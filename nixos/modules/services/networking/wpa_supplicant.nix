@@ -3,8 +3,12 @@
 with lib;
 
 let
+  package = if cfg.allowAuxiliaryImperativeNetworks
+    then pkgs.wpa_supplicant_ro_ssids
+    else pkgs.wpa_supplicant;
+
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
+  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
       ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
@@ -14,8 +18,8 @@ let
         then ''"${psk}"''
         else pskRaw;
       baseAuth = if key != null
-        then ''psk=${key}''
-        else ''key_mgmt=NONE'';
+        then "psk=${key}"
+        else "key_mgmt=NONE";
     in ''
       network={
         ssid="${ssid}"
@@ -36,8 +40,7 @@ in {
         default = [];
         example = [ "wlan0" "wlan1" ];
         description = ''
-          The interfaces <command>wpa_supplicant</command> will use. If empty, it will
-          automatically use all wireless interfaces.
+          The interfaces <command>wpa_supplicant</command> will use.
         '';
       };
 
@@ -45,6 +48,16 @@ in {
         type = types.str;
         default = "nl80211,wext";
         description = "Force a specific wpa_supplicant driver.";
+      };
+
+      allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
+        description = ''
+          Whether to allow configuring networks "imperatively" (e.g. via
+          <package>wpa_supplicant_gui</package>) and declaratively via
+          <xref linkend="opt-networking.wireless.networks" />.
+
+          Please note that this adds a custom patch to <package>wpa_supplicant</package>.
+        '';
       };
 
       networks = mkOption {
@@ -206,14 +219,21 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = flip mapAttrsToList cfg.networks (name: cfg: {
+    assertions = [
+      { assertion = cfg.interfaces != [];
+        message = ''
+          No network interfaces for wpa_supplicant have been configured.
+          Please, specify at least one using networking.wireless.interfaces.
+        '';
+      }
+    ] ++ flip mapAttrsToList cfg.networks (name: cfg: {
       assertion = with cfg; count (x: x != null) [ psk pskRaw auth ] <= 1;
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
     });
 
-    environment.systemPackages =  [ pkgs.wpa_supplicant ];
+    environment.systemPackages = [ package ];
 
-    services.dbus.packages = [ pkgs.wpa_supplicant ];
+    services.dbus.packages = [ package ];
     services.udev.packages = [ pkgs.crda ];
 
     # FIXME: start a separate wpa_supplicant instance per interface.
@@ -230,24 +250,18 @@ in {
       wantedBy = [ "multi-user.target" ];
       stopIfChanged = false;
 
-      path = [ pkgs.wpa_supplicant ];
+      path = [ package ];
 
-      script = ''
-        iface_args="-s -u -D${cfg.driver} -c ${configFile}"
-        ${if ifaces == [] then ''
-          for i in $(cd /sys/class/net && echo *); do
-            DEVTYPE=
-            UEVENT_PATH=/sys/class/net/$i/uevent
-            if [ -e "$UEVENT_PATH" ]; then
-              source "$UEVENT_PATH"
-              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-                args+="''${args:+ -N} -i$i $iface_args"
-              fi
-            fi
-          done
-        '' else ''
-          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
-        ''}
+      script = let
+        configStr = if cfg.allowAuxiliaryImperativeNetworks
+          then "-c /etc/wpa_supplicant.conf -I ${configFile}"
+          else "-c ${configFile}";
+      in ''
+        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
+        then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+        fi
+        iface_args="-s -u -D${cfg.driver} ${configStr}"
+        args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
         exec wpa_supplicant $args
       '';
     };

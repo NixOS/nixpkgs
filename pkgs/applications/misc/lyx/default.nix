@@ -1,18 +1,18 @@
-{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc
+{ fetchurl, lib, mkDerivation, pkg-config, python, file, bc
 , qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
 mkDerivation rec {
-  version = "2.3.5.1";
+  version = "2.3.6.1";
   pname = "lyx";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
-    sha256 = "0mv32s26igm0pd8vs7d2mk1240dpr83y0a2wyh3xz6b67ph0w157";
+    sha256 = "sha256-xr7SYzQZiY4Bp8w1AxDX2TS/WRyrcln8JYGqTADq+ng=";
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     qtbase qtsvg python file/*for libmagic*/ bc
     hunspell makeWrapper # enchant

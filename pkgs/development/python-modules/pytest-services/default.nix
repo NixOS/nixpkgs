@@ -5,28 +5,38 @@
 , requests
 , psutil
 , pytest
-, subprocess32
+, setuptools-scm
+, subprocess32 ? null
+, toml
 , zc_lockfile
 }:
 
 buildPythonPackage rec {
   pname = "pytest-services";
-  version = "2.0.1";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0848cead86d3816b9c4e37cecfda31d21a4366f0dca2313ea29f3ca375c6295d";
+    sha256 = "2da740487d08ea63dfdf718f5d4ba11e590c99ddf5481549edebf7a3a42ca536";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+    toml
+  ];
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     requests
     psutil
-    pytest
     zc_lockfile
   ] ++ lib.optional (!isPy3k) subprocess32;
 
   # no tests in PyPI tarball
   doCheck = false;
+
+  pythonImportsCheck = [ "pytest_services" ];
 
   meta = with lib; {
     description = "Services plugin for pytest testing framework";

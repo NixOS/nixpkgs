@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   buildInputs = [ nose ];
   propagatedBuildInputs = [ pep8 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/WoLpH/tissue";
     description = "Tissue - automated pep8 checker for nose";
     license = licenses.lgpl2;

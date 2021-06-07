@@ -2,9 +2,11 @@
 
 buildGoModule rec {
   pname = "doctl";
-  version = "1.45.1";
+  version = "1.61.0";
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   subPackages = [ "cmd/doctl" ];
 
@@ -30,14 +32,13 @@ buildGoModule rec {
     owner = "digitalocean";
     repo = "doctl";
     rev = "v${version}";
-    sha256 = "1zzdjpbag23kr6j3c7zkgqaavlna1q792qhs6s234vxm85zmwh4j";
+    sha256 = "sha256-Z6G80Xg2DSoUj8vhxkDr3W/wh3fecRwxm0oly2GYDdg=";
   };
 
   meta = with lib; {
     description = "A command line tool for DigitalOcean services";
     homepage = "https://github.com/digitalocean/doctl";
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = [ maintainers.siddharthist ];
   };
 }

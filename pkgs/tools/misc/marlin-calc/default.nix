@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "marlin-calc";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     install -Dm0755 {,$out/bin/}marlin-calc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/eyal0/Marlin";
     description = "Marlin 3D printer timing simulator";
     license = licenses.gpl3;

@@ -2,18 +2,22 @@
 
 buildGoModule rec {
   pname = "go-swagger";
-  version = "0.24.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "go-swagger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "051av25vnrcpvj9w6mqalwk7byw52m2dlh1m56y30xvm0ybbnayn";
+    sha256 = "sha256-S3/sXmgogxhMv53Gd/ir6ScirYQtt5kn04ZfRiS6NoA=";
   };
 
-  vendorSha256 = "020z4izc8i4yhbbr8h2fn8bqbis9q9yfcrjnixd6rsiayw1brh4p";
+  vendorSha256 = "sha256-ABGjrMZdgsAaEhJlGbvbX77t7TsodraadNyItESMbEc=";
+
+  doCheck = false;
 
   subPackages = [ "cmd/swagger" ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/go-swagger/go-swagger/cmd/swagger/commands.Version=${version} -X github.com/go-swagger/go-swagger/cmd/swagger/commands.Commit=${src.rev}" ];
 
   meta = with lib; {
     description = "Golang implementation of Swagger 2.0, representation of your RESTful API";

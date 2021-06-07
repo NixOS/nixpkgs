@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, SDL2, SDL2_image, SDL2_mixer }:
+{ lib, stdenv, fetchFromGitHub, SDL2, SDL2_image, SDL2_mixer }:
 
 stdenv.mkDerivation rec {
   pname = "abbaye-des-morts";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "DESTDIR=" ];
 
-  preBuild = stdenv.lib.optionalString stdenv.cc.isClang
+  preBuild = lib.optionalString stdenv.cc.isClang
     ''
       substituteInPlace Makefile \
         --replace -fpredictive-commoning ""
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://locomalito.com/abbaye_des_morts.php";
     description = "A retro arcade video game";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "sysklogd-1.5.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "00f2wy6f0qng7qzga4iicyzl9j8b7mp6mrpfky5jxj93ms2w2rji";
   };
 
-  patches = [ ./systemd.patch ./union-wait.patch ];
+  patches = [ ./systemd.patch ./union-wait.patch ./fix-includes-for-musl.patch ];
 
   NIX_CFLAGS_COMPILE = "-DSYSV";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   preInstall = "mkdir -p $out/share/man/man5/ $out/share/man/man8/ $out/sbin";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A system logging daemon";
     platforms = platforms.linux;
     license = licenses.gpl2;

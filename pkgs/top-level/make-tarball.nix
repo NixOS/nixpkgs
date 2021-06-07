@@ -4,6 +4,7 @@
 
 { nixpkgs
 , officialRelease
+, supportedSystems
 , pkgs ? import nixpkgs.outPath {}
 , nix ? pkgs.nix
 , lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; }
@@ -40,7 +41,6 @@ releaseTools.sourceTarball {
   checkPhase = ''
     set -o pipefail
 
-    export NIX_DB_DIR=$TMPDIR
     export NIX_STATE_DIR=$TMPDIR
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
     opts=(--option build-users-group "")
@@ -67,7 +67,7 @@ releaseTools.sourceTarball {
     fi
 
     # Check that all-packages.nix evaluates on a number of platforms without any warnings.
-    for platform in i686-linux x86_64-linux x86_64-darwin; do
+    for platform in ${pkgs.lib.concatStringsSep " " supportedSystems}; do
         header "checking Nixpkgs on $platform"
 
         nix-env -f . \
@@ -108,6 +108,7 @@ releaseTools.sourceTarball {
     echo -n '}' >> tmp
     packages=$out/packages.json.br
     < tmp sed "s|$(pwd)/||g" | jq -c | brotli -9 > $packages
+    rm tmp
 
     echo "file json-br $packages" >> $out/nix-support/hydra-build-products
   '';

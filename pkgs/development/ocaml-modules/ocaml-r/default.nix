@@ -1,14 +1,20 @@
-{ lib, fetchFromGitHub, buildDunePackage, pkg-config, configurator, stdio, R }:
+{ lib, fetchFromGitHub, buildDunePackage, pkg-config, dune-configurator, stdio, R
+, alcotest
+}:
 
 buildDunePackage rec {
   pname = "ocaml-r";
-  version = "0.2.0";
+  version = "0.4.0";
+
+  useDune2 = true;
+
+  minimumOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "pveber";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09gljccwjsw9693m1hm9hcyvgp3p2fvg3cfn18yyidpc2f81a4fy";
+    sha256 = "10is2s148kfh3g0pwniyzp5mh48k57ldvn8gm86469zvgxyij1ri";
   };
 
   # Without the following patch, stub generation fails with:
@@ -17,9 +23,14 @@ buildDunePackage rec {
     substituteInPlace stubgen/stubgen.ml --replace  \
     'failwithf "not supported: %s" name ()' \
     'sprintf "(* not supported: %s *)" name'
+    substituteInPlace lib/config/discover.ml --replace \
+    ' libRmath"' '"'
   '';
 
-  buildInputs = [ configurator pkg-config R stdio ];
+  buildInputs = [ pkg-config R dune-configurator stdio ];
+
+  doCheck = true;
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "OCaml bindings for the R interpreter";

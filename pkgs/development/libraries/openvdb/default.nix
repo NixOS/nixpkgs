@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, openexr, boost, jemalloc, c-blosc, ilmbase, tbb }:
+{ lib, stdenv, fetchFromGitHub, openexr, boost, jemalloc, c-blosc, ilmbase, tbb }:
 
 stdenv.mkDerivation rec
 {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec
 
   outputs = [ "out" ];
 
-  buildInputs = [ unzip openexr boost tbb jemalloc c-blosc ilmbase ];
+  buildInputs = [ openexr boost tbb jemalloc c-blosc ilmbase ];
 
   setSourceRoot = ''
     sourceRoot=$(echo */openvdb)
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec
   NIX_CFLAGS_COMPILE="-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR/";
   NIX_LDFLAGS="-lboost_iostreams";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open framework for voxel";
     homepage = "https://www.openvdb.org";
     maintainers = [ maintainers.guibou ];

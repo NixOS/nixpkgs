@@ -1,15 +1,15 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "debianutils";
-  version = "4.11";
+  version = "4.11.2";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/${pname}/${pname}_${version}.tar.xz";
-    sha256 = "0lbizfnf3qwsiz2ggia6ff7sjjj8gwhys8bm6wixdc4n0qlycp5v";
+    sha256 = "1pjh2s5f8qp8jaky2x08yvf125np0s48zb2z6f3h6x4vf20hws1v";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Miscellaneous utilities specific to Debian";
     longDescription = ''
        This package provides a number of small utilities which are used primarily by the installation scripts of Debian packages, although you may use them directly.
@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus publicDomain smail ];
     maintainers = [];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
   };
 }

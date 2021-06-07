@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, camlp4 }:
+{ stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, camlp4 }:
 
 stdenv.mkDerivation {
   name = "ocaml-optcomp-1.6";
@@ -8,13 +8,13 @@ stdenv.mkDerivation {
   };
 
   patches =
-    let inherit (stdenv.lib) optional versionAtLeast; in
+    let inherit (lib) optional versionAtLeast; in
     optional (versionAtLeast ocaml.version "4.02") (fetchpatch {
       url = "https://github.com/diml/optcomp/commit/b7f809360c9794b383a4bc0492f6df381276b429.patch";
       sha256 = "1n095lk94jq1rwi0l24g2wbgms7249wdd31n0ji895dr6755s93y";
     })
   ;
-  
+
   createFindlibDestdir = true;
 
   buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
@@ -37,10 +37,10 @@ stdenv.mkDerivation {
   meta =  {
     homepage = "https://github.com/diml/optcomp";
     description = "Optional compilation for OCaml with cpp-like directives";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.gal_bolle
+      lib.maintainers.gal_bolle
     ];
   };
 

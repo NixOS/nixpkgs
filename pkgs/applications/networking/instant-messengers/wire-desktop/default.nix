@@ -5,10 +5,12 @@
 , makeDesktopItem
 , makeWrapper
 , stdenv
+, lib
 , udev
 , wrapGAppsHook
 , cpio
 , xar
+, libdbusmenu
 }:
 
 let
@@ -20,16 +22,16 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.18.3728";
-    x86_64-linux = "3.18.2925";
+    x86_64-darwin = "3.25.4095";
+    x86_64-linux = "3.25.2940";
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-darwin = "0xi3k95yw59xsfavncc1giwxlwjz26z34qm3i604ksjjalvpzy5l";
-    x86_64-linux = "01g39hncj1w0zyfrzv4mgv8npwvx0g0lw99azyai99877b30bm8j";
+    x86_64-darwin = "01gbmbxs3w7lwsy5wjpr7fgqkb20rj5fv1r3dsmjkfwy45pd835j";
+    x86_64-linux = "1vb2fy8hijjp0193d32d8hw7h00w6wympf3zc96skk8hz3ks6xz8";
   }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern, secure messenger for everyone";
     longDescription = ''
       Wire Personal is a secure, privacy-friendly messenger. It combines useful
@@ -49,7 +51,6 @@ let
       arianvp
       kiwi
       toonn
-      worldofpeace
     ];
     platforms = [
       "x86_64-darwin"
@@ -93,9 +94,17 @@ let
 
     buildInputs = atomEnv.packages;
 
-    unpackPhase = "dpkg-deb -x $src .";
+    unpackPhase = ''
+      runHook preUnpack
+
+      dpkg-deb -x $src .
+
+      runHook postUnpack
+    '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/bin"
       cp -R "opt" "$out"
       cp -R "usr/share" "$out/share"
@@ -104,10 +113,13 @@ let
       # Desktop file
       mkdir -p "$out/share/applications"
       cp "${desktopItem}/share/applications/"* "$out/share/applications"
+
+      runHook postInstall
     '';
 
     runtimeDependencies = [
-      udev.lib
+      (lib.getLib udev)
+      libdbusmenu
     ];
 
     postFixup = ''
@@ -131,17 +143,29 @@ let
     ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       xar -xf $src
       cd com.wearezeta.zclient.mac.pkg
+
+      runHook postUnpack
     '';
 
     buildPhase = ''
+      runHook preBuild
+
       cat Payload | gunzip -dc | cpio -i
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications
       cp -r Wire.app $out/Applications
+
+      runHook postInstall
     '';
   };
 

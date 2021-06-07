@@ -1,42 +1,19 @@
-{ stdenv, system, fetchurl }:
+{ buildGoPackage, fetchFromGitHub, lib }:
 
-let
-  linuxPredicate = system == "x86_64-linux";
-  bsdPredicate = system == "x86_64-freebsd";
-  darwinPredicate = system == "x86_64-darwin";
-  metadata = assert linuxPredicate || bsdPredicate || darwinPredicate;
-    if linuxPredicate then
-      { arch = "linux-amd64";
-        sha256 = "0p0qj911nmmdj0r7wx3363gid8g4bm3my6mj3d6s4mwgh9lfisiz";
-        archiveBinaryPath = "linux/amd64"; }
-    else if bsdPredicate then
-      { arch = "freebsd-amd64";
-        sha256 = "0g618y9n39j11l1cbhyhwlbl2gv5a2a122c1dps3m2wmv7yzq5hk";
-        archiveBinaryPath = "freebsd/amd64"; }
-    else
-      { arch = "darwin-amd64";
-        sha256 = "0l623fgnsix0y3f960bwx3dgnrqaxs21w5652kvaaal7dhnlgmwj";
-        archiveBinaryPath = "darwin/amd64"; };
-in stdenv.mkDerivation rec {
-  shortname = "github-release";
-  name = "${shortname}-${version}";
-  version = "0.7.2";
+buildGoPackage rec {
+  pname = "github-release";
+  version = "0.10.0";
 
-  src = fetchurl {
-    url = "https://github.com/aktau/github-release/releases/download/v${version}/${metadata.arch}-${shortname}.tar.bz2";
-    sha256 = metadata.sha256;
+  src = fetchFromGitHub {
+    owner = "github-release";
+    repo = "github-release";
+    rev = "v${version}";
+    sha256 = "sha256-J5Y0Kvon7DstTueCsoYvw6x4cOH/C1IaVArE0bXtZts=";
   };
 
-  buildInputs = [ ];
+  goPackagePath = "github.com/github-release/github-release";
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
-    mkdir -p "$out/bin"
-    cp "${metadata.archiveBinaryPath}/github-release" "$out/bin/"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Commandline app to create and edit releases on Github (and upload artifacts)";
     longDescription = ''
       A small commandline app written in Go that allows you to easily create and
@@ -45,8 +22,8 @@ in stdenv.mkDerivation rec {
     '';
 
     license = licenses.mit;
-    homepage = "https://github.com/aktau/github-release";
-    maintainers = with maintainers; [ ardumont ];
+    homepage = "https://github.com/github-release/github-release";
+    maintainers = with maintainers; [ ardumont j03 ];
     platforms = with platforms; unix;
   };
 }

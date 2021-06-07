@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "hcxdumptool";
-  version = "6.0.7";
+  version = "6.1.4";
 
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = "hcxdumptool";
     rev = version;
-    sha256 = "14w4f63nrcwhqj753rjif9cgs1xh1r1619827p69dz0v2x3xdvn1";
+    sha256 = "14rwcchqpsxyzvk086d7wbi5qlcxj4jcmafzgvkwzrpbspqh8p24";
   };
 
   buildInputs = [ openssl ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ZerBea/hcxdumptool";
     description = "Small tool to capture packets from wlan devices";
     license = licenses.mit;

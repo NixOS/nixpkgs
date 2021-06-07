@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , btrfs-progs
 , buildGoModule
 , fetchFromGitHub
@@ -10,19 +10,23 @@
 , libselinux
 , lvm2
 , pkg-config
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.18.2";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "0p6gprbs54v3n09fjpyfxnzxs680ms8924wdim4q9qw52wc6sbdz";
+    sha256 = "sha256-qhS1RLkM7xDsH3qDVL+ORXmwULYz8UK1oJM29oRqJ0M=";
   };
   vendorSha256 = null;
+
+  doCheck = false;
+
   outputs = [ "out" "man" ];
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
@@ -33,18 +37,17 @@ buildGoModule rec {
     libseccomp
     libselinux
     lvm2
-  ] ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
+  ] ++ lib.optionals (glibc != null) [ glibc glibc.static ];
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
-    patchShebangs .
-
-    sed -i '/version.buildDate/d' Makefile
-
+    runHook preBuild
     make binaries docs BUILDTAGS="$BUILDTAGS"
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 bin/* -t $out/bin
 
     for shell in bash fish zsh; do
@@ -52,9 +55,12 @@ buildGoModule rec {
     done
 
     installManPage docs/*.[1-9]
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) cri-o; };
+
+  meta = with lib; {
     homepage = "https://cri-o.io";
     description = ''
       Open Container Initiative-based implementation of the

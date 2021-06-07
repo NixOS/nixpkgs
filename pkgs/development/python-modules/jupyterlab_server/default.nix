@@ -1,36 +1,49 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, notebook
 , jsonschema
 , pythonOlder
 , requests
-, pytest
+, pytestCheckHook
 , pyjson5
+, Babel
+, jupyter_server
+, pytest-tornasync
+, pytestcov
+, strict-rfc3339
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "1.1.5";
+  version = "2.3.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3398e401b95da868bc96bdaa44fa61252bf3e68fc9dd1645bd93293cce095f6c";
+    sha256 = "sha256-56AkWqPeI6GAPeLv9AHkykWUU42fWYBhNPMEGabYtqM=";
   };
 
-  checkInputs = [ requests pytest ];
-  propagatedBuildInputs = [ notebook jsonschema pyjson5 ];
+  propagatedBuildInputs = [ requests jsonschema pyjson5 Babel jupyter_server ];
 
-  # test_listing test fails
-  # this is a new package and not all tests pass
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    pytest-tornasync
+    pytestcov
+    strict-rfc3339
+  ];
 
-  checkPhase = ''
-    pytest
-  '';
+  disabledTests = [
+    "test_get_locale"
+    "test_get_installed_language_pack_locales_passes"
+    "test_get_installed_package_locales"
+    "test_get_installed_packages_locale"
+    "test_get_language_packs"
+    "test_get_language_pack"
+  ];
 
-  meta = with stdenv.lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     description = "JupyterLab Server";
     homepage = "https://jupyter.org";
     license = licenses.bsdOriginal;

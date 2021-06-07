@@ -1,7 +1,7 @@
-{ stdenv, targetPackages
+{ lib, stdenv, targetPackages
 
 # Build time
-, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
@@ -17,21 +17,20 @@
 }:
 
 let
-  basename = "gdb-${version}";
-  version = "9.2";
+  basename = "gdb";
+  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                 "${stdenv.targetPlatform.config}-";
 in
 
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  name =
-    stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                              (stdenv.targetPlatform.config + "-")
-    + basename;
+  pname = targetPrefix + basename;
+  version = "10.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "0mf5fn8v937qwnal4ykn3ji1y2sxk0fa1yfqi679hxmpg6pdf31n";
+    url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
+    sha256 = "0aag1c0fw875pvhjg1qp7x8pf6gf92bjv5gcic5716scacyj58da";
   };
 
   postPatch = if stdenv.isDarwin then ''
@@ -41,15 +40,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
+  nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
   buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile ]
-    ++ stdenv.lib.optional pythonSupport python3
-    ++ stdenv.lib.optional doCheck dejagnu;
+    ++ lib.optional pythonSupport python3
+    ++ lib.optional doCheck dejagnu;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -58,12 +57,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # darwin build fails with format hardening since v7.12
-  hardeningDisable = stdenv.lib.optionals stdenv.isDarwin [ "format" ];
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "format" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   # GDB have to be built out of tree.
   preConfigure = ''
@@ -72,7 +70,14 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  configureFlags = with stdenv.lib; [
+  configureFlags = with lib; [
+    # Set the program prefix to the current targetPrefix.
+    # This ensures that the prefix always conforms to
+    # nixpkgs' expectations instead of relying on the build
+    # system which only receives `config` which is merely a
+    # subset of the platform description.
+    "--program-prefix=${targetPrefix}"
+
     "--enable-targets=all" "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"
@@ -83,7 +88,8 @@ stdenv.mkDerivation rec {
     "--with-mpfr=${mpfr.dev}"
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
-  ] ++ stdenv.lib.optional (!pythonSupport) "--without-python";
+  ] ++ lib.optional (!pythonSupport) "--without-python"
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.
@@ -93,7 +99,7 @@ stdenv.mkDerivation rec {
   # TODO: Investigate & fix the test failures.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GNU Project debugger";
 
     longDescription = ''
@@ -104,7 +110,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/gdb/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     platforms = with platforms; linux ++ cygwin ++ darwin;
     maintainers = with maintainers; [ pierron globin lsix ];

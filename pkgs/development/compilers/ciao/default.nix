@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "ciao";
-  version = "1.19.0";
+  version = "1.20.0";
   src = fetchFromGitHub {
     owner = "ciao-lang";
     repo = "ciao";
     rev = "v${version}";
-    sha256 = "03qzcb4ivgkiwdpw7a94dn74xqyxjwz5ilrr53rcblsh5ng299jp";
+    sha256 = "sha256-Xp0ZQRi7mOO2WN/2hO6zgobDG3S0BEV+SgsaduBZ30U=";
   };
 
   configurePhase = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ./ciao-boot.sh install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ciao-lang.org/";
     description = "A general purpose, multi-paradigm programming language in the Prolog family";
     license = licenses.lgpl21;

@@ -1,19 +1,42 @@
-{ rustPlatform, fetchFromGitHub, lib, nasm }:
+{ stdenv, rustPlatform, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.3.3";
+  version = "0.4.1";
 
-  src = fetchFromGitHub {
-    owner = "xiph";
-    repo = "rav1e";
-    rev = "v${version}";
-    sha256 = "0a9dryag4x35a2c45qiq1j5xk9ydcpw1g6kici85d2yrc2z3hwrx";
+  src = stdenv.mkDerivation rec {
+    name = "${pname}-${version}-source";
+
+    src = fetchFromGitHub {
+      owner = "xiph";
+      repo = "rav1e";
+      rev = "v${version}";
+      sha256 = "0jnq5a3fv6fzzbmprzfxidlcwwgblkwwm0135cfw741wjv7f7h6r";
+    };
+
+    cargoLock = fetchurl {
+      url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
+      sha256 = "14fi9wam9rs5206rvcd2f3sjpzq41pnfml14w74wn2ws3gpi46zn";
+    };
+
+    installPhase = ''
+      mkdir -p $out
+      cp -r ./* $out/
+      cp ${cargoLock} $out/Cargo.lock
+    '';
   };
 
-  cargoSha256 = "1xaincrmpicp0skf9788w5631x1hxvifvq06hh5ribdz79zclzx3";
+  cargoSha256 = "0miq6iiywwbxm6k0alnqg6bnd14pwc8vl9d8fgg6c0vjlfy5zhlb";
+  nativeBuildInputs = [ nasm cargo-c ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  nativeBuildInputs = [ nasm ];
+  postBuild = ''
+    cargo cbuild --release --frozen --prefix=${placeholder "out"}
+  '';
+
+  postInstall = ''
+    cargo cinstall --release --frozen --prefix=${placeholder "out"}
+  '';
 
   meta = with lib; {
     description = "The fastest and safest AV1 encoder";
@@ -23,10 +46,9 @@ rustPlatform.buildRustPackage rec {
       libaom (the reference encoder) is too slow.
       Features: https://github.com/xiph/rav1e#features
     '';
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/xiph/rav1e";
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.primeos ];
-    platforms = platforms.all;
+    maintainers = [ ];
   };
 }

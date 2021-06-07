@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , nose
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkPhase = "nosetests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://code.eliotberriot.com/eliotberriot/persisting-theory";
     description = "Automate data discovering and access inside a list of packages";
     license = licenses.bsd3;

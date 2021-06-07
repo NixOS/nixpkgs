@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, unzip, zlib, SDL, readline, libGLU, libGL, libX11 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
+, zlib, SDL, readline, libGLU, libGL, libX11 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "atari800";
   version = "4.2.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ unzip zlib SDL readline libGLU libGL libX11 ];
+  buildInputs = [ zlib SDL readline libGLU libGL libX11 ];
 
   configureFlags = [
     "--target=default"
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.AndersonTorres ];
     license = licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

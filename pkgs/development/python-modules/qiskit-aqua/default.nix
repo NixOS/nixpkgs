@@ -2,7 +2,6 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
-# , cplex
 , cvxpy
 , dlx
 , docplex
@@ -11,34 +10,43 @@
 , networkx
 , numpy
 , psutil
-, python
 , qiskit-ignis
 , qiskit-terra
 , quandl
-, scikitlearn
+, scikit-learn
+, yfinance
+  # Optional inputs
+, withTorch ? false
+, pytorch
+, withPyscf ? false
+, pyscf ? null
+, withScikitQuant ? false
+, scikit-quant ? null
+, withCplex ? false
+, cplex ? null
   # Check Inputs
 , ddt
 , pytestCheckHook
+, pytest-timeout
 , qiskit-aer
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.7.3";
+  version = "0.9.1";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   # Pypi's tarball doesn't contain tests
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    sha256 = "04zcnrc0vi6dfjahp1019h2ngdgi7l7jvfs9aw0y306nd9g6qgjc";
+    hash = "sha256-fptyqPrkUgl3UjtlEmDYORdX/SsONxWozQGEs/EahmU=";
   };
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
   propagatedBuildInputs = [
-    # cplex
     cvxpy
     docplex
     dlx # Python Dancing Links package
@@ -50,8 +58,12 @@ buildPythonPackage rec {
     qiskit-terra
     qiskit-ignis
     quandl
-    scikitlearn
-  ];
+    scikit-learn
+    yfinance
+  ] ++ lib.optionals (withTorch) [ pytorch ]
+  ++ lib.optionals (withPyscf) [ pyscf ]
+  ++ lib.optionals (withScikitQuant) [ scikit-quant ]
+  ++ lib.optionals (withCplex) [ cplex ];
 
   # *** NOTE ***
   # We make pyscf optional in this package, due to difficulties packaging it in Nix (test failures, complicated flags, etc).
@@ -60,13 +72,14 @@ buildPythonPackage rec {
   # It can also be installed at runtime from the pip wheel.
   # We disable appropriate tests below to allow building without pyscf installed
 
-  # NOTE: we remove cplex b/c we can't build pythonPackages.cplex.
-  # cplex is only distributed in manylinux1 wheel (no source), and Nix python is not manylinux1 compatible
-
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyscf; sys_platform != 'win32'" "" \
-      --replace "cplex; python_version >= '3.6' and python_version < '3.8'" ""
+    # Because this is a legacy/final release, the maintainers restricted the maximum
+    # versions of all dependencies to the latest current version. That will not
+    # work with nixpkgs' rolling release/update system.
+    # Unlock all versions for compatibility
+    substituteInPlace setup.py --replace "<=" ">="
+    sed -i 's/\(\w\+-*\w*\).*/\1/' requirements.txt
+    substituteInPlace requirements.txt --replace "dataclasses" ""
 
     # Add ImportWarning when running qiskit.chemistry (pyscf is a chemistry package) that pyscf is not included
     echo -e "\nimport warnings\ntry: import pyscf;\nexcept ImportError:\n    " \
@@ -83,10 +96,12 @@ buildPythonPackage rec {
       >> qiskit/optimization/__init__.py
   '';
 
-  postInstall = "rm -rf $out/${python.sitePackages}/docs";  # Remove docs dir b/c it can cause conflicts.
-
-  checkInputs = [ ddt qiskit-aer pytestCheckHook ];
-  dontUseSetuptoolsCheck = true;
+  checkInputs = [
+    pytestCheckHook
+    ddt
+    pytest-timeout
+    qiskit-aer
+  ];
   pythonImportsCheck = [
     "qiskit.aqua"
     "qiskit.aqua.algorithms"
@@ -96,22 +111,25 @@ buildPythonPackage rec {
     "qiskit.optimization"
   ];
   pytestFlagsArray = [
-    # Disabled b/c missing pyscf
+    "--timeout=30"
+    "--durations=10"
+  ] ++ lib.optionals (!withPyscf) [
     "--ignore=test/chemistry/test_qeom_ee.py"
     "--ignore=test/chemistry/test_qeom_vqe.py"
     "--ignore=test/chemistry/test_vqe_uccsd_adapt.py"
+    "--ignore=test/chemistry/test_bopes_sampler.py"
   ];
   disabledTests = [
-    # Disabled due to missing pyscf
-    "test_validate" # test/chemistry/test_inputparser.py
-
-    "test_binary" # in SklearnSVM, seems to have trouble with eigenvectors converging
-    "test_pauli_expect_single"  # fails for unknown reason, 3e-3 out of tolerance
+    # Online tests
+    "test_exchangedata"
+    "test_yahoo"
 
     # Disabling slow tests > 10 seconds
     "TestVQE"
+    "TestOOVQE"
     "TestVQC"
     "TestQSVM"
+    "TestOptimizerAQGD"
     "test_graph_partition_vqe"
     "TestLookupRotation"
     "_vqe"
@@ -119,7 +137,6 @@ buildPythonPackage rec {
     "TestQGAN"
     "test_evaluate_qasm_mode"
     "test_measurement_error_mitigation_auto_refresh"
-    "test_exchangedata"
     "test_wikipedia"
     "test_shor_factoring_1__15___qasm_simulator____3__5__"
     "test_readme_sample"
@@ -138,11 +155,16 @@ buildPythonPackage rec {
     "test_oh"
     "test_confidence_intervals_00001"
     "test_eoh"
+    "test_qasm_5"
+    "test_uccsd_hf"
+  ] ++ lib.optionals (!withPyscf) [
+    "test_validate" # test/chemistry/test_inputparser.py
   ];
 
   meta = with lib; {
     description = "An extensible library of quantum computing algorithms";
     homepage = "https://github.com/QISKit/qiskit-aqua";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

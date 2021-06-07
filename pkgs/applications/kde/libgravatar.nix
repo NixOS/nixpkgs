@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "libgravatar";
+  pname = "libgravatar";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;

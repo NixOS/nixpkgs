@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , future
 , isPy3k
 , python
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "b472c4933094306ca08ec90b2a8cbb50c34f1fb2767775169a1c1650b7b74630";
   };
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   checkInputs = [ hypothesis ];
   propagatedBuildInputs = [ future ];
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pjdelport/backports.os";
     description = "Backport of new features in Python's os module";
     license = licenses.mit;

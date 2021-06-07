@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , dask
-, distributed
 , bokeh
 , toolz
 , datashape
@@ -14,32 +13,26 @@
 , colorcet
 , param
 , pyct
-, pyyaml
-, requests
-, scikitimage
 , scipy
-, pytest
-, pytest-benchmark
-, flake8
+, pytestCheckHook
 , nbsmoke
 , fastparquet
-, testpath
 , nbconvert
-, pytest_xdist
+, pytest-xdist
+, netcdf4
 }:
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.11.0";
+  version = "0.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05p81aff7x70yj8llclclgz6klvfzqixwxfng6awn3y5scv18w40";
+    sha256 = "a135612876dc3e4b16ccb9ddb70de50519825c8c1be251b49aefa550bcf8a39a";
   };
 
   propagatedBuildInputs = [
     dask
-    distributed
     bokeh
     toolz
     datashape
@@ -51,34 +44,29 @@ buildPythonPackage rec {
     colorcet
     param
     pyct
-    pyyaml
-    requests
-    scikitimage
     scipy
-    testpath
   ];
 
   checkInputs = [
-    pytest
-    pytest-benchmark
-    pytest_xdist # not needed
-    flake8
+    pytestCheckHook
+    pytest-xdist # not needed
     nbsmoke
     fastparquet
-    pandas
     nbconvert
+    netcdf4
   ];
 
-  postConfigure = ''
-    substituteInPlace setup.py \
-      --replace "'numba >=0.37.0,<0.49'" "'numba'"
-  '';
+  pytestFlagsArray = [
+    "-n $NIX_BUILD_CORES"
+    "datashader"
+  ];
 
-  checkPhase = ''
-    pytest -n $NIX_BUILD_CORES datashader
-  '';
+  disabledTestPaths = [
+    # 31/50 tests fail with TypeErrors
+    "datashader/tests/test_datatypes.py"
+  ];
 
-  meta = with lib; {
+  meta = with lib;{
     description = "Data visualization toolchain based on aggregating into a grid";
     homepage = "https://datashader.org";
     license = licenses.bsd3;

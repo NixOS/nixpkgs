@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     substituteInPlace dialog.py --replace ":/bin:/usr/bin" ":$out/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python interface to the UNIX dialog utility and mostly-compatible programs (Python 2 backport)";
     homepage = "http://pythondialog.sourceforge.net/";
     license = licenses.lgpl3;

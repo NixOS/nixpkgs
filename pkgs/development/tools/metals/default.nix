@@ -1,10 +1,11 @@
 { stdenv, lib, coursier, jdk, jre, makeWrapper }:
 
-let
-  baseName = "metals";
-  version = "0.9.1";
+stdenv.mkDerivation rec {
+  pname = "metals";
+  version = "0.10.4";
+
   deps = stdenv.mkDerivation {
-    name = "${baseName}-deps-${version}";
+    name = "${pname}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
       ${coursier}/bin/coursier fetch org.scalameta:metals_2.12:${version} \
@@ -15,11 +16,8 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "1pa84y7jrfl8p7lwz2pjlv70fqg1wmcz98npqq5i443smf7r9v4f";
+    outputHash     = "0pjgnm5argmc92872vblsz0pw2wniggvkw4w2346ps09ybdv9r3q";
   };
-in
-stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jdk deps ];
@@ -55,7 +53,7 @@ stdenv.mkDerivation rec {
       --add-flags "${extraJavaOpts} -Dmetals.client=sublime -cp $CLASSPATH scala.meta.metals.Main"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
     description = "Work-in-progress language server for Scala";

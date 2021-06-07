@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, pkgconfig, libtool
+{ lib, stdenv, fetchurl
+, pkg-config, libtool
 , gtk2, libGLU, libGL, readline, libX11, libXpm
 , docbook_xml_dtd_45, docbook_xsl
 , sdlSupport ? true, SDL2 ? null
@@ -15,7 +15,7 @@ assert wxSupport -> (gtk2 != null && wxGTK != null);
 assert wgetSupport -> (wget != null);
 assert curlSupport -> (curl != null);
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "bochs";
@@ -26,10 +26,14 @@ stdenv.mkDerivation rec {
     sha256 = "0ql8q6y1k356li1g9gbvl21448mlxphxxi6kjb2b3pxvzd0pp2b3";
   };
 
-  patches = [ ./bochs-2.6.11-glibc-2.26.patch ./fix-build-smp.patch ];
+  patches = [
+    ./bochs-2.6.11-glibc-2.26.patch
+    ./fix-build-smp.patch
+    ./bochs_fix_narrowing_conv_warning.patch
+  ];
 
   buildInputs =
-  [ pkgconfig libtool gtk2 libGLU libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
+  [ pkg-config libtool gtk2 libGLU libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
   ++ optionals termSupport [ ncurses ]
   ++ optionals sdlSupport [ SDL2 ]
   ++ optionals wxSupport [ wxGTK ]

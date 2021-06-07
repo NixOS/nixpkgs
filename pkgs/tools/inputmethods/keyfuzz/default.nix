@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   pname = "keyfuzz";
   version = "0.2";
 
-  meta = with stdenv.lib; {
-    description = "Manipulate the scancode/keycode translation tables of keyboard drivers.";
+  meta = with lib; {
+    description = "Manipulate the scancode/keycode translation tables of keyboard drivers";
     homepage    = "http://0pointer.de/lennart/projects/keyfuzz/";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;

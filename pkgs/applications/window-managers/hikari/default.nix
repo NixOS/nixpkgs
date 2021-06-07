@@ -1,7 +1,7 @@
-{ stdenv, fetchzip,
-  pkgconfig, bmake,
+{ lib, stdenv, fetchzip,
+  pkg-config, bmake,
   cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman,
-  libucl, wayland, wayland-protocols, wlroots,
+  libucl, wayland, wayland-protocols, wlroots, mesa,
   features ? {
     gammacontrol = true;
     layershell   = true;
@@ -12,7 +12,7 @@
 
 let
   pname = "hikari";
-  version = "2.0.4";
+  version = "2.3.0";
 in
 
 stdenv.mkDerivation {
@@ -20,10 +20,10 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://hikari.acmelabs.space/releases/${pname}-${version}.tar.gz";
-    sha256 = "0arm2zmiqf63a7a3nwcqf88lsk79n0ycdqqgz0c2wafvdxl23v3d";
+    sha256 = "0vxwma2r9mb2h0c3dkpvf8dbrc2x2ykhc5bb0vd72sl9pwj4jxmy";
   };
 
-  nativeBuildInputs = [ pkgconfig bmake ];
+  nativeBuildInputs = [ pkg-config bmake ];
 
   buildInputs = [
     cairo
@@ -35,6 +35,7 @@ stdenv.mkDerivation {
     pango
     pixman
     libucl
+    mesa # for libEGL
     wayland
     wayland-protocols
     wlroots
@@ -42,30 +43,22 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  # Must replace GNU Make by bmake
-  buildPhase = with stdenv.lib; concatStringsSep " " (
-    [ "bmake" "-j$NIX_BUILD_CORES" "PREFIX=$out" ]
+  makeFlags = with lib; [ "PREFIX=$(out)" ]
     ++ optional stdenv.isLinux "WITH_POSIX_C_SOURCE=YES"
     ++ mapAttrsToList (feat: enabled:
          optionalString enabled "WITH_${toUpper feat}=YES"
-       ) features
-  );
+       ) features;
 
-  # Can't suid in nix store
-  # Run hikari as root (it will drop privileges as early as possible), or create
-  # a systemd unit to give it the necessary permissions/capabilities.
-  patchPhase = ''
+  postPatch = ''
+    # Can't suid in nix store
+    # Run hikari as root (it will drop privileges as early as possible), or create
+    # a systemd unit to give it the necessary permissions/capabilities.
     substituteInPlace Makefile --replace '4555' '555'
+
+    sed -i 's@<drm_fourcc.h>@<libdrm/drm_fourcc.h>@' src/*.c
   '';
 
-  installPhase = ''
-    bmake \
-      PREFIX=$out \
-      install
-    runHook postInstall
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stacking Wayland compositor which is actively developed on FreeBSD but also supports Linux";
     homepage    = "https://hikari.acmelabs.space";
     license     = licenses.bsd2;

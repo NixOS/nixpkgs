@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, gtest }:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "gbenchmark";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
     rev = "v${version}";
-    sha256 = "16xlk8h4mfszl4rig22fgpj9kw312az22981ph6pmkf35xsvvv66";
+    sha256 = "13rxagpzw6bal6ajlmrxlh9kgfvcixn6j734b2bvfqz7lch8n0pa";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,10 +18,9 @@ stdenv.mkDerivation rec {
     chmod -R u+w googletest
   '';
 
-  enableParallelBuilding = true;
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A microbenchmark support library";
     homepage = "https://github.com/google/benchmark";
     license = licenses.asl20;

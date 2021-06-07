@@ -1,6 +1,6 @@
-{stdenv, clwrapper, pkgs, sbcl, coreutils, nix, asdf}:
+{lib, stdenv, clwrapper, pkgs, sbcl, coreutils, nix, asdf}:
 let lispPackages = rec {
-  inherit pkgs clwrapper stdenv;
+  inherit lib pkgs clwrapper stdenv;
   nixLib = pkgs.lib;
   callPackage = nixLib.callPackageWith lispPackages;
 
@@ -8,7 +8,7 @@ let lispPackages = rec {
 
   quicklisp = buildLispPackage rec {
     baseName = "quicklisp";
-    version = "2019-02-16";
+    version = "2021-02-13";
 
     buildSystems = [];
 
@@ -17,17 +17,17 @@ let lispPackages = rec {
     src = pkgs.fetchgit {
       url = "https://github.com/quicklisp/quicklisp-client/";
       rev = "refs/tags/version-${version}";
-      sha256 = "0x9b4vf36n2hh102gqgjxg5f5ymxcr9j5khn4rskjdprfgd8d1y9";
+      sha256 = "sha256:102f1chpx12h5dcf659a9kzifgfjc482ylf73fg1cs3w34zdawnl";
     };
     overrides = x: rec {
       inherit clwrapper;
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "https://beta.quicklisp.org/dist/quicklisp/2019-12-27/distinfo.txt";
-        sha256 = "0fz0k7ydmddxvxyid0nkifap21n6bxap602qhqsac2dxglv3i4cs";
+        url = "https://beta.quicklisp.org/dist/quicklisp/2021-04-11/distinfo.txt";
+        sha256 = "sha256:1z7a7m9cm7iv4m9ajvyqphsw30s3qwb0l8g8ayfmkvmvhlj79g86";
       };
-      buildPhase = '' true; '';
+      buildPhase = "true; ";
       postInstall = ''
         substituteAll ${./quicklisp.sh} "$out"/bin/quicklisp
         chmod a+x "$out"/bin/quicklisp
@@ -76,6 +76,134 @@ let lispPackages = rec {
       cp quicklisp-to-nix $out/bin
     '';
     dontStrip = true;
+  };
+
+  clx-truetype = buildLispPackage rec {
+          baseName = "clx-truetype";
+          version = "20160825-git";
+
+          buildSystems = [ "clx-truetype" ];
+          parasites = [ "clx-truetype-test" ];
+
+          description = "clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.";
+          deps = with pkgs.lispPackages; [
+                  alexandria bordeaux-threads cl-aa cl-fad cl-paths cl-paths-ttf cl-store
+                          cl-vectors clx trivial-features zpb-ttf
+          ];
+          src = pkgs.fetchurl {
+                  url = "http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
+                  sha256 = "0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67";
+          };
+
+          packageName = "clx-truetype";
+
+          asdFilesToKeep = ["clx-truetype.asd"];
+  };
+  cluffer = buildLispPackage rec {
+    baseName = "cluffer";
+    version = "2018-09-24";
+
+    buildSystems = [ "cluffer-base" "cluffer-simple-buffer" "cluffer-simple-line" "cluffer-standard-buffer" "cluffer-standard-line" "cluffer" ];
+    parasites = [ "cluffer-test" ];
+
+    description = "General purpose text-editor buffer";
+    deps = with pkgs.lispPackages; [
+      acclimation clump
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "robert-strandh";
+      repo = "cluffer";
+      rev = "4aad29c276a58a593064e79972ee4d77cae0af4a";
+      sha256 = "1bcg13g7qb3dr8z50aihdjqa6miz5ivlc9wsj2csgv1km1mak2kj";
+      # date = 2018-09-24T04:45:36+02:00;
+    };
+
+    packageName = "cluffer";
+
+    asdFilesToKeep = [ "cluffer.asd" "cluffer-base.asd" "cluffer-simple-buffer.asd" "cluffer-simple-line.asd" "cluffer-standard-buffer.asd" "cluffer-standard-line.asd" ];
+  };
+  nyxt = pkgs.lispPackages.buildLispPackage rec {
+    baseName = "nyxt";
+    version = "2.0.0";
+
+    description = "Browser";
+
+    overrides = x: {
+      postInstall = ''
+        echo "Building nyxt binary"
+        (
+          source "$out/lib/common-lisp-settings"/*-shell-config.sh
+          cd "$out/lib/common-lisp"/*/
+          makeFlags="''${makeFlags:-}"
+          make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags all
+          make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags install
+          cp nyxt "$out/bin/nyxt"
+        )
+        NIX_LISP_PRELAUNCH_HOOK='
+          nix_lisp_build_system nyxt/gtk-application \
+           "(asdf/system:component-entry-point (asdf:find-system :nyxt/gtk-application))" \
+           "" "(format *error-output* \"Alien objects:~%~s~%\" sb-alien::*shared-objects*)"
+        ' "$out/bin/nyxt-lisp-launcher.sh"
+        cp "$out/lib/common-lisp/nyxt/nyxt" "$out/bin/"
+      '';
+    };
+
+    deps = with pkgs.lispPackages; [
+            alexandria
+            bordeaux-threads
+            calispel
+            cl-css
+            cl-json
+            cl-markup
+            cl-ppcre
+            cl-ppcre-unicode
+            cl-prevalence
+            closer-mop
+            cl-containers
+            cluffer
+            moptilities
+            dexador
+            enchant
+            file-attributes
+            iolib
+            local-time
+            log4cl
+            mk-string-metrics
+            osicat
+            parenscript
+            quri
+            serapeum
+            str
+            plump
+            swank
+            trivia
+            trivial-clipboard
+            trivial-features
+            trivial-package-local-nicknames
+            trivial-types
+            unix-opts
+            cl-html-diff
+            hu_dot_dwim_dot_defclass-star
+            cl-custom-hash-table
+            fset
+            cl-cffi-gtk
+            cl-webkit2
+            cl-gobject-introspection
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nyxt";
+      rev = "${version}";
+      sha256 = "sha256-eSRNfzkAzGTorLjdHo1LQEKLx4ASdv3RGXIFZ5WFIXk=";
+    };
+
+    packageName = "nyxt";
+
+    propagatedBuildInputs = [
+      pkgs.libressl.out
+      pkgs.webkitgtk
+      pkgs.sbcl
+    ];
   };
 };
 in lispPackages

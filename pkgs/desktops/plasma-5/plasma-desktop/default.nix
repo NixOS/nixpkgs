@@ -1,42 +1,47 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
 
   boost, fontconfig, ibus, libXcursor, libXft, libcanberra_kde, libpulseaudio,
   libxkbfile, xf86inputevdev, xf86inputsynaptics, xinput, xkeyboard_config,
-  xorgserver, utillinux,
+  xorgserver, util-linux,
 
-  qtdeclarative, qtquickcontrols, qtquickcontrols2, qtsvg, qtx11extras,
+  accounts-qt, qtdeclarative, qtquickcontrols, qtquickcontrols2, qtsvg,
+  qtx11extras,
 
-  attica, baloo, kactivities, kactivities-stats, kauth, kcmutils, kdbusaddons,
-  kdeclarative, kded, kdelibs4support, kemoticons, kglobalaccel, ki18n,
-  kitemmodels, knewstuff, knotifications, knotifyconfig, kpeople, krunner,
-  kscreenlocker, ksysguard, kwallet, kwin, phonon, plasma-framework,
-  plasma-workspace, xf86inputlibinput
+  attica, baloo, kaccounts-integration, kactivities, kactivities-stats, kauth,
+  kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons,
+  kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications, knotifyconfig,
+  kpeople, krunner, kscreenlocker, ksysguard, kwallet, kwin, phonon,
+  plasma-framework, plasma-workspace, qqc2-desktop-style, xf86inputlibinput
 }:
 
 mkDerivation {
   name = "plasma-desktop";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft
+    boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft xorgserver
     libxkbfile phonon xf86inputevdev xf86inputsynaptics xinput xkeyboard_config
 
-    qtdeclarative qtquickcontrols qtquickcontrols2 qtsvg qtx11extras
+    accounts-qt qtdeclarative qtquickcontrols qtquickcontrols2 qtsvg qtx11extras
 
-    attica baloo kactivities kactivities-stats kauth kcmutils kdbusaddons
-    kdeclarative kded kdelibs4support kemoticons kglobalaccel ki18n kitemmodels
-    knewstuff knotifications knotifyconfig kpeople krunner kscreenlocker
-    ksysguard kwallet kwin plasma-framework plasma-workspace
+    attica baloo kaccounts-integration kactivities kactivities-stats kauth
+    kcmutils kdbusaddons kdeclarative kded kdelibs4support kemoticons
+    kglobalaccel ki18n kitemmodels knewstuff knotifications knotifyconfig
+    kpeople krunner kscreenlocker ksysguard kwallet kwin plasma-framework
+    plasma-workspace qqc2-desktop-style
   ];
 
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./hwclock-path.patch
+    ./tzdir.patch
+  ];
   postPatch = ''
-    sed '1i#include <cmath>' -i kcms/touchpad/src/backends/x11/synapticstouchpad.cpp
+    sed '1i#include <cmath>' -i kcms/touchpad/backends/x11/synapticstouchpad.cpp
   '';
   CXXFLAGS = [
     "-I${lib.getDev xorgserver}/include/xorg"
-    ''-DNIXPKGS_HWCLOCK=\"${lib.getBin utillinux}/sbin/hwclock\"''
+    ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/sbin/hwclock\"''
   ];
   cmakeFlags = [
     "-DEvdev_INCLUDE_DIRS=${lib.getDev xf86inputevdev}/include/xorg"

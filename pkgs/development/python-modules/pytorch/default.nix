@@ -1,11 +1,21 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
-  cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null, magma ? null,
+  cudaSupport ? false, cudatoolkit, cudnn, nccl, magma,
   mklDnnSupport ? true, useSystemNccl ? true,
-  openMPISupport ? false, openmpi ? null,
+  MPISupport ? false, mpi,
   buildDocs ? false,
   cudaArchList ? null,
-  numpy, pyyaml, cffi, click, typing, cmake, oneDNN, hypothesis, numactl, psutil,
-  linkFarm, symlinkJoin,
+
+  # Native build inputs
+  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11,
+
+  # Build inputs
+  numactl,
+
+  # Propagated build inputs
+  dataclasses, numpy, pyyaml, cffi, click, typing-extensions,
+
+  # Unit tests
+  hypothesis, psutil,
 
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
@@ -17,25 +27,18 @@
   # dependencies for torch.utils.tensorboard
   pillow, six, future, tensorflow-tensorboard, protobuf,
 
-  utillinux, which, isPy3k }:
-
-assert !openMPISupport || openmpi != null;
+  isPy3k, pythonOlder }:
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
-assert !cudaSupport || cudatoolkit != null;
-assert cudnn == null || cudatoolkit != null;
 assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
-                        in majorIs == "9" || majorIs == "10");
+                        in majorIs == "9" || majorIs == "10" || majorIs == "11");
 
-let
-  hasDependency = dep: pkg: lib.lists.any (inp: inp == dep) pkg.buildInputs;
-  matchesCudatoolkit = hasDependency cudatoolkit;
-in
 # confirm that cudatoolkits are sync'd across dependencies
-assert !(openMPISupport && cudaSupport) || matchesCudatoolkit openmpi;
-assert !cudaSupport || matchesCudatoolkit magma;
+assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
+assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
 
 let
+  setBool = v: if v then "1" else "0";
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     # nccl is here purely for semantic grouping it could be moved to nativeBuildInputs
@@ -70,27 +73,35 @@ let
   # (allowing FBGEMM to be built in pytorch-1.1), and may future proof this
   # derivation.
   brokenArchs = [ "3.0" ]; # this variable is only used as documentation.
-  cuda9ArchList = [
-    "3.5"
-    "5.0"
-    "5.2"
-    "6.0"
-    "6.1"
-    "7.0"
-    "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
-               # which leads me to believe this is the final cuda-9-compatible architecture.
-  ];
-  cuda10ArchList = cuda9ArchList ++ [
-    "7.5"
-    "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
-  ];
+
+  cudaCapabilities = rec {
+    cuda9 = [
+      "3.5"
+      "5.0"
+      "5.2"
+      "6.0"
+      "6.1"
+      "7.0"
+      "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
+                 # which leads me to believe this is the final cuda-9-compatible architecture.
+    ];
+
+    cuda10 = cuda9 ++ [
+      "7.5"
+      "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
+    ];
+
+    cuda11 = cuda10 ++ [
+      "8.0"
+      "8.0+PTX"  # < CUDA toolkit 11.0
+      "8.6"
+      "8.6+PTX"  # < CUDA toolkit 11.1
+    ];
+  };
   final_cudaArchList =
     if !cudaSupport || cudaArchList != null
     then cudaArchList
-    else
-      if lib.versions.major cudatoolkit.version == "9"
-      then cuda9ArchList
-      else cuda10ArchList; # the assert above removes any ambiguity here.
+    else cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
 
   # Normally libcuda.so.1 is provided at runtime by nvidia-x11 via
   # LD_LIBRARY_PATH=/run/opengl-driver/lib.  We only use the stub
@@ -104,13 +115,16 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
 
 in buildPythonPackage rec {
-  version = "1.5.1";
   pname = "pytorch";
+  # Don't forget to update pytorch-bin to the same version.
+  version = "1.8.1";
+
   disabled = !isPy3k;
 
   outputs = [
     "out"   # output standard python package
-    "dev"   # output libtorch only
+    "dev"   # output libtorch headers
+    "lib"   # output libtorch libraries
   ];
 
   src = fetchFromGitHub {
@@ -118,23 +132,24 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1xjbn4hi96m7xslv3p2jc6qcsng0fx3w1m6isqfah81piljf8wng";
+    sha256 = "sha256-HERbvmrfhWwH164GFHU/M0KbhVAuhI5sBZSxCZy8mRk=";
   };
 
-  patches = lib.optionals stdenv.isAarch64 [
-    # GNU aarch64 assembler does not support 4s on neon mov:
-    # https://github.com/pytorch/pytorch/issues/33124
-    #
-    # Fix from:
-    # https://github.com/pytorch/pytorch/pull/40584
-    #
-    # This patch can be removed with the next major version (1.6.0).
-    (fetchpatch {
-      name = "qnnpack-neon-fix.patch";
-      url = "https://github.com/pytorch/pytorch/commit/7676682584d0caf9243bce74ea0a88711ec4a807.diff";
-      sha256 = "13spncaqlpsp8qk2850yly7xqwmhhfwznhmzkk8jgpslkbx75vgq";
-    })
+  patches = lib.optionals stdenv.isDarwin [
+    # pthreadpool added support for Grand Central Dispatch in April
+    # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
+    # that is available starting with macOS 10.13. However, our current
+    # base is 10.12. Until we upgrade, we can fall back on the older
+    # pthread support.
+    ./pthreadpool-disable-gcd.diff
   ];
+
+  # The dataclasses module is included with Python >= 3.7. This should
+  # be fixed with the next PyTorch release.
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'dataclasses'" "'dataclasses; python_version < \"3.7\"'"
+  '';
 
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
@@ -146,16 +161,17 @@ in buildPythonPackage rec {
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
 
-  BUILD_NAMEDTENSOR = true;
-  BUILD_DOCS = buildDocs;
+  BUILD_NAMEDTENSOR = setBool true;
+  BUILD_DOCS = setBool buildDocs;
 
-  USE_MKL = blas.implementation == "mkl";
+  # We only do an imports check, so do not build tests either.
+  BUILD_TEST = setBool false;
 
-  # Unlike MKL, MKLDNN is FOSS, so we enable support for it by default. Note
-  # that this was renamed to dnnl and then renamed again to oneDNN upstream, but
-  # pytorch still calls it by the old name mkldnn.
-  USE_MKLDNN = mklDnnSupport;
-  USE_MKLDNN_CBLAS = mklDnnSupport;
+  # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
+  # it by default. PyTorch currently uses its own vendored version
+  # of oneDNN through Intel iDeep.
+  USE_MKLDNN = setBool mklDnnSupport;
+  USE_MKLDNN_CBLAS = setBool mklDnnSupport;
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -184,7 +200,7 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_SYSTEM_NCCL=useSystemNccl;                  # don't build pytorch's third_party NCCL
+  USE_SYSTEM_NCCL=setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -197,12 +213,13 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    utillinux
+    util-linux
     which
     ninja
+    pybind11
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
-  buildInputs = [ blas blas.provider oneDNN ]
+  buildInputs = [ blas blas.provider ]
     ++ lib.optionals cudaSupport [ cudnn magma nccl ]
     ++ lib.optionals stdenv.isLinux [ numactl ];
 
@@ -211,9 +228,11 @@ in buildPythonPackage rec {
     click
     numpy
     pyyaml
+    typing-extensions
     # the following are required for tensorboard support
     pillow six future tensorflow-tensorboard protobuf
-  ] ++ lib.optionals openMPISupport [ openmpi ];
+  ] ++ lib.optionals MPISupport [ mpi ]
+    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
   checkInputs = [ hypothesis ninja psutil ];
 
@@ -239,41 +258,56 @@ in buildPythonPackage rec {
   ];
   postInstall = ''
     mkdir $dev
-    cp -r $out/${python.sitePackages}/torch/lib     $dev/lib
     cp -r $out/${python.sitePackages}/torch/include $dev/include
     cp -r $out/${python.sitePackages}/torch/share   $dev/share
+
+    # Fix up library paths for split outputs
+    substituteInPlace \
+      $dev/share/cmake/Torch/TorchConfig.cmake \
+      --replace \''${TORCH_INSTALL_PREFIX}/lib "$lib/lib"
+
+    substituteInPlace \
+      $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
+      --replace \''${_IMPORT_PREFIX}/lib "$lib/lib"
+
+    mkdir $lib
+    cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
   '';
 
-  postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    for f in $(ls $dev/lib/*.dylib); do
-        install_name_tool -id $dev/lib/$(basename $f) $f || true
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    for f in $(ls $lib/lib/*.dylib); do
+        install_name_tool -id $lib/lib/$(basename $f) $f || true
     done
 
-    install_name_tool -change @rpath/libshm.dylib $dev/lib/libshm.dylib $dev/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libshm.dylib $lib/lib/libshm.dylib $lib/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch_python.dylib
 
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libtorch.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libcaffe2_observers.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libcaffe2_observers.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_observers.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_observers.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libcaffe2_module_test_dynamic.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libcaffe2_module_test_dynamic.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_module_test_dynamic.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_module_test_dynamic.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libcaffe2_detectron_ops.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libcaffe2_detectron_ops.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_detectron_ops.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_detectron_ops.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libshm.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libshm.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libshm.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
 
+  # Builds in 2+h with 2 cores, and ~15m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = {
+  meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage    = "https://pytorch.org/";
-    license     = lib.licenses.bsd3;
-    platforms   = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with lib.maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    license     = licenses.bsd3;
+    platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    maintainers = with maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    # error: use of undeclared identifier 'noU'; did you mean 'no'?
+    broken = stdenv.isDarwin;
   };
 }

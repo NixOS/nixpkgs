@@ -1,6 +1,5 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, fetchpatch
 , gmp
 , readline
 , libX11
@@ -13,20 +12,21 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.11.3";
+  version = "2.13.1";
 
   src = fetchurl {
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
-    sha256 = "1jd65h2psrmba2dx7rkf5qidf9ka0cwbsg20pd18k45ggr30l467";
+    urls = [
+      "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz"
+      # old versions are at the url below
+      "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
+    ];
+    sha256 = "sha256-gez31wzNquIwFlz/Ynyc4uwpe48i+fQHQiedhfht/LE=";
   };
 
   patches = [
-    # https://trac.sagemath.org/ticket/29313#comment:1
-    (fetchpatch {
-      name = "backport-bug-fix.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/repos/community-x86_64/c7a1d35f.patch?h=packages/pari&id=27893d227290dc3821d68aa25877d9765c204dad";
-      sha256 = "0vm0fwyzj66cr32imip6srksd47s2s2sjl1rb26ph8gpfi3nalii";
-    })
+    # rebased version of 3edb98db78, see
+    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2284
+    ./rnfdisc.patch
   ];
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     libX11
     tex
     perl
-  ] ++ stdenv.lib.optionals withThread [
+  ] ++ lib.optionals withThread [
     libpthreadstubs
   ];
 
@@ -43,20 +43,20 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gmp=${gmp.dev}"
     "--with-readline=${readline.dev}"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin"
-  ++ stdenv.lib.optional withThread "--mt=pthread";
+  ] ++ lib.optional stdenv.isDarwin "--host=x86_64-darwin"
+  ++ lib.optional withThread "--mt=pthread";
 
   preConfigure = ''
     export LD=$CC
   '';
 
-  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  postConfigure = lib.optionalString stdenv.isDarwin ''
     echo 'echo x86_64-darwin' > config/arch-osname
   '';
 
   makeFlags = [ "all" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Computer algebra system for high-performance number theory computations";
     longDescription = ''
        PARI/GP is a widely used computer algebra system designed for fast
@@ -72,20 +72,20 @@ stdenv.mkDerivation rec {
        Belabas with the help of many volunteer contributors.
 
        - PARI is a C library, allowing fast computations.
-       - gp is an easy-to-use interactive shell giving access to the
-          PARI functions.
+       - gp is an easy-to-use interactive shell giving access to the PARI
+         functions.
        - GP is the name of gp's scripting language.
-       - gp2c, the GP-to-C compiler, combines the best of both worlds
-          by compiling GP scripts to the C language and transparently loading
-          the resulting functions into gp. (gp2c-compiled scripts will typically
-          run 3 or 4 times faster.) gp2c currently only understands a subset
-           of the GP language.
+       - gp2c, the GP-to-C compiler, combines the best of both worlds by
+         compiling GP scripts to the C language and transparently loading the
+         resulting functions into gp. (gp2c-compiled scripts will typically run
+         3 or 4 times faster.) gp2c currently only understands a subset of the
+         GP language.
     '';
-    homepage    = "http://pari.math.u-bordeaux.fr";
+    homepage = "http://pari.math.u-bordeaux.fr";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes raskin AndersonTorres timokau ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ertes AndersonTorres ] ++ teams.sage.members;
+    platforms = platforms.linux ++ platforms.darwin;
     updateWalker = true;
   };
 }

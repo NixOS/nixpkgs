@@ -22,6 +22,11 @@ in {
 
     systemd.packages = [ pkgs.iwd ];
 
+    systemd.network.links."80-iwd" = {
+      matchConfig.Type = "wlan";
+      linkConfig.NamePolicy = "keep kernel";
+    };
+
     systemd.services.iwd.wantedBy = [ "multi-user.target" ];
   };
 

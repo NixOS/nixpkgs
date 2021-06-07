@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, zip, unzip, firefox, bash}:
+{lib, stdenv, fetchFromGitHub, zip, unzip, firefox, bash}:
 let
   s = # Generated upstream information
   rec {
@@ -10,13 +10,11 @@ let
     sha256="1w4sfrv520isbs7r1rlzl5y3idrpad7znw9fc92yz40jlwz7sxs4";
     rev = version;
   };
-  buildInputs = [
-    unzip zip
-  ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  buildInputs = [ zip ];
+  nativeBuildInputs = [ unzip ];
   #src = fetchurl {
   #  inherit (s) url sha256;
   #};
@@ -42,9 +40,9 @@ stdenv.mkDerivation {
   '';
   meta = {
     inherit (s) version;
-    description = ''Gecko-based programmatically-driven browser'';
-    license = stdenv.lib.licenses.mpl20 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Gecko-based programmatically-driven browser";
+    license = lib.licenses.mpl20 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

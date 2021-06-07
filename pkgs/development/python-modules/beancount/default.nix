@@ -1,17 +1,30 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, beautifulsoup4, bottle, chardet, dateutil
-, google_api_python_client, lxml, oauth2client
-, ply, python_magic, pytest, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, beautifulsoup4
+, bottle
+, chardet
+, dateutil
+, google-api-python-client
+, google-auth-oauthlib
+, lxml
+, oauth2client
+, ply
+, pytest
+, python_magic
+, requests
+}:
 
 buildPythonPackage rec {
-  version = "2.3.0";
+  version = "2.3.4";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04i788glp2cslwi67dixy1pi5l0izcl078i9mrd1j1sh8f99cvcs";
+    sha256 = "sha256-K/CM5qldmAAPTXM5WYXNHeuBwNUu1aduYQusd9gvhsA=";
   };
 
   # Tests require files not included in the PyPI archive.
@@ -22,18 +35,19 @@ buildPythonPackage rec {
     bottle
     chardet
     dateutil
-    google_api_python_client
+    google-api-python-client
+    google-auth-oauthlib
     lxml
     oauth2client
     ply
     python_magic
     requests
     # pytest really is a runtime dependency
-    # https://bitbucket.org/blais/beancount/commits/554e13057551951e113835196770847c788dd592
+    # https://github.com/beancount/beancount/blob/v2/setup.py#L81-L82
     pytest
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://furius.ca/beancount/";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
@@ -41,8 +55,7 @@ buildPythonPackage rec {
         financial transaction records in a text file, read them in memory,
         generate a variety of reports from them, and provides a web interface.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ bhipple ];
   };
 }
-

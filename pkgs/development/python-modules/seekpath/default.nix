@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, future, spglib, glibcLocales, pytest, scipy }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, future, spglib, glibcLocales, pytest, scipy }:
 
 buildPythonPackage rec {
   pname = "seekpath";
   version = "2.0.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "giovannipizzi";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     pytest . -k 'not oI2Y'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A module to obtain and visualize band paths in the Brillouin zone of crystal structures.";
     homepage = "https://github.com/giovannipizzi/seekpath";
     license = licenses.mit;

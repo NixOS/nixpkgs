@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, xxd }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "yabai";
-  version = "3.2.1";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11rsi6z2z7ynfqs1xq3bvf187k5xnwm0d45a8ai9hrqdsf3f1j19";
+    sha256 = "1pvyjdxgy7yxxz4x87f8an0dlxvxbnmv5kya8hkzw2na453ihvab";
   };
 
   buildInputs = [ Carbon Cocoa ScriptingBridge xxd ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp ./doc/yabai.1 $out/share/man/man1/yabai.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A tiling window manager for macOS based on binary space partitioning
     '';

@@ -1,27 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook }:
+{ autoreconfHook
+, fetchFromGitHub
+, lib
+, nix-update-script
+, pkg-config
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   pname = "gensio";
-  version = "2.0.5";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "cminyard";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1j6c6vmnip24pxafk29y312vif1xlryymv7aaxgqp9ca3s91nlrf";
+    sha256 = "sha256-QC07NGgZa++qHyGZY3fjosjJVuRFfc7HYmdGxQHAz4s=";
+  };
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
   };
 
   configureFlags = [
     "--with-python=no"
   ];
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = with lib; {
     description = "General Stream I/O";
     homepage = "https://sourceforge.net/projects/ser2net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }

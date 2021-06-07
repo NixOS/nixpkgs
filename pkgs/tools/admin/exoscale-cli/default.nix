@@ -1,18 +1,19 @@
-{ stdenv, buildGo114Package, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-buildGo114Package rec {
+buildGoPackage rec {
   pname = "exoscale-cli";
-  version = "1.12.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner  = "exoscale";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "04ym7mfv565icj3lmd2nrvq9asawwmmzg09681pj9py61ws56bxr";
+    sha256 = "sha256-2CK/W8h0xfReqYt4a3qQ88Ydr8u9Ky6DfttJJaGu9kM=";
   };
 
   goPackagePath = "github.com/exoscale/cli";
-  goDeps = ./deps.nix;
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
 
   # ensures only the cli binary is built and we don't clutter bin/ with submodules
   subPackages = [ "." ];
@@ -26,7 +27,7 @@ buildGo114Package rec {
   meta = {
     description = "Command-line tool for everything at Exoscale: compute, storage, dns";
     homepage    = "https://github.com/exoscale/cli";
-    license     = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ dramaturg ];
+    license     = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dramaturg ];
   };
 }

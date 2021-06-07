@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , makeWrapper
-, electron_8
+, electron_9
 , dpkg
 , gtk3
 , glib
@@ -12,13 +12,16 @@
 , pandoc
 }:
 
+let
+  electron = electron_9;
+in
 stdenv.mkDerivation rec {
   pname = "typora";
-  version = "0.9.89";
+  version = "0.9.98";
 
   src = fetchurl {
     url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-    sha256 = "0gk8j13z1ymad34zzcy4vqwyjgd5khgyw5xjj9rbzm5v537kqmx6";
+    sha256 = "sha256-JiqjxT8ZGttrcJrcQmBoGPnRuuYWZ9u2083RxZoLMus=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_8}/bin/electron $out/bin/typora \
+    makeWrapper ${electron}/bin/electron $out/bin/typora \
       --add-flags $out/share/typora \
       "''${gappsWrapperArgs[@]}" \
       ${lib.optionalString withPandoc ''--prefix PATH : "${lib.makeBinPath [ pandoc ]}"''} \

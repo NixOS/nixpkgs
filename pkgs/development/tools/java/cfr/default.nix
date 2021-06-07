@@ -1,12 +1,12 @@
-{ stdenv, makeWrapper, fetchurl, jre }:
+{ lib, stdenv, makeWrapper, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
   pname = "cfr";
-  version = "0.150";
+  version = "0.151";
 
   src = fetchurl {
     url = "http://www.benf.org/other/cfr/cfr_${version}.jar";
-    sha256 = "09lq21phnhr374wb8gj355jsqj8c4m5m818r3pbr8f8zpaamjxfj";
+    sha256 = "sha256-MW6QFbmvKVP8/0/oa/O7pwXzLnzSW9blNcaY3ool6Dc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/cfr --add-flags "-jar $jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Another java decompiler";
     longDescription = ''
       CFR will decompile modern Java features - Java 8 lambdas (pre and post

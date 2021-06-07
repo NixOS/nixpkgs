@@ -1,28 +1,22 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "diskonaut";
-  version = "0.3.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = "diskonaut";
     rev = version;
-    sha256 = "0vnmch2cac0j9b44vlcpqnayqhfdfdwvfa01bn7lwcyrcln5cd0z";
+    sha256 = "1pmbag3r2ka30zmy2rs9jps2qxj2zh0gy4a774v9yhf0b6qjid54";
   };
 
-  cargoSha256 = "03hqdg6pnfxnhwk0xwhwmbrk4dicjpjllbbai56a3391xac5wmi6";
+  cargoSha256 = "10jrcy8m9ll4136ghq3fhmnphd9g3rw863x708vm17n44kgdxyab";
 
-  # some tests fail due to non-portable (in terms of filesystems) measurements of block sizes
-  # try to re-enable tests once actual-file-size is added
-  # see https://github.com/imsnif/diskonaut/issues/50 for more info
-  doCheck = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terminal disk space navigator";
     homepage = "https://github.com/imsnif/diskonaut";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ evanjs ];
   };
 }

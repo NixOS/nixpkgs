@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname   = "plplot";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform scientific graphics plotting library";
     homepage    = "https://plplot.org";
     maintainers = with maintainers; [ bcdarwin ];

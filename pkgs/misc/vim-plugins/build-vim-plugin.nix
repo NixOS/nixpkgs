@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rtpPath ? "share/vim-plugins"
 , vim
 }:
@@ -18,7 +18,7 @@ rec {
     buildPhase ? "",
     preInstall ? "",
     postInstall ? "",
-    path ? stdenv.lib.getName name,
+    path ? lib.getName name,
     addonInfo ? null,
     ...
   }:

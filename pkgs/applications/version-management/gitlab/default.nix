@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests, nodejs
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
+, ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace
+, fixup_yarn_lock, replace, file
 }:
 
 let
@@ -27,6 +27,14 @@ let
         grpc = x.grpc // {
           patches = [ ./fix-grpc-ar.patch ];
           dontBuild = false;
+        };
+        # the openssl needs the openssl include files
+        openssl = x.openssl // {
+          buildInputs = [ openssl ];
+        };
+        ruby-magic = x.ruby-magic // {
+          buildInputs = [ file ];
+          buildFlags = [ "--enable-system-libraries" ];
         };
       };
     groups = [
@@ -89,8 +97,9 @@ let
 
       bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake webpack:compile RAILS_ENV=production NODE_ENV=production NODE_OPTIONS="--max_old_space_size=3072"
+      bundle exec rake gitlab:assets:compile_webpack_if_needed RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
 
       runHook postBuild
     '';
@@ -113,7 +122,10 @@ stdenv.mkDerivation {
     rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
 
-  patches = [ ./remove-hardcoded-locations.patch ];
+  patches = [
+    # Change hardcoded paths to the NixOS equivalent
+    ./remove-hardcoded-locations.patch
+  ];
 
   postPatch = ''
     ${lib.optionalString (!gitlabEnterprise) ''
@@ -132,6 +144,7 @@ stdenv.mkDerivation {
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
     sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
 
+    mv config/puma.rb.example config/puma.rb
     # Always require lib-files and application.rb through their store
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the

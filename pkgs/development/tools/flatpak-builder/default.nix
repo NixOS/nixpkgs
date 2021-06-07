@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , nixosTests
@@ -11,7 +11,7 @@
 , gettext
 , libxml2
 , libxslt
-, pkgconfig
+, pkg-config
 , xmlto
 
 , acl
@@ -46,13 +46,13 @@ let
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
-  version = "1.0.10";
+  version = "1.0.12";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1fn61cl1d33yd1jgqm8jpffjw3xlyyhkn032g14d9gnwkcaf4649";
+    sha256 = "sha256-R4DBuOCDj/tk6WOb14AUF5ZP2BjHxtXpr8pNVRHe0sg=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     gettext
     libxml2
     libxslt
-    pkgconfig
+    pkg-config
     xmlto
   ];
 
@@ -87,9 +87,11 @@ in stdenv.mkDerivation rec {
   patches = [
     # patch taken from gtk_doc
     ./respect-xml-catalog-files-var.patch
+
+    # Hardcode paths
     (substituteAll {
       src = ./fix-paths.patch;
-      bzr = "${breezy}/bin/bzr";
+      brz = "${breezy}/bin/brz";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
       tar = "${gnutar}/bin/tar";
@@ -143,7 +145,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to build flatpaks from source";
     homepage = "https://github.com/flatpak/flatpak-builder";
     license = licenses.lgpl21Plus;

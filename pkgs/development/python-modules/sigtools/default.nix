@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , repeated_test
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   patchPhase = ''sed -i s/test_suite="'"sigtools.tests"'"/test_suite="'"unittest2.collector"'"/ setup.py'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for working with 3.3's inspect.Signature objects.";
     homepage = "https://pypi.python.org/pypi/sigtools";
     license = licenses.mit;

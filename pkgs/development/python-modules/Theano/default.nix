@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , runCommandCC
 , fetchPypi
 , buildPythonPackage
@@ -40,35 +40,37 @@ let
     if stdenv.cc.isClang then "clang++" else
     throw "Unknown C++ compiler";
   cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
-    (    stdenv.lib.optional cudaSupport libgpuarray_
-      ++ stdenv.lib.optional cudnnSupport cudnn );
+    (    lib.optional cudaSupport libgpuarray_
+      ++ lib.optional cudnnSupport cudnn );
 
   libgpuarray_ = libgpuarray.override { inherit cudaSupport cudatoolkit; };
 
 in buildPythonPackage rec {
   pname = "Theano";
-  version = "1.0.4";
+  version = "1.0.5";
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35c9bbef56b61ffa299265a42a4e8f8cb5a07b2997dabaef0f8830b397086913";
+    sha256 = "129f43ww2a6badfdr6b88kzjzz2b0wk0dwkvwb55z6dsagfkk53f";
   };
 
   postPatch = ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(param, is_valid=warn_cxx)' 'StrParam('\'''${cxx_compiler}'\''', is_valid=warn_cxx)' \
       --replace 'rc == 0 and config.cxx != ""' 'config.cxx != ""'
-  '' + stdenv.lib.optionalString cudaSupport ''
+  '' + lib.optionalString cudaSupport ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(get_cuda_root)' 'StrParam('\'''${cudatoolkit}'\''')'
-  '' + stdenv.lib.optionalString cudnnSupport ''
+  '' + lib.optionalString cudnnSupport ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';
 
-  preCheck = ''
+  # needs to be postFixup so it runs before pythonImportsCheck even when
+  # doCheck = false (meaning preCheck would be disabled)
+  postFixup = ''
     mkdir -p check-phase
     export HOME=$(pwd)/check-phase
   '';
@@ -81,7 +83,9 @@ in buildPythonPackage rec {
   checkInputs = [ nose ];
   propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "theano" ];
+
+  meta = with lib; {
     homepage = "http://deeplearning.net/software/theano/";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;

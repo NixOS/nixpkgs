@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub }:
+{ lib, stdenv, cmake, fetchFromGitHub, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "btor2tools";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mfqmkgvyw8fa2c09kww107dmk180ch1hp98r5kv41vnc04iqb0s";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   installPhase = ''
     mkdir -p $out $dev/include/btor2parser/ $lib/lib
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A generic parser and tool package for the BTOR2 format";
     homepage    = "https://github.com/Boolector/btor2tools";
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

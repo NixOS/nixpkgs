@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, SDL, SDL_image, SDL_ttf, SDL_gfx, flex, bison }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, SDL, SDL_image, SDL_ttf, SDL_gfx, flex, bison }:
 
 let
   makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "092vp61ngd2vscsvyisi7dv6qrk5m1i81gg19hyfl5qvjq5p0p8g";
   };
 
-  nativeBuildInputs = [ pkgconfig flex bison ];
+  nativeBuildInputs = [ pkg-config flex bison ];
 
   buildInputs = [ SDL SDL_image SDL_ttf SDL_gfx ];
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     ./parse.patch # Fixes compilation error by avoiding redundant definitions.
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A slide show presentation tool";
 

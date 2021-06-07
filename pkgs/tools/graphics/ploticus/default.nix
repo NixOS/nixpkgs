@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, libX11, libpng}:
+{lib, stdenv, fetchurl, zlib, libX11, libpng}:
 
 stdenv.mkDerivation {
   name = "ploticus-2.42";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     ln -sf pl.1 "$out"/man/man1/ploticus.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A non-interactive software package for producing plots and charts";
     longDescription = ''Ploticus is a free, GPL'd, non-interactive
       software package for producing plots, charts, and graphics from

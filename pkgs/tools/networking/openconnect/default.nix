@@ -1,4 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, fetchgit, darwin } :
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, openssl ? null
+, gnutls ? null
+, gmp
+, libxml2
+, stoken
+, zlib
+, fetchgit
+, darwin
+, head ? false
+  , fetchFromGitLab
+  , autoreconfHook
+}:
 
 assert (openssl != null) == (gnutls == null);
 
@@ -9,18 +24,23 @@ let vpnc = fetchgit {
 };
 
 in stdenv.mkDerivation rec {
-  pname = "openconnect";
-  version = "8.10";
+  pname = "openconnect${lib.optionalString head "-head"}";
+  version = if head then "2021-05-05" else "8.10";
 
-  src = fetchurl {
-    urls = [
-      "ftp://ftp.infradead.org/pub/openconnect/${pname}-${version}.tar.gz"
-    ];
-    sha256 = "1cdsx4nsrwawbsisfkldfc9i4qn60g03vxb13nzppr2br9p4rrih";
-  };
+  src =
+    if head then fetchFromGitLab {
+      owner = "openconnect";
+      repo = "openconnect";
+      rev = "684f6db1aef78e61e01f511c728bf658c30b9114";
+      sha256 = "0waclawcymgd8sq9xbkn2q8mnqp4pd0gpyv5wrnb7i0nsv860wz8";
+    }
+    else fetchurl {
+      url = "ftp://ftp.infradead.org/pub/openconnect/${pname}-${version}.tar.gz";
+      sha256 = "1cdsx4nsrwawbsisfkldfc9i4qn60g03vxb13nzppr2br9p4rrih";
+    };
 
   outputs = [ "out" "dev" ];
-  
+
   configureFlags = [
     "--with-vpnc-script=${vpnc}/vpnc-script"
     "--disable-nls"
@@ -28,14 +48,15 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl gnutls gmp libxml2 stoken zlib ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC;
-  nativeBuildInputs = [ pkgconfig ];
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC;
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optional head autoreconfHook;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
     homepage = "http://www.infradead.org/openconnect/";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ pradeepchhetri tricktron ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

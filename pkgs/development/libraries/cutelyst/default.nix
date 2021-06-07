@@ -1,19 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, wrapQtAppsHook
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook
 , qtbase, libuuid, libcap, uwsgi, grantlee, pcre
 }:
 
 stdenv.mkDerivation rec {
   pname = "cutelyst";
-  version = "2.11.0";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "cutelyst";
     repo = "cutelyst";
     rev = "v${version}";
-    sha256 = "1c4cjzx6jkqlblcfc7pkx66py43576y6rky19j7rjiap724q2yk9";
+    sha256 = "sha256-JUffOeUTeaZvEssP5hfSGipeRuQ7FzLF4bOizCFhe5o=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [ qtbase libuuid libcap uwsgi grantlee pcre ];
 
   cmakeFlags = [

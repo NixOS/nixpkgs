@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, runtimeShell }:
+{ lib, buildGoPackage, fetchFromGitHub, runtimeShell }:
 
 buildGoPackage rec {
   pname = "hivemind";
@@ -16,7 +16,7 @@ buildGoPackage rec {
     sha256 = "0afcnd03wsdphbbpha65rv5pnv0x6ldnnm6rnv1m6xkkywgnzx95";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/DarthSim/";
     description = "Process manager for Procfile-based applications";
     license = with licenses; [ mit ];

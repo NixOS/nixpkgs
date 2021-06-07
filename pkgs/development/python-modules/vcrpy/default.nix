@@ -1,5 +1,6 @@
 { buildPythonPackage
 , lib
+, isPy27
 , six
 , fetchPypi
 , pyyaml
@@ -15,11 +16,13 @@
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "4.0.2";
+  version = "4.1.1";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9740c5b1b63626ec55cefb415259a2c77ce00751e97b0f7f214037baaf13c7bf";
+    sha256 = "57095bf22fc0a2d99ee9674cdafebed0f3ba763018582450706f7d3a74fff599";
   };
 
   checkInputs = [

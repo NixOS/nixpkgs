@@ -12,7 +12,7 @@ let
   mkElkTest = name : elk :
     import ./make-test-python.nix ({
     inherit name;
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ eelco offline basvandijk ];
     };
     nodes = {
@@ -120,6 +120,7 @@ let
           };
       };
 
+    passthru.elkPackages = elk;
     testScript = ''
       import json
 
@@ -177,7 +178,7 @@ let
           one.systemctl("stop logstash")
           one.systemctl("start elasticsearch-curator")
           one.wait_until_succeeds(
-              '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep -q ^'
+              '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep ^'
           )
     '';
   }) {};

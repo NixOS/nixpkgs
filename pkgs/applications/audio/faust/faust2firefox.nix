@@ -1,5 +1,5 @@
 { faust
-, xdg_utils
+, xdg-utils
 }:
 
 # This just runs faust2svg, then attempts to open a browser using
@@ -9,6 +9,6 @@ faust.wrap {
 
   baseName = "faust2firefox";
 
-  runtimeInputs = [ xdg_utils ];
+  runtimeInputs = [ xdg-utils ];
 
 }

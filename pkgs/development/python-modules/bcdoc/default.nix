@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, docutils, six }:
+{ lib, buildPythonPackage, fetchPypi, docutils, six }:
 
 buildPythonPackage rec {
   pname = "bcdoc";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # Tests fail due to nix file timestamp normalization.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/boto/bcdoc";
     license = licenses.asl20;
     description = "ReST document generation tools for botocore";

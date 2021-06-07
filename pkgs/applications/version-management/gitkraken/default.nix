@@ -1,23 +1,23 @@
-{ stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
+{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
+, libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5
+, e2fsprogs, krb5, libdrm, mesa
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "7.0.1";
+  version = "7.6.1";
 
   src = fetchzip {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-    sha256 = "0vj2ggbm617fypl69ksbrbl048xp4v6wc46y4sp7hrk6lg0gw1b0";
+    sha256 = "sha256-wpfTozXxanZkYtYQHY950PLsVO4lXLt5OOP/xDCrFEw=";
   };
 
   dontBuild = true;
@@ -61,10 +61,12 @@ stdenv.mkDerivation rec {
     libuuid
     e2fsprogs
     krb5
+    libdrm
+    mesa
   ];
 
   desktopItem = makeDesktopItem {
-    name = "gitkraken";
+    name = pname;
     exec = "gitkraken";
     icon = "gitkraken";
     desktopName = "GitKraken";
@@ -74,7 +76,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   installPhase = ''
     runHook preInstall
@@ -86,10 +88,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
 
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
-
-    substituteInPlace $out/share/applications/gitkraken.desktop \
-      --replace $out/usr/share/gitkraken $out/bin
+    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     mkdir -p $out/share/pixmaps
     cp gitkraken.png $out/share/pixmaps/gitkraken.png

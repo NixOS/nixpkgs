@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, ocaml_pcre }:
+{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, ocaml_pcre }:
 
 let version = "1.4"; in
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     homepage = "http://ocaml-benchmark.forge.ocamlcore.org/";
     platforms = ocaml.meta.platforms or [];
     description = "Benchmark running times of code";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ volth ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ volth ];
   };
 }

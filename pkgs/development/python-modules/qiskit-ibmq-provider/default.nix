@@ -9,24 +9,37 @@
 , requests_ntlm
 , websockets
   # Visualization inputs
-, ipykernel
+, withVisualization ? false
+, ipython
 , ipyvuetify
 , ipywidgets
 , matplotlib
-, nbconvert
-, nbformat
 , plotly
 , pyperclip
 , seaborn
   # check inputs
 , pytestCheckHook
+, nbconvert
+, nbformat
 , pproxy
+, qiskit-aer
 , vcrpy
 }:
 
+let
+  visualizationPackages = [
+    ipython
+    ipyvuetify
+    ipywidgets
+    matplotlib
+    plotly
+    pyperclip
+    seaborn
+  ];
+in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.7.2";
+  version = "0.13.1";
 
   disabled = pythonOlder "3.6";
 
@@ -34,7 +47,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "11h1ca4v11pajzn1cxqhim1hfziqzj27xzakwln13g8zmiqx3csp";
+    hash = "sha256-DlHlXncttzGo4uVoh2aQ7urW6krN3ej2sJ/EwuxeF2I=";
   };
 
   propagatedBuildInputs = [
@@ -44,31 +57,17 @@ buildPythonPackage rec {
     requests
     requests_ntlm
     websockets
-    # Visualization/Jupyter inputs
-    ipykernel
-    ipyvuetify
-    ipywidgets
-    matplotlib
-    nbconvert
-    nbformat
-    plotly
-    pyperclip
-    seaborn
-  ];
-
-  # websockets seems to be pinned b/c in v8+ it drops py3.5 support. Not an issue here (usually py3.7+, and disabled for older py3.6)
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "websockets>=7,<8" "websockets"
-    substituteInPlace setup.py --replace "websockets>=7,<8" "websockets"
-  '';
+  ] ++ lib.optionals withVisualization visualizationPackages;
 
   # Most tests require credentials to run on IBMQ
   checkInputs = [
     pytestCheckHook
+    nbconvert
+    nbformat
     pproxy
+    qiskit-aer
     vcrpy
-  ];
-  dontUseSetuptoolsCheck = true;
+  ] ++ lib.optionals (!withVisualization) visualizationPackages;
 
   pythonImportsCheck = [ "qiskit.providers.ibmq" ];
   # These disabled tests require internet connection, aren't skipped elsewhere
@@ -76,15 +75,22 @@ buildPythonPackage rec {
     "test_old_api_url"
     "test_non_auth_url"
     "test_non_auth_url_with_hub"
+
+    # slow tests
+    "test_websocket_retry_failure"
+    "test_invalid_url"
   ];
 
   # Skip tests that rely on internet access (mostly to IBM Quantum Experience cloud).
   # Options defined in qiskit.terra.test.testing_options.py::get_test_options
-  QISKIT_TESTS = "skip_online";
+  preCheck = ''
+    export QISKIT_TESTS=skip_online
+  '';
 
   meta = with lib; {
     description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ";
     homepage = "https://github.com/Qiskit/qiskit-ibmq-provider";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

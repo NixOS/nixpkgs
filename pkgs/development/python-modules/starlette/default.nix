@@ -2,61 +2,62 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, isPy27
 , aiofiles
 , graphene
 , itsdangerous
 , jinja2
+, python-multipart
 , pyyaml
 , requests
-, ujson
-, python-multipart
-, pytest
-, uvicorn
-, isPy27
-, darwin
-, databases
 , aiosqlite
+, databases
+, pytestCheckHook
+, pytest-asyncio
+, typing-extensions
+, ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-
-  # This is not the latest version of Starlette, however, later
-  # versions of Starlette break FastAPI due to
-  # https://github.com/tiangolo/fastapi/issues/683. Please update when
-  # possible. FastAPI is currently Starlette's only dependent.
-
-  version = "0.13.4";
+  version = "0.14.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "1rk20rj62iigkkikb80bmalriyg1j3g28s25l8z2gijagv1v5c7l";
+    sha256 = "0fz28czvwiww693ig9vwdja59xxs7m0yp1df32ms1hzr99666bia";
   };
+
+  postPatch = ''
+    # remove coverage arguments to pytest
+    sed -i '/--cov/d' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     aiofiles
     graphene
     itsdangerous
     jinja2
+    python-multipart
     pyyaml
     requests
-    ujson
-    uvicorn
-    python-multipart
-    databases
-  ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
+  ] ++ lib.optional stdenv.isDarwin [ ApplicationServices ];
 
   checkInputs = [
-    pytest
     aiosqlite
+    databases
+    pytest-asyncio
+    pytestCheckHook
+    typing-extensions
   ];
 
-  checkPhase = ''
-    pytest --ignore=tests/test_graphql.py
-  '';
+  # fails to import graphql, but integrated graphql support is about to
+  # be removed in 0.15, see https://github.com/encode/starlette/pull/1135.
+  disabledTestPaths = [ "tests/test_graphql.py" ];
+
+  pythonImportsCheck = [ "starlette" ];
 
   meta = with lib; {
     homepage = "https://www.starlette.io/";

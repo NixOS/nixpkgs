@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , Mako
@@ -12,20 +13,24 @@
 , opencl-headers
 , ocl-icd
 , pybind11
+, mesa_drivers
 }:
 
-buildPythonPackage rec {
+let
+  os-specific-buildInputs =
+    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
+in buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2020.1";
+  version = "2021.1.4";
 
   checkInputs = [ pytest ];
-  buildInputs = [ opencl-headers ocl-icd pybind11 ];
+  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 
   propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7513f7054f4eeb5361de1f5113883145fc67dbabde73a2148f221ae05af4d22c";
+    sha256 = "6a9665e89c15e1c684789263bd3a632567e7c7bd25a657092df4b185b3468971";
   };
 
   # py.test is not needed during runtime, so remove it from `install_requires`
@@ -40,7 +45,7 @@ buildPythonPackage rec {
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
     license = licenses.mit;

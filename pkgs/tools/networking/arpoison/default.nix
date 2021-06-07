@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, libnet }:
+{ lib, stdenv, fetchzip, libnet }:
 
 stdenv.mkDerivation rec {
   name = "arpoison-0.7";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp arpoison.8.gz $out/share/man/man8
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "UNIX arp cache update utility";
     homepage = "http://www.arpoison.net/";
     license = with licenses; [ gpl2 ];

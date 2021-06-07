@@ -1,20 +1,22 @@
-{ stdenv
+{ lib
 , fetchFromGitLab
 , meson
 , ninja
 , pkg-config
 , python3
 , docbook_xml_dtd_43
-, docbook_xsl
+, docbook-xsl-nons
 , libxslt
 , gettext
-, gnome3
+, gnome
 , withDblatex ? false, dblatex
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gtk-doc";
-  version = "1.32";
+  version = "1.33.2";
+
+  outputDevdoc = "out";
 
   format = "other";
 
@@ -22,15 +24,20 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "GTK_DOC_${stdenv.lib.replaceStrings ["."] ["_"] version }";
-    sha256 = "14fihxj662gg4ln1ngff6s52zzkpbcc58qa0nxysxypnhp0h4ypk";
+    rev = version;
+    sha256 = "A6OXpazrJ05SUIO1ZPVN0xHTXOSov8UnPvUolZAv/Iw=";
   };
 
   patches = [
     passthru.respect_xml_catalog_files_var_patch
   ];
 
-  outputDevdoc = "out";
+  strictDeps = true;
+
+  depsBuildBuild = [
+    python3
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -42,15 +49,14 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     libxslt
-  ] ++ stdenv.lib.optionals withDblatex [
+  ] ++ lib.optionals withDblatex [
     dblatex
   ];
 
   pythonPath = with python3.pkgs; [
     pygments # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42
-    (anytree.override { withGraphviz = false; })
     lxml
   ];
 
@@ -68,23 +74,19 @@ python3.pkgs.buildPythonApplication rec {
       --replace "${python3}" ""
   '';
 
-  # find: ‘...-gtk-doc-1.32/lib/python3.8/site-packages’: No such file or directory
-  # https://github.com/NixOS/nixpkgs/pull/90208#issuecomment-644051108
-  dontUsePythonRecompileBytecode = true;
-
   passthru = {
     # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
     respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to extract documentation embedded in GTK and GNOME source code";
-    homepage = "https://www.gtk.org/gtk-doc";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub worldofpeace ];
+    homepage = "https://gitlab.gnome.org/GNOME/gtk-doc";
+    license = licenses.gpl2Plus;
+    maintainers = teams.gnome.members ++ (with maintainers; [ pSub ]);
   };
 }

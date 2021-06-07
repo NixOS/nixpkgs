@@ -1,20 +1,22 @@
 { lib, stdenv, callPackage, fetchurl
-, python
-, jdk, cmake, libxml2, zlib, python3, ncurses5
+, jdk, cmake, zlib, python3
+, dotnet-sdk_5
+, autoPatchelfHook
+, libdbusmenu
+, vmopts ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
-  mkJetBrainsProduct = callPackage ./common.nix { };
-
+  mkJetBrainsProduct = callPackage ./common.nix { inherit vmopts; };
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "CLion";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/clion/";
         inherit description license;
         longDescription = ''
@@ -24,7 +26,16 @@ let
         maintainers = with maintainers; [ edwtjo mic92 ];
         platforms = platforms.linux;
       };
-    }) (attrs: {
+    }).overrideAttrs (attrs: {
+      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
+        autoPatchelfHook
+      ];
+      buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
+        python3
+        stdenv.cc.cc
+        libdbusmenu
+      ];
+      dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
         (
           cd $out/clion-${version}
@@ -32,45 +43,7 @@ let
           rm -rf bin/cmake/linux
           ln -s ${cmake} bin/cmake/linux
 
-          lldbLibPath=$out/clion-${version}/bin/lldb/linux/lib
-          interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-          ln -s ${ncurses5.out}/lib/libtinfo.so.5 $lldbLibPath/libtinfo.so.5
-
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/linux/bin/lldb-server
-
-          for i in LLDBFrontend lldb lldb-argdumper; do
-            patchelf --set-interpreter $interp \
-              --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-              "bin/lldb/linux/bin/$i"
-          done
-
-          patchelf \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
-
-          patchelf \
-            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python3 ]}:$lldbLibPath" \
-            bin/lldb/linux/lib/liblldb.so
-
-          gdbLibPath=$out/clion-${version}/bin/gdb/linux/lib
-          patchelf \
-            --set-rpath "$gdbLibPath" \
-            bin/gdb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$gdbLibPath" \
-            bin/gdb/linux/bin/gdb
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$gdbLibPath" \
-            bin/gdb/linux/bin/gdbserver
-
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
-            bin/clang/linux/clangd
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
-            bin/clang/linux/clang-tidy
+          autoPatchelf $PWD/bin
 
           wrapProgram $out/bin/clion \
             --set CL_JDK "${jdk}"
@@ -82,7 +55,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "DataGrip";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/datagrip/";
         inherit description license;
         longDescription = ''
@@ -90,16 +63,16 @@ let
           It allows you to quickly migrate and refactor relational databases,
           construct efficient, statically checked SQL queries and much more.
         '';
-        maintainers = with maintainers; [ loskutov ];
+        maintainers = with maintainers; [ ];
         platforms = platforms.linux;
       };
     });
 
   buildGoland = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Goland";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/go/";
         inherit description license;
         longDescription = ''
@@ -111,7 +84,7 @@ let
         maintainers = [ maintainers.miltador ];
         platforms = platforms.linux;
       };
-    }) (attrs: {
+    }).overrideAttrs (attrs: {
       postFixup = (attrs.postFixup or "") + ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
         patchelf --set-interpreter $interp $out/goland*/plugins/go/lib/dlv/linux/dlv
@@ -124,7 +97,8 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "IDEA";
-      meta = with stdenv.lib; {
+      extraLdPath = [ zlib ];
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/idea/";
         inherit description license;
         longDescription = ''
@@ -133,8 +107,8 @@ let
           with JUnit, TestNG, popular SCMs, Ant & Maven. Also known
           as IntelliJ.
         '';
-        maintainers = with maintainers; [ edwtjo ];
-        platforms = platforms.linux ++ platforms.darwin;
+        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius ];
+        platforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" ];
       };
     });
 
@@ -142,8 +116,8 @@ let
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "MPS";
-      meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/mps/;
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/mps/";
         inherit license description;
         longDescription = ''
           A metaprogramming system which uses projectional editing
@@ -160,7 +134,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "PhpStorm";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/phpstorm/";
         inherit description license;
         longDescription = ''
@@ -177,7 +151,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "PyCharm";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/pycharm/";
         inherit description license;
         longDescription = ''
@@ -197,14 +171,14 @@ let
         platforms = platforms.linux;
       };
     }).override {
-      propagatedUserEnvPkgs = [ python ];
+      propagatedUserEnvPkgs = [ python3 ];
     };
 
   buildRider = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Rider";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/rider/";
         inherit description license;
         longDescription = ''
@@ -218,11 +192,11 @@ let
         maintainers = [ maintainers.miltador ];
         platforms = platforms.linux;
       };
-    }) (attrs: {
+    }).overrideAttrs (attrs: {
       patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
-        # Patch built-in mono for ReSharperHost to start successfully
-        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-        patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
+        rm -rf lib/ReSharperHost/linux-x64/dotnet
+        mkdir -p lib/ReSharperHost/linux-x64/dotnet/
+        ln -s ${dotnet-sdk_5}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
       '');
     });
 
@@ -230,7 +204,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "RubyMine";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/ruby/";
         inherit description license;
         longDescription = description;
@@ -240,10 +214,10 @@ let
     });
 
   buildWebStorm = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "WebStorm";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/webstorm/";
         inherit description license;
         longDescription = ''
@@ -254,7 +228,7 @@ let
         maintainers = with maintainers; [ abaldeau ];
         platforms = platforms.linux;
       };
-    }) (attrs: {
+    }).overrideAttrs (attrs: {
       patchPhase = (attrs.patchPhase or "") + optionalString (stdenv.isLinux) ''
         # Webstorm tries to use bundled jre if available.
         # Lets prevent this for the moment
@@ -268,12 +242,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "0q5bnb0rmsgks7brrdpgah83s2ixa4pyhw8jvg9p2g48b582rmf7"; /* updated by script */
+      sha256 = "1zx9qwjx7hwjq25y474yj7sxvp9bqnq9l53afs6d4h6131lhjkcz"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -281,12 +255,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2020.1.5"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "0605d772156lzlz5904px2spdijc92yz6rjvmpyg6vk5zv5k2wm9"; /* updated by script */
+      sha256 = "1znb4m7sv7xqi1mq3yw0m51m06wfwmhhxmvck0xkv8s0cfg18qim"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -294,12 +268,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2020.1.3"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description = "Up and Coming Go IDE";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "0pqwj4gc23gf10xqciwndimb4ml7djmx8m5rh52c07m77y4aniyn"; /* updated by script */
+      sha256 = "0g20r7yn4r2h08wv3i8bnnma8x4jljixsbmfml8kixk0pzfhv4px"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -307,12 +281,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "07gfqyp6blbf7v8p106ngpq7c5p0llcjahi205yg2jgzkhshn7ld"; /* updated by script */
+      sha256 = "03i5f6p0abr9yfs9fg90fg7hb1a7zar9q4d4iiag30cmndwpslg2"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -320,12 +294,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "13qj8n5daz0z0pjizyfsvbbr1gxp5479ar3a68ygi0vrpmbdbssd"; /* updated by script */
+      sha256 = "0mw4acaik1bkr7gqbwgs3i8f8px8zw95hm1zxgd5gd5kh88n17x5"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -333,12 +307,12 @@ in
 
   mps = buildMps rec {
     name = "mps-${version}";
-    version = "2019.2";
+    version = "2020.3.3"; /* updated by script */
     description = "Create your own domain-specific language";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.asl20;
     src = fetchurl {
-      url = "https://download.jetbrains.com/mps/2019.2/MPS-${version}.tar.gz";
-      sha256 = "0rph3bibj74ddbyrn0az1npn4san4g1alci8nlq4gaqdlcz6zx22";
+      url = "https://download.jetbrains.com/mps/2020.3/MPS-${version}.tar.gz";
+      sha256 = "0sb50f7d4272dzx84njc326xvhbqn3xwrphvdq4zl3pk3wl8f4nz"; /* updated by script */
     };
     wmClass = "jetbrains-mps";
     update-channel = "MPS RELEASE";
@@ -346,12 +320,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "00c8vlp125j56v9g9d4rc5g4dhgvl1bhi6qrzvpaf6x77jbq4fv4"; /* updated by script */
+      sha256 = "02s75fqd9hfh302zha4jw6qynpgm9nkrlq7s78nk3fc3d3hw8v5y"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -359,12 +333,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2021.1.1"; /* updated by script */
     description = "PyCharm Community Edition";
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1s04b9w7sydix1sjqzmby63nwcvzs6iw28wz7441kxgryl9qg0qw"; /* updated by script */
+      sha256 = "04bs9sz872b0h1zzax23irvj6q5wxnzp6fl4f177j94kh4116cqh"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -372,12 +346,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2021.1.1"; /* updated by script */
     description = "PyCharm Professional Edition";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1ysj00qbn5ik6i5953b9mln4g456fmn3phdln9m5jmcb0126y235"; /* updated by script */
+      sha256 = "0wc9j7nilakmm7scf7a71zb3k9vixgih05ni3n3pp4iznvwb3nxg"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
@@ -385,12 +359,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2020.1.3"; /* updated by script */
+    version = "2021.1.3"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "1zzkd3b5j3q6jqrvibxz33a4fcm7pgqfx91bqjs615v3499ncng7"; /* updated by script */
+      sha256 = "0k2vpndpachq6g767v2dwfa3xc8mssv0i7wwpm05dgqirpn4n0dw"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider RELEASE";
@@ -398,12 +372,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2021.1.1"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "1ycwml7fyhjajjfy1fhggmx0mcdcjidkxll7357rv2z51r0yhc9h"; /* updated by script */
+      sha256 = "05sfjf5523idsl7byc7400r4xqv1d65gpmkh5x0lbgf1k3bx2wlm"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";
@@ -411,12 +385,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1szgiccimfk99z9x1k99lgic6ix81fdahf1k3a88rddl8hhncjwv"; /* updated by script */
+      sha256 = "0q4hn6npm0c30v23d30dnphd6wajif0im1b9vjwa121lqi997l34"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";

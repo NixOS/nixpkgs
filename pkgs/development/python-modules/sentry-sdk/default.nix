@@ -1,8 +1,11 @@
 { aiohttp
+, blinker
+, botocore
 , bottle
 , buildPythonPackage
 , celery
 , certifi
+, chalice
 , django
 , falcon
 , fetchPypi
@@ -14,33 +17,31 @@
 , rq
 , sanic
 , sqlalchemy
-, stdenv
+, lib
 , tornado
 , urllib3
 , trytond
 , werkzeug
+, executing
+, pure-eval
+, asttokens
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "0.14.4";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0e5e947d0f7a969314aa23669a94a9712be5a688ff069ff7b9fc36c66adc160c";
+    sha256 = "sha256-wSJ9ONyjFbo1GCNz8SnD4nIujtmZ5SWE5qyn0oeHBzk=";
   };
 
-  checkInputs = [ django flask tornado bottle rq falcon sqlalchemy werkzeug ]
-  ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
+  checkInputs = [ blinker botocore chalice django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
+    executing pure-eval asttokens ]
+  ++ lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 
-  propagatedBuildInputs = [ urllib3 certifi trytond ];
+  propagatedBuildInputs = [ urllib3 certifi ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/getsentry/sentry-python";
-    description = "New Python SDK for Sentry.io";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
-  };
 
   # The Sentry tests need access to `/etc/protocols` (the tests call
   # `socket.getprotobyname('tcp')`, which reads from this file). Normally
@@ -50,5 +51,17 @@ buildPythonPackage rec {
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols
     export LD_PRELOAD=${libredirect}/lib/libredirect.so
   '';
+
   postCheck = "unset NIX_REDIRECTS LD_PRELOAD";
+
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "sentry_sdk" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/getsentry/sentry-python";
+    description = "New Python SDK for Sentry.io";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ gebner ];
+  };
 }

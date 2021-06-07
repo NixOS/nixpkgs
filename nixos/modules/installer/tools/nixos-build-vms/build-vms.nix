@@ -15,4 +15,4 @@ with import ../../../../lib/testing-python.nix {
   pkgs = import ../../../../.. { inherit system config; };
 };
 
-(makeTest { inherit nodes; testScript = ""; }).driver
+(makeTest { inherit nodes; testScript = ""; }).driverInteractive

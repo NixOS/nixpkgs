@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nginx-sandbox";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ izorkin ];
   };
 
@@ -18,7 +18,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     ];
     services.nginx.enable = true;
     services.nginx.package = pkgs.nginx-lua;
-    services.nginx.enableSandbox = true;
     services.nginx.virtualHosts.localhost = {
       extraConfig = ''
         location /test1-write {

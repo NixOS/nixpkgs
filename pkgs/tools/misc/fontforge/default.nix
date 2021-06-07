@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, lib
-, cmake, perl, uthash, pkgconfig, gettext
-, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
+{ stdenv, fetchpatch, fetchFromGitHub, lib
+, cmake, perl, uthash, pkg-config, gettext
+, python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq, libuninameslist
 , withSpiro ? false, libspiro
 , withGTK ? false, gtk3
@@ -14,12 +14,23 @@ assert withGTK -> withGUI;
 
 stdenv.mkDerivation rec {
   pname = "fontforge";
-  version = "20200314";
+  version = "20201107";
 
-  src = fetchurl {
-    url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0qf88wd6riycq56d24brybyc93ns74s0nyyavm43zp2kfcihn6fd";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-Rl/5lbXaPgIndANaD0IakaDus6T53FjiBb45FIuGrvc=";
   };
+
+  patches = [
+    # Allow installing contrib files (e.g. extras and tools).
+    # Taken from https://salsa.debian.org/fonts-team/fontforge/-/blob/master/debian/patches/0001-add-extra-cmake-install-rules.patch
+    (fetchpatch {
+      url = "https://salsa.debian.org/fonts-team/fontforge/raw/76bffe6ccf8ab20a0c81476a80a87ad245e2fd1c/debian/patches/0001-add-extra-cmake-install-rules.patch";
+      sha256 = "u3D9od2xLECNEHhZ+8dkuv9818tPkdP6y/Tvd9CADJg=";
+    })
+  ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
   postPatch = ''
@@ -33,10 +44,10 @@ stdenv.mkDerivation rec {
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
     readline uthash woff2 zeromq libuninameslist
-    python freetype zlib glib libungif libpng libjpeg libtiff libxml2
+    python freetype zlib glib giflib libpng libjpeg libtiff libxml2
   ]
     ++ lib.optionals withSpiro [libspiro]
     ++ lib.optionals withGUI [ gtk3 cairo pango ]
@@ -63,8 +74,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A font editor";
     homepage = "http://fontforge.github.io";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.erictapen ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.erictapen ];
   };
 }

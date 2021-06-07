@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages, mopidy }:
+{ lib, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Mopify";
@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dirkgroenen/mopidy-mopify";
     description = "A mopidy webclient based on the Spotify webbased interface";
     license = licenses.gpl3;

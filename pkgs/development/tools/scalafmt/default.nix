@@ -1,8 +1,8 @@
-{ stdenv, jdk, jre, coursier, makeWrapper }:
+{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
 
 let
   baseName = "scalafmt";
-  version = "2.6.2";
+  version = "2.6.4";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -13,7 +13,7 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "1q2bsc6vqgbgzg8hcz8pn6vl3263ghjfbkn93vijvmz0ivc806j4";
+    outputHash     = "1h19rsxsn2piifillv29nwks2k9l391jwygjbfy8pc0ha8yi63mw";
   };
 in
 stdenv.mkDerivation {
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";
     license = licenses.asl20;

@@ -13,7 +13,7 @@
 , gdk-pixbuf
 , glib
 , gnome2
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , gtk3
 , libpulseaudio
@@ -26,9 +26,11 @@
 , libXext
 , libXfixes
 , libXi
+, libxkbcommon
 , libXrandr
 , libXrender
 , libXScrnSaver
+, libxshmfence
 , libXtst
 , mesa
 , nspr
@@ -37,7 +39,7 @@
 , udev
 , xorg
 , zlib
-, xdg_utils
+, xdg-utils
 , wrapGAppsHook
 }:
 
@@ -61,6 +63,7 @@ rpath = lib.makeLibraryPath [
   libdrm
   libpulseaudio
   libX11
+  libxkbcommon
   libXScrnSaver
   libXcomposite
   libXcursor
@@ -70,6 +73,7 @@ rpath = lib.makeLibraryPath [
   libXi
   libXrandr
   libXrender
+  libxshmfence
   libXtst
   libuuid
   mesa
@@ -77,7 +81,7 @@ rpath = lib.makeLibraryPath [
   nss
   pango
   udev
-  xdg_utils
+  xdg-utils
   xorg.libxcb
   zlib
 ];
@@ -86,24 +90,27 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.10.97";
+  version = "1.25.68";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "1qwk75k8km2sy7l3m4k5m383sl75dph4dyrp8hd65x5hnpip67yi";
+    sha256 = "OBf42L6pctflNLjtcbnw2wKo7TisRSMF3SriDPFlB6I=";
   };
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  doInstallCheck = true;
 
   nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
-  buildInputs = [ glib gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
+  buildInputs = [ glib gsettings-desktop-schemas gnome.adwaita-icon-theme ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
   installPhase = ''
+      runHook preInstall
+
       mkdir -p $out $out/bin
 
       cp -R usr/share $out
@@ -141,21 +148,30 @@ stdenv.mkDerivation rec {
       done
 
       # Replace xdg-settings and xdg-mime
-      ln -sf ${xdg_utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
-      ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+      ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
+      ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+
+      runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  installCheckPhase = ''
+    # Bypass upstream wrapper which suppresses errors
+    $out/opt/brave.com/brave/brave --version
+  '';
+
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
-    changelog = "https://github.com/brave/brave-browser/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md";
     longDescription = ''
       Brave browser blocks the ads and trackers that slow you down,
       chew up your bandwidth, and invade your privacy. Brave lets you
       contribute to your favorite creators automatically.
     '';
     license = licenses.mpl20;
-    maintainers = with maintainers; [ uskudnik rht jefflabonte ];
+    maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm ];
     platforms = [ "x86_64-linux" ];
   };
 }

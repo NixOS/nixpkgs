@@ -1,74 +1,57 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
-, click
-, click-completion
-, factory_boy
-, faker
-, inquirer
-, pbr
-, pendulum
-, ptable
-, pytest
-, pytestcov
-, pytest-mock
-, requests
-, setuptools
-, twine
-, validate-email
-}:
-
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder, click
+, click-completion, factory_boy, faker, inquirer, notify-py, pbr, pendulum
+, ptable, pytestCheckHook, pytestcov, pytest-mock, requests, twine
+, validate-email }:
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.1.0";
-  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
+  version = "2.4.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "0iirvvb8772569v28d36bnryksm1qkkw48d48fw26j7ka01qq6mm";
+    sha256 = "1wgh231r16jyvaj1ch1pajvl9szflb4srs505pfdwdlqvz7rzww8";
   };
 
   postPatch = ''
-   substituteInPlace requirements.txt \
-     --replace "pendulum==2.0.4" "pendulum>=2.0.4" \
-     --replace "click-completion==0.5.0" "click-completion>=0.5.0" \
-     --replace "click==7.0" "click>=7.0" \
-     --replace "pbr==5.1.2" "pbr>=5.1.2" \
-     --replace "inquirer==2.5.1" "inquirer>=2.5.1"
+    substituteInPlace requirements.txt \
+      --replace "notify-py==0.3.1" "notify-py>=0.3.1"
   '';
 
   nativeBuildInputs = [ pbr twine ];
-  checkInputs = [ pbr pytest pytestcov pytest-mock faker factory_boy ];
+  checkInputs = [ pbr pytestCheckHook pytestcov pytest-mock faker factory_boy ];
 
   preCheck = ''
     export TOGGL_API_TOKEN=your_api_token
     export TOGGL_PASSWORD=toggl_password
     export TOGGL_USERNAME=user@example.com
-    '';
-
-  checkPhase = ''
-   runHook preCheck
-   pytest -k "not premium and not TestDateTimeType and not TestDateTimeField" tests/unit --maxfail=20
-   runHook postCheck
   '';
 
+  disabledTests = [
+    "integration"
+    "premium"
+    "test_parsing"
+    "test_type_check"
+    "test_now"
+  ];
+
   propagatedBuildInputs = [
-    setuptools
     click
     click-completion
-    validate-email
+    inquirer
+    notify-py
     pendulum
     ptable
     requests
-    inquirer
     pbr
+    validate-email
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://toggl.uhlir.dev/";
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     license = licenses.mit;
     maintainers = [ maintainers.mmahut ];
   };
 }
-

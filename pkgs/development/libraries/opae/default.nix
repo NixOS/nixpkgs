@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , libuuid, json_c
 , doxygen, perl, python2, python2Packages
 }:
@@ -37,9 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DBUILD_ASE=1" ];
-  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Programmable Acceleration Engine SDK";
     homepage    = "https://01.org/opae";
     license     = licenses.bsd3;

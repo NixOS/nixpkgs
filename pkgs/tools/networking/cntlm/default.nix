@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which}:
+{ lib, stdenv, fetchurl, which}:
 
 stdenv.mkDerivation rec {
   pname = "cntlm";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "xlc_r gcc" "xlc_r gcc $CC"
     substitute Makefile Makefile.$CC --replace "CC=gcc" "CC=$CC"
   '';
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/man/; cp doc/cntlm.1 $out/man/;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NTLM/NTLMv2 authenticating HTTP proxy";
     homepage = "http://cntlm.sourceforge.net/";
     license = licenses.gpl2;

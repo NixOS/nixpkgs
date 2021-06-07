@@ -1,42 +1,49 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, parallel-io
 , fixplate
-, pandoc
 , tasty
 , tasty-hunit
 , tasty-th
 , streamly
 , mtl
-, path-io
 , path
 , pretty-terminal
 , text
 , base
 , aeson
+, path-io
 , cmdargs
 , containers
 , hnix
 , bytestring
+, fetchpatch
 }:
 
 mkDerivation rec {
   pname = "nix-linter-unstable";
-  version = "2019-04-26";
+  version = "2020-09-25";
 
   src = fetchFromGitHub {
     owner = "Synthetica9";
     repo = "nix-linter";
-    rev = "4aaf60195cd2d9f9e2345fbdf4aac48e1451292c";
-    sha256 = "0c7rcjaxd8z0grwambsw46snv7cg66h3pszw3549z4xz0i60yq87";
+    rev = "2516a8cda41f9bb553a1c3eca38e3dd94ebf53de";
+    sha256 = "07mn2c9v67wsm57jlxv9pqac9hahw4618vngmj2sfbgihx8997kb";
   };
 
   isLibrary = false;
   isExecutable = true;
-  libraryHaskellDepends = [ parallel-io fixplate pandoc ];
-  executableHaskellDepends = [ streamly mtl path-io path pretty-terminal text base aeson cmdargs containers hnix bytestring ];
+  libraryHaskellDepends = [ fixplate ];
+  executableHaskellDepends = [ streamly mtl path pretty-terminal text base aeson cmdargs containers hnix bytestring path-io ];
   testHaskellDepends = [ tasty tasty-hunit tasty-th ];
+
+  patches = [
+    # Fix compatibility with hnix≥0.13.0 https://github.com/Synthetica9/nix-linter/pull/51
+    (fetchpatch {
+      url = "https://github.com/Synthetica9/nix-linter/commit/f73acacd8623dc25c9a35f8e04e4ff33cc596af8.patch";
+      sha256 = "139fm21hdg3vcw8hv35kxj4awd52bjqbb76mpzx191hzi9plj8qc";
+    })
+  ];
 
   description = "Linter for Nix(pkgs), based on hnix";
   homepage = "https://github.com/Synthetica9/nix-linter";

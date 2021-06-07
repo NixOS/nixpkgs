@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "mt-st-1.3";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
       Fork of the standard "mt" tool with additional Linux-specific IOCTLs.
     '';
     homepage = "https://github.com/iustin/mt-st";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.redvers ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.redvers ];
+    platforms = lib.platforms.linux;
   };
 }

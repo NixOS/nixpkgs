@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "06ae07a12294a7ba708abaa63f838017d1a2faf6147a1e7a14ca4fa28f86da7f";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Add options to doctest examples while they are running";
     homepage = "https://pypi.python.org/pypi/dtopt";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, ghostscript, cairo }:
+{ fetchurl, lib, stdenv, pkg-config, ghostscript, cairo }:
 
 stdenv.mkDerivation rec {
   name = "libspectre-0.2.7";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # Need `libgs.so'.
-    pkgconfig ghostscript cairo /*for tests*/
+    pkg-config ghostscript cairo /*for tests*/
   ];
 
   doCheck = true;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       handling and rendering Postscript documents.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

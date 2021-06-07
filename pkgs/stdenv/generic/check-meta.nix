@@ -16,8 +16,8 @@ let
   allowUnfree = config.allowUnfree or false
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
-  whitelist = config.whitelistedLicenses or [];
-  blacklist = config.blacklistedLicenses or [];
+  allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
+  blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
 
   onlyLicenses = list:
     lib.lists.all (license:
@@ -27,19 +27,19 @@ let
     ) list;
 
   areLicenseListsValid =
-    if lib.mutuallyExclusive whitelist blacklist then
-      assert onlyLicenses whitelist; assert onlyLicenses blacklist; true
+    if lib.mutuallyExclusive allowlist blocklist then
+      assert onlyLicenses allowlist; assert onlyLicenses blocklist; true
     else
-      throw "whitelistedLicenses and blacklistedLicenses are not mutually exclusive.";
+      throw "allowlistedLicenses and blocklistedLicenses are not mutually exclusive.";
 
   hasLicense = attrs:
     attrs ? meta.license;
 
-  hasWhitelistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && lib.lists.any (l: builtins.elem l whitelist) (lib.lists.toList attrs.meta.license);
+  hasAllowlistedLicense = assert areLicenseListsValid; attrs:
+    hasLicense attrs && lib.lists.any (l: builtins.elem l allowlist) (lib.lists.toList attrs.meta.license);
 
-  hasBlacklistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && lib.lists.any (l: builtins.elem l blacklist) (lib.lists.toList attrs.meta.license);
+  hasBlocklistedLicense = assert areLicenseListsValid; attrs:
+    hasLicense attrs && lib.lists.any (l: builtins.elem l blocklist) (lib.lists.toList attrs.meta.license);
 
   allowBroken = config.allowBroken or false
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
@@ -49,12 +49,24 @@ let
 
   isUnfree = licenses: lib.lists.any (l: !l.free or true) licenses;
 
+  hasUnfreeLicense = attrs:
+    hasLicense attrs &&
+    isUnfree (lib.lists.toList attrs.meta.license);
+
+  isMarkedBroken = attrs: attrs.meta.broken or false;
+
+  hasUnsupportedPlatform = attrs:
+    (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
+      lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or []));
+
+  isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
+
   # Alow granular checks to allow only some unfree packages
   # Example:
   # {pkgs, ...}:
   # {
   #   allowUnfree = false;
-  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayer-" x.name);
+  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "vscode" x.name);
   # }
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 
@@ -62,16 +74,15 @@ let
   # package has an unfree license and is not explicitely allowed by the
   # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense = attrs:
+    hasUnfreeLicense attrs &&
     !allowUnfree &&
-    hasLicense attrs &&
-    isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
 
   allowInsecureDefaultPredicate = x: builtins.elem (getName x) (config.permittedInsecurePackages or []);
   allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
-    (attrs.meta.knownVulnerabilities or []) == [] ||
+    !(isMarkedInsecure attrs) ||
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
@@ -80,21 +91,46 @@ let
   pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
-    unfree = remediate_whitelist "Unfree";
-    broken = remediate_whitelist "Broken";
-    unsupported = remediate_whitelist "UnsupportedSystem";
-    blacklisted = x: "";
+    unfree = remediate_allowlist "Unfree" remediate_unfree_predicate;
+    broken = remediate_allowlist "Broken" (x: "");
+    unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
+    blocklisted = x: "";
     insecure = remediate_insecure;
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
   };
-  remediate_whitelist = allow_attr: attrs:
+  remediation_env_var = allow_attr: {
+    Unfree = "NIXPKGS_ALLOW_UNFREE";
+    Broken = "NIXPKGS_ALLOW_BROKEN";
+    UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
+  }.${allow_attr};
+  remediation_phrase = allow_attr: {
+    Unfree = "unfree packages";
+    Broken = "broken packages";
+    UnsupportedSystem = "packages that are unsupported for this system";
+  }.${allow_attr};
+  remediate_unfree_predicate = attrs:
     ''
-      a) For `nixos-rebuild` you can set
+
+      Alternatively you can configure a predicate to allow specific packages:
+        { nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+            "${lib.getName attrs}"
+          ];
+        }
+    '';
+
+  remediate_allowlist = allow_attr: rebuild_amendment: attrs:
+    ''
+      a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
+         for a single invocation of the nix tools.
+
+           $ export ${remediation_env_var allow_attr}=1
+
+      b) For `nixos-rebuild` you can set
         { nixpkgs.config.allow${allow_attr} = true; }
       in configuration.nix to override this.
-
-      b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+      ${rebuild_amendment attrs}
+      c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
         { allow${allow_attr} = true; }
       to ~/.config/nixpkgs/config.nix.
     '';
@@ -105,7 +141,7 @@ let
       Known issues:
     '' + (lib.concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities)) + ''
 
-        You can install it anyway by whitelisting this package, using the
+        You can install it anyway by allowing this package, using the
         following methods:
 
         a) To temporarily allow all insecure packages, you can use an environment
@@ -167,6 +203,7 @@ let
   metaTypes = with lib.types; rec {
     # These keys are documented
     description = str;
+    mainProgram = str;
     longDescription = str;
     branch = str;
     homepage = either (listOf str) str;
@@ -178,6 +215,9 @@ let
     platforms = listOf str;
     hydraPlatforms = listOf str;
     broken = bool;
+    unfree = bool;
+    unsupported = bool;
+    insecure = bool;
     # TODO: refactor once something like Profpatsch's types-simple will land
     # This is currently dead code due to https://github.com/NixOS/nix/issues/2532
     tests = attrsOf (mkOptionType {
@@ -229,17 +269,22 @@ let
   #
   # Return { valid: Bool } and additionally
   # { reason: String; errormsg: String } if it is not valid, where
-  # reason is one of "unfree", "blacklisted" or "broken".
+  # reason is one of "unfree", "blocklisted", "broken", "insecure", ...
+  # Along with a boolean flag for each reason
   checkValidity = attrs:
-    if hasDeniedUnfreeLicense attrs && !(hasWhitelistedLicense attrs) then
+    {
+      unfree = hasUnfreeLicense attrs;
+      broken = isMarkedBroken attrs;
+      unsupported = hasUnsupportedPlatform attrs;
+      insecure = isMarkedInsecure attrs;
+    }
+    // (if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
       { valid = false; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
-    else if hasBlacklistedLicense attrs then
-      { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
+    else if hasBlocklistedLicense attrs then
+      { valid = false; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
-    else if !allowUnsupportedSystem &&
-            (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
-              lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or [])) then
+    else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
       { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
@@ -247,14 +292,14 @@ let
       { valid = false; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
     else let res = checkMeta (attrs.meta or {}); in if res != [] then
       { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
-    else { valid = true; };
+    else { valid = true; });
 
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
     in validity // {
       # Throw an error if trying to evaluate an non-valid derivation
       handled = if !validity.valid
-        then handleEvalIssue { inherit meta attrs; } (removeAttrs validity ["valid"])
+        then handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; }
         else true;
   };
 

@@ -1,9 +1,9 @@
 {
-  stdenv,
+  lib, stdenv,
   fetchFromGitHub,
   cmake,
   gtest,
-  python,
+  python3,
   boost
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ boost python ];
+  checkInputs = [ boost python3 ];
 
   doCheck = true;
 
@@ -30,14 +30,12 @@ stdenv.mkDerivation rec {
     sed -i '/TrueFalseTest/d' tests/CMakeLists.txt
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
-    description = "CLI11 is a command line parser for C++11";
+  meta = with lib; {
+    description = "Command line parser for C++11";
     homepage = "https://github.com/CLIUtils/CLI11";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nand0p ];
-    license = licenses.unfreeRedistributable;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
+    license = licenses.bsd3;
   };
 
 }

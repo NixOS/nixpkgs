@@ -2,21 +2,26 @@
 , fetchPypi
 , lib
 , param
+, panel
 }:
 
 buildPythonPackage rec {
   pname = "pyviz_comms";
-  version = "0.7.4";
+  version = "0.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "092nl8pq1jqdylj0xyqwgi5qxvhy6qj2nx2lwwfkbnixlg6g8bbi";
+    sha256 = "sha256-zZZJqeqd/LmzTXj5pk4YcKqLa5TeVG4smca7U9ZKtdE=";
   };
 
   propagatedBuildInputs = [ param ];
 
   # there are not tests with the package
   doCheck = false;
+
+  passthru.tests = {
+    inherit panel;
+  };
 
   meta = with lib; {
     description = "Launch jobs, organize the output, and dissect the results";

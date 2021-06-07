@@ -1,4 +1,4 @@
-{ stdenv, vscode-utils
+{ lib, vscode-utils
 , fetchurl, unzip
 , mono, writeScript, runtimeShell
 , jq, clang-tools
@@ -50,18 +50,14 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "0.27.1";
+    version = "1.0.1";
   };
 
   vsix = fetchurl {
+    name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
     url = "https://github.com/microsoft/vscode-cpptools/releases/download/${mktplcRef.version}/cpptools-linux.vsix";
-    sha256 = "1if43zis2cy32c6y1zsh0ih0y2kpdag0flkb795b3m5iwm38rjsq";
+    sha256 = "1lb5pza2ny1ydan19596amabs1np10nq08yqsfbvvfw7zbg4gnyc";
   };
-
-  unpackPhase = ''
-    unzip $src
-    cd extension
-  '';
 
   buildInputs = [
     jq
@@ -96,7 +92,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     chmod a+x ./bin/cpptools{-srv,}
   '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       license = licenses.unfree;
       maintainers = [ maintainers.jraygauthier ];
       # A 32 bit linux would also be possible with some effort (specific download of binaries +

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # run_tests.py not packaged with pypi release
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/soft-matter/slicerator";
     description = "A lazy-loading, fancy-sliceable iterable";
     license = licenses.bsdOriginal;

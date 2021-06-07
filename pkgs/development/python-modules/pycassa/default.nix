@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, thrift, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, thrift, isPy3k }:
 
 let
 
@@ -30,9 +30,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ thrift' ];
 
-  meta = {
+  meta = with lib; {
     description = "A python client library for Apache Cassandra";
     homepage = "https://github.com/pycassa/pycassa";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
   };
 }

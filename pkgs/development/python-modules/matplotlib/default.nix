@@ -1,50 +1,58 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
-, which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection
-, enableGhostscript ? true, ghostscript ? null, gtk3
+{ lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
+, which, cycler, dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
+, freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
+, certifi, pillow
+, enableGhostscript ? true, ghostscript, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
-, enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, enableQt ? false, pyqt5 ? null
+, enableTk ? !stdenv.isDarwin, tcl, tk, tkinter
+, enableQt ? false, pyqt5
+# required for headless detection
+, libX11, wayland
 , Cocoa
-, pythonOlder
 }:
 
-assert enableGhostscript -> ghostscript != null;
-assert enableTk -> (tcl != null)
-                && (tk != null)
-                && (tkinter != null)
-                && (libX11 != null)
-                ;
-assert enableQt -> pyqt5 != null;
+let
+  interactive = enableTk || enableGtk3 || enableQt;
+in
 
 buildPythonPackage rec {
-  version = "3.2.1";
+  version = "3.4.1";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ffe2f9cdcea1086fc414e82f42271ecf1976700b8edd16ca9d376189c6d93aee";
+    sha256 = "84d4c4f650f356678a5d658a43ca21a41fca13f9b8b00169c0b76e6a6a948908";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ which sphinx ]
-    ++ stdenv.lib.optional enableGhostscript ghostscript
-    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
+    ++ lib.optional enableGhostscript ghostscript
+    ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
-      libpng mock pytz ]
-    ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
-    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
-    ++ stdenv.lib.optionals enableQt [ pyqt5 ];
+    [ cycler dateutil numpy pyparsing tornado freetype qhull
+      kiwisolver certifi libpng mock pytz pillow ]
+    ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
+    ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
+    ++ lib.optionals enableQt [ pyqt5 ];
 
-  setup_cfg = ./setup.cfg;
+  passthru.config = {
+    directories = { basedirlist = "."; };
+    libs = {
+      system_freetype = true;
+      system_qhull = true;
+    } // lib.optionalAttrs stdenv.isDarwin {
+      # LTO not working in darwin stdenv, see #19312
+      enable_lto = false;
+    };
+  };
+  setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
   preBuild = ''
     cp "$setup_cfg" ./setup.cfg
   '';
@@ -57,19 +65,25 @@ buildPythonPackage rec {
   # script.
   postPatch =
     let
-      inherit (stdenv.lib.strings) substring;
-      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${substring 0 3 tk.version}"'';
+      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${lib.strings.substring 0 3 tk.version}"'';
     in
-    stdenv.lib.optionalString enableTk
-      "sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py";
+    lib.optionalString enableTk ''
+      sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py
+    '' + lib.optionalString (stdenv.isLinux && interactive) ''
+      # fix paths to libraries in dlopen calls (headless detection)
+      substituteInPlace src/_c_internal_utils.c \
+        --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
+        --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
+    '';
 
   # Matplotlib needs to be built against a specific version of freetype in
   # order for all of the tests to pass.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python plotting library, making publication quality plots";
     homepage    = "https://matplotlib.org/";
+    license     = with licenses; [ psfl bsd0 ];
     maintainers = with maintainers; [ lovek323 veprbl ];
   };
 

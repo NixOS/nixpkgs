@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://twiggy.wearpants.org";
     # Taken from http://i.wearpants.org/blog/meet-twiggy/
     description = "Twiggy is the first totally new design for a logger since log4j";

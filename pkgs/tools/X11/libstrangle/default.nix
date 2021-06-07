@@ -1,14 +1,16 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitLab, libGL, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "libstrangle";
-  version = "2017-02-22";
+  version = "0.1.1";
 
-  src = fetchFromGitHub {
-    owner = "milaq";
+  buildInputs = [ libGL libX11 ];
+
+  src = fetchFromGitLab {
+    owner = "torkel104";
     repo = pname;
-    rev = "6020f9e375ba747c75eb7996b7d5f0214ac3221e";
-    sha256 = "04ikacbjcq9phdc8q5y1qjjpa1sxmzfm0idln9ys95prg289zp4h";
+    rev = version;
+    sha256 = "135icr544w5ynlxfnxqgjn794bsm9i703rh9jfnracjb7jgnha4w";
   };
 
   makeFlags = [ "prefix=" "DESTDIR=$(out)" ];
@@ -17,13 +19,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteAllInPlace src/strangle.sh
+    substituteAllInPlace src/stranglevk.sh
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/milaq/libstrangle";
+  meta = with lib; {
+    homepage = "https://gitlab.com/torkel104/libstrangle";
     description = "Frame rate limiter for Linux/OpenGL";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ aske ];
+    mainProgram = "strangle";
   };
 }

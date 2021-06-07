@@ -1,5 +1,8 @@
-{ fetchurl, stdenv, slang, popt }:
+{ lib, fetchurl, stdenv, slang, popt, python }:
 
+let
+  pythonIncludePath = "${lib.getDev python}/include/python";
+in
 stdenv.mkDerivation rec {
   pname = "newt";
   version = "0.52.21";
@@ -11,9 +14,14 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i -e s,/usr/bin/install,install, -e s,-I/usr/include/slang,, Makefile.in po/Makefile
+
+    substituteInPlace configure \
+      --replace "/usr/include/python" "${pythonIncludePath}"
+    substituteInPlace configure.ac \
+      --replace "/usr/include/python" "${pythonIncludePath}"
   '';
 
-  buildInputs = [ slang popt ];
+  buildInputs = [ slang popt python ];
 
   NIX_LDFLAGS = "-lncurses";
 
@@ -23,11 +31,11 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
-  makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fedorahosted.org/newt/";
     description = "Library for color text mode, widget based user interfaces";
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
-, libjack2, libsigcxx, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
-, imagemagick, intltool, autoreconfHook, which, gnome3
+{ lib, stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
+, libjack2, libsigcxx, libxmlxx, makeWrapper, mlt-qt5, pango, pkg-config
+, imagemagick, intltool, autoreconfHook, which, gnome
 }:
 
 let
@@ -39,7 +39,7 @@ let
       "--with-boost-libdir=${boost.out}/lib"
     ];
 
-    nativeBuildInputs = [ pkgconfig autoreconfHook gettext ];
+    nativeBuildInputs = [ pkg-config autoreconfHook gettext ];
     buildInputs = [
       ETL boost cairo glibmm mlt-qt5 libsigcxx libxmlxx pango
     ];
@@ -103,11 +103,11 @@ stdenv.mkDerivation {
 
   preConfigure = "./bootstrap.sh";
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook gettext ];
+  nativeBuildInputs = [ pkg-config autoreconfHook gettext ];
   buildInputs = [
     ETL boost cairo glibmm gtk3 gtkmm3 imagemagick intltool
     libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5
-    synfig which gnome3.adwaita-icon-theme
+    synfig which gnome.adwaita-icon-theme
   ];
 
   postInstall = ''
@@ -117,7 +117,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 2D animation program";
     homepage = "http://www.synfig.org";
     license = licenses.gpl2Plus;

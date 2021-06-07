@@ -1,26 +1,26 @@
-{ fetchFromGitHub, stdenv, buildGoPackage,
-  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
-buildGoPackage rec {
+{ fetchFromGitHub, lib, buildGoModule,
+  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep,
+  nixosTests }:
+buildGoModule rec {
   name = "buildkite-agent-${version}";
-  version = "3.17.0";
-
-  goPackagePath = "github.com/buildkite/agent";
+  version = "3.30.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "0a7x919kxnpdn0pnhc5ilx1z6ninx8zgjvsd0jcg4qwh0qqp5ppr";
+    sha256 = "sha256-U2UnT41IpICy08jPQkr25wjAL1kBxiQCD4lysYnLAPk=";
   };
+
+  vendorSha256 = "sha256-n3XRxpEKjHf7L7fcGscWTVKBtot9waZbLoS9cG0kHfI=";
+
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash
   '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  # on Linux, the TMPDIR is /build which is the same prefix as this package
-  # remove once #35068 is merged
-  noAuditTmpdir = stdenv.isLinux;
+  doCheck = false;
 
   postInstall = ''
     # Fix binary name
@@ -28,10 +28,14 @@ buildGoPackage rec {
 
     # These are runtime dependencies
     wrapProgram $out/bin/buildkite-agent \
-      --prefix PATH : '${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
+      --prefix PATH : '${lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    smoke-test = nixosTests.buildkite-agents;
+  };
+
+  meta = with lib; {
     description = "Build runner for buildkite.com";
     longDescription = ''
       The buildkite-agent is a small, reliable, and cross-platform build runner
@@ -43,6 +47,6 @@ buildGoPackage rec {
     homepage = "https://buildkite.com/docs/agent";
     license = licenses.mit;
     maintainers = with maintainers; [ pawelpacana zimbatm rvl ];
-    platforms = platforms.unix;
+    platforms = with platforms; unix ++ darwin;
   };
 }

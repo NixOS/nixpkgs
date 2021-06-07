@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, future, numpy }:
+{ lib, buildPythonPackage, fetchPypi, pytest, future, numpy }:
 
 buildPythonPackage rec {
   pname = "MDP";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # Tests disabled because of missing dependencies not in nix
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for building complex data processing software by combining widely used machine learning algorithms";
     homepage = "http://mdp-toolkit.sourceforge.net";
     license = licenses.bsd3;

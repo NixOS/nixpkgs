@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "xtruss";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mm8k92zc318jk71wlf2r4rb723nd9lalhjl0pf48raiajb5ifgd";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "easy-to-use X protocol tracing program";
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss";
     license = licenses.mit;

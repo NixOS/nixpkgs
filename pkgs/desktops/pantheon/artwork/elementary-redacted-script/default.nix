@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pantheon
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cp -a truetype/*.ttf $out/share/fonts/truetype/redacted-elementary
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Font for concealing text";
     homepage = "https://github.com/png2378/redacted-elementary";
     license = licenses.ofl;

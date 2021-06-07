@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tk }:
+{ lib, stdenv, fetchurl, tk }:
 
 stdenv.mkDerivation rec {
   name = "gocr-0.52";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://jocr.sourceforge.net/";
     description = "GPL Optical Character Recognition";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

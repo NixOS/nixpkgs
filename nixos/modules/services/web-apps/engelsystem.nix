@@ -10,7 +10,7 @@ in {
         default = false;
         example = true;
         description = ''
-          Whether to enable engelsystem, an online tool for coordinating helpers
+          Whether to enable engelsystem, an online tool for coordinating volunteers
           and shifts on large events.
         '';
         type = lib.types.bool;
@@ -89,7 +89,7 @@ in {
     # create database
     services.mysql = mkIf cfg.createDatabase {
       enable = true;
-      package = mkDefault pkgs.mysql;
+      package = mkDefault pkgs.mariadb;
       ensureUsers = [{
         name = "engelsystem";
         ensurePermissions = { "engelsystem.*" = "ALL PRIVILEGES"; };

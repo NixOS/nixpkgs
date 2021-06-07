@@ -46,7 +46,10 @@ pkgs.stdenv.mkDerivation {
       (
         GLOBIGNORE=".:.."
         shopt -u dotglob
-        cp -a --reflink=auto ./files/* -t ./rootImage/
+
+        for f in ./files/*; do
+            cp -a --reflink=auto -t ./rootImage/ "$f"
+        done
       )
 
       # Also include a manifest of the closures in a format suitable for nix-store --load-db
@@ -71,11 +74,9 @@ pkgs.stdenv.mkDerivation {
         return 1
       fi
 
-      echo "Resizing to minimum allowed size"
-      resize2fs -M $img
-
-      # And a final fsck, because of the previous truncating.
-      fsck.ext4 -n -f $img
+      # We may want to shrink the file system and resize the image to
+      # get rid of the unnecessary slack here--but see
+      # https://github.com/NixOS/nixpkgs/issues/125121 for caveats.
 
       if [ ${builtins.toString compressImage} ]; then
         echo "Compressing image"

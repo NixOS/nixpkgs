@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, raleway}:
+{lib, stdenv, fetchurl, unzip, raleway}:
 
 let
 
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.theleagueofmoveabletype.com/";
 
-    license = stdenv.lib.licenses.ofl;
+    license = lib.licenses.ofl;
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ bergey Profpatsch ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bergey Profpatsch ];
   };
 }

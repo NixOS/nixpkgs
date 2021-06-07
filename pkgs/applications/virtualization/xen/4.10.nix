@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, fetchpatch, fetchgit
+{ lib, callPackage, fetchurl, fetchpatch, fetchgit
 , ocaml-ng
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
@@ -16,7 +16,7 @@
 assert withInternalSeabios -> !withSeabios;
 assert withInternalOVMF -> !withOVMF;
 
-with stdenv.lib;
+with lib;
 
 # Patching XEN? Check the XSAs at
 # https://xenbits.xen.org/xsa/
@@ -160,6 +160,9 @@ callPackage (import ./generic.nix (rec {
     "-Wno-error=address-of-packed-member"
     "-Wno-error=format-overflow"
     "-Wno-error=absolute-value"
+    # Fix build with GCC 10
+    "-Wno-error=enum-conversion"
+    "-Wno-error=zero-length-bounds"
   ];
 
   postPatch = ''

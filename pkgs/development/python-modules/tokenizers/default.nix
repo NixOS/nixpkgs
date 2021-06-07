@@ -1,11 +1,12 @@
-{ stdenv
-, rustPlatform
+{ lib
 , fetchFromGitHub
 , fetchurl
-, maturin
-, pipInstallHook
-, pytest
-, python
+, buildPythonPackage
+, rustPlatform
+, setuptools-rust
+, numpy
+, datasets
+, pytestCheckHook
 , requests
 }:
 
@@ -18,9 +19,25 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-merges.txt";
     sha256 = "1idd4rvkpqqbks51i2vjbd928inw7slij9l4r063w3y5fd3ndq8w";
   };
+  albertVocab = fetchurl {
+    url = "https://s3.amazonaws.com/models.huggingface.co/bert/albert-base-v1-tokenizer.json";
+    sha256 = "1hra9pn8rczx7378z88zjclw2qsdrdwq20m56sy42s2crbas6akf";
+  };
   bertVocab = fetchurl {
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
     sha256 = "18rq42cmqa8zanydsbzrb34xwy4l6cz1y900r4kls57cbhvyvv07";
+  };
+  norvigBig = fetchurl {
+    url = "https://norvig.com/big.txt";
+    sha256 = "0yz80icdly7na03cfpl0nfk5h3j3cam55rj486n03wph81ynq1ps";
+  };
+  docPipelineTokenizer = fetchurl {
+    url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-pipeline/tokenizer.json";
+    hash = "sha256-i533xC8J5CDMNxBjo+p6avIM8UOcui8RmGAmK0GmfBc=";
+  };
+  docQuicktourTokenizer = fetchurl {
+    url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-quicktour/tokenizer.json";
+    hash = "sha256-ipY9d5DR5nxoO6kj7rItueZ9AO5wq9+Nzr6GuEIfIBI=";
   };
   openaiVocab = fetchurl {
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-vocab.json";
@@ -30,35 +47,40 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
     sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
   };
-in rustPlatform.buildRustPackage rec {
+in buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.8.0";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    sha256 = "0f5r1wm5ybyk3jvihj1g98y7ihq0iklg0pwkaa11pk1gv0k869w3";
+    hash = "sha256-X7aUiJJjB2ZDlE8LbK7Pn/15SLTZbP8kb4l9ED7/xvU=";
   };
 
-  cargoSha256 = "131bvf35q5n65mq6zws1rp5fn2qkfwfg9sbxi5y6if24n8fpdz4m";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src sourceRoot;
+    name = "${pname}-${version}";
+    hash = "sha256-gRqxlL6q87sGC0birDhCmGF+CVbfxwOxW6Tl6+5mGoo=";
+  };
 
   sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = [
-    maturin
-    pipInstallHook
-  ];
+  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
+    cargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
 
   propagatedBuildInputs = [
-    python
+    numpy
   ];
 
-  # tokenizers uses pyo3, which requires Rust nightly.
-  RUSTC_BOOTSTRAP = 1;
-
-  doCheck = false;
-  doInstallCheck = true;
+  checkInputs = [
+    datasets
+    pytestCheckHook
+    requests
+  ];
 
   postUnpack = ''
     # Add data files for tests, otherwise tests attempt network access.
@@ -66,52 +88,25 @@ in rustPlatform.buildRustPackage rec {
     ( cd $sourceRoot/tests/data
       ln -s ${robertaVocab} roberta-base-vocab.json
       ln -s ${robertaMerges} roberta-base-merges.txt
+      ln -s ${albertVocab} albert-base-v1-tokenizer.json
       ln -s ${bertVocab} bert-base-uncased-vocab.txt
+      ln -s ${docPipelineTokenizer} bert-wiki.json
+      ln -s ${docQuicktourTokenizer} tokenizer-wiki.json
+      ln -s ${norvigBig} big.txt
       ln -s ${openaiVocab} openai-gpt-vocab.json
       ln -s ${openaiMerges} openai-gpt-merges.txt )
   '';
 
-  postPatch = ''
-    # pyo3's build check verifies that Rust is a nightly
-    # version. Disable this check.
-    substituteInPlace $NIX_BUILD_TOP/$cargoDepsCopy/pyo3/build.rs \
-      --replace "check_rustc_version()?;" ""
-
-    # Patching the vendored dependency invalidates the file
-    # checksums, so remove them. This should be safe, since
-    # this is just a copy of the vendored dependencies and
-    # the integrity of the vendored dependencies is validated
-    # by cargoSha256.
-    sed -r -i 's|"files":\{[^}]+\}|"files":{}|' \
-      $NIX_BUILD_TOP/$cargoDepsCopy/pyo3/.cargo-checksum.json
-
-    # Maturin uses the crate name as the wheel name.
-    substituteInPlace Cargo.toml \
-      --replace "tokenizers-python" "tokenizers"
+  preCheck = ''
+    HOME=$TMPDIR
   '';
 
-  buildPhase = ''
-    maturin build --release --manylinux off
-  '';
-
-  installPhase = ''
-    # Put the wheels where the pip install hook can find them.
-    install -Dm644 -t dist target/wheels/*.whl
-    pipInstallPhase
-  '';
-
-  installCheckInputs = [
-    pytest
-    requests
+  disabledTests = [
+    # Downloads data using the datasets module.
+    "TestTrainFromIterators"
   ];
 
-  installCheckPhase = ''
-    # Append paths, or the binding's tokenizer module will be
-    # used, since the test directories have __init__.py
-    pytest --import-mode=append
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/huggingface/tokenizers";
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     license = licenses.asl20;

@@ -16,6 +16,7 @@
 , pathlib
 , plac
 , preshed
+, pydantic
 , srsly
 , tqdm
 , wasabi
@@ -23,29 +24,32 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.4.1";
+  version = "8.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17lampllwq50yjl2djs9bs5rp29xw55gqj762npqi3cvvj2glf81";
+    hash = "sha256-w3CnpG0BtYjY1fmdjV42s8usRRJjg1b6Qw9/Urs6iJc=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Accelerate CoreFoundation CoreGraphics CoreVideo
+  buildInputs = [ cython ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Accelerate
+    CoreFoundation
+    CoreGraphics
+    CoreVideo
   ]);
 
   propagatedBuildInputs = [
-   blis
-   catalogue
-   cymem
-   cython
-   murmurhash
-   numpy
-   plac
-   preshed
-   srsly
-   tqdm
-   wasabi
+    blis
+    catalogue
+    cymem
+    murmurhash
+    numpy
+    plac
+    preshed
+    srsly
+    tqdm
+    pydantic
+    wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
 
@@ -59,10 +63,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
-      --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
-      --replace "srsly>=0.0.6,<1.1.0" "srsly>=0.0.6,<3.0"
+    substituteInPlace setup.cfg \
+      --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
+      --replace "pydantic>=1.7.1,<1.8.0" "pydantic~=1.7"
   '';
 
   checkPhase = ''
@@ -71,10 +74,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thinc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Practical Machine Learning for NLP in Python";
     homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu danieldk sdll ];
-    };
+    maintainers = with maintainers; [ aborsu sdll ];
+  };
 }

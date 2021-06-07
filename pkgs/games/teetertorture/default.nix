@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_mixer}:
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_mixer }:
 
 stdenv.mkDerivation {
   name = "teeter-torture-20051018";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.newbreedsoftware.com/teetertorture/";
     description = "Simple shooting game with your cannon is sitting atop a teeter totter";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

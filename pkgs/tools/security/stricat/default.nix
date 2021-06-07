@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "stricat";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1axg8r4g5n5kdqj5013pgck80nni3z172xkg506vz4zx1zcmrm4r";
   };
 
-  buildFlags = [ "CC=cc" ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Multi-use cryptographic tool based on the STRIBOB algorithm";
     homepage    = "https://www.stribob.com/stricat/";
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

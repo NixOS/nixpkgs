@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # there are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight library to build and train neural networks in Theano";
     homepage = "https://github.com/Lasagne/Lasagne";
     maintainers = with maintainers; [ NikolaMandic ];

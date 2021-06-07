@@ -1,6 +1,5 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , python3
@@ -10,57 +9,48 @@
 , glib
 , bash-completion
 , dbus
-, gnome3
-, libxml2
+, gnome
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 }:
-
+let
+  isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+in
 stdenv.mkDerivation rec {
   pname = "dconf";
-  version = "0.36.0";
+  version = "0.40.0";
 
-  outputs = [ "out" "lib" "dev" "devdoc" ];
+  outputs = [ "out" "lib" "dev" ]
+    ++ lib.optional (!isCross) "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bfs069pjv6lhp7xrzmrhz3876ay2ryqxzc6mlva1hhz34ibprlz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0cs5nayg080y8pb9b7qccm1ni8wkicdmqp1jsgc22110r6j24zyg";
   };
-
-  patches = [
-    # Fix bash-completion installation
-    # https://gitlab.gnome.org/GNOME/dconf/merge_requests/58
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/dconf/commit/b3c9423c6151f3c28e526083ea2f04987a780fdf.patch";
-      sha256 = "0kdapiw3zq041jhzsx90kk08vqfgzr6vy2k541iav984d0m0zcnf";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    vala
     pkg-config
     python3
     libxslt
-    libxml2
     glib
-    gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_42
-  ];
+  ] ++ lib.optional (!isCross) gtk-doc;
 
   buildInputs = [
     glib
     bash-completion
     dbus
-  ];
+  ] ++ lib.optional (!isCross) vala;
+  # Vala cross compilation is broken. For now, build dconf without vapi when cross-compiling.
 
   mesonFlags = [
     "--sysconfdir=/etc"
-    "-Dgtk_doc=true"
-  ];
+    "-Dgtk_doc=${lib.boolToString (!isCross)}" # gtk-doc does do some gobject introspection, which doesn't yet cross-compile.
+  ] ++ lib.optional isCross "-Dvapi=false";
 
   doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin;
 
@@ -71,12 +61,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/dconf";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;

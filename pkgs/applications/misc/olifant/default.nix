@@ -1,14 +1,15 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , fetchpatch
 , vala
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , libgee
 , gsettings-desktop-schemas
-, gnome3
+, gnome
 , pantheon
 , wrapGAppsHook
 , gtk3
@@ -19,19 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "olifant";
-  version = "0.2.1-beta5";
+  version = "0.2.1-beta6";
 
   src = fetchFromGitHub {
     owner = "cleac";
     repo = pname;
     rev = version;
-    sha256 = "1fpyg3nii75vmsdhp8x4yvhi3npvp3xnbqmd0qcidn05mbsam68r";
+    sha256 = "sha256-3hnEa4Q1dH0R8Jp+Ew0+dH1PEm3F+56jYwqhJ+vll4M=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     glib-networking
-    gnome3.libsoup
+    gnome.libsoup
     gsettings-desktop-schemas
     gtk3
     json-glib
@@ -54,15 +55,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple Mastodon client designed for elementary OS, originally developed by @bleakgrey";
     homepage = "https://github.com/cleac/olifant";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
   };
 }

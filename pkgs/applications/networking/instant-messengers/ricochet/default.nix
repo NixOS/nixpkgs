@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchurl, pkgconfig, makeDesktopItem
+{ mkDerivation, lib, fetchurl, pkg-config, makeDesktopItem
 , qtbase, qttools, qtmultimedia, qtquick1, qtquickcontrols
 , openssl, protobuf, qmake
 }:
@@ -27,7 +27,7 @@ mkDerivation rec {
     openssl protobuf
   ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags openssl)"
@@ -49,7 +49,7 @@ mkDerivation rec {
   # RCC: Error in 'translation/embedded.qrc': Cannot find file 'ricochet_en.qm'
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Anonymous peer-to-peer instant messaging";
     homepage = "https://ricochet.im";
     license = licenses.bsd3;

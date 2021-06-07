@@ -2,69 +2,46 @@
 , enableDaemon ? false # build amule daemon
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
-, fetchFromGitHub, fetchpatch, stdenv, lib, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
-, autoreconfHook, pkgconfig, makeWrapper, libX11 ? null }:
-
-assert httpServer -> libpng != null;
-assert client -> libX11 != null;
+, fetchFromGitHub
+, stdenv
+, lib
+, cmake
+, zlib
+, wxGTK
+, perl
+, cryptopp
+, libupnp
+, gettext
+, libpng
+, autoreconfHook
+, pkg-config
+, makeWrapper
+, libX11
+}:
 
 stdenv.mkDerivation rec {
   pname = "amule";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "amule-project";
     repo = "amule";
     rev = version;
-    sha256 = "010wxm6g9f92x6fympj501zbnjka32rzbx0sk3a2y4zpih5d2nsn";
+    sha256 = "1nm4vxgmisn1b6l3drmz0q04x067j2i8lw5rnf0acaapwlp8qwvi";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/amule-project/amule/pull/135.patch";
-      sha256 = "1n24r1j28083b8ipbnh1nf6i4j6vx59pdkfl1c0g6bb4psx9wvvi";
-      name = "libupnp_18.patch";
-    })
-    (fetchpatch {
-      name = "amule-cryptopp_6.patch";
-      url = "https://github.com/amule-project/amule/commit/27c13f3e622b8a3eaaa05bb62b0149604bdcc9e8.patch";
-      sha256 = "0kq095gi3xl665wr864zlhp5f3blk75pr725yany8ilzcwrzdrnm";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace src/libs/ec/file_generator.pl \
-      --replace /usr/bin/perl ${perl}/bin/perl
-
-    # autotools expects these to be in the root
-    cp docs/{AUTHORS,README} .
-    cp docs/Changelog ./ChangeLog
-    cp docs/Changelog ./NEWS
-  '';
-
-  preAutoreconf = ''
-    pushd src/pixmaps/flags_xpm >/dev/null
-    ./makeflags.sh
-    popd >/dev/null
-  '';
-
-  nativeBuildInputs = [ autoreconfHook gettext makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
 
   buildInputs = [
-    zlib wxGTK perl cryptopp libupnp
+    zlib wxGTK perl cryptopp.dev libupnp
   ] ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;
 
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    "--with-crypto-prefix=${cryptopp}"
-    "--disable-debug"
-    "--enable-optimize"
-    (lib.enableFeature monolithic   "monolithic")
-    (lib.enableFeature enableDaemon "amule-daemon")
-    (lib.enableFeature client       "amule-gui")
-    (lib.enableFeature httpServer   "webserver")
+  cmakeFlags = [
+    "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"
+    "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
+    "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
+    "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
   ];
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
@@ -91,5 +68,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom ];
     platforms = platforms.unix;
+    # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
+    broken = enableDaemon;
   };
 }

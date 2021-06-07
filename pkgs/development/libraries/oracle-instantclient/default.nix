@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoPatchelfHook
 , fixDarwinDylibNames
@@ -12,7 +12,7 @@
 assert odbcSupport -> unixODBC != null;
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString;
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
@@ -114,7 +114,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Oracle instant client libraries and sqlplus CLI";
     longDescription = ''
       Oracle instant client provides access to Oracle databases (OCI,
@@ -123,7 +123,7 @@ in stdenv.mkDerivation {
     '';
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ pesterhazy flokli ];
+    maintainers = with maintainers; [ flokli ];
     hydraPlatforms = [];
   };
 }

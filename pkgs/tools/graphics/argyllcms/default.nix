@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "all" ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
   ];
 
   # Install udev rules, but remove lines that set up the udev-acl
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     mv $out/ref $out/share/argyllcms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.argyllcms.com";
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;

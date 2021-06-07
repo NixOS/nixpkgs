@@ -1,43 +1,38 @@
-{ fetchPypi
+{ fetchFromGitHub
 , lib
 , buildPythonPackage
-, pythonOlder
 , attrs
 , click
 , effect
-, jinja2
 , git
 , pytestCheckHook
-, pytest-black
 , pytestcov
-, pytest-isort
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "2.4";
+  version = "4.0.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-PVB/cL0NVB5pHxRMjg8TLatvIvHjfCvaRWBanVHYT+E=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "seppeljordan";
+    repo = "nix-prefetch-github";
+    rev = "v${version}";
+    sha256 = "CLcmwobPrL6NiI/nw+/Dwho/r15owV16Jmt5OcfFqvo=";
   };
-
-  # The tests for this package require nix and network access.  That's
-  # why we cannot execute them inside the building process.
-  doCheck = false;
 
   propagatedBuildInputs = [
     attrs
     click
     effect
-    jinja2
   ];
 
-  checkInputs = [ pytestCheckHook pytest-black pytestcov pytest-isort git ];
+  checkInputs = [ pytestCheckHook pytestcov git ];
 
-  # latest version of isort will cause tests to fail
   # ignore tests which are impure
-  disabledTests = [ "isort" "life" "outputs" "fetch_submodules" ];
+  disabledTests = [ "network" "requires_nix_build" ];
 
   meta = with lib; {
     description = "Prefetch sources from github";

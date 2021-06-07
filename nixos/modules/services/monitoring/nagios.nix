@@ -192,6 +192,7 @@ in
       path     = [ pkgs.nagios ] ++ cfg.plugins;
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
+      restartTriggers = [ nagiosCfgFile ];
 
       serviceConfig = {
         User = "nagios";
@@ -201,7 +202,6 @@ in
         LogsDirectory = "nagios";
         StateDirectory = "nagios";
         ExecStart = "${pkgs.nagios}/bin/nagios /etc/nagios.cfg";
-        X-ReloadIfChanged = nagiosCfgFile;
       };
     };
 

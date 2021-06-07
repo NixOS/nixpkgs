@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
+{ lib, fetchFromGitLab, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
 
 python3Packages.buildPythonApplication {
   pname = "connman-notify";
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication {
     install -D -t $out/share/doc README.rst
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop notification integration for connman";
     homepage = "https://gitlab.com/wavexx/connman-notify";
     license = licenses.gpl2;

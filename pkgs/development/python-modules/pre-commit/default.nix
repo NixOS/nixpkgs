@@ -2,7 +2,6 @@
 , aspy-yaml
 , cached-property
 , cfgv
-, futures
 , identify
 , importlib-metadata
 , importlib-resources
@@ -16,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "pre-commit";
-  version = "2.6.0";
+  version = "2.11.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit version;
     pname = "pre_commit";
-    sha256 = "05d9635v0yzrj2848m2hn9axbvds0dymv49rlyj238v3vlzncmqn";
+    sha256 = "15f1chxrbmfcajk1ngk3jvf6jjbigb5dg66wnn7phmlywaawpy06";
   };
 
   patches = [

@@ -3,14 +3,16 @@
 
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems; };
+with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
 
 {
 
   tarball = import ./make-tarball.nix {
-    inherit nixpkgs;
+    inherit nixpkgs supportedSystems;
     officialRelease = false;
   };
 
@@ -38,7 +40,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
-  emacs25 = linux;
+  emacs = linux;
   enscript = all;
   file = all;
   findutils = all;
@@ -91,7 +93,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   ltrace = linux;
   lvm2 = linux;
   lynx = linux;
-  lzma = linux;
+  xz = linux;
   man = linux;
   man-pages = linux;
   mc = all;
@@ -124,7 +126,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   pciutils = linux;
   pdf2xml = all;
   perl = all;
-  pkgconfig = all;
+  pkg-config = all;
   pmccabe = linux;
   procps = linux;
   python = unix; # Cygwin builds fail
@@ -158,8 +160,8 @@ with import ./release-lib.nix { inherit supportedSystems; };
   udev = linux;
   unzip = all;
   usbutils = linux;
-  utillinux = linux;
-  utillinuxMinimal = linux;
+  util-linux = linux;
+  util-linuxMinimal = linux;
   w3m = all;
   webkitgtk = linux;
   wget = all;

@@ -46,7 +46,7 @@ in
         Set of files that have to be linked in <filename>/etc</filename>.
       '';
 
-      type = with types; loaOf (submodule (
+      type = with types; attrsOf (submodule (
         { name, config, ... }:
         { options = {
 
@@ -154,7 +154,7 @@ in
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."
-        ${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} ${./setup-etc.pl} ${etc}/etc
+        ${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl ${./setup-etc.pl} ${etc}/etc
       '';
 
   };

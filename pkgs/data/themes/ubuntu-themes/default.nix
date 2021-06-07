@@ -1,32 +1,32 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , gnome-icon-theme
-, gnome3
+, gnome
 , gtk-engine-murrine
 , gtk3
 , hicolor-icon-theme
 , humanity-icon-theme
-, python2Packages
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "ubuntu-themes";
-  version = "19.04";
+  version = "20.10";
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}.orig.tar.gz";
-    sha256 = "1dy2dmiq2dj80nl2y4mf4ks0c7qmmnpk25wzv2rynwa3s2gkxgih";
+    sha256 = "00frn2dd4kjhlmwkasrx4a820fwrg8f8hmiwh51m63bpj00vwn0r";
   };
 
   nativeBuildInputs = [
     gtk3
-    python2Packages.python
+    python3Packages.python
   ];
 
   propagatedBuildInputs = [
     gnome-icon-theme
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     humanity-icon-theme
     hicolor-icon-theme
   ];
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ubuntu monochrome and Suru icon themes, Ambiance and Radiance themes, and Ubuntu artwork";
     homepage = "https://launchpad.net/ubuntu-themes";
     license = with licenses; [ cc-by-sa-40 gpl3 ];

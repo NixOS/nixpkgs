@@ -1,70 +1,79 @@
 { stdenv
-, fetchurl
+, lib
+, callPackage
 , fetchFromGitHub
 , rust
 , rustPlatform
 , installShellFiles
+, libiconv
+, libobjc
 , Security
 , CoreServices
+, Metal
+, Foundation
+, QuartzCore
+, librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
-let
-  deps = import ./deps.nix { };
-  arch = rust.toRustTarget stdenv.hostPlatform;
-  rustyV8Lib = with deps.rustyV8Lib; fetchurl {
-    url = "https://github.com/denoland/rusty_v8/releases/download/v${version}/librusty_v8_release_${arch}.a";
-    sha256 = sha256s."${stdenv.hostPlatform.system}";
-    meta = { inherit version; };
-  };
-in
+
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.1.3";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0knm27xygrbs8h460aw3xh9h2gymw18diy8j3y49h8i20gmgj05n";
-    fetchSubmodules = true;
+    sha256 = "sha256-25FfxGtPZ+KQCmXur6pwrb1l/xjCWgw69CMLPihnhAU=";
   };
-  cargoSha256 = "0kssazwpqhldafpl5c6yq0ywgd6f18y082r5gwq9igpfyg4amb6z";
+  cargoSha256 = "sha256-CopfdjafWAhpbrdYSHJjKHKCLw94TSaiSAH4CVFOHi8=";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security CoreServices ];
+  buildAndTestSubdir = "cli";
+
+  buildInputs = lib.optionals stdenv.isDarwin
+    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
 
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance
-  preBuild = ''
-    _rusty_v8_setup() {
-      for v in "$@"; do
-        dir="target/$v/gn_out/obj"
-        mkdir -p "$dir" && cp "${rustyV8Lib}" "$dir/librusty_v8.a"
-      done
-    }
+  preBuild =
+    let arch = rust.toRustTarget stdenv.hostPlatform; in
+    ''
+      _librusty_v8_setup() {
+        for v in "$@"; do
+          install -D ${librusty_v8} "target/$v/gn_out/obj/librusty_v8.a"
+        done
+      }
 
-    # Copy over the `librusty_v8.a` file inside target/XYZ/gn_out/obj, symlink not allowed
-    _rusty_v8_setup "debug" "release" "${arch}/release"
-  '';
+      # Copy over the `librusty_v8.a` file inside target/XYZ/gn_out/obj, symlink not allowed
+      _librusty_v8_setup "debug" "release" "${arch}/release"
+    '';
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
   doCheck = false;
 
-  # TODO: Move to enhanced installShellCompletion when merged: PR #83630
   postInstall = ''
-    $out/bin/deno completions bash > deno.bash
-    $out/bin/deno completions fish > deno.fish
-    $out/bin/deno completions zsh  > _deno
-    installShellCompletion deno.{bash,fish} --zsh _deno
+    installShellCompletion --cmd deno \
+      --bash <($out/bin/deno completions bash) \
+      --fish <($out/bin/deno completions fish) \
+      --zsh <($out/bin/deno completions zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/deno --help
+    $out/bin/deno --version | grep "deno ${version}"
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = ./update/update.ts;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://deno.land/";
-    changelog = "${src.meta.homepage}/releases/tag/v${version}";
+    changelog = "https://github.com/denoland/deno/releases/tag/v${version}";
     description = "A secure runtime for JavaScript and TypeScript";
     longDescription = ''
       Deno aims to be a productive and secure scripting environment for the modern programmer.
@@ -77,6 +86,6 @@ rustPlatform.buildRustPackage rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

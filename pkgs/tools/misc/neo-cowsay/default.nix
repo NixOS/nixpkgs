@@ -13,12 +13,14 @@ buildGoModule rec {
 
   vendorSha256 = "1clar59x2dvn7yj4fbylby9nrzy8kdixi48hkbmrv8g5l8n0wdl2";
 
+  doCheck = false;
+
   subPackages = [ "cmd/cowsay" "cmd/cowthink" ];
 
   meta = with lib; {
     description = "Cowsay reborn, written in Go";
     homepage = "https://github.com/Code-Hex/Neo-cowsay";
     license = with licenses; [artistic1 /* or */ gpl3];
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv }:
+{ fetchurl, fetchpatch, lib, stdenv, libtirpc }:
 
 stdenv.mkDerivation rec {
   name = "xinetd-2.3.15";
@@ -16,10 +16,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  buildInputs = [ libtirpc ];
+
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_LDFLAGS = [ "-ltirpc" ];
+
   meta = {
     description = "Secure replacement for inetd";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "http://xinetd.org";
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
   };
 }

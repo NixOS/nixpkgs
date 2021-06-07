@@ -1,46 +1,24 @@
-{ stdenv, buildEnv, fetchurl, perl, perlPackages, makeWrapper }:
+{ lib, stdenv, autoreconfHook, buildEnv, fetchFromGitHub, perl, perlPackages, makeWrapper, gnupg, openssl }:
 
-# This package isn't extremely useful as it is, but is getting close.
-# After running:
-#
-#   nix-build . -A rt
-#
-# I created a config file named myconfig.pm with:
-#
-#   use utf8;
-#   Set($rtname, '127.0.0.1');
-#   # These dirs need to be pre-created:
-#   Set($MasonSessionDir, '/home/grahamc/foo/sessiondir/');
-#   Set($MasonDataDir, '/home/grahamc/foo/localstate/');
-#   Set($WebPort, 8080);
-#
-#   Set($DatabaseType, "SQLite");
-#   Set( $DatabaseName, '/home/grahamc/projects/foo/my.db' );
-#
-#   1;
-#
-# and ran
-#
-#  RT_SITE_CONFIG=$(pwd)/myconfig.pm ./result/bin/rt-setup-database --action init
-#
-# Then:
-#
-#   RT_SITE_CONFIG=$(pwd)/myconfig.pm ./result/bin/rt-server
-#
-# Make sure to check out result/etc/RT_Config.pm
-#
-# Good luck.
 stdenv.mkDerivation rec {
   pname = "rt";
+  version = "5.0.1";
 
-  version = "4.4.4";
-
-  src = fetchurl {
-    url = "https://download.bestpractical.com/pub/rt/release/${pname}-${version}.tar.gz";
-    sha256 = "1108jhz1gvalcfnbzgpbk7fkxzxkkc7m74a3bnwyjzldlyj1dhrl";
+  src = fetchFromGitHub {
+    repo = pname;
+    rev = "${pname}-${version}";
+    owner = "bestpractical";
+    sha256 = "1qqh6w094x7dljz001va802v4s6mixs9lkhs2cs47lf5ph3vwq2q";
   };
 
-  patches = [ ./override-generated.patch ];
+  patches = [
+    ./dont-check-users_groups.patch  # needed for "make testdeps" to work in the build
+    ./override-generated.patch
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   buildInputs = [
     makeWrapper
@@ -48,28 +26,102 @@ stdenv.mkDerivation rec {
     (buildEnv {
       name = "rt-perl-deps";
       paths = with perlPackages; (requiredPerlModules [
-        ApacheSession BusinessHours CGIEmulatePSGI CGIPSGI
-        CSSMinifierXS CSSSquish ConvertColor CryptEksblowfish
-        CryptSSLeay DBDSQLite DBDmysql DBIxSearchBuilder DataGUID
-        DataICal DataPagePageset DateExtract DateManip
-        DateTimeFormatNatural DevelGlobalDestruction EmailAddress
-        EmailAddressList FCGI FCGIProcManager FileShareDir FileWhich
-        GD GDGraph GnuPGInterface GraphViz HTMLFormatTextWithLinks
-        HTMLFormatTextWithLinksAndTables HTMLMason
-        HTMLMasonPSGIHandler HTMLQuoted HTMLRewriteAttributes
-        HTMLScrubber IPCRun IPCRun3 JSON JavaScriptMinifierXS LWP
-        LWPProtocolHttps LocaleMaketextFuzzy LocaleMaketextLexicon
-        LogDispatch MIMETools MIMETypes MailTools ModuleRefresh
-        ModuleVersionsReport MozillaCA NetCIDR NetIP PerlIOeol Plack
-        RegexpCommon RegexpCommonnetCIDR RegexpIPv6 RoleBasic
-        ScopeUpper Starlet SymbolGlobalName TermReadKey
-        TextPasswordPronounceable TextQuoted TextTemplate
-        TextWikiFormat TextWrapper TimeParseDate TreeSimple
-        UNIVERSALrequire XMLRSS
+        ApacheSession
+        BusinessHours
+        CGIEmulatePSGI
+        CGIPSGI
+        CSSMinifierXS
+        CSSSquish
+        ConvertColor
+        CryptEksblowfish
+        CryptSSLeay
+        CryptX509
+        DBDPg
+        DBIxSearchBuilder
+        DataGUID
+        DataICal
+        DataPage
+        DataPagePageset
+        DateExtract
+        DateManip
+        DateTimeFormatNatural
+        DevelGlobalDestruction
+        EmailAddress
+        EmailAddressList
+        EncodeDetect
+        EncodeHanExtra
+        FCGI
+        FCGIProcManager
+        FileShareDir
+        FileWhich
+        GD
+        GDGraph
+        GnuPGInterface
+        GraphViz
+        HTMLFormatExternal
+        HTMLFormatTextWithLinks
+        HTMLFormatTextWithLinksAndTables
+        HTMLGumbo
+        HTMLMason
+        HTMLMasonPSGIHandler
+        HTMLQuoted
+        HTMLRewriteAttributes
+        HTMLScrubber
+        IPCRun
+        IPCRun3
+        JSON
+        JavaScriptMinifierXS
+        LWP
+        LWPProtocolHttps
+        LocaleMaketextFuzzy
+        LocaleMaketextLexicon
+        LogDispatch
+        MIMETools
+        MIMETypes
+        MailTools
+        ModulePath
+        ModuleRefresh
+        ModuleVersionsReport
+        Moose
+        MooseXNonMoose
+        MooseXRoleParameterized
+        MozillaCA
+        NetCIDR
+        NetIP
+        PathDispatcher
+        PerlIOeol
+        Plack
+        PodParser
+        RegexpCommon
+        RegexpCommonnetCIDR
+        RegexpIPv6
+        RoleBasic
+        ScopeUpper
+        Starlet
+        Starman
+        StringShellQuote
+        SymbolGlobalName
+        TermReadKey
+        TextPasswordPronounceable
+        TextQuoted
+        TextTemplate
+        TextWikiFormat
+        TextWordDiff
+        TextWrapper
+        TimeParseDate
+        TreeSimple
+        UNIVERSALrequire
+        WebMachine
+        XMLRSS
+        perlldap
       ]);
     })
   ];
 
+  preAutoreconf = ''
+    substituteInPlace configure.ac \
+      --replace "rt-3.9.EXPORTED" "rt-${version}"
+  '';
   preConfigure = ''
     configureFlags="$configureFlags --with-web-user=$UID"
     configureFlags="$configureFlags --with-web-group=$(id -g)"
@@ -82,21 +134,30 @@ stdenv.mkDerivation rec {
     "--enable-graphviz"
     "--enable-gd"
     "--enable-gpg"
-    "--with-db-type=SQLite"
+    "--enable-smime"
+    "--with-db-type=Pg"
   ];
 
   buildPhase = ''
-    make testdeps | grep -i missing | sort
+    make testdeps
   '';
 
-  preFixup = ''
-    for i in $(find $out/bin -type f; find $out/sbin -type f); do
-      wrapProgram $i \
-          --prefix PERL5LIB ':' $PERL5LIB
+  postFixup = ''
+    for i in $(find $out/bin -type f); do
+      wrapProgram $i --prefix PERL5LIB ':' $PERL5LIB \
+        --prefix PATH ":" "${lib.makeBinPath [ openssl gnupg ]}"
     done
+
+    rm -r $out/var
+    mkdir -p $out/var/data
+    ln -s /var/log/rt $out/var/log
+    ln -s /run/rt/mason_data $out/var/mason_data
+    ln -s /var/lib/rt/shredder $out/var/data/RT-Shredder
+    ln -s /var/lib/rt/smime $out/var/data/smime
+    ln -s /var/lib/rt/gpg $out/var/data/gpg
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

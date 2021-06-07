@@ -6,17 +6,17 @@
 
 let
   pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
-  version = "2.11.2";
+  version = "2.11.6";
 
 in stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_gpl-${version}.tar.gz";
-    sha256 = "18glb2v07mwfz6p8qmwhzcaaczyc36x3gn9wx8ndm7q6d93xr6q2";
+    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla-${version}.tar.gz";
+    sha256 = "5zRgV9tH0vs4RGf6/M/LE6oHQTc8XVk7xytVsvDdIKc=";
   };
 
-  sourceRoot = "QScintilla_gpl-${version}/Qt4Qt5";
+  sourceRoot = "QScintilla-${version}/Qt4Qt5";
 
   buildInputs = [ (if withQt5 then qtbase else qt4) ];
 
@@ -35,6 +35,7 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  dontWrapQtApps = true;
 
   postPatch = ''
     substituteInPlace qscintilla.pro \
@@ -46,7 +47,7 @@ in stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_DATA]'         $out/share${lib.optionalString (! withQt5) "/qt"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Qt port of the Scintilla text editing library";
     longDescription = ''
       QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor
@@ -63,7 +64,7 @@ in stdenv.mkDerivation rec {
       background colours and multiple fonts.
     '';
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
-    license = with licenses; [ gpl2 gpl3 ]; # and commercial
+    license = with licenses; [ gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };

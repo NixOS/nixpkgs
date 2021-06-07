@@ -1,30 +1,25 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
+, fetchFromGitLab
+, nose
 }:
 
 buildPythonPackage rec {
   pname = "pyxdg";
-  version = "0.26";
+  version = "0.27";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "fe2928d3f532ed32b39c32a482b54136fe766d19936afc96c8f00645f9da1a06";
+  src =  fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "xdg";
+    repo = pname;
+    rev = "rel-${version}";
+    sha256 = "1dg826vrc7ifkk4lnf648h61cqfamaqmngkn9hgmxnf9gqmkbn0k";
   };
 
-  # error: invalid command 'test'
+  # Tests failed (errors=4, failures=4) on NixOS
   doCheck = false;
 
-  patches = [ 
-    # see: https://gitlab.freedesktop.org/xdg/pyxdg/-/merge_requests/5 
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xdg/pyxdg/-/commit/78405aaa34463db2c6f33ca28ae2293dd3bb1e91.patch";
-      sha256 = "17cjax546rkqv5kvwczjqjdd6vmlvcxjanz0296dlfq23j2wbx63";
-    })
-  ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://freedesktop.org/wiki/Software/pyxdg";
     description = "Contains implementations of freedesktop.org standards";
     license = licenses.lgpl2;

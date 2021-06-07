@@ -1,8 +1,8 @@
 { config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
-, qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
+, qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
+, alsaLib, curl, libvpx, nettools, dbus, substituteAll
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin ? null
@@ -16,14 +16,14 @@
 , enable32bitGuests ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   python = python3;
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.6";
+  version = "6.1.22";
 
   iasl' = iasl.overrideAttrs (old: rec {
     inherit (old) pname;
@@ -40,12 +40,12 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "b031c30d770f28c5f884071ad933e8c1f83e65b93aaba03a4012077c1d90a54f";
+    sha256 = "99816d2a15205d49362a31e8ffeb8262d2fa0678c751dfd0a7c43b2faca8be49";
   };
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 ]
+  nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 ]
     ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.

@@ -1,17 +1,29 @@
-{ fetchurl, stdenv, gmp }:
+{ fetchurl, lib, stdenv, autoconf, automake, libtool, gmp
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.1a-2";
+  version = "4.3h";
 
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo${version}.tar.gz";
-    sha256 = "09yrz8r0jpj7bda39fdxzrrdyhi851nlfajsyf0b6jxanz6ygcjx";
+    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
+    sha256 = "0fw08096sf8ma2cncipnidnysxii0h0pc7kcqkjhkhdchknp8vig";
   };
+
+  nativeBuildInputs = [ autoconf automake libtool ];
+
+  buildInputs = lib.optional stdenv.isDarwin
+    darwin.apple_sdk.frameworks.ApplicationServices
+  ;
 
   propagatedBuildInputs = [ gmp ];
 
   preConfigure =
+    # For libuv on darwin
+    lib.optionalString stdenv.isDarwin ''
+      export LIBTOOLIZE=libtoolize
+    '' +
     # Help libgc's configure.
     '' export CXXCPP="$CXX -E"
     '';
@@ -20,14 +32,14 @@ stdenv.mkDerivation rec {
     # Fix absolute paths.
     sed -e 's=/bin/mv=mv=g' -e 's=/bin/rm=rm=g'			\
         -e 's=/tmp=$TMPDIR=g' -i autoconf/*		\
-	[Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*	\
-	*/*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*		\
-	comptime/Cc/cc.scm gc/install-*
+        [Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*	\
+        */*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*		\
+        comptime/Cc/cc.scm gc/install-*
 
     # Make sure we don't change string lengths in the generated
     # C files.
     sed -e 's=/bin/rm=     rm=g' -e 's=/bin/mv=     mv=g'	\
-	-i comptime/Cc/cc.c
+        -i comptime/Cc/cc.c
   '';
 
   checkTarget = "test";
@@ -38,9 +50,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Efficient Scheme compiler";
     homepage    = "http://www-sop.inria.fr/indes/fp/Bigloo/";
-    license     = stdenv.lib.licenses.gpl2Plus;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
+    license     = lib.licenses.gpl2Plus;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

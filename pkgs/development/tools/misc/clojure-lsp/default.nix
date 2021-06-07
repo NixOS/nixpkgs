@@ -1,30 +1,56 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, graalvm11-ce, babashka, fetchurl, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "20200706T152722";
+  version = "2021.04.13-12.47.33";
 
-  src = fetchurl {
-    url = "https://github.com/snoe/clojure-lsp/releases/download/release-${version}/${pname}";
-    sha256 = "1gjlsmahmmjklribdwbqybh1zj5qcv4aaxw7ffqg7rayf967w4pj";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "1la0d28pvp1fqnxp3scb2vawcblilwyx42djxn379vag403p1i2d";
   };
 
-  dontUnpack = true;
+  jar = fetchurl {
+    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
+    sha256 = "059gz7y2rzwdxpyqy80w4lghzgxi5lb4rxmks1721yq6k7ljjyqy";
+  };
 
-  installPhase = ''
-    install -Dm755 $src $out/bin/clojure-lsp
-    sed -i -e '1 s!java!${jre}/bin/java!' $out/bin/clojure-lsp
+  GRAALVM_HOME = graalvm11-ce;
+  CLOJURE_LSP_JAR = jar;
+
+  buildInputs = [ graalvm11-ce ];
+
+  buildPhase = with lib; ''
+    runHook preBuild
+
+    bash ./graalvm/native-unix-compile.sh
+
+    runHook postBuild
   '';
 
-  # verify shebang patch
-  installCheckPhase = "PATH= clojure-lsp --version";
+  installPhase = ''
+    runHook preInstall
 
-  meta = with stdenv.lib; {
+    install -Dm755 ./clojure-lsp $out/bin/clojure-lsp
+
+    runHook postInstall
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    ${babashka}/bin/bb integration-test/run-all.clj ./clojure-lsp
+
+    runHook postCheck
+  '';
+
+  meta = with lib; {
     description = "Language Server Protocol (LSP) for Clojure";
-    homepage = "https://github.com/snoe/clojure-lsp";
+    homepage = "https://github.com/clojure-lsp/clojure-lsp";
     license = licenses.mit;
     maintainers = [ maintainers.ericdallo ];
-    platforms = jre.meta.platforms;
+    platforms = graalvm11-ce.meta.platforms;
   };
-
 }

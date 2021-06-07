@@ -26,9 +26,12 @@
 , libXrandr
 , libXrender
 , libXtst
+, libdrm
 , libnotify
 , libpulseaudio
 , libuuid
+, libxshmfence
+, mesa
 , nspr
 , nss
 , pango
@@ -47,11 +50,11 @@ let
 in stdenv.mkDerivation rec {
 
   pname = "opera";
-  version = "67.0.3575.31";
+  version = "76.0.4017.94";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    sha256 = "1ghygin7xf5lwd77s8f6bag339di4alwlkqwjzlq20wzwx4lns4w";
+    sha256 = "sha256-vjSfzkl1jIQ9P1ARDa0eOuD8CmKHIEZ+IwMB2wIVjE8=";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -88,9 +91,12 @@ in stdenv.mkDerivation rec {
     libXrandr
     libXrender
     libXtst
+    libdrm
     libnotify
     libuuid
     libxcb
+    libxshmfence
+    mesa
     nspr
     nss
     pango
@@ -104,7 +110,7 @@ in stdenv.mkDerivation rec {
     # This is a little tricky. Without it the app starts then crashes. Then it
     # brings up the crash report, which also crashes. `strace -f` hints at a
     # missing libudev.so.0.
-    systemd.lib
+    (lib.getLib systemd)
   ];
 
   installPhase = ''

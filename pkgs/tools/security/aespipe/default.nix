@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sharutils, makeWrapper }:
+{ lib, stdenv, fetchurl, sharutils, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "aespipe";
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp bz2aespipe $out/bin
     wrapProgram $out/bin/bz2aespipe \
-     --prefix PATH : $out/bin:${stdenv.lib.makeBinPath [ sharutils ]}
+     --prefix PATH : $out/bin:${lib.makeBinPath [ sharutils ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AES encrypting or decrypting pipe";
     homepage = "http://loop-aes.sourceforge.net/aespipe.README";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

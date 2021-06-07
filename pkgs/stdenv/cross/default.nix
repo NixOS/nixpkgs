@@ -38,7 +38,7 @@ in lib.init bootStages ++ [
   (buildPackages: {
     inherit config;
     overlays = overlays ++ crossOverlays
-      ++ (if crossSystem.isWasm then [(import ../../top-level/static.nix)] else []);
+      ++ (if (with crossSystem; isWasm || isRedox) then [(import ../../top-level/static.nix)] else []);
     selfBuild = false;
     stdenv = buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;
@@ -48,7 +48,9 @@ in lib.init bootStages ++ [
       # Prior overrides are surely not valid as packages built with this run on
       # a different platform, and so are disabled.
       overrides = _: _: {};
-      extraBuildInputs = [ ]; # Old ones run on wrong platform
+      extraBuildInputs = [ ] # Old ones run on wrong platform
+         ++ lib.optionals hostPlatform.isDarwin [ buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation ]
+         ;
       allowedRequisites = null;
 
       hasCC = !targetPlatform.isGhcjs;
@@ -63,8 +65,10 @@ in lib.init bootStages ++ [
              # `tryEval` wouldn't catch, wrecking accessing previous stages
              # when there is a C compiler and everything should be fine.
              then throw "no C compiler provided for this platform"
+           else if crossSystem.isDarwin
+             then buildPackages.llvmPackages.clang
            else if crossSystem.useLLVM or false
-             then buildPackages.llvmPackages_8.lldClang
+             then buildPackages.llvmPackages.clangUseLLVM
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs
@@ -72,7 +76,8 @@ in lib.init bootStages ++ [
              (hostPlatform.isLinux && !buildPlatform.isLinux)
              [ buildPackages.patchelf ]
         ++ lib.optional
-             (let f = p: !p.isx86 || p.libc == "musl" || p.libc == "wasilibc" || p.isiOS; in f hostPlatform && !(f buildPlatform))
+             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
+               in f hostPlatform && !(f buildPlatform) )
              buildPackages.updateAutotoolsGnuConfigScriptsHook
            # without proper `file` command, libtool sometimes fails
            # to recognize 64-bit DLLs

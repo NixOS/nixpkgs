@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k
 , mock
 , pytest
-, pytestpep8
 , snowballstemmer
 }:
 
@@ -19,11 +18,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ snowballstemmer ];
 
-  checkInputs = [ pytest pytestpep8 mock ];
+  checkInputs = [ pytest mock ];
 
   checkPhase = ''
     # test_integration.py installs packages via pip
-    py.test --pep8 --cache-clear -vv src/tests -k "not test_integration"
+    py.test --cache-clear -vv src/tests -k "not test_integration"
   '';
 
   meta = with lib; {

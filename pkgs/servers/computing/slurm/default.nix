@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtool, curl
-, python, munge, perl, pam, zlib, shadow, coreutils
+{ lib, stdenv, fetchFromGitHub, pkg-config, libtool, curl
+, python3, munge, perl, pam, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, xorg, lz4, rdma-core, nixosTests
 , pmix
@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "19.05.7.1";
+  version = "20.11.7.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "115f40k8y7d569nbl6g0mkyshgv925lawlwar7ib5296g30p97f0";
+    sha256 = "0ril6k4dj96qhx5x7r4nc2ghp7n9700808731v4qn9yvcslqzg9a";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace src/common/env.c \
         --replace "/bin/echo" "${coreutils}/bin/echo"
-  '' + (stdenv.lib.optionalString enableX11 ''
+  '' + (lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
         --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
   '');
@@ -44,15 +44,15 @@ stdenv.mkDerivation rec {
   # this doesn't fix tests completely at least makes slurmd to launch
   hardeningDisable = [ "bindnow" ];
 
-  nativeBuildInputs = [ pkgconfig libtool ];
+  nativeBuildInputs = [ pkg-config libtool python3 ];
   buildInputs = [
-    curl python munge perl pam zlib
+    curl python3 munge perl pam zlib
       libmysqlclient ncurses gtk2 lz4 rdma-core
       lua hwloc numactl readline freeipmi shadow.su
       pmix
-  ] ++ stdenv.lib.optionals enableX11 [ xorg.xauth ];
+  ] ++ lib.optionals enableX11 [ xorg.xauth ];
 
-  configureFlags = with stdenv.lib;
+  configureFlags = with lib;
     [ "--with-freeipmi=${freeipmi}"
       "--with-hwloc=${hwloc.dev}"
       "--with-lz4=${lz4.dev}"
@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.slurm = nixosTests.slurm;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.schedmd.com/";
     description = "Simple Linux Utility for Resource Management";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ jagajaga markuskowa ];
   };
 }

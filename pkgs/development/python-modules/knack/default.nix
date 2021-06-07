@@ -1,11 +1,9 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , argcomplete
 , colorama
 , jmespath
-, knack
 , pygments
 , pyyaml
 , six
@@ -17,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "knack";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fcef6040164ebe7d69629e4e089b398c9b980791446496301befcf8381dba0fc";
+    sha256 = "16aa47240add6badd933a0b27576f3c090d7469177dc941e3ece05ca88123199";
   };
 
   propagatedBuildInputs = [

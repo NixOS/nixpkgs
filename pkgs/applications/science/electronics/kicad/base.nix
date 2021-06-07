@@ -1,105 +1,159 @@
-{ lib, stdenv, fetchFromGitLab, cmake, libGLU, libGL, zlib, wxGTK
-, libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
-, doxygen, pcre, libpthreadstubs, libXdmcp, fetchpatch, lndir, callPackages
+{ lib
+, stdenv
+, cmake
+, libGLU
+, libGL
+, zlib
+, wxGTK
+, libX11
+, gettext
+, glew
+, glm
+, cairo
+, curl
+, openssl
+, boost
+, pkg-config
+, doxygen
+, graphviz
+, pcre
+, libpthreadstubs
+, libXdmcp
+, lndir
 
-, stable ? true
-, baseName ? "kicad"
-, versions ? { }
-, oceSupport ? false, opencascade
-, withOCCT ? true, opencascade-occt
-, ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python, wxPython
-, debug ? false, valgrind
-, withI18n ? true
+, util-linux
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libxkbcommon
+, epoxy
+, dbus
+, at-spi2-core
+, libXtst
+
+, swig
+, python
+, wxPython
+, opencascade
+, opencascade-occt
+, libngspice
+, valgrind
+
+, stable
+, baseName
+, kicadSrc
+, kicadVersion
+, i18n
+, withOCE
+, withOCC
+, withNgspice
+, withScripting
+, debug
+, sanitizeAddress
+, sanitizeThreads
+, withI18n
 }:
 
-assert ngspiceSupport -> libngspice != null;
-
-with lib;
+assert lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
+assert lib.asserts.assertMsg (!(withOCC && withOCE))
+  "Only one of OCC and OCE may be enabled";
+assert lib.assertMsg (!(stable && (sanitizeAddress || sanitizeThreads)))
+  "Only kicad-unstable(-small) supports address/thread sanitation";
+assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
+  "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
 let
-
-  versionConfig = versions.${baseName};
-
-  # oce on aarch64 fails a test
-  withOCE = oceSupport && !stdenv.isAarch64;
-  withOCC = (withOCCT && !withOCE) || (oceSupport && stdenv.isAarch64);
-
-  libraries = callPackages ./libraries.nix versionConfig.libVersion;
-
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
-
-  i18n = libraries.i18n;
-
   pname = "kicad-base";
-  version = "${versions.${baseName}.kicadVersion.version}";
+  version = if (stable) then kicadVersion else builtins.substring 0 10 src.rev;
 
-  src = fetchFromGitLab (
-    {
-      group = "kicad";
-      owner = "code";
-      repo = "kicad";
-    } // versionConfig.kicadVersion.src
-  );
-
-  # quick fix for #72248
-  # should be removed if a a more permanent fix is published
-  patches = [
-    (
-      fetchpatch {
-        url = "https://github.com/johnbeard/kicad/commit/dfb1318a3989e3d6f9f2ac33c924ca5030ea273b.patch";
-        sha256 = "00ifd3fas8lid8svzh1w67xc8kyx89qidp7gm633r014j3kjkgcd";
-      }
-    )
-  ];
+  src = kicadSrc;
 
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  # "-1" appended to indicate we're adding a patch
   postPatch = ''
     substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace "unknown" "${builtins.substring 0 10 src.rev}-1" \
-      --replace "${version}" "${version}-1"
+      --replace "unknown" "${builtins.substring 0 10 src.rev}" \
   '';
 
-  makeFlags = optional (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
+  makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
-  cmakeFlags =
-    optionals (scriptingSupport) [
-      "-DKICAD_SCRIPTING=ON"
-      "-DKICAD_SCRIPTING_MODULES=ON"
-      "-DKICAD_SCRIPTING_PYTHON3=ON"
-      "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
-    ]
-    ++ optional (!scriptingSupport)
-      "-DKICAD_SCRIPTING=OFF"
-    ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON"
-    ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
-    ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
-    ++ optionals (withOCE) [
-      "-DKICAD_USE_OCE=ON"
-      "-DOCE_DIR=${opencascade}"
-    ]
-    ++ optionals (withOCC) [
-      "-DKICAD_USE_OCC=ON"
-      "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
-    ]
-    ++ optionals (debug) [
-      "-DCMAKE_BUILD_TYPE=Debug"
-      "-DKICAD_STDLIB_DEBUG=ON"
-      "-DKICAD_USE_VALGRIND=ON"
-    ]
-  ;
+  cmakeFlags = optionals (withScripting) [
+    "-DKICAD_SCRIPTING=ON"
+    "-DKICAD_SCRIPTING_MODULES=ON"
+    "-DKICAD_SCRIPTING_PYTHON3=ON"
+    "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
+  ]
+  ++ optional (!withScripting)
+    "-DKICAD_SCRIPTING=OFF"
+  ++ optional (withNgspice) "-DKICAD_SPICE=ON"
+  ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
+  ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
+  ++ optionals (withOCE) [
+    "-DKICAD_USE_OCE=ON"
+    "-DOCE_DIR=${opencascade}"
+  ]
+  ++ optionals (withOCC) [
+    "-DKICAD_USE_OCC=ON"
+    "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
+  ]
+  ++ optionals (debug) [
+    "-DCMAKE_BUILD_TYPE=Debug"
+    "-DKICAD_STDLIB_DEBUG=ON"
+    "-DKICAD_USE_VALGRIND=ON"
+  ]
+  ++ optionals (sanitizeAddress) [
+    "-DKICAD_SANITIZE_ADDRESS=ON"
+  ]
+  ++ optionals (sanitizeThreads) [
+    "-DKICAD_SANITIZE_THREADS=ON"
+  ];
 
-  nativeBuildInputs = [ cmake doxygen pkgconfig lndir ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
+    pkg-config
+    lndir
+  ]
+  # wanted by configuration on linux, doesn't seem to affect performance
+  # no effect on closure size
+  ++ optionals (stdenv.isLinux) [
+    util-linux
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    libxkbcommon
+    epoxy
+    dbus.daemon
+    at-spi2-core
+    libXtst
+  ];
 
   buildInputs = [
-    libGLU libGL zlib libX11 wxGTK pcre libXdmcp gettext
-    glew glm libpthreadstubs cairo curl openssl boost
+    libGLU
+    libGL
+    zlib
+    libX11
+    wxGTK
+    wxGTK.gtk
+    pcre
+    libXdmcp
+    gettext
+    glew
+    glm
+    libpthreadstubs
+    cairo
+    curl
+    openssl
+    boost
   ]
-  ++ optionals (scriptingSupport) [ swig python wxPython ]
-  ++ optional (ngspiceSupport) libngspice
+  ++ optionals (withScripting) [ swig python wxPython ]
+  ++ optional (withNgspice) libngspice
   ++ optional (withOCE) opencascade
   ++ optional (withOCC) opencascade-occt
   ++ optional (debug) valgrind
@@ -124,7 +178,7 @@ stdenv.mkDerivation rec {
       the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad-pcb.org/";
-    license = licenses.agpl3;
-    platforms = platforms.all;
+    license = lib.licenses.agpl3;
+    platforms = lib.platforms.all;
   };
 }

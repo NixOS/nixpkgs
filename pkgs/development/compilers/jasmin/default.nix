@@ -1,13 +1,13 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , unzip
-, jdk
+, jdk8
 , ant
 , makeWrapper
-, jre
 , callPackage
 }:
 
+let jre = jdk8.jre; jdk = jdk8; in
 stdenv.mkDerivation rec {
   pname = "jasmin";
   version = "2.4";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     minimal-module = callPackage ./test-assemble-hello-world {};
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An assembler for the Java Virtual Machine";
     homepage = "http://jasmin.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/jasmin/files/latest/download";

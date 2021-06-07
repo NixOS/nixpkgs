@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchFromGitHub, clang-unwrapped }:
+{ lib, python3, fetchFromGitHub, clang-unwrapped }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whatstyle";
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false; # 3 or 4 failures depending on version, haven't investigated.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Find a code format style that fits given source files";
     homepage = "https://github.com/mikr/whatstyle";
     license = licenses.mit;

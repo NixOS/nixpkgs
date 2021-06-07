@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "vlan-1.9";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       cp vconfig.8 $out/share/man/man8/
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "User mode programs to enable VLANs on Ethernet devices";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

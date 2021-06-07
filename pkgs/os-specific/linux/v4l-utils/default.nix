@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkg-config, perl
 , libjpeg, udev
 , withUtils ? true
 , withGUI ? true, alsaLib, libX11, qtbase, libGLU, wrapQtAppsHook
@@ -12,11 +12,11 @@ let
 # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
 in stdenv.mkDerivation rec {
   pname = "v4l-utils";
-  version = "1.18.1";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0hpkqm2bpg1ma2shjzcf6xsrpyjd8h5cakgh8a3iyh126wjl5z15";
+    sha256 = "1xr66y6w422hil6s7n8d61a2vhwh4im8l267amf41jvw7xqihqcm";
   };
 
   outputs = [ "out" ] ++ lib.optional withUtils "lib" ++ [ "dev" ];
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl ] ++ lib.optional withQt wrapQtAppsHook;
+  nativeBuildInputs = [ pkg-config perl ] ++ lib.optional withQt wrapQtAppsHook;
 
   buildInputs = [ udev ] ++ lib.optionals withQt [ alsaLib libX11 qtbase libGLU ];
 
@@ -41,9 +41,10 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs utils/cec-ctl/msg2ctl.pl
+    patchShebangs utils/libcecutil/cec-gen.pl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
     license = licenses.lgpl21Plus;

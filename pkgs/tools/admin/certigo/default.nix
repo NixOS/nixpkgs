@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "certigo";
@@ -13,7 +13,9 @@ buildGoModule rec {
 
   vendorSha256 = "1l6ajfl04rfbssvijgd5jrppmqc5svfrswdx01x007lr8rvdfd94";
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  meta = with lib; {
     description = "A utility to examine and validate certificates in a variety of formats";
     homepage = "https://github.com/square/certigo";
     license = licenses.asl20;

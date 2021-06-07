@@ -1,10 +1,10 @@
-{stdenv, fetchurl, automake, ocaml, autoconf, gnum4, pkgconfig, freetype, lablgtk, unzip, cairo, findlib, gdk-pixbuf, gtk2, pango }:
+{stdenv, lib, fetchurl, automake, ocaml, autoconf, gnum4, pkg-config, freetype, lablgtk, unzip, cairo, findlib, gdk-pixbuf, gtk2, pango }:
 
 let
   pname = "ocaml-cairo";
 in
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./META.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml automake gnum4 autoconf unzip
+  nativeBuildInputs = [ pkg-config unzip ];
+  buildInputs = [ ocaml automake gnum4 autoconf
                   findlib freetype lablgtk cairo gdk-pixbuf gtk2 pango ];
 
   createFindlibDestdir = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://cairographics.org/cairo-ocaml";
     description = "ocaml bindings for cairo library";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = ocaml.meta.platforms or [];
   };
 }

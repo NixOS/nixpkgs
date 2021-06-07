@@ -1,52 +1,58 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
 , aiohttp
 , aiozeroconf
-, asynctest
 , cryptography
 , deepdiff
+, fetchFromGitHub
 , netifaces
 , protobuf
-, pytest
 , pytest-aiohttp
 , pytest-asyncio
-, pytestrunner
+, pytest-runner
+, pytest-timeout
+, pytestCheckHook
 , srptools
+, zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.6.1";
+  version = "0.7.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0f9wj1ggllwpjd9nh6nsrck7m4gbz29q6vqbrhbkc2kz6waqkgwc";
+  src = fetchFromGitHub {
+    owner = "postlund";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-dPnh8XZN7ZVR2rYNnj7GSYXW5I2GNQwD/KRDTgs2AtI=";
   };
 
-  nativeBuildInputs = [ pytestrunner];
+  nativeBuildInputs = [ pytest-runner];
 
   propagatedBuildInputs = [
-    aiozeroconf
-    srptools
     aiohttp
-    protobuf
+    aiozeroconf
     cryptography
     netifaces
+    protobuf
+    srptools
+    zeroconf
   ];
 
   checkInputs = [
     deepdiff
-    pytest
     pytest-aiohttp
     pytest-asyncio
+    pytest-timeout
+    pytestCheckHook
   ];
 
-  # just run vanilla pytest to avoid inclusion of coverage reports and xdist
-  checkPhase = ''
-    pytest
-  '';
+  __darwinAllowLocalNetworking = true;
 
-  meta = with stdenv.lib; {
-    description = "A python client library for the Apple TV";
+  pythonImportsCheck = [ "pyatv" ];
+
+  meta = with lib; {
+    description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
     license = licenses.mit;
     maintainers = with maintainers; [ elseym ];

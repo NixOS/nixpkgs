@@ -1,44 +1,44 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, scikitlearn
-, numpy
-, matplotlib
-, scipy
+, deprecated
 , hopcroftkarp
-, pytest
+, joblib
+, matplotlib
+, numpy
+, scikit-learn
+, scipy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "persim";
-  version = "0.1.2";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vz6s49ar7mhg4pj4jcbwb79s8acqj6jc70va5w79pjxb5pw8k2n";
+    sha256 = "5db2f7f65b1ad7b2cbfa254afb692ca0a91aeb686e82d6905838c41f516e6a13";
   };
 
   propagatedBuildInputs = [
-    scikitlearn
-    numpy
-    matplotlib
-    scipy
+    deprecated
     hopcroftkarp
+    joblib
+    matplotlib
+    numpy
+    scikit-learn
+    scipy
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
+  preCheck = ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-
-    # ignore tests due to python 2.7 fail
-    pytest --ignore test/test_plots.py \
-           --ignore test/test_visuals.py
   '';
 
   meta = with lib; {

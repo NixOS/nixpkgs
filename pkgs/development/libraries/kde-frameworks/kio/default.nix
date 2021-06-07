@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, fetchpatch,
   extra-cmake-modules, kdoctools, qttools,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
@@ -9,7 +9,6 @@
 
 mkDerivation {
   name = "kio";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     karchive kconfigwidgets kdbusaddons ki18n kiconthemes knotifications
@@ -21,5 +20,8 @@ mkDerivation {
     kxmlgui qtbase qttools solid
   ];
   outputs = [ "out" "dev" ];
-  patches = (copyPathsToStore (lib.readPathsFromFile ./. ./series));
+  patches = [
+    ./0001-Remove-impure-smbd-search-path.patch
+    ./0002-Debug-module-loader.patch
+ ];
 }

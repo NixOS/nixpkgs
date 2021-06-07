@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , vala
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , gettext
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -51,12 +52,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Edit the Pantheon desktop application menu";
     homepage = "https://github.com/donadigo/appeditor";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;

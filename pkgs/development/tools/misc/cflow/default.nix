@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, emacs }:
+{ lib, stdenv, fetchurl, gettext, emacs }:
 
 stdenv.mkDerivation rec {
   name = "cflow-1.6";
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext ] ++
     # We don't have Emacs/GTK/etc. on {Dar,Cyg}win.
-    stdenv.lib.optional
-      (! (stdenv.lib.lists.any (x: stdenv.hostPlatform.system == x)
+    lib.optional
+      (! (lib.lists.any (x: stdenv.hostPlatform.system == x)
               [ "i686-cygwin" ]))
       emacs;
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to analyze the control flow of C programs";
 
     longDescription = ''
@@ -45,13 +45,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ maintainers.vrthra ];
 
-    /* On Darwin, build fails with:
-
-       Undefined symbols:
-         "_argp_program_version", referenced from:
-             _argp_program_version$non_lazy_ptr in libcflow.a(argp-parse.o)
-       ld: symbol(s) not found
-     */
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

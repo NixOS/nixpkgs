@@ -1,5 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
+, fetchpatch
 , avahi
 , bluez
 , boost
@@ -10,20 +11,19 @@
 , glib
 , glib-networking
 , glibmm
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , gtk3
 , gtkmm3
 , hicolor-icon-theme
 , intltool
 , ladspaH
-, libav
 , libjack2
 , libsndfile
 , lilv
 , lrdf
 , lv2
-, pkgconfig
+, pkg-config
 , python2
 , sassc
 , serd
@@ -37,26 +37,32 @@
 }:
 
 let
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional;
 in
 
 stdenv.mkDerivation rec {
   pname = "guitarix";
-  version = "0.40.0";
+  version = "0.42.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "0q9050499hcj19hvbxb069vxh5yclawjg04vryh46lxm4sfy9g57";
+    sha256 = "101c2hdpipj3s6rmva5wf3q9hfjv7bkyzi7s8sgaiys8f7h4czkr";
   };
 
-  # see: https://sourceforge.net/p/guitarix/bugs/105
-  patches = [ ./fix-build.patch ];
+  patches = [
+    (fetchpatch {
+      name = "guitarix-gcc11.patch";
+      url = "https://github.com/brummer10/guitarix/commit/d8f003484c57d808682025dfb07a7a1fb848afdc.patch";
+      stripLen = 1;
+      sha256 = "1qhlbf18cn6m9jdz3741nrdfqvznjna3daqmn9l10k5nd3asy4il";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
     hicolor-icon-theme
     intltool
-    pkgconfig
+    pkg-config
     python2
     wafHook
     wrapGAppsHook
@@ -72,12 +78,11 @@ stdenv.mkDerivation rec {
     glib
     glib-networking.out
     glibmm
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     gtk3
     gtkmm3
     ladspaH
-    libav
     libjack2
     libsndfile
     lilv
@@ -101,11 +106,9 @@ stdenv.mkDerivation rec {
     "--no-desktop-update"
     "--enable-nls"
     "--install-roboto-font"
-    "--includeresampler"
-    "--includeconvolver"
   ] ++ optional optimizationSupport "--optimization";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with

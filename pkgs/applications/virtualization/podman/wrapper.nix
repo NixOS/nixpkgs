@@ -9,9 +9,10 @@
 , conmon # Container runtime monitor
 , slirp4netns # User-mode networking for unprivileged namespaces
 , fuse-overlayfs # CoW for images, much faster than default vfs
-, utillinux # nsenter
+, util-linux # nsenter
 , cni-plugins # not added to path
 , iptables
+, iproute2
 }:
 
 let
@@ -23,13 +24,16 @@ let
     conmon
     slirp4netns
     fuse-overlayfs
-    utillinux
+    util-linux
     iptables
+    iproute2
   ] ++ extraPackages);
 
 in runCommand podman.name {
   name = "${podman.pname}-wrapper-${podman.version}";
   inherit (podman) pname version passthru;
+
+  preferLocalBuild = true;
 
   meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
 
@@ -46,6 +50,8 @@ in runCommand podman.name {
   ln -s ${podman.man} $man
 
   mkdir -p $out/bin
+  ln -s ${podman-unwrapped}/etc $out/etc
+  ln -s ${podman-unwrapped}/lib $out/lib
   ln -s ${podman-unwrapped}/share $out/share
   makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
     --prefix PATH : ${binPath}

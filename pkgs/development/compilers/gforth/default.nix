@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4 }:
+{ lib, stdenv, fetchurl, m4 }:
 
 let
   version = "0.7.3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ m4 ];
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
+  configureFlags = lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     description = "The Forth implementation of the GNU project";
     homepage = "https://www.gnu.org/software/gforth/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
   };
 }

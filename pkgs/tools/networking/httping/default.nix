@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, libintl, ncurses, openssl
+{ lib, stdenv, fetchurl, gettext, libintl, ncurses, openssl
 , fftw ? null }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://vanheusden.com/httping";
     description = "ping with HTTP requests";
     longDescription = ''

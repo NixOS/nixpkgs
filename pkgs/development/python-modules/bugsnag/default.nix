@@ -1,17 +1,19 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , six
 , webob
 }:
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "3.6.1";
+  version = "4.0.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8878437aa44ec485cecb255742035b3b98a6c7e7d167a943b5fbe597b2f8f7f9";
+    sha256 = "7a49dacf055a8c6dda4ce714acd91fabe9546f1ad826276918a26603a8b5489a";
   };
 
   propagatedBuildInputs = [ six webob ];
@@ -19,7 +21,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic error monitoring for django, flask, etc.";
     homepage = "https://www.bugsnag.com";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 let
   version = "2.9.4";
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
   doCheck = true;
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An HTTP message parser written in C";
     homepage = "https://github.com/nodejs/http-parser";
     maintainers = with maintainers; [ matthewbauer ];

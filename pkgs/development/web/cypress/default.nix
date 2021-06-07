@@ -1,28 +1,33 @@
-{ stdenv, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook }:
+{ stdenv, lib, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "4.9.0";
+  version = "7.4.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "1lyhwy4rg6gdsj4590ya5v27lmyz6hnn4dhs51dq5i069rsw9qw4";
+    sha256 = "1xhjmn6cwpdph12k4gbl2f1v72bp689779l5i16i90i01m31kwjp";
   };
+
+  passthru.updateScript = ./update.sh;
 
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
 
   buildInputs = with xorg; [
-    libXScrnSaver libXdamage libXtst
+    libXScrnSaver libXdamage libXtst libxshmfence
   ] ++ [
-    nss gtk2 alsaLib gnome2.GConf gtk3 unzip
+    nss gtk2 alsaLib gnome2.GConf gtk3
+    mesa # for libgbm
   ];
 
-  runtimeDependencies = [ udev.lib ];
+  runtimeDependencies = [ (lib.getLib udev) ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/opt/cypress
     cp -vr * $out/opt/cypress/
     # Let's create the file binary_state ourselves to make the npm package happy on initial verification.
@@ -32,9 +37,11 @@ stdenv.mkDerivation rec {
     # Cypress now looks for binary_state.json in bin
     echo '{"verified": true}' > $out/binary_state.json
     ln -s $out/opt/cypress/Cypress $out/bin/Cypress
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     license = licenses.mit;

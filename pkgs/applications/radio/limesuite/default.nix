@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , sqlite, wxGTK30-gtk3, libusb1, soapysdr
 , mesa_glu, libX11, gnuplot, fltk
 } :
 
 stdenv.mkDerivation rec {
   pname = "limesuite";
-  version = "20.01.0";
+  version = "20.10.0";
 
   src = fetchFromGitHub {
     owner = "myriadrf";
     repo = "LimeSuite";
     rev = "v${version}";
-    sha256 = "01z4idcby2lm34bbnpbp400ski7p61jjiir6sy6dalnvsl52m7vx";
+    sha256 = "04wzfhzqmxjsa6bgcr4zd518fln9rbwnbabf48kha84d70vzkdlx";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/limesuite bin/Release/lms7suite_mcu/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Driver and GUI for LMS7002M-based SDR platforms";
     homepage = "https://github.com/myriadrf/LimeSuite";
     license = licenses.asl20;

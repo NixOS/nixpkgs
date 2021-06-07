@@ -1,9 +1,11 @@
-{ stdenv, fetchFromGitHub, coreutils, gfortran7, gnused
-, python27, utillinux, which, bash
+{ lib, stdenv, fetchFromGitHub, coreutils, gfortran, gnused
+, python3, util-linux, which
+
+, enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 let
-  version = "1.15";
+  version = "1.16.1";
 in stdenv.mkDerivation {
   pname = "libxsmm";
   inherit version;
@@ -11,31 +13,40 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "hfp";
     repo = "libxsmm";
-    rev = "refs/tags/${version}";
-    sha256 = "1406qk7k2k4qfqy4psqk55iihsrx91w8kjgsa82jxj50nl9nw5nj";
+    rev = version;
+    sha256 = "1c1qj6hcdfx11bvilnly92vgk1niisd2bjw1s8vfyi2f7ws1wnp0";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     coreutils
-    gfortran7
+    gfortran
     gnused
-    python27
-    utillinux
+    python3
+    util-linux
     which
+  ];
+
+  enableParallelBuilding = true;
+
+  dontConfigure = true;
+
+  makeFlags = let
+    static = if enableStatic then "1" else "0";
+  in [
+    "OMP=1"
+    "PREFIX=$(out)"
+    "STATIC=${static}"
   ];
 
   prePatch = ''
     patchShebangs .
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library targeting Intel Architecture for specialized dense and sparse matrix operations, and deep learning primitives";
     license = licenses.bsd3;
     homepage = "https://github.com/hfp/libxsmm";
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ chessai ];
-    inherit version;
+    maintainers = with lib.maintainers; [ chessai ];
   };
 }

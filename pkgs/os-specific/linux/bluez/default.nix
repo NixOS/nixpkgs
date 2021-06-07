@@ -6,7 +6,7 @@
 , glib
 , json_c
 , libical
-, pkgconfig
+, pkg-config
 , python3
 , readline
 , systemd
@@ -19,11 +19,11 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.54";
+  version = "5.58";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "1p2ncvjz6alr9n3l5wvq2arqgc7xjs6dqyar1l9jp0z8cfgapkb8";
+    sha256 = "1wgiv8cqya6n1w5fz24cb8q401bhn5aa6s7g95l26rzblmsmw1n8";
   };
 
   buildInputs = [
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3.pkgs.wrapPython
   ];
 
@@ -112,7 +112,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth support for Linux";
     homepage = "http://www.bluez.org/";
     license = with licenses; [ gpl2 lgpl21 ];

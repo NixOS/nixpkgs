@@ -1,10 +1,11 @@
-# Crystal
+# Crystal {#crystal}
 
-## Building a Crystal package
+## Building a Crystal package {#building-a-crystal-package}
 
 This section uses [Mint](https://github.com/mint-lang/mint) as an example for how to build a Crystal package.
 
 If the Crystal project has any dependencies, the first step is to get a `shards.nix` file encoding those. Get a copy of the project and go to its root directory such that its `shard.lock` file is in the current directory, then run `crystal2nix` in it
+
 ```bash
 $ git clone https://github.com/mint-lang/mint
 $ cd mint
@@ -15,6 +16,7 @@ $ nix-shell -p crystal2nix --run crystal2nix
 This should have generated a `shards.nix` file.
 
 Next create a Nix file for your derivation and use `pkgs.crystal.buildCrystalPackage` as follows:
+
 ```nix
 with import <nixpkgs> {};
 crystal.buildCrystalPackage rec {

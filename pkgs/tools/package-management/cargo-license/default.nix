@@ -13,13 +13,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./add-Cargo.lock.patch ];
 
-  cargoSha256 = "0bkaj54avvib1kipk8ky7gyxfs00qm80jd415zp53hhvinphzb5v";
+  cargoSha256 = "1gda6m5g545fgx8ash96w408mxi5rb8hrv73c0xs0gx7hfyx5zcj";
 
   meta = with lib; {
     description = "Cargo subcommand to see license of dependencies";
     homepage = "https://github.com/onur/cargo-license";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ basvandijk ];
-    platforms = platforms.all;
   };
 }

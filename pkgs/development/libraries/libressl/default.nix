@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch, buildShared ? true }:
+{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch
+, buildShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
 
@@ -40,8 +42,6 @@ let
       substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
     '';
 
-    enableParallelBuilding = true;
-
     outputs = [ "bin" "dev" "out" "man" "nc" ];
 
     postFixup = ''
@@ -63,13 +63,13 @@ let
   };
 
 in {
-  libressl_3_0 = generic {
-    version = "3.0.2";
-    sha256 = "13ir2lpxz8y1m151k7lrx306498nzfhwlvgkgv97v5cvywmifyyz";
+  libressl_3_1 = generic {
+    version = "3.1.5";
+    sha256 = "1504a1sf43frw43j14pij0q1f48rm5q86ggrlxxhw708qp7ds4rc";
   };
 
-  libressl_3_1 = generic {
-    version = "3.1.3";
-    sha256 = "184znscbkww65aavy2p4v4xncalp1ni19c2w5yvfq4pnmhb06sy7";
+  libressl_3_2 = generic {
+    version = "3.2.5";
+    sha256 = "1zkwrs3b19s1ybz4q9hrb7pqsbsi8vxcs44qanfy11fkc7ynb2kr";
   };
 }

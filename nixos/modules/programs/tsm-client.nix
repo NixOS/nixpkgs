@@ -7,7 +7,7 @@ let
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) literalExample mkEnableOption mkOption;
   inherit (lib.strings) concatStringsSep optionalString toLower;
-  inherit (lib.types) addCheck attrsOf lines loaOf nullOr package path port str strMatching submodule;
+  inherit (lib.types) addCheck attrsOf lines nullOr package path port str strMatching submodule;
 
   # Checks if given list of strings contains unique
   # elements when compared without considering case.
@@ -178,7 +178,7 @@ let
       client system-options file "dsm.sys"
     '';
     servers = mkOption {
-      type = loaOf (submodule [ serverOptions ]);
+      type = attrsOf (submodule [ serverOptions ]);
       default = {};
       example.mainTsmServer = {
         server = "tsmserver.company.com";

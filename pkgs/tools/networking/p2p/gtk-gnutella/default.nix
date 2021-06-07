@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , bison
-, pkgconfig
+, pkg-config
 , gettext
 , desktop-file-utils
 , glib
@@ -19,20 +19,20 @@ stdenv.mkDerivation rec {
   pname = "gtk-gnutella";
   # NOTE: Please remove hardeningDisable on the next release, see:
   # https://sourceforge.net/p/gtk-gnutella/bugs/555/#5c19
-  version = "1.1.15";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "gtk-gnutella";
     repo = "gtk-gnutella";
     rev = "v${version}";
-    sha256 = "1g7w6ywwp2g4qdgmfqkrl1rldk1b4rx50yb7h75hh15mh6nr159r";
+    sha256 = "0j596dpajk68bkry0gmpqawsi61rphfciy4vji1dh890jyhkhdgy";
   };
 
   nativeBuildInputs = [
     bison
     desktop-file-utils
     gettext
-    pkgconfig
+    pkg-config
   ];
   buildInputs = [
     glib
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++
-    stdenv.lib.optionals (enableGui) [ gtk2 ]
+    lib.optionals (enableGui) [ gtk2 ]
   ;
 
   configureScript = "./build.sh";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
     "--disable-malloc"
   ]
-    ++ stdenv.lib.optionals (!enableGui) [ "--topless" ]
+    ++ lib.optionals (!enableGui) [ "--topless" ]
   ;
 
   hardeningDisable = [ "bindnow" "fortify" "pic" "relro" ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     install -Dm0444 src/${pname}.man $out/share/man/man1/${pname}.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK Gnutella client, optimized for speed and scalability";
     homepage = "http://gtk-gnutella.sourceforge.net/"; # Code: https://github.com/gtk-gnutella/gtk-gnutella
     changelog = "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${version}/ChangeLog";

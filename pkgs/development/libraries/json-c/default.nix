@@ -1,26 +1,19 @@
-{ stdenv, fetchurl, fetchpatch, autoconf }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "json-c-0.13.1";
-  src = fetchurl {
-    url    = "https://s3.amazonaws.com/json-c_releases/releases/${name}-nodoc.tar.gz";
-    sha256 = "0ch1v18wk703bpbyzj7h1mkwvsw4rw4qdwvgykscypvqq10678ll";
-  };
+  pname = "json-c";
+  version = "0.15";
 
-  patches = [
-    # https://nvd.nist.gov/vuln/detail/CVE-2020-12762
-    (fetchpatch {
-      name = "CVE-2020-12762.patch";
-      url = "https://github.com/json-c/json-c/commit/865b5a65199973bb63dff8e47a2f57e04fec9736.patch";
-      sha256 = "1g5afk4khhm1sb70xrva1pyznshcw3ipzp1g5z60dpzxy303pp6h";
-    })
-  ];
+  src = fetchurl {
+    url    = "https://s3.amazonaws.com/json-c_releases/releases/${pname}-${version}.tar.gz";
+    sha256 = "1im484iz08j3gmzpw07v16brwq46pxxj65i996kkp2vivcfhmn5q";
+  };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ autoconf ];  # for autoheader
+  nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A JSON implementation in C";
     homepage    = "https://github.com/json-c/json-c/wiki";
     maintainers = with maintainers; [ lovek323 ];

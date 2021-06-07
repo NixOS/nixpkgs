@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "convmv-2.05";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts filenames from one encoding to another";
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.cygwin;
     maintainers = [ ];

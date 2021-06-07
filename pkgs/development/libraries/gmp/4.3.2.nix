@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, cxx ? true }:
+{ lib, stdenv, fetchurl, m4, cxx ? true }:
 
 let self = stdenv.mkDerivation rec {
   name = "gmp-4.3.2";
@@ -28,8 +28,8 @@ let self = stdenv.mkDerivation rec {
     else ''echo "Darwin host is `./config.guess`."'';
 
   configureFlags = [
-    (stdenv.lib.enableFeature cxx "cxx")
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    (lib.enableFeature cxx "cxx")
+  ] ++ lib.optionals stdenv.isDarwin [
     "ac_cv_build=x86_64-apple-darwin13.4.0"
     "ac_cv_host=x86_64-apple-darwin13.4.0"
   ];
@@ -65,10 +65,10 @@ let self = stdenv.mkDerivation rec {
       '';
 
     homepage = "https://gmplib.org/";
-    license = stdenv.lib.licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     badPlatforms = [ "x86_64-darwin" ];
   };
 };

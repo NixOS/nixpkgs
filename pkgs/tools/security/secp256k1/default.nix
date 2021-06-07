@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, jdk
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, jdk
 
 # Enable ECDSA pubkey recovery module
 , enableRecovery ? true
@@ -13,20 +13,20 @@
 
 }:
 
-let inherit (stdenv.lib) optionals; in
+let inherit (lib) optionals; in
 
 stdenv.mkDerivation {
   pname = "secp256k1";
 
   # I can't find any version numbers, so we're just using the date of the
   # last commit.
-  version = "2017-12-18";
+  version = "2020-08-16";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    rev = "f54c6c5083307b18224c953cf5870ea7ffce070b";
-    sha256 = "0bxqmimm627g9klalg1vdbspmn52588v4a6cli3p8bn84ibsnzbm";
+    rev = "670cdd3f8be25f81472b2d16dcd228b0d24a5c45";
+    sha256 = "0ak2hrr0wznl5d9s905qwn5yds7k22i28d2jp957l4a8yf8cqv3s";
   };
 
   buildInputs = optionals enableJNI [ jdk ];
@@ -34,12 +34,15 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags =
-    [ "--enable-benchmark=no" "--enable-tests=no" "--enable-exhaustive-tests=no" ] ++
+    [ "--enable-benchmark=no" "--enable-tests=yes" "--enable-exhaustive-tests=no" ] ++
     optionals enableECDH [ "--enable-module-ecdh" "--enable-experimental" ] ++
     optionals enableRecovery [ "--enable-module-recovery" ] ++
     optionals enableJNI [ "--enable-jni" ];
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+  checkPhase = "./tests";
+
+  meta = with lib; {
     description = "Optimized C library for EC operations on curve secp256k1";
     longDescription = ''
       Optimized C library for EC operations on curve secp256k1. Part of

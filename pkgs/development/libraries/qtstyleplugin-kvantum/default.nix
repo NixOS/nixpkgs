@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
 , libX11, libXext, qttools, wrapQtAppsHook
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SVG-based Qt5 theme engine plus a config tool and extra themes";
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3;

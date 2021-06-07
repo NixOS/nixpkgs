@@ -1,8 +1,9 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
-  modDirVersion = "4.19.118";
-  tag = "1.20200601";
+  # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
+  modDirVersion = "5.10.17";
+  tag = "1.20210303";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -12,7 +13,7 @@ lib.overrideDerivation (buildLinux (args // {
     owner = "raspberrypi";
     repo = "linux";
     rev = "raspberrypi-kernel_${tag}-1";
-    sha256 = "11jzsmnd1qry2ir9vmsv0nfdzjpgkn5yab5ylxcz406plc073anp";
+    sha256 = "0ffsllayl18ka4mgp4rdy9h0da5gy1n6g0kfvinvzdzabb5wzvrx";
   };
 
   defconfig = {
@@ -25,6 +26,14 @@ lib.overrideDerivation (buildLinux (args // {
   features = {
     efiBootStub = false;
   } // (args.features or {});
+
+  extraConfig = ''
+    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: error: initialization of 'void (*)(struct drm_crtc *, struct drm_atomic_state *)' from incompatible pointer type 'void (*)(struct drm_crtc *, struct drm_crtc_state *)' [-Werror=incompatible-pointer-types]
+    #   851 |  .atomic_flush = ast_crtc_helper_atomic_flush,
+    #       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: note: (near initialization for 'ast_crtc_helper_funcs.atomic_flush')
+    DRM_AST n
+  '';
 
   extraMeta = if (rpiVersion < 3) then {
     platforms = with lib.platforms; [ arm ];

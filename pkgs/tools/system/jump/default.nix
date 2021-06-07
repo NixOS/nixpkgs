@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "jump";
-  version = "0.30.1";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "gsamokovarov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mph3bqfjnw3yf0a6ml3ccmkr1shviwvvq4d04ky4gppfy6z51jy";
+    sha256 = "sha256-8Lfta4qDXYVSHG3UI8iUA6vIjBe5OIX7n0LC4OW1qMU=";
   };
 
-  vendorSha256 = "1500vim2lmkkls758pwhlx3piqbw6ap0nnhdwz9pcxih4s4as2nk";
+  vendorSha256 = null;
+
+  doCheck = false;
 
   outputs = [ "out" "man"];
   postInstall = ''
@@ -26,7 +28,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Jump helps you navigate faster by learning your habits.";
+    description = "Navigate directories faster by learning your habits";
     longDescription = ''
       Jump integrates with the shell and learns about your
       navigational habits by keeping track of the directories you visit. It
@@ -34,7 +36,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/gsamokovarov/jump";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ sondr3 ];
   };
 }

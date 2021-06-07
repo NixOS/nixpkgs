@@ -23,6 +23,7 @@ python.pkgs.buildPythonApplication rec {
     ${python.interpreter} setup.py compile_catalog
   '';
   postInstall = ''
+    patchShebangs gradlew-fdroid
     install -m 0755 gradlew-fdroid $out/bin
   '';
 
@@ -47,6 +48,9 @@ python.pkgs.buildPythonApplication rec {
     requests
     ruamel_yaml
   ];
+
+  # no tests
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://f-droid.org";

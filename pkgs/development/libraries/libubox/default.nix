@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, cmake, pkgconfig, json_c }:
+{ stdenv, lib, fetchgit, cmake, pkg-config, json_c }:
 
 stdenv.mkDerivation {
   pname = "libubox";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DBUILD_LUA=OFF" "-DBUILD_EXAMPLES=OFF" ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ json_c ];
 
   meta = with lib; {

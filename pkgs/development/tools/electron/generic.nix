@@ -1,19 +1,43 @@
-{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, glib, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core, libdrm, mesa }:
+{ lib, stdenv
+, libXScrnSaver
+, makeWrapper
+, fetchurl
+, wrapGAppsHook
+, glib
+, gtk3
+, unzip
+, atomEnv
+, libuuid
+, at-spi2-atk
+, at-spi2-core
+, libdrm
+, mesa
+, libxkbcommon
+, libappindicator-gtk3
+, libxshmfence
+}:
 
 version: hashes:
 let
   name = "electron-${version}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ]
+      ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ];
+    knownVulnerabilities = optional (versionOlder version "6.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {
     url = "https://github.com/electron/electron/releases/download/v${vers}/electron-v${vers}-${tag}.zip";
+    sha256 = hash;
+  };
+
+  headersFetcher = vers: hash: fetchurl {
+    url = "https://atom.io/download/electron/v${vers}/node-v${vers}-headers.tar.gz";
     sha256 = hash;
   };
 
@@ -23,6 +47,7 @@ let
     armv7l-linux = "linux-armv7l";
     aarch64-linux = "linux-arm64";
     x86_64-darwin = "darwin-x64";
+    aarch64-darwin = "darwin-arm64";
   };
 
   get = as: platform: as.${platform.system} or
@@ -31,9 +56,15 @@ let
   common = platform: {
     inherit name version meta;
     src = fetcher version (get tags platform) (get hashes platform);
+    passthru.headers = headersFetcher version hashes.headers;
   };
 
-  electronLibPath = stdenv.lib.makeLibraryPath ([ libuuid at-spi2-atk at-spi2-core ] ++ stdenv.lib.optionals (version > "9") [ libdrm mesa ]);
+  electronLibPath = with lib; makeLibraryPath (
+    [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 ]
+    ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]
+    ++ optionals (! versionOlder version "11.0.0") [ libxkbcommon ]
+    ++ optionals (! versionOlder version "12.0.0") [ libxshmfence ]
+  );
 
   linux = {
     buildInputs = [ glib gtk3 ];
@@ -62,13 +93,13 @@ let
         $out/lib/electron/electron
 
       wrapProgram $out/lib/electron/electron \
-        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
+        --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
         "''${gappsWrapperArgs[@]}"
     '';
   };
 
   darwin = {
-    buildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip ];
 
     buildCommand = ''
       mkdir -p $out/Applications

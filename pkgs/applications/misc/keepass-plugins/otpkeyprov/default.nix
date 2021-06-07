@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchzip, mono }:
+{ lib, stdenv, buildEnv, fetchzip, mono }:
 
 let
   version = "2.6";
@@ -15,9 +15,9 @@ let
     meta = {
       description = "OtpKeyProv is a key provider based on one-time passwords";
       homepage    = "https://keepass.info/plugins.html#otpkeyprov";
-      platforms   = with stdenv.lib.platforms; linux;
-      license     = stdenv.lib.licenses.gpl2;
-      maintainers = [ stdenv.lib.maintainers.ente ];
+      platforms   = with lib.platforms; linux;
+      license     = lib.licenses.gpl2;
+      maintainers = [ lib.maintainers.ente ];
     };
 
     pluginFilename = "OtpKeyProv.plgx";

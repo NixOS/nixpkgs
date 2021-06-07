@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja
+{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja
 , libevdev, mtdev, udev, libwacom
 , documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
 , eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
@@ -10,7 +10,7 @@ assert eventGUISupport -> cairo != null && glib != null && gtk3 != null;
 assert testsSupport -> check != null && valgrind != null && python3 != null;
 
 let
-  mkFlag = optSet: flag: "-D${flag}=${stdenv.lib.boolToString optSet}";
+  mkFlag = optSet: flag: "-D${flag}=${lib.boolToString optSet}";
 
   sphinx-build = if documentationSupport then
     python3.pkgs.sphinx.overrideAttrs (super: {
@@ -24,14 +24,17 @@ let
   else null;
 in
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.15.5";
+  version = "1.16.4";
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/libinput/${pname}-${version}.tar.xz";
-    sha256 = "15ww4jl3lcxyi8m8idg8canklbqv729gnwpkz7r98c1w8a7zq3m9";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "1c81429kh9av9fanxmnjw5rvsjbzcyi7d0dx0gkyq5yysmpmrppi";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -44,13 +47,26 @@ stdenv.mkDerivation rec {
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja ]
+  nativeBuildInputs = [ pkg-config meson ninja ]
     ++ optionals documentationSupport [ doxygen graphviz sphinx-build ];
 
-  buildInputs = [ libevdev mtdev libwacom ]
+  buildInputs = [
+    libevdev
+    mtdev
+    libwacom
+    (python3.withPackages (pp: with pp; [
+      pp.libevdev # already in scope
+      pyudev
+      pyyaml
+      setuptools
+    ]))
+  ]
     ++ optionals eventGUISupport [ cairo glib gtk3 ];
 
-  checkInputs = [ (python3.withPackages (pkgs: with pkgs; [ evdev ])) check valgrind ];
+  checkInputs = [
+    check
+    valgrind
+  ];
 
   propagatedBuildInputs = [ udev ];
 
@@ -60,13 +76,14 @@ stdenv.mkDerivation rec {
     patchShebangs tools/helper-copy-and-exec-from-tmp.sh
     patchShebangs test/symbols-leak-test
     patchShebangs test/check-leftover-udev-rules.sh
+    patchShebangs test/helper-copy-and-exec-from-tmp.sh
   '';
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
-    homepage    = "http://www.freedesktop.org/wiki/Software/libinput";
+    homepage    = "https://www.freedesktop.org/wiki/Software/libinput/";
     license     = licenses.mit;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];

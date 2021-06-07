@@ -3,7 +3,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gst-plugins-base
 , gettext
@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-libav";
-  version = "1.16.2";
+  version = "1.18.4";
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1wpfilc98bad9nsv3y1qapxp35dvn2mvwvrmqwrsj58cf09gc967";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "15n3x3vhshqa3icw93g4vqmqd46122anzqvfxwn6q8famlxlcjil";
   };
 
   outputs = [ "out" "dev" ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
-    pkgconfig
+    pkg-config
     python3
   ];
 
@@ -36,6 +36,15 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     libav
   ];
+
+  mesonFlags = [
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ];
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   meta = with lib; {
     description = "FFmpeg/libav plugin for GStreamer";

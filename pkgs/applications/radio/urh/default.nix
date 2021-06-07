@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages
+{ lib, fetchFromGitHub, python3Packages
 , hackrf, rtl-sdr, airspy, limesuite, libiio
 , qt5
 , USRPSupport ? false, uhd }:
 
 python3Packages.buildPythonApplication rec {
   pname = "urh";
-  version = "2.8.8";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0knymy85n9kxj364jpxjc4v9c238b00nl40rafi1ripkqx36bsfv";
+    sha256 = "0s8zlq2bx6hp8c522rkxj9kbkf3a0qj6iyg7q9dcxmcl3q2sanq9";
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];

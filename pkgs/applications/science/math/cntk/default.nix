@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, cmake
-, openblas, blas, lapack, opencv3, libzip, boost, protobuf, openmpi
+, openblas, blas, lapack, opencv3, libzip, boost, protobuf, mpi
 , onebitSGDSupport ? false
 , cudaSupport ? false, addOpenGLRunpath, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport, cudnn
@@ -33,17 +33,20 @@ in stdenv.mkDerivation rec {
   # Force OpenMPI to use g++ in PATH.
   OMPI_CXX = "g++";
 
-  buildInputs = [ openblas opencv3 libzip boost protobuf openmpi ]
+  # Uses some deprecated tensorflow functions
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  buildInputs = [ openblas opencv3 libzip boost protobuf mpi ]
              ++ lib.optional cudaSupport cudatoolkit
              ++ lib.optional cudnnSupport cudnn;
 
   configureFlags = [
     "--with-opencv=${opencv3}"
     "--with-libzip=${libzip.dev}"
-    "--with-openblas=${openblas}"
+    "--with-openblas=${openblas.dev}"
     "--with-boost=${boost.dev}"
     "--with-protobuf=${protobuf}"
-    "--with-mpi=${openmpi}"
+    "--with-mpi=${mpi}"
     "--cuda=${if cudaSupport then "yes" else "no"}"
     # FIXME
     "--asgd=no"
@@ -89,8 +92,6 @@ in stdenv.mkDerivation rec {
       addOpenGLRunpath "$lib"
     done
   '';
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     # Newer cub is included with cudatoolkit now and it breaks the build.

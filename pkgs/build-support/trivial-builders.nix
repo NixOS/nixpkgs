@@ -1,27 +1,12 @@
 { lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
 
-let
-
-  runCommand' = runLocal: stdenv: name: env: buildCommand:
-    stdenv.mkDerivation ({
-      name = lib.strings.sanitizeDerivationName name;
-      inherit buildCommand;
-      passAsFile = [ "buildCommand" ];
-    }
-    // (lib.optionalAttrs runLocal {
-          preferLocalBuild = true;
-          allowSubstitutes = false;
-       })
-    // env);
-
-in
-
 rec {
 
   /* Run the shell command `buildCommand' to produce a store path named
   * `name'.  The attributes in `env' are added to the environment
-  * prior to running the command. By default `runCommand' runs using
-  * stdenv with no compiler environment. `runCommandCC`
+  * prior to running the command. By default `runCommand` runs in a
+  * stdenv with no compiler environment. `runCommandCC` uses the default
+  * stdenv, `pkgs.stdenv`.
   *
   * Examples:
   * runCommand "name" {envVariable = true;} ''echo hello > $out''
@@ -42,12 +27,63 @@ rec {
   runCommand = runCommandNoCC;
   runCommandLocal = runCommandNoCCLocal;
 
-  runCommandNoCC = runCommand' false stdenvNoCC;
-  runCommandNoCCLocal = runCommand' true stdenvNoCC;
+  runCommandNoCC = name: env: runCommandWith {
+    stdenv = stdenvNoCC;
+    runLocal = false;
+    inherit name;
+    derivationArgs = env;
+  };
+  runCommandNoCCLocal = name: env: runCommandWith {
+    stdenv = stdenvNoCC;
+    runLocal = true;
+    inherit name;
+    derivationArgs = env;
+  };
 
-  runCommandCC = runCommand' false stdenv;
+  runCommandCC = name: env: runCommandWith {
+    stdenv = stdenv;
+    runLocal = false;
+    inherit name;
+    derivationArgs = env;
+  };
   # `runCommandCCLocal` left out on purpose.
   # We shouldn’t force the user to have a cc in scope.
+
+  /* Generalized version of the `runCommand`-variants
+   * which does customized behavior via a single
+   * attribute set passed as the first argument
+   * instead of having a lot of variants like
+   * `runCommand*`. Additionally it allows changing
+   * the used `stdenv` freely and has a more explicit
+   * approach to changing the arguments passed to
+   * `stdenv.mkDerivation`.
+   */
+  runCommandWith =
+    let
+      # prevent infinite recursion for the default stdenv value
+      defaultStdenv = stdenv;
+    in
+    { stdenv ? defaultStdenv
+    # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
+    , runLocal ? false
+    # whether to build this derivation locally instead of substituting
+    , derivationArgs ? {}
+    # extra arguments to pass to stdenv.mkDerivation
+    , name
+    # name of the resulting derivation
+    }: buildCommand:
+    stdenv.mkDerivation ({
+      name = lib.strings.sanitizeDerivationName name;
+      inherit buildCommand;
+      passAsFile = [ "buildCommand" ]
+        ++ (derivationArgs.passAsFile or []);
+    }
+    // (lib.optionalAttrs runLocal {
+          preferLocalBuild = true;
+          allowSubstitutes = false;
+       })
+    // builtins.removeAttrs derivationArgs [ "passAsFile" ]);
+
 
   /* Writes a text file to the nix store.
    * The contents of text is added to the file in the store.
@@ -240,6 +276,8 @@ rec {
    * This creates a single derivation that replicates the directory structure
    * of all the input paths.
    *
+   * BEWARE: it may not "work right" when the passed paths contain symlinks to directories.
+   *
    * Examples:
    * # adds symlinks of hello to current build.
    * symlinkJoin { name = "myhello"; paths = [ pkgs.hello ]; }
@@ -400,6 +438,35 @@ rec {
       done < graph
     '';
 
+  /*
+    Write the set of references to a file, that is, their immediate dependencies.
+
+    This produces the equivalent of `nix-store -q --references`.
+   */
+  writeDirectReferencesToFile = path: runCommand "runtime-references"
+    {
+      exportReferencesGraph = ["graph" path];
+      inherit path;
+    }
+    ''
+      touch ./references
+      while read p; do
+        read dummy
+        read nrRefs
+        if [[ $p == $path ]]; then
+          for ((i = 0; i < nrRefs; i++)); do
+            read ref;
+            echo $ref >>./references
+          done
+        else
+          for ((i = 0; i < nrRefs; i++)); do
+            read ref;
+          done
+        fi
+      done < graph
+      sort ./references >$out
+    '';
+
 
   /* Print an error message if the file with the specified name and
    * hash doesn't exist in the Nix store. This function should only
@@ -503,4 +570,37 @@ rec {
       phases = "unpackPhase patchPhase installPhase";
       installPhase = "cp -R ./ $out";
     };
+
+  /* Checks the command output contains the specified version
+   *
+   * Although simplistic, this test assures that the main program
+   * can run. While there's no substitute for a real test case,
+   * it does catch dynamic linking errors and such. It also provides
+   * some protection against accidentally building the wrong version,
+   * for example when using an 'old' hash in a fixed-output derivation.
+   *
+   * Examples:
+   *
+   * passthru.tests.version = testVersion { package = hello; };
+   *
+   * passthru.tests.version = testVersion {
+   *   package = seaweedfs;
+   *   command = "weed version";
+   * };
+   *
+   * passthru.tests.version = testVersion {
+   *   package = key;
+   *   command = "KeY --help";
+   *   # Wrong '2.5' version in the code. Drop on next version.
+   *   version = "2.5";
+   * };
+   */
+  testVersion =
+    { package,
+      command ? "${package.meta.mainProgram or package.pname or package.name} --version",
+      version ? package.version,
+    }: runCommand "test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
+      ${command} | grep -Fw ${version}
+      touch $out
+    '';
 }

@@ -32,7 +32,7 @@ in
 
       enableOSSEmulation = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).
         '';

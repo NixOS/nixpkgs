@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, libnotify, pkg-config, glib }:
+{ lib, stdenv, fetchFromGitHub, libnotify, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   pname = "batsignal";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "electrickite";
     repo = "batsignal";
-    rev = "${version}";
-    sha256 = "wy7YhgKfz07u0bp7rWpze+KmSdooOkmU7giaBX3wWkY=";
+    rev = version;
+    sha256 = "0yc7xgwb3i4m8m9kg2xspqig3s2qgh2i9bkalvnkziayjb7y59qn";
   };
 
   buildInputs = [ libnotify glib ];
   nativeBuildInputs = [ pkg-config ];
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/electrickite/batsignal";
     description = "Lightweight battery daemon written in C";
     license = licenses.isc;

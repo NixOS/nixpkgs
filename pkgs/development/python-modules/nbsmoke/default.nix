@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "nbsmoke";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06as8vh17m0nkp3fpkp42m990a5zjfl2iaa17da99ksh7886mjpc";
+    sha256 = "2400d7878e97714e822ab200a71fc71ede487e671f42b4b411745dba95f9cb32";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   # tests not included with pypi release
   doCheck = false;
+  pythonImportsCheck = [ "nbsmoke" ];
 
   meta = with lib; {
     description = "Basic notebook checks and linting";

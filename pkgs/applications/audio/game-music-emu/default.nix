@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.1";
+  version = "0.6.3";
   pname = "game-music-emu";
 
   src = fetchurl {
-    url = "https://bitbucket.org/mpyne/game-music-emu/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "08fk7zddpn7v93d0fa7fcypx7hvgwx9b5psj9l6m8b87k2hbw4fw";
+    url = "https://bitbucket.org/mpyne/game-music-emu/downloads/${pname}-${version}.tar.xz";
+    sha256 = "07857vdkak306d9s5g6fhmjyxk7vijzjhkmqb15s7ihfxx9lx8xb";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://bitbucket.org/mpyne/game-music-emu/wiki/Home";
     description = "A collection of video game music file emulators";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = with maintainers; [ luc65r ];
   };
 }

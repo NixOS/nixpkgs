@@ -1,11 +1,11 @@
 { python
-, callPackage
+, buildPackages
 , makeSetupHook
-, yj
 , wheel
 , pip
 }:
 let
+  callPackage = python.pythonForBuild.pkgs.callPackage;
   pythonInterpreter = python.pythonForBuild.interpreter;
   pythonSitePackages = python.sitePackages;
 in
@@ -20,11 +20,12 @@ in
           deps = [ ];
           substitutions = {
             inherit pythonInterpreter;
-            yj = "${yj}/bin/yj";
+            yj = "${buildPackages.yj}/bin/yj";
             pyprojectPatchScript = "${./pyproject-without-path.py}";
           };
         } ./remove-path-dependencies.sh
-    ) { };
+    )
+    { };
 
   pipBuildHook = callPackage
     (
@@ -37,7 +38,8 @@ in
             inherit pythonInterpreter pythonSitePackages;
           };
         } ./pip-build-hook.sh
-    ) { };
+    )
+    { };
 
   poetry2nixFixupHook = callPackage
     (
@@ -47,6 +49,20 @@ in
           name = "fixup-hook.sh";
           deps = [ ];
         } ./fixup-hook.sh
-    ) { };
+    )
+    { };
+
+  # When the "wheel" package itself is a wheel the nixpkgs hook (which pulls in "wheel") leads to infinite recursion
+  # It doesn't _really_ depend on wheel though, it just copies the wheel.
+  wheelUnpackHook = callPackage
+    ({}:
+      makeSetupHook
+        {
+          name = "wheel-unpack-hook.sh";
+          deps = [ ];
+        } ./wheel-unpack-hook.sh
+    )
+    { };
+
 
 }

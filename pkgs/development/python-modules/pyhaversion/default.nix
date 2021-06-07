@@ -1,43 +1,48 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-# propagatedBuildInputs
 , aiohttp
-, async-timeout
-# buildInputs
-, pytestrunner
-# checkInputs
-, pytest
-, pytest-asyncio
 , aresponses
+, async-timeout
+, awesomeversion
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytest-asyncio
+, pytestCheckHook
 }:
+
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "3.3.0";
+  version = "21.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "376a1b232a26035bc82d64affa1c4f312d782234fe5453e8d0f9e1350a97be5b";
+  # Only 3.8.0 and beyond are supported
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "ludeeus";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-/F4UMFUs60o3QazfFYEWgTGHg4z5knzNWolUpk5SIeM=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     async-timeout
-  ];
-
-  buildInputs = [
-    pytestrunner
+    awesomeversion
   ];
 
   checkInputs = [
-    pytest
-    pytest-asyncio
     aresponses
+    pytest-asyncio
+    pytestCheckHook
   ];
 
+  pythonImportsCheck = [ "pyhaversion" ];
+
   meta = with lib; {
-    description = "A python module to the newest version number of Home Assistant";
+    description = "Python module to the newest version number of Home Assistant";
     homepage = "https://github.com/ludeeus/pyhaversion";
-    maintainers = [ maintainers.makefu ];
+    changelog = "https://github.com/ludeeus/pyhaversion/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ makefu ];
   };
 }

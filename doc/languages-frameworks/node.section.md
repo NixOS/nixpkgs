@@ -1,5 +1,5 @@
-Node.js
-=======
+# Node.js {#node.js}
+
 The `pkgs/development/node-packages` folder contains a generated collection of
 [NPM packages](https://npmjs.com/) that can be installed with the Nix package
 manager.
@@ -25,12 +25,13 @@ build system it uses. Here are some examples:
 
 After you have identified the correct system, you need to override your package
 expression while adding in build system as a build input. For example, `dat`
-requires `node-gyp-build`, so we override its expression in `default.nix`:
+requires `node-gyp-build`, so [we override](https://github.com/NixOS/nixpkgs/blob/32f5e5da4a1b3f0595527f5195ac3a91451e9b56/pkgs/development/node-packages/default.nix#L37-L40) its expression in [`default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/default.nix):
 
 ```nix
-dat = nodePackages.dat.override (oldAttrs: {
-  buildInputs = oldAttrs.buildInputs ++ [ nodePackages.node-gyp-build ];
-});
+    dat = super.dat.override {
+      buildInputs = [ self.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
+      meta.broken = since "12";
+    };
 ```
 
 To add a package from NPM to nixpkgs:

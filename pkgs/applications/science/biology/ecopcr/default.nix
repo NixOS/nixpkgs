@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gcc, zlib, python27 }:
+{ lib, stdenv, fetchurl, gcc, zlib, python27 }:
 
 stdenv.mkDerivation rec {
   name = "ecopcr-0.8.0";
@@ -13,15 +13,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ gcc python27 zlib ];
 
   installPhase = ''
-	mkdir -p $out/bin
-	cp -v ecoPCR $out/bin
-	cp -v ecogrep $out/bin
-	cp -v ecofind $out/bin
-	cp -v ../tools/ecoPCRFormat.py $out/bin/ecoPCRFormat
-	chmod a+x $out/bin/ecoPCRFormat
+    mkdir -p $out/bin
+    cp -v ecoPCR $out/bin
+    cp -v ecogrep $out/bin
+    cp -v ecofind $out/bin
+    cp -v ../tools/ecoPCRFormat.py $out/bin/ecoPCRFormat
+    chmod a+x $out/bin/ecoPCRFormat
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Electronic PCR software tool";
     longDescription = ''
       ecoPCR is an electronic PCR software developed by the LECA. It

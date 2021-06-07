@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , gnupg
@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pycoin";
-  version = "0.90.20200322";
+  version = "0.90.20201031";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8af579e86c118deb64d39e0d844d53a065cdd8227ddd632112e5667370b53a3";
+    sha256 = "65c19204cb7aece4aae30c44b5e08beecb9c118370a9f9994d6cddaee17c351d";
   };
 
   propagatedBuildInputs = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     "test_tx_with_gpg"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for Bitcoin and altcoin addresses and transaction manipulation";
     homepage = "https://github.com/richardkiss/pycoin";
     license = licenses.mit;

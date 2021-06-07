@@ -1,40 +1,17 @@
-From 6d988c08e852379a163ecd20df8639196d84d014 Mon Sep 17 00:00:00 2001
-From: Bernardo Meurer <meurerbernardo@gmail.com>
-Date: Sun, 26 Apr 2020 14:50:25 -0700
-Subject: [PATCH] cmake: don't use OpenCVFindOpenEXR
-
-Use find_package for this.
----
- CMakeLists.txt                  |  2 ++
- cmake/OpenCVFindLibsGrfmt.cmake | 15 +++------------
- 2 files changed, 5 insertions(+), 12 deletions(-)
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4c0b3880fc..0360469350 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -14,6 +14,8 @@ FATAL: In-source builds are not allowed.
- ")
- endif()
- 
-+# the future!
-+include(FindPkgConfig)
- 
- include(cmake/OpenCVMinDepVersions.cmake)
- 
 diff --git a/cmake/OpenCVFindLibsGrfmt.cmake b/cmake/OpenCVFindLibsGrfmt.cmake
-index 0beaf19317..4c5e46e615 100644
+index 23a6ca6959..27e121943a 100644
 --- a/cmake/OpenCVFindLibsGrfmt.cmake
 +++ b/cmake/OpenCVFindLibsGrfmt.cmake
-@@ -227,20 +227,11 @@ endif()
+@@ -255,21 +255,12 @@ endif()
  # --- OpenEXR (optional) ---
  if(WITH_OPENEXR)
    ocv_clear_vars(HAVE_OPENEXR)
 -  if(NOT BUILD_OPENEXR)
+-    ocv_clear_internal_cache_vars(OPENEXR_INCLUDE_PATHS OPENEXR_LIBRARIES OPENEXR_ILMIMF_LIBRARY OPENEXR_VERSION)
 -    include("${OpenCV_SOURCE_DIR}/cmake/OpenCVFindOpenEXR.cmake")
 -  endif()
--
 +  pkg_check_modules(OPENEXR OpenEXR)
+ 
    if(OPENEXR_FOUND)
      set(HAVE_OPENEXR YES)
 -  else()
@@ -50,6 +27,3 @@ index 0beaf19317..4c5e46e615 100644
    endif()
  endif()
  
--- 
-2.26.1
-

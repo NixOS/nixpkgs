@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stats for Python processes";
     homepage = "https://www.github.com/Cue/scales";
     license = licenses.asl20;

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub}:
+{ lib, stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
   pname = "zsh-completions";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = pname;
     rev = version;
-    sha256 = "0rw23m8cqxhcb4yjhbzb9lir60zn1xjy7hn3zv1fzz700f0i6fyk";
+    sha256 = "0vs14n29wvkai84fvz3dz2kqznwsq2i5fzbwpv8nsfk1126ql13i";
   };
 
   installPhase= ''
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Additional completion definitions for zsh";
     homepage = "https://github.com/zsh-users/zsh-completions";
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.olejorgenb ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.olejorgenb ];
   };
 }

@@ -1,25 +1,26 @@
-{ buildPythonApplication, fetchPypi, lib
-, youtube-dl
-, PyChromecast
-, click
-, ifaddr
-, requests
-}:
+{ lib, python3 }:
+
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "catt";
-  version = "0.11.0";
+  version = "0.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vq1wg79b7855za6v6bsfgypm0v3b4wakap4rash45mhzbgjj0kq";
+    sha256 = "fef58bf7a8ebaba98399d1077cc4615f53d0196aab2a989df369a66f7111963b";
   };
 
   propagatedBuildInputs = [
-    youtube-dl PyChromecast click ifaddr requests
+    click
+    ifaddr
+    PyChromecast
+    requests
+    youtube-dl
   ];
 
   doCheck = false; # attempts to access various URLs
+  pythonImportsCheck = [ "catt" ];
 
   meta = with lib; {
     description = "Cast All The Things allows you to send videos from many, many online sources to your Chromecast";

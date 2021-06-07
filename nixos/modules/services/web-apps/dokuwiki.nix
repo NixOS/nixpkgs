@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkEnableOption mkForce mkIf mkMerge mkOption optionalAttrs recursiveUpdate types;
+  inherit (lib) mkEnableOption mkForce mkIf mkMerge mkOption optionalAttrs recursiveUpdate types maintainers;
   inherit (lib) concatMapStringsSep flatten mapAttrs mapAttrs' mapAttrsToList nameValuePair concatMapStringSep;
 
   eachSite = config.services.dokuwiki;
@@ -95,7 +95,7 @@ let
 
       aclFile = mkOption {
         type = with types; nullOr str;
-        default = if (config.aclUse && config.acl == null) then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
+        default = if (config.aclUse && config.acl == null) then "/var/lib/dokuwiki/${name}/acl.auth.php" else null;
         description = ''
           Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
           Mutually exclusive with services.dokuwiki.acl which is preferred.
@@ -193,7 +193,7 @@ let
                 };
                 sourceRoot = ".";
                 # We need unzip to build this package
-                buildInputs = [ pkgs.unzip ];
+                nativeBuildInputs = [ pkgs.unzip ];
                 # Installing simply means copying all files to the output directory
                 installPhase = "mkdir -p $out; cp -R * $out/";
               };
@@ -220,7 +220,7 @@ let
                   sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
                 };
                 # We need unzip to build this package
-                buildInputs = [ pkgs.unzip ];
+                nativeBuildInputs = [ pkgs.unzip ];
                 # Installing simply means copying all files to the output directory
                 installPhase = "mkdir -p $out; cp -R * $out/";
               };
@@ -249,22 +249,19 @@ let
       nginx = mkOption {
         type = types.submodule (
           recursiveUpdate
-            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
-            {
-              # Enable encryption by default,
-              options.forceSSL.default = true;
-              options.enableACME.default = true;
-            }
+            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
         );
-        default = {forceSSL = true; enableACME = true;};
+        default = {};
         example = {
           serverAliases = [
             "wiki.\${config.networking.domain}"
           ];
-          enableACME = false;
+          # To enable encryption and let let's encrypt take care of certificate
+          forceSSL = true;
+          enableACME = true;
         };
         description = ''
-          With this option, you can customize the nginx virtualHost which already has sensible defaults for DokuWiki.
+          With this option, you can customize the nginx virtualHost settings.
         '';
       };
     };
@@ -276,7 +273,7 @@ in
     services.dokuwiki = mkOption {
       type = types.attrsOf (types.submodule siteOpts);
       default = {};
-      description = "Sepcification of one or more dokuwiki sites to service.";
+      description = "Sepcification of one or more dokuwiki sites to serve.";
     };
   };
 
@@ -321,7 +318,7 @@ in
       enable = true;
       virtualHosts = mapAttrs (hostName: cfg:  mkMerge [ cfg.nginx {
         root = mkForce "${pkg hostName cfg}/share/dokuwiki";
-        extraConfig = "fastcgi_param HTTPS on;";
+        extraConfig = lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
 
         locations."~ /(conf/|bin/|inc/|install.php)" = {
           extraConfig = "deny all;";
@@ -332,14 +329,14 @@ in
           extraConfig = "internal;";
         };
 
-        locations."~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
+        locations."~ ^/lib.*\\.(js|css|gif|png|ico|jpg|jpeg)$" = {
           extraConfig = "expires 365d;";
         };
 
         locations."/" = {
           priority = 1;
           index = "doku.php";
-          extraConfig = ''try_files $uri $uri/ @dokuwiki;'';
+          extraConfig = "try_files $uri $uri/ @dokuwiki;";
         };
 
         locations."@dokuwiki" = {
@@ -352,14 +349,14 @@ in
           '';
         };
 
-        locations."~ \.php$" = {
+        locations."~ \\.php$" = {
           extraConfig = ''
               try_files $uri $uri/ /doku.php;
               include ${pkgs.nginx}/conf/fastcgi_params;
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param REDIRECT_STATUS 200;
               fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};
-              fastcgi_param HTTPS on;
+              ${lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
           '';
         };
       }]) eachSite;
@@ -385,4 +382,7 @@ in
       isSystemUser = true;
     };
   };
+
+  meta.maintainers = with maintainers; [ _1000101 ];
+
 }

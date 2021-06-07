@@ -1,33 +1,36 @@
-{ stdenv, callPackage, CoreFoundation
+{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
 , tiles ? true, Cocoa
 , debug ? false
+, useXdgDir ? false
+, version ? "2020-12-09"
+, rev ? "cb02195d9fb5ba71f35a105be4104c3d8883065c"
+, sha256 ? "108cs6vp99qmqqfnmczad0xjgcl82bypm5xszwnlfcswdsrfs4da"
 }:
 
 let
-  inherit (stdenv.lib) substring;
-  inherit (callPackage ./common.nix { inherit tiles CoreFoundation Cocoa debug; }) common utils;
-  inherit (utils) fetchFromCleverRaven;
+  common = callPackage ./common.nix {
+    inherit CoreFoundation tiles Cocoa debug useXdgDir;
+  };
+
+  self = common.overrideAttrs (common: rec {
+    pname = common.pname + "-git";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "CleverRaven";
+      repo = "Cataclysm-DDA";
+      inherit rev sha256;
+    };
+
+    makeFlags = common.makeFlags ++ [
+      "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
+    ];
+
+    meta = common.meta // {
+      maintainers = with lib.maintainers;
+      common.meta.maintainers ++ [ rardiol ];
+    };
+  });
 in
 
-stdenv.mkDerivation (common // rec {
-  version = "2019-11-22";
-  name = "cataclysm-dda-git-${version}";
-
-  src = fetchFromCleverRaven {
-    rev = "a6c8ece992bffeae3788425dd4b3b5871e66a9cd";
-    sha256 = "0ww2q5gykxm802z1kffmnrfahjlx123j1gfszklpsv0b1fccm1ab";
-  };
-
-  patches = [
-    # Locale patch required for Darwin builds, see: https://github.com/NixOS/nixpkgs/pull/74064#issuecomment-560083970
-    ./patches/fix_locale_dir_git.patch
-  ];
-
-  makeFlags = common.makeFlags ++ [
-    "VERSION=git-${version}-${substring 0 8 src.rev}"
-  ];
-
-  meta = with stdenv.lib.maintainers; common.meta // {
-    maintainers = common.meta.maintainers ++ [ rardiol ];
-  };
-})
+attachPkgs pkgs self

@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchurl
 , autoPatchelfHook
 , alsaLib
@@ -17,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
-  version = "1.7.8";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
-    sha256 = "207fbf813b6da018a5b848e5dc1194b5996daab39adbd873b2cecb0565c105ce";
+    sha256 = "mfpwDYRpFULD9Th8tI5yqb5RYWZJHarbWYpfKS3Q6mE=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     libsecret
     nss
     xorg.libxkbfile
+    xorg.libXdamage
     xorg.libXScrnSaver
     xorg.libXtst
   ];
@@ -45,38 +47,45 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     coreutils
     openssl
-    udev.lib
+    (lib.getLib udev)
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     dpkg -x $src .
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib}
     cp -ar ./usr/share $out
 
     substituteInPlace $out/share/mailspring/resources/app.asar.unpacked/mailsync \
-      --replace realpath ${coreutils}/bin/realpath \
       --replace dirname ${coreutils}/bin/dirname
 
     ln -s $out/share/mailspring/mailspring $out/bin/mailspring
     ln -s ${openssl.out}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
+
+    runHook postInstall
   '';
 
   postFixup = /* sh */ ''
-    substituteInPlace $out/share/applications/mailspring.desktop \
-      --replace /usr/bin $out/bin
+    substituteInPlace $out/share/applications/Mailspring.desktop \
+      --replace Exec=mailspring Exec=$out/bin/mailspring
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
     longDescription = ''
       Mailspring is an open-source mail client forked from Nylas Mail and built with Electron.
       Mailspring's sync engine runs locally, but its source is not open.
     '';
-    license = licenses.unfree;
-    maintainers = with maintainers; [ toschmidt ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ toschmidt doronbehar ];
     homepage = "https://getmailspring.com";
     downloadPage = "https://github.com/Foundry376/Mailspring";
     platforms = platforms.x86_64;

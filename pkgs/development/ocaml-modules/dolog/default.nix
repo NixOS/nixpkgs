@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
+{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild }:
 
 let version = "3.0"; in
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/UnixJunkie/dolog";
     description = "Minimalistic lazy logger in OCaml";
     platforms = ocaml.meta.platforms or [];
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

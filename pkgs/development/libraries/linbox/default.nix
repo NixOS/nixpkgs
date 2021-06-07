@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , givaro
-, pkgconfig
+, pkg-config
 , blas
 , lapack
 , fflas-ffpack
@@ -14,8 +14,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "linbox";
-  version = "1.6.3";
-
+  version = "1.6.3"; # TODO: Check postPatch script on update
 
   src = fetchFromGitHub {
     owner = "linbox-team";
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -36,21 +35,34 @@ stdenv.mkDerivation rec {
     fflas-ffpack
   ];
 
+  patches = [
+    # Remove inappropriate `const &` qualifiers on data members that can be
+    # modified via member functions.
+    # See also: https://github.com/linbox-team/linbox/pull/256
+    ./patches/linbox-pr256-part2.patch # TODO: Remove on 1.7.0 update
+  ];
+
+  postPatch = ''
+    # Remove @LINBOXSAGE_LIBS@ that is actually undefined.
+    # See also: https://github.com/linbox-team/linbox/pull/249
+    # TODO: Remove on 1.7.0 update
+    find . -type f -exec sed -e 's/@LINBOXSAGE_LIBS@//' -i {} \;
+  '';
+
   configureFlags = [
     "--with-blas-libs=-lblas"
     "--disable-optimization"
-  ] ++ stdenv.lib.optionals stdenv.isx86_64 {
+  ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
-    default        = [ "--disable-sse3" "--disable-ssse3" "--disable-sse41" "--disable-sse42" "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    westmere       = [                                                                        "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    sandybridge    = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    ivybridge      = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    haswell        = [                                                                                                                         "--disable-fma4" ];
-    broadwell      = [                                                                                                                         "--disable-fma4" ];
-    skylake        = [                                                                                                                         "--disable-fma4" ];
-    skylake-avx512 = [                                                                                                                         "--disable-fma4" ];
-  }.${stdenv.hostPlatform.platform.gcc.arch or "default"}
-  ++ stdenv.lib.optionals withSage [
+    "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
+    "--${if stdenv.hostPlatform.ssse3Support  then "enable" else "disable"}-ssse3"
+    "--${if stdenv.hostPlatform.sse4_1Support then "enable" else "disable"}-sse41"
+    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-sse42"
+    "--${if stdenv.hostPlatform.avxSupport    then "enable" else "disable"}-avx"
+    "--${if stdenv.hostPlatform.avx2Support   then "enable" else "disable"}-avx2"
+    "--${if stdenv.hostPlatform.fmaSupport    then "enable" else "disable"}-fma"
+    "--${if stdenv.hostPlatform.fma4Support   then "enable" else "disable"}-fma4"
+  ] ++ lib.optionals withSage [
     "--enable-sage"
   ];
 
@@ -58,12 +70,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     inherit version;
     description = "C++ library for exact, high-performance linear algebra";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [stdenv.lib.maintainers.timokau];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    maintainers = teams.sage.members;
+    platforms = platforms.unix;
     homepage = "https://linalg.org/";
   };
 }

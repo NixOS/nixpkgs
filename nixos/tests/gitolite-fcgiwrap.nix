@@ -13,7 +13,7 @@ import ./make-test-python.nix (
       {
         name = "gitolite-fcgiwrap";
 
-        meta = with pkgs.stdenv.lib.maintainers; {
+        meta = with pkgs.lib.maintainers; {
           maintainers = [ bbigras ];
         };
 

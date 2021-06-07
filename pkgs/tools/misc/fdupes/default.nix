@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, pcre2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses, pcre2 }:
 
 stdenv.mkDerivation rec {
   pname = "fdupes";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses pcre2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Identifies duplicate files residing within specified directories";
     longDescription = ''
       fdupes searches the given path for duplicate files.

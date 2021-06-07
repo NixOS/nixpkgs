@@ -1,20 +1,20 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, pillow, xlib, six, xvfb_run, sphinx }:
+, pillow, xlib, six, xvfb-run, sphinx }:
 
 buildPythonPackage rec {
   pname = "pystray";
-  version = "0.15.0";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pystray";
     rev = "v${version}";
-    sha256 = "0m5raxahyix3lmmbjbrsfd9yhr4vdil8gcy155hh6lqm2b1fmmss";
+    sha256 = "sha256-da2ZkehyXrxW5LdMR3K5AEQhiCpx8ygn6eswTC8fsRo=";
   };
 
-  propagatedBuildInputs = [ pillow xlib six ];
   nativeBuildInputs = [ sphinx ];
-  checkInputs = [ xvfb_run ];
+  propagatedBuildInputs = [ pillow xlib six ];
+  checkInputs = [ xvfb-run ];
 
   checkPhase = ''
     rm tests/icon_tests.py # test needs user input
@@ -25,7 +25,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/moses-palmer/pystray";
     description = "This library allows you to create a system tray icon";
-    license = licenses.lgpl3;
+    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ jojosch ];
   };
 }

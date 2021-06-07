@@ -2,22 +2,22 @@
 
 buildPythonPackage rec {
   pname = "vertica-python";
-  version = "0.10.4";
-  
+  version = "1.0.1";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "570525d0371806993874bd2ee0f47cc5d68994abb5aa382e964e53e0b81160b2";
+    sha256 = "94cff37e03f89fc4c5e4b2d4c913c7d5d7450f5a205d14f709b39e0a4202be95";
   };
-  
+
   propagatedBuildInputs = [ future dateutil six ];
-  
+
   checkInputs = [ pytest mock parameterized ];
-  
+
   # Integration tests require an accessible Vertica db
   checkPhase = ''
     pytest --ignore vertica_python/tests/integration_tests
   '';
-  
+
   meta = with lib; {
     description = "Native Python client for Vertica database";
     homepage = "https://github.com/vertica/vertica-python";

@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, ... }: let
   };
 in {
   name = "sanoid";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ lopsided98 ];
   };
 
@@ -33,14 +33,22 @@ in {
 
           autosnap = true;
         };
-        datasets."pool/test".useTemplate = [ "test" ];
+        datasets."pool/sanoid".useTemplate = [ "test" ];
+        extraArgs = [ "--verbose" ];
       };
 
       services.syncoid = {
         enable = true;
-        sshKey = "/root/.ssh/id_ecdsa";
-        commonArgs = [ "--no-sync-snap" ];
-        commands."pool/test".target = "root@target:pool/test";
+        sshKey = "/var/lib/syncoid/id_ecdsa";
+        commands = {
+          # Sync snapshot taken by sanoid
+          "pool/sanoid" = {
+            target = "root@target:pool/sanoid";
+            extraArgs = [ "--no-sync-snap" ];
+          };
+          # Take snapshot and sync
+          "pool/syncoid".target = "root@target:pool/syncoid";
+        };
       };
     };
     target = { ... }: {
@@ -54,37 +62,38 @@ in {
 
   testScript = ''
     source.succeed(
-        "mkdir /tmp/mnt",
+        "mkdir /mnt",
         "parted --script /dev/vdb -- mklabel msdos mkpart primary 1024M -1s",
         "udevadm settle",
-        "zpool create pool /dev/vdb1",
-        "zfs create -o mountpoint=legacy pool/test",
-        "mount -t zfs pool/test /tmp/mnt",
+        "zpool create pool -R /mnt /dev/vdb1",
+        "zfs create pool/sanoid",
+        "zfs create pool/syncoid",
         "udevadm settle",
     )
     target.succeed(
+        "mkdir /mnt",
         "parted --script /dev/vdb -- mklabel msdos mkpart primary 1024M -1s",
         "udevadm settle",
-        "zpool create pool /dev/vdb1",
+        "zpool create pool -R /mnt /dev/vdb1",
         "udevadm settle",
     )
 
-    source.succeed("mkdir -m 700 /root/.ssh")
     source.succeed(
-        "cat '${snakeOilPrivateKey}' > /root/.ssh/id_ecdsa"
+        "mkdir -m 700 -p /var/lib/syncoid",
+        "cat '${snakeOilPrivateKey}' > /var/lib/syncoid/id_ecdsa",
+        "chmod 600 /var/lib/syncoid/id_ecdsa",
+        "chown -R syncoid:syncoid /var/lib/syncoid/",
     )
-    source.succeed("chmod 600 /root/.ssh/id_ecdsa")
 
-    source.succeed("touch /tmp/mnt/test.txt")
+    # Take snapshot with sanoid
+    source.succeed("touch /mnt/pool/sanoid/test.txt")
     source.systemctl("start --wait sanoid.service")
 
+    # Sync snapshots
     target.wait_for_open_port(22)
+    source.succeed("touch /mnt/pool/syncoid/test.txt")
     source.systemctl("start --wait syncoid.service")
-    target.succeed(
-        "mkdir /tmp/mnt",
-        "zfs set mountpoint=legacy pool/test",
-        "mount -t zfs pool/test /tmp/mnt",
-    )
-    target.succeed("cat /tmp/mnt/test.txt")
+    target.succeed("cat /mnt/pool/sanoid/test.txt")
+    target.succeed("cat /mnt/pool/syncoid/test.txt")
   '';
 })

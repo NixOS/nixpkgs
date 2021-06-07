@@ -1,7 +1,8 @@
-{ stdenv, buildGoPackage, fetchurl
+{ lib, stdenv, buildGoPackage, fetchurl
 , cmake, xz, which, autoconf
 , ncurses6, libedit, libunwind
 , installShellFiles
+, removeReferencesTo, go
 }:
 
 let
@@ -14,16 +15,16 @@ let
 in
 buildGoPackage rec {
   pname = "cockroach";
-  version = "20.1.2";
+  version = "20.1.8";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "1xmb516xr0bhkzj6yigcrxbghvh0dis85dq7n5hi49mn951ad5yn";
+    sha256 = "0mm3hfr778c7djza8gr1clwa8wca4d3ldh9hlg80avw4x664y5zi";
   };
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];
 
   inherit nativeBuildInputs buildInputs;
 
@@ -53,10 +54,16 @@ buildGoPackage rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  # fails with `GOFLAGS=-trimpath`
+  allowGoReference = true;
+  preFixup = ''
+    find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
+  '';
+
+  meta = with lib; {
     homepage    = "https://www.cockroachlabs.com";
     description = "A scalable, survivable, strongly-consistent SQL database";
-    license     = licenses.asl20;
+    license     = licenses.bsl11;
     platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ rushmorem thoughtpolice rvolosatovs ];
   };

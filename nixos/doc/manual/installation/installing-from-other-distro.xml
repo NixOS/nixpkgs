@@ -47,7 +47,7 @@
     Short version:
    </para>
 <screen>
-<prompt>$ </prompt>curl https://nixos.org/nix/install | sh
+<prompt>$ </prompt>curl -L https://nixos.org/nix/install | sh
 <prompt>$ </prompt>. $HOME/.nix-profile/etc/profile.d/nix.sh # …or open a fresh shell</screen>
    <para>
     More details in the
@@ -84,12 +84,12 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
    </para>
    <para>
     You'll need <literal>nixos-generate-config</literal> and
-    <literal>nixos-install</literal> and we'll throw in some man pages and
-    <literal>nixos-enter</literal> just in case you want to chroot into your
-    NixOS partition. They are installed by default on NixOS, but you don't have
+    <literal>nixos-install</literal>, but this also makes some man pages
+    and <literal>nixos-enter</literal> available, just in case you want to chroot into your
+    NixOS partition. NixOS installs these by default, but you don't have
     NixOS yet..
    </para>
-<screen><prompt>$ </prompt>nix-env -f '&lt;nixpkgs/nixos&gt;' --arg configuration {} -iA config.system.build.{nixos-generate-config,nixos-install,nixos-enter,manual.manpages}</screen>
+   <screen><prompt>$ </prompt>nix-env -f '&lt;nixpkgs>' -iA nixos-install-tools</screen>
   </listitem>
   <listitem>
    <note>
@@ -161,6 +161,13 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
      existing systems without the help of a rescue USB drive or similar.
     </para>
    </warning>
+   <note>
+    <para>
+     On some distributions there are separate PATHS for programs intended only for root.
+     In order for the installation to succeed, you might have to use <literal>PATH="$PATH:/usr/sbin:/sbin"</literal>
+     in the following command.
+    </para>
+   </note>
 <screen><prompt>$ </prompt>sudo PATH="$PATH" NIX_PATH="$NIX_PATH" `which nixos-install` --root /mnt</screen>
    <para>
     Again, please refer to the <literal>nixos-install</literal> step in
@@ -211,7 +218,7 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
     use <literal>sudo</literal>)
    </para>
 <programlisting>
-<link linkend="opt-users.users._name__.initialHashedPassword">users.users.root.initialHashedPassword</link> = "";
+<link linkend="opt-users.users._name_.initialHashedPassword">users.users.root.initialHashedPassword</link> = "";
 </programlisting>
   </listitem>
   <listitem>
@@ -325,14 +332,14 @@ sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot
     to boot on a USB rescue disk and do something along these lines:
    </para>
 <screen>
-# mkdir root
-# mount /dev/sdaX root
-# mkdir root/nixos-root
-# mv -v root/* root/nixos-root/
-# mv -v root/nixos-root/old-root/* root/
-# mv -v root/boot.bak root/boot  # We had renamed this by hand earlier
-# umount root
-# reboot</screen>
+<prompt># </prompt>mkdir root
+<prompt># </prompt>mount /dev/sdaX root
+<prompt># </prompt>mkdir root/nixos-root
+<prompt># </prompt>mv -v root/* root/nixos-root/
+<prompt># </prompt>mv -v root/nixos-root/old-root/* root/
+<prompt># </prompt>mv -v root/boot.bak root/boot  # We had renamed this by hand earlier
+<prompt># </prompt>umount root
+<prompt># </prompt>reboot</screen>
    <para>
     This may work as is or you might also need to reinstall the boot loader
    </para>

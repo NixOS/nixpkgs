@@ -21,11 +21,13 @@ in
       enable = mkEnableOption "Mailpile the mail client";
 
       hostname = mkOption {
+        type = types.str;
         default = "localhost";
         description = "Listen to this hostname or ip.";
       };
       port = mkOption {
-        default = "33411";
+        type = types.port;
+        default = 33411;
         description = "Listen on this port.";
       };
     };

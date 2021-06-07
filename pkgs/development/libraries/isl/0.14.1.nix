@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp }:
+{ lib, stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
   name = "isl-0.14.1";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.kotnet.org/~skimo/isl/";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     description = "A library for manipulating sets and relations of integer points bounded by linear constraints";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

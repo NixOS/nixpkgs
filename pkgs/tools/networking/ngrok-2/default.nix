@@ -1,6 +1,6 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-with stdenv.lib;
+with lib;
 
 let versions = builtins.fromJSON (builtins.readFile ./versions.json);
     arch = if stdenv.isi686 then "386"
@@ -9,7 +9,8 @@ let versions = builtins.fromJSON (builtins.readFile ./versions.json);
            else if stdenv.isAarch64 then "arm64"
            else throw "Unsupported architecture";
     os = if stdenv.isLinux then "linux"
-         else if stdenv.isDarwin then "darwin"
+         else if (stdenv.isDarwin && stdenv.isx86_64) then "darwin"
+         else if stdenv.isDarwin then throw "Unsupported architecture"
          else throw "Unsupported os";
     versionInfo = versions."${os}-${arch}";
     inherit (versionInfo) version sha256 url;
@@ -35,13 +36,10 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "ngrok";
-    longDescription = ''
-      Allows you to expose a web server running on your local machine to the internet.
-    '';
+    description = "Allows you to expose a web server running on your local machine to the internet";
     homepage = "https://ngrok.com/";
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = [ maintainers.bobvanderlinden ];
   };
 }

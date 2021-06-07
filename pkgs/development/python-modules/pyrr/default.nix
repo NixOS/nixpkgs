@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , setuptools
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   buildInputs = [ setuptools ];
   propagatedBuildInputs = [ multipledispatch numpy ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "3D mathematical functions using NumPy";
     homepage = "https://github.com/adamlwgriffiths/Pyrr/";
     license = licenses.bsd2;

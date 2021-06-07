@@ -1,6 +1,6 @@
 { stdenv, lib, makeWrapper, fetchurl,
   alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib,
-  gnome2, gtk2-x11, nspr, nss,
+  gnome2, pango, gtk2-x11, nspr, nss,
   libX11, libxcb, libXcomposite, libXcursor, libXdamage, libXext, libXfixes,
   libXi, libXrandr, libXrender, libXScrnSaver, libXtst,
   libudev0-shim
@@ -33,7 +33,7 @@
     preFixup = let
       libPath = lib.makeLibraryPath [
         alsaLib atk cairo cups.lib dbus.lib expat fontconfig.lib freetype
-        gdk-pixbuf glib gnome2.GConf gnome2.pango gtk2-x11 nspr nss stdenv.cc.cc.lib
+        gdk-pixbuf glib gnome2.GConf pango gtk2-x11 nspr nss stdenv.cc.cc.lib
         libX11 libxcb libXcomposite libXcursor libXdamage libXext libXfixes
         libXi libXrandr libXrender libXScrnSaver libXtst
       ];
@@ -49,7 +49,7 @@
       wrapProgram "$out/bin/sweep_visualizer" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://support.scanse.io/hc/en-us/articles/115006008948-Visualizer-Overview";
       description = "A minimal desktop application for interfacing with the Sweep device";
       license = licenses.unfree;

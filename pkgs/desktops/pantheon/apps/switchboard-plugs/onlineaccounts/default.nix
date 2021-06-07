@@ -1,10 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , fetchpatch
 , pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala_0_46
 , libgee
 , granite
@@ -26,11 +27,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "03h8ii8zz59fpp4fwlvyx3m3550096fn7a6w612b1rbj3dqhlmh9";
+    sha256 = "sha256-CVYKcRty5bBEMNyoY51JAJQy6uh+U+7IvS6V/1GMCA4=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala_0_46
   ];
 
@@ -61,6 +62,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/5fa2882f765076d20c6ef4886198a34a05159f8a.patch";
       sha256 = "1szryyy7shdmbvx9yhpi0bhzaayg7hl6pq2c456j1qf9kfv0m4hf";
     })
+
+    # fix build with vala 0.48.9
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/b1853b7427102b8dd94774e1e2cc455f50902263.patch";
+      sha256 = "J3C71GyEHEZWSghGXlwXPHFJRhrvx6i0yvi8NIDb4WE=";
+    })
   ];
 
   PKG_CONFIG_LIBACCOUNTS_GLIB_PROVIDERFILESDIR = "${placeholder "out"}/share/accounts/providers";
@@ -68,7 +75,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Online Accounts Plug";
     homepage = "https://github.com/elementary/switchboard-plug-onlineaccounts";
     license = licenses.lgpl2Plus;

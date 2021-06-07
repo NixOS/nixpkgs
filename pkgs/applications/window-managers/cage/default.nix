@@ -1,45 +1,41 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkgconfig, makeWrapper
-, wlroots, wayland, wayland-protocols, pixman, libxkbcommon
-, systemd, libGL, libX11
+{ lib, stdenv, fetchFromGitHub
+, meson, ninja, pkg-config, wayland, scdoc, makeWrapper
+, wlroots, wayland-protocols, pixman, libxkbcommon
+, systemd, libGL, libX11, mesa
 , xwayland ? null
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cage-unstable";
-  version = "2020-01-18";
-  # The last stable release (0.1.1) would require at least the following 3 patches:
-  # - https://github.com/Hjdskes/cage/commit/33bb3c818c5971777b6f09d8821e7f078d38d262.patch
-  # - https://github.com/Hjdskes/cage/commit/51e6c760da51e2b885737d61a61cdc965bb9269d.patch
-  # - https://github.com/Hjdskes/cage/commit/84216ca2a417b237ad61c11e2f3ebbcb91681ece.patch
-  # Which need to be adapted due to other changes. At this point it seems
-  # better to use the current master version until the next stable release.
+  pname = "cage";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "Hjdskes";
     repo = "cage";
-    rev = "cc1f975c442ebd691b70196d76aa120ead717810";
-    sha256 = "1gkqx26pvlw00b3fgx6sh87yyjfzyj51jwxvbf9k117npkrf4b2g";
+    rev = "v${version}";
+    sha256 = "0ixl45g0m8b75gvbjm3gf5qg0yplspgs0xpm2619wn5sygc47sb1";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig makeWrapper wayland ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon
-    # TODO: Not specified but required:
+    mesa # for libEGL headers
     systemd libGL libX11
   ];
 
-  enableParallelBuilding = true;
+  mesonFlags = [ "-Dxwayland=${lib.boolToString (xwayland != null)}" ];
 
-  mesonFlags = [ "-Dxwayland=${stdenv.lib.boolToString (xwayland != null)}" ];
-
-  postFixup = stdenv.lib.optionalString (xwayland != null) ''
+  postFixup = lib.optionalString (xwayland != null) ''
     wrapProgram $out/bin/cage --prefix PATH : "${xwayland}/bin"
   '';
 
-  meta = with stdenv.lib; {
-    description = "A Wayland kiosk";
+  # Tests Cage using the NixOS module by launching xterm:
+  passthru.tests.basic-nixos-module-functionality = nixosTests.cage;
+
+  meta = with lib; {
+    description = "A Wayland kiosk that runs a single, maximized application";
     homepage    = "https://www.hjdskes.nl/projects/cage/";
     license     = licenses.mit;
     platforms   = platforms.linux;

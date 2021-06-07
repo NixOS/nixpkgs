@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libSM, libX11, libICE, SDL, alsaLib, gcc-unwrapped, libXext }:
+{ lib, stdenv, fetchurl, libSM, libX11, libICE, SDL, alsaLib, gcc-unwrapped, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "atari++";
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libSM libX11 SDL libICE alsaLib gcc-unwrapped libXext ];
 
   postFixup = ''
-    patchelf --set-rpath ${stdenv.lib.makeLibraryPath buildInputs} "$out/bin/atari++"
+    patchelf --set-rpath ${lib.makeLibraryPath buildInputs} "$out/bin/atari++"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.xl-project.com/";
     description = "An enhanced, cycle-accurated Atari emulator";
     longDescription = ''
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.AndersonTorres ];
     license = licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

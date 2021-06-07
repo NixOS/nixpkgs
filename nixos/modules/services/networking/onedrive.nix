@@ -23,7 +23,7 @@ in {
   ### Documentation
   # meta.doc = ./onedrive.xml;
 
-  ### Interface 
+  ### Interface
 
   options.services.onedrive = {
     enable = lib.mkOption {
@@ -53,7 +53,7 @@ in {
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          ${cfg.package}/bin/onedrive --monitor --verbose --confdir=%h/.config/%i
+          ${cfg.package}/bin/onedrive --monitor --confdir=%h/.config/%i
         '';
         Restart="on-failure";
         RestartSec=3;

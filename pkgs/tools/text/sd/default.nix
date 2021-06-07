@@ -1,26 +1,25 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sd";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04jsni80jzhbb106283df34cdyp5p362l6m29kp30hnc6x49853q";
+    sha256 = "0c5bsqs6c55x4j640vhzlmbiylhp5agr7lx0jrwcjazfyvxihc01";
   };
 
-  cargoSha256 = "1gwb76zys7gky42clzjs5g4hhgpfvzcw63chw9mnj703c7h0cgfh";
+  cargoSha256 = "1iwgy9zzdxay6hb9pz47jchy03jrsy5csxijlq4i228qhqnvq1lr";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Intuitive find & replace CLI (sed alternative)";
     homepage = "https://github.com/chmln/sd";
     license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ amar1729 filalex77 ];
+    maintainers = with maintainers; [ amar1729 Br1ght0ne ];
   };
 }

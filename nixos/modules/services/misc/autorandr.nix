@@ -37,9 +37,9 @@ in {
       description = "Autorandr execution hook";
       after = [ "sleep.target" ];
 
+      startLimitIntervalSec = 5;
+      startLimitBurst = 1;
       serviceConfig = {
-        StartLimitInterval = 5;
-        StartLimitBurst = 1;
         ExecStart = "${pkgs.autorandr}/bin/autorandr --batch --change --default ${cfg.defaultTarget}";
         Type = "oneshot";
         RemainAfterExit = false;
@@ -48,5 +48,5 @@ in {
 
   };
 
-  meta.maintainers = with maintainers; [ gnidorah ];
+  meta.maintainers = with maintainers; [ ];
 }

@@ -5,34 +5,16 @@
   # passing them in this array enables Salt to find them.
 , extraInputs ? []
 }:
-let
-
-  py = python3.override {
-    packageOverrides = self: super: {
-      # Can be unpinned once https://github.com/saltstack/salt/issues/56007 is resolved
-      msgpack = super.msgpack.overridePythonAttrs (
-        oldAttrs: rec {
-          version = "0.6.2";
-          src = oldAttrs.src.override {
-            inherit version;
-            sha256 = "0c0q3vx0x137567msgs5dnizghnr059qi5kfqigxbz26jf2jyg7a";
-          };
-        }
-      );
-    };
-  };
-
-in
-py.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3001";
+  version = "3003";
 
-  src = py.pkgs.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0m7immip3r8yffiv7qlcqibszvhlg48qpgcm16skvrn85hdhv9jw";
+    sha256 = "xGiXM9/nOM8ofjHLP908uNFgYpUgKxjY5m1I03LVync=";
   };
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     distro
     jinja2
     markupsafe
@@ -41,7 +23,7 @@ py.pkgs.buildPythonApplication rec {
     pyyaml
     pyzmq
     requests
-    tornado_4
+    tornado
   ] ++ extraInputs;
 
   patches = [ ./fix-libcrypto-loading.patch ];
@@ -57,9 +39,10 @@ py.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://saltstack.com/";
+    homepage = "https://saltproject.io/";
+    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
     description = "Portable, distributed, remote execution and configuration management system";
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with maintainers; [ Flakebi ];
     license = licenses.asl20;
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv, config, fetchurl, pkgconfig
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+{ lib, stdenv, config, fetchurl, pkg-config
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
-, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
 , libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
 , libXinerama, libXext, libXxf86vm, libXrandr
 , waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
@@ -21,15 +21,15 @@
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.12";
+  version = "2.0.14";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "0qy8wbqvfkb5ps8kxgaaf2zzpkjqbsw712hlp74znbn0jpv6i4il";
+    sha256 = "1g1jahknv5r4yhh1xq5sf0md20ybdw1zh1i15lry26sq39bmn8fq";
   };
   dontDisableStatic = withStatic;
   outputs = [ "out" "dev" ];
@@ -42,9 +42,14 @@ stdenv.mkDerivation rec {
     substituteInPlace include/SDL_opengl_glext.h \
       --replace "typedef ptrdiff_t GLsizeiptr;" "typedef signed long int khronos_ssize_t; typedef khronos_ssize_t GLsizeiptr;" \
       --replace "typedef ptrdiff_t GLintptr;" "typedef signed long int khronos_intptr_t; typedef khronos_intptr_t GLintptr;"
+
+    substituteInPlace configure \
+      --replace 'WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`' 'WAYLAND_SCANNER=`pkg-config --variable=wayland_scanner wayland-scanner`'
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 
@@ -74,6 +79,7 @@ stdenv.mkDerivation rec {
     "--disable-oss"
   ] ++ optional (!x11Support) "--without-x"
     ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
+    ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
     ++ optional stdenv.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,
@@ -121,7 +127,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit openglSupport; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform multimedia library";
     homepage = "http://www.libsdl.org/";
     license = licenses.zlib;

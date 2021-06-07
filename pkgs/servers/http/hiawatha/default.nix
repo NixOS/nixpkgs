@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 
 , cmake
@@ -17,17 +17,17 @@
 
 stdenv.mkDerivation rec {
   pname = "hiawatha";
-  version = "10.9";
+  version = "10.11";
 
   src = fetchFromGitLab {
     owner = "hsleisink";
     repo = "hiawatha";
     rev = "v${version}";
-    sha256 = "0mcg36bidy3p57nyk9nliqjipfb3r2irziavlbr2d5g3smfv52z2";
+    sha256 = "10a7dqj37zrbmgnhwsw0mqm5x25kasl8p95g01rzakviwxkdrkid";
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ mbedtls ] ++ stdenv.lib.optionals enableXslt [ libxslt libxml2 ];
+  buildInputs = [ mbedtls ] ++ lib.optionals enableXslt [ libxslt libxml2 ];
 
   prePatch = ''
     substituteInPlace CMakeLists.txt --replace SETUID ""
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ( if enableToolkit   then "-DENABLE_TOOLKIT=on"     else "-DENABLE_TOOLKIT=off"     )
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.hiawatha-webserver.org";
     description = "An advanced and secure webserver";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libtool, lldClang, ninja
+{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
 , boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
 , icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
 , poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
@@ -7,17 +7,19 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "20.5.2.7";
+  version = "21.3.11.5";
+
+  broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
   src = fetchFromGitHub {
     owner  = "ClickHouse";
     repo   = "ClickHouse";
-    rev    = "v${version}-stable";
+    rev    = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "15b499czsv727wwdb1i1ja5wfsk6ii3pqpk6dlqic9cdmkh8c8ic";
+    sha256 = "sha256-V62Z82p21qtvSOsoXM225/Wkc9F+dvVMz0xpVjhgZVo=";
   };
 
-  nativeBuildInputs = [ cmake libtool lldClang.bintools ninja ];
+  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
   buildInputs = [
     boost brotli capnproto cctz clang-unwrapped double-conversion
     icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl perl
@@ -28,8 +30,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs src/
 
-    substituteInPlace contrib/openssl-cmake/CMakeLists.txt \
-      --replace '/usr/bin/env perl' perl
     substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-duplicate-includes.sh \
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
+    "-DENABLE_EMBEDDED_COMPILER=ON"
+    "-USE_INTERNAL_LLVM_LIBRARY=OFF"
   ];
 
   postInstall = ''
@@ -59,7 +61,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
+
+  meta = with lib; {
     homepage = "https://clickhouse.tech/";
     description = "Column-oriented database management system";
     license = licenses.asl20;

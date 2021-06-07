@@ -1,7 +1,7 @@
-From ca7f6286c518d7ef3877458bbdf8e01f5518ab0e Mon Sep 17 00:00:00 2001
+From 3d1b2e56a6ed6cc86a64f6f89765a2900e576402 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Wed, 16 Apr 2014 10:59:28 +0200
-Subject: [PATCH 03/18] Fix NixOS containers
+Subject: [PATCH 03/19] Fix NixOS containers
 
 In NixOS containers, the init script is bind-mounted into the
 container, so checking early whether it exists will fail.
@@ -10,10 +10,10 @@ container, so checking early whether it exists will fail.
  1 file changed, 2 insertions(+)
 
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 51d0c2a75b..4d3451ff3b 100644
+index 7515380fcd..14f8a82eb8 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -5017,6 +5017,7 @@ static int run(int argc, char *argv[]) {
+@@ -5323,6 +5323,7 @@ static int run(int argc, char *argv[]) {
                                  goto finish;
                          }
                  } else {
@@ -21,7 +21,7 @@ index 51d0c2a75b..4d3451ff3b 100644
                          const char *p, *q;
  
                          if (arg_pivot_root_new)
-@@ -5031,6 +5032,7 @@ static int run(int argc, char *argv[]) {
+@@ -5337,6 +5338,7 @@ static int run(int argc, char *argv[]) {
                                  r = -EINVAL;
                                  goto finish;
                          }
@@ -30,5 +30,5 @@ index 51d0c2a75b..4d3451ff3b 100644
  
          } else {
 -- 
-2.26.2
+2.30.1
 

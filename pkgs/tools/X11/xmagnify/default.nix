@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, libX11, xorgproto }:
+{ lib, stdenv, fetchFromGitLab, libX11, xorgproto }:
 
 stdenv.mkDerivation {
   name = "xmagnify-0.1.0";
@@ -10,11 +10,11 @@ stdenv.mkDerivation {
     sha256 = "1ngnp5f5zl3v35vhbdyjpymy6mwrs0476fm5nd7dzkba7n841jdh";
   };
 
-  prePatch = ''substituteInPlace ./Makefile --replace /usr $out'';
+  prePatch = "substituteInPlace ./Makefile --replace /usr $out";
 
   buildInputs = [ libX11 xorgproto ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiny screen magnifier for X11";
     homepage = "https://gitlab.com/amiloradovsky/magnify";
     license = licenses.mit;  # or GPL2+, optionally

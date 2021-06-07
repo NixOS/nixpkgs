@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , fetchpatch
-, pkgconfig
+, pkg-config
 , glib
 , sqlite
 , gobject-introspection
@@ -11,34 +11,32 @@
 , libtool
 , gettext
 , dbus
-, telepathy-glib
 , gtk3
 , json-glib
 , librdf_raptor2
-, dbus-glib
 , pythonSupport ? true
-, python2Packages
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "zeitgeist";
-  version = "1.0.2";
+  version = "1.0.3";
 
-  outputs = [ "out" "lib" "dev" "man" ] ++ stdenv.lib.optional pythonSupport "py";
+  outputs = [ "out" "lib" "dev" "man" ] ++ lib.optional pythonSupport "py";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ig3d3j1n0ghaxsgfww6g2hhcdwx8cljwwfmp9jk1nrvkxd6rnmv";
+    sha256 = "0y6fyzxl5np4yskcxibd0p03h619w9ir907nhf40h02y0pk1kgkp";
   };
 
   patches = [
-    # Fix build with gettext 0.20
+    # Fix build with Vala 0.52
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/zeitgeist/zeitgeist/commit/b5c00e80189fd59a059a95c4e276728a2492cb89.patch";
-      sha256 = "1r7f7j3l2p6xlzxajihgx8bzbc2sxcb9spc9pi26rz9bwmngdyq7";
+      url = "https://gitlab.freedesktop.org/zeitgeist/zeitgeist/commit/64ac3a6f94cd299e5e14945dc31b48f009dec152.patch";
+      sha256 = "Dw1kNE3JoFdmgcQ0eFoFLYvmxlPjXNj56Jkn2meINz4=";
     })
   ];
 
@@ -46,27 +44,25 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     gettext
     gobject-introspection
     vala
-    python2Packages.python
+    python3
   ];
 
   buildInputs = [
     glib
     sqlite
     dbus
-    telepathy-glib
-    dbus-glib
     gtk3
     json-glib
     librdf_raptor2
-    python2Packages.rdflib
+    python3.pkgs.rdflib
   ];
 
   configureFlags = [
-    "--with-session-bus-services-dir=${placeholder "out"}/share/dbus-1/services"
+    "--disable-telepathy"
   ];
 
   enableParallelBuilding = true;
@@ -79,15 +75,15 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 ./autogen.sh
   '';
 
-  postFixup = stdenv.lib.optionalString pythonSupport ''
-    moveToOutput lib/${python2Packages.python.libPrefix} "$py"
+  postFixup = lib.optionalString pythonSupport ''
+    moveToOutput lib/${python3.libPrefix} "$py"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A service which logs the users’s activities and events";
     homepage = "https://zeitgeist.freedesktop.org/";
-    maintainers = with maintainers; [ lethalman worldofpeace ];
-    license = licenses.gpl2;
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

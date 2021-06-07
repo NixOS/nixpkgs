@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Beautiful stack trace pretty printer for C++";
     homepage = "https://github.com/bombela/backward-cpp";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

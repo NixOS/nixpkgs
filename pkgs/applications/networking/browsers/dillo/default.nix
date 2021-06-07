@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , fltk
 , openssl
 , libjpeg, libpng
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "12ql8n1lypv3k5zqgwjxlw1md90ixz3ag6j1gghfnhjq3inf26yv";
   };
 
-  buildInputs = with stdenv.lib;
+  buildInputs = with lib;
   [ perl fltk openssl libjpeg libpng libXcursor libXi libXinerama ];
 
   configureFlags = [ "--enable-ssl" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.dillo.org/";
     description = "A fast graphical web browser with a small footprint";
     longDescription = ''

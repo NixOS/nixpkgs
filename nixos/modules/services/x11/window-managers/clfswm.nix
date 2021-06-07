@@ -15,10 +15,10 @@ in
     services.xserver.windowManager.session = singleton {
       name = "clfswm";
       start = ''
-        ${pkgs.clfswm}/bin/clfswm &
+        ${pkgs.lispPackages.clfswm}/bin/clfswm &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.clfswm ];
+    environment.systemPackages = [ pkgs.lispPackages.clfswm ];
   };
 }

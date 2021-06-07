@@ -1,4 +1,4 @@
-{ stdenv, type_conv, buildOcamlJane }:
+{ lib, type_conv, buildOcamlJane }:
 
 buildOcamlJane {
   name = "fieldslib";
@@ -10,7 +10,7 @@ buildOcamlJane {
 
   propagatedBuildInputs = [ type_conv ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ocaml.janestreet.com/";
     description = "OCaml syntax extension to define first class values representing record fields, to get and set record fields, iterate and fold over all fields of a record and create new record values";
     license = licenses.asl20;

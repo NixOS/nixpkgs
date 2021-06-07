@@ -2,11 +2,11 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-mime, karchive, kcompletion, kconfig, kcoreaddons, ki18n,
-  kmime, kxmlgui, libkdepim
+  kmime, kxmlgui, libkdepim, pimcommon
 }:
 
 mkDerivation {
-  name = "mailimporter";
+  pname = "mailimporter";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
@@ -14,6 +14,6 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     akonadi akonadi-mime karchive kcompletion kconfig kcoreaddons ki18n kmime
-    kxmlgui libkdepim
+    kxmlgui libkdepim pimcommon
   ];
 }

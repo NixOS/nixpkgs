@@ -3,7 +3,7 @@
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExample maintainers
                 mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
-                optional types;
+                optional types mkOptionDefault flip attrNames;
 
   cfg = config.services.prometheus.exporters;
 
@@ -22,31 +22,53 @@ let
 
   exporterOpts = genAttrs [
     "apcupsd"
+    "artifactory"
     "bind"
+    "bird"
+    "bitcoin"
     "blackbox"
     "collectd"
     "dnsmasq"
+    "domain"
     "dovecot"
     "fritzbox"
     "json"
+    "jitsi"
+    "kea"
     "keylight"
+    "knot"
     "lnd"
     "mail"
     "mikrotik"
     "minio"
+    "modemmanager"
     "nextcloud"
     "nginx"
+    "nginxlog"
     "node"
+    "openldap"
+    "openvpn"
+    "pihole"
     "postfix"
     "postgres"
+    "process"
+    "py-air-control"
     "redis"
     "rspamd"
+    "rtl_433"
+    "script"
     "snmp"
+    "smokeping"
+    "sql"
     "surfboard"
+    "systemd"
     "tor"
+    "unbound"
     "unifi"
+    "unifi-poller"
     "varnish"
     "wireguard"
+    "flow"
   ] (name:
     import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
   );
@@ -54,7 +76,7 @@ let
   mkExporterOpts = ({ name, port }: {
     enable = mkEnableOption "the prometheus ${name} exporter";
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = port;
       description = ''
         Port to listen on.
@@ -82,8 +104,8 @@ let
       '';
     };
     firewallFilter = mkOption {
-      type = types.str;
-      default = "-p tcp -m tcp --dport ${toString port}";
+      type = types.nullOr types.str;
+      default = null;
       example = literalExample ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
@@ -98,7 +120,6 @@ let
       default = "${name}-exporter";
       description = ''
         User name under which the ${name} exporter shall be run.
-        Has no effect when <option>systemd.services.prometheus-${name}-exporter.serviceConfig.DynamicUser</option> is true.
       '';
     };
     group = mkOption {
@@ -106,19 +127,20 @@ let
       default = "${name}-exporter";
       description = ''
         Group under which the ${name} exporter shall be run.
-        Has no effect when <option>systemd.services.prometheus-${name}-exporter.serviceConfig.DynamicUser</option> is true.
       '';
     };
   });
 
   mkSubModule = { name, port, extraOpts, imports }: {
     ${name} = mkOption {
-      type = types.submodule {
+      type = types.submodule [{
         inherit imports;
         options = (mkExporterOpts {
           inherit name port;
         } // extraOpts);
-      };
+      } ({ config, ... }: mkIf config.openFirewall {
+        firewallFilter = mkDefault "-p tcp -m tcp --dport ${toString config.port}";
+      })];
       internal = true;
       default = {};
     };
@@ -158,10 +180,9 @@ let
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
         serviceConfig.DynamicUser = mkDefault enableDynamicUser;
-      } serviceOpts ] ++ optional (!enableDynamicUser) {
         serviceConfig.User = conf.user;
         serviceConfig.Group = conf.group;
-      });
+      } serviceOpts ]);
   };
 in
 {
@@ -216,16 +237,29 @@ in
         Please specify either 'services.prometheus.exporters.mail.configuration'
           or 'services.prometheus.exporters.mail.configFile'.
       '';
-    } ];
+    } {
+      assertion = cfg.sql.enable -> (
+        (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
+      );
+      message = ''
+        Please specify either 'services.prometheus.exporters.sql.configuration' or
+          'services.prometheus.exporters.sql.configFile'
+      '';
+    } ] ++ (flip map (attrNames cfg) (exporter: {
+      assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
+      message = ''
+        The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
+        `openFirewall' is set to `true'!
+      '';
+    }));
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
     services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
-  })] ++ [(mkIf config.services.rspamd.enable {
-    services.prometheus.exporters.rspamd.url = mkDefault "http://localhost:11334/stat";
-  })] ++ [(mkIf config.services.nginx.enable {
-    systemd.services.prometheus-nginx-exporter.after = [ "nginx.service" ];
-    systemd.services.prometheus-nginx-exporter.requires = [ "nginx.service" ];
+  })] ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
+    hardware.rtl-sdr.enable = mkDefault true;
+  })] ++ [(mkIf config.services.postfix.enable {
+    services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
   })] ++ (mapAttrsToList (name: conf:
     mkExporterConf {
       inherit name;

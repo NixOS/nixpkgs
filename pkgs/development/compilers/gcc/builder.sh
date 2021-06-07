@@ -37,6 +37,9 @@ if test "$noSysDirs" = "1"; then
             # Figure out what extra flags when linking to pass to the gcc
             # compilers being generated to make sure that they use our libc.
             extraLDFlags=($(< "${!curBintools}/nix-support/libc-ldflags") $(< "${!curBintools}/nix-support/libc-ldflags-before" || true))
+            if [ -e ${!curBintools}/nix-support/ld-set-dynamic-linker ]; then
+                extraLDFlags=-dynamic-linker=$(< ${!curBintools}/nix-support/dynamic-linker)
+            fi
 
             # The path to the Libc binaries such as `crti.o'.
             libc_libdir="$(< "${!curBintools}/nix-support/orig-libc")/lib"
@@ -61,7 +64,7 @@ if test "$noSysDirs" = "1"; then
         if [[ -e "${!curCC}/nix-support/orig-libc" ]]; then
             # Figure out what extra compiling flags to pass to the gcc compilers
             # being generated to make sure that they use our libc.
-            extraFlags=($(< "${!curCC}/nix-support/libc-cflags"))
+            extraFlags=($(< "${!curCC}/nix-support/libc-crt1-cflags") $(< "${!curCC}/nix-support/libc-cflags"))
 
             # The path to the Libc headers
             libc_devdir="$(< "${!curCC}/nix-support/orig-libc-dev")"
@@ -144,9 +147,9 @@ if test "$noSysDirs" = "1"; then
     fi
 fi
 
-if test -n "${targetConfig-}"; then
-    # The host strip will destroy some important details of the objects
-    dontStrip=1
+if [ -n "${targetConfig-}" ]; then
+    # if stripping gcc, include target directory too
+    stripDebugList="${stripDebugList-lib lib32 lib64 libexec bin sbin} $targetConfig"
 fi
 
 eval "$oldOpts"
@@ -241,7 +244,7 @@ postInstall() {
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
 
-    if type "patchelf"; then
+    if [[ buildConfig == *"linux"* ]]; then
         # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
         for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
             PREV_RPATH=`patchelf --print-rpath "$i"`
@@ -250,8 +253,18 @@ postInstall() {
         done
     fi
 
+    if [[ targetConfig == *"linux"* ]]; then
+        # For some reason, when building for linux on darwin, the libs retain
+        # RPATH to $out.
+        for i in "$lib"/"$targetConfig"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
+            PREV_RPATH=`patchelf --print-rpath "$i"`
+            NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
+            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
+        done
+    fi
+
     if type "install_name_tool"; then
-        for i in "${!outputLib}"/lib/*.*.dylib; do
+        for i in "${!outputLib}"/lib/*.*.dylib "${!outputLib}"/lib/*.so.[0-9]; do
             install_name_tool -id "$i" "$i" || true
             for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
               new_path=`echo "$old_path" | sed "s,$out,${!outputLib},"`
@@ -277,7 +290,12 @@ postInstall() {
     done
 
     # Two identical man pages are shipped (moving and compressing is done later)
-    ln -sf gcc.1 "$out"/share/man/man1/g++.1
+    for i in "$out"/share/man/man1/*g++.1; do
+        if test -e "$i"; then
+            man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
+            ln -sf "$man_prefix"gcc.1 "$i"
+        fi
+    done
 }
 
 genericBuild

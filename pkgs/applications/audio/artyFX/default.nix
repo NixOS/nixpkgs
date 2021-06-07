@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub , cairomm, cmake, libjack2, libpthreadstubs, libXdmcp, libxshmfence, libsndfile, lv2, ntk, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub , cairomm, cmake, libjack2, libpthreadstubs, libXdmcp, libxshmfence, libsndfile, lv2, ntk, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "artyFX";
@@ -8,14 +8,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openAVproductions";
     repo = "openAV-ArtyFX";
-    rev = "492587461b50d140455aa3c98d915eb8673bebf0";
+    rev = "8c542627d936a01b1d97825e7f26a8e95633f7aa";
     sha256 = "0wwg8ivnpyy0235bapjy4g0ij85zq355jwi6c1nkrac79p4z9ail";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cairomm cmake libjack2 libpthreadstubs libXdmcp libxshmfence libsndfile lv2 ntk   ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ cairomm libjack2 libpthreadstubs libXdmcp libxshmfence libsndfile lv2 ntk ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://openavproductions.com/artyfx/";
     description = "A LV2 plugin bundle of artistic realtime effects";
     license = licenses.gpl2;

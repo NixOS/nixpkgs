@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   version = "2.13";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/cpio/";
     description = "A program to create or extract from cpio archives";
     license = licenses.gpl3;

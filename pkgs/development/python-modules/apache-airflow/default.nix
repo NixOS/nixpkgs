@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
 , fetchpatch
 , alembic
@@ -47,10 +46,7 @@
 , tzlocal
 , unicodecsv
 , zope_deprecation
-, enum34
-, typing
 , nose
-, python
 , pythonOlder
 , pythonAtLeast
 }:
@@ -143,11 +139,9 @@ buildPythonPackage rec {
       --replace "flask-appbuilder>=1.12.5, <2.0.0" "flask-appbuilder" \
       --replace "flask-admin==1.5.3" "flask-admin" \
       --replace "flask-login>=0.3, <0.5" "flask-login" \
-      --replace "pendulum==1.4.4" "pendulum" \
       --replace "cached_property~=1.5" "cached_property" \
       --replace "dill>=0.2.2, <0.3" "dill" \
       --replace "configparser>=3.5.0, <3.6.0" "configparser" \
-      --replace "jinja2>=2.10.1, <2.11.0" "jinja2" \
       --replace "colorlog==4.0.2" "colorlog" \
       --replace "funcsigs==1.0.0" "funcsigs" \
       --replace "flask-swagger==0.2.13" "flask-swagger" \

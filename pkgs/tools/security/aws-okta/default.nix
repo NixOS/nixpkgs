@@ -1,8 +1,8 @@
-{ buildGoPackage, fetchFromGitHub, libusb1, pkgconfig, stdenv, libiconv }:
+{ buildGoPackage, fetchFromGitHub, libusb1, pkg-config, lib, libiconv }:
 
 buildGoPackage rec {
   pname = "aws-okta";
-  version = "1.0.2";
+  version = "1.0.11";
 
   goPackagePath = "github.com/segmentio/aws-okta";
 
@@ -10,22 +10,21 @@ buildGoPackage rec {
     owner = "segmentio";
     repo = "aws-okta";
     rev = "v${version}";
-    sha256 = "0rqkbhprz1j9b9bx3wvl5zi4p02q1qza905wkrvh42f9pbknajww";
+    sha256 = "sha256-1cprKpIFgM3+lUEHNvda34nJTH4Ch3LtTRq/Dp6QBQ8=";
   };
 
   buildFlags = [ "--tags" "release" ];
 
   buildFlagsArray = [ "-ldflags=-X main.Version=${version}" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1  libiconv ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "aws-vault like tool for Okta authentication";
     license = licenses.mit;
-    maintainers = [maintainers.imalsogreg];
-    platforms = platforms.all;
+    maintainers = with maintainers; [imalsogreg Chili-Man];
     homepage = "https://github.com/segmentio/aws-okta";
     downloadPage = "https://github.com/segmentio/aws-okta";
   };

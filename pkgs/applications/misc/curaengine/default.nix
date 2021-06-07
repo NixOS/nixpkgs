@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, libarcus, stb, protobuf }:
+{ lib, stdenv, fetchFromGitHub, cmake, libarcus, stb, protobuf }:
 
 stdenv.mkDerivation rec {
   pname = "curaengine";
-  version = "4.6.1";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "CuraEngine";
     rev = version;
-    sha256 = "1fr151hmdg2lhk9pbpan1hb1pafj784nijr4pz646ljmjh12vfk2";
+    sha256 = "sha256-1hCjtnI1EnfyQ0QfU8qZoSLIjE5pyDYpu8H4J91cWYM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCURA_ENGINE_VERSION=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful, fast and robust engine for processing 3D models into 3D printing instruction";
     homepage = "https://github.com/Ultimaker/CuraEngine";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar gebner ];
   };

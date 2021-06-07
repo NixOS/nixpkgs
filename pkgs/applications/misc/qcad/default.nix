@@ -1,34 +1,43 @@
 { boost
 , fetchFromGitHub
+, libGLU
 , mkDerivationWith
 , muparser
-, pkgconfig
+, pkg-config
+, qtbase
 , qmake
-, qt5
+, qtscript
+, qtsvg
+, qtxmlpatterns
+, qttools
+, lib
 , stdenv
-, libGLU
+, installShellFiles
 }:
 
 mkDerivationWith stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.24.3.10";
+  version = "3.26.1.0";
 
   src = fetchFromGitHub {
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "0izyn4y1ffq1mgxs5dymkrqih6n6v9ifrcpyk1z2vyhbm5xx4qsa";
+    sha256 = "sha256-OWAc7g8DiJR3z6dUF5D0Yo3wnRKd1Xe7D1eq15NRW5c=";
   };
 
   patches = [
+    # Patch directory lookup, remove __DATE__ and executable name
     ./application-dir.patch
   ];
 
   postPatch = ''
-    mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}
-    cp \
-      src/3rdparty/qt-labs-qtscriptgenerator-5.12.3/qt-labs-qtscriptgenerator-5.12.3.pro \
-      src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}/qt-labs-qtscriptgenerator-${qt5.qtbase.version}.pro
+    if ! [ -d src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version} ]; then
+      mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}
+      cp \
+        src/3rdparty/qt-labs-qtscriptgenerator-5.14.0/qt-labs-qtscriptgenerator-5.14.0.pro \
+        src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}/qt-labs-qtscriptgenerator-${qtbase.version}.pro
+    fi
   '';
 
   qmakeFlags = [
@@ -58,35 +67,50 @@ mkDerivationWith stdenv.mkDerivation rec {
     cp -r scripts $out/lib
     cp -r plugins $out/lib/plugins
     cp -r patterns $out/lib/patterns
+    cp -r fonts $out/lib/fonts
+    cp -r libraries $out/lib/libraries
+    cp -r linetypes $out/lib/linetypes
+    cp -r ts $out/lib/ts
+
+    # workaround to fix the library browser:
+    rm -r $out/lib/plugins/sqldrivers
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/sqldrivers
+
+    rm -r $out/lib/plugins/printsupport
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/printsupport
+
+    rm -r $out/lib/plugins/imageformats
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/imageformats
 
     install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
 
+    installManPage qcad.1
+
     runHook postInstall
-    '';
+  '';
 
   buildInputs = [
     boost
     muparser
     libGLU
-    qt5.qtbase
-    qt5.qtscript
-    qt5.qtsvg
-    qt5.qtxmlpatterns
+    qtbase
+    qtscript
+    qtsvg
+    qtxmlpatterns
   ];
 
   nativeBuildInputs = [
-    pkgconfig
-    qt5.qmake
-    qt5.qttools
+    pkg-config
+    qmake
+    qttools
+    installShellFiles
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://qcad.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ yvesf ];
-    platforms = qt5.qtbase.meta.platforms;
+    platforms = qtbase.meta.platforms;
   };
 }

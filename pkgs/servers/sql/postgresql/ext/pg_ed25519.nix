@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, postgresql }:
+{ lib, stdenv, fetchurl, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg_ed25519";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PostgreSQL extension for signing and verifying ed25519 signatures";
     homepage = "https://gitlab.com/dwagin/pg_ed25519";
     maintainers = [ maintainers.renzo ];

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''net_dot_didierverna_dot_asdf-flv'';
-  version = ''asdf-flv-version-2.1'';
+  baseName = "net_dot_didierverna_dot_asdf-flv";
+  version = "asdf-flv-version-2.1";
 
-  description = ''ASDF extension to provide support for file-local variables.'';
+  description = "ASDF extension to provide support for file-local variables.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/asdf-flv/2016-04-21/asdf-flv-version-2.1.tgz'';
-    sha256 = ''12k0d4xyv6s9vy6gq18p8c9bm334jsfjly22lhg680kx2zr7y0lc'';
+    url = "http://beta.quicklisp.org/archive/asdf-flv/2016-04-21/asdf-flv-version-2.1.tgz";
+    sha256 = "12k0d4xyv6s9vy6gq18p8c9bm334jsfjly22lhg680kx2zr7y0lc";
   };
 
   packageName = "net.didierverna.asdf-flv";

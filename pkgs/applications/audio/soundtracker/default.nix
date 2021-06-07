@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , autoconf
@@ -6,18 +6,21 @@
 , alsaLib
 , SDL
 , jack2
+, audiofile
 , goocanvas # graphical envelope editing
 }:
 
 stdenv.mkDerivation rec {
   pname = "soundtracker";
-  version = "1.0.0.1";
+  version = "1.0.1";
 
   src = fetchurl {
     # Past releases get moved to the "old releases" directory.
-    # Only the latest release (currently a prerelease) is at the top level.
-    url = "mirror://sourceforge/soundtracker/old%20releases/soundtracker-${version}.tar.bz2";
-    sha256 = "1ggliswz5ngmlnrnyhv3x1arh5w77an0ww9p53cddp9aas5q11jm";
+    # Only the latest release is at the top level.
+    # Nonetheless, only the name of the file seems to affect which file is
+    # downloaded, so this path should be fine both for old and current releases.
+    url = "mirror://sourceforge/soundtracker/soundtracker-${version}.tar.bz2";
+    sha256 = "0m5iiqccch6w53khpvdldz59zymw13vmwqc5ggx3sn41riwbd6ks";
   };
 
   nativeBuildInputs = [
@@ -28,10 +31,13 @@ stdenv.mkDerivation rec {
     gtk2
     SDL
     jack2
+    audiofile
     goocanvas
-  ] ++ stdenv.lib.optional stdenv.isLinux alsaLib;
+  ] ++ lib.optional stdenv.isLinux alsaLib;
 
-  meta = with stdenv.lib; {
+  hardeningDisable = [ "format" ];
+
+  meta = with lib; {
     description = "A music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
     longDescription = ''
       SoundTracker is a pattern-oriented music editor (similar to the DOS

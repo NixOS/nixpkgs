@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -16,7 +17,7 @@
 , libnotify
 , libunity
 , pango
-, plank
+, elementary-dock
 , bamf
 , sqlite
 , libdbusmenu-gtk3
@@ -30,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.4.3";
+  version = "4.5.0";
 
   repoName = "files";
 
@@ -40,11 +41,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "14i5icgpsy78mr7w6cav38p7shfk784b6nlxz9y72rbcxky036yc";
+    sha256 = "sha256-wtQW1poX791DAlSFdVV9psnCfBDeVXI2fDZ2GcvvNn8=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     glib-networking
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
+    elementary-dock
     elementary-icon-theme
     granite
     gtk3
@@ -74,13 +76,12 @@ stdenv.mkDerivation rec {
     libnotify
     libunity
     pango
-    plank
     sqlite
     zeitgeist
   ];
 
   patches = [
-    ./hardcode-gsettings.patch
+    ./0001-filechooser-module-hardcode-gsettings-for-nixos.patch
   ];
 
   postPatch = ''
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
       --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File browser designed for elementary OS";
     homepage = "https://github.com/elementary/files";
     license = licenses.lgpl3;

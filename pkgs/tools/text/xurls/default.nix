@@ -1,4 +1,4 @@
-{ buildGoPackage, stdenv, fetchFromGitHub }:
+{ buildGoPackage, lib, fetchFromGitHub }:
 
 buildGoPackage rec {
   version = "2.2.0";
@@ -14,7 +14,7 @@ buildGoPackage rec {
   goPackagePath = "mvdan.cc/xurls/v2";
   subPackages = [ "cmd/xurls" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extract urls from text";
     homepage = "https://github.com/mvdan/xurls";
     maintainers = with maintainers; [ koral ];

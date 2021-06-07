@@ -1,12 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests}:
+{ lib, buildPythonPackage, fetchPypi, requests, isPy27
+}:
 
 buildPythonPackage rec {
   pname = "update_checker";
-  version = "0.17";
+  version = "0.18.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qhfn5fjjab50gbnj2053wdfppzkydqgapfz35ymrm1vysvqvvrd";
+    sha256 = "6a2d45bb4ac585884a6b03f9eade9161cedd9e8111545141e9aa9058932acb13";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -14,7 +16,7 @@ buildPythonPackage rec {
   # requires network
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python module that will check for package updates";
     homepage = "https://github.com/bboe/update_checker";
     license = licenses.bsd2;

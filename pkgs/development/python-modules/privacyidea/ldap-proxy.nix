@@ -1,8 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, twisted, ldaptor, configobj }:
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, twisted, ldaptor, configobj }:
 
 buildPythonPackage rec {
   pname = "privacyidea-ldap-proxy";
   version = "0.6.1";
+
+  # https://github.com/privacyidea/privacyidea-ldap-proxy/issues/50
+  disabled = isPy3k;
 
   src = fetchFromGitHub {
     owner = "privacyidea";

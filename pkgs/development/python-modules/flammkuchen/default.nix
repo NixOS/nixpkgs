@@ -1,4 +1,4 @@
-{ lib, pkgs, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , numpy
 , scipy
 , tables

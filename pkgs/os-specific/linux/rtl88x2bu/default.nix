@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, kernel, bc }:
+{ lib, stdenv, fetchFromGitHub, kernel, bc }:
 
 stdenv.mkDerivation rec {
-  name = "rtl88x2bu-${kernel.version}-${version}";
-  version = "unstable-2020-05-19";
+  pname = "rtl88x2bu";
+  version = "${kernel.version}-unstable-2021-05-18";
 
   src = fetchFromGitHub {
-    owner = "cilynx";
-    repo = "rtl88x2BU";
-    rev = "0f159d7cd937a12b818121cb1f1c4910bd1adc72";
-    sha256 = "0flqnvzfdb4wsiiqv9vf5gfwd5fgpjvhs9zhqknnv1cmp8msgw6y";
+    owner = "morrownr";
+    repo = "88x2bu";
+    rev = "80b03962e33f86f99e898305d8d597140503de03";
+    sha256 = "sha256-C7XOpKgwxM9UbfW3wHteInTmAUM3FFqN1MHMKxP8gBA=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bc ];
   buildInputs = kernel.moduleBuildDependencies;
 
-  prePatch = ''
+ prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
       --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Realtek rtl88x2bu driver";
-    homepage = "https://github.com/cilynx/rtl88x2bu";
-    license = licenses.gpl2;
+    homepage = "https://github.com/morrownr/88x2bu";
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.ralith ];
   };

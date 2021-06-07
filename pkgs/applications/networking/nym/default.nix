@@ -1,44 +1,32 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , openssl
-, libredirect
-, writeText
+, Security
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nym";
-  version = "0.7.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym";
     rev = "v${version}";
-    sha256 = "05bxrpqwwf9spydac0q8sly65q8f1nk13i5fy3p5adr1phzxdnr8";
+    sha256 = "sha256-7x+B+6T0cnEOjXevA5n1k/SY1Q2tcu0bbZ9gIGoljw0=";
   };
 
-  cargoSha256 = "0mh8cwia86bm68b0wcrmnsq1af5cp6kj1j81nwxb03awnqpxc34n";
+  cargoSha256 = "0a7yja0ihjc66fqlshlaxpnpcpdy7h7gbv6120w2cr605qdnqvkx";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
+  patches = [ ./ignore-networking-tests.patch ];
   checkType = "debug";
-
-  /*
-  Nym's test presence::converting_mixnode_presence_into_topology_mixnode::it_returns_resolved_ip_on_resolvable_hostname tries to resolve nymtech.net.
-  Since there is no external DNS resolution available in the build sandbox, we point cargo and its children (that's what we remove the 'unsetenv' call for) to a hosts file in which we statically resolve nymtech.net.
-  */
-  preCheck = ''
-    export LD_PRELOAD=${libredirect.overrideAttrs (drv: {
-      postPatch = "sed -i -e /unsetenv/d libredirect.c";
-    })}/lib/libredirect.so
-    export NIX_REDIRECTS=/etc/hosts=${writeText "nym_resolve_test_hosts" "127.0.0.1 nymtech.net"}
-  '';
-
-  postCheck = "unset NIX_REDIRECTS LD_PRELOAD";
-
 
   passthru.updateScript = ./update.sh;
 
@@ -51,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://nymtech.net";
     license = licenses.asl20;
     maintainers = [ maintainers.ehmry ];
-    platforms = with platforms; intersectLists (linux ++ darwin) (concatLists [ x86 x86_64 aarch64 arm ]);
+    platforms = platforms.all;
   };
 }

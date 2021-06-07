@@ -17,16 +17,6 @@ fi
 
 source @out@/nix-support/utils.bash
 
-# Flirting with a layer violation here.
-if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
-    source @bintools@/nix-support/add-flags.sh
-fi
-
-# Put this one second so libc ldflags take priority.
-if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
-    source @out@/nix-support/add-flags.sh
-fi
-
 
 # Parse command line options and set several variables.
 # For instance, figure out if linker flags should be passed.
@@ -35,8 +25,11 @@ dontLink=0
 nonFlagArgs=0
 cc1=0
 # shellcheck disable=SC2193
-[[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
-cppInclude=1
+[[ "@prog@" = *++ ]] && isCxx=1 || isCxx=0
+cxxInclude=1
+cxxLibrary=1
+cInclude=1
+setDynamicLinker=1
 
 expandResponseParams "$@"
 declare -i n=0
@@ -58,14 +51,17 @@ while (( "$n" < "$nParams" )); do
         dontLink=1
     elif [[ "$p" = -x && "$p2" = *-header ]]; then
         dontLink=1
-    elif [[ "$p" = -x && "$p2" = c++* && "$isCpp" = 0 ]]; then
-        isCpp=1
+    elif [[ "$p" = -x && "$p2" = c++* && "$isCxx" = 0 ]]; then
+        isCxx=1
     elif [ "$p" = -nostdlib ]; then
-        isCpp=-1
+        cxxLibrary=0
     elif [ "$p" = -nostdinc ]; then
-        cppInclude=0
+        cInclude=0
+        cxxInclude=0
     elif [ "$p" = -nostdinc++ ]; then
-        cppInclude=0
+        cxxInclude=0
+    elif [[ "$p" = -static || "$p" = -static-pie ]]; then
+        setDynamicLinker=0
     elif [[ "$p" != -?* ]]; then
         # A dash alone signifies standard input; it is not a flag
         nonFlagArgs=1
@@ -111,6 +107,15 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     params=(${rest+"${rest[@]}"})
 fi
 
+# Flirting with a layer violation here.
+if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+    source @bintools@/nix-support/add-flags.sh
+fi
+
+# Put this one second so libc ldflags take priority.
+if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+    source @out@/nix-support/add-flags.sh
+fi
 
 # Clear march/mtune=native -- they bring impurity.
 if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
@@ -127,11 +132,13 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     params=(${rest+"${rest[@]}"})
 fi
 
-if [[ "$isCpp" = 1 ]]; then
-    if [[ "$cppInclude" = 1 ]]; then
-        NIX_CFLAGS_COMPILE_@suffixSalt@+=" ${NIX_CXXSTDLIB_COMPILE_@suffixSalt@:-@default_cxx_stdlib_compile@}"
+if [[ "$isCxx" = 1 ]]; then
+    if [[ "$cxxInclude" = 1 ]]; then
+        NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
     fi
-    NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
+    if [[ "$cxxLibrary" = 1 ]]; then
+        NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
+    fi
 fi
 
 source @out@/nix-support/add-hardening.sh
@@ -151,6 +158,9 @@ if [ "$dontLink" != 1 ]; then
     for i in $NIX_LDFLAGS_BEFORE_@suffixSalt@; do
         extraBefore+=("-Wl,$i")
     done
+    if [[ "$setDynamicLinker" = 1 && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
+        extraBefore+=("-Wl,-dynamic-linker=$NIX_DYNAMIC_LINKER_@suffixSalt@")
+    fi
     for i in $NIX_LDFLAGS_@suffixSalt@; do
         if [ "${i:0:3}" = -L/ ]; then
             extraAfter+=("$i")
@@ -191,7 +201,15 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-exec @prog@ \
-    ${extraBefore+"${extraBefore[@]}"} \
-    ${params+"${params[@]}"} \
-    ${extraAfter+"${extraAfter[@]}"}
+
+if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+    exec @prog@ @<(printf "%q\n" \
+       ${extraBefore+"${extraBefore[@]}"} \
+       ${params+"${params[@]}"} \
+       ${extraAfter+"${extraAfter[@]}"})
+else
+    exec @prog@ \
+       ${extraBefore+"${extraBefore[@]}"} \
+       ${params+"${params[@]}"} \
+       ${extraAfter+"${extraAfter[@]}"}
+fi

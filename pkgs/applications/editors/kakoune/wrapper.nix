@@ -1,44 +1,31 @@
-{ stdenv, bash }:
-with stdenv.lib;
-
-kakoune:
+{ symlinkJoin, makeWrapper, kakoune, plugins ? [], configure ? {} }:
 
 let
-  getPlugins = { plugins ? [] }: plugins;
+  # "plugins" is the preferred way, but some configurations may be
+  # using "configure.plugins", so accept both
+  requestedPlugins = plugins ++ (configure.plugins or []);
 
-  wrapper = { configure ? {} }:
-  stdenv.mkDerivation rec {
-    pname = "kakoune";
-    version = getVersion kakoune;
+in
+  symlinkJoin {
+    name = "kakoune-${kakoune.version}";
 
-    src = ./.;
-    buildCommand = ''
-      mkdir -p $out/share/kak
-      for plugin in ${strings.escapeShellArgs (getPlugins configure)}; do
-        if [[ -d $plugin/share/kak/autoload ]]; then
-          find "$plugin/share/kak/autoload" -type f -name '*.kak'| while read rcfile; do
-            printf 'source "%s"\n' "$rcfile"
-          done
-        fi
-      done >>$out/share/kak/plugins.kak
+    nativeBuildInputs = [ makeWrapper ];
 
-      mkdir -p $out/bin
-      substitute ${src}/wrapper.sh $out/bin/kak \
-        --subst-var-by bash "${bash}" \
-        --subst-var-by kakoune "${kakoune}" \
-        --subst-var-by out "$out"
-      chmod +x $out/bin/kak
+    paths = [ kakoune ] ++ requestedPlugins;
+
+    postBuild = ''
+      # location of kak binary is used to find ../share/kak/autoload,
+      # unless explicitly overriden with KAKOUNE_RUNTIME
+      rm "$out/bin/kak"
+      makeWrapper "${kakoune}/bin/kak" "$out/bin/kak" --set KAKOUNE_RUNTIME "$out/share/kak"
+
+      # currently kakoune ignores doc files if they are symlinks, so workaround by
+      # copying doc files over, so they become regular files...
+      mkdir "$out/DELETE_ME"
+      mv "$out/share/kak/doc" "$out/DELETE_ME"
+      cp -r --dereference "$out/DELETE_ME/doc" "$out/share/kak"
+      rm -Rf "$out/DELETE_ME"
     '';
 
-    preferLocalBuild = true;
-    buildInputs = [ bash kakoune ];
-    passthru = { unwrapped = kakoune; };
-
-    meta = kakoune.meta // {
-      # prefer wrapper over the package
-      priority = (kakoune.meta.priority or 0) - 1;
-      hydraPlatforms = [];
-    };
-  };
-in
-  makeOverridable wrapper
+    meta = kakoune.meta // { priority = (kakoune.meta.priority or 0) - 1; };
+  }

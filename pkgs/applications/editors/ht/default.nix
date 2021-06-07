@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc7.patch ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-narrowing" ];
+
   meta = with lib; {
     description = "File editor/viewer/analyzer for executables";
     homepage = "http://hte.sourceforge.net";

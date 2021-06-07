@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , python-dateutil
-, pytest
+, pytestCheckHook
 , pytz
 , natsort
 , tzlocal
@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "croniter";
-  version = "0.3.32";
+  version = "1.0.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d5bf45f12861c1b718c51bd6e2ab056da94e651bf22900658421cdde0ff7088";
+    sha256 = "sha256-V/Nt9PWhwxu/ULv/o1UWEsGfYVarHoji5CNCzLufm5o=";
   };
 
   propagatedBuildInputs = [
@@ -23,14 +23,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytz
     tzlocal
   ];
 
-  checkPhase = ''
-    pytest src/croniter
-  '';
+  pythonImportsCheck = [ "croniter" ];
 
   meta = with lib; {
     description = "croniter provides iteration for datetime object with cron like format";

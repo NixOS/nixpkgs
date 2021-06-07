@@ -11,6 +11,8 @@ let
   in {
     inherit mkDerivation;
 
+    lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
+
     agda = withPackages [] // { inherit withPackages; };
 
     standard-library = callPackage ../development/libraries/agda/standard-library {
@@ -24,5 +26,10 @@ let
     agda-categories = callPackage ../development/libraries/agda/agda-categories { };
 
     cubical = callPackage ../development/libraries/agda/cubical { };
+
+    functional-linear-algebra = callPackage
+      ../development/libraries/agda/functional-linear-algebra { };
+
+    generic = callPackage ../development/libraries/agda/generic { };
   };
 in mkAgdaPackages Agda

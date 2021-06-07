@@ -1,4 +1,5 @@
 { cmake
+, lib
 , stdenv
 , fetchurl
 , bash
@@ -18,6 +19,7 @@
 , fetchFromGitHub
 , makeWrapper
 , runtimeShell
+, libnsl
 } @args:
 
 let

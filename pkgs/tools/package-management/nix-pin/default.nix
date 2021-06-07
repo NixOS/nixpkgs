@@ -9,7 +9,8 @@ let self = stdenv.mkDerivation rec {
     rev = "version-${version}";
     sha256 = "1pccvc0iqapms7kidrh09g5fdx44x622r5l9k7bkmssp3v4c68vy";
   };
-  buildInputs = [ python3 mypy makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3 mypy ];
   checkPhase = ''
     mypy bin/*
   '';
@@ -42,7 +43,7 @@ let self = stdenv.mkDerivation rec {
           --modify-nix default.nix
       '';
     };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/timbertson/nix-pin";
     description = "nixpkgs development utility";
     license = licenses.mit;

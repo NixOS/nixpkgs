@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1yw0gph4zfg8w4343882l6b9lggwyak2zz8ic1l1m2m44p3aq169";
 
+  doCheck = false;
+
   meta = with lib; {
     description = ''Displays "The Matrix" in a terminal'';
     license = licenses.bsd2;

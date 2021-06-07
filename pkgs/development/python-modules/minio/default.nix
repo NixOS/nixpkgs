@@ -8,16 +8,17 @@
 , pytz
 , pytestCheckHook
 , urllib3
+, certifi
 }:
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "5.0.10";
+  version = "7.0.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6ecb7637a35f806733e9d112eacfa599a58d7c3d4698fda2b5c86fff5d34b417";
+    sha256 = "f2f6022cfe4694d946972efef2a752f87d08cc030940faa50a640088772953c8";
   };
 
   propagatedBuildInputs = [
@@ -26,9 +27,12 @@ buildPythonPackage rec {
     python-dateutil
     pytz
     urllib3
+    certifi
   ];
 
   checkInputs = [ faker mock nose pytestCheckHook ];
+  # example credentials aren't present
+  pytestFlagsArray = [ "--ignore=tests/unit/credentials_test.py" ];
 
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";

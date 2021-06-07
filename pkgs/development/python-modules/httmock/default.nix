@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, requests }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests }:
 
 buildPythonPackage rec {
   pname   = "httmock";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   checkInputs = [ requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A mocking library for requests";
     homepage    = "https://github.com/patrys/httmock";
     license     = licenses.asl20;

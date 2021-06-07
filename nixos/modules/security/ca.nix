@@ -10,15 +10,10 @@ let
     blacklist = cfg.caCertificateBlacklist;
   };
 
-  caCertificates = pkgs.runCommand "ca-certificates.crt"
-    { files =
-        cfg.certificateFiles ++
-        [ (builtins.toFile "extra.crt" (concatStringsSep "\n" cfg.certificates)) ];
-      preferLocalBuild = true;
-     }
-    ''
-      cat $files > $out
-    '';
+  caCertificates = pkgs.runCommand "ca-certificates.crt" {
+    files = cfg.certificateFiles ++ [ (builtins.toFile "extra.crt" (concatStringsSep "\n" cfg.certificates)) ];
+    preferLocalBuild = true;
+  } "awk 1 $files > $out";  # awk ensures a newline between each pair of consecutive files
 
 in
 

@@ -3,120 +3,126 @@
 with lib;
 
 let
-
   cfg = config.services.rsyncd;
-
-  motdFile = builtins.toFile "rsyncd-motd" cfg.motd;
-
-  foreach = attrs: f:
-    concatStringsSep "\n" (mapAttrsToList f attrs);
-
-  cfgFile = ''
-    ${optionalString (cfg.motd != "") "motd file = ${motdFile}"}
-    ${optionalString (cfg.address != "") "address = ${cfg.address}"}
-    ${optionalString (cfg.port != 873) "port = ${toString cfg.port}"}
-    ${cfg.extraConfig}
-    ${foreach cfg.modules (name: module: ''
-      [${name}]
-      ${foreach module (k: v:
-        "${k} = ${v}"
-      )}
-    '')}
-  '';
-in
-
-{
+  settingsFormat = pkgs.formats.ini { };
+  configFile = settingsFormat.generate "rsyncd.conf" cfg.settings;
+in {
   options = {
     services.rsyncd = {
 
       enable = mkEnableOption "the rsync daemon";
 
-      motd = mkOption {
-        type = types.str;
-        default = "";
-        description = ''
-          Message of the day to display to clients on each connect.
-          This usually contains site information and any legal notices.
-        '';
-      };
-
       port = mkOption {
         default = 873;
-        type = types.int;
+        type = types.port;
         description = "TCP port the daemon will listen on.";
       };
 
-      address = mkOption {
-        default = "";
-        example = "192.168.1.2";
+      settings = mkOption {
+        inherit (settingsFormat) type;
+        default = { };
+        example = {
+          global = {
+            uid = "nobody";
+            gid = "nobody";
+            "use chroot" = true;
+            "max connections" = 4;
+          };
+          ftp = {
+            path = "/var/ftp/./pub";
+            comment = "whole ftp area";
+          };
+          cvs = {
+            path = "/data/cvs";
+            comment = "CVS repository (requires authentication)";
+            "auth users" = [ "tridge" "susan" ];
+            "secrets file" = "/etc/rsyncd.secrets";
+          };
+        };
         description = ''
-          IP address the daemon will listen on; rsyncd will listen on
-          all addresses if this is not specified.
+          Configuration for rsyncd. See
+          <citerefentry><refentrytitle>rsyncd.conf</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry>.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-            Lines of configuration to add to rsyncd globally.
-            See <command>man rsyncd.conf</command> for options.
-          '';
-      };
-
-      modules = mkOption {
-        default = {};
-        description = ''
-            A set describing exported directories.
-            See <command>man rsyncd.conf</command> for options.
-          '';
-        type = types.attrsOf (types.attrsOf types.str);
-        example = literalExample ''
-          { srv =
-             { path = "/srv";
-               "read only" = "yes";
-               comment = "Public rsync share.";
-             };
-          }
-        '';
-      };
-
-      user = mkOption {
-        type = types.str;
-        default = "root";
-        description = ''
-          The user to run the daemon as.
-          By default the daemon runs as root.
-        '';
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "root";
-        description = ''
-          The group to run the daemon as.
-          By default the daemon runs as root.
-        '';
+      socketActivated = mkOption {
+        default = false;
+        type = types.bool;
+        description =
+          "If enabled Rsync will be socket-activated rather than run persistently.";
       };
 
     };
   };
 
-  ###### implementation
+  imports = (map (option:
+    mkRemovedOptionModule [ "services" "rsyncd" option ]
+    "This option was removed in favor of `services.rsyncd.settings`.") [
+      "address"
+      "extraConfig"
+      "motd"
+      "user"
+      "group"
+    ]);
 
   config = mkIf cfg.enable {
 
-    environment.etc."rsyncd.conf".text = cfgFile;
+    services.rsyncd.settings.global.port = toString cfg.port;
 
-    systemd.services.rsyncd = {
-      description = "Rsync daemon";
-      wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ config.environment.etc."rsyncd.conf".source ];
-      serviceConfig = {
-        ExecStart = "${pkgs.rsync}/bin/rsync --daemon --no-detach";
-        User = cfg.user;
-        Group = cfg.group;
+    systemd = let
+      serviceConfigSecurity = {
+        ProtectSystem = "full";
+        PrivateDevices = "on";
+        NoNewPrivileges = "on";
+      };
+    in {
+      services.rsync = {
+        enable = !cfg.socketActivated;
+        aliases = [ "rsyncd" ];
+
+        description = "fast remote file copy program daemon";
+        after = [ "network.target" ];
+        documentation = [ "man:rsync(1)" "man:rsyncd.conf(5)" ];
+
+        serviceConfig = serviceConfigSecurity // {
+          ExecStart =
+            "${pkgs.rsync}/bin/rsync --daemon --no-detach --config=${configFile}";
+          RestartSec = 1;
+        };
+
+        wantedBy = [ "multi-user.target" ];
+      };
+
+      services."rsync@" = {
+        description = "fast remote file copy program daemon";
+        after = [ "network.target" ];
+
+        serviceConfig = serviceConfigSecurity // {
+          ExecStart = "${pkgs.rsync}/bin/rsync --daemon --config=${configFile}";
+          StandardInput = "socket";
+          StandardOutput = "inherit";
+          StandardError = "journal";
+        };
+      };
+
+      sockets.rsync = {
+        enable = cfg.socketActivated;
+
+        description = "socket for fast remote file copy program daemon";
+        conflicts = [ "rsync.service" ];
+
+        listenStreams = [ (toString cfg.port) ];
+        socketConfig.Accept = true;
+
+        wantedBy = [ "sockets.target" ];
       };
     };
+
   };
+
+  meta.maintainers = with lib.maintainers; [ ehmry ];
+
+  # TODO: socket activated rsyncd
+
 }

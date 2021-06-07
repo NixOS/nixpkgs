@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, ipaddress, isPy27 }:
+{ lib, buildPythonPackage, fetchFromGitHub, ipaddress, isPy27 }:
 
 buildPythonPackage rec {
   pname = "anonip";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkPhase = "python tests.py";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/DigitaleGesellschaft/Anonip";
     description = "A tool to anonymize IP-addresses in log-files";
     license = licenses.bsd3;

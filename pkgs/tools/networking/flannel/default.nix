@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   pname = "flannel";
-  version = "0.12.0";
+  version = "0.13.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/coreos/flannel";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "coreos";
     repo = "flannel";
-    sha256 = "04g7rzgyi3xs3sf5p1a9dmd08crdrz6y1b02ziv3444qk40jyswd";
+    sha256 = "0mmswnaybwpf18h832haapcs5b63wn5w2hax0smm3inldiggsbw8";
   };
 
   meta = {

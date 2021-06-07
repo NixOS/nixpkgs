@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchurl }:
+{ lib, buildPythonPackage, isPy3k, fetchurl }:
 
 buildPythonPackage rec {
   pname = "umemcache";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultra fast memcache client written in highly optimized C++ with Python bindings";
     homepage = "https://github.com/esnme/ultramemcache";
     license = licenses.bsdOriginal;

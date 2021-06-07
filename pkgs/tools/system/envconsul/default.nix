@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "envconsul";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "03cgxkyyynr067dg5b0lhvaxn60318fj9fh55p1n43vj5nrzgnbc";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/hashicorp/envconsul/";
     description = "Read and set environmental variables for processes from Consul";
     platforms = platforms.linux ++ platforms.darwin;

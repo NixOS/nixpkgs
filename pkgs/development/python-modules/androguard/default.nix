@@ -1,13 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi, future, networkx, pygments, lxml, colorama, matplotlib,
-  asn1crypto, click, pydot, ipython, pyqt5, pyperclip }:
+{ lib
+, fetchpatch
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, networkx
+, pygments
+, lxml
+, colorama
+, matplotlib
+, asn1crypto
+, click
+, pydot
+, ipython
+, pyqt5
+, pyperclip
+, nose
+, nose-timer
+, mock
+, python_magic
+, codecov
+, coverage
+, qt5
+# This is usually used as a library, and it'd be a shame to force the gui
+# libraries to the closure if gui is not desired.
+, withGui ? false
+# Tests take a very long time, and currently fail, but next release' tests
+# shouldn't fail
+, doCheck ? false
+}:
 
 buildPythonPackage rec {
   version = "3.3.5";
   pname = "androguard";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f0655ca3a5add74c550951e79bd0bebbd1c5b239178393d30d8db0bd3202cda2";
+  # No tests in pypi tarball
+  src = fetchFromGitHub {
+    repo = pname;
+    owner = pname;
+    rev = "v${version}";
+    sha256 = "0zc8m1xnkmhz2v12ddn47q0c01p3sbna2v5npfxhcp88szswlr9y";
   };
 
   propagatedBuildInputs = [
@@ -21,12 +52,37 @@ buildPythonPackage rec {
     click
     pydot
     ipython
+  ] ++ lib.optionals withGui [
     pyqt5
     pyperclip
   ];
 
-  # Tests are not shipped on PyPI.
-  doCheck = false;
+  checkInputs = [
+    pyqt5
+    pyperclip
+    nose
+    nose-timer
+    codecov
+    coverage
+    mock
+    python_magic
+  ];
+  inherit doCheck;
+
+  nativeBuildInputs = lib.optionals withGui [ qt5.wrapQtAppsHook ];
+
+  # If it won't be verbose, you'll see nothing going on for a long time.
+  checkPhase = ''
+    runHook preCheck
+
+    nosetests --verbosity=3
+
+    runHook postCheck
+  '';
+
+  preFixup = lib.optionalString withGui ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   meta = {
     description = "Tool and python library to interact with Android Files";

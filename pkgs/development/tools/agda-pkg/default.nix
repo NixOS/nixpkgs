@@ -4,13 +4,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "agda-pkg";
-  version = "0.1.50";
+  version = "0.1.51";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wpw90kw3danw91m3jzfdn7zmclimmiz74f77mpij9b1w6wvhm11";
+    sha256 = "ee370889a1558caf45930d9f898dbe248048078e1e7e3ee17382bf574dc795f2";
   };
 
   # Checks need internet access, so we just check the program executes

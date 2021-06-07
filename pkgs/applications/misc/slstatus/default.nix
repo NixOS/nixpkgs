@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, pkgconfig, writeText, libX11, conf ? null, patches ? [] }:
+{ lib, stdenv, fetchgit, pkg-config, writeText, libX11, conf ? null, patches ? [] }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "slstatus";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 ];
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tools.suckless.org/slstatus/";
     description = "status monitor for window managers that use WM_NAME like dwm";
     license = licenses.isc;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
     platforms = platforms.linux;
   };
 }

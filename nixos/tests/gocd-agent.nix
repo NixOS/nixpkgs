@@ -11,7 +11,7 @@ in
 
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "gocd-agent";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ grahamc swarren83 ];
 
     # gocd agent needs to register with the autoregister key created on first server startup,
@@ -42,7 +42,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].uuid"
     )
     agent.succeed(
-        "curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].agent_state | grep -q Idle"
+        "curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].agent_state | grep Idle"
     )
   '';
 })

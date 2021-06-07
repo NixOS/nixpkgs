@@ -1,18 +1,24 @@
-{ stdenv, fetchFromGitHub, callPackage, makeWrapper
+{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper
 , clang, llvm, libbfd, libopcodes, libunwind, libblocksruntime
 }:
 
 let
   honggfuzz = stdenv.mkDerivation rec {
     pname = "honggfuzz";
-    version = "2.2";
+    version = "2.4";
 
     src = fetchFromGitHub {
       owner = "google";
       repo = pname;
-      rev = "${version}";
-      sha256 = "0ycpx087mhv5s7w01chg2b6rfb3zgfpp9in0x73kpv7y4dcvg7gw";
+      rev = version;
+      sha256 = "sha256-sU5lmlfmvVWo4K96sI+xQsPfTMd1wsLbihcKI4aTj6g=";
     };
+
+    postPatch = ''
+      substituteInPlace hfuzz_cc/hfuzz-cc.c \
+        --replace '"clang' '"${clang}/bin/clang'
+    '';
+
     enableParallelBuilding = true;
 
     nativeBuildInputs = [ makeWrapper ];
@@ -37,9 +43,9 @@ let
         feedback-based coverage metrics.
       '';
       homepage    = "https://honggfuzz.dev/";
-      license     = stdenv.lib.licenses.asl20;
+      license     = lib.licenses.asl20;
       platforms   = ["x86_64-linux"];
-      maintainers = with stdenv.lib.maintainers; [ cpu ];
+      maintainers = with lib.maintainers; [ cpu ];
     };
   };
 in honggfuzz

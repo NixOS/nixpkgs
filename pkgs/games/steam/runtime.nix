@@ -1,14 +1,18 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl
+
+# for update script
+, writeShellScript, curl, nix-update
+}:
 
 stdenv.mkDerivation rec {
 
-  name = "steam-runtime";
+  pname = "steam-runtime";
   # from https://repo.steampowered.com/steamrt-images-scout/snapshots/
-  version = "0.20200417.0";
+  version = "0.20210317.0";
 
   src = fetchurl {
     url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/steam-runtime.tar.xz";
-    sha256 = "0d4dfl6i31i8187wj8rr9yvmrg32bx96bsgs2ya21b00czf070sy";
+    sha256 = "061z2r33n2017prmhdxm82cly3qp3bma2q70pqs57adl65yvg7vw";
     name = "scout-runtime-${version}.tar.gz";
   };
 
@@ -17,7 +21,14 @@ stdenv.mkDerivation rec {
     tar -C $out --strip=1 -x -f $src
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = writeShellScript "update.sh" ''
+      version=$(${curl}/bin/curl https://repo.steampowered.com/steamrt-images-scout/snapshots/latest-steam-client-general-availability/VERSION.txt)
+      ${nix-update}/bin/nix-update --version "$version" steamPackages.steam-runtime
+    '';
+  };
+
+  meta = with lib; {
     description = "The official runtime used by Steam";
     homepage = "https://github.com/ValveSoftware/steam-runtime";
     license = licenses.unfreeRedistributable; # Includes NVIDIA CG toolkit

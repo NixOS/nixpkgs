@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "i3-wk-switch";
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     cp i3-wk-switch.py "$out/bin/i3-wk-switch"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XMonad-like workspace switching for i3 and sway";
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;

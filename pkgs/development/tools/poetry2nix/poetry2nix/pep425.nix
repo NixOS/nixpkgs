@@ -1,6 +1,7 @@
-{ lib, stdenv, python, isLinux ? stdenv.isLinux }:
+{ lib, stdenv, poetryLib, python, isLinux ? stdenv.isLinux }:
 let
   inherit (lib.strings) hasSuffix hasInfix splitString removeSuffix;
+  inherit (poetryLib) targetMachine;
 
   # The 'cpxy" as determined by `python.version`
   #
@@ -62,7 +63,7 @@ let
   selectWheel = files:
     let
       filesWithoutSources = (builtins.filter (x: hasSuffix ".whl" x.file) files);
-      isPyAbiCompatible = pyabi: x: x == "none" || lib.hasPrefix pyabi x || (
+      isPyAbiCompatible = pyabi: x: x == "none" || lib.hasPrefix pyabi x || lib.hasPrefix x pyabi || (
         # The CPython stable ABI is abi3 as in the shared library suffix.
         python.passthru.implementation == "cpython" &&
           builtins.elemAt (lib.splitString "." python.version) 0 == "3" &&
@@ -71,12 +72,17 @@ let
       withPython = ver: abi: x: (isPyVersionCompatible ver x.pyVer) && (isPyAbiCompatible abi x.abi);
       withPlatform =
         if isLinux
-        then (
-          x: x.platform == "manylinux1_${stdenv.platform.kernelArch}"
-            || x.platform == "manylinux2010_${stdenv.platform.kernelArch}"
-            || x.platform == "manylinux2014_${stdenv.platform.kernelArch}"
-            || x.platform == "any"
-        )
+        then
+          if targetMachine != null
+          then
+            (
+              x: x.platform == "manylinux1_${targetMachine}"
+                || x.platform == "manylinux2010_${targetMachine}"
+                || x.platform == "manylinux2014_${targetMachine}"
+                || x.platform == "any"
+            )
+          else
+            (x: x.platform == "any")
         else (x: hasInfix "macosx" x.platform || x.platform == "any");
       filterWheel = x:
         let
@@ -86,7 +92,7 @@ let
       filtered = builtins.filter filterWheel filesWithoutSources;
       choose = files:
         let
-          osxMatches = [ "10_12" "10_11" "10_10" "10_9" "any" ];
+          osxMatches = [ "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
           linuxMatches = [ "manylinux1_" "manylinux2010_" "manylinux2014_" "any" ];
           chooseLinux = x: lib.take 1 (findBestMatches linuxMatches x);
           chooseOSX = x: lib.take 1 (findBestMatches osxMatches x);

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, fetchgit
-, pkgconfig, makeWrapper, libtool, autoconf, automake, fetchpatch
+{ lib, stdenv, fetchurl, fetchgit
+, pkg-config, makeWrapper, libtool, autoconf, automake, fetchpatch
 , coreutils, libxml2, gnutls, perl, python2, attr
-, iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
+, iproute2, iptables, readline, lvm2, util-linux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, glib
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, glib, rpcsvc-proto, libtirpc
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
 }:
 
-with stdenv.lib;
+with lib;
 
 # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 let
@@ -33,15 +33,15 @@ in stdenv.mkDerivation rec {
         fetchSubmodules = true;
       };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config rpcsvc-proto ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
-    libpciaccess lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl attr parted
+    libpciaccess lvm2 util-linux systemd libnl numad zfs
+    libapparmor libcap_ng numactl attr parted libtirpc
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
   ] ++ optionals enableIscsi [
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     ${ optionalString (!buildFromTarball) "./bootstrap --no-git --gnulib-srcdir=$(pwd)/.gnulib" }
-    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+    PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute2 iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
@@ -76,6 +76,7 @@ in stdenv.mkDerivation rec {
     "QEMU_BRIDGE_HELPER=/run/wrappers/bin/qemu-bridge-helper"
     "QEMU_PR_HELPER=/run/libvirt/nix-helpers/qemu-pr-helper"
     "EBTABLES_PATH=${ebtables}/bin/ebtables-legacy"
+    "CFLAGS=-I${libtirpc.dev}/include/tirpc"
     "--with-attr"
     "--with-apparmor"
     "--with-secdriver-apparmor"
@@ -100,7 +101,7 @@ in stdenv.mkDerivation rec {
 
 
   postInstall = let
-    binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
+    binPath = [ iptables iproute2 pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
   in ''
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_BOOT=start'       'ON_BOOT=''${ON_BOOT:-start}' \
@@ -132,5 +133,10 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz globin ];
+    knownVulnerabilities = [
+      "https://security.libvirt.org/2019/0008.html"
+      "https://security.libvirt.org/2019/0009.html"
+      "https://security.libvirt.org/2020/0001.html"
+    ];
   };
 }

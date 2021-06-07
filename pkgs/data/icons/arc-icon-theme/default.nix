@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gtk3, gnome3, moka-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk3, gnome, moka-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "arc-icon-theme";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     moka-icon-theme
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
   ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postFixup = "gtk-update-icon-cache $out/share/icons/Arc";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Arc icon theme";
     homepage = "https://github.com/horst3180/arc-icon-theme";
     license = licenses.gpl3;

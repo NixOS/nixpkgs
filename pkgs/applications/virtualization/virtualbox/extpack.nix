@@ -12,7 +12,7 @@ fetchurl rec {
     # Manually sha256sum the extensionPack file, must be hex!
     # Thus do not use `nix-prefetch-url` but instead plain old `sha256sum`.
     # Checksums can also be found at https://www.virtualbox.org/download/hashes/${version}/SHA256SUMS
-    let value = "80b96b4b51a502141f6a8981f1493ade08a00762622c39e48319e5b122119bf3";
+    let value = "6d33d9cc1c5a8f8a2a70e5aaaa778a341322d2ba7eb34f7de420fb5f312b9e87";
     in assert (builtins.stringLength value) == 64; value;
 
   meta = {

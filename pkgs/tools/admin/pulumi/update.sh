@@ -1,14 +1,35 @@
 #!/usr/bin/env bash
+# Bash 3 compatible for Darwin
 
-VERSION="2.2.1"
+# Version of Pulumi from
+# https://www.pulumi.com/docs/get-started/install/versions/
+VERSION="3.3.1"
 
-declare -A plugins
+# Grab latest release ${VERSION} from
+# https://github.com/pulumi/pulumi-${NAME}/releases
 plugins=(
-    ["aws"]="2.5.0"
-    ["gcp"]="3.6.0"
-    ["random"]="2.1.1"
-    ["kubernetes"]="2.2.0"
-    ["postgresql"]="2.1.1"
+    "auth0=2.2.0"
+    "aws=4.6.0"
+    "cloudflare=3.1.0"
+    "consul=3.2.0"
+    "datadog=3.3.0"
+    "digitalocean=4.3.1"
+    "docker=3.0.0"
+    "equinix-metal=2.0.0"
+    "gcp=5.6.0"
+    "github=4.1.0"
+    "gitlab=4.1.0"
+    "hcloud=1.0.0"
+    "kubernetes=3.3.0"
+    "linode=3.1.0"
+    "mailgun=3.1.0"
+    "mysql=3.0.0"
+    "openstack=3.2.0"
+    "packet=3.2.2"
+    "postgresql=3.1.0"
+    "random=4.2.0"
+    "vault=4.1.0"
+    "vsphere=3.1.0"
 )
 
 function genMainSrc() {
@@ -22,8 +43,9 @@ function genMainSrc() {
 }
 
 function genSrcs() {
-    for plug in "${!plugins[@]}"; do
-        local version=${plugins[$plug]}
+    for plugVers in "${plugins[@]}"; do
+        local plug=${plugVers%=*}
+        local version=${plugVers#*=}
         # url as defined here
         # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
         local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-$1-amd64.tar.gz"
@@ -36,7 +58,8 @@ function genSrcs() {
     done
 }
 
-cat <<EOF
+{
+  cat <<EOF
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
@@ -44,13 +67,14 @@ cat <<EOF
   pulumiPkgs = {
     x86_64-linux = [
 EOF
-genMainSrc "linux"
-genSrcs "linux"
-echo "    ];"
+  genMainSrc "linux"
+  genSrcs "linux"
+  echo "    ];"
+  echo "    x86_64-darwin = ["
 
-echo "    x86_64-darwin = ["
-genMainSrc "darwin"
-genSrcs "darwin"
-echo "    ];"
-echo "  };"
-echo "}"
+  genMainSrc "darwin"
+  genSrcs "darwin"
+  echo "    ];"
+  echo "  };"
+  echo "}"
+} > data.nix

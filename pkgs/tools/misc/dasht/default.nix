@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Search API docs offline, in terminal or browser";
     homepage    = "https://sunaku.github.io/dasht/man";
-    license     = stdenv.lib.licenses.isc;
-    platforms   = stdenv.lib.platforms.unix; #cannot test other
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    license     = lib.licenses.isc;
+    platforms   = lib.platforms.unix; #cannot test other
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

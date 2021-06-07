@@ -1,29 +1,39 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy27
-, nose, chai, simplejson, backports_functools_lru_cache
-, python-dateutil, pytz, pytest-mock, sphinx, dateparser, pytestcov
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, python-dateutil
+, typing-extensions
 , pytestCheckHook
+, pytest-mock
+, pytz
+, simplejson
 }:
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "0.15.6";
+  version = "1.0.3";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb5d339f00072cc297d7de252a2e75f272085d1231a3723f1026d1fa91367118";
+    sha256 = "399c9c8ae732270e1aa58ead835a79a40d7be8aa109c579898eb41029b5a231d";
   };
 
+  postPatch = ''
+    # no coverage reports
+    sed -i "/addopts/d" tox.ini
+  '';
+
   propagatedBuildInputs = [ python-dateutil ]
-    ++ lib.optionals isPy27 [ backports_functools_lru_cache ];
+    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   checkInputs = [
-    dateparser
     pytestCheckHook
-    pytestcov
     pytest-mock
     pytz
     simplejson
-    sphinx
   ];
 
   # ParserError: Could not parse timezone expression "America/Nuuk"

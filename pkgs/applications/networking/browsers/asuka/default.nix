@@ -1,24 +1,24 @@
-{ stdenv, rustPlatform, fetchurl, pkgconfig, ncurses, openssl, Security }:
+{ lib, stdenv, rustPlatform, fetchFromSourcehut, pkg-config, ncurses, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "asuka";
-  version = "0.8.0";
+  version = "0.8.1";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~julienxx/${pname}/archive/${version}.tar.gz";
-    sha256 = "10hmsdwf2nrsmpycqa08vd31c6vhx7w5fhvv5a9f92sqp0lcavf0";
+  src = fetchFromSourcehut {
+    owner = "~julienxx";
+    repo = pname;
+    rev = version;
+    sha256 = "1y8v4qc5dng3v9k0bky1xlf3qi9pk2vdsi29lff4ha5310467f0k";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "0b8wf12bjsy334g04sv3knw8f177xsmh7lrkyvx9gnn0fax0lmnr";
 
-  cargoSha256 = "0csj63x77nkdh543pzl9cbaip6xp8anw0942hc6j19y7yicd29ns";
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ ncurses openssl ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.isDarwin Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gemini Project client written in Rust with NCurses";
     homepage = "https://git.sr.ht/~julienxx/asuka";
     license = licenses.mit;

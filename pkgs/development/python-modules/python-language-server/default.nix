@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
-, backports_functools_lru_cache, configparser, futures, future, jedi, pluggy, python-jsonrpc-server, flake8
-, pytestCheckHook, mock, pytestcov, coverage, setuptools, ujson
+{ lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast, pythonOlder, isPy27
+, backports_functools_lru_cache ? null, configparser ? null, futures ? null, future, jedi, pluggy, python-jsonrpc-server, flake8
+, pytestCheckHook, mock, pytestcov, coverage, setuptools, ujson, flaky
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
   # The following packages are optional and
@@ -21,25 +21,43 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.33.1";
+  version = "0.36.2";
+  # https://github.com/palantir/python-language-server/issues/896#issuecomment-752790868
+  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "064ck4ikrrrhq8wjpbs5k6hzkrjvfg91pd6351471xpsij0kj16f";
+    sha256 = "07x6jr4z20jxn03bxblwc8vk0ywha492cgwfhj7q97nb5cm7kx0q";
   };
 
   postPatch = ''
-    # https://github.com/palantir/python-jsonrpc-server/issues/36
-    sed -i -e 's!ujson<=!ujson>=!' setup.py
+    # Reading the changelog I don't expect an API break in pycodestyle and pyflakes
+    substituteInPlace setup.py \
+      --replace "pycodestyle>=2.6.0,<2.7.0" "pycodestyle>=2.6.0,<2.8.0" \
+      --replace "pyflakes>=2.2.0,<2.3.0" "pyflakes>=2.2.0,<2.4.0"
   '';
+
+  propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server ujson ]
+    ++ lib.optional (withProvider "autopep8") autopep8
+    ++ lib.optional (withProvider "mccabe") mccabe
+    ++ lib.optional (withProvider "pycodestyle") pycodestyle
+    ++ lib.optional (withProvider "pydocstyle") pydocstyle
+    ++ lib.optional (withProvider "pyflakes") pyflakes
+    ++ lib.optional (withProvider "pylint") pylint
+    ++ lib.optional (withProvider "rope") rope
+    ++ lib.optional (withProvider "yapf") yapf
+    ++ lib.optional isPy27 configparser
+    ++ lib.optionals (pythonOlder "3.2") [ backports_functools_lru_cache futures ];
 
   # The tests require all the providers, disable otherwise.
   doCheck = providers == ["*"];
 
   checkInputs = [
-    pytestCheckHook mock pytestcov coverage
+    pytestCheckHook mock pytestcov coverage flaky
+    # Do not propagate flake8 or it will enable pyflakes implicitly
+    flake8
     # rope is technically a dependency, but we don't add it by default since we
     # already have jedi, which is the preferred option
     rope
@@ -59,21 +77,10 @@ buildPythonPackage rec {
     "test_matplotlib_completions"
     "test_snippet_parsing"
     "test_numpy_hover"
-  ] ++ stdenv.lib.optional isPy27 "test_flake8_lint";
+    "test_symbols"
+  ] ++ lib.optional isPy27 "test_flake8_lint";
 
-  propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server flake8 ujson ]
-    ++ stdenv.lib.optional (withProvider "autopep8") autopep8
-    ++ stdenv.lib.optional (withProvider "mccabe") mccabe
-    ++ stdenv.lib.optional (withProvider "pycodestyle") pycodestyle
-    ++ stdenv.lib.optional (withProvider "pydocstyle") pydocstyle
-    ++ stdenv.lib.optional (withProvider "pyflakes") pyflakes
-    ++ stdenv.lib.optional (withProvider "pylint") pylint
-    ++ stdenv.lib.optional (withProvider "rope") rope
-    ++ stdenv.lib.optional (withProvider "yapf") yapf
-    ++ stdenv.lib.optional isPy27 configparser
-    ++ stdenv.lib.optionals (pythonOlder "3.2") [ backports_functools_lru_cache futures ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/palantir/python-language-server";
     description = "An implementation of the Language Server Protocol for Python";
     license = licenses.mit;

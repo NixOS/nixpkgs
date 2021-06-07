@@ -1,4 +1,4 @@
-{ stdenv, haskellPackages, fetchFromGitHub }:
+{ lib, stdenv, haskellPackages, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "nix-script";
@@ -24,8 +24,8 @@ stdenv.mkDerivation {
     ln -s $out/bin/nix-script $out/bin/nix-scripti
   '';
 
-  meta = with stdenv.lib; {
-    description = "A shebang for running inside nix-shell.";
+  meta = with lib; {
+    description = "A shebang for running inside nix-shell";
     homepage    = "https://github.com/bennofs/nix-script";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ bennofs rnhmjoj ];

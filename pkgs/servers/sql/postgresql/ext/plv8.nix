@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, v8, perl, postgresql }:
+{ lib, stdenv, fetchFromGitHub, v8, perl, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "plv8";
-  version = "2.3.14";
+  version = "2.3.15";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ v8 postgresql ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "plv8";
     repo = "plv8";
     rev = "v${version}";
-    sha256 = "12g7z0xkb6zg2qd0hppk2izq238v1k52vb13jlvaij1rbhh10mbp";
+    sha256 = "1cv94n49gq2b377gqyq7pjjzw98czv4mwl3sx97y18c20zwp6rk3";
   };
 
   makefile = "Makefile.shared";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
     maintainers = with maintainers; [ volth marsam ];

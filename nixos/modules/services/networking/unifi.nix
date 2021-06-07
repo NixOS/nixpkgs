@@ -162,6 +162,8 @@ in
       unitConfig.RequiresMountsFor = stateDir;
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
+      # Make sure package upgrades trigger a service restart
+      restartTriggers = [ cfg.unifiPackage cfg.mongodbPackage ];
 
       serviceConfig = {
         Type = "simple";

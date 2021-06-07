@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 let
   version = "2.1.0";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     cp ./src/* "$out/include/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A hash table for C structures";
     homepage    = "http://troydhanson.github.io/uthash";
     license     = licenses.bsd2; # it's one-clause, actually, as it's source-only

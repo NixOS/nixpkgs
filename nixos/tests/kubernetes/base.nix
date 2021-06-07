@@ -9,7 +9,6 @@ with pkgs.lib;
 let
   mkKubernetesBaseTest =
     { name, domain ? "my.zyx", test, machines
-    , pkgs ? import <nixpkgs> { inherit system; }
     , extraConfiguration ? null }:
     let
       masterName = head (filter (machineName: any (role: role == "master") machines.${machineName}.roles) (attrNames machines));

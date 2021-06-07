@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "ecm-tools";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     (cd $out/bin; ln -s bin2ecm ecm2bin)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility to uncompress ECM files to BIN CD format";
     homepage = "https://github.com/alucryd/ecm-tools";
     license = licenses.gpl3;

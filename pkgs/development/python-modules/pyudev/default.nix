@@ -13,11 +13,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/pyudev/_ctypeslib/utils.py \
-      --replace "find_library(name)" "'${systemd.lib}/lib/libudev.so'"
+      --replace "find_library(name)" "'${lib.getLib systemd}/lib/libudev.so'"
     '';
 
   checkInputs = [ pytest mock hypothesis docutils ];
-  propagatedBuildInputs = [ systemd six ];
+  propagatedBuildInputs = [ six ];
 
   checkPhase = ''
     py.test

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "2.2.3";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "The plugin manager for zsh.";
+    description = "The plugin manager for zsh";
     homepage = "http://antigen.sharats.me";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
   };
 }

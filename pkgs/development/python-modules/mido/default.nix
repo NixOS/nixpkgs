@@ -1,6 +1,13 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll
-, portmidi, pygame, python-rtmidi, rtmidi-python
-, pytest
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, substituteAll
+, portmidi
+, pygame
+, python-rtmidi
+, rtmidi-python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -25,15 +32,18 @@ buildPythonPackage rec {
     rtmidi-python
   ];
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    py.test . -rs -q
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "mido"
+  ];
 
   meta = with lib; {
     description = "MIDI Objects for Python";
     homepage = "https://mido.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

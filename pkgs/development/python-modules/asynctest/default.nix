@@ -18,7 +18,7 @@ buildPythonPackage rec {
   '';
 
   # https://github.com/Martiusweb/asynctest/issues/132
-  doCheck = pythonOlder "3.8";
+  doCheck = pythonOlder "3.7";
 
   checkPhase = ''
     ${python.interpreter} -m unittest test

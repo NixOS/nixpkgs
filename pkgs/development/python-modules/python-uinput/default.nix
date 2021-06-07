@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , udev }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   NIX_CFLAGS_LINK = "-ludev";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pythonic API to Linux uinput kernel module";
     homepage = "http://tjjr.fi/sw/python-uinput/";
     license = licenses.gpl3Plus;

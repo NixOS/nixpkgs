@@ -43,7 +43,7 @@ xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix">
   console, whether device ownership is correctly maintained when switching
   between consoles, and so on. On the other hand,
   <filename
-xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs.nix">nfs.nix</filename>,
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs/simple.nix">nfs/simple.nix</filename>,
   which tests NFS client and server functionality in the Linux kernel
   (including whether locks are maintained across server crashes), requires
   three machines: a server and two clients.
@@ -188,6 +188,25 @@ start_all()
    </varlistentry>
    <varlistentry>
     <term>
+     <methodname>get_screen_text_variants</methodname>
+    </term>
+    <listitem>
+     <para>
+      Return a list of different interpretations of what is currently visible
+      on the machine's screen using optical character recognition. The number
+      and order of the interpretations is not specified and is subject to
+      change, but if no exception is raised at least one will be returned.
+     </para>
+     <note>
+      <para>
+       This requires passing <option>enableOCR</option> to the test attribute
+       set.
+      </para>
+     </note>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <methodname>get_screen_text</methodname>
     </term>
     <listitem>
@@ -216,12 +235,12 @@ start_all()
    </varlistentry>
    <varlistentry>
     <term>
-     <methodname>send_keys</methodname>
+     <methodname>send_key</methodname>
     </term>
     <listitem>
      <para>
       Simulate pressing keys on the virtual keyboard, e.g.,
-      <literal>send_keys("ctrl-alt-delete")</literal>.
+      <literal>send_key("ctrl-alt-delete")</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -232,7 +251,7 @@ start_all()
     <listitem>
      <para>
       Simulate typing a sequence of characters on the virtual keyboard, e.g.,
-      <literal>send_keys("foobar\n")</literal> will type the string
+      <literal>send_chars("foobar\n")</literal> will type the string
       <literal>foobar</literal> followed by the Enter key.
      </para>
     </listitem>
@@ -255,8 +274,29 @@ start_all()
     </term>
     <listitem>
      <para>
-      Execute a shell command, raising an exception if the exit status is not
-      zero, otherwise returning the standard output.
+      Execute a shell command, raising an exception if the exit status
+      is not zero, otherwise returning the standard output. Commands
+      are run with <literal>set -euo pipefail</literal> set:
+      <itemizedlist>
+        <listitem>
+          <para>
+            If several commands are separated by <literal>;</literal>
+            and one fails, the command as a whole will fail.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            For pipelines, the last non-zero exit status will be
+            returned (if there is one, zero will be returned
+            otherwise).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Dereferencing unset variables fail the command.
+          </para>
+        </listitem>
+      </itemizedlist>
      </para>
     </listitem>
    </varlistentry>
@@ -350,7 +390,8 @@ start_all()
      <para>
       Wait until the supplied regular expressions matches the textual contents
       of the screen by using optical character recognition (see
-      <methodname>get_screen_text</methodname>).
+     <methodname>get_screen_text</methodname> and
+     <methodname>get_screen_text_variants</methodname>).
      </para>
      <note>
       <para>
@@ -390,7 +431,7 @@ start_all()
     <listitem>
      <para>
       Copies a file from host to machine, e.g.,
-      <literal>copy_file_from_host("myfile", "/etc/my/important/file")</literal>.
+      <literal>copy_from_host("myfile", "/etc/my/important/file")</literal>.
      </para>
      <para>
       The first argument is the file on the host. The file needs to be
@@ -413,6 +454,18 @@ start_all()
 machine.systemctl("list-jobs --no-pager") # runs `systemctl list-jobs --no-pager`
 machine.systemctl("list-jobs --no-pager", "any-user") # spawns a shell for `any-user` and runs `systemctl --user list-jobs --no-pager`
 </programlisting>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <methodname>shell_interact</methodname>
+    </term>
+    <listitem>
+     <para>
+      Allows you to directly interact with the guest shell.
+      This should only be used during test development, not in production tests.
+      Killing the interactive session with <literal>Ctrl-d</literal> or <literal>Ctrl-c</literal> also ends the guest session.
      </para>
     </listitem>
    </varlistentry>
@@ -448,6 +501,17 @@ import ./make-test-python.nix {
       <replaceable>Python code…</replaceable>
     '';
 }
+</programlisting>
+  This will produce a Nix warning at evaluation time. To fully disable the
+  linter, wrap the test script in comment directives to disable the Black linter
+  directly (again, don't commit this within the Nixpkgs repository):
+<programlisting>
+  testScript =
+    ''
+      # fmt: off
+      <replaceable>Python code…</replaceable>
+      # fmt: on
+    '';
 </programlisting>
  </para>
 </section>

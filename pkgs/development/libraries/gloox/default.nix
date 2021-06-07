@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , zlibSupport ? true, zlib ? null
 , sslSupport ? true, openssl ? null
 , idnSupport ? true, libidn ? null
@@ -8,10 +8,10 @@ assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 assert idnSupport -> libidn != null;
 
-with stdenv.lib;
+with lib;
 
 let
-  version = "1.0.23";
+  version = "1.0.24";
 in
 stdenv.mkDerivation {
   pname = "gloox";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://camaya.net/download/gloox-${version}.tar.bz2";
-    sha256 = "12jz8glg9zmyk0iyv1ywf5i0hq93dfq8lvn6lyjgy8730w66mjwp";
+    sha256 = "1jgrd07qr9jvbb5hcmhrqz4w4lvwc51m30jls1fgxf1f5az6455f";
   };
 
   buildInputs = [ ]

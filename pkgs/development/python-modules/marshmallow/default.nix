@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "3.6.1";
+  version = "3.10.0";
   disabled = isPy27;
 
   meta = {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35ee2fb188f0bd9fc1cf9ac35e45fd394bd1c153cee430745a465ea435514bd5";
+    sha256 = "4ab2fdb7f36eb61c3665da67a7ce281c8900db08d72ba6bf0e695828253581f7";
   };
 
   propagatedBuildInputs = [ dateutil simplejson ];

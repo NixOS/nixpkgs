@@ -3,20 +3,23 @@
 , lib
 , makeWrapper
 , ncurses
+, stdenv
 }:
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.30.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11vy39zygk1gxb1nc1zmxlgs6fn7yq68090fwm2jar0lsxx8a83i";
+    sha256 = "sha256-JVHcunpS+2/0d7XaUZ95m9QpVHCG1Tq8LJ9KNURSRy8=";
    };
 
-  vendorSha256 = "0qfb352gmsmy5glrsjwc3w57di5k2kjdsyfqn4xf7p4v12yg88va";
+  vendorSha256 = "sha256-4uRhbRPfCRYwFlfucXOYhLruj7hkV4G9Sxjh9yQkDEQ=";
+
+  doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
@@ -35,5 +38,6 @@ buildGoModule rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;
+    broken = stdenv.isDarwin;
   };
 }

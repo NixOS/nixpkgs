@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "kyotocabinet-1.2.76";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g6js20x7vnpq4p8ghbw3mh9wpqksya9vwhzdx6dnlf354zjsal1";
   };
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace kccommon.h \
       --replace tr1/unordered_map unordered_map \
       --replace tr1/unordered_set unordered_set \
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://fallabs.com/kyotocabinet";
     description = "A library of routines for managing a database";
     license = licenses.gpl3;

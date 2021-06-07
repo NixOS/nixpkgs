@@ -11,16 +11,17 @@
 , pandas
 , pyshp
 , setuptools
+, withPcap ? true, dpkt ? null, dnslib ? null
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "1.5.2";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "19gs8i6chrrwibz706gib5sixx1cjgfzh7v011kp3izcrn524mc0";
+    sha256 = "0mvf2603d9b0s6rh7sl7mg4ipbh0nk05xgh1078mwvx31qjsmq1i";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +35,7 @@ buildPythonApplication rec {
     pandas
     pyshp
     setuptools
-  ];
+  ] ++ lib.optionals withPcap [ dpkt dnslib ];
 
   doCheck = false;
 
@@ -43,7 +44,7 @@ buildPythonApplication rec {
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.raskin ];
-    platforms = with lib.platforms; linux ++ darwin;
     homepage = "http://visidata.org/";
+    changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };
 }

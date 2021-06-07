@@ -1,30 +1,30 @@
 <book xmlns="http://docbook.org/ns/docbook"
       xmlns:xi="http://www.w3.org/2001/XInclude">
  <info>
-  <title>Nixpkgs Users and Contributors Guide</title>
+  <title>Nixpkgs Manual</title>
   <subtitle>Version <xi:include href=".version" parse="text" />
   </subtitle>
  </info>
  <xi:include href="preface.chapter.xml" />
  <part>
   <title>Using Nixpkgs</title>
-  <xi:include href="using/configuration.xml" />
-  <xi:include href="using/overlays.xml" />
-  <xi:include href="using/overrides.xml" />
+  <xi:include href="using/configuration.chapter.xml" />
+  <xi:include href="using/overlays.chapter.xml" />
+  <xi:include href="using/overrides.chapter.xml" />
   <xi:include href="functions.xml" />
  </part>
  <part>
   <title>Standard environment</title>
-  <xi:include href="stdenv/stdenv.xml" />
-  <xi:include href="stdenv/meta.xml" />
-  <xi:include href="stdenv/multiple-output.xml" />
-  <xi:include href="stdenv/cross-compilation.xml" />
-  <xi:include href="stdenv/platform-notes.xml" />
+  <xi:include href="stdenv/stdenv.chapter.xml" />
+  <xi:include href="stdenv/meta.chapter.xml" />
+  <xi:include href="stdenv/multiple-output.chapter.xml" />
+  <xi:include href="stdenv/cross-compilation.chapter.xml" />
+  <xi:include href="stdenv/platform-notes.chapter.xml" />
  </part>
  <part>
   <title>Builders</title>
-  <xi:include href="builders/fetchers.xml" />
-  <xi:include href="builders/trivial-builders.xml" />
+  <xi:include href="builders/fetchers.chapter.xml" />
+  <xi:include href="builders/trivial-builders.chapter.xml" />
   <xi:include href="builders/special.xml" />
   <xi:include href="builders/images.xml" />
   <xi:include href="languages-frameworks/index.xml" />
@@ -32,10 +32,11 @@
  </part>
  <part>
   <title>Contributing to Nixpkgs</title>
-  <xi:include href="contributing/quick-start.xml" />
-  <xi:include href="contributing/coding-conventions.xml" />
-  <xi:include href="contributing/submitting-changes.xml" />
-  <xi:include href="contributing/reviewing-contributions.xml" />
-  <xi:include href="contributing/contributing-to-documentation.xml" />
+  <xi:include href="contributing/quick-start.chapter.xml" />
+  <xi:include href="contributing/coding-conventions.chapter.xml" />
+  <xi:include href="contributing/submitting-changes.chapter.xml" />
+  <xi:include href="contributing/vulnerability-roundup.chapter.xml" />
+  <xi:include href="contributing/reviewing-contributions.chapter.xml" />
+  <xi:include href="contributing/contributing-to-documentation.chapter.xml" />
  </part>
 </book>

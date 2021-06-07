@@ -1,33 +1,56 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.20.6-k3s1" }:
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "1.7.0";
-  k3sVersion = "1.17.3-k3s1";
-
-  goPackagePath = "github.com/rancher/k3d";
+  version = "4.4.4";
 
   src = fetchFromGitHub {
-    owner  = "rancher";
-    repo   = "k3d";
-    rev    = "v${version}";
-    sha256 = "0aij2l7zmg4cxbw7pwf7ddc64di25hpjvbmp1madhz9q28rwfa9w";
+    owner = "rancher";
+    repo = "k3d";
+    rev = "v${version}";
+    sha256 = "sha256-pfyU25MASKQMwd49IbNyyEiz3gmSOBmLdWtIKhYU2wg=";
   };
-
-  buildFlagsArray = ''
-    -ldflags=
-      -w -s
-      -X github.com/rancher/k3d/version.Version=${version}
-      -X github.com/rancher/k3d/version.K3sVersion=v${k3sVersion}
-  '';
 
   vendorSha256 = null;
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ installShellFiles ];
+
+  excludedPackages = "\\(tools\\|docgen\\)";
+
+  preBuild = let t = "github.com/rancher/k3d/v4/version"; in
+    ''
+      buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.K3sVersion=v${k3sVersion}")
+    '';
+
+  doCheck = false;
+
+  postInstall = ''
+    installShellCompletion --cmd k3d \
+      --bash <($out/bin/k3d completion bash) \
+      --fish <($out/bin/k3d completion fish) \
+      --zsh <($out/bin/k3d completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/k3d --help
+    $out/bin/k3d version | grep "k3d version v${version}"
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
     homepage = "https://github.com/rancher/k3d";
-    description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
+    changelog = "https://github.com/rancher/k3d/blob/v${version}/CHANGELOG.md";
+    description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container - k3d";
+    longDescription = ''
+      k3s is the lightweight Kubernetes distribution by Rancher: rancher/k3s
+
+      k3d creates containerized k3s clusters. This means, that you can spin up a
+      multi-node k3s cluster on a single machine using docker.
+    '';
     license = licenses.mit;
+    maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kuznero jlesquembre ngerstle ];
   };
 }

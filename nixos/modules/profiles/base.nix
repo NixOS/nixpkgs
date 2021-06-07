@@ -26,6 +26,7 @@
     pkgs.fuse
     pkgs.fuse3
     pkgs.sshfs-fuse
+    pkgs.rsync
     pkgs.socat
     pkgs.screen
 

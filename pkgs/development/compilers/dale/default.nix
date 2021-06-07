@@ -1,18 +1,16 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , libffi
 , llvm_6
 , doCheck ? false
 , perl
 }:
 
-let version = "20181024";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "dale";
-  inherit version;
+  version = "20181024";
 
   src = fetchFromGitHub {
     owner = "tomhrr";
@@ -21,17 +19,15 @@ in stdenv.mkDerivation {
     sha256 = "0v4ajrzrqvf279kd7wsd9flrpsav57lzxlwwimk9vnfwh7xpzf9v";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libffi llvm_6 ]
-             ++ stdenv.lib.optional doCheck perl;
+  nativeBuildInputs = [ cmake pkg-config llvm_6.dev ];
+  buildInputs = [ libffi llvm_6 ];
 
   inherit doCheck;
+  checkInputs = [ perl ];
 
   checkTarget = "tests";
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lisp-flavoured C";
     longDescription = ''
       Dale is a system (no GC) programming language that uses

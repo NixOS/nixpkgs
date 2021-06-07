@@ -1,52 +1,50 @@
-{ stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, installShellFiles,
-  qmake, qtbase, poppler, qtmultimedia }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles,
+  qmake, qtbase, qtmultimedia, wrapQtAppsHook,
+  poppler, mupdf, freetype, jbig2dec, openjpeg, gumbo,
+  renderer ? "mupdf" }:
 
-mkDerivation rec {
+let
+  renderers = {
+    mupdf.buildInputs = [ mupdf freetype jbig2dec openjpeg gumbo ];
+    poppler.buildInputs = [ poppler ];
+  };
+
+in
+
+stdenv.mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
     rev = "v${version}";
-    sha256 = "0j7wx3qqwhda33ig2464bi0j0a473y5p7ndy5f7f8x9cqdal1d01";
+    sha256 = "10i5nc5b5syaqvsixam4lmfiz3b5cphbjfgfqavi5jilq769792a";
   };
 
-  nativeBuildInputs = [ qmake installShellFiles ];
-  buildInputs = [ qtbase qtmultimedia poppler ];
+  nativeBuildInputs = [ qmake installShellFiles wrapQtAppsHook ];
+  buildInputs = [ qtbase qtmultimedia ] ++ renderers.${renderer}.buildInputs;
+
+  qmakeFlags = [ "RENDERER=${renderer}" ];
 
   postPatch = ''
-    # Fix location of poppler-*.h
     shopt -s globstar
-    for f in **/*.{h,cpp}; do
-      substituteInPlace $f --replace '#include <poppler-' '#include <poppler/qt5/poppler-'
+    for f in **/*.{pro,conf,h,cpp}; do
+      substituteInPlace "$f" \
+        --replace "/usr/" "$out/" \
+        --replace "/etc/" "$out/etc/" \
+        --replace '$${GUI_CONFIG_PATH}' "$out/etc/xdg/beamerpresenter/gui.json"
     done
   '';
 
-  installPhase = ''
-    install -m755 beamerpresenter -Dt $out/bin/
-    install -m644 src/icons/beamerpresenter.svg -Dt $out/share/icons/hicolor/scalable/apps/
-    install -m644 $desktopItem/share/applications/*.desktop -Dt $out/share/applications/
-    installManPage man/*.{1,5}
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    wrapQtApp "$out"/bin/beamerpresenter.app/Contents/MacOS/beamerpresenter
   '';
 
-  # TODO: replace with upstream's .desktop file once available.
-  # https://github.com/stiglers-eponym/BeamerPresenter/pull/4
-  desktopItem = makeDesktopItem {
-    name = pname;
-    desktopName = "BeamerPresenter";
-    genericName = "Beamer presentation viewer";
-    comment = "Simple dual screen pdf presentation software";
-    icon = "beamerpresenter";
-    categories = "Office;";
-    exec = "beamerpresenter %F";
-    mimeType = "application/pdf;application/x-pdf;";
-  };
-
-  meta = with stdenv.lib; {
-    description = "Simple dual screen pdf presentation software";
+  meta = with lib; {
+    description = "Modular multi screen pdf presentation software respecting your window manager";
     homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
-    license = licenses.gpl3Plus;
+    license = licenses.agpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ pacien ];
   };

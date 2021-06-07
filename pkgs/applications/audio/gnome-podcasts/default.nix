@@ -1,17 +1,17 @@
 { stdenv
+, lib
 , rustPlatform
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , gettext
-, cargo
-, rustc
 , python3
-, pkgconfig
+, pkg-config
 , glib
 , libhandy
 , gtk3
+, appstream-glib
+, desktop-file-utils
 , dbus
 , openssl
 , sqlite
@@ -19,33 +19,40 @@
 , wrapGAppsHook
 }:
 
-rustPlatform.buildRustPackage rec {
-  version = "0.4.7";
+stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
+  version = "0.4.9";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "podcasts";
     rev = version;
-    sha256 = "0vy5i77bv8c22ldhrnr4z6kx22zqnb1lg3s7y8673bqjgd7dppi0";
+    sha256 = "1ah59ac3xm3sqai8zhil8ar30pviw83cm8in1n4id77rv24xkvgm";
   };
 
-  cargoSha256 = "1dlbdxsf9p2jzrsclm43k95y8m3zcd41qd9ajg1ii3fpnahi58kd";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    sha256 = "1iihpfvkli09ysn46cnif53xizkwzk0m91bljmlzsygp3ip5i5yw";
+  };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
-    cargo
-    rustc
     python3
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
     wrapGAppsHook
     glib
   ];
 
   buildInputs = [
+    appstream-glib
+    desktop-file-utils
     glib
     gtk3
     libhandy
@@ -55,13 +62,8 @@ rustPlatform.buildRustPackage rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
   ];
-
-  # use Meson/Ninja phases
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
 
   # tests require network
   doCheck = false;
@@ -71,10 +73,10 @@ rustPlatform.buildRustPackage rec {
     patchShebangs scripts/compile-gschema.py scripts/cargo.sh scripts/test.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Listen to your favorite podcasts";
     homepage = "https://wiki.gnome.org/Apps/Podcasts";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };

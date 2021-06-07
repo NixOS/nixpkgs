@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
-, runCommand
 , gpgme
 , lvm2
 , btrfs-progs
@@ -10,48 +10,50 @@
 , installShellFiles
 , makeWrapper
 , fuse-overlayfs
-, nixosTests
 }:
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "1cxhwfrp5cjdq56vzy7gmidvm1z02f0rz2r1lv0d9ymnjlsjp9s3";
+    sha256 = "sha256-ZHEujkl+GUk5WjgDWdbJwOIKuOqJnIpGnvD1SsrHuhI=";
   };
 
   outputs = [ "out" "man" ];
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
   buildInputs = [ gpgme ]
-  ++ stdenv.lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
+  ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
   buildPhase = ''
+    runHook preBuild
     patchShebangs .
-    make binary-local
+    make bin/skopeo docs
+    runHook postBuild
   '';
 
   installPhase = ''
-    make install-binary PREFIX=$out
-    make install-docs MANINSTALLDIR="$man/share/man"
+    runHook preInstall
+    install -Dm755 bin/skopeo -t $out/bin
+    installManPage docs/*.[1-9]
     installShellCompletion --bash completions/bash/skopeo
-  '';
-
-  postInstall = stdenv.lib.optionals stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/skopeo \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
+      --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
+  '' + ''
+    runHook postInstall
   '';
 
-  passthru.tests.docker-tools = nixosTests.docker-tools;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line utility for various operations on container images and image repositories";
     homepage = "https://github.com/containers/skopeo";
     maintainers = with maintainers; [ lewo ] ++ teams.podman.members;

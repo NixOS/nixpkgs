@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , meson
+, python3
 , ninja
 , gusb
 , pixman
@@ -10,13 +11,13 @@
 , gobject-introspection
 , coreutils
 , gtk-doc
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_43
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
-  version = "1.90.2";
+  version = "1.90.7";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -24,15 +25,15 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g890y49anqd7yfz86iyvywxgbfmfmj6813fy58m5n8jain7iy1b";
+    sha256 = "sha256-g/yczzCZEzUKV2uFl1MAPL1H/R2QJSwxgppI2ftt9QI=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gtk-doc
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_43
     gobject-introspection
   ];
@@ -44,14 +45,29 @@ stdenv.mkDerivation rec {
     nss
   ];
 
-  mesonFlags = [
-    "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
+  checkInputs = [
+    python3
   ];
 
-  meta = with stdenv.lib; {
+  mesonFlags = [
+    "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
+    # Include virtual drivers for fprintd tests
+    "-Ddrivers=all"
+  ];
+
+  doCheck = true;
+
+  postPatch = ''
+    patchShebangs \
+      tests/test-runner.sh \
+      tests/unittest_inspector.py \
+      tests/virtual-image.py
+  '';
+
+  meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
     description = "A library designed to make it easy to add support for consumer fingerprint readers";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

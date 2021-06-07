@@ -1,7 +1,6 @@
-R
-=
+# R {#r}
 
-## Installation
+## Installation {#installation}
 
 Define an environment for R that contains all the libraries that you'd like to
 use by adding the following snippet to your $HOME/.config/nixpkgs/config.nix file:
@@ -32,15 +31,14 @@ output is the name that has to be passed to rWrapper in the code snipped above.
 However, if you'd like to add a file to your project source to make the
 environment available for other contributors, you can create a `default.nix`
 file like so:
+
 ```nix
-let
-  pkgs = import <nixpkgs> {};
-  stdenv = pkgs.stdenv;
-in with pkgs; {
+with import <nixpkgs> {};
+{
   myProject = stdenv.mkDerivation {
     name = "myProject";
     version = "1";
-    src = if pkgs.lib.inNixShell then null else nix;
+    src = if lib.inNixShell then null else nix;
 
     buildInputs = with rPackages; [
       R
@@ -53,7 +51,7 @@ in with pkgs; {
 and then run `nix-shell .` to be dropped into a shell with those packages
 available.
 
-## RStudio
+## RStudio {#rstudio}
 
 RStudio uses a standard set of packages and ignores any custom R
 environments or installed packages you may have.  To create a custom
@@ -96,7 +94,7 @@ Executing `nix-shell` will then drop you into an environment equivalent to the
 one above. If you need additional packages just add them to the list and
 re-enter the shell.
 
-## Updating the package set
+## Updating the package set {#updating-the-package-set}
 
 ```bash
 nix-shell generate-shell.nix
@@ -106,12 +104,17 @@ mv cran-packages.nix.new cran-packages.nix
 
 Rscript generate-r-packages.R bioc  > bioc-packages.nix.new
 mv bioc-packages.nix.new bioc-packages.nix
+
+Rscript generate-r-packages.R bioc-annotation > bioc-annotation-packages.nix.new
+mv bioc-annotation-packages.nix.new bioc-annotation-packages.nix
+
+Rscript generate-r-packages.R bioc-experiment > bioc-experiment-packages.nix.new
+mv bioc-experiment-packages.nix.new bioc-experiment-packages.nix
 ```
 
 `generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.
 
-
-## Testing if the Nix-expression could be evaluated
+## Testing if the Nix-expression could be evaluated {#testing-if-the-nix-expression-could-be-evaluated}
 
 ```bash
 nix-build test-evaluation.nix --dry-run

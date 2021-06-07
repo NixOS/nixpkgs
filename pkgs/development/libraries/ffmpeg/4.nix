@@ -1,12 +1,17 @@
-{ stdenv, callPackage, fetchpatch
+{ callPackage
 # Darwin frameworks
 , Cocoa, CoreMedia, VideoToolbox
+, stdenv, lib
 , ...
 }@args:
 
 callPackage ./generic.nix (rec {
-  version = "4.3";
-  branch = "4.3";
-  sha256 = "1qnnhd2b0g5sg72pclxs3i8sxzz0raky69k7w9cmpba9zh973s57";
+  version = "4.4";
+  branch = "4.4";
+  sha256 = "03kxc29y8190k4y8s8qdpsghlbpmchv1m8iqygq2qn0vfm4ka2a2";
   darwinFrameworks = [ Cocoa CoreMedia VideoToolbox ];
+
+  /* Work around https://trac.ffmpeg.org/ticket/9242 */
+  patches = lib.optional stdenv.isDarwin
+    ./v2-0001-avcodec-videotoolboxenc-define-TARGET_CPU_ARM64-t.patch;
 } // args)

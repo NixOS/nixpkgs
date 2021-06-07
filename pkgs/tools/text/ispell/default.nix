@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, ncurses }:
+{ lib, stdenv, fetchurl, bison, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "ispell";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cat >> local.h <<EOF
-    ${stdenv.lib.optionalString (!stdenv.isDarwin) "#define USG"}
+    ${lib.optionalString (!stdenv.isDarwin) "#define USG"}
     #define TERMLIB "-lncurses"
     #define LANGUAGES "{american,MASTERDICTS=american.med,HASHFILES=americanmed.hash}"
     #define MASTERHASH "americanmed.hash"
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interactive spell-checking program for Unix";
     homepage = "https://www.cs.hmc.edu/~geoff/ispell.html";
     license = licenses.free;

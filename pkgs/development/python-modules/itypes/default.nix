@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib,
   fetchFromGitHub,
   buildPythonPackage,
   pytest,
@@ -22,10 +22,10 @@ buildPythonPackage rec {
     pytest tests.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple immutable types for python";
     homepage = "https://github.com/tomchristie/itypes";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ivegotasthma ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , alsaLib
 , aubio
@@ -8,21 +8,19 @@
 , curl
 , dbus
 , doxygen
-, ffmpeg_3
+, ffmpeg
 , fftw
 , fftwSinglePrec
 , flac
-, fluidsynth
 , glibc
 , glibmm
 , graphviz
 , gtkmm2
-, hidapi
+, harvid
 , itstool
 , libarchive
 , libjack2
 , liblo
-, libltc
 , libogg
 , libpulseaudio
 , librdf_raptor
@@ -38,30 +36,33 @@
 , lilv
 , lrdf
 , lv2
+, makeWrapper
 , pango
 , perl
 , pkg-config
 , python3
-, qm-dsp
 , readline
 , rubberband
 , serd
 , sord
+, soundtouch
 , sratom
 , suil
 , taglib
 , vamp-plugin-sdk
 , wafHook
+, xjadeo
+, videoSupport ? false
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "6.0";
+  version = "6.7";
 
   # don't fetch releases from the GitHub mirror, they are broken
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "162jd96zahl05fdmjwvpdfjxbhd6ifbav6xqa0vv6rsdl4zk395q";
+    sha256 = "19jc29fjwgvqbg3gnmy50mrz8mh5x4nwddglasvwx83nc87qwllx";
   };
 
   patches = [
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
     doxygen
     graphviz # for dot
     itstool
+    makeWrapper
     perl
     pkg-config
     python3
@@ -87,19 +89,16 @@ stdenv.mkDerivation rec {
     cppunit
     curl
     dbus
-    ffmpeg_3
+    ffmpeg
     fftw
     fftwSinglePrec
     flac
-    fluidsynth
     glibmm
     gtkmm2
-    hidapi
     itstool
     libarchive
     libjack2
     liblo
-    libltc
     libogg
     libpulseaudio
     librdf_raptor
@@ -118,16 +117,16 @@ stdenv.mkDerivation rec {
     pango
     perl
     python3
-    qm-dsp
     readline
     rubberband
     serd
     sord
+    soundtouch
     sratom
     suil
     taglib
     vamp-plugin-sdk
-  ];
+  ] ++ lib.optionals videoSupport [ harvid xjadeo ];
 
   wafConfigureFlags = [
     "--cxx11"
@@ -136,11 +135,11 @@ stdenv.mkDerivation rec {
     "--no-phone-home"
     "--optimize"
     "--ptformat"
-    "--qm-dsp-include=${qm-dsp}/include/qm-dsp"
     "--run-tests"
     "--test"
-    "--use-external-libs"
   ];
+  # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
+  # "--use-external-libs"
 
   # Ardour's wscript requires git revision and date to be available.
   # Since they are not, let's generate the file manually.
@@ -149,8 +148,8 @@ stdenv.mkDerivation rec {
     sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
     patchShebangs ./tools/
     substituteInPlace libs/ardour/video_tools_paths.cc \
-      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg_3}/bin/ffmpeg");' \
-      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg_3}/bin/ffprobe");'
+      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
   '';
 
   postInstall = ''
@@ -164,11 +163,15 @@ stdenv.mkDerivation rec {
         "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour6.png"
     done
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
+  '' + lib.optionalString videoSupport ''
+    # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
+    wrapProgram "$out/bin/ardour6" \
+      --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
   '';
 
   LINKFLAGS = "-lpthread";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-track hard disk recording software";
     longDescription = ''
       Ardour is a digital audio workstation (DAW), You can use it to
@@ -180,8 +183,8 @@ stdenv.mkDerivation rec {
       https://community.ardour.org/donate
     '';
     homepage = "https://ardour.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu magnetophon ];
+    maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
   };
 }

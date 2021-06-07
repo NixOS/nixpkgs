@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, libcap, acl }:
+{ lib, stdenv, fetchFromGitHub, libcap, acl }:
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "1.7";
+  version = "2.2";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "1jkz99i10y6dwc4dyh2vp3p549jscgwjdp6x17mcw561bnam2287";
+    sha256 = "sha256-YxQBKXjYITVy8c6DJ3GwDR0ESgzghqJCcj1GEv8Lp2Q=";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libcap acl ];
+  buildInputs = lib.optionals stdenv.isLinux [ libcap acl ];
 
   # Disable LTO on darwin. See https://github.com/NixOS/nixpkgs/issues/19098
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile --replace "-flto -DNDEBUG" "-DNDEBUG"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "release" ]; # "release" enables compiler optimizations
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A breadth-first version of the UNIX find command";
     longDescription = ''
       bfs is a variant of the UNIX find command that operates breadth-first rather than

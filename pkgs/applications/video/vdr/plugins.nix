@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
+{ lib, stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg_3
-, libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg, ncurses
+, libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
 }: let
   mkPlugin = name: stdenv.mkDerivation {
@@ -18,7 +18,7 @@ in {
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
   });
 
-  inherit (stdenv.lib.genAttrs [
+  inherit (lib.genAttrs [
     "epgtableid0" "hello" "osddemo" "pictures" "servicedemo" "status" "svdrpdemo"
   ] mkPlugin);
 
@@ -37,7 +37,7 @@ in {
 
     makeFlags = [ "DESTDIR=$(out)" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://www.saunalahti.fi/~rahrenbe/vdr/femon/";
       description = "DVB Frontend Status Monitor plugin for VDR";
       maintainers = [ maintainers.ck3d ];
@@ -49,7 +49,8 @@ in {
 
   vaapidevice = stdenv.mkDerivation {
 
-    name = "vdr-vaapidevice-0.7.0";
+    pname = "vdr-vaapidevice";
+    version = "20190525";
 
     buildInputs = [
       vdr libxcb xcbutilwm ffmpeg_3
@@ -61,17 +62,17 @@ in {
     makeFlags = [ "DESTDIR=$(out)" ];
 
     postPatch = ''
-      substituteInPlace softhddev.c --replace /usr/bin/X ${xorgserver}/bin/X
+      substituteInPlace vaapidev.c --replace /usr/bin/X ${xorgserver}/bin/X
     '';
 
     src = fetchFromGitHub {
       owner = "pesintta";
       repo = "vdr-plugin-vaapidevice";
-      sha256 = "072y61fpkh3i2dragg0nsd4g3malgwxkwpdrb1ykdljyzf52s5hs";
-      rev = "c99afc23a53e6d91f9afaa99af59b30e68e626a8";
+      sha256 = "1gwjp15kjki9x5742fhaqk3yc2bbma74yp2vpn6wk6kj46nbnwp6";
+      rev = "d19657bae399e79df107e316ca40922d21393f80";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/pesintta/vdr-plugin-vaapidevice";
       description = "VDR SoftHDDevice Plug-in (with VA-API VPP additions)";
       maintainers = [ maintainers.ck3d ];
@@ -117,7 +118,7 @@ in {
 
     installFlags = buildFlags;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://projects.vdr-developer.org/projects/plg-markad";
       description = "Ein Programm zum automatischen Setzen von Schnittmarken bei Werbeeinblendungen während einer Sendung.";
       maintainers = [ maintainers.ck3d ];
@@ -129,11 +130,12 @@ in {
 
   epgsearch = stdenv.mkDerivation rec {
     pname = "vdr-epgsearch";
-    version = "2.4.0";
+    version = "20191202";
 
-    src = fetchurl {
-      url = "https://projects.vdr-developer.org/git/vdr-plugin-epgsearch.git/snapshot/vdr-plugin-epgsearch-${version}.tar.bz2";
-      sha256 = "0xfgn17vicyjwdf0rbkrik4q16mnfi305d4wmi8f0qk825pa0z3y";
+    src = fetchgit {
+      url = "git://projects.vdr-developer.org/vdr-plugin-epgsearch.git";
+      sha256 = "18kskwnnscr4rb4yzfikw1la318zjgraf340cl7n9z77chi2gi8m";
+      rev = "602d66c55964998ce25c6c57b302949a9517f149";
     };
 
     postPatch = ''
@@ -144,7 +146,7 @@ in {
 
     nativeBuildInputs = [
       perl # for pod2man and pos2html
-      utillinux
+      util-linux
       groff
     ];
 
@@ -164,7 +166,7 @@ in {
 
     outputs = [ "out" "man" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://winni.vdr-developer.org/epgsearch";
       description = "Searchtimer and replacement of the VDR program menu";
       maintainers = [ maintainers.ck3d ];
@@ -191,7 +193,7 @@ in {
       sha256 = "0n7idpxqx7ayd63scl6xwdx828ik4kb2mwz0c30cfjnmnxxd45lw";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/FernetMenta/vdr-plugin-vnsiserver";
       description = "VDR plugin to handle KODI clients.";
       maintainers = [ maintainers.ck3d ];
@@ -226,7 +228,7 @@ in {
 
     installPhase = ":";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://projects.vdr-developer.org/projects/plg-text2skin";
       description = "VDR Text2Skin Plugin";
       maintainers = [ maintainers.ck3d ];
@@ -327,7 +329,7 @@ in {
 
     installFlags = [ "DESTDIR=$(out)" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/jowi24/vdr-fritz";
       description = "A plugin for VDR to access AVMs Fritz Box routers";
       maintainers = [ maintainers.ck3d ];

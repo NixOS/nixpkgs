@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , meson
 , ninja
 , pkg-config
 , fetchpatch
 
 , platform-tools
-, ffmpeg_3
+, ffmpeg
 , SDL2
 }:
 
 let
-  version = "1.14";
+  version = "1.17";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "082n57a9lw39lfjxybgim09qf0id9m0rpfb3zmqng58fp2i1h6qx";
+    sha256 = "sha256-EbWtLRvJuXMPtyVKeO/XGo/0axk4/0aOR6IbZTobZyU=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1w06gsvgjdbpb9lvvhpjwmysxjl0daiigjfh3cxfgz88447bgw7j";
+    sha256 = "sha256-xCzrbWhMve0bJerFNHiUdSzp5O1pSaKRkcJSs/0nHpk=";
   };
 
   # postPatch:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
 
-  buildInputs = [ ffmpeg_3 SDL2 ];
+  buildInputs = [ ffmpeg SDL2 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
     license = licenses.asl20;

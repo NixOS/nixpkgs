@@ -7,22 +7,27 @@
 , fontconfig
 , freetype
 , glib
+, libGLU
 , libglvnd
 , libX11
 , libxcb
 , libXi
 , ncurses5
 , qtbase
+, qtdeclarative
 , zlib
 }:
 
+let
+  buildNum = "2021-03-31-696";
+in
 stdenv.mkDerivation rec {
   pname = "rgp";
-  version = "1.7.0.29";
+  version = "1.10";
 
   src = fetchurl {
-    url = "https://github.com/GPUOpen-Tools/radeon_gpu_profiler/releases/download/v${lib.versions.majorMinor version}/RadeonGPUProfiler_${version}.tgz";
-    sha256 = "d7d4aa92231796a509dfcf92e9618cac98ae6572c12efd0871eb43afa4e8240a";
+    url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
+    sha256 = "1GUV75KpYbeq7KkE86QqTfGnf/t3VEgviaAsbg/LWJI=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -32,12 +37,14 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     glib
+    libGLU
     libglvnd
     libX11
     libxcb
     libXi
     ncurses5
     qtbase
+    qtdeclarative
     zlib
   ];
 
@@ -46,15 +53,18 @@ stdenv.mkDerivation rec {
     "${placeholder "out"}/opt/rgp/qt"
   ];
 
+  dontWrapQtApps = true;
+
   installPhase = ''
     mkdir -p $out/opt/rgp $out/bin
     cp -r . $out/opt/rgp/
-    # Breaks autoPatchelfHook and has no known usage
-    rm $out/opt/rgp/AMDToolsDownloader
 
-    for prog in RadeonGPUProfiler RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI; do
+    chmod +x $out/opt/rgp/scripts/*
+    patchShebangs $out/opt/rgp/scripts
+
+    for prog in RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI RadeonGPUAnalyzer RadeonGPUProfiler rga rtda; do
       # makeWrapper is needed so that executables are started from the opt
-      # directory, where qt.conf is
+      # directory, where qt.conf and other tools are
       makeWrapper \
         $out/opt/rgp/$prog \
         $out/bin/$prog
@@ -63,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool from AMD that allows for deep inspection of GPU workloads";
-    homepage = "https://gpuopen.com/gaming-product/radeon-gpu-profiler-rgp/";
+    homepage = "https://gpuopen.com/rgp/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ Flakebi ];

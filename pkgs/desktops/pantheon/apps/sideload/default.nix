@@ -1,5 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , desktop-file-utils
+, nix-update-script
 , elementary-gtk-theme
 , elementary-icon-theme
 , fetchFromGitHub
@@ -12,7 +13,7 @@
 , meson
 , ninja
 , pantheon
-, pkgconfig
+, pkg-config
 , python3
 , vala
 , libxml2
@@ -27,11 +28,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0mlc3nm2navzxm8k1rwpbw4w6mv30lmhqybm8jqxd4v8x7my73vq";
+    sha256 = "sha256-eI/j6+lok9axRHV5DCsFY1fDCV+X5zBR7X8rK6odjFY=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/elementary/sideload";
     description = "Flatpak installer, designed for elementary OS";
     license = licenses.gpl3Plus;

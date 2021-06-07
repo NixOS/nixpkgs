@@ -9,11 +9,12 @@
 , scipy
 , h5py
 , nibabel
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "dipy";
-  version = "1.1.1";
+  version = "1.3.0";
 
   disabled = isPy27;
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner  = "dipy";
     repo   = pname;
     rev    = version;
-    sha256 = "08abx0f4li6ya62ilc59miw4mk6wndizahyylxhgcrpacb6ydw28";
+    sha256 = "0555abx0fwqmk6dc3im7r45d9j7r9xh6gm9mbwfwvlf7laf8h098";
   };
 
   nativeBuildInputs = [ cython packaging ];
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     scipy
     h5py
     nibabel
+    tqdm
   ];
 
   checkInputs = [ pytest ];

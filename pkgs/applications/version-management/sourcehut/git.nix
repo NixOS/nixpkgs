@@ -1,61 +1,57 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
 , buildGoModule
-, srht, minio, pygit2, scmsrht }:
-
+, python
+, srht
+, pygit2
+, scmsrht
+}:
 let
-  version = "0.50.3";
+  version = "0.72.8";
+
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "git.sr.ht";
+    rev = version;
+    sha256 = "sha256-AB2uzajO5PtcpJfbOOTfuDFM6is5K39v3AZJ1hShRNc=";
+  };
 
   buildShell = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-shell";
-
-  vendorSha256 = "1zvbqn4r940mibn4h1cqz94gbr476scm281ps361n0rfqlimw8g5";
+    vendorSha256 = "sha256-aqUFICp0C2reqb2p6JCPAUIRsxzSv0t9BHoNWrTYfqk=";
   };
 
   buildDispatcher = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatcher";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-dispatch";
-
-  vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
+    vendorSha256 = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
   };
 
   buildKeys = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-keys";
-
-  vendorSha256 = "16j7kpar318s4766pln8xn6d51xqblwig5n1jywhj0sl80qjl5cv";
+    vendorSha256 = "1d94cqy7x0q0agwg515xxsbl70b3qrzxbzsyjhn1pbyj532brn7f";
   };
 
   buildUpdateHook = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-update-hook";
-
-  vendorSha256 = "1rmv3p60g6w4h4v9wx99jkyx0q02snslyjrjy9n1flardjs01b63";
+    vendorSha256 = "0fwzqpjv8x5y3w3bfjd0x0cvqjjak23m0zj88hf32jpw49xmjkih";
   };
-in buildPythonPackage rec {
-  inherit version;
+
+  updateHook = buildUpdateHook "${src}/gitsrht-update-hook";
+
+in
+buildPythonPackage rec {
+  inherit src version;
   pname = "gitsrht";
-
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
-    rev = version;
-    sha256 = "0rxsr8cizac5xv8bgx2s1p2q4n8i5s51p9qbqdjad9z1xmwi6rvn";
-  };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
   propagatedBuildInputs = [
     srht
-    minio
     pygit2
     scmsrht
   ];
@@ -70,10 +66,13 @@ in buildPythonPackage rec {
     cp ${buildShell "${src}/gitsrht-shell"}/bin/gitsrht-shell $out/bin/gitsrht-shell
     cp ${buildDispatcher "${src}/gitsrht-dispatch"}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
     cp ${buildKeys "${src}/gitsrht-keys"}/bin/gitsrht-keys $out/bin/gitsrht-keys
-    cp ${buildUpdateHook "${src}/gitsrht-update-hook"}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
+    cp ${updateHook}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
   '';
+  passthru = {
+    inherit updateHook;
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";
     license = licenses.agpl3;

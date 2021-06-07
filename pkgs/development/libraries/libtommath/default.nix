@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool }:
+{ lib, stdenv, fetchurl, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "libtommath";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.libtom.net/LibTomMath/";
     description = "A library for integer-based number-theoretic applications";
     license = with licenses; [ publicDomain wtfpl ];

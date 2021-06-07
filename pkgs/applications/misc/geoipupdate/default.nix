@@ -1,23 +1,24 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "geoipupdate";
-  version = "4.3.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "geoipupdate";
     rev = "v${version}";
-    sha256 = "08h14bf4z2gx9sy34jpi2pvxv3i8g9ypl222hzdjsp2ixhl0jia9";
+    sha256 = "sha256-nshQxr6y3TxKsAVSA9mzL7LJfCtpv0QuuTTqk3/lENc=";
   };
 
-  vendorSha256 = "0q4byhvs1c1xm4qjvs2vyf98vdv121qn0z51arcf7k4ayrys5xcx";
+  vendorSha256 = "sha256-fqQWFhFeyW4GntRBxEeN6WSOo0G+1hH9vSEZmBKglz8=";
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  meta = with lib; {
     description = "Automatic GeoIP database updater";
     homepage = "https://github.com/maxmind/geoipupdate";
     license = with licenses; [ asl20 ];
-    platforms = platforms.all;
     maintainers = with maintainers; [ das_j ];
   };
 }

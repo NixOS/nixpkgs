@@ -2,27 +2,40 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.19.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "0d6n51p4b8jwkfqympwxkqxssgy462m5pgv5qvm6jy5pm566qa08";
+    sha256 = "sha256-pxPqBUOsXbP9giaV5NS3a6Z6auN4vUTIrIKcNh8xURU=";
   };
 
-  vendorSha256 = "150fj2c9qll39wiqk41w0qms0sdqiacb2z015j38kg60r8f6i4lm";
+  vendorSha256 = "sha256-y8DRrthaUzMKxFbdbASvqsRMT+jex7jMJA6g7YF/VxI=";
 
-  buildFlagsArray = ''
-    -ldflags=
-        -X main.version=${version}
-  '';
+  doCheck = false;
+
+  buildFlagsArray = [
+    "-ldflags="
+    "-s"
+    "-w"
+    "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
+  ];
 
   meta = with lib; {
     description = "Write tests against structured configuration data";
+    longDescription = ''
+      Conftest helps you write tests against structured configuration data.
+      Using Conftest you can write tests for your Kubernetes configuration,
+      Tekton pipeline definitions, Terraform code, Serverless configs or any
+      other config files.
+
+      Conftest uses the Rego language from Open Policy Agent for writing the
+      assertions. You can read more about Rego in 'How do I write policies' in
+      the Open Policy Agent documentation.
+    '';
     inherit (src.meta) homepage;
     license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.all;
   };
 }

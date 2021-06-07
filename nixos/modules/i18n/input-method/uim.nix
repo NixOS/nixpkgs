@@ -2,7 +2,7 @@
 
 with lib;
 
-let 
+let
   cfg = config.i18n.inputMethod.uim;
 in
 {

@@ -1,15 +1,15 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , cmake
 , ninja
-, pkgconfig
+, pkg-config
 , glibc
 , gtk3
 , gtkmm3
 , pcre
 , swig
-, antlr4_7
+, antlr4_8
 , sudo
 , mysql
 , libxml2
@@ -45,11 +45,11 @@ let
   inherit (python2.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.20";
+  version = "8.0.21";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "0c0ig2fqfpli7fwb4v4iwvfh4szzj3grx8j9rbh40kllkc8v5qh6";
+    sha256 = "0rqgr1dcbf6yp60hninbw5dnwykx5ngbyhhx0sbhgv0m0cq5a44h";
   };
 
   patches = [
@@ -80,13 +80,13 @@ in stdenv.mkDerivation rec {
   # have it look for 4.7.2 instead of 4.7.1
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
-      --replace "antlr-4.7.1-complete.jar" "antlr-4.7.2-complete.jar"
+      --replace "antlr-4.7.1-complete.jar" "antlr-4.8-complete.jar"
   '';
 
   nativeBuildInputs = [
     cmake
     ninja
-    pkgconfig
+    pkg-config
     jre
     swig
     wrapGAppsHook
@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     libX11
-    antlr4_7.runtime.cpp
+    antlr4_8.runtime.cpp
     python2
     mysql
     libxml2
@@ -141,8 +141,8 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
     "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
-    "-DWITH_ANTLR_JAR=${antlr4_7.jarLocation}"
-    # mysql-workbench 8.0.20 depends on libmysqlconnectorcpp 1.1.8.
+    "-DWITH_ANTLR_JAR=${antlr4_8.jarLocation}"
+    # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
     "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
@@ -172,7 +172,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
+{ lib, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
 
 buildPythonPackage rec {
   pname = "RoboMachine";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "argparse" ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Test data generator for Robot Framework";
     homepage = "https://github.com/mkorpela/RoboMachine";
     license = licenses.asl20;

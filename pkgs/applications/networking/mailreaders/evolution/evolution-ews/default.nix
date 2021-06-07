@@ -1,46 +1,40 @@
-{ stdenv, fetchurl, gnome3, cmake, gettext, intltool, pkg-config, evolution-data-server
+{ lib, stdenv, fetchurl, gnome, cmake, gettext, intltool, pkg-config, evolution-data-server, evolution
 , sqlite, gtk3, webkitgtk, libgdata, libmspack }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.36.4";
+  version = "3.40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zfq02h3r1qbxak04i49564q4s2ykvkgcyc3krjgndan9lq3kvvn";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1kgxdacqqcq8yfkij6vyqlk5r4yqvw7gh7mxqii670hrn1mb2s50";
   };
 
   nativeBuildInputs = [ cmake gettext intltool pkg-config ];
 
   buildInputs = [
-    evolution-data-server gnome3.evolution
+    evolution-data-server evolution
     sqlite libgdata
     gtk3 webkitgtk
     libmspack
   ];
 
-  # Building with libmspack as reccommended: https://wiki.gnome.org/Apps/Evolution/Building#Build_evolution-ews
   cmakeFlags = [
+    # Building with libmspack as recommended: https://wiki.gnome.org/Apps/Evolution/Building#Build_evolution-ews
     "-DWITH_MSPACK=ON"
+    # don't try to install into ${evolution}
+    "-DFORCE_INSTALL_PREFIX=ON"
   ];
 
-  PKG_CONFIG_EVOLUTION_SHELL_3_0_ERRORDIR = "${placeholder "out"}/share/evolution/errors";
-  PKG_CONFIG_EVOLUTION_SHELL_3_0_PRIVLIBDIR = "${placeholder "out"}/lib/evolution";
-  PKG_CONFIG_CAMEL_1_2_CAMEL_PROVIDERDIR = "${placeholder "out"}/lib/evolution-data-server/camel-providers";
-  PKG_CONFIG_LIBEDATA_BOOK_1_2_BACKENDDIR = "${placeholder "out"}/lib/evolution-data-server/addressbook-backends";
-  PKG_CONFIG_LIBEDATA_CAL_2_0_BACKENDDIR = "${placeholder "out"}/lib/evolution-data-server/calendar-backends";
-  PKG_CONFIG_LIBEBACKEND_1_2_MODULEDIR = "${placeholder "out"}/lib/evolution-data-server/registry-modules";
-  PKG_CONFIG_EVOLUTION_SHELL_3_0_MODULEDIR = "${placeholder "out"}/lib/evolution/modules";
-  PKG_CONFIG_EVOLUTION_DATA_SERVER_1_2_PRIVDATADIR = "${placeholder "out"}/share/evolution-data-server";
-
    passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "evolution-ews";
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
-    description = "Evolution connector for Microsoft Exchange Server protocols.";
+  meta = with lib; {
+    description = "Evolution connector for Microsoft Exchange Server protocols";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-ews";
     license = "LGPL-2.1-only OR LGPL-3.0-only"; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
     maintainers = [ maintainers.dasj19 ];

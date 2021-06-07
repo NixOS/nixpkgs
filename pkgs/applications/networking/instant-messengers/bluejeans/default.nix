@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchurl
 , rpmextract
 , libnotify
@@ -34,21 +35,23 @@
 , alsaLib
 , pulseaudio
 , makeWrapper
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.4.0";
+  version = "2.21.3";
+  buildNumber = "2";
 
   src = fetchurl {
-    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans.rpm";
-    sha256 = "180hc854ngwfn6y6nsrfn74rv78cxhq6sgshrca5zqv6wq3l98g0";
+    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans_${version}.${buildNumber}.rpm";
+    sha256 = "sha256-a/REuxkqZmLLa7N3CUgUAdq74VMD9D10a/Sx2jOj1QA=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
   libPath =
-    stdenv.lib.makeLibraryPath
+    lib.makeLibraryPath
       [
         libnotify
         libuuid
@@ -62,7 +65,7 @@ stdenv.mkDerivation rec {
         expat
         gdk-pixbuf
         dbus
-        udev.lib
+        (lib.getLib udev)
         freetype
         nspr
         glib
@@ -98,6 +101,7 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/BlueJeans/bluejeans-v2
+
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       opt/BlueJeans/resources/BluejeansHelper
@@ -106,7 +110,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
-      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so
+      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so \
+      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
       --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"
@@ -114,11 +119,11 @@ stdenv.mkDerivation rec {
     patchShebangs "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

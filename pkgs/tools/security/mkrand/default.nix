@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "mkrand-0.1.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     description = "A Digital Random Bit Generator";
     longDescription = "MKRAND is a utility for generating random information.";
     homepage = "https://github.com/mknight-tag/MKRAND/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
   }

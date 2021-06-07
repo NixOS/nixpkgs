@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , configobj
+, patiencediff
 , six
 , fastimport
 , dulwich
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.0.2";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50f16bc7faf299f98fe58573da55b0664078f94b1a0e7f0ce9e1e6a0d47e68e0";
+    sha256 = "sha256-lwKPk+UxKAhfIgUb1xPLJ/za53VdHenmBrr85RTpEps=";
   };
 
-  propagatedBuildInputs = [ configobj six fastimport dulwich launchpadlib ];
+  propagatedBuildInputs = [ configobj patiencediff six fastimport dulwich launchpadlib ];
 
   checkInputs = [ testtools ];
 

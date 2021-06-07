@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, shared-mime-info
-, autoconf, automake, intltool, libtool, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, shared-mime-info
+, autoconf, automake, intltool, libtool, pkg-config, cmake
 , ruby, librsvg
 , ncurses, m17n_lib, m17n_db, expat
 , withAnthy ? true, anthy ? null
@@ -18,7 +18,7 @@
 , withMisc ? false, libeb ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert withGtk2 -> gtk2 != null;
 assert withGtk3 -> gtk3 != null;
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf automake intltool libtool pkgconfig cmake
+    autoconf automake intltool libtool pkg-config cmake
 
     ruby # used by sigscheme build to generate function tables
     librsvg # used by uim build to generate png pixmaps from svg
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = src.meta.homepage;
     description = "A multilingual input method framework";
     license     = licenses.bsd3;

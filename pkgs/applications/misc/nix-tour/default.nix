@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, electron, runtimeShell } :
+{ lib, stdenv, fetchgit, electron, runtimeShell } :
 
 stdenv.mkDerivation rec {
   pname = "nix-tour";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     chmod 0755 $out/bin/nix-tour
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "'the tour of nix' from nixcloud.io/tour as offline version";
     homepage = "https://nixcloud.io/tour";
     license = licenses.gpl2;

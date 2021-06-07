@@ -1,5 +1,5 @@
 { fetchurl
-, stdenv
+, lib, stdenv
 , ocaml, isabelle, cvc3, perl, wget, which
 }:
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
       consistent abstraction over the various “backend” verifiers.
     '';
     homepage    = "https://tla.msr-inria.inria.fr/tlaps/content/Home.html";
-    license     = stdenv.lib.licenses.bsd2;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.badi ];
+    license     = lib.licenses.bsd2;
+    platforms   = lib.platforms.unix;
+    maintainers = [ ];
   };
 
 }

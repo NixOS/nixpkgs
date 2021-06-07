@@ -1,55 +1,25 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, asciidoc, libxml2,
-  libxslt, docbook_xsl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, perl, withDebug ? false }:
 
 stdenv.mkDerivation rec {
   pname = "tinyproxy";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
-    sha256 = "0gzapnllzyc005l3rs6iarjk1p5fc8mf9ysbck1mbzbd8xg6w35s";
+    sha256 = "13fhkmmrwzl657dq04x2wagkpjwdrzhkl141qvzr7y7sli8j0w1n";
     rev = version;
     repo = "tinyproxy";
     owner = "tinyproxy";
   };
 
-  nativeBuildInputs = [ autoreconfHook asciidoc libxml2 libxslt docbook_xsl ];
+  # perl is needed for man page generation.
+  nativeBuildInputs = [ autoreconfHook perl ];
 
-  # -z flag is not supported in darwin
-  preAutoreconf = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.ac --replace \
-          'LDFLAGS="-Wl,-z,defs $LDFLAGS"' \
-          'LDFLAGS="-Wl, $LDFLAGS"'
-  '';
+  configureFlags = lib.optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
 
-  # See: https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=154624
-  postConfigure = ''
-    substituteInPlace docs/man5/Makefile --replace \
-          "-f manpage" \
-          "--xsltproc-opts=--nonet \\
-           -f manpage \\
-           -L"
-    substituteInPlace docs/man8/Makefile --replace \
-          "-f manpage" \
-          "--xsltproc-opts=--nonet \\
-           -f manpage \\
-           -L"
-  '';
-
-  configureFlags = [
-    "--disable-debug"      # Turn off debugging
-    "--enable-xtinyproxy"  # Compile in support for the XTinyproxy header, which is sent to any web server in your domain.
-    "--enable-filter"      # Allows Tinyproxy to filter out certain domains and URLs.
-    "--enable-upstream"    # Enable support for proxying connections through another proxy server.
-    "--enable-transparent" # Allow Tinyproxy to be used as a transparent proxy daemon.
-    "--enable-reverse"     # Enable reverse proxying.
-  ] ++
-  # See: https://github.com/tinyproxy/tinyproxy/issues/1
-  stdenv.lib.optional stdenv.isDarwin "--disable-regexcheck";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tinyproxy.github.io/";
     description = "A light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = [ maintainers.carlosdagos ];
   };

@@ -3,12 +3,13 @@
   extra-cmake-modules,
 
   kauth, kcodecs, kcompletion, kconfig, kconfigwidgets, kdbusaddons, kdoctools,
-  kguiaddons, ki18n, kiconthemes, kjobwidgets, kcmutils, kdelibs4support, kio,
-  knotifications, kservice, kwidgetsaddons, kwindowsystem, kxmlgui, phonon,
+  kguiaddons, ki18n, kiconthemes, kidletime, kjobwidgets, kcmutils,
+  kio, knotifications, knotifyconfig, kservice, kwidgetsaddons,
+  kwindowsystem, kxmlgui, phonon,
 
   kimap, akonadi, akonadi-contacts, akonadi-mime, kalarmcal, kcalendarcore, kcalutils,
   kholidays, kidentitymanagement, libkdepim, mailcommon, kmailtransport, kmime,
-  pimcommon, kpimtextedit, kdepim-apps-libs, messagelib,
+  pimcommon, kpimtextedit, messagelib,
 
   qtx11extras,
 
@@ -16,7 +17,7 @@
 }:
 
 mkDerivation {
-  name = "kalarm";
+  pname = "kalarm";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.rittelle ];
@@ -24,12 +25,13 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kauth kcodecs kcompletion kconfig kconfigwidgets kdbusaddons kdoctools
-    kguiaddons ki18n kiconthemes kjobwidgets kcmutils kdelibs4support kio
-    knotifications kservice kwidgetsaddons kwindowsystem kxmlgui phonon
+    kguiaddons ki18n kiconthemes kidletime kjobwidgets kcmutils
+    kio knotifications knotifyconfig kservice kwidgetsaddons kwindowsystem
+    kxmlgui phonon
 
-    kimap akonadi akonadi-contacts akonadi-mime kalarmcal kcalendarcore kcalutils
-    kholidays kidentitymanagement libkdepim mailcommon kmailtransport kmime
-    pimcommon kpimtextedit kdepim-apps-libs messagelib
+    kimap akonadi akonadi-contacts akonadi-mime kalarmcal kcalendarcore
+    kcalutils kholidays kidentitymanagement libkdepim mailcommon kmailtransport
+    kmime pimcommon kpimtextedit messagelib
 
     qtx11extras
   ];

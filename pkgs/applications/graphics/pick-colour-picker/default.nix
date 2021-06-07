@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , buildPythonPackage
 , pygobject3
@@ -12,13 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pick-colour-picker";
-  version = "unstable-2019-10-11"; # "1.5.0-3ec940"
+  version = "unstable-2021-01-19";
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";
     repo = "ColourPicker";
-    rev = "3ec9406d787ce373f6db0d520ed38a921edb9473";
-    sha256 = "04l8ch9297nhkgcmyhsbg0il424c8vy0isns1c7aypn0zp0dc4zd";
+    rev = "dec8f144918aa7964aaf86a346161beb7e997f09";
+    sha256 = "hW2rarfchZ3M0JVfz5RbJRvMhv2PpyLNEMyMAp2gC+o=";
+    fetchSubmodules = false;
   };
 
   nativeBuildInputs = [
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     sed "s|os.environ.get('SNAP'), \"usr\"|'$out'|g" -i "$pickLoc/__main__.py"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kryogenix.org/code/pick/";
     license = licenses.mit;
     platforms = platforms.linux;

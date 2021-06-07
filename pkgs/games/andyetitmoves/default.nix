@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libvorbis, libogg, libtheora, SDL, libXft, SDL_image, zlib, libX11, libpng, openal, runtimeShell, requireFile, commercialVersion ? false }:
+{ lib, stdenv, fetchurl, libvorbis, libogg, libtheora, SDL, libXft, SDL_image, zlib, libX11, libpng, openal, runtimeShell, requireFile, commercialVersion ? false }:
 
 let plainName = "andyetitmoves";
     version   = "1.2.2";
@@ -68,8 +68,8 @@ stdenv.mkDerivation {
 
     homepage = "http://www.andyetitmoves.net/";
 
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
 
-    maintainers = with stdenv.lib.maintainers; [bluescreen303];
+    maintainers = with lib.maintainers; [bluescreen303];
   };
 }

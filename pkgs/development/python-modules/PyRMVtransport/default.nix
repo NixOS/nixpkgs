@@ -1,13 +1,19 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, flit
-, lxml, aiohttp
-, pytest, pytestcov, pytest-asyncio, pytest-mock, pytest-aiohttp, aresponses
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , pythonOlder
+, flit
+, async-timeout
+, lxml
+, httpx
+, pytestCheckHook
+, pytest-asyncio
+, pytest-httpx
 }:
 
 buildPythonPackage rec {
   pname = "PyRMVtransport";
-  version = "0.2.9";
+  version = "0.3.2";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -15,7 +21,7 @@ buildPythonPackage rec {
     owner = "cgtobi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h3d0yxzrfi47zil5gr086v0780q768z8v5psvcikqw852f93vxb";
+    sha256 = "0m74m3dhxmbv10hsvs7cpshzs3pg66va5lyq94i5j1nxrl9i7spb";
   };
 
   nativeBuildInputs = [
@@ -23,21 +29,18 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    aiohttp
+    async-timeout
+    httpx
     lxml
   ];
 
+  pythonImportsCheck = [ "RMVtransport" ];
+
   checkInputs = [
-    pytest
-    pytestcov
+    pytestCheckHook
     pytest-asyncio
-    pytest-mock
-    pytest-aiohttp
-    aresponses
+    pytest-httpx
   ];
-  checkPhase = ''
-    pytest --cov=RMVtransport tests
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/cgtobi/PyRMVtransport";

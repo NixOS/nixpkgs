@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, isPy3k
+, jaraco_functools
 , jaraco_text
 , more-itertools
 , portend
@@ -6,10 +11,10 @@
 , pytestCheckHook
 , pytestcov
 , pytest-mock
-, pytest-testmon
 , requests
+, requests-toolbelt
 , requests-unixsocket
-, setuptools_scm
+, setuptools-scm
 , setuptools-scm-git-archive
 , six
 , trustme
@@ -17,18 +22,24 @@
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "8.3.0";
+  version = "8.5.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0577e1f28661727d472671a7cc4e0c12ea0cbc5220265e70f00a8b8cb628931";
+    sha256 = "f137d03fd5155b1364bea557a7c98168665c239f6c8cedd8f80e81cdfac01567";
   };
 
-  nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
+  nativeBuildInputs = [ setuptools-scm setuptools-scm-git-archive ];
 
-  propagatedBuildInputs = [ more-itertools six ];
+  propagatedBuildInputs = [
+    # install_requires
+    jaraco_functools
+
+    more-itertools
+    six
+  ];
 
   checkInputs = [
     jaraco_text
@@ -37,8 +48,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytestcov
     pytest-mock
-    pytest-testmon
     requests
+    requests-toolbelt
     requests-unixsocket
     trustme
   ];
@@ -48,17 +59,24 @@ buildPythonPackage rec {
   # Deselect test_bind_addr_unix on darwin because times out
   # Deselect test_http_over_https_error on darwin because builtin cert fails
   # Disable warnings-as-errors because of deprecation warnings from socks on python 3.7
+  # Disable pytest-testmon because it doesn't work
   # adds many other pytest utilities which aren't necessary like linting
   preCheck = ''
     rm pytest.ini
   '';
 
-  disabledTests= [
+  disabledTests = [
     "tls" # touches network
     "peercreds_unix_sock" # test urls no longer allowed
   ] ++ lib.optionals stdenv.isDarwin [
     "http_over_https_error"
     "bind_addr_unix"
+  ];
+
+  disabledTestPaths = [
+    # avoid attempting to use 3 packages not available on nixpkgs
+    # (jaraco.apt, jaraco.context, yg.lockfile)
+    "cheroot/test/test_wsgi.py"
   ];
 
   # Some of the tests use localhost networking.

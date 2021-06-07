@@ -1,6 +1,6 @@
-{ stdenv, makeWrapper, fetchurl, dpkg
+{ stdenv, lib, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
+, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
 , xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 }:
 
@@ -20,6 +20,7 @@ let deps = [
     gtk3
     libappindicator
     libnotify
+    mesa
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXcomposite
@@ -41,11 +42,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2020.5";
+  version = "2021.3";
 
   src = fetchurl {
-    url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "131z6qlpjwxcn5a62f1f147f2z1xg185jmr0vbin8h0dwa1182vn";
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
+    sha256 = "sha256-f7ZCDZ/RN+Z0Szmnx8mbzhKZiRPjqXTsgClfWViFYzo=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  runtimeDependencies = [ systemd.lib libnotify libappindicator ];
+  runtimeDependencies = [ (lib.getLib systemd) libnotify libappindicator ];
 
   installPhase = ''
     runHook preInstall
@@ -80,13 +81,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ymarkus ];
   };
 
 }

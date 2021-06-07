@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkgconfig, ncurses, python3, openssl, libgpgerror, gpgme, xorg, AppKit, Security }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, ncurses, python3, openssl, libgpgerror, gpgme, xorg, AppKit, Security }:
 
 with rustPlatform;
 buildRustPackage rec {
@@ -14,14 +14,14 @@ buildRustPackage rec {
 
   patches = [ ./fix-tests.patch ];
 
-  cargoSha256 = "1wpn67v0xmxhn1dgzhh1pwz1yc3cizmfxhpb7qv9b27ynx4486ji";
+  cargoSha256 = "1sv5czhrafk15yj5xyd1x9jdqn1dz6aqpxxnyz49icx53qlg9f8g";
 
   cargoBuildFlags = [ "-p ripasso-cursive -p ripasso-man" ];
 
-  nativeBuildInputs = [ pkgconfig gpgme python3 ];
+  nativeBuildInputs = [ pkg-config gpgme python3 ];
   buildInputs = [
     ncurses openssl libgpgerror gpgme xorg.libxcb
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Security ];
+  ] ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   preFixup = ''
     mkdir -p "$out/man/man1"
@@ -29,7 +29,7 @@ buildRustPackage rec {
     rm $out/bin/ripasso-man
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple password manager written in Rust";
     homepage = "https://github.com/cortex/ripasso";
     license = licenses.gpl3;

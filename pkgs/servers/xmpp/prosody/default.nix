@@ -11,11 +11,11 @@
 assert withLibevent -> luaevent != null;
 assert withDBI -> luadbi != null;
 
-with stdenv.lib;
+with lib;
 
 
 stdenv.mkDerivation rec {
-  version = "0.11.5"; # also update communityModules
+  version = "0.11.9"; # also update communityModules
   pname = "prosody";
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "12s0hn6hvjbi61cdw3165l6iw0878971dmlvfg663byjsmjvvy2m";
+    sha256 = "02gzvsaq0l5lx608sfh7hfz14s6yfsr4sr4kzcsqd1cxljp35h6c";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "acd231e2b46f";
-    sha256 = "1b33lsxrrrvarknqz9xs7j7f19bzxxymmfdhch7k70x3yyiwmfsy";
+    rev = "c149edb37349";
+    sha256 = "1njw17k0nhf15hc20l28v0xzcc7jha85lqy3j97nspv9zdxmshk1";
   };
 
   buildInputs = [
@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
     "--with-lua=${lua5}"
   ];
 
+  postBuild = ''
+    make -C tools/migration
+  '';
+
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
@@ -68,6 +72,11 @@ stdenv.mkDerivation rec {
         --prefix LUA_CPATH ';' "$LUA_CPATH"
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
+        --prefix LUA_PATH ';' "$LUA_PATH" \
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
+
+      make -C tools/migration install
+      wrapProgram $out/bin/prosody-migrator \
         --prefix LUA_PATH ';' "$LUA_PATH" \
         --prefix LUA_CPATH ';' "$LUA_CPATH"
     '';
@@ -85,6 +94,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin ninjatrappeur ];
   };
 }

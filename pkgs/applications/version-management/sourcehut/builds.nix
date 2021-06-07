@@ -1,31 +1,35 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
 , buildGoModule
-, srht, redis, celery, pyyaml, markdown }:
-
+, srht
+, redis
+, celery
+, pyyaml
+, markdown
+, ansi2html
+, python
+}:
 let
-  version = "0.56.13";
+  version = "0.66.7";
 
   buildWorker = src: buildGoModule {
     inherit src version;
     pname = "builds-sr-ht-worker";
-    goPackagePath = "git.sr.ht/~sircmpwn/builds.sr.ht/worker";
 
-  vendorSha256 = "0prdlihcy5yz760llwyby747yy2981dn3gy401a48df7ndlfj6lp";
+    vendorSha256 = "sha256-giOaldV46aBqXyFH/cQVsbUr6Rb4VMhbBO86o48tRZY=";
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   inherit version;
   pname = "buildsrht";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "builds.sr.ht";
     rev = version;
-    sha256 = "0la9i93fxxphi4gf913ccjiqlfn92h3nbpl9gxcwcplm2vvi4nmq";
+    sha256 = "sha256-2MLs/DOXHjEYarXDVUcPZe3o0fmZbzVxn528SE72lhM=";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -35,6 +39,7 @@ in buildPythonPackage rec {
     celery
     pyyaml
     markdown
+    ansi2html
   ];
 
   preBuild = ''
@@ -51,7 +56,7 @@ in buildPythonPackage rec {
     cp ${buildWorker "${src}/worker"}/bin/worker $out/bin/builds.sr.ht-worker
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     description = "Continuous integration service for the sr.ht network";
     license = licenses.agpl3;

@@ -5,7 +5,7 @@
 , pytestcov
 , pytest-doctestplus
 , pytestCheckHook
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -18,11 +18,12 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
-    pytest
     pytest-doctestplus
     pytestcov
     pytestCheckHook

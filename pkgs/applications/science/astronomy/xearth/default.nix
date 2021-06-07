@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, imake, gccmakedep, libXt, libXext }:
+{ lib, stdenv, fetchurl, imake, gccmakedep, libXt, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "xearth";
@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)/" "BINDIR=bin" "MANDIR=man/man1"];
   installTargets = [ "install" "install.man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "sets the X root window to an image of the Earth";
     homepage = "http://xplanet.org";
     longDescription =
       '' Xearth  sets  the X root window to an image of the Earth, as seen from your favorite vantage point in space,
          correctly shaded for the current position of the Sun.
-	 By default, xearth updates the displayed image every  five  minutes.
+         By default, xearth updates the displayed image every  five  minutes.
       '';
     maintainers = [ maintainers.mafo ];
     license = "xearth";

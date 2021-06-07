@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "oset";
@@ -11,9 +11,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Ordered set";
-    license = stdenv.lib.licenses.psfl;
+    license = licenses.psfl;
   };
 
 }

@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, unzip, zlib, pcre, hdf5
+, cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf
 , config
 
@@ -9,7 +9,6 @@
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
 , enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
-, enableJPEG2K    ? false, jasper  # disable jasper by default (many CVE)
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
@@ -19,11 +18,11 @@
 
 , enableUnfree    ? false
 , enableIpp       ? false
-, enablePython    ? false, pythonPackages
+, enablePython    ? false, pythonPackages ? null
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
 , enableVtk       ? false, vtk
-, enableFfmpeg    ? false, ffmpeg_3
+, enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableTesseract ? false, tesseract, leptonica
 , enableTbb       ? false, tbb
@@ -36,6 +35,8 @@
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
+
+assert enablePython -> pythonPackages != null;
 
 let
   version = "3.4.8";
@@ -187,8 +188,7 @@ stdenv.mkDerivation {
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
     ++ lib.optionals enableEXR [ openexr ilmbase ]
-    ++ lib.optional enableJPEG2K jasper
-    ++ lib.optional enableFfmpeg ffmpeg_3
+    ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
                      [ VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
@@ -208,7 +208,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -225,7 +225,6 @@ stdenv.mkDerivation {
     "-DBUILD_DOCS=${printEnabled enableDocs}"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
-    (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "WEBP" enableWebP)
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
@@ -247,8 +246,6 @@ stdenv.mkDerivation {
     # Autodetection broken by https://github.com/opencv/opencv/pull/13337
     "-DEIGEN_INCLUDE_PATH=${eigen}/include/eigen3"
   ];
-
-  enableParallelBuilding = true;
 
   postBuild = lib.optionalString enableDocs ''
     make doxygen
@@ -274,7 +271,7 @@ stdenv.mkDerivation {
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
     license = with licenses; if enableUnfree then unfree else bsd3;

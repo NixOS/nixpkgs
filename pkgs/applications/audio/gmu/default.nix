@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_gfx, SDL_image, tremor, flac, mpg123, libmikmod
+{lib, stdenv, fetchurl, SDL, SDL_gfx, SDL_image, tremor, flac, mpg123, libmikmod
 , speex, ncurses
 , keymap ? "default"
 , conf ? "unknown"
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://wejp.k.vu/projects/gmu";
     description = "Open source music player for portable gaming consoles and handhelds";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

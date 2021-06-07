@@ -1,14 +1,14 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, fetchpatch
 , atk
 , cairo
 , desktop-file-utils
 , evolution-data-server
+, evolution
 , gcr
 , gettext
 , glib
-, gnome3
+, gnome
 , gpgme
 , gtk3
 , gtksourceview3
@@ -17,28 +17,20 @@
 , libxml2
 , meson
 , ninja
-, pkgconfig
+, pkg-config
+, python3
 , sqlite
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "almanah";
-  version = "0.12.0";
+  version = "0.12.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09rxx4s4c34d1axza6ayss33v78p44r9bpx058shllh1sf5avpcb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "lMpDQOxlGljP66APR49aPbTZnfrGakbQ2ZcFvmiPMFo=";
   };
-
-  patches = [
-    # Fix gpgme detection
-    # https://gitlab.gnome.org/GNOME/almanah/merge_requests/7
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/almanah/commit/4b979c4145ef2fbceebb3849a70df1d0ceb1bb93.patch";
-      sha256 = "0wwkgqr5vi597j734xq0fwgk1zpcabp8wi8b1lnb1ksnqfi3wwxb";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -46,7 +38,8 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
+    python3
     wrapGAppsHook
   ];
 
@@ -56,7 +49,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     gcr
     glib
-    gnome3.evolution
+    evolution
     gpgme
     gtk3
     gtksourceview3
@@ -66,13 +59,13 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none"; # it is quite odd
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small GTK application to allow to keep a diary of your life";
     homepage = "https://wiki.gnome.org/Apps/Almanah_Diary";
     license = licenses.gpl3Plus;

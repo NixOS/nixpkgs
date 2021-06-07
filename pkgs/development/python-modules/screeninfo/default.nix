@@ -1,12 +1,13 @@
-{ stdenv, buildPythonApplication, fetchPypi, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
+{ lib, buildPythonApplication, fetchPypi, isPy27, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
 
 buildPythonApplication rec {
   pname = "screeninfo";
-  version = "0.6.5";
+  version = "0.6.7";
+  disabled = isPy27; # dataclasses isn't available for python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vcw54crdgmbzwlrfg80kd1a8p9i10yks8k0szzi0k5q80zhp8xz";
+    sha256 = "1c4bac1ca329da3f68cbc4d2fbc92256aa9bb8ff8583ee3e14f91f0a7baa69cb";
   };
 
   # dataclasses is a compatibility shim for python 3.6 ONLY
@@ -22,11 +23,11 @@ buildPythonApplication rec {
       --replace "load_library(\"Xrandr\")" "ctypes.cdll.LoadLibrary(\"${libXrandr}/lib/libXrandr.so\")"
   '';
 
-  propagatedBuildInputs = stdenv.lib.optional isPy36 dataclasses;
+  propagatedBuildInputs = lib.optional isPy36 dataclasses;
 
   buildInputs = [ libX11 libXinerama libXrandr];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fetch location and size of physical screens";
     homepage = "https://github.com/rr-/screeninfo";
     license = licenses.mit;

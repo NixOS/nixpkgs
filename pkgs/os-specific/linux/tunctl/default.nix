@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "tunctl-1.5";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://tunctl.sourceforge.net/";
     description = "Utility to set up and maintain TUN/TAP network interfaces";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

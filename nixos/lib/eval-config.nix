@@ -24,11 +24,11 @@
   check ? true
 , prefix ? []
 , lib ? import ../../lib
+, extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
+                 in if e == "" then [] else [(import e)]
 }:
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs;
-    extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                   in if e == "" then [] else [(import e)];
 in
 
 let

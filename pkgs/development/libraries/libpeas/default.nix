@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, gnome
 , glib, gtk3, gobject-introspection, python3, ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "1.26.0";
+  version = "1.30.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xkk9zhkw8f2fm7g9nb4ry4xxig5n27s7rjmx6l7jr2941zdfxm9";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "18xrk1c1ixlhkmykcfiafrl2am470ws687xqvjlq40zwkcp5dx8b";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja gettext gobject-introspection ];
+  nativeBuildInputs = [ pkg-config meson ninja gettext gobject-introspection ];
   buildInputs =  [ glib gtk3 ncurses python3 python3.pkgs.pygobject3 ];
   propagatedBuildInputs = [
     # Required by libpeas-1.0.pc
@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GObject-based plugins engine";
     homepage = "https://wiki.gnome.org/Projects/Libpeas";
     license = licenses.gpl2Plus;

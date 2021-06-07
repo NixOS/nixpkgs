@@ -1,6 +1,6 @@
-{ python, stdenv }:
+{ python3, lib }:
 
-with python.pkgs;
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "chkcrontab";
@@ -11,10 +11,10 @@ buildPythonApplication rec {
     sha256 = "0gmxavjkjkvjysgf9cf5fcpk589gb75n1mn20iki82wifi1pk1jn";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to detect crontab errors";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     homepage = "https://github.com/lyda/chkcrontab";
   };
 }

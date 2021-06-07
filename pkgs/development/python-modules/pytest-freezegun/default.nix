@@ -1,23 +1,31 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, isPy27
+, fetchFromGitHub
 , freezegun
 , pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-freezegun";
-  version = "0.4.1";
+  version = "0.4.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "060cdf192848e50a4a681a5e73f8b544c4ee5ebc1fab3cb7223a0097bac2f83f";
+  src = fetchFromGitHub {
+    owner = "ktosiek";
+    repo = "pytest-freezegun";
+    rev = version;
+    sha256 = "10c4pbh03b4s1q8cjd75lr0fvyf9id0zmdk29566qqsmaz28npas";
   };
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     freezegun
-    pytest
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   meta = with lib; {

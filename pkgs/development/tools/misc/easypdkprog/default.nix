@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easypdkprog";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "free-pdk";
     repo = "easy-pdk-programmer-software";
     rev = version;
-    sha256 = "06bn86rd57ff567l0ipx38raih0zll3y16lg5fpn7c601a9jldps";
+    sha256 = "0hc3gdmn6l01z63hzzwdhbdyy288gh5v219bsfm8fb1498vpnd6f";
   };
 
   installPhase = ''

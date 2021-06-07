@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   pname = "FlameGraph";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = with licenses; [ asl20 cddl gpl2Plus ];
     homepage = "http://www.brendangregg.com/flamegraphs.html";
     description = "Visualization for profiled code";

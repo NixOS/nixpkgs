@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , intltool
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.12.6";
+  version = "1.12.9";
 
   src = fetchurl {
-    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}b.tar.bz2";
-    sha256 = "03pr1gmiv5y0i92bkhcxr8s311ll91chz19wb96jkixx32xav91d";
+    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    sha256 = "06ybr1wjlfir8iqjx6x0v1knd4b2hsy30qmkk4kssy6ky2ahc66q";
   };
 
   nativeBuildInputs = [
@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ vcunat romildo ];
+    maintainers = with maintainers; [ romildo ];
     platforms = platforms.linux;
 
     longDescription = ''

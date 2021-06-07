@@ -1,11 +1,13 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-applehelp";
   version = "1.0.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +18,7 @@ buildPythonPackage rec {
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
     homepage = "http://sphinx-doc.org/";
     license = licenses.bsd0;

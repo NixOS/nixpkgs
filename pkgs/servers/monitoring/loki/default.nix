@@ -1,34 +1,51 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, systemd
+}:
 
-buildGoPackage rec {
-  version = "1.5.0";
+buildGoModule rec {
+  version = "2.2.1";
   pname = "grafana-loki";
-  goPackagePath = "github.com/grafana/loki";
-
-  doCheck = true;
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "137lnd69p8qfg2z8l32dr1mrk2lhrxjx392xfij11sy5i9blfc3n";
+    sha256 = "sha256-ujZD5GIgMewvEQW3Wnt0eHdMIFs77PkkEecgCDw9290=";
   };
 
-  postPatch = ''
-    substituteInPlace pkg/distributor/distributor_test.go --replace \
-      '"eth0", "en0", "lo0"' \
-      '"lo"'
-  '';
+  vendorSha256 = null;
+
+  subPackages = [
+    # TODO split every executable into its own package
+    "cmd/loki"
+    "cmd/loki-canary"
+    "cmd/promtail"
+    "cmd/logcli"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ systemd.dev ];
+  buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
 
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/promtail \
-      --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) loki; };
+
+  buildFlagsArray = let t = "github.com/grafana/loki/pkg/build"; in
+    ''
+      -ldflags=-s -w -X ${t}.Version=${version} -X ${t}.BuildUser=nix@nixpkgs -X ${t}.BuildDate=unknown -X ${t}.Branch=unknown -X ${t}.Revision=unknown
+    '';
+
+  doCheck = true;
+
+  meta = with lib; {
     description = "Like Prometheus, but for logs";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/loki/";

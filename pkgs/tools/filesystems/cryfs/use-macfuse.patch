@@ -1,0 +1,207 @@
+diff --git a/.travisci/install.sh b/.travisci/install.sh
+index 9057a75b..2929c360 100755
+--- a/.travisci/install.sh
++++ b/.travisci/install.sh
+@@ -6,12 +6,11 @@ set -e
+ if [ "${CXX}" == "g++" ]; then
+     # We need to uninstall oclint because it creates a /usr/local/include/c++ symlink that clashes with the gcc5 package
+     # see https://github.com/Homebrew/homebrew-core/issues/21172
+-    brew cask uninstall oclint
++    brew uninstall oclint
+     brew install gcc@7
+ fi
+ 
+-brew cask install osxfuse
+-brew install libomp
++brew install libomp pkg-config macfuse
+ 
+ # By default, travis only fetches the newest 50 commits. We need more in case we're further from the last version tag, so the build doesn't fail because it can't generate the version number.
+ git fetch --unshallow --tags
+diff --git a/README.md b/README.md
+index b0f4a684..7001119a 100644
+--- a/README.md
++++ b/README.md
+@@ -19,7 +19,7 @@ OSX
+ 
+ CryFS is distributed via Homebrew. Just do
+ 
+-    brew cask install osxfuse
++    brew install osxfuse
+     brew install cryfs
+     
+ Windows (experimental)
+@@ -45,6 +45,7 @@ Requirements
+   - Git (for getting the source code)
+   - GCC version >= 5.0 or Clang >= 4.0
+   - CMake version >= 3.0 
++  - pkg-config (on Unix)
+   - libcurl4 (including development headers)
+   - Boost libraries version >= 1.65.1 (including development headers)
+     - filesystem
+@@ -53,20 +54,20 @@ Requirements
+     - program_options
+     - thread
+   - SSL development libraries (including development headers, e.g. libssl-dev)
+-  - libFUSE version >= 2.8.6 (including development headers), on Mac OS X instead install osxfuse from https://osxfuse.github.io/
++  - libFUSE version >= 2.8.6 (including development headers), on Mac OS X instead install macFUSE from https://osxfuse.github.io/
+   - Python >= 2.7
+   - OpenMP
+ 
+ You can use the following commands to install these requirements
+ 
+         # Ubuntu
+-        $ sudo apt install git g++ cmake make libcurl4-openssl-dev libboost-filesystem-dev libboost-system-dev libboost-chrono-dev libboost-program-options-dev libboost-thread-dev libssl-dev libfuse-dev python
++        $ sudo apt install git g++ cmake make pkg-config libcurl4-openssl-dev libboost-filesystem-dev libboost-system-dev libboost-chrono-dev libboost-program-options-dev libboost-thread-dev libssl-dev libfuse-dev python
+ 
+         # Fedora
+-        sudo dnf install git gcc-c++ cmake make libcurl-devel boost-devel boost-static openssl-devel fuse-devel python
++        sudo dnf install git gcc-c++ cmake make pkgconf libcurl-devel boost-devel boost-static openssl-devel fuse-devel python
+ 
+         # Macintosh
+-        brew install cmake boost openssl libomp
++        brew install cmake pkg-config boost openssl libomp
+ 
+ Build & Install
+ ---------------
+@@ -116,17 +117,17 @@ On most systems, CMake should find the libraries automatically. However, that do
+ 
+         cmake .. -DBoost_USE_STATIC_LIBS=off
+ 
+-2. **Fuse/Osxfuse library not found**
++2. **Fuse library not found**
+ 
+     Pass in the library path with
+ 
+-        cmake .. -DFUSE_LIB_PATH=/path/to/fuse/or/osxfuse
++        PKG_CONFIG_PATH=/path-to-fuse-or-macFUSE/lib/pkgconfig cmake ..
+ 
+-3. **Fuse/Osxfuse headers not found**
++3. **Fuse headers not found**
+ 
+     Pass in the include path with
+ 
+-        cmake .. -DCMAKE_CXX_FLAGS="-I/path/to/fuse/or/osxfuse/headers"
++        PKG_CONFIG_PATH=/path-to-fuse-or-macFUSE/lib/pkgconfig cmake ..
+ 
+ 4. **Openssl headers not found**
+ 
+diff --git a/cmake-utils/utils.cmake b/cmake-utils/utils.cmake
+index da4dff8c..66021c5c 100644
+--- a/cmake-utils/utils.cmake
++++ b/cmake-utils/utils.cmake
+@@ -157,33 +157,6 @@ function(require_clang_version VERSION)
+     endif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+ endfunction(require_clang_version)
+ 
+-##################################################
+-# Find the location of a library and return its full path in OUTPUT_VARIABLE.
+-# If PATH_VARIABLE points to a defined variable, then the library will only be searched in this path.
+-# If PATH_VARIABLE points to a undefined variable, default system locations will be searched.
+-#
+-# Uses (the following will search for fuse in system locations by default, and if the user passes -DFUSE_LIB_PATH to cmake, it will only search in this path.
+-#  find_library_with_path(MYLIBRARY fuse FUSE_LIB_PATH)
+-#  target_link_library(target ${MYLIBRARY})
+-##################################################
+-function(find_library_with_path OUTPUT_VARIABLE LIBRARY_NAME PATH_VARIABLE)
+-    if(${PATH_VARIABLE})
+-        find_library(${OUTPUT_VARIABLE} ${LIBRARY_NAME} PATHS ${${PATH_VARIABLE}} NO_DEFAULT_PATH)
+-        if (${OUTPUT_VARIABLE} MATCHES NOTFOUND)
+-            message(FATAL_ERROR "Didn't find ${LIBRARY_NAME} in path specified by the ${PATH_VARIABLE} parameter (${${PATH_VARIABLE}}). Pass in the correct path or remove the parameter to try common system locations.")
+-        else(${OUTPUT_VARIABLE} MATCHES NOTFOUND)
+-            message(STATUS "Found ${LIBRARY_NAME} in user-defined path ${${PATH_VARIABLE}}")
+-        endif(${OUTPUT_VARIABLE} MATCHES NOTFOUND)
+-    else(${PATH_VARIABLE})
+-        find_library(${OUTPUT_VARIABLE} ${LIBRARY_NAME})
+-        if (${OUTPUT_VARIABLE} MATCHES NOTFOUND)
+-            message(FATAL_ERROR "Didn't find ${LIBRARY_NAME} library. If ${LIBRARY_NAME} is installed, try passing in the library location with -D${PATH_VARIABLE}=/path/to/${LIBRARY_NAME}/lib.")
+-        else(${OUTPUT_VARIABLE} MATCHES NOTFOUND)
+-            message(STATUS "Found ${LIBRARY_NAME} in system location")
+-        endif(${OUTPUT_VARIABLE} MATCHES NOTFOUND)
+-    endif(${PATH_VARIABLE})
+-endfunction(find_library_with_path)
+-
+ include(cmake-utils/TargetArch.cmake)
+ function(get_target_architecture output_var)
+ 	target_architecture(local_output_var)
+diff --git a/src/fspp/fuse/CMakeLists.txt b/src/fspp/fuse/CMakeLists.txt
+index b991bd72..8df3dbb7 100644
+--- a/src/fspp/fuse/CMakeLists.txt
++++ b/src/fspp/fuse/CMakeLists.txt
+@@ -35,12 +35,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+     DESTINATION "${CMAKE_INSTALL_BINDIR}"
+   )
+ 
+-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+-  set(CMAKE_FIND_FRAMEWORK LAST)
+-  find_library_with_path(FUSE "osxfuse" FUSE_LIB_PATH)
+-  target_link_libraries(${PROJECT_NAME} PUBLIC ${FUSE})
+-else() # Linux
+-  find_library_with_path(FUSE "fuse" FUSE_LIB_PATH)
+-  target_link_libraries(${PROJECT_NAME} PUBLIC ${FUSE})
++else() # Linux and macOS
++  find_package(PkgConfig REQUIRED)
++  pkg_check_modules(Fuse REQUIRED IMPORTED_TARGET fuse)
++  target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::Fuse)
+ endif()
+ 
++if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
++  set(CMAKE_FIND_FRAMEWORK LAST)
++endif()
+diff --git a/src/fspp/fuse/Fuse.cpp b/src/fspp/fuse/Fuse.cpp
+index 52cd5644..df0b400d 100644
+--- a/src/fspp/fuse/Fuse.cpp
++++ b/src/fspp/fuse/Fuse.cpp
+@@ -295,7 +295,7 @@ vector<char *> Fuse::_build_argv(const bf::path &mountdir, const vector<string>
+   // Make volume name default to mountdir on macOS
+   _add_fuse_option_if_not_exists(&argv, "volname", mountdir.filename().string());
+ #endif
+-  // TODO Also set read/write size for osxfuse. The options there are called differently.
++  // TODO Also set read/write size for macFUSE. The options there are called differently.
+   // large_read not necessary because reads are large anyhow. This option is only important for 2.4.
+   //argv.push_back(_create_c_string("-o"));
+   //argv.push_back(_create_c_string("large_read"));
+diff --git a/src/fspp/fuse/params.h b/src/fspp/fuse/params.h
+index 4a45ef79..9903ac82 100644
+--- a/src/fspp/fuse/params.h
++++ b/src/fspp/fuse/params.h
+@@ -3,14 +3,6 @@
+ #define MESSMER_FSPP_FUSE_PARAMS_H_
+ 
+ #define FUSE_USE_VERSION 26
+-#if defined(__linux__) || defined(__FreeBSD__)
+ #include <fuse.h>
+-#elif __APPLE__
+-#include <osxfuse/fuse.h>
+-#elif defined(_MSC_VER)
+-#include <fuse.h> // Dokany fuse
+-#else
+-#error System not supported
+-#endif
+ 
+ #endif
+diff --git a/src/fspp/impl/FilesystemImpl.cpp b/src/fspp/impl/FilesystemImpl.cpp
+index bc0ffbd7..23b28601 100644
+--- a/src/fspp/impl/FilesystemImpl.cpp
++++ b/src/fspp/impl/FilesystemImpl.cpp
+@@ -321,7 +321,7 @@ void FilesystemImpl::statfs(struct ::statvfs *fsstat) {
+   fsstat->f_namemax = stat.max_filename_length;
+ 
+   //f_frsize, f_favail, f_fsid and f_flag are ignored in fuse, see http://fuse.sourcearchive.com/documentation/2.7.0/structfuse__operations_4e765e29122e7b6b533dc99849a52655.html#4e765e29122e7b6b533dc99849a52655
+-  fsstat->f_frsize = fsstat->f_bsize; // even though this is supposed to be ignored, osxfuse needs it.
++  fsstat->f_frsize = fsstat->f_bsize; // even though this is supposed to be ignored, macFUSE needs it.
+ }
+ 
+ void FilesystemImpl::createSymlink(const bf::path &to, const bf::path &from, ::uid_t uid, ::gid_t gid) {
+diff --git a/test/fspp/testutils/FuseThread.cpp b/test/fspp/testutils/FuseThread.cpp
+index 277a2dac..7f3638db 100644
+--- a/test/fspp/testutils/FuseThread.cpp
++++ b/test/fspp/testutils/FuseThread.cpp
+@@ -23,7 +23,7 @@ void FuseThread::start(const bf::path &mountDir, const vector<string> &fuseOptio
+   //Wait until it is running (busy waiting is simple and doesn't hurt much here)
+   while(!_fuse->running()) {}
+ #ifdef __APPLE__
+-  // On Mac OS X, _fuse->running() returns true too early, because osxfuse calls init() when it's not ready yet. Give it a bit time.
++  // On Mac OS X, _fuse->running() returns true too early, because macFUSE calls init() when it's not ready yet. Give it a bit time.
+   std::this_thread::sleep_for(std::chrono::milliseconds(200));
+ #endif
+ }

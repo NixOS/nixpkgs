@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, xdg_utils
+{ lib, buildPythonPackage, fetchFromGitHub, xdg-utils
 , requests, filetype, pyparsing, configparser, arxiv2bib
 , pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
 , click, python-slugify, habanero, isbnlib, typing-extensions
 , prompt_toolkit, pygments, stevedore, tqdm, lxml
-, python-doi, isPy3k, pythonOlder, pytestcov
+, python-doi, isPy3k, pytestcov
 #, optional, dependencies
 , whoosh, pytest
 , stdenv
@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.10";
+  version = "0.11.1";
   disabled = !isPy3k;
 
   # Missing tests on Pypi
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fmrvxs6ixfwjlp96b69db7fpvyqfy2n3c23kdz8yr0vhnp82l93";
+    sha256 = "0bbkjyw1fsvvp0380l404h2lys8ib4xqga5s6401k1y1hld28nl6";
   };
 
   propagatedBuildInputs = [
@@ -40,13 +40,12 @@ buildPythonPackage rec {
       --replace "python-slugify>=1.2.6,<4" "python-slugify"
   '';
 
-  # pytest seems to hang with python3.8
-  doCheck = !stdenv.isDarwin && pythonOlder "3.8";
+  doCheck = !stdenv.isDarwin;
 
   checkInputs = ([
     pytest pytestcov
   ]) ++ [
-    xdg_utils
+    xdg-utils
   ];
 
   # most of the downloader tests and 4 other tests require a network connection

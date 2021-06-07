@@ -7,7 +7,7 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
-  phpWithPspell = pkgs.php.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+  phpWithPspell = pkgs.php74.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 in
 {
   options.services.roundcube = {
@@ -203,6 +203,11 @@ in
       phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
+
+    # Restart on config changes.
+    systemd.services.phpfpm-roundcube.restartTriggers = [
+      config.environment.etc."roundcube/config.inc.php".source
+    ];
 
     systemd.services.roundcube-setup = mkMerge [
       (mkIf (cfg.database.host == "localhost") {

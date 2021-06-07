@@ -1,7 +1,7 @@
 # restart using 'killall -TERM fcron; fcron -b
 # use convert-fcrontab to update fcrontab files
 
-{ stdenv, fetchurl, perl, busybox, vim }:
+{ lib, stdenv, fetchurl, perl, busybox, vim }:
 
 stdenv.mkDerivation rec {
   pname = "fcron";
@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
     find -type f | xargs sed -i -e 's@^\(\s\)*chown@\1:@' -e 's@^\(\s\)*chgrp@\1:@'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description="A command scheduler with extended capabilities over cron and anacron";
     homepage = "http://fcron.free.fr";
     license = licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

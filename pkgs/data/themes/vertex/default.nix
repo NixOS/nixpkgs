@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "theme-vertex";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c9mhrs95ahz37djrv176vn41ywvj26ilwmnr1h9171giv6hid98";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     cp AUTHORS README.md $out/share/doc/$pname/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Theme for GTK 3, GTK 2, Gnome-Shell, and Cinnamon";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rycee romildo ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

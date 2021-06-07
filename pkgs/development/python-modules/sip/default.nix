@@ -1,44 +1,40 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, toml }:
 
 buildPythonPackage rec {
-  pname = sip-module;
-  version = "4.19.22";
-  format = "other";
+  pname = "sip";
+  version = "5.5.0";
 
-  disabled = isPyPy;
-
-  src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/sip/${version}/sip-${version}.tar.gz";
-    sha256 = "0idywc326l8v1m3maprg1aq2gph67mmnnsskvlwfx8n19s16idz1";
+  src = fetchPypi {
+    pname = "sip";
+    inherit version;
+    sha256 = "1idaivamp1jvbbai9yzv471c62xbqxhaawccvskaizihkd0lq0jx";
   };
 
-  configurePhase = ''
-    ${python.executable} ./configure.py \
-      --sip-module ${sip-module} \
-      -d $out/${python.sitePackages} \
-      -b $out/bin -e $out/include
-  '';
+  propagatedBuildInputs = [ packaging toml ];
 
-  enableParallelBuilding = true;
+  # There aren't tests
+  doCheck = false;
 
-  installCheckPhase = let
-    modules = [
-      sip-module
-      "sipconfig"
-    ];
-    imports = lib.concatMapStrings (module: "import ${module};") modules;
-  in ''
-    echo "Checking whether modules can be imported..."
-    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH ${python.interpreter} -c "${imports}"
-  '';
+  pythonImportsCheck = [ "sipbuild" ];
 
-  doCheck = true;
+  # FIXME: Why isn't this detected automatically?
+  # Needs to be specified in pyproject.toml, e.g.:
+  # [tool.sip.bindings.MODULE]
+  # tags = [PLATFORM_TAG]
+  platform_tag =
+    if stdenv.targetPlatform.isLinux then
+      "WS_X11"
+    else if stdenv.targetPlatform.isDarwin then
+      "WS_MACX"
+    else if stdenv.targetPlatform.isWindows then
+      "WS_WIN"
+    else
+      throw "unsupported platform";
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
     homepage    = "http://www.riverbankcomputing.co.uk/";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 sander ];
-    platforms   = platforms.all;
+    license     = licenses.gpl3Only;
+    maintainers = with maintainers; [ eduardosm ];
   };
 }

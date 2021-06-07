@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk11 }:
 
 stdenv.mkDerivation rec {
   pname = "metabase";
-  version = "0.35.4";
+  version = "0.38.0";
 
   src = fetchurl {
-    url = "http://downloads.metabase.com/v${version}/metabase.jar";
-    sha256 = "1mggrkd4ih8fak4nk3a8z5677nblvihjvkvgmix080cps44bcfd8";
+    url = "https://downloads.metabase.com/v${version}/metabase.jar";
+    sha256 = "170fj2cc7drh6c1dgl60f9n79vfrsw2v57lmds677naxnq254jhp";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/metabase --add-flags "-jar $src"
+    makeWrapper ${jdk11}/bin/java $out/bin/metabase --add-flags "-jar $src"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The easy, open source way for everyone in your company to ask questions and learn from data";
     homepage    = "https://metabase.com";
     license     = licenses.agpl3;

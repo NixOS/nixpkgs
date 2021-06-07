@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3
+{ lib, stdenv, fetchurl, python3
 , libfaketime, fonttosfnt
 , bdftopcf, mkfontscale
 }:
@@ -35,15 +35,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # install otb fonts (for GTK applications)
-    install -m 644 -D *.otb -t "$otb/share/fonts/misc";
-    mkfontdir "$otb/share/fonts/misc"
+    install -m 644 -D *.otb -t "$out/share/fonts/misc";
+    mkfontdir "$out/share/fonts/misc"
   '';
 
   installTargets = [ "install" "fontdir" ];
 
-  outputs = [ "out" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A clean fixed width font";
     longDescription = ''
       Terminus Font is designed for long (8 and more hours per day) work

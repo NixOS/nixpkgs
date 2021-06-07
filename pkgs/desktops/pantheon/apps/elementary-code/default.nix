@@ -1,7 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, fetchpatch
+, nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -35,11 +37,19 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "158zrzyyy507rxcbsb5am9768zbakpwrl61ixab57zla7z51l0g0";
+    sha256 = "sha256-4AEayj+K/lOW6jEYmvmdan1kTqqqLL1YzwcU7/3PH5U=";
   };
 
+  patches = [
+    # Fix build with latest Vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/code/commit/c50580d3336296823da9a2c50b824f21fde50286.patch";
+      sha256 = "F+ZYlnZWYCU68G4oayLfbTnvSnTb4YA0zHVGD/Uf3KA=";
+    })
+  ];
+
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -49,7 +59,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -78,7 +88,7 @@ stdenv.mkDerivation rec {
   # ctags needed in path by outline plugin
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${stdenv.lib.makeBinPath [ ctags ]}"
+      --prefix PATH : "${lib.makeBinPath [ ctags ]}"
     )
   '';
 
@@ -87,7 +97,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code editor designed for elementary OS";
     homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;

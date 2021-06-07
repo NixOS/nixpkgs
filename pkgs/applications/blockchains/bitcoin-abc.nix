@@ -1,26 +1,26 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, openssl, db53, boost
-, zlib, miniupnpc, qtbase ? null , qttools ? null, utillinux, protobuf, qrencode, libevent
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, cmake, openssl, db53, boost
+, zlib, miniupnpc, qtbase ? null , qttools ? null, util-linux, protobuf, qrencode, libevent
 , withGui, python3, jemalloc, zeromq4 }:
 
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-abc-" + version;
-  version = "0.21.10";
+  version = "0.21.13";
 
   src = fetchFromGitHub {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
     rev = "v${version}";
-    sha256 = "1m210g6db8f09m66v75ia1fdd1dlvs1srgk2jhd3wqbvnmjqa77f";
+    sha256 = "1x8xcdi1vcskggk9bqkwr3ah4vi9b7sj2h8hf7spac6dvz8lmzav";
   };
 
   patches = [ ./fix-bitcoin-qt-build.patch ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ openssl db53 boost zlib python3 jemalloc zeromq4
-                  miniupnpc utillinux protobuf libevent ]
+                  miniupnpc util-linux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
   cmakeFlags = optionals (!withGui) [
@@ -31,8 +31,6 @@ mkDerivation rec {
   postConfigure = ''
     find ./. -type f -iname "*.sh" -exec chmod +x {} \;
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Peer-to-peer electronic cash system (Cash client)";

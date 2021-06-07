@@ -162,6 +162,45 @@ in
             <manvolnum>7</manvolnum></citerefentry>.
           '';
         };
+
+        backupDir = mkOption {
+          type = types.str;
+          default = "${cfg.stateDir}/dump";
+          description = "Path to the dump files.";
+        };
+      };
+
+      ssh = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Enable external SSH feature.";
+        };
+
+        clonePort = mkOption {
+          type = types.int;
+          default = 22;
+          example = 2222;
+          description = ''
+            SSH port displayed in clone URL.
+            The option is required to configure a service when the external visible port
+            differs from the local listening port i.e. if port forwarding is used.
+          '';
+        };
+      };
+
+      lfs = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enables git-lfs support.";
+        };
+
+        contentDir = mkOption {
+          type = types.str;
+          default = "${cfg.stateDir}/data/lfs";
+          description = "Where to store LFS files.";
+        };
       };
 
       appName = mkOption {
@@ -198,6 +237,12 @@ in
         type = types.int;
         default = 3000;
         description = "HTTP listen port.";
+      };
+
+      enableUnixSocket = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Configure Gitea to listen on a unix socket instead of the default TCP port.";
       };
 
       cookieSecure = mkOption {
@@ -300,14 +345,34 @@ in
         ROOT = cfg.repositoryRoot;
       };
 
-      server = {
-        DOMAIN = cfg.domain;
-        HTTP_ADDR = cfg.httpAddress;
-        HTTP_PORT = cfg.httpPort;
-        ROOT_URL = cfg.rootUrl;
-        STATIC_ROOT_PATH = cfg.staticRootPath;
-        LFS_JWT_SECRET = "#jwtsecret#";
-      };
+      server = mkMerge [
+        {
+          DOMAIN = cfg.domain;
+          STATIC_ROOT_PATH = cfg.staticRootPath;
+          LFS_JWT_SECRET = "#lfsjwtsecret#";
+          ROOT_URL = cfg.rootUrl;
+        }
+        (mkIf cfg.enableUnixSocket {
+          PROTOCOL = "unix";
+          HTTP_ADDR = "/run/gitea/gitea.sock";
+        })
+        (mkIf (!cfg.enableUnixSocket) {
+          HTTP_ADDR = cfg.httpAddress;
+          HTTP_PORT = cfg.httpPort;
+        })
+        (mkIf cfg.ssh.enable {
+          DISABLE_SSH = false;
+          SSH_PORT = cfg.ssh.clonePort;
+        })
+        (mkIf (!cfg.ssh.enable) {
+          DISABLE_SSH = true;
+        })
+        (mkIf cfg.lfs.enable {
+          LFS_START_SERVER = true;
+          LFS_CONTENT_PATH = cfg.lfs.contentDir;
+        })
+
+      ];
 
       session = {
         COOKIE_NAME = "session";
@@ -316,6 +381,7 @@ in
 
       security = {
         SECRET_KEY = "#secretkey#";
+        INTERNAL_TOKEN = "#internaltoken#";
         INSTALL_LOCK = true;
       };
 
@@ -330,6 +396,10 @@ in
 
       mailer = mkIf (cfg.mailerPasswordFile != null) {
         PASSWD = "#mailerpass#";
+      };
+
+      oauth2 = {
+        JWT_SECRET = "#oauth2jwtsecret#";
       };
     };
 
@@ -357,12 +427,26 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/conf' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom/conf' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/log' - ${cfg.user} gitea - -"
-      "d '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
+      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
+      "Z '${cfg.dump.backupDir}' - ${cfg.user} gitea - -"
+      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
+      "Z '${cfg.lfs.contentDir}' - ${cfg.user} gitea - -"
+      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
+      "Z '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
       "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
 
       # If we have a folder or symlink with gitea locales, remove it
@@ -374,39 +458,68 @@ in
       description = "gitea";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ gitea pkgs.gitAndTools.git ];
+      path = [ gitea pkgs.git ];
 
+      # In older versions the secret naming for JWT was kind of confusing.
+      # The file jwt_secret hold the value for LFS_JWT_SECRET and JWT_SECRET
+      # wasn't persistant at all.
+      # To fix that, there is now the file oauth2_jwt_secret containing the
+      # values for JWT_SECRET and the file jwt_secret gets renamed to
+      # lfs_jwt_secret.
+      # We have to consider this to stay compatible with older installations.
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
         secretKey = "${cfg.stateDir}/custom/conf/secret_key";
-        jwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret";
+        oauth2JwtSecret = "${cfg.stateDir}/custom/conf/oauth2_jwt_secret";
+        oldLfsJwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret"; # old file for LFS_JWT_SECRET
+        lfsJwtSecret = "${cfg.stateDir}/custom/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
+        internalToken = "${cfg.stateDir}/custom/conf/internal_token";
       in ''
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
-          cp -f ${configFile} ${runConfig}
+          function gitea_setup {
+            cp -f ${configFile} ${runConfig}
 
-          if [ ! -e ${secretKey} ]; then
-              ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
-          fi
+            if [ ! -e ${secretKey} ]; then
+                ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
+            fi
 
-          if [ ! -e ${jwtSecret} ]; then
-              ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${jwtSecret}
-          fi
+            # Migrate LFS_JWT_SECRET filename
+            if [[ -e ${oldLfsJwtSecret} && ! -e ${lfsJwtSecret} ]]; then
+                mv ${oldLfsJwtSecret} ${lfsJwtSecret}
+            fi
 
-          KEY="$(head -n1 ${secretKey})"
-          DBPASS="$(head -n1 ${cfg.database.passwordFile})"
-          JWTSECRET="$(head -n1 ${jwtSecret})"
-          ${if (cfg.mailerPasswordFile == null) then ''
-            MAILERPASSWORD="#mailerpass#"
-          '' else ''
-            MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
-          ''}
-          sed -e "s,#secretkey#,$KEY,g" \
-              -e "s,#dbpass#,$DBPASS,g" \
-              -e "s,#jwtsecret#,$JWTSECRET,g" \
-              -e "s,#mailerpass#,$MAILERPASSWORD,g" \
-              -i ${runConfig}
-          chmod 640 ${runConfig} ${secretKey} ${jwtSecret}
+            if [ ! -e ${oauth2JwtSecret} ]; then
+                ${gitea}/bin/gitea generate secret JWT_SECRET > ${oauth2JwtSecret}
+            fi
+
+            if [ ! -e ${lfsJwtSecret} ]; then
+                ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
+            fi
+
+            if [ ! -e ${internalToken} ]; then
+                ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
+            fi
+
+            SECRETKEY="$(head -n1 ${secretKey})"
+            DBPASS="$(head -n1 ${cfg.database.passwordFile})"
+            OAUTH2JWTSECRET="$(head -n1 ${oauth2JwtSecret})"
+            LFSJWTSECRET="$(head -n1 ${lfsJwtSecret})"
+            INTERNALTOKEN="$(head -n1 ${internalToken})"
+            ${if (cfg.mailerPasswordFile == null) then ''
+              MAILERPASSWORD="#mailerpass#"
+            '' else ''
+              MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+            ''}
+            sed -e "s,#secretkey#,$SECRETKEY,g" \
+                -e "s,#dbpass#,$DBPASS,g" \
+                -e "s,#oauth2jwtsecret#,$OAUTH2JWTSECRET,g" \
+                -e "s,#lfsjwtsecret#,$LFSJWTSECRET,g" \
+                -e "s,#internaltoken#,$INTERNALTOKEN,g" \
+                -e "s,#mailerpass#,$MAILERPASSWORD,g" \
+                -i ${runConfig}
+          }
+          (umask 027; gitea_setup)
         ''}
 
         # update all hooks' binary paths
@@ -431,28 +544,39 @@ in
         User = cfg.user;
         Group = "gitea";
         WorkingDirectory = cfg.stateDir;
-        ExecStart = "${gitea}/bin/gitea web";
+        ExecStart = "${gitea}/bin/gitea web --pid /run/gitea/gitea.pid";
         Restart = "always";
-
-        # Filesystem
+        # Runtime directory and mode
+        RuntimeDirectory = "gitea";
+        RuntimeDirectoryMode = "0755";
+        # Access write directories
+        ReadWritePaths = [ cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
+        UMask = "0027";
+        # Capabilities
+        CapabilityBoundingSet = "";
+        # Security
+        NoNewPrivileges = true;
+        # Sandboxing
+        ProtectSystem = "strict";
         ProtectHome = true;
+        PrivateTmp = true;
         PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
+        ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        ReadWritePaths = cfg.stateDir;
-        # Caps
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        # Misc.
+        RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6" ];
         LockPersonality = true;
-        RestrictRealtime = true;
-        PrivateMounts = true;
-        PrivateUsers = true;
         MemoryDenyWriteExecute = true;
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        # System Call Filtering
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
       };
 
       environment = {
@@ -475,8 +599,7 @@ in
     users.groups.gitea = {};
 
     warnings =
-      optional (cfg.database.password != "") ''
-        config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead.'' ++
+      optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
       optional (cfg.extraConfig != null) ''
         services.gitea.`extraConfig` is deprecated, please use services.gitea.`settings`.
       '';
@@ -504,7 +627,7 @@ in
          Type = "oneshot";
          User = cfg.user;
          ExecStart = "${gitea}/bin/gitea dump";
-         WorkingDirectory = cfg.stateDir;
+         WorkingDirectory = cfg.dump.backupDir;
        };
     };
 
@@ -515,5 +638,5 @@ in
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
-  meta.maintainers = with lib.maintainers; [ srhb ];
+  meta.maintainers = with lib.maintainers; [ srhb ma27 ];
 }

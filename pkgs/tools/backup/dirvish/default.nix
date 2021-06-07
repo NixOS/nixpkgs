@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, perl, perlPackages }:
+{ fetchurl, lib, stdenv, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "dirvish-1.2.1";
@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
-    description = "Dirvish is a fast, disk based, rotating network backup system";
+  meta = with lib; {
+    description = "Fast, disk based, rotating network backup system";
     homepage = "http://dirvish.org/";
-    license = stdenv.lib.licenses.osl2;
+    license = lib.licenses.osl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.winpat ];
   };

@@ -1,0 +1,66 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="release-21.11">
+  <title>Release 21.11 (<quote>?</quote>, 2021.11/??)</title>
+  <para>
+    In addition to numerous new and upgraded packages, this release has
+    the following highlights:
+  </para>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        Support is planned until the end of April 2022, handing over to
+        22.05.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <section xml:id="highlights">
+    <title>Highlights</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          PHP now defaults to PHP 8.0, updated from 7.4.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="new-services">
+    <title>New Services</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
+          a GeoIP database updater from MaxMind. Available as
+          <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="backward-incompatibilities">
+    <title>Backward Incompatibilities</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>staticjinja</literal> package has been upgraded
+          from 1.0.4 to 2.0.0
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.geoip-updater</literal> was broken and has
+          been replaced by
+          <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          PHP 7.3 is no longer supported due to upstream not supporting
+          this version for the entire lifecycle of the 21.11 release.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="other-notable-changes">
+    <title>Other Notable Changes</title>
+    <para>
+    </para>
+  </section>
+</section>

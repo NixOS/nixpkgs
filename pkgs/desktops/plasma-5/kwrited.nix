@@ -1,5 +1,5 @@
 {
-  mkDerivation,
+  mkDerivation, lib,
   extra-cmake-modules,
   kcoreaddons, kdbusaddons, ki18n, knotifications, kpty, qtbase,
 }:

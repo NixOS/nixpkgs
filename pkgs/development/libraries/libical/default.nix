@@ -1,21 +1,26 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, buildPackages
 , cmake
 , glib
-, gobject-introspection
 , icu
 , libxml2
 , ninja
 , perl
-, pkgconfig
+, pkg-config
+, libical
 , python3
 , tzdata
+, fixDarwinDylibNames
+, introspectionSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, gobject-introspection
 , vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.8";
+  version = "3.0.10";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -23,20 +28,26 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "0pkh74bfrgp1slv8wsv7lbmal2m7qkixwm5llpmfwaiv14njlp68";
+    sha256 = "sha256-fLmEJlkZLYLcKZqZwitf8rH261QDPTJZf/+/+FMsGIg=";
   };
 
   nativeBuildInputs = [
     cmake
-    gobject-introspection
     ninja
     perl
-    pkgconfig
-    vala
+    pkg-config
     # Docs building fails:
     # https://github.com/NixOS/nixpkgs/pull/67204
     # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
     # gtk-doc docbook_xsl docbook_xml_dtd_43 # for docs
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # provides ical-glib-src-generator that runs during build
+    libical
+  ] ++ lib.optionals introspectionSupport [
+    gobject-introspection
+    vala
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
   installCheckInputs = [
     # running libical-glib tests
@@ -52,9 +63,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DGOBJECT_INTROSPECTION=True"
     "-DENABLE_GTK_DOC=False"
+  ] ++ lib.optionals introspectionSupport [
+    "-DGOBJECT_INTROSPECTION=True"
     "-DICAL_GLIB_VAPI=True"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
 
   patches = [
@@ -67,6 +81,13 @@ stdenv.mkDerivation rec {
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
   doInstallCheck = true;
   enableParallelChecking = false;
+  preInstallCheck = if stdenv.isDarwin then ''
+    for testexe in $(find ./src/test -maxdepth 1 -type f -executable); do
+      for lib in $(cd lib && ls *.3.dylib); do
+        install_name_tool -change $lib $out/lib/$lib $testexe
+      done
+    done
+  '' else null;
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -76,7 +97,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/libical/libical";
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;

@@ -1,9 +1,10 @@
-{ stdenv
+{ lib
 , fetchurl
+, nix-update-script
 , python3Packages
 , gdk-pixbuf
 , glib
-, gnome3
+, gnome
 , gobject-introspection
 , gtk3
 , wrapGAppsHook
@@ -13,19 +14,19 @@
 , libappindicator
 , intltool
 , wmctrl
-, xvfb_run
+, xvfb-run
 , librsvg
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.8.0";
+  version = "5.9.0";
 
   disabled = python3Packages.isPy27;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "1czxzcxix9iwv1sir1q64j5aavc7lzjjwqpisgdc1kidkwnk05zp";
+    sha256 = "sha256-jRCrkJcjUHDd3wF+Hkxg0QaW7YgIh7zM/KZ4TAH84/U=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -37,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gdk-pixbuf
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gobject-introspection
     gtk3
     keybinder3
@@ -65,8 +66,7 @@ python3Packages.buildPythonApplication rec {
     mock
     pytest
     pytest-mock
-    pytestpep8
-    xvfb_run
+    xvfb-run
   ];
 
   patches = [
@@ -94,20 +94,27 @@ python3Packages.buildPythonApplication rec {
     # skip tests in invocation that handle paths that
     # aren't nix friendly (i think)
     xvfb-run -s '-screen 0 1024x768x16' \
-      pytest -k 'not TestPath and not test_handle_key_press_event' --pep8 tests
+      pytest -k 'not TestPath and not test_handle_key_press_event' tests
 
     runHook postCheck
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ wmctrl ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+
+  meta = with lib; {
     description = "A fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse worldofpeace ];
+    maintainers = with maintainers; [ aaronjanse ];
   };
 }

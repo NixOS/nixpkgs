@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "ipfs-migrator";
-  version = "1.5.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "fs-repo-migrations";
     rev = "v${version}";
-    sha256 = "18pjxkxfbsbbj4hs4xyzfmmz991h31785ldx41dll6wa9zx4lsnm";
+    sha256 = "sha256-MxEKmoveIpuxBkGGGJHp9T11i3Py8a1fLpF0fWk0ftg=";
   };
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   subPackages = [ "." ];
 

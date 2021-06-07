@@ -1,9 +1,7 @@
-{ lib, fetchFromGitHub, buildPythonApplication
-, pygtk
-, numpy ? null
+{ lib, python2Packages, fetchFromGitHub
 }:
 
-buildPythonApplication {
+with python2Packages; buildPythonApplication {
   name = "escrotum-2019-06-10";
 
   src = fetchFromGitHub {

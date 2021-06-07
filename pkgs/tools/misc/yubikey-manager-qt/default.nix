@@ -1,63 +1,66 @@
-{ stdenv
+{ lib
+, mkDerivation
 , fetchurl
-, wrapQtAppsHook
 , pcsclite
 , pyotherside
-, pythonPackages
 , python3
 , qmake
 , qtbase
 , qtgraphicaleffects
-, qtquickcontrols
 , qtquickcontrols2
-, qtdeclarative
-, qtsvg
 , yubikey-manager
 , yubikey-personalization
 }:
 
-let inherit (stdenv) lib; in
-
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "yubikey-manager-qt";
-  version = "1.1.4";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0rbr72741q7fqkr9qmvgj2mi6192ayz7bl935q2bsnqils4wsa3f";
+    sha256 = "1jqibv7na9h2r8nxgzp40j9qpyiwx97c65krivkcqjwdjk5lrahl";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook python3.pkgs.wrapPython qmake ];
+  nativeBuildInputs = [
+    python3.pkgs.wrapPython
+    qmake
+  ];
 
   postPatch = ''
     substituteInPlace ykman-gui/deployment.pri --replace '/usr/bin' "$out/bin"
   '';
 
-  buildInputs = [ pythonPackages.python qtbase qtgraphicaleffects qtquickcontrols qtquickcontrols2 pyotherside ];
+  buildInputs = [
+    pyotherside
+    python3
+    qtbase
+    qtgraphicaleffects
+    qtquickcontrols2
+  ];
 
-  enableParallelBuilding = true;
+  pythonPath = [
+    (yubikey-manager.override { python3Packages = python3.pkgs; })
+  ];
 
-  pythonPath = [ yubikey-manager ];
-
-  dontWrapQtApps = true;
   postInstall = ''
-    buildPythonPath "$pythonPath"
-
-    wrapQtApp $out/bin/ykman-gui \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \
-      --prefix PYTHONPATH : "$program_PYTHONPATH"
-
-    mkdir -p $out/share/applications
-    cp resources/ykman-gui.desktop $out/share/applications/ykman-gui.desktop
-    mkdir -p $out/share/ykman-gui/icons
-    cp resources/icons/*.{icns,ico,png,xpm} $out/share/ykman-gui/icons
+    install -Dt $out/share/applications resources/ykman-gui.desktop
+    install -Dt $out/share/ykman-gui/icons resources/icons/*.{icns,ico,png,xpm}
     substituteInPlace $out/share/applications/ykman-gui.desktop \
-      --replace 'Exec=ykman-gui' "Exec=$out/bin/ykman-gui" \
+      --replace 'Exec=ykman-gui' "Exec=$out/bin/ykman-gui"
+  '';
+
+  qtWrapperArgs = [
+    "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ pcsclite yubikey-personalization ])
+  ];
+
+  preFixup = ''
+    buildPythonPath "$pythonPath"
+    qtWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
   meta = with lib; {
     inherit version;
-    description = "Cross-platform application for configuring any YubiKey over all USB interfaces.";
+    description = "Cross-platform application for configuring any YubiKey over all USB interfaces";
     homepage = "https://developers.yubico.com/yubikey-manager-qt/";
     license = licenses.bsd2;
     maintainers = [ maintainers.cbley ];

@@ -1,27 +1,27 @@
 { cmake
 , fetchFromGitHub
 , sqlite
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "soci";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "SOCI";
     repo = pname;
     rev = version;
-    sha256 = "06faswdxd2frqr9xnx6bxc7zwarlzsbdi3bqpz7kwdxsjvq41rnb";
+    sha256 = "sha256-d4GtxDaB+yGfyCnbvnLRUYcrPSMkUF7Opu6+SZd8opM=";
   };
 
   # Do not build static libraries
-  cmakeFlags = [ "-DSOCI_STATIC=OFF" ];
+  cmakeFlags = [ "-DSOCI_STATIC=OFF" "-DCMAKE_CXX_STANDARD=11" ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ sqlite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Database access library for C++";
     homepage = "http://soci.sourceforge.net/";
     license = licenses.boost;

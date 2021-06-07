@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, curl  }:
+{ lib, stdenv, fetchFromGitHub, curl  }:
 
 stdenv.mkDerivation rec {
-  version = "1.11.3";
+  version = "1.11.4";
   pname = "clib";
 
   src = fetchFromGitHub {
     rev    = version;
     owner  = "clibs";
     repo   = "clib";
-    sha256 = "0qwds9w9y2dy39bwh2523wra5dj820cjl11ynkshh7k94fk7qgpm";
+    sha256 = "0cxldyx5bsld8gdasqpqlnzyap294hlkgcjyw3vlzlxcb0izjy8i";
   };
 
   hardeningDisable = [ "fortify" ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C micro-package manager";
     homepage = "https://github.com/clibs/clib";
     license = licenses.mit;

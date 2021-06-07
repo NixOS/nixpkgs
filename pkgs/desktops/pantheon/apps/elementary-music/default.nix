@@ -1,7 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, fetchpatch
+, nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -37,11 +39,19 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0cb0mwsp5w2bmjq8ap9mi0jvaqr9fgq00gfrkj0mzb5x5c26hrnw";
+    sha256 = "sha256-3GZoBCu9rF+BnNk9APBzKWO1JYg1XYWwrEvwcjWvYDE=";
   };
 
+  patches = [
+    # Fix build with latest Vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/music/commit/9ed3bbb3a0d68e289a772b4603f58e52a4973316.patch";
+      sha256 = "fFO97SQzTc2fYFJFGfFPSUCdkCgZxfX1fjDQ7GH4BUs=";
+    })
+  ];
+
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -50,7 +60,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -89,7 +99,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music player and library designed for elementary OS";
     homepage = "https://github.com/elementary/music";
     license = licenses.lgpl2Plus;

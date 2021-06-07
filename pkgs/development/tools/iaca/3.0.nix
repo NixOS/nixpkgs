@@ -1,5 +1,5 @@
-{ stdenv, requireFile, unzip }:
-with stdenv.lib;
+{ lib, stdenv, requireFile, unzip }:
+with lib;
 
 stdenv.mkDerivation {
   name = "iaca-3.0";

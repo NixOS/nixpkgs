@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   name = "cccc";
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
       complexity and metrics proposed by Chidamber&Kemerer and Henry&Kafura.
     '';
     homepage = "http://cccc.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.linquize ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.linquize ];
   };
 }

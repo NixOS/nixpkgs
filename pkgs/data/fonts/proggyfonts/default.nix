@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mkfontscale }:
+{ lib, stdenv, fetchurl, mkfontscale }:
 
 stdenv.mkDerivation {
   name = "proggyfonts-0.1";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "1x196rp3wqjd7m57bgp5kfy5jmj97qncxi1vwibs925ji7dqzfgf";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://upperbounds.net";
     description = "A set of fixed-width screen fonts that are designed for code listings";
     license = licenses.mit;

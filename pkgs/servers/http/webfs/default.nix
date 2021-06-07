@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 let
   # Let's not pull the whole apache httpd package
   mime_file = fetchurl {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP server for purely static content";
     homepage    = "http://linux.bytesex.org/misc/webfs.html";
     license     = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 
 , fetchurl
 , coreutils
@@ -18,23 +18,11 @@
 
 grimshot = stdenv.mkDerivation rec {
   pname = "grimshot";
-  version = "2020-05-08";
-  rev = "b1d08db5f5112ab562f89564825e3e791b0682c4";
+  version = sway-unwrapped.version;
 
-  # master has new fixes and features, and a man page
-  # after sway-1.5 these may be switched to sway-unwrapped.src
-  bsrc = fetchurl {
-    url = "https://raw.githubusercontent.com/swaywm/sway/${rev}/contrib/grimshot";
-    sha256 = "1awzmzkib8a7q5s78xyh8za03lplqfpbasqp3lidqqmjqs882jq9";
-  };
-
-  msrc = fetchurl {
-    url = "https://raw.githubusercontent.com/swaywm/sway/${rev}/contrib/grimshot.1";
-    sha256 = "191xxjfhf61gkxl3b0f694h0nrwd7vfnyp5afk8snhhr6q7ia4jz";
-  };
+  src = sway-unwrapped.src;
 
   dontBuild = true;
-  dontUnpack = true;
   dontConfigure = true;
 
   outputs = [ "out" "man" ];
@@ -42,11 +30,11 @@ grimshot = stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   installPhase = ''
-    installManPage ${msrc}
+    installManPage contrib/grimshot.1
 
-    install -Dm 0755 ${bsrc} $out/bin/grimshot
+    install -Dm 0755 contrib/grimshot $out/bin/grimshot
     wrapProgram $out/bin/grimshot --set PATH \
-      "${stdenv.lib.makeBinPath [
+      "${lib.makeBinPath [
         sway-unwrapped
         wl-clipboard
         coreutils
@@ -67,7 +55,7 @@ grimshot = stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A helper for screenshots within sway";
     homepage = "https://github.com/swaywm/sway/tree/master/contrib";
     license = licenses.mit;

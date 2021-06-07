@@ -1,15 +1,17 @@
-{ fetchurl, lib, which, ocamlPackages }:
+{ fetchFromGitHub, lib, which, ocamlPackages }:
 
 let
   pname = "alt-ergo";
-  version = "2.3.2";
+  version = "2.4.0";
 
-  src = fetchurl {
-    url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-${version}/alt-ergo-${version}.tar.gz";
-    sha256 = "130hisjzkaslygipdaaqib92spzx9rapsd45dbh5ssczjn5qnhb9";
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = pname;
+    rev = version;
+    sha256 = "1jm1yrvsg8iyfp9bb728zdx2i7yb6z7minjrfs27k5ncjqkjm65g";
   };
 
-  preConfigure = "patchShebangs ./configure";
+  useDune2 = true;
 
   nativeBuildInputs = [ which ];
 
@@ -17,14 +19,15 @@ in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src preConfigure nativeBuildInputs;
+  inherit version src useDune2 nativeBuildInputs;
   configureFlags = pname;
+  buildInputs = with ocamlPackages; [ dune-configurator ];
   propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src preConfigure nativeBuildInputs;
+  inherit version src useDune2 nativeBuildInputs;
   configureFlags = pname;
   buildInputs = with ocamlPackages; [ menhir ];
   propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
@@ -32,11 +35,13 @@ let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src preConfigure nativeBuildInputs;
+  inherit pname version src useDune2 nativeBuildInputs;
 
   configureFlags = pname;
 
-  buildInputs = [ alt-ergo-parsers ocamlPackages.menhir ];
+  buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [
+    cmdliner menhir ])
+  ;
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

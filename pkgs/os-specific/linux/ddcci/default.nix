@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, kernel }:
+{ lib, stdenv, fetchFromGitLab, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "INCLUDEDIR=$(out)/include"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kernel module driver for DDC/CI monitors";
     homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
     license = licenses.gpl2;

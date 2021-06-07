@@ -1,7 +1,7 @@
 {
-  mkDerivation, extra-cmake-modules,
+  mkDerivation, lib, extra-cmake-modules,
   kcoreaddons, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, knotifications,
-  kwidgetsaddons, kwindowsystem, polkit-qt
+  kwidgetsaddons, kwindowsystem, polkit-qt, qtbase
 }:
 
 mkDerivation {

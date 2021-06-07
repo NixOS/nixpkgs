@@ -1,5 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , python3
@@ -20,11 +21,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0rs68cb39r9vq85pr8h3mgmyjpj8bkhkxr5cz4cn5947kf776wg9";
+    sha256 = "sha256-6XFzjpuHpGIZ+azkPuFcSF7p66sDonwLwjvlNBZDRmc=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
 
   postFixup = "gtk-update-icon-cache $out/share/icons/elementary";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Named, vector icons for elementary OS";
     longDescription = ''
       An original set of vector icons designed specifically for elementary OS and its desktop environment: Pantheon.

@@ -1,11 +1,12 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchurl
 , fetchgit
+, fetchpatch
 , meson
 , ninja
-, pkgconfig
-, gnome3
+, pkg-config
+, gnome
 , perl
 , gettext
 , gtk3
@@ -73,12 +74,26 @@ stdenv.mkDerivation rec {
     #"${patchPath}/ubuntu_ibus_configs.patch"
     # https://github.com/elementary/os-patches/blob/6975d1c254cb6ab913b8e2396877203aea8eaa65/debian/patches/elementary-dpms.patch
     ./elementary-dpms.patch
+
+    # Query GWeather DB on the fly instead of caching.
+    # Needed for the next patch to apply.
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/merge_requests/175
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/df6c69f028d27b53ac86829e11df103b25ed5a74.patch";
+      sha256 = "bKZkPzN64DXMgitjn0vUzUvKl7ldhN/mNVtPKVmHd0Q=";
+    })
+    # Adjust to libgweather changes.
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/217
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/82d88014dfca2df7e081712870e1fb017c16b808.patch";
+      sha256 = "H5k/v+M2bRaswt5nrDJFNn4gS4BdB0UfzdjUCT4yLKg=";
+    })
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     perl
     gettext
     libxml2
@@ -131,29 +146,19 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for autostart in $(grep -rl "OnlyShowIn=GNOME;" $out/etc/xdg/autostart)
-    do
-      echo "Patching OnlyShowIn to Pantheon in: $autostart"
-      sed -i "s,OnlyShowIn=GNOME;,OnlyShowIn=Pantheon;," $autostart
-    done
-
-    # This breaks lightlocker https://github.com/elementary/session-settings/commit/b0e7a2867608c3a3916f9e4e21a68264a20e44f8
-    # TODO: shouldn't be neeed for the 5.1 greeter (awaiting release)
-    rm $out/etc/xdg/autostart/org.gnome.SettingsDaemon.ScreensaverProxy.desktop
-
     # So the polkit policy can reference /run/current-system/sw/bin/elementary-settings-daemon/gsd-backlight-helper
     mkdir -p $out/bin/elementary-settings-daemon
     ln -s $out/libexec/gsd-backlight-helper $out/bin/elementary-settings-daemon/gsd-backlight-helper
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = repoName;
       attrPath = "pantheon.${pname}";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Plus;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;

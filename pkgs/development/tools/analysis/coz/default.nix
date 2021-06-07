@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libelfin
 , ncurses
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/plasma-umass/coz";
-    description = "Coz: Causal Profiling";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ zimbatm ];
+    description = "Profiler based on casual profiling";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

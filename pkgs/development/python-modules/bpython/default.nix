@@ -1,22 +1,25 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , curtsies
 , greenlet
-, mock
+, jedi
 , pygments
+, pyxdg
 , requests
 , substituteAll
 , urwid
-, which }:
+, watchdog
+, which
+}:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.19";
+  version = "0.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1764ikgj24jjq46s50apwkydqvy5a13adb2nbszk8kbci6df0v27";
+    sha256 = "88aa9b89974f6a7726499a2608fa7ded216d84c69e78114ab2ef996a45709487";
   };
 
   patches = [ (substituteAll {
@@ -24,19 +27,24 @@ buildPythonPackage rec {
     which = "${which}/bin/which";
   })];
 
-  propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];
+  propagatedBuildInputs = [
+    curtsies
+    greenlet
+    pygments
+    pyxdg
+    requests
+    urwid
+  ];
 
   postInstall = ''
     substituteInPlace "$out/share/applications/org.bpython-interpreter.bpython.desktop" \
       --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
   '';
 
-  checkInputs = [ mock ];
+  checkInputs = [ jedi watchdog ];
+  pythonImportsCheck = [ "bpython" ];
 
-  # tests fail: https://github.com/bpython/bpython/issues/712
-  doCheck = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
     license = licenses.mit;

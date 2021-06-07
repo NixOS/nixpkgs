@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , alsaLib
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/llloret/osmid";
     description = "A lightweight, portable, easy to use tool to convert MIDI to OSC and OSC to MIDI";
     license = licenses.mit;

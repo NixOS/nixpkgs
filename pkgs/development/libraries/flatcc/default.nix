@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 }:
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "FlatBuffers Compiler and Library in C for C ";
     homepage = "https://github.com/dvidelabs/flatcc";
-    license = [ stdenv.lib.licenses.asl20 ];
+    license = [ lib.licenses.asl20 ];
   };
 }

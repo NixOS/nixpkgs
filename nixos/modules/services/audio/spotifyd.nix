@@ -16,7 +16,7 @@ in
         type = types.lines;
         description = ''
           Configuration for Spotifyd. For syntax and directives, see
-          https://github.com/Spotifyd/spotifyd#Configuration.
+          <link xlink:href="https://github.com/Spotifyd/spotifyd#Configuration"/>.
         '';
       };
     };
@@ -27,6 +27,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" "sound.target" ];
       description = "spotifyd, a Spotify playing daemon";
+      environment.SHELL = "/bin/sh";
       serviceConfig = {
         ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
         Restart = "always";

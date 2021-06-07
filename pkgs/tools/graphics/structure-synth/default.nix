@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, unzip, libGLU, makeWrapper }:
+{ lib, stdenv, fetchurl, qt4, qmake4Hook, unzip, libGLU, makeWrapper }:
 
 stdenv.mkDerivation {
 
@@ -10,8 +10,8 @@ stdenv.mkDerivation {
     sha256 = "1kiammx46719az6jzrav8yrwz82nk4m72ybj0kpbnvp9wfl3swbb";
   };
 
-  buildInputs = [ qt4 unzip libGLU makeWrapper ];
-  nativeBuildInputs = [ qmake4Hook ];
+  buildInputs = [ qt4 libGLU ];
+  nativeBuildInputs = [ qmake4Hook makeWrapper unzip ];
 
   # Thanks to https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=672000#15:
   patches = [ ./gcc47.patch ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/structure-synth" --run "cd $out/share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application for generating 3D structures by specifying a design grammar";
     homepage = "http://structuresynth.sourceforge.net";
     maintainers = with maintainers; [ hodapp ];

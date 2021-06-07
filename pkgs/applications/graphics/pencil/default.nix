@@ -91,12 +91,12 @@ in stdenv.mkDerivation rec {
       $out/opt/pencil/pencil
 
     # fix missing libudev
-    ln -s ${systemd.lib}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
+    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
     wrapProgram $out/opt/pencil/pencil \
       --prefix LD_LIBRARY_PATH : $out/opt/pencil
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI prototyping/mockup tool";
     homepage    = "https://pencil.evolus.vn/";
     license     = licenses.gpl2; # Commercial license is also available

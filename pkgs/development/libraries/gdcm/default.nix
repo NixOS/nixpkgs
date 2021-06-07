@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, cmake, vtk_7, darwin
+{ lib, stdenv, fetchurl, cmake, vtk_7, darwin
 , enablePython ? false, python ? null,  swig ? null}:
 
 stdenv.mkDerivation rec {
-  version = "3.0.7";
+  version = "3.0.8";
   pname = "gdcm";
 
   src = fetchurl {
     url = "mirror://sourceforge/gdcm/${pname}-${version}.tar.bz2";
-    sha256 = "1mm1190fv059k2vrilh3znm8z1ilygwld1iazdgh5s04mi1qljni";
+    sha256 = "1q9p0r7wszn51yak9wdp61fd9i0wj3f8ja2frmhk7d1gxic7j1rk";
   };
 
   dontUseCmakeBuildDir = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "-DGDCM_BUILD_SHARED_LIBS=ON"
     "-DGDCM_USE_VTK=ON"
   ]
-  ++ stdenv.lib.optional enablePython [
+  ++ lib.optional enablePython [
     "-DGDCM_WRAP_PYTHON:BOOL=ON"
     "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
   ];
@@ -28,15 +28,15 @@ stdenv.mkDerivation rec {
     cd ../build
   '';
 
-  enableParallelBuilding = true;
-  buildInputs = [ cmake vtk_7 ]
-    ++ stdenv.lib.optional stdenv.isDarwin [
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ vtk_7 ]
+    ++ lib.optional stdenv.isDarwin [
       darwin.apple_sdk.frameworks.ApplicationServices
       darwin.apple_sdk.frameworks.Cocoa
-    ] ++ stdenv.lib.optional enablePython [ swig python ];
+    ] ++ lib.optional enablePython [ swig python ];
   propagatedBuildInputs = [ ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The grassroots cross-platform DICOM implementation";
     longDescription = ''
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.

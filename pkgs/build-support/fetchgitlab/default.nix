@@ -12,7 +12,7 @@ let
     ((optional (group != null) group) ++ [ owner repo ]);
 
   escapedSlug = replaceStrings ["." "/"] ["%2E" "%2F"] slug;
-  escapedRev = replaceStrings ["+"] ["%2B"] rev;
+  escapedRev = replaceStrings ["+" "%" "/"] ["%2B" "%25" "%2F"] rev;
 in
 
 fetchzip ({

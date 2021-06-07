@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1ivvq5ch9grdrwqq29flv9821kyb16k0cj6wgj5v0dyn63w420aw";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Contributed tools and other packages on top of the Go proto package";
     homepage = "https://github.com/emicklei/proto-contrib";

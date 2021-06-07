@@ -7,22 +7,24 @@
 , msrestazure
 , azure-common
 , azure-mgmt-nspkg
+, azure-mgmt-core
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datamigration";
-  version = "4.0.0";
+  version = "9.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1efda568d67af911156591eb308432b5f9a56075b57ac0a5dd9f7aee17d79217";
+    sha256 = "70373dbeb35a7768a47341bb3b570c559197bc1ba36fc8f8bf15139e4c8bad70";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
+    azure-mgmt-core
   ] ++ lib.optionals (!isPy3k) [
     azure-mgmt-nspkg
   ];
@@ -36,6 +38,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Data Migration Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer maxwilson ];
   };
 }

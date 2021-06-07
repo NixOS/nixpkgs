@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , glib
 , flex
@@ -14,7 +14,7 @@
 , python3
 , cctools
 , cairo
-, gnome3
+, gnome
 , substituteAll
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gobject-introspection";
-  version = "1.64.1";
+  version = "1.68.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19vz7vp10h0zj3f491yk72dp89bix6rgkzxg4qcm4d6151ksxgl0";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "09sawnv3xj9pzgy2qrrk87dl3jibfphnswb61i5bh0d2h4j28afj";
   };
 
   patches = [
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
-  ] ++ stdenv.lib.optionals x11Support [
+  ] ++ lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
     # https://github.com/NixOS/nixpkgs/issues/34080
     (substituteAll {
       src = ./absolute_gir_path.patch;
-      cairoLib = "${stdenv.lib.getLib cairo}/lib";
+      cairoLib = "${lib.getLib cairo}/lib";
     })
   ];
 
@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
     bison
     gtk-doc
     docbook-xsl-nons
-    docbook_xml_dtd_43 # FIXME: remove in next release
     docbook_xml_dtd_45
     python3
     setupHook # move .gir files
@@ -73,7 +72,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  checkInputs = stdenv.lib.optionals stdenv.isDarwin [
+  checkInputs = lib.optionals stdenv.isDarwin [
     cctools # for otool
   ];
 
@@ -91,6 +90,12 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isAarch64;
 
+  # During configurePhase, two python scripts are generated and need this. See
+  # https://github.com/NixOS/nixpkgs/pull/98316#issuecomment-695785692
+  postConfigure = ''
+    patchShebangs tools/*
+  '';
+
   preCheck = ''
     # Our gobject-introspection patches make the shared library paths absolute
     # in the GIR files. When running tests, the library is not yet installed,
@@ -107,12 +112,13 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 ]);

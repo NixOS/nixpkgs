@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "holochain-go${version}";
@@ -22,8 +22,8 @@ buildGoPackage rec {
     longDescription = "Holographic storage for distributed applications -- a validating monotonic DHT backed by authoritative hashchains for data provenance";
     homepage = "https://holochain.org/";
     downloadPage = "https://developer.holochain.org/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ gavin ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ gavin ];
 
   };
 }

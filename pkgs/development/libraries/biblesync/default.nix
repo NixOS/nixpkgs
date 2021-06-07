@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, libuuid }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, libuuid }:
 
 stdenv.mkDerivation rec {
 
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0prmd12jq2cjdhsph5v89y38j7hhd51dr3r1hivgkhczr3m5hf4s";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ libuuid ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.crosswire.org/BibleSync";
     description = "A multicast protocol to Bible software shared conavigation";
     longDescription = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       navigation, and handling of incoming packets.
     '';
     license = licenses.publicDomain;
-    maintainers = [ maintainers.AndersonTorres ]; 
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
 }

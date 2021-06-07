@@ -1,7 +1,7 @@
-{ stdenv, afl}:
+{ lib, stdenv, afl}:
 
 stdenv.mkDerivation {
-  version = stdenv.lib.getVersion afl;
+  version = lib.getVersion afl;
   pname = "libdislocator";
 
   src = afl.src;
@@ -21,14 +21,14 @@ stdenv.mkDerivation {
     chmod +x $out/bin/get-libdislocator-so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://lcamtuf.coredump.cx/afl/";
     description = ''
       Drop-in replacement for the libc allocator which improves
       the odds of bumping into heap-related security bugs in
       several ways.
     '';
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = with maintainers; [ ris ];
   };
 }

@@ -4,33 +4,36 @@
 , isPy27
 , six
 , pytest
+, pytestCheckHook
 , numpy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "0.7.0";
+  version = "0.9.0";
   disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed440f43e33191f09aed7bbc4f60db3dfb8f295ab33e04c59302af7eda9e29aa";
+    sha256 = "6fe747418461d7b202824a3486ba8f4fa17a9bd0b1eddc743ba1d6d87f03391a";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     six
     numpy
-    pytest
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
-
-  # check_distribution incorrectly pulls pytest version
-  checkPhase = ''
-    pytest -k 'not check_distribution'
-  '';
 
   meta = with lib; {
     description = "Pytest plugin with advanced doctest features";

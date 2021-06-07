@@ -1,6 +1,7 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub
 , poetry, pygls, pyparsing
 , cmake, pytest, pytest-datadir
+, fetchpatch
 }:
 
 buildPythonApplication rec {
@@ -15,6 +16,16 @@ buildPythonApplication rec {
     sha256 = "0vz7bjxkk0phjhz3h9kj6yr7wnk3g7lqmkqraa0kw12mzcfck837";
   };
 
+  patches = [
+    ./disable-test-timeouts.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # can be removed after v0.1.2
+    (fetchpatch {
+      url = "https://github.com/regen100/cmake-language-server/commit/0ec120f39127f25898ab110b43819e3e9becb8a3.patch";
+      sha256 = "1xbmarvsvzd61fnlap4qscnijli2rw2iqr7cyyvar2jd87z6sfp0";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'pygls = "^0.8.1"' 'pygls = "^0.9.0"'
@@ -27,10 +38,10 @@ buildPythonApplication rec {
   dontUseCmakeConfigure = true;
   checkPhase = "pytest";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/regen100/cmake-language-server";
     description = "CMake LSP Implementation";
     license = licenses.mit;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }

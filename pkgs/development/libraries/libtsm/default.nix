@@ -1,21 +1,19 @@
-{ stdenv, lib, fetchurl, libxkbcommon, pkgconfig, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, libxkbcommon, pkg-config, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "libtsm-3";
+  pname = "libtsm";
+  version = "4.0.1";
 
-  src = fetchurl {
-    url = "https://freedesktop.org/software/kmscon/releases/${name}.tar.xz";
-    sha256 = "01ygwrsxfii0pngfikgqsb4fxp8n1bbs47l7hck81h9b9bc1ah8i";
+  src = fetchFromGitHub {
+    owner = "Aetf";
+    repo = "libtsm";
+    rev = "v${version}";
+    sha256 = "0mwn91i5h5d518i1s05y7hzv6bc13vzcvxszpfh77473iwg4wprx";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libxkbcommon ] ++ lib.optionals stdenv.isDarwin [
-    autoreconfHook
-  ];
+  buildInputs = [ libxkbcommon ];
 
-  configureFlags = [ "--disable-debug" ];
-
-  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
     description = "Terminal-emulator State Machine";

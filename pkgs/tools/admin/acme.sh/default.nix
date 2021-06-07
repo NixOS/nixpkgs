@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute, unixtools, dnsutils }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute2, unixtools, dnsutils }:
 stdenv.mkDerivation rec {
   pname = "acme.sh";
-  version = "2.8.6";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "Neilpang";
     repo = "acme.sh";
     rev = version;
-    sha256 = "0zbs8vzbh89wxf36h9mvhin2p85n3jrsq6l5i40q1zkzgwi3648n";
+    sha256 = "sha256-BSKqfj8idpE4OV8/EJkCFo5i1vq/aEde/moqJcwuDvk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,15 +22,15 @@ stdenv.mkDerivation rec {
           openssl
           curl
           dnsutils
-          (if stdenv.isLinux then iproute else unixtools.netstat)
+          (if stdenv.isLinux then iproute2 else unixtools.netstat)
         ]
       }"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pure Unix shell script implementing ACME client protocol";
     homepage = "https://acme.sh/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.yorickvp ];
+    maintainers = teams.serokell.members;
   };
 }

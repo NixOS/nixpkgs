@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "ucspi-tcp-0.88";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     cp debian/ucspi-tcp-man/*.1 "$out/share/man/man1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line tools for building TCP client-server applications";
     longDescription = ''
       tcpserver waits for incoming connections and, for each connection, runs a

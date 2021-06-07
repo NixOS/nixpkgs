@@ -1,19 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "Unidecode";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b6aab710c2a1647e928e36d69c21e76b453cd455f4e2621000e54b2a9b8cce8";
+    sha256 = "8d73a97d387a956922344f6b74243c2c6771594659778744b2dbdaad8f6b727d";
   };
 
   LC_ALL="en_US.UTF-8";
 
   buildInputs = [ glibcLocales ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/Unidecode/";
     description = "ASCII transliterations of Unicode text";
     license = licenses.gpl2;

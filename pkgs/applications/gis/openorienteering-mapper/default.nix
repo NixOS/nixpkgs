@@ -1,6 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
+, substituteAll
 , gdal
 , cmake
 , ninja
@@ -18,7 +20,7 @@
 
 mkDerivation rec {
   pname = "OpenOrienteering-Mapper";
-  version = "0.9.3";
+  version = "0.9.5";
 
   buildInputs = [
     gdal
@@ -37,27 +39,28 @@ mkDerivation rec {
     owner = "OpenOrienteering";
     repo = "mapper";
     rev = "v${version}";
-    sha256 = "05bliglpc8170px6k9lfrp9ylpnb2zf47gnjns9b2bif8dv8zq0l";
+    sha256 = "1w8ikqpgi0ksrzjal5ihfaik4grc5v3gdnnv79j20xkr2p4yn1h5";
   };
 
   patches = [
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    ./fix-qttranslations-path.diff
+    # https://github.com/NixOS/nixpkgs/issues/86054
+    (substituteAll {
+      src = ./fix-qttranslations-path.diff;
+      inherit qttranslations;
+    })
+    # https://github.com/OpenOrienteering/mapper/pull/1907
+    (fetchpatch {
+      url = "https://github.com/OpenOrienteering/mapper/commit/bc52aa567e90a58d6963b44d5ae1909f3f841508.patch";
+      sha256 = "1bkckapzccn6k0ri6bgrr0nhis9498fnwj7b32s2ysym8zcg0355";
+    })
   ];
-
-  postPatch = ''
-    substituteInPlace src/util/translation_util.cpp \
-      --subst-var-by qttranslations ${qttranslations}
-  '';
 
   cmakeFlags = [
     # Building the manual and bundling licenses fails
     # See https://github.com/NixOS/nixpkgs/issues/85306
     "-DLICENSING_PROVIDER:BOOL=OFF"
     "-DMapper_MANUAL_QTHELP:BOOL=OFF"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    # Usually enabled on Darwin
-    "-DCMAKE_FIND_FRAMEWORK=never"
+  ] ++ lib.optionals stdenv.isDarwin [
     # FindGDAL is broken and always finds /Library/Framework unless this is
     # specified
     "-DGDAL_INCLUDE_DIR=${gdal}/include"
@@ -80,13 +83,14 @@ mkDerivation rec {
     ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       OpenOrienteering Mapper is an orienteering mapmaking program
       and provides a free alternative to the existing proprietary solution.
     '';
     homepage = "https://www.openorienteering.org/apps/mapper/";
-    license = licenses.gpl3;
+    changelog = "https://github.com/OpenOrienteering/mapper/releases/tag/v${version}";
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ mpickering sikmir ];
   };

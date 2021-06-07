@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibm-sw-tpm2";
-  version = "1628";
+  version = "1661";
 
   src = fetchurl {
     url = "mirror://sourceforge/ibmswtpm2/ibmtpm${version}.tar.gz";
-    sha256 = "18wywbsdp5sjrapznk2ydbmx0whz513dhybn1lls24xfl7kp9s58";
+    sha256 = "sha256-VRRZKK0rJPNL5qDqz5+0kuEODqkZuEKMch+pcOhdYUc=";
   };
 
   buildInputs = [ openssl ];

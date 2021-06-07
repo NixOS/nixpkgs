@@ -6,7 +6,7 @@
     The engine is relatively small and quick to build, so this is not much of a problem.
     Building a mod will result in a wrapper script that starts the mod inside the specified engine.
 */
-{ stdenv
+{ lib, stdenv
 , packageAttrs
 , patchEngine
 , wrapLaunchGame
@@ -14,7 +14,7 @@
 , engine
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   engineSourceName = engine.src.name or "engine";

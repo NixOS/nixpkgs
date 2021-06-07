@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
   name = "pgf-3.00";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0kj769hyp4z2zmdv3f8xv443wcfqn5nkkbzxzqgfxjizlz81aav7";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   # Multiple files problem
   unpackPhase = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     cp -prd * $out/share/texmf-nix
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     branch = "3";
     platforms = platforms.unix;
     license = licenses.gpl2;

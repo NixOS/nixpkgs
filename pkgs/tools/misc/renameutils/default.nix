@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline}:
+{lib, stdenv, fetchurl, readline}:
 
 stdenv.mkDerivation {
   name = "renameutils-0.12.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.nongnu.org/renameutils/";
     description = "A set of programs to make renaming of files faster";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 }

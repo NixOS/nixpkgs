@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU, libGL
+{ mkDerivation, lib, fetchurl, cmake, pkg-config, qtbase, qt5, libGLU, libGL
 , freeglut ? null, openal ? null, SDL2 ? null }:
 
 mkDerivation rec {
@@ -10,7 +10,7 @@ mkDerivation rec {
     sha256 = "1cn2rjjb7d9pkr4g5bqz55vd4pzyb7hg94cfmixjkzzkw0zw8d23";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ qtbase qt5.qtmultimedia libGLU libGL freeglut openal SDL2 ];
 
   patches = [
@@ -26,7 +26,7 @@ mkDerivation rec {
     "-DYAB_PORTS=qt"
   ] ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source Sega Saturn emulator";
     homepage = "https://yabause.org/";
     license = licenses.gpl2Plus;

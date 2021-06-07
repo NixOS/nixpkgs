@@ -1,135 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httptools
-, aiofiles
-, websockets
-, multidict
-, uvloop
-, ujson
-, pytest
-, gunicorn
-, aiohttp
-, beautifulsoup4
-, pytest-sanic
-, pytest-benchmark
-
-# required just httpcore / requests-async
-, h11
-, h2
-, certifi
-, chardet
-, idna
-, requests
-, rfc3986
-, uvicorn
+{ lib, buildPythonPackage, fetchPypi, doCheck ? true
+, aiofiles, httptools, multidict, sanic-routing, ujson, uvloop, websockets
+, pytestCheckHook, beautifulsoup4, gunicorn, uvicorn, sanic-testing
+, pytest-benchmark, pytest-sanic, pytest-sugar, pytestcov
 }:
-
-let
-
-  # This version of sanic depends on two packages that have been deprecated by
-  # their development teams:
-  #
-  # - requests-async [where first line of pypi says to use `http3` instead now]
-  # - httpcore       [where the homepage redirects to `http3` now]
-  #
-  # Since no other packages in nixpkg depend on these right now, define these
-  # packages just as local dependencies here, to avoid bloat.
-
-  httpcore = buildPythonPackage rec {
-    pname = "httpcore";
-    version = "0.3.0";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0n3bamaixxhcm27gf1ws3g6rkamvqx87087c88r6hyyl52si1ycn";
-    };
-
-    propagatedBuildInputs = [ certifi chardet h11 h2 idna rfc3986 ];
-
-    # relax pinned old version of h11
-    postConfigure = ''
-      substituteInPlace setup.py \
-        --replace "h11==0.8.*" "h11"
-      '';
-
-    # LICENCE.md gets propagated without this, causing collisions
-    postInstall = ''
-      rm $out/LICENSE.md
-    '';
-  };
-
-  requests-async = buildPythonPackage rec {
-    pname = "requests-async";
-    version = "0.5.0";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "8731420451383196ecf2fd96082bfc8ae5103ada90aba185888499d7784dde6f";
-    };
-
-    propagatedBuildInputs = [ requests httpcore ];
-
-    # LICENCE.md gets propagated without this, causing collisions
-    postInstall = ''
-      rm $out/LICENSE.md
-    '';
-  };
-
-in
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "19.6.3";
+  version = "21.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b1qqsvdjkibrw5kgr0pm7n7jzb1403132wjmb0lx3k5wyvqfi95";
+    sha256 = "1cbd12b9138b3ca69656286b0be91fff02b826e8cb72dd76a2ca8c5eb1288d8e";
   };
 
+  postPatch = ''
+    # Loosen dependency requirements.
+    substituteInPlace setup.py \
+      --replace '"pytest==5.2.1"' '"pytest"' \
+      --replace '"gunicorn==20.0.4"' '"gunicorn"' \
+      --replace '"pytest-sanic",' ""
+    # Patch a request headers test to allow brotli encoding
+    # (we build httpx with brotli support, upstream doesn't).
+    substituteInPlace tests/test_headers.py \
+      --replace "deflate\r\n" "deflate, br\r\n"
+  '';
+
   propagatedBuildInputs = [
-    httptools
-    aiofiles
-    websockets
-    multidict
-    requests-async
-    uvloop
-    ujson
+    sanic-routing httptools uvloop ujson aiofiles websockets multidict
   ];
 
   checkInputs = [
-    pytest
-    gunicorn
-    aiohttp
-    beautifulsoup4
-    pytest-sanic
-    pytest-benchmark
-    uvicorn
+    sanic-testing gunicorn pytestcov beautifulsoup4 pytest-sanic pytest-sugar
+    pytest-benchmark pytestCheckHook uvicorn
   ];
 
-  # Sanic says it needs websockets 7.x, but the changelog for 8.x is actually
-  # nearly compatible with sanic's use. So relax this constraint, with a small
-  # required code change.
-  postConfigure = ''
-    substituteInPlace setup.py --replace \
-      "websockets>=7.0,<8.0"             \
-      "websockets>=7.0,<9.0"
-    substituteInPlace sanic/websocket.py --replace    \
-           "self.websocket.subprotocol = subprotocol" \
-           "self.websocket.subprotocol = subprotocol
-            self.websocket.is_client = False"
-  '';
+  inherit doCheck;
 
-  # 10/500 tests ignored due to missing directory and
-  # requiring network access
-  checkPhase = ''
-    pytest --ignore tests/test_blueprints.py \
-           --ignore tests/test_routes.py \
-           --ignore tests/test_worker.py
-  '';
+  disabledTests = [
+    # No "examples" directory in pypi distribution
+    "test_gunicorn"
+    "test_zero_downtime"
+    # flaky
+    "test_keep_alive_client_timeout"
+    "test_check_timeouts_request_timeout"
+    "test_check_timeouts_response_timeout"
+    "test_reloader_live"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "sanic" ];
 
   meta = with lib; {
     description = "A microframework based on uvloop, httptools, and learnings of flask";
-    homepage = "http://github.com/channelcat/sanic/";
+    homepage = "https://github.com/sanic-org/sanic/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc AluisioASG ];
   };
 }

@@ -1,19 +1,31 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, setuptools, swig, verilog }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, cocotb-bus
+, pytest
+, swig
+, verilog
+}:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.3.1";
+  version = "1.5.2";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "118wp5sjsl99hj8pqw5n3v2lry9r949p2hv4l92p086q1n0axxk3";
+  # - we need to use the tarball from PyPi
+  #   or the full git checkout (with .git)
+  # - using fetchFromGitHub will cause a build failure,
+  #   because it does not include required metadata
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "9f4f3e6eb9caeb479e98d604770645b57469cd25b39e28df1916ffcd593efbe6";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  buildInputs = [ setuptools ];
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -26,21 +38,22 @@ buildPythonPackage rec {
       substituteInPlace $f --replace 'shell which' 'shell command -v'
     done
 
-    # This can probably be removed in the next update after 1.3.1
-    substituteInPlace cocotb/share/makefiles/Makefile.inc --replace "-Werror" ""
+    # remove circular dependency cocotb-bus from setup.py
+    substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
   '';
 
-  checkInputs = [ swig verilog ];
+  checkInputs = [ cocotb-bus pytest swig verilog ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH
     make test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthuszagh ];
+    broken = stdenv.isDarwin;
   };
 }

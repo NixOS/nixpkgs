@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcre, ocaml, findlib, ocamlbuild }:
+{ lib, stdenv, fetchurl, pcre, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-pcre-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;	# Skip configure phase
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://bitbucket.org/mmottl/pcre-ocaml";
     description = "An efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
     license = licenses.lgpl21;

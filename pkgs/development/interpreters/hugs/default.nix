@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison }:
+{ lib, stdenv, fetchurl, bison }:
 
 stdenv.mkDerivation {
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     "--enable-pthreads"                 # build Hugs using POSIX threads C library
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.haskell.org/hugs";
     description = "Haskell interpreter";
     maintainers = with maintainers; [ joachifm ];

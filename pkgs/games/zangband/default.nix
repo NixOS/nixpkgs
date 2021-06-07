@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, flex, bison, autoconf, automake, m4, coreutils }:
+{ lib, stdenv, fetchurl, ncurses, flex, bison, autoconf, automake, m4, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "zangband";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Rogue-like game";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     broken = true; # broken in runtime, will not get pass character generation
   };
 }

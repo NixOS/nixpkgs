@@ -45,6 +45,7 @@ in
       };
 
       interfaces = mkOption {
+        type = types.listOf types.str;
         default = [ "127.0.0.1" ];
         description = ''
           The interfaces the Quassel daemon will be listening to.  If `[ 127.0.0.1 ]',
@@ -54,6 +55,7 @@ in
       };
 
       portNumber = mkOption {
+        type = types.port;
         default = 4242;
         description = ''
           The port number the Quassel daemon will be listening to.
@@ -61,7 +63,8 @@ in
       };
 
       dataDir = mkOption {
-        default = ''/home/${user}/.config/quassel-irc.org'';
+        default = "/home/${user}/.config/quassel-irc.org";
+        type = types.str;
         description = ''
           The directory holding configuration files, the SQlite database and the SSL Cert.
         '';
@@ -69,6 +72,7 @@ in
 
       user = mkOption {
         default = null;
+        type = types.nullOr types.str;
         description = ''
           The existing user the Quassel daemon should run as. If left empty, a default "quassel" user will be created.
         '';

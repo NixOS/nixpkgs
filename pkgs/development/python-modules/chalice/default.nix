@@ -1,29 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , attrs
 , botocore
 , click
 , enum-compat
+, hypothesis
+, inquirer
 , jmespath
+, mock
+, mypy-extensions
 , pip
+, pytest
+, pyyaml
 , setuptools
 , six
-, typing
-, wheel
+, typing ? null
 , watchdog
-, pytest
-, hypothesis
-, mock
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.14.1";
+  version = "1.22.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "457e71fd84951574ccbe72d1389d9c89aaf5e69a552b01d1f1585faa63459c26";
+    sha256 = "5a84a73c4a8d8b22bb64e06ff99060d7f222097db4237e58749dcad5165f082d";
   };
 
   checkInputs = [ watchdog pytest hypothesis mock ];
@@ -32,11 +36,15 @@ buildPythonPackage rec {
     botocore
     click
     enum-compat
+    inquirer
     jmespath
+    mypy-extensions
     pip
+    pyyaml
     setuptools
     six
     wheel
+  ] ++ lib.optionals (pythonOlder "3.5") [
     typing
   ];
 
@@ -46,10 +54,7 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i setup.py -e "/pip>=/c\'pip',"
     substituteInPlace setup.py \
-      --replace 'pip>=9,<=19.4' 'pip' \
-      --replace 'typing==3.6.4' 'typing' \
-      --replace 'attrs==17.4.0' 'attrs' \
-      --replace 'click>=6.6,<7.0' 'click'
+      --replace 'typing==3.6.4' 'typing'
   '';
 
   checkPhase = ''

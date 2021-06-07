@@ -1,45 +1,49 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
-, pkgconfig
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
-, systemd ? null
+, pkg-config
+, enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, udev
 , libobjc
 , IOKit
 , withStatic ? false
 }:
 
-assert enableSystemd -> systemd != null;
-
 stdenv.mkDerivation rec {
   pname = "libusb";
-  version = "1.0.23";
+  version = "1.0.24";
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
     rev = "v${version}";
-    sha256 = "0mxbpg01kgbk5nh6524b0m4xk7ywkyzmc3yhi5asqcsd3rbhjj98";
+    sha256 = "18ri8ky422hw64zry7bpbarb1m0hiljyf64a0a9y093y7aad38i7";
   };
 
-  outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
+  outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  patches = [ (fetchpatch {
+    # https://bugs.archlinux.org/task/69121
+    url = "https://github.com/libusb/libusb/commit/f6d2cb561402c3b6d3627c0eb89e009b503d9067.patch";
+    sha256 = "1dbahikcbwkjhyvks7wbp7fy2bf7nca48vg5z0zqvqzjb9y595cq";
+    excludes = [ "libusb/version_nano.h" ];
+  }) ];
+
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   propagatedBuildInputs =
-    stdenv.lib.optional enableSystemd systemd ++
-    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optional enableUdev udev ++
+    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   dontDisableStatic = withStatic;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  configureFlags = lib.optional (!enableUdev) "--disable-udev";
 
-  configureFlags = stdenv.lib.optional (!enableSystemd) "--disable-udev";
-
-  preFixup = stdenv.lib.optionalString enableSystemd ''
-    sed 's,-ludev,-L${stdenv.lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la
+  preFixup = lib.optionalString enableUdev ''
+    sed 's,-ludev,-L${lib.getLib udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libusb.info/";
     repositories.git = "https://github.com/libusb/libusb";
     description = "cross-platform user-mode USB device library";
@@ -48,6 +52,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ prusnak ];
   };
 }

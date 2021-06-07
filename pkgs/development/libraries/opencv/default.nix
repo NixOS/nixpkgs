@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, unzip
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, unzip
 , zlib
 , enablePython ? false, pythonPackages
 , enableGtk2 ? false, gtk2
@@ -6,8 +6,7 @@
 , enablePNG ? true, libpng
 , enableTIFF ? true, libtiff
 , enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
-, enableJPEG2K ? false, jasper  # disable jasper by default (many CVE)
-, enableFfmpeg ? false, ffmpeg_3
+, enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
 , Cocoa, QTKit
@@ -20,13 +19,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "opencv";
-  version = "2.4.13";
+  version = "2.4.13.7";
 
   src = fetchFromGitHub {
-    owner = "Itseez";
+    owner = "opencv";
     repo = "opencv";
     rev = version;
-    sha256 = "1k29rxlvrhgc5hadg2nc50wa3d2ls9ndp373257p756a0aividxh";
+    sha256 = "062js7zhh4ixi2wk61wyi23qp9zsk5vw24iz2i5fab2hp97y5zq3";
   };
 
   patches =
@@ -50,8 +49,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optionals enableEXR [ openexr ilmbase ]
-    ++ lib.optional enableJPEG2K jasper
-    ++ lib.optional enableFfmpeg ffmpeg_3
+    ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
@@ -59,24 +57,21 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
     (opencvFlag "TIFF" enableTIFF)
-    (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "GSTREAMER" enableGStreamer)
   ];
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "bindnow" "relro" ];
 
-  # Fix pkgconfig file that gets broken with multiple outputs
+  # Fix pkg-config file that gets broken with multiple outputs
   postFixup = ''
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_old=.*|includedir_old=$dev/include/opencv|"
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
@@ -84,7 +79,7 @@ stdenv.mkDerivation rec {
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
     license = licenses.bsd3;

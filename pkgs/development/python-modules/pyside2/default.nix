@@ -1,13 +1,13 @@
-{ buildPythonPackage, python, fetchurl, stdenv,
+{ buildPythonPackage, python, fetchurl, lib, stdenv,
   cmake, ninja, qt5, shiboken2 }:
 
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.12.6";
+  version = "5.15.2";
 
   src = fetchurl {
-    url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-everywhere-src-${version}.tar.xz";
-    sha256 = "1n45l6xxyxs6cfp2l4rp8qs1c2fyfwyrdxa4qcpwfsqsi51rydsk";
+    url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
+    sha256 = "060ljj1nzyp4zfz2vasbv2i7gs5rfkkjwxxbisd0fdw01d5m01mk";
   };
 
   patches = [
@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ shiboken2 ];
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "LGPL-licensed Python bindings for Qt";
     license = licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";

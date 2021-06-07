@@ -1,6 +1,6 @@
 # Temporaririly avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
 
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, which, mono, msbuild, dotnetbuildhelpers, dotnetPackages }:
+{ lib, stdenv, fetchurl, pkg-config, autoconf, automake, which, mono, msbuild, dotnetbuildhelpers, dotnetPackages }:
 
 stdenv.mkDerivation rec {
   pname = "fsharp";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cv6p5pin962vhbpsji40nkckkag5c96kq5qihvg60pc1z821p0i";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoconf
     automake
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     ./fsharp-IsPathRooted-type-inference.patch
     ./fsharp-string-switchName.patch
     ./fsharp-path-overloads.patch
+    ./fsharp-GetFileNameWithoutExtension-type-inference.patch
   ];
 
   configurePhase = ''
@@ -118,8 +119,8 @@ EOF
   meta = {
     description = "A functional CLI language";
     homepage = "https://fsharp.org/";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thoughtpolice raskin ];
+    platforms = with lib.platforms; unix;
   };
 }

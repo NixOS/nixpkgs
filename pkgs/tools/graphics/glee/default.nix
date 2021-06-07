@@ -1,9 +1,9 @@
-{stdenv, fetchgit, cmake, libGLU, libGL, xorg }:
+{lib, stdenv, fetchgit, cmake, libGLU, libGL, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "glee";
   rev = "f727ec7463d514b6279981d12833f2e11d62b33d";
-  version = "20170205-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20170205-${lib.strings.substring 0 7 rev}";
 
   src = fetchgit {
     inherit rev;
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     sed -i 's/readme/Readme/' cmake_install.cmake
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GL Easy Extension Library";
     homepage = "https://sourceforge.net/p/glee/glee/";
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

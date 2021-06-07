@@ -12,6 +12,9 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ colorama GitPython ];
 
+  # no tests
+  doCheck = false;
+
   meta = with lib; {
     description = "Easily update multiple Git repositories at once";
     homepage = "https://github.com/earwig/git-repo-updater";

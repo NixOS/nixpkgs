@@ -3,11 +3,11 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "3.1.0";
+  version = "4.0.1";
 
   srcs = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0nb3qzpggyp61lchvprnklby5mf5n0xpn9z8vlhh99pz1k9sqdq1";
+    hash = "sha256-OxbKo5vwOBabU6/2hO4RMWiifo4IVIxz+DlcwP9xO/E=";
   };
 
   propagatedBuildInputs =
@@ -42,12 +42,11 @@ python3Packages.buildPythonPackage rec {
       --replace 'compdef _ykman_completion ykman;' '_ykman_completion "$@"'
   '';
 
-  # See https://github.com/NixOS/nixpkgs/issues/29169
-  doCheck = false;
+  checkInputs = with python3Packages; [ pytestCheckHook makefun ];
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";
-    description = "Command line tool for configuring any YubiKey over all USB transports.";
+    description = "Command line tool for configuring any YubiKey over all USB transports";
 
     license = licenses.bsd2;
     platforms = platforms.unix;

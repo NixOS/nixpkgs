@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11}:
+{lib, stdenv, fetchurl, libX11}:
 
 stdenv.mkDerivation {
   name = "3dpong-0.5";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.newbreedsoftware.com/3dpong/";
     description = "One or two player 3d sports game based on Pong from Atari";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

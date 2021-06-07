@@ -1,5 +1,6 @@
 { src
 , pkgs
+, lib
 , stdenv ? pkgs.stdenv
 , name
 , antTargets ? []
@@ -16,8 +17,7 @@
 , ... } @ args:
 
 let
-  antFlags = "-f ${buildfile} " + stdenv.lib.concatMapStrings ({name, value}: "-D${name}=${value} " ) antProperties ;
-  lib = stdenv.lib;
+  antFlags = "-f ${buildfile} " + lib.concatMapStrings ({name, value}: "-D${name}=${value} " ) antProperties ;
 in
 stdenv.mkDerivation (
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (
     prePhases =
       ["antSetupPhase"];
 
-    antSetupPhase = with stdenv.lib; ''
+    antSetupPhase = with lib; ''
       if test "$hydraAntLogger" != "" ; then
         export ANT_ARGS="-logger org.hydra.ant.HydraLogger -lib `ls $hydraAntLogger/share/java/*.jar | head -1`"
       fi
@@ -46,7 +46,7 @@ stdenv.mkDerivation (
       mkdir -p $out/share/java
       ${ if jars == [] then ''
            find . -name "*.jar" | xargs -I{} cp -v {} $out/share/java
-         '' else stdenv.lib.concatMapStrings (j: ''
+         '' else lib.concatMapStrings (j: ''
            cp -v ${j} $out/share/java
          '') jars }
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation (
       in
       ''
       header "Generating jar wrappers"
-    '' + (stdenv.lib.concatMapStrings (w: ''
+    '' + (lib.concatMapStrings (w: ''
 
       mkdir -p $out/bin
       cat >> $out/bin/${w.name} <<EOF
@@ -85,7 +85,7 @@ stdenv.mkDerivation (
       header "Building default ant target"
       ant ${antFlags}
       closeNest
-    '' else stdenv.lib.concatMapStrings (t: ''
+    '' else lib.concatMapStrings (t: ''
       header "Building '${t}' target"
       ant ${antFlags} ${t}
       closeNest
@@ -103,12 +103,13 @@ stdenv.mkDerivation (
       '';
   }
 
-  // removeAttrs args ["antProperties" "buildInputs" "pkgs" "jarWrappers"] //
+  // removeAttrs args ["antProperties" "buildInputs" "pkgs" "lib" "jarWrappers"] //
 
   {
     name = name + (if src ? version then "-" + src.version else "");
 
-    buildInputs = [ant jre zip unzip] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
+    nativeBuildInputs = [ unzip ];
+    buildInputs = [ant jre zip] ++ lib.optional (args ? buildInputs) args.buildInputs ;
 
     postHook = ''
       mkdir -p $out/nix-support

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial_4, python27, setJavaClassPath,
   which, zlib, makeWrapper, openjdk, unzip, git, clang, llvm, icu, ruby, glibc, bash, gcc, libobjc,
-  xcodebuild, gfortran, readline, bzip2, lzma, pcre, curl, ed, libresolv, libiconv, writeScriptBin,
+  xcodebuild, gfortran, readline, bzip2, xz, pcre, curl, ed, libresolv, libiconv, writeScriptBin,
   openssl, perl, CoreFoundation, Foundation, JavaNativeFoundation, JavaRuntimeSupport, JavaVM, Cocoa
 }:
 
@@ -89,7 +89,7 @@ let
   makeMxCache = list:
     stdenv.mkDerivation {
       name = "mx-cache";
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       buildCommand = with lib; ''
         mkdir $out
         ${lib.concatMapStrings
@@ -270,7 +270,7 @@ in rec {
         --prefix PATH : ${lib.makeBinPath [ python27withPackages mercurial ]} \
         --set    FINDBUGS_HOME ${findbugs}
     '';
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/graalvm/mx";
       description = "Command-line tool used for the development of Graal projects";
       license = licenses.gpl2;
@@ -372,7 +372,7 @@ in rec {
 
     buildInputs = [ mx zlib.dev mercurial jvmci8 git llvm clang
                     python27withPackages icu ruby bzip2 which
-                    readline bzip2 lzma pcre curl ed gfortran
+                    readline bzip2 xz pcre curl ed gfortran
                   ]  ++ lib.optional stdenv.isDarwin [
                     CoreFoundation gcc.cc.lib libiconv perl openssl
                   ];
@@ -527,7 +527,7 @@ in rec {
     enableParallelBuilding = true;
     passthru.home = graalvm8;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/oracle/graal";
       description = "High-Performance Polyglot VM";
       license = licenses.gpl2;

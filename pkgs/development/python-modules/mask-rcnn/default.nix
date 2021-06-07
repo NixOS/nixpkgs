@@ -12,13 +12,13 @@
 , pillow
 , scikitimage
 , scipy
-, tensorflow
+, tensorflow_2
 }:
 
 buildPythonPackage rec {
   pname = "mask-rcnn";
   version = "2.1";
-  
+
   src = fetchFromGitHub {
     owner = "matterport";
     repo = "Mask_RCNN";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pillow
     scikitimage
     scipy
-    tensorflow
+    tensorflow_2 # Keras only supports tensorflow 2 now
   ];
 
   meta = with lib; {
@@ -49,4 +49,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ rakesh4g ];
   };
 }
-

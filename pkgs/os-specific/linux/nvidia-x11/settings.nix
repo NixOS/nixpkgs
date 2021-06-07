@@ -1,6 +1,6 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchFromGitHub, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
+{ stdenv, lib, fetchFromGitHub, pkg-config, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
 , librsvg, wrapGAppsHook
 , withGtk2 ? false, withGtk3 ? true
 }:
@@ -9,13 +9,13 @@ let
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-settings";
-    rev = nvidia_x11.version;
+    rev = nvidia_x11.settingsVersion;
     inherit sha256;
   };
 
   libXNVCtrl = stdenv.mkDerivation {
     pname = "libXNVCtrl";
-    inherit (nvidia_x11) version;
+    version = nvidia_x11.settingsVersion;
     inherit src;
 
     buildInputs = [ libXrandr libXext ];
@@ -42,10 +42,10 @@ in
 
 stdenv.mkDerivation {
   pname = "nvidia-settings";
-  inherit (nvidia_x11) version;
+  version = nvidia_x11.settingsVersion;
   inherit src;
 
-  nativeBuildInputs = [ pkgconfig m4 ];
+  nativeBuildInputs = [ pkg-config m4 ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
              ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     inherit libXNVCtrl;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;

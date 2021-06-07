@@ -1,16 +1,38 @@
-{ stdenv, fetchurl, m4, tcsh, libX11, tcl, tk, cairo, ncurses, mesa_glu, python3 }:
+{ lib, stdenv
+, fetchurl
+, python3
+, m4
+, cairo
+, libX11
+, mesa_glu
+, ncurses
+, tcl
+, tcsh
+, tk
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "magic-vlsi";
-  version = "8.3.5";
+  version = "8.3.109";
 
   src = fetchurl {
-    url = "http://opencircuitdesign.com/magic/archive/magic-8.3.5.tgz";
-    sha256 = "0wv4zmxlqjfaakgp802icn0cd9f8ylkz2sppix83axq8p5cg90yq";
+    url    = "http://opencircuitdesign.com/magic/archive/magic-${version}.tgz";
+    sha256 = "sha256-ZK4OF5XwjW1OJmOVUFqLklfpM10eIwCILygqIyjRbEQ=";
   };
 
-  buildInputs = [ m4 tcsh libX11 tcl tk cairo ncurses mesa_glu ];
   nativeBuildInputs = [ python3 ];
+  buildInputs = [
+    cairo
+    libX11
+    m4
+    mesa_glu
+    ncurses
+    tcl
+    tcsh
+    tk
+  ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-tcl=${tcl}"
@@ -22,15 +44,17 @@ stdenv.mkDerivation {
     patchShebangs scripts/*
   '';
 
+  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+
   patches = [
     ./0001-strip-bin-prefix.patch
     ./0002-fix-format-security.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VLSI layout tool written in Tcl";
-    homepage = "http://opencircuitdesign.com/magic/";
-    license = licenses.mit;
-    maintainers = [ maintainers.dkudriavtsev ];
+    homepage    = "http://opencircuitdesign.com/magic/";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ anna328p thoughtpolice AndersonTorres ];
   };
 }

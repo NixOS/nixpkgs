@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, runtimeShell }:
+{ lib, stdenv, fetchurl, python3, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "mozlz4a";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "A script to handle Mozilla's mozlz4 files";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "https://gist.githubusercontent.com/Tblue/62ff47bef7f894e92ed5";
   };
 }

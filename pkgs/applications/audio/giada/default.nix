@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , fltk
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "0.16.3";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1sysv5d0wq6ib47bqsn3wdzkqzjpzjrgzg15bkllbm67hiz9abhh";
+    sha256 = "0qyx0bvivlvly0vj5nnnbiks22xh13sqlw4mfgplq2lbbpgisigp";
   };
 
   configureFlags = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
         src/core/{conf,init,midiMapConf,patch}.cpp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;

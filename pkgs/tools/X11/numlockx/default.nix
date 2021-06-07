@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXext, autoconf }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXext, autoconf }:
 
 stdenv.mkDerivation rec {
   version = "1.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXext autoconf ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows to start X with NumLock turned on";
     license = licenses.mit;
     platforms = platforms.all;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jdk, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "elasticmq-server";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/elasticmq-server/elasticmq-server.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/softwaremill/elasticmq";
     description = "Message queueing system with Java, Scala and Amazon SQS-compatible interfaces";
     license = licenses.asl20;

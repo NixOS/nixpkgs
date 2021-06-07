@@ -1,63 +1,70 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
-, ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
-, bison, lzo, snappy, libaio, gnutls, nettle, curl
-, makeWrapper
+{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
+, perl, pixman, vde2, alsaLib, texinfo, flex
+, bison, lzo, snappy, libaio, gnutls, nettle, curl, ninja, meson
+, makeWrapper, autoPatchelfHook
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin, SDL2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? true, libjpeg, libpng
-, smartcardSupport ? true, libcacard
-, spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
+, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
+, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
+, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
+, vncSupport ? !nixosTestRunner, libjpeg, libpng
+, smartcardSupport ? !nixosTestRunner, libcacard
+, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
+, ncursesSupport ? !nixosTestRunner, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
+, glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, epoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
+, libiscsiSupport ? true, libiscsi
 , smbdSupport ? false, samba
+, tpmSupport ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
-                    then (stdenv.lib.optional stdenv.isx86_64 "i386-softmmu"
+                    then (lib.optional stdenv.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
 }:
 
-with stdenv.lib;
+with lib;
 let
-  audio = optionalString (hasSuffix "linux" stdenv.hostPlatform.system) "alsa,"
+  audio = optionalString alsaSupport "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
 in
 
 stdenv.mkDerivation rec {
-  version = "5.0.0";
+  version = "6.0.0";
   pname = "qemu"
-    + stdenv.lib.optionalString xenSupport "-xen"
-    + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
-    + stdenv.lib.optionalString nixosTestRunner "-for-vm-tests";
+    + lib.optionalString xenSupport "-xen"
+    + lib.optionalString hostCpuOnly "-host-cpu-only"
+    + lib.optionalString nixosTestRunner "-for-vm-tests";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "1dlcwyshdp94fwd30pddxf9bn2q8dfw5jsvry2gvdj551wmaj4rg";
+    sha256 = "1f9hz8rf12jm8baa7kda34yl4hyl0xh0c4ap03krfjx23i3img47";
   };
 
-  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ]
-    ++ optionals gtkSupport [ wrapGAppsHook ];
+  nativeBuildInputs = [ python python.pkgs.sphinx pkg-config flex bison meson ninja ]
+    ++ optionals gtkSupport [ wrapGAppsHook ]
+    ++ optionals stdenv.isLinux [ autoPatchelfHook ];
   buildInputs =
-    [ zlib glib ncurses perl pixman
+    [ zlib glib perl pixman
       vde2 texinfo makeWrapper lzo snappy
       gnutls nettle curl
     ]
+    ++ optionals ncursesSupport [ ncurses ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
     ++ optionals seccompSupport [ libseccomp ]
     ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
-    ++ optionals sdlSupport [ SDL2 ]
+    ++ optionals sdlSupport [ SDL2 SDL2_image ]
     ++ optionals gtkSupport [ gtk3 gettext vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals smartcardSupport [ libcacard ]
@@ -66,16 +73,17 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
     ++ optionals xenSupport [ xen ]
     ++ optionals cephSupport [ ceph ]
+    ++ optionals glusterfsSupport [ glusterfs libuuid ]
     ++ optionals openGLSupport [ mesa epoxy libdrm ]
     ++ optionals virglSupport [ virglrenderer ]
+    ++ optionals libiscsiSupport [ libiscsi ]
     ++ optionals smbdSupport [ samba ];
 
-  enableParallelBuilding = true;
+  dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
   outputs = [ "out" "ga" ];
 
   patches = [
-    ./no-etc-install.patch
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
@@ -95,53 +103,78 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  hardeningDisable = [ "stackprotector" ];
+  postPatch = ''
+    # Otherwise tries to ensure /var/run exists.
+    sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
+        qga/meson.build
+
+    # TODO: On aarch64-darwin, we automatically codesign everything, but qemu
+    # needs specific entitlements and does its own signing. This codesign
+    # command fails, but we have no fix at the moment, so this disables it.
+    # This means `-accel hvf` is broken for now, on aarch64-darwin only.
+    substituteInPlace meson.build \
+      --replace 'if exe_sign' 'if false'
+  '';
 
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
+    # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
+    chmod +x ./scripts/shaderinclude.pl
+    patchShebangs .
+    # avoid conflicts with libc++ include for <version>
+    mv VERSION QEMU_VERSION
+    substituteInPlace configure \
+      --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
+    substituteInPlace meson.build \
+      --replace "'VERSION'" "'QEMU_VERSION'"
   '' + optionalString stdenv.hostPlatform.isMusl ''
     NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
   configureFlags =
     [ "--audio-drv-list=${audio}"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
       "--enable-docs"
       "--enable-tools"
       "--enable-guest-agent"
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
     ]
-    # disable sysctl check on darwin.
-    ++ optional stdenv.isDarwin "--cpu=x86_64"
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional smartcardSupport "--enable-smartcard"
     ++ optional spiceSupport "--enable-spice"
     ++ optional usbredirSupport "--enable-usb-redir"
-    ++ optional (hostCpuTargets != null) "--target-list=${stdenv.lib.concatStringsSep "," hostCpuTargets}"
+    ++ optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isDarwin "--enable-hvf"
     ++ optional stdenv.isLinux "--enable-linux-aio"
     ++ optional gtkSupport "--enable-gtk"
     ++ optional xenSupport "--enable-xen"
     ++ optional cephSupport "--enable-rbd"
+    ++ optional glusterfsSupport "--enable-glusterfs"
     ++ optional openGLSupport "--enable-opengl"
     ++ optional virglSupport "--enable-virglrenderer"
+    ++ optional tpmSupport "--enable-tpm"
+    ++ optional libiscsiSupport "--enable-libiscsi"
     ++ optional smbdSupport "--smbd=${samba}/bin/smbd";
 
   doCheck = false; # tries to access /dev
   dontWrapGApps = true;
 
   postFixup = ''
-      # copy qemu-ga (guest agent) to separate output
-      mkdir -p $ga/bin
-      cp $out/bin/qemu-ga $ga/bin/
-    '' + optionalString gtkSupport ''
-      # wrap GTK Binaries
-      for f in $out/bin/qemu-system-*; do
-        wrapGApp $f
-      done
-    '';
+    # the .desktop is both invalid and pointless
+    rm -f $out/share/applications/qemu.desktop
+
+    # copy qemu-ga (guest agent) to separate output
+    mkdir -p $ga/bin
+    cp $out/bin/qemu-ga $ga/bin/
+  '' + optionalString gtkSupport ''
+    # wrap GTK Binaries
+    for f in $out/bin/qemu-system-*; do
+      wrapGApp $f
+    done
+  '';
+  preBuild = "cd build";
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
@@ -156,11 +189,14 @@ stdenv.mkDerivation rec {
     qemu-system-i386 = "bin/qemu-system-i386";
   };
 
-  meta = with stdenv.lib; {
+  # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
+
+  meta = with lib; {
     homepage = "http://www.qemu.org/";
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ eelco ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ eelco qyliss ];
+    platforms = platforms.unix;
   };
 }

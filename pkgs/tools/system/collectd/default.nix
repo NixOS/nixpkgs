@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, darwin, callPackage
+{ lib, stdenv, fetchurl, fetchpatch, darwin, callPackage
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , libtool
 , ...
 }@args:
@@ -8,18 +8,18 @@ let
   plugins = callPackage ./plugins.nix args;
 in
 stdenv.mkDerivation rec {
-  version = "5.11.0";
+  version = "5.12.0";
   pname = "collectd";
 
   src = fetchurl {
     url = "https://collectd.org/files/${pname}-${version}.tar.bz2";
-    sha256 = "1cjxksxdqcqdccz1nbnc2fp6yy84qq361ynaq5q8bailds00mc9p";
+    sha256 = "1mh97afgq6qgmpvpr84zngh58m0sl1b4wimqgvvk376188q09bjv";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     libtool
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
   ] ++ plugins.buildInputs;
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon which collects system performance statistics periodically";
     homepage = "https://collectd.org";
     license = licenses.gpl2;

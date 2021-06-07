@@ -31,7 +31,7 @@ let
       { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
       { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
       { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
-      { name: "ssl"; host: "localhost"; port: "443"; probe: "builtin"; },
+      { name: "tls"; host: "localhost"; port: "443"; probe: "builtin"; },
       { name: "anyprot"; host: "localhost"; port: "443"; probe: "builtin"; }
     );
   '';
@@ -132,7 +132,7 @@ in
           { table = "mangle"; command = "OUTPUT ! -o lo -p tcp -m connmark --mark 0x02/0x0f -j CONNMARK --restore-mark --mask 0x0f"; }
         ];
       in {
-        path = [ pkgs.iptables pkgs.iproute pkgs.procps ];
+        path = [ pkgs.iptables pkgs.iproute2 pkgs.procps ];
 
         preStart = ''
           # Cleanup old iptables entries which might be still there

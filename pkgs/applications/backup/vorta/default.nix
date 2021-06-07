@@ -1,26 +1,28 @@
-{ buildPythonApplication, fetchFromGitHub, lib, paramiko, peewee, pyqt5
-, python-dateutil, APScheduler, psutil, qdarkstyle, secretstorage
-, appdirs, setuptools, qt5
+{ lib
+, python3
+, fetchFromGitHub
+, wrapQtAppsHook
+, borgbackup
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.6.26";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "v${version}";
-    sha256 = "189kzwdmissg9142cd7wvxa1rvc2y7lysgr7if99zc7ks59mv6dq";
+    sha256 = "sha256-qPO8qmXYDDFwV+8hAUyfF4Ins0vkwEJbw4JPguUSYOw=";
   };
 
   postPatch = ''
     sed -i -e '/setuptools_git/d' -e '/pytest-runner/d' setup.cfg
   '';
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     paramiko peewee pyqt5 python-dateutil APScheduler psutil qdarkstyle
     secretstorage appdirs setuptools
   ];
@@ -28,12 +30,15 @@ buildPythonApplication rec {
   # QT setup in tests broken.
   doCheck = false;
 
-  postFixup = ''
-    wrapQtApp $out/bin/vorta
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      --prefix PATH : ${lib.makeBinPath [ borgbackup ]}
+    )
   '';
 
   meta = with lib; {
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     homepage = "https://vorta.borgbase.com/";
     maintainers = with maintainers; [ ma27 ];
     description = "Desktop Backup Client for Borg";

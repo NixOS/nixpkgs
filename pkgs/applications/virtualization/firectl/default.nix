@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "firectl";
@@ -15,7 +15,9 @@ buildGoModule rec {
 
   vendorSha256 = "1xbpck1gvzl75xgrajf5yzl199l4f2f6j3mac5586i7b00b9jxqj";
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  meta = with lib; {
     description = "A command-line tool to run Firecracker microVMs";
     homepage = "https://github.com/firecracker-microvm/firectl";
     license = licenses.asl20;

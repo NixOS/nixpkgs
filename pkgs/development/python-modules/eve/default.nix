@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , flask
@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "Eve";
-  version = "1.1.1";
+  version = "1.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dbb409c481ffd5100a5ab13177f6ef6284257e33ac8e5090cd50e42533607ebd";
+    sha256 = "5647ee7dd6e063b967276e49f564cd4f96decdd0a218482bdf86c404a2be1fbf";
   };
 
   propagatedBuildInputs = [
@@ -27,12 +27,17 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "events>=0.3,<0.4" "events>=0.3,<0.5"
+  '';
+
   pythonImportsCheck = [ "eve" ];
 
   # tests call a running mongodb instance
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://python-eve.org/";
     description = "Open source Python REST API framework designed for human beings";
     license = licenses.bsd3;

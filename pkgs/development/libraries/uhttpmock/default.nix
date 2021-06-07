@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, autoconf, gtk-doc, automake, libtool, pkgconfig, glib, libsoup, gobject-introspection }:
+{ stdenv, lib, fetchFromGitLab, autoconf, gtk-doc, automake, libtool, pkg-config, glib, libsoup, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   version="0.5.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kkf670abkq5ikm3mqls475lydfsd9by1kv5im4k757xrl1br1d4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf gtk-doc automake libtool glib libsoup gobject-introspection ];
 
   preConfigure = "./autogen.sh";

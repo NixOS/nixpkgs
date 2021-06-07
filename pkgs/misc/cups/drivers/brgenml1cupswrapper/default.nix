@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cups, perl, coreutils, gnused, gnugrep
+{ lib, stdenv, fetchurl, makeWrapper, cups, perl, coreutils, gnused, gnugrep
 , brgenml1lpr, debugLvl ? "0"}:
 
 /*
@@ -117,8 +117,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother BrGenML1 CUPS wrapper driver";
     homepage = "http://www.brother.com";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

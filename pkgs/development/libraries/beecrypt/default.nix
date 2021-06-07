@@ -1,4 +1,4 @@
-{stdenv, fetchurl, m4}:
+{lib, stdenv, fetchurl, m4}:
 
 stdenv.mkDerivation {
   name = "beecrypt-4.2.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--disable-optimized" "--enable-static" ];
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2;
   };
 }

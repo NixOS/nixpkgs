@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "Markdown";
-  version = "3.2.2";
+  version = "3.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fafe3f1ecabfb514a5285fca634a53c1b32a81cb0feb154264d55bf2ff22c17";
+    sha256 = "31b5b491868dcc87d6c24b7e3d19a0d730d59d3e46f4eea6430a321bed387a49";
   };
 
-  propagatedBuildInputs = [ 
-    setuptools 
+  propagatedBuildInputs = [
+    setuptools
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];

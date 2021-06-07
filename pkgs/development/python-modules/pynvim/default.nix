@@ -4,7 +4,6 @@
 , nose
 , msgpack
 , greenlet
-, trollius
 , pythonOlder
 , isPyPy
 , pytestrunner
@@ -12,11 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pynvim";
-  version = "0.4.1";
+  version = "0.4.3";
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n2cx22lrmbq7xk7356lyn6k77ryqvkxplw9k0fglk35ckb1isam";
+    sha256 = "sha256-OnlTeL3l6AkvvrOhqZvpxhPSaFVC8dsOXG/UZ+7Vbf8=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ msgpack ]
-    ++ lib.optional (!isPyPy) greenlet
-    ++ lib.optional (pythonOlder "3.4") trollius;
+    ++ lib.optional (!isPyPy) greenlet;
 
   meta = {
     description = "Python client for Neovim";

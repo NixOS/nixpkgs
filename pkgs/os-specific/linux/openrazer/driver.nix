@@ -2,14 +2,16 @@
 , fetchFromGitHub
 , kernel
 , stdenv
-, utillinux
+, lib
+, util-linux
 }:
 
 let
-  common = import ../../../development/python-modules/openrazer/common.nix { inherit stdenv fetchFromGitHub; };
+  common = import ../../../development/python-modules/openrazer/common.nix { inherit lib fetchFromGitHub; };
 in
 stdenv.mkDerivation (common // {
-  name = "openrazer-${common.version}-${kernel.version}";
+  pname = "openrazer";
+  version = "${common.version}-${kernel.version}";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -18,6 +20,8 @@ stdenv.mkDerivation (common // {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/hid"
     mkdir -p "$binDir"
     cp -v driver/*.ko "$binDir"
@@ -28,12 +32,15 @@ stdenv.mkDerivation (common // {
     substituteInPlace $RAZER_RULES_OUT \
       --replace razer_mount $RAZER_MOUNT_OUT
     substituteInPlace $RAZER_MOUNT_OUT \
-      --replace /usr/bin/logger ${utillinux}/bin/logger \
+      --replace /usr/bin/logger ${util-linux}/bin/logger \
       --replace chgrp ${coreutils}/bin/chgrp \
       --replace "PATH='/sbin:/bin:/usr/sbin:/usr/bin'" ""
+
+    runHook postInstall
   '';
 
   meta = common.meta // {
     description = "An entirely open source Linux driver that allows you to manage your Razer peripherals on GNU/Linux";
+    broken = kernel.kernelOlder "4.19";
   };
 })

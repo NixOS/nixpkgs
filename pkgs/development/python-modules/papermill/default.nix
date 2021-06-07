@@ -14,7 +14,7 @@
 , requests
 , entrypoints
 , tenacity
-, futures
+, futures ? null
 , black
 , backports_tempfile
 , isPy27
@@ -25,11 +25,11 @@
 
 buildPythonPackage rec {
   pname = "papermill";
-  version = "2.1.1";
+  version = "2.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e599992317f761c5e0543430402b24faac89292d7770c3e20b520fa2a25f75a";
+    sha256 = "349aecd526c15c39f73a08df836467e2fead877c474d82c7df349f27ad272525";
   };
 
   propagatedBuildInputs = [

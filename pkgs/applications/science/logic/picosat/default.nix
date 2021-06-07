@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "picosat";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = "./configure.sh --shared --trace";
 
-  makeFlags = stdenv.lib.optional stdenv.isDarwin
+  makeFlags = lib.optional stdenv.isDarwin
     "SONAME=-Wl,-install_name,$(out)/lib/libpicosat.so";
 
   installPhase = ''
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SAT solver with proof and core support";
     homepage    = "http://fmv.jku.at/picosat/";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ roconnor thoughtpolice ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ roconnor thoughtpolice ];
   };
 }

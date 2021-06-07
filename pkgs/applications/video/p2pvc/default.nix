@@ -1,9 +1,9 @@
-{ stdenv, pkgconfig, fetchFromGitHub, opencv2, ncurses, portaudio }:
+{ lib, stdenv, pkg-config, fetchFromGitHub, opencv2, ncurses, portaudio }:
 
 stdenv.mkDerivation {
   name = "p2pvc";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ opencv2 ncurses portaudio ];
 
   enableParallelBuilding = true;
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A point to point color terminal video chat";
     homepage = "https://github.com/mofarrell/p2pvc";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ trino ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ trino ];
+    platforms = with lib.platforms; linux;
   };
 }

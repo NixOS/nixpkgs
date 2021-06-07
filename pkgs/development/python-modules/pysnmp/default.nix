@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pyasn1
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyasn1 pycryptodomex pysmi ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://snmplabs.com/pysnmp/index.html";
     description = "A pure-Python SNMPv1/v2c/v3 library";
     license = licenses.bsd2;

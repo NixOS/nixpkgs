@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, libusb-compat-0_1, libxml2, perl }:
+{ lib, stdenv, fetchurl, cups, libusb-compat-0_1, libxml2, perl }:
 
 let
 
@@ -87,10 +87,10 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     for bin in "$out/bin/"*; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$bin"
-      patchelf --set-rpath "$out/lib:${stdenv.lib.getLib cups}/lib" "$bin"
+      patchelf --set-rpath "$out/lib:${lib.getLib cups}/lib" "$bin"
     done
 
-    patchelf --set-rpath "$out/lib:${stdenv.lib.getLib cups}/lib" "$out/lib/libscmssc.so"
+    patchelf --set-rpath "$out/lib:${lib.getLib cups}/lib" "$out/lib/libscmssc.so"
     patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb-compat-0_1.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
 
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unified Linux Driver for Samsung printers and scanners";
     homepage = "http://www.bchemnet.com/suldr";
     downloadPage = "http://www.bchemnet.com/suldr/driver/";

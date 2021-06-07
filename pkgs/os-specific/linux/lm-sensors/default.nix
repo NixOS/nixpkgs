@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, bison, flex, which, perl
+{ lib, stdenv, fetchzip, bison, flex, which, perl
 , sensord ? false, rrdtool ? null
 }:
 
@@ -7,7 +7,7 @@ assert sensord -> rrdtool != null;
 stdenv.mkDerivation rec {
   pname = "lm-sensors";
   version = "3.6.0";
-  dashedVersion = stdenv.lib.replaceStrings ["."] ["-"] version;
+  dashedVersion = lib.replaceStrings ["."] ["-"] version;
 
   src = fetchzip {
     url = "https://github.com/lm-sensors/lm-sensors/archive/V${dashedVersion}.tar.gz";
@@ -16,16 +16,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bison flex which ];
   buildInputs = [ perl ]
-   ++ stdenv.lib.optional sensord rrdtool;
+   ++ lib.optional sensord rrdtool;
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" "ETCDIR=${placeholder "out"}/etc" ]
-    ++ stdenv.lib.optional sensord "PROG_EXTRA=sensord";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ] ++ lib.optional sensord "PROG_EXTRA=sensord";
 
-  meta = with stdenv.lib; {
+  installFlags = [
+    "ETCDIR=${placeholder "out"}/etc"
+  ];
+
+  meta = with lib; {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
     changelog = "https://raw.githubusercontent.com/lm-sensors/lm-sensors/V${dashedVersion}/CHANGES";
     description = "Tools for reading hardware sensors";
     license = with licenses; [ lgpl21Plus gpl2Plus ];
+    maintainers = with maintainers; [ pengmeiyu ];
     platforms = platforms.linux;
+    mainProgram = "sensors";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake }:
+{ lib, stdenv, fetchurl, autoconf, automake }:
 stdenv.mkDerivation rec {
   name = "avra-1.3.0";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     automake -a
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Assembler for the Atmel AVR microcontroller family";
     homepage = "http://avra.sourceforge.net/";
     license = licenses.gpl2Plus;

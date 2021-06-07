@@ -37,11 +37,57 @@ in {
       description = "Shiori simple bookmarks manager";
       wantedBy = [ "multi-user.target" ];
 
+      environment.SHIORI_DIR = "/var/lib/shiori";
+
       serviceConfig = {
         ExecStart = "${package}/bin/shiori serve --address '${address}' --port '${toString port}'";
+
         DynamicUser = true;
-        Environment = "SHIORI_DIR=/var/lib/shiori";
         StateDirectory = "shiori";
+        # As the RootDirectory
+        RuntimeDirectory = "shiori";
+
+        # Security options
+
+        BindReadOnlyPaths = [
+          "/nix/store"
+
+          # For SSL certificates, and the resolv.conf
+          "/etc"
+        ];
+
+        CapabilityBoundingSet = "";
+
+        DeviceAllow = "";
+
+        LockPersonality = true;
+
+        MemoryDenyWriteExecute = true;
+
+        PrivateDevices = true;
+        PrivateUsers = true;
+
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+
+        RestrictNamespaces = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+
+        RootDirectory = "/run/shiori";
+
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [
+          "@system-service"
+          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@resources" "~@setuid"
+        ];
       };
     };
   };

@@ -3,41 +3,72 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+  # C Inputs
+, blas
+, catch2
 , cmake
-, cvxpy
 , cython
+, fmt
+, muparserx
+, ninja
+, nlohmann_json
+, spdlog
+  # Python Inputs
+, cvxpy
 , numpy
-, openblas
 , pybind11
 , scikit-build
-, spdlog
   # Check Inputs
-, qiskit-terra
 , pytestCheckHook
-, python
+, ddt
+, fixtures
+, pytest-timeout
+, qiskit-terra
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.5.2";
+  version = "0.8.2";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = version;
-    fetchSubmodules = true; # fetch muparserx and other required libraries
-    sha256 = "0vw6b69h8pvzxhaz3k8sg9ac792gz3kklfv0izs6ra83y1dfwhjz";
+    hash = "sha256-7NWM7qpMQ3vA6p0dhEPnkBjsPMdhceYTYcAD4tsClf0=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/Qiskit/qiskit-aer/pull/1250
+      name = "qiskit-aer-pr-1250-native-cmake_dl_libs.patch";
+      url = "https://github.com/Qiskit/qiskit-aer/commit/2bf04ade3e5411776817706cf82cc67a3b3866f6.patch";
+      sha256 = "0ldwzxxfgaad7ifpci03zfdaj0kqj0p3h94qgshrd2953mf27p6z";
+    })
+  ];
+  # Remove need for cmake python package
+  # pybind11 shouldn't be an install requirement, just build requirement.
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'cmake!=3.17,!=3.17.0'," "" \
+      --replace "'pybind11>=2.6'" ""
+  '';
 
   nativeBuildInputs = [
     cmake
+    ninja
     scikit-build
+    pybind11
   ];
 
   buildInputs = [
-    openblas
+    blas
+    catch2
+    fmt
+    muparserx
+    nlohmann_json
     spdlog
   ];
 
@@ -45,25 +76,14 @@ buildPythonPackage rec {
     cvxpy
     cython  # generates some cython files at runtime that need to be cython-ized
     numpy
-    pybind11
   ];
 
-  postPatch = ''
-    # remove dependency on PyPi cmake package, which isn't in Nixpkgs
-    substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'" ""
+  # Disable using conan for build
+  preBuild = ''
+    export DISABLE_CONAN=1
   '';
 
   dontUseCmakeConfigure = true;
-
-  cmakeFlags = [
-    "-DBUILD_TESTS=True"
-    "-DAER_THRUST_BACKEND=OMP"
-  ];
-
-  # Needed to find qiskit.providers.aer modules in cython. This exists in GitHub, don't know why it isn't copied by default
-  postFixup = ''
-    touch $out/${python.sitePackages}/qiskit/__init__.pxd
-  '';
 
   # *** Testing ***
 
@@ -72,15 +92,32 @@ buildPythonPackage rec {
     "qiskit.providers.aer.backends.qasm_simulator"
     "qiskit.providers.aer.backends.controller_wrappers" # Checks C++ files built correctly. Only exists if built & moved to output
   ];
-  checkInputs = [
-    qiskit-terra
-    pytestCheckHook
-  ];
-  dontUseSetuptoolsCheck = true;  # Otherwise runs tests twice
+  # Slow tests
   disabledTests = [
-    # broken with cvxpy >= 1.1.0, see https://github.com/Qiskit/qiskit-aer/issues/779.
-    # TODO: Remove once resolved, probably next qiskit-aer version
-    "test_clifford"
+    "test_paulis_1_and_2_qubits"
+    "test_3d_oscillator"
+    "_057"
+    "_136"
+    "_137"
+    "_139"
+    "_138"
+    "_140"
+    "_141"
+    "_143"
+    "_144"
+    "test_sparse_output_probabilities"
+    "test_reset_2_qubit"
+  ];
+  checkInputs = [
+    pytestCheckHook
+    ddt
+    fixtures
+    pytest-timeout
+    qiskit-terra
+  ];
+  pytestFlagsArray = [
+    "--timeout=30"
+    "--durations=10"
   ];
 
   preCheck = ''
@@ -92,19 +129,14 @@ buildPythonPackage rec {
     # Add qiskit-aer compiled files to cython include search
     pushd $HOME
   '';
-  postCheck = ''
-    popd
-  '';
+  postCheck = "popd";
 
   meta = with lib; {
     description = "High performance simulators for Qiskit";
     homepage = "https://qiskit.org/aer";
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
-    # Doesn't build on aarch64 (libmuparserx issue).
-    # Can fix by building muparserx from source (https://github.com/beltoforion/muparserx)
-    # or in future updates (e.g. Raspberry Pi enabled via https://github.com/Qiskit/qiskit-aer/pull/651 & https://github.com/Qiskit/qiskit-aer/pull/660)
-    platforms = platforms.x86_64;
   };
 }

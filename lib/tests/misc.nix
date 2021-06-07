@@ -87,6 +87,26 @@ runTests {
     expected = true;
   };
 
+  testComposeManyExtensions0 = {
+    expr = let obj = makeExtensible (self: { foo = true; });
+               emptyComposition = composeManyExtensions [];
+               composed = obj.extend emptyComposition;
+           in composed.foo;
+    expected = true;
+  };
+
+  testComposeManyExtensions =
+    let f = self: super: { bar = false; baz = true; };
+        g = self: super: { bar = super.baz or false; };
+        h = self: super: { qux = super.bar or false; };
+        obj = makeExtensible (self: { foo = self.qux; });
+    in {
+    expr = let composition = composeManyExtensions [f g h];
+               composed = obj.extend composition;
+           in composed.foo;
+    expected = (obj.extend (composeExtensions f (composeExtensions g h))).foo;
+  };
+
   testBitAnd = {
     expr = (bitAnd 3 10);
     expected = 2;
@@ -100,6 +120,16 @@ runTests {
   testBitXor = {
     expr = (bitXor 3 10);
     expected = 9;
+  };
+
+  testToHexString = {
+    expr = toHexString 250;
+    expected = "FA";
+  };
+
+  testToBaseDigits = {
+    expr = toBaseDigits 2 6;
+    expected = [ 1 1 0 ];
   };
 
 # STRINGS
@@ -142,6 +172,20 @@ runTests {
   testSplitStringsLastEmpty = {
     expr = strings.splitString ":" "2001:db8:0:0042::8a2e:370:";
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
+  };
+
+  testSplitStringsRegex = {
+    expr = strings.splitString "\\[{}]()^$?*+|." "A\\[{}]()^$?*+|.B";
+    expected = [ "A" "B" ];
+  };
+
+  testSplitStringsDerivation = {
+    expr = take 3  (strings.splitString "/" (derivation {
+      name = "name";
+      builder = "builder";
+      system = "system";
+    }));
+    expected = ["" "nix" "store"];
   };
 
   testSplitVersionSingle = {
@@ -435,32 +479,90 @@ runTests {
       expected = builtins.toJSON val;
   };
 
-  testToPretty = {
-    expr = mapAttrs (const (generators.toPretty {})) rec {
+  testToPretty =
+    let
+      deriv = derivation { name = "test"; builder = "/bin/sh"; system = builtins.currentSystem; };
+    in {
+    expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
       int = 42;
       float = 0.1337;
       bool = true;
+      emptystring = "";
       string = ''fno"rd'';
+      newlinestring = "\n";
       path = /. + "/foo";
       null_ = null;
       function = x: x;
       functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
+      emptylist = [];
       attrs = { foo = null; "foo bar" = "baz"; };
-      drv = derivation { name = "test"; system = builtins.currentSystem; };
+      emptyattrs = {};
+      drv = deriv;
     };
     expected = rec {
       int = "42";
       float = "~0.133700";
       bool = "true";
+      emptystring = ''""'';
       string = ''"fno\"rd"'';
+      newlinestring = "\"\\n\"";
       path = "/foo";
       null_ = "null";
-      function = "<λ>";
-      functionArgs = "<λ:{(arg),foo}>";
+      function = "<function>";
+      functionArgs = "<function, args: {arg?, foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
-      attrs = "{ \"foo\" = null; \"foo bar\" = \"baz\"; }";
-      drv = "<δ:test>";
+      emptylist = "[ ]";
+      attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
+      emptyattrs = "{ }";
+      drv = "<derivation ${deriv.drvPath}>";
+    };
+  };
+
+  testToPrettyMultiline = {
+    expr = mapAttrs (const (generators.toPretty { })) rec {
+      list = [ 3 4 [ false ] ];
+      attrs = { foo = null; bar.foo = "baz"; };
+      newlinestring = "\n";
+      multilinestring = ''
+        hello
+        there
+        test
+      '';
+      multilinestring' = ''
+        hello
+        there
+        test'';
+    };
+    expected = rec {
+      list = ''
+        [
+          3
+          4
+          [
+            false
+          ]
+        ]'';
+      attrs = ''
+        {
+          bar = {
+            foo = "baz";
+          };
+          foo = null;
+        }'';
+      newlinestring = "''\n  \n''";
+      multilinestring = ''
+        '''
+          hello
+          there
+          test
+        ''''';
+      multilinestring' = ''
+        '''
+          hello
+          there
+          test''''';
+
     };
   };
 
@@ -531,5 +633,98 @@ runTests {
   testSanitizeDerivationNameEmpty = testSanitizeDerivationName {
     name = "";
     expected = "unknown";
+  };
+
+  testFreeformOptions = {
+    expr =
+      let
+        submodule = { lib, ... }: {
+          freeformType = lib.types.attrsOf (lib.types.submodule {
+            options.bar = lib.mkOption {};
+          });
+          options.bar = lib.mkOption {};
+        };
+
+        module = { lib, ... }: {
+          options.foo = lib.mkOption {
+            type = lib.types.submodule submodule;
+          };
+        };
+
+        options = (evalModules {
+          modules = [ module ];
+        }).options;
+
+        locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
+      in map (o: o.loc) locs;
+    expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+  };
+
+  testCartesianProductOfEmptySet = {
+    expr = cartesianProductOfSets {};
+    expected = [ {} ];
+  };
+
+  testCartesianProductOfOneSet = {
+    expr = cartesianProductOfSets { a = [ 1 2 3 ]; };
+    expected = [ { a = 1; } { a = 2; } { a = 3; } ];
+  };
+
+  testCartesianProductOfTwoSets = {
+    expr = cartesianProductOfSets { a = [ 1 ]; b = [ 10 20 ]; };
+    expected = [
+      { a = 1; b = 10; }
+      { a = 1; b = 20; }
+    ];
+  };
+
+  testCartesianProductOfTwoSetsWithOneEmpty = {
+    expr = cartesianProductOfSets { a = [ ]; b = [ 10 20 ]; };
+    expected = [ ];
+  };
+
+  testCartesianProductOfThreeSets = {
+    expr = cartesianProductOfSets {
+      a = [   1   2   3 ];
+      b = [  10  20  30 ];
+      c = [ 100 200 300 ];
+    };
+    expected = [
+      { a = 1; b = 10; c = 100; }
+      { a = 1; b = 10; c = 200; }
+      { a = 1; b = 10; c = 300; }
+
+      { a = 1; b = 20; c = 100; }
+      { a = 1; b = 20; c = 200; }
+      { a = 1; b = 20; c = 300; }
+
+      { a = 1; b = 30; c = 100; }
+      { a = 1; b = 30; c = 200; }
+      { a = 1; b = 30; c = 300; }
+
+      { a = 2; b = 10; c = 100; }
+      { a = 2; b = 10; c = 200; }
+      { a = 2; b = 10; c = 300; }
+
+      { a = 2; b = 20; c = 100; }
+      { a = 2; b = 20; c = 200; }
+      { a = 2; b = 20; c = 300; }
+
+      { a = 2; b = 30; c = 100; }
+      { a = 2; b = 30; c = 200; }
+      { a = 2; b = 30; c = 300; }
+
+      { a = 3; b = 10; c = 100; }
+      { a = 3; b = 10; c = 200; }
+      { a = 3; b = 10; c = 300; }
+
+      { a = 3; b = 20; c = 100; }
+      { a = 3; b = 20; c = 200; }
+      { a = 3; b = 20; c = 300; }
+
+      { a = 3; b = 30; c = 100; }
+      { a = 3; b = 30; c = 200; }
+      { a = 3; b = 30; c = 300; }
+    ];
   };
 }

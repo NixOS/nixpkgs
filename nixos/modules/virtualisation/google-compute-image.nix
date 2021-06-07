@@ -18,8 +18,9 @@ in
 
   options = {
     virtualisation.googleComputeImage.diskSize = mkOption {
-      type = with types; int;
-      default = 1536;
+      type = with types; either (enum [ "auto" ]) int;
+      default = "auto";
+      example = 1536;
       description = ''
         Size of disk image. Unit is MB.
       '';
@@ -43,7 +44,7 @@ in
     system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
       name = "google-compute-image";
       postVM = ''
-        PATH=$PATH:${with pkgs; stdenv.lib.makeBinPath [ gnutar gzip ]}
+        PATH=$PATH:${with pkgs; lib.makeBinPath [ gnutar gzip ]}
         pushd $out
         mv $diskImage disk.raw
         tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw.tar.gz disk.raw

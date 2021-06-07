@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , dpkg
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -vD usr/lib/chromium-browser/libffmpeg.so $out/lib/libffmpeg.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Additional support for proprietary codecs for Vivaldi";
     homepage    = "https://ffmpeg.org/";
     license     = licenses.lgpl21;

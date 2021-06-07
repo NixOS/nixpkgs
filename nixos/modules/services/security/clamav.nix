@@ -8,30 +8,19 @@ let
   cfg = config.services.clamav;
   pkg = pkgs.clamav;
 
-  clamdConfigFile = pkgs.writeText "clamd.conf" ''
-    DatabaseDirectory ${stateDir}
-    LocalSocket ${runDir}/clamd.ctl
-    PidFile ${runDir}/clamd.pid
-    TemporaryDirectory /tmp
-    User clamav
-    Foreground yes
+  toKeyValue = generators.toKeyValue {
+    mkKeyValue = generators.mkKeyValueDefault {} " ";
+    listsAsDuplicateKeys = true;
+  };
 
-    ${cfg.daemon.extraConfig}
-  '';
-
-  freshclamConfigFile = pkgs.writeText "freshclam.conf" ''
-    DatabaseDirectory ${stateDir}
-    Foreground yes
-    Checks ${toString cfg.updater.frequency}
-
-    ${cfg.updater.extraConfig}
-
-    DatabaseMirror database.clamav.net
-  '';
+  clamdConfigFile = pkgs.writeText "clamd.conf" (toKeyValue cfg.daemon.settings);
+  freshclamConfigFile = pkgs.writeText "freshclam.conf" (toKeyValue cfg.updater.settings);
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "clamav" "updater" "config" ] [ "services" "clamav" "updater" "extraConfig" ])
+    (mkRemovedOptionModule [ "services" "clamav" "updater" "config" ] "Use services.clamav.updater.settings instead.")
+    (mkRemovedOptionModule [ "services" "clamav" "updater" "extraConfig" ] "Use services.clamav.updater.settings instead.")
+    (mkRemovedOptionModule [ "services" "clamav" "daemon" "extraConfig" ] "Use services.clamav.daemon.settings instead.")
   ];
 
   options = {
@@ -39,12 +28,12 @@ in
       daemon = {
         enable = mkEnableOption "ClamAV clamd daemon";
 
-        extraConfig = mkOption {
-          type = types.lines;
-          default = "";
+        settings = mkOption {
+          type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
+          default = {};
           description = ''
-            Extra configuration for clamd. Contents will be added verbatim to the
-            configuration file.
+            ClamAV configuration. Refer to <link xlink:href="https://linux.die.net/man/5/clamd.conf"/>,
+            for details on supported values.
           '';
         };
       };
@@ -68,12 +57,12 @@ in
           '';
         };
 
-        extraConfig = mkOption {
-          type = types.lines;
-          default = "";
+        settings = mkOption {
+          type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
+          default = {};
           description = ''
-            Extra configuration for freshclam. Contents will be added verbatim to the
-            configuration file.
+            freshclam configuration. Refer to <link xlink:href="https://linux.die.net/man/5/freshclam.conf"/>,
+            for details on supported values.
           '';
         };
       };
@@ -92,6 +81,22 @@ in
 
     users.groups.${clamavGroup} =
       { gid = config.ids.gids.clamav; };
+
+    services.clamav.daemon.settings = {
+      DatabaseDirectory = stateDir;
+      LocalSocket = "${runDir}/clamd.ctl";
+      PidFile = "${runDir}/clamd.pid";
+      TemporaryDirectory = "/tmp";
+      User = "clamav";
+      Foreground = true;
+    };
+
+    services.clamav.updater.settings = {
+      DatabaseDirectory = stateDir;
+      Foreground = true;
+      Checks = cfg.updater.frequency;
+      DatabaseMirror = [ "database.clamav.net" ];
+    };
 
     environment.etc."clamav/freshclam.conf".source = freshclamConfigFile;
     environment.etc."clamav/clamd.conf".source = clamdConfigFile;

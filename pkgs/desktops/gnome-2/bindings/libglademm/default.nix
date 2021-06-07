@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtkmm2, libglade }:
+{ stdenv, fetchurl, pkg-config, intltool, gtkmm2, libglade }:
 
 stdenv.mkDerivation rec {
   name = "libglademm-2.6.7";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "devdoc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ intltool ];
 
   propagatedBuildInputs = [ gtkmm2 libglade ];

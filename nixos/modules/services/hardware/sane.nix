@@ -4,9 +4,7 @@ with lib;
 
 let
 
-  pkg = if config.hardware.sane.snapshot
-    then pkgs.sane-backends-git
-    else pkgs.sane-backends;
+  pkg = pkgs.sane-backends;
 
   sanedConf = pkgs.writeTextFile {
     name = "saned.conf";
@@ -32,7 +30,7 @@ let
   };
 
   backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; };
+  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
@@ -73,6 +71,16 @@ in
         </para></note>
       '';
       example = literalExample "[ pkgs.hplipWithPlugin ]";
+    };
+
+    hardware.sane.disabledDefaultBackends = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "v4l" ];
+      description = ''
+        Names of backends which are enabled by default but should be disabled.
+        See <literal>$SANE_CONFIG_DIR/dll.conf</literal> for the list of possible names.
+      '';
     };
 
     hardware.sane.configDir = mkOption {
@@ -148,13 +156,14 @@ in
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";
           Accept = true;
-          MaxConnections = 1;
+          MaxConnections = 64;
         };
       };
 
       users.users.scanner = {
         uid = config.ids.uids.scanner;
         group = "scanner";
+        extraGroups = [ "lp" ] ++ optionals config.services.avahi.enable [ "avahi" ];
       };
     })
   ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gitolite";
-  version = "3.6.11";
+  version = "3.6.12";
 
   src = fetchFromGitHub {
     owner = "sitaramc";
     repo = "gitolite";
     rev = "v${version}";
-    sha256 = "1rkj7gknwjlc5ij9w39zf5mr647bm45la57yjczydmvrb8c56yrh";
+    sha256 = "05xw1pmagvkrbzga5pgl3xk9qyc6b5x73f842454f3w9ijspa8zy";
   };
 
   buildInputs = [ nettools perl ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/gitolite-shell \
-      --prefix PATH : "${git}/bin"
+      --prefix PATH : ${lib.makeBinPath [ git perl ]}
   '';
 
   installPhase = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     echo ${version} > $out/bin/VERSION
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Finely-grained git repository hosting";
     homepage    = "https://gitolite.com/gitolite/index.html";
     license     = licenses.gpl2;

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pythonPackages, unbound, libreswan }:
+{ lib, stdenv, fetchFromGitHub, python2Packages, unbound, libreswan }:
 
 let
-  inherit (pythonPackages) python;
+  pythonPackages = python2Packages;
 in stdenv.mkDerivation rec {
   pname    = "hash-slinger";
   version = "2.7";
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/man $out/${python.sitePackages}/
+    mkdir -p $out/bin $out/man $out/${pythonPackages.python.sitePackages}/
     make install
     wrapPythonPrograms
    '';
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
    meta = {
     description = "Various tools to generate special DNS records";
     homepage    = "https://github.com/letoams/hash-slinger";
-    license     = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.leenaars ];
+    license     = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.leenaars ];
   };
 }

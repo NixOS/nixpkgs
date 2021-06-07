@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp, libdrm
-, pkgconfig, freetype, fontconfig, which, imagemagick, curl, sane-backends, libXpm
+{ lib, stdenv, fetchurl, libjpeg, libexif, giflib, libtiff, libpng, libwebp, libdrm
+, pkg-config, freetype, fontconfig, which, imagemagick, curl, sane-backends, libXpm
 , epoxy, poppler, mesa, lirc }:
 
 stdenv.mkDerivation rec {
@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "0f242mix20rgsqz1llibhsz4r2pbvx6k32rmky0zjvnbaqaw1dwm";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkg-config which ];
   buildInputs = [
-    libexif libjpeg libpng libungif freetype fontconfig libtiff libwebp
+    libexif libjpeg libpng giflib freetype fontconfig libtiff libwebp
     imagemagick curl sane-backends libdrm libXpm epoxy poppler lirc
     mesa
   ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sed -e 's@$(HAVE_LINUX_FB_H)@yes@' -i GNUmakefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Image viewing and manipulation programs including fbi, fbgs, ida, exiftran and thumbnail.cgi";
     homepage = "https://www.kraxel.org/blog/linux/fbida/";
     license = licenses.gpl2;

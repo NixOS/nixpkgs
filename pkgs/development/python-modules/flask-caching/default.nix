@@ -1,23 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, flask, pytest, pytestcov, pytest-xprocess, pytestcache }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, flask, pytestCheckHook, pytestcov, pytest-xprocess, pytestcache }:
 
 buildPythonPackage rec {
   pname = "Flask-Caching";
-  version = "1.9.0";
+  version = "1.10.1";
   disabled = isPy27; # invalid python2 syntax
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0356ad868b1d8ec2d0e675a6fe891c41303128f8904d5d79e180d8b3f952aff";
+    sha256 = "cf19b722fcebc2ba03e4ae7c55b532ed53f0cbf683ce36fafe5e881789a01c00";
   };
 
   propagatedBuildInputs = [ flask ];
 
-  checkInputs = [ pytest pytestcov pytest-xprocess pytestcache ];
+  checkInputs = [ pytestCheckHook pytestcov pytest-xprocess pytestcache ];
 
-  # backend_cache relies on pytest-cache, which is a stale package from 2013
-  checkPhase = ''
-    pytest -k 'not backend_cache'
-  '';
+  disabledTests = [
+    # backend_cache relies on pytest-cache, which is a stale package from 2013
+    "backend_cache"
+    # optional backends
+    "Redis"
+    "Memcache"
+  ];
 
   meta = with lib; {
     description = "Adds caching support to your Flask application";

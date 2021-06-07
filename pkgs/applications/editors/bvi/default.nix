@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "bvi";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hex editor with vim style keybindings";
     homepage = "http://bvi.sourceforge.net/download.html";
     license = licenses.gpl2;

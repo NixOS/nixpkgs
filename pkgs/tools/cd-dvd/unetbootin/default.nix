@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, qt4, utillinux, coreutils, which, qmake4Hook
+{ lib, stdenv, fetchFromGitHub, makeWrapper, qt4, util-linux, coreutils, which, qmake4Hook
 , p7zip, mtools, syslinux }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace unetbootin.cpp \
       --replace /bin/df             ${coreutils}/bin/df \
-      --replace /sbin/blkid         ${utillinux}/sbin/blkid \
-      --replace /sbin/fdisk         ${utillinux}/sbin/fdisk \
-      --replace /sbin/sfdisk        ${utillinux}/sbin/sfdisk \
+      --replace /sbin/blkid         ${util-linux}/sbin/blkid \
+      --replace /sbin/fdisk         ${util-linux}/sbin/fdisk \
+      --replace /sbin/sfdisk        ${util-linux}/sbin/sfdisk \
       --replace /usr/bin/syslinux   ${syslinux}/bin/syslinux \
       --replace /usr/bin/extlinux   ${syslinux}/sbin/extlinux \
       --replace /usr/share/syslinux ${syslinux}/share/syslinux
@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/applications unetbootin.desktop
 
     wrapProgram $out/bin/unetbootin \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ mtools p7zip which ]} \
+      --prefix PATH : ${lib.makeBinPath [ mtools p7zip which ]} \
       --set QT_X11_NO_MITSHM 1
 
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://unetbootin.sourceforge.net/";
     description = "A tool to create bootable live USB drives from ISO images";
     license     = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gettext, libmpcdec, libao }:
+{ fetchurl, lib, stdenv, gettext, libmpcdec, libao }:
 
 let version = "0.2.4"; in
 stdenv.mkDerivation rec {
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
     description = "A Musepack (.mpc) audio player";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
   };
 }

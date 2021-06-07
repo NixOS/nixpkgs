@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "python-debian";
-  version = "0.1.37";
+  version = "0.1.39";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab04f535155810c46c8abf3f7d46364b67b034c49ff8690cdb510092eee56750";
+    sha256 = "6cca96239b5981f5203216d2113fea522477628607ed0a8427e15094a792541c";
   };
 
   propagatedBuildInputs = [ chardet six ];

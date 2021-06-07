@@ -9,11 +9,11 @@
 }:
 
 mkDerivation {
-  name = "kmahjongg";
+  pname = "kmahjongg";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kdeclarative libkmahjongg knewstuff libkdegames ];
   meta = {
     license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ genesis ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

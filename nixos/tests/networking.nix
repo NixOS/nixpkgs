@@ -8,7 +8,9 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  router = { config, pkgs, ... }:
+  qemu-flags = import ../lib/qemu-flags.nix { inherit pkgs; };
+
+  router = { config, pkgs, lib, ... }:
     with pkgs.lib;
     let
       vlanIfs = range 1 (length config.virtualisation.vlans);
@@ -30,17 +32,20 @@ let
       services.dhcpd4 = {
         enable = true;
         interfaces = map (n: "eth${toString n}") vlanIfs;
-        extraConfig = ''
-          authoritative;
-        '' + flip concatMapStrings vlanIfs (n: ''
+        extraConfig = flip concatMapStrings vlanIfs (n: ''
           subnet 192.168.${toString n}.0 netmask 255.255.255.0 {
             option routers 192.168.${toString n}.1;
-            # XXX: technically it's _not guaranteed_ that IP addresses will be
-            # issued from the first item in range onwards! We assume that in
-            # our tests however.
-            range 192.168.${toString n}.2 192.168.${toString n}.254;
+            range 192.168.${toString n}.3 192.168.${toString n}.254;
           }
-        '');
+        '')
+        ;
+        machines = flip map vlanIfs (vlan:
+          {
+            hostName = "client${toString vlan}";
+            ethernetAddress = qemu-flags.qemuNicMac vlan 1;
+            ipAddress = "192.168.${toString vlan}.2";
+          }
+        );
       };
       services.radvd = {
         enable = true;
@@ -494,8 +499,8 @@ let
                 list, targetList
             )
         with subtest("Test MTU and MAC Address are configured"):
-            assert "mtu 1342" in machine.succeed("ip link show dev tap0")
-            assert "mtu 1343" in machine.succeed("ip link show dev tun0")
+            machine.wait_until_succeeds("ip link show dev tap0 | grep 'mtu 1342'")
+            machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
             assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
       '' # network-addresses-* only exist in scripted networking
       + optionalString (!networkd) ''
@@ -506,7 +511,7 @@ let
             machine.sleep(10)
             residue = machine.succeed("ip tuntap list")
             assert (
-                residue is ""
+                residue == ""
             ), "Some virtual interface has not been properly cleaned:\n{}".format(residue)
       '';
     };
@@ -660,11 +665,35 @@ let
             ipv4Residue = machine.succeed("ip -4 route list dev eth0 | head -n-3").strip()
             ipv6Residue = machine.succeed("ip -6 route list dev eth0 | head -n-3").strip()
             assert (
-                ipv4Residue is ""
+                ipv4Residue == ""
             ), "The IPv4 routing table has not been properly cleaned:\n{}".format(ipv4Residue)
             assert (
-                ipv6Residue is ""
+                ipv6Residue == ""
             ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
+      '';
+    };
+    rename = {
+      name = "RenameInterface";
+      machine = { pkgs, ... }: {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+        };
+      } //
+      (if networkd
+       then { systemd.network.links."10-custom_name" = {
+                matchConfig.MACAddress = "52:54:00:12:01:01";
+                linkConfig.Name = "custom_name";
+              };
+            }
+       else { services.udev.initrdRules = ''
+               SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="custom_name"
+              '';
+            });
+      testScript = ''
+        machine.succeed("udevadm settle")
+        print(machine.succeed("ip link show dev custom_name"))
       '';
     };
     # even with disabled networkd, systemd.network.links should work

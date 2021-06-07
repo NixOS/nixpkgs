@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchPypi
+, pythonOlder
 , h5py
 , numpy
 , dill
@@ -18,11 +19,12 @@
 
 buildPythonPackage rec {
   pname   = "hickle";
-  version = "3.4.6";
+  version = "4.0.4";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "026r6yg3amsi8k8plzsbw5rnifym6sc17y011daqyvcpb7mfs94b";
+    sha256 = "0d35030a76fe1c7fa6480088cde932689960ed354a2539ffaf5f3c90c578c06f";
   };
 
   postPatch = ''
@@ -31,11 +33,17 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ h5py numpy dill ];
+
+  doCheck = false; # incompatible with latest astropy
   checkInputs = [
     pytest pytestcov pytestrunner coveralls scipy pandas astropy twine check-manifest codecov
   ];
 
+  pythonImportsCheck = [ "hickle" ];
+
   meta = {
+    # incompatible with h5py>=3.0, see https://github.com/telegraphic/hickle/issues/143
+    broken = true;
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
     license = lib.licenses.mit;

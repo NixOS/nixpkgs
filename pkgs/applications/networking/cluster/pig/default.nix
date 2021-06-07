@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, hadoop, jre, bash }:
+{ lib, stdenv, fetchurl, makeWrapper, hadoop, jre, bash }:
 
 stdenv.mkDerivation rec {
 
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
 
     for n in $out/{bin,sbin}"/"*; do
       wrapProgram $n \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ jre bash ]}" \
+        --prefix PATH : "${lib.makeBinPath [ jre bash ]}" \
         --set JAVA_HOME "${jre}" --set HADOOP_PREFIX "${hadoop}"
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pig.apache.org/";
     description = "High-level language for Apache Hadoop";
     license = licenses.asl20;

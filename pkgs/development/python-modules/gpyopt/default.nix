@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, setuptools
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools
 , numpy, scipy, gpy, emcee, nose }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools numpy scipy gpy emcee ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bayesian optimization toolbox in Python";
     homepage = "https://sheffieldml.github.io/GPyOpt";
     license = licenses.bsd3;

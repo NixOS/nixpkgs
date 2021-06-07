@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , hdf5
 , m4
 , curl # for DAP
+, removeReferencesTo
 }:
 
 let
@@ -26,7 +27,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 removeReferencesTo ];
   buildInputs = [ hdf5 curl mpi ];
 
   passthru = {
@@ -40,13 +41,19 @@ in stdenv.mkDerivation rec {
       "--enable-shared"
       "--disable-dap-remote-tests"
   ]
-  ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+  ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+
+  disallowedReferences = [ stdenv.cc ];
+
+  postFixup = ''
+    remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
+  '';
 
   doCheck = !mpiSupport;
 
   meta = {
       description = "Libraries for the Unidata network Common Data Format";
-      platforms = stdenv.lib.platforms.unix;
+      platforms = lib.platforms.unix;
       homepage = "https://www.unidata.ucar.edu/software/netcdf/";
       license = {
         url = "https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html";

@@ -1,6 +1,13 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, ocaml, findlib }:
+{ lib, stdenv, fetchFromGitHub, buildDunePackage, ocaml, findlib, cppo }:
 
-let param = {
+let param =
+  let v6_3 = {
+    version = "6.3";
+    sha256 = "1skf4njvkifwx0qlsrc0jn891gvvcp5ryd6kkpx56hck7nnxv8x6";
+    useDune2 = true;
+    buildInputs = [cppo];
+  }; in
+{
   "4.02" = {
     version = "5.0+4.02.0";
     sha256 = "16drjk0qafjls8blng69qiv35a84wlafpk16grrg2i3x19p8dlj8"; };
@@ -20,15 +27,11 @@ let param = {
   "4.07" = {
     version = "5.1+4.06.0";
     sha256 = "1ww4cspdpgjjsgiv71s0im5yjkr3544x96wsq1vpdacq7dr7zwiw"; };
-  "4.08" = {
-    version = "5.3+4.08.0";
-    sha256 = "0vdmhs3hpmh5iclx4lzgdpf362m4l35zprxs73r84z1yhr4jcr4m"; };
-  "4.09" = {
-    version = "6.0+4.08.0";
-    sha256 = "056cmdajap8mbb8k0raj0cq0y4jf7pf5x0hlivm92w2v7xxf59ns"; };
-  "4.10" = {
-    version = "6.1+4.10.0";
-    sha256 = "0ccx2g4zpwnv52bbzhgxji1nvzmn80jwiqalwwc4s60i9qg51llw"; };
+  "4.08" = v6_3;
+  "4.09" = v6_3;
+  "4.10" = v6_3;
+  "4.11" = v6_3;
+  "4.12" = v6_3;
 }.${ocaml.meta.branch};
 in
 
@@ -39,18 +42,18 @@ let src = fetchFromGitHub {
       inherit (param) sha256;
     };
     pname = "ppx_tools";
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Tools for authors of ppx rewriters";
       homepage = "https://www.lexifi.com/ppx_tools";
       license = licenses.mit;
       maintainers = with maintainers; [ vbgl ];
     };
 in
-if stdenv.lib.versionAtLeast param.version "6.0"
+if lib.versionAtLeast param.version "6.0"
 then
   buildDunePackage {
     inherit pname src meta;
-    inherit (param) version;
+    inherit (param) version useDune2 buildInputs;
   }
 else
   stdenv.mkDerivation {

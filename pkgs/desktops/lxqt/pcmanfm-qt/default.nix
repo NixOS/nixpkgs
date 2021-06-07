@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , lxqt
 , qtbase
 , qttools
@@ -15,18 +15,18 @@
 
 mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "0.15.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "12rzcv5n4s299c8787islkn4xcjb9bbrj12mxcd5ii91jq39aii4";
+    sha256 = "1awyncpypygsrg7d2nc6xh1l4xaln3ypdliy4xmq8bf94sh9rf0y";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt.lxqt-build-tools
   ];
 
@@ -47,9 +47,9 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
     homepage = "https://github.com/lxqt/pcmanfm-qt";
-    license = licenses.gpl2;
+    description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };

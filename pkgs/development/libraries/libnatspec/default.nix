@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, popt, libiconv }:
+{ lib, stdenv, fetchurl, autoreconfHook, popt, libiconv }:
 
 stdenv.mkDerivation (rec {
   name = "libnatspec-0.3.0";
@@ -12,12 +12,12 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ popt ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://natspec.sourceforge.net/";
     description = "A library intended to smooth national specificities in using of programs";
     platforms = platforms.unix;
     license = licenses.lgpl21;
   };
-} // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
+} // lib.optionalAttrs (!stdenv.isLinux) {
   propagatedBuildInputs = [ libiconv ];
 })

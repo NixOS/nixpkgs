@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre, m4
-, buildPackages
+, buildPackages, nixosTests
 , withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
 , withMySQL ? false, libmysqlclient
@@ -12,7 +12,7 @@ let
     "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient.dev}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
      ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
    auxlibs = lib.concatStringsSep " " ([
@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.5.4";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "10b8g6xv90shhfx17cjw7p40gphwi02az1y2dd8a4sjm4z6b2bzw";
+    sha256 = "sha256-d0YolNdnHWPL5fwnM/lBCIUVptZxCLnxgIt9rjfoPC4=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     ./relative-symlinks.patch
   ];
 
-  postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -e 's!bin/postconf!${buildPackages.postfix}/bin/postconf!' -i postfix-install
   '' + ''
     sed -e '/^PATH=/d' -i postfix-install
@@ -96,12 +96,13 @@ in stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
   '';
 
+  passthru.tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
+
   meta = with lib; {
     homepage = "http://www.postfix.org/";
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rickynils globin ];
+    maintainers = with maintainers; [ globin dotlambda ];
   };
-
 }

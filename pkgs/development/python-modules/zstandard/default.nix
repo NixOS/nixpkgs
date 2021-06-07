@@ -7,17 +7,17 @@
 
 buildPythonPackage rec {
   pname = "zstandard";
-  version = "0.14.0";
-  
+  version = "0.15.2";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lkn7n3bfp7zip6hkqwkqwc8pxmhhs4rr699k77h51rfln6kjllh";
+    sha256 = "52de08355fd5cfb3ef4533891092bb96229d43c2069703d4aff04fdbedf9c92f";
   };
-  
+
   propagatedBuildInputs = [ cffi ];
-  
+
   checkInputs = [ hypothesis ];
-    
+
   meta = with lib; {
     description = "zstandard bindings for Python";
     homepage = "https://github.com/indygreg/python-zstandard";

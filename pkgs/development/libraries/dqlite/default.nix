@@ -1,38 +1,37 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file, libco-canonical
-, libuv, raft-canonical, sqlite-replication }:
-
-with stdenv.lib;
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv
+, raft-canonical, sqlite-replication }:
 
 stdenv.mkDerivation rec {
   pname = "dqlite";
-  version = "1.4.4";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wm7vkapjg8hdjm6bi48hwsf4w4ppgn3r655gqms5ssjxm50m15d";
+    sha256 = "sha256-lCMTmKnDv/fb5fP/Ch8AwpuNfmR+gecxeIweO6hHj5U=";
   };
 
-  nativeBuildInputs = [ autoreconfHook file pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook file pkg-config ];
   buildInputs = [
-    libco-canonical.dev
     libuv
     raft-canonical.dev
     sqlite-replication
   ];
+
+  enableParallelBuilding = true;
 
   # tests fail
   doCheck = false;
 
   outputs = [ "dev" "out" ];
 
-  meta = {
+  meta = with lib; {
     description = ''
       Expose a SQLite database over the network and replicate it across a
       cluster of peers
     '';
-    homepage = "https://github.com/CanonicalLtd/dqlite/";
+    homepage = "https://dqlite.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ joko wucke13 ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ lib, fetchurl, stdenv }:
 
 let
   name = "antiword-0.37";
@@ -23,9 +23,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.winfield.demon.nl/";
     description = "Convert MS Word documents to plain text or PostScript";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
-    maintainers = [ stdenv.lib.maintainers.peti ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.peti ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

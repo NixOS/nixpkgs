@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, python27Packages, file }:
+{ lib, stdenv, fetchurl, python27Packages, file }:
 
 let
   inherit (python27Packages) python;
   requirements = (import ./requirements.nix {
-    inherit stdenv fetchurl;
+    inherit lib fetchurl;
     pythonPackages = python27Packages;
   });
 
@@ -50,7 +50,7 @@ in
       done
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://sat.goffi.org/";
       description = "A multi-frontend XMPP client";
       platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnugrep, findutils }:
+{ lib, stdenv, fetchurl, gnugrep, findutils }:
 
 let
   version = "22-1.1ubuntu1"; # Zesty
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
       --replace " xargs " " ${findutils}/bin/xargs "
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://packages.ubuntu.com/source/zesty/kmod";
     description = "Linux kernel module blacklists from Ubuntu";
     platforms = platforms.linux;

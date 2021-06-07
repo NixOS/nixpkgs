@@ -14,11 +14,12 @@
 
 buildPythonPackage rec {
   pname = "astroquery";
-  version = "0.4";
+  version = "0.4.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ddwnj9vpvxkrfb45c4pwv5f5za9kn2q0040dpw2ymj2bwlpl61h";
+    sha256 = "0xpqrl9h7sg55mql38xsfpbz9rxsm3mxfha1biqyly1gmxpmd47a";
   };
 
   disabled = !isPy3k;
@@ -30,11 +31,6 @@ buildPythonPackage rec {
   # Tests disabled until pytest-astropy has been updated to include pytest-astropy-header
   doCheck = false;
   checkInputs = [ pytest pytest-astropy ];
-
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
-  '';
 
   # Tests must be run in the build directory. The tests create files
   # in $HOME/.astropy so we need to set HOME to $TMPDIR.

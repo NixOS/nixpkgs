@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config
 , libtool, autoconf, automake, cppunit
 , libtorrent, ncurses, libsigcxx, curl
 , zlib, openssl, xmlrpc_c
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hcaf1brk402caa7hhlb2r1c93mjzxkm8gb19xfl33gkp3jpf372";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libtool autoconf automake cppunit
     libtorrent ncurses libsigcxx curl zlib openssl xmlrpc_c
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # Optional patch adds support for custom configurable colors
   # https://github.com/Chlorm/chlorm_overlay/blob/master/net-p2p/rtorrent/README.md
-  patches = stdenv.lib.optional colorSupport (fetchurl {
+  patches = lib.optional colorSupport (fetchurl {
     url = "https://gist.githubusercontent.com/codyopel/a816c2993f8013b5f4d6/raw/b952b32da1dcf14c61820dfcf7df00bc8918fec4/rtorrent-color.patch";
     sha256 = "00gcl7yq6261rrfzpz2k8bd7mffwya0ifji1xqcvhfw50syk8965";
   });
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     mv doc/rtorrent.rc $out/share/doc/rtorrent/rtorrent.rc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
 

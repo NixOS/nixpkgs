@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, wrapGAppsHook
-, libX11, libzip, glfw, libpng, xorg, gnome3
+, libX11, libzip, glfw, libpng, xorg, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0fn5j9klzrjvz3bq8p9yp9nqikn2fr7bp98c1sxwpwwaadkqy9xf";
+    sha256 = "12wsy2zdfhg0ygkpvz58rk86qiy259fi9grb0jxiz8zcyd6x1ngk";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
@@ -26,13 +26,17 @@ stdenv.mkDerivation rec {
       --replace "/usr/" "''${out}/"
   '';
 
+  cmakeFlags = [
+    "-DTEV_DEPLOY=1" # Only relevant not to append "dev" to the version
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/tev \
       "''${gappsWrapperArgs[@]}" \
-      --prefix PATH ":" "${gnome3.zenity}/bin"
+      --prefix PATH ":" "${gnome.zenity}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high dynamic range (HDR) image comparison tool";
     longDescription = ''
       A high dynamic range (HDR) image comparison tool for graphics people. tev

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, fontforge }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, fontforge }:
 
 stdenv.mkDerivation rec {
   pname = "tlwg";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   preAutoreconf = "echo ${version} > VERSION";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of Thai scalable fonts available under free licenses";
     homepage = "https://linux.thai.net/projects/fonts-tlwg";
     license = with licenses; [ gpl2 publicDomain lppl13c free ];

@@ -1,21 +1,22 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
+{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
 , future, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp
 , hddtemp
 , netifaces # IP module
+, py-cpuinfo
 }:
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.1.4.1";
+  version = "3.1.7";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "04dc3pwj9qbbhxpihf13ckdgwz0qc771c7v7awni4vyzk3a9cdfb";
+    sha256 = "sha256-82ZD32dqRYGbGM/uyaJ5VqVZbhDZthiEcTihkV43JOU=";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
@@ -41,17 +42,14 @@ buildPythonApplication rec {
     psutil
     pysnmp
     setuptools
+    py-cpuinfo
   ] ++ lib.optional stdenv.isLinux hddtemp;
-
-  preConfigure = ''
-    sed -i 's/data_files\.append((conf_path/data_files.append(("etc\/glances"/' setup.py;
-  '';
 
   meta = with lib; {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
     changelog = "https://github.com/nicolargo/glances/releases/tag/v${version}";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ jonringer primeos koral ];
   };
 }

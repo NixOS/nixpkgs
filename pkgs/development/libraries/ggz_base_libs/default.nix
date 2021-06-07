@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, openssl, expat, libgcrypt }:
+{ lib, stdenv, fetchurl, intltool, openssl, expat, libgcrypt }:
 
 stdenv.mkDerivation rec {
   version = "0.99.5";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "--with-tls"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GGZ Gaming zone libraries";
     maintainers = with maintainers;
     [

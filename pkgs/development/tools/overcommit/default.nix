@@ -9,7 +9,7 @@ bundlerApp {
     description = "Tool to manage and configure Git hooks";
     homepage    = "https://github.com/sds/overcommit";
     license     = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
     platforms   = platforms.unix;
   };
 }

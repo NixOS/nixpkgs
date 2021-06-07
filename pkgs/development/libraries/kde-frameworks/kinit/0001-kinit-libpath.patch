@@ -20,7 +20,7 @@ index 8fff17a..0801b75 100644
 -                //     https://sourceware.org/bugzilla/show_bug.cgi?id=13945
 -                //     - so we try hacking it in ourselves
 -                QString install_lib_dir = QFile::decodeName(
--                        CMAKE_INSTALL_PREFIX "/" LIB_INSTALL_DIR "/");
+-                        CMAKE_INSTALL_PREFIX "/" KDE_INSTALL_LIBDIR "/");
 -                QString orig_libpath = libpath;
 -                libpath = install_lib_dir + libpath;
 -                l.setFileName(libpath);

@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
+{ lib, stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
 , libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
 , freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
 , leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   boolToCMake = b: if b then "ON" else "OFF";
@@ -39,7 +39,7 @@ let
     ] ++ optionals buildClient [
       "-DOpenGL_GL_PREFERENCE=GLVND"
     ];
-    
+
     NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ];
@@ -47,7 +47,7 @@ let
     buildInputs = [
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
       gmp libspatialindex
-    ] ++ optionals stdenv.isDarwin [ 
+    ] ++ optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
       libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
@@ -60,7 +60,7 @@ let
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://minetest.net/";
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
@@ -76,9 +76,9 @@ let
   };
 
   v5 = {
-    version = "5.2.0";
-    sha256 = "0pj9hkxwc1vzng2khbixi79557sbawf6mqkzl589jciyqa7jqkv1";
-    dataSha256 = "1kjz7x3xiqqnpyrd6339a139pbdxx31c4qpg8pmns410hsm8i358";
+    version = "5.4.1";
+    sha256 = "062ilb7s377q3hwfhl8q06vvcw2raydz5ljzlzwy2dmyzmdcndb8";
+    dataSha256 = "0i45lbnikvgj9kxdp0yphpjjwjcgp4ibn49xkj78j5ic1s9n8jd4";
   };
 
 in {

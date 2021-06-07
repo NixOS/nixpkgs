@@ -3,42 +3,52 @@
 , fetchFromGitHub
 , nose
 , numpy
-, scikitlearn
+, scikit-learn
 , scipy
 , numba
+, pynndescent
+, tensorflow
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.3.10";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     rev = version;
-    sha256 = "0nck5va5km7qkbrhn15dsn0p2mms9kc641lcypy7l8haqgm44h8x";
+    sha256 = "0favphngcz5jvyqs06x07hk552lvl9qx3vka8r4x0xmv88gsg349";
   };
-
-  checkInputs = [
-    nose
-  ];
 
   propagatedBuildInputs = [
     numpy
-    scikitlearn
+    scikit-learn
     scipy
     numba
+    pynndescent
   ];
 
-  postConfigure = ''
-   substituteInPlace umap/tests/test_umap.py \
-     --replace "def test_umap_transform_on_iris()" "@SkipTest
-def test_umap_transform_on_iris()"
+  checkInputs = [
+    nose
+    tensorflow
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
 
-  checkPhase = ''
-    nosetests -s umap
-  '';
+  disabledTests = [
+    # Plot functionality requires additional packages.
+    # These test also fail with 'RuntimeError: cannot cache function' error.
+    "test_umap_plot_testability"
+    "test_plot_runs_at_all"
+
+    # Flaky test. Fails with AssertionError sometimes.
+    "test_sparse_hellinger"
+  ];
 
   meta = with lib; {
     description = "Uniform Manifold Approximation and Projection";

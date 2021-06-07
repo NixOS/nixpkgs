@@ -1,10 +1,11 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , glib
 , meson
 , ninja
 , pantheon
-, pkgconfig
+, pkg-config
 , vala
 , gettext
 , wrapGAppsHook
@@ -12,20 +13,20 @@
 
 stdenv.mkDerivation rec {
   pname = "vala-lint-unstable";
-  version = "2019-10-11";
+  version = "2021-02-17";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "a077bbec30dea128616a23583ce3f8364ff2ef11";
-    sha256 = "0w0rmaj4v42wc4vq2lfjnj6airag5ahv6522xkw3j1nmccxq3s72";
+    rev = "5b06cc2341ae7e9f7f8c35c542ef78c36e864c30";
+    sha256 = "KwJ5sCp9ZrrxIqc6qi2+ZdHBt1esNOO1+uDkS+d9mW8=";
   };
 
   nativeBuildInputs = [
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -34,10 +35,9 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  # See https://github.com/vala-lang/vala-lint/issues/133
-  doCheck = false;
+  doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/vala-lang/vala-lint";
     description = "Check Vala code files for code-style errors";
     longDescription = ''

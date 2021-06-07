@@ -1,13 +1,14 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
-, pkgconfig
+, pkg-config
 , fetchurl
+, fetchpatch
 , python3Packages
 , gettext
 , itstool
 , libtool
 , texinfo
-, utillinux
+, util-linux
 , autoreconfHook
 , glib
 , dotconf
@@ -24,7 +25,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
   inherit (python3Packages) python pyxdg wrapPython;
 
   # speechd hard-codes espeak, even when built without support for it.
@@ -39,22 +40,29 @@ let
       throw "You need to enable at least one output module.";
 in stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
-  version = "0.9.1";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "16bg52hnkrsrs7kgbzanb34b9zb6fqxwj0a9bmsxmj1skkil1h1p";
+    sha256 = "sha256-sGMZ8gHhXlbGKWZTr1vPwwDLNI6XLVF9+LBurHfq4tw=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit utillinux;
+      utillinux = util-linux;
+    })
+
+    # Fix build with Glib 2.68
+    # https://github.com/brailcom/speechd/pull/462
+    (fetchpatch {
+      url = "https://github.com/brailcom/speechd/commit/a2faab416e42cbdf3d73f98578a89eb7a235e25a.patch";
+      sha256 = "8Q7tUdKKBBtgXZZnj59OcJOkrCNeBR9gkBjhKlpW0hQ=";
     })
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gettext
     libtool
@@ -88,7 +96,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
-    "--with-systemdsystemunitdir=${placeholder ''out''}/lib/systemd/system"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ] ++ optional withPulse "--with-pulse"
     ++ optional withAlsa "--with-alsa"
     ++ optional withLibao "--with-libao"
@@ -110,7 +118,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common interface to speech synthesis";
     homepage = "https://devel.freebsoft.org/speechd";
     license = licenses.gpl2Plus;

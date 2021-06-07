@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , gtk2
 , mono
 , gtk-sharp-2_0
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "15jsm6n0sih0nf3w8vmvik97q7l3imz4vkdzmp9k7bssiz4glj1z";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool which ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
   buildInputs = [ gtk2 mono gtk-sharp-2_0 ]
   ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui ]);
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mono-project.com/docs/gui/gtksharp/";
     description = "A .NET language binding for assorted GNOME libraries";
     license = licenses.lgpl21;

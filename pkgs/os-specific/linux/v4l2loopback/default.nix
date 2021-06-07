@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, kernel, kmod }:
+{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
 
 stdenv.mkDerivation rec {
-  name = "v4l2loopback-${version}-${kernel.version}";
-  version = "0.12.5";
+  pname = "v4l2loopback";
+  version = "unstable-2020-04-22-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
-    rev = "v${version}";
-    sha256 = "1qi4l6yam8nrlmc3zwkrz9vph0xsj1cgmkqci4652mbpbzigg7vn";
+    rev = "d26e624b4ead762d34152f9f825b3a51fb92fb9c";
+    sha256 = "sha256-OA45vmuVieoL7J83D3TD5qi3SBsiqi0kiQn4i1K6dVE=";
   };
 
   hardeningDisable = [ "format" "pic" ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
   buildInputs = [ kmod ];
 
   makeFlags = [
@@ -27,11 +28,11 @@ stdenv.mkDerivation rec {
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A kernel module to create V4L2 loopback devices";
     homepage = "https://github.com/umlaeute/v4l2loopback";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.domenkozar ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fortuneteller2k ];
     platforms = platforms.linux;
   };
 }

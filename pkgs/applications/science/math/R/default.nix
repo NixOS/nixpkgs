@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
+{ lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
-, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, blas, lapack
+, less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
@@ -12,11 +12,12 @@
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
-  name = "R-4.0.0";
+  pname = "R";
+  version = "4.0.4";
 
   src = fetchurl {
-    url = "https://cran.r-project.org/src/base/R-4/${name}.tar.gz";
-    sha256 = "0h1995smlyiyhx7gpg9paxsfqrcn6g9bbp5h9r47i6an3clv1gh6";
+    url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
+    sha256 = "0bl098xcv8v316kqnf43v6gb4kcsv31ydqfm1f7qr824jzb2fgsj";
   };
 
   dontUseImakeConfigure = true;
@@ -24,16 +25,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which blas lapack curl tcl tk jdk
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+    pkg-config bison imake which blas lapack curl tcl tk jdk
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
     ./no-usr-local-search-paths.patch
     ./fix-failing-test.patch
   ];
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+  prePatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure \
+      --replace "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib" \
+      --replace "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib" \
+      --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
   '';
 
   dontDisableStatic = static;
@@ -41,7 +45,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray=(
       --disable-lto
-      --with${stdenv.lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
+      --with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
       --with-blas="-L${blas}/lib -lblas"
       --with-lapack="-L${lapack}/lib -llapack"
       --with-readline
@@ -51,7 +55,7 @@ stdenv.mkDerivation rec {
       --with-jpeglib
       --with-libtiff
       --with-ICU
-      ${stdenv.lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
+      ${lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
       ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
       AR=$(type -p ar)
       AWK=$(type -p gawk)
@@ -61,11 +65,12 @@ stdenv.mkDerivation rec {
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
       --disable-R-framework
+      --without-x
       OBJC="clang"
-      CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
-      LDFLAGS="-L${libcxx}/lib"
+      CPPFLAGS="-isystem ${lib.getDev libcxx}/include/c++/v1"
+      LDFLAGS="-L${lib.getLib libcxx}/lib"
   '' + ''
     )
     echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
@@ -86,7 +91,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
     license = licenses.gpl2Plus;
@@ -113,6 +118,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     hydraPlatforms = platforms.linux;
 
-    maintainers = with maintainers; [ peti timokau ];
+    maintainers = with maintainers; [ peti ] ++ teams.sage.members;
   };
 }

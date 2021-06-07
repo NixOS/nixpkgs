@@ -5,17 +5,18 @@
 , makeDesktopItem
 , makeWrapper
 , stdenv
+, lib
 , udev
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "5.10.1";
+  version = "7.1.0";
 
   src = fetchurl {
     url = "https://deb.termius.com/pool/main/t/termius-app/termius-app_${version}_amd64.deb";
-    sha256 = "04zh0zzyp906lf6mz3xzxybn2a55rv3vvrj0m12gnrb8kjb3pk5s";
+    sha256 = "801579b931ca0ad5340085df8863042336e2b609dd1cd6771260c873f3d2bb73";
   };
 
   desktopItem = makeDesktopItem {
@@ -44,25 +45,25 @@ stdenv.mkDerivation rec {
     cp -R "opt" "$out"
     cp -R "usr/share" "$out/share"
     chmod -R g-w "$out"
-
     # Desktop file
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  runtimeDependencies = [ udev.lib ];
+  runtimeDependencies = [ (lib.getLib udev) ];
 
   postFixup = ''
     makeWrapper $out/opt/Termius/termius-app $out/bin/termius-app \
       "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = true;
     description = "A cross-platform SSH client with cloud data sync and more";
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne th0rgal ];
     platforms = [ "x86_64-linux" ];
   };
 }

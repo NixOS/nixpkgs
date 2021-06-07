@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gobject-introspection
 , vala
 , gtk-doc
@@ -8,7 +8,7 @@
 , docbook_xml_dtd_412
 , libxml2
 , gst_all_1
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0spzd2saax7w776p5laixdam6d7smyynr9qszhbmq7f14y13cghj";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
     vala
     gtk-doc
@@ -48,12 +48,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GUPnP/";
     description = "Library to ease DLNA-related bits for applications using GUPnP";
     license = licenses.lgpl2Plus;

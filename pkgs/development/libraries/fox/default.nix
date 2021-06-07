@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor, libXrandr, libXft
+{ lib, stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor, libXrandr, libXft
 , CoreServices ? null }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patches = [ ./clang.patch ];
 
   buildInputs = [ libpng xlibsWrapper libjpeg libtiff zlib bzip2 libXcursor libXrandr libXft ]
-    ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
+    ++ lib.optional stdenv.isDarwin CoreServices;
 
   doCheck = true;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ based class library for building Graphical User Interfaces";
     longDescription = ''
       FOX stands for Free Objects for X.

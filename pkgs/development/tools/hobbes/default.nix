@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, llvm_6, ncurses, readline, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvm_6, ncurses, readline, zlib, libxml2 }:
 
 stdenv.mkDerivation {
   name = "hobbes";
@@ -20,12 +20,13 @@ stdenv.mkDerivation {
     ncurses
     readline
     zlib
+    libxml2
   ];
 
   doCheck = false; # Running tests in NixOS hangs. See https://git.io/JvK7R.
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A language and an embedded JIT compiler";
     longDescription = ''
       Hobbes is a a language, embedded compiler, and runtime for efficient

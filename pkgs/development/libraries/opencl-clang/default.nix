@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -15,10 +16,10 @@ let
     inherit spirv-llvm-translator;
   };
 
-  inherit (stdenv.lib) getVersion;
+  inherit (lib) getVersion;
 
   addPatches = component: pkg:
-    with builtins; with stdenv.lib;
+    with builtins; with lib;
     let path = "${passthru.patchesOut}/${component}";
     in pkg.overrideAttrs (super: {
       postPatch = (if super ? postPatch then super.postPatch + "\n" else "") + ''
@@ -31,7 +32,9 @@ let
 
   passthru = rec {
 
-    clang-unwrapped = addPatches "clang" llvmPkgs.clang-unwrapped;
+    libclang = addPatches "clang" llvmPkgs.libclang;
+
+    clang-unwrapped = libclang.out;
 
     clang = llvmPkgs.clang.override {
       cc = clang-unwrapped;
@@ -39,7 +42,7 @@ let
 
     patchesOut = stdenv.mkDerivation rec {
       pname = "opencl-clang-patches";
-      inherit (lib) version src patches;
+      inherit (library) version src patches;
       installPhase = ''
         [ -d patches ] && cp -r patches/ $out || mkdir $out
         mkdir -p $out/clang $out/spirv
@@ -50,9 +53,9 @@ let
 
   };
 
-  lib = let
+  library = let
     inherit (llvmPkgs) llvm;
-    inherit (if buildWithPatches then passthru else llvmPkgs) clang-unwrapped spirv-llvm-translator;
+    inherit (if buildWithPatches then passthru else llvmPkgs) libclang spirv-llvm-translator;
   in
     stdenv.mkDerivation rec {
       pname = "opencl-clang";
@@ -73,19 +76,26 @@ let
         ./opencl-headers-dir.patch
       ];
 
-      nativeBuildInputs = [ cmake git ];
+      # Uses linker flags that are not supported on Darwin.
+      postPatch = lib.optionalString stdenv.isDarwin ''
+        sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
+        substituteInPlace CMakeLists.txt \
+          --replace '-Wl,--no-undefined' ""
+      '';
 
-      buildInputs = [ clang-unwrapped llvm spirv-llvm-translator ];
+      nativeBuildInputs = [ cmake git llvm.dev ];
+
+      buildInputs = [ libclang llvm spirv-llvm-translator ];
 
       cmakeFlags = [
         "-DPREFERRED_LLVM_VERSION=${getVersion llvm}"
-        "-DOPENCL_HEADERS_DIR=${clang-unwrapped}/lib/clang/${getVersion clang-unwrapped}/include/"
+        "-DOPENCL_HEADERS_DIR=${libclang.lib}/lib/clang/${getVersion libclang}/include/"
 
         "-DLLVMSPIRV_INCLUDED_IN_LLVM=OFF"
         "-DSPIRV_TRANSLATOR_DIR=${spirv-llvm-translator}"
       ];
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage    = "https://github.com/intel/opencl-clang/";
         description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
         license     = licenses.ncsa;
@@ -94,4 +104,4 @@ let
       };
     };
 in
-  lib
+  library

@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, which, ocaml, ocamlbuild }:
+{ lib, stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.09"
+if lib.versionAtLeast ocaml.version "4.09"
 then throw "camlp4 is not available for OCaml ${ocaml.version}"
 else
 
@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
   dontAddPrefix = true;
 
   preConfigure = ''
+    # increase stack space for spacetime variant of the compiler
+    # https://github.com/ocaml/ocaml/issues/7435
+    # but disallowed by darwin sandbox
+    ulimit -s unlimited || true
+
     configureFlagsArray=(
       --bindir=$out/bin
       --libdir=$out/lib/ocaml/${ocaml.version}/site-lib
@@ -61,7 +66,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A software system for writing extensible parsers for programming languages";
     homepage = "https://github.com/ocaml/camlp4";
     platforms = ocaml.meta.platforms or [];

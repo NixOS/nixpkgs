@@ -1,0 +1,39 @@
+diff --git a/src/tss2-tcti/tctildr-dl.c b/src/tss2-tcti/tctildr-dl.c
+index b364695c..b13be3ef 100644
+--- a/src/tss2-tcti/tctildr-dl.c
++++ b/src/tss2-tcti/tctildr-dl.c
+@@ -85,7 +85,15 @@ handle_from_name(const char *file,
+     if (handle == NULL) {
+         return TSS2_TCTI_RC_BAD_REFERENCE;
+     }
+-    *handle = dlopen(file, RTLD_NOW);
++    size = snprintf(file_xfrm,
++                    sizeof (file_xfrm),
++                    "@PREFIX@%s",
++                    file);
++    if (size >= sizeof (file_xfrm)) {
++        LOG_ERROR("TCTI name truncated in transform.");
++        return TSS2_TCTI_RC_BAD_VALUE;
++    }
++    *handle = dlopen(file_xfrm, RTLD_NOW);
+     if (*handle != NULL) {
+         return TSS2_RC_SUCCESS;
+     } else {
+@@ -94,7 +102,7 @@ handle_from_name(const char *file,
+     /* 'name' alone didn't work, try libtss2-tcti-<name>.so.0 */
+     size = snprintf(file_xfrm,
+                     sizeof (file_xfrm),
+-                    TCTI_NAME_TEMPLATE_0,
++                    "@PREFIX@" TCTI_NAME_TEMPLATE_0,
+                     file);
+     if (size >= sizeof (file_xfrm)) {
+         LOG_ERROR("TCTI name truncated in transform.");
+@@ -109,7 +117,7 @@ handle_from_name(const char *file,
+     /* libtss2-tcti-<name>.so.0 didn't work, try libtss2-tcti-<name>.so */
+     size = snprintf(file_xfrm,
+                     sizeof (file_xfrm),
+-                    TCTI_NAME_TEMPLATE,
++                    "@PREFIX@" TCTI_NAME_TEMPLATE,
+                     file);
+     if (size >= sizeof (file_xfrm)) {
+         LOG_ERROR("TCTI name truncated in transform.");

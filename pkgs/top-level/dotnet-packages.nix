@@ -1,14 +1,14 @@
 { stdenv
+, lib
 , pkgs
 , buildDotnetPackage
 , fetchurl
 , fetchFromGitHub
 , fetchNuGet
 , glib
-, pkgconfig
+, pkg-config
 , mono
 , fsharp
-, unzip
 , overrides ? {}
 }:
 
@@ -33,10 +33,17 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Fantomas = fetchNuGet {
     baseName = "Fantomas";
-    version = "1.6.0";
-    sha256 = "1b9rd3i76b5xzv0j62dvfr1ksdwvb59vxw6jhzpi018axjn6757q";
+    version = "4.4.0";
+    sha256 = "cYz0ewJdK9nRlMKmigk3IENfOXvJRhXJfLXshaqgZ6o=";
     outputFiles = [ "lib/*" ];
     dllFiles = [ "Fantomas*.dll" ];
+
+    meta = with lib; {
+      description = "FSharp source code formatter";
+      homepage = "https://github.com/fsprojects/fantomas";
+      license = licenses.asl20;
+      maintainers = [ maintainers.ratsclub ];
+    };
   };
 
   FSharpCompilerCodeDom = fetchNuGet {
@@ -72,6 +79,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     version = "4.1.17";
     sha256 = "1yk23ir66fgqm5r6qyf66zf64l0s223l3yd7p9yvbyimyg0hgzb1";
     outputFiles = [ "*" ];
+  };
+
+  FSharpData = fetchNuGet {
+    baseName = "FSharp.Data";
+    version = "4.1.1";
+    sha256 = "0ytjiQi8vQQU51JYexnC13Bi7NqVmLRzM75SOZ+hhQU=";
+    outputFiles = [ "lib/*" ];
+
+    meta = with lib; {
+      description = "F# Data: Library for Data Access";
+      homepage = "https://fsprojects.github.io/FSharp.Data/";
+      license = licenses.asl20;
+      maintainers = [ maintainers.ratsclub ];
+    };
   };
 
   FSharpData225 = fetchNuGet {
@@ -153,9 +174,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpFormatting = fetchNuGet {
     baseName = "FSharp.Formatting";
-    version = "2.9.8";
-    sha256 = "1bswcpa68i2lqds4kkl2qxgkfrppbpxa4jkyja48azljajh0df3m";
-    outputFiles = [ "lib/net40/*" ];
+    version = "11.2.0";
+    sha256 = "4IMrd+jpRZw+vBXx4X89/B/Fdpiuy2hwtmQNGWQp0wM=";
+    outputFiles = [ "lib/*" ];
+    postUnpack = ''
+      chmod -R a+r $sourceRoot
+    '';
+
+    meta = with lib; {
+      description = "F# tools for generating documentation (Markdown processor and F# code formatter)";
+      homepage = "https://fsprojects.github.io/FSharp.Formatting/";
+      longDescription = ''
+        The FSharp.Formatting package includes libraries and tools for processing F# script files,
+        markdown and components for documentation generation.
+      '';
+      license = licenses.asl20;
+      maintainers = [ maintainers.ratsclub ];
+    };
   };
 
   NUnit3 = fetchNuGet {
@@ -327,14 +362,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Boogie = buildDotnetPackage rec {
     baseName = "Boogie";
-    version = "2019-06-20";
-    name = "${baseName}-unstable-${version}";
+    version = "2.4.1";
 
     src = fetchFromGitHub {
       owner = "boogie-org";
       repo = "boogie";
-      rev = "2e8fae4dc1724d8f9e7b1f877116e56b0773337e";
-      sha256 = "01wjps3yfx8q0qy0zrmmfd1ixjxi2dhkn1wfazb5qm2slav39dp2";
+      rev = "v${version}";
+      sha256 = "13f6ifkh6gpy4bvx5zhgwmk3wd5rfxzl9wxwfhcj1c90fdrhwh1b";
     };
 
     # emulate `nuget restore Source/Boogie.sln`
@@ -364,7 +398,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "An intermediate verification language";
       homepage = "https://github.com/boogie-org/boogie";
       longDescription = ''
@@ -379,7 +413,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  Dafny = buildDotnetPackage rec {
+  Dafny = let
+    z3 = pkgs.z3.overrideAttrs (oldAttrs: rec {
+      version = "4.8.4";
+      name = "z3-${version}";
+
+      src = fetchFromGitHub {
+        owner = "Z3Prover";
+        repo = "z3";
+        rev = "z3-${version}";
+        sha256 = "014igqm5vwswz0yhz0cdxsj3a6dh7i79hvhgc3jmmmz3z0xm1gyn";
+      };
+    });
+    self' = pkgs.dotnetPackages.override ({
+      pkgs = pkgs // { inherit z3; };
+    });
+    Boogie = assert self'.Boogie.version == "2.4.1"; self'.Boogie;
+  in buildDotnetPackage rec {
     baseName = "Dafny";
     version = "2.3.0";
 
@@ -396,7 +446,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     '';
 
     preBuild = ''
-      ln -s ${pkgs.z3} Binaries/z3
+      ln -s ${z3} Binaries/z3
     '';
 
     buildInputs = [ Boogie ];
@@ -422,7 +472,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       rm -f $out/lib/dotnet/${baseName}/dafny{,-server}
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A programming language with built-in specification constructs";
       homepage = "https://research.microsoft.com/dafny";
       maintainers = with maintainers; [ layus ];
@@ -462,9 +512,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "Excel-DNA is an independent project to integrate .NET into Excel";
       homepage = "https://excel-dna.net/";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -491,9 +541,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "This library implements helper functions to assist and modify the Excel-DNA function registration";
       homepage = "https://github.com/Excel-DNA/Registration";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -525,9 +575,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "ExtCore is an extended core library for F#";
       homepage = "https://github.com/jack-pappas/ExtCore";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
       broken = true;
     };
   };
@@ -561,9 +611,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         service for rich editing or 'intellisense' features for editors.
         '';
       homepage = "https://github.com/fsharp/FSharp.AutoComplete";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -588,53 +638,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "The F# compiler services package is a component derived from the F# compiler source code that exposes additional functionality for implementing F# language bindings";
       homepage = "https://fsharp.github.io/FSharp.Compiler.Service/";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
-    };
-  };
-
-  FSharpData = buildDotnetPackage rec {
-    baseName = "FSharp.Data";
-    version = "2.2.3";
-
-    src = fetchFromGitHub {
-      owner = "fsharp";
-      repo = baseName;
-      rev = version;
-      sha256 = "1h3v9rc8k0khp61cv5n01larqbxd3xcx3q52sw5zf9l0661vw7qr";
-    };
-
-    buildInputs = [ fsharp ];
-
-    fileProvidedTypes = fetchurl {
-      name = "ProvidedTypes.fs";
-      url = "https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/ProvidedTypes.fs";
-      sha256 = "1lb056v1xld1rfx6a8p8i2jz8i6qa2r2823n5izsf1qg1qgf2980";
-    };
-
-    fileDebugProvidedTypes = fetchurl {
-      name = "DebugProvidedTypes.fs";
-      url = "https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/DebugProvidedTypes.fs";
-      sha256 = "1whyrf2jv6fs7kgysn2086v15ggjsd54g1xfs398mp46m0nxp91f";
-    };
-
-    preConfigure = ''
-       # Copy single-files-in-git-repos
-       mkdir -p "paket-files/fsprojects/FSharp.TypeProviders.StarterPack/src"
-       cp -v "${fileProvidedTypes}" "paket-files/fsprojects/FSharp.TypeProviders.StarterPack/src/ProvidedTypes.fs"
-       cp -v "${fileDebugProvidedTypes}" "paket-files/fsprojects/FSharp.TypeProviders.StarterPack/src/DebugProvidedTypes.fs"
-    '';
-
-    xBuildFiles = [ "src/FSharp.Data.fsproj" "src/FSharp.Data.DesignTime.fsproj" ];
-    outputFiles = [ "bin/*.dll" "bin/*.xml" ];
-
-    meta = {
-      description = "F# Data: Library for Data Access";
-      homepage = "https://fsharp.github.io/FSharp.Data/";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -664,9 +670,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   meta = {
   #     description = "FSharpx.Extras is a collection of libraries and tools for use with F#";
   #     homepage = "https://fsprojects.github.io/FSharpx.Extras/";
-  #     license = stdenv.lib.licenses.asl20;
-  #     maintainers = with stdenv.lib.maintainers; [ obadz ];
-  #     platforms = with stdenv.lib.platforms; linux;
+  #     license = lib.licenses.asl20;
+  #     maintainers = with lib.maintainers; [ obadz ];
+  #     platforms = with lib.platforms; linux;
   #   };
   # };
 
@@ -709,7 +715,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "GitVersionTree/bin/Release/*" ];
     exeFiles = [ "GitVersionTree.exe" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A tool to help visualize git revisions and branches";
       homepage = "https://github.com/crc8/GitVersionTree";
       license = licenses.gpl2;
@@ -736,9 +742,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
       homepage = "https://numerics.mathdotnet.com/";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -770,7 +776,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         A generic framework for creating extensible applications,
         and for creating libraries which extend those applications.
       '';
-      license = stdenv.lib.licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 
@@ -825,26 +831,25 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   meta = {
   #     description = "F# addin for MonoDevelop 5.9";
   #     homepage = "https://github.com/fsharp/fsharpbinding/tree/5.9";
-  #     license = stdenv.lib.licenses.asl20;
-  #     maintainers = with stdenv.lib.maintainers; [ obadz ];
-  #     platforms = with stdenv.lib.platforms; linux;
+  #     license = lib.licenses.asl20;
+  #     maintainers = with lib.maintainers; [ obadz ];
+  #     platforms = with lib.platforms; linux;
   #   };
   # };
 
   NDeskOptions = stdenv.mkDerivation rec {
-    baseName = "NDesk.Options";
+    pname = "NDesk.Options";
     version = "0.2.1";
-    name = "${baseName}-${version}";
 
     src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "http://www.ndesk.org/archive/ndesk-options/ndesk-options-0.2.1.tar.gz";
+      name = "${pname}-${version}.tar.gz";
+      url = "http://www.ndesk.org/archive/ndesk-options/ndesk-options-${version}.tar.gz";
       sha256 = "1y25bfapafwmifakjzyb9c70qqpvza8g5j2jpf08j8wwzkrb6r28";
     };
 
     buildInputs = [
       mono
-      pkgconfig
+      pkg-config
     ];
 
     postInstall = ''
@@ -857,9 +862,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "A callback-based program option parser for C#";
       homepage = "http://www.ndesk.org/Options";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -880,8 +885,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       rev = "7871fa26914593fdb2f2500df1196df7b8aecb1c";
       sha256 = "07r63xam6icm17pf6amh1qkmna13nxa3ncdan7a3ql307i5isriz";
     };
-
-    buildInputs = [ unzip ];
 
     phases = [ "unpackPhase" "installPhase" ];
 
@@ -924,9 +927,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "A command-line tool for manipulating F# project files";
       homepage = "https://github.com/kjnilsson/projekt";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -952,9 +955,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "A declarative CLI argument/XML configuration parser for F# applications";
       homepage = "https://nessos.github.io/UnionArgParser/";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
+    };
+  };
+
+  YamlDotNet = fetchNuGet {
+    baseName = "YamlDotNet";
+    version = "11.1.1";
+    sha256 = "rwZ/QyDVrN3wGrEYKY3QY5Xqo2Tp3FkR6dh4QrC+QS0=";
+    outputFiles = [ "lib/*" ];
+
+    meta = with lib; {
+      description = "YamlDotNet is a .NET library for YAML";
+      homepage = "https://github.com/aaubry/YamlDotNet";
+      license = licenses.mit;
+      maintainers = [ maintainers.ratsclub ];
     };
   };
 

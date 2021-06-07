@@ -99,7 +99,7 @@ let
 
 in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "cockroachdb";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers;
+  meta.maintainers = with pkgs.lib.maintainers;
     [ thoughtpolice ];
 
   nodes = {

@@ -1,18 +1,19 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''collectors'';
-  version = ''20161204-git'';
+  baseName = "collectors";
+  version = "20161204-git";
 
   parasites = [ "collectors-test" ];
 
-  description = ''A library providing various collector type macros
-   pulled from arnesi into its own library and stripped of dependencies'';
+  description = "A library providing various collector type macros
+   pulled from arnesi into its own library and stripped of dependencies";
 
   deps = [ args."alexandria" args."closer-mop" args."iterate" args."lisp-unit2" args."symbol-munger" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/collectors/2016-12-04/collectors-20161204-git.tgz'';
-    sha256 = ''0cf2y2yxraqs9v54gbj8hhp7s522gz8qfwwc5hvlhl2s7540b2zf'';
+    url = "http://beta.quicklisp.org/archive/collectors/2016-12-04/collectors-20161204-git.tgz";
+    sha256 = "0cf2y2yxraqs9v54gbj8hhp7s522gz8qfwwc5hvlhl2s7540b2zf";
   };
 
   packageName = "collectors";

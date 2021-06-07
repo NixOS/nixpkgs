@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, apple_sdk, emacs, pkgconfig }:
+{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, apple_sdk, emacs, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "rtags";
   version = "2.38";
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ llvmPackages.llvm openssl emacs ]
+  nativeBuildInputs = [ cmake pkg-config llvmPackages.llvm.dev ];
+  buildInputs = [ llvmPackages.llvm llvmPackages.libclang openssl emacs ]
     ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
     ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
 
@@ -25,12 +25,10 @@ stdenv.mkDerivation rec {
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "C/C++ client-server indexer based on clang";
     homepage = "https://github.com/andersbakken/rtags";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; x86_64 ++ aarch64;
+    license = lib.licenses.gpl3;
+    platforms = with lib.platforms; x86_64 ++ aarch64;
   };
 }

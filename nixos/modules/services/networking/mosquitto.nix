@@ -20,8 +20,7 @@ let
     acl_file ${aclFile}
     persistence true
     allow_anonymous ${boolToString cfg.allowAnonymous}
-    bind_address ${cfg.host}
-    port ${toString cfg.port}
+    listener ${toString cfg.port} ${cfg.host}
     ${passwordConf}
     ${listenerConf}
     ${cfg.extraConf}
@@ -123,12 +122,33 @@ in
               '';
             };
 
+            passwordFile = mkOption {
+              type = with types; uniq (nullOr str);
+              example = "/path/to/file";
+              default = null;
+              description = ''
+                Specifies the path to a file containing the
+                clear text password for the MQTT user.
+              '';
+            };
+
             hashedPassword = mkOption {
               type = with types; uniq (nullOr str);
               default = null;
               description = ''
                 Specifies the hashed password for the MQTT User.
-                <option>hashedPassword</option> overrides <option>password</option>.
+                To generate hashed password install <literal>mosquitto</literal>
+                package and use <literal>mosquitto_passwd</literal>.
+              '';
+            };
+
+            hashedPasswordFile = mkOption {
+              type = with types; uniq (nullOr str);
+              example = "/path/to/file";
+              default = null;
+              description = ''
+                Specifies the path to a file containing the
+                hashed password for the MQTT user.
                 To generate hashed password install <literal>mosquitto</literal>
                 package and use <literal>mosquitto_passwd</literal>.
               '';
@@ -190,6 +210,13 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = mapAttrsToList (name: cfg: {
+      assertion = length (filter (s: s != null) (with cfg; [
+        password passwordFile hashedPassword hashedPasswordFile
+      ])) <= 1;
+      message = "Cannot set more than one password option";
+    }) cfg.users;
+
     systemd.services.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -204,13 +231,62 @@ in
         Restart = "on-failure";
         ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c ${mosquittoConf}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.dataDir
+          "/tmp"  # mosquitto_passwd creates files in /tmp before moving them
+        ];
+        ReadOnlyPaths = with cfg.ssl; lib.optionals (enable) [
+          certfile
+          keyfile
+          cafile
+        ];
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"  # for sd_notify() call
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "0077";
       };
       preStart = ''
         rm -f ${cfg.dataDir}/passwd
         touch ${cfg.dataDir}/passwd
       '' + concatStringsSep "\n" (
         mapAttrsToList (n: c:
-          if c.hashedPassword != null then
+          if c.hashedPasswordFile != null then
+            "echo '${n}:'$(cat '${c.hashedPasswordFile}') >> ${cfg.dataDir}/passwd"
+          else if c.passwordFile != null then
+            "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} $(cat '${c.passwordFile}')"
+          else if c.hashedPassword != null then
             "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
           else optionalString (c.password != null)
             "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} '${c.password}'"

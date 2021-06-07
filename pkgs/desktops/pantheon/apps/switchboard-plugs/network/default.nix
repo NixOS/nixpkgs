@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , substituteAll
 , vala
 , libgee
@@ -17,17 +18,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1k7925qrgjvh1x8ijhkh3p0z4ypgmx3lg21ygr8qhlp7xr3zm8d5";
+    sha256 = "sha256-PYgewxBblhOfOJQSeRaq8xD7qZ3083EvgUjpi92FqyI=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Networking Plug";
     homepage = "https://github.com/elementary/switchboard-plug-network";
     license = licenses.lgpl21Plus;

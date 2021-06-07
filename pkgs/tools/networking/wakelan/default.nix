@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "wakelan-1.1";
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
          power on.
       '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ lib.maintainers.viric ];
+    platforms = lib.platforms.unix;
   };
 }

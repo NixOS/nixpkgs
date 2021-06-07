@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, lzma, zstd, scrypt
+{ lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
+, libseccomp, systemd, libcap, xz, zstd, scrypt, nixosTests
+, writeShellScript
 
 # for update.nix
 , writeScript
@@ -12,29 +13,43 @@
 , gnused
 , nix
 }:
+let
+  tor-client-auth-gen = writeShellScript "tor-client-auth-gen" ''
+    PATH="${lib.makeBinPath [coreutils gnugrep openssl]}"
+    pem="$(openssl genpkey -algorithm x25519)"
 
+    printf private_key=descriptor:x25519:
+    echo "$pem" | grep -v " PRIVATE KEY" |
+    base64 -d | tail --bytes=32 | base32 | tr -d =
+
+    printf public_key=descriptor:x25519:
+    echo "$pem" | openssl pkey -in /dev/stdin -pubout |
+    grep -v " PUBLIC KEY" |
+    base64 -d | tail --bytes=32 | base32 | tr -d =
+  '';
+in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.3.5";
+  version = "0.4.5.7";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "0s6qspi102drn1nk3gfxs51x992xarc44gkfsi8y3l48wr50wsk1";
+    sha256 = "0x7hhl0svfc4yh9xvq7kkzgmwjcw1ak9i0794wjg4biy2fmclzs4";
   };
 
   outputs = [ "out" "geoip" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
-    stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libevent openssl zlib xz zstd scrypt ] ++
+    lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
   # cross compiles correctly but needs the following
-  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     "--disable-tool-name-check";
 
-  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
@@ -52,24 +67,28 @@ stdenv.mkDerivation rec {
     mkdir -p $geoip/share/tor
     mv $out/share/tor/geoip{,6} $geoip/share/tor
     rm -rf $out/share/tor
+    ln -s ${tor-client-auth-gen} $out/bin/tor-client-auth-gen
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit (stdenv) lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
+  passthru = {
+    tests.tor = nixosTests.tor;
+    updateScript = import ./update.nix {
+      inherit lib;
+      inherit
+        writeScript
+        common-updater-scripts
+        bash
+        coreutils
+        curl
+        gnupg
+        gnugrep
+        gnused
+        nix
+      ;
+    };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.torproject.org/";
     repositories.git = "https://git.torproject.org/git/tor";
     description = "Anonymizing overlay network";
@@ -87,7 +106,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
 
     maintainers = with maintainers;
-      [ phreedom doublec thoughtpolice joachifm ];
+      [ phreedom thoughtpolice joachifm prusnak ];
     platforms = platforms.unix;
   };
 }

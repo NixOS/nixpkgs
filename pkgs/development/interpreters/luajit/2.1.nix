@@ -1,8 +1,8 @@
 { self, callPackage }:
 callPackage ./default.nix {
   inherit self;
-  version = "2.1.0-2020-03-20";
-  rev = "9143e86";
+  version = "2.1.0-2021-05-29";
+  rev = "839fb5bd72341d8e67b6cfc2053e2acffdb75567";
   isStable = false;
-  sha256 = "1zw1yr0375d6jr5x20zvkvk76hkaqamjynbswpl604w6r6id070b";
+  sha256 = "1gyzq4n0fwah0245wazv4c43q9in1mwbk3dhh6cb1ijnjcxp2bb6";
 }

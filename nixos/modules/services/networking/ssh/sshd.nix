@@ -122,6 +122,15 @@ in
         '';
       };
 
+      sftpServerExecutable = mkOption {
+        type = types.str;
+        example = "internal-sftp";
+        description = ''
+          The sftp server executable.  Can be a path or "internal-sftp" to use
+          the sftp server built into the sshd binary.
+        '';
+      };
+
       sftpFlags = mkOption {
         type = with types; listOf str;
         default = [];
@@ -232,6 +241,14 @@ in
         '';
       };
 
+      banner = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          Message to display to the remote user before authentication is allowed.
+        '';
+      };
+
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -261,6 +278,7 @@ in
       kexAlgorithms = mkOption {
         type = types.listOf types.str;
         default = [
+          "curve25519-sha256"
           "curve25519-sha256@libssh.org"
           "diffie-hellman-group-exchange-sha256"
         ];
@@ -271,7 +289,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -292,7 +310,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -313,7 +331,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -361,7 +379,7 @@ in
     };
 
     users.users = mkOption {
-      type = with types; loaOf (submodule userOptions);
+      type = with types; attrsOf (submodule userOptions);
     };
 
   };
@@ -377,6 +395,7 @@ in
       };
 
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
+    services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
 
     environment.etc = authKeysFiles //
       { "ssh/moduli".source = cfg.moduliFile;
@@ -468,11 +487,13 @@ in
     # https://github.com/NixOS/nixpkgs/pull/10155
     # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
-      [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
+      [ "%h/.ssh/authorized_keys" "%h/.ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.extraConfig = mkOrder 0
       ''
         UsePAM yes
+
+        Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         ${concatMapStrings (port: ''
@@ -494,7 +515,7 @@ in
         ''}
 
         ${optionalString cfg.allowSFTP ''
-          Subsystem sftp ${cfgc.package}/libexec/sftp-server ${concatStringsSep " " cfg.sftpFlags}
+          Subsystem sftp ${cfg.sftpServerExecutable} ${concatStringsSep " " cfg.sftpFlags}
         ''}
 
         PermitRootLogin ${cfg.permitRootLogin}

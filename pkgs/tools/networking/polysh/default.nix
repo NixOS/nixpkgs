@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 let
   inherit (python2Packages) buildPythonApplication;
@@ -11,7 +11,7 @@ buildPythonApplication rec {
           sha256 = "0kxhp38c8a8hc8l86y53l2z5zpzxc4b8lx5zyzmq1badcrfc4mh4";
         };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to aggregate several remote shells into one";
     longDescription = ''
       Polysh is a tool to aggregate several remote shells into one. It

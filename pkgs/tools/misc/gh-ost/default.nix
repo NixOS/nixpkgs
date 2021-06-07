@@ -1,27 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-let
+buildGoPackage rec {
+  pname = "gh-ost";
+  version = "1.1.1";
+
+  src = fetchFromGitHub {
+    owner = "github";
+    repo = "gh-ost";
+    rev = "v${version}";
+    sha256 = "sha256-srJXzY4TTHZDYKq8OPqin4zRoYlmaJKhHXDzO/GjBV8=";
+  };
+
   goPackagePath = "github.com/github/gh-ost";
-  version = "1.0.49";
-  sha256 = "0mncjhmv25wnhgjkn9gwkz2gzh0v6954w47ql7fs2iqr9al111dq";
 
-in
-buildGoPackage ({
-    pname = "gh-ost";
-    inherit version;
-    inherit goPackagePath;
+  buildFlagsArray = [ "-ldflags=-s -w -X main.AppVersion=${version} -X main.BuildDescribe=${src.rev}" ];
 
-    src = fetchFromGitHub {
-      owner = "github";
-      repo  = "gh-ost";
-      rev   = "v${version}";
-      inherit sha256;
-    };
-
-    meta = with stdenv.lib; {
-      description = "Triggerless online schema migration solution for MySQL";
-      homepage = "https://github.com/github/gh-ost";
-      license = licenses.mit;
-    };
-})
-
+  meta = with lib; {
+    description = "Triggerless online schema migration solution for MySQL";
+    homepage = "https://github.com/github/gh-ost";
+    license = licenses.mit;
+  };
+}

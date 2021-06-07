@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, mint-x-icons, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "iconpack-obsidian";
-  version = "4.12";
+  version = "4.15";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0139ps707mh1zkypaxsqzy58mmsm5whdxxx2nbsmqfswb7qisz2b";
+    sha256 = "1f32isq1xyn9b6p1nx5rssqgg9gw0jp9ld19860xk29fspmlfb8n";
   };
 
   nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [ gnome-icon-theme hicolor-icon-theme ];
-  # still missing parent themes: Ambiant-MATE, Mint-X, Faenza-Dark, KFaenza
+  propagatedBuildInputs = [ gnome-icon-theme mint-x-icons hicolor-icon-theme ];
+  # still missing parent themes: Ambiant-MATE, Faenza-Dark, KFaenza
 
   dontDropIconThemeCache = true;
 
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnome icon pack based upon Faenza";
     homepage = "https://github.com/madmaxms/iconpack-obsidian";
-    license = licenses.lgpl3;
+    license = licenses.gpl3Only;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

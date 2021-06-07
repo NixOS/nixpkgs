@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -23,9 +23,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ ninja python3 ];
   buildInputs = [ curl libxml2 objc4 ICU ];
 
-  sourceRoot = "source/CoreFoundation";
+  postPatch = ''
+    cd CoreFoundation
 
-  patchPhase = ''
     cp ${sysdir-free-system-directories} Base.subproj/CFSystemDirectories.c
 
     # In order, since I can't comment individual lines:
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     # Fix sandbox impurities.
     substituteInPlace ../lib/script.py \
       --replace '/bin/cp' cp
+    patchShebangs --build ../configure
 
     # Includes xpc for some initialization routine that they don't define anyway, so no harm here
     substituteInPlace PlugIn.subproj/CFBundlePriv.h \
@@ -74,7 +75,7 @@ stdenv.mkDerivation {
   # Based on testing this issue seems to only occur with clang_7, so
   # please remove this when updating the default llvm versions to 8 or
   # later.
-  buildPhase = stdenv.lib.optionalString true ''
+  buildPhase = lib.optionalString true ''
     for i in {1..512}; do
         if ninja -j $NIX_BUILD_CORES; then
             break

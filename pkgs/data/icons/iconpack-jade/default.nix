@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "iconpack-jade";
-  version = "1.22";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1piypv8wdxnfiy6kgh7i3wi52m4fh4x874kh01qjmymssyirn17x";
+    sha256 = "0pwz3l5i93s84iwkn1jq8a150ma96788a0n41xq2cgy00j8h8xh0";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Icon pack based upon Faenza and Mint-X";
     homepage = "https://github.com/madmaxms/iconpack-jade";
-    license = licenses.lgpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , python3
 , ninja
@@ -23,11 +24,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "12xir2gssr0x21sgm5m620bvd6b6y8dcm26cj4s1wsn8qb59jx9p";
+    sha256 = "sha256-N3WZysLIah40kcyIyhryZpm2FxCmlvp0EB1krZ/IsYs=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extensible System Settings app for Pantheon";
     homepage = "https://github.com/elementary/switchboard";
     license = licenses.lgpl21Plus;

@@ -1,4 +1,4 @@
-{stdenv, composeAndroidPackages, composeXcodeWrapper, titaniumsdk, titanium, alloy, jdk, python, nodejs, which, file}:
+{stdenv, lib, composeAndroidPackages, composeXcodeWrapper, titaniumsdk, titanium, alloy, jdk, python, nodejs, which, file}:
 { name, src, preBuild ? "", target, tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
 , iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "12.1", iosBuildStore ? false
@@ -34,14 +34,14 @@ let
   extraArgs = removeAttrs args [ "name" "preRebuild" "androidsdkArgs" "xcodewrapperArgs" ];
 in
 stdenv.mkDerivation ({
-  name = stdenv.lib.replaceChars [" "] [""] name;
+  name = lib.replaceChars [" "] [""] name;
 
   buildInputs = [ nodejs titanium alloy python which file jdk ];
 
   buildPhase = ''
     ${preBuild}
 
-    ${stdenv.lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.isDarwin ''
       # Hack that provides a writable alloy package on macOS. Without it the build fails because of a file permission error.
       alloy=$(dirname $(type -p alloy))/..
       cp -rv $alloy/* alloy
@@ -51,7 +51,7 @@ stdenv.mkDerivation ({
 
     export HOME=${if target == "iphone" then "/Users/$(whoami)" else "$TMPDIR"}
 
-    ${stdenv.lib.optionalString (tiVersion != null) ''
+    ${lib.optionalString (tiVersion != null) ''
       # Replace titanium version by the provided one
       sed -i -e "s|<sdk-version>[0-9a-zA-Z\.]*</sdk-version>|<sdk-version>${tiVersion}</sdk-version>|" tiapp.xml
     ''}
@@ -76,7 +76,7 @@ stdenv.mkDerivation ({
       export GRADLE_USER_HOME=$TMPDIR/gradle
 
       ${if release then ''
-        ${stdenv.lib.optionalString stdenv.isDarwin ''
+        ${lib.optionalString stdenv.isDarwin ''
           # Signing the app does not work with OpenJDK on macOS, use host SDK instead
           export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
         ''}
@@ -171,7 +171,7 @@ stdenv.mkDerivation ({
         mkdir -p $out/nix-support
         echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
 
-        ${stdenv.lib.optionalString enableWirelessDistribution ''
+        ${lib.optionalString enableWirelessDistribution ''
           appname="$(basename $out/*.ipa .ipa)"
           bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
           version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
@@ -184,5 +184,5 @@ stdenv.mkDerivation ({
     else throw "Target: ${target} is not supported!"}
   '';
 
-  failureHook = stdenv.lib.optionalString (release && target == "iphone") deleteKeychain;
+  failureHook = lib.optionalString (release && target == "iphone") deleteKeychain;
 } // extraArgs)

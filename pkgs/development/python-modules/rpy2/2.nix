@@ -9,7 +9,7 @@
 , rWrapper
 , rPackages
 , pcre
-, lzma
+, xz
 , bzip2
 , zlib
 , icu
@@ -35,7 +35,7 @@ buildPythonPackage rec {
       readline
       R
       pcre
-      lzma
+      xz
       bzip2
       zlib
       icu

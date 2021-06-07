@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, yasm }:
+{ lib, stdenv, fetchurl, fetchpatch, yasm }:
 
 stdenv.mkDerivation rec {
   pname = "mac";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ yasm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "APE codec and decompressor";
     homepage = "http://www.deb-multimedia.org/dists/testing/main/binary-amd64/package/monkeys-audio.php";
     license = licenses.unfreeRedistributable;

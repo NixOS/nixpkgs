@@ -1,41 +1,33 @@
-{ stdenv
-, pkgconfig
+{ lib, stdenv
+, pkg-config
 , python3
-, fetchhg
-, fetchpatch
+, fetchFromGitLab
 , gtk3
 , glib
 , gdbm
 , gtkspell3
 , ofono
 , itstool
-, libappindicator-gtk3
+, libayatana-appindicator-gtk3
 , perlPackages
-, glibcLocales
 , meson
 , ninja
 }:
 
 stdenv.mkDerivation rec {
   pname = "modem-manager-gui";
-  version = "0.0.19.1";
+  version = "0.0.20";
 
-  src = fetchhg {
-    url = "https://linuxonly@bitbucket.org/linuxonly/modem-manager-gui";
-    rev = "version ${version}";
-    sha256 = "11iibh36567814h2bz41sa1072b86p1l13xyj670pwkh9k8kw8fd";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "modem-manager-gui";
+    rev = "upstream%2F${version}";
+    sha256 = "1pjx4rbsxa7gcs628yjkwb0zqrm5xq8pkmp0cfk4flfk1ryflmgr";
   };
 
-  patches = [
-    # Fix docs build
-    (fetchpatch {
-      url = "https://bitbucket.org/linuxonly/modem-manager-gui/commits/68fb09c12413b7de9b7477cbf4241c3527568325/raw";
-      sha256 = "033nrlhjlk0zvadv5g9n2id53ajagswf77mda0ixnrskyi7wiig7";
-    })
-  ];
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3
     perlPackages.Po4a
     itstool
@@ -49,14 +41,14 @@ stdenv.mkDerivation rec {
     gdbm
     gtkspell3
     ofono
-    libappindicator-gtk3
+    libayatana-appindicator-gtk3
   ];
 
   postPatch = ''
     patchShebangs man/manhelper.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An app to send/receive SMS, make USSD requests, control mobile data usage and more";
     longDescription = ''
       A simple GTK based GUI compatible with Modem manager, Wader and oFono
@@ -66,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://linuxonly.ru/page/modem-manager-gui";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ahuzik ];
+    maintainers = with maintainers; [ ahuzik galagora ];
     platforms = platforms.linux;
   };
 }

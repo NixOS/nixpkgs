@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gst-plugins-base
 , orc
@@ -16,25 +16,27 @@
 , libintl
 , lib
 , opencore-amr
-, darwin
+, IOKit
+, CoreFoundation
+, DiskArbitration
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
-  version = "1.16.2";
+  version = "1.18.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1jpvc32x6q01zjkfgh6gmq6aaikiyfwwnhj7bmvn52syhrdl202m";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0g6i4db1883q3j0l2gdv46fcqwiiaw63n6mhvsfcms1i1p7g1391";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     gettext
-    pkgconfig
+    pkg-config
     python3
   ];
 
@@ -49,16 +51,21 @@ stdenv.mkDerivation rec {
     x264
     libintl
     opencore-amr
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin [
     IOKit
     CoreFoundation
     DiskArbitration
-  ]);
+  ];
 
   mesonFlags = [
-    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
   ];
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   meta = with lib; {
     description = "Gstreamer Ugly Plugins";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , pyperclip
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Console UI for pass";
     homepage = "https://github.com/Kwpolska/upass";
     license = licenses.bsd3;

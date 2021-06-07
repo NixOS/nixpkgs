@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, SkyLight }:
 
 stdenv.mkDerivation rec {
   pname = "spacebar";
-  version = "0.5.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
-    owner = "somdoron";
+    owner = "cmacrae";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0v8v4xsc67qpzm859r93ggq7rr7hmaj6dahdlg6g3ppj81cq0khz";
+    sha256 = "0f5ddn3sx13rwwh0nfl784160s8ml3m5593d5fz2b1996aznzrsx";
   };
 
-  buildInputs = [ Carbon Cocoa ScriptingBridge ];
+  buildInputs = [ Carbon Cocoa ScriptingBridge SkyLight ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     cp ./doc/spacebar.1 $out/share/man/man1/spacebar.1
   '';
 
-  meta = with stdenv.lib; {
-    description = "A status bar for yabai tiling window management";
-    homepage = "https://github.com/somdoron/spacebar";
+  meta = with lib; {
+    description = "A minimal status bar for macOS";
+    homepage = "https://github.com/cmacrae/spacebar";
     platforms = platforms.darwin;
     maintainers = [ maintainers.cmacrae ];
     license = licenses.mit;

@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "libkleo";
+  pname = "libkleo";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;

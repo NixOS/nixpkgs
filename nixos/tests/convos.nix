@@ -6,7 +6,7 @@ let
 in
 {
   name = "convos";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ sgo ];
   };
 
@@ -25,6 +25,6 @@ in
     machine.wait_for_unit("convos")
     machine.wait_for_open_port("${toString port}")
     machine.succeed("journalctl -u convos | grep -q 'Listening at.*${toString port}'")
-    machine.succeed("curl http://localhost:${toString port}/")
+    machine.succeed("curl -f http://localhost:${toString port}/")
   '';
 })

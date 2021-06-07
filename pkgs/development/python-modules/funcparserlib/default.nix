@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # Tests are Python 2.x only judging from SyntaxError
   doCheck = !(isPy3k);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recursive descent parsing library based on functional combinators";
     homepage = "https://github.com/vlasovskikh/funcparserlib";
     license = licenses.mit;

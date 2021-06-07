@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 let
-  version = "2020.2.1.2";
+  version = "2020.2.6";
   majorVersion = builtins.substring 0 6 version;
 in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.flexibee.eu/download/${majorVersion}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1a382lwyscvl5gdax5vs0shzmbnhjgggrv0hcwid8kf2s98diw5n";
+    sha256 = "0vscz24sabk9xafywnx41rqhq6300ddsw1x95ibc7ghsgbkq80ja";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client for an accouting economic system";
     homepage = "https://www.flexibee.eu/";
     license = licenses.unfree;

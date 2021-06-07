@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , gettext
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -48,12 +49,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple application for encoding and decoding text, designed for elementary OS";
     homepage = "https://github.com/arshubham/cipher";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;

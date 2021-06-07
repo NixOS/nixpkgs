@@ -1,18 +1,19 @@
-{ stdenv, buildGoModule, fetchurl }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "matterbridge";
-  version = "1.17.5";
+  version = "1.22.2";
 
-  goPackagePath = "github.com/42wim/matterbridge";
-  vendorSha256 = null;
-
-  src = fetchurl {
-    url = "https://github.com/42wim/matterbridge/archive/v${version}.tar.gz";
-    sha256 = "1p89ik5zr1qq1abd9k1xfa4j62b11zdnl2gm52y0s5yx8slap4w0";
+  src = fetchFromGitHub {
+    owner = "42wim";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-H6Cy6yvX57QLNfZPeansZv6IJ4uQVqr0h24QsAlrLx8=";
   };
 
-  meta = with stdenv.lib; {
+  vendorSha256 = null;
+
+  meta = with lib; {
     description = "Simple bridge between Mattermost, IRC, XMPP, Gitter, Slack, Discord, Telegram, Rocket.Chat, Hipchat(via xmpp), Matrix and Steam";
     homepage = "https://github.com/42wim/matterbridge";
     license = with licenses; [ asl20 ];

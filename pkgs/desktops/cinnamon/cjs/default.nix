@@ -1,14 +1,13 @@
-{ autoconf-archive
-, autoreconfHook
-, dbus-glib
+{ dbus-glib
 , fetchFromGitHub
 , gobject-introspection
-, pkgconfig
+, pkg-config
+, lib
 , stdenv
 , wrapGAppsHook
 , python3
 , cairo
-, gnome3
+, gnome
 , xapps
 , keybinder3
 , upower
@@ -17,58 +16,66 @@
 , libffi
 , gtk3
 , readline
+, spidermonkey_78
+, meson
+, sysprof
+, dbus
+, xvfb-run
+, ninja
+, makeWrapper
+, which
+, libxml2
 }:
-
-let
-
-  # https://github.com/linuxmint/cjs/issues/80
-  spidermonkey_52 = callPackage ./spidermonkey_52.nix {};
-
-in
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "4.4.0";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cjs";
     rev = version;
-    sha256 = "0q5h2pbwysc6hwq5js3lwi6zn7i5qjjy070ynfhfn3z69lw5iz2d";
+    hash = "sha256-6+zlWL0DmyP+RFp1ECA4XGbgYUlsMqqyTd6z46w99Ug=";
   };
+
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [
+    meson # ADDING cmake breaks the build, ignore meson warning
+    ninja
+    pkg-config
+    makeWrapper
+    which # for locale detection
+    libxml2 # for xml-stripblanks
+  ];
+
+  buildInputs = [
+    gobject-introspection
+    cairo
+    readline
+    spidermonkey_78
+    dbus # for dbus-run-session
+  ];
+
+  checkInputs = [
+    xvfb-run
+  ];
 
   propagatedBuildInputs = [
     glib
 
     # bindings
-    gnome3.caribou
+    gnome.caribou
     keybinder3
     upower
     xapps
   ];
 
-  nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
-    wrapGAppsHook
-    pkgconfig
+  mesonFlags = [
+    "-Dprofiler=disabled"
   ];
 
-  buildInputs = [
-    # from .pc
-    gobject-introspection
-    libffi
-    spidermonkey_52 # mozjs-52
-    cairo # +cairo-gobject
-    gtk3
-
-    # other
-
-    dbus-glib
-    readline
-  ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cjs";
     description = "JavaScript bindings for Cinnamon";
 
@@ -77,12 +84,13 @@ stdenv.mkDerivation rec {
     '';
 
     license = with licenses; [
-     gpl2Plus
-     lgpl2Plus
-     mit
-     mpl11
-   ];
+      gpl2Plus
+      lgpl2Plus
+      mit
+      mpl11
+    ];
+
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -26,10 +26,10 @@ buildPythonPackage rec {
     substituteInPlace "setup.cfg"                                     \
             --replace "/usr/local/include" "${pkgs.sqlite.dev}/include"   \
             --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"
-    ${stdenv.lib.optionalString (!stdenv.isDarwin) ''export LDSHARED="$CC -pthread -shared"''}
+    ${lib.optionalString (!stdenv.isDarwin) ''export LDSHARED="$CC -pthread -shared"''}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pysqlite.org/";
     description = "Python bindings for the SQLite embedded relational database engine";
     longDescription = ''

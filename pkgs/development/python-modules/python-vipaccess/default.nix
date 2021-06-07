@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , oath
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytest tests/ -k 'not test_check_token'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free software implementation of Symantec's VIP Access application and protocol";
     homepage = "https://github.com/dlenski/python-vipaccess";
     license = licenses.asl20;

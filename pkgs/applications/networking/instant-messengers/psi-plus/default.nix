@@ -1,36 +1,39 @@
-{ stdenv, fetchFromGitHub, cmake, wrapQtAppsHook
+{ lib, mkDerivation, fetchFromGitHub, cmake
 , qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
-, libidn, qca2-qt5, libsecret, libXScrnSaver, hunspell
-, libgcrypt, libotr, html-tidy, libgpgerror, libsignal-protocol-c
+, libidn, qca-qt5, libXScrnSaver, hunspell
+, libsecret, libgcrypt, libotr, html-tidy, libgpgerror, libsignal-protocol-c
+, usrsctp
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "psi-plus";
-  version = "1.4.1407";
+  version = "1.5.1520";
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
-    sha256 = "0gp5rk7km2fzw109wil6s9x49x5q1qbw9mnkjs58dpzvxn74ylhw";
+    sha256 = "0cj811qv0n8xck2qrnps2ybzrpvyjqz7nxkyccpaivq6zxj6mc12";
   };
 
   cmakeFlags = [
     "-DENABLE_PLUGINS=ON"
   ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake qttools ];
 
   buildInputs = [
-    qtbase qtmultimedia qtx11extras qttools qtwebengine
-    libidn qca2-qt5 libsecret libXScrnSaver hunspell
-    libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
+    qtbase qtmultimedia qtx11extras qtwebengine
+    libidn qca-qt5 libXScrnSaver hunspell
+    libsecret libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
+    usrsctp
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://psi-plus.com";
     description = "XMPP (Jabber) client";
     maintainers = with maintainers; [ orivej misuzu ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

@@ -1,14 +1,18 @@
-{ lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage }:
+{ stdenv, lib, go, buildGoModule, fetchFromGitHub, mkYarnPackage, nixosTests
+, fetchpatch
+}:
 
 let
-  version = "2.19.2";
+  version = "2.27.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "119csghjmw4lphpnnhaxwimmir5bn455g92rb40j3y9pyv0hlfsh";
+    sha256 = "0836ygyvld5skjycd7366i6vyf451s6cay5ng6c2fwq0skvp2gj2";
   };
+
+  goPackagePath = "github.com/prometheus/prometheus";
 
   webui = mkYarnPackage {
     src = "${src}/web/ui/react-app";
@@ -23,21 +27,23 @@ let
     installPhase = "mv build $out";
     distPhase = "true";
   };
-in buildGoPackage rec {
+in buildGoModule rec {
   pname = "prometheus";
   inherit src version;
 
-  goPackagePath = "github.com/prometheus/prometheus";
+  vendorSha256 = "0dq3p7hga7m1aq78har5rr136hlb0kp8zhh2wzqlkxrk1f33w54p";
+
+  excludedPackages = [ "documentation/prometheus-mixin" ];
 
   postPatch = ''
     ln -s ${webui.node_modules} web/ui/react-app/node_modules
     ln -s ${webui} web/ui/static/react
   '';
 
+  buildFlags = "-tags=builtinassets";
   buildFlagsArray = let
     t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
   in [
-    "-tags=builtinassets"
     ''
       -ldflags=
          -X ${t}.Version=${version}
@@ -49,8 +55,10 @@ in buildGoPackage rec {
     ''
   ];
 
+  # only run this in the real build, not during the vendor build
+  # this should probably be fixed in buildGoModule
   preBuild = ''
-    make -C go/src/${goPackagePath} assets
+    if [ -d vendor ]; then make assets; fi
   '';
 
   preInstall = ''
@@ -59,7 +67,9 @@ in buildGoPackage rec {
     cp -a $src/console_libraries $src/consoles $out/etc/prometheus
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
+
+  passthru.tests = { inherit (nixosTests) prometheus; };
 
   meta = with lib; {
     description = "Service monitoring system and time series database";

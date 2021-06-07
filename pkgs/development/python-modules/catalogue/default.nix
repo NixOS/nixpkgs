@@ -1,27 +1,27 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, importlib-metadata
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "catalogue";
-  version = "2.0.0";
+  version = "2.0.4";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "34f8416ec5e7ed08e55c10414416e67c3f4d66edf83bc67320c3290775293816";
+    hash = "sha256-ntNF0ShVrzFfFxVYNhKya4YhorCi4775dNxdcS95g6o=";
   };
 
-  propagatedBuildInputs = [ importlib-metadata ];
+  checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiny library for adding function or object registries";
     homepage = "https://github.com/explosion/catalogue";
+    changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
-    };
+  };
 }

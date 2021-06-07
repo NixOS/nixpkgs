@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose unittest2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generates unicode slugs";
     homepage = "https://pypi.org/project/unicode-slugify/";
     license = licenses.bsd3;

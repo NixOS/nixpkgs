@@ -1,6 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , pytestrunner
 , future
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "parsedatetime";
   version = "2.6";
+  disabled = isPy27; # no longer compatible with icu package
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +20,7 @@ buildPythonPackage rec {
   buildInputs = [ pytest pytestrunner ];
   propagatedBuildInputs = [ future ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parse human-readable date/time text";
     homepage = "https://github.com/bear/parsedatetime";
     license = licenses.asl20;

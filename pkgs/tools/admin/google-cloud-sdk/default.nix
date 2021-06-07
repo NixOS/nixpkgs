@@ -21,31 +21,37 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "0imsshvdwd2isq58kplc27za30nabp62ypf1hq95aq94pjm2zp39";
+      sha256 = "1f86pkjsp8lrmk8ap40wh9zbzb2ni49vc2cjsdjbj4pkkwivihpv";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1905rj36md5iszbxw78ylvkljr4d54i50x23r1r6k1xw7i93yfwq";
+      sha256 = "1l47lq2wq8y0adrjij3w5ki1mm1f00503ks398flfmbzyav6bad3";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "297.0.1";
+  version = "343.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
-  buildInputs = [ python makeWrapper ];
+  buildInputs = [ python ];
 
-  nativeBuildInputs = [ jq ];
+  nativeBuildInputs = [ jq makeWrapper ];
 
   patches = [
+    # For kubectl configs, don't store the absolute path of the `gcloud` binary as it can be garbage-collected
     ./gcloud-path.patch
+    # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
+    # Try to use cloud_sql_proxy from SDK only if it actually exists, otherwise, search for one in PATH
+    ./cloud_sql_proxy_path.patch
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/google-cloud-sdk
     cp -R * .install $out/google-cloud-sdk/
 
@@ -74,8 +80,9 @@ in stdenv.mkDerivation rec {
     disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
-    mkdir -p $out/etc/bash_completion.d
-    mv $out/google-cloud-sdk/completion.bash.inc $out/etc/bash_completion.d/gcloud.inc
+    mkdir -p $out/share/bash-completion/completions
+    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud
+    ln -s $out/share/bash-completion/completions/gcloud $out/share/bash-completion/completions/gsutil
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
@@ -91,15 +98,17 @@ in stdenv.mkDerivation rec {
       jq -c . $path > $path.min
       mv $path.min $path
     done
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    maintainers = with maintainers; [ pradyuman stephenmw zimbatm ];
+    maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

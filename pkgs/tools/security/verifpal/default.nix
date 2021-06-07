@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorSha256 = "0cmj6h103igg5pcs9c9wrcmrsf0mwp9vbgzf5amsnj1206ryb1p2";
 
+  doCheck = false;
+
   nativeBuildInputs = [ pigeon ];
 
   subPackages = [ "cmd/verifpal" ];

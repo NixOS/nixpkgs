@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -20,11 +21,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0ksxx45mm0cvnb5jphyxsf843rn2rgb0yxv9j0ydh2xp4qgvvyva";
+    sha256 = "sha256-avu9Hya3C9g8kGl3D9bLwuZBkNPdwyvLspuBWgvpXU8=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Bluetooth Plug";
     homepage = "https://github.com/elementary/switchboard-plug-bluetooth";
     license = licenses.gpl3Plus;

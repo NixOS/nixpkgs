@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, writeText }:
+{ lib, stdenv, fetchFromGitHub, writeText }:
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
-  version = "2018-04-22b";
+  version = "2020-07-29";
 
   src = fetchFromGitHub {
     owner = "splitbrain";
-    repo = "${pname}";
+    repo = pname;
     rev = "release_stable_${version}";
-    sha256 = "1na5pn4j4mi2la80ywzg1krwqdxz57mjkw0id6ga9rws809gkdjp";
+    sha256 = "09swcqyd06l3481k190gmlr3b33dlv1lw1kk9nyh5b4sa5p3k7kk";
   };
 
   preload = writeText "preload.php" ''
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     cp ${phpPluginsLocalConfig} $out/share/dokuwiki/conf/plugins.local.php
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple to use and highly versatile Open Source wiki software that doesn't require a database";
     license = licenses.gpl2;
     homepage = "https://www.dokuwiki.org";
     platforms = platforms.all;
-    maintainers = with maintainers; [ maintainers."1000101" ];
+    maintainers = with maintainers; [ _1000101 ];
   };
 }

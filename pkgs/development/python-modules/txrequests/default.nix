@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , twisted
@@ -25,11 +25,11 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Asynchronous Python HTTP for Humans.";
     homepage    = "https://github.com/tardyp/txrequests";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 
 }

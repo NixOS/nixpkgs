@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , systemd ? null
 }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "14xz00mq07qmcgprlj5b2r21ljgpa4sbwmpr6jm2wrf8wms6331k";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd ];
 
   configureFlags = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--enable-man-pages"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.liblogging.org/";
     description = "Lightweight signal-safe logging library";
     license = licenses.bsd2;

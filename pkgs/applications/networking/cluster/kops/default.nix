@@ -1,18 +1,18 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
-
+{ lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
 let
   goPackagePath = "k8s.io/kops";
 
-  generic = { version, sha256, ...}@attrs:
-    let attrs' = builtins.removeAttrs attrs ["version" "sha256"] ; in
-      buildGoPackage {
+  generic = { version, sha256, rev ? version, ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "rev" ]; in
+    buildGoPackage
+      {
         pname = "kops";
         inherit version;
 
         inherit goPackagePath;
 
         src = fetchFromGitHub {
-          rev = version;
+          rev = rev;
           owner = "kubernetes";
           repo = "kops";
           inherit sha256;
@@ -39,30 +39,34 @@ let
           done
         '';
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "Easiest way to get a production Kubernetes up and running";
           homepage = "https://github.com/kubernetes/kops";
+          changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
-          maintainers = with maintainers; [ offline zimbatm kampka ];
+          maintainers = with maintainers; [ offline zimbatm diegolelis ];
           platforms = platforms.unix;
         };
       } // attrs';
-in rec {
+in
+rec {
 
   mkKops = generic;
 
-  kops_1_15 = mkKops {
-    version = "1.15.3";
-    sha256 = "0pzgrsl61nw8pm3s032lj020fw13x3fpzlj7lknsnd581f0gg4df";
+  kops_1_18 = mkKops {
+    version = "1.18.2";
+    sha256 = "17na83j6sfhk69w9ssvicc0xd1904z952ad3zzbpha50lcy6nlhp";
   };
 
-  kops_1_16 = mkKops {
-    version = "1.16.4";
-    sha256 = "0qi80hzd5wc8vn3y0wsckd7pq09xcshpzvcr7rl5zd4akxb0wl3f";
+  kops_1_19 = mkKops rec {
+    version = "1.19.2";
+    sha256 = "15csxih1xy8myky37n5dyzp5mc31pc4bq9asaw6zz51mgw8ad5r9";
+    rev = "v${version}";
   };
 
-  kops_1_17 = mkKops {
-    version = "1.17.1";
-    sha256 = "1km6nwanmhfx8rl1wp445z9ib50jr2f86rd92vilm3q4rs9kig1h";
+  kops_1_20 = mkKops rec {
+    version = "1.20.1";
+    sha256 = "sha256-k6ODXbh7Bh+rBw6bjSNLxLY0fz7JLnrmJibnXz5qnSc=";
+    rev = "v${version}";
   };
 }

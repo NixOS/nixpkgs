@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, jedi, pycodestyle,
+{ lib, buildPythonPackage, fetchFromGitHub, jedi, pycodestyle,
   psutil, pyflakes, rope, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
   spyder-kernels_0_5, qtpy, pyzmq, chardet, pyqtwebengine
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope pylint keyring numpydoc 
+    jedi pycodestyle psutil pyflakes rope pylint keyring numpydoc
     qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels_0_5
     pygments qtpy pyzmq chardet pyqtwebengine
   ];
@@ -31,7 +31,9 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "spyder" ];
+
+  meta = with lib; {
     description = "Library providing a scientific python development environment";
     longDescription = ''
       Spyder (previously known as Pydee) is a powerful interactive development

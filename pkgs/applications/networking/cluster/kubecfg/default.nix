@@ -1,6 +1,6 @@
 { lib, buildGoPackage, fetchFromGitHub, ... }:
 
-let version = "0.16.0"; in
+let version = "0.20.0"; in
 
 buildGoPackage {
   pname = "kubecfg";
@@ -10,7 +10,7 @@ buildGoPackage {
     owner = "bitnami";
     repo = "kubecfg";
     rev = "v${version}";
-    sha256 = "1ipw7r9fyqbh1bjvk7ifmj3skh799ly90y4ph37r8mqk1wb92rz4";
+    sha256 = "sha256-7lBIqaozVBoiYYOTqAxq9h2N+Y3JFwLaunCykILOmPU=";
   };
 
   goPackagePath = "github.com/bitnami/kubecfg";

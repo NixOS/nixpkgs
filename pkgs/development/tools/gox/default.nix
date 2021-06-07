@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gox";
@@ -13,10 +13,9 @@ buildGoPackage rec {
     sha256 = "0mkh81hd7kn45dz7b6yhzqsg2mvg1g6pwx89jjigxrnqhyg9vrl7";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mitchellh/gox";
     description = "A dead simple, no frills Go cross compile tool";
-    platforms = platforms.all;
     license = licenses.mpl20;
   };
 }

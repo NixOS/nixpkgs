@@ -28,6 +28,9 @@ let
 
     # Don't start services that are not yet initialized
     unitConfig.ConditionPathExists = "/var/lib/${stateDirectory}/keyring";
+    startLimitBurst =
+      if daemonType == "osd" then 30 else if lib.elem daemonType ["mgr" "mds"] then 3 else 5;
+    startLimitIntervalSec = 60 * 30;  # 30 mins
 
     serviceConfig = {
       LimitNOFILE = 1048576;
@@ -39,22 +42,17 @@ let
       ProtectHome = "true";
       ProtectSystem = "full";
       Restart = "on-failure";
-      StartLimitBurst = "5";
-      StartLimitInterval = "30min";
       StateDirectory = stateDirectory;
       User = "ceph";
       Group = if daemonType == "osd" then "disk" else "ceph";
       ExecStart = ''${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} \
                     -f --cluster ${clusterName} --id ${daemonId}'';
     } // optionalAttrs (daemonType == "osd") {
-      ExecStartPre = ''${ceph.lib}/libexec/ceph/ceph-osd-prestart.sh --id ${daemonId} --cluster ${clusterName}'';
-      StartLimitBurst = "30";
+      ExecStartPre = "${ceph.lib}/libexec/ceph/ceph-osd-prestart.sh --id ${daemonId} --cluster ${clusterName}";
       RestartSec = "20s";
       PrivateDevices = "no"; # osd needs disk access
     } // optionalAttrs ( daemonType == "mon") {
       RestartSec = "10";
-    } // optionalAttrs (lib.elem daemonType ["mgr" "mds"]) {
-      StartLimitBurst = "3";
     };
   });
 
@@ -318,7 +316,7 @@ in
     client = {
       enable = mkEnableOption "Ceph client configuration";
       extraConfig = mkOption {
-        type = with types; attrsOf str;
+        type = with types; attrsOf (attrsOf str);
         default = {};
         example = ''
           {
@@ -355,7 +353,7 @@ in
     ];
 
     warnings = optional (cfg.global.monInitialMembers == null)
-      ''Not setting up a list of members in monInitialMembers requires that you set the host variable for each mon daemon or else the cluster won't function'';
+      "Not setting up a list of members in monInitialMembers requires that you set the host variable for each mon daemon or else the cluster won't function";
 
     environment.etc."ceph/ceph.conf".text = let
       # Merge the extraConfig set for mgr daemons, as mgr don't have their own section

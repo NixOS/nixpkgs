@@ -1,14 +1,14 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "blockbook-frontend";
-  meta = with pkgs.stdenv.lib; {
-    maintainers = with maintainers; [ maintainers."1000101" ];
+  meta = with pkgs.lib; {
+    maintainers = with maintainers; [ _1000101 ];
   };
 
   machine = { ... }: {
     services.blockbook-frontend."test" = {
       enable = true;
     };
-    services.bitcoind = {
+    services.bitcoind.mainnet = {
       enable = true;
       rpc = {
         port = 8030;

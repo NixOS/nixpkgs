@@ -1,24 +1,30 @@
-{ stdenv, targetPackages, fetchurl, fetchpatch, fetchFromGitHub, noSysDirs
+{ lib, stdenv, targetPackages, fetchurl, fetchpatch, fetchFromGitHub, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langJava ? false
 , langGo ? false
+, reproducibleBuild ? true
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, enableShared ? true
+, # N.B. the defult is intentionally not from an `isStatic`. See
+  # https://gcc.gnu.org/install/configure.html - this is about target
+  # platform libraries not host platform ones unlike normal. But since
+  # we can't rebuild those without also rebuilding the compiler itself,
+  # we opt to always build everything unlike our usual policy.
+  enableShared ? true
 , enableLTO ? true
 , texinfo ? null
 , flex
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
-, gmp, mpfr, libmpc, gettext, which
+, gmp, mpfr, libmpc, gettext, which, patchelf
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
 , gnatboot ? null
-, zip ? null, unzip ? null, pkgconfig ? null
+, zip ? null, unzip ? null, pkg-config ? null
 , gtk2 ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
 , libXrender ? null, xorgproto ? null
@@ -31,8 +37,8 @@
 , threadsCross ? null # for MinGW
 , crossStageStatic ? false
 , # Strip kills static libs of other archs (hence no cross)
-  stripped ? stdenv.hostPlatform == stdenv.buildPlatform
-          && stdenv.targetPlatform == stdenv.hostPlatform
+  stripped ? stdenv.hostPlatform.system == stdenv.buildPlatform.system
+          && stdenv.targetPlatform.system == stdenv.hostPlatform.system
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
@@ -56,7 +62,11 @@ assert langAda -> gnatboot != null;
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
-with stdenv.lib;
+# profiledCompiler builds inject non-determinism in one of the compilation stages.
+# If turned on, we can't provide reproducible builds anymore
+assert reproducibleBuild -> profiledCompiler == false;
+
+with lib;
 with builtins;
 
 let majorVersion = "6";
@@ -64,16 +74,19 @@ let majorVersion = "6";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-    patches =
-      [ ../use-source-date-epoch.patch ]
-      ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
+    patches = optionals (!stdenv.targetPlatform.isRedox) [
+      ../use-source-date-epoch.patch ./0001-Fix-build-for-glibc-2.31.patch
+    ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
-        url = "https://raw.githubusercontent.com/lhmouse/MINGW-packages/${import ../common/mfcgthreads-patches-repo.nix}/mingw-w64-gcc-git/9000-gcc-${majorVersion}-branch-Added-mcf-thread-model-support-from-mcfgthread.patch";
-        sha256 = "1c449jgm1vx9g4kv82bxmvlgrwb8f6kwkl0gqmjlmhf7f4hjy2nr";
+
+      # Obtain latest patch with ../update-mcfgthread-patches.sh
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
+      ++ optional (targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
+        url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
+        sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
       });
 
     javaEcj = fetchurl {
@@ -120,6 +133,11 @@ stdenv.mkDerivation ({
     repo = "gcc-vc4";
     rev = "e90ff43f9671c760cf0d1dd62f569a0fb9bf8918";
     sha256 = "0gxf66hwqk26h8f853sybphqa5ca0cva2kmrw5jsiv6139g0qnp8";
+  } else if stdenv.targetPlatform.isRedox then fetchFromGitHub {
+    owner = "redox-os";
+    repo = "gcc";
+    rev = "f360ac095028d286fc6dde4d02daed48f59813fa"; # `redox` branch
+    sha256 = "1an96h8l58pppyh3qqv90g8hgcfd9hj7igvh2gigmkxbrx94khfl";
   } else fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
     sha256 = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
@@ -136,10 +154,10 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" "pie" ];
 
-  prePatch =
+  postPatch =
     # This should kill all the stdinc frameworks that gcc and friends like to
     # insert into default search paths.
-    stdenv.lib.optionalString hostPlatform.isDarwin ''
+    lib.optionalString hostPlatform.isDarwin ''
       substituteInPlace gcc/config/darwin-c.c \
         --replace 'if (stdinc)' 'if (0)'
 
@@ -148,9 +166,8 @@ stdenv.mkDerivation ({
 
       substituteInPlace libgfortran/configure \
         --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
-    '';
-
-  postPatch =
+    ''
+  + (
     if targetPlatform != hostPlatform || stdenv.cc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
@@ -168,12 +185,12 @@ stdenv.mkDerivation ({
                  -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
            done
         ''
-        + stdenv.lib.optionalString (targetPlatform.libc == "musl")
+        + lib.optionalString (targetPlatform.libc == "musl")
         ''
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
-    else null;
+    else "");
 
   inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
@@ -181,16 +198,19 @@ stdenv.mkDerivation ({
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
-    ++ (optional javaAwtGtk pkgconfig)
-    ++ (optional (stdenv.targetPlatform.isVc4) flex);
+    ++ (optional javaAwtGtk pkg-config)
+    ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex);
 
   # For building runtime libs
   depsBuildTarget =
-    if hostPlatform == buildPlatform then [
-      targetPackages.stdenv.cc.bintools # newly-built gcc will be used
-    ] else assert targetPlatform == hostPlatform; [ # build != host == target
-      stdenv.cc
-    ];
+    (
+      if hostPlatform == buildPlatform then [
+        targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+      ] else assert targetPlatform == hostPlatform; [ # build != host == target
+        stdenv.cc
+      ]
+    )
+    ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
     gmp mpfr libmpc libelf
@@ -207,20 +227,20 @@ stdenv.mkDerivation ({
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
+  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
   preConfigure = import ../common/pre-configure.nix {
-    inherit (stdenv) lib;
-    inherit version hostPlatform gnatboot langJava langAda langGo;
+    inherit lib;
+    inherit version targetPlatform hostPlatform gnatboot langJava langAda langGo;
   };
 
   dontDisableStatic = true;
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags = import ../common/configure-flags.nix {
     inherit
+      lib
       stdenv
       targetPackages
       crossStageStatic libcCross
@@ -290,7 +310,7 @@ stdenv.mkDerivation ({
 
   inherit
     (import ../common/extra-target-flags.nix {
-      inherit stdenv crossStageStatic libcCross threadsCross;
+      inherit lib stdenv crossStageStatic libcCross threadsCross;
     })
     EXTRA_FLAGS_FOR_TARGET
     EXTRA_LDFLAGS_FOR_TARGET
@@ -308,7 +328,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "https://gcc.gnu.org/";
-    license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
+    license = lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");
 
@@ -321,13 +341,13 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ peti ];
+    maintainers = with lib.maintainers; [ peti ];
 
     platforms =
-      stdenv.lib.platforms.linux ++
-      stdenv.lib.platforms.freebsd ++
-      stdenv.lib.platforms.illumos ++
-      stdenv.lib.platforms.darwin;
+      lib.platforms.linux ++
+      lib.platforms.freebsd ++
+      lib.platforms.illumos ++
+      lib.platforms.darwin;
   };
 }
 

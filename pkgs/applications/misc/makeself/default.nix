@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, which, zstd, pbzip2 }:
 
 stdenv.mkDerivation rec {
   version = "2.4.2";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
+  checkInputs = [ which zstd pbzip2 ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/{${pname}-${version},man/man1}}
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}-${version}/makeself-header.sh|" -i $out/bin/makeself
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://megastep.org/makeself";
     description = "Utility to create self-extracting packages";
     license = licenses.gpl2;

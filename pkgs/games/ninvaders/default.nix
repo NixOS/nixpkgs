@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ncurses }:
+{ lib, stdenv, fetchFromGitHub, cmake, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "ninvaders";
@@ -11,13 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1wmwws1zsap4bfc2439p25vnja0hnsf57k293rdxw626gly06whi";
   };
 
-  buildInputs = [ cmake ncurses ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Space Invaders clone based on ncurses";
     homepage = "http://ninvaders.sourceforge.net/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ maintainers."1000101" ];
+    maintainers = with maintainers; [ _1000101 ];
     platforms = platforms.all;
   };
 }

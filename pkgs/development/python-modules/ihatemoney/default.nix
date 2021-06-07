@@ -30,6 +30,7 @@
 , wtforms
 , psycopg2 # optional, for postgresql support
 , flask_testing
+, pytestCheckHook
 }:
 
 # ihatemoney is not really a library. It will only ever be imported
@@ -66,6 +67,11 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/spiral-project/ihatemoney/commit/6129191b26784b895e203fa3eafb89cee7d88b71.patch";
       sha256 = "0yc24gsih9x3pnh2mhj4v5i71x02dq93a9jd2r8b1limhcl4p1sw";
+    })
+    (fetchpatch {
+      name = "CVE-2020-15120.patch";
+      url = "https://github.com/spiral-project/ihatemoney/commit/8d77cf5d5646e1d2d8ded13f0660638f57e98471.patch";
+      sha256 = "0y855sk3qsbpq7slj876k2ifa1lccc2dccag98pkyaadpz5gbabv";
     })
   ];
 
@@ -108,16 +114,22 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    flask_testing
+    flask_testing pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "--pyargs ihatemoney.tests.tests" ];
+  disabledTests = [
+    "test_notifications"  # requires running service.
+    "test_invite"         # requires running service.
   ];
 
   passthru.tests = {
-    inherit (nixosTests) ihatemoney;
+    inherit (nixosTests.ihatemoney) ihatemoney-postgresql ihatemoney-sqlite;
   };
+
   meta = with lib; {
     homepage = "https://ihatemoney.org";
     description = "A simple shared budget manager web application";
-    platforms = platforms.linux;
     license = licenses.beerware;
     maintainers = [ maintainers.symphorien ];
   };

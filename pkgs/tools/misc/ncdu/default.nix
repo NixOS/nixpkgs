@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "ncdu";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Disk usage analyzer with an ncurses interface";
     homepage = "https://dev.yorhel.nl/ncdu";
     license = licenses.mit;

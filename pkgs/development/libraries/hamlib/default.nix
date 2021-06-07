@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb-compat-0_1, pkgconfig,
+{lib, stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb-compat-0_1, pkg-config,
  boost, libtool, perlPackages }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl perlPackages.ExtUtilsMakeMaker python2 swig gd libxml2
-                  tcl libusb-compat-0_1 pkgconfig boost libtool ];
+                  tcl libusb-compat-0_1 pkg-config boost libtool ];
 
   configureFlags = [ "--with-perl-binding" "--with-python-binding"
                      "--with-tcl-binding" "--with-rigmatrix" ];
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     which lets one control a radio transceiver or receiver, either from
     command line interface or in a text-oriented interactive interface.
     '';
-    license = with stdenv.lib.licenses; [ gpl2Plus lgpl2Plus ];
+    license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
     homepage = "http://hamlib.sourceforge.net";
-    maintainers = with stdenv.lib.maintainers; [ relrod ];
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with lib.maintainers; [ relrod ];
+    platforms = with lib.platforms; unix;
   };
 }

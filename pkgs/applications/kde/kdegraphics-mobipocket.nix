@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kdegraphics-mobipocket";
+  pname = "kdegraphics-mobipocket";
   meta = {
     license = [ lib.licenses.gpl2Plus ];
     maintainers = [ lib.maintainers.ttuegel ];

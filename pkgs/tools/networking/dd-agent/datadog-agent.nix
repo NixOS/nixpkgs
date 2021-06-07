@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd, hostname, extraTags ? [] }:
+{ lib, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkg-config, systemd, hostname, extraTags ? [] }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
@@ -28,13 +28,13 @@ in buildGoPackage rec {
   goPackagePath = "github.com/${owner}/${repo}";
 
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
 
   preBuild = let
-    ldFlags = stdenv.lib.concatStringsSep " " [
+    ldFlags = lib.concatStringsSep " " [
       "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
       "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
       "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
@@ -65,17 +65,16 @@ in buildGoPackage rec {
 
     wrapProgram "$out/bin/agent" \
       --set PYTHONPATH "$out/${python.sitePackages}" \
-      --prefix LD_LIBRARY_PATH : ${systemd.lib}/lib
+      --prefix LD_LIBRARY_PATH : ${lib.getLib systemd}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
     homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
-    platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl ];
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkgconfig
-, zlib, bzip2, lzma, libgcrypt
+{ lib, stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkg-config
+, zlib, bzip2, xz, libgcrypt
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "cygwin-setup";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "024wxaaxkf7p1i78bh5xrsqmfz7ss2amigbfl2r5w9h87zqn9aq3";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool flex bison pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool flex bison pkg-config ];
 
   buildInputs = let
     mkStatic = flip overrideDerivation (o: {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       buildInputs = map mkStatic (o.buildInputs or []);
       propagatedBuildInputs = map mkStatic (o.propagatedBuildInputs or []);
     });
-  in map mkStatic [ zlib bzip2 lzma libgcrypt ];
+  in map mkStatic [ zlib bzip2 xz libgcrypt ];
 
   configureFlags = [ "--disable-shared" ];
 

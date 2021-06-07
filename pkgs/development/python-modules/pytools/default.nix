@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , decorator
 , appdirs
 , six
@@ -10,11 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2020.2";
+  version = "2021.2.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3cacefed54148aafb07502c7c907cae8d9327ea35df16e3366c883a706ed5601";
+    sha256 = "ebbcc38c7a30b1a0ce1a74816c85db9f2556bb4d5b9a71f85f5d88f69ddcb96b";
   };
 
   checkInputs = [ pytest ];

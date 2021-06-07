@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, gmp, gwenhywfar, libtool, libxml2, libxslt
-, pkgconfig, gettext, xmlsec, zlib
+{ lib, stdenv, fetchurl, gmp, gwenhywfar, libtool, libxml2, libxslt
+, pkg-config, gettext, xmlsec, zlib
 }:
 
 let
@@ -25,11 +25,11 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ gmp gwenhywfar libtool libxml2 libxslt xmlsec zlib ];
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkg-config gettext ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interface to banking tasks, file formats and country information";
-    homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=03&showall=1";
+    homepage = "https://www.aquamaniac.de/";
     hydraPlatforms = [];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ goibhniu ];

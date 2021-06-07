@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libpng, autoreconfHook }:
+{ fetchurl, lib, stdenv, libpng, autoreconfHook }:
 
 # debian splits this package into plotutils and libplot2c2
 
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/plotutils/";
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
   };
 }

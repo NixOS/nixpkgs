@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, fuse3, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, fuse3, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "fuse-overlayfs";
-  version = "1.1.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ivz65nnyisha3lkk6ywx175f2sdacjz3q5vy9xddr7dixwd2b18";
+    sha256 = "sha256-/gdmrQhYsE4a/1sxtJ5IfVUWjh08wTVrOr4V7Fkn1i0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ fuse3 ];
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FUSE implementation for overlayfs";
     longDescription = "An implementation of overlay+shiftfs in FUSE for rootless containers.";
     license = licenses.gpl3;

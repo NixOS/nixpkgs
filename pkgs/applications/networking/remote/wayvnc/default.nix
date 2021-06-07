@@ -1,29 +1,22 @@
-{ stdenv, fetchFromGitHub, meson, pkg-config, ninja
-, pixman, libuv, libGL, libxkbcommon, wayland, neatvnc, libdrm, libX11
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc
+, pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml, pam
 }:
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";
-  version = "0.1.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0aa12fkbwhzs0g2pqw1b27l33nn5dpbcvsf1z8h88kwsf9xdvb2r";
+    sha256 = "0q48fgh6gf3jicy4bk3kq18h9lhqfq9qz32ri6j9ffvbb8mcw64s";
   };
 
-  patches = [ ./add-missing-librt.patch ];
+  nativeBuildInputs = [ meson pkg-config ninja scdoc wayland ];
+  buildInputs = [ pixman libxkbcommon wayland neatvnc libdrm libX11 aml pam ];
 
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace "version: '0.1.0'" "version: '${version}'"
-  '';
-
-  nativeBuildInputs = [ meson pkg-config ninja ];
-  buildInputs = [ pixman libuv libGL libxkbcommon wayland neatvnc libdrm libX11 ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A VNC server for wlroots based Wayland compositors";
     longDescription = ''
       This is a VNC server for wlroots based Wayland compositors. It attaches

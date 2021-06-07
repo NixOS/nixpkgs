@@ -1,11 +1,12 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , gettext
 , desktop-file-utils
 , appstream-glib
-, pkgconfig
+, pkg-config
 , txt2man
 , gzip
 , vala
@@ -15,7 +16,7 @@
 , glib
 , cairo
 , keybinder3
-, ffmpeg_3
+, ffmpeg
 , python3
 , libxml2
 , gst_all_1
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     libxml2
-    pkgconfig
+    pkg-config
     txt2man
     python3
     vala
@@ -65,14 +66,21 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${stdenv.lib.makeBinPath [ which ffmpeg_3 gifski ]})
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ which ffmpeg gifski ]})
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+
+  meta = with lib; {
     homepage = "https://github.com/phw/peek";
     description = "Simple animated GIF screen recorder with an easy to use interface";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ puffnfresh worldofpeace ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ puffnfresh ];
     platforms = platforms.linux;
   };
 }

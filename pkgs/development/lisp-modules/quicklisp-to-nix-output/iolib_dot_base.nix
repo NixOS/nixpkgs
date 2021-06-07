@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''iolib_dot_base'';
-  version = ''iolib-v0.8.3'';
+  baseName = "iolib_dot_base";
+  version = "iolib-v0.8.3";
 
-  description = ''Base IOlib package, used instead of CL.'';
+  description = "Base IOlib package, used instead of CL.";
 
   deps = [ args."alexandria" args."iolib_dot_asdf" args."iolib_dot_common-lisp" args."iolib_dot_conf" args."split-sequence" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iolib/2018-02-28/iolib-v0.8.3.tgz'';
-    sha256 = ''12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c'';
+    url = "http://beta.quicklisp.org/archive/iolib/2018-02-28/iolib-v0.8.3.tgz";
+    sha256 = "12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c";
   };
 
   packageName = "iolib.base";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, gmp }:
+{ lib, stdenv, fetchFromGitHub, zlib, gmp }:
 
 stdenv.mkDerivation {
   name = "open-wbo-2.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     install -Dm0755 open-wbo_release $out/bin/open-wbo
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "State-of-the-art MaxSAT and Pseudo-Boolean solver";
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;

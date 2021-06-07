@@ -43,7 +43,7 @@ if [ "ico" = "$rscFileExt" ]; then
 else
     wrestool -x --output=$tmp/ico -t14 $rscFile
 fi
-    
+
 icotool --icon -x --palette-size=0 -o $tmp/png $tmp/ico/*.ico
 
 mkdir -p $out

@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python
-, pkgconfig
+, pkg-config
 , bison
 , flex
 , perl
@@ -12,6 +12,7 @@
 , docbook_xml_dtd_45
 , readline
 , popt
+, dbus
 , libbsd
 , libarchive
 , zlib
@@ -24,6 +25,8 @@
 , libtasn1
 , tdb
 , cmocka
+, rpcsvc-proto
+, python3Packages
 , nixosTests
 
 , enableLDAP ? false, openldap
@@ -31,7 +34,6 @@
 , enableProfiling ? true
 , enableMDNS ? false, avahi
 , enableDomainController ? false, gpgme, lmdb
-, enableKerberos ? true, krb5Full
 , enableRegedit ? true, ncurses
 , enableCephFS ? false, libceph
 , enableGlusterFS ? false, glusterfs, libuuid
@@ -39,15 +41,15 @@
 , enablePam ? (!stdenv.isDarwin), pam
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.12.3";
+  version = "4.14.4";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "09w7aap1cjc41ayhaksm1igc7p7gl40fad4a1l6q4ds9a2jbrb9z";
+    sha256 = "1fc9ix91hb1f35j69sk7rsi9pky2p0vsmw47s973bx801cm0kbw9";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -60,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     bison
     flex
     perl
@@ -69,6 +71,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
+    rpcsvc-proto
   ] ++ optionals stdenv.isDarwin [
     rpcgen
     fixDarwinDylibNames
@@ -78,6 +81,7 @@ stdenv.mkDerivation rec {
     python
     readline
     popt
+    dbus
     jansson
     libbsd
     libarchive
@@ -88,11 +92,10 @@ stdenv.mkDerivation rec {
     libtasn1
     tdb
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
-    ++ optional enableLDAP openldap
+    ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
-    ++ optionals enableDomainController [ gpgme lmdb ]
-    ++ optional enableKerberos krb5Full
+    ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
@@ -116,13 +119,9 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
-  ] ++ singleton (if enableDomainController
-         then "--with-experimental-mit-ad-dc"
-         else "--without-ad-dc")
-    ++ optionals enableKerberos [
-    "--with-system-mitkrb5"
-    "--with-system-mitkdc=${krb5Full}"
-  ] ++ optionals (!enableLDAP) [
+  ] ++ optional (!enableDomainController)
+    "--without-ad-dc"
+  ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
   ] ++ optional enableProfiling "--with-profiling-data"
@@ -153,11 +152,13 @@ stdenv.mkDerivation rec {
     tests.samba = nixosTests.samba;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.samba.org";
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
+    # N.B. enableGlusterFS does not build
+    broken = stdenv.isDarwin || enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
   };
 }

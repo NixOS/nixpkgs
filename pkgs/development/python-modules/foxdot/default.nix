@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, tkinter, supercollider }:
+{ lib, buildPythonPackage, fetchPypi, tkinter, supercollider }:
 
 buildPythonPackage rec {
   pname = "FoxDot";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # Requires a running SuperCollider instance
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Live coding music with SuperCollider";
     homepage = "https://foxdot.org/";
     license = licenses.cc-by-sa-40;

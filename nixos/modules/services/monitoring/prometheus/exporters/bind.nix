@@ -41,12 +41,12 @@ in
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-bind-exporter}/bin/bind_exporter \
-          -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-          -bind.pid-file /var/run/named/named.pid \
-          -bind.timeout ${toString cfg.bindTimeout} \
-          -bind.stats-url ${cfg.bindURI} \
-          -bind.stats-version ${cfg.bindVersion} \
-          -bind.stats-groups ${concatStringsSep "," cfg.bindGroups} \
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          --bind.pid-file /var/run/named/named.pid \
+          --bind.timeout ${toString cfg.bindTimeout} \
+          --bind.stats-url ${cfg.bindURI} \
+          --bind.stats-version ${cfg.bindVersion} \
+          --bind.stats-groups ${concatStringsSep "," cfg.bindGroups} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, xpdf, imagemagick, tesseract }:
+{ lib, python3Packages, xpdf, imagemagick, tesseract }:
 
 python3Packages.buildPythonPackage rec {
   pname = "invoice2data";
@@ -9,14 +9,14 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1phz0a8jxg074k0im7shrrdfvdps7bn1fa4zwcf8q3sa2iig26l4";
   };
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ imagemagick xpdf tesseract ]) ];
+  makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [ imagemagick xpdf tesseract ]) ];
 
   propagatedBuildInputs = with python3Packages; [ unidecode dateparser pyyaml pillow chardet pdfminer ];
 
   # Tests fails even when ran manually on my ubuntu machine !!
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Data extractor for PDF invoices";
     homepage = "https://github.com/invoice-x/invoice2data";
     license = licenses.mit;

@@ -151,14 +151,13 @@ in with lib; {
         description = "LCDproc - client";
         after = [ "lcdd.service" ];
         wantedBy = [ "lcd.target" ];
+        # Allow restarting for eternity
+        startLimitIntervalSec = lib.mkIf cfg.client.restartForever 0;
         serviceConfig = serviceCfg // {
           ExecStart = "${pkg}/bin/lcdproc -f -c ${clientCfg}";
           # If the server is being restarted at the same time, the client will
           # fail as it cannot connect, so space it out a bit.
           RestartSec = "5";
-          # Allow restarting for eternity
-          StartLimitIntervalSec = lib.mkIf cfg.client.restartForever "0";
-          StartLimitBurst = lib.mkIf cfg.client.restartForever "0";
         };
       };
     };

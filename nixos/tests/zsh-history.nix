@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "zsh-history";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ kampka ];
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ ];
   };
 
   nodes.default = { ... }: {

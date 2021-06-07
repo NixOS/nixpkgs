@@ -1,62 +1,56 @@
 diff -Nur a/pyproj/datadir.py b/pyproj/datadir.py
---- a/pyproj/datadir.py	2020-03-24 12:53:39.417440608 +0100
-+++ b/pyproj/datadir.py	2020-03-24 12:56:19.870089479 +0100
-@@ -66,9 +66,7 @@
+--- a/pyproj/datadir.py	2021-04-10 18:26:52.829018483 +0100
++++ b/pyproj/datadir.py	2021-04-10 18:44:59.155190614 +0100
+@@ -70,7 +70,7 @@
      if _VALIDATED_PROJ_DATA is not None:
          return _VALIDATED_PROJ_DATA
      global _USER_PROJ_DATA
--    internal_datadir = os.path.join(
--        os.path.dirname(os.path.abspath(__file__)), "proj_dir", "share", "proj"
--    )
-+    internal_datadir = "@proj@/share/proj"
+-    internal_datadir = Path(__file__).absolute().parent / "proj_dir" / "share" / "proj"
++    internal_datadir = Path("@proj@/share/proj")
      proj_lib_dirs = os.environ.get("PROJ_LIB", "")
-     prefix_datadir = os.path.join(sys.prefix, "share", "proj")
+     prefix_datadir = Path(sys.prefix, "share", "proj")
  
 diff -Nur a/setup.py b/setup.py
---- a/setup.py	2020-03-24 12:53:39.415440624 +0100
-+++ b/setup.py	2020-03-24 12:52:05.311232522 +0100
+--- a/setup.py	2021-04-10 18:26:52.817018512 +0100
++++ b/setup.py	2021-04-10 18:46:01.652324424 +0100
 @@ -11,7 +11,7 @@
- PROJ_MIN_VERSION = parse_version("6.2.0")
- CURRENT_FILE_PATH = os.path.dirname(os.path.abspath(__file__))
- BASE_INTERNAL_PROJ_DIR = "proj_dir"
--INTERNAL_PROJ_DIR = os.path.join(CURRENT_FILE_PATH, "pyproj", BASE_INTERNAL_PROJ_DIR)
-+INTERNAL_PROJ_DIR = "@proj@"
+ PROJ_MIN_VERSION = parse_version("7.2.0")
+ CURRENT_FILE_PATH = Path(__file__).absolute().parent
+ BASE_INTERNAL_PROJ_DIR = Path("proj_dir")
+-INTERNAL_PROJ_DIR = CURRENT_FILE_PATH / "pyproj" / BASE_INTERNAL_PROJ_DIR
++INTERNAL_PROJ_DIR = Path("@proj@")
  
  
- def check_proj_version(proj_dir):
-@@ -146,7 +146,7 @@
+ def get_proj_version(proj_dir: Path) -> str:
+@@ -150,7 +150,7 @@
      # By default we'll try to get options PROJ_DIR or the local version of proj
      proj_dir = get_proj_dir()
      library_dirs = get_proj_libdirs(proj_dir)
 -    include_dirs = get_proj_incdirs(proj_dir)
-+    include_dirs = get_proj_incdirs("@projdev@")
++    include_dirs = get_proj_incdirs(Path("@projdev@"))
  
-     # setup extension options
-     ext_options = {
+     proj_version = get_proj_version(proj_dir)
+     check_proj_version(proj_version)
 diff -Nur a/test/conftest.py b/test/conftest.py
---- a/test/conftest.py	2020-03-24 12:53:39.417440608 +0100
-+++ b/test/conftest.py	2020-03-24 23:16:47.373972786 +0100
-@@ -1,6 +1,7 @@
- import os
- import shutil
- import tempfile
+--- a/test/conftest.py	2021-04-10 18:26:52.831018478 +0100
++++ b/test/conftest.py	2021-04-10 18:37:01.605682432 +0100
+@@ -2,6 +2,7 @@
+ from contextlib import contextmanager
+ from distutils.version import LooseVersion
+ from pathlib import Path
 +import stat
  
- import pytest
+ import pyproj
+ from pyproj.datadir import get_data_dir, get_user_data_dir, set_data_dir
+diff -Nur a/test/test_cli.py b/test/test_cli.py
+--- a/test/test_cli.py	2021-04-10 18:26:52.831018478 +0100
++++ b/test/test_cli.py	2021-04-10 22:17:04.665088162 +0100
+@@ -14,7 +14,7 @@
+ from test.conftest import grids_available, proj_env, tmp_chdir
  
-@@ -17,6 +18,15 @@
-     with tempfile.TemporaryDirectory() as tmpdir:
-         tmp_data_dir = os.path.join(tmpdir, "proj")
-         shutil.copytree(data_dir, tmp_data_dir)
-+
-+        # Data copied from the nix store is readonly (causes cleanup problem).
-+        # Make it writable.
-+        for r, d, files in os.walk(tmp_data_dir):
-+            os.chmod(r, os.stat(r).st_mode | stat.S_IWUSR)
-+            for f in files:
-+                fpath = os.path.join(r, f)
-+                os.chmod(fpath, os.stat(fpath).st_mode | stat.S_IWUSR)
-+
-         try:
-             os.remove(os.path.join(str(tmp_data_dir), "ntv2_0.gsb"))
-         except OSError:
+ PYPROJ_CLI_ENDPONTS = pytest.mark.parametrize(
+-    "input_command", [["pyproj"], [sys.executable, "-m", "pyproj"]]
++    "input_command", [[sys.executable, "-m", "pyproj"]]
+ )
+ 
+ 

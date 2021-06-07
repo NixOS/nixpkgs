@@ -1,10 +1,9 @@
-{ pkgs, configTxt }:
+{ pkgs, configTxt, firmware ? pkgs.raspberrypifw }:
 
 pkgs.substituteAll {
   src = ./raspberrypi-builder.sh;
   isExecutable = true;
-  inherit (pkgs.buildPackages) bash;
-  path = with pkgs.buildPackages; [coreutils gnused gnugrep];
-  firmware = pkgs.raspberrypifw;
-  inherit configTxt;
+  inherit (pkgs) bash;
+  path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+  inherit firmware configTxt;
 }

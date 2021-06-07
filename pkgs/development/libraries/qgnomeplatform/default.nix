@@ -1,7 +1,8 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
-, pkgconfig
+, nix-update-script
+, pkg-config
 , gtk3
 , glib
 , qtbase
@@ -32,7 +33,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
   ];
 
@@ -52,7 +53,7 @@ mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
@@ -61,7 +62,7 @@ mkDerivation rec {
     description = "QPlatformTheme for a better Qt application inclusion in GNOME";
     homepage = "https://github.com/FedoraQt/QGnomePlatform";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ haskellPackages, haskell, removeReferencesTo }:
+{ haskellPackages, fetchpatch, haskell, removeReferencesTo }:
 
 let
   static = haskell.lib.justStaticExecutables haskellPackages.pandoc;

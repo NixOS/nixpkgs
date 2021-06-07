@@ -3,13 +3,15 @@
 , fetchFromGitHub
 , autoreconfHook
 , go-md2man
-, pkgconfig
+, pkg-config
 , libcap
 , libseccomp
 , python3
 , systemd
 , yajl
 , nixosTests
+, criu
+, system
 }:
 
 let
@@ -25,6 +27,8 @@ let
     "test_pid.py"
     "test_pid_file.py"
     "test_preserve_fds.py"
+    "test_resources"
+    "test_seccomp"
     "test_start.py"
     "test_uid_gid.py"
     "test_update.py"
@@ -34,19 +38,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "0.14";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "14hmdarmhkfp5qgd8ifn7dn895j54ibaficci82q40haqh252l4n";
+    sha256 = "sha256-NlpgdRizQFt5T3CRxt0DVXTVPUbge9uPc9B7LuR3o1k=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook go-md2man pkgconfig python3 ];
+  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
-  buildInputs = [ libcap libseccomp systemd yajl ];
+  buildInputs = [ libcap libseccomp systemd yajl ]
+    # Criu currently only builds on x86_64-linux
+    ++ lib.optional (lib.elem system criu.meta.platforms) criu;
 
   enableParallelBuilding = true;
 
@@ -63,7 +69,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";

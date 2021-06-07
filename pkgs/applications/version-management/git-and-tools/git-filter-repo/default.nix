@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ lib, stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
   pname = "git-filter-repo";
-  version = "2.27.1";
+  version = "2.29.0";
 
   src = fetchurl {
     url = "https://github.com/newren/git-filter-repo/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "07r32n31ryflgz1ds3dz5s3ixv7li3scxwavy9mzbzdhq6bbzl28";
+    sha256 = "00nn7k9jqrybb762486fmigsnbcn9lbvimgpfvvarz4ikdp9y9pb";
   };
 
   buildInputs = [ pythonPackages.python ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/man/man1 Documentation/man1/git-filter-repo.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/newren/git-filter-repo";
     description = "Quickly rewrite git repository history (filter-branch replacement)";
     license = licenses.mit;

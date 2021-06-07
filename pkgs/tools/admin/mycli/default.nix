@@ -7,15 +7,26 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.21.1";
+  version = "1.24.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q9p0yik9cpvpxjs048anvhicfcna84mpl7axv9bwgr48w40lqwg";
+    sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
   };
 
   propagatedBuildInputs = [
-    paramiko pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
+    cli-helpers
+    click
+    configobj
+    importlib-resources
+    paramiko
+    prompt_toolkit
+    pyaes
+    pycrypto
+    pygments
+    pymysql
+    pyperclip
+    sqlparse
   ];
 
   checkInputs = [ pytest mock glibcLocales ];
@@ -24,16 +35,17 @@ buildPythonApplication rec {
     export HOME=.
     export LC_ALL="en_US.UTF-8"
 
-    py.test
+    py.test \
+      --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
 
-  # TODO: remove with next release
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "prompt_toolkit>=2.0.6,<3.0.0" "prompt_toolkit"
+      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
+      --replace "importlib_resources >= 5.0.0" "importlib_resources"
   '';
 
-  meta = {
+  meta = with lib; {
     inherit version;
     description = "Command-line interface for MySQL";
     longDescription = ''
@@ -41,7 +53,7 @@ buildPythonApplication rec {
       syntax highlighting.
     '';
     homepage = "http://mycli.net";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.jojosch ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jojosch ];
   };
 }

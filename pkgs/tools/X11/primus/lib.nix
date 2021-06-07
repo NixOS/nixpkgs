@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , libX11, libGL, mesa
 , nvidia_x11 ? null
 , libglvnd
@@ -42,7 +42,7 @@ in stdenv.mkDerivation {
 
   passthru.glvnd = if nvidia_x11 != null && nvidia_x11.useGLVND then nvidia_x11 else null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Low-overhead client-side GPU offloading";
     homepage = "https://github.com/amonakov/primus";
     platforms = [ "i686-linux" "x86_64-linux" ];

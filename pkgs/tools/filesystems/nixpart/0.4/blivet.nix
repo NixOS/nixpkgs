@@ -1,7 +1,7 @@
 # FIXME: Unify with pkgs/development/python-modules/blivet/default.nix.
 
-{ stdenv, fetchurl, buildPythonApplication, pykickstart, pyparted, pyblock
-, libselinux, cryptsetup, multipath_tools, lsof, utillinux
+{ lib, fetchurl, buildPythonApplication, pykickstart, pyparted, pyblock
+, libselinux, cryptsetup, multipath_tools, lsof, util-linux
 , useNixUdev ? true, systemd ? null
 # useNixUdev is here for bw compatibility
 }:
@@ -24,24 +24,24 @@ buildPythonApplication rec {
     sed -i -e 's|"multipath"|"${multipath_tools}/sbin/multipath"|' \
       blivet/devicelibs/mpath.py blivet/devices.py
     sed -i -e '/"wipefs"/ {
-      s|wipefs|${utillinux.bin}/sbin/wipefs|
+      s|wipefs|${util-linux.bin}/sbin/wipefs|
       s/-f/--force/
     }' blivet/formats/__init__.py
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
-    sed -i -r -e 's|"(u?mount)"|"${utillinux.bin}/bin/\1"|' blivet/util.py
+    sed -i -r -e 's|"(u?mount)"|"${util-linux.bin}/bin/\1"|' blivet/util.py
     sed -i -e '/find_library/,/find_library/ {
-      c libudev = "${systemd.lib}/lib/libudev.so.1"
+      c libudev = "${lib.getLib systemd}/lib/libudev.so.1"
     }' blivet/pyudev.py
   '';
 
   propagatedBuildInputs = [
     pykickstart pyparted pyblock libselinux cryptsetup
-  ] ++ stdenv.lib.optional useNixUdev systemd;
+  ] ++ lib.optional useNixUdev systemd;
 
   # tests are currently _heavily_ broken upstream
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
     license = with licenses; [ gpl2Plus lgpl21Plus ];

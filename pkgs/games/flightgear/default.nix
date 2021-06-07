@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wrapQtAppsHook
+{ lib, stdenv, fetchurl, wrapQtAppsHook
 , freeglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
@@ -6,15 +6,15 @@
 }:
 
 let
-  version = "2020.1.2";
+  version = "2020.3.8";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "0ldsjb54k8nb99h6n4f4x20nawd2pa0a8skkwkrgckdpmdv0zwyk";
+      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
+      sha256 = "sha256-/KFumHRkmRvsU/L1i11jG/KbqobnOEP7l4lyPMKHycA=";
     };
 
     phases = [ "installPhase" ];
@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "1770kgwa7z70sx6da9x1q9cszpd3ywz6nn8jrb6xv8ldjqcpqpvb";
+    sha256 = "XXDqhZ9nR+FwQ3LauZe8iGxOjlyDXDrEtj61BQGVDYc=";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
   # a decent icon :-)
   iconsrc = fetchurl {
-    url = "http://wiki.flightgear.org/images/6/62/FlightGear_logo.png";
+    url = "https://wiki.flightgear.org/w/images/6/62/FlightGear_logo.png";
     sha256 = "1ikz413jia55vfnmx8iwrlxvx8p16ggm81mbrj66wam3q7s2dm5p";
   };
 
@@ -69,9 +69,7 @@ stdenv.mkDerivation rec {
     "--set FG_ROOT ${data}/share/FlightGear"
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flight simulator";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

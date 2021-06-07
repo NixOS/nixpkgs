@@ -69,6 +69,11 @@ let
         if-carrier-up = "";
       }.${cfg.wait}}
 
+      ${optionalString (config.networking.enableIPv6 == false) ''
+        # Don't solicit or accept IPv6 Router Advertisements and DHCPv6 if disabled IPv6
+        noipv6
+      ''}
+
       ${cfg.extraConfig}
     '';
 
@@ -186,9 +191,8 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
-        wants = [ "network.target" "systemd-udev-settle.service" ];
+        wants = [ "network.target" ];
         before = [ "network-online.target" ];
-        after = [ "systemd-udev-settle.service" ];
 
         restartTriggers = [ exitHook ];
 

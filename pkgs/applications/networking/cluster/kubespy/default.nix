@@ -2,17 +2,19 @@
 
 buildGoModule rec {
   pname = "kubespy";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "pulumi";
     repo = "kubespy";
-    sha256 = "1p0qmn6458pa9la6zkvyrkgs2rhzfwsk9m3rk5fkmcfbh7b031r8";
+    sha256 = "1xrwhxw2y0zpzsxp1rlm1wd0aqw6jda5ai5y1ards5djqsbsv87g";
   };
-  
-  vendorSha256 = "0q85is01cbgxflnqdvxc9w5iqdizgvsc44h8z21j712bm2w7blqq";
-  
+
+  vendorSha256 = "0ajhbjs9ijpxp3svvj7pjiac78ps7vkqmqrizq18mllsry0m9pcl";
+
+  doCheck = false;
+
   # TODO: enable after https://github.com/pulumi/kubespy/issues/72 is addressed.
   # postInstall = ''
   # 	for shell in bash zsh; do

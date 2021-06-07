@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.5.0.1";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7424f2c8511c186cd5424bbf31045b77435b37a8d604990b79d4e70d741148bb";
+    sha256 = "029a70cb45c6171c329dfc890cde0879f8c52d6f3922794796e06f577bb03db4";
   };
 
   doCheck = false; # I don't know why, but with doCheck = true it fails.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/pkginfo";
     license = licenses.mit;
     description = "Query metadatdata from sdists / bdists / installed packages";

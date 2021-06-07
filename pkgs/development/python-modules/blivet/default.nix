@@ -1,11 +1,8 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
-, pyudev, six, libselinux, cryptsetup, multipath-tools, lsof, utillinux
+{ lib, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
+, pyudev, six, libselinux, multipath-tools, lsof, util-linux
 }:
 
-let
-  pyenable = { enablePython = true; };
-  cryptsetupWithPython = cryptsetup.override pyenable;
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "blivet";
   version = "0.67";
 
@@ -22,21 +19,21 @@ in buildPythonPackage rec {
       -e '/^def set_friendly_names/a \    return False' \
       blivet/devicelibs/mpath.py
     sed -i -e '/"wipefs"/ {
-      s|wipefs|${utillinux}/sbin/wipefs|
+      s|wipefs|${util-linux}/sbin/wipefs|
       s/-f/--force/
     }' blivet/formats/__init__.py
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
-    sed -i -r -e 's|"(u?mount)"|"${utillinux}/bin/\1"|' blivet/util.py
+    sed -i -r -e 's|"(u?mount)"|"${util-linux}/bin/\1"|' blivet/util.py
   '';
 
   propagatedBuildInputs = [
-    pykickstart pyparted pyblock pyudev libselinux cryptsetupWithPython
+    pykickstart pyparted pyblock pyudev libselinux
     six
   ];
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
     license = with licenses; [ gpl2Plus lgpl21Plus ];

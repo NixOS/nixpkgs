@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "k6";
-  version = "0.26.2";
+  version = "0.31.1";
 
   goPackagePath = "github.com/loadimpact/k6";
 
@@ -10,12 +10,12 @@ buildGoPackage rec {
     owner = "loadimpact";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s5haycpfnfyvxxhhm7205gzylsbjndx9f134f245p4xm5bxhxbf";
+    sha256 = "sha256-wngOG0uSNoUU+88oShDpCgPpzuevzJxcwzSzWS3PzAw=";
   };
 
   subPackages = [ "./" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern load testing tool, using Go and JavaScript";
     homepage = "https://k6.io/";
     changelog = "https://github.com/loadimpact/k6/releases/tag/v${version}";

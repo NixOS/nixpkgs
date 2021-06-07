@@ -1,5 +1,5 @@
-{ stdenv, pkgsBuildBuild, buildPackages
-, fetchurl, makeWrapper, gawk, pkgconfig
+{ lib, stdenv, pkgsBuildBuild, buildPackages
+, fetchurl, makeWrapper, gawk, pkg-config
 , libtool, readline, gmp
 }:
 
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-error-on-warning" ]
     # Guile needs patching to preset results for the configure tests about
     # pthreads, which work only in native builds.
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
                           "--with-threads=no";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
                            pkgsBuildBuild.guile_1_8;
-  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
+  nativeBuildInputs = [ makeWrapper gawk pkg-config ];
   buildInputs = [ readline libtool ];
 
   propagatedBuildInputs = [
@@ -37,7 +37,10 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-  patches = [ ./cpp-4.5.patch ];
+  patches = [
+    ./cpp-4.5.patch
+    ./CVE-2016-8605.patch
+  ];
 
   preBuild = ''
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
@@ -67,9 +70,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Embeddable Scheme implementation";
     homepage    = "https://www.gnu.org/software/guile/";
-    license     = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms   = stdenv.lib.platforms.unix;
+    license     = lib.licenses.lgpl2Plus;
+    maintainers = [ lib.maintainers.ludo ];
+    platforms   = lib.platforms.unix;
 
     longDescription = ''
       GNU Guile is an interpreter for the Scheme programming language,

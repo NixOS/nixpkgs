@@ -18,9 +18,10 @@ stdenv.mkDerivation {
     sha256 = "1c5axdngxaxj5vc6lr8sxb99mr5adsm1dnjckaxc23kq78pc8cn7";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ boost llvmPackages.libclang ]
-    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames Cocoa ];
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
@@ -89,7 +90,7 @@ stdenv.mkDerivation {
                 "'$out/lib/ycmd/ycmd/__main__.py'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A code-completion and comprehension server";
     homepage = "https://github.com/Valloric/ycmd";
     license = licenses.gpl3;

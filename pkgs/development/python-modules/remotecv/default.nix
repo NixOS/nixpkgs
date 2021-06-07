@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pillow, pyres, nose
+{ lib, buildPythonPackage, fetchFromGitHub, pillow, pyres, nose
 , preggy, numpy, yanc, nose-focus, mock, opencv }:
 
 buildPythonPackage rec {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     nosetests --with-yanc -s tests/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenCV worker for facial and feature recognition";
     homepage = "https://github.com/thumbor/remotecv/wiki";
     license = licenses.mit;

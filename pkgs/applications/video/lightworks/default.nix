@@ -1,36 +1,42 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
-, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, gnome2, libGLU
-, nvidia_cg_toolkit, zlib, openssl, portaudio
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
+, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
+, libGL, nvidia_cg_toolkit, zlib, openssl, libuuid , alsaLib, udev, libjack2
 }:
 let
-  fullPath = stdenv.lib.makeLibraryPath [
+  fullPath = lib.makeLibraryPath [
     stdenv.cc.cc
     gtk3
     gdk-pixbuf
     cairo
     libjpeg_original
     glib
-    gnome2.pango
+    pango
+    libGL
     libGLU
     nvidia_cg_toolkit
     zlib
     openssl
-    portaudio
+    libuuid
+    alsaLib
+    libjack2
+    udev
   ];
 
   lightworks = stdenv.mkDerivation rec {
-    version = "14.0.0";
+    version = "2021.2.1";
+    rev = "128456";
     pname = "lightworks";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "http://downloads.lwks.com/v14/lwks-14.0.0-amd64.deb";
-          sha256 = "66eb9f9678d979db76199f1c99a71df0ddc017bb47dfda976b508849ab305033";
+          url = "https://cdn.lwks.com/releases/${version}/lightworks_${lib.versions.majorMinor version}_r${rev}.deb";
+          sha256 = "sha256-GkTg43IUF1NgEm/wT9CZw68Dw/R2BYBU/F4bsCxQowQ=";
         }
       else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
-    buildInputs = [ dpkg makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ dpkg ];
 
     phases = [ "unpackPhase" "installPhase" ];
     unpackPhase = "dpkg-deb -x ${src} ./";
@@ -47,7 +53,7 @@ let
       # This adds it to lightworks' search path while keeping the default
       # using the FONTCONFIG_FILE env variable
       echo "<?xml version='1.0'?>
-      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
           <dir>/usr/share/fonts/truetype</dir>
           <include>/etc/fonts/fonts.conf</include>
@@ -80,8 +86,8 @@ in buildFHSUserEnv {
   meta = {
     description = "Professional Non-Linear Video Editor";
     homepage = "https://www.lwks.com/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.antonxy ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ antonxy vojta001 ];
     platforms = [ "x86_64-linux" ];
   };
 }

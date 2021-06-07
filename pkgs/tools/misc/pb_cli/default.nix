@@ -1,5 +1,5 @@
 { screenshots ? true, video ? false, clipboard ? true
-, stdenv, jq, curl, fetchFromGitHub, makeWrapper, maim ? null, xclip ? null, capture ? null }:
+, lib, stdenv, jq, curl, fetchFromGitHub, makeWrapper, maim ? null, xclip ? null, capture ? null }:
 
 assert screenshots -> maim != null;
 assert video -> capture != null;
@@ -16,21 +16,21 @@ stdenv.mkDerivation rec {
     sha256 = "0w6a789zffvz4ixsb92q45n5s4xyx7s2l2f07972i3dajaaai8z7";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  liveDeps = [ jq curl ] ++ stdenv.lib.optional screenshots maim
-                         ++ stdenv.lib.optional video capture
-                         ++ stdenv.lib.optional clipboard xclip;
+  liveDeps = [ jq curl ] ++ lib.optional screenshots maim
+                         ++ lib.optional video capture
+                         ++ lib.optional clipboard xclip;
 
   installPhase = ''
     install -Dm755 src/pb.sh $out/bin/pb
 
     patchShebangs $out/bin/pb
     wrapProgram $out/bin/pb \
-      --prefix PATH : '${stdenv.lib.makeBinPath liveDeps}'
+      --prefix PATH : '${lib.makeBinPath liveDeps}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A no bullshit 0x0.st client";
     homepage = "https://github.com/ptpb/pb_cli";
     maintainers = [ maintainers.ar1a ];

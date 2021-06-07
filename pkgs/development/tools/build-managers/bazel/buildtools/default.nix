@@ -1,29 +1,32 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "bazel-buildtools";
-  version = "3.3.0";
-
-  goPackagePath = "github.com/bazelbuild/buildtools";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = version;
-    sha256 = "0g411gjbm02qd5b50iy6kk81kx2n5zw5x1m6i6g7nrmh38p3pn9k";
+    sha256 = "0q7b9zh38vblqs5lwhjk28km89p706aky4wv6bwz2vg9gl6bfclq";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "1w6i1lb72mfdyb901gpl9yc6ql73j5kik6li0j5jv5ab2m3j9qvf";
+
+  preBuild = ''
+    rm -r warn/docs
+  '';
+
+  doCheck = false;
 
   excludedPackages = [ "generatetables" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.buildVersion=${version} -X main.buildScmRevision=${src.rev}" ];
 
-  meta = with stdenv.lib; {
-    description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps.";
+  meta = with lib; {
+    description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";
     homepage = "https://github.com/bazelbuild/buildtools";
     license = licenses.asl20;
     maintainers = with maintainers; [ elasticdog uri-canva marsam ];
-    platforms = platforms.all;
   };
 }

@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "sympy";
-  version = "1.6"; # Upgrades may break sage. Please test or ping @timokau.
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9769e3d2952e211b1245f1d0dfdbfbdde1f7779a3953832b7dd2b88a21ca6cc6";
+    sha256 = "sha256-o96SYel1Nbg7uGB7DaLH0DEmZQ+v6isniWV7Ipwkay4=";
   };
 
   checkInputs = [ glibcLocales ];
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "A Python library for symbolic mathematics";
     homepage    = "https://www.sympy.org/";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ lovek323 timokau ];
+    maintainers = with maintainers; [ lovek323 ] ++ teams.sage.members;
   };
 }

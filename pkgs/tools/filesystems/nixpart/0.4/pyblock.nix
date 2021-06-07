@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, lvm2, dmraid }:
+{ lib, stdenv, fetchurl, python, lvm2, dmraid }:
 
 stdenv.mkDerivation rec {
   pname = "pyblock";
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     "SITELIB=$(out)/lib/${python.libPrefix}/site-packages"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Interface for working with block devices";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, gettext, itstool, exempi, lcms2, libexif, libjpeg, librsvg, libxml2, libpeas, shared-mime-info, gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, exempi, lcms2, libexif, libjpeg, librsvg, libxml2, libpeas, shared-mime-info, gtk3, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "eom";
-  version = "1.24.0";
+  version = "1.24.2";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zzximp2534bky0vac219alafblw6m0lis0gncq92017s6c1mb77";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "08rjckr1hdw7c31f2hzz3vq0rn0c5z3hmvl409y6k6ns583k1bgf";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     itstool
     wrapGAppsHook
@@ -32,11 +32,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = {
     description = "An image viewing and cataloging program for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

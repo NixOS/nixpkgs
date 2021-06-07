@@ -1,24 +1,28 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.37.4";
+  version = "1.59.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "02jr0qz130jz7ncfch1jry0prd00669j53mlmpb6ky0xiz5y2zq1";
+    sha256 = "sha256-2i9rmk9aAnjTJY+w/NKJOaLX+tpkt3vG07iLCsSGzdU=";
   };
 
-  goPackagePath = "github.com/VictoriaMetrics/VictoriaMetrics";
+  vendorSha256 = null;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/lib/buildinfo.Version=${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}" ];
+
+  passthru.tests = { inherit (nixosTests) victoriametrics; };
 
   meta = with lib; {
     homepage = "https://victoriametrics.com/";
     description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
     license = licenses.asl20;
     maintainers = [ maintainers.yorickvp ];
+    changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${version}";
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,11 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchPypi, fetchpatch
 , nose, numpy
 , bottle, pyyaml, redis, six
-, zlib }:
+, zlib
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Jug";
-  version = "2.0.0";
+  version = "2.1.1";
   buildInputs = [ nose numpy ];
   propagatedBuildInputs = [
     bottle
@@ -18,10 +19,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1am73pis8qrbgmpwrkja2qr0n9an6qha1k1yp87nx6iq28w5h7cv";
+    sha256 = "8ae7bb45d4495cf3d0dc5dd9df104a35bba2ca83eb4576732cadf8469e7cf1a1";
   };
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "jug" ];
+
+  meta = with lib; {
     description = "A Task-Based Parallelization Framework";
     license = licenses.mit;
     homepage = "https://jug.readthedocs.io/";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation {
   pname = "xilinx-bootgen";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     install -Dm755 bootgen $out/bin/bootgen
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate Boot Images for Xilinx Zynq and ZU+ SoCs";
     longDescription = ''
       Bootgen for Xilinx Zynq and ZU+ SoCs, without code related to generating

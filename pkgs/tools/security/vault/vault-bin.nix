@@ -1,30 +1,26 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 let
-  version = "1.3.0";
+  version = "1.7.2";
 
   sources = let
     base = "https://releases.hashicorp.com/vault/${version}";
   in {
     x86_64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_amd64.zip";
-      sha256 = "1crfj4gd1qwwa2xidd0pjffv0n6hf5hbhv6568m6zc1ig0qqm6yq";
+      sha256 = "1g37pgj7hbi6vfpwq9rrh6is980lfwbq5jb4736jfp5m360vprjy";
     };
     i686-linux = fetchurl {
       url = "${base}/vault_${version}_linux_386.zip";
-      sha256 = "0pyf0kyvxpmx3fwfvin1r0x30r9byx9lyi81894q06xrhiwbqc0l";
+      sha256 = "0777xkkfiy0s3nyygcfpw0nbfsm6yz1n5hxcvfafhzcdyr58fpb7";
     };
     x86_64-darwin = fetchurl {
       url = "${base}/vault_${version}_darwin_amd64.zip";
-      sha256 = "113vnpz9n6y7z2k9jqpfpxqxqbrmd9bhny79yaxqzkfdqw8vyv3g";
-    };
-    i686-darwin = fetchurl {
-      url = "${base}/vault_${version}_darwin_386.zip";
-      sha256 = "0d191qai0bpl7cyivca26wqgycsj2dz08809z147d1vnrz321v6w";
+      sha256 = "0wzmah542bhyvrm9brhrx7drjyzan8vxhqnm0gjak5wlrcnf2dvx";
     };
     aarch64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_arm64.zip";
-      sha256 = "1bk5y3knc42mh07gnnn6p109qz908014620h1s0348wp4qfdy49w";
+      sha256 = "0cs56ircad2z2msqgb0l5h53cwmwybi5rs4y2jigz4rq4ndx9f9b";
     };
   };
 
@@ -39,16 +35,20 @@ in stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/bash-completion/completions
     mv vault $out/bin
     echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.vaultproject.io";
     description = "A tool for managing secrets, this binary includes the UI";
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "i686-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
     license = licenses.mpl20;
-    maintainers = with maintainers; [ offline psyanticy mkaito ];
+    maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man ];
   };
 }

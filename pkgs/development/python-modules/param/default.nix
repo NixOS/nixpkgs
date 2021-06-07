@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "param";
-  version = "1.9.3";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10crjlsn5vx03xwlnhga9faqq2rlw0qwabi45vnvhmz22qbd8w43";
+    sha256 = "1f0f1133fbadcd2c5138e579b9934e29fd00f803af01d9bf6f9e6b80ecf1999b";
   };
 
   checkInputs = [ flake8 nose ];

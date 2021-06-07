@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "timelapse-deflicker";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     FileType ClassMethodMaker
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple script to deflicker images taken for timelapses";
     homepage = "https://github.com/cyberang3l/timelapse-deflicker";
     license = licenses.gpl3;

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
+{ lib, stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
 , libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11
-, zlib, fontconfig, dpkg, libproxy, libxml2, gstreamer, gst_all_1, dbus }:
+, zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus }:
 
 let
   arch =
@@ -12,7 +12,7 @@ let
     then "0dwnppn5snl5bwkdrgj4cyylnhngi0g66fn2k41j3dvis83x24k6"
     else "0gndbxrj3kgc2dhjqwjifr3cl85hgpm695z0wi01wvwzhrjqs0l2";
   version = "7.1.8.3036";
-  fullPath = stdenv.lib.makeLibraryPath [
+  fullPath = lib.makeLibraryPath [
     glibc
     glib
     stdenv.cc.cc
@@ -33,7 +33,6 @@ let
     fontconfig
     libproxy
     libxml2
-    gstreamer
     dbus
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -80,7 +79,7 @@ stdenv.mkDerivation rec {
     for a in $out/opt/google/earth/free/*.so* ; do
       patchelf --set-rpath "${fullPath}:\$ORIGIN" $a
     done
-    
+
     # Add desktop config file and icons
     mkdir -p $out/share/{applications,icons/hicolor/{16x16,22x22,24x24,32x32,48x48,64x64,128x128,256x256}/apps,pixmaps}
     ln -s $out/opt/google/earth/free/google-earth.desktop $out/share/applications/google-earth.desktop
@@ -97,7 +96,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A world sphere viewer";
     homepage = "http://earth.google.com";
     license = licenses.unfree;

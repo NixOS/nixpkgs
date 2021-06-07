@@ -83,10 +83,10 @@
       like games.
       <itemizedlist>
       <para>This can be achieved with the following options which the desktop manager default enables, excluding <literal>games</literal>.</para>
-      <listitem><para><xref linkend="opt-services.gnome3.core-os-services.enable"/></para></listitem>
-      <listitem><para><xref linkend="opt-services.gnome3.core-shell.enable"/></para></listitem>
-      <listitem><para><xref linkend="opt-services.gnome3.core-utilities.enable"/></para></listitem>
-      <listitem><para><xref linkend="opt-services.gnome3.games.enable"/></para></listitem>
+      <listitem><para><option>services.gnome3.core-os-services.enable</option></para></listitem>
+      <listitem><para><option>services.gnome3.core-shell.enable</option></para></listitem>
+      <listitem><para><option>services.gnome3.core-utilities.enable</option></para></listitem>
+      <listitem><para><option>services.gnome3.games.enable</option></para></listitem>
       </itemizedlist>
       With these options we hope to give users finer grained control over their systems. Prior to this change you'd either have to manually
       disable options or use <option>environment.gnome3.excludePackages</option> which only excluded the optional applications.

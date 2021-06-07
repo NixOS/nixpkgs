@@ -1,56 +1,58 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, pyopenssl
 , libuv
-, psutil
-, isPy27
 , CoreServices
 , ApplicationServices
 # Check Inputs
+, aiohttp
+, psutil
+, pyopenssl
 , pytestCheckHook
-# , pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.14.0";
-  disabled = isPy27;
+  version = "0.15.2";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07j678z9gf41j98w72ysrnb5sa41pl5yxd7ib17lcwfxqz0cjfhj";
+    sha256 = "2bb0624a8a70834e54dde8feed62ed63b50bad7a1265c40d6403a2ac447bce01";
   };
-
-  patches = lib.optional stdenv.isDarwin ./darwin_sandbox.patch;
 
   buildInputs = [
     libuv
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
-
-  pythonImportsCheck = [
-    "uvloop"
-    "uvloop.loop"
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+    ApplicationServices
   ];
 
   dontUseSetuptoolsCheck = true;
-  checkInputs = [ pytestCheckHook pyopenssl psutil ];
+  checkInputs = [
+    aiohttp
+    pytestCheckHook
+    pyopenssl
+    psutil
+  ];
 
   pytestFlagsArray = [
     # from pytest.ini, these are NECESSARY to prevent failures
     "--capture=no"
     "--assert=plain"
+    "--strict"
     "--tb=native"
-    # ignore code linting tests
-    "--ignore=tests/test_sourcecode.py"
-    # Fails on Python 3.8
-    # https://salsa.debian.org/python-team/modules/uvloop/-/commit/302a7e8f5a2869e13d0550cd37e7a8f480e79869
-    "--ignore=tests/test_tcp.py"
+  ] ++ lib.optionals (stdenv.isAarch64) [
+    # test gets stuck in epoll_pwait on hydras aarch64 builders
+    # https://github.com/MagicStack/uvloop/issues/412
+    "--deselect" "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
   ];
 
-  disabledTests = [
-    "test_sock_cancel_add_reader_race"  # asyncio version of test is supposed to be skipped but skip doesn't happen. uvloop version runs fine
+  disabledTestPaths = [
+    # ignore code linting tests
+    "tests/test_sourcecode.py"
   ];
 
   # force using installed/compiled uvloop vs source by moving tests to temp dir
@@ -58,13 +60,16 @@ buildPythonPackage rec {
     export TEST_DIR=$(mktemp -d)
     cp -r tests $TEST_DIR
     pushd $TEST_DIR
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Some tests fail on Darwin
-    rm tests/test_[stu]*.py
   '';
+
   postCheck = ''
     popd
   '';
+
+  pythonImportsCheck = [
+    "uvloop"
+    "uvloop.loop"
+  ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

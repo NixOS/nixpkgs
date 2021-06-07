@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, unidecode, regex, python }:
+{ lib, buildPythonPackage, fetchPypi, unidecode, regex, python }:
 
 buildPythonPackage rec {
   pname = "awesome-slugify";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
       ${python.interpreter} -m unittest discover
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dimka665/awesome-slugify";
     description = "Python flexible slugify function";
     license = licenses.gpl3;

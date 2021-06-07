@@ -1,5 +1,4 @@
 { lib
-, fetchpatch
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -9,25 +8,21 @@
 , numpy
 , six
 , typing-extensions
-, typing
-, pytestrunner
-, pytest
+, pytestCheckHook
 , nbval
 , tabulate
 }:
 
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.7.0";
+  version = "1.9.0";
 
-  # Due to Protobuf packaging issues this build of Onnx with Python 2 gives
-  # errors on import.
-  # Also support for Python 2 will be deprecated from Onnx v1.8.
+  # Python 2 is not supported as of Onnx v1.8
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j6rgfbhsw3a8id8pyg18y93k68lbjbj1kq6qia36h69f6pvlyjy";
+    sha256 = "0yjv2axz2vc2ysniwislsp53fsb8f61y1warrr2ppn2d9ijml1d9";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,17 +32,20 @@ buildPythonPackage rec {
     numpy
     six
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.5") [ typing ];
+  ];
 
   checkInputs = [
-    pytestrunner
-    pytest
+    pytestCheckHook
     nbval
     tabulate
   ];
 
   postPatch = ''
-    patchShebangs tools/protoc-gen-mypy.py
+    chmod +x tools/protoc-gen-mypy.sh.in
+    patchShebangs tools/protoc-gen-mypy.sh.in tools/protoc-gen-mypy.py
+
+    substituteInPlace setup.py \
+      --replace "setup_requires.append('pytest-runner')" ""
   '';
 
   preBuild = ''

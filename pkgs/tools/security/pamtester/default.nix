@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam }:
+{ lib, stdenv, fetchurl, pam }:
 
 stdenv.mkDerivation rec {
   name = "pamtester-0.1.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility program to test the PAM facility";
     homepage = "http://pamtester.sourceforge.net/";
     license = licenses.bsd3;

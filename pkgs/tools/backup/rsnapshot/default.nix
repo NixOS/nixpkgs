@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, perl, openssh, rsync, logger }:
+{ fetchurl, lib, stdenv, perl, openssh, rsync, logger }:
 
 stdenv.mkDerivation rec {
   name = "rsnapshot-1.4.3";
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
       "/usr/bin/pod2man" "${perl}/bin/pod2man"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A filesystem snapshot utility for making backups of local and remote systems";
     homepage = "https://rsnapshot.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

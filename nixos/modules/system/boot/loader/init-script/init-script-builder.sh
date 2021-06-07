@@ -49,11 +49,10 @@ addEntry() {
       echo "#!/bin/sh"
       echo "# $name"
       echo "# created by init-script-builder.sh"
-      echo "export systemConfig=$(readlink -f $path)"
       echo "exec $stage2"
     )"
 
-    [ "$path" != "$defaultConfig" ] || { 
+    [ "$path" != "$defaultConfig" ] || {
       echo "$content" > $tmp
       echo "# older configurations: $targetOther" >> $tmp
       chmod +x $tmp

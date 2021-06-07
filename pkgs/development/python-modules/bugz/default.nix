@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 }:
@@ -16,7 +16,7 @@ buildPythonPackage {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/williamh/pybugz";
     description = "Command line interface for Bugzilla";
     license = licenses.gpl2;

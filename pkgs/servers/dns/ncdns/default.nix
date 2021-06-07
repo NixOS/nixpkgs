@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "ncdns";
-  version = "0.0.10.3";
+  version = "2020-11-22";
 
   goPackagePath = "github.com/namecoin/ncdns";
   goDeps = ./deps.nix;
@@ -10,17 +10,13 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "ncdns";
-    rev = "v${version}";
-    sha256 = "12q5al48mkjhgyk7z5wyklzzrdbcqhwxl79axa4gh9ld75prghbq";
+    rev = "2fa54cd3b5480dba82170ab8ecb511fbd4977c41";
+    sha256 = "0mrxbg5lmy3s281ff6nxpp03z4mqwq7h5hkqm9qy8nb280x1sx7h";
   };
 
-  patches = [ ./fix-tpl-path.nix ];
+  patches = [ ./fix-tpl-path.patch ];
 
   buildInputs = [ libcap ];
-
-  preBuild = ''
-    go generate github.com/namecoin/x509-signature-splice/...
-  '';
 
   postInstall = ''
     mkdir -p "$out/share"
@@ -32,7 +28,6 @@ buildGoPackage rec {
     description = "Namecoin to DNS bridge daemon";
     homepage = "https://github.com/namecoin/ncdns";
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 

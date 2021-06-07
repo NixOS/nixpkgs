@@ -2,16 +2,19 @@
 
 buildGoModule rec {
   pname = "mtail";
-  version = "3.0.0-rc36";
+  version = "3.0.0-rc46";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mtail";
     rev = "v${version}";
-    sha256 = "1xdpjzcr143f7430wl9l6zzq9yhbkirr3fbfw60f10zpglrcx8a4";
+    sha256 = "sha256-/PiwrXr/oG/euWDOqcXvKKvyvQbp11Ks8LjmmJjDtdU=";
   };
 
-  vendorSha256 = "02fnvy897cygmipc5snza556qihjwrp1lf9qi9f5dzarphd6d0pw";
+  vendorSha256 = "sha256-aBGJ+JJjm9rt7Ic90iWY7vGtZQN0u6jlBnAMy1nivQM=";
+
+  doCheck = false;
+
   subPackages = [ "cmd/mtail" ];
 
   preBuild = ''

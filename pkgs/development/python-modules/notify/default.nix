@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python
 , pygobject2
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1kh4spwgqxm534qlzzf2ijchckvs0pwjxl1irhicjmlg7mybnfvx";
   };
 
-  patches = stdenv.lib.singleton (fetchurl {
+  patches = lib.singleton (fetchurl {
     name = "libnotify07.patch";
     url = "https://src.fedoraproject.org/cgit/notify-python.git/plain/"
         + "libnotify07.patch?id2=289573d50ae4838a1658d573d2c9f4c75e86db0c";
@@ -27,12 +27,12 @@ stdenv.mkDerivation {
       configure
   '';
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = [ python pygobject2 pygtk pkgs.libnotify pkgs.glib pkgs.gtk2 pkgs.dbus-glib ];
 
   postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for libnotify";
     homepage = "http://www.galago-project.org/";
     license = licenses.lgpl3;

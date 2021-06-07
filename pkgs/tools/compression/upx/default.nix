@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ucl, zlib, perl }:
+{ lib, stdenv, fetchurl, ucl, zlib, perl }:
 
 stdenv.mkDerivation rec {
   pname = "upx";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp src/upx.out $out/bin/upx
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://upx.github.io/";
     description = "The Ultimate Packer for eXecutables";
     license = licenses.gpl2Plus;

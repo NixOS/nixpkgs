@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gobject-introspection
 , gsettings-desktop-schemas
 , makeWrapper
@@ -14,23 +14,25 @@
 , libX11
 , libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
 , libXi
+, libXext
 
-, gnome3 # To pass updateScript
+, gnome # To pass updateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.36.0";
+  version = "2.40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0nn0lnf07ayysq8c8irmvc91c2dszn04m5qs6jy60g3y1bg5gnl8";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0miqn8531czy9ffpxnsxsnk12w3d6sqjda3qyix8kns2xsjf6rlz";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection makeWrapper ];
-  buildInputs = [ libX11 libXtst libXi ];
+  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection makeWrapper ];
+  # libXext is a transitive dependency of libXi
+  buildInputs = [ libX11 libXtst libXi libXext ];
   # In atspi-2.pc dbus-1 glib-2.0
   propagatedBuildInputs = [ dbus glib ];
 
@@ -43,19 +45,20 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon" ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
   postFixup = ''
     # Cannot use wrapGAppsHook'due to a dependency cycle
     wrapProgram $out/libexec/at-spi-bus-launcher \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
     license = licenses.lgpl21Plus;

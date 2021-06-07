@@ -1,33 +1,39 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , ninja
 , meson
-, pkgconfig
+, pkg-config
 , vala
 , gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
 , glib
 , libgudev
 , libevdev
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmanette";
-  version = "0.2.4";
+  version = "0.2.6";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1xrc6rh73v5w3kbkflzv1yg8sbxk4wf06hfk95raxhxlssza9q2g";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1b3bcdkk5xd5asq797cch9id8692grsjxrc1ss87vv11m1ck4rb3";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
   ];
 
   buildInputs = [
@@ -36,17 +42,22 @@ stdenv.mkDerivation rec {
     libevdev
   ];
 
+  mesonFlags = [
+    "-Ddoc=true"
+  ];
+
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple GObject game controller library";
-    homepage = "https://gitlab.gnome.org/aplazas/libmanette";
+    homepage = "https://gnome.pages.gitlab.gnome.org/libmanette/";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

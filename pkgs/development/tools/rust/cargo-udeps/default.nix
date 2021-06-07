@@ -1,31 +1,30 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, CoreServices, Security, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, CoreServices, Security, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-udeps";
-  version = "0.1.12";
+  version = "0.1.21";
 
   src = fetchFromGitHub {
     owner = "est31";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hf2zkv3yd72kkvdwigms3wzchmh4i56ym3swpx35dij2h8g08mx";
+    sha256 = "sha256-Voei7j3WRDu70NkcJvjqPJ4ikOUupOhvFNEHHRyF6/Q=";
   };
 
-  cargoSha256 = "0xb9fmcrsm47zkb26jw5rsi9wfz3jh19fbc74gnsrffdmfsd7mm2";
+  cargoSha256 = "sha256-zMya7bEehNKIfwQtJ252sflg06P4Ra8/lgBjn4UUqRg=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv ];
 
   # Requires network access
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Find unused dependencies in Cargo.toml";
     homepage = "https://github.com/est31/cargo-udeps";
     license = licenses.mit;
     maintainers = with maintainers; [ b4dm4n ];
-    platforms = platforms.all;
   };
 }

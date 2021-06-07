@@ -1,15 +1,15 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 
 , file
 , icu
 , gumbo
-, lzma
+, xz
 , xapian
 , zimlib
 , zlib
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "1vkrrq929a8s3m5rri1lg0l2vd0mc9n2fsb2z1g88k4n4j2l6f19";
   };
 
-  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = [ file icu gumbo lzma zimlib zlib xapian ];
+  nativeBuildInputs = [ automake autoconf libtool pkg-config ];
+  buildInputs = [ file icu gumbo xz zimlib zlib xapian ];
   setSourceRoot = ''
     sourceRoot=$(echo */zimwriterfs)
   '';
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A console tool to create ZIM files";
     homepage = "http://git.wikimedia.org/log/openzim";
-    maintainers = with stdenv.lib.maintainers; [ robbinch ];
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; [ linux ];
+    maintainers = with lib.maintainers; [ robbinch ];
+    license = lib.licenses.gpl3;
+    platforms = with lib.platforms; [ linux ];
   };
 }

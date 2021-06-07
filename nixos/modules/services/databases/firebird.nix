@@ -43,22 +43,21 @@ in
       enable = mkEnableOption "the Firebird super server";
 
       package = mkOption {
-        default = pkgs.firebirdSuper;
-        defaultText = "pkgs.firebirdSuper";
+        default = pkgs.firebird;
+        defaultText = "pkgs.firebird";
         type = types.package;
-        /*
-          Example: <code>package = pkgs.firebirdSuper.override { icu =
-            pkgs.icu; };</code> which is not recommended for compatibility
-            reasons. See comments at the firebirdSuper derivation
-        */
-
+        example = ''
+          <code>package = pkgs.firebird_3;</code>
+        '';
         description = ''
-          Which firebird derivation to use.
+          Which Firebird package to be installed: <code>pkgs.firebird_3</code>
+          For SuperServer use override: <code>pkgs.firebird_3.override { superServer = true; };</code>
         '';
       };
 
       port = mkOption {
         default = "3050";
+        type = types.port;
         description = ''
           Port Firebird uses.
         '';
@@ -66,13 +65,15 @@ in
 
       user = mkOption {
         default = "firebird";
+        type = types.str;
         description = ''
           User account under which firebird runs.
         '';
       };
 
       baseDir = mkOption {
-        default = "/var/db/firebird"; # ubuntu is using /var/lib/firebird/2.1/data/.. ?
+        default = "/var/lib/firebird";
+        type = types.str;
         description = ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.
@@ -108,13 +109,21 @@ in
                 cp ${firebird}/security2.fdb "${systemDir}"
             fi
 
+            if ! test -e "${systemDir}/security3.fdb"; then
+                cp ${firebird}/security3.fdb "${systemDir}"
+            fi
+
+            if ! test -e "${systemDir}/security4.fdb"; then
+                cp ${firebird}/security4.fdb "${systemDir}"
+            fi
+
             chmod -R 700         "${dataDir}" "${systemDir}" /var/log/firebird
           '';
 
         serviceConfig.User = cfg.user;
         serviceConfig.LogsDirectory = "firebird";
         serviceConfig.LogsDirectoryMode = "0700";
-        serviceConfig.ExecStart = ''${firebird}/bin/fbserver -d'';
+        serviceConfig.ExecStart = "${firebird}/bin/fbserver -d";
 
         # TODO think about shutdown
       };

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "0.1.0";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/rauchg/wifi-password";
     description = "Get the password of the wifi you're on";
-    platforms = stdenv.lib.platforms.darwin;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.nikitavoloboev ];
+    platforms = lib.platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.nikitavoloboev ];
   };
 }

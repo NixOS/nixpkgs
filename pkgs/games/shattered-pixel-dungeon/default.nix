@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , fetchFromGitHub
-, gradle_5
+, nixosTests
+, gradle_6
 , perl
 , jre
 , libpulseaudio
@@ -9,13 +10,15 @@
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "0.8.1";
+  version = "0.9.2b";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
-    rev = "v${version}";
-    sha256 = "1n459xdvqf974hs91xfq5fdj29s4w5w83dg3m2vp7gqmrmm2jykf";
+    # NOTE: always use the commit sha, not the tag. Tags _will_ disappear!
+    # https://github.com/00-Evan/shattered-pixel-dungeon/issues/596
+    rev = "eba806ef561921b86637cf26818e095556edec0d";
+    sha256 = "05m4sfchccr437pxjvgzjk6nd9r3n4c4p3q8lxcc5pj6qrppk49j";
   };
 
   postPatch = ''
@@ -30,9 +33,11 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit version src postPatch;
-    nativeBuildInputs = [ gradle_5 perl ];
+    nativeBuildInputs = [ gradle_6 perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
+      # https://github.com/gradle/gradle/issues/4426
+      ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
       gradle --no-daemon desktop:release
     '';
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
@@ -49,10 +54,12 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version src postPatch;
 
-  nativeBuildInputs = [ gradle_5 perl makeWrapper ];
+  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
+    # https://github.com/gradle/gradle/issues/4426
+    ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
     # point to offline repo
     sed -ie "s#repositories {#repositories { maven { url '${deps}' };#g" build.gradle
     gradle --offline --no-daemon desktop:release
@@ -66,13 +73,18 @@ in stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    shattered-pixel-dungeon-starts = nixosTests.shattered-pixel-dungeon;
+  };
+
+  meta = with lib; {
     homepage = "https://shatteredpixel.com/";
     downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
     description = "Traditional roguelike game with pixel-art graphics and simple interface";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    # https://github.com/NixOS/nixpkgs/pull/99885#issuecomment-740065005
+    broken = stdenv.isDarwin;
   };
 }
-

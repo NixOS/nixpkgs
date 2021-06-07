@@ -1,38 +1,60 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, pkg-config
+, file
+, ncurses
+, readline
+, which
+# options
+, conf ? null
+, withIcons ? false
+, withNerdIcons ? false
+}:
 
-with stdenv.lib;
+# Mutually exclusive options
+assert withIcons -> withNerdIcons == false;
+assert withNerdIcons -> withIcons == false;
 
 stdenv.mkDerivation rec {
   pname = "nnn";
-  version = "3.2";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13p3379c26l57121ymx0kw7afh51zv614p57di311d2a41jaz5cw";
+    sha256 = "09z37lv57nbp0l1ax28558jk5jv91lb22bgaclirvdyz2qp47xhj";
   };
 
-  configFile = optionalString (conf != null) (builtins.toFile "nnn.h" conf);
-  preBuild = optionalString (conf != null) "cp ${configFile} src/nnn.h";
+  configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
+  preBuild = lib.optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
   buildInputs = [ readline ncurses ];
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ]
+    ++ lib.optional withIcons [ "O_ICONS=1" ]
+    ++ lib.optional withNerdIcons [ "O_NERD=1" ];
 
-  # shell completions
+  binPath = lib.makeBinPath [ file which ];
+
   postInstall = ''
-    install -Dm555 misc/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
-    install -Dm555 misc/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
-    install -Dm555 misc/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
+    installShellCompletion --bash --name nnn.bash misc/auto-completion/bash/nnn-completion.bash
+    installShellCompletion --fish misc/auto-completion/fish/nnn.fish
+    installShellCompletion --zsh misc/auto-completion/zsh/_nnn
+
+    wrapProgram $out/bin/nnn --prefix PATH : "$binPath"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Small ncurses-based file browser forked from noice";
     homepage = "https://github.com/jarun/nnn";
+    changelog = "https://github.com/jarun/nnn/blob/v${version}/CHANGELOG";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau filalex77 ];
+    maintainers = with maintainers; [ jfrankenau Br1ght0ne ];
   };
 }

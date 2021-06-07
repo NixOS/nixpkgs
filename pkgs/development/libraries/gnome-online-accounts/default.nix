@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , vala
 , glib
 , meson
@@ -18,11 +18,11 @@
 , icu
 , glib-networking
 , libsoup
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_412
-, gnome3
+, gnome
 , gcr
-, kerberos
+, libkrb5
 , gvfs
 , dbus
 , wrapGAppsHook
@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
-  version = "3.36.0";
+  version = "3.40.0";
 
   # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
   src = fetchFromGitLab {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-online-accounts";
     rev = version;
-    sha256 = "15j3xh93rqjphjw56j00g40m684nr4zy3hs7dsngm6a21l87fkfd";
+    sha256 = "sha256-GuUWypfmfbovpDKnj6wSBuNeKJIfIyipY+01u/p4znU=";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
@@ -46,22 +46,21 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
     "-Dgtk_doc=true"
-    "-Dlastfm=true"
     "-Dman=true"
     "-Dmedia_server=true"
   ];
 
   nativeBuildInputs = [
-    dbus # used for checks and pkgconfig to install dbus service/s
+    dbus # used for checks and pkg-config to install dbus service/s
     docbook_xml_dtd_412
-    docbook_xsl
+    docbook-xsl-nons
     gettext
     gobject-introspection
     gtk-doc
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -75,7 +74,7 @@ stdenv.mkDerivation rec {
     gvfs # OwnCloud, Google Drive
     icu
     json-glib
-    kerberos
+    libkrb5
     librest
     libsecret
     libsoup
@@ -90,12 +89,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
     description = "Single sign-on framework for GNOME";
     platforms = platforms.linux;

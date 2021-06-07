@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, allegro }:
+{ lib, stdenv, fetchurl, autoconf, automake, allegro }:
 
 stdenv.mkDerivation rec {
   pname = "garden-of-coloured-lights";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qsj4d7r22m5f9f5f6cyvam1y5q5pbqvy5058r7w0k4s48n77y6s";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Old-school vertical shoot-em-up / bullet hell";
     homepage = "http://garden.sourceforge.net/drupal/";
     maintainers = with maintainers; [ Profpatsch ];

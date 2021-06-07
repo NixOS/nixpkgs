@@ -2,8 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, pkg-config
 , bluez
+, libobjc
+, Foundation
+, IOBluetooth
 }:
 stdenv.mkDerivation rec {
 
@@ -13,21 +15,24 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wiiuse";
     repo = "wiiuse";
-    rev = "${version}";
+    rev = version;
     sha256 = "05gc3s0wxx7ga4g32yyibyxdh46rm9bbslblrc72ynrjxq98sg13";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ (lib.getDev bluez) ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ bluez ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc Foundation IOBluetooth ];
 
-  cmakeFlags = [ "-DBUILD_EXAMPLE_SDL=NO" ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
+
+  cmakeFlags = [ "-DBUILD_EXAMPLE_SDL=OFF" ];
 
   meta = with lib; {
     description = "Feature complete cross-platform Wii Remote access library";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     homepage = "https://github.com/wiiuse/wiiuse";
     maintainers = with maintainers; [ shamilton ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
   };
 }

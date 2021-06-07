@@ -1,14 +1,13 @@
-{ stdenv, fetchFromGitLab, cmake, gfortran, perl
-, openblas, blas, lapack, hdf5-cpp, python3, texlive
-, armadillo, openmpi, globalarrays, openssh
-, makeWrapper, fetchpatch
+{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl
+, openblas, hdf5-cpp, python3, texlive
+, armadillo, mpi, globalarrays, openssh
+, makeWrapper
 } :
 
-assert blas.implementation == "openblas" && lapack.implementation == "openblas";
-
 let
-  version = "19.11";
-  gitLabRev = "v${version}";
+  version = "21.02";
+  # The tag keeps moving, fix a hash instead
+  gitLabRev = "41cee871945ac712e86ee971425a49a8fc60a936";
 
   python = python3.withPackages (ps : with ps; [ six pyparsing ]);
 
@@ -20,18 +19,13 @@ in stdenv.mkDerivation {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = gitLabRev;
-    sha256 = "1wwqhkyyi7pw5x1ghnp83ir17zl5jsj7phhqxapybyi3bmg0i00q";
+    sha256 = "0cap53gy1wds2qaxbijw09fqhvfxphfkr93nhp9xdq84yxh4wzv6";
   };
 
-  patches = [ (fetchpatch {
-    name = "Fix-MPI-INT-size"; # upstream patch, fixes a Fortran compiler error
-    url = "https://gitlab.com/Molcas/OpenMolcas/commit/860e3350523f05ab18e49a428febac8a4297b6e4.patch";
-    sha256 = "0h96h5ikbi5l6ky41nkxmxfhjiykkiifq7vc2s3fdy1r1siv09sb";
-  }) (fetchpatch {
-    name = "fix-cisandbox"; # upstream patch, fixes a Fortran compiler error
-    url = "https://gitlab.com/Molcas/OpenMolcas/commit/d871590c8ce4689cd94cdbbc618954c65589393d.patch";
-    sha256 = "0dgz1w2rkglnis76spai3m51qa72j4bz6ppnk5zmzrr6ql7gwpgg";
-  })];
+  patches = [
+    # Required to handle openblas multiple outputs
+    ./openblasPath.patch
+  ];
 
   nativeBuildInputs = [ perl cmake texlive.combined.scheme-minimal makeWrapper ];
   buildInputs = [
@@ -40,12 +34,10 @@ in stdenv.mkDerivation {
     hdf5-cpp
     python
     armadillo
-    openmpi
+    mpi
     globalarrays
     openssh
   ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DOPENMP=ON"
@@ -55,7 +47,7 @@ in stdenv.mkDerivation {
     "-DTOOLS=ON"
     "-DHDF5=ON"
     "-DFDE=ON"
-    "-DOPENBLASROOT=${openblas}"
+    "-DOPENBLASROOT=${openblas.dev}"
   ];
 
   GAROOT=globalarrays;
@@ -66,6 +58,10 @@ in stdenv.mkDerivation {
     export PATH=$PATH:$out/bin
   '';
 
+  postInstall = ''
+    mv $out/pymolcas $out/bin
+  '';
+
   postFixup = ''
     # Wrong store path in shebang (no Python pkgs), force re-patching
     sed -i "1s:/.*:/usr/bin/env python:" $out/bin/pymolcas
@@ -74,12 +70,12 @@ in stdenv.mkDerivation {
     wrapProgram $out/bin/pymolcas --set MOLCAS $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced quantum chemistry software package";
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    license = licenses.lgpl21Only;
+    platforms = [ "x86_64-linux" ];
   };
 }
 

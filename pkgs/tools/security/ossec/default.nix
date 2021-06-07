@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which }:
+{ lib, stdenv, fetchurl, which }:
 
 stdenv.mkDerivation {
   name = "ossec-client-2.6";
@@ -33,8 +33,8 @@ yes
   meta = {
     description = "Open source host-based instrusion detection system";
     homepage = "https://www.ossec.net";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }
 

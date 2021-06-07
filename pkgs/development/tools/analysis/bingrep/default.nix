@@ -1,19 +1,19 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bingrep";
-  version = "0.8.2";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "m4b";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qv41g7mblnq07145m03s2fhbrjfsc0924zb9z4cp159ygkggxcy";
+    sha256 = "sha256-ayA3aEidZPa5GJgbbm5K3X2Xgd5Eb6TgUU80Gw/p07w=";
   };
 
-  cargoSha256 = "1z53408mcmy698xb2sxj1s1p9xc9srlkj0v8wswhdp7nq27vwkdj";
+  cargoSha256 = "sha256-XcXllex7UEufV5URhH7aqln1tNxwaiAETO3fUKmHf7s=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Greps through binaries from various OSs and architectures, and colors them";
     homepage = "https://github.com/m4b/bingrep";
     license = licenses.mit;

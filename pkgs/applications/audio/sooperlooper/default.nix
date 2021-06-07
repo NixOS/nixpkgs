@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , which
 , libtool
 , liblo
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sooperlooper";
-  version = "unstable-2019-09-30";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "essej";
     repo = "sooperlooper";
-    rev = "4d1da14176e16b0f56b727bb1e6c2e8957515625";
-    sha256 = "1gsgqa7hdymzw2al1ymzv0f33y161dyhh3fmy88lpjwv3bfchamg";
+    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    sha256 = "1jng9bkb7iikad0dy1fkiq9wjjdhh1xi1p0cp2lvnz1dsc4yk6iw";
   };
 
   autoreconfPhase = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig which libtool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config which libtool ];
 
   buildInputs = [
     liblo
@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
     fftw
   ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "A live looping sampler capable of immediate loop recording, overdubbing, multiplying, reversing and more";
     longDescription = ''
       It allows for multiple simultaneous multi-channel loops limited only by your computer's available memory.

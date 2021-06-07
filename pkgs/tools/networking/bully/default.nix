@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpcap }:
+{ lib, stdenv, fetchFromGitHub, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "bully";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/${pname} ../*.md
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Retrieve WPA/WPA2 passphrase from a WPS enabled access point";
     homepage = "https://github.com/kimocoder/bully";
     license = licenses.gpl3;

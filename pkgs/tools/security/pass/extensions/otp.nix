@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, oathToolkit }:
+{ lib, stdenv, fetchFromGitHub, oathToolkit }:
 
 stdenv.mkDerivation rec {
   pname = "pass-otp";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
                    "BASHCOMPDIR=$(out)/share/bash-completion/completions"
                  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pass extension for managing one-time-password (OTP) tokens";
     homepage = "https://github.com/tadfisher/pass-otp";
     license = licenses.gpl3;

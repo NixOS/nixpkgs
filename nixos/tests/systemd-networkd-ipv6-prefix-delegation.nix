@@ -9,7 +9,7 @@
 
 import ./make-test-python.nix ({pkgs, ...}: {
   name = "systemd-networkd-ipv6-prefix-delegation";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ andir ];
   };
   nodes = {
@@ -31,7 +31,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
         firewall.enable = false;
         interfaces.eth1.ipv4.addresses = lib.mkForce []; # no need for legacy IP
         interfaces.eth1.ipv6.addresses = lib.mkForce [
-          { address = "2001:DB8::"; prefixLength = 64; }
+          { address = "2001:DB8::1"; prefixLength = 64; }
         ];
       };
 
@@ -43,7 +43,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
       # Everyone on the "isp" machine will be able to add routes to the kernel.
       security.wrappers.add-dhcpd-lease = {
         source = pkgs.writeShellScript "add-dhcpd-lease" ''
-          exec ${pkgs.iproute}/bin/ip -6 route replace "$1" via "$2"
+          exec ${pkgs.iproute2}/bin/ip -6 route replace "$1" via "$2"
         '';
         capabilities = "cap_net_admin+ep";
       };
@@ -165,7 +165,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
               # accept the delegated prefix.
               PrefixDelegationHint  = "::/48";
             };
-            ipv6PrefixDelegationConfig = {
+            ipv6SendRAConfig = {
               # Let networkd know that we would very much like to use DHCPv6
               # to obtain the "managed" information. Not sure why they can't
               # just take that from the upstream RAs.
@@ -179,24 +179,20 @@ import ./make-test-python.nix ({pkgs, ...}: {
             name = "eth2";
             networkConfig = {
               Description = "Client interface";
-              # the client shouldn't be allowed to send us RAs, that would be weird.
+              # The client shouldn't be allowed to send us RAs, that would be weird.
               IPv6AcceptRA = false;
 
-              # Just delegate prefixes from the DHCPv6 PD pool.
-              # If you also want to distribute a local ULA prefix you want to
-              # set this to `yes` as that includes both static prefixes as well
-              # as PD prefixes.
-              IPv6PrefixDelegation = "dhcpv6";
+              # Delegate prefixes from the DHCPv6 PD pool.
+              DHCPv6PrefixDelegation = true;
+              IPv6SendRA = true;
             };
-            # finally "act as router" (according to systemd.network(5))
-            ipv6PrefixDelegationConfig = {
-              RouterLifetimeSec = 300; # required as otherwise no RA's are being emitted
 
-              # In a production environment you should consider setting these as well:
+            # In a production environment you should consider setting these as well:
+            # ipv6SendRAConfig = {
               #EmitDNS = true;
               #EmitDomains = true;
               #DNS= = "fe80::1"; # or whatever "well known" IP your router will have on the inside.
-            };
+            # };
 
             # This adds a "random" ULA prefix to the interface that is being
             # advertised to the clients.
@@ -260,7 +256,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
     client.wait_until_succeeds("ping -6 -c 1 FD42::1")
 
     # the global IP of the ISP router should still not be a reachable
-    router.fail("ping -6 -c 1 2001:DB8::")
+    router.fail("ping -6 -c 1 2001:DB8::1")
 
     # Once we have internal connectivity boot up the ISP
     isp.start()
@@ -273,11 +269,11 @@ import ./make-test-python.nix ({pkgs, ...}: {
 
     # wait until the uplink interface has a good status
     router.wait_for_unit("network-online.target")
-    router.wait_until_succeeds("ping -6 -c1 2001:DB8::")
+    router.wait_until_succeeds("ping -6 -c1 2001:DB8::1")
 
     # shortly after that the client should have received it's global IPv6
     # address and thus be able to ping the ISP
-    client.wait_until_succeeds("ping -6 -c1 2001:DB8::")
+    client.wait_until_succeeds("ping -6 -c1 2001:DB8::1")
 
     # verify that we got a globally scoped address in eth1 from the
     # documentation prefix

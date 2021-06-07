@@ -1,14 +1,15 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "godef";
   version = "1.1.2";
   rev = "v${version}";
 
-  goPackagePath = "github.com/rogpeppe/godef";
   subPackages = [ "." ];
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   src = fetchFromGitHub {
     inherit rev;
@@ -20,7 +21,7 @@ buildGoModule rec {
   meta = {
     description = "Print where symbols are defined in Go source code";
     homepage = "https://github.com/rogpeppe/godef/";
-    maintainers = with stdenv.lib.maintainers; [ vdemeester rvolosatovs ];
-    license = stdenv.lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vdemeester rvolosatovs ];
+    license = lib.licenses.bsd3;
   };
 }

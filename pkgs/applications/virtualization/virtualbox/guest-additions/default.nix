@@ -3,7 +3,7 @@
 
 let
   version = virtualbox.version;
-  xserverVListFunc = builtins.elemAt (stdenv.lib.splitVersion xorg.xorgserver.version);
+  xserverVListFunc = builtins.elemAt (lib.splitVersion xorg.xorgserver.version);
 
   # Forced to 1.18 in <nixpkgs/nixos/modules/services/x11/xserver.nix>
   # as it even fails to build otherwise.  Still, override this even here,
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "bcde4691dea7de93b65a10a43dda2b8f52e570f820992ad281c9bb5c8dede181";
+    sha256 = "bffc316a7b8d5ed56d830e9f6aef02b4e5ffc28674032142e96ffbedd905f8c9";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";

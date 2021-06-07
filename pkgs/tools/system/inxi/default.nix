@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper
 , ps, dnsutils # dig is recommended for multiple categories
 , withRecommends ? false # Install (almost) all recommended tools (see --recommends)
-, withRecommendedSystemPrograms ? withRecommends, utillinuxMinimal, dmidecode
-, file, hddtemp, iproute, ipmitool, usbutils, kmod, lm_sensors, smartmontools
-, binutils, tree, upower
+, withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
+, file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm_sensors, smartmontools
+, binutils, tree, upower, pciutils
 , withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
 }:
 
 let
   prefixPath = programs:
-    "--prefix PATH ':' '${stdenv.lib.makeBinPath programs}'";
+    "--prefix PATH ':' '${lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
-    utillinuxMinimal dmidecode file hddtemp iproute ipmitool usbutils kmod
-    lm_sensors smartmontools binutils tree upower
+    util-linuxMinimal dmidecode file hddtemp iproute2 ipmitool usbutils kmod
+    lm_sensors smartmontools binutils tree upower pciutils
   ];
   recommendedDisplayInformationPrograms = lib.optionals
     withRecommendedDisplayInformationPrograms
@@ -22,16 +22,17 @@ let
     ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.1.04-1";
+  version = "3.3.04-1";
 
   src = fetchFromGitHub {
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "1mirnrrqfjyl2r7fwnpjlk37i5hf8f7lxv2yxcbdfjf2b3dfbpvl";
+    sha256 = "sha256-/EutIHQGLiRcRD/r8LJYG7oJBb7EAhR5cn6QiC7zMOc=";
   };
 
-  buildInputs = [ perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -43,7 +44,7 @@ in stdenv.mkDerivation rec {
     cp inxi.1 $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full featured CLI system information tool";
     longDescription = ''
       inxi is a command line system information script built for console and
@@ -56,6 +57,6 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/smxi/inxi/blob/${version}/inxi.changelog";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

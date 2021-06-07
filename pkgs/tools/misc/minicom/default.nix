@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, makeWrapper, pkgconfig
+{ lib, stdenv, fetchgit, autoreconfHook, makeWrapper, pkg-config
 , lrzsz, ncurses, libiconv }:
 
 stdenv.mkDerivation {
@@ -12,9 +12,9 @@ stdenv.mkDerivation {
     sha256 = "0j95727xni4r122dalp09963gvc1nqa18l1d4wzz8746kw5s2rrb";
   };
 
-  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin libiconv;
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
 
   enableParallelBuilding = true;
 
@@ -34,11 +34,11 @@ stdenv.mkDerivation {
   postInstall = ''
     for f in $out/bin/*minicom ; do
       wrapProgram $f \
-        --prefix PATH : ${stdenv.lib.makeBinPath [ lrzsz ]}:$out/bin
+        --prefix PATH : ${lib.makeBinPath [ lrzsz ]}:$out/bin
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modem control and terminal emulation program";
     homepage = "https://salsa.debian.org/minicom-team/minicom";
     license = licenses.gpl2;

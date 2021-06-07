@@ -1,43 +1,67 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
-, libjpeg, libpng, qtbase, mkDerivation
+{ lib
+, mkDerivation
+, fetchurl
+, pkg-config
+, cairo
+, freetype
+, ghostscript
+, gsl
+, libjpeg
+, libpng
+, libspiro
+, lua5
+, qtbase
+, texlive
+, zlib
 }:
 
 mkDerivation rec {
-  name = "ipe-7.2.13";
+  pname = "ipe";
+  version = "7.2.23";
 
   src = fetchurl {
-    url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${name}-src.tar.gz";
-    sha256 = "1a6a88r7j5z01z6k1z72a8g3n6lxdjjxxkdrzrfdd6df2gbs6g5g";
+    url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${pname}-${version}-src.tar.gz";
+    sha256 = "0yvm3zfba1ljyy518vjnvwpyg7lgnmdwm19v5k0wfgz64aca56x1";
   };
 
-  sourceRoot = "${name}/src";
+  sourceRoot = "${pname}-${version}/src";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    cairo
+    freetype
+    ghostscript
+    gsl
+    libjpeg
+    libpng
+    libspiro
+    lua5
+    qtbase
+    texlive
+    zlib
+  ];
 
   IPEPREFIX=placeholder "out";
   URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 
-  buildInputs = [
-    libjpeg libpng zlib qtbase freetype cairo lua5 texlive ghostscript
-  ];
-
-  nativeBuildInputs = [ pkgconfig ];
-
-  qtWrapperArgs = [ ''--prefix PATH : ${texlive}/bin''  ];
+  qtWrapperArgs = [ "--prefix PATH : ${texlive}/bin"  ];
 
   enableParallelBuilding = true;
 
-  #TODO: make .desktop entry
+  # TODO: make .desktop entry
 
-  meta = {
+  meta = with lib; {
     description = "An editor for drawing figures";
-    homepage = "http://ipe.otfried.org";
-    license = stdenv.lib.licenses.gpl3Plus;
+    homepage = "http://ipe.otfried.org";  # https not available
+    license = licenses.gpl3Plus;
     longDescription = ''
       Ipe is an extensible drawing editor for creating figures in PDF and Postscript format.
       It supports making small figures for inclusion into LaTeX-documents
       as well as presentations in PDF.
     '';
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ ttuegel ];
+    platforms = platforms.linux;
   };
 }

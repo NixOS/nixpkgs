@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python, pkgconfig, gtk2, pygobject2, pycairo, pango
+{ lib, stdenv, fetchurl, fetchpatch, python, pkg-config, gtk2, pygobject2, pycairo, pango
 , buildPythonPackage, libglade ? null, isPy3k }:
 
 buildPythonPackage rec {
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   disabled = isPy3k;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "04k942gn8vl95kwf0qskkv6npclfm31d78ljkrkgyqxxcni1w76d";
   };
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pango
-  ] ++ stdenv.lib.optional (libglade != null) libglade;
+  ] ++ lib.optional (libglade != null) libglade;
 
   propagatedBuildInputs = [ gtk2 pygobject2 pycairo ];
 
@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   buildPhase = "buildPhase";
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-ObjC";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-ObjC";
 
   installPhase = "installPhase";
 
-  checkPhase = stdenv.lib.optionalString (libglade == null)
+  checkPhase = lib.optionalString (libglade == null)
     ''
       sed -i -e "s/glade = importModule('gtk.glade', buildDir)//" \
              tests/common.py
@@ -65,7 +65,7 @@ buildPythonPackage rec {
                   $out/lib/${python.libPrefix}/site-packages/${pname}-${version}.pth
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK 2 Python bindings";
     homepage = "https://gitlab.gnome.org/Archive/pygtk";
     platforms = platforms.all;

@@ -1,5 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , vala
@@ -49,12 +50,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Track each task's time in a simple inobtrusive way";
     homepage = "https://github.com/lainsce/khronos";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;

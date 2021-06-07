@@ -1,11 +1,13 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, fetchpatch
+, nix-update-script
 , pantheon
 , substituteAll
 , meson
 , ninja
 , python3
-, pkgconfig
+, pkg-config
 , vala
 , granite
 , libgee
@@ -14,9 +16,9 @@
 , appstream
 , gnome-menus
 , json-glib
-, plank
+, elementary-dock
 , bamf
-, switchboard
+, switchboard-with-plugs
 , libunity
 , libsoup
 , wingpanel
@@ -35,11 +37,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0wsfvyp0z6c612nl348dr6sar0qghhfcgkzcx3108x8v743v7rim";
+    sha256 = "sha256-NeazBzkbdQTC6OzPxxyED4OstMkNkUGtCIaZD67fTnM=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -49,13 +51,14 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
-   ];
+  ];
 
   buildInputs = [
     bamf
+    elementary-dock
     gnome-menus
     granite
     gtk3
@@ -64,17 +67,28 @@ stdenv.mkDerivation rec {
     libhandy
     libsoup
     libunity
-    plank
-    switchboard
+    switchboard-with-plugs
     wingpanel
     zeitgeist
-   ];
+  ] ++
+  # applications-menu has a plugin to search switchboard plugins
+  # see https://github.com/NixOS/nixpkgs/issues/100209
+  # wingpanel's wrapper will need to pick up the fact that
+  # applications-menu needs a version of switchboard with all
+  # its plugins for search.
+  switchboard-with-plugs.buildInputs;
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
   patches = [
+    # Port to Libhandy-1
+    (fetchpatch {
+      url = "https://github.com/elementary/applications-menu/commit/8eb2430e8513e9d37f875c5c9b8b15a968c27127.patch";
+      sha256 = "8Uw9mUw7U5nrAwUDGVpAwoRqb9ah503wQCr9kPbBJIo=";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       bc = "${bc}/bin/bc";
@@ -86,7 +100,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight and stylish app launcher for Pantheon";
     homepage = "https://github.com/elementary/applications-menu";
     license = licenses.gpl3Plus;

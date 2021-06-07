@@ -1,8 +1,9 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libde265, x265, libpng, libjpeg }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, dav1d, rav1e, libde265, x265, libpng,
+  libjpeg, libaom }:
 
 stdenv.mkDerivation rec {
   pname = "libheif";
-  version = "1.7.0";
+  version = "1.12.0";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
@@ -10,20 +11,19 @@ stdenv.mkDerivation rec {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    sha256 = "0alri5h486ck9b5z6wwrmlpzydhz58l223z3zxkizqrzxlllhr6p";
+    sha256 = "sha256-RjGLaDSBO8T7ijRb5a16aUlkCy5vdFPs4O9caIJo4jI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libde265 x265 libpng libjpeg ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ dav1d rav1e libde265 x265 libpng libjpeg libaom ];
 
   enableParallelBuilding = true;
 
   meta = {
     homepage = "http://www.libheif.org/";
     description = "ISO/IEC 23008-12:2017 HEIF image file format decoder and encoder";
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ gebner ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ gebner ];
   };
-
 }

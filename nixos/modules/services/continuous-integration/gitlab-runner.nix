@@ -49,6 +49,8 @@ let
           ] ++ service.registrationFlags
             ++ optional (service.buildsDir != null)
             "--builds-dir ${service.buildsDir}"
+            ++ optional (service.cloneUrl != null)
+            "--clone-url ${service.cloneUrl}"
             ++ optional (service.preCloneScript != null)
             "--pre-clone-script ${service.preCloneScript}"
             ++ optional (service.preBuildScript != null)
@@ -64,10 +66,10 @@ let
             ++ optional service.debugTraceDisabled
             "--debug-trace-disabled"
             ++ map (e: "--env ${escapeShellArg e}") (mapAttrsToList (name: value: "${name}=${value}") service.environmentVariables)
-            ++ optionals (service.executor == "docker") (
+            ++ optionals (hasPrefix "docker" service.executor) (
               assert (
                 assertMsg (service.dockerImage != null)
-                  "dockerImage option is required for docker executor (${name})");
+                  "dockerImage option is required for ${service.executor} executor (${name})");
               [ "--docker-image ${service.dockerImage}" ]
               ++ optional service.dockerDisableCache
               "--docker-disable-cache"
@@ -377,6 +379,14 @@ in
               in context of selected executor (Locally, Docker, SSH).
             '';
           };
+          cloneUrl = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "http://gitlab.example.local";
+            description = ''
+              Overwrite the URL for the GitLab instance. Used if the Runner can’t connect to GitLab on the URL GitLab exposes itself.
+            '';
+          };
           dockerImage = mkOption {
             type = types.nullOr types.str;
             default = null;
@@ -531,7 +541,7 @@ in
         jq
         moreutils
         remarshal
-        utillinux
+        util-linux
         cfg.package
       ] ++ cfg.extraPackages;
       reloadIfChanged = true;

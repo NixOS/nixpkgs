@@ -41,24 +41,17 @@ import pathlib
 import tarfile
 import itertools
 import threading
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import namedtuple
 
 
-def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
+def archive_paths_to(obj, paths, mtime):
     """
     Writes the given store paths as a tar file to the given stream.
 
     obj: Stream to write to. Should have a 'write' method.
     paths: List of store paths.
-    add_nix: Whether /nix and /nix/store directories should be
-             prepended to the archive.
-    filter: An optional transformation to be applied to TarInfo
-            objects. Should take a single TarInfo object and return
-            another one. Defaults to identity.
     """
-
-    filter = filter if filter else lambda i: i
 
     # gettarinfo makes the paths relative, this makes them
     # absolute again
@@ -72,7 +65,11 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
         ti.gid = 0
         ti.uname = "root"
         ti.gname = "root"
-        return filter(ti)
+        return ti
+
+    def nix_root(ti):
+        ti.mode = 0o0555  # r-xr-xr-x
+        return ti
 
     def dir(path):
         ti = tarfile.TarInfo(path)
@@ -81,15 +78,17 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
 
     with tarfile.open(fileobj=obj, mode="w|") as tar:
         # To be consistent with the docker utilities, we need to have
-        # these directories first when building layer tarballs. But
-        # we don't need them on the customisation layer.
-        if add_nix:
-            tar.addfile(apply_filters(dir("/nix")))
-            tar.addfile(apply_filters(dir("/nix/store")))
+        # these directories first when building layer tarballs.
+        tar.addfile(apply_filters(nix_root(dir("/nix"))))
+        tar.addfile(apply_filters(nix_root(dir("/nix/store"))))
 
         for path in paths:
             path = pathlib.Path(path)
-            files = itertools.chain([path], path.rglob("*"))
+            if path.is_symlink():
+                files = [path]
+            else:
+                files = itertools.chain([path], path.rglob("*"))
+
             for filename in sorted(files):
                 ti = append_root(tar.gettarinfo(filename))
 
@@ -128,31 +127,104 @@ class ExtractChecksum:
         return (self._digest.hexdigest(), self._size)
 
 
+FromImage = namedtuple("FromImage", ["tar", "manifest_json", "image_json"])
 # Some metadata for a layer
 LayerInfo = namedtuple("LayerInfo", ["size", "checksum", "path", "paths"])
 
 
-def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
+def load_from_image(from_image_str):
+    """
+    Loads the given base image, if any.
+
+    from_image_str: Path to the base image archive.
+
+    Returns: A 'FromImage' object with references to the loaded base image,
+             or 'None' if no base image was provided.
+    """
+    if from_image_str is None:
+        return None
+
+    base_tar = tarfile.open(from_image_str)
+
+    manifest_json_tarinfo = base_tar.getmember("manifest.json")
+    with base_tar.extractfile(manifest_json_tarinfo) as f:
+        manifest_json = json.load(f)
+
+    image_json_tarinfo = base_tar.getmember(manifest_json[0]["Config"])
+    with base_tar.extractfile(image_json_tarinfo) as f:
+        image_json = json.load(f)
+
+    return FromImage(base_tar, manifest_json, image_json)
+
+
+def add_base_layers(tar, from_image):
+    """
+    Adds the layers from the given base image to the final image.
+
+    tar: 'tarfile.TarFile' object for new layers to be added to.
+    from_image: 'FromImage' object with references to the loaded base image.
+    """
+    if from_image is None:
+        print("No 'fromImage' provided", file=sys.stderr)
+        return []
+
+    layers = from_image.manifest_json[0]["Layers"]
+    checksums = from_image.image_json["rootfs"]["diff_ids"]
+    layers_checksums = zip(layers, checksums)
+
+    for num, (layer, checksum) in enumerate(layers_checksums, start=1):
+        layer_tarinfo = from_image.tar.getmember(layer)
+        checksum = re.sub(r"^sha256:", "", checksum)
+
+        tar.addfile(layer_tarinfo, from_image.tar.extractfile(layer_tarinfo))
+        path = layer_tarinfo.path
+        size = layer_tarinfo.size
+
+        print("Adding base layer", num, "from", path, file=sys.stderr)
+        yield LayerInfo(size=size, checksum=checksum, path=path, paths=[path])
+
+    from_image.tar.close()
+
+
+def overlay_base_config(from_image, final_config):
+    """
+    Overlays the final image 'config' JSON on top of selected defaults from the
+    base image 'config' JSON.
+
+    from_image: 'FromImage' object with references to the loaded base image.
+    final_config: 'dict' object of the final image 'config' JSON.
+    """
+    if from_image is None:
+        return final_config
+
+    base_config = from_image.image_json["config"]
+
+    # Preserve environment from base image
+    final_env = base_config.get("Env", []) + final_config.get("Env", [])
+    if final_env:
+        # Resolve duplicates (last one wins) and format back as list
+        resolved_env = {entry.split("=", 1)[0]: entry for entry in final_env}
+        final_config["Env"] = list(resolved_env.values())
+    return final_config
+
+
+def add_layer_dir(tar, paths, store_dir, mtime):
     """
     Appends given store paths to a TarFile object as a new layer.
 
     tar: 'tarfile.TarFile' object for the new layer to be added to.
     paths: List of store paths.
+    store_dir: the root directory of the nix store
     mtime: 'mtime' of the added files and the layer tarball.
            Should be an integer representing a POSIX time.
-    add_nix: Whether /nix and /nix/store directories should be
-             added to a layer.
-    filter: An optional transformation to be applied to TarInfo
-            objects inside the layer. Should take a single TarInfo
-            object and return another one. Defaults to identity.
 
     Returns: A 'LayerInfo' object containing some metadata of
              the layer added.
     """
 
-    invalid_paths = [i for i in paths if not i.startswith("/nix/store/")]
+    invalid_paths = [i for i in paths if not i.startswith(store_dir)]
     assert len(invalid_paths) == 0, \
-        "Expecting absolute store paths, but got: {invalid_paths}"
+        f"Expecting absolute paths from {store_dir}, but got: {invalid_paths}"
 
     # First, calculate the tarball checksum and the size.
     extract_checksum = ExtractChecksum()
@@ -160,8 +232,6 @@ def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
         extract_checksum,
         paths,
         mtime=mtime,
-        add_nix=add_nix,
-        filter=filter
     )
     (checksum, size) = extract_checksum.extract()
 
@@ -178,8 +248,6 @@ def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
                 write,
                 paths,
                 mtime=mtime,
-                add_nix=add_nix,
-                filter=filter
             )
             write.close()
 
@@ -195,29 +263,38 @@ def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
     return LayerInfo(size=size, checksum=checksum, path=path, paths=paths)
 
 
-def add_customisation_layer(tar, path, mtime):
+def add_customisation_layer(target_tar, customisation_layer, mtime):
     """
-    Adds the contents of the store path as a new layer. This is different
-    than the 'add_layer_dir' function defaults in the sense that the contents
-    of a single store path will be added to the root of the layer. eg (without
-    the /nix/store prefix).
+    Adds the customisation layer as a new layer. This is layer is structured
+    differently; given store path has the 'layer.tar' and corresponding
+    sha256sum ready.
 
     tar: 'tarfile.TarFile' object for the new layer to be added to.
-    path: A store path.
-    mtime: 'mtime' of the added files and the layer tarball. Should be an
-           integer representing a POSIX time.
+    customisation_layer: Path containing the layer archive.
+    mtime: 'mtime' of the added layer tarball.
     """
 
-    def filter(ti):
-        ti.name = re.sub("^/nix/store/[^/]*", "", ti.name)
-        return ti
-    return add_layer_dir(
-        tar,
-        [path],
-        mtime=mtime,
-        add_nix=False,
-        filter=filter
-      )
+    checksum_path = os.path.join(customisation_layer, "checksum")
+    with open(checksum_path) as f:
+        checksum = f.read().strip()
+    assert len(checksum) == 64, f"Invalid sha256 at ${checksum_path}."
+
+    layer_path = os.path.join(customisation_layer, "layer.tar")
+
+    path = f"{checksum}/layer.tar"
+    tarinfo = target_tar.gettarinfo(layer_path)
+    tarinfo.name = path
+    tarinfo.mtime = mtime
+
+    with open(layer_path, "rb") as f:
+        target_tar.addfile(tarinfo, f)
+
+    return LayerInfo(
+      size=None,
+      checksum=checksum,
+      path=path,
+      paths=[customisation_layer]
+    )
 
 
 def add_bytes(tar, path, content, mtime):
@@ -242,23 +319,28 @@ def main():
         conf = json.load(f)
 
     created = (
-      datetime.now(tz=datetime.timezone.utc)
+      datetime.now(tz=timezone.utc)
       if conf["created"] == "now"
       else datetime.fromisoformat(conf["created"])
     )
     mtime = int(created.timestamp())
+    store_dir = conf["store_dir"]
+
+    from_image = load_from_image(conf["from_image"])
 
     with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
         layers = []
-        for num, store_layer in enumerate(conf["store_layers"]):
-            print(
-              "Creating layer", num,
-              "from paths:", store_layer,
-              file=sys.stderr)
-            info = add_layer_dir(tar, store_layer, mtime=mtime)
+        layers.extend(add_base_layers(tar, from_image))
+
+        start = len(layers) + 1
+        for num, store_layer in enumerate(conf["store_layers"], start=start):
+            print("Creating layer", num, "from paths:", store_layer,
+                  file=sys.stderr)
+            info = add_layer_dir(tar, store_layer, store_dir, mtime=mtime)
             layers.append(info)
 
-        print("Creating the customisation layer...", file=sys.stderr)
+        print("Creating layer", len(layers) + 1, "with customisation...",
+              file=sys.stderr)
         layers.append(
           add_customisation_layer(
             tar,
@@ -273,14 +355,14 @@ def main():
             "created": datetime.isoformat(created),
             "architecture": conf["architecture"],
             "os": "linux",
-            "config": conf["config"],
+            "config": overlay_base_config(from_image, conf["config"]),
             "rootfs": {
                 "diff_ids": [f"sha256:{layer.checksum}" for layer in layers],
                 "type": "layers",
             },
             "history": [
                 {
-                  "created": conf["created"],
+                  "created": datetime.isoformat(created),
                   "comment": f"store paths: {layer.paths}"
                 }
                 for layer in layers

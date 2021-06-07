@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
+{ lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
 , libXext , freetype, libXrender, fontconfig, libXft, libXinerama
 , libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
 , curl }:
@@ -9,7 +9,7 @@ let
 
   inherit (data) version url sha256;
 
-  rpath = stdenv.lib.makeLibraryPath
+  rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
       libXinerama stdenv.cc.cc.lib libnotify glib gtk3 libappindicator-gtk3
       curl libXfixes libXScrnSaver ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     ln -s $opt/data/resources $opt/x86_64/resources
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Time tracking software";
     homepage = "https://hubstaff.com/";
     license = licenses.unfree;

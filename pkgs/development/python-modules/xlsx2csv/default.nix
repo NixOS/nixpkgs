@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -12,11 +12,10 @@ buildPythonPackage rec {
     sha256 = "09vigknmz15izirfddkmb3a39h1rp2jmc00bnrff12i757n7jjl4";
   };
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/bitprophet/alabaster";
+  meta = with lib; {
+    homepage = "https://github.com/dilshod/xlsx2csv";
     description = "Convert xlsx to csv";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jb55 ];
   };
-
 }

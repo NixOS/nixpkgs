@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libelf, zlib }:
+{ lib, stdenv, fetchurl, libelf, zlib }:
 
 let
   version = "20181024";
@@ -11,8 +11,8 @@ let
   };
   meta = {
     homepage = "https://www.prevanders.net/dwarf.html";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
   };
 
 in rec {

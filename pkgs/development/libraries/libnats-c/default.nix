@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, protobuf, protobufc
 , libsodium, openssl
 }:
@@ -18,10 +18,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libsodium openssl protobuf protobufc ];
 
   separateDebugInfo = true;
-  enableParallelBuilding = true;
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C API for the NATS messaging system";
     homepage    = "https://github.com/nats-io/nats.c";
     license     = licenses.asl20;

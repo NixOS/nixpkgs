@@ -1,22 +1,23 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, libiconv }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
-    rev = "${version}";
-    sha256 = "00ing1v6vjqfvirp3mbayn8rwvxf72wnhz9249k2iifw8bl2r2hd";
+    rev = version;
+    sha256 = "sha256-MsXNneKj2xCci1guj1TKcIrX7XByJ5/lWUmjxAsgzPY=";
   };
 
-  cargoSha256 = "1wmw7knkx79fbwizaj9qkcnw0ld1lsfhca8mfpn5f0daxa5v5y97";
+  cargoSha256 = "sha256-ssAmY+o+/2+C9sol+PeFlpNwVuN5JNoofgkr3cUW+S4=";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";
     homepage = "https://github.com/EmbarkStudios/cargo-about";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ evanjs ];
-    platforms = platforms.all;
   };
 }

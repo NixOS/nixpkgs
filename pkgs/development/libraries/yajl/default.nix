@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   name = "yajl-2.1.0";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
       C, and a small validating JSON generator.
     '';
     homepage = "http://lloyd.github.com/yajl/";
-    license = stdenv.lib.licenses.isc;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ maggesi ];
+    license = lib.licenses.isc;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ maggesi ];
   };
 }

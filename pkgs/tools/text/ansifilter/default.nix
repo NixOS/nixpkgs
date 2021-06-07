@@ -1,15 +1,15 @@
-{ fetchurl, stdenv, pkgconfig, boost, lua }:
+{ fetchurl, lib, stdenv, pkg-config, boost, lua }:
 
 stdenv.mkDerivation rec {
   pname = "ansifilter";
-  version = "2.16";
+  version = "2.18";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
-    sha256 = "1wmszcykhaipxa7kxj4ml0lkmd5z7i9ryaachg9jpkhbaaijzkbz";
+    sha256 = "sha256-Zs8BfTakPV9q4gYJzjtYZHSU7mwOQfxoLFmL/859fTk=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ boost lua ];
 
   postPatch = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "conf_dir=/etc/ansifilter"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to convert ANSI to other formats";
     longDescription = ''
       Tool to remove ANSI or convert them to another format

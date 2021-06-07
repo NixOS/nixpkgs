@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, pkgconfig, glib
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, pkg-config, glib
 , perl, ncurses5, hamlib, xmlrpc_c }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xpgs4k27pjd9mianfknknp6mf34365bcp96wrv5xh4dhph573rj";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf automake pkgconfig perl ];
+  nativeBuildInputs = [ autoreconfHook autoconf automake pkg-config perl ];
   buildInputs = [ glib ncurses5 hamlib xmlrpc_c ];
 
   configureFlags = [ "--enable-hamlib" "--enable-fldigi-xmlrpc" ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ln -s ${ncurses5.out}/lib/libtinfo.so.5 $out/lib/libtinfo.so.5
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced ham radio logging and contest program";
     longDescription = ''
       TLF is a curses based console mode general logging and contest program for

@@ -29,8 +29,10 @@ in stdenv.mkDerivation {
     license = with licenses; [ asl20 ];
     platforms = builtins.attrNames data.pulumiPkgs;
     maintainers = with maintainers; [
+      ghuntley
       peterromfeldhk
       jlesquembre
+      cpcloud
     ];
   };
 }

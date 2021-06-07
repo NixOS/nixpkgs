@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "PyTado";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "14xdfw4913g4j4h576hjbigm7fiw8k0dc8s98gh2ag9xrc2ifgr0";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python binding for Tado web API. Pythonize your central heating!";
     homepage = "https://github.com/wmalgadey/PyTado";
     license = licenses.gpl3;

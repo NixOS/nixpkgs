@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "super-3.30.0";
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
+    ./0001-Remove-references-to-dropped-sys_nerr-sys_errlist-fo.patch
     (fetchpatch {
       name = "CVE-2014-0470.patch";
       url = "https://salsa.debian.org/debian/super/raw/debian/3.30.0-7/debian/patches/14-Fix-unchecked-setuid-call.patch";
@@ -43,6 +44,6 @@ stdenv.mkDerivation rec {
         in /etc/super.tab); and 2) “setuid”, which allows root to
         execute a command under a different uid.
       '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,15 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, ipywidgets, matplotlib }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ipywidgets
+, matplotlib
+, jupyter-packaging
+}:
 
 buildPythonPackage rec {
   pname = "ipympl";
-  version = "0.5.6";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1sak58wcpikn4ww1k8gr2vf1hmwzfly31hzcnwiizp7l0vk40qh7";
+    sha256 = "f0f1f356d8cb9d4fb51bb86dbbf837c190145316cb72f66081872ebc4d6db0a1";
   };
 
-  propagatedBuildInputs = [ ipywidgets matplotlib ];
+  propagatedBuildInputs = [ ipywidgets matplotlib jupyter-packaging ];
 
   # There are no unit tests in repository
   doCheck = false;

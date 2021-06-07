@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage
-, agate, openpyxl, xlrd, nose
+, agate, openpyxl, xlrd, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -13,11 +13,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ agate openpyxl xlrd ];
 
-  checkInputs = [ nose ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  disabledTests = [
+    # See https://github.com/wireservice/agate-excel/issues/45
+    "test_ambiguous_date"
+  ];
 
   meta = with lib; {
     description = "Adds read support for excel files to agate";

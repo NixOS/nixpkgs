@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "berglas";
@@ -13,7 +13,9 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  meta = with lib; {
     description = "A tool for managing secrets on Google Cloud";
     homepage = "https://github.com/GoogleCloudPlatform/berglas";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, db, gtk2, bzip2 }:
+{ lib, stdenv, fetchurl, db, gtk2, bzip2 }:
 
 stdenv.mkDerivation {
   name = "jigdo-0.7.3";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Download utility that can fetch files from several sources simultaneously";
     homepage = "http://atterer.net/jigdo/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

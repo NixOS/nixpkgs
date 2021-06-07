@@ -42,6 +42,7 @@ in {
     # It has been possible since https://github.com/flatpak/flatpak/releases/tag/1.3.2
     # to build a SELinux policy module.
 
+    # TODO: use sysusers.d
     users.users.flatpak = {
       description = "Flatpak system helper";
       group = "flatpak";

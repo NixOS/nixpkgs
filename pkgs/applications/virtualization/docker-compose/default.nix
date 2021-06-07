@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi, pythonOlder
+{ lib, buildPythonApplication, fetchPypi, pythonOlder
 , installShellFiles
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
@@ -8,12 +8,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "1.26.2";
+  version = "1.28.6";
   pname = "docker-compose";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c3v30z7jlbxm9nxs42vv3nbja0zsppkcd6fnd0mjcm1s60hyssp";
+    sha256 = "1d44906f7ab738ba2d1785130ed31b16111eee6dc5a1dbd7252091dae48c5281";
   };
 
   # lots of networking and other fails
@@ -21,12 +21,12 @@ buildPythonApplication rec {
   nativeBuildInputs = [ installShellFiles ];
   checkInputs = [ mock pytest nose ];
   propagatedBuildInputs = [
-    pyyaml backports_ssl_match_hostname colorama dockerpty docker
+    pyyaml colorama dockerpty docker
     ipaddress jsonschema requests six texttable websocket_client
     docopt cached-property paramiko distro python-dotenv
-  ] ++
-    stdenv.lib.optional (pythonOlder "3.4") enum34 ++
-    stdenv.lib.optional (pythonOlder "3.2") functools32;
+  ] ++ lib.optional (pythonOlder "3.7") backports_ssl_match_hostname
+  ++ lib.optional (pythonOlder "3.4") enum34
+  ++ lib.optional (pythonOlder "3.2") functools32;
 
   postPatch = ''
     # Remove upper bound on requires, see also
@@ -39,7 +39,7 @@ buildPythonApplication rec {
     installShellCompletion --zsh contrib/completion/zsh/_docker-compose
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.docker.com/compose/";
     description = "Multi-container orchestration for Docker";
     license = licenses.asl20;

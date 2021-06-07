@@ -1,17 +1,28 @@
-{ lib, fetchurl, buildDunePackage, yojson }:
+{ lib, fetchurl, buildDunePackage, substituteAll
+, dot-merlin-reader, dune_2, yojson, csexp, result }:
 
 buildDunePackage rec {
   pname = "merlin";
-  version = "3.3.6";
-
-  minimumOCamlVersion = "4.02.1";
+  version = "3.4.2";
 
   src = fetchurl {
     url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-v${version}.tbz";
-    sha256 = "1360cm0jkn2v2y5p3yzdyw9661a1vpddcibkbfblmk95qafx4civ";
+    sha256 = "e1b7b897b11119d92995c558530149fd07bd67a4aaf140f55f3c4ffb5e882a81";
   };
 
-  buildInputs = [ yojson ];
+  useDune2 = true;
+
+  minimumOCamlVersion = "4.02.3";
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+      dune = "${dune_2}/bin/dune";
+    })
+  ];
+
+  buildInputs = [ dot-merlin-reader yojson csexp result ];
 
   meta = with lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";

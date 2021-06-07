@@ -3,22 +3,22 @@
 , fetchPypi
 , mecab
 , swig
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "mecab-python3";
-  version = "0.996.5";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7f09caf136903ce908b8b001ffc178d6caa129c1550d47d8f7f733a213749a8";
+    sha256 = "62abe28a1155398325372291483608427bc82681fef80e7d132904415f9fd42e";
   };
 
   nativeBuildInputs = [
     mecab # for mecab-config
     swig
-    setuptools_scm
+    setuptools-scm
   ];
 
   buildInputs = [ mecab ];

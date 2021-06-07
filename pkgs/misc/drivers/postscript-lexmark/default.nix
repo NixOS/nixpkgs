@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpmextract }:
+{ lib, stdenv, fetchurl, rpmextract }:
 let
   version = "20160218";
 in
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     cp -r opt/OpenPrinting-Lexmark/doc $out/doc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.openprinting.org/driver/Postscript-Lexmark/";
     description = "Lexmark Postscript Drivers";
     platforms = platforms.linux;

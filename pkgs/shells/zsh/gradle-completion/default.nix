@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "gradle-completion";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gradle tab completion for bash and zsh";
     homepage = "https://github.com/gradle/gradle-completion";
     license = licenses.mit;

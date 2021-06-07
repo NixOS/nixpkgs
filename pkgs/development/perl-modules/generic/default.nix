@@ -5,10 +5,8 @@
 assert attrs?pname -> attrs?version;
 assert attrs?pname -> !(attrs?name);
 
-(if attrs ? name then
-  lib.trivial.warn "builtPerlPackage: `name' (\"${attrs.name}\") is deprecated, use `pname' and `version' instead"
- else
-  (x: x))
+lib.warnIf (attrs ? name) "builtPerlPackage: `name' (\"${attrs.name}\") is deprecated, use `pname' and `version' instead"
+
 toPerlModule(stdenv.mkDerivation (
   (
   lib.recursiveUpdate
@@ -42,7 +40,7 @@ toPerlModule(stdenv.mkDerivation (
     version = lib.getVersion attrs;                     # TODO: phase-out `attrs.name`
     builder = ./builder.sh;
     buildInputs = buildInputs ++ [ perl ];
-    nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
+    nativeBuildInputs = nativeBuildInputs ++ [ (perl.mini or perl) ];
     fullperl = buildPerl;
   }
 ))

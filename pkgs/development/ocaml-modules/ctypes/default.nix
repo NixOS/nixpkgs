@@ -1,21 +1,21 @@
-{ stdenv, fetchzip, ocaml, findlib, libffi, pkgconfig, ncurses, integers }:
+{ lib, stdenv, fetchzip, ocaml, findlib, libffi, pkg-config, ncurses, integers, bigarray-compat }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !lib.versionAtLeast ocaml.version "4.02"
 then throw "ctypes is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ctypes-${version}";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchzip {
     url = "https://github.com/ocamllabs/ocaml-ctypes/archive/${version}.tar.gz";
-    sha256 = "0qh2gfx5682wkk2nm1ybspzz9c2xvlnnf6iv08a89kbwa1hvdqrg";
+    sha256 = "03zrbnl16m67ls0yfhq7a4k4238x6x6b3m456g4dw2yqwc153vks";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ocaml findlib ncurses ];
-  propagatedBuildInputs = [ integers libffi ];
+  propagatedBuildInputs = [ integers libffi bigarray-compat ];
 
   buildPhase =  ''
      make XEN=false libffi.config ctypes-base ctypes-stubs
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     make install XEN=false
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ocamllabs/ocaml-ctypes";
     description = "Library for binding to C libraries using pure OCaml";
     license = licenses.mit;

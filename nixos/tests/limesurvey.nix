@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "limesurvey";
-  meta.maintainers = [ pkgs.stdenv.lib.maintainers.aanderse ];
+  meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
   machine = { ... }: {
     services.limesurvey = {
@@ -20,7 +20,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     machine.wait_for_unit("phpfpm-limesurvey.service")
     assert "The following surveys are available" in machine.succeed(
-        "curl http://example.local/"
+        "curl -f http://example.local/"
     )
   '';
 })

@@ -1,30 +1,32 @@
-{ stdenv, fetchFromGitHub, cmake, wrapQtAppsHook
+{ lib, mkDerivation, fetchFromGitHub, cmake
 , qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
-, libidn, qca2-qt5, libXScrnSaver, hunspell
+, libidn, qca-qt5, libXScrnSaver, hunspell
 }:
-stdenv.mkDerivation rec {
+
+mkDerivation rec {
   pname = "psi";
-  version = "1.4";
+  version = "1.5";
   src = fetchFromGitHub {
     owner = "psi-im";
     repo = pname;
     rev = version;
-    sha256 = "09c7cg96vgxzgbpypgcw7yv73gvzppbi1lm4svbpfn2cfxy059d4";
+    sha256 = "hXDZODHl14kimRlMQ1XjISQ2kk9NS78axVN3U21wkuM=";
     fetchSubmodules = true;
   };
   patches = [
     ./fix-cmake-hunspell-1.7.patch
   ];
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake qttools ];
   buildInputs = [
-    qtbase qtmultimedia qtx11extras qttools qtwebengine
-    libidn qca2-qt5 libXScrnSaver hunspell
+    qtbase qtmultimedia qtx11extras qtwebengine
+    libidn qca-qt5 libXScrnSaver hunspell
   ];
-  enableParallelBuilding = true;
-  meta = with stdenv.lib; {
-    description = "Psi, an XMPP (Jabber) client";
+
+  meta = with lib; {
+    homepage = "https://psi-im.org";
+    description = "An XMPP (Jabber) client";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

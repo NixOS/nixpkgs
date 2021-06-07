@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 ## Usage
 # In NixOS, simply add this package to services.udev.packages:
@@ -6,24 +6,26 @@
 
 stdenv.mkDerivation rec {
   pname = "android-udev-rules";
-  version = "20200410";
+  version = "20210501";
 
   src = fetchFromGitHub {
     owner = "M0Rf30";
     repo = "android-udev-rules";
     rev = version;
-    sha256 = "1ik9a0k9gkaw5a80m25pxx5yfiwq34ffb7iqhwicz4lwz5wsw8d3";
+    sha256 = "sha256-rlTulWclPqMl9LdHdcAtLARXGItiSeF3RX+neZrjgV4=";
   };
 
   installPhase = ''
+    runHook preInstall
     install -D 51-android.rules $out/lib/udev/rules.d/51-android.rules
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/M0Rf30/android-udev-rules";
     description = "Android udev rules list aimed to be the most comprehensive on the net";
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar ];
   };
 }

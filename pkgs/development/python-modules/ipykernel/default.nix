@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , flaky
 , ipython
 , jupyter_client
@@ -15,22 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "5.2.1";
+  version = "5.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a3hr7wx3ywwskr99hgp120dw9ab1vmcaxdixlsbd9bg6ly3fdr9";
+    sha256 = "98321abefdf0505fb3dc7601f60fc4087364d394bd8fad53107eb1adee9ff475";
   };
 
   propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
-
-  # https://github.com/ipython/ipykernel/pull/377
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ipython/ipykernel/commit/a3bf849dbd368a1826deb9dfc94c2bd3e5ed04fe.patch";
-      sha256 = "1yhpwqixlf98a3n620z92mfips3riw6psijqnc5jgs2p58fgs2yc";
-    })
-  ];
 
   checkInputs = [ pytestCheckHook nose flaky ];
   dontUseSetuptoolsCheck = true;
@@ -42,9 +33,9 @@ buildPythonPackage rec {
     "test_subprocess_print"
     "test_subprocess_error"
     "test_ipython_start_kernel_no_userns"
-    
+
     # https://github.com/ipython/ipykernel/issues/506
-    "test_unc_paths"    
+    "test_unc_paths"
   ] ++ lib.optionals (pythonOlder "3.8") [
     # flaky test https://github.com/ipython/ipykernel/issues/485
     "test_shutdown"

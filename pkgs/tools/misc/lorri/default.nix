@@ -1,46 +1,54 @@
-{ stdenv
+{ lib
+, stdenv
 , pkgs
+, rustPackages
 , fetchFromGitHub
 , rustPlatform
-  # Updater script
-, runtimeShell
 , writers
-  # Tests
 , nixosTests
-  # Apple dependencies
 , CoreServices
 , Security
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "lorri";
-  version = "1.1";
+let
+  # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
+  version = "1.5.0";
+  gitRev = "f4b6a135e2efb18b3a679e3946d4d070a1c45a2c";
+  sha256 = "0irgzw7vwhvm97nmylj44x2dnd8pwf47gvlgw7fj58fj67a0l8fr";
+  cargoSha256 = "18l7yxciqcvagsg9lykilfhr104a4qqdydjkjysxgd197xalxgzr";
 
-  meta = with stdenv.lib; {
-    description = "Your project's nix-env";
-    homepage = "https://github.com/target/lorri";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ grahamc Profpatsch ];
-  };
+in (rustPlatform.buildRustPackage rec {
+  pname = "lorri";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = "target";
+    owner = "nix-community";
     repo = pname;
-    # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
-    # ALSO don’t forget to update the cargoSha256!
-    rev = "93d93013217cd9aa09d2bd316d6c3abf827a6601";
-    sha256 = "0wbkx8hmikngfp6fp0y65yla22f3k0jszq8a6pas80q0b33llwm5";
+    rev = gitRev;
+    inherit sha256;
   };
 
-  cargoSha256 = "1a3n1ylyp63x6v7b07nnqpfxjzmsgwmgraza23lx8z4gh167gv46";
+  outputs = [ "out" "man" "doc" ];
+
+  inherit cargoSha256;
   doCheck = false;
 
   BUILD_REV_COUNT = src.revCount or 1;
-  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix {};
+  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
 
-  nativeBuildInputs = with pkgs; [ rustPackages.rustfmt ];
-  buildInputs =
-    stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  nativeBuildInputs = [ rustPackages.rustfmt ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
+
+  # copy the docs to the $man and $doc outputs
+  postInstall = ''
+    install -Dm644 lorri.1 $man/share/man/man1/lorri.1
+    install -Dm644 -t $doc/share/doc/lorri/ \
+      README.md \
+      CONTRIBUTING.md \
+      LICENSE \
+      MAINTAINERS.md
+    cp -r contrib/ $doc/share/doc/lorri/contrib
+  '';
 
   passthru = {
     updater = writers.writeBash "copy-runtime-nix.sh" ''
@@ -52,4 +60,11 @@ rustPlatform.buildRustPackage rec {
       nixos = nixosTests.lorri;
     };
   };
-}
+
+  meta = with lib; {
+    description = "Your project's nix-env";
+    homepage = "https://github.com/target/lorri";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ grahamc Profpatsch ];
+  };
+})

@@ -1,13 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags, abseil-cpp }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, re2, openssl, protobuf
+, abseil-cpp, libnsl
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.29.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.38.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "1n604grkf2amzrmwcz6am0rpbp3yfb062lpgmhv943hj8wk7xw27";
+    sha256 = "0an903nh8lz3xlf79zsh2v55nrwnjzzavkjlrsl7j9aysgwmgn4r";
     fetchSubmodules = true;
   };
   patches = [
@@ -18,18 +20,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags abseil-cpp ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
+  buildInputs = [ c-ares.cmake-config openssl protobuf ]
+    ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags =
     [ "-DgRPC_ZLIB_PROVIDER=package"
       "-DgRPC_CARES_PROVIDER=package"
+      "-DgRPC_RE2_PROVIDER=package"
       "-DgRPC_SSL_PROVIDER=package"
       "-DgRPC_PROTOBUF_PROVIDER=package"
-      "-DgRPC_GFLAGS_PROVIDER=package"
       "-DgRPC_ABSL_PROVIDER=package"
       "-DBUILD_SHARED_LIBS=ON"
       "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+      "-DCMAKE_CXX_STANDARD=17"
     ];
 
   # CMake creates a build directory by default, this conflicts with the
@@ -42,11 +47,11 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
 
   enableParallelBuilds = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
     maintainers = [ maintainers.lnl7 maintainers.marsam ];

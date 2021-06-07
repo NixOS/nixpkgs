@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0krsj7i5yr76imf83krz2lmlmpbsvpwqg2d4r0jwxiydjfyj4qr4";
   };
 
-  buildInputs = [ wxGTK makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ wxGTK ];
 
   preConfigure = "cd src";
 
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
       --replace "Icon=images/treesheets.svg" "Icon=$out/share/libexec/images/treesheets.svg"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free Form Data Organizer";
 
     longDescription = ''

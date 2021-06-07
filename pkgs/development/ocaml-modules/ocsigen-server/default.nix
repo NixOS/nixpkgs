@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
+{ stdenv, lib, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
 , lwt_log, ocamlnet, ocaml_pcre, cryptokit, tyxml, xml-light, ipaddr
 , pgocaml, camlzip, ocaml_sqlite3
 , makeWrapper
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "4.06.1"
 then throw "ocsigenserver is not available for OCaml ${ocaml.version}"
 else
 
@@ -13,19 +13,18 @@ let mkpath = p: n:
 in
 
 stdenv.mkDerivation rec {
-  version = "2.15.0";
+  version = "2.18.0";
   pname = "ocsigenserver";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
     rev = version;
-    sha256 = "15qdkxcbl9c1bbn0fh9awjw0hjn7r6awcn288a9vyxln7icdbifw";
+    sha256 = "0c61wkq8ddy3qxb2x1jz04rz0722hk92r6jl1zvgikh74m5p5ipp";
   };
 
-  buildInputs = [ which makeWrapper ocaml findlib
-    lwt_react pgocaml camlzip ocaml_sqlite3
-  ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ which ocaml findlib lwt_react pgocaml camlzip ocaml_sqlite3 ];
 
   propagatedBuildInputs = [ cryptokit ipaddr lwt_log lwt_ssl ocamlnet
     ocaml_pcre tyxml xml-light
@@ -52,9 +51,9 @@ stdenv.mkDerivation rec {
     longDescription =''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
       '';
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
-    maintainers = [ stdenv.lib.maintainers.gal_bolle ];
+    maintainers = [ lib.maintainers.gal_bolle ];
   };
 
 }

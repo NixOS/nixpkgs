@@ -2,19 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , ruamel_base
-, ruamel_ordereddict
-, ruamel_yaml_clib
+, ruamel_ordereddict ? null
+, ruamel_yaml_clib ? null
 , isPy3k
 , isPyPy
 }:
 
 buildPythonPackage rec {
   pname = "ruamel.yaml";
-  version = "0.16.10";
+  version = "0.16.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "099c644a778bf72ffa00524f78dd0b6476bca94a1da344130f4bf3381ce5b954";
+    sha256 = "bb48c514222702878759a05af96f4b7ecdba9b33cd4efcf25c86b882cef3a942";
   };
 
   # Tests use relative paths

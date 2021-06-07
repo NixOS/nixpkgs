@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libpcap, bison, flex, cyrus_sasl, tcp_wrappers,
-  pkgconfig, procps, which, wget, lsof, net-snmp, perl }:
+{ lib, stdenv, fetchurl, libpcap, bison, flex, cyrus_sasl, tcp_wrappers,
+  pkg-config, procps, which, wget, lsof, net-snmp, perl }:
 
 stdenv.mkDerivation rec {
   pname = "argus";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zzf688dbbcb5z2r9v1p28rddns6znzx35nc05ygza6lp7aknkna";
   };
 
-  nativeBuildInputs = [ pkgconfig bison flex ];
+  nativeBuildInputs = [ pkg-config bison flex ];
   buildInputs = [ libpcap cyrus_sasl tcp_wrappers ];
   propagatedBuildInputs = [ procps which wget lsof net-snmp ];
 
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     substituteInPlace events/argus-vmstat.sh \
       --replace vm_stat ${procps}/bin/vmstat
     substituteInPlace events/argus-snmp.sh \
-      --replace /usr/bin/snmpget ${stdenv.lib.getBin net-snmp}/bin/snmpget \
-      --replace /usr/bin/snmpwalk ${stdenv.lib.getBin net-snmp}/bin/snmpwalk
+      --replace /usr/bin/snmpget ${lib.getBin net-snmp}/bin/snmpget \
+      --replace /usr/bin/snmpwalk ${lib.getBin net-snmp}/bin/snmpwalk
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Audit Record Generation and Utilization System for networks";
     longDescription = ''The Argus Project is focused on developing all
     aspects of large scale network situtational awareness derived from

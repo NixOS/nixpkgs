@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , wafHook
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "--builtin-libraries=replace"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The trivial database";
     longDescription = ''
       TDB is a Trivial Database. In concept, it is very much like GDBM,

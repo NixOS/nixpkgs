@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, xorgserver, pytest, pytest-xvfb, pytest-asyncio, i3, python, xlib, xdpyinfo
+{ lib, buildPythonPackage, fetchFromGitHub
+, xorgserver, pytest, pytest-xvfb, i3, python, xlib, xdpyinfo
 , makeFontsConf, coreutils
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     fontDirectories = [ ];
   };
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
-  checkInputs = [ pytest xdpyinfo pytest-asyncio pytest-xvfb xorgserver i3 ];
+  checkInputs = [ pytest xdpyinfo pytest-xvfb xorgserver i3 ];
 
   postPatch = ''
     substituteInPlace test/i3.config \
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An improved Python library to control i3wm and sway";
     homepage    = "https://github.com/acrisci/i3ipc-python";
     license     = licenses.bsd3;

@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "helmsman";
-  version = "3.4.4";
+  version = "3.6.11";
 
   src = fetchFromGitHub {
     owner = "Praqma";
     repo = "helmsman";
     rev = "v${version}";
-    sha256 = "01vjghak2szif0p82kall5jw7mbfh4fg7fcjkblmic7l0vlqhfac";
+    sha256 = "sha256-9G/A6eADt9jP0CZC6MTZnQOmGOItJFI0zTfmC7HXSaI=";
   };
 
-  vendorSha256 = "05vnysr5r3hbayss1pyifgp989kjw81h95iack8ady62k6ys5njl";
+  vendorSha256 = "sha256-icX8mOc8g+DhfAjD1pzneLWTXY17lXyAjdPOWAxkHwI=";
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Helm Charts (k8s applications) as Code tool";

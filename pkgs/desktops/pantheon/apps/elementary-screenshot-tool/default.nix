@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -25,11 +26,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "179ib2ldvhdx3hks5lqyx2cvlkk3j1qccvlfwh2yd2bl79zpk3ma";
+    sha256 = "sha256-qo55fzp0ieYF5I5uxnCQY066mege06InHL3B3ahYMZ0=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Screenshot tool designed for elementary OS";
     homepage = "https://github.com/elementary/screenshot";
     license = licenses.lgpl3;

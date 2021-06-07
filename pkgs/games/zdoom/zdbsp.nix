@@ -1,27 +1,32 @@
-{ stdenv, fetchurl, cmake, unzip, zlib }:
+{ lib, stdenv, fetchzip, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "zdbsp";
   version = "1.19";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://zdoom.org/files/utils/zdbsp/zdbsp-${version}-src.zip";
-    sha256 = "0j82q7g7hgvnahk6gdyhmn9880mqii3b4agqc98f5xaj3kxmd2dr";
+    sha256 = "1j6k0appgjjj3ffbll9hy9nnbqr17szd1s66q08zrbkfqf6g8f0d";
+    stripRoot = false;
   };
 
-  nativeBuildInputs = [cmake unzip];
-  buildInputs = [zlib];
-  sourceRoot = ".";
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    zlib
+  ];
+
   installPhase = ''
     install -Dm755 zdbsp $out/bin/zdbsp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ZDoom's internal node builder for DOOM maps";
     homepage = "https://zdoom.org/wiki/ZDBSP";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ertes];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ lassulus siraben ];
+    platforms = platforms.unix;
   };
 }

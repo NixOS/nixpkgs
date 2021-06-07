@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , at-spi2-core
 , babl
@@ -13,7 +13,7 @@
 , gfbgraph
 , glib
 , gnome-online-accounts
-, gnome3
+, gnome
 , gobject-introspection
 , grilo
 , grilo-plugins
@@ -21,12 +21,13 @@
 , gtk3
 , itstool
 , libdazzle
+, libhandy
 , libgdata
 , libxml2
 , meson
 , ninja
 , nixosTests
-, pkgconfig
+, pkg-config
 , python3
 , tracker
 , tracker-miners
@@ -35,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "3.34.2";
+  version = "40.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "06ml5sf8xhpan410msqz085hmfc7082d368pb82yq646y9pcfn9w";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "1bzi79plw6ji6qlckhxnwfnswy6jpnhzmmyanml2i2xg73hp6bg0";
   };
 
   patches = [
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     (python3.withPackages (pkgs: with pkgs; [
       dogtail
       pygobject3
@@ -77,12 +78,13 @@ stdenv.mkDerivation rec {
     gfbgraph
     glib
     gnome-online-accounts
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     grilo
     grilo-plugins
     gsettings-desktop-schemas
     gtk3
     libdazzle
+    libhandy
     libgdata
     tracker
     tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
@@ -106,16 +108,16 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
 
     tests = {
-      installed-tests = nixosTests.gnome-photos;
+      installed-tests = nixosTests.installed-tests.gnome-photos;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Access, organize and share your photos";
     homepage = "https://wiki.gnome.org/Apps/Photos";
     license = licenses.gpl3Plus;

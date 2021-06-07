@@ -14,15 +14,15 @@
 , codecov
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "stumpy";
-  version = "1.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "TDAmeritrade";
     repo = "stumpy";
-    rev = "115e477c1eec9291ab7c1fd8da30d67a70854f8e"; # no git version tag
-    sha256 = "0s2s3y855jjwdb7p55zx8lknplz58ghpw547yzmqisacr968b67w";
+    rev = "v${version}";
+    sha256 = "0s7pamn39ymm1lp9z28isbdrd6ix98y9i4lfdk3ii95wvd3y50my";
   };
 
   propagatedBuildInputs = [
@@ -42,8 +42,9 @@ buildPythonPackage {
     codecov
   ];
 
+  # ignore changed numpy operations
   checkPhase = ''
-    pytest
+    pytest -k 'not allc'
   '';
 
   meta = with lib; {

@@ -1,5 +1,5 @@
 { lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-, withLLVM ? false
+, withLLVM ? !(stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isPowerPC)
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
@@ -57,9 +57,8 @@ symlinkJoin {
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
+  nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
-    . ${makeWrapper}/nix-support/setup-hook
-
     # wrap compiler executables with correct env variables
 
     for prg in ${ghcCommand} ${ghcCommand}i ${ghcCommand}-${ghc.version} ${ghcCommand}i-${ghc.version}; do
@@ -103,15 +102,6 @@ symlinkJoin {
       makeWrapper ${ghc}/bin/haddock $out/bin/haddock    \
         --add-flags '"-B$NIX_${ghcCommandCaps}_LIBDIR"'  \
         --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
-    fi
-
-    # ghcide does package discovery without calling our ghc wrapper.
-    if [[ -x "$out/bin/ghcide" ]]; then
-      wrapProgram $out/bin/ghcide  \
-          --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
-          --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
-          --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
-          --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
     fi
 
   '' + (lib.optionalString (stdenv.targetPlatform.isDarwin && !isGhcjs && !stdenv.targetPlatform.isiOS) ''

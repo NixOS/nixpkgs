@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, libtool, ghostscript, groff, autoreconfHook }:
+{ lib, stdenv, fetchzip, libtool, ghostscript, groff, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "fstrcmp";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Make fuzzy comparisons of strings and byte arrays";
     longDescription = ''
       The fstrcmp project provides a library that is used to make fuzzy

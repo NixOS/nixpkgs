@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, tcl }:
+{ lib, stdenv, fetchFromGitHub, tcl }:
 
 stdenv.mkDerivation rec {
   pname = "eggdrop";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--with-tclinc=${tcl}/include/tcl.h"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2;
     platforms = platforms.unix;
     homepage = "http://www.eggheads.org";

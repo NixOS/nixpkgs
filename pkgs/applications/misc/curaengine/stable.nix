@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 let
   version = "15.04.6";
 in
@@ -12,7 +12,9 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    sed -i 's,--static,,g' Makefile
+    substituteInPlace Makefile --replace "--static" ""
+  '' + lib.optionalString stdenv.isi686 ''
+    substituteInPlace Makefile --replace "-flto" ""
   '';
 
   installPhase = ''
@@ -20,7 +22,7 @@ stdenv.mkDerivation {
     cp build/CuraEngine $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Engine for processing 3D models into 3D printing instructions";
     homepage = "https://github.com/Ultimaker/CuraEngine";
     license = licenses.agpl3;

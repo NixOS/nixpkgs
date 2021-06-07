@@ -1,9 +1,9 @@
-{ stdenv
-, fetchurl, qttools, pkgconfig
+{ lib, stdenv
+, fetchurl, qttools, pkg-config
 , minizip, zlib
 , qtbase, qtsvg, qtmultimedia, qtwebkit, qttranslations, qtxmlpatterns
 , rsync, SDL2, xwininfo
-, utillinux
+, util-linux
 , xorg
 }:
 
@@ -15,26 +15,26 @@ stdenv.mkDerivation rec {
       url = "mirror://sourceforge/project/qmc2/qmc2/${version}/${pname}-${version}.tar.gz";
       sha256 = "1dzmjlfk8pdspns6zg1jmd5fqzg8igd4q38cz4a1vf39lx74svns";
   };
-  
+
   preBuild = ''
     patchShebangs scripts
   '';
 
-  nativeBuildInputs = [ qttools pkgconfig ];
+  nativeBuildInputs = [ qttools pkg-config ];
   buildInputs = [ minizip qtbase qtsvg qtmultimedia qtwebkit
                   qttranslations qtxmlpatterns rsync SDL2
-                  xwininfo zlib utillinux xorg.libxcb ];
+                  xwininfo zlib util-linux xorg.libxcb ];
 
   makeFlags = [ "DESTDIR=$(out)"
                 "PREFIX=/"
                 "DATADIR=/share/"
                 "SYSCONFDIR=/etc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Qt frontend for MAME/MESS";
     homepage = "https://qmc2.batcom-it.net";
     license = licenses.gpl2;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
     broken = true;
   };

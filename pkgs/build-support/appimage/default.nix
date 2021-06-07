@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+
 , bash
 , binutils-unwrapped
 , coreutils
@@ -15,7 +16,7 @@ rec {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
-    path = with pkgs; stdenv.lib.makeBinPath [
+    path = lib.makeBinPath [
       bash
       binutils-unwrapped
       coreutils
@@ -60,12 +61,12 @@ rec {
     targetPkgs = pkgs: with pkgs; [
       gtk3
       bashInteractive
-      gnome3.zenity
+      gnome.zenity
       python2
       xorg.xrandr
       which
       perl
-      xdg_utils
+      xdg-utils
       iana-etc
       krb5
     ];
@@ -84,6 +85,7 @@ rec {
 
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-plugins-base
       libdrm
       xorg.xkeyboardconfig
       xorg.libpciaccess
@@ -119,7 +121,6 @@ rec {
       libusb1
       udev
       dbus-glib
-      libav
       atk
       at-spi2-atk
       libudev0-shim
@@ -162,8 +163,6 @@ rec {
       SDL_mixer
       SDL2_ttf
       SDL2_mixer
-      gstreamer
-      gst-plugins-base
       libappindicator-gtk2
       libcaca
       libcanberra
@@ -185,6 +184,7 @@ rec {
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
+      xorg.libxshmfence # for apple-music-electron
       at-spi2-core
     ];
   };

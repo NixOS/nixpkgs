@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # strange setuptools error (can not import semantic.test)
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common Natural Language Processing Tasks for Python";
     homepage = "https://github.com/crm416/semantic";
     license = licenses.mit;

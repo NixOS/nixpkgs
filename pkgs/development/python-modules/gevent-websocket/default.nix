@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ gevent gunicorn ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gitlab.com/noppo/gevent-websocket";
     description = "Websocket handler for the gevent pywsgi server, a Python network library";
     license = licenses.asl20;

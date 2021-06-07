@@ -1,4 +1,4 @@
-{ pkgs,  stdenv, fetchurl, unzip, graylog }:
+{ pkgs,  lib, stdenv, fetchurl, unzip, graylog }:
 
 with pkgs.lib;
 
@@ -15,7 +15,7 @@ let
     stdenv.mkDerivation (a // {
       inherit installPhase;
       dontUnpack = true;
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       meta = a.meta // {
         platforms = graylog.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];
@@ -32,7 +32,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/cvtienhoven/graylog-plugin-aggregates";
-      description = "SSO support for Graylog through trusted HTTP headers set by load balancers or authentication proxies";
+      description = "A plugin that enables users to execute term searches and get notified when the given criteria are met";
     };
   };
   auth_sso = glPlugin rec {
@@ -64,10 +64,10 @@ in {
   enterprise-integrations = glPlugin rec {
     name = "graylog-enterprise-integrations-${version}";
     pluginName = "graylog-plugin-enterprise-integrations";
-    version = "3.3.1";
+    version = "3.3.9";
     src = fetchurl {
       url = "https://downloads.graylog.org/releases/graylog-enterprise-integrations/graylog-enterprise-integrations-plugins-${version}.tgz";
-      sha256 = "0la91f5hfakrp5d37q3r1z15zzya9vmwgp8gf5ifkh6fasa811ll";
+      sha256 = "0yr2lmf50w8qw5amimmym6y4jxga4d7s7cbiqs5sqzvipgsknbwj";
     };
     installPhase = ''
       mkdir -p $out/bin
@@ -77,7 +77,7 @@ in {
     meta = {
       homepage = "https://docs.graylog.org/en/3.3/pages/integrations.html#enterprise";
       description = "Integrations are tools that help Graylog work with external systems (unfree enterprise integrations)";
-      license = stdenv.lib.licenses.unfree;
+      license = lib.licenses.unfree;
     };
   };
   filter-messagesize = glPlugin rec {
@@ -96,10 +96,10 @@ in {
   integrations = glPlugin rec {
     name = "graylog-integrations-${version}";
     pluginName = "graylog-plugin-integrations";
-    version = "3.3.1";
+    version = "3.3.9";
     src = fetchurl {
       url = "https://downloads.graylog.org/releases/graylog-integrations/graylog-integrations-plugins-${version}.tgz";
-      sha256 = "1k90q50p4ly9d8fj0riyb1xw0bd6f8wm2xmkr71908j2v0jaskpq";
+      sha256 = "0q858ffmkinngyqqsaszcrx93zc4fg43ny0xb7vm0p4wd48hjyqc";
     };
     installPhase = ''
       mkdir -p $out/bin

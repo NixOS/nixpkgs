@@ -1,26 +1,91 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, Mako, packaging, pysocks, pygments, ROPGadget
-, capstone, paramiko, pip, psutil
-, pyelftools, pyserial, dateutil
-, requests, tox, unicorn, intervaltree, fetchpatch }:
+{ lib
+, buildPythonPackage
+, debugger
+, fetchPypi
+, Mako
+, packaging
+, pysocks
+, pygments
+, ROPGadget
+, capstone
+, colored-traceback
+, paramiko
+, pip
+, psutil
+, pyelftools
+, pyserial
+, dateutil
+, requests
+, rpyc
+, tox
+, unicorn
+, intervaltree
+, installShellFiles
+}:
 
+let
+  debuggerName = lib.strings.getName debugger;
+in
 buildPythonPackage rec {
-  version = "4.1.1";
+  version = "4.5.0";
   pname = "pwntools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "694ce7a6cfca0ad40eae36c1d2663c44eb953f84785c63daa9752b4dfa7f39d8";
+    sha256 = "sha256-IWHMorSASG/po8ib1whS3xPuoUUlD0tbbWI35DI2SIY=";
   };
 
-  propagatedBuildInputs = [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pyserial dateutil requests tox unicorn intervaltree ];
+  postPatch = ''
+    # Upstream has set an upper bound on unicorn because of https://github.com/Gallopsled/pwntools/issues/1538,
+    # but since that is a niche use case and it requires extra work to get unicorn 1.0.2rc3 to work we relax
+    # the bound here. Check if this is still necessary when updating!
+    sed -i 's/unicorn>=1.0.2rc1,<1.0.2rc4/unicorn>=1.0.2rc1/' setup.py
+
+    # Upstream hardcoded the check for the command `gdb-multiarch`;
+    # Forcefully use the provided debugger, as `gdb` (hence `pwndbg`) is built with multiarch in `nixpkgs`.
+    sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  propagatedBuildInputs = [
+    Mako
+    packaging
+    pysocks
+    pygments
+    ROPGadget
+    capstone
+    colored-traceback
+    paramiko
+    pip
+    psutil
+    pyelftools
+    pyserial
+    dateutil
+    requests
+    rpyc
+    tox
+    unicorn
+    intervaltree
+  ];
 
   doCheck = false; # no setuptools tests for the package
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    installShellCompletion --bash extra/bash_completion.d/shellcraft
+  '';
+
+  postFixup = ''
+    mkdir -p "$out/bin"
+    makeWrapper "${debugger}/bin/${debuggerName}" "$out/bin/pwntools-gdb"
+  '';
+
+  meta = with lib; {
     homepage = "http://pwntools.com";
     description = "CTF framework and exploit development library";
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs kristoff3r ];
+    maintainers = with maintainers; [ bennofs kristoff3r pamplemousse ];
   };
 }

@@ -1,0 +1,50 @@
+From 291f691400d4e85c57b57ec75482d2c6078ce26e Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Wed, 9 Dec 2020 10:01:59 -0600
+Subject: [PATCH] platform plugins path
+
+---
+ src/pluginwrapper.cpp | 27 +++++++++++++--------------
+ 1 file changed, 13 insertions(+), 14 deletions(-)
+
+diff --git a/src/pluginwrapper.cpp b/src/pluginwrapper.cpp
+index a255d83..9699b08 100644
+--- a/src/pluginwrapper.cpp
++++ b/src/pluginwrapper.cpp
+@@ -25,20 +25,19 @@ static QStringList pluginCandidates()
+ {
+     QStringList ret;
+     const auto paths = QCoreApplication::libraryPaths();
+-    for (const QString &path : paths) {
+-        static const QStringList searchFolders {
+-            QStringLiteral("/kf5/org.kde.kwindowsystem.platforms"),
+-            QStringLiteral("/kf5/kwindowsystem"),
+-        };
+-        for (const QString &searchFolder : searchFolders) {
+-            QDir pluginDir(path + searchFolder);
+-            if (!pluginDir.exists()) {
+-                continue;
+-            }
+-            const auto entries = pluginDir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+-            for (const QString &entry : entries) {
+-                ret << pluginDir.absoluteFilePath(entry);
+-            }
++    const QString path = QStringLiteral(NIXPKGS_QT_PLUGIN_PATH);
++    static const QStringList searchFolders {
++        QStringLiteral("/kf5/org.kde.kwindowsystem.platforms"),
++        QStringLiteral("/kf5/kwindowsystem"),
++    };
++    for (const QString &searchFolder : searchFolders) {
++        QDir pluginDir(path + searchFolder);
++        if (!pluginDir.exists()) {
++            continue;
++        }
++        const auto entries = pluginDir.entryList(QDir::Files | QDir::NoDotAndDotDot);
++        for (const QString &entry : entries) {
++            ret << pluginDir.absoluteFilePath(entry);
+         }
+     }
+     return ret;
+-- 
+2.28.0
+

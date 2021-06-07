@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27
 , clikit
-, poetry
+, poetry-core
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "4.0.1";
+  version = "5.0.2";
   pname = "xdg";
   disabled = isPy27;
   format = "pyproject";
@@ -14,10 +14,10 @@ buildPythonPackage rec {
     owner = "srstevenson";
     repo = pname;
     rev = version;
-    sha256 = "13kgnbwam6wmdbig0m98vmyjcqrp0j62nmfknb6prr33ns2nxbs2";
+    sha256 = "sha256-wZfihMrq83Bye5CE5p7bTlI9Z7CsCkSd8Art5ws4vsY=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     clikit

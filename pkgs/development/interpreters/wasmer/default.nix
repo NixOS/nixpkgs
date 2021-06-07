@@ -8,21 +8,34 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "0.17.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = version;
-    sha256 = "05g4h0xkqd14wnmijiiwmhk6l909fjxr6a2zplrjfxk5bypdalpm";
+    sha256 = "0ciia8hhkkyh6rmrxgbk3bgwjwzkcba6645wlcm0vlgk2w4i5m3z";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "1ssmgx9fjvkq7ycyzjanqmlm5b80akllq6qyv3mj0k5fvs659wcq";
+  cargoSha256 = "140bzxhsyfif99x5a1m1d45ppb6jzvy9m4xil7z1wg2pnq9k7zz8";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  cargoBuildFlags = [
+    # cranelift+jit works everywhere, see:
+    # https://github.com/wasmerio/wasmer/blob/master/Makefile#L22
+    "--features" "cranelift,jit"
+    # must target manifest and desired output bin, otherwise output is empty
+    "--manifest-path" "lib/cli/Cargo.toml"
+    "--bin" "wasmer"
+  ];
+
+  cargoTestFlags = [
+    "--features" "test-cranelift,test-jit"
+  ];
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   meta = with lib; {
     description = "The Universal WebAssembly Runtime";
@@ -34,7 +47,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://wasmer.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

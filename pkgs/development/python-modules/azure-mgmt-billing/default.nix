@@ -3,6 +3,7 @@
 , fetchPypi
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 , python
 , isPy3k
@@ -10,22 +11,23 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-billing";
-  version = "0.2.0"; #pypi's 0.2.0 doesn't build ootb
+  version = "6.0.0"; #pypi's 0.2.0 doesn't build ootb
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1li2bcdwdapwwx7xbvgfsq51f2mrwm0qyzih8cjhszcah2rkpxw5";
+    sha256 = "d4f5c5a4188a456fe1eb32b6c45f55ca2069c74be41eb76921840b39f2f5c07f";
     extension = "zip";
   };
 
   propagatedBuildInputs = [
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 
   preBuild = ''
-    rm azure_bdist_wheel.py
+    rm -rf azure_bdist_wheel.py
     substituteInPlace setup.cfg \
       --replace "azure-namespace-package = azure-mgmt-nspkg" ""
   '';
@@ -39,6 +41,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Billing Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

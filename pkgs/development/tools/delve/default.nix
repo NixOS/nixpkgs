@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, makeWrapper }:
 
 buildGoPackage rec {
   pname = "delve";
-  version = "1.4.1";
+  version = "1.6.1";
 
   goPackagePath = "github.com/go-delve/delve";
   excludedPackages = "\\(_fixtures\\|scripts\\|service/test\\)";
@@ -11,10 +11,20 @@ buildGoPackage rec {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "007bc69r26w0sv6v9mbjdnmnkahpfk5998isx81ma7cinqdhi1cj";
+    sha256 = "sha256-bTVCasemE8Vyjcs8wZBiiXEsW3UBndjpPQ5bi+4vQkw=";
   };
 
-  meta = with stdenv.lib; {
+  subPackages = [ "cmd/dlv" ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    # fortify source breaks build since delve compiles with -O0
+    wrapProgram $out/bin/dlv \
+      --prefix disableHardening " " fortify
+  '';
+
+  meta = with lib; {
     description = "debugger for the Go programming language";
     homepage = "https://github.com/derekparker/delve";
     maintainers = with maintainers; [ vdemeester ];

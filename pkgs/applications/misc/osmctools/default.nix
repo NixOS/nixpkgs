@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, zlib }:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "osmctools";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line tools for transforming Open Street Map files";
     homepage = [
       "https://wiki.openstreetmap.org/wiki/osmconvert"

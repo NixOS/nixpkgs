@@ -13,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "5.0";
-    url = "https://dl.winehq.org/wine/source/5.0/wine-${version}.tar.xz";
-    sha256 = "1d0kcy338radq07hrnzcpc9lc9j2fvzjh37q673002x8d6x5058q";
+    version = "6.0";
+    url = "https://dl.winehq.org/wine/source/6.0/wine-${version}.tar.xz";
+    sha256 = "sha256-tJMGXy+D7kKcYuLsWGmKPPY+94ci4bIHZYIxUuhYLFY=";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -31,33 +31,57 @@ in rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "4.9.4";
-      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";
-      sha256 = "1p8g45xphxnns7dkg9rbaknarbjy5cjhrngaf0fsgk9z68wgz9ji";
+      version = "5.1.1";
+      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
+      sha256 = "09wjrfxbw0072iv6d2vqnkc3y7dzj15vp8mv4ay44n1qp5ji4m3l";
     };
+
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path.patch
+    ];
   };
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "5.11";
-    url = "https://dl.winehq.org/wine/source/5.x/wine-${version}.tar.xz";
-    sha256 = "1q0sh89xnn6cq3kpqrrq9h316qyzpslj2w6m6vq7pq4y4p727nxk";
-    inherit (stable) mono gecko32 gecko64;
+    version = "6.9";
+    url = "https://dl.winehq.org/wine/source/6.x/wine-${version}.tar.xz";
+    sha256 = "sha256-GFVOYB3vhqmiAXKwhcZoMpFPwh511VX25U/4nn6uW/4=";
+    inherit (stable) gecko32 gecko64;
+
+    ## see http://wiki.winehq.org/Mono
+    mono = fetchurl rec {
+      version = "6.1.1";
+      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
+      sha256 = "sha256-rDsUvq/eNLhIIofllwABE9wGqRXzLJ/QbHfrgZB544s=";
+    };
+
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path.patch
+     ];
   };
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "050npck8mdck8m2rs9xn6mszzj2fv9ql80g08j2ahinf792svrid";
+    sha256 = "sha256-g0NmiypafOAmKDRoRf4uz5NnhFo6uga0fKYNCF29jbE=";
     owner = "wine-staging";
     repo = "wine-staging";
-    rev = "v${version}";
+    #rev = "v${version}";
+    # FIXME: replace with line above with 6.10 release
+    # Fix https://bugs.winehq.org/show_bug.cgi?id=51172
+    rev = "5bbe3e47a559b3c04bc8791e0b398a271c772af7";
+
+    # Actually only "d3d11-Deferred_Context" cause problems, two others only dependencies
+    # see FIXME above
+    disabledPatchsets = [ "d3d11-Deferred_Context" "wined3d-CSMT_Main" "nvapi-Stub_DLL" "nvcuvid-CUDA_Video_Support" "nvencodeapi-Video_Encoder" ];
   };
 
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
-    version = "20200412";
-    sha256 = "0ccr8wdmhkhbccxs5hvn44ppl969n8j0c3rnnir5v6akjcb2nzzv";
+    version = "20210206";
+    sha256 = "sha256-tnwownY9A05nYlkYaoCQZjeGGHuE+kJYzA7MPE2bXnQ=";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;

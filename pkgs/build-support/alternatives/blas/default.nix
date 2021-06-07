@@ -70,9 +70,9 @@ stdenv.mkDerivation {
     exit 1
   fi
 
-  nm -an "$libblas" | cut -f3 -d' ' > symbols
+  $NM -an "$libblas" | cut -f3 -d' ' > symbols
   for symbol in ${toString blasFortranSymbols}; do
-    grep "^$symbol_$" symbols || { echo "$symbol" was not found in "$libblas"; exit 1; }
+    grep -q "^$symbol_$" symbols || { echo "$symbol" was not found in "$libblas"; exit 1; }
   done
 
   cp -L "$libblas" $out/lib/libblas${canonicalExtension}
@@ -132,7 +132,7 @@ Description: BLAS C implementation
 Cflags: -I$dev/include
 Libs: -L$out/lib -lcblas
 EOF
-'' + stdenv.lib.optionalString (blasImplementation == "mkl") ''
+'' + lib.optionalString (blasImplementation == "mkl") ''
   mkdir -p $out/nix-support
   echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
   ln -s $out/lib/libblas${canonicalExtension} $out/lib/libmkl_rt${stdenv.hostPlatform.extensions.sharedLibrary}

@@ -1,35 +1,28 @@
-{ stdenv, fetchFromGitLab
+{ lib, stdenv, fetchFromGitLab
 , meson, ninja, pkg-config, scdoc
-, wayland, wayland-protocols, openssh
 , mesa, lz4, zstd, ffmpeg, libva
 }:
 
 stdenv.mkDerivation rec {
   pname = "waypipe-unstable";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    sha256 = "0bkmibask7gfnwkn3fg3l6zaabp95n1zsdnz3dwng8j80a0kakyy";
+    sha256 = "1qa47ljfvb1vv3h647xwn1j5j8gfmcmdfaz4j8ygnkvj36y87vnz";
   };
-
-  postPatch = ''
-    substituteInPlace src/waypipe.c \
-      --replace "/usr/bin/ssh" "${openssh}/bin/ssh"
-  '';
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];
 
   buildInputs = [
-    wayland wayland-protocols
     # Optional dependencies:
     mesa lz4 zstd ffmpeg libva
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A network proxy for Wayland clients (applications)";
     longDescription = ''
       waypipe is a proxy for Wayland clients. It forwards Wayland messages and

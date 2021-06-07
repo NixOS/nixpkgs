@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , zlib
 , xorg
@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.2.3";
+  version = "2.5.5";
 
   dontConfigure = true;
   dontBuild = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
-    sha256 = "029l4f7d6c6kj2arc2zij4r04y36p537c6qaa6v87dd9piz85k0j";
+    sha256 = "sha256-M5O2NEGIVPWYKl11yxMMVreEtDO1VqcMkiGGrjNmk3A=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     ln -s $out/codeql/codeql $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Semantic code analysis engine";
     homepage = "https://semmle.com/codeql";
     maintainers = [ maintainers.dump_stack ];

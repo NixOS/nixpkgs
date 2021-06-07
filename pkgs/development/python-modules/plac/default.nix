@@ -1,15 +1,15 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
 }:
 buildPythonPackage rec {
   pname = "plac";
-  version = "1.2.0";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca03587234e5bdd2a3fa96f19a04a01ebb5b0cd66d48ecb5a54d42bc9b287320";
+    sha256 = "51e332dabc2aed2cd1f038be637d557d116175101535f53eaa7ae854a00f2a74";
   };
 
   checkPhase = ''
@@ -17,7 +17,7 @@ buildPythonPackage rec {
       ${python.interpreter} -m unittest discover -p "*test_plac*"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parsing the Command Line the Easy Way";
     homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;

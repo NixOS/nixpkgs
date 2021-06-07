@@ -1,5 +1,6 @@
-{ buildPythonPackage
-, isPy27
+{ lib
+, buildPythonPackage
+, pythonOlder
 , asn1crypto
 , azure-storage-blob
 , boto3
@@ -10,7 +11,6 @@
 , idna
 , ijson
 , isPy3k
-, lib
 , oscrypto
 , pyarrow
 , pyasn1-modules
@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.2.7";
-  disabled = isPy27;
+  version = "2.4.3";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84974778dd8d1efd4ff87d8404d71241f90e02044b1b94a52eea567080f93ac4";
+    sha256 = "sha256-+jAfUwaofWM5Ef1kk4AEAbBM/UES8/ZzLd4QJfkEQsM=";
   };
 
   propagatedBuildInputs = [
@@ -49,20 +49,26 @@ buildPythonPackage rec {
     pytz
     requests
     six
-  ] ++ lib.optionals (!isPy3k) [
     pyarrow
     pyasn1-modules
     urllib3
   ];
 
   postPatch = ''
+    # https://github.com/snowflakedb/snowflake-connector-python/issues/705
     substituteInPlace setup.py \
-      --replace "'cffi>=1.9,<1.14'," "'cffi~=1.9',"
+      --replace "idna>=2.5,<3" "idna" \
+      --replace "chardet>=3.0.2,<4" "chardet"
   '';
 
-  # tests are not working
-  # XXX: fix the tests
+  # Tests require encrypted secrets, see
+  # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
   doCheck = false;
+
+  pythonImportsCheck = [
+    "snowflake"
+    "snowflake.connector"
+  ];
 
   meta = with lib; {
     description = "Snowflake Connector for Python";

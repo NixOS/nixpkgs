@@ -1,5 +1,5 @@
 { fetchFromGitHub
-, stdenv
+, lib, stdenv
 , python3
 , sassc
 , sass
@@ -7,13 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-themes";
-  version = "1.8.0";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    rev = version;
-    sha256 = "0a8f2cmcl00y4607v5qr2zdcdjc0z74ixm2yakscvw6qzgsh9fac";
+    # commit is named 1.8.6, tags=404
+    rev = "fa0b9530f6e68c390aecd622b229072fcd08f05f";
+    sha256 = "0pgv5hglsscip5s7nv0mn301vkn0j6wp4rv34vr941yai1jfk2wb";
   };
 
   nativeBuildInputs = [
@@ -31,11 +32,11 @@ stdenv.mkDerivation rec {
     mv usr/share $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/mint-themes";
     description = "Mint-X and Mint-Y themes for the cinnamon desktop";
     license = licenses.gpl3; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

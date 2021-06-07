@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , fetchurl
 , buildPythonPackage
-, pkgconfig
+, pkg-config
 , python
 , dbus-python
 , enlightenment
@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "python-efl";
-  version = "1.24.0";
+  version = "1.25.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
-    sha256 = "1vk1cdd959gia4a9qzyq56a9zw3lqf9ck66k8c9g3c631mp5cfpy";
+    sha256 = "0bk161xwlz4dlv56r68xwkm8snzfifaxd1j7w2wcyyk4fgvnvq4r";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ enlightenment.efl ];
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for EFL and Elementary";
     homepage = "https://phab.enlightenment.org/w/projects/python_bindings_for_efl/";
     platforms = platforms.linux;

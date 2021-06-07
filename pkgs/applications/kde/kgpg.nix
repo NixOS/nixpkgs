@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "kgpg";
+  pname = "kgpg";
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   buildInputs = [
     akonadi-contacts gnupg karchive kcodecs kcontacts kcoreaddons kcrash

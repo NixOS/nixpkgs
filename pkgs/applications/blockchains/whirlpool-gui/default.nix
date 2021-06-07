@@ -1,8 +1,9 @@
-{ stdenv, fetchFromGitHub, callPackage, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper, makeDesktopItem
 , nodejs, yarn, electron_7, jre8, tor }:
 
 let
   system = stdenv.hostPlatform.system;
+  electron = electron_7;
 
 in stdenv.mkDerivation rec {
   pname = "whirlpool-gui";
@@ -71,7 +72,7 @@ in stdenv.mkDerivation rec {
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
 
     # wrap electron
-    makeWrapper '${electron_7}/bin/electron' "$out/bin/whirlpool-gui" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/whirlpool-gui" \
       --add-flags "$out/libexec/whirlpool-gui" \
       --prefix PATH : "${jre8}/bin:${tor}/bin"
   '';
@@ -89,11 +90,11 @@ in stdenv.mkDerivation rec {
     '';
   };
 
-  passthru.prefetchYarnCache = stdenv.lib.overrideDerivation yarnCache (d: {
-    outputHash = stdenv.lib.fakeSha256;
+  passthru.prefetchYarnCache = lib.overrideDerivation yarnCache (d: {
+    outputHash = lib.fakeSha256;
   });
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop GUI for Whirlpool by Samourai-Wallet";
     homepage = https://www.samouraiwallet.com/whirlpool;
     license = licenses.unlicense;

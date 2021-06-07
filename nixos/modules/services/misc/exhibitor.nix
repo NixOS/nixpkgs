@@ -185,7 +185,7 @@ in
       };
       zkExtraCfg = mkOption {
         type = types.str;
-        default = ''initLimit=5&syncLimit=2&tickTime=2000'';
+        default = "initLimit=5&syncLimit=2&tickTime=2000";
         description = ''
           Extra options to pass into Zookeeper
         '';

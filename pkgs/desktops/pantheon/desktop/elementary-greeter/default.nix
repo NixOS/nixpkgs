@@ -1,10 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -36,11 +37,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1zrsvbd386f7r3jbvjf8j08v1n5cpzkbjjaj2lxvjn8b81xgwy8j";
+    sha256 = "sha256-Enn+ekALWbk7FVJJuea/rNiwEZDIyb3kyMcZNNraOv8=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -119,7 +120,7 @@ stdenv.mkDerivation rec {
       --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LightDM Greeter for Pantheon";
     homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;

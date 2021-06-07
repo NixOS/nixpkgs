@@ -9,7 +9,7 @@ with pkgs.lib;
 {
   test1 = makeTest {
     name = "rsyslogd-test1";
-    meta.maintainers = [ pkgs.stdenv.lib.maintainers.aanderse ];
+    meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
     machine = { config, pkgs, ... }: {
       services.rsyslogd.enable = true;
@@ -25,7 +25,7 @@ with pkgs.lib;
 
   test2 = makeTest {
     name = "rsyslogd-test2";
-    meta.maintainers = [ pkgs.stdenv.lib.maintainers.aanderse ];
+    meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
     machine = { config, pkgs, ... }: {
       services.rsyslogd.enable = true;

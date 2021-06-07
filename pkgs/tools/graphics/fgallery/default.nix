@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, perlPackages
+{ lib, stdenv, fetchurl, unzip, makeWrapper, perlPackages
 , coreutils, zip, imagemagick, pngcrush, lcms2
 , facedetect, fbida }:
 
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "18wlvqbxcng8pawimbc8f2422s8fnk840hfr6946lzsxr0ijakvf";
   };
 
-  buildInputs = [ unzip makeWrapper ] ++ (with perlPackages; [ perl ImageExifTool CpanelJSONXS ]);
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = (with perlPackages; [ perl ImageExifTool CpanelJSONXS ]);
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -32,11 +33,11 @@ stdenv.mkDerivation rec {
 
     wrapProgram "$out/share/fgallery/fgallery" \
         --set PERL5LIB "$PERL5LIB" \
-        --set PATH "${stdenv.lib.makeBinPath
+        --set PATH "${lib.makeBinPath
                      [ coreutils zip imagemagick pngcrush lcms2 facedetect fbida ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Static photo gallery generator";
     homepage = "http://www.thregr.org/~wavexx/software/fgallery/";
     license = licenses.gpl2;

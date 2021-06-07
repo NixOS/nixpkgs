@@ -1,22 +1,30 @@
-{ config, stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
+{ config, lib, substituteAll, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
 , gdk-pixbuf, xlibsWrapper, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
-, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups ? null
+, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , AppKit, Cocoa
 , fetchpatch
 }:
 
-assert xineramaSupport -> xorg.libXinerama != null;
-assert cupsSupport -> cups != null;
+with lib;
 
-with stdenv.lib;
+let
+
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
+    gtk_module_path = "gtk-2.0";
+    gtk_binary_version = "2.10.0";
+  };
+
+in
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.32";
+  pname = "gtk+";
+  version = "2.24.32";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
+    url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
     sha256 = "b6c8a93ddda5eabe3bfee1eb39636c9a03d2a56c7b62828b359bf197943c582e";
   };
 
@@ -26,11 +34,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   setupHooks =  [
-    ./hooks/gtk2-clean-immodules-cache.sh
     ./hooks/drop-icon-theme-cache.sh
+    gtkCleanImmodulesCache
   ];
 
-  nativeBuildInputs = setupHooks ++ [ perl pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = setupHooks ++ [ perl pkg-config gettext gobject-introspection ];
 
   patches = [
     ./patches/2.0-immodules.cache.patch
@@ -52,6 +60,10 @@ stdenv.mkDerivation rec {
     ++ optional xineramaSupport libXinerama
     ++ optionals cupsSupport [ cups ]
     ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
+
+  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '' else null;
 
   configureFlags = [
     "--with-gdktarget=${gdktarget}"
@@ -95,5 +107,6 @@ stdenv.mkDerivation rec {
       proprietary software with GTK without any license fees or
       royalties.
     '';
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
 }

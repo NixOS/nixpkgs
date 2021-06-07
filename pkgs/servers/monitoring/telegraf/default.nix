@@ -2,9 +2,7 @@
 
 buildGoModule rec {
   pname = "telegraf";
-  version = "1.14.5";
-
-  goPackagePath = "github.com/influxdata/telegraf";
+  version = "1.18.1";
 
   excludedPackages = "test";
 
@@ -14,21 +12,21 @@ buildGoModule rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${version}";
-    sha256 = "1rnrg1q0dylr62cfkzspp47w818cja3hs6bbarcksmp0s23rq6lz";
+    sha256 = "sha256-iFigbnqUXWQrhDovwQYZsr8llkB9553c5LgcKJ78yZ4=";
   };
 
-  vendorSha256 = "1mjlakf88fa75qldkz62aja0wn0m6xqfr45vjy0lwpi0adc0fz70";
+  vendorSha256 = "sha256-m53S/L71nyioCBbIDDAWEnqStBdqTFGq16y5ozsXq1c=";
 
-  buildFlagsArray = [ ''-ldflags=
-    -w -s -X main.version=${version}
-  '' ];
+  preBuild = ''
+    buildFlagsArray+=("-ldflags=-w -s -X main.version=${version}")
+  '';
 
   passthru.tests = { inherit (nixosTests) telegraf; };
 
   meta = with lib; {
-    description = "The plugin-driven server agent for collecting & reporting metrics.";
+    description = "The plugin-driven server agent for collecting & reporting metrics";
     license = licenses.mit;
     homepage = "https://www.influxdata.com/time-series-platform/telegraf/";
-    maintainers = with maintainers; [ mic92 roblabla foxit64 ];
+    maintainers = with maintainers; [ mic92 roblabla timstott foxit64 ];
   };
 }

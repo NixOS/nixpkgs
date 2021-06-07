@@ -1,4 +1,4 @@
-{ stdenv, python, buildPythonApplication, fetchurl, urlgrabber }:
+{ lib, python, buildPythonApplication, fetchurl, urlgrabber }:
 
 buildPythonApplication rec {
   pname = "pykickstart";
@@ -22,9 +22,9 @@ buildPythonApplication rec {
     ${python}/bin/${python.executable} tests/baseclass.py -vv
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://fedoraproject.org/wiki/Pykickstart";
     description = "Read and write Fedora kickstart files";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

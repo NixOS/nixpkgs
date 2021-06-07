@@ -210,12 +210,21 @@ in rec {
       '';
     };
 
+    startLimitBurst = mkOption {
+       type = types.int;
+       description = ''
+         Configure unit start rate limiting. Units which are started
+         more than startLimitBurst times within an interval time
+         interval are not permitted to start any more.
+       '';
+    };
+
     startLimitIntervalSec = mkOption {
        type = types.int;
        description = ''
          Configure unit start rate limiting. Units which are started
-         more than burst times within an interval time interval are
-         not permitted to start any more.
+         more than startLimitBurst times within an interval time
+         interval are not permitted to start any more.
        '';
     };
 
@@ -234,7 +243,6 @@ in rec {
     path = mkOption {
       default = [];
       type = with types; listOf (oneOf [ package str ]);
-      apply = ps: "${makeBinPath ps}:${makeSearchPathOutput "bin" "sbin" ps}";
       description = ''
         Packages added to the service's <envar>PATH</envar>
         environment variable.  Both the <filename>bin</filename>
@@ -246,8 +254,7 @@ in rec {
     serviceConfig = mkOption {
       default = {};
       example =
-        { StartLimitInterval = 10;
-          RestartSec = 5;
+        { RestartSec = 5;
         };
       type = types.addCheck (types.attrsOf unitOption) checkService;
       description = ''
@@ -375,6 +382,16 @@ in rec {
       example = [ "0.0.0.0:993" "/run/my-socket" ];
       description = ''
         For each item in this list, a <literal>ListenStream</literal>
+        option in the <literal>[Socket]</literal> section will be created.
+      '';
+    };
+
+    listenDatagrams = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      example = [ "0.0.0.0:993" "/run/my-socket" ];
+      description = ''
+        For each item in this list, a <literal>ListenDatagram</literal>
         option in the <literal>[Socket]</literal> section will be created.
       '';
     };

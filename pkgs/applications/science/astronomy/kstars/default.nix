@@ -1,36 +1,41 @@
 {
-  mkDerivation, lib, fetchgit,
-  extra-cmake-modules,
+  lib, mkDerivation, extra-cmake-modules, fetchurl,
 
   kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui,
+  knewstuff, kplotting, kwidgetsaddons, kxmlgui, knotifyconfig,
 
-  qtx11extras, qtwebsockets,
+
+  qtx11extras, qtwebsockets, qtkeychain, libsecret,
 
   eigen, zlib,
 
-  cfitsio, indilib, xplanet
+  cfitsio, indi-full, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
 }:
 
-mkDerivation {
-  name = "kstars";
-  
-  src = fetchgit {
-    url = "https://anongit.kde.org/kstars.git";
-    rev = "7acc527939280edd22823371dc4e22494c6c626a";
-    sha256 = "1n1lgi7p3dj893fdnzjbnrha40p4apl0dy8zppcabxwrb1khb84v";
+mkDerivation rec {
+  pname = "kstars";
+  version = "3.5.3";
+
+  src = fetchurl {
+    url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
+    sha256 = "sha256-kgUsG2k2YSAAH7ea2qfGw4gON5CFdUoQ3EwOnATXZ5g=";
   };
-  
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
-    knewstuff kplotting kwidgetsaddons kxmlgui
+    knewstuff kplotting kwidgetsaddons kxmlgui knotifyconfig
 
-    qtx11extras qtwebsockets
+    qtx11extras qtwebsockets qtkeychain libsecret
 
     eigen zlib
 
-    cfitsio indilib xplanet
+    cfitsio indi-full xplanet libnova libraw gsl wcslib stellarsolver
+  ];
+
+  cmakeFlags = [
+    "-DINDI_PREFIX=${indi-full}"
+    "-DXPLANET_PREFIX=${xplanet}"
   ];
 
   meta = with lib; {
@@ -41,8 +46,8 @@ mkDerivation {
       The display includes up to 100 million stars, 13.000 deep-sky objects, all 8 planets, the Sun and Moon, and thousands of comets, asteroids, supernovae, and satellites.
       For students and teachers, it supports adjustable simulation speeds in order to view phenomena that happen over long timescales, the KStars Astrocalculator to predict conjunctions, and many common astronomical calculations.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timput ];
+    maintainers = with maintainers; [ timput hjones2199 ];
   };
 }

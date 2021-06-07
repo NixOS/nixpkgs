@@ -1,5 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , glib
 , gtk3
 , vala
@@ -7,7 +8,7 @@
 , libgee
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , wrapGAppsHook
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     python3
     wrapGAppsHook
@@ -48,12 +49,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plot out your own timetable for the week and organize it";
     homepage = "https://github.com/lainsce/timetable";
     maintainers = [ maintainers.xiorcale ] ++ pantheon.maintainers;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkgconfig, pmount, pythonPackages, writeScript, runtimeShell }:
+{ lib, stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkg-config, pmount, pythonPackages, writeScript, runtimeShell }:
 
 let
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     makeWrapper
     # pam_usb dependencies
-    dbus libxml2 pam pmount pkgconfig
+    dbus libxml2 pam pmount pkg-config
     # pam_usb's tools dependencies
     python
     # cElementTree is included with python 2.5 and later.
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://pamusb.org/";
     description = "Authentication using USB Flash Drives";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

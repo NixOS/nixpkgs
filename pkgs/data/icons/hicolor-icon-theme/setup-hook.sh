@@ -28,17 +28,17 @@ symlinkParentIconThemes() {
             theme_name="${theme%/*}"
             theme_name="${theme_name##*/}"
             echo "  theme: $theme_name"
-            inheritance=$(sed -rne 's,^Inherits=(.*)$,\1,p' $theme)
+            inheritance=$(sed -rne 's,^Inherits=(.*)$,\1,p' "$theme")
             IFS=',' read -ra parent_themes <<< "$inheritance"
             for parent_theme in "${parent_themes[@]}"; do
                 parent_path=""
                 if [ -e "$out/share/icons/$parent_theme" ]; then
-                    parent_path="$(realpath $out/share/icons/$parent_theme)"
+                    parent_path="$(realpath "$out/share/icons/$parent_theme")"
                 else
                     IFS=':' read -ra dirs <<< $XDG_ICON_DIRS
                     for parent_dir in  "${dirs[@]}"; do
                         if [ -e "$parent_dir/icons/$parent_theme/index.theme" ]; then
-                            parent_path=$(realpath "$parent_dir/icons/$parent_theme")
+                            parent_path="$(realpath "$parent_dir/icons/$parent_theme")"
                             ln -s "$parent_path" "$out/share/icons/"
                             break
                         fi

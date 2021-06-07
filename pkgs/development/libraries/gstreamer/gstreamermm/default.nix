@@ -1,29 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, file, glibmm, gst_all_1, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, file, glibmm, gst_all_1, gnome }:
 stdenv.mkDerivation rec {
   pname = "gstreamermm";
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0q4dx9sncqbwgpzma0zvj6zssc279yl80pn8irb95qypyyggwn5y";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig file ];
+  nativeBuildInputs = [ pkg-config file ];
 
   propagatedBuildInputs = [ glibmm gst_all_1.gst-plugins-base ];
 
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-      versionPolicy = "none"; # Unpredictable version stability
+    updateScript = gnome.updateScript {
+      packageName = "gst_all_1.gstreamermm";
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ interface for GStreamer";
     homepage = "https://gstreamer.freedesktop.org/bindings/cplusplus.html";
     license = licenses.lgpl21Plus;

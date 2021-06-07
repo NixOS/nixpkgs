@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , ruby
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/env nix-shell" "${ruby}/bin/ruby"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Uses nixpkgs fetchers to figure out hashes";
     homepage = "https://github.com/samueldr/nix-universal-prefetch";
     license = licenses.mit;

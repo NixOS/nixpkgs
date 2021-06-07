@@ -10,6 +10,10 @@ stdenv.mkDerivation {
     sha256 = "007s2idsn6bspmfxv1qabj39ggkgvn6gwdbhczwn04lb4c6gh3xc";
   };
 
+  # Upstream development has stopped and is no longer accepting patches
+  # https://github.com/mischief/9pfs/pull/3
+  patches = [ ./fix-darwin-build.patch ];
+
   preConfigure =
     ''
       substituteInPlace Makefile --replace '-g bin' ""
@@ -25,7 +29,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/mischief/9pfs";
     description = "FUSE-based client of the 9P network filesystem protocol";
     maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     license = with lib.licenses; [ lpl-102 bsd2 ];
   };
 }

@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames, glibc
+{ lib, stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames, glibc
 , version, hashes }:
-with stdenv;
+
 let
+  inherit (stdenv) hostPlatform;
   OS = if hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
   MODEL = toString hostPlatform.parsed.cpu.bits;
-in mkDerivation {
+in stdenv.mkDerivation {
   pname = "dmd-bootstrap";
   inherit version;
 
@@ -17,7 +18,8 @@ in mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ fixDarwinDylibNames autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook ]
+    ++ lib.optional hostPlatform.isDarwin fixDarwinDylibNames;
   propagatedBuildInputs = [ curl tzdata ] ++ lib.optional hostPlatform.isLinux glibc;
 
   installPhase = ''

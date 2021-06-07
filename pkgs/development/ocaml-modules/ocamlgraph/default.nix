@@ -1,4 +1,7 @@
-{stdenv, fetchurl, ocaml, findlib, lablgtk ? null}:
+{ stdenv, lib, fetchurl, ocaml, findlib
+, gtkSupport ? true
+, lablgtk
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocamlgraph";
@@ -9,31 +12,28 @@ stdenv.mkDerivation rec {
     sha256 = "0m9g16wrrr86gw4fz2fazrh8nkqms0n863w7ndcvrmyafgxvxsnr";
   };
 
-  buildInputs = [ ocaml findlib lablgtk ];
-
-  patches = ./destdir.patch;
-
-  postPatch = ''
-    sed -i 's@$(DESTDIR)$(OCAMLLIB)/ocamlgraph@$(DESTDIR)/lib/ocaml/${ocaml.version}/site-lib/ocamlgraph@' Makefile.in
-    sed -i 's@OCAMLFINDDEST := -destdir $(DESTDIR)@@' Makefile.in
-    ${stdenv.lib.optionalString (lablgtk != null)
-      "sed -i 's@+lablgtk2@${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2 -I ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/stublibs@' configure Makefile.in editor/Makefile"}
-  '';
+  buildInputs = [ ocaml findlib ]
+  ++ lib.optional gtkSupport lablgtk
+  ;
 
   createFindlibDestdir = true;
 
-  buildPhase = ''
-    make all
-    make install-findlib
+  buildFlags =  [ "all" ];
+  installTargets = [ "install-findlib" ];
+
+  postInstall = lib.optionalString gtkSupport ''
+    mkdir -p $out/bin
+    cp dgraph/dgraph.opt $out/bin/graph-viewer
+    cp editor/editor.opt $out/bin/graph-editor
   '';
 
   meta = {
     homepage = "http://ocamlgraph.lri.fr/";
     description = "Graph library for Objective Caml";
-    license = stdenv.lib.licenses.gpl2Oss;
+    license = lib.licenses.gpl2Oss;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.kkallio
+      lib.maintainers.kkallio
     ];
   };
 }

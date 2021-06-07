@@ -1,0 +1,32 @@
+diff '--color=auto' -ru dirdiff-2.1/dirdiff dirdiff-2.1-patched/dirdiff
+--- dirdiff-2.1/dirdiff	2005-04-20 03:09:53.000000000 -0700
++++ dirdiff-2.1-patched/dirdiff	2021-02-14 22:54:09.837692023 -0800
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ # Tcl ignores the next line \
+-exec wish "$0" -- "${1+$@}"
++exec @tk@/bin/wish "$0" -- "${1+$@}"
+ 
+ # Copyright (C) 1999-2004 Paul Mackerras.  All rights reserved.
+ # This program is free software; it may be used, copied, modified
+@@ -17,7 +17,7 @@
+ set TclExe [info nameofexecutable]
+ set compound_ok [expr {$tcl_version >= 8.4}]
+ 
+-set nofilecmp [catch {load libfilecmp.so.0.0}]
++set nofilecmp [catch {load @out@/lib/libfilecmp.so.0.0}]
+ set rcsflag {}
+ set diffbflag {}
+ set diffBflag {}
+diff '--color=auto' -ru dirdiff-2.1/Makefile dirdiff-2.1-patched/Makefile
+--- dirdiff-2.1/Makefile	2005-04-19 03:22:01.000000000 -0700
++++ dirdiff-2.1-patched/Makefile	2021-02-14 22:54:58.575400923 -0800
+@@ -7,7 +7,7 @@
+ INSTALL=install
+ 
+ # You may need to change the -I arguments depending on your system
+-CFLAGS=-O3 -I/usr/include/tcl8.3/ -I/usr/include/tcl
++CFLAGS=-O3 -I@tcl@/include
+ 
+ all:	libfilecmp.so.0.0
+ 

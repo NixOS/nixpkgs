@@ -1,4 +1,4 @@
-{ lib, pythonPackages, pkgconfig
+{ lib, pythonPackages, pkg-config
 , qmake, qtbase, qtsvg, qtwebengine
 , wrapQtAppsHook
 }:
@@ -7,21 +7,27 @@ let
 
   inherit (pythonPackages) buildPythonPackage python isPy3k pyqt5 enum34;
   inherit (pyqt5) sip;
+  # source: https://www.riverbankcomputing.com/pipermail/pyqt/2020-June/042985.html
+  patches = lib.optional (lib.hasPrefix "5.14" pyqt5.version)
+    [ ./fix-build-with-qt-514.patch ]
+  ;
 
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";
-  version = "5.15.0";
+  version = "5.15.4";
   format = "other";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "0xdzhl07x3mzfnr5cf4d640168vxi7fyl0fz1pvpbgs0irl14237";
+    sha256 = "06fc35hzg346a9c86dk7vzm1fakkgzn5l52jfq3bix3587sjip6f";
   };
+
+  inherit patches;
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     sip
     qtbase
@@ -38,6 +44,8 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyqt5 ]
     ++ lib.optional (!isPy3k) enum34;
+
+  dontWrapQtApps = true;
 
   configurePhase = ''
     runHook preConfigure

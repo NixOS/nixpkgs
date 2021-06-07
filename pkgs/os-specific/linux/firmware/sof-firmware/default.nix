@@ -1,33 +1,30 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "sof-firmware";
-  version = "1.5.1";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof-bin";
-    rev = "ae61d2778b0a0f47461a52da0d1f191f651e0763";
-    sha256 = "0j6bpwz49skvdvian46valjw4anwlrnkq703n0snkbngmq78prba";
+    rev = "v${version}";
+    sha256 = "sha256-Z0Z4HLsIIuW8E1kFNhAECmzj1HkJVfbEw13B8V7PZLk=";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontFixup = true; # binaries must not be stripped or patchelfed
 
   installPhase = ''
-    mkdir -p $out/lib/firmware/intel
-
-    sed -i 's/ROOT=.*$/ROOT=$out/g' go.sh
-    sed -i 's/VERSION=.*$/VERSION=v${version}/g' go.sh
-
-    ./go.sh
+    mkdir -p $out/lib/firmware/intel/
+    cp -a sof-v${version} $out/lib/firmware/intel/sof
+    cp -a sof-tplg-v${version} $out/lib/firmware/intel/sof-tplg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sound Open Firmware";
     homepage = "https://www.sofproject.org/";
     license = with licenses; [ bsd3 isc ];
-    maintainers = with maintainers; [ lblasc evenbrenden ];
+    maintainers = with maintainers; [ lblasc evenbrenden hmenke ];
     platforms = with platforms; linux;
   };
 }

@@ -1,44 +1,53 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, buildPackages, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
+, makeWrapper
+, enableCmount ? true, fuse, macfuse-stubs
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "rclone";
-  version = "1.52.2";
+  version = "1.55.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1da6azr4j5sbzb5xpy2xk4vqi6bdpmzlq3pxrmakaskicz64nnld";
+    sha256 = "1fyi12qz2igcf9rqsp9gmcgfnmgy4g04s2b03b95ml6klbf73cns";
   };
 
-  goPackagePath = "github.com/rclone/rclone";
+  vendorSha256 = "199z3j62xw9h8yviyv4jfls29y2ri9511hcyp5ix8ahgk6ypz8vw";
 
   subPackages = [ "." ];
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = lib.optional enableCmount (if stdenv.isDarwin then macfuse-stubs else fuse);
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  buildFlagsArray = lib.optionals enableCmount [ "-tags=cmount" ]
+    ++ [ "-ldflags=-s -w -X github.com/rclone/rclone/fs.Version=${version}" ];
 
   postInstall =
     let
       rcloneBin =
         if stdenv.buildPlatform == stdenv.hostPlatform
         then "$out"
-        else stdenv.lib.getBin buildPackages.rclone;
+        else lib.getBin buildPackages.rclone;
     in
-      ''
-        installManPage $src/rclone.1
-        for shell in bash zsh fish; do
-          ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
-          installShellCompletion rclone.$shell
-        done
-      '';
+    ''
+      installManPage rclone.1
+      for shell in bash zsh fish; do
+        ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
+        installShellCompletion rclone.$shell
+      done
+    '' + lib.optionalString (enableCmount && !stdenv.isDarwin) ''
+      wrapProgram $out/bin/rclone --prefix LD_LIBRARY_PATH : "${fuse}/lib"
+    '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
+    changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ danielfullmer ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ danielfullmer marsam SuperSandro2000 ];
   };
 }

@@ -1,52 +1,50 @@
 { lib
+, astropy
 , buildPythonPackage
 , fetchPypi
-, pytest-astropy
-, semantic-version
-, pyyaml
 , jsonschema
-, six
 , numpy
-, isPy27
-, astropy
-, setuptools_scm
-, setuptools
+, packaging
+, pytest-astropy
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, semantic-version
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.6.0";
-  disabled = isPy27;
+  version = "2.7.3";
+  disabled = pythonOlder "3.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ym9mmxjpnnlinly1rxfqj9rlyl2fv7dxc81f30n1b8n9pwc6jb5";
+    sha256 = "11dyr295wn5m2pcynlwj7kgw9xr66msfvwn1m6a5vv13vzj19spp";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "semantic_version>=2.3.1,<=2.6.0" "semantic_version>=2.3.1" \
-      --replace "doctest_plus = enabled" ""
-  '';
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [
+    jsonschema
+    numpy
+    packaging
+    pyyaml
+    semantic-version
+  ];
 
   checkInputs = [
     pytest-astropy
     astropy
+    pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
-    semantic-version
-    pyyaml
-    jsonschema
-    six
-    numpy
-    setuptools_scm
-    setuptools
-  ];
-
-  checkPhase = ''
-    pytest
+  preCheck = ''
+    export PY_IGNORE_IMPORTMISMATCH=1
   '';
+
+  pythonImportsCheck = [ "asdf" ];
 
   meta = with lib; {
     description = "Python tools to handle ASDF files";

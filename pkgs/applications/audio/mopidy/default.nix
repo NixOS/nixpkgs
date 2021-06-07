@@ -1,45 +1,41 @@
-{ newScope, python }:
+{ lib, newScope, python }:
 
 # Create a custom scope so we are consistent in which python version is used
+lib.makeScope newScope (self: with self; {
+  inherit python;
+  pythonPackages = python.pkgs;
 
-let
-  callPackage = newScope self;
+  mopidy = callPackage ./mopidy.nix { };
 
-  self = {
+  mopidy-iris = callPackage ./iris.nix { };
 
-    inherit python;
-    pythonPackages = python.pkgs;
+  mopidy-local = callPackage ./local.nix { };
 
-    mopidy = callPackage ./mopidy.nix { };
+  mopidy-moped = callPackage ./moped.nix { };
 
-    mopidy-gmusic = callPackage ./gmusic.nix { };
+  mopidy-mopify = callPackage ./mopify.nix { };
 
-    mopidy-local-images = callPackage ./local-images.nix { };
+  mopidy-mpd = callPackage ./mpd.nix { };
 
-    mopidy-local-sqlite = callPackage ./local-sqlite.nix { };
+  mopidy-mpris = callPackage ./mpris.nix { };
 
-    mopidy-spotify = callPackage ./spotify.nix { };
+  mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 
-    mopidy-moped = callPackage ./moped.nix { };
+  mopidy-podcast = callPackage ./podcast.nix { };
 
-    mopidy-mopify = callPackage ./mopify.nix { };
+  mopidy-scrobbler = callPackage ./scrobbler.nix { };
 
-    mopidy-mpd = callPackage ./mpd.nix { };
+  mopidy-somafm = callPackage ./somafm.nix { };
 
-    mopidy-mpris = callPackage ./mpris.nix { };
+  mopidy-soundcloud = callPackage ./soundcloud.nix { };
 
-    mopidy-somafm = callPackage ./somafm.nix { };
+  mopidy-spotify = callPackage ./spotify.nix { };
 
-    mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
+  mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
 
-    mopidy-youtube = callPackage ./youtube.nix { };
+  mopidy-tunein = callPackage ./tunein.nix { };
 
-    mopidy-soundcloud = callPackage ./soundcloud.nix { };
+  mopidy-youtube = callPackage ./youtube.nix { };
 
-    mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
-
-    mopidy-iris = callPackage ./iris.nix { };
-
-  };
-
-in self
+  mopidy-subidy = callPackage ./subidy.nix { };
+})

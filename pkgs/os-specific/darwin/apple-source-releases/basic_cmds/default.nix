@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, xcbuildHook }:
+{ lib, appleDerivation, xcbuildHook }:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
@@ -26,7 +26,7 @@ appleDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

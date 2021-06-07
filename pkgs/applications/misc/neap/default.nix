@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ lib, stdenv, fetchFromGitHub, python2Packages }:
 
 stdenv.mkDerivation rec {
   pname = "neap";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Systray workspace pager";
     homepage = "https://github.com/vzxwco/neap";
     license = licenses.bsd2;

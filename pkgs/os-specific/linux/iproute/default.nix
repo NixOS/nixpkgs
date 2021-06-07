@@ -1,15 +1,15 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , buildPackages, bison, flex, pkg-config
 , db, iptables, libelf, libmnl
 }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.7.0";
+  version = "5.12.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "088gs56iqhdlpw1iqjwrss4zxd4zbl2wl8s2implrrdajjxcfpbj";
+    sha256 = "sha256-nSaNuYo27ioOP/O5Ky7/9m/BE4pR5Am972qzz+FfMm8=";
   };
 
   preConfigure = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;

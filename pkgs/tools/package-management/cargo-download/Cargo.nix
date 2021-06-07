@@ -427,7 +427,7 @@ rec {
     serde_urlencoded = "0.5.1";
     tokio = "0.1.7";
     tokio_io = "0.1.10";
-    url = "1.6.0";
+    url = "1.6.1";
     uuid = "0.7.1";
   };
   deps.rustc_version."0.2.3" = {
@@ -464,7 +464,7 @@ rec {
     dtoa = "0.4.2";
     itoa = "0.3.4";
     serde = "1.0.21";
-    url = "1.6.0";
+    url = "1.6.1";
   };
   deps.siphasher."0.2.2" = {};
   deps.slab."0.4.0" = {};
@@ -639,7 +639,7 @@ rec {
   deps.unreachable."1.0.0" = {
     void = "1.0.2";
   };
-  deps.url."1.6.0" = {
+  deps.url."1.6.1" = {
     idna = "0.1.4";
     matches = "0.1.6";
     percent_encoding = "1.0.1";

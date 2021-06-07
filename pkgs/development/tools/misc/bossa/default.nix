@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, wxGTK, libX11, readline }:
+{ lib, stdenv, fetchgit, wxGTK, libX11, readline }:
 
 let
   # BOSSA needs a "bin2c" program to embed images.
@@ -8,8 +8,8 @@ let
     name = "bossa-bin2c";
     src = ./bin2c.c;
     dontUnpack = true;
-    buildPhase = ''cc $src -o bin2c'';
-    installPhase = ''mkdir -p $out/bin; cp bin2c $out/bin/'';
+    buildPhase = "cc $src -o bin2c";
+    installPhase = "mkdir -p $out/bin; cp bin2c $out/bin/";
   };
 
 in
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     cp bin/bossa{c,sh,} $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
     longDescription = ''
       BOSSA is a flash programming utility for Atmel's SAM family of

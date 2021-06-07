@@ -47,6 +47,7 @@ in
 
     extraFlags = mkOption {
       description = "Extra flags to pass to the k3s command.";
+      type = types.str;
       default = "";
       example = "--no-deploy traefik --cluster-cidr 10.24.0.0/16";
     };
@@ -76,10 +77,18 @@ in
       enable = mkDefault true;
     };
 
+    # TODO: disable this once k3s supports cgroupsv2, either by docker
+    # supporting it, or their bundled containerd
+    systemd.enableUnifiedCgroupHierarchy = false;
+
+    environment.systemPackages = [ config.services.k3s.package ];
+
     systemd.services.k3s = {
       description = "k3s service";
-      after = mkIf cfg.docker [ "docker.service" ];
+      after = [ "network.service" "firewall.service" ] ++ (optional cfg.docker "docker.service");
+      wants = [ "network.service" "firewall.service" ];
       wantedBy = [ "multi-user.target" ];
+      path = optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {
         # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
         Type = if cfg.role == "agent" then "exec" else "notify";
@@ -87,6 +96,10 @@ in
         Delegate = "yes";
         Restart = "always";
         RestartSec = "5s";
+        LimitNOFILE = 1048576;
+        LimitNPROC = "infinity";
+        LimitCORE = "infinity";
+        TasksMax = "infinity";
         ExecStart = concatStringsSep " \\\n " (
           [
             "${cfg.package}/bin/k3s ${cfg.role}"

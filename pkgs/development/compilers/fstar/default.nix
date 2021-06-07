@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "fstar";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   buildInputs = with ocamlPackages; [
-    z3 ocaml findlib batteries menhir stdint
+    z3 ocaml findlib batteries menhir menhirLib stdint
     zarith camlp4 yojson pprint
     ulex ocaml-migrate-parsetree process ppx_deriving ppx_deriving_yojson ocamlbuild
   ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --zsh --name _fstar.exe .completion/zsh/__fstar.exe
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
     license = licenses.asl20;

@@ -1,19 +1,23 @@
 { gnustep, lib, fetchFromGitHub , libxml2, openssl_1_1
-, openldap, mysql, libmysqlclient, postgresql }: with lib; gnustep.stdenv.mkDerivation rec {
+, openldap, mariadb, libmysqlclient, postgresql }:
+with lib;
+
+gnustep.stdenv.mkDerivation rec {
   pname = "sope";
-  version = "4.3.2";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOPE-${version}";
-    sha256 = "0ny1ihx38gd25w8f3dfybyswvyjfljvb2fhfmkajgg6hhjrkfar2";
+    sha256 = "031m8ydr4jhh29332mfbsw0i5d0cjfqfyfs55jm832dlmv4447gb";
   };
 
+  hardeningDisable = [ "format" ];
   nativeBuildInputs = [ gnustep.make ];
   buildInputs = flatten ([ gnustep.base libxml2 openssl_1_1 ]
     ++ optional (openldap != null) openldap
-    ++ optionals (mysql != null) [ libmysqlclient mysql ]
+    ++ optionals (mariadb != null) [ libmysqlclient mariadb ]
     ++ optional (postgresql != null) postgresql);
 
   postPatch = ''
@@ -27,7 +31,7 @@
 
   configureFlags = [ "--prefix=" "--disable-debug" "--enable-xml" "--with-ssl=ssl" ]
     ++ optional (openldap != null) "--enable-openldap"
-    ++ optional (mysql != null) "--enable-mysql"
+    ++ optional (mariadb != null) "--enable-mysql"
     ++ optional (postgresql != null) "--enable-postgresql";
 
   # Yes, this is ugly.
@@ -37,7 +41,7 @@
   '';
 
   meta = {
-    description = "SOPE is an extensive set of frameworks which form a complete Web application server environment";
+    description = "An extensive set of frameworks which form a complete Web application server environment";
     license = licenses.publicDomain;
     homepage = "https://github.com/inverse-inc/sope";
     platforms = platforms.linux;

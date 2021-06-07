@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation {
   name = "mysocketw-031026";
@@ -11,16 +11,16 @@ stdenv.mkDerivation {
 
   buildInputs = [ openssl ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/Makefile \
         --replace -Wl,-soname, -Wl,-install_name,$out/lib/
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "CXX=c++" ];
+  makeFlags = [ "PREFIX=$(out)" "CXX=${stdenv.cc.targetPrefix}c++" ];
 
   meta = {
     description = "Cross platform (Linux/FreeBSD/Unix/Win32) streaming socket C++";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
 }

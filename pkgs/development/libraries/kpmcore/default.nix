@@ -1,35 +1,50 @@
-{ stdenv, lib, fetchurl, extra-cmake-modules
-, qtbase, kdeFrameworks
-, libatasmart, parted
-, utillinux }:
+{ stdenv, lib, fetchurl, fetchpatch, extra-cmake-modules
+, qca-qt5, kauth, kio, polkit-qt, qtbase
+, util-linux
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "kpmcore";
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "3.3.0";
+  # NOTE: When changing this version, also change the version of `partition-manager`.
+  version = "4.2.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "0s6v0jfrhjg31ri5p6h9n4w29jvasf5dj954j3vfpzl91lygmmmq";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    hash = "sha256-MvW0CqvFZtzcJlya6DIpzorPbKJai6fxt7nKsKpJn54=";
   };
 
-  buildInputs = [
-    qtbase
-    libatasmart
-    parted # we only need the library
-
-    kdeFrameworks.kio
-
-    utillinux # needs blkid (note that this is not provided by utillinux-compat)
+  patches = [
+    # Fix build with `kcoreaddons` >= 5.77.0
+    (fetchpatch {
+      url = "https://github.com/KDE/kpmcore/commit/07e5a3ac2858e6d38cc698e0f740e7a693e9f302.patch";
+      sha256 = "sha256-LYzea888euo2HXM+acWaylSw28iwzOdZBvPBt/gjP1s=";
+    })
+    # Fix crash when `fstab` omits mount options.
+    (fetchpatch {
+      url = "https://github.com/KDE/kpmcore/commit/eea84fb60525803a789e55bb168afb968464c130.patch";
+      sha256 = "sha256-NJ3PvyRC6SKNSOlhJPrDDjepuw7IlAoufPgvml3fap0=";
+    })
   ];
-  nativeBuildInputs = [ extra-cmake-modules ];
-  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    maintainers = with lib.maintainers; [ peterhoeg ];
-    # The build requires at least Qt 5.12:
-    broken = lib.versionOlder qtbase.version "5.12.0";
+  buildInputs = [
+    qca-qt5
+    kauth
+    kio
+    polkit-qt
+
+    util-linux # Needs blkid in configure script (note that this is not provided by util-linux-compat)
+  ];
+
+  nativeBuildInputs = [ extra-cmake-modules ];
+
+  dontWrapQtApps = true;
+
+  meta = with lib; {
+    description = "KDE Partition Manager core library";
+    homepage = "https://invent.kde.org/system/kpmcore";
+    license = with licenses; [ cc-by-40 cc0 gpl3Plus mit ];
+    maintainers = with maintainers; [ peterhoeg oxalica ];
+    # The build requires at least Qt 5.14:
+    broken = versionOlder qtbase.version "5.14";
   };
 }

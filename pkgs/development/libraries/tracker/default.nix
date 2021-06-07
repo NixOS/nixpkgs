@@ -1,27 +1,26 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
-, pkgconfig
+, pkg-config
+, asciidoc
 , gobject-introspection
 , python3
 , gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, docbook_xml_dtd_43
+, docbook-xsl-nons
 , docbook_xml_dtd_45
 , libxml2
 , glib
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , vala
 , sqlite
 , libxslt
 , libstemmer
-, gnome3
+, gnome
 , icu
 , libuuid
-, networkmanager
 , libsoup
 , json-glib
 , systemd
@@ -31,19 +30,30 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "2.3.4";
+  version = "3.1.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vai0qz9jn3z5dlzysynwhbbmslp84ygdql81f5wfxxr98j54yap";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-Q3bi6YRUBm9E96JC5FuZs7/kwDtn+rGauw7Vhsp0iuc=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      gdbus = "${glib.bin}/bin/gdbus";
+      inherit asciidoc;
+    })
+
+    # Add missing build target dependencies to fix parallel building of docs.
+    # TODO: Upstream this.
+    ./fix-docs.patch
+
+    # Fix 32bit datetime issue, use this upstream patch until 3.1.2 lands
+    # https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/401
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker/merge_requests/401.patch";
+      sha256 = "QEf+ciGkkCzanmtGO0aig6nAxd+NxjvuNi4RbNOwZEA=";
     })
   ];
 
@@ -51,19 +61,18 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
+    asciidoc
     gettext
     libxslt
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
     gobject-introspection
     gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_412
-    docbook_xml_dtd_43
+    docbook-xsl-nons
     docbook_xml_dtd_45
     python3 # for data-generators
     systemd # used for checks to install systemd user service
-    dbus # used for checks and pkgconfig to install dbus service/s
+    dbus # used for checks and pkg-config to install dbus service/s
   ];
 
   buildInputs = [
@@ -71,20 +80,18 @@ stdenv.mkDerivation rec {
     libxml2
     sqlite
     icu
-    networkmanager
     libsoup
     libuuid
     json-glib
     libstemmer
   ];
 
-  checkInputs = [
-    python3.pkgs.pygobject3
+  checkInputs = with python3.pkgs; [
+    pygobject3
+    tappy
   ];
 
   mesonFlags = [
-    # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
-    # "-Dfunctional_tests=true"
     "-Ddocs=true"
   ];
 
@@ -95,6 +102,7 @@ stdenv.mkDerivation rec {
     patchShebangs utils/data-generators/cc/generate
     patchShebangs tests/functional-tests/test-runner.sh.in
     patchShebangs tests/functional-tests/*.py
+    patchShebangs examples/python/endpoint.py
   '';
 
   preCheck = ''
@@ -106,9 +114,17 @@ stdenv.mkDerivation rec {
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that will be overridden during installation.
     mkdir -p $out/lib
-    ln -s $PWD/src/libtracker-sparql-backend/libtracker-sparql-2.0.so $out/lib/libtracker-sparql-2.0.so.0
-    ln -s $PWD/src/libtracker-miner/libtracker-miner-2.0.so $out/lib/libtracker-miner-2.0.so.0
-    ln -s $PWD/src/libtracker-data/libtracker-data.so $out/lib/libtracker-data.so
+    ln -s $PWD/src/libtracker-sparql/libtracker-sparql-3.0.so $out/lib/libtracker-sparql-3.0.so.0
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
   postCheck = ''
@@ -116,18 +132,14 @@ stdenv.mkDerivation rec {
     rm -r $out/lib
   '';
 
-  postInstall = ''
-    glib-compile-schemas "$out/share/glib-2.0/schemas"
-  '';
-
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bash, coreutils, gdb, zlib }:
+{ lib, stdenv, fetchFromGitHub, bash, coreutils, gdb, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "procdump";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Linux version of the ProcDump Sysinternals tool";
     homepage = "https://github.com/Microsoft/ProcDump-for-Linux";
     license = licenses.mit;

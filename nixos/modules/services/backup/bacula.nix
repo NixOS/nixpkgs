@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+
 # TODO: test configuration when building nixexpr (use -t parameter)
 # TODO: support sqlite3 (it's deprecate?) and mysql
 
@@ -18,7 +19,7 @@ let
         Pid Directory = "/run";
         ${fd_cfg.extraClientConfig}
       }
-     
+
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Director {
         Name = "${name}";
@@ -26,7 +27,7 @@ let
         Monitor = "${value.monitor}";
       }
       '') fd_cfg.director)}
-     
+
       Messages {
         Name = Standard;
         syslog = all, !skipped, !restored
@@ -35,7 +36,7 @@ let
     '';
 
   sd_cfg = config.services.bacula-sd;
-  sd_conf = pkgs.writeText "bacula-sd.conf" 
+  sd_conf = pkgs.writeText "bacula-sd.conf"
     ''
       Storage {
         Name = "${sd_cfg.name}";
@@ -80,7 +81,7 @@ let
     '';
 
   dir_cfg = config.services.bacula-dir;
-  dir_conf = pkgs.writeText "bacula-dir.conf" 
+  dir_conf = pkgs.writeText "bacula-dir.conf"
     ''
     Director {
       Name = "${dir_cfg.name}";
@@ -111,6 +112,7 @@ let
   {
     options = {
       password = mkOption {
+        type = types.str;
         # TODO: required?
         description = ''
           Specifies the password that must be supplied for the default Bacula
@@ -125,11 +127,12 @@ let
 
           The password is plain text. It is not generated through any special
           process but as noted above, it is better to use random text for
-          security reasons. 
+          security reasons.
         '';
       };
-      
+
       monitor = mkOption {
+        type = types.enum [ "no" "yes" ];
         default = "no";
         example = "yes";
         description = ''
@@ -140,7 +143,7 @@ let
 
           Please note that if this director is being used by a Monitor, we
           highly recommend to set this directive to yes to avoid serious
-          security problems. 
+          security problems.
         '';
       };
     };
@@ -150,6 +153,7 @@ let
   {
     options = {
       changerDevice = mkOption {
+        type = types.str;
         description = ''
           The specified name-string must be the generic SCSI device name of the
           autochanger that corresponds to the normal read/write Archive Device
@@ -163,11 +167,12 @@ let
           type of autochanger, what you specify here can vary. This directive
           is optional. See the Using AutochangersAutochangersChapter chapter of
           this manual for more details of using this and the following
-          autochanger directives.         
+          autochanger directives.
           '';
       };
 
       changerCommand = mkOption {
+        type = types.str;
         description = ''
           The name-string specifies an external program to be called that will
           automatically change volumes as required by Bacula. Normally, this
@@ -190,17 +195,18 @@ let
       };
 
       devices = mkOption {
-        description = ''
-        '';
+        description = "";
+        type = types.listOf types.str;
       };
 
       extraAutochangerConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration to be passed in Autochanger directive.
         '';
         example = ''
-   
+
         '';
       };
     };
@@ -212,6 +218,7 @@ let
     options = {
       archiveDevice = mkOption {
         # TODO: required?
+        type = types.str;
         description = ''
           The specified name-string gives the system file name of the storage
           device managed by this storage daemon. This will usually be the
@@ -222,12 +229,13 @@ let
           if you are archiving to disk storage. In this case, you must supply
           the full absolute path to the directory. When specifying a tape
           device, it is preferable that the "non-rewind" variant of the device
-          file name be given. 
+          file name be given.
         '';
       };
 
       mediaType = mkOption {
         # TODO: required?
+        type = types.str;
         description = ''
           The specified name-string names the type of media supported by this
           device, for example, <literal>DLT7000</literal>. Media type names are
@@ -265,6 +273,7 @@ let
 
       extraDeviceConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration to be passed in Device directive.
         '';
@@ -290,9 +299,10 @@ in {
           Whether to enable the Bacula File Daemon.
         '';
       };
- 
+
       name = mkOption {
         default = "${config.networking.hostName}-fd";
+        type = types.str;
         description = ''
           The client name that must be used by the Director when connecting.
           Generally, it is a good idea to use a name related to the machine so
@@ -300,7 +310,7 @@ in {
           Clients. This directive is required.
         '';
       };
- 
+
       port = mkOption {
         default = 9102;
         type = types.int;
@@ -310,7 +320,7 @@ in {
           the Client resource of the Director's configuration file.
         '';
       };
- 
+
       director = mkOption {
         default = {};
         description = ''
@@ -321,6 +331,7 @@ in {
 
       extraClientConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration to be passed in Client directive.
         '';
@@ -332,6 +343,7 @@ in {
 
       extraMessagesConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration to be passed in Messages directive.
         '';
@@ -349,14 +361,15 @@ in {
           Whether to enable Bacula Storage Daemon.
         '';
       };
- 
+
       name = mkOption {
         default = "${config.networking.hostName}-sd";
+        type = types.str;
         description = ''
           Specifies the Name of the Storage daemon.
         '';
       };
- 
+
       port = mkOption {
         default = 9103;
         type = types.int;
@@ -392,6 +405,7 @@ in {
 
       extraStorageConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration to be passed in Storage directive.
         '';
@@ -403,6 +417,7 @@ in {
 
       extraMessagesConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration to be passed in Messages directive.
         '';
@@ -410,7 +425,7 @@ in {
           console = all
         '';
       };
- 
+
     };
 
     services.bacula-dir = {
@@ -424,12 +439,13 @@ in {
 
       name = mkOption {
         default = "${config.networking.hostName}-dir";
+        type = types.str;
         description = ''
           The director name used by the system administrator. This directive is
           required.
         '';
       };
- 
+
       port = mkOption {
         default = 9101;
         type = types.int;
@@ -442,9 +458,10 @@ in {
           specify DirAddresses (N.B plural) directive.
         '';
       };
- 
+
       password = mkOption {
         # TODO: required?
+        type = types.str;
         description = ''
            Specifies the password that must be supplied for a Director.
         '';
@@ -452,6 +469,7 @@ in {
 
       extraMessagesConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration to be passed in Messages directive.
         '';
@@ -462,6 +480,7 @@ in {
 
       extraDirectorConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration to be passed in Director directive.
         '';

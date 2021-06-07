@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
+{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null
+, python3Packages
+}:
 
 assert interactive -> readline != null && ncurses != null;
 
-with stdenv.lib;
+with lib;
 
 let
-  archiveVersion = import ./archive-version.nix stdenv.lib;
+  archiveVersion = import ./archive-version.nix lib;
 in
 
 stdenv.mkDerivation rec {
   pname = "sqlite";
-  version = "3.32.2";
+  version = "3.35.2";
 
-  # NB! Make sure to update analyzer.nix src (in the same directory).
+  # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2020/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "1130bcd70s2vlsq0d638pb5qrw9kwqvjswnp2dfypghx9hjz3gid";
+    url = "https://sqlite.org/2021/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    sha256 = "1bfczv5006ycwr1vw7xbq7cmys0jvfr8awmx7wi1b40zyj0yss8j";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -72,6 +74,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # fails to link against tcl
+
+  passthru.tests = {
+    inherit (python3Packages) sqlalchemy;
+  };
 
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";

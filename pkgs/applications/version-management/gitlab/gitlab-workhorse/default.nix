@@ -1,33 +1,27 @@
-{ stdenv, fetchFromGitLab, git, buildGoPackage }:
-
-buildGoPackage rec {
+{ lib, fetchFromGitLab, git, buildGoModule }:
+let
+  data = (builtins.fromJSON (builtins.readFile ../data.json));
+in
+buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "8.31.2";
+  version = "13.12.2";
 
   src = fetchFromGitLab {
-    owner = "gitlab-org";
-    repo = "gitlab-workhorse";
-    rev = "v${version}";
-    sha256 = "0wvhhjfb490mjdrmc9xwr3qfh3941xn3b02c757ghrvzwv329wvg";
+    owner = data.owner;
+    repo = data.repo;
+    rev = data.rev;
+    sha256 = data.repo_hash;
   };
 
-  goPackagePath = "gitlab.com/gitlab-org/gitlab-workhorse";
-  goDeps = ./deps.nix;
+  sourceRoot = "source/workhorse";
+
+  vendorSha256 = "sha256-JJN1KqqbP4fIW/k6LebIaWdYOmIzHqxCDgOKrkbB7Nw=";
   buildInputs = [ git ];
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
+  doCheck = false;
 
-  # gitlab-workhorse depends on an older version of labkit which
-  # contains old, vendored versions of some packages; gitlab-workhorse
-  # also explicitly depends on newer versions of these libraries,
-  # but buildGoPackage exposes the vendored versions instead,
-  # leading to compilation errors. Since the vendored libraries
-  # aren't used here anyway, we'll just remove them.
-  postConfigure = ''
-    rm -r "$NIX_BUILD_TOP/go/src/gitlab.com/gitlab-org/labkit/vendor"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin talyz ];

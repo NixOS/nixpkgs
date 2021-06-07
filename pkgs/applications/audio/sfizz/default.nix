@@ -1,27 +1,56 @@
-{ stdenv, fetchFromGitHub , cmake, libjack2, libsndfile, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub
+, libjack2, libsndfile, xorg, freetype, libxkbcommon
+, cairo, glib, gnome, flac, libogg, libvorbis, libopus
+, cmake, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
-  version = "0.3.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = pname;
     rev = version;
-    sha256 = "1px22x9lb6wyqfbv1jg1sbl1rsnwrzs8sm4dnas1w4ifchiv3ymd";
+    sha256 = "sha256-3RdY5+BPsdk6vctDy24w5aJsVOV9qzSgXs62Pm5UEKs=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [
+    libjack2
+    libsndfile
+    flac
+    libogg
+    libvorbis
+    libopus
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.xcbutil
+    xorg.xcbutilcursor
+    xorg.xcbutilrenderutil
+    xorg.xcbutilkeysyms
+    xorg.xcbutilimage
+    libxkbcommon
+    cairo
+    glib
+    gnome.zenity
+    freetype
+  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libjack2 libsndfile ];
+  postPatch = ''
+  substituteInPlace editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
+    --replace '"/usr/bin/zenity' '"${gnome.zenity}/bin/zenity'
+  '';
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DSFIZZ_TESTS=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sfztools/sfizz";
     description = "SFZ jack client and LV2 plugin";
     license = licenses.bsd2;

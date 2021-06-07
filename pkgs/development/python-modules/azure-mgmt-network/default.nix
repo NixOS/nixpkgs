@@ -1,37 +1,43 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, azure-common
 , azure-mgmt-common
-, python
+, azure-mgmt-core
+, msrest
+, msrestazure
 , isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "11.0.0";
+  version = "19.0.0";
   pname = "azure-mgmt-network";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7fdfc631c660cb173eee88abbb7b8be7742f91b522be6017867f217409cd69bc";
+    sha256 = "5e39a26ae81fa58c13c02029700f8c7b22c3fd832a294c543e3156a91b9459e8";
   };
 
-  postInstall = if isPy3k then "" else ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-  '';
-
   propagatedBuildInputs = [
-    azure-mgmt-common
+    azure-common
+    azure-mgmt-core
+    msrest
+    msrestazure
   ];
 
   # has no tests
   doCheck = false;
 
+  pythonNamespaces = [ "azure.mgmt" ];
+
+  pythonImportsCheck = [ "azure.mgmt.network" ];
+
   meta = with lib; {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai mwilsoninsight ];
+    maintainers = with maintainers; [ olcai maxwilson jonringer ];
   };
 }

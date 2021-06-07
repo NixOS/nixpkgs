@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, tkinter }:
+{ lib, fetchPypi, buildPythonPackage, tkinter }:
 
 buildPythonPackage rec {
   pname = "PyMsgBox";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # Finding tests fails
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, cross-platform, pure Python module for JavaScript-like message boxes";
     homepage = "https://github.com/asweigart/PyMsgBox";
     license = licenses.bsd3;

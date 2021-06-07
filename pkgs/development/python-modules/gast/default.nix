@@ -1,14 +1,14 @@
-{ stdenv, fetchPypi, buildPythonPackage, astunparse }:
+{ lib, fetchPypi, buildPythonPackage, astunparse }:
 
 buildPythonPackage rec {
   pname = "gast";
-  version =  "0.3.3";
+  version =  "0.4.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b881ef288a49aa81440d2c5eb8aeefd4c2bb8993d5f50edae7413a85bfdb3b57";
+    sha256 = "40feb7b8b8434785585ab224d1568b857edb18297e5a3047f1ba012bc83b42c1";
   };
   checkInputs = [ astunparse ] ;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GAST provides a compatibility layer between the AST of various Python versions, as produced by ast.parse from the standard ast module.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jyp ];

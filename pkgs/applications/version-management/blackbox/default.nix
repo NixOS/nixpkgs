@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "1.20181219";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin && cp -r bin/* $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Safely store secrets in a VCS repo";
     maintainers = with maintainers; [ ericsagnes ];
     license     = licenses.mit;

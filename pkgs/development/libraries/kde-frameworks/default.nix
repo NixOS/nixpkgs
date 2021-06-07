@@ -28,6 +28,13 @@ existing packages here and modify it as necessary.
 
 let
 
+  minQtVersion = "5.14";
+  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
+  maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
+  license = with lib.licenses; [
+    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+  ];
+
   srcs = import ./srcs.nix {
     inherit fetchurl;
     mirror = "mirror://kde";
@@ -72,18 +79,19 @@ let
             defaultSetupHook = if hasSeparateDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
 
-            meta = {
-              homepage = "http://www.kde.org";
-              license = with lib.licenses; [
-                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
-              ];
-              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
-              platforms = lib.platforms.linux;
-            } // (args.meta or {});
+            meta =
+              let meta = args.meta or {}; in
+              meta // {
+                homepage = meta.homepage or "http://www.kde.org";
+                license = meta.license or license;
+                maintainers = (meta.maintainers or []) ++ maintainers;
+                platforms = meta.platforms or lib.platforms.linux;
+                broken = meta.broken or broken;
+              };
 
           in mkDerivation (args // {
             name = "${name}-${version}";
-            inherit meta outputs setupHook src;
+            inherit meta outputs setupHook src version;
           });
 
       };
@@ -112,6 +120,7 @@ let
       kitemmodels = callPackage ./kitemmodels.nix {};
       kitemviews = callPackage ./kitemviews.nix {};
       kplotting = callPackage ./kplotting.nix {};
+      kquickcharts = callPackage ./kquickcharts.nix {};
       kwayland = callPackage ./kwayland.nix {};
       kwidgetsaddons = callPackage ./kwidgetsaddons.nix {};
       kwindowsystem = callPackage ./kwindowsystem {};
@@ -146,17 +155,18 @@ let
       kbookmarks = callPackage ./kbookmarks.nix {};
       kcmutils = callPackage ./kcmutils {};
       kconfigwidgets = callPackage ./kconfigwidgets {};
+      kdav = callPackage ./kdav.nix {};
       kdeclarative = callPackage ./kdeclarative.nix {};
       kded = callPackage ./kded.nix {};
       kdesignerplugin = callPackage ./kdesignerplugin.nix {};
-      kdesu = callPackage ./kdesu.nix {};
+      kdesu = callPackage ./kdesu {};
       kdewebkit = callPackage ./kdewebkit.nix {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};
       kiconthemes = callPackage ./kiconthemes {};
       kinit = callPackage ./kinit {};
       kio = callPackage ./kio {};
-      knewstuff = callPackage ./knewstuff.nix {};
+      knewstuff = callPackage ./knewstuff {};
       knotifyconfig = callPackage ./knotifyconfig.nix {};
       kparts = callPackage ./kparts.nix {};
       kpeople = callPackage ./kpeople.nix {};

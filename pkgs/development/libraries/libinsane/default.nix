@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libinsane";
-  version = "1.0.4";
+  version = "1.0.9";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "OpenPaperwork";
     rev = version;
-    sha256 = "1qk0s4m87yqa75h27bl7m03g4gamln43wn4159h7dcnwc36hdzw6";
+    sha256 = "1a1lszhq3j11i1jybc5kmn7hhhji44xhjqsxsldsy9l3344rkzv4";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja doxygen gtk-doc docbook_xsl gobject-introspection vala ];

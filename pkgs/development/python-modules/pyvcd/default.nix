@@ -1,21 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, pythonOlder
+, setuptools-scm
 , six
 , pytest
 }:
 
 buildPythonPackage rec {
-  version = "0.2.1";
+  version = "0.2.4";
   pname = "pyvcd";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fad6b9e2cd68049968a43fd9f465a1f924050c0a654e28cc5aa04c1908f283ab";
+    sha256 = "071e51a8362908ad5a2a12f078185639b98b20b653a56f01679de169d0fa425d";
   };
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
 
   checkPhase = ''

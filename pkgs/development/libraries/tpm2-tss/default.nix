@@ -1,18 +1,18 @@
 { stdenv, lib, fetchFromGitHub
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
-, cmocka, uthash, ibm-sw-tpm2, iproute, procps, which
+, cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "2.4.1";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "09x5czaj4a8cyf8cxavcasx3yy1kik1s45a90c7zvxb7y1kfp9zs";
+    sha256 = "106yhsjwjadxsl9dqxywg287mdwsksman02hdalhav18vcnvnlpj";
   };
 
   nativeBuildInputs = [
@@ -20,14 +20,28 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ openssl json_c curl libgcrypt ];
   checkInputs = [
-    cmocka uthash ibm-sw-tpm2 iproute procps which
+    cmocka uthash ibm-sw-tpm2 iproute2 procps which
   ];
 
   preAutoreconf = "./bootstrap";
 
   enableParallelBuilding = true;
 
-  postPatch = "patchShebangs script";
+  patches = [
+    # Do not rely on dynamic loader path
+    # TCTI loader relies on dlopen(), this patch prefixes all calls with the output directory
+    ./no-dynamic-loader-path.patch
+  ];
+
+  postPatch = ''
+    patchShebangs script
+    substituteInPlace src/tss2-tcti/tctildr-dl.c \
+      --replace '@PREFIX@' $out/lib/
+    substituteInPlace ./test/unit/tctildr-dl.c \
+      --replace ', "libtss2' ", \"$out/lib/libtss2" \
+      --replace ', "foo' ", \"$out/lib/foo" \
+      --replace ', TEST_TCTI_NAME' ", \"$out/lib/\"TEST_TCTI_NAME"
+  '';
 
   configureFlags = [
     "--enable-unit"
@@ -35,6 +49,14 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+  preCheck = ''
+    # Since we rewrote the load path in the dynamic loader for the TCTI
+    # The various tcti implementation should be placed in their target directory
+    # before we could run tests
+    installPhase
+    # install already done, dont need another one
+    dontInstall=1
+  '';
 
   postInstall = ''
     # Do not install the upstream udev rules, they rely on specific

@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "libquotient";
-  version = "0.5.3.2";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    sha256 = "0gkwr3yw6k2m0j8cc085b5p2q788rf5nhp1p5hc5d55pc7mci2qs";
+    sha256 = "sha256-QSpkcQEDTMsFbQBa7dTuL/5HraVChUHqUuJdNMty/4s=";
   };
 
   buildInputs = [ qtbase qtmultimedia ];
@@ -16,9 +16,9 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "A Qt5 library to write cross-platfrom clients for Matrix";
+    description = "A Qt5 library to write cross-platform clients for Matrix";
     homepage = "https://matrix.org/docs/projects/sdk/quotient";
-    maintainers = with maintainers; [ colemickens ];
     license = licenses.lgpl21;
+    maintainers = with maintainers; [ colemickens ];
   };
 }

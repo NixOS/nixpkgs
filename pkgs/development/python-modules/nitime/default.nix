@@ -2,7 +2,8 @@
 , buildPythonPackage
 , python
 , fetchPypi
-, pytest
+, isPy27
+, pytestCheckHook
 , cython
 , numpy
 , scipy
@@ -13,19 +14,17 @@
 
 buildPythonPackage rec {
   pname = "nitime";
-  version = "0.8.1";
-  disabled = python.pythonVersion != "3.7";  # gcc error when running Cython with Python 3.8
+  version = "0.9";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hb3x5196z2zaawb8s7lhja0vd3n983ncaynqfl9qg315x9ax7i6";
+    sha256 = "sha256-bn2QrbsfqUJim84vH5tt5T6h3YsGAlgu9GCMiNQ0OHQ=";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
   buildInputs = [ cython ];
   propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
-
-  checkPhase = "pytest nitime/tests";
 
   meta = with lib; {
     homepage = "https://nipy.org/nitime";

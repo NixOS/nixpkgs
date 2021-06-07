@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "srelay-0.4.8";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A SOCKS proxy and relay";
     homepage = "http://socks-relay.sourceforge.net/";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perlPackages, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, perlPackages, pythonPackages }:
 
 stdenv.mkDerivation rec {
   pname = "shocco";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perlPackages.TextMarkdown pythonPackages.pygments ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A quick-and-dirty, literate-programming-style documentation generator for / in POSIX shell";
     homepage = "https://rtomayko.github.io/shocco/";
     license = licenses.mit;

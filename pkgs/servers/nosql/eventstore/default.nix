@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchurl
 , makeWrapper
@@ -74,9 +74,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://geteventstore.com/";
     description = "Event sourcing database with processing logic in JavaScript";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ puffnfresh ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 
 }

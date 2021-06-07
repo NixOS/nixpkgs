@@ -1,27 +1,23 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , elementpath
+, lxml
 , pytest
 }:
 
 buildPythonPackage rec {
-  version = "1.1.0";
+  version = "1.6.2";
   pname = "xmlschema";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "v${version}";
-    sha256 = "1h8321jb6q3dhlh3608y3f3sbbzfd3jg1psyirxkrm4w5xs3lbvy";
+    sha256 = "sha256-GL2PlHxKDSEsZwHPBAy+tjBSbKyvlbXUWwXakKPmzSs=";
   };
 
   propagatedBuildInputs = [ elementpath ];
 
-  checkInputs = [ pytest ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "elementpath~=1.4.0" "elementpath~=1.4"
-  '';
+  checkInputs = [ lxml pytest ];
 
   # Ignore broken fixtures, and tests for files which don't exist.
   # For darwin, we need to explicity say we can't reach network
@@ -31,7 +27,7 @@ buildPythonPackage rec {
       --ignore=tests/test_schemas.py \
       --ignore=tests/test_memory.py \
       --ignore=tests/test_validation.py \
-      -k 'not element_tree_import_script'
+      -k 'not element_tree_import_script and not export_remote'
   '';
 
   meta = with lib; {

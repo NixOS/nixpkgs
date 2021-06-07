@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , cairo, fftwSinglePrec, libX11, libXft, libclthreads, libclxclient, libjack2
 , xorgproto, zita-resampler
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Autotuner Jack application to correct the pitch of vocal tracks";
     homepage = "https://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = licenses.gpl3Plus;

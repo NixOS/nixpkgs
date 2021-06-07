@@ -3,6 +3,7 @@
 , fetchPypi
 , python
 , isPy3k
+, azure-common
 , azure-core
 , msrest
 , msrestazure
@@ -10,15 +11,16 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-certificates";
-  version = "4.1.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "069l6m80rq4smyqbrmjb2w18wxxg49xi2yrf1wsxpq8r0r45cksl";
+    sha256 = "ea651883ad00d0a9a25b38e51feff7111f6c7099c6fb2597598da5bb21d3451c";
   };
 
   propagatedBuildInputs = [
+    azure-common
     azure-core
     msrest
     msrestazure

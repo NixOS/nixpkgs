@@ -1,17 +1,16 @@
 { stdenv, lib, buildPythonPackage, isPy3k, fetchPypi
 , mock
-, meld3
 , pytest
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "supervisor";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "64082ebedf6d36ff409ab2878f1aad5c9035f916c5f15a9a1ec7dffc6dfbbed8";
+    sha256 = "5b2b8882ec8a3c3733cce6965cc098b6d80b417f21229ab90b18fe551d619f90";
   };
 
   # wants to write to /tmp/foo which is likely already owned by another
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  propagatedBuildInputs = [ meld3 setuptools ];
+  propagatedBuildInputs = [ setuptools ];
 
   meta = with lib; {
     description = "A system for controlling process state under UNIX";

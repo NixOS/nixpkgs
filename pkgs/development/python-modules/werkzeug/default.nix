@@ -1,7 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , itsdangerous, hypothesis
-, pytest, requests
+, pytestCheckHook, requests
 , pytest-timeout
+, isPy3k
  }:
 
 buildPythonPackage rec {
@@ -14,15 +15,16 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ itsdangerous ];
-  checkInputs = [ pytest requests hypothesis pytest-timeout ];
+  checkInputs = [ pytestCheckHook requests hypothesis pytest-timeout ];
 
-  checkPhase = ''
-    pytest ${stdenv.lib.optionalString stdenv.isDarwin "-k 'not test_get_machine_id'"}
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_get_machine_id"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "A WSGI utility library for Python";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

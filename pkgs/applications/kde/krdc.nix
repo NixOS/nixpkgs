@@ -2,11 +2,11 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools, makeWrapper,
   kcmutils, kcompletion, kconfig, kdnssd, knotifyconfig, kwallet, kwidgetsaddons,
-  kwindowsystem, libvncserver, freerdp
+  kwindowsystem, libvncserver, freerdp, qtbase,
 }:
 
 mkDerivation {
-  name = "krdc";
+  pname = "krdc";
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   buildInputs = [
     kcmutils kcompletion kconfig kdnssd knotifyconfig kwallet kwidgetsaddons
@@ -21,5 +21,6 @@ mkDerivation {
     license = with licenses; [ gpl2 lgpl21 fdl12 bsd3 ];
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
+    broken = lib.versionOlder qtbase.version "5.14";
   };
 }

@@ -62,6 +62,22 @@ in
         description = "The firewall package used by fail2ban service.";
       };
 
+      extraPackages = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        example = lib.literalExample "[ pkgs.ipset ]";
+        description = ''
+          Extra packages to be made available to the fail2ban service. The example contains
+          the packages needed by the `iptables-ipset-proto6` action.
+        '';
+      };
+
+      maxretry = mkOption {
+        default = 3;
+        type = types.ints.unsigned;
+        description = "Number of failures before a host gets banned.";
+      };
+
       banaction = mkOption {
         default = "iptables-multiport";
         type = types.str;
@@ -243,7 +259,7 @@ in
       restartTriggers = [ fail2banConf jailConf pathsConf ];
       reloadIfChanged = true;
 
-      path = [ cfg.package cfg.packageFirewall pkgs.iproute ];
+      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
 
       unitConfig.Documentation = "man:fail2ban(1)";
 
@@ -282,16 +298,16 @@ in
     services.fail2ban.jails.DEFAULT = ''
       ${optionalString cfg.bantime-increment.enable ''
         # Bantime incremental
-        bantime.increment    = ${if cfg.bantime-increment.enable then "true" else "false"}
+        bantime.increment    = ${boolToString cfg.bantime-increment.enable}
         bantime.maxtime      = ${cfg.bantime-increment.maxtime}
         bantime.factor       = ${cfg.bantime-increment.factor}
         bantime.formula      = ${cfg.bantime-increment.formula}
         bantime.multipliers  = ${cfg.bantime-increment.multipliers}
-        bantime.overalljails = ${if cfg.bantime-increment.overalljails then "true" else "false"}
+        bantime.overalljails = ${boolToString cfg.bantime-increment.overalljails}
       ''}
       # Miscellaneous options
       ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}
-      maxretry    = 3
+      maxretry    = ${toString cfg.maxretry}
       backend     = systemd
       # Actions
       banaction   = ${cfg.banaction}

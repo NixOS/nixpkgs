@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pazi";
@@ -11,11 +11,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0z8x70mwg0mvz6iap92gil37d4kpg5dizlyfx3zk7984ynycgap8";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoSha256 = "0sja0q9i0b1zb3a0a6z561yg9lqykylwr3iwin4r6cmi7j2sw5j6";
+  cargoSha256 = "1iamlp5519h8mmgd4964cvyp7mmnqdg2d3qj5v7yzilyp4nz15jc";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An autojump \"zap to directory\" helper";
     homepage = "https://github.com/euank/pazi";
     license = licenses.gpl3;

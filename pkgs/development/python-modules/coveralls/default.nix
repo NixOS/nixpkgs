@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "coveralls";
-  version = "2.0.0";
+  version = "3.0.1";
   disabled = isPy27;
 
   # wanted by tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d213f5edd49053d03f0db316ccabfe17725f2758147afc9a37eaca9d8e8602b5";
+    sha256 = "cbb942ae5ef3d2b55388cb5b43e93a269544911535f1e750e1c656aef019ce60";
   };
 
   checkInputs = [
@@ -35,6 +35,10 @@ buildPythonPackage rec {
   buildInputs = [
     pytestrunner
   ];
+
+  postPatch = ''
+    sed -i "s/'coverage>=\([^,]\+\),.*',$/'coverage>=\1',/" setup.py
+  '';
 
   # FIXME: tests requires .git directory to be present
   doCheck = false;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, python }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, python }:
 
 stdenv.mkDerivation rec {
   pname = "udis86";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://udis86.sourceforge.net";
     license = licenses.bsd2;
     maintainers = with maintainers; [ timor ];

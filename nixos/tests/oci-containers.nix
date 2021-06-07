@@ -12,7 +12,7 @@ let
     name = "oci-containers-${backend}";
 
     meta = {
-      maintainers = with lib.maintainers; [ adisbladis benley mkaito ];
+      maintainers = with lib.maintainers; [ adisbladis benley ] ++ lib.teams.serokell.members;
     };
 
     nodes = {
@@ -32,7 +32,7 @@ let
       start_all()
       ${backend}.wait_for_unit("${backend}-nginx.service")
       ${backend}.wait_for_open_port(8181)
-      ${backend}.wait_until_succeeds("curl http://localhost:8181 | grep Hello")
+      ${backend}.wait_until_succeeds("curl -f http://localhost:8181 | grep Hello")
     '';
   };
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
+{ lib, stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
-, libpsm2, libfabric, pmix
+, libpsm2, libfabric, pmix, ucx
 
 # Enable CUDA support
 , cudaSupport ? false, cudatoolkit ? null
@@ -13,13 +13,12 @@
 
 # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
 , fabricSupport ? stdenv.isLinux && stdenv.isx86_64
-
 }:
 
 assert !cudaSupport || cudatoolkit != null;
 
 let
-  version = "4.0.4";
+  version = "4.1.1";
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -29,9 +28,9 @@ in stdenv.mkDerivation rec {
   pname = "openmpi";
   inherit version;
 
-  src = with stdenv.lib.versions; fetchurl {
+  src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1i0slg2dxjdgw513aml1n9dsbdxn2fimi2b5712d5r9z4ar4xqj7";
+    sha256 = "1nkwq123vvmggcay48snm9qqmrh0bdzpln0l1jnp26niidvplkz2";
   };
 
   postPatch = ''
@@ -46,7 +45,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = with stdenv; [ gfortran zlib ]
-    ++ lib.optionals isLinux [ libnl numactl pmix ]
+    ++ lib.optionals isLinux [ libnl numactl pmix ucx ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (isLinux || isFreeBSD) rdma-core
@@ -59,6 +58,7 @@ in stdenv.mkDerivation rec {
       "--with-libnl=${libnl.dev}"
       "--with-pmix=${pmix}"
       "--with-pmix-libdir=${pmix}/lib"
+      "--enable-mpi-cxx"
     ] ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
     inherit cudaSupport cudatoolkit;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.open-mpi.org/";
     description = "Open source MPI-3 implementation";
     longDescription = "The Open MPI Project is an open source MPI-3 implementation that is developed and maintained by a consortium of academic, research, and industry partners. Open MPI is therefore able to combine the expertise, technologies, and resources from all across the High Performance Computing community in order to build the best MPI library available. Open MPI offers advantages for system and software vendors, application developers and computer science researchers.";

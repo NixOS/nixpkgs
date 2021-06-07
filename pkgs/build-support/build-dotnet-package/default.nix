@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, pkgconfig, mono, dotnetbuildhelpers }:
+{ stdenv, lib, makeWrapper, pkg-config, mono, dotnetbuildhelpers }:
 
 attrsOrig @
 { baseName
@@ -19,7 +19,7 @@ attrsOrig @
     attrs = {
       name = "${baseName}-${version}";
 
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         mono
         dotnetbuildhelpers

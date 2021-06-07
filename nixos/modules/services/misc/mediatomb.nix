@@ -6,37 +6,97 @@ let
 
   gid = config.ids.gids.mediatomb;
   cfg = config.services.mediatomb;
+  name = cfg.package.pname;
+  pkg = cfg.package;
+  optionYesNo = option: if option then "yes" else "no";
+  # configuration on media directory
+  mediaDirectory = {
+    options = {
+      path = mkOption {
+        type = types.str;
+        description = ''
+          Absolute directory path to the media directory to index.
+        '';
+      };
+      recursive = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the indexation must take place recursively or not.";
+      };
+      hidden-files = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to index the hidden files or not.";
+      };
+    };
+  };
+  toMediaDirectory = d: "<directory location=\"${d.path}\" mode=\"inotify\" recursive=\"${optionYesNo d.recursive}\" hidden-files=\"${optionYesNo d.hidden-files}\" />\n";
 
-  mtConf = pkgs.writeText "config.xml" ''
-  <?xml version="1.0" encoding="UTF-8"?>
-  <config version="2" xmlns="http://mediatomb.cc/config/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
+  transcodingConfig = if cfg.transcoding then with pkgs; ''
+    <transcoding enabled="yes">
+      <mimetype-profile-mappings>
+        <transcode mimetype="video/x-flv" using="vlcmpeg" />
+        <transcode mimetype="application/ogg" using="vlcmpeg" />
+        <transcode mimetype="audio/ogg" using="ogg2mp3" />
+        <transcode mimetype="audio/x-flac" using="oggflac2raw"/>
+      </mimetype-profile-mappings>
+      <profiles>
+        <profile name="ogg2mp3" enabled="no" type="external">
+          <mimetype>audio/mpeg</mimetype>
+          <accept-url>no</accept-url>
+          <first-resource>yes</first-resource>
+          <accept-ogg-theora>no</accept-ogg-theora>
+          <agent command="${ffmpeg}/bin/ffmpeg" arguments="-y -i %in -f mp3 %out" />
+          <buffer size="1048576" chunk-size="131072" fill-size="262144" />
+        </profile>
+        <profile name="vlcmpeg" enabled="no" type="external">
+          <mimetype>video/mpeg</mimetype>
+          <accept-url>yes</accept-url>
+          <first-resource>yes</first-resource>
+          <accept-ogg-theora>yes</accept-ogg-theora>
+          <agent command="${libsForQt5.vlc}/bin/vlc"
+            arguments="-I dummy %in --sout #transcode{venc=ffmpeg,vcodec=mp2v,vb=4096,fps=25,aenc=ffmpeg,acodec=mpga,ab=192,samplerate=44100,channels=2}:standard{access=file,mux=ps,dst=%out} vlc:quit" />
+          <buffer size="14400000" chunk-size="512000" fill-size="120000" />
+        </profile>
+      </profiles>
+    </transcoding>
+'' else ''
+    <transcoding enabled="no">
+    </transcoding>
+'';
+
+  configText = optionalString (! cfg.customCfg) ''
+<?xml version="1.0" encoding="UTF-8"?>
+<config version="2" xmlns="http://mediatomb.cc/config/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
     <server>
       <ui enabled="yes" show-tooltips="yes">
         <accounts enabled="no" session-timeout="30">
-          <account user="mediatomb" password="mediatomb"/>
+          <account user="${name}" password="${name}"/>
         </accounts>
       </ui>
       <name>${cfg.serverName}</name>
       <udn>uuid:${cfg.uuid}</udn>
       <home>${cfg.dataDir}</home>
-      <webroot>${pkgs.mediatomb}/share/mediatomb/web</webroot>
+      <interface>${cfg.interface}</interface>
+      <webroot>${pkg}/share/${name}/web</webroot>
+      <pc-directory upnp-hide="${optionYesNo cfg.pcDirectoryHide}"/>
       <storage>
         <sqlite3 enabled="yes">
-          <database-file>mediatomb.db</database-file>
+          <database-file>${name}.db</database-file>
         </sqlite3>
       </storage>
-      <protocolInfo extend="${if cfg.ps3Support then "yes" else "no"}"/>
-      ${if cfg.dsmSupport then ''
+      <protocolInfo extend="${optionYesNo cfg.ps3Support}"/>
+      ${optionalString cfg.dsmSupport ''
       <custom-http-headers>
         <add header="X-User-Agent: redsonic"/>
       </custom-http-headers>
 
       <manufacturerURL>redsonic.com</manufacturerURL>
       <modelNumber>105</modelNumber>
-      '' else ""}
-      ${if cfg.tg100Support then ''
+      ''}
+        ${optionalString cfg.tg100Support ''
       <upnp-string-limit>101</upnp-string-limit>
-      '' else ""}
+      ''}
       <extended-runtime-options>
         <mark-played-items enabled="yes" suppress-cds-updates="yes">
           <string mode="prepend">*</string>
@@ -47,11 +107,14 @@ let
       </extended-runtime-options>
     </server>
     <import hidden-files="no">
+      <autoscan use-inotify="auto">
+      ${concatMapStrings toMediaDirectory cfg.mediaDirectories}
+      </autoscan>
       <scripting script-charset="UTF-8">
-        <common-script>${pkgs.mediatomb}/share/mediatomb/js/common.js</common-script>
-        <playlist-script>${pkgs.mediatomb}/share/mediatomb/js/playlists.js</playlist-script>
+        <common-script>${pkg}/share/${name}/js/common.js</common-script>
+        <playlist-script>${pkg}/share/${name}/js/playlists.js</playlist-script>
         <virtual-layout type="builtin">
-          <import-script>${pkgs.mediatomb}/share/mediatomb/js/import.js</import-script>
+          <import-script>${pkg}/share/${name}/js/import.js</import-script>
         </virtual-layout>
       </scripting>
       <mappings>
@@ -75,12 +138,12 @@ let
           <map from="flv" to="video/x-flv"/>
           <map from="mkv" to="video/x-matroska"/>
           <map from="mka" to="audio/x-matroska"/>
-          ${if cfg.ps3Support then ''
+          ${optionalString cfg.ps3Support ''
           <map from="avi" to="video/divx"/>
-          '' else ""}
-          ${if cfg.dsmSupport then ''
+          ''}
+          ${optionalString cfg.dsmSupport ''
           <map from="avi" to="video/avi"/>
-          '' else ""}
+          ''}
         </extension-mimetype>
         <mimetype-upnpclass>
           <map from="audio/*" to="object.item.audioItem.musicTrack"/>
@@ -108,45 +171,26 @@ let
       </mappings>
       <online-content>
         <YouTube enabled="no" refresh="28800" update-at-start="no" purge-after="604800" racy-content="exclude" format="mp4" hd="no">
-          <favorites user="mediatomb"/>
+          <favorites user="${name}"/>
           <standardfeed feed="most_viewed" time-range="today"/>
-          <playlists user="mediatomb"/>
-          <uploads user="mediatomb"/>
+          <playlists user="${name}"/>
+          <uploads user="${name}"/>
           <standardfeed feed="recently_featured" time-range="today"/>
         </YouTube>
       </online-content>
     </import>
-    <transcoding enabled="${if cfg.transcoding then "yes" else "no"}">
-      <mimetype-profile-mappings>
-        <transcode mimetype="video/x-flv" using="vlcmpeg"/>
-        <transcode mimetype="application/ogg" using="vlcmpeg"/>
-        <transcode mimetype="application/ogg" using="oggflac2raw"/>
-        <transcode mimetype="audio/x-flac" using="oggflac2raw"/>
-      </mimetype-profile-mappings>
-      <profiles>
-        <profile name="oggflac2raw" enabled="no" type="external">
-          <mimetype>audio/L16</mimetype>
-          <accept-url>no</accept-url>
-          <first-resource>yes</first-resource>
-          <accept-ogg-theora>no</accept-ogg-theora>
-          <agent command="ogg123" arguments="-d raw -o byteorder:big -f %out %in"/>
-          <buffer size="1048576" chunk-size="131072" fill-size="262144"/>
-        </profile>
-        <profile name="vlcmpeg" enabled="no" type="external">
-          <mimetype>video/mpeg</mimetype>
-          <accept-url>yes</accept-url>
-          <first-resource>yes</first-resource>
-          <accept-ogg-theora>yes</accept-ogg-theora>
-          <agent command="vlc" arguments="-I dummy %in --sout #transcode{venc=ffmpeg,vcodec=mp2v,vb=4096,fps=25,aenc=ffmpeg,acodec=mpga,ab=192,samplerate=44100,channels=2}:standard{access=file,mux=ps,dst=%out} vlc:quit"/>
-          <buffer size="14400000" chunk-size="512000" fill-size="120000"/>
-        </profile>
-      </profiles>
-    </transcoding>
+    ${transcodingConfig}
   </config>
-  '';
+'';
+  defaultFirewallRules = {
+    # udp 1900 port needs to be opened for SSDP (not configurable within
+    # mediatomb/gerbera) cf.
+    # http://docs.gerbera.io/en/latest/run.html?highlight=udp%20port#network-setup
+    allowedUDPPorts = [ 1900 cfg.port ];
+    allowedTCPPorts = [ cfg.port ];
+  };
 
 in {
-
 
   ###### interface
 
@@ -158,15 +202,24 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable the mediatomb DLNA server.
+          Whether to enable the Gerbera/Mediatomb DLNA server.
         '';
       };
 
       serverName = mkOption {
         type = types.str;
-        default = "mediatomb";
+        default = "Gerbera (Mediatomb)";
         description = ''
           How to identify the server on the network.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        example = literalExample "pkgs.mediatomb";
+        default = pkgs.gerbera;
+        description = ''
+          Underlying package to be used with the module (default: pkgs.gerbera).
         '';
       };
 
@@ -206,23 +259,34 @@ in {
 
       dataDir = mkOption {
         type = types.path;
-        default = "/var/lib/mediatomb";
+        default = "/var/lib/${name}";
         description = ''
-          The directory where mediatomb stores its state, data, etc.
+          The directory where Gerbera/Mediatomb stores its state, data, etc.
+        '';
+      };
+
+      pcDirectoryHide = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to list the top-level directory or not (from upnp client standpoint).
         '';
       };
 
       user = mkOption {
+        type = types.str;
         default = "mediatomb";
-        description = "User account under which mediatomb runs.";
+        description = "User account under which ${name} runs.";
       };
 
       group = mkOption {
+        type = types.str;
         default = "mediatomb";
-        description = "Group account under which mediatomb runs.";
+        description = "Group account under which ${name} runs.";
       };
 
       port = mkOption {
+        type = types.int;
         default = 49152;
         description = ''
           The network port to listen on.
@@ -230,40 +294,76 @@ in {
       };
 
       interface = mkOption {
+        type = types.str;
         default = "";
         description = ''
           A specific interface to bind to.
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If false (the default), this is up to the user to declare the firewall rules.
+          If true, this opens port 1900 (tcp and udp) and the port specified by
+          <option>sercvices.mediatomb.port</option>.
+
+          If the option <option>services.mediatomb.interface</option> is set,
+          the firewall rules opened are dedicated to that interface. Otherwise,
+          those rules are opened globally.
+        '';
+      };
+
       uuid = mkOption {
+        type = types.str;
         default = "fdfc8a4e-a3ad-4c1d-b43d-a2eedb03a687";
         description = ''
           A unique (on your network) to identify the server by.
         '';
       };
 
+      mediaDirectories = mkOption {
+        type = with types; listOf (submodule mediaDirectory);
+        default = {};
+        description = ''
+          Declare media directories to index.
+        '';
+        example = [
+          { path = "/data/pictures"; recursive = false; hidden-files = false; }
+          { path = "/data/audio"; recursive = true; hidden-files = false; }
+        ];
+      };
+
       customCfg = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Allow mediatomb to create and use its own config file inside ${cfg.dataDir}.
+          Allow ${name} to create and use its own config file inside the <literal>dataDir</literal> as
+          configured by <option>services.mediatomb.dataDir</option>.
+          Deactivated by default, the service then runs with the configuration generated from this module.
+          Otherwise, when enabled, no service configuration is generated. Gerbera/Mediatomb then starts using
+          config.xml within the configured <literal>dataDir</literal>. It's up to the user to make a correct
+          configuration file.
         '';
       };
+
     };
   };
 
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = let binaryCommand = "${pkg}/bin/${name}";
+               interfaceFlag = optionalString ( cfg.interface != "") "--interface ${cfg.interface}";
+               configFlag = optionalString (! cfg.customCfg) "--config ${pkgs.writeText "config.xml" configText}";
+    in mkIf cfg.enable {
     systemd.services.mediatomb = {
-      description = "MediaTomb media Server";
+      description = "${cfg.serverName} media Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.mediatomb ];
-      serviceConfig.ExecStart = "${pkgs.mediatomb}/bin/mediatomb -p ${toString cfg.port} ${if cfg.interface!="" then "-e ${cfg.interface}" else ""} ${if cfg.customCfg then "" else "-c ${mtConf}"} -m ${cfg.dataDir}";
-      serviceConfig.User = "${cfg.user}";
+      serviceConfig.ExecStart = "${binaryCommand} --port ${toString cfg.port} ${interfaceFlag} ${configFlag} --home ${cfg.dataDir}";
+      serviceConfig.User = cfg.user;
     };
 
     users.groups = optionalAttrs (cfg.group == "mediatomb") {
@@ -274,15 +374,18 @@ in {
       mediatomb = {
         isSystemUser = true;
         group = cfg.group;
-        home = "${cfg.dataDir}";
+        home = cfg.dataDir;
         createHome = true;
-        description = "Mediatomb DLNA Server User";
+        description = "${name} DLNA Server User";
       };
     };
 
-    networking.firewall = {
-      allowedUDPPorts = [ 1900 cfg.port ];
-      allowedTCPPorts = [ cfg.port ];
-    };
+    # Open firewall only if users enable it
+    networking.firewall = mkMerge [
+      (mkIf (cfg.openFirewall && cfg.interface != "") {
+        interfaces."${cfg.interface}" = defaultFirewallRules;
+      })
+      (mkIf (cfg.openFirewall && cfg.interface == "") defaultFirewallRules)
+    ];
   };
 }

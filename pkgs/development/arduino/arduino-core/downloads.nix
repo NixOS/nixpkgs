@@ -107,20 +107,20 @@
     url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/releases/download/v0.10.10/WiFi101-Updater-ArduinoIDE-Plugin-0.10.10.zip";
     sha256 = "0bs5qdglsfc2q5c48m6wdjpzhz4ya4askh1g8364dp6p7jmg6w0d";
   };
-  "build/avr-1.8.2.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/cores/avr-1.8.2.tar.bz2";
-    sha256 = "06zl8fwphknd0qdx87fcr1003gid1yqsazaj674mm9widqfd84v2";
+  "build/avr-1.8.3.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/cores/avr-1.8.3.tar.bz2";
+    sha256 = "051wnc0nmsmxvvs4c79zvjag33yx5il2pz2j7qyjsxkp4jc9p2ny";
   };
 }
 
 // optionalAttrs (system == "x86_64-linux") {
-  "build/arduino-builder-linux64-1.5.2.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-linux64-1.5.2.tar.bz2";
-    sha256 = "0wypr9a2cbv9r0ignsr13raw09i3vfc5zvkjxp2xwb7mv35y77z3";
+  "build/arduino-builder-linux64-1.5.4.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-linux64-1.5.4.tar.bz2";
+    sha256 = "1cgvwlvxzzpjaj4njz1mrsif27l26dwkz9c7gbhdj0lvlk3xsa7s";
   };
-  "build/linux/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2";
-    sha256 = "1yq6a811dabrkcgzfi3jsys41r19qsna46kglkjbcy0rza7yvzry";
+  "build/linux/avr-gcc-7.3.0-atmel3.6.1-arduino7-x86_64-pc-linux-gnu.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino7-x86_64-pc-linux-gnu.tar.bz2";
+    sha256 = "07nrzv7gsq7bi7ichlw3xsdvgzk0lvv56b73ksn3089ajpv3g35x";
   };
   "build/linux/avrdude-6.3.0-arduino17-x86_64-pc-linux-gnu.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avrdude-6.3.0-arduino17-x86_64-pc-linux-gnu.tar.bz2";

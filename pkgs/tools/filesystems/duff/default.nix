@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gettext }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gettext }:
 
 stdenv.mkDerivation {
   pname = "duff";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quickly find duplicate files";
     longDescription = ''
       Duff is a Unix command-line utility for quickly finding duplicates in

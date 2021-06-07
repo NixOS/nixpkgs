@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, substituteAll
+, nix-update-script
 , desktop-file-utils
 , pkg-config
 , writeScript
@@ -10,7 +10,6 @@
 , wingpanel
 , orca
 , onboard
-, at-spi2-core
 , elementary-default-settings
 , elementary-settings-daemon
 , runtimeShell
@@ -61,24 +60,45 @@ let
   '';
 
   executable = writeScript "pantheon" ''
-    export XDG_CONFIG_DIRS=${elementary-settings-daemon}/etc/xdg:${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
+    # gnome-session can find RequiredComponents for `pantheon` session (notably pantheon's patched g-s-d autostarts)
+    export XDG_CONFIG_DIRS=@out@/etc/xdg:$XDG_CONFIG_DIRS
+
+    # Make sure we use our gtk-3.0/settings.ini
+    export XDG_CONFIG_DIRS=${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
+
+    # * gnome-session can find the `pantheon' session
+    # * use pantheon-mimeapps.list
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
-    exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
+
+    # Start pantheon session. Keep in sync with upstream
+    exec ${gnome-session}/bin/gnome-session --builtin --session=pantheon "$@"
+  '';
+
+  # Absolute path patched version of the upstream xsession
+  xsession = writeText "pantheon.desktop" ''
+    [Desktop Entry]
+    Name=Pantheon
+    Comment=This session provides elementary experience
+    Exec=@out@/libexec/pantheon
+    TryExec=${wingpanel}/bin/wingpanel
+    Icon=
+    DesktopNames=Pantheon
+    Type=Application
   '';
 
 in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings-unstable";
-  version = "2020-06-11";
+  version = "2020-07-06";
 
   repoName = "session-settings";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "130c9ae221913032ed18bcf6d21e3dcdba3c4209";
-    sha256 = "0bzg9vbq0ssnxgcb2vxpx6x9zv8ngkm9r3ki5q83m9al9919n0pr";
+    rev = "fa15cbd83fba0ba30e9a302db880350bff5ace52";
+    hash = "sha256-26H791c7OAjFYtjVChIatICSocMt0uTej1TKBOvw+6w=";
   };
 
   nativeBuildInputs = [
@@ -103,24 +123,26 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
+    # our mimeapps patched from upstream to exclude:
+    # * pantheon-mail -> geary
+    # * evince.desktop -> org.gnome.Evince.desktop
     mkdir -p $out/share/applications
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
+    # instantiates pantheon's dockitems
     cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
 
+    # script `Exec` to start pantheon
     mkdir -p $out/libexec
     substitute ${executable} $out/libexec/pantheon --subst-var out
     chmod +x $out/libexec/pantheon
-  '';
 
-  postFixup = ''
-    substituteInPlace $out/share/xsessions/pantheon.desktop \
-      --replace "gnome-session --session=pantheon" "$out/libexec/pantheon" \
-      --replace "wingpanel" "${wingpanel}/bin/wingpanel"
+    # absolute path patched xsession
+    substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
 
@@ -129,7 +151,7 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Session settings for elementary";
     homepage = "https://github.com/elementary/session-settings";
     license = licenses.lgpl3;

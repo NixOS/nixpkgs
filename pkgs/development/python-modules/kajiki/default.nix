@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , Babel
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ Babel pytz nine ];
   checkInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kajiki provides fast well-formed XML templates";
     homepage = "https://github.com/nandoflorestan/kajiki";
     license = licenses.mit;

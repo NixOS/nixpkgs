@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python
 , pyusb
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -D 99-ibuddy.rules $out/lib/udev/rules.d/99-ibuddy.rules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code to work with the iBuddy MSN figurine";
     homepage = "https://github.com/armijnhemel/py3buddy";
     license = with licenses; [ mit ];

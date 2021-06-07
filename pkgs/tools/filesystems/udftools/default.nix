@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "udftools";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s@/usr/sbin/pktsetup@$out/sbin/pktsetup@" $out/lib/udev/rules.d/80-pktsetup.rules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "UDF tools";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

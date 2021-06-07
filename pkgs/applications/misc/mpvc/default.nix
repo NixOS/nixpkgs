@@ -1,4 +1,4 @@
-{ stdenv, socat, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, socat, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "mpvc-unstable-2017-03-18";
@@ -17,9 +17,10 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/mpvc --prefix PATH : "${socat}/bin/"
   '';
 
-  buildInputs = [ socat makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ socat ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A mpc-like control interface for mpv";
     homepage = "https://github.com/wildefyr/mpvc";
     license = licenses.mit;

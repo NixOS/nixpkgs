@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtheora, xvidcore, libGLU, libGL, SDL, SDL_ttf, SDL_mixer
+{ lib, stdenv, fetchurl, libtheora, xvidcore, libGLU, libGL, SDL, SDL_ttf, SDL_mixer
 , curl, libjpeg, libpng, gettext, cunit, enableEditor?false }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''tar xvf "${srcData}"'';
 
   configureFlags = [ "--enable-release" "--enable-sse" ]
-    ++ stdenv.lib.optional enableEditor "--enable-uforadiant";
+    ++ lib.optional enableEditor "--enable-uforadiant";
 
   buildInputs = [
     libtheora xvidcore libGLU libGL SDL SDL_ttf SDL_mixer
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://ufoai.org";
     description = "A squad-based tactical strategy game in the tradition of X-Com";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [];
   };
 }
