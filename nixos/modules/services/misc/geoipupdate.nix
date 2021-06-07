@@ -152,6 +152,15 @@ in
         RuntimeDirectoryMode = 0700;
       };
     };
+
+    systemd.timers.geoipupdate-initial-run = {
+      wantedBy = [ "timers.target" ];
+      unitConfig.ConditionPathExists = "!${cfg.settings.DatabaseDirectory}";
+      timerConfig = {
+        Unit = "geoipupdate.service";
+        OnActiveSec = 0;
+      };
+    };
   };
 
   meta.maintainers = [ lib.maintainers.talyz ];
