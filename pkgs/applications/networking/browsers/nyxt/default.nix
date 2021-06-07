@@ -18,9 +18,9 @@
 
 stdenv.mkDerivation rec {
   pname = "nyxt";
-  inherit (lispPackages.nyxt.meta) version;
+  inherit (lispPackages.nyxt-unwrapped.meta) version;
 
-  src = lispPackages.nyxt;
+  src = lispPackages.nyxt-unwrapped;
 
   nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = [
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     '' + (if stdenv.isDarwin then ''
       mkdir -p $out/bin $out/Applications/Nyxt.app/Contents
       pushd $out/Applications/Nyxt.app/Contents
-      install -Dm644 $src/lib/common-lisp/nyxt/assets/Info.plist Info.plist
-      install -Dm644 $src/lib/common-lisp/nyxt/assets/nyxt.icns Resources/nyxt.icns
+      install -Dm644 $src/lib/common-lisp/nyxt-unwrapped/assets/Info.plist Info.plist
+      install -Dm644 $src/lib/common-lisp/nyxt-unwrapped/assets/nyxt.icns Resources/nyxt.icns
       install -Dm755 $src/bin/nyxt MacOS/nyxt
       popd
 
@@ -71,10 +71,10 @@ stdenv.mkDerivation rec {
       ln -s $out/Applications/Nyxt.app/Contents/MacOS/nyxt $out/bin/nyxt
     '' else ''
       mkdir -p $out/share/applications/
-      sed "s/VERSION/$version/" $src/lib/common-lisp/nyxt/assets/nyxt.desktop > $out/share/applications/nyxt.desktop
+      sed "s/VERSION/$version/" $src/lib/common-lisp/nyxt-unwrapped/assets/nyxt.desktop > $out/share/applications/nyxt.desktop
       for i in 16 32 128 256 512; do
         mkdir -p "$out/share/icons/hicolor/''${i}x''${i}/apps/"
-        cp -f $src/lib/common-lisp/nyxt/assets/nyxt_''${i}x''${i}.png "$out/share/icons/hicolor/''${i}x''${i}/apps/nyxt.png"
+        cp -f $src/lib/common-lisp/nyxt-unwrapped/assets/nyxt_''${i}x''${i}.png "$out/share/icons/hicolor/''${i}x''${i}/apps/nyxt.png"
       done
 
       install -Dm755 $src/bin/nyxt $out/bin/nyxt

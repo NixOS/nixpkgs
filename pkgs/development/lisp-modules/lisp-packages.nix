@@ -122,8 +122,8 @@ let lispPackages = rec {
 
     asdFilesToKeep = [ "cluffer.asd" "cluffer-base.asd" "cluffer-simple-buffer.asd" "cluffer-simple-line.asd" "cluffer-standard-buffer.asd" "cluffer-standard-line.asd" ];
   };
-  nyxt = pkgs.lispPackages.buildLispPackage rec {
-    baseName = "nyxt";
+  nyxt-unwrapped = pkgs.lispPackages.buildLispPackage rec {
+    baseName = "nyxt-unwrapped";
     version = "2.0.0";
 
     description = "Browser";
@@ -162,9 +162,9 @@ let lispPackages = rec {
             "(asdf/system:component-entry-point (asdf:find-system :nyxt/gi-gtk-application))" \
             "" \
             "(format *error-output* \"Alien objects:~%~s~%\" sb-alien::*shared-objects*)"
-        ' "$out/bin/nyxt-lisp-launcher.sh"
+        ' "$out/bin/${baseName}-lisp-launcher.sh"
 
-        mv "$out/lib/common-lisp/nyxt/nyxt" "$out/bin/"
+        mv "$out/lib/common-lisp/${baseName}/nyxt" "$out/bin/"
       '';
     };
 
@@ -225,5 +225,8 @@ let lispPackages = rec {
       pkgs.sbcl
     ];
   };
+
+  # added 2021-06-14
+  nyxt = throw "lispPackages.nyxt was renamed to lispPackages.nyxt-unwrapped";
 };
 in lispPackages
