@@ -1061,8 +1061,6 @@ in
 
   antora = callPackage ../development/tools/documentation/antora {};
 
-  anup = callPackage ../applications/misc/anup {};
-
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
   apk-tools = callPackage ../tools/package-management/apk-tools {
