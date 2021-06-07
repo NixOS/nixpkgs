@@ -3400,6 +3400,8 @@ in {
 
   iniparse = callPackage ../development/python-modules/iniparse { };
 
+  injector = callPackage ../development/python-modules/injector { };
+
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
   inquirer = callPackage ../development/python-modules/inquirer { };
