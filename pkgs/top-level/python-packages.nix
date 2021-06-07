@@ -6334,6 +6334,8 @@ in {
 
   pyspinel = callPackage ../development/python-modules/pyspinel { };
 
+  pyspnego = callPackage ../development/python-modules/pyspnego { };
+
   pyspotify = callPackage ../development/python-modules/pyspotify { };
 
   pysptk = callPackage ../development/python-modules/pysptk { };
