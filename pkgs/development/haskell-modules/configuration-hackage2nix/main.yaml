@@ -93,6 +93,9 @@ default-package-overrides:
   - futhark < 0.19.5
   # 2021-06-05: remove once pandoc 2.14 is in stackage
   - pandoc-crossref < 0.3.11.0
+  # 2021-06-07: stackage still has dhall < 1.39
+  - dhall-nix < 1.1.21
+  - dhall-openapi < 1.0.1
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
