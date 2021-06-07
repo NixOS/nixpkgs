@@ -7,7 +7,6 @@
   "dash-to-dock@micxgx.gmail.com" = callPackage ./dash-to-dock { };
   "dash-to-panel@jderose9.github.com" = callPackage ./dash-to-panel { };
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };
-  "dynamic-panel-transparency@rockon999.github.io" = callPackage ./dynamic-panel-transparency { };
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
   "emoji-selector@maestroschan.fr" = callPackage ./emoji-selector { };
   "freon@UshakovVasilii_Github.yahoo.com" = callPackage ./freon { };
