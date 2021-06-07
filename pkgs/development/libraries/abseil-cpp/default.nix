@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_CXX_STANDARD=17"
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
   ];
 
