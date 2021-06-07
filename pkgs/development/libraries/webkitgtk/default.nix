@@ -56,7 +56,9 @@
 , xdg-dbus-proxy
 , substituteAll
 , glib
+, glib-networking
 , addOpenGLRunpath
+, wrapGAppsHook
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -134,6 +136,7 @@ stdenv.mkDerivation rec {
     python3
     ruby
     glib # for gdbus-codegen
+    wrapGAppsHook # for MiniBrowser
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
@@ -152,6 +155,7 @@ stdenv.mkDerivation rec {
     libgcrypt
     libidn
     libintl
+    glib-networking # for MiniBrowser
   ] ++ lib.optionals stdenv.isLinux [
     libmanette
   ] ++ [
@@ -201,10 +205,10 @@ stdenv.mkDerivation rec {
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
+    "-DENABLE_MINIBROWSER=ON"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
-    "-DENABLE_MINIBROWSER=OFF"
     "-DENABLE_QUARTZ_TARGET=ON"
     "-DENABLE_VIDEO=ON"
     "-DENABLE_WEBGL=OFF"
@@ -226,7 +230,16 @@ stdenv.mkDerivation rec {
     sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
+  postInstall = ''
+    mv $out/libexec/MiniBrowser $out/bin/MiniBrowser
+    gappsWrapperArgsHook # FIXME: currently runs at preFixup
+    wrapGApp $out/bin/MiniBrowser --argv0 MiniBrowser
+  '';
+
   doCheck = true;
+
+  # we only want to wrap the MiniBrowser
+  dontWrapGApps = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
 
