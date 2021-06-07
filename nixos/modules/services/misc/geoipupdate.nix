@@ -119,7 +119,7 @@ in
               };
             };
 
-            geoipupdateConf = pkgs.writeText "discourse.conf" (geoipupdateKeyValue cfg.settings);
+            geoipupdateConf = pkgs.writeText "geoipupdate.conf" (geoipupdateKeyValue cfg.settings);
 
             script = ''
               mkdir -p "${cfg.settings.DatabaseDirectory}"
