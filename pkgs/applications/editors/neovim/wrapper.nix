@@ -4,6 +4,7 @@
 , nodejs
 , nodePackages
 , python3Packages
+, callPackage
 }:
 with lib;
 
@@ -120,6 +121,9 @@ let
     passthru = {
       unwrapped = neovim;
       initRc = neovimRcContent;
+
+      tests = callPackage ./tests.nix {
+      };
     };
 
     meta = neovim.meta // {
