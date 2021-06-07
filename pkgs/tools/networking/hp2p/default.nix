@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A MPI based benchmark for network diagnostics";
     homepage = "https://github.com/cea-hpc/hp2p";
     platforms = platforms.unix;
