@@ -214,6 +214,7 @@ itchyny/thumbnail.vim
 itchyny/vim-cursorword
 itchyny/vim-gitbranch
 itspriddle/vim-shellcheck
+ivalkeen/vim-simpledb
 ivanov/vim-ipython
 jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
@@ -577,6 +578,7 @@ SevereOverfl0w/deoplete-github
 shaunsingh/moonlight.nvim@pure-lua
 shaunsingh/nord.nvim
 sheerun/vim-polyglot
+shinchu/lightline-gruvbox.vim
 Shougo/context_filetype.vim
 Shougo/defx.nvim
 Shougo/denite.nvim
