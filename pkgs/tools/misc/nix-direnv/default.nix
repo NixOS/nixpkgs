@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, gnugrep, nixUnstable }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnugrep
+, nixStable
+, nixUnstable
+, enableFlakes ? false
+}:
 
+let
+  nix = if enableFlakes then nixUnstable else nixStable;
+in
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
   version = "1.2.6";
@@ -14,7 +24,7 @@ stdenv.mkDerivation rec {
   # Substitute instead of wrapping because the resulting file is
   # getting sourced, not executed:
   postPatch = ''
-    sed -i "1a NIX_BIN_PREFIX=${nixUnstable}/bin/" direnvrc
+    sed -i "1a NIX_BIN_PREFIX=${nix}/bin/" direnvrc
     substituteInPlace direnvrc --replace "grep" "${gnugrep}/bin/grep"
   '';
 
