@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "7.5.7";
+  version = "8.0.0";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -10,15 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-GTQK02zxOBTE+93vT0zLMhAeZ7F3Cq/0lbvbzwB2QZA=";
+    sha256 = "sha256-HtubiSx4Orf9knZcuYy4eF2qwclX/JVd2Ba9L33tM74=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-IQ7aAuUrNa+bSh5ld6IttujM8AgKUSlu8H7pwzDi164=";
+    sha256 = "sha256-bwBpkPy4kwfnkRsLOktUgQx+Sm8WJA2d65efMBCnGp4=";
   };
 
-  vendorSha256 = "sha256-AsPRaRLomp090XAKLXLXKm40ESPO4im9qi6VLpLYRQU=";
+  vendorSha256 = "sha256-Hon5WrhXUvZUtMRxx3XcBDQe3rkRkfqbnXjY3xCzuuM=";
 
   # grafana-aws-sdk is specified with two versions which causes a problem later:
   # go: inconsistent vendoring in /build/source:
@@ -33,9 +33,8 @@ buildGoModule rec {
   '';
 
   # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
-  # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/dashboard-schemas
   preBuild = ''
-    rm -r dashboard-schemas scripts/go
+    rm -r scripts/go
   '';
 
   postInstall = ''
