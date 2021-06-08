@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
       --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
   '';
 
+  passthru.tests = {
+    hello = callPackage ./tests/hello { };
+  };
+
   meta = with lib; {
     homepage = "https://reasonml.github.io/";
     downloadPage = "https://github.com/reasonml/reason";
