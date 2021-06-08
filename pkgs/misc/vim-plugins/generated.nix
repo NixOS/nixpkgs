@@ -8970,6 +8970,18 @@ final: prev:
     meta.homepage = "https://github.com/rcarriga/vim-ultest/";
   };
 
+  vim-unicoder = buildVimPluginFrom2Nix {
+    pname = "vim-unicoder";
+    version = "2019-04-16";
+    src = fetchFromGitHub {
+      owner = "arthurxavierx";
+      repo = "vim-unicoder";
+      rev = "a71fc3670f9337c56806fa9e8e97b7ea09fd5e39";
+      sha256 = "1kcnxx909pdvrvk0kyz3h8f9szn6hmalm8qyakq3pv6dknlkwb0b";
+    };
+    meta.homepage = "https://github.com/arthurxavierx/vim-unicoder/";
+  };
+
   vim-unimpaired = buildVimPluginFrom2Nix {
     pname = "vim-unimpaired";
     version = "2020-04-26";

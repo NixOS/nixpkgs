@@ -98,6 +98,7 @@ in buildFHSUserEnv rec {
     xorg.libXfixes
     libGL
     libva
+    pipewire.lib
 
     # Not formally in runtime but needed by some games
     at-spi2-atk

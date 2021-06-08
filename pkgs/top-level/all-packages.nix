@@ -11160,6 +11160,10 @@ in
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
+  gwe = callPackage ../tools/misc/gwe {
+    nvidia_x11 = linuxPackages.nvidia_x11;
+  };
+
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
   idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
@@ -25675,8 +25679,6 @@ in
   nanorc = callPackage ../applications/editors/nano/nanorc { };
 
   navipowm = callPackage ../applications/misc/navipowm { };
-
-  navit = libsForQt5.callPackage ../applications/misc/navit { };
 
   netbeans = callPackage ../applications/editors/netbeans {
     jdk = jdk11;

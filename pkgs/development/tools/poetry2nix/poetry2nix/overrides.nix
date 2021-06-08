@@ -598,7 +598,7 @@ self: super:
 
   lxml = super.lxml.overridePythonAttrs (
     old: {
-      nativeBuildInputs = with pkgs; (old.nativeBuildInputs or [ ]) ++ [ pkg-config libxml2.dev libxslt.dev ];
+      nativeBuildInputs = with pkgs; (old.nativeBuildInputs or [ ]) ++ [ pkg-config libxml2.dev libxslt.dev ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
       buildInputs = with pkgs; (old.buildInputs or [ ]) ++ [ libxml2 libxslt ];
     }
   );
@@ -636,6 +636,10 @@ self: super:
         cat > setup.cfg <<EOF
         [libs]
         system_freetype = True
+      '' + lib.optionalString stdenv.isDarwin ''
+        # LTO not working in darwin stdenv, see NixOS/nixpkgs/pull/19312
+        enable_lto = false
+      '' + ''
         EOF
       '';
 

@@ -14,6 +14,15 @@
     "sha256": "1wdrjpd3l0xadsa3lqhsc9c57g8x2qkwb76q824sk8za1a7lapii",
     "version": "1.5.0-patched"
   },
+  "aiven": {
+    "owner": "aiven",
+    "provider-source-address": "registry.terraform.io/aiven/aiven",
+    "repo": "terraform-provider-aiven",
+    "rev": "v2.1.14",
+    "sha256": "14bfdhn3daygj1v3lm9b3791sx2cd5h0panchpp39h6vrccrpmmk",
+    "vendorSha256": "1j09bfbld03yxq0vv9ld0xmw5axbza2bwlz01i1gl1v9dprlnbkc",
+    "version": "2.1.14"
+  },
   "akamai": {
     "owner": "terraform-providers",
     "provider-source-address": "registry.terraform.io/akamai/akamai",
@@ -609,6 +618,7 @@
   },
   "metal": {
     "owner": "equinix",
+    "provider-source-address": "registry.terraform.io/equinix/metal",
     "repo": "terraform-provider-metal",
     "rev": "v2.1.0",
     "sha256": "06i3rj6ig8hxbncdpa8b11v8pr3zhi90ppmf77jjin1114ikd172",
