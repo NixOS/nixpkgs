@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , aiofiles
 , asgi-csrf
 , click
@@ -35,6 +36,14 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-Ixh56X9dI/FIJPXHXXGnFiYj3qeBmvW5L1FF7/0ofUQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-32670.patch";
+      url = "https://github.com/simonw/datasette/commit/26fc539312bca2551b6f048b6bcf4ffbb491289f.patch";
+      sha256 = "1d4yy6dqb4l7y0c5xpdvl66522ckdb34wnqvzqw73pdl2hr5jsml";
+    })
+  ];
 
   nativeBuildInputs = [ pytestrunner ];
 
@@ -80,6 +89,8 @@ buildPythonPackage rec {
   # just run the csv tests, as this should give some indictation of correctness
   pytestFlagsArray = [
     "tests/test_csv.py"
+    # covers patched CVE-2021-32670
+    "tests/test_html.py"
   ];
   disabledTests = [
     "facet"
