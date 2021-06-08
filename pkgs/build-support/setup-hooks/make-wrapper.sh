@@ -101,6 +101,7 @@ makeWrapper() {
         elif [[ "$p" == "--argv0" ]]; then
             argv0="${params[$((n + 1))]}"
             n=$((n + 1))
+            echo "export __NIX_ARGV0=\"$argv0\"  # a promise to interpreted shebang scripts: exec -a NAME has no effect"
         else
             die "makeWrapper doesn't understand the arg $p"
         fi
