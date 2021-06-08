@@ -1,14 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , python
 }:
 
 buildPythonPackage rec {
   pname = "defusedxml";
   version = "0.7.1";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.1.5";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
-    sha256 = "ZUxWOlJGQpeQCtWt0PSdcbMackHdeuNFkxHvYDPcU8Y=";
+    sha256 = "05hcckkv3vhz172w9kp5lh4srakizx1l383dijs50vgx2bj30m8v";
   };
 
   patches = [
@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
     colorlog
     concurrent-log-handler
     cryptography
+    dnspython
     keyrings-cryptfile
     pyyaml
     setproctitle

@@ -25,6 +25,7 @@ andys8/vim-elm-syntax
 antoinemadec/coc-fzf
 ap/vim-css-color
 arcticicestudio/nord-vim
+arthurxavierx/vim-unicoder
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 axelf4/vim-strip-trailing-whitespace
