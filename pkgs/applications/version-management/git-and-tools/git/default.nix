@@ -290,11 +290,13 @@ stdenv.mkDerivation {
       fi
     }
 
-    # Shared permissions are forbidden in sandbox builds.
-    disable_test t0001-init shared
+    # Shared permissions are forbidden in sandbox builds:
+    substituteInPlace t/test-lib.sh \
+      --replace "test_set_prereq POSIXPERM" ""
+    # TODO: Investigate while these still fail (without POSIXPERM):
+    disable_test t0001-init 'shared overrides system'
+    disable_test t0001-init 'init honors global core.sharedRepository'
     disable_test t1301-shared-repo
-    disable_test t5324-split-commit-graph 'split commit-graph respects core.sharedrepository'
-    disable_test t4129-apply-samemode 'do not use core.sharedRepository for working tree files'
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
