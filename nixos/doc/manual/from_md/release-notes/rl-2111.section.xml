@@ -169,6 +169,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>erigon</literal> ethereum node has moved to a new
+          database format in <literal>2021-05-04</literal>, and requires
+          a full resync
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.geoip-updater</literal> was broken and has
           been replaced by
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.

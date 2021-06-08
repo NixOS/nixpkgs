@@ -1,29 +1,33 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  pname = "turbo-geth";
-  version = "2021.05.02";
+  pname = "erigon";
+  version = "2021.08.01";
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7sTRAAlKZOdwi/LRbIEDKWpBe1ol8pZfEf2KIC4s0xk=";
+    sha256 = "sha256-fjMkCCeQa/IHB4yXlL7Qi8J9wtZm90l3xIA72LeoW8M=";
   };
 
-  vendorSha256 = "1d0ahdb2b5v8nxq3kdxw151phnyv6habb8kr8qjaq3kyhcnyk6ng";
+  vendorSha256 = "1vsgd19an592dblm9afasmh8cd0x2frw5pvnxkxd2fikhy2mibbs";
   runVend = true;
 
+  # Build errors in mdbx when format hardening is enabled:
+  #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
+  hardeningDisable = [ "format" ];
+
   subPackages = [
-    "cmd/tg"
+    "cmd/erigon"
     "cmd/evm"
     "cmd/rpcdaemon"
     "cmd/rlpdump"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/ledgerwatch/turbo-geth/";
-    description = "Ethereum node and geth fork focused on scalability and modularity";
+    homepage = "https://github.com/ledgerwatch/erigon/";
+    description = "Ethereum node implementation focused on scalability and modularity";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
     maintainers = with maintainers; [ d-xo ];
   };
