@@ -8,7 +8,7 @@ To update the list of packages from MELPA,
 2. Check for evaluation errors:
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
-3. Run `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
+3. Run `git commit -m "melpa-packages $(date -Idate)" recipes-archive-melpa.json`
 
 ## Update from overlay
 
