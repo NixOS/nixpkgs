@@ -5,23 +5,108 @@ let
 
   parentWrapperDir = dirOf wrapperDir;
 
-  programs =
-    (lib.mapAttrsToList
-      (n: v: (if v ? program then v else v // {program=n;}))
-      wrappers);
-
   securityWrapper = pkgs.callPackage ./wrapper.nix {
     inherit parentWrapperDir;
   };
+
+  fileModeType =
+    let
+      # taken from the chmod(1) man page
+      symbolic = "[ugoa]*([-+=]([rwxXst]*|[ugo]))+|[-+=][0-7]+";
+      numeric = "[-+=]?[0-7]{0,4}";
+      mode = "((${symbolic})(,${symbolic})*)|(${numeric})";
+    in
+     lib.types.strMatching mode
+     // { description = "file mode string"; };
+
+  wrapperType = lib.types.submodule ({ name, config, ... }: {
+    options.source = lib.mkOption
+      { type = lib.types.path;
+        description = "The absolute path to the program to be wrapped.";
+      };
+    options.program = lib.mkOption
+      { type = with lib.types; nullOr str;
+        default = name;
+        description = ''
+          The name of the wrapper program. Defaults to the attribute name.
+        '';
+      };
+    options.owner = lib.mkOption
+      { type = lib.types.str;
+        default = with config;
+          if (capabilities != "") || !(setuid || setgid || permissions != null)
+          then "root"
+          else "nobody";
+        description = ''
+          The owner of the wrapper program. Defaults to <literal>root</literal>
+          if any capability is set and setuid/setgid/permissions are not, otherwise to
+          <literal>nobody</litera>.
+        '';
+      };
+    options.group = lib.mkOption
+      { type = lib.types.str;
+        default = with config;
+          if (capabilities != "") || !(setuid || setgid || permissions != null)
+          then "root"
+          else "nogroup";
+        description = ''
+          The group of the wrapper program. Defaults to <literal>root</literal>
+          if any capability is set and setuid/setgid/permissions are not,
+          otherwise to <literal>nogroup</litera>.
+        '';
+      };
+    options.permissions = lib.mkOption
+      { type = lib.types.nullOr fileModeType;
+        default = null;
+        example = "u+rx,g+x,o+x";
+        apply = x: if x == null then "u+rx,g+x,o+x" else x;
+        description = ''
+          The permissions of the wrapper program. The format is that of a
+          symbolic or numeric file mode understood by <command>chmod</command>.
+        '';
+      };
+    options.capabilities = lib.mkOption
+      { type = lib.types.commas;
+        default = "";
+        description = ''
+          A comma-separated list of capabilities to be given to the wrapper
+          program. For capabilities supported by the system check the
+          <citerefentry>
+            <refentrytitle>capabilities</refentrytitle>
+            <manvolnum>7</manvolnum>
+          </citerefentry>
+          manual page.
+
+          <note><para>
+            <literal>cap_setpcap</literal>, which is required for the wrapper
+            program to be able to raise caps into the Ambient set is NOT raised
+            to the Ambient set so that the real program cannot modify its own
+            capabilities!! This may be too restrictive for cases in which the
+            real program needs cap_setpcap but it at least leans on the side
+            security paranoid vs. too relaxed.
+          </para></note>
+        '';
+      };
+    options.setuid = lib.mkOption
+      { type = lib.types.bool;
+        default = false;
+        description = "Whether to add the setuid bit the wrapper program.";
+      };
+    options.setgid = lib.mkOption
+      { type = lib.types.bool;
+        default = false;
+        description = "Whether to add the setgid bit the wrapper program.";
+      };
+  });
 
   ###### Activation script for the setcap wrappers
   mkSetcapProgram =
     { program
     , capabilities
     , source
-    , owner  ? "nobody"
-    , group  ? "nogroup"
-    , permissions ? "u+rx,g+x,o+x"
+    , owner
+    , group
+    , permissions
     , ...
     }:
     assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
@@ -46,11 +131,11 @@ let
   mkSetuidProgram =
     { program
     , source
-    , owner  ? "nobody"
-    , group  ? "nogroup"
-    , setuid ? false
-    , setgid ? false
-    , permissions ? "u+rx,g+x,o+x"
+    , owner
+    , group
+    , setuid
+    , setgid
+    , permissions
     , ...
     }:
     ''
@@ -66,24 +151,11 @@ let
 
   mkWrappedPrograms =
     builtins.map
-      (s: if (s ? capabilities)
-          then mkSetcapProgram
-                 ({ owner = "root";
-                    group = "root";
-                  } // s)
-          else if
-             (s ? setuid && s.setuid) ||
-             (s ? setgid && s.setgid) ||
-             (s ? permissions)
-          then mkSetuidProgram s
-          else mkSetuidProgram
-                 ({ owner  = "root";
-                    group  = "root";
-                    setuid = true;
-                    setgid = false;
-                    permissions = "u+rx,g+x,o+x";
-                  } // s)
-      ) programs;
+      (opts:
+        if opts.capabilities != ""
+          then mkSetcapProgram opts
+          else mkSetuidProgram opts
+      ) (lib.attrValues wrappers);
 in
 {
   imports = [
@@ -95,7 +167,7 @@ in
 
   options = {
     security.wrappers = lib.mkOption {
-      type = lib.types.attrs;
+      type = lib.types.attrsOf wrapperType;
       default = {};
       example = lib.literalExample
         ''
@@ -109,31 +181,11 @@ in
           }
         '';
       description = ''
-        This option allows the ownership and permissions on the setuid
-        wrappers for specific programs to be overridden from the
-        default (setuid root, but not setgid root).
-
-        <note>
-          <para>The sub-attribute <literal>source</literal> is mandatory,
-          it must be the absolute path to the program to be wrapped.
-          </para>
-
-          <para>The sub-attribute <literal>program</literal> is optional and
-          can give the wrapper program a new name. The default name is the same
-          as the attribute name itself.</para>
-
-          <para>Additionally, this option can set capabilities on a
-          wrapper program that propagates those capabilities down to the
-          wrapped, real program.</para>
-
-          <para>NOTE: cap_setpcap, which is required for the wrapper
-          program to be able to raise caps into the Ambient set is NOT
-          raised to the Ambient set so that the real program cannot
-          modify its own capabilities!! This may be too restrictive for
-          cases in which the real program needs cap_setpcap but it at
-          least leans on the side security paranoid vs. too
-          relaxed.</para>
-        </note>
+        This option effectively allows adding setuid/setgid bits, capabilities,
+        changing file ownership and permissions of a program without directly
+        modifying it. This works by creating a wrapper program under the
+        <option>security.wrapperDir</option> directory, which is then added to
+        the shell <literal>PATH</literal>.
       '';
     };
 
@@ -150,6 +202,16 @@ in
 
   ###### implementation
   config = {
+
+    assertions = lib.mapAttrsToList
+      (name: opts:
+        { assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
+          message = ''
+            The security.wrappers.${name} wrapper is not valid:
+                setuid/setgid and capabilities are mutually exclusive.
+          '';
+        }
+      ) wrappers;
 
     security.wrappers = {
       # These are mount related wrappers that require the +s permission.
