@@ -17,6 +17,7 @@ buildPecl {
       Pinba is a MySQL storage engine that acts as a realtime monitoring and
       statistics server for PHP using MySQL as a read-only interface.
     '';
+    license = licenses.lgpl2Plus;
     homepage = "http://pinba.org/";
     maintainers = teams.php.members;
   };
