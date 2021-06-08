@@ -17018,6 +17018,8 @@ in
       };
   });
 
+  libyang = callPackage ../development/libraries/libyang { };
+
   libykclient = callPackage ../development/libraries/libykclient { };
 
   libykneomgr = callPackage ../development/libraries/libykneomgr { };
