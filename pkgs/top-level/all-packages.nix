@@ -28537,6 +28537,8 @@ in
   dogecoin  = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = true; };
   dogecoind = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = false; };
 
+  eclair = callPackage ../applications/blockchains/eclair.nix { };
+
   electrs = callPackage ../applications/blockchains/electrs.nix { };
 
   elements  = libsForQt5.callPackage ../applications/blockchains/elements.nix { miniupnpc = miniupnpc_2; withGui = true; };
