@@ -71,6 +71,12 @@
           <literal>fetchConfigured = false;</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          fsharp41 has been removed in preference to use the latest
+          dotnet-sdk
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="other-notable-changes">
