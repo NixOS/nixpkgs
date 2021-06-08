@@ -1,0 +1,96 @@
+#!/bin/env bash
+
+# Adapt from get_vsixpkg() of the original update_install_exts.sh
+
+set -eu -o pipefail
+
+# Helper to just fail with a message and non-zero exit code.
+function fail() {
+    echo "$1" >&2
+    exit 1
+}
+
+PUBLISHER=""
+NAME=""
+VER=""
+
+if [[ "$#" -eq 0 ]]; then
+fail "Expect PUBLISHER and NAME. See --help for usage"
+fi
+
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            cat <<END_HELP
+Usage: nix-prefetch-vscode-mktplc [OPTIONS] PUBLISHER NAME VERSION=latest
+
+Fetch the vscode extension from Open VSX Registry
+and print the mktplcRef attributes in JSON format
+
+Options:
+  -h, --help    Print this help and exit
+END_HELP
+
+            exit 0
+            ;;
+        *)
+            if [[ "$#" -lt 2 ]]; then
+                fail "Expect PUBLISHER and NAME"
+            fi
+            PUBLISHER="$1"
+            NAME="$2"
+            if [[ "$#" -lt 3 ]] || [[ -z "$3" ]]; then
+                VER="latest"
+            else
+                VER="$3"
+            fi
+            if [[ "$#" -eq 2 ]]; then
+                shift 2
+            else
+                shift 3
+            fi
+            ;;
+    esac
+done
+
+N="$PUBLISHER.$NAME"
+
+EXTTMP=$(mktemp -d -t vscode_exts_XXXXXXXX)
+
+# Clean up the temp folder whenever exit
+function clean_up {
+    rm -rf "$EXTTMP"
+}
+
+trap clean_up EXIT
+
+URL_META="https://open-vsx.org/api/$PUBLISHER/$NAME/$VER"
+N_META="${N}_meta.json"
+curl --silent --show-error -o "$EXTTMP/$N_META" "$URL_META"
+
+VER_FETCHED="$(jq -r '.version' "$EXTTMP/$N_META")"
+if [[ -z "$VER_FETCHED" ]] || [[ "$VER_FETCHED" = "null" ]]; then
+    fail "Fetched version ($VER_FETCHED) is null or empty"
+fi
+
+if [[ "$VER" = "latest" ]]; then
+    VER="$VER_FETCHED"
+else
+    if [[ $VER != "$VER_FETCHED" ]]; then
+        fail "Fetched version ($VER_FETCHED) does not match the specified version ($VER)"
+    fi
+fi
+
+URL_VSIX="https://open-vsx.org/api/$PUBLISHER/$NAME/$VER/file/$N-$VER.vsix"
+curl --silent --show-error -L -o "$EXTTMP/$N.zip" "$URL_VSIX"
+SHA=$(nix-hash --flat --base32 --type sha256 "$EXTTMP/$N.zip")
+
+cat <<EOF
+{
+  "name": "$NAME",
+  "publisher": "$PUBLISHER",
+  "version": "$VER",
+  "useMSMktplc": false,
+  "sha256": "$SHA"
+}
+EOF

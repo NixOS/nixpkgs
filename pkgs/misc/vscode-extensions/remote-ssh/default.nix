@@ -37,6 +37,7 @@ in
       name = "remote-ssh";
       publisher = "ms-vscode-remote";
       version = "0.50.0";
+      useMSMktplc = true;
       sha256 = "01pyd6759p5nkjhjy3iplrl748xblr54l1jphk2g02s1n5ds2qb9";
     };
 

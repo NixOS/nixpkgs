@@ -30807,6 +30807,10 @@ in
   nix-prefetch-github = with python3Packages;
     toPythonApplication nix-prefetch-github;
 
+  nix-prefetch-openvsx = callPackage ../misc/vscode-extensions/nix-prefetch-openvsx { };
+
+  nix-prefetch-vscode-mktplc = callPackage ../misc/vscode-extensions/nix-prefetch-vscode-mktplc { };
+
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
     nix-prefetch-cvs

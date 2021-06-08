@@ -11,6 +11,7 @@ let
     dontPatchELF ? true,
     dontStrip ? true,
     buildInputs ? [],
+    useMSMktplc ? false,
     ...
   }:
   stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) // {
@@ -34,6 +35,8 @@ let
       runHook postInstall
     '';
 
+    passthru.useMSMktplc = useMSMktplc;
+
   });
 
   fetchVsixFromVscodeMarketplace = mktplcExtRef:
@@ -52,6 +55,7 @@ let
       then vsix
       else fetchVsixFromVscodeMarketplace mktplcRef;
     vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
+    useMSMktplc = mktplcRef.useMSMktplc or false;
   });
 
   mktplcRefAttrList = [
@@ -59,6 +63,7 @@ let
     "publisher"
     "version"
     "sha256"
+    "useMSMktplc"
   ];
 
   mktplcExtRefToExtDrv = ext:
