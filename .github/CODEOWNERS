@@ -199,9 +199,9 @@
 /doc/languages-frameworks/php.section.md @NixOS/php
 /nixos/tests/php                         @NixOS/php
 /pkgs/build-support/build-pecl.nix       @NixOS/php
-/pkgs/development/interpreters/php       @NixOS/php
+/pkgs/development/interpreters/php       @NixOS/php @jtojnar
 /pkgs/development/php-packages           @NixOS/php
-/pkgs/top-level/php-packages.nix         @NixOS/php
+/pkgs/top-level/php-packages.nix         @NixOS/php @jtojnar
 
 # Podman, CRI-O modules and related
 /nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq
