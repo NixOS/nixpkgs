@@ -10,21 +10,21 @@ assert alsaSupport -> alsaLib != null;
 assert pulseSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
-  version = "1.19.1";
+  version = "1.21.1";
   pname = "openal-soft";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
-    rev = "${pname}-${version}";
-    sha256 = "0b0g0q1c36nfb289xcaaj3cmyfpiswvvgky3qyalsf9n4dj7vnzi";
+    rev = "${version}";
+    sha256 = "025qlh2sm4l75hljhcw740i0fh84pdmz97hz16nbwrfs6n93l1xf";
   };
 
   # this will make it find its own data files (e.g. HRTF profiles)
   # without any other configuration
   patches = [ ./search-out.patch ];
   postPatch = ''
-    substituteInPlace Alc/helpers.c \
+    substituteInPlace alc/helpers.cpp \
       --replace "@OUT@" $out
   '';
 
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     ++ optional pulseSupport "-lpulse");
 
   meta = {
-    description = "OpenAL alternative";
-    homepage = "https://kcat.strangesoft.net/openal.html";
+    description = "Software implementation of OpenAL";
+    homepage = "https://kcat.tomasu.net/openal.html";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ftrvxmtrx];
     platforms = platforms.unix;
