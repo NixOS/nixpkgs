@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aio-georss-gdacs";
-  version = "0.4";
+  version = "0.5";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-gdacs";
     rev = "v${version}";
-    sha256 = "0rcrhdpgj84hfifx9rzxz15ajzsk069iknb28gicw1cm1qv4vfxm";
+    sha256 = "sha256-CIQoQRk5KIPEa/Y/7C1NPctuHvoiZ/o2bDa5YSWY+9M=";
   };
 
   propagatedBuildInputs = [

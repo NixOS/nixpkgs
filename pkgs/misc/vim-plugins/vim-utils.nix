@@ -184,7 +184,7 @@ let
 
   rtpPath = "share/vim-plugins";
 
-  nativeImpl = packages: lib.optionalString (packages != null)
+  nativeImpl = packages:
   (let
     link = (packageName: dir: pluginPath: "ln -sf ${pluginPath}/share/vim-plugins/* $out/pack/${packageName}/${dir}");
     packageLinks = (packageName: {start ? [], opt ? []}:
@@ -340,8 +340,8 @@ let
       entries = [
         beforePlugins
         vamImpl
-        (nativeImpl packages)
       ]
+      ++ lib.optional (packages != null && packages != []) (nativeImpl packages)
       ++ lib.optional (pathogen != null) pathogenImpl
       ++ lib.optional (plug != null) plugImpl
       ++ [ customRC ];

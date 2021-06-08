@@ -3840,6 +3840,10 @@ in {
 
   lexid = callPackage ../development/python-modules/lexid { };
 
+  lhapdf = toPythonModule (pkgs.lhapdf.override {
+    inherit python;
+  });
+
   libagent = callPackage ../development/python-modules/libagent { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
