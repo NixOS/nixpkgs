@@ -19,7 +19,7 @@ xlink:href="https://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
   constructs useful in NixOS configuration files.
  </para>
  <xi:include href="config-file.xml" />
- <xi:include href="abstractions.xml" />
+ <xi:include href="../from_md/configuration/abstractions.section.xml" />
  <xi:include href="modularity.xml" />
  <xi:include href="summary.xml" />
 </chapter>
