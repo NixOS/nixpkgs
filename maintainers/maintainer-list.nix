@@ -6461,7 +6461,7 @@
     name = "Matthias C. M. Troffaes";
   };
   McSinyx = {
-    email = "vn.mcsinyx@gmail.com";
+    email = "mcsinyx@disroot.org";
     github = "McSinyx";
     githubId = 13689192;
     name = "Nguyễn Gia Phong";
