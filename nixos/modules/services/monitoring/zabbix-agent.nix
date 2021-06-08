@@ -157,7 +157,10 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      path = [ "/run/wrappers" ] ++ cfg.extraPackages;
+      # https://www.zabbix.com/documentation/current/manual/config/items/userparameters
+      # > User parameters are commands executed by Zabbix agent.
+      # > /bin/sh is used as a command line interpreter under UNIX operating systems.
+      path = with pkgs; [ bash "/run/wrappers" ] ++ cfg.extraPackages;
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/sbin/zabbix_agentd zabbix_agentd -f --config ${configFile}";
