@@ -285,4 +285,6 @@ in
       };
     };
   };
+
+  meta.maintainers = with maintainers; [ jwoudenberg ];
 }
