@@ -54,6 +54,8 @@ in stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
+    # Without || true the install would fail on case-insensitive filesystems
+    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
 
     ln -s "${desktopItem}/share/applications" $out/share/
