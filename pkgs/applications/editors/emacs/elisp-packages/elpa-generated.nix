@@ -3396,21 +3396,6 @@
           license = lib.licenses.free;
         };
       }) {};
-    shell-command-plus = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
-      elpaBuild {
-        pname = "shell-command-plus";
-        ename = "shell-command+";
-        version = "2.1.0";
-        src = fetchurl {
-          url = "https://elpa.gnu.org/packages/shell-command+-2.1.0.tar";
-          sha256 = "1jyrnv89989bi03m5h8dj0cllsw3rvyxkiyfrh9v6gpxjwfy8lmq";
-        };
-        packageRequires = [ emacs ];
-        meta = {
-          homepage = "https://elpa.gnu.org/packages/shell-command+.html";
-          license = lib.licenses.free;
-        };
-      }) {};
     shen-mode = callPackage ({ elpaBuild, fetchurl, lib }:
       elpaBuild {
         pname = "shen-mode";
