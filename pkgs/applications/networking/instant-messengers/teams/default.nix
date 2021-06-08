@@ -6,6 +6,7 @@
 , dpkg
 , atomEnv
 , libuuid
+, libappindicator-gtk3
 , pulseaudio
 , at-spi2-atk
 , coreutils
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     (lib.getLib systemd)
     pulseaudio
+    libappindicator-gtk3
   ];
 
   preFixup = ''
