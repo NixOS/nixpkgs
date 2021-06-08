@@ -98,9 +98,10 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
-  # ld.gold is disabled for musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
+  # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
+  # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
-  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false) && !targetPlatform.isMusl;
+  useLdGold = targetPlatform.linker == "gold" || (targetPlatform.linker == "bfd" && !targetPlatform.isMusl);
 
 in
 stdenv.mkDerivation (rec {
