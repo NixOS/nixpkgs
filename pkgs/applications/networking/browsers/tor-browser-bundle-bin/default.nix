@@ -105,7 +105,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "tor-browser-bundle-bin";
+  pname = "tor-browser";
   inherit version;
 
   src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
