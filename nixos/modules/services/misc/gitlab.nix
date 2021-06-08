@@ -156,7 +156,7 @@ let
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
     MALLOC_ARENA_MAX = "2";
-  };
+  } // cfg.extraEnv;
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
@@ -274,6 +274,14 @@ in {
           exist already. Its parent directories must be owned by
           either <literal>root</literal> or the user set in
           <option>services.gitlab.user</option>.
+        '';
+      };
+
+      extraEnv = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        description = ''
+          Additional environment variables for the GitLab environment.
         '';
       };
 
