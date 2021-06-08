@@ -26738,6 +26738,8 @@ in
     git = gitMinimal;
   };
 
+  survex = callPackage ../applications/misc/survex { };
+
   sunvox = callPackage ../applications/audio/sunvox { };
 
   svkbd = callPackage ../applications/accessibility/svkbd { };
