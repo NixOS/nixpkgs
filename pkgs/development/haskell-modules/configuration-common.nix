@@ -1953,4 +1953,7 @@ EOT
   # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
   reactive-banana = doJailbreak super.reactive-banana;
 
+  # tests add constraints on dependencies
+  wide-word = dontCheck super.wide-word;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
