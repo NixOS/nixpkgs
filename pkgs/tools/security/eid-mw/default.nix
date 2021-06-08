@@ -21,11 +21,11 @@
 stdenv.mkDerivation rec {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
-  version = "5.0.21";
+  version = "5.0.23";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    sha256 = "1sz7996q6gd6vbdxqgyx1jwjznpki1k9zbgaj1j1a51y6w0g0kdh";
+    sha256 = "0annkm0hqhkpjmfa6ywvzgn1n9619baqdzdbhjfhzfi4hf7mml1d";
     repo = "eid-mw";
     owner = "Fedict";
   };
