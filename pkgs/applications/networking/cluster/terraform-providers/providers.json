@@ -378,11 +378,13 @@
     "version": "3.47.0"
   },
   "grafana": {
-    "owner": "terraform-providers",
+    "owner": "grafana",
+    "provider-source-address": "registry.terraform.io/grafana/grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v1.5.0",
-    "sha256": "0zy3bqgpxymp2zygaxzllk1ysdankwxa1sy1djfgr4fs2nlggkwi",
-    "version": "1.5.0"
+    "rev": "v1.10.0",
+    "sha256": "0q3j30q1zxpdm0fmda3ivnl754q2p61xn9l30l0a3n0r5b25w8pk",
+    "vendorSha256": null,
+    "version": "1.10.0"
   },
   "gridscale": {
     "owner": "terraform-providers",
