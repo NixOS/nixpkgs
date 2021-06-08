@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
+{ lib, fetchFromGitHub, fetchpatch, python3Packages, gettext, git, qt5 }:
 
 let
   inherit (python3Packages) buildPythonApplication pyqt5 sip_4 pyinotify;
@@ -13,6 +13,14 @@ in buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "11186pdgaw5p4iv10dqcnynf5pws2v9nhqqqca7z5b7m20fpfjl7";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/git-cola/git-cola/commit/bdd6121f795186bbed9335995ef77a47ed007092.patch";
+      sha256 = "sha256-mTOGWatIcKB8+DBh5wu1GfcP1LZDiQjhAshlVgguKdk=";
+      name = "bdd6121f795186bbed9335995ef77a47ed007092.patch";
+    })
+  ];
 
   buildInputs = [ git gettext ];
   propagatedBuildInputs = [ pyqt5 sip_4 pyinotify ];
