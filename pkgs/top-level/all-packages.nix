@@ -23158,6 +23158,8 @@ in
     inherit (pkgs.gnome2) libart_lgpl libgnomeui;
   };
 
+  diodon = callPackage ../applications/misc/diodon { };
+
   direwolf = callPackage ../applications/radio/direwolf { };
 
   dirt = callPackage ../applications/audio/dirt {};
