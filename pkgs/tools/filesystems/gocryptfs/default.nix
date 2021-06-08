@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "gocryptfs";
-  version = "1.8.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1acalwrr5xqhpqca3gypj0s68w6vpckxmg5z5gfgh8wx6nqx4aw9";
+    sha256 = "sha256-dwJLFS0Nv9Dm3mr2A2lECnL5h/W56LzvBpFXVH19KnI=";
   };
 
   runVend = true;
-  vendorSha256 = "0z3y51sgr1rmr23jpc5h5d5lw14p3qzv48rc7zj7qa4rd5cfhsgi";
+  vendorSha256 = "sha256-1a/PqHSXptwxwcgOtmDNsv1kADT6Uf1lwQYaQU/NIBg=";
 
   nativeBuildInputs = [ pandoc pkg-config ];
   buildInputs = [ openssl ];
