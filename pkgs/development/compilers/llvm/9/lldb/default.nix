@@ -58,6 +58,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+  installCheckPhase = ''
+    if [ ! -e "$out/lib/python3.8/site-packages/lldb/_lldb.so" ] ; then
+        return 1;
+    fi
+  '';
+
   postInstall = ''
     # man page
     mkdir -p $out/share/man/man1
