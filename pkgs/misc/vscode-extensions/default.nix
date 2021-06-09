@@ -524,6 +524,15 @@ let
         };
       };
 
+      Gleam.gleam = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gleam";
+          publisher = "Gleam";
+          version = "1.3.0";
+          sha256 = "sha256-w/DvNFZ4mEyaQhSh1m1idovzw/qegxPKUdKdq8qjpu0=";
+        };
+      };
+
       golang.Go = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Go";
