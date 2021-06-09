@@ -1821,6 +1821,18 @@ final: prev:
     meta.homepage = "https://github.com/gregsexton/gitv/";
   };
 
+  gleam-vim = buildVimPluginFrom2Nix {
+    pname = "gleam-vim";
+    version = "2020-06-24";
+    src = fetchFromGitHub {
+      owner = "gleam-lang";
+      repo = "gleam.vim";
+      rev = "847a5ef57c2faef2774242c87f711d1131b89fe6";
+      sha256 = "17kjby64zdnmhyia1cx9jnk4mss0gca1jz1m4hff9rl63i56bql1";
+    };
+    meta.homepage = "https://github.com/gleam-lang/gleam.vim/";
+  };
+
   glow-nvim = buildVimPluginFrom2Nix {
     pname = "glow-nvim";
     version = "2021-05-29";
