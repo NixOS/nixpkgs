@@ -5,9 +5,9 @@
 
 let
   mkDict =
-  { name, readmeFile, dictFileName, ... }@args:
+  { pname, readmeFile, dictFileName, ... }@args:
   stdenv.mkDerivation ({
-    inherit name;
+    inherit pname;
     installPhase = ''
       runHook preInstall
       # hunspell dicts
@@ -20,7 +20,7 @@ let
       ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
       # docs
       install -dm755 "$out/share/doc"
-      install -m644 ${readmeFile} $out/share/doc/${name}.txt
+      install -m644 ${readmeFile} $out/share/doc/${pname}.txt
       runHook postInstall
     '';
   } // args);
@@ -30,7 +30,7 @@ let
     mkDict rec {
       inherit dictFileName;
       version = "2.2";
-      name = "hunspell-dict-${shortName}-rla-${version}";
+      pname = "hunspell-dict-${shortName}-rla";
       readmeFile = "README.txt";
       src = fetchFromGitHub {
         owner = "sbosio";
@@ -71,7 +71,7 @@ let
       version = "2.40";
       # Should really use a string function or something
       _version = "2-40";
-      name = "hunspell-dict-${shortName}-dsso-${version}";
+      pname = "hunspell-dict-${shortName}-dsso";
       _name = "ooo_swedish_dict_${_version}";
       readmeFile = "LICENSE_en_US.txt";
       src = fetchurl {
@@ -105,7 +105,7 @@ let
         ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
         # docs
         install -dm755 "$out/share/doc"
-        install -m644 ${readmeFile} $out/share/doc/${name}.txt
+        install -m644 ${readmeFile} $out/share/doc/${pname}.txt
       '';
     };
 
@@ -114,7 +114,7 @@ let
     mkDict rec {
       inherit dictFileName;
       version = "5.3";
-      name = "hunspell-dict-${shortName}-dicollecte-${version}";
+      pname = "hunspell-dict-${shortName}-dicollecte";
       readmeFile = "README_dict_fr.txt";
       src = fetchurl {
          url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
@@ -147,7 +147,7 @@ let
     mkDict rec {
       inherit src srcFileName dictFileName;
       version = "2018.04.16";
-      name = "hunspell-dict-${shortName}-wordlist-${version}";
+      pname = "hunspell-dict-${shortName}-wordlist";
       srcReadmeFile = "README_" + srcFileName + ".txt";
       readmeFile = "README_" + dictFileName + ".txt";
       meta = with lib; {
@@ -175,7 +175,7 @@ let
     mkDict rec {
       inherit src dictFileName;
       version = "2.4";
-      name = "hunspell-dict-${shortName}-linguistico-${version}";
+      pname = "hunspell-dict-${shortName}-linguistico";
       readmeFile = dictFileName + "_README.txt";
       meta = with lib; {
         description = "Hunspell dictionary for ${shortDescription}";
@@ -199,7 +199,7 @@ let
   mkDictFromXuxen =
     { shortName, srcs, shortDescription, longDescription, dictFileName }:
     stdenv.mkDerivation rec {
-      name = "hunspell-dict-${shortName}-xuxen-${version}";
+      pname = "hunspell-dict-${shortName}-xuxen";
       version = "5-2015.11.10";
 
       inherit srcs;
@@ -232,7 +232,7 @@ let
   mkDictFromJ3e =
     { shortName, shortDescription, dictFileName }:
     stdenv.mkDerivation rec {
-      name = "hunspell-dict-${shortName}-j3e-${version}";
+      pname = "hunspell-dict-${shortName}-j3e";
       version = "20161207";
 
       src = fetchurl {
@@ -273,7 +273,7 @@ let
     , readmeFile ? "README_${dictFileName}.txt"
     , sourceRoot ? dictFileName }:
     mkDict rec {
-      name = "hunspell-dict-${shortName}-libreoffice-${version}";
+      pname = "hunspell-dict-${shortName}-libreoffice";
       version = "6.3.0.4";
       inherit dictFileName readmeFile;
       src = fetchFromGitHub {
@@ -700,7 +700,7 @@ in rec {
 
   uk_UA = uk-ua;
   uk-ua = mkDict rec {
-    name = "hunspell-dict-uk-ua-${version}";
+    pname = "hunspell-dict-uk-ua";
     version = "4.6.3";
     _version = "4-6.3";
 
@@ -761,7 +761,7 @@ in rec {
 
   da_DK = da-dk;
   da-dk = mkDict rec {
-    name = "hunspell-dict-da-dk-${version}";
+    pname = "hunspell-dict-da-dk";
     version = "2.5.189";
 
     src = fetchurl {
@@ -790,7 +790,7 @@ in rec {
 
   nl_NL = nl_nl;
   nl_nl = mkDict rec {
-    name = "hunspell-dict-nl-nl-${version}";
+    pname = "hunspell-dict-nl-nl";
     version = "2.20.19";
 
     src = fetchFromGitHub {
