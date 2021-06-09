@@ -1928,9 +1928,7 @@ EOT
   # Disable flaky tests
   # https://github.com/DavidEichmann/alpaca-netcode/issues/2
   alpaca-netcode = overrideCabal super.alpaca-netcode {
-    # use testTarget to also pass some flags to the test suite.
-    # TODO: We should add proper support for this to the builder.
-    testTarget = "test --test-options='-p \"!/[NOCI]/\"'";
+    testFlags = [ "--pattern" "!/[NOCI]/" ];
   };
 
   # Tests require to run a binary which isn't built
@@ -1941,8 +1939,7 @@ EOT
   # this, run tests with only a single job.
   # https://github.com/vmchale/libarchive/issues/20
   libarchive = overrideCabal super.libarchive {
-    # TODO: We should add proper support for this to the builder.
-    testTarget = "libarchive-test --test-options='-j1'";
+    testFlags = [ "-j1" ];
   };
 
   # unrestrict bounds for hashable and semigroups
