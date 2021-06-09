@@ -20,7 +20,6 @@ dont-distribute-packages:
  - activehs
  - actor
  - AC-Vector-Fancy
- - addy
  - adhoc-network
  - adict
  - ADPfusionForest
@@ -117,10 +116,8 @@ dont-distribute-packages:
  - atp
  - AttoJson
  - attoparsec-enumerator
- - attoparsec-ip
  - attoparsec-iteratee
  - attoparsec-text-enumerator
- - attoparsec-uri
  - atuin
  - audiovisual
  - aura
@@ -168,8 +165,6 @@ dont-distribute-packages:
  - Barracuda
  - base16-lens
  - base32-bytestring
- - base62
- - base64-bytes
  - baserock-schema
  - BASIC
  - batchd
@@ -309,10 +304,8 @@ dont-distribute-packages:
  - buster-network
  - butterflies
  - bv-sized-lens
- - bytebuild
  - bytehash
  - bytelog
- - bytesmith
  - bytestring-read
  - c0check
  - cabal2arch
@@ -622,7 +615,6 @@ dont-distribute-packages:
  - dewdrop
  - dfinity-radix-tree
  - dhall-docs
- - dhcp-lease-parser
  - dia-functions
  - diagrams-haddock
  - diagrams-html5
@@ -1565,7 +1557,6 @@ dont-distribute-packages:
  - invertible-hlist
  - ion
  - IORefCAS
- - ip
  - ipatch
  - ipc
  - ipld-cid
@@ -1575,7 +1566,6 @@ dont-distribute-packages:
  - irc-fun-client
  - irc-fun-color
  - irc-fun-messages
- - iri
  - ironforge
  - isevaluated
  - ismtp
@@ -1629,11 +1619,8 @@ dont-distribute-packages:
  - JsonGrammar
  - jsonifier
  - json-incremental-decoder
- - json-query
  - jsons-to-schema
- - json-syntax
  - json-togo
- - json-tokens
  - jspath
  - JunkDB-driver-gdbm
  - JunkDB-driver-hashtables
@@ -1886,7 +1873,6 @@ dont-distribute-packages:
  - markdown2svg
  - markdown-pap
  - markov-processes
- - markup
  - marmalade-upload
  - marquise
  - marvin
@@ -1986,7 +1972,6 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
- - mptcp-pm
  - msgpack-aeson
  - msgpack-idl
  - msgpack-rpc
@@ -2127,6 +2112,7 @@ dont-distribute-packages:
  - openpgp-crypto-api
  - OpenSCAD
  - openssh-github-keys
+ - opentelemetry-extra_0_7_0
  - opentracing-jaeger
  - opentracing-zipkin-v1
  - open-union
@@ -2146,7 +2132,6 @@ dont-distribute-packages:
  - pairing
  - panda
  - pandoc-japanese-filters
- - pan-os-syslog
  - papa
  - papa-base
  - papa-base-implement
@@ -2526,7 +2511,6 @@ dont-distribute-packages:
  - runtime-arbitrary
  - S3
  - safe-coloured-text-layout-gen
- - safe-numeric
  - safer-file-handles
  - safer-file-handles-bytestring
  - safer-file-handles-text
@@ -2565,7 +2549,6 @@ dont-distribute-packages:
  - scholdoc
  - scholdoc-citeproc
  - scholdoc-texmath
- - scientific-notation
  - SciFlow
  - SciFlow-drmaa
  - scion
@@ -2635,7 +2618,6 @@ dont-distribute-packages:
  - SGdemo
  - sgf
  - sgrep
- - sha1
  - shake-minify-css
  - shaker
  - shapefile
@@ -2688,11 +2670,9 @@ dont-distribute-packages:
  - skylark-client
  - slidemews
  - slip32
- - small-bytearray-builder
  - smallstring
  - smartword
  - smcdel
- - smith
  - smith-cli
  - smith-client
  - Smooth
@@ -2842,6 +2822,8 @@ dont-distribute-packages:
  - swearjure
  - sweet-egison
  - switch
+ - sydtest_0_2_0_0
+ - sydtest-persistent-postgresql
  - sylvia
  - symantic-atom
  - symantic-lib
@@ -3035,7 +3017,6 @@ dont-distribute-packages:
  - universe-th
  - unix-fcntl
  - unix-simple
- - unpacked-maybe-numeric
  - unpacked-these
  - unpacked-validation
  - unparse-attoparsec
@@ -3048,9 +3029,7 @@ dont-distribute-packages:
  - urembed
  - uri-enumerator
  - uri-enumerator-file
- - url-bytes
  - UrlDisp
- - urlpath
  - URLT
  - usb
  - usb-enumerator
@@ -3063,7 +3042,6 @@ dont-distribute-packages:
  - uu-cco-examples
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
- - uuid-bytes
  - uuid-crypto
  - uvector-algorithms
  - v4l2
@@ -3110,7 +3088,6 @@ dont-distribute-packages:
  - wai-middleware-cache
  - wai-middleware-cache-redis
  - wai-middleware-consul
- - wai-middleware-content-type
  - wai-middleware-rollbar
  - wai-middleware-route
  - wai-session-tokyocabinet
@@ -3144,7 +3121,6 @@ dont-distribute-packages:
  - wheb-redis
  - wheb-strapped
  - whitespace
- - wide-word-instances
  - wikipedia4epub
  - windowslive
  - winio
@@ -3163,7 +3139,6 @@ dont-distribute-packages:
  - wrecker-ui
  - wright
  - writer-cps-full
- - ws
  - wss-client
  - wtk-gtk
  - wumpus-basic
@@ -3235,7 +3210,6 @@ dont-distribute-packages:
  - yesod-colonnade
  - yesod-continuations
  - yesod-examples
- - yesod-ip
  - yesod-mangopay
  - yesod-paypal-rest
  - yesod-platform
