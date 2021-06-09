@@ -3995,6 +3995,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/popup.nvim/";
   };
 
+  presence-nvim = buildVimPluginFrom2Nix {
+    pname = "presence-nvim";
+    version = "2021-06-08";
+    src = fetchFromGitHub {
+      owner = "andweeb";
+      repo = "presence.nvim";
+      rev = "f4c1e227be0a0c863c2de201155401950eda572e";
+      sha256 = "08s4az1gv6r5sl0jqkaf4yzibglibb7n2sivh7qccj8dz8id3883";
+    };
+    meta.homepage = "https://github.com/andweeb/presence.nvim/";
+  };
+
   PreserveNoEOL = buildVimPluginFrom2Nix {
     pname = "PreserveNoEOL";
     version = "2013-06-14";
