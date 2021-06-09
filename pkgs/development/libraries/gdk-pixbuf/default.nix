@@ -22,11 +22,16 @@
 , lib
 }:
 
+let
+  withGtkDoc = stdenv.buildPlatform == stdenv.hostPlatform;
+in
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf";
   version = "2.42.6";
 
-  outputs = [ "out" "dev" "man" "devdoc" "installedTests" ];
+  outputs = [ "out" "dev" "man" ]
+    ++ lib.optional withGtkDoc "devdoc"
+    ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -63,8 +68,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
-    "-Dintrospection=${if gobject-introspection != null then "enabled" else "disabled"}"
+    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
+    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
     "-Dgio_sniffing=false"
   ];
 
@@ -85,9 +90,6 @@ stdenv.mkDerivation rec {
       moveToOutput "bin" "$dev"
       moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
 
-      # So that devhelp can find this.
-      mkdir -p "$devdoc/share/devhelp"
-      mv "$out/share/doc" "$devdoc/share/devhelp/books"
     '' + lib.optionalString stdenv.isDarwin ''
       # meson erroneously installs loaders with .dylib extension on Darwin.
       # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
@@ -98,6 +100,10 @@ stdenv.mkDerivation rec {
     '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       $dev/bin/gdk-pixbuf-query-loaders --update-cache
+    '' + lib.optionalString withGtkDoc ''
+      # So that devhelp can find this.
+      mkdir -p "$devdoc/share/devhelp"
+      mv "$out/share/doc" "$devdoc/share/devhelp/books"
     '';
 
   # The fixDarwinDylibNames hook doesn't patch binaries.
