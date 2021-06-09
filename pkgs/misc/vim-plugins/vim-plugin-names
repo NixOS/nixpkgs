@@ -20,6 +20,7 @@ AndrewRadev/sideways.vim@main
 AndrewRadev/splitjoin.vim@main
 andsild/peskcolor.vim
 andviro/flake8-vim
+andweeb/presence.nvim
 andymass/vim-matchup
 andys8/vim-elm-syntax
 antoinemadec/coc-fzf
