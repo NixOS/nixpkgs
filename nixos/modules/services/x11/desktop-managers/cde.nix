@@ -49,9 +49,10 @@ in {
     users.groups.mail = {};
     security.wrappers = {
       dtmail = {
-        source = "${pkgs.cdesktopenv}/bin/dtmail";
-        group = "mail";
         setgid = true;
+        owner = "nobody";
+        group = "mail";
+        source = "${pkgs.cdesktopenv}/bin/dtmail";
       };
     };
 

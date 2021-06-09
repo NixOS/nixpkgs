@@ -181,6 +181,8 @@ in
       source = "${pkgs.ssmtp}/bin/sendmail";
       setuid = false;
       setgid = false;
+      owner = "root";
+      group = "root";
     };
 
   };
