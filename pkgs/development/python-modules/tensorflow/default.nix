@@ -110,7 +110,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "0v5qfzkfj9p7z50kp6zfq584n4pzyvjhsajbf5mpydgw4zm7af13";
+      sha256 = "1jdw2i1rq06zqd6aabh7bbm0avsg4pygnfmd7gviv0blhih9054l";
     };
 
     patches = [
