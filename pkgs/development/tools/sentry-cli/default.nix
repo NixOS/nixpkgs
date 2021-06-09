@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     sha256 = "sha256-ivQBn5GGb64Jq0gpywAg20309QQMpasg/Bu5sHKj02Y=";
   };
+  doCheck = false;
 
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
