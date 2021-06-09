@@ -15,15 +15,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
   nativeBuildInputs = [ flex bison python3 ];
 
-  # these tests need some interpreter paths patched early on...
-  # see https://github.com/NixOS/nix/issues/1205
-  doCheck = false;
+  doCheck = true;
   checkTarget = "test";
 
-  postPatch = ''
+  preCheck = ''
     patchShebangs \
       src/flexfix \
-      src/vlcovgen
+      src/vlcovgen \
+      test_regress/t/*.pl
   '';
 
   meta = with lib; {
