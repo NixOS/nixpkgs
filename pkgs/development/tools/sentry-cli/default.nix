@@ -2,6 +2,8 @@
 , fetchFromGitHub
 , lib
 , openssl
+, file
+, rpm
 , pkg-config
 , stdenv
 , curl
@@ -19,7 +21,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-ivQBn5GGb64Jq0gpywAg20309QQMpasg/Bu5sHKj02Y=";
   };
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
+  # Needed to get openssl-sys to use pkgconfig.
+  OPENSSL_NO_VENDOR = 1;
+
+  buildInputs = [ openssl file rpm ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
   nativeBuildInputs = [ pkg-config ];
 
   cargoSha256 = "sha256-xS88KZWYkg3v8TJZUVVgQhR++CrZGD0DQnLPktSUJQk=";
