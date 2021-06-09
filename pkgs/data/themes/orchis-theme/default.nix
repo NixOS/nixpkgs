@@ -9,14 +9,14 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "orchis";
-  version = "2021-04-20";
+  pname = "orchis-theme";
+  version = "2021-06-09";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "sha256-cCUmainVTqFztZGpL2z2Zj6zcE2SQBWrec6yNFUMo5M=";
+    sha256 = "sha256-YlrocFDk3da2eqxbJ5lPUUxHHvJZx19LOa0MSljWY8Q=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -24,10 +24,6 @@ stdenvNoCC.mkDerivation rec {
   buildInputs = [ gnome-themes-extra ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
-
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
 
   preInstall = ''
     mkdir -p $out/share/themes
