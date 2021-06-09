@@ -5160,6 +5160,8 @@ in {
 
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
+  pynobo = callPackage ../development/python-modules/pynobo { };
+
   pynuki = callPackage ../development/python-modules/pynuki { };
 
   pynws = callPackage ../development/python-modules/pynws { };
