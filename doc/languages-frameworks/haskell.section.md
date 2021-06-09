@@ -15,7 +15,7 @@ support for the default compiler (currently GHC 8.10.4) and usually
 only provide a default and (if different) the latest version of
 a haskell package.
 
-## Available packages
+## Available packages {#haskell-available-packages}
 
 The compiler and most build tools are exposed at the top level:
 
@@ -58,14 +58,14 @@ version from Hackage. Sometimes alternative versions of packages
 are provided whose attribute names are their normal name with
 their version appended after an underscore, e. g. `Cabal_3_4_0_0`.
 If you are interested in details how the package set is populated,
-read the section [Package set generation](#package-set-generation).
+read the section [Package set generation](#haskell-package-set-generation).
 
 Most of the packages contained in `haskellPackages` don't actually
 build and are marked as broken semi-automatically. Most of those
 packages are deprecated or unmaintained, but sometimes packages
 that should, don't build. Very often fixing them is not a lot of
 work. How you can help with that is described in [Fixing a broken
-package](#fixing-a-broken-package).
+package](#haskell-fixing-a-broken-package).
 
 `haskellPackages` is built with our default compiler, but we also
 provide other releases of GHC and package sets built with them.
@@ -105,8 +105,12 @@ Every package set also re-exposes its GHC as `haskell.packages.*.ghc`.
 
 ## `haskellPackages.mkDerivation`
 
-## Contributing
 
-### Fixing a broken package {#fixing-a-broken-package}
 
-### Package set generation {#package-set-generation}
+## Overriding haskell packages {#haskell-overriding-haskell-packages}
+
+## Contributing {#haskell-contributing}
+
+### Fixing a broken package {#haskell-fixing-a-broken-package}
+
+### Package set generation {#haskell-package-set-generation}
