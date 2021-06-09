@@ -30064,6 +30064,8 @@ in
 
   gap-full = lowPrio (gap.override { packageSet = "full"; });
 
+  gaviewer = callPackage ../applications/science/math/gaviewer { };
+
   geogebra = callPackage ../applications/science/math/geogebra { };
   geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix { };
 
