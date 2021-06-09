@@ -385,6 +385,8 @@ in {
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
 
+  ambee = callPackage ../development/python-modules/ambee { };
+
   ambiclimate = callPackage ../development/python-modules/ambiclimate { };
 
   amcrest = callPackage ../development/python-modules/amcrest { };
