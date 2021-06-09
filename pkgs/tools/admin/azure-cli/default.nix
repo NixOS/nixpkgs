@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.23.0";
+  version = "2.24.2";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,7 +9,7 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-uIM1U9hub1A1YT6CzwQHmefNBuU4tDapu7VC6EP5kuM=";
+    sha256 = "sha256-4XmwM0/89hacA8ARs5Zq/ahzeqIc9wS18zT/ale+wQ4=";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -132,6 +132,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     mock
     paramiko
     pydocumentdb
+    PyGithub
     pygments
     pyopenssl
     pytz
