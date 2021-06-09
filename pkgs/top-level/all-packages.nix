@@ -2550,6 +2550,8 @@ in
 
   electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
 
+  electron-mail = callPackage ../applications/networking/mailreaders/electron-mail { };
+
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix { };
 
   element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
