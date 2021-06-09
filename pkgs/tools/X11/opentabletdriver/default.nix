@@ -23,18 +23,18 @@
 
 stdenv.mkDerivation rec {
   pname = "OpenTabletDriver";
-  version = "0.5.3.1";
+  version = "0.5.3.2";
 
   src = fetchFromGitHub {
     owner = "InfinityGhost";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "OT8/c+6wNpZyq/q7uMxIqmyJKNAq0B4ynEAqFF0GWyo=";
+    sha256 = "qRc/9Edp3x7/XVEWgBbPush76MSQz4biYSk+E9Gt68w=";
   };
 
   debPkg = fetchurl {
     url = "https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
-    sha256 = "0nm0v1xhphl6g6rz3li4rbdp7408g6sf9l4nh3mbbif5042xa0qh";
+    sha256 = "14k06iyc642x42yadyfmmf8ky84y8rc6kgd63b4ipskkcxyl1gvl";
   };
 
   nativeBuildInputs = [

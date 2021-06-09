@@ -2,8 +2,6 @@
 let
   pname = "phpmd";
   version = "2.8.2";
-
-  isPhp74 = lib.versionAtLeast php.version "7.4";
 in
 mkDerivation {
   inherit pname version;
@@ -28,6 +26,6 @@ mkDerivation {
     license = licenses.bsd3;
     homepage = "https://phpmd.org/";
     maintainers = teams.php.members;
-    broken = !isPhp74;
+    broken = versionAtLeast php.version "7.4";
   };
 }

@@ -25,7 +25,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Configuration tool for the VEIKK Linux driver";
     homepage = "https://github.com/jlam55555/veikk-linux-driver-gui/";
-    license = licenses.unfree;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nicbk ];
   };

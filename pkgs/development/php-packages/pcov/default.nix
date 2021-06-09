@@ -8,5 +8,10 @@ buildPecl {
 
   buildInputs = [ pcre2 ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "A self contained php-code-coverage compatible driver for PHP.";
+    license = licenses.php301;
+    homepage = "https://github.com/krakjoe/pcov";
+    maintainers = teams.php.members;
+  };
 }

@@ -4821,6 +4821,12 @@
     githubId = 587870;
     name = "Jonathan Mettes";
   };
+  jo1gi = {
+    email = "joakimholm@protonmail.com";
+    github = "jo1gi";
+    githubId = 26695750;
+    name = "Joakim Holm";
+  };
   joachifm = {
     email = "joachifm@fastmail.fm";
     github = "joachifm";
@@ -8594,6 +8600,12 @@
     github = "rhoriguchi ";
     githubId = 6047658;
     name = "Ryan Horiguchi";
+  };
+  ribose-jeffreylau = {
+    name = "Jeffrey Lau";
+    email = "jeffrey.lau@ribose.com";
+    github = "ribose-jeffreylau";
+    githubId = 2649467;
   };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";
