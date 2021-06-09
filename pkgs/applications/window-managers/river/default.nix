@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "river";
-  version = "unstable-2021-05-07";
+  version = "unstable-2021-06-06";
 
   src = fetchFromGitHub {
     owner = "ifreund";
     repo = pname;
-    rev = "7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d";
-    sha256 = "1z5qjid73lfn654f2k74nwgvpr88fpdfpbzhihybx9cyy1mqfz7j";
+    rev = "0e9dc089d14e2b5c923d483c62d342af29493cf0";
+    sha256 = "sha256-2rIZYr9Y+IBrox5MVrPpHeI8OVSXHsMZmcCagsX56lU=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    zig build -Drelease-safe -Dtarget=${stdenv.hostPlatform.parsed.cpu.name}-native -Dxwayland -Dman-pages --prefix $out install
+    zig build -Drelease-safe -Dcpu=baseline -Dxwayland -Dman-pages --prefix $out install
     runHook postInstall
   '';
 
