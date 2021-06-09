@@ -231,6 +231,8 @@ let
 
     csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
 
+    cudf = callPackage ../development/ocaml-modules/cudf { };
+
     curly = callPackage ../development/ocaml-modules/curly {
       inherit (pkgs) curl;
     };
