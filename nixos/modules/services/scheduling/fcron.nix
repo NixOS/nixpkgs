@@ -136,9 +136,11 @@ in
         owner = "fcron";
         group = "fcron";
         setgid = true;
+        setuid = false;
       };
       fcronsighup = {
         source = "${pkgs.fcron}/bin/fcronsighup";
+        owner = "root";
         group = "fcron";
       };
     };
