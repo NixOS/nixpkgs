@@ -615,7 +615,7 @@ let
         };
       };
 
-      JakeBecker.elixir-ls = buildVscodeMarketplaceExtension {
+      jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
@@ -1173,7 +1173,7 @@ let
         };
       };
 
-      VSpaceCode.vspacecode = buildVscodeMarketplaceExtension {
+      vspacecode.vspacecode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vspacecode";
           publisher = "VSpaceCode";
@@ -1185,7 +1185,7 @@ let
         };
       };
 
-      VSpaceCode.whichkey = buildVscodeMarketplaceExtension {
+      vspacecode.whichkey = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "whichkey";
           publisher = "VSpaceCode";
