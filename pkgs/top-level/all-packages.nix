@@ -14912,7 +14912,6 @@ with pkgs;
   boost169 = callPackage ../development/libraries/boost/1.69.nix { };
   boost16x = boost169;
   boost170 = callPackage ../development/libraries/boost/1.70.nix { };
-  boost171 = callPackage ../development/libraries/boost/1.71.nix { };
   boost172 = callPackage ../development/libraries/boost/1.72.nix { };
   boost173 = callPackage ../development/libraries/boost/1.73.nix { };
   boost174 = callPackage ../development/libraries/boost/1.74.nix { };
