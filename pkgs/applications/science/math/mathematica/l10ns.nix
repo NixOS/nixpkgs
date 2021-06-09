@@ -8,10 +8,10 @@ let allVersions = with lib; flip map
   # N.B. Versions in this list should be ordered from newest to oldest.
   [
     {
-      version = "12.2.0";
+      version = "12.3.0";
       lang = "en";
       language = "English";
-      sha256 = "3b6676a203c6adb7e9c418a5484b037974287b5be09c64e7dfea74ddc0e400d7";
+      sha256 = "045df045f6e796ded59f64eb2e0f1949ac88dcba1d5b6e05fb53ea0a4aed7215";
     }
     {
       version = "11.3.0";

@@ -1,14 +1,20 @@
-{ pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem, crossSystem ? null }:
+{ pkgspath ? ../../.., test-pkgspath ? pkgspath
+, system ? builtins.currentSystem, crossSystem ? null, bootstrapFiles ? null
+}:
+
+let cross = if crossSystem != null
+      then { inherit crossSystem; }
+      else {};
+    custom-bootstrap = if bootstrapFiles != null
+      then { stdenvStages = args:
+              let args' = args // { bootstrapFiles = bootstrapFiles; };
+              in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
+           }
+      else {};
+in with import pkgspath ({ inherit system; } // cross // custom-bootstrap);
 
 let
-  pkgs = import pkgspath ({ inherit system; } // (if (crossSystem != null) then { inherit crossSystem; } else {}));
-in
-
-with pkgs;
-
-let
-  llvmPackageSet = if stdenv.hostPlatform.isAarch64 then "llvmPackages_11" else "llvmPackages_7";
-  llvmPackages = pkgs."${llvmPackageSet}";
+  llvmPackages = llvmPackages_11;
   storePrefixLen = builtins.stringLength builtins.storeDir;
 in rec {
   coreutils_ = coreutils.override (args: {
@@ -26,6 +32,50 @@ in rec {
   # Avoid messing with libkrb5 and libnghttp2.
   curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });
 
+  # Avoid stdenv rebuild.
+  Libsystem_ = (darwin.Libsystem.override (args:
+    { xnu = darwin.xnu.overrideAttrs (oldAttrs:
+      { patches = [ ./fixed-xnu-python3.patch ]; });
+    })).overrideAttrs (oldAttrs:
+    { installPhase = oldAttrs.installPhase + ''
+        cat <<EOF > $out/include/TargetConditionals.h
+        #ifndef __TARGETCONDITIONALS__
+        #define __TARGETCONDITIONALS__
+        #define TARGET_OS_MAC               1
+        #define TARGET_OS_WIN32             0
+        #define TARGET_OS_UNIX              0
+        #define TARGET_OS_OSX               1
+        #define TARGET_OS_IPHONE            0
+        #define TARGET_OS_IOS               0
+        #define TARGET_OS_WATCH             0
+        #define TARGET_OS_BRIDGE            0
+        #define TARGET_OS_TV                0
+        #define TARGET_OS_SIMULATOR         0
+        #define TARGET_OS_EMBEDDED          0
+        #define TARGET_OS_EMBEDDED_OTHER    0 /* Used in configd */
+        #define TARGET_IPHONE_SIMULATOR     TARGET_OS_SIMULATOR /* deprecated */
+        #define TARGET_OS_NANO              TARGET_OS_WATCH /* deprecated */
+
+        #define TARGET_CPU_PPC          0
+        #define TARGET_CPU_PPC64        0
+        #define TARGET_CPU_68K          0
+        #define TARGET_CPU_X86          0
+        #define TARGET_CPU_X86_64       1
+        #define TARGET_CPU_ARM          0
+        #define TARGET_CPU_ARM64        0
+        #define TARGET_CPU_MIPS         0
+        #define TARGET_CPU_SPARC        0
+        #define TARGET_CPU_ALPHA        0
+        #define TARGET_RT_MAC_CFM       0
+        #define TARGET_RT_MAC_MACHO     1
+        #define TARGET_RT_LITTLE_ENDIAN 1
+        #define TARGET_RT_BIG_ENDIAN    0
+        #define TARGET_RT_64_BIT        1
+        #endif  /* __TARGETCONDITIONALS__ */
+        EOF
+      '';
+    });
+
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
@@ -37,12 +87,12 @@ in rec {
 
       ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
         # Copy libSystem's .o files for various low-level boot stuff.
-        cp -d ${darwin.Libsystem}/lib/*.o $out/lib
+        cp -d ${Libsystem_}/lib/*.o $out/lib
 
         # Resolv is actually a link to another package, so let's copy it properly
-        cp -L ${darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
+        cp -L ${Libsystem_}/lib/libresolv.9.dylib $out/lib
 
-        cp -rL ${darwin.Libsystem}/include $out
+        cp -rL ${Libsystem_}/include $out
         chmod -R u+w $out/include
         cp -rL ${darwin.ICU}/include*             $out/include
         cp -rL ${libiconv}/include/*       $out/include
