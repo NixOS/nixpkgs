@@ -116,7 +116,9 @@ let
                 then overrideCC stdenv llvmPackages.clangUseLLVM
                 else stdenv;
 
-  nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss;
+  # Disable p11-kit support in nss until our cacert packages has caught up exposing CKA_NSS_MOZILLA_CA_POLICY
+  # https://github.com/NixOS/nixpkgs/issues/126065
+  nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss.override { useP11kit = false; };
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
   # RAM and the 32-bit memory space cannot handle that linking

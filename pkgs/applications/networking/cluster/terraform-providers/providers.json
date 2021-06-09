@@ -387,11 +387,13 @@
     "version": "3.47.0"
   },
   "grafana": {
-    "owner": "terraform-providers",
+    "owner": "grafana",
+    "provider-source-address": "registry.terraform.io/grafana/grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v1.5.0",
-    "sha256": "0zy3bqgpxymp2zygaxzllk1ysdankwxa1sy1djfgr4fs2nlggkwi",
-    "version": "1.5.0"
+    "rev": "v1.10.0",
+    "sha256": "0q3j30q1zxpdm0fmda3ivnl754q2p61xn9l30l0a3n0r5b25w8pk",
+    "vendorSha256": null,
+    "version": "1.10.0"
   },
   "gridscale": {
     "owner": "terraform-providers",
@@ -514,6 +516,15 @@
     "sha256": "0jm592chliiph5643rymzpwnlcq7q6bpwg2h86x5qmbzbiyqsi83",
     "vendorSha256": "08wg16g4mvn6kl8xwn89195a826cb132ijvrgf32c6p7zp4lgmjd",
     "version": "0.2.12"
+  },
+  "kafka-connect": {
+    "owner": "Mongey",
+    "provider-source-address": "registry.terraform.io/Mongey/kafka-connect",
+    "repo": "terraform-provider-kafka-connect",
+    "rev": "v0.2.3",
+    "sha256": "0fn03l58lkrlinvnxld2ba7z1gx95vxklbhh2z7930pih0vhr0sr",
+    "vendorSha256": "17fwqhxh22szdys97dxh069z6s8xr3y9i3pi5ckdcr462j1dr95w",
+    "version": "0.2.3"
   },
   "keycloak": {
     "owner": "mrparkers",
