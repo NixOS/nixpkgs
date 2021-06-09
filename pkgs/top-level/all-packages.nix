@@ -27892,9 +27892,7 @@ in
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
-  zanshin = libsForQt5.callPackage ../applications/office/zanshin {
-    boost = boost160;
-  };
+  zanshin = libsForQt5.callPackage ../applications/office/zanshin { };
 
   zathura = callPackage ../applications/misc/zathura { };
 
