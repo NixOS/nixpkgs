@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       sha256 = "0wnvbjfrbk7rghd032z684l7vk7mhy3bd41zvhkrhgp3cd5id0bm";
     })
     ./conf-symlink.patch
-  ];
+  ] ++ stdenv.lib.optionals (stdenv.cc.isClang) [ ./0001-Remove-unused-function-after_eq.patch ];
 
   makeFlags = lib.optionals stdenv.hostPlatform.isStatic "NO_SOLIB=1";
 
