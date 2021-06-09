@@ -24356,6 +24356,8 @@ in
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
+  slackcat = callPackage ../tools/networking/slackcat { };
+
   singularity = callPackage ../applications/virtualization/singularity { };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
