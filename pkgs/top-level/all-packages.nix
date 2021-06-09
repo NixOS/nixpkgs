@@ -7913,6 +7913,8 @@ in
 
   poedit = callPackage ../tools/text/poedit { };
 
+  poica = callPackage ../development/libraries/poica { };
+
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
