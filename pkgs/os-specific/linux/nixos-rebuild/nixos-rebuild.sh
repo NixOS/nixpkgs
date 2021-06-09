@@ -28,7 +28,8 @@ repair=
 profile=/nix/var/nix/profiles/system
 buildHost=
 targetHost=
-maybeSudo=()
+remoteSudo=
+remoteSudoActivate=
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -100,7 +101,11 @@ while [ "$#" -gt 0 ]; do
         shift 1
         ;;
       --use-remote-sudo)
-        maybeSudo=(sudo --)
+        echo "warning: \`--use-remote-sudo' is over-powered. Try \`--use-remote-sudo-activate' instead" >&2
+        remoteSudo=1
+        ;;
+      --use-remote-sudo-activate)
+        remoteSudoActivate=1
         ;;
       --flake)
         flake="$1"
@@ -126,8 +131,9 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
+# FIXME: Undocumented behavior?
 if [ -n "$SUDO_USER" ]; then
-    maybeSudo=(sudo --)
+    remoteSudo=1
 fi
 
 if [ -z "$buildHost" -a -n "$targetHost" ]; then
@@ -143,18 +149,28 @@ fi
 buildHostCmd() {
     if [ -z "$buildHost" ]; then
         "$@"
-    elif [ -n "$remoteNix" ]; then
-        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix":'$PATH' "${maybeSudo[@]}" "$@"
     else
-        ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" "$@"
+        ssh $SSHOPTS "$buildHost" \
+            ${remoteSudo:+-t sudo --} \
+            ${remoteNix:+env PATH="$remoteNix":'$PATH'} \
+            "$@"
     fi
 }
 
 targetHostCmd() {
     if [ -z "$targetHost" ]; then
-        "${maybeSudo[@]}" "$@"
+        # FIXME: As the documentation, there should be no sudo. But kept for compatibility.
+        ${remoteSudo:+sudo --} "$@"
     else
-        ssh $SSHOPTS "$targetHost" "${maybeSudo[@]}" "$@"
+        ssh $SSHOPTS "$targetHost" ${remoteSudo:+-t sudo --} "$@"
+    fi
+}
+
+targetHostCmdActivate() {
+    if [ -n "$remoteSudoActivate" ]; then
+        remoteSudo=1 targetHostCmd "$@"
+    else
+        targetHostCmd "$@"
     fi
 }
 
@@ -463,7 +479,7 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
-        targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
+        targetHostCmdActivate nix-env -p "$profile" --set "$pathToConfig"
     elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
@@ -491,7 +507,7 @@ if [ -z "$rollback" ]; then
     fi
 else # [ -n "$rollback" ]
     if [ "$action" = switch -o "$action" = boot ]; then
-        targetHostCmd nix-env --rollback -p "$profile"
+        targetHostCmdActivate nix-env --rollback -p "$profile"
         pathToConfig="$profile"
     elif [ "$action" = test -o "$action" = build ]; then
         systemNumber=$(
@@ -511,7 +527,7 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = dry-activate ]; then
-    if ! targetHostCmd $pathToConfig/bin/switch-to-configuration "$action"; then
+    if ! targetHostCmdActivate $pathToConfig/bin/switch-to-configuration "$action"; then
         echo "warning: error(s) occurred while switching to the new configuration" >&2
         exit 1
     fi
