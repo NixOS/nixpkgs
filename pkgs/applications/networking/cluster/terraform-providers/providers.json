@@ -517,6 +517,15 @@
     "vendorSha256": "08wg16g4mvn6kl8xwn89195a826cb132ijvrgf32c6p7zp4lgmjd",
     "version": "0.2.12"
   },
+  "kafka-connect": {
+    "owner": "Mongey",
+    "provider-source-address": "registry.terraform.io/Mongey/kafka-connect",
+    "repo": "terraform-provider-kafka-connect",
+    "rev": "v0.2.3",
+    "sha256": "0fn03l58lkrlinvnxld2ba7z1gx95vxklbhh2z7930pih0vhr0sr",
+    "vendorSha256": "17fwqhxh22szdys97dxh069z6s8xr3y9i3pi5ckdcr462j1dr95w",
+    "version": "0.2.3"
+  },
   "keycloak": {
     "owner": "mrparkers",
     "provider-source-address": "registry.terraform.io/mrparkers/keycloak",
