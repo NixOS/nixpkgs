@@ -33,33 +33,18 @@ let
       };
     options.owner = lib.mkOption
       { type = lib.types.str;
-        default = with config;
-          if (capabilities != "") || !(setuid || setgid || permissions != null)
-          then "root"
-          else "nobody";
-        description = ''
-          The owner of the wrapper program. Defaults to <literal>root</literal>
-          if any capability is set and setuid/setgid/permissions are not, otherwise to
-          <literal>nobody</litera>.
-        '';
+        default = "root";
+        description = "The owner of the wrapper program.";
       };
     options.group = lib.mkOption
       { type = lib.types.str;
-        default = with config;
-          if (capabilities != "") || !(setuid || setgid || permissions != null)
-          then "root"
-          else "nogroup";
-        description = ''
-          The group of the wrapper program. Defaults to <literal>root</literal>
-          if any capability is set and setuid/setgid/permissions are not,
-          otherwise to <literal>nogroup</litera>.
-        '';
+        default = "root";
+        description = "The group of the wrapper program.";
       };
     options.permissions = lib.mkOption
-      { type = lib.types.nullOr fileModeType;
-        default = null;
-        example = "u+rx,g+x,o+x";
-        apply = x: if x == null then "u+rx,g+x,o+x" else x;
+      { type = fileModeType;
+        default  = "u+rx,g+x,o+x";
+        example = "a+rx";
         description = ''
           The permissions of the wrapper program. The format is that of a
           symbolic or numeric file mode understood by <command>chmod</command>.
@@ -89,7 +74,7 @@ let
       };
     options.setuid = lib.mkOption
       { type = lib.types.bool;
-        default = false;
+        default = true;
         description = "Whether to add the setuid bit the wrapper program.";
       };
     options.setgid = lib.mkOption
@@ -153,8 +138,8 @@ let
     builtins.map
       (opts:
         if opts.capabilities != ""
-          then mkSetcapProgram opts
-          else mkSetuidProgram opts
+        then mkSetcapProgram opts
+        else mkSetuidProgram opts
       ) (lib.attrValues wrappers);
 in
 {
