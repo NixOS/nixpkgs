@@ -1275,6 +1275,8 @@ in
 
   barman = python3Packages.callPackage ../tools/misc/barman { };
 
+  base16-universal-manager = callPackage ../applications/misc/base16-universal-manager { };
+
   bashate = python3Packages.callPackage ../development/tools/bashate { };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };

@@ -4815,6 +4815,12 @@
     githubId = 587870;
     name = "Jonathan Mettes";
   };
+  jo1gi = {
+    email = "joakimholm@protonmail.com";
+    github = "jo1gi";
+    githubId = 26695750;
+    name = "Joakim Holm";
+  };
   joachifm = {
     email = "joachifm@fastmail.fm";
     github = "joachifm";
