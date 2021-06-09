@@ -507,6 +507,8 @@ mapAliases ({
   oauth2_proxy = oauth2-proxy; # added 2021-04-18
   opencascade_oce = opencascade; # added 2018-04-25
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
+  openapi-generator-cli = throw "openapi-generator-cli has no source release currently. If you are okay with the binary distribution, use openapi-generator-cli-bin";
+  openapi-generator-cli-unstable = throw "openapi-generator-cli-unstable has no source release currently. If you are okay with the binary distribution, use openapi-generator-cli-unstable-bin";
   opencl-icd = ocl-icd; # added 2017-01-20
   openconnect_pa = throw "openconnect_pa fork has been discontinued, support for GlobalProtect is now available in openconnect"; # added 2021-05-21
   openexr_ctl = ctl; # added 2018-04-25
