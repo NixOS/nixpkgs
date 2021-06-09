@@ -1,4 +1,4 @@
-# Haskell {#haskell}
+# Haskell {#sec-haskell}
 
 The Haskell infrastructure in nixpkgs has two main purposes: The
 primary purpose is to provide a Haskell compiler and build tools
@@ -15,7 +15,7 @@ support for the default compiler (currently GHC 8.10.4) and usually
 only provide a default and (if different) the latest version of
 a haskell package.
 
-## Available packages {#haskell-available-packages}
+## Available packages {#sec-haskell-available-packages}
 
 The compiler and most build tools are exposed at the top level:
 
@@ -58,14 +58,14 @@ version from Hackage. Sometimes alternative versions of packages
 are provided whose attribute names are their normal name with
 their version appended after an underscore, e. g. `Cabal_3_4_0_0`.
 If you are interested in details how the package set is populated,
-read the section [Package set generation](#haskell-package-set-generation).
+read the section [Package set generation](#sec-haskell-package-set-generation).
 
 Most of the packages contained in `haskellPackages` don't actually
 build and are marked as broken semi-automatically. Most of those
 packages are deprecated or unmaintained, but sometimes packages
 that should, don't build. Very often fixing them is not a lot of
 work. How you can help with that is described in [Fixing a broken
-package](#haskell-fixing-a-broken-package).
+package](#sec-haskell-fixing-a-broken-package).
 
 `haskellPackages` is built with our default compiler, but we also
 provide other releases of GHC and package sets built with them.
@@ -110,7 +110,7 @@ is used to build its packages. Generally you won't have to interact with
 this builder since [cabal2nix](https://github.com/nixos/cabal2nix) can
 generate packages using it for an arbitrary cabal package definition.
 Still it is useful to know the parameters it takes when you need to
-[override](#haskell-overriding-haskell-packages) a generated nix expression.
+[override](#sec-haskell-overriding-haskell-packages) a generated nix expression.
 
 `haskellPackages.mkDerivation` is a wrapper around `stdenv.mkDerivation`
 which re-defines the default phases to be haskell aware and handles
@@ -364,7 +364,7 @@ That only leaves the following extra ways for specifying dependencies:
 : Deprecated, use either `benchmarkHaskellDepends` or `benchmarkSystemDepends`.
 
 The dependency specification methods in this list which are unconditional
-are especially useful when writing [overrides](#haskell-overriding-haskell-packages)
+are especially useful when writing [overrides](#sec-haskell-overriding-haskell-packages)
 when you want to make sure that they are definitely included. However, it is
 recommended to use the more accurate ones listed above when possible.
 
@@ -386,10 +386,10 @@ documentation.
     * `broken`
     * `hydraPlatforms`
 
-## Overriding haskell packages {#haskell-overriding-haskell-packages}
+## Overriding haskell packages {#sec-haskell-overriding-haskell-packages}
 
-## Contributing {#haskell-contributing}
+## Contributing {#sec-haskell-contributing}
 
-### Fixing a broken package {#haskell-fixing-a-broken-package}
+### Fixing a broken package {#sec-haskell-fixing-a-broken-package}
 
-### Package set generation {#haskell-package-set-generation}
+### Package set generation {#sec-haskell-package-set-generation}
