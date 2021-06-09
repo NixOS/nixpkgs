@@ -9,6 +9,7 @@ let
   stdenv.mkDerivation ({
     inherit name;
     installPhase = ''
+      runHook preInstall
       # hunspell dicts
       install -dm755 "$out/share/hunspell"
       install -m644 ${dictFileName}.dic "$out/share/hunspell/"
@@ -782,6 +783,36 @@ in rec {
       homepage = "https://github.com/jeppebundsgaard/stavekontrolden";
       license = with lib.licenses; [ gpl2Only lgpl21Only mpl11 ];
       maintainers = with maintainers; [ louisdk1 ];
+    };
+  };
+
+  /* DUTCH */
+
+  nl_NL = nl_nl;
+  nl_nl = mkDict rec {
+    name = "hunspell-dict-nl-nl-${version}";
+    version = "2.20.19";
+
+    src = fetchFromGitHub {
+      owner = "OpenTaal";
+      repo = "opentaal-hunspell";
+      rev = version;
+      sha256 = "0jma8mmrncyzd77kxliyngs4z6z4769g3nh0a7xn2pd4s5y2xdpy";
+    };
+
+    preInstall = ''
+      mv nl.aff nl_NL.aff
+      mv nl.dic nl_NL.dic
+    '';
+
+    dictFileName = "nl_NL";
+    readmeFile = "README.md";
+
+    meta = with lib; {
+      description = "Hunspell dictionary for Dutch (Netherlands) from OpenTaal";
+      homepage = "https://www.opentaal.org/";
+      license = with licenses; [ bsd3 cc-by-nc-30 ];
+      maintainers = with maintainers; [ artturin ];
     };
   };
 
