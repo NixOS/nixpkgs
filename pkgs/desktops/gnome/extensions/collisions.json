@@ -16,6 +16,10 @@
       "Fuzzy_Clock@dallagi",
       "fuzzy-clock@keepawayfromfire.co.uk"
     ],
+    "hide-activities-button": [
+      "Hide_Activities@shay.shayel.org",
+      "hide-activities-button@nmingori.gnome-shell-extensions.org"
+    ],
     "transparent-window": [
       "transparent-window@pbxqdown.github.com",
       "transparentwindows.mdirshad07"
@@ -37,6 +41,18 @@
     "lock-keys": [
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
+    ],
+    "hide-activities-button": [
+      "Hide_Activities@shay.shayel.org",
+      "hide-activities-button@nmingori.gnome-shell-extensions.org"
+    ],
+    "shutdowntimer": [
+      "ShutdownTimer@neumann",
+      "shutdown-timer-gnome-shell-extension"
+    ],
+    "extension-list": [
+      "extension-list@tu.berry",
+      "screen-lock@garciabaameiro.com"
     ]
   }
 }
