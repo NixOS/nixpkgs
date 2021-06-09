@@ -12,7 +12,7 @@
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
 , potrace
 , openxr-loader
-, embree, gmp
+, embree, gmp, libharu
 }:
 
 with lib;
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
       gmp
       pugixml
       potrace
+      libharu
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender

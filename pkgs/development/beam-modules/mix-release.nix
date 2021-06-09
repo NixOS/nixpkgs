@@ -1,4 +1,4 @@
-{ stdenv, lib, elixir, erlang, findutils, hex, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }:
+{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }:
 
 { pname
 , version
@@ -32,6 +32,8 @@ stdenv.mkDerivation (overridable // {
   HEX_OFFLINE = 1;
   DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
   # the api with `mix local.rebar rebar path` makes a copy of the binary
+  # some older dependencies still use rebar
+  MIX_REBAR = "${rebar}/bin/rebar";
   MIX_REBAR3 = "${rebar3}/bin/rebar3";
 
   postUnpack = ''
