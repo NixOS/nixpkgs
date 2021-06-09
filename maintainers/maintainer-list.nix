@@ -7583,6 +7583,16 @@
     githubId = 72201;
     name = "Ole Jørgen Brønner";
   };
+  oliverevans96 = {
+    email = "oliverevans96@gmail.com";
+    github = "OliverEvans96";
+    githubId = 15915043;
+    name = "Oliver Evans";
+    keys = [{
+      longkeyid = "rsa2048/A1BA3D39691538A2";
+      fingerprint = "616C 2477 3570 6EC8 0803  B2A5 A1BA 3D39 6915 38A2";
+    }];
+  };
   olynch = {
     email = "owen@olynch.me";
     github = "olynch";
