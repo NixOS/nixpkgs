@@ -54,6 +54,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProgVal/Limnoria";
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
+    broken = stdenv.isDarwin;
   };
 
 }
