@@ -353,6 +353,8 @@ in {
 
   aiosyncthing = callPackage ../development/python-modules/aiosyncthing { };
 
+  aiotractive = callPackage ../development/python-modules/aiotractive { };
+
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
