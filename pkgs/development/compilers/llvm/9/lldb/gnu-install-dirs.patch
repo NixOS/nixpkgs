@@ -76,3 +76,16 @@ index cdf22c4..d56fc6a 100644
                 ${use_python_wrapper_from_src_dir}
                 ${use_six_py_from_system}
          VERBATIM
+diff --git a/cmake/modules/LLDBStandalone.cmake b/cmake/modules/LLDBStandalone.cmake
+index b726797..1f057ac 100644
+--- a/cmake/modules/LLDBStandalone.cmake
++++ b/cmake/modules/LLDBStandalone.cmake
+@@ -95,7 +95,7 @@ include_directories(
+   "${CLANG_INCLUDE_DIRS}")
+
+ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX})
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_INSTALL_LIBDIR}/lib${LLVM_LIBDIR_SUFFIX})
+ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX})
+
+ set(LLDB_BUILT_STANDALONE 1)
