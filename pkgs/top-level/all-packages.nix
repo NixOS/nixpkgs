@@ -1067,6 +1067,8 @@ in
 
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
+  apfsprogs = callPackage ../tools/filesystems/apfsprogs { };
+
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
   };
