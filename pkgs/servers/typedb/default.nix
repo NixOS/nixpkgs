@@ -1,4 +1,6 @@
-{ stdenv, lib, openjdk, which, system, fetchzip, fetchurl, server-data ? "~/.typedb_home", server-port ? "1729", server-logs ? "~/.typedb_home/logs" }:
+{ stdenv, lib, openjdk, which, system, fetchzip, fetchurl, callPackage
+, server-data ? "~/.typedb_home", server-port ? "1729"
+, server-logs ? "~/.typedb_home/logs" }:
 let
   typedbVersion = "2.1.1";
   systems = {
@@ -53,15 +55,15 @@ let
     > server.port=${server-port}
   '';
   typedb-wrapper-patch = ''
-    3c3
+    2c2
     <   TYPEDB_SERVER_DATA="__SERVER_DATA__"
     ---
     >   TYPEDB_SERVER_DATA="${server-data}"
-    8c8
+    6c6
     <   TYPEDB_SERVER_LOGS="__SERVER_LOGS__"
     ---
     >   TYPEDB_SERVER_LOGS="${server-logs}"
-    13c13
+    10c10
     <   TYPEDB_SERVER_PORT="__SERVER_PORT__"
     ---
     >   TYPEDB_SERVER_PORT="${server-port}"
@@ -94,7 +96,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
 
     cat ${typedbWrapper} > $out/bin/typedb
-    echo "$out/typedb server --data=\$TYPEDB_SERVER_DATA --logs=\$TYPEDB_SERVER_LOGS --port=\$TYPEDB_SERVER_PORT \"\$@\"" >> $out/bin/typedb
+    echo "$out/typedb \"\$@\" --data=\$TYPEDB_SERVER_DATA --logs=\$TYPEDB_SERVER_LOGS --port=\$TYPEDB_SERVER_PORT" >> $out/bin/typedb
     patch $out/bin/typedb typedb_wrapper.patch
 
     chmod u+x $out/bin/typedb
@@ -102,17 +104,10 @@ stdenv.mkDerivation rec {
     rm typedb_wrapper.patch
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    mkdir "$out/server_data"
-    mkdir "$out/server_log"
-    echo "testing server"
-    TYPEDB_SERVER_DATA=$out/server_data TYPEDB_SERVER_LOGS=$out/server_log $out/bin/typedb --help > /dev/null
-    echo "testing client"
-    TYPEDB_SERVER_DATA=$out/server_data TYPEDB_SERVER_LOGS=$out/server_log $out/bin/typedb client --help > /dev/null
-    rm -r $out/server_data
-    rm -r $out/server_log
-  '';
+  passthru.tests = {
+    simple-execution = callPackage ./tests.nix { };
+  };
+
   doCheck = true;
 
   meta = with lib; {
