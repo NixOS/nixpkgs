@@ -144,8 +144,7 @@ let
         // passthru
 
     else runCommand "texlive-${tlName}"
-      ( { # lots of derivations, not meant to be cached
-          preferLocalBuild = true; allowSubstitutes = false;
+      ( {
           inherit passthru;
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
