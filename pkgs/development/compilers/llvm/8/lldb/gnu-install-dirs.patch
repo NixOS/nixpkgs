@@ -105,3 +105,16 @@ index a9059dd..d76a47d 100644
    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX})
 
    set(LLDB_BUILT_STANDALONE 1)
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index 3598247..bd60451 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -47,7 +47,7 @@ if(NOT LLDB_BUILD_FRAMEWORK)
+   endif()
+
+   set(SWIG_PYTHON_DIR ${LLVM_LIBRARY_OUTPUT_INTDIR}/${swig_python_subdir})
+-  set(SWIG_INSTALL_DIR lib${LLVM_LIBDIR_SUFFIX})
++  set(SWIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+
+   # Install the LLDB python module
+   install(DIRECTORY ${SWIG_PYTHON_DIR} DESTINATION ${SWIG_INSTALL_DIR})

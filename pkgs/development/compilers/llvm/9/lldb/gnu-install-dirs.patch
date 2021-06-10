@@ -89,3 +89,17 @@ index b726797..1f057ac 100644
  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX})
 
  set(LLDB_BUILT_STANDALONE 1)
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index 7de7973..b70aecc 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -50,7 +50,8 @@ if(NOT LLDB_BUILD_FRAMEWORK)
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+   execute_process(
+     COMMAND ${PYTHON_EXECUTABLE}
+-        -c "import distutils.sysconfig; print(distutils.sysconfig.get_python_lib(True, False, ''))"
++        -c "import distutils.sysconfig, sys; print(distutils.sysconfig.get_python_lib(True, False, sys.argv[1]))"
++        ${CMAKE_INSTALL_LIBDIR}/../
+     OUTPUT_VARIABLE SWIG_INSTALL_DIR
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+
