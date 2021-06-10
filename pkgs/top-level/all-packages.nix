@@ -2228,6 +2228,8 @@ in
 
   commitizen = callPackage ../applications/version-management/commitizen {};
 
+  common-licenses = callPackage ../data/misc/common-licenses {};
+
   compactor = callPackage ../applications/networking/compactor { };
 
   consul = callPackage ../servers/consul { };
@@ -14026,6 +14028,8 @@ in
   swarm = callPackage ../development/tools/analysis/swarm { };
 
   swiftformat = callPackage ../development/tools/swiftformat { };
+
+  symfony-cli = callPackage ../development/tools/symfony-cli { };
 
   swiftshader = callPackage ../development/libraries/swiftshader { };
 

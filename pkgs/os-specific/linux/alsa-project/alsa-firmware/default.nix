@@ -1,13 +1,17 @@
-{ lib, stdenv, buildPackages, autoreconfHook, fetchurl }:
+{ lib, stdenv, buildPackages, autoreconfHook, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  pname = "alsa-firmware";
-  version = "1.2.4";
+  name = "alsa-firmware-1.2.1";
 
   src = fetchurl {
-    url = "mirror://alsa/firmware/${pname}-${version}.tar.bz2";
-    sha256 = "1fymdjrsbndws3gy4ypm7id31261k65bh2pzyrz29z5w11ynsyxn";
+    url = "mirror://alsa/firmware/${name}.tar.bz2";
+    sha256 = "1aq8z8ajpjvcx7bwhwp36bh5idzximyn77ygk3ifs0my3mbpr8mf";
   };
+
+  patches = [ (fetchpatch {
+    url = "https://github.com/alsa-project/alsa-firmware/commit/a8a478485a999ff9e4a8d8098107d3b946b70288.patch";
+    sha256 = "0zd7vrgz00hn02va5bkv7qj2395a1rl6f8jq1mwbryxs7hiysb78";
+  }) ];
 
   nativeBuildInputs = [ autoreconfHook buildPackages.stdenv.cc ];
 
