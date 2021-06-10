@@ -15,24 +15,33 @@ let compcert = mkCoqDerivation rec {
   releaseRev = v: "v${v}";
 
   defaultVersion =  with versions; switch coq.version [
-      { case = range "8.8" "8.11";  out = "3.7"; }
-      { case = range "8.12" "8.13"; out = "3.8"; }
+      { case = range "8.8" "8.13"; out = "3.8"; }
     ] null;
 
   release = {
-    "3.7".sha256 = "1h4zhk9rrqki193nxs9vjvya7nl9yxjcf07hfqb6g77riy1vd2jr";
     "3.8".sha256 = "1gzlyxvw64ca12qql3wnq3bidcx9ygsklv9grjma3ib4hvg7vnr7";
     "3.9".sha256 = "1srcz2dqrvmbvv5cl66r34zqkm0hsbryk7gd3i9xx4slahc9zvdb";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = with ocamlPackages; [ ocaml findlib menhir menhirLib ] ++ [ coq coq2html ];
+  propagatedBuildInputs = [ flocq ];
+
   enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace ./configure \
       --replace \$\{toolprefix\}ar 'ar' \
       --replace '{toolprefix}gcc' '{toolprefix}cc'
+  '';
+
+  configurePhase = ''
+    ./configure -clightgen \
+    -prefix $out \
+    -coqdevdir $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/ \
+    -toolprefix ${tools}/bin/ \
+    -use-external-Flocq \
+    ${if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux"}
   '';
 
   installTargets = "documentation install";
@@ -64,22 +73,9 @@ let compcert = mkCoqDerivation rec {
   };
 }; in
 compcert.overrideAttrs (o:
-  let useExternalFlocq = with lib.versions; range "3.8" "3.9" o.version; in
   {
     patches = with versions; switch [ coq.version o.version ] [
-      { cases = [ (isEq "8.11") "3.7" ];
-        out = [
-          (fetchpatch {
-            url = "https://github.com/AbsInt/CompCert/commit/0a2db0269809539ccc66f8ec73637c37fbd23580.patch";
-            sha256 = "0n8qrba70x8f422jdvq9ddgsx6avf2dkg892g4ldh3jiiidyhspy";
-          })
-          (fetchpatch {
-            url = "https://github.com/AbsInt/CompCert/commit/5e29f8b5ba9582ecf2a1d0baeaef195873640607.patch";
-            sha256 = "184nfdgxrkci880lkaj5pgnify3plka7xfgqrgv16275sqppc5hc";
-          })
-        ];
-      }
-      { cases = [ (range "8.12" "8.13") "3.8" ];
+      { cases = [ (range "8.12.2" "8.13.2") "3.8" ];
         out = [
           # Support for Coq 8.12.2
           (fetchpatch {
@@ -109,16 +105,5 @@ compcert.overrideAttrs (o:
         ];
       }
     ] [];
-
-    propagatedBuildInputs = optional useExternalFlocq [ flocq ];
-
-    configurePhase = ''
-      ./configure -clightgen \
-      -prefix $out \
-      -coqdevdir $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/ \
-      -toolprefix ${tools}/bin/ \
-      ${optionalString useExternalFlocq "-use-external-Flocq"} \
-      ${if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux"}
-    '';
   }
 )
