@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl, cmake, pkg-config
-, alsaLib, fftw, flac, lame, libjack2, libmad, libpulseaudio
+, alsa-lib, fftw, flac, lame, libjack2, libmad, libpulseaudio
 , libsamplerate, libsndfile, libvorbis, portaudio, qtbase, wavpack
 }:
 mkDerivation {
@@ -12,7 +12,7 @@ mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ alsaLib fftw flac.dev libjack2 lame
+  buildInputs = [ alsa-lib fftw flac.dev libjack2 lame
                   libmad libpulseaudio libsamplerate.dev libsndfile.dev libvorbis
                   portaudio qtbase wavpack ];
 

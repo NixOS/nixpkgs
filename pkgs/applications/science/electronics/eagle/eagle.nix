@@ -1,13 +1,13 @@
 { lib, stdenv, mkDerivation, fetchurl, makeDesktopItem
 , libXrender, libXrandr, libXcursor, libX11, libXext, libXi, libxcb
- , libGL, glib, nss, nspr, expat, alsaLib
+ , libGL, glib, nss, nspr, expat, alsa-lib
 , qtbase, qtdeclarative, qtsvg, qtlocation, qtwebchannel, qtwebengine
 }:
 
 let
   libPath = lib.makeLibraryPath
     [ libXrender libXrandr libXcursor libX11 libXext libXi libxcb
-      libGL glib nss nspr expat alsaLib
+      libGL glib nss nspr expat alsa-lib
       qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
     ];
   in
@@ -32,7 +32,7 @@ let
 
     buildInputs =
       [ libXrender libXrandr libXcursor libX11 libXext libXi libxcb
-        libGL glib nss nspr expat alsaLib
+        libGL glib nss nspr expat alsa-lib
         qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
       ];
 

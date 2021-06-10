@@ -6,7 +6,7 @@
 , makeWrapper
 # minimum dependencies
 , Foundation
-, alsaLib
+, alsa-lib
 , fontconfig
 , freetype
 , glibc
@@ -82,7 +82,7 @@ let
         ];
 
         buildInputs = lib.optionals stdenv.isLinux [
-          alsaLib # libasound.so wanted by lib/libjsound.so
+          alsa-lib # libasound.so wanted by lib/libjsound.so
           fontconfig
           freetype
           openssl # libssl.so wanted by languages/ruby/lib/mri/openssl.so

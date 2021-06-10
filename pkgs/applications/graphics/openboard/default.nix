@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
 , qtbase, qtxmlpatterns, qttools, qtwebkit, libGL, fontconfig, openssl, poppler
-, ffmpeg, libva, alsaLib, SDL, x264, libvpx, libvorbis, libtheora, libogg
+, ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
 
 let
@@ -52,7 +52,7 @@ in mkDerivation rec {
     poppler
     ffmpeg
     libva
-    alsaLib
+    alsa-lib
     SDL
     x264
     libvpx

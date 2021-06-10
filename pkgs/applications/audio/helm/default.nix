@@ -3,7 +3,7 @@
 , fetchpatch
 , xorg
 , freetype
-, alsaLib
+, alsa-lib
 , curl
 , libjack2
 , lv2
@@ -26,7 +26,7 @@
   buildInputs = [
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
     xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsaLib curl libjack2 pkg-config libGLU libGL lv2
+    freetype alsa-lib curl libjack2 pkg-config libGLU libGL lv2
   ];
 
   CXXFLAGS = "-DHAVE_LROUND";

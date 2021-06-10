@@ -2,7 +2,7 @@
 , gtk ? null
 , libpulseaudio, gst_all_1, libvorbis, libcap
 , CoreServices
-, withAlsa ? stdenv.isLinux, alsaLib }:
+, withAlsa ? stdenv.isLinux, alsa-lib }:
 
 stdenv.mkDerivation rec {
   name = "libcanberra-0.30";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional stdenv.isDarwin CoreServices
     ++ lib.optional stdenv.isLinux libcap
-    ++ lib.optional withAlsa alsaLib;
+    ++ lib.optional withAlsa alsa-lib;
 
   configureFlags = [ "--disable-oss" ];
 

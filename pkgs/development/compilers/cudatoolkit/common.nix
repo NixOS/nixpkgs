@@ -6,7 +6,7 @@ args@
 , developerProgram ? false
 , runPatches ? []
 , addOpenGLRunpath
-, alsaLib
+, alsa-lib
 , expat
 , fetchurl
 , fontconfig
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     ncurses5 expat python27 zlib glibc
     xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsaLib
+    gtk2 glib fontconfig freetype unixODBC alsa-lib
   ];
 
   rpath = "${lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";

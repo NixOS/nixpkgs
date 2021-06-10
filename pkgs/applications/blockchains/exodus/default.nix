@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango,
-atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsaLib, dbus, at-spi2-atk,
+atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsa-lib, dbus, at-spi2-atk,
 cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       util-linux
       xorg.libXrandr
       xorg.libXScrnSaver
-      alsaLib
+      alsa-lib
       dbus.lib
       at-spi2-atk
       at-spi2-core

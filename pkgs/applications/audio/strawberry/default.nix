@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, alsaLib
+, alsa-lib
 , boost
 , chromaprint
 , fftw
@@ -45,7 +45,7 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     boost
     chromaprint
     fftw

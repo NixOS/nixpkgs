@@ -3,7 +3,7 @@
 , libXmu
 , lua
 , tinyxml
-, agg, alsaLib, soundtouch, openal
+, agg, alsa-lib, soundtouch, openal
 , desktop-file-utils
 , gtk2, gtkglext, libglade
 , libGLU, libpcap, SDL, zziplib }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = "-fpermissive";
 
   buildInputs =
-  [ pkg-config libtool intltool libXmu lua agg alsaLib soundtouch
+  [ pkg-config libtool intltool libXmu lua agg alsa-lib soundtouch
     openal desktop-file-utils gtk2 gtkglext libglade
     libGLU libpcap SDL zziplib tinyxml ];
 

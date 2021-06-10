@@ -3,7 +3,7 @@
   unzip, zlib, curl, libjpeg, libpng, libvorbis, libtheora
 , libogg, libmodplug
 , # glx
-  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, libXxf86dga, alsaLib
+  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, libXxf86dga, alsa-lib
 , # sdl
   SDL
 }:
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ unzip ];
   buildInputs = [
     # glx
-    libX11 libGLU libGL libXpm libXext libXxf86vm libXxf86dga alsaLib
+    libX11 libGLU libGL libXpm libXext libXxf86vm libXxf86dga alsa-lib
     # sdl
     SDL
   ];

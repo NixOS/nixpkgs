@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, alsaLib, ffmpeg, glib, openssl
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, alsa-lib, ffmpeg, glib, openssl
 , pcre, zlib, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama
 , libXrandr, libXrender, libXv, libXtst, libxkbcommon, libxkbfile, wayland
 , gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc, libxslt, cairo
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = with lib;
     [
-      alsaLib
+      alsa-lib
       cairo
       cups
       ffmpeg

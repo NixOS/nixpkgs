@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, fftw, libjack2, libsamplerate
+{ lib, stdenv, fetchurl, alsa-lib, fftw, libjack2, libsamplerate
 , libsndfile, pkg-config, python3, wafHook
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config python3 wafHook ];
-  buildInputs = [ alsaLib fftw libjack2 libsamplerate libsndfile ];
+  buildInputs = [ alsa-lib fftw libjack2 libsamplerate libsndfile ];
 
   strictDeps = true;
 

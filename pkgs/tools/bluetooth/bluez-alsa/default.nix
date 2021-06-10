@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, alsaLib, bluez, glib, sbc, dbus
+, alsa-lib, bluez, glib, sbc, dbus
 
 # optional, but useful utils
 , readline, libbsd, ncurses
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
-    alsaLib bluez glib sbc dbus
+    alsa-lib bluez glib sbc dbus
     readline libbsd ncurses
   ]
   ++ optional aacSupport fdk_aac;

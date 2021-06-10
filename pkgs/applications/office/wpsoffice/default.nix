@@ -5,7 +5,7 @@
 , dpkg
 , wrapGAppsHook
 , wrapQtAppsHook
-, alsaLib
+, alsa-lib
 , atk
 , bzip2
 , cairo
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xorg; [
-    alsaLib
+    alsa-lib
     atk
     bzip2
     cairo
