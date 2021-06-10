@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts, git
-, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
+, nixfmt, nix, coreutils, gnused, util-linux, ncurses, disableRemoteLogging ? true }:
 
 with lib;
 
@@ -17,7 +17,7 @@ let
         inherit sha256;
       };
 
-      phases = "installPhase";
+      dontUnpack = true;
 
       installPhase = ''
         install -Dm755 $src $out/bin/amm
@@ -25,6 +25,17 @@ let
       '' + optionalString (disableRemoteLogging) ''
         sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
         sed -i '1i #!/bin/sh' $out/bin/amm
+      '';
+
+      doInstallCheck = true;
+      installCheckPhase = ''
+        PATH="${ncurses}/bin:$PATH"
+
+        welcome="$(echo 'exit' | ${util-linux}/bin/script --command $out/bin/amm)"
+        javaVersion="$(${jre}/bin/java -version 2>&1 | head -1 | awk '{print $3}' | tr -d '\\"')"
+
+        grep 'Welcome to the Ammonite Repl ${version}' <<< "''${welcome}"
+        grep "''${javaVersion}" <<< "''${welcome}"
       '';
 
       passthru = {
