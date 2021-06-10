@@ -6,7 +6,7 @@
 , aoSupport ? !stdenv.isLinux, libao ? null
 , jackSupport ? false, libjack ? null
 , samplerateSupport ? jackSupport, libsamplerate ? null
-, ossSupport ? false, alsaOss ? null
+, ossSupport ? false, alsa-oss ? null
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio ? null
 , mprisSupport ? stdenv.isLinux, systemd ? null
 
@@ -59,7 +59,7 @@ let
     (mkFlag aoSupport         "CONFIG_AO=y"         libao)
     (mkFlag jackSupport       "CONFIG_JACK=y"       libjack)
     (mkFlag samplerateSupport "CONFIG_SAMPLERATE=y" libsamplerate)
-    (mkFlag ossSupport        "CONFIG_OSS=y"        alsaOss)
+    (mkFlag ossSupport        "CONFIG_OSS=y"        alsa-oss)
     (mkFlag pulseaudioSupport "CONFIG_PULSE=y"      libpulseaudio)
     (mkFlag mprisSupport      "CONFIG_MPRIS=y"      systemd)
 

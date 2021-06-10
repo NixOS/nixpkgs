@@ -20104,10 +20104,10 @@ in
 
   alsa-firmware = callPackage ../os-specific/linux/alsa-project/alsa-firmware { };
   alsa-lib = callPackage ../os-specific/linux/alsa-project/alsa-lib { };
+  alsa-oss = callPackage ../os-specific/linux/alsa-project/alsa-oss { };
   alsaPlugins = callPackage ../os-specific/linux/alsa-project/alsa-plugins { };
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-project/alsa-plugins/wrapper.nix { };
   alsaUtils = callPackage ../os-specific/linux/alsa-project/alsa-utils { fftw = fftwFloat; };
-  alsaOss = callPackage ../os-specific/linux/alsa-project/alsa-oss { };
   alsaTools = callPackage ../os-specific/linux/alsa-project/alsa-tools { };
   alsa-ucm-conf = callPackage ../os-specific/linux/alsa-project/alsa-ucm-conf { };
   alsa-topology-conf = callPackage ../os-specific/linux/alsa-project/alsa-topology-conf { };
