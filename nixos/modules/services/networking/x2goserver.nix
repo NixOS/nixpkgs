@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.programs.x2goserver;
+  cfg = config.services.x2goserver;
 
   defaults = {
     superenicer = { enable = cfg.superenicer.enable; };
@@ -17,7 +17,11 @@ let
   '';
 
 in {
-  options.programs.x2goserver = {
+  imports = [
+    (mkAliasOptionModule [ "programs" "x2goserver" "enable" ] [ "services" "x2goserver" "enable" ])
+  ];
+
+  options.services.x2goserver = {
     enable = mkEnableOption "x2goserver" // {
       description = ''
         Enables the x2goserver module.
@@ -62,6 +66,14 @@ in {
   };
 
   config = mkIf cfg.enable {
+
+    # x2goserver can run X11 program even if "services.xserver.enable = false"
+    xdg = {
+      autostart.enable = true;
+      menus.enable = true;
+      mime.enable = true;
+      icons.enable = true;
+    };
 
     environment.systemPackages = [ pkgs.x2goserver ];
 
