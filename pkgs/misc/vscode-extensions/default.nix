@@ -12,6 +12,19 @@ let
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
+      _4ops.terraform = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "4ops";
+          name = "terraform";
+          version = "0.2.1";
+          sha256 = "196026a89pizj8p0hqdgkyllj2spx2qwpynsaqjq17s8v15vk5dg";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
       a5huynh.vscode-ron = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-ron";
