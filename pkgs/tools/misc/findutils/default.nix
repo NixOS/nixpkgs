@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "findutils";
-  version = "4.7.0";
+  version = "4.8.0";
 
   src = fetchurl {
     url = "mirror://gnu/findutils/${pname}-${version}.tar.xz";
-    sha256 = "16kqz9yz98dasmj70jwf5py7jk558w96w0vgp3zf9xsqk3gzpzn5";
+    sha256 = "sha256-VxJ7fpfZEoLGrOVWN41UValQmJgpfkbhBEMBbqE4cWQ=";
   };
 
   postPatch = ''
