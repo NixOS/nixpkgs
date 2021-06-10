@@ -3,7 +3,7 @@
 , fetchurl
 , makeWrapper
 # Dynamic libraries
-, alsaLib
+, alsa-lib
 , atk
 , cairo
 , dbus
@@ -39,7 +39,7 @@ let
 
   libs = lib.makeLibraryPath ([
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
-    alsaLib
+    alsa-lib
     atk
     cairo
     dbus

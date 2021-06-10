@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libjack2, alsaLib
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libjack2, alsa-lib
 , freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
 , fetchpatch, fmt
 , adlplugChip ? "-DADLplug_CHIP=OPL3"
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ adlplugChip "-DADLplug_USE_SYSTEM_FMT=ON" ];
 
   buildInputs = [
-    libjack2 alsaLib freetype libX11 libXrandr libXinerama libXext
+    libjack2 alsa-lib freetype libX11 libXrandr libXinerama libXext
     libXcursor
   ];
   nativeBuildInputs = [ cmake pkg-config fmt ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, pkg-config, gtk2, gtk3, fltk13 }:
+{ lib, stdenv, fetchurl, alsa-lib, pkg-config, gtk2, gtk3, fltk13 }:
 # Comes from upstream as as bundle of several tools,
 # some use gtk2, some gtk3 (and some even fltk13).
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib gtk2 gtk3 fltk13 ];
+  buildInputs = [ alsa-lib gtk2 gtk3 fltk13 ];
 
   patchPhase = ''
     export tools="as10k1 hda-verb hdspmixer echomixer hdajackretask hdspconf hwmixvolume mixartloader rmedigicontrol sscape_ctl vxloader envy24control hdajacksensetest hdsploader ld10k1 pcxhrloader sb16_csp us428control"

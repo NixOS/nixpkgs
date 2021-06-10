@@ -1,11 +1,11 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnetCorePackages, dotnetPackages, cacert
-, ffmpeg_4, alsaLib, SDL2, lttng-ust, numactl, alsaPlugins
+, ffmpeg_4, alsa-lib, SDL2, lttng-ust, numactl, alsa-plugins
 }:
 
 let
   runtimeDeps = [
-    ffmpeg_4 alsaLib SDL2 lttng-ust numactl
+    ffmpeg_4 alsa-lib SDL2 lttng-ust numactl
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;

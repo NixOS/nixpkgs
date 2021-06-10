@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, libconfuse, yajl, alsaLib, libpulseaudio, libnl, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
+{ fetchurl, lib, stdenv, libconfuse, yajl, alsa-lib, libpulseaudio, libnl, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "i3status-2.13";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl ];
-  buildInputs = [ libconfuse yajl alsaLib libpulseaudio libnl ];
+  buildInputs = [ libconfuse yajl alsa-lib libpulseaudio libnl ];
 
   makeFlags = [ "all" "PREFIX=$(out)" ];
 

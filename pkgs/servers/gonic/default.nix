@@ -1,5 +1,5 @@
 { lib, buildGoModule, fetchFromGitHub
-, pkg-config, taglib, alsaLib
+, pkg-config, taglib, alsa-lib
 , zlib
 
 # Disable on-the-fly transcoding,
@@ -21,7 +21,7 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ taglib alsaLib zlib ];
+  buildInputs = [ taglib alsa-lib zlib ];
   vendorSha256 = "0inxlqxnkglz4j14jav8080718a80nqdcl866lkql8r6zcxb4fm9";
 
   # TODO(Profpatsch): write a test for transcoding support,

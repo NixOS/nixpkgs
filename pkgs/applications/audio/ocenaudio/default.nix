@@ -5,7 +5,7 @@
 , dpkg
 , qt5
 , libjack2
-, alsaLib
+, alsa-lib
 , bzip2
 , libpulseaudio }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libjack2
     libpulseaudio
     bzip2
-    alsaLib
+    alsa-lib
   ];
 
   buildInputs = [ dpkg ];

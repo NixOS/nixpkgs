@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchurl, fetchpatch, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
-, dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
+, dee, ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk, libtgvoip
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
@@ -57,7 +57,7 @@ in mkDerivation rec {
 
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu enchant2 lz4 xxHash
-    dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
+    dee ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
     tl-expected hunspell glibmm webkitgtk
     tg_owt libtgvoip
     # Transitive dependencies:

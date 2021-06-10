@@ -20102,23 +20102,17 @@ in
 
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
-  alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
-
-  alsaLib = callPackage ../os-specific/linux/alsa-lib { };
-
-  alsaPlugins = callPackage ../os-specific/linux/alsa-plugins { };
-
-  alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
-
-  alsaUtils = callPackage ../os-specific/linux/alsa-utils {
+  alsa-firmware = callPackage ../os-specific/linux/alsa-project/alsa-firmware { };
+  alsa-lib = callPackage ../os-specific/linux/alsa-project/alsa-lib { };
+  alsa-oss = callPackage ../os-specific/linux/alsa-project/alsa-oss { };
+  alsa-plugins = callPackage ../os-specific/linux/alsa-project/alsa-plugins { };
+  alsa-plugins-wrapper = callPackage ../os-specific/linux/alsa-project/alsa-plugins/wrapper.nix { };
+  alsa-tools = callPackage ../os-specific/linux/alsa-project/alsa-tools { };
+  alsa-topology-conf = callPackage ../os-specific/linux/alsa-project/alsa-topology-conf { };
+  alsa-ucm-conf = callPackage ../os-specific/linux/alsa-project/alsa-ucm-conf { };
+  alsa-utils = callPackage ../os-specific/linux/alsa-project/alsa-utils {
     fftw = fftwFloat;
   };
-  alsaOss = callPackage ../os-specific/linux/alsa-oss { };
-  alsaTools = callPackage ../os-specific/linux/alsa-tools { };
-
-  alsa-ucm-conf = callPackage ../os-specific/linux/alsa-ucm-conf { };
-
-  alsa-topology-conf = callPackage ../os-specific/linux/alsa-topology-conf { };
 
   inherit (callPackage ../misc/arm-trusted-firmware {})
     buildArmTrustedFirmware
@@ -23350,7 +23344,7 @@ in
     libXaw = xorg.libXaw;
     Xaw3d = null;
     gconf = null;
-    alsaLib = null;
+    alsa-lib = null;
     acl = null;
     gpm = null;
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;

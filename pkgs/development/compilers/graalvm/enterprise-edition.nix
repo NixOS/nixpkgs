@@ -1,4 +1,4 @@
-{ lib, stdenv, requireFile, perl, unzip, glibc, zlib, bzip2, gdk-pixbuf, xorg, glib, fontconfig, freetype, cairo, pango, gtk3, gtk2, ffmpeg, libGL, atk, alsaLib, setJavaClassPath }:
+{ lib, stdenv, requireFile, perl, unzip, glibc, zlib, bzip2, gdk-pixbuf, xorg, glib, fontconfig, freetype, cairo, pango, gtk3, gtk2, ffmpeg, libGL, atk, alsa-lib, setJavaClassPath }:
 
 let
   common = javaVersion:
@@ -125,7 +125,7 @@ let
                     }.${javaVersion}
                  }:${
             lib.strings.makeLibraryPath [ glibc xorg.libXxf86vm xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXrender
-                                                 glib zlib bzip2 alsaLib fontconfig freetype pango gtk3 gtk2 cairo gdk-pixbuf atk ffmpeg libGL ]}"
+                                                 glib zlib bzip2 alsa-lib fontconfig freetype pango gtk3 gtk2 cairo gdk-pixbuf atk ffmpeg libGL ]}"
 
           for f in $(find $out -type f -perm -0100); do
             patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f" || true

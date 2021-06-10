@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, gtk2, pkg-config }:
+{ lib, stdenv, fetchurl, alsa-lib, gtk2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "praat";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib gtk2 ];
+  buildInputs = [ alsa-lib gtk2 ];
 
   meta = {
     description = "Doing phonetics by computer";

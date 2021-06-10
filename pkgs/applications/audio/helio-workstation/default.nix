@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, alsaLib, freetype, xorg, curl, libGL, libjack2, gnome
+, alsa-lib, freetype, xorg, curl, libGL, libjack2, gnome
 , pkg-config, makeWrapper
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
+    alsa-lib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
     xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome.zenity
   ];
 

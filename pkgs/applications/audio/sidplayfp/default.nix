@@ -6,7 +6,7 @@
 , pkg-config
 , libsidplayfp
 , alsaSupport ? stdenv.hostPlatform.isLinux
-, alsaLib
+, alsa-lib
 , pulseSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
 , out123Support ? stdenv.hostPlatform.isDarwin
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook perl pkg-config ];
 
   buildInputs = [ libsidplayfp ]
-    ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional out123Support mpg123;
 

@@ -18,7 +18,7 @@
 
 ## optional libraries
 
-, alsaSupport ? stdenv.isLinux, alsaLib
+, alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
@@ -180,7 +180,7 @@ buildStdenv.mkDerivation ({
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
     nspr nss_pkg
   ]
-  ++ lib.optional  alsaSupport alsaLib
+  ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport libkrb5

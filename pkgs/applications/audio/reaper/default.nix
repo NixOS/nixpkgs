@@ -3,7 +3,7 @@
 , autoPatchelfHook
 , makeWrapper
 
-, alsaLib
+, alsa-lib
 , gtk3
 , lame
 , ffmpeg
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     stdenv.cc.cc.lib # reaper and libSwell need libstdc++.so.6
     gtk3
   ];

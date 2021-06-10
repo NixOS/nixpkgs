@@ -7,7 +7,7 @@
 , log4cpp
 , mpir
 , fftwFloat
-, alsaLib
+, alsa-lib
 , libjack2
 # drivers (optional):
 , rtl-sdr
@@ -37,7 +37,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     log4cpp
     mpir
     fftwFloat
-    alsaLib
+    alsa-lib
     libjack2
     gnuradio3_8Minimal.unwrapped.boost
     qt5.qtbase

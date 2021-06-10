@@ -1,7 +1,7 @@
 { lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL, libGLU
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 , libXext, libICE, libXrandr
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
@@ -17,7 +17,7 @@ let
   extraPropagatedBuildInputs = [ ]
     ++ optionals x11Support [ libXext libICE libXrandr ]
     ++ optionals openglSupport [ libGL libGLU ]
-    ++ optional alsaSupport alsaLib
+    ++ optional alsaSupport alsa-lib
     ++ optional pulseaudioSupport libpulseaudio
     ++ optional stdenv.isDarwin Cocoa;
   rpath = makeLibraryPath extraPropagatedBuildInputs;
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   # Please try revert the change that introduced this comment when updating SDL.
   ] ++ optional stdenv.isDarwin "--disable-x11-shared"
     ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib";
+    ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib";
 
   patches = [
     ./find-headers.patch
