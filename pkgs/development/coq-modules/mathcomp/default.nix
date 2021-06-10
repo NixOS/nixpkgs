@@ -12,7 +12,7 @@
 
 { lib, ncurses, which, graphviz, lua, fetchzip,
   mkCoqDerivation, recurseIntoAttrs, withDoc ? false, single ? false,
-  coqPackages, coq, ocamlPackages, version ? null }@args:
+  coqPackages, coq, ocamlPackages, version ? null, origin ? null }@args:
 with builtins // lib;
 let
   repo  = "math-comp";
@@ -53,7 +53,7 @@ let
         echo "-R . mathcomp.all" >> Make
       '';
       derivation = mkCoqDerivation ({
-        inherit version pname defaultVersion release releaseRev repo owner;
+        inherit version origin pname defaultVersion release releaseRev repo owner;
 
         nativeBuildInputs = optionals withDoc [ graphviz lua ];
         mlPlugin = versions.isLe "8.6" coq.coq-version;

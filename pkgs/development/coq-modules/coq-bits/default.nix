@@ -1,9 +1,9 @@
-{ lib, mkCoqDerivation, coq, mathcomp, version ? null }:
+{ lib, mkCoqDerivation, coq, mathcomp, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "coq-bits";
   repo = "bits";
-  inherit version;
+  inherit version origin;
   defaultVersion = if versions.isGe "8.7" coq.version then "20190812" else null;
 
   release."20190812".rev    = "1.0.0";

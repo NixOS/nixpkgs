@@ -1,12 +1,12 @@
 { coq, mkCoqDerivation, mathcomp, mathcomp-bigenough,
-  lib, version ? null }:
+  lib, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "real-closed";
   owner = "math-comp";
-  inherit version;
+  inherit version origin;
   release = {
     "1.1.2".sha256 = "0907x4nf7nnvn764q3x9lx41g74rilvq5cki5ziwgpsdgb98pppn";
     "1.1.1".sha256 = "0ksjscrgq1i79vys4zrmgvzy2y4ylxa8wdsf4kih63apw6v5ws6b";

@@ -1,8 +1,8 @@
 { lib, mkCoqDerivation, coq, callPackage }:
 
 with lib; let mkContrib = pname: coqs: param:
-  let contribVersion = {version ? null}: mkCoqDerivation ({
-      inherit pname version;
+  let contribVersion = {version ? null, origin ? null}: mkCoqDerivation ({
+      inherit pname version origin;
       owner = "coq-contribs";
       mlPlugin = true;
     } // optionalAttrs (builtins.elem coq.coq-version coqs) ({

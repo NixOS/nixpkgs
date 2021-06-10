@@ -1,11 +1,11 @@
 { lib, bash, which, autoconf, automake,
-  mkCoqDerivation, coq, version ? null }:
+  mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "flocq";
   owner = "flocq";
   domain = "gitlab.inria.fr";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = isGe "8.7";        out = "3.3.1"; }
     { case = range "8.5" "8.8"; out = "2.6.1"; }

@@ -1,11 +1,11 @@
 { coq, mkCoqDerivation, mathcomp, bignums, paramcoq, multinomials,
-  lib, which, version ? null }:
+  lib, which, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
 
   pname = "CoqEAL";
   owner = "CoqEAL";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
       { cases = [ (isGe "8.10") (range "1.11.0" "1.12.0") ]; out = "1.0.5"; }
       { cases = [ (isGe "8.7") "1.11.0" ]; out = "1.0.4"; }

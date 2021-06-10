@@ -1,8 +1,9 @@
 { stdenv, lib, fetchzip, buildDunePackage, camlp5
 , ppxlib, ppx_deriving, re, perl, ncurses
-, version ? "1.13.5"
+, version ? "1.13.5", origin ? null,
 }:
-with lib;
+let lib' = import ../../../build-support/coq/extra-lib.nix {inherit lib;}; in
+with lib';
 let fetched = import ../../../build-support/coq/meta-fetch/default.nix
   {inherit lib stdenv fetchzip; } ({
     release."1.13.5".sha256 = "02a6r23mximrdvs6kgv6rp0r2dgk7zynbs99nn7lphw2c4189kka";
@@ -11,8 +12,9 @@ let fetched = import ../../../build-support/coq/meta-fetch/default.nix
     release."1.12.0".sha256 = "1agisdnaq9wrw3r73xz14yrq3wx742i6j8i5icjagqk0ypmly2is";
     release."1.11.4".sha256 = "1m0jk9swcs3jcrw5yyw5343v8mgax238cjb03s8gc4wipw1fn9f5";
     releaseRev = v: "v${v}";
+    combined = true;
     location = { domain = "github.com"; owner = "LPCIC"; repo = "elpi"; };
-  }) version;
+  }) { inherit origin version; pname = "elpi"; };
 in
 buildDunePackage rec {
   pname = "elpi";

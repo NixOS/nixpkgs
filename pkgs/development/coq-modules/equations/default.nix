@@ -1,10 +1,10 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "equations";
   owner = "mattam82";
   repo = "Coq-Equations";
-  inherit version;
+  inherit version origin;
   defaultVersion = switch coq.coq-version [
     { case = "8.13"; out = "1.2.4+coq8.13"; }
     { case = "8.12"; out = "1.2.4+coq8.12"; }

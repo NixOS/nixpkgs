@@ -1,9 +1,9 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "paco";
   owner = "snu-sf";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = isGe "8.6";         out = "4.0.2"; }
     { case = range "8.5" "8.8";  out = "1.2.8"; }

@@ -1,9 +1,9 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "Velisarios";
   owner = "vrahli";
-  inherit version;
+  inherit version origin;
   defaultVersion = if versions.range "8.6" "8.8" coq.coq-version then "20180221" else null;
 
   release."20180221".rev    = "e1eee1f10d5d46331a560bd8565ac101229d0d6b";

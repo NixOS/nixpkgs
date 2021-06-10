@@ -1,9 +1,9 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; (mkCoqDerivation {
   pname = "tlc";
   owner = "charguer";
-  inherit version;
+  inherit version origin;
   displayVersion = { tlc = false; };
   defaultVersion = with versions; switch coq.coq-version [
     { case = range "8.12" "8.13"; out = "20210316"; }

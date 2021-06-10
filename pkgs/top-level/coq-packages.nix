@@ -97,8 +97,8 @@ let
               else v))
       ) (lib.attrNames set)
     );
-  mkCoq = version: callPackage ../applications/science/logic/coq {
-    inherit version ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10;
+  mkCoq = origin: callPackage ../applications/science/logic/coq {
+    inherit origin ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10;
   };
 in rec {
 

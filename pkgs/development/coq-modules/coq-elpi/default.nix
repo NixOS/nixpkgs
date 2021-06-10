@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, which, coq, version ? null }:
+{ lib, mkCoqDerivation, which, coq, version ? null, origin ? null }:
 
 with builtins; with lib; let
   elpi = coq.ocamlPackages.elpi.override (lib.switch coq.coq-version [
@@ -10,7 +10,7 @@ in mkCoqDerivation {
   pname = "elpi";
   repo  = "coq-elpi";
   owner = "LPCIC";
-  inherit version;
+  inherit version origin;
   defaultVersion = lib.switch coq.coq-version [
     { case = "8.13"; out = "1.10.1"; }
     { case = "8.12"; out = "1.8.3_8.12"; }

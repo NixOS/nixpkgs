@@ -1,9 +1,9 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation rec {
   pname = "coq-ext-lib";
   owner = "coq-ext-lib";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = range "8.8" "8.13"; out = "0.11.3"; }
     { case = "8.7";              out = "0.9.7"; }

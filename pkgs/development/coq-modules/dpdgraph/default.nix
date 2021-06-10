@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, autoreconfHook, coq, version ? null }:
+{ lib, mkCoqDerivation, autoreconfHook, coq, version ? null, origin ? null }:
 
 with lib;
 let hasWarning = versionAtLeast coq.ocamlPackages.ocaml.version "4.08"; in
@@ -7,7 +7,7 @@ mkCoqDerivation {
   pname = "dpdgraph";
   owner = "Karmaki";
   repo = "coq-dpdgraph";
-  inherit version;
+  inherit version origin;
   defaultVersion = switch coq.coq-version [
     { case = "8.13"; out = "0.6.9"; }
     { case = "8.12"; out = "0.6.8"; }

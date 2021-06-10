@@ -11,10 +11,10 @@
 , buildIde ? true
 , glib, gnome, wrapGAppsHook
 , csdp ? null
-, version, coq-version ? null,
+, version ? null, origin ? null, coq-version ? null,
 }@args:
-let lib' = lib; in
-let lib = import ../../../../build-support/coq/extra-lib.nix {lib = lib';}; in
+let lib = import ../../../../build-support/coq/extra-lib.nix
+  {inherit (args) lib;}; in
 with builtins; with lib;
 let
   release = {
@@ -48,17 +48,18 @@ let
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
     { inherit lib stdenv fetchzip; }
-    { inherit release releaseRev; location = { owner = "coq"; repo = "coq";}; }
-    args.version;
-  version = fetched.version;
-  coq-version = args.coq-version or (if version != "dev" then versions.majorMinor version else "dev");
-  versionAtLeast = v: (coq-version == "dev") || (lib.versionAtLeast coq-version v);
-  ideFlags = optionalString (buildIde && !versionAtLeast "8.10")
+    { inherit release releaseRev; combined = true;
+      location = { owner = "coq"; repo = "coq";}; }
+    { inherit origin version; pname = "coq"; };
+  coq-version = args.coq-version or (versions.majorMinor fetched.version);
+  coqAtLeast = lib.versionAtLeast coq-version;
+  ideFlags = optionalString (buildIde && !coqAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
+  buildIde = args.buildIde or (!(stdenv.isDarwin && coqAtLeast "8.10"));
   ocamlPackages = if !isNull customOCamlPackages then customOCamlPackages
     else with versions; switch coq-version [
       { case = range "8.11" "8.13"; out = ocamlPackages_4_10; }
@@ -66,9 +67,9 @@ let
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
     ] ocamlPackages_4_10;
   ocamlBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
-    ++ optional (!versionAtLeast "8.10") ocamlPackages.camlp5
-    ++ optional (!versionAtLeast "8.13") ocamlPackages.num
-    ++ optional (versionAtLeast "8.13") ocamlPackages.zarith;
+    ++ optional (!coqAtLeast "8.10") ocamlPackages.camlp5
+    ++ optional (!coqAtLeast "8.13") ocamlPackages.num
+    ++ optional (coqAtLeast "8.13") ocamlPackages.zarith;
 self = stdenv.mkDerivation {
   pname = "coq";
   inherit (fetched) version src;
@@ -124,10 +125,10 @@ self = stdenv.mkDerivation {
     '';
   };
 
-  nativeBuildInputs = [ pkg-config ] ++ optional (!versionAtLeast "8.6") gnumake42;
+  nativeBuildInputs = [ pkg-config ] ++ optional (!coqAtLeast "8.6") gnumake42;
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
-      (if versionAtLeast "8.10"
+      (if coqAtLeast "8.10"
        then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme wrapGAppsHook ]
        else [ ocamlPackages.lablgtk ]);
 
@@ -150,7 +151,7 @@ self = stdenv.mkDerivation {
     addEnvHooks "$targetOffset" addCoqPath
   '';
 
-  preConfigure = if versionAtLeast "8.10" then ''
+  preConfigure = if coqAtLeast "8.10" then ''
     patchShebangs dev/tools/
   '' else ''
     configureFlagsArray=(

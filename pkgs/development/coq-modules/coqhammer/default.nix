@@ -1,7 +1,7 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
-  inherit version;
+  inherit version origin;
   pname = "coqhammer";
   owner = "lukaszcz";
   defaultVersion = with versions; switch coq.coq-version [

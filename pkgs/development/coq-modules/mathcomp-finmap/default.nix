@@ -1,11 +1,11 @@
-{ coq, mkCoqDerivation, mathcomp, lib, version ? null }:
+{ coq, mkCoqDerivation, mathcomp, lib, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "finmap";
   owner = "math-comp";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
       { cases = [ (isGe "8.10")          (range "1.11" "1.12") ]; out = "1.5.1"; }
       { cases = [ (range "8.7" "8.11")   "1.11.0" ];              out = "1.5.0"; }

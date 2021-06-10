@@ -1,9 +1,9 @@
-{ lib, mkCoqDerivation, which, coq, coq-elpi, version ? null }:
+{ lib, mkCoqDerivation, which, coq, coq-elpi, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "hierarchy-builder";
   owner = "math-comp";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = isGe "8.12";         out = "1.0.0"; }
     { case = range "8.11" "8.12"; out = "0.10.0"; }

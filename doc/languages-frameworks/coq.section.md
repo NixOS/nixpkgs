@@ -4,7 +4,7 @@
 
 The Coq derivation is overridable through the `coq.override overrides`, where overrides is an attribute set which contains the arguments to override. We recommend overriding either of the following
 
-* `version` (optional, defaults to the latest version of Coq selected for nixpkgs, see `pkgs/top-level/coq-packages` to witness this choice), which follows the conventions explained in the `coqPackages` section below,
+* `origin` and `version` (optional, defaults to the latest version of Coq selected for nixpkgs, see `pkgs/top-level/coq-packages` to witness this choice), which follows the conventions explained in the `coqPackages` section below,
 * `customOCamlPackage` (optional, defaults to `null`, which lets Coq choose a version automatically), which can be set to any of the ocaml packages attribute of `ocaml-ng` (such as `ocaml-ng.ocamlPackages_4_10` which is the default for Coq 8.11 for example).
 * `coq-version` (optional, defaults to the short version e.g. "8.10"), is a version number of the form "x.y" that indicates which Coq's version build behavior to mimic when using a source which is not a release. E.g. `coq.override { version = "d370a9d1328a4e1cdb9d02ee032f605a9d94ec7a"; coq-version = "8.10"; }`.
 
@@ -13,14 +13,18 @@ The Coq derivation is overridable through the `coq.override overrides`, where ov
 The recommended way of defining a derivation for a Coq library, is to use the `coqPackages.mkCoqDerivation` function, which is essentially a specialization of `mkDerivation` taking into account most of the specifics of Coq libraries. The following attributes are supported:
 
 * `pname` (required) is the name of the package,
-* `version` (optional, defaults to `null`), is the version to fetch and build,
-  this attribute is interpreted in several ways depending on its type and pattern:
+* `origin` (optional, defaults to `null`), is the version to fetch and build, this attribute is interpreted in several ways depending on its type and pattern:
   * if it is a known released version string, i.e. from the `release` attribute below, the according release is picked, and the `version` attribute of the resulting derivation is set to this release string,
   * if it is a majorMinor `"x.y"` prefix of a known released version (as defined above), then the latest `"x.y.z"` known released version is selected (for the ordering given by `versionAtLeast`),
-  * if it is a path or a string representing an absolute path (i.e. starting with `"/"`), the provided path is selected as a source, and the `version` attribute of the resulting derivation is set to `"dev"`,
-  * if it is a string of the form `owner:branch` then it tries to download the `branch` of owner `owner` for a project of the same name using the same vcs, and the `version` attribute of the resulting derivation is set to `"dev"`, additionally if the owner is not provided (i.e. if the `owner:` prefix is missing), it defaults to the original owner of the package (see below),
-  * if it is a string of the form `"#N"`, and the domain is github, then it tries to download the current head of the pull request `#N` from github,
-* `defaultVersion` (optional). Coq libraries may be compatible with some specific versions of Coq only. The `defaultVersion` attribute is used when no `version` is provided (or if `version = null`) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a `coq` version number but also possibly on other packages versions (e.g. `mathcomp`). If its value ends up to be `null`, the package is marked for removal in end-user `coqPackages` attribute set.
+  * if it is a path or a string representing an absolute path (i.e. starting with `"/"`), the provided path is selected as a source, and the `version` attribute of the resulting derivation is set to `"999"` (to ensure it is greater than any version, use `version` below if you want to change that),
+  * if it is a string of the form `branch`, `owner:branch` or `owner@repo:branch` then it tries to download the `branch` of owner `owner` for a project of the name `repo`, and the `version` attribute of the resulting derivation is set to `"999"` (to ensure it is greater than any version, use `version` below if you want to change that). If `owner` or `repo` is not provided (i.e. if the `owner:` or `owner@repo:` prefix is missing), it defaults to the original `owner` and the original `repo` of the package (see below),
+  * if it is a string of the form `"#N"`, and the domain is github, then it tries to download the current head of the pull request `#N` from github, and the `version` attribute of the resulting derivation is set to `"999"` (to ensure it is greater than any version, use `version` below if you want to change that),
+  * if `null` then `version` is used with the same semantics
+* `version` (optional, defaults to `null`),
+  * if `origin` is not `null`, it is used to set the final derivation `version`,
+  * if `origin` is `null`, it is used exactly in the same way as `origin`, for backward compatibility reasons. This is discouraged and you will get a warning, unless the provided `version` matches exactly the computed one, which happens only when using a specific release,
+  * if both `origin` and `version` are null, then `defaultVersion` is used.
+* `defaultVersion` (optional): Coq libraries may be compatible with some specific versions of Coq only. The `defaultVersion` attribute is used when no `version` or `origin` is provided (or if `version = origin = null`) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a `coq` version number but also possibly on other packages versions (e.g. `mathcomp`). If its value ends up to be `null`, the package is marked for removal in end-user `coqPackages` attribute set.
 * `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `sha256` attribute (you may put the empty string `""` in order to automatically insert a fake sha256, this will trigger an error which will allow you to find the correct sha256), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
 * `fetcher` (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an `owner`, a `repo`, a `rev`, and a `sha256` and returns an attribute set with a `version` and `src`.
 * `repo` (optional, defaults to the value of `pname`),
@@ -41,10 +45,18 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
 
 It also takes other standard `mkDerivation` attributes, they are added as such, except for `meta` which extends an automatically computed `meta` (where the `platform` is the same as `coq` and the homepage is automatically computed).
 
+The builder `mkCoqDerivation` can also by applied to a function taking an attribute set and returning one. The main reason for using this feature is to get the version number as computed by `mkCoqDerivation`, as in:
+```
+cat $(nix-build -E 'with import ./. {}; coqPackages.mkCoqDerivation (computed: {
+  pname = "test"; src = mktemp; defaultVersion = "1.0";
+  VERSION = computed.version; installPhase = "echo $VERSION > $out";})')
+```
+will return `999`. This does a fixpoint computation, so do not use an attribute of `computed` in order to alter the outcome of the same attribute or you will get an infinite recursion.  For a concrete example see `coqPackage.mathcomp-analysis`.
+
 Here is a simple package example. It is a pure Coq library, thus it depends on Coq. It builds on the Mathematical Components library, thus it also takes some `mathcomp` derivations as `extraBuildInputs`.
 
 ```nix
-{ lib, mkCoqDerivation, version ? null
+{ lib, mkCoqDerivation, version ? null, origin ? null
 , coq, mathcomp, mathcomp-finmap, mathcomp-bigenough }:
 with lib; mkCoqDerivation {
   /* namePrefix leads to e.g. `name = coq8.11-mathcomp1.11-multinomials-1.5.2` */
