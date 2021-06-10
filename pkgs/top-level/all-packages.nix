@@ -6556,6 +6556,8 @@ in
   # Needed for apps that still depend on the unstable verison of the library (not libhandy-1)
   libhandy_0 = callPackage ../development/libraries/libhandy/0.x.nix { };
 
+  libgmpris = callPackage ../development/libraries/libgmpris { };
+
   libgumath = callPackage ../development/libraries/libgumath { };
 
   libinsane = callPackage ../development/libraries/libinsane { };
