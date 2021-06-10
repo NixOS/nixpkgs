@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     # See https://www.aliza-dicom-viewer.com/download
     urls = [
-      "https://drive.google.com/uc?export=download&id=1-AXa3tjy_onecW2k7ftjAQl0KGTb0B1Y"
+      "https://www.dropbox.com/s/py0w8kqg3xjvmac/aliza-1.98.57-2.x86_64.rpm?raw=1"
       "https://web.archive.org/web/20210327224315/https://doc-0s-0s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/1lgjid9ti29rdf5ebmd7o58iqhs3gfpo/1616884950000/16072287944266838401/*/1-AXa3tjy_onecW2k7ftjAQl0KGTb0B1Y?e=download"
     ];
     sha256 = "01qk2gadmc24pmfdnmpiz7vgfiqkvhznyq9rsr153frscg76gc9b";
