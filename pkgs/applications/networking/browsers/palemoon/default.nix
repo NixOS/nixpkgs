@@ -5,7 +5,7 @@
 , lib
 , fetchFromGitHub
 , writeScript
-, alsaLib
+, alsa-lib
 , autoconf213
 , cairo
 , desktop-file-utils
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     cairo
     dbus
     dbus-glib

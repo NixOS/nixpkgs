@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl
 , dpkg
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -46,7 +46,7 @@
 let
 
 rpath = lib.makeLibraryPath [
-  alsaLib
+  alsa-lib
   at-spi2-atk
   at-spi2-core
   atk

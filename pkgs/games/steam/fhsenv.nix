@@ -136,7 +136,7 @@ in buildFHSUserEnv rec {
     libGLU
     libuuid
     libbsd
-    alsaLib
+    alsa-lib
 
     # Loop Hero
     libidn2

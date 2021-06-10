@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, alsaLib }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, alsa-lib }:
 
 mkDerivation rec {
   version = "1.5.1";
@@ -13,7 +13,7 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib qttools
+    alsa-lib qttools
   ];
   nativeBuildInputs = [ cmake ];
 

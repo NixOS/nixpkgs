@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
-, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
+, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
 , cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
 , systemd, libnotify, libdbusmenu, libpulseaudio
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     at-spi2-core
     atk

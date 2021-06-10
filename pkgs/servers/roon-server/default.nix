@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , alsaUtils
 , autoPatchelfHook
 , cifs-utils
@@ -23,7 +23,7 @@
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     alsaUtils
     cifs-utils
     ffmpeg

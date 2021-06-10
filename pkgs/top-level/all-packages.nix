@@ -20103,7 +20103,7 @@ in
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
   alsa-firmware = callPackage ../os-specific/linux/alsa-project/alsa-firmware { };
-  alsaLib = callPackage ../os-specific/linux/alsa-project/alsa-lib { };
+  alsa-lib = callPackage ../os-specific/linux/alsa-project/alsa-lib { };
   alsaPlugins = callPackage ../os-specific/linux/alsa-project/alsa-plugins { };
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-project/alsa-plugins/wrapper.nix { };
   alsaUtils = callPackage ../os-specific/linux/alsa-project/alsa-utils { fftw = fftwFloat; };
@@ -23342,7 +23342,7 @@ in
     libXaw = xorg.libXaw;
     Xaw3d = null;
     gconf = null;
-    alsaLib = null;
+    alsa-lib = null;
     acl = null;
     gpm = null;
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;

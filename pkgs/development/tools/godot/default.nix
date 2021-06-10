@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, scons, pkg-config, udev, libX11
 , libXcursor , libXinerama, libXrandr, libXrender, libpulseaudio
 , libXi, libXext, libXfixes, freetype, openssl
-, alsaLib, libGLU, zlib, yasm
+, alsa-lib, libGLU, zlib, yasm
 , withUdev ? true
 }:
 
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     scons udev libX11 libXcursor libXinerama libXrandr libXrender
-    libXi libXext libXfixes freetype openssl alsaLib libpulseaudio
+    libXi libXext libXfixes freetype openssl alsa-lib libpulseaudio
     libGLU zlib yasm
   ];
 

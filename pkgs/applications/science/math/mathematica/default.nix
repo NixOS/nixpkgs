@@ -4,7 +4,7 @@
 , requireFile
 , callPackage
 , makeWrapper
-, alsaLib
+, alsa-lib
 , dbus
 , fontconfig
 , freetype
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     coreutils
     patchelf
     makeWrapper
-    alsaLib
+    alsa-lib
     coreutils
     dbus
     fontconfig

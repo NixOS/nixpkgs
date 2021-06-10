@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, expat, glib, libjack2, libXext, libX11, libpng
+{ lib, stdenv, fetchurl, alsa-lib, expat, glib, libjack2, libXext, libX11, libpng
 , libpthreadstubs, libsmf, libsndfile, lv2, pkg-config, zita-resampler
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    alsaLib expat glib libjack2 libXext libX11 libpng libpthreadstubs
+    alsa-lib expat glib libjack2 libXext libX11 libpng libpthreadstubs
     libsmf libsndfile lv2 zita-resampler
   ];
 

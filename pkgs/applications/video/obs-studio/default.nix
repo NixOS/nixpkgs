@@ -30,7 +30,7 @@
 , python3
 
 , alsaSupport ? stdenv.isLinux
-, alsaLib
+, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
@@ -77,7 +77,7 @@ in mkDerivation rec {
     mbedtls
   ]
   ++ optionals scriptingSupport [ luajit swig python3 ]
-  ++ optional alsaSupport alsaLib
+  ++ optional alsaSupport alsa-lib
   ++ optional pulseaudioSupport libpulseaudio
   ++ optional pipewireSupport pipewire;
 

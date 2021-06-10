@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, libjack2, alsaLib, freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
+, libjack2, alsa-lib, freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
 }:
 
 let
@@ -57,7 +57,7 @@ in  stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    libjack2 alsaLib freetype libX11 libXrandr libXinerama libXext
+    libjack2 alsa-lib freetype libX11 libXrandr libXinerama libXext
     libXcursor
   ];
 

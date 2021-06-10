@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, autoreconfHook
-, openssl, libopus, alsaLib, libpulseaudio
+, openssl, libopus, alsa-lib, libpulseaudio
 }:
 
 with lib;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl libopus alsaLib libpulseaudio ];
+  buildInputs = [ openssl libopus alsa-lib libpulseaudio ];
   enableParallelBuilding = true;
 
   meta = {

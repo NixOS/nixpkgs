@@ -17,7 +17,7 @@
 , dbus
 , nss
 , nspr
-, alsaLib
+, alsa-lib
 , cups
 , expat
 , udev
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     gnome2.GConf
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     expat
     stdenv.cc.cc

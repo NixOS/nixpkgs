@@ -6,7 +6,7 @@
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
 , gtest, ncurses, spdlog
 , libxml2, systemd
-, alsaLib, libGLU, libGL, fontconfig, freetype, ftgl
+, alsa-lib, libGLU, libGL, fontconfig, freetype, ftgl
 , libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
@@ -114,7 +114,7 @@ in stdenv.mkDerivation {
       gettext pcre-cpp yajl fribidi libva libdrm
       openssl gperf tinyxml2 taglib libssh
       gtest ncurses spdlog
-      alsaLib libGL libGLU fontconfig freetype ftgl
+      alsa-lib libGL libGLU fontconfig freetype ftgl
       libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
