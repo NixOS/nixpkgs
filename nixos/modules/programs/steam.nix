@@ -44,7 +44,14 @@ in {
 
     hardware.steam-hardware.enable = true;
 
-    environment.systemPackages = [ steam steam.run ];
+    environment.systemPackages = [
+      (steam.override {
+        extraProfile = ''
+          export VK_ICD_FILENAMES=${config.hardware.nvidia.package}/share/vulkan/icd.d/nvidia_icd.json:${config.hardware.nvidia.package.lib32}/share/vulkan/icd.d/nvidia_icd32.json:$VK_ICD_FILENAMES
+        '';
+      })
+      steam.run
+    ];
 
     networking.firewall = lib.mkMerge [
       (mkIf cfg.remotePlay.openFirewall {
