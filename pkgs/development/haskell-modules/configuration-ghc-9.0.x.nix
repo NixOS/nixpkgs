@@ -104,4 +104,7 @@ self: super: {
   # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
   memory = super.memory_0_16_0;
 
+  # 0.29 introduced support for GHC 9.0.x, stackage has 0.28
+  cryptonite = super.cryptonite_0_29;
+
 }
