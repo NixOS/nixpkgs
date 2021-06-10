@@ -13,7 +13,7 @@
 , libXi
 , libXext
 , libGLU
-, alsaLib
+, alsa-lib
 , fontconfig
 , AVFoundation
 , Carbon
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXrandr libXinerama libXcursor libXi libXext alsaLib fontconfig libGLU ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXrandr libXinerama libXcursor libXi libXext alsa-lib fontconfig libGLU ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ AVFoundation Carbon Cocoa CoreAudio Kernel OpenGL ];
 
   installPhase = ''

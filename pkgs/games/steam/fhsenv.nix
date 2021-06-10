@@ -98,6 +98,7 @@ in buildFHSUserEnv rec {
     xorg.libXfixes
     libGL
     libva
+    pipewire.lib
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -135,7 +136,7 @@ in buildFHSUserEnv rec {
     libGLU
     libuuid
     libbsd
-    alsaLib
+    alsa-lib
 
     # Loop Hero
     libidn2

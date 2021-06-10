@@ -59,6 +59,15 @@ Follow these steps to backport a change into a release branch in compliance with
 5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-20.09`) as the target branch of the pull request, and link to the pull request in which the original change was comitted to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[20.09]`.
 6. When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request. This way maintainers can keep track of missing backports easier.
 
+## Criteria for Backporting changes
+
+Anything that does not cause user or downstream dependency regressions can be backported. This includes:
+- New Packages / Modules
+- Security / Patch updates
+- Version updates which include new functionality (but no breaking changes)
+- Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
+- Security critical applications (E.g. `firefox`)
+
 ## Generating 21.11 Release Notes
 
 Documentation in nixpkgs is transitioning to a markdown-centric workflow. Release notes now require a translation step to convert from markdown to a compatible docbook document.

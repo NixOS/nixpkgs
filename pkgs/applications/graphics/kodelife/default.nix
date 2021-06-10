@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchzip
-, alsaLib
+, alsa-lib
 , glib
 , gst_all_1
 , libGLU, libGL
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   preFixup = let
     libPath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
-      alsaLib
+      alsa-lib
       glib
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-base

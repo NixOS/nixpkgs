@@ -44,6 +44,11 @@ buildPecl {
     '')
   ];
 
-  meta.broken = lib.versionAtLeast php.version "8.0";
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "Couchbase Server PHP extension";
+    license = licenses.asl20;
+    homepage = "https://docs.couchbase.com/php-sdk/current/project-docs/sdk-release-notes.html";
+    maintainers = teams.php.members;
+    broken = versionAtLeast php.version "8.0";
+  };
 }

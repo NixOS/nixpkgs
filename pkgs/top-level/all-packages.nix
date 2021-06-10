@@ -176,6 +176,8 @@ in
 
   alda = callPackage ../development/interpreters/alda { };
 
+  althttpd = callPackage ../servers/althttpd { };
+
   among-sus = callPackage ../games/among-sus { };
 
   ankisyncd = callPackage ../servers/ankisyncd { };
@@ -1274,6 +1276,8 @@ in
   automirror = callPackage ../tools/misc/automirror { };
 
   barman = python3Packages.callPackage ../tools/misc/barman { };
+
+  base16-universal-manager = callPackage ../applications/misc/base16-universal-manager { };
 
   bashate = python3Packages.callPackage ../development/tools/bashate { };
 
@@ -3032,6 +3036,8 @@ in
   nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
 
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
+
+  notemap = callPackage ../tools/networking/notemap { };
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
 
@@ -8314,6 +8320,8 @@ in
 
   rnnoise-plugin = callPackage ../development/libraries/rnnoise-plugin {};
 
+  rnp = callPackage ../tools/security/rnp { };
+
   rnv = callPackage ../tools/text/xml/rnv { };
 
   rosie = callPackage ../tools/text/rosie { };
@@ -9346,7 +9354,7 @@ in
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
-  twtxt = callPackage ../applications/networking/twtxt { };
+  twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
 
   txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
 
@@ -10107,6 +10115,13 @@ in
 
   zenith = callPackage ../tools/system/zenith {
     inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
+
+  # Nvidia support does not require any propietary libraries, so CI can build it.
+  # Note that when enabling this unconditionally, non-nvidia users will always have an empty "GPU" section.
+  zenith-nvidia = callPackage ../tools/system/zenith {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+    nvidiaSupport = true;
   };
 
   zerotierone = callPackage ../tools/networking/zerotierone { };
@@ -11103,8 +11118,6 @@ in
 
   fsharp = callPackage ../development/compilers/fsharp { };
 
-  fsharp41 = callPackage ../development/compilers/fsharp41 { };
-
   fstar = callPackage ../development/compilers/fstar {
     ocamlPackages = ocaml-ng.ocamlPackages_4_07;
   };
@@ -11152,6 +11165,10 @@ in
   gox = callPackage ../development/tools/gox { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
+
+  gwe = callPackage ../tools/misc/gwe {
+    nvidia_x11 = linuxPackages.nvidia_x11;
+  };
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
@@ -13745,6 +13762,8 @@ in
   phantomjs = callPackage ../development/tools/phantomjs { };
 
   phantomjs2 = libsForQt514.callPackage ../development/tools/phantomjs2 { };
+
+  picotool = callPackage ../development/tools/picotool { };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
@@ -17518,6 +17537,8 @@ in
     physfs_2
     physfs;
 
+  pico-sdk = callPackage ../development/libraries/pico-sdk { };
+
   pipelight = callPackage ../tools/misc/pipelight {
     stdenv = stdenv_32bit;
     wine-staging = pkgsi686Linux.wine-staging;
@@ -17612,7 +17633,9 @@ in
 
   protozero = callPackage ../development/libraries/protozero { };
 
-  flatbuffers = callPackage ../development/libraries/flatbuffers { };
+  flatbuffers = flatbuffers_2_0;
+  flatbuffers_2_0 = callPackage ../development/libraries/flatbuffers/2.0.nix { };
+  flatbuffers_1_12 = callPackage ../development/libraries/flatbuffers/1.12.nix { };
 
   nanopb = callPackage ../development/libraries/nanopb { };
 
@@ -19102,7 +19125,10 @@ in
 
   engelsystem = callPackage ../servers/web-apps/engelsystem { php = php74; };
 
-  envoy = callPackage ../servers/http/envoy { };
+  envoy = callPackage ../servers/http/envoy {
+    go = go_1_15;
+    jdk = openjdk11;
+  };
 
   etcd = callPackage ../servers/etcd { };
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
@@ -19684,6 +19710,7 @@ in
     postgresql_11
     postgresql_12
     postgresql_13
+    postgresql_14
   ;
   postgresql = postgresql_11.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
@@ -20075,23 +20102,17 @@ in
 
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
-  alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
-
-  alsaLib = callPackage ../os-specific/linux/alsa-lib { };
-
-  alsaPlugins = callPackage ../os-specific/linux/alsa-plugins { };
-
-  alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
-
-  alsaUtils = callPackage ../os-specific/linux/alsa-utils {
+  alsa-firmware = callPackage ../os-specific/linux/alsa-project/alsa-firmware { };
+  alsa-lib = callPackage ../os-specific/linux/alsa-project/alsa-lib { };
+  alsa-oss = callPackage ../os-specific/linux/alsa-project/alsa-oss { };
+  alsa-plugins = callPackage ../os-specific/linux/alsa-project/alsa-plugins { };
+  alsa-plugins-wrapper = callPackage ../os-specific/linux/alsa-project/alsa-plugins/wrapper.nix { };
+  alsa-tools = callPackage ../os-specific/linux/alsa-project/alsa-tools { };
+  alsa-topology-conf = callPackage ../os-specific/linux/alsa-project/alsa-topology-conf { };
+  alsa-ucm-conf = callPackage ../os-specific/linux/alsa-project/alsa-ucm-conf { };
+  alsa-utils = callPackage ../os-specific/linux/alsa-project/alsa-utils {
     fftw = fftwFloat;
   };
-  alsaOss = callPackage ../os-specific/linux/alsa-oss { };
-  alsaTools = callPackage ../os-specific/linux/alsa-tools { };
-
-  alsa-ucm-conf = callPackage ../os-specific/linux/alsa-ucm-conf { };
-
-  alsa-topology-conf = callPackage ../os-specific/linux/alsa-topology-conf { };
 
   inherit (callPackage ../misc/arm-trusted-firmware {})
     buildArmTrustedFirmware
@@ -20550,13 +20571,6 @@ in
     ];
   };
 
-  linux_5_11 = callPackage ../os-specific/linux/kernel/linux-5.11.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-    ];
-  };
-
   linux_5_12 = callPackage ../os-specific/linux/kernel/linux-5.12.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -20806,6 +20820,8 @@ in
 
     v86d = callPackage ../os-specific/linux/v86d { };
 
+    veikk-linux-driver = callPackage ../os-specific/linux/veikk-linux-driver { };
+
     vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
 
     vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
@@ -20868,7 +20884,6 @@ in
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
-  linuxPackages_5_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_11);
   linuxPackages_5_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_12);
 
   # When adding to the list above:
@@ -20902,7 +20917,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_11;
+      linux_latest_for_hardened = pkgs.linux_5_12;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
@@ -23329,7 +23344,7 @@ in
     libXaw = xorg.libXaw;
     Xaw3d = null;
     gconf = null;
-    alsaLib = null;
+    alsa-lib = null;
     acl = null;
     gpm = null;
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
@@ -24167,7 +24182,7 @@ in
   gv = callPackage ../applications/misc/gv { };
 
   gvisor = callPackage ../applications/virtualization/gvisor {
-    go = go_1_14;
+    go = go_1_16;
   };
 
   gvisor-containerd-shim = callPackage ../applications/virtualization/gvisor/containerd-shim.nix { };
@@ -25665,8 +25680,6 @@ in
   nanorc = callPackage ../applications/editors/nano/nanorc { };
 
   navipowm = callPackage ../applications/misc/navipowm { };
-
-  navit = libsForQt5.callPackage ../applications/misc/navit { };
 
   netbeans = callPackage ../applications/editors/netbeans {
     jdk = jdk11;
@@ -30213,7 +30226,9 @@ in
 
   herwig = callPackage ../development/libraries/physics/herwig { };
 
-  lhapdf = callPackage ../development/libraries/physics/lhapdf { };
+  lhapdf = callPackage ../development/libraries/physics/lhapdf {
+    python = python3;
+  };
 
   mela = callPackage ../development/libraries/physics/mela { };
 
@@ -31174,6 +31189,7 @@ in
     terraform_0_13
     terraform_0_14
     terraform_0_15
+    terraform_1_0_0
     terraform_plugins_test
     ;
 

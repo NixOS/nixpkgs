@@ -20,11 +20,13 @@ AndrewRadev/sideways.vim@main
 AndrewRadev/splitjoin.vim@main
 andsild/peskcolor.vim
 andviro/flake8-vim
+andweeb/presence.nvim
 andymass/vim-matchup
 andys8/vim-elm-syntax
 antoinemadec/coc-fzf
 ap/vim-css-color
 arcticicestudio/nord-vim
+arthurxavierx/vim-unicoder
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 axelf4/vim-strip-trailing-whitespace
@@ -157,6 +159,7 @@ GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
 gioele/vim-autoswap
+gleam-lang/gleam.vim
 glepnir/dashboard-nvim
 glepnir/galaxyline.nvim@main
 glepnir/lspsaga.nvim@main

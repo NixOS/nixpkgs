@@ -1,5 +1,5 @@
-{ alsaLib
-, alsaUtils
+{ alsa-lib
+, alsa-utils
 , autoPatchelfHook
 , cifs-utils
 , fetchurl
@@ -23,8 +23,8 @@
   };
 
   buildInputs = [
-    alsaLib
-    alsaUtils
+    alsa-lib
+    alsa-utils
     cifs-utils
     ffmpeg
     freetype
@@ -48,7 +48,7 @@
         ln -sf $out/RoonMono/bin/mono-sgen $out/RoonMono/bin/${builtins.baseNameOf bin}
       '';
       wrapFix = bin: ''
-        wrapProgram ${bin} --prefix PATH : ${lib.makeBinPath [ alsaUtils cifs-utils ffmpeg ]}
+        wrapProgram ${bin} --prefix PATH : ${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}
       '';
     in
     ''

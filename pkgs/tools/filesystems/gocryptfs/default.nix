@@ -1,27 +1,41 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , openssl
 , pandoc
 , pkg-config
+, libfido2
 }:
+
+let
+  # pandoc is currently broken on aarch64-darwin
+  # because of missing ghc
+  brokenPandoc = stdenv.isDarwin && stdenv.isAarch64;
+in
 
 buildGoModule rec {
   pname = "gocryptfs";
-  version = "1.8.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1acalwrr5xqhpqca3gypj0s68w6vpckxmg5z5gfgh8wx6nqx4aw9";
+    sha256 = "0wiagmym8mwi0vpvrs5ryn3zjwha8ilh7xkavvkd1gqd5laln0kp";
   };
 
-  runVend = true;
-  vendorSha256 = "0z3y51sgr1rmr23jpc5h5d5lw14p3qzv48rc7zj7qa4rd5cfhsgi";
+  vendorSha256 = "10az8n7z4rhsk1af2x6v3pmxg4zp7c9cal35ily8bdzzcb9cpgs0";
 
-  nativeBuildInputs = [ pandoc pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals (!brokenPandoc) [
+    pandoc
+  ];
+
   buildInputs = [ openssl ];
+
+  propagatedBuildInputs = [ libfido2 ];
 
   buildFlagsArray = ''
     -ldflags=
@@ -32,9 +46,10 @@ buildGoModule rec {
 
   subPackages = [ "." "gocryptfs-xray" "contrib/statfs" ];
 
-  postBuild = ''
+  postBuild = lib.optionalString (!brokenPandoc) ''
     pushd Documentation/
     mkdir -p $out/share/man/man1
+    # taken from Documentation/MANPAGE-render.bash
     pandoc MANPAGE.md -s -t man -o $out/share/man/man1/gocryptfs.1
     pandoc MANPAGE-XRAY.md -s -t man -o $out/share/man/man1/gocryptfs-xray.1
     pandoc MANPAGE-STATFS.md -s -t man -o $out/share/man/man1/statfs.1

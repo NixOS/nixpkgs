@@ -3,7 +3,7 @@
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl
 , # glx
-  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsaLib
+  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsa-lib
 , # sdl
   SDL2
 
@@ -64,7 +64,7 @@ let
 
     nativeBuildInputs = [ unzip ];
     buildInputs = [ libjpeg zlib libvorbis curl ]
-      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsaLib.dev ]
+      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
       ++ lib.optional withSDL [ SDL2.dev ];
 
     sourceRoot = "Xonotic/source/darkplaces";

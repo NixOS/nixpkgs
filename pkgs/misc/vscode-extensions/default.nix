@@ -615,7 +615,7 @@ let
         };
       };
 
-      JakeBecker.elixir-ls = buildVscodeMarketplaceExtension {
+      jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
@@ -662,6 +662,18 @@ let
           publisher = "jock";
           version = "1.4.4";
           sha256 = "0kn2ic7pgbd4rbvzpsxfwyiwxa1iy92l0h3jsppxc8gk8xbqm2nc";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      johnpapa.vscode-peacock = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-peacock";
+          publisher = "johnpapa";
+          version = "3.9.1";
+          sha256 = "1g7apzzgfm8s9sjavhwr8jpf9slhq8b9jfkww3q5n41mzzx8m94p";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -823,6 +835,18 @@ let
           publisher = "naumovs";
           version = "2.3.0";
           sha256 = "1syzf43ws343z911fnhrlbzbx70gdn930q67yqkf6g0mj8lf2za2";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      octref.vetur = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vetur";
+          publisher = "octref";
+          version = "0.34.1";
+          sha256 = "09w3bik1mxs7qac67wgrc58vl98ham3syrn2anycpwd7135wlpby";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1149,7 +1173,7 @@ let
         };
       };
 
-      VSpaceCode.vspacecode = buildVscodeMarketplaceExtension {
+      vspacecode.vspacecode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vspacecode";
           publisher = "VSpaceCode";
@@ -1161,7 +1185,7 @@ let
         };
       };
 
-      VSpaceCode.whichkey = buildVscodeMarketplaceExtension {
+      vspacecode.whichkey = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "whichkey";
           publisher = "VSpaceCode";
@@ -1170,6 +1194,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      wix.vscode-import-cost = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-import-cost";
+          publisher = "wix";
+          version = "2.15.0";
+          sha256 = "0d3b6654cdck1syn74vmmd1jmgkrw5v4c4cyrhdxbhggkip732bc";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 

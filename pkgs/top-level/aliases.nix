@@ -40,8 +40,14 @@ mapAliases ({
   adobe_flex_sdk = apache-flex-sdk; # added 2018-06-01
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
-  alienfx = throw "alienfx has been removed."; # added 2019-12-08
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream."; # added 2020-11-30
+  alienfx = throw "alienfx has been removed."; # added 2019-12-08
+  alsaLib = alsa-lib; # added 2021-06-09
+  alsaOss = alsa-oss; # added 2021-06-10
+  alsaPlugins = alsa-plugins; # added 2021-06-10
+  alsaPluginWrapper = alsa-plugins-wrapper; # added 2021-06-10
+  alsaTools = alsa-tools; # added 2021-06-10
+  alsaUtils = alsa-utils; # added 2021-06-10
   amazon-glacier-cmd-interface = throw "amazon-glacier-cmd-interface has been removed due to it being unmaintained."; # added 2020-10-30
   ammonite-repl = ammonite; # added 2017-05-02
   amsn = throw "amsn has been removed due to being unmaintained."; # added 2020-12-09
@@ -237,6 +243,7 @@ mapAliases ({
   '';
   font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
+  fsharp41 = throw "fsharp41 has been removed, please use dotnet-sdk_5 or later";
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
   fusesmb = throw "fusesmb is abandoned by upstream"; # added 2019-10-15
@@ -482,6 +489,7 @@ mapAliases ({
   mxisd = throw "mxisd has been removed from nixpkgs as it has reached end of life, see https://github.com/kamax-matrix/mxisd/blob/535e0a5b96ab63cb0ddef90f6f42c5866407df95/EOL.md#end-of-life-notice . ma1sd may be a suitable alternative."; # added 2021-04-15
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
   nagiosPluginsOfficial = monitoring-plugins;
+  navit = throw "navit has been removed from nixpkgs, due to being unmaintained"; # added 2021-06-07
   ncat = nmap;  # added 2016-01-26
   netcat-openbsd = libressl.nc; # added 2018-04-25
   netease-cloud-music = throw "netease-cloud-music has been removed together with deepin"; # added 2020-08-31

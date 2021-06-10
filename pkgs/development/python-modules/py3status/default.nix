@@ -14,7 +14,7 @@
 , file
 , acpi
 , coreutils
-, alsaUtils
+, alsa-utils
 , i3
 , procps
 , lm_sensors
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     sed -i -e "s|\[\"acpi\"|\[\"${acpi}/bin/acpi\"|" py3status/modules/battery_level.py
     sed -i -e "s|notify-send|${libnotify}/bin/notify-send|" py3status/modules/battery_level.py
     sed -i -e "s|/usr/bin/whoami|${coreutils}/bin/whoami|" py3status/modules/external_script.py
-    sed -i -e "s|'amixer|'${alsaUtils}/bin/amixer|" py3status/modules/volume_status.py
+    sed -i -e "s|'amixer|'${alsa-utils}/bin/amixer|" py3status/modules/volume_status.py
     sed -i -e "s|'i3-nagbar|'${i3}/bin/i3-nagbar|" py3status/modules/pomodoro.py
     sed -i -e "s|'free|'${procps}/bin/free|" py3status/modules/sysdata.py
     sed -i -e "s|'sensors|'${lm_sensors}/bin/sensors|" py3status/modules/sysdata.py

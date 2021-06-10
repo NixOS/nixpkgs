@@ -2,7 +2,7 @@
 , replace, fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
+, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
 , gnome/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
@@ -68,9 +68,9 @@ let
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
-            (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
+            (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsa-lib zlib ])
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
-            ++ lib.optional alsaSupport alsaLib
+            ++ lib.optional alsaSupport alsa-lib
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk2 ];
 
@@ -302,10 +302,6 @@ let
         for ext in ${toString pkcs11Modules}; do
             ln -sLt $out/lib/mozilla/pkcs11-modules $ext/lib/mozilla/pkcs11-modules/*
         done
-
-        # For manpages, in case the program supplies them
-        mkdir -p $out/nix-support
-        echo ${browser} > $out/nix-support/propagated-user-env-packages
 
 
         #########################

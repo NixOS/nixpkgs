@@ -3400,6 +3400,8 @@ in {
 
   iniparse = callPackage ../development/python-modules/iniparse { };
 
+  injector = callPackage ../development/python-modules/injector { };
+
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
   inquirer = callPackage ../development/python-modules/inquirer { };
@@ -3839,6 +3841,10 @@ in {
   leveldb = callPackage ../development/python-modules/leveldb { };
 
   lexid = callPackage ../development/python-modules/lexid { };
+
+  lhapdf = toPythonModule (pkgs.lhapdf.override {
+    inherit python;
+  });
 
   libagent = callPackage ../development/python-modules/libagent { };
 
@@ -6394,6 +6400,8 @@ in {
 
   pyspinel = callPackage ../development/python-modules/pyspinel { };
 
+  pyspnego = callPackage ../development/python-modules/pyspnego { };
+
   pyspotify = callPackage ../development/python-modules/pyspotify { };
 
   pysptk = callPackage ../development/python-modules/pysptk { };
@@ -7783,6 +7791,8 @@ in {
   smart-open = callPackage ../development/python-modules/smart-open { };
 
   smartypants = callPackage ../development/python-modules/smartypants { };
+
+  smbprotocol = callPackage ../development/python-modules/smbprotocol { };
 
   smbus-cffi = callPackage ../development/python-modules/smbus-cffi { };
 

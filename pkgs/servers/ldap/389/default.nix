@@ -65,5 +65,8 @@ stdenv.mkDerivation rec {
     description = "Enterprise-class Open Source LDAP server for Linux";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    knownVulnerabilities = [
+      "CVE-2021-3514" # https://nvd.nist.gov/vuln/detail/CVE-2021-3514
+    ];
   };
 }

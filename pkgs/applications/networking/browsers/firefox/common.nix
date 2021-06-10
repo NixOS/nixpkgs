@@ -18,7 +18,7 @@
 
 ## optional libraries
 
-, alsaSupport ? stdenv.isLinux, alsaLib
+, alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
@@ -116,7 +116,9 @@ let
                 then overrideCC stdenv llvmPackages.clangUseLLVM
                 else stdenv;
 
-  nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss;
+  # Disable p11-kit support in nss until our cacert packages has caught up exposing CKA_NSS_MOZILLA_CA_POLICY
+  # https://github.com/NixOS/nixpkgs/issues/126065
+  nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss.override { useP11kit = false; };
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
   # RAM and the 32-bit memory space cannot handle that linking
@@ -178,7 +180,7 @@ buildStdenv.mkDerivation ({
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
     nspr nss_pkg
   ]
-  ++ lib.optional  alsaSupport alsaLib
+  ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport libkrb5
