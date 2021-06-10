@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, alsaLib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
+{lib, stdenv, fetchurl, alsa-lib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
 
 stdenv.mkDerivation rec {
   pname = "alsa-utils";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gettext makeWrapper ];
-  buildInputs = [ alsaLib ncurses libsamplerate fftw ];
+  buildInputs = [ alsa-lib ncurses libsamplerate fftw ];
 
   configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 

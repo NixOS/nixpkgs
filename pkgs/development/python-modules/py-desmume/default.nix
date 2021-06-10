@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, GitPython
 , libpcap, meson, ninja, pillow, pkg-config, pygobject3, SDL2
-, alsaLib, soundtouch, openal
+, alsa-lib, soundtouch, openal
 }:
 
 let
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     cp -R --no-preserve=mode ${desmume} __build_desmume
   '';
 
-  buildInputs = [ GitPython libpcap SDL2 alsaLib soundtouch openal ];
+  buildInputs = [ GitPython libpcap SDL2 alsa-lib soundtouch openal ];
   nativeBuildInputs = [ meson ninja pkg-config ];
   propagatedBuildInputs = [ pillow pygobject3 ];
 

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeDesktopItem
 , stdenv
-, alsaLib
+, alsa-lib
 , gcc-unwrapped
 , git
 , godot-export-templates
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     gcc-unwrapped.lib
     git
     libGLU

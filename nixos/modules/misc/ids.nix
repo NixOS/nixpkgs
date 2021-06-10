@@ -252,7 +252,7 @@ in
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
-      gale = 223;
+      # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22
@@ -562,7 +562,7 @@ in
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
-      gale = 223;
+      # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22

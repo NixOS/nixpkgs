@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, alsaLib
+, alsa-lib
 , dbus
 , glib
 , json_c
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     dbus
     glib
     json_c
