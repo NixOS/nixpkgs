@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  /* 
+  /*
     in preparation for the coming change of properties file parsing
     allowing for environment variable reading :
     > echo "${typedb-properties-patch}" > typedb-properties.patch
@@ -118,8 +118,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A distributed knowledge graph, a logical database to organise large and complex networks of data as one body of knowledge";
     longDescription = ''
-      TypeDB is a distributed knowledge graph: a logical database to organise large and complex networks of data as one body of knowledge. 
-      TypeDB provides the knowledge engineering tools for developers to easily leverage the power of Knowledge Representation and Automated 
+      TypeDB is a distributed knowledge graph: a logical database to organise large and complex networks of data as one body of knowledge.
+      TypeDB provides the knowledge engineering tools for developers to easily leverage the power of Knowledge Representation and Automated
       Reasoning when building complex systems. Ultimately, TypeDB serves as the knowledge-base foundation for intelligent systems.
     '';
     homepage = "https://www.grakn.ai/";
