@@ -34,10 +34,10 @@ let
     ---
     > JAVA_BIN=${openjdk}/bin/java
     32c32
-    <     which "$'' + "{JAVA_BIN}\" > /dev/null\n"+
-    "---\n"+
-    ">     ${which}/bin/which \"$" + "{JAVA_BIN}\" > /dev/null";
-  
+    <     which "$'' + "{JAVA_BIN}\" > /dev/null\n" +
+  "---\n" +
+  ">     ${which}/bin/which \"$" + "{JAVA_BIN}\" > /dev/null";
+
   typedb-properties-patch = ''
     19c19
     < server.data=server/data/
