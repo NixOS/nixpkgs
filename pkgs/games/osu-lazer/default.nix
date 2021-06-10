@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnetCorePackages, dotnetPackages, cacert
-, ffmpeg_4, alsa-lib, SDL2, lttng-ust, numactl, alsaPlugins
+, ffmpeg_4, alsa-lib, SDL2, lttng-ust, numactl, alsa-plugins
 }:
 
 let
