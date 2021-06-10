@@ -11679,6 +11679,16 @@
     github = "pulsation";
     githubId = 1838397;
   };
+  princemachiavelli = {
+    name = "Josh Hoffer";
+    email = "jhoffer@sansorgan.es";
+    github = "princemachiavelli";
+    githubId = 2730968;
+    keys = [{
+      longkeyid = "ed25519/0x83124F97A318EA18";
+      fingerprint = "DD54 130B ABEC B65C 1F6B  2A38 8312 4F97 A318 EA18";
+    }];
+  };
   ydlr = {
     name = "ydlr";
     email = "ydlr@ydlr.io";
