@@ -742,6 +742,19 @@ let
         };
       };
 
+      mads-hartmann.bash-ide-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "mads-hartmann";
+          name = "bash-ide-vscode";
+          version = "1.11.0";
+          sha256 = "1hq41fy2v1grjrw77mbs9k6ps6gncwlydm03ipawjnsinxc9rdkp";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
       mikestead.dotenv = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dotenv";
