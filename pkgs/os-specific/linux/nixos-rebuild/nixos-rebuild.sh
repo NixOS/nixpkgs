@@ -171,6 +171,7 @@ nixBuild() {
     else
         local instArgs=()
         local buildArgs=()
+        local drv=
 
         while [ "$#" -gt 0 ]; do
             local i="$1"; shift 1
@@ -197,7 +198,7 @@ nixBuild() {
             esac
         done
 
-        local drv="$(nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
+        drv="$(nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
@@ -217,6 +218,8 @@ nixFlakeBuild() {
         shift 1
         local evalArgs=()
         local buildArgs=()
+        local drv=
+
         while [ "$#" -gt 0 ]; do
             local i="$1"; shift 1
             case "$i" in
@@ -238,7 +241,7 @@ nixFlakeBuild() {
             esac
         done
 
-        local drv="$(nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildArgs[@]}")"
+        drv="$(nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildArgs[@]}")"
         if [ -a "$drv" ]; then
             NIX_SSHOPTS=$SSHOPTS nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
