@@ -24,7 +24,6 @@ fast=
 rollback=
 upgrade=
 upgrade_all=
-repair=
 profile=/nix/var/nix/profiles/system
 buildHost=
 targetHost=
@@ -59,10 +58,6 @@ while [ "$#" -gt 0 ]; do
       --upgrade-all)
         upgrade=1
         upgrade_all=1
-        ;;
-      --repair)
-        repair=1
-        extraBuildFlags+=("$i")
         ;;
       --max-jobs|-j|--cores|-I|--builders)
         j="$1"; shift 1
