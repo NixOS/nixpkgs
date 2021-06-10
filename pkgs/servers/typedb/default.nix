@@ -48,6 +48,13 @@ let
     ---
     > server.port=${server-port}
   '';
+  typedbWrapper = ''
+    [ -z "$TYPEDB_SERVER_DATA" ] && $TYPEDB_SERVER_DATA="${server-data}"
+    [ -z "$TYPEDB_SERVER_LOGS" ] && $TYPEDB_SERVER_LOGS="${server-logs}"
+    [ -z "$TYPEDB_SERVER_PORT" ] && $TYPEDB_SERVER_PORT="${server-port}"
+
+    ../typedb server --data $TYPEDB_SERVER_DATA --logs $TYPEDB_SERVER_LOGS --port $TYPEDB_SERVER_PORT
+  '';
 
 in
 stdenv.mkDerivation rec {
@@ -57,23 +64,28 @@ stdenv.mkDerivation rec {
   src = srcFolder;
 
   dontBuild = true;
+  #phases = [unpackPhase installPhase installCheckPhase];
+  unpackPhase = ''
+    echo "here"
+    ls
+    echo "here2"
+    if [[ "${system}" -eq "x86_64-linux" ]]; then
+      tar -xf typedb-all-linux-2.1.1.tar.gz
+    fi # the rest is already unpacked by fetchzip
+  '';
 
   installPhase = ''
-    #echo "here"
-    #ls
-    #echo "here2"
-    #if [[ "${system}" -eq "x86_64-linux" ]]; then
-    #  tar -xf typedb-all-linux-2.1.1.tar.gz
-    #fi # the rest is already unpacked by fetchzip
-
     #patch before install
     echo "${javaPatch}" > typedb_java.patch
-    echo "${typedb-properties-patch}" > typedb-properties.patch
+    # echo "${typedb-properties-patch}" > typedb-properties.patch
+
     patch ./typedb typedb_java.patch
     patch ./server/conf/typedb.properties typedb-properties.patch
     mkdir $out
     cp -r ./* $out
+    mkdir $out/bin
 
+    echo "${typedbWrapper}" > $out/bin/typedb
 
   '';
 
