@@ -1675,6 +1675,12 @@
     githubId = 977929;
     name = "Cody Allen";
   };
+  cemguresci = {
+    email = "gurescicem@gmail.com";
+    github = "dyrnade";
+    githubId = 799562;
+    name = "Cem Güreşçi";
+  };
   cfouche = {
     email = "chaddai.fouche@gmail.com";
     github = "Chaddai";
@@ -11731,4 +11737,5 @@
     github = "zupo";
     githubId = 311580;
   };
+
 }
