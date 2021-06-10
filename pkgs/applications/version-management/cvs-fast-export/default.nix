@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cvs-fast-export";
-  version = "1.56";
+  version = "1.57";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-${version}.tar.gz";
-    sha256 = "sha256-TB/m7kd91+PyAkGdFCCgeb9pQh0kacq0QuTZa8f9CxU=";
+    sha256 = "0y1fzsicga19nsarpmn2ms69sq26b2d3d8a1169qbqz1kzr0jji8";
   };
 
   strictDeps = true;
