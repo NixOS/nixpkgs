@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.5.15";
+  version = "0.5.16";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    sha256 = "sha256-3hiiCcCgbWxSfG8XCcoKdNJsQoP2L2G4g4zFQkFtzQI=";
+    sha256 = "sha256-p2O9GkXrRCxgOnVVmtBFUpbg0w9b3LB0PNOlK1gxYAY=";
   };
 
-  vendorSha256 = "sha256-q3dDV0eop2NxXHFrlppWsZrO2Hz1q5xhs1DnB6PvG9g=";
+  vendorSha256 = "sha256-avxNVTPcJ5HjeN7Q9rVmmSud1i3Yb8cSFTAUtNPYbBg=";
 
   buildFlagsArray = ''
     -ldflags=

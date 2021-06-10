@@ -1,8 +1,8 @@
 {
   "stable": {
-    "version": "91.0.4472.77",
-    "sha256": "0c8vj3gq3nmb7ssiwj6875g0a8hcprss1a4gqw9h7llqywza9ma5",
-    "sha256bin64": "0caf47xam5igdnbhipal1iyicnxxvadhi61k199rwysrvyv5sdad",
+    "version": "91.0.4472.101",
+    "sha256": "1d3y621iclkq6nvxrapk5aihv50x13hjha0c2gcp2xxfma96253q",
+    "sha256bin64": "12j5q5b9v0jpiznjnh89831w8lv399vd1z4ljhbsnsidbsygrbr1",
     "deps": {
       "gn": {
         "version": "2021-04-06",
