@@ -6478,6 +6478,9 @@ in
   ispell = callPackage ../tools/text/ispell {};
 
   iodash = callPackage ../development/libraries/iodash { };
+
+  jbofihe = callPackage ../tools/text/jbofihe {};
+
   jumanpp = callPackage ../tools/text/jumanpp {};
 
   jump = callPackage ../tools/system/jump {};
