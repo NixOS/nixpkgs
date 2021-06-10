@@ -198,6 +198,7 @@ in
 
       environment.systemPackages = (with pkgs // pkgs.gnome // pkgs.cinnamon; pkgs.gnome.removePackagesByName [
         # cinnamon team apps
+        bulky
         blueberry
         warpinator
 
