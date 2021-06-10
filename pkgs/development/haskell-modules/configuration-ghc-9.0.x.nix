@@ -107,4 +107,8 @@ self: super: {
   # 0.29 introduced support for GHC 9.0.x, stackage has 0.28
   cryptonite = super.cryptonite_0_29;
 
+  # GHC 9.0.x doesn't like `import Spec (main)` in Main.hs
+  # https://github.com/snoyberg/mono-traversable/issues/192
+  mono-traversable = dontCheck super.mono-traversable;
+
 }
