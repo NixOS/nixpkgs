@@ -49,6 +49,15 @@ import ./make-test-python.nix (
                     inherit repository passwordFile;
                     pruneOpts = [ "--keep-last 1" ];
                   };
+                  pre-post-options-backup = {
+                    inherit repository passwordFile initialize paths pruneOpts;
+                    preStart = ''
+                      echo -n 1 >> /tmp/restic-test
+                    '';
+                    postStart = ''
+                      echo -n 2 >> /tmp/restic-test
+                    '';
+                  };
                 };
 
                 environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
@@ -90,6 +99,8 @@ import ./make-test-python.nix (
               '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
               "systemctl start restic-backups-remoteprune.service",
               '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+              "systemctl start restic-backups-pre-post-options-backup.service",
+              "grep -qE ^12$ /tmp/restic-test"
           )
         '';
       }

@@ -186,6 +186,24 @@ in
           '';
           example = "find /home/matt/git -type d -name .git";
         };
+
+        preStart = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = ''
+            A script that runs before a backup is executed.
+          '';
+          example = "program --pause";
+        };
+
+        postStart = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = ''
+            A script that runs before after a backup is executed.
+          '';
+          example = "program --continue";
+        };
       };
     }));
     default = {};
@@ -254,8 +272,9 @@ in
           } // optionalAttrs (backup.s3CredentialsFile != null) {
             EnvironmentFile = backup.s3CredentialsFile;
           };
-        } // optionalAttrs (backup.initialize || backup.dynamicFilesFrom != null) {
+        } // optionalAttrs (backup.initialize || backup.preStart != null || backup.dynamicFilesFrom != null) {
           preStart = ''
+            ${builtins.toString backup.preStart}
             ${optionalString (backup.initialize) ''
               ${resticCmd} snapshots || ${resticCmd} init
             ''}
@@ -263,9 +282,12 @@ in
               ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} > ${filesFromTmpFile}
             ''}
           '';
-        } // optionalAttrs (backup.dynamicFilesFrom != null) {
+        } // optionalAttrs (backup.dynamicFilesFrom != null  || backup.postStart != null) {
           postStart = ''
-            rm ${filesFromTmpFile}
+            ${optionalString (backup.dynamicFilesFrom != null) ''
+              rm ${filesFromTmpFile}
+            ''}
+            ${builtins.toString backup.postStart}
           '';
         })
       ) config.services.restic.backups;
