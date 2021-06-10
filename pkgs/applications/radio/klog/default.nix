@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "klog";
-  version = "1.3.2";
+  version = "1.4.5";
 
   src = fetchurl {
     url = "https://download.savannah.nongnu.org/releases/klog/${pname}-${version}.tar.gz";
-    sha256 = "1d5x7rq0mgfrqws3q1y4z8wh2qa3gvsmd0ssf2yqgkyq3fhdrb5c";
+    sha256 = "sha256-aC96Tf9HszoR5N/YR6kx9qYT2Ypqw/pFUxyDUSsoZYU=";
   };
 
   nativeBuildInputs = [ pkg-config wrapQtAppsHook qmake qttools ];
