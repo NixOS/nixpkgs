@@ -31045,6 +31045,8 @@ in
 
   vbam = callPackage ../misc/emulators/vbam { };
 
+  vgmstream = callPackage ../applications/audio/vgmstream { };
+
   vice = callPackage ../misc/emulators/vice { };
 
   ViennaRNA = callPackage ../applications/science/molecular-dynamics/viennarna { };
