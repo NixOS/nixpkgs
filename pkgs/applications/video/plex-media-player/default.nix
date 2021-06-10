@@ -11,19 +11,33 @@ let
   depSrcs = import ./deps.nix { inherit fetchurl; };
 in mkDerivation rec {
   pname = "plex-media-player";
-  version = "2.58.0.1076";
-  vsnHash = "38e019da";
+  version = "2.58.1";
+  vsnHash = "ae73e074";
 
   src = fetchFromGitHub {
     owner = "plexinc";
     repo = "plex-media-player";
     rev = "v${version}-${vsnHash}";
-    sha256 = "XFwcSHn9wG30bDMGFITBmhp6/VI1RLmxMxFFxjntTmw=";
+    sha256 = "sha256-TTbflbdCxjEKJ7e92RQr5gnW+DpliGswWHSBVm5zQOA=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake python3 ];
-  buildInputs = [ libX11 libXrandr qtbase qtwebchannel qtwebengine qtx11extras
-                  libvdpau SDL2 mpv libGL ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+  ];
+  buildInputs = [
+    libGL
+    libvdpau
+    libX11
+    libXrandr
+    mpv
+    qtbase
+    qtwebchannel
+    qtwebengine
+    qtx11extras
+    SDL2
+  ];
 
   preConfigure = with depSrcs; ''
     mkdir -p build/dependencies
@@ -34,14 +48,18 @@ in mkDerivation rec {
     ln -s ${webClientTv} build/dependencies/web-client-tv-${webClientTvBuildId}.tar.xz
   '';
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DQTROOT=${qtbase}" ];
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+    "-DQTROOT=${qtbase}"
+  ];
 
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Streaming media player for Plex";
+    downloadPage = "https://github.com/plexinc/plex-media-player/";
+    homepage = "https://plex.tv";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
-    homepage = "https://plex.tv";
   };
 }
