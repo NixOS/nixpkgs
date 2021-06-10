@@ -15915,7 +15915,7 @@ in
 
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
-  libcef = callPackage ../development/libraries/libcef { inherit (gnome2) GConf; };
+  libcef = callPackage ../development/libraries/libcef {};
 
   libcello = callPackage ../development/libraries/libcello {};
 
