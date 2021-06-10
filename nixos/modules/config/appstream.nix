@@ -1,20 +1,21 @@
 { config, lib, ... }:
 
-with lib;
+ lib;
 {
-  options = {
-    appstream.enable = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
+  options  {
+    appstream.enable  mkOption {
+      type  types.bool;
+      default  true;
+      description =m ''
         Whether to install files to support the
         <link xlink:href="https://www.freedesktop.org/software/appstream/docs/index.html">AppStream metadata specification</link>.
       '';
     };
   };
 
-  config = mkIf config.appstream.enable {
-    environment.pathsToLink = [
+  config =
+ mkIf config.appstream.enable {
+    environment.pathsToLink  [
       # per component metadata
       "/share/metainfo"
       # legacy path for above
