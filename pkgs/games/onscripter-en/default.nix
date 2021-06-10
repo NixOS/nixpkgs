@@ -4,12 +4,12 @@
 
 
 stdenv.mkDerivation {
-  name = "onscripter-en-20110930";
+  name = "onscripter-en-20171218";
 
   src = fetchurl {
     # The website is not available now.
-    url = "https://www.dropbox.com/s/ag21owy9poyr2oy/onscripter-en-20110930-src.tar.bz2";
-    sha256 = "1kzm6d894c0ihgkwhd03x3kaqqz0sb6kf0r86xrrz12y309zfam6";
+    url = "https://www.dropbox.com/s/ag21owy9poyr2oy/onscripter-en-20171218-src.tar.bz2";
+    sha256 = "sha256-pir3ExhehJ9zNygDN83S4GOs5ugDNMjngxEwklAz9c8=";
   };
 
   buildInputs = [ libpng libjpeg libogg libvorbis freetype smpeg
