@@ -1,5 +1,4 @@
-{ stdenv
-, appdirs
+{ appdirs
 , buildPythonPackage
 , cached-property
 , click
@@ -12,7 +11,6 @@
 , oyaml
 , pathspec
 , pytest
-, pythonOlder
 , tblib
 , typing-extensions
 }:
