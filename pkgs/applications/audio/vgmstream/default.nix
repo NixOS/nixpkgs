@@ -16,10 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mpg123 ffmpeg libvorbis libao jansson ];
 
-  ##
-  # There's no nice way to build the audacious plugin without
-  # a circular dependency.
-  ##
+  # There's no nice way to build the audacious plugin without a circular dependency
   cmakeFlags = [ "-DBUILD_AUDACIOUS=OFF" ];
 
   preConfigure = ''
