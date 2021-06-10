@@ -47,7 +47,7 @@ with lib; {
        ```
        where a complex-clause is either a simple-clause
        or has the form { cases = [ p1 .. pn ]; out = r; }
-       in which case the first branch such as all `pi x` are true
+       in which case the first branch such as all `pi xi` are true
 
        if the variables p are not functions,
        they are converted to a `equal p`
