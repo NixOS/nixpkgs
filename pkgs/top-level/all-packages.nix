@@ -19970,6 +19970,7 @@ in
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
+  alsa-lib = alsaLib; # New name on nixos-unstable
 
   alsaPlugins = callPackage ../os-specific/linux/alsa-plugins { };
 
