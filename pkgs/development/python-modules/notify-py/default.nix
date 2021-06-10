@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, coreutils, alsaUtils
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, coreutils, alsa-utils
 , libnotify, which, jeepney, loguru, pytestCheckHook }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   propagatedNativeBuildInputs = [ which ]
-    ++ lib.optionals stdenv.isLinux [ alsaUtils libnotify ];
+    ++ lib.optionals stdenv.isLinux [ alsa-utils libnotify ];
   propagatedBuildInputs = [ loguru ]
     ++ lib.optionals stdenv.isLinux [ jeepney ];
 
