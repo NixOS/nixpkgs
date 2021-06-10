@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A Qt GUI to visualize profiling data";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ periklis ];
   };
