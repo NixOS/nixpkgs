@@ -1,4 +1,4 @@
-{ stdenv, lib, openjdk, system, fetchzip, fetchurl, server-data ? "~/.typedb_home", server-port ? "1729", server-logs ? "~/.typedb_home/logs" }:
+{ stdenv, lib, openjdk, which, system, fetchzip, fetchurl, server-data ? "~/.typedb_home", server-port ? "1729", server-logs ? "~/.typedb_home/logs" }:
 let
   typedbVersion = "2.1.1";
   systems = {
@@ -33,7 +33,11 @@ let
     < JAVA_BIN=java
     ---
     > JAVA_BIN=${openjdk}/bin/java
-  '';
+    32c32
+    <     which "$'' + "{JAVA_BIN}\" > /dev/null\n"+
+    "---\n"+
+    ">     ${which}/bin/which \"$" + "{JAVA_BIN}\" > /dev/null";
+  
   typedb-properties-patch = ''
     19c19
     < server.data=server/data/
@@ -48,13 +52,21 @@ let
     ---
     > server.port=${server-port}
   '';
-  typedbWrapper = ''
-    [ -z "$TYPEDB_SERVER_DATA" ] && $TYPEDB_SERVER_DATA="${server-data}"
-    [ -z "$TYPEDB_SERVER_LOGS" ] && $TYPEDB_SERVER_LOGS="${server-logs}"
-    [ -z "$TYPEDB_SERVER_PORT" ] && $TYPEDB_SERVER_PORT="${server-port}"
-
-    ../typedb server --data $TYPEDB_SERVER_DATA --logs $TYPEDB_SERVER_LOGS --port $TYPEDB_SERVER_PORT
+  typedb-wrapper-patch = ''
+    3c3
+    <   TYPEDB_SERVER_DATA="__SERVER_DATA__"
+    ---
+    >   TYPEDB_SERVER_DATA="${server-data}"
+    8c8
+    <   TYPEDB_SERVER_LOGS="__SERVER_LOGS__"
+    ---
+    >   TYPEDB_SERVER_LOGS="${server-logs}"
+    13c13
+    <   TYPEDB_SERVER_PORT="__SERVER_PORT__"
+    ---
+    >   TYPEDB_SERVER_PORT="${server-port}"
   '';
+  typedbWrapper = ./typedbWrapper.sh;
 
 in
 stdenv.mkDerivation rec {
@@ -64,37 +76,42 @@ stdenv.mkDerivation rec {
   src = srcFolder;
 
   dontBuild = true;
-  #phases = [unpackPhase installPhase installCheckPhase];
-  unpackPhase = ''
-    echo "here"
-    ls
-    echo "here2"
-    if [[ "${system}" -eq "x86_64-linux" ]]; then
-      tar -xf typedb-all-linux-2.1.1.tar.gz
-    fi # the rest is already unpacked by fetchzip
-  '';
 
+  /* 
+    in preparation for the coming change of properties file parsing
+    allowing for environment variable reading :
+    > echo "${typedb-properties-patch}" > typedb-properties.patch
+    > patch ./server/conf/typedb.properties typedb-properties.patch
+  */
   installPhase = ''
     #patch before install
-    echo "${javaPatch}" > typedb_java.patch
-    # echo "${typedb-properties-patch}" > typedb-properties.patch
-
+    echo '${javaPatch}' > typedb_java.patch
+    echo '${typedb-wrapper-patch}' > typedb_wrapper.patch
     patch ./typedb typedb_java.patch
-    patch ./server/conf/typedb.properties typedb-properties.patch
+
     mkdir $out
     cp -r ./* $out
     mkdir $out/bin
 
-    echo "${typedbWrapper}" > $out/bin/typedb
+    cat ${typedbWrapper} > $out/bin/typedb
+    echo "$out/typedb server --data=\$TYPEDB_SERVER_DATA --logs=\$TYPEDB_SERVER_LOGS --port=\$TYPEDB_SERVER_PORT \"\$@\"" >> $out/bin/typedb
+    patch $out/bin/typedb typedb_wrapper.patch
 
+    chmod u+x $out/bin/typedb
+    rm typedb_java.patch
+    rm typedb_wrapper.patch
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    #$out/typedb --help > /dev/null
-    #res=`$out/typedb client`
-    #echo "--"
-    #echo $res
+    mkdir "$out/server_data"
+    mkdir "$out/server_log"
+    echo "testing server"
+    TYPEDB_SERVER_DATA=$out/server_data TYPEDB_SERVER_LOGS=$out/server_log $out/bin/typedb --help > /dev/null
+    echo "testing client"
+    TYPEDB_SERVER_DATA=$out/server_data TYPEDB_SERVER_LOGS=$out/server_log $out/bin/typedb client --help > /dev/null
+    rm -r $out/server_data
+    rm -r $out/server_log
   '';
   doCheck = true;
 
