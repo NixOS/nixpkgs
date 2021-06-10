@@ -20108,9 +20108,11 @@ in
   alsa-plugins = callPackage ../os-specific/linux/alsa-project/alsa-plugins { };
   alsa-plugins-wrapper = callPackage ../os-specific/linux/alsa-project/alsa-plugins/wrapper.nix { };
   alsa-tools = callPackage ../os-specific/linux/alsa-project/alsa-tools { };
-  alsa-utils = callPackage ../os-specific/linux/alsa-project/alsa-utils { fftw = fftwFloat; };
-  alsa-ucm-conf = callPackage ../os-specific/linux/alsa-project/alsa-ucm-conf { };
   alsa-topology-conf = callPackage ../os-specific/linux/alsa-project/alsa-topology-conf { };
+  alsa-ucm-conf = callPackage ../os-specific/linux/alsa-project/alsa-ucm-conf { };
+  alsa-utils = callPackage ../os-specific/linux/alsa-project/alsa-utils {
+    fftw = fftwFloat;
+  };
 
   inherit (callPackage ../misc/arm-trusted-firmware {})
     buildArmTrustedFirmware
