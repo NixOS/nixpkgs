@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "165kzza1m8h37y1ir0d0hp0z645h4ihkyj83fii69f18gk47r3kg";
 
-  outputs = [ "out" ];
-
   meta = with lib; {
     description = "Run Windows programs with Proton";
     changelog = "https://github.com/caverym/proton-caller/releases/tag/${version}";
