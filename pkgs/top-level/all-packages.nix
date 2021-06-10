@@ -5703,6 +5703,8 @@ in
 
   hping = callPackage ../tools/networking/hping { };
 
+  hqplayer-desktop = libsForQt5.callPackage ../applications/audio/hqplayer-desktop { };
+
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
   htpdate = callPackage ../tools/networking/htpdate { };
