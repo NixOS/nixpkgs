@@ -508,6 +508,19 @@ let
         };
       };
 
+      jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "jkillian";
+          name = "custom-local-formatters";
+          version = "0.0.4";
+          sha256 = "1pmqnc759fq86g2z3scx5xqpni9khcqi5z2kpl1kb7yygsv314gm";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
       github = {
         github-vscode-theme = buildVscodeMarketplaceExtension {
           mktplcRef = {
