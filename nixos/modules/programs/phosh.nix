@@ -149,6 +149,8 @@ in {
 
     security.pam.services.phosh = {};
 
+    hardware.opengl.enable = mkDefault true;
+
     services.gnome.core-shell.enable = true;
     services.gnome.core-os-services.enable = true;
     services.xserver.displayManager.sessionPackages = [ pkgs.phosh ];
