@@ -4265,6 +4265,12 @@
     githubId = 3661115;
     name = "Ingo Blechschmidt";
   };
+  icy-thought = {
+    name = "Icy-Thought";
+    email = "gilganyx@pm.me";
+    github = "Icy-Thought";
+    githubId = 53710398;
+  };
   idontgetoutmuch = {
     email = "dominic@steinitz.org";
     github = "idontgetoutmuch";
