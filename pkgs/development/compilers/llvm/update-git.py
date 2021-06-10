@@ -64,7 +64,7 @@ default_nix = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'git/defa
 with fileinput.FileInput(default_nix, inplace=True) as f:
     for line in f:
         result = re.sub(r'^  release_version = ".+";', f'  release_version = "{release_version}";', line)
-        result = re.sub(r'^  version = ".+";', f'  version = "{version}";', line)
+        result = re.sub(r'^  version = ".+";', f'  version = "{version}";', result)
         result = re.sub(r'^  rev = ".*";', f'  rev = "{commit["sha"]}";', result)
         result = re.sub(r'^    sha256 = ".+";', f'    sha256 = "{hash}";', result)
         print(result, end='')
