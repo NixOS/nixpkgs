@@ -125,6 +125,7 @@ extra-packages:
   - gi-gtk < 4.0                        # 2021-05-07: For haskell-gi 0.25 without gtk4
   - gi-gdkx11 == 3.0.11                 # 2021-05-07: For haskell-gi 0.25 without gtk4
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
+  - hackage-db < 2.1.1                  # 2021-06-10: Need older hackage-db as long as Cabal < 3.4, see https://github.com/NixOS/cabal2nix/issues/501
 
 package-maintainers:
   abbradar:
