@@ -2228,6 +2228,8 @@ in
 
   commitizen = callPackage ../applications/version-management/commitizen {};
 
+  common-licenses = callPackage ../data/misc/common-licenses {};
+
   compactor = callPackage ../applications/networking/compactor { };
 
   consul = callPackage ../servers/consul { };
