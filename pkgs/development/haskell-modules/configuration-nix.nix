@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.libmysqlclient; });
+  mysql = dontCheck super.mysql;
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
