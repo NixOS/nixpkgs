@@ -4779,6 +4779,8 @@ in
 
   flips = callPackage ../tools/compression/flips { };
 
+  flowblade = callPackage ../applications/video/flowblade { };
+
   fmbt = callPackage ../development/tools/fmbt {
     python = python2;
   };
