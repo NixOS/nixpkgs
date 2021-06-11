@@ -243,10 +243,23 @@ Alternatively, set the number of processes to a lower count to avoid rate-limiti
 ./pkgs/applications/editors/vim/plugins/update.py --proc 1
 ```
 
-## Important repositories {#important-repositories}
+## How to maintain an out-of-tree overlay of vim plugins ?
 
-- [vim-pi](https://bitbucket.org/vimcommunity/vim-pi) is a plugin repository
-  from VAM plugin manager meant to be used by others as well used by
+You can use the updater script to generate basic packages out of a custom vim
+plugin list:
+```
+pkgs/applications/editors/vim/plugins/update.py -i vim-plugin-names -o generated.nix --no-commit
+```
+with the contents of "vim-plugin-names" being for example:
+```
+repo,branch,alias
+pwntester/octo.nvim,,
+```
 
-- [vim2nix](https://github.com/MarcWeber/vim-addon-vim2nix) which generates the
-  .nix code
+You can then reference the generated vim plugins via:
+```nix
+myVimPlugins = pkgs.vimPlugins.extend (
+  (pkgs.callPackage generated.nix {})
+);
+```
+
