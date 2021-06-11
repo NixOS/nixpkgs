@@ -18,7 +18,7 @@ let
 
 in {
   imports = [
-    (mkAliasOptionModule [ "programs" "x2goserver" "enable" ] [ "services" "x2goserver" "enable" ])
+    (mkRenamedOptionModule [ "programs" "x2goserver" ] [ "services" "x2goserver" ])
   ];
 
   options.services.x2goserver = {
