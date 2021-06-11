@@ -30298,6 +30298,8 @@ in
 
   cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
 
+  cups-kyocera-ecosys-m552x-p502x = callPackage ../misc/cups/drivers/kyocera-ecosys-m552x-p502x {};
+
   cups-kyodialog3 = callPackage ../misc/cups/drivers/kyodialog3 {};
 
   cups-dymo = callPackage ../misc/cups/drivers/dymo {};
