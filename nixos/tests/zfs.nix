@@ -18,12 +18,28 @@ let
         maintainers = [ adisbladis ];
       };
 
-      machine = { pkgs, lib, ... }: {
+      machine = { pkgs, lib, ... }:
+        let
+          usersharePath = "/var/lib/samba/usershares";
+        in {
         virtualisation.emptyDiskImages = [ 4096 ];
         networking.hostId = "deadbeef";
         boot.kernelPackages = kernelPackage;
         boot.supportedFilesystems = [ "zfs" ];
         boot.zfs.enableUnstable = enableUnstable;
+
+        services.samba = {
+          enable = true;
+          extraConfig = ''
+            registry shares = yes
+            usershare path = ${usersharePath}
+            usershare allow guests = yes
+            usershare max shares = 100
+            usershare owner only = no
+          '';
+        };
+        systemd.services.samba-smbd.serviceConfig.ExecStartPre =
+          "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
 
         environment.systemPackages = [ pkgs.parted ];
 
@@ -60,6 +76,8 @@ let
             "zfs create -o mountpoint=legacy rpool/root",
             "mount -t zfs rpool/root /tmp/mnt",
             "udevadm settle",
+            "zfs set sharesmb=on rpool/root",
+            "smbclient -NL localhost",
             "umount /tmp/mnt",
             "zpool destroy rpool",
             "udevadm settle",
