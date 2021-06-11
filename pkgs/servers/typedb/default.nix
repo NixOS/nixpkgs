@@ -14,7 +14,7 @@ let
     x86_64-darwin = {
       src = fetchzip {
         url = "https://github.com/vaticle/typedb/releases/download/2.1.1/typedb-all-mac-2.1.1.zip";
-        sha256 = "16hlfy6kh2rnvcralz206q13mghb0rv8wazpg6q3h324p5rdys54";
+        sha256 = "1njvssv9h0m13jz0ims96nfl1fjyk7lv8jdb6apcqpbkw7ykz8h8";
       };
       dir = "typedb-all-mac-${typedbVersion}";
     };
