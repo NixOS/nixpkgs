@@ -27,6 +27,7 @@ in stdenv.mkDerivation {
   configureFlags = optional (!stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
+    "--enable-utf8"
   ]
     ++ optional (variant != null) "--enable-${variant}";
 
