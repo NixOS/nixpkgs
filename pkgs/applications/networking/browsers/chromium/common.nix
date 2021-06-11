@@ -9,7 +9,7 @@
 
 , python2, python3, perl, pkg-config
 , nspr, systemd, libkrb5
-, util-linux, alsaLib
+, util-linux, alsa-lib
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
@@ -54,9 +54,9 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
-  githubPatch = commit: sha256: fetchpatch {
+  githubPatch = { commit, sha256, revert ? false }: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
-    inherit sha256;
+    inherit sha256 revert;
   };
 
   mkGnFlags =
@@ -144,7 +144,7 @@ let
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
-      util-linux alsaLib
+      util-linux alsa-lib
       bison gperf libkrb5
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
@@ -166,6 +166,14 @@ let
       # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
       ./patches/fix-missing-atspi2-dependency.patch
       ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
+    ] ++ lib.optionals (chromiumVersionAtLeast "93") [
+      # We need to revert this patch to build M93 with LLVM 12.
+      (githubPatch {
+        # Reland "Replace 'blacklist' with 'ignorelist' in ./tools/msan/."
+        commit = "9d080c0934b848ee4a05013c78641e612fcc1e03";
+        sha256 = "1bxdhxmiy6h4acq26lq43x2mxx6rawmfmlgsh5j7w8kyhkw5af0c";
+        revert = true;
+      })
     ];
 
     postPatch = ''
@@ -198,7 +206,7 @@ let
       substituteInPlace services/audio/audio_sandbox_hook_linux.cc \
         --replace \
           '/usr/share/alsa/' \
-          '${alsaLib}/share/alsa/' \
+          '${alsa-lib}/share/alsa/' \
         --replace \
           '/usr/lib/x86_64-linux-gnu/gconv/' \
           '${glibc}/lib/gconv/' \

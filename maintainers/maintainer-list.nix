@@ -2677,6 +2677,16 @@
     githubId = 10198051;
     name = "Drew Risinger";
   };
+  drupol = {
+    name = "Pol Dellaiera";
+    email = "pol.dellaiera@protonmail.com";
+    github = "drupol";
+    githubId = 252042;
+    keys = [{
+      longkeyid = "ed25519/0x0AAF2901E8040715";
+      fingerprint = "85F3 72DF 4AF3 EF13 ED34  72A3 0AAF 2901 E804 0715";
+    }];
+  };
   dschrempf = {
     name = "Dominik Schrempf";
     email = "dominik.schrempf@gmail.com";
@@ -4814,6 +4824,12 @@
     github = "jmettes";
     githubId = 587870;
     name = "Jonathan Mettes";
+  };
+  jo1gi = {
+    email = "joakimholm@protonmail.com";
+    github = "jo1gi";
+    githubId = 26695750;
+    name = "Joakim Holm";
   };
   joachifm = {
     email = "joachifm@fastmail.fm";
@@ -8588,6 +8604,12 @@
     github = "rhoriguchi ";
     githubId = 6047658;
     name = "Ryan Horiguchi";
+  };
+  ribose-jeffreylau = {
+    name = "Jeffrey Lau";
+    email = "jeffrey.lau@ribose.com";
+    github = "ribose-jeffreylau";
+    githubId = 2649467;
   };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";

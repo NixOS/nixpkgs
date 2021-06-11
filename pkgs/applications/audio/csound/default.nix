@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, libsndfile, libsamplerate, flex, bison, boost, gettext
-, alsaLib ? null
+, alsa-lib ? null
 , libpulseaudio ? null
 , libjack2 ? null
 , liblo ? null
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake flex bison gettext ];
   buildInputs = [ libsndfile libsamplerate boost ]
     ++ builtins.filter (optional: optional != null) [
-      alsaLib libpulseaudio libjack2
+      alsa-lib libpulseaudio libjack2
       liblo ladspa-sdk fluidsynth eigen
       curl tcltk fltk ];
 

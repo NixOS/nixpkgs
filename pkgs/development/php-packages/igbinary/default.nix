@@ -10,5 +10,10 @@ buildPecl {
   makeFlags = [ "phpincludedir=$(dev)/include" ];
   outputs = [ "out" "dev" ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "Binary serialization for PHP";
+    license = licenses.bsd3;
+    homepage = "https://github.com/igbinary/igbinary/";
+    maintainers = teams.php.members;
+  };
 }

@@ -67,6 +67,8 @@ in lib.makeScopeWithSplicing
     HOST_SH = stdenv'.shell;
 
     MACHINE_ARCH = {
+      i486 = "i386";
+      i586 = "i386";
       i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
@@ -74,6 +76,8 @@ in lib.makeScopeWithSplicing
     MACHINE = {
       x86_64 = "amd64";
       aarch64 = "evbarm64";
+      i486 = "i386";
+      i586 = "i386";
       i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
@@ -96,6 +100,8 @@ in lib.makeScopeWithSplicing
     HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
   } // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
     HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
+  } // lib.optionalAttrs (stdenv'.isx86_32) {
+    USE_SSP = "no";
   } // lib.optionalAttrs (attrs.headersOnly or false) {
     installPhase = "includesPhase";
     dontBuild = true;

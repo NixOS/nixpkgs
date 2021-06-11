@@ -84,7 +84,7 @@ For convenience, it also adds `dconf.lib` for a GIO module implementing a GSetti
 
 - []{#ssec-gnome-hooks-gobject-introspection} `gobject-introspection` setup hook populates `GI_TYPELIB_PATH` variable with `lib/girepository-1.0` directories of dependencies, which is then added to wrapper by `wrapGAppsHook`. It also adds `share` directories of dependencies to `XDG_DATA_DIRS`, which is intended to promote GIR files but it also [pollutes the closures](https://github.com/NixOS/nixpkgs/issues/32790) of packages using `wrapGAppsHook`.
 
-  ::: warning
+  ::: {.warning}
   The setup hook [currently](https://github.com/NixOS/nixpkgs/issues/56943) does not work in expressions with `strictDeps` enabled, like Python packages. In those cases, you will need to disable it with `strictDeps = false;`.
   :::
 

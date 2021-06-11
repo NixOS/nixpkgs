@@ -1,9 +1,9 @@
 { lib, rustPlatform, fetchFromGitHub, dbus, gdk-pixbuf, libnotify, makeWrapper, pkg-config, xorg
-, enableAlsaUtils ? true, alsaUtils, coreutils
+, enableAlsaUtils ? true, alsa-utils, coreutils
 , enableNetwork ? true, dnsutils, iproute2, wirelesstools }:
 
 let
-  bins = lib.optionals enableAlsaUtils [ alsaUtils coreutils ]
+  bins = lib.optionals enableAlsaUtils [ alsa-utils coreutils ]
     ++ lib.optionals enableNetwork [ dnsutils iproute2 wirelesstools ];
 in
 

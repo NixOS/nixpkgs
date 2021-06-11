@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchgit
-, alsaLib
+, alsa-lib
 , aubio
 , boost
 , cairomm
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     aubio
     boost
     cairomm

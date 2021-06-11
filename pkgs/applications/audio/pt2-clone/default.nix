@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , nixosTests
-, alsaLib
+, alsa-lib
 , SDL2
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 ] ++ lib.optional stdenv.isLinux alsaLib;
+  buildInputs = [ SDL2 ] ++ lib.optional stdenv.isLinux alsa-lib;
 
   passthru.tests = {
     pt2-clone-opens = nixosTests.pt2-clone;

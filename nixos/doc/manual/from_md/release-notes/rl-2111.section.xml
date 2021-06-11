@@ -24,12 +24,20 @@
   </section>
   <section xml:id="new-services">
     <title>New Services</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
           a GeoIP database updater from MaxMind. Available as
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sr.ht">sourcehut</link>, a
+          collection of tools useful for software development. Available
+          as
+          <link xlink:href="options.html#opt-services.sourcehut.enable">services.sourcehut</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -54,6 +62,174 @@
         <para>
           PHP 7.3 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 21.11 release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Those making use of <literal>buildBazelPackage</literal> will
+          need to regenerate the fetch hashes (preferred), or set
+          <literal>fetchConfigured = false;</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          fsharp41 has been removed in preference to use the latest
+          dotnet-sdk
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The following F#-related packages have been removed for being
+          unmaintaned. Please use <literal>fetchNuGet</literal> for
+          specific packages.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              ExtCore
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Fake
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Fantomas
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsCheck
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsCheck262
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsCheckNunit
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpAutoComplete
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCompilerCodeDom
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCompilerService
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCompilerTools
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCore302
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCore3125
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCore4001
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCore4117
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpData
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpData225
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpDataSQLProvider
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpFormatting
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsLexYacc
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsLexYacc706
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsLexYaccRuntime
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsPickler
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsUnit
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Projekt
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Suave
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              UnionArgParser
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              ExcelDnaRegistration
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              MathNetNumerics
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>programs.x2goserver</literal> is now
+          <literal>services.x2goserver</literal>
         </para>
       </listitem>
     </itemizedlist>
