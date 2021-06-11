@@ -7578,8 +7578,7 @@ in
   olsrd = callPackage ../tools/networking/olsrd { };
 
   opl3bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor { };
-
-  opn2bankeditor = callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
+  opn2bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
 
   orangefs = callPackage ../tools/filesystems/orangefs {
     autoreconfHook = buildPackages.autoreconfHook269;
