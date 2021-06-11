@@ -301,6 +301,14 @@ in rec {
               cpu_family = '${cpuFamily stdenv.targetPlatform}'
               cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
               endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
+              
+              ${if stdenv.targetPlatform.isAarch32 then "
+              # The default linker seems to create partially broken (SEGVing) applications for ARM hosts.
+              # Use `gold` until the issue is resolved.
+              [binaries]
+              c_ld = 'gold'
+              cpp_ld = 'gold'
+              "}
             '';
           in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
         } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
