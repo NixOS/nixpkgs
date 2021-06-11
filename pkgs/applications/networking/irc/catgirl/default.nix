@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "catgirl";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchurl {
     url = "https://git.causal.agency/catgirl/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3shSdeq4l6Y5DEJZEVMHAngp6vjnkPjzpLpcp407X/0=";
+    sha256 = "0svpd2nqsr55ac98vczyhihs6pvgw7chspf6bdlwl98gch39dxif";
   };
 
   nativeBuildInputs = [ ctags pkg-config ];

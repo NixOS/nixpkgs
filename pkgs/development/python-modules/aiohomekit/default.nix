@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "0.2.61";
+  version = "0.2.62";
   format = "pyproject";
   disabled = pythonAtLeast "3.9";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = pname;
     rev = version;
-    sha256 = "047ql5a4i4354jgr8xr2waim8j522z58vbfi7aa62jqc9l8jzxzk";
+    sha256 = "sha256-01IzeR0iukPTkz8I7h93wZkgjz6flRAJN8unEX6d+cs=";
   };
 
   nativeBuildInputs = [ poetry ];

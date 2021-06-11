@@ -15,6 +15,7 @@
 , mesa
 , meson
 , ninja
+, pandoc
 , pixman
 , pkg-config
 , unzip
@@ -56,18 +57,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cardboard";
-  version = "0.0.0-unstable=2021-01-21";
+  version = "0.0.0+unstable=2021-05-10";
 
   src = fetchFromGitLab {
     owner = "cardboardwm";
     repo = pname;
-    rev = "f2ef2ff076ddbbd23994553b8eff131f9bd0207f";
-    hash = "sha256-43aqAWk4QoIP0BpRyPRDWFtVh/1UbrBoEeTDEF2gZX4=";
+    rev = "b54758d85164fb19468f5ca52588ebea576cd027";
+    hash = "sha256-Kn5NyQSDyX7/nn2bKZPnsuepkoppi5XIkdu7IDy5r4w=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
+    pandoc
     pkg-config
     unzip
   ];
@@ -101,6 +103,7 @@ stdenv.mkDerivation rec {
 
   # "Inherited" from Nixpkgs expression for wlroots
   mesonFlags = [
+    "-Dman=true"
     "-Dwlroots:logind-provider=systemd"
     "-Dwlroots:libseat=disabled"
   ];

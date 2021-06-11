@@ -5,6 +5,7 @@
 , python3Packages
 , ffmpeg
 , makeWrapper
+, nixosTests
 
 # For the update script
 , coreutils
@@ -139,6 +140,10 @@ stdenv.mkDerivation rec {
       --composition /dev/null \
       --output ${toString ./node-packages.nix}
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) botamusique;
+  };
 
   meta = with lib; {
     description = "Bot to play youtube / soundcloud / radio / local music on Mumble";

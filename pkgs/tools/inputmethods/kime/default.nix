@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   ];
 
   RUST_BACKTRACE = 1;
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   meta = with lib; {
     homepage = "https://github.com/Riey/kime";

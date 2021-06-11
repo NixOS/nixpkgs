@@ -1,28 +1,51 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pyserial, pyftdi, pyusb
-, pyopenssl, nose, isPy3k, pythonOlder, mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, pyftdi
+, pyopenssl
+, pyserial
+, pytestCheckHook
+, pythonOlder
+, pyusb
+}:
 
 buildPythonPackage rec {
   pname = "alarmdecoder";
-  version = "1.13.10";
+  version = "1.13.11";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nutechsoftware";
     repo = "alarmdecoder";
     rev = version;
-    sha256 = "05581j78181p6mwbfpbkp5irnrzsvps1lslgqrh7xbdcmz5b2nxd";
+    sha256 = "sha256-q2s+wngDKtWm5mxGHNAc63Ed6tiQD9gLHVoQZNWFB0w=";
   };
 
-  propagatedBuildInputs = [ pyserial pyftdi pyusb pyopenssl ];
+  propagatedBuildInputs = [
+    pyftdi
+    pyopenssl
+    pyserial
+    pyusb
+  ];
 
-  doCheck = !isPy3k;
-  checkInputs = [ nose mock ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Socket issue, https://github.com/nutechsoftware/alarmdecoder/issues/45
+    "test_ssl"
+    "test_ssl_exception"
+  ];
+
   pythonImportsCheck = [ "alarmdecoder" ];
 
   meta = with lib; {
+    description = "Python interface for the Alarm Decoder (AD2USB, AD2SERIAL and AD2PI) devices";
     homepage = "https://github.com/nutechsoftware/alarmdecoder";
-    description =
-      "Python interface for the Alarm Decoder (AD2) family of alarm devices. (AD2USB, AD2SERIAL and AD2PI)";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

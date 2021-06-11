@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, fetchFromGitHub
-, gn, ninja, python, glib, pkg-config, icu
+, gn, ninja, python, pythonPackages, glib, pkg-config, icu
 , xcbuild, darwin
 , fetchpatch
 }:
@@ -55,6 +55,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   patches = [
+    # Remove unrecognized clang debug flags
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/saiarcot895/chromium-ubuntu-build/663dbfc492fd2f8ba28d9af40fb3b1327e6aa56e/debian/patches/revert-Xclang-instcombine-lower-dbg-declare.patch";
+      sha256 = "07qp4bjgbwbdrzqslvl2bgbzr3v97b9isbp0539x3lc8cy3h02g1";
+    })
     ./darwin.patch
     ./gcc_arm.patch  # Fix building zlib with gcc on aarch64, from https://gist.github.com/Adenilson/d973b6fd96c7709d33ddf08cf1dcb149
   ];
@@ -78,6 +83,13 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace build/config/compiler/compiler.gni \
+      --replace 'strip_absolute_paths_from_debug_symbols = true' \
+                'strip_absolute_paths_from_debug_symbols = false'
+    substituteInPlace build/config/compiler/BUILD.gn \
+      --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
+                'false'
   '';
 
   gnFlags = [
@@ -85,6 +97,7 @@ stdenv.mkDerivation rec {
     "is_clang=${lib.boolToString stdenv.cc.isClang}"
     "use_sysroot=false"
     # "use_system_icu=true"
+    "clang_use_chrome_plugins=false"
     "is_component_build=false"
     "v8_use_external_startup_data=false"
     "v8_monolithic=true"
@@ -93,16 +106,25 @@ stdenv.mkDerivation rec {
     "treat_warnings_as_errors=false"
     "v8_enable_i18n_support=true"
     "use_gold=false"
-    "use_system_xcode=true"
+    "init_stack_vars=false"
     # ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
     ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
   ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
 
   NIX_CFLAGS_COMPILE = "-O2";
+  FORCE_MAC_SDK_MIN = stdenv.targetPlatform.sdkVer or "10.12";
 
-  nativeBuildInputs = [ gn ninja pkg-config python ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];
+  nativeBuildInputs = [
+    gn
+    ninja
+    pkg-config
+    python
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild
+    darwin.DarwinTools
+    pythonPackages.setuptools
+  ];
   buildInputs = [ glib icu ];
 
   ninjaFlags = [ ":d8" "v8_monolith" ];

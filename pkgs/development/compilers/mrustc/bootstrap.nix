@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     # Use shared mrustc/minicargo/llvm instead of rebuilding them
     "MRUSTC=${mrustc}/bin/mrustc"
     "MINICARGO=${mrustc-minicargo}/bin/minicargo"
-    "LLVM_CONFIG=${llvm_7}/bin/llvm-config"
+    "LLVM_CONFIG=${llvm_7.dev}/bin/llvm-config"
     "RUSTC_TARGET=${rust.toRustTarget stdenv.targetPlatform}"
   ];
 

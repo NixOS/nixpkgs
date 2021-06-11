@@ -4,6 +4,7 @@
   substituteAll,
   fetchFromGitHub,
   isPy3k,
+  colorama,
   flask,
   flask-httpauth,
   flask-socketio,
@@ -22,12 +23,12 @@
 }:
 
 let
-  version = "2.3.1";
+  version = "2.3.2";
   src = fetchFromGitHub {
     owner = "micahflee";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "sha256-H09x3OF6l1HLHukGPvV2rZUjW9fxeKKMZkKbY9a2m9I=";
+    sha256 = "sha256-mzLDvvpO82iGDnzY42wx1KCNmAxUgVhpaDVprtb+YOI=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
@@ -69,6 +70,7 @@ in rec {
     ];
     disable = !isPy3k;
     propagatedBuildInputs = [
+      colorama
       flask
       flask-httpauth
       flask-socketio

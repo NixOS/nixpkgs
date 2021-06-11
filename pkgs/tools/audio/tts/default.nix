@@ -12,25 +12,26 @@
 #
 # If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
 # Also note that your tts version might not support all available models so check:
-#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.13
+#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.14
 #
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
 python3Packages.buildPythonApplication rec {
   pname = "tts";
-  version = "0.0.13";
+  version = "0.0.14";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "1sh7sjkh7ihbkqc7sl4hnzci0n7gv4s140dykpb1havaqyfhjn8l";
+    sha256 = "0cl0ri90mx0y19fmqww73lp5nv6qkpc45rm4157i7p6q6llajdhp";
   };
 
-  preBuild = ''
+  postPatch = ''
     sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt
     sed -i -e 's!unidecode==[^"]*!unidecode!' requirements.txt
+    sed -i -e 's!numba==[^"]*!numba!' requirements.txt
     sed -i -e 's!numpy==[^"]*!numpy!' requirements.txt
     sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt
   '';
@@ -40,14 +41,15 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    coqpit
     flask
     gdown
     inflect
     jieba
     librosa
     matplotlib
+    numba
     pandas
-    phonemizer
     pypinyin
     pysbd
     pytorch
@@ -69,6 +71,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkInputs = with python3Packages; [
+    pytest-sugar
     pytestCheckHook
   ];
 
@@ -77,10 +80,6 @@ python3Packages.buildPythonApplication rec {
     "test_torch_stft"
     "test_stft_loss"
     "test_multiscale_stft_loss"
-    # assert tensor(1.1904e-07, dtype=torch.float64) <= 0
-    "test_parametrized_gan_dataset"
-    # RuntimeError: expected scalar type Double but found Float
-    "test_speaker_embedding"
     # Requires network acccess to download models
     "test_synthesize"
   ];
@@ -92,13 +91,25 @@ python3Packages.buildPythonApplication rec {
 
     # numba tries to write to HOME directory
     export HOME=$TMPDIR
+
+    for file in $(grep -rl 'python TTS/bin' tests); do
+      substituteInPlace "$file" \
+        --replace "python TTS/bin" "${python3.interpreter} $out/lib/${python3.libPrefix}/site-packages/TTS/bin"
+    done
   '';
 
   disabledTestPaths = [
     # requires tensorflow
     "tests/test_tacotron2_tf_model.py"
-    "tests/test_vocoder_tf_melgan_generator.py"
-    "tests/test_vocoder_tf_pqmf.py"
+    "tests/vocoder_tests/test_vocoder_tf_pqmf.py"
+    "tests/vocoder_tests/test_vocoder_tf_melgan_generator.py"
+    # RuntimeError: fft: ATen not compiled with MKL support
+    "tests/vocoder_tests/test_fullband_melgan_train.py"
+    "tests/vocoder_tests/test_hifigan_train.py"
+    "tests/vocoder_tests/test_melgan_train.py"
+    "tests/vocoder_tests/test_multiband_melgan_train.py"
+    "tests/vocoder_tests/test_parallel_wavegan_train.py"
+
   ];
 
   meta = with lib; {

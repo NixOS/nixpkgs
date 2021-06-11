@@ -145,7 +145,7 @@ let
     };
   };
 
-  gitlabEnv = {
+  gitlabEnv = cfg.packages.gitlab.gitlabEnv // {
     HOME = "${cfg.statePath}/home";
     PUMA_PATH = "${cfg.statePath}/";
     GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
@@ -952,7 +952,7 @@ in {
       path = with pkgs; [
         jq
         openssl
-        replace
+        replace-secret
         git
       ];
       serviceConfig = {
@@ -994,8 +994,7 @@ in {
           ${optionalString cfg.smtp.enable ''
               install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
               ${optionalString (cfg.smtp.passwordFile != null) ''
-                  smtp_password=$(<'${cfg.smtp.passwordFile}')
-                  replace-literal -e '@smtpPassword@' "$smtp_password" '${cfg.statePath}/config/initializers/smtp_settings.rb'
+                  replace-secret '@smtpPassword@' '${cfg.smtp.passwordFile}' '${cfg.statePath}/config/initializers/smtp_settings.rb'
               ''}
           ''}
 

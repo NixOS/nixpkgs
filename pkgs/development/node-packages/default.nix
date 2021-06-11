@@ -75,6 +75,7 @@ let
 
     flood = super.flood.override {
       buildInputs = [ self.node-pre-gyp ];
+      meta.mainProgram = "flood";
     };
 
     expo-cli = super."expo-cli".override (attrs: {
@@ -116,6 +117,10 @@ let
             else ""
         }
       '';
+    };
+
+    markdownlint-cli = super.markdownlint-cli.override {
+      meta.mainProgram = "markdownlint";
     };
 
     mirakurun = super.mirakurun.override rec {
@@ -325,6 +330,17 @@ let
         wrapProgram "$out/bin/yaml-language-server" \
         --prefix NODE_PATH : ${self.prettier}/lib/node_modules
       '';
+    };
+
+    wavedrom-cli = super.wavedrom-cli.override {
+      nativeBuildInputs = [ pkgs.pkg-config self.node-pre-gyp ];
+      # These dependencies are required by
+      # https://github.com/Automattic/node-canvas.
+      buildInputs = with pkgs; [
+        pixman
+        cairo
+        pango
+      ];
     };
   };
 in self

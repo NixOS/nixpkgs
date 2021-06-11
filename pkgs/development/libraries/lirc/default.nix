@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
-  alsaLib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
+  alsa-lib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
 
 stdenv.mkDerivation rec {
   name = "lirc-0.10.1";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config help2man
     (python3.withPackages (p: with p; [ pyyaml setuptools ])) ];
 
-  buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];
+  buildInputs = [ alsa-lib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];
 
   configureFlags = [
     "--sysconfdir=/etc"

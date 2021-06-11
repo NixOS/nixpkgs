@@ -30,7 +30,7 @@ with python3.pkgs; buildPythonApplication rec {
     pkginfo
     freezegun
   ];
-  nativeBuildInputs = [ setuptools_scm sphinx sphinxcontrib_newsfeed ];
+  nativeBuildInputs = [ setuptools-scm sphinx sphinxcontrib_newsfeed ];
   checkInputs = [ pytest glibcLocales ];
   LC_ALL = "en_US.UTF-8";
 

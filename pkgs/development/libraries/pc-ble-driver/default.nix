@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, git, cmake, catch2, asio, udev, IOKit }:
+{ lib, stdenv, fetchFromGitHub
+, cmake, git
+, asio, catch2, spdlog
+, IOKit, udev
+}:
 
 stdenv.mkDerivation rec {
   pname = "pc-ble-driver";
-  version = "4.1.1";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-ble-driver";
     rev = "v${version}";
-    sha256 = "1llhkpbdbsq9d91m873vc96bprkgpb5wsm5fgs1qhzdikdhg077q";
+    sha256 = "1609x17sbfi668jfwyvnfk9z29w6cgzvgv67xcpvpx5jv0czpcdj";
   };
 
   cmakeFlags = [
@@ -16,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake git ];
-  buildInputs = [ catch2 asio ];
+  buildInputs = [ asio catch2 spdlog ];
 
   propagatedBuildInputs = [
 

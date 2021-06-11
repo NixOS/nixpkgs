@@ -10,11 +10,10 @@
 , networkx
 , numpy
 , psutil
-, python
 , qiskit-ignis
 , qiskit-terra
 , quandl
-, scikitlearn
+, scikit-learn
 , yfinance
   # Optional inputs
 , withTorch ? false
@@ -34,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.9.0";
+  version = "0.9.1";
 
   disabled = pythonOlder "3.6";
 
@@ -43,7 +42,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    hash = "sha256-knue9uJih72UQHsvfXZ9AA94mol4ERa9Lo/GMcp+2hA=";
+    hash = "sha256-fptyqPrkUgl3UjtlEmDYORdX/SsONxWozQGEs/EahmU=";
   };
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
@@ -59,7 +58,7 @@ buildPythonPackage rec {
     qiskit-terra
     qiskit-ignis
     quandl
-    scikitlearn
+    scikit-learn
     yfinance
   ] ++ lib.optionals (withTorch) [ pytorch ]
   ++ lib.optionals (withPyscf) [ pyscf ]
@@ -97,8 +96,6 @@ buildPythonPackage rec {
       >> qiskit/optimization/__init__.py
   '';
 
-  postInstall = "rm -rf $out/${python.sitePackages}/docs";  # Remove docs dir b/c it can cause conflicts.
-
   checkInputs = [
     pytestCheckHook
     ddt
@@ -123,9 +120,6 @@ buildPythonPackage rec {
     "--ignore=test/chemistry/test_bopes_sampler.py"
   ];
   disabledTests = [
-    # Disabled due to missing pyscf
-    "test_validate" # test/chemistry/test_inputparser.py
-
     # Online tests
     "test_exchangedata"
     "test_yahoo"
@@ -163,6 +157,8 @@ buildPythonPackage rec {
     "test_eoh"
     "test_qasm_5"
     "test_uccsd_hf"
+  ] ++ lib.optionals (!withPyscf) [
+    "test_validate" # test/chemistry/test_inputparser.py
   ];
 
   meta = with lib; {

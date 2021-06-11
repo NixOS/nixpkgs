@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl, pkg-config, gettext, glib
-, alsaSupport ? stdenv.isLinux, alsaLib
+, alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
 , ossSupport ? false
 , mateUpdateScript
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config gettext ];
 
   buildInputs = [ glib ]
-    ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = lib.optional ossSupport "--enable-oss";

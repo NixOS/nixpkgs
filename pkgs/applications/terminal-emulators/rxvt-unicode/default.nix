@@ -9,7 +9,7 @@
 
 let
   pname = "rxvt-unicode";
-  version = "9.22";
+  version = "9.26";
   description = "A clone of the well-known terminal emulator rxvt";
 
   desktopItem = makeDesktopItem {
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
-    sha256 = "1pddjn5ynblwfrdmskylrsxb9vfnk3w4jdnq2l8xn2pspkljhip9";
+    sha256 = "12y9p32q0v7n7rhjla0j2g9d5rj2dmwk20c9yhlssaaxlawiccb4";
   };
 
   buildInputs =

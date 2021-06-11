@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , pkg-config
 , cmake
-, alsaLib
+, alsa-lib
 , ffmpeg
 , libass
 , libcddb
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
-    alsaLib
+    alsa-lib
     ffmpeg
     libass
     libcddb

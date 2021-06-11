@@ -1,5 +1,5 @@
 { mkDerivation, stdenv, lib, fetchurl, rpmextract, autoPatchelfHook , libuuid
-, libXtst, libXfixes, glib, gst_all_1, alsaLib, freetype, fontconfig , libXext
+, libXtst, libXfixes, glib, gst_all_1, alsa-lib, freetype, fontconfig , libXext
 , libGL, libpng, libXScrnSaver, libxcb, xorg, libpulseaudio, libdrm
 }:
 mkDerivation rec {
@@ -16,7 +16,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    libuuid libXtst libXScrnSaver libXfixes alsaLib freetype fontconfig libXext
+    libuuid libXtst libXScrnSaver libXfixes alsa-lib freetype fontconfig libXext
     libGL libpng libxcb libpulseaudio libdrm
     glib  # For libgobject
     stdenv.cc.cc  # For libstdc++

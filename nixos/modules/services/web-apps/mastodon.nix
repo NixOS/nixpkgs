@@ -448,10 +448,10 @@ in {
                 join pg_namespace s on s.oid = c.relnamespace \
                 where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
                 and s.nspname not like 'pg_temp%';" | sed -n 3p` -eq 0 ]; then
-          SAFETY_ASSURED=1 rake db:schema:load
-          rake db:seed
+          SAFETY_ASSURED=1 rails db:schema:load
+          rails db:seed
         else
-          rake db:migrate
+          rails db:migrate
         fi
       '';
       path = [ cfg.package pkgs.postgresql ];

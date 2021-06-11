@@ -50,11 +50,10 @@ common =
            ];
 
       buildInputs =
-        [ curl openssl sqlite xz bzip2 nlohmann_json
+        [ curl libsodium openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
-        ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is24 [ libarchive gtest lowdown ]
         ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
         ++ lib.optional withLibseccomp libseccomp
@@ -94,14 +93,12 @@ common =
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
         '' +
-        # On all versions before c9f51e87057652db0013289a95deffba495b35e7,
-        # released with 2.3.8, we need to patch around an issue where the Nix
-        # configure step pulls in the build system's bash and other utilities
-        # when cross-compiling.
+        # On all versions before c9f51e87057652db0013289a95deffba495b35e7, which
+        # removes config.nix entirely and is not present in 2.3.x, we need to
+        # patch around an issue where the Nix configure step pulls in the build
+        # system's bash and other utilities when cross-compiling.
         lib.optionalString (
-          stdenv.buildPlatform != stdenv.hostPlatform &&
-          (lib.versionOlder "2.3.8" version && !is24)
-          # The additional is24 condition is required as versionOlder doesn't understand nixUnstable version strings
+          stdenv.buildPlatform != stdenv.hostPlatform && !is24
         ) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
@@ -119,8 +116,11 @@ common =
         [ "--with-store-dir=${storeDir}"
           "--localstatedir=${stateDir}"
           "--sysconfdir=${confDir}"
-          "--disable-init-state"
           "--enable-gc"
+        ]
+        ++ lib.optionals (!is24) [
+          # option was removed in 2.4
+          "--disable-init-state"
         ]
         ++ lib.optionals stdenv.isLinux [
           "--with-sandbox-shell=${sh}/bin/busybox"
@@ -196,10 +196,10 @@ in rec {
 
   nixStable = callPackage common (rec {
     pname = "nix";
-    version = "2.3.11";
+    version = "2.3.12";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "89a8d7995305a78b1561e6670bbf1879c791fc4904eb094bc4f180775a61c128";
+      sha256 = "sha256-ITp9ScRhB5syNh5NAI0kjX9o400syTR/Oo/5Ap+a+10=";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -208,31 +208,17 @@ in rec {
   nixUnstable = lib.lowPrio (callPackage common rec {
     pname = "nix";
     version = "2.4${suffix}";
-    suffix = "pre20210503_6d2553a";
+    suffix = "pre20210601_5985b8b";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "6d2553ae1496288554e871c530836428f405fd67";
-      sha256 = "sha256-YeSeyOKhBAXHlkzo4mwYr8QIjIP9AgdpJ7YdhqOO2CA=";
+      rev = "5985b8b5275605ddd5e92e2f0a7a9f494ac6e35d";
+      sha256 = "sha256-2So7ZsD8QJlOXCYqdoj8naNgBw6O4Vw1MM2ORsaqlXc=";
     };
 
     inherit storeDir stateDir confDir boehmgc;
 
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/NixOS/nix/commit/8c7e043de2f673bc355d83f1e873baa93f30be62.patch";
-        sha256 = "sha256-aTcUnZXheewnyCT7yQKnTqQDKS2uDoN9plMQgxJH8Ag=";
-      })
-    ];
-  });
-
-  nixExperimental = nixUnstable.overrideAttrs (prev: {
-    patches = (prev.patches or []) ++ [ ./enable-all-experimental.patch ];
-  });
-
-  nixFlakes = nixUnstable.overrideAttrs (prev: {
-    patches = (prev.patches or []) ++ [ ./enable-flakes.patch ];
   });
 
 }

@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
     "-Dmac_ghash_pclmulqdq=disabled"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Fast and Secure Tunneling Daemon";
     homepage = "https://projects.universe-factory.net/projects/fastd/wiki";

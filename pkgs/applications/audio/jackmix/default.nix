@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, sconsPackages, qtbase, lash, libjack2, jack ? libjack2, alsaLib }:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, sconsPackages, qtbase, lash, libjack2, jack ? libjack2, alsa-lib }:
 
 mkDerivation rec {
   pname = "jackmix";
@@ -18,7 +18,7 @@ mkDerivation rec {
     qtbase
     lash
     jack
-    alsaLib
+    alsa-lib
   ];
 
   installPhase = ''

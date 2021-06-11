@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, meson, ninja, pkg-config, wayland, git
-, alsaLib, gtkmm3, gtk-layer-shell, pulseaudio, wayfire, wf-config
+, alsa-lib, gtkmm3, gtk-layer-shell, pulseaudio, wayfire, wf-config
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config wayland ];
   buildInputs = [
-    alsaLib gtkmm3 gtk-layer-shell pulseaudio wayfire wf-config
+    alsa-lib gtkmm3 gtk-layer-shell pulseaudio wayfire wf-config
   ];
 
   mesonFlags = [ "--sysconfdir" "/etc" ];

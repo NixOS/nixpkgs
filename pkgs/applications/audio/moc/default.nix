@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config
 , ncurses, db , popt, libtool
 # Sound sub-systems
-, alsaSupport ? true, alsaLib
+, alsaSupport ? true, alsa-lib
 , pulseSupport ? true, libpulseaudio, autoreconfHook
 , jackSupport ? true, libjack2
 , ossSupport ? true
@@ -14,11 +14,10 @@
 , musepackSupport ? true, libmpc, libmpcdec, taglib
 , vorbisSupport ? true, libvorbis
 , speexSupport ? true, speex
-, ffmpegSupport ? true, ffmpeg_3
+, ffmpegSupport ? true, ffmpeg
 , sndfileSupport ? true, libsndfile
 , wavpackSupport ? true, wavpack
 # Misc
-, withffmpeg4 ? false, ffmpeg_4
 , curlSupport ? true, curl
 , samplerateSupport ? true, libsamplerate
 , withDebug ? false
@@ -39,7 +38,7 @@ in stdenv.mkDerivation rec {
   };
 
   patches = []
-    ++ opt withffmpeg4 ./moc-ffmpeg4.patch
+    ++ opt ffmpegSupport ./moc-ffmpeg4.patch
     ++ opt pulseSupport ./pulseaudio.patch;
 
   nativeBuildInputs = [ pkg-config ]
@@ -47,7 +46,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses db popt libtool ]
     # Sound sub-systems
-    ++ opt alsaSupport alsaLib
+    ++ opt alsaSupport alsa-lib
     ++ opt pulseSupport libpulseaudio
     ++ opt jackSupport libjack2
     # Audio formats
@@ -60,8 +59,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
     ++ opt vorbisSupport libvorbis
     ++ opt speexSupport speex
-    ++ opt (ffmpegSupport && !withffmpeg4) ffmpeg_3
-    ++ opt (ffmpegSupport && withffmpeg4) ffmpeg_4
+    ++ opt ffmpegSupport ffmpeg
     ++ opt sndfileSupport libsndfile
     ++ opt wavpackSupport wavpack
     # Misc

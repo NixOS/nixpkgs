@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "configparser";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   preConfigure = ''
     export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8

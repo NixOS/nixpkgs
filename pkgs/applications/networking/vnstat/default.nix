@@ -1,12 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gd, ncurses, sqlite, check }:
+{ lib, stdenv
+, fetchFromGitHub
+, pkg-config
+, gd, ncurses
+, sqlite
+, check
+}:
 
 stdenv.mkDerivation rec {
   pname = "vnstat";
-  version = "2.6";
+  version = "2.7";
 
-  src = fetchurl {
-    sha256 = "1xvzkxkq1sq33r2s4f1967f4gnca4xw411sbapdkx541f856w9w9";
-    url = "https://humdi.net/${pname}/${pname}-${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "vergoh";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "105krrc7hl5mbj89i1k3w8yzqrg4f0q96lmyv4rc7fhhds5zam2h";
   };
 
   postPatch = ''
@@ -32,5 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://humdi.net/vnstat/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ evils ];
   };
 }

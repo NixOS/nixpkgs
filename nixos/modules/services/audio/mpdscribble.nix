@@ -59,7 +59,7 @@ let
 
   replaceSecret = secretFile: placeholder: targetFile:
     optionalString (secretFile != null) ''
-      ${pkgs.replace}/bin/replace-literal -ef ${placeholder} "$(cat ${secretFile})" ${targetFile}'';
+      ${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' '';
 
   preStart = pkgs.writeShellScript "mpdscribble-pre-start" ''
     cp -f "${cfgTemplate}" "${cfgFile}"

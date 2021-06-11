@@ -3,13 +3,13 @@
 }:
 
 let
-  version = "2.26.0";
+  version = "2.27.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "06zr10zx3f526wcxj77smcl8wk55mhlnikd0b8vbjl9yyb0qc5mz";
+    sha256 = "0836ygyvld5skjycd7366i6vyf451s6cay5ng6c2fwq0skvp2gj2";
   };
 
   goPackagePath = "github.com/prometheus/prometheus";
@@ -31,7 +31,7 @@ in buildGoModule rec {
   pname = "prometheus";
   inherit src version;
 
-  vendorSha256 = "0h14pmk74lxj7z39jb4xwvx3whwkaxn9686y23sgrpkra5sk6dbm";
+  vendorSha256 = "0dq3p7hga7m1aq78har5rr136hlb0kp8zhh2wzqlkxrk1f33w54p";
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 

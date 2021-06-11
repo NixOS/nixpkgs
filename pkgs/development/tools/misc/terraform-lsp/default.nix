@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "terraform-lsp";
-  version = "0.0.10";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "juliosueiras";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1j69j1pkd0q6bds1c6pcaars5hl3hk93q2p31mymkzmy640k8zfn";
+    sha256 = "111350jbq0dp0qhk48j12hrlisd1fwzqpcv357igrbqf6ki7r78q";
   };
 
   goPackagePath = "github.com/juliosueiras/terraform-lsp";

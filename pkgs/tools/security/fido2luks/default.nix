@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config clang ];
 
   configurePhase = ''
-    export LIBCLANG_PATH="${llvmPackages.libclang}/lib"
+    export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
   '';
 
-  cargoSha256 = "sha256-4VuM1bPkl9XCI9XsZIJvw3kHSKgT4P7x6I83F2KCFD0=";
+  cargoSha256 = "sha256-d6t/bvHpnH4lKv78tp/8DC/VrQBnaiZhnf8GrlcYhJw=";
 
   meta = with lib; {
     description = "Decrypt your LUKS partition using a FIDO2 compatible authenticator";

@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
   ]);
   propagatedBuildInputs = [ glib libsigcxx ];
 
-  enableParallelBuilding = true;
-
   doCheck = false; # fails. one test needs the net, another /etc/fstab
 
   passthru = {

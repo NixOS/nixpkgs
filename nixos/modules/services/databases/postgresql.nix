@@ -159,7 +159,7 @@ in
                 For more information on how to specify the target
                 and on which privileges exist, see the
                 <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
+                The attributes are used as <code>GRANT ''${attrValue} ON ''${attrName}</code>.
               '';
               example = literalExample ''
                 {

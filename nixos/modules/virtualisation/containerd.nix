@@ -1,10 +1,20 @@
 { pkgs, lib, config, ... }:
 let
   cfg = config.virtualisation.containerd;
-  containerdConfigChecked = pkgs.runCommand "containerd-config-checked.toml" { nativeBuildInputs = [pkgs.containerd]; } ''
-    containerd -c ${cfg.configFile} config dump >/dev/null
-    ln -s ${cfg.configFile} $out
+
+  configFile = if cfg.configFile == null then
+    settingsFormat.generate "containerd.toml" cfg.settings
+  else
+    cfg.configFile;
+
+  containerdConfigChecked = pkgs.runCommand "containerd-config-checked.toml" {
+    nativeBuildInputs = [ pkgs.containerd ];
+  } ''
+    containerd -c ${configFile} config dump >/dev/null
+    ln -s ${configFile} $out
   '';
+
+  settingsFormat = pkgs.formats.toml {};
 in
 {
 
@@ -13,8 +23,19 @@ in
 
     configFile = lib.mkOption {
       default = null;
-      description = "path to containerd config file";
+      description = ''
+       Path to containerd config file.
+       Setting this option will override any configuration applied by the settings option.
+      '';
       type = nullOr path;
+    };
+
+    settings = lib.mkOption {
+      type = settingsFormat.type;
+      default = {};
+      description = ''
+        Verbatim lines to add to containerd.toml
+      '';
     };
 
     args = lib.mkOption {
@@ -25,9 +46,19 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    virtualisation.containerd.args.config = lib.mkIf (cfg.configFile != null) (toString containerdConfigChecked);
+    warnings = lib.optional (cfg.configFile != null) ''
+      `virtualisation.containerd.configFile` is deprecated. use `virtualisation.containerd.settings` instead.
+    '';
 
-    environment.systemPackages = [pkgs.containerd];
+    virtualisation.containerd = {
+      args.config = toString containerdConfigChecked;
+      settings = {
+        plugins.cri.containerd.snapshotter = lib.mkIf config.boot.zfs.enabled "zfs";
+        plugins.cri.cni.bin_dir = lib.mkDefault "${pkgs.cni-plugins}/bin";
+      };
+    };
+
+    environment.systemPackages = [ pkgs.containerd ];
 
     systemd.services.containerd = {
       description = "containerd - container runtime";
@@ -37,16 +68,14 @@ in
         containerd
         runc
         iptables
-      ];
+      ] ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {
         ExecStart = ''${pkgs.containerd}/bin/containerd ${lib.concatStringsSep " " (lib.cli.toGNUCommandLine {} cfg.args)}'';
         Delegate = "yes";
         KillMode = "process";
         Type = "notify";
         Restart = "always";
-        RestartSec = "5";
-        StartLimitBurst = "8";
-        StartLimitIntervalSec = "120s";
+        RestartSec = "10";
 
         # "limits" defined below are adopted from upstream: https://github.com/containerd/containerd/blob/master/containerd.service
         LimitNPROC = "infinity";
@@ -54,6 +83,13 @@ in
         LimitNOFILE = "infinity";
         TasksMax = "infinity";
         OOMScoreAdjust = "-999";
+
+        StateDirectory = "containerd";
+        RuntimeDirectory = "containerd";
+      };
+      unitConfig = {
+        StartLimitBurst = "16";
+        StartLimitIntervalSec = "120s";
       };
     };
   };

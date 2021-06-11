@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkg-config, gtk2, alsaLib, SDL}:
+{lib, stdenv, fetchurl, pkg-config, gtk2, alsa-lib, SDL}:
 
 stdenv.mkDerivation rec {
   name = "uae-0.8.29";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-sdl" "--with-sdl-sound" "--with-sdl-gfx" "--with-alsa" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 alsaLib SDL ];
+  buildInputs = [ gtk2 alsa-lib SDL ];
 
   hardeningDisable = [ "format" ];
   LDFLAGS = [ "-lm" ];

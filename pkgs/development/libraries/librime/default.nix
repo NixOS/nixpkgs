@@ -1,20 +1,20 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  libyamlcpp, gtest }:
+  libyamlcpp, gtest, capnproto, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "librime";
-  version = "1.5.3";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "rime";
-    repo = "librime";
+    repo = pname;
     rev = version;
-    sha256 = "0xskhdhk7dgpc71r39pfzxi5vrlzy90aqj1gzv8nnapq91p2awhv";
+    sha256 = "023c7bpfnyf8wlrssn89ziwsjccflyanrxlaqmwcbx8a5dvipk01";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gtest ];
+  buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gtest capnproto ];
 
   meta = with lib; {
     homepage    = "https://rime.im/";

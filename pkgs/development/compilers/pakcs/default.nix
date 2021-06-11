@@ -94,7 +94,7 @@ in stdenv.mkDerivation {
       with dynamic web pages, prototyping embedded systems).
     '';
 
-    maintainers = with maintainers; [ kkallio gnidorah ];
+    maintainers = with maintainers; [ kkallio ];
     platforms = platforms.linux;
   };
 }

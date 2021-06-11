@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "1dz5sksalccv4c3bzk3c1jxpg3s28lwlw8hfwc9dfxhw3a1np3fd";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ click python-dotenv pyserial ];
 
   # No tests

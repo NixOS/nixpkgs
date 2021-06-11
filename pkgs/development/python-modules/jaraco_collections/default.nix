@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, setuptools_scm
+{ buildPythonPackage, fetchPypi, setuptools-scm
 , six, jaraco_classes, jaraco_text
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pythonNamespaces = [ "jaraco" ];
 
   doCheck = false;
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six jaraco_classes jaraco_text ];
 
   # break dependency cycle

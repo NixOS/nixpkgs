@@ -16,11 +16,11 @@ assert enableDmeventd -> enableCmdlib;
 
 stdenv.mkDerivation rec {
   pname = "lvm2" + lib.optionalString enableDmeventd "with-dmeventd";
-  version = "2.03.11";
+  version = "2.03.12";
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz";
-    sha256 = "1m4xpda8vbyd89ca0w8nacvnl4j34yzsa625gn990fb5sh84ab44";
+    sha256 = "1shczwfd0888dchjiaqzd48ampm6f8y0ngsqd99fy4nxlbr5q1vn";
   };
 
   nativeBuildInputs = [ pkg-config ];

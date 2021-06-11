@@ -13,6 +13,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   });
 
   # blueberry -> pkgs/tools/bluetooth/blueberry/default.nix
+  bulky = callPackage ./bulky {};
   cinnamon-common = callPackage ./cinnamon-common { };
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-desktop = callPackage ./cinnamon-desktop { };

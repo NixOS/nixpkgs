@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, cmake, /*jdk,*/ alsaLib }:
+{ lib, stdenv, fetchurl, unzip, cmake, /*jdk,*/ alsa-lib }:
 
 stdenv.mkDerivation rec {
   pname = "portmidi";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ unzip cmake ];
-  buildInputs = [ alsaLib ];
+  buildInputs = [ alsa-lib ];
 
   hardeningDisable = [ "format" ];
 

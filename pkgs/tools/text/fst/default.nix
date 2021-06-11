@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoBuildFlags = [ "--workspace" ];
-  cargoSha256 = "0svn2gzipslz939396rcydqx3i1x07l7acas7fhql12n59n2yrxw";
+  cargoSha256 = "0440p0hb3nlq9wwk3zac9dldanslrddvqn4gib0vl7aikxkcvh4l";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

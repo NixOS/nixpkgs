@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
     description = "Plays old Amiga tunes through UAE emulation and cloned m68k-assembler Eagleplayer API";
     homepage = "http://zakalwe.fi/uade/";
     license = licenses.gpl2;
-    maintainers = [ lib.maintainers.gnidorah ];
-    platforms = lib.platforms.unix;
+    maintainers = [ ];
+    platforms = platforms.unix;
   };
 }

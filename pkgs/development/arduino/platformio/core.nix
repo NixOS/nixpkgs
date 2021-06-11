@@ -1,9 +1,25 @@
-{ stdenv, lib, buildPythonApplication, bottle
-, click, click-completion, colorama, semantic-version
-, lockfile, pyserial, requests
-, tabulate, pyelftools, marshmallow
-, pytest, tox, jsondiff
-, git, spdx-license-list-data
+{ stdenv, lib, buildPythonApplication
+, ajsonrpc
+, bottle
+, click
+, click-completion
+, colorama
+, git
+, jsondiff
+, lockfile
+, marshmallow
+, pyelftools
+, pyserial
+, pytest
+, requests
+, semantic-version
+, spdx-license-list-data
+, starlette
+, tabulate
+, tox
+, uvicorn
+, wsproto
+, zeroconf
 , version, src
 }:
 
@@ -78,10 +94,24 @@ in buildPythonApplication rec {
   pname = "platformio";
   inherit version src;
 
-  propagatedBuildInputs =  [
-    bottle click click-completion colorama git
-    lockfile pyserial requests semantic-version
-    tabulate pyelftools marshmallow
+  propagatedBuildInputs = [
+    ajsonrpc
+    bottle
+    click
+    click-completion
+    colorama
+    git
+    lockfile
+    marshmallow
+    pyelftools
+    pyserial
+    requests
+    semantic-version
+    starlette
+    tabulate
+    uvicorn
+    wsproto
+    zeroconf
   ];
 
   HOME = "/tmp";
@@ -105,6 +135,9 @@ in buildPythonApplication rec {
   postPatch = ''
     substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
+
+    substituteInPlace setup.py \
+      --replace "zeroconf==0.28.*" "zeroconf"
   '';
 
   meta = with lib; {

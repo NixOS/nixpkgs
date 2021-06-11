@@ -1,5 +1,6 @@
 broken-packages:
   # These packages don't compile.
+  - 3d-graphics-examples
   - 3dmodels
   - AAI
   - abcnotation
@@ -33,6 +34,7 @@ broken-packages:
   - acme-inator
   - acme-kitchen-sink
   - acme-left-pad
+  - acme-memorandom
   - acme-miscorder
   - acme-mutable-package
   - acme-now
@@ -42,6 +44,7 @@ broken-packages:
   - acme-strfry
   - acme-stringly-typed
   - acme-this
+  - acme-zalgo
   - acme-zero
   - AC-MiniTest
   - AC-Terminal
@@ -168,7 +171,6 @@ broken-packages:
   - archiver
   - archlinux
   - archnews
-  - arch-web
   - arena
   - argon2
   - argparser
@@ -236,6 +238,7 @@ broken-packages:
   - Aurochs
   - authenticate-ldap
   - authinfo-hs
+  - auto
   - autom
   - automata
   - autonix-deps
@@ -439,6 +442,7 @@ broken-packages:
   - BufferedSocket
   - buffet
   - buffon
+  - buffon-machines
   - bugsnag-haskell
   - bugzilla
   - build
@@ -452,6 +456,7 @@ broken-packages:
   - buster
   - Buster
   - butter
+  - buttplug-hs-core
   - bv-sized
   - bytable
   - bytearray-parsing
@@ -513,6 +518,7 @@ broken-packages:
   - cache-polysemy
   - caching
   - cacophony
+  - caerbannog
   - cafeteria-prelude
   - caffegraph
   - cairo-core
@@ -582,6 +588,7 @@ broken-packages:
   - cgen
   - cgi-utils
   - chalkboard
+  - chalmers-lava2000
   - character-cases
   - charter
   - chart-histogram
@@ -592,6 +599,7 @@ broken-packages:
   - Checked
   - checkmate
   - chell-quickcheck
+  - chiasma
   - Chitra
   - choose
   - chorale
@@ -695,6 +703,7 @@ broken-packages:
   - commander
   - Commando
   - commodities
+  - commonmark-cli
   - commsec
   - compactable
   - Compactable
@@ -992,12 +1001,12 @@ broken-packages:
   - dhrun
   - dia-base
   - diagrams-boolean
+  - diagrams-builder
   - diagrams-canvas
   - diagrams-graphviz
   - diagrams-gtk
   - diagrams-pdf
   - diagrams-qrcode
-  - diagrams-rasterific
   - diagrams-tikz
   - dib
   - dice2tex
@@ -1031,6 +1040,7 @@ broken-packages:
   - direct-plugins
   - direct-rocksdb
   - direm
+  - discord-haskell
   - discordian-calendar
   - discord-types
   - discrete
@@ -1251,6 +1261,7 @@ broken-packages:
   - exinst-hashable
   - exists
   - exitcode
+  - exp-cache
   - exp-extended
   - explain
   - explicit-constraint-lens
@@ -1273,8 +1284,10 @@ broken-packages:
   - Facebook-Password-Hacker-Online-Latest-Version
   - faceted
   - facts
+  - fadno-braids
   - failable-list
   - failure-detector
+  - fakedata
   - fake-type
   - faktory
   - f-algebra-gen
@@ -1344,6 +1357,7 @@ broken-packages:
   - fitsio
   - fits-parse
   - fixed-point
+  - fixedprec
   - fixed-precision
   - fixed-storable-array
   - fixed-timestep
@@ -1475,6 +1489,7 @@ broken-packages:
   - fusion
   - futun
   - future
+  - fuzzy-time-gen
   - fuzzy-timings
   - fwgl
   - g4ip
@@ -1510,7 +1525,6 @@ broken-packages:
   - generic-lens-labels
   - generic-lucid-scaffold
   - generic-maybe
-  - generic-optics
   - generic-override-aeson
   - generic-pretty
   - genericserialize
@@ -1529,6 +1543,7 @@ broken-packages:
   - gentlemark
   - genvalidity-persistent
   - GeocoderOpenCage
+  - geodetics
   - geodetic-types
   - geojson-types
   - geom2d
@@ -1570,6 +1585,7 @@ broken-packages:
   - ghc-srcspan-plugin
   - ghc-syb
   - ghc-syb-utils
+  - ghc-tags
   - ghc-tags-core
   - ghc-time-alloc-prof
   - ghc-usage
@@ -1622,6 +1638,7 @@ broken-packages:
   - global-variables
   - glob-posix
   - GlomeTrace
+  - gloss-banana
   - gloss-export
   - gloss-game
   - glpk-headers
@@ -1745,8 +1762,18 @@ broken-packages:
   - hakismet
   - hakka
   - hako
-  - hakyll
+  - hakyll-blaze-templates
+  - hakyll-contrib
+  - hakyll-contrib-csv
+  - hakyll-contrib-elm
+  - hakyll-contrib-links
+  - hakyll-dhall
+  - hakyll-dir-list
+  - hakyll-process
+  - hakyll-R
+  - hakyll-series
   - hakyll-shortcode
+  - hakyll-shortcut-links
   - HaLeX
   - halfs
   - halipeto
@@ -1766,6 +1793,7 @@ broken-packages:
   - hans
   - hanspell
   - haphviz
+  - hapistrano
   - happindicator
   - happindicator3
   - happlets
@@ -1819,7 +1847,6 @@ broken-packages:
   - haskell-awk
   - haskell-bitmex-rest
   - haskell-brainfuck
-  - haskell-ci
   - haskell-cnc
   - haskell-coffee
   - haskell-compression
@@ -1855,6 +1882,7 @@ broken-packages:
   - haskell-rules
   - haskellscrabble
   - haskellscript
+  - haskell-snake
   - haskell-spacegoo
   - haskell-src-exts-prisms
   - haskell-src-exts-qq
@@ -1872,6 +1900,7 @@ broken-packages:
   - haskey
   - haskheap
   - haskhol-core
+  - hasklepias
   - haskmon
   - haskoin
   - haskoin-util
@@ -1883,6 +1912,7 @@ broken-packages:
   - haskus-binary
   - haskyapi
   - hasmin
+  - hasqlator-mysql
   - hasql-backend
   - hasql-class
   - hasql-cursor-transaction
@@ -2049,12 +2079,14 @@ broken-packages:
   - hjs
   - hjsonpointer
   - hjson-query
+  - hjugement-protocol
   - HJVM
   - hkd-delta
   - hkd-lens
   - hkt
   - hlbfgsb
   - hledger-chart
+  - hledger-flow
   - hledger-irr
   - hledger-vty
   - hlibBladeRF
@@ -2065,7 +2097,11 @@ broken-packages:
   - hlogger
   - HLogger
   - hlongurl
+  - hlrdb-core
   - hls-exactprint-utils
+  - hls-floskell-plugin
+  - hls-fourmolu-plugin
+  - hls-pragmas-plugin
   - hlwm
   - hmarkup
   - hmatrix-banded
@@ -2073,6 +2109,7 @@ broken-packages:
   - hmatrix-nipals
   - hmatrix-sparse
   - hmatrix-static
+  - hmatrix-sundials
   - hmatrix-svdlibc
   - hmatrix-syntax
   - hmatrix-tests
@@ -2086,6 +2123,7 @@ broken-packages:
   - Hmpf
   - hmumps
   - hnetcdf
+  - hnn
   - hoauth
   - hobbes
   - hocilib
@@ -2230,6 +2268,7 @@ broken-packages:
   - hs-pkg-config
   - hspread
   - hspresent
+  - hspretty
   - hsql
   - hs-re
   - hsrelp
@@ -2398,6 +2437,7 @@ broken-packages:
   - ini-qq
   - initialize
   - inject-function
+  - inline-asm
   - inserts
   - instana-haskell-trace-sdk
   - instance-map
@@ -2535,6 +2575,7 @@ broken-packages:
   - katip-syslog
   - katt
   - katydid
+  - kawaii
   - kawhi
   - kdesrc-build-extra
   - kd-tree
@@ -2775,6 +2816,7 @@ broken-packages:
   - L-seed
   - lsfrom
   - ltext
+  - ltiv1p1
   - ltk
   - LTS
   - lua-bc
@@ -2828,11 +2870,13 @@ broken-packages:
   - mappy
   - markdown-kate
   - marked-pretty
+  - markov-realization
   - mars
   - marvin-interpolate
   - MASMGen
   - massiv-persist
   - massiv-serialise
+  - master-plan
   - mathflow
   - math-grads
   - math-interpolate
@@ -2878,6 +2922,7 @@ broken-packages:
   - memis
   - memoization-utils
   - memo-ptr
+  - memorable-bits
   - memorypool
   - menoh
   - menshen
@@ -2930,6 +2975,7 @@ broken-packages:
   - mit-3qvpPyAi6mH
   - mix-arrows
   - mixpanel-client
+  - mltool
   - ml-w
   - mm2
   - mmark
@@ -3037,6 +3083,7 @@ broken-packages:
   - multext-east-msd
   - multiaddr
   - multiarg
+  - multi-except
   - multihash
   - multi-instance
   - multilinear
@@ -3137,6 +3184,7 @@ broken-packages:
   - network-socket-options
   - network-transport-amqp
   - network-transport-inmemory
+  - network-transport-tests
   - network-uri-json
   - network-voicetext
   - network-wai-router
@@ -3200,6 +3248,7 @@ broken-packages:
   - numerals-base
   - numeric-qq
   - numeric-ranges
+  - numhask
   - numhask-array
   - numhask-free
   - numhask-prelude
@@ -3240,6 +3289,7 @@ broken-packages:
   - onama
   - ONC-RPC
   - on-demand-ssh-tunnel
+  - one-liner-instances
   - oneormore
   - onpartitions
   - onu-course
@@ -3252,6 +3302,7 @@ broken-packages:
   - openapi3-code-generator
   - openapi-petstore
   - openapi-typed
+  - opencc
   - opench-meteo
   - OpenCL
   - OpenCLRaw
@@ -3360,6 +3411,7 @@ broken-packages:
   - parcom-lib
   - par-dual
   - pareto
+  - parochial
   - Parry
   - parseargs
   - parsec2
@@ -3375,6 +3427,7 @@ broken-packages:
   - parser-helper
   - parsers-megaparsec
   - parsimony
+  - parsley
   - parsnip
   - partage
   - partial-records
@@ -3402,6 +3455,7 @@ broken-packages:
   - pb-next
   - pcd-loader
   - pcf-font
+  - pcgen
   - PCLT
   - pcre-light-extra
   - pdfname
@@ -3434,6 +3488,7 @@ broken-packages:
   - persistent-cereal
   - persistent-database-url
   - persistent-discover
+  - persistent-documentation
   - persistent-equivalence
   - persistent-migration
   - persistent-mongoDB
@@ -3569,6 +3624,7 @@ broken-packages:
   - postgresql-simple-named
   - postgresql-simple-sop
   - postgresql-simple-url
+  - postgresql-syntax
   - postgresql-typed-lifted
   - postgres-tmp
   - postgrest-ws
@@ -3578,6 +3634,7 @@ broken-packages:
   - postmaster
   - potato-tool
   - potoki-core
+  - powerdns
   - powermate
   - powerpc
   - powerqueue-levelmem
@@ -3685,6 +3742,7 @@ broken-packages:
   - pushme
   - push-notifications
   - putlenses
+  - puzzle-draw
   - pyffi
   - pyfi
   - python-pickle
@@ -3729,6 +3787,7 @@ broken-packages:
   - quiver
   - quokka
   - quoridor-hs
+  - raaz
   - RabbitMQ
   - rad
   - radian
@@ -3766,7 +3825,9 @@ broken-packages:
   - react-haskell
   - reaction-logic
   - reactive-bacon
-  - reactive-banana
+  - reactive-banana-gi-gtk
+  - reactive-banana-sdl2
+  - reactive-banana-threepenny
   - reactive-thread
   - react-tutorial-haskell-server
   - readability
@@ -3951,6 +4012,9 @@ broken-packages:
   - SableCC2Hs
   - safe-buffer-monad
   - safe-coerce
+  - safe-coloured-text-gen
+  - safe-coloured-text-layout
+  - safe-coloured-text-terminfo
   - safecopy-migrate
   - safecopy-store
   - safe-freeze
@@ -4303,6 +4367,7 @@ broken-packages:
   - sparse-lin-alg
   - special-functors
   - special-keys
+  - speculate
   - speculation
   - sphinx
   - sphinxesc
@@ -4427,6 +4492,7 @@ broken-packages:
   - stripe-hs
   - stripe-http-streams
   - stripe-signature
+  - stripe-tests
   - strongswan-sql
   - structural-traversal
   - structures
@@ -4489,6 +4555,7 @@ broken-packages:
   - syntax-trees
   - syntax-trees-fork-bairyn
   - synthesizer
+  - synthesizer-alsa
   - Sysmon
   - sys-process
   - system-canonicalpath
@@ -4724,6 +4791,7 @@ broken-packages:
   - transformers-lift
   - transformers-runnable
   - TransformersStepByStep
+  - transient
   - transient-universe
   - translatable-intset
   - translate
@@ -4783,6 +4851,7 @@ broken-packages:
   - typed-encoding
   - typedflow
   - typedquery
+  - typed-time
   - typed-wire
   - type-eq
   - type-fun
@@ -4816,12 +4885,14 @@ broken-packages:
   - uhexdump
   - uhttpc
   - ui-command
+  - ulid
   - unamb-custom
   - unbounded-delays-units
   - unboxed-containers
   - unboxed-references
   - unbreak
   - unfix-binders
+  - unfoldable
   - unicode-prelude
   - unicode-show
   - unicode-symbols
@@ -4851,6 +4922,7 @@ broken-packages:
   - unpack-funcs
   - unroll-ghc-plugin
   - unsafely
+  - unsatisfiable
   - unsequential
   - unused
   - uom-plugin
@@ -4933,6 +5005,7 @@ broken-packages:
   - verilog
   - verismith
   - versioning
+  - vformat
   - vhd
   - vhdl
   - vicinity
@@ -5025,7 +5098,6 @@ broken-packages:
   - web-encodings
   - WeberLogic
   - webfinger-client
-  - webify
   - webkit-javascriptcore
   - webmention
   - web-output
@@ -5126,6 +5198,7 @@ broken-packages:
   - xmonad-dbus
   - xmonad-eval
   - xmonad-vanessa
+  - xmonad-wallpaper
   - xmonad-windownames
   - xor
   - Xorshift128Plus
@@ -5145,6 +5218,7 @@ broken-packages:
   - yahoo-web-search
   - yajl
   - yall
+  - yam-app
   - yam-config
   - yaml-pretty-extras
   - YamlReference
@@ -5155,6 +5229,7 @@ broken-packages:
   - yampa-glut
   - yampa-sdl2
   - YampaSynth
+  - yampa-test
   - yam-servant
   - yandex-translate
   - yaop

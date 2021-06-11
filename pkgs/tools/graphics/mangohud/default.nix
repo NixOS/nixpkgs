@@ -120,6 +120,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flightlessmango/MangoHud";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ metadark zeratax ];
+    maintainers = with maintainers; [ kira-bruneau zeratax ];
   };
 }

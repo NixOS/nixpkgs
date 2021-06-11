@@ -6,7 +6,7 @@
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
 , libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi
 # output plugins
-, alsaLib, libpulseaudio
+, alsa-lib, libpulseaudio
 # effect plugins
 , libsamplerate
 }:
@@ -46,7 +46,7 @@ mkDerivation rec {
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
       libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
       # output plugins
-      alsaLib libpulseaudio
+      alsa-lib libpulseaudio
       # effect plugins
       libsamplerate
     ];

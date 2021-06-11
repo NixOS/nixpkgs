@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , isPy27
 , numpy
-, scikitlearn
+, scikit-learn
 , pytestCheckHook
 , pytorch
 , torchvision
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     pytorch
-    scikitlearn
+    scikit-learn
     torchvision
     tqdm
   ];

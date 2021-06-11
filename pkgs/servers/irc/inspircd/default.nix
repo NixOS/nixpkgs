@@ -23,7 +23,7 @@ let
   # checking, only whitelist licenses used by notable
   # libcs in nixpkgs (musl and glibc).
   compatible = lib: drv:
-    lib.any (lic: lic == drv.meta.license) [
+    lib.any (lic: lic == (drv.meta.license or {})) [
       lib.licenses.mit        # musl
       lib.licenses.lgpl2Plus  # glibc
     ];

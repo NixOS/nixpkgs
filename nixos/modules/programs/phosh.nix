@@ -145,15 +145,7 @@ in {
 
     programs.feedbackd.enable = true;
 
-    # https://source.puri.sm/Librem5/phosh/-/issues/303
-    security.pam.services.phosh = {
-      text = ''
-        auth    requisite       pam_nologin.so
-        auth    required        pam_succeed_if.so user != root quiet_success
-        auth    required        pam_securetty.so
-        auth    requisite       pam_nologin.so
-      '';
-    };
+    security.pam.services.phosh = {};
 
     services.gnome.core-shell.enable = true;
     services.gnome.core-os-services.enable = true;

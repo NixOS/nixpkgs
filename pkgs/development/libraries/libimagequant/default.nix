@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./configure
   '';
 
-  configureFlags = lib.optionals stdenv.isAarch64 [ "--disable-sse" ];
+  configureFlags = lib.optionals (!stdenv.isi686 && !stdenv.isx86_64) [ "--disable-sse" ];
 
   meta = with lib; {
     homepage = "https://pngquant.org/lib/";

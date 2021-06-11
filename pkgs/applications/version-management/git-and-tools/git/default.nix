@@ -5,7 +5,7 @@
 , asciidoctor, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xsl_ns, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
-, perlSupport ? true
+, perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , nlsSupport ? true
 , osxkeychainSupport ? stdenv.isDarwin
 , guiSupport

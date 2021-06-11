@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, perl, gfortran
-, openssh, hwloc, autoconf, automake, libtool
+, openssh, hwloc
 # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
 # these libraries currently build so this argument is ignored on Darwin.
 , ch4backend
@@ -11,28 +11,12 @@ assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation  rec {
   pname = "mpich";
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    sha256 = "09wpfw9lsrc84vcmfw94razd4xv4znx4mmg7rqmljvgg0jc96dl8";
+    sha256 = "1gw7qpb27mhsj7ip0hhljshgpwvz2hmyhizhlp6793afp2lbw6aw";
   };
-
-  patches = [
-    # Reverts an upstream change that causes json-c test to fail
-    ./jsonc-test.patch
-  ];
-
-  # Required for the json-c patch
-  nativeBuildInputs = [ autoconf automake libtool ];
-
-  # Update configure after patch
-  postPatch = ''
-    cd modules/json-c
-    ./autogen.sh
-    cd ../..
-  '';
-
 
   configureFlags = [
     "--enable-shared"

@@ -1,5 +1,5 @@
 { stdenv, lib
-, buildPythonPackage, fetchPypi, pythonOlder, setuptools_scm, pytestCheckHook
+, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
 , aiohttp
 , aiohttp-cors
 , appdirs
@@ -8,6 +8,7 @@
 , dataclasses
 , mypy-extensions
 , pathspec
+, parameterized
 , regex
 , toml
 , typed-ast
@@ -15,34 +16,34 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "20.8b1";
+  version = "21.5b1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1spv6sldp3mcxr740dh3ywp25lly9s8qlvs946fin44rl1x5a0hw";
+    sha256 = "1cdkrl5vw26iy7s23v2zpr39m6g5xsgxhfhagzzflgfbvdc56s93";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs =  [ pytestCheckHook ];
+  checkInputs =  [ pytestCheckHook parameterized ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
+
+    # The top directory /build matches black's DEFAULT_EXCLUDE regex.
+    # Make /build the project root for black tests to avoid excluding files.
+    touch ../.git
   '';
 
   disabledTests = [
-    # Don't know why these tests fails
-    "test_cache_multiple_files"
-    "test_failed_formatting_does_not_get_cached"
     # requires network access
     "test_gen_check_output"
-    "test_process_queue"
   ] ++ lib.optionals stdenv.isDarwin [
     # fails on darwin
     "test_expression_diff"

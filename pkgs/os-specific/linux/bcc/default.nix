@@ -19,7 +19,7 @@ python.pkgs.buildPythonApplication rec {
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm clang-unwrapped kernel
+    llvm llvm.dev libclang kernel
     elfutils luajit netperf iperf
     systemtap.stapBuild flex bash
     libbpf
@@ -32,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
-  nativeBuildInputs = [ makeWrapper cmake flex bison ]
+  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ]
     # libelf is incompatible with elfutils-libelf
     ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 

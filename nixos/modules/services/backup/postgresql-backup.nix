@@ -48,7 +48,7 @@ in {
 
       startAt = mkOption {
         default = "*-*-* 01:15:00";
-        type = types.str;
+        type = with types; either (listOf str) str;
         description = ''
           This option defines (see <literal>systemd.time</literal> for format) when the
           databases should be dumped.

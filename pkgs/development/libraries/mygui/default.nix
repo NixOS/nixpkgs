@@ -1,4 +1,4 @@
-{  lib, stdenv, fetchFromGitHub, libX11, unzip, cmake, ois, freetype, libuuid,
+{  lib, stdenv, fetchFromGitHub, libX11, cmake, ois, freetype, libuuid,
    boost, pkg-config, withOgre ? false, ogre ? null, libGL, libGLU ? null } :
 
 let
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0a4zi8w18pjj813n7kmxldl1d9r1jp0iyhkw7pbqgl8f7qaq994w";
   };
 
-  nativeBuildInputs = [ cmake pkg-config unzip ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libX11 ois freetype libuuid boost ]
     ++ (if withOgre then [ ogre ] else [ libGL libGLU ]);
 

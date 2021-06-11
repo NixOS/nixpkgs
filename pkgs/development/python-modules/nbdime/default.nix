@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
 , hypothesis
-, setuptools_scm
+, setuptools-scm
 , six
 , attrs
 , py
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     "test_merge"
   ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrs

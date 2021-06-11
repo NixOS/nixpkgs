@@ -171,6 +171,9 @@ stdenv.mkDerivation rec {
   passthru = {
     targetPrefix = "";
     enableShared = true;
+
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc-${version}";
   };
 
   meta = rec {

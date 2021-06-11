@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0y1c0v2zjpav1n72pgf3kpqdz6ixp2mjhcvvza4gzfp865c236nc";
   };
 
-  cargoSha256 = "06ljy213x9lhvqjysz9cjhrrg0ns07qkz27pxd8rih0mk6cck45g";
+  cargoSha256 = "0ca6maapn2337i78mq97199xjqk87ckw14k8kspc8kx5wnics2hl";
 
   meta = with lib; {
     description = "Tagref helps you refer to other locations in your codebase.";

@@ -19,7 +19,7 @@
 , pkg-config
 , pam
 , etcDir ? null
-, withKerberos ? true
+, withKerberos ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
 , libkrb5
 , libfido2
 , nixosTests

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "1j2gfw4anixb5ajgiyn7bcca8pgjvsaf0y0b2xz88s9hdx0h6gs9";
+    sha256 = "1jl7wrmcpf6lakpi1gvjcs18cy0mmwgsv5wdd80zyl41cpd8gm8d";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen ];

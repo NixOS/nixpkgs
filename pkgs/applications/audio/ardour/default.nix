@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchgit
-, alsaLib
+, alsa-lib
 , aubio
 , boost
 , cairomm
@@ -8,7 +8,7 @@
 , curl
 , dbus
 , doxygen
-, ffmpeg_3
+, ffmpeg
 , fftw
 , fftwSinglePrec
 , flac
@@ -56,13 +56,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "6.5";
+  version = "6.7";
 
   # don't fetch releases from the GitHub mirror, they are broken
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "0sd38hchyr16biq9hcxha4ljy3pf0yhcgn90i5zfqcznnc57ildx";
+    sha256 = "19jc29fjwgvqbg3gnmy50mrz8mh5x4nwddglasvwx83nc87qwllx";
   };
 
   patches = [
@@ -82,14 +82,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     aubio
     boost
     cairomm
     cppunit
     curl
     dbus
-    ffmpeg_3
+    ffmpeg
     fftw
     fftwSinglePrec
     flac
@@ -148,8 +148,8 @@ stdenv.mkDerivation rec {
     sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
     patchShebangs ./tools/
     substituteInPlace libs/ardour/video_tools_paths.cc \
-      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg_3}/bin/ffmpeg");' \
-      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg_3}/bin/ffprobe");'
+      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
   '';
 
   postInstall = ''

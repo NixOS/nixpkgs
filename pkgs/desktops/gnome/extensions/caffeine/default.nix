@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, glib, gettext, bash, gnome }:
+{ lib, stdenv, fetchFromGitHub, glib, gettext, bash }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-caffeine";
-  version = "37";
+  version = "38";
 
   src = fetchFromGitHub {
     owner = "eonpatapon";
     repo = "gnome-shell-extension-caffeine";
     rev = "v${version}";
-    sha256 = "1mpa0fbpmv3pblb20dxj8iykn4ayvx89qffpcs67bzlq597zsbkb";
+    sha256 = "0dyagnjmk91h96xr98mc177c473bqpxcv86qf6g3kyh3arwa9shs";
   };
 
   uuid = "caffeine@patapon.info";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fill the cup to inhibit auto suspend and screensaver";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ eperuffo ];
     homepage = "https://github.com/eonpatapon/gnome-shell-extension-caffeine";
   };

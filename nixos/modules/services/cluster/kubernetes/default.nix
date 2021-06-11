@@ -7,12 +7,12 @@ let
 
   defaultContainerdConfigFile = pkgs.writeText "containerd.toml" ''
     version = 2
-    root = "/var/lib/containerd/daemon"
-    state = "/var/run/containerd/daemon"
+    root = "/var/lib/containerd"
+    state = "/run/containerd"
     oom_score = 0
 
     [grpc]
-      address = "/var/run/containerd/containerd.sock"
+      address = "/run/containerd/containerd.sock"
 
     [plugins."io.containerd.grpc.v1.cri"]
       sandbox_image = "pause:latest"
@@ -48,8 +48,9 @@ let
         cluster = "local";
         user = name;
       };
-      current-context = "local";
+      name = "local";
     }];
+    current-context = "local";
   });
 
   caCert = secret "ca";

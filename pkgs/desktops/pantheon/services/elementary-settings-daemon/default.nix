@@ -15,7 +15,7 @@
 , libgnomekbd
 , lcms2
 , libpulseaudio
-, alsaLib
+, alsa-lib
 , libcanberra-gtk3
 , upower
 , colord
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     accountsservice
-    alsaLib
+    alsa-lib
     colord
     gcr
     geoclue2

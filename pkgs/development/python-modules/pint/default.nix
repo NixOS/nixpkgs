@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools_scm
+, setuptools-scm
 , importlib-metadata
 , packaging
 # Check Inputs
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ packaging ]
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];

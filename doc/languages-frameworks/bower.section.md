@@ -149,7 +149,7 @@ A few notes about [Full example — `default.nix`](#ex-buildBowerComponentsDefau
 
 ## Troubleshooting {#ssec-bower2nix-troubleshooting}
 
-### ENOCACHE errors from buildBowerComponents
+### ENOCACHE errors from buildBowerComponents {#enocache-errors-from-buildbowercomponents}
 
 This means that Bower was looking for a package version which doesn't exist in the generated `bower-packages.nix`.
 

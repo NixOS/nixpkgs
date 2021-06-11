@@ -8,7 +8,7 @@
 , pure-eval
 , pygments
 , pytestCheckHook
-, setuptools_scm
+, setuptools-scm
 , toml
 , typeguard
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     git
-    setuptools_scm
+    setuptools-scm
     toml
   ];
 

@@ -122,7 +122,7 @@ self = stdenv.mkDerivation {
   ];
 
   buildInputs = with xorg; [
-    expat llvmPackages.llvm libglvnd xorgproto
+    expat llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
@@ -145,7 +145,6 @@ self = stdenv.mkDerivation {
   ] ++ optional stdenv.isLinux libdrm
     ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
-  enableParallelBuilding = true;
   doCheck = false;
 
   postInstall = ''

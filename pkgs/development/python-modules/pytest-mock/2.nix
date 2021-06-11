@@ -5,7 +5,7 @@
 , isPy3k
 , pytest
 , mock
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = lib.optional (!isPy3k) mock;
 
   nativeBuildInputs = [
-   setuptools_scm
+   setuptools-scm
   ];
 
   checkInputs = [
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Thin-wrapper around the mock package for easier use with py.test.";
     homepage    = "https://github.com/pytest-dev/pytest-mock";
     license     = licenses.mit;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

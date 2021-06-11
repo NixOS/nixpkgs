@@ -4,9 +4,9 @@
 , fetchzip
 , cython
 , numpy
-, scikitlearn
+, scikit-learn
 , six
-, setuptools_scm
+, setuptools-scm
 , gcc
 , pytest
 , pytestcov
@@ -28,9 +28,9 @@ buildPythonPackage rec {
     sha256 = "222d8ffb47f385c43eba45e3f308e605fc9736b2b7137d74979adf1a31e7c8b4";
   };
 
-  nativeBuildInputs = [ setuptools_scm gcc ];
+  nativeBuildInputs = [ setuptools-scm gcc ];
 
-  propagatedBuildInputs = [ cython numpy scikitlearn six ];
+  propagatedBuildInputs = [ cython numpy scikit-learn six ];
 
   checkInputs = [ pytest pytestcov ];
 

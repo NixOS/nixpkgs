@@ -4,7 +4,7 @@
 , ninja
 , pkg-config
 , pixman
-, alsaLib
+, alsa-lib
 , openssl
 , libXrandr
 , libXfixes
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     cyrus_sasl
     glib
     gst_all_1.gst-plugins-base

@@ -9,7 +9,7 @@
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
-, executableName, longName, shortName, pname
+, executableName, longName, shortName, pname, updateScript
 }:
 
 let
@@ -19,7 +19,7 @@ let
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName tests;
+      inherit executableName tests updateScript;
       fhs = fhs {};
       fhsWithPackages = f: fhs { additionalPkgs = f; };
     };
@@ -77,7 +77,7 @@ let
     '' + (if system == "x86_64-darwin" then ''
       mkdir -p "$out/Applications/${longName}.app" $out/bin
       cp -r ./* "$out/Applications/${longName}.app"
-      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/code" $out/bin/${executableName}
+      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${executableName}" $out/bin/${executableName}
     '' else ''
       mkdir -p $out/lib/vscode $out/bin
       cp -r ./* $out/lib/vscode
@@ -159,4 +159,3 @@ let
   };
 in
   unwrapped
-

@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ygb6dh5lng91xs6xiqf5v0nxa68qmjc787p0s5h9w89364f2yjv";
   };
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace src/Makefile --replace 'all: $(LIBA) $(LIBSO)' 'all: $(LIBA)'
+    sed -i $'/^\t.*LIBSO/d' src/Makefile
+  '';
+
   nativeBuildInputs = [ flex ];
 
   makeFlags = [
@@ -34,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "http://userspace.selinuxproject.org";
     platforms = platforms.linux;
     maintainers = [ maintainers.phreedom ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 }

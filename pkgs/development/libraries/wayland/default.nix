@@ -1,11 +1,12 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , substituteAll
 , meson
 , pkg-config
 , ninja
-, wayland
+, wayland-scanner
 , expat
 , libxml2
 , withLibraries ? stdenv.isLinux
@@ -37,6 +38,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Picked from upstream 'main' branch for Darwin support.
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/wayland/wayland/-/commit/f452e41264387dee4fd737cbf1af58b34b53941b.patch";
+      sha256 = "00mk32a01vgn31sm3wk4p8mfwvqv3xv02rxvdj1ygnzgb1ac62r7";
+    })
     (substituteAll {
       src = ./0001-add-placeholder-for-nm.patch;
       nm = "${stdenv.cc.targetPrefix}nm";
@@ -64,7 +70,7 @@ stdenv.mkDerivation rec {
     pkg-config
     ninja
   ] ++ lib.optionals isCross [
-    wayland # For wayland-scanner during the build
+    wayland-scanner
   ] ++ lib.optionals withDocumentation [
     (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
     doxygen
@@ -85,6 +91,18 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
   ];
 
+  postFixup = ''
+    # The pkg-config file is required for cross-compilation:
+    mkdir -p $bin/lib/pkgconfig/
+    cat <<EOF > $bin/lib/pkgconfig/wayland-scanner.pc
+    wayland_scanner=$bin/bin/wayland-scanner
+
+    Name: Wayland Scanner
+    Description: Wayland scanner
+    Version: ${version}
+    EOF
+  '';
+
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
     longDescription = ''
@@ -99,6 +117,8 @@ stdenv.mkDerivation rec {
     license = licenses.mit; # Expat version
     platforms = if withLibraries then platforms.linux else platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
+    # big sur doesn't support gcc stdenv and wayland doesn't build with clang
+    broken = stdenv.isDarwin;
   };
 
   passthru.version = version;

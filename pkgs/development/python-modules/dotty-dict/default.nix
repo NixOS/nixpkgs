@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-6wA1o2KezYQ5emjx9C8elKvRw0V3oZzT6srTMe58uvA=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   doCheck = false;
 

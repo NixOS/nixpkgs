@@ -1,0 +1,28 @@
+From ffe227676352a910754d96d92e9b06e475f28ff1 Mon Sep 17 00:00:00 2001
+From: Pontus Stenetorp <pontus@stenetorp.se>
+Date: Thu, 8 Apr 2021 04:25:19 +0000
+Subject: [PATCH 2/6] nix: Skip `tempname` test broken in sandbox
+
+Reported upstream:
+
+    https://github.com/JuliaLang/julia/issues/38873
+---
+ test/file.jl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/file.jl b/test/file.jl
+index 0f39bc7c14..bd4dd78f62 100644
+--- a/test/file.jl
++++ b/test/file.jl
+@@ -95,7 +95,7 @@ end
+     @test dirname(t) == tempdir()
+     mktempdir() do d
+         t = tempname(d)
+-        @test dirname(t) == d
++        @test_skip dirname(t) == d
+     end
+     @test_throws ArgumentError tempname(randstring())
+ end
+-- 
+2.29.3
+

@@ -5,7 +5,7 @@
 , cython
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , persim
 , pytest
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     cython
     numpy
     scipy
-    scikitlearn
+    scikit-learn
     persim
   ];
 

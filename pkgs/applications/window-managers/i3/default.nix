@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-builddir" ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     patchShebangs .
   '';

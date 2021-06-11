@@ -23,6 +23,14 @@ buildPythonPackage rec {
     sha256 = "1lsacpawl2gb5qlh0cawj9swsyfbwhzhwiv6553a7lsigdbadqpy";
   };
 
+  patches = [
+    # fix pybind11Config.cmake
+    (fetchpatch {
+      url = "https://github.com/pybind/pybind11/commit/d9c4e1047a95f023633a7260af5a633307438941.patch";
+      sha256 = "0kran295kj31xfs6mfha5ip132zd0pnj2dl36qzgyc1rpnha5gz4";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ catch ];

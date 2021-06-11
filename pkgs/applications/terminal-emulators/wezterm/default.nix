@@ -2,6 +2,7 @@
 , rustPlatform
 , lib
 , fetchFromGitHub
+, ncurses
 , pkg-config
 , fontconfig
 , python3
@@ -68,6 +69,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  outputs = [ "out" "terminfo" ];
+
   postPatch = ''
     echo ${version} > .tag
   '';
@@ -78,9 +81,16 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     python3
     perl
+    ncurses
   ];
 
   buildInputs = runtimeDeps;
+
+  postInstall = ''
+    mkdir -p $terminfo/share/terminfo/w $out/nix-support
+    tic -x -o $terminfo/share/terminfo termwiz/data/wezterm.terminfo
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
     for artifact in wezterm wezterm-gui wezterm-mux-server strip-ansi-escapes; do

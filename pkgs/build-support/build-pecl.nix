@@ -33,4 +33,5 @@ stdenv.mkDerivation (args // {
       (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
       internalDeps}
   '';
+  checkPhase = "NO_INTERACTON=yes make test";
 })

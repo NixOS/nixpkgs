@@ -63,6 +63,8 @@ in buildPythonPackage rec {
   ]);
   propagatedBuildInputs = [ pillow pycairo ];
 
+  pythonImportsCheck = [ "mapnik" ] ;
+
   meta = with lib; {
     description = "Python bindings for Mapnik";
     homepage = "https://mapnik.org";

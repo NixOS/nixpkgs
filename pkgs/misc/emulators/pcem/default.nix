@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, wxGTK31, coreutils, SDL2, openal, alsaLib, pkg-config
+{ stdenv, lib, fetchzip, wxGTK31, coreutils, SDL2, openal, alsa-lib, pkg-config
 , autoreconfHook, withNetworking ? true, withALSA ? true }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ wxGTK31 coreutils SDL2 openal ]
-    ++ lib.optional withALSA alsaLib;
+    ++ lib.optional withALSA alsa-lib;
 
   configureFlags = [ "--enable-release-build" ]
     ++ lib.optional withNetworking "--enable-networking"

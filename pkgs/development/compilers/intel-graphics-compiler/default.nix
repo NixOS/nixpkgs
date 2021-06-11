@@ -18,7 +18,7 @@ let
     inherit spirv-llvm-translator;
   };
   inherit (llvmPkgs) llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPkgs) clang clang-unwrapped spirv-llvm-translator;
+  inherit (if buildWithPatches then opencl-clang else llvmPkgs) clang libclang spirv-llvm-translator;
   inherit (lib) getVersion optional optionals versionOlder versions;
 in
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       ln -s ${clang}/bin/clang $out/
       ln -s clang $out/clang-${versions.major (getVersion clang)}
       ln -s ${opencl-clang}/lib/* $out/
-      ln -s ${clang-unwrapped}/lib/clang/${getVersion clang}/include/opencl-c.h $out/
+      ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c.h $out/
     '';
   };
 

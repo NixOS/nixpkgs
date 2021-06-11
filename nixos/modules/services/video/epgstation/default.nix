@@ -27,7 +27,7 @@ let
 
     # NOTE: Use password authentication, since mysqljs does not yet support auth_socket
     if [ ! -e /var/lib/epgstation/db-created ]; then
-      ${pkgs.mysql}/bin/mysql -e \
+      ${pkgs.mariadb}/bin/mysql -e \
         "GRANT ALL ON \`${cfg.database.name}\`.* TO '${username}'@'localhost' IDENTIFIED by '$DB_PASSWORD';"
       touch /var/lib/epgstation/db-created
     fi
@@ -224,7 +224,7 @@ in
 
     services.mysql = {
       enable = mkDefault true;
-      package = mkDefault pkgs.mysql;
+      package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       # FIXME: enable once mysqljs supports auth_socket
       # ensureUsers = [ {

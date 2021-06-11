@@ -78,6 +78,34 @@ stdenv.mkDerivation rec {
 
     # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
     ./patches/ignore-cmp-deprecation.patch
+
+    # sphinx 3.5 pretty-prints code slightly differently than sphinx
+    # 3.1--3.3. a similar patch is available at the sphinx 4 ticket
+    # (https://trac.sagemath.org/ticket/31696), but sphinx 3.5 uses
+    # <code> tags while sphinx 4 uses <span> tags so we cannot just
+    # import the patch from trac.
+    ./patches/sphinx-3.5-code-output.patch
+
+    # remove use of matplotlib function deprecated in 3.4
+    # https://trac.sagemath.org/ticket/31827
+    (fetchSageDiff {
+      base = "9.3";
+      name = "remove-matplotlib-deprecated-function.patch";
+      rev = "32b2bcaefddc4fa3d2aee6fa690ce1466cbb5948";
+      sha256 = "sha256-SXcUGBMOoE9HpuBzgKC3P6cUmM5MiktXbe/7dVdrfWo=";
+    })
+
+    # https://trac.sagemath.org/ticket/30801. this patch has
+    # positive_review but has not been merged upstream yet, so we
+    # don't use fetchSageDiff because it returns a file that contains
+    # each commit as a separate patch instead of a single diff, and
+    # some commits from the pari update branch are already in 9.3.rc5
+    # (auto-resolvable merge conflicts).
+    (fetchpatch {
+      name = "pari-2.13.1.patch";
+      url = "https://github.com/sagemath/sagetrac-mirror/compare/d6c5cd9be78cc448ee4c54bac93385b1244a234c...10a4531721d2700fd717e2b3a1364508ffd971c3.diff";
+      sha256 = "sha256-zMjRMEReoiTvmt+vvV0Ij1jtyLSLwSXBEVXqgvmq1D4=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

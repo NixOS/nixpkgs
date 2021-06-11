@@ -144,5 +144,5 @@ in {
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
   };
 
-  meta.maintainers = with lib.maintainers; [ gnidorah primeos colemickens ];
+  meta.maintainers = with lib.maintainers; [ primeos colemickens ];
 }

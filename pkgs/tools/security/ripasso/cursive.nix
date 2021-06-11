@@ -14,7 +14,7 @@ buildRustPackage rec {
 
   patches = [ ./fix-tests.patch ];
 
-  cargoSha256 = "1wpn67v0xmxhn1dgzhh1pwz1yc3cizmfxhpb7qv9b27ynx4486ji";
+  cargoSha256 = "1sv5czhrafk15yj5xyd1x9jdqn1dz6aqpxxnyz49icx53qlg9f8g";
 
   cargoBuildFlags = [ "-p ripasso-cursive -p ripasso-man" ];
 

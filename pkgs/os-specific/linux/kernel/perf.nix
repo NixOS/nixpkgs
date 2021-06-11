@@ -74,5 +74,6 @@ stdenv.mkDerivation {
     description = "Linux tools to profile with performance counters";
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
+    broken = kernel.kernelOlder "5";
   };
 }

@@ -9,7 +9,7 @@
 , zlib
 , debugVersion ? false
 , enableManpages ? false
-, enableSharedLibraries ? true
+, enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 
 , version
 , src

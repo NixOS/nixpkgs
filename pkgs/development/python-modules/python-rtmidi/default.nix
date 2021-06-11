@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
-, pkg-config, alsaLib, libjack2, tox, flake8, alabaster
+, pkg-config, alsa-lib, libjack2, tox, flake8, alabaster
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib libjack2 ];
+  buildInputs = [ alsa-lib libjack2 ];
   checkInputs = [
     tox
     flake8

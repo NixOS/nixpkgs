@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvm_6, ncurses, readline, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvm_6, ncurses, readline, zlib, libxml2 }:
 
 stdenv.mkDerivation {
   name = "hobbes";
@@ -20,6 +20,7 @@ stdenv.mkDerivation {
     ncurses
     readline
     zlib
+    libxml2
   ];
 
   doCheck = false; # Running tests in NixOS hangs. See https://git.io/JvK7R.

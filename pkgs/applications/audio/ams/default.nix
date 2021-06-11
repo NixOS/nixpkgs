@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchgit
 , automake
-, alsaLib
+, alsa-lib
 , ladspaH
 , libjack2
 , fftw
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     ladspaH
     libjack2
     fftw

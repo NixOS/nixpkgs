@@ -14,10 +14,6 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  # Without this patch cmake fails with a "No known features for CXX compiler"
-  # error on darwin
-  patches = lib.optional stdenv.isDarwin ./move-project.patch ;
-
   # tells CMake to use this CA bundle file if it is accessible
   preConfigure = "export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt";
 

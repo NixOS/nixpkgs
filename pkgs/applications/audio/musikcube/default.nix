@@ -1,6 +1,6 @@
 { cmake
 , pkg-config
-, alsaLib
+, alsa-lib
 , boost
 , curl
 , fetchFromGitHub
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    alsaLib
+    alsa-lib
     boost
     curl
     ffmpeg

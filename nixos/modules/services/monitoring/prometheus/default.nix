@@ -386,6 +386,10 @@ let
         List of relabel configurations.
       '';
 
+      metric_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
+        List of metric relabel configurations.
+      '';
+
       sample_limit = mkDefOpt types.int "0" ''
         Per-scrape limit on number of scraped samples that will be accepted.
         If more than this number of samples are present after metric relabelling

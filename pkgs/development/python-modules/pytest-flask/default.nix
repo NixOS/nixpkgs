@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools_scm, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools-scm, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pytest-flask";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   meta = with lib; {
     homepage = "https://github.com/pytest-dev/pytest-flask/";

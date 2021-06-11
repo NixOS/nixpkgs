@@ -644,7 +644,7 @@ let
 
     services.mysql = mkIf mysqlLocal {
       enable = true;
-      package = mkDefault pkgs.mysql;
+      package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         {

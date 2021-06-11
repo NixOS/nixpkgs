@@ -2,20 +2,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pyserial
-, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymata-express";
-  version = "1.19";
+  version = "1.20";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MrYsLab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gfjmqcxwsnfjgll6ql5xd1n3xp4klf4fcaajaivh053i02p0a79";
+    sha256 = "sha256-spYmd+Cb7Ej5FmniuJYAVVmq0mhOz5fu4+2UUXctRWs=";
   };
 
   propagatedBuildInputs = [ pyserial ];

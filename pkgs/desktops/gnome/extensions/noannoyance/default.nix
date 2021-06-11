@@ -3,7 +3,7 @@
 , fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "noannoyance";
+  pname = "gnome-shell-extension-noannoyance";
   version = "unstable-2021-01-17";
 
   src = fetchFromGitHub {

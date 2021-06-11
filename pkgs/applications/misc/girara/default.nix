@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1n3i960b458172mc3pkq7m9dn5qxry6fms3c3k06v27cjp5whsyf";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext check dbus xvfb-run ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext check dbus ];
   buildInputs = [ libintl libiconv json_c ];
   propagatedBuildInputs = [ glib gtk ];
+  checkInputs = [ xvfb-run ];
 
   doCheck = !stdenv.isDarwin;
 

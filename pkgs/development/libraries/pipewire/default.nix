@@ -11,7 +11,7 @@
 , valgrind
 , glib
 , dbus
-, alsaLib
+, alsa-lib
 , libjack2
 , udev
 , libva
@@ -85,7 +85,7 @@ let
     ];
 
     buildInputs = [
-      alsaLib
+      alsa-lib
       dbus
       glib
       libjack2

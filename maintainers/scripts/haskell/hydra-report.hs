@@ -17,6 +17,7 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 {-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE MultiWayIf #-}
@@ -36,8 +37,6 @@ import Data.Aeson (
    encodeFile,
  )
 import Data.Foldable (Foldable (toList), foldl')
-import Data.Function ((&))
-import Data.Functor ((<&>))
 import Data.List.NonEmpty (NonEmpty, nonEmpty)
 import qualified Data.List.NonEmpty as NonEmpty
 import Data.Map.Strict (Map)
@@ -71,7 +70,6 @@ import System.Directory (XdgDirectory (XdgCache), getXdgDirectory)
 import System.Environment (getArgs)
 import System.Process (readProcess)
 import Prelude hiding (id)
-import qualified Prelude
 
 newtype JobsetEvals = JobsetEvals
    { evals :: Seq Eval
@@ -132,30 +130,117 @@ getBuildReports = runReq defaultHttpConfig do
 
 hydraEvalCommand :: FilePath
 hydraEvalCommand = "hydra-eval-jobs"
+
 hydraEvalParams :: [String]
 hydraEvalParams = ["-I", ".", "pkgs/top-level/release-haskell.nix"]
+
 handlesCommand :: FilePath
 handlesCommand = "nix-instantiate"
+
 handlesParams :: [String]
 handlesParams = ["--eval", "--strict", "--json", "-"]
+
 handlesExpression :: String
 handlesExpression = "with import ./. {}; with lib; zipAttrsWith (_: builtins.head) (mapAttrsToList (_: v: if v ? github then { \"${v.email}\" = v.github; } else {}) (import maintainers/maintainer-list.nix))"
 
-newtype Maintainers = Maintainers {maintainers :: Maybe Text} deriving (Generic, ToJSON, FromJSON)
+-- | This newtype is used to parse a Hydra job output from @hydra-eval-jobs@.
+-- The only field we are interested in is @maintainers@, which is why this
+-- is just a newtype.
+--
+-- Note that there are occassionally jobs that don't have a maintainers
+-- field, which is why this has to be @Maybe Text@.
+newtype Maintainers = Maintainers { maintainers :: Maybe Text }
+  deriving stock (Generic, Show)
+  deriving anyclass (FromJSON, ToJSON)
 
+-- | This is a 'Map' from Hydra job name to maintainer email addresses.
+--
+-- It has values similar to the following:
+--
+-- @@
+--  fromList
+--    [ ("arion.aarch64-linux", Maintainers (Just "robert@example.com"))
+--    , ("bench.x86_64-linux", Maintainers (Just ""))
+--    , ("conduit.x86_64-linux", Maintainers (Just "snoy@man.com, web@ber.com"))
+--    , ("lens.x86_64-darwin", Maintainers (Just "ek@category.com"))
+--    ]
+-- @@
+--
+-- Note that Hydra jobs without maintainers will have an empty string for the
+-- maintainer list.
 type HydraJobs = Map Text Maintainers
+
+-- | Map of email addresses to GitHub handles.
+-- This is built from the file @../../maintainer-list.nix@.
+--
+-- It has values similar to the following:
+--
+-- @@
+--  fromList
+--    [ ("robert@example.com", "rob22")
+--    , ("ek@category.com", "edkm")
+--    ]
+-- @@
+type EmailToGitHubHandles = Map Text Text
+
+-- | Map of Hydra jobs to maintainer GitHub handles.
+--
+-- It has values similar to the following:
+--
+-- @@
+--  fromList
+--    [ ("arion.aarch64-linux", ["rob22"])
+--    , ("conduit.x86_64-darwin", ["snoyb", "webber"])
+--    ]
+-- @@
 type MaintainerMap = Map Text (NonEmpty Text)
 
+-- | Generate a mapping of Hydra job names to maintainer GitHub handles.
 getMaintainerMap :: IO MaintainerMap
 getMaintainerMap = do
-   hydraJobs :: HydraJobs <- get hydraEvalCommand hydraEvalParams "" "Failed to decode hydra-eval-jobs output: "
-   handlesMap :: Map Text Text <- get handlesCommand handlesParams handlesExpression "Failed to decode nix output for lookup of github handles: "
-   pure $ hydraJobs & Map.mapMaybe (nonEmpty . mapMaybe (`Map.lookup` handlesMap) . Text.splitOn ", " . fromMaybe "" . maintainers)
-  where
-   get c p i e = readProcess c p i <&> \x -> either (error . (<> " Raw:'" <> take 1000 x <> "'") . (e <>)) Prelude.id . eitherDecodeStrict' . encodeUtf8 . Text.pack $ x
+   hydraJobs :: HydraJobs <-
+      readJSONProcess hydraEvalCommand hydraEvalParams "" "Failed to decode hydra-eval-jobs output: "
+   handlesMap :: EmailToGitHubHandles <-
+      readJSONProcess handlesCommand handlesParams handlesExpression "Failed to decode nix output for lookup of github handles: "
+   pure $ Map.mapMaybe (splitMaintainersToGitHubHandles handlesMap) hydraJobs
+   where
+   -- Split a comma-spearated string of Maintainers into a NonEmpty list of
+   -- GitHub handles.
+   splitMaintainersToGitHubHandles
+      :: EmailToGitHubHandles -> Maintainers -> Maybe (NonEmpty Text)
+   splitMaintainersToGitHubHandles handlesMap (Maintainers maint) =
+      nonEmpty .  mapMaybe (`Map.lookup` handlesMap) .  Text.splitOn ", " $ fromMaybe "" maint
+
+-- | Run a process that produces JSON on stdout and and decode the JSON to a
+-- data type.
+--
+-- If the JSON-decoding fails, throw the JSON-decoding error.
+readJSONProcess
+   :: FromJSON a
+   => FilePath -- ^ Filename of executable.
+   -> [String] -- ^ Arguments
+   -> String -- ^ stdin to pass to the process
+   -> String -- ^ String to prefix to JSON-decode error.
+   -> IO a
+readJSONProcess exe args input err = do
+   output <- readProcess exe args input
+   let eitherDecodedOutput = eitherDecodeStrict' . encodeUtf8 . Text.pack $ output
+   case eitherDecodedOutput of
+     Left decodeErr -> error $ err <> decodeErr <> "\nRaw: '" <> take 1000 output <> "'"
+     Right decodedOutput -> pure decodedOutput
 
 -- BuildStates are sorted by subjective importance/concerningness
-data BuildState = Failed | DependencyFailed | OutputLimitExceeded | Unknown (Maybe Int) | TimedOut | Canceled | HydraFailure | Unfinished | Success deriving (Show, Eq, Ord)
+data BuildState
+  = Failed
+  | DependencyFailed
+  | OutputLimitExceeded
+  | Unknown (Maybe Int)
+  | TimedOut
+  | Canceled
+  | HydraFailure
+  | Unfinished
+  | Success
+  deriving stock (Show, Eq, Ord)
 
 icon :: BuildState -> Text
 icon = \case
@@ -243,7 +328,7 @@ printJob evalId name (Table mapping, maintainers) =
    printSingleRow set = "- [ ] " <> printState set <> " " <> makeJobSearchLink set (makePkgName set) <> " " <> maintainers
    makePkgName set = (if Text.null set then "" else set <> ".") <> name
    printState set = Text.intercalate " " $ map (\pf -> maybe "" (label pf) $ Map.lookup (set, pf) mapping) platforms
-   makeJobSearchLink set linkLabel= makeSearchLink evalId linkLabel (makePkgName set <> ".") -- Append '.' to the search query to prevent e.g. "hspec." matching "hspec-golden.x86_64-linux"
+   makeJobSearchLink set linkLabel= makeSearchLink evalId linkLabel (makePkgName set)
    sets = toList $ Set.fromList (fst <$> Map.keys mapping)
    platforms = toList $ Set.fromList (snd <$> Map.keys mapping)
    label pf (BuildResult s i) = "[[" <> platformIcon pf <> icon s <> "]](https://hydra.nixos.org/build/" <> showT i <> ")"

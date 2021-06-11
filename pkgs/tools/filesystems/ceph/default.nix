@@ -131,10 +131,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "16.2.1";
+  version = "16.2.4";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "1qqvfhnc94vfrq1ddizf6habjlcp77abry4v18zlq6rnhwr99zrh";
+    sha256 = "sha256-J6FVK7feNN8cGO5BSDlfRGACAzchmRUSWR+a4ZgeWy0=";
   };
 in rec {
   ceph = stdenv.mkDerivation {

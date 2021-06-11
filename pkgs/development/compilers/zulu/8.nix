@@ -7,7 +7,7 @@
 , setJavaClassPath
 , zulu
 # minimum dependencies
-, alsaLib
+, alsa-lib
 , fontconfig
 , freetype
 , xorg
@@ -49,7 +49,7 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = lib.optionals stdenv.isLinux [
-    alsaLib # libasound.so wanted by lib/libjsound.so
+    alsa-lib # libasound.so wanted by lib/libjsound.so
     fontconfig
     freetype
     stdenv.cc.cc # libstdc++.so.6

@@ -31,16 +31,6 @@ in
 
   config = mkIf cfg.enable {
 
-    users = {
-      groups.lm_sensors = {};
-
-      users.fancontrol = {
-        isSystemUser = true;
-        group = "lm_sensors";
-        description = "fan speed controller";
-      };
-    };
-
     systemd.services.fancontrol = {
       documentation = [ "man:fancontrol(8)" ];
       description = "software fan control";
@@ -49,8 +39,6 @@ in
 
       serviceConfig = {
         ExecStart = "${pkgs.lm_sensors}/sbin/fancontrol ${configFile}";
-        Group = "lm_sensors";
-        User = "fancontrol";
       };
     };
   };

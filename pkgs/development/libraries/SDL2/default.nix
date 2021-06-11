@@ -1,7 +1,7 @@
 { lib, stdenv, config, fetchurl, pkg-config
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
 , x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
 , libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
 , libXinerama, libXext, libXxf86vm, libXrandr
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     ++ optionals x11Support [ libX11 xorgproto ];
 
   dlopenBuildInputs = [ ]
-    ++ optionals  alsaSupport [ alsaLib audiofile ]
+    ++ optionals  alsaSupport [ alsa-lib audiofile ]
     ++ optional  dbusSupport dbus
     ++ optional  pulseaudioSupport libpulseaudio
     ++ optional  udevSupport udev
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-oss"
   ] ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
+    ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
     ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
     ++ optional stdenv.isDarwin "--disable-sdltest";
 

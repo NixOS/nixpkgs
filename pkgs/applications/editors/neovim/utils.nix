@@ -29,6 +29,11 @@ let
     , withNodeJs ? false
     , withRuby ? true
 
+    # expects a list of plugin configuration
+    # expects { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
+    , plugins ? []
+    # forwarded to configure.customRC
+    , customRC ? ""
     # same values as in vimUtils.vimrcContent
     , configure ? { }
 
@@ -44,7 +49,25 @@ let
         '';
       };
 
-      requiredPlugins = vimUtils.requiredPlugins configure;
+      # transform all plugins into an attrset
+      pluginsNormalized = map (x: if x ? plugin then { optional = false; } // x else { plugin = x; optional = false;}) plugins;
+
+
+      configurePatched = configure // {
+        customRC = pluginRc + customRC + (configure.customRC or "");
+      };
+
+      # A function to get the configuration string (if any) from an element of 'plugins'
+      pluginConfig = p:
+        if (p.config or "") != "" then ''
+          " ${p.plugin.pname or p.plugin.name} {{{
+          ${p.config}
+          " }}}
+        '' else "";
+
+      pluginRc = lib.concatMapStrings pluginConfig pluginsNormalized;
+
+      requiredPlugins = vimUtils.requiredPlugins configurePatched;
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
 
       pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
@@ -89,12 +112,13 @@ let
           "--suffix" "PATH" ":" binPath
         ];
 
-      manifestRc = vimUtils.vimrcContent (configure // { customRC = ""; });
-      neovimRcContent = vimUtils.vimrcContent configure;
+
+      manifestRc = vimUtils.vimrcContent (configurePatched // { customRC = ""; }) ;
+      neovimRcContent = vimUtils.vimrcContent configurePatched;
     in
     assert withPython2 -> throw "Python2 support has been removed from neovim, please remove withPython2 and extraPython2Packages.";
 
-    args // {
+    builtins.removeAttrs args ["plugins"] // {
       wrapperArgs = makeWrapperArgs;
       inherit neovimRcContent;
       inherit manifestRc;
@@ -124,6 +148,7 @@ let
     , vimAlias ? false
     , viAlias ? false
     , configure ? {}
+    , extraName ? ""
   }:
     let
       /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
@@ -136,16 +161,14 @@ let
         extraPython3Packages = compatFun extraPython3Packages;
         inherit withNodeJs withRuby viAlias vimAlias;
         inherit configure;
+        inherit extraName;
       };
     in
     assert withPython -> throw "Python2 support has been removed from neovim, please remove withPython and extraPythonPackages.";
 
     wrapNeovimUnstable neovim (res // {
-      wrapperArgs = lib.escapeShellArgs (
-        res.wrapperArgs ++ lib.optionals (configure != {}) [
-          "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}"
-        ]) + " " + extraMakeWrapperArgs
-      ;
+      wrapperArgs = lib.escapeShellArgs res.wrapperArgs + extraMakeWrapperArgs;
+      wrapRc = (configure != {});
   });
 in
 {

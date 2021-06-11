@@ -40,7 +40,7 @@ close ANSWERS;
 sub runConfig {
 
     # Run `make config'.
-    my $pid = open2(\*IN, \*OUT, "make -C $ENV{SRC} O=$buildRoot config SHELL=bash ARCH=$ENV{ARCH}");
+    my $pid = open2(\*IN, \*OUT, "make -C $ENV{SRC} O=$buildRoot config SHELL=bash ARCH=$ENV{ARCH} CC=$ENV{CC} HOSTCC=$ENV{HOSTCC} HOSTCXX=$ENV{HOSTCXX}");
 
     # Parse the output, look for questions and then send an
     # appropriate answer.

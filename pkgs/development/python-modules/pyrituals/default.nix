@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyrituals";
-  version = "0.0.2";
+  version = "0.0.3";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "milanmeu";
     repo = pname;
     rev = version;
-    sha256 = "0hrwhk3kpvdg78fgnvhmnnh3wprdv10j8jqjm4ly64chr8cdi6f2";
+    sha256 = "sha256-oAxQRGP6GxiidnGshSJZEh2RD3XsZ/7kFGwcqaYaBnM=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

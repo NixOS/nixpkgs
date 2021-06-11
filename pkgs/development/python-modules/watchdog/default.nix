@@ -5,17 +5,18 @@
 , argh
 , pathtools
 , pyyaml
+, pytest-timeout
 , pytestCheckHook
 , CoreServices
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VTFu+rUvZZuLe1lzBoC/snrAA1IvJMRPa81gxONzbM0=";
+    sha256 = "sha256-AjfbTZAkhZvqJ9DvtZ/nXu8pCDP9mIuOrXqHmwMIwts=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pytest-timeout
     pytestCheckHook
   ];
 

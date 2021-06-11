@@ -42,8 +42,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     programs.gnupg.agent.enable = true;
 
     virtualisation.memorySize = 1024;
-    # Need to switch to a different VGA card / GPU driver than the default one (std) so that Sway can launch:
-    virtualisation.qemu.options = [ "-vga virtio" ];
+    # Need to switch to a different GPU driver than the default one (-vga std) so that Sway can launch:
+    virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
   };
 
   enableOCR = true;

@@ -8,9 +8,9 @@
  <xi:include href="preface.chapter.xml" />
  <part>
   <title>Using Nixpkgs</title>
-  <xi:include href="using/configuration.xml" />
-  <xi:include href="using/overlays.xml" />
-  <xi:include href="using/overrides.xml" />
+  <xi:include href="using/configuration.chapter.xml" />
+  <xi:include href="using/overlays.chapter.xml" />
+  <xi:include href="using/overrides.chapter.xml" />
   <xi:include href="functions.xml" />
  </part>
  <part>

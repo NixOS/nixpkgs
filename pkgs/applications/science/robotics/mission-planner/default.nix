@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, mono6 }:
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, mono }:
 
 let
   pname = "mission-planner";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1cgpmsmmnbzw1lwsdafp8yklk1rwc61yf12vc1ahcc6bl7q2385x";
   };
 
-  nativeBuildInputs = [ makeWrapper mono6 unzip ];
+  nativeBuildInputs = [ makeWrapper mono unzip ];
   sourceRoot = ".";
 
   AOT_FILES = [ "MissionPlanner.exe" "MissionPlanner.*.dll" ];
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     install -m 444 -D mpdesktop150.png $out/share/icons/mission-planner.png
     cp -r ${desktopItem}/share/applications $out/share/
     mv * $out/opt/mission-planner
-    makeWrapper ${mono6}/bin/mono $out/bin/mission-planner \
+    makeWrapper ${mono}/bin/mono $out/bin/mission-planner \
       --add-flags $out/opt/mission-planner/MissionPlanner.exe
     runHook postInstall
   '';

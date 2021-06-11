@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel, bc }:
 
 stdenv.mkDerivation rec {
-  name = "rtl88x2bu-${kernel.version}-${version}";
-  version = "unstable-2021-01-21";
+  pname = "rtl88x2bu";
+  version = "${kernel.version}-unstable-2021-05-18";
 
   src = fetchFromGitHub {
-    owner = "cilynx";
-    repo = "rtl88x2BU";
-    rev = "48e7c19c92a77554403e1347447f8e2cfd780228";
-    sha256 = "0nw2kgblpq6qlr43gbfxqvq0c83664f4czfwzsyfjr47rj00iyq7";
+    owner = "morrownr";
+    repo = "88x2bu";
+    rev = "80b03962e33f86f99e898305d8d597140503de03";
+    sha256 = "sha256-C7XOpKgwxM9UbfW3wHteInTmAUM3FFqN1MHMKxP8gBA=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bc ];
   buildInputs = kernel.moduleBuildDependencies;
 
-  prePatch = ''
+ prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
       --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Realtek rtl88x2bu driver";
-    homepage = "https://github.com/cilynx/rtl88x2bu";
+    homepage = "https://github.com/morrownr/88x2bu";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.ralith ];

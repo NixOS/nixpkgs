@@ -1,7 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
 , vdf
 , bash
 , steam-run
@@ -27,7 +27,7 @@ buildPythonApplication rec {
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ vdf ];
 
   makeWrapperArgs = [
@@ -50,7 +50,7 @@ buildPythonApplication rec {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
   };
 }

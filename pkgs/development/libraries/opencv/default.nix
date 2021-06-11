@@ -6,7 +6,7 @@
 , enablePNG ? true, libpng
 , enableTIFF ? true, libtiff
 , enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
-, enableFfmpeg ? false, ffmpeg_3
+, enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
 , Cocoa, QTKit
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optionals enableEXR [ openexr ilmbase ]
-    ++ lib.optional enableFfmpeg ffmpeg_3
+    ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]

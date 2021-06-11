@@ -146,7 +146,7 @@ let
         "CRYSTAL_CONFIG_VERSION=${version}"
       ];
 
-      LLVM_CONFIG = "${llvmPackages.llvm}/bin/llvm-config";
+      LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
       FLAGS = [
         "--release"

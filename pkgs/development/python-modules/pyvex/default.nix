@@ -11,12 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.0.6885";
+  version = "9.0.7912";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cWQdrGKJyGieBow3TiMj/uB2crIF32Kvl5tVUKg/z+E=";
+    sha256 = "sha256-KqTfu49Muicr5oJcXcoYpz3S7+0hk7dxbU7GMCDlJQA=";
   };
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace vex/Makefile-gcc --replace '/usr/bin/ar' 'ar'
+  '';
 
   propagatedBuildInputs = [
     archinfo

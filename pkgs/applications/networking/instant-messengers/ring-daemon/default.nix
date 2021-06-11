@@ -7,7 +7,7 @@
 , libtool
 , pjsip
 , libyamlcpp
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , libsamplerate
 , libsndfile
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
   buildInputs = [
     pjsip'
     libyamlcpp
-    alsaLib
+    alsa-lib
     libpulseaudio
     libsamplerate
     libsndfile

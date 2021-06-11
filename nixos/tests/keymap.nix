@@ -107,8 +107,23 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       altgr.expect = [ "~"       "#"       "{"       "["       "|"       ];
     };
 
-    extraConfig.console.keyMap = "azerty/fr";
+    extraConfig.console.keyMap = "fr";
     extraConfig.services.xserver.layout = "fr";
+  };
+
+  bone = {
+    tests = {
+      layer1.qwerty = [ "f"           "j"                     ];
+      layer1.expect = [ "e"           "n"                     ];
+      layer2.qwerty = [ "shift-f"     "shift-j"     "shift-6" ];
+      layer2.expect = [ "E"           "N"           "$"       ];
+      layer3.qwerty = [ "caps_lock-d" "caps_lock-f"           ];
+      layer3.expect = [ "{"           "}"                     ];
+    };
+
+    extraConfig.console.keyMap = "bone";
+    extraConfig.services.xserver.layout = "de";
+    extraConfig.services.xserver.xkbVariant = "bone";
   };
 
   colemak = {
@@ -117,7 +132,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       homerow.expect = [ "a" "r" "s" "t" "n" "e" "i" "o"         ];
     };
 
-    extraConfig.console.keyMap = "colemak/colemak";
+    extraConfig.console.keyMap = "colemak";
     extraConfig.services.xserver.layout = "us";
     extraConfig.services.xserver.xkbVariant = "colemak";
   };
@@ -129,9 +144,13 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       symbols.qwerty = [ "q" "w" "e" "minus" "equal" ];
       symbols.expect = [ "'" "," "." "["     "]"     ];
     };
+
+    extraConfig.console.keyMap = "dvorak";
+    extraConfig.services.xserver.layout = "us";
+    extraConfig.services.xserver.xkbVariant = "dvorak";
   };
 
-  dvp = {
+  dvorak-programmer = {
     tests = {
       homerow.qwerty = [ "a" "s" "d" "f" "j" "k" "l" "semicolon" ];
       homerow.expect = [ "a" "o" "e" "u" "h" "t" "n" "s"         ];
@@ -142,6 +161,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       symbols.expect = [ "&" "[" "{" "}" "(" "=" "*" ")" "+" "]" "!" ];
     };
 
+    extraConfig.console.keyMap = "dvorak-programmer";
     extraConfig.services.xserver.layout = "us";
     extraConfig.services.xserver.xkbVariant = "dvp";
   };
@@ -156,6 +176,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       layer3.expect = [ "{"           "}"                     ];
     };
 
+    extraConfig.console.keyMap = "neo";
     extraConfig.services.xserver.layout = "de";
     extraConfig.services.xserver.xkbVariant = "neo";
   };

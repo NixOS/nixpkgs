@@ -1,6 +1,6 @@
-{ appleDerivation, ed, unifdef, Libc_old, Libc_10-9 }:
+{ appleDerivation', stdenvNoCC, ed, unifdef, Libc_old, Libc_10-9 }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   nativeBuildInputs = [ ed unifdef ];
 
   # TODO: asl.h actually comes from syslog project now

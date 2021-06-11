@@ -1,0 +1,14 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index c975128..a9f6910 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -31,8 +31,7 @@ include(FetchContent)
+ 
+ FetchContent_Declare(
+   pybind11-src
+-  GIT_REPOSITORY https://github.com/pybind/pybind11.git
+-  GIT_TAG        v2.6.2
++  SOURCE_DIR @pybind11_src@
+ )
+ FetchContent_MakeAvailable(pybind11-src)
+ 

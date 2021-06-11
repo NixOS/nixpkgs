@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "0.3.3";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XYWoHKa/yq7MtGVM6eVgLtR2E3VmqsjX3TNcQcd7dEQ=";
+    sha256 = "sha256-6BbJgRpn2hivm4N3Zpll9NACMSNlIhxj8CF2iVduIro=";
   };
 
   nativeBuildInputs = [ poetry-core ];

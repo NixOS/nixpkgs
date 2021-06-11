@@ -7,7 +7,7 @@
 # be nice to add the native GUI (and/or the GTK GUI) as an option too, but that
 # requires invoking the Xcode build system, which is non-trivial for now.
 
-{ stdenv, lib, fetchFromGitHub,
+{ stdenv, lib, fetchFromGitHub, fetchpatch,
   # Main build tools
   pkg-config, autoconf, automake, libtool, m4, xz, python3,
   numactl,
@@ -57,6 +57,15 @@ stdenv.mkDerivation rec {
       echo "DATE=$(date +"%F %T %z" -r $out/NEWS.markdown)" > $out/version.txt
     '';
   };
+
+  # Remove with a release after 1.3.3
+  patches = [
+    (fetchpatch {
+      name = "audio-fix-ffmpeg-4_4";
+      url = "https://github.com/HandBrake/HandBrake/commit/f28289fb06ab461ea082b4be56d6d1504c0c31c2.patch";
+      sha256 = "sha256:1zcwa4h97d8wjspb8kbd8b1jg0a9vvmv9zaphzry4m9q0bj3h3kz";
+    })
+  ];
 
   # we put as little as possible in src.extraPostFetch as it's much easier to
   # add to it here without having to fiddle with src.sha256
@@ -111,8 +120,6 @@ _EOF
   # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
   # look at ./make/configure.py search "enable_nvenc"
   ++ lib.optional stdenv.isLinux nv-codec-headers;
-
-  enableParallelBuilding = true;
 
   configureFlags = [
     "--disable-df-fetch"

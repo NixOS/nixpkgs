@@ -1,8 +1,8 @@
 diff --git a/ytfzf b/ytfzf
-index 42f41c0..f75f5cb 100755
+index d5ff8c9..96f9c8f 100755
 --- a/ytfzf
 +++ b/ytfzf
-@@ -892,23 +892,8 @@ send_notify () {
+@@ -934,23 +934,8 @@ send_notify () {
  }
  
  update_ytfzf () {
@@ -10,7 +10,7 @@ index 42f41c0..f75f5cb 100755
 -	updatefile="/tmp/ytfzf-update"
 -	curl -L "https://raw.githubusercontent.com/pystardust/ytfzf/$branch/ytfzf" -o "$updatefile"
 -
--	if sed -n '1p' < "$updatefile" | grep -q '#!/bin/sh' ; then
+-	if sed -n '1p' < "$updatefile" | grep -q '#!/bin/sh'; then
 -		chmod 755 "$updatefile"
 -		if [ "$(uname)" = "Darwin" ]; then
 -			sudo cp "$updatefile" "/usr/local/bin/ytfzf"
@@ -27,4 +27,4 @@ index 42f41c0..f75f5cb 100755
 +	exit 1
  }
  
- scrape_subscriptions () {
+ sort_video_data_date () {

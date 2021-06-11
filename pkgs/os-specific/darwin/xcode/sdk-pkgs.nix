@@ -41,6 +41,7 @@ rec {
       mv cc-cflags.tmp $out/nix-support/cc-cflags
       echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
       echo "-isystem ${sdk}/usr/include${lib.optionalString (lib.versionAtLeast "10" sdk.version) " -isystem ${sdk}/usr/include/c++/4.2.1/ -stdlib=libstdc++"}" >> $out/nix-support/cc-cflags
+      ${lib.optionalString (lib.versionAtLeast sdk.version "14") "echo -isystem ${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 >> $out/nix-support/cc-cflags"}
     '';
   }) // {
     inherit sdk;

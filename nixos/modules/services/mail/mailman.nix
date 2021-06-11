@@ -333,6 +333,7 @@ in {
         before = [ "mailman.service" "mailman-web-setup.service" "mailman-uwsgi.service" "hyperkitty.service" ];
         requiredBy = [ "mailman.service" "mailman-web-setup.service" "mailman-uwsgi.service" "hyperkitty.service" ];
         path = with pkgs; [ jq ];
+        serviceConfig.Type = "oneshot";
         script = ''
           mailmanDir=/var/lib/mailman
           mailmanWebDir=/var/lib/mailman-web

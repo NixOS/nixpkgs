@@ -91,6 +91,10 @@
     <option>--flake</option> <replaceable>flake-uri</replaceable>
    </arg>
 
+   <arg>
+    <option>--override-input</option> <replaceable>input-name</replaceable> <replaceable>flake-uri</replaceable>
+   </arg>
+
    <sbr />
 
    <arg>
@@ -402,10 +406,9 @@
     </term>
     <listitem>
      <para>
-      Equivalent to <option>--no-build-nix</option>
-      <option>--show-trace</option>. This option is useful if you call
-      <command>nixos-rebuild</command> frequently (e.g. if you’re hacking on
-      a NixOS module).
+      Equivalent to <option>--no-build-nix</option>. This option is
+      useful if you call <command>nixos-rebuild</command> frequently
+      (e.g. if you’re hacking on a NixOS module).
      </para>
     </listitem>
    </varlistentry>

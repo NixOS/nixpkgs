@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
 , apispec
 , colorama
 , click
@@ -27,15 +26,16 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "3.2.3";
+  version = "3.3.0";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "sha256-+ZYrn2LnVORyYsnZtsH3JX+4XbGgAZZ/Eh6O5gUP+y4=";
+    sha256 = "00dsfv1apl6483wy20aj91f9h5ak2casbx5vcajv2nd3i7c7v8gx";
   };
 
   patches = [
+    # https://github.com/dpgaspar/Flask-AppBuilder/pull/1610
     (fetchpatch {
       name = "flask_jwt_extended-and-pyjwt-patch";
       url = "https://github.com/dpgaspar/Flask-AppBuilder/commit/7097a7b133f27c78d2b54d2a46e4a4c24478a066.patch";
@@ -75,7 +75,7 @@ buildPythonPackage rec {
       --replace "marshmallow-sqlalchemy>=0.22.0, <0.24.0" "marshmallow-sqlalchemy >=0.22.0, <0.25.0"
   '';
 
-  # majority of tests require network access or mongo
+  # Majority of tests require network access or mongo
   doCheck = false;
 
   pythonImportsCheck = [ "flask_appbuilder" ];

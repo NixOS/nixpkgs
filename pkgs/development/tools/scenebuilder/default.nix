@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gradleGen, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, jdk11, gradleGen, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
 let
-  # The default one still uses jdk8 (#89731)
-  gradle = (gradleGen.override (old: { java = jdk; })).gradle_6_8;
+  gradle = (gradleGen.override (old: { java = jdk11; })).gradle_6_8;
 
   pname = "scenebuilder";
   version = "15.0.1";
@@ -17,7 +16,7 @@ let
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk perl gradle ];
+    nativeBuildInputs = [ jdk11 perl gradle ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
@@ -77,7 +76,7 @@ let
 in stdenv.mkDerivation rec {
   inherit pname src version;
 
-  nativeBuildInputs = [ jdk gradle makeWrapper glib wrapGAppsHook ];
+  nativeBuildInputs = [ jdk11 gradle makeWrapper glib wrapGAppsHook ];
 
   dontWrapGApps = true; # prevent double wrapping
 
@@ -101,7 +100,7 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar" "''${gappsWrapperArgs[@]}"
+    makeWrapper ${jdk11}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar" "''${gappsWrapperArgs[@]}"
     '';
 
   desktopItems = [ desktopItem ];

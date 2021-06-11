@@ -28,7 +28,7 @@ One can create a simple environment using a `shell.nix` like that:
   name = "simple-x11-env";
   targetPkgs = pkgs: (with pkgs;
     [ udev
-      alsaLib
+      alsa-lib
     ]) ++ (with pkgs.xorg;
     [ libX11
       libXcursor
@@ -36,7 +36,7 @@ One can create a simple environment using a `shell.nix` like that:
     ]);
   multiPkgs = pkgs: (with pkgs;
     [ udev
-      alsaLib
+      alsa-lib
     ]);
   runScript = "bash";
 }).env

@@ -1,6 +1,6 @@
 # Reviewing contributions {#chap-reviewing-contributions}
 
-::: warning
+::: {.warning}
 The following section is a draft, and the policy for reviewing is still being discussed in issues such as [#11166](https://github.com/NixOS/nixpkgs/issues/11166) and [#20836](https://github.com/NixOS/nixpkgs/issues/20836).
 :::
 
@@ -35,15 +35,18 @@ Reviewing process:
 - Building the package locally.
   - pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
   - It is possible to rebase the changes on nixos-unstable or nixpkgs-unstable for easier review by running the following commands from a nixpkgs clone.
+
     ```ShellSession
     $ git fetch origin nixos-unstable
     $ git fetch origin pull/PRNUMBER/head
     $ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD
     ```
+
     - The first command fetches the nixos-unstable branch.
     - The second command fetches the pull request changes, `PRNUMBER` is the number at the end of the pull request title and `BASEBRANCH` the base branch of the pull request.
     - The third command rebases the pull request changes to the nixos-unstable branch.
   - The [nixpkgs-review](https://github.com/Mic92/nixpkgs-review) tool can be used to review a pull request content in a single command. `PRNUMBER` should be replaced by the number at the end of the pull request title. You can also provide the full github pull request url.
+
     ```ShellSession
     $ nix-shell -p nixpkgs-review --run "nixpkgs-review pr PRNUMBER"
     ```

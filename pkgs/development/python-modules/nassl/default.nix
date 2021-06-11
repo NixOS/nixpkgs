@@ -90,7 +90,7 @@ buildPythonPackage rec {
       ${opensslLegacyStatic.out}/lib/libcrypto.a \
       deps/openssl-OpenSSL_${legacyOpenSSLVersion}/
     ln -s ${opensslLegacyStatic.out.dev}/include deps/openssl-OpenSSL_${legacyOpenSSLVersion}/include
-    ln -s ${opensslLegacyStatic.bin} deps/openssl-OpenSSL_${legacyOpenSSLVersion}/apps
+    ln -s ${opensslLegacyStatic.bin}/bin deps/openssl-OpenSSL_${legacyOpenSSLVersion}/apps
 
     mkdir -p deps/openssl-OpenSSL_${modernOpenSSLVersion}/
     cp ${opensslStatic.out}/lib/libssl.a \

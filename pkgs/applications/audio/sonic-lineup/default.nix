@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, boost, bzip2, fftw, fftwFloat, libfishsound
+{ lib, stdenv, fetchurl, alsa-lib, boost, bzip2, fftw, fftwFloat, libfishsound
 , libid3tag, liblo, libmad, liboggz, libpulseaudio, libsamplerate
 , libsndfile, lrdf, opusfile, portaudio, rubberband, serd, sord, capnproto
 , wrapQtAppsHook, pkg-config
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ alsaLib boost bzip2 fftw fftwFloat libfishsound libid3tag liblo
+    [ alsa-lib boost bzip2 fftw fftwFloat libfishsound libid3tag liblo
       libmad liboggz libpulseaudio libsamplerate libsndfile lrdf opusfile
       portaudio rubberband serd sord capnproto
     ];

@@ -1,5 +1,5 @@
 diff --git a/config/environments/production.rb b/config/environments/production.rb
-index 75c3a69512..7fc374cd9d 100644
+index a523888a8d..422c2c1ee8 100644
 --- a/config/environments/production.rb
 +++ b/config/environments/production.rb
 @@ -32,6 +32,7 @@ Discourse::Application.configure do

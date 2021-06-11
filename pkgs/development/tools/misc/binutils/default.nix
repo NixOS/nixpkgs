@@ -107,8 +107,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" "pie" ];
 
-  # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-  configurePlatforms = [ "build" "host" ] ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags =
     (if enableShared then [ "--enable-shared" "--disable-static" ]
@@ -126,7 +125,19 @@ stdenv.mkDerivation {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     "--enable-new-dtags"
-  ] ++ lib.optionals gold [ "--enable-gold" "--enable-plugins" ];
+
+    # force target prefix. Some versions of binutils will make it empty
+    # if `--host` and `--target` are too close, even if Nixpkgs thinks
+    # the platforms are different (e.g. because not all the info makes
+    # the `config`). Other versions of binutils will always prefix if
+    # `--target` is passed, even if `--host` and `--target` are the same.
+    # The easiest thing for us to do is not leave it to chance, and force
+    # the program prefix to be what we want it to be.
+    "--program-prefix=${targetPrefix}"
+  ] ++ lib.optionals gold [
+    "--enable-gold"
+    "--enable-plugins"
+  ];
 
   doCheck = false; # fails
 

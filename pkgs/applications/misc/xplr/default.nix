@@ -1,19 +1,17 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
+{ lib, stdenv, rustPlatform, fetchCrate, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
-  version = "0.8.4";
+  version = "0.14.1";
 
-  src = fetchFromGitHub {
-    owner = "sayanarijit";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "00kmmdwwf9cll25bkszgin2021ggf9b28jlcpicin5kgw4iwlhkj";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "08gb4dnnzdy3whn2411xmar1wpvmc014scbniicksra8p1xizh0b";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  cargoSha256 = "1j43vwb885h355wdmjijz1qpkqn1dmb93hwi6vc035vkbbxs1g4r";
+  cargoSha256 = "1yxbirqf6c4bc364gw0nnjrjvhvjy2j2pbmvlpakv0bmyfphhb95";
 
   meta = with lib; {
     description = "A hackable, minimal, fast TUI file explorer";

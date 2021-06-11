@@ -18,10 +18,11 @@ let
   maintenancePath = lib.makeBinPath [ gawk gnused gnugrep coreutils which ];
 
 in stdenv.mkDerivation rec {
-  name = "dspam-3.10.2";
+  pname = "dspam";
+  version = "3.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dspam/dspam/${name}/${name}.tar.gz";
+    url = "mirror://sourceforge/dspam/dspam/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "1acklnxn1wvc7abn31l3qdj8q6k13s51k5gv86vka7q20jb5cxmf";
   };
 

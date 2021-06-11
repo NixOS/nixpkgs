@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.17.2";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1md52xzlrzf99s5q2152s1b7yql2h02ss451g68ky207xz660aj1";
+    sha256 = "1vz3d59wfqssfv1kvd4minlxibr0id06xfyg8956w9s3b22jc5vq";
   };
 
   postPatch = ''
@@ -67,6 +67,7 @@ python3.pkgs.buildPythonApplication rec {
     hypothesis
     mock
     pytest-mock
+    pytest-sugar
     pytestCheckHook
   ];
 

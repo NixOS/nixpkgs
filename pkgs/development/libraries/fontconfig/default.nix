@@ -61,6 +61,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/409b37c62780728755c908991c912a6b16f2389c.patch";
       sha256 = "zJFh37QErSAINPGFkFVJyhYRP27BuIN7PIgoDl/PIwI=";
     })
+
+    # Combination of
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/88
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/131
+    ./macos-atomics.h
   ];
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config

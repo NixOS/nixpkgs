@@ -92,7 +92,7 @@ in
   nettle-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
-    LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   };
 
   openssl = attrs: {

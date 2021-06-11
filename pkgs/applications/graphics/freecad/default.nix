@@ -23,6 +23,7 @@
 , opencascade-occt
 , pivy
 , pkg-config
+, ply
 , pycollada
 , pyside2
 , pyside2-tools
@@ -80,6 +81,7 @@ mkDerivation rec {
     ode
     opencascade-occt
     pivy
+    ply # for openSCAD file support
     pycollada
     pyside2
     pyside2-tools

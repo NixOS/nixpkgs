@@ -1,0 +1,48 @@
+--- a/atop.service
++++ b/atop.service
+@@ -12,4 +12,4 @@
+ ExecStartPre=/bin/sh -c 'test -n "$LOGGENERATIONS" -a "$LOGGENERATIONS" -eq "$LOGGENERATIONS"'
+-ExecStart=/bin/sh -c 'exec /usr/bin/atop ${LOGOPTS} -w "${LOGPATH}/atop_$(date +%%Y%%m%%d)" ${LOGINTERVAL}'
+-ExecStartPost=/usr/bin/find "${LOGPATH}" -name "atop_*" -mtime +${LOGGENERATIONS} -exec rm -v {} \;
++ExecStart=/bin/sh -c 'exec @out@/bin/atop ${LOGOPTS} -w "${LOGPATH}/atop_$(date +%%Y%%m%%d)" ${LOGINTERVAL}'
++ExecStartPost=@findutils@/bin/find "${LOGPATH}" -name "atop_*" -mtime +${LOGGENERATIONS} -exec rm -v {} \;
+ KillSignal=SIGUSR2
+
+--- a/atop-rotate.service
++++ b/atop-rotate.service
+@@ -4,3 +4,3 @@
+ [Service]
+ Type=oneshot
+-ExecStart=/usr/bin/systemctl try-restart atop.service
++ExecStart=@systemd@/bin/systemctl try-restart atop.service
+
+--- a/atopgpu.service
++++ b/atopgpu.service
+@@ -6,5 +6,5 @@
+
+ [Service]
+-ExecStart=/usr/sbin/atopgpud
++ExecStart=@out@/bin/atopgpud
+ Type=oneshot
+ RemainAfterExit=yes
+
+--- a/atopacct.service
++++ b/atopacct.service
+@@ -10,3 +10,3 @@
+ PIDFile=/var/run/atopacctd.pid
+-ExecStart=/usr/sbin/atopacctd
++ExecStart=@out@/bin/atopacctd
+
+--- a/atop-pm.sh
++++ b/atop-pm.sh
+@@ -2,8 +2,8 @@
+
+ case "$1" in
+-	pre)	/usr/bin/systemctl stop atop
++	pre)	@systemd@/bin/systemctl stop atop
+ 		exit 0
+ 		;;
+-	post)	/usr/bin/systemctl start atop
++	post)	@systemd@/bin/systemctl start atop
+ 		exit 0
+ 		;;

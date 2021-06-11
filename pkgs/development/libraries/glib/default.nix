@@ -45,15 +45,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.68.1";
+  version = "2.68.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-JBZUuWvTa4iqoSgU78SEO1eOVdR0QBA3J5Waw0aUQzM=";
+    sha256 = "sha256-7Md5ipzANOq9/X8kbm3UYc2/EXX8wumGfMfae3MJ4Ps=";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
+    ./link-with-coreservices.patch
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
@@ -92,13 +93,23 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libelf setupHook pcre
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
-    gtk-doc
   ] ++ optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]);
+  ]) ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    # Note: this needs to be both in buildInputs and nativeBuildInputs. The
+    # Meson gtkdoc module uses find_program to look it up (-> build dep), but
+    # glib's own Meson configuration uses the host pkg-config to find its
+    # version (-> host dep). We could technically go and fix this in glib, add
+    # pkg-config to depsBuildBuild, but this would be a futile exercise since
+    # Meson's gtkdoc integration does not support cross compilation[1] anyway
+    # and this derivation disables the docs build when cross compiling.
+    #
+    # [1] https://github.com/mesonbuild/meson/issues/2003
+    gtk-doc
+  ];
 
   strictDeps = true;
 

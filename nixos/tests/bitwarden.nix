@@ -42,7 +42,7 @@ let
                 GRANT ALL ON `bitwarden`.* TO 'bitwardenuser'@'localhost';
                 FLUSH PRIVILEGES;
               '';
-              package = pkgs.mysql;
+              package = pkgs.mariadb;
             };
 
             services.bitwarden_rs.config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";

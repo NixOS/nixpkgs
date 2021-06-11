@@ -1,21 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gtest, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libtorrent-jesec";
-  version = "0.13.8-r1";
+  version = "0.13.8-r2";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "sha256-Eh5pMkSe9uO0dPRWDg2BbbRxxuvX9FM2/OReq/61ojc=";
+    sha256 = "sha256-eIXVTbVOCRHcxSsLPvIm9F60t2upk5ORpDSOOYqTCJ4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "test-fallback";
+      url = "https://github.com/jesec/libtorrent/commit/a38205ce06aadc9908478ec3a9c8aefd9be06344.patch";
+      sha256 = "sha256-2TyQ9zYWZw6bzAfVZzTOQSkfIZnDU8ykgpRAFXscEH0=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl zlib ];
 
-  # https://github.com/jesec/libtorrent/issues/1
-  doCheck = false;
+  doCheck = true;
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
+  '';
   checkInputs = [ gtest ];
 
   meta = with lib; {

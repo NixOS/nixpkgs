@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, which, pkg-config, makeWrapper
-, ffmpeg_3, libGLU, libGL, freetype, libxml2, python3
+, ffmpeg, libGLU, libGL, freetype, libxml2, python3
 , libobjc, AppKit, Foundation
-, alsaLib ? null
+, alsa-lib ? null
 , libdrm ? null
 , libpulseaudio ? null
 , libv4l ? null
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config wayland ]
                       ++ optional withVulkan makeWrapper;
 
-  buildInputs = [ ffmpeg_3 freetype libxml2 libGLU libGL python3 SDL2 which ]
+  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
                 ++ optional withVulkan vulkan-loader
                 ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
-                ++ optionals stdenv.isLinux [ alsaLib libdrm libpulseaudio libv4l libX11
+                ++ optionals stdenv.isLinux [ alsa-lib libdrm libpulseaudio libv4l libX11
                                               libXdmcp libXext libXxf86vm mesa udev
                                               wayland libxkbcommon ];
 

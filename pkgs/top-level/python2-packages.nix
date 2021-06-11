@@ -524,7 +524,7 @@ with self; with super; {
 
   scandir = callPackage ../development/python-modules/scandir { };
 
-  scikitlearn = callPackage ../development/python-modules/scikitlearn/0.20.nix {
+  scikit-learn = callPackage ../development/python-modules/scikit-learn/0.20.nix {
     inherit (pkgs) gfortran glibcLocales;
   };
 
@@ -548,7 +548,7 @@ with self; with super; {
 
   setuptools = callPackage ../development/python-modules/setuptools/44.0.nix { };
 
-  setuptools_scm = callPackage ../development/python-modules/setuptools_scm/2.nix { };
+  setuptools-scm = callPackage ../development/python-modules/setuptools-scm/2.nix { };
 
   setuptoolsDarcs = callPackage ../development/python-modules/setuptoolsdarcs { };
 

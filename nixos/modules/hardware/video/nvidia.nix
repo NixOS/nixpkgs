@@ -92,7 +92,7 @@ in
       example = "PCI:4:0:0";
       description = ''
         Bus ID of the AMD APU. You can find it using lspci; for example if lspci
-	shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
+        shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
       '';
     };
 
@@ -159,7 +159,7 @@ in
       description = ''
         The NVIDIA X11 derivation to use.
       '';
-      example = "config.boot.kernelPackages.nvidiaPackages.legacy340";
+      example = "config.boot.kernelPackages.nvidiaPackages.legacy_340";
     };
   };
 

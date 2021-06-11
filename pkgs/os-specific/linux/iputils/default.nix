@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, gettext, libxslt, docbook_xsl_ns
 , libcap, libidn2
+, apparmorRulesFromClosure
 }:
 
 let
@@ -20,6 +21,8 @@ in stdenv.mkDerivation rec {
     sha256 = "08j2hfgnfh31vv9rn1ml7090j2lsvm9wdpdz13rz60rmyzrx9dq3";
   };
 
+  outputs = ["out" "apparmor"];
+
   mesonFlags = [
     "-DBUILD_RARPD=true"
     "-DBUILD_TRACEROUTE6=true"
@@ -34,6 +37,26 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config gettext libxslt.bin docbook_xsl_ns ];
   buildInputs = [ libcap ]
     ++ lib.optional (!stdenv.hostPlatform.isMusl) libidn2;
+  postInstall = ''
+    mkdir $apparmor
+    cat >$apparmor/bin.ping <<EOF
+    include <tunables/global>
+    $out/bin/ping {
+      include <abstractions/base>
+      include <abstractions/consoles>
+      include <abstractions/nameservice>
+      include "${apparmorRulesFromClosure { name = "ping"; }
+       ([libcap] ++ lib.optional (!stdenv.hostPlatform.isMusl) libidn2)}"
+      include <local/bin.ping>
+      capability net_raw,
+      network inet raw,
+      network inet6 raw,
+      mr $out/bin/ping,
+      r $out/share/locale/**,
+      r @{PROC}/@{pid}/environ,
+    }
+    EOF
+  '';
 
   meta = with lib; {
     description = "A set of small useful utilities for Linux networking";

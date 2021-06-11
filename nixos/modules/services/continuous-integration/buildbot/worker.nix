@@ -191,6 +191,6 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ nand0p ];
+  meta.maintainers = with lib.maintainers; [ ];
 
 }

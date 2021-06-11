@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       # https://github.com/raspberrypi/userland/pull/670
-      url = "https://github.com/raspberrypi/userland/pull/670/commits/37cb44f314ab1209fe2a0a2449ef78893b1e5f62.patch";
+      url = "https://github.com/raspberrypi/userland/commit/37cb44f314ab1209fe2a0a2449ef78893b1e5f62.patch";
       sha256 = "1fbrbkpc4cc010ji8z4ll63g17n6jl67kdy62m74bhlxn72gg9rw";
     })
   ];

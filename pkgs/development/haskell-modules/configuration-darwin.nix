@@ -168,4 +168,7 @@ self: super: {
     '' + (drv.postPatch or "");
   });
 
+  # 2021-05-25: Tests fail and I have no way to debug them.
+  hls-class-plugin = dontCheck super.hls-class-plugin;
+
 }

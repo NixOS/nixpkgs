@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "3d694015d020a888b42564d56559213b94981ca2b32b952a49b2de4d029d2e59";
   };
 
-  nativeBuildInputs = [ python3Packages.setuptools_scm ];
+  nativeBuildInputs = [ python3Packages.setuptools-scm ];
   pythonPath = with python3Packages; [ i3ipc ];
 
   # no tests

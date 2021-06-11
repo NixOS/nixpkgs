@@ -72,7 +72,7 @@ in
 , shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
-, hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
+, hardeningDisable ? null
 , enableSeparateBinOutput ? false
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
@@ -417,6 +417,17 @@ stdenv.mkDerivation ({
   configurePlatforms = [];
   inherit configureFlags;
 
+  # Note: the options here must be always added, regardless of whether the
+  # package specifies `hardeningDisable`.
+  hardeningDisable = lib.optionals (args ? hardeningDisable) hardeningDisable
+    ++ lib.optional (ghc.isHaLVM or false) "all"
+    # Static libraries (ie. all of pkgsStatic.haskellPackages) fail to build
+    # because by default Nix adds `-pie` to the linker flags: this
+    # conflicts with the `-r` and `-no-pie` flags added by GHC (see
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/19580). hardeningDisable
+    # changes the default Nix behavior regarding adding "hardening" flags.
+    ++ lib.optional enableStaticLibraries "pie";
+
   configurePhase = ''
     runHook preConfigure
 
@@ -674,7 +685,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? preFixup)               { inherit preFixup; }
 // optionalAttrs (args ? postFixup)              { inherit postFixup; }
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
-// optionalAttrs (args ? hardeningDisable)       { inherit hardeningDisable; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
 )

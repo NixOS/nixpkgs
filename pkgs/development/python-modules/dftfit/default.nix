@@ -8,7 +8,7 @@
 , pandas
 , scipy
 , numpy
-, scikitlearn
+, scikit-learn
 , lammps-cython
 , pymatgen-lammps
 , pytestrunner
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pandas
     scipy
     numpy
-    scikitlearn
+    scikit-learn
     lammps-cython
     pymatgen-lammps
   ];

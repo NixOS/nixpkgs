@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.gnu.org/software/dico/";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
 
     longDescription = ''
       GNU Dico is a flexible modular implementation of DICT server

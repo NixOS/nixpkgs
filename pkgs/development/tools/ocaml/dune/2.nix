@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, ocaml, findlib }:
 
 if lib.versionOlder ocaml.version "4.08"
-then throw "dune is not available for OCaml ${ocaml.version}"
+then throw "dune 2 is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {

@@ -11,7 +11,7 @@
 , matplotlib
 , nibabel
 , pandas
-, scikitlearn
+, scikit-learn
 }:
 
 buildPythonPackage rec {
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     matplotlib
     nibabel
     pandas
-    scikitlearn
+    scikit-learn
   ];
   preCheck = ''
     export HOME=$TMP

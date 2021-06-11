@@ -13,6 +13,7 @@ let
       contribs = recurseIntoAttrs
         (callPackage ../development/coq-modules/contribs {});
 
+      aac-tactics = callPackage ../development/coq-modules/aac-tactics {};
       autosubst = callPackage ../development/coq-modules/autosubst {};
       bignums = if lib.versionAtLeast coq.coq-version "8.6"
         then callPackage ../development/coq-modules/bignums {}
@@ -68,17 +69,21 @@ let
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       pocklington = callPackage ../development/coq-modules/pocklington {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
+      reglang = callPackage ../development/coq-modules/reglang {};
+      relation-algebra = callPackage ../development/coq-modules/relation-algebra {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
+      topology = callPackage ../development/coq-modules/topology {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
       VST = callPackage ../development/coq-modules/VST (with lib.versions;
         lib.switch coq.coq-version [
           { case = "8.11"; out = { compcert = compcert.override { coqPackages = self; version = "3.7"; }; }; }
-          { case = range "8.12" "8.13"; out = { compcert = compcert.override { coqPackages = self; }; }; }
+          { case = range "8.12" "8.13"; out = { compcert = compcert.override { coqPackages = self; version = "3.8"; }; }; }
         ] {});
+      zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };
 

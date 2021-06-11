@@ -4,7 +4,7 @@
 , libjpeg
 , libX11
 , libXt
-, alsaLib
+, alsa-lib
 , aalib
 , libXft
 , xorgproto
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libFS
     perl
-    alsaLib
+    alsa-lib
     aalib
     libXaw
     libXpm

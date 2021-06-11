@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , curl
 , fetchFromGitHub
 , freeglut
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     curl
     freeglut
     freetype

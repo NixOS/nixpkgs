@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     # >   "_utimensat", referenced from:
     # >       _set_attribs in rdsquashfs-restore_fstree.o
     # > ld: symbol(s) not found for architecture x86_64
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

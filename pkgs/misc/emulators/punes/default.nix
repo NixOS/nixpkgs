@@ -11,7 +11,7 @@
 , pkg-config
 , ffmpeg
 , libGLU
-, alsaLib
+, alsa-lib
 , sndio
 }:
 
@@ -34,7 +34,7 @@ mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook cmake pkg-config qttools ];
 
   buildInputs = [ ffmpeg qtbase qtsvg libGLU ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsaLib ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
     ++ lib.optionals stdenv.hostPlatform.isBSD [ sndio ];
 
   dontUseCmakeConfigure = true;

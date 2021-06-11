@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     ratelimiter
     requests
-    smart_open
+    smart-open
     toposort
     wrapt
   ];

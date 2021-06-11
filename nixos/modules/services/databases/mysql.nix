@@ -34,7 +34,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.mysql";
+        example = literalExample "pkgs.mariadb";
         description = "
           Which MySQL derivation to use. MariaDB packages are supported too.
         ";

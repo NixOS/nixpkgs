@@ -1,4 +1,4 @@
-{ lib, git, setuptools, setuptools_scm, fetchFromGitHub, requests, boto3, buildPythonPackage, responses }:
+{ lib, git, setuptools, setuptools-scm, fetchFromGitHub, requests, boto3, buildPythonPackage, responses }:
 
 buildPythonPackage rec {
     pname = "sapi-python-client";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
     doCheck = false; # requires API token and an active keboola bucket
 
-    nativeBuildInputs = [ git setuptools_scm ];
+    nativeBuildInputs = [ git setuptools-scm ];
 
     propagatedBuildInputs = [ setuptools requests boto3 responses ];
 

@@ -19,7 +19,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ curl libgit2 openssl ]
     ++ lib.optional stdenv.isDarwin Security;
 
-  doCheck = true;
+  # thread 'main' panicked at 'Cannot ping mock server.: "cannot send request to mock server: cannot send request to mock server: failed to resolve host name"'
+  # __darwinAllowLocalNetworking does not fix the panic
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Generate Bazel BUILD files from Cargo dependencies";

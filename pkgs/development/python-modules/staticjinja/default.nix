@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , buildPythonPackage
 , poetry
-, isPy27
 , docopt
 , easywatch
 , jinja2
@@ -13,17 +12,15 @@
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "1.0.4";
+  version = "2.0.1";
   format = "pyproject";
-
-  disabled = isPy27; # 0.4.0 drops python2 support
 
   # No tests in pypi
   src = fetchFromGitHub {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "1saz6f71s693gz9c2k3bq2di2mrkj65mgmfdg86jk0z0zzjk90y1";
+    sha256 = "sha256-sGon3+So4EuVRTUqcP9omfJ91wBzJSm7CSkuefX3S+8=";
   };
 
   nativeBuildInputs = [

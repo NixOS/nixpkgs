@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     "--with-system-zlib"
     "--with-system-icu"
 
-    "--with-libclang-path=${llvmPackages.libclang}/lib"
+    "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
 
     "--enable-shared-js"

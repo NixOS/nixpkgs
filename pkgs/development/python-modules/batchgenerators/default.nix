@@ -8,7 +8,7 @@
 , numpy
 , pillow
 , scipy
-, scikitlearn
+, scikit-learn
 , scikitimage
 , threadpoolctl
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    future numpy pillow scipy scikitlearn scikitimage threadpoolctl
+    future numpy pillow scipy scikit-learn scikitimage threadpoolctl
   ];
 
   checkInputs = [ pytestCheckHook unittest2 ];

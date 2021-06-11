@@ -5,13 +5,15 @@ buildPythonPackage rec {
   version = "0.11.13";
 
   buildInputs = lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ Security ]);
+    (with darwin.apple_sdk.frameworks; [ CoreFoundation Security ]);
 
   # Required to suppress -Werror
   # https://github.com/NixOS/nixpkgs/issues/39687
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.isAarch64 ([ gcc10 perl ]);
+  nativeBuildInputs = [ cmake ] ++
+    # gcc <10 is not supported, LLVM on darwin is just fine
+    lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [ gcc10 perl ];
 
   dontUseCmakeConfigure = true;
 

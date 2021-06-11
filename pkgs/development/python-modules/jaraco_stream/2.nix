@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, setuptools_scm, six }:
+{ buildPythonPackage, fetchPypi, setuptools-scm, six }:
 
 buildPythonPackage rec {
   pname = "jaraco.stream";
@@ -8,6 +8,6 @@ buildPythonPackage rec {
     sha256 = "196synw4g76yagcflmavi7wakf5cdgsflmvbj7zs616gv03xbsf2";
   };
   doCheck = false;
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
 }

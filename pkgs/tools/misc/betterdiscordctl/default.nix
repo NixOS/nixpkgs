@@ -2,22 +2,28 @@
 
 stdenv.mkDerivation rec {
   pname = "betterdiscordctl";
-  version = "1.7.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "bb010g";
     repo = "betterdiscordctl";
     rev = "v${version}";
-    sha256 = "12c3phcfwl4p2jfh22ihm57vxw4nq5kwqirb7y4gzc91swfh5yj1";
+    sha256 = "1wys3wbcz5hq8275ia2887kr5fzz4b3gkcp56667j9k0p3k3zfac";
   };
 
-  preBuild = "sed -i 's/^nix=$/&yes/g;s/^DISABLE_UPGRADE=$/&yes/g' ./betterdiscordctl";
+  postPatch = ''
+    substituteInPlace betterdiscordctl \
+      --replace "DISABLE_SELF_UPGRADE=" "DISABLE_SELF_UPGRADE=yes"
+  '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/doc/betterdiscordctl
+    runHook preInstall
+
+    mkdir -p "$out/bin" "$out/share/doc/betterdiscordctl"
     install -Dm744 betterdiscordctl $out/bin/betterdiscordctl
     install -Dm644 README.md $out/share/doc/betterdiscordctl/README.md
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -31,11 +31,11 @@
     <link linkend="opt-services.mailman.enable">enable</link> = true;
     <link linkend="opt-services.mailman.serve.enable">serve.enable</link> = true;
     <link linkend="opt-services.mailman.hyperkitty.enable">hyperkitty.enable</link> = true;
-    <link linkend="opt-services.mailman.hyperkitty.enable">webHosts</link> = ["lists.example.org"];
-    <link linkend="opt-services.mailman.hyperkitty.enable">siteOwner</link> = "mailman@example.org";
+    <link linkend="opt-services.mailman.webHosts">webHosts</link> = ["lists.example.org"];
+    <link linkend="opt-services.mailman.siteOwner">siteOwner</link> = "mailman@example.org";
   };
   <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">services.nginx.virtualHosts."lists.example.org".enableACME</link> = true;
-  <link linkend="opt-services.mailman.hyperkitty.enable">networking.firewall.allowedTCPPorts</link> = [ 25 80 443 ];
+  <link linkend="opt-networking.firewall.allowedTCPPorts">networking.firewall.allowedTCPPorts</link> = [ 25 80 443 ];
 }</programlisting>
     </para>
     <para>

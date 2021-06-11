@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pur";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "alanhamlett";
     repo = "pip-update-requirements";
     rev = version;
-    sha256 = "1p2g0kz9l0rb59b3rkclb6wwidc93kwqh2hm4xc22b1w9r946six";
+    sha256 = "sha256-a2wViLJW+UXgHcURxr4irFVkH8STH84AVcwQIkvH+Fg=";
   };
 
   propagatedBuildInputs = [

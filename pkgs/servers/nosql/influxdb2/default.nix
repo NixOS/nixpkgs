@@ -7,21 +7,23 @@
 , mkYarnPackage
 , pkg-config
 , rustPlatform
+, stdenv
+, libiconv
 }:
 
 # Note for maintainers: use ./update-influxdb2.sh to update the Yarn
 # dependencies nix expression.
 
 let
-  version = "2.0.2";
-  shorthash = "84496e507a"; # git rev-parse HEAD with 2.0.2 checked out
-  libflux_version = "0.95.0";
+  version = "2.0.6";
+  shorthash = "4db98b4c9a"; # git rev-parse HEAD with 2.0.6 checked out
+  libflux_version = "0.115.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "05s09crqgbyfdck33zwax5l47jpc4wh04yd8zsm658iksdgzpmnn";
+    sha256 = "1x74p87csx4m4cgijk57xs75nikv3bnh7skgnzk30ab1ar13iirw";
   };
 
   ui = mkYarnPackage {
@@ -31,7 +33,7 @@ let
     yarnNix = ./influx-ui-yarndeps.nix;
     configurePhase = ''
       cp -r $node_modules ui/node_modules
-      rsync -r $node_modules/../deps/chronograf-ui/node_modules/ ui/node_modules
+      rsync -r $node_modules/../deps/influxdb-ui/node_modules/ ui/node_modules
     '';
     INFLUXDB_SHA = shorthash;
     buildPhase = ''
@@ -52,12 +54,13 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "07jz2nw3zswg9f4p5sb5r4hpg3n4qibjcgs9sk9csns70h5rp9j3";
+      sha256 = "0zplwsk9xidv8l9sqbxqivy6q20ryd31fhrzspn1mjn4i45kkwz1";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "0y5xjkqpaxp9qq1qj39zw3mnvkbbb9g4fa5cli77nhfwz288xx6h";
+    cargoSha256 = "06gh466q7qkid0vs5scic0qqlz3h81yb00nwn8nwq8ppr5z2ijyq";
     nativeBuildInputs = [ llvmPackages.libclang ];
-    LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+    buildInputs = lib.optional stdenv.isDarwin libiconv;
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}
@@ -71,6 +74,8 @@ let
       cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
       substitute $pkgcfgPath $out/pkgconfig/flux.pc \
         --replace /out $out
+    '' + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
   };
 in buildGoModule {
@@ -80,7 +85,7 @@ in buildGoModule {
 
   nativeBuildInputs = [ go-bindata pkg-config ];
 
-  vendorSha256 = "0lviz7l5zbghyfkp0lvlv8ykpak5hhkfal8d7xwvpsm8q3sghc8a";
+  vendorSha256 = "03pabm0h9q0v5dfdq9by2l2n32bz9imwalz0aw897vsrfhci0ldf";
   subPackages = [ "cmd/influxd" "cmd/influx" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";

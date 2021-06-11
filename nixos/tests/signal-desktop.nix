@@ -44,12 +44,11 @@ import ./make-test-python.nix ({ pkgs, ...} :
     # - https://github.com/NixOS/nixpkgs/issues/108772
     # - https://github.com/NixOS/nixpkgs/pull/117555
     print(machine.succeed("su - alice -c 'file ~/.config/Signal/sql/db.sqlite'"))
-    # TODO: The DB should be encrypted and the following should be machine.fail
-    # instead of machine.succeed but the DB is currently unencrypted and we
-    # want to notice if this isn't the case anymore as the transition to a
-    # encrypted DB can cause data loss!:
     machine.succeed(
-        "su - alice -c 'file ~/.config/Signal/sql/db.sqlite' | grep -i sqlite"
+        "su - alice -c 'file ~/.config/Signal/sql/db.sqlite' | grep 'db.sqlite: data'"
+    )
+    machine.fail(
+        "su - alice -c 'file ~/.config/Signal/sql/db.sqlite' | grep -e SQLite -e database"
     )
   '';
 })

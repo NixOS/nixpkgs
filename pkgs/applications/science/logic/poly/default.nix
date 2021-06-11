@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-E2lHo8Bt4ujoGQ623fjkQbqRnDYJYilXdRt4lnF4wJk=";
   };
 
+  # https://github.com/SRI-CSL/libpoly/pull/52
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/CMakeLists.txt --replace \
+      '"utils/open_memstream.c ''${poly_SOURCES}"' \
+      'utils/open_memstream.c ''${poly_SOURCES}'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ gmp python3 ];

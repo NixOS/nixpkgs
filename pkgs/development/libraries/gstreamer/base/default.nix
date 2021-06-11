@@ -26,7 +26,7 @@
 , wayland
 , wayland-protocols
 , enableAlsa ? stdenv.isLinux
-, alsaLib
+, alsa-lib
 # Enabling Cocoa seems to currently not work, giving compile
 # errors. Suspected is that a newer version than clang
 # is needed than 5.0 but it is not clear.
@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-base";
-  version = "1.18.2";
+  version = "1.18.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1b05kg46azrxxvq42c71071lfsnc34pw4vynnkczdqi6g0gzn16x";
+    sha256 = "08w3ivbc6n4vdds2ap6q7l8zdk9if8417nznyqidf0adm0lk5r99";
   };
 
   patches = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     pango
     OpenGL
   ] ++ lib.optionals enableAlsa [
-    alsaLib
+    alsa-lib
   ] ++ lib.optionals enableX11 [
     libXext
     libXv

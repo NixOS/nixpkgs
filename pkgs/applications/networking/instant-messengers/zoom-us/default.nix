@@ -3,7 +3,7 @@
 , fetchurl
 , makeWrapper
 # Dynamic libraries
-, alsaLib
+, alsa-lib
 , atk
 , cairo
 , dbus
@@ -29,17 +29,17 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  version = "5.6.16888.0424";
+  version = "5.6.22045.0607";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "H/G9cSVmxYM0AVfrdpXzm7ohssDbKq2xdvIBc4d+elc=";
+      sha256 = "0zdk02zq9apxnfbxwnlda9z8nqkqa1h1javbh9wwj8yy3y3a1lb5";
     };
   };
 
   libs = lib.makeLibraryPath ([
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
-    alsaLib
+    alsa-lib
     atk
     cairo
     dbus

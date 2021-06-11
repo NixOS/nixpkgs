@@ -151,6 +151,12 @@ stdenv.mkDerivation {
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-logind-seat-debus-show-CanMultiSession-again.patch
     ./0019-pkg-config-derive-prefix-from-prefix.patch
+
+    # Fix -Werror=format.
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/ab1aa6368a883bce88e3162fee2bea14aacedf23.patch";
+      sha256 = "1b280l5jrjsg8qhsang199mpqjhkpix4c8bm3blknjnq9iv43add";
+    })
   ];
 
   postPatch = ''
@@ -507,8 +513,6 @@ stdenv.mkDerivation {
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
   '';
-
-  enableParallelBuilding = true;
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is

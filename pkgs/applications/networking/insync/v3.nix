@@ -10,7 +10,7 @@
 , nss
 , libthai
 , wayland
-, alsaLib
+, alsa-lib
 , qtvirtualkeyboard
 , qtwebchannel
 , qtwebsockets
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     libGL
     libthai
     libxcb

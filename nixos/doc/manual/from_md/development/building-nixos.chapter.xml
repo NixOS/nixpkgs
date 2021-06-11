@@ -1,0 +1,33 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-building-cd">
+  <title>Building Your Own NixOS CD</title>
+  <para>
+    Building a NixOS CD is as easy as configuring your own computer. The
+    idea is to use another module which will replace your
+    <literal>configuration.nix</literal> to configure the system that
+    would be installed on the CD.
+  </para>
+  <para>
+    Default CD/DVD configurations are available inside
+    <literal>nixos/modules/installer/cd-dvd</literal>
+  </para>
+  <programlisting>
+$ git clone https://github.com/NixOS/nixpkgs.git
+$ cd nixpkgs/nixos
+$ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd-dvd/installation-cd-minimal.nix default.nix
+</programlisting>
+  <para>
+    Before burning your CD/DVD, you can check the content of the image
+    by mounting anywhere like suggested by the following command:
+  </para>
+  <programlisting>
+# mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso&lt;/screen&gt;
+</programlisting>
+  <para>
+    If you want to customize your NixOS CD in more detail, or generate
+    other kinds of images, you might want to check out
+    <link xlink:href="https://github.com/nix-community/nixos-generators">nixos-generators</link>.
+    This can also be a good starting point when you want to use Nix to
+    build a <quote>minimal</quote> image that doesn’t include a NixOS
+    installation.
+  </para>
+</chapter>

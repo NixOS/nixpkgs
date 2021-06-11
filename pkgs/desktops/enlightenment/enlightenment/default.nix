@@ -4,7 +4,7 @@
 , ninja
 , pkg-config
 , gettext
-, alsaLib
+, alsa-lib
 , acpid
 , bc
 , ddcutil
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     acpid # for systems with ACPI for lid events, AC/Battery plug in/out etc
     bc # for the Everything module calculator mode
     ddcutil # specifically libddcutil.so.2 for backlight control

@@ -1,5 +1,5 @@
 {
-  alsaLib, atk, cairo, cups, dbus, dpkg, expat, fetchurl, fetchzip, fontconfig, freetype,
+  alsa-lib, atk, cairo, cups, dbus, dpkg, expat, fetchurl, fetchzip, fontconfig, freetype,
   gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor,
   libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst,
   libxcb, nspr, nss, lib, stdenv, udev, libuuid, pango, at-spi2-atk, at-spi2-core
@@ -7,7 +7,7 @@
 
   let
     rpath = lib.makeLibraryPath ([
-    alsaLib
+    alsa-lib
     atk
     at-spi2-core
     at-spi2-atk

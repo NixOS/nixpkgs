@@ -11,20 +11,20 @@ let
     if stdenv.hostPlatform.system == "i686-linux" then "i686"
     else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
+    else if stdenv.hostPlatform.system == "aarch64-linux"  || stdenv.hostPlatform.system == "aarch64-darwin" then "aarch64"
     else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
-    else throw "ImageMagick is not supported on this platform.";
+    else null;
 in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "7.0.11-8";
+  version = "7.0.11-9";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = version;
-    sha256 = "sha256-h9hoFXnxuLVQRVtEh83P7efz2KFLLqOXKD6nVJEhqiM=";
+    sha256 = "sha256-eL9zFrgkLb3pS8/UlQB5+p50UG8j3Q7TNDwcO/3BuXo=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-frozenpaths" ]
-    ++ [ "--with-gcc-arch=${arch}" ]
+    ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
     ++ lib.optional (librsvg != null) "--with-rsvg"
     ++ lib.optionals (ghostscript != null)
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"

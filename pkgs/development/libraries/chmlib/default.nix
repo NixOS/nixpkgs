@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.jedrea.com/chmlib";
-    license = lib.licenses.lgpl2;
+    license = licenses.lgpl2;
     description = "A library for dealing with Microsoft ITSS/CHM format files";
-    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux"];
+    platforms = platforms.unix;
   };
 }

@@ -6,7 +6,7 @@
 , joblib
 , matplotlib
 , numpy
-, scikitlearn
+, scikit-learn
 , scipy
 , pytestCheckHook
 }:
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     joblib
     matplotlib
     numpy
-    scikitlearn
+    scikit-learn
     scipy
   ];
 

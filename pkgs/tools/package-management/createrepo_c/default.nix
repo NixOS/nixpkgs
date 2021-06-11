@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "createrepo_c";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner  = "rpm-software-management";
     repo   = "createrepo_c";
     rev    = version;
-    sha256 = "G2xioH9XWntHFmUfTN2s2mdtIqgTTLKr5jZflwpaC8Q=";
+    sha256 = "sha256-rcrJjcWj+cTAE3k11Ynr7CQCOWD+rb60lcar0G2w06A=";
   };
 
   patches = [

@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   pname = "grex";
   version = "1.2.0";
 
-  cargoSha256 = "sha256-EZnuGoysTZMpk2pndOzfXyRnN696RpKze27utQWNFTY=";
+  cargoSha256 = "sha256-aEwMJ9f08SJhrL8kLaTp54yP1hYGb3Ob5KNzZ5r752s=";
 
   src = fetchFromGitHub {
     owner = "pemistahl";

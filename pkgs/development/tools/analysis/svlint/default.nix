@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-p002oWwTQxesWLgLq8oKKzuZKXUdO4C1TZ7lR/Mh1PA=";
   };
 
-  cargoSha256 = "sha256-M0hng1JcR5Q829bVOaTASl0Eq6fFm8mUFsS5zx1JX94=";
+  cargoSha256 = "sha256-1WEPJpU/hLn+qjU+ETkmbfZIJTORe3OUdyl605JnYmU=";
 
   meta = with lib; {
     description = "SystemVerilog linter";

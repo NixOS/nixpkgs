@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
+{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curl, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
@@ -20,7 +20,7 @@ let
   rev = "46";
 
   deps = [
-    alsaLib
+    alsa-lib
     atk
     at-spi2-atk
     at-spi2-core

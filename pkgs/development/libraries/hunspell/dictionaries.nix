@@ -784,4 +784,15 @@ in rec {
       maintainers = with maintainers; [ louisdk1 ];
     };
   };
+
+  /* HEBREW */
+
+  he_IL = he-il;
+  he-il = mkDictFromLibreOffice {
+    shortName = "he-il";
+    dictFileName = "he_IL";
+    shortDescription = "Hebrew (Israel)";
+    readmeFile = "README_he_IL.txt";
+    license = with lib.licenses; [ agpl3Plus ];
+  };
 }

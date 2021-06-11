@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, pytest }:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-runner";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "96c7e73ead7b93e388c5d614770d2bae6526efd997757d3543fe17b557a0942b";
   };
 
-  nativeBuildInputs = [ setuptools_scm pytest ];
+  nativeBuildInputs = [ setuptools-scm pytest ];
 
   postPatch = ''
     rm pytest.ini

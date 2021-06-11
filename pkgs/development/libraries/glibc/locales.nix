@@ -11,7 +11,7 @@
 }:
 
 callPackage ./common.nix { inherit stdenv; } {
-  name = "glibc-locales";
+  pname = "glibc-locales";
 
   builder = ./locales-builder.sh;
 

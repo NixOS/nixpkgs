@@ -3,6 +3,7 @@
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
 , pkg-config, openssl
+, libiconv
 , which, libffi
 , withBundledLLVM ? false
 , enableRustcDev ? true
@@ -88,9 +89,9 @@ in stdenv.mkDerivation rec {
     "${setTarget}.cxx=${cxxForTarget}"
   ] ++ optionals (!withBundledLLVM) [
     "--enable-llvm-link-shared"
-    "${setBuild}.llvm-config=${llvmSharedForBuild}/bin/llvm-config"
-    "${setHost}.llvm-config=${llvmSharedForHost}/bin/llvm-config"
-    "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
+    "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
+    "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
+    "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
   ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [
@@ -137,7 +138,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ optional stdenv.isDarwin Security
+    ++ optionals stdenv.isDarwin [ libiconv Security ]
     ++ optional (!withBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];

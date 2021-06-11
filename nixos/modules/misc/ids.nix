@@ -252,7 +252,7 @@ in
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
-      gale = 223;
+      # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22
@@ -300,7 +300,7 @@ in
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
-      geoip = 272;
+      #geoip = 272; # new module uses DynamicUser
       fcron = 273;
       sonarr = 274;
       radarr = 275;
@@ -562,7 +562,7 @@ in
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
-      gale = 223;
+      # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22

@@ -31,7 +31,11 @@ mkDerivation {
     substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
   '';
 
-  installPhase = ''
+  installPhase = lib.optionalString (stdenv.isDarwin && enableGUI) ''
+    mkdir -p $out/Applications
+    mv bin/heimdall-frontend.app $out/Applications/heimdall-frontend.app
+    wrapQtApp $out/Applications/heimdall-frontend.app/Contents/MacOS/heimdall-frontend
+  '' + ''
     mkdir -p $out/{bin,share/doc/heimdall,lib/udev/rules.d}
     install -m755 -t $out/bin                bin/*
     install -m644 -t $out/lib/udev/rules.d   ../heimdall/60-heimdall.rules

@@ -1,4 +1,4 @@
-{ config, lib, buildEnv, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8 }:
+{ config, lib, buildEnv, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -12,6 +12,19 @@ let
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
+      _4ops.terraform = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "4ops";
+          name = "terraform";
+          version = "0.2.1";
+          sha256 = "196026a89pizj8p0hqdgkyllj2spx2qwpynsaqjq17s8v15vk5dg";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
       a5huynh.vscode-ron = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-ron";
@@ -30,6 +43,18 @@ let
           publisher = "alanz";
           version = "0.0.27"; # see the note above
           sha256 = "1mz0h5zd295i73hbji9ivla8hx02i4yhqcv6l4r23w3f07ql3i8h";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      alefragnani.project-manager = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "project-manager";
+          publisher = "alefragnani";
+          version = "12.1.0";
+          sha256 = "sha256-fYBKmWn9pJh2V0fGdqVrXj9zIl8oTrZcBycDaMOXL/8=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -87,6 +112,26 @@ let
         };
       };
 
+      b4dm4n.vscode-nixpkgs-fmt = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nixpkgs-fmt";
+          publisher = "B4dM4n";
+          version = "0.0.1";
+          sha256 = "sha256-vz2kU36B1xkLci2QwLpl/SBEhfSWltIDJ1r7SorHcr8=";
+        };
+        nativeBuildInputs = [ jq ];
+        buildInputs = [ nixpkgs-fmt ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+          tmp_package_json=$(mktemp)
+          jq '.contributes.configuration.properties."nixpkgs-fmt.path".default = "${nixpkgs-fmt}/bin/nixpkgs-fmt"' package.json > "$tmp_package_json"
+          mv "$tmp_package_json" package.json
+        '';
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       baccata.scaladex-search = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scaladex-search";
@@ -108,6 +153,30 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      bodil.file-browser = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "file-browser";
+          publisher = "bodil";
+          version = "0.2.10";
+          sha256 = "sha256-RW4vm0Hum9AeN4Rq7MSJOIHnALU0L1tBLKjaRLA2hL8=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-tailwindcss";
+          publisher = "bradlc";
+          version = "0.6.6";
+          sha256 = "sha256-CRd+caKHFOXBnePr/LqNkzw0kRGYvNSkf4ecNgedpdA=";
+        };
+        meta = with lib; {
+          license = licenses.mpl20;
         };
       };
 
@@ -439,6 +508,19 @@ let
         };
       };
 
+      jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "jkillian";
+          name = "custom-local-formatters";
+          version = "0.0.4";
+          sha256 = "1pmqnc759fq86g2z3scx5xqpni9khcqi5z2kpl1kb7yygsv314gm";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
       github = {
         github-vscode-theme = buildVscodeMarketplaceExtension {
           mktplcRef = {
@@ -516,7 +598,7 @@ let
         };
       };
 
-      hashicorp.terraform = callPackage ./terraform {};
+      hashicorp.terraform = callPackage ./terraform { };
 
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -556,6 +638,18 @@ let
           homepage = "https://github.com/iciclesoft/workspacesort-for-VSCode";
           license = licenses.mit;
           maintainers = with maintainers; [ dbirks ];
+        };
+      };
+
+      jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "elixir-ls";
+          publisher = "JakeBecker";
+          version = "0.7.0";
+          sha256 = "sha256-kFrkElD7qC1SpOx1rpcHW1D2hybHCf7cqvIO7JfPuMc=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 
@@ -600,6 +694,18 @@ let
         };
       };
 
+      johnpapa.vscode-peacock = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-peacock";
+          publisher = "johnpapa";
+          version = "3.9.1";
+          sha256 = "1g7apzzgfm8s9sjavhwr8jpf9slhq8b9jfkww3q5n41mzzx8m94p";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       jpoissonnier.vscode-styled-components = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-styled-components";
@@ -621,6 +727,31 @@ let
         };
         meta = {
           license = lib.licenses.bsd3;
+        };
+      };
+
+      kahole.magit = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "magit";
+          publisher = "kahole";
+          version = "0.6.15";
+          sha256 = "sha256-fRXm70FXnHduoywI4YC9ya6/J7wyd6EBzbnrcijBIbA=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      mads-hartmann.bash-ide-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "mads-hartmann";
+          name = "bash-ide-vscode";
+          version = "1.11.0";
+          sha256 = "1hq41fy2v1grjrw77mbs9k6ps6gncwlydm03ipawjnsinxc9rdkp";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
         };
       };
 
@@ -698,15 +829,16 @@ let
         };
       };
 
-      ms-vscode.cpptools = callPackage ./cpptools {};
+      ms-vscode.cpptools = callPackage ./cpptools { };
 
-      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
+      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
 
-      ms-python.python = let
-        raw-package = callPackage ./python {
-          extractNuGet = callPackage ./python/extract-nuget.nix { };
-        };
-      in
+      ms-python.python =
+        let
+          raw-package = callPackage ./python {
+            extractNuGet = callPackage ./python/extract-nuget.nix { };
+          };
+        in
         buildEnv {
           name = "vscode-extension-ms-python-python-full";
           paths = [ raw-package self.ms-toolsai.jupyter ];
@@ -742,6 +874,18 @@ let
           publisher = "naumovs";
           version = "2.3.0";
           sha256 = "1syzf43ws343z911fnhrlbzbx70gdn930q67yqkf6g0mj8lf2za2";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      octref.vetur = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vetur";
+          publisher = "octref";
+          version = "0.34.1";
+          sha256 = "09w3bik1mxs7qac67wgrc58vl98ham3syrn2anycpwd7135wlpby";
         };
         meta = {
           license = lib.licenses.mit;
@@ -786,7 +930,7 @@ let
         };
       };
 
-      matklad.rust-analyzer = callPackage ./rust-analyzer {};
+      matklad.rust-analyzer = callPackage ./rust-analyzer { };
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = with lib; {
@@ -877,6 +1021,18 @@ let
         };
       };
 
+      shardulm94.trailing-spaces = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "shardulm94";
+          name = "trailing-spaces";
+          version = "0.3.1";
+          sha256 = "0h30zmg5rq7cv7kjdr5yzqkkc1bs20d72yz9rjqag32gwf46s8b8";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
 
       shyykoserhiy.vscode-spotify = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -955,6 +1111,18 @@ let
         };
       };
 
+      svelte.svelte-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "svelte-vscode";
+          publisher = "svelte";
+          version = "105.0.0";
+          sha256 = "sha256-my3RzwUW5MnajAbEnqxtrIR701XH+AKYLbnKD7ivASE=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "even-better-toml";
@@ -966,6 +1134,19 @@ let
           license = lib.licenses.mit;
         };
       };
+
+      tiehuis.zig = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "zig";
+          publisher = "tiehuis";
+          version = "0.2.5";
+          sha256 = "sha256-P8Sep0OtdchTfnudxFNvIK+SW++TyibGVI9zd+B5tu4=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
 
       timonwong.shellcheck = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1029,7 +1210,7 @@ let
         };
       };
 
-      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare {};
+      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare { };
 
       vscodevim.vim = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1040,6 +1221,42 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      vspacecode.vspacecode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vspacecode";
+          publisher = "VSpaceCode";
+          version = "0.9.1";
+          sha256 = "sha256-/qJKYXR0DznqwF7XuJsz+OghIBzdWjm6dAlaRX4wdRU=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      vspacecode.whichkey = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "whichkey";
+          publisher = "VSpaceCode";
+          version = "0.8.5";
+          sha256 = "sha256-p5fukIfk/tZFQrkf6VuT4fjmeGtKAqHDh6r6ky847ks=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      wix.vscode-import-cost = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-import-cost";
+          publisher = "wix";
+          version = "2.15.0";
+          sha256 = "0d3b6654cdck1syn74vmmd1jmgkrw5v4c4cyrhdxbhggkip732bc";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 
@@ -1094,7 +1311,7 @@ let
 
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
-      WakaTime.vscode-wakatime = callPackage ./wakatime {};
+      WakaTime.vscode-wakatime = callPackage ./wakatime { };
 
       wholroyd.jinja = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1109,17 +1326,17 @@ let
       };
     };
 
-    aliases = self: super: {
-      # aliases
-      ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
-    };
+  aliases = self: super: {
+    # aliases
+    ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
+  };
 
-    # TODO: add overrides overlay, so that we can have a generated.nix
-    # then apply extension specific modifcations to packages.
+  # TODO: add overrides overlay, so that we can have a generated.nix
+  # then apply extension specific modifcations to packages.
 
-    # overlays will be applied left to right, overrides should come after aliases.
-    overlays = lib.optionals (config.allowAliases or true) [ aliases ];
+  # overlays will be applied left to right, overrides should come after aliases.
+  overlays = lib.optionals (config.allowAliases or true) [ aliases ];
 
-    toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
+  toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in
-  lib.fix toFix
+lib.fix toFix

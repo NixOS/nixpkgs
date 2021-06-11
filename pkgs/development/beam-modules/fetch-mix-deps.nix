@@ -7,6 +7,7 @@
 , mixEnv ? "prod"
 , debug ? false
 , meta ? { }
+, patches ? []
 , ...
 }@attrs:
 
@@ -35,6 +36,8 @@ stdenvNoCC.mkDerivation (attrs // {
     export REBAR_CACHE_DIR="$TMPDIR/rebar3.cache"
     runHook postConfigure
   '';
+
+  inherit patches;
 
   dontBuild = true;
 

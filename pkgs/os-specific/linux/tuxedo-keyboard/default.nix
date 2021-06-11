@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tuxedocomputers/tuxedo-keyboard/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    broken = stdenv.isAarch64;
     maintainers = [ maintainers.blanky0230 ];
   };
 }

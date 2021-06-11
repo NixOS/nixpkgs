@@ -1,8 +1,9 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , pytestCheckHook
 , cmake
 , scipy
-, scikitlearn
+, scikit-learn
 , stdenv
 , xgboost
 , substituteAll
@@ -22,7 +23,7 @@ buildPythonPackage {
   propagatedBuildInputs = [ scipy ];
   checkInputs = [
     pytestCheckHook
-    scikitlearn
+    scikit-learn
     pandas
     matplotlib
     graphviz
@@ -56,6 +57,11 @@ buildPythonPackage {
   disabledTests = [
     "test_cli_binary_classification"
     "test_model_compatibility"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # fails to connect to the com.apple.fonts daemon in sandboxed mode
+    "test_plotting"
+    "test_sklearn_plotting"
   ];
 
+  __darwinAllowLocalNetworking = true;
 }

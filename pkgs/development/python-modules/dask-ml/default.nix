@@ -6,7 +6,7 @@
 , numpy, toolz # dask[array]
 , numba
 , pandas
-, scikitlearn
+, scikit-learn
 , scipy
 , dask-glm
 , six
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     numpy
     packaging
     pandas
-    scikitlearn
+    scikit-learn
     scipy
     six
     toolz

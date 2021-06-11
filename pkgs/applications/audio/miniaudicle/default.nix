@@ -4,7 +4,7 @@
 , bison
 , flex
 , which
-, alsaLib
+, alsa-lib
 , libsndfile
 , qt4
 , qscintilla
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     libsndfile
     qt4
     qscintilla

@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost165 ];
 
+  makeFlags = [
+    "CXX=${stdenv.cc.targetPrefix}c++"
+    "BOOST_DIR=${boost165.dev}/include"
+  ];
+
   installPhase = ''
     mkdir -p $out/bin
     mv starspace $out/bin

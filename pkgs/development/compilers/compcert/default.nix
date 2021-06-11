@@ -1,11 +1,11 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper
 , coqPackages, ocamlPackages, coq2html
 , tools ? stdenv.cc
-, version ? "3.8"
+, version ? "3.9"
 }:
 
 let
-  ocaml-pkgs      = with ocamlPackages; [ ocaml findlib menhir ];
+  ocaml-pkgs      = with ocamlPackages; [ ocaml findlib menhir menhirLib ];
   ccomp-platform = if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux";
   inherit (coqPackages) coq flocq;
   inherit (lib) optional optionalString;
@@ -56,6 +56,10 @@ let param = {
     ];
     useExternalFlocq = true;
   };
+  "3.9" = {
+    sha256 = "1srcz2dqrvmbvv5cl66r34zqkm0hsbryk7gd3i9xx4slahc9zvdb";
+    useExternalFlocq = true;
+  };
 }."${version}"; in
 
 stdenv.mkDerivation rec {
@@ -78,6 +82,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./configure \
+      --replace \$\{toolprefix\}ar 'ar' \
       --replace '{toolprefix}gcc' '{toolprefix}cc'
   '';
 

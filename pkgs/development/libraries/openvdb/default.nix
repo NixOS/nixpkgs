@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, unzip, openexr, boost, jemalloc, c-blosc, ilmbase, tbb }:
+{ lib, stdenv, fetchFromGitHub, openexr, boost, jemalloc, c-blosc, ilmbase, tbb }:
 
 stdenv.mkDerivation rec
 {
@@ -14,7 +14,6 @@ stdenv.mkDerivation rec
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ unzip ];
   buildInputs = [ openexr boost tbb jemalloc c-blosc ilmbase ];
 
   setSourceRoot = ''

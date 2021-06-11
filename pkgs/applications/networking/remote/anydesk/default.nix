@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg, minizip
-, lsb-release, freetype, fontconfig, polkit, polkit_gnome
+, lsb-release, freetype, fontconfig, polkit, polkit_gnome, pciutils
 , pulseaudio }:
 
 let
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
       $out/bin/anydesk
 
     wrapProgram $out/bin/anydesk \
-      --prefix PATH : ${lib.makeBinPath [ lsb-release ]}
+      --prefix PATH : ${lib.makeBinPath [ lsb-release pciutils ]}
 
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out

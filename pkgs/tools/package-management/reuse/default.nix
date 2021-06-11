@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     license-expression
     requests
     setuptools
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = with python3Packages; [ pytestCheckHook ];

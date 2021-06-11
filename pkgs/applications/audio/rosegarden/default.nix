@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, cmake, makedepend, perl, pkg-config, qttools, wrapQtAppsHook
-, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2, alsaLib
+, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2, alsa-lib
 , liblo, libsamplerate, libsndfile, lirc ? null, lrdf, qtbase }:
 
 stdenv.mkDerivation (rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (rec {
     lirc
     lrdf
     qtbase
-    alsaLib
+    alsa-lib
   ];
 
   meta = with lib; {

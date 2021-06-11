@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, makeDesktopItem, pkg-config, cmake
 , wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
 , libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
-, libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsaLib
+, libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsa-lib
 , miniupnpc, enet, mbedtls, soundtouch, sfml
 , vulkan-loader ? null, libpulseaudio ? null
 
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
-    bluez udev libevdev alsaLib vulkan-loader
+    bluez udev libevdev alsa-lib vulkan-loader
   ] ++ lib.optionals stdenv.isDarwin [
     CoreBluetooth OpenGL ForceFeedback IOKit
   ];

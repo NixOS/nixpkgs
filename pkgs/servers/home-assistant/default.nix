@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , python3
+, inetutils
 , nixosTests
 
 # Look up dependencies of specified components in component-packages.nix
@@ -54,6 +55,46 @@ let
     # https://github.com/tchellomello/python-ring-doorbell/issues/240
     (mkOverride "ring-doorbell" "0.6.2"
       "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
+
+    # Pinned due to API changes in pyflunearyou>=2.0
+    (self: super: {
+      pyflunearyou = super.pyflunearyou.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.7";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "pyflunearyou";
+          rev = version;
+          sha256 = "0hq55k298m9a90qb3lasw9bi093hzndrah00rfq94bp53aq0is99";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace "poetry.masonry.api" "poetry.core.masonry.api" \
+            --replace 'msgpack = "^0.6.2"' 'msgpack = "*"' \
+            --replace 'ujson = "^1.35"' 'ujson = "*"'
+        '';
+      });
+    })
+
+    # Pinned due to API changes in pylast 4.2.1
+    (mkOverride "pylast" "4.2.0"
+      "0zd0dn2l738ndz62vpa751z0ldnm91dcz9zzbvxv53r08l0s9yf3")
+
+    # Pinned due to API changes in pyopenuv>=1.1.0
+    (self: super: {
+      pyopenuv = super.pyopenuv.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.13";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "pyopenuv";
+          rev = version;
+          sha256 = "1gx9xjkyvqqy8410lnbshq1j5y4cb0cdc4m505g17rwdzdwb01y8";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace "poetry.masonry.api" "poetry.core.masonry.api"
+        '';
+      });
+    })
 
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
@@ -114,7 +155,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.5.3";
+  hassVersion = "2021.5.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -133,7 +174,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1zc21d70n24sk8y42xq3gzisj44kn6w6fhgqrcani470hhph24ba";
+    sha256 = "1vdxygjik1ay58xgyr1rk12cgy63raqi4fldnd4mlhs4i21c7ff8";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -199,32 +240,69 @@ in with py.pkgs; buildPythonApplication rec {
   # services. Before adding new components to this list make sure we have all
   # its dependencies packaged and listed in ./component-packages.nix.
   componentTests = [
+    "abode"
     "accuweather"
+    "acmeda"
+    "adguard"
+    "advantage_air"
+    "agent_dvr"
+    "air_quality"
     "airly"
+    "airnow"
+    "airvisual"
+    "alarm_control_panel"
+    "alarmdecoder"
+    "alert"
+    "alexa"
+    "almond"
+    "ambiclimate"
+    "ambient_station"
     "analytics"
     "androidtv"
-    "alert"
+    "apache_kafka"
     "api"
+    "apple_tv"
+    "apprise"
+    "arlo"
+    "asuswrt"
+    "august"
+    "aurora"
     "auth"
     "automation"
+    "awair"
+    "aws"
     "axis"
     "bayesian"
     "binary_sensor"
+    "blackbird"
+    "blueprint"
+    "bluetooth_le_tracker"
+    "braviatv"
+    "broadlink"
     "brother"
+    "bsblan"
     "caldav"
     "calendar"
     "camera"
+    "canary"
     "cast"
+    "cert_expiry"
     "climacell"
     "climate"
     "cloud"
+    "cloudflare"
     "comfoconnect"
     "command_line"
+    "compensation"
     "config"
     "configurator"
     "conversation"
+    "coronavirus"
     "counter"
     "cover"
+    "daikin"
+    "darksky"
+    "datadog"
     "deconz"
     "default_config"
     "demo"
@@ -234,22 +312,43 @@ in with py.pkgs; buildPythonApplication rec {
     "device_sun_light_trigger"
     "device_tracker"
     "devolo_home_control"
+    "dexcom"
     "dhcp"
+    "dialogflow"
     "discovery"
     "dsmr"
+    "dte_energy_bridge"
+    "duckdns"
+    "dyson"
+    "eafm"
     "econet"
+    "efergy"
+    "emonitor"
     "emulated_hue"
+    "enphase_envoy"
     "esphome"
-    "fan"
+    "everlights"
+    "ezviz"
     "faa_delays"
+    "facebook"
+    "facebox"
+    "fail2ban"
+    "fan"
+    "feedreader"
     "ffmpeg"
+    "fido"
     "file"
     "filesize"
     "filter"
+    "firmata"
+    "flo"
+    "flume"
+    "flunearyou"
     "flux"
     "folder"
     "folder_watcher"
     "freebox"
+    "freedns"
     "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
@@ -258,58 +357,97 @@ in with py.pkgs; buildPythonApplication rec {
     "generic_thermostat"
     "geo_json_events"
     "geo_location"
+    "geofency"
+    "glances"
+    "google"
+    "google_assistant"
+    "google_domains"
+    "google_pubsub"
+    "google_translate"
+    "google_travel_time"
+    "google_wifi"
+    "gpslogger"
+    "graphite"
     "group"
+    "guardian"
+    "harmony"
+    "hassio"
     "hddtemp"
     "history"
     "history_stats"
     "home_connect"
     "home_plus_control"
+    "homeassistant"
     "homekit"
     "homekit_controller"
-    "homeassistant"
     "homematic"
     "homematicip_cloud"
     "html5"
     "http"
     "hue"
+    "humidifier"
     "hyperion"
+    "ialarm"
     "iaqualink"
+    "icloud"
     "ifttt"
     "image"
     "image_processing"
+    "imap_email_content"
     "influxdb"
     "input_boolean"
     "input_datetime"
-    "input_text"
     "input_number"
     "input_select"
+    "input_text"
+    "insteon"
+    "integration"
     "intent"
     "intent_script"
+    "ios"
     "ipp"
+    "iqvia"
+    "islamic_prayer_times"
     "jewish_calendar"
+    "kira"
     "kmtronic"
     "knx"
     "kodi"
+    "lastfm"
+    "lcn"
     "light"
     "litterrobot"
     "local_file"
     "local_ip"
+    "locative"
     "lock"
     "logbook"
     "logentries"
     "logger"
+    "london_air"
     "lovelace"
+    "luftdaten"
     "lutron_caseta"
+    "lyric"
+    "mailbox"
     "manual"
     "manual_mqtt"
     "mazda"
     "media_player"
     "media_source"
+    "meraki"
     "met"
     "met_eireann"
+    "microsoft_face"
+    "microsoft_face_detect"
+    "microsoft_face_identify"
+    "mikrotik"
+    "min_max"
     "minecraft_server"
+    "minio"
     "mobile_app"
     "modbus"
+    "mold_indicator"
     "moon"
     "motioneye"
     "mqtt"
@@ -319,97 +457,193 @@ in with py.pkgs; buildPythonApplication rec {
     "mqtt_statestream"
     "mullvad"
     "mutesync"
+    "my"
+    "myq"
+    "mysensors"
+    "namecheapdns"
+    "neato"
+    "netatmo"
     "nexia"
+    "no_ip"
     "notify"
     "notion"
+    "nuki"
     "number"
+    "nws"
     "nx584"
     "omnilogic"
+    "onboarding"
     "ondilo_ico"
+    "openalpr_cloud"
+    "openalpr_local"
     "openerz"
+    "openhardwaremonitor"
     "opentherm_gw"
+    "openuv"
+    "openweathermap"
+    "opnsense"
+    "ovo_energy"
+    "owntracks"
     "ozw"
     "panel_custom"
     "panel_iframe"
     "persistent_notification"
     "person"
+    "philips_js"
+    "pi_hole"
+    "picnic"
+    "ping"
     "plaato"
+    "plant"
+    "plex"
     "plugwise"
+    "poolsense"
+    "profiler"
     "prometheus"
     "proximity"
     "push"
+    "pushbullet"
     "pvpc_hourly_pricing"
     "python_script"
+    "rachio"
+    "radarr"
+    "rainmachine"
     "random"
+    "recollect_waste"
     "recorder"
+    "reddit"
+    "remote"
     "rest"
     "rest_command"
+    "ring"
+    "risco"
     "rituals_perfume_genie"
     "rmvtransport"
     "roku"
     "roomba"
+    "roon"
     "rss_feed_template"
     "ruckus_unleashed"
     "safe_mode"
+    "samsungtv"
     "scene"
     "screenlogic"
     "script"
     "search"
+    "season"
+    "sensor"
+    "sentry"
+    "sharkiq"
     "shell_command"
+    "shelly"
     "shopping_list"
+    "sigfox"
+    "sighthound"
     "simplisafe"
     "simulated"
+    "slack"
     "sleepiq"
     "sma"
-    "smhi"
-    "sensor"
-    "slack"
+    "smappee"
     "smartthings"
     "smarttub"
+    "smhi"
     "smtp"
-    "smappee"
+    "snips"
     "solaredge"
+    "soma"
+    "somfy"
     "sonos"
+    "soundtouch"
+    "spaceapi"
+    "speedtestdotnet"
     "spotify"
     "sql"
+    "squeezebox"
     "ssdp"
+    "startca"
+    "statistics"
+    "statsd"
     "stream"
+    "stt"
     "subaru"
     "sun"
     "surepetcare"
     "switch"
+    "switcher_kis"
     "system_health"
     "system_log"
+    "tado"
     "tag"
     "tasmota"
     "tcp"
+    "telegram"
+    "tellduslive"
     "template"
     "tesla"
     "threshold"
+    "tile"
     "time_date"
     "timer"
     "tod"
+    "tomato"
+    "toon"
+    "tplink"
     "trace"
+    "transmission"
+    "trend"
     "tts"
+    "tuya"
+    "twentemilieu"
+    "twilio"
+    "twinkly"
+    "twitch"
+    "uk_transport"
+    "unifi"
+    "unifi_direct"
     "universal"
     "updater"
     "upnp"
     "uptime"
+    "usgs_earthquakes_feed"
+    "utility_meter"
+    "uvc"
     "vacuum"
+    "velbus"
+    "vera"
     "verisure"
     "version"
     "vesync"
+    "vizio"
+    "voicerss"
+    "volumio"
+    "vultr"
+    "wake_on_lan"
+    "water_heater"
+    "waze_travel_time"
     "weather"
     "webhook"
+    "webostv"
     "websocket_api"
     "wemo"
+    "wiffi"
+    "wilight"
     "wled"
     "workday"
     "worldclock"
+    "wsdot"
+    "wunderground"
+    "xiaomi"
+    "xiaomi_aqara"
     "xiaomi_miio"
+    "yamaha"
+    "yandex_transport"
+    "yandextts"
     "yeelight"
     "zeroconf"
+    "zerproc"
     "zha"
+    "zodiac"
     "zone"
     "zwave"
     "zwave_js"
@@ -418,17 +652,37 @@ in with py.pkgs; buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    # limit amout of runners to reduce race conditions
-    "-n auto"
+    # parallelize test run
+    "--numprocesses auto"
+    # assign tests grouped by file to workers
+    "--dist loadfile"
     # retry racy tests that end in "RuntimeError: Event loop is closed"
     "--reruns 3"
     "--only-rerun RuntimeError"
-    # assign tests grouped by file to workers
-    "--dist loadfile"
-    # tests are located in tests/
-    "tests"
+    # enable full variable printing on error
+    "--showlocals"
     # screenlogic/test_config_flow.py: Tries to send out UDP broadcasts
     "--deselect tests/components/screenlogic/test_config_flow.py::test_form_cannot_connect"
+    # asuswrt/test_config_flow.py: Sandbox network limitations, fails with unexpected error
+    "--deselect tests/components/asuswrt/test_config_flow.py::test_on_connect_failed"
+    # shelly/test_config_flow.py: Tries to join multicast group
+    "--deselect tests/components/shelly/test_config_flow.py::test_form"
+    "--deselect tests/components/shelly/test_config_flow.py::test_title_without_name"
+    "--deselect tests/components/shelly/test_config_flow.py::test_form_auth"
+    "--deselect tests/components/shelly/test_config_flow.py::test_form_errors_test_connection"
+    "--deselect tests/components/shelly/test_config_flow.py::test_user_setup_ignored_device"
+    "--deselect tests/components/shelly/test_config_flow.py::test_form_auth_errors_test_connection"
+    "--deselect tests/components/shelly/test_config_flow.py::test_form_auth_errors_test_connection"
+    "--deselect tests/components/shelly/test_config_flow.py::test_form_auth_errors_test_connection"
+    "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf"
+    "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf_sleeping_device"
+    "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf_sleeping_device_error"
+    "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf_sleeping_device_error"
+    "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf_require_auth"
+    # prometheus/test_init.py: Spurious AssertionError regarding humidifier_target_humidity_percent metric
+    "--deselect tests/components/prometheus/test_init.py::test_view"
+    # tests are located in tests/
+    "tests"
     # dynamically add packages required for component tests
   ] ++ map (component: "tests/components/" + component) componentTests;
 
@@ -455,6 +709,11 @@ in with py.pkgs; buildPythonApplication rec {
     "test_check_package_version_does_not_match"
     # homeassistant/util/thread.py:51: SystemError
     "test_executor_shutdown_can_interrupt_threads"
+    # {'theme_color': '#03A9F4'} != {'theme_color': 'blue'}
+    "test_webhook_handle_get_config"
+    # onboarding tests rpi_power component, for which we are lacking rpi_bad_power library
+    "test_onboarding_core_sets_up_rpi_power"
+    "test_onboarding_core_no_rpi_power"
   ];
 
   preCheck = ''
@@ -462,6 +721,9 @@ in with py.pkgs; buildPythonApplication rec {
 
     # the tests require the existance of a media dir
     mkdir /build/media
+
+    # put ping binary into PATH, e.g. for wake_on_lan tests
+    export PATH=${inetutils}/bin:$PATH
 
     # error out when component test directory is missing, otherwise hidden by xdist execution :(
     for component in ${lib.concatStringsSep " " (map lib.escapeShellArg componentTests)}; do

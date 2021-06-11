@@ -10,11 +10,12 @@
 , libva
 , libvdpau
 , libxkbcommon
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , openssl
 , libopus
 , ffmpeg
+, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -42,11 +43,12 @@ stdenv.mkDerivation rec {
     libva
     libvdpau
     libxkbcommon
-    alsaLib
+    alsa-lib
     libpulseaudio
     openssl
     libopus
     ffmpeg
+    wayland
   ];
 
   meta = with lib; {

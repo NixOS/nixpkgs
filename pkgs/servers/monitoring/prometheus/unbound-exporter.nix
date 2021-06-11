@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, openssl, pkg-config, nixosTests }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, nixosTests, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "unbound-telemetry";
@@ -11,11 +11,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "xCelL6WGaTRhDJkkUdpdwj1zcKKAU2dyUv3mHeI4oAw=";
   };
 
-  cargoSha256 = "P3nAtYOuwNSLMP7q1L5zKTsZ6rJA/qL1mhVHzP3szi4=";
+  cargoSha256 = "sha256-P3nAtYOuwNSLMP7q1L5zKTsZ6rJA/qL1mhVHzP3szi4=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+    ++ lib.optional stdenv.isDarwin Security;
 
   passthru.tests = {
     inherit (nixosTests.prometheus-exporters) unbound;

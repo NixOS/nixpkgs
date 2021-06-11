@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-0d8+Rkb4h1DoFUQ7u2/kPR/fUUz0YvI+hNT4iXL3mxY=";
   };
 
-  cargoSha256 = "sha256-cUDOi3QwjEJaBXGSQZQ76gZ702QLNok8fr6U2q+tVao=";
+  cargoSha256 = "0r60smhlx1992a1s1k5sxjpdqllb2xsqcimgx3ldp5fdkfphk3cw";
 
   #for substituteAll
   libclang = llvmPackages.libclang.lib;
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   propagatedBuildInputs = [ clang ]; # to populate NIX_CXXSTDLIB_COMPILE
 
   configurePhase = ''
-    export LIBCLANG_PATH="${libclang}/lib"
+    export LIBCLANG_PATH="${libclang.lib}/lib"
   '';
 
   postInstall = ''

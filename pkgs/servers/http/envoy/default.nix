@@ -3,7 +3,9 @@
 , fetchFromGitHub
 , stdenv
 , cmake
+, gn
 , go
+, jdk
 , ninja
 , python3
 , nixosTests
@@ -15,8 +17,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.16.2";
-    commit = "e98e41a8e168af7acae8079fc0cd68155f699aa3";
+    version = "1.17.3";
+    commit = "46bf743b97d0d3f01ff437b2f10cc0bd9cdfe6e4";
   };
 in
 buildBazelPackage rec {
@@ -26,7 +28,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     rev = srcVer.commit;
-    hash = "sha256-aWVMRKFCZzf9/96NRPCP4jiW38DJhXyi0gEqW7uIpnQ=";
+    hash = "sha256:09zzr4h3zjsb2rkxrvlazpx0jy33yn9j65ilxiqbvv0ckaralqfc";
 
     extraPostFetch = ''
       chmod -R +w $out
@@ -36,29 +38,29 @@ buildBazelPackage rec {
     '';
   };
 
-  patches = [
-    # Quiche needs to be updated to compile under newer GCC.
-    # This is a manual backport of https://github.com/envoyproxy/envoy/pull/13949.
-    ./0001-quiche-update-QUICHE-tar-13949.patch
-
-    # upb needs to be updated to compile under newer GCC.
-    # This is a manual backport of https://github.com/protocolbuffers/upb/commit/9bd23dab4240b015321a53c45b3c9e4847fbf020.
-    ./0002-Add-upb-patch-to-make-it-compile-under-GCC10.patch
-  ];
   postPatch = ''
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
+    sed -i '/javabase=/d' .bazelrc
+    # Patch paths to build tools, and disable gold because it just segfaults.
+    substituteInPlace bazel/external/wee8.genrule_cmd \
+      --replace '"''$$gn"' '"''$$(command -v gn)"' \
+      --replace '"''$$ninja"' '"''$$(command -v ninja)"' \
+      --replace '"''$$WEE8_BUILD_ARGS"' '"''$$WEE8_BUILD_ARGS use_gold=false"'
   '';
 
   nativeBuildInputs = [
     cmake
     python3
+    gn
     go
+    jdk
     ninja
   ];
 
   fetchAttrs = {
-    sha256 = "0q72c2zrl5vc8afkhkwyalb2h0mxn3133d4b9z4gag0p95wbwgc0";
+    sha256 = "sha256:1cy2b73x8jzczq9z9c1kl7zrg5iasvsakb50zxn4mswpmajkbj5h";
     dontUseCmakeConfigure = true;
+    dontUseGnConfigure = true;
     preInstall = ''
       # Strip out the path to the build location (by deleting the comment line).
       find $bazelOut/external -name requirements.bzl | while read requirements; do
@@ -78,10 +80,14 @@ buildBazelPackage rec {
       >$bazelOut/external/config_validation_pip3/PyYAML-5.3.1-cp38-cp38-linux_x86_64.whl
       >$bazelOut/external/protodoc_pip3/PyYAML-5.3.1-cp38-cp38-linux_x86_64.whl
       >$bazelOut/external/thrift_pip3/thrift-0.13.0-cp38-cp38-linux_x86_64.whl
+
+      # Remove Unix timestamps from go cache.
+      rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
     '';
   };
   buildAttrs = {
     dontUseCmakeConfigure = true;
+    dontUseGnConfigure = true;
     dontUseNinjaInstall = true;
     preConfigure = ''
       sed -i 's,#!/usr/bin/env bash,#!${stdenv.shell},' $bazelOut/external/rules_foreign_cc/tools/build_defs/framework.bzl
@@ -98,7 +104,6 @@ buildBazelPackage rec {
     '';
   };
 
-  fetchConfigured = true;
   removeRulesCC = false;
   removeLocalConfigCc = true;
   removeLocal = false;

@@ -28,6 +28,8 @@ buildPythonPackage rec {
     pytest-tornasync
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Jupyter lab environment notebook server extension.";
     license = with licenses; [ bsd3 ];

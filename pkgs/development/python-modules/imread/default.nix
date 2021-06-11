@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "python-imread";
-  version = "0.7.0";
+  version = "0.7.4";
 
   src = fetchPypi {
     inherit version;
     pname = "imread";
-    sha256 = "0yb0fmy6ilh5fvbk69wl2bzqgss2g0951668mx8z9yyj4jhr1z2y";
+    sha256 = "0kvlpy62vc16i0mysv1b2gv746in41q75hb815q6h8d227psv1q4";
   };
 
 

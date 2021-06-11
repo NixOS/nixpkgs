@@ -16,7 +16,7 @@ stdenv.mkDerivation {
       ld-mac.cc
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
   buildInputs = [ clang libcxx ];
   buildFlags = [ "USE_LIBCXX=1" "release" ];
 

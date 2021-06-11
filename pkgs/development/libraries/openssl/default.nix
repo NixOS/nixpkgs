@@ -69,6 +69,7 @@ let
         armv6l-linux = "./Configure linux-armv4 -march=armv6";
         armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
         x86_64-darwin  = "./Configure darwin64-x86_64-cc";
+        aarch64-darwin = "./Configure darwin64-arm64-cc";
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
       }.${stdenv.hostPlatform.system} or (
@@ -125,8 +126,6 @@ let
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
           rm "$out/lib/"*.a
       fi
-
-      mkdir -p $bin
     '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
       # Fix bin/c_rehash's perl interpreter line
       #
@@ -140,9 +139,9 @@ let
       # "#!/usr/bin/env perl"
     ''
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
-    '' +
-    ''
-      mv $out/bin $bin/
+    '' + ''
+      mkdir -p $bin
+      mv $out/bin $bin/bin
 
       mkdir $dev
       mv $out/include $dev/

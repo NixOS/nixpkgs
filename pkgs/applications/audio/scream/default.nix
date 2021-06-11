@@ -1,5 +1,5 @@
 { stdenv, lib, config, fetchFromGitHub, cmake, pkg-config
-, alsaSupport ? stdenv.isLinux, alsaLib
+, alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = lib.optional pulseSupport libpulseaudio
-    ++ lib.optional alsaSupport alsaLib;
+    ++ lib.optional alsaSupport alsa-lib;
   nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, fusepy, fuse
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, fusepy, fuse
 , openssl }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     substituteInPlace tests/monkey.py --replace /etc/ssl/openssl.cnf ${openssl.out}/etc/ssl/openssl.cnf
   '';
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   checkInputs = [ fusepy fuse ];
 
   doCheck = false; # seems to hang, not sure

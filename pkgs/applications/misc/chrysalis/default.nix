@@ -1,15 +1,19 @@
-{ lib, appimageTools, fetchurl }:
+{ lib, appimageTools, fetchurl, gtk3, gsettings-desktop-schemas }:
 
 let
   pname = "chrysalis";
-  version = "0.7.9";
+  version = "0.8.4";
 in appimageTools.wrapType2 rec {
   name = "${pname}-${version}-binary";
 
   src = fetchurl {
-    url = "https://github.com/keyboardio/${pname}/releases/download/${pname}-${version}/${pname}-${version}.AppImage";
-    sha256 = "12w4vv7dwfpvxpc8kpfas90y7yy8mb8dj2096z3vw1bli5lrn3zi";
+    url = "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
+    sha256 = "b41f3e23dac855b1588cff141e3d317f96baff929a0543c79fccee0c6f095bc7";
   };
+
+  profile = ''
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+  '';
 
   multiPkgs = null;
   extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [

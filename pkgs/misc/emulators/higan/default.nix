@@ -4,7 +4,7 @@
 , udev
 , libGLU, libGL, SDL2
 , libao, openal, libpulseaudio
-, alsaLib
+, alsa-lib
 , gtk2, gtksourceview
 , runtimeShell
 # Darwin dependencies
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ libicns ];
 
   buildInputs = [ SDL2 libao ]
-                ++ optionals stdenv.isLinux [ alsaLib udev libpulseaudio openal
+                ++ optionals stdenv.isLinux [ alsa-lib udev libpulseaudio openal
                                               gtk2 gtksourceview libX11 libXv
                                               libGLU libGL ]
                 ++ optionals stdenv.isDarwin [ Carbon Cocoa OpenGL OpenAL ];

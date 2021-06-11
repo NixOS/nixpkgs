@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, qttools
-, alsaLib, ftgl, libGLU, libjack2, qtbase, rtmidi, wrapQtAppsHook
+, alsa-lib, ftgl, libGLU, libjack2, qtbase, rtmidi, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
-  buildInputs = [ alsaLib ftgl libGLU libjack2 qtbase rtmidi ];
+  buildInputs = [ alsa-lib ftgl libGLU libjack2 qtbase rtmidi ];
 
   cmakeFlags = [
     "-DOpenGL_GL_PREFERENCE=GLVND"

@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
-, alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
+, alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
 , openglSupport ? false, libGLU ? null, libGL ? null
@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
     ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libdrm
-    ++ optional isLinux alsaLib
+    ++ optional isLinux alsa-lib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
     ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
@@ -213,7 +213,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
-    homepage = "http://www.ffmpeg.org/";
+    homepage = "https://www.ffmpeg.org/";
+    changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines

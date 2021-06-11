@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, setuptools_scm }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pytest-celery";
@@ -17,5 +17,6 @@ buildPythonPackage rec {
     description = "pytest plugin for unittest subTest() support and subtests fixture";
     homepage = "https://github.com/pytest-dev/pytest-subtests";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

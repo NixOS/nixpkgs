@@ -20,6 +20,7 @@
 , automake
 , libtool
 , which
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +34,13 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1vy6yfwkfv6bb45bzf4g6dayiqkvqqvlr02rsnhd10793hlpqlgg";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://projects.archlinux.de/svntogit/packages.git/plain/trunk/gtk-sharp2-2.12.12-gtkrange.patch?h=packages/gtk-sharp-2";
+      sha256 = "bjx+OfgWnN8SO82p8G7pbGuxJ9EeQxMLeHnrtEm8RV8=";
+    })
+  ];
 
   postInstall = ''
     pushd $out/bin

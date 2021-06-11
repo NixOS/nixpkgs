@@ -16,6 +16,12 @@ stdenv.mkDerivation {
     cd unix
   '';
 
+  postPatch = ''
+    for file in $(find library/demos/. -type f ! -name "*.*"); do
+      substituteInPlace $file --replace "exec wish" "exec $out/bin/wish"
+    done
+  '';
+
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish
     cp ../{unix,generic}/*.h $out/include

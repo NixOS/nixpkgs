@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-pomodoro";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "codito";
     repo = "gnome-pomodoro";
     rev = version;
-    sha256 = "0990m8ydryd77kv25nfqli1n209i0h5dkjg9gkyww8bfrjhw47mc";
+    sha256 = "sha256-im66QUzz6PcX0vkf4cN57ttRLB4KKPFky1pwUa4V7kQ=";
   };
 
   nativeBuildInputs = [

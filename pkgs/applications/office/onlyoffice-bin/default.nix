@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 # Alphabetic ordering below
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , atk
 , autoPatchelfHook
@@ -72,11 +72,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "onlyoffice-desktopeditors";
-  version = "6.1.0";
-  minor = "90";
+  version = "6.2.0";
+  minor = null;
   src = fetchurl {
-    url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_${version}-${minor}_amd64.deb";
-    sha256 = "sha256-TUaECChM3GxtB54/zNIKjRIocnAxpBVK7XsX3z7aq8o=";
+    url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
+    sha256 = "sha256-nKmWxaVVul/rGDIh3u9zCpKu7U0nmrntFFf96xQyzdg=";
   };
 
   nativeBuildInputs = [
@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     atk
     cairo
@@ -153,7 +153,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/onlyoffice-desktopeditors.desktop \
       --replace "/usr/bin/onlyoffice-desktopeditor" "$out/bin/DesktopEditor"
 
-    runHook preInstall
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -163,6 +163,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";
     homepage = "https://www.onlyoffice.com/";
+    downloadPage = "https://github.com/ONLYOFFICE/DesktopEditors/releases";
+    changelog = "https://github.com/ONLYOFFICE/DesktopEditors/blob/master/CHANGELOG.md";
     platforms = [ "x86_64-linux" ];
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ nh2 gtrunsec ];

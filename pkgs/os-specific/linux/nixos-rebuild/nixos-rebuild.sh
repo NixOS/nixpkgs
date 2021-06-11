@@ -79,7 +79,6 @@ while [ "$#" -gt 0 ]; do
       --fast)
         buildNix=
         fast=1
-        extraBuildFlags+=(--show-trace)
         ;;
       --profile-name|-p)
         if [ -z "$1" ]; then
@@ -216,7 +215,7 @@ nixBuild() {
 
 nixFlakeBuild() {
     if [ -z "$buildHost" ]; then
-        nix build "$@" --out-link "${tmpDir}/result"
+        nix "${flakeFlags[@]}" build "$@" --out-link "${tmpDir}/result"
         readlink -f "${tmpDir}/result"
     else
         local attr="$1"
@@ -386,6 +385,8 @@ prebuiltNix() {
         echo @nix_x86_64_linux@
     elif [[ "$machine" =~ i.86 ]]; then
         echo @nix_i686_linux@
+    elif [[ "$machine" = aarch64 ]]; then
+        echo @nix_aarch64_linux@
     else
         echo "$0: unsupported platform"
         exit 1

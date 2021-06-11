@@ -1,6 +1,6 @@
 { lib, stdenv, fetchPypi, buildPythonPackage
 , libmediainfo
-, setuptools_scm
+, setuptools-scm
 , pytest, glibcLocales }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
                 "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}.0"
   '';
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [ glibcLocales pytest ];
 

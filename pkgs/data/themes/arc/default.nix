@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-    "-Dthemes=cinnamon,gnome-shell,gtk2,gtk3,plank,xfwm"
+    "-Dthemes=cinnamon,gnome-shell,gtk2,gtk3,plank,xfwm,metacity"
     "-Dvariants=light,darker,dark,lighter"
     "-Dcinnamon_version=${cinnamon.cinnamon-common.version}"
     "-Dgnome_shell_version=${gnome.gnome-shell.version}"

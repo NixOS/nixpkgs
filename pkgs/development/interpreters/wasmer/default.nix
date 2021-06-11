@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "08r2b4s005w8r207jwq2fd43y3prgd8pg1m72aww1r7yrbxdr0v2";
+  cargoSha256 = "140bzxhsyfif99x5a1m1d45ppb6jzvy9m4xil7z1wg2pnq9k7zz8";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     "--features" "test-cranelift,test-jit"
   ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   meta = with lib; {
     description = "The Universal WebAssembly Runtime";

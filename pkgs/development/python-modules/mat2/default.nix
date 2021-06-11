@@ -3,6 +3,7 @@
 , python
 , pythonOlder
 , fetchFromGitLab
+, fetchpatch
 , substituteAll
 , bubblewrap
 , exiftool
@@ -49,6 +50,12 @@ buildPythonPackage rec {
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
+    # remove for next release
+    (fetchpatch {
+      name = "fix-tests-ffmpeg-4.4.patch";
+      url = "https://0xacab.org/jvoisin/mat2/-/commit/c9be50f968212b01f8d8ad85e59e19c3e67d8578.patch";
+      sha256 = "0895dkv6575ps3drdfnli15cggx27n9irjx0axigrm4ql4ma0648";
+    })
   ];
 
   postPatch = ''
