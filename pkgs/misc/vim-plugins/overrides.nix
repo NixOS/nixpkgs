@@ -402,7 +402,7 @@ self: super: {
       export HOME=$TMPDIR
       echo $HOME
       set -x
-      ${neovim}/bin/nvim -n -u NONE -i NONE -V1 -E --cmd "set rtp+=$out/share/vim-plugins/minimap-vim" --cmd "set loadplugins" -c "MinimapToggle"  +quit!
+      ${neovim}/bin/nvim -n -u NONE -i NONE -V1 --cmd "set rtp+=$out/share/vim-plugins/minimap-vim" --cmd "runtime! plugin/*.vim" -c "MinimapToggle"  +quit!
     '';
   });
 
