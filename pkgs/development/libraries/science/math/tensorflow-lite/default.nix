@@ -76,6 +76,10 @@ stdenv.mkDerivation rec {
     sha256 = "1jdw2i1rq06zqd6aabh7bbm0avsg4pygnfmd7gviv0blhih9054l";
   };
 
+  patches = [
+    ./include-schema-conversion-utils-source.patch
+  ];
+
   buildInputs = [ zlib flatbuffers ];
 
   dontConfigure = true;
