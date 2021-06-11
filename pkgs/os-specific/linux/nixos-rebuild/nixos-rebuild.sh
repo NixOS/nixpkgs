@@ -215,7 +215,7 @@ nixBuild() {
 
 nixFlakeBuild() {
     if [ -z "$buildHost" ]; then
-        nix build "$@" --out-link "${tmpDir}/result"
+        nix "${flakeFlags[@]}" build "$@" --out-link "${tmpDir}/result"
         readlink -f "${tmpDir}/result"
     else
         local attr="$1"
