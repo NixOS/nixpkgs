@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "sha256-G8gm57LogQjH5L9DwCZjb3ekHYSc+2Z6p7XAuG2/lmw=";
+    sha256 = "0v4npxnvih5mlxx6dywwhhfs8xvgcckc0hxzwk3hi0g8nbkjdj0v";
   };
 
   # FIXME: -dev depends on -doc
