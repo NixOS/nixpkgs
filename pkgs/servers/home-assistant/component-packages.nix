@@ -499,7 +499,7 @@
     "met" = ps: with ps; [ pymetno ];
     "met_eireann" = ps: with ps; [ pymeteireann ];
     "meteo_france" = ps: with ps; [ ]; # missing inputs: meteofrance-api
-    "meteoalarm" = ps: with ps; [ ]; # missing inputs: meteoalertapi
+    "meteoalarm" = ps: with ps; [ meteoalertapi ];
     "meteoclimatic" = ps: with ps; [ ]; # missing inputs: pymeteoclimatic
     "metoffice" = ps: with ps; [ ]; # missing inputs: datapoint
     "mfi" = ps: with ps; [ ]; # missing inputs: mficlient
