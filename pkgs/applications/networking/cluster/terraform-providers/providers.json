@@ -235,10 +235,11 @@
   },
   "ct": {
     "owner": "poseidon",
+    "provider-source-address": "registry.terraform.io/poseidon/ct",
     "repo": "terraform-provider-ct",
-    "rev": "v0.6.1",
-    "sha256": "0hh3hvi8lwb0h8x9viz5p991w94gn7354nw95b51rdmir9qi2x89",
-    "version": "0.6.1"
+    "rev": "v0.8.0",
+    "sha256": "1mm86q3rl81dm2yfg2hdf88x8g5mhwwixrxgrffpkjvjqy42a8h7",
+    "version": "0.8.0"
   },
   "datadog": {
     "owner": "terraform-providers",

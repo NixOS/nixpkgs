@@ -1529,6 +1529,8 @@ in
 
   github-commenter = callPackage ../development/tools/github-commenter { };
 
+  github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
+
   gitless = callPackage ../applications/version-management/gitless { python = python3; };
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
