@@ -177,6 +177,12 @@ let
 
     cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
 
+    comby = callPackage ../development/tools/ocaml/comby { };
+
+    conduit_p4 = callPackage ../development/ocaml-modules/conduit/0.10.0.nix {
+       lwt = lwt2;
+    };
+
     conduit = callPackage ../development/ocaml-modules/conduit { };
 
     conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
@@ -411,6 +417,8 @@ let
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
+
+    hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
@@ -775,6 +783,7 @@ let
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
+    mparser-comby =  callPackage ../development/ocaml-modules/mparser/comby.nix { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 

@@ -1,0 +1,24 @@
+diff --git a/dune b/dune
+index 4f35f18..721b171 100644
+--- a/dune
++++ b/dune
+@@ -1,5 +1,3 @@
+-(copy_files# static_libs/*)
+-
+ (env
+  (dev
+   (flags (:standard -w A-3-4-6-27-29-34-32-35-39-40-41-42-44-45-48-49-50-57))))
+@@ -7,13 +5,8 @@
+ (library
+  (name hack_parallel)
+  (public_name hack_parallel)
+- (c_library_flags -L static_libs -l hp)
+  (libraries
+   str
+   core
+   hack_parallel.scheduler
+   hack_parallel.memory))
+-
+-(install
+-  (section lib)
+-   (files static_libs/libhp.a))
