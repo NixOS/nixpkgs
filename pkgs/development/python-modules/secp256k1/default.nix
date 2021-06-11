@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ludbb/secp256k1-py";
     description = "Python FFI bindings for secp256k1";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ chris-martin ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
