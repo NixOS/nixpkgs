@@ -56,6 +56,13 @@
           be able to access programmers supported by flashrom.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://vikunja.io">vikunja</link>, a to-do
+          list app. Available as
+          <link linkend="opt-services.vikunja.enable">services.vikunja</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
