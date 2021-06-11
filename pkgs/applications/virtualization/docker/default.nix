@@ -11,7 +11,7 @@ rec {
       , tiniRev, tiniSha256, buildxSupport ? false
       # package dependencies
       , stdenv, fetchFromGitHub, buildGoPackage
-      , makeWrapper, installShellFiles, pkg-config
+      , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
       , sqlite, iproute2, lvm2, systemd, docker-buildx
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
@@ -56,7 +56,9 @@ rec {
       };
 
       # Do not remove static from make files as we want a static binary
-      patchPhase = "";
+      postPatch = "";
+
+      buildInputs = [ glibc glibc.static ];
 
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
