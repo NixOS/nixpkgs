@@ -80,6 +80,8 @@ let
 
     bos = callPackage ../development/ocaml-modules/bos { };
 
+    bz2 = callPackage ../development/ocaml-modules/bz2 { };
+
     ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
 
     ca-certs-nss = callPackage ../development/ocaml-modules/ca-certs-nss { };
@@ -230,6 +232,8 @@ let
       else callPackage ../development/ocaml-modules/csv/1.5.nix { };
 
     csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
+
+    cudf = callPackage ../development/ocaml-modules/cudf { };
 
     curly = callPackage ../development/ocaml-modules/curly {
       inherit (pkgs) curl;

@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , buildPythonPackage
 , poetry
-, isPy27
 , docopt
 , easywatch
 , jinja2
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "pyproject";
 
   # No tests in pypi
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "0z5y4l4sv4c7zmp6pj1ws3psq7i87xqbcmk648bmsa1d6prr1hil";
+    sha256 = "sha256-sGon3+So4EuVRTUqcP9omfJ91wBzJSm7CSkuefX3S+8=";
   };
 
   nativeBuildInputs = [

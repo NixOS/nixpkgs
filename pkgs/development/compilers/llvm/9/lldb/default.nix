@@ -12,6 +12,7 @@
 , python3
 , version
 , darwin
+, makeWrapper
 , lit
 }:
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
-    cmake python3 which swig lit
+    cmake python3 which swig lit makeWrapper
   ];
 
   buildInputs = [
@@ -58,7 +59,15 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+  installCheckPhase = ''
+    if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
+        return 1;
+    fi
+  '';
+
   postInstall = ''
+    wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/
+
     # man page
     mkdir -p $out/share/man/man1
     install ../docs/lldb.1 -t $out/share/man/man1/

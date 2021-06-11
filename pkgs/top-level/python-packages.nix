@@ -2797,8 +2797,9 @@ in {
 
   github3_py = callPackage ../development/python-modules/github3_py { };
 
-  github-webhook = callPackage ../development/python-modules/github-webhook { };
+  github-to-sqlite = callPackage ../development/python-modules/github-to-sqlite { };
 
+  github-webhook = callPackage ../development/python-modules/github-webhook { };
   GitPython = callPackage ../development/python-modules/GitPython { };
 
   git-revise = callPackage ../development/python-modules/git-revise { };
@@ -7448,6 +7449,8 @@ in {
   ruffus = callPackage ../development/python-modules/ruffus { };
 
   runway-python = callPackage ../development/python-modules/runway-python { };
+
+  ruyaml = callPackage ../development/python-modules/ruyaml { };
 
   rx = callPackage ../development/python-modules/rx { };
 
