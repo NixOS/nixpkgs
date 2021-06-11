@@ -8,19 +8,18 @@
 
 assert guileBindings -> guile != null;
 let
-  version = "3.7.2";
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4"
+  doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin
       && stdenv.buildPlatform == stdenv.hostPlatform;
 
   inherit (stdenv.hostPlatform) isDarwin;
 in
 
-stdenv.mkDerivation {
-  name = "gnutls-${version}";
-  inherit version;
+stdenv.mkDerivation rec {
+  pname = "gnutls";
+  version = "3.7.2";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.7/gnutls-${version}.tar.xz";
@@ -42,7 +41,7 @@ stdenv.mkDerivation {
   #  - trust-store: default trust store path (/etc/ssl/...) is missing in sandbox (3.5.11)
   #  - psk-file: no idea; it broke between 3.6.3 and 3.6.4
   # Change p11-kit test to use pkg-config to find p11-kit
-  postPatch = lib.optionalString (lib.versionAtLeast version "3.6") ''
+  postPatch = ''
     sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
     sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
