@@ -7,10 +7,13 @@ let
 
   builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
   builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
+  builderRpi4uefi = import ./rpi4uefi-builder.nix { inherit pkgs config lib; };
 
   builder =
     if cfg.uboot.enable then
       "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
+    else if cfg.rpi4uefi.enable then
+      "${builderRpi4uefi} -t ${timeoutStr} -c"
     else
       "${builderGeneric} -c";
 
@@ -61,6 +64,16 @@ in
         description = "";
       };
 
+      rpi4uefi = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Enable using rpi4uefi as bootmanager for the raspberry pi.
+          '';
+        };
+      };
+
       uboot = {
         enable = mkOption {
           default = false;
@@ -93,10 +106,19 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = singleton {
+    assertions = [
+    {
       assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version >= 3;
       message = "Only Raspberry Pi >= 3 supports aarch64.";
-    };
+    }
+    {
+      assertion = !cfg.rpi4uefi.enable || cfg.version >= 4;
+      message = "Only Raspberry Pi >= 4 supports rpi4uefi.";
+    }
+    # TODO: we don't assert between the sub-bootloader
+    # right-now it's either rpi or uboot, if uboot=true
+    # now we have additional invariants so we need to change api and/or assertions
+  ];
 
     system.build.installBootLoader = builder;
     system.boot.loader.id = "raspberrypi";
