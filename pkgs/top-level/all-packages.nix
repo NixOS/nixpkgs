@@ -4289,6 +4289,8 @@ in
 
   epubcheck = callPackage ../tools/text/epubcheck { };
 
+  eyewitness = callPackage ../tools/security/eyewitness { };
+
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
     ssh = openssh;
   };
