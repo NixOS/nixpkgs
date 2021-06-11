@@ -6311,6 +6311,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  mathpix-snipping-tool = callPackage ../tools/misc/mathpix-snipping-tool { };
+
   /* Python 3.8 is currently broken with matrix-synapse since `python38Packages.bleach` fails
     (https://github.com/NixOS/nixpkgs/issues/76093) */
   matrix-synapse = callPackage ../servers/matrix-synapse { /*python3 = python38;*/ };
