@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "boschshcpy";
-  version = "0.2.18";
+  version = "0.2.19";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tschamm";
     repo = pname;
     rev = version;
-    sha256 = "08bfg3g0hifjaa17d4zmws2ikbijdm0b98svgj8jdcl8v0nlqx69";
+    sha256 = "sha256-HxLy3tGMn2KDfD37yKLoImpfXGoaoGB6VEanNu/WMnk=";
   };
 
   propagatedBuildInputs = [
