@@ -226,6 +226,12 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          <literal>programs.x2goserver</literal> is now
+          <literal>services.x2goserver</literal>
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="other-notable-changes">

@@ -198,7 +198,6 @@
   ./programs/waybar.nix
   ./programs/wireshark.nix
   ./programs/wshowkeys.nix
-  ./programs/x2goserver.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
@@ -855,6 +854,7 @@
   ./services/networking/xandikos.nix
   ./services/networking/xinetd.nix
   ./services/networking/xl2tpd.nix
+  ./services/networking/x2goserver.nix
   ./services/networking/xrdp.nix
   ./services/networking/yggdrasil.nix
   ./services/networking/zerobin.nix
