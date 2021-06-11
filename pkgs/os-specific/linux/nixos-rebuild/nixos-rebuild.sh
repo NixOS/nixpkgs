@@ -26,7 +26,7 @@ upgrade=
 upgrade_all=
 repair=
 profile=/nix/var/nix/profiles/system
-buildHost=
+buildHost=localhost
 targetHost=
 maybeSudo=()
 
