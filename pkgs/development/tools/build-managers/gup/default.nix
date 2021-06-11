@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "gup";
-    rev = "version-0.8.0";
+    rev = "version-${version}";
     sha256 = "1zjd76jyb5zc9w3l368723bjmxjl05s096g8ipwncfks1p9hdgf3";
   };
   pname = "gup";
