@@ -32,6 +32,10 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  disabledTests = [
+    "test_scrape_dependents"
+  ];
+
   meta = with lib; {
     description = "Save data from GitHub to a SQLite database";
     homepage = "https://github.com/dogsheep/github-to-sqlite";
