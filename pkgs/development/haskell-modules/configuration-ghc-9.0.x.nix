@@ -111,4 +111,8 @@ self: super: {
   # https://github.com/snoyberg/mono-traversable/issues/192
   mono-traversable = dontCheck super.mono-traversable;
 
+  # Disable tests pending resolution of
+  # https://github.com/Soostone/retry/issues/71
+  retry = dontCheck super.retry;
+
 }
