@@ -463,6 +463,12 @@ The prefix under which the package must be installed, passed via the `--prefix` 
 
 The key to use when specifying the prefix. By default, this is set to `--prefix=` as that is used by the majority of packages.
 
+##### `dontAddStaticConfigureFlags`
+
+By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
+
+If this is undesirable, set this variable to true.
+
 ##### `dontAddDisableDepTrack` {#var-stdenv-dontAddDisableDepTrack}
 
 By default, the flag `--disable-dependency-tracking` is added to the configure flags to speed up Automake-based builds. If this is undesirable, set this variable to true.
@@ -475,7 +481,7 @@ By default, the configure phase applies some special hackery to all files called
 
 By default, when the configure script has `--enable-static`, the option `--disable-static` is added to the configure flags.
 
-If this is undesirable, set this variable to true.
+If this is undesirable, set this variable to true.  It is automatically set to true when building statically, for example through `pkgsStatic`.
 
 ##### `configurePlatforms` {#var-stdenv-configurePlatforms}
 
