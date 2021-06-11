@@ -41,6 +41,8 @@ let
         $extraInitArgs
       ${cfg.postInit}
     fi
+  '' + optionalString (cfg.backupCommand != null) ''
+    ${cfg.backupCommand} | \
   '' + ''
     borg create $extraArgs \
       --compression ${cfg.compression} \
@@ -181,6 +183,13 @@ let
       + " without at least one public key";
   };
 
+  mkCommandAssertions = name: cfg: {
+    assertion = (cfg.backupCommand != null) -> (cfg.paths == [ "-" ]);
+    message = ''
+      borgbackup.jobs.${name}.paths must be set to [ "-" ] while specifying a backupCommand!
+    '';
+  };
+
   mkRemovableDeviceAssertions = name: cfg: {
     assertion = !(isLocalPath cfg.repo) -> !cfg.removableDevice;
     message = ''
@@ -242,6 +251,17 @@ in {
             type = with types; coercedTo str lib.singleton (listOf str);
             description = "Path(s) to back up.";
             example = "/home/user";
+          };
+
+          backupCommand = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = ''
+              Backup the stdout of this program instead of filesystem paths.
+              You must set <option>paths</option> to <literal>-</literal>
+              to use this option.
+            '';
+            example = "/path/to/createZFSsend.sh";
           };
 
           repo = mkOption {
@@ -659,6 +679,7 @@ in {
       assertions =
         mapAttrsToList mkPassAssertion jobs
         ++ mapAttrsToList mkKeysAssertion repos
+        ++ mapAttrsToList mkCommandAssertions jobs
         ++ mapAttrsToList mkRemovableDeviceAssertions jobs;
 
       system.activationScripts = mapAttrs' mkActivationScript jobs;
