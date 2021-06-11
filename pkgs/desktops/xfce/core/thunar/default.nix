@@ -10,6 +10,7 @@
 , libxfce4ui
 , libxfce4util
 , libxslt
+, pcre
 , xfconf
 , gobject-introspection
 , makeWrapper
@@ -39,6 +40,7 @@ let unwrapped = mkXfceDerivation {
     libnotify
     libxfce4ui
     libxfce4util
+    pcre
     xfconf
   ];
 
