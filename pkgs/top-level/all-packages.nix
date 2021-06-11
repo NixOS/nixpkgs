@@ -22610,6 +22610,8 @@ in
 
   antiword = callPackage ../applications/office/antiword {};
 
+  anup = callPackage ../applications/misc/anup {};
+
   ao = libfive;
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
