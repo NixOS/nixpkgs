@@ -90,6 +90,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.abbradar ];
+    badPlatforms = [ "riscv32-linux" "riscv64-linux" ];
     platforms = platforms.linux;
   };
 }
