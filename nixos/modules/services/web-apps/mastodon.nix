@@ -314,7 +314,7 @@ in {
         authenticate = lib.mkOption {
           description = "Authenticate with the SMTP server using username and password.";
           type = lib.types.bool;
-          default = true;
+          default = false;
         };
 
         host = lib.mkOption {
@@ -565,6 +565,7 @@ in {
 
     services.postfix = lib.mkIf (cfg.smtp.createLocally && cfg.smtp.host == "127.0.0.1") {
       enable = true;
+      hostname = lib.mkDefault "${cfg.localDomain}";
     };
     services.redis = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
       enable = true;
