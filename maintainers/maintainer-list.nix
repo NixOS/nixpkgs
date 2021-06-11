@@ -7207,6 +7207,16 @@
     githubId = 1386642;
     name = "Noah Brenowitz";
   };
+  ncfavier = {
+    email = "n@monade.li";
+    github = "ncfavier";
+    githubId = 4323933;
+    name = "Naïm Favier";
+    keys = [{
+      longkeyid = "rsa2048/0x49B07322580B7EE2";
+      fingerprint = "51A0 705E 7DD2 3CBC 5EAA  B43E 49B0 7322 580B 7EE2";
+    }];
+  };
   nckx = {
     email = "github@tobias.gr";
     github = "nckx";
