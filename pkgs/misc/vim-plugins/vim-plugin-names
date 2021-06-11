@@ -72,6 +72,7 @@ cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
 cohama/lexima.vim
+ConradIrwin/vim-bracketed-paste
 crusoexia/vim-monokai
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
