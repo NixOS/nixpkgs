@@ -5655,6 +5655,18 @@ final: prev:
     meta.homepage = "https://github.com/ntpeters/vim-better-whitespace/";
   };
 
+  vim-bracketed-paste = buildVimPluginFrom2Nix {
+    pname = "vim-bracketed-paste";
+    version = "2018-05-22";
+    src = fetchFromGitHub {
+      owner = "ConradIrwin";
+      repo = "vim-bracketed-paste";
+      rev = "c4c639f3cacd1b874ed6f5f196fac772e089c932";
+      sha256 = "1hhi7ab36iscv9l7i64qymckccnjs9pzv0ccnap9gj5xigwz6p9h";
+    };
+    meta.homepage = "https://github.com/ConradIrwin/vim-bracketed-paste/";
+  };
+
   vim-bsv = buildVimPluginFrom2Nix {
     pname = "vim-bsv";
     version = "2020-11-08";
