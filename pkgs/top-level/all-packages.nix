@@ -27133,6 +27133,8 @@ with pkgs;
 
   ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet { };
 
+  ricochet-refresh = callPackage ../applications/networking/instant-messengers/ricochet-refresh { };
+
   ries = callPackage ../applications/science/math/ries { };
 
   ripcord = qt5.callPackage ../applications/networking/instant-messengers/ripcord { };

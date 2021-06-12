@@ -41,6 +41,13 @@ with lib.maintainers; {
     scope = "Maintain BEAM-related packages and modules.";
   };
 
+  blueprint-freespeech = {
+    members = [
+      richard-blueprint
+    ];
+    scope = "Maintain ricochet-refresh";
+  };
+
   cinnamon = {
     members = [
       mkg20001

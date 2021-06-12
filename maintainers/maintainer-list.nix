@@ -9052,6 +9052,12 @@
     github = "ribose-jeffreylau";
     githubId = 2649467;
   };
+  richard-blueprint = {
+    name = "Richard Pospesel";
+    email = "richard@blueprintforfreespeech.net";
+    github = "pospeselr";
+    githubId = 2148104;
+  };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";
     github = "richardipsum";
