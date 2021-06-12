@@ -4018,9 +4018,6 @@ broken-packages:
   - SableCC2Hs
   - safe-buffer-monad
   - safe-coerce
-  - safe-coloured-text-gen
-  - safe-coloured-text-layout
-  - safe-coloured-text-terminfo
   - safecopy-migrate
   - safecopy-store
   - safe-freeze
