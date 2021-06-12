@@ -20829,6 +20829,8 @@ in
 
     system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
 
+    system76-power = callPackage ../os-specific/linux/system76-power { };
+
     system76-io = callPackage ../os-specific/linux/system76-io { };
 
     tmon = callPackage ../os-specific/linux/tmon { };
