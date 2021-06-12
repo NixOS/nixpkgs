@@ -153,9 +153,6 @@ in
   ppc64le = mapTestOnCross lib.systems.examples.powernv linuxCommon;
   ppc64le-musl = mapTestOnCross lib.systems.examples.musl-power linuxCommon;
 
-  android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt linuxCommon;
-  android32 = mapTestOnCross lib.systems.examples.armv7a-android-prebuilt linuxCommon;
-
   wasi32 = mapTestOnCross lib.systems.examples.wasi32 wasiCommon;
 
   msp430 = mapTestOnCross lib.systems.examples.msp430 embedded;
