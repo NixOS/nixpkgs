@@ -3731,7 +3731,6 @@ broken-packages:
   - proxy-mapping
   - pseudo-trie
   - PTQ
-  - ptr-poker
   - publicsuffixlistcreate
   - publish
   - pubnub
