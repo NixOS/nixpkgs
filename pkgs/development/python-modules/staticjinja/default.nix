@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "pyproject";
 
   # No tests in pypi
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "sha256-sGon3+So4EuVRTUqcP9omfJ91wBzJSm7CSkuefX3S+8=";
+    sha256 = "sha256-VKsDvWEurBdckWbPG5hQLK3dzdM7XVbrp23fR5wp1xk=";
   };
 
   nativeBuildInputs = [
