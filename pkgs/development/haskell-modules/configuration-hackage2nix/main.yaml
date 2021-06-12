@@ -397,6 +397,7 @@ unsupported-platforms:
   mpi-hs-cereal:                                [ aarch64-linux, x86_64-darwin ]
   mpi-hs-store:                                 [ aarch64-linux, x86_64-darwin ]
   mplayer-spot:                                 [ aarch64-linux ]
+  mptcp-pm:                                     [ x86_64-darwin ]
   netlink:                                      [ x86_64-darwin ]
   oculus:                                       [ x86_64-darwin ]
   pam:                                          [ x86_64-darwin ]
