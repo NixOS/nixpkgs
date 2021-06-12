@@ -1,15 +1,16 @@
-{ mkDerivation
+{ lib
+, stdenv
 , cmark-gfm
 , fetchurl
 , fetchpatch
 , qmake
 , qtbase
 , qtwebengine
-, lib
 , wrapGAppsHook
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mindforger";
   version = "1.52.0";
 
@@ -18,7 +19,7 @@ mkDerivation rec {
     sha256 = "1pghsw8kwvjhg3jpmjs0n892h2l0pm0cs6ymi8b23fwk0kfj67rd";
   };
 
-  nativeBuildInputs = [ qmake wrapGAppsHook ];
+  nativeBuildInputs = [ qmake wrapGAppsHook wrapQtAppsHook ];
   buildInputs = [ qtbase qtwebengine cmark-gfm ];
 
   doCheck = true;
