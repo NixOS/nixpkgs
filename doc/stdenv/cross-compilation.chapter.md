@@ -10,7 +10,14 @@ This chapter will be organized in three parts. First, it will describe the basic
 
 ### Platform parameters {#ssec-cross-platform-parameters}
 
-Nixpkgs follows the [conventions of GNU autoconf](https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html). We distinguish between 3 types of platforms when building a derivation: _build_, _host_, and _target_. In summary, _build_ is the platform on which a package is being built, _host_ is the platform on which it will run. The third attribute, _target_, is relevant only for certain specific compilers and build tools.
+Nixpkgs follows the [conventions of GNU autoconf](https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html). We distinguish between 3 types of platforms when building a derivation: _build_, _host_, and _target_. In summary, _build_ is the platform on which a package is being built, _host_ is the platform on which it will run. The third attribute, _target_, is relevant only for certain specific compilers and build tools. Using this terminology, we can summarize the different types of compilation as follows:
+
+| Type of compilation        | Condition               |
+|----------------------------|-------------------------|
+| native compilation         | build == host == target |
+| cross-compilation          | build /= host == target |
+| Canadian cross-compilation | build /= host /= target |
+
 
 In Nixpkgs, these three platforms are defined as attribute sets under the names `buildPlatform`, `hostPlatform`, and `targetPlatform`. They are always defined as attributes in the standard environment. That means one can access them like:
 
@@ -63,6 +70,8 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 `platform`
 
 : This is, quite frankly, a dumping ground of ad-hoc settings (it's an attribute set). See `lib.systems.platforms` for examples—there's hopefully one in there that will work verbatim for each platform that is working. Please help us triage these flags and give them better homes!
+
+Using these attributes, the build process of a package can change depending on the situation, for instance, when cross-compiling, one may want to apply specific patches or disable tests.
 
 ### Theory of dependency categorization {#ssec-cross-dependency-categorization}
 
