@@ -1,15 +1,11 @@
-{ lib, newScope, kodi }:
+{ lib }:
 
 with lib;
 
-let self = rec {
+self: with self; {
 
   addonDir = "/share/kodi/addons";
   rel = "Matrix";
-
-  callPackage = newScope self;
-
-  inherit kodi;
 
   # Convert derivation to a kodi module. Stolen from ../../../top-level/python-packages.nix
   toKodiAddon = drv: drv.overrideAttrs (oldAttrs: {
@@ -126,4 +122,4 @@ let self = rec {
 
   urllib3 = callPackage ../applications/video/kodi-packages/urllib3 { };
 
-}; in self
+}

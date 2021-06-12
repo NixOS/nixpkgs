@@ -27665,21 +27665,35 @@ in
     gtk = gtk2;
   };
 
-  kodiPackages = recurseIntoAttrs (kodi.packages);
+  kodiPackagesFor = kodi:
+    let fun = callPackage ./kodi-packages.nix { }; in
+    recurseIntoAttrs (lib.makeExtensible (self: with self; {
+      inherit kodi;
+      callPackage = newScope self;
+    } // (fun self)));
+
+  kodiPackages = kodi.packages;
 
   kodi = callPackage ../applications/video/kodi {
     jre_headless = jdk11_headless;
   };
 
+
   kodi-wayland = callPackage ../applications/video/kodi {
     jre_headless = jdk11_headless;
     waylandSupport = true;
+    kodiPackages = kodiWaylandPackages;
   };
+
+  kodiWaylandPackages = kodiPackagesFor kodi-wayland;
 
   kodi-gbm = callPackage ../applications/video/kodi {
     jre_headless = jdk11_headless;
     gbmSupport = true;
+    kodiPackages = kodiGbmPackages;
   };
+
+  kodiGbmPackages = kodiPackagesFor kodi-gbm;
 
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
 
