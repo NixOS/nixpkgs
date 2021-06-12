@@ -1097,8 +1097,6 @@ in {
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
-  blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # Added 2020-11-29
-
   block-io = callPackage ../development/python-modules/block-io { };
 
   blspy = callPackage ../development/python-modules/blspy { };
@@ -1179,8 +1177,6 @@ in {
   BTrees = callPackage ../development/python-modules/btrees { };
 
   btrfs = callPackage ../development/python-modules/btrfs { };
-
-  bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
 
   bugsnag = callPackage ../development/python-modules/bugsnag { };
 
@@ -1849,8 +1845,6 @@ in {
 
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
-  detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
-
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
@@ -2400,8 +2394,6 @@ in {
 
   fasttext = callPackage ../development/python-modules/fasttext { };
 
-  faulthandler = throw "faulthandler is built into ${python.executable}";
-
   favicon = callPackage ../development/python-modules/favicon { };
 
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
@@ -2797,8 +2789,6 @@ in {
   git-annex-adapter =
     callPackage ../development/python-modules/git-annex-adapter { };
 
-  gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
-
   gitdb = callPackage ../development/python-modules/gitdb { };
 
   github3_py = callPackage ../development/python-modules/github3_py { };
@@ -2811,8 +2801,6 @@ in {
   git-revise = callPackage ../development/python-modules/git-revise { };
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
-
-  glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
 
   glances-api = callPackage ../development/python-modules/glances-api { };
 
@@ -5920,8 +5908,6 @@ in {
     inherit (pkgs) libusb1;
   };
 
-  pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
-
   pyliblo = callPackage ../development/python-modules/pyliblo { };
 
   pylibmc = callPackage ../development/python-modules/pylibmc { };
@@ -6019,8 +6005,6 @@ in {
   pympler = callPackage ../development/python-modules/pympler { };
 
   pymsgbox = callPackage ../development/python-modules/pymsgbox { };
-
-  pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
 
   pymsteams = callPackage ../development/python-modules/pymsteams { };
 
@@ -6619,9 +6603,6 @@ in {
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
-  pytest-pep8 = self.pytestpep8; # added 2021-01-04
-  pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
-
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-pythonpath = callPackage ../development/python-modules/pytest-pythonpath { };
@@ -7107,8 +7088,6 @@ in {
   pyzmq = callPackage ../development/python-modules/pyzmq { };
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
-
-  qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
 
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
@@ -7823,8 +7802,6 @@ in {
 
   smhi-pkg = callPackage ../development/python-modules/smhi-pkg { };
 
-  smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
-
   smmap = callPackage ../development/python-modules/smmap { };
 
   smpplib = callPackage ../development/python-modules/smpplib { };
@@ -8443,8 +8420,6 @@ in {
   toonapi = callPackage ../development/python-modules/toonapi { };
 
   toposort = callPackage ../development/python-modules/toposort { };
-
-  topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
 
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
 
