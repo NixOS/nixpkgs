@@ -2686,6 +2686,8 @@ in {
     pythonPackages = self;
   });
 
+  garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
+
   gast = callPackage ../development/python-modules/gast { };
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
