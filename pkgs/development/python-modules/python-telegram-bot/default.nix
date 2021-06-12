@@ -8,16 +8,17 @@
 , isPy3k
 , tornado
 , urllib3
+, cachetools
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "13.5";
+  version = "13.6";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-g9v0zUYyf9gYu2ZV8lCAJKCt5o69s1RNo1xGmtwjvds=";
+    hash = "sha256-N8/o+roW+2iotatBoQ54fDhfYpYgDIQlbMVNfBYzRkM=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     future
     tornado
     urllib3
+    cachetools
   ];
 
   # --with-upstream-urllib3 is not working properly
@@ -34,7 +36,8 @@ buildPythonPackage rec {
     rm -r telegram/vendor
 
     substituteInPlace requirements.txt \
-      --replace 'APScheduler==3.6.3' 'APScheduler'
+      --replace 'APScheduler==3.6.3' 'APScheduler' \
+      --replace 'cachetools==4.2.2' 'cachetools'
   '';
 
   setupPyGlobalFlags = "--with-upstream-urllib3";
