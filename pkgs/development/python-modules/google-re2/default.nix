@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, pythonAtLeast, fetchPypi, pybind11, re2, six }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, pybind11, re2, six }:
 
 buildPythonPackage rec {
   pname = "google-re2";
   version = "0.1.20210601";
-  disabled = !pythonAtLeast "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
