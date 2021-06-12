@@ -370,6 +370,7 @@ broken-packages:
   - biohazard
   - bio-sequence
   - birds-of-paradise
+  - biscuit-haskell
   - bisect-binary
   - bishbosh
   - bitcoin-hs
@@ -998,6 +999,7 @@ broken-packages:
   - dhall-fly
   - dhall-text
   - dhall-to-cabal
+  - dhcp-lease-parser
   - dhrun
   - dia-base
   - diagrams-boolean
@@ -2202,6 +2204,7 @@ broken-packages:
   - hs-carbon-examples
   - hscd
   - hs-cdb
+  - hscdio
   - hsclock
   - hScraper
   - hscuid
@@ -2480,6 +2483,7 @@ broken-packages:
   - Irc
   - irc-dcc
   - irc-fun-types
+  - iri
   - iridium
   - iron-mq
   - irt
@@ -2548,6 +2552,7 @@ broken-packages:
   - json-schema
   - jsonschema-gen
   - jsonsql
+  - json-syntax
   - json-tools
   - json-tracer
   - jsontsv
@@ -3059,6 +3064,7 @@ broken-packages:
   - movie-monad
   - mpppc
   - mpris
+  - mptcp-pm
   - mpvguihs
   - mqtt
   - mqtt-hs
@@ -3390,6 +3396,7 @@ broken-packages:
   - pandoc-utils
   - pang-a-lambda
   - pangraph
+  - pan-os-syslog
   - panpipe
   - pansite
   - pantry-tmp
@@ -4209,6 +4216,7 @@ broken-packages:
   - shorten-strings
   - show-prettyprint
   - Shpadoinkle-backend-snabbdom
+  - Shpadoinkle-isreal
   - Shpadoinkle-streaming
   - shwifty
   - sifflet
@@ -4282,6 +4290,7 @@ broken-packages:
   - slug
   - slugify
   - smallarray
+  - small-bytearray-builder
   - smallcheck-kind-generics
   - smallcheck-laws
   - smallcheck-lens
@@ -4681,6 +4690,7 @@ broken-packages:
   - thank-you-stars
   - th-build
   - th-dict-discovery
+  - themoviedb
   - thentos-cookie-session
   - Theora
   - theoremquest
@@ -4919,6 +4929,7 @@ broken-packages:
   - unordered-intmap
   - unpacked-either
   - unpacked-maybe
+  - unpacked-maybe-numeric
   - unpack-funcs
   - unroll-ghc-plugin
   - unsafely

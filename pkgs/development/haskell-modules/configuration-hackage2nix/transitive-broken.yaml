@@ -165,6 +165,7 @@ dont-distribute-packages:
  - Barracuda
  - base16-lens
  - base32-bytestring
+ - base64-bytes
  - baserock-schema
  - BASIC
  - batchd
@@ -1619,8 +1620,10 @@ dont-distribute-packages:
  - JsonGrammar
  - jsonifier
  - json-incremental-decoder
+ - json-query
  - jsons-to-schema
  - json-togo
+ - json-tokens
  - jspath
  - JunkDB-driver-gdbm
  - JunkDB-driver-hashtables
@@ -2618,6 +2621,7 @@ dont-distribute-packages:
  - SGdemo
  - sgf
  - sgrep
+ - sha1
  - shake-minify-css
  - shaker
  - shapefile
@@ -3068,6 +3072,7 @@ dont-distribute-packages:
  - vfr-waypoints
  - ViennaRNA-extras
  - vigilance
+ - vimeta
  - vinyl-operational
  - vision
  - visual-graphrewrite
