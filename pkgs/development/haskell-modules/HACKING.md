@@ -70,8 +70,8 @@ The short version is this:
 * We regularly update the Stackage and Hackage pins on `haskell-updates` (normally at the beginning of a merge window).
 * The community fixes builds of Haskell packages on that branch.
 * We aim at at least one merge of `haskell-updates` into `master` every two weeks.
-* We only do the merge if the `mergeable` job is succeeding on hydra.
-* If a maintained package is still broken at the time of merge, we will only merge if the maintainer has been pinged 7 days in advance. (If you care about a Haskell package, become a maintainer!)
+* We only do the merge if the [`mergeable`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/mergeable) job is succeeding on hydra.
+* If a [`maintained`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/maintained) package is still broken at the time of merge, we will only merge if the maintainer has been pinged 7 days in advance. (If you care about a Haskell package, become a maintainer!)
 
 ---
 
