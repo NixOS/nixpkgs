@@ -366,6 +366,19 @@
           <literal>rxvt-unicode</literal> explicitly.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The linux kernel package infrastructure was moved out of
+          <literal>all-packages.nix</literal>, and restructured. Linux
+          related functions and attributes now live under the
+          <literal>pkgs.linuxKernel</literal> attribute set. The
+          versioned <literal>linuxPackages_*</literal> package sets and
+          kernels from <literal>pkgs</literal> are now considered
+          deprecated, and kept for backwards compatibility only. If you
+          want to pin the kernel package to a specific version, use one
+          of the <literal>linuxKernel.packages.*</literal> attributes.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
