@@ -8,6 +8,9 @@
 , pytestCheckHook
 , pytest-check
 , markdown
+
+, testVersion
+, staticjinja
 }:
 
 buildPythonPackage rec {
@@ -43,6 +46,10 @@ buildPythonPackage rec {
   preCheck = ''
     export PATH="$PATH:$out/bin";
   '';
+
+  passthru.tests.version = testVersion {
+    package = staticjinja;
+  };
 
   meta = with lib; {
     description = "A library and cli tool that makes it easy to build static sites using Jinja2";
