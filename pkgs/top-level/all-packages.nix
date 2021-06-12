@@ -7025,7 +7025,9 @@ in
 
   munge = callPackage ../tools/security/munge { };
 
-  munt = libsForQt5.callPackage ../applications/audio/munt { };
+  munt = libsForQt5.callPackage ../applications/audio/munt {
+    jack = libjack2;
+  };
 
   mutagen = callPackage ../tools/misc/mutagen { };
 
