@@ -48,7 +48,9 @@ In this section we create the PR for merging `haskell-updates` into `master`.
 
 1.  Open a PR on Nixpkgs merging `haskell-updates` into `master`.
 
-Use the following message body:
+
+
+Use the title `haskellPackages: update stackage and hackage` and the following message body:
 
 ```markdown
 ### This Merge
