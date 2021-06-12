@@ -22740,10 +22740,7 @@ in
 
   jnetmap = callPackage ../applications/networking/jnetmap {};
 
-  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
-    secp256k1 = secp256k1.override { enableECDH = true; };
-  };
-
+  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix { };
   libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix { };
   libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
   libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix { };
