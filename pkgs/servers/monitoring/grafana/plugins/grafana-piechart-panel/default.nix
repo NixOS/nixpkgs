@@ -6,7 +6,7 @@ grafanaPlugin rec {
   zipHash = "sha256-64K/efoBKuBFp8Jw79hTdMyTurTZsL0qfgPDcUWz2jg=";
   meta = with lib; {
     description = "Pie chart panel for Grafana";
-    license = licenses.asl20;
+    license = licenses.mit;
     maintainers = with maintainers; [ lukegb ];
     platforms = platforms.unix;
   };
