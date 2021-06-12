@@ -12,7 +12,22 @@
       else "";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
-{ url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? deepClone
+{ url
+, rev ? "HEAD"
+
+, # SRI hash.
+  hash ? ""
+
+, # Legacy ways of specifying the hash.
+  outputHash ? ""
+, outputHashAlgo ? ""
+, md5 ? ""
+, sha1 ? ""
+, sha256 ? ""
+, sha512 ? ""
+
+, # Git-related options.
+  leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , name ? urlToName url rev
@@ -47,10 +62,16 @@ in
 
 assert deepClone -> leaveDotGit;
 
-if md5 != "" then
-  throw "fetchgit does not support md5 anymore, please use sha256"
-else
-stdenvNoCC.mkDerivation {
+let
+  hash_ =
+    if hash != "" then { outputHashAlgo = null; outputHash = hash; }
+    else if md5 != "" then throw "fetchgit does not support md5 anymore, please use hash (in SRI format), sha256 or sha512 attribute"
+    else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
+    else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
+    else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
+    else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
+    else throw "fetchgit requires a hash for fixed-output derivation: ${url} @ ${rev}";
+in stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;  # This must be a string to ensure it's called with bash.
@@ -58,9 +79,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ git ]
     ++ lib.optionals fetchLFS [ git-lfs ];
 
-  outputHashAlgo = "sha256";
+  inherit (hash_) outputHashAlgo outputHash;
   outputHashMode = "recursive";
-  outputHash = sha256;
 
   inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName postFetch;
 
