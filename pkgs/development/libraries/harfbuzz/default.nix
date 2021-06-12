@@ -4,7 +4,7 @@
 , pkg-config
 , glib
 , freetype
-, cairo
+, fontconfig
 , libintl
 , meson
 , ninja
@@ -57,6 +57,11 @@ stdenv.mkDerivation {
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
     (mesonFeatureFlag "coretext" withCoreText)
+    # upstream recommends cairo, but it is only used for development purposes
+    # and is not part of the library.
+    # Cairo causes transitive (build) dependencies on various X11 or other
+    # GUI-related libraries, so it shouldn't be re-added lightly.
+    (mesonFeatureFlag "cairo" false)
     (mesonFeatureFlag "introspection" isNativeCompilation)
   ];
 
@@ -72,7 +77,7 @@ stdenv.mkDerivation {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [ glib freetype cairo ] # recommended by upstream
+  buildInputs = [ glib freetype fontconfig ]
     ++ lib.optionals withCoreText [ ApplicationServices CoreText ]
     ++ lib.optionals isNativeCompilation [ gobject-introspection ];
 
