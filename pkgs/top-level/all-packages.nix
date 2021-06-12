@@ -26088,6 +26088,8 @@ in
 
   pommed_light = callPackage ../os-specific/linux/pommed-light {};
 
+  polylith = callPackage ../development/tools/misc/polylith { };
+
   polymake = callPackage ../applications/science/math/polymake {
     openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
