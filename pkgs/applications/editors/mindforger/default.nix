@@ -49,6 +49,12 @@ stdenv.mkDerivation rec {
     "CONFIG+=mfwebengine"
   ];
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir "$out"/Applications
+    mv app/mindforger.app "$out"/Applications/
+    wrapQtApp "$out"/Applications/mindforger.app/Contents/MacOS/mindforger
+  '';
+
   meta = with lib; {
     description = "Thinking Notebook & Markdown IDE";
     longDescription = ''
