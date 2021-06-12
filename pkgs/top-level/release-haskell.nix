@@ -222,6 +222,7 @@ let
       # working as expected.
       cabal-install = all;
       Cabal_3_4_0_0 = with compilerNames; [ ghc884 ghc8104 ];
+      cabal2nix-unstable = all;
       funcmp = all;
       # Doesn't currently work on ghc-9.0:
       # https://github.com/haskell/haskell-language-server/issues/297
