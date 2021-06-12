@@ -10135,6 +10135,8 @@ with pkgs;
 
   termplay = callPackage ../tools/misc/termplay { };
 
+  testEqualDerivation = callPackage ../build-support/test-equal-derivation.nix { };
+
   tetrd = callPackage ../applications/networking/tetrd { };
 
   tewisay = callPackage ../tools/misc/tewisay { };
