@@ -548,7 +548,7 @@
     "namecheapdns" = ps: with ps; [ defusedxml ];
     "nanoleaf" = ps: with ps; [ pynanoleaf ];
     "neato" = ps: with ps; [ aiohttp-cors pybotvac ];
-    "nederlandse_spoorwegen" = ps: with ps; [ ]; # missing inputs: nsapi
+    "nederlandse_spoorwegen" = ps: with ps; [ nsapi ];
     "nello" = ps: with ps; [ ]; # missing inputs: pynello
     "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
     "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
