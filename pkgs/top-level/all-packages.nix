@@ -12577,6 +12577,8 @@ in
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
 
+  scheme-bytestructures = callPackage ../development/scheme-modules/scheme-bytestructures { };
+
   self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
   spark = callPackage ../applications/networking/cluster/spark { };
@@ -12650,6 +12652,8 @@ in
   guile-commonmark = callPackage ../development/guile-modules/guile-commonmark { };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
+
+  guile-git = callPackage ../development/guile-modules/guile-git { };
 
   guile-gnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome2.GConf;
