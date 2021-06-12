@@ -1,7 +1,9 @@
 { lib
 , stdenv
 , fetchurl
+, nixos
 , testVersion
+, testEqualDerivation
 , hello
 }:
 
@@ -16,8 +18,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.tests.version =
-    testVersion { package = hello; };
+  passthru.tests = {
+    version =
+      testVersion { package = hello; };
+
+    independent-of-noXlibs =
+      testEqualDerivation
+        "hello does not have to be rebuilt when environment.noXlibs is set."
+        hello
+        (nixos { environment.noXlibs = true; })._module.args.pkgs.hello;
+  };
 
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";
