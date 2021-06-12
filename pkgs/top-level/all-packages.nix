@@ -12571,6 +12571,8 @@ in
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
 
+  scheme-bytestructures = callPackage ../development/scheme-modules/scheme-bytestructures { };
+
   self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
   spark = callPackage ../applications/networking/cluster/spark { };
@@ -12644,6 +12646,8 @@ in
   guile-commonmark = callPackage ../development/guile-modules/guile-commonmark { };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
+
+  guile-git = callPackage ../development/guile-modules/guile-git { };
 
   guile-gnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome2.GConf;
@@ -14439,6 +14443,8 @@ in
   boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
+
+  bosh-cli = callPackage ../applications/networking/cluster/bosh-cli { };
 
   botan = callPackage ../development/libraries/botan {
     openssl = openssl_1_0_2;
@@ -20754,6 +20760,8 @@ in
 
     r8168 = callPackage ../os-specific/linux/r8168 { };
 
+    rtl8188eus-aircrack = callPackage ../os-specific/linux/rtl8188eus-aircrack { };
+
     rtl8192eu = callPackage ../os-specific/linux/rtl8192eu { };
 
     rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
@@ -22726,10 +22734,7 @@ in
 
   jnetmap = callPackage ../applications/networking/jnetmap {};
 
-  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
-    secp256k1 = secp256k1.override { enableECDH = true; };
-  };
-
+  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix { };
   libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix { };
   libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
   libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix { };

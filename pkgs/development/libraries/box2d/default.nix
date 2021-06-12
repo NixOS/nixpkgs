@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "2D physics engine";
     homepage = "https://box2d.org/";
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.zlib;
   };
 }
