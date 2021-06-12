@@ -383,6 +383,7 @@ in with py.pkgs; buildPythonApplication rec {
     "fritzbox"
     "fritzbox_callmonitor"
     "frontend"
+    "garmin_connect"
     "generic"
     "generic_thermostat"
     "geo_json_events"
