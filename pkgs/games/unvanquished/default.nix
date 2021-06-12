@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchzip, fetchurl, fetchFromGitHub, buildFHSUserEnv
-, runCommandNoCC, makeDesktopItem, copyDesktopItems, gcc, cmake, gmp
-, libGL, zlib, ncurses, geoip, lua5, nettle, curl, SDL2, freetype, glew
-, openal, libopus, opusfile, libogg, libvorbis, libjpeg, libwebp, libpng
+{ lib, stdenv, fetchzip, fetchFromGitHub, buildFHSUserEnv, makeDesktopItem
+, copyDesktopItems, gcc, cmake, gmp , libGL, zlib, ncurses, geoip, lua5
+, nettle, curl, SDL2, freetype, glew , openal, libopus, opusfile, libogg
+, libvorbis, libjpeg, libwebp, libpng
 , cacert, aria2 # to download assets
 }:
 
@@ -127,6 +127,7 @@ in stdenv.mkDerivation rec {
     "-DBUILD_SGAME=NO"
     "-DUSE_HARDENING=TRUE"
     "-DUSE_LTO=TRUE"
+    "-DOpenGL_GL_PREFERENCE=LEGACY" # https://github.com/DaemonEngine/Daemon/issues/474
   ];
 
   desktopItems = [
