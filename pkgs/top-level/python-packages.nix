@@ -1124,6 +1124,8 @@ in {
     enablePython = true;
   });
 
+  boschshcpy = callPackage ../development/python-modules/boschshcpy { };
+
   boto3 = callPackage ../development/python-modules/boto3 { };
 
   boto = callPackage ../development/python-modules/boto { };
@@ -2786,6 +2788,8 @@ in {
 
   gin-config = callPackage ../development/python-modules/gin-config { };
 
+  gios = callPackage ../development/python-modules/gios { };
+
   gipc = callPackage ../development/python-modules/gipc { };
 
   git-annex-adapter =
@@ -3017,6 +3021,8 @@ in {
 
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
 
+  growattserver = callPackage ../development/python-modules/growattserver { };
+
   grip = callPackage ../development/python-modules/grip { };
 
   grpc_google_iam_v1 = callPackage ../development/python-modules/grpc_google_iam_v1 { };
@@ -3104,7 +3110,7 @@ in {
 
   handout = callPackage ../development/python-modules/handout { };
 
-  HAP-python = callPackage ../development/python-modules/HAP-python { };
+  hap-python = callPackage ../development/python-modules/hap-python { };
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
@@ -3475,6 +3481,8 @@ in {
   islpy = callPackage ../development/python-modules/islpy { };
 
   iso3166 = callPackage ../development/python-modules/iso3166 { };
+
+  ismartgate = callPackage ../development/python-modules/ismartgate { };
 
   iso-639 = callPackage ../development/python-modules/iso-639 { };
 
@@ -4292,6 +4300,8 @@ in {
   mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
 
   metar = callPackage ../development/python-modules/metar { };
+
+  meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
@@ -5734,6 +5744,8 @@ in {
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
+  pyflic = callPackage ../development/python-modules/pyflic { };
+
   pyflume = callPackage ../development/python-modules/pyflume { };
 
   pyflunearyou = callPackage ../development/python-modules/pyflunearyou { };
@@ -6256,8 +6268,6 @@ in {
   pyro-api = callPackage ../development/python-modules/pyro-api { };
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl { };
-
-  pyroon = callPackage ../development/python-modules/pyroon { };
 
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
@@ -7390,6 +7400,8 @@ in {
   roman = callPackage ../development/python-modules/roman { };
 
   roombapy = callPackage ../development/python-modules/roombapy { };
+
+  roonapi = callPackage ../development/python-modules/roonapi { };
 
   ronin = callPackage ../development/python-modules/ronin { };
 

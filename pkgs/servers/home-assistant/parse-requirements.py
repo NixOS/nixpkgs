@@ -104,6 +104,7 @@ def dump_packages() -> Dict[str, Dict[str, str]]:
             "-qa",
             "-A",
             PKG_SET,
+            "--arg", "config", "{ allowAliases = false; }",
             "--json",
         ]
     )
