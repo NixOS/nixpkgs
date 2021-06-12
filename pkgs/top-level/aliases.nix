@@ -1000,6 +1000,8 @@ mapAliases ({
   /* Added 2021-01-02 */
   ttyrec = ovh-ttyrec;
 
+  tt-rss-plugin-tumblr-gdpr = throw "tt-rss-plugin-tumblr-gdpr was removed because tumblr does not require gdpr acceptance to fetch rss feeds anymore"; # added 2012-06-12
+
   zplugin = zinit; # Added 2021-01-30
 
   posix_man_pages = man-pages-posix; # Added 2021-04-15
