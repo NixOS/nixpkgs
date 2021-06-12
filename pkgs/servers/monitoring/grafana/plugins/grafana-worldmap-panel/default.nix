@@ -6,7 +6,7 @@ grafanaPlugin rec {
   zipHash = "sha256-MGAJzS9X91x6wt305jH1chLoW3zd7pIYDwRnPg9qrgE=";
   meta = with lib; {
     description = "World Map panel for Grafana";
-    license = licenses.asl20;
+    license = licenses.mit;
     maintainers = with maintainers; [ lukegb ];
     platforms = platforms.unix;
   };
