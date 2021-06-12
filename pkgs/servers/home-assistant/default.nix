@@ -653,6 +653,7 @@ in with py.pkgs; buildPythonApplication rec {
     "volumio"
     "vultr"
     "wake_on_lan"
+    "wallbox"
     "water_heater"
     "waze_travel_time"
     "weather"
