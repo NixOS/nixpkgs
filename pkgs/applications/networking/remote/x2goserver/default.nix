@@ -26,7 +26,7 @@ let
   };
 
   perlEnv = perl.withPackages (p: with p; [
-    x2go-perl DBI DBDSQLite FileBaseDir TryTiny CaptureTiny ConfigSimple Switch
+    x2go-perl DBI DBDSQLite FileBaseDir FileWhich TryTiny CaptureTiny ConfigSimple Switch
   ]);
 
   binaryDeps = [
