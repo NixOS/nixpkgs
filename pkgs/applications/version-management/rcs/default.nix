@@ -17,27 +17,6 @@ stdenv.mkDerivation rec {
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
       [ buildPackages.diffutils buildPackages.ed ];
 
-  doCheck = !stdenv.isDarwin;
-
-  checkFlags = [ "VERBOSE=1" ];
-
-  checkPhase = ''
-    # If neither LOGNAME or USER are set, rcs will default to
-    # getlogin(), which is unreliable on macOS. It will often return
-    # things like `_spotlight`, or `_mbsetupuser`. macOS sets both
-    # environment variables in user sessions, so this is unlikely to
-    # affect regular usage.
-
-    export LOGNAME=$(id -un)
-
-    print_logs_and_fail() {
-      grep -nH -e . -r tests/*.d/{out,err}
-      return 1
-    }
-
-    make $checkFlags check || print_logs_and_fail
-  '';
-
   NIX_CFLAGS_COMPILE = "-std=c99";
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
