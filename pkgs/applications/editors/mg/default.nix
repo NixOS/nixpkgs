@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "mg";
-    rev = "mg-6.9";
+    rev = "mg-${version}";
     sha256 = "1w49yb9v1657rv1w5w7rc9ih1d2vzv6ym3mzhf2wgmh04pdm6hid";
   };
 
