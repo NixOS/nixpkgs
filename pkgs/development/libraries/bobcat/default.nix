@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   pname = "bobcat";
-  version = "5.05.00";
+  version = "5.07.00";
 
   src = fetchFromGitLab {
-    sha256 = "sha256:14lvxzkxmkk54s97ah996m6s1wbw1g3iwawbhsf8qw7sf75vlp1h";
+    sha256 = "sha256-TRhAUwq4MjUZMgHnr+J4V8n59mEn2Wc80JtpJynSGEQ=";
     domain = "gitlab.com";
     rev = version;
     repo = "bobcat";
