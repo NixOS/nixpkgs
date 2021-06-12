@@ -433,7 +433,7 @@
     "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
     "kostal_plenticore" = ps: with ps; [ ]; # missing inputs: kostal_plenticore
     "kraken" = ps: with ps; [ ]; # missing inputs: krakenex pykrakenapi
-    "kulersky" = ps: with ps; [ ]; # missing inputs: pykulersky
+    "kulersky" = ps: with ps; [ pykulersky ];
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb
     "lacrosse" = ps: with ps; [ pylacrosse ];
     "lametric" = ps: with ps; [ ]; # missing inputs: lmnotify
