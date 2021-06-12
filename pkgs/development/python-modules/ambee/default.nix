@@ -52,5 +52,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/frenck/python-ambee";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    # upstream don't want us to re-distribute this library:
+    # https://github.com/NixOS/nixpkgs/pull/126326#issuecomment-860066627
+    hydraPlatforms = [];
   };
 }
