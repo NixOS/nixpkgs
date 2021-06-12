@@ -56,5 +56,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ goibhniu ];
     broken = stdenv.isDarwin;
   };
-
 }
