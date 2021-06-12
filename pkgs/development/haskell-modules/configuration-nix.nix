@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.libmysqlclient; });
+  mysql = dontCheck super.mysql;
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
@@ -833,4 +833,16 @@ self: super: builtins.intersectAttrs super {
       sed -i 's|"tophat"|"./dist/build/tophat/tophat"|' app-test-bin/*.hs
     '' + (drv.postPatch or "");
   });
+
+  # Runtime dependencies and CLI completion
+  nvfetcher = generateOptparseApplicativeCompletion "nvfetcher" (overrideCabal
+    super.nvfetcher (drv: {
+      buildTools = drv.buildTools or [ ] ++ [ pkgs.makeWrapper ];
+      postInstall = drv.postInstall or "" + ''
+        wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
+          pkgs.lib.makeBinPath [ pkgs.nvchecker pkgs.nix-prefetch-git ]
+        }"
+      '';
+    }));
+
 }

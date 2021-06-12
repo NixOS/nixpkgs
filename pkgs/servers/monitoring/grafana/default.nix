@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "8.0.0";
+  version = "8.0.1";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -10,15 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-HtubiSx4Orf9knZcuYy4eF2qwclX/JVd2Ba9L33tM74=";
+    sha256 = "sha256-Vs/4urH/XuoVly26YfhFbf/T3x5jdS4BgrVStuTHaHo=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-bwBpkPy4kwfnkRsLOktUgQx+Sm8WJA2d65efMBCnGp4=";
+    sha256 = "sha256-b05nUApLjdQW5vbS56HUK+/GXKcHo2UAHybfe6ZTr3U=";
   };
 
-  vendorSha256 = "sha256-Hon5WrhXUvZUtMRxx3XcBDQe3rkRkfqbnXjY3xCzuuM=";
+  vendorSha256 = "sha256-iwB1JtekxFYSHjaV+TqBDqnyE5zt3RJ4dQmf12AA53U=";
 
   preBuild = ''
     # The testcase makes an API call against grafana.com:
@@ -36,6 +36,10 @@ buildGoModule rec {
 
     # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
     rm -r scripts/go
+  '';
+
+  buildFlagsArray = ''
+    -ldflags=-s -w -X main.version=${version}
   '';
 
   postInstall = ''

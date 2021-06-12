@@ -481,18 +481,4 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "*" ];
   };
 
-  YamlDotNet = fetchNuGet {
-    baseName = "YamlDotNet";
-    version = "11.1.1";
-    sha256 = "rwZ/QyDVrN3wGrEYKY3QY5Xqo2Tp3FkR6dh4QrC+QS0=";
-    outputFiles = [ "lib/*" ];
-
-    meta = with lib; {
-      description = "YamlDotNet is a .NET library for YAML";
-      homepage = "https://github.com/aaubry/YamlDotNet";
-      license = licenses.mit;
-      maintainers = [ maintainers.ratsclub ];
-    };
-  };
-
 }; in self
