@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ITgxLZSB4zhSaFKX7Vbf89DGI8ibIcGEQTtLjcGN2tA=";
+    sha256 = "sha256-p+NGJis8yt83PA8QEA2APWPvOsQBuBl1+pvT2rwVci8=";
   };
 
   passthru = {
