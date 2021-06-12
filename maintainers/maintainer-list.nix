@@ -4623,12 +4623,6 @@
     githubId = 1982341;
     name = "Jack Cummings";
   };
-  jD91mZM2 = {
-    email = "me@krake.one";
-    github = "jD91mZM2";
-    githubId = 12830969;
-    name = "jD91mZM2";
-  };
   jdagilliland = {
     email = "jdagilliland@gmail.com";
     github = "jdagilliland";
