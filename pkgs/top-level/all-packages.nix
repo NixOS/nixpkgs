@@ -14455,6 +14455,8 @@ in
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
+  bosh-cli = callPackage ../applications/networking/cluster/bosh-cli { };
+
   botan = callPackage ../development/libraries/botan {
     openssl = openssl_1_0_2;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;

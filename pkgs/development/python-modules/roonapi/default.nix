@@ -11,14 +11,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyroon";
+  pname = "roonapi";
   version = "0.0.37";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pavoni";
-    repo = pname;
+    repo = "pyroon";
     rev = version;
     sha256 = "1hxr473z9h3kb91m3ygina58pfwfyjsv1yb29spxmnbzvk34rzzz";
   };

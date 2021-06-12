@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , python3
 , inetutils
+, tzdata
 , nixosTests
 
 # Look up dependencies of specified components in component-packages.nix
@@ -21,7 +22,31 @@
 
 let
   defaultOverrides = [
-    # Override the version of some packages pinned in Home Assistant's setup.py
+    # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
+
+    # https://github.com/NixOS/nixpkgs/pull/125414
+    (mkOverride "flask" "2.0.1" "0mcgwq7b4qd99mf5bsvs3wphchxarf8kgil4hwww3blj31xjak0w")
+    (mkOverride "itsdangerous" "2.0.1" "1w6gfb2zhbcmrfj6digwzw1z68w6zg1q87rm6la2m412zil4swly")
+    (mkOverride "jinja2" "3.0.1" "197ms1wimxql650245v63wkv04n8bicj549wfhp51bx68x5lhgvh")
+    (mkOverride "markupsafe" "2.0.1" "02k2ynmqvvd0z0gakkf8s4idyb606r7zgga41jrkhqmigy06fk2r")
+    (self: super: {
+      werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0hlwawnn8c41f254qify5jnjj8xb97n294h09bqimzqhs0qdpq8x";
+        };
+        checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.pytest-xprocess ];
+        pytestFlagsArray = [ "-m 'not filterwarnings'" ];
+      });
+    })
+    (mkOverride "flask-restful" "0.3.9" "0gm5dz088v3d2k1dkcp9b3nnqpkk0fp2jly870hijj2xhc5nbv6c")
+    (self: super: {
+      debugpy = super.debugpy.overridePythonAttrs (oldAttrs: rec {
+        # tests fail with flask/werkezug>=2.0
+        doCheck = false;
+      });
+    })
 
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
@@ -43,6 +68,7 @@ let
       pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
         version = "1.7.1";
         src = oldAttrs.src.override {
+          inherit version;
           sha256 = "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd";
         };
         disabledTests = [
@@ -155,7 +181,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.5.5";
+  hassVersion = "2021.6.3";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -174,7 +200,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1vdxygjik1ay58xgyr1rk12cgy63raqi4fldnd4mlhs4i21c7ff8";
+    sha256 = "0n0g5kgyc9vhncdfi66lr9i42631rsigv2hzmnfal5jxgblh5736";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -183,7 +209,8 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awesomeversion==21.2.3" "awesomeversion" \
+      --replace "attrs==21.2.0" "attrs" \
+      --replace "awesomeversion==21.4.0" "awesomeversion" \
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "cryptography==3.3.2" "cryptography" \
       --replace "pip>=8.0.3,<20.3" "pip" \
@@ -215,6 +242,8 @@ in with py.pkgs; buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
@@ -277,6 +306,7 @@ in with py.pkgs; buildPythonApplication rec {
     "blackbird"
     "blueprint"
     "bluetooth_le_tracker"
+    "bosch_shc"
     "braviatv"
     "broadlink"
     "brother"
@@ -359,6 +389,8 @@ in with py.pkgs; buildPythonApplication rec {
     "geo_location"
     "geofency"
     "glances"
+    "gios"
+    "gogogate2"
     "google"
     "google_assistant"
     "google_domains"
@@ -369,6 +401,7 @@ in with py.pkgs; buildPythonApplication rec {
     "gpslogger"
     "graphite"
     "group"
+    "growatt_server"
     "guardian"
     "harmony"
     "hassio"
@@ -610,6 +643,7 @@ in with py.pkgs; buildPythonApplication rec {
     "uvc"
     "vacuum"
     "velbus"
+    "venstar"
     "vera"
     "verisure"
     "version"
@@ -681,6 +715,8 @@ in with py.pkgs; buildPythonApplication rec {
     "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf_require_auth"
     # prometheus/test_init.py: Spurious AssertionError regarding humidifier_target_humidity_percent metric
     "--deselect tests/components/prometheus/test_init.py::test_view"
+    # smhi/test_init.py: Tries to fetch data from the network: socket.gaierror: [Errno -2] Name or service not known
+    "--deselect tests/components/smhi/test_init.py::test_remove_entry"
     # tests are located in tests/
     "tests"
     # dynamically add packages required for component tests
@@ -724,6 +760,9 @@ in with py.pkgs; buildPythonApplication rec {
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH
+
+    # set up zoneinfo data for backports-zoneinfo in pvpc_hourly_pricing tests
+    export PYTHONTZPATH="${tzdata}/share/zoneinfo"
 
     # error out when component test directory is missing, otherwise hidden by xdist execution :(
     for component in ${lib.concatStringsSep " " (map lib.escapeShellArg componentTests)}; do
