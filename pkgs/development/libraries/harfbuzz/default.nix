@@ -54,17 +54,17 @@ stdenv.mkDerivation {
   outputBin = "dev";
 
   mesonFlags = [
-    (mesonFeatureFlag "graphite" withGraphite2)
-    (mesonFeatureFlag "icu" withIcu)
-    (mesonFeatureFlag "coretext" withCoreText)
     # upstream recommends cairo, but it is only used for development purposes
     # and is not part of the library.
     # Cairo causes transitive (build) dependencies on various X11 or other
     # GUI-related libraries, so it shouldn't be re-added lightly.
     (mesonFeatureFlag "cairo" false)
-    (mesonFeatureFlag "introspection" isNativeCompilation)
     # chafa is only used in a development utility, not in the library
     (mesonFeatureFlag "chafa" false)
+    (mesonFeatureFlag "coretext" withCoreText)
+    (mesonFeatureFlag "graphite" withGraphite2)
+    (mesonFeatureFlag "icu" withIcu)
+    (mesonFeatureFlag "introspection" isNativeCompilation)
   ];
 
   nativeBuildInputs = [
