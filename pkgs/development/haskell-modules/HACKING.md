@@ -44,7 +44,7 @@ In this section we create the PR for merging `haskell-updates` into `master`.
     $ ./maintainers/scripts/haskell/regenerate-hackage-packages.sh --do-commit
     ```
 
-1.  Push these commits to the Nixpkgs repository.
+1.  Push these commits to the `haskell-updates` branch of the NixOS/nixpkgs repository.
 
 1.  Open a PR on Nixpkgs merging `haskell-updates` into `master`.
 
