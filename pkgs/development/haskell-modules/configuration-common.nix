@@ -1953,4 +1953,6 @@ EOT
   # https://github.com/erikd/wide-word/issues/57
   wide-word = doJailbreak super.wide-word;
 
+  hackage-db_2_1_0 = doDistribute super.hackage-db_2_1_0;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
