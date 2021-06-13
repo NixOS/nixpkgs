@@ -5,7 +5,6 @@
 , cmocka
 , docbook_xsl
 , libxslt
-, fontconfig
 , meson
 , ninja
 , pkg-config
