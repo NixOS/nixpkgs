@@ -5315,6 +5315,8 @@ in
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
+  goofys = callPackage ../tools/filesystems/goofys { };
+
   go-sct = callPackage ../tools/X11/go-sct { };
 
   # rename to upower-notify?
@@ -15935,7 +15937,7 @@ in
 
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
-  libcef = callPackage ../development/libraries/libcef { inherit (gnome2) GConf; };
+  libcef = callPackage ../development/libraries/libcef {};
 
   libcello = callPackage ../development/libraries/libcello {};
 
