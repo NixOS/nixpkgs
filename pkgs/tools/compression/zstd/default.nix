@@ -24,12 +24,13 @@ stdenv.mkDerivation rec {
     # This patches makes sure we do not attempt to use the MD5 implementation
     # of the host platform when running the tests
     ./playtests-darwin.patch
-  ] ++ lib.optional stdenv.is32bit
-    (fetchpatch { # https://github.com/facebook/zstd/pull/2606
+    # https://github.com/facebook/zstd/pull/2606
+    (fetchpatch {
       name = "test-memory-usage.diff";
-      url = "https://github.com/facebook/zstd/commit/6f40571a.diff";
+      url = "https://github.com/facebook/zstd/commit/6f40571ae2feb8bfa0a56f9871b6ee3084085fc2.diff";
       sha256 = "1484k5b99wplv9vjvvxjn88l13hlay6bynhq3zh1nd34whyi1kd0";
-    });
+    })
+  ];
 
 
   postPatch = lib.optionalString (!static) ''
