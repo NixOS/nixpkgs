@@ -1186,6 +1186,8 @@ in {
 
   bugzilla = callPackage ../development/python-modules/bugzilla { };
 
+  buienradar = callPackage ../development/python-modules/buienradar { };
+
   buildbot = callPackage ../development/python-modules/buildbot { };
 
   buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
