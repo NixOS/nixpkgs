@@ -32,8 +32,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
-    rev = "release-${version}";
-    sha256 = "15ik32xnwyf3g57jvvaz24f6a18lv3a86341rzjbs30kd5045qzd";
+    rev = "99ff93f8c60c89bbe2dc7c63eab9bfe2f4c4833e";
+    sha256 = "0ww54xjvv6p8jwsh6hml3v527zgnv2gj58gpb818bbg4k1jwa5fl";
   };
 
   nativeBuildInputs = [ cmake ];
