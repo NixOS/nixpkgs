@@ -8,6 +8,7 @@ let
     url = "https://github.com/LuaJIT/LuaJIT/archive/${luajitRev}.tar.gz";
     sha256 = "0kasmyk40ic4b9dwd4wixm0qk10l88ardrfimwmq36yc5dhnizmy";
   };
+
   llvmMerged = symlinkJoin {
     name = "llvmClangMerged";
     paths = with llvmPackages; [
@@ -19,7 +20,11 @@ let
       clang-unwrapped.lib
     ];
   };
+
   cuda = cudaPackages.cudatoolkit_11;
+
+  clangVersion = llvmPackages.clang-unwrapped.version;
+
 in stdenv.mkDerivation rec {
   pname = "terra";
   version = "1.0.0-beta3";
@@ -36,8 +41,9 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DHAS_TERRA_VERSION=0"
-    "-DTERRA_VERSION=${src.rev}"
+    "-DTERRA_VERSION=release-1.0.0-beta3"
     "-DTERRA_LUA=luajit"
+    "-DCLANG_RESOURCE_DIR=${llvmMerged}/lib/clang/${clangVersion}"
   ] ++ lib.optional enableCUDA "-DTERRA_ENABLE_CUDA=ON";
 
   doCheck = true;
@@ -45,22 +51,11 @@ in stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
   outputs = [ "bin" "dev" "out" "static" ];
 
-  patches = [
-    # Should be removed as https://github.com/terralang/terra/pull/496 get merged and released.
-    ./get-compiler-from-envvar-fix-cpu-detection.patch
-    ./nix-cflags.patch
-    ./disable-luajit-file-download.patch
-    ./nix-add-test-paths.patch
-  ];
-
-  INCLUDE_PATH = "${llvmMerged}/lib/clang/10.0.1/include";
+  patches = [ ./nix-cflags.patch ./disable-luajit-file-download.patch ];
 
   postPatch = ''
     substituteInPlace src/terralib.lua \
       --subst-var-by NIX_LIBC_INCLUDE ${lib.getDev stdenv.cc.libc}/include
-
-    substituteInPlace src/CMakeLists.txt \
-      --subst-var INCLUDE_PATH
   '';
 
   preConfigure = ''
