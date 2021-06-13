@@ -10,6 +10,7 @@
 , hicolor-icon-theme
 , librsvg
 , wrapGAppsHook
+, makeWrapper
 }:
 
 with python37Packages;
@@ -27,9 +28,13 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ intltool wrapGAppsHook ];
 
-  buildInputs = [ distutils_extra ];
+  buildInputs = [ makeWrapper distutils_extra ];
 
   doCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/variety --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
+  '';
 
   prePatch = ''
     substituteInPlace variety_lib/varietyconfig.py \
@@ -76,7 +81,7 @@ buildPythonApplication rec {
       blur, as well as options to layer quotes and a clock onto the background.
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ AndersonTorres zfnmxt ];
+    maintainers = with maintainers; [ p3psi AndersonTorres zfnmxt ];
     platforms = with platforms; linux;
   };
 }
