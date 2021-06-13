@@ -31917,4 +31917,8 @@ in
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  ippcrypto = callPackage ../os-specific/linux/ippcrypto {};
+
+  sgxsdk = callPackage ../os-specific/linux/sgxsdk {};
 }
