@@ -3838,6 +3838,15 @@ let
         sha512 = "Vwhc3ObxmDZmA5hY8mfsau2rJ4vGPvzbj20QSZ2/E1GDPF61QVyjLfNHak9xmel6pW4heRt3v1fHa6np9Ehfeg==";
       };
     };
+    "@msgpack/msgpack-2.7.0" = {
+      name = "_at_msgpack_slash_msgpack";
+      packageName = "@msgpack/msgpack";
+      version = "2.7.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@msgpack/msgpack/-/msgpack-2.7.0.tgz";
+        sha512 = "mlRYq9FSsOd4m+3wZWatemn3hGFZPWNJ4JQOdrir4rrMK2PyIk26idKBoUWrqF3HJJHl+5GpRU+M0wEruJwecg==";
+      };
+    };
     "@nestjs/schematics-7.3.1" = {
       name = "_at_nestjs_slash_schematics";
       packageName = "@nestjs/schematics";
@@ -15124,13 +15133,13 @@ let
         sha512 = "OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==";
       };
     };
-    "cldr-5.8.0" = {
+    "cldr-6.1.1" = {
       name = "cldr";
       packageName = "cldr";
-      version = "5.8.0";
+      version = "6.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/cldr/-/cldr-5.8.0.tgz";
-        sha512 = "w0L5FX4X3txDX5G/YSbDAQuneVSFPSKjOXB2ehWh/J6BN7RJ+IUEVNG9hIGjuJoyYJcVGE2AoL0W0VSjirQPIg==";
+        url = "https://registry.npmjs.org/cldr/-/cldr-6.1.1.tgz";
+        sha512 = "Efm9g4BcBHWdy7jMcuXtWk7PI1gIx4nO1BhJyaFTeRktytW0tR4rDmm+PG7mSMLrnNUFcr3ww8JwJAgkNRMv5Q==";
       };
     };
     "clean-css-3.4.28" = {
@@ -23144,15 +23153,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/eventemitter2/-/eventemitter2-5.0.1.tgz";
         sha1 = "6197a095d5fb6b57e8942f6fd7eaad63a09c9452";
-      };
-    };
-    "eventemitter2-6.4.3" = {
-      name = "eventemitter2";
-      packageName = "eventemitter2";
-      version = "6.4.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/eventemitter2/-/eventemitter2-6.4.3.tgz";
-        sha512 = "t0A2msp6BzOf+QAcI6z9XMktLj52OjGQg+8SJH6v5+3uxNpWYRR3wQmfA+6xtMU9kOC59qk9licus5dYcrYkMQ==";
       };
     };
     "eventemitter2-6.4.4" = {
@@ -53600,13 +53600,13 @@ let
         sha512 = "0rfBDPVLzvDbMUKrFWvF6kvtXxllXGZRkFL0aCWJ5y8uXlEfZDo6IEPACZwJbKt/fGqFjJLJRHnG62vJmLLpRA==";
       };
     };
-    "spiro-2.0.0" = {
+    "spiro-3.0.0" = {
       name = "spiro";
       packageName = "spiro";
-      version = "2.0.0";
+      version = "3.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/spiro/-/spiro-2.0.0.tgz";
-        sha512 = "KPWXN+OmQdjZPCMGRkE2hsbcY4Y4UJxjn+qTw4rsJ49n8VN6EqPk0UOOkNihXEl3JEqPQxcrDQebu9YPn9Ad4w==";
+        url = "https://registry.npmjs.org/spiro/-/spiro-3.0.0.tgz";
+        sha512 = "UEhtLWA8fDQuExOKpT3FLa7Rk238G5Bm3wGAxbvnah3H2X6yEL4blIkAsc38wNwMXBwQFRYE6l0Q9X0t1izOxA==";
       };
     };
     "split-0.2.10" = {
@@ -58677,13 +58677,13 @@ let
         sha1 = "5c080e5d661cbbe38259d2e70a3c7253e873881d";
       };
     };
-    "typo-geom-0.11.2" = {
+    "typo-geom-0.12.1" = {
       name = "typo-geom";
       packageName = "typo-geom";
-      version = "0.11.2";
+      version = "0.12.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/typo-geom/-/typo-geom-0.11.2.tgz";
-        sha512 = "ouK6sY+LNGDDQra+MEZb2ZYDaEkCUeutr6x8BZAGGGB0fCsR0wt6YIuz9DJoc8idQS8mnqY8npGmXcMsTZAXPA==";
+        url = "https://registry.npmjs.org/typo-geom/-/typo-geom-0.12.1.tgz";
+        sha512 = "W20RYp2OCEGMhEYayR0cAP67AUWiGRUufMs6Clul7MAmu5SpLuOG/RWk7+LkL65wsugcfhPQlFEJ231C2xHNQg==";
       };
     };
     "ua-parser-js-0.7.21" = {
@@ -61972,13 +61972,13 @@ let
         sha512 = "ae13n2/yEpmJt9VabwawsK7eHva7Mk+ghI+TQXCUbC1YEW8ChdrYgI/4TJyaYblzDlADZ0iCSaifZKNbjpR4Tw==";
       };
     };
-    "wawoff2-1.0.2" = {
+    "wawoff2-2.0.0" = {
       name = "wawoff2";
       packageName = "wawoff2";
-      version = "1.0.2";
+      version = "2.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/wawoff2/-/wawoff2-1.0.2.tgz";
-        sha512 = "qxuTwf5tAP/XojrRc6cmR0hGvqgD3XUxv2fzfzURKPDfE7AeHmtRuankVxdJ4DRdSKXaE5QlyJT49yBis2vb6Q==";
+        url = "https://registry.npmjs.org/wawoff2/-/wawoff2-2.0.0.tgz";
+        sha512 = "5gjFj+fyQO9cMrg5vYaVM7+T37xSHpqUWM/S6UCEiBx8wRmfpvuhYjPM3toB2UujpmWQt1hSPKRo/jIRE/j9Eg==";
       };
     };
     "wbuf-1.7.3" = {
@@ -63635,15 +63635,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/xmldom/-/xmldom-0.3.0.tgz";
         sha512 = "z9s6k3wxE+aZHgXYxSTpGDo7BYOUfJsIRyoZiX6HTjwpwfS2wpQBQKa2fD+ShLyPkqDYo5ud7KitmLZ2Cd6r0g==";
-      };
-    };
-    "xmldom-0.4.0" = {
-      name = "xmldom";
-      packageName = "xmldom";
-      version = "0.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/xmldom/-/xmldom-0.4.0.tgz";
-        sha512 = "2E93k08T30Ugs+34HBSTQLVtpi6mCddaY8uO+pMNk1pqSjV5vElzn4mmh6KLxN3hki8rNcHSYzILoh3TEWORvA==";
       };
     };
     "xmldom-0.5.0" = {
@@ -82758,10 +82749,10 @@ in
   forever = nodeEnv.buildNodePackage {
     name = "forever";
     packageName = "forever";
-    version = "4.0.0";
+    version = "4.0.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/forever/-/forever-4.0.0.tgz";
-      sha512 = "8cFfO0lvIs4c0P5LvKbdvZvtOK/z79AF/vC9DQLH+niyOCPxqq1+12CyYrzHC+5hBILjPU9ClWLVrXvrK+2ZVw==";
+      url = "https://registry.npmjs.org/forever/-/forever-4.0.1.tgz";
+      sha512 = "NRY5hvmjqfsWXpdGZONsfQg0GpzTHOP3xWTnOc1U3bY92m6TJr2mWDsXzv+3bMk2LftSne72keaMcX891JL2pQ==";
     };
     dependencies = [
       (sources."anymatch-2.0.0" // {
@@ -82850,7 +82841,7 @@ in
       sources."es-get-iterator-1.1.2"
       sources."es-to-primitive-1.2.1"
       sources."event-stream-3.3.4"
-      sources."eventemitter2-6.4.3"
+      sources."eventemitter2-6.4.4"
       (sources."expand-brackets-2.1.4" // {
         dependencies = [
           sources."define-property-0.2.5"
@@ -87391,17 +87382,18 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  "iosevka-https://github.com/be5invis/Iosevka/archive/v5.0.2.tar.gz" = nodeEnv.buildNodePackage {
+  "iosevka-https://github.com/be5invis/Iosevka/archive/v7.0.4.tar.gz" = nodeEnv.buildNodePackage {
     name = "iosevka";
     packageName = "iosevka";
-    version = "5.0.2";
+    version = "7.0.4";
     src = fetchurl {
-      name = "iosevka-5.0.2.tar.gz";
-      url = "https://codeload.github.com/be5invis/Iosevka/tar.gz/v5.0.2";
-      sha256 = "93aada519e3014b472b3ae1e33a139bcc588618239393735ff88d9d0822d7ced";
+      name = "iosevka-7.0.4.tar.gz";
+      url = "https://codeload.github.com/be5invis/Iosevka/tar.gz/v7.0.4";
+      sha256 = "e0de45dde08463fbd02bced41893746235068167fd91051727dc048d66b91aeb";
     };
     dependencies = [
       sources."@iarna/toml-2.2.5"
+      sources."@msgpack/msgpack-2.7.0"
       sources."@ot-builder/bin-composite-types-1.0.9"
       sources."@ot-builder/bin-util-1.0.9"
       (sources."@ot-builder/cli-help-shower-1.0.9" // {
@@ -87468,7 +87460,7 @@ in
       sources."amdefine-1.0.1"
       sources."ansi-regex-5.0.0"
       sources."ansi-styles-3.2.1"
-      sources."argparse-1.0.10"
+      sources."argparse-2.0.1"
       sources."async-0.9.2"
       sources."at-least-node-1.0.0"
       sources."atob-2.1.2"
@@ -87477,7 +87469,7 @@ in
       sources."camelcase-5.3.1"
       sources."chainsaw-0.0.9"
       sources."chalk-2.4.2"
-      sources."cldr-5.8.0"
+      sources."cldr-6.1.1"
       sources."cli-cursor-3.1.0"
       sources."clipper-lib-6.4.2"
       sources."cliui-7.0.4"
@@ -87524,7 +87516,7 @@ in
       sources."fast-levenshtein-2.0.6"
       sources."filelist-1.0.2"
       sources."find-up-4.1.0"
-      sources."fs-extra-9.1.0"
+      sources."fs-extra-10.0.0"
       sources."fs.realpath-1.0.0"
       sources."get-caller-file-2.0.5"
       sources."glob-7.1.7"
@@ -87590,12 +87582,7 @@ in
       sources."source-map-0.6.1"
       sources."source-map-resolve-0.5.3"
       sources."source-map-url-0.4.1"
-      (sources."spiro-2.0.0" // {
-        dependencies = [
-          sources."tslib-1.14.1"
-        ];
-      })
-      sources."sprintf-js-1.0.3"
+      sources."spiro-3.0.0"
       sources."string-width-4.2.2"
       sources."strip-ansi-6.0.0"
       (sources."stylus-0.54.8" // {
@@ -87610,7 +87597,7 @@ in
       sources."traverse-0.3.9"
       sources."tslib-2.3.0"
       sources."type-check-0.3.2"
-      sources."typo-geom-0.11.2"
+      sources."typo-geom-0.12.1"
       sources."unicoderegexp-0.4.1"
       sources."universalify-2.0.0"
       sources."urix-0.1.0"
@@ -87621,6 +87608,7 @@ in
           sources."cliui-6.0.0"
           sources."color-convert-2.0.1"
           sources."color-name-1.1.4"
+          sources."fs-extra-9.1.0"
           sources."has-flag-4.0.0"
           sources."supports-color-7.2.0"
           sources."wrap-ansi-6.2.0"
@@ -87629,7 +87617,7 @@ in
           sources."yargs-parser-18.1.3"
         ];
       })
-      sources."wawoff2-1.0.2"
+      sources."wawoff2-2.0.0"
       sources."which-2.0.2"
       sources."which-module-2.0.0"
       sources."word-wrap-1.2.3"
@@ -87642,7 +87630,7 @@ in
         ];
       })
       sources."wrappy-1.0.2"
-      sources."xmldom-0.4.0"
+      sources."xmldom-0.6.0"
       sources."xpath-0.0.32"
       sources."y18n-5.0.8"
       sources."yallist-4.0.0"
