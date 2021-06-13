@@ -364,7 +364,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
       { name = "opcache";
-        buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin && lib.versionAtLeast php.version "8.0") [
+        buildInputs = [ pcre2 ] ++ lib.optionals (lib.versionAtLeast php.version "8.0" && !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind) [
           valgrind.dev
         ];
         patches = lib.optionals (lib.versionOlder php.version "7.4") [

@@ -96,5 +96,5 @@ in {
 
   embedded      = filterDoubles predicates.isNone;
 
-  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "armv7a-linux" "aarch64-linux" "powerpc64-linux" "powerpc64le-linux" "aarch64-darwin"];
+  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "armv7a-linux" "aarch64-linux" "powerpc64-linux" "powerpc64le-linux" "aarch64-darwin" "riscv64-linux"];
 }

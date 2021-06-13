@@ -10,7 +10,7 @@
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , OpenGL, Xplugin
-, withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
+, withValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 }:
@@ -63,6 +63,11 @@ self = stdenv.mkDerivation {
       name = "nine_debug-Make-tid-more-type-correct";
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
+    })
+    (fetchpatch {
+      name = "add-riscv-default-selections.patch";
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/11346.patch";
+      sha256 = "1nwqslr1g6m83i0r40710havkyf03yxkgaiwgxz2zlw2xkbrnzw0";
     })
   ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
