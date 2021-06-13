@@ -645,6 +645,8 @@ let
 
     markup = callPackage ../development/ocaml-modules/markup { };
 
+    mccs = callPackage ../development/ocaml-modules/mccs { };
+
     mdx = callPackage ../development/ocaml-modules/mdx { };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
