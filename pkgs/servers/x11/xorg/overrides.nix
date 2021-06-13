@@ -903,13 +903,16 @@ self: super:
       "fontbhttf"
       "fontbh100dpi"
       "fontbh75dpi"
+
+      # Bigelow & Holmes fonts
+      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
+      "fontbhlucidatypewriter100dpi"
+      "fontbhlucidatypewriter75dpi"
     ];
 
     # unfree, possibly not redistributable
     unfree = [
       # no license, just a copyright notice
-      "fontbhlucidatypewriter100dpi"
-      "fontbhlucidatypewriter75dpi"
       "fontdaewoomisc"
 
       # unclear license, "permission to use"?
