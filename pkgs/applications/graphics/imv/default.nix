@@ -90,6 +90,12 @@ stdenv.mkDerivation rec {
   ] ++ windowSystems."${withWindowSystem}"
     ++ builtins.map (b: backends."${b}") withBackends;
 
+  postInstall = ''
+    # fix the executable path and install the desktop item
+    substituteInPlace ../files/imv.desktop --replace "imv %F" "$out/bin/imv %F"
+    install -Dm644 ../files/imv.desktop $out/share/applications/
+  '';
+
   postFixup = lib.optionalString (withWindowSystem == "all") ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
     # so we have to fix those to the binaries we installed into the /nix/store
