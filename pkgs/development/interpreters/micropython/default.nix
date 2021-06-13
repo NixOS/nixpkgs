@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.13";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner  = "micropython";
     repo   = "micropython";
     rev    = "v${version}";
-    sha256 = "0m9g6isys4pnlnkdmrw7lxaxdrjn02j481wz5x5cdrmrbi4zi17z";
+    sha256 = "11bf1lq4kgfs1nzg5cnshh2dqxyk5w2k816i04innri6fj0g7y6p";
     fetchSubmodules = true;
   };
 
@@ -25,13 +25,15 @@ stdenv.mkDerivation rec {
 
   checkPhase = ''
     pushd tests
-    MICROPY_MICROPYTHON=../ports/unix/micropython ${python3.interpreter} ./run-tests
+    MICROPY_MICROPYTHON=../ports/unix/micropython ${python3.interpreter} ./run-tests.py
     popd
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
-    install -Dm755 ports/unix/micropython $out/bin/micropython
+    install -Dm755 ports/unix/micropython -t $out/bin
+    runHook postInstall
   '';
 
   meta = with lib; {
