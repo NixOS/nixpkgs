@@ -274,6 +274,7 @@ in with py.pkgs; buildPythonApplication rec {
     "acmeda"
     "adguard"
     "advantage_air"
+    "aemet"
     "agent_dvr"
     "air_quality"
     "airly"
