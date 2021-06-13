@@ -10624,6 +10624,8 @@ in
 
   fpc = callPackage ../development/compilers/fpc { };
 
+  g203-led = callPackage ../tools/misc/g203-led { };
+
   gambit = callPackage ../development/compilers/gambit { };
   gambit-unstable = callPackage ../development/compilers/gambit/unstable.nix { };
   gambit-support = callPackage ../development/compilers/gambit/gambit-support.nix { };
