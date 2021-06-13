@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ocaml
     findlib
+  ];
+
+  propagatedBuildInputs = [
     bzip2
   ];
 
