@@ -483,7 +483,7 @@
     "manual_mqtt" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "map" = ps: with ps; [ aiohttp-cors pillow ];
     "marytts" = ps: with ps; [ ]; # missing inputs: speak2mary
-    "mastodon" = ps: with ps; [ ]; # missing inputs: Mastodon.py
+    "mastodon" = ps: with ps; [ mastodon-py ];
     "matrix" = ps: with ps; [ matrix-client ];
     "maxcube" = ps: with ps; [ ]; # missing inputs: maxcube-api
     "mazda" = ps: with ps; [ pymazda ];
