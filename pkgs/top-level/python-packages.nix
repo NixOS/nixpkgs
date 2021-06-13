@@ -1584,6 +1584,8 @@ in {
 
   coreapi = callPackage ../development/python-modules/coreapi { };
 
+  coremltools = callPackage ../development/python-modules/coremltools { };
+
   coreschema = callPackage ../development/python-modules/coreschema { };
 
   cornice = callPackage ../development/python-modules/cornice { };
