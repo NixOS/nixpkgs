@@ -1,6 +1,6 @@
 { lib, stdenv
-, makeWrapper
-, runCommand, wrapBintoolsWith, wrapCCWith
+, makeWrapper, python
+, runCommand, wrapBintoolsWith, wrapCCWith, autoPatchelfHook
 , buildAndroidndk, androidndk, targetAndroidndkPkgs
 }:
 
@@ -48,35 +48,60 @@ let
   hostInfo = ndkInfoFun stdenv.hostPlatform;
   targetInfo = ndkInfoFun stdenv.targetPlatform;
 
-  prefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
+  sdkVer = stdenv.targetPlatform.sdkVer;
+
+  # targetInfo.triple is what Google thinks the toolchain should be, this is a little
+  # different from what we use. We make it four parts to conform with the existing
+  # standard more properly.
+  targetConfig = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config);
 in
 
 rec {
   # Misc tools
-  binaries = runCommand "ndk-toolchain-binutils" {
-    pname = "ndk-toolchain-binutils";
+  binaries = stdenv.mkDerivation {
+    pname = "${targetConfig}-ndk-toolchain";
     inherit (androidndk) version;
     isClang = true; # clang based cc, but bintools ld
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper python autoPatchelfHook ];
+
     propagatedBuildInputs = [ androidndk ];
-  } ''
-    mkdir -p $out/bin
+    dontUnpack = true;
+    dontBuild = true;
+    dontStrip = true;
+    dontConfigure = true;
+    dontPatch = true;
+    autoPatchelfIgnoreMissingDeps = true;
+    installPhase = ''
+      ${androidndk}/libexec/android-sdk/ndk-bundle/build/tools/make-standalone-toolchain.sh --arch=${targetInfo.arch} --install-dir=$out/toolchain --platform=${sdkVer} --force
+      ln -vfs $out/toolchain/sysroot/usr/lib $out/lib
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/*.so $out/lib/
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/*.a $out/lib/
+      chmod +w $out/lib/*
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.so $out/lib/
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.o $out/lib/
 
-    # llvm toolchain
-    for prog in ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/bin/*; do
-      ln -s $prog $out/bin/$(basename $prog)
-      ln -s $prog $out/bin/${prefix}$(basename $prog)
-    done
+      echo "INPUT(-lc++_static)" > $out/lib/libc++.a
 
-    # bintools toolchain
-    for prog in ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}/bin/*; do
-      prog_suffix=$(basename $prog | sed 's/${targetInfo.triple}-//')
-      ln -s $prog $out/bin/${stdenv.targetPlatform.config}-$prog_suffix
-    done
+      ln -s $out/toolchain/bin $out/bin
+      ln -s $out/toolchain/${targetInfo.triple}/bin/* $out/bin/
+      for f in $out/bin/${targetInfo.triple}-*; do
+        ln -s $f ''${f/${targetInfo.triple}-/${targetConfig}-}
+      done
+      for f in `find $out/toolchain -type d -name ${targetInfo.triple}`; do
+        ln -s $f ''${f/${targetInfo.triple}/${targetConfig}}
+      done
 
-    # shitty googly wrappers
-    rm -f $out/bin/${stdenv.targetPlatform.config}-gcc $out/bin/${stdenv.targetPlatform.config}-g++
-  '';
+      # get rid of gcc and g++, otherwise wrapCCWith will use them instead of clang
+      rm $out/bin/${targetConfig}-gcc $out/bin/${targetConfig}-g++
+
+      # ld doesn't properly include transitive library dependencies. Let's use gold
+      # instead
+      rm $out/bin/${targetConfig}-ld
+      ln -s $out/bin/${targetConfig}-ld.gold $out/bin/${targetConfig}-ld
+
+      patchShebangs $out/bin
+    '';
+  };
 
   binutils = wrapBintoolsWith {
     bintools = binaries;
@@ -92,9 +117,9 @@ rec {
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''
       echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
-      echo "-target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
       echo "-resource-dir=$(echo ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/lib*/clang/*)" >> $out/nix-support/cc-cflags
       echo "--gcc-toolchain=${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}" >> $out/nix-support/cc-cflags
+      echo "-fuse-ld=$out/bin/${targetConfig}-ld.gold -L${binaries}/lib" >> $out/nix-support/cc-ldflags
     '';
   };
 
@@ -104,10 +129,10 @@ rec {
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
   libraries = runCommand "bionic-prebuilt" {} ''
-    mkdir -p $out
-    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include $out/include
-    chmod +w $out/include
-    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include/${targetInfo.triple}/* $out/include
-    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/${if hostInfo.arch == "x86_64" then "lib64" else "lib"} $out/lib
+    mkdir -p $out/lib
+    cp ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${targetInfo.triple}/*.so $out/lib
+    cp ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${targetInfo.triple}/*.a $out/lib
+    chmod +w $out/lib/*
+    cp ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/* $out/lib
   '';
 }
