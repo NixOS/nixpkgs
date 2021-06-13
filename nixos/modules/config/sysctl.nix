@@ -59,5 +59,21 @@ in
     # Disable YAMA by default to allow easy debugging.
     boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkDefault 0;
 
+    # Dynamic since kernel v5.12
+    # https://github.com/torvalds/linux/commit/ac7b79fd190b02e7151bc7d2b9da692f537657f3
+    # From version 5.12 inotify instances are charegd memcg, so to let memcg work
+    # properly in all possible circumstance, kernel mainatainers (see commit) suggest
+    # to make this value ineffective by setting it to the maximum
+    boot.kernel.sysctl."fs.inotify.max_user_instances" =
+      if (config.boot.kernelPackages.kernel.kernelAtLeast "5.12")
+      then mkDefault 2147483647 # INT_MAX, dynamically limited based on available memory
+      else mkDefault 8192; # instead of 128
+
+    # Dynamic since kernel v5.11
+    # https://github.com/torvalds/linux/commit/92890123749bafc317bbfacbe0a62ce08d78efb7
+    boot.kernel.sysctl."fs.inotify.max_user_watches" = mkIf
+      (config.boot.kernelPackages.kernel.kernelOlder "5.11")
+      (mkDefault 1048576); # instead of 8192
+
   };
 }
