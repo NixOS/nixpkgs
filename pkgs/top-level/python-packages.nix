@@ -8765,6 +8765,8 @@ in {
 
   viewstate = callPackage ../development/python-modules/viewstate { };
 
+  vincenty = callPackage ../development/python-modules/vincenty { };
+
   vine = callPackage ../development/python-modules/vine { };
 
   virtkey = callPackage ../development/python-modules/virtkey { };
