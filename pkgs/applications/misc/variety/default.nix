@@ -32,7 +32,9 @@ buildPythonApplication rec {
 
   doCheck = false;
 
-  postInstall = "wrapProgram $out/bin/variety --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/";
+  postInstall = ''
+    wrapProgram $out/bin/variety --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
+  '';
 
   prePatch = ''
     substituteInPlace variety_lib/varietyconfig.py \
