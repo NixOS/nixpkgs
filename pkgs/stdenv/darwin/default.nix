@@ -4,6 +4,7 @@
 , config
 , overlays
 , crossOverlays ? [ ]
+, bootstrapLlvmVersion ? if localSystem.isAarch64 then "11.1.0" else "7.1.0"
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? if localSystem.isAarch64 then
     let
@@ -40,14 +41,11 @@ assert crossSystem == localSystem;
 let
   inherit (localSystem) system;
 
-  # Bootstrap version needs to be known to reference headers included in the bootstrap tools
-  bootstrapLlvmVersion = if localSystem.isAarch64 then "11.1.0" else "7.1.0";
-
   useAppleSDKLibs = localSystem.isAarch64;
   haveKRB5 = localSystem.isx86_64;
 
   # final toolchain is injected into llvmPackages_${finalLlvmVersion}
-  finalLlvmVersion = if localSystem.isAarch64 then "11" else "7";
+  finalLlvmVersion = lib.versions.major bootstrapLlvmVersion;
   finalLlvmPackages = "llvmPackages_${finalLlvmVersion}";
 
   commonImpureHostDeps = [
