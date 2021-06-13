@@ -19255,6 +19255,8 @@ in
 
   hydron = callPackage ../servers/hydron { };
 
+  hyprspace = callPackage ../applications/networking/hyprspace { inherit (darwin) iproute2mac; };
+
   icecream = callPackage ../servers/icecream { };
 
   icingaweb2 = callPackage ../servers/icingaweb2 { };
