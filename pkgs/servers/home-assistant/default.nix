@@ -294,6 +294,7 @@ in with py.pkgs; buildPythonApplication rec {
     "apprise"
     "arlo"
     "asuswrt"
+    "atag"
     "august"
     "aurora"
     "auth"
