@@ -6129,6 +6129,8 @@ in {
 
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
 
+  pypdt = callPackage ../development/python-modules/pypdt { };
+
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
