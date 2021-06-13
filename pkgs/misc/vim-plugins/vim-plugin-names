@@ -20,11 +20,13 @@ AndrewRadev/sideways.vim@main
 AndrewRadev/splitjoin.vim@main
 andsild/peskcolor.vim
 andviro/flake8-vim
+andweeb/presence.nvim
 andymass/vim-matchup
 andys8/vim-elm-syntax
 antoinemadec/coc-fzf
 ap/vim-css-color
 arcticicestudio/nord-vim
+arthurxavierx/vim-unicoder
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 axelf4/vim-strip-trailing-whitespace
@@ -70,6 +72,7 @@ cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
 cohama/lexima.vim
+ConradIrwin/vim-bracketed-paste
 crusoexia/vim-monokai
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
@@ -157,6 +160,7 @@ GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
 gioele/vim-autoswap
+gleam-lang/gleam.vim
 glepnir/dashboard-nvim
 glepnir/galaxyline.nvim@main
 glepnir/lspsaga.nvim@main
@@ -214,6 +218,7 @@ itchyny/thumbnail.vim
 itchyny/vim-cursorword
 itchyny/vim-gitbranch
 itspriddle/vim-shellcheck
+ivalkeen/vim-simpledb
 ivanov/vim-ipython
 jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
@@ -577,6 +582,7 @@ SevereOverfl0w/deoplete-github
 shaunsingh/moonlight.nvim@pure-lua
 shaunsingh/nord.nvim
 sheerun/vim-polyglot
+shinchu/lightline-gruvbox.vim
 Shougo/context_filetype.vim
 Shougo/defx.nvim
 Shougo/denite.nvim

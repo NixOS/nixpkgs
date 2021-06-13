@@ -42,6 +42,11 @@ in {
         description = ''
           The interfaces <command>wpa_supplicant</command> will use. If empty, it will
           automatically use all wireless interfaces.
+          <warning><para>
+            The automatic discovery of interfaces does not work reliably on boot:
+            it may fail and leave the system without network. When possible, specify
+            a known interface name.
+          </para></warning>
         '';
       };
 
@@ -224,6 +229,14 @@ in {
       assertion = with cfg; count (x: x != null) [ psk pskRaw auth ] <= 1;
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
     });
+
+    warnings =
+      optional (cfg.interfaces == [] && config.systemd.services.wpa_supplicant.wantedBy != [])
+      ''
+        No network interfaces for wpa_supplicant have been configured: the service
+        may randomly fail to start at boot. You should specify at least one using the option
+        networking.wireless.interfaces.
+      '';
 
     environment.systemPackages = [ package ];
 

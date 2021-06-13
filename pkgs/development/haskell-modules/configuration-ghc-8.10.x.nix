@@ -5,7 +5,7 @@ with haskellLib;
 self: super: {
 
   # This compiler version needs llvm 9.x.
-  llvmPackages = pkgs.llvmPackages_9;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_9;
 
   # Disable GHC 8.10.x core libraries.
   array = null;
@@ -86,5 +86,9 @@ self: super: {
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
+
+  # hackage-db 2.1.1 is incompatible with Cabal < 3.4
+  # See https://github.com/NixOS/cabal2nix/issues/501
+  hackage-db = self.hackage-db_2_1_0;
 
 }

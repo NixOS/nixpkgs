@@ -1907,6 +1907,16 @@
     githubId = 3392199;
     name = "Calum MacRae";
   };
+  cmars = {
+    email = "nix@cmars.tech";
+    github = "cmars";
+    githubId = 23741;
+    name = "Casey Marshall";
+    keys = [{
+      longkeyid = "rsa3072/0x6DEC2758ACD5A973";
+      fingerprint = "6B78 7E5F B493 FA4F D009  5D10 6DEC 2758 ACD5 A973";
+    }];
+  };
   cmcdragonkai = {
     email = "roger.qiu@matrix.ai";
     github = "cmcdragonkai";
@@ -2676,6 +2686,16 @@
     github = "drewrisinger";
     githubId = 10198051;
     name = "Drew Risinger";
+  };
+  drupol = {
+    name = "Pol Dellaiera";
+    email = "pol.dellaiera@protonmail.com";
+    github = "drupol";
+    githubId = 252042;
+    keys = [{
+      longkeyid = "ed25519/0x0AAF2901E8040715";
+      fingerprint = "85F3 72DF 4AF3 EF13 ED34  72A3 0AAF 2901 E804 0715";
+    }];
   };
   dschrempf = {
     name = "Dominik Schrempf";
@@ -4603,12 +4623,6 @@
     githubId = 1982341;
     name = "Jack Cummings";
   };
-  jD91mZM2 = {
-    email = "me@krake.one";
-    github = "jD91mZM2";
-    githubId = 12830969;
-    name = "jD91mZM2";
-  };
   jdagilliland = {
     email = "jdagilliland@gmail.com";
     github = "jdagilliland";
@@ -4814,6 +4828,12 @@
     github = "jmettes";
     githubId = 587870;
     name = "Jonathan Mettes";
+  };
+  jo1gi = {
+    email = "joakimholm@protonmail.com";
+    github = "jo1gi";
+    githubId = 26695750;
+    name = "Joakim Holm";
   };
   joachifm = {
     email = "joachifm@fastmail.fm";
@@ -7261,6 +7281,16 @@
     githubId = 10180857;
     name = "Anmol Sethi";
   };
+  nicbk = {
+    email = "nicolas@nicbk.com";
+    github = "nicbk";
+    githubId = 77309427;
+    name = "Nicolás Kennedy";
+    keys = [{
+      longkeyid = "rsa4096/0xC061089EFEBF7A35";
+      fingerprint = "7BC1 77D9 C222 B1DC FB2F  0484 C061 089E FEBF 7A35";
+    }];
+  };
   nichtsfrei = {
     email = "philipp.eder@posteo.net";
     github = "nichtsfrei";
@@ -8576,6 +8606,12 @@
     github = "rhoriguchi ";
     githubId = 6047658;
     name = "Ryan Horiguchi";
+  };
+  ribose-jeffreylau = {
+    name = "Jeffrey Lau";
+    email = "jeffrey.lau@ribose.com";
+    github = "ribose-jeffreylau";
+    githubId = 2649467;
   };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";

@@ -21,14 +21,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.20.3";
+  version = "0.21.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-rORIrbUqtQZuU6TjjYP7IZHfCPeLnrNy6wInnAwhG48=";
+    sha256 = "sha256-n8ipIQAfKPVApJhuTrlSSsd6dlPeCUvk7rdiVmL9i+4=";
   };
 
   buildInputs = [
@@ -62,10 +62,6 @@ buildPythonApplication rec {
   propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
 
   outputs = [ "out" "terminfo" ];
-
-  patches = [
-    ./fix-paths.patch
-  ];
 
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";

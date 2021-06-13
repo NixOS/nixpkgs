@@ -22,35 +22,50 @@ let
 
   enableIwd = cfg.wifi.backend == "iwd";
 
-  configFile = pkgs.writeText "NetworkManager.conf" ''
-    [main]
-    plugins=keyfile
-    dhcp=${cfg.dhcp}
-    dns=${cfg.dns}
-    # If resolvconf is disabled that means that resolv.conf is managed by some other module.
-    rc-manager=${if config.networking.resolvconf.enable then "resolvconf" else "unmanaged"}
+  mkValue = v:
+    if v == true then "yes"
+    else if v == false then "no"
+    else if lib.isInt v then toString v
+    else v;
 
-    [keyfile]
-    ${optionalString (cfg.unmanaged != [])
-      ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
-
-    [logging]
-    level=${cfg.logLevel}
-    audit=${lib.boolToString config.security.audit.enable}
-
-    [connection]
-    ipv6.ip6-privacy=2
-    ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
-    wifi.cloned-mac-address=${cfg.wifi.macAddress}
-    ${optionalString (cfg.wifi.powersave != null)
-      ''wifi.powersave=${if cfg.wifi.powersave then "3" else "2"}''}
-
-    [device]
-    wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
-    wifi.backend=${cfg.wifi.backend}
-
-    ${cfg.extraConfig}
+  mkSection = name: attrs: ''
+    [${name}]
+    ${
+      lib.concatStringsSep "\n"
+        (lib.mapAttrsToList
+          (k: v: "${k}=${mkValue v}")
+          (lib.filterAttrs
+            (k: v: v != null)
+            attrs))
+    }
   '';
+
+  configFile = pkgs.writeText "NetworkManager.conf" (lib.concatStringsSep "\n" [
+    (mkSection "main" {
+      plugins = "keyfile";
+      dhcp = cfg.dhcp;
+      dns = cfg.dns;
+      # If resolvconf is disabled that means that resolv.conf is managed by some other module.
+      rc-manager =
+        if config.networking.resolvconf.enable then "resolvconf"
+        else "unmanaged";
+    })
+    (mkSection "keyfile" {
+      unmanaged-devices =
+        if cfg.unmanaged == [] then null
+        else lib.concatStringsSep ";" cfg.unmanaged;
+    })
+    (mkSection "logging" {
+      audit = config.security.audit.enable;
+      level = cfg.logLevel;
+    })
+    (mkSection "connection" cfg.connectionConfig)
+    (mkSection "device" {
+      "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
+      "wifi.backend" = cfg.wifi.backend;
+    })
+    cfg.extraConfig
+  ]);
 
   /*
     [network-manager]
@@ -151,6 +166,28 @@ in {
           configured. If enabled, a group <literal>networkmanager</literal>
           will be created. Add all users that should have permission
           to change network settings to this group.
+        '';
+      };
+
+      connectionConfig = mkOption {
+        type = with types; attrsOf (nullOr (oneOf [
+          bool
+          int
+          str
+        ]));
+        default = {};
+        description = ''
+          Configuration for the [connection] section of NetworkManager.conf.
+          Refer to
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#id-1.2.3.11
+          </link>
+          or
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
         '';
       };
 
@@ -482,6 +519,18 @@ in {
       (mkIf enableIwd {
         wireless.iwd.enable = true;
       })
+
+      {
+        networkmanager.connectionConfig = {
+          "ipv6.ip6-privacy" = 2;
+          "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
+          "wifi.cloned-mac-address" = cfg.wifi.macAddress;
+          "wifi.powersave" =
+            if cfg.wifi.powersave == null then null
+            else if cfg.wifi.powersave then 3
+            else 2;
+        };
+      }
     ];
 
     boot.kernelModules = [ "ctr" ];

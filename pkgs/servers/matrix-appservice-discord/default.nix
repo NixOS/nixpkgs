@@ -43,7 +43,8 @@ in mkYarnPackage rec {
 
   doCheck = true;
   checkPhase = ''
-    yarn --offline test
+    # the default 2000ms timeout is sometimes too short on our busy builders
+    yarn --offline test --timeout 10000
   '';
 
   postInstall = ''

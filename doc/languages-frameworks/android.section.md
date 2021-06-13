@@ -3,8 +3,8 @@
 The Android build environment provides three major features and a number of
 supporting features.
 
-Deploying an Android SDK installation with plugins
---------------------------------------------------
+## Deploying an Android SDK installation with plugins {#deploying-an-android-sdk-installation-with-plugins}
+
 The first use case is deploying the SDK with a desired set of plugins or subsets
 of an SDK.
 
@@ -136,8 +136,8 @@ in
 androidComposition.platform-tools
 ```
 
-Using predefined Android package compositions
----------------------------------------------
+## Using predefined Android package compositions {#using-predefined-android-package-compositions}
+
 In addition to composing an Android package set manually, it is also possible
 to use a predefined composition that contains all basic packages for a specific
 Android version, such as version 9.0 (API-level 28).
@@ -159,11 +159,12 @@ with import <nixpkgs> {};
 androidenv.androidPkgs_9_0.platform-tools
 ```
 
-Building an Android application
--------------------------------
+## Building an Android application {#building-an-android-application}
+
 In addition to the SDK, it is also possible to build an Ant-based Android
 project and automatically deploy all the Android plugins that a project
 requires.
+
 
 ```nix
 with import <nixpkgs> {};
@@ -199,8 +200,8 @@ to build Android apps. An Android APK gets exposed as a build product and can be
 installed on any Android device with a web browser by navigating to the build
 result page.
 
-Spawning emulator instances
----------------------------
+## Spawning emulator instances {#spawning-emulator-instances}
+
 For testing purposes, it can also be quite convenient to automatically generate
 scripts that spawn emulator instances with all desired configuration settings.
 
@@ -241,8 +242,8 @@ androidenv.emulateApp {
 In addition to prebuilt APKs, you can also bind the APK parameter to a
 `buildApp {}` function invocation shown in the previous example.
 
-Notes on environment variables in Android projects
---------------------------------------------------
+## Notes on environment variables in Android projects {#notes-on-environment-variables-in-android-projects}
+
 * `ANDROID_SDK_ROOT` should point to the Android SDK. In your Nix expressions, this should be
   `${androidComposition.androidsdk}/libexec/android-sdk`. Note that `ANDROID_HOME` is deprecated,
   but if you rely on tools that need it, you can export it too.
@@ -300,8 +301,8 @@ This shell.nix includes a shell hook that overwrites local.properties with the c
 sdk.dir and ndk.dir values. This will ensure that the SDK and NDK directories will
 both be correct when you run Android Studio inside nix-shell.
 
-Notes on improving build.gradle compatibility
----------------------------------------------
+## Notes on improving build.gradle compatibility {#notes-on-improving-build.gradle-compatibility}
+
 Ensure that your buildToolsVersion and ndkVersion match what is declared in androidenv.
 If you are using cmake, make sure its declared version is correct too.
 
@@ -321,8 +322,8 @@ android {
 
 ```
 
-Querying the available versions of each plugin
-----------------------------------------------
+## Querying the available versions of each plugin {#querying-the-available-versions-of-each-plugin}
+
 repo.json provides all the options in one file now.
 
 A shell script in the `pkgs/development/mobile/androidenv/` subdirectory can be used to retrieve all
@@ -334,8 +335,8 @@ possible options:
 
 The above command-line instruction queries all package versions in repo.json.
 
-Updating the generated expressions
-----------------------------------
+## Updating the generated expressions {#updating-the-generated-expressions}
+
 repo.json is generated from XML files that the Android Studio package manager uses.
 To update the expressions run the `generate.sh` script that is stored in the
 `pkgs/development/mobile/androidenv/` subdirectory:

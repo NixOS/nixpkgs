@@ -42,8 +42,12 @@ let
     buildInputs = buildInputs ++ [ erlang rebar3 openssl libyaml ];
     propagatedBuildInputs = unique beamDeps;
 
-    dontStrip = true;
     inherit src;
+
+    # stripping does not have any effect on beam files
+    # it is however needed for dependencies with NIFs
+    # false is the default but we keep this for readability
+    dontStrip = false;
 
     setupHook = writeText "setupHook.sh" ''
       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"

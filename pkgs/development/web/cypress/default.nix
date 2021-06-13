@@ -1,12 +1,12 @@
-{ stdenv, lib, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook, mesa }:
+{ stdenv, lib, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsa-lib, udev, unzip, wrapGAppsHook, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "7.4.0";
+  version = "7.5.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "1xhjmn6cwpdph12k4gbl2f1v72bp689779l5i16i90i01m31kwjp";
+    sha256 = "07i475b17v8qazdq6qzjqsdfpvhg1b8x1p5a51hwhcxaym3p5njj";
   };
 
   passthru.updateScript = ./update.sh;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = with xorg; [
     libXScrnSaver libXdamage libXtst libxshmfence
   ] ++ [
-    nss gtk2 alsaLib gnome2.GConf gtk3
+    nss gtk2 alsa-lib gnome2.GConf gtk3
     mesa # for libgbm
   ];
 

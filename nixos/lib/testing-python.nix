@@ -196,8 +196,7 @@ rec {
               --add-flags "''${vms[*]}" \
               ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
               --set tests 'start_all(); join_all();' \
-              --set VLANS '${toString vlans}' \
-              ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
+              --set VLANS '${toString vlans}'
           ''); # "
 
       passMeta = drv: drv // lib.optionalAttrs (t ? meta) {

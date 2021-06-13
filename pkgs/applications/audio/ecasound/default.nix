@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
-, alsaLib
+, alsa-lib
 , audiofile
 , libjack2
 , liblo
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     audiofile
     libjack2
     liblo

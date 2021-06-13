@@ -34,8 +34,8 @@ buildPythonPackage rec {
     rich
     tkinter
   ] ++
-    # pandas is not supported on i686
-    lib.optional (!stdenv.isi686) pandas;
+    # pandas is not supported on i686 or risc-v
+    lib.optional (!stdenv.isi686 && !stdenv.hostPlatform.isRiscV) pandas;
 
   # Remove performance testing.
   # Too sensitive for on Hydra.

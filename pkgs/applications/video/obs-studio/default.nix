@@ -30,7 +30,7 @@
 , python3
 
 , alsaSupport ? stdenv.isLinux
-, alsaLib
+, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
@@ -52,6 +52,14 @@ in mkDerivation rec {
     sha256 = "1n71705b9lbdff3svkmgwmbhlhhxvi8ajxqb74lm07v56a5bvi6p";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Lets obs-browser build against CEF 90.1.0+
+    ./Enable-file-access-and-universal-access-for-file-URL.patch
+
+    # Lets obs-browser build against CEF 91.1.0+
+    ./Change-product_version-to-user_agent_product.patch
+  ];
 
   nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
 
@@ -77,7 +85,7 @@ in mkDerivation rec {
     mbedtls
   ]
   ++ optionals scriptingSupport [ luajit swig python3 ]
-  ++ optional alsaSupport alsaLib
+  ++ optional alsaSupport alsa-lib
   ++ optional pulseaudioSupport libpulseaudio
   ++ optional pipewireSupport pipewire;
 
