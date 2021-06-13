@@ -9389,6 +9389,8 @@ in
 
   ubertooth = callPackage ../applications/radio/ubertooth { };
 
+  ucarp = callPackage ../servers/ucarp { };
+
   ucl = callPackage ../development/libraries/ucl { };
 
   ucspi-tcp = callPackage ../tools/networking/ucspi-tcp { };
