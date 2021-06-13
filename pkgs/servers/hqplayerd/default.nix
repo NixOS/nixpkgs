@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     # main executable
     mkdir -p $out/bin
     cp ./usr/bin/hqplayerd $out/bin
@@ -62,12 +64,14 @@ stdenv.mkDerivation rec {
     cp ./usr/lib/systemd/system/hqplayerd.service $out/lib/systemd/system
 
     # documentation
-    mkdir -p $out/share/doc/${pname}
-    cp ./usr/share/doc/${pname}/* $out/share/doc/${pname}
+    mkdir -p $out/share/doc/hqplayerd
+    cp ./usr/share/doc/hqplayerd/* $out/share/doc/hqplayerd
 
     # misc service support files
-    mkdir -p $out/var/lib/${pname}
-    cp -r ./var/hqplayer/web $out/var/lib/${pname}
+    mkdir -p $out/var/lib/hqplayerd
+    cp -r ./var/hqplayer/web $out/var/lib/hqplayerd
+
+    runHook postInstall
   '';
 
   postInstall = ''
