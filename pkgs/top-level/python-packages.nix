@@ -1105,6 +1105,8 @@ in {
 
   bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
 
+  blurhash = callPackage ../development/python-modules/blurhash { };
+
   bme680 = callPackage ../development/python-modules/bme680 { };
 
   bokeh = callPackage ../development/python-modules/bokeh { };
