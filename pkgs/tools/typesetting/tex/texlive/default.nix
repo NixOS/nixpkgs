@@ -131,6 +131,7 @@ let
 
     in if sha512 == "" then
       # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
+      # currently unused as we prefer to keep the sha512 hashes for reproducibility
       fetchurl {
         inherit urls;
         sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
