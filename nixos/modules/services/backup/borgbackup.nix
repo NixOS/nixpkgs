@@ -75,7 +75,7 @@ let
       description = "BorgBackup job ${name}";
       path = with pkgs; [
         borgbackup openssh
-      ];
+      ] ++ cfg.path;
       script = mkBackupScript cfg;
       serviceConfig = {
         User = cfg.user;
@@ -555,6 +555,18 @@ in {
             example = "--save-space";
           };
 
+          path = mkOption {
+            type = with types; listOf package;
+            default = [];
+            defaultText = literalExample "[]";
+            example = literalExample ''
+              with pkgs; [ btrfs-progs ]
+            '';
+            description = ''
+              Packages to be added to the service script path.This might be useful for example to
+              create a BTRFS snapshot of your data in the <literal>$preHook</literal>.
+            '';
+          };
         };
       }
     ));
