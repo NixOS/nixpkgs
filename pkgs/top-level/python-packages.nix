@@ -9048,6 +9048,8 @@ in {
 
   xattr = callPackage ../development/python-modules/xattr { };
 
+  xbox-webapi = callPackage ../development/python-modules/xbox-webapi { };
+
   xboxapi = callPackage ../development/python-modules/xboxapi { };
 
   xcffib = callPackage ../development/python-modules/xcffib { };
