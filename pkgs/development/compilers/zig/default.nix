@@ -37,6 +37,13 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR;
   '';
 
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ./zig test --cache-dir "$TMPDIR" -I $src/test $src/test/behavior.zig
+    runHook postCheck
+  '';
+
   meta = with lib; {
     homepage = "https://ziglang.org/";
     description =
@@ -48,4 +55,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
   };
 }
-# TODO: checkPhase
+
