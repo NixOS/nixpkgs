@@ -207,6 +207,8 @@ in {
 
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
+  aemet-opendata = callPackage ../development/python-modules/aemet-opendata { };
+
   aenum = callPackage ../development/python-modules/aenum { };
 
   afdko = callPackage ../development/python-modules/afdko { };
@@ -1071,6 +1073,8 @@ in {
 
   bitstruct = callPackage ../development/python-modules/bitstruct { };
 
+  bitvavo-aio = callPackage ../development/python-modules/bitvavo-aio { };
+
   bjoern = callPackage ../development/python-modules/bjoern { };
 
   bkcharts = callPackage ../development/python-modules/bkcharts { };
@@ -1106,6 +1110,8 @@ in {
   bluepy = callPackage ../development/python-modules/bluepy { };
 
   bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
+
+  blurhash = callPackage ../development/python-modules/blurhash { };
 
   bme680 = callPackage ../development/python-modules/bme680 { };
 
@@ -1187,6 +1193,8 @@ in {
   bugz = callPackage ../development/python-modules/bugz { };
 
   bugzilla = callPackage ../development/python-modules/bugzilla { };
+
+  buienradar = callPackage ../development/python-modules/buienradar { };
 
   buildbot = callPackage ../development/python-modules/buildbot { };
 
@@ -4204,6 +4212,8 @@ in {
 
   mask-rcnn = callPackage ../development/python-modules/mask-rcnn { };
 
+  mastodon-py = callPackage ../development/python-modules/mastodon-py { };
+
   mat2 = callPackage ../development/python-modules/mat2 { };
 
   matchpy = callPackage ../development/python-modules/matchpy { };
@@ -5166,6 +5176,8 @@ in {
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
+
+  pyatag = callPackage ../development/python-modules/pyatag { };
 
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
@@ -7912,6 +7924,8 @@ in {
 
   sphfile = callPackage ../development/python-modules/sphfile { };
 
+  spiderpy = callPackage ../development/python-modules/spiderpy { };
+
   spinners = callPackage ../development/python-modules/spinners { };
 
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
@@ -8766,6 +8780,8 @@ in {
   ViennaRNA = toPythonModule pkgs.ViennaRNA;
 
   viewstate = callPackage ../development/python-modules/viewstate { };
+
+  vincenty = callPackage ../development/python-modules/vincenty { };
 
   vine = callPackage ../development/python-modules/vine { };
 
