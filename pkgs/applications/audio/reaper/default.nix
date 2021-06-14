@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   version = "6.29";
 
   src = fetchurl {
-    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
-    hash = "sha256-38HSjR+rQWPzMOjq1abLn/MP3DCz5YzBg0v2kBsQmR4=";
+    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.targetPlatform.qemuArch}.tar.xz";
+    hash = if stdenv.isx86_64 then "sha256-DOul6J2Y7szy4+Q4SeO0uG6PSuU+MELE7ky8W3mSpTQ="
+                              else "sha256-67iTi6bFlbQtyCjnPIjK8K/3aV+zaCsWBRCWmgYonM4=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ jfrankenau ilian ];
   };
 }
