@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     bsdtar -xf Payload~
   '';
 
-  doBuild = false;
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out
