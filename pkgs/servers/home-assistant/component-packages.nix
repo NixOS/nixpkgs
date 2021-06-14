@@ -967,7 +967,7 @@
     "wunderground" = ps: with ps; [ ];
     "x10" = ps: with ps; [ ];
     "xbee" = ps: with ps; [ ]; # missing inputs: xbee-helper
-    "xbox" = ps: with ps; [ aiohttp-cors ]; # missing inputs: xbox-webapi
+    "xbox" = ps: with ps; [ aiohttp-cors xbox-webapi ];
     "xbox_live" = ps: with ps; [ xboxapi ];
     "xeoma" = ps: with ps; [ pyxeoma ];
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
