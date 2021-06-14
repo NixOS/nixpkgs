@@ -68,17 +68,21 @@ buildPythonApplication rec {
 
   dontConfigure = true;
 
-  buildPhase = if stdenv.isDarwin then ''
-    ${python.interpreter} setup.py kitty.app \
-    --update-check-interval=0 \
-    --disable-link-time-optimization
-    make man
-  '' else ''
-    ${python.interpreter} setup.py linux-package \
-    --update-check-interval=0 \
-    --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
-    --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
-    --canberra-library='${libcanberra}/lib/libcanberra.so'
+  buildPhase = ''
+    runHook preBuild
+    ${if stdenv.isDarwin then ''
+      ${python.interpreter} setup.py kitty.app \
+      --update-check-interval=0 \
+      --disable-link-time-optimization
+      make man
+    '' else ''
+      ${python.interpreter} setup.py linux-package \
+      --update-check-interval=0 \
+      --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
+      --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
+      --canberra-library='${libcanberra}/lib/libcanberra.so'
+    ''}
+    runHook postBuild
   '';
 
   checkInputs = [ pillow ];
