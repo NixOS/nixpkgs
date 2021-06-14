@@ -7211,6 +7211,12 @@
     githubId = 818502;
     name = "Nathan Yong";
   };
+  natto1784 = {
+    email = "natto@weirdnatto.in";
+    github = "natto1784";
+    githubId = 56316606;
+    name = "Amneesh Singh";
+  };
   nbren12 = {
     email = "nbren12@gmail.com";
     github = "nbren12";
