@@ -12,7 +12,7 @@
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
     "advantage_air" = ps: with ps; [ advantage-air ];
-    "aemet" = ps: with ps; [ ]; # missing inputs: AEMET-OpenData
+    "aemet" = ps: with ps; [ aemet-opendata ];
     "aftership" = ps: with ps; [ pyaftership ];
     "agent_dvr" = ps: with ps; [ agent-py ];
     "air_quality" = ps: with ps; [ ];
