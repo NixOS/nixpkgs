@@ -84,7 +84,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 4971;
         description = ''
           Port used for backup communication
