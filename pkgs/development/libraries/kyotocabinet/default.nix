@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.2.79";
 
   src = fetchurl {
-    url = "https://dbmx.net/kyotocabinet/pkg/${name}.tar.gz";
+    url = "https://dbmx.net/kyotocabinet/pkg/kyotocabinet-${version}.tar.gz";
     sha256 = "079ymsahlrijswgwfr2la9yw5h57l752cprhp5dz31iamsj1vyv7";
   };
 
