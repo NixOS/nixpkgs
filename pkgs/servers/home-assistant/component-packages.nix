@@ -303,8 +303,8 @@
     "geo_location" = ps: with ps; [ ];
     "geo_rss_events" = ps: with ps; [ georss-generic-client ];
     "geofency" = ps: with ps; [ aiohttp-cors ];
-    "geonetnz_quakes" = ps: with ps; [ ]; # missing inputs: aio_geojson_geonetnz_quakes
-    "geonetnz_volcano" = ps: with ps; [ ]; # missing inputs: aio_geojson_geonetnz_volcano
+    "geonetnz_quakes" = ps: with ps; [ aio-geojson-geonetnz-quakes ];
+    "geonetnz_volcano" = ps: with ps; [ aio-geojson-geonetnz-volcano ];
     "gios" = ps: with ps; [ gios ];
     "github" = ps: with ps; [ PyGithub ];
     "gitlab_ci" = ps: with ps; [ python-gitlab ];
@@ -576,7 +576,7 @@
     "notify_events" = ps: with ps; [ ]; # missing inputs: notify-events
     "notion" = ps: with ps; [ aionotion ];
     "nsw_fuel_station" = ps: with ps; [ ]; # missing inputs: nsw-fuel-api-client
-    "nsw_rural_fire_service_feed" = ps: with ps; [ ]; # missing inputs: aio_geojson_nsw_rfs_incidents
+    "nsw_rural_fire_service_feed" = ps: with ps; [ aio-geojson-nsw-rfs-incidents ];
     "nuheat" = ps: with ps; [ ]; # missing inputs: nuheat
     "nuki" = ps: with ps; [ pynuki ];
     "numato" = ps: with ps; [ ]; # missing inputs: numato-gpio

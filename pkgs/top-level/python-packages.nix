@@ -225,6 +225,14 @@ in {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
+
+  aio-geojson-geonetnz-quakes = callPackage ../development/python-modules/aio-geojson-geonetnz-quakes { };
+
+  aio-geojson-geonetnz-volcano = callPackage ../development/python-modules/aio-geojson-geonetnz-volcano { };
+
+  aio-geojson-nsw-rfs-incidents = callPackage ../development/python-modules/aio-geojson-nsw-rfs-incidents { };
+
   aio-georss-client = callPackage ../development/python-modules/aio-georss-client { };
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
