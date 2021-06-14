@@ -309,12 +309,12 @@ gem 'rack-attack', '~> 6.3.0'
 gem 'sentry-raven', '~> 3.0'
 
 # PostgreSQL query parsing
-gem 'pg_query', '~> 2.0.3'
+gem 'pg_query', '~> 1.3.0'
 
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.17.1'
+gem 'gitlab-labkit', '~> 0.16.2'
 # Thrift is a dependency of gitlab-labkit, we want a version higher than 0.14.0
 # because of https://gitlab.com/gitlab-org/gitlab/-/issues/321900
 gem 'thrift', '>= 0.14.0'
@@ -485,7 +485,7 @@ gem 'gitaly', '~> 13.12.0.pre.rc1'
 
 gem 'grpc', '~> 1.30.2'
 
-gem 'google-protobuf', '~> 3.15.8'
+gem 'google-protobuf', '~> 3.14.0'
 
 gem 'toml-rb', '~> 1.0.0'
 
