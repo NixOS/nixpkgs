@@ -23351,6 +23351,8 @@ in
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
 
+  eddie-ui = callPackage ../applications/networking/eddie-ui/default.nix { };
+
   ekho = callPackage ../applications/audio/ekho { };
 
   electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };

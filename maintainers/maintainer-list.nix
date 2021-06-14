@@ -11745,4 +11745,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  vanbeast = {
+    name = "Ivan Shramko";
+    email = "vanbeast@gmail.com";
+    github = "vanbeast";
+    githubId = 641935;
+  };
 }
