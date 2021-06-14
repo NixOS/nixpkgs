@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "kyotocabinet-1.2.79";
+  pname = "kyotocabinet";
+  version = "1.2.79";
 
   src = fetchurl {
     url = "https://dbmx.net/kyotocabinet/pkg/${name}.tar.gz";
