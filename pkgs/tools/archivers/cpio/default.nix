@@ -11,6 +11,8 @@ in stdenv.mkDerivation {
     sha256 = "0vbgnhkawdllgnkdn6zn1f56fczwk0518krakz2qbwhxmv2vvdga";
   };
 
+  patches = [ ./0001-Pass-fcommon-to-CC.patch ];
+
   preConfigure = if stdenv.isCygwin then ''
     sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
   '' else null;

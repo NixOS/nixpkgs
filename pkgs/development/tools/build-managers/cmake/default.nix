@@ -16,12 +16,12 @@ stdenv.mkDerivation (rec {
           + lib.optionalString isBootstrap "-boot"
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI";
-  version = "3.19.7";
+  version = "3.20.1";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "sha256-WKFfDVagr8zDzFNxI0/Oc/zGyPnb13XYmOUQuDF1WI4=";
+    sha256 = "3f1808b9b00281df06c91dd7a021d7f52f724101000da7985a401678dfe035b0";
   };
 
   patches = [
@@ -68,6 +68,7 @@ stdenv.mkDerivation (rec {
   '';
 
   configureFlags = [
+    "CXXFLAGS=-Wno-elaborated-enum-base"
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ lib.optional withQt5 "--qt-gui"

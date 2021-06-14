@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  CFLAGS = "-fcommon";
+
   postPatch = let
       # This evaluates to a string containing:
       #

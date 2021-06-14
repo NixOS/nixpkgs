@@ -18,7 +18,7 @@ index 73b2db4..d354ba0 100755
 -	m = id_name_pattern.match(line)
 -	if m:
 +        m = id_name_pattern.match(line)
-+    if m:
++        if m:
              code_table += [(int(m.group(1),base=16), m.group(2))]
  
  # emit typedef:

@@ -1,0 +1,25 @@
+From 15c40579e3118d4d6e1157968fdea71921eb82f7 Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Tue, 20 Apr 2021 16:01:56 +0200
+Subject: [PATCH] Pass -fcommon to CC
+
+---
+ src/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Makefile.in b/src/Makefile.in
+index a6ca40d..3d295c1 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -309,7 +309,7 @@ BITSIZEOF_SIG_ATOMIC_T = @BITSIZEOF_SIG_ATOMIC_T@
+ BITSIZEOF_SIZE_T = @BITSIZEOF_SIZE_T@
+ BITSIZEOF_WCHAR_T = @BITSIZEOF_WCHAR_T@
+ BITSIZEOF_WINT_T = @BITSIZEOF_WINT_T@
+-CC = @CC@
++CC = @CC@ -fcommon
+ CCDEPMODE = @CCDEPMODE@
+ CFLAGS = @CFLAGS@
+ CPP = @CPP@
+-- 
+2.17.2 (Apple Git-113)
+

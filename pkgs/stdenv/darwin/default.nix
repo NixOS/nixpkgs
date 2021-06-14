@@ -22,16 +22,16 @@
   else
     let
       fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-        url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/5ab5783e4f46c373c6de84deac9ad59b608bb2e6/${file}";
+        url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/c253216595572930316f2be737dc288a1da22558/${file}";
         inherit (localSystem) system;
         inherit sha256 executable;
       }; in
     {
-      sh = fetch { file = "sh"; sha256 = "sha256-nbb4XEk3go7ttiWrQyKQMLzPr+qUnwnHkWMtVCZsMCs="; };
-      bzip2 = fetch { file = "bzip2"; sha256 = "sha256-ybnA+JWrKhXSfn20+GVKXkHFTp2Zt79hat8hAVmsUOc="; };
-      mkdir = fetch { file = "mkdir"; sha256 = "sha256-nmvMxmfcY41/60Z/E8L9u0vgePW5l30Dqw1z+Nr02Hk="; };
-      cpio = fetch { file = "cpio"; sha256 = "sha256-cB36rN3NLj19Tk37Kc5bodMFMO+mCpEQkKKo0AEMkaU="; };
-      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-kh2vKmjCr/HvR06czZbxUxV5KDRxSF27M6nN3cyofRI="; executable = false; };
+      sh = fetch { file = "sh"; sha256 = "sha256-igMAVEfumFv/LUNTGfNi2nSehgTNIP4Sg+f3L7u6SMA="; };
+      bzip2 = fetch { file = "bzip2"; sha256 = "sha256-K3rhkJZipudT1Jgh+l41Y/fNsMkrPtiAsNRDha/lpZI="; };
+      mkdir = fetch { file = "mkdir"; sha256 = "sha256-VddFELwLDJGNADKB1fWwWPBtIAlEUgJv2hXRmC4NEeM="; };
+      cpio = fetch { file = "cpio"; sha256 = "sha256-SWkwvLaFyV44kLKL2nx720SvcL4ej/p2V/bX3uqAGO0="; };
+      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-kRC/bhCmlD4L7KAvJQgcukk7AinkMz4IwmG1rqlh5tA="; executable = false; };
     }
 }:
 
@@ -41,13 +41,13 @@ let
   inherit (localSystem) system;
 
   # Bootstrap version needs to be known to reference headers included in the bootstrap tools
-  bootstrapLlvmVersion = if localSystem.isAarch64 then "11.1.0" else "7.1.0";
+  bootstrapLlvmVersion = "11.1.0";
 
   useAppleSDKLibs = localSystem.isAarch64;
   haveKRB5 = localSystem.isx86_64;
 
   # final toolchain is injected into llvmPackages_${finalLlvmVersion}
-  finalLlvmVersion = if localSystem.isAarch64 then "11" else "7";
+  finalLlvmVersion = "11";
   finalLlvmPackages = "llvmPackages_${finalLlvmVersion}";
 
   commonImpureHostDeps = [
@@ -63,9 +63,6 @@ rec {
     export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
     export NIX_IGNORE_LD_THROUGH_GCC=1
     unset SDKROOT
-
-    # Workaround for https://openradar.appspot.com/22671534 on 10.11.
-    export gl_cv_func_getcwd_abort_bug=no
 
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
