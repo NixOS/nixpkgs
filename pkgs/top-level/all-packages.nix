@@ -14002,6 +14002,8 @@ in
 
   strace = callPackage ../development/tools/misc/strace { };
 
+  stylua = callPackage ../development/tools/stylua { };
+
   summon = callPackage ../development/tools/summon { };
 
   svlint = callPackage ../development/tools/analysis/svlint { };
