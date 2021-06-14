@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildPhase = ''
-    make --directory=src/build $makeFlags
-  '';
+  makeFlags = [ "--directory=src/build" ];
 
   installPhase = ''
     mkdir -p $out/bin
