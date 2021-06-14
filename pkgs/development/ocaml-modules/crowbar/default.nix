@@ -1,5 +1,5 @@
 { lib, stdenv, buildDunePackage, fetchFromGitHub, ocplib-endian, cmdliner, afl-persistent
-, calendar, fpath, pprint, uutf, uunf, uucp }:
+, calendar, fpath, pprint_20171003, uutf, uunf, uucp }:
 
 buildDunePackage rec {
   pname = "crowbar";
@@ -20,7 +20,7 @@ buildDunePackage rec {
   postPatch = "rm -rf examples/xmldiff";
 
   propagatedBuildInputs = [ ocplib-endian cmdliner afl-persistent ];
-  checkInputs = [ calendar fpath pprint uutf uunf uucp ];
+  checkInputs = [ calendar fpath pprint_20171003 uutf uunf uucp ];
   # uunf is broken on aarch64
   doCheck = !stdenv.isAarch64;
 
