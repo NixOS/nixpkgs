@@ -2375,6 +2375,12 @@
     github = "delan";
     githubId = 465303;
   };
+  deliciouslytyped = {
+    email = "47436522+deliciouslytyped@users.noreply.github.com";
+    github = "deliciouslytyped";
+    githubId = 47436522;
+    name = "deliciouslytyped";
+  };
   delroth = {
     email = "delroth@gmail.com";
     github = "delroth";
