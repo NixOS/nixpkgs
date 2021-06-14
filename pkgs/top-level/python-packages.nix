@@ -1192,6 +1192,8 @@ in {
 
   bugzilla = callPackage ../development/python-modules/bugzilla { };
 
+  buienradar = callPackage ../development/python-modules/buienradar { };
+
   buildbot = callPackage ../development/python-modules/buildbot { };
 
   buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
@@ -8776,6 +8778,8 @@ in {
   ViennaRNA = toPythonModule pkgs.ViennaRNA;
 
   viewstate = callPackage ../development/python-modules/viewstate { };
+
+  vincenty = callPackage ../development/python-modules/vincenty { };
 
   vine = callPackage ../development/python-modules/vine { };
 

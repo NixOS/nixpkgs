@@ -313,6 +313,7 @@ in with py.pkgs; buildPythonApplication rec {
     "broadlink"
     "brother"
     "bsblan"
+    "buienradar"
     "caldav"
     "calendar"
     "camera"
