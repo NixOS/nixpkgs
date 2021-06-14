@@ -5523,6 +5523,8 @@ in {
 
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
+  pyathena = callPackage ../development/python-modules/pyathena { };
+
   pyatmo = callPackage ../development/python-modules/pyatmo { };
 
   pyatspi = callPackage ../development/python-modules/pyatspi { };
