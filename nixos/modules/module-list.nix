@@ -126,6 +126,7 @@
   ./programs/chromium.nix
   ./programs/clickshare.nix
   ./programs/command-not-found/command-not-found.nix
+  ./programs/cowsay.nix
   ./programs/criu.nix
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
