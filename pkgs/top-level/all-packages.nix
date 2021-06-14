@@ -26738,7 +26738,9 @@ in
     git = gitMinimal;
   };
 
-  survex = callPackage ../applications/misc/survex { };
+  survex = callPackage ../applications/misc/survex {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
 
   sunvox = callPackage ../applications/audio/sunvox { };
 
