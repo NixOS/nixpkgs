@@ -477,6 +477,8 @@ in {
 
   apptools = callPackage ../development/python-modules/apptools { };
 
+  aprslib = callPackage ../development/python-modules/aprslib { };
+
   APScheduler = callPackage ../development/python-modules/APScheduler { };
 
   apsw = callPackage ../development/python-modules/apsw { };

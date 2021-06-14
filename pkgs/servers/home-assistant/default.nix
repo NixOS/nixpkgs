@@ -292,6 +292,7 @@ in with py.pkgs; buildPythonApplication rec {
     "api"
     "apple_tv"
     "apprise"
+    "aprs"
     "arlo"
     "asuswrt"
     "august"
