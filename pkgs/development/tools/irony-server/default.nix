@@ -11,10 +11,6 @@ stdenv.mkDerivation {
 
   cmakeDir = "server";
 
-  cmakeFlags = [
-    "-DCMAKE_PREFIX_PATH=${llvmPackages.clang-unwrapped}"
-  ];
-
   meta = with lib; {
     description = "The server part of irony";
     homepage = "https://melpa.org/#/irony";
