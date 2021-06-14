@@ -15,13 +15,13 @@ let
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
-    version = "7.43";
+    version = "7.45";
 
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
       rev = "QUAKE2_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "1dszbvxlh1npq4nv9s4wv4lcyfgb01k92ncxrrczsxy1dddg86pp";
+      sha256 = "sha256-B7O4r2w0sHeSA1/eHYUoZuRCOC+MnSL7gHQvy7Y0Hvg=";
     };
 
     nativeBuildInputs = [ cmake ];
