@@ -12,7 +12,7 @@
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
     "advantage_air" = ps: with ps; [ advantage-air ];
-    "aemet" = ps: with ps; [ ]; # missing inputs: AEMET-OpenData
+    "aemet" = ps: with ps; [ aemet-opendata ];
     "aftership" = ps: with ps; [ pyaftership ];
     "agent_dvr" = ps: with ps; [ agent-py ];
     "air_quality" = ps: with ps; [ ];
@@ -55,7 +55,7 @@
     "asterisk_cdr" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
     "asterisk_mbox" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
     "asuswrt" = ps: with ps; [ aioasuswrt ];
-    "atag" = ps: with ps; [ ]; # missing inputs: pyatag
+    "atag" = ps: with ps; [ pyatag ];
     "aten_pe" = ps: with ps; [ atenpdu ];
     "atome" = ps: with ps; [ ]; # missing inputs: pyatome
     "august" = ps: with ps; [ yalexs ];
@@ -106,7 +106,7 @@
     "bsblan" = ps: with ps; [ bsblan ];
     "bt_home_hub_5" = ps: with ps; [ ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [ ]; # missing inputs: btsmarthub_devicelist
-    "buienradar" = ps: with ps; [ ]; # missing inputs: buienradar
+    "buienradar" = ps: with ps; [ buienradar ];
     "caldav" = ps: with ps; [ caldav ];
     "calendar" = ps: with ps; [ aiohttp-cors ];
     "camera" = ps: with ps; [ aiohttp-cors ];
@@ -483,7 +483,7 @@
     "manual_mqtt" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "map" = ps: with ps; [ aiohttp-cors pillow ];
     "marytts" = ps: with ps; [ ]; # missing inputs: speak2mary
-    "mastodon" = ps: with ps; [ ]; # missing inputs: Mastodon.py
+    "mastodon" = ps: with ps; [ mastodon-py ];
     "matrix" = ps: with ps; [ matrix-client ];
     "maxcube" = ps: with ps; [ ]; # missing inputs: maxcube-api
     "mazda" = ps: with ps; [ pymazda ];
@@ -794,7 +794,7 @@
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
     "spc" = ps: with ps; [ ]; # missing inputs: pyspcwebgw
     "speedtestdotnet" = ps: with ps; [ speedtest-cli ];
-    "spider" = ps: with ps; [ ]; # missing inputs: spiderpy
+    "spider" = ps: with ps; [ spiderpy ];
     "splunk" = ps: with ps; [ ]; # missing inputs: hass_splunk
     "spotify" = ps: with ps; [ aiohttp-cors spotipy ];
     "sql" = ps: with ps; [ sqlalchemy ];
