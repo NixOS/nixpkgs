@@ -8353,6 +8353,8 @@ in {
 
   tflearn = callPackage ../development/python-modules/tflearn { };
 
+  tgcrypto = callPackage ../development/python-modules/tgcrypto { };
+
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
