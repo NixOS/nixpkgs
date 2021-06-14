@@ -96,6 +96,9 @@ default-package-overrides:
   # 2021-06-07: stackage still has dhall < 1.39
   - dhall-nix < 1.1.21
   - dhall-openapi < 1.0.1
+  # 2021-06-14: hnix still needs old versions https://github.com/haskell-nix/hnix/issues/952
+  - hnix-store-core < 0.5
+  - hnix-store-remote < 0.5
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
