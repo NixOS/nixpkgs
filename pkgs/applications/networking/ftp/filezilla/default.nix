@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
 
   buildInputs = [
     dbus
@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
     pugixml
     sqlite
     tinyxml
-    wrapGAppsHook
     wxGTK30-gtk3
     wxGTK30-gtk3.gtk
     xdg-utils
