@@ -677,6 +677,7 @@ in with py.pkgs; buildPythonApplication rec {
     "worldclock"
     "wsdot"
     "wunderground"
+    "xbox"
     "xiaomi"
     "xiaomi_aqara"
     "xiaomi_miio"
