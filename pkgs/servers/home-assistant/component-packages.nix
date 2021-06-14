@@ -939,7 +939,7 @@
     "vultr" = ps: with ps; [ vultr ];
     "w800rf32" = ps: with ps; [ ]; # missing inputs: pyW800rf32
     "wake_on_lan" = ps: with ps; [ wakeonlan ];
-    "wallbox" = ps: with ps; [ ]; # missing inputs: wallbox
+    "wallbox" = ps: with ps; [ wallbox ];
     "waqi" = ps: with ps; [ waqiasync ];
     "water_heater" = ps: with ps; [ ];
     "waterfurnace" = ps: with ps; [ waterfurnace ];
