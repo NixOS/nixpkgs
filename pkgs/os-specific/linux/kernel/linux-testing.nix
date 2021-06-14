@@ -3,7 +3,7 @@
 with lib;
 
 buildLinux (args // rec {
-  version = "5.12-rc6";
+  version = "5.13-rc6";
   extraMeta.branch = "5.12";
 
   # modDirVersion needs to be x.y.z, will always add .0
@@ -11,7 +11,7 @@ buildLinux (args // rec {
 
   src = fetchurl {
     url = "https://git.kernel.org/torvalds/t/linux-${version}.tar.gz";
-    sha256 = "0w0zk2byimdbcvn8myqaq0ab6lyd43493fnkv9a1407dimpxb03d";
+    sha256 = "sha256-PunFd6tOsmrsPItp2QX4TEVxHnvvi1BMSwWio/DTlMU=";
   };
 
   kernelTests = args.kernelTests or [ nixosTests.kernel-generic.linux_testing ];
