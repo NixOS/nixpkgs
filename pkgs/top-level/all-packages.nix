@@ -9599,6 +9599,10 @@ in
     inherit (python27Packages) ldap;
   };
 
+  sentry-cli = callPackage ../development/tools/sentry-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   vtun = callPackage ../tools/networking/vtun {
     openssl = openssl_1_0_2;
   };
