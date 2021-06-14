@@ -32,3 +32,16 @@ if [[ " ${preFixupPhases:-} " =~ " gappsWrapperArgsHook " ]]; then
 else
     preFixupPhases+=" glibPreFixupPhase"
 fi
+
+
+removeGIOModuleCache() {
+  echo "Executing removeGIOModuleCache"
+
+  rm -f ${!outputLib}/lib/gio/modules/giomodule.cache
+
+  echo "Finished removeGIOModuleCache"
+}
+
+if [ -z ${dontRemoveGIOModuleCache:-} ]; then
+  preFixupPhases+=" removeGIOModuleCache"
+fi
