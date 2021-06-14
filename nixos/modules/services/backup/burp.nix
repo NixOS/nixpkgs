@@ -109,7 +109,7 @@ in {
 
       cname = mkOption {
         type = types.str;
-        default = "${config.networking.hostName}-nixos";
+        default = "${config.networking.hostName}";
         description = ''
           Name the client should use to identify itself on the server
         '';
