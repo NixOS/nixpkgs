@@ -94,7 +94,7 @@ let
         description = "Name of the datasource. Required.";
       };
       type = mkOption {
-        type = types.enum ["graphite" "prometheus" "cloudwatch" "elasticsearch" "influxdb" "opentsdb" "mysql" "mssql" "postgres" "loki"];
+        type = types.str;
         description = "Datasource type. Required.";
       };
       access = mkOption {
