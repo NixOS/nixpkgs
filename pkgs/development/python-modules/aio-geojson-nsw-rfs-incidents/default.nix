@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-nsw-rfs-incidents";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-nsw-rfs-incidents";
     rev = "v${version}";
-    sha256 = "0g7a5sbp1y4shhsik924zssa2n7ima6p2zk1l890y66lyc168vws";
+    sha256 = "sha256-o9tuoJ7VZ6bg0rYeRWClKxdbxxj6wPgkSF7ZdOfmJew=";
   };
 
   propagatedBuildInputs = [
