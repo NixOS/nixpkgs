@@ -7063,6 +7063,11 @@
     githubId = 628342;
     name = "Tim Steinbach";
   };
+  nessdoor = {
+    name = "Tomas Antonio Lopez";
+    email = "entropy.overseer@protonmail.com";
+    githubId = 25993494;
+  };
   netcrns = {
     email = "jason.wing@gmx.de";
     github = "netcrns";
