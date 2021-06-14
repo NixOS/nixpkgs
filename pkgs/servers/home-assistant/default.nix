@@ -593,6 +593,7 @@ in with py.pkgs; buildPythonApplication rec {
     "soundtouch"
     "spaceapi"
     "speedtestdotnet"
+    "spider"
     "spotify"
     "sql"
     "squeezebox"

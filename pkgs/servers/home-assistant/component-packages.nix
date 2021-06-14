@@ -794,7 +794,7 @@
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
     "spc" = ps: with ps; [ ]; # missing inputs: pyspcwebgw
     "speedtestdotnet" = ps: with ps; [ speedtest-cli ];
-    "spider" = ps: with ps; [ ]; # missing inputs: spiderpy
+    "spider" = ps: with ps; [ spiderpy ];
     "splunk" = ps: with ps; [ ]; # missing inputs: hass_splunk
     "spotify" = ps: with ps; [ aiohttp-cors spotipy ];
     "sql" = ps: with ps; [ sqlalchemy ];
