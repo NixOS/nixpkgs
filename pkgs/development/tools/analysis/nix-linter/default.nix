@@ -1,7 +1,6 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , fixplate
 , tasty
 , tasty-hunit
@@ -18,6 +17,7 @@
 , containers
 , hnix
 , bytestring
+, fetchpatch
 }:
 
 mkDerivation rec {
@@ -38,10 +38,10 @@ mkDerivation rec {
   testHaskellDepends = [ tasty tasty-hunit tasty-th ];
 
   patches = [
-    # raise upper bound on hnix https://github.com/Synthetica9/nix-linter/pull/46
+    # Fix compatibility with hnix≥0.13.0 https://github.com/Synthetica9/nix-linter/pull/51
     (fetchpatch {
-      url = "https://github.com/Synthetica9/nix-linter/commit/b406024e525977b3c69d78d6a94a683e2ded121f.patch";
-      sha256 = "0viwbprslcmy70bxy3v27did79nqhlc0jcx4kp0lycswaccvnp1j";
+      url = "https://github.com/Synthetica9/nix-linter/commit/f73acacd8623dc25c9a35f8e04e4ff33cc596af8.patch";
+      sha256 = "139fm21hdg3vcw8hv35kxj4awd52bjqbb76mpzx191hzi9plj8qc";
     })
   ];
 

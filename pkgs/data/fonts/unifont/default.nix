@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, mkfontscale
+{ lib, stdenv, fetchurl, mkfontscale
 , libfaketime, fonttosfnt
 }:
 
 stdenv.mkDerivation rec {
   pname = "unifont";
-  version = "13.0.01";
+  version = "13.0.05";
 
   ttf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.ttf";
-    sha256 = "0y5bd7i5hp9ks6d3qq0bshywba7g90i3074wckpn9m8shh98ngcg";
+    sha256 = "0ff7zbyqi45q0171rl9ckj6lpfhcj8a9850d8j89m7wbwky32isf";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
-    sha256 = "05zgz00n514cijqh9qcvr4iz0bla4hd028cvi1jlh0ic6fkafix8";
+    sha256 = "16n666p6rs6l4r8grh67gy4ls33qfnbb5xk7cksywzjwdh42js0r";
   };
 
   nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       mkfontscale
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unicode font for Base Multilingual Plane";
     homepage = "http://unifoundry.com/unifont.html";
 

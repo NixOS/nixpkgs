@@ -20,8 +20,24 @@ let
       --config ${configFile} --adapter ${cfg.adapter} > $out
   '';
   tlsJSON = pkgs.writeText "tls.json" (builtins.toJSON tlsConfig);
-  configJSON = pkgs.runCommand "caddy-config.json" { } ''
-    ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${adaptedConfig} ${tlsJSON} > $out
+
+  # merge the TLS config options we expose with the ones originating in the Caddyfile
+  configJSON =
+    let tlsConfigMerge = ''
+      {"apps":
+        {"tls":
+          {"automation":
+            {"policies":
+              (if .[0].apps.tls.automation.policies == .[1]?.apps.tls.automation.policies
+               then .[0].apps.tls.automation.policies
+               else (.[0].apps.tls.automation.policies + .[1]?.apps.tls.automation.policies)
+               end)
+            }
+          }
+        }
+      }'';
+    in pkgs.runCommand "caddy-config.json" { } ''
+    ${pkgs.jq}/bin/jq -s '.[0] * ${tlsConfigMerge}' ${adaptedConfig} ${tlsJSON} > $out
   '';
 in {
   imports = [
@@ -45,6 +61,18 @@ in {
         Verbatim Caddyfile to use.
         Caddy v2 supports multiple config formats via adapters (see <option>services.caddy.adapter</option>).
       '';
+    };
+
+    user = mkOption {
+      default = "caddy";
+      type = types.str;
+      description = "User account under which caddy runs.";
+    };
+
+    group = mkOption {
+      default = "caddy";
+      type = types.str;
+      description = "Group account under which caddy runs.";
     };
 
     adapter = mkOption {
@@ -107,8 +135,8 @@ in {
         ExecStart = "${cfg.package}/bin/caddy run --config ${configJSON}";
         ExecReload = "${cfg.package}/bin/caddy reload --config ${configJSON}";
         Type = "simple";
-        User = "caddy";
-        Group = "caddy";
+        User = cfg.user;
+        Group = cfg.group;
         Restart = "on-abnormal";
         AmbientCapabilities = "cap_net_bind_service";
         CapabilityBoundingSet = "cap_net_bind_service";
@@ -126,13 +154,18 @@ in {
       };
     };
 
-    users.users.caddy = {
-      group = "caddy";
-      uid = config.ids.uids.caddy;
-      home = cfg.dataDir;
-      createHome = true;
+    users.users = optionalAttrs (cfg.user == "caddy") {
+      caddy = {
+        group = cfg.group;
+        uid = config.ids.uids.caddy;
+        home = cfg.dataDir;
+        createHome = true;
+      };
     };
 
-    users.groups.caddy.gid = config.ids.uids.caddy;
+    users.groups = optionalAttrs (cfg.group == "caddy") {
+      caddy.gid = config.ids.gids.caddy;
+    };
+
   };
 }

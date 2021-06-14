@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "dstask";
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/dstask.go" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line todo list with super-reliable git sync";
     homepage = src.meta.homepage;
     license = licenses.mit;

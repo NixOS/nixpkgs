@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "libvolume_id-0.81.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   preBuild = "
-    makeFlagsArray=(prefix=$out E=echo RANLIB=ranlib INSTALL='install -c')
+    makeFlagsArray=(prefix=$out E=echo RANLIB=${stdenv.cc.targetPrefix}ranlib INSTALL='install -c')
   ";
 
   # Work around a broken Makefile.
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     cp -f libvolume_id.so.0 $out/lib/
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

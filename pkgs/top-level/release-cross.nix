@@ -150,6 +150,9 @@ in
 
   x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
 
+  ppc64le = mapTestOnCross lib.systems.examples.powernv linuxCommon;
+  ppc64le-musl = mapTestOnCross lib.systems.examples.musl-power linuxCommon;
+
   android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt linuxCommon;
   android32 = mapTestOnCross lib.systems.examples.armv7a-android-prebuilt linuxCommon;
 

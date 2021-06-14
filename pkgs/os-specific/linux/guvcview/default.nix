@@ -1,15 +1,15 @@
 { config
-, stdenv
+, lib, stdenv
 , fetchurl
 , intltool
-, pkgconfig
+, pkg-config
 , portaudio
 , SDL2
 , ffmpeg
 , udev
 , libusb1
 , libv4l
-, alsaLib
+, alsa-lib
 , gsl
 , libpng
 , sfml
@@ -37,15 +37,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     intltool
-    pkgconfig
+    pkg-config
   ]
-    ++ stdenv.lib.optionals (useGtk) [ wrapGAppsHook ]
-    ++ stdenv.lib.optionals (useQt) [ wrapQtAppsHook ]
+    ++ lib.optionals (useGtk) [ wrapGAppsHook ]
+    ++ lib.optionals (useQt) [ wrapQtAppsHook ]
   ;
 
   buildInputs = [
     SDL2
-    alsaLib
+    alsa-lib
     ffmpeg
     libusb1
     libv4l
@@ -54,21 +54,21 @@ stdenv.mkDerivation rec {
     gsl
     libpng
     sfml
-  ] 
-    ++ stdenv.lib.optionals (pulseaudioSupport) [ libpulseaudio ]
-    ++ stdenv.lib.optionals (useGtk) [ gtk3 ]
-    ++ stdenv.lib.optionals (useQt) [
+  ]
+    ++ lib.optionals (pulseaudioSupport) [ libpulseaudio ]
+    ++ lib.optionals (useGtk) [ gtk3 ]
+    ++ lib.optionals (useQt) [
       qtbase
     ]
   ;
   configureFlags = [
     "--enable-sfml"
   ]
-    ++ stdenv.lib.optionals (useGtk) [ "--enable-gtk3" ]
-    ++ stdenv.lib.optionals (useQt) [ "--enable-qt5" ]
+    ++ lib.optionals (useGtk) [ "--enable-gtk3" ]
+    ++ lib.optionals (useQt) [ "--enable-qt5" ]
   ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple interface for devices supported by the linux UVC driver";
     homepage = "http://guvcview.sourceforge.net";
     maintainers = [ maintainers.coconnor ];

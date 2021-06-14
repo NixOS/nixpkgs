@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27
 , future, python-language-server, mypy, configparser
-, pytestCheckHook, mock, isPy3k, pytestcov, coverage
+, pytestCheckHook, mock, pytestcov, coverage
 , fetchpatch
 }:
 

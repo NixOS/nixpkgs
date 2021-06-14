@@ -1,20 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , azure-mgmt-common
 , azure-mgmt-core
-, isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "17.0.0";
+  version = "21.0.0";
   pname = "azure-mgmt-compute";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c7350b404e5d10a548ceddb034394c8fad6c852ce33a3d3b211065813c1da404";
+    sha256 = "9227c3755a70bc377d70e35e1fc6f1fab109dd88974fd2c7129867ccaa10f813";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +29,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Compute Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai mwilsoninsight ];
+    maintainers = with maintainers; [ olcai maxwilson ];
   };
 }

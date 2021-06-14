@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub-systemdspawner";
-  version = "0.14";
+  version = "0.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "080dd9cd9292266dad35d1efc7aa1af0ed6993d15eadc79bd959d1ee273d1923";
+    sha256 = "b6e2d981657aa5d3794abb89b1650d056524158a3d0f0f706007cae9b6dbeb2b";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +27,9 @@ buildPythonPackage rec {
     substituteInPlace systemdspawner/systemdspawner.py \
       --replace "/bin/bash" "${bash}/bin/bash"
   '';
+
+  # no tests
+  doCheck = false;
 
   meta = with lib; {
     description = "JupyterHub Spawner using systemd for resource isolation";

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{stdenv, lib, fetchurl, ocaml, findlib}:
 
 stdenv.mkDerivation {
   name = "ocaml-calendar-2.5";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     license = "LGPL";
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.gal_bolle
+      lib.maintainers.gal_bolle
     ];
   };
 }

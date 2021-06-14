@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , perl, ncurses, zlib, sqlite, libffi
 , autoreconfHook, mcpp, bison, flex, doxygen, graphviz
 , makeWrapper
@@ -6,7 +6,7 @@
 
 
 let
-  toolsPath = stdenv.lib.makeBinPath [ mcpp ];
+  toolsPath = lib.makeBinPath [ mcpp ];
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A translator of declarative Datalog programs into the C++ language";
     homepage    = "https://souffle-lang.github.io/";
     platforms   = platforms.unix;

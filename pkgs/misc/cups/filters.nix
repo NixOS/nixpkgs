@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
+{ lib, stdenv, fetchurl, pkg-config, cups, poppler, poppler_utils, fontconfig
 , libjpeg, libpng, perl, ijs, qpdf, dbus, avahi
 , makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which, ghostscript
 , mupdf
 }:
 
 let
-  binPath = stdenv.lib.makeBinPath [ coreutils gnused bc gawk gnugrep which ];
+  binPath = lib.makeBinPath [ coreutils gnused bc gawk gnugrep which ];
 
 in stdenv.mkDerivation rec {
   pname = "cups-filters";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1kv25011iyzvd33n5zmmn1z2p6pzk26hmmw6qvjjnx8p3sp7raqn";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [
     cups poppler poppler_utils fontconfig libjpeg libpng perl
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters";
     description = "Backends, filters, and other software that was once part of the core CUPS distribution but is no longer maintained by Apple Inc";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

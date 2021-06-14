@@ -43,13 +43,14 @@ in
 
   options.console  = {
     font = mkOption {
-      type = types.str;
+      type = with types; either str path;
       default = "Lat2-Terminus16";
       example = "LatArCyrHeb-16";
       description = ''
         The font used for the virtual consoles.  Leave empty to use
         whatever the <command>setfont</command> program considers the
         default font.
+        Can be either a font name or a path to a PSF font file.
       '';
     };
 
@@ -82,25 +83,10 @@ in
 
     packages = mkOption {
       type = types.listOf types.package;
-      default = with pkgs.kbdKeymaps; [ dvp neo ];
-      defaultText = ''with pkgs.kbdKeymaps; [ dvp neo ]'';
+      default = [ ];
       description = ''
         List of additional packages that provide console fonts, keymaps and
         other resources for virtual consoles use.
-      '';
-    };
-
-    extraTTYs = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      example = ["tty8" "tty9"];
-      description = ''
-        TTY (virtual console) devices, in addition to the consoles on
-        which mingetty and syslogd run, that must be initialised.
-        Only useful if you have some program that you want to run on
-        some fixed console.  For example, the NixOS installation CD
-        opens the manual in a web browser on console 7, so it sets
-        <option>console.extraTTYs</option> to <literal>["tty7"]</literal>.
       '';
     };
 
@@ -158,10 +144,16 @@ in
           ''}
         '';
 
-        systemd.services.systemd-vconsole-setup =
-          { before = [ "display-manager.service" ];
-            after = [ "systemd-udev-settle.service" ];
+        systemd.services.reload-systemd-vconsole-setup =
+          { description = "Reset console on configuration changes";
+            wantedBy = [ "multi-user.target" ];
             restartTriggers = [ vconsoleConf consoleEnv ];
+            reloadIfChanged = true;
+            serviceConfig =
+              { RemainAfterExit = true;
+                ExecStart = "${pkgs.coreutils}/bin/true";
+                ExecReload = "/run/current-system/systemd/bin/systemctl restart systemd-vconsole-setup";
+              };
           };
       }
 
@@ -199,5 +191,9 @@ in
     (mkRenamedOptionModule [ "i18n" "consoleUseXkbConfig" ] [ "console" "useXkbConfig" ])
     (mkRenamedOptionModule [ "boot" "earlyVconsoleSetup" ] [ "console" "earlySetup" ])
     (mkRenamedOptionModule [ "boot" "extraTTYs" ] [ "console" "extraTTYs" ])
+    (mkRemovedOptionModule [ "console" "extraTTYs" ] ''
+      Since NixOS switched to systemd (circa 2012), TTYs have been spawned on
+      demand, so there is no need to configure them manually.
+    '')
   ];
 }

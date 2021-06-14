@@ -10,9 +10,11 @@ buildPythonPackage {
   src = qscintilla.src;
   format = "other";
 
-  nativeBuildInputs = [ sip qtbase ];
+  nativeBuildInputs = [ sip_4 qtbase ];
   buildInputs = [ qscintilla ];
   propagatedBuildInputs = [ pyqt5 ];
+
+  dontWrapQtApps = true;
 
   postPatch = ''
     substituteInPlace Python/configure.py \
@@ -38,7 +40,7 @@ buildPythonPackage {
       --qsci-libdir=${qscintilla}/lib \
       --pyqt-sipdir=${pyqt5}/share/sip/PyQt5 \
       --qsci-sipdir=$out/share/sip/PyQt5 \
-      --sip-incdir=${sip}/include
+      --sip-incdir=${sip_4}/include
   '';
 
   meta = with lib; {

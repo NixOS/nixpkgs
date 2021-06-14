@@ -58,6 +58,7 @@ in
       };
 
       interface = mkOption {
+        type = types.str;
         default = "127.0.0.1";
         description = ''
           The interface the BitlBee deamon will be listening to.  If `127.0.0.1',
@@ -68,6 +69,7 @@ in
 
       portNumber = mkOption {
         default = 6667;
+        type = types.int;
         description = ''
           Number of the port BitlBee will be listening to.
         '';
@@ -142,6 +144,7 @@ in
 
       extraSettings = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Will be inserted in the Settings section of the config file.
         '';
@@ -149,6 +152,7 @@ in
 
       extraDefaults = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Will be inserted in the Default section of the config file.
         '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lvm2, libgcrypt, libuuid, pkgconfig, popt
+{ lib, stdenv, fetchurl, fetchpatch, lvm2, libgcrypt, libuuid, pkg-config, popt
 , enablePython ? true, python ? null
 }:
 
@@ -22,17 +22,17 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [ "--enable-cryptsetup-reencrypt" ]
-                ++ stdenv.lib.optional enablePython "--enable-python";
+                ++ lib.optional enablePython "--enable-python";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ lvm2 libgcrypt libuuid popt ]
-             ++ stdenv.lib.optional enablePython python;
+             ++ lib.optional enablePython python;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://code.google.com/p/cryptsetup/";
     description = "LUKS for dm-crypt";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
+    platforms = with platforms; linux;
   };
 }

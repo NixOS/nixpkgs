@@ -1,22 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, vcver }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, setuptools-scm
+, vcver
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "deepmerge";
-  version = "0.1.1";
+  version = "0.3.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa1d44269786bcc12d30a7471b0b39478aa37a43703b134d7f12649792f92c1f";
+    sha256 = "1zfl8rkw98vj7jdpb29ably50x46pq6pazhrkrczndf5jc97zzgn";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    setuptools-scm
     vcver
   ];
 
-  # depends on https://pypi.org/project/uranium/
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "deepmerge" ];
 

@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, dbus-python, setuptools_scm, entrypoints, secretstorage
+{ lib, stdenv, buildPythonPackage, fetchPypi
+, dbus-python, setuptools-scm, entrypoints, secretstorage
 , pytest, pytest-flake8 }:
 
 buildPythonPackage rec {
@@ -11,11 +11,11 @@ buildPythonPackage rec {
     sha256 = "0f58jq58jhfzlhix7x2zz7c4ycdvcs1z3sgs4lkr4xxx680wrmk7";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [ pytest pytest-flake8 ];
 
-  propagatedBuildInputs = [ dbus-python entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
+  propagatedBuildInputs = [ dbus-python entrypoints ] ++ lib.optional stdenv.isLinux secretstorage;
 
   doCheck = !stdenv.isDarwin;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Store and access your passwords safely";
     homepage    = "https://pypi.python.org/pypi/keyring";
     license     = licenses.psfl;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libogg, libvorbis }:
+{ lib, stdenv, fetchurl, libogg, libvorbis }:
 
 stdenv.mkDerivation rec {
   name = "vorbisgain-0.37";
@@ -10,18 +10,18 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ unzip libogg libvorbis ];
+  buildInputs = [ libogg libvorbis ];
 
   patchPhase = ''
     chmod -v +x configure
     configureFlags="--mandir=$out/share/man"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sjeng.org/vorbisgain.html";
     description = "A utility that corrects the volume of an Ogg Vorbis file to a predefined standardized loudness";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
   };
 }

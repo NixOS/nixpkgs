@@ -1,15 +1,15 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
-  version = "0.5.0";
+  version = "0.6.0";
   pname = "BespON";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a75cd7e62746fb0fef9b98aa157a44f9ed2ef63e952f7ae4ec5b3c2892669187";
+    sha256 = "2f2bda67fea8ee95c8aa7e885835ab88bdbfa392a94077ce1c9d29017420ce7a";
   };
 
   propagatedBuildInputs = [ ];
@@ -17,10 +17,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "bespon" ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encodes and decodes data in the BespON format.";
     homepage = "https://github.com/gpoore/bespon_py";
-    license = licenses.lgpl3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ synthetica ];
   };
 

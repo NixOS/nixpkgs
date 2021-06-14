@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoconf, automake, intltool, gettext
 , gtk, vte
 , flavour ? "stable"
@@ -29,13 +29,13 @@ let
       };
 
 in
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   inherit pname;
 
   inherit (stuff) src version;
 
-  nativeBuildInputs = [ pkgconfig autoconf automake intltool gettext ];
+  nativeBuildInputs = [ pkg-config autoconf automake intltool gettext ];
   buildInputs = [ gtk vte ];
 
   preConfigure = "sh autogen.sh";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     "--enable-safe-mode"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast, lightweight terminal emulator";
     longDescription = ''
       LilyTerm is a terminal emulator based off of libvte that aims to be fast and lightweight.

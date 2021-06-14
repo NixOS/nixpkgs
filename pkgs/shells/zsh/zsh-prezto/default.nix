@@ -1,34 +1,39 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "zsh-prezto";
-  version = "2020-05-20";
+  version = "unstable-2021-06-02";
+
   src = fetchFromGitHub {
     owner = "sorin-ionescu";
     repo = "prezto";
-    rev = "793f239a5e38ef2c4b76a4955bb734520303e8c4";
-    sha256 = "0xhdl1g0rvlikq6qxh6cwp6wsrgmw4l1rmmq5xpc7wl6dyh35yri";
+    rev = "6833fcd2f2afbc7396ea7a5fa9eb3b49f4678242";
+    sha256 = "1a8gndj1f8sjnq7clc742lm4qyhp1a2zid6g6lmfr1axhcbn38v6";
     fetchSubmodules = true;
   };
-  buildPhase = ''
-    sed -i '/\''${ZDOTDIR:\-\$HOME}\/.zpreztorc" ]]/i\
-    if [[ -s "/etc/zpreztorc" ]]; then\
-      source "/etc/zpreztorc"\
-    fi' init.zsh
-    sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zprezto/|$out/|g" init.zsh
-    for i in runcoms/*; do
-      sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zprezto/|$out/|g" $i
-    done
+
+  postPatch = ''
+    # make zshrc aware of where zsh-prezto is installed
+    sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zprezto/|$out/share/zsh-prezto/|g" runcoms/zshrc
   '';
+
   installPhase = ''
-    mkdir -p $out
-    cp ./* $out/ -R
+    mkdir -p $out/share/zsh-prezto
+    cp -R ./ $out/share/zsh-prezto
   '';
-  meta = with stdenv.lib; {
-    description = "Prezto is the configuration framework for Zsh; it enriches the command line interface environment with sane defaults, aliases, functions, auto completion, and prompt themes";
+
+  passthru.updateScript = unstableGitUpdater {};
+
+  meta = with lib; {
+    description = "The configuration framework for Zsh";
+    longDescription = ''
+      Prezto is the configuration framework for Zsh; it enriches
+      the command line interface environment with sane defaults,
+      aliases, functions, auto completion, and prompt themes.
+    '';
     homepage = "https://github.com/sorin-ionescu/prezto";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ holymonson ];
+    platforms = platforms.unix;
   };
 }

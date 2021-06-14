@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   pname = "comic-neue";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp -v ${pname}-${version}/WebFonts/*.woff2 $out/share/fonts/WOFF2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://comicneue.com/";
     description = "A casual type face: Make your lemonade stand look like a fortune 500 company";
     longDescription = ''

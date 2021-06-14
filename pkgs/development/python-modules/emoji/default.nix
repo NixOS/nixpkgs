@@ -2,16 +2,16 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "0.6.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e42da4f8d648f8ef10691bc246f682a1ec6b18373abfd9be10ec0b398823bd11";
+    sha256 = "18siknldyqvxvjf0nv18m0a1c26ahkg7vmhkij1qayanb0h46vs9";
   };
 
   checkInputs = [ nose ];
 
-  checkPhase = ''nosetests'';
+  checkPhase = "nosetests";
 
   meta = with lib; {
     description = "Emoji for Python";

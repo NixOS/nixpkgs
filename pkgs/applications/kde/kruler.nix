@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kruler";
+  pname = "kruler";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.vandenoever ];

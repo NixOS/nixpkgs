@@ -1,9 +1,4 @@
----
-title: Titanium
-author: Sander van der Burg
-date: 2018-11-18
----
-# Titanium
+# Titanium {#titanium}
 
 The Nixpkgs repository contains facilities to deploy a variety of versions of
 the [Titanium SDK](https://www.appcelerator.com) versions, a cross-platform
@@ -14,8 +9,8 @@ applications for Android and iOS devices from source code.
 Not all Titanium features supported -- currently, it can only be used to build
 Android and iOS apps.
 
-Building a Titanium app
------------------------
+## Building a Titanium app {#building-a-titanium-app}
+
 We can build a Titanium app from source for Android or iOS and for debugging or
 release purposes by invoking the `titaniumenv.buildApp {}` function:
 
@@ -108,8 +103,8 @@ When `enableWirelessDistribution` has been enabled, you must also provide the
 path of the PHP script (`installURL`) (that is included with the iOS build
 environment) to enable wireless ad-hoc installations.
 
-Emulating or simulating the app
--------------------------------
+## Emulating or simulating the app {#emulating-or-simulating-the-app}
+
 It is also possible to simulate the correspond iOS simulator build by using
 `xcodeenv.simulateApp {}` and emulate an Android APK by using
 `androidenv.emulateApp {}`.

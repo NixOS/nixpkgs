@@ -48,7 +48,7 @@ let
       ExecStart = ''${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} \
                     -f --cluster ${clusterName} --id ${daemonId}'';
     } // optionalAttrs (daemonType == "osd") {
-      ExecStartPre = ''${ceph.lib}/libexec/ceph/ceph-osd-prestart.sh --id ${daemonId} --cluster ${clusterName}'';
+      ExecStartPre = "${ceph.lib}/libexec/ceph/ceph-osd-prestart.sh --id ${daemonId} --cluster ${clusterName}";
       RestartSec = "20s";
       PrivateDevices = "no"; # osd needs disk access
     } // optionalAttrs ( daemonType == "mon") {
@@ -316,7 +316,7 @@ in
     client = {
       enable = mkEnableOption "Ceph client configuration";
       extraConfig = mkOption {
-        type = with types; attrsOf str;
+        type = with types; attrsOf (attrsOf str);
         default = {};
         example = ''
           {
@@ -353,7 +353,7 @@ in
     ];
 
     warnings = optional (cfg.global.monInitialMembers == null)
-      ''Not setting up a list of members in monInitialMembers requires that you set the host variable for each mon daemon or else the cluster won't function'';
+      "Not setting up a list of members in monInitialMembers requires that you set the host variable for each mon daemon or else the cluster won't function";
 
     environment.etc."ceph/ceph.conf".text = let
       # Merge the extraConfig set for mgr daemons, as mgr don't have their own section

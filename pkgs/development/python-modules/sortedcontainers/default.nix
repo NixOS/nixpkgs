@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "sortedcontainers";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e73a757831fc3ca4de2859c422564239a31d8213d09a2a666e375807034d2ba";
+    sha256 = "59cc937650cf60d677c16775597c89a960658a09cf7c1a668f86e1e4464b10a1";
   };
 
   # pypi tarball does not come with tests

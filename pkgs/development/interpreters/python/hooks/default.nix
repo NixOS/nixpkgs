@@ -1,19 +1,35 @@
 # Hooks for building Python packages.
 { python
 , lib
-, callPackage
 , makeSetupHook
 , disabledIf
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
+, findutils
 }:
 
 let
+  callPackage = python.pythonForBuild.pkgs.callPackage;
   pythonInterpreter = python.pythonForBuild.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in rec {
+
+  condaInstallHook = callPackage ({ gnutar, lbzip2 }:
+    makeSetupHook {
+      name = "conda-install-hook";
+      deps = [ gnutar lbzip2 ];
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./conda-install-hook.sh) {};
+
+  condaUnpackHook = callPackage ({}:
+    makeSetupHook {
+      name = "conda-unpack-hook";
+      deps = [];
+    } ./conda-unpack-hook.sh) {};
 
   eggBuildHook = callPackage ({ }:
     makeSetupHook {
@@ -94,7 +110,7 @@ in rec {
     makeSetupHook {
       name = "python-namespaces-hook.sh";
       substitutions = {
-        inherit pythonSitePackages;
+        inherit pythonSitePackages findutils;
       };
     } ./python-namespaces-hook.sh) {};
 

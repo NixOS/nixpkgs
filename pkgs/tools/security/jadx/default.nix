@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
+{ lib, stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
 
 let
   pname = "jadx";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dx3g0sm46qy57gggpg8bpmin5glzbxdbf0qzvha9r2dwh4mrwlg";
+    sha256 = "1w1wc81mkjcsgjbrihbsphxkcmwnfnf555pmlsd2vs2a04nki01y";
   };
 
   deps = stdenv.mkDerivation {
@@ -33,7 +33,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "083r4hg6m9cxzm2m8nckf10awq8kh901v5i39r60x47xk5yw84ps";
+    outputHash = "05fsycpd90dbak2vgdpd9cz08liq5j78ag9ry9y1s62ld776g0hz";
   };
 in stdenv.mkDerivation {
   inherit pname version src;
@@ -90,7 +90,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dex to Java decompiler";
     longDescription = ''
       Command line and GUI tools for produce Java source code from Android Dex

@@ -27,7 +27,6 @@ mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -45,8 +44,6 @@ mkDerivation {
   postFixup = ''
     rm $out/bin/AppCSXCAD.sh
   '';
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Minimal Application using the QCSXCAD library";

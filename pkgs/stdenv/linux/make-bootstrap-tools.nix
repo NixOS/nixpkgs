@@ -47,6 +47,12 @@ in with pkgs; rec {
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools";
 
+      meta = {
+        # Increase priority to unblock nixpkgs-unstable
+        # https://github.com/NixOS/nixpkgs/pull/104679#issuecomment-732267288
+        schedulingPriority = 200;
+      };
+
       nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ];
 
       buildCommand = ''
@@ -152,7 +158,7 @@ in with pkgs; rec {
         # These needed for cross but not native tools because the stdenv
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
-        cp -d ${isl_0_17.out}/lib/libisl*.so* $out/lib
+        cp -d ${isl_0_20.out}/lib/libisl*.so* $out/lib
 
       '' + ''
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
@@ -199,6 +205,12 @@ in with pkgs; rec {
   dist = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
+    meta = {
+      # Increase priority to unblock nixpkgs-unstable
+      # https://github.com/NixOS/nixpkgs/pull/104679#issuecomment-732267288
+      schedulingPriority = 200;
+    };
+
     buildCommand = ''
       mkdir -p $out/nix-support
       echo "file tarball ${build}/on-server/bootstrap-tools.tar.xz" >> $out/nix-support/hydra-build-products
@@ -212,15 +224,24 @@ in with pkgs; rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = if (stdenv.hostPlatform.libc == "glibc") then
+  bootstrapTools =
+    let extraAttrs = lib.optionalAttrs
+      (config.contentAddressedByDefault or false)
+      {
+        __contentAddressed = true;
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+      };
+    in
+    if (stdenv.hostPlatform.libc == "glibc") then
     import ./bootstrap-tools {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else if (stdenv.hostPlatform.libc == "musl") then
     import ./bootstrap-tools-musl {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else throw "unsupported libc";
 
@@ -246,7 +267,7 @@ in with pkgs; rec {
       gcc --version
 
     '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-      ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
+      ldlinux=$(echo ${bootstrapTools}/lib/${builtins.baseNameOf binutils.dynamicLinker})
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
       export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"

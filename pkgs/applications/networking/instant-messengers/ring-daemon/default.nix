@@ -1,13 +1,13 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , which
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , automake
 , libtool
 , pjsip
 , libyamlcpp
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , libsamplerate
 , libsndfile
@@ -52,7 +52,7 @@ let
   patchdir = "${src}/contrib/src";
 
   restbed = import ./restbed.nix {
-    inherit stdenv fetchFromGitHub cmake asio openssl;
+    inherit stdenv lib fetchFromGitHub cmake asio openssl;
     patches = [
     "${patchdir}/restbed/CMakeLists.patch"
     "${patchdir}/restbed/strand.patch"
@@ -62,7 +62,7 @@ let
     ];
   };
 
-  pjsip' = stdenv.lib.overrideDerivation pjsip (old: {
+  pjsip' = lib.overrideDerivation pjsip (old: {
     patches = [
       "${patchdir}/pjproject/gnutls.patch"
       ./notestsapps.patch # this one had to be modified
@@ -89,13 +89,13 @@ stdenv.mkDerivation {
     autoreconfHook
     automake
     libtool
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
     pjsip'
     libyamlcpp
-    alsaLib
+    alsa-lib
     libpulseaudio
     libsamplerate
     libsndfile
@@ -132,7 +132,7 @@ stdenv.mkDerivation {
     ln -s $out/dringctrl/dringctrl.py $out/bin/dringctrl.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Voice-over-IP software phone";
     longDescription = ''
       As the SIP/audio daemon and the user interface are separate processes, it

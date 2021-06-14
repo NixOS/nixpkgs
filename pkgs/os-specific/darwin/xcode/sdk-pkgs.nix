@@ -2,7 +2,7 @@
 , clang-unwrapped
 , binutils-unwrapped
 , runCommand
-, stdenv
+
 , wrapBintoolsWith
 , wrapCCWith
 , buildIosSdk, targetIosSdkPkgs
@@ -13,12 +13,6 @@
 let
 
 minSdkVersion = targetPlatform.minSdkVersion or "9.0";
-
-iosPlatformArch = { parsed, ... }: {
-  armv7a  = "armv7";
-  aarch64 = "arm64";
-  x86_64  = "x86_64";
-}.${parsed.cpu.name};
 
 in
 
@@ -35,13 +29,6 @@ rec {
   binutils = wrapBintoolsWith {
     libc = targetIosSdkPkgs.libraries;
     bintools = binutils-unwrapped;
-    extraBuildCommands = ''
-      echo "-arch ${iosPlatformArch targetPlatform}" >> $out/nix-support/libc-ldflags
-    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneSimulator") ''
-      echo "-platform_version ios-sim ${minSdkVersion} ${sdk.version}" >> $out/nix-support/libc-ldflags
-    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneOS") ''
-      echo "-platform_version ios ${minSdkVersion} ${sdk.version}" >> $out/nix-support/libc-ldflags
-    '';
   };
 
   clang = (wrapCCWith {
@@ -52,12 +39,9 @@ rec {
     extraBuildCommands = ''
       tr '\n' ' ' < $out/nix-support/cc-cflags > cc-cflags.tmp
       mv cc-cflags.tmp $out/nix-support/cc-cflags
-      echo "-target ${targetPlatform.config} -arch ${iosPlatformArch targetPlatform}" >> $out/nix-support/cc-cflags
+      echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
       echo "-isystem ${sdk}/usr/include${lib.optionalString (lib.versionAtLeast "10" sdk.version) " -isystem ${sdk}/usr/include/c++/4.2.1/ -stdlib=libstdc++"}" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneSimulator") ''
-      echo "-mios-simulator-version-min=${minSdkVersion}" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneOS") ''
-      echo "-miphoneos-version-min=${minSdkVersion}" >> $out/nix-support/cc-cflags
+      ${lib.optionalString (lib.versionAtLeast sdk.version "14") "echo -isystem ${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 >> $out/nix-support/cc-cflags"}
     '';
   }) // {
     inherit sdk;

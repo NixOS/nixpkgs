@@ -1,6 +1,5 @@
 { buildPythonPackage
 , certbot
-, pytest
 , cryptography
 , pyasn1
 , pyopenssl
@@ -11,7 +10,6 @@
 , requests-toolbelt
 , six
 , werkzeug
-, mock
 , ndg-httpsclient
 }:
 
@@ -22,10 +20,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cryptography pyasn1 pyopenssl pyRFC3339 pytz requests requests-toolbelt six
-    werkzeug mock ndg-httpsclient josepy
+    werkzeug ndg-httpsclient josepy
   ];
 
-  checkInputs = [ pytest ];
+  # does not contain any tests
+  doCheck = false;
+  pythonImportsCheck = [ "acme" ];
 
   sourceRoot = "source/${pname}";
 

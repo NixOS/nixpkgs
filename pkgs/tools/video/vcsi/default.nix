@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vcsi";
-  version = "7.0.12";
+  version = "7.0.13";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0dks0yr2a0cpr32vrwhdrhsb4qyj7rz1yv44fjbr8z8j8p84yjx5";
+    sha256 = "01qwbb2l8gwf622zzhh0kzdzw3njvsdwmndwn01i9bn4qm5cas8r";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -16,6 +16,9 @@ python3Packages.buildPythonApplication rec {
     texttable
     parsedatetime
   ];
+
+  doCheck = false;
+  pythonImportsCheck = [ "vcsi" ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
 

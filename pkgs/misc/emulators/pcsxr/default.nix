@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, intltool, pkgconfig, gtk3, SDL2, xorg
+{ lib, stdenv, fetchurl, autoreconfHook, intltool, pkg-config, gtk3, SDL2, xorg
 , wrapGAppsHook, libcdio, nasm, ffmpeg, file
 , fetchpatch }:
 
@@ -49,9 +49,10 @@ stdenv.mkDerivation rec {
     ./uncompress2.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];
   buildInputs = [
     gtk3 SDL2 xorg.libXv xorg.libXtst libcdio nasm ffmpeg file
+    xorg.libXxf86vm
   ];
 
   dynarecTarget =
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
        "$out/share/doc/${pname}-${version}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Playstation 1 emulator";
     homepage = "https://pcsxr.codeplex.com/";
     maintainers = with maintainers; [ rardiol ];

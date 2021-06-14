@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python } :
+{lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python } :
 
 stdenv.mkDerivation rec {
   name = "tennix-1.1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     installFlags="PREFIX=$out install"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://icculus.org/tennix/";
     description = "Classic Championship Tour 2011";
     license = licenses.gpl2Plus;

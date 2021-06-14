@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-csv'';
-  version = ''20201016-git'';
+  baseName = "cl-csv";
+  version = "20201016-git";
 
   parasites = [ "cl-csv/speed-test" "cl-csv/test" ];
 
-  description = ''Facilities for reading and writing CSV format files'';
+  description = "Facilities for reading and writing CSV format files";
 
   deps = [ args."alexandria" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-csv/2020-10-16/cl-csv-20201016-git.tgz'';
-    sha256 = ''1w12ads26v5sgcmy6rjm6ys9lml7l6rz86w776s2an2maci9kzmf'';
+    url = "http://beta.quicklisp.org/archive/cl-csv/2020-10-16/cl-csv-20201016-git.tgz";
+    sha256 = "1w12ads26v5sgcmy6rjm6ys9lml7l6rz86w776s2an2maci9kzmf";
   };
 
   packageName = "cl-csv";

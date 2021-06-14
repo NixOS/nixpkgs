@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, unzip, makeWrapper, flex, bison, ncurses, buddy, tecla
+{ lib, stdenv, fetchurl, unzip, makeWrapper, flex, bison, ncurses, buddy, tecla
 , libsigsegv, gmpxx, cln, yices
 }:
 
 let
 
-  version = "3.0";
+  version = "3.1";
 
   fullMaude = fetchurl {
-    url = "http://maude.cs.illinois.edu/w/images/0/04/Full-Maude-${version}.zip";
-    sha256 = "0gf36wlkkl343vlxgryqdhxmgyn8z0cc2zayccd7ac3inmj1iayw";
+    url = "http://maude.cs.illinois.edu/w/images/0/0a/Full-Maude-${version}.zip";
+    sha256 = "8b13af02c6243116c2ef9592622ecaa06d05dbe1dd6b1e595551ff33855948f2";
   };
 
 in
@@ -18,16 +18,17 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://maude.cs.illinois.edu/w/images/9/92/Maude-${version}.tar.gz";
-    sha256 = "0vhn3lsck6ji9skrgm67hqrn3k4f6y442q73jbw65qqznm321k5a";
+    url = "http://maude.cs.illinois.edu/w/images/d/d3/Maude-${version}.tar.gz";
+    sha256 = "b112d7843f65217e3b5a9d40461698ef8dab7cbbe830af21216dfb924dc88a2f";
   };
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
-    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper unzip cln yices
+    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper cln yices
   ];
 
   hardeningDisable = [ "stackprotector" ] ++
-    stdenv.lib.optionals stdenv.isi686 [ "pic" "fortify" ];
+    lib.optionals stdenv.isi686 [ "pic" "fortify" ];
 
   preConfigure = ''
     configureFlagsArray=(
@@ -43,7 +44,7 @@ stdenv.mkDerivation {
   postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
     unzip ${fullMaude}
-    install -D -m 444 full-maude3.maude $out/share/maude/full-maude.maude
+    install -D -m 444 full-maude31.maude $out/share/maude/full-maude.maude
   '';
 
   # bison -dv surface.yy -o surface.c
@@ -54,7 +55,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://maude.cs.illinois.edu/";
     description = "High-level specification language";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       Maude is a high-performance reflective language and system
@@ -66,7 +67,7 @@ stdenv.mkDerivation {
       rewriting logic computation.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.peti ];
   };
 }

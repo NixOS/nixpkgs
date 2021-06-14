@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libjack2, alsaLib
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libjack2, alsa-lib
 , freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
 , fetchpatch, fmt
 , adlplugChip ? "-DADLplug_CHIP=OPL3"
@@ -28,16 +28,16 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ adlplugChip "-DADLplug_USE_SYSTEM_FMT=ON" ];
 
   buildInputs = [
-    libjack2 alsaLib freetype libX11 libXrandr libXinerama libXext
+    libjack2 alsa-lib freetype libX11 libXrandr libXinerama libXext
     libXcursor
   ];
-  nativeBuildInputs = [ cmake pkgconfig fmt ];
+  nativeBuildInputs = [ cmake pkg-config fmt ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OPL3 and OPN2 FM Chip Synthesizer";
     homepage = src.meta.homepage;
     license = licenses.boost;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

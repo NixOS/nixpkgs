@@ -27,7 +27,7 @@ let
   makeBitwardenTest = backend: makeTest {
     name = "bitwarden_rs-${backend}";
     meta = {
-      maintainers = with pkgs.stdenv.lib.maintainers; [ jjjollyjim ];
+      maintainers = with pkgs.lib.maintainers; [ jjjollyjim ];
     };
 
     nodes = {
@@ -42,7 +42,7 @@ let
                 GRANT ALL ON `bitwarden`.* TO 'bitwardenuser'@'localhost';
                 FLUSH PRIVILEGES;
               '';
-              package = pkgs.mysql;
+              package = pkgs.mariadb;
             };
 
             services.bitwarden_rs.config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
@@ -113,6 +113,7 @@ let
                   driver.find_element_by_css_selector('input#masterPasswordRetype').send_keys(
                     '${userPassword}'
                   )
+                  driver.find_element_by_css_selector('input#acceptPolicies').click()
 
                   driver.find_element_by_xpath("//button[contains(., 'Submit')]").click()
 

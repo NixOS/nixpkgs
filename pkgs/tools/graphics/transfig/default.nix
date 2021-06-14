@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, libjpeg, libpng, imake, gccmakedep }:
+{ lib, stdenv, fetchurl, zlib, libjpeg, libpng, imake, gccmakedep }:
 
 stdenv.mkDerivation {
   name = "transfig-3.2.4";
@@ -56,6 +56,6 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

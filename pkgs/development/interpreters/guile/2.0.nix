@@ -1,5 +1,5 @@
-{ stdenv, pkgsBuildBuild, buildPackages
-, fetchpatch, fetchurl, makeWrapper, gawk, pkgconfig
+{ lib, stdenv, pkgsBuildBuild, buildPackages
+, fetchpatch, fetchurl, makeWrapper, gawk, pkg-config
 , libffi, libtool, readline, gmp, boehmgc, libunistring
 , coverageAnalysis ? null
 }:
@@ -21,9 +21,9 @@
   setOutputFlags = false; # $dev gets into the library otherwise
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
                            pkgsBuildBuild.guile_2_0;
-  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
+  nativeBuildInputs = [ makeWrapper gawk pkg-config ];
   buildInputs = [ readline libtool libunistring libffi ];
 
   propagatedBuildInputs = [
@@ -46,8 +46,8 @@
     })
     ./riscv.patch
   ] ++
-    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
-    ++ stdenv.lib.optionals stdenv.isDarwin [
+    (lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
+    ++ lib.optionals stdenv.isDarwin [
       (fetchpatch {
         url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
         sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
@@ -59,10 +59,10 @@
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
 
   # don't have "libgcc_s.so.1" on darwin
-  LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "-lgcc_s";
+  LDFLAGS = lib.optionalString (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "-lgcc_s";
 
   configureFlags = [ "--with-libreadline-prefix" ]
-    ++ stdenv.lib.optionals stdenv.isSunOS [
+    ++ lib.optionals stdenv.isSunOS [
       # Make sure the right <gmp.h> is found, and not the incompatible
       # /usr/include/mp.h from OpenSolaris.  See
       # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
@@ -102,9 +102,9 @@
   meta = {
     description = "Embeddable Scheme implementation";
     homepage    = "https://www.gnu.org/software/guile/";
-    license     = stdenv.lib.licenses.lgpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ ludo lovek323 ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ ludo lovek323 ];
+    platforms   = lib.platforms.all;
 
     longDescription = ''
       GNU Guile is an implementation of the Scheme programming language, with
@@ -120,7 +120,7 @@
 
 //
 
-(stdenv.lib.optionalAttrs (!stdenv.isLinux) {
+(lib.optionalAttrs (!stdenv.isLinux) {
   # Work around <https://bugs.gnu.org/14201>.
   SHELL = stdenv.shell;
   CONFIG_SHELL = stdenv.shell;

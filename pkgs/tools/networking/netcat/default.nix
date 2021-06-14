@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "netcat-gnu-0.7.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1frjcdkhkpzk0f84hx6hmw5l0ynpmji8vcbaxg8h5k2svyxz0nmm";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility which reads and writes data across network connections";
     homepage = "http://netcat.sourceforge.net/";
     license = licenses.gpl2Plus;

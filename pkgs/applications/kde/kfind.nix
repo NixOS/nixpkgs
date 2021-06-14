@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kfind";
+  pname = "kfind";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.iblech ];

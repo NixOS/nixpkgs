@@ -1,42 +1,51 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
 , xmltodict
-, requests
 , ifaddr
+, requests
 
-# Test dependencies
-, pytest, pylint, flake8, graphviz
-, mock, sphinx, sphinx_rtd_theme
+  # Test dependencies
+, pytestCheckHook
+, mock
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "pysonos";
-  version = "0.0.35";
+  version = "0.0.51";
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3a0f8f6eb6ba0623b93a6995c1978cf72c4eedc5fbedac194e6d89e1b6b985e4";
+  # pypi package is missing test fixtures
+  src = fetchFromGitHub {
+    owner = "amelchio";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-MjsbqrH4SWnnwGe9BVHaValoQEiaaZVhFdn6MDoEyZs=";
   };
 
-  propagatedBuildInputs = [ xmltodict requests ifaddr ];
-
-  checkInputs = [
-    pytest pylint flake8 graphviz
-    mock sphinx sphinx_rtd_theme
+  propagatedBuildInputs = [
+    ifaddr
+    requests
+    xmltodict
   ];
 
-  checkPhase = ''
-    pytest --deselect=tests/test_discovery.py::TestDiscover::test_discover
-  '';
+  checkInputs = [
+    pytestCheckHook
+    mock
+    requests-mock
+  ];
 
-  meta = {
-    homepage = "https://github.com/amelchio/pysonos";
+  disabledTests = [
+    "test_desc_from_uri" # test requires network access
+  ];
+
+  meta = with lib; {
     description = "A SoCo fork with fixes for Home Assistant";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ juaningan ];
+    homepage = "https://github.com/amelchio/pysonos";
+    license = licenses.mit;
+    maintainers = with maintainers; [ juaningan ];
   };
 }

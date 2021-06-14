@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchzip }:
+{ lib, python3Packages, fetchzip }:
 
 python3Packages.buildPythonApplication {
   pname = "pdf-parser";
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication {
       --replace '/usr/bin/python' '${python3Packages.python}/bin/python'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parse a PDF document";
     longDescription = ''
       This tool will parse a PDF document to identify the fundamental elements used in the analyzed file.
@@ -29,6 +29,6 @@ python3Packages.buildPythonApplication {
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
     license = licenses.publicDomain;
     maintainers = [ maintainers.lightdiscord ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

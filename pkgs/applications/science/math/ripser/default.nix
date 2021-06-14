@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ lib, stdenv, fetchurl, fetchFromGitHub
 , assembleReductionMatrix ? false
 , useCoefficients ? false
 , indicateProgress ? false
@@ -6,14 +6,14 @@
 , fileFormat ? "lowerTriangularCsv"
 }:
 
-with stdenv.lib;
+with lib;
 
 assert assertOneOf "fileFormat" fileFormat
   ["lowerTriangularCsv" "upperTriangularCsv" "dipha"];
 assert useGoogleHashmap -> sparsehash != null;
 
 let
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional;
   version = "1.0";
 in
 stdenv.mkDerivation {
@@ -60,8 +60,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A lean C++ code for the computation of Vietoris–Rips persistence barcodes";
     homepage = "https://github.com/Ripser/ripser";
-    license = stdenv.lib.licenses.lgpl3;
-    maintainers = with stdenv.lib.maintainers; [erikryb];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [erikryb];
+    platforms = lib.platforms.linux;
   };
 }

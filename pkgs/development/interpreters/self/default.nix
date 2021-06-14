@@ -1,6 +1,6 @@
-{ fetchgit, stdenv, xorg, makeWrapper, ncurses, cmake }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXext, makeWrapper, ncurses, cmake }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   # The Self wrapper stores source in $XDG_DATA_HOME/self or ~/.local/share/self
   # so that it can be written to when using the Self transposer. Running 'Self'
   # after installation runs without an image. You can then build a Self image with:
@@ -11,16 +11,18 @@ stdenv.mkDerivation {
   # This image can later be started with:
   #   $ Self -s myimage.snap
   #
-  version = "4.5.0";
   pname = "self";
+  version = "2017.1";
 
-  src = fetchgit {
-    url    = "https://github.com/russellallen/self";
-    rev    = "d16bcaad3c5092dae81ad0b16d503f2a53b8ef86";
-    sha256 = "1dhs6209407j0ll9w9id31vbawdrm9nz1cjak8g8hixrw1nid4i5";
+  src = fetchFromGitHub {
+    owner = "russellallen";
+    repo = pname;
+    rev = version;
+    sha256 = "C/1Q6yFmoXx2F97xuvkm8DxFmmvuBS7uYZOxq/CRNog=";
   };
 
-  buildInputs = [ ncurses xorg.libX11 xorg.libXext makeWrapper cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
+  buildInputs = [ ncurses libX11 libXext ];
 
   selfWrapper = ./self;
 
@@ -33,12 +35,11 @@ stdenv.mkDerivation {
       --set SELF_ROOT "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A prototype-based dynamic object-oriented programming language, environment, and virtual machine";
     homepage = "https://selflanguage.org/";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.doublec ];
-    platforms = with stdenv.lib.platforms; linux;
-    broken = true; # segfaults on gcc > 4.4
+    license = licenses.bsd3;
+    maintainers = [ maintainers.doublec ];
+    platforms = platforms.linux;
   };
 }

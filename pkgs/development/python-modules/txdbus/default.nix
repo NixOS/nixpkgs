@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, twisted }:
+{ lib, buildPythonPackage, fetchPypi, six, twisted }:
 
 buildPythonPackage rec {
   pname = "txdbus";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six twisted ];
   pythonImportsCheck = [ "txdbus" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Native Python implementation of DBus for Twisted";
     homepage = "https://github.com/cocagne/txdbus";
     license = licenses.mit;

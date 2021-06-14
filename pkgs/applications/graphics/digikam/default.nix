@@ -39,7 +39,7 @@
 , marble
 , libGL
 , libGLU
-, opencv3
+, opencv
 , pcre
 , threadweaver
 , x265
@@ -55,11 +55,11 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "7.1.0";
+  version = "7.2.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1gmblnsm0aida3yynyddm6jdh59hx3w177hrhfar616z793ch0xi";
+    sha256 = "sha256-zYfs4UOu+gLmkqSvXDw8wQe5pNYYBNefp33S40R5ihc=";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -83,7 +83,7 @@ mkDerivation rec {
     libusb1
     libGL
     libGLU
-    opencv3
+    opencv
     pcre
     x265
 
@@ -109,13 +109,12 @@ mkDerivation rec {
     threadweaver
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
     "-DENABLE_MEDIAPLAYER=1"
     "-DENABLE_QWEBENGINE=on"
+    "-DENABLE_APPSTYLES=on"
   ];
 
   dontWrapGApps = true;

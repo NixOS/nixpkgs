@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, zlib, bzip2, wxGTK30 }:
+{ lib, stdenv, fetchurl, boost, zlib, bzip2, wxGTK30 }:
 
 stdenv.mkDerivation rec {
   pname = "xylib";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost zlib bzip2 wxGTK30 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Portable library for reading files that contain x-y data from powder diffraction, spectroscopy and other experimental methods";
     license = licenses.lgpl21;
     homepage = "http://xylib.sourceforge.net/";

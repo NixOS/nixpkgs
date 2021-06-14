@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoconf, automake, pkgconfig, libtool
+{ stdenv, lib, fetchurl, autoconf, automake, pkg-config, libtool
 , gtk2, halibut, ncurses, perl, darwin
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     done
   '' else null;
 
-  nativeBuildInputs = [ autoconf automake halibut libtool perl pkgconfig ];
+  nativeBuildInputs = [ autoconf automake halibut libtool perl pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
     gtk2 ncurses
   ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;

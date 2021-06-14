@@ -93,6 +93,7 @@ in
     users.users.pixiecore = {
       description = "Pixiecore daemon user";
       group = "pixiecore";
+      isSystemUser = true;
     };
 
     networking.firewall = mkIf cfg.openFirewall {

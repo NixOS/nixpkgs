@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''lack'';
-  version = ''20201016-git'';
+  baseName = "lack";
+  version = "20201016-git";
 
-  description = ''A minimal Clack'';
+  description = "A minimal Clack";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."lack-component" args."lack-util" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz'';
-    sha256 = ''124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan'';
+    url = "http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz";
+    sha256 = "124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan";
   };
 
   packageName = "lack";

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, makeWrapper, gmp, gcc }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, gmp, gcc }:
 
-with stdenv.lib; stdenv.mkDerivation rec {
+with lib; stdenv.mkDerivation rec {
   pname = "mkcl";
   version = "1.1.11";
 

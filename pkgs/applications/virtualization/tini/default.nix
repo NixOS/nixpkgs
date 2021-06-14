@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, glibc }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   version = "0.19.0";
@@ -11,14 +11,13 @@ stdenv.mkDerivation rec {
     sha256 ="1hnnvjydg7gi5gx6nibjjdnfipblh84qcpajc08nvr44rkzswck4";
   };
 
-  patchPhase = "sed -i /tini-static/d CMakeLists.txt";
+  postPatch = "sed -i /tini-static/d CMakeLists.txt";
 
   NIX_CFLAGS_COMPILE = "-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ glibc glibc.static ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiny but valid init for containers";
     homepage = "https://github.com/krallin/tini";
     license = licenses.mit;

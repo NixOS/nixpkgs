@@ -9,7 +9,7 @@
 , ffmpeg
 , libmysqlclient
 , postgresql
-, spandsp
+, spandsp3
 , sofia_sip
 }:
 
@@ -70,7 +70,7 @@ in
     snom = mk "applications/mod_snom" [];
     sonar = mk "applications/mod_sonar" [];
     soundtouch = mk "applications/mod_soundtouch" [];
-    spandsp = mk "applications/mod_spandsp" [ spandsp ];
+    spandsp = mk "applications/mod_spandsp" [ spandsp3 ];
     spy = mk "applications/mod_spy" [];
     stress = mk "applications/mod_stress" [];
     translate = mk "applications/mod_translate" [];

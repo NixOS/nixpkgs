@@ -7,9 +7,8 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications kdeFrameworks plasma5;
-  libsForQt5 = pkgs.libsForQt514;
-  qt5 = pkgs.qt514;
+  libsForQt5 = pkgs.plasma5Packages;
+  inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;
@@ -185,12 +184,11 @@ in
   config = mkMerge [
     (mkIf cfg.enable {
       # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = ''
+      system.nixos-generate-config.desktopConfiguration = [''
         # Enable the Plasma 5 Desktop Environment.
-        services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
-      '';
+      ''];
 
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
@@ -199,8 +197,8 @@ in
       };
 
       security.wrappers = {
-        kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/libexec/kcheckpass";
-        start_kdeinit.source = "${lib.getBin pkgs.kdeFrameworks.kinit}/libexec/kf5/start_kdeinit";
+        kcheckpass.source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+        start_kdeinit.source = "${lib.getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
         kwin_wayland = {
           source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
           capabilities = "cap_sys_nice+ep";
@@ -214,8 +212,8 @@ in
       '';
 
       environment.systemPackages =
-        with qt5; with libsForQt5;
-        with plasma5; with kdeApplications; with kdeFrameworks;
+        with libsForQt5;
+        with plasma5; with kdeGear; with kdeFrameworks;
         [
           frameworkintegration
           kactivities
@@ -238,6 +236,7 @@ in
           kidletime
           kimageformats
           kinit
+          kirigami2  # In system profile for SDDM theme. TODO: wrapper.
           kio
           kjobwidgets
           knewstuff
@@ -317,6 +316,7 @@ in
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
+        ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]

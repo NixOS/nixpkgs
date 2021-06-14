@@ -1,9 +1,9 @@
-{ darwin, stdenv, qtModule, qtdeclarative, qtwebengine }:
+{ darwin, lib, stdenv, qtModule, qtdeclarative, qtwebengine }:
 
-with stdenv.lib;
+with lib;
 
 qtModule {
-  name = "qtwebview";
+  pname = "qtwebview";
   qtInputs = [ qtdeclarative qtwebengine ];
   buildInputs = optional (stdenv.isDarwin) [
     darwin.apple_sdk.frameworks.CoreFoundation

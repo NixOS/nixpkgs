@@ -28,7 +28,7 @@ let
   supportDarwin = builtins.elem "x86_64-darwin" systemsWithAnySupport;
 
   jobs =
-    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
+    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
@@ -173,13 +173,17 @@ let
             in {
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
-
               # Test a full stdenv bootstrap from the bootstrap tools definition
-              # Temporarily disabled. The darwin bootstrap is transitioning the
-              # structure of bootstrap tools. The tools that are generated as
-              # part of the current package set cannot be unpacked in the same
-              # way as the tools used by the current package set.
-              # inherit (bootstrap.test-pkgs) stdenv;
+              inherit (bootstrap.test-pkgs) stdenv;
+            };
+
+          # Cross compiled bootstrap tools
+          aarch64-darwin =
+            let
+              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; crossSystem = "aarch64-darwin"; };
+            in {
+              # Distribution only for now
+              inherit (bootstrap) dist;
             };
           };
 

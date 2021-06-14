@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl, ncurses, perl, help2man }:
+{ stdenv, lib, fetchurl, ncurses, perl, help2man
+, apparmorRulesFromClosure
+}:
 
 stdenv.mkDerivation rec {
   name = "inetutils-1.9.4";
@@ -7,6 +9,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/inetutils/${name}.tar.gz";
     sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
   };
+
+  outputs = ["out" "apparmor"];
 
   patches = [
     ./whois-Update-Canadian-TLD-server.patch
@@ -40,6 +44,23 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   installFlags = [ "SUIDMODE=" ];
+
+  postInstall = ''
+    mkdir $apparmor
+    cat >$apparmor/bin.ping <<EOF
+    $out/bin/ping {
+      include <abstractions/base>
+      include <abstractions/consoles>
+      include <abstractions/nameservice>
+      include "${apparmorRulesFromClosure { name = "ping"; } [stdenv.cc.libc]}"
+      include <local/bin.ping>
+      capability net_raw,
+      network inet raw,
+      network inet6 raw,
+      mr $out/bin/ping,
+    }
+    EOF
+  '';
 
   meta = with lib; {
     description = "Collection of common network programs";

@@ -1,9 +1,9 @@
-{stdenv, dotnetfx}:
+{ lib, stdenv, dotnetfx }:
 
 let dotnetenv =
 {
   buildSolution = import ./build-solution.nix {
-    inherit stdenv;
+    inherit lib stdenv;
     dotnetfx = dotnetfx.pkg;
   };
 

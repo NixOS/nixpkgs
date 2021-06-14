@@ -2,7 +2,7 @@
 , bctoolbox
 , cmake
 , fetchFromGitLab
-, jre
+, lib
 , libantlr3c
 , mbedtls
 , stdenv
@@ -11,20 +11,18 @@
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  # Using master branch for linphone-desktop caused a chain reaction that many
-  # of its dependencies needed to use master branch too.
-  version = "unstable-2020-02-18";
+  version = "4.5.14";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = "0dcb13416eae87edf140771b886aedaf6be8cf60";
-    sha256 = "0pzxk8mkkg6zsnmj1bwggbdjv864psx89gglfm51h8s501kg11fv";
+    rev = version;
+    sha256 = "sha256-L6dhgBJrzYgBuMNd2eMZJCqB/GIZjKipfn1SffxBFWw=";
   };
 
-  nativeBuildInputs = [ jre cmake ];
+  nativeBuildInputs = [ antlr3_4 cmake ];
 
   buildInputs = [ zlib ];
 
@@ -37,15 +35,12 @@ stdenv.mkDerivation rec {
     "-Wno-error=cast-function-type"
   ];
 
-  propagatedBuildInputs = [ antlr3_4 libantlr3c mbedtls bctoolbox ];
+  propagatedBuildInputs = [ libantlr3c mbedtls bctoolbox ];
 
-  # Fails to build with lots of parallel jobs
-  enableParallelBuilding = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://linphone.org/technical-corner/belle-sip";
     description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };

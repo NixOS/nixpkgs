@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # pypi version doesn't include runtest.py, needed to run tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Class based template tags for Django";
     homepage = "https://github.com/divio/django-classy-tags";
     license = licenses.bsd3;

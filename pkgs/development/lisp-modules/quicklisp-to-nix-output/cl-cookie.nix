@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-cookie'';
-  version = ''20191007-git'';
+  baseName = "cl-cookie";
+  version = "20191007-git";
 
-  description = ''HTTP cookie manager'';
+  description = "HTTP cookie manager";
 
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."cl-utilities" args."local-time" args."proc-parse" args."quri" args."split-sequence" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-cookie/2019-10-07/cl-cookie-20191007-git.tgz'';
-    sha256 = ''1xcb69n3qfp37nwj0mj2whf3yj5xfsgh9sdw6c64gxqkiiq9nfhh'';
+    url = "http://beta.quicklisp.org/archive/cl-cookie/2019-10-07/cl-cookie-20191007-git.tgz";
+    sha256 = "1xcb69n3qfp37nwj0mj2whf3yj5xfsgh9sdw6c64gxqkiiq9nfhh";
   };
 
   packageName = "cl-cookie";

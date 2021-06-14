@@ -1,33 +1,41 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest, libsodium }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, libsodium
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "libnacl";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "saltstack";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10rpim9lf0qd861a3miq8iqg8w87slqwqni7nq66h72jdk130axg";
+    sha256 = "sha256-nttR9PQimhqd2pByJ5IJzJ4RmSI4y7lcX7a7jcK+vqc=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ libsodium ];
+  buildInputs = [ libsodium ];
 
   postPatch =
-    let soext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
-    substituteInPlace "./libnacl/__init__.py" --replace "ctypes.cdll.LoadLibrary('libsodium${soext}')" "ctypes.cdll.LoadLibrary('${libsodium}/lib/libsodium${soext}')"
-  '';
+    let soext = stdenv.hostPlatform.extensions.sharedLibrary; in
+    ''
+      substituteInPlace "./libnacl/__init__.py" --replace \
+        "ctypes.cdll.LoadLibrary('libsodium${soext}')" \
+        "ctypes.cdll.LoadLibrary('${libsodium}/lib/libsodium${soext}')"
+    '';
 
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
-    maintainers = with maintainers; [ xvapx ];
+  pythonImportsCheck = [ "libnacl" ];
+
+  meta = with lib; {
     description = "Python bindings for libsodium based on ctypes";
-    homepage = "https://pypi.python.org/pypi/libnacl";
+    homepage = "https://libnacl.readthedocs.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ xvapx ];
   };
 }

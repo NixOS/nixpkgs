@@ -1,58 +1,23 @@
-{ stdenv, fetchFromGitHub, coq }:
+{ lib, mkCoqDerivation, coq, version ? null }:
 
-let params =
-  {
-    "8.7" = {
-      sha256 = "09n0ky7ldb24by7yf5j3hv410h85x50ksilf7qacl7xglj4gy5hj";
-      buildInputs = [ coq.ocamlPackages.camlp5 ];
-    };
-    "8.8" = {
-      sha256 = "0rc4lshqvnfdsph98gnscvpmlirs9wx91qcvffggg73xw0p1g9s0";
-      buildInputs = [ coq.ocamlPackages.camlp5 ];
-    };
-    "8.9" = {
-      sha256 = "1jjzgpff09xjn9kgp7w69r096jkj0x2ksng3pawrmhmn7clwivbk";
-      buildInputs = [ coq.ocamlPackages.camlp5 ];
-    };
-    "8.10" = {
-      sha256 = "1lq1mw15w4yky79qg3rm0mpzqi2ir51b6ak04ismrdr7ixky49y8";
-    };
-    "8.11" = {
-      sha256 = "09c6813988nvq4fpa45s33k70plnhxsblhm7cxxkg0i37mhvigsa";
-    };
-    "8.12" = {
-      sha256 = "0qd72r45if4h7c256qdfiimv75zyrs0w0xqij3m866jxaq591v4i";
-    };
-  };
-  param = params.${coq.coq-version};
-in
-
-stdenv.mkDerivation rec {
-  version = "1.1.2";
-  name = "coq${coq.coq-version}-paramcoq-${version}";
-  src = fetchFromGitHub {
-    owner = "coq-community";
-    repo = "paramcoq";
-    rev = "v${version}+coq${coq.coq-version}";
-    inherit (param) sha256;
-  };
-
-  buildInputs = [ coq ]
-  ++ (with coq.ocamlPackages; [ ocaml findlib ])
-  ++ (param.buildInputs or [])
-  ;
-
-  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
-
-  passthru = {
-    compatibleCoqVersions = v: builtins.hasAttr v params;
-  };
-
+with lib; mkCoqDerivation {
+  pname = "paramcoq";
+  inherit version;
+  defaultVersion = if versions.range "8.7" "8.13" coq.coq-version
+    then "1.1.2+coq${coq.coq-version}" else null;
+  displayVersion = { paramcoq = "1.1.2"; };
+  release."1.1.2+coq8.13".sha256 = "02vnf8p04ynf3qk8myvjzsbga15395235mpdpj54pvxis3h5qq22";
+  release."1.1.2+coq8.12".sha256 = "0qd72r45if4h7c256qdfiimv75zyrs0w0xqij3m866jxaq591v4i";
+  release."1.1.2+coq8.11".sha256 = "09c6813988nvq4fpa45s33k70plnhxsblhm7cxxkg0i37mhvigsa";
+  release."1.1.2+coq8.10".sha256 = "1lq1mw15w4yky79qg3rm0mpzqi2ir51b6ak04ismrdr7ixky49y8";
+  release."1.1.2+coq8.9".sha256  = "1jjzgpff09xjn9kgp7w69r096jkj0x2ksng3pawrmhmn7clwivbk";
+  release."1.1.2+coq8.8".sha256  = "0rc4lshqvnfdsph98gnscvpmlirs9wx91qcvffggg73xw0p1g9s0";
+  release."1.1.2+coq8.7".sha256  = "09n0ky7ldb24by7yf5j3hv410h85x50ksilf7qacl7xglj4gy5hj";
+  releaseRev = v: "v${v}";
+  mlPlugin = true;
   meta = {
     description = "Coq plugin for parametricity";
-    inherit (src.meta) homepage;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (coq.meta) platforms;
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

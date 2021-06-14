@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , nixosTests
@@ -12,7 +12,7 @@
 , gcr
 , gnome-online-accounts
 , gobject-introspection
-, gnome3
+, gnome
 , p11-kit
 , openssl
 , uhttpmock
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgdata";
-  version = "0.17.13";
+  version = "0.18.1";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bj7ij6k3lxjn62jgh8vabr8vfjs48aylnnl3779warw5iwyzfga";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "3YWS7rZRKtCoz1yL6McudvdL/msj5N2T8HVu4HFoBMc=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none"; # Stable version has not been updated for a long time.
     };
@@ -76,10 +76,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GData API library";
     homepage = "https://wiki.gnome.org/Projects/libgdata";
-    maintainers = with maintainers; [ raskin lethalman ] ++ teams.gnome.members;
+    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
   };

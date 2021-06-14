@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   version = "1.0.1";
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extract, defang, resolve names and IPs from text";
     longDescription = ''
       ipgrep extracts possibly obfuscated host names and IP addresses

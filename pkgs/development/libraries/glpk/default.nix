@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , libmysqlclient
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ libmysqlclient
-    ] ++ stdenv.lib.optionals withGmp [
+    ] ++ lib.optionals withGmp [
       gmp
     ];
 
-  configureFlags = stdenv.lib.optionals withGmp [
+  configureFlags = lib.optionals withGmp [
     "--with-gmp"
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "The GNU Linear Programming Kit";
 
     longDescription =
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = "https://www.gnu.org/software/glpk/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ bjg timokau ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ bjg ] ++ teams.sage.members;
+    platforms = platforms.all;
   };
 }

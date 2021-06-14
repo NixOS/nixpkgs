@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   patches = [ ./suds-0.4-CVE-2013-2217.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # Broken for security issues:
     # - https://github.com/NixOS/nixpkgs/issues/19678
     # - https://lwn.net/Vulnerabilities/559200/

@@ -20,6 +20,7 @@ if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
+setDynamicLinker=1
 
 # Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
@@ -47,6 +48,11 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
             # Our ld is not built with sysroot support (Can we fix that?)
             :
         else
+            if [[ "$p" = -static || "$p" = -static-pie ]]; then
+                # Using a dynamic linker for static binaries can lead to crashes.
+                # This was observed for rust binaries.
+                setDynamicLinker=0
+            fi
             rest+=("$p")
         fi
         n+=1
@@ -63,9 +69,22 @@ extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 if [ -z "${NIX_LDFLAGS_SET_@suffixSalt@:-}" ]; then
     extraAfter+=($NIX_LDFLAGS_@suffixSalt@)
     extraBefore+=($NIX_LDFLAGS_BEFORE_@suffixSalt@)
+    # By adding dynamic linker to extraBefore we allow the users set their
+    # own dynamic linker as NIX_LD_FLAGS will override earlier set flags
+    if [[ "$setDynamicLinker" = 1 && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
+        extraBefore+=("-dynamic-linker" "$NIX_DYNAMIC_LINKER_@suffixSalt@")
+    fi
 fi
 
 extraAfter+=($NIX_LDFLAGS_AFTER_@suffixSalt@)
+
+# These flags *must not* be pulled up to -Wl, flags, so they can't go in
+# add-flags.sh. They must always be set, so must not be disabled by
+# NIX_LDFLAGS_SET.
+if [ -e @out@/nix-support/add-local-ldflags-before.sh ]; then
+    source @out@/nix-support/add-local-ldflags-before.sh
+fi
+
 
 # Specify the target emulation if nothing is passed in ("-m" overrides this
 # environment variable). Ensures we never blindly fallback on targeting the host
@@ -82,6 +101,8 @@ extraAfter+=($NIX_LDFLAGS_AFTER_@suffixSalt@)
 declare -a libDirs
 declare -A libs
 declare -i relocatable=0 link32=0
+
+linkerOutput="a.out"
 
 if
     [ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 ] \
@@ -134,7 +155,25 @@ then
     done
 fi
 
-if [ -e "@out@/nix-support/dynamic-linker-m32" ] && (( "$link32" )); then
+# Determine linkerOutput
+prev=
+for p in \
+    ${extraBefore+"${extraBefore[@]}"} \
+    ${params+"${params[@]}"} \
+    ${extraAfter+"${extraAfter[@]}"}
+do
+    case "$prev" in
+        -o)
+            # Informational for post-link-hook
+            linkerOutput="$p"
+            ;;
+        *)
+            ;;
+    esac
+    prev="$p"
+done
+
+if [[ "$link32" = "1" && "$setDynamicLinker" = 1 && -e "@out@/nix-support/dynamic-linker-m32" ]]; then
     # We have an alternate 32-bit linker and we're producing a 32-bit ELF, let's
     # use it.
     extraAfter+=(
@@ -204,7 +243,11 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-exec @prog@ \
+@prog@ \
     ${extraBefore+"${extraBefore[@]}"} \
     ${params+"${params[@]}"} \
     ${extraAfter+"${extraAfter[@]}"}
+
+if [ -e "@out@/nix-support/post-link-hook" ]; then
+    source @out@/nix-support/post-link-hook
+fi

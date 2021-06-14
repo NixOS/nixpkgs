@@ -1,7 +1,7 @@
-{ lib, fetchurl, gettext, pkgconfig, texinfo, wrapGAppsHook
+{ lib, fetchurl, gettext, pkg-config, texinfo, wrapGAppsHook
 , buildPythonApplication, pycairo, pygobject3
 , gobject-introspection, gtk3, librsvg
-, alsaUtils, timidity, mpg123, vorbis-tools, csound, lilypond
+, alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond
 }:
 
 buildPythonApplication rec {
@@ -19,12 +19,12 @@ buildPythonApplication rec {
     ./webbrowser.patch
   ];
 
-  nativeBuildInputs = [ gettext pkgconfig texinfo wrapGAppsHook ];
+  nativeBuildInputs = [ gettext pkg-config texinfo wrapGAppsHook ];
   buildInputs = [ gobject-introspection gtk3 librsvg ];
   propagatedBuildInputs = [ pycairo pygobject3 ];
 
   preBuild = ''
-    sed -i -e 's|wav_player=.*|wav_player=${alsaUtils}/bin/aplay|' \
+    sed -i -e 's|wav_player=.*|wav_player=${alsa-utils}/bin/aplay|' \
            -e 's|midi_player=.*|midi_player=${timidity}/bin/timidity|' \
            -e 's|mp3_player=.*|mp3_player=${mpg123}/bin/mpg123|' \
            -e 's|ogg_player=.*|ogg_player=${vorbis-tools}/bin/ogg123|' \

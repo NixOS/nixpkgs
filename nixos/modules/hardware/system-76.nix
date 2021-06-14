@@ -17,6 +17,9 @@ let
 
   firmware-pkg = pkgs.system76-firmware;
   firmwareConfig = mkIf cfg.firmware-daemon.enable {
+    # Make system76-firmware-cli usable by root from the command line.
+    environment.systemPackages = [ firmware-pkg ];
+
     services.dbus.packages = [ firmware-pkg ];
 
     systemd.services.system76-firmware-daemon = {

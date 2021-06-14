@@ -1,4 +1,4 @@
-{ stdenv, xorg, fetchgit }:
+{ lib, stdenv, xorg, fetchgit }:
 stdenv.mkDerivation rec {
   pname = "xpointerbarrier";
   version = "18.06";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://uninformativ.de/git/xpointerbarrier";
     description = "Create X11 pointer barriers around your working area";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.xzfc ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.xzfc ];
+    platforms = lib.platforms.linux;
   };
 }

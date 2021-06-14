@@ -1,7 +1,7 @@
-{ stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
-, file, atk, alsaLib, cairo, fontconfig, gdk-pixbuf, glib, gnome3, gtk2-x11, gtk3
+{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
+, file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, gnome, gtk2-x11, gtk3
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
-, gnome2, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
+, gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
 , libpulseaudio, pcsclite
 
@@ -11,8 +11,6 @@
 }:
 
 let
-  inherit (stdenv) lib;
-
   openssl' = symlinkJoin {
     name = "openssl-backwards-compat";
     nativeBuildInputs = [ makeWrapper ];
@@ -64,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     atk
     cairo
     dconf
@@ -72,7 +70,7 @@ stdenv.mkDerivation rec {
     freetype
     gdk-pixbuf
     gnome2.gtkglext
-    gnome3.webkitgtk
+    gnome.webkitgtk
     gtk2
     gtk2-x11
     gtk3
@@ -86,6 +84,7 @@ stdenv.mkDerivation rec {
     libsoup
     libvorbis
     libxml2
+    mesa
     nspr
     nss
     openssl'
@@ -204,7 +203,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     description = "Citrix Workspace";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ pmenke ];
     inherit homepage;
   };
 }

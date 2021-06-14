@@ -3,34 +3,42 @@
 , fetchFromGitHub
 , nose
 , numpy
-, scikitlearn
+, scikit-learn
 , scipy
 , numba
+, pynndescent
+, tensorflow
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.4.5";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     rev = version;
-    sha256 = "080by8h4rxr5ijx8vp8kn952chiqz029j26c04k4js4g9s7201bq";
+    sha256 = "0favphngcz5jvyqs06x07hk552lvl9qx3vka8r4x0xmv88gsg349";
   };
-
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
 
   propagatedBuildInputs = [
     numpy
-    scikitlearn
+    scikit-learn
     scipy
     numba
+    pynndescent
   ];
+
+  checkInputs = [
+    nose
+    tensorflow
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   disabledTests = [
     # Plot functionality requires additional packages.

@@ -10,15 +10,15 @@
     version = "0.0.4";
   };
   colorls = {
-    dependencies = ["clocale" "filesize" "manpages" "rainbow"];
+    dependencies = ["clocale" "filesize" "manpages" "rainbow" "unicode-display_width"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0sw377wklld5zn1la0smxc2bg4rph2xf9d0h3zmxhmds06lb92db";
+      sha256 = "1w9d99qzgxw8wwa4z1vkdnr70fppx2g9shma6dz3ihjhajj2xvmq";
       type = "gem";
     };
-    version = "1.4.2";
+    version = "1.4.3";
   };
   filesize = {
     groups = ["default"];
@@ -49,5 +49,15 @@
       type = "gem";
     };
     version = "3.0.0";
+  };
+  unicode-display_width = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "06i3id27s60141x6fdnjn5rar1cywdwy64ilc59cz937303q3mna";
+      type = "gem";
+    };
+    version = "1.7.0";
   };
 }

@@ -1,24 +1,28 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, ocaml-migrate-parsetree, ppx_tools_versioned }:
+{ lib, fetchFromGitHub, buildDunePackage, cmdliner, ppxlib }:
 
 buildDunePackage rec {
   pname = "bisect_ppx";
-  version = "1.4.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "aantron";
     repo = "bisect_ppx";
     rev = version;
-    sha256 = "1plhm4pvrhpapz5zaks194ji1fgzmp13y942g10pbn9m7kgkqg4h";
+    sha256 = "sha256-YeLDlH3mUbVEY4OmzlrvSwVUav3uMtSsTFlOsQKnz84=";
   };
 
+  minimumOCamlVersion = "4.08";
+  useDune2 = true;
+
   buildInputs = [
-    ocaml-migrate-parsetree
-    ppx_tools_versioned
+    cmdliner
+    ppxlib
   ];
 
-  meta = {
-    description = "Code coverage for OCaml";
-    license = stdenv.lib.licenses.mpl20;
+  meta = with lib; {
+    description = "Bisect_ppx is a code coverage tool for OCaml and Reason. It helps you test thoroughly by showing what's not tested.";
+    license = licenses.mit;
     homepage = "https://github.com/aantron/bisect_ppx";
+    maintainers = with maintainers; [ ];
   };
 }

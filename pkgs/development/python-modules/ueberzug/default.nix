@@ -4,17 +4,22 @@
 
 buildPythonPackage rec {
   pname = "ueberzug";
-  version = "18.1.6";
+  version = "18.1.9";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13a9q9rvkbsym5nrc1y2anhyx317vj1vi8k8kln8gin2yw311pyb";
+    sha256 = "7ce49f351132c7d1b0f8097f6e4c5635376151ca59318540da3e296e5b21adc3";
   };
 
   buildInputs = [ libX11 libXext ];
+
   propagatedBuildInputs = [ attrs docopt pillow psutil xlib ];
+
+  doCheck = false;
+
+  pythonImportsCheck = [ "ueberzug" ];
 
   meta = with lib; {
     homepage = "https://github.com/seebye/ueberzug";

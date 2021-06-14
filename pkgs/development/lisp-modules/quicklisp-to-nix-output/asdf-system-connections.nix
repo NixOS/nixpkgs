@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''asdf-system-connections'';
-  version = ''20170124-git'';
+  baseName = "asdf-system-connections";
+  version = "20170124-git";
 
-  description = ''Allows for ASDF system to be connected so that auto-loading may occur.'';
+  description = "Allows for ASDF system to be connected so that auto-loading may occur.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/asdf-system-connections/2017-01-24/asdf-system-connections-20170124-git.tgz'';
-    sha256 = ''0h8237bq3niw6glcsps77n1ykcmc5bjkcrbjyxjgkmcb1c5kwwpq'';
+    url = "http://beta.quicklisp.org/archive/asdf-system-connections/2017-01-24/asdf-system-connections-20170124-git.tgz";
+    sha256 = "0h8237bq3niw6glcsps77n1ykcmc5bjkcrbjyxjgkmcb1c5kwwpq";
   };
 
   packageName = "asdf-system-connections";

@@ -171,14 +171,8 @@ diff -u --recursive ncbi-blast-2.9.0+-src/scripts/common/impl/strip_for_install.
  GREP     = @GREP@
 --- ncbi-blast-2.9.0+-src/src/build-system/configure	2019-03-05 00:49:08.000000000 +0800
 +++ ncbi-blast-2.9.0+-src.patched/src/build-system/configure	2019-05-15 16:55:40.711795042 +0800
-@@ -10417,10 +10417,6 @@
- echo "${ECHO_T}no, using $LN_S" >&6; }
- fi
- 
+@@ -10417,4 +10417,0 @@
 -case "$LN_S" in
 -    /*) ;;
 -    * ) LN_S=/bin/$LN_S ;;
 -esac
- 
- if test -n "$ac_tool_prefix"; then
-   # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.

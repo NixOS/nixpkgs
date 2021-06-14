@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, rustPlatform, fetchpatch }:
+{ lib, fetchFromGitHub, rustPlatform, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eva";
   version = "0.2.7";
 
-  cargoSha256 = "1lycjw5i169xx73qw8gknbakrxikdbr65fmqx7xq2mafc0hb1zyn";
+  cargoSha256 = "08wm34rd03m5kd2zar23yhvi66kalzdqkgd6cqa1nq0ra4agnan7";
 
   src = fetchFromGitHub {
     owner = "NerdyPepper";
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A calculator REPL, similar to bc";
     homepage = "https://github.com/NerdyPepper/eva";
     license = licenses.mit;

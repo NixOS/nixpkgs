@@ -29,7 +29,7 @@ in
 {
   name = "fenics";
   meta = {
-    maintainers = with pkgs.stdenv.lib.maintainers; [ knedlsepp ];
+    maintainers = with pkgs.lib.maintainers; [ knedlsepp ];
   };
 
   nodes = {

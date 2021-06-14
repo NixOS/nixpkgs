@@ -21,7 +21,7 @@ in {
       };
 
       environmentFiles = mkOption {
-        type = types.nullOr (types.listOf types.path);
+        type = types.listOf types.path;
         default = [];
         example = "/run/keys/telegraf.env";
         description = ''
@@ -38,17 +38,13 @@ in {
         description = "Extra configuration options for telegraf";
         type = settingsFormat.type;
         example = {
-          outputs = {
-            influxdb = {
-              urls = ["http://localhost:8086"];
-              database = "telegraf";
-            };
+          outputs.influxdb = {
+            urls = ["http://localhost:8086"];
+            database = "telegraf";
           };
-          inputs = {
-            statsd = {
-              service_address = ":8125";
-              delete_timings = true;
-            };
+          inputs.statsd = {
+            service_address = ":8125";
+            delete_timings = true;
           };
         };
       };
@@ -73,7 +69,7 @@ in {
             umask 077
             ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > /var/run/telegraf/config.toml
           '');
-        ExecStart=''${cfg.package}/bin/telegraf -config ${finalConfigFile}'';
+        ExecStart="${cfg.package}/bin/telegraf -config ${finalConfigFile}";
         ExecReload="${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = "telegraf";
         User = "telegraf";

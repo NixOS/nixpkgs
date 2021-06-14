@@ -1,23 +1,53 @@
-{ stdenv, fetchFromGitHub, makeWrapper, bison, flex, geoip, geolite-legacy
-, libcli, libnet, libnetfilter_conntrack, libnl, libpcap, libsodium
-, liburcu, ncurses, pkgconfig, zlib }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, bison
+, flex
+, geoip
+, geolite-legacy
+, libcli
+, libnet
+, libnetfilter_conntrack
+, libnl
+, libpcap
+, libsodium
+, liburcu
+, ncurses
+, pkg-config
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "netsniff-ng";
-  version = "0.6.7";
+  version = "0.6.8";
 
-  # Upstream recommends and supports git
   src = fetchFromGitHub {
     repo = pname;
     owner = pname;
     rev = "v${version}";
-    sha256 = "1jvihq30cwlpjqwny0lcrciysn40wscq6xik3s9b81nw2s7wiyqr";
+    sha256 = "10ih8amaqspy0zwg7hqvypa1v7ixpjl0n608cyfgyfzffp73lbqf";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper bison flex ];
+  nativeBuildInputs = [
+    bison
+    flex
+    makeWrapper
+    pkg-config
+  ];
+
   buildInputs = [
-    geoip geolite-legacy libcli libnet libnl
-    libnetfilter_conntrack libpcap libsodium liburcu ncurses zlib
+    geoip
+    geolite-legacy
+    libcli
+    libnet
+    libnl
+    libnetfilter_conntrack
+    libpcap
+    libsodium
+    liburcu
+    ncurses
+    zlib
   ];
 
   # ./configure is not autoGNU but some home-brewn magic
@@ -37,16 +67,16 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/sbin/trafgen" --prefix PATH ":" "${stdenv.cc}/bin"
     wrapProgram "$out/sbin/bpfc" --prefix PATH ":" "${stdenv.cc}/bin"
 
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIP.dat		$out/etc/netsniff-ng/country4.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPv6.dat		$out/etc/netsniff-ng/country6.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPCity.dat		$out/etc/netsniff-ng/city4.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPCityv6.dat	$out/etc/netsniff-ng/city6.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNum.dat		$out/etc/netsniff-ng/asname4.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNumv6.dat	$out/etc/netsniff-ng/asname6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIP.dat $out/etc/netsniff-ng/country4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPv6.dat $out/etc/netsniff-ng/country6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPCity.dat $out/etc/netsniff-ng/city4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPCityv6.dat $out/etc/netsniff-ng/city6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNum.dat $out/etc/netsniff-ng/asname4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNumv6.dat $out/etc/netsniff-ng/asname6.dat
     rm -v $out/etc/netsniff-ng/geoip.conf # updating databases after installation is impossible
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Swiss army knife for daily Linux network plumbing";
     longDescription = ''
       netsniff-ng is a free Linux networking toolkit. Its gain of performance
@@ -56,7 +86,7 @@ stdenv.mkDerivation rec {
       development and analysis, debugging, auditing or network reconnaissance.
     '';
     homepage = "http://netsniff-ng.org/";
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Only ];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchurl
-, libasyncns, pkgconfig }:
+{ lib, buildPythonPackage, fetchurl
+, libasyncns, pkg-config }:
 
 buildPythonPackage rec {
   pname = "libasyncns-python";
@@ -13,10 +13,10 @@ buildPythonPackage rec {
   patches = [ ./libasyncns-fix-res-consts.patch ];
 
   buildInputs = [ libasyncns ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   doCheck = false; # requires network access
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "libasyncns-python is a python binding for the asynchronous name service query library";
     license = licenses.lgpl21;
     maintainers = [ maintainers.mic92 ];

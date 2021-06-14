@@ -31,7 +31,7 @@ VersionComponent = Union[int, str]
 Version = List[VersionComponent]
 
 
-Patch = TypedDict("Patch", {"name": str, "url": str, "sha256": str})
+Patch = TypedDict("Patch", {"name": str, "url": str, "sha256": str, "extra": str})
 
 
 @dataclass
@@ -99,7 +99,10 @@ def verify_openpgp_signature(
             return False
 
 
-def fetch_patch(*, name: str, release: GitRelease) -> Optional[Patch]:
+def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
+    release = release_info.release
+    extra = f'-{release_info.version[-1]}'
+
     def find_asset(filename: str) -> str:
         try:
             it: Iterator[str] = (
@@ -130,12 +133,12 @@ def fetch_patch(*, name: str, release: GitRelease) -> Optional[Patch]:
     if not sig_ok:
         return None
 
-    return Patch(name=patch_filename, url=patch_url, sha256=sha256)
+    return Patch(name=patch_filename, url=patch_url, sha256=sha256, extra=extra)
 
 
 def parse_version(version_str: str) -> Version:
     version: Version = []
-    for component in version_str.split("."):
+    for component in re.split('\.|\-', version_str):
         try:
             version.append(int(component))
         except ValueError:
@@ -205,7 +208,7 @@ failures = False
 releases = {}
 for release in repo.get_releases():
     version = parse_version(release.tag_name)
-    # needs to look like e.g. 5.6.3.a
+    # needs to look like e.g. 5.6.3-hardened1
     if len(version) < 4:
         continue
 
@@ -252,7 +255,7 @@ for kernel_key in sorted(releases.keys()):
         update = True
 
     if update:
-        patch = fetch_patch(name=name, release=release)
+        patch = fetch_patch(name=name, release_info=release_info)
         if patch is None:
             failures = True
         else:

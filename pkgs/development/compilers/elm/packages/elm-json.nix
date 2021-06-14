@@ -1,29 +1,21 @@
-{ rustPlatform, fetchurl, openssl, stdenv, pkg-config }:
+{ lib, curl, rustPlatform, fetchurl, openssl, stdenv, pkg-config, Security }:
 rustPlatform.buildRustPackage rec {
   pname = "elm-json";
-  version = "0.2.7";
+  version = "0.2.10";
 
   src = fetchurl {
     url = "https://github.com/zwilias/elm-json/archive/v${version}.tar.gz";
-    sha256 = "sha256:1b9bhl7rb01ylqjbfd1ccm26lhk4hzwd383rbg89aj2jwjv0w4hs";
+    sha256 = "sha256:03azh7wvl60h6w7ffpvl49s7jr7bxpladcm4fzcasakg26i5a71x";
   };
 
   cargoPatches = [ ./elm-json.patch ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ curl openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "0ylniriq073kpiykamkn9mxdaa6kyiza4pvf7gnfq2h1dvbqa6z7";
+  cargoSha256 = "sha256:01zasrqf1va58i52s3kwdkj1rnwy80gv00xi6npfshjirj3ix07f";
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
-
-  meta = with stdenv.lib; {
-    description = "Install, upgrade and uninstall Elm dependencies";
-    homepage = "https://github.com/zwilias/elm-json";
-    license = licenses.mit;
-    maintainers = [ maintainers.turbomack ];
-    platforms = platforms.linux;
-  };
 }

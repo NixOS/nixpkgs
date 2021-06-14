@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, opaline
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, opaline
 , calendar, eliom, js_of_ocaml-ppx_deriving_json
 }:
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://ocsigen.org/ocsigen-toolkit/";
     description = " User interface widgets for Ocsigen applications";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.gal_bolle ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.gal_bolle ];
     inherit (ocaml.meta) platforms;
   };
 

@@ -1,14 +1,14 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "telegraf";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ mic92 ];
   };
 
   machine = { ... }: {
     services.telegraf.enable = true;
-    services.telegraf.environmentFiles = [pkgs.writeText "secrets" ''
+    services.telegraf.environmentFiles = [(pkgs.writeText "secrets" ''
       SECRET=example
-    ''];
+    '')];
     services.telegraf.extraConfig = {
       agent.interval = "1s";
       agent.flush_interval = "1s";

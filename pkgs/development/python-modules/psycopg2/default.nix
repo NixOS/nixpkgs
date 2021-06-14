@@ -4,6 +4,8 @@ buildPythonPackage rec {
   pname = "psycopg2";
   version = "2.8.6";
 
+  # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
+  # c.f. https://github.com/NixOS/nixpkgs/pull/104151#issuecomment-729750892
   disabled = isPyPy;
 
   src = fetchPypi {

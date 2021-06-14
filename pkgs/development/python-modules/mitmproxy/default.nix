@@ -1,21 +1,25 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
-, isPy27
-, fetchpatch
-# Mitmproxy requirements
+, pythonOlder
+  # Mitmproxy requirements
+, asgiref
 , blinker
 , brotli
 , certifi
 , click
 , cryptography
 , flask
+, h11
 , h2
 , hyperframe
 , kaitaistruct
 , ldap3
+, msgpack
 , passlib
 , protobuf
+, publicsuffix2
 , pyasn1
 , pyopenssl
 , pyparsing
@@ -26,65 +30,47 @@
 , tornado
 , urwid
 , wsproto
-, publicsuffix2
 , zstandard
-# Additional check requirements
+  # Additional check requirements
 , beautifulsoup4
 , glibcLocales
-, pytest
-, requests
-, asynctest
+, hypothesis
 , parver
 , pytest-asyncio
-, hypothesis
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "5.2";
-  disabled = isPy27;
+  version = "6.0.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "0ja0aqnfmkvns5qmd51hmrvbw8dnccaks30gxgzgcjgy30rj4brq";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-FyIZKFQtf6qvwo4+NzPa/KOmBCcdGJ3jCqxz26+S2e4=";
   };
-
-  patches = [
-    # Apply patch from upstream to make mitmproxy v5.2 compatible with urwid >v2.1.0
-    (fetchpatch {
-      name = "urwid-lt-2.1.0.patch";
-      url = "https://github.com/mitmproxy/mitmproxy/commit/ea9177217208fdf642ffc54f6b1f6507a199350c.patch";
-      sha256 = "1z5r8izg5nvay01ywl3xc6in1vjfi9f144j057p3k5rzfliv49gg";
-    })
-  ];
-
-  postPatch = ''
-    # remove dependency constraints
-    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?//' -i setup.py
-  '';
-
-  doCheck = (!stdenv.isDarwin);
-
-  checkPhase = ''
-    export HOME=$(mktemp -d)
-    pytest -k 'not test_get_version' # expects a Git repository
-  '';
 
   propagatedBuildInputs = [
     setuptools
     # setup.py
+    asgiref
     blinker
     brotli
     certifi
     click
     cryptography
     flask
+    h11
     h2
     hyperframe
     kaitaistruct
     ldap3
+    msgpack
     passlib
     protobuf
     publicsuffix2
@@ -101,21 +87,39 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    asynctest
     beautifulsoup4
-    flask
     glibcLocales
     hypothesis
     parver
-    pytest
     pytest-asyncio
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
     requests
   ];
 
-  meta = with stdenv.lib; {
+  doCheck = !stdenv.isDarwin;
+
+  postPatch = ''
+    # remove dependency constraints
+    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTests = [
+    # Tests require a git repository
+    "test_get_version"
+  ];
+
+  pythonImportsCheck = [ "mitmproxy" ];
+
+  meta = with lib; {
     description = "Man-in-the-middle proxy";
-    homepage    = "https://mitmproxy.org/";
-    license     = licenses.mit;
+    homepage = "https://mitmproxy.org/";
+    license = licenses.mit;
     maintainers = with maintainers; [ fpletz kamilchm ];
   };
 }

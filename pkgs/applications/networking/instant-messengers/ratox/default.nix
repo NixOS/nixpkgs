@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, libtoxcore
+{ lib, stdenv, fetchgit, libtoxcore
 , conf ? null }:
 
-with stdenv.lib;
+with lib;
 
 let
   configFile = optionalString (conf!=null) (builtins.toFile "config.h" conf);

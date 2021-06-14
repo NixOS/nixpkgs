@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qt5, box2d, which, cmake, gettext }:
+{ lib, mkDerivation, fetchFromGitHub, qt5, box2d, which, cmake, gettext }:
 
 mkDerivation rec {
   pname = "tbe";
@@ -17,7 +17,6 @@ mkDerivation rec {
     qt5.qtbase qt5.qtsvg qt5.qttranslations box2d which cmake
     gettext
   ];
-  enableParallelBuilding = true;
 
   installPhase = ''
     make DESTDIR=.. install
@@ -26,7 +25,7 @@ mkDerivation rec {
     cp -r ../usr/share $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A physics-based game vaguely similar to Incredible Machine";
     homepage = "http://the-butterfly-effect.org/";
     maintainers = [ maintainers.raskin ];

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, ua-parser }:
+{ lib, buildPythonPackage, fetchFromGitHub, ua-parser }:
 
 buildPythonPackage rec {
   pname = "user-agents";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ua-parser ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python library to identify devices by parsing user agent strings";
     homepage = "https://github.com/selwin/python-user-agents";
     license = licenses.mit;

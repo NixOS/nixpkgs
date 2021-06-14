@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkg-config, python3
-, alsaLib, curl, freetype, gtk3, libGL, libX11, libXext, libXinerama, webkitgtk
+{ lib, stdenv, fetchFromGitHub, pkg-config, python3
+, alsa-lib, curl, freetype, gtk3, libGL, libX11, libXext, libXinerama, webkitgtk
 }:
 
 stdenv.mkDerivation {
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config python3 ];
-  buildInputs = [ alsaLib curl freetype gtk3 libGL libX11 libXext libXinerama webkitgtk ];
+  buildInputs = [ alsa-lib curl freetype gtk3 libGL libX11 libXext libXinerama webkitgtk ];
 
   postPatch = ''
     patchShebangs src/tunefish4/generate-lv2-ttl.py
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tunefish-synth.com/";
     description = "Virtual analog synthesizer LV2 plugin";
     license = licenses.gpl3Plus;

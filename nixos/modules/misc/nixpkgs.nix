@@ -73,7 +73,7 @@ in
           }
         '';
       type = pkgsType;
-      example = literalExample ''import <nixpkgs> {}'';
+      example = literalExample "import <nixpkgs> {}";
       description = ''
         If set, the pkgs argument to all NixOS modules is the value of
         this option, extended with <code>nixpkgs.overlays</code>, if

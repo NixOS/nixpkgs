@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "toml";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # git to download a test suite.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a Python library for parsing and creating TOML";
     homepage = "https://github.com/uiri/toml";
     license = licenses.mit;

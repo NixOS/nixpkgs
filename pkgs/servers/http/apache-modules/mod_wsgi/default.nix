@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheHttpd, python, ncurses }:
+{ lib, stdenv, fetchurl, apacheHttpd, python, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "mod_wsgi";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/GrahamDumpleton/mod_wsgi";
     description = "Host Python applications in Apache through the WSGI interface";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
   };
 }

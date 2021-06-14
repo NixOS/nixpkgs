@@ -1,9 +1,26 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub, fetchpatch
-, bottle, click, colorama, semantic-version
-, lockfile, pyserial, requests
-, tabulate, pyelftools, marshmallow
-, pytest, tox, jsondiff
-, git, spdx-license-list-data
+{ stdenv, lib, buildPythonApplication
+, ajsonrpc
+, bottle
+, click
+, click-completion
+, colorama
+, git
+, jsondiff
+, lockfile
+, marshmallow
+, pyelftools
+, pyserial
+, pytest
+, requests
+, semantic-version
+, spdx-license-list-data
+, starlette
+, tabulate
+, tox
+, uvicorn
+, wsproto
+, zeroconf
+, version, src
 }:
 
 let
@@ -75,20 +92,26 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "5.0.2";
+  inherit version src;
 
-  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
-  src = fetchFromGitHub {
-    owner = "platformio";
-    repo = "platformio-core";
-    rev = "v${version}";
-    sha256 = "1hbw8nbllyj0xyx1rz2chx9vyqf9949dcdx4v9hnfbsjwwpcfi0a";
-  };
-
-  propagatedBuildInputs =  [
-    bottle click colorama git lockfile
-    pyserial requests semantic-version
-    tabulate pyelftools marshmallow
+  propagatedBuildInputs = [
+    ajsonrpc
+    bottle
+    click
+    click-completion
+    colorama
+    git
+    lockfile
+    marshmallow
+    pyelftools
+    pyserial
+    requests
+    semantic-version
+    starlette
+    tabulate
+    uvicorn
+    wsproto
+    zeroconf
   ];
 
   HOME = "/tmp";
@@ -112,9 +135,12 @@ in buildPythonApplication rec {
   postPatch = ''
     substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
+
+    substituteInPlace setup.py \
+      --replace "zeroconf==0.28.*" "zeroconf"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
     homepage = "http://platformio.org";

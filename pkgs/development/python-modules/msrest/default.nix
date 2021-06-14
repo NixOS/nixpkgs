@@ -6,19 +6,19 @@
 , requests_oauthlib
 , isodate
 , certifi
-, enum34
+, enum34 ? null
 , typing
 , aiohttp
 , aiodns
 , pytest
 , httpretty
 , mock
-, futures
+, futures ? null
 , trio
 }:
 
 buildPythonPackage rec {
-  version = "0.6.18";
+  version = "0.6.21";
   pname = "msrest";
 
   # no tests in PyPI tarball
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Azure";
     repo = "msrest-for-python";
     rev = "v${version}";
-    sha256 = "0j0dbca47qnxnhpfgj3v5bglg8dpx2cy1psix8kp3ldrkf6rjwdb";
+    sha256 = "sha256-IlBwlVQ/v+vJmCWNbFZKGL6a9K09z4AYrPm3kwaA/nI=";
   };
 
   propagatedBuildInputs = [
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "The runtime library 'msrest' for AutoRest generated Python clients.";
     homepage = "https://github.com/Azure/msrest-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ bendlas jonringer mwilsoninsight ];
+    maintainers = with maintainers; [ bendlas jonringer maxwilson ];
   };
 }

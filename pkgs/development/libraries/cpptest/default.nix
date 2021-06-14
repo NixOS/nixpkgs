@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "cpptest-2.0.0";
@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0lpy3f2fjx1srh02myanlp6zfi497whlldcrnij39ghfhm0arcnm";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cpptest.sourceforge.net/";
     description = "Simple C++ unit testing framework";
     maintainers = with maintainers; [ bosu ];
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl3;
+    platforms = platforms.all;
   };
 }

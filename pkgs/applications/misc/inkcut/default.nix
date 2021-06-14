@@ -1,16 +1,20 @@
-{ lib, python3Packages, fetchFromGitHub, wrapQtAppsHook }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapQtAppsHook
+}:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "inkcut";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c0mfdfy9iq4l683f3aa7cm7x2w9px83dyigc7655wvaq3bxi2rp";
+    sha256 = "0px0xdv6kyzkkpmvryrdfavv1qy2xrqdxkpmhvx1gj649xcabv32";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
@@ -44,6 +48,15 @@ buildPythonApplication rec {
 
   dontWrapQtApps = true;
   makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+
+  postInstall = ''
+    mkdir -p $out/share/inkscape/extensions
+
+    cp plugins/inkscape/* $out/share/inkscape/extensions
+
+    sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_cut.py
+    sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_open.py
+  '';
 
   meta = with lib; {
     homepage = "https://www.codelv.com/projects/inkcut/";

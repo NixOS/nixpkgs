@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses
+{ fetchurl, lib, stdenv, ncurses
 }:
 
 stdenv.mkDerivation (rec {
@@ -47,11 +47,11 @@ stdenv.mkDerivation (rec {
 
     homepage = "https://savannah.gnu.org/projects/readline/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
     branch = "6.2";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
 

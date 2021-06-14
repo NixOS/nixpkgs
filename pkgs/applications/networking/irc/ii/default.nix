@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "ii-1.8";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://tools.suckless.org/ii/";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     description = "Irc it, simple FIFO based irc client";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

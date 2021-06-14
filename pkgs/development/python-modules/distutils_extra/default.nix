@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1bv3h2p9ffbzyddhi5sccsfwrm3i6yxzn0m06fdxkj2zsvs28gvj";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://launchpad.net/python-distutils-extra";
     description = "Enhancements to Python's distutils";
     license = licenses.gpl2;

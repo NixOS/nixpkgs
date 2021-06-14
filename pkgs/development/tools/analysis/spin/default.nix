@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchurl, makeWrapper, yacc, gcc
+{ stdenv, lib, fetchurl, makeWrapper, bison, gcc
 , withISpin ? true, tk, swarm, graphviz }:
 
 let
-  binPath = stdenv.lib.makeBinPath [ gcc ];
-  ibinPath = stdenv.lib.makeBinPath [ gcc tk swarm graphviz tk ];
+  binPath = lib.makeBinPath [ gcc ];
+  ibinPath = lib.makeBinPath [ gcc tk swarm graphviz tk ];
 
 in stdenv.mkDerivation rec {
   pname = "spin";
   version = "6.4.9";
-  url-version = stdenv.lib.replaceChars ["."] [""] version;
+  url-version = lib.replaceChars ["."] [""] version;
 
   src = fetchurl {
     # The homepage is behind CloudFlare anti-DDoS protection, which blocks cURL.
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ yacc ];
+  buildInputs = [ bison ];
 
   sourceRoot = "Spin/Src${version}";
 
@@ -36,11 +36,11 @@ in stdenv.mkDerivation rec {
       --prefix PATH ':' "$out/bin:${ibinPath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Formal verification tool for distributed software systems";
-    homepage = "http://spinroot.com/";
+    homepage = "https://spinroot.com/";
     license = licenses.free;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };
 }

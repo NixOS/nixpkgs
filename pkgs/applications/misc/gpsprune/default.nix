@@ -1,12 +1,12 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jdk }:
+{ fetchurl, lib, stdenv, makeDesktopItem, makeWrapper, unzip, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
-  version = "20";
+  version = "20.4";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "1i9p6h98azgradrrkcwx18zwz4c6zkxp4bfykpa2imi1z3ry5q2b";
+    sha256 = "sha256-ZTYkKyu0/axf2uLUmQHRW/2bQ6p2zK7xBF66ozbPS2c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ${unzip}/bin/unzip -p $src tim/prune/gui/images/window_icon_64.png > $out/share/pixmaps/gpsprune.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application for viewing, editing and converting GPS coordinate data";
     homepage = "https://activityworkshop.net/software/gpsprune/";
     license = licenses.gpl2Plus;

@@ -12,7 +12,7 @@ let
   };
 
   optionToArgs = opt: v  : optional (v != null)  ''--${opt}="${toString v}"'';
-  flagToArgs   = opt: v  : optional v            ''--${opt}'';
+  flagToArgs   = opt: v  : optional v            "--${opt}";
   listToArgs   = opt: vs : map               (v: ''--${opt}="${v}"'') vs;
   attrsToArgs  = opt: kvs: mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
 
@@ -67,7 +67,7 @@ let
     preferLocalBuild = true;
     json = builtins.toFile "${name}.json" (builtins.toJSON attrs);
     nativeBuildInputs = [ pkgs.remarshal ];
-  } ''json2yaml -i $json -o $out'';
+  } "json2yaml -i $json -o $out";
 
   thanos = cmd: "${cfg.package}/bin/thanos ${cmd}" +
     (let args = cfg.${cmd}.arguments;

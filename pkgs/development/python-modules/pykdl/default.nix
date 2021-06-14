@@ -1,4 +1,4 @@
-{ lib, stdenv, toPythonModule, cmake, orocos-kdl, python, sip }:
+{ lib, stdenv, toPythonModule, cmake, orocos-kdl, eigen, python }:
 
 toPythonModule (stdenv.mkDerivation {
   pname = "pykdl";
@@ -6,9 +6,15 @@ toPythonModule (stdenv.mkDerivation {
 
   sourceRoot = "source/python_orocos_kdl";
 
+  # Fix hardcoded installation path
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace dist-packages site-packages
+  '';
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ orocos-kdl ];
-  propagatedBuildInputs = [ python sip ];
+  buildInputs = [ orocos-kdl eigen ];
+  propagatedBuildInputs = [ python ];
 
   meta = with lib; {
     description = "Kinematics and Dynamics Library (Python bindings)";

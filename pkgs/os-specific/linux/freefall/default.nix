@@ -1,4 +1,4 @@
-{ stdenv, kernel }:
+{ lib, stdenv, kernel }:
 
 stdenv.mkDerivation {
   inherit (kernel) version src;
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (kernel.meta) homepage license;
 
     description = "Free-fall protection for spinning HP/Dell laptop hard drives";

@@ -1,6 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , spark_parser
 , xdis
 , nose
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "uncompyle6";
   version = "3.7.4";
+  disabled = pythonAtLeast "3.9"; # See: https://github.com/rocky/python-uncompyle6/issues/331
 
   src = fetchPypi {
     inherit pname version;
@@ -28,7 +30,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python cross-version byte-code deparser";
     homepage = "https://github.com/rocky/python-uncompyle6/";
     license = licenses.gpl3;

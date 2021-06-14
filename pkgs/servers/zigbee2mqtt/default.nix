@@ -1,31 +1,23 @@
-{ pkgs, stdenv, system, dataDir ? "/opt/zigbee2mqtt/data", nixosTests }:
+{ pkgs, system, dataDir ? "/opt/zigbee2mqtt/data", nixosTests }:
 let
   package = (import ./node.nix { inherit pkgs system; }).package;
 in
 package.override rec {
-  version = "1.16.0";
+  # don't upgrade! Newer versions cause stack overflows and fail trunk-combined
+  # see https://github.com/NixOS/nixpkgs/pull/118400
+  version = "1.16.2";
   reconstructLock = true;
-
-  postInstall = ''
-    sed -i '1s;^;#!/usr/bin/env node\n;' $out/lib/node_modules/zigbee2mqtt/index.js
-    chmod +x $out/lib/node_modules/zigbee2mqtt/index.js
-    mkdir $out/bin
-    ln -s $out/lib/node_modules/zigbee2mqtt/index.js $out/bin/zigbee2mqtt
-
-    rm -rf $out/lib/node_modules/zigbee2mqtt/data
-    ln -s ${dataDir} $out/lib/node_modules/zigbee2mqtt/data
-  '';
 
   src = pkgs.fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     rev = version;
-    sha256 = "0hahzvp3099g0i4jqbkcq6vndpjigx7b6mg1vjcs5v0wyllxdlwp";
+    sha256 = "0rpmm4pwm8s4i9fl26ql0czg5kijv42k9wwik7jb3ppi5jzxrakd";
   };
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
 
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     description = "Zigbee to MQTT bridge using zigbee-shepherd";
     license = licenses.gpl3;
     homepage = https://github.com/Koenkk/zigbee2mqtt;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost}:
+{lib, stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost}:
 
 stdenv.mkDerivation rec {
   version = "201707";
@@ -10,11 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "1c8h94ja7271ph61zrcgnjgblxppld6v22f7f900prjgzbcfy14m";
   };
 
-  buildInputs = [ cmake libGLU libGL qt5.qtbase boost ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libGLU libGL qt5.qtbase boost ];
 
-  enableParallelBuilding = true;
+  dontWrapQtApps = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolset for model-checking concurrent systems and protocols";
     longDescription = ''
       A formal specification language with an associated toolset,

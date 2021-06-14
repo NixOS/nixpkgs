@@ -1,4 +1,4 @@
-#! @perl@
+#! @perl@/bin/perl
 
 use strict;
 use POSIX;
@@ -458,7 +458,9 @@ elsif ($action eq "run") {
 
 elsif ($action eq "show-ip") {
     my $s = read_file($confFile) or die;
-    $s =~ /^LOCAL_ADDRESS=([0-9\.]+)(\/[0-9]+)?$/m or die "$0: cannot get IP address\n";
+    $s =~ /^LOCAL_ADDRESS=([0-9\.]+)(\/[0-9]+)?$/m
+        or $s =~ /^LOCAL_ADDRESS6=([0-9a-f:]+)(\/[0-9]+)?$/m
+        or die "$0: cannot get IP address\n";
     print "$1\n";
 }
 

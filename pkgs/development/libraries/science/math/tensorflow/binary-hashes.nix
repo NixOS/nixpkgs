@@ -1,15 +1,15 @@
 {
-version = "1.14.0";
-cpu-linux-x86_64 = {
-  url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz";
-  sha256 = "04bi3ijq4sbb8c5vk964zlv0j9mrjnzzxd9q9knq3h273nc1a36k";
+version = "2.4.0";
+"cpu-linux-x86_64" = {
+  url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.4.0.tar.gz";
+  sha256 = "022p5jjwmb8rhyyis3cpk2lw45apl2vz49m2rgxmd75h783x1gjk";
 };
-gpu-linux-x86_64 = {
-  url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-linux-x86_64-1.14.0.tar.gz";
-  sha256 = "1ffnpyj9jjgwxpjfiyjvq4dm3n6nwiksim5jld9zw7fdswh215x6";
+"gpu-linux-x86_64" = {
+  url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-linux-x86_64-2.4.0.tar.gz";
+  sha256 = "1fclvbrn3fs8qmhmh3lzni7s7wl1w30a071b4gzh9ifnxdhip6lq";
 };
-cpu-darwin-x86_64 = {
-  url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-darwin-x86_64-1.14.0.tar.gz";
-  sha256 = "0zsd5ils1a17j6jzh0c7q1z56fw46gkzybbnms7h2rgg8al0rh92";
+"cpu-darwin-x86_64" = {
+  url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-darwin-x86_64-2.4.0.tar.gz";
+  sha256 = "09x096nslg04c8sr7bd5v68a5gfinc0f1h36lbzn8bahs8b1agi3";
 };
 }

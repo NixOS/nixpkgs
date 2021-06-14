@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , fltk
@@ -7,7 +7,7 @@
 , libsamplerate
 , libsndfile
 , jack2
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , libXpm
 , libXinerama
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     rtmidi
     libXpm
     jack2
-    alsaLib
+    alsa-lib
     libpulseaudio
     libXinerama
     libXcursor
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
         src/core/{conf,init,midiMapConf,patch}.cpp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, dockapps-sources, autoreconfHook, pkg-config
+{ lib, stdenv, dockapps-sources, autoreconfHook, pkg-config
 , libX11, libXext, libXpm, mkfontdir, fontutil }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--with-font=no"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library providing a framework for dockapps";
     homepage = "https://www.dockapps.net/libdockapp";
     license = licenses.gpl2Plus;

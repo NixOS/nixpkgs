@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, expat
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, expat
 , installShellFiles }:
 
 stdenv.mkDerivation rec {
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib expat ];
 
   postInstall = ''
-    installShellCompletion --bash $out/etc/bash_completion.d/prevo-completion
+    installShellCompletion --bash src/prevo-completion
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "CLI tools for the offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''

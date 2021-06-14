@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , python3Packages
 , fetchurl
 , gettext
@@ -7,6 +7,7 @@
 , glib
 , gtk3
 , libnotify
+, scandir ? null
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -54,12 +55,12 @@ python3Packages.buildPythonApplication rec {
   # prevent double wrapping from wrapGApps and wrapPythonProgram
   dontWrapGApps = true;
   makeWrapperArgs = [
-    ''''${gappsWrapperArgs[@]}''
+    "\${gappsWrapperArgs[@]}"
   ];
 
   strictDeps = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://bleachbit.sourceforge.net";
     description = "A program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";

@@ -24,7 +24,7 @@ let
 
     miniInit = ''
       #!${pkgs.runtimeShell} -xe
-      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
+      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.util-linux ]}"
 
       mkdir -p /run/dbus
       cat > /etc/passwd <<EOF
@@ -72,7 +72,7 @@ let
 
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs "${guestAdditions}/bin/mount.vboxsf"
-      copy_bin_and_libs "${pkgs.utillinux}/bin/unshare"
+      copy_bin_and_libs "${pkgs.util-linux}/bin/unshare"
       ${(attrs.extraUtilsCommands or (const "")) pkgs}
     '';
 
@@ -122,7 +122,7 @@ let
         "$diskImage" "$out/disk.vdi"
     '';
 
-    buildInputs = [ pkgs.utillinux pkgs.perl ];
+    buildInputs = [ pkgs.util-linux pkgs.perl ];
   } ''
     ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
     ${pkgs.parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
@@ -226,18 +226,16 @@ let
 
 
       def create_vm_${name}():
-          # fmt: off
-          vbm(f"createvm --name ${name} ${createFlags}")
-          vbm(f"modifyvm ${name} ${vmFlags}")
-          vbm(f"setextradata ${name} VBoxInternal/PDM/HaltOnReset 1")
-          vbm(f"storagectl ${name} ${controllerFlags}")
-          vbm(f"storageattach ${name} ${diskFlags}")
-          vbm(f"sharedfolder add ${name} ${sharedFlags}")
-          vbm(f"sharedfolder add ${name} ${nixstoreFlags}")
+          vbm("createvm --name ${name} ${createFlags}")
+          vbm("modifyvm ${name} ${vmFlags}")
+          vbm("setextradata ${name} VBoxInternal/PDM/HaltOnReset 1")
+          vbm("storagectl ${name} ${controllerFlags}")
+          vbm("storageattach ${name} ${diskFlags}")
+          vbm("sharedfolder add ${name} ${sharedFlags}")
+          vbm("sharedfolder add ${name} ${nixstoreFlags}")
           cleanup_${name}()
 
           ${mkLog "$HOME/VirtualBox VMs/${name}/Logs/VBox.log" "HOST-${name}"}
-          # fmt: on
 
 
       def destroy_vm_${name}():
@@ -259,9 +257,7 @@ let
 
       def wait_for_ip_${name}(interface):
           property = f"/VirtualBox/GuestInfo/Net/{interface}/V4/IP"
-          # fmt: off
           getip = f"VBoxManage guestproperty get ${name} {property} | sed -n -e 's/^Value: //p'"
-          # fmt: on
 
           ip = machine.succeed(
               ru(
@@ -394,15 +390,13 @@ let
 
       machine.wait_for_x()
 
-      # fmt: off
       ${mkLog "$HOME/.config/VirtualBox/VBoxSVC.log" "HOST-SVC"}
-      # fmt: on
 
       ${testScript}
       # (keep black happy)
     '';
 
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ aszlig cdepillabout ];
     };
   };

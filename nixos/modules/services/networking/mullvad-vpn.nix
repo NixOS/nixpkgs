@@ -15,6 +15,9 @@ with lib;
   config = mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
 
+    # mullvad-daemon writes to /etc/iproute2/rt_tables
+    networking.iproute2.enable = true;
+
     systemd.services.mullvad-daemon = {
       description = "Mullvad VPN daemon";
       wantedBy = [ "multi-user.target" ];
@@ -25,7 +28,7 @@ with lib;
         "systemd-resolved.service"
       ];
       path = [
-        pkgs.iproute
+        pkgs.iproute2
         # Needed for ping
         "/run/wrappers"
       ];

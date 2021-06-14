@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, fetchurl, rustPlatform, runCommand } :
+{ lib, fetchFromGitHub, fetchurl, rustPlatform, runCommand } :
 with rustPlatform;
 
 buildRustPackage rec {
   pname = "pax-rs";
   version = "0.4.0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The fastest JavaScript bundler in the galaxy";
     longDescription = ''
       The fastest JavaScript bundler in the galaxy. Fully supports ECMAScript module syntax (import/export) in addition to CommonJS require(<string>).
@@ -36,5 +36,5 @@ buildRustPackage rec {
       cp ${cargo-lock} $out/Cargo.lock
     '';
 
-  cargoSha256 = "0wx5x7ll21bb6v34csk63kkvxdk3as720hdkaj0izdkpy0xf1knr";
+  cargoSha256 = "0d6g52hjflnw2zvlx10pz78527vh7mw5n43yi8q6dwr3pkbds1fs";
 }

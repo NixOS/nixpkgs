@@ -1,0 +1,23 @@
+name: Backport
+on:
+  pull_request_target:
+    types: [closed, labeled]
+jobs:
+  backport:
+    name: Backport Pull Request
+    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # required to find all branches
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Create backport PRs
+        # should be kept in sync with `version`
+        uses: zeebe-io/backport-action@9b8949dcd4295d364b0939f07d0c7593598d26cd
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_workspace: ${{ github.workspace }}
+          # should be kept in sync with `uses`
+          version: 9b8949dcd4295d364b0939f07d0c7593598d26cd

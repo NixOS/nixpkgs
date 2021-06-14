@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline, perl, libharu, libX11, libpng, libXt, zlib}:
+{lib, stdenv, fetchurl, readline, perl, libharu, libX11, libpng, libXt, zlib}:
 
 stdenv.mkDerivation {
   name = "emboss-6.6.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     user community, including libraries. The software automatically copes with
     data in a variety of formats and even allows transparent retrieval of
     sequence data from the web.'';
-    license     = stdenv.lib.licenses.gpl2;
+    license     = lib.licenses.gpl2;
     homepage    = "http://emboss.sourceforge.net/";
   };
 }

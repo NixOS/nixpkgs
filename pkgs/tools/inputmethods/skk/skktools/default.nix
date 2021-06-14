@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gdbm, glib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gdbm, glib }:
 
 # Note (2017-10-24, yuriaisaka):
 # - Version 1.3.3 dates from Jul. 19, 2013.
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "skk-dev";
     repo = "skktools";
-    rev = "skktools-${stdenv.lib.replaceStrings ["."] ["_"] version}";
+    rev = "skktools-${lib.replaceStrings ["."] ["_"] version}";
     sha256 = "1zway8jsm18279xq8zlpr84iqiw373x3v0ysay74n9bjqxbl234a";
   };
   # # See "12.2. Package naming"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   #   sha256 = "1k9zxqybl1l5h0a8px2awc920qrdyp1qls50h3kfrj3g65d08aq2";
   # };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gdbm glib ];
 
   meta = {
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       input method.
     '';
     homepage = "https://github.com/skk-dev/skktools";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ yuriaisaka ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

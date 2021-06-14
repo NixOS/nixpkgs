@@ -219,7 +219,7 @@ upload_image() {
         log "Registering snapshot $snapshot_id as AMI"
 
         local block_device_mappings=(
-            "DeviceName=/dev/xvda,Ebs={SnapshotId=$snapshot_id,VolumeSize=$image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp2}"
+            "DeviceName=/dev/xvda,Ebs={SnapshotId=$snapshot_id,VolumeSize=$image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp3}"
         )
 
         local extra_flags=(

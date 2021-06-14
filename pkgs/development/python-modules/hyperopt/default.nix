@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , cloudpickle, numpy, future, networkx
 , six, tqdm, scipy, pymongo
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyperopt" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Distributed Asynchronous Hyperparameter Optimization";
     homepage    = "http://hyperopt.github.com/hyperopt/";
     license     = licenses.bsd2;

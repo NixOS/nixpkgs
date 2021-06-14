@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   name = "faustCompressors-v${version}";
   version = "1.2";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A collection of bread and butter compressors";
     homepage = "https://github.com/magnetophon/faustCompressors";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
   };
 }

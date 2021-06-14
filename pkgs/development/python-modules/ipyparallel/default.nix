@@ -11,7 +11,7 @@
 , ipykernel
 , tornado
 , isPy3k
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {

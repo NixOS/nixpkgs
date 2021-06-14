@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "alegreya-sans";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -D -m 444 fonts/webfonts/*.woff2 -t $out/share/fonts/woff2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Humanist sans serif family with a calligraphic feeling";
     longDescription = ''
 Alegreya Sans is a humanist sans serif family with a calligraphic feeling that conveys a dynamic and varied rhythm. This gives a pleasant feeling to readers of long texts.

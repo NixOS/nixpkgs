@@ -1,4 +1,6 @@
-{ stdenv, buildPythonApplication, buildPythonPackage, isPy3k, fetchurl, rpkg, offtrac, urlgrabber, pyopenssl, python_fedora }:
+{ lib, python2Packages, fetchurl }:
+
+with python2Packages;
 
 let
   fedora_cert = buildPythonPackage rec {
@@ -26,7 +28,7 @@ in buildPythonApplication rec {
   patches = [ ./fix-paths.patch ];
   propagatedBuildInputs = [ rpkg offtrac urlgrabber fedora_cert ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Subclass of the rpkg project for dealing with rpm packaging";
     homepage = "https://pagure.io/fedpkg";
     license = licenses.gpl2;

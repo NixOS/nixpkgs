@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.34.2";
+  version = "0.36.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "1mwh35ycv07ajnpcjc4rjdmndh6nyg03gdgag5m8c2af7z1xlcmj";
+    sha256 = "sha256-8lK2UvqBIxUYm6IOuT+Jk71wYbEEjvI7typS3749N9g=";
     name = "${pname}-${version}-source";
   };
 

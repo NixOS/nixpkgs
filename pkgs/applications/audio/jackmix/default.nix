@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig, sconsPackages, qtbase, lash, libjack2, jack ? libjack2, alsaLib }:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, sconsPackages, qtbase, lash, libjack2, jack ? libjack2, alsa-lib }:
 
 mkDerivation rec {
   pname = "jackmix";
@@ -13,12 +13,12 @@ mkDerivation rec {
 
   patches = [ ./no_error.patch ];
 
-  nativeBuildInputs = [ sconsPackages.scons_3_1_2 pkgconfig ];
+  nativeBuildInputs = [ sconsPackages.scons_3_1_2 pkg-config ];
   buildInputs = [
     qtbase
     lash
     jack
-    alsaLib
+    alsa-lib
   ];
 
   installPhase = ''

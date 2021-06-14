@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, fcitx, libskk, skk-dicts }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, fcitx, libskk, skk-dicts }:
 
 stdenv.mkDerivation {
   pname = "fcitx-skk";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1yl2syqrk212h26vzzkwl19fyp71inqmsli9411h4n2hbcp6m916";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ fcitx libskk skk-dicts ];
 
   cmakeFlags = [ "-DSKK_DEFAULT_PATH=${skk-dicts}/share/SKK-JISYO.combined"
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     description   = "A SKK style input method engine for fcitx";
     longDescription = ''

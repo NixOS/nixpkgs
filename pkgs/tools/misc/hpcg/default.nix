@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openmpi } :
+{ lib, stdenv, fetchurl, mpi } :
 
 stdenv.mkDerivation rec {
   pname = "hpcg";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ openmpi ];
+  buildInputs = [ mpi ];
 
   makeFlags = [ "arch=Linux_MPI" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp bin/hpcg.dat $out/share/hpcg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HPC conjugate gradient benchmark";
     homepage = "https://www.hpcg-benchmark.org";
     platforms = platforms.linux;

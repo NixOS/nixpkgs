@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, makeWrapper, nodePackages }:
+{ lib, stdenv, pkgs, fetchurl, makeWrapper, nodePackages }:
 
 let
 
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/share/parity-ui/parity-ui $out/bin/parity-ui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "UI for Parity. Fast, light, robust Ethereum implementation";
     homepage = "http://parity.io";
     license = licenses.gpl3;

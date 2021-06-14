@@ -2,25 +2,17 @@
 , fetchFromGitHub
 , python3
 , installShellFiles
-, fetchurl
 }:
 
 stdenv.mkDerivation rec {
   pname = "btrfs-heatmap";
-  version = "8";
+  version = "9";
 
   src = fetchFromGitHub {
     owner = "knorrie";
     repo = "btrfs-heatmap";
     rev = "v${version}";
-    sha256 = "035frvk3s7g18y81srssvm550nfq7jylr7w60nvixidxvrc0yrnh";
-  };
-
-  # man page is currently only in the debian branch
-  # https://github.com/knorrie/btrfs-heatmap/issues/11
-  msrc = fetchurl {
-    url = "https://raw.githubusercontent.com/knorrie/btrfs-heatmap/45d844e12d7f5842ebb99e65d7b968a5e1a89066/debian/man/btrfs-heatmap.8";
-    sha256 = "1md7xc426sc8lq4w29gjd6gv7vjqhcwrqqcr6z39kihvi04d5f6q";
+    sha256 = "sha256-yCkuZqWwxrs2eS7EXY6pAOVVVSq7dAMxJtf581gX8vg=";
   };
 
   buildInputs = [ python3 ];
@@ -29,11 +21,15 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   installPhase = ''
-    install -Dm 0755 heatmap.py $out/sbin/btrfs-heatmap
-    installManPage ${msrc}
+    runHook preInstall
+
+    install -Dm 0755 btrfs-heatmap $out/sbin/btrfs-heatmap
+    installManPage man/btrfs-heatmap.1
 
     buildPythonPath ${python3.pkgs.btrfs}
     patchPythonScript $out/sbin/btrfs-heatmap
+
+    runHook postInstall
   '';
 
   meta = with lib; {

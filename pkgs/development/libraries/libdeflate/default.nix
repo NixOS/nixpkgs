@@ -1,19 +1,21 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libdeflate";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
     rev = "v${version}";
-    sha256 = "1rhichmalqz7p1hiwvn6y0isralpbf0w5nyjp4lg0asawkxy9cww";
+    sha256 = "1hnn1yd9s5h92xs72y73izak47kdz070kxkw3kyz2d3az6brfdgh";
   };
 
   postPatch = ''
     substituteInPlace Makefile --replace /usr/local $out
   '';
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   configurePhase = ''
     make programs/config.h

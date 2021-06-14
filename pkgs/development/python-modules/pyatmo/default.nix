@@ -2,32 +2,36 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, aiohttp
 , oauthlib
 , requests
 , requests_oauthlib
 , freezegun
+, pytest-asyncio
 , pytestCheckHook
 , requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "4.2.0";
+  version = "5.0.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jabesq";
-    repo = "netatmo-api-python";
+    repo = "pyatmo";
     rev = "v${version}";
-    sha256 = "0b2k1814zg3994k60xdw5gpsl8k1wy9zndd0b1p4dfb5qkx9f8kp";
+    sha256 = "0can9v602iqfn0l01fd7gr63qzvcngfm0qka4s1x0pldh6avxmfh";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "oauthlib==3.1.0" "oauthlib"
+      --replace "oauthlib~=3.1" "oauthlib" \
+      --replace "requests~=2.24" "requests"
   '';
 
   propagatedBuildInputs = [
+    aiohttp
     oauthlib
     requests
     requests_oauthlib
@@ -35,6 +39,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     freezegun
+    pytest-asyncio
     pytestCheckHook
     requests-mock
   ];

@@ -1,4 +1,4 @@
-{ buildPythonPackage, stdenv, glibcLocales, mock, nose, isPy3k, jinja2, six
+{ buildPythonPackage, lib, glibcLocales, mock, nose, isPy3k, jinja2, six
 , fetchPypi
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jinja2 six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/domenkozar/mr.bob";
     description = "A tool to generate code skeletons from templates";
     license = licenses.bsd3;

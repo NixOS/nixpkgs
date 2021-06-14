@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django-discover-runner
@@ -9,7 +9,7 @@
 , django-cache-url
 , six
 , django
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "9e3bcea1355ac50a4c9f854f751d214cb17e5f8adf18405a4488d0a1e8945915";
   };
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
   checkInputs = [ django-discover-runner mock dj-database-url dj-email-url dj-search-url django-cache-url ];
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: django-configurations settings importer wasn't correctly installed
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://django-configurations.readthedocs.io/";
     description = "A helper for organizing Django settings";
     license = licenses.bsd0;

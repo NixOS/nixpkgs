@@ -1,14 +1,17 @@
-{ stdenv
+{ lib
 , buildBazelPackage
 , fetchFromGitHub
+, callPackage
+, bash
 , cacert
 , git
 , glibcLocales
 , go
-, iproute
+, iproute2
 , iptables
 , makeWrapper
 , procps
+, protobuf
 , python3
 }:
 
@@ -16,9 +19,12 @@ let
   preBuild = ''
     patchShebangs .
 
+    substituteInPlace tools/defs.bzl \
+      --replace "#!/bin/bash" "#!${bash}/bin/bash"
+
     # Tell rules_go to use the Go binary found in the PATH
     sed -E -i \
-      -e 's|go_version\s*=\s*"[^"]+",|go_version = "host",|g' \
+      -e 's|go_version\s*=\s*"[^"]+"|go_version = "host"|g' \
       WORKSPACE
 
     # The gazelle Go tooling needs CA certs
@@ -31,20 +37,37 @@ let
     export GOPATH=
   '';
 
+  # Patch the protoc alias so that it always builds from source.
+  rulesProto = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "rules_proto";
+    rev = "f7a30f6f80006b591fa7c437fe5a951eb10bcbcf";
+    sha256 = "10bcw0ir0skk7h33lmqm38n9w4nfs24mwajnngkbs6jb5wsvkqv8";
+    extraPostFetch = ''
+      sed -i 's|name = "protoc"|name = "_protoc_original"|' $out/proto/private/BUILD.release
+      cat <<EOF >>$out/proto/private/BUILD.release
+      alias(name = "protoc", actual = "@com_github_protocolbuffers_protobuf//:protoc", visibility = ["//visibility:public"])
+      EOF
+    '';
+  };
+
 in buildBazelPackage rec {
   name = "gvisor-${version}";
-  version = "2019-11-14";
+  version = "20210518.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo  = "gvisor";
-    rev   = "release-20191114.0";
-    sha256 = "0kyixjjlws9iz2r2srgpdd4rrq94vpxkmh2rmmzxd9mcqy2i9bg1";
+    rev   = "release-${version}";
+    sha256 = "15a6mlclnyfc9mx3bjksnnf4vla0xh0rv9kxdp34la4gw3c4hksn";
   };
 
   nativeBuildInputs = [ git glibcLocales go makeWrapper python3 ];
 
   bazelTarget = "//runsc:runsc";
+  bazelFlags = [
+    "--override_repository=rules_proto=${rulesProto}"
+  ];
 
   # gvisor uses the Starlark implementation of rules_cc, not the built-in one,
   # so we shouldn't delete it from our dependencies.
@@ -76,22 +99,22 @@ in buildBazelPackage rec {
       rm -f "$bazelOut"/java.log "$bazelOut"/java.log.*
     '';
 
-    sha256 = "0myffqywbvqhax995z55jymwnwyxmp13r27kpbc7wb5fk9s4skvr";
+    sha256 = "13pahppm431m198v5bffrzq5iw8m79riplbfqp0afh384ln669hb";
   };
 
   buildAttrs = {
     inherit preBuild;
 
     installPhase = ''
-      install -Dm755 bazel-bin/runsc/*_pure_stripped/runsc $out/bin/runsc
+      install -Dm755 bazel-out/*/bin/runsc/runsc_/runsc $out/bin/runsc
 
       # Needed for the 'runsc do' subcomand
       wrapProgram $out/bin/runsc \
-        --prefix PATH : ${stdenv.lib.makeBinPath [ iproute iptables procps ]}
+        --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Container Runtime Sandbox";
     homepage = "https://github.com/google/gvisor";
     license = licenses.asl20;

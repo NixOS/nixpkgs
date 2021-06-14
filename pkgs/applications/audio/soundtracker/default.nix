@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , autoconf
 , gtk2
-, alsaLib
+, alsa-lib
 , SDL
 , jack2
 , audiofile
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     jack2
     audiofile
     goocanvas
-  ] ++ stdenv.lib.optional stdenv.isLinux alsaLib;
+  ] ++ lib.optional stdenv.isLinux alsa-lib;
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
     longDescription = ''
       SoundTracker is a pattern-oriented music editor (similar to the DOS

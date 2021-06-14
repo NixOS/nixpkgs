@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
+{ lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
 , aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools
 , hcxdumptool, pyrit, which }:
 
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = propagatedBuildInputs;
   checkPhase = "python -m unittest discover tests -v";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/derv82/wifite2";
     description = "Rewrite of the popular wireless network auditor, wifite";
     license = licenses.gpl2;

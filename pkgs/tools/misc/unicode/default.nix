@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, python3Packages, installShellFiles }:
+{ lib, fetchFromGitHub, fetchurl, python3Packages, installShellFiles }:
 
 python3Packages.buildPythonApplication rec {
   pname = "unicode";
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     installManPage paracode.1 unicode.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display unicode character properties";
     homepage = "https://github.com/garabik/unicode";
     license = licenses.gpl3;

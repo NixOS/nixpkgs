@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , mwlib
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ mwlib mwlib-ext pygments ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate pdfs from mediawiki markup";
     homepage = "http://pediapress.com/code/";
     license = licenses.bsd3;

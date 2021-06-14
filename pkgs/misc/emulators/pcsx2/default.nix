@@ -1,17 +1,41 @@
-{ alsaLib, cmake, fetchFromGitHub, gcc-unwrapped, gettext, glib, gtk3, harfbuzz
-, libaio, libpcap, libpng, libxml2, makeWrapper, perl, pkgconfig, portaudio
-, SDL2, soundtouch, stdenv, udev, wrapGAppsHook, wxGTK, zlib
+{ alsa-lib
+, cmake
+, fetchFromGitHub
+, fmt
+, gcc-unwrapped
+, gettext
+, glib
+, gtk3
+, harfbuzz
+, libaio
+, libpcap
+, libpng
+, libpulseaudio
+, libsamplerate
+, libxml2
+, makeWrapper
+, perl
+, pkg-config
+, portaudio
+, SDL2
+, soundtouch
+, lib, stdenv
+, udev
+, wrapGAppsHook
+, wxGTK
+, zlib
 }:
 
 stdenv.mkDerivation {
   pname = "pcsx2";
-  version = "unstable-2020-10-10";
+  version = "unstable-2020-11-13";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
-    rev = "7e2ccd64e8e6049b6059141e8767037463421c33";
-    sha256 = "0c7m74ch68p4y9xlld34a9r38kb2py6wlkg4vranc6dicxvi1b3r";
+    fetchSubmodules = true;
+    rev = "319287dbe552c8405720b25dfdf5fa518deeee0b";
+    sha256 = "1kswc8vw9hbv2nigp8cxrgf2s0ik7p4i203cbqci8zjmnkaqpsai";
   };
 
   cmakeFlags = [
@@ -44,10 +68,11 @@ stdenv.mkDerivation {
       --set __GL_THREADED_OPTIMIZATIONS 1
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper perl pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ cmake makeWrapper perl pkg-config wrapGAppsHook ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
+    fmt
     gettext
     glib
     gtk3
@@ -55,6 +80,8 @@ stdenv.mkDerivation {
     libaio
     libpcap
     libpng
+    libpulseaudio
+    libsamplerate
     libxml2
     portaudio
     SDL2
@@ -64,7 +91,7 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Playstation 2 emulator";
     longDescription= ''
       PCSX2 is an open-source PlayStation 2 (AKA PS2) emulator. Its purpose
@@ -74,7 +101,8 @@ stdenv.mkDerivation {
       PC, with many additional features and benefits.
     '';
     homepage = "https://pcsx2.net";
-    maintainers = with maintainers; [ hrdinka samuelgrf ];
+    maintainers = with maintainers; [ hrdinka govanify ];
+    mainProgram = "PCSX2";
 
     # PCSX2's source code is released under LGPLv3+. It However ships
     # additional data files and code that are licensed differently.

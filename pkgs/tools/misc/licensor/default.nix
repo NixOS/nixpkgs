@@ -1,22 +1,17 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "licensor";
-  version = "2.1.0";
+  version = "unstable-2021-02-03";
 
   src = fetchFromGitHub {
     owner = "raftario";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0zr8hcq7crmhrdhwcclc0nap68wvg5kqn5l93ha0vn9xgjy8z11p";
+    rev = "1897882a708ec6ed65a9569ae0e07d6ea576c652";
+    sha256 = "0x0lkfrj7jka0p6nx6i9syz0bnzya5z9np9cw09zm1c9njv9mm32";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/raftario/licensor/commit/77ae1ea6d9b6de999ee7590d9dbd3c8465d70bb6.patch";
-    sha256 = "0kfyg06wa2v7swm7hs9kkazjg34mircd4nm4qmljyzjh2yh8icg3";
-  })];
-
-  cargoSha256 = "1z2r8nfizifj8sk1ghppyqk5r65sgmbk47fiq95pnwpadm5drvqa";
+  cargoSha256 = "1h66d1brx441bg7vzbqdish4avgmc6h7rrkw2qf1siwmplwqqhw0";
 
   meta = with lib; {
     description = "Write licenses to stdout";

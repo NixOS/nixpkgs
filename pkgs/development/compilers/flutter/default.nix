@@ -1,40 +1,45 @@
-{ callPackage, dart }:
-
+{ callPackage, fetchurl, dart }:
 let
-  dart_stable = dart.override { version = "2.10.0"; };
-  dart_beta = dart.override { version = "2.10.0"; };
-  dart_dev = dart.override { version = "2.11.0-161.0.dev"; };
   mkFlutter = opts: callPackage (import ./flutter.nix opts) { };
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
-in {
+  version = "2.2.1";
+  dartVersion = "2.13.1";
+  channel = "stable";
+  filename = "flutter_linux_${version}-${channel}.tar.xz";
+  dartStable = dart.override {
+    version = dartVersion;
+    sources = {
+      "${dartVersion}-x86_64-darwin" = fetchurl {
+        url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
+        sha256 = "0kb6r2rmp5d0shvgyy37fmykbgww8qaj4f8k79rmqfv5lwa3izya";
+      };
+      "${dartVersion}-x86_64-linux" = fetchurl {
+        url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
+        sha256 = "0zq8wngyrw01wjc5s6w1vz2jndms09ifiymjjixxby9k41mr6jrq";
+      };
+      "${dartVersion}-i686-linux" = fetchurl {
+        url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-ia32-release.zip";
+        sha256 = "0zv4q8xv2i08a6izpyhhnil75qhs40m5mgyvjqjsswqkwqdf7lkj";
+      };
+      "${dartVersion}-aarch64-linux" = fetchurl {
+        url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
+        sha256 = "0bb9jdmg5p608jmmiqibp13ydiw9avgysxlmljvgsl7wl93j6rgc";
+      };
+    };
+  };
+in
+{
   mkFlutter = mkFlutter;
   stable = mkFlutter rec {
+    dart = dartStable;
+    inherit version;
     pname = "flutter";
-    channel = "stable";
-    version = "1.22.0";
-    filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "0ryrx458ss8ryhmspcfrhjvad2pl46bxh1qk5vzwzhxiqdc79vm8";
-    patches = getPatches ./patches/stable;
-    dart = dart_stable;
-  };
-  beta = mkFlutter rec {
-    pname = "flutter";
-    channel = "beta";
-    version = "1.22.0-12.3.pre";
-    filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "1axzz137z4lgpa09h7bjf52i6dij6a9wmjbha1182db23r09plzh";
-    patches = getPatches ./patches/stable;
-    dart = dart_beta;
-  };
-  dev = mkFlutter rec {
-    pname = "flutter";
-    channel = "dev";
-    version = "1.23.0-7.0.pre";
-    filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "166qb4qbv051bc71yj7c0vrkamhvzz3fp3mz318qzm947mydwjj5";
-    patches = getPatches ./patches/dev;
-    dart = dart_dev;
+    src = fetchurl {
+      url = "https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/${filename}";
+      sha256 = "009pwk2casz10gibgjpz08102wxmkq9iq3994b3c2q342g6526g0";
+    };
+    patches = getPatches ./patches;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pyannotate
@@ -30,7 +30,8 @@ buildPythonPackage rec {
   # no testing in a testing module...
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = true; # unmaintained and incompatible with pytest>=6.0
     homepage = "https://github.com/kensho-technologies/pytest-annotate";
     description = "Generate PyAnnotate annotations from your pytest tests";
     license = licenses.asl20;

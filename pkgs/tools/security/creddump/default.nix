@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, python2, python2Packages }:
+{ lib, fetchFromGitLab, python2, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   pname = "creddump";
@@ -7,8 +7,7 @@ python2Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "kalilinux";
     repo = "packages/creddump";
-    # url-encoding workaround: https://github.com/NixOS/nixpkgs/issues/65796#issuecomment-517829019
-    rev = "debian%2F${version}-1kali2"; # %2F = urlquote("/")
+    rev = "debian/${version}-1kali2";
     sha256 = "0r3rs2hggsvv619l3fh3c0jli6d3ryyj30ni3hz0nz670z5smzcf";
   };
 
@@ -25,7 +24,7 @@ python2Packages.buildPythonApplication rec {
     cp lsadump.py ${placeholder "out"}/bin/lsadump
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python tool to extract various credentials and secrets from Windows registry hives";
     homepage = "https://gitlab.com/kalilinux/packages/creddump";
     license = licenses.gpl3;

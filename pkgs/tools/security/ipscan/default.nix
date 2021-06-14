@@ -1,25 +1,26 @@
-{ stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
+{ lib, stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
 
 stdenv.mkDerivation rec {
   pname = "ipscan";
-  version = "3.7.1";
+  version = "3.7.6";
 
   src = fetchurl {
     url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_all.deb";
-    sha256 = "1l6l3nb1yq0f09ia3k9k1dcpzp9g1hxnf547pqmiyiqvd27n7shs";
+    sha256 = "sha256-IjbuCCwcAOlCM2XbM5qBGjaGn8xNNDjoyJmCzP5JF/Q=";
   };
 
   sourceRoot = ".";
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $src .";
 
-  buildInputs = [ makeWrapper jdk ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk ];
 
   installPhase = ''
     mkdir -p $out/share
     cp usr/lib/ipscan/ipscan-any-${version}.jar $out/share/${pname}-${version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
-      --prefix LD_LIBRARY_PATH : "$out/lib/:${stdenv.lib.makeLibraryPath [ swt xorg.libXtst ]}" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt xorg.libXtst ]}" \
       --add-flags "-Xmx256m -cp $out/share/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 
     mkdir -p $out/share/applications
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     cp usr/share/pixmaps/ipscan.png $out/share/pixmaps/ipscan.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and friendly network scanner";
     homepage = "https://angryip.org";
     license = licenses.gpl2;

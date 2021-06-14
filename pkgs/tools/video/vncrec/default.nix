@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xorgproto, imake, gccmakedep, libXt, libXmu
+{ lib, stdenv, fetchurl, libX11, xorgproto, imake, gccmakedep, libXt, libXmu
 , libXaw, libXext, libSM, libICE, libXpm, libXp
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     description = "VNC recorder";
     homepage = "http://ronja.twibright.com/utils/vncrec/";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

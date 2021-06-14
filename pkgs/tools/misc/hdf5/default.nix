@@ -1,30 +1,34 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , removeReferencesTo
 , cpp ? false
 , gfortran ? null
 , zlib ? null
 , szip ? null
-, mpi ? null
-, enableShared ? true
+, mpiSupport ? false
+, mpi
+, enableShared ? !stdenv.hostPlatform.isStatic
+, javaSupport ? false
+, jdk
+, usev110Api ? false
 }:
 
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
-assert !cpp || mpi == null;
+assert !cpp || !mpiSupport;
 
-let inherit (stdenv.lib) optional optionals; in
+let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.6";
+  version = "1.12.0";
   pname = "hdf5";
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "1gf38x51128hn00744358w27xgzjk0ff4wra4yxh2lk804ck1mh9";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
+    sha256 = "0qazfslkqbmzg495jafpvqp0khws3jkxa0z7rph9qvhacil6544p";
   };
 
   passthru = {
-    mpiSupport = (mpi != null);
+    inherit mpiSupport;
     inherit mpi;
   };
 
@@ -34,18 +38,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = []
     ++ optional (gfortran != null) gfortran
-    ++ optional (szip != null) szip;
+    ++ optional (szip != null) szip
+    ++ optional javaSupport jdk;
 
   propagatedBuildInputs = []
     ++ optional (zlib != null) zlib
-    ++ optional (mpi != null) mpi;
+    ++ optional mpiSupport mpi;
 
   configureFlags = []
     ++ optional cpp "--enable-cxx"
     ++ optional (gfortran != null) "--enable-fortran"
     ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
-    ++ optional enableShared "--enable-shared";
+    ++ optionals mpiSupport ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
+    ++ optional enableShared "--enable-shared"
+    ++ optional javaSupport "--enable-java"
+    ++ optional usev110Api "--with-default-api-version=v110";
 
   patches = [
     ./bin-mv.patch
@@ -67,8 +74,8 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = stdenv.lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
     homepage = "https://www.hdfgroup.org/HDF5/";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

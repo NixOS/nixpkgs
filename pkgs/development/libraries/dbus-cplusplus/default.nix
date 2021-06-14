@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus, glib, pkgconfig, expat }:
+{ lib, stdenv, fetchurl, dbus, glib, pkg-config, expat }:
 
 stdenv.mkDerivation rec {
   pname = "dbus-cplusplus";
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus glib expat ];
 
   configureFlags = [ "--disable-ecore" "--disable-tests" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dbus-cplusplus.sourceforge.net";
     description = "C++ API for D-BUS";
     license = licenses.gpl2Plus;

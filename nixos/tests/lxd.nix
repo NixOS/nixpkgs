@@ -47,7 +47,7 @@ let
 in {
   name = "lxd";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ patryk27 ];
   };
 
@@ -96,6 +96,7 @@ in {
         ## limits.cpu ##
 
         machine.succeed("lxc config set test limits.cpu 1")
+        machine.succeed("lxc restart test")
 
         # Since Alpine doesn't have `nproc` pre-installed, we've gotta resort
         # to the primal methods
@@ -105,6 +106,7 @@ in {
         )
 
         machine.succeed("lxc config set test limits.cpu 2")
+        machine.succeed("lxc restart test")
 
         assert (
             "2"
@@ -115,6 +117,7 @@ in {
         ## limits.memory ##
 
         machine.succeed("lxc config set test limits.memory 64MB")
+        machine.succeed("lxc restart test")
 
         assert (
             "MemTotal:          62500 kB"
@@ -122,6 +125,7 @@ in {
         )
 
         machine.succeed("lxc config set test limits.memory 128MB")
+        machine.succeed("lxc restart test")
 
         assert (
             "MemTotal:         125000 kB"

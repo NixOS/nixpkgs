@@ -1,10 +1,12 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , sassc
-, autoreconfHook
+, meson
+, ninja
 , pkg-config
 , gtk3
-, gnome3
+, glib
+, gnome
 , gtk-engine-murrine
 , optipng
 , inkscape
@@ -13,47 +15,47 @@
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
-  version = "20201013";
+  version = "20210412";
 
   src = fetchFromGitHub {
     owner = "jnsh";
     repo = pname;
     rev = version;
-    sha256 = "1x2l1mwjx68dwf3jb1i90c1q8nqsl1wf2zggcn8im6590k5yv39s";
+    sha256 = "sha256-BNJirtBtdWsIzQfsJsZzg1zFbJEzZPq1j2qZ+1QjRH8=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     pkg-config
     sassc
     optipng
     inkscape
     gtk3
+    glib # for glib-compile-resources
   ];
 
   propagatedUserEnvPkgs = [
-    gnome3.gnome-themes-extra
+    gnome.gnome-themes-extra
     gtk-engine-murrine
   ];
-
-  enableParallelBuilding = true;
 
   preBuild = ''
     # Shut up inkscape's warnings about creating profile directory
     export HOME="$NIX_BUILD_ROOT"
   '';
 
-  configureFlags = [
-    "--with-cinnamon=${cinnamon.cinnamon-common.version}"
-    "--with-gnome-shell=${gnome3.gnome-shell.version}"
-    "--disable-unity"
+  mesonFlags = [
+    "-Dthemes=cinnamon,gnome-shell,gtk2,gtk3,plank,xfwm,metacity"
+    "-Dvariants=light,darker,dark,lighter"
+    "-Dcinnamon_version=${cinnamon.cinnamon-common.version}"
+    "-Dgnome_shell_version=${gnome.gnome-shell.version}"
+    "-Dgtk3_version=${gtk3.version}"
+    # You will need to patch gdm to make use of this.
+    "-Dgnome_shell_gresource=true"
   ];
 
-  postInstall = ''
-    install -Dm644 -t $out/share/doc/${pname} AUTHORS *.md
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
     homepage = "https://github.com/jnsh/arc-theme";
     license = licenses.gpl3Only;

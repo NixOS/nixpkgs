@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, camlp4, ocamlbuild
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, camlp4, ocamlbuild
 , erm_xml, mirage-crypto, mirage-crypto-rng, base64
 }:
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/hannesm/xmpp";
     description = "OCaml based XMPP implementation (fork)";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sternenseemann ];
     inherit (ocaml.meta) platforms;
   };
 }

@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , intltool
 , gtk3
 , wrapGAppsHook
-, alsaLib
+, alsa-lib
 , libjack2
 , libpulseaudio
 , fftw
@@ -28,18 +28,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    alsaLib
+    alsa-lib
     libpulseaudio
     fftw
-  ] ++ stdenv.lib.optional jackSupport libjack2;
+  ] ++ lib.optional jackSupport libjack2;
 
-  configureFlags = stdenv.lib.optional (!jackSupport) "--disable-jack";
+  configureFlags = lib.optional (!jackSupport) "--disable-jack";
 
   meta = {
     description = "Not a Guitar-Only tuner";
     homepage = "https://www.nongnu.org/lingot/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ viric ];
   };
 }

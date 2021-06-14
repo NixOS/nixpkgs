@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "shunit2";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     $out/bin/shunit2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kward/shunit2";
     description = "A xUnit based unit test framework for Bourne based shell scripts";
     maintainers = with maintainers; [ cdepillabout utdemir ];

@@ -29,15 +29,14 @@ in {
       };
     };
 
-    # We use the 'out' output, since localtime has its 'bin' output
-    # first, so that is what we get if we use the derivation bare.
     # Install the polkit rules.
-    environment.systemPackages = [ pkgs.localtime.out ];
+    environment.systemPackages = [ pkgs.localtime ];
     # Install the systemd unit.
-    systemd.packages = [ pkgs.localtime.out ];
+    systemd.packages = [ pkgs.localtime ];
 
     users.users.localtimed = {
-      description = "Taskserver user";
+      description = "localtime daemon";
+      isSystemUser = true;
     };
 
     systemd.services.localtime = {

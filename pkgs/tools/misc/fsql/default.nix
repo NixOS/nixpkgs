@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "fsql";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "1accpxryk4744ydfrqc3la5k376ji11yr84n66dz5cx0f3n71vmz";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Search through your filesystem with SQL-esque queries";
     homepage = "https://github.com/kshvmdn/fsql";
     license = licenses.mit;

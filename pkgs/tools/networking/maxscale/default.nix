@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, glibc
-, bison, curl, flex, gperftools, jansson, jemalloc, kerberos, lua, libmysqlclient
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glibc
+, bison, curl, flex, gperftools, jansson, jemalloc, libkrb5, lua, libmysqlclient
 , ncurses, openssl, pcre, pcre2, perl, rabbitmq-c, sqlite, tcl
 , libaio, libedit, libtool, libui, libuuid, zlib
 }:
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "161kc6aqqj3z509q4qwvsd86h06hlyzdask4gawn2ij0h3ca58q6";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    bison curl flex gperftools jansson jemalloc kerberos lua libmysqlclient
+    bison curl flex gperftools jansson jemalloc libkrb5 lua libmysqlclient
     ncurses openssl pcre pcre2 perl rabbitmq-c sqlite tcl
     libaio libedit libtool libui libuuid zlib
   ];
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/{etc,var}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
      description = "MaxScale database proxy extends MariaDB Server's high availability";
      homepage = "https://mariadb.com/products/technology/maxscale";
      license = licenses.bsl11;

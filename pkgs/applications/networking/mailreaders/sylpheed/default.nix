@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, openssl ? null, gpgme ? null
+{ lib, stdenv, fetchurl, pkg-config, gtk2, openssl ? null, gpgme ? null
 , gpgSupport ? true, sslSupport ? true }:
 
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "sylpheed";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0j9y5vdzch251s264diw9clrn88dn20bqqkwfmis9l7m8vmwasqd";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gtk2 ]
     ++ optionals gpgSupport [ gpgme ]
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ++ optional sslSupport "--enable-ssl";
 
   meta = {
-    homepage = "http://sylpheed.sraoss.jp/en/";
+    homepage = "https://sylpheed.sraoss.jp/en/";
     description = "Lightweight and user-friendly e-mail client";
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux ++ platforms.darwin;

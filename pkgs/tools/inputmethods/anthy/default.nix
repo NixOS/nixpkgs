@@ -1,14 +1,14 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "anthy-9100h";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hiragana text to Kana Kanji mixed text Japanese input method";
     homepage    = "https://anthy.osdn.jp/";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ericsagnes ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 
   src = fetchurl {

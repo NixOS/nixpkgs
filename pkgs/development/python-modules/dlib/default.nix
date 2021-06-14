@@ -1,4 +1,5 @@
 { buildPythonPackage, stdenv, lib, dlib, python, pytest, more-itertools
+, sse4Support ? stdenv.hostPlatform.sse4_1Support
 , avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
@@ -12,7 +13,10 @@ buildPythonPackage {
     ${python.interpreter} nix_run_setup test --no USE_AVX_INSTRUCTIONS
   '';
 
-  setupPyBuildFlags = lib.optional avxSupport "--no USE_AVX_INSTRUCTIONS";
+  setupPyBuildFlags = [
+    "--set USE_SSE4_INSTRUCTIONS=${if sse4Support then "yes" else "no"}"
+    "--set USE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}"
+  ];
 
   patches = [ ./build-cores.patch ];
 
@@ -24,6 +28,5 @@ buildPythonPackage {
 
   checkInputs = [ pytest more-itertools ];
 
-  enableParallelBuilding = true;
   dontUseCmakeConfigure = true;
 }

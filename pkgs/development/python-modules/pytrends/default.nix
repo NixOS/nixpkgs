@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -17,11 +17,12 @@ buildPythonPackage rec {
     sha256 = "8ccb06c57c31fa157b978a0d810de7718ee46583d28cf818250d45f36abd2faa";
   };
 
-  doCheck = false;
-
   propagatedBuildInputs = [ requests lxml pandas ];
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+  pythonImportsCheck = [ "pytrends" ];
+
+  meta = with lib; {
     description = "Pseudo API for Google Trends";
     homepage = "https://github.com/GeneralMills/pytrends";
     license = [ licenses.asl20 ];

@@ -10,14 +10,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "16.0.0";
+  version = "19.0.0";
   pname = "azure-mgmt-network";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "6159a8c44590cc58841690c27c7d4acb0cd9ad0a1e5178c1d35e0f48e3c3c0e9";
+    sha256 = "5e39a26ae81fa58c13c02029700f8c7b22c3fd832a294c543e3156a91b9459e8";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai mwilsoninsight jonringer ];
+    maintainers = with maintainers; [ olcai maxwilson jonringer ];
   };
 }

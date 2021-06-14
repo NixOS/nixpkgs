@@ -5,7 +5,7 @@
 
 buildGoPackage rec {
   pname = "goconst";
-  version = "1.3.2";
+  version = "1.4.0";
 
   goPackagePath = "github.com/jgautheron/goconst";
 
@@ -15,7 +15,7 @@ buildGoPackage rec {
     owner = "jgautheron";
     repo = "goconst";
     rev = version;
-    sha256 = "0bfiblp1498ic5jbdsm6mnc8s9drhasbqsw0asi6kmcz2kmslp9s";
+    sha256 = "0jp9vg5l4wcvnf653h3d8ay2n7y717l9z34rls1vrsaf0qdf1r6v";
   };
 
   meta = with lib; {

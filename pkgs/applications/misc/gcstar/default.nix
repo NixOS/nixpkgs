@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , perlPackages
 , wrapGAppsHook
@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcstar";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchFromGitLab {
     owner = "Kerenoc";
     repo = "GCstar";
     rev = "v${version}";
-    sha256 = "1vqfff33sssvlvsva1dflggmwl00j5p64sn1669f9wrbvjkxgpv4";
+    sha256 = "1hah8ijh9mvcgbh36y3d3s6y79mzz27w24f2i29qllv7cayf6129";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
     DateCalc
     DateTimeFormatStrptime
     Glib
-    Gtk2
+    Gtk3
+    Gtk3SimpleList
     GD
     GDGraph
     GDText
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     JSON
     ImageExifTool
     librelative
-    LWPUserAgent
+    LWP
     LWPProtocolHttps
     MP3Info
     MP3Tag
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gcstar --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/Kerenoc/GCstar";
     description = "Manage your collections of movies, games, books, music and more";
     longDescription = ''

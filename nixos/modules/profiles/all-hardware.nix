@@ -3,8 +3,10 @@
 # enabled in the initrd.  Its primary use is in the NixOS installation
 # CDs.
 
-{ ... }:
-
+{ pkgs, lib,... }:
+let
+  platform = pkgs.stdenv.hostPlatform;
+in
 {
 
   # The initrd has to contain any module that might be necessary for
@@ -35,6 +37,9 @@
       # drives.
       "uas"
 
+      # SD cards.
+      "sdhci_pci"
+
       # Firewire support.  Not tested.
       "ohci1394" "sbp2"
 
@@ -42,10 +47,68 @@
       "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
 
       # VMware support.
-      "mptspi" "vmw_balloon" "vmwgfx" "vmw_vmci" "vmw_vsock_vmci_transport" "vmxnet3" "vsock"
+      "mptspi" "vmxnet3" "vsock"
+    ] ++ lib.optional platform.isx86 "vmw_balloon"
+    ++ lib.optionals (!platform.isAarch64 && !platform.isAarch32) [ # not sure where else they're missing
+      "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
 
       # Hyper-V support.
       "hv_storvsc"
+    ] ++ lib.optionals (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
+      # Most of the following falls into two categories:
+      #  - early KMS / early display
+      #  - early storage (e.g. USB) support
+
+      # Allows using framebuffer configured by the initial boot firmware
+      "simplefb"
+
+      # Allwinner support
+
+      # Required for early KMS
+      "sun4i-drm"
+      "sun8i-mixer" # Audio, but required for kms
+
+      # PWM for the backlight
+      "pwm-sun4i"
+
+      # Broadcom
+
+      "vc4"
+    ] ++ lib.optionals pkgs.stdenv.isAarch64 [
+      # Most of the following falls into two categories:
+      #  - early KMS / early display
+      #  - early storage (e.g. USB) support
+
+      # Broadcom
+
+      "pcie-brcmstb"
+
+      # Rockchip
+      "dw-hdmi"
+      "dw-mipi-dsi"
+      "rockchipdrm"
+      "rockchip-rga"
+      "phy-rockchip-pcie"
+      "pcie-rockchip-host"
+
+      # Misc. uncategorized hardware
+
+      # Used for some platform's integrated displays
+      "panel-simple"
+      "pwm-bl"
+
+      # Power supply drivers, some platforms need them for USB
+      "axp20x-ac-power"
+      "axp20x-battery"
+      "pinctrl-axp209"
+      "mp8859"
+
+      # USB drivers
+      "xhci-pci-renesas"
+
+      # Misc "weak" dependencies
+      "analogix-dp"
+      "analogix-anx6345" # For DP or eDP (e.g. integrated display)
     ];
 
   # Include lots of firmware.

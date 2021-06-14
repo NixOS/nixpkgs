@@ -3,12 +3,17 @@
 buildPecl {
   pname = "igbinary";
 
-  version = "3.1.6";
-  sha256 = "1spx6581ly2r8pn9b632bi8429sy762v04ramrlnf7469pf8ggxr";
+  version = "3.2.2";
+  sha256 = "0321pb0298fa67qwj5nhhabkjiaxna5mag15ljyrqzpivimvny92";
 
   configureFlags = [ "--enable-igbinary" ];
   makeFlags = [ "phpincludedir=$(dev)/include" ];
   outputs = [ "out" "dev" ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "Binary serialization for PHP";
+    license = licenses.bsd3;
+    homepage = "https://github.com/igbinary/igbinary/";
+    maintainers = teams.php.members;
+  };
 }

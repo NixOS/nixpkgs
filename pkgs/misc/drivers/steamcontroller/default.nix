@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, libusb1, linuxHeaders
+{ lib, fetchFromGitHub, python3Packages, libusb1, linuxHeaders
 , GyroplotSupport ? false
 }:
 
@@ -21,11 +21,13 @@ buildPythonApplication {
   '';
 
   buildInputs = [ libusb1 ];
-  propagatedBuildInputs =
-    [ psutil python3Packages.libusb1 ]
+  propagatedBuildInputs = [ psutil python3Packages.libusb1 ]
     ++ lib.optionals GyroplotSupport [ pyqtgraph pyside ];
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+  pythonImportsCheck = [ "steamcontroller" ];
+
+  meta = with lib; {
     description = "A standalone Steam controller driver";
     homepage    = "https://github.com/ynsta/steamcontroller";
     license     = licenses.mit;

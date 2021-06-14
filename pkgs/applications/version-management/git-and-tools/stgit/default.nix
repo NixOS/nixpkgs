@@ -1,30 +1,65 @@
-{ stdenv, python3Packages, fetchFromGitHub, git, installShellFiles }:
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, python3Packages
+, asciidoc
+, docbook_xsl
+, git
+, perl
+, xmlto
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "stgit";
-  version = "0.23";
+  version = "1.1";
 
   src = fetchFromGitHub {
-    owner = "ctmarinas";
+    owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "1r9y8qnl6kdvq61788pnfhhgyv2xrnyrizbhy4qz4l1bpqkwfr2r";
+    sha256 = "sha256-gfPf1yRmx1Mn1TyCBWmjQJBgXLlZrDcew32C9o6uNYk=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles asciidoc xmlto docbook_xsl ];
 
-  checkInputs = [ git ];
+  format = "other";
 
-  postInstall = ''
-    installShellCompletion $out/share/stgit/completion/stg.fish
-    installShellCompletion --name stg $out/share/stgit/completion/stgit.bash
-    installShellCompletion --name _stg $out/share/stgit/completion/stgit.zsh
+  checkInputs = [ git perl ];
+
+  postPatch = ''
+    for f in Documentation/*.xsl; do
+      substituteInPlace $f \
+        --replace http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl \
+                  ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
+        --replace http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl \
+                  ${docbook_xsl}/xml/xsl/docbook/html/docbook.xsl
+    done
   '';
 
-  meta = with stdenv.lib; {
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "MAN_BASE_URL=${placeholder "out"}/share/man"
+    "XMLTO_EXTRA=--skip-validation"
+  ];
+
+  buildFlags = [ "all" "doc" ];
+
+  checkTarget = "test";
+  checkFlags = [ "PERL_PATH=${perl}/bin/perl" ];
+
+  installTargets = [ "install" "install-doc" ];
+  postInstall = ''
+    installShellCompletion --cmd stg \
+      --fish $out/share/stgit/completion/stg.fish \
+      --bash $out/share/stgit/completion/stgit.bash \
+      --zsh $out/share/stgit/completion/stgit.zsh
+    '';
+
+  meta = with lib; {
     description = "A patch manager implemented on top of Git";
-    homepage = "http://procode.org/stgit/";
-    license = licenses.gpl2;
+    homepage = "https://stacked-git.github.io/";
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ jshholland ];
   };
 }

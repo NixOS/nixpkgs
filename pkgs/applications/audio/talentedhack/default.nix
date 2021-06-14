@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lv2, fftwFloat, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, lv2, fftwFloat, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "talentedhack";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kwvayalysmk7y49jq0k16al252md8d45z58hphzsksmyz6148bx";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lv2 fftwFloat ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cp *.so *.ttl $d
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jeremysalwen/TalentedHack";
     description = "LV2 port of Autotalent pitch correction plugin";
     license = licenses.gpl3;

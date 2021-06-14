@@ -1,31 +1,33 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames
+{ stdenv, lib, fetchurl, fetchFromGitHub, fixDarwinDylibNames
 , autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4
-, perl, python3, rapidjson, snappy, thrift, utf8proc, which, zlib, zstd
-, enableShared ? true }:
+, perl, python3, rapidjson, re2, snappy, thrift, utf8proc, which, xsimd
+, zlib, zstd
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "860376d4e586a3ac34ec93089889da624ead6c2a";
-    sha256 = "16k3lz4ji4y3qcjhr765q14jwwlac8iqscwndwd8ll3zr0vy69b0";
+    rev = "d6c4deb22c4b4e9e3247a2f291046e3c671ad235";
+    sha256 = "0cwhnqijam632zp07j98i8ym967wz6kd35fim1msv88x2rhqky1i";
   };
 
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "d914f9d289488c7db1759d7a88a4a1b8f062c7dd";
-    sha256 = "0xj3ynck2wv6l70xnmvs13bz1jycqjrl5k4lwhhwgag338048als";
+    rev = "ddd898958803cb89b7156c6350584d1cda0fe8de";
+    sha256 = "0n16xqlpxn2ryp43w8pppxrbwmllx6sk4hv3ycgikfj57nd3ibc0";
   };
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "2.0.0";
+  version = "4.0.1";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "1ghzqw0rx4rxa2d7i76y3szisv0bd9cl7vzadbc41cvvhk6440xy";
+    sha256 = "0vl926i6jvsvj5vigdgqzp9v1i1h5zzj1abqr6qwc9drfsibzk3m";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
@@ -66,6 +68,7 @@ in stdenv.mkDerivation rec {
     gtest
     lz4
     rapidjson
+    re2
     snappy
     thrift
     utf8proc
@@ -88,6 +91,10 @@ in stdenv.mkDerivation rec {
     "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
     "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
+    "-DARROW_COMPUTE=ON"
+    "-DARROW_CSV=ON"
+    "-DARROW_DATASET=ON"
+    "-DARROW_JSON=ON"
     "-DARROW_PLASMA=ON"
     # Disable Python for static mode because openblas is currently broken there.
     "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
@@ -109,11 +116,22 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
+  ARROW_XSIMD_URL = xsimd.src;
+
   doInstallCheck = true;
   ARROW_TEST_DATA =
     if doInstallCheck then "${arrow-testing}/data" else null;
   PARQUET_TEST_DATA =
     if doInstallCheck then "${parquet-testing}/data" else null;
+  GTEST_FILTER =
+    if doInstallCheck then let
+      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+      filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+        "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+        "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+        "TestCompareKernel.PrimitiveRandomTests"
+      ];
+    in "-${builtins.concatStringsSep ":" filteredTests}" else null;
   installCheckInputs = [ perl which ];
   installCheckPhase =
   let
@@ -128,11 +146,11 @@ in stdenv.mkDerivation rec {
       --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A  cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tobim veprbl ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ tobim veprbl ];
   };
 }

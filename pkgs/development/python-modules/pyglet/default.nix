@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , libGL
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     py.test tests/unit tests/integration
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.pyglet.org/";
     description = "A cross-platform windowing and multimedia library";
     license = licenses.bsd3;

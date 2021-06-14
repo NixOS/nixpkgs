@@ -50,7 +50,7 @@
        </varlistentry>
        <varlistentry>
          <term>
-           <varname>pkgs.formats.ini</varname> { <replaceable>listsAsDuplicateKeys</replaceable> ? false, ... }
+           <varname>pkgs.formats.ini</varname> { <replaceable>listsAsDuplicateKeys</replaceable> ? false, <replaceable>listToValue</replaceable> ? null, ... }
          </term>
          <listitem>
            <para>
@@ -63,6 +63,16 @@
                  <listitem>
                    <para>
                      A boolean for controlling whether list values can be used to represent duplicate INI keys
+                   </para>
+                 </listitem>
+               </varlistentry>
+               <varlistentry>
+                 <term>
+                   <varname>listToValue</varname>
+                 </term>
+                 <listitem>
+                   <para>
+                     A function for turning a list of values into a single value.
                    </para>
                  </listitem>
                </varlistentry>
@@ -167,7 +177,7 @@ in {
 
     # We know that the `user` attribute exists because we set a default value
     # for it above, allowing us to use it without worries here
-    users.users.${cfg.settings.user} = {};
+    users.users.${cfg.settings.user} = { isSystemUser = true; };
 
     # ...
   };

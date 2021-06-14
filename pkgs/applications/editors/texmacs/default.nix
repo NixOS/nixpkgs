@@ -1,4 +1,4 @@
-{ lib, mkDerivation, callPackage, fetchurl, fetchpatch,
+{ lib, mkDerivation, callPackage, fetchurl,
   guile_1_8, qtbase, xmodmap, which, freetype,
   libjpeg,
   sqlite,
@@ -7,7 +7,7 @@
   git ? null,
   python3 ? null,
   cmake,
-  pkgconfig,
+  pkg-config,
   ghostscriptX ? null,
   extraFonts ? false,
   chineseFonts ? false,
@@ -16,22 +16,20 @@
 
 let
   pname = "TeXmacs";
-  version = "1.99.14";
+  version = "1.99.19";
   common = callPackage ./common.nix {
     inherit tex extraFonts chineseFonts japaneseFonts koreanFonts;
   };
 in
 mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
-    sha256 = "1zbl1ddhppgnn3j213jl1b9mn8zmwnknxiqswm25p4llj0mqcgna";
+    sha256 = "1izwqb0z4gqiglv57mjswk6sjivny73kd2sxrf3nmj7wr12pn5m8";
   };
 
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     guile_1_8
     qtbase

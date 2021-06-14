@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, readline, ncurses
-, autoreconfHook, pkgconfig, gettext }:
+{ lib, stdenv, fetchFromGitHub, readline, ncurses
+, autoreconfHook, pkg-config, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "hstr";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner  = "dvorka";
     repo   = "hstr";
     rev    = version;
-    sha256 = "07fkilqlkpygvf9kvxyvl58g3lfq0bwwdp3wczy4hk8qlbhmgihn";
+    sha256 = "1chmfdi1dwg3sarzd01nqa82g65q7wdr6hrnj96l75vikwsg986y";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ readline ncurses gettext ];
 
   configureFlags = [ "--prefix=$(out)" ];
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/dvorka/hstr";
     description = "Shell history suggest box - easily view, navigate, search and use your command history";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-    platforms = with stdenv.lib.platforms; linux; # Cannot test others
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 
 }

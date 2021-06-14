@@ -7,7 +7,7 @@
 , pytest
 , pytestrunner
 , hypothesis
-, setuptools_scm
+, setuptools-scm
 , isPy27
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
        --replace "pytest>=3.0,<4.0" "pytest"
   '';
 
-  buildInputs = [ setuptools_scm pytestrunner ];
+  buildInputs = [ setuptools-scm pytestrunner ];
   checkInputs = [ pytest hypothesis ];
   propagatedBuildInputs = [ hopcroftkarp multiset ];
 

@@ -46,11 +46,11 @@ in
       DynamicUser = false;
       ExecStart = ''
         ${pkgs.prometheus-nextcloud-exporter}/bin/nextcloud-exporter \
-          -a ${cfg.listenAddress}:${toString cfg.port} \
-          -u ${cfg.username} \
-          -t ${cfg.timeout} \
-          -l ${cfg.url} \
-          -p ${escapeShellArg "@${cfg.passwordFile}"} \
+          --addr ${cfg.listenAddress}:${toString cfg.port} \
+          --username ${cfg.username} \
+          --timeout ${cfg.timeout} \
+          --server ${cfg.url} \
+          --password ${escapeShellArg "@${cfg.passwordFile}"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

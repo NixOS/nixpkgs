@@ -1,14 +1,14 @@
-{ stdenv, go, buildGoModule, fetchgit }:
+{ lib, buildGoModule, fetchgit }:
 
 buildGoModule rec {
   pname = "gotools-unstable";
-  version = "2020-10-27";
-  rev = "eafbe7b904eb2418efc832e36ac634dc09084f10";
+  version = "2021-01-13";
+  rev = "8b4aab62c064010e8e875d2e5a8e63a96fefc87d";
 
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "0884znfbm44f4ddjkm0g7qg2a257kwzv1ismd2m225f3c69n3mdg";
+    sha256 = "1cmnm9fl2a6hiplj8s6x0l3czcw4xh3j3lvzbgccnp1l8kz8q2vm";
   };
 
   # The gopls folder contains a Go submodule which causes a build failure.
@@ -40,7 +40,7 @@ buildGoModule rec {
   '';
 
   excludedPackages = "\\("
-    + stdenv.lib.concatStringsSep "\\|" ([ "testdata" ] ++ stdenv.lib.optionals (stdenv.lib.versionAtLeast go.meta.branch "1.5") [ "vet" "cover" ])
+    + lib.concatStringsSep "\\|" ([ "testdata" "vet" "cover" ])
     + "\\)";
 
   # Set GOTOOLDIR for derivations adding this to buildInputs

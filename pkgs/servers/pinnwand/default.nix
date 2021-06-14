@@ -1,47 +1,40 @@
-{ lib, python3, fetchFromGitHub, poetry, nixosTests }:
+{ lib
+, python3
+, fetchFromGitHub
+, fetchpatch
+, nixosTests
+}:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
-        version = "6.0.4";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1p5n7sw4580pkybywg93p8ddqdj9lhhy72rzswfa801vlidx9qhg";
-        };
-      });
-    };
-  };
-in with python.pkgs; buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.2.2";
+  version = "1.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cxdpc3lxgzakzgvdyyrn234380dm05svnwr8av5nrjp4nm9s8z4";
+    sha256 = "046xk2y59wa0pdp7s3hp1gh8sqdw0yl4xab22r2x44iwwcyb0gy5";
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
     click
     docutils
-    tornado
+    pygments
     pygments-better-html
-    toml
     sqlalchemy
+    token-bucket
+    toml
+    tornado
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    pytest
-  '';
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = nixosTests.pinnwand;
 

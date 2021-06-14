@@ -3,10 +3,11 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , libftdi1
 , libusb1
 , pciutils
+, installShellFiles
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +19,15 @@ stdenv.mkDerivation rec {
     sha256 = "0ax4kqnh7kd3z120ypgp73qy1knz47l6qxsqzrfkd97mh5cdky71";
   };
 
+  # Meson build doesn't build and install manpage. Only Makefile can.
+  # Build manpage from source directory. Here we're inside the ./build subdirectory
+  postInstall = ''
+    make flashrom.8 -C ..
+    installManPage ../flashrom.8
+  '';
+
   mesonFlags = lib.optionals stdenv.isAarch64 [ "-Dpciutils=false" ];
-  nativeBuildInputs = [ meson pkgconfig ninja ];
+  nativeBuildInputs = [ meson pkg-config ninja installShellFiles ];
   buildInputs = [ libftdi1 libusb1 pciutils ];
 
   meta = with lib; {
@@ -28,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ funfunctor fpletz ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # requires DirectHW
   };
 }

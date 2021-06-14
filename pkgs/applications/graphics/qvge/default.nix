@@ -9,16 +9,16 @@
 
 mkDerivation rec {
   pname = "qvge";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "ArsMasiuk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j4ih03nl6iihhnxrfldkarg9hvxb62lpr58xspn417d3gj6xjll";
+    sha256 = "sha256-rtbUAp3l0VZsu+D9HCHM3q0UkDLflw50rYRq/LP4Wu4=";
   };
 
-  prePatch = "cd src";
+  sourceRoot = "${src.name}/src";
 
   patches = (substituteAll {
     src = ./set-graphviz-path.patch;

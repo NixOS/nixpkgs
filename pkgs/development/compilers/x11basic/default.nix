@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , automake, autoconf, readline
 , libX11, bluez, SDL2
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp -r ../examples $out/share/.
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://x11-basic.sourceforge.net/";
     description = "A Basic interpreter and compiler with graphics capabilities";
     license = licenses.gpl2;

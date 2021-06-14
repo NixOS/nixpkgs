@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net }:
+{lib, stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net }:
 
 stdenv.mkDerivation {
   name = "njam-1.25";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://trackballs.sourceforge.net/";
     description = "Cross-platform pacman-like game";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

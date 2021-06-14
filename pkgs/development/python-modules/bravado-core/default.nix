@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pytest-benchmark
   ];
 
-  checkPhase = ''pytest --benchmark-skip'';
+  checkPhase = "pytest --benchmark-skip";
 
   propagatedBuildInputs = [
     python-dateutil

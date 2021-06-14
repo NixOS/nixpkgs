@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkg-config, ibus, gtk3, libthai }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, ibus, gtk3, libthai }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-libthai";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 ibus libthai ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     homepage = "https://linux.thai.net/projects/ibus-libthai";
     description = "Thai input method engine for IBus";

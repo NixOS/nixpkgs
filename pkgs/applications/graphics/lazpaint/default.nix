@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lazarus, fpc, pango, cairo, glib
+{ lib, stdenv, fetchFromGitHub, lazarus, fpc, pango, cairo, glib
 , atk, gtk2, libX11, gdk-pixbuf, busybox, python3, makeWrapper }:
 
 with stdenv;
@@ -55,14 +55,14 @@ in stdenv.mkDerivation rec {
 
     # Python is needed for scripts
     makeWrapper $out/share/lazpaint/lazpaint $out/bin/lazpaint \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ python3 ]}
+      --prefix PATH : ${lib.makeBinPath [ python3 ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Image editor like PaintBrush or Paint.Net";
     homepage = "https://sourceforge.net/projects/lazpaint/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

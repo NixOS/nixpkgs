@@ -1,21 +1,31 @@
-{ aiohttp, async-timeout, buildPythonPackage, fetchPypi, isPy3k, lib }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, aiohttp
+, async-timeout
+, aresponses
+, pytest-asyncio
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyaftership";
-  version = "0.1.2";
+  version = "21.1.0";
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "057dwzacc0lmsq00ipfbnxkq4rc2by8glmza6s8i6dzi1cc68v98";
+  src = fetchFromGitHub {
+    owner = "ludeeus";
+    repo = pname;
+    rev = version;
+    sha256 = "0jyzgwaijkp80whi58a0hgjzmnlczmd9vwn11z2m0j01kbdwznn5";
   };
 
   propagatedBuildInputs = [ aiohttp async-timeout ];
 
-  # No tests
-  doCheck = false;
-  pythonImportsCheck = [ "pyaftership.tracker" ];
+  checkInputs = [ pytestCheckHook aresponses pytest-asyncio ];
+  pythonImportsCheck = [ "pyaftership" ];
 
   meta = with lib; {
     description = "Python wrapper package for the AfterShip API";

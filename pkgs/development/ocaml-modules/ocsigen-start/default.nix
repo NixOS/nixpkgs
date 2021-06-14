@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, safepass, yojson
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, safepass, yojson
 , cohttp-lwt-unix
 , resource-pooling
 }:
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     longDescription =''
      An Eliom application skeleton, ready to use to build your own application with users, (pre)registration, notifications, etc.
       '';
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.gal_bolle ];
+    maintainers = [ lib.maintainers.gal_bolle ];
   };
 
 }

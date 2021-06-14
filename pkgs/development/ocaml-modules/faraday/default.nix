@@ -2,7 +2,9 @@
 
 buildDunePackage rec {
   pname = "faraday";
-  version = "0.7.0";
+  version = "0.7.2";
+
+  useDune2 = true;
 
   minimumOCamlVersion = "4.02";
 
@@ -10,12 +12,12 @@ buildDunePackage rec {
     owner = "inhabitedtype";
     repo = pname;
     rev = version;
-    sha256 = "0z6ikwlqad91iac0q5z88p3wzq5k15y86ckzmhdq1aqwrcm14bq2";
+    sha256 = "0gdysszzk6b6npic4nhpdnz2nbq7rma6aml0rbn113bfh0rmb36x";
   };
 
-  checkInputs = lib.optional doCheck alcotest;
+  checkInputs = [ alcotest ];
   propagatedBuildInputs = [ bigstringaf ];
-  doCheck = lib.versions.majorMinor ocaml.version != "4.07";
+  doCheck = lib.versionAtLeast ocaml.version "4.05";
 
   meta = {
     description = "Serialization library built for speed and memory efficiency";

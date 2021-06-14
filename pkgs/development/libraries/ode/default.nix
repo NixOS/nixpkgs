@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ode";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l63ymlkgfp5cb0ggqwm386lxmc3al21nb7a07dd49f789d33ib5";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Dynamics Engine";
     homepage = "https://sourceforge.net/projects/opende";
     platforms = platforms.linux;

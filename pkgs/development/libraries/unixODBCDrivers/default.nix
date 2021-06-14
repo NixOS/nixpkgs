@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, libuuid, patchelf, libiconv, fetchFromGitHub }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fetchFromGitHub }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -19,7 +19,7 @@
       driver = "lib/psqlodbcw.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Official PostgreSQL ODBC Driver";
       homepage =  "https://odbc.postgresql.org/";
       license = licenses.lgpl2;
@@ -60,7 +60,7 @@
       driver = if stdenv.isDarwin then "lib/libmaodbc.dylib" else "lib/libmaodbc.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "MariaDB ODBC database driver";
       homepage =  "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
@@ -79,7 +79,7 @@
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mysql ];
+    buildInputs = [ unixODBC mariadb ];
 
     cmakeFlags = [ "-DWITH_UNIXODBC=1" ];
 
@@ -88,7 +88,7 @@
       driver = "lib/libmyodbc3-3.51.12.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "MariaDB ODBC database driver";
       homepage = "https://dev.mysql.com/downloads/connector/odbc/";
       license = licenses.gpl2;
@@ -123,7 +123,7 @@
       driver = "lib/libsqlite3odbc.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ODBC driver for SQLite";
       homepage = "http://www.ch-werner.de/sqliteodbc";
       license = licenses.bsd2;
@@ -137,12 +137,12 @@
     version = "${versionMajor}.${versionMinor}.${versionAdditional}-1";
 
     versionMajor = "17";
-    versionMinor = "5";
+    versionMinor = "7";
     versionAdditional = "1.1";
 
     src = fetchurl {
-      url = "https://packages.microsoft.com/debian/9/prod/pool/main/m/msodbcsql17/msodbcsql${versionMajor}_${version}_amd64.deb";
-      sha256 = "0ysrl01z5ca72qw8n8kwwcl432cgiyw4pibfwg5nifx0kd7i7z4z";
+      url = "https://packages.microsoft.com/debian/10/prod/pool/main/m/msodbcsql17/msodbcsql${versionMajor}_${version}_amd64.deb";
+      sha256 = "0vwirnp56jibm3qf0kmi4jnz1w7xfhnsfr8imr0c9hg6av4sk3a6";
     };
 
     nativeBuildInputs = [ dpkg patchelf ];
@@ -157,7 +157,7 @@
     '';
 
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl.out kerberos libuuid stdenv.cc.cc ]} \
+      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl.out libkrb5 libuuid stdenv.cc.cc ]} \
         $out/lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}
     '';
 
@@ -166,7 +166,7 @@
       driver = "lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ODBC Driver 17 for SQL Server";
       homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
       license = licenses.unfree;

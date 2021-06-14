@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, django-picklefield, arrow
+{ lib, buildPythonPackage, fetchPypi, django-picklefield, arrow
 , blessed, django, future }:
 
 buildPythonPackage rec {
   pname = "django-q";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "523d54dcf1b66152c1b658f914f00ed3b518a3432a9decd4898738ca8dbbe10f";
+    sha256 = "8871c602e2c7e892fbedc271d5b91c4a96803b689c3ee2f15464931f99f4e32b";
   };
 
   propagatedBuildInputs = [
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multiprocessing distributed task queue for Django";
     homepage = "https://django-q.readthedocs.org";
     license = licenses.mit;

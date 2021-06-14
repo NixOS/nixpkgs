@@ -1,4 +1,5 @@
 { runCommand
+, lib
 , stdenv
 , storeDir ? builtins.storeDir
 , writeScript
@@ -7,7 +8,7 @@
 , bash
 , vmTools
 , gawk
-, utillinux
+, util-linux
 , runtimeShell
 , e2fsprogs }:
 
@@ -47,7 +48,7 @@ rec {
         runScriptFile = shellScript "run-script.sh" runScript;
         result = vmTools.runInLinuxVM (
           runCommand "singularity-image-${name}.img" {
-            buildInputs = [ singularity e2fsprogs utillinux gawk ];
+            buildInputs = [ singularity e2fsprogs util-linux gawk ];
             layerClosure = writeReferencesToFile layer;
             preVM = vmTools.createEmptyImage {
               size = diskSize;
@@ -64,7 +65,7 @@ rec {
             mkdir proc sys dev
 
             # Run root script
-            ${stdenv.lib.optionalString (runAsRoot != null) ''
+            ${lib.optionalString (runAsRoot != null) ''
               mkdir -p ./${storeDir}
               mount --rbind ${storeDir} ./${storeDir}
               unshare -imnpuf --mount-proc chroot ./ ${runAsRootFile}

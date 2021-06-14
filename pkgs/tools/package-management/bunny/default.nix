@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab }:
+{ lib, stdenv, fetchFromGitLab }:
 
 stdenv.mkDerivation rec {
   pname = "bunny";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple shell script wrapper around multiple package managers";
     homepage = "https://gitlab.com/tim241/bunny";
     license = licenses.gpl3;

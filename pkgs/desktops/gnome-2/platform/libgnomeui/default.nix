@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libxml2, xorg, glib, pango
+{ stdenv, fetchurl, fetchpatch, pkg-config, libxml2, xorg, glib, pango
 , intltool, libgnome, libgnomecanvas, libbonoboui, GConf, libtool
 , gnome_vfs, libgnome-keyring, libglade }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
   buildInputs =
     [ xorg.xlibsWrapper libxml2 GConf pango glib libgnome-keyring libglade libtool ];
 

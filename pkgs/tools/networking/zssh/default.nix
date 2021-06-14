@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline }:
+{ lib, stdenv, fetchurl, readline }:
 
 let
   version = "1.5c";
@@ -32,8 +32,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "SSH and Telnet client with ZMODEM file transfer capability";
     homepage = "http://zssh.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ]; # required by deepin-terminal
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

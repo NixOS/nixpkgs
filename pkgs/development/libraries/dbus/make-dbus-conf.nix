@@ -1,6 +1,7 @@
 { runCommand, writeText, libxslt, dbus
 , serviceDirectories ? []
 , suidHelper ? "/var/setuid-wrappers/dbus-daemon-launch-helper"
+, apparmor ? "disabled" # one of enabled, disabled, required
 }:
 
 /* DBus has two configuration parsers -- normal and "trivial", which is used
@@ -10,7 +11,7 @@
  */
 runCommand "dbus-1"
   {
-    inherit serviceDirectories suidHelper;
+    inherit serviceDirectories suidHelper apparmor;
     preferLocalBuild = true;
     allowSubstitutes = false;
     XML_CATALOG_FILES = writeText "dbus-catalog.xml" ''
@@ -33,10 +34,12 @@ runCommand "dbus-1"
     xsltproc --nonet \
       --stringparam serviceDirectories "$serviceDirectories" \
       --stringparam suidHelper "$suidHelper" \
+      --stringparam apparmor "$apparmor" \
       ${./make-system-conf.xsl} ${dbus}/share/dbus-1/system.conf \
       > $out/system.conf
     xsltproc --nonet \
       --stringparam serviceDirectories "$serviceDirectories" \
+      --stringparam apparmor "$apparmor" \
       ${./make-session-conf.xsl} ${dbus}/share/dbus-1/session.conf \
       > $out/session.conf
   ''

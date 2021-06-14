@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, proot, patchelf, fakechroot, runc, simplejson, pycurl, coreutils, nose, mock, buildPythonApplication }:
+{ lib, fetchFromGitHub, proot, patchelf, fakechroot, runc, simplejson, pycurl, coreutils, nose, mock, buildPythonApplication }:
 
 buildPythonApplication rec {
 
@@ -31,7 +31,7 @@ buildPythonApplication rec {
     NOSE_EXCLUDE=test_03_create_repo,test_04_is_repo,test_02__get_group_from_host nosetests -v tests/unit_tests.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "basic user tool to execute simple docker containers in user space without root privileges";
     homepage = "https://indigo-dc.gitbooks.io/udocker";
     license = licenses.asl20;

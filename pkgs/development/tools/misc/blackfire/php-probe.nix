@@ -14,14 +14,15 @@ let
   soFile = {
     "7.3" = "blackfire-20180731";
     "7.4" = "blackfire-20190902";
+    "8.0" = "blackfire-20200930";
   }.${lib.versions.majorMinor php.version} or (throw "Unsupported PHP version.");
 in stdenv.mkDerivation rec {
   pname = "php-blackfire";
-  version = "1.43.0";
+  version = "1.53.0";
 
   src = fetchurl {
     url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire-php/blackfire-php_${version}_amd64.deb";
-    sha256 = "1038qbpqkamd51ip25z6fbbz69faggahhdw75lnsd8prrwjcpli7";
+    sha256 = "ApKj5gulTCzWh7oSAM+JWQnWviHCnHV3OJHegpXJL54=";
   };
 
   nativeBuildInputs = [

@@ -1,12 +1,14 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "reattach-to-user-namespace";
-  version = "2.8";
+  version = "2.9";
 
-  src = fetchurl {
-    url = "https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard/archive/v${version}.tar.gz";
-    sha256 = "0xxxdd26rcplhpvi2vy6crxadk3d1qkq4xry10lwq6dyya2jf6wb";
+  src = fetchFromGitHub {
+    owner = "ChrisJohnsen";
+    repo = "tmux-MacOSX-pasteboard";
+    rev = "v${version}";
+    sha256 = "1qgimh58hcx5f646gj2kpd36ayvrdkw616ad8cb3lcm11kg0ag79";
   };
 
   buildFlags = [ "ARCHES=x86_64" ];
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
     cp reattach-to-user-namespace $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A wrapper that provides access to the Mac OS X pasteboard service";
     license = licenses.bsd2;
     maintainers = with maintainers; [ lnl7 ];

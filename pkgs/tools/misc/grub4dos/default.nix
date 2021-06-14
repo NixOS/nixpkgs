@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nasm }:
+{ lib, stdenv, fetchFromGitHub, nasm }:
 
 let arch =
   if stdenv.isi686 then "i386"
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
   # make[2]: *** No rule to make target 'pre_stage2_fullsize', needed by 'all-am'.  Stop.
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];

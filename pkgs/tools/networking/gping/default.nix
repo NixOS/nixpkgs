@@ -1,20 +1,24 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "0.1.6";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     rev = "v${version}";
-    sha256 = "1scwwrrj30ff9yr776gpn4jyl3lbrx2s2dv0pc8b1zj7mvwp3as2";
+    sha256 = "sha256-lApm1JLXNjDKLj6zj25OaZDVp7lLW3qyrDsvJrudl8I=";
   };
 
-  cargoSha256 = "1dsfrl5cajl9nmzl6p43j7j50xn1z7dymqaz8kqs7zalj9zadm8k";
+  cargoSha256 = "sha256-d1NjPwT3YDp1U9JWeUejpWDbJonFlt5lYbUf7p3jVT0=";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "Ping, but with a graph";

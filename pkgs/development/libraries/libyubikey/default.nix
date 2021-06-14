@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libyubikey-1.13";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "009l3k2zyn06dbrlja2d4p2vfnzjhlcqxi88v02mlrnb17mx1v84";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://opensource.yubico.com/yubico-c/";
     description = "C library for manipulating Yubico YubiKey One-Time Passwords (OTPs)";
     license = licenses.bsd2;

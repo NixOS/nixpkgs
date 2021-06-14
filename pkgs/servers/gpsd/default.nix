@@ -1,59 +1,60 @@
-{ fetchurl, stdenv, sconsPackages, pkgconfig, dbus, dbus-glib
-, ncurses, libX11, libXt, libXpm, libXaw, libXext
+{ stdenv, lib ,fetchurl, scons, pkg-config, dbus, ncurses
 , libusb1, docbook_xml_dtd_412, docbook_xsl, bc
+
+# optional deps for GUI packages
+, guiSupport ? true
+, dbus-glib ? null, libX11 ? null, libXt ? null, libXpm ? null, libXaw ? null, libXext ? null
+, gobject-introspection ? null, pango ? null, gdk-pixbuf ? null, atk ? null, wrapGAppsHook ? null
+
 , libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
 , pps-tools
-, python2Packages
+, python3Packages
 }:
 
-# TODO: put the X11 deps behind a guiSupport parameter for headless support
 
 stdenv.mkDerivation rec {
-  name = "gpsd-3.16";
+  pname = "gpsd";
+  version = "3.22";
 
   src = fetchurl {
-    url = "https://download-mirror.savannah.gnu.org/releases/gpsd/${name}.tar.gz";
-    sha256 = "0a90ph4qrlz5kkcz2mwkfk3cmwy9fmglp94znz2y0gsd7bqrlmq3";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "18rplv1cd76ndb2wc91jarjmfm2nk508pykv1hir79bqbwmdygvq";
   };
 
   nativeBuildInputs = [
-    sconsPackages.scons_3_1_2 pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
-    python2Packages.python
-    python2Packages.wrapPython
-  ];
+    scons pkg-config docbook_xml_dtd_412 docbook_xsl xmlto bc
+    python3Packages.python
+    python3Packages.wrapPython
+  ]
+  ++ lib.optionals guiSupport [ wrapGAppsHook gobject-introspection ];
 
   buildInputs = [
-    python2Packages.python dbus dbus-glib ncurses libX11 libXt libXpm libXaw libXext
+    python3Packages.python dbus ncurses
     libxslt libusb1 pps-tools
+  ]
+  ++ lib.optionals guiSupport [
+    dbus-glib libX11 libXt libXpm libXaw libXext
+    gobject-introspection pango gdk-pixbuf atk
   ];
 
-  pythonPath = [
-    python2Packages.pygobject2
-    python2Packages.pygtk
+  pythonPath = lib.optionals guiSupport [
+    python3Packages.pygobject3
+    python3Packages.pycairo
   ];
 
   patches = [
-    ./0001-Import-LD_LIBRARY_PATH-to-allow-running-scons-check-.patch
-    ./0002-Import-XML_CATALOG_FILES-to-be-able-to-validate-the-.patch
-
-    # TODO: remove the patch with the next release
-    ./0001-Use-pkgconfig-for-dbus-library.patch
-    # to be able to find pps-tools
-    ./0002-scons-envs-patch.patch
+    ./sconstruct-env-fixes.patch
   ];
-
-  postPatch = ''
-    sed -i -e '17i#include <sys/sysmacros.h>' serial.c
-  '';
 
   # - leapfetch=no disables going online at build time to fetch leap-seconds
   #   info. See <gpsd-src>/build.txt for more info.
   preBuild = ''
     patchShebangs .
-    sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConstruct
+    sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConscript
+    export TAR=noop
 
     sconsFlags+=" udevdir=$out/lib/udev"
-    sconsFlags+=" python_libdir=$out/lib/${python2Packages.python.libPrefix}/site-packages"
+    sconsFlags+=" python_libdir=$out/lib/${python3Packages.python.libPrefix}/site-packages"
   '';
 
   sconsFlags = [
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     "gpsd_user=${gpsdUser}"
     "gpsd_group=${gpsdGroup}"
     "systemd=yes"
+    "xgps=${if guiSupport then "True" else "False"}"
   ];
 
   preCheck = ''
@@ -73,11 +75,13 @@ stdenv.mkDerivation rec {
   '';
   installTargets = [ "install" "udev-install" ];
 
+  # remove binaries for x-less install because xgps sconsflag is partially broken
   postFixup = ''
+    ${if guiSupport then "" else "rm $out/bin/xgps*"}
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPS service daemon";
     longDescription = ''
       gpsd is a service daemon that monitors one or more GPSes or AIS
@@ -97,7 +101,8 @@ stdenv.mkDerivation rec {
       diagnostic monitoring and profiling of receivers and feeding
       location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
-    homepage = "http://catb.org/gpsd/";
+    homepage = "https://gpsd.gitlab.io/gpsd/index.html";
+    changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor rasendubi ];

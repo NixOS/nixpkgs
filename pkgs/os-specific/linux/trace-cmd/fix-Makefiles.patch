@@ -1,30 +1,30 @@
 diff --git a/Makefile b/Makefile
-index bbdf15e..deb8ef7 100644
+index b034042..b8a06bc 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -288,7 +288,7 @@ libtraceevent.a: $(LIBTRACEEVENT_STATIC)
- libtracecmd.a: $(LIBTRACECMD_STATIC)
- libtracecmd.so: $(LIBTRACECMD_SHARED)
+@@ -338,6 +338,7 @@ libtracefs.a: $(LIBTRACEFS_STATIC)
+ libtracefs.so: $(LIBTRACEFS_SHARED)
  
--libs: $(LIBTRACECMD_SHARED) $(LIBTRACEEVENT_SHARED)
-+libs: $(LIBTRACECMD_SHARED) $(LIBTRACEEVENT_SHARED) $(LIBTRACECMD_STATIC) $(LIBTRACEEVENT_STATIC)
+ libs: $(LIBTRACECMD_SHARED) $(LIBTRACEEVENT_SHARED) $(LIBTRACEFS_SHARED)
++libs: $(LIBTRACECMD_STATIC) $(LIBTRACEEVENT_STATIC) $(LIBTRACEFS_STATIC)
  
- plugins: force $(obj)/lib/traceevent/plugins/traceevent_plugin_dir $(obj)/lib/traceevent/plugins/trace_python_dir
- 	$(Q)$(MAKE) -C $(src)/lib/traceevent/plugins
-@@ -344,6 +344,8 @@ install_gui: install_cmd gui
- install_libs: libs
+ test: force $(LIBTRACEEVENT_STATIC) $(LIBTRACEFS_STATIC) $(LIBTRACECMD_STATIC)
+ ifneq ($(CUNIT_INSTALLED),1)
+@@ -414,6 +415,9 @@ install_libs: libs
  	$(Q)$(call do_install,$(LIBTRACECMD_SHARED),$(libdir_SQ)/trace-cmd)
  	$(Q)$(call do_install,$(LIBTRACEEVENT_SHARED),$(libdir_SQ)/traceevent)
+ 	$(Q)$(call do_install,$(LIBTRACEFS_SHARED),$(libdir_SQ)/tracefs)
 +	$(Q)$(call do_install,$(LIBTRACECMD_STATIC),$(libdir_SQ)/trace-cmd)
 +	$(Q)$(call do_install,$(LIBTRACEEVENT_STATIC),$(libdir_SQ)/traceevent)
++	$(Q)$(call do_install,$(LIBTRACEFS_STATIC),$(libdir_SQ)/tracefs)
  	$(Q)$(call do_install,$(src)/include/traceevent/event-parse.h,$(includedir_SQ)/traceevent)
  	$(Q)$(call do_install,$(src)/include/traceevent/trace-seq.h,$(includedir_SQ)/traceevent)
  	$(Q)$(call do_install,$(src)/include/trace-cmd/trace-cmd.h,$(includedir_SQ)/trace-cmd)
 diff --git a/kernel-shark/src/CMakeLists.txt b/kernel-shark/src/CMakeLists.txt
-index e20a030..7fce165 100644
+index 457c100..687e150 100644
 --- a/kernel-shark/src/CMakeLists.txt
 +++ b/kernel-shark/src/CMakeLists.txt
-@@ -93,7 +93,7 @@ if (Qt5Widgets_FOUND AND Qt5Network_FOUND)
+@@ -92,7 +92,7 @@ if (Qt5Widgets_FOUND AND Qt5Network_FOUND)
              DESTINATION ${_INSTALL_PREFIX}/share/icons/${KS_APP_NAME})
  
      install(FILES "${KS_DIR}/org.freedesktop.kshark-record.policy"

@@ -1,7 +1,7 @@
 
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "babeld";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];
   };
 
@@ -24,9 +24,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       local_router = { pkgs, lib, ... }:
       {
         virtualisation.vlans = [ 10 20 ];
-
-        boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = 1;
-        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
 
         networking = {
           useDHCP = false;
@@ -73,9 +70,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       remote_router = { pkgs, lib, ... }:
       {
         virtualisation.vlans = [ 20 30 ];
-
-        boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = 1;
-        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
 
         networking = {
           useDHCP = false;

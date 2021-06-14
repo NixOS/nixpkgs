@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkgconfig, zathura_core, girara, libspectre, gettext }:
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config, zathura_core, girara, libspectre, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "zathura-ps";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wygq89nyjrjnsq7vbpidqdsirjm6iq4w2rijzwpk2f83ys8bc3y";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext ];
   buildInputs = [ libspectre zathura_core girara ];
 
   PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";

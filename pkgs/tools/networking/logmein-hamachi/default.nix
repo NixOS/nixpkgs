@@ -1,6 +1,6 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-with stdenv.lib;
+with lib;
 
 let
   arch =
@@ -12,7 +12,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then "0zy0jzvdqccfsg42m2lq1rj8r2c4iypd1h9vxl9824cbl92yim37"
     else if stdenv.hostPlatform.system == "i686-linux" then "03ml9xv19km99f0z7fpr21b1zkxvw7q39kjzd8wpb2pds51wnc62"
     else throwSystem;
-  libraries = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
+  libraries = lib.makeLibraryPath [ stdenv.cc.cc ];
 
 in stdenv.mkDerivation rec {
   pname = "logmein-hamachi";
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A hosted VPN service that lets you securely extend LAN-like networks to distributed teams";
     homepage = "https://secure.logmein.com/products/hamachi/";
     license = licenses.unfreeRedistributable;

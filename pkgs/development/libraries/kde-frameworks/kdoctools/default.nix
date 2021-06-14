@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules, docbook_xml_dtd_45, docbook_xsl_ns,
   karchive, ki18n, qtbase,
   perl, perlPackages
@@ -7,7 +7,6 @@
 
 mkDerivation {
   name = "kdoctools";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [
     extra-cmake-modules
     # The build system insists on having native Perl.

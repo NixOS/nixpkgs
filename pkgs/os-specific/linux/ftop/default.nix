@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "ftop";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace "curses" "ncurses"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Show progress of open files and file systems";
     homepage = "https://code.google.com/archive/p/ftop/";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pari
@@ -29,19 +29,19 @@ stdenv.mkDerivation rec {
     pari
     ntl
     gmp
-  ] ++ stdenv.lib.optionals withFlint [
+  ] ++ lib.optionals withFlint [
     flint
   ];
   nativeBuildInputs = [
     autoreconfHook
   ];
   doCheck = true;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
-    description = ''Elliptic curve tools'';
+    description = "Elliptic curve tools";
     homepage = "https://github.com/JohnCremona/eclib";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.all;
   };
 }

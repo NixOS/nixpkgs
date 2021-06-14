@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , freeglut
 , libGL
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     cp LICENSE.txt "$out/share/glui/doc"
   '';
 
-  meta = with stdenv.lib; {
-    description = ''A user interface library using OpenGL'';
+  meta = with lib; {
+    description = "A user interface library using OpenGL";
     license = licenses.zlib ;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

@@ -11,9 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "026vc8d0jkc1d7dlp3ldmwks7svpvqzl0k5niri8a12cl5w5b9hj";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "1ryi5qi1zz2yljyj4rn84q9zkzafc9w4nw3zc01hlzpnb1sjw5sw";
+  cargoSha256 = "069i8ydrp1pssnjq7d6mydwr7xh2cmcpzpf8bzd6nfjr6xx1pipr";
 
   meta = with lib; {
     description = "See what Rust is doing behind the curtains";

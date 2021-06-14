@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, perl, kbd, bdftopcf
+{ lib, stdenv, fetchurl, perl, kbd, bdftopcf
 , libfaketime, fonttosfnt, mkfontscale
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   name = "uni-vga";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "vue";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Visual Understanding Environment - mind mapping software";
-    maintainers = with stdenv.lib.maintainers; [ raskin ];
-    platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.free; # Apache License fork, actually
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = with lib.platforms; linux;
+    license = lib.licenses.free; # Apache License fork, actually
   };
 }

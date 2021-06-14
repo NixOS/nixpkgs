@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchgit, fetchurl, cmake, sip, protobuf, pythonOlder }:
+{ lib, buildPythonPackage, fetchgit, fetchurl, cmake, sip_4, protobuf, pythonOlder }:
 
 buildPythonPackage {
   pname = "libarcus";
@@ -13,7 +13,7 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.4.0";
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ sip_4 ];
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ];
 
@@ -22,7 +22,7 @@ buildPythonPackage {
     sed -i '/SET(ENV{PYTHONPATH}/d' cmake/FindSIP.cmake
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Communication library between internal components for Ultimaker software";
     homepage = "https://code.alephobjects.com/source/arcus/";
     license = licenses.lgpl3Plus;

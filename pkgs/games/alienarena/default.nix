@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
+{ lib, stdenv, fetchsvn, pkg-config, libjpeg, libX11, libXxf86vm, curl, libogg
 , libvorbis, freetype, openal, libGL }:
 
-stdenv.mkDerivation {
-  name = "alienarena-7.65";
+stdenv.mkDerivation rec {
+  pname = "alienarena";
+  version = "7.71.2";
 
-  src = fetchurl {
-    url = "https://icculus.org/alienarena/Files/alienarena-7.65-linux20130207.tar.gz";
-    sha256 = "03nnv4m2xmswr0020hssajncdb8sy95jp5yccsm53sgxga4r8igg";
+  src = fetchsvn {
+    url = "svn://svn.icculus.org/alienarena/trunk";
+    rev = "5673";
+    sha256 = "1qfrgrp7nznk5n1jqvjba6l1w8y2ixzyx9swkpvd02rdwlwrp9kw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjpeg libX11 curl libogg libvorbis
                   freetype openal libGL libXxf86vm ];
 
@@ -19,7 +21,7 @@ stdenv.mkDerivation {
       --replace libGL.so.1 ${libGL}/lib/libGL.so.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How

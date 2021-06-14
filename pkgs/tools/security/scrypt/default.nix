@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, utillinux, getconf }:
+{ lib, stdenv, fetchurl, openssl, util-linux, getconf }:
 
 stdenv.mkDerivation rec {
   pname = "scrypt";
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  checkInputs = [ utillinux ];
+  checkInputs = [ util-linux ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encryption utility";
     homepage    = "https://www.tarsnap.com/scrypt.html";
     license     = licenses.bsd2;

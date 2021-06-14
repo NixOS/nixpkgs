@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, tornado }:
+{ lib, fetchPypi, buildPythonPackage, tornado }:
 
 buildPythonPackage rec {
   pname = "snakeviz";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
   propagatedBuildInputs = [ tornado ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Browser based viewer for profiling data";
     homepage = "https://jiffyclub.github.io/snakeviz";
     license = licenses.bsd3;

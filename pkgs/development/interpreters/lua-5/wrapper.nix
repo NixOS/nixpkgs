@@ -1,4 +1,4 @@
-{ stdenv, lua, buildEnv, makeWrapper
+{ lib, stdenv, lua, buildEnv, makeWrapper
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
@@ -28,7 +28,7 @@ let
       addToLuaPath "$out"
 
       # take every binary from lua packages and put them into the env
-      for path in ${stdenv.lib.concatStringsSep " " paths}; do
+      for path in ${lib.concatStringsSep " " paths}; do
         nix_debug "looking for binaries in path = $path"
         if [ -d "$path/bin" ]; then
           cd "$path/bin"
@@ -37,7 +37,7 @@ let
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
                 nix_debug "Making wrapper $prg"
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix LUA_PATH ';' "$LUA_PATH"   --suffix LUA_CPATH ';' "$LUA_CPATH" ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
+                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix LUA_PATH ';' "$LUA_PATH"   --suffix LUA_CPATH ';' "$LUA_CPATH" ${lib.concatStringsSep " " makeWrapperArgs}
               fi
             fi
           done

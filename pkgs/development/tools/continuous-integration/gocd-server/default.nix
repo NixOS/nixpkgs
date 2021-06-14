@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   name = "gocd-server-${version}-${rev}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c30qzd6awlw0zx91rk6na0mmgykqkgrw9ychx18ivjwma0hr0sc";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A continuous delivery server specializing in advanced workflow modeling and visualization";
     homepage = "http://www.go.cd";
     license = licenses.asl20;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ grahamc swarren83 ];
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   buildCommand = "
     unzip $src -d $out

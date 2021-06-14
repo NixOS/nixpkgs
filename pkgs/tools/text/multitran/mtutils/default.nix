@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libmtsupport, libfacet, libbtree, libmtquery, help2man} :
+{lib, stdenv, fetchurl, libmtsupport, libfacet, libbtree, libmtquery, help2man} :
 
 stdenv.mkDerivation {
   name = "mt-utils-0.0.1alpha3";
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://multitran.sourceforge.net/";
     description = "Multitran: simple command line utilities for dictionary maintenance";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

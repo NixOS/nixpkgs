@@ -11,16 +11,15 @@
 , cmake
 , octave
 , gl2ps
+, mpi
 , withQcsxcad ? true
 , withMPI ? false
 , withHyp2mat ? true
 , qcsxcad ? null
-, openmpi ? null
 , hyp2mat ? null
 }:
 
 assert withQcsxcad -> qcsxcad != null;
-assert withMPI -> openmpi != null;
 assert withHyp2mat -> hyp2mat != null;
 
 stdenv.mkDerivation {
@@ -50,7 +49,7 @@ stdenv.mkDerivation {
     csxcad
     (octave.override { inherit hdf5; }) ]
     ++ lib.optionals withQcsxcad [ qcsxcad ]
-    ++ lib.optionals withMPI [ openmpi ]
+    ++ lib.optionals withMPI [ mpi ]
     ++ lib.optionals withHyp2mat [ hyp2mat ];
 
   postFixup = ''
@@ -62,8 +61,6 @@ stdenv.mkDerivation {
       -lhdf5 $out/share/openEMS/matlab/h5readatt_octave.cc \
       -o $out/share/openEMS/matlab/h5readatt_octave.oct
   '';
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Open Source Electromagnetic Field Solver";

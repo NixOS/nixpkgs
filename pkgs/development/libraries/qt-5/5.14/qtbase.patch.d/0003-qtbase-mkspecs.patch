@@ -1,6 +1,6 @@
-From 1cb5581d7f20bf87ac8d67a7295447a78a1d9645 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <me@pbb.lc>
-Date: Sat, 4 Apr 2020 00:25:52 +0200
+From 87c81a31d65862a2f32fdc575cfb47b7a46bfae7 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Mon, 12 Apr 2021 20:05:25 +0200
 Subject: [PATCH 03/10] qtbase-mkspecs
 
 ---
@@ -12,10 +12,10 @@ Subject: [PATCH 03/10] qtbase-mkspecs
  mkspecs/features/qt_build_paths.prf           |  4 +-
  mkspecs/features/qt_docs.prf                  | 10 +--
  mkspecs/features/qt_example_installs.prf      |  2 +-
- mkspecs/features/qt_functions.prf             |  2 +-
+ mkspecs/features/qt_functions.prf             | 27 ++++---
  mkspecs/features/qt_installs.prf              | 22 ++---
  mkspecs/features/qt_plugin.prf                |  2 +-
- 11 files changed, 38 insertions(+), 141 deletions(-)
+ 11 files changed, 52 insertions(+), 152 deletions(-)
 
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
 index 0e71fd0015..ba071d9a70 100644
@@ -369,18 +369,44 @@ index 72b47bce27..d59e949e78 100644
  
  check_examples {
 diff --git a/mkspecs/features/qt_functions.prf b/mkspecs/features/qt_functions.prf
-index 7777e615bd..abeb03a663 100644
+index 7777e615bd..b0c6880a74 100644
 --- a/mkspecs/features/qt_functions.prf
 +++ b/mkspecs/features/qt_functions.prf
-@@ -87,7 +87,7 @@ defineTest(qtHaveModule) {
+@@ -87,19 +87,22 @@ defineTest(qtHaveModule) {
  defineTest(qtPrepareTool) {
      cmd = $$eval(QT_TOOL.$${2}.binary)
      isEmpty(cmd) {
 -        cmd = $$[QT_HOST_BINS]/$$2
-+        cmd = $$system("command -v $$2")
-         exists($${cmd}.pl) {
-             $${1}_EXE = $${cmd}.pl
-             cmd = perl -w $$system_path($${cmd}.pl)
+-        exists($${cmd}.pl) {
+-            $${1}_EXE = $${cmd}.pl
+-            cmd = perl -w $$system_path($${cmd}.pl)
+-        } else: contains(QMAKE_HOST.os, Windows) {
+-            $${1}_EXE = $${cmd}.exe
+-            cmd = $$system_path($${cmd}.exe)
+-        } else:contains(QMAKE_HOST.os, Darwin) {
+-            BUNDLENAME = $${cmd}.app/Contents/MacOS/$$2
+-            exists($$BUNDLENAME) {
+-                cmd = $$BUNDLENAME
++        cmd = $$system("command -v $${2}")
++        isEmpty(cmd) {
++            cmd = $$system("command -v $${2}.pl")
++            !isEmpty(cmd) {
++                $${1}_EXE = $$cmd
++                cmd = perl -w $$system_path($${cmd})
++            } else: contains(QMAKE_HOST.os, Windows) {
++                cmd = $$system("command -v $${2}.exe")
++                $${1}_EXE = $$cmd
++            } else: contains(QMAKE_HOST.os, Darwin) {
++                cmd = $$system("command -v $${2}.app")
++                !isEmpty(cmd) {
++                    cmd = $${cmd}/Contents/MacOS/$${2}
++                    $${1}_EXE = $$cmd
++                }
+             }
+-            $${1}_EXE = $$cmd
+         } else {
+             $${1}_EXE = $$cmd
+         }
 diff --git a/mkspecs/features/qt_installs.prf b/mkspecs/features/qt_installs.prf
 index 1ebca17366..a8f958eae8 100644
 --- a/mkspecs/features/qt_installs.prf
@@ -460,5 +486,5 @@ index 573d717eea..024c624cb6 100644
  
  qt_libinfix_plugins: TARGET = $$TARGET$$QT_LIBINFIX
 -- 
-2.25.1
+2.29.3
 

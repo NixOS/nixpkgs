@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2-x11, glib, pango, cairo, atk, gdk-pixbuf, libX11 }:
+{ lib, stdenv, fetchurl, gtk2-x11, glib, pango, cairo, atk, gdk-pixbuf, libX11 }:
 
 # Arena is free software in the sense of "free beer" but not as in "free
 # speech". We can install it as we please, but we cannot re-distribute it in
@@ -7,7 +7,7 @@
 
 let
 
-  inherit (stdenv.lib) makeLibraryPath;
+  inherit (lib) makeLibraryPath;
   libDir = "lib64";
 
 in
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
       UCI protocol I, II. Furthermore, compatible to Chess960, DGT electronic
       chess board & DGT clocks and much more.
     '';
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = ["x86_64-linux"];
-    hydraPlatforms = stdenv.lib.platforms.none;
+    hydraPlatforms = lib.platforms.none;
   };
 
 }

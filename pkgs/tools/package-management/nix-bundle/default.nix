@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0hdvdjm467w37clkhbifn54hbdmnxlbk66cj88lwaz26j4s2ik5g";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   # coreutils, gnutar is actually needed by nix for bootstrap
-  buildInputs = [ nix coreutils makeWrapper gnutar gzip bzip2 ];
+  buildInputs = [ nix coreutils gnutar gzip bzip2 ];
 
   binPath = lib.makeBinPath [ nix coreutils gnutar gzip bzip2 ];
 

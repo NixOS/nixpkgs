@@ -1,10 +1,11 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule
+, enableUnfree ? true }:
 
 buildGoModule rec {
-  name = "drone.io-${version}";
-  version = "1.9.0";
+  pname = "drone.io${lib.optionalString (!enableUnfree) "-oss"}";
+  version = "1.10.0";
 
-  vendorSha256 = "0idf11sr417lxcjryplgb87affr6lgzxazzlyvk0y40hp8zbhwsx";
+  vendorSha256 = "sha256-cKHX/GnvGELQBfoo0/1UmDQ4Z66GGnnHG7+1CzjinL0=";
 
   doCheck = false;
 
@@ -12,12 +13,16 @@ buildGoModule rec {
     owner = "drone";
     repo = "drone";
     rev = "v${version}";
-    sha256 = "1lsyd245fr1f74rpccvvw41h5g75b79afrb8g589bj13ggjav0xy";
+    sha256 = "sha256-12Jac+mXWdUX8gWvmpdO9ROv7Bi0YzvyqnNDVNJOr34=";
   };
 
-  meta = with stdenv.lib; {
+  preBuild = ''
+    buildFlagsArray+=( "-tags" "${lib.optionalString (!enableUnfree) "oss nolimit"}" )
+  '';
+
+  meta = with lib; {
     maintainers = with maintainers; [ elohmeier vdemeester ];
-    license = licenses.asl20;
+    license = with licenses; if enableUnfree then unfreeRedistributable else asl20;
     description = "Continuous Integration platform built on container technology";
   };
 }

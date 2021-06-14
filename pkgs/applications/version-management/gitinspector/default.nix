@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, python2Packages}:
+{ lib, fetchzip, python2Packages}:
 
 python2Packages.buildPythonApplication rec {
   pname = "gitinspector";
@@ -15,7 +15,7 @@ python2Packages.buildPythonApplication rec {
     unittest2
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ejwa/gitinspector";
     description = "Statistical analysis tool for git repositories";
     license = licenses.gpl3;

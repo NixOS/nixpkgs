@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "kate";
+  pname = "kate";
   meta = {
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];

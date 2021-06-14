@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation {
-  name = "wasilibc-20190712";
+  pname = "wasilibc";
+  version = "20190712";
   src = fetchFromGitHub {
     owner = "CraneStation";
     repo = "wasi-libc";
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
     ln -s $out/share/wasm32-wasi/undefined-symbols.txt $out/lib/wasi.imports
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WASI libc implementation for WebAssembly";
     homepage    = "https://wasi.dev";
     platforms   = platforms.wasi;

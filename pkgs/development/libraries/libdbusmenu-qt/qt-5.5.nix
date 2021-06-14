@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, qtbase }:
+{ lib, stdenv, fetchgit, cmake, qtbase }:
 
 stdenv.mkDerivation rec {
   pname = "libdbusmenu-qt";
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWITH_DOC=OFF" ];
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     homepage = "https://launchpad.net/libdbusmenu-qt";
     description = "Provides a Qt implementation of the DBusMenu spec";
     maintainers = [ maintainers.ttuegel ];

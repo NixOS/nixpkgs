@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "quorum";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ mmahut ];
   };
 
@@ -55,7 +55,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         parentHash =
           "0x0000000000000000000000000000000000000000000000000000000000000000";
         timestamp = "0x5cffc201";
-		  };
+      };
      };
     };
   };

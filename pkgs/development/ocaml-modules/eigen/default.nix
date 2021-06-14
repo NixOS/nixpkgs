@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, ctypes, libcxx }:
+{ lib, stdenv, buildDunePackage, fetchFromGitHub, ctypes, libcxx }:
 
 buildDunePackage rec {
   pname = "eigen";
@@ -15,11 +15,11 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.02";
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [ ctypes ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Minimal/incomplete Ocaml interface to Eigen3, mostly for Owl";
     platforms = platforms.x86_64;

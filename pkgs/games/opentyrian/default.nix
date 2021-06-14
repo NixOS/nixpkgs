@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchzip, SDL, SDL_net}:
+{ lib, stdenv, fetchurl, fetchzip, SDL, SDL_net }:
 
 stdenv.mkDerivation rec {
   pname = "opentyrian";
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     description = ''Open source port of the game "Tyrian"'';
     homepage = "https://bitbucket.org/opentyrian/opentyrian";
     # This does not account of Tyrian data.
-    # license = stdenv.lib.licenses.gpl2;
+    # license = lib.licenses.gpl2;
   };
 }

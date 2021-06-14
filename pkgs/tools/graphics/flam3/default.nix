@@ -1,8 +1,8 @@
-{stdenv, fetchFromGitHub, zlib, libpng, libxml2, libjpeg }:
+{lib, stdenv, fetchFromGitHub, zlib, libpng, libxml2, libjpeg }:
 
 stdenv.mkDerivation rec {
   pname = "flam3";
-  version = "3.1.1-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "3.1.1-${lib.strings.substring 0 7 rev}";
   rev = "e0801543538451234d7a8a240ba3b417cbda5b21";
 
   src = fetchFromGitHub {
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib libpng libxml2 libjpeg ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cosmic recursive fractal flames";
     homepage = "https://flam3.com/";
-    maintainers = [ maintainers.nand0p ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
   };

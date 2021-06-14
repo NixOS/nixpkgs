@@ -27,6 +27,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" "sound.target" ];
       description = "spotifyd, a Spotify playing daemon";
+      environment.SHELL = "/bin/sh";
       serviceConfig = {
         ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
         Restart = "always";

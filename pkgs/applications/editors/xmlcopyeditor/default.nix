@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, aspell, boost, expat, intltool, libxml2, libxslt, pcre, wxGTK, xercesc }:
+{ lib, stdenv, fetchurl, aspell, boost, expat, intltool, libxml2, libxslt, pcre, wxGTK, xercesc }:
 
 stdenv.mkDerivation rec {
   pname = "xmlcopyeditor";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast, free, validating XML editor";
     homepage = "http://xml-copy-editor.sourceforge.net/";
     license = licenses.gpl2Plus;

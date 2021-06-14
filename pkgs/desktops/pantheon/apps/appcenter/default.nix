@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , nix-update-script
 , appstream
 , appstream-glib
@@ -21,7 +21,7 @@
 , ninja
 , packagekit
 , pantheon
-, pkgconfig
+, pkg-config
 , python3
 , vala
 , polkit
@@ -31,14 +31,23 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.4.2";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8r0DlmG8xlCQ1uFHZQjXG2ls4VBrsRzrVY8Ey3/OYAU=";
+    sha256 = "MsaXdmL+M+NYAJrrwluleeNxqQg0soFbO/G/FqibBFI=";
   };
+
+  patches = [
+    # Allow build with appstream 0.14.x
+    # https://github.com/elementary/appcenter/pull/1493
+    (fetchpatch {
+      url = "https://github.com/elementary/appcenter/commit/5807dd13fe3c715f26225aed8d7a0abdea0c2a64.patch";
+      sha256 = "BvEahG9lU9ZdgooFDFhm5evRvnKVcmcHLdmZPb85gbo=";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -48,12 +57,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     appstream-glib
-    dbus # for pkgconfig
+    dbus # for pkg-config
     desktop-file-utils
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -87,7 +96,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;

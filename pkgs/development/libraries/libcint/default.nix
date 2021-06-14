@@ -4,18 +4,18 @@
 , cmake
 , blas
   # Check Inputs
-, python
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcint";
-  version = "4.0.6";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
     rev = "v${version}";
-    sha256 = "1bgzsyz1i0hvla5ax0lawp1kw25fkhzh9ddhq92mplizrj9y05c1";
+    hash = "sha256-nsIyosn8dBf217UmjXSKLTM2RhIQHCSvPlrvlqo5KLc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,8 +26,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX=" # ends up double-adding /nix/store/... prefix, this avoids issue
   ];
 
+  strictDeps = true;
+
   doCheck = true;
-  checkInputs = [ python.pkgs.numpy ];
+  checkInputs = [ python3.pkgs.numpy ];
 
   meta = with lib; {
     description = "General GTO integrals for quantum chemistry";

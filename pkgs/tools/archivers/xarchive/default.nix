@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, pkgconfig }:
+{ lib, stdenv, fetchurl, gtk2, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "0.2.8-6";
@@ -9,15 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "0chfim7z27s00naf43a61zsngwhvim14mg1p3csbv5i3f6m50xx4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 ];
 
   hardeningDisable = [ "format" ];
 
   meta = {
     description = "A GTK front-end for command line archiving tools";
-    maintainers = [ stdenv.lib.maintainers.domenkozar ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.domenkozar ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

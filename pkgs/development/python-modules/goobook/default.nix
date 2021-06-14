@@ -1,21 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , docutils, installShellFiles
-, google_api_python_client, simplejson, oauth2client, setuptools, xdg
+, google-api-python-client, simplejson, oauth2client, setuptools, xdg
 }:
 
 buildPythonPackage rec {
   pname = "goobook";
-  version = "3.5";
+  version = "3.5.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rmfyma3gwdf5mrw4l3j66y86fy8hgdbd0z4a5kck0kcm3hy34j9";
+    sha256 = "6e69aeaf69112d116302f0c42ca1904f3b6efd17f15cefc12c866206160293be";
   };
 
   nativeBuildInputs = [ docutils installShellFiles ];
   propagatedBuildInputs = [
-    google_api_python_client simplejson oauth2client setuptools xdg
+    google-api-python-client simplejson oauth2client setuptools xdg
   ];
 
   postInstall = ''
@@ -23,7 +23,11 @@ buildPythonPackage rec {
     installManPage goobook.1
   '';
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  pythonImportsCheck = [ "goobook" ];
+
+  meta = with lib; {
     description = "Access your Google contacts from the command line";
     longDescription = ''
       The purpose of GooBook is to make it possible to use your Google Contacts

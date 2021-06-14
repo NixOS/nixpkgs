@@ -1,4 +1,4 @@
-{ fetchFromGitHub, silver-searcher, tree, man, stdenv,
+{ fetchFromGitHub, silver-searcher, tree, man, lib, stdenv,
   git,
   pandocSupport ? true, pandoc ? null
   , ... }:
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://palovandalo.com/memo/";
     downloadPage = "https://github.com/mrVanDalo/memo/releases";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.mrVanDalo ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.mrVanDalo ];
+    platforms = lib.platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, glib, readline, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, glib, readline, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "neardal-0.7-post-git-20150930";
@@ -10,8 +10,8 @@ stdenv.mkDerivation {
     sha256 = "12qwg7qiw2wfpaxfg2fjkmj5lls0g33xp6w433g8bnkvwlq4s29g";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake libtool glib readline makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ autoconf automake libtool glib readline ];
 
   preConfigure = ''
     substituteInPlace "ncl/Makefile.am" --replace "noinst_PROGRAMS" "bin_PROGRAMS"
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--disable-dependency-tracking" "--disable-traces" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C APIs to exchange datas with the NFC daemon 'Neard'";
     license = licenses.lgpl2;
     homepage = "https://01.org/linux-nfc";

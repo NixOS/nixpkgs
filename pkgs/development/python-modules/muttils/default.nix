@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , isPy3k
@@ -17,7 +17,7 @@ buildPythonPackage {
   # Tests don't work
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for use with console mail clients, like mutt";
     homepage = "https://www.blacktrash.org/hg/muttils";
     license = licenses.gpl2Plus;

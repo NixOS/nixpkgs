@@ -1,18 +1,19 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''access'';
-  version = ''20151218-git'';
+  baseName = "access";
+  version = "20210124-git";
 
   parasites = [ "access-test" ];
 
-  description = ''A library providing functions that unify data-structure access for Common Lisp:
-      access and (setf access)'';
+  description = "A library providing functions that unify data-structure access for Common Lisp:
+      access and (setf access)";
 
   deps = [ args."alexandria" args."anaphora" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/access/2015-12-18/access-20151218-git.tgz'';
-    sha256 = ''0f4257cxd1rpp46wm2qbnk0ynlc3dli9ib4qbn45hglh8zy7snfl'';
+    url = "http://beta.quicklisp.org/archive/access/2021-01-24/access-20210124-git.tgz";
+    sha256 = "1n4j15v1ikspchcbb0bn15kk3lh78f6bxk56cs4arimm8bisyqlq";
   };
 
   packageName = "access";
@@ -23,9 +24,9 @@ rec {
 /* (SYSTEM access DESCRIPTION
     A library providing functions that unify data-structure access for Common Lisp:
       access and (setf access)
-    SHA256 0f4257cxd1rpp46wm2qbnk0ynlc3dli9ib4qbn45hglh8zy7snfl URL
-    http://beta.quicklisp.org/archive/access/2015-12-18/access-20151218-git.tgz
-    MD5 a6f1eb4a1823b04c6db4fa2dc16d648f NAME access FILENAME access DEPS
+    SHA256 1n4j15v1ikspchcbb0bn15kk3lh78f6bxk56cs4arimm8bisyqlq URL
+    http://beta.quicklisp.org/archive/access/2021-01-24/access-20210124-git.tgz
+    MD5 d2d7d9826cbfb3de568d05a4d6bacdbe NAME access FILENAME access DEPS
     ((NAME alexandria FILENAME alexandria) (NAME anaphora FILENAME anaphora)
      (NAME cl-interpol FILENAME cl-interpol) (NAME cl-ppcre FILENAME cl-ppcre)
      (NAME cl-unicode FILENAME cl-unicode)
@@ -36,4 +37,4 @@ rec {
     DEPENDENCIES
     (alexandria anaphora cl-interpol cl-ppcre cl-unicode closer-mop
      flexi-streams iterate lisp-unit2 named-readtables)
-    VERSION 20151218-git SIBLINGS NIL PARASITES (access-test)) */
+    VERSION 20210124-git SIBLINGS NIL PARASITES (access-test)) */

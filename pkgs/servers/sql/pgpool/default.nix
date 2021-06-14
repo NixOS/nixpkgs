@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, postgresql, openssl, pam ? null, libmemcached ? null }:
+{ lib, stdenv, fetchurl, postgresql, openssl, pam ? null, libmemcached ? null }:
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-openssl"
-  ] ++ stdenv.lib.optional (pam != null) "--with-pam"
-    ++ stdenv.lib.optional (libmemcached != null) "--with-memcached=${libmemcached}";
+  ] ++ lib.optional (pam != null) "--with-pam"
+    ++ lib.optional (libmemcached != null) "--with-memcached=${libmemcached}";
 
   installFlags = [
     "sysconfdir=\${out}/etc"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pgpool.net/mediawiki/index.php";
     description = "A middleware that works between postgresql servers and postgresql clients";
     license = licenses.free;

@@ -2,14 +2,20 @@
 , mkDerivation
 , extra-cmake-modules
 , kdoctools
-, kdelibs4support
+, kguiaddons
+, kio
+, ktextwidgets
+, kwidgetsaddons
+, kxmlgui
 , libkexiv2
 }:
 
 mkDerivation {
-  name = "kolourpaint";
+  pname = "kolourpaint";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kdelibs4support libkexiv2 ];
+  buildInputs = [
+    kguiaddons kio ktextwidgets kwidgetsaddons kxmlgui libkexiv2
+  ];
   meta = {
     maintainers = [ lib.maintainers.fridh ];
     license = with lib.licenses; [ gpl2 ];

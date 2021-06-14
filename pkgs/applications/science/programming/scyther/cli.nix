@@ -6,12 +6,8 @@ stdenv.mkDerivation {
 
   inherit src meta;
 
-  buildInputs = [
-    cmake
-    glibc.static
-    flex
-    bison
-  ];
+  nativeBuildInputs = [ cmake flex bison ];
+  buildInputs = [ glibc.static ];
 
   patchPhase = ''
     # Since we're not in a git dir, the normal command this project uses to create this file wouldn't work

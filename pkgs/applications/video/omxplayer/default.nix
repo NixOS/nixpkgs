@@ -1,20 +1,20 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , raspberrypifw, pcre, boost, freetype, zlib
 }:
 
 let
   ffmpeg = stdenv.mkDerivation rec {
     name = "ffmpeg-1.1.3";
-    
+
     src = fetchurl {
       url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
       sha256 = "03s1zsprz5p6gjgwwqcf7b6cvzwwid6l8k7bamx9i0f1iwkgdm0j";
     };
-    
+
     configurePlatforms = [];
     configureFlags = [
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ] ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch32 [
+    ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
       # TODO be better with condition
       "--cpu=arm1176jzf-s"
     ] ++ [
@@ -47,7 +47,7 @@ let
       "--disable-debug"
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
       "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
-    ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
     ];
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/huceke/omxplayer";
     description = "Commandline OMX player for the Raspberry Pi";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.arm;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.arm;
   };
 }

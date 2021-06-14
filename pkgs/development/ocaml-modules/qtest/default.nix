@@ -2,13 +2,15 @@
 
 buildDunePackage rec {
   pname = "qtest";
-  version = "2.11";
+  version = "2.11.2";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "vincent-hugot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10fi2093ny8pp3jsi1gdqsllp3lr4r5mfcs2hrm7qvbnhrdbb0g3";
+    sha256 = "sha256-VLY8+Nu6md0szW4RVxTFwlSQ9kyrgUqf7wQEA6GW8BE=";
   };
 
   propagatedBuildInputs = [ qcheck ];

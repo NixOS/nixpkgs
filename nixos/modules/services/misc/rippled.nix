@@ -389,6 +389,7 @@ in
 
       extraConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra lines to be added verbatim to the rippled.cfg configuration file.
         '';
