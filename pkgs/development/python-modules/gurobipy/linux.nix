@@ -17,4 +17,11 @@ buildPythonPackage {
       patchelf --set-rpath $out/lib \
         $out/lib/${python.libPrefix}/site-packages/gurobipy/gurobipy.so
     '';
+
+  meta = with lib; {
+    description = "The Gurobi Python interface";
+    homepage = "https://www.gurobi.com";
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+  };
 }
