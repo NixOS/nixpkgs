@@ -2523,11 +2523,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, python3 }: stdenv.mkDerivation {
-    name = "xkeyboard-config-2.31";
+    name = "xkeyboard-config-2.33";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.31.tar.bz2";
-      sha256 = "18xddaxh83zm698syh50w983jg6b7b8zgv0dfaf7ha485hgihi6s";
+      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.33.tar.bz2";
+      sha256 = "1g6kn7l0mixw50kgn7d97gwv1990c5rczr2x776q3xywss8dfzv5";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config python3 ];
