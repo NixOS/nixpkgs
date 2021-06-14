@@ -8355,6 +8355,8 @@ in {
 
   textwrap3 = callPackage ../development/python-modules/textwrap3 { };
 
+  tf-models-official = callPackage ../development/python-modules/tf-models-official { };
+
   tflearn = callPackage ../development/python-modules/tflearn { };
 
   Theano = callPackage ../development/python-modules/Theano rec {
