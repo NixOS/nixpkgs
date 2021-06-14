@@ -250,7 +250,7 @@ in {
       };
 
       status_port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 4972;
         description = ''
           Port used for querying backup and server status
