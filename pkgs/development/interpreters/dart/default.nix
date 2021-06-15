@@ -14,23 +14,19 @@
   in
   {
     "${version}-x86_64-darwin" = fetchurl {
-      url =
-        "${base}/stable/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
+      url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
       sha256 = "0kb6r2rmp5d0shvgyy37fmykbgww8qaj4f8k79rmqfv5lwa3izya";
     };
     "${version}-x86_64-linux" = fetchurl {
-      url =
-        "${base}/stable/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
+      url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
       sha256 = "0zq8wngyrw01wjc5s6w1vz2jndms09ifiymjjixxby9k41mr6jrq";
     };
     "${version}-i686-linux" = fetchurl {
-      url =
-        "${base}/stable/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
+      url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
       sha256 = "0zv4q8xv2i08a6izpyhhnil75qhs40m5mgyvjqjsswqkwqdf7lkj";
     };
     "${version}-aarch64-linux" = fetchurl {
-      url =
-        "${base}/stable/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
+      url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
       sha256 = "0bb9jdmg5p608jmmiqibp13ydiw9avgysxlmljvgsl7wl93j6rgc";
     };
   }
@@ -45,8 +41,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ unzip ];
 
-  src = sources."${version}-${stdenv.hostPlatform.system}" or (throw
-    "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
+  src = sources."${version}-${stdenv.hostPlatform.system}" or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
 
   installPhase = ''
     mkdir -p $out
@@ -62,8 +57,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.dartlang.org/";
     maintainers = with maintainers; [ grburst thiagokokada ];
-    description =
-      "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
+    description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''
       Dart is a class-based, single inheritance, object-oriented language
       with C-style syntax. It offers compilation to JavaScript, interfaces,
