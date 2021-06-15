@@ -386,6 +386,7 @@ in with py.pkgs; buildPythonApplication rec {
     "folder"
     "folder_watcher"
     "foobot"
+    "foscam"
     "freebox"
     "freedns"
     "fritz"
