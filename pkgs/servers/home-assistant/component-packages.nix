@@ -95,7 +95,7 @@
     "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
     "bmw_connected_drive" = ps: with ps; [ ]; # missing inputs: bimmer_connected
-    "bond" = ps: with ps; [ ]; # missing inputs: bond-api
+    "bond" = ps: with ps; [ bond-api ];
     "bosch_shc" = ps: with ps; [ aiohttp-cors boschshcpy ifaddr zeroconf ];
     "braviatv" = ps: with ps; [ bravia-tv ];
     "broadlink" = ps: with ps; [ broadlink ];
