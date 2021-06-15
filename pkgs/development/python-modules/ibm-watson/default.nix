@@ -8,7 +8,7 @@
 , tox
 , requests
 , python-dateutil
-, websocket_client
+, websocket-client
 , ibm-cloud-sdk-core
 }:
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     python-dateutil
-    websocket_client
+    websocket-client
     ibm-cloud-sdk-core
   ];
 

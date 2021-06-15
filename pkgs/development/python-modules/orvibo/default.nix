@@ -6,7 +6,7 @@
 , pytest-runner
 , pytestCheckHook
 , requests
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {

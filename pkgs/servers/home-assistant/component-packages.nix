@@ -323,7 +323,7 @@
     "google_translate" = ps: with ps; [ gtts ];
     "google_travel_time" = ps: with ps; [ googlemaps ];
     "google_wifi" = ps: with ps; [ ];
-    "gpmdp" = ps: with ps; [ websocket_client ];
+    "gpmdp" = ps: with ps; [ websocket-client ];
     "gpsd" = ps: with ps; [ gps3 ];
     "gpslogger" = ps: with ps; [ aiohttp-cors ];
     "graphite" = ps: with ps; [ ];

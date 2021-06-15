@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication rec {
     python-Levenshtein
     pyxdg
     requests
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = with python3Packages; [

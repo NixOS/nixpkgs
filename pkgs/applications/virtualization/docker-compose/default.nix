@@ -3,7 +3,7 @@
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
 , dockerpty, docker, ipaddress, jsonschema, requests
-, six, texttable, websocket_client, cached-property
+, six, texttable, websocket-client, cached-property
 , enum34, functools32, paramiko, distro, python-dotenv
 }:
 
@@ -22,7 +22,7 @@ buildPythonApplication rec {
   checkInputs = [ mock pytest nose ];
   propagatedBuildInputs = [
     pyyaml colorama dockerpty docker
-    ipaddress jsonschema requests six texttable websocket_client
+    ipaddress jsonschema requests six texttable websocket-client
     docopt cached-property paramiko distro python-dotenv
   ] ++ lib.optional (pythonOlder "3.7") backports_ssl_match_hostname
   ++ lib.optional (pythonOlder "3.4") enum34
