@@ -214,9 +214,14 @@ GitHub Issues are **one** place for discussing Calamares (and Calamares Extensio
 if there are concrete
 problems or a new feature to discuss.
 
-Regular Calamares development chit-chat happens on old-school IRC
-(no registration required). Responsiveness is best during the day
-in Europe, but feel free to idle. The Matrix room is relatively new.
+Regular Calamares development chit-chat happens in a [Matrix](https://matrix.org/)
+room, `#calamares:kde.org`. The conversation is bridged with IRC
+on [Libera.Chat](https://libera.chat/).
+Responsiveness is best during the day
+in Europe, but feel free to idle. If you use IRC, **DO NOT** ask-and-leave. Keep
+that chat window open because it can easily take a few hours for
+someone to notice a message.
+Matrix is persistent, and we'll see your message eventually.
 
 * [![Join us on Matrix](https://img.shields.io/badge/Matrix-%23calamares:kde.org-blue)](https://webchat.kde.org/#/room/%23calamares:kde.org)
 * [![Chat on IRC](https://img.shields.io/badge/IRC-Libera.Chat%20%23calamares-green)](https://kiwiirc.com/client/irc.libera.chat/#calamares)
