@@ -210,7 +210,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_0_12.withPlugins (p: [ p.random ]);
+      terraform = terraform_1_0.withPlugins (p: [ p.random ]);
       test =
         runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
           set -e
