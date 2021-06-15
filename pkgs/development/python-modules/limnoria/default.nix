@@ -12,6 +12,7 @@
 , pysocks
 , mock
 , cryptography
+, stdenv
 }:
 
 buildPythonPackage rec {
