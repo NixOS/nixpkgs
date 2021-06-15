@@ -6432,12 +6432,6 @@
     githubId = 2649304;
     name = "M. Baeten";
   };
-  mbakke = {
-    email = "mbakke@fastmail.com";
-    github = "mbakke";
-    githubId = 1269099;
-    name = "Marius Bakke";
-  };
   mbaillie = {
     email = "martin@baillie.id";
     github = "martinbaillie";
