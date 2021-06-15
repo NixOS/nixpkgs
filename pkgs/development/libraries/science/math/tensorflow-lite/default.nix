@@ -77,7 +77,18 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./include-schema-conversion-utils-source.patch
+    # TODO: replace these with the upstream patch as soon as
+    # https://github.com/tensorflow/tensorflow/pull/50240 is merged
+    (fetchpatch {
+      name = "include-schema-conversion-utils-source.patch";
+      url = "https://github.com/cpcloud/tensorflow/commit/5bf9c77ee994f1bc0b98a925f35dbaa3c7b3a11b.patch";
+      sha256 = "0m92c6ahy9pxs6pcrhfjk6lpkva650kv0ypyl7sykq4ghaycm4xk";
+    })
+    (fetchpatch {
+      name = "alphabetize-schema-sources.patch";
+      url = "https://github.com/cpcloud/tensorflow/commit/567e05a4582920ff0523615dcbe8ca4d325ce332.patch";
+      sha256 = "1yw011wxbqd3gvv58digmnidrbj3h4r6y9hnb6dgrrglpgb4yrps";
+    })
   ];
 
   buildInputs = [ zlib flatbuffers ];
