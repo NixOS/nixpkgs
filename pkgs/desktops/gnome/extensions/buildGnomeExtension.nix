@@ -20,6 +20,7 @@ let
 
   stdenv.mkDerivation {
     pname = "gnome-shell-extension-${pname}";
+    uuid = uuid;
     version = builtins.toString version;
     src = fetchzip {
       url = "https://extensions.gnome.org/extension-data/${
