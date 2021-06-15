@@ -2626,6 +2626,8 @@ in {
 
   fonttools = callPackage ../development/python-modules/fonttools { };
 
+  foobot-async = callPackage ../development/python-modules/foobot-async { };
+
   foolscap = callPackage ../development/python-modules/foolscap { };
 
   forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };

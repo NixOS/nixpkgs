@@ -275,7 +275,7 @@
     "flux_led" = ps: with ps; [ flux-led ];
     "folder" = ps: with ps; [ ];
     "folder_watcher" = ps: with ps; [ watchdog ];
-    "foobot" = ps: with ps; [ ]; # missing inputs: foobot_async
+    "foobot" = ps: with ps; [ foobot-async ];
     "forked_daapd" = ps: with ps; [ ]; # missing inputs: pyforked-daapd pylibrespot-java
     "fortios" = ps: with ps; [ fortiosapi ];
     "foscam" = ps: with ps; [ ]; # missing inputs: libpyfoscam
