@@ -1,10 +1,21 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, coreutils
-, runCommand, runtimeShell, writeText, terraform-providers, fetchpatch }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, runCommand
+, runtimeShell
+, writeText
+, terraform-providers
+, fetchpatch
+}:
 
 let
   generic = { version, sha256, vendorSha256 ? null, ... }@attrs:
     let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "vendorSha256" ];
-    in buildGoModule ({
+    in
+    buildGoModule ({
       name = "terraform-${version}";
 
       inherit vendorSha256;
@@ -62,33 +73,37 @@ let
           actualPlugins = plugins terraform.plugins;
 
           # Make providers available in Terraform 0.13 and 0.12 search paths.
-          pluginDir = lib.concatMapStrings (pl: let
-            inherit (pl) version GOOS GOARCH;
+          pluginDir = lib.concatMapStrings
+            (pl:
+              let
+                inherit (pl) version GOOS GOARCH;
 
-            pname = pl.pname or (throw "${pl.name} is missing a pname attribute");
+                pname = pl.pname or (throw "${pl.name} is missing a pname attribute");
 
-            # This is just the name, without the terraform-provider- prefix
-            plugin_name = lib.removePrefix "terraform-provider-" pname;
+                # This is just the name, without the terraform-provider- prefix
+                plugin_name = lib.removePrefix "terraform-provider-" pname;
 
-            slug = pl.passthru.provider-source-address or "registry.terraform.io/nixpkgs/${plugin_name}";
+                slug = pl.passthru.provider-source-address or "registry.terraform.io/nixpkgs/${plugin_name}";
 
-            shim = writeText "shim" ''
-              #!${runtimeShell}
-              exec ${pl}/bin/${pname}_v${version} "$@"
-            '';
-            in ''
-              TF_0_13_PROVIDER_PATH=$out/plugins/${slug}/${version}/${GOOS}_${GOARCH}/${pname}_v${version}
-              mkdir -p "$(dirname $TF_0_13_PROVIDER_PATH)"
+                shim = writeText "shim" ''
+                  #!${runtimeShell}
+                  exec ${pl}/bin/${pname}_v${version} "$@"
+                '';
+              in
+              ''
+                TF_0_13_PROVIDER_PATH=$out/plugins/${slug}/${version}/${GOOS}_${GOARCH}/${pname}_v${version}
+                mkdir -p "$(dirname $TF_0_13_PROVIDER_PATH)"
 
-              cp ${shim} "$TF_0_13_PROVIDER_PATH"
-              chmod +x "$TF_0_13_PROVIDER_PATH"
+                cp ${shim} "$TF_0_13_PROVIDER_PATH"
+                chmod +x "$TF_0_13_PROVIDER_PATH"
 
-              TF_0_12_PROVIDER_PATH=$out/plugins/${pname}_v${version}
+                TF_0_12_PROVIDER_PATH=$out/plugins/${pname}_v${version}
 
-              cp ${shim} "$TF_0_12_PROVIDER_PATH"
-              chmod +x "$TF_0_12_PROVIDER_PATH"
-          ''
-          ) actualPlugins;
+                cp ${shim} "$TF_0_12_PROVIDER_PATH"
+                chmod +x "$TF_0_12_PROVIDER_PATH"
+              ''
+            )
+            actualPlugins;
 
           # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
           wrapperInputs = lib.unique (lib.flatten
@@ -110,9 +125,10 @@ let
           };
           # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
           # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
-        in if actualPlugins == [ ] then
+        in
+        if actualPlugins == [ ] then
           terraform.overrideAttrs
-          (orig: { passthru = orig.passthru // passthru; })
+            (orig: { passthru = orig.passthru // passthru; })
         else
           lib.appendToName "with-plugins" (stdenv.mkDerivation {
             inherit (terraform) name meta;
@@ -127,24 +143,27 @@ let
 
             inherit passthru;
           });
-    in withPlugins (_: [ ]);
+    in
+    withPlugins (_: [ ]);
 
   plugins = removeAttrs terraform-providers [
     "override"
     "overrideDerivation"
     "recurseForDerivations"
   ];
-in rec {
+in
+rec {
   terraform_0_12 = pluggable (generic {
     version = "0.12.31";
     sha256 = "03p698xdbk5gj0f9v8v1fpd74zng3948dyy4f2hv7zgks9hid7fg";
     patches = [
-        ./provider-path.patch
-        (fetchpatch {
-            name = "fix-mac-mojave-crashes.patch";
-            url = "https://github.com/hashicorp/terraform/commit/cd65b28da051174a13ac76e54b7bb95d3051255c.patch";
-            sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
-        }) ];
+      ./provider-path.patch
+      (fetchpatch {
+        name = "fix-mac-mojave-crashes.patch";
+        url = "https://github.com/hashicorp/terraform/commit/cd65b28da051174a13ac76e54b7bb95d3051255c.patch";
+        sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
+      })
+    ];
     passthru = { inherit plugins; };
   });
 
@@ -183,20 +202,22 @@ in rec {
   # file pattern and if the plugin is not found it will try to download it
   # from the Internet. With sandboxing enable this test will fail if that is
   # the case.
-  terraform_plugins_test = let
-    mainTf = writeText "main.tf" ''
-      resource "random_id" "test" {}
-    '';
-    terraform = terraform_0_12.withPlugins (p: [ p.random ]);
-    test =
-      runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
-        set -e
-        # make it fail outside of sandbox
-        export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
-        cp ${mainTf} main.tf
-        terraform init
-        touch $out
+  terraform_plugins_test =
+    let
+      mainTf = writeText "main.tf" ''
+        resource "random_id" "test" {}
       '';
-  in test;
+      terraform = terraform_0_12.withPlugins (p: [ p.random ]);
+      test =
+        runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
+          set -e
+          # make it fail outside of sandbox
+          export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
+          cp ${mainTf} main.tf
+          terraform init
+          touch $out
+        '';
+    in
+    test;
 
 }
