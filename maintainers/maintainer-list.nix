@@ -896,6 +896,12 @@
     githubId = 869771;
     name = "Kirill Boltaev";
   };
+  ashley = {
+    email = "personavinny@protonmail.com";
+    github = "paranoidcat";
+    githubId = 84152630;
+    name = "Ashley Chiara";
+  };
   asppsa = {
     email = "asppsa@gmail.com";
     github = "asppsa";
