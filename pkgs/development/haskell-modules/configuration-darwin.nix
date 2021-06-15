@@ -170,5 +170,6 @@ self: super: {
 
   # 2021-05-25: Tests fail and I have no way to debug them.
   hls-class-plugin = dontCheck super.hls-class-plugin;
+  hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
 
 }
