@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ gtk3 ];
 
-  BuildInputs = [
+  buildInputs = [
     gnome-icon-theme
     gnome.adwaita-icon-theme
     hicolor-icon-theme
