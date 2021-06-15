@@ -663,6 +663,7 @@ in with py.pkgs; buildPythonApplication rec {
     "volumio"
     "vultr"
     "wake_on_lan"
+    "wallbox"
     "water_heater"
     "waze_travel_time"
     "weather"
@@ -727,6 +728,9 @@ in with py.pkgs; buildPythonApplication rec {
     "--deselect tests/components/prometheus/test_init.py::test_view"
     # smhi/test_init.py: Tries to fetch data from the network: socket.gaierror: [Errno -2] Name or service not known
     "--deselect tests/components/smhi/test_init.py::test_remove_entry"
+    # wallbox/test_config_flow.py: Tries to connect to api.wall-box.cim: Failed to establish a new connection: [Errno -2] Name or service not known
+    "--deselect tests/components/wallbox/test_config_flow.py::test_form_invalid_auth"
+    "--deselect tests/components/wallbox/test_config_flow.py::test_form_cannot_connect"
     # tests are located in tests/
     "tests"
     # dynamically add packages required for component tests
