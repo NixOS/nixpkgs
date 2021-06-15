@@ -405,6 +405,7 @@ in with py.pkgs; buildPythonApplication rec {
     "geonetnz_volcano"
     "gios"
     "glances"
+    "goalzero"
     "gogogate2"
     "google"
     "google_assistant"
