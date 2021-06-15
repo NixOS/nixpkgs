@@ -27,6 +27,17 @@ stdenv.mkDerivation rec {
     sha256 = "0451hhjrj9hb6limxim7sbhvw4gs6dd2gmnfxjjx07z3wbgdzwhw";
   };
 
+  patches = [
+    # Remove this when updating to 79 - The patches are already applied upstream
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1318905
+
+    # Combination of 3 changesets, modified to apply on 78:
+    # - https://hg.mozilla.org/mozilla-central/rev/06d7e1b6b7e7
+    # - https://hg.mozilla.org/mozilla-central/rev/ec48f15d085c
+    # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
+    ./add-riscv64-support.patch
+  ];
+
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
 
@@ -81,6 +92,10 @@ stdenv.mkDerivation rec {
     "--host=${stdenv.buildPlatform.config}"
     "--target=${stdenv.hostPlatform.config}"
   ];
+
+  # cc-rs insists on using -mabi=lp64 (soft-float) for riscv64,
+  # while we have a double-float toolchain
+  NIX_CFLAGS_COMPILE = lib.optionalString (with stdenv.hostPlatform; isRiscV && is64bit) "-mabi=lp64d";
 
   configurePlatforms = [ ];
 
