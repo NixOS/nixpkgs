@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ alsa-lib gtk3 openssl ffmpeg ];
 
   postInstall = ''
-    mv packaging/rootfs/usr/share "$out"/share
+    mv packaging/rootfs/usr/share $out/share
   '';
 
   meta = with lib; {
