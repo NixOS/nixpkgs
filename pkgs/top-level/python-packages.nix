@@ -3958,6 +3958,8 @@ in {
 
   libpurecool = callPackage ../development/python-modules/libpurecool { };
 
+  libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
+
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
     inherit (self) python libxml2;
