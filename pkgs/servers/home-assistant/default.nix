@@ -381,6 +381,7 @@ in with py.pkgs; buildPythonApplication rec {
     "flux"
     "folder"
     "folder_watcher"
+    "foobot"
     "freebox"
     "freedns"
     "fritz"
