@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bulky";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
     rev = version;
-    sha256 = "NBlP10IM/+u8IRds4bdFyGWg3pJLRmlSLsdlndMVQqg=";
+    sha256 = "sha256-jBGrfE8jYQStIs9h/b/1yBu8OEQdPOMHZ/U/KczfX+4=";
   };
 
   nativeBuildInputs = [

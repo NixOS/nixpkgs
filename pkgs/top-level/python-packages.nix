@@ -225,6 +225,14 @@ in {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
+
+  aio-geojson-geonetnz-quakes = callPackage ../development/python-modules/aio-geojson-geonetnz-quakes { };
+
+  aio-geojson-geonetnz-volcano = callPackage ../development/python-modules/aio-geojson-geonetnz-volcano { };
+
+  aio-geojson-nsw-rfs-incidents = callPackage ../development/python-modules/aio-geojson-nsw-rfs-incidents { };
+
   aio-georss-client = callPackage ../development/python-modules/aio-georss-client { };
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
@@ -354,6 +362,8 @@ in {
   aioswitcher = callPackage ../development/python-modules/aioswitcher { };
 
   aiosyncthing = callPackage ../development/python-modules/aiosyncthing { };
+
+  aiotractive = callPackage ../development/python-modules/aiotractive { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
@@ -568,6 +578,8 @@ in {
   async_generator = callPackage ../development/python-modules/async_generator { };
 
   async-dns = callPackage ../development/python-modules/async-dns { };
+
+  async-lru = callPackage ../development/python-modules/async-lru { };
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
@@ -2690,6 +2702,8 @@ in {
     pythonPackages = self;
   });
 
+  garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
+
   gast = callPackage ../development/python-modules/gast { };
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
@@ -4442,6 +4456,8 @@ in {
 
   mpyq = callPackage ../development/python-modules/mpyq { };
 
+  ms-cv = callPackage ../development/python-modules/ms-cv { };
+
   msal = callPackage ../development/python-modules/msal { };
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
@@ -4599,6 +4615,8 @@ in {
   netdisco = callPackage ../development/python-modules/netdisco { };
 
   netifaces = callPackage ../development/python-modules/netifaces { };
+
+  nettigo-air-monitor = callPackage ../development/python-modules/nettigo-air-monitor { };
 
   networkx = callPackage ../development/python-modules/networkx { };
 
@@ -5189,6 +5207,8 @@ in {
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
+  pyrogram = callPackage ../development/python-modules/pyrogram { };
+
   pysbd = callPackage ../development/python-modules/pysbd { };
 
   pyshark = callPackage ../development/python-modules/pyshark { };
@@ -5514,6 +5534,8 @@ in {
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
 
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
+
+  pyathena = callPackage ../development/python-modules/pyathena { };
 
   pyatmo = callPackage ../development/python-modules/pyatmo { };
 
@@ -5901,6 +5923,8 @@ in {
   pykodi = callPackage ../development/python-modules/pykodi { };
 
   pykoplenti = callPackage ../development/python-modules/pykoplenti { };
+
+  pykulersky = callPackage ../development/python-modules/pykulersky { };
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
@@ -8339,6 +8363,8 @@ in {
 
   tflearn = callPackage ../development/python-modules/tflearn { };
 
+  tgcrypto = callPackage ../development/python-modules/tgcrypto { };
+
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
@@ -9027,6 +9053,8 @@ in {
   xarray = callPackage ../development/python-modules/xarray { };
 
   xattr = callPackage ../development/python-modules/xattr { };
+
+  xbox-webapi = callPackage ../development/python-modules/xbox-webapi { };
 
   xboxapi = callPackage ../development/python-modules/xboxapi { };
 

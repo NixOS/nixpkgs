@@ -10,11 +10,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "corosync";
-  version = "3.1.3";
+  version = "3.1.4";
 
   src = fetchurl {
     url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-UlwF1DmWh52yJ4c9SbpaoVaV/L65r4dQ238M3/+Esps=";
+    sha256 = "sha256-sxoYlAi5RJCQcg0bSqO23t9nTkuuzOeLWPa/dLZZzuo=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];

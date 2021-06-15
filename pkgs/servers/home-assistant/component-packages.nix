@@ -293,7 +293,7 @@
     "futurenow" = ps: with ps; [ pyfnip ];
     "garadget" = ps: with ps; [ ];
     "garages_amsterdam" = ps: with ps; [ garages-amsterdam ];
-    "garmin_connect" = ps: with ps; [ ]; # missing inputs: garminconnect_aio
+    "garmin_connect" = ps: with ps; [ garminconnect-aio ];
     "gc100" = ps: with ps; [ ]; # missing inputs: python-gc100
     "gdacs" = ps: with ps; [ aio-georss-gdacs ];
     "generic" = ps: with ps; [ ];
@@ -303,8 +303,8 @@
     "geo_location" = ps: with ps; [ ];
     "geo_rss_events" = ps: with ps; [ georss-generic-client ];
     "geofency" = ps: with ps; [ aiohttp-cors ];
-    "geonetnz_quakes" = ps: with ps; [ ]; # missing inputs: aio_geojson_geonetnz_quakes
-    "geonetnz_volcano" = ps: with ps; [ ]; # missing inputs: aio_geojson_geonetnz_volcano
+    "geonetnz_quakes" = ps: with ps; [ aio-geojson-geonetnz-quakes ];
+    "geonetnz_volcano" = ps: with ps; [ aio-geojson-geonetnz-volcano ];
     "gios" = ps: with ps; [ gios ];
     "github" = ps: with ps; [ PyGithub ];
     "gitlab_ci" = ps: with ps; [ python-gitlab ];
@@ -433,7 +433,7 @@
     "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
     "kostal_plenticore" = ps: with ps; [ ]; # missing inputs: kostal_plenticore
     "kraken" = ps: with ps; [ ]; # missing inputs: krakenex pykrakenapi
-    "kulersky" = ps: with ps; [ ]; # missing inputs: pykulersky
+    "kulersky" = ps: with ps; [ pykulersky ];
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb
     "lacrosse" = ps: with ps; [ pylacrosse ];
     "lametric" = ps: with ps; [ ]; # missing inputs: lmnotify
@@ -544,7 +544,7 @@
     "mystrom" = ps: with ps; [ aiohttp-cors python-mystrom ];
     "mythicbeastsdns" = ps: with ps; [ ]; # missing inputs: mbddns
     "nad" = ps: with ps; [ nad-receiver ];
-    "nam" = ps: with ps; [ ]; # missing inputs: nettigo-air-monitor
+    "nam" = ps: with ps; [ nettigo-air-monitor ];
     "namecheapdns" = ps: with ps; [ defusedxml ];
     "nanoleaf" = ps: with ps; [ pynanoleaf ];
     "neato" = ps: with ps; [ aiohttp-cors pybotvac ];
@@ -576,7 +576,7 @@
     "notify_events" = ps: with ps; [ ]; # missing inputs: notify-events
     "notion" = ps: with ps; [ aionotion ];
     "nsw_fuel_station" = ps: with ps; [ ]; # missing inputs: nsw-fuel-api-client
-    "nsw_rural_fire_service_feed" = ps: with ps; [ ]; # missing inputs: aio_geojson_nsw_rfs_incidents
+    "nsw_rural_fire_service_feed" = ps: with ps; [ aio-geojson-nsw-rfs-incidents ];
     "nuheat" = ps: with ps; [ ]; # missing inputs: nuheat
     "nuki" = ps: with ps; [ pynuki ];
     "numato" = ps: with ps; [ ]; # missing inputs: numato-gpio
@@ -967,7 +967,7 @@
     "wunderground" = ps: with ps; [ ];
     "x10" = ps: with ps; [ ];
     "xbee" = ps: with ps; [ ]; # missing inputs: xbee-helper
-    "xbox" = ps: with ps; [ aiohttp-cors ]; # missing inputs: xbox-webapi
+    "xbox" = ps: with ps; [ aiohttp-cors xbox-webapi ];
     "xbox_live" = ps: with ps; [ xboxapi ];
     "xeoma" = ps: with ps; [ pyxeoma ];
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
