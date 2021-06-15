@@ -4,7 +4,8 @@ with lib;
 
 let cfg = config.system.notifyUpdates;
 
-in {
+in
+{
   options = {
     system.notifyUpdates = {
 
@@ -88,10 +89,10 @@ in {
       '';
 
       startAt = cfg.dates;
-      
+
     };
 
-    systemd.timers.notify-updates.timerConfig.RandomizedDelaySec = 
+    systemd.timers.notify-updates.timerConfig.RandomizedDelaySec =
       cfg.randomizedDelaySec;
   };
 }
