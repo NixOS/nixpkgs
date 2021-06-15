@@ -513,10 +513,10 @@
     "owner": "Mongey",
     "provider-source-address": "registry.terraform.io/Mongey/kafka",
     "repo": "terraform-provider-kafka",
-    "rev": "v0.2.12",
-    "sha256": "0jm592chliiph5643rymzpwnlcq7q6bpwg2h86x5qmbzbiyqsi83",
-    "vendorSha256": "08wg16g4mvn6kl8xwn89195a826cb132ijvrgf32c6p7zp4lgmjd",
-    "version": "0.2.12"
+    "rev": "v0.3.3",
+    "sha256": "10il2mmsrk27zgzdkwn495sfhlad2nnc2xa7qzn7rlqzh92bb8rb",
+    "vendorSha256": "1gxx561s7jghiq6kqb2nns52bbcp0ks2dylrb1lvy7g2798cpspf",
+    "version": "0.3.3"
   },
   "kafka-connect": {
     "owner": "Mongey",

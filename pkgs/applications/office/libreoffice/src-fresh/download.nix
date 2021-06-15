@@ -476,11 +476,11 @@
     md5name = "b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523-libjpeg-turbo-1.5.3.tar.gz";
   }
   {
-    name = "language-subtag-registry-2020-12-18.tar.bz2";
-    url = "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-12-18.tar.bz2";
-    sha256 = "62ce680d5db0f28001b64bd57db47f388c13629cdefc9af8e8af0fbe93689ba1";
+    name = "language-subtag-registry-2021-03-05.tar.bz2";
+    url = "https://dev-www.libreoffice.org/src/language-subtag-registry-2021-03-05.tar.bz2";
+    sha256 = "ce80e8face06bf2ada363e0c159e3f990c4116fdae9232ca43e6369aa82bf16a";
     md5 = "";
-    md5name = "62ce680d5db0f28001b64bd57db47f388c13629cdefc9af8e8af0fbe93689ba1-language-subtag-registry-2020-12-18.tar.bz2";
+    md5name = "ce80e8face06bf2ada363e0c159e3f990c4116fdae9232ca43e6369aa82bf16a-language-subtag-registry-2021-03-05.tar.bz2";
   }
   {
     name = "JLanguageTool-1.7.0.tar.bz2";

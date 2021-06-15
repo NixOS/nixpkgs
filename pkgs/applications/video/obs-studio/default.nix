@@ -53,6 +53,14 @@ in mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Lets obs-browser build against CEF 90.1.0+
+    ./Enable-file-access-and-universal-access-for-file-URL.patch
+
+    # Lets obs-browser build against CEF 91.1.0+
+    ./Change-product_version-to-user_agent_product.patch
+  ];
+
   nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
 
   buildInputs = [

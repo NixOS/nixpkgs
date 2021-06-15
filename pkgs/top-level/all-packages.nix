@@ -1067,6 +1067,8 @@ in
 
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
+  apfsprogs = callPackage ../tools/filesystems/apfsprogs { };
+
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
   };
@@ -2558,6 +2560,8 @@ in
 
   electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
 
+  electron-mail = callPackage ../applications/networking/mailreaders/electron-mail { };
+
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix { };
 
   element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
@@ -3553,6 +3557,8 @@ in
 
   cfdg = callPackage ../tools/graphics/cfdg { };
 
+  cglm = callPackage ../development/libraries/cglm { };
+
   cgreen = callPackage ../development/libraries/cgreen { };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
@@ -4367,7 +4373,9 @@ in
 
   vorta = libsForQt5.callPackage ../applications/backup/vorta { };
 
-  vowpal-wabbit = callPackage ../applications/science/machine-learning/vowpal-wabbit { };
+  vowpal-wabbit = callPackage ../applications/science/machine-learning/vowpal-wabbit {
+    boost = boost17x;
+  };
 
   utahfs = callPackage ../applications/networking/utahfs { };
 
@@ -4771,6 +4779,8 @@ in
 
   flips = callPackage ../tools/compression/flips { };
 
+  flowblade = callPackage ../applications/video/flowblade { };
+
   fmbt = callPackage ../development/tools/fmbt {
     python = python2;
   };
@@ -4855,7 +4865,9 @@ in
 
   frescobaldi = python3Packages.callPackage ../misc/frescobaldi {};
 
-  freshfetch = callPackage ../tools/misc/freshfetch { };
+  freshfetch = callPackage ../tools/misc/freshfetch {
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation DiskArbitration Foundation IOKit;
+  };
 
   frostwire = callPackage ../applications/networking/p2p/frostwire { };
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
@@ -5315,6 +5327,8 @@ in
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
+  goofys = callPackage ../tools/filesystems/goofys { };
+
   go-sct = callPackage ../tools/X11/go-sct { };
 
   # rename to upower-notify?
@@ -5704,6 +5718,8 @@ in
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
 
   hping = callPackage ../tools/networking/hping { };
+
+  hqplayer-desktop = libsForQt5.callPackage ../applications/audio/hqplayer-desktop { };
 
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
@@ -6311,6 +6327,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  mathpix-snipping-tool = callPackage ../tools/misc/mathpix-snipping-tool { };
+
   /* Python 3.8 is currently broken with matrix-synapse since `python38Packages.bleach` fails
     (https://github.com/NixOS/nixpkgs/issues/76093) */
   matrix-synapse = callPackage ../servers/matrix-synapse { /*python3 = python38;*/ };
@@ -6557,6 +6575,8 @@ in
 
   # Needed for apps that still depend on the unstable verison of the library (not libhandy-1)
   libhandy_0 = callPackage ../development/libraries/libhandy/0.x.nix { };
+
+  libgmpris = callPackage ../development/libraries/libgmpris { };
 
   libgumath = callPackage ../development/libraries/libgumath { };
 
@@ -9587,6 +9607,10 @@ in
     inherit (python27Packages) ldap;
   };
 
+  sentry-cli = callPackage ../development/tools/sentry-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   vtun = callPackage ../tools/networking/vtun {
     openssl = openssl_1_0_2;
   };
@@ -10432,6 +10456,8 @@ in
 
   aliceml = callPackage ../development/compilers/aliceml { };
 
+  armips = callPackage ../development/compilers/armips { };
+
   arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
 
   asciigraph = callPackage ../tools/text/asciigraph { };
@@ -10543,7 +10569,7 @@ in
 
   cmucl_binary = pkgsi686Linux.callPackage ../development/compilers/cmucl/binary.nix { };
 
-  compcert = callPackage ../development/compilers/compcert {};
+  compcert = coqPackages.compcert.override { version = "3.9"; };
 
   computecpp-unwrapped = callPackage ../development/compilers/computecpp {};
   computecpp = wrapCCWith rec {
@@ -10623,6 +10649,8 @@ in
   flutter = flutterPackages.stable;
 
   fpc = callPackage ../development/compilers/fpc { };
+
+  g203-led = callPackage ../tools/misc/g203-led { };
 
   gambit = callPackage ../development/compilers/gambit { };
   gambit-unstable = callPackage ../development/compilers/gambit/unstable.nix { };
@@ -11485,7 +11513,7 @@ in
       /**/ if platform.isDarwin then (if platform.isAarch64 then 11 else 7)
       else if platform.isFreeBSD then 7
       else if platform.isAndroid then 12
-      else if platform.isLinux then (if platform.isRiscV then 9 else 7)
+      else if platform.isLinux then (if platform.isRiscV then 11 else 7)
       else if platform.isWasm then 8
       else 11; # latest
     # We take the "max of the mins". Why? Since those are lower bounds of the
@@ -14028,6 +14056,8 @@ in
 
   strace = callPackage ../development/tools/misc/strace { };
 
+  stylua = callPackage ../development/tools/stylua { };
+
   summon = callPackage ../development/tools/summon { };
 
   svlint = callPackage ../development/tools/analysis/svlint { };
@@ -15926,7 +15956,7 @@ in
 
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
-  libcef = callPackage ../development/libraries/libcef { inherit (gnome2) GConf; };
+  libcef = callPackage ../development/libraries/libcef {};
 
   libcello = callPackage ../development/libraries/libcello {};
 
@@ -17156,6 +17186,8 @@ in
 
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
+  markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
+
   micropython = callPackage ../development/interpreters/micropython { };
 
   MIDIVisualizer = callPackage ../applications/audio/midi-visualizer { };
@@ -17882,6 +17914,8 @@ in
   qgnomeplatform =  libsForQt514.callPackage ../development/libraries/qgnomeplatform { };
 
   randomx = callPackage ../development/libraries/randomx { };
+
+  retro-gtk = callPackage ../development/libraries/retro-gtk { };
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
@@ -19249,9 +19283,13 @@ in
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
+  hqplayerd = callPackage ../servers/hqplayerd { };
+
   https-dns-proxy = callPackage ../servers/dns/https-dns-proxy { };
 
   hydron = callPackage ../servers/hydron { };
+
+  hyprspace = callPackage ../applications/networking/hyprspace { inherit (darwin) iproute2mac; };
 
   icecream = callPackage ../servers/icecream { };
 
@@ -19858,6 +19896,8 @@ in
     boost = boost17x;
   };
 
+  roon-bridge = callPackage ../servers/roon-bridge { };
+
   roon-server = callPackage ../servers/roon-server { };
 
   s6 = skawarePackages.s6;
@@ -19978,7 +20018,6 @@ in
 
   tt-rss = callPackage ../servers/tt-rss { };
   tt-rss-plugin-ff-instagram = callPackage ../servers/tt-rss/plugin-ff-instagram { };
-  tt-rss-plugin-tumblr-gdpr = callPackage ../servers/tt-rss/plugin-tumblr-gdpr { };
   tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
 
@@ -20706,7 +20745,9 @@ in
 
     digimend = callPackage ../os-specific/linux/digimend { };
 
-    dpdk = callPackage ../os-specific/linux/dpdk { };
+    dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
+
+    dpdk = throw "The dpdk driver has been renamed to dpdk-mods.";
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
@@ -21847,6 +21888,8 @@ in
 
   edusong = callPackage ../data/fonts/edusong { };
 
+  efont-unicode = callPackage ../data/fonts/efont-unicode { };
+
   elliptic_curves = callPackage ../data/misc/elliptic_curves { };
 
   equilux-theme = callPackage ../data/themes/equilux-theme { };
@@ -22517,6 +22560,8 @@ in
 
   weather-icons = callPackage ../data/fonts/weather-icons { };
 
+  whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
+
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
   work-sans  = callPackage ../data/fonts/work-sans { };
@@ -22643,6 +22688,8 @@ in
   antimony = libsForQt514.callPackage ../applications/graphics/antimony {};
 
   antiword = callPackage ../applications/office/antiword {};
+
+  anup = callPackage ../applications/misc/anup {};
 
   ao = libfive;
 
@@ -24818,6 +24865,8 @@ in
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
+  kubebuilder = callPackage ../applications/networking/cluster/kubebuilder { };
+
   kuttl = callPackage ../applications/networking/cluster/kuttl {
     buildGoModule = buildGo115Module;
   };
@@ -26082,6 +26131,8 @@ in
   poezio = python3Packages.poezio;
 
   pommed_light = callPackage ../os-specific/linux/pommed-light {};
+
+  polylith = callPackage ../development/tools/misc/polylith { };
 
   polymake = callPackage ../applications/science/math/polymake {
     openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -27925,9 +27976,7 @@ in
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
-  zanshin = libsForQt5.callPackage ../applications/office/zanshin {
-    boost = boost160;
-  };
+  zanshin = libsForQt5.callPackage ../applications/office/zanshin { };
 
   zathura = callPackage ../applications/misc/zathura { };
 
@@ -30336,6 +30385,8 @@ in
 
   cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
 
+  cups-kyocera-ecosys-m552x-p502x = callPackage ../misc/cups/drivers/kyocera-ecosys-m552x-p502x {};
+
   cups-kyodialog3 = callPackage ../misc/cups/drivers/kyodialog3 {};
 
   cups-dymo = callPackage ../misc/cups/drivers/dymo {};
@@ -31197,15 +31248,12 @@ in
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py {};
 
   inherit (callPackage ../applications/networking/cluster/terraform { })
-    terraform_0_12
-    terraform_0_13
-    terraform_0_14
-    terraform_0_15
-    terraform_1_0_0
+    mkTerraform
+    terraform_1_0
     terraform_plugins_test
     ;
 
-  terraform = terraform_0_12;
+  terraform = terraform_1_0;
   # deprecated
   terraform-full = terraform.full;
 

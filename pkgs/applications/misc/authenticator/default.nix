@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = true; # https://gitlab.gnome.org/World/Authenticator/-/issues/271
     description = "Two-factor authentication code generator for GNOME";
     homepage = "https://gitlab.gnome.org/World/Authenticator";
     license = licenses.gpl3Plus;
