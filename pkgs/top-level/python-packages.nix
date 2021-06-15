@@ -2706,6 +2706,8 @@ in {
 
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
 
+  garminconnect-ha = callPackage ../development/python-modules/garminconnect-ha { };
+
   gast = callPackage ../development/python-modules/gast { };
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
