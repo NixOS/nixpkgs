@@ -327,7 +327,7 @@
     "gpsd" = ps: with ps; [ gps3 ];
     "gpslogger" = ps: with ps; [ aiohttp-cors ];
     "graphite" = ps: with ps; [ ];
-    "gree" = ps: with ps; [ ]; # missing inputs: greeclimate
+    "gree" = ps: with ps; [ greeclimate ];
     "greeneye_monitor" = ps: with ps; [ ]; # missing inputs: greeneye_monitor
     "greenwave" = ps: with ps; [ ]; # missing inputs: greenwavereality
     "group" = ps: with ps; [ ];

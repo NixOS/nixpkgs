@@ -3029,6 +3029,8 @@ in {
 
   greatfet = callPackage ../development/python-modules/greatfet { };
 
+  greeclimate = callPackage ../development/python-modules/greeclimate { };
+
   green = callPackage ../development/python-modules/green { };
 
   greenlet = callPackage ../development/python-modules/greenlet { };

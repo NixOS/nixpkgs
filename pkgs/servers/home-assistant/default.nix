@@ -411,6 +411,7 @@ in with py.pkgs; buildPythonApplication rec {
     "google_wifi"
     "gpslogger"
     "graphite"
+    "gree"
     "group"
     "growatt_server"
     "guardian"
