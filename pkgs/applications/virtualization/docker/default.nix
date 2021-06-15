@@ -78,7 +78,7 @@ rec {
       extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
       postPatch = ''
-        patchShebangs .
+        patchShebangs hack/make.sh hack/make/
       '';
 
       buildPhase = ''
@@ -144,7 +144,7 @@ rec {
     ] ++ optionals (buildxSupport) [ docker-buildx ];
 
     postPatch = ''
-      patchShebangs .
+      patchShebangs man scripts/build/
       substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
     '' + optionalString buildxSupport ''
       substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
