@@ -294,6 +294,7 @@ in with py.pkgs; buildPythonApplication rec {
     "apple_tv"
     "apprise"
     "aprs"
+    "arcam_fmj"
     "arlo"
     "asuswrt"
     "atag"
