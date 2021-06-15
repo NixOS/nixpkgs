@@ -629,6 +629,7 @@ in with py.pkgs; buildPythonApplication rec {
     "template"
     "tesla"
     "threshold"
+    "tibber"
     "tile"
     "time_date"
     "timer"
