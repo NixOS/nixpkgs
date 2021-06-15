@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.6.4";
+  version = "2021.6.5";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -293,7 +293,7 @@
     "futurenow" = ps: with ps; [ pyfnip ];
     "garadget" = ps: with ps; [ ];
     "garages_amsterdam" = ps: with ps; [ garages-amsterdam ];
-    "garmin_connect" = ps: with ps; [ garminconnect-aio ];
+    "garmin_connect" = ps: with ps; [ garminconnect-ha ];
     "gc100" = ps: with ps; [ ]; # missing inputs: python-gc100
     "gdacs" = ps: with ps; [ aio-georss-gdacs ];
     "generic" = ps: with ps; [ ];
