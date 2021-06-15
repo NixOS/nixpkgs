@@ -376,6 +376,7 @@ in with py.pkgs; buildPythonApplication rec {
     "filter"
     "fireservicerota"
     "firmata"
+    "flick_electric"
     "flo"
     "flume"
     "flunearyou"

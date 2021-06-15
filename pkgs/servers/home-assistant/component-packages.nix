@@ -266,7 +266,7 @@
     "fleetgo" = ps: with ps; [ ]; # missing inputs: ritassist
     "flexit" = ps: with ps; [ pymodbus ]; # missing inputs: pyflexit
     "flic" = ps: with ps; [ pyflic ];
-    "flick_electric" = ps: with ps; [ ]; # missing inputs: PyFlick
+    "flick_electric" = ps: with ps; [ pyflick ];
     "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
     "flume" = ps: with ps; [ pyflume ];
