@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, curses }:
+{ lib, stdenv, fetchgit, curses }:
 
 stdenv.mkDerivation {
   name = "stag-1.0";
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/seenaburns/stag";
     description = "Terminal streaming bar graph passed through stdin";
-    license = stdenv.lib.licenses.bsdOriginal;
-    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsdOriginal;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -35,6 +35,9 @@ let
       ''
         #! ${pkgs.runtimeShell} -e
 
+        # Exit early if we're asked to shut down.
+        trap "exit 0" SIGRTMIN+3
+
         # Initialise the container side of the veth pair.
         if [ -n "$HOST_ADDRESS" ]   || [ -n "$HOST_ADDRESS6" ]  ||
            [ -n "$LOCAL_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS6" ] ||
@@ -56,12 +59,16 @@ let
             ip -6 route add $HOST_ADDRESS6 dev eth0
             ip -6 route add default via $HOST_ADDRESS6
           fi
-
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
 
-        # Start the regular stage 1 script.
-        exec "$1"
+        ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
+
+        # Start the regular stage 2 script.
+        # We source instead of exec to not lose an early stop signal, which is
+        # also the only _reliable_ shutdown signal we have since early stop
+        # does not execute ExecStop* commands.
+        set +e
+        . "$1"
       ''
     );
 
@@ -127,12 +134,16 @@ let
       ''}
 
       # Run systemd-nspawn without startup notification (we'll
-      # wait for the container systemd to signal readiness).
+      # wait for the container systemd to signal readiness)
+      # Kill signal handling means systemd-nspawn will pass a system-halt signal
+      # to the container systemd when it receives SIGTERM for container shutdown;
+      # containerInit and stage2 have to handle this as well.
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
         -M "$INSTANCE" -D "$root" $extraFlags \
         $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
+        --kill-signal=SIGRTMIN+3 \
         --bind-ro=/nix/store \
         --bind-ro=/nix/var/nix/db \
         --bind-ro=/nix/var/nix/daemon-socket \
@@ -170,7 +181,7 @@ let
 
       ${concatStringsSep "\n" (
         mapAttrsToList (name: cfg:
-          ''ip link del dev ${name} 2> /dev/null || true ''
+          "ip link del dev ${name} 2> /dev/null || true "
         ) cfg.extraVeths
       )}
    '';
@@ -185,7 +196,7 @@ let
             fi
           ''
         else
-          ''${ipcmd} add ${cfg.${attribute}} dev $ifaceHost'';
+          "${ipcmd} add ${cfg.${attribute}} dev $ifaceHost";
       renderExtraVeth = name: cfg:
         if cfg.hostBridge != null then
           ''
@@ -223,8 +234,8 @@ let
             ${ipcall cfg "ip route" "$LOCAL_ADDRESS" "localAddress"}
             ${ipcall cfg "ip -6 route" "$LOCAL_ADDRESS6" "localAddress6"}
           fi
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
+        ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
       ''
   );
 
@@ -259,20 +270,17 @@ let
     Slice = "machine.slice";
     Delegate = true;
 
-    # Hack: we don't want to kill systemd-nspawn, since we call
-    # "machinectl poweroff" in preStop to shut down the
-    # container cleanly. But systemd requires sending a signal
-    # (at least if we want remaining processes to be killed
-    # after the timeout). So send an ignored signal.
+    # We rely on systemd-nspawn turning a SIGTERM to itself into a shutdown
+    # signal (SIGRTMIN+3) for the inner container.
     KillMode = "mixed";
-    KillSignal = "WINCH";
+    KillSignal = "TERM";
 
     DevicePolicy = "closed";
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
-
   system = config.nixpkgs.localSystem.system;
+  kernelVersion = config.boot.kernelPackages.kernel.version;
 
   bindMountOpts = { name, ... }: {
 
@@ -320,7 +328,6 @@ let
       };
     };
   };
-
 
   mkBindFlag = d:
                let flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
@@ -421,7 +428,7 @@ let
       extraVeths = {};
       additionalCapabilities = [];
       ephemeral = false;
-      timeoutStartSec = "15s";
+      timeoutStartSec = "1min";
       allowedDevices = [];
       hostAddress = null;
       hostAddress6 = null;
@@ -440,21 +447,16 @@ in
       default = false;
       description = ''
         Whether this NixOS machine is a lightweight container running
-        in another NixOS system. If set to true, support for nested
-        containers is disabled by default, but can be reenabled by
-        setting <option>boot.enableContainers</option> to true.
+        in another NixOS system.
       '';
     };
 
     boot.enableContainers = mkOption {
       type = types.bool;
-      default = !config.boot.isContainer;
+      default = true;
       description = ''
         Whether to enable support for NixOS containers. Defaults to true
-        (at no cost if containers are not actually used), but only if the
-        system is not itself a lightweight container of a host.
-        To enable support for nested containers, this option has to be
-        explicitly set to true (in the outer container).
+        (at no cost if containers are not actually used).
       '';
     };
 
@@ -463,21 +465,15 @@ in
         { config, options, name, ... }:
         {
           options = {
-
             config = mkOption {
               description = ''
                 A specification of the desired configuration of this
                 container, as a NixOS module.
               '';
-              type = let
-                confPkgs = if config.pkgs == null then pkgs else config.pkgs;
-              in lib.mkOptionType {
+              type = lib.mkOptionType {
                 name = "Toplevel NixOS config";
-                merge = loc: defs: (import (confPkgs.path + "/nixos/lib/eval-config.nix") {
+                merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
                   inherit system;
-                  pkgs = confPkgs;
-                  baseModules = import (confPkgs.path + "/nixos/modules/module-list.nix");
-                  inherit (confPkgs) lib;
                   modules =
                     let
                       extraConfig = {
@@ -488,11 +484,16 @@ in
                           networking.useDHCP = false;
                           assertions = [
                             {
-                              assertion =  config.privateNetwork -> stringLength name < 12;
+                              assertion =
+                                (builtins.compareVersions kernelVersion "5.8" <= 0)
+                                -> config.privateNetwork
+                                -> stringLength name <= 11;
                               message = ''
                                 Container name `${name}` is too long: When `privateNetwork` is enabled, container names can
                                 not be longer than 11 characters, because the container's interface name is derived from it.
-                                This might be fixed in the future. See https://github.com/NixOS/nixpkgs/issues/38509
+                                You should either make the container name shorter or upgrade to a more recent kernel that
+                                supports interface altnames (i.e. at least Linux 5.8 - please see https://github.com/NixOS/nixpkgs/issues/38509
+                                for details).
                               '';
                             }
                           ];
@@ -506,7 +507,7 @@ in
 
             path = mkOption {
               type = types.path;
-              example = "/nix/var/nix/profiles/containers/webserver";
+              example = "/nix/var/nix/profiles/per-container/webserver";
               description = ''
                 As an alternative to specifying
                 <option>config</option>, you can specify the path to
@@ -526,12 +527,18 @@ in
               '';
             };
 
-            pkgs = mkOption {
-              type = types.nullOr types.attrs;
-              default = null;
-              example = literalExample "pkgs";
+            nixpkgs = mkOption {
+              type = types.path;
+              default = pkgs.path;
+              defaultText = "pkgs.path";
               description = ''
-                Customise which nixpkgs to use for this container.
+                A path to the nixpkgs that provide the modules, pkgs and lib for evaluating the container.
+
+                To only change the <literal>pkgs</literal> argument used inside the container modules,
+                set the <literal>nixpkgs.*</literal> options in the container <option>config</option>.
+                Setting <literal>config.nixpkgs.pkgs = pkgs</literal> speeds up the container evaluation
+                by reusing the system pkgs, but the <literal>nixpkgs.config</literal> option in the
+                container config is ignored in this case.
               '';
             };
 
@@ -672,14 +679,31 @@ in
               '';
             };
 
+            # Removed option. See `checkAssertion` below for the accompanying error message.
+            pkgs = mkOption { visible = false; };
           } // networkOptions;
 
-          config = mkMerge
-            [
-              (mkIf options.config.isDefined {
-                path = config.config.system.build.toplevel;
-              })
-            ];
+          config = let
+            # Throw an error when removed option `pkgs` is used.
+            # Because this is a submodule we cannot use `mkRemovedOptionModule` or option `assertions`.
+            optionPath = "containers.${name}.pkgs";
+            files = showFiles options.pkgs.files;
+            checkAssertion = if options.pkgs.isDefined then throw ''
+              The option definition `${optionPath}' in ${files} no longer has any effect; please remove it.
+
+              Alternatively, you can use the following options:
+              - containers.${name}.nixpkgs
+                This sets the nixpkgs (and thereby the modules, pkgs and lib) that
+                are used for evaluating the container.
+
+              - containers.${name}.config.nixpkgs.pkgs
+                This only sets the `pkgs` argument used inside the container modules.
+            ''
+            else null;
+          in {
+            path = builtins.seq checkAssertion
+              mkIf options.config.isDefined config.config.system.build.toplevel;
+          };
         }));
 
       default = {};
@@ -718,7 +742,7 @@ in
 
       unitConfig.RequiresMountsFor = "/var/lib/containers/%i";
 
-      path = [ pkgs.iproute ];
+      path = [ pkgs.iproute2 ];
 
       environment = {
         root = "/var/lib/containers/%i";
@@ -730,8 +754,6 @@ in
       script = startScript dummyConfig;
 
       postStart = postStartScript dummyConfig;
-
-      preStop = "machinectl poweroff $INSTANCE";
 
       restartIfChanged = false;
 

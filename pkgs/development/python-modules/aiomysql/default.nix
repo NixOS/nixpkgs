@@ -4,19 +4,28 @@
 , pymysql
 , pytest
 , isPy27
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "aiomysql";
-  version = "0.0.20";
+  version = "0.0.21";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mxih81zc2k64briirpp5wz4f72l8v05avfyfibaq9fr6lcbih9b";
+    sha256 = "1qvy3phbsxp55161dnppjfx2m1kn82v0irc3xzqw0adfd81vaiad";
   };
+
+  patches = [
+    (fetchpatch {
+      # vendor functions previously provided by pymysql.util
+      url = "https://github.com/aio-libs/aiomysql/pull/554/commits/919b997a9de7f53d721af76762fba425e306531e.patch";
+      sha256 = "V1VYyqr6RwTXoVoGVyMuJst6uqTuuHbpMOpLoVZO1XA=";
+    })
+  ];
 
   propagatedBuildInputs = [
     pymysql
@@ -28,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "PyMySQL>=0.9,<=0.9.2" "PyMySQL"
+      --replace "PyMySQL>=0.9,<=0.9.3" "PyMySQL"
   '';
 
   checkPhase = ''

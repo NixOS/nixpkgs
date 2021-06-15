@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "codebraid";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     $out/bin/codebraid --help > /dev/null
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gpoore/codebraid";
     description = ''
       Live code in Pandoc Markdown.

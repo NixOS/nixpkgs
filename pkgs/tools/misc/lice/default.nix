@@ -1,19 +1,18 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, buildPythonPackage, fetchPypi , setuptools, pytestCheckHook }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
+  pname = "lice";
+  version = "0.6";
 
-  version = "0.4";
-  name = "lice-${version}";
-
-  src = fetchFromGitHub {
-    owner = "licenses";
-    repo = "lice";
-    rev = version;
-    sha256 = "0yxf70fi8ds3hmwjply2815k466r99k8n22r0ppfhwjvp3rn60qx";
-    fetchSubmodules = true;
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0skyyirbidknfdzdvsjga8zb4ar6xpd5ilvz11dfm2a9yxh3d59d";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [ setuptools ];
+
+  checkInputs = [ pytestCheckHook ];
+  meta = with lib; {
     description = "Print license based on selection and user options";
     homepage = "https://github.com/licenses/lice";
     license = licenses.bsd3;

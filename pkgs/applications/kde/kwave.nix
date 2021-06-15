@@ -1,9 +1,9 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, qtmultimedia, kcompletion, kconfig
-, kcrash, kiconthemes, kio, audiofile, libsamplerate, alsaLib, libpulseaudio, flac, id3lib
+, kcrash, kiconthemes, kio, audiofile, libsamplerate, alsa-lib, libpulseaudio, flac, id3lib
 , libogg, libmad, libopus, libvorbis, fftw, librsvg, qtbase }:
 
 mkDerivation {
-  name = "kwave";
+  pname = "kwave";
 
   meta = with lib; {
     homepage = "https://kde.org/applications/en/multimedia/org.kde.kwave";
@@ -17,7 +17,7 @@ mkDerivation {
     extra-cmake-modules
   ];
   buildInputs = [
-    alsaLib
+    alsa-lib
     audiofile
     kcrash
     kdoctools

@@ -13,7 +13,7 @@ buildPerlPackage {
 
   outputs = [ "out" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ openssh GitRepository URI XMLMini ];
 
   preConfigure = ''

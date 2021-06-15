@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''ironclad'';
-  version = ''v0.51'';
+  baseName = "ironclad";
+  version = "v0.55";
 
   parasites = [ "ironclad/tests" ];
 
-  description = ''A cryptographic toolkit written in pure Common Lisp'';
+  description = "A cryptographic toolkit written in pure Common Lisp";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."rt" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/ironclad/2020-09-25/ironclad-v0.51.tgz'';
-    sha256 = ''0zfazyvg91fxr9gm195qwwf1y5qdci7i1cwzpv0fggxhylpkswrn'';
+    url = "http://beta.quicklisp.org/archive/ironclad/2021-04-11/ironclad-v0.55.tgz";
+    sha256 = "0vdqaad9i3dkz6z2y1iqmh6m77kc9jy49xh9bysgywl0gfdyhnq6";
   };
 
   packageName = "ironclad";
@@ -21,10 +22,10 @@ rec {
 }
 /* (SYSTEM ironclad DESCRIPTION
     A cryptographic toolkit written in pure Common Lisp SHA256
-    0zfazyvg91fxr9gm195qwwf1y5qdci7i1cwzpv0fggxhylpkswrn URL
-    http://beta.quicklisp.org/archive/ironclad/2020-09-25/ironclad-v0.51.tgz
-    MD5 23b0b6a654bceca511e100fdc976e107 NAME ironclad FILENAME ironclad DEPS
+    0vdqaad9i3dkz6z2y1iqmh6m77kc9jy49xh9bysgywl0gfdyhnq6 URL
+    http://beta.quicklisp.org/archive/ironclad/2021-04-11/ironclad-v0.55.tgz
+    MD5 c3c4a88e71ef37c9604662071069afcc NAME ironclad FILENAME ironclad DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads) (NAME rt FILENAME rt))
-    DEPENDENCIES (alexandria bordeaux-threads rt) VERSION v0.51 SIBLINGS
+    DEPENDENCIES (alexandria bordeaux-threads rt) VERSION v0.55 SIBLINGS
     (ironclad-text) PARASITES (ironclad/tests)) */

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeDesktopItem, unzip, fpc, lazarus,
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip, fpc, lazarus,
 libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl }:
 
 stdenv.mkDerivation rec {
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1dyx778756zhvz5sxgdvy49p2c0x44w4nmcfd90wqrmgfknncnf5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    unzip fpc lazarus stdenv.cc
+    fpc lazarus stdenv.cc
     libX11 glib gtk2 gdk-pixbuf pango atk cairo openssl
   ];
 
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
+    FPCDIR=${fpc}/lib/fpc/${fpc.version} fpcmake -w
     lazbuild -B transgui.lpr --lazarusdir=${lazarus}/share/lazarus
   '';
 
@@ -48,11 +49,11 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Transmission Remote GUI";
     genericName = "BitTorrent Client";
-    categories = stdenv.lib.concatStringsSep ";" [
+    categories = lib.concatStringsSep ";" [
       "Application" "Network" "FileTransfer" "P2P" "GTK"
     ];
     startupNotify = "true";
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    mimeType = lib.concatStringsSep ";" [
       "application/x-bittorrent" "x-scheme-handler/magnet"
     ];
   };
@@ -69,8 +70,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A cross platform front-end for the Transmission Bit-Torrent client";
     homepage = "https://sourceforge.net/p/transgui";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ ramkromberg ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ramkromberg ];
+    platforms = lib.platforms.linux;
   };
 }

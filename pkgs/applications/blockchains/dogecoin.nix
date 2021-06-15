@@ -1,10 +1,10 @@
-{ stdenv , fetchFromGitHub
-, pkgconfig, autoreconfHook
+{ lib, stdenv , fetchFromGitHub
+, pkg-config, autoreconfHook
 , db5, openssl, boost, zlib, miniupnpc, libevent
 , protobuf, util-linux, qt4, qrencode
 , withGui }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
   version = "1.14.2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gw46q63mjzwvb17ck6p1bap2xpdrap08szw2kjhasa3yvd5swyy";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl db5 openssl util-linux
                   protobuf boost zlib miniupnpc libevent ]
                   ++ optionals withGui [ qt4 qrencode ];

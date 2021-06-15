@@ -1,4 +1,4 @@
-{ stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, gnupg }:
+{ lib, stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, gnupg }:
 
 let
   pythonEnv = pythonPackages.python.withPackages (p: [ p.requests p.setuptools p.zxcvbn ]);
@@ -30,7 +30,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pythonEnv ];
   nativeBuildInputs = [ makeWrapper ];
 
-  doCheck = true;
+  # Tests freeze on darwin with: pass-audit-1.1 (checkPhase): EOFError
+  doCheck = !stdenv.isDarwin;
   checkInputs = [ pythonPackages.green pass gnupg ];
   checkPhase = ''
     ${pythonEnv}/bin/python3 setup.py green -q
@@ -42,7 +43,7 @@ in stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$out/lib/${pythonEnv.libPrefix}/site-packages"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pass extension for auditing your password repository.";
     homepage = "https://github.com/roddhjav/pass-audit";
     license = licenses.gpl3Plus;

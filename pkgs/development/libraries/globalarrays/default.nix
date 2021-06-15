@@ -1,5 +1,5 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
-, blas, gfortran, openssh, openmpi
+{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
+, blas, gfortran, openssh, mpi
 } :
 
 let
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openmpi blas gfortran openssh ];
+  buildInputs = [ mpi blas gfortran openssh ];
 
   preConfigure = ''
     configureFlagsArray+=( "--enable-i8" \
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Global Arrays Programming Models";
     homepage = "http://hpc.pnl.gov/globalarrays/";
     maintainers = [ maintainers.markuskowa ];

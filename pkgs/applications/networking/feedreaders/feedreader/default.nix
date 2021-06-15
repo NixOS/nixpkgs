@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkgconfig, vala, gettext, python3
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkg-config, vala, gettext, python3
 , appstream-glib, desktop-file-utils, wrapGAppsHook, gnome-online-accounts
-, gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas, pantheon
-, curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo, libxml2
+, gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas
+, curl, glib, gnome, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo, libxml2
 }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gettext appstream-glib desktop-file-utils
+    meson ninja pkg-config vala gettext appstream-glib desktop-file-utils
     libxml2 python3 wrapGAppsHook
   ];
 
   buildInputs = [
     curl glib json-glib libnotify libsecret sqlite gumbo gtk3
-    libgee libpeas gnome3.libsoup librest webkitgtk gsettings-desktop-schemas
+    libgee libpeas gnome.libsoup librest webkitgtk gsettings-desktop-schemas
     gnome-online-accounts
   ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern desktop application designed to complement existing web-based RSS accounts";
     homepage = "https://jangernert.github.io/FeedReader/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ edwtjo worldofpeace ];
+    maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;
   };
 }

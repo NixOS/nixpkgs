@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, cmake, libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
   pname = "garmindev";
@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libusb-compat-0_1 ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.qlandkarte.org/";
     description = "Garmin Device Drivers for QlandkarteGT";
     license = licenses.gpl2;

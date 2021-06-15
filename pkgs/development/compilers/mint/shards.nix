@@ -2,20 +2,20 @@
   admiral = {
     owner = "jwaldrip";
     repo = "admiral.cr";
-    rev = "v1.9.0";
-    sha256 = "0y8gsh1qz42bc9jawcrn0i49mzzfvf8znmivd8lybapf0f53fblz";
+    rev = "v1.11.2";
+    sha256 = "0rxsy41d0qpw9h1d3jvhmbmzqba9yhgyzc0jrdbg28f59fl7zp7q";
   };
   ameba = {
     owner = "crystal-ameba";
     repo = "ameba";
-    rev = "v0.12.0";
-    sha256 = "0g68yijbm2j4ig536fwq49d1z7x2iv9kp4g3gjklf5zn1sbqhm12";
+    rev = "v0.13.3";
+    sha256 = "0yhb8vfrfzsm3a45h2jmcrn1n7jy3zn2hwims3dikgq8kaggws9y";
   };
   baked_file_system = {
     owner = "schovi";
     repo = "baked_file_system";
-    rev = "v0.9.8";
-    sha256 = "12l375jllg1lxvfh610dz0a39p803xw6q9fxlmnc6hy55i0gm0y3";
+    rev = "7183bfde8d86a976a6912f582b51cbd1783456af";
+    sha256 = "0s1bsrimz30wfkkfmb4bm49mx44nhqj0hky8jkn0kz0mpc28mkkl";
   };
   diff = {
     owner = "MakeNowJust";
@@ -38,8 +38,8 @@
   kemal = {
     owner = "kemalcr";
     repo = "kemal";
-    rev = "v0.26.1";
-    sha256 = "169pwkjmk7x6j8i0rf5rpyk1y0hl7jaf9h6yrq4ha2ag9yq9i8fr";
+    rev = "v0.27.0";
+    sha256 = "01p5fkm6q9k6390dhhw3dwwzlxhxafykknkkcayv1k4ynn126hi7";
   };
   kilt = {
     owner = "jeromegn";
@@ -50,8 +50,8 @@
   markd = {
     owner = "icyleaf";
     repo = "markd";
-    rev = "v0.2.0";
-    sha256 = "0n27fndd77mlkgw1r4pf0sa8fz4gwsh7dpnjck95c0ml91cr8j1a";
+    rev = "620845abb6776d1765d20d86cc0220aa40f89a91";
+    sha256 = "1nq1ddmd2kgnl8vrk0y65lqhy145740a3s68kn0advm2xx8rbhmy";
   };
   radix = {
     owner = "luislavena";
@@ -72,9 +72,9 @@
     sha256 = "0mmssnabf476i07sajm7s3rlvfcav4lkh0n8g12rybxr6c9f683v";
   };
   tree_template = {
-    owner = "anykeyh";
+    owner = "gdotdesign";
     repo = "tree_template";
-    rev = "3fcb71ee6852040077dd1a2c8c55c67f4a95ba4e";
-    sha256 = "04w89wpnkna4ipyy3pxshqqwgk965hz1d31vqp0mrb0ilmpsywdk";
+    rev = "7e24c92208cc99938f3fbd8f5fecda22bcbe3cc3";
+    sha256 = "0ixscq7nqlp83x976d41kq83a5gw9kkk7lnxhlsc91000hm5h3wq";
   };
 }

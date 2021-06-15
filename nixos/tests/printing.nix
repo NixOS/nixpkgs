@@ -35,7 +35,7 @@ let
 
 in {
   name = "printing";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ domenkozar eelco matthewbauer ];
   };
 
@@ -50,7 +50,6 @@ in {
   testScript = ''
     import os
     import re
-    import sys
 
     start_all()
 
@@ -64,7 +63,7 @@ in {
     ):
         serviceClient.sleep(20)
         socketActivatedClient.wait_until_succeeds(
-            "systemctl status ensure-printers | grep -q -E 'code=exited, status=0/SUCCESS'"
+            "systemctl show ensure-printers | grep -q -E 'code=exited ; status=0'"
         )
 
 

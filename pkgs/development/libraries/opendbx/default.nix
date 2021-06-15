@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, readline, libmysqlclient, postgresql, sqlite }:
+{ lib, stdenv, fetchurl, readline, libmysqlclient, postgresql, sqlite }:
 
-let inherit (stdenv.lib) getDev; in
+let inherit (lib) getDev; in
 
 stdenv.mkDerivation rec {
   name = "opendbx-1.4.6";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline libmysqlclient postgresql sqlite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extremely lightweight but extensible database access library written in C";
     license = licenses.lgpl21;
     platforms = platforms.all;

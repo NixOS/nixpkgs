@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "rjsmin";
   version = "1.1.0";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # tests auto-discovery
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://opensource.perlig.de/rjsmin/";
     license = licenses.asl20;
     description = "Javascript minifier written in python";

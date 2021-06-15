@@ -1,5 +1,5 @@
-{ stdenv, python38Packages, fetchPypi
-, fftw, alsaLib, pulseaudio, wxPython_4_0 }:
+{ lib, python38Packages, fetchPypi
+, fftw, alsa-lib, pulseaudio, wxPython_4_0 }:
 
 python38Packages.buildPythonApplication rec {
   pname = "quisk";
@@ -10,13 +10,13 @@ python38Packages.buildPythonApplication rec {
     sha256 = "37dfb02a32341025c086b07d66ddf1608d4ee1ae1c62fb51f87c97662f13e0d8";
   };
 
-  buildInputs = [ fftw alsaLib pulseaudio ];
+  buildInputs = [ fftw alsa-lib pulseaudio ];
 
   propagatedBuildInputs = [ wxPython_4_0 ];
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A SDR transceiver for radios that use the Hermes protocol";
     longDescription = ''
       QUISK is a Software Defined Radio (SDR) transceiver. You supply radio

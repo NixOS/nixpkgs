@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "qogir-icon-theme";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     name= ./install.sh -d $out/share/icons
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flat colorful design icon theme";
     homepage = "https://github.com/vinceliuice/Qogir-icon-theme";
     license = with licenses; [ gpl3 ];

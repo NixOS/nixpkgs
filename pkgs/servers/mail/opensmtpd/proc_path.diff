@@ -1,7 +1,7 @@
-diff --git a/smtpd/smtpd.c b/smtpd/smtpd.c
+diff --git a/usr.sbin/smtpd/smtpd.c b/usr.sbin/smtpd/smtpd.c
 index e049f07c..a1bd03a0 100644
---- a/smtpd/smtpd.c
-+++ b/smtpd/smtpd.c
+--- a/usr.sbin/smtpd/smtpd.c
++++ b/usr.sbin/smtpd/smtpd.c
 @@ -1157,6 +1157,7 @@ fork_proc_backend(const char *key, const char *conf, const char *procname)
  	char		path[PATH_MAX];
  	char		name[PATH_MAX];
@@ -24,10 +24,10 @@ index e049f07c..a1bd03a0 100644
  	    (ssize_t)sizeof(path)) {
  		log_warn("warn: %s-proc: exec path too long", key);
  		return (-1);
-diff --git a/smtpd/table.c b/smtpd/table.c
+diff --git a/usr.sbin/smtpd/table.c b/usr.sbin/smtpd/table.c
 index 9cfdfb99..24dfcca4 100644
---- a/smtpd/table.c
-+++ b/smtpd/table.c
+--- a/usr.sbin/smtpd/table.c
++++ b/usr.sbin/smtpd/table.c
 @@ -201,6 +201,7 @@ table_create(const char *backend, const char *name, const char *tag,
  	struct table_backend	*tb;
  	char			 buf[LINE_MAX];

@@ -1,9 +1,7 @@
-{ stdenv, lib, buildPythonPackage, python, fetchFromGitHub, fetchpatch, isPy3k
+{ lib, buildPythonPackage, python, fetchFromGitHub, isPy3k
 , notmuch, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
-, service-identity
-, gnupg ? null, sphinx, awk ? null, procps ? null, future ? null
-, withManpage ? false }:
-
+, service-identity, gnupg, sphinx, gawk, procps, future , withManpage ? false
+}:
 
 buildPythonPackage rec {
   pname = "alot";
@@ -41,7 +39,7 @@ buildPythonPackage rec {
   doCheck = false;
   postBuild = lib.optionalString withManpage "make -C docs man";
 
-  checkInputs =  [ awk future mock gnupg procps ];
+  checkInputs =  [ gawk future mock gnupg procps ];
 
   postInstall = let
     completionPython = python.withPackages (ps: [ ps.configobj ]);
@@ -60,7 +58,7 @@ buildPythonPackage rec {
     sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3;

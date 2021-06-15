@@ -9,12 +9,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "0.10.10";
+  version = "0.11.9";
   pname = "gita";
 
   src = fetchFromGitHub {
-    sha256 = "0k7hicncbrqvhmpq1w3v1309bqij6izw31xs8xcb8is85dvi754h";
-    rev = "v${version}";
+    sha256 = "9+zuLAx9lMfltsBqjvsivJ5wPnStPfq11XgGMv/JDpY=";
+    rev = version;
     repo = "gita";
     owner = "nosarthur";
   };

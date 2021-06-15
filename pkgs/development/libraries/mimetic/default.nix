@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cutee }:
+{ lib, stdenv, fetchurl, cutee }:
 
 stdenv.mkDerivation rec {
   pname = "mimetic";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cutee ];
 
-  patches = stdenv.lib.optional stdenv.isAarch64 ./narrowing.patch;
+  patches = lib.optional stdenv.isAarch64 ./narrowing.patch;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MIME handling library";
     homepage    = "http://www.codesink.org/mimetic_mime_library.html";
     license     = licenses.mit;

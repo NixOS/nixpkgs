@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , isPy3k
 , docutils
 , requests
@@ -10,7 +11,6 @@
 , pytest
 , testpath
 , responses
-, pytoml
 , flit-core
 }:
 
@@ -21,19 +21,24 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "2.3.0";
-  disabled = !isPy3k;
+  version = "3.2.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "017012b809ec489918afd68af7a70bd7c8c770c87b60159d875c126866e97a4b";
+  src = fetchFromGitHub {
+    owner = "takluyver";
+    repo = "flit";
+    rev = version;
+    sha256 = "sha256-zN+/oAyXBo6Ho7n/xhOQ2mjtPGKA1anCvl3sVf7t+Do=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     docutils
     requests
     requests_download
-    pytoml
     flit-core
   ] ++ lib.optionals (pythonOlder "3.6") [
     zipfile36

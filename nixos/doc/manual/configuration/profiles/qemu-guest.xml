@@ -11,8 +11,7 @@
  </para>
 
  <para>
-  It makes virtio modules available on the initrd, sets the system time from
-  the hardware clock to work around a bug in qemu-kvm, and
-  <link linkend="opt-security.rngd.enable">enables rngd</link>.
+  It makes virtio modules available on the initrd and sets the system time from
+  the hardware clock to work around a bug in qemu-kvm.
  </para>
 </section>

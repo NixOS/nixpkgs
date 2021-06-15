@@ -38,8 +38,8 @@ let
     else "haddock-ghcjs";
   ghcDocLibDir =
     if !isGhcjs
-    then ghc.doc + ''/share/doc/ghc*/html/libraries''
-    else ghc     + ''/doc/lib'';
+    then ghc.doc + "/share/doc/ghc*/html/libraries"
+    else ghc     + "/doc/lib";
   # On GHCJS, use a stripped down version of GHC's prologue.txt
   prologue =
     if !isGhcjs
@@ -120,7 +120,7 @@ buildPackages.stdenv.mkDerivation {
   meta = {
     description = "A local Hoogle database";
     platforms = ghc.meta.platforms;
-    hydraPlatforms = with stdenv.lib.platforms; none;
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    hydraPlatforms = with lib.platforms; none;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

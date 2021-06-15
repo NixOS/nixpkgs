@@ -1,11 +1,26 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPy38
-, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
-
-with stdenv.lib;
+{ lib
+, fetchPypi
+, fetchurl
+, fetchpatch
+, buildPythonPackage
+, pythonOlder
+, python
+, bzip2
+, c-blosc
+, cython
+, hdf5
+, lzo
+, numpy
+, numexpr
+, setuptools
+  # Test inputs
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  version = "3.6.1";
   pname = "tables";
+  version = "3.6.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -14,12 +29,33 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  buildInputs = [ hdf5 bzip2 lzo c-blosc ];
-  propagatedBuildInputs = [ numpy numexpr six mock ];
+  buildInputs = [
+    bzip2
+    c-blosc
+    hdf5
+    lzo
+  ];
+  propagatedBuildInputs = [
+    numpy
+    numexpr
+    setuptools  # uses pkg_resources at runtime
+  ];
 
+  patches = [
+    (fetchpatch {
+      # Needed for numpy >= 1.20.0
+      name = "tables-pr-862-use-lowercase-numpy-dtypes.patch";
+      url = "https://github.com/PyTables/PyTables/commit/93a3272b8fe754095637628b4d312400e24ae654.patch";
+      sha256 = "00czgxnm1dxp9763va9xw1nc7dd7kxh9hjcg9klim52519hkbhi4";
+    })
+  ];
   # When doing `make distclean`, ignore docs
   postPatch = ''
     substituteInPlace Makefile --replace "src doc" "src"
+    # Force test suite to error when unittest runner fails
+    substituteInPlace tables/tests/test_suite.py \
+      --replace "return 0" "assert result.wasSuccessful(); return 0" \
+      --replace "return 1" "assert result.wasSuccessful(); return 1"
   '';
 
   # Regenerate C code with Cython
@@ -27,44 +63,29 @@ buildPythonPackage rec {
     make distclean
   '';
 
-  # The setup script complains about missing run-paths, but they are
-  # actually set.
   setupPyBuildFlags = [
-    "--hdf5=${getDev hdf5}"
-    "--lzo=${getDev lzo}"
-    "--bzip2=${getDev bzip2}"
-    "--blosc=${getDev c-blosc}"
+    "--hdf5=${lib.getDev hdf5}"
+    "--lzo=${lib.getDev lzo}"
+    "--bzip2=${lib.getDev bzip2}"
+    "--blosc=${lib.getDev c-blosc}"
   ];
-  # Run the test suite.
-  # It requires the build path to be in the python search path.
-  # These tests take quite some time.
-  # If the hdf5 library is built with zlib then there is only one
-  # test-failure. That is the same failure as described in the following
-  # github issue:
-  #     https://github.com/PyTables/PyTables/issues/269
-  checkPhase = ''
-    ${python.interpreter} <<EOF
-    import sysconfig
-    import sys
-    import os
-    f = "lib.{platform}-{version[0]}.{version[1]}"
-    lib = f.format(platform=sysconfig.get_platform(),
-                   version=sys.version_info)
-    build = os.path.join(os.getcwd(), 'build', lib)
-    sys.path.insert(0, build)
-    import tables
-    r = tables.test()
-    if not r.wasSuccessful():
-        sys.exit(1)
-    EOF
+
+  checkInputs = [ pytestCheckHook ];
+  preCheck = ''
+    cd ..
   '';
+  # Runs the test suite as one single test via unittest. The whole "heavy" test suite supposedly takes ~5 hours to run.
+  pytestFlagsArray = [
+    "--pyargs"
+    "tables.tests.test_suite"
+  ];
 
-  # Disable tests until the failure described above is fixed.
-  doCheck = false;
+  pythonImportsCheck = [ "tables" ];
 
-  meta = {
+  meta = with lib; {
     description = "Hierarchical datasets for Python";
-    homepage = "http://www.pytables.org/";
-    license = stdenv.lib.licenses.bsd2;
+    homepage = "https://www.pytables.org/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

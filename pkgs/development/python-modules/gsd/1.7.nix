@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # tests not packaged with gsd
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://bitbucket.org/glotzer/gsd";
     description = "General simulation data file format";
     license = licenses.bsd2;

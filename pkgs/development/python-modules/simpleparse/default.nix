@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   doCheck = false;  # weird error
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Parser Generator for Python";
     homepage = "https://pypi.python.org/pypi/SimpleParse";
     license = licenses.bsd0;

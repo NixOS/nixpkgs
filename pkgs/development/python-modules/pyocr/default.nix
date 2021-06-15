@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, buildPythonPackage, pillow, setuptools_scm,
+{ lib, fetchFromGitLab, buildPythonPackage, pillow, setuptools-scm,
 setuptools-scm-git-archive , tesseract, cuneiform, isPy3k, substituteAll,
 pytest, tox }:
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   })
   ];
 
-  buildInputs = [ setuptools_scm setuptools-scm-git-archive ];
+  buildInputs = [ setuptools-scm setuptools-scm-git-archive ];
   propagatedBuildInputs = [ pillow ];
   checkInputs = [ pytest tox ];
   checkPhase = "pytest";

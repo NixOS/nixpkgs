@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libjack2, libGL, pkgconfig, xorg, mesa, libsndfile, libsamplerate }:
+{ lib, stdenv, fetchFromGitHub, libjack2, libGL, pkg-config, xorg, mesa, libsndfile, libsamplerate }:
 
 stdenv.mkDerivation rec {
   pname = "ninjas2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     patchShebangs dpf/utils/generate-ttl.sh
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libjack2 xorg.libX11 libGL mesa libsndfile libsamplerate
   ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/clearly-broken-software/ninjas2";
     description = "sample slicer plugin for LV2, VST, and jack standalone";
     license = with licenses; [ gpl3 ];

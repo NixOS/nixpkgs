@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, numpy, dateutil }:
+{ lib, fetchPypi, buildPythonPackage, numpy, dateutil }:
 
 buildPythonPackage rec {
   pname = "pycollada";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # (upstream packaging issue)
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library for reading and writing collada documents";
     homepage = "http://pycollada.github.io/";
     license = "BSD"; # they don't specify which BSD variant

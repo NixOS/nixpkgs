@@ -1,4 +1,4 @@
-{ stdenv, python3Packages }:
+{ lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "hy";
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     $out/bin/hy --help > /dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A LISP dialect embedded in Python";
     homepage = "http://hylang.org/";
     license = licenses.mit;

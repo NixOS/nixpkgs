@@ -29,9 +29,11 @@ stdenv.mkDerivation (rec {
     sha256 = "sha256-RFjY3nhJ30TMqxXhaxVIsoUiTbul8I+sBwwcDgvMTPo=";
   };
 
-  patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
-    # included on coreutils master; TODO: apply unconditionally, I guess
-    ++ optional stdenv.hostPlatform.isAarch64 ./sys-getdents-undeclared.patch;
+  patches = [ ./sys-getdents-undeclared.patch ]
+    ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+    # fix gnulib tests on 32-bit ARM. Included on coreutils master.
+    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
+    ++ optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -40,6 +42,9 @@ stdenv.mkDerivation (rec {
     sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
+
+    # Depends on the mountpoints
+    sed '2i echo Skipping df df-symlink test && exit 77' -i ./tests/df/df-symlink.sh
 
     # Some target platforms, especially when building inside a container have
     # issues with the inotify test.
@@ -73,8 +78,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ]
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
-    ++ optionals stdenv.hostPlatform.isMusl [ autoreconfHook bison ];   # due to patch
+    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ];  # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
@@ -102,8 +106,7 @@ stdenv.mkDerivation (rec {
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform
-    && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.isMusl)
-    && builtins.storeDir == "/nix/store";
+    && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.isMusl);
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
@@ -152,6 +155,6 @@ stdenv.mkDerivation (rec {
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.
   NIX_CFLAGS_COMPILE = "-Wno-error";
-} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isAndroid {
+} // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
   NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
 })

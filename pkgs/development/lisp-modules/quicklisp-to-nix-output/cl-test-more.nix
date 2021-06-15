@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-test-more'';
-  version = ''prove-20200218-git'';
+  baseName = "cl-test-more";
+  version = "prove-20200218-git";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ args."alexandria" args."anaphora" args."cl-ansi-text" args."cl-colors" args."cl-colors2" args."cl-ppcre" args."let-plus" args."prove" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/prove/2020-02-18/prove-20200218-git.tgz'';
-    sha256 = ''1sv3zyam9sdmyis5lyv0khvw82q7bcpsycpj9b3bsv9isb4j30zn'';
+    url = "http://beta.quicklisp.org/archive/prove/2020-02-18/prove-20200218-git.tgz";
+    sha256 = "1sv3zyam9sdmyis5lyv0khvw82q7bcpsycpj9b3bsv9isb4j30zn";
   };
 
   packageName = "cl-test-more";

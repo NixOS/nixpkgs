@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
-, setuptools_scm
+, setuptools-scm
 , docutils
 , pyparsing
 , pytestCheckHook
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "cb12dcb49d16b168c02be128a1527ecde50211e4bd94af76ff4e67707f5a2d38";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     docutils
     pyparsing
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "amply" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/willu47/amply";
     description = ''
       Allows you to load and manipulate AMPL/GLPK data as Python data structures

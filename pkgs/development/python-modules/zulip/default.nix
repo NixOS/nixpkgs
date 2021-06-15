@@ -5,11 +5,14 @@
 , requests
 , matrix-client
 , distro
+, cryptography
+, pyopenssl
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "zulip";
-  version = "0.7.0";
+  version = "0.8.0";
 
   disabled = !isPy3k;
 
@@ -18,7 +21,7 @@ buildPythonPackage rec {
     owner = "zulip";
     repo = "python-zulip-api";
     rev = version;
-    sha256 = "0waldgpzq3ms1r1z14lxdj56lf082fnmi83l3fn8i8gqr8nvnch1";
+    sha256 = "sha256-gJ+YRJC6wmQzPakApOqytyPy34cS/jjzEZhRIvWUBIQ=";
   };
   sourceRoot = "source/zulip";
 
@@ -26,11 +29,21 @@ buildPythonPackage rec {
     requests
     matrix-client
     distro
+
+    # from requests[security]
+    cryptography
+    pyopenssl
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   preCheck = ''
     export COLUMNS=80
   '';
+
+  pythonImportsCheck = [ "zulip" ];
 
   meta = with lib; {
     description = "Bindings for the Zulip message API";

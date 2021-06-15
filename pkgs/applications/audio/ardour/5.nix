@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
-, alsaLib
+, alsa-lib
 , aubio
 , boost
 , cairomm
@@ -8,7 +8,6 @@
 , doxygen
 , fftwSinglePrec
 , flac
-, glibc
 , glibmm
 , graphviz
 , gtkmm2
@@ -75,7 +74,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     aubio
     boost
     cairomm
@@ -143,7 +142,7 @@ in stdenv.mkDerivation rec {
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-track hard disk recording software";
     longDescription = ''
       Ardour is a digital audio workstation (DAW), You can use it to

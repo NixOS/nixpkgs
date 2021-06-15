@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "svgcleaner";
@@ -11,9 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1jpnqsln37kkxz98vj7gly3c2170v6zamd876nc9nfl9vns41s0f";
   };
 
-  cargoSha256 = "1xhwlsq9b6cnafbapm5jf48zqdx5k2vxlr701lh5f8nqvd7nxi6g";
+  cargoSha256 = "172kdnd11xb2qkklqdkdcwi3g55k0d67p8g8qj7iq34bsnfb5bnr";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for tidying and optimizing SVGs";
     homepage = "https://github.com/RazrFalcon/svgcleaner";
     license = licenses.gpl2;

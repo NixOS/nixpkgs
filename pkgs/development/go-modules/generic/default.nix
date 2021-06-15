@@ -7,6 +7,9 @@
 , passthru ? {}
 , patches ? []
 
+# Go linker flags, passed to go via -ldflags
+, ldflags ? []
+
 # A function to override the go-modules derivation
 , overrideModAttrs ? (_oldAttrs : {})
 
@@ -27,23 +30,25 @@
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
-# Disabled flag
-, disabled ? false
-
 # Do not enable this without good reason
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
 , meta ? {}
 
+# Not needed with buildGoModule
+, goPackagePath ? ""
+
 , ... }@args':
 
 with builtins;
 
-let
-  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "disabled" ];
+assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 
-  go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
+let
+  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" ];
+
+  go-modules = if vendorSha256 != null then stdenv.mkDerivation (let modArgs = {
 
     name = "${name}-go-modules";
 
@@ -116,7 +121,7 @@ let
       }
   ) // overrideModAttrs modArgs) else "";
 
-  package = go.stdenv.mkDerivation (args // {
+  package = stdenv.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
     inherit (go) GOOS GOARCH;
@@ -151,7 +156,7 @@ let
         echo "$d" | grep -q "\(/_\|examples\|Godeps\|testdata\)" && return 0
         [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v -p $NIX_BUILD_CORES $d 2>&1)"; then
+        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -240,7 +245,5 @@ let
                     [ lib.maintainers.kalbasit ];
     };
   });
-in if disabled then
-  throw "${package.name} not supported for go ${go.meta.branch}"
-else
+in
   package

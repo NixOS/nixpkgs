@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kcalc";
+  pname = "kcalc";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.fridh ];

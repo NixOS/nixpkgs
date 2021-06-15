@@ -1,11 +1,11 @@
 { buildDhallGitHubPackage }:
 
 buildDhallGitHubPackage {
-  name      = "Prelude-19.0.0";
+  name      = "Prelude";
   owner     = "dhall-lang";
   repo      = "dhall-lang";
   directory = "Prelude";
   file      = "package.dhall";
-  rev       = "v19.0.0";
-  sha256    = "04m29f5xlks6rarv1gy909j68bsflwl18l9bg7kyy1vpwap0avkp";
+  rev       = "v20.1.0";
+  sha256    = "04r1w7wqydmwm9mh3lz4y96a87k5kkvzsmrhbdrf0izcy5bqqv5y";
 }

@@ -1,28 +1,52 @@
-{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, DiskArbitration
+, Foundation
+, IOKit
+, installShellFiles
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = pname;
     rev = version;
-    sha256 = "0bw83l3s7yraxiwbwcm0nfqqhv2dkd208qz7nm89whzdjzf340gj";
+    sha256 = "sha256-/O/VXBpVBgjzYuv1AghzmOBUu0MQXhuF65QswgNwa0k=";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
+  prePatch = ''
+    rm .cargo/config.toml
+  '';
 
-  cargoSha256 = "11ywms0vgrm4ildsgl99agjimk5f3l56hlr5aa70kagxam4k6vmn";
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    DiskArbitration
+    Foundation
+    IOKit
+    libiconv
+  ];
+
+  cargoSha256 = "sha256-5AZgOzRg7jEyv/4+IiQplrwt2yQO9yNi6BosdSzh5v8=";
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    installShellCompletion $releaseDir/build/bottom-*/out/btm.{bash,fish} --zsh $releaseDir/build/bottom-*/out/_btm
+  '';
+
+  meta = with lib; {
     description = "A cross-platform graphical process/system monitor with a customizable interface";
     homepage = "https://github.com/ClementTsang/bottom";
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.unix;
+    mainProgram = "btm";
   };
 }
-

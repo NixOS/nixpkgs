@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, icmake
+{ lib, stdenv, fetchFromGitLab, icmake
 , libmilter, libX11, openssl, readline
 , util-linux, yodl }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ./build install x
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Brokken's Own Base Classes And Templates";
     homepage = "https://fbb-git.gitlab.io/bobcat/";
     license = licenses.gpl3;

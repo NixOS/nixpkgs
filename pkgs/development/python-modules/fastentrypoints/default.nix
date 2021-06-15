@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "fastentrypoints";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "02s1j8i2dzbpbwgq2a3fiqwm3cnmhii2qzc0k42l0rdxd4a4ya7z";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Makes entry_points specified in setup.py load more quickly";
     homepage = "https://github.com/ninjaaron/fast-entry_points";
     license = licenses.bsd2;

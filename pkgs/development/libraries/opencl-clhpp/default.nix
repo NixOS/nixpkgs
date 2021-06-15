@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python, opencl-headers }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, opencl-headers }:
 
 stdenv.mkDerivation rec {
   pname = "opencl-clhpp";
@@ -11,16 +11,18 @@ stdenv.mkDerivation rec {
     sha256 = "04g3mg2cpbi048fxxkghra81bpxzqr4r3gspx5mvqipx1lzypsci";
   };
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python3 ];
 
   propagatedBuildInputs = [ opencl-headers ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_TESTS=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenCL Host API C++ bindings";
     homepage = "http://github.khronos.org/OpenCL-CLHPP/";
     license = licenses.mit;

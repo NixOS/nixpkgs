@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , substituteAll
 , gdb
-, colorama
 , flask
 , psutil
 , pytest-timeout
@@ -18,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r5w5ngipj5fgjylrmlw3jrh5y2n67n68l91sj9329549x4ww8dh";
+    hash = "sha256-YGzc9mMIzPTmUgIXuZROLdYKjUm69x9SR+JtYRVpn24=";
   };
 
   patches = [
@@ -34,6 +33,7 @@ buildPythonPackage rec {
       inherit gdb;
     })
 
+    # Use nixpkgs version instead of versioneer
     (substituteAll {
       src = ./hardcode-version.patch;
       inherit version;
@@ -65,7 +65,6 @@ buildPythonPackage rec {
   )'';
 
   checkInputs = [
-    colorama
     flask
     psutil
     pytest-timeout
@@ -89,11 +88,13 @@ buildPythonPackage rec {
     "gevent"
   ];
 
+  pythonImportsCheck = [ "debugpy" ];
+
   meta = with lib; {
     description = "An implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
     license = licenses.mit;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" ];
   };
 }

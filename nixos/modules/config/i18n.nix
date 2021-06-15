@@ -84,7 +84,7 @@ with lib;
     environment.etc."locale.conf".source = pkgs.writeText "locale.conf"
       ''
         LANG=${config.i18n.defaultLocale}
-        ${concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${v}'') config.i18n.extraLocaleSettings)}
+        ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${v}") config.i18n.extraLocaleSettings)}
       '';
 
   };

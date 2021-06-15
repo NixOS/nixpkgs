@@ -5,7 +5,7 @@
 , pytest
 , pytestCheckHook
 , psutil
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -18,10 +18,11 @@ buildPythonPackage rec {
     sha256 = "179c2911d8aee3441fee051aba08e0d9b4dab61b829ae4811906d5c49a3b0a58";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    pytest
     psutil
   ];
 

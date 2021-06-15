@@ -4,10 +4,9 @@
 , fetchFromGitHub
 , fetchurl
 , fetchzip
-, optipng
 , cairo
 , python3
-, pkgconfig
+, pkg-config
 , pngquant
 , which
 , imagemagick
@@ -131,7 +130,7 @@ in
       zopfli
       pngquant
       which
-      pkgconfig
+      pkg-config
       emojiPythonEnv
     ];
 
@@ -179,7 +178,7 @@ in
       install -D $src $out/share/fonts/blobmoji/Blobmoji.ttf
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Noto Emoji with extended Blob support";
       homepage = "https://github.com/C1710/blobmoji";
       license = with licenses; [ ofl asl20 ];

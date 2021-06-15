@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A preprocessor for less";
     longDescription = ''
       Usually lesspipe.sh is called as an input filter to less. With the help

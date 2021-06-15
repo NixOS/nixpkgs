@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, chez, chez-srfi, chez-mit }:
+{ stdenv, lib, fetchgit, chez, chez-srfi, chez-mit }:
 
 stdenv.mkDerivation {
   pname = "chez-scmutils";
@@ -22,11 +22,11 @@ stdenv.mkDerivation {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "This is a port of the ‘MIT Scmutils’ library to Chez Scheme";
     homepage = "https://github.com/fedeinthemix/chez-scmutils/";
-    maintainers = [ stdenv.lib.maintainers.jitwit ];
-    license = stdenv.lib.licenses.gpl3;
+    maintainers = [ maintainers.jitwit ];
+    license = licenses.gpl3;
   };
 
 }

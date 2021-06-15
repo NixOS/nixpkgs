@@ -1,12 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
-, autoconf
-, automake
-, libtool
-, docbook_xml_dtd_412
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
+, autoreconfHook
+, docbook_xml_dtd_45
 , docbook-xsl-nons
 , which
 , libxml2
@@ -18,7 +14,7 @@
 , xmlto
 , appstream-glib
 , substituteAll
-, yacc
+, bison
 , xdg-dbus-proxy
 , p11-kit
 , bubblewrap
@@ -40,7 +36,7 @@
 , fuse
 , nixosTests
 , libsoup
-, lzma
+, xz
 , zstd
 , ostree
 , polkit
@@ -49,7 +45,7 @@
 , xorg
 , valgrind
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , dconf
 , gsettings-desktop-schemas
 , librsvg
@@ -57,14 +53,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.8.2";
+  version = "1.10.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "eSZiXffCKCpe4aizwxevU9QKZjsbxrGKLch0fiZQhbA=";
+    sha256 = "sha256-2xUnOdBy+P8pnk6IjYljobRTjaexDguGUlvkOPLh3eQ=";
   };
 
   patches = [
@@ -98,30 +94,27 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/43581
     ./use-flatpak-from-path.patch
 
+    # Hardcode flatpak binary path for flatpak-spawn.
+    # When calling the portal’s Spawn command with FLATPAK_SPAWN_FLAGS_CLEAR_ENV flag,
+    # it will clear environment, including PATH, making the flatpak run fail.
+    # https://github.com/flatpak/flatpak/pull/4174
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/commit/495449daf6d3c072519a36c9e4bc6cc1da4d31db.patch";
+      sha256 = "gOX/sGupAE7Yg3MVrMhFXzWHpFn+izVyjtkuPzIckuY=";
+    })
+
     # Nix environment hacks should not leak into the apps.
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
     # But we want the GDK_PIXBUF_MODULE_FILE from the wrapper affect the icon validator.
     ./validate-icon-pixbuf.patch
-
-    # Fix `flatpak/test-oci-registry@{user,system}.wrap.test` installed tests.
-    # https://github.com/flatpak/flatpak/pull/3762
-    (fetchpatch {
-      url = "https://github.com/flatpak/flatpak/commit/c1447dadecd50f384b6d11dac18b014245267d00.patch";
-      sha256 = "UAA/wGr8/aMbx5MV+8Ilro2kgKkx2QOn88lDUjCgeDA=";
-    })
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
+    autoreconfHook
     libxml2
-    # TODO: replace with docbook_xml_dtd_45 https://github.com/flatpak/flatpak/pull/3760
-    docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
+    docbook_xml_dtd_45
     docbook-xsl-nons
     which
     gobject-introspection
@@ -131,8 +124,8 @@ stdenv.mkDerivation rec {
     pkg-config
     xmlto
     appstream-glib
-    yacc
-    wrapGAppsHook
+    bison
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -146,8 +139,8 @@ stdenv.mkDerivation rec {
     libcap
     libseccomp
     libsoup
-    lzma
-    # zstd # TODO: broken paths in .pc file
+    xz
+    zstd
     polkit
     python3
     systemd
@@ -196,17 +189,7 @@ stdenv.mkDerivation rec {
   in ''
     patchShebangs buildutil
     patchShebangs tests
-    PATH=${stdenv.lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
-  '';
-
-  preConfigure = ''
-    # TODO: remove the condition once autogen.sh is shipped in the tarball
-    # https://github.com/flatpak/flatpak/pull/3761
-    if [[ -f autogen.sh ]]; then
-        NOCONFIGURE=1 ./autogen.sh
-    else
-        autoreconf --install --force --verbose
-    fi
+    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
   '';
 
   passthru = {
@@ -215,10 +198,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

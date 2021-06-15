@@ -32,9 +32,14 @@ in buildDunePackage rec {
     # to have a fixed path to the binary in nix store
     sed -i '/must_exist (Cmd\.v "curl"/d' lib/github.ml
 
-    # set bogus user info in git so git commit doesn't fail
-    sed -i '/git init/ a \    $ git config user.name test; git config user.email "pseudo@pseudo.invalid"' \
-      tests/bin/{delegate_info,errors,tag,no_doc,x-commit-hash}/run.t
+    # fix problems with git invocations in tests
+    for f in tests/bin/{delegate_info,errors,tag,no_doc,x-commit-hash}/run.t; do
+      # set bogus user info in git so git commit doesn't fail
+      sed -i '/git init/ a \    $ git config user.name test; git config user.email "pseudo@pseudo.invalid"' "$f"
+      # surpress hint to set default branch name
+      substituteInPlace "$f" --replace "git init" "git init -b main"
+    done
+
     # ignore weird yes error message
     sed -i 's/yes |/yes 2>\/dev\/null |/' tests/bin/no_doc/run.t
   '';

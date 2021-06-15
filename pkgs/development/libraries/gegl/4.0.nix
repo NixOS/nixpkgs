@@ -1,11 +1,11 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
-, fetchpatch
-, pkgconfig
+, pkg-config
 , vala
 , gobject-introspection
 , gtk-doc
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_43
 , glib
 , babl
@@ -15,6 +15,7 @@
 , librsvg
 , lensfun
 , libspiro
+, maxflow
 , netsurf
 , pango
 , poly2tri-c
@@ -35,34 +36,25 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.26";
+  version = "0.4.30";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DzceLtK5IWL+/T3edD5kjKCKahsrBQBIZ/vdx+IR5CQ=";
+    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-wRJ4LPQJaWniMhfM36vkIoTjXVQ1/wxD1A5McPrsqN0=";
   };
 
-  patches = [
-    # fix build with darwin: https://github.com/NixOS/nixpkgs/issues/99108
-    # https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/83
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/83.patch";
-      sha256 = "sha256-CSBYbJ2xnEN23xrla1qqr244jxOR5vNK8ljBSXdg4yE=";
-    })
-  ];
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     meson
     ninja
     vala
     gobject-introspection
     gtk-doc
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_43
   ];
 
@@ -73,6 +65,7 @@ stdenv.mkDerivation rec {
     librsvg
     lensfun
     libspiro
+    maxflow
     netsurf.libnsgif
     pango
     poly2tri-c
@@ -84,7 +77,7 @@ stdenv.mkDerivation rec {
     luajit
     openexr
     suitesparse
-  ] ++ stdenv.lib.optional stdenv.isDarwin OpenCL;
+  ] ++ lib.optional stdenv.isDarwin OpenCL;
 
   # for gegl-4.0.pc
   propagatedBuildInputs = [
@@ -111,14 +104,14 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-lm";
 
   postPatch = ''
-    chmod +x tests/opencl/opencl_test.sh tests/buffer/buffer-tests-run.sh
-    patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tests/buffer/buffer-tests-run.sh tools/xml_insert.sh
+    chmod +x tests/opencl/opencl_test.sh
+    patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tools/xml_insert.sh
   '';
 
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graph-based image processing framework";
     homepage = "https://www.gegl.org";
     license = licenses.lgpl3Plus;

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, mpv-unwrapped, lib }:
+{ stdenvNoCC, mpv-unwrapped, lib }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mpv-autoload";
   version = mpv-unwrapped.version;
   src = "${mpv-unwrapped.src.outPath}/TOOLS/lua/autoload.lua";

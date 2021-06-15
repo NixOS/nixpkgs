@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "bgpq3";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # Fix binary install location. Remove with next upstream release.
   preInstall = "mkdir -p $out/bin";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "bgp filtering automation tool";
     homepage = "https://github.com/snar/bgpq3";
     license = licenses.bsd2;

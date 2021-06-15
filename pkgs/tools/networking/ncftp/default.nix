@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, coreutils }:
+{ lib, stdenv, fetchurl, ncurses, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "ncftp";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--mandir=$(out)/share/man/"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line FTP (File Transfer Protocol) client";
     homepage = "https://www.ncftp.com/ncftp/";
     maintainers = with maintainers; [ bjornfor ];

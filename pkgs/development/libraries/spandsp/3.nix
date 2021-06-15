@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, audiofile, libtiff, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, audiofile, libtiff, autoreconfHook }:
 stdenv.mkDerivation rec {
   version = "3.0.0";
   pname = "spandsp";
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A portable and modular SIP User-Agent with audio and video support";
     homepage = "https://github.com/freeswitch/spandsp";
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ ajs124 ];
-    license = stdenv.lib.licenses.gpl2;
+    platforms = with lib.platforms; unix;
+    maintainers = with lib.maintainers; [ ajs124 misuzu ];
+    license = lib.licenses.gpl2;
   };
 }

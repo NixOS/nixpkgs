@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, util-linux, coreutils}:
+{ lib, stdenv, fetchurl, util-linux, coreutils}:
 
 stdenv.mkDerivation rec {
   version = "6.42";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Syncs browser profile dirs to RAM";
     longDescription = ''
       Profile-sync-daemon (psd) is a tiny pseudo-daemon designed to manage your

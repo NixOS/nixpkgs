@@ -1,12 +1,12 @@
 { buildPythonPackage, fetchPypi, lib }:
 
 buildPythonPackage rec {
-  version = "0.1.1";
+  version = "0.1.2";
   pname = "pyro-api";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0rhd7p61pf2vvflbdixp7sygblvvl9qbqavxj27910lr79vl4fdz";
+    sha256 = "a1b900d9580aa1c2fab3b123ab7ff33413744da7c5f440bd4aadc4d40d14d920";
   };
 
   pythonImportsCheck = [ "pyroapi" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, perl, intltool, flex, texinfo, libiconv, libintl }:
+{ lib, stdenv, fetchurl, python3, perl, intltool, flex, texinfo, libiconv, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "recode";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/rrthomas/recode";
     description = "Converts files between various character sets and usages";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 }

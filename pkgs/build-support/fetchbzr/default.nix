@@ -10,6 +10,6 @@ stdenvNoCC.mkDerivation {
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = sha256;
-  
+
   inherit url rev;
 }

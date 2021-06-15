@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, runtimeShell }:
+{ lib, stdenv, fetchurl, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "thinkingrock-binary-2.2.1";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   installPhase = ":";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Task management system";
     homepage = "http://www.thinkingrock.com.au/";
     license = licenses.cddl;

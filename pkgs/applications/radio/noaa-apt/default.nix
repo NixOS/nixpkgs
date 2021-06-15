@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  cargoSha256 = "0w4rbbz8lsh31xkgibzndiic47690nfcjrn1411dskf7ali6djy8";
+  cargoSha256 = "167q9w45lh05l27cdssg8sfz3qfskfaxayzjy6q1cj50jrn0gq13";
 
   preBuild = ''
     # Used by macro pointing to resource location at compile time.
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "NOAA APT image decoder";
-    homepage = "http://noaa-apt.mbernardi.com.ar/";
+    homepage = "https://noaa-apt.mbernardi.com.ar/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ trepetti ];
     platforms = platforms.all;

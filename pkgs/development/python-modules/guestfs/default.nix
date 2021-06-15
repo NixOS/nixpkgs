@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl, libguestfs, qemu }:
+{ lib, buildPythonPackage, fetchurl, libguestfs, qemu }:
 
 buildPythonPackage rec {
   pname = "guestfs";
@@ -11,7 +11,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ libguestfs qemu ];
 
-  meta = with stdenv.lib; {
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "guestfs" ];
+
+  meta = with lib; {
     homepage = "https://libguestfs.org/guestfs-python.3.html";
     description = "Use libguestfs from Python";
     license = licenses.lgpl2Plus;

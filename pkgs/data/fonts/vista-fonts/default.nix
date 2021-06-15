@@ -1,14 +1,22 @@
-{ stdenv, fetchzip, cabextract }:
+{ lib, stdenvNoCC, fetchurl, cabextract }:
 
-fetchzip {
-  name = "vista-fonts-1";
+stdenvNoCC.mkDerivation {
+  pname = "vista-fonts";
+  version = "1";
 
-  url = "https://web.archive.org/web/20171225132744/http://download.microsoft.com/download/E/6/7/E675FFFC-2A6D-4AB0-B3EB-27C9F8C8F696/PowerPointViewer.exe";
+  src = fetchurl {
+    url = "mirror://sourceforge/mscorefonts2/cabs/PowerPointViewer.exe";
+    sha256 = "07vhjdw8iip7gxk6wvp4myhvbn9619g10j9qvpbzz4ihima57ry4";
+  };
 
-  postFetch = ''
-    ${cabextract}/bin/cabextract --lowercase --filter ppviewer.cab $downloadedFile
-    ${cabextract}/bin/cabextract --lowercase --filter '*.TTF' ppviewer.cab
+  nativeBuildInputs = [ cabextract ];
 
+  unpackPhase = ''
+    cabextract --lowercase --filter ppviewer.cab $src
+    cabextract --lowercase --filter '*.TTF' ppviewer.cab
+  '';
+
+  installPhase = ''
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
 
@@ -21,12 +29,10 @@ fetchzip {
     done
   '';
 
-  sha256 = "sha256-x7JSXS9Q1fzlJTVR+MAS3f2+cmo/H0s1qkY9FPjx2zI=";
-
   meta = {
     description = "Some TrueType fonts from Microsoft Windows Vista (Calibri, Cambria, Candara, Consolas, Constantia, Corbel)";
     homepage = "http://www.microsoft.com/typography/ClearTypeFonts.mspx";
-    license = stdenv.lib.licenses.unfree; # haven't read the EULA, but we probably can't redistribute these files, so...
+    license = lib.licenses.unfree; # haven't read the EULA, but we probably can't redistribute these files, so...
 
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.

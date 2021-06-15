@@ -73,7 +73,72 @@ in {
 
     pruneFS = mkOption {
       type = listOf str;
-      default = ["afs" "anon_inodefs" "auto" "autofs" "bdev" "binfmt" "binfmt_misc" "cgroup" "cifs" "coda" "configfs" "cramfs" "cpuset" "debugfs" "devfs" "devpts" "devtmpfs" "ecryptfs" "eventpollfs" "exofs" "futexfs" "ftpfs" "fuse" "fusectl" "gfs" "gfs2" "hostfs" "hugetlbfs" "inotifyfs" "iso9660" "jffs2" "lustre" "misc" "mqueue" "ncpfs" "nnpfs" "ocfs" "ocfs2" "pipefs" "proc" "ramfs" "rpc_pipefs" "securityfs" "selinuxfs" "sfs" "shfs" "smbfs" "sockfs" "spufs" "nfs" "NFS" "nfs4" "nfsd" "sshfs" "subfs" "supermount" "sysfs" "tmpfs" "ubifs" "udf" "usbfs" "vboxsf" "vperfctrfs" ];
+      default = [
+        "afs"
+        "anon_inodefs"
+        "auto"
+        "autofs"
+        "bdev"
+        "binfmt"
+        "binfmt_misc"
+        "cgroup"
+        "cifs"
+        "coda"
+        "configfs"
+        "cramfs"
+        "cpuset"
+        "debugfs"
+        "devfs"
+        "devpts"
+        "devtmpfs"
+        "ecryptfs"
+        "eventpollfs"
+        "exofs"
+        "futexfs"
+        "ftpfs"
+        "fuse"
+        "fusectl"
+        "fuse.sshfs"
+        "gfs"
+        "gfs2"
+        "hostfs"
+        "hugetlbfs"
+        "inotifyfs"
+        "iso9660"
+        "jffs2"
+        "lustre"
+        "misc"
+        "mqueue"
+        "ncpfs"
+        "nnpfs"
+        "ocfs"
+        "ocfs2"
+        "pipefs"
+        "proc"
+        "ramfs"
+        "rpc_pipefs"
+        "securityfs"
+        "selinuxfs"
+        "sfs"
+        "shfs"
+        "smbfs"
+        "sockfs"
+        "spufs"
+        "nfs"
+        "NFS"
+        "nfs4"
+        "nfsd"
+        "sshfs"
+        "subfs"
+        "supermount"
+        "sysfs"
+        "tmpfs"
+        "ubifs"
+        "udf"
+        "usbfs"
+        "vboxsf"
+        "vperfctrfs"
+      ];
       description = ''
         Which filesystem types to exclude from indexing
       '';
@@ -150,7 +215,7 @@ in {
           ''
           else ''
             exec ${cfg.locate}/bin/updatedb \
-              ${optionalString (cfg.localuser != null && ! isMLocate) ''--localuser=${cfg.localuser}''} \
+              ${optionalString (cfg.localuser != null && ! isMLocate) "--localuser=${cfg.localuser}"} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
         environment = optionalAttrs (!isMLocate) {

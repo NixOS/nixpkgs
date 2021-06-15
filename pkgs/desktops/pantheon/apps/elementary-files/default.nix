@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     glib-networking
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
       --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File browser designed for elementary OS";
     homepage = "https://github.com/elementary/files";
     license = licenses.lgpl3;

@@ -1,27 +1,21 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
+{ lib, fetchurl, buildDunePackage }:
 
-let version = "1.0.0"; in
+buildDunePackage rec {
+  pname = "magic-mime";
+  version = "1.1.3";
 
-stdenv.mkDerivation {
-  pname = "ocaml-magic-mime";
-  inherit version;
-
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-magic-mime/archive/v${version}.tar.gz";
-    sha256 = "058d83hmxd5mjccxdm3ydchmhk2lca5jdg82jg0klsigmf4ida6v";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-magic-mime/releases/download/v${version}/magic-mime-v${version}.tbz";
+    sha256 = "1xqjs8bba567yzrzgnr88j5ck97d36zw68zr9v29liya37k6rcvz";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib ];
-  configurePlatforms = [];
+  minimalOCamlVersion = "4.03";
+  useDune2 = true;
 
-  createFindlibDestdir = true;
-
-  meta = {
-    homepage = "https://github.com/mirage/ocaml-magic-mime";
+  meta = with lib; {
     description = "Convert file extensions to MIME types";
-    platforms = ocaml.meta.platforms or [];
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    homepage = "https://github.com/mirage/ocaml-magic-mime";
+    license = licenses.isc;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

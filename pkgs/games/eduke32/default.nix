@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, nasm, makeDesktopItem
-, alsaLib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, nasm, makeDesktopItem
+, alsa-lib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
 , SDL2, SDL2_mixer }:
 
 let
@@ -27,10 +27,10 @@ in stdenv.mkDerivation {
     sha256 = "972630059be61ef9564a241b84ef2ee4f69fc85c19ee36ce46052ff2f1ce3bf9";
   };
 
-  buildInputs = [ alsaLib flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
+  buildInputs = [ alsa-lib flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
+  nativeBuildInputs = [ makeWrapper pkg-config ]
+    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
   postPatch = ''
     substituteInPlace source/build/src/glbuild.cpp \
@@ -66,7 +66,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     homepage = "http://eduke32.com";
     license = licenses.gpl2Plus;

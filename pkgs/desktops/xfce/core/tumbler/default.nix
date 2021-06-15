@@ -5,7 +5,6 @@
 , freetype
 , libgsf
 , poppler
-, libjpeg
 , gst_all_1
 }:
 
@@ -14,9 +13,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "tumbler";
-  version = "0.2.9";
+  version = "4.16.0";
 
-  sha256 = "0b3mli40msv35qn67c1m9rn5bigj6ls10l08qk7fa3fwvzl49hmw";
+  sha256 = "1z4q858afj3yksim4lc96wylgvymv4cv6iw41qdxl5xd6ii2ddr4";
 
   buildInputs = [
     ffmpegthumbnailer

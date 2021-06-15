@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran }:
+{ lib, stdenv, fetchurl, gfortran }:
 
 stdenv.mkDerivation rec {
   pname = "blas";
@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
   installPhase =
     # FreeBSD's stdenv doesn't use Coreutils.
     let dashD = if stdenv.isFreeBSD then "" else "-D"; in
-    (stdenv.lib.optionalString stdenv.isFreeBSD "mkdir -p $out/lib ;")
+    (lib.optionalString stdenv.isFreeBSD "mkdir -p $out/lib ;")
     + ''
     install ${dashD} -m755 libblas.a "$out/lib/libblas.a"
     install ${dashD} -m755 libblas.so.${version} "$out/lib/libblas.so.${version}"
     ln -s libblas.so.${version} "$out/lib/libblas.so.3"
     ln -s libblas.so.${version} "$out/lib/libblas.so"
-    # Write pkgconfig alias.
+    # Write pkg-config alias.
     # See also openblas/default.nix
     mkdir $out/lib/pkgconfig
     cat <<EOF > $out/lib/pkgconfig/blas.pc
@@ -55,7 +55,7 @@ Libs: -L$out/lib -lblas
 EOF
   '';
 
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.isDarwin ''
     for fn in $(find $out/lib -name "*.so*"); do
       if [ -L "$fn" ]; then continue; fi
       install_name_tool -id "$fn" "$fn"
@@ -64,8 +64,8 @@ EOF
 
   meta = {
     description = "Basic Linear Algebra Subprograms";
-    license = stdenv.lib.licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     homepage = "http://www.netlib.org/blas/";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl sonarScannerArchPackage.${stdenv.hostPlatform.system};
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $out/lib

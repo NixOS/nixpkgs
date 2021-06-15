@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -20,13 +20,13 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      libevdev = stdenv.lib.getLib pkgs.libevdev;
+      libevdev = lib.getLib pkgs.libevdev;
     })
   ];
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python wrapper around the libevdev C library";
     homepage = "https://gitlab.freedesktop.org/libevdev/python-libevdev";
     license = licenses.mit;

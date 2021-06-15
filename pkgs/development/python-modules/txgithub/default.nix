@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pyopenssl
@@ -29,11 +29,11 @@ buildPythonPackage rec {
   # No tests distributed
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GitHub API client implemented using Twisted.";
     homepage    = "https://github.com/tomprince/txgithub";
     license     = licenses.mit;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 
 }

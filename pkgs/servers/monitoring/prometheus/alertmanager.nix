@@ -1,4 +1,4 @@
-{ stdenv, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "alertmanager";
@@ -21,7 +21,7 @@ buildGoPackage rec {
        -X ${t}.Branch=unknown
        -X ${t}.BuildUser=nix@nixpkgs
        -X ${t}.BuildDate=unknown
-       -X ${t}.GoVersion=${stdenv.lib.getVersion go}
+       -X ${t}.GoVersion=${lib.getVersion go}
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -31,7 +31,7 @@ buildGoPackage rec {
     installShellCompletion amtool.bash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
     license = licenses.asl20;

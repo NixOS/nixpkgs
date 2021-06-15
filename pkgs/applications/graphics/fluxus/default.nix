@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
-, alsaLib
+, alsa-lib
 , bzip2
 , fftw
 , freeglut
@@ -23,7 +23,7 @@
 }:
 let
   libs = [
-    alsaLib
+    alsa-lib
     bzip2
     fftw
     freeglut
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     fftw
     freeglut.dev
     freetype
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "RacketPrefix=${racket}"
     "RacketInclude=${racket}/include/racket"
     "RacketLib=${racket}/lib/racket"
-    "LIBPATH=${stdenv.lib.makeLibraryPath libs}"
+    "LIBPATH=${lib.makeLibraryPath libs}"
     "DESTDIR=build"
   ];
   configurePhase = ''
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     cp -r build$out/* $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Livecoding environment for 3D graphics, sound, and games";
     license = licenses.gpl2;
     homepage = "http://www.pawfal.org/fluxus/";

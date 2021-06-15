@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ... }:
+{ lib, stdenv, fetchFromGitHub, ... }:
 
 stdenv.mkDerivation rec {
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mv bin core modules lib $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A NixOS like terraform-json generator";
     homepage = "https://terranix.org";
     license = licenses.gpl3;

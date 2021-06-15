@@ -8,7 +8,7 @@
 , numpy
 , wheel
 , isPy3k
-, setuptools_scm
+, setuptools-scm
 , psutil
 , pandas
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     pybind11
-    setuptools_scm
+    setuptools-scm
   ];
 
   buildInputs = [
@@ -81,6 +81,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/TileDB-Inc/TileDB-Py";
     license = licenses.mit;
     maintainers = with maintainers; [ fridh ];
+    # tiledb/core.cc:556:30: error: ‘struct std::array<long unsigned int, 2>’ has no member named ‘second’
+    broken = true;
   };
-
 }

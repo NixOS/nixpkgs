@@ -27,7 +27,7 @@ in
         default = with pkgs.dictdDBs; [ wiktionary wordnet ];
         defaultText = "with pkgs.dictdDBs; [ wiktionary wordnet ]";
         example = literalExample "[ pkgs.dictdDBs.nld2eng ]";
-        description = ''List of databases to make available.'';
+        description = "List of databases to make available.";
       };
 
     };

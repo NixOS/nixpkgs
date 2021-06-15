@@ -1,7 +1,6 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, isPy3k
 , guessit
 , babelfish
 , enzyme
@@ -16,11 +15,9 @@
 , appdirs
 , rarfile
 , pytz
-, futures
 , sympy
 , vcrpy
 , pytest
-, pytestpep8
 , pytest-flakes
 , pytestcov
 , pytestrunner
@@ -39,15 +36,16 @@ buildPythonPackage rec {
     guessit babelfish enzyme beautifulsoup4 requests
     click dogpile_cache stevedore chardet pysrt six
     appdirs rarfile pytz
-  ] ++ lib.optional (!isPy3k) futures;
+  ];
 
   checkInputs = [
-    sympy vcrpy pytest pytestpep8 pytest-flakes
+    sympy vcrpy pytest pytest-flakes
     pytestcov pytestrunner
   ];
 
   # https://github.com/Diaoul/subliminal/pull/963
   doCheck = false;
+  pythonImportsCheck = [ "subliminal" ];
 
   meta = with lib; {
     homepage = "https://github.com/Diaoul/subliminal";

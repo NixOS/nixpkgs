@@ -1,11 +1,11 @@
 # Maintainers
 
-- TODO: We need more maintainers:
-  - https://github.com/NixOS/nixpkgs/issues/78450
-  - If you just want to help out without becoming a maintainer:
-    - Look for open Nixpkgs issues or PRs related to Chromium
-    - Make your own PRs (but please try to make reviews as easy as possible)
-- Primary maintainer (responsible for updating Chromium): @primeos
+- Note: We could always use more contributors, testers, etc. E.g.:
+  - A dedicated maintainer for the NixOS stable channel
+  - PRs with cleanups, improvements, fixes, etc. (but please try to make reviews
+    as easy as possible)
+  - People who handle stale issues/PRs
+- Primary maintainer (responsible for all updates): @primeos
 - Testers (test all stable channel updates)
   - `nixos-unstable`:
     - `x86_64`: @danielfullmer
@@ -13,11 +13,14 @@
   - Stable channel:
     - `x86_64`: @Frostman
 - Other relevant packages:
-  - `chromiumBeta` and `chromiumDev`: For testing purposes (not build on Hydra)
+  - `chromiumBeta` and `chromiumDev`: For testing purposes only (not build on
+    Hydra). We use these channels for testing and to fix build errors in advance
+    so that `chromium` updates are trivial and can be merged fast.
   - `google-chrome`, `google-chrome-beta`, `google-chrome-dev`: Updated via
     Chromium's `upstream-info.json`
-  - `ungoogled-chromium`: Based on `chromium` (the expressions are regularly
-    copied over and patched accordingly)
+  - `ungoogled-chromium`: @squalus
+  - `chromedriver`: Updated via Chromium's `upstream-info.json` and not built
+    from source.
 
 # Upstream links
 
@@ -36,8 +39,25 @@ update `upstream-info.json`. After updates it is important to test at least
 `nixosTests.chromium` (or basic manual testing) and `google-chrome` (which
 reuses `upstream-info.json`).
 
-After updating, please also update pkgs/development/tools/selenium/chromedriver/default.nix
-to a matching version.
+Note: The source tarball is often only available a few hours after the release
+was announced. The CI/CD status can be tracked here:
+- https://ci.chromium.org/p/infra/builders/cron/publish_tarball
+- https://ci.chromium.org/p/infra/builders/cron/publish_tarball_dispatcher
+
+To run all automated NixOS VM tests for Chromium, ungoogled-chromium,
+and Google Chrome (not recommended, currently 6x tests!):
+```
+nix-build nixos/tests/chromium.nix
+```
+
+A single test can be selected, e.g. to test `ungoogled-chromium` (see
+`channelMap` in `nixos/tests/chromium.nix` for all available options):
+```
+nix-build nixos/tests/chromium.nix -A ungoogled
+```
+(Note: Testing Google Chrome requires `export NIXPKGS_ALLOW_UNFREE=1`.)
+
+For custom builds it's possible to "override" `channelMap`.
 
 ## Backports
 
@@ -67,3 +87,13 @@ that a new major release of LLVM is required.
 
 Those channels are only used to test and fix builds in advance. They may be
 broken at times and must not delay stable channel updates.
+
+# Testing
+
+Useful tests:
+- Version: chrome://version/
+- GPU acceleration: chrome://gpu/
+- Essential functionality: Browsing, extensions, video+audio, JS, ...
+- WebGL: https://get.webgl.org/
+- VA-API: https://wiki.archlinux.org/index.php/chromium#Hardware_video_acceleration
+- Optional: Widevine CDM (proprietary), Benchmarks, Ozone, etc.

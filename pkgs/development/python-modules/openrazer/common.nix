@@ -1,16 +1,16 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 }: rec {
-  version = "2.8.0";
+  version = "3.0.1";
   src = fetchFromGitHub {
     owner = "openrazer";
     repo = "openrazer";
     rev = "v${version}";
-    sha256 = "0mwg6b2y3wfpvgxb9lznwblb3bnrayn858nc4fbbg76zdp5bk5ky";
+    sha256 = "sha256-ptB0jP0kp1Liynkfz0B0OMw6xNQG1s8IvxhgNAdEytM=";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://openrazer.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ roelvandijk evanjs ];
     platforms = platforms.linux;
   };

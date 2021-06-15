@@ -52,7 +52,6 @@ let
     lxqt-archiver = callPackage ./lxqt-archiver {};
 
     preRequisitePackages = [
-      pkgs.gvfs # virtual file systems support for PCManFM-QT
       libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
       libsForQt5.libkscreen # provides plugins for screen management software
       pkgs.libfm
@@ -107,7 +106,7 @@ let
       qlipper
 
       ### Default icon theme
-      pkgs.oxygen-icons5
+      libsForQt5.oxygen-icons5
 
       ### Screen saver
       pkgs.xscreensaver

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2020.6.20";
+  version = "2020.12.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3";
+    sha256 = "177mdbw0livdjvp17sz6wsfrc32838m9y59v871gpgv2888raj8s";
   };
 
   pythonImportsCheck = [ "certifi" ];

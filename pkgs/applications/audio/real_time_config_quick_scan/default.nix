@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perlPackages, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "realTimeConfigQuickScan";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "16kanzp5i353x972zjkwgi3m8z90wc58613mlfzb0n01djdnm6k5";
   };
 
-  buildInputs = [ perlPackages.perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perlPackages.perl ];
 
   dontBuild = true;
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
       --set PERL5LIB "$out/share/$pname:${with perlPackages; makePerlPath [ Tk ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux configuration checker for systems to be used for real-time audio";
     homepage = "https://github.com/raboof/realtimeconfigquickscan";
     license = licenses.gpl2Plus;

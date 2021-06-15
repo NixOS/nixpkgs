@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "ctrtool";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp ctrtool${stdenv.hostPlatform.extensions.executable} $out/bin/
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     description = "A tool to extract data from a 3ds rom";
     platforms = platforms.linux;

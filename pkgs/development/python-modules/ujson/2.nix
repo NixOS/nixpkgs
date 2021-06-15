@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook
 }:
 
@@ -14,13 +14,13 @@ buildPythonPackage rec {
     sha256 = "18z9gb9ggy1r464b9q1gqs078mqgrkj6dys5a47529rqk3yfybdx";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/ujson";
     description = "Ultra fast JSON encoder and decoder for Python";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpm, cpio, zlib }:
+{ lib, stdenv, fetchurl, rpm, cpio, zlib }:
 
 /* usage: (sorry, its still impure but works!)
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   phases = "buildPhase";
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc zlib ];
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc zlib ];
 
   buildPhase = ''
     ar -x $src data.tar.gz

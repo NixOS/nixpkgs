@@ -15,7 +15,7 @@ while
   read -r name
   read -r url
 do
-    printf '\t"%s" = "%s";\n' "${name%.*}" "$(nix-prefetch-url "$url")" >>"$dirname/shas.nix"
+    printf '  "%s" = "%s";\n' "${name%.*}" "$(nix-prefetch-url "$url")" >>"$dirname/shas.nix"
 done < <(jq -r '.assets[] | .name, .browser_download_url' <<<"$latest_release")
 
 printf '}\n' >> "$dirname/shas.nix"

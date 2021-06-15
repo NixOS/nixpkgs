@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkg-config, perl
 , libjpeg, udev
 , withUtils ? true
-, withGUI ? true, alsaLib, libX11, qtbase, libGLU, wrapQtAppsHook
+, withGUI ? true, alsa-lib, libX11, qtbase, libGLU, wrapQtAppsHook
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
@@ -33,9 +33,9 @@ in stdenv.mkDerivation rec {
     ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl ] ++ lib.optional withQt wrapQtAppsHook;
+  nativeBuildInputs = [ pkg-config perl ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [ udev ] ++ lib.optionals withQt [ alsaLib libX11 qtbase libGLU ];
+  buildInputs = [ udev ] ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
 
   propagatedBuildInputs = [ libjpeg ];
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     patchShebangs utils/libcecutil/cec-gen.pl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
     license = licenses.lgpl21Plus;

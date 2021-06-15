@@ -1,5 +1,5 @@
 { buildPythonPackage, pythonAtLeast, pytest, requests, requests_oauthlib, six
-, fetchFromGitHub, responses, stdenv
+, fetchFromGitHub, responses, lib
 }:
 
 buildPythonPackage rec {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client library for Asana";
     homepage = "https://github.com/asana/python-asana";
     license = licenses.mit;

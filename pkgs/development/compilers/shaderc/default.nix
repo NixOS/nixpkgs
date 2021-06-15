@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3 }:
 # Like many google projects, shaderc doesn't gracefully support separately compiled dependencies, so we can't easily use
 # the versions of glslang and spirv-tools used by vulkan-loader. Exact revisions are taken from
 # https://github.com/google/shaderc/blob/known-good/known_good.json
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A collection of tools, libraries and tests for shader compilation";
     license = [ licenses.asl20 ];

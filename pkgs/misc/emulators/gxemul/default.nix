@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "gxemul";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp -r ./man $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gavare.se/gxemul/";
     description = "Gavare's experimental emulator";
     longDescription = ''

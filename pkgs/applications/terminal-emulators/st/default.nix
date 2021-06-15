@@ -1,7 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, writeText, libX11, ncurses
-, libXft, conf ? null, patches ? [], extraLibs ? []}:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, writeText
+, libX11
+, ncurses
+, fontconfig
+, freetype
+, libXft
+, conf ? null
+, patches ? [ ]
+, extraLibs ? [ ]
+}:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "st";
@@ -14,18 +26,34 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
+  configFile = optionalString (conf != null) (writeText "config.def.h" conf);
 
-  postPatch = optionalString (conf!=null) "cp ${configFile} config.def.h"
-            + optionalString stdenv.isDarwin ''
+  postPatch = optionalString (conf != null) "cp ${configFile} config.def.h"
+    + optionalString stdenv.isDarwin ''
     substituteInPlace config.mk --replace "-lrt" ""
   '';
 
-  nativeBuildInputs = [ pkgconfig ncurses ];
-  buildInputs = [ libX11 libXft ] ++ extraLibs;
+  strictDeps = true;
+
+  makeFlags = [
+    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    ncurses
+    fontconfig
+    freetype
+  ];
+  buildInputs = [
+    libX11
+    libXft
+  ] ++ extraLibs;
 
   installPhase = ''
+    runHook preInstall
     TERMINFO=$out/share/terminfo make install PREFIX=$out
+    runHook postInstall
   '';
 
   meta = {

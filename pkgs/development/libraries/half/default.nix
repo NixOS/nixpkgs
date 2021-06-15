@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   version = "2.1.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp $src/{ChangeLog,LICENSE,README}.txt $out/share/doc/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ library for half precision floating point arithmetics";
     platforms = platforms.all;
     license = licenses.mit;

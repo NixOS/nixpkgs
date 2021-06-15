@@ -1,59 +1,57 @@
 { lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
 , rustPlatform
-, python
-, fetchpatch
 , fetchFromGitHub
-, pipInstallHook
-, maturin
-, pip
+, libiconv
   # Check inputs
 , pytestCheckHook
+, fixtures
+, graphviz
+, matplotlib
+, networkx
 , numpy
+, pydot
 }:
 
-rustPlatform.buildRustPackage rec {
+buildPythonPackage rec {
   pname = "retworkx";
-  version = "0.4.0";
+  version = "0.9.0";
+  format = "pyproject";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "retworkx";
     rev = version;
-    sha256 = "1xqp6d39apkjvd0ad9vw81cp2iqzhpagfa4p171xqm3bwfn2imdc";
+    hash = "sha256-1W7DexS+ECAPsxyZAF36xcEguFkjUMX9lDBylNVPqyk=";
   };
 
-  cargoSha256 = "0bma0l14jv5qhcsxck7vw3ak1w3c8v84cq4hii86i4iqk523zns5";
-  cargoPatches = [
-      ( fetchpatch {
-        name = "retworkx-cargo-lock.patch";
-        url = "https://github.com/Qiskit/retworkx/commit/a02fd33d357a92dbe9530696a6d85aa59fe8a5b9.patch";
-        sha256 = "0gvxr1nqp9ll4skfks4p4d964pshal25kb1nbfzhpyipnzddizr5";
-      } )
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-y5l7jqrlk3ONHefZPS31IvcaO9ttXWLM7fIUmNVwbco=";
+  };
+
+  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  pythonImportsCheck = [ "retworkx" ];
+  checkInputs = [
+    pytestCheckHook
+    fixtures
+    graphviz
+    matplotlib
+    networkx
+    numpy
+    pydot
   ];
 
-  propagatedBuildInputs = [ python ];
-
-  nativeBuildInputs = [ pipInstallHook maturin pip ];
-
-  # Need to check AFTER python wheel is installed (b/c using Rust Build, not buildPythonPackage)
-  doCheck = false;
-  doInstallCheck = true;
-
-  buildPhase = ''
-    runHook preBuild
-    maturin build --release --manylinux off --strip --interpreter ${python.interpreter}
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    install -Dm644 -t dist target/wheels/*.whl
-    pipInstallPhase
-  '';
-
-  installCheckInputs = [ pytestCheckHook numpy ];
   preCheck = ''
     export TESTDIR=$(mktemp -d)
-    cp -r $TMP/$sourceRoot/tests $TESTDIR
+    cp -r tests/ $TESTDIR
     pushd $TESTDIR
   '';
   postCheck = "popd";

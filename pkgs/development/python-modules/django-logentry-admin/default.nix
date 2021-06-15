@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, django, pytest, pytest-django }:
+{ lib, fetchFromGitHub, buildPythonPackage, django, pytest, pytest-django }:
 
 buildPythonPackage rec {
   pname = "django-logentry-admin";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Show all LogEntry objects in the Django admin site";
     homepage = "https://github.com/yprez/django-logentry-admin";
     license = licenses.isc;

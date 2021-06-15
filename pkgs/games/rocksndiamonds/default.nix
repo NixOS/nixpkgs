@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_image, SDL2_mixer, SDL2_net }:
+{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_image, SDL2_mixer, SDL2_net }:
 
 stdenv.mkDerivation rec {
   name = "${project}-${version}";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scrolling tile-based arcade style puzzle game";
     homepage = "https://www.artsoft.org/rocksndiamonds/";
     license = licenses.gpl2;

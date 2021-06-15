@@ -1,14 +1,14 @@
-{ fetchFromGitHub, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
+{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
 
 stdenv.mkDerivation rec {
-  pname = "z88dk-unstable";
-  version = "2020-01-27";
+  pname = "z88dk";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "z88dk";
-    repo  = "z88dk";
-    rev = "efdd07c2e2229cac7cfef97ec01f478004846e39";
-    sha256 = "0jcks5ygp256lmzmllffp4yb38cxjgdyqnnimkj4s65095cfasyb";
+    repo = "z88dk";
+    rev = "v${version}";
+    sha256 = "sha256-NgO8rbM31IX4nrJRU0p1DUafHPagMQepKLLoOLuGlT8=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "git_rev=${short_rev}"
     "version=${version}"
-    "prefix=$(out)"
+    "DESTDIR=$(out)"
     "git_count=0"
   ];
 
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "libs" "install" ];
 
-  meta = with stdenv.lib; {
-    homepage    = "https://www.z88dk.org";
+  meta = with lib; {
+    homepage = "https://www.z88dk.org";
     description = "z80 Development Kit";
-    license     = licenses.clArtistic;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = licenses.clArtistic;
+    maintainers = [ maintainers.siraben ];
+    platforms = platforms.unix;
   };
 }

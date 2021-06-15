@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "syncthing";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ chkno ];
+  meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
 
   nodes = rec {
     a = {

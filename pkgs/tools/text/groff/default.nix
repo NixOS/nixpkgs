@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, perl
+{ lib, stdenv, fetchurl, fetchpatch, perl
 , ghostscript #for postscript and html output
 , psutils, netpbm #for html output
 , buildPackages
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , texinfo
 }:
 
@@ -22,24 +22,31 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Fix-cross-compilation-by-looking-for-ar.patch
+  ]
+  ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") [
+    # https://trac.macports.org/ticket/59783
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openembedded/openembedded-core/ce265cf467f1c3e5ba2edbfbef2170df1a727a52/meta/recipes-extended/groff/files/0001-Include-config.h.patch";
+      sha256 = "1b0mg31xkpxkzlx696nr08rcc7ndpaxdplvysy0hw5099c4n1wyf";
+    })
   ];
 
-  postPatch = stdenv.lib.optionalString (psutils != null) ''
+  postPatch = lib.optionalString (psutils != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
       --replace "psselect" "${psutils}/bin/psselect"
-  '' + stdenv.lib.optionalString (netpbm != null) ''
+  '' + lib.optionalString (netpbm != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
-      --replace "pnmcut" "${stdenv.lib.getBin netpbm}/bin/pnmcut" \
-      --replace "pnmcrop" "${stdenv.lib.getBin netpbm}/bin/pnmcrop" \
-      --replace "pnmtopng" "${stdenv.lib.getBin netpbm}/bin/pnmtopng"
+      --replace "pnmcut" "${lib.getBin netpbm}/bin/pnmcut" \
+      --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
+      --replace "pnmtopng" "${lib.getBin netpbm}/bin/pnmtopng"
     substituteInPlace tmac/www.tmac \
-      --replace "pnmcrop" "${stdenv.lib.getBin netpbm}/bin/pnmcrop" \
-      --replace "pngtopnm" "${stdenv.lib.getBin netpbm}/bin/pngtopnm" \
-      --replace "@PNMTOPS_NOSETPAGE@" "${stdenv.lib.getBin netpbm}/bin/pnmtops -nosetpage"
+      --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
+      --replace "pngtopnm" "${lib.getBin netpbm}/bin/pngtopnm" \
+      --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
   '';
 
   buildInputs = [ ghostscript psutils netpbm perl ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig texinfo ];
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
 
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
@@ -48,13 +55,14 @@ stdenv.mkDerivation rec {
   # have to pass "--with-appresdir", too.
   configureFlags = [
     "--without-x"
-  ] ++ stdenv.lib.optionals (ghostscript != null) [
+  ] ++ lib.optionals (ghostscript != null) [
     "--with-gs=${ghostscript}/bin/gs"
-  ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
+    "gl_cv_func_signbit=yes"
   ];
 
-  makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff
     # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
     "GROFF_BIN_PATH=${buildPackages.groff}/bin"
@@ -98,11 +106,11 @@ stdenv.mkDerivation rec {
     substituteInPlace $perl/bin/grog \
       --replace $out/lib/groff/grog $perl/lib/groff/grog
 
-  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/groff/";
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
     license = licenses.gpl3Plus;

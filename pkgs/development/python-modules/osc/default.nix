@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, bashInteractive, urlgrabber
+{ lib, buildPythonPackage, fetchFromGitHub, bashInteractive, urlgrabber
 , m2crypto, rpm, chardet
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/openSUSE/osc";
     description = "opensuse-commander with svn like handling";
     maintainers = [ maintainers.peti ];

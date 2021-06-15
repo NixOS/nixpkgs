@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gperf
+{ lib, stdenv, fetchurl, pkg-config, gperf
 , buildsystem
 , libdom
 , libhubbub
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LA3PlS8c2ILD6VQB75RZ8W27U8XT5FEjObL563add4E=";
   };
 
-  nativeBuildInputs = [ pkgconfig gperf ];
+  nativeBuildInputs = [ pkg-config gperf ];
   buildInputs = [
     libdom
     libhubbub
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "NetSurf SVG decoder";
     license = licenses.mit;

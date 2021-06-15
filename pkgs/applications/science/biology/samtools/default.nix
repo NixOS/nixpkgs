@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, htslib, perl, ncurses ? null }:
+{ lib, stdenv, fetchurl, zlib, htslib, perl, ncurses ? null }:
 
 stdenv.mkDerivation rec {
   pname = "samtools";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ncurses htslib ];
 
   configureFlags = [ "--with-htslib=${htslib}" ]
-    ++ stdenv.lib.optional (ncurses == null) "--without-curses";
+    ++ lib.optional (ncurses == null) "--without-curses";
 
   preCheck = ''
     patchShebangs test/
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for manipulating SAM/BAM/CRAM format";
     license = licenses.mit;
     homepage = "http://www.htslib.org/";

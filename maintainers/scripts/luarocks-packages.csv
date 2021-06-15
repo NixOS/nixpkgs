@@ -6,7 +6,7 @@ basexx,,,,,
 binaryheap,,,,,vcunat
 bit32,,,,lua5_1,lblasc
 busted,,,,,
-cassowary,,,,,marsam
+cassowary,,,,,marsam alerque
 cjson,lua-cjson,,,,
 compat53,,,,,vcunat
 cosmo,,,,,marsam
@@ -38,6 +38,7 @@ lua-messagepack,,,,,
 lua-resty-http,,,,,
 lua-resty-jwt,,,,,
 lua-resty-openidc,,,,,
+lua-resty-openssl,,,,,
 lua-resty-session,,,,,
 lua-term,,,,,
 lua-toml,,,,,

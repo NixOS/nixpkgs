@@ -1,5 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , SDL
 , jack2
 , Foundation
@@ -7,45 +8,46 @@
 
 stdenv.mkDerivation rec {
   pname = "littlegptracker";
-  version = "unstable-2019-04-14";
+  version = "unstable-2020-11-26";
 
   src = fetchFromGitHub {
     owner = "Mdashdotdashn";
     repo = "littlegptracker";
-    rev = "0ed729b46739e3df5e111c6fa4d548fde2d3b891";
-    sha256 = "1pc6lg2qp6xh7ahs5d5pb63ms4h2dz7ryp3c7mci4g37gbwbsj5b";
+    rev = "4aca8cd765e1ad586da62decd019e66cb64b45b8";
+    sha256 = "0f2ip8z5wxk8fvlw47mczsbcrzh4nh1hgw1fwf5gjrqnzm8v111x";
   };
 
   buildInputs = [
     SDL
   ]
-  ++ stdenv.lib.optional stdenv.isDarwin Foundation
-  ++ stdenv.lib.optional stdenv.isLinux jack2;
+  ++ lib.optional stdenv.isDarwin Foundation
+  ++ lib.optional stdenv.isLinux jack2;
 
   patches = [
     # Remove outdated (pre-64bit) checks that would fail on modern platforms
     # (see description in patch file)
     ./0001-Remove-coherency-checks.patch
-    # Set starting directory to cwd, default is in /nix/store and causes a crash
-    # (see description in patch file)
-    ./0002-Set-the-initial-directory-to-the-current-directory.patch
   ];
 
   preBuild = "cd projects";
 
   makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ]
-    ++ stdenv.lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
+    ++ lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
+    ++ lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ] ++
-    stdenv.lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
+    lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
-  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin "-framework Foundation";
+  NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework Foundation";
 
   installPhase = let extension = if stdenv.isDarwin then "app" else "deb-exe";
     in "install -Dm555 lgpt.${extension} $out/bin/lgpt";
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/Mdashdotdashn/littlegptracker.git";
+  };
+
+  meta = with lib; {
     description = "A music tracker similar to lsdj optimised to run on portable game consoles";
     longDescription = ''
       LittleGPTracker (a.k.a 'The piggy', 'lgpt') is a music tracker optimised

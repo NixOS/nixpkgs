@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , sphinx
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
     homepage = "https://bitbucket.org/birkenfeld/sphinx-contrib";
     license = licenses.bsd0;

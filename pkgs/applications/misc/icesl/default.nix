@@ -1,6 +1,6 @@
 { stdenv, lib, fetchzip, freeglut, libXmu, libXi, libX11, libICE, libGLU, libGL, libSM, libXext, dialog, makeWrapper }:
 let
-  lpath = stdenv.lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU libGL libSM libXext ];
+  lpath = lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU libGL libSM libXext ];
 in
 stdenv.mkDerivation rec {
   pname = "iceSL";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sl54fsb2gz6dy0bwdscpdq1ab6ph5b7zald3bwzgkqsvna7p1jr";
   } else throw "Unsupported architecture";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     cp -r ./ $out
     mkdir $out/oldbin

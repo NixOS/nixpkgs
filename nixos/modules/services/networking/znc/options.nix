@@ -44,7 +44,7 @@ let
       modules = mkOption {
         type = types.listOf types.str;
         default = [ "simple_away" ];
-        example = literalExample "[ simple_away sasl ]";
+        example = literalExample ''[ "simple_away" "sasl" ]'';
         description = ''
           ZNC network modules to load.
         '';

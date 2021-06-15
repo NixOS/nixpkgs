@@ -1,9 +1,12 @@
 { lib
+, stdenv
 , bokeh
 , buildPythonPackage
+, fetchpatch
 , fetchFromGitHub
 , fsspec
 , pytestCheckHook
+, pytest-rerunfailures
 , pythonOlder
 , cloudpickle
 , numpy
@@ -11,28 +14,22 @@
 , dill
 , pandas
 , partd
-, pytest_xdist
+, pytest-xdist
+, withExtraComplete ? false
+, distributed
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2.25.0";
-
+  version = "2021.03.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "1irp6s577yyjvrvkg00hh1wnl8vrv7pbnbr09mk67z9y7s6xhiw3";
+    sha256 = "LACv7lWpQULQknNGX/9vH9ckLsypbqKDGnsNBgKT1eI=";
   };
-
-  checkInputs = [
-    pytestCheckHook
-    pytest_xdist # takes >10mins to run single-threaded
-  ];
-
-  dontUseSetuptoolsCheck = true;
 
   propagatedBuildInputs = [
     bokeh
@@ -43,6 +40,28 @@ buildPythonPackage rec {
     pandas
     partd
     toolz
+  ] ++ lib.optionals withExtraComplete [
+    distributed
+  ];
+
+  doCheck = true;
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-rerunfailures
+    pytest-xdist
+  ];
+
+  dontUseSetuptoolsCheck = true;
+
+  patches = [
+    # dask dataframe cannot be imported in sandboxed builds
+    # See https://github.com/dask/dask/pull/7601
+    (fetchpatch {
+      url = "https://github.com/dask/dask/commit/9ce5b0d258cecb3ef38fd844135ad1f7ac3cea5f.patch";
+      sha256 = "sha256-1EVRYwAdTSEEH9jp+UOnrijzezZN3iYR6q6ieYJM3kY=";
+      name = "fix-dask-dataframe-imports-in-sandbox.patch";
+    })
   ];
 
   postPatch = ''
@@ -54,25 +73,26 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
-  # dask test suite with consistently fail when using high core counts
-  preCheck = ''
-    NIX_BUILD_CORES=$((NIX_BUILD_CORES > 8 ? 8 : NIX_BUILD_CORES))
-  '';
-
-  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
-
-  disabledTests = [
-    "test_argwhere_str"
-    "test_count_nonzero_str"
-    "rolling_methods"  # floating percision error ~0.1*10^8 small
-    "num_workers_config" # flaky
+  pytestFlagsArray = [
+    "-n $NIX_BUILD_CORES"
+    "-m 'not network'"
   ];
 
-  meta = {
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # this test requires features of python3Packages.psutil that are
+    # blocked in sandboxed-builds
+    "test_auto_blocksize_csv"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "dask.dataframe" "dask" "dask.array" ];
+
+  meta = with lib; {
     description = "Minimal task scheduling abstraction";
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }

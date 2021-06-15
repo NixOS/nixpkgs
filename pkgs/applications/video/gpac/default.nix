@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, zlib }:
 
 stdenv.mkDerivation rec {
   version = "1.0.1";
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
   # For most other functionality, this should probably be extended
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zlib ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Source multimedia framework for research and academic purposes";
     longDescription = ''
       GPAC is an Open Source multimedia framework for research and academic purposes.

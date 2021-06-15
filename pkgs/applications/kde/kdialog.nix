@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kdialog";
+  pname = "kdialog";
 
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];

@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "spectacle";
+  pname = "spectacle";
   meta = with lib; { maintainers = with maintainers; [ ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

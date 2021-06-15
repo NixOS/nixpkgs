@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
-  version = "1.16.1";
+  version = "1.16.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c2275e91c794a3569a76c47c78cf2ff04d7f569a98558227e899ead7b30af0d6";
+    sha256 = "44b31623fd71fedd891c3f66be3bc1caa6f1caf88076a75236ab74f8807f6ae5";
   };
 
   # Remove overly restrictive version constraints

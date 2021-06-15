@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, isPyPy, python }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, isPyPy, python
+, pythonAtLeast }:
 
 let
   testDir = if isPy3k then "src" else "python2";
@@ -11,6 +12,8 @@ in buildPythonPackage rec {
     inherit pname version;
     sha256 = "1187fb9c82fd670d10aa07bbb6cfcfe4bdda42d6fab8d5134f04e8c4d0b71cc9";
   };
+
+  disabled = pythonAtLeast "3.5";
 
   # Error for Python3.6: ImportError: cannot import name 'ann_module'
   # See https://github.com/python/typing/pull/280

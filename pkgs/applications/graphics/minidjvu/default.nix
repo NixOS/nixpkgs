@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libtiff, gettext }:
+{lib, stdenv, fetchurl, libtiff, gettext }:
 
 stdenv.mkDerivation {
   name = "minidjvu-0.8";
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://djvu.sourceforge.net/djview4.html";
     description = "Black-and-white djvu page encoder and decoder that use interpage information";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.viric ];
+    platforms = lib.platforms.unix;
   };
 }

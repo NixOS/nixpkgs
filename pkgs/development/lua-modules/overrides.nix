@@ -108,7 +108,7 @@ with super;
 
   lgi = super.lgi.override({
     nativeBuildInputs = [
-      pkgs.pkgconfig
+      pkgs.pkg-config
     ];
     buildInputs = [
       pkgs.glib
@@ -173,7 +173,7 @@ with super;
       MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
     };
     buildInputs = [
-      pkgs.mysql.client
+      pkgs.mariadb.client
       pkgs.libmysqlclient
     ];
   });

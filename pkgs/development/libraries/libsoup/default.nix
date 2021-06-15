@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkgconfig, gnome3, libsysprof-capture
+{ stdenv, lib, fetchurl, fetchpatch, glib, libxml2, meson, ninja, pkg-config, gnome, libsysprof-capture
 , gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
 , libpsl, python3, brotli
 }:
@@ -8,9 +8,17 @@ stdenv.mkDerivation rec {
   version = "2.72.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "11skbyw2pw32178q3h8pi7xqa41b2x4k6q4k9f75zxmh8s23y30p";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://gitlab.gnome.org/GNOME/libsoup/-/issues/222
+      url = "https://gitlab.gnome.org/GNOME/libsoup/commit/b5e4f15a09d197b6a9b4b2d78b33779f27d828af.patch";
+      sha256 = "1hqk8lqzc200hi0nwbwq9qm6f03z296cnd79d4ql30683s80xqws";
+    })
+  ];
 
   postPatch = ''
     patchShebangs libsoup/
@@ -27,7 +35,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     libsysprof-capture
   ];
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala glib ];
+  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala glib ];
   propagatedBuildInputs = [ glib libxml2 ];
 
   NIX_CFLAGS_COMPILE = [ "-lpthread" ];
@@ -46,15 +54,16 @@ stdenv.mkDerivation rec {
 
   passthru = {
     propagatedUserEnvPackages = [ glib-networking.out ];
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
   meta = {
     description = "HTTP client/server library for GNOME";
     homepage = "https://wiki.gnome.org/Projects/libsoup";
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     inherit (glib.meta) maintainers platforms;
   };
 }

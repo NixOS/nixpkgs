@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bash, curl, xsel }:
+{ lib, stdenv, fetchFromGitHub, bash, curl, xsel }:
 
 stdenv.mkDerivation rec {
   pname = "imgurbash2";
@@ -15,16 +15,16 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cat <<EOF >$out/bin/imgurbash2
     #!${bash}/bin/bash
-    PATH=${stdenv.lib.makeBinPath [curl xsel]}:\$PATH
+    PATH=${lib.makeBinPath [curl xsel]}:\$PATH
     EOF
     cat imgurbash2 >> $out/bin/imgurbash2
     chmod +x $out/bin/imgurbash2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A shell script that uploads images to imgur";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
     homepage = "https://github.com/ram-on/imgurbash2";
   };

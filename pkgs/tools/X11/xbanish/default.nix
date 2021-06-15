@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, libX11, libXi, libXt, libXfixes, libXext}:
+{lib, stdenv, fetchFromGitHub, libX11, libXi, libXt, libXfixes, libXext}:
 
 stdenv.mkDerivation rec {
   version = "1.7";
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
       The name comes from ratpoison's "banish" command that sends the cursor to the
       corner of the screen.
     '';
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.choochootrain];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [lib.maintainers.choochootrain];
+    platforms = lib.platforms.linux;
   };
 }

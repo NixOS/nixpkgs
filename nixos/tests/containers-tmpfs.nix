@@ -1,9 +1,7 @@
-# Test for NixOS' container support.
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-tmpfs";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ kampka ];
+  meta = {
+    maintainers = with lib.maintainers; [ patryk27 ];
   };
 
   machine =

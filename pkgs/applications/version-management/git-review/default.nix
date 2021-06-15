@@ -1,8 +1,14 @@
-{ lib, fetchurl, buildPythonApplication, pbr, requests, setuptools }:
+{ lib
+, fetchurl
+, buildPythonApplication
+, pbr
+, requests
+, setuptools
+}:
 
 buildPythonApplication rec {
   pname = "git-review";
-  version = "1.28.0";
+  version = "2.1.0";
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
@@ -10,18 +16,29 @@ buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://opendev.org/opendev/${pname}/archive/${version}.tar.gz";
-    sha256 = "1y1jzb0hlprynwwr4q5y4x06641qrhj0k69mclabnmhfam9g8ygm";
+    hash = "sha256-3A1T+/iXhNeMS2Aww5jISoiNExdv9N9/kwyATSuwVTE=";
   };
 
-  propagatedBuildInputs = [ pbr requests setuptools ];
+  nativeBuildInputs = [
+    pbr
+  ];
 
-  # Don't do tests because they require gerrit which is not packaged
+  propagatedBuildInputs = [
+    requests
+    setuptools # implicit dependency, used to get package version through pkg_resources
+  ];
+
+  # Don't run tests because they pull in external dependencies
+  # (a specific build of gerrit + maven plugins), and I haven't figured
+  # out how to work around this yet.
   doCheck = false;
 
+  pythonImportsCheck = [ "git_review" ];
+
   meta = with lib; {
-    homepage = "https://opendev.org/opendev/git-review";
     description = "Tool to submit code to Gerrit";
+    homepage = "https://opendev.org/opendev/git-review";
     license = licenses.asl20;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }

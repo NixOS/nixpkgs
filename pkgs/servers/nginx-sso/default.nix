@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, stdenv, nixosTests }:
+{ buildGoPackage, fetchFromGitHub, lib, nixosTests }:
 
 buildGoPackage rec {
   pname = "nginx-sso";
@@ -23,7 +23,7 @@ buildGoPackage rec {
     inherit (nixosTests) nginx-sso;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SSO authentication provider for the auth_request nginx module";
     homepage = "https://github.com/Luzifer/nginx-sso";
     license = licenses.asl20;

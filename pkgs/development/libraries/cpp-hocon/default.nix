@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
 
 stdenv.mkDerivation rec {
   pname = "cpp-hocon";
@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost curl leatherman ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A C++ port of the Typesafe Config library";
     license = licenses.asl20;

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl,  openssl }:
+{ lib, stdenv, fetchurl,  openssl }:
 
 stdenv.mkDerivation rec {
-
-  name = "popa3d-1.0.3";
+  pname = "popa3d";
+  version = "1.0.3";
 
   src = fetchurl {
-    url = "http://www.openwall.com/popa3d/${name}.tar.gz";
+    url = "http://www.openwall.com/popa3d/${pname}-${version}.tar.gz";
     sha256 = "1g48cd74sqhl496wmljhq44iyfpghaz363a1ip8nyhpjz7d57f03";
   };
 
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.openwall.com/popa3d/";
     description = "Tiny POP3 daemon with security as the primary goal";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

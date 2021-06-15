@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland, scdoc
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland, scdoc
 , wayland-protocols, ffmpeg, x264, libpulseaudio, ocl-icd, opencl-headers
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     wayland-protocols ffmpeg x264 libpulseaudio ocl-icd opencl-headers
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility program for screen recording of wlroots-based compositors";
     inherit (src.meta) homepage;
     changelog = "https://github.com/ammen99/wf-recorder/releases/tag/v${version}";

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
        operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
     '';
     platforms = postgresql.meta.platforms;
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ danbst ];
   };
 }

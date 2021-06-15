@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     cp docs/*.txt $doc/share/doc/fasmg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "x86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
     homepage = "https://flatassembler.net";
     license = licenses.bsd3;

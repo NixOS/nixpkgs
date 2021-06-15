@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig
+{ lib, stdenv, fetchFromGitHub
+, pkg-config
 , libX11, libXv
 , udev
 , libGLU, libGL, SDL2
 , libao, openal, libpulseaudio
-, alsaLib
+, alsa-lib
 , gtk2, gtksourceview
 , runtimeShell
 # Darwin dependencies
 , libicns, Carbon, Cocoa, OpenGL, OpenAL}:
 
 let
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 stdenv.mkDerivation rec {
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ optionals stdenv.isDarwin [ libicns ];
 
   buildInputs = [ SDL2 libao ]
-                ++ optionals stdenv.isLinux [ alsaLib udev libpulseaudio openal
+                ++ optionals stdenv.isLinux [ alsa-lib udev libpulseaudio openal
                                               gtk2 gtksourceview libX11 libXv
                                               libGLU libGL ]
                 ++ optionals stdenv.isDarwin [ Carbon Cocoa OpenGL OpenAL ];
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/higan-init.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source, cycle-accurate multi-system emulator";
     longDescription = ''
       higan is a multi-system game console emulator. The purpose of higan is to

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "segments";
-  version = "2.1.3";
+  version = "2.2.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "cldf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12lnpk834r3y7hw5x7nvswa60ddh69ylvr44k46gqcfba160hhb0";
+    sha256 = "04yc8q79zk09xj0wnal0vdg5azi9jlarfmf2iyljqyr80p79gwvv";
   };
 
   patchPhase = ''
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Unicode Standard tokenization routines and orthography profile segmentation";
     homepage = "https://github.com/cldf/segments";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

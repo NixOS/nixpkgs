@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, boost
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, boost
 , openal, glm, freetype, libGLU, SDL2, epoxy
 , dejavu_fonts, inkscape, optipng, imagemagick
 , withCrashReporter ? !stdenv.isDarwin
@@ -8,7 +8,7 @@
 ,   gdb  ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "arx-libertatis";
@@ -37,7 +37,6 @@ stdenv.mkDerivation {
     "-DImageMagick_mogrify_EXECUTABLE=${imagemagick.out}/bin/mogrify"
   ];
 
-  enableParallelBuilding = true;
   dontWrapQtApps = true;
 
   postInstall = ''

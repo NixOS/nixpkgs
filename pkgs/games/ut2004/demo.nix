@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   arch =
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A first-person shooter video game developed by Epic Games and Digital Extreme -- demo version";
     homepage = "http://www.unrealtournament2004.com";
     license = licenses.unfree;

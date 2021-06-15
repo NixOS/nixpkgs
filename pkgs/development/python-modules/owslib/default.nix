@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, fetchPypi, dateutil, requests, pytz, pyproj , pytest, pyyaml } :
 buildPythonPackage rec {
   pname = "OWSLib";
-  version = "0.20.0";
+  version = "0.23.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "334988857b260c8cdf1f6698d07eab61839c51acb52ee10eed1275439200a40e";
+    sha256 = "0a03a9978673f377df45107024e2aae006f85afe7ef7bf4640ef663167a4386f";
   };
 
   buildInputs = [ pytest ];

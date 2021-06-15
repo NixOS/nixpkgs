@@ -1,8 +1,8 @@
-{stdenv, fetchurl, boost, openssl
+{lib, stdenv, fetchurl, boost, openssl
 , version, sha256, ...
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "asio";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     homepage = "http://asio.sourceforge.net/";
     description = "Cross-platform C++ library for network and low-level I/O programming";
     license = licenses.boost;
-    broken = stdenv.isDarwin && stdenv.lib.versionOlder version "1.16.1";
+    broken = stdenv.isDarwin && lib.versionOlder version "1.16.1";
     platforms = platforms.unix;
   };
 }

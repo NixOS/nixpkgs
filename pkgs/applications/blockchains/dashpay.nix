@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook
+{ fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , qrencode, glib, protobuf, yasm, libevent
 , util-linux
@@ -6,7 +6,7 @@
 , disable_Wallet ? false
 , disable_Daemon ? false }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "dashpay";
   version = "0.12.2.3";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l1gcj2xf2bal9ph9y11x8yd28fd25f55f48xbm45bfw3ij7nbaa";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ glib openssl db48 yasm boost zlib libevent
                   miniupnpc protobuf qrencode util-linux ];
 

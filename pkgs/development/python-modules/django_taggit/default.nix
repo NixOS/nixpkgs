@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , python
 , fetchPypi
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m django test --settings=tests.settings
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "django-taggit is a reusable Django application for simple tagging";
     homepage = "https://github.com/alex/django-taggit/tree/master/";
     license = licenses.bsd2;

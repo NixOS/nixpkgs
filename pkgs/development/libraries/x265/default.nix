@@ -1,4 +1,4 @@
-{ stdenv, fetchFromBitbucket, cmake, nasm, numactl
+{ lib, stdenv, fetchFromBitbucket, cmake, nasm, numactl
 , numaSupport ? stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)  # Enabled by default on NUMA platforms
 , debugSupport ? false # Run-time sanity checks (debugging)
 , werrorSupport ? false # Warnings as errors
@@ -21,7 +21,7 @@ let
     (mkFlag custatsSupport "DETAILED_CU_STATS")
     (mkFlag unittestsSupport "ENABLE_TESTS")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isPower [
+  ] ++ lib.optionals stdenv.hostPlatform.isPower [
     "-DENABLE_ALTIVEC=OFF"
   ];
 
@@ -37,7 +37,6 @@ let
   buildLib = has12Bit: stdenv.mkDerivation rec {
     name = "libx265-${if has12Bit then "12" else "10"}-${version}";
     inherit src;
-    enableParallelBuilding = true;
 
     postPatch = ''
       sed -i 's/unknown/${version}/g' source/cmake/version.cmake
@@ -57,7 +56,7 @@ let
       cd source
     '';
 
-    nativeBuildInputs = [cmake nasm] ++ stdenv.lib.optional numaSupport numactl;
+    nativeBuildInputs = [cmake nasm] ++ lib.optional numaSupport numactl;
   };
 
   libx265-10 = buildLib false;
@@ -68,8 +67,6 @@ stdenv.mkDerivation rec {
   pname = "x265";
   inherit version src;
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     sed -i 's/unknown/${version}/g' source/cmake/version.cmake
     sed -i 's/0.0/${version}/g' source/cmake/version.cmake
@@ -79,7 +76,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_SHARED=ON"
     "-DHIGH_BIT_DEPTH=OFF"
     "-DENABLE_HDR10_PLUS=OFF"
-  ] ++ stdenv.lib.optionals (is64bit && !(stdenv.isAarch64 && stdenv.isLinux)) [
+  ] ++ lib.optionals (is64bit && !(stdenv.isAarch64 && stdenv.isLinux)) [
     "-DEXTRA_LIB=${libx265-10}/lib/libx265.a;${libx265-12}/lib/libx265.a"
     "-DLINKED_10BIT=ON"
     "-DLINKED_12BIT=ON"
@@ -95,9 +92,9 @@ stdenv.mkDerivation rec {
     rm $out/lib/*.a
   '';
 
-  nativeBuildInputs = [ cmake nasm ] ++ stdenv.lib.optional numaSupport numactl;
+  nativeBuildInputs = [ cmake nasm ] ++ lib.optional numaSupport numactl;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for encoding h.265/HEVC video streams";
     homepage    = "http://x265.org";
     license     = licenses.gpl2;

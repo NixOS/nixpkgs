@@ -1,25 +1,35 @@
-{ stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils, python3Packages, util-linux }:
+{ lib
+, stdenv
+, runCommand
+, fetchFromGitHub
+, bash
+, btrfs-progs
+, coreutils
+, python3Packages
+, util-linux
+, nixosTests
+}:
 
 let
 
   bees = stdenv.mkDerivation rec {
     pname = "bees";
-    version = "0.6.3";
+    version = "0.6.5";
 
     src = fetchFromGitHub {
       owner = "Zygo";
       repo = "bees";
       rev = "v${version}";
-      sha256 = "sha256-brEjr7lhmKDCIDeLq+XP+ZTxv1RvwoUlszMSEYygxv8=";
+      sha256 = "11ppbf23b8ngzfy02am0skxlybzmgsp6kna21jimb01x9pp1q7l7";
     };
 
     buildInputs = [
-      btrfs-progs               # for btrfs/ioctl.h
-      util-linux                 # for uuid.h
+      btrfs-progs # for btrfs/ioctl.h
+      util-linux # for uuid.h
     ];
 
     nativeBuildInputs = [
-      python3Packages.markdown   # documentation build
+      python3Packages.markdown # documentation build
     ];
 
     preBuild = ''
@@ -43,7 +53,7 @@ let
       "SYSTEMD_SYSTEM_UNIT_DIR=$(out)/etc/systemd/system"
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/Zygo/bees";
       description = "Block-oriented BTRFS deduplication service";
       license = licenses.gpl3;
@@ -55,13 +65,18 @@ let
 
 in
 
-runCommand "bees-service" {
-  inherit bash bees coreutils;
-  utillinux = util-linux; # needs to be a valid shell variable name
-  btrfsProgs = btrfs-progs; # needs to be a valid shell variable name
-} ''
+(runCommand "bees-service"
+  {
+    inherit bash bees coreutils;
+    utillinux = util-linux; # needs to be a valid shell variable name
+    btrfsProgs = btrfs-progs; # needs to be a valid shell variable name
+  } ''
   mkdir -p -- "$out/bin"
   substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
   chmod +x "$out"/bin/bees-service-wrapper
   ln -s ${bees}/bin/beesd "$out"/bin/beesd
-''
+'').overrideAttrs (old: {
+  passthru.tests = {
+    smoke-test = nixosTests.bees;
+  };
+})

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, fetchFromGitHub
-, gn, ninja, python, glib, pkgconfig, icu
+, gn, ninja, python, pythonPackages, glib, pkg-config, icu
 , xcbuild, darwin
 , fetchpatch
 }:
@@ -11,23 +11,23 @@ let
   deps = {
     "base/trace_event/common" = fetchgit {
       url    = "${git_url}/chromium/src/base/trace_event/common.git";
-      rev    = "936ba8a963284a6b3737cf2f0474a7131073abee";
-      sha256 = "14nr22fqdpxma1kzjflj6a865vr3hfnnm2gs4vcixyq4kmfzfcy2";
+      rev    = "dab187b372fc17e51f5b9fad8201813d0aed5129";
+      sha256 = "0dmpj9hj4xv3xb0fl1kb9hm4bhpbs2s5csx3z8cgjd5vwvhdzig4";
     };
     build = fetchgit {
       url    = "${git_url}/chromium/src/build.git";
-      rev    = "325e95d6dae64f35b160b3dc7d73218cee5ec079";
-      sha256 = "0dddyxa76p2xpjhmxif05v63i5ar6h5v684fdl667sg84f5bhhxf";
+      rev    = "26e9d485d01d6e0eb9dadd21df767a63494c8fea";
+      sha256 = "1jjvsgj0cs97d26i3ba531ic1f9gqan8x7z4aya8yl8jx02l342q";
     };
     "third_party/googletest/src" = fetchgit {
       url    = "${git_url}/external/github.com/google/googletest.git";
-      rev    = "5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081";
-      sha256 = "0gmr10042c0xybxnn6g7ndj1na1mmd3l9w7449qlcv4s8gmfs7k6";
+      rev    = "e3f0319d89f4cbf32993de595d984183b1a9fc57";
+      sha256 = "18xz71l2xjrqsc0q317whgw4xi1i5db24zcj7v04f5g6r1hyf1a5";
     };
     "third_party/icu" = fetchgit {
       url    = "${git_url}/chromium/deps/icu.git";
-      rev    = "960f195aa87acaec46e6104ec93a596da7ae0843";
-      sha256 = "073kh6gpcairgjxf3hlhpqljc13gwl2aj8fz91fv220xibwqs834";
+      rev    = "f2223961702f00a8833874b0560d615a2cc42738";
+      sha256 = "0z5p53kbrjfkjn0i12dpk55cp8976j2zk7a4wk88423s2c5w87zl";
     };
     "third_party/jinja2" = fetchgit {
       url    = "${git_url}/chromium/src/third_party/jinja2.git";
@@ -39,29 +39,36 @@ let
       rev    = "8f45f5cfa0009d2a70589bcda0349b8cb2b72783";
       sha256 = "168ppjmicfdh4i1l0l25s86mdbrz9fgxmiq1rx33x79mph41scfz";
     };
+    "third_party/zlib" = fetchgit {
+      url    = "${git_url}/chromium/src/third_party/zlib.git";
+      rev    = "156be8c52f80cde343088b4a69a80579101b6e67";
+      sha256 = "0hxbkkzmlv714fjq2jlp5dd2jc339xyh6gkjx1sz3srwv33mlk92";
+    };
   };
 
 in
 
 stdenv.mkDerivation rec {
   pname = "v8";
-  version = "7.4.255";
+  version = "8.4.255";
 
   doCheck = true;
 
   patches = [
+    # Remove unrecognized clang debug flags
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/RPi-Distro/chromium-browser/master/debian/patches/revert-Xclang-instcombine-lower-dbg-declare.patch";
-      sha256 = "02hczcg43m36q8j1kv5j3hq9czj9niiil9w13w22vzv2f3c67dvn";
+      url = "https://raw.githubusercontent.com/saiarcot895/chromium-ubuntu-build/663dbfc492fd2f8ba28d9af40fb3b1327e6aa56e/debian/patches/revert-Xclang-instcombine-lower-dbg-declare.patch";
+      sha256 = "07qp4bjgbwbdrzqslvl2bgbzr3v97b9isbp0539x3lc8cy3h02g1";
     })
     ./darwin.patch
+    ./gcc_arm.patch  # Fix building zlib with gcc on aarch64, from https://gist.github.com/Adenilson/d973b6fd96c7709d33ddf08cf1dcb149
   ];
 
   src = fetchFromGitHub {
     owner = "v8";
     repo = "v8";
     rev = version;
-    sha256 = "14i0c71hmffzqnq9n73dh9dnabdxhbjhzkhqpk5yv9y90bwrzi2n";
+    sha256 = "07ymw4kqbz7kv311gpk5bs5q90wj73n2q7jkyfhqk4hvhs1q5bw7";
   };
 
   postUnpack = ''
@@ -73,9 +80,16 @@ stdenv.mkDerivation rec {
     chmod u+w -R .
   '';
 
-  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+  postPatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace build/config/compiler/compiler.gni \
+      --replace 'strip_absolute_paths_from_debug_symbols = true' \
+                'strip_absolute_paths_from_debug_symbols = false'
+    substituteInPlace build/config/compiler/BUILD.gn \
+      --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
+                'false'
   '';
 
   gnFlags = [
@@ -83,6 +97,7 @@ stdenv.mkDerivation rec {
     "is_clang=${lib.boolToString stdenv.cc.isClang}"
     "use_sysroot=false"
     # "use_system_icu=true"
+    "clang_use_chrome_plugins=false"
     "is_component_build=false"
     "v8_use_external_startup_data=false"
     "v8_monolithic=true"
@@ -91,18 +106,25 @@ stdenv.mkDerivation rec {
     "treat_warnings_as_errors=false"
     "v8_enable_i18n_support=true"
     "use_gold=false"
-    "use_system_xcode=true"
+    "init_stack_vars=false"
     # ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
     ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
-  ] ++ stdenv.lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
+  ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
 
-  # with gcc8, -Wclass-memaccess became part of -Wall and causes logging limit
-  # to be exceeded
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-class-memaccess";
+  NIX_CFLAGS_COMPILE = "-O2";
+  FORCE_MAC_SDK_MIN = stdenv.targetPlatform.sdkVer or "10.12";
 
-  nativeBuildInputs = [ gn ninja pkgconfig python ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];
+  nativeBuildInputs = [
+    gn
+    ninja
+    pkg-config
+    python
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild
+    darwin.DarwinTools
+    pythonPackages.setuptools
+  ];
   buildInputs = [ glib icu ];
 
   ninjaFlags = [ ":d8" "v8_monolith" ];

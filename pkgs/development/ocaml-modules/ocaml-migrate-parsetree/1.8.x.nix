@@ -1,8 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, result, ppx_derivers }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, result, ppx_derivers }:
 
 buildDunePackage rec {
    pname = "ocaml-migrate-parsetree";
    version = "1.8.0";
+
+   useDune2 = lib.versionAtLeast ocaml.version "4.08";
 
    src = fetchFromGitHub {
      owner = "ocaml-ppx";

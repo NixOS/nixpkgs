@@ -327,6 +327,26 @@ in
         '';
       };
 
+      extraInstallCommands = mkOption {
+        default = "";
+        example = literalExample ''
+          # the example below generates detached signatures that GRUB can verify
+          # https://www.gnu.org/software/grub/manual/grub/grub.html#Using-digital-signatures
+          ''${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -name '*.sig' -delete
+          old_gpg_home=$GNUPGHOME
+          export GNUPGHOME="$(mktemp -d)"
+          ''${pkgs.gnupg}/bin/gpg --import ''${priv_key} > /dev/null 2>&1
+          ''${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -exec ''${pkgs.gnupg}/bin/gpg --detach-sign "{}" \; > /dev/null 2>&1
+          rm -rf $GNUPGHOME
+          export GNUPGHOME=$old_gpg_home
+        '';
+        type = types.lines;
+        description = ''
+          Additional shell commands inserted in the bootloader installer
+          script after generating menu entries.
+        '';
+      };
+
       extraPerEntryConfig = mkOption {
         default = "";
         example = "root (hd0)";
@@ -708,14 +728,18 @@ in
             utillinux = pkgs.util-linux;
             btrfsprogs = pkgs.btrfs-progs;
           };
+          perl = pkgs.perl.withPackages (p: with p; [
+            FileSlurp FileCopyRecursive
+            XMLLibXML XMLSAX XMLSAXBase
+            ListCompare JSON
+          ]);
         in pkgs.writeScript "install-grub.sh" (''
         #!${pkgs.runtimeShell}
         set -e
-        export PERL5LIB=${with pkgs.perlPackages; makePerlPath [ FileSlurp FileCopyRecursive XMLLibXML XMLSAX XMLSAXBase ListCompare JSON ]}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
-      ''));
+        ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
+      '') + cfg.extraInstallCommands);
 
       system.build.grub = grub;
 
@@ -741,7 +765,7 @@ in
             + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
         }
         {
-          assertion = cfg.efiSupport || all (c: c < 2) (mapAttrsToList (_: c: c) bootDeviceCounters);
+          assertion = cfg.efiSupport || all (c: c < 2) (mapAttrsToList (n: c: if n == "nodev" then 0 else c) bootDeviceCounters);
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {

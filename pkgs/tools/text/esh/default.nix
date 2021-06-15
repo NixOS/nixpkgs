@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, asciidoctor, gawk, gnused, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, asciidoctor, gawk, gnused, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "esh";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple templating engine based on shell";
     homepage = "https://github.com/jirutka/esh";
     license = licenses.mit;

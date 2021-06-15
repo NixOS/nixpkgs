@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, lzma, curl, perl }:
+{ lib, stdenv, fetchurl, zlib, bzip2, xz, curl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "htslib";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # perl is only used during the check phase.
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ zlib bzip2 lzma curl ];
+  buildInputs = [ zlib bzip2 xz curl ];
 
   configureFlags = [ "--enable-libcurl" ]; # optional but strongly recommended
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C library for reading/writing high-throughput sequencing data";
     license = licenses.mit;
     homepage = "http://www.htslib.org/";

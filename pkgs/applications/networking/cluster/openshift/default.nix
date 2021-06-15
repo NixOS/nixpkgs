@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage, which, go-bindata, rsync, util-linux
-, coreutils, kerberos, ncurses, clang, installShellFiles
+{ lib, fetchFromGitHub, buildGoPackage, which, go-bindata, rsync, util-linux
+, coreutils, libkrb5, ncurses, clang, installShellFiles
 , components ? [
   "cmd/oc"
   "cmd/openshift"
@@ -10,7 +10,7 @@ with lib;
 
 let
   version = "4.1.0";
-  ver = stdenv.lib.elemAt (stdenv.lib.splitVersion version);
+  ver = lib.elemAt (lib.splitVersion version);
   versionMajor = ver 0;
   versionMinor = ver 1;
   versionPatch = ver 2;
@@ -33,7 +33,7 @@ in buildGoPackage rec {
 
   goPackagePath = "github.com/openshift/origin";
 
-  buildInputs = [ kerberos ncurses ];
+  buildInputs = [ libkrb5 ncurses ];
 
   nativeBuildInputs = [ which rsync go-bindata clang installShellFiles ];
 
@@ -67,7 +67,7 @@ in buildGoPackage rec {
     installShellCompletion --zsh contrib/completions/zsh/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     license = licenses.asl20;
     homepage = "http://www.openshift.org";

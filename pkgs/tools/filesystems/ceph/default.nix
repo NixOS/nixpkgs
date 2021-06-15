@@ -1,6 +1,6 @@
-{ stdenv, runCommand, fetchurl
+{ lib, stdenv, runCommand, fetchurl
 , ensureNewerSourcesHook
-, cmake, pkgconfig
+, cmake, pkg-config
 , which, git
 , boost, python3Packages
 , libxml2, zlib, lz4
@@ -8,10 +8,20 @@
 , babeltrace, gperf
 , gtest
 , cunit, snappy
-, rocksdb, makeWrapper
+, makeWrapper
 , leveldb, oathToolkit
 , libnl, libcap_ng
 , rdkafka
+, nixosTests
+, cryptsetup
+, sqlite
+, lua
+, icu
+, bzip2
+, doxygen
+, graphviz
+, fmt
+, python3
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -35,7 +45,6 @@
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
 
-with stdenv; with stdenv.lib;
 let
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
@@ -75,12 +84,12 @@ let
     none = [ ];
   };
 
-  getMeta = description: {
+  getMeta = description: with lib; {
      homepage = "https://ceph.com/";
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
-     platforms = [ "x86_64-linux" ];
+     platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
   ceph-common = python3Packages.buildPythonPackage rec{
@@ -109,6 +118,7 @@ let
     ps.jsonpatch
     ps.pecan
     ps.prettytable
+    ps.pyopenssl
     ps.pyjwt
     ps.webob
     ps.bcrypt
@@ -121,10 +131,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "15.2.5";
+  version = "16.2.4";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "05p7ssbfypf5x8bry361rrnyaihf89xzbqzhygdyrg7w1rxpna8d";
+    sha256 = "sha256-J6FVK7feNN8cGO5BSDlfRGACAzchmRUSWR+a4ZgeWy0=";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -133,25 +143,30 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      ./ceph-glibc-2-32-sigdescr_np.patch
     ];
 
     nativeBuildInputs = [
       cmake
-      pkgconfig which git python3Packages.wrapPython makeWrapper
+      pkg-config which git python3Packages.wrapPython makeWrapper
       python3Packages.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
+      python3
+      fmt
+      # for building docs/man-pages presumably
+      doxygen
+      graphviz
     ];
 
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
-    ] ++ optionals stdenv.isLinux [
+      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+      cryptsetup sqlite lua icu bzip2
+    ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
-    ] ++ optionals hasRadosgw [
+    ] ++ lib.optionals hasRadosgw [
       optFcgi optExpat optCurl optFuse optLibedit
     ];
 
@@ -160,6 +175,7 @@ in rec {
     preConfigure =''
       substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
+      substituteInPlace src/common/module.c --replace "/bin/grep" "grep"
 
       # for pybind/rgw to find internal dep
       export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -170,19 +186,18 @@ in rec {
     '';
 
     cmakeFlags = [
-      "-DWITH_PYTHON3=ON"
-      "-DWITH_SYSTEM_ROCKSDB=OFF"
+      "-DWITH_SYSTEM_ROCKSDB=OFF"  # breaks Bluestore
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
-
       "-DWITH_SYSTEM_BOOST=ON"
-      "-DWITH_SYSTEM_ROCKSDB=ON"
       "-DWITH_SYSTEM_GTEST=ON"
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_SYSTEMD=OFF"
       "-DWITH_TESTS=OFF"
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
+      # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
+      ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
     ];
 
     postFixup = ''
@@ -194,15 +209,17 @@ in rec {
       test -f $out/bin/ceph-volume
     '';
 
-    enableParallelBuilding = true;
-
     outputs = [ "out" "lib" "dev" "doc" "man" ];
 
     doCheck = false; # uses pip to install things from the internet
 
+    # Takes 7+h to build with 2 cores.
+    requiredSystemFeatures = [ "big-parallel" ];
+
     meta = getMeta "Distributed storage system";
 
     passthru.version = version;
+    passthru.tests = { inherit (nixosTests) ceph-single-node ceph-multi-node ceph-single-node-bluestore; };
   };
 
   ceph-client = runCommand "ceph-client-${version}" {

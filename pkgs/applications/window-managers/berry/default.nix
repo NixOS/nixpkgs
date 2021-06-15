@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libX11
+, libXext
 , libXft
 , libXinerama
 , fontconfig
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =[
     libX11
+    libXext
     libXft
     libXinerama
     fontconfig
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
                       FREETYPEINC="${freetype.dev}/include/freetype2" )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A healthy, bite-sized window manager";
     longDescription = ''
       berry is a healthy, bite-sized window manager written in C for unix

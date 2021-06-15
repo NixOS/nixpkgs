@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, gettext, intltool
+{ lib, stdenv, fetchurl, pkg-config, autoconf, automake, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
 , wrapGAppsHook, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.4";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "http://geeqie.org/${pname}-${version}.tar.xz";
-    sha256 = "0ciygvcxb78pqg59r6p061mkbpvkgv2rv3r79j3kgv3kalb3ln2w";
+    sha256 = "02m1vqaasin249xx792cdj11xyag8lnanwzxd108y7y34g9xam28";
   };
 
   patches = [
@@ -19,19 +19,14 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/geeqie/raw/132fb04a1a5e74ddb333d2474f7edb9a39dc8d27/f/geeqie-1.4-goodbye-changelog.patch";
       sha256 = "00a35dds44kjjdqsbbfk0x9y82jspvsbpm2makcm1ivzlhjjgszn";
     })
-    # Fixes build with exiv2 0.27.1
-    (fetchpatch {
-      name = "geeqie-exiv2-0.27.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/geeqie-exiv2-0.27.patch?h=packages/geeqie&id=dee28a8b3e9039b9cd6927b5a93ef2a07cd8271d";
-      sha256 = "05skpbyp8pcq92psgijyccc8liwfy2cpwprw6m186pf454yb5y9p";
-    })
   ];
 
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs = [ pkgconfig autoconf automake gettext intltool
+  nativeBuildInputs = [ pkg-config autoconf automake gettext intltool
     wrapGAppsHook
   ];
+
   buildInputs = [
     gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida
   ];
@@ -40,12 +35,12 @@ stdenv.mkDerivation rec {
     # Allow geeqie to find exiv2 and exiftran, necessary to
     # losslessly rotate JPEG images.
     sed -i $out/lib/geeqie/geeqie-rotate \
-        -e '1 a export PATH=${stdenv.lib.makeBinPath [ exiv2 fbida ]}:$PATH'
+        -e '1 a export PATH=${lib.makeBinPath [ exiv2 fbida ]}:$PATH'
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight GTK based image viewer";
 
     longDescription =
@@ -63,7 +58,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://geeqie.sourceforge.net";
 
-    maintainers = with maintainers; [ jfrankenau pSub ];
+    maintainers = with maintainers; [ jfrankenau pSub markus1189 ];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, dpkg, alsaLib, atk, cairo, cups, dbus, expat, fontconfig
-, freetype, gdk-pixbuf, glib, gnome2, nspr, nss, pango, udev, xorg }:
+{ lib, stdenv, fetchurl, dpkg, alsa-lib, atk, cairo, cups, dbus, expat, fontconfig
+, freetype, gdk-pixbuf, glib, gnome2, gtk2, nspr, nss, pango, udev, xorg }:
 let
-  fullPath = stdenv.lib.makeLibraryPath [
-    alsaLib
+  fullPath = lib.makeLibraryPath [
+    alsa-lib
     atk
     cairo
     cups
@@ -13,7 +13,7 @@ let
     gdk-pixbuf
     glib
     gnome2.GConf
-    gnome2.gtk
+    gtk2
     nspr
     nss
     pango
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       "$out/bin/stride"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop client for Atlassian Stride";
     homepage = "https://www.stride.com/";
     license = licenses.unfree;

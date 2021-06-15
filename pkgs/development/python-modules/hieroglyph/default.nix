@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy27, sphinx }:
+{ lib, fetchPypi, buildPythonPackage, isPy27, sphinx }:
 
 buildPythonPackage rec {
   pname = "hieroglyph";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # test_absolute_paths_made_relative (hieroglyph.tests.test_path_fixing.PostProcessImageTests) ... ERROR
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate HTML presentations from plain text sources";
     homepage = "https://github.com/nyergler/hieroglyph/";
     license = licenses.bsd3;

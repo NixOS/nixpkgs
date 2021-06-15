@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchpatch
 , substituteAll
 , fetchurl
@@ -9,6 +9,7 @@
 , gperf
 , dejavu_fonts
 , autoreconfHook
+, CoreFoundation
 }:
 
 stdenv.mkDerivation rec {
@@ -60,6 +61,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/409b37c62780728755c908991c912a6b16f2389c.patch";
       sha256 = "zJFh37QErSAINPGFkFVJyhYRP27BuIN7PIgoDl/PIwI=";
     })
+
+    # Combination of
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/88
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/131
+    ./macos-atomics.h
   ];
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
@@ -73,7 +79,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-  ];
+  ] ++ lib.optional stdenv.isDarwin CoreFoundation;
 
   propagatedBuildInputs = [
     freetype
@@ -85,7 +91,7 @@ stdenv.mkDerivation rec {
     "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
     # just <1MB; this is what you get when loading config fails for some reason
     "--with-default-fonts=${dejavu_fonts.minimal}"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
   ];
 
@@ -112,11 +118,11 @@ stdenv.mkDerivation rec {
     rm -r $bin/share/man/man3
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for font customization and configuration";
     homepage = "http://fontconfig.org/";
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; teams.freedesktop.members ++ [ ];
   };
 }

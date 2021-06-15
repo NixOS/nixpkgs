@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ised";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A numeric sequence editor";
-    maintainers = with stdenv.lib.maintainers; [ raskin ];
-    platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = with lib.platforms; linux;
+    license = lib.licenses.gpl3Plus;
   };
 }

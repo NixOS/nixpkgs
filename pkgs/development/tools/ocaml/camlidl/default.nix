@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, writeText }:
+{ lib, stdenv, fetchurl, ocaml, writeText }:
 
 let
   pname = "camlidl";
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     description = "A stub code generator and COM binding for Objective Caml";
     homepage = webpage;
     license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    maintainers = [ lib.maintainers.roconnor ];
   };
 }

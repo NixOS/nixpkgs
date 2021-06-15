@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchPypi, six }:
 
 buildPythonPackage rec {
   pname = "robot-detection";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # no tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for detecting if a HTTP User Agent header is likely to be a bot";
     homepage = "https://github.com/rory/robot-detection";
     license = licenses.gpl3Plus;

@@ -1,23 +1,25 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, nixFlakes
+, nixUnstable
 , nix-prefetch
+, nixpkgs-fmt
+, nixpkgs-review
 }:
 
 buildPythonApplication rec {
   pname = "nix-update";
-  version = "0.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    sha256 = "12fsxy2rv2dgk8l10ymp10j01jkcbn9w0fv5iyb5db85q4xsrsm5";
+    sha256 = "sha256-n3YuNypKFaBtO5Fhf7Z3Wgh0+WH5bQWR0W0uHCYKtuY=";
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nixFlakes nix-prefetch ])
+    "--prefix" "PATH" ":" (lib.makeBinPath [ nixUnstable nix-prefetch nixpkgs-fmt nixpkgs-review ])
   ];
 
   checkPhase = ''

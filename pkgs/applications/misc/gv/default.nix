@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkgconfig, libiconv }:
+{ lib, stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkg-config, libiconv }:
 
 let
   name = "gv-3.7.4";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0q8s43z14vxm41pfa8s5h9kyyzk1fkwjhkiwbf2x70alm6rv6qi1";
   };
 
-  configureFlags = stdenv.lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.isDarwin [
     "--enable-SIGCHLD-fallback"
   ];
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
     Xaw3d
     ghostscriptX
     perl
-    pkgconfig
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
   ];
 
@@ -41,8 +41,8 @@ stdenv.mkDerivation {
       interface for the Ghostscript interpreter.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

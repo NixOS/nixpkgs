@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
 , pkg-config
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     "-Dui=enabled"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "UI components for parental controls library";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;

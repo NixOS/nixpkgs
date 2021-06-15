@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, libglade, gtksourceview }:
 
 let param =
-  let check = stdenv.lib.versionAtLeast ocaml.version; in
+  let check = lib.versionAtLeast ocaml.version; in
   if check "4.06" then rec {
     version = "2.18.10";
     src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   pname = "lablgtk";
   inherit (param) version src;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
       maggesi roconnor vbgl

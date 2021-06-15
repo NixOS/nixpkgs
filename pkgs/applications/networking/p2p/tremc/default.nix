@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, python3Packages
+{ lib, stdenv, fetchFromGitHub, python3Packages
 , x11Support ? !stdenv.isDarwin
 , xclip ? null
 , pbcopy ? null
 , useGeoIP ? false # Require /var/lib/geoip-databases/GeoIP.dat
 }:
 let
-  wrapperPath = with stdenv.lib; makeBinPath (
+  wrapperPath = with lib; makeBinPath (
     optional x11Support xclip ++
     optional stdenv.isDarwin pbcopy
   );
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     ipy
     pyperclip
   ] ++
-  stdenv.lib.optional useGeoIP GeoIP;
+  lib.optional useGeoIP GeoIP;
 
   phases = [ "unpackPhase" "installPhase" ];
 
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Curses interface for transmission";
     homepage = "https://github.com/tremc/tremc";
     license = licenses.gpl3Plus;

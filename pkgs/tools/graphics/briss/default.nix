@@ -1,6 +1,6 @@
 # The releases of this project are apparently precompiled to .jar files.
 
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 let
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "https://sourceforge.net/projects/briss/";
     description = "Java application for cropping PDF files";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

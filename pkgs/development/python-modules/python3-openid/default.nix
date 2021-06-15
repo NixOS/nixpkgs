@@ -1,4 +1,4 @@
-{ stdenv, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
+{ lib, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
 
 buildPythonPackage rec {
   pname = "python3-openid";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenID support for modern servers and consumers";
     homepage = "https://github.com/necaris/python3-openid";
     license = licenses.asl20;

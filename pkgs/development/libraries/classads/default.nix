@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcre }:
+{ lib, stdenv, fetchurl, pcre }:
 
 let version = "1.0.10"; in
 
@@ -16,11 +16,11 @@ stdenv.mkDerivation {
   configureFlags = [
     "--enable-namespace" "--enable-flexible-member"
   ];
-  
+
   meta = {
     homepage = "http://www.cs.wisc.edu/condor/classad/";
     description = "The Classified Advertisements library provides a generic means for matching resources";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

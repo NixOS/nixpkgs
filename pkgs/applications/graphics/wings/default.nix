@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, erlang, cl, libGL, libGLU, runtimeShell }:
+{ fetchurl, lib, stdenv, erlang, cl, libGL, libGLU, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "wings-2.2.4";
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.wings3d.com/";
     description = "Subdivision modeler inspired by Nendo and Mirai from Izware";
-    license = stdenv.lib.licenses.tcltk;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.tcltk;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

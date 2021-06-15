@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
-, coreutils, gnused, getopt, git, tree, gnupg, openssl, which, procps
-, qrencode , makeWrapper, pass, symlinkJoin
+, coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
+, which, procps , qrencode , makeWrapper, pass, symlinkJoin
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin , dmenuSupport ? x11Support
@@ -26,7 +26,7 @@ let
   env = extensions:
     let
       selected = [ pass ] ++ extensions passExtensions
-        ++ stdenv.lib.optional tombPluginSupport passExtensions.tomb;
+        ++ lib.optional tombPluginSupport passExtensions.tomb;
     in buildEnv {
       name = "pass-extensions-env";
       paths = selected;
@@ -34,11 +34,15 @@ let
 
       postBuild = ''
         files=$(find $out/bin/ -type f -exec readlink -f {} \;)
-        rm $out/bin
-        mkdir $out/bin
+        if [ -L $out/bin ]; then
+          rm $out/bin
+          mkdir $out/bin
+        fi
 
         for i in $files; do
-          ln -sf $i $out/bin/$(basename $i)
+          if ! [ "$(readlink -f "$out/bin/$(basename $i)")" = "$i" ]; then
+            ln -sf $i $out/bin/$(basename $i)
+          fi
         done
 
         wrapProgram $out/bin/pass \
@@ -59,10 +63,10 @@ stdenv.mkDerivation rec {
   patches = [
     ./set-correct-program-name-for-sleep.patch
     ./extension-dir.patch
-  ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch
+  ] ++ lib.optional stdenv.isDarwin ./no-darwin-getopt.patch
     # TODO (@Ma27) this patch adds support for wl-clipboard and can be removed during the next
     # version bump.
-    ++ stdenv.lib.optional waylandSupport ./clip-wayland-support.patch;
+    ++ lib.optional waylandSupport ./clip-wayland-support.patch;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -78,10 +82,12 @@ stdenv.mkDerivation rec {
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
-  wrapperPath = with stdenv.lib; makeBinPath ([
+  wrapperPath = with lib; makeBinPath ([
     coreutils
+    findutils
     getopt
     git
+    gnugrep
     gnupg
     gnused
     tree
@@ -101,7 +107,7 @@ stdenv.mkDerivation rec {
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
       --prefix PATH : "${wrapperPath}"
-  '' + stdenv.lib.optionalString dmenuSupport ''
+  '' + lib.optionalString dmenuSupport ''
     # We just wrap passmenu with the same PATH as pass. It doesn't
     # need all the tools in there but it doesn't hurt either.
     wrapProgram $out/bin/passmenu \
@@ -121,7 +127,7 @@ stdenv.mkDerivation rec {
            -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
            -e '/which gpg/ d' \
       tests/setup.sh
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # 'pass edit' uses hdid, which is not available from the sandbox.
     rm -f tests/t0200-edit-tests.sh
     rm -f tests/t0010-generate-tests.sh
@@ -143,7 +149,7 @@ stdenv.mkDerivation rec {
     withExtensions = env;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage    = "https://www.passwordstore.org/";
     license     = licenses.gpl2Plus;

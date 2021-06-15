@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "scmpuff";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "0zrzzcs0i13pfwcqh8qb0sji54vh37rdr7qasg57y56cqpx16vl3";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Add numbered shortcuts to common git commands";
     homepage = "https://github.com/mroth/scmpuff";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "mustache-go";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0mnh5zbpfwymddm1dppg9i9d1r8jqyg03z2gl6c5a8fgbrnxpjvc";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cbroglie/mustache";
     description = "The mustache template language in Go";
     license = [ licenses.mit ];

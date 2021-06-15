@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libogg, pkgconfig }:
+{ lib, stdenv, fetchurl, libogg, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "libvorbis-1.3.7";
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libogg ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vorbis audio compression reference implementation";
     homepage = "https://xiph.org/vorbis/";
     license = licenses.bsd3;

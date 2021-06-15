@@ -1,6 +1,6 @@
-{stdenv, fetchurl, ncurses}:
+{lib, stdenv, fetchurl, ncurses}:
 let
-  s = 
+  s =
   rec {
     baseName = "n2048";
     version = "0.1";
@@ -19,17 +19,17 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
   makeFlags = [
-    ''DESTDIR=$(out)''
+    "DESTDIR=$(out)"
   ];
   preInstall = ''
     mkdir -p "$out"/{share/man,bin}
   '';
   meta = {
     inherit (s) version;
-    description = ''Console implementation of 2048 game'';
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Console implementation of 2048 game";
+    license = lib.licenses.bsd2;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "http://www.dettus.net/n2048/";
   };
 }

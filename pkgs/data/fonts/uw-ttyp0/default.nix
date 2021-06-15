@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl
+{ lib, stdenv, fetchurl, perl
 , bdftopcf, bdf2psf, mkfontdir
 , fonttosfnt
 , targetsDat  ? null
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Monospace bitmap screen fonts for X11";
     homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
     license = with licenses; [ free mit ];

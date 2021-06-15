@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, asciidoc, libxslt, docbook_xsl }:
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoc, libxslt }:
 
 
 stdenv.mkDerivation rec {
@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "0yc4q7n3k7k6rx3cxq5ddd5r0la8gw1287a74kql6gwkxjq0jmcv";
   };
 
-  nativeBuildInputs = [ cmake asciidoc docbook_xsl ];
+  strictDeps = true;
 
-  buildInputs = [ libxslt ];
+  nativeBuildInputs = [ asciidoc cmake libxslt.bin ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "Patches jumptables into TI calculator ROM files and generates an include file";
     license     = licenses.mit;

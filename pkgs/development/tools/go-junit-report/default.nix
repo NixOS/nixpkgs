@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "go-junit-report-unstable";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "109zs8wpdmc2ijc2khyqija8imay88ka6v50xvrpnnwnd3ywckxi";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts go test output to an xml report, suitable for applications that expect junit xml reports (e.g. Jenkins)";
     homepage    = "https://${goPackagePath}";
     maintainers = with maintainers; [ cryptix ];

@@ -1,40 +1,46 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, requests
+, fetchFromGitHub
+, certifi
+, click
 , keyring
 , keyrings-alt
-, click
+, pytz
+, requests
 , six
 , tzlocal
-, certifi
-, bitstring
-, unittest2
+, pytest-mock
+, pytestCheckHook
 , future
 }:
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "0.9.7";
+  version = "0.10.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "dcebb32e474bc28aa77b944a0a64949ef3b5b852cbef6256fbc95347a04e777c";
+  src = fetchFromGitHub {
+    owner = "picklepete";
+    repo = pname;
+    rev = version;
+    sha256 = "0bxbhvimwbj2jm8dg7sil8yvln17xgjhvpwr4m783vwfcf76kdmy";
   };
 
   propagatedBuildInputs = [
-    requests
+    certifi
+    click
+    future
     keyring
     keyrings-alt
-    click
+    pytz
+    requests
     six
     tzlocal
-    certifi
-    bitstring
-    future
   ];
 
-  checkInputs = [ unittest2 ];
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   postPatch = ''
     sed -i \

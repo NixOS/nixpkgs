@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "imgp";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13r4fn3dd0nyidfhrr7zzpls5ifbyqdwxhyvpkqr8ahchws7wfc6";
+    sha256 = "1miabaxd5pwxn0va4drzj1d4ppxvyqsrrd4xw1j6qr52yci0lms8";
   };
 
   propagatedBuildInputs = [ pillow ];

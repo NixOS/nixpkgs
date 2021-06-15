@@ -25,7 +25,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext" );
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -161,7 +161,7 @@ while (<>) {
     }
 
     if ($file =~ /AM_PATH_PYTHON/) {
-        push @nativeRequires, "python";
+        push @nativeRequires, "python3";
     }
 
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
@@ -292,7 +292,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
 
     my @arguments = @buildInputs;
     push @arguments, @nativeBuildInputs;
-    unshift @arguments, "stdenv", "pkgconfig", "fetchurl";
+    unshift @arguments, "stdenv", "pkg-config", "fetchurl";
     my $argumentsStr = join ", ", @arguments;
 
     my $extraAttrsStr = "";
@@ -301,6 +301,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     }
 
     print OUT <<EOF
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   $pkg = callPackage ({ $argumentsStr }: stdenv.mkDerivation {
     name = "$pkgNames{$pkg}";
     builder = ./builder.sh;
@@ -309,9 +310,9 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig $nativeBuildInputsStr];
+    nativeBuildInputs = [ pkg-config $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
-    meta.platforms = stdenv.lib.platforms.unix;
+    meta.platforms = lib.platforms.unix;
   }) {};
 
 EOF

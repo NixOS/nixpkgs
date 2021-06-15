@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gtk3, breeze-icons, gnome-icon-theme, papirus-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, cmake, gtk3, breeze-icons, gnome-icon-theme, papirus-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "papirus-maia-icon-theme";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manjaro variation of Papirus icon theme";
     homepage = "https://github.com/Ste74/papirus-maia-icon-theme";
     license = licenses.lgpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , adoptopenjdk-bin, jre, ant
 }:
 
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1mm6r9bq79zks50yk0agcpdkw9yy994m38ibmgpb3bi3wkpq9891";
   };
 
-  buildInputs = [ makeWrapper adoptopenjdk-bin ant ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ adoptopenjdk-bin ant ];
 
   buildPhase = "ant -f tlatools/org.lamport.tlatools/customBuild.xml compile dist";
   installPhase = ''
@@ -33,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An algorithm specification language with model checking tools";
     homepage    = "http://lamport.azurewebsites.net/tla/tla.html";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

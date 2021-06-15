@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, xorg, boost, cmake, gtest }:
+{ lib, stdenv, fetchFromGitHub, xorg, boost, cmake, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "xlayoutdisplay";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace "set(Boost_USE_STATIC_LIBS ON)" ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Detects and arranges linux display outputs, using XRandR for detection and xrandr for arrangement";
     homepage = "https://github.com/alex-courtis/xlayoutdisplay";
     maintainers = with maintainers; [ dtzWill ];

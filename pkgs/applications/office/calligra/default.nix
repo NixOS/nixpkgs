@@ -1,15 +1,14 @@
-{
-  mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools, makeWrapper,
-  boost, qtwebkit, qtx11extras, shared-mime-info,
-  breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets,
-  kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n,
-  kiconthemes, kitemviews, kjobwidgets, kcmutils, kdelibs4support, kio, kross,
-  knotifications, knotifyconfig, kparts, ktextwidgets, kwallet, kwidgetsaddons,
-  kwindowsystem, kxmlgui, sonnet, threadweaver,
-  kcontacts, akonadi, akonadi-calendar, akonadi-contacts,
-  eigen, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen,
-  librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg, phonon,
-  poppler, pstoedit, qca-qt5, vc
+{ mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools
+, boost, qtwebkit, qtx11extras, shared-mime-info
+, breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets
+, kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n
+, kiconthemes, kitemviews, kjobwidgets, kcmutils, kdelibs4support, kio, kross
+, knotifications, knotifyconfig, kparts, ktextwidgets, kwallet, kwidgetsaddons
+, kwindowsystem, kxmlgui, sonnet, threadweaver
+, kcontacts, akonadi, akonadi-calendar, akonadi-contacts
+, eigen, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen
+, librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg, phonon
+, poppler, pstoedit, qca-qt5, vc
 # TODO: package Spnav, m2mml LibEtonyek, Libqgit2
 }:
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, prevo-tools }:
+{ lib, stdenv, fetchFromGitHub, prevo-tools }:
 
 stdenv.mkDerivation rec {
   pname = "prevo-data";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp prevo.db $out/share/prevo/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "data for offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''

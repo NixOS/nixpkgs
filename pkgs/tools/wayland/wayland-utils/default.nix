@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , meson, pkg-config, ninja
 , wayland, wayland-protocols
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson pkg-config ninja wayland ];
   buildInputs = [ wayland wayland-protocols ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wayland utilities (wayland-info)";
     longDescription = ''
       A collection of Wayland related utilities:

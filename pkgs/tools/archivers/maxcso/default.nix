@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libuv, lz4, zlib }:
+{ lib, stdenv, fetchFromGitHub, libuv, lz4, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "maxcso";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/unknownbrackets/maxcso";
     description =
       "A fast ISO to CSO compression program for use with PSP and PS2 emulators, which uses multiple algorithms for best compression ratio";

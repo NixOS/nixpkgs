@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, pkgconfig
+, pkg-config
 , expat
 , enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , systemd
@@ -16,12 +16,6 @@
 , docbook-xsl-nons
 , xmlto
 }:
-
-assert
-  x11Support ->
-    libX11 != null && libICE != null && libSM != null;
-
-assert enableSystemd -> systemd != null;
 
 stdenv.mkDerivation rec {
   pname = "dbus";
@@ -57,7 +51,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "lib" "doc" "man" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     docbook_xml_dtd_44
     docbook-xsl-nons
     xmlto
@@ -73,13 +67,13 @@ stdenv.mkDerivation rec {
       libICE
       libSM
     ] ++ lib.optional enableSystemd systemd
-    ++ lib.optionals (!stdenv.isDarwin) [ audit libapparmor ];
+    ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
   configureFlags = [
     "--enable-user-session"
     "--enable-xml-docs"
-    "--libexecdir=${placeholder ''out''}/libexec"
+    "--libexecdir=${placeholder "out"}/libexec"
     "--datadir=/etc"
     "--localstatedir=/var"
     "--runstatedir=/run"
@@ -87,10 +81,10 @@ stdenv.mkDerivation rec {
     "--with-session-socket-dir=/tmp"
     "--with-system-pid-file=/run/dbus/pid"
     "--with-system-socket=/run/dbus/system_bus_socket"
-    "--with-systemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
-    "--with-systemduserunitdir=${placeholder ''out''}/etc/systemd/user"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ] ++ lib.optional (!x11Support) "--without-x"
-  ++ lib.optionals (!stdenv.isDarwin) [ "--enable-apparmor" "--enable-libaudit" ];
+  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ];
 
   # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
   # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
@@ -103,8 +97,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   installFlags = [
-    "sysconfdir=${placeholder ''out''}/etc"
-    "datadir=${placeholder ''out''}/share"
+    "sysconfdir=${placeholder "out"}/etc"
+    "datadir=${placeholder "out"}/share"
   ];
 
   # it's executed from $lib by absolute path
@@ -118,11 +112,11 @@ stdenv.mkDerivation rec {
     daemon = dbus.out;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple interprocess messaging system";
     homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;
   };
 }

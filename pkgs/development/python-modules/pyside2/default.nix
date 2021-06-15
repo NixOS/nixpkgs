@@ -1,4 +1,4 @@
-{ buildPythonPackage, python, fetchurl, stdenv,
+{ buildPythonPackage, python, fetchurl, lib, stdenv,
   cmake, ninja, qt5, shiboken2 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ shiboken2 ];
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "LGPL-licensed Python bindings for Qt";
     license = licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";

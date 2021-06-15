@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ustr";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     find $out/lib -name \*debug\* -delete
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.and.org/ustr/";
     description = "Micro String API for C language";
     license = licenses.bsd2;

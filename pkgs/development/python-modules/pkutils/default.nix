@@ -1,5 +1,4 @@
 { lib
-, pythonOlder
 , buildPythonPackage
 , isPy3k
 , fetchFromGitHub

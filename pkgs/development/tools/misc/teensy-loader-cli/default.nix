@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, go-md2man, installShellFiles, libusb-compat-0_1 }:
+{ lib, stdenv, fetchFromGitHub, go-md2man, installShellFiles, libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
   pname = "teensy-loader-cli";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     installManPage *.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Firmware uploader for the Teensy microcontroller boards";
     homepage = "https://www.pjrc.com/teensy/";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, z3, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, z3, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "vampire";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     install -m0755 -D vampire_z3_rel* $out/bin/vampire
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://vprover.github.io/";
     description = "The Vampire Theorem Prover";
     platforms = platforms.unix;

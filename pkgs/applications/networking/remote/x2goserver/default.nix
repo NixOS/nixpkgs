@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, perlPackages, makeWrapper, perl, which, nx-libs
 , util-linux, coreutils, glibc, gawk, gnused, gnugrep, findutils, xorg
-, nettools, iproute, bc, procps, psmisc, lsof, pwgen, openssh, sshfs, bash
+, nettools, iproute2, bc, procps, psmisc, lsof, pwgen, openssh, sshfs, bash
 }:
 
 let
@@ -8,8 +8,8 @@ let
   version = "4.1.0.3";
 
   src = fetchurl {
-    url = "http://code.x2go.org/releases/source/x2goserver/${pname}-${version}.tar.gz";
-    sha256 = "1l6wd708kbipib4ldprfiihqmj4895nifg0bkws4x97majislxk7";
+    url = "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
   };
 
   x2go-perl = perlPackages.buildPerlPackage rec {
@@ -26,12 +26,12 @@ let
   };
 
   perlEnv = perl.withPackages (p: with p; [
-    x2go-perl DBI DBDSQLite FileBaseDir TryTiny CaptureTiny ConfigSimple Switch
+    x2go-perl DBI DBDSQLite FileBaseDir TryTiny CaptureTiny ConfigSimple Switch FileWhich
   ]);
 
   binaryDeps = [
     perlEnv which nx-libs util-linux coreutils glibc.bin gawk gnused gnugrep
-    findutils nettools iproute bc procps psmisc lsof pwgen openssh sshfs
+    findutils nettools iproute2 bc procps psmisc lsof pwgen openssh sshfs
     xorg.xauth xorg.xinit xorg.xrandr xorg.xmodmap xorg.xwininfo xorg.fontutil
     xorg.xkbcomp xorg.setxkbmap
   ];
@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Remote desktop application, server component";
     homepage = "http://x2go.org/";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     license = licenses.gpl2;
-    maintainers = [ maintainers.averelld ];
+    maintainers = with maintainers; [ averelld mkg20001 ];
   };
 }

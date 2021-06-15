@@ -40,9 +40,9 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/bit-team/backintime";
     description = "Simple backup tool for Linux";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     longDescription = ''
       Back In Time is a simple backup tool (on top of rsync) for Linux
       inspired from “flyback project” and “TimeVault”. The backup is

@@ -1,5 +1,5 @@
-{ stdenv, makeWrapper, requireFile, gcc, unzip }:
-with stdenv.lib;
+{ lib, stdenv, makeWrapper, requireFile, gcc, unzip }:
+with lib;
 
 # v2.1: last version with NHM/WSM arch support
 stdenv.mkDerivation {
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
         --set-rpath $out/lib:"${libPath}" \
         $out/bin/iaca
   '';
-  postFixup = ''wrapProgram $out/bin/iaca --set LD_LIBRARY_PATH $out/lib'';
+  postFixup = "wrapProgram $out/bin/iaca --set LD_LIBRARY_PATH $out/lib";
   meta = {
     description = "Intel Architecture Code Analyzer";
     homepage = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer/";

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch}:
+{lib, stdenv, fetchurl, fetchpatch}:
 
 stdenv.mkDerivation rec {
   name = "tre-0.8.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight and robust POSIX compliant regexp matching library";
     homepage = "https://laurikari.net/tre/";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd2;
   };
 }

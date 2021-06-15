@@ -5,6 +5,7 @@
 , disabledIf
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
+, findutils
 }:
 
 let
@@ -14,6 +15,21 @@ let
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in rec {
+
+  condaInstallHook = callPackage ({ gnutar, lbzip2 }:
+    makeSetupHook {
+      name = "conda-install-hook";
+      deps = [ gnutar lbzip2 ];
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./conda-install-hook.sh) {};
+
+  condaUnpackHook = callPackage ({}:
+    makeSetupHook {
+      name = "conda-unpack-hook";
+      deps = [];
+    } ./conda-unpack-hook.sh) {};
 
   eggBuildHook = callPackage ({ }:
     makeSetupHook {
@@ -94,7 +110,7 @@ in rec {
     makeSetupHook {
       name = "python-namespaces-hook.sh";
       substitutions = {
-        inherit pythonSitePackages;
+        inherit pythonSitePackages findutils;
       };
     } ./python-namespaces-hook.sh) {};
 

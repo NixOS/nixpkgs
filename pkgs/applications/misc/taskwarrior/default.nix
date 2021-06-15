@@ -1,17 +1,36 @@
-{ stdenv, fetchurl, cmake, libuuid, gnutls }:
+{ lib, stdenv, fetchurl, cmake, libuuid, gnutls, python3, bash }:
 
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
-  version = "2.5.1";
+  version = "2.5.3";
 
-  src = fetchurl {
-    url = "https://taskwarrior.org/download/task-${version}.tar.gz";
-    sha256 = "059a9yc58wcicc6xxsjh1ph7k2yrag0spsahp1wqmsq6h7jwwyyq";
-  };
+  srcs = [
+    (fetchurl {
+      url = " https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${version}/${sourceRoot}.tar.gz";
+      sha256 = "0fwnxshhlha21hlgg5z1ad01w13zm1hlmncs274y5n8i15gdfhvj";
+    })
+    (fetchurl {
+      url = "https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${version}/tests-${version}.tar.gz";
+      sha256 = "165xmf9h6rb7l6l9nlyygj0mx9bi1zyd78z0lrl3nadhmgzggv0b";
+    })
+  ];
 
-  patches = [ ./0001-bash-completion-quote-pattern-argument-to-grep.patch ];
+  sourceRoot = "task-${version}";
+
+  postUnpack = ''
+    mv test ${sourceRoot}
+  '';
 
   nativeBuildInputs = [ cmake libuuid gnutls ];
+
+  doCheck = true;
+  preCheck = ''
+    find test -type f -exec sed -i \
+      -e "s|/usr/bin/env python3|${python3.interpreter}|" \
+      -e "s|/usr/bin/env bash|${bash}/bin/bash|" \
+      {} +
+  '';
+  checkTarget = "test";
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
@@ -22,11 +41,11 @@ stdenv.mkDerivation rec {
     ln -s "../../../share/doc/task/scripts/zsh/_task" "$out/share/zsh/site-functions/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
     license = licenses.mit;
     maintainers = with maintainers; [ marcweber ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

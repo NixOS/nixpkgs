@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, python3 }:
 
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "mpv_sponsorblock";
   version = "unstable-2020-07-05";
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   passthru.scriptName = "sponsorblock.lua";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "mpv script to skip sponsored segments of YouTube videos";
     homepage = "https://github.com/po5/mpv_sponsorblock";
     license = licenses.gpl3;

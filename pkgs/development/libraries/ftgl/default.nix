@@ -1,40 +1,66 @@
-{ stdenv, fetchurl, freetype, libGL, libGLU, OpenGL }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
+, freeglut
+, freetype
+, GLUT
+, libGL
+, libGLU
+, OpenGL
+, pkg-config
+}:
 
-let
-  name = "ftgl-2.1.3-rc5";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "ftgl";
+  version = "2.4.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ftgl/${name}.tar.gz";
-    sha256 = "0nsn4s6vnv5xcgxcw6q031amvh2zfj2smy1r5mbnjj2548hxcn2l";
+  src = fetchFromGitHub {
+    owner = "frankheckenbach";
+    repo = "ftgl";
+    rev = "v${version}";
+    hash = "sha256-6TDNGoMeBLnucmHRgEDIVWcjlJb7N0sTluqBwRMMWn4=";
   };
 
-  buildInputs = [ freetype ]
-    ++ (if stdenv.isDarwin then
-      [ OpenGL ]
-    else
-      [ libGL libGLU ])
-    ;
+  nativeBuildInputs = [
+    autoreconfHook
+    doxygen
+    pkg-config
+  ];
+  buildInputs = [
+    freetype
+  ] ++ (if stdenv.isDarwin then [
+    OpenGL
+    GLUT
+  ] else [
+    libGL
+    libGLU
+    freeglut
+  ]);
 
-  configureFlags = [ "--with-ft-prefix=${stdenv.lib.getDev freetype}" ];
+  configureFlags = [
+    "--with-ft-prefix=${lib.getDev freetype}"
+  ];
 
   enableParallelBuilding = true;
 
-  meta = {
-    homepage = "https://sourceforge.net/apps/mediawiki/ftgl/";
+  postInstall = ''
+    install -Dm644 src/FTSize.h -t ${placeholder "out"}/include/FTGL
+    install -Dm644 src/FTFace.h -t ${placeholder "out"}/include/FTGL
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/frankheckenbach/ftgl";
     description = "Font rendering library for OpenGL applications";
-    license = stdenv.lib.licenses.gpl3Plus;
-
     longDescription = ''
-      FTGL is a free cross-platform Open Source C++ library that uses
-      Freetype2 to simplify rendering fonts in OpenGL applications. FTGL
-      supports bitmaps, pixmaps, texture maps, outlines, polygon mesh,
-      and extruded polygon rendering modes.
+      FTGL is a free cross-platform Open Source C++ library that uses Freetype2
+      to simplify rendering fonts in OpenGL applications. FTGL supports bitmaps,
+      pixmaps, texture maps, outlines, polygon mesh, and extruded polygon
+      rendering modes.
     '';
-
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [];
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

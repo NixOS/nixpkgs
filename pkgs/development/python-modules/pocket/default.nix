@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wrapper for the pocket API";
     homepage    = "https://github.com/tapanpandita/pocket";
     license     = licenses.bsd3;

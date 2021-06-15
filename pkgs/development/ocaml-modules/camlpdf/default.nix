@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, which, ocaml, findlib }:
+{ lib, stdenv, fetchFromGitHub, which, ocaml, findlib }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !lib.versionAtLeast ocaml.version "4.02"
 then throw "camlpdf is not available for OCaml ${ocaml.version}"
 else
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OCaml library for reading, writing and modifying PDF files";
     homepage = "https://github.com/johnwhitington/camlpdf";
     license = licenses.lgpl21Plus;

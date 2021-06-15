@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen }:
+{ lib, stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors-translucent";
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
     cp -pr Bibata_* $out/share/icons/
   '';
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "Translucent Varient of the Material Based Cursor";
     homepage = "https://github.com/Silicasandwhich/Bibata_Cursor_Translucent";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3, xxd, boost, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, xxd, boost, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "cryptominisat";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "00hmxdlyhn7pwk9jlvc5g0l5z5xqfchjzf5jgn3pkj9xhl8yqq50";
   };
 
-  patches = [ 
+  patches = [
     (fetchpatch {
       # https://github.com/msoos/cryptominisat/pull/621
       url = "https://github.com/msoos/cryptominisat/commit/11a97003b0bfbfb61ed6c4e640212110d390c28c.patch";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 boost ];
   nativeBuildInputs = [ cmake xxd ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An advanced SAT Solver";
     homepage    = "https://github.com/msoos/cryptominisat";
     license     = licenses.mit;

@@ -2,7 +2,7 @@
 , qtbase }:
 
 let
-  version = "0.3.7";
+  version = "0.3.8";
   pname = "nanovna-saver";
 
 in mkDerivationWith python3Packages.buildPythonApplication {
@@ -12,7 +12,7 @@ in mkDerivationWith python3Packages.buildPythonApplication {
     owner = "NanoVNA-Saver";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c22ckyypg91gfb2sdc684msw28nnb6r8cq3b362gafvv00a35mi";
+    sha256 = "0z83rwpnbbs1n74mx8dgh1d1crp90mannj9vfy161dmy4wzc5kpv";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];

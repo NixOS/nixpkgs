@@ -1,13 +1,13 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , nose, flask, six, packaging }:
 
 buildPythonPackage rec {
   pname = "Flask-Cors";
-  version = "3.0.9";
+  version = "3.0.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8";
+    sha256 = "b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de";
   };
 
   checkInputs = [ nose packaging ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     nosetests --exclude test_acl_uncaught_exception_500
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Flask extension adding a decorator for CORS support";
     homepage = "https://github.com/corydolphin/flask-cors";
     license = with licenses; [ mit ];

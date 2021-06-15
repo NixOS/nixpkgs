@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p5k73wjfh0zzjvby8b5107cx7x0c2rdj66zh1nc8y95i0anf2na";
+    sha256 = "7d1417f36b5b92d1365671633a91711513e5afbcc82f32475d0690317607714e";
   };
 
   propagatedBuildInputs = [ numpy pyopengl pyqt5 scipy ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyqtgraph" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "http://www.pyqtgraph.org/";
     changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";

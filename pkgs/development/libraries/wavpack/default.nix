@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, libiconv }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "wavpack";
-  version = "5.3.0";
+  version = "5.4.0";
 
   enableParallelBuilding = true;
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  src = fetchurl {
-    url = "http://www.wavpack.com/${pname}-${version}.tar.bz2";
-    sha256 = "00baiag7rlkzc6545dqdp4p5sr7xc3n97n7qdkgx58c544x0pw5n";
+  src = fetchFromGitHub {
+    owner = "dbry";
+    repo = "WavPack";
+    rev = version;
+    sha256 = "1b6szk2vmnqnv5w7h8yc1iazjlidlraq1lwjbmc3fi0snbn6qj44";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hybrid audio compression format";
-    homepage    = "http://www.wavpack.com/";
+    homepage    = "https://www.wavpack.com/";
+    changelog   = "https://github.com/dbry/WavPack/releases/tag/${version}";
     license     = licenses.bsd3;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];

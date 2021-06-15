@@ -7,16 +7,17 @@
 , msrestazure
 , azure-common
 , azure-mgmt-nspkg
+, azure-mgmt-core
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-loganalytics";
-  version = "2.0.0";
+  version = "10.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "947cada6e52fea6ecae7011d7532cf8edbe90250753a58749c473b863331fcc6";
+    sha256 = "29330984d0f084dff26cea239d7b733c1a26844da85d33bf3bb53b515ce0bc23";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +25,7 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-nspkg
+    azure-mgmt-core
   ];
 
   pythonNamespaces = [ "azure.mgmt" ];

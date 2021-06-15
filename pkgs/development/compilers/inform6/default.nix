@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "inform6";
@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "PREFIX=${placeholder "out"}"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interactive fiction compiler and libraries";
     longDescription = ''
       Inform 6 is a C-like programming language for writing interactive fiction
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/DavidGriffith/inform6unix";
     changelog = "https://gitlab.com/DavidGriffith/inform6unix/-/raw/${version}/NEWS";
     license = licenses.artistic2;
-    maintainers = with stdenv.lib.maintainers; [ ddelabru ];
+    maintainers = with lib.maintainers; [ ddelabru ];
     platforms = platforms.all;
   };
 }

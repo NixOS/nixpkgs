@@ -10,7 +10,7 @@
   ­~~~
 */
 
-{ stdenv, ghcWithPackages, makeWrapper, diagrams-builder, extraPackages ? (self: []) }:
+{ lib, stdenv, ghcWithPackages, makeWrapper, diagrams-builder, extraPackages ? (self: []) }:
 
 let
 
@@ -33,9 +33,9 @@ in
 stdenv.mkDerivation {
   name = "diagrams-builder";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildCommand = with stdenv.lib;
+  buildCommand = with lib;
     concatStrings (intersperse "\n" (map exeWrapper backends));
 
   # Will be faster to build the wrapper locally then to fetch it from a binary cache.

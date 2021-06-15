@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "manix";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "mlvzk";
     repo  = pname;
     rev = "v${version}";
-    sha256 = "0fv3sgzwjsgq2h1177r8r1cl5zrfja4ll801sd0bzj3nzmkyww7p";
+    sha256 = "1b7xi8c2drbwzfz70czddc4j33s7g1alirv12dwl91hbqxifx8qs";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin [ darwin.Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "0f2q3bj1cmpbma0fjhc2lc92j4al78fhrx3yc37kmbgzaza0yan5";
+  cargoSha256 = "1yivx9vzk2fvncvlkwq5v11hb9llr1zlcmy69y12q6xnd9rd8x1b";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Fast Documentation Searcher for Nix";
     homepage    = "https://github.com/mlvzk/manix";
     license     = [ licenses.mpl20 ];

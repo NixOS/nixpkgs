@@ -1,47 +1,92 @@
-{ stdenv, fetchurl, cmake, pkgconfig, glib, libX11, libXext, libXinerama, libXrandr
-, withDoc ? stdenv.buildPlatform == stdenv.targetPlatform, asciidoc ? null }:
-
-# Doc generation is disabled by default when cross compiling because asciidoc
-# does not cross compile for now
-
-assert withDoc -> asciidoc != null;
+{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, freetype, asciidoc
+, xdotool, xorgserver, xsetroot, xterm, runtimeShell
+, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.8.3";
+  version = "0.9.3";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "1qmb4pjf2f6g0dvcg11cw9njwmxblhqzd70ai8qnlgqw1iz3nkm1";
+    sha256 = "01f1bv9axjhw1l2gwhdwahljssj0h8q7a1bqwbpnwvln0ayv39qb";
   };
 
   outputs = [
     "out"
-  ] ++ stdenv.lib.optionals withDoc [
     "doc"
     "man"
   ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONF_PREFIX=${placeholder "out"}/etc"
-  ] ++ stdenv.lib.optional (!withDoc) "-DWITH_DOCUMENTATION=OFF";
+  ];
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
-  ] ++ stdenv.lib.optional withDoc asciidoc;
+    pkg-config
+  ];
+
+  depsBuildBuild = [
+    asciidoc
+  ];
 
   buildInputs = [
     libX11
     libXext
     libXinerama
     libXrandr
+    libXft
+    libXrender
+    freetype
   ];
 
-  meta = {
+  patches = [
+    ./test-path-environment.patch
+  ];
+
+  postPatch = ''
+    patchShebangs doc/gendoc.py
+
+    # fix /etc/xdg/herbstluftwm paths in documentation and scripts
+    grep -rlZ /etc/xdg/herbstluftwm share/ doc/ scripts/ | while IFS="" read -r -d "" path; do
+      substituteInPlace "$path" --replace /etc/xdg/herbstluftwm $out/etc/xdg/herbstluftwm
+    done
+
+    # fix shebang in generated scripts
+    substituteInPlace tests/conftest.py --replace "/usr/bin/env bash" ${runtimeShell}
+    substituteInPlace tests/test_herbstluftwm.py --replace "/usr/bin/env bash" ${runtimeShell}
+  '';
+
+  doCheck = true;
+
+  checkInputs = [
+    (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
+    xdotool
+    xorgserver
+    xsetroot
+    xterm
+    python3.pkgs.pytestCheckHook
+  ];
+
+  # make the package's module avalaible
+  preCheck = ''
+    export PYTHONPATH="$PYTHONPATH:../python"
+  '';
+
+  pytestFlagsArray = [ "../tests" ];
+  disabledTests = [
+    "test_title_different_letters_are_drawn"
+  ];
+
+  passthru = {
+    tests.herbstluftwm = nixosTests.herbstluftwm;
+  };
+
+  meta = with lib; {
     description = "A manual tiling window manager for X";
     homepage = "https://herbstluftwm.org/";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thibautmarty ];
   };
 }

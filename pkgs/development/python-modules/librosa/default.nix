@@ -1,10 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , joblib
 , matplotlib
 , six
-, scikitlearn
+, scikit-learn
 , decorator
 , audioread
 , resampy
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "af0b9f2ed4bbf6aecbc448a4cd27c16453c397cb6bef0f0cfba0e63afea2b839";
   };
 
-  propagatedBuildInputs = [ joblib matplotlib six scikitlearn decorator audioread resampy soundfile pooch ];
+  propagatedBuildInputs = [ joblib matplotlib six scikit-learn decorator audioread resampy soundfile pooch ];
 
   # No tests
   # 1. Internet connection is required
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # check that import works, this allows to capture errors like https://github.com/librosa/librosa/issues/1160
   pythonImportsCheck = [ "librosa" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python module for audio and music processing";
     homepage = "http://librosa.github.io/";
     license = licenses.isc;

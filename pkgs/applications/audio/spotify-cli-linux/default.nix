@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, dbus }:
+{ lib, python3Packages, dbus }:
 python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";
   version = "1.6.0";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   # upstream has no code tests, but uses its "tests" for linting and formatting checks
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pwittchen.github.io/spotify-cli-linux/";
     maintainers = [ maintainers.kmein ];
     description = "A command line interface to Spotify on Linux.";

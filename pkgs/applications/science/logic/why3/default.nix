@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, fetchpatch, stdenv
+{ callPackage, fetchurl, fetchpatch, lib, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib ocamlgraph zarith menhir
+    ocaml findlib ocamlgraph zarith menhir menhirLib
     # Compressed Sessions
     # Emacs compilation of why3.el
     emacs
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   passthru.withProvers = callPackage ./with-provers.nix {};
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A platform for deductive program verification";
     homepage    = "http://why3.lri.fr/";
     license     = licenses.lgpl21;

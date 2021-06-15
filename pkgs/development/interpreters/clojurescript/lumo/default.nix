@@ -149,11 +149,11 @@ stdenv.mkDerivation {
     sha256 = "12agi6bacqic2wq6q3l28283badzamspajmajzqm7fbdl2aq1a4p";
   };
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
     nodejs
     clojure
     jre
-    unzip
     python
     openssl
     gnutar
@@ -280,8 +280,8 @@ stdenv.mkDerivation {
       making it the fastest Clojure REPL in existence.
     '';
     homepage = "https://github.com/anmonteiro/lumo";
-    license = stdenv.lib.licenses.epl10;
-    maintainers = [ stdenv.lib.maintainers.hlolli ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = lib.licenses.epl10;
+    maintainers = [ lib.maintainers.hlolli ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

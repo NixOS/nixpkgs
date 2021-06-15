@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = ''A collection of routines for representation theory and combinatorics'';
+    description = "A collection of routines for representation theory and combinatorics";
     license = licenses.isc;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

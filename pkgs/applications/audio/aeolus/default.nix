@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libclthreads, zita-alsa-pcmi, alsaLib, libjack2
+{ lib, stdenv, fetchurl, libclthreads, zita-alsa-pcmi, alsa-lib, libjack2
 , libclxclient, libX11, libXft, readline
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libclthreads zita-alsa-pcmi alsaLib libjack2 libclxclient
+    libclthreads zita-alsa-pcmi alsa-lib libjack2 libclxclient
     libX11 libXft readline
   ];
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Synthetized (not sampled) pipe organ emulator";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html";
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nico202 ];
   };
 }

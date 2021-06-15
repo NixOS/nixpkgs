@@ -1,33 +1,71 @@
-{ stdenv, fetchFromGitHub, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
-, libvorbis, libxml2, makeWrapper, movit, pkgconfig, sox, qtbase, qtsvg
-, fftw, vid-stab, opencv3, ladspa-sdk, genericUpdater, common-updater-scripts
+{ lib
+, fetchFromGitHub
+, SDL
+, ffmpeg
+, frei0r
+, libjack2
+, libdv
+, libsamplerate
+, libvorbis
+, libxml2
+, movit
+, pkg-config
+, sox
+, qtbase
+, qtsvg
+, fftw
+, vid-stab
+, opencv3
+, ladspa-sdk
+, genericUpdater
+, common-updater-scripts
+, ladspaPlugins
+, mkDerivation
+, which
 }:
-
-let inherit (stdenv.lib) getDev; in
-
-stdenv.mkDerivation rec {
+let inherit (lib) getDev; in
+mkDerivation rec {
   pname = "mlt";
-  version = "6.22.1";
+  version = "6.24.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0jxv848ykw0csbnayrd710ylw46m0picfv7rpzsxz1vh4jzs395k";
+    sha256 = "1my43ica2qax2622307dv4gn3w8hkchy643i9pq8r9yh2hd4pvs9";
   };
 
   buildInputs = [
-    SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
-    makeWrapper movit pkgconfig qtbase qtsvg sox fftw vid-stab opencv3
+    SDL
+    ffmpeg
+    frei0r
+    libjack2
+    libdv
+    libsamplerate
+    libvorbis
+    libxml2
+    movit
+    pkg-config
+    qtbase
+    qtsvg
+    sox
+    fftw
+    vid-stab
+    opencv3
     ladspa-sdk
+    ladspaPlugins
   ];
+
+  nativeBuildInputs = [ which ];
 
   outputs = [ "out" "dev" ];
 
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
   configureFlags = [
-    "--avformat-swscale" "--enable-gpl" "--enable-gpl" "--enable-gpl3"
+    "--avformat-swscale"
+    "--enable-gpl"
+    "--enable-gpl3"
     "--enable-opengl"
   ];
 
@@ -37,11 +75,12 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = "-std=c++11";
 
-  enableParallelBuilding = true;
+  qtWrapperArgs = [
+    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
+    "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
+  ];
 
   postInstall = ''
-    wrapProgram $out/bin/melt --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1
-
     # Remove an unnecessary reference to movit.dev.
     s=${movit.dev}/include
     t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
@@ -63,7 +102,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org/";
     license = licenses.gpl3;

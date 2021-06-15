@@ -2,25 +2,28 @@
 
 stdenv.mkDerivation rec {
   pname = "spdx-license-list-data";
-  version = "3.10";
+  version = "3.12";
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "license-list-data";
     rev = "v${version}";
-    sha256 = "1zza0jrs82112dcjqgkyck2b7hv4kg9s10pmlripi6c1rs37av14";
+    sha256 = "09xci8dzblg3d30jf7s43zialbcxlxly03zrkiymcvnzixg8v48f";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
+    runHook preInstall
+
     install -vDt $out/json json/licenses.json
+
+    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Various data formats for the SPDX License List";
     homepage = "https://github.com/spdx/license-list-data";
-    license = lib.licenses.cc0;
-    platforms = lib.platforms.all;
+    license = licenses.cc0;
+    maintainers = with maintainers; [ oxzi ];
+    platforms = platforms.all;
   };
 }

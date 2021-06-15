@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, pytestcov, pytest }:
+{ lib, buildPythonPackage, fetchPypi, six, pytestcov, pytest }:
 
 buildPythonPackage rec {
   version = "1.1.0";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestcov pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library for parsing Dockerfile files";
     homepage = "https://github.com/DBuildService/dockerfile-parse";
     license = licenses.bsd3;

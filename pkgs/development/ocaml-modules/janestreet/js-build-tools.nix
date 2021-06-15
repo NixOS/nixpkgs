@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchurl, ocaml_oasis, opaline }:
+{ lib, buildOcaml, fetchurl, ocaml_oasis, opaline }:
 
 buildOcaml rec {
   name = "js-build-tools";
@@ -21,7 +21,7 @@ buildOcaml rec {
 
   patches = [ ./js-build-tools-darwin.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jane Street Build Tools";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;

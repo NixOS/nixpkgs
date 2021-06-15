@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "jid";
@@ -18,7 +18,7 @@ buildGoPackage rec {
   meta = {
     description = "A command-line tool to incrementally drill down JSON";
     homepage = "https://github.com/simeji/jid";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ stesie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stesie ];
   };
 }

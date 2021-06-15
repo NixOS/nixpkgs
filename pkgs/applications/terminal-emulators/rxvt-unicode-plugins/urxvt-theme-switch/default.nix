@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   rev = "cfcbcc3dd5a5b09a3fec0f6a1fea95f4a36a48c4";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp color-themes $out/lib/urxvt/perl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "urxvt plugin that allows to switch color themes during runtime";
     homepage = "https://github.com/felixr/urxvt-theme-switch";
     license = "CCBYNC";

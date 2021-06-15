@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip
+{ lib, stdenv, fetchurl, unzip
 # If jdk is null, require JAVA_HOME in runtime environment, else store
 # JAVA_HOME=${jdk.home} into grails.
 , jdk ? null
@@ -6,8 +6,8 @@
 }:
 
 let
-  binpath = stdenv.lib.makeBinPath
-    ([ coreutils ncurses gnused gnugrep ] ++ stdenv.lib.optional (jdk != null) jdk);
+  binpath = lib.makeBinPath
+    ([ coreutils ncurses gnused gnugrep ] ++ lib.optional (jdk != null) jdk);
 in
 stdenv.mkDerivation rec {
   pname = "grails";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l99x3g485qjpdd7ga553xpi1s6rq21p8v16qjzqwdhyld961qsr";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   dontBuild = true;
 
@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
     rm -f "$out"/bin/*.bat
     # Improve purity
     sed -i -e '2iPATH=${binpath}:\$PATH' "$out"/bin/grails
-  '' + stdenv.lib.optionalString (jdk != null) ''
+  '' + lib.optionalString (jdk != null) ''
     # Inject JDK path into grails
     sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
   '';
 
   preferLocalBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Full stack, web application framework for the JVM";
     longDescription = ''
       Grails is an Open Source, full stack, web application framework for the

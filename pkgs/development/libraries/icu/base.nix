@@ -30,18 +30,18 @@ let
 
       # $(includedir) is different from $(prefix)/include due to multiple outputs
       sed -i -e 's|^\(CPPFLAGS = .*\) -I\$(prefix)/include|\1 -I$(includedir)|' config/Makefile.inc.in
-    '' + stdenv.lib.optionalString stdenv.isAarch32 ''
+    '' + lib.optionalString stdenv.isAarch32 ''
       # From https://archlinuxarm.org/packages/armv7h/icu/files/icudata-stdlibs.patch
       sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
     '';
 
     configureFlags = [ "--disable-debug" ]
-      ++ stdenv.lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) "--enable-rpath"
-      ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--with-cross-build=${nativeBuildRoot}";
+      ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) "--enable-rpath"
+      ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--with-cross-build=${nativeBuildRoot}";
 
     enableParallelBuilding = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Unicode and globalization support library";
       homepage = "http://site.icu-project.org/";
       maintainers = with maintainers; [ raskin ];
@@ -57,10 +57,10 @@ let
 
     # FIXME: This fixes dylib references in the dylibs themselves, but
     # not in the programs in $out/bin.
-    nativeBuildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
     # remove dependency on bootstrap-tools in early stdenv build
-    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.isDarwin ''
       sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
     '' + (let
       replacements = [

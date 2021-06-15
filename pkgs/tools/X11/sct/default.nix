@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXrandr }:
+{ lib, stdenv, fetchurl, libX11, libXrandr }:
 
 stdenv.mkDerivation rec {
   name = "sct";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -Dt $out/bin sct";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.tedunangst.com/flak/post/sct-set-color-temperature";
     description = "A minimal utility to set display colour temperature";
     maintainers = [ maintainers.raskin ];

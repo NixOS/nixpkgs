@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, cmake, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "nvidia-texture-tools";
@@ -37,9 +37,7 @@ stdenv.mkDerivation rec {
     moveToOutput lib "$lib"
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of cuda-enabled texture tools and compressors";
     homepage = "https://github.com/castano/nvidia-texture-tools";
     license = licenses.mit;

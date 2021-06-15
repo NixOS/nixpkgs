@@ -9,7 +9,7 @@
 , pytest-remotedata
 , pytest-openfiles
 , pytest-arraydiff
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -22,12 +22,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     hypothesis
-    pytest
     pytest-astropy-header
     pytest-doctestplus
     pytest-filter-subpackage

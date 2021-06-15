@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , fetchPypi
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ colored boto pkgs.openssh pkgs.which ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI for querying and SSHing onto AWS EC2 instances";
     homepage = "https://github.com/NarrativeScience/lsi";
     maintainers = [maintainers.adnelson];

@@ -92,10 +92,12 @@ in rec {
 
   checkUnitConfig = group: checks: attrs: let
     # We're applied at the top-level type (attrsOf unitOption), so the actual
-    # unit options might contain attributes from mkOverride that we need to
+    # unit options might contain attributes from mkOverride and mkIf that we need to
     # convert into single values before checking them.
     defs = mapAttrs (const (v:
-      if v._type or "" == "override" then v.content else v
+      if v._type or "" == "override" then v.content
+      else if v._type or "" == "if" then v.content
+      else v
     )) attrs;
     errors = concatMap (c: c group defs) checks;
   in if errors == [] then true

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, nim, htslib, pcre}:
+{lib, stdenv, fetchFromGitHub, nim, htslib, pcre}:
 
 let
   hts-nim = fetchFromGitHub {
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = "install -Dt $out/bin mosdepth";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";
     license = licenses.mit;
     homepage = "https://github.com/brentp/mosdepth";

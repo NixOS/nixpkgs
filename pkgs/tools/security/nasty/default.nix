@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gpgme }:
+{ lib, stdenv, fetchurl, gpgme }:
 
 stdenv.mkDerivation rec {
   pname = "nasty";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp nasty $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recover the passphrase of your PGP or GPG-key";
     longDescription = ''
     Nasty is a program that helps you to recover the passphrase of your PGP or GPG-key

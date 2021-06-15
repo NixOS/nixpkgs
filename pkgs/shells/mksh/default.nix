@@ -1,4 +1,8 @@
-{ stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+}:
 
 stdenv.mkDerivation rec {
   pname = "mksh";
@@ -6,23 +10,33 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
-      "http://pub.allbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
+      "https://www.mirbsd.org/MirOS/dist/mir/mksh/${pname}-R${version}.tgz"
+      "http://pub.allbsd.org/MirOS/dist/mir/mksh/${pname}-R${version}.tgz"
     ];
-    sha256 = "01n5ggw33bw4jv4d3148wlw9n4aj7vdn3ffnc66c9w9pldjidbkp";
+    hash = "sha256-d64WZaM38cSMYda5Yds+UhGbOOWIhNHIloSvMfh7xQY=";
   };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   dontConfigure = true;
 
-  buildPhase = ''sh ./Build.sh -r'';
-
-  installPhase = ''
-    install -D -m 755 mksh $out/bin/mksh
-    install -D -m 644 mksh.1 $out/share/man/man1/mksh.1
-    install -D -m 644 dot.mkshrc $out/share/mksh/mkshrc
+  buildPhase = ''
+    runHook preBuild
+    sh ./Build.sh -r
+    runHook postBuild
   '';
 
-  meta = with stdenv.lib; {
+  installPhase = ''
+    runHook preInstall
+    install -D mksh $out/bin/mksh
+    install -D dot.mkshrc $out/share/mksh/mkshrc
+    installManPage mksh.1
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "MirBSD Korn Shell";
     longDescription = ''
       The MirBSD Korn Shell is a DFSG-free and OSD-compliant (and OSI
@@ -32,7 +46,7 @@ stdenv.mkDerivation rec {
       systems.
     '';
     homepage = "https://www.mirbsd.org/mksh.htm";
-    license = licenses.bsd3;
+    license = with licenses; [ miros isc unicode-dfs-2016 ];
     maintainers = with maintainers; [ AndersonTorres joachifm ];
     platforms = platforms.unix;
   };
@@ -41,3 +55,5 @@ stdenv.mkDerivation rec {
     shellPath = "/bin/mksh";
   };
 }
+# TODO [ AndersonTorres ]: lksh
+# TODO [ AndersonTorres ]: a more accurate licensing info

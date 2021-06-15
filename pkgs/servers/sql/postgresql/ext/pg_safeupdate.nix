@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg-safeupdate";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -D safeupdate.so -t $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple extension to PostgreSQL that requires criteria for UPDATE and DELETE";
     homepage    = "https://github.com/eradman/pg-safeupdate";
     platforms   = postgresql.meta.platforms;

@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, autoreconfHook, which, pkgconfig, perl, guile, libxml2 }:
+{ lib, stdenv, buildPackages, fetchurl, autoreconfHook, which, pkg-config, perl, guile, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "autogen";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
   nativeBuildInputs = [
-    which pkgconfig perl autoreconfHook/*patches applied*/
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    which pkg-config perl autoreconfHook/*patches applied*/
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # autogen needs a build autogen when cross-compiling
     buildPackages.buildPackages.autogen buildPackages.texinfo
   ];
@@ -56,13 +56,15 @@ stdenv.mkDerivation rec {
       # Debian: https://salsa.debian.org/debian/autogen/-/blob/master/debian/rules#L21
       "--enable-timeout=78"
     ]
-    ++ (stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ (lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--with-libxml2=${libxml2.dev}"
       "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
       # the configure check for regcomp wants to run a host program
       "libopts_cv_with_libregex=yes"
       #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
-    ]);
+    ])
+    # See: https://sourceforge.net/p/autogen/bugs/187/
+    ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_utimensat=no" ];
 
   #doCheck = true; # not reliable
 
@@ -76,7 +78,7 @@ stdenv.mkDerivation rec {
       sed -e "s|$lib/lib|/no-such-autogen-lib-path|" -i $f
     done
 
-  '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # remove /build/** from RPATHs
     for f in "$bin"/bin/*; do
       local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)/build/[^:]*:@\1@g')"
@@ -84,7 +86,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automated text and program generation tool";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     homepage = "https://www.gnu.org/software/autogen/";

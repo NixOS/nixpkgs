@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, ruby }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, ruby }:
 
 stdenv.mkDerivation rec {
   pname = "h";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp up $out/bin/up
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "faster shell navigation of projects";
     homepage = "https://github.com/zimbatm/h";
     license = licenses.mit;

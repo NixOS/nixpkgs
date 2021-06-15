@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libX11, libXt, libXpm, libXaw, localStateDir?null }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libX11, libXt, libXpm, libXaw, localStateDir?null }:
 
 stdenv.mkDerivation {
   pname = "xjump";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     else
       [];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The falling tower game";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pmeunier ];

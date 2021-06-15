@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
@@ -19,7 +19,7 @@ buildPythonPackage {
 
   buildInputs = [ pkgs.lxc ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Out of tree python 2.7 binding for liblxc";
     homepage = "https://github.com/lxc/python2-lxc";
     license = licenses.lgpl2;

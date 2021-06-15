@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, writeShellScriptBin, substituteAll
+{ lib, stdenv, callPackage, fetchFromGitHub, writeShellScriptBin, substituteAll
 , sbcl, bash, which, perl, nettools
 , openssl, glucose, minisat, abc-verifier, z3, python2
 , certifyBooks ? true
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     # ACL2 itself only needs a Common Lisp compiler/interpreter:
     sbcl
-  ] ++ stdenv.lib.optionals certifyBooks [
+  ] ++ lib.optionals certifyBooks [
     # To build community books, we need Perl and a couple of utilities:
     which perl nettools
     # Some of the books require one or more of these external tools:
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     # When certifying books, ACL2 doesn't like $HOME not existing.
     export HOME=$(pwd)/fake-home
-  '' + stdenv.lib.optionalString certifyBooks ''
+  '' + lib.optionalString certifyBooks ''
     # Some books also care about $USER being nonempty.
     export USER=nobody
   '';
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     ln -s $out/share/${pname}/saved_acl2           $out/bin/${pname}
-  '' + stdenv.lib.optionalString certifyBooks ''
+  '' + lib.optionalString certifyBooks ''
     ln -s $out/share/${pname}/books/build/cert.pl  $out/bin/${pname}-cert
     ln -s $out/share/${pname}/books/build/clean.pl $out/bin/${pname}-clean
   '';
@@ -100,7 +100,7 @@ in stdenv.mkDerivation rec {
     rm -rf $out/share/${pname}/books
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interpreter and a prover for a Lisp dialect";
     longDescription = ''
       ACL2 is a logic and programming language in which you can model computer

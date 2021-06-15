@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, py, pytest }:
+{ lib, buildPythonPackage, fetchPypi, py, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-datafiles";
@@ -10,9 +10,9 @@ buildPythonPackage rec {
 
   buildInputs = [ py pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
-    homepage = "https://pypi.python.org/pypi/pytest-catchlog/";
+    homepage = "https://github.com/omarkohl/pytest-datafiles";
     description = "py.test plugin to create a 'tmpdir' containing predefined files/directories.";
   };
 }

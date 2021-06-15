@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, wheel, watchdog, flake8
+{ lib, buildPythonPackage, fetchPypi, watchdog, flake8
 , pytest, pytestrunner, coverage, sphinx, twine }:
 
 buildPythonPackage rec {
@@ -16,6 +16,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/rhgrant10/ndjson";
     description = "JsonDecoder";
     platforms = platforms.unix;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ freezeboy ];
   };
 }

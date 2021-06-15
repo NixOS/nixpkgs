@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libjack2, pkgconfig, libpulseaudio, xorg }:
+{ lib, stdenv, fetchurl, alsa-lib, libjack2, pkg-config, libpulseaudio, xorg }:
 
 stdenv.mkDerivation  rec {
   pname = "bristol";
@@ -9,9 +9,9 @@ stdenv.mkDerivation  rec {
     sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    alsaLib libjack2 libpulseaudio xorg.libX11 xorg.libXext
+    alsa-lib libjack2 libpulseaudio xorg.libX11 xorg.libXext
     xorg.xorgproto
   ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation  rec {
     sed -e "s@\`which brighton\`@$out/bin/brighton@g" -i bin/startBristol
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A range of synthesiser, electric piano and organ emulations";
     homepage = "http://bristol.sourceforge.net";
     license = licenses.gpl3;

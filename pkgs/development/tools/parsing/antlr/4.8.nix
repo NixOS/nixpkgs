@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, jre
-, fetchFromGitHub, cmake, ninja, pkgconfig, libuuid, darwin }:
+{ lib, stdenv, fetchurl, jre
+, fetchFromGitHub, cmake, ninja, pkg-config, libuuid, darwin }:
 
 let
   version = "4.8";
@@ -18,15 +18,15 @@ let
 
       outputs = [ "out" "dev" "doc" ];
 
-      nativeBuildInputs = [ cmake ninja pkgconfig ];
-      buildInputs = stdenv.lib.optional stdenv.isLinux libuuid
-        ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreFoundation;
+      nativeBuildInputs = [ cmake ninja pkg-config ];
+      buildInputs = lib.optional stdenv.isLinux libuuid
+        ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreFoundation;
 
       postUnpack = ''
         export sourceRoot=$sourceRoot/runtime/Cpp
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "C++ target for ANTLR 4";
         homepage = "https://www.antlr.org/";
         license = licenses.bsd3;
@@ -67,7 +67,7 @@ let
       jarLocation = "${antlr}/share/java/antlr-${version}-complete.jar";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Powerful parser generator";
       longDescription = ''
         ANTLR (ANother Tool for Language Recognition) is a powerful parser

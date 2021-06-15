@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml }:
+{ lib, stdenv, fetchurl, ocaml, perl }:
 
 stdenv.mkDerivation {
   pname = "bibtex2html";
@@ -9,9 +9,9 @@ stdenv.mkDerivation {
     sha256 = "07gzrs4lfrkvbn48cgn2gn6c7cx3jsanakkrb2irj0gmjzfxl96j";
   };
 
-  buildInputs = [ ocaml ];
+  buildInputs = [ ocaml perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of tools for translating from BibTeX to HTML";
     homepage = "https://www.lri.fr/~filliatr/bibtex2html/";
     license = licenses.gpl2;

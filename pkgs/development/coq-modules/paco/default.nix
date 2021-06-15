@@ -1,42 +1,16 @@
-{stdenv, fetchFromGitHub, coq, unzip}:
+{ lib, mkCoqDerivation, coq, version ? null }:
 
-let
-  versions = {
-    pre_8_6 = rec {
-      rev = "v${version}";
-      version = "1.2.8";
-      sha256 = "05fskx5x1qgaf9qv626m38y5izichzzqc7g2rglzrkygbskrrwsb";
-    };
-    post_8_6 = rec {
-      rev = "v${version}";
-      version = "4.0.2";
-      sha256 = "1q96bsxclqx84xn5vkid501jkwlc1p6fhb8szrlrp82zglj58b0b";
-    };
-  };
-  params = {
-    "8.5" = versions.pre_8_6;
-    "8.6" = versions.post_8_6;
-    "8.7" = versions.post_8_6;
-    "8.8" = versions.post_8_6;
-    "8.9" = versions.post_8_6;
-    "8.10" = versions.post_8_6;
-    "8.11" = versions.post_8_6;
-    "8.12" = versions.post_8_6;
-  };
-  param = params.${coq.coq-version};
-in
-
-stdenv.mkDerivation rec {
-  inherit (param) version;
-  name = "coq${coq.coq-version}-paco-${version}";
-
-  src = fetchFromGitHub {
-    inherit (param) rev sha256;
-    owner = "snu-sf";
-    repo = "paco";
-  };
-
-  buildInputs = [ coq ];
+with lib; mkCoqDerivation {
+  pname = "paco";
+  owner = "snu-sf";
+  inherit version;
+  defaultVersion = with versions; switch coq.coq-version [
+    { case = isGe "8.6";         out = "4.0.2"; }
+    { case = range "8.5" "8.8";  out = "1.2.8"; }
+  ] null;
+  release."4.0.2".sha256 = "1q96bsxclqx84xn5vkid501jkwlc1p6fhb8szrlrp82zglj58b0b";
+  release."1.2.8".sha256 = "05fskx5x1qgaf9qv626m38y5izichzzqc7g2rglzrkygbskrrwsb";
+  releaseRev = v: "v${v}";
 
   preBuild = "cd src";
 
@@ -46,15 +20,9 @@ stdenv.mkDerivation rec {
     cp -pR *.vo $COQLIB/user-contrib/Paco
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "http://plv.mpi-sws.org/paco/";
     description = "A Coq library implementing parameterized coinduction";
     maintainers = with maintainers; [ jwiegley ptival ];
-    platforms = coq.meta.platforms;
   };
-
-  passthru = {
-    compatibleCoqVersions = stdenv.lib.flip builtins.hasAttr params;
-  };
-
 }

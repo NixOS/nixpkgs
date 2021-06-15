@@ -2,7 +2,7 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : rec {
   name = "privacyidea";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ fpletz ];
   };
 
@@ -12,10 +12,16 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
 
     services.privacyidea = {
       enable = true;
-      secretKey = "testing";
-      pepper = "testing";
+      secretKey = "$SECRET_KEY";
+      pepper = "$PEPPER";
       adminPasswordFile = pkgs.writeText "admin-password" "testing";
       adminEmail = "root@localhost";
+
+      # Don't try this at home!
+      environmentFile = pkgs.writeText "pi-secrets.env" ''
+        SECRET_KEY=testing
+        PEPPER=testing
+      '';
     };
     services.nginx = {
       enable = true;
@@ -29,6 +35,8 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
     machine.start()
     machine.wait_for_unit("multi-user.target")
     machine.succeed("curl --fail http://localhost | grep privacyIDEA")
+    machine.succeed("grep \"SECRET_KEY = 'testing'\" /var/lib/privacyidea/privacyidea.cfg")
+    machine.succeed("grep \"PI_PEPPER = 'testing'\" /var/lib/privacyidea/privacyidea.cfg")
     machine.succeed(
         "curl --fail http://localhost/auth -F username=admin -F password=testing | grep token"
     )

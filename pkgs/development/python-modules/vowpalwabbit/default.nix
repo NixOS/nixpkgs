@@ -11,7 +11,7 @@
 , pygments
 , numpy
 , scipy
-, scikitlearn }:
+, scikit-learn }:
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    scikitlearn
+    scikit-learn
     scipy
   ];
 

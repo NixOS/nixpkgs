@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "go-neb";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa maralorn ];
   };
 

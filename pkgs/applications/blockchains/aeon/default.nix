@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, git, doxygen, graphviz
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, git, doxygen, graphviz
 , boost, miniupnpc, openssl, unbound, cppzmq
 , zeromq, pcsclite, readline, libsodium
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "07d87n1j4dc9gfwj6xy5jdpryn45095xdh961g6xjnjzc5fivjch";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig git doxygen graphviz ];
+  nativeBuildInputs = [ cmake pkg-config git doxygen graphviz ];
 
   buildInputs = [
     boost miniupnpc openssl unbound
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private, secure, untraceable currency";
     homepage = "http://www.aeon.cash/";
     license = licenses.bsd3;

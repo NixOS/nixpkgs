@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, mkDerivation, dpkg, which
+{ fetchurl, lib, stdenv, mkDerivation, dpkg, which
 , makeWrapper
-, alsaLib
+, alsa-lib
 , desktop-file-utils
 , dbus
 , libcap
@@ -59,7 +59,7 @@ let
     qtquickcontrols
     qtwebkit
     qtwebengine
-    alsaLib
+    alsa-lib
     dbus
     freetype
     fontconfig
@@ -114,12 +114,12 @@ mkDerivation {
 
     interpreter=$(patchelf --print-interpreter $(readlink -f $(which patchelf)))
     patchelf --set-interpreter $interpreter \
-             --set-rpath ${stdenv.lib.makeLibraryPath deps}:$out/lib \
+             --set-rpath ${lib.makeLibraryPath deps}:$out/lib \
              $out/bin/mendeleydesktop
 
     wrapQtApp $out/bin/mendeleydesktop \
       --add-flags "--unix-distro-build" \
-      ${stdenv.lib.optionalString autorunLinkHandler # ignore errors installing the link handler
+      ${lib.optionalString autorunLinkHandler # ignore errors installing the link handler
       ''--run "$out/bin/install-mendeley-link-handler.sh $out/bin/mendeleydesktop ||:"''}
 
     # Remove bundled qt bits
@@ -128,7 +128,7 @@ mkDerivation {
 
     # Patch up link handler script
     wrapProgram $out/bin/install-mendeley-link-handler.sh \
-      --prefix PATH ':' ${stdenv.lib.makeBinPath [ which gconf desktop-file-utils ] }
+      --prefix PATH ':' ${lib.makeBinPath [ which gconf desktop-file-utils ] }
   '';
 
   dontStrip = true;
@@ -136,7 +136,7 @@ mkDerivation {
 
   updateScript = import ./update.nix { inherit writeScript runtimeShell; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mendeley.com";
     description = "A reference manager and academic social network";
     license = licenses.unfree;

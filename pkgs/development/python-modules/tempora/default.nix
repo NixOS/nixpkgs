@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools_scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
+, setuptools-scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
 , six, pytz, jaraco_functools, pythonOlder
 , pytest-flake8, pytestcov, pytest-black, pytest-mypy
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.2";
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ six pytz jaraco_functools ];
 

@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , gtk2
 , hicolor-icon-theme
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gwc";
-  version = "0.22-04";
+  version = "0.22-05";
 
   src = fetchFromGitHub {
     owner = "AlisterH";
     repo = pname;
     rev = version;
-    sha256 = "0xvfra32dchnnyf9kj5s5xmqhln8jdrc9f0040hjr2dsb58y206p";
+    sha256 = "sha256-FHKu5qAyRyMxXdWYTCeAc6Q4J+NOaU1SGgoTbe0PiFE=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     libpulseaudio
     gtk2
     hicolor-icon-theme
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false; # Fails to generate machine.h in time.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI application for removing noise (hiss, pops and clicks) from audio files";
     homepage = "https://github.com/AlisterH/gwc/";
     license = licenses.gpl2Plus;

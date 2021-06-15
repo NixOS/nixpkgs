@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen,
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen,
   libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
   AGL, Carbon, Cocoa, Foundation,
@@ -11,7 +11,7 @@
   curlSupport ? true, curl,
   colladaSupport ? false, opencollada,
   opencascadeSupport ? false, opencascade,
-  ffmpegSupport ? false, ffmpeg_3,
+  ffmpegSupport ? false, ffmpeg,
   nvttSupport ? false, nvidia-texture-tools,
   freetypeSupport ? true, freetype,
   svgSupport ? false, librsvg,
@@ -27,16 +27,16 @@
 
 stdenv.mkDerivation rec {
   pname = "openscenegraph";
-  version = "3.6.4";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
     rev = "OpenSceneGraph-${version}";
-    sha256 = "0x8hdbzw0b71j91fzp9cwmy9a7ava8v8wwyj8nxijq942vdx1785";
+    sha256 = "00i14h82qg3xzcyd8p02wrarnmby3aiwmz0z43l50byc9f8i05n1";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake doxygen ];
+  nativeBuildInputs = [ pkg-config cmake doxygen ];
 
   buildInputs = [
     libX11 libXinerama libXrandr libGLU libGL
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional curlSupport curl
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional opencascadeSupport opencascade
-    ++ lib.optional ffmpegSupport ffmpeg_3
+    ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optional nvttSupport nvidia-texture-tools
     ++ lib.optional freetypeSupport freetype
     ++ lib.optional svgSupport librsvg
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
     maintainers = with maintainers; [ aanderse raskin ];

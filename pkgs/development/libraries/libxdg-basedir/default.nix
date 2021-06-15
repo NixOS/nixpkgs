@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch}:
+{lib, stdenv, fetchurl, fetchpatch}:
 
 stdenv.mkDerivation rec {
   name = "libxdg-basedir-1.2.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/devnev/libxdg-basedir";
     description = "Implementation of the XDG Base Directory specification";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -28,11 +28,11 @@ buildPythonPackage rec {
   # Couldn't get tests working
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Setuptools plugin that makes unit tests execute with trial instead of pyunit.";
     homepage = "https://github.com/rutsky/setuptools-trial";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ryansydnor nand0p ];
+    maintainers = with maintainers; [ ryansydnor ];
   };
 
 }

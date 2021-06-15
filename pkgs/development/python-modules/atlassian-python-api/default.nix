@@ -1,31 +1,30 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
-, certifi
-, chardet
-, idna
+, fetchFromGitHub
+, deprecated
 , oauthlib
 , requests
 , requests_oauthlib
 , six
-, urllib3
-, pytestrunner
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "1.17.7";
+  version = "3.8.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "456e9873fa5ab5cc91c6ae76a70b662f0993d32e4dff6d8febd866a53d86041e";
+  src = fetchFromGitHub {
+    owner = "atlassian-api";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-J0/CtfBtOdWReKQS/VvOL/3r+j4zJfnv/ICIXepKUvc=";
   };
 
-  checkInputs = [ pytestrunner pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = [ oauthlib requests requests_oauthlib six ];
+  propagatedBuildInputs = [ deprecated oauthlib requests requests_oauthlib six ];
 
   meta = with lib; {
     description = "Python Atlassian REST API Wrapper";

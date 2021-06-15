@@ -1,0 +1,3 @@
+[
+    {"matrix-appservice-irc": "git+https://github.com/matrix-org/matrix-appservice-irc.git#0.26.1" }
+]

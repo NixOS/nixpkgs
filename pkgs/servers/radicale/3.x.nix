@@ -1,16 +1,19 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, nixosTests }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.0.5";
+  version = "3.0.6";
 
-  # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = version;
-    sha256 = "0w8qkjm7b62cr49dbis41kvv3179sfmvvzlhlc0rbqss6vmwbq4p";
+    sha256 = "1xlsvrmx6jhi71j6j8z9sli5vwxasivzjyqf8zq8r0l5p7350clf";
   };
+
+  postPatch = ''
+    sed -i '/addopts/d' setup.cfg
+  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     defusedxml
@@ -21,13 +24,13 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   checkInputs = with python3.pkgs; [
-    pytestrunner
-    pytest
-    pytestcov
-    pytest-flake8
-    pytest-isort
+    pytestCheckHook
     waitress
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) radicale;
+  };
 
   meta = with lib; {
     homepage = "https://www.radicale.org/3.0.html";

@@ -7,7 +7,7 @@
 , cython
 , htslib
 , libdeflate
-, lzma
+, xz
 , pytest
 , samtools
 , zlib
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     curl
     cython
     libdeflate
-    lzma
+    xz
     zlib
   ];
 

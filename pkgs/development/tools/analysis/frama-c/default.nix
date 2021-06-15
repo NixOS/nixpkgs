@@ -11,7 +11,7 @@ let
     biniou
     camlzip
     easy-format
-    menhir
+    menhirLib
     mlgmpidl
     num
     ocamlgraph
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf wrapGAppsHook ];
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhir camlzip
+    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhirLib camlzip
     lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
     gdk-pixbuf
   ];
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
     homepage    = "http://frama-c.com/";
-    license     = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice amiddelk ];
-    platforms   = stdenv.lib.platforms.unix;
+    license     = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];
+    platforms   = lib.platforms.unix;
   };
 }

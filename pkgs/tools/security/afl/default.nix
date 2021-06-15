@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage, makeWrapper
+{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper
 , clang, llvm, which, libcgroup
 }:
 
@@ -21,7 +21,7 @@ let
 
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
     # script.
-    nativeBuildInputs = [ makeWrapper which ];
+    nativeBuildInputs = [ makeWrapper which llvm.dev ];
     buildInputs = [ llvm ];
 
     makeFlags = [ "PREFIX=$(out)" ];
@@ -74,9 +74,9 @@ let
         testing regimes down the road.
       '';
       homepage    = "https://lcamtuf.coredump.cx/afl/";
-      license     = stdenv.lib.licenses.asl20;
+      license     = lib.licenses.asl20;
       platforms   = ["x86_64-linux" "i686-linux"];
-      maintainers = with stdenv.lib.maintainers; [ thoughtpolice ris ];
+      maintainers = with lib.maintainers; [ thoughtpolice ris ];
     };
   };
 in afl

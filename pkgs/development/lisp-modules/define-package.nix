@@ -1,4 +1,4 @@
-args @ {stdenv, clwrapper, baseName, packageName ? baseName
+args @ {lib, stdenv, clwrapper, baseName, packageName ? baseName
   , parasites ? []
   , buildSystems ? ([packageName] ++ parasites)
   , version ? "latest"
@@ -89,7 +89,7 @@ basePackage = {
     env -i \
     NIX_LISP="$NIX_LISP" \
     NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(progn
-          ${stdenv.lib.concatMapStrings (system: ''
+          ${lib.concatMapStrings (system: ''
             (asdf:compile-system :${system})
             (asdf:load-system :${system})
             (asdf:operate (quote asdf::compile-bundle-op) :${system})

@@ -1,18 +1,19 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-hooks'';
-  version = ''architecture.hooks-20181210-git'';
+  baseName = "cl-hooks";
+  version = "architecture.hooks-20181210-git";
 
   parasites = [ "cl-hooks/test" ];
 
-  description = ''This system provides the hooks extension point
-mechanism (as known, e.g., from GNU Emacs).'';
+  description = "This system provides the hooks extension point
+mechanism (as known, e.g., from GNU Emacs).";
 
   deps = [ args."alexandria" args."anaphora" args."closer-mop" args."fiveam" args."let-plus" args."trivial-garbage" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/architecture.hooks/2018-12-10/architecture.hooks-20181210-git.tgz'';
-    sha256 = ''04l8rjmgsd7i580rpm1wndz1jcvfqrmwllnkh3h7als3azi3q2ns'';
+    url = "http://beta.quicklisp.org/archive/architecture.hooks/2018-12-10/architecture.hooks-20181210-git.tgz";
+    sha256 = "04l8rjmgsd7i580rpm1wndz1jcvfqrmwllnkh3h7als3azi3q2ns";
   };
 
   packageName = "cl-hooks";

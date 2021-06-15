@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "semver-tool";
-  version = "2.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "fsaintjacques";
     repo = pname;
     rev = version;
-    sha256 = "0lpwsa86qb5w6vbnsn892nb3qpxxx9ifxch8pw3ahzx2dqhdgnrr";
+    sha256 = "sha256-coy/g4nEvSN+0/aqK2r3EEIaoUcnsZhzX66H1qsK9ac=";
   };
 
   dontBuild = true; # otherwise we try to 'make' which fails.

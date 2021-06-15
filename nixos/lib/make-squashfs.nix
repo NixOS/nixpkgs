@@ -23,6 +23,6 @@ stdenv.mkDerivation {
 
       # Generate the squashfs image.
       mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $out \
-        -keep-as-directory -all-root -b 1048576 -comp ${comp}
+        -no-hardlinks -keep-as-directory -all-root -b 1048576 -comp ${comp}
     '';
 }

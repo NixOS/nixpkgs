@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
 
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     cp iDSK $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manipulating CPC dsk images and files";
     homepage = "https://github.com/cpcsdk/idsk" ;
     license = licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -3,8 +3,8 @@
 
 set -eou pipefail
 
-latest_linux_version=$(curl --silent https://slack.com/downloads/linux | sed -n 's/.*Version \([0-9\.]\+\).*/\1/p')
-latest_mac_version=$(curl --silent https://slack.com/downloads/mac | sed -n 's/.*Version \([0-9\.]\+\).*/\1/p')
+latest_linux_version=$(curl -L --silent https://slack.com/downloads/linux | sed -n 's/.*Version \([0-9\.]\+\).*/\1/p')
+latest_mac_version=$(curl -L --silent https://slack.com/downloads/mac | sed -n 's/.*Version \([0-9\.]\+\).*/\1/p')
 
 # Double check that the latest mac and linux versions are in sync.
 if [[ "$latest_linux_version" != "$latest_mac_version" ]]; then

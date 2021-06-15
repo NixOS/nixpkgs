@@ -1,4 +1,4 @@
-{ stdenv, slop, ffmpeg_3, fetchFromGitHub, makeWrapper}:
+{ lib, stdenv, slop, ffmpeg, fetchFromGitHub, makeWrapper}:
 
 stdenv.mkDerivation {
   pname = "capture-unstable";
@@ -11,17 +11,17 @@ stdenv.mkDerivation {
     sha256 = "0zyyg4mvrny7cc2xgvfip97b6yc75ka5ni39rwls93971jbk83d6";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -Dm755 src/capture.sh $out/bin/capture
 
     patchShebangs $out/bin/capture
     wrapProgram $out/bin/capture \
-      --prefix PATH : '${stdenv.lib.makeBinPath [ slop ffmpeg_3 ]}'
+      --prefix PATH : '${lib.makeBinPath [ slop ffmpeg ]}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A no bullshit screen capture tool";
     homepage = "https://github.com/buhman/capture";
     maintainers = [ maintainers.ar1a ];

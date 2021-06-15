@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , patchelf
 , requireFile
 , callPackage
-, alsaLib
+, alsa-lib
 , dbus
 , fontconfig
 , freetype
@@ -26,7 +26,7 @@
 let
   l10n =
     import ./l10ns.nix {
-      lib = stdenv.lib;
+      lib = lib;
       inherit requireFile lang;
       majorVersion = "11";
     };
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     coreutils
     patchelf
-    alsaLib
+    alsa-lib
     coreutils
     dbus
     fontconfig
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     libSM
   ]);
 
-  ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath = lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
+      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";
 
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
         echo "patching $f executable <<"
         patchelf --shrink-rpath "$f"
         patchelf \
-	  --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
           "$f" \
           && patchelf --shrink-rpath "$f" \
@@ -145,6 +145,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Wolfram Mathematica computational software system";
     homepage = "http://www.wolfram.com/mathematica/";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

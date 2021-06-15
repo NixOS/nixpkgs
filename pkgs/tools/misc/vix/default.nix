@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, SDL }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, SDL }:
 
 stdenv.mkDerivation {
   pname = "vix";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ SDL ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visual Interface heXadecimal dump ";
     homepage = "http://actinid.org/vix/";
     license = licenses.gpl3;

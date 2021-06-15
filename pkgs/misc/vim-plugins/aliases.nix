@@ -1,8 +1,7 @@
 # Deprecated aliases - for backward compatibility
+lib:
 
-lib: overriden:
-
-with overriden;
+final: prev:
 
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
@@ -21,12 +20,12 @@ let
 
   # Make sure that we are not shadowing something from
   # all-packages.nix.
-  checkInPkgs = n: alias: if builtins.hasAttr n overriden
+  checkInPkgs = n: alias: if builtins.hasAttr n prev
                           then throw "Alias ${n} is still in vim-plugins"
                           else alias;
 
   mapAliases = aliases:
-     lib.mapAttrs (n: alias: removeDistribute
+    lib.mapAttrs (n: alias: removeDistribute
                              (removeRecurseForDerivations
                               (checkInPkgs n alias)))
                      aliases;
@@ -36,7 +35,7 @@ let
   ) (builtins.fromJSON (builtins.readFile ./deprecated.json));
 
 in
-mapAliases ({
+mapAliases (with prev; {
   airline             = vim-airline;
   alternative         = a-vim; # backwards compat, added 2014-10-21
   bats                = bats-vim;

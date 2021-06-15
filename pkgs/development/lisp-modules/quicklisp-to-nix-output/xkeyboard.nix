@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''xkeyboard'';
-  version = ''clx-20120811-git'';
+  baseName = "xkeyboard";
+  version = "clx-20120811-git";
 
   parasites = [ "xkeyboard-test" ];
 
-  description = ''XKeyboard is X11 extension for clx of the same name.'';
+  description = "XKeyboard is X11 extension for clx of the same name.";
 
   deps = [ args."clx" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clx-xkeyboard/2012-08-11/clx-xkeyboard-20120811-git.tgz'';
-    sha256 = ''11q70drx3xn7rvk528qlnzpnxd6hg6801kc54ys3jz1l7074458n'';
+    url = "http://beta.quicklisp.org/archive/clx-xkeyboard/2012-08-11/clx-xkeyboard-20120811-git.tgz";
+    sha256 = "11q70drx3xn7rvk528qlnzpnxd6hg6801kc54ys3jz1l7074458n";
   };
 
   packageName = "xkeyboard";

@@ -1,29 +1,26 @@
-{ stdenv, fetchFromGitHub, cmake, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, python }:
 
 stdenv.mkDerivation rec {
   pname = "opencc";
-  version = "1.0.6";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "BYVoid";
     repo = "OpenCC";
     rev = "ver.${version}";
-    sha256 = "1ygj2ygxsva72hs6cm0a6wdd2rp71k4nm0pd7cb20y2srdlzvdqk";
+    sha256 = "1a15p9idznh23b44r7rw2zjnirbxjs5pyq3k6xkz0k64cdh2zq6h";
   };
 
   nativeBuildInputs = [ cmake python ];
 
   # let intermediate tools find intermediate library
-  preBuild = stdenv.lib.optionalString stdenv.isLinux ''
+  preBuild = lib.optionalString stdenv.isLinux ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/src
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$(pwd)/src
   '';
 
-  # Parallel building occasionaly fails with: Error copying file "/tmp/nix-build-opencc-1.0.5.drv-0/OpenCC-ver.1.0.5/build/src/libopencc.so.1.0.0" to "/tmp/nix-build-opencc-1.0.5.drv-0/OpenCC-ver.1.0.5/build/src/tools".
-  enableParallelBuilding = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";
     license = licenses.asl20;
     description = "A project for conversion between Traditional and Simplified Chinese";

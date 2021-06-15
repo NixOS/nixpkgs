@@ -1,29 +1,26 @@
-{ stdenv, fetchurl
-
-, SystemConfiguration ? null, Foundation ? null
-}:
-
-assert stdenv.isDarwin -> SystemConfiguration != null
-                       && Foundation != null;
+{ lib, stdenv, fetchFromGitHub, zlib, libpng, libjpeg, SystemConfiguration, Foundation, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.29";
   pname = "htmldoc";
-  src = fetchurl {
-    url = "https://github.com/michaelrsweet/htmldoc/releases/download"
-      + "/release-${version}/htmldoc-${version}-source.tar.gz";
-    sha256 = "15x0xdf487j4i4gfap5yr83airxnbp2v4lxaz79a4s3iirrq39p0";
+  version = "1.9.12";
+  src = fetchFromGitHub {
+    owner = "michaelrsweet";
+    repo = "htmldoc";
+    rev = "v${version}";
+    sha256 = "1dqima0g3j301wwzjxdhzk5pvfj724rl615gf8ssxxajfnid1gl0";
   };
-  buildInputs = with stdenv;
-       lib.optional isDarwin SystemConfiguration
-    ++ lib.optional isDarwin Foundation;
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ zlib libpng libjpeg ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation SystemConfiguration ];
+
+  meta = with lib; {
     description = "Converts HTML files to PostScript and PDF";
     homepage    = "https://michaelrsweet.github.io/htmldoc";
-    license     = licenses.gpl2;
+    changelog   = "https://github.com/michaelrsweet/htmldoc/releases/tag/v${version}";
+    license     = licenses.gpl2Only;
     maintainers = with maintainers; [ shanemikel ];
-    platforms   = with platforms; linux ++ darwin;
+    platforms   = platforms.unix;
 
     longDescription = ''
       HTMLDOC is a program that reads HTML source files or web pages and

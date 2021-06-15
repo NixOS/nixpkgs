@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
   , qt4, qmake4Hook, openssl
   , xorgproto, libX11, libXScrnSaver
   , xz, zlib
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An XMPP client fully composed of plugins";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

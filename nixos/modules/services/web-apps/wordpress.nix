@@ -61,8 +61,10 @@ let
     ?>
   '';
 
-  secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
+  secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
   secretsScript = hostStateDir: ''
+    # The match in this line is not a typo, see https://github.com/NixOS/nixpkgs/pull/124839
+    grep -q "LOOGGED_IN_KEY" "${hostStateDir}/secret-keys.php" && rm "${hostStateDir}/secret-keys.php"
     if ! test -e "${hostStateDir}/secret-keys.php"; then
       umask 0177
       echo "<?php" >> "${hostStateDir}/secret-keys.php"
@@ -109,7 +111,7 @@ let
                 sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
               };
               # We need unzip to build this package
-              buildInputs = [ pkgs.unzip ];
+              nativeBuildInputs = [ pkgs.unzip ];
               # Installing simply means copying all files to the output directory
               installPhase = "mkdir -p $out; cp -R * $out/";
             };
@@ -136,7 +138,7 @@ let
                 sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
               };
               # We need unzip to build this package
-              buildInputs = [ pkgs.unzip ];
+              nativeBuildInputs = [ pkgs.unzip ];
               # Installing simply means copying all files to the output directory
               installPhase = "mkdir -p $out; cp -R * $out/";
             };

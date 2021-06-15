@@ -3,21 +3,22 @@
 with lib;
 
 let
+  cfg = config.services.acpid;
 
   canonicalHandlers = {
     powerEvent = {
       event = "button/power.*";
-      action = config.services.acpid.powerEventCommands;
+      action = cfg.powerEventCommands;
     };
 
     lidEvent = {
       event = "button/lid.*";
-      action = config.services.acpid.lidEventCommands;
+      action = cfg.lidEventCommands;
     };
 
     acEvent = {
       event = "ac_adapter.*";
-      action = config.services.acpid.acEventCommands;
+      action = cfg.acEventCommands;
     };
   };
 
@@ -33,7 +34,7 @@ let
             echo "event=${handler.event}" > $fn
             echo "action=${pkgs.writeShellScriptBin "${name}.sh" handler.action }/bin/${name}.sh '%e'" >> $fn
           '';
-        in concatStringsSep "\n" (mapAttrsToList f (canonicalHandlers // config.services.acpid.handlers))
+        in concatStringsSep "\n" (mapAttrsToList f (canonicalHandlers // cfg.handlers))
       }
     '';
 
@@ -47,11 +48,7 @@ in
 
     services.acpid = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the ACPI daemon.";
-      };
+      enable = mkEnableOption "the ACPI daemon";
 
       logEvents = mkOption {
         type = types.bool;
@@ -129,26 +126,28 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.acpid.enable {
+  config = mkIf cfg.enable {
 
     systemd.services.acpid = {
       description = "ACPI Daemon";
+      documentation = [ "man:acpid(8)" ];
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
-
-      path = [ pkgs.acpid ];
 
       serviceConfig = {
-        Type = "forking";
+        ExecStart = escapeShellArgs
+          ([ "${pkgs.acpid}/bin/acpid"
+             "--foreground"
+             "--netlink"
+             "--confdir" "${acpiConfDir}"
+           ] ++ optional cfg.logEvents "--logevents"
+          );
       };
-
       unitConfig = {
         ConditionVirtualization = "!systemd-nspawn";
         ConditionPathExists = [ "/proc/acpi" ];
       };
 
-      script = "acpid ${optionalString config.services.acpid.logEvents "--logevents"} --confdir ${acpiConfDir}";
     };
 
   };

@@ -1,29 +1,53 @@
-{ lib, buildPythonApplication, fetchFromGitHub, isPy27, pyyaml, unidiff, configparser, enum34, future, functools32, mock, pytest }:
+{ lib
+, buildPythonApplication
+, configparser
+, enum34
+, fetchFromGitHub
+, functools32
+, future
+, isPy27
+, mock
+, pyahocorasick
+, pytestCheckHook
+, pyyaml
+, requests
+, responses
+, unidiff
+}:
 
 buildPythonApplication rec {
   pname = "detect-secrets";
-  version = "0.12.4";
+  version = "0.14.3";
+  disabled = isPy27;
 
   # PyPI tarball doesn't ship tests
   src = fetchFromGitHub {
     owner = "Yelp";
-    repo = "detect-secrets";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "01y5xd0irxxib4wnf5834gwa7ibb81h5y4dl8b26gyzgvm5zfpk1";
+    sha256 = "0c4hxih9ljmv0d3izq5idyspk5zci26gdb6lv9klwcshwrfkvxj0";
   };
 
-  propagatedBuildInputs = [ pyyaml ]
-    ++ lib.optionals isPy27 [ configparser enum34 future functools32 ];
+  propagatedBuildInputs = [
+    pyyaml
+    requests
+  ];
 
-  checkInputs = [ mock pytest unidiff ];
+  checkInputs = [
+    mock
+    pyahocorasick
+    pytestCheckHook
+    responses
+    unidiff
+  ];
 
-  # deselect tests which require git setup
-  checkPhase = ''
-    PYTHONPATH=$PWD:$PYTHONPATH pytest \
-      --deselect tests/main_test.py::TestMain \
-      --deselect tests/pre_commit_hook_test.py::TestPreCommitHook \
-      --deselect tests/core/baseline_test.py::TestInitializeBaseline
-  '';
+  disabledTests = [
+    "TestMain"
+    "TestPreCommitHook"
+    "TestInitializeBaseline"
+  ];
+
+  pythonImportsCheck = [ "detect_secrets" ];
 
   meta = with lib; {
     description = "An enterprise friendly way of detecting and preventing secrets in code";

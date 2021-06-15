@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 # native deps.
-, runCommand, pkgconfig, meson, ninja, makeWrapper
+, runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
 , systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
@@ -12,16 +12,16 @@ let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional optionals optionalString;
+inherit (lib) optional optionals optionalString;
 lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.2.0";
+  version = "5.3.2";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "8824267ca3331fa06d418c1351b68c648da0af121bcbc84c6e08f5b1e28d9433";
+    sha256 = "8b6f447d5fe93422d4c129a2d4004a977369c3aa6e55258ead1cbd488bc01436";
   };
 
   outputs = [ "out" "dev" ];
@@ -30,8 +30,8 @@ unwrapped = stdenv.mkDerivation rec {
   postPatch = ''
     patch meson.build <<EOF
     @@ -50,2 +50,2 @@
-    -systemd_work_dir = join_paths(prefix, get_option('localstatedir'), 'lib', 'knot-resolver')
-    -systemd_cache_dir = join_paths(prefix, get_option('localstatedir'), 'cache', 'knot-resolver')
+    -systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
+    -systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
     +systemd_work_dir  = '/var/lib/knot-resolver'
     +systemd_cache_dir = '/var/cache/knot-resolver'
     EOF
@@ -43,14 +43,15 @@ unwrapped = stdenv.mkDerivation rec {
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
     echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
-    sed '/^[[:blank:]]*test_dstaddr,$/d' -i tests/config/doh2.test.lua
+    sed '/^[[:blank:]]*test_dstaddr,$/d' -i \
+      tests/config/doh2.test.lua modules/http/http_doh.test.lua
   '';
 
   preConfigure = ''
     patchShebangs scripts/
   '';
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
@@ -78,13 +79,14 @@ unwrapped = stdenv.mkDerivation rec {
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
-  doInstallCheck = with stdenv; hostPlatform == buildPlatform;
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform
+    && !(isDarwin && isAarch64); # avoid luarocks, as it's broken ATM on the platform
   installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
     meson test --print-errorlogs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Caching validating DNS resolver, from .cz domain registry";
     homepage = "https://knot-resolver.cz";
     license = licenses.gpl3Plus;

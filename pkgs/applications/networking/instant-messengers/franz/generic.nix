@@ -17,17 +17,19 @@
 , dbus
 , nss
 , nspr
-, alsaLib
+, alsa-lib
 , cups
 , expat
 , udev
 , libnotify
-, xdg_utils
+, xdg-utils
+, mesa
 }:
 
 # Helper function for building a derivation for Franz and forks.
 
-{ pname, name, version, src, meta }:
+{ pname, name, version, src, meta, extraBuildInputs ? [] }:
+
 stdenv.mkDerivation rec {
   inherit pname version src meta;
 
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapGAppsHook dpkg ];
-  buildInputs = (with xorg; [
+  buildInputs = extraBuildInputs ++ (with xorg; [
     libXi
     libXcursor
     libXdamage
@@ -48,6 +50,7 @@ stdenv.mkDerivation rec {
     libXtst
     libXScrnSaver
   ]) ++ [
+    mesa #libgbm
     gtk3
     atk
     glib
@@ -60,7 +63,7 @@ stdenv.mkDerivation rec {
     gnome2.GConf
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     expat
     stdenv.cc.cc
@@ -85,7 +88,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/opt/${name}/${pname} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}" \
-      --prefix PATH : ${xdg_utils}/bin \
+      --prefix PATH : ${xdg-utils}/bin \
       "''${gappsWrapperArgs[@]}"
   '';
 }
