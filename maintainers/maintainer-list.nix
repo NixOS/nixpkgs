@@ -8187,6 +8187,12 @@
     githubId = 1829032;
     name = "Paul Hendry";
   };
+  polygon = {
+    email = "polygon@wh2.tu-dresden.de";
+    name = "Polygon";
+    github = "polygon";
+    githubId = 51489;
+  };
   polyrod = {
     email = "dc1mdp@gmail.com";
     github = "polyrod";
