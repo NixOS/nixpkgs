@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , python3
 , inetutils
-, tzdata
 , nixosTests
 
 # Look up dependencies of specified components in component-packages.nix
@@ -784,9 +783,6 @@ in with py.pkgs; buildPythonApplication rec {
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH
-
-    # set up zoneinfo data for backports-zoneinfo in pvpc_hourly_pricing tests
-    export PYTHONTZPATH="${tzdata}/share/zoneinfo"
 
     # error out when component test directory is missing, otherwise hidden by xdist execution :(
     for component in ${lib.concatStringsSep " " (map lib.escapeShellArg componentTests)}; do
