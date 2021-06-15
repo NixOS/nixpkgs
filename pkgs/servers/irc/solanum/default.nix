@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hexa ];
     platforms = platforms.unix;
   };
