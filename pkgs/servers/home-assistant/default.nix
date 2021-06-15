@@ -308,6 +308,7 @@ in with py.pkgs; buildPythonApplication rec {
     "binary_sensor"
     "blackbird"
     "blebox"
+    "blink"
     "blueprint"
     "bluetooth_le_tracker"
     "bond"
