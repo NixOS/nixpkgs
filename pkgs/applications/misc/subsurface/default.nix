@@ -5,13 +5,13 @@
 }:
 
 let
-  version = "4.9.10";
+  version = "5.0.1";
 
   subsurfaceSrc = (fetchFromGitHub {
     owner = "Subsurface";
     repo = "subsurface";
     rev = "v${version}";
-    sha256 = "12ndhjplz3cwndwzhfc959dc0i6rm2qf3v2d8n9kba8nj63iblfs";
+    sha256 = "01r836ckvrmgprjf4cqxn2n3w5w4pa2fjrhspjndsspic8nwlrwg";
     fetchSubmodules = true;
   });
 
