@@ -6973,6 +6973,8 @@ in {
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
 
+  pytibber = callPackage ../development/python-modules/pytibber { };
+
   pytile = callPackage ../development/python-modules/pytile { };
 
   pytimeparse = callPackage ../development/python-modules/pytimeparse { };
