@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     owner = "spiralgenetics";
     repo = "truvari";
     rev = "v${version}";
-    sha256 = "sha256:14nsdbj063qm175xxixs34cihvsiskc9gym8pg7gbwsh13k5a00h";
+    sha256 = "14nsdbj063qm175xxixs34cihvsiskc9gym8pg7gbwsh13k5a00h";
   };
 
   postPatch = ''
