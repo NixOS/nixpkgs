@@ -9,7 +9,7 @@
 , pytest
 , requests-toolbelt
 , update_checker
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     mock
     prawcore
     update_checker
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = [

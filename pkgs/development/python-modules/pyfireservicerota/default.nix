@@ -4,7 +4,7 @@
 , pytz
 , oauthlib
 , requests
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     pytz
     oauthlib
     requests
-    websocket_client
+    websocket-client
   ];
 
   # no tests implemented

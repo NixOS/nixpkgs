@@ -9,7 +9,7 @@
 , pytestCheckHook
 , requests
 , six
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     paramiko
     requests
     six
-    websocket_client
+    websocket-client
   ] ++ lib.optional isPy27 backports_ssl_match_hostname;
 
   checkInputs = [
