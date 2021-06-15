@@ -39,7 +39,10 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
-      after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") ];
+      after = [
+        (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service")
+        (mkIf ("${appName}" == "winbindd") "network-online.target")
+      ];
       requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
