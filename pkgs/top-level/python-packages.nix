@@ -3015,6 +3015,8 @@ in {
 
   graphql-server-core = callPackage ../development/python-modules/graphql-server-core { };
 
+  graphql-subscription-manager = callPackage ../development/python-modules/graphql-subscription-manager { };
+
   graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
 
   graphtage = callPackage ../development/python-modules/graphtage { };
