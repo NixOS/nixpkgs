@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "neilbrown";
     repo = "wiggle";
     rev = "v${version}";
-    sha256 = "sha256-/5LPATPB9NzjNWPiY8sw59229KvfhtQnsewUkL7CWvo=";
+    sha256 = "sha256-rlHhYzP81lfblZvtZ1lhiq4iQ6WRpBYukoGqpVP+NKI=";
   };
 
   buildInputs = [ ncurses groff ];
