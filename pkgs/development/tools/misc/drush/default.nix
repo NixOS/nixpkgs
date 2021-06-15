@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, php, which, makeWrapper, bash, coreutils, ncurses }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, php, which, makeWrapper, bash, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "drush-6.1.0";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     platforms   = platforms.all;
   };
 
-  src = fetchurl {
-    url    = "https://github.com/drush-ops/drush/archive/6.1.0.tar.gz";
+  src = fetchFromGitHub {
+    owner = "drush-ops";
+    repo  = pname;
+    rev = version;
     sha256 = "1jgnc4jjyapyn04iczvcz92ic0vq8d1w8xi55ismqyy5cxhqj6bp";
   };
 
