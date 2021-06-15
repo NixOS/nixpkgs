@@ -190,7 +190,7 @@ rec {
     passthru = { inherit plugins; };
   });
 
-  terraform_1_0_0 = pluggable (generic {
+  terraform_1_0 = pluggable (generic {
     version = "1.0.0";
     sha256 = "sha256-ddcT/I2Qn1pKFyhXgh+CcD3fSv2steSNmjyyiS2SE/o=";
     vendorSha256 = "sha256-oFvoEsDunJR4IULdGwS6nHBKWEgUehgT+nNM41W/GYo=";
