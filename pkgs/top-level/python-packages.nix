@@ -7769,6 +7769,8 @@ in {
 
   simanneal = callPackage ../development/python-modules/simanneal { };
 
+  simber = callPackage ../development/python-modules/simber { };
+
   simpleaudio = callPackage ../development/python-modules/simpleaudio { };
 
   simplebayes = callPackage ../development/python-modules/simplebayes { };
