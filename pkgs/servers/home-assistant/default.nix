@@ -148,9 +148,9 @@ let
       });
     })
 
-    # hass-frontend does not exist in python3.pkgs
+    # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
-      hass-frontend = self.callPackage ./frontend.nix { };
+      home-assistant-frontend = self.callPackage ./frontend.nix { };
     })
   ];
 
@@ -229,7 +229,6 @@ in with py.pkgs; buildPythonApplication rec {
     certifi
     ciso8601
     cryptography
-    hass-frontend
     httpx
     jinja2
     pip
@@ -803,6 +802,7 @@ in with py.pkgs; buildPythonApplication rec {
     tests = {
       inherit (nixosTests) home-assistant;
     };
+    python = py;
   };
 
   meta = with lib; {
