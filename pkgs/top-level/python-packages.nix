@@ -245,6 +245,8 @@ in {
 
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
+  aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
+
   aiocache = callPackage ../development/python-modules/aiocache { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
