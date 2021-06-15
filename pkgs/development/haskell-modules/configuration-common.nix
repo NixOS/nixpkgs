@@ -698,6 +698,9 @@ self: super: {
   uuid-types = doJailbreak super.uuid-types;
   uuid = doJailbreak super.uuid;
 
+  # Bypass version check for random < 1.2 (1.2 works fine).
+  xmonad-wallpaper = doJailbreak super.xmonad-wallpaper;
+
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
