@@ -2221,6 +2221,8 @@ in {
 
   elevate = callPackage ../development/python-modules/elevate { };
 
+  elgato = callPackage ../development/python-modules/elgato { };
+
   eliot = callPackage ../development/python-modules/eliot { };
 
   elmax = callPackage ../development/python-modules/elmax { };
