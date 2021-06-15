@@ -254,8 +254,11 @@ in
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
         # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
         escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
-        swapOptions = sw: "defaults"
-          + optionalString (sw.priority != null) ",pri=${toString sw.priority}";
+        swapOptions = sw: concatStringsSep "," (
+          [ "defaults" ]
+          ++ optional (sw.priority != null) "pri=${toString sw.priority}"
+          ++ optional (sw.discardPolicy != null) "discard${optionalString (sw.discardPolicy != "both") "=${toString sw.discardPolicy}"}"
+        );
       in ''
         # This is a generated file.  Do not edit!
         #
