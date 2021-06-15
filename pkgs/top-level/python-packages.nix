@@ -2132,6 +2132,8 @@ in {
 
   dotmap = callPackage ../development/python-modules/dotmap { };
 
+  downloader-cli = callPackage ../development/python-modules/downloader-cli { };
+
   dparse = callPackage ../development/python-modules/dparse { };
 
   dpath = callPackage ../development/python-modules/dpath { };
