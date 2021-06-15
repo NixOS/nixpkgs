@@ -25,15 +25,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake curl ];
 
   buildInputs = [
-    curl openssl s2n-tls zlib
-    aws-c-common aws-c-event-stream aws-checksums
+    curl openssl zlib
   ] ++ lib.optionals (stdenv.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
          [ CoreAudio AudioToolbox ];
 
   # propagation is needed for Security.framework to be available when linking
-  propagatedBuildInputs = [ aws-c-cal aws-c-io ];
+  propagatedBuildInputs = [
+    aws-c-cal
+    aws-c-event-stream
+    aws-c-io
+    aws-c-common
+    aws-checksums
+    s2n-tls
+  ];
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"

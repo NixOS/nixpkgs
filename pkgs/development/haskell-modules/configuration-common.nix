@@ -1925,10 +1925,6 @@ EOT
   # https://github.com/haskell-hvr/missingh/issues/56
   MissingH = doJailbreak super.MissingH;
 
-  # Too strict bound on containers
-  # https://github.com/batterseapower/parallel-io/issues/14#issuecomment-853441933
-  parallel-io = doJailbreak super.parallel-io;
-
   # Disable flaky tests
   # https://github.com/DavidEichmann/alpaca-netcode/issues/2
   alpaca-netcode = overrideCabal super.alpaca-netcode {
@@ -1952,5 +1948,11 @@ EOT
   # unrestrict bounds for hashable and semigroups
   # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
   reactive-banana = doJailbreak super.reactive-banana;
+
+  # Too strict version bounds on QuickCheck and semirings
+  # https://github.com/erikd/wide-word/issues/57
+  wide-word = doJailbreak super.wide-word;
+
+  hackage-db_2_1_0 = doDistribute super.hackage-db_2_1_0;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

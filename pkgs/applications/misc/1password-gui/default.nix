@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let rpath = lib.makeLibraryPath [
-      alsaLib
+      alsa-lib
       at-spi2-atk
       at-spi2-core
       atk

@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "mpv-playlistmanager";
+  pname = "mpv-youtube-quality";
   version = "unstable-2020-02-11";
 
   src = fetchFromGitHub {

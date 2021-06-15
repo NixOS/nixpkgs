@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.hostPlatform.libc != "libSystem") "-lcrypt"
     ++ optional (luaSupport) "-llua"
     ++ optionals (sslSupport) [ "-lssl" "-lcrypto" ];
-  makeFlags = [ "LDADD=$(_LDADD)" "prefix=$(out)" "MANDIR=$(out)/share/man" "BINOWN=" ];
+  makeFlags = [ "LDADD=$(_LDADD)" ];
 
   doCheck = true;
   checkInputs = [ inetutils wget ];

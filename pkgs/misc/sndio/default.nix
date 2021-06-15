@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, alsa-lib, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "sndio";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux alsaLib;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   enableParallelBuilding = true;
 

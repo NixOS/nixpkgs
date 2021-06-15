@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, alsaLib, gtk3
+{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, alsa-lib, gtk3
 , makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg-utils
 , epoxy, gdk-pixbuf, gnome, wrapGAppsHook
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
-    alsaLib
+    alsa-lib
     epoxy
     gtk3
     gdk-pixbuf

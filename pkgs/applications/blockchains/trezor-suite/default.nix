@@ -8,7 +8,7 @@
 
 let
   pname = "trezor-suite";
-  version = "21.5.1";
+  version = "21.6.1";
   name = "${pname}-${version}";
 
   suffix = {
@@ -20,8 +20,8 @@ let
     url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
     # sha512 hashes are obtained from latest-linux-arm64.yml and latest-linux.yml
     sha512 = {
-      aarch64-linux = "sha512-nqwfonWySc+wBSJjC8BW9vm+v5zHbKqbbrTTRmoZdEYBJg2SthMtTULNLVpXaX9NHxr6guZnOWdBlzVk2dQkfQ==";
-      x86_64-linux  = "sha512-tfvdNXsjMe8YXJwTuujz4tKTdfsCuR/9VECF8EkcRP95YM7vuDV8dumru1jKtdiv0gaS1GT3SPEeAfmczY5jGg==";
+      aarch64-linux = "sha512-IxWiOJEk2PHdKf4QPHH9Y5rdyhKF3aQCHJe1crS4sYrE+4BLj3rFwRPIIGhJLqzqPyW24Hw/A4lnRnDd/UpsNA==";
+      x86_64-linux  = "sha512-pSJ+4y9v1ltXun3F4UyQoSTJdaFSelIHx49DBbd180MSbpETecVa7OFadKjlSUKD1sknNXG9MDb2hv7SRNdDYw==";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -57,6 +57,7 @@ appimageTools.wrapType2 rec {
   meta = with lib; {
     description = "Trezor Suite - Desktop App for managing crypto";
     homepage = "https://suite.trezor.io";
+    changelog = "https://github.com/trezor/trezor-suite/releases/tag/v${version}";
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];

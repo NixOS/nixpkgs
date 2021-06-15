@@ -14,7 +14,7 @@
 , libgnomekbd
 , lcms2
 , libpulseaudio
-, alsaLib
+, alsa-lib
 , libcanberra-gtk3
 , upower
 , colord
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     gnome-desktop
     lcms2
     libpulseaudio
-    alsaLib
+    alsa-lib
     libcanberra-gtk3
     upower
     colord

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, doxygen, graphviz, valgrind
-, glib, dbus, gst_all_1, alsaLib, ffmpeg_4, libjack2, udev, libva, xorg
+, glib, dbus, gst_all_1, alsa-lib, ffmpeg_4, libjack2, udev, libva, xorg
 , sbc, SDL2, makeFontsConf
 }:
 
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer
-    alsaLib ffmpeg_4 libjack2 udev libva xorg.libX11 sbc SDL2
+    alsa-lib ffmpeg_4 libjack2 udev libva xorg.libX11 sbc SDL2
   ];
 
   mesonFlags = [

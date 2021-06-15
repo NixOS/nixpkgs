@@ -27,7 +27,7 @@
 , libXScrnSaver
 , nss
 , nspr
-, alsaLib
+, alsa-lib
 , cups
 , fontconfig
 , expat
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     fontconfig
     expat

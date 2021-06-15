@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , bctoolbox
 , bzrtp
 , cmake
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    alsaLib
+    alsa-lib
     bctoolbox
     bzrtp
     ffmpeg

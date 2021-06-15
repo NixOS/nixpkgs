@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
-, perl, pixman, vde2, alsaLib, texinfo, flex
+, perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl, ninja, meson
 , makeWrapper, autoPatchelfHook
 , attr, libcap, libcap_ng
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     ++ optionals smartcardSupport [ libcacard ]
     ++ optionals spiceSupport [ spice-protocol spice ]
     ++ optionals usbredirSupport [ usbredir ]
-    ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
+    ++ optionals stdenv.isLinux [ alsa-lib libaio libcap_ng libcap attr ]
     ++ optionals xenSupport [ xen ]
     ++ optionals cephSupport [ ceph ]
     ++ optionals glusterfsSupport [ glusterfs libuuid ]

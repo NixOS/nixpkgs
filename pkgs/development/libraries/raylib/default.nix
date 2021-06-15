@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, cmake,
   mesa, libGLU, glfw,
   libX11, libXi, libXcursor, libXrandr, libXinerama,
-  alsaSupport ? stdenv.hostPlatform.isLinux, alsaLib,
+  alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib,
   pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio,
   sharedLib ? true,
   includeEverything ? true
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     mesa libGLU glfw libX11 libXi libXcursor libXrandr libXinerama
-  ] ++ lib.optional alsaSupport alsaLib
+  ] ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio;
 
   # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   # fix libasound.so/libpulse.so not being found
   preFixup = ''
-    ${lib.optionalString alsaSupport "patchelf --add-needed ${alsaLib}/lib/libasound.so $out/lib/libraylib.so.${version}"}
+    ${lib.optionalString alsaSupport "patchelf --add-needed ${alsa-lib}/lib/libasound.so $out/lib/libraylib.so.${version}"}
     ${lib.optionalString pulseSupport "patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/libraylib.so.${version}"}
   '';
 

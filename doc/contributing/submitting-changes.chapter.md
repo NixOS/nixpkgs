@@ -269,3 +269,14 @@ Other examples of reasons are:
 - Previously the build would fail due to, e.g., `getaddrinfo` not being defined
 - The previous download links were all broken
 - Crash when starting on some X11 systems
+
+#### Acceptable backport criteria
+
+The stable branch does have some changes which cannot be backported. Most notable are breaking changes. The desire is to have stable users be uninterrupted when updating packages.
+
+However, many changes are able to be backported, including:
+- New Packages / Modules
+- Security / Patch updates
+- Version updates which include new functionality (but no breaking changes)
+- Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
+- Security critical applications (E.g. `firefox`)

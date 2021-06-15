@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute2, unixtools, dnsutils }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute2,
+  unixtools, dnsutils, coreutils, gnugrep, gnused }:
 stdenv.mkDerivation rec {
   pname = "acme.sh";
   version = "2.9.0";
@@ -13,11 +14,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out $out/bin $out/libexec
     cp -R $src/* $_
     makeWrapper $out/libexec/acme.sh $out/bin/acme.sh \
       --prefix PATH : "${
         lib.makeBinPath [
+          coreutils
+          gnugrep
+          gnused
           socat
           openssl
           curl
@@ -25,6 +31,8 @@ stdenv.mkDerivation rec {
           (if stdenv.isLinux then iproute2 else unixtools.netstat)
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

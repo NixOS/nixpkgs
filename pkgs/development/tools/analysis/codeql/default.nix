@@ -3,7 +3,7 @@
 , zlib
 , xorg
 , freetype
-, alsaLib
+, alsa-lib
 , jdk11
 , curl
 , lttng-ust
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libXrender
     freetype
-    alsaLib
+    alsa-lib
     jdk11
     stdenv.cc.cc.lib
     curl

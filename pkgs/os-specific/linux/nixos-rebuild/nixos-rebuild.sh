@@ -24,7 +24,6 @@ fast=
 rollback=
 upgrade=
 upgrade_all=
-repair=
 profile=/nix/var/nix/profiles/system
 buildHost=
 targetHost=
@@ -59,10 +58,6 @@ while [ "$#" -gt 0 ]; do
       --upgrade-all)
         upgrade=1
         upgrade_all=1
-        ;;
-      --repair)
-        repair=1
-        extraBuildFlags+=("$i")
         ;;
       --max-jobs|-j|--cores|-I|--builders)
         j="$1"; shift 1
@@ -176,6 +171,7 @@ nixBuild() {
     else
         local instArgs=()
         local buildArgs=()
+        local drv=
 
         while [ "$#" -gt 0 ]; do
             local i="$1"; shift 1
@@ -202,7 +198,7 @@ nixBuild() {
             esac
         done
 
-        local drv="$(nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
+        drv="$(nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
@@ -215,13 +211,15 @@ nixBuild() {
 
 nixFlakeBuild() {
     if [ -z "$buildHost" ]; then
-        nix build "$@" --out-link "${tmpDir}/result"
+        nix "${flakeFlags[@]}" build "$@" --out-link "${tmpDir}/result"
         readlink -f "${tmpDir}/result"
     else
         local attr="$1"
         shift 1
         local evalArgs=()
         local buildArgs=()
+        local drv=
+
         while [ "$#" -gt 0 ]; do
             local i="$1"; shift 1
             case "$i" in
@@ -243,7 +241,7 @@ nixFlakeBuild() {
             esac
         done
 
-        local drv="$(nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildArgs[@]}")"
+        drv="$(nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             NIX_SSHOPTS=$SSHOPTS nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
@@ -310,7 +308,7 @@ fi
 if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast && -z $flake ]]; then
     if p=$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
         export _NIXOS_REBUILD_REEXEC=1
-        exec $p/bin/nixos-rebuild "${origArgs[@]}"
+        exec "$p/bin/nixos-rebuild" "${origArgs[@]}"
         exit 1
     fi
 fi
@@ -393,14 +391,12 @@ prebuiltNix() {
     fi
 }
 
-remotePATH=
-
 if [[ -n $buildNix && -z $flake ]]; then
     echo "building Nix..." >&2
     nixDrv=
-    if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nix.drv --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
-        if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root $tmpDir/nix.drv --indirect -A nix "${extraBuildFlags[@]}")"; then
-            if ! nixStorePath="$(nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A $(nixSystem) | sed -e 's/^"//' -e 's/"$//')"; then
+    if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root "$tmpDir/nix.drv" --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
+        if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root "$tmpDir/nix.drv" --indirect -A nix "${extraBuildFlags[@]}")"; then
+            if ! nixStorePath="$(nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A "$(nixSystem)" | sed -e 's/^"//' -e 's/"$//')"; then
                 nixStorePath="$(prebuiltNix "$(uname -m)")"
             fi
             if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
@@ -408,11 +404,11 @@ if [[ -n $buildNix && -z $flake ]]; then
                 echo "warning: don't know how to get latest Nix" >&2
             fi
             # Older version of nix-store -r don't support --add-root.
-            [ -e $tmpDir/nix ] || ln -sf $nixStorePath $tmpDir/nix
+            [ -e "$tmpDir/nix" ] || ln -sf "$nixStorePath" "$tmpDir/nix"
             if [ -n "$buildHost" ]; then
                 remoteNixStorePath="$(prebuiltNix "$(buildHostCmd uname -m)")"
                 remoteNix="$remoteNixStorePath/bin"
-                if ! buildHostCmd nix-store -r $remoteNixStorePath \
+                if ! buildHostCmd nix-store -r "$remoteNixStorePath" \
                   --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
                     remoteNix=
                     echo "warning: don't know how to get latest Nix" >&2
@@ -421,7 +417,7 @@ if [[ -n $buildNix && -z $flake ]]; then
         fi
     fi
     if [ -a "$nixDrv" ]; then
-        nix-store -r "$nixDrv"'!'"out" --add-root $tmpDir/nix --indirect >/dev/null
+        nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
         if [ -n "$buildHost" ]; then
             nix-copy-closure --to "$buildHost" "$nixDrv"
             # The nix build produces multiple outputs, we add them all to the remote path
@@ -438,7 +434,7 @@ fi
 # nixos-version shows something useful).
 if [[ -n $canRun && -z $flake ]]; then
     if nixpkgs=$(nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
-        suffix=$($SHELL $nixpkgs/nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}" || true)
+        suffix=$($SHELL "$nixpkgs/nixos/modules/installer/tools/get-version-suffix" "${extraBuildFlags[@]}" || true)
         if [ -n "$suffix" ]; then
             echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
         fi
@@ -511,7 +507,7 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = dry-activate ]; then
-    if ! targetHostCmd $pathToConfig/bin/switch-to-configuration "$action"; then
+    if ! targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action"; then
         echo "warning: error(s) occurred while switching to the new configuration" >&2
         exit 1
     fi

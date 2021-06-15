@@ -14,6 +14,11 @@ buildPecl {
     mv $out/lib/php/extensions/apc.so $out/lib/php/extensions/apcu_bc.so
   '';
 
-  meta.maintainers = lib.teams.php.members;
-  meta.broken = lib.versionAtLeast php.version "8";
+  meta = with lib; {
+    description = "APCu Backwards Compatibility Module";
+    license = licenses.php301;
+    homepage = "https://pecl.php.net/package/apcu_bc";
+    maintainers = teams.php.members;
+    broken = versionAtLeast php.version "8";
+  };
 }

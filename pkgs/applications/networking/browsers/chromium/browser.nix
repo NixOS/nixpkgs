@@ -62,6 +62,8 @@ mkChromiumDerivation (base: rec {
       -e '/\[Desktop Entry\]/a\' \
       -e 'StartupWMClass=chromium-browser' \
       $out/share/applications/chromium-browser.desktop
+  '' + lib.optionalString (channel == "dev") ''
+    cp -v "$buildPath/crashpad_handler" "$libExecPath/"
   '';
 
   passthru = { inherit sandboxExecutableName; };

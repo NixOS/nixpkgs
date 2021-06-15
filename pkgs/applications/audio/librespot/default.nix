@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, withRodio ? true
-, withALSA ? true, alsaLib ? null, withPulseAudio ? false, libpulseaudio ? null
+, withALSA ? true, alsa-lib ? null, withPulseAudio ? false, libpulseaudio ? null
 , withPortAudio ? false, portaudio ? null }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional withALSA alsaLib
+  buildInputs = [ openssl ] ++ lib.optional withALSA alsa-lib
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio;
 

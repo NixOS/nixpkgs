@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ubuntu/yaru";
     license = with licenses; [ cc-by-sa-40 gpl3Plus lgpl21Only lgpl3Only ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.jD91mZM2 ];
+    maintainers = with maintainers; [ ];
   };
 }

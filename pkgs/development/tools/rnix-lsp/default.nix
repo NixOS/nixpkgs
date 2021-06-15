@@ -17,6 +17,6 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A work-in-progress language server for Nix, with syntax checking and basic completion";
     license = licenses.mit;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with maintainers; [ ];
   };
 }

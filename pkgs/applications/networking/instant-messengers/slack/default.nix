@@ -4,7 +4,7 @@
 , undmg
 , makeWrapper
 , nodePackages
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -80,7 +80,7 @@ let
     passthru.updateScript = ./update.sh;
 
     rpath = lib.makeLibraryPath [
-      alsaLib
+      alsa-lib
       at-spi2-atk
       at-spi2-core
       atk

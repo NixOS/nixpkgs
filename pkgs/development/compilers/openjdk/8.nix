@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkg-config, lndir, bash, cpio, file, which, unzip, zip
-, cups, freetype, alsaLib, cacert, perl, liberation_ttf, fontconfig, zlib
+, cups, freetype, alsa-lib, cacert, perl, liberation_ttf, fontconfig, zlib
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , openjdk8-bootstrap
@@ -85,7 +85,7 @@ let
 
     nativeBuildInputs = [ pkg-config lndir unzip ];
     buildInputs = [
-      cpio file which zip perl openjdk8-bootstrap zlib cups freetype alsaLib
+      cpio file which zip perl openjdk8-bootstrap zlib cups freetype alsa-lib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig
     ] ++ lib.optionals (!headless && enableGnome2) [

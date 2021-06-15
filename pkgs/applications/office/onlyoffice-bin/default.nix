@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 # Alphabetic ordering below
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , atk
 , autoPatchelfHook
@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     atk
     cairo

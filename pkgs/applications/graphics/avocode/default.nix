@@ -1,5 +1,5 @@
 { lib, stdenv, makeDesktopItem, fetchurl, unzip
-, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome
+, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsa-lib, cups, expat, udev, gnome
 , xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     dbus
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     expat
     udev

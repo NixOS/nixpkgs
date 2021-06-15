@@ -1,5 +1,5 @@
 {fetchurl, lib, stdenv, dpkg, makeWrapper,
- alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
+ alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
  harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
  nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   libPath = lib.makeLibraryPath [
-      alsaLib
+      alsa-lib
       cups
       curl
       dbus

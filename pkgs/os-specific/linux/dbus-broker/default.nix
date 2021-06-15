@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dbus-broker";
-  version = "28";
+  version = "29";
 
   src = fetchFromGitHub {
     owner  = "bus1";
     repo   = "dbus-broker";
     rev    = "v${version}";
-    sha256 = "1rsn74x6yhyl9w7jqgnzgzyhp9cln1602jyzpw5qvrkdk5b7zzgs";
+    sha256 = "1abbi8c0mgdqjidlp2wnmy0a88xv173hq88sh5m966c5r1h6alkq";
     fetchSubmodules = true;
   };
 

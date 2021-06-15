@@ -3,7 +3,7 @@
 , cmake
 , pkg-config
 , curl
-, alsaLib
+, alsa-lib
 , libGLU
 , libX11
 , libevdev
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     curl
-    alsaLib
+    alsa-lib
     libGLU
     libX11
     libevdev

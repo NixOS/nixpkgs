@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl, pkg-config, libjack2
-, alsaLib, liblo, libsndfile, lv2, qtbase, qttools
+, alsa-lib, liblo, libsndfile, lv2, qtbase, qttools
 , rubberband
 }:
 
@@ -14,7 +14,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qttools pkg-config ];
 
-  buildInputs = [ libjack2 alsaLib liblo libsndfile lv2 qtbase rubberband ];
+  buildInputs = [ libjack2 alsa-lib liblo libsndfile lv2 qtbase rubberband ];
 
   meta = with lib; {
     description = "An old-school all-digital polyphonic sampler synthesizer with stereo fx";

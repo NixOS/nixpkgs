@@ -309,11 +309,7 @@ stdenv.mkDerivation ({
 
     maintainers = with lib.maintainers; [ peti veprbl ];
 
-    platforms =
-      lib.platforms.linux ++
-      lib.platforms.freebsd ++
-      lib.platforms.illumos ++
-      lib.platforms.darwin;
+    platforms = lib.platforms.unix;
     badPlatforms = [ "x86_64-darwin" ];
   };
 }

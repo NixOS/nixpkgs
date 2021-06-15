@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib
+{ lib, stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsa-lib
 , mpg123, releasePath ? null }:
 
 with lib;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
           releasePath
     else throw "Platform is not supported. Use instalation native to your platform https://www.renoise.com/";
 
-  buildInputs = [ alsaLib libjack2 libX11 libXcursor libXext libXrandr ];
+  buildInputs = [ alsa-lib libjack2 libX11 libXcursor libXext libXrandr ];
 
   installPhase = ''
     cp -r Resources $out

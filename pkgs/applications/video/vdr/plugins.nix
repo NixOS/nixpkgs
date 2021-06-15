@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
+{ lib, stdenv, fetchurl, fetchgit, vdr, alsa-lib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg_3
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
@@ -54,7 +54,7 @@ in {
 
     buildInputs = [
       vdr libxcb xcbutilwm ffmpeg_3
-      alsaLib
+      alsa-lib
       libvdpau # vdpau
       libva # va-api
     ] ++ (with xorg; [ libxcb libX11 ]);

@@ -42,7 +42,7 @@
 , libsepol
 , orc
 
-, alsaLib
+, alsa-lib
 }:
 
 let
@@ -107,7 +107,7 @@ let
     sqlite
     taglib
 
-    alsaLib
+    alsa-lib
   ]
   ++ lib.optionals (withIpod) [ libgpod libplist usbmuxd ]
   ++ lib.optionals (withMTP) [ libmtp ]

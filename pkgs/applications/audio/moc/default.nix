@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config
 , ncurses, db , popt, libtool
 # Sound sub-systems
-, alsaSupport ? true, alsaLib
+, alsaSupport ? true, alsa-lib
 , pulseSupport ? true, libpulseaudio, autoreconfHook
 , jackSupport ? true, libjack2
 , ossSupport ? true
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses db popt libtool ]
     # Sound sub-systems
-    ++ opt alsaSupport alsaLib
+    ++ opt alsaSupport alsa-lib
     ++ opt pulseSupport libpulseaudio
     ++ opt jackSupport libjack2
     # Audio formats

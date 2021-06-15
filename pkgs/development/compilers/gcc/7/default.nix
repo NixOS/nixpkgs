@@ -296,11 +296,7 @@ stdenv.mkDerivation ({
 
     maintainers = lib.teams.gcc.members;
 
-    platforms =
-      lib.platforms.linux ++
-      lib.platforms.freebsd ++
-      lib.platforms.illumos ++
-      lib.platforms.darwin;
+    platforms = lib.platforms.unix;
   };
 }
 

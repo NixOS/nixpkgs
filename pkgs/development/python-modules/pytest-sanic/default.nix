@@ -21,7 +21,9 @@ buildPythonPackage rec {
     sha256 = "sha256-OtyulpSHUWERtcIRT5j3YtHciIxFiIFYKqtlEd1NSFw=";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -35,6 +37,12 @@ buildPythonPackage rec {
     sanic
     pytestCheckHook
   ];
+
+  postPatch = ''
+    # https://github.com/yunstanford/pytest-sanic/issues/55
+    substituteInPlace setup.py \
+      --replace "websockets>=8.1,<9.0" "websockets>=9.1,<10.0"
+  '';
 
   disabledTests = [
     # https://github.com/yunstanford/pytest-sanic/issues/51

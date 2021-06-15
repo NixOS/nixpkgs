@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, pkg-config, libxcb, mkDerivation, qmake
 , qtbase, qtdeclarative, qtquickcontrols, qtquickcontrols2
-, ffmpeg-full, gst_all_1, libpulseaudio, alsaLib, jack2
+, ffmpeg-full, gst_all_1, libpulseaudio, alsa-lib, jack2
 , v4l-utils }:
 mkDerivation rec {
   pname = "webcamoid";
@@ -18,7 +18,7 @@ mkDerivation rec {
     qtbase qtdeclarative qtquickcontrols qtquickcontrols2
     ffmpeg-full
     gst_all_1.gstreamer gst_all_1.gst-plugins-base
-    alsaLib libpulseaudio jack2
+    alsa-lib libpulseaudio jack2
     v4l-utils
   ];
 

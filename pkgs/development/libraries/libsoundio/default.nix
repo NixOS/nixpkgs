@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, alsaLib, libjack2, libpulseaudio, AudioUnit }:
+{ lib, stdenv, fetchFromGitHub, cmake, alsa-lib, libjack2, libpulseaudio, AudioUnit }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libjack2 libpulseaudio ]
-    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional stdenv.isDarwin AudioUnit;
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-strict-prototypes";

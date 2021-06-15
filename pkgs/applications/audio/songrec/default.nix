@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , gtk3
 , openssl
-, alsaLib
+, alsa-lib
 , pkg-config
 , ffmpeg
 }:
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ alsaLib gtk3 openssl ffmpeg ];
+  buildInputs = [ alsa-lib gtk3 openssl ffmpeg ];
 
   meta = with lib; {
     description = "An open-source Shazam client for Linux, written in Rust";

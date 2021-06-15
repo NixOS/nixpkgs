@@ -1,4 +1,4 @@
-{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
+{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsa-lib
 , libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     nss
     nspr
     cups
-    alsaLib
+    alsa-lib
     expat
     gdk-pixbuf
     dbus

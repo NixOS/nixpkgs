@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, which, pkg-config, makeWrapper
 , ffmpeg, libGLU, libGL, freetype, libxml2, python3
 , libobjc, AppKit, Foundation
-, alsaLib ? null
+, alsa-lib ? null
 , libdrm ? null
 , libpulseaudio ? null
 , libv4l ? null
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
                 ++ optional withVulkan vulkan-loader
                 ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
-                ++ optionals stdenv.isLinux [ alsaLib libdrm libpulseaudio libv4l libX11
+                ++ optionals stdenv.isLinux [ alsa-lib libdrm libpulseaudio libv4l libX11
                                               libXdmcp libXext libXxf86vm mesa udev
                                               wayland libxkbcommon ];
 

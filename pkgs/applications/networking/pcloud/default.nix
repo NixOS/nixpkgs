@@ -21,7 +21,7 @@
   # Runtime dependencies;
   # A few additional ones (e.g. Node) are already shipped together with the
   # AppImage, so we don't have to duplicate them here.
-  alsaLib, dbus-glib, fuse, gnome, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
+  alsa-lib, dbus-glib, fuse, gnome, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
 }:
 
 let
@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     dbus-glib
     fuse
     gtk3

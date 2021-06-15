@@ -4,7 +4,7 @@
   # When installing a conda binary package, just extend
   # the `buildInputs` with `condaAutopatchLibs`.
   condaPatchelfLibs = builtins.map (p: p.lib or p) ([
-    pkgs.alsaLib
+    pkgs.alsa-lib
     pkgs.cups
     pkgs.gcc-unwrapped
     pkgs.libGL

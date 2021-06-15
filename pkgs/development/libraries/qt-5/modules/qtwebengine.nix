@@ -8,7 +8,7 @@
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
-, alsaLib
+, alsa-lib
 , libcap
 , pciutils
 , systemd
@@ -156,7 +156,7 @@ qtModule {
     dbus zlib minizip snappy nss protobuf jsoncpp
 
     # Audio formats
-    alsaLib
+    alsa-lib
 
     # Text rendering
     fontconfig freetype

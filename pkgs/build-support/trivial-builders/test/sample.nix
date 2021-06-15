@@ -12,4 +12,8 @@ in
   norefs = writeText "hi" "hello";
   helloRef = writeText "hi" "hello ${hello}";
   helloFigletRef = writeText "hi" "hello ${hello} ${figlet}";
+  inherit (pkgs)
+    emptyFile
+    emptyDirectory
+  ;
 }

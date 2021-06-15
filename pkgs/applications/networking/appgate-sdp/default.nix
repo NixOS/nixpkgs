@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -55,7 +55,7 @@
 with lib;
 let
   deps = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     at-spi2-core
     atk

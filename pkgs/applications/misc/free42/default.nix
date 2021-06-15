@@ -5,7 +5,7 @@
 , copyDesktopItems
 , pkg-config
 , gtk3
-, alsaLib
+, alsa-lib
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems pkg-config ];
-  buildInputs = [ gtk3 alsaLib ];
+  buildInputs = [ gtk3 alsa-lib ];
 
   postPatch = ''
     sed -i -e "s|/bin/ls|ls|" gtk/Makefile

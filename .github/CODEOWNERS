@@ -196,12 +196,12 @@
 /nixos/tests/prometheus-exporters.nix                        @WilliButz
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md @NixOS/php
-/nixos/tests/php                         @NixOS/php
-/pkgs/build-support/build-pecl.nix       @NixOS/php
-/pkgs/development/interpreters/php       @NixOS/php @jtojnar
-/pkgs/development/php-packages           @NixOS/php
-/pkgs/top-level/php-packages.nix         @NixOS/php @jtojnar
+/doc/languages-frameworks/php.section.md          @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/nixos/tests/php                                  @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/build-support/build-pecl.nix                @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/development/php-packages                    @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @NixOS/php @aanderse @etu @globin @ma27 @talyz
 
 # Podman, CRI-O modules and related
 /nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq

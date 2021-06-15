@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkg-config, alsaLib, spice-protocol, glib,
+{lib, stdenv, fetchurl, pkg-config, alsa-lib, spice-protocol, glib,
  libpciaccess, libxcb, libXrandr, libXinerama, libXfixes, dbus, libdrm,
  systemd}:
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace data/spice-vdagent.desktop --replace /usr $out
   '';
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib spice-protocol glib libdrm
+  buildInputs = [ alsa-lib spice-protocol glib libdrm
                   libpciaccess libxcb libXrandr libXinerama libXfixes
                   dbus systemd ] ;
   meta = {

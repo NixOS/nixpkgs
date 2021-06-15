@@ -171,7 +171,7 @@ rec {
       librsvg
       xorg.libXft
       libvdpau
-      alsaLib
+      alsa-lib
 
       harfbuzz
       e2fsprogs

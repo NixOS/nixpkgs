@@ -14,6 +14,15 @@
     "sha256": "1wdrjpd3l0xadsa3lqhsc9c57g8x2qkwb76q824sk8za1a7lapii",
     "version": "1.5.0-patched"
   },
+  "aiven": {
+    "owner": "aiven",
+    "provider-source-address": "registry.terraform.io/aiven/aiven",
+    "repo": "terraform-provider-aiven",
+    "rev": "v2.1.14",
+    "sha256": "14bfdhn3daygj1v3lm9b3791sx2cd5h0panchpp39h6vrccrpmmk",
+    "vendorSha256": "1j09bfbld03yxq0vv9ld0xmw5axbza2bwlz01i1gl1v9dprlnbkc",
+    "version": "2.1.14"
+  },
   "akamai": {
     "owner": "terraform-providers",
     "provider-source-address": "registry.terraform.io/akamai/akamai",
@@ -226,10 +235,11 @@
   },
   "ct": {
     "owner": "poseidon",
+    "provider-source-address": "registry.terraform.io/poseidon/ct",
     "repo": "terraform-provider-ct",
-    "rev": "v0.6.1",
-    "sha256": "0hh3hvi8lwb0h8x9viz5p991w94gn7354nw95b51rdmir9qi2x89",
-    "version": "0.6.1"
+    "rev": "v0.8.0",
+    "sha256": "1mm86q3rl81dm2yfg2hdf88x8g5mhwwixrxgrffpkjvjqy42a8h7",
+    "version": "0.8.0"
   },
   "datadog": {
     "owner": "terraform-providers",
@@ -378,11 +388,13 @@
     "version": "3.47.0"
   },
   "grafana": {
-    "owner": "terraform-providers",
+    "owner": "grafana",
+    "provider-source-address": "registry.terraform.io/grafana/grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v1.5.0",
-    "sha256": "0zy3bqgpxymp2zygaxzllk1ysdankwxa1sy1djfgr4fs2nlggkwi",
-    "version": "1.5.0"
+    "rev": "v1.10.0",
+    "sha256": "0q3j30q1zxpdm0fmda3ivnl754q2p61xn9l30l0a3n0r5b25w8pk",
+    "vendorSha256": null,
+    "version": "1.10.0"
   },
   "gridscale": {
     "owner": "terraform-providers",
@@ -506,6 +518,15 @@
     "vendorSha256": "08wg16g4mvn6kl8xwn89195a826cb132ijvrgf32c6p7zp4lgmjd",
     "version": "0.2.12"
   },
+  "kafka-connect": {
+    "owner": "Mongey",
+    "provider-source-address": "registry.terraform.io/Mongey/kafka-connect",
+    "repo": "terraform-provider-kafka-connect",
+    "rev": "v0.2.3",
+    "sha256": "0fn03l58lkrlinvnxld2ba7z1gx95vxklbhh2z7930pih0vhr0sr",
+    "vendorSha256": "17fwqhxh22szdys97dxh069z6s8xr3y9i3pi5ckdcr462j1dr95w",
+    "version": "0.2.3"
+  },
   "keycloak": {
     "owner": "mrparkers",
     "provider-source-address": "registry.terraform.io/mrparkers/keycloak",
@@ -609,6 +630,7 @@
   },
   "metal": {
     "owner": "equinix",
+    "provider-source-address": "registry.terraform.io/equinix/metal",
     "repo": "terraform-provider-metal",
     "rev": "v2.1.0",
     "sha256": "06i3rj6ig8hxbncdpa8b11v8pr3zhi90ppmf77jjin1114ikd172",

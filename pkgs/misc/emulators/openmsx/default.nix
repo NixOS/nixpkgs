@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config
 , python
-, alsaLib, glew, libGL, libpng
+, alsa-lib, glew, libGL, libpng
 , libogg, libtheora, libvorbis
 , SDL2, SDL2_image, SDL2_ttf
 , freetype, tcl, zlib
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config python ];
 
-  buildInputs = [ alsaLib glew libGL libpng
+  buildInputs = [ alsa-lib glew libGL libpng
     libogg libtheora libvorbis freetype
     SDL2 SDL2_image SDL2_ttf tcl zlib ];
 

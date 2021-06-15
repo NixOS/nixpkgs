@@ -16,7 +16,7 @@
 
   # Optional dependencies
 , alsaSupport ? true
-, alsaLib
+, alsa-lib
 , dssiSupport ? false
 , dssi
 , ladspaH
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
   buildInputs = [ fftw liblo minixml zlib ]
-    ++ lib.optionals alsaSupport [ alsaLib ]
+    ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals dssiSupport [ dssi ladspaH ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals lashSupport [ lash ]

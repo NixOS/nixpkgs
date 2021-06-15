@@ -93,6 +93,9 @@ default-package-overrides:
   - futhark < 0.19.5
   # 2021-06-05: remove once pandoc 2.14 is in stackage
   - pandoc-crossref < 0.3.11.0
+  # 2021-06-07: stackage still has dhall < 1.39
+  - dhall-nix < 1.1.21
+  - dhall-openapi < 1.0.1
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -122,6 +125,7 @@ extra-packages:
   - gi-gtk < 4.0                        # 2021-05-07: For haskell-gi 0.25 without gtk4
   - gi-gdkx11 == 3.0.11                 # 2021-05-07: For haskell-gi 0.25 without gtk4
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
+  - hackage-db < 2.1.1                  # 2021-06-10: Need older hackage-db as long as Cabal < 3.4, see https://github.com/NixOS/cabal2nix/issues/501
 
 package-maintainers:
   abbradar:
@@ -393,6 +397,7 @@ unsupported-platforms:
   mpi-hs-cereal:                                [ aarch64-linux, x86_64-darwin ]
   mpi-hs-store:                                 [ aarch64-linux, x86_64-darwin ]
   mplayer-spot:                                 [ aarch64-linux ]
+  mptcp-pm:                                     [ x86_64-darwin ]
   netlink:                                      [ x86_64-darwin ]
   oculus:                                       [ x86_64-darwin ]
   pam:                                          [ x86_64-darwin ]

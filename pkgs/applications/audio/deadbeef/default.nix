@@ -25,7 +25,7 @@
 , hotkeysSupport ? true, libX11 ? null
 , osdSupport ? true, dbus ? null
 # output plugins
-, alsaSupport ? true, alsaLib ? null
+, alsaSupport ? true, alsa-lib ? null
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 # effect plugins
 , resamplerSupport ? true, libsamplerate ? null
@@ -50,7 +50,7 @@ assert apeSupport -> yasm != null;
 assert artworkSupport -> imlib2 != null;
 assert hotkeysSupport -> libX11 != null;
 assert osdSupport -> dbus != null;
-assert alsaSupport -> alsaLib != null;
+assert alsaSupport -> alsa-lib != null;
 assert pulseSupport -> libpulseaudio != null;
 assert resamplerSupport -> libsamplerate != null;
 assert overloadSupport -> zlib != null;
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     ++ optional artworkSupport imlib2
     ++ optional hotkeysSupport libX11
     ++ optional osdSupport dbus
-    ++ optional alsaSupport alsaLib
+    ++ optional alsaSupport alsa-lib
     ++ optional pulseSupport libpulseaudio
     ++ optional resamplerSupport libsamplerate
     ++ optional overloadSupport zlib

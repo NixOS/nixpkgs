@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
-, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
+, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
 , cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
 , systemd, libnotify, libdbusmenu, libpulseaudio
@@ -28,7 +28,7 @@ let
       else "");
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.4.0"; # Please backport all updates to the stable channel.
+  version = "5.4.1"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "046xy033ars70ay5ryj39i5053py00xj92ajdg212pamq415z1zb";
+    sha256 = "1f1narpqj8gcyi4r574nqm1cbyi3azk1y7d1j300scr51gk74fq6";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     at-spi2-core
     atk

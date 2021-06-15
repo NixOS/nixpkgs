@@ -16,7 +16,7 @@
 , clanlib
 , libXrender
 , libmikmod
-, alsaLib
+, alsa-lib
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     clanlib
     libXrender
     libmikmod
-    alsaLib
+    alsa-lib
   ];
 
   installPhase  = ''

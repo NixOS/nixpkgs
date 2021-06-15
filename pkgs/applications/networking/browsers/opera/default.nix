@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , atk
 , cairo
 , cups
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     at-spi2-core
     atk

@@ -23939,6 +23939,21 @@ let
     };
   };
 
+  XSParseKeyword = buildPerlModule {
+    pname = "XS-Parse-Keyword";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.06.tar.gz";
+      sha256 = "0nnr8akkxb2h2y3d5r51pr84vvxkq89ynmi9azkbnn79jmbcbgvq";
+    };
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "XS functions to assist in parsing keyword syntax";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   XSParseSublike = buildPerlModule {
     pname = "XS-Parse-Sublike";
     version = "0.10";

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , cmake, docbook_xml_dtd_45, docbook_xsl, doxygen, graphviz-nox, pkg-config, qttools, wrapQtAppsHook
-, alsaLib, fluidsynth, qtbase, qtsvg, libpulseaudio
+, alsa-lib, fluidsynth, qtbase, qtsvg, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib fluidsynth libpulseaudio qtbase qtsvg
+    alsa-lib fluidsynth libpulseaudio qtbase qtsvg
   ];
 
   cmakeFlags = [

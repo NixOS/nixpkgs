@@ -1,18 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, jq, callPackage
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, callPackage
 , nodePackages, cmake, nodejs, unzip, python3
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-mi+AeHg9zO0vjF0OZCufPkliInqxTvDGV350wqAwe90=";
-    fetchSubmodules = true;
+    sha256 = "sha256-utElXMAJG8X7jFmY/oyrWOCkOiNG3jZHrf04vTBTi7M=";
   };
 
   lldb = callPackage ./lldb.nix {};
@@ -24,7 +23,7 @@ let
     # It will pollute the build environment of `buildRustPackage`.
     cargoPatches = [ ./reset-cargo-config.patch ];
 
-    cargoSha256 = "sha256-vcL/nSGhyE0INQVWxEIpYwXmnOl1soBn+mymZr1FaSM=";
+    cargoSha256 = "sha256-ZbD/+QWvpi88bHoSvDG0FKcsTsnthYR1SYkkJhqBbbU=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -71,8 +70,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $ext/{adapter,formatters}
     mv -t $ext vsix-extracted/extension/*
     cp -t $ext/adapter ${adapter}/{bin,lib}/* ../adapter/*.py
+    wrapProgram $ext/adapter/codelldb \
+      --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
     cp -t $ext/formatters ../formatters/*.py
-    ln -s ${lldb} $ext/lldb
+    ln -s ${lldb.lib} $ext/lldb
     # Mark that all components are installed.
     touch $ext/platform.ok
 
@@ -80,7 +81,7 @@ in stdenv.mkDerivation rec {
   '';
 
   # `adapter` will find python binary and libraries at runtime.
-  fixupPhase = ''
+  postFixup = ''
     wrapProgram $out/$installPrefix/adapter/codelldb \
       --prefix PATH : "${python3}/bin" \
       --prefix LD_LIBRARY_PATH : "${python3}/lib"

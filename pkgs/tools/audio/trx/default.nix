@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, libopus, ortp, bctoolbox }:
+{ lib, stdenv, fetchurl, alsa-lib, libopus, ortp, bctoolbox }:
 
 stdenv.mkDerivation rec {
   pname = "trx";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ./add_bctoolbox_ldlib.patch
   ];
 
-  buildInputs = [ alsaLib libopus ortp bctoolbox ];
+  buildInputs = [ alsa-lib libopus ortp bctoolbox ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {

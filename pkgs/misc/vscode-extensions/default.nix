@@ -12,6 +12,19 @@ let
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
+      _4ops.terraform = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "4ops";
+          name = "terraform";
+          version = "0.2.1";
+          sha256 = "196026a89pizj8p0hqdgkyllj2spx2qwpynsaqjq17s8v15vk5dg";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
       a5huynh.vscode-ron = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-ron";
@@ -229,6 +242,19 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      coolbear.systemd-unit-file = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "coolbear";
+          name = "systemd-unit-file";
+          version = "1.0.6";
+          sha256 = "0sc0zsdnxi4wfdlmaqwb6k2qc21dgwx6ipvri36x7agk7m8m4736";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
         };
       };
 
@@ -495,6 +521,19 @@ let
         };
       };
 
+      jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "jkillian";
+          name = "custom-local-formatters";
+          version = "0.0.4";
+          sha256 = "1pmqnc759fq86g2z3scx5xqpni9khcqi5z2kpl1kb7yygsv314gm";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
       github = {
         github-vscode-theme = buildVscodeMarketplaceExtension {
           mktplcRef = {
@@ -615,7 +654,7 @@ let
         };
       };
 
-      JakeBecker.elixir-ls = buildVscodeMarketplaceExtension {
+      jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
@@ -708,11 +747,24 @@ let
         mktplcRef = {
           name = "magit";
           publisher = "kahole";
-          version = "0.6.13";
-          sha256 = "sha256-/SeGQV0UEqBk69cAmUXFc/OfPxNssvzZqa7NmAMQD1k=";
+          version = "0.6.15";
+          sha256 = "sha256-fRXm70FXnHduoywI4YC9ya6/J7wyd6EBzbnrcijBIbA=";
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      mads-hartmann.bash-ide-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "mads-hartmann";
+          name = "bash-ide-vscode";
+          version = "1.11.0";
+          sha256 = "1hq41fy2v1grjrw77mbs9k6ps6gncwlydm03ipawjnsinxc9rdkp";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
         };
       };
 
@@ -835,6 +887,18 @@ let
           publisher = "naumovs";
           version = "2.3.0";
           sha256 = "1syzf43ws343z911fnhrlbzbx70gdn930q67yqkf6g0mj8lf2za2";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      octref.vetur = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vetur";
+          publisher = "octref";
+          version = "0.34.1";
+          sha256 = "09w3bik1mxs7qac67wgrc58vl98ham3syrn2anycpwd7135wlpby";
         };
         meta = {
           license = lib.licenses.mit;
@@ -970,6 +1034,18 @@ let
         };
       };
 
+      shardulm94.trailing-spaces = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "shardulm94";
+          name = "trailing-spaces";
+          version = "0.3.1";
+          sha256 = "0h30zmg5rq7cv7kjdr5yzqkkc1bs20d72yz9rjqag32gwf46s8b8";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
 
       shyykoserhiy.vscode-spotify = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1161,7 +1237,7 @@ let
         };
       };
 
-      VSpaceCode.vspacecode = buildVscodeMarketplaceExtension {
+      vspacecode.vspacecode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vspacecode";
           publisher = "VSpaceCode";
@@ -1173,7 +1249,7 @@ let
         };
       };
 
-      VSpaceCode.whichkey = buildVscodeMarketplaceExtension {
+      vspacecode.whichkey = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "whichkey";
           publisher = "VSpaceCode";
