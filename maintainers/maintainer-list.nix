@@ -3093,6 +3093,12 @@
     githubId = 57923898;
     name = "Elyhaka";
   };
+  em0lar = {
+    email = "nix@em0lar.dev";
+    github = "em0lar";
+    githubId = 11006031;
+    name = "Leo Maroni";
+  };
   emmanuelrosa = {
     email = "emmanuel_rosa@aol.com";
     github = "emmanuelrosa";
