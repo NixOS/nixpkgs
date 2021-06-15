@@ -24,12 +24,13 @@ buildPythonPackage rec {
     sha256 = "c13dd7a84eddfcf9c3068d57f3c9da90ea7c0d11688dc3f78f9265f3f093c6ea";
   };
 
-  patchPhase = ''
-    sed -i 's/version=version/version="${version}"/' setup.py
+  postPhase = ''
+    substituteInPlace setup.py \
+      --replace "version=version" 'version="${version}"'
 
-    # Unix's test suite assumes /bin/ls and /boot exists
-    sed -i 's|/bin/ls|ls|' plugins/Unix/test.py
-    sed -i 's|boot|bin|' plugins/Unix/test.py
+    substituteInPlace plugins/Unix/test.py \
+      --replace "/bin/ls" "ls" \
+      --replace "boot" "bin"
   '';
 
   checkInputs = [
