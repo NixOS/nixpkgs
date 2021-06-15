@@ -52,12 +52,12 @@ let
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {
       iaqualink = super.iaqualink.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.4";
+        version = "0.3.90";
         src = fetchFromGitHub {
           owner = "flz";
           repo = "iaqualink-py";
           rev = "v${version}";
-          sha256 = "16mn6nd9x3hm6j6da99qhwbqs95hh8wx21r1h1m9csl76z77n9lh";
+          sha256 = "0c8ckbbr1n8gx5k63ymgyfkbz3d0rbdvghg8fqdvbg4nrigrs5v0";
         };
         checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
       });
