@@ -8,7 +8,6 @@
 , pytestCheckHook
 , pytest-check
 , markdown
-
 , testVersion
 , staticjinja
 }:
