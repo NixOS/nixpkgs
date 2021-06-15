@@ -308,6 +308,7 @@ in with py.pkgs; buildPythonApplication rec {
     "blackbird"
     "blueprint"
     "bluetooth_le_tracker"
+    "bond"
     "bosch_shc"
     "braviatv"
     "broadlink"
