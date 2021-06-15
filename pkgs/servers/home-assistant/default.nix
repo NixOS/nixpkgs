@@ -219,7 +219,7 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    # Only packages required in setup.py + hass-frontend
+    # Only packages required in setup.py
     aiohttp
     astral
     async-timeout
@@ -798,11 +798,10 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit (py.pkgs) hass-frontend;
+    python = py;
     tests = {
       inherit (nixosTests) home-assistant;
     };
-    python = py;
   };
 
   meta = with lib; {
