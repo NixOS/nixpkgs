@@ -374,6 +374,7 @@ in with py.pkgs; buildPythonApplication rec {
     "file"
     "filesize"
     "filter"
+    "fireservicerota"
     "firmata"
     "flo"
     "flume"

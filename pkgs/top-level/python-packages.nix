@@ -5197,6 +5197,8 @@ in {
 
   pyatag = callPackage ../development/python-modules/pyatag { };
 
+  pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
