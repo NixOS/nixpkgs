@@ -1135,6 +1135,8 @@ in {
 
   boltztrap2 = callPackage ../development/python-modules/boltztrap2 { };
 
+  bond-api = callPackage ../development/python-modules/bond-api { };
+
   booleanoperations = callPackage ../development/python-modules/booleanoperations { };
 
   boolean-py = callPackage ../development/python-modules/boolean-py { };
