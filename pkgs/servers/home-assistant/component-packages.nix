@@ -157,7 +157,7 @@
     "deconz" = ps: with ps; [ pydeconz ];
     "decora" = ps: with ps; [ bluepy ]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
-    "default_config" = ps: with ps; [ pynacl aiodiscover aiohttp-cors async-upnp-client defusedxml distro emoji hass-nabucasa ifaddr netdisco pillow scapy sqlalchemy zeroconf ];
+    "default_config" = ps: with ps; [ pynacl aiodiscover aiohttp-cors async-upnp-client defusedxml distro emoji hass-nabucasa home-assistant-frontend ifaddr netdisco pillow scapy sqlalchemy zeroconf ];
     "delijn" = ps: with ps; [ pydelijn ];
     "deluge" = ps: with ps; [ deluge-client ];
     "demo" = ps: with ps; [ aiohttp-cors ];
@@ -288,7 +288,7 @@
     "fritzbox_callmonitor" = ps: with ps; [ fritzconnection ];
     "fritzbox_netmonitor" = ps: with ps; [ fritzconnection ];
     "fronius" = ps: with ps; [ ]; # missing inputs: pyfronius
-    "frontend" = ps: with ps; [ aiohttp-cors pillow ];
+    "frontend" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
     "frontier_silicon" = ps: with ps; [ ]; # missing inputs: afsapi
     "futurenow" = ps: with ps; [ pyfnip ];
     "garadget" = ps: with ps; [ ];
@@ -339,7 +339,7 @@
     "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
     "harman_kardon_avr" = ps: with ps; [ ]; # missing inputs: hkavr
     "harmony" = ps: with ps; [ aioharmony ];
-    "hassio" = ps: with ps; [ aiohttp-cors pillow ];
+    "hassio" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
     "haveibeenpwned" = ps: with ps; [ ];
     "hddtemp" = ps: with ps; [ ];
     "hdmi_cec" = ps: with ps; [ pycec ];
@@ -460,7 +460,7 @@
     "local_ip" = ps: with ps; [ ];
     "locative" = ps: with ps; [ aiohttp-cors ];
     "lock" = ps: with ps; [ ];
-    "logbook" = ps: with ps; [ aiohttp-cors pillow sqlalchemy ];
+    "logbook" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
     "logentries" = ps: with ps; [ ];
     "logger" = ps: with ps; [ ];
     "logi_circle" = ps: with ps; [ aiohttp-cors ha-ffmpeg ]; # missing inputs: logi_circle
@@ -481,7 +481,7 @@
     "mailgun" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pymailgunner
     "manual" = ps: with ps; [ ];
     "manual_mqtt" = ps: with ps; [ aiohttp-cors paho-mqtt ];
-    "map" = ps: with ps; [ aiohttp-cors pillow ];
+    "map" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
     "marytts" = ps: with ps; [ ]; # missing inputs: speak2mary
     "mastodon" = ps: with ps; [ mastodon-py ];
     "matrix" = ps: with ps; [ matrix-client ];
@@ -536,7 +536,7 @@
     "mullvad" = ps: with ps; [ mullvad-api ];
     "mutesync" = ps: with ps; [ mutesync ];
     "mvglive" = ps: with ps; [ PyMVGLive ];
-    "my" = ps: with ps; [ aiohttp-cors pillow ];
+    "my" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
     "mychevy" = ps: with ps; [ ]; # missing inputs: mychevy
     "mycroft" = ps: with ps; [ ]; # missing inputs: mycroftapi
     "myq" = ps: with ps; [ pymyq ];
@@ -592,7 +592,7 @@
     "ohmconnect" = ps: with ps; [ defusedxml ];
     "ombi" = ps: with ps; [ ]; # missing inputs: pyombi
     "omnilogic" = ps: with ps; [ omnilogic ];
-    "onboarding" = ps: with ps; [ aiohttp-cors pillow ];
+    "onboarding" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
     "ondilo_ico" = ps: with ps; [ aiohttp-cors ondilo ];
     "onewire" = ps: with ps; [ ]; # missing inputs: pi1wire pyownet
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
@@ -624,8 +624,8 @@
     "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
     "panasonic_viera" = ps: with ps; [ ]; # missing inputs: panasonic_viera
     "pandora" = ps: with ps; [ pexpect ];
-    "panel_custom" = ps: with ps; [ aiohttp-cors pillow ];
-    "panel_iframe" = ps: with ps; [ aiohttp-cors pillow ];
+    "panel_custom" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
+    "panel_iframe" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
     "pcal9535a" = ps: with ps; [ ]; # missing inputs: pcal9535a
     "pencom" = ps: with ps; [ ]; # missing inputs: pencompy
     "persistent_notification" = ps: with ps; [ ];
@@ -720,7 +720,7 @@
     "russound_rio" = ps: with ps; [ ]; # missing inputs: russound_rio
     "russound_rnet" = ps: with ps; [ ]; # missing inputs: russound
     "sabnzbd" = ps: with ps; [ aiohttp-cors ifaddr netdisco zeroconf ]; # missing inputs: pysabnzbd
-    "safe_mode" = ps: with ps; [ aiohttp-cors hass-nabucasa pillow ];
+    "safe_mode" = ps: with ps; [ aiohttp-cors hass-nabucasa home-assistant-frontend pillow ];
     "saj" = ps: with ps; [ ]; # missing inputs: pysaj
     "samsungtv" = ps: with ps; [ samsungctl samsungtvws wakeonlan ];
     "satel_integra" = ps: with ps; [ ]; # missing inputs: satel_integra
