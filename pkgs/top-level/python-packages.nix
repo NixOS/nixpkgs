@@ -9198,6 +9198,8 @@ in {
     phantomjsSupport = false;
   };
 
+  youtube-search = callPackage ../development/python-modules/youtube-search { };
+
   yowsup = callPackage ../development/python-modules/yowsup { };
 
   yq = callPackage ../development/python-modules/yq {
