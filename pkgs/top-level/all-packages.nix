@@ -367,7 +367,7 @@ in
 
   nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
 
-  docker-compose = python3Packages.callPackage ../applications/virtualization/docker-compose {};
+  docker-compose = with python3Packages; toPythonApplication docker-compose;
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
@@ -1205,7 +1205,7 @@ in
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
-  aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
+  aws-sam-cli = with python3Packages; toPythonApplication aws-sam-cli;
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 

@@ -693,6 +693,8 @@ in {
 
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
 
+  aws-sam-cli = callPackage ../development/python-modules/aws-sam-cli { };
+
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
@@ -2091,6 +2093,8 @@ in {
   dockerpty = callPackage ../development/python-modules/dockerpty { };
 
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds { };
+
+  docker-compose = callPackage ../development/python-modules/docker-compose { };
 
   docker-py = callPackage ../development/python-modules/docker-py { };
 

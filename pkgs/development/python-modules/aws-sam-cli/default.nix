@@ -1,13 +1,28 @@
 { lib
-, python3
 , enableTelemetry ? false
+, buildPythonPackage
+, fetchPypi
+, aws-lambda-builders
+, aws-sam-translator
+, chevron
+, click
+, cookiecutter
+, dateparser
+, python-dateutil
+, docker
+, flask
+, jmespath
+, requests
+, serverlessrepo
+, tomlkit
+, watchdog
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "aws-sam-cli";
   version = "1.23.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "0j0q6p08c3l9z0yc2cggw797k47cjh6ljpchiqgg0fh6mk32215f";
   };
@@ -15,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   # Tests are not included in the PyPI package
   doCheck = false;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     aws-lambda-builders
     aws-sam-translator
     chevron
@@ -34,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postFixup = if enableTelemetry then "echo aws-sam-cli TELEMETRY IS ENABLED" else ''
     # Disable telemetry: https://github.com/awslabs/aws-sam-cli/issues/1272
-    wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
+    wrapProgram $out/bin/sam --set SAM_CLI_TELEMETRY 0
   '';
 
   # fix over-restrictive version bounds
