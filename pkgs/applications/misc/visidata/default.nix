@@ -2,16 +2,23 @@
 , lib
 , fetchFromGitHub
 , dateutil
-, pyyaml
+, pandas
+, requests
+, lxml
 , openpyxl
 , xlrd
 , h5py
-, fonttools
-, lxml
-, pandas
+, psycopg2
 , pyshp
+, fonttools
+, pyyaml
+, pdfminer
+, vobject
+, tabulate
+, wcwidth
+, zstandard
 , setuptools
-, withPcap ? true, dpkt ? null, dnslib ? null
+, withPcap ? true, dpkt, dnslib
 }:
 buildPythonApplication rec {
   pname = "visidata";
@@ -25,15 +32,32 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
+    # from visidata/requirements.txt
+    # packages not (yet) present in nixpkgs are commented
     dateutil
-    pyyaml
+    pandas
+    requests
+    lxml
     openpyxl
     xlrd
     h5py
-    fonttools
-    lxml
-    pandas
+    psycopg2
     pyshp
+    #mapbox-vector-tile
+    #pypng
+    fonttools
+    #sas7bdat
+    #xport
+    #savReaderWriter
+    pyyaml
+    #namestand
+    #datapackage
+    pdfminer
+    #tabula
+    vobject
+    tabulate
+    wcwidth
+    zstandard
     setuptools
   ] ++ lib.optionals withPcap [ dpkt dnslib ];
 
