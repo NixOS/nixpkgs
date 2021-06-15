@@ -41,7 +41,12 @@ buildGoModule rec {
     # + (string) (len=5) "error": (string) (len=171) "Failed to send request: Get \"https://grafana.com/api/plugins/repo/test\": dial tcp: lookup grafana.com on [::1]:53: read udp [::1]:48019->[::1]:53: read: connection refused",
     # + (string) (len=7) "message": (string) (len=24) "Failed to install plugin"
     #  }
-    sed -ie '/func TestPluginInstallAccess/a t.Skip();' pkg/tests/api/plugins/api_install_test.go
+    sed -i -e '/func TestPluginInstallAccess/a t.Skip();' pkg/tests/api/plugins/api_install_test.go
+
+    # Skip a flaky test (https://github.com/NixOS/nixpkgs/pull/126928#issuecomment-861424128)
+    sed -i -e '/it should change folder successfully and return correct result/{N;s/$/\nt.Skip();/}'\
+      pkg/services/libraryelements/libraryelements_patch_test.go
+
 
     # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
     rm -r scripts/go
