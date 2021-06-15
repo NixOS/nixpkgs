@@ -259,7 +259,7 @@
     "filesize" = ps: with ps; [ ];
     "filter" = ps: with ps; [ sqlalchemy ];
     "fints" = ps: with ps; [ fints ];
-    "fireservicerota" = ps: with ps; [ ]; # missing inputs: pyfireservicerota
+    "fireservicerota" = ps: with ps; [ pyfireservicerota ];
     "firmata" = ps: with ps; [ pymata-express ];
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [ fixerio ];
