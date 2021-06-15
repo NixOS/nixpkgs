@@ -3528,6 +3528,8 @@ in {
 
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
+  itunespy = callPackage ../development/python-modules/itunespy { };
+
   itypes = callPackage ../development/python-modules/itypes { };
 
   j2cli = callPackage ../development/python-modules/j2cli { };
