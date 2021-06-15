@@ -861,7 +861,7 @@
     "thinkingcleaner" = ps: with ps; [ ]; # missing inputs: pythinkingcleaner
     "thomson" = ps: with ps; [ ];
     "threshold" = ps: with ps; [ ];
-    "tibber" = ps: with ps; [ ]; # missing inputs: pyTibber
+    "tibber" = ps: with ps; [ pytibber ];
     "tikteck" = ps: with ps; [ ]; # missing inputs: tikteck
     "tile" = ps: with ps; [ pytile ];
     "time_date" = ps: with ps; [ ];
