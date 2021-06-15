@@ -2,33 +2,36 @@
 , lib
 , fetchurl
 , unzip
-, version ? "2.12.2"
-, sources ?
-  let
+, version ? "2.13.1"
+, sources ? let
     base = "https://storage.googleapis.com/dart-archive/channels";
     x86_64 = "x64";
     i686 = "ia32";
     aarch64 = "arm64";
     # Make sure that if the user overrides version parameter they're
     # also need to override sources, to avoid mistakes
-    version = "2.12.2";
+    version = "2.13.1";
   in
   {
     "${version}-x86_64-darwin" = fetchurl {
-      url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
-      sha256 = "0h6mpy0kfc842vhg053fyxbjnd8lw1d1shdcsj800048260lxhyd";
+      url =
+        "${base}/stable/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
+      sha256 = "0kb6r2rmp5d0shvgyy37fmykbgww8qaj4f8k79rmqfv5lwa3izya";
     };
     "${version}-x86_64-linux" = fetchurl {
-      url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "1gg210gf4yif3bl9k19znkndc4c1cd529xwxpi20ykaw3zfxxz2z";
+      url =
+        "${base}/stable/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
+      sha256 = "0zq8wngyrw01wjc5s6w1vz2jndms09ifiymjjixxby9k41mr6jrq";
     };
     "${version}-i686-linux" = fetchurl {
-      url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
-      sha256 = "1wngxba71j20gq9vy7n8q0m9rnqs047xm5b03bxk3hhaq6dyzkwn";
+      url =
+        "${base}/stable/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
+      sha256 = "0zv4q8xv2i08a6izpyhhnil75qhs40m5mgyvjqjsswqkwqdf7lkj";
     };
     "${version}-aarch64-linux" = fetchurl {
-      url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
-      sha256 = "0rqsmzl5g5kgk54qb03kamjm5n5g5pqfl79np37xdzwqbv0zx22b";
+      url =
+        "${base}/stable/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
+      sha256 = "0bb9jdmg5p608jmmiqibp13ydiw9avgysxlmljvgsl7wl93j6rgc";
     };
   }
 }:
@@ -40,11 +43,10 @@ stdenv.mkDerivation {
   pname = "dart";
   inherit version;
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
-  src = sources."${version}-${stdenv.hostPlatform.system}" or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
+  src = sources."${version}-${stdenv.hostPlatform.system}" or (throw
+    "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
 
   installPhase = ''
     mkdir -p $out
@@ -60,7 +62,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.dartlang.org/";
     maintainers = with maintainers; [ grburst thiagokokada ];
-    description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
+    description =
+      "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''
       Dart is a class-based, single inheritance, object-oriented language
       with C-style syntax. It offers compilation to JavaScript, interfaces,
