@@ -23,6 +23,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+from functools import reduce
 from io import BytesIO
 from typing import Dict, Optional, Set, Any
 from urllib.request import urlopen
@@ -205,6 +206,12 @@ def main() -> None:
             f.write("\n")
         f.write("  };\n")
         f.write("}\n")
+
+    supported_components = reduce(lambda n, c: n + (build_inputs[c][1] == []),
+                                  components.keys(), 0)
+    total_components = len(components)
+    print(f"{supported_components} / {total_components} components supported, "
+          f"i.e. {supported_components / total_components:.2%}")
 
     if outdated:
         table = Table(title="Outdated dependencies")
