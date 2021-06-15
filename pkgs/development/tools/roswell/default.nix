@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "roswell";
-  version = "21.01.14.108";
+  version = "21.05.14.109";
 
   src = fetchFromGitHub {
     owner = "roswell";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hj9q3ig7naky3pb3jkl9yjc9xkg0k7js3glxicv0aqffx9hkp3p";
+    sha256 = "0r4r2d0jfwqaxjfnzwl804g194hjrn6lma485crb4gxs7xkziwbx";
   };
 
   preConfigure = ''
