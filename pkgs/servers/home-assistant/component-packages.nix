@@ -293,7 +293,7 @@
     "futurenow" = ps: with ps; [ pyfnip ];
     "garadget" = ps: with ps; [ ];
     "garages_amsterdam" = ps: with ps; [ garages-amsterdam ];
-    "garmin_connect" = ps: with ps; [ ]; # missing inputs: garminconnect_aio
+    "garmin_connect" = ps: with ps; [ garminconnect-aio ];
     "gc100" = ps: with ps; [ ]; # missing inputs: python-gc100
     "gdacs" = ps: with ps; [ aio-georss-gdacs ];
     "generic" = ps: with ps; [ ];
