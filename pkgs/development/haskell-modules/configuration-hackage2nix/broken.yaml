@@ -5203,7 +5203,6 @@ broken-packages:
   - xmonad-dbus
   - xmonad-eval
   - xmonad-vanessa
-  - xmonad-wallpaper
   - xmonad-windownames
   - xor
   - Xorshift128Plus
