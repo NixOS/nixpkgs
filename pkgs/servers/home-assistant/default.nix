@@ -303,6 +303,7 @@ in with py.pkgs; buildPythonApplication rec {
     "awair"
     "aws"
     "axis"
+    "azure_event_hub"
     "bayesian"
     "binary_sensor"
     "blackbird"
