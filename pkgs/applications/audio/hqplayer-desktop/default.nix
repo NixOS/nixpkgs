@@ -76,8 +76,6 @@ mkDerivation rec {
         --replace /usr/bin/ $out/bin/ \
         --replace /usr/share/doc/ $out/share/doc/
     done
-
-    gunzip $out/share/doc/${pname}/*.gz
   '';
 
   postFixup = ''
