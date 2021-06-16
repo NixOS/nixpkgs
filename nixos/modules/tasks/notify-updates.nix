@@ -28,71 +28,39 @@ in
           --list</literal> to see the current value).
         '';
       };
-
-      dates = mkOption {
-        default = "04:40";
-        type = types.str;
-        description = ''
-          Specification (in the format described by
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>) of the time at
-          which the update will occur.
-        '';
-      };
-
-      randomizedDelaySec = mkOption {
-        default = "0";
-        type = types.str;
-        example = "45min";
-        description = ''
-          Add a randomized delay before each automatic upgrade.
-          The delay will be chozen between zero and this value.
-          This value must be a time span in the format specified by
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>
-        '';
-      };
     };
   };
 
   config = lib.mkIf cfg.enable {
 
-    systemd.services.nixos-notify-updates = {
+    systemd.user.services.nixos-notify-updates = {
       description = "Notify available NixOS Updates";
 
-      restartIfChanged = true; # not sure
+      restartIfChanged = true;
 
       serviceConfig.Type = "oneshot";
 
       environment = config.nix.envVars // {
         inherit (config.environment.sessionVariables) NIX_PATH;
-        #HOME="/root";
       };
 
       path = with pkgs; [
         coreutils
         curl
-
+        libnotify
       ];
 
       script = ''
-        current="$(cat /nix/var/nix/profiles/system/nixos-version | sed 's/.*\.\([0-9a-f]*\)$/\1/')"
-        length="$(echo -n $current | wc -c)"
-        
-        incoming="$(curl -L $CHANNEL/git-revision)"
-        incoming="$(echo -n $incoming | cut -c 1-$length)"
-        
-        if ! [ "$incoming" = "$current" ]; then
-          # to change
-          wall "UPDATE AVAILABLE" "Incoming git revision: $incoming, current git revision: $current"
+        current=$(cat /nix/var/nix/profiles/system/nixos-version | sed 's/.*\.\([0-9a-f]*\)$/\1/')
+        length=$(echo -n $current | wc -c)
+
+        incoming=$(curl -L ${cfg.channel}/git-revision)
+        incoming=$(echo -n $incoming | cut -c 1-$length)
+
+        if ! [ $incoming = $current ]; then
+          notify-send "Update Available" "Incoming git revision: $incoming\nCurrent git revision: $current"
         fi
       '';
-
-      startAt = cfg.dates;
-
     };
-
-    systemd.timers.notify-updates.timerConfig.RandomizedDelaySec =
-      cfg.randomizedDelaySec;
   };
 }
