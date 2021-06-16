@@ -81,7 +81,7 @@
     "bitcoin" = ps: with ps; [ blockchain ];
     "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
     "blackbird" = ps: with ps; [ pyblackbird ];
-    "blebox" = ps: with ps; [ ]; # missing inputs: blebox_uniapi
+    "blebox" = ps: with ps; [ blebox-uniapi ];
     "blink" = ps: with ps; [ ]; # missing inputs: blinkpy
     "blinksticklight" = ps: with ps; [ BlinkStick ];
     "blinkt" = ps: with ps; [ ]; # missing inputs: blinkt

@@ -307,6 +307,7 @@ in with py.pkgs; buildPythonApplication rec {
     "bayesian"
     "binary_sensor"
     "blackbird"
+    "blebox"
     "blueprint"
     "bluetooth_le_tracker"
     "bond"

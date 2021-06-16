@@ -1101,6 +1101,8 @@ in {
 
   bleak = callPackage ../development/python-modules/bleak { };
 
+  blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
+
   blessed = callPackage ../development/python-modules/blessed { };
 
   blessings = callPackage ../development/python-modules/blessings { };
