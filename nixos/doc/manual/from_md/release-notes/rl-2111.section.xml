@@ -40,6 +40,14 @@
           <link xlink:href="options.html#opt-services.sourcehut.enable">services.sourcehut</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://download.pureftpd.org/pub/ucarp/README">ucarp</link>,
+          an userspace implementation of the Common Address Redundancy
+          Protocol (CARP). Available as
+          <link xlink:href="options.html#opt-networking.ucarp.enable">networking.ucarp</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="backward-incompatibilities">
