@@ -35,6 +35,13 @@ in stdenv.mkDerivation rec {
       url    = "https://gitlab.freedesktop.org/cairo/cairo/commit/6edf572ebb27b00d3c371ba5ae267e39d27d5b6d.patch";
       sha256 = "112hgrrsmcwxh1r52brhi5lksq4pvrz4xhkzcf2iqp55jl2pb7n1";
     })
+
+    # Fix PDF output.
+    # https://gitlab.freedesktop.org/cairo/cairo/issues/342
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/cairo/cairo/commit/5e34c5a9640e49dcc29e6b954c4187cfc838dbd1.patch";
+      sha256 = "yCwsDUY7efVvOZkA6a0bPS+RrVc8Yk9bfPwWHeOjq5o=";
+    })
   ] ++ optionals stdenv.hostPlatform.isDarwin [
     # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
     ./skip-configure-stderr-check.patch
