@@ -47,6 +47,8 @@ mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     # main executable
     mkdir -p $out/bin
     cp ./usr/bin/* $out/bin
@@ -62,6 +64,8 @@ mkDerivation rec {
     # pixmaps
     mkdir -p $out/share/pixmaps
     cp ./usr/share/pixmaps/* $out/share/pixmaps
+
+    runHook postInstall
   '';
 
   postInstall = ''
