@@ -334,6 +334,7 @@ in with py.pkgs; buildPythonApplication rec {
     "compensation"
     "config"
     "configurator"
+    "control4"
     "conversation"
     "coronavirus"
     "counter"
