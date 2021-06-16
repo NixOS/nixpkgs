@@ -38,9 +38,11 @@ options = {
       <listitem>
         <para>
           The type of the option (see
-          <xref linkend="sec-option-types" />). It may be omitted, but
-          that’s not advisable since it may lead to errors that are hard
-          to diagnose.
+          <xref linkend="sec-option-types" />). This argument is
+          mandatory for nixpkgs modules. Setting this is highly
+          recommended for the sake of documentation and type checking.
+          In case it is not set, a fallback type with unspecified
+          behavior is used.
         </para>
       </listitem>
     </varlistentry>
