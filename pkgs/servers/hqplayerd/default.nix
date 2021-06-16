@@ -88,7 +88,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software embedded HD-audio player";
-    changelog = "https://www.signalyst.eu/bins/${pname}/fc33/${pname}-${version}.fc33.x86_64.changes";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
   };
