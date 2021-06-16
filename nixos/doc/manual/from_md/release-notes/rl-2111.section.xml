@@ -232,6 +232,75 @@
           <literal>services.x2goserver</literal>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The following dotnet-related packages have been removed for
+          being unmaintaned. Please use <literal>fetchNuGet</literal>
+          for specific packages.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Autofac
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemValueTuple
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              MicrosoftDiaSymReader
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              MicrosoftDiaSymReaderPortablePdb
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemCollectionsImmutable
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemCollectionsImmutable131
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemReflectionMetadata
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              NUnit350
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Deedle
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              ExcelDna
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              GitVersionTree
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              NDeskOptions
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="other-notable-changes">
