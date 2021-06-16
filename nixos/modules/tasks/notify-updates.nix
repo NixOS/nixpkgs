@@ -4,8 +4,7 @@ with lib;
 
 let cfg = config.system.notifyUpdates;
 
-in
-{
+in {
   options = {
     system.notifyUpdates = {
 
@@ -19,7 +18,6 @@ in
 
       channel = mkOption {
         type = types.str;
-        #default = null;
         example = "https://nixos.org/channels/nixos-unstable";
         description = ''
           The URI of the NixOS channel to use for checking updates.
@@ -44,11 +42,7 @@ in
         inherit (config.environment.sessionVariables) NIX_PATH;
       };
 
-      path = with pkgs; [
-        coreutils
-        curl
-        libnotify
-      ];
+      path = with pkgs; [ coreutils curl libnotify ];
 
       script = ''
         current=$(cat /nix/var/nix/profiles/system/nixos-version | sed 's/.*\.\([0-9a-f]*\)$/\1/')
