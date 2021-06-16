@@ -43,7 +43,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = ''
-          ${pks.libnotify}/bin/notify-send "System up to date"
+          ${pkgs.libnotify}/bin/notify-send "System up to date"
         '';
         description = ''
           Shell script to execute if no update is detected. The git revision
@@ -83,7 +83,7 @@ in {
       script = ''
         current=$(cat /nix/var/nix/profiles/system/nixos-version | sed 's/.*\.\([0-9a-f]*\)$/\1/')
         length=$(echo -n $current | wc -c)
-
+ 
         incoming=$(curl -N -L ${cfg.channel}/git-revision | cut -c 1-$length 2>&1)
         unset length
 
