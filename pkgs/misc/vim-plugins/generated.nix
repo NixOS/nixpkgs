@@ -2542,6 +2542,18 @@ final: prev:
     meta.homepage = "https://github.com/itchyny/lightline.vim/";
   };
 
+  lightspeed-nvim = buildVimPluginFrom2Nix {
+    pname = "lightspeed-nvim";
+    version = "2021-06-16";
+    src = fetchFromGitHub {
+      owner = "ggandor";
+      repo = "lightspeed.nvim";
+      rev = "2c9ee4d31c84835e0d929a98d9142ac9e3e9dc0c";
+      sha256 = "0hc0xis0zgikf8mlsvqrn2vqjq6v1sscfihd8895wrz0hnzcmn8s";
+    };
+    meta.homepage = "https://github.com/ggandor/lightspeed.nvim/";
+  };
+
   limelight-vim = buildVimPluginFrom2Nix {
     pname = "limelight-vim";
     version = "2020-10-13";
