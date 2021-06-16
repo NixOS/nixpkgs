@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "3.7.2";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnutls/v3.7/gnutls-${version}.tar.xz";
+    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
     sha256 = "646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752";
   };
 
