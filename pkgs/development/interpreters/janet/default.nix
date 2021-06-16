@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "janet";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Wrr2zie251oB+uhsLMmkPBV0b3MwTmcPTgNJOsgCems=";
+    sha256 = "sha256-TzJbHmHIySlf3asQ02HOdehMR+s0KkPifBiaQ4FvFCg=";
   };
 
   nativeBuildInputs = [ meson ninja ];
