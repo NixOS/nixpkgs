@@ -4512,6 +4512,18 @@ final: prev:
     meta.homepage = "https://github.com/gorkunov/smartpairs.vim/";
   };
 
+  snap = buildVimPluginFrom2Nix {
+    pname = "snap";
+    version = "2021-06-16";
+    src = fetchFromGitHub {
+      owner = "camspiers";
+      repo = "snap";
+      rev = "8628478288bb64ed59989910e736879054facda3";
+      sha256 = "0sq7wv07hckk8qfg39qv507i33vg1c6nr5gjrjl5126i1h5afa8j";
+    };
+    meta.homepage = "https://github.com/camspiers/snap/";
+  };
+
   snippets-nvim = buildVimPluginFrom2Nix {
     pname = "snippets-nvim";
     version = "2020-09-09";
