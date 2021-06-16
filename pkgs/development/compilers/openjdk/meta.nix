@@ -1,5 +1,5 @@
 lib: with lib; {
-  homepage = "http://openjdk.java.net/";
+  homepage = "https://openjdk.java.net/";
   license = licenses.gpl2Only;
   description = "The open-source Java Development Kit";
   maintainers = with maintainers; [ edwtjo asbachb ];
