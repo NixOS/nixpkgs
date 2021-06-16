@@ -26,6 +26,42 @@ in {
           --list</literal> to see the current value).
         '';
       };
+
+      update-available-script = mkOption {
+        type = types.nullOr types.str;
+        default = ''
+          ${pkgs.libnotify}/bin/notify-send "Update Available" "Incoming git revision: $incoming\nCurrent git revision: $current"
+        '';
+        description = ''
+          Shell script to execute if an update is detected. Git revisions
+          for the current and incoming systems are stored in the environment
+          variables $current and $incoming (respectfully).
+        '';
+      };
+
+      up-to-date-script = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = ''
+          ${pks.libnotify}/bin/notify-send "System up to date"
+        '';
+        description = ''
+          Shell script to execute if no update is detected. The git revision
+          for the current system is stored in environment variable $current.
+        '';
+      };
+
+      error-script = mkOption {
+        type = types.nullOr types.str;
+        default = ''
+          ${pkgs.libnotify}/bin/notify-send "Error occured while checking for updates." "$error"
+        '';
+        description = ''
+          Shell script to execute if an error occurs while attempting
+          to retrieve updated value. The environment variable $error
+          contains the error produced.
+        '';
+      };
     };
   };
 
@@ -42,17 +78,27 @@ in {
         inherit (config.environment.sessionVariables) NIX_PATH;
       };
 
-      path = with pkgs; [ coreutils curl libnotify ];
+      path = with pkgs; [ coreutils curl gnused ];
 
       script = ''
         current=$(cat /nix/var/nix/profiles/system/nixos-version | sed 's/.*\.\([0-9a-f]*\)$/\1/')
         length=$(echo -n $current | wc -c)
 
-        incoming=$(curl -L ${cfg.channel}/git-revision)
-        incoming=$(echo -n $incoming | cut -c 1-$length)
+        incoming=$(curl -N -L ${cfg.channel}/git-revision | cut -c 1-$length 2>&1)
+        unset length
 
-        if ! [ $incoming = $current ]; then
-          notify-send "Update Available" "Incoming git revision: $incoming\nCurrent git revision: $current"
+        if [ $? -eq 0 ]; then
+          if ! [ $incoming = $current ]; then
+            ${cfg.update-available-script}
+          else
+            unset incoming
+            ${cfg.up-to-date-script}
+          fi
+        else
+          error=$incoming
+          unset current
+          unset incoming
+          ${cfg.error-script}
         fi
       '';
     };
