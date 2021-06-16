@@ -5,6 +5,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd
+, vulkan-loader
 , enableRadv ? true
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
@@ -128,7 +129,8 @@ self = stdenv.mkDerivation {
     libpthreadstubs openssl /*or another sha1 provider*/
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
-    ++ lib.optional withValgrind valgrind-light;
+    ++ lib.optional withValgrind valgrind-light
+    ++ lib.optional (elem "zink" galliumDrivers) vulkan-loader;
 
   depsBuildBuild = [ pkg-config ];
 
