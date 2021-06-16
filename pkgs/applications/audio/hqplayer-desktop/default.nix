@@ -73,8 +73,8 @@ mkDerivation rec {
   postInstall = ''
     for desktopFile in $out/share/applications/*; do
       substituteInPlace "$desktopFile" \
-        --replace '/usr/bin/' '$out/bin/' \
-        --replace '/usr/share/doc/' '$out/share/doc/'
+        --replace /usr/bin/ $out/bin/ \
+        --replace /usr/share/doc/ $out/share/doc/
     done
 
     gunzip $out/share/doc/${pname}/*.gz
