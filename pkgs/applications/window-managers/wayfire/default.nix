@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config, git
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config
 , cairo, libdrm, libexecinfo, libinput, libjpeg, libxkbcommon, wayland
 , wayland-protocols, wf-config, wlroots, mesa
 }:
