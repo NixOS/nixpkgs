@@ -17,11 +17,13 @@
 
 mkDerivation rec {
   pname = "hqplayer-desktop";
-  version = "4.12.0-34";
+  version = "4.12.1-35";
 
   src = fetchurl {
+    # FIXME: use the fc34 sources when we get glibc 2.33 in nixpkgs
+    # c.f. https://github.com/NixOS/nixpkgs/pull/111616
     url = "https://www.signalyst.eu/bins/hqplayer/fc33/hqplayer4desktop-${version}.fc33.x86_64.rpm";
-    sha256 = "sha256-9kLKmi5lNtnRm9b4HnO01cO/C+Sg0DcKD64N5WBbYOE=";
+    sha256 = "sha256-DLnZNX+uAan9dhPLMvINeXsIn3Yv2CgsvyTcX0hbEK8=";
   };
 
   unpackPhase = ''
