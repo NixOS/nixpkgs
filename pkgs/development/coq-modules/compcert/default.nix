@@ -15,7 +15,8 @@ let compcert = mkCoqDerivation rec {
   releaseRev = v: "v${v}";
 
   defaultVersion =  with versions; switch coq.version [
-      { case = range "8.8" "8.13"; out = "3.8"; }
+      { case = range "8.8" "8.11"; out = "3.8"; }
+      { case = range "8.12" "8.13"; out = "3.9"; }
     ] null;
 
   release = {
