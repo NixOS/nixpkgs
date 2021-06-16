@@ -1,10 +1,14 @@
 { config, lib, pkgs, ... }:
 
+with builtins;
 with lib;
 
 let cfg = config.services.xserver.libinput;
 
     xorgBool = v: if v then "on" else "off";
+
+    # toString prints floats with hardcoded high precision
+    floatToString = f: builtins.toJSON f;
 
     mkConfigForDevice = deviceType: {
       dev = mkOption {
@@ -24,7 +28,7 @@ let cfg = config.services.xserver.libinput;
         example = "flat";
         description =
           ''
-            Sets  the pointer acceleration profile to the given profile.
+            Sets the pointer acceleration profile to the given profile.
             Permitted values are adaptive, flat.
             Not all devices support this option or all profiles.
             If a profile is unsupported, the default profile for this is used.
@@ -36,7 +40,8 @@ let cfg = config.services.xserver.libinput;
       };
 
       accelSpeed = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.float;
+        example = literalExample "-0.5";
         default = null;
         description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
@@ -44,6 +49,7 @@ let cfg = config.services.xserver.libinput;
       buttonMapping = mkOption {
         type = types.nullOr types.str;
         default = null;
+        example = "1 6 3 4 5 0 7";
         description =
           ''
             Sets the logical button mapping for this device, see XSetPointerMapping(3). The string  must
@@ -68,6 +74,7 @@ let cfg = config.services.xserver.libinput;
       clickMethod = mkOption {
         type = types.nullOr (types.enum [ "none" "buttonareas" "clickfinger" ]);
         default = null;
+        example = "buttonareas";
         description =
           ''
             Enables a click method. Permitted values are <literal>none</literal>,
@@ -85,7 +92,7 @@ let cfg = config.services.xserver.libinput;
 
       middleEmulation = mkOption {
         type = types.bool;
-        default = true;
+        default = getAttr deviceType { mouse = false; touchpad = true; };
         description =
           ''
             Enables middle button emulation. When enabled, pressing the left and right buttons
@@ -111,8 +118,9 @@ let cfg = config.services.xserver.libinput;
       };
 
       scrollMethod = mkOption {
-        type = types.enum [ "twofinger" "edge" "button" "none" ];
-        default = "twofinger";
+        type = types.nullOr (types.enum [ "twofinger" "edge" "button" "none" ]);
+        default = getAttr deviceType { mouse = null; touchpad = "twofinger"; };
+        visible = getAttr deviceType { mouse = false; touchpad = true; };
         example = "edge";
         description =
           ''
@@ -144,8 +152,9 @@ let cfg = config.services.xserver.libinput;
       };
 
       tapping = mkOption {
-        type = types.bool;
-        default = true;
+        type = types.nullOr types.bool;
+        default = getAttr deviceType { mouse = null; touchpad = true; };
+        visible = getAttr deviceType { mouse = false; touchpad = true; };
         description =
           ''
             Enables or disables tap-to-click behavior.
@@ -153,8 +162,9 @@ let cfg = config.services.xserver.libinput;
       };
 
       tappingDragLock = mkOption {
-        type = types.bool;
-        default = true;
+        type = types.nullOr types.bool;
+        default = getAttr deviceType { mouse = null; touchpad = true; };
+        visible = getAttr deviceType { mouse = false; touchpad = true; };
         description =
           ''
             Enables or disables drag lock during tapping behavior. When enabled, a finger up during tap-
@@ -193,7 +203,7 @@ let cfg = config.services.xserver.libinput;
         MatchIs${matchIs} "${xorgBool true}"
         ${optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
         Option "AccelProfile" "${cfg.${deviceType}.accelProfile}"
-        ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
+        ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${floatToString cfg.${deviceType}.accelSpeed}"''}
         ${optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
         ${optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
         ${optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
@@ -201,15 +211,16 @@ let cfg = config.services.xserver.libinput;
         Option "MiddleEmulation" "${xorgBool cfg.${deviceType}.middleEmulation}"
         Option "NaturalScrolling" "${xorgBool cfg.${deviceType}.naturalScrolling}"
         ${optionalString (cfg.${deviceType}.scrollButton != null) ''Option "ScrollButton" "${toString cfg.${deviceType}.scrollButton}"''}
-        Option "ScrollMethod" "${cfg.${deviceType}.scrollMethod}"
+        ${optionalString (cfg.${deviceType}.scrollMethod != null) ''Option "ScrollMethod" "${cfg.${deviceType}.scrollMethod}"''}
         Option "HorizontalScrolling" "${xorgBool cfg.${deviceType}.horizontalScrolling}"
         Option "SendEventsMode" "${cfg.${deviceType}.sendEventsMode}"
-        Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"
-        Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"
+        ${optionalString (cfg.${deviceType}.tapping != null) ''Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"''}
+        ${optionalString (cfg.${deviceType}.tappingDragLock != null) ''Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"''}
         Option "DisableWhileTyping" "${xorgBool cfg.${deviceType}.disableWhileTyping}"
         ${cfg.${deviceType}.additionalOptions}
   '';
 in {
+  meta.maintainers = with maintainers; [ thiagokokada ];
 
   imports =
     (map (option: mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "xserver" "libinput" "touchpad" option ]) [
