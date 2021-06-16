@@ -1217,7 +1217,6 @@ broken-packages:
   - erlang
   - erlang-ffi
   - eros
-  - errata
   - error-context
   - error-continuations
   - error-list
