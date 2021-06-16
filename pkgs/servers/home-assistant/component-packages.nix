@@ -130,7 +130,7 @@
     "cmus" = ps: with ps; [ ]; # missing inputs: pycmus
     "co2signal" = ps: with ps; [ ]; # missing inputs: co2signal
     "coinbase" = ps: with ps; [ ]; # missing inputs: coinbase
-    "color_extractor" = ps: with ps; [ ]; # missing inputs: colorthief
+    "color_extractor" = ps: with ps; [ colorthief ];
     "comed_hourly_pricing" = ps: with ps; [ ];
     "comfoconnect" = ps: with ps; [ pycomfoconnect ];
     "command_line" = ps: with ps; [ ];

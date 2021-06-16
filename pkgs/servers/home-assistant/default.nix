@@ -327,6 +327,7 @@ in with py.pkgs; buildPythonApplication rec {
     "climate"
     "cloud"
     "cloudflare"
+    "color_extractor"
     "comfoconnect"
     "command_line"
     "compensation"
