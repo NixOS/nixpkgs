@@ -185,7 +185,13 @@ rec {
             then true
             else opt.visible or true;
           readOnly = opt.readOnly or false;
-          type = opt.type.description or null;
+          type =
+            if opt.type.name == "unspecified"
+            then lib.warn
+              ("Option `${showOption loc}' defined in ${showFiles opt.declarations} has no type.\n"
+              +"       Please specify a valid types from <nixpkgs/lib/types.nix> or use types.raw if there is no appropriate type.")
+              null
+            else opt.type.description or null;
         }
         // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
         // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
