@@ -81,10 +81,10 @@ in {
       path = with pkgs; [ coreutils curl gnused ];
 
       script = ''
-        current=$(cat /nix/var/nix/profiles/system/nixos-version | sed 's/.*\.\([0-9a-f]*\)$/\1/')
-
         if incoming=$(curl -sSNL ${cfg.channel}/git-revision 2>&1) ; then
+          current=$(cat /nix/var/nix/profiles/system/nixos-version | sed 's/.*\.\([0-9a-f]*\)$/\1/')
           length=$(echo -n $current | wc -c)
+
           incoming=$(echo -n $incoming | cut -c 1-$length)
           unset length
 
@@ -96,7 +96,6 @@ in {
           fi
         else
           error=$incoming
-          unset current
           unset incoming
           ${cfg.error-script}
         fi
