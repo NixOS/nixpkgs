@@ -158,6 +158,7 @@ gennaro-tedesco/nvim-peekup
 gentoo/gentoo-syntax
 GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
+ggandor/lightspeed.nvim@main
 gibiansky/vim-textobj-haskell
 gioele/vim-autoswap
 gleam-lang/gleam.vim
