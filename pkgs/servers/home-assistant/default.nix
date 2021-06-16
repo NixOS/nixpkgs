@@ -148,9 +148,9 @@ let
       });
     })
 
-    # hass-frontend does not exist in python3.pkgs
+    # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
-      hass-frontend = self.callPackage ./frontend.nix { };
+      home-assistant-frontend = self.callPackage ./frontend.nix { };
     })
   ];
 
@@ -229,7 +229,6 @@ in with py.pkgs; buildPythonApplication rec {
     certifi
     ciso8601
     cryptography
-    hass-frontend
     httpx
     jinja2
     pip
@@ -304,11 +303,14 @@ in with py.pkgs; buildPythonApplication rec {
     "awair"
     "aws"
     "axis"
+    "azure_event_hub"
     "bayesian"
     "binary_sensor"
     "blackbird"
+    "blebox"
     "blueprint"
     "bluetooth_le_tracker"
+    "bond"
     "bosch_shc"
     "braviatv"
     "broadlink"
@@ -374,20 +376,25 @@ in with py.pkgs; buildPythonApplication rec {
     "file"
     "filesize"
     "filter"
+    "fireservicerota"
     "firmata"
+    "flick_electric"
     "flo"
     "flume"
     "flunearyou"
     "flux"
     "folder"
     "folder_watcher"
+    "foobot"
     "freebox"
     "freedns"
     "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
     "frontend"
+    "garages_amsterdam"
     "garmin_connect"
+    "gdacs"
     "generic"
     "generic_thermostat"
     "geo_json_events"
@@ -396,8 +403,8 @@ in with py.pkgs; buildPythonApplication rec {
     "geofency"
     "geonetnz_quakes"
     "geonetnz_volcano"
-    "glances"
     "gios"
+    "glances"
     "gogogate2"
     "google"
     "google_assistant"
@@ -408,6 +415,7 @@ in with py.pkgs; buildPythonApplication rec {
     "google_wifi"
     "gpslogger"
     "graphite"
+    "gree"
     "group"
     "growatt_server"
     "guardian"
@@ -628,6 +636,7 @@ in with py.pkgs; buildPythonApplication rec {
     "template"
     "tesla"
     "threshold"
+    "tibber"
     "tile"
     "time_date"
     "timer"
@@ -666,6 +675,7 @@ in with py.pkgs; buildPythonApplication rec {
     "volumio"
     "vultr"
     "wake_on_lan"
+    "wallbox"
     "water_heater"
     "waze_travel_time"
     "weather"
@@ -731,6 +741,9 @@ in with py.pkgs; buildPythonApplication rec {
     "--deselect tests/components/prometheus/test_init.py::test_view"
     # smhi/test_init.py: Tries to fetch data from the network: socket.gaierror: [Errno -2] Name or service not known
     "--deselect tests/components/smhi/test_init.py::test_remove_entry"
+    # wallbox/test_config_flow.py: Tries to connect to api.wall-box.cim: Failed to establish a new connection: [Errno -2] Name or service not known
+    "--deselect tests/components/wallbox/test_config_flow.py::test_form_invalid_auth"
+    "--deselect tests/components/wallbox/test_config_flow.py::test_form_cannot_connect"
     # tests are located in tests/
     "tests"
     # dynamically add packages required for component tests
@@ -792,6 +805,7 @@ in with py.pkgs; buildPythonApplication rec {
     tests = {
       inherit (nixosTests) home-assistant;
     };
+    python = py;
   };
 
   meta = with lib; {

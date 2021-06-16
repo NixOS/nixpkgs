@@ -14,25 +14,12 @@
 let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   # BINARY PACKAGES
-  Autofac = fetchNuGet {
-    baseName = "Autofac";
-    version = "3.5.2";
-    sha256 = "194cs8ybn5xjqnzy643w5i62m0d5s34d3nshwxp2v4fcb94wa4ri";
-    outputFiles = [ "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/*" ];
-  };
 
   NUnit3 = fetchNuGet {
     baseName = "NUnit";
     version = "3.0.1";
     sha256 = "1g3j3kvg9vrapb1vjgq65nvn1vg7bzm66w7yjnaip1iww1yn1b0p";
     outputFiles = [ "lib/*" ];
-  };
-
-  NUnit350 = fetchNuGet {
-    baseName = "NUnit";
-    version = "3.5.0";
-    sha256 = "19fxq9cf754ygda5c8rn1zqs71pfxi7mb96jwqhlichnqih6i16z";
-    outputFiles = [ "*" ];
   };
 
   NUnit2 = fetchNuGet {
@@ -86,13 +73,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "tools/*" ];
   };
 
-  SystemValueTuple = fetchNuGet {
-    baseName = "System.ValueTuple";
-    version = "4.3.1";
-    sha256 = "0qzq878s66yfkf4n2b9af8lw2bx45s3cg6mi0w8w0bi358fa7q70";
-    outputFiles = [ "*" ];
-  };
-
   RestSharp = fetchNuGet {
     baseName = "RestSharp";
     version = "105.2.3";
@@ -135,20 +115,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/*" ];
   };
 
-  MicrosoftDiaSymReader = fetchNuGet {
-    baseName = "Microsoft.DiaSymReader";
-    version = "1.1.0";
-    sha256 = "04dgwy6nyxksd1nb24k5c5vz8naggg7hryadvwqnm2v3alkh6g88";
-    outputFiles = [ "*" ];
-  };
-
-  MicrosoftDiaSymReaderPortablePdb = fetchNuGet {
-    baseName = "Microsoft.DiaSymReader.PortablePdb";
-    version = "1.2.0";
-    sha256 = "0qa8sqg0lzz9galkkfyi8rkbkali0nxm3qd5y4dlxp96ngrq5ldz";
-    outputFiles = [ "*" ];
-  };
-
   NUnitRunners = fetchNuGet {
     baseName = "NUnit.Runners";
     version = "2.6.4";
@@ -157,26 +123,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     preInstall = "mv -v tools/lib/* tools && rmdir -v tools/lib";
   };
 
-  SystemCollectionsImmutable = fetchNuGet {
-    baseName = "System.Collections.Immutable";
-    version = "1.1.36";
-    sha256 = "0760kzf5s771pnvnxsgas446kqdh1b71w6g3k75jpzldfmsd3vyq";
-    outputFiles = [ "lib/portable-net45+win8+wp8+wpa81/*" ];
-  };
-
-  SystemCollectionsImmutable131 = fetchNuGet {
-    baseName = "System.Collections.Immutable";
-    version = "1.3.1";
-    sha256 = "149fcp7k7r9iw24dv5hbaij0c38kcv28dyhzbkggilfh4x2hy8c2";
-    outputFiles = [ "*" ];
-  };
-
-  SystemReflectionMetadata = fetchNuGet {
-    baseName = "System.Reflection.Metadata";
-    version = "1.4.2";
-    sha256 = "19fhdgd35yg52gyckhgwrphq07nv7v7r73hcg69ns94xfg1i6r7i";
-    outputFiles = [ "*" ];
-  };
   # SOURCE PACKAGES
 
   Boogie = buildDotnetPackage rec {
@@ -300,91 +246,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  Deedle = fetchNuGet {
-    baseName = "Deedle";
-    version = "1.2.5";
-    sha256 = "0g19ll6bp97ixprcnpwwvshr1n9jxxf9xjhkxp0r63mg46z48jnw";
-    outputFiles = [ "*" ];
-  };
-
-  ExcelDna = buildDotnetPackage {
-    baseName = "Excel-DNA";
-    version = "0.32.0";
-
-    src = fetchFromGitHub {
-      owner = "Excel-DNA";
-      repo = "ExcelDna";
-      rev = "10a163843bcc2fb5517f6f3d499e18a8b64df511";
-      sha256 = "1w2ag9na20ly0m2sic3nkgdc4qqyb4x4c9iv588ynpkgd1pjndrk";
-    };
-
-    buildInputs = [ ];
-
-    preConfigure = ''
-      rm -vf Distribution/*.dll Distribution/*.exe # Make sure we don't use those
-      substituteInPlace Source/ExcelDna.Integration/ExcelDna.Integration.csproj --replace LogDisplay.designer.cs LogDisplay.Designer.cs
-    '';
-
-    xBuildFiles = [ "Source/ExcelDna.sln" ];
-    outputFiles = [ "Source/ExcelDnaPack/bin/Release/*" "Distribution/ExcelDna.xll" "Distribution/ExcelDna64.xll" ];
-
-    meta = {
-      description = "Excel-DNA is an independent project to integrate .NET into Excel";
-      homepage = "https://excel-dna.net/";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ obadz ];
-      platforms = with lib.platforms; linux;
-    };
-  };
-
-  GitVersionTree = buildDotnetPackage {
-    baseName = "GitVersionTree";
-    version = "2013-10-01";
-
-    src = fetchFromGitHub {
-      owner = "crc8";
-      repo = "GitVersionTree";
-      rev = "58dc39c43cffea44f721ee4425835e56518f7da2";
-      sha256 = "0mna5pkpqkdr5jgn8paz004h1pa24ncsvmi2c8s4gp94nfw34x05";
-    };
-
-    buildInputs = with pkgs; [ ed ];
-
-    postPatch = ''
-      ed -v -p: -s GitVersionTree/Program.cs << EOF
-      /Main()
-      c
-      static void Main(string[] args)
-      .
-      /EnableVisualStyles
-      i
-      Reg.Write("GitPath", "${pkgs.gitMinimal}/bin/git");
-      Reg.Write("GraphvizPath", "${pkgs.graphviz}/bin/dot");
-      if (args.Length > 0) {
-        Reg.Write("GitRepositoryPath", args[0]);
-      }
-      .
-      w
-      EOF
-
-      substituteInPlace GitVersionTree/Forms/MainForm.cs \
-        --replace 'Directory.GetParent(Application.ExecutablePath)' 'Environment.CurrentDirectory' \
-        --replace '\\' '/' \
-        --replace '@"\"' '"/"'
-    '';
-
-    outputFiles = [ "GitVersionTree/bin/Release/*" ];
-    exeFiles = [ "GitVersionTree.exe" ];
-
-    meta = with lib; {
-      description = "A tool to help visualize git revisions and branches";
-      homepage = "https://github.com/crc8/GitVersionTree";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ obadz ];
-      platforms = platforms.all;
-    };
-  };
-
   MonoAddins = buildDotnetPackage rec {
     baseName = "Mono.Addins";
     version = "1.2";
@@ -414,38 +275,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         and for creating libraries which extend those applications.
       '';
       license = lib.licenses.mit;
-    };
-  };
-
-
-  NDeskOptions = stdenv.mkDerivation rec {
-    pname = "NDesk.Options";
-    version = "0.2.1";
-
-    src = fetchurl {
-      name = "${pname}-${version}.tar.gz";
-      url = "http://www.ndesk.org/archive/ndesk-options/ndesk-options-${version}.tar.gz";
-      sha256 = "1y25bfapafwmifakjzyb9c70qqpvza8g5j2jpf08j8wwzkrb6r28";
-    };
-
-    buildInputs = [
-      mono
-      pkg-config
-    ];
-
-    postInstall = ''
-      # Otherwise pkg-config won't find it and the DLL will get duplicated
-      ln -sv $out/lib/pkgconfig/ndesk-options.pc $out/lib/pkgconfig/NDesk.Options.pc
-    '';
-
-    dontStrip = true;
-
-    meta = {
-      description = "A callback-based program option parser for C#";
-      homepage = "http://www.ndesk.org/Options";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ obadz ];
-      platforms = with lib.platforms; linux;
     };
   };
 

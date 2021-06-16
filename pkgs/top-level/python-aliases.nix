@@ -52,4 +52,5 @@ mapAliases ({
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
+  websocket_client = websocket-client;
 })

@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , aria2, poetry, pytest, pytestcov, pytest_xdist, responses
-, asciimatics, loguru, requests, setuptools, websocket_client
+, asciimatics, loguru, requests, setuptools, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytest -nauto -k "not test_api and not test_cli and not test_interface"
   '';
 
-  propagatedBuildInputs = [ asciimatics loguru requests setuptools websocket_client ];
+  propagatedBuildInputs = [ asciimatics loguru requests setuptools websocket-client ];
 
   meta = with lib; {
     homepage = "https://github.com/pawamoy/aria2p";

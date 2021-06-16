@@ -10,7 +10,7 @@
 , pytest-aiohttp
 , pytest-asyncio
 , requests
-, websocket_client
+, websocket-client
 , websockets
 }:
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     aiohttp
     async-timeout
     requests
-    websocket_client
+    websocket-client
     websockets
   ];
 

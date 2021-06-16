@@ -307,12 +307,12 @@ in
 
   mps = buildMps rec {
     name = "mps-${version}";
-    version = "2020.3.3"; /* updated by script */
+    version = "2021.1"; /* updated by script */
     description = "Create your own domain-specific language";
     license = lib.licenses.asl20;
     src = fetchurl {
-      url = "https://download.jetbrains.com/mps/2020.3/MPS-${version}.tar.gz";
-      sha256 = "0sb50f7d4272dzx84njc326xvhbqn3xwrphvdq4zl3pk3wl8f4nz"; /* updated by script */
+      url = "https://download.jetbrains.com/mps/${version}/MPS-${version}.tar.gz";
+      sha256 = "0fdh8lzsi2zryi0xs961vrf3l8kqk5imlj56dhifywi7xkhs3vwn"; /* updated by script */
     };
     wmClass = "jetbrains-mps";
     update-channel = "MPS RELEASE";
@@ -320,12 +320,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2021.1.2"; /* updated by script */
+    version = "2021.1.3"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "02s75fqd9hfh302zha4jw6qynpgm9nkrlq7s78nk3fc3d3hw8v5y"; /* updated by script */
+      sha256 = "05hjv1nz1b82bkakadjvsy23v0qv8fyni6h31lcg9198h1890f7v"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -333,12 +333,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2021.1.1"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description = "PyCharm Community Edition";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "04bs9sz872b0h1zzax23irvj6q5wxnzp6fl4f177j94kh4116cqh"; /* updated by script */
+      sha256 = "0sp7w1xrl0y36dai08kqfd0jk06yr7jdbaf1a9f3fgxp5pmspxp1"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -346,12 +346,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2021.1.1"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0wc9j7nilakmm7scf7a71zb3k9vixgih05ni3n3pp4iznvwb3nxg"; /* updated by script */
+      sha256 = "0ny7rbl8g5azpqnlcq8l6bwh6hrp8rgp06lf4a8gdr9rpvw9xsqb"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
@@ -372,12 +372,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2021.1.1"; /* updated by script */
+    version = "2021.1.2"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "05sfjf5523idsl7byc7400r4xqv1d65gpmkh5x0lbgf1k3bx2wlm"; /* updated by script */
+      sha256 = "0r80y8y38rdxgc9sim0q2p7bmgxlp4pdxydr0w9gjikwnjxnvz51"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";

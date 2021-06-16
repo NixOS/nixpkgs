@@ -725,6 +725,8 @@ in {
 
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
 
+  azure-eventhub = callPackage ../development/python-modules/azure-eventhub { };
+
   azure-functions-devops-build = callPackage ../development/python-modules/azure-functions-devops-build { };
 
   azure-graphrbac = callPackage ../development/python-modules/azure-graphrbac { };
@@ -1099,6 +1101,8 @@ in {
 
   bleak = callPackage ../development/python-modules/bleak { };
 
+  blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
+
   blessed = callPackage ../development/python-modules/blessed { };
 
   blessings = callPackage ../development/python-modules/blessings { };
@@ -1133,6 +1137,8 @@ in {
 
   boltztrap2 = callPackage ../development/python-modules/boltztrap2 { };
 
+  bond-api = callPackage ../development/python-modules/bond-api { };
+
   booleanoperations = callPackage ../development/python-modules/booleanoperations { };
 
   boolean-py = callPackage ../development/python-modules/boolean-py { };
@@ -1145,6 +1151,10 @@ in {
   });
 
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
+
+  boost-histogram = callPackage ../development/python-modules/boost-histogram {
+    inherit (pkgs) boost;
+  };
 
   boto3 = callPackage ../development/python-modules/boto3 { };
 
@@ -2626,6 +2636,8 @@ in {
 
   fonttools = callPackage ../development/python-modules/fonttools { };
 
+  foobot-async = callPackage ../development/python-modules/foobot-async { };
+
   foolscap = callPackage ../development/python-modules/foolscap { };
 
   forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };
@@ -3015,6 +3027,8 @@ in {
 
   graphql-server-core = callPackage ../development/python-modules/graphql-server-core { };
 
+  graphql-subscription-manager = callPackage ../development/python-modules/graphql-subscription-manager { };
+
   graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
 
   graphtage = callPackage ../development/python-modules/graphtage { };
@@ -3028,6 +3042,8 @@ in {
   graspologic = callPackage ../development/python-modules/graspologic { };
 
   greatfet = callPackage ../development/python-modules/greatfet { };
+
+  greeclimate = callPackage ../development/python-modules/greeclimate { };
 
   green = callPackage ../development/python-modules/green { };
 
@@ -4373,6 +4389,11 @@ in {
 
   mlxtend = callPackage ../development/python-modules/mlxtend { };
 
+  mlt = toPythonModule (pkgs.mlt.override {
+    inherit python;
+    enablePython = true;
+  });
+
   mmh3 = callPackage ../development/python-modules/mmh3 { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
@@ -5196,6 +5217,10 @@ in {
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
+
+  pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
+
+  pyflick = callPackage ../development/python-modules/pyflick { };
 
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
@@ -6963,6 +6988,8 @@ in {
   pythran = callPackage ../development/python-modules/pythran { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
+
+  pytibber = callPackage ../development/python-modules/pytibber { };
 
   pytile = callPackage ../development/python-modules/pytile { };
 
@@ -8881,6 +8908,8 @@ in {
 
   wakeonlan = callPackage ../development/python-modules/wakeonlan { };
 
+  wallbox = callPackage ../development/python-modules/wallbox { };
+
   Wand = callPackage ../development/python-modules/Wand { };
 
   warlock = callPackage ../development/python-modules/warlock { };
@@ -8935,7 +8964,7 @@ in {
 
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
-  websocket_client = callPackage ../development/python-modules/websocket_client { };
+  websocket-client = callPackage ../development/python-modules/websocket-client { };
 
   websockets = callPackage ../development/python-modules/websockets { };
 
