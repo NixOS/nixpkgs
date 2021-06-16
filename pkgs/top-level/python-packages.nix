@@ -1055,6 +1055,8 @@ in {
 
   billiard = callPackage ../development/python-modules/billiard { };
 
+  bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
+
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };

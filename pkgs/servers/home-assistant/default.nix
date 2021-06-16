@@ -310,6 +310,7 @@ in with py.pkgs; buildPythonApplication rec {
     "blink"
     "blueprint"
     "bluetooth_le_tracker"
+    "bmw_connected_drive"
     "bond"
     "bosch_shc"
     "braviatv"
