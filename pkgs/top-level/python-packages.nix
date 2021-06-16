@@ -2868,6 +2868,8 @@ in {
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
 
+  goalzero = callPackage ../development/python-modules/goalzero { };
+
   goobook = callPackage ../development/python-modules/goobook { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };

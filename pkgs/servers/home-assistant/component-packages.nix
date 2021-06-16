@@ -312,7 +312,7 @@
     "glances" = ps: with ps; [ glances-api ];
     "gntp" = ps: with ps; [ gntp ];
     "goalfeed" = ps: with ps; [ ]; # missing inputs: pysher
-    "goalzero" = ps: with ps; [ ]; # missing inputs: goalzero
+    "goalzero" = ps: with ps; [ goalzero ];
     "gogogate2" = ps: with ps; [ ismartgate ];
     "google" = ps: with ps; [ google-api-python-client httplib2 oauth2client ];
     "google_assistant" = ps: with ps; [ aiohttp-cors ];
