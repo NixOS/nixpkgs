@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2
-, autoreconfHook
+, autoreconfHook, nixosTests
 }:
 
 let inherit (lib) optional optionals; in
@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -r "$out"/lib/*.la
   '';
+
+  passthru.tests = { inherit (nixosTests) knot; };
 
   meta = with lib; {
     description = "Authoritative-only DNS server from .cz domain registry";
