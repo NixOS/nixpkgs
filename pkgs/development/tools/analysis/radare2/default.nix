@@ -41,6 +41,10 @@ let
         inherit rev sha256;
       };
 
+      patches = [
+        ./4.5.1-CVE-2021-32613.patch
+      ];
+
       postPatch = let
         capstone = fetchFromGitHub {
           owner = "aquynh";
