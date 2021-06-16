@@ -88,11 +88,11 @@ in {
         unset length
 
         if [ $? -eq 0 ]; then
-          if ! [ $incoming = $current ]; then
-            ${cfg.update-available-script}
-          else
+          if [ $incoming != $current ]; then
             unset incoming
             ${cfg.up-to-date-script}
+          else
+            ${cfg.update-available-script}
           fi
         else
           error=$incoming
