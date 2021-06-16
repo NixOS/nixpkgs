@@ -26,6 +26,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://litestream.io/";
     maintainers = with maintainers; [ fbrs ];
-    platforms = platforms.unix;
   };
 }
