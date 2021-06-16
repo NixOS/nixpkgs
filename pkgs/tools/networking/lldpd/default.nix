@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, pkgconfig, removeReferencesTo
 , libevent, readline, net-snmp, openssl
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -10,6 +11,20 @@ stdenv.mkDerivation rec {
     url = "https://media.luffy.cx/files/lldpd/${pname}-${version}.tar.gz";
     sha256 = "16fbqrs3l976gdslx647nds8x7sz4h5h3h4l4yxzrayvyh9b5lrd";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2020-27827-1.patch";
+      url = "https://github.com/lldpd/lldpd/commit/a8d3c90feca548fc0656d95b5d278713db86ff61.patch";
+      sha256 = "135hnq3wzga3zpmpy65jyyqyn67id9di1y3kv2qczp5jdgxfx9cy";
+    })
+    (fetchpatch {
+      name = "CVE-2020-27827-2.patch";
+      url = "https://github.com/lldpd/lldpd/commit/7d60bf30effc4c88f17f3d58ecaa72479f16d4be.patch";
+      sha256 = "0b2j8sn2z7p9250iki7rx88f9cdrxv5by7cbmmmwa0h4c5cb6b61";
+      excludes = [ "NEWS" ];
+    })
+  ];
 
   configureFlags = [
     "--localstatedir=/var"
