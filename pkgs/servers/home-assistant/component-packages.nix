@@ -138,7 +138,7 @@
     "concord232" = ps: with ps; [ ]; # missing inputs: concord232
     "config" = ps: with ps; [ aiohttp-cors ];
     "configurator" = ps: with ps; [ ];
-    "control4" = ps: with ps; [ ]; # missing inputs: pyControl4
+    "control4" = ps: with ps; [ pycontrol4 ];
     "conversation" = ps: with ps; [ aiohttp-cors ];
     "coolmaster" = ps: with ps; [ ]; # missing inputs: pycoolmasternet-async
     "coronavirus" = ps: with ps; [ coronavirus ];
