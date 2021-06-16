@@ -1563,6 +1563,8 @@ in {
 
   colorspacious = callPackage ../development/python-modules/colorspacious { };
 
+  colorthief = callPackage ../development/python-modules/colorthief { };
+
   colour = callPackage ../development/python-modules/colour { };
 
   commandparse = callPackage ../development/python-modules/commandparse { };
