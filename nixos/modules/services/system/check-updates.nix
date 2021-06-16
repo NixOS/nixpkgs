@@ -30,7 +30,7 @@ in {
       update-available-script = mkOption {
         type = types.nullOr types.str;
         default = ''
-          ${pkgs.libnotify}/bin/notify-send "Update Available" "Incoming git revision: $incoming\nCurrent git revision: $current"
+          ${pkgs.libnotify}/bin/notify-send -a "Update Notifier" "Update Available" "Incoming git revision: $incoming\nCurrent git revision: $current"
         '';
         description = ''
           Shell script to execute if an update is detected. Git revisions
@@ -43,7 +43,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = ''
-          ${pkgs.libnotify}/bin/notify-send "System up to date"
+          ${pkgs.libnotify}/bin/notify-send -a "Update Notifier" "System up to date"
         '';
         description = ''
           Shell script to execute if no update is detected. The git revision
@@ -54,7 +54,7 @@ in {
       error-script = mkOption {
         type = types.nullOr types.str;
         default = ''
-          ${pkgs.libnotify}/bin/notify-send "Error occured while checking for updates." "$error"
+          ${pkgs.libnotify}/bin/notify-send -a "Update Notifier" "Error occured while checking for updates." "$error"
         '';
         description = ''
           Shell script to execute if an error occurs while attempting
@@ -82,12 +82,12 @@ in {
 
       script = ''
         current=$(cat /nix/var/nix/profiles/system/nixos-version | sed 's/.*\.\([0-9a-f]*\)$/\1/')
-        length=$(echo -n $current | wc -c)
 
-        incoming=$(curl -N -L ${cfg.channel}/git-revision | cut -c 1-$length 2>&1)
-        unset length
+        if incoming=$(curl -sSNL ${cfg.channel}/git-revision 2>&1) ; then
+          length=$(echo -n $current | wc -c)
+          incoming=$(echo -n $incoming | cut -c 1-$length)
+          unset length
 
-        if [ $? -eq 0 ]; then
           if ! [ $incoming = $current ]; then
             ${cfg.update-available-script}
           else
