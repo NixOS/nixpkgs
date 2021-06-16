@@ -557,12 +557,12 @@ final: prev:
 
   coc-nvim = buildVimPluginFrom2Nix {
     pname = "coc-nvim";
-    version = "2021-06-15";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "6e55e524faf7afd229e44add0cfdad8a03f2e5d5";
-      sha256 = "1d4mgk0yyca0pyq0ibi2b1l62sbrss2w012zvy5260cgz2n5lirg";
+      rev = "0692698256a55c0c9c2f12988f12dc68b00890ad";
+      sha256 = "0ncdjkgg0yi76rklzhvysiaczh85gwbbsyxnn6z29g5clxcar3j0";
     };
     meta.homepage = "https://github.com/neoclide/coc.nvim/";
   };
@@ -1799,12 +1799,12 @@ final: prev:
 
   gitsigns-nvim = buildVimPluginFrom2Nix {
     pname = "gitsigns-nvim";
-    version = "2021-06-15";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "lewis6991";
       repo = "gitsigns.nvim";
-      rev = "f14b090658b87ea0b3b46484f8fc82094205c9da";
-      sha256 = "0sn0nnkn5whh7whv1wqba6yxsmjsyr96x8lhrcfb5jamfz9cpmsy";
+      rev = "229d9c0d387789e5aff7138a513fcd1184b0ec26";
+      sha256 = "03yl9dq09l7mfal44qh16k4wav0lq4cq0ng715knnvqc0qhyk7p1";
     };
     meta.homepage = "https://github.com/lewis6991/gitsigns.nvim/";
   };
@@ -3456,12 +3456,12 @@ final: prev:
 
   nvim-dap-ui = buildVimPluginFrom2Nix {
     pname = "nvim-dap-ui";
-    version = "2021-06-13";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "rcarriga";
       repo = "nvim-dap-ui";
-      rev = "ba2720dfc402d3f198230ce39894e032726e5270";
-      sha256 = "0w35h60ykfb4ppics5n7aas8rdw8f38fi6mvdb8p7msj58gnjlhi";
+      rev = "40160a6d6b090339c0337c0c538f670bf9387d63";
+      sha256 = "17s0l7xc9080ssv6lk0lhjvj002ccqw7p0k8xb0ps5wacndkm81v";
     };
     meta.homepage = "https://github.com/rcarriga/nvim-dap-ui/";
   };
@@ -3552,12 +3552,12 @@ final: prev:
 
   nvim-lspconfig = buildVimPluginFrom2Nix {
     pname = "nvim-lspconfig";
-    version = "2021-06-15";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      rev = "ef1ea929affe8462f8efca80138e5bd38f28598e";
-      sha256 = "12chdk6j1aj23h86rbibc6h6h8vfgki162vrxka9i6kya2ajr987";
+      rev = "f81570d1288fd974098e0f311f728469ca919155";
+      sha256 = "162j51rw1gv0gwip4d82qvmgpk7ky22xhhb2sjqm43zhjv3hqy0g";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };
@@ -4201,12 +4201,12 @@ final: prev:
 
   registers-nvim = buildVimPluginFrom2Nix {
     pname = "registers-nvim";
-    version = "2021-06-15";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "tversteeg";
       repo = "registers.nvim";
-      rev = "9778db44a6a199317c1a8f41aece500703c0b503";
-      sha256 = "19wx3fsdsvkjyf8laixy9v1vw636ai1w05i25mf1s08l1k97d9rq";
+      rev = "a80e199ad4e6e7027f2822fcbf92428606127893";
+      sha256 = "0xssz0vhylxhsbr7fm5gbagp23xcbl1nv16845nmahawab6ir9ks";
     };
     meta.homepage = "https://github.com/tversteeg/registers.nvim/";
   };
@@ -5045,12 +5045,12 @@ final: prev:
 
   traces-vim = buildVimPluginFrom2Nix {
     pname = "traces-vim";
-    version = "2021-06-12";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "markonm";
       repo = "traces.vim";
-      rev = "2b1471c605a7fa158ed1cf18ab3f1f7eaf37007b";
-      sha256 = "0xxcvvy6wy6pgrz6ryhyxrsyar8gsip6q68zwpfy04ka112y5rmk";
+      rev = "e36a2e45791ef9078de781a781fec70e160044b0";
+      sha256 = "1qndaqs38mgkl15n895nzjc98h2cy4gjgr3r72cpwhn9qmzhi5zc";
     };
     meta.homepage = "https://github.com/markonm/traces.vim/";
   };
@@ -6269,12 +6269,12 @@ final: prev:
 
   vim-elixir = buildVimPluginFrom2Nix {
     pname = "vim-elixir";
-    version = "2021-06-15";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "elixir-editors";
       repo = "vim-elixir";
-      rev = "e7caa59695e726c0a6377bb03d50ce6433c788b1";
-      sha256 = "0cn6pgw8c9c5nys7nb344y7n7363fl4vkqdzzycsjj6xbqczfj0a";
+      rev = "58084475c1e523caeac97ffff62c154f7f8fcc66";
+      sha256 = "09nv87iqjnwpfkvbspgwxibjlf1aj4syw0nv885fyw8fjpbhf06l";
     };
     meta.homepage = "https://github.com/elixir-editors/vim-elixir/";
   };
@@ -7351,12 +7351,12 @@ final: prev:
 
   vim-lsp = buildVimPluginFrom2Nix {
     pname = "vim-lsp";
-    version = "2021-06-11";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "vim-lsp";
-      rev = "9ecbe24af95df983c74166108d2dd602443f69d0";
-      sha256 = "07dd3rvkil8qpq0vs7w35xzckiks6kimww92d1asafgxw00bvra8";
+      rev = "fb0a72306e1fc42c1ce8909aa1e420ddfccf6fbf";
+      sha256 = "0dzy7cvpmzvx6z5pifzj4y7biln5gcn4iic35ha58ixwgwcw784m";
     };
     meta.homepage = "https://github.com/prabirshrestha/vim-lsp/";
   };
@@ -8997,12 +8997,12 @@ final: prev:
 
   vim-ultest = buildVimPluginFrom2Nix {
     pname = "vim-ultest";
-    version = "2021-06-10";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "rcarriga";
       repo = "vim-ultest";
-      rev = "3c3cbed92722db1046926825c79118afc60e5fb9";
-      sha256 = "018hk48sj32mz4bp2sn8qzakw6j7ndd68y70jpnrpqh6kvwikp4n";
+      rev = "4d6d02bf940401ee103df8110b412d9ff95be2d2";
+      sha256 = "12dz6r6fz3pvd62fxyl8smna88l7k8f60n9s1xnyf573xms5ka5w";
     };
     meta.homepage = "https://github.com/rcarriga/vim-ultest/";
   };
@@ -9430,12 +9430,12 @@ final: prev:
 
   vimtex = buildVimPluginFrom2Nix {
     pname = "vimtex";
-    version = "2021-06-15";
+    version = "2021-06-16";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "c7acb085cd96c4d51cac81d6075b7b33c735ab0c";
-      sha256 = "1sh2irbppvdl8pmxl3qy3h00y22a6qvsslj05ddwnsbll9z1jqxi";
+      rev = "4d3ba03b6a592c44547e3aef92489f7fb3a491ef";
+      sha256 = "0kxg9kkfbfwcrpfg2vdzzgy2yy6b66y6jcym94g4q3nlj2gg130b";
     };
     meta.homepage = "https://github.com/lervag/vimtex/";
   };
