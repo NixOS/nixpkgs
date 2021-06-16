@@ -499,6 +499,8 @@ in {
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
+  arcam-fmj = callPackage ../development/python-modules/arcam-fmj { };
+
   archinfo = callPackage ../development/python-modules/archinfo { };
 
   area = callPackage ../development/python-modules/area { };
@@ -1055,6 +1057,8 @@ in {
 
   billiard = callPackage ../development/python-modules/billiard { };
 
+  bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
+
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
@@ -1562,6 +1566,8 @@ in {
   colormath = callPackage ../development/python-modules/colormath { };
 
   colorspacious = callPackage ../development/python-modules/colorspacious { };
+
+  colorthief = callPackage ../development/python-modules/colorthief { };
 
   colour = callPackage ../development/python-modules/colour { };
 
@@ -2866,6 +2872,8 @@ in {
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
 
+  goalzero = callPackage ../development/python-modules/goalzero { };
+
   goobook = callPackage ../development/python-modules/goobook { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
@@ -3961,6 +3969,8 @@ in {
   };
 
   libpurecool = callPackage ../development/python-modules/libpurecool { };
+
+  libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
 
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
@@ -5221,6 +5231,10 @@ in {
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
+
+  pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
+
+  pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
 
