@@ -83,7 +83,7 @@ in {
       script = ''
         current=$(cat /nix/var/nix/profiles/system/nixos-version | sed 's/.*\.\([0-9a-f]*\)$/\1/')
         length=$(echo -n $current | wc -c)
- 
+
         incoming=$(curl -N -L ${cfg.channel}/git-revision | cut -c 1-$length 2>&1)
         unset length
 
