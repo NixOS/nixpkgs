@@ -143,6 +143,13 @@ in {
           List of additional Matrix plugins to make available.
         '';
       };
+      withJemalloc = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to preload jemalloc to reduce memory fragmentation and overall usage.
+        '';
+      };
       no_tls = mkOption {
         type = types.bool;
         default = false;
@@ -720,7 +727,11 @@ in {
           --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
-      environment.PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
+      environment = {
+        PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
+      } // optionalAttrs (cfg.withJemalloc) {
+        LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+      };
       serviceConfig = {
         Type = "notify";
         User = "matrix-synapse";

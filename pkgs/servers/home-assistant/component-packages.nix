@@ -45,7 +45,7 @@
     "aprs" = ps: with ps; [ aprslib geopy ];
     "aqualogic" = ps: with ps; [ aqualogic ];
     "aquostv" = ps: with ps; [ ]; # missing inputs: sharp_aquos_rc
-    "arcam_fmj" = ps: with ps; [ ]; # missing inputs: arcam-fmj
+    "arcam_fmj" = ps: with ps; [ arcam-fmj ];
     "arduino" = ps: with ps; [ ]; # missing inputs: PyMata
     "arest" = ps: with ps; [ ];
     "arlo" = ps: with ps; [ ha-ffmpeg pyarlo ];
@@ -94,7 +94,7 @@
     "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
-    "bmw_connected_drive" = ps: with ps; [ ]; # missing inputs: bimmer_connected
+    "bmw_connected_drive" = ps: with ps; [ bimmer-connected ];
     "bond" = ps: with ps; [ bond-api ];
     "bosch_shc" = ps: with ps; [ aiohttp-cors boschshcpy ifaddr zeroconf ];
     "braviatv" = ps: with ps; [ bravia-tv ];
@@ -130,7 +130,7 @@
     "cmus" = ps: with ps; [ ]; # missing inputs: pycmus
     "co2signal" = ps: with ps; [ ]; # missing inputs: co2signal
     "coinbase" = ps: with ps; [ ]; # missing inputs: coinbase
-    "color_extractor" = ps: with ps; [ ]; # missing inputs: colorthief
+    "color_extractor" = ps: with ps; [ colorthief ];
     "comed_hourly_pricing" = ps: with ps; [ ];
     "comfoconnect" = ps: with ps; [ pycomfoconnect ];
     "command_line" = ps: with ps; [ ];
@@ -138,9 +138,9 @@
     "concord232" = ps: with ps; [ ]; # missing inputs: concord232
     "config" = ps: with ps; [ aiohttp-cors ];
     "configurator" = ps: with ps; [ ];
-    "control4" = ps: with ps; [ ]; # missing inputs: pyControl4
+    "control4" = ps: with ps; [ pycontrol4 ];
     "conversation" = ps: with ps; [ aiohttp-cors ];
-    "coolmaster" = ps: with ps; [ ]; # missing inputs: pycoolmasternet-async
+    "coolmaster" = ps: with ps; [ pycoolmasternet-async ];
     "coronavirus" = ps: with ps; [ coronavirus ];
     "counter" = ps: with ps; [ ];
     "cover" = ps: with ps; [ ];
@@ -278,7 +278,7 @@
     "foobot" = ps: with ps; [ foobot-async ];
     "forked_daapd" = ps: with ps; [ ]; # missing inputs: pyforked-daapd pylibrespot-java
     "fortios" = ps: with ps; [ fortiosapi ];
-    "foscam" = ps: with ps; [ ]; # missing inputs: libpyfoscam
+    "foscam" = ps: with ps; [ libpyfoscam ];
     "foursquare" = ps: with ps; [ aiohttp-cors ];
     "free_mobile" = ps: with ps; [ ]; # missing inputs: freesms
     "freebox" = ps: with ps; [ freebox-api ];
@@ -312,7 +312,7 @@
     "glances" = ps: with ps; [ glances-api ];
     "gntp" = ps: with ps; [ gntp ];
     "goalfeed" = ps: with ps; [ ]; # missing inputs: pysher
-    "goalzero" = ps: with ps; [ ]; # missing inputs: goalzero
+    "goalzero" = ps: with ps; [ goalzero ];
     "gogogate2" = ps: with ps; [ ismartgate ];
     "google" = ps: with ps; [ google-api-python-client httplib2 oauth2client ];
     "google_assistant" = ps: with ps; [ aiohttp-cors ];

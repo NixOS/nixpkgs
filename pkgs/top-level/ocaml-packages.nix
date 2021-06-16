@@ -1144,6 +1144,8 @@ let
 
     reason = callPackage ../development/compilers/reason { };
 
+    reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
+
     rope = callPackage ../development/ocaml-modules/rope { };
 
     rpclib = callPackage ../development/ocaml-modules/rpclib { };

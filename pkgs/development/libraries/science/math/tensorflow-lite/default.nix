@@ -76,6 +76,15 @@ stdenv.mkDerivation rec {
     sha256 = "1jdw2i1rq06zqd6aabh7bbm0avsg4pygnfmd7gviv0blhih9054l";
   };
 
+  patches = [
+    # TODO: remove on the next version bump
+    (fetchpatch {
+      name = "include-schema-conversion-utils-source.patch";
+      url = "https://github.com/tensorflow/tensorflow/commit/f3c4f4733692150fd6174f2cd16438cfaba2e5ab.patch";
+      sha256 = "0zx4hbz679kn79f30159rl1mq74dg45cvaawii0cyv48z472yy4k";
+    })
+  ];
+
   buildInputs = [ zlib flatbuffers ];
 
   dontConfigure = true;
