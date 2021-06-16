@@ -5234,6 +5234,8 @@ in {
 
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
 
+  pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
+
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
 
   pyflick = callPackage ../development/python-modules/pyflick { };

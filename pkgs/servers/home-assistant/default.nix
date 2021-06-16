@@ -337,6 +337,7 @@ in with py.pkgs; buildPythonApplication rec {
     "configurator"
     "control4"
     "conversation"
+    "coolmaster"
     "coronavirus"
     "counter"
     "cover"
