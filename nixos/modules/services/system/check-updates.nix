@@ -12,7 +12,9 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Whether to notify the user when there are NixOS updates available
+          Whether to notify the user when there are NixOS updates available.
+          If enabled, the user service is made available and can be manually
+          enabled to activated with a user timer.
         '';
       };
 
@@ -21,19 +23,18 @@ in {
         example = "https://nixos.org/channels/nixos-unstable";
         description = ''
           The URI of the NixOS channel to use for checking updates.
-          By default, this is the channel set using
-          <command>nix-channel</command> (run <literal>nix-channel
-          --list</literal> to see the current value).
         '';
       };
 
       update-available-script = mkOption {
         type = types.nullOr types.str;
         default = ''
-          ${pkgs.libnotify}/bin/notify-send -a "Update Notifier" "Update Available" "Incoming git revision: $incoming\nCurrent git revision: $current"
+          ${pkgs.libnotify}/bin/notify-send -a "Update Notifier" \
+              "Update Available" \
+              "Incoming git revision: $incoming\nCurrent git revision: $current"
         '';
         description = ''
-          Shell script to execute if an update is detected. Git revisions
+          Bash script to execute if an update is detected. Git revisions
           for the current and incoming systems are stored in the environment
           variables $current and $incoming (respectfully).
         '';
@@ -43,10 +44,10 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = ''
-          ${pkgs.libnotify}/bin/notify-send -a "Update Notifier" "System up to date"
+          ${pkgs.libnotify}/bin/notify-send -a "Update Notifier" "System up is to date"
         '';
         description = ''
-          Shell script to execute if no update is detected. The git revision
+          Bash script to execute if no update is detected. The git revision
           for the current system is stored in environment variable $current.
         '';
       };
@@ -57,7 +58,7 @@ in {
           ${pkgs.libnotify}/bin/notify-send -a "Update Notifier" "Error occured while checking for updates." "$error"
         '';
         description = ''
-          Shell script to execute if an error occurs while attempting
+          Bash script to execute if an error occurs while attempting
           to retrieve updated value. The environment variable $error
           contains the error produced.
         '';
@@ -68,7 +69,7 @@ in {
   config = lib.mkIf cfg.enable {
 
     systemd.user.services.nixos-notify-updates = {
-      description = "Notify available NixOS Updates";
+      description = "Notify user that there are available NixOS updates";
 
       restartIfChanged = true;
 
@@ -90,14 +91,14 @@ in {
 
           if [ $incoming = $current ]; then
             unset incoming
-            ${cfg.up-to-date-script}
+            ${builtins.toString cfg.up-to-date-script}
           else
-            ${cfg.update-available-script}
+            ${builtins.toString cfg.update-available-script}
           fi
         else
           error=$incoming
           unset incoming
-          ${cfg.error-script}
+          ${builtins.toString cfg.error-script}
         fi
       '';
     };
