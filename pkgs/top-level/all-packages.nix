@@ -31617,6 +31617,10 @@ in
 
   x16-emulator = callPackage ../misc/emulators/commander-x16/emulator.nix { };
   x16-rom = callPackage ../misc/emulators/commander-x16/rom.nix { };
+  x16-run = (callPackage ../misc/emulators/commander-x16/run.nix { }) {
+    emulator = x16-emulator;
+    rom = x16-rom;
+  };
 
   bullet = callPackage ../development/libraries/bullet {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
