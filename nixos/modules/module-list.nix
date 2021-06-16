@@ -896,7 +896,6 @@
   ./services/security/usbguard.nix
   ./services/security/vault.nix
   ./services/security/yubikey-agent.nix
-  ./services/system/check-updates.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix
@@ -909,6 +908,7 @@
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix
   ./services/torrent/magnetico.nix
+  ./services/system/notify-updates.nix
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
   ./services/torrent/rtorrent.nix
