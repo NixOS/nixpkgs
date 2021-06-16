@@ -25,7 +25,7 @@ in writeScript "update-${name}" ''
 
   export GNUPGHOME=`mktemp -d`
 
-  gpg --receive-keys 61B7B526D98F0353
+  gpg --receive-keys 14F26682D0916CDD81E37B6D61B7B526D98F0353
 
   tmpfile=`mktemp`
   url=${baseUrl}
