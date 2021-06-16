@@ -87,7 +87,6 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software HD-audio player";
-    changelog = "https://www.signalyst.eu/bins/${pname}/fc33/hqplayer4desktop-${version}fc33.x86_64.changes";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
   };
