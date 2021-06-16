@@ -278,7 +278,7 @@
     "foobot" = ps: with ps; [ foobot-async ];
     "forked_daapd" = ps: with ps; [ ]; # missing inputs: pyforked-daapd pylibrespot-java
     "fortios" = ps: with ps; [ fortiosapi ];
-    "foscam" = ps: with ps; [ ]; # missing inputs: libpyfoscam
+    "foscam" = ps: with ps; [ libpyfoscam ];
     "foursquare" = ps: with ps; [ aiohttp-cors ];
     "free_mobile" = ps: with ps; [ ]; # missing inputs: freesms
     "freebox" = ps: with ps; [ freebox-api ];
