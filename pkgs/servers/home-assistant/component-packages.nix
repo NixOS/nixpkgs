@@ -45,7 +45,7 @@
     "aprs" = ps: with ps; [ aprslib geopy ];
     "aqualogic" = ps: with ps; [ aqualogic ];
     "aquostv" = ps: with ps; [ ]; # missing inputs: sharp_aquos_rc
-    "arcam_fmj" = ps: with ps; [ ]; # missing inputs: arcam-fmj
+    "arcam_fmj" = ps: with ps; [ arcam-fmj ];
     "arduino" = ps: with ps; [ ]; # missing inputs: PyMata
     "arest" = ps: with ps; [ ];
     "arlo" = ps: with ps; [ ha-ffmpeg pyarlo ];

@@ -499,6 +499,8 @@ in {
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
+  arcam-fmj = callPackage ../development/python-modules/arcam-fmj { };
+
   archinfo = callPackage ../development/python-modules/archinfo { };
 
   area = callPackage ../development/python-modules/area { };
