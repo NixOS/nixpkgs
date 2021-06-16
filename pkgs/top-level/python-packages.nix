@@ -1109,6 +1109,8 @@ in {
 
   blinker = callPackage ../development/python-modules/blinker { };
 
+  blinkpy = callPackage ../development/python-modules/blinkpy { };
+
   BlinkStick = callPackage ../development/python-modules/blinkstick { };
 
   blis = callPackage ../development/python-modules/blis { };
