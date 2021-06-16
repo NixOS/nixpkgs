@@ -1,4 +1,4 @@
-{ config, lib, buildEnv, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq }:
+{ config, lib, buildEnv, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq, shellcheck }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -1165,9 +1165,16 @@ let
         mktplcRef = {
           name = "shellcheck";
           publisher = "timonwong";
-          version = "0.12.3";
-          sha256 = "1i9rszgnac2z1kyahmgxmz05ib7z14s458fvvjlzmvl64fa1fdvf";
+          version = "0.14.1";
+          sha256 = "sha256-X3ihMxANcqNLWl9oTZjCgwRt1uBsSN2BmC2D4dPRFLE=";
         };
+        nativeBuildInputs = [ jq ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+          tmp_package_json=$(mktemp)
+          jq '.contributes.configuration.properties."shellcheck.executablePath".default = "${shellcheck}/bin/shellcheck"' package.json > "$tmp_package_json"
+          mv "$tmp_package_json" package.json
+        '';
         meta = {
           license = lib.licenses.mit;
         };
