@@ -120,7 +120,6 @@ let
           sha256 = "sha256-vz2kU36B1xkLci2QwLpl/SBEhfSWltIDJ1r7SorHcr8=";
         };
         nativeBuildInputs = [ jq ];
-        buildInputs = [ nixpkgs-fmt ];
         postInstall = ''
           cd "$out/$installPrefix"
           tmp_package_json=$(mktemp)
