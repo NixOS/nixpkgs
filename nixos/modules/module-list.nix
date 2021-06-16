@@ -896,6 +896,7 @@
   ./services/security/usbguard.nix
   ./services/security/vault.nix
   ./services/security/yubikey-agent.nix
+  ./services/system/check-updates.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix
