@@ -183,8 +183,7 @@ def main() -> None:
             if attr_path is not None:
                 # Add attribute path without "python3Packages." prefix
                 attr_paths.append(attr_path[len(PKG_SET + ".") :])
-            # home-assistant-frontend is always in propagatedBuildInputs
-            elif name != 'home-assistant-frontend':
+            else:
                 missing_reqs.append(name)
         else:
             build_inputs[component] = (attr_paths, missing_reqs)
