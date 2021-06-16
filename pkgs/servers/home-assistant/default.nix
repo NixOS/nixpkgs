@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , python3
 , inetutils
-, tzdata
 , nixosTests
 
 # Look up dependencies of specified components in component-packages.nix
@@ -52,12 +51,12 @@ let
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {
       iaqualink = super.iaqualink.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.4";
+        version = "0.3.90";
         src = fetchFromGitHub {
           owner = "flz";
           repo = "iaqualink-py";
           rev = "v${version}";
-          sha256 = "16mn6nd9x3hm6j6da99qhwbqs95hh8wx21r1h1m9csl76z77n9lh";
+          sha256 = "0c8ckbbr1n8gx5k63ymgyfkbz3d0rbdvghg8fqdvbg4nrigrs5v0";
         };
         checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
       });
@@ -181,7 +180,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.6.4";
+  hassVersion = "2021.6.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -200,7 +199,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "058dx5hg0a3zvd85sxglbadigfzajmzx8i5jxvw0ww9yp8002qj1";
+    sha256 = "1cp294hy35k9hjbp8iqmaf1m5qbbkh3jwf92ym49waw8di5a5wvh";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -219,7 +218,7 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    # Only packages required in setup.py + hass-frontend
+    # Only packages required in setup.py
     aiohttp
     astral
     async-timeout
@@ -789,9 +788,6 @@ in with py.pkgs; buildPythonApplication rec {
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH
 
-    # set up zoneinfo data for backports-zoneinfo in pvpc_hourly_pricing tests
-    export PYTHONTZPATH="${tzdata}/share/zoneinfo"
-
     # error out when component test directory is missing, otherwise hidden by xdist execution :(
     for component in ${lib.concatStringsSep " " (map lib.escapeShellArg componentTests)}; do
       test -d "tests/components/$component" || {
@@ -802,11 +798,10 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit (py.pkgs) hass-frontend;
+    python = py;
     tests = {
       inherit (nixosTests) home-assistant;
     };
-    python = py;
   };
 
   meta = with lib; {
