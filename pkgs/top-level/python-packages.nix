@@ -1109,6 +1109,8 @@ in {
 
   blinker = callPackage ../development/python-modules/blinker { };
 
+  blinkpy = callPackage ../development/python-modules/blinkpy { };
+
   BlinkStick = callPackage ../development/python-modules/blinkstick { };
 
   blis = callPackage ../development/python-modules/blis { };
@@ -2715,6 +2717,8 @@ in {
   });
 
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
+
+  garminconnect-ha = callPackage ../development/python-modules/garminconnect-ha { };
 
   gast = callPackage ../development/python-modules/gast { };
 
@@ -7675,8 +7679,6 @@ in {
   segments = callPackage ../development/python-modules/segments { };
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
-
-  selectors34 = callPackage ../development/python-modules/selectors34 { };
 
   selenium = callPackage ../development/python-modules/selenium { };
 

@@ -48,6 +48,7 @@ mapAliases ({
   pytest-pep8 = pytestpep8; # added 2021-01-04
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
+  selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # Added 2021-06-10
   setuptools_scm = setuptools-scm; # added 2021-06-03
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
