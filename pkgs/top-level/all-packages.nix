@@ -932,9 +932,7 @@ in
     flavour = "git";
   };
 
-  logseq = callPackage ../applications/misc/logseq {
-    electron = electron_12;
-  };
+  logseq = callPackage ../applications/misc/logseq { };
 
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
