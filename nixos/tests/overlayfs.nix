@@ -26,21 +26,21 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           mount -t overlay overlay -o lowerdir=/tmp/mnt/lower,upperdir=/tmp/mnt/upper,workdir=/tmp/mnt/work /tmp/mnt/merged
           # Test new
           echo 'New' > /tmp/mnt/merged/new.txt
-          [[ "\$(cat /tmp/mnt/merged/new.txt)" == "New" ]]
+          [[ "$(cat /tmp/mnt/merged/new.txt)" == "New" ]]
           # Test replace
-          [[ "\$(cat /tmp/mnt/merged/replace.txt)" == "Replace" ]]
+          [[ "$(cat /tmp/mnt/merged/replace.txt)" == "Replace" ]]
           echo 'Replaced' > /tmp/mnt/merged/replace-tmp.txt
           mv /tmp/mnt/merged/replace-tmp.txt /tmp/mnt/merged/replace.txt
-          [[ "\$(cat /tmp/mnt/merged/replace.txt)" == "Replaced" ]]
+          [[ "$(cat /tmp/mnt/merged/replace.txt)" == "Replaced" ]]
           # Overwrite
-          [[ "\$(cat /tmp/mnt/merged/overwrite.txt)" == "Overwrite" ]]
+          [[ "$(cat /tmp/mnt/merged/overwrite.txt)" == "Overwrite" ]]
           echo 'Overwritten' > /tmp/mnt/merged/overwrite.txt
-          [[ "\$(cat /tmp/mnt/merged/overwrite.txt)" == "Overwritten" ]]
+          [[ "$(cat /tmp/mnt/merged/overwrite.txt)" == "Overwritten" ]]
           # Test append
-          [[ "\$(cat /tmp/mnt/merged/append.txt)" == "Append" ]]
+          [[ "$(cat /tmp/mnt/merged/append.txt)" == "Append" ]]
           echo 'ed' >> /tmp/mnt/merged/append.txt
           #"cat /tmp/mnt/merged/append.txt && exit 1
-          [[ "\$(cat /tmp/mnt/merged/append.txt)" == "Append\ned" ]]
+          [[ "$(cat /tmp/mnt/merged/append.txt)" == "Append\ned" ]]
           umount /tmp/mnt/merged
           umount /tmp/mnt
           udevadm settle
