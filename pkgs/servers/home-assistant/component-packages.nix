@@ -140,7 +140,7 @@
     "configurator" = ps: with ps; [ ];
     "control4" = ps: with ps; [ pycontrol4 ];
     "conversation" = ps: with ps; [ aiohttp-cors ];
-    "coolmaster" = ps: with ps; [ ]; # missing inputs: pycoolmasternet-async
+    "coolmaster" = ps: with ps; [ pycoolmasternet-async ];
     "coronavirus" = ps: with ps; [ coronavirus ];
     "counter" = ps: with ps; [ ];
     "cover" = ps: with ps; [ ];
