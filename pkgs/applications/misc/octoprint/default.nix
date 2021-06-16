@@ -134,7 +134,7 @@ let
                 tornado
                 unidecode
                 watchdog
-                websocket_client
+                websocket-client
                 werkzeug
                 wrapt
                 zeroconf

@@ -124,15 +124,15 @@ let
                 ln -s ${extraInit} $out/lib/php.ini
 
                 if test -e $out/bin/php; then
-                  wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
+                  wrapProgram $out/bin/php --prefix PHP_INI_SCAN_DIR : $out/lib
                 fi
 
                 if test -e $out/bin/php-fpm; then
-                  wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
+                  wrapProgram $out/bin/php-fpm --prefix PHP_INI_SCAN_DIR : $out/lib
                 fi
 
                 if test -e $out/bin/phpdbg; then
-                  wrapProgram $out/bin/phpdbg --set PHP_INI_SCAN_DIR $out/lib
+                  wrapProgram $out/bin/phpdbg --prefix PHP_INI_SCAN_DIR : $out/lib
                 fi
               '';
             };

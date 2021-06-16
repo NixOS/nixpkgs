@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3, wrapGAppsHook, python3Packages }:
+{ lib, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3, webkitgtk, wrapGAppsHook, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
@@ -11,7 +11,15 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0l2c4qngv58j6zkp0va6m96zksx8gqn3mjc3isqybfnhjr6nd3v9";
   };
 
-  buildInputs = [ gobject-introspection gtk3 gtksourceview3 ];
+  buildInputs = [
+    gobject-introspection
+    gtk3
+    gtksourceview3
+    # webkitgkt is used for rendering interactive statistics graph which
+    # can be seen by opening a ROM, entering Pokemon section, selecting
+    # any Pokemon, and clicking Stats and Moves tab.
+    webkitgtk
+  ];
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
   propagatedBuildInputs = with python3Packages; [
     natsort

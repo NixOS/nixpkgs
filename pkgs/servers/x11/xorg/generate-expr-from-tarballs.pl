@@ -306,6 +306,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     }
 
     print OUT <<EOF
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   $pkg = callPackage ({ $argumentsStr }: stdenv.mkDerivation {
     pname = "$pkgNames{$pkg}";
     version = "$pkgVersions{$pkg}";

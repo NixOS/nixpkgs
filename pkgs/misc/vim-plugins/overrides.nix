@@ -208,7 +208,7 @@ self: super: {
   });
 
   ensime-vim = super.ensime-vim.overrideAttrs (old: {
-    passthru.python3Dependencies = ps: with ps; [ sexpdata websocket_client ];
+    passthru.python3Dependencies = ps: with ps; [ sexpdata websocket-client ];
     dependencies = with self; [ vimproc-vim vimshell-vim self.self forms ];
   });
 
