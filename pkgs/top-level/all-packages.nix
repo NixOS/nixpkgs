@@ -14768,6 +14768,8 @@ in
       vdpauinfo;
   };
 
+  drogon = callPackage ../development/libraries/drogon { };
+
   dssi = callPackage ../development/libraries/dssi {};
 
   duckdb = callPackage ../development/libraries/duckdb {};
