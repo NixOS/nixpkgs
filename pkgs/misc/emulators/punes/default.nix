@@ -17,13 +17,13 @@
 
 mkDerivation rec {
   pname = "punes";
-  version = "unstable-2021-04-25";
+  version = "unstable-2021-06-05";
 
   src = fetchFromGitHub {
     owner = "punesemu";
     repo = "puNES";
-    rev = "4b4c3495a56d3989544cb56079ce641da8aa9b35";
-    sha256 = "1wszvdgm38513v26p14k58shbkxn1qhkn8l0hsqi04vviicad59s";
+    rev = "07fd123f62b2d075894a0cc966124db7b427b791";
+    sha256 = "1wxff7b397ayd2s2v14w6a0zfgklc7y0kv3mkz1gg5x47mnll24l";
   };
 
   postPatch = ''
