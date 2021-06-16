@@ -77,17 +77,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # TODO: replace these with the upstream patch as soon as
-    # https://github.com/tensorflow/tensorflow/pull/50240 is merged
+    # TODO: remove on the next version bump
     (fetchpatch {
       name = "include-schema-conversion-utils-source.patch";
-      url = "https://github.com/cpcloud/tensorflow/commit/5bf9c77ee994f1bc0b98a925f35dbaa3c7b3a11b.patch";
-      sha256 = "0m92c6ahy9pxs6pcrhfjk6lpkva650kv0ypyl7sykq4ghaycm4xk";
-    })
-    (fetchpatch {
-      name = "alphabetize-schema-sources.patch";
-      url = "https://github.com/cpcloud/tensorflow/commit/567e05a4582920ff0523615dcbe8ca4d325ce332.patch";
-      sha256 = "1yw011wxbqd3gvv58digmnidrbj3h4r6y9hnb6dgrrglpgb4yrps";
+      url = "https://github.com/tensorflow/tensorflow/commit/f3c4f4733692150fd6174f2cd16438cfaba2e5ab.patch";
+      sha256 = "0zx4hbz679kn79f30159rl1mq74dg45cvaawii0cyv48z472yy4k";
     })
   ];
 
