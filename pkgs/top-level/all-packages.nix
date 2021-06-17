@@ -3029,6 +3029,8 @@ in
 
   mq-cli = callPackage ../tools/system/mq-cli { };
 
+  nb = callPackage ../tools/misc/nb { };
+
   nextdns = callPackage ../applications/networking/nextdns { };
 
   ngadmin = callPackage ../applications/networking/ngadmin { };
