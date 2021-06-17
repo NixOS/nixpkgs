@@ -359,6 +359,7 @@ in with py.pkgs; buildPythonApplication rec {
     "dsmr"
     "dte_energy_bridge"
     "duckdns"
+    "dunehd"
     "dyson"
     "eafm"
     "econet"
