@@ -24578,6 +24578,8 @@ in
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   });
 
+  imagination = callPackage ../applications/video/imagination { };
+
   inherit (nodePackages) imapnotify;
 
   img2pdf = with python3Packages; toPythonApplication img2pdf;
