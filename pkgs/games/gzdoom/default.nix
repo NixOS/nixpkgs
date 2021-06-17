@@ -69,6 +69,10 @@ let
       mkdir $out/bin
       makeWrapper $out/lib/gzdoom/gzdoom $out/bin/gzdoom
     '';
+    
+    postInstall = ''
+      patchelf --set-rpath "${SDL2}/lib:${openal}/lib:${fluidsynth_1}/lib:${bzip2}/lib:${zlib}/lib:${libjpeg}/lib:${mpg123}/lib:${libsndfile}/lib" $out/lib/gzdoom/gzdoom
+    '';
 
     meta = with lib; {
       homepage = "https://github.com/coelckers/gzdoom";
