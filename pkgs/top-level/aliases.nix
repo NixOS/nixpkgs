@@ -818,10 +818,19 @@ mapAliases ({
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
   terraform_1_0_0 = terraform_1_0; # added 2021-06-15
-  terraform_0_12 = throw "terraform 0.12 has been removed"; # added 2021-06-15
-  terraform_0_13 = throw "terraform 0.13 has been removed"; # added 2021-06-15
-  terraform_0_14 = throw "terraform 0.14 has been removed"; # added 2021-06-15
-  terraform_0_15 = throw "terraform 0.15 has been removed"; # added 2021-06-15
+  terraform_0_12 = throw ''
+    terraform 0.12 (terraform_0_12) has been removed, and replaced with terraform 1.0.0.
+    However, terraform 0.12's statefile cannot be directly upgraded to terraform 1.0.0's
+    statefile.
+    
+    Please use the nixos-21.05 channel to upgrade to terraform 0.13 (terraform_0_13) and
+    then upgrade again to terraform 1.0 (terraform_1_0).
+    
+    For help upgrading, see: https://github.com/NixOS/nixpkgs/pull/99198#issuecomment-737361190
+  ''; # added 2021-06-15
+  terraform_0_13 = throw "terraform 0.13 (terraform_0_13) has been removed, please upgrade to terraform 1.0.0 (terraform_1_0_0)"; # added 2021-06-15
+  terraform_0_14 = throw "terraform 0.14 (terraform_0_14) has been removed, please upgrade to terraform 1.0.0 (terraform_1_0_0)"; # added 2021-06-15
+  terraform_0_15 = throw "terraform 0.15 (terraform_0_15) has been removed, please upgrade to terraform 1.0.0 (terraform_1_0_0)"; # added 2021-06-15
   terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28
   terraform-provider-libvirt = terraform-providers.libvirt; # added 2018-09-28
   terraform-provider-lxd = terraform-providers.lxd; # added 2020-03-16
