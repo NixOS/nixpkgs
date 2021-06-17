@@ -24976,7 +24976,10 @@ in
   librecad = libsForQt514.callPackage ../applications/misc/librecad { };
 
   libreoffice = hiPrio libreoffice-still;
-  libreoffice-unwrapped = libreoffice.libreoffice;
+  
+  libreoffice-impress-templates = callPackage ../applications/office/libreoffice/plugins.nix { };
+  
+libreoffice-unwrapped = libreoffice.libreoffice;
 
   libreoffice-args = {
     inherit (perlPackages) ArchiveZip IOCompress;
@@ -25019,6 +25022,8 @@ in
       });
   });
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
+
+  libreofficePlugins = callPackage ../applications/office/libreoffice/plugins.nix { };
 
   libvmi = callPackage ../development/libraries/libvmi { };
 
