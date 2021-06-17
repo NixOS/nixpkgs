@@ -25819,19 +25819,9 @@ in
 
   oberon-risc-emu = callPackage ../misc/emulators/oberon-risc-emu { };
 
-  obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
-
-  obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
-
-  obs-gstreamer = callPackage ../applications/video/obs-studio/obs-gstreamer.nix { };
-
-  obs-move-transition = callPackage ../applications/video/obs-studio/obs-move-transition.nix { };
-
-  obs-multi-rtmp = libsForQt5.callPackage ../applications/video/obs-studio/obs-multi-rtmp.nix { };
-
-  obs-v4l2sink = libsForQt5.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
-
-  obs-ndi = libsForQt5.callPackage ../applications/video/obs-studio/obs-ndi.nix { };
+  obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {};
+  obs-studio-plugins = callPackage ../applications/video/obs-studio/plugins {};
+  wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
   obsidian = callPackage ../applications/misc/obsidian { };
 

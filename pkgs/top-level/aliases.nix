@@ -1018,6 +1018,38 @@ mapAliases ({
     & maintenance is abandoned by upstream.
   '';
 
+  # Added 2021-06-01
+  obs-gstreamer = throw ''
+    obs-gstreamer has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-gstreamer.
+  '';
+
+  # Added 2021-06-01
+  obs-move-transition = throw ''
+    obs-move-transition has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-move-transition.
+  '';
+
+  # Added 2021-06-01
+  obs-multi-rtmp = throw ''
+    obs-multi-rtmp has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-multi-rtmp.
+  '';
+
+  # Added 2021-06-01
+  obs-ndi = throw ''
+    obs-ndi has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-ndi.
+  '';
+
+  obs-v4l2sink = throw "obs-v4l2sink is integrated into upstream OBS since version 26.1";  # Added 2021-06-01
+
+  # Added 2021-06-01
+  obs-wlrobs = throw ''
+    wlrobs has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.wlrobs.
+  '';
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */
