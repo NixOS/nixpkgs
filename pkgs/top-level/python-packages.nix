@@ -1277,6 +1277,8 @@ in {
 
   caldav = callPackage ../development/python-modules/caldav { };
 
+  calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
+
   can = callPackage ../development/python-modules/can { };
 
   canmatrix = callPackage ../development/python-modules/canmatrix { };
