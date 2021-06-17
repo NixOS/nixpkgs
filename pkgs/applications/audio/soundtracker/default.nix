@@ -12,15 +12,15 @@
 
 stdenv.mkDerivation rec {
   pname = "soundtracker";
-  version = "1.0.1";
+  version = "1.0.2.1";
 
   src = fetchurl {
     # Past releases get moved to the "old releases" directory.
     # Only the latest release is at the top level.
     # Nonetheless, only the name of the file seems to affect which file is
     # downloaded, so this path should be fine both for old and current releases.
-    url = "mirror://sourceforge/soundtracker/soundtracker-${version}.tar.bz2";
-    sha256 = "0m5iiqccch6w53khpvdldz59zymw13vmwqc5ggx3sn41riwbd6ks";
+    url = "mirror://sourceforge/soundtracker/soundtracker-${version}.tar.xz";
+    sha256 = "0nh0dwz8nldc040q6n06vlazhss8ms42r2dffhjcrqj3hbrvfx82";
   };
 
   nativeBuildInputs = [
@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
     audiofile
     goocanvas
   ] ++ lib.optional stdenv.isLinux alsaLib;
-
-  hardeningDisable = [ "format" ];
 
   meta = with lib; {
     description = "A music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
