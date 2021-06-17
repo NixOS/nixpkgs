@@ -452,6 +452,23 @@ let
         };
       };
 
+      foam.foam-vscode = buildVscodeMarketplaceExtension {
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
+          description = "A personal knowledge management and sharing system for VSCode ";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=foam.foam-vscode";
+          homepage = "https://foambubble.github.io/";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+        mktplcRef = {
+          name = "foam-vscode";
+          publisher = "foam";
+          version = "0.13.7";
+          sha256 = "Y2pcd4iXPiuhJdD/9d+tbTJN18O4+kRMqUdOtbx8xy8=";
+        };
+      };
+
       formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "auto-close-tag";
@@ -566,8 +583,8 @@ let
         mktplcRef = {
           name = "Go";
           publisher = "golang";
-          version = "0.18.1";
-          sha256 = "sha256-b2Wa3TULQQnBm1/xnDCB9SZjE+Wxz5wBttjDEtf8qlE=";
+          version = "0.25.1";
+          sha256 = "sha256-ZDUWN9lzDnR77W7xcMFQaaFl/6Lf/x1jgaBkwZPqGGw=";
         };
         meta = {
           license = lib.licenses.mit;
