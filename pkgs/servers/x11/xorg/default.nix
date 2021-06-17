@@ -571,11 +571,11 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fonttosfnt = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto }: stdenv.mkDerivation {
-    name = "fonttosfnt-1.2.2";
+    name = "fonttosfnt-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/fonttosfnt-1.2.2.tar.bz2";
-      sha256 = "0r1s43ypy0a9z6hzdq5y02s2acj965rax4flwdyylvc54ppv86qs";
+      url = "mirror://xorg/individual/app/fonttosfnt-1.2.1.tar.bz2";
+      sha256 = "16r51h5wfy85wnbq3q8v8a184hb25c3ksjgix0mlcywdz7qkbj07";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -755,11 +755,11 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
-    name = "libX11-1.7.0";
+    name = "libX11-1.7.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.7.0.tar.bz2";
-      sha256 = "0m6bfwllr3pq2c00l51y62yiq15kphc8dw69zf67qhwmclxzkj1n";
+      url = "mirror://xorg/individual/lib/libX11-1.7.1.tar.bz2";
+      sha256 = "0isxad59hvdwggbxqqjjjg3zmih9xiq4d9mdsnqbyb2nmbg46kp6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];

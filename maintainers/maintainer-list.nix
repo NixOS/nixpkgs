@@ -318,6 +318,12 @@
     githubId = 4296804;
     name = "Alex Franchuk";
   };
+  agbrooks = {
+    email = "andrewgrantbrooks@gmail.com";
+    github = "agbrooks";
+    githubId = 19290901;
+    name = "Andrew Brooks";
+  };
   aherrmann = {
     email = "andreash87@gmx.ch";
     github = "aherrmann";

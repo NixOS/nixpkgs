@@ -47,11 +47,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # https://github.com/NixOS/nixpkgs/issues/124165
-    "test_bridge_getdevicestatus"
-  ];
-
   pythonImportsCheck = [ "pywemo" ];
 
   meta = with lib; {

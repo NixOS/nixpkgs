@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional guiSupport makeWrapper;
 
   buildInputs = [ boehmgc readline ]
-  ++ lib.optional guiSupport tk
+  ++ lib.optionals guiSupport [ tk tcl.tclPackageHook tcllib ]
   ++ lib.optional miSupport json_c
   ++ lib.optional nbdSupport libnbd
   ++ lib.optional textStylingSupport gettext
@@ -56,11 +56,6 @@ in stdenv.mkDerivation rec {
 
   doCheck = !isCross;
   checkInputs = lib.optionals (!isCross) [ dejagnu ];
-
-  postFixup = lib.optionalString guiSupport ''
-    wrapProgram "$out/bin/poke-gui" \
-      --prefix TCLLIBPATH ' ' ${tcllib}/lib/tcllib${tcllib.version}
-  '';
 
   meta = with lib; {
     description = "Interactive, extensible editor for binary data";
