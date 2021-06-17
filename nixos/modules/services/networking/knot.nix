@@ -68,6 +68,14 @@ in {
         '';
       };
 
+      nixConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        description = ''
+          Extra configuration as nix values.  EXPERIMENTAL!
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.knot-dns;
@@ -113,5 +121,80 @@ in {
     };
 
     environment.systemPackages = [ knot-cli-wrappers ];
+
+    services.knot.extraConfig =
+      let
+        result = nix2yaml cfg.nixConfig;
+        nix2yaml = nix_def: concatStrings (
+            # We output the config section in the upstream-mandated order.
+            # Ordering is important due to forward-references not being allowed.
+            [ (sec_list_fa "id" nix_def "module") ]
+            ++ map (sec_plain nix_def)
+              [ "server" "control" ]
+            ++ [ (sec_list_fa "target" nix_def "log") ]
+            ++ map (sec_plain nix_def)
+              [  "statistics" "database" ]
+            ++ map (sec_list_fa "id" nix_def)
+              [ "keystore" "key" "remote" "acl" "submission" "policy" "template" ]
+            ++ [ (sec_list_fa "domain" nix_def "zone") ]
+            ++ [ (sec_plain nix_def "include") ]
+          );
+          #FIXME: check that no other attributes are present? (silently omitted ATM)
+
+        # A plain section contains directly attributes (we don't really check that ATM).
+        sec_plain = nix_def: sec_name: if !hasAttr sec_name nix_def then "" else
+          n2y "" { ${sec_name} = nix_def.${sec_name}; };
+
+        # This section contains a list of attribute sets.  In each of the sets
+        # there's an attribute (`fa_name`, typically "id") that must exist and come first.
+        # Alternatively we support using attribute sets instead of lists; example diff:
+        # -template = [ { id = "default"; /* other attributes */ }   { id = "foo"; } ]
+        # +template = { default = {       /* those attributes */ };  foo = { };      }
+        sec_list_fa = fa_name: nix_def: sec_name: if !hasAttr sec_name nix_def then "" else
+          let
+            elem2yaml = fa_val: other_attrs:
+              "  - " + n2y "" { ${fa_name} = fa_val; }
+              + "    " + n2y "    " other_attrs
+              + "\n";
+            sec = nix_def.${sec_name};
+          in
+            sec_name + ":\n" +
+              (if isList sec
+                then flip concatMapStrings sec
+                  (elem: elem2yaml elem.${fa_name} (removeAttrs elem [ fa_name ]))
+                else concatStrings (mapAttrsToList elem2yaml sec)
+              );
+
+        # This convertor doesn't care about ordering of attributes.
+        # TODO: it could probably be simplified even more, now that it's not
+        # to be used directly, but we might want some other tweaks, too.
+        n2y = indent: val:
+          if doRecurse val then concatStringsSep "\n${indent}"
+            (mapAttrsToList
+              # This is a bit wacky - set directly under a set would start on bad indent,
+              # so we start those on a new line, but not other types of attribute values.
+              (aname: aval: "${aname}:${if doRecurse aval then "\n${indent}  " else " "}"
+                + n2y (indent + "  ") aval)
+              val
+            )
+            + "\n"
+            else
+          /*
+          if isList val && stringLength indent < 4 then concatMapStrings
+            (elem: "\n${indent}- " + n2y (indent + "  ") elem)
+            val
+            else
+          */
+          if isList val /* and long indent */ then
+            "[ " + concatMapStringsSep ", " quoteString val + " ]" else
+          if isBool val then (if val then "on" else "off") else
+          quoteString val;
+
+        # We don't want paths like ./my-zone.txt be converted to plain strings.
+        quoteString = s: ''"${if builtins.typeOf s == "path" then s else toString s}"'';
+        # We don't want to walk the insides of derivation attributes.
+        doRecurse = val: isAttrs val && !isDerivation val;
+
+      in result;
   };
 }
