@@ -1152,6 +1152,23 @@ let
         };
       };
 
+      svsool.markdown-memo = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-memo";
+          publisher = "svsool";
+          version = "0.3.8";
+          sha256 = "eFiCCXxrOnXwJK1AOMfIDsPGsFG3ArLD1X/uAEH5lRY=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/svsool.markdown-memo/changelog";
+          description = "Markdown knowledge base with bidirectional [[link]]s built on top of VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=svsool.markdown-memo";
+          homepage = "https://github.com/svsool/vscode-memo";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+      };
+
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "even-better-toml";
