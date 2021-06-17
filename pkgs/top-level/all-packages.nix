@@ -9030,6 +9030,8 @@ in
 
   t = callPackage ../tools/misc/t { };
 
+  t_py = python3Packages.callPackage ../applications/misc/t_py { };
+
   tabnine = callPackage ../development/tools/tabnine { };
 
   tab-rs = callPackage ../tools/misc/tab-rs {
