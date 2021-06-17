@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetch
+, fetchpatch
 , cmake
 , python3
 , libffi
@@ -54,6 +55,15 @@ in stdenv.mkDerivation (rec {
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = with stdenv; lib.optional (isLinux && isx86_64) # minimize rebuilds, for now at least
+    # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
+    (fetchpatch {
+      name = "uops-CMOV16rm-noreg.diff";
+      url = "https://github.com/llvm/llvm-project/commit/9e9f991ac033.diff";
+      sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
+      stripLen = 1;
+    });
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
