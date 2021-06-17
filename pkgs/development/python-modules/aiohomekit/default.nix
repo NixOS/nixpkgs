@@ -13,7 +13,6 @@ buildPythonPackage rec {
   pname = "aiohomekit";
   version = "0.2.67";
   format = "pyproject";
-  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "Jc2k";

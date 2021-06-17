@@ -818,10 +818,6 @@ mapAliases ({
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
   terraform_1_0_0 = terraform_1_0; # added 2021-06-15
-  terraform_0_12 = throw "terraform 0.12 has been removed"; # added 2021-06-15
-  terraform_0_13 = throw "terraform 0.13 has been removed"; # added 2021-06-15
-  terraform_0_14 = throw "terraform 0.14 has been removed"; # added 2021-06-15
-  terraform_0_15 = throw "terraform 0.15 has been removed"; # added 2021-06-15
   terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28
   terraform-provider-libvirt = terraform-providers.libvirt; # added 2018-09-28
   terraform-provider-lxd = terraform-providers.lxd; # added 2020-03-16
@@ -834,7 +830,9 @@ mapAliases ({
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
   timescale-prometheus = promscale; # added 2020-09-29
-  tomcat85 = tomcat8; # added 2020-03-11
+  tomcat7 = throw "tomcat7 has been removed from nixpkgs as it has reached end of life."; # added 2022-06-16
+  tomcat8 = throw "tomcat8 has been removed from nixpkgs as it has reached end of life."; # added 2022-06-16
+  tomcat85 = throw "tomcat85 has been removed from nixpkgs as it has reached end of life."; # added 2020-03-11
   torbrowser = tor-browser-bundle-bin; # added 2017-04-05
   torch = throw "torch has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   torch-hdf5 = throw "torch-hdf5 has been removed, as the upstream project has been abandoned"; # added 2020-03-28

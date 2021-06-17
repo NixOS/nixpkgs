@@ -175,7 +175,7 @@
     "dialogflow" = ps: with ps; [ aiohttp-cors ];
     "digital_ocean" = ps: with ps; [ digital-ocean ];
     "digitalloggers" = ps: with ps; [ ]; # missing inputs: dlipower
-    "directv" = ps: with ps; [ ]; # missing inputs: directv
+    "directv" = ps: with ps; [ directv ];
     "discogs" = ps: with ps; [ discogs_client ];
     "discord" = ps: with ps; [ discordpy ];
     "discovery" = ps: with ps; [ aiohttp-cors ifaddr netdisco zeroconf ];
