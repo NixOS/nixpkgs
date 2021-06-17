@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "croc";
-  version = "9.1.5";
+  version = "9.1.6";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NjKj1m1g3F+YLNhFLDeO5DXtHIxPRwfSpunhRnSHRFc=";
+    sha256 = "sha256-FMx2Siw1J7UKtuwLcSkgMhs4Dl0erQcRb5FGkq2hFv0=";
   };
 
-  vendorSha256 = "sha256-cBf4UV9jBKvmcBG2XLPpPgO05GRB1SV1W3lJCuoQJQ4=";
+  vendorSha256 = "sha256-tPBPmZLcBR16RxqvL3UYlIAwK8IeV+DYkRrVOgBkm58=";
 
   doCheck = false;
 

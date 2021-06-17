@@ -16,11 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.24.0-61";
+  version = "4.24.1-62";
 
   src = fetchurl {
+    # FIXME: use the fc34 sources when we get glibc 2.33 in nixpkgs
+    # c.f. https://github.com/NixOS/nixpkgs/pull/111616
     url = "https://www.signalyst.eu/bins/${pname}/fc33/${pname}-${version}.fc33.x86_64.rpm";
-    sha256 = "sha256-VouqkWRu9lcbCQNmXJayrsZZnhvM5xEZlUyBEkURBOQ=";
+    sha256 = "sha256-lnejPkw6X3wRtjXTsdipEy6yZCEsDARhLPnySIltHXs=";
   };
 
   unpackPhase = ''
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     # main executable
     mkdir -p $out/bin
     cp ./usr/bin/hqplayerd $out/bin
@@ -62,12 +66,14 @@ stdenv.mkDerivation rec {
     cp ./usr/lib/systemd/system/hqplayerd.service $out/lib/systemd/system
 
     # documentation
-    mkdir -p $out/share/doc/${pname}
-    cp ./usr/share/doc/${pname}/* $out/share/doc/${pname}
+    mkdir -p $out/share/doc/hqplayerd
+    cp ./usr/share/doc/hqplayerd/* $out/share/doc/hqplayerd
 
     # misc service support files
-    mkdir -p $out/var/lib/${pname}
-    cp -r ./var/hqplayer/web $out/var/lib/${pname}
+    mkdir -p $out/var/lib/hqplayerd
+    cp -r ./var/hqplayer/web $out/var/lib/hqplayerd
+
+    runHook postInstall
   '';
 
   postInstall = ''
@@ -82,7 +88,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software embedded HD-audio player";
-    changelog = "https://www.signalyst.eu/bins/${pname}/fc33/${pname}-${version}.fc33.x86_64.changes";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
   };
