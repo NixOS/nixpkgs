@@ -1,0 +1,11 @@
+--- firefox-68.4.2/js/src/wasm/WasmSignalHandlers.cpp.orig	2020-04-30 06:35:16.243047468 +0900
++++ firefox-68.4.2/js/src/wasm/WasmSignalHandlers.cpp	2020-04-30 06:35:44.110598805 +0900
+@@ -243,7 +243,7 @@
+ // If you run into compile problems on a tier-3 platform, you can disable the
+ // emulation here.
+ 
+-#if defined(__linux__) && defined(__arm__)
++#if 0
+ #  define WASM_EMULATE_ARM_UNALIGNED_FP_ACCESS
+ #endif
+ 
