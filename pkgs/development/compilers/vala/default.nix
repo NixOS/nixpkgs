@@ -111,11 +111,6 @@ in rec {
     sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
   };
 
-  vala_0_44 = generic {
-    version = "0.44.11";
-    sha256 = "06spdvm9q9k4riq1d2fxkyc8d88bcv460v360465iy1lnj3z9x2s";
-  };
-
   vala_0_46 = generic {
     version = "0.46.13";
     sha256 = "0d7l4vh2xra3q75kw3sy2d9bn5p6s3g3r7j37bdn6ir8l3wp2ivs";
