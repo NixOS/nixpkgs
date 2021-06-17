@@ -351,6 +351,7 @@ in with py.pkgs; buildPythonApplication rec {
     "eafm"
     "econet"
     "efergy"
+    "elgato"
     "emonitor"
     "emulated_hue"
     "enphase_envoy"
