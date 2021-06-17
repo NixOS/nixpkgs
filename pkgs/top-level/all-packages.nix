@@ -561,6 +561,7 @@ in
   };
 
   fetchzip = callPackage ../build-support/fetchzip { };
+  fetchunpack = fetchzip;  # alternative name, fetchzip can unpack more than just zip files
 
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
