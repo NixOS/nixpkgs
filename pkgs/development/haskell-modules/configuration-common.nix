@@ -1956,4 +1956,9 @@ EOT
   # https://github.com/muesli4/table-layout/issues/16
   table-layout = doJailbreak super.table-layout;
 
+  # Bounds on profunctors are too strict
+  # https://github.com/ConferOpenSource/composite/issues/50
+  composite-base = doJailbreak super.composite-base;
+  composite-aeson = doJailbreak super.composite-aeson;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
