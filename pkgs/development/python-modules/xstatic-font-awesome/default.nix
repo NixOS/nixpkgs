@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  pname = "XStatic-Font-Awesome";
+  pname = "xstatic-font-awesome";
   version = "4.7.0.0";
 
   src = fetchPypi {
