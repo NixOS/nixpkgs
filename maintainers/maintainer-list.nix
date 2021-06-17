@@ -2381,6 +2381,16 @@
     githubId = 75067;
     name = "Daniel Duan";
   };
+  dearrude = {
+    name = "Ebrahim Nejati";
+    email = "dearrude@tfwno.gf";
+    github = "dearrude";
+    githubId = 30749142;
+    keys = [{
+      longkeyid = "rsa4096/19151E03BF2CF012";
+      fingerprint = "4E35 F2E5 2132 D654 E815  A672 DB2C BC24 2868 6000";
+    }];
+  };
   deepfire = {
     email = "_deepfire@feelingofgreen.ru";
     github = "deepfire";
