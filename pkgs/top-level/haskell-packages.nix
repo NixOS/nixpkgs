@@ -20,6 +20,10 @@ let
     inherit pkgs;
   };
 
+  haskellLibFlipped = import ../development/haskell-modules/lib/flipped.nix {
+    unflipped = haskellLib;
+  };
+
   callPackage = newScope {
     inherit haskellLib;
     overrides = pkgs.haskell.packageOverrides;
@@ -41,6 +45,7 @@ let
 
 in {
   lib = haskellLib;
+  lib-flipped = haskellLibFlipped;
 
   compiler = {
 
