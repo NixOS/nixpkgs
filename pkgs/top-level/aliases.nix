@@ -834,6 +834,7 @@ mapAliases ({
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
   timescale-prometheus = promscale; # added 2020-09-29
+  tomcat7 = throw "tomcat7 has been removed from nixpkgs as it has reached end of life."; # added 2022-06-16
   tomcat85 = tomcat8; # added 2020-03-11
   torbrowser = tor-browser-bundle-bin; # added 2017-04-05
   torch = throw "torch has been removed, as the upstream project has been abandoned"; # added 2020-03-28
