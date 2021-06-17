@@ -6,6 +6,7 @@
 , glib
 , json_c
 , libical
+, docutils
 , pkg-config
 , python3
 , readline
@@ -19,11 +20,11 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.58";
+  version = "5.59";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "1wgiv8cqya6n1w5fz24cb8q401bhn5aa6s7g95l26rzblmsmw1n8";
+    sha256 = "05kk8zdh3msf5j88jbai8m877rvya6fpkzhicfhv5gyhhsrrasq4";
   };
 
   buildInputs = [
@@ -38,6 +39,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    docutils
     pkg-config
     python3.pkgs.wrapPython
   ];
