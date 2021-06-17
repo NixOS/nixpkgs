@@ -989,7 +989,7 @@
   ./services/web-servers/pomerium.nix
   ./services/web-servers/unit/default.nix
   ./services/web-servers/shellinabox.nix
-  ./services/web-servers/tomcat.nix
+  ./services/web-servers/tomcat/default.nix
   ./services/web-servers/traefik.nix
   ./services/web-servers/trafficserver.nix
   ./services/web-servers/ttyd.nix
