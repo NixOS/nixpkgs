@@ -12,11 +12,10 @@ buildPythonPackage {
 
   postInstall = "mv lib/libgurobi*.so* $out/lib";
 
-  postFixup =
-    ''
-      patchelf --set-rpath $out/lib \
-        $out/lib/${python.libPrefix}/site-packages/gurobipy/gurobipy.so
-    '';
+  postFixup = ''
+    patchelf --set-rpath $out/lib \
+      $out/lib/${python.libPrefix}/site-packages/gurobipy/gurobipy.so
+  '';
 
   meta = with lib; {
     description = "The Gurobi Python interface";
