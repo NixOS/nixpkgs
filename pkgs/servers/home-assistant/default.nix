@@ -355,6 +355,7 @@ in with py.pkgs; buildPythonApplication rec {
     "dexcom"
     "dhcp"
     "dialogflow"
+    "directv"
     "discovery"
     "dsmr"
     "dte_energy_bridge"
