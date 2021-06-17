@@ -22446,6 +22446,8 @@ in
 
   theme-vertex = callPackage ../data/themes/vertex { };
 
+  times-newer-roman = callPackage ../data/fonts/times-newer-roman { };
+
   tipa = callPackage ../data/fonts/tipa { };
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
