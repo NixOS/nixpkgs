@@ -20,12 +20,12 @@ let
         mv $out/webapps $webapps/
       '';
 
-    meta = {
+    meta = with lib; {
       homepage = "https://tomcat.apache.org/";
       description = "An implementation of the Java Servlet and JavaServer Pages technologies";
-      platforms = with lib.platforms; all;
-      maintainers = with lib.maintainers; [ danbst ];
-      license = [ lib.licenses.asl20 ];
+      platforms = platforms.all;
+      maintainers = [ ];
+      license = [ licenses.asl20 ];
     };
   });
 
