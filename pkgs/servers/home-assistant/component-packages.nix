@@ -186,7 +186,7 @@
     "dnsip" = ps: with ps; [ aiodns ];
     "dominos" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pizzapi
     "doods" = ps: with ps; [ pillow ]; # missing inputs: pydoods
-    "doorbird" = ps: with ps; [ aiohttp-cors ]; # missing inputs: doorbirdpy
+    "doorbird" = ps: with ps; [ aiohttp-cors doorbirdpy ];
     "dovado" = ps: with ps; [ ]; # missing inputs: dovado
     "downloader" = ps: with ps; [ ];
     "dsmr" = ps: with ps; [ dsmr-parser ];
