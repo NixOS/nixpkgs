@@ -1919,6 +1919,8 @@ in {
 
   dipy = callPackage ../development/python-modules/dipy { };
 
+  directv = callPackage ../development/python-modules/directv { };
+
   discid = callPackage ../development/python-modules/discid { };
 
   discogs_client = callPackage ../development/python-modules/discogs_client { };
