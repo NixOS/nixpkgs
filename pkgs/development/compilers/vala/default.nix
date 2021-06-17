@@ -106,11 +106,6 @@ let
   });
 
 in rec {
-  vala_0_36 = generic {
-    version = "0.36.20";
-    sha256 = "19v7zjhr9yxkh9lxg46n9gjr0lb7j6v0xqfhrdvgz18xhj3hm5my";
-  };
-
   vala_0_40 = generic {
     version = "0.40.25";
     sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
