@@ -13,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "6.0";
+    version = "6.0.1";
     url = "https://dl.winehq.org/wine/source/6.0/wine-${version}.tar.xz";
-    sha256 = "sha256-tJMGXy+D7kKcYuLsWGmKPPY+94ci4bIHZYIxUuhYLFY=";
+    sha256 = "sha256-Ogmh7Jyh6h1PcpWY14JxeXP09kRYZn+7dX0SLzoB2ko=";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -44,16 +44,16 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "6.9";
+    version = "6.10";
     url = "https://dl.winehq.org/wine/source/6.x/wine-${version}.tar.xz";
-    sha256 = "sha256-GFVOYB3vhqmiAXKwhcZoMpFPwh511VX25U/4nn6uW/4=";
+    sha256 = "sha256-WO3hSEgtSRiCYtWi0MnXAKdMacUcyqEcWt9j0/MUQZ8=";
     inherit (stable) gecko32 gecko64;
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "6.1.1";
+      version = "6.2.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      sha256 = "sha256-rDsUvq/eNLhIIofllwABE9wGqRXzLJ/QbHfrgZB544s=";
+      sha256 = "sha256-zY1TUT2DV7KHama6sIllTvmUH0LvaQ+1VcZJP1OB28o=";
     };
 
     patches = [
@@ -65,17 +65,12 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "sha256-g0NmiypafOAmKDRoRf4uz5NnhFo6uga0fKYNCF29jbE=";
+    sha256 = "sha256-nqXgJe2i1xDW1aCAmwFPshiUI2PtZ/S7p8Cq2ODMTQk=";
     owner = "wine-staging";
     repo = "wine-staging";
-    #rev = "v${version}";
-    # FIXME: replace with line above with 6.10 release
-    # Fix https://bugs.winehq.org/show_bug.cgi?id=51172
-    rev = "5bbe3e47a559b3c04bc8791e0b398a271c772af7";
+    rev = "v${version}";
 
-    # Actually only "d3d11-Deferred_Context" cause problems, two others only dependencies
-    # see FIXME above
-    disabledPatchsets = [ "d3d11-Deferred_Context" "wined3d-CSMT_Main" "nvapi-Stub_DLL" "nvcuvid-CUDA_Video_Support" "nvencodeapi-Video_Encoder" ];
+    disabledPatchsets = [ ];
   };
 
   winetricks = fetchFromGitHub rec {

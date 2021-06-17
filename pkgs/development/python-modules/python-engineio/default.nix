@@ -9,7 +9,7 @@
 , requests
 , six
 , tornado
-, websocket_client
+, websocket-client
 , websockets
 , pytestCheckHook
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     mock
     requests
     tornado
-    websocket_client
+    websocket-client
     websockets
     pytestCheckHook
   ];

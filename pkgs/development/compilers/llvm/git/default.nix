@@ -18,18 +18,19 @@
 }:
 
 let
-  release_version = "12.0.0";
+  release_version = "13.0.0";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = ""; # When using a Git commit
-  version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
+  rev = "643b6407faf460915679f304420cfbee87c47734"; # When using a Git commit
+  rev-version = "unstable-2021-06-11"; # When using a Git commit
+  version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
   targetConfig = stdenv.targetPlatform.config;
 
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
     rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "07jz8pywc2qqa1srdnqg5p2y4lx3ki1inpigarzgxc3j20r4gb58";
+    sha256 = "0b06qqbks20m1cy9g1k8y4w8vh9zcbh9ag2bpk9xgg2xkmbq42az";
   };
 
   llvm_meta = {
@@ -256,9 +257,7 @@ let
 
     libunwind = callPackage ./libunwind {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
     openmp = callPackage ./openmp {

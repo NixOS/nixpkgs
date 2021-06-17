@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.stellar.org/";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };
 }

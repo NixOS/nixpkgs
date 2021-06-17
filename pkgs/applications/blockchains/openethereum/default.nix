@@ -10,18 +10,18 @@
 , darwin
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
+rustPlatform.buildRustPackage rec {
   pname = "openethereum";
-  version = "3.2.5";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "openethereum";
     repo = "openethereum";
     rev = "v${version}";
-    sha256 = "1g48fkznvr9fs3j9zy2d9pcwnahmyghxg2b9bsn2mxpyczmfqrki";
+    sha256 = "0lxps3cyg8dzb9qr1kg91s9jc3mnm6hxybwcbhva38pcq4yc40xc";
   };
 
-  cargoSha256 = "02nlm5ariv4dr6b3rckzs7hw1xrl83yvhimrzb0g5l0j0sxh1nhc";
+  cargoSha256 = "08yrpls3szmw6vy2c4d6b1k907ga0809ylvyx0zb6f8mp8z7ahl2";
 
   nativeBuildInputs = [ cmake pkg-config ];
 

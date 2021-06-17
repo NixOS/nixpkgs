@@ -215,10 +215,9 @@ let
 
     csexp = callPackage ../development/ocaml-modules/csexp { };
 
-    cstruct =
-      if lib.versionAtLeast ocaml.version "4.2"
-      then callPackage ../development/ocaml-modules/cstruct {}
-      else callPackage ../development/ocaml-modules/cstruct/1.9.0.nix { };
+    cstruct = callPackage ../development/ocaml-modules/cstruct {};
+
+    cstruct-async = callPackage ../development/ocaml-modules/cstruct/async.nix { };
 
     cstruct-lwt = callPackage ../development/ocaml-modules/cstruct/lwt.nix { };
 
@@ -644,6 +643,8 @@ let
     };
 
     markup = callPackage ../development/ocaml-modules/markup { };
+
+    mccs = callPackage ../development/ocaml-modules/mccs { };
 
     mdx = callPackage ../development/ocaml-modules/mdx { };
 
@@ -1145,6 +1146,8 @@ let
 
     reason = callPackage ../development/compilers/reason { };
 
+    reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
+
     rope = callPackage ../development/ocaml-modules/rope { };
 
     rpclib = callPackage ../development/ocaml-modules/rpclib { };
@@ -1510,6 +1513,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_11 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.11.nix { });
 
   ocamlPackages_4_12 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.12.nix { });
+
+  ocamlPackages_4_13 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.13.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_12;
 

@@ -48,7 +48,6 @@ in
       default = false;
       description = ''
         Run workers for builds.sr.ht.
-        Perform manually on machine: `cd ${scfg.statePath}/images; docker build -t qemu -f qemu/Dockerfile .`
       '';
     };
 
@@ -161,6 +160,21 @@ in
           partOf = [ "buildsrht.service" ];
           description = "builds.sr.ht worker service";
           path = [ pkgs.openssh pkgs.docker ];
+          preStart = let qemuPackage = pkgs.qemu_kvm;
+          in ''
+            if [[ "$(docker images -q qemu:latest 2> /dev/null)" == "" || "$(cat ${statePath}/docker-image-qemu 2> /dev/null || true)" != "${qemuPackage.version}" ]]; then
+              # Create and import qemu:latest image for docker
+              ${
+                pkgs.dockerTools.streamLayeredImage {
+                  name = "qemu";
+                  tag = "latest";
+                  contents = [ qemuPackage ];
+                }
+              } | docker load
+              # Mark down current package version
+              printf "%s" "${qemuPackage.version}" > ${statePath}/docker-image-qemu
+            fi
+          '';
           serviceConfig = {
             Type = "simple";
             User = user;

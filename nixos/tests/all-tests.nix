@@ -433,6 +433,7 @@ in
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
   tuptime = handleTest ./tuptime.nix {};
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
+  ucarp = handleTest ./ucarp.nix {};
   ucg = handleTest ./ucg.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   unbound = handleTest ./unbound.nix {};

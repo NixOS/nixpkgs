@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "amidst";
-  version = "4.6";
+  version = "4.7";
 
   src = fetchurl { # TODO: Compile from src
     url = "https://github.com/toolbox4minecraft/amidst/releases/download/v${version}/amidst-v${lib.replaceStrings [ "." ] [ "-" ] version}.jar";
-    sha256 = "0nz6xfhshy36j8k81kqdfbbxih96l7f3s9156f9lmw0mi1qlyzqk";
+    sha256 = "sha256-oecRjD7JUuvFym8N/hSE5cbAFQojS6yxOuxpwWRlW9M=";
   };
 
   dontUnpack = true;

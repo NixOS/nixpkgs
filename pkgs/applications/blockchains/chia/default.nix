@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "chia";
@@ -14,6 +18,12 @@ python3Packages.buildPythonApplication rec {
   patches = [
     # tweak version requirements to what's available in Nixpkgs
     ./dependencies.patch
+    # Allow later websockets release, https://github.com/Chia-Network/chia-blockchain/pull/6304
+    (fetchpatch {
+      name = "later-websockets.patch";
+      url = "https://github.com/Chia-Network/chia-blockchain/commit/a188f161bf15a30e8e2efc5eec824e53e2a98a5b.patch";
+      sha256 = "1s5qjhd4kmi28z6ni7pc5n09czxvh8qnbwmnqsmms7cpw700g78s";
+    })
   ];
 
   nativeBuildInputs = [
@@ -47,8 +57,8 @@ python3Packages.buildPythonApplication rec {
     websockets
   ];
 
-  checkInputs = [
-    python3Packages.pytestCheckHook
+  checkInputs = with python3Packages; [
+    pytestCheckHook
   ];
 
   disabledTests = [

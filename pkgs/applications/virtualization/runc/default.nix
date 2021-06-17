@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 , go-md2man
 , installShellFiles
 , pkg-config
@@ -14,7 +14,7 @@
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "runc";
   version = "1.0.0-rc95";
 
@@ -25,7 +25,7 @@ buildGoPackage rec {
     sha256 = "sha256-q4sXcvJO9gyo7m0vlaMrwh7ZZHYa58FJy3GatWndS6M=";
   };
 
-  goPackagePath = "github.com/opencontainers/runc";
+  vendorSha256 = null;
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
@@ -36,7 +36,6 @@ buildGoPackage rec {
 
   buildPhase = ''
     runHook preBuild
-    cd go/src/${goPackagePath}
     patchShebangs .
     make ${toString makeFlags} runc man
     runHook postBuild

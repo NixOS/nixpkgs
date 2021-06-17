@@ -66,7 +66,9 @@ in {
   meta.maintainers = teams.home-assistant.members;
 
   options.services.home-assistant = {
-    enable = mkEnableOption "Home Assistant";
+    # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
+    # https://github.com/home-assistant/architecture/blob/master/adr/0012-define-supported-installation-method.md#decision
+    enable = mkEnableOption "Home Assistant. Please note that this installation method is unsupported upstream";
 
     configDir = mkOption {
       default = "/var/lib/hass";

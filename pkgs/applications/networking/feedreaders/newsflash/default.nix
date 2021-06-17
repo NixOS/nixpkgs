@@ -16,6 +16,7 @@
 , glib-networking
 , librsvg
 , gst_all_1
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -77,6 +78,9 @@ stdenv.mkDerivation rec {
     openssl
     sqlite
     webkitgtk
+
+    # open link in browser
+    xdg-utils
 
     # TLS support for loading external content in webkitgtk WebView
     glib-networking

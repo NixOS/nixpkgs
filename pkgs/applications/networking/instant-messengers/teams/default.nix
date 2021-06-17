@@ -12,7 +12,8 @@
 , coreutils
 , gawk
 , xdg-utils
-, systemd }:
+, systemd
+, enableRectOverlay ? false }:
 
 stdenv.mkDerivation rec {
   pname = "teams";
@@ -57,9 +58,11 @@ stdenv.mkDerivation rec {
 
     ln -s $out/opt/teams/teams $out/bin/
 
+    ${lib.optionalString (!enableRectOverlay) ''
     # Work-around screen sharing bug
     # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
     rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
+    ''}
 
     runHook postInstall
   '';

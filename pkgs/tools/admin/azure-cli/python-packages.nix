@@ -499,11 +499,10 @@ let
         };
       });
 
-      websocket_client = super.websocket_client.overridePythonAttrs(oldAttrs: rec {
+      websocket-client = super.websocket-client.overridePythonAttrs(oldAttrs: rec {
         version = "0.56.0";
 
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
+        src = oldAttrs.src.override {
           inherit version;
           sha256 = "0fpxjyr74klnyis3yf6m54askl0h5dchxcwbfjsq92xng0455m8z";
         };

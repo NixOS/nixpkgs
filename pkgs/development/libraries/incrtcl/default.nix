@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, writeText, tcl }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "incrtcl";
   version = "4.2.0";
 
@@ -9,16 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0w28v0zaraxcq1s9pa6cihqqwqvvwfgz275lks7w4gl7hxjxmasw";
   };
 
-  buildInputs = [ tcl ];
-  configureFlags = [ "--with-tcl=${tcl}/lib" ];
   enableParallelBuilding = true;
 
   patchPhase = ''
     substituteInPlace configure --replace "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
-  '';
-
-  preConfigure = ''
-    configureFlags="--exec_prefix=$prefix $configureFlags"
   '';
 
   postInstall = ''

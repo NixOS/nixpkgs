@@ -24,10 +24,6 @@ buildPythonPackage rec {
     sha256 = "sha256-eQdbAQRKqnJGxnSTkk3gld9TX9MpP3J8LFNYH6peVIY=";
   };
 
-  postPatch = ''
-    sed -i 's/"acme.*"/"acme"/' setup.py
-  '';
-
   propagatedBuildInputs = [
     acme
     aiohttp
@@ -44,11 +40,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    sed -i 's/"acme.*"/"acme"/' setup.py
+    substituteInPlace setup.py \
+      --replace "snitun==" "snitun>="
+  '';
+
   pythonImportsCheck = [ "hass_nabucasa" ];
 
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
-    description = "Home Assistant cloud integration by Nabu Casa, inc.";
+    description = "Python module for the Home Assistant cloud integration";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

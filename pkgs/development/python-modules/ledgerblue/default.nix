@@ -1,6 +1,6 @@
 { lib, fetchPypi, buildPythonPackage, hidapi
 , pycrypto, pillow, protobuf, future, ecpy, python-u2flib-host, pycryptodomex
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    hidapi pycrypto pillow protobuf future ecpy python-u2flib-host pycryptodomex websocket_client
+    hidapi pycrypto pillow protobuf future ecpy python-u2flib-host pycryptodomex websocket-client
   ];
 
   # No tests

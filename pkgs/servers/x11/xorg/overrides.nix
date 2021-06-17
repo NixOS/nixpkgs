@@ -54,6 +54,10 @@ self: super:
       '';
   });
 
+  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
+    meta = attrs.meta // { license = lib.licenses.mit; };
+  });
+
   imake = super.imake.overrideAttrs (attrs: {
     inherit (self) xorgcffiles;
     x11BuildHook = ./imake.sh;

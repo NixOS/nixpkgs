@@ -21,18 +21,42 @@
 
 let
   defaultOverrides = [
-    # Override the version of some packages pinned in Home Assistant's setup.py
+    # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
+
+    # https://github.com/NixOS/nixpkgs/pull/125414
+    (mkOverride "flask" "2.0.1" "0mcgwq7b4qd99mf5bsvs3wphchxarf8kgil4hwww3blj31xjak0w")
+    (mkOverride "itsdangerous" "2.0.1" "1w6gfb2zhbcmrfj6digwzw1z68w6zg1q87rm6la2m412zil4swly")
+    (mkOverride "jinja2" "3.0.1" "197ms1wimxql650245v63wkv04n8bicj549wfhp51bx68x5lhgvh")
+    (mkOverride "markupsafe" "2.0.1" "02k2ynmqvvd0z0gakkf8s4idyb606r7zgga41jrkhqmigy06fk2r")
+    (self: super: {
+      werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0hlwawnn8c41f254qify5jnjj8xb97n294h09bqimzqhs0qdpq8x";
+        };
+        checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.pytest-xprocess ];
+        pytestFlagsArray = [ "-m 'not filterwarnings'" ];
+      });
+    })
+    (mkOverride "flask-restful" "0.3.9" "0gm5dz088v3d2k1dkcp9b3nnqpkk0fp2jly870hijj2xhc5nbv6c")
+    (self: super: {
+      debugpy = super.debugpy.overridePythonAttrs (oldAttrs: rec {
+        # tests fail with flask/werkezug>=2.0
+        doCheck = false;
+      });
+    })
 
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {
       iaqualink = super.iaqualink.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.4";
+        version = "0.3.90";
         src = fetchFromGitHub {
           owner = "flz";
           repo = "iaqualink-py";
           rev = "v${version}";
-          sha256 = "16mn6nd9x3hm6j6da99qhwbqs95hh8wx21r1h1m9csl76z77n9lh";
+          sha256 = "0c8ckbbr1n8gx5k63ymgyfkbz3d0rbdvghg8fqdvbg4nrigrs5v0";
         };
         checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
       });
@@ -43,6 +67,7 @@ let
       pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
         version = "1.7.1";
         src = oldAttrs.src.override {
+          inherit version;
           sha256 = "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd";
         };
         disabledTests = [
@@ -109,22 +134,9 @@ let
       });
     })
 
-    # Remove after https://github.com/NixOS/nixpkgs/pull/121854 has passed staging-next
+    # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.13";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0npsg38d11skv04zvsi90j93f6jdgm8666ds2ri7shr1pz1732hx";
-        };
-        patches = [];
-        propagatedBuildInputs = [ python3.pkgs.greenlet ];
-      });
-    })
-
-    # hass-frontend does not exist in python3.pkgs
-    (self: super: {
-      hass-frontend = self.callPackage ./frontend.nix { };
+      home-assistant-frontend = self.callPackage ./frontend.nix { };
     })
   ];
 
@@ -155,7 +167,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.5.5";
+  hassVersion = "2021.6.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -167,14 +179,12 @@ in with py.pkgs; buildPythonApplication rec {
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
 
-  inherit availableComponents;
-
   # PyPI tarball is missing tests/ directory
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1vdxygjik1ay58xgyr1rk12cgy63raqi4fldnd4mlhs4i21c7ff8";
+    sha256 = "1cp294hy35k9hjbp8iqmaf1m5qbbkh3jwf92ym49waw8di5a5wvh";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -183,7 +193,8 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awesomeversion==21.2.3" "awesomeversion" \
+      --replace "attrs==21.2.0" "attrs" \
+      --replace "awesomeversion==21.4.0" "awesomeversion" \
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "cryptography==3.3.2" "cryptography" \
       --replace "pip>=8.0.3,<20.3" "pip" \
@@ -192,7 +203,7 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    # Only packages required in setup.py + hass-frontend
+    # Only packages required in setup.py
     aiohttp
     astral
     async-timeout
@@ -202,7 +213,6 @@ in with py.pkgs; buildPythonApplication rec {
     certifi
     ciso8601
     cryptography
-    hass-frontend
     httpx
     jinja2
     pip
@@ -215,6 +225,8 @@ in with py.pkgs; buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
@@ -245,6 +257,7 @@ in with py.pkgs; buildPythonApplication rec {
     "acmeda"
     "adguard"
     "advantage_air"
+    "aemet"
     "agent_dvr"
     "air_quality"
     "airly"
@@ -263,8 +276,11 @@ in with py.pkgs; buildPythonApplication rec {
     "api"
     "apple_tv"
     "apprise"
+    "aprs"
+    "arcam_fmj"
     "arlo"
     "asuswrt"
+    "atag"
     "august"
     "aurora"
     "auth"
@@ -272,15 +288,23 @@ in with py.pkgs; buildPythonApplication rec {
     "awair"
     "aws"
     "axis"
+    "azure_devops"
+    "azure_event_hub"
     "bayesian"
     "binary_sensor"
     "blackbird"
+    "blebox"
+    "blink"
     "blueprint"
     "bluetooth_le_tracker"
+    "bmw_connected_drive"
+    "bond"
+    "bosch_shc"
     "braviatv"
     "broadlink"
     "brother"
     "bsblan"
+    "buienradar"
     "caldav"
     "calendar"
     "camera"
@@ -291,12 +315,15 @@ in with py.pkgs; buildPythonApplication rec {
     "climate"
     "cloud"
     "cloudflare"
+    "color_extractor"
     "comfoconnect"
     "command_line"
     "compensation"
     "config"
     "configurator"
+    "control4"
     "conversation"
+    "coolmaster"
     "coronavirus"
     "counter"
     "cover"
@@ -315,6 +342,7 @@ in with py.pkgs; buildPythonApplication rec {
     "dexcom"
     "dhcp"
     "dialogflow"
+    "directv"
     "discovery"
     "dsmr"
     "dte_energy_bridge"
@@ -340,25 +368,38 @@ in with py.pkgs; buildPythonApplication rec {
     "file"
     "filesize"
     "filter"
+    "fireservicerota"
     "firmata"
+    "flick_electric"
     "flo"
     "flume"
     "flunearyou"
     "flux"
     "folder"
     "folder_watcher"
+    "foobot"
+    "foscam"
     "freebox"
     "freedns"
     "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
     "frontend"
+    "garages_amsterdam"
+    "garmin_connect"
+    "gdacs"
     "generic"
     "generic_thermostat"
     "geo_json_events"
     "geo_location"
+    "geo_rss_events"
     "geofency"
+    "geonetnz_quakes"
+    "geonetnz_volcano"
+    "gios"
     "glances"
+    "goalzero"
+    "gogogate2"
     "google"
     "google_assistant"
     "google_domains"
@@ -368,7 +409,9 @@ in with py.pkgs; buildPythonApplication rec {
     "google_wifi"
     "gpslogger"
     "graphite"
+    "gree"
     "group"
+    "growatt_server"
     "guardian"
     "harmony"
     "hassio"
@@ -413,6 +456,7 @@ in with py.pkgs; buildPythonApplication rec {
     "kmtronic"
     "knx"
     "kodi"
+    "kulersky"
     "lastfm"
     "lcn"
     "light"
@@ -438,6 +482,7 @@ in with py.pkgs; buildPythonApplication rec {
     "meraki"
     "met"
     "met_eireann"
+    "meteoclimatic"
     "microsoft_face"
     "microsoft_face_detect"
     "microsoft_face_identify"
@@ -460,6 +505,7 @@ in with py.pkgs; buildPythonApplication rec {
     "my"
     "myq"
     "mysensors"
+    "nam"
     "namecheapdns"
     "neato"
     "netatmo"
@@ -467,6 +513,7 @@ in with py.pkgs; buildPythonApplication rec {
     "no_ip"
     "notify"
     "notion"
+    "nsw_rural_fire_service_feed"
     "nuki"
     "number"
     "nws"
@@ -557,6 +604,7 @@ in with py.pkgs; buildPythonApplication rec {
     "soundtouch"
     "spaceapi"
     "speedtestdotnet"
+    "spider"
     "spotify"
     "sql"
     "squeezebox"
@@ -582,6 +630,7 @@ in with py.pkgs; buildPythonApplication rec {
     "template"
     "tesla"
     "threshold"
+    "tibber"
     "tile"
     "time_date"
     "timer"
@@ -610,6 +659,7 @@ in with py.pkgs; buildPythonApplication rec {
     "uvc"
     "vacuum"
     "velbus"
+    "venstar"
     "vera"
     "verisure"
     "version"
@@ -619,6 +669,7 @@ in with py.pkgs; buildPythonApplication rec {
     "volumio"
     "vultr"
     "wake_on_lan"
+    "wallbox"
     "water_heater"
     "waze_travel_time"
     "weather"
@@ -633,6 +684,7 @@ in with py.pkgs; buildPythonApplication rec {
     "worldclock"
     "wsdot"
     "wunderground"
+    "xbox"
     "xiaomi"
     "xiaomi_aqara"
     "xiaomi_miio"
@@ -681,6 +733,11 @@ in with py.pkgs; buildPythonApplication rec {
     "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf_require_auth"
     # prometheus/test_init.py: Spurious AssertionError regarding humidifier_target_humidity_percent metric
     "--deselect tests/components/prometheus/test_init.py::test_view"
+    # smhi/test_init.py: Tries to fetch data from the network: socket.gaierror: [Errno -2] Name or service not known
+    "--deselect tests/components/smhi/test_init.py::test_remove_entry"
+    # wallbox/test_config_flow.py: Tries to connect to api.wall-box.cim: Failed to establish a new connection: [Errno -2] Name or service not known
+    "--deselect tests/components/wallbox/test_config_flow.py::test_form_invalid_auth"
+    "--deselect tests/components/wallbox/test_config_flow.py::test_form_cannot_connect"
     # tests are located in tests/
     "tests"
     # dynamically add packages required for component tests
@@ -714,6 +771,8 @@ in with py.pkgs; buildPythonApplication rec {
     # onboarding tests rpi_power component, for which we are lacking rpi_bad_power library
     "test_onboarding_core_sets_up_rpi_power"
     "test_onboarding_core_no_rpi_power"
+    # hue/test_sensor_base.py: Race condition when counting events
+    "test_hue_events"
   ];
 
   preCheck = ''
@@ -735,7 +794,8 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit (py.pkgs) hass-frontend;
+    inherit availableComponents;
+    python = py;
     tests = {
       inherit (nixosTests) home-assistant;
     };

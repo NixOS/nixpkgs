@@ -6,7 +6,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, websocket_client
+, websocket-client
 , zeroconf
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     zeroconf
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = [

@@ -1,4 +1,5 @@
 { lib
+, pkgs
 , python3
 , fetchFromGitHub
 , platformio
@@ -6,15 +7,18 @@
 , git
 }:
 
+let
+  esphome-dashboard = pkgs.callPackage ./dashboard.nix {};
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vz3d59wfqssfv1kvd4minlxibr0id06xfyg8956w9s3b22jc5vq";
+    sha256 = "07brvpsy40jv30h0a0ywrw4bgwajjd37xznw34s8k53y92qs8lfi";
   };
 
   postPatch = ''
@@ -44,6 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     click
     colorama
     cryptography
+    esphome-dashboard
     ifaddr
     paho-mqtt
     pillow
@@ -66,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = with python3.pkgs; [
     hypothesis
     mock
+    pytest-asyncio
     pytest-mock
     pytest-sugar
     pytestCheckHook
@@ -74,6 +80,10 @@ python3.pkgs.buildPythonApplication rec {
   postCheck = ''
     $out/bin/esphome --help > /dev/null
   '';
+
+  passthru = {
+    dashboard = esphome-dashboard;
+  };
 
   meta = with lib; {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";

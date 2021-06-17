@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin
+{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeScriptBin
 , runtimeShell
 , bash
 }:
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0r60smhlx1992a1s1k5sxjpdqllb2xsqcimgx3ldp5fdkfphk3cw";
 
   #for substituteAll
-  libclang = llvmPackages.libclang.lib;
+  libclang = llvmPackages_latest.libclang.lib;
   inherit bash;
 
   buildInputs = [ libclang ];

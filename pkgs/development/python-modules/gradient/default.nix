@@ -17,7 +17,7 @@
 , requests
 , requests_toolbelt
 , terminaltables
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     requests
     requests_toolbelt
     terminaltables
-    websocket_client
+    websocket-client
   ];
 
   # tries to use /homeless-shelter to mimic container usage, etc

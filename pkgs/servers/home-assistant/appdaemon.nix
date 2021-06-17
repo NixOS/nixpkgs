@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     sockjs
     uvloop
     voluptuous
-    websocket_client
+    websocket-client
     yarl
   ];
 

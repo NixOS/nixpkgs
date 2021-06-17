@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 6416bc1a2867938dd39705a3daef25bc5dedfd16
-  ref: refs/tags/6.0.47
+  revision: 4ec1009a615521371dd98576c456f62f63190ad9
+  ref: refs/tags/6.0.48
   specs:
-    metasploit-framework (6.0.47)
+    metasploit-framework (6.0.48)
       actionpack (~> 5.2.2)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -31,9 +31,9 @@ GIT
       metasploit-concern (~> 3.0.0)
       metasploit-credential (~> 4.0.0)
       metasploit-model (~> 3.1.0)
-      metasploit-payloads (= 2.0.45)
+      metasploit-payloads (= 2.0.47)
       metasploit_data_models (~> 4.1.0)
-      metasploit_payloads-mettle (= 1.0.9)
+      metasploit_payloads-mettle (= 1.0.10)
       mqtt
       msgpack
       nessus_rest
@@ -125,13 +125,13 @@ GEM
     arel-helpers (2.12.0)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.1.1)
-    aws-partitions (1.465.0)
-    aws-sdk-core (3.114.1)
+    aws-partitions (1.467.0)
+    aws-sdk-core (3.114.2)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.240.0)
+    aws-sdk-ec2 (1.242.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.55.0)
@@ -140,7 +140,7 @@ GEM
     aws-sdk-kms (1.43.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.96.0)
+    aws-sdk-s3 (1.96.1)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -192,7 +192,7 @@ GEM
     hashery (2.1.2)
     hrr_rb_ssh (0.3.0.pre2)
       ed25519 (~> 1.2)
-    http-cookie (1.0.3)
+    http-cookie (1.0.4)
       domain_name (~> 0.5)
     http_parser.rb (0.6.0)
     i18n (1.8.10)
@@ -204,7 +204,7 @@ GEM
     jsobfu (0.4.2)
       rkelly-remix
     json (2.5.1)
-    loofah (2.9.1)
+    loofah (2.10.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     metasm (1.0.4)
@@ -226,7 +226,7 @@ GEM
       activemodel (~> 5.2.2)
       activesupport (~> 5.2.2)
       railties (~> 5.2.2)
-    metasploit-payloads (2.0.45)
+    metasploit-payloads (2.0.47)
     metasploit_data_models (4.1.4)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -237,7 +237,7 @@ GEM
       railties (~> 5.2.2)
       recog (~> 2.0)
       webrick
-    metasploit_payloads-mettle (1.0.9)
+    metasploit_payloads-mettle (1.0.10)
     method_source (1.0.0)
     mini_portile2 (2.5.3)
     minitest (5.14.4)
@@ -265,7 +265,7 @@ GEM
       pcaprub
     patch_finder (1.0.2)
     pcaprub (0.13.0)
-    pdf-reader (2.4.2)
+    pdf-reader (2.5.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)

@@ -145,7 +145,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     sshtunnel
     urllib3
     vsts-cd-manager
-    websocket_client
+    websocket-client
     xmltodict
     javaproperties
     jsondiff

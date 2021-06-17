@@ -3,10 +3,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screenshooter";
-  version = "1.9.8";
+  version = "1.9.9";
   odd-unstable = false;
 
-  sha256 = "0pbzjcaxm8gk0s75s99kvzygmih4yghp7ngf2mxymjiywcxqr40d";
+  sha256 = "1myzm9sk968bcl9yqh6zyaa3ck42rw01hbcqn8z4sipiwsbhkrj0";
 
   buildInputs = [ exo gtk3 libsoup libxfce4ui libxfce4util xfce4-panel glib-networking ];
 

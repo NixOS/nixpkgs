@@ -53,6 +53,14 @@ in mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Lets obs-browser build against CEF 90.1.0+
+    ./Enable-file-access-and-universal-access-for-file-URL.patch
+
+    # Lets obs-browser build against CEF 91.1.0+
+    ./Change-product_version-to-user_agent_product.patch
+  ];
+
   nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
 
   buildInputs = [
@@ -106,13 +114,13 @@ in mkDerivation rec {
   ];
 
   postInstall = ''
-      wrapProgram $out/bin/obs \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
+    wrapProgram $out/bin/obs \
+      --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-      addOpenGLRunpath $out/lib/lib*.so
-      addOpenGLRunpath $out/lib/obs-plugins/*.so
+    addOpenGLRunpath $out/lib/lib*.so
+    addOpenGLRunpath $out/lib/obs-plugins/*.so
   '';
 
   meta = with lib; {
@@ -123,7 +131,7 @@ in mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E ];
+    maintainers = with maintainers; [ jb55 MP2E V ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

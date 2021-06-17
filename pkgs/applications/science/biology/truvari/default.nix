@@ -5,14 +5,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "truvari";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "spiralgenetics";
     repo = "truvari";
     rev = "v${version}";
-    sha256 = "0lp1wnldjv92k4ncga1h0icb0dpjsrx427vggg40x04a7kp9lwx0";
+    sha256 = "14nsdbj063qm175xxixs34cihvsiskc9gym8pg7gbwsh13k5a00h";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'python-Levenshtein==0.12.1' 'python-Levenshtein>=0.12.1'
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     pyvcf

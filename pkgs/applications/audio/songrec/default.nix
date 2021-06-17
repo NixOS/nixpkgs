@@ -25,6 +25,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ alsa-lib gtk3 openssl ffmpeg ];
 
+  postInstall = ''
+    mv packaging/rootfs/usr/share $out/share
+  '';
+
   meta = with lib; {
     description = "An open-source Shazam client for Linux, written in Rust";
     homepage = "https://github.com/marin-m/SongRec";

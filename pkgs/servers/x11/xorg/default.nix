@@ -5,6 +5,7 @@ lib.makeScope newScope (self: with self; {
 
   inherit pixman;
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXt }: stdenv.mkDerivation {
     name = "appres-1.0.5";
     builder = ./builder.sh;
@@ -18,6 +19,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   bdftopcf = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "bdftopcf-1.1";
     builder = ./builder.sh;
@@ -31,6 +33,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   bitmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "bitmap-1.0.9";
     builder = ./builder.sh;
@@ -44,6 +47,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   editres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "editres-1.0.7";
     builder = ./builder.sh;
@@ -57,6 +61,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   encodings = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "encodings-1.0.5";
     builder = ./builder.sh;
@@ -70,6 +75,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobe100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-100dpi-1.0.3";
     builder = ./builder.sh;
@@ -84,6 +90,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobe75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-75dpi-1.0.3";
     builder = ./builder.sh;
@@ -98,6 +105,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobeutopia100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-100dpi-1.0.4";
     builder = ./builder.sh;
@@ -112,6 +120,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobeutopia75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-75dpi-1.0.4";
     builder = ./builder.sh;
@@ -126,6 +135,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobeutopiatype1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-type1-1.0.4";
     builder = ./builder.sh;
@@ -140,6 +150,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontalias = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "font-alias-1.0.3";
     builder = ./builder.sh;
@@ -153,6 +164,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontarabicmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-arabic-misc-1.0.3";
     builder = ./builder.sh;
@@ -167,6 +179,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbh100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-100dpi-1.0.3";
     builder = ./builder.sh;
@@ -181,6 +194,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbh75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-75dpi-1.0.3";
     builder = ./builder.sh;
@@ -195,6 +209,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhlucidatypewriter100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-lucidatypewriter-100dpi-1.0.3";
     builder = ./builder.sh;
@@ -209,6 +224,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhlucidatypewriter75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-lucidatypewriter-75dpi-1.0.3";
     builder = ./builder.sh;
@@ -223,6 +239,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhttf = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-ttf-1.0.3";
     builder = ./builder.sh;
@@ -237,6 +254,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhtype1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-type1-1.0.3";
     builder = ./builder.sh;
@@ -251,6 +269,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbitstream100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-100dpi-1.0.3";
     builder = ./builder.sh;
@@ -265,6 +284,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbitstream75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-75dpi-1.0.3";
     builder = ./builder.sh;
@@ -279,6 +299,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbitstreamtype1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-type1-1.0.3";
     builder = ./builder.sh;
@@ -293,6 +314,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontcronyxcyrillic = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-cronyx-cyrillic-1.0.3";
     builder = ./builder.sh;
@@ -307,6 +329,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontcursormisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-cursor-misc-1.0.3";
     builder = ./builder.sh;
@@ -321,6 +344,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontdaewoomisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-daewoo-misc-1.0.3";
     builder = ./builder.sh;
@@ -335,6 +359,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontdecmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-dec-misc-1.0.3";
     builder = ./builder.sh;
@@ -349,6 +374,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontibmtype1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-ibm-type1-1.0.3";
     builder = ./builder.sh;
@@ -363,6 +389,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontisasmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-isas-misc-1.0.3";
     builder = ./builder.sh;
@@ -377,6 +404,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontjismisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-jis-misc-1.0.3";
     builder = ./builder.sh;
@@ -391,6 +419,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmicromisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-micro-misc-1.0.3";
     builder = ./builder.sh;
@@ -405,6 +434,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmisccyrillic = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-cyrillic-1.0.3";
     builder = ./builder.sh;
@@ -419,6 +449,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmiscethiopic = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-ethiopic-1.0.3";
     builder = ./builder.sh;
@@ -433,6 +464,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmiscmeltho = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-meltho-1.0.3";
     builder = ./builder.sh;
@@ -447,6 +479,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmiscmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-misc-1.1.2";
     builder = ./builder.sh;
@@ -461,6 +494,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmuttmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-mutt-misc-1.0.3";
     builder = ./builder.sh;
@@ -475,6 +509,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontschumachermisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-schumacher-misc-1.1.2";
     builder = ./builder.sh;
@@ -489,6 +524,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontscreencyrillic = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-screen-cyrillic-1.0.4";
     builder = ./builder.sh;
@@ -503,6 +539,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontsonymisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-sony-misc-1.0.3";
     builder = ./builder.sh;
@@ -517,6 +554,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontsunmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-sun-misc-1.0.3";
     builder = ./builder.sh;
@@ -531,6 +569,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fonttosfnt = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto }: stdenv.mkDerivation {
     name = "fonttosfnt-1.2.1";
     builder = ./builder.sh;
@@ -544,6 +583,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontutil = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "font-util-1.3.1";
     builder = ./builder.sh;
@@ -557,6 +597,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontwinitzkicyrillic = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-winitzki-cyrillic-1.0.3";
     builder = ./builder.sh;
@@ -571,6 +612,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontxfree86type1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-xfree86-type1-1.0.4";
     builder = ./builder.sh;
@@ -585,6 +627,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   gccmakedep = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "gccmakedep-1.0.3";
     builder = ./builder.sh;
@@ -598,6 +641,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   iceauth = callPackage ({ stdenv, pkg-config, fetchurl, libICE, xorgproto }: stdenv.mkDerivation {
     name = "iceauth-1.0.8";
     builder = ./builder.sh;
@@ -611,6 +655,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   ico = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "ico-1.0.5";
     builder = ./builder.sh;
@@ -624,6 +669,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   imake = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "imake-1.0.8";
     builder = ./builder.sh;
@@ -637,6 +683,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libAppleWM = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libAppleWM-1.4.1";
     builder = ./builder.sh;
@@ -650,6 +697,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libFS = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xtrans }: stdenv.mkDerivation {
     name = "libFS-1.0.8";
     builder = ./builder.sh;
@@ -663,6 +711,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libICE = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xtrans }: stdenv.mkDerivation {
     name = "libICE-1.0.10";
     builder = ./builder.sh;
@@ -676,6 +725,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libSM = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libuuid, xorgproto, xtrans }: stdenv.mkDerivation {
     name = "libSM-1.2.3";
     builder = ./builder.sh;
@@ -689,6 +739,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libWindowsWM = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libWindowsWM-1.0.1";
     builder = ./builder.sh;
@@ -702,12 +753,13 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
-    name = "libX11-1.7.0";
+    name = "libX11-1.7.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.7.0.tar.bz2";
-      sha256 = "0m6bfwllr3pq2c00l51y62yiq15kphc8dw69zf67qhwmclxzkj1n";
+      url = "mirror://xorg/individual/lib/libX11-1.7.1.tar.bz2";
+      sha256 = "0isxad59hvdwggbxqqjjjg3zmih9xiq4d9mdsnqbyb2nmbg46kp6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -715,6 +767,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXScrnSaver = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libXScrnSaver-1.2.3";
     builder = ./builder.sh;
@@ -728,6 +781,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXTrap = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXt }: stdenv.mkDerivation {
     name = "libXTrap-1.0.1";
     builder = ./builder.sh;
@@ -741,6 +795,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXau = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "libXau-1.0.9";
     builder = ./builder.sh;
@@ -754,6 +809,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXaw = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXmu, libXpm, libXt }: stdenv.mkDerivation {
     name = "libXaw-1.0.14";
     builder = ./builder.sh;
@@ -767,6 +823,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXaw3d = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, libXpm, xorgproto, libXt }: stdenv.mkDerivation {
     name = "libXaw3d-1.6.3";
     builder = ./builder.sh;
@@ -780,6 +837,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcomposite = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
     name = "libXcomposite-0.4.5";
     builder = ./builder.sh;
@@ -793,6 +851,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcursor = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes, libXrender }: stdenv.mkDerivation {
     name = "libXcursor-1.2.0";
     builder = ./builder.sh;
@@ -806,6 +865,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXdamage = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
     name = "libXdamage-1.1.5";
     builder = ./builder.sh;
@@ -819,6 +879,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXdmcp = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "libXdmcp-1.1.3";
     builder = ./builder.sh;
@@ -832,6 +893,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXext = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "libXext-1.3.4";
     builder = ./builder.sh;
@@ -845,6 +907,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXfixes = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "libXfixes-5.0.3";
     builder = ./builder.sh;
@@ -858,6 +921,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXfont = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
     name = "libXfont-1.5.4";
     builder = ./builder.sh;
@@ -871,6 +935,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXfont2 = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
     name = "libXfont2-2.0.4";
     builder = ./builder.sh;
@@ -884,6 +949,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXft = callPackage ({ stdenv, pkg-config, fetchurl, fontconfig, freetype, libX11, xorgproto, libXrender }: stdenv.mkDerivation {
     name = "libXft-2.3.3";
     builder = ./builder.sh;
@@ -897,6 +963,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXi = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXfixes }: stdenv.mkDerivation {
     name = "libXi-1.7.10";
     builder = ./builder.sh;
@@ -910,6 +977,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXinerama = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     name = "libXinerama-1.1.4";
     builder = ./builder.sh;
@@ -923,6 +991,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXmu = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXt }: stdenv.mkDerivation {
     name = "libXmu-1.1.3";
     builder = ./builder.sh;
@@ -936,6 +1005,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXp = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXau, libXext }: stdenv.mkDerivation {
     name = "libXp-1.0.3";
     builder = ./builder.sh;
@@ -949,6 +1019,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXpm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXt, gettext }: stdenv.mkDerivation {
     name = "libXpm-3.5.13";
     builder = ./builder.sh;
@@ -962,6 +1033,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXpresent = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "libXpresent-1.0.0";
     builder = ./builder.sh;
@@ -975,6 +1047,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXrandr = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXrender }: stdenv.mkDerivation {
     name = "libXrandr-1.5.2";
     builder = ./builder.sh;
@@ -988,6 +1061,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXrender = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "libXrender-0.9.10";
     builder = ./builder.sh;
@@ -1001,6 +1075,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXres = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libXres-1.2.1";
     builder = ./builder.sh;
@@ -1014,6 +1089,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXt = callPackage ({ stdenv, pkg-config, fetchurl, libICE, xorgproto, libSM, libX11 }: stdenv.mkDerivation {
     name = "libXt-1.2.1";
     builder = ./builder.sh;
@@ -1027,6 +1103,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXtst = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXi }: stdenv.mkDerivation {
     name = "libXtst-1.2.3";
     builder = ./builder.sh;
@@ -1040,6 +1117,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXv = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libXv-1.0.11";
     builder = ./builder.sh;
@@ -1053,6 +1131,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXvMC = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXv }: stdenv.mkDerivation {
     name = "libXvMC-1.0.12";
     builder = ./builder.sh;
@@ -1066,6 +1145,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXxf86dga = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     name = "libXxf86dga-1.1.5";
     builder = ./builder.sh;
@@ -1079,6 +1159,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXxf86misc = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     name = "libXxf86misc-1.0.4";
     builder = ./builder.sh;
@@ -1092,6 +1173,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXxf86vm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     name = "libXxf86vm-1.1.4";
     builder = ./builder.sh;
@@ -1105,6 +1187,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libdmx = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libdmx-1.1.4";
     builder = ./builder.sh;
@@ -1118,6 +1201,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libfontenc = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, zlib }: stdenv.mkDerivation {
     name = "libfontenc-1.1.4";
     builder = ./builder.sh;
@@ -1131,6 +1215,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, zlib }: stdenv.mkDerivation {
     name = "libpciaccess-0.16";
     builder = ./builder.sh;
@@ -1144,6 +1229,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libpthreadstubs = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "libpthread-stubs-0.4";
     builder = ./builder.sh;
@@ -1157,6 +1243,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxcb = callPackage ({ stdenv, pkg-config, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python3 }: stdenv.mkDerivation {
     name = "libxcb-1.14";
     builder = ./builder.sh;
@@ -1170,6 +1257,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxkbfile = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "libxkbfile-1.1.0";
     builder = ./builder.sh;
@@ -1183,6 +1271,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxshmfence = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "libxshmfence-1.3";
     builder = ./builder.sh;
@@ -1196,6 +1285,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   listres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "listres-1.0.4";
     builder = ./builder.sh;
@@ -1209,6 +1299,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   lndir = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "lndir-1.0.3";
     builder = ./builder.sh;
@@ -1222,6 +1313,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   luit = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "luit-20190106";
     builder = ./builder.sh;
@@ -1235,6 +1327,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   makedepend = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "makedepend-1.0.6";
     builder = ./builder.sh;
@@ -1248,6 +1341,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   mkfontscale = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto, zlib }: stdenv.mkDerivation {
     name = "mkfontscale-1.2.1";
     builder = ./builder.sh;
@@ -1261,6 +1355,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   oclock = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
     name = "oclock-1.0.4";
     builder = ./builder.sh;
@@ -1274,6 +1369,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   sessreg = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "sessreg-1.1.2";
     builder = ./builder.sh;
@@ -1287,6 +1383,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   setxkbmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
     name = "setxkbmap-1.3.2";
     builder = ./builder.sh;
@@ -1300,6 +1397,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   smproxy = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libXmu, libXt }: stdenv.mkDerivation {
     name = "smproxy-1.0.6";
     builder = ./builder.sh;
@@ -1313,6 +1411,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   transset = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "transset-1.0.2";
     builder = ./builder.sh;
@@ -1326,6 +1425,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   twm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXext, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "twm-1.0.10";
     builder = ./builder.sh;
@@ -1339,6 +1439,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   utilmacros = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "util-macros-1.19.3";
     builder = ./builder.sh;
@@ -1352,6 +1453,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   viewres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, libXt }: stdenv.mkDerivation {
     name = "viewres-1.0.5";
     builder = ./builder.sh;
@@ -1365,6 +1467,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   x11perf = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXft, libXmu, xorgproto, libXrender }: stdenv.mkDerivation {
     name = "x11perf-1.6.1";
     builder = ./builder.sh;
@@ -1378,6 +1481,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xauth = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXext, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xauth-1.1";
     builder = ./builder.sh;
@@ -1391,6 +1495,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xbacklight = callPackage ({ stdenv, pkg-config, fetchurl, libxcb, xcbutil }: stdenv.mkDerivation {
     name = "xbacklight-1.2.3";
     builder = ./builder.sh;
@@ -1404,6 +1509,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xbitmaps = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "xbitmaps-1.1.2";
     builder = ./builder.sh;
@@ -1417,6 +1523,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcalc = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
     name = "xcalc-1.1.0";
     builder = ./builder.sh;
@@ -1430,6 +1537,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbproto = callPackage ({ stdenv, pkg-config, fetchurl, python3 }: stdenv.mkDerivation {
     name = "xcb-proto-1.14.1";
     builder = ./builder.sh;
@@ -1443,6 +1551,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutil = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-0.4.0";
     builder = ./builder.sh;
@@ -1456,6 +1565,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilcursor = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbutilimage, xcbutilrenderutil, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-cursor-0.1.3";
     builder = ./builder.sh;
@@ -1469,6 +1579,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilerrors = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbproto, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-errors-1.0";
     builder = ./builder.sh;
@@ -1482,6 +1593,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilimage = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbutil, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-image-0.4.0";
     builder = ./builder.sh;
@@ -1495,6 +1607,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilkeysyms = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-keysyms-0.4.0";
     builder = ./builder.sh;
@@ -1508,6 +1621,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilrenderutil = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-renderutil-0.3.9";
     builder = ./builder.sh;
@@ -1521,6 +1635,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilwm = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-wm-0.4.1";
     builder = ./builder.sh;
@@ -1534,6 +1649,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xclock = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     name = "xclock-1.0.9";
     builder = ./builder.sh;
@@ -1547,6 +1663,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcmsdb = callPackage ({ stdenv, pkg-config, fetchurl, libX11 }: stdenv.mkDerivation {
     name = "xcmsdb-1.0.5";
     builder = ./builder.sh;
@@ -1560,6 +1677,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcompmgr = callPackage ({ stdenv, pkg-config, fetchurl, libXcomposite, libXdamage, libXext, libXfixes, libXrender }: stdenv.mkDerivation {
     name = "xcompmgr-1.1.8";
     builder = ./builder.sh;
@@ -1573,6 +1691,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xconsole = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "xconsole-1.0.7";
     builder = ./builder.sh;
@@ -1586,6 +1705,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcursorgen = callPackage ({ stdenv, pkg-config, fetchurl, libpng, libX11, libXcursor }: stdenv.mkDerivation {
     name = "xcursorgen-1.0.7";
     builder = ./builder.sh;
@@ -1599,6 +1719,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcursorthemes = callPackage ({ stdenv, pkg-config, fetchurl, libXcursor }: stdenv.mkDerivation {
     name = "xcursor-themes-1.0.6";
     builder = ./builder.sh;
@@ -1612,6 +1733,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     name = "xdm-1.1.12";
     builder = ./builder.sh;
@@ -1625,6 +1747,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xdpyinfo = callPackage ({ stdenv, pkg-config, fetchurl, libdmx, libX11, libxcb, libXcomposite, libXext, libXi, libXinerama, xorgproto, libXrender, libXtst, libXxf86dga, libXxf86misc, libXxf86vm }: stdenv.mkDerivation {
     name = "xdpyinfo-1.3.2";
     builder = ./builder.sh;
@@ -1638,6 +1761,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xdriinfo = callPackage ({ stdenv, pkg-config, fetchurl, libGL, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "xdriinfo-1.0.6";
     builder = ./builder.sh;
@@ -1651,6 +1775,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xev = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXrandr }: stdenv.mkDerivation {
     name = "xev-1.2.3";
     builder = ./builder.sh;
@@ -1664,6 +1789,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xeyes = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     name = "xeyes-1.1.2";
     builder = ./builder.sh;
@@ -1677,6 +1803,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputevdev = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libevdev, udev, mtdev, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-evdev-2.10.6";
     builder = ./builder.sh;
@@ -1690,6 +1817,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputjoystick = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-joystick-1.6.3";
     builder = ./builder.sh;
@@ -1703,6 +1831,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputkeyboard = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-keyboard-1.9.0";
     builder = ./builder.sh;
@@ -1716,6 +1845,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputlibinput = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libinput, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-libinput-1.0.1";
     builder = ./builder.sh;
@@ -1729,6 +1859,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputmouse = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-mouse-1.9.3";
     builder = ./builder.sh;
@@ -1742,6 +1873,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputsynaptics = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libevdev, libX11, libXi, xorgserver, libXtst }: stdenv.mkDerivation {
     name = "xf86-input-synaptics-1.9.1";
     builder = ./builder.sh;
@@ -1755,6 +1887,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputvmmouse = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, udev, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-vmmouse-13.1.0";
     builder = ./builder.sh;
@@ -1768,6 +1901,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputvoid = callPackage ({ stdenv, pkg-config, fetchurl, xorgserver, xorgproto }: stdenv.mkDerivation {
     name = "xf86-input-void-1.4.1";
     builder = ./builder.sh;
@@ -1781,6 +1915,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoamdgpu = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-amdgpu-19.1.0";
     builder = ./builder.sh;
@@ -1794,6 +1929,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoapm = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-apm-1.3.0";
     builder = ./builder.sh;
@@ -1807,6 +1943,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoark = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-ark-0.7.5";
     builder = ./builder.sh;
@@ -1820,6 +1957,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoast = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-ast-1.1.5";
     builder = ./builder.sh;
@@ -1833,6 +1971,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoati = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-ati-19.1.0";
     builder = ./builder.sh;
@@ -1846,6 +1985,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videochips = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-chips-1.4.0";
     builder = ./builder.sh;
@@ -1859,6 +1999,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videocirrus = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-cirrus-1.5.3";
     builder = ./builder.sh;
@@ -1872,6 +2013,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videodummy = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-dummy-0.3.8";
     builder = ./builder.sh;
@@ -1885,6 +2027,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videofbdev = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-fbdev-0.5.0";
     builder = ./builder.sh;
@@ -1898,6 +2041,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videogeode = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-geode-2.11.19";
     builder = ./builder.sh;
@@ -1911,6 +2055,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoglide = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-glide-1.2.2";
     builder = ./builder.sh;
@@ -1924,6 +2069,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoglint = callPackage ({ stdenv, pkg-config, fetchurl, libpciaccess, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-glint-1.2.9";
     builder = ./builder.sh;
@@ -1937,6 +2083,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoi128 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-i128-1.4.0";
     builder = ./builder.sh;
@@ -1950,6 +2097,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoi740 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-i740-1.4.0";
     builder = ./builder.sh;
@@ -1963,6 +2111,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videointel = callPackage ({ stdenv, pkg-config, fetchurl, cairo, xorgproto, libdrm, libpng, udev, libpciaccess, libX11, xcbutil, libxcb, libXcursor, libXdamage, libXext, libXfixes, xorgserver, libXrandr, libXrender, libxshmfence, libXtst, libXvMC }: stdenv.mkDerivation {
     name = "xf86-video-intel-2.99.917";
     builder = ./builder.sh;
@@ -1976,6 +2125,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videomach64 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-mach64-6.9.6";
     builder = ./builder.sh;
@@ -1989,6 +2139,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videomga = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-mga-2.0.0";
     builder = ./builder.sh;
@@ -2002,6 +2153,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoneomagic = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-neomagic-1.3.0";
     builder = ./builder.sh;
@@ -2015,6 +2167,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videonewport = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-newport-0.2.4";
     builder = ./builder.sh;
@@ -2028,6 +2181,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videonouveau = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-nouveau-1.0.17";
     builder = ./builder.sh;
@@ -2041,6 +2195,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videonv = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-nv-2.1.21";
     builder = ./builder.sh;
@@ -2054,6 +2209,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoomap = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-omap-0.4.5";
     builder = ./builder.sh;
@@ -2067,6 +2223,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoopenchrome = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver, libXvMC }: stdenv.mkDerivation {
     name = "xf86-video-openchrome-0.6.0";
     builder = ./builder.sh;
@@ -2080,6 +2237,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoqxl = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-qxl-0.1.5";
     builder = ./builder.sh;
@@ -2093,6 +2251,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videor128 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-r128-6.11.0";
     builder = ./builder.sh;
@@ -2106,6 +2265,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videorendition = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-rendition-4.2.7";
     builder = ./builder.sh;
@@ -2119,6 +2279,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videos3virge = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-s3virge-1.11.0";
     builder = ./builder.sh;
@@ -2132,6 +2293,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosavage = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-savage-2.3.9";
     builder = ./builder.sh;
@@ -2145,6 +2307,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosiliconmotion = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-siliconmotion-1.7.9";
     builder = ./builder.sh;
@@ -2158,6 +2321,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosis = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-sis-0.11.0";
     builder = ./builder.sh;
@@ -2171,6 +2335,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosisusb = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-sisusb-0.9.7";
     builder = ./builder.sh;
@@ -2184,6 +2349,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosuncg6 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-suncg6-1.1.2";
     builder = ./builder.sh;
@@ -2197,6 +2363,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosunffb = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-sunffb-1.2.2";
     builder = ./builder.sh;
@@ -2210,6 +2377,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosunleo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-sunleo-1.2.2";
     builder = ./builder.sh;
@@ -2223,6 +2391,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videotdfx = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-tdfx-1.5.0";
     builder = ./builder.sh;
@@ -2236,6 +2405,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videotga = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-tga-1.2.2";
     builder = ./builder.sh;
@@ -2249,6 +2419,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videotrident = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-trident-1.3.8";
     builder = ./builder.sh;
@@ -2262,6 +2433,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videov4l = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-v4l-0.3.0";
     builder = ./builder.sh;
@@ -2275,6 +2447,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovboxvideo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-vboxvideo-1.0.0";
     builder = ./builder.sh;
@@ -2288,6 +2461,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovesa = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-vesa-2.5.0";
     builder = ./builder.sh;
@@ -2301,6 +2475,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovmware = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-vmware-13.3.0";
     builder = ./builder.sh;
@@ -2314,6 +2489,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovoodoo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-voodoo-1.2.5";
     builder = ./builder.sh;
@@ -2327,6 +2503,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videowsfb = callPackage ({ stdenv, pkg-config, fetchurl, xorgserver, xorgproto }: stdenv.mkDerivation {
     name = "xf86-video-wsfb-0.4.0";
     builder = ./builder.sh;
@@ -2340,6 +2517,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoxgi = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-xgi-1.6.1";
     builder = ./builder.sh;
@@ -2353,6 +2531,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext }: stdenv.mkDerivation {
     name = "xfd-1.1.3";
     builder = ./builder.sh;
@@ -2366,6 +2545,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfontsel = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
     name = "xfontsel-1.0.6";
     builder = ./builder.sh;
@@ -2379,6 +2559,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfs = callPackage ({ stdenv, pkg-config, fetchurl, libXfont2, xorgproto, xtrans }: stdenv.mkDerivation {
     name = "xfs-1.2.0";
     builder = ./builder.sh;
@@ -2392,6 +2573,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfsinfo = callPackage ({ stdenv, pkg-config, fetchurl, libFS, xorgproto }: stdenv.mkDerivation {
     name = "xfsinfo-1.0.6";
     builder = ./builder.sh;
@@ -2405,6 +2587,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xgamma = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXxf86vm }: stdenv.mkDerivation {
     name = "xgamma-1.0.6";
     builder = ./builder.sh;
@@ -2418,6 +2601,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xgc = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
     name = "xgc-1.0.5";
     builder = ./builder.sh;
@@ -2431,6 +2615,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xhost = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xhost-1.0.8";
     builder = ./builder.sh;
@@ -2444,6 +2629,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xinit = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xinit-1.4.1";
     builder = ./builder.sh;
@@ -2457,6 +2643,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xinput = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXi, libXinerama, libXrandr }: stdenv.mkDerivation {
     name = "xinput-1.6.3";
     builder = ./builder.sh;
@@ -2470,6 +2657,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbcomp = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
     name = "xkbcomp-1.4.5";
     builder = ./builder.sh;
@@ -2483,6 +2671,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbevd = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
     name = "xkbevd-1.1.4";
     builder = ./builder.sh;
@@ -2496,6 +2685,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbprint = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
     name = "xkbprint-1.0.4";
     builder = ./builder.sh;
@@ -2509,6 +2699,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbutils = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXaw, libXt }: stdenv.mkDerivation {
     name = "xkbutils-1.0.4";
     builder = ./builder.sh;
@@ -2522,6 +2713,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, python3 }: stdenv.mkDerivation {
     name = "xkeyboard-config-2.31";
     builder = ./builder.sh;
@@ -2535,6 +2727,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkill = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xkill-1.0.5";
     builder = ./builder.sh;
@@ -2548,6 +2741,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xload = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext }: stdenv.mkDerivation {
     name = "xload-1.1.3";
     builder = ./builder.sh;
@@ -2561,6 +2755,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xlsatoms = callPackage ({ stdenv, pkg-config, fetchurl, libxcb }: stdenv.mkDerivation {
     name = "xlsatoms-1.1.3";
     builder = ./builder.sh;
@@ -2574,6 +2769,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xlsclients = callPackage ({ stdenv, pkg-config, fetchurl, libxcb }: stdenv.mkDerivation {
     name = "xlsclients-1.1.4";
     builder = ./builder.sh;
@@ -2587,6 +2783,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xlsfonts = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xlsfonts-1.0.6";
     builder = ./builder.sh;
@@ -2600,6 +2797,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmag = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
     name = "xmag-1.0.6";
     builder = ./builder.sh;
@@ -2613,6 +2811,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmessage = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
     name = "xmessage-1.0.5";
     builder = ./builder.sh;
@@ -2626,6 +2825,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmodmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xmodmap-1.0.10";
     builder = ./builder.sh;
@@ -2639,6 +2839,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmore = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
     name = "xmore-1.0.3";
     builder = ./builder.sh;
@@ -2652,6 +2853,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgcffiles = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "xorg-cf-files-1.0.6";
     builder = ./builder.sh;
@@ -2665,6 +2867,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgdocs = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "xorg-docs-1.7.1";
     builder = ./builder.sh;
@@ -2678,6 +2881,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgproto = callPackage ({ stdenv, pkg-config, fetchurl, libXt }: stdenv.mkDerivation {
     name = "xorgproto-2021.3";
     builder = ./builder.sh;
@@ -2691,6 +2895,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgserver = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
     name = "xorg-server-1.20.11";
     builder = ./builder.sh;
@@ -2704,6 +2909,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgsgmldoctools = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "xorg-sgml-doctools-1.11";
     builder = ./builder.sh;
@@ -2717,6 +2923,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xpr = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xpr-1.0.5";
     builder = ./builder.sh;
@@ -2730,6 +2937,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xprop = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xprop-1.2.5";
     builder = ./builder.sh;
@@ -2743,6 +2951,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrandr = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXrandr, libXrender }: stdenv.mkDerivation {
     name = "xrandr-1.5.1";
     builder = ./builder.sh;
@@ -2756,6 +2965,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrdb = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xrdb-1.2.0";
     builder = ./builder.sh;
@@ -2769,6 +2979,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrefresh = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xrefresh-1.0.6";
     builder = ./builder.sh;
@@ -2782,6 +2993,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xset = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, xorgproto, libXxf86misc }: stdenv.mkDerivation {
     name = "xset-1.2.4";
     builder = ./builder.sh;
@@ -2795,6 +3007,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xsetroot = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xbitmaps, libXcursor, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xsetroot-1.1.2";
     builder = ./builder.sh;
@@ -2808,6 +3021,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xsm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXaw, libXt }: stdenv.mkDerivation {
     name = "xsm-1.0.4";
     builder = ./builder.sh;
@@ -2821,6 +3035,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xstdcmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xstdcmap-1.0.4";
     builder = ./builder.sh;
@@ -2834,6 +3049,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xtrans = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     name = "xtrans-1.4.0";
     builder = ./builder.sh;
@@ -2847,6 +3063,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xtrap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXt, libXTrap }: stdenv.mkDerivation {
     name = "xtrap-1.0.3";
     builder = ./builder.sh;
@@ -2860,6 +3077,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xvinfo = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXv }: stdenv.mkDerivation {
     name = "xvinfo-1.1.4";
     builder = ./builder.sh;
@@ -2873,6 +3091,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xwd-1.0.7";
     builder = ./builder.sh;
@@ -2886,6 +3105,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwininfo = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxcb, xorgproto }: stdenv.mkDerivation {
     name = "xwininfo-1.1.4";
     builder = ./builder.sh;
@@ -2899,6 +3119,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwud = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xwud-1.0.5";
     builder = ./builder.sh;

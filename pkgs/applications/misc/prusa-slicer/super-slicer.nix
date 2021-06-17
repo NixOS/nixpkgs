@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, makeDesktopItem, prusa-slicer }:
 let
   appname = "SuperSlicer";
-  version = "2.2.54.2";
+  version = "2.3.56.5";
   pname = "super-slicer";
   description = "PrusaSlicer fork with more features and faster development cycle";
   override = super: {
@@ -10,19 +10,18 @@ let
     src = fetchFromGitHub {
       owner = "supermerill";
       repo = "SuperSlicer";
-      sha256 = "sha256-ThmsxFXI1uReK+JwpHrIWzHpBdIOP77kDjv+QaK+Azk=";
+      sha256 = "sha256-Gg+LT1YKyUGNJE9XvWE1LSlIQ6Vq5GfVBTUw/A7Qx7E=";
       rev = version;
+      fetchSubmodules = true;
     };
+
+    # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
+    postInstall = null;
 
     # See https://github.com/supermerill/SuperSlicer/issues/432
     cmakeFlags = super.cmakeFlags ++ [
       "-DSLIC3R_BUILD_TESTS=0"
     ];
-
-    postInstall = ''
-      mkdir -p "$out/share/pixmaps/"
-      ln -s "$out/share/SuperSlicer/icons/Slic3r.png" "$out/share/pixmaps/${appname}.png"
-    '';
 
     desktopItems = [
       (makeDesktopItem {

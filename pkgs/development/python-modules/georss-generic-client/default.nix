@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "georss-generic-client";
-  version = "0.4";
+  version = "0.6";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-generic-client";
     rev = "v${version}";
-    sha256 = "0i4shx6fvwibx0hlfmd0dyq2n5lkrqwmlm0l476fdb9bw5lkaiy0";
+    sha256 = "sha256-XVejBbVilq8zrmuyBUd0mNPZ4qysSg9lAe/lhbKT+qs=";
   };
 
   propagatedBuildInputs = [

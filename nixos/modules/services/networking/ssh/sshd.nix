@@ -41,6 +41,10 @@ let
           Warning: If you are using <literal>NixOps</literal> then don't use this
           option since it will replace the key required for deployment via ssh.
         '';
+        example = [
+          "ssh-rsa AAAAB3NzaC1yc2etc/etc/etcjwrsh8e596z6J0l7 example@host"
+          "ssh-ed25519 AAAAC3NzaCetcetera/etceteraJZMfk3QPfQ foo@bar"
+        ];
       };
 
       keyFiles = mkOption {
@@ -252,7 +256,17 @@ in
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Files from which authorized keys are read.";
+        description = ''
+          Specify the rules for which files to read on the host.
+
+          This is an advanced option. If you're looking to configure user
+          keys, you can generally use <xref linkend="opt-users.users._name_.openssh.authorizedKeys.keys"/>
+          or <xref linkend="opt-users.users._name_.openssh.authorizedKeys.keyFiles"/>.
+
+          These are paths relative to the host root file system or home
+          directories and they are subject to certain token expansion rules.
+          See AuthorizedKeysFile in man sshd_config for details.
+        '';
       };
 
       authorizedKeysCommand = mkOption {

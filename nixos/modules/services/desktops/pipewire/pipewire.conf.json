@@ -74,7 +74,18 @@
       "args": {
         "factory.name": "support.node.driver",
         "node.name": "Dummy-Driver",
-        "priority.driver": 8000
+        "node.group": "pipewire.dummy",
+        "priority.driver": 20000
+      }
+    },
+    {
+      "factory": "spa-node-factory",
+      "args": {
+        "factory.name": "support.node.driver",
+        "node.name": "Freewheel-Driver",
+        "priority.driver": 19000,
+        "node.group": "pipewire.freewheel",
+        "node.freewheel": true
       }
     }
   ],

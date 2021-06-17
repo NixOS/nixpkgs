@@ -40,6 +40,14 @@
           <link xlink:href="options.html#opt-services.sourcehut.enable">services.sourcehut</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://download.pureftpd.org/pub/ucarp/README">ucarp</link>,
+          an userspace implementation of the Common Address Redundancy
+          Protocol (CARP). Available as
+          <link xlink:href="options.html#opt-networking.ucarp.enable">networking.ucarp</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="backward-incompatibilities">
@@ -231,6 +239,75 @@
           <literal>programs.x2goserver</literal> is now
           <literal>services.x2goserver</literal>
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          The following dotnet-related packages have been removed for
+          being unmaintaned. Please use <literal>fetchNuGet</literal>
+          for specific packages.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Autofac
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemValueTuple
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              MicrosoftDiaSymReader
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              MicrosoftDiaSymReaderPortablePdb
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemCollectionsImmutable
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemCollectionsImmutable131
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemReflectionMetadata
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              NUnit350
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Deedle
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              ExcelDna
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              GitVersionTree
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              NDeskOptions
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>

@@ -2,7 +2,7 @@
 
 let
   pname = "spleen";
-  version = "1.9.0";
+  version = "1.9.1";
 in fetchurl {
   name = "${pname}-${version}";
   url = "https://github.com/fcambus/spleen/releases/download/${version}/spleen-${version}.tar.gz";
@@ -19,7 +19,7 @@ in fetchurl {
     # create fonts.dir so NixOS xorg module adds to fp
     ${mkfontscale}/bin/mkfontdir "$d"
   '';
-  sha256 = "sha256-hNPbYiU+v7kCYKVyOn+uc5cSlu9bWsC4CwFvfH6StWM=";
+  sha256 = "sha256-6Imsa0ku8On63di0DOo0QxBa0t+tbtPRxM531EIiG94=";
 
   meta = with lib; {
     description = "Monospaced bitmap fonts";

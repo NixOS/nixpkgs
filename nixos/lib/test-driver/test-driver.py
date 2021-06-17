@@ -973,7 +973,7 @@ def subtest(name: str) -> Iterator[None]:
 
 
 if __name__ == "__main__":
-    arg_parser = argparse.ArgumentParser()
+    arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
         "-K",
         "--keep-vm-state",

@@ -4,21 +4,21 @@ let
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "cf396f868aebb8ba654ea2398c25f033181e7114";
-    sha256 = "sha256-12jkpWl/kL0ttRHtxyDnKjYAZNrheEGQF8HEGSXvvAk=";
+    rev = "8c2812c169fa6bd5f31c13160bd93ef8b317bbc9";
+    sha256 = "sha256-O+H8N1yqQiH645mgXeSc330GRmxF+gxiJJ5iYn65Z6Q=";
   };
 in
 
 buildGoModule rec {
   pname = "teleport";
-  version = "6.1.3";
+  version = "6.2.3";
 
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-kb7qRPZKXDY0Qy3/72epAGaN2FCOO/XAN8lOoUYkoM0=";
+    sha256 = "sha256-3syl1a2ui8/aTgCvihuhg575Df31loOXuENBNJG3nR0=";
   };
 
   vendorSha256 = null;

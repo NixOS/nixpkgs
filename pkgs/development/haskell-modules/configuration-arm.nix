@@ -37,6 +37,10 @@ self: super: {
   # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
   happy = dontCheck super.happy;
 
+  # Disable GClosure based signals implementation on aarch64 as it causes linker issues
+  # https://github.com/gtk2hs/gtk2hs/issues/305
+  gtk2hs-buildtools = appendConfigureFlag super.gtk2hs-buildtools "-f-ClosureSignals";
+
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
   # AARCH64-SPECIFIC OVERRIDES
 

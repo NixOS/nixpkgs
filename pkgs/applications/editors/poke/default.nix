@@ -19,11 +19,11 @@ let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in stdenv.mkDerivation rec {
   pname = "poke";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-9hz42ltkwBoTWTc3JarRyiV/NcHJJp5NUN0GZBg932I=";
+    hash = "sha256-unhjA0obCABLDuj4i9qUFgcH6aeB1VVvVVtQdYPPDxs=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional guiSupport makeWrapper;
 
   buildInputs = [ boehmgc readline ]
-  ++ lib.optional guiSupport tk
+  ++ lib.optionals guiSupport [ tk tcl.tclPackageHook tcllib ]
   ++ lib.optional miSupport json_c
   ++ lib.optional nbdSupport libnbd
   ++ lib.optional textStylingSupport gettext
@@ -56,11 +56,6 @@ in stdenv.mkDerivation rec {
 
   doCheck = !isCross;
   checkInputs = lib.optionals (!isCross) [ dejagnu ];
-
-  postFixup = lib.optionalString guiSupport ''
-    wrapProgram "$out/bin/poke-gui" \
-      --prefix TCLLIBPATH ' ' ${tcllib}/lib/tcllib${tcllib.version}
-  '';
 
   meta = with lib; {
     description = "Interactive, extensible editor for binary data";

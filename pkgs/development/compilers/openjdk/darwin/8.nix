@@ -73,10 +73,6 @@ let
       home = jdk;
     };
 
-    meta = with lib; {
-      license = licenses.gpl2;
-      platforms = platforms.darwin;
-    };
-
+    meta = import ./meta.nix lib;
   };
 in jdk

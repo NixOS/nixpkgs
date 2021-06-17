@@ -20,7 +20,7 @@ version="$1"
 
 sed -E 's/\bversion = ".*?"/version = "'$version'"/' --in-place "$nixFile"
 srcHash=$(nix-prefetch fetchFromGitHub --owner vadimcn --repo vscode-lldb --rev "v$version" --fetchSubmodules)
-sed -E 's/\bsha256 = ".*?"/sha256 = "'$srcHash'"/' --in-place "$nixFile"
+sed -E 's#\bsha256 = ".*?"#sha256 = "'$srcHash'"#' --in-place "$nixFile"
 cargoHash=$(nix-prefetch "{ sha256 }: (import $nixpkgs {}).vscode-extensions.vadimcn.vscode-lldb.adapter.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
 sed -E 's#\bcargoSha256 = ".*?"#cargoSha256 = "'$cargoHash'"#' --in-place "$nixFile"
 
