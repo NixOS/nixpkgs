@@ -2142,6 +2142,8 @@ in {
 
   dominate = callPackage ../development/python-modules/dominate { };
 
+  doorbirdpy = callPackage ../development/python-modules/doorbirdpy { };
+
   dopy = callPackage ../development/python-modules/dopy { };
 
   dotty-dict = callPackage ../development/python-modules/dotty-dict { };
