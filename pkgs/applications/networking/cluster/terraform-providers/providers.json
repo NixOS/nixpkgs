@@ -242,11 +242,13 @@
     "version": "0.8.0"
   },
   "datadog": {
-    "owner": "terraform-providers",
+    "owner": "DataDog",
+    "provider-source-address": "registry.terraform.io/DataDog/datadog",
     "repo": "terraform-provider-datadog",
-    "rev": "v2.7.0",
-    "sha256": "0cq11cjcm2nlszqhsrj425mk8dp0h5ljrrn7jplrbffp8g6wvadd",
-    "version": "2.7.0"
+    "rev": "v2.16.0",
+    "sha256": "059bixrf2jx7wn6sb3xiszrh3yl5wx6i07wzmb0x7bk8vg45x4yp",
+    "vendorSha256": null,
+    "version": "2.16.0"
   },
   "digitalocean": {
     "owner": "digitalocean",
