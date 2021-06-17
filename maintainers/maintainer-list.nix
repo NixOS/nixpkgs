@@ -932,6 +932,12 @@
     githubId = 2093941;
     name = "Alexander Tsamutali";
   };
+  aswan89 = {
+    email = "andrew@swanso.net";
+    github = "aswan89";
+    githubId = 8301892;
+    name = "Andrew Swanson";
+  };
   asymmetric = {
     email = "lorenzo@mailbox.org";
     github = "asymmetric";
