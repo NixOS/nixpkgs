@@ -10650,6 +10650,12 @@
     githubId = 33242106;
     name = "Uri Baghin";
   };
+  urlordjames = {
+    email = "urlordjames@gmail.com";
+    github = "urlordjames";
+    githubId = 32751441;
+    name = "urlordjames";
+  };
   uskudnik = {
     email = "urban.skudnik@gmail.com";
     github = "uskudnik";
