@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../../ -i bash -p wget yarn2nix
+#!nix-shell -I nixpkgs=../../../../../ -i bash -p wget yarn2nix nix yarn jq
 
 set -euo pipefail
 
@@ -11,7 +11,31 @@ fi
 
 RIOT_WEB_SRC="https://raw.githubusercontent.com/vector-im/element-desktop/$1"
 
-wget "$RIOT_WEB_SRC/package.json" -O element-desktop-package.json
-wget "$RIOT_WEB_SRC/yarn.lock" -O element-desktop-yarndeps.lock
-yarn2nix --lockfile=element-desktop-yarndeps.lock > element-desktop-yarndeps.nix
-rm element-desktop-yarndeps.lock
+# Here we deal with the so-called hakDependencies. They are not part of yarn.lock.
+# Upstream doesn't add them to the dependencies field, because they want to prevent
+# the install scripts to be run by npm/yarn. Fortunately, yarn2nix doesn't run
+# install scripts by default, so it's okay to add them to the dependencies for us.
+# For more information, read the description at
+# https://github.com/vector-im/element-desktop/tree/v1.7.17/scripts/hak
+
+TMPDIR="$(mktemp -d)"
+trap "rm -rf $TMPDIR;" EXIT
+
+pushd "$TMPDIR"
+
+wget -O- "$RIOT_WEB_SRC/package.json" \
+  | jq '. + { dependencies: (.dependencies + .hakDependencies) }' \
+  > package.json
+
+wget "$RIOT_WEB_SRC/yarn.lock"
+
+# generate new entries in lockfile, since we changed the dependencies field
+yarn --ignore-scripts
+
+yarn2nix > yarn.nix
+
+popd
+
+cp $TMPDIR/package.json ./element-desktop-package.json
+cp $TMPDIR/yarn.lock ./element-desktop-yarn.lock
+cp $TMPDIR/yarn.nix ./element-desktop-yarndeps.nix

@@ -2560,7 +2560,9 @@ in
 
   electron-mail = callPackage ../applications/networking/mailreaders/electron-mail { };
 
-  element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix { };
+  element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
+    electron = electron_12;
+  };
 
   element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
     conf = config.element-web.conf or {};
