@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
       # such and would be used in dependents like libedgetpu
       buildFlagsArray+=(
         INCLUDES="-I $PWD ${includes}"
-        CXXSTANDARD=-std=c++17
+        CXXSTANDARD="-std=c++17"
         TARGET_TOOLCHAIN_PREFIX=""
         -j$NIX_BUILD_CORES
         all)
