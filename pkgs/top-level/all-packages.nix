@@ -20012,7 +20012,6 @@ in
   trafficserver = callPackage ../servers/http/trafficserver { };
 
   inherit (callPackages ../servers/http/tomcat { })
-    tomcat8
     tomcat9
     tomcat10;
 
