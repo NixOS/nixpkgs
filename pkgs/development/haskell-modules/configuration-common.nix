@@ -1961,4 +1961,8 @@ EOT
   composite-base = doJailbreak super.composite-base;
   composite-aeson = doJailbreak super.composite-aeson;
 
+  # Too strict bounds on profunctors
+  # https://github.com/google/proto-lens/issues/413
+  proto-lens = doJailbreak super.proto-lens;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
