@@ -2734,6 +2734,8 @@ in {
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
 
+  gatt-python = callPackage ../development/python-modules/gatt-python { };
+
   gcovr = callPackage ../development/python-modules/gcovr { };
 
   gcsfs = callPackage ../development/python-modules/gcsfs { };
