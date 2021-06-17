@@ -217,6 +217,8 @@ let
 
     cstruct = callPackage ../development/ocaml-modules/cstruct {};
 
+    cstruct-async = callPackage ../development/ocaml-modules/cstruct/async.nix { };
+
     cstruct-lwt = callPackage ../development/ocaml-modules/cstruct/lwt.nix { };
 
     cstruct-sexp = callPackage ../development/ocaml-modules/cstruct/sexp.nix {};

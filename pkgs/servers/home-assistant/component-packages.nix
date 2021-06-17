@@ -68,7 +68,7 @@
     "awair" = ps: with ps; [ python-awair ];
     "aws" = ps: with ps; [ aiobotocore ];
     "axis" = ps: with ps; [ aiohttp-cors axis paho-mqtt ];
-    "azure_devops" = ps: with ps; [ ]; # missing inputs: aioazuredevops
+    "azure_devops" = ps: with ps; [ aioazuredevops ];
     "azure_event_hub" = ps: with ps; [ azure-eventhub ];
     "azure_service_bus" = ps: with ps; [ azure-servicebus ];
     "baidu" = ps: with ps; [ ]; # missing inputs: baidu-aip
