@@ -156,6 +156,43 @@ rec {
   # Constructor for other terraform versions
   mkTerraform = attrs: pluggable (generic attrs);
 
+  terraform_0_12 = mkTerraform {
+    version = "0.12.31";
+    sha256 = "03p698xdbk5gj0f9v8v1fpd74zng3948dyy4f2hv7zgks9hid7fg";
+    patches = [
+      ./provider-path.patch
+      (fetchpatch {
+        name = "fix-mac-mojave-crashes.patch";
+        url = "https://github.com/hashicorp/terraform/commit/cd65b28da051174a13ac76e54b7bb95d3051255c.patch";
+        sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
+      })
+    ];
+    passthru = { inherit plugins; };
+  };
+
+  terraform_0_13 = mkTerraform {
+    version = "0.13.7";
+    sha256 = "1cahnmp66dk21g7ga6454yfhaqrxff7hpwpdgc87cswyq823fgjn";
+    patches = [ ./provider-path.patch ];
+    passthru = { inherit plugins; };
+  };
+
+  terraform_0_14 = mkTerraform {
+    version = "0.14.11";
+    sha256 = "1yi1jj3n61g1kn8klw6l78shd23q79llb7qqwigqrx3ki2mp279j";
+    vendorSha256 = "1d93aqkjdrvabkvix6h1qaxpjzv7w1wa7xa44czdnjs2lapx4smm";
+    patches = [ ./provider-path.patch ];
+    passthru = { inherit plugins; };
+  };
+
+  terraform_0_15 = mkTerraform {
+    version = "0.15.5";
+    sha256 = "18f4a6l24s3cym7gk40agxikd90i56q84wziskw1spy9rgv2yx6d";
+    vendorSha256 = "12hrpxay6k3kz89ihyhl91c4lw4wp821ppa245w9977fq09fhnx0";
+    patches = [ ./provider-path-0_15.patch ];
+    passthru = { inherit plugins; };
+  };
+
   terraform_1_0 = mkTerraform {
     version = "1.0.0";
     sha256 = "sha256-ddcT/I2Qn1pKFyhXgh+CcD3fSv2steSNmjyyiS2SE/o=";

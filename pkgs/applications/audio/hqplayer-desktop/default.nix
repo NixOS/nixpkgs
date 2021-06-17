@@ -17,11 +17,13 @@
 
 mkDerivation rec {
   pname = "hqplayer-desktop";
-  version = "4.12.0-34";
+  version = "4.12.1-35";
 
   src = fetchurl {
+    # FIXME: use the fc34 sources when we get glibc 2.33 in nixpkgs
+    # c.f. https://github.com/NixOS/nixpkgs/pull/111616
     url = "https://www.signalyst.eu/bins/hqplayer/fc33/hqplayer4desktop-${version}.fc33.x86_64.rpm";
-    sha256 = "sha256-9kLKmi5lNtnRm9b4HnO01cO/C+Sg0DcKD64N5WBbYOE=";
+    sha256 = "sha256-DLnZNX+uAan9dhPLMvINeXsIn3Yv2CgsvyTcX0hbEK8=";
   };
 
   unpackPhase = ''
@@ -47,6 +49,8 @@ mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     # main executable
     mkdir -p $out/bin
     cp ./usr/bin/* $out/bin
@@ -62,16 +66,16 @@ mkDerivation rec {
     # pixmaps
     mkdir -p $out/share/pixmaps
     cp ./usr/share/pixmaps/* $out/share/pixmaps
+
+    runHook postInstall
   '';
 
   postInstall = ''
     for desktopFile in $out/share/applications/*; do
       substituteInPlace "$desktopFile" \
-        --replace '/usr/bin/' '$out/bin/' \
-        --replace '/usr/share/doc/' '$out/share/doc/'
+        --replace /usr/bin/ $out/bin/ \
+        --replace /usr/share/doc/ $out/share/doc/
     done
-
-    gunzip $out/share/doc/${pname}/*.gz
   '';
 
   postFixup = ''
@@ -81,7 +85,6 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software HD-audio player";
-    changelog = "https://www.signalyst.eu/bins/${pname}/fc33/hqplayer4desktop-${version}fc33.x86_64.changes";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
   };

@@ -245,6 +245,8 @@ in {
 
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
+  aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
+
   aiocache = callPackage ../development/python-modules/aiocache { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
@@ -499,6 +501,8 @@ in {
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
+  arcam-fmj = callPackage ../development/python-modules/arcam-fmj { };
+
   archinfo = callPackage ../development/python-modules/archinfo { };
 
   area = callPackage ../development/python-modules/area { };
@@ -724,6 +728,8 @@ in {
   azure-datalake-store = callPackage ../development/python-modules/azure-datalake-store { };
 
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
+
+  azure-eventhub = callPackage ../development/python-modules/azure-eventhub { };
 
   azure-functions-devops-build = callPackage ../development/python-modules/azure-functions-devops-build { };
 
@@ -1053,6 +1059,8 @@ in {
 
   billiard = callPackage ../development/python-modules/billiard { };
 
+  bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
+
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
@@ -1099,11 +1107,15 @@ in {
 
   bleak = callPackage ../development/python-modules/bleak { };
 
+  blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
+
   blessed = callPackage ../development/python-modules/blessed { };
 
   blessings = callPackage ../development/python-modules/blessings { };
 
   blinker = callPackage ../development/python-modules/blinker { };
+
+  blinkpy = callPackage ../development/python-modules/blinkpy { };
 
   BlinkStick = callPackage ../development/python-modules/blinkstick { };
 
@@ -1133,6 +1145,8 @@ in {
 
   boltztrap2 = callPackage ../development/python-modules/boltztrap2 { };
 
+  bond-api = callPackage ../development/python-modules/bond-api { };
+
   booleanoperations = callPackage ../development/python-modules/booleanoperations { };
 
   boolean-py = callPackage ../development/python-modules/boolean-py { };
@@ -1145,6 +1159,10 @@ in {
   });
 
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
+
+  boost-histogram = callPackage ../development/python-modules/boost-histogram {
+    inherit (pkgs) boost;
+  };
 
   boto3 = callPackage ../development/python-modules/boto3 { };
 
@@ -1551,6 +1569,8 @@ in {
 
   colorspacious = callPackage ../development/python-modules/colorspacious { };
 
+  colorthief = callPackage ../development/python-modules/colorthief { };
+
   colour = callPackage ../development/python-modules/colour { };
 
   commandparse = callPackage ../development/python-modules/commandparse { };
@@ -1898,6 +1918,8 @@ in {
   diofant = callPackage ../development/python-modules/diofant { };
 
   dipy = callPackage ../development/python-modules/dipy { };
+
+  directv = callPackage ../development/python-modules/directv { };
 
   discid = callPackage ../development/python-modules/discid { };
 
@@ -2706,6 +2728,8 @@ in {
 
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
 
+  garminconnect-ha = callPackage ../development/python-modules/garminconnect-ha { };
+
   gast = callPackage ../development/python-modules/gast { };
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
@@ -2851,6 +2875,8 @@ in {
   gntp = callPackage ../development/python-modules/gntp { };
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
+
+  goalzero = callPackage ../development/python-modules/goalzero { };
 
   goobook = callPackage ../development/python-modules/goobook { };
 
@@ -3947,6 +3973,8 @@ in {
   };
 
   libpurecool = callPackage ../development/python-modules/libpurecool { };
+
+  libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
 
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
@@ -5207,6 +5235,10 @@ in {
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
+
+  pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
+
+  pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
 
@@ -7666,8 +7698,6 @@ in {
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 
-  selectors34 = callPackage ../development/python-modules/selectors34 { };
-
   selenium = callPackage ../development/python-modules/selenium { };
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
@@ -8954,7 +8984,7 @@ in {
 
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
-  websocket_client = callPackage ../development/python-modules/websocket_client { };
+  websocket-client = callPackage ../development/python-modules/websocket-client { };
 
   websockets = callPackage ../development/python-modules/websockets { };
 

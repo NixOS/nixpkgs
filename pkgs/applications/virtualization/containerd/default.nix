@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 , btrfs-progs
 , go-md2man
 , installShellFiles
@@ -8,19 +8,20 @@
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "containerd";
-  version = "1.5.1";
+  version = "1.5.2";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-jVyg+fyMuDnV/TM0Z2t+Cr17a6XBv11aWijhsqMnA5s=";
+    sha256 = "sha256-RDLAmPBjDHCx9al+gstUTrvKc/L0vAm8IEd/mvX5Als=";
   };
 
-  goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "out" "man" ];
+  vendorSha256 = null;
 
   nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
@@ -28,11 +29,9 @@ buildGoPackage rec {
 
   buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
 
-  BUILDTAGS = [ ]
-    ++ lib.optional (btrfs-progs == null) "no_btrfs";
+  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
     patchShebangs .
     make binaries man $buildFlags
   '';

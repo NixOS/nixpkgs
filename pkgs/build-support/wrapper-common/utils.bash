@@ -13,7 +13,9 @@ accumulateRoles() {
     fi
 }
 
-mangleVarList() {
+mangleVarListGeneric() {
+    local sep="$1"
+    shift
     local var="$1"
     shift
     local -a role_suffixes=("$@")
@@ -25,9 +27,13 @@ mangleVarList() {
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
-            export ${outputVar}+="${!outputVar:+ }${!inputVar}"
+            export ${outputVar}+="${!outputVar:+$sep}${!inputVar}"
         fi
     done
+}
+
+mangleVarList() {
+    mangleVarListGeneric " " "$@"
 }
 
 mangleVarBool() {

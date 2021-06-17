@@ -217,6 +217,8 @@ let
 
     cstruct = callPackage ../development/ocaml-modules/cstruct {};
 
+    cstruct-async = callPackage ../development/ocaml-modules/cstruct/async.nix { };
+
     cstruct-lwt = callPackage ../development/ocaml-modules/cstruct/lwt.nix { };
 
     cstruct-sexp = callPackage ../development/ocaml-modules/cstruct/sexp.nix {};
@@ -1143,6 +1145,8 @@ let
     reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
 
     reason = callPackage ../development/compilers/reason { };
+
+    reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
 
     rope = callPackage ../development/ocaml-modules/rope { };
 

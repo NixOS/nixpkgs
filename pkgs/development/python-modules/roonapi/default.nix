@@ -7,7 +7,7 @@
 , pythonOlder
 , requests
 , six
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     ifaddr
     requests
     six
-    websocket_client
+    websocket-client
   ];
 
   patches = [

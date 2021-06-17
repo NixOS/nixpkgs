@@ -20,7 +20,7 @@ AndrewRadev/sideways.vim@main
 AndrewRadev/splitjoin.vim@main
 andsild/peskcolor.vim
 andviro/flake8-vim
-andweeb/presence.nvim
+andweeb/presence.nvim@main
 andymass/vim-matchup
 andys8/vim-elm-syntax
 antoinemadec/coc-fzf
@@ -47,6 +47,7 @@ bronson/vim-trailing-whitespace
 brooth/far.vim
 buoto/gotests-vim
 camspiers/lens.vim
+camspiers/snap@main
 carlitux/deoplete-ternjs
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml
@@ -158,6 +159,7 @@ gennaro-tedesco/nvim-peekup
 gentoo/gentoo-syntax
 GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
+ggandor/lightspeed.nvim@main
 gibiansky/vim-textobj-haskell
 gioele/vim-autoswap
 gleam-lang/gleam.vim

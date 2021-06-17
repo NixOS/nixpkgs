@@ -301,8 +301,8 @@
   })
   (fetchNuGet {
     name = "Markdig";
-    version = "0.22.1";
-    sha256 = "1m62kjwz93h323w8qvwmld2g8dy17a3ny5wyy29pwqj7ig4y8ymj";
+    version = "0.24.0";
+    sha256 = "03i0mw9717xwf3pffr8ar7k7fmyhgdw222j58l4x0xr4slpg94l7";
   })
   (fetchNuGet {
     name = "MessagePack";
@@ -376,6 +376,11 @@
   })
   (fetchNuGet {
     name = "Microsoft.Bcl.AsyncInterfaces";
+    version = "1.1.0";
+    sha256 = "1dq5yw7cy6s42193yl4iqscfw5vzkjkgv0zyy32scr4jza6ni1a1";
+  })
+  (fetchNuGet {
+    name = "Microsoft.Bcl.AsyncInterfaces";
     version = "5.0.0";
     sha256 = "0cp5jbax2mf6xr3dqiljzlwi05fv6n9a35z337s92jcljiq674kf";
   })
@@ -446,13 +451,13 @@
   })
   (fetchNuGet {
     name = "Microsoft.Diagnostics.NETCore.Client";
-    version = "0.2.61701";
-    sha256 = "1ic1607jj4ln8dbibf1fz5v9svk9x2kqlgvhndc6ijaqnbc4wcr1";
+    version = "0.2.221401";
+    sha256 = "1k55l60bg8lj5ayl3kixbzvx2684xd7a9nzha5fiqjgp85cimb3r";
   })
   (fetchNuGet {
     name = "Microsoft.Diagnostics.Runtime";
-    version = "2.0.222201";
-    sha256 = "1vsa6xbqi4f2mx85rjmq641r9zgssj0bbfcsqlsa5nx6lqh2rf2q";
+    version = "2.0.226801";
+    sha256 = "1w8ahqkv8nbq2ch17aa9axhqqnybmc9bsxpdhpiy52ix70mr72w1";
   })
   (fetchNuGet {
     name = "Microsoft.DotNet.PlatformAbstractions";
@@ -571,8 +576,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.ObjectPool";
-    version = "5.0.5";
-    sha256 = "0hh0xm14hp479dsd0gb9igz0vbbn3sak27v39phpyilxvk7ky5z1";
+    version = "5.0.6";
+    sha256 = "0kwhcnsagwn3x9ms2sfy5js25gfnipkrakqgn7bbg0a1k35qa5xx";
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Options";
@@ -751,13 +756,13 @@
   })
   (fetchNuGet {
     name = "ppy.LocalisationAnalyser";
-    version = "2021.525.0";
-    sha256 = "1h8p8d1xk03904fifhi77zrjkh4sknp4mxjqd3nbpfyikd8f7c8p";
+    version = "2021.608.0";
+    sha256 = "1lsb7nr2gynz7llbl22f5mrd9hlxaq48gssfcn5qfji7afv8kwql";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2021.601.0";
-    sha256 = "0y17s60r4q0c05gm67fmp700zwb7k74xdi45hprblyxsplnbkmi0";
+    version = "2021.611.0";
+    sha256 = "14a2032khf2ys51rp6qs3ikp0lvqxgdqh0hbvchj34q0l3g40yv0";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";
@@ -766,8 +771,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Game.Resources";
-    version = "2021.525.0";
-    sha256 = "15ksxv5fasfzdkmwikjbn17c1d4rssjfm2vp71b7m834ghm6pnbd";
+    version = "2021.611.0";
+    sha256 = "01pbxccfrwzn47xg9xgjn91l6w3d0d3gqkkx53ak7ynxbbvx9q07";
   })
   (fetchNuGet {
     name = "ppy.osuTK.NS20";
@@ -1008,11 +1013,6 @@
     name = "System.Collections.Immutable";
     version = "1.5.0";
     sha256 = "1d5gjn5afnrf461jlxzawcvihz195gayqpcfbv6dd7pxa9ialn06";
-  })
-  (fetchNuGet {
-    name = "System.Collections.Immutable";
-    version = "1.7.1";
-    sha256 = "1nh4nlxfc7lbnbl86wwk1a3jwl6myz5j6hvgh5sp4krim9901hsq";
   })
   (fetchNuGet {
     name = "System.Collections.Immutable";
@@ -1381,11 +1381,6 @@
   })
   (fetchNuGet {
     name = "System.Reflection.Metadata";
-    version = "1.8.1";
-    sha256 = "17xxl3m99wa4hcpqy42vl8qb1jk2jfq32rj3sfjc1a46hi2si5jj";
-  })
-  (fetchNuGet {
-    name = "System.Reflection.Metadata";
     version = "5.0.0";
     sha256 = "17qsl5nanlqk9iz0l5wijdn6ka632fs1m1fvx18dfgswm258r3ss";
   })
@@ -1443,11 +1438,6 @@
     name = "System.Runtime.CompilerServices.Unsafe";
     version = "4.5.3";
     sha256 = "1afi6s2r1mh1kygbjmfba6l4f87pi5sg13p4a48idqafli94qxln";
-  })
-  (fetchNuGet {
-    name = "System.Runtime.CompilerServices.Unsafe";
-    version = "4.7.1";
-    sha256 = "119br3pd85lq8zcgh4f60jzmv1g976q1kdgi3hvqdlhfbw6siz2j";
   })
   (fetchNuGet {
     name = "System.Runtime.CompilerServices.Unsafe";
@@ -1698,6 +1688,11 @@
     name = "System.Threading.Tasks.Extensions";
     version = "4.3.0";
     sha256 = "1xxcx2xh8jin360yjwm4x4cf5y3a2bwpn2ygkfkwkicz7zk50s2z";
+  })
+  (fetchNuGet {
+    name = "System.Threading.Tasks.Extensions";
+    version = "4.5.2";
+    sha256 = "1sh63dz0dymqcwmprp0nadm77b83vmm7lyllpv578c397bslb8hj";
   })
   (fetchNuGet {
     name = "System.Threading.Tasks.Extensions";

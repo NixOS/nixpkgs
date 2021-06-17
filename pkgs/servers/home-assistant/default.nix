@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , python3
 , inetutils
-, tzdata
 , nixosTests
 
 # Look up dependencies of specified components in component-packages.nix
@@ -52,12 +51,12 @@ let
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {
       iaqualink = super.iaqualink.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.4";
+        version = "0.3.90";
         src = fetchFromGitHub {
           owner = "flz";
           repo = "iaqualink-py";
           rev = "v${version}";
-          sha256 = "16mn6nd9x3hm6j6da99qhwbqs95hh8wx21r1h1m9csl76z77n9lh";
+          sha256 = "0c8ckbbr1n8gx5k63ymgyfkbz3d0rbdvghg8fqdvbg4nrigrs5v0";
         };
         checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
       });
@@ -135,19 +134,6 @@ let
       });
     })
 
-    # Remove after https://github.com/NixOS/nixpkgs/pull/121854 has passed staging-next
-    (self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.13";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0npsg38d11skv04zvsi90j93f6jdgm8666ds2ri7shr1pz1732hx";
-        };
-        patches = [];
-        propagatedBuildInputs = [ python3.pkgs.greenlet ];
-      });
-    })
-
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -181,7 +167,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.6.4";
+  hassVersion = "2021.6.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -193,14 +179,12 @@ in with py.pkgs; buildPythonApplication rec {
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
 
-  inherit availableComponents;
-
   # PyPI tarball is missing tests/ directory
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "058dx5hg0a3zvd85sxglbadigfzajmzx8i5jxvw0ww9yp8002qj1";
+    sha256 = "1cp294hy35k9hjbp8iqmaf1m5qbbkh3jwf92ym49waw8di5a5wvh";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -219,7 +203,7 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    # Only packages required in setup.py + hass-frontend
+    # Only packages required in setup.py
     aiohttp
     astral
     async-timeout
@@ -293,6 +277,7 @@ in with py.pkgs; buildPythonApplication rec {
     "apple_tv"
     "apprise"
     "aprs"
+    "arcam_fmj"
     "arlo"
     "asuswrt"
     "atag"
@@ -303,11 +288,17 @@ in with py.pkgs; buildPythonApplication rec {
     "awair"
     "aws"
     "axis"
+    "azure_devops"
+    "azure_event_hub"
     "bayesian"
     "binary_sensor"
     "blackbird"
+    "blebox"
+    "blink"
     "blueprint"
     "bluetooth_le_tracker"
+    "bmw_connected_drive"
+    "bond"
     "bosch_shc"
     "braviatv"
     "broadlink"
@@ -324,12 +315,15 @@ in with py.pkgs; buildPythonApplication rec {
     "climate"
     "cloud"
     "cloudflare"
+    "color_extractor"
     "comfoconnect"
     "command_line"
     "compensation"
     "config"
     "configurator"
+    "control4"
     "conversation"
+    "coolmaster"
     "coronavirus"
     "counter"
     "cover"
@@ -348,6 +342,7 @@ in with py.pkgs; buildPythonApplication rec {
     "dexcom"
     "dhcp"
     "dialogflow"
+    "directv"
     "discovery"
     "dsmr"
     "dte_energy_bridge"
@@ -383,6 +378,7 @@ in with py.pkgs; buildPythonApplication rec {
     "folder"
     "folder_watcher"
     "foobot"
+    "foscam"
     "freebox"
     "freedns"
     "fritz"
@@ -402,6 +398,7 @@ in with py.pkgs; buildPythonApplication rec {
     "geonetnz_volcano"
     "gios"
     "glances"
+    "goalzero"
     "gogogate2"
     "google"
     "google_assistant"
@@ -774,6 +771,8 @@ in with py.pkgs; buildPythonApplication rec {
     # onboarding tests rpi_power component, for which we are lacking rpi_bad_power library
     "test_onboarding_core_sets_up_rpi_power"
     "test_onboarding_core_no_rpi_power"
+    # hue/test_sensor_base.py: Race condition when counting events
+    "test_hue_events"
   ];
 
   preCheck = ''
@@ -785,9 +784,6 @@ in with py.pkgs; buildPythonApplication rec {
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH
 
-    # set up zoneinfo data for backports-zoneinfo in pvpc_hourly_pricing tests
-    export PYTHONTZPATH="${tzdata}/share/zoneinfo"
-
     # error out when component test directory is missing, otherwise hidden by xdist execution :(
     for component in ${lib.concatStringsSep " " (map lib.escapeShellArg componentTests)}; do
       test -d "tests/components/$component" || {
@@ -798,11 +794,11 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit (py.pkgs) hass-frontend;
+    inherit availableComponents;
+    python = py;
     tests = {
       inherit (nixosTests) home-assistant;
     };
-    python = py;
   };
 
   meta = with lib; {

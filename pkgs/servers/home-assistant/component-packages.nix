@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.6.4";
+  version = "2021.6.5";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -45,7 +45,7 @@
     "aprs" = ps: with ps; [ aprslib geopy ];
     "aqualogic" = ps: with ps; [ aqualogic ];
     "aquostv" = ps: with ps; [ ]; # missing inputs: sharp_aquos_rc
-    "arcam_fmj" = ps: with ps; [ ]; # missing inputs: arcam-fmj
+    "arcam_fmj" = ps: with ps; [ arcam-fmj ];
     "arduino" = ps: with ps; [ ]; # missing inputs: PyMata
     "arest" = ps: with ps; [ ];
     "arlo" = ps: with ps; [ ha-ffmpeg pyarlo ];
@@ -68,8 +68,8 @@
     "awair" = ps: with ps; [ python-awair ];
     "aws" = ps: with ps; [ aiobotocore ];
     "axis" = ps: with ps; [ aiohttp-cors axis paho-mqtt ];
-    "azure_devops" = ps: with ps; [ ]; # missing inputs: aioazuredevops
-    "azure_event_hub" = ps: with ps; [ ]; # missing inputs: azure-eventhub
+    "azure_devops" = ps: with ps; [ aioazuredevops ];
+    "azure_event_hub" = ps: with ps; [ azure-eventhub ];
     "azure_service_bus" = ps: with ps; [ azure-servicebus ];
     "baidu" = ps: with ps; [ ]; # missing inputs: baidu-aip
     "bayesian" = ps: with ps; [ ];
@@ -81,8 +81,8 @@
     "bitcoin" = ps: with ps; [ blockchain ];
     "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
     "blackbird" = ps: with ps; [ pyblackbird ];
-    "blebox" = ps: with ps; [ ]; # missing inputs: blebox_uniapi
-    "blink" = ps: with ps; [ ]; # missing inputs: blinkpy
+    "blebox" = ps: with ps; [ blebox-uniapi ];
+    "blink" = ps: with ps; [ blinkpy ];
     "blinksticklight" = ps: with ps; [ BlinkStick ];
     "blinkt" = ps: with ps; [ ]; # missing inputs: blinkt
     "blockchain" = ps: with ps; [ ]; # missing inputs: python-blockchain-api
@@ -94,8 +94,8 @@
     "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
-    "bmw_connected_drive" = ps: with ps; [ ]; # missing inputs: bimmer_connected
-    "bond" = ps: with ps; [ ]; # missing inputs: bond-api
+    "bmw_connected_drive" = ps: with ps; [ bimmer-connected ];
+    "bond" = ps: with ps; [ bond-api ];
     "bosch_shc" = ps: with ps; [ aiohttp-cors boschshcpy ifaddr zeroconf ];
     "braviatv" = ps: with ps; [ bravia-tv ];
     "broadlink" = ps: with ps; [ broadlink ];
@@ -130,7 +130,7 @@
     "cmus" = ps: with ps; [ ]; # missing inputs: pycmus
     "co2signal" = ps: with ps; [ ]; # missing inputs: co2signal
     "coinbase" = ps: with ps; [ ]; # missing inputs: coinbase
-    "color_extractor" = ps: with ps; [ ]; # missing inputs: colorthief
+    "color_extractor" = ps: with ps; [ colorthief ];
     "comed_hourly_pricing" = ps: with ps; [ ];
     "comfoconnect" = ps: with ps; [ pycomfoconnect ];
     "command_line" = ps: with ps; [ ];
@@ -138,9 +138,9 @@
     "concord232" = ps: with ps; [ ]; # missing inputs: concord232
     "config" = ps: with ps; [ aiohttp-cors ];
     "configurator" = ps: with ps; [ ];
-    "control4" = ps: with ps; [ ]; # missing inputs: pyControl4
+    "control4" = ps: with ps; [ pycontrol4 ];
     "conversation" = ps: with ps; [ aiohttp-cors ];
-    "coolmaster" = ps: with ps; [ ]; # missing inputs: pycoolmasternet-async
+    "coolmaster" = ps: with ps; [ pycoolmasternet-async ];
     "coronavirus" = ps: with ps; [ coronavirus ];
     "counter" = ps: with ps; [ ];
     "cover" = ps: with ps; [ ];
@@ -175,7 +175,7 @@
     "dialogflow" = ps: with ps; [ aiohttp-cors ];
     "digital_ocean" = ps: with ps; [ digital-ocean ];
     "digitalloggers" = ps: with ps; [ ]; # missing inputs: dlipower
-    "directv" = ps: with ps; [ ]; # missing inputs: directv
+    "directv" = ps: with ps; [ directv ];
     "discogs" = ps: with ps; [ discogs_client ];
     "discord" = ps: with ps; [ discordpy ];
     "discovery" = ps: with ps; [ aiohttp-cors ifaddr netdisco zeroconf ];
@@ -278,7 +278,7 @@
     "foobot" = ps: with ps; [ foobot-async ];
     "forked_daapd" = ps: with ps; [ ]; # missing inputs: pyforked-daapd pylibrespot-java
     "fortios" = ps: with ps; [ fortiosapi ];
-    "foscam" = ps: with ps; [ ]; # missing inputs: libpyfoscam
+    "foscam" = ps: with ps; [ libpyfoscam ];
     "foursquare" = ps: with ps; [ aiohttp-cors ];
     "free_mobile" = ps: with ps; [ ]; # missing inputs: freesms
     "freebox" = ps: with ps; [ freebox-api ];
@@ -293,7 +293,7 @@
     "futurenow" = ps: with ps; [ pyfnip ];
     "garadget" = ps: with ps; [ ];
     "garages_amsterdam" = ps: with ps; [ garages-amsterdam ];
-    "garmin_connect" = ps: with ps; [ garminconnect-aio ];
+    "garmin_connect" = ps: with ps; [ garminconnect-ha ];
     "gc100" = ps: with ps; [ ]; # missing inputs: python-gc100
     "gdacs" = ps: with ps; [ aio-georss-gdacs ];
     "generic" = ps: with ps; [ ];
@@ -312,7 +312,7 @@
     "glances" = ps: with ps; [ glances-api ];
     "gntp" = ps: with ps; [ gntp ];
     "goalfeed" = ps: with ps; [ ]; # missing inputs: pysher
-    "goalzero" = ps: with ps; [ ]; # missing inputs: goalzero
+    "goalzero" = ps: with ps; [ goalzero ];
     "gogogate2" = ps: with ps; [ ismartgate ];
     "google" = ps: with ps; [ google-api-python-client httplib2 oauth2client ];
     "google_assistant" = ps: with ps; [ aiohttp-cors ];
@@ -323,7 +323,7 @@
     "google_translate" = ps: with ps; [ gtts ];
     "google_travel_time" = ps: with ps; [ googlemaps ];
     "google_wifi" = ps: with ps; [ ];
-    "gpmdp" = ps: with ps; [ websocket_client ];
+    "gpmdp" = ps: with ps; [ websocket-client ];
     "gpsd" = ps: with ps; [ gps3 ];
     "gpslogger" = ps: with ps; [ aiohttp-cors ];
     "graphite" = ps: with ps; [ ];
