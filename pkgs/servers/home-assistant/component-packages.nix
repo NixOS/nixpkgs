@@ -213,7 +213,7 @@
     "efergy" = ps: with ps; [ ];
     "egardia" = ps: with ps; [ pythonegardia ];
     "eight_sleep" = ps: with ps; [ pyeight ];
-    "elgato" = ps: with ps; [ ]; # missing inputs: elgato
+    "elgato" = ps: with ps; [ elgato ];
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
     "elkm1" = ps: with ps; [ ]; # missing inputs: elkm1-lib
     "elv" = ps: with ps; [ ]; # missing inputs: pypca
