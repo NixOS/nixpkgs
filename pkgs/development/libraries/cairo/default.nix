@@ -13,7 +13,7 @@
 assert glSupport -> x11Support && libGL != null;
 
 let
-  version = "1.16.0";
+  version = "1.17.4";
   inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "cairo";
@@ -21,21 +21,10 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://cairographics.org/${if lib.mod (builtins.fromJSON (lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${pname}-${version}.tar.xz";
-    sha256 = "0c930mk5xr2bshbdljv005j3j8zr47gqmkry3q6qgvqky6rjjysy";
+    sha256 = "01cpjl0p8y7slqvx52kdcyw46h9zqhkkp6hpk5sfifrnshg4rckl";
   };
 
-  patches = [
-    # Fixes CVE-2018-19876; see Nixpkgs issue #55384
-    # CVE information: https://nvd.nist.gov/vuln/detail/CVE-2018-19876
-    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/merge_requests/5
-    #
-    # This patch is the merged commit from the above PR.
-    (fetchpatch {
-      name   = "CVE-2018-19876.patch";
-      url    = "https://gitlab.freedesktop.org/cairo/cairo/commit/6edf572ebb27b00d3c371ba5ae267e39d27d5b6d.patch";
-      sha256 = "112hgrrsmcwxh1r52brhi5lksq4pvrz4xhkzcf2iqp55jl2pb7n1";
-    })
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
+  patches = optionals stdenv.hostPlatform.isDarwin [
     # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
     ./skip-configure-stderr-check.patch
   ];
