@@ -134,19 +134,6 @@ let
       });
     })
 
-    # Remove after https://github.com/NixOS/nixpkgs/pull/121854 has passed staging-next
-    (self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.13";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0npsg38d11skv04zvsi90j93f6jdgm8666ds2ri7shr1pz1732hx";
-        };
-        patches = [];
-        propagatedBuildInputs = [ python3.pkgs.greenlet ];
-      });
-    })
-
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
