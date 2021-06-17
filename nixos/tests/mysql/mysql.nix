@@ -171,7 +171,7 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
     mariadb.succeed(
         "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 42"
     )
-
+  '' + pkgs.stdenv.lib.optionalString pkgs.stdenv.is64bit ''
     # Check if RocksDB plugin works
     mariadb.succeed(
         "echo 'use testdb; create table rocksdb (test_id INT, PRIMARY KEY (test_id)) ENGINE = RocksDB;' | sudo -u testuser mysql -u testuser"
