@@ -14352,6 +14352,8 @@ in
 
   arrayfire = callPackage ../development/libraries/arrayfire {};
 
+  arrayfire-ml = callPackage ../development/libraries/arrayfire-ml { };
+
   arrow-cpp = callPackage ../development/libraries/arrow-cpp ({
   } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
     stdenv = overrideCC stdenv buildPackages.gcc6; # hidden symbol `__divmoddi4'
