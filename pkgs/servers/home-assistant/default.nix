@@ -343,6 +343,7 @@ in with py.pkgs; buildPythonApplication rec {
     "daikin"
     "darksky"
     "datadog"
+    "debugpy"
     "deconz"
     "default_config"
     "demo"
