@@ -192,8 +192,6 @@ in with py.pkgs; buildPythonApplication rec {
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
 
-  inherit availableComponents;
-
   # PyPI tarball is missing tests/ directory
   src = fetchFromGitHub {
     owner = "home-assistant";
@@ -805,6 +803,7 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   passthru = {
+    inherit availableComponents;
     python = py;
     tests = {
       inherit (nixosTests) home-assistant;

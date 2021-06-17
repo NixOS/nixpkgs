@@ -1,5 +1,6 @@
 { mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , SDL2
 , cmake
 , ffmpeg
@@ -25,6 +26,15 @@ mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "sha256-vfp/vacIItlPP5dR7jzDT7oOUNFnjvvdR46yi79EJKU=";
   };
+
+  patches = [
+     # fix compability with ffmpeg 4.4, remove on next release after 1.11
+    (fetchpatch {
+      name = "fix_ffmpeg_4.4.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/hrydgard/ppsspp/pull/14176.patch";
+      sha256 = "sha256-ecDoOydaLfL6+eFpahcO1TnRl866mZZVHlr6Qrib1mo=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace git-version.cmake --replace unknown ${src.rev}
