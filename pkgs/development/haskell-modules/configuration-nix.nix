@@ -826,8 +826,21 @@ self: super: builtins.intersectAttrs super {
   random = dontCheck super.random;
 
   # Since this package is primarily used by nixpkgs maintainers and is probably
-  # not used to link against by anyone, we can make it’s closure smaller.
-  cabal2nix-unstable = justStaticExecutables super.cabal2nix-unstable;
+  # not used to link against by anyone, we can make it’s closure smaller and
+  # add its runtime dependencies in `haskellPackages` (as opposed to cabal2nix).
+  cabal2nix-unstable = overrideCabal
+    (justStaticExecutables super.cabal2nix-unstable)
+    (drv: {
+      buildTools = (drv.buildTools or []) ++ [
+        pkgs.makeWrapper
+      ];
+      postInstall = ''
+        wrapProgram $out/bin/cabal2nix \
+          --prefix PATH ":" "${
+            pkgs.lib.makeBinPath [ pkgs.nix pkgs.nix-prefetch-scripts ]
+          }"
+      '';
+    });
 
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
