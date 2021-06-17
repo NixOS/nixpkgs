@@ -16314,7 +16314,7 @@ in
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
-  # https://github.com/gpg/libgpg-error/blob/70058cd9f944d620764e57c838209afae8a58c78/README#L118-L140
+  # https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=README;h=fd6e1a83f55696c1f7a08f6dfca08b2d6b7617ec;hb=70058cd9f944d620764e57c838209afae8a58c78#l118
   libgpgerror-gen-posix-lock-obj = libgpgerror.override {
     genPosixLockObjOnly = true;
   };
@@ -19256,7 +19256,7 @@ in
   gofish = callPackage ../servers/gopher/gofish { };
 
   grafana = callPackage ../servers/monitoring/grafana { };
-  grafanaPlugins = dontRecurseIntoAttrs (callPackage ../servers/monitoring/grafana/plugins { });
+  grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
   grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
@@ -20021,9 +20021,8 @@ in
   trafficserver = callPackage ../servers/http/trafficserver { };
 
   inherit (callPackages ../servers/http/tomcat { })
-    tomcat7
-    tomcat8
-    tomcat9;
+    tomcat9
+    tomcat10;
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
@@ -26839,6 +26838,10 @@ in
     git = gitMinimal;
   };
 
+  survex = callPackage ../applications/misc/survex {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
+
   sunvox = callPackage ../applications/audio/sunvox { };
 
   svkbd = callPackage ../applications/accessibility/svkbd { };
@@ -31275,6 +31278,10 @@ in
 
   inherit (callPackage ../applications/networking/cluster/terraform { })
     mkTerraform
+    terraform_0_12
+    terraform_0_13
+    terraform_0_14
+    terraform_0_15
     terraform_1_0
     terraform_plugins_test
     ;
