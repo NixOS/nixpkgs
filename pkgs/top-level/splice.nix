@@ -113,9 +113,11 @@ let
     inherit (pkgs.stdenv) buildPlatform targetPlatform hostPlatform;
   };
 
-  splicedPackagesWithXorg = splicedPackages // builtins.removeAttrs splicedPackages.xorg [
+  splicedXorg = builtins.removeAttrs splicedPackages.xorg [
     "callPackage" "newScope" "overrideScope" "packages"
   ];
+
+  splicedPackagesWithXorg = [ splicedPackages splicedXorg ];
 
 in
 
@@ -129,7 +131,7 @@ in
 
   callPackages = lib.callPackagesWith splicedPackagesWithXorg;
 
-  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
+  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg ++ lib.toList extra);
 
   # Haskell package sets need this because they reimplement their own
   # `newScope`.

@@ -117,7 +117,13 @@ rec {
   callPackageWith = autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
+      funArgs = lib.functionArgs f;
+      auto =
+        if lib.isList autoArgs then
+          lib.foldl' (args: elem:
+            args // builtins.intersectAttrs funArgs elem
+          ) {} autoArgs
+        else builtins.intersectAttrs funArgs autoArgs;
     in makeOverridable f (auto // args);
 
 
@@ -127,7 +133,13 @@ rec {
   callPackagesWith = autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
+      funArgs = lib.functionArgs f;
+      auto =
+        if lib.isList autoArgs then
+          lib.foldl' (args: elem:
+            args // builtins.intersectAttrs funArgs elem
+          ) {} autoArgs
+        else builtins.intersectAttrs funArgs autoArgs;
       origArgs = auto // args;
       pkgs = f origArgs;
       mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
@@ -207,8 +219,8 @@ rec {
      which can form the parent scope for later package sets. */
   makeScope = newScope: f:
     let self = f self // {
-          newScope = scope: newScope (self // scope);
-          callPackage = self.newScope {};
+          newScope = scope: newScope ([ self ] ++ lib.toList scope);
+          callPackage = self.newScope [];
           overrideScope = g: lib.warn
             "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
             (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
@@ -229,9 +241,9 @@ rec {
         pkgsHostTarget = self; # Not `otherSplices.selfHostTarget`;
         pkgsTargetTarget = otherSplices.selfTargetTarget;
       };
-      spliced = extra spliced0 // spliced0 // keep self;
+      spliced = [ (extra spliced0) spliced0 (keep self) ];
       self = f self // {
-        newScope = scope: newScope (spliced // scope);
+        newScope = scope: newScope (spliced ++ lib.toList scope);
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
         # overridden.
