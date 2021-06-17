@@ -1440,6 +1440,16 @@
     githubId = 2506621;
     name = "Brayden Willenborg";
   };
+  brcha = {
+    email = "brcha@yandex.com";
+    github = "brcha";
+    githubId = 37037;
+    name = "Filip Brcic";
+    keys = [{
+      longkeyid = "rsa4096/0x96577BD3C105EDA4";
+      fingerprint = "9AFC 0A4B D2CE F3D2 2CF6  1081 9657 7BD3 C105 EDA4";
+    }];
+  };
   brian-dawn = {
     email = "brian.t.dawn@gmail.com";
     github = "brian-dawn";

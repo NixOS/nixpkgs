@@ -31166,6 +31166,8 @@ in
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
   samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
 
+  xerox-phaser-p3250 = callPackage ../misc/cups/drivers/xerox/xerox-phaser-p3250.nix {};
+
   sane-backends = callPackage ../applications/graphics/sane/backends (config.sane or {});
 
   senv = callPackage ../applications/misc/senv { };
