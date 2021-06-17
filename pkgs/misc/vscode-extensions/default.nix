@@ -670,6 +670,23 @@ let
         };
       };
 
+      ionide.ionide-fsharp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "Ionide-fsharp";
+          publisher = "Ionide";
+          version = "5.5.5";
+          sha256 = "xrBNiIbZVJ0sGUk/4PudD8kSyX94QkrFtf7Ho/sB0Vs=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
+          description = "Enhanced F# Language Features for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-fsharp";
+          homepage = "https://ionide.io";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+      };
+
       jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elixir-ls";
