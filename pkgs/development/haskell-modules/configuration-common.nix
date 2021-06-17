@@ -1965,4 +1965,8 @@ EOT
   # https://github.com/google/proto-lens/issues/413
   proto-lens = doJailbreak super.proto-lens;
 
+  # Too strict bounds on profunctors
+  # https://github.com/jcranch/tophat/issues/1
+  tophat = doJailbreak super.tophat;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
