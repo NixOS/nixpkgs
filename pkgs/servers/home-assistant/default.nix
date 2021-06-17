@@ -349,6 +349,7 @@ in with py.pkgs; buildPythonApplication rec {
     "duckdns"
     "dyson"
     "eafm"
+    "ecobee"
     "econet"
     "efergy"
     "emonitor"
