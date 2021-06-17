@@ -4356,6 +4356,8 @@ in
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
+  tsduck = callPackage ../tools/video/tsduck { };
+
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uusi = haskell.lib.justStaticExecutables haskellPackages.uusi;
@@ -4410,6 +4412,8 @@ in
   ### DEVELOPMENT / EMSCRIPTEN
 
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
+
+  dtapi = callPackage ../development/libraries/dtapi { };
 
   carp = callPackage ../development/compilers/carp { };
 
