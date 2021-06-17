@@ -209,7 +209,7 @@
     "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
     "edimax" = ps: with ps; [ pyedimax ];
     "edl21" = ps: with ps; [ ]; # missing inputs: pysml
-    "ee_brightbox" = ps: with ps; [ ]; # missing inputs: eebrightbox
+    "ee_brightbox" = ps: with ps; [ eebrightbox ];
     "efergy" = ps: with ps; [ ];
     "egardia" = ps: with ps; [ pythonegardia ];
     "eight_sleep" = ps: with ps; [ pyeight ];
