@@ -31,6 +31,9 @@ python3Packages.buildPythonApplication rec {
     python test.py
   '';
 
+  postInstall = ''
+    mv $out/share/applications/{zim,.zim-wrapped}.desktop
+  '';
 
   meta = with lib; {
     description = "A desktop wiki";
