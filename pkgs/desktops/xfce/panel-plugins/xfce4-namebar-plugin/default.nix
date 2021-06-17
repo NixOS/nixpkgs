@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "HugLifeTiZ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0l70f6mzkscsj4wr43wp5c0l2qnf85vj24cv02bjrh3bzz6wkak8";
+    sha256 = "sha256-aKrJzf9rwCyXAJsRIXdBzmJBASuXD5I5kZrp+atx4FA=";
   };
 
   nativeBuildInputs = [ pkg-config vala_0_46 wafHook python3 ];

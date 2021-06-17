@@ -21,7 +21,7 @@ mkXfceDerivation {
   rev-prefix = "";
   odd-unstable = false;
 
-  sha256 = "06pvzhhkr2mimsrzlkpsrzf5fxag4fhabyb3cpmgpyp5hcbgvaj3";
+  sha256 = "sha256-Q6r9FoPl+vvqZWP5paAjT3VX3M/6TvqzrrGKPCH8+xo=";
 
   buildInputs = [
     clutter
