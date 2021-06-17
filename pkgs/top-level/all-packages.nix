@@ -2393,6 +2393,8 @@ in
 
   datovka = libsForQt5.callPackage ../applications/networking/datovka { };
 
+  db-backup = callPackage ../tools/backup/db { };
+
   dconf = callPackage ../development/libraries/dconf { };
 
   dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
