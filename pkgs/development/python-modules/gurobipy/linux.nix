@@ -10,7 +10,9 @@ buildPythonPackage {
 
   patches = [ ./no-clever-setup.patch ];
 
-  postInstall = "mv lib/libgurobi*.so* $out/lib";
+  postInstall = ''
+    mv lib/libgurobi*.so* $out/lib
+  '';
 
   postFixup = ''
     patchelf --set-rpath $out/lib \
