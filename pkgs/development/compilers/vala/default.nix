@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
-, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
+, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
 }:
 
 let
@@ -88,13 +88,12 @@ let
 
     doCheck = false; # fails, requires dbus daemon
 
-    # Wait for PR #59372
-    # passthru = {
-    #  updateScript = gnome.updateScript {
-    #    attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
-    #    packageName = pname;
-    #  };
-    # };
+    passthru = {
+     updateScript = gnome.updateScript {
+       attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+       packageName = pname;
+     };
+    };
 
     meta = with lib; {
       description = "Compiler for GObject type system";
