@@ -83,6 +83,12 @@ in lib.init bootStages ++ [
            # to recognize 64-bit DLLs
         ++ lib.optional (hostPlatform.config == "x86_64-w64-mingw32") buildPackages.file
         ;
+
+      # temp hack to avoid ios macos clash
+      preHook = lib.concatStringsSep "\n"
+        (lib.filter
+          (l: ! lib.strings.hasInfix "-sdk_version" l)
+          (lib.strings.splitString "\n" old.preHook));
     });
   })
 
