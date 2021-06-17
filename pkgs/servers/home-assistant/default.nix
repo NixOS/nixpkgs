@@ -782,6 +782,8 @@ in with py.pkgs; buildPythonApplication rec {
     # onboarding tests rpi_power component, for which we are lacking rpi_bad_power library
     "test_onboarding_core_sets_up_rpi_power"
     "test_onboarding_core_no_rpi_power"
+    # hue/test_sensor_base.py: Race condition when counting events
+    "test_hue_events"
   ];
 
   preCheck = ''
