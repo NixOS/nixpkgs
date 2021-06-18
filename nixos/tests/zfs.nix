@@ -74,10 +74,15 @@ let
             "udevadm settle",
             "zpool create rpool /dev/vdb1",
             "zfs create -o mountpoint=legacy rpool/root",
+            # shared datasets cannot have legacy mountpoint
+            "zfs create rpool/shared_smb",
             "mount -t zfs rpool/root /tmp/mnt",
             "udevadm settle",
-            "zfs set sharesmb=on rpool/root",
-            "smbclient -NL localhost",
+            # wait for samba services
+            "systemctl is-system-running --wait",
+            "zfs set sharesmb=on rpool/shared_smb",
+            "zfs share rpool/shared_smb",
+            "smbclient -gNL localhost | grep rpool_shared_smb",
             "umount /tmp/mnt",
             "zpool destroy rpool",
             "udevadm settle",
