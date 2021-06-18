@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "portpicker";
   version = "1.4.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
