@@ -368,6 +368,7 @@ in with py.pkgs; buildPythonApplication rec {
     "econet"
     "ee_brightbox"
     "efergy"
+    "elgato"
     "emonitor"
     "emulated_hue"
     "enphase_envoy"

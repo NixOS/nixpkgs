@@ -2239,6 +2239,8 @@ in {
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
 
+  elgato = callPackage ../development/python-modules/elgato { };
+
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
   elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
