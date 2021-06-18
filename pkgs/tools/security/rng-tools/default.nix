@@ -14,13 +14,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
-  version = "6.11";
+  version = "6.12";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = "rng-tools";
     rev = "v${version}";
-    sha256 = "sha256-qheJaeVX2zuv0mvKEd6wcbSHFjiJE0t5hVCJiRSKm3M=";
+    sha256 = "sha256-FQLIAaXsQmpkdrYZls7DOxTlCOTwFGF61n/MBPEcknw=";
   };
 
   postPatch = ''
