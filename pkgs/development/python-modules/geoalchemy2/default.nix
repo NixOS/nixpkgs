@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "GeoAlchemy2";
-  version = "0.8.4";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02jbad9vbnjx8bmfvxg77z18nymrry6li8hy9pwi0yiyvwbnycyr";
+    sha256 = "c32023bc2fb8fbb136f00a0e9c2feba21f3e1040af0f619c888661f6ee72dd28";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
