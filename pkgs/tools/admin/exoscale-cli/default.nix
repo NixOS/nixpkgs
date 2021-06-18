@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "exoscale-cli";
-  version = "1.32.0";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner  = "exoscale";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "sha256-SQWGFF43J730XFj32ZU2N8PQMP2yIiSLLfEIAbeJvBg=";
+    sha256 = "sha256-S18SVSyFpIWkzQiRBY7i1siIPRiRR/SHAse3NJzwR3A=";
   };
 
   goPackagePath = "github.com/exoscale/cli";

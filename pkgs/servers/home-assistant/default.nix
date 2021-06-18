@@ -134,6 +134,19 @@ let
       });
     })
 
+    # Pinned due to API changes in eebrightbox>=0.0.5
+    (self: super: {
+      eebrightbox = super.eebrightbox.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.4";
+        src = fetchFromGitHub {
+          owner = "krygal";
+          repo = "eebrightbox";
+          rev = version;
+          sha256 = "0d8mmpwgrd7gymw5263r1v2wjv6dx6w6pq13d62fkfm4h2hya4a4";
+        };
+      });
+    })
+
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -344,6 +357,7 @@ in with py.pkgs; buildPythonApplication rec {
     "dialogflow"
     "directv"
     "discovery"
+    "doorbird"
     "dsmr"
     "dte_energy_bridge"
     "duckdns"
@@ -352,7 +366,9 @@ in with py.pkgs; buildPythonApplication rec {
     "eafm"
     "ecobee"
     "econet"
+    "ee_brightbox"
     "efergy"
+    "elgato"
     "emonitor"
     "emulated_hue"
     "enphase_envoy"

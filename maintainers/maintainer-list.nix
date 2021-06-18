@@ -6515,10 +6515,14 @@
     name = "Matthias C. M. Troffaes";
   };
   McSinyx = {
-    email = "vn.mcsinyx@gmail.com";
+    email = "mcsinyx@disroot.org";
     github = "McSinyx";
     githubId = 13689192;
     name = "Nguyễn Gia Phong";
+    keys = [{
+      longkeyid = "rsa3072/0x27148B2C06A2224B";
+      fingerprint = "E90E 11B8 0493 343B 6132  E394 2714 8B2C 06A2 224B";
+    }];
   };
   mcwitt = {
     email = "mcwitt@gmail.com";
@@ -9864,6 +9868,12 @@
       githubId = 39732259;
       name = "Justus K";
   };
+  SubhrajyotiSen = {
+      email = "subhrajyoti12@gmail.com";
+      github = "SubhrajyotiSen";
+      githubId = 12984845;
+      name = "Subhrajyoti Sen";
+  };
   suhr = {
     email = "suhr@i2pmail.org";
     github = "suhr";
@@ -10665,6 +10675,12 @@
     github = "uri-canva";
     githubId = 33242106;
     name = "Uri Baghin";
+  };
+  urlordjames = {
+    email = "urlordjames@gmail.com";
+    github = "urlordjames";
+    githubId = 32751441;
+    name = "urlordjames";
   };
   uskudnik = {
     email = "urban.skudnik@gmail.com";

@@ -6,7 +6,7 @@ mkXfceDerivation {
   version = "0.5.5";
   odd-unstable = false;
 
-  sha256 = "1c985xb3395bn1024qhqqdnlkbn02zldsnybxsw49xqh55pa4a2n";
+  sha256 = "sha256-ViiibikQ90S47stb3egXwK5JbcMYYiJAsKukMVYvKLE=";
 
   nativeBuildInputs = [ gobject-introspection ];
 
