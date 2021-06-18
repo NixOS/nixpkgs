@@ -16997,6 +16997,8 @@ in
 
   libvorbis = callPackage ../development/libraries/libvorbis { };
 
+  libvori = callPackage ../development/libraries/libvori { };
+
   libwebcam = callPackage ../os-specific/linux/libwebcam { };
 
   libwebp = callPackage ../development/libraries/libwebp { };
