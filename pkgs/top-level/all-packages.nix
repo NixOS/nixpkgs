@@ -24101,6 +24101,8 @@ in
 
   lollypop = callPackage ../applications/audio/lollypop { };
 
+  obfuscate = callPackage ../applications/misc/obfuscate { };  
+
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
 
   manim = python3Packages.callPackage ../applications/video/manim {
