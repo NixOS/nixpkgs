@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://kotlinlang.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers;
-      [ ];
+    maintainers = with lib.maintainers; [ SubhrajyotiSen ];
     platforms = lib.platforms.all;
   };
 }

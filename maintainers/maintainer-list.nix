@@ -9868,6 +9868,12 @@
       githubId = 39732259;
       name = "Justus K";
   };
+  SubhrajyotiSen = {
+      email = "subhrajyoti12@gmail.com";
+      github = "SubhrajyotiSen";
+      githubId = 12984845;
+      name = "Subhrajyoti Sen";
+  };
   suhr = {
     email = "suhr@i2pmail.org";
     github = "suhr";
