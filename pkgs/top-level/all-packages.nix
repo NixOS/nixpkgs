@@ -30173,6 +30173,8 @@ in
 
   pcalc = callPackage ../applications/science/math/pcalc { };
 
+  programmer-calculator = callPackage ../applications/science/math/programmer-calculator { };
+
   bcal = callPackage ../applications/science/math/bcal { };
 
   pspp = callPackage ../applications/science/math/pspp { };
