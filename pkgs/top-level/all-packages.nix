@@ -8790,6 +8790,8 @@ in
 
   sonar-scanner-cli = callPackage ../tools/security/sonar-scanner-cli { };
 
+  solana = callPackage ../applications/blockchains/solana { };
+
   solr = callPackage ../servers/search/solr { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
