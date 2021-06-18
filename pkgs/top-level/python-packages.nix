@@ -7722,6 +7722,8 @@ in {
 
   sendgrid = callPackage ../development/python-modules/sendgrid { };
 
+  sense-energy = callPackage ../development/python-modules/sense-energy { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece;
   };
