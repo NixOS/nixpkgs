@@ -232,7 +232,7 @@
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ pyenvisalink ];
     "ephember" = ps: with ps; [ ]; # missing inputs: pyephember
-    "epson" = ps: with ps; [ ]; # missing inputs: epson-projector
+    "epson" = ps: with ps; [ epson-projector ];
     "epsonworkforce" = ps: with ps; [ ]; # missing inputs: epsonprinter
     "eq3btsmart" = ps: with ps; [ construct ]; # missing inputs: python-eq3bt
     "esphome" = ps: with ps; [ aioesphomeapi aiohttp-cors ifaddr zeroconf ];
