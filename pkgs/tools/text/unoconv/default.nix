@@ -3,10 +3,11 @@
 , installSymlinks ? true
 }:
 
-# IMPORTANT: unoconv must use the same python version as libreoffice (unless it
-# will not be able to load the pyuno module from libreoffice).
-
-stdenv.mkDerivation rec {
+let
+  libreoffice = libreoffice-unwrapped.override {
+    inherit python3;
+  };
+in python3.pkgs.buildPythonApplication rec {
   pname = "unoconv";
   version = "0.9.0";
 
@@ -17,24 +18,26 @@ stdenv.mkDerivation rec {
     sha256 = "1akx64686in8j8arl6vsgp2n3bv770q48pfv283c6fz6wf9p8fvr";
   };
 
+  patches = [
+    ./program-name.patch
+  ];
+
   nativeBuildInputs = [ asciidoc makeWrapper ];
 
-  preBuild = ''
-    makeFlags=prefix="$out"
-  '';
+  makeWrapperArgs = [
+    "--set" "UNO_PATH" "${libreoffice}/lib/libreoffice/program/"
+    "--set" "NIX_PROGRAM_NAME" "\\$0"
+  ];
 
-  postInstall = ''
-    sed -i "s|/usr/bin/env python.*|${python3}/bin/${python3.executable}|" "$out/bin/unoconv"
-    wrapProgram "$out/bin/unoconv" --set UNO_PATH "${libreoffice-unwrapped}/lib/libreoffice/program/"
-  '' + (if installSymlinks then ''
+  postInstall = lib.optionalString installSymlinks ''
     make install-links prefix="$out"
-  '' else "");
+  '';
 
   meta = with lib; {
     description = "Convert between any document format supported by LibreOffice/OpenOffice";
     homepage = "http://dag.wieers.com/home-made/unoconv/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor dotlambda ];
   };
 }

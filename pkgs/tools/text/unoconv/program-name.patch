@@ -1,0 +1,15 @@
+diff --git a/unoconv b/unoconv
+index 6aa1bfa..6a81987 100755
+--- a/unoconv
++++ b/unoconv
+@@ -739,8 +739,9 @@ class Options:
+ 
+         ### If no format was specified, probe it or provide it
+         if not self.format:
++            command = os.environ.get('NIX_PROGRAM_NAME', sys.argv[0])
+             ### Check if the command is in the form odt2pdf
+-            l = sys.argv[0].split('2')
++            l = command.split('2')
+             if len(l) == 2:
+                 self.format = l[1]
+             ### Use the extension of the output file
