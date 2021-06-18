@@ -1,5 +1,5 @@
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="release-21.11">
-  <title>Release 21.11 (<quote>?</quote>, 2021.11/??)</title>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-21.11">
+  <title>Release 21.11 (“?”, 2021.11/??)</title>
   <para>
     In addition to numerous new and upgraded packages, this release has
     the following highlights:
@@ -12,7 +12,7 @@
       </para>
     </listitem>
   </itemizedlist>
-  <section xml:id="highlights">
+  <section xml:id="sec-release-21.11-highlights">
     <title>Highlights</title>
     <itemizedlist spacing="compact">
       <listitem>
@@ -22,7 +22,7 @@
       </listitem>
     </itemizedlist>
   </section>
-  <section xml:id="new-services">
+  <section xml:id="sec-release-21.11-new-services">
     <title>New Services</title>
     <itemizedlist>
       <listitem>
@@ -50,7 +50,7 @@
       </listitem>
     </itemizedlist>
   </section>
-  <section xml:id="backward-incompatibilities">
+  <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
       <listitem>
@@ -311,7 +311,7 @@
       </listitem>
     </itemizedlist>
   </section>
-  <section xml:id="other-notable-changes">
+  <section xml:id="sec-release-21.11-notable-changes">
     <title>Other Notable Changes</title>
     <para>
     </para>

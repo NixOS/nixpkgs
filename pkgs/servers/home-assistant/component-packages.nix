@@ -186,7 +186,7 @@
     "dnsip" = ps: with ps; [ aiodns ];
     "dominos" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pizzapi
     "doods" = ps: with ps; [ pillow ]; # missing inputs: pydoods
-    "doorbird" = ps: with ps; [ aiohttp-cors ]; # missing inputs: doorbirdpy
+    "doorbird" = ps: with ps; [ aiohttp-cors doorbirdpy ];
     "dovado" = ps: with ps; [ ]; # missing inputs: dovado
     "downloader" = ps: with ps; [ ];
     "dsmr" = ps: with ps; [ dsmr-parser ];
@@ -209,11 +209,11 @@
     "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
     "edimax" = ps: with ps; [ pyedimax ];
     "edl21" = ps: with ps; [ ]; # missing inputs: pysml
-    "ee_brightbox" = ps: with ps; [ ]; # missing inputs: eebrightbox
+    "ee_brightbox" = ps: with ps; [ eebrightbox ];
     "efergy" = ps: with ps; [ ];
     "egardia" = ps: with ps; [ pythonegardia ];
     "eight_sleep" = ps: with ps; [ pyeight ];
-    "elgato" = ps: with ps; [ ]; # missing inputs: elgato
+    "elgato" = ps: with ps; [ elgato ];
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
     "elkm1" = ps: with ps; [ ]; # missing inputs: elkm1-lib
     "elv" = ps: with ps; [ ]; # missing inputs: pypca

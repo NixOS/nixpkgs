@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "jellyfin-web";
-  version = "10.7.5";
+  version = "10.7.6";
   # TODO: on the next major release remove src.postFetch
   # and use the lock file in web-update.sh:
   # https://github.com/jellyfin/jellyfin-web/commit/6efef9680d55a93f4333ef8bfb65a8a650c99a49
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "jellyfin";
     repo = "jellyfin-web";
     rev = "v${version}";
-    sha256 = "5y6hWEDxY5WbOUdjujmuMV3bQVvYU2J9oIANBVN5XOc=";
+    sha256 = "T5a17mAvx7fLla2jQp1dNswijeUbBQB1RA1ZkVpLWqM=";
     postFetch = ''
       mkdir -p $out
       cd $out

@@ -114,30 +114,30 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "18j2m4i70zinxvwib53kclyvgl5j474nm230yy15bqsfhmhm5qqc";
+      sha256 = "0xh65jmz3s12kfi7ij0j89d638nzdvq4z6dq9amzgmiw09ycvdbr";
       type = "gem";
     };
-    version = "1.467.0";
+    version = "1.469.0";
   };
   aws-sdk-core = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "09ybqvdmxcw0jgyjy99c5nr0jirs1yyp0lqy95hl0wgvxhvck001";
+      sha256 = "10wk5y4flc04cc42cmcfgr9sj67mz4582d45xmll56mpz4cw5cfc";
       type = "gem";
     };
-    version = "3.114.2";
+    version = "3.114.3";
   };
   aws-sdk-ec2 = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0zbhgfd4x70ikajximd4s4ni6rd9bvylxwqzh84iwmjngf2sa5fi";
+      sha256 = "0xnpxgcmacmqs98swlv3qkg7svpwydb1kqsngqciyg3jddzxrzp6";
       type = "gem";
     };
-    version = "1.242.0";
+    version = "1.244.0";
   };
   aws-sdk-iam = {
     groups = ["default"];
@@ -154,10 +154,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01pd0f4srsa65zl4zq4014p9j5yrr2yy9h9ab17g3w9d0qqm2vsh";
+      sha256 = "0407yggwsy89fzh387vq3af5azplci5v0a8y97h7r6da4jrv1ksm";
       type = "gem";
     };
-    version = "1.43.0";
+    version = "1.44.0";
   };
   aws-sdk-s3 = {
     groups = ["default"];
@@ -574,12 +574,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "4ec1009a615521371dd98576c456f62f63190ad9";
-      sha256 = "0jkb38spyc6vh8n4ymz682kn1i6gwyd7fy9gaalnziig1swyxfqk";
+      rev = "2e07122e80d8ae23e6aa53ae0fcb9dfca6639c59";
+      sha256 = "0zxyr1r88qslw6ypjqxx188vhmikl94fmkcdg3phm8r71qa375da";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.0.48";
+    version = "6.0.49";
   };
   metasploit-model = {
     groups = ["default"];
@@ -1426,10 +1426,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0l1wmvs0yf8gz64rymijx2pygwch99qdci91q8j193fwrz22bp7x";
+      sha256 = "0a3bwxd9v3ghrxzjc4vxmf4xa18c6m4xqy5wb0yk5c6b9psc7052";
       type = "gem";
     };
-    version = "0.7.4";
+    version = "0.7.5";
   };
   websocket-extensions = {
     groups = ["default"];

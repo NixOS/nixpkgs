@@ -3,11 +3,11 @@
   <para>
     If NixOS fails to boot, there are a number of kernel command line
     parameters that may help you to identify or fix the issue. You can
-    add these parameters in the GRUB boot menu by pressing
-    <quote>e</quote> to modify the selected boot entry and editing the
-    line starting with <literal>linux</literal>. The following are some
-    useful kernel command line parameters that are recognised by the
-    NixOS boot scripts or by systemd:
+    add these parameters in the GRUB boot menu by pressing “e” to modify
+    the selected boot entry and editing the line starting with
+    <literal>linux</literal>. The following are some useful kernel
+    command line parameters that are recognised by the NixOS boot
+    scripts or by systemd:
   </para>
   <variablelist>
     <varlistentry>
@@ -44,7 +44,7 @@
         <para>
           Like <literal>boot.debug1</literal>, but runs stage1 until
           kernel modules are loaded and device nodes are created. This
-          may help with e.g. making the keyboard work.
+          may help with e.g. making the keyboard work.
         </para>
       </listitem>
     </varlistentry>
@@ -117,7 +117,7 @@
     if you’d chosen <quote>ignore the error and continue</quote>.
   </para>
   <para>
-    If no login prompts or X11 login screens appear (e.g. due to hanging
+    If no login prompts or X11 login screens appear (e.g. due to hanging
     dependencies), you can press Alt+ArrowUp. If you’re lucky, this will
     start rescue mode (described above). (Also note that since most
     units have a 90-second timeout before systemd gives up on them, the

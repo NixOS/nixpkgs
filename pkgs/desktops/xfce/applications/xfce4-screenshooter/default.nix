@@ -6,7 +6,7 @@ mkXfceDerivation {
   version = "1.9.9";
   odd-unstable = false;
 
-  sha256 = "1myzm9sk968bcl9yqh6zyaa3ck42rw01hbcqn8z4sipiwsbhkrj0";
+  sha256 = "sha256-QOYJl+bxRk0+spgtGADPgkw2lPLfQOwTZQuZNHWq39c=";
 
   buildInputs = [ exo gtk3 libsoup libxfce4ui libxfce4util xfce4-panel glib-networking ];
 
