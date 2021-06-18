@@ -7184,6 +7184,8 @@ in {
 
   pyyaml = callPackage ../development/python-modules/pyyaml { };
 
+  pyyaml-env-tag = callPackage ../development/python-modules/pyyaml-env-tag { };
+
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
