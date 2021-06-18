@@ -503,7 +503,7 @@
     "meteoclimatic" = ps: with ps; [ pymeteoclimatic ];
     "metoffice" = ps: with ps; [ ]; # missing inputs: datapoint
     "mfi" = ps: with ps; [ ]; # missing inputs: mficlient
-    "mhz19" = ps: with ps; [ ]; # missing inputs: pmsensor
+    "mhz19" = ps: with ps; [ pmsensor ];
     "microsoft" = ps: with ps; [ ]; # missing inputs: pycsspeechtts
     "microsoft_face" = ps: with ps; [ aiohttp-cors ];
     "microsoft_face_detect" = ps: with ps; [ aiohttp-cors ];
@@ -739,7 +739,7 @@
     "sensor" = ps: with ps; [ sqlalchemy ];
     "sentry" = ps: with ps; [ sentry-sdk ];
     "serial" = ps: with ps; [ pyserial-asyncio ];
-    "serial_pm" = ps: with ps; [ ]; # missing inputs: pmsensor
+    "serial_pm" = ps: with ps; [ pmsensor ];
     "sesame" = ps: with ps; [ ]; # missing inputs: pysesame2
     "seven_segments" = ps: with ps; [ pillow ];
     "seventeentrack" = ps: with ps; [ ]; # missing inputs: py17track
