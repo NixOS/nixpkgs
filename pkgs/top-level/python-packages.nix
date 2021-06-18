@@ -2299,6 +2299,8 @@ in {
 
   ephem = callPackage ../development/python-modules/ephem { };
 
+  epson-projector = callPackage ../development/python-modules/epson-projector { };
+
   eradicate = callPackage ../development/python-modules/eradicate { };
 
   escapism = callPackage ../development/python-modules/escapism { };

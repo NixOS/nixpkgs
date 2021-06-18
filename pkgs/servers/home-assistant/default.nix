@@ -373,6 +373,7 @@ in with py.pkgs; buildPythonApplication rec {
     "emulated_hue"
     "emulated_kasa"
     "enphase_envoy"
+    "epson"
     "esphome"
     "everlights"
     "ezviz"
