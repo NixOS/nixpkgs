@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.7.2";
+  version = "2.8.3";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0e21d3b80b96740909d77206d741aa3ce0b06b41be375d92e1f3244a274c1f8a";
+    sha256 = "0a049c5d47b629d9070c3932d13bff482b12119b6a241a93bc460b0be16953c8";
   };
 
   nativeBuildInputs = [
