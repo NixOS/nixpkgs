@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.5.2";
+  version = "0.6.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "813023269686045f8e01e2289cc1e7e9ae5ab22ddd1e2849a9093ab3ab7270eb";
+    sha256 = "dd9120a4ab7b8128cba9b6b120d8b5560d566a3cd0f828cced3d3fd60a42ec40";
   };
 
   buildInputs = [ mock ];
