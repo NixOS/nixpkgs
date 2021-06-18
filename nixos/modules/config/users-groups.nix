@@ -396,7 +396,7 @@ let
     };
   };
 
-  idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
+  idsAreUnique = set: idAttr: !(foldr (name: args@{ dup, acc }:
     let
       id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
       exists = builtins.hasAttr id acc;

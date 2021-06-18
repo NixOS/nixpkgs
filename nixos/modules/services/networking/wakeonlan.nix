@@ -19,7 +19,7 @@ let
     ${ethtool} -s ${interface} ${methodParameter {inherit method password;}}
   '';
 
-  concatStrings = fold (x: y: x + y) "";
+  concatStrings = foldr (x: y: x + y) "";
   lines = concatStrings (map (l: line l) interfaces);
 
 in
