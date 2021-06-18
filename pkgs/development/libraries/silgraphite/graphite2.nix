@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, freetype, cmake }:
+{ lib, stdenv, fetchurl, pkg-config, freetype, cmake, libgcc }:
 
 stdenv.mkDerivation rec {
   version = "1.3.14";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ freetype ];
+  buildInputs = [ freetype ]
+    ++ lib.optionals (!stdenv.cc.isGNU) [ libgcc ];
 
   patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
 
