@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.1.0";
+  version = "4.2.0";
   pname = "geoip2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57d8d15de2527e0697bbef44fc16812bba709f03a07ef99297bd56c1df3b1efd";
+    sha256 = "906a1dbf15a179a1af3522970e8420ab15bb3e0afc526942cc179e12146d9c1d";
   };
 
   patchPhase = ''
