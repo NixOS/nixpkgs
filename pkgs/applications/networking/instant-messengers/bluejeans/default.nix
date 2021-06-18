@@ -44,11 +44,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.21.3.2";
+  version = "2.22.0.87";
 
   src = fetchurl {
     url = "https://swdl.bluejeans.com/desktop-app/linux/${getFirst 3 version}/BlueJeans_${version}.rpm";
-    sha256 = "sha256-a/REuxkqZmLLa7N3CUgUAdq74VMD9D10a/Sx2jOj1QA=";
+    sha256 = "sha256-0nobn+YcvqakwvBdkoEJrzHoL+OGym2zJ806oUabYfo=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
