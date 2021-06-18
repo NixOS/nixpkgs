@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
-  version = "1.2.8";
+  version = "1.2.9";
 
   src = fetchurl {
     url = "http://distfiles.gentoo.org/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "sha256-urTIhG4dLMNmnPqSMdIdszWEHX1Y+eGc0Jn+bOYmsVc=";
+    sha256 = "sha256-687CadybmHbXO9M6jQDVZ+OUat6U2XDVyysM/KwpiLI=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
