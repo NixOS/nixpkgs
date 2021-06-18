@@ -9193,6 +9193,8 @@ in {
 
   xstatic-pygments = callPackage ../development/python-modules/xstatic-pygments { };
 
+  xtensor-python = callPackage ../development/python-modules/xtensor-python { };
+
   xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
     inherit (pkgs.xorg) xorgserver;
   };
