@@ -12,7 +12,7 @@
   attica, baloo, kaccounts-integration, kactivities, kactivities-stats, kauth,
   kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons,
   kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications, knotifyconfig,
-  kpeople, krunner, kscreenlocker, ksysguard, kwallet, kwin, phonon,
+  kpeople, krunner, kscreenlocker, kwallet, kwin, phonon,
   plasma-framework, plasma-workspace, qqc2-desktop-style, xf86inputlibinput
 }:
 
@@ -28,7 +28,7 @@ mkDerivation {
     attica baloo kaccounts-integration kactivities kactivities-stats kauth
     kcmutils kdbusaddons kdeclarative kded kdelibs4support kemoticons
     kglobalaccel ki18n kitemmodels knewstuff knotifications knotifyconfig
-    kpeople krunner kscreenlocker ksysguard kwallet kwin plasma-framework
+    kpeople krunner kscreenlocker kwallet kwin plasma-framework
     plasma-workspace qqc2-desktop-style
   ];
 
