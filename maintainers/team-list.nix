@@ -164,6 +164,13 @@ with lib.maintainers; {
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
   };
 
+  pantheon = {
+    members = [
+      davidak
+    ];
+    scope = "Maintain Pantheon desktop environment and platform.";
+  };
+
   php = {
     members = [
       aanderse
