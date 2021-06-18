@@ -328,7 +328,11 @@ in
               if [ ! -e ${cfg.cachedir}/firstrun ]; then
                 ( flock 10
                   flock -u 9
-                  ${tarsnap} --fsck
+                  if (tarsnap-keymgmt --print-key-permissions ${gcfg.keyfile} | grep -q writing); then
+                    ${tarsnap} --fsck
+                  else
+                    echo 'unable to fsck on firstrun as ${gcfg.keyfile} does not have writing permission'
+                  fi
                   flock 9
                 ) 10>${cfg.cachedir}/firstrun
               fi
