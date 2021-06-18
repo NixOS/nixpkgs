@@ -27,7 +27,7 @@ rec {
       # *not* a parent of b.device. If we add a slash at the end of each string,
       # though, this is not a problem: "/aaa/" is not a prefix of "/aaaa/".
       normalisePath = path: "${path}${optionalString (!(hasSuffix "/" path)) "/"}";
-      normalise = mount: mount // { device = normalisePath mount.device;
+      normalise = mount: mount // { device = normalisePath (toString mount.device);
                                     mountPoint = normalisePath mount.mountPoint;
                                     depends = map normalisePath mount.depends;
                                   };
