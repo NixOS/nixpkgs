@@ -12733,6 +12733,8 @@ in
   pharo-spur64 = assert stdenv.is64bit; pharo-vms.spur64;
   pharo-launcher = callPackage ../development/pharo/launcher { };
 
+  protege-distribution = callPackage ../development/web/protege-distribution { };
+
   umr = callPackage ../development/misc/umr {
     llvmPackages = llvmPackages_latest;
   };
