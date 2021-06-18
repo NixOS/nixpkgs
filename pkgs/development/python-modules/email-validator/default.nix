@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a13bd6050d1db4475f13e444e169b6fe872434922d38968c67cea9568cce2f0";
+    sha256 = "aa237a65f6f4da067119b7df3f13e89c25c051327b2b5b66dc075f33d62480d7";
   };
 
   doCheck = false;
