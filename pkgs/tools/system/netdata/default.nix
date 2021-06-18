@@ -79,7 +79,6 @@ in stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    rm -r $out/sbin
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${openssl}/bin
   '';
 
