@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dhewm3";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "dhewm";
     repo = "dhewm3";
     rev = version;
-    sha256 = "0wsabvh1x4g12xmhzs2m2pgri2q9sir1w3m2r7fpy6kzxp32hqdk";
+    sha256 = "sha256-QI2INtNP+TSXdGSNxBcJ+lQK9dvDStrir20z3kCY8v4=";
   };
 
   # Add libGLU libGL linking
