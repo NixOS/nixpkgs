@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7qVemc7siW/8mO4wUXEKJBt9M18kagRyu/+7DLLe9FM=";
+    sha256 = "eea55e99ceec896ffc98ee3051710a241b7d335f246a0472bbffbb0cb2def453";
   };
 
   propagatedBuildInputs = [ google-api-core proto-plus ];
