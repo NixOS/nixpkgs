@@ -120,6 +120,8 @@ stdenv.mkDerivation ({
       })
 
       ./fix-x64-abi.patch
+
+      ./nss-path.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
