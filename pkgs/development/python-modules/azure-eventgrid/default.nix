@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "azure-eventgrid";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "77af2c20abde7d8342da7993781605b440aeac0f95c4af13bb87465c3bd5fe35";
+    sha256 = "bf50c8a4dc022ff9b1810800cb431b2c68b748eed160dd71fb8eb9bd860c7ecc";
   };
 
   propagatedBuildInputs = [
