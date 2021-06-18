@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 4ec1009a615521371dd98576c456f62f63190ad9
-  ref: refs/tags/6.0.48
+  revision: 2e07122e80d8ae23e6aa53ae0fcb9dfca6639c59
+  ref: refs/tags/6.0.49
   specs:
-    metasploit-framework (6.0.48)
+    metasploit-framework (6.0.49)
       actionpack (~> 5.2.2)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -125,19 +125,19 @@ GEM
     arel-helpers (2.12.0)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.1.1)
-    aws-partitions (1.467.0)
-    aws-sdk-core (3.114.2)
+    aws-partitions (1.469.0)
+    aws-sdk-core (3.114.3)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.242.0)
+    aws-sdk-ec2 (1.244.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.55.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.43.0)
+    aws-sdk-kms (1.44.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.96.1)
@@ -391,7 +391,7 @@ GEM
     warden (1.2.9)
       rack (>= 2.0.9)
     webrick (1.7.0)
-    websocket-driver (0.7.4)
+    websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     windows_error (0.1.2)
