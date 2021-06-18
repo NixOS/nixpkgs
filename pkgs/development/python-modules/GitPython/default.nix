@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "GitPython";
-  version = "3.1.14";
+  version = "3.1.18";
   disabled = isPy27; # no longer supported
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be27633e7509e58391f10207cd32b2a6cf5b908f92d9cd30da2e514e1137af61";
+    sha256 = "b838a895977b45ab6f0cc926a9045c8d1c44e2b653c1fcc39fe91f42c6e8f05b";
   };
 
   patches = [
