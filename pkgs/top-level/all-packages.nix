@@ -10286,6 +10286,7 @@ in
   es = callPackage ../shells/es { };
 
   fish = callPackage ../shells/fish { };
+  oh-my-fish = callPackage ../shells/fish/oh-my-fish { };
 
   wrapFish = callPackage ../shells/fish/wrapper.nix { };
 
