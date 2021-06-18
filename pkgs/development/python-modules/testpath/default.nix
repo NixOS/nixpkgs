@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "testpath";
-  version = "0.4.4";
+  version = "0.5.0";
   format = "wheel";
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "bfcf9411ef4bf3db7579063e0546938b1edda3d69f4e1fb8756991f5951f85d4";
+    sha256 = "8044f9a0bab6567fc644a3593164e872543bb44225b0e24846e2c89237937589";
   };
 
   meta = with lib; {
