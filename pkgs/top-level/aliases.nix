@@ -1120,7 +1120,7 @@ mapAliases ({
     kgamma5
     kinfocenter
     kmenuedit
-    kscreen kscreenlocker ksshaskpass ksysguard
+    kscreen kscreenlocker ksshaskpass
     kwallet-pam kwayland-integration kwin kwrited
     milou
     oxygen
