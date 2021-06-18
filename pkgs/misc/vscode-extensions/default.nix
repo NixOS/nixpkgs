@@ -670,6 +670,23 @@ let
         };
       };
 
+      ionide.ionide-fsharp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "Ionide-fsharp";
+          publisher = "Ionide";
+          version = "5.5.5";
+          sha256 = "xrBNiIbZVJ0sGUk/4PudD8kSyX94QkrFtf7Ho/sB0Vs=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
+          description = "Enhanced F# Language Features for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-fsharp";
+          homepage = "https://ionide.io";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+      };
+
       jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elixir-ls";
@@ -1149,6 +1166,23 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      svsool.markdown-memo = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-memo";
+          publisher = "svsool";
+          version = "0.3.8";
+          sha256 = "eFiCCXxrOnXwJK1AOMfIDsPGsFG3ArLD1X/uAEH5lRY=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/svsool.markdown-memo/changelog";
+          description = "Markdown knowledge base with bidirectional [[link]]s built on top of VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=svsool.markdown-memo";
+          homepage = "https://github.com/svsool/vscode-memo";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
         };
       };
 

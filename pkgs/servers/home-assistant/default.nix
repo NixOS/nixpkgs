@@ -350,6 +350,7 @@ in with py.pkgs; buildPythonApplication rec {
     "dunehd"
     "dyson"
     "eafm"
+    "ecobee"
     "econet"
     "efergy"
     "emonitor"
