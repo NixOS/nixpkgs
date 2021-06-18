@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Cerberus";
-  version = "1.3.2";
+  version = "1.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12cm547hpypqd7bwcl4wr4w6varibc1dagzicg5qbp86yaa6cbih";
+    sha256 = "d1b21b3954b2498d9a79edf16b3170a3ac1021df88d197dc2ce5928ba519237c";
   };
 
   checkInputs = [ pytestrunner pytest ];
