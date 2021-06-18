@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ktlint.github.io/";
     license = licenses.mit;
     platforms = jre_headless.meta.platforms;
-    maintainers = with maintainers; [ tadfisher ];
+    maintainers = with maintainers; [ tadfisher SubhrajyotiSen ];
   };
 }
