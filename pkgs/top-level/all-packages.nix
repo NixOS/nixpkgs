@@ -11158,6 +11158,8 @@ in
     ocamlPackages = ocaml-ng.ocamlPackages_4_07;
   };
 
+  pyre = callPackage ../development/tools/pyre { };
+
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
   glslang = callPackage ../development/compilers/glslang { };
