@@ -1602,3 +1602,29 @@ The following rules are desired to be respected:
   If necessary, `pname` has to be given a different value within `fetchPypi`.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
+
+## Package set maintenance
+
+The whole python package set has alot of packages that does not see regular
+updates, because they either are a very fragile component in the python
+ecosystem, like for example the `hypothesis` package, or packages that have
+no maintainer, so maintenance falls back to the package set maintainers.
+
+### Updating packages in bulk
+
+There is a tool to update alot of python libraries in bulk, it exists at
+`./maintainers/scripts/update-python-libraries` with this repository.
+
+It can quickly update minor or major versions for all packages selected
+and create update commits, and supports the `fetchPypi`, `fetchUrl` and
+`fetchFromGitHub` fetchers.
+
+These bulk updates take place in the `python-unstable` branch which should
+normally be merged into `staging-next` after a stabilization period.
+
+An exemplary call to update all python libraries between minor versions
+would be:
+
+```
+./maintainers/scripts/update-python-libraries --target minor --commit --use-pkgs-prefix pkgs/development/python-modules/**/default.nix
+```
