@@ -72,6 +72,11 @@ in stdenv.mkDerivation {
     mkdir -p $out
     cp -r ./* "$out/"
 
+    rm -rf $out/demo
+
+    # Remove some broken manpages.
+    rm -rf $out/man/ja*
+
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
