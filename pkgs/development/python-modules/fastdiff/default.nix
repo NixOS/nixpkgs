@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fastdiff";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ai95vjchl4396zjl1b69xfqvn9kn1y7c40d9l0qxdss0pcx6fk2";
+    sha256 = "4dfa09c47832a8c040acda3f1f55fc0ab4d666f0e14e6951e6da78d59acd945a";
   };
 
   postPatch = ''
