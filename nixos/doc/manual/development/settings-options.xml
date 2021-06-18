@@ -91,6 +91,84 @@
            </para>
          </listitem>
        </varlistentry>
+       <varlistentry>
+         <term>
+           <varname>pkgs.formats.elixirConf</varname> { <replaceable>elixir</replaceable> ? pkgs.elixir }
+         </term>
+         <listitem>
+           <para>
+             A function taking an attribute set with values
+             <variablelist>
+               <varlistentry>
+                 <term>
+                   <varname>elixir</varname>
+                 </term>
+                 <listitem>
+                   <para>
+                     The Elixir package which will be used to format the generated output
+                   </para>
+                 </listitem>
+               </varlistentry>
+             </variablelist>
+             It returns a set with Elixir-Config-specific attributes <varname>type</varname>, <varname>lib</varname>, and <varname>generate</varname> as specified <link linkend='pkgs-formats-result'>below</link>.
+           </para>
+           <para>
+             The <varname>lib</varname> attribute contains functions to be used in settings, for generating special Elixir values:
+             <variablelist>
+               <varlistentry>
+                 <term>
+                   <varname>mkRaw</varname> <replaceable>elixirCode</replaceable>
+                 </term>
+                 <listitem>
+                   <para>
+                    Outputs the given string as raw Elixir code
+                   </para>
+                 </listitem>
+               </varlistentry>
+               <varlistentry>
+                 <term>
+                   <varname>mkGetEnv</varname> { <replaceable>envVariable</replaceable>, <replaceable>fallback</replaceable> ? null }
+                 </term>
+                 <listitem>
+                   <para>
+                     Make the configuration fetch an environment variable at runtime
+                   </para>
+                 </listitem>
+               </varlistentry>
+               <varlistentry>
+                 <term>
+                   <varname>mkAtom</varname> <replaceable>atom</replaceable>
+                 </term>
+                 <listitem>
+                   <para>
+                     Outputs the given string as an Elixir atom, instead of the default Elixir binary string. Note: lowercase atoms still needs to be prefixed with ":"
+                   </para>
+                 </listitem>
+               </varlistentry>
+               <varlistentry>
+                 <term>
+                   <varname>mkTuple</varname> <replaceable>array</replaceable>
+                 </term>
+                 <listitem>
+                   <para>
+                     Outputs the given array as an Elixir tuple, instead of the default Elixir list
+                   </para>
+                 </listitem>
+               </varlistentry>
+               <varlistentry>
+                 <term>
+                   <varname>mkMap</varname> <replaceable>attrset</replaceable>
+                 </term>
+                 <listitem>
+                   <para>
+                     Outputs the given attribute set as an Elixir map, instead of the default Elixir keyword list
+                   </para>
+                 </listitem>
+               </varlistentry>
+             </variablelist>
+           </para>
+         </listitem>
+       </varlistentry>
      </variablelist>
 
    </para>
@@ -104,6 +182,16 @@
         <listitem>
           <para>
             A module system type representing a value of the format
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <varname>lib</varname>
+        </term>
+        <listitem>
+          <para>
+            Utility functions for convenience, or special interactions with the format. This attribute is optional. It may contain inside a <varname>types</varname> attribute containing types specific to this format.
           </para>
         </listitem>
       </varlistentry>

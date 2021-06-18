@@ -1,0 +1,15 @@
+diff --git a/yarn.lock b/yarn.lock
+index cd2f8536..83b3b4f1 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -12826,8 +12826,8 @@ workbox-sw@^5.1.4:
+   resolved "https://registry.yarnpkg.com/workbox-sw/-/workbox-sw-5.1.4.tgz#2bb34c9f7381f90d84cef644816d45150011d3db"
+   integrity sha512-9xKnKw95aXwSNc8kk8gki4HU0g0W6KXu+xks7wFuC7h0sembFnTrKtckqZxbSod41TDaGh+gWUA5IRXrL0ECRA==
+ 
+-workbox-webpack-plugin@5.1.3, workbox-webpack-plugin@^4.3.1:
+-  version "5.1.3"
++workbox-webpack-plugin@^4.3.1:
++  version "4.3.1"
+   resolved "https://registry.yarnpkg.com/workbox-webpack-plugin/-/workbox-webpack-plugin-5.1.3.tgz#a7070e3ea0eedb6f87e11fd916ec5d4430a6e348"
+   integrity sha512-gxSkZ9GFLrMNC/8DGNRjcMhrt8iu+MMXhH/Fpo3wo9rKaSMsI7esGq0klTH/UloP9pNvBizVydysrB52eRhI7w==
+   dependencies:
