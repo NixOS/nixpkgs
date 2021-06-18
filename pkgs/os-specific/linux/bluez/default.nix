@@ -72,7 +72,6 @@ in stdenv.mkDerivation rec {
     "--enable-nfc"
     "--enable-sap"
     "--enable-sixaxis"
-    "--enable-wiimote"
   ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
