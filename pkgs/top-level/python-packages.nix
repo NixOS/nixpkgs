@@ -5242,6 +5242,8 @@ in {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
+  pmsensor = callPackage ../development/python-modules/pmsensor { };
+
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
