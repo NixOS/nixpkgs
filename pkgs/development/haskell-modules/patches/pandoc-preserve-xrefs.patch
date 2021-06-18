@@ -1,0 +1,31 @@
+From 88f99ed2df748406b268bb2d9ba230fbe9b19707 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Thu, 17 Jun 2021 23:14:08 +0200
+Subject: [PATCH] DocBook reader: Preserve callouts and xrefs in code
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When converting DocBook documents like https://github.com/NixOS/nixpkgs/blob/c06cb69ca0dc02b37e27104ac8415c3cab173328/nixos/modules/programs/plotinus.xml#L27, these need to be dealt with manually, or too much information will be lost.
+
+Ideally, the AST would support rich code blocks and the dumbing down would be handled in writers but until then, let’s preserve the elements verbatim.
+---
+ src/Text/Pandoc/Readers/DocBook.hs | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/Text/Pandoc/Readers/DocBook.hs b/src/Text/Pandoc/Readers/DocBook.hs
+index 6ac1c99f92b..95c6839f832 100644
+--- a/src/Text/Pandoc/Readers/DocBook.hs
++++ b/src/Text/Pandoc/Readers/DocBook.hs
+@@ -1076,7 +1076,10 @@ strContentRecursive = strContent .
+   (\e' -> e'{ elContent = map elementToStr $ elContent e' })
+ 
+ elementToStr :: Content -> Content
+-elementToStr (Elem e') = Text $ CData CDataText (strContentRecursive e') Nothing
++elementToStr (Elem e') =
++  case qName (elName e') of
++        n | n == "xref" || n == "co" -> Text $ CData CDataText (showElement e') Nothing
++        _ -> Text $ CData CDataText (strContentRecursive e') Nothing
+ elementToStr x = x
+ 
+ parseInline :: PandocMonad m => Content -> DB m Inlines
