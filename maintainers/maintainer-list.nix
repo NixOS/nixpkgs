@@ -1883,6 +1883,12 @@
     githubId = 2131991;
     name = "Elmo Todurov";
   };
+  cjab = {
+    email = "chad+nixpkgs@jablonski.xyz";
+    github = "cjab";
+    githubId = 136485;
+    name = "Chad Jablonski";
+  };
   ck3d = {
     email = "ck3d@gmx.de";
     github = "ck3d";
