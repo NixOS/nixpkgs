@@ -501,6 +501,7 @@ in with py.pkgs; buildPythonApplication rec {
     "met"
     "met_eireann"
     "meteoclimatic"
+    "mhz19"
     "microsoft_face"
     "microsoft_face_detect"
     "microsoft_face_identify"
