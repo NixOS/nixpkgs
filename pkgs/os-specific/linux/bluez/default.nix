@@ -3,6 +3,7 @@
 , fetchurl
 , alsa-lib
 , dbus
+, ell
 , glib
 , json_c
 , libical
@@ -30,6 +31,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     dbus
+    ell
     glib
     json_c
     libical
@@ -57,6 +59,7 @@ in stdenv.mkDerivation rec {
     "--enable-library"
     "--enable-cups"
     "--enable-pie"
+    "--enable-external-ell"
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
     "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
