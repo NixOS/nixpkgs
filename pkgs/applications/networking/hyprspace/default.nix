@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "hyprspace";
-  version = "0.1.2";
+  version = "0.1.4";
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin iproute2mac;
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YQJaK6i4GWEGSlf/1+hzjVhdN6ZjZC55v8w9KEedNg4=";
+    sha256 = "sha256-Rw82m0NJcWgtcXRIb1YNv+Kpe2YufKMNAn1Ph9RB3W8=";
   };
 
   vendorSha256 = "sha256-ErqK2jDTpqUyvll+epdGKRYCJvyvCa90W1GVbbhF0a4=";
