@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, substituteAll, intltool, pkg-config, fetchpatch, dbus
-, gnome, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
-, libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
+, gnome, systemd, libuuid, polkit, gnutls, ppp, dhcp, nftables, python3, vala
+, libgcrypt, dnsmasq, bluez5, readline, libselinux, audit, nss
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, gnused, iputils, kmod, jansson, gtk-doc, libxslt
 , docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43
@@ -10,11 +10,11 @@ let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.30.4";
+  version = "1.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-YFC3JCEuo85zhhEzWb6pr6H2eaVPYNmZpZmYkuZywZA=";
+    sha256 = "sha256-/27O4EwRQjBN29SaF5S7AbOcpSoPj1ncHBkjMe5UnnM=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     "-Ddhcpcd=no"
     "-Ddhcpcanon=no"
     "-Dpppd=${ppp}/bin/pppd"
-    "-Diptables=${iptables}/bin/iptables"
+    "-Dnft=${nftables}/bin/nft"
     # to enable link-local connections
     "-Dudev_dir=${placeholder "out"}/lib/udev"
     "-Dresolvconf=${openresolv}/bin/resolvconf"
@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     systemd libselinux audit libpsl libuuid polkit ppp libndp curl mobile-broadband-provider-info
-    bluez5 dnsmasq gobject-introspection modemmanager readline newt libsoup jansson
+    bluez5 dnsmasq gobject-introspection modemmanager readline newt libsoup jansson nss
   ];
 
   propagatedBuildInputs = [ gnutls libgcrypt ];
@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that will be overridden during installation.
     mkdir -p ${placeholder "out"}/lib
-    ln -s $PWD/libnm/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
+    ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
   '';
 
   passthru = {
