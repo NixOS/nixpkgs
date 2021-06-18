@@ -39,7 +39,9 @@ stdenv.mkDerivation rec {
         fi
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
         if test -n "''${createFindlibDestdir-}"; then
-          mkdir -p $OCAMLFIND_DESTDIR
+          preInstall () {
+            mkdir -p $OCAMLFIND_DESTDIR
+          }
         fi
     }
 
@@ -57,5 +59,3 @@ stdenv.mkDerivation rec {
     ];
   };
 }
-
-
