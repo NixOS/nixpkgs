@@ -6254,6 +6254,12 @@
     githubId = 34393802;
     name = "Malte Voos";
   };
+  malbarbo = {
+    email = "malbarbo@gmail.com";
+    github = "malbarbo";
+    githubId = 1678126;
+    name = "Marco A L Barbosa";
+  };
   malyn = {
     email = "malyn@strangeGizmo.com";
     github = "malyn";

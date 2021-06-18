@@ -2299,6 +2299,8 @@ in {
 
   ephem = callPackage ../development/python-modules/ephem { };
 
+  epson-projector = callPackage ../development/python-modules/epson-projector { };
+
   eradicate = callPackage ../development/python-modules/eradicate { };
 
   escapism = callPackage ../development/python-modules/escapism { };
@@ -5242,6 +5244,8 @@ in {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
+  pmsensor = callPackage ../development/python-modules/pmsensor { };
+
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
@@ -7722,6 +7726,8 @@ in {
 
   sendgrid = callPackage ../development/python-modules/sendgrid { };
 
+  sense-energy = callPackage ../development/python-modules/sense-energy { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece;
   };
@@ -9186,6 +9192,8 @@ in {
   xstatic-jquery-ui = callPackage ../development/python-modules/xstatic-jquery-ui { };
 
   xstatic-pygments = callPackage ../development/python-modules/xstatic-pygments { };
+
+  xtensor-python = callPackage ../development/python-modules/xtensor-python { };
 
   xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
     inherit (pkgs.xorg) xorgserver;
