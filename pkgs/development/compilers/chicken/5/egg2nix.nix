@@ -10,8 +10,9 @@ eggDerivation {
   src = fetchFromGitHub {
     owner = "corngood";
     repo = "egg2nix";
-    rev = "chicken-5";
-    sha256 = "1vfnhbcnyakywgjafhs0k5kpsdnrinzvdjxpz3fkwas1jsvxq3d1";
+    # from the chicken-5 branch
+    rev = "26039936505a301ad3d467c6aa54300cc400993b";
+    sha256 = "0mykaj1c3hccilm2vkb2qss1d8xib5mcksam0wsmmq2c2pm4mvii";
   };
 
   name = "egg2nix-${version}";
