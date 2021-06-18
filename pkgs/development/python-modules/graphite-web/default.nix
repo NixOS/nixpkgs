@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "graphite-web";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b3cb3b9affe1b9e3777aab046416b3d545390ceea4d35d55c753b1e4732eaad0";
+    sha256 = "54240b0f1e069b53e2ce92d4e534e21b195fb0ebd64b6ad8a49c44284e3eb0b1";
   };
 
   patches = [
