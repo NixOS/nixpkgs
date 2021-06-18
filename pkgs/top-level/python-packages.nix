@@ -2269,6 +2269,8 @@ in {
 
   enamlx = callPackage ../development/python-modules/enamlx { };
 
+  enocean = callPackage ../development/python-modules/enocean { };
+
   enrich = callPackage ../development/python-modules/enrich { };
 
   entrance = callPackage ../development/python-modules/entrance {

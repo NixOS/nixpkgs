@@ -225,7 +225,7 @@
     "emulated_kasa" = ps: with ps; [ sense-energy ];
     "emulated_roku" = ps: with ps; [ ]; # missing inputs: emulated_roku
     "enigma2" = ps: with ps; [ openwebifpy ];
-    "enocean" = ps: with ps; [ ]; # missing inputs: enocean
+    "enocean" = ps: with ps; [ enocean ];
     "enphase_envoy" = ps: with ps; [ envoy-reader ];
     "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
     "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
