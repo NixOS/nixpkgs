@@ -222,7 +222,7 @@
     "emoncms_history" = ps: with ps; [ ];
     "emonitor" = ps: with ps; [ aioemonitor ];
     "emulated_hue" = ps: with ps; [ aiohttp-cors ];
-    "emulated_kasa" = ps: with ps; [ ]; # missing inputs: sense_energy
+    "emulated_kasa" = ps: with ps; [ sense-energy ];
     "emulated_roku" = ps: with ps; [ ]; # missing inputs: emulated_roku
     "enigma2" = ps: with ps; [ openwebifpy ];
     "enocean" = ps: with ps; [ ]; # missing inputs: enocean
@@ -232,7 +232,7 @@
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ pyenvisalink ];
     "ephember" = ps: with ps; [ ]; # missing inputs: pyephember
-    "epson" = ps: with ps; [ ]; # missing inputs: epson-projector
+    "epson" = ps: with ps; [ epson-projector ];
     "epsonworkforce" = ps: with ps; [ ]; # missing inputs: epsonprinter
     "eq3btsmart" = ps: with ps; [ construct ]; # missing inputs: python-eq3bt
     "esphome" = ps: with ps; [ aioesphomeapi aiohttp-cors ifaddr zeroconf ];
@@ -503,7 +503,7 @@
     "meteoclimatic" = ps: with ps; [ pymeteoclimatic ];
     "metoffice" = ps: with ps; [ ]; # missing inputs: datapoint
     "mfi" = ps: with ps; [ ]; # missing inputs: mficlient
-    "mhz19" = ps: with ps; [ ]; # missing inputs: pmsensor
+    "mhz19" = ps: with ps; [ pmsensor ];
     "microsoft" = ps: with ps; [ ]; # missing inputs: pycsspeechtts
     "microsoft_face" = ps: with ps; [ aiohttp-cors ];
     "microsoft_face_detect" = ps: with ps; [ aiohttp-cors ];
@@ -733,13 +733,13 @@
     "search" = ps: with ps; [ aiohttp-cors ];
     "season" = ps: with ps; [ ephem ];
     "sendgrid" = ps: with ps; [ sendgrid ];
-    "sense" = ps: with ps; [ ]; # missing inputs: sense_energy
+    "sense" = ps: with ps; [ sense-energy ];
     "sensehat" = ps: with ps; [ ]; # missing inputs: sense-hat
     "sensibo" = ps: with ps; [ ]; # missing inputs: pysensibo
     "sensor" = ps: with ps; [ sqlalchemy ];
     "sentry" = ps: with ps; [ sentry-sdk ];
     "serial" = ps: with ps; [ pyserial-asyncio ];
-    "serial_pm" = ps: with ps; [ ]; # missing inputs: pmsensor
+    "serial_pm" = ps: with ps; [ pmsensor ];
     "sesame" = ps: with ps; [ ]; # missing inputs: pysesame2
     "seven_segments" = ps: with ps; [ pillow ];
     "seventeentrack" = ps: with ps; [ ]; # missing inputs: py17track
