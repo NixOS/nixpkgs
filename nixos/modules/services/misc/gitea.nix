@@ -82,7 +82,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = (if !usePostgresql then 3306 else pg.port);
           description = "Database host port.";
         };
