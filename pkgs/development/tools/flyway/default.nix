@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, jre_headless, makeWrapper }:
   let
-    version = "7.5.4";
+    version = "7.6.0";
   in
     stdenv.mkDerivation {
       pname = "flyway";
       inherit version;
       src = fetchurl {
         url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${version}/flyway-commandline-${version}.tar.gz";
-        sha256 = "sha256-WU8j1NSf2KfA/HJWFtMLOZ3t5nxW4sU713e6qEEhZ0I=";
+        sha256 = "sha256-2wFDTBkxhBeam7f2Ic1Tgm3Yt8fCch4XmUqcnw90Bb0=";
       };
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
