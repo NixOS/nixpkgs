@@ -817,6 +817,8 @@ substitute ./foo.in ./foo.out \
     --subst-var someVar
 ```
 
+For debugging purposes the environment variable ``SUBSTITUTE_ERROR`` can be set to anything which aborts incase a none match was encountered.
+
 ### `substituteInPlace` \<file\> \<subs\> {#fun-substituteInPlace}
 
 Like `substitute`, but performs the substitutions in place on the file \<file\>.

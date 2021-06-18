@@ -672,6 +672,7 @@ substituteStream() {
                 if [ "$pattern" != "$replacement" ]; then
                     if [ "${!var}" == "$savedvar" ]; then
                         echo "substituteStream(): WARNING: pattern '$pattern' doesn't match anything in $description" >&2
+                        [[ -n ${SUBSTITUTE_ERROR:-} ]] && return 1
                     fi
                 fi
                 ;;
