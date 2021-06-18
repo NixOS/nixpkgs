@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyfma";
-  version = "0.1.2";
+  version = "0.1.4";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a9e2503fd01baa4978af5f491b79b7646d7872df9ecc7ab63ba10c250c50d8a";
+    sha256 = "5bc6bf57d960a5232b7a56bd38e9fe3dce0911016746029931044b66bdec46e9";
   };
 
   buildInputs = [
