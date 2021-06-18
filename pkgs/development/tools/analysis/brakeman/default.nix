@@ -1,11 +1,11 @@
-{ lib, ruby, buildRubyGem }:
+{ lib, ruby, bundlerApp, bundlerUpdateScript }:
 
-buildRubyGem rec {
-  inherit ruby;
-  name = "${gemName}-${version}";
-  gemName = "brakeman";
-  version = "5.0.0";
-  source.sha256 = "0k1ynqsr9b0vnxqb7d5hbdk4q1i98zjzdnx4y1ylikz4rmkizf91";
+bundlerApp rec {
+  pname = "brakeman";
+  exes = [ "brakeman" ];
+  gemdir = ./.;
+
+  passthru.updateScript = bundlerUpdateScript "brakeman";
 
   meta = with lib; {
     description = "Static analysis security scanner for Ruby on Rails";
