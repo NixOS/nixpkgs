@@ -12658,6 +12658,8 @@ in
 
   wasm = ocamlPackages.wasm;
 
+  wasm3 = callPackage ../development/interpreters/wasm3 { };
+
   proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm { };
 
 
