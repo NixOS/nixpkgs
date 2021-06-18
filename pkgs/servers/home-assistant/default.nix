@@ -357,6 +357,7 @@ in with py.pkgs; buildPythonApplication rec {
     "dialogflow"
     "directv"
     "discovery"
+    "doorbird"
     "dsmr"
     "dte_energy_bridge"
     "duckdns"
