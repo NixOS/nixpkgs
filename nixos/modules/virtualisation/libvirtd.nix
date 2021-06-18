@@ -164,7 +164,13 @@ in {
 
     boot.kernelModules = [ "tun" ];
 
-    users.groups.libvirt.gid = config.ids.gids.libvirt;
+    users.groups.libvirt.gid = let id = config.ids.gids.libvirt; in
+      if
+        lib.any
+          (groups: builtins.elem "libvirtd" groups)
+          (lib.mapAttrsToList (name: value: value.extraGroups) users.users)
+      then
+        builtins.trace "warning: the group libvirtd is deprecated, use libvirt instead" id else id;
 
     # libvirtd runs qemu as this user and group by default
     users.extraGroups.qemu-libvirtd.gid = config.ids.gids.qemu-libvirtd;
