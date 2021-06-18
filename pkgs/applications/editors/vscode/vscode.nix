@@ -13,16 +13,16 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1bj954kjwrk0nx8griy2y8gp7dys0wf610ki0jrby46mlvrmszs1";
-    x86_64-darwin = "1dqpz7qpnycd4b7iqg639rab3ds4m06m15rmyp7r70053qaw1s61";
-    aarch64-linux = "04ifmw39swdl6ybz6jpan2krsqli1kjyjnicjaisww8vhvhr2lzk";
-    armv7l-linux = "0y1rzn2jy4wrn2yr95v7zzyl36pj9mbz4dgvazvy465wzk5ai7b4";
+    x86_64-linux = "0cklp0mp7qylzrqnfbvzs308q0bzpswlqw5n98qhl1jb5783svx1";
+    x86_64-darwin = "04yyv0wpkzdjfiy9kj2jslhv7nc5i6nw2207vfnbzysgs55l3x63";
+    aarch64-linux = "1ygk51902g0q7x3r6kd3s7gi2gx86x10svpvbipl494qcyfngqzs";
+    armv7l-linux = "0z5rg1nl8lz7zsvml6dfz093dbyrkr4zvvfssqiyarw4n24d2mim";
   }.${system};
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.57.0";
+    version = "1.57.1";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
