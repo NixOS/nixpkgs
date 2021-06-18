@@ -6,10 +6,13 @@
 , sphinx
 , Security
 , libiconv
-, prefix ? "uutils-"
+, withPrefix ? false
 , buildMulticallBinary ? true
 }:
 
+let
+  prefix = "uutils-";
+in
 stdenv.mkDerivation rec {
   pname = "uutils-coreutils";
   version = "0.0.6";
@@ -42,7 +45,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
     "PROFILE=release"
     "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
-  ] ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
+  ] ++ lib.optionals withPrefix [ "PROG_PREFIX=${prefix}" ]
   ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
   # too many impure/platform-dependent tests

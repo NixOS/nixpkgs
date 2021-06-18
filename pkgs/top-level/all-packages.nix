@@ -4450,6 +4450,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  uutils-coreutils-prefixed = pkgs.uutils-coreutils.override { withPrefix = true; };
+
   volctl = callPackage ../tools/audio/volctl { };
 
   volk = callPackage ../development/libraries/volk { };
