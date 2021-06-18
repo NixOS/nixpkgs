@@ -19478,6 +19478,8 @@ in
 
   neo4j = callPackage ../servers/nosql/neo4j { };
 
+  neo4j-desktop = callPackage ../applications/misc/neo4j-desktop { };
+
   check-esxi-hardware = callPackage ../servers/monitoring/plugins/esxi.nix {};
 
   net-snmp = callPackage ../servers/monitoring/net-snmp { };
