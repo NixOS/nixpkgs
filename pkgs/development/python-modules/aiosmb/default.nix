@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.2.44";
+  version = "0.2.48";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xNdrOO0BqV4sD6U39G2RXihDBBf516x8RLiqNLnZyWk=";
+    sha256 = "f5518987e3d41d213a4ffc4dd38362465b5d2cf99417014cb5402f8ee8c5abac";
   };
 
   propagatedBuildInputs = [
