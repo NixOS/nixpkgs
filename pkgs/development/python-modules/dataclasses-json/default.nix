@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , stringcase
 , typing-inspect
 , marshmallow-enum
@@ -11,13 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.5.2";
+  version = "0.5.4";
 
-  src = fetchFromGitHub {
-    owner = "lidatong";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1gcnm41rwg0jvq4vhr57vv9hyasws425zl8h4p05x2nzq86l0w1n";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "6c3976816fd3cdd8db3be2b516b64fc083acd46ac22c680d3dc24cb1d6ae3367";
   };
 
   propagatedBuildInputs = [
