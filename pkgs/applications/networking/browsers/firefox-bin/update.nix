@@ -26,7 +26,7 @@ in writeScript "update-${name}" ''
   HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
 
-  gpg --import ${./mozilla.asc}
+  gpg --receive-keys 14F26682D0916CDD81E37B6D61B7B526D98F0353
 
   tmpfile=`mktemp`
   url=${baseUrl}
