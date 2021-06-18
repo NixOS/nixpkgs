@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.11.1";
+  version = "0.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d1417f36b5b92d1365671633a91711513e5afbcc82f32475d0690317607714e";
+    sha256 = "d2ef3b5289184fb48dfe5f44ccb58d9d64ffb5452fc524a2bd7a640a36b3874d";
   };
 
   propagatedBuildInputs = [ numpy pyopengl pyqt5 scipy ];
