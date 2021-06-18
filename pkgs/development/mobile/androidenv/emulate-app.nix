@@ -4,6 +4,8 @@
 , enableGPU ? false, extraAVDFiles ? []
 , package ? null, activity ? null
 , avdHomeDir ? null, sdkExtraArgs ? {}
+, enableKeyboard ? true
+, dpi ? 240
 }:
 
 let
@@ -78,6 +80,14 @@ stdenv.mkDerivation {
         ${lib.optionalString enableGPU ''
           # Enable GPU acceleration
           echo "hw.gpu.enabled=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
+        ''}
+
+        echo "hw.lcd.density=${toString dpi}" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
+
+        ${lib.optionalString enableKeyboard ''
+          # Enable keyboard
+          echo "hw.keyboard=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
+          echo "hw.mainKeys=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
         ''}
 
         ${lib.concatMapStrings (extraAVDFile: ''
