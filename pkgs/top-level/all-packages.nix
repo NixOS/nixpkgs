@@ -19328,6 +19328,8 @@ in
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
 
+  jitsi-meet-prosody = callPackage ../misc/jitsi-meet-prosody { };
+
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
   kapowbang = callPackage ../servers/kapowbang { };
