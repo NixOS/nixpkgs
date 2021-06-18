@@ -11,6 +11,7 @@ The function `buildGoModule` builds Go programs managed with Go modules. It buil
 
 In the following is an example expression using `buildGoModule`, the following arguments are of special significance to the function:
 
+- `modRoot` : is the root directory where the `go.mod` and `go.sum` files are located.
 - `vendorSha256`: is the hash of the output of the intermediate fetcher derivation. `vendorSha256` can also take `null` as an input. When `null` is used as a value, rather than fetching the dependencies and vendoring them, we use the vendoring included within the source repo. If you'd like to not have to update this field on dependency changes, run `go mod vendor` in your source repo and set `vendorSha256 = null;`
 - `runVend`: runs the vend command to generate the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build.
 
@@ -26,6 +27,7 @@ pet = buildGoModule rec {
     sha256 = "0m2fzpqxk7hrbxsgqplkg7h2p7gv6s1miymv3gvw0cz039skag0s";
   };
 
+  modRoot = ".";
   vendorSha256 = "1879j77k96684wi554rkjxydrj8g3hpp0kvxz03sd8dmwr3lh83j";
 
   runVend = true;
