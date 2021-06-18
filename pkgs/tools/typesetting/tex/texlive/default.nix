@@ -30,61 +30,78 @@ let
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    orig = import ./pkgs.nix tl;
-    removeSelfDep = lib.mapAttrs
-      (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; }
+    tlpdb = with builtins; fromJSON (readFile ./texlive-snapshot.tlpdb.json);
+    removeSelfDep = builtins.map
+      (p: if p ? depends then p // { depends = lib.remove p.name p.depends; }
                          else p);
-    clean = removeSelfDep (orig // {
+    orig = lib.foldl'
+      (r: p: r // {
+        ${p.name} = p;
+      }) {} (removeSelfDep tlpdb.tlpkgs);
+    clean = orig // {
       # overrides of texlive.tlpdb
 
-      texlive-msg-translations = orig.texlive-msg-translations // {
-        hasRunfiles = false; # only *.po for tlmgr
-      };
+      # only *.po for tlmgr
+      texlive-msg-translations = lib.filterAttrs (n: v: n != hashAttr.run) orig.texlive-msg-translations;
 
       xdvi = orig.xdvi // { # it seems to need it to transform fonts
-        deps = (orig.xdvi.deps or {}) // { inherit (tl) metafont; };
+        depends = (orig.xdvi.depends or [ ]) ++ [ "metafont" ];
       };
 
       # remove dependency-heavy packages from the basic collections
       collection-basic = orig.collection-basic // {
-        deps = removeAttrs orig.collection-basic.deps [ "metafont" "xdvi" ];
+        depends = lib.remove "metafont" (lib.remove "xdvi"
+          orig.collection-basic.depends);
       };
       # add them elsewhere so that collections cover all packages
       collection-metapost = orig.collection-metapost // {
-        deps = orig.collection-metapost.deps // { inherit (tl) metafont; };
+        depends = orig.collection-metapost.depends ++ [ "metafont" ];
       };
       collection-plaingeneric = orig.collection-plaingeneric // {
-        deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
+        depends = orig.collection-plaingeneric.depends ++ [ "xdvi" ];
       };
-    }); # overrides
+    }; # overrides
+    withDeps = lib.mapAttrs
+      (n: p: p // {
+        depends = builtins.map (dn: tl.${dn}) (p.depends or [ ]);
+      }) clean;
 
     # tl =
-    in lib.mapAttrs flatDeps clean;
+    in lib.mapAttrs flatDeps withDeps;
     # TODO: texlive.infra for web2c config?
 
+  hashAttr = rec {
+    run = "containerchecksum";
+    doc = "doc" + run;
+    source = "src" + run;
+  };
 
-  flatDeps = pname: attrs:
+  flatDeps = pname: tlpkg:
     let
-      version = attrs.version or (builtins.toString attrs.revision);
+      version = tlpkg.cataloguedata.version or (toString tlpkg.revision);
       mkPkgV = tlType: let
-        pkg = attrs // {
-          sha512 = attrs.sha512.${tlType};
+        pkg = tlpkg // {
+          sha512 = tlpkg.${hashAttr.${tlType}};
           inherit pname tlType version;
         };
         in mkPkg pkg;
     in {
       # TL pkg contains lists of packages: runtime files, docs, sources, binaries
       pkgs =
-        # tarball of a collection/scheme itself only contains a tlobj file
-        [( if (attrs.hasRunfiles or false) then mkPkgV "run"
+        [( if (tlpkg ? ${hashAttr.run}) then mkPkgV "run"
             # the fake derivations are used for filtering of hyphenation patterns
-          else { inherit pname version; tlType = "run"; }
+          else ({ inherit pname version; tlType = "run"; } //
+            lib.optionalAttrs (tlpkg ? executes) {
+              inherit (tlpkg) executes;
+            } // lib.optionalAttrs (tlpkg ? postactions) {
+              inherit (tlpkg) postactions;
+            })
         )]
-        ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
-        ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
+        ++ lib.optional (tlpkg ? ${hashAttr.doc}) (mkPkgV "doc")
+        ++ lib.optional (tlpkg ? ${hashAttr.source}) (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
-        ++ combinePkgs (attrs.deps or {});
+        ++ combinePkgsList tlpkg.depends;
     };
 
   snapshot = {
@@ -94,14 +111,14 @@ let
   };
 
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
+  mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", relocated ? false, ... }@tlpkgV:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
       tlName = urlName + "-${version}";
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
-      urls = args.urls or (if args ? url then [ args.url ] else
+      urls = tlpkgV.urls or (if tlpkgV ? url then [ tlpkgV.url ] else
         map (up: "${up}/${urlName}.r${toString revision}.tar.xz") urlPrefixes);
 
       # The tarballs on CTAN mirrors for the current release are constantly
@@ -109,7 +126,7 @@ let
       # need to be used instead. Ideally, for the release branches of NixOS we
       # should be switching to the tlnet-final versions
       # (https://tug.org/historic/).
-      urlPrefixes = args.urlPrefixes or [
+      urlPrefixes = tlpkgV.urlPrefixes or [
         # tlnet-final snapshot
         #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
         #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
@@ -121,11 +138,16 @@ let
       src = fetchurl { inherit urls sha512; };
 
       passthru = {
-        inherit pname tlType version;
-      } // lib.optionalAttrs (sha512 != "") { inherit src; };
+        inherit pname tlType version src;
+      } // lib.optionalAttrs (tlpkgV ? executes) {
+        inherit (tlpkgV) executes;
+      } // lib.optionalAttrs (tlpkgV ? postactions) {
+        inherit (tlpkgV) postactions;
+      };
+
       unpackCmd = file: ''
         tar -xf ${file} \
-          '--strip-components=${toString stripPrefix}' \
+          '--strip-components=${if relocated then "0" else "1"}' \
           -C "$out" --anchored --exclude=tlpkg --keep-old-files
       '' + postUnpack;
 
@@ -159,8 +181,9 @@ let
       );
 
   # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgSet: lib.concatLists # uniqueness is handled in `combine`
-    (lib.mapAttrsToList (_n: a: a.pkgs) pkgSet);
+  combinePkgs = pkgSet: combinePkgsList (lib.attrValues pkgSet);
+  combinePkgsList = pkgList: lib.concatLists (lib.catAttrs "pkgs" pkgList);
+  # uniqueness is handled in `combine`
 
 in
   tl // {

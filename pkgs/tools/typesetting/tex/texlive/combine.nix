@@ -122,14 +122,13 @@ in (buildEnv {
   '' +
     # now filter hyphenation patterns, in a hacky way ATM
   (let
-    pnames = uniqueStrings (map (p: p.pname) pkgList.splitBin.wrong);
-    script =
-      writeText "hyphens.sed" (
-        # pick up the header
-        "1,/^% from/p;"
-        # pick up all sections matching packages that we combine
-        + lib.concatMapStrings (pname: "/^% from ${pname}:$/,/^%/p;\n") pnames
-      );
+    hyphens = with lib; filter (p: p ? executes && any (hasPrefix "AddHyphen") p.executes) pkgList.splitBin.wrong;
+    pnames = uniqueStrings (map (p: p.pname) hyphens);
+    sedExprs =
+      # pick up the header
+      "-e '1,/^% from/p;' " +
+      # pick up all sections matching packages that we combine
+      (lib.concatMapStrings (pname: "-e '/^% from ${pname}:$/,/^%/p;' ") pnames);
   in ''
     (
       cd ./share/texmf/tex/generic/config/
@@ -137,7 +136,7 @@ in (buildEnv {
         [ -e $fname ] || continue;
         cnfOrig="$(realpath ./$fname)"
         rm ./$fname
-        cat "$cnfOrig" | sed -n -f '${script}' > ./$fname
+        cat "$cnfOrig" | sed -n ${sedExprs} > ./$fname
       done
     )
   '') +
