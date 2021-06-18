@@ -5268,6 +5268,8 @@ in {
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
+  python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
+
   python-openems = callPackage ../development/python-modules/python-openems { };
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
