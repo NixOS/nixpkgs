@@ -217,13 +217,13 @@ rec {
           );
 
       driver = setupDriverForTest {
-        inherit testScript enableOCR skipLint;
+        inherit testScript enableOCR skipLint passthru;
         testName = name;
         qemu_pkg = pkgs.qemu_test;
         nodes = nodes pkgs.qemu_test;
       };
       driverInteractive = setupDriverForTest {
-        inherit testScript enableOCR skipLint;
+        inherit testScript enableOCR skipLint passthru;
         testName = name;
         qemu_pkg = pkgs.qemu;
         nodes = nodes pkgs.qemu;
