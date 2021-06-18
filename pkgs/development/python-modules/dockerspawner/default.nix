@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "dockerspawner";
-  version = "0.11.1";
+  version = "12.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83fd8ee012bb32432cb57bd408ff65534749aed8696648e6ac029a87fc474928";
+    sha256 = "b2cf2f4284b71f0bf34bc79c622f54805275167c83b446dfc05d8ee27294d60b";
   };
 
   propagatedBuildInputs = [
