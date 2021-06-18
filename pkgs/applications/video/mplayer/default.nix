@@ -205,6 +205,7 @@ stdenv.mkDerivation rec {
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
+    ++ optional  x264Support "-lx264"
     ++ [ "-lfreetype" ]
   );
 
