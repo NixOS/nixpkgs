@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , bc
 , bison
@@ -9,14 +8,13 @@
 , flex
 , openssl
 , swig
-, meson-tools
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
-, armTrustedFirmwareS905
 , buildPackages
 }:
 
+# For Amlogic U-Boot builds, look at the `amlogic.nix` expression.
 let
   defaultVersion = "2021.04";
   defaultSrc = fetchurl {
@@ -33,6 +31,7 @@ let
   , extraPatches ? []
   , extraMakeFlags ? []
   , extraMeta ? {}
+  , nativeBuildInputs ? []
   , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
 
@@ -60,7 +59,7 @@ let
         p.setuptools # for pkg_resources
       ]))
       swig
-    ];
+    ] ++ nativeBuildInputs;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
     hardeningDisable = [ "all" ];
@@ -102,7 +101,7 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]);
+  } // removeAttrs args [ "extraMeta" "nativeBuildInputs" ]);
 
 in {
   inherit buildUBoot;
@@ -204,52 +203,6 @@ in {
     defconfig = "novena_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-dtb.img" "SPL"];
-  };
-
-  # Flashing instructions:
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=1 count=442
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=512 skip=1 seek=1
-  # dd if=u-boot.gxbb of=<device> conv=fsync bs=512 seek=97
-  ubootOdroidC2 = let
-    firmwareBlobs = fetchFromGitHub {
-      owner = "armbian";
-      repo = "odroidc2-blobs";
-      rev = "47c5aac4bcac6f067cebe76e41fb9924d45b429c";
-      sha256 = "1ns0a130yxnxysia8c3q2fgyjp9k0nkr689dxk88qh2vnibgchnp";
-      meta.license = lib.licenses.unfreeRedistributableFirmware;
-    };
-  in buildUBoot {
-    defconfig = "odroid-c2_defconfig";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = ["u-boot.bin" "u-boot.gxbb" "${firmwareBlobs}/bl1.bin.hardkernel"];
-    postBuild = ''
-      # BL301 image needs at least 64 bytes of padding after it to place
-      # signing headers (with amlbootsig)
-      truncate -s 64 bl301.padding.bin
-      cat '${firmwareBlobs}/gxb/bl301.bin' bl301.padding.bin > bl301.padded.bin
-      # The downstream fip_create tool adds a custom TOC entry with UUID
-      # AABBCCDD-ABCD-EFEF-ABCD-12345678ABCD for the BL301 image. It turns out
-      # that the firmware blob does not actually care about UUIDs, only the
-      # order the images appear in the file. Because fiptool does not know
-      # about the BL301 UUID, we would have to use the --blob option, which adds
-      # the image to the end of the file, causing the boot to fail. Instead, we
-      # take advantage of the fact that UUIDs are ignored and just put the
-      # images in the right order with the wrong UUIDs. In the command below,
-      # --tb-fw is really --scp-fw and --scp-fw is the BL301 image.
-      #
-      # See https://github.com/afaerber/meson-tools/issues/3 for more
-      # information.
-      '${buildPackages.armTrustedFirmwareTools}/bin/fiptool' create \
-        --align 0x4000 \
-        --tb-fw '${firmwareBlobs}/gxb/bl30.bin' \
-        --scp-fw bl301.padded.bin \
-        --soc-fw '${armTrustedFirmwareS905}/bl31.bin' \
-        --nt-fw u-boot.bin \
-        fip.bin
-      cat '${firmwareBlobs}/gxb/bl2.package' fip.bin > boot_new.bin
-      '${buildPackages.meson-tools}/bin/amlbootsig' boot_new.bin u-boot.img
-      dd if=u-boot.img of=u-boot.gxbb bs=512 skip=96
-    '';
   };
 
   ubootOdroidXU3 = buildUBoot {

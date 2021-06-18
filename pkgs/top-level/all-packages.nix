@@ -2813,6 +2813,8 @@ in
 
   gti = callPackage ../tools/misc/gti { };
 
+  gxlimg = callPackage ../misc/gxlimg { };
+
   hdate = callPackage ../applications/misc/hdate { };
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
@@ -2976,6 +2978,8 @@ in
   meson = callPackage ../development/tools/build-managers/meson { };
 
   meson-tools = callPackage ../misc/meson-tools { };
+
+  meson64-tools = callPackage ../misc/meson64-tools { };
 
   metabase = callPackage ../servers/metabase { };
 
@@ -21577,7 +21581,6 @@ in
     ubootJetsonTK1
     ubootNanoPCT4
     ubootNovena
-    ubootOdroidC2
     ubootOdroidXU3
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
@@ -21605,6 +21608,17 @@ in
     ubootUtilite
     ubootWandboard
     ;
+
+  # Upstream U-Boot, for Amlogic
+  inherit (callPackage ../misc/uboot/amlogic.nix {})
+    buildUBootMesonG12A
+    buildUBootMesonGXL
+    ubootLibretechAC
+    ubootOdroidC2
+    ubootOdroidC4
+  ;
+
+  firmwareAmlogic = callPackage ../misc/uboot/amlogic-firmware.nix {};
 
   # Upstream Barebox:
   inherit (callPackage ../misc/barebox {})
