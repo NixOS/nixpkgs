@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${openssl}/bin
+    wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
 
   passthru.tests.netdata = nixosTests.netdata;
