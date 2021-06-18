@@ -27,8 +27,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjpeg libtiff libpng freetype fltk gtk libX11 libXext libICE dbus dbus ];
 
-  # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
+     # https://github.com/afterstep/afterstep/issues/2
+     sed -i 's/clq/cq/' autoconf/Makefile.defines.in libAfterImage/aftershow/Makefile.in libAfterImage/apps/Makefile.in libAfterBase/Makefile.in libAfterImage/Makefile.in
+
+     # A strange type of bug: dbus is not immediately found by pkg-config
      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 

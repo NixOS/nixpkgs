@@ -66,6 +66,8 @@ stdenv.mkDerivation {
     "--${if !static then "enable" else "disable"}-sharedlibs"
   ] ++ lib.optional withX "--with-x";
 
+  preConfigure = "sed -i 's/clq/cq/' aftershow/Makefile.in Makefile.in apps/Makefile.in";
+
   meta = with lib; {
     homepage = "http://www.afterstep.org/afterimage/";
     description = "A generic image manipulation library";

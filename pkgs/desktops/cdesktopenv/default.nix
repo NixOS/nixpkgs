@@ -45,6 +45,8 @@ in stdenv.mkDerivation rec {
     "LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive"
   ];
 
+  preConfigure = "sed -i 's/clq/cq/' config/cf/Imake.tmpl config/util/crayar.sh config/util/crayar.sh programs/dtwm/Makefile.tmpl";
+
   preBuild = ''
     while IFS= read -r -d ''$'\0' i; do
       substituteInPlace "$i" --replace /usr/dt $out/opt/dt
