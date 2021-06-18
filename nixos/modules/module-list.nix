@@ -469,6 +469,7 @@
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
   ./services/misc/cfdyndns.nix
+  ./services/misc/chatwoot.nix
   ./services/misc/clipmenu.nix
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix

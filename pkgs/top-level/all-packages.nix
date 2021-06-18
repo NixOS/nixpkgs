@@ -27521,6 +27521,8 @@ in
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {};
 
+  chatwoot = callPackage ../servers/chatwoot { };
+
   weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
 
   wio = callPackage ../applications/window-managers/wio { };
