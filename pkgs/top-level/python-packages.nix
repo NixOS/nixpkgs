@@ -7359,6 +7359,8 @@ in {
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
 
+  requests-futures = callPackage ../development/python-modules/requests-futures { };
+
   requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 
   requests = callPackage ../development/python-modules/requests { };
