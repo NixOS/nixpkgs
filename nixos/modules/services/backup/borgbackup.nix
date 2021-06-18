@@ -44,7 +44,7 @@ let
   '' + ''
     borg create $extraArgs \
       --compression ${cfg.compression} \
-      --exclude-from ${mkExcludeFile cfg} \
+      --exclude-from "$excludeFile" \
       $extraCreateArgs \
       "::$archiveName$archiveSuffix" \
       ${escapeShellArgs cfg.paths}
@@ -91,12 +91,16 @@ let
           ++ optional (isLocalPath cfg.repo) cfg.repo;
         PrivateTmp = cfg.privateTmp;
       };
-      environment = {
-        BORG_REPO = cfg.repo;
+      environment = mkEnvironment cfg // {
         inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs;
-      } // (mkPassEnv cfg) // cfg.environment;
+      };
       inherit (cfg) startAt;
     };
+
+  mkEnvironment = cfg: {
+      BORG_REPO = cfg.repo;
+      excludeFile = mkExcludeFile cfg;
+    } // mkPassEnv cfg // cfg.environment;
 
   # utility function around makeWrapper
   mkWrapperDrv = {
@@ -112,7 +116,7 @@ let
   mkBorgWrapper = name: cfg: mkWrapperDrv {
     original = "${pkgs.borgbackup}/bin/borg";
     name = "borg-job-${name}";
-    set = { BORG_REPO = cfg.repo; } // (mkPassEnv cfg) // cfg.environment;
+    set = mkEnvironment cfg;
   };
 
   # Paths listed in ReadWritePaths must exist before service is started
