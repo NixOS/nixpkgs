@@ -26202,7 +26202,7 @@ in
 
   pulseaudio-ctl = callPackage ../applications/audio/pulseaudio-ctl { };
 
-  pulseaudio-dlna = callPackage ../applications/audio/pulseaudio-dlna { };
+  pulseaudio-dlna = python3Packages.callPackage ../applications/audio/pulseaudio-dlna { };
 
   pulseview = libsForQt514.callPackage ../applications/science/electronics/pulseview { };
 
