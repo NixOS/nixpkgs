@@ -12678,6 +12678,8 @@ in
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
 
+  guile-gcrypt = callPackage ../development/guile-modules/guile-gcrypt { };
+
   guile-git = callPackage ../development/guile-modules/guile-git { };
 
   guile-gnome = callPackage ../development/guile-modules/guile-gnome {
