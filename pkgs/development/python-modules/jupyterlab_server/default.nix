@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "2.3.0";
+  version = "2.6.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-56AkWqPeI6GAPeLv9AHkykWUU42fWYBhNPMEGabYtqM=";
+    sha256 = "f300adf6bb0a952bebe9c807a3b2a345d62da39b476b4f69ea0dc6b5f3f6b97d";
   };
 
   propagatedBuildInputs = [ requests jsonschema pyjson5 Babel jupyter_server ];
