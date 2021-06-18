@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake } :
+{ stdenv, lib, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "libvori";
