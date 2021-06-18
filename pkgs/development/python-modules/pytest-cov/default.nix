@@ -3,6 +3,7 @@
 , fetchPypi
 , pytest
 , coverage
+, toml
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ coverage ];
+  propagatedBuildInputs = [ coverage toml ];
 
   # xdist related tests fail with the following error
   # OSError: [Errno 13] Permission denied: 'py/_code'
