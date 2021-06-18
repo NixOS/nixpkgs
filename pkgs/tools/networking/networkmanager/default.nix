@@ -14,6 +14,7 @@
 , ppp
 , dhcp
 , iptables
+, nftables
 , python3
 , vala
 , libgcrypt
@@ -53,11 +54,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.30.4";
+  version = "1.32.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-YFC3JCEuo85zhhEzWb6pr6H2eaVPYNmZpZmYkuZywZA=";
+    sha256 = "sha256-Kay9QceLfvh/+I/sU2DR6vi1tvy5BVXXORq8XjaSMVg=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
     "-Diwd=true"
     "-Dpppd=${ppp}/bin/pppd"
     "-Diptables=${iptables}/bin/iptables"
+    "-Dnft=${nftables}/bin/nft"
     "-Dmodem_manager=true"
     "-Dnmtui=true"
     "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
@@ -173,7 +175,7 @@ stdenv.mkDerivation rec {
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that will be overridden during installation.
     mkdir -p ${placeholder "out"}/lib
-    ln -s $PWD/libnm/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
+    ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
   '';
 
   passthru = {
@@ -188,7 +190,8 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/NetworkManager";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ phreedom domenkozar obadz ]);
+    changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ phreedom domenkozar obadz maxeaubrey ]);
     platforms = platforms.linux;
   };
 }
