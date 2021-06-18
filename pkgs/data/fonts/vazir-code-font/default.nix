@@ -18,8 +18,7 @@ in fetchFromGitHub {
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/vazir-code-font";
-    description =
-      "A Persian (farsi) Monospaced Font for coding - فونت (قلم) فارسی وزیرکد برای کد نویسی ";
+    description = "A Persian (farsi) Monospaced Font for coding";
     license = licenses.publicDomain;
     platforms = platforms.all;
     maintainers = [ maintainers.dearrude ];
