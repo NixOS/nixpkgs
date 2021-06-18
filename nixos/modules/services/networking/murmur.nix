@@ -98,7 +98,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 64738;
         description = "Ports to bind to (UDP and TCP).";
       };
