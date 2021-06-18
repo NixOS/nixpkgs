@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gibo";
-  version = "1.0.6";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "simonwhitaker";
     repo = "gibo";
     rev = version;
-    sha256 = "07j3sv9ar9l074krajw8nfmsfmdp836irsbd053dbqk2v880gfm6";
+    sha256 = "0d3596yfyic6sarny23aw4yrb6gr7adpiw5cxx20fqj7xpw72m7a";
   };
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/share/bash-completion/completions
     cp gibo $out/bin
-    cp gibo-completion.bash $out/share/bash-completion/completions
+    cp shell-completions/gibo-completion.bash $out/share/bash-completion/completions
 
     sed -e 's|\<git |${git}/bin/git |g' \
         -e 's|\<basename |${coreutils}/bin/basename |g' \
