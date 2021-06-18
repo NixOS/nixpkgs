@@ -6,11 +6,10 @@
 buildPythonPackage rec {
   pname = "testpath";
   version = "0.5.0";
-  format = "wheel";
 
   src = fetchPypi {
-    inherit pname version format;
-    sha256 = "8044f9a0bab6567fc644a3593164e872543bb44225b0e24846e2c89237937589";
+    inherit pname version;
+    sha256 = "05z4s4d5i1ja16hiv4jhqv63fvg1a4vw77s0ay1sw11hrl5pmkqs";
   };
 
   meta = with lib; {
