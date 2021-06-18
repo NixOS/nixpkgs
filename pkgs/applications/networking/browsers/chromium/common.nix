@@ -92,9 +92,10 @@ let
   };
 
   defaultDependencies = [
+    (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
-    libpng libcap
+    libcap
     xdg-utils minizip libwebp
     libusb1 re2
     ffmpeg libxslt libxml2
