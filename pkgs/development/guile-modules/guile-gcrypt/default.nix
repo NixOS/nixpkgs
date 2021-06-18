@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
   pname = "guile-gcrypt";
   version = "0.2.1";
 
-  # src = fetchurl {
-  #   url = "https://notabug.org/cwebber/${pname}/archive/v${version}.tar.gz";
-  #   sha256 = "1qj1yw0kman984x584jjjxnjdhm0pwgp09iyn3b5rqajx7svpqcd";
-  # };
   src = fetchFromGitea {
     domain = "notabug.org";
     owner = "cwebber";
