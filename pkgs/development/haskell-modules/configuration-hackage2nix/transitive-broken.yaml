@@ -28,7 +28,6 @@ dont-distribute-packages:
  - Advgame
  - Advise-me
  - aern2-real
- - aern2-real_0_2_7_0
  - AERN-Net
  - AERN-Real
  - AERN-Real-Double
@@ -121,6 +120,7 @@ dont-distribute-packages:
  - atuin
  - audiovisual
  - aura
+ - aura_3_2_5
  - authoring
  - AutoForms
  - autonix-deps-kf5
@@ -1105,6 +1105,7 @@ dont-distribute-packages:
  - happstack-jmacro
  - happstack-plugins
  - happstack-state
+ - happstack-static-routing
  - happstack-yui
  - happs-tutorial
  - happybara-webkit
@@ -1618,7 +1619,6 @@ dont-distribute-packages:
  - JSON-Combinator-Examples
  - json-enumerator
  - JsonGrammar
- - jsonifier
  - json-incremental-decoder
  - json-query
  - jsons-to-schema
@@ -1892,6 +1892,7 @@ dont-distribute-packages:
  - MaybeT-transformers
  - MC-Fold-DP
  - mcmc
+ - mcmc_0_5_0_0
  - mcmc-samplers
  - mDNSResponder-client
  - mealy
@@ -2080,7 +2081,6 @@ dont-distribute-packages:
  - NoSlow
  - notmuch-haskell
  - notmuch-web
- - nri-prelude_0_6_0_1
  - numerical
  - numeric-ode
  - numhask-hedgehog
@@ -2115,7 +2115,6 @@ dont-distribute-packages:
  - openpgp-crypto-api
  - OpenSCAD
  - openssh-github-keys
- - opentelemetry-extra_0_7_0
  - opentracing-jaeger
  - opentracing-zipkin-v1
  - open-union
@@ -2150,6 +2149,7 @@ dont-distribute-packages:
  - parquet-hs
  - parse-help
  - parsestar
+ - parsley-garnish
  - partial-lens
  - passman-cli
  - patch-image
@@ -2513,7 +2513,6 @@ dont-distribute-packages:
  - ruler-core
  - runtime-arbitrary
  - S3
- - safe-coloured-text-layout-gen
  - safer-file-handles
  - safer-file-handles-bytestring
  - safer-file-handles-text
@@ -2614,7 +2613,6 @@ dont-distribute-packages:
  - servant-zeppelin-swagger
  - serv-wai
  - sessiontypes-distributed
- - setdown
  - s-expression
  - SFML-control
  - SFont
@@ -2826,7 +2824,6 @@ dont-distribute-packages:
  - swearjure
  - sweet-egison
  - switch
- - sydtest_0_2_0_0
  - sydtest-persistent-postgresql
  - sylvia
  - symantic-atom
