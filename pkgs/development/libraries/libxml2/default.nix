@@ -42,6 +42,31 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/libxml2/commit/50f06b3efb638efb0abd95dc62dca05ae67882c2.patch";
       sha256 = "093f1ic5qfiq8nk9mc6b8p1qcs8m9hir3ardr6r5il4zi2dnjrj4";
     })
+    (fetchpatch {
+      name = "CVE-2021-3516.patch";
+      url = "https://sources.debian.org/data/main/libx/libxml2/2.9.10+dfsg-6.7/debian/patches/Fix-use-after-free-with-xmllint-html-push.patch";
+      sha256 = "0yvb8q97mpykhlwygz073j60ab46zfx81h816b7f19d2s3mfqizb";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3517.patch";
+      url = "https://sources.debian.org/data/main/libx/libxml2/2.9.10+dfsg-6.7/debian/patches/Validate-UTF8-in-xmlEncodeEntities.patch";
+      sha256 = "11f2k99w8b4b42b8dbnmsv9psay76ihvsmhs6fjyvg63fq9m331g";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3518.patch";
+      url = "https://sources.debian.org/data/main/libx/libxml2/2.9.10+dfsg-6.7/debian/patches/Fix-user-after-free-with-xmllint-xinclude-dropdtd.patch";
+      sha256 = "02wdiqfacxdka947x1ngaiidgqp3ra25dp9y1mb2ccs0myryl8fi";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3537.patch";
+      url = "https://sources.debian.org/data/main/libx/libxml2/2.9.10+dfsg-6.7/debian/patches/Propagate-error-in-xmlParseElementChildrenContentDec.patch";
+      sha256 = "19m2m9mf8lf4afccv2nfy320kzha3wgmz5ilg8fnxgca2nqwdz37";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3541.patch";
+      url = "https://sources.debian.org/data/main/libx/libxml2/2.9.10+dfsg-6.7/debian/patches/Patch-for-security-issue-CVE-2021-3541.patch";
+      sha256 = "03p8zkk4ynin0cv88g0zhxn0byjr74bc9awjyin1w6ygl47kmcdb";
+    })
     # Fix compatibility with Python 3.9.
     # https://gitlab.gnome.org/GNOME/libxml2/-/issues/149
     (fetchpatch {
