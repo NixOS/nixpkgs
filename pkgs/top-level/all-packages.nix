@@ -765,14 +765,16 @@ in
 
   adafruit-ampy = callPackage ../tools/misc/adafruit-ampy { };
 
-  adlplug = callPackage ../applications/audio/adlplug { };
+  adlplug = callPackage ../applications/audio/adlplug {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices WebKit DiscRecording;
+    jack = libjack2;
+  };
+  opnplug = adlplug.override {
+    type = "OPN";
+  };
 
   arc_unpacker = callPackage ../tools/archivers/arc_unpacker { };
-
-  opnplug = callPackage ../applications/audio/adlplug {
-    adlplugChip = "-DADLplug_CHIP=OPN2";
-    pname = "OPNplug";
-  };
 
   adminer = callPackage ../servers/adminer { };
 
@@ -7041,7 +7043,9 @@ in
 
   munge = callPackage ../tools/security/munge { };
 
-  munt = libsForQt5.callPackage ../applications/audio/munt { };
+  munt = libsForQt5.callPackage ../applications/audio/munt {
+    jack = libjack2;
+  };
 
   mutagen = callPackage ../tools/misc/mutagen { };
 
@@ -7588,8 +7592,7 @@ in
   olsrd = callPackage ../tools/networking/olsrd { };
 
   opl3bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor { };
-
-  opn2bankeditor = callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
+  opn2bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
 
   orangefs = callPackage ../tools/filesystems/orangefs {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -15913,6 +15916,8 @@ in
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
+
+  libbencodetools = callPackage ../development/libraries/libbencodetools { };
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
