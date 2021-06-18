@@ -1800,6 +1800,15 @@
       </listitem>
       <listitem>
         <para>
+          The option
+          <link linkend="opt-services.xserver.desktopManager.runXdgAutostartIfNone">services.xserver.desktopManager.runXdgAutostartIfNone</link>
+          was added in order to automatically run XDG autostart files
+          for sessions without a desktop manager. This replaces helpers
+          like the <literal>dex</literal> package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the Envoy reverse proxy, providing
           the options <literal>services.envoy.enable</literal> and
           <literal>services.envoy.settings</literal>.
