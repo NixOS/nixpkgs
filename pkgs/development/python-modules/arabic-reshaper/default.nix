@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/mpcabd/python-arabic-reshaper";
     description = "Reconstruct Arabic sentences to be used in applications that don't support Arabic";
-    platforms = platforms.unix;
+    license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];
   };
 }
