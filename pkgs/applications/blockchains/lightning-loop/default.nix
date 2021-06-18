@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "lightning-loop";
-  version = "0.12.2-beta";
+  version = "0.14.1-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "loop";
     rev = "v${version}";
-    sha256 = "1yyx9j9lxdianm0mxm8zs2yn6xglc1kb7vbcalnxss8j62zn1msm";
+    sha256 = "0fnbf0cryrw9yk3z1g7innv1rxxk7h2lhfakdj994l5a0pgzghmy";
   };
 
-  vendorSha256 = "03z0cmn9qgcmqm8llybfn1hz1m9hx3pn18m11s3fwnay8ib00r89";
+  vendorSha256 = "1i7mmf4ab4a6h08df6zlyjdnmvn44i2y3fc05hq6g1ln1bzdrz40";
 
   subPackages = [ "cmd/loop" "cmd/loopd" ];
 
@@ -22,6 +22,6 @@ buildGoModule rec {
     description = "Lightning Loop Client";
     homepage = "https://github.com/lightninglabs/loop";
     license = licenses.mit;
-    maintainers = with maintainers; [ proofofkeags ];
+    maintainers = with maintainers; [ proofofkeags prusnak ];
   };
 }
