@@ -39,18 +39,6 @@ stdenv.mkDerivation rec {
     substituteInPlace audio-move.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'
   '';
 
-  # obs-studio expects the shared object to be located in bin/32bit or bin/64bit
-  # https://github.com/obsproject/obs-studio/blob/d60c736cb0ec0491013293c8a483d3a6573165cb/libobs/obs-nix.c#L48
-  postInstall = let
-    pluginPath = {
-      i686-linux = "bin/32bit";
-      x86_64-linux = "bin/64bit";
-    }.${stdenv.targetPlatform.system} or (throw "Unsupported system: ${stdenv.targetPlatform.system}");
-  in ''
-    mkdir -p $out/share/obs/obs-plugins/move-transition/${pluginPath}
-    ln -s $out/lib/obs-plugins/move-transition.so $out/share/obs/obs-plugins/move-transition/${pluginPath}
-  '';
-
   meta = with lib; {
     description = "Plugin for OBS Studio to move source to a new position during scene transition";
     homepage = "https://github.com/exeldro/obs-move-transition";
