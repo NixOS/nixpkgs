@@ -1277,6 +1277,8 @@ in {
 
   caldav = callPackage ../development/python-modules/caldav { };
 
+  calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
+
   can = callPackage ../development/python-modules/can { };
 
   canmatrix = callPackage ../development/python-modules/canmatrix { };
@@ -2228,6 +2230,8 @@ in {
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
   edward = callPackage ../development/python-modules/edward { };
+
+  eebrightbox = callPackage ../development/python-modules/eebrightbox { };
 
   effect = callPackage ../development/python-modules/effect { };
 
