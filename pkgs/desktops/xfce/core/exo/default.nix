@@ -6,7 +6,7 @@ mkXfceDerivation {
   pname = "exo";
   version = "4.16.2";
 
-  sha256 = "0rsp92j4hkr5jrkrj8anzw9fwd96xbxzpzqzqiyjjwdiq7b29l1v";
+  sha256 = "sha256-O9Ak1sGxcSl9xB//+/vqJjXuEv9WIZlnliVPSKRIV2c=";
 
   nativeBuildInputs = [
     libxslt

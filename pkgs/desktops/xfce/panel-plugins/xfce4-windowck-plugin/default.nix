@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "invidian";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0l066a174v2c7ly125v9x1fgbg5bnpwdwnjh69v9kp4plp791q4n";
+    sha256 = "sha256-luCQzqWX3Jl2MlBa3vi1q7z1XOhpFxE8PUxscoIyBlA=";
   };
 
   nativeBuildInputs = [
