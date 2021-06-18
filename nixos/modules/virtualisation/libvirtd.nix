@@ -40,7 +40,7 @@ in {
       default = false;
       description = ''
         This option enables libvirtd, a daemon that manages
-        virtual machines. Users in the "libvirtd" group can interact with
+        virtual machines. Users in the "libvirt" group can interact with
         the daemon (e.g. to start or stop VMs) using the
         <command>virsh</command> command line tool, among others.
       '';
@@ -164,7 +164,7 @@ in {
 
     boot.kernelModules = [ "tun" ];
 
-    users.groups.libvirtd.gid = config.ids.gids.libvirtd;
+    users.groups.libvirt.gid = config.ids.gids.libvirt;
 
     # libvirtd runs qemu as this user and group by default
     users.extraGroups.qemu-libvirtd.gid = config.ids.gids.qemu-libvirtd;
@@ -280,7 +280,7 @@ in {
     security.polkit.extraConfig = ''
       polkit.addRule(function(action, subject) {
         if (action.id == "org.libvirt.unix.manage" &&
-          subject.isInGroup("libvirtd")) {
+          subject.isInGroup("libvirt")) {
           return polkit.Result.YES;
         }
       });
