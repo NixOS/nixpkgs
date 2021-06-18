@@ -1809,6 +1809,20 @@
       </listitem>
       <listitem>
         <para>
+          When setting
+          <link linkend="opt-i18n.inputMethod.enabled">i18n.inputMethod.enabled</link>
+          to <literal>fcitx5</literal>, it no longer creates
+          coresponding systemd user services. It now relies on XDG
+          autostart files to start and work properly in your desktop
+          seesions. If your are using only a window manager without a
+          desktop manager, you need to enable
+          <literal>services.xserver.desktopManager.runXdgAutostartIfNone</literal>
+          or using the <literal>dex</literal> package to make
+          <literal>fcitx5</literal> work.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the Envoy reverse proxy, providing
           the options <literal>services.envoy.enable</literal> and
           <literal>services.envoy.settings</literal>.
