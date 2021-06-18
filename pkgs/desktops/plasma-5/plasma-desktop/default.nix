@@ -41,11 +41,11 @@ mkDerivation {
   '';
   CXXFLAGS = [
     "-I${lib.getDev xorgserver}/include/xorg"
+    "-I${lib.getDev xf86inputsynaptics}/include/xorg"
     ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/sbin/hwclock\"''
   ];
   cmakeFlags = [
     "-DEvdev_INCLUDE_DIRS=${lib.getDev xf86inputevdev}/include/xorg"
-    "-DSynaptics_INCLUDE_DIRS=${lib.getDev xf86inputsynaptics}/include/xorg"
     "-DXORGLIBINPUT_INCLUDE_DIRS=${lib.getDev xf86inputlibinput}/include/xorg"
   ];
   postInstall = ''
