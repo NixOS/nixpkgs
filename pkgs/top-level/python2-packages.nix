@@ -46,6 +46,8 @@ with self; with super; {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  certifi = callPackage ../development/python-modules/certifi/python2.nix { };
+
   chardet = callPackage ../development/python-modules/chardet/2.nix { };
 
   cheetah = callPackage ../development/python-modules/cheetah { };
