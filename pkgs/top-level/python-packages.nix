@@ -8742,6 +8742,8 @@ in {
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
+  unasync = callPackage ../development/python-modules/unasync { };
+
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
