@@ -434,7 +434,10 @@ in {
     defconfig = "rockpro64-rk3399_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31="${armTrustedFirmwareRK3399}/bl31.elf";
-    filesToInstall = [ "u-boot-rockchip.bin" "u-boot.itb" "idbloader.img" ];
+    filesToInstall = [ "u-boot-rockchip.bin" "u-boot.itb" "idbloader.img" "spi-idbloader.img" ];
+    postBuild = ''
+      ./tools/mkimage -n rk3399 -T rkspi -d tpl/u-boot-tpl.bin:spl/u-boot-spl.bin spi-idbloader.img
+    '';
   };
 
   ubootROCPCRK3399 = buildUBoot {
