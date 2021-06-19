@@ -1,4 +1,4 @@
-# Generates the documentation for library functons via nixdoc. To add
+# Generates the documentation for library functions via nixdoc. To add
 # another library function file to this list, the include list in the
 # file `doc/functions/library.xml` must also be updated.
 
@@ -17,6 +17,7 @@ with pkgs; stdenv.mkDerivation {
     mkdir -p $out
     ln -s ${locationsXml} $out/locations.xml
 
+    docgen asserts 'Assert functions'
     docgen strings 'String manipulation functions'
     docgen trivial 'Miscellaneous functions'
     docgen lists 'List manipulation functions'

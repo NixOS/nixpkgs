@@ -18,7 +18,11 @@ rec {
        assertMsg :: Bool -> String -> Bool
   */
   # TODO(Profpatsch): add tests that check stderr
-  assertMsg = pred: msg:
+  assertMsg =
+    # Condition under which the `msg` should not be printed
+    pred:
+    # Message to print
+    msg:
     if pred
     then true
     else builtins.trace msg false;
@@ -35,7 +39,14 @@ rec {
      Type:
        assertOneOf :: String -> ComparableVal -> List ComparableVal -> Bool
   */
-  assertOneOf = name: val: xs: assertMsg
+  assertOneOf =
+    # The name of the variable the user entered `val` into, for inclusion in the error message
+    name:
+    # The value of what the user provided, to be compared against the values in `xs`
+    val:
+    # The list of valid values
+    xs:
+    assertMsg
     (lib.elem val xs)
     "${name} must be one of ${
       lib.generators.toPretty {} xs}, but is: ${
