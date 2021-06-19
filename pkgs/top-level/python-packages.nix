@@ -4313,6 +4313,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
+
   matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
