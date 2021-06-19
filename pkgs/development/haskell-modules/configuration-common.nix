@@ -698,6 +698,10 @@ self: super: {
   uuid-types = doJailbreak super.uuid-types;
   uuid = doJailbreak super.uuid;
 
+  # Bypass version check for random < 1.2 (1.2 works fine).
+  # https://github.com/yeyan/xmonad-wallpaper/issues/2
+  xmonad-wallpaper = doJailbreak super.xmonad-wallpaper;
+
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
@@ -1928,9 +1932,7 @@ EOT
   # Disable flaky tests
   # https://github.com/DavidEichmann/alpaca-netcode/issues/2
   alpaca-netcode = overrideCabal super.alpaca-netcode {
-    # use testTarget to also pass some flags to the test suite.
-    # TODO: We should add proper support for this to the builder.
-    testTarget = "test --test-options='-p \"!/[NOCI]/\"'";
+    testFlags = [ "--pattern" "!/[NOCI]/" ];
   };
 
   # Tests require to run a binary which isn't built
@@ -1941,18 +1943,30 @@ EOT
   # this, run tests with only a single job.
   # https://github.com/vmchale/libarchive/issues/20
   libarchive = overrideCabal super.libarchive {
-    # TODO: We should add proper support for this to the builder.
-    testTarget = "libarchive-test --test-options='-j1'";
+    testFlags = [ "-j1" ];
   };
 
   # unrestrict bounds for hashable and semigroups
   # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
   reactive-banana = doJailbreak super.reactive-banana;
 
-  # Too strict version bounds on QuickCheck and semirings
-  # https://github.com/erikd/wide-word/issues/57
-  wide-word = doJailbreak super.wide-word;
-
   hackage-db_2_1_0 = doDistribute super.hackage-db_2_1_0;
+
+  # Too strict bounds on QuickCheck
+  # https://github.com/muesli4/table-layout/issues/16
+  table-layout = doJailbreak super.table-layout;
+
+  # Bounds on profunctors are too strict
+  # https://github.com/ConferOpenSource/composite/issues/50
+  composite-base = doJailbreak super.composite-base;
+  composite-aeson = doJailbreak super.composite-aeson;
+
+  # Too strict bounds on profunctors
+  # https://github.com/google/proto-lens/issues/413
+  proto-lens = doJailbreak super.proto-lens;
+
+  # Too strict bounds on profunctors
+  # https://github.com/jcranch/tophat/issues/1
+  tophat = doJailbreak super.tophat;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
