@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, reason, console }:
+{ lib, buildDunePackage, reason, reason-native-console }:
 
 buildDunePackage rec {
   pname = "console-test";
@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   buildInputs = [
     reason
-    console
+    reason-native-console
   ];
 
   doInstallCheck = true;

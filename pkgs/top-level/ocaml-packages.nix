@@ -1148,7 +1148,16 @@ let
 
     reason = callPackage ../development/compilers/reason { };
 
-    reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
+    reason-native-console = callPackage ../development/ocaml-modules/reason-native/console.nix { };
+    reason-native-dir = callPackage ../development/ocaml-modules/reason-native/dir.nix { };
+    reason-native-file-context-printer = callPackage ../development/ocaml-modules/reason-native/file-context-printer.nix { };
+    reason-native-fp = callPackage ../development/ocaml-modules/reason-native/fp.nix { };
+    reason-native-pastel = callPackage ../development/ocaml-modules/reason-native/pastel.nix { };
+    reason-native-pastel-console = callPackage ../development/ocaml-modules/reason-native/pastel-console.nix { };
+    reason-native-refmterr = callPackage ../development/ocaml-modules/reason-native/refmterr.nix { };
+    reason-native-rely = callPackage ../development/ocaml-modules/reason-native/rely.nix { };
+    reason-native-rely-junit-reporter = callPackage ../development/ocaml-modules/reason-native/rely-junit-reporter.nix { };
+    reason-native-rely-qcheck = callPackage ../development/ocaml-modules/reason-native/rely-qcheck.nix { };
 
     rope = callPackage ../development/ocaml-modules/rope { };
 
