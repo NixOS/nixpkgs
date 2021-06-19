@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-client";
-  version = "0.14";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-client";
     rev = "v${version}";
-    sha256 = "1nk0mas71n1bn4wc7pcv279i1b5mxy9phyc8ppxlb16kbjnjj0h8";
+    sha256 = "0sbzrzmny7x4bkbg6z0cjn4d10r50nxdyaq7g6lagwd8ijpkg8l3";
   };
 
   propagatedBuildInputs = [
