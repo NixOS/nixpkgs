@@ -5317,6 +5317,8 @@ in
 
   godot = callPackage ../development/tools/godot {};
 
+  godot-kotlin = callPackage ../development/tools/godot-kotlin {};
+
   godot-export-templates = callPackage ../development/tools/godot/export-templates.nix { };
 
   godot-headless = callPackage ../development/tools/godot/headless.nix { };
