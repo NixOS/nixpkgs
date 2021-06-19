@@ -335,8 +335,8 @@
     "gstreamer" = ps: with ps; [ ]; # missing inputs: gstreamer-player
     "gtfs" = ps: with ps; [ pygtfs ];
     "guardian" = ps: with ps; [ aioguardian ];
-    "habitica" = ps: with ps; [ ]; # missing inputs: habitipy
-    "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
+    "habitica" = ps: with ps; [ habitipy ];
+    "hangouts" = ps: with ps; [ hangups ];
     "harman_kardon_avr" = ps: with ps; [ ]; # missing inputs: hkavr
     "harmony" = ps: with ps; [ aioharmony ];
     "hassio" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
