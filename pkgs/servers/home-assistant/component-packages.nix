@@ -344,7 +344,7 @@
     "hddtemp" = ps: with ps; [ ];
     "hdmi_cec" = ps: with ps; [ pycec ];
     "heatmiser" = ps: with ps; [ ]; # missing inputs: heatmiserV3
-    "heos" = ps: with ps; [ ]; # missing inputs: pyheos
+    "heos" = ps: with ps; [ pyheos ];
     "here_travel_time" = ps: with ps; [ ]; # missing inputs: herepy
     "hikvision" = ps: with ps; [ ]; # missing inputs: pyhik
     "hikvisioncam" = ps: with ps; [ ]; # missing inputs: hikvision
