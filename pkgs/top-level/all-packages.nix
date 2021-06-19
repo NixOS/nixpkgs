@@ -93,7 +93,7 @@ with pkgs;
 
   stdenvUutilsCoreutils =
     let
-      uutils-coreutils = pkgs.uutils-coreutils;
+      uutils-coreutils = pkgs.uutils-coreutils-minimal;
       bintools = wrapBintoolsWith {
         bintools = stdenv.cc.bintools.bintools;
         coreutils = uutils-coreutils;
@@ -2916,6 +2916,11 @@ with pkgs;
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
+
+  uutils-coreutils-minimal = pkgs.uutils-coreutils.override {
+    prefix = null;
+    withDocs = false;
+  };
 
   vorta = qt6Packages.callPackage ../applications/backup/vorta { };
 
