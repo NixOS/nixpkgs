@@ -3160,6 +3160,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  habitipy = callPackage ../development/python-modules/habitipy { };
+
   hachoir = callPackage ../development/python-modules/hachoir { };
 
   hdate = callPackage ../development/python-modules/hdate { };

@@ -335,7 +335,7 @@
     "gstreamer" = ps: with ps; [ ]; # missing inputs: gstreamer-player
     "gtfs" = ps: with ps; [ pygtfs ];
     "guardian" = ps: with ps; [ aioguardian ];
-    "habitica" = ps: with ps; [ ]; # missing inputs: habitipy
+    "habitica" = ps: with ps; [ habitipy ];
     "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
     "harman_kardon_avr" = ps: with ps; [ ]; # missing inputs: hkavr
     "harmony" = ps: with ps; [ aioharmony ];
