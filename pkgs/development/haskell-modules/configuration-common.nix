@@ -564,7 +564,7 @@ self: super: {
     preCheck = "export HOME=$TMPDIR";
     testToolDepends = drv.testToolDepends or [] ++ [self.cabal-install];
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
-    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.buildPackages.emacs];
     postInstall = ''
       local lispdir=( "$data/share/${self.ghc.name}/*/${drv.pname}-${drv.version}/elisp" )
       make -C $lispdir
@@ -765,7 +765,7 @@ self: super: {
   # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
   # in LTS-13.x.
   cryptol = overrideCabal super.cryptol (drv: {
-    buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
+    buildTools = drv.buildTools or [] ++ [ pkgs.buildPackages.makeWrapper ];
     postInstall = drv.postInstall or "" + ''
       for b in $out/bin/cryptol $out/bin/cryptol-html; do
         wrapProgram $b --prefix 'PATH' ':' "${pkgs.lib.getBin pkgs.z3}/bin"
@@ -791,7 +791,7 @@ self: super: {
     preCheck = ''
       export HOME="$TMPDIR"
     '' + (drv.preCheck or "");
-    libraryToolDepends = drv.libraryToolDepends or [] ++ [pkgs.postgresql];
+    libraryToolDepends = drv.libraryToolDepends or [] ++ [pkgs.buildPackages.postgresql];
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
@@ -1205,7 +1205,7 @@ self: super: {
   EdisonAPI = appendPatch super.EdisonAPI (pkgs.fetchpatch {
     url = "https://github.com/robdockins/edison/pull/16/commits/8da6c0f7d8666766e2f0693425c347c0adb492dc.patch";
     postFetch = ''
-      ${pkgs.patchutils}/bin/filterdiff --include='a/edison-api/*' --strip=1 "$out" > "$tmpfile"
+      ${pkgs.buildPackages.patchutils}/bin/filterdiff --include='a/edison-api/*' --strip=1 "$out" > "$tmpfile"
       mv "$tmpfile" "$out"
     '';
     sha256 = "0yi5pz039lcm4pl9xnl6krqxyqq5rgb5b6m09w0sfy06x0n4x213";
@@ -1214,7 +1214,7 @@ self: super: {
   EdisonCore = appendPatch super.EdisonCore (pkgs.fetchpatch {
     url = "https://github.com/robdockins/edison/pull/16/commits/8da6c0f7d8666766e2f0693425c347c0adb492dc.patch";
     postFetch = ''
-      ${pkgs.patchutils}/bin/filterdiff --include='a/edison-core/*' --strip=1 "$out" > "$tmpfile"
+      ${pkgs.buildPackages.patchutils}/bin/filterdiff --include='a/edison-core/*' --strip=1 "$out" > "$tmpfile"
       mv "$tmpfile" "$out"
     '';
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
@@ -1293,7 +1293,7 @@ self: super: {
   # Fixed upstream but not released to Hackage yet:
   # https://github.com/k0001/hs-libsodium/issues/2
   libsodium = overrideCabal super.libsodium (drv: {
-    libraryToolDepends = (drv.libraryToolDepends or []) ++ [self.c2hs];
+    libraryToolDepends = (drv.libraryToolDepends or []) ++ [self.buildHaskellPackages.c2hs];
   });
 
   # https://github.com/kowainik/policeman/issues/57
@@ -1386,7 +1386,7 @@ self: super: {
   update-nix-fetchgit = let deps = [ pkgs.git pkgs.nix pkgs.nix-prefetch-git ];
   in generateOptparseApplicativeCompletion "update-nix-fetchgit" (overrideCabal
     (addTestToolDepends super.update-nix-fetchgit deps) (drv: {
-      buildTools = drv.buildTools or [ ] ++ [ pkgs.makeWrapper ];
+      buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
         wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${
           pkgs.lib.makeBinPath deps
@@ -1612,7 +1612,7 @@ self: super: {
   feed = dontCheck super.feed;
 
   spacecookie = overrideCabal super.spacecookie (old: {
-    buildTools = (old.buildTools or []) ++ [ pkgs.installShellFiles ];
+    buildTools = (old.buildTools or []) ++ [ pkgs.buildPackages.installShellFiles ];
     # let testsuite discover the resulting binary
     preCheck = ''
       export SPACECOOKIE_TEST_BIN=./dist/build/spacecookie/spacecookie
@@ -1884,7 +1884,7 @@ EOT
     ] ++ (drv.patches or []);
     # fix line endings preventing patch from applying
     prePatch = ''
-      ${pkgs.dos2unix}/bin/dos2unix hashable.cabal
+      ${pkgs.buildPackages.dos2unix}/bin/dos2unix hashable.cabal
     '' + (drv.prePatch or "");
   });
 
