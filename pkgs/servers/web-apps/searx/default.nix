@@ -1,4 +1,4 @@
-{ lib, nixosTests, python3, python3Packages, fetchFromGitHub }:
+{ lib, nixosTests, python3, python3Packages, fetchFromGitHub, fetchpatch }:
 
 with python3Packages;
 
@@ -13,6 +13,14 @@ toPythonModule (buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "0ghkx8g8jnh8yd46p4mlbjn2zm12nx27v7qflr4c8xhlgi0px0mh";
   };
+
+  patches = [
+    # Fix a crash, remove with the next update
+    (fetchpatch {
+      url = "https://github.com/searx/searx/commit/9c10b150963babb7f0b52081693a42b2e61eede9.patch";
+      sha256 = "0svp8799628wja2hq59da6rxqi99am8p6hb8y27ciwzsjz0wwba7";
+    })
+  ];
 
   postPatch = ''
     sed -i 's/==.*$//' requirements.txt
