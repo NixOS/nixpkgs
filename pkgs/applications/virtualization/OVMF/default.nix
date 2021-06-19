@@ -2,25 +2,47 @@
 , csmSupport ? false, seabios ? null
 , secureBoot ? false
 , httpSupport ? false
+, crossIa32 ? false
 }:
 
 assert csmSupport -> seabios != null;
+assert crossIa32 == false || (stdenv.isi686 || stdenv.isx86_64);
 
 let
 
   projectDscPath = if stdenv.isi686 then
     "OvmfPkg/OvmfPkgIa32.dsc"
   else if stdenv.isx86_64 then
-    "OvmfPkg/OvmfPkgX64.dsc"
+    if crossIa32 then
+      "OvmfPkg/OvmfPkgIa32.dsc"
+    else
+      "OvmfPkg/OvmfPkgX64.dsc"
   else if stdenv.isAarch64 then
     "ArmVirtPkg/ArmVirtQemu.dsc"
+  else
+    throw "Unsupported architecture";
+
+  buildType = if stdenv.isDarwin then
+    "CLANGPDB"
+  else
+    "GCC5";
+
+  targetArch = if stdenv.isi686 then
+    "IA32"
+  else if stdenv.isx86_64 then
+    if crossIa32 then
+      "IA32"
+    else
+      "X64"
+  else if stdenv.isAarch64 then
+    "AARCH64"
   else
     throw "Unsupported architecture";
 
   version = lib.getVersion edk2;
 in
 
-edk2.mkDerivation projectDscPath {
+edk2.mkDerivation projectDscPath targetArch buildType {
   name = "OVMF-${version}";
 
   outputs = [ "out" "fd" ];
