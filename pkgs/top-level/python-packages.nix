@@ -7313,6 +7313,8 @@ in {
 
   readchar = callPackage ../development/python-modules/readchar { };
 
+  readlike = callPackage ../development/python-modules/readlike { };
+
   readme = callPackage ../development/python-modules/readme { };
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
