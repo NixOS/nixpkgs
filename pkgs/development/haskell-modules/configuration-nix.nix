@@ -243,7 +243,7 @@ self: super: builtins.intersectAttrs super {
   llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
 
   # Needs help finding LLVM.
-  spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
+  spaceprobe = addBuildTool super.spaceprobe self.buildHaskellPackages.llvmPackages.llvm;
 
   # Tries to run GUI in tests
   leksah = dontCheck (overrideCabal super.leksah (drv: {
@@ -336,7 +336,7 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/deech/fltkhs/issues/16
   fltkhs = overrideCabal super.fltkhs (drv: {
-    libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.autoconf];
+    libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.buildPackages.autoconf];
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.fltk13 pkgs.libGL pkgs.libjpeg];
   });
 
@@ -495,8 +495,8 @@ self: super: builtins.intersectAttrs super {
   Frames-beam = dontCheck super.Frames-beam;
 
   # Compile manpages (which are in RST and are compiled with Sphinx).
-  futhark = with pkgs;
-    overrideCabal (addBuildTools super.futhark [makeWrapper python3Packages.sphinx])
+  futhark =
+    overrideCabal (addBuildTools super.futhark (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]))
       (_drv: {
         postBuild = (_drv.postBuild or "") + ''
         make -C docs man
@@ -511,7 +511,7 @@ self: super: builtins.intersectAttrs super {
   git-annex = with pkgs;
     if (!stdenv.isLinux) then
       let path = lib.makeBinPath [ coreutils ];
-      in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
+      in overrideCabal (addBuildTool super.git-annex buildPackages.makeWrapper) (_drv: {
         # This is an instance of https://github.com/NixOS/nix/pull/1085
         # Fails with:
         #   gpg: can't connect to the agent: File name too long
@@ -631,7 +631,7 @@ self: super: builtins.intersectAttrs super {
   # mplayer-spot uses mplayer at runtime.
   mplayer-spot =
     let path = pkgs.lib.makeBinPath [ pkgs.mplayer ];
-    in overrideCabal (addBuildTool super.mplayer-spot pkgs.makeWrapper) (oldAttrs: {
+    in overrideCabal (addBuildTool super.mplayer-spot pkgs.buildPackages.makeWrapper) (oldAttrs: {
       postInstall = ''
         wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
       '';
@@ -643,7 +643,7 @@ self: super: builtins.intersectAttrs super {
 
   cut-the-crap =
     let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
-    in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
+    in overrideCabal (addBuildTool super.cut-the-crap pkgs.buildPackages.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
           --prefix PATH : "${path}"
@@ -660,7 +660,7 @@ self: super: builtins.intersectAttrs super {
 
   neuron = overrideCabal (super.neuron) (drv: {
     # neuron expects the neuron-search script to be in PATH at built-time.
-    buildTools = [ pkgs.makeWrapper ];
+    buildTools = [ pkgs.buildPackages.makeWrapper ];
     preConfigure = ''
       mkdir -p $out/bin
       cp src-bash/neuron-search $out/bin/neuron-search
@@ -879,7 +879,7 @@ self: super: builtins.intersectAttrs super {
     (justStaticExecutables super.cabal2nix-unstable)
     (drv: {
       buildTools = (drv.buildTools or []) ++ [
-        pkgs.makeWrapper
+        pkgs.buildPackages.makeWrapper
       ];
       postInstall = ''
         wrapProgram $out/bin/cabal2nix \
@@ -902,7 +902,7 @@ self: super: builtins.intersectAttrs super {
   # Runtime dependencies and CLI completion
   nvfetcher = generateOptparseApplicativeCompletion "nvfetcher" (overrideCabal
     super.nvfetcher (drv: {
-      buildTools = drv.buildTools or [ ] ++ [ pkgs.makeWrapper ];
+      buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
           pkgs.lib.makeBinPath [ pkgs.nvchecker pkgs.nix-prefetch-git ]
