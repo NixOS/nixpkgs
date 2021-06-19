@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "3.5.4";
+  version = "4.0.2";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1xjii3dl01rq8x2bsxc6zywiy1s7arfgxrg5l8ml54w1748shadd";
+    sha256 = "sha256-0QdgHFX4r40BDHjpi9R40lXqT4n5ZgrIny+w070LZPE=";
   };
 
   propagatedBuildInputs = [
