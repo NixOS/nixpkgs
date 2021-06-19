@@ -1910,21 +1910,6 @@ EOT
   # https://github.com/kcsongor/generic-lens/issues/133
   generic-optics = dontCheck super.generic-optics;
 
-  # 2021-05-19: Allow random 1.2.0
-  # Remove at (presumably next release) which is > 1.3.1.0
-  hashable = overrideCabal super.hashable (drv: {
-    patches = [
-      (pkgs.fetchpatch {
-        url = "https://github.com/haskell-unordered-containers/hashable/commit/78fa8fdb4f8bec5d221f34110d6afa0d0a00b5f9.patch";
-        sha256 = "0bzgp9qf53zk4rzk73x5cf2kfqncvlmihcallpplaibpslzalyi4";
-      })
-    ] ++ (drv.patches or []);
-    # fix line endings preventing patch from applying
-    prePatch = ''
-      ${pkgs.dos2unix}/bin/dos2unix hashable.cabal
-    '' + (drv.prePatch or "");
-  });
-
   # Too strict bound on random
   # https://github.com/haskell-hvr/missingh/issues/56
   MissingH = doJailbreak super.MissingH;
