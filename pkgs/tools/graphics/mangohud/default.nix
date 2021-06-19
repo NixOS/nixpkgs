@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, fetchurl
 , substituteAll
 , coreutils
 , curl
@@ -9,7 +9,7 @@
 , glxinfo
 , gnugrep
 , gnused
-, pciutils
+, lsof
 , xdg-utils
 , dbus
 , hwdata
@@ -22,33 +22,49 @@
 , ninja
 , pkg-config
 , python3Packages
+, unzip
 , vulkan-loader
 , libXNVCtrl
 , wayland
 }:
 
-stdenv.mkDerivation rec {
+let
+  # Derived from subprojects/imgui.wrap
+  imgui = rec {
+    version = "1.81";
+    src = fetchFromGitHub {
+      owner = "ocornut";
+      repo = "imgui";
+      rev = "v${version}";
+      hash = "sha256-rRkayXk3xz758v6vlMSaUu5fui6NR8Md3njhDB0gJ18=";
+    };
+    patch = fetchurl {
+      url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
+      hash = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
+    };
+  };
+in stdenv.mkDerivation rec {
   pname = "mangohud";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "v${version}";
-    sha256 = "1bzfp37qrx9kk5zaq7sfisgkyccwnxd7i3b1l0blfcy2lrxgx0n6";
+    sha256 = "wL+/wAqvVFph1QzuXPBbSEFjs33VA0S6euNWr/1J1Mk=";
     fetchSubmodules = true;
   };
 
   outputs = [ "out" "doc" "man" ];
 
-  patches = [
-    # Adds option to specify Vulkan's datadir when it's not the same as MangoHud's
-    # See https://github.com/flightlessmango/MangoHud/pull/522
-    (fetchpatch {
-      url = "https://github.com/flightlessmango/MangoHud/commit/56682985d8cec711af7ad0841888a44099249b1b.patch";
-      sha256 = "0l5vb374lfgfh54jiy4097bzsccpv4zsl1fdhn55sxggklymcad8";
-    })
+  # Unpack subproject sources
+  postUnpack = ''(
+    cd "$sourceRoot/subprojects"
+    cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
+    unzip ${imgui.patch}
+  )'';
 
+  patches = [
     # Hard code dependencies. Can't use makeWrapper since the Vulkan
     # layer can be used without the mangohud executable by setting MANGOHUD=1.
     (substituteAll {
@@ -61,7 +77,7 @@ stdenv.mkDerivation rec {
         glxinfo
         gnugrep
         gnused
-        pciutils
+        lsof
         xdg-utils
       ];
 
@@ -96,6 +112,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3Packages.Mako
     python3Packages.python
+    unzip
     vulkan-loader
   ];
 
