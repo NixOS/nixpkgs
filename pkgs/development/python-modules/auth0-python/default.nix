@@ -3,6 +3,7 @@
 , fetchPypi
 , requests
 , mock
+, pyjwt
 , pytestCheckHook
 }:
 
@@ -17,6 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
+    pyjwt
   ];
 
   checkInputs = [
