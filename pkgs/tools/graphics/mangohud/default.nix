@@ -24,6 +24,7 @@
 , python3Packages
 , vulkan-loader
 , libXNVCtrl
+, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -82,6 +83,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Duse_system_vulkan=enabled"
     "-Dvulkan_datadir=${vulkan-headers}/share"
+    "-Dwith_wayland=enabled"
   ];
 
   nativeBuildInputs = [
@@ -99,6 +101,7 @@ stdenv.mkDerivation rec {
     dbus
     libX11
     libXNVCtrl
+    wayland
   ];
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layer
