@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16mc22z3104fvygky4gy3gvifjijm42db48v2z1y0fmyf6whi9p6";
+    sha256 = "0if069f4sjyjl7wvzyzk8k9q9qjixswcc6aszrrgfb4a4mix3h1g";
   };
 
   propagatedBuildInputs = [
