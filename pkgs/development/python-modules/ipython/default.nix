@@ -11,6 +11,7 @@
 # Runtime dependencies
 , jedi
 , decorator
+, matplotlib-inline
 , pickleshare
 , traitlets
 , prompt_toolkit
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jedi
     decorator
+    matplotlib-inline
     pickleshare
     traitlets
     prompt_toolkit
