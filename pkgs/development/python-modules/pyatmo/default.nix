@@ -8,6 +8,7 @@
 , requests_oauthlib
 , freezegun
 , pytest-asyncio
+, pytest-mock
 , pytestCheckHook
 , requests-mock
 }:
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   checkInputs = [
     freezegun
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
     requests-mock
   ];
