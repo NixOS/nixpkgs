@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  outputs = [ "out" "doc" "man" ];
+
   patches = [
     # Adds option to specify Vulkan's datadir when it's not the same as MangoHud's
     # See https://github.com/flightlessmango/MangoHud/pull/522
