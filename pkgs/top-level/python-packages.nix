@@ -5266,6 +5266,8 @@ in {
 
   pyflick = callPackage ../development/python-modules/pyflick { };
 
+  pyheos = callPackage ../development/python-modules/pyheos { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
