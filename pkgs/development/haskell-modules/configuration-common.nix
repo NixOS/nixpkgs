@@ -1958,8 +1958,11 @@ EOT
 
   # Bounds on profunctors are too strict
   # https://github.com/ConferOpenSource/composite/issues/50
-  composite-base = doJailbreak super.composite-base;
-  composite-aeson = doJailbreak super.composite-aeson;
+  # Remove overrides when assert fails.
+  composite-base = assert super.composite-base.version == "0.7.5.0";
+    doJailbreak super.composite-base;
+  composite-aeson = assert super.composite-aeson.version == "0.7.5.0";
+    doJailbreak super.composite-aeson;
 
   # Too strict bounds on profunctors
   # https://github.com/google/proto-lens/issues/413
