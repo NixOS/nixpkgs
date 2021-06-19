@@ -223,9 +223,9 @@
     "emonitor" = ps: with ps; [ aioemonitor ];
     "emulated_hue" = ps: with ps; [ aiohttp-cors ];
     "emulated_kasa" = ps: with ps; [ sense-energy ];
-    "emulated_roku" = ps: with ps; [ ]; # missing inputs: emulated_roku
+    "emulated_roku" = ps: with ps; [ emulated-roku ];
     "enigma2" = ps: with ps; [ openwebifpy ];
-    "enocean" = ps: with ps; [ ]; # missing inputs: enocean
+    "enocean" = ps: with ps; [ enocean ];
     "enphase_envoy" = ps: with ps; [ envoy-reader ];
     "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
     "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
@@ -335,8 +335,8 @@
     "gstreamer" = ps: with ps; [ ]; # missing inputs: gstreamer-player
     "gtfs" = ps: with ps; [ pygtfs ];
     "guardian" = ps: with ps; [ aioguardian ];
-    "habitica" = ps: with ps; [ ]; # missing inputs: habitipy
-    "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
+    "habitica" = ps: with ps; [ habitipy ];
+    "hangouts" = ps: with ps; [ hangups ];
     "harman_kardon_avr" = ps: with ps; [ ]; # missing inputs: hkavr
     "harmony" = ps: with ps; [ aioharmony ];
     "hassio" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
@@ -344,7 +344,7 @@
     "hddtemp" = ps: with ps; [ ];
     "hdmi_cec" = ps: with ps; [ pycec ];
     "heatmiser" = ps: with ps; [ ]; # missing inputs: heatmiserV3
-    "heos" = ps: with ps; [ ]; # missing inputs: pyheos
+    "heos" = ps: with ps; [ pyheos ];
     "here_travel_time" = ps: with ps; [ ]; # missing inputs: herepy
     "hikvision" = ps: with ps; [ ]; # missing inputs: pyhik
     "hikvisioncam" = ps: with ps; [ ]; # missing inputs: hikvision

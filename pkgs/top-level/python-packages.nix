@@ -2265,9 +2265,13 @@ in {
 
   emoji = callPackage ../development/python-modules/emoji { };
 
+  emulated-roku = callPackage ../development/python-modules/emulated-roku { };
+
   enaml = callPackage ../development/python-modules/enaml { };
 
   enamlx = callPackage ../development/python-modules/enamlx { };
+
+  enocean = callPackage ../development/python-modules/enocean { };
 
   enrich = callPackage ../development/python-modules/enrich { };
 
@@ -3156,6 +3160,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  habitipy = callPackage ../development/python-modules/habitipy { };
+
   hachoir = callPackage ../development/python-modules/hachoir { };
 
   hdate = callPackage ../development/python-modules/hdate { };
@@ -3167,6 +3173,8 @@ in {
   halo = callPackage ../development/python-modules/halo { };
 
   handout = callPackage ../development/python-modules/handout { };
+
+  hangups = callPackage ../development/python-modules/hangups { };
 
   hap-python = callPackage ../development/python-modules/hap-python { };
 
@@ -5260,6 +5268,8 @@ in {
 
   pyflick = callPackage ../development/python-modules/pyflick { };
 
+  pyheos = callPackage ../development/python-modules/pyheos { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
@@ -7309,6 +7319,8 @@ in {
 
   readchar = callPackage ../development/python-modules/readchar { };
 
+  readlike = callPackage ../development/python-modules/readlike { };
+
   readme = callPackage ../development/python-modules/readme { };
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
@@ -7346,6 +7358,8 @@ in {
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   rencode = callPackage ../development/python-modules/rencode { };
+
+  reparser = callPackage ../development/python-modules/reparser { };
 
   repeated_test = callPackage ../development/python-modules/repeated_test { };
 

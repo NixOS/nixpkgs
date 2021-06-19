@@ -764,7 +764,7 @@
     keys = [{
       longkeyid = "rsa4096/0xAAA50652F0479205";
       fingerprint = "BF8B F725 DA30 E53E 7F11  4ED8 AAA5 0652 F047 9205";
-   }];
+    }];
   };
   ar1a = {
     email = "aria@ar1as.space";
@@ -5331,7 +5331,7 @@
     github = "kho-dialga";
     githubId = 55767703;
     name = "Iván Brito";
-    };
+  };
   khumba = {
     email = "bog@khumba.net";
     github = "khumba";
@@ -6026,8 +6026,8 @@
     githubId = 7243783;
     name = "Bernardo Meurer";
     keys = [{
-        longkeyid = "rsa4096/0xF4C0D53B8D14C246";
-        fingerprint = "F193 7596 57D5 6DA4 CCD4  786B F4C0 D53B 8D14 C246";
+      longkeyid = "rsa4096/0xF4C0D53B8D14C246";
+      fingerprint = "F193 7596 57D5 6DA4 CCD4  786B F4C0 D53B 8D14 C246";
     }];
   };
   lowfatcomputing = {
@@ -8247,12 +8247,10 @@
     github = "poscat0x04";
     githubId = 53291983;
     name = "Poscat Tarski";
-    keys = [
-      {
-        longkeyid = "rsa4096/2D2595A00D08ACE0";
-        fingerprint = "48AD DE10 F27B AFB4 7BB0  CCAF 2D25 95A0 0D08 ACE0";
-      }
-    ];
+    keys = [{
+      longkeyid = "rsa4096/2D2595A00D08ACE0";
+      fingerprint = "48AD DE10 F27B AFB4 7BB0  CCAF 2D25 95A0 0D08 ACE0";
+    }];
   };
   pradeepchhetri = {
     email = "pradeep.chhetri89@gmail.com";
@@ -9344,6 +9342,16 @@
       fingerprint = "A317 37B3 693C 921B 480C  C629 4A2A AAA3 82F8 294C";
     }];
   };
+  seylerius = {
+    name = "Sable Seyler";
+    email = "sable@seyleri.us";
+    github = "seylerius";
+    githubId = 1145981;
+    keys = [{
+      longkeyid = "rsa4096/0xDC26B921A9E9DBDE";
+      fingerprint = "7246 B6E1 ABB9 9A48 4395  FD11 DC26 B921 A9E9 DBDE";
+    }];
+  };
   sfrijters = {
     email = "sfrijters@gmail.com";
     github = "sfrijters";
@@ -9869,10 +9877,10 @@
     name = "Felix Bühler";
   };
   stupremee = {
-      email = "jutus.k@protonmail.com";
-      github = "Stupremee";
-      githubId = 39732259;
-      name = "Justus K";
+    email = "jutus.k@protonmail.com";
+    github = "Stupremee";
+    githubId = 39732259;
+    name = "Justus K";
   };
   SubhrajyotiSen = {
       email = "subhrajyoti12@gmail.com";
