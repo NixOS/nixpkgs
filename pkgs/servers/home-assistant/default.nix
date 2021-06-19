@@ -440,6 +440,7 @@ in with py.pkgs; buildPythonApplication rec {
     "harmony"
     "hassio"
     "hddtemp"
+    "heos"
     "history"
     "history_stats"
     "home_connect"
