@@ -16,6 +16,10 @@ let generic = { channel, version, sha256, vendorSha256 }:
     runVend = true;
 
     preBuild = ''
+      buildFlagsArray+=(
+        "-tags=prod"
+        "-ldflags=-s -w -X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
+      )
       env GOFLAGS="" go generate ./pkg/charts/static
       env GOFLAGS="" go generate ./jaeger/static
       env GOFLAGS="" go generate ./multicluster/static
