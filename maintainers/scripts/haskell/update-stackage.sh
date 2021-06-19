@@ -39,23 +39,9 @@ EOF
 
 # Drop restrictions on some tools where we always want the latest version.
 sed -r \
-    -e '/ cabal-install /d' \
     -e '/ cabal2nix /d' \
-    -e '/ cabal2spec /d' \
     -e '/ distribution-nixpkgs /d' \
-    -e '/ git-annex /d' \
-    -e '/ hindent /d' \
-    -e '/ hledger/d' \
-    -e '/ hlint /d' \
-    -e '/ hoogle /d' \
-    -e '/ hopenssl /d' \
     -e '/ jailbreak-cabal /d' \
-    -e '/ json-autotype/d' \
-    -e '/ language-nix /d' \
-    -e '/ shake /d' \
-    -e '/ ShellCheck /d' \
-    -e '/ stack /d' \
-    -e '/ weeder /d' \
     < "${tmpfile}.new" >> $stackage_config
 
 if [[ "${1:-}" == "--do-commit" ]]; then
