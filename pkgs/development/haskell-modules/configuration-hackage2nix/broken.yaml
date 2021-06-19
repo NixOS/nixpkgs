@@ -118,6 +118,7 @@ broken-packages:
   - alto
   - alure
   - amazon-emailer
+  - amazonka-s3-streaming
   - amazon-products
   - amby
   - AMI
@@ -834,6 +835,7 @@ broken-packages:
   - criu-rpc-types
   - crjdt-haskell
   - crocodile
+  - cronus
   - cruncher-types
   - crunghc
   - crypto-cipher-benchmarks
@@ -1217,7 +1219,6 @@ broken-packages:
   - erlang
   - erlang-ffi
   - eros
-  - errata
   - error-context
   - error-continuations
   - error-list
@@ -2365,6 +2366,7 @@ broken-packages:
   - hweblib
   - hwhile
   - hw-json-simd
+  - hw-mquery
   - hworker
   - hw-simd
   - hwsl2
@@ -2609,6 +2611,7 @@ broken-packages:
   - ktx
   - ktx-codec
   - kuifje
+  - kure
   - kure-your-boilerplate
   - KyotoCabinet
   - labeled-graph
@@ -2765,6 +2768,7 @@ broken-packages:
   - list-remote-forwards
   - ListT
   - list-t-http-client
+  - list-tries
   - list-t-text
   - list-zip-def
   - list-zipper
@@ -2987,6 +2991,7 @@ broken-packages:
   - mmtf
   - mmtl
   - Mobile-Legends-Hack-Cheats
+  - mock-time
   - modelicaparser
   - modular-prelude
   - module-management
@@ -3305,6 +3310,7 @@ broken-packages:
   - open-adt
   - OpenAFP
   - openai-hs
+  - openai-servant
   - openapi3-code-generator
   - openapi-petstore
   - openapi-typed
@@ -3435,6 +3441,7 @@ broken-packages:
   - parsers-megaparsec
   - parsimony
   - parsley
+  - parsley-core
   - parsnip
   - partage
   - partial-records
@@ -3731,7 +3738,6 @@ broken-packages:
   - proxy-mapping
   - pseudo-trie
   - PTQ
-  - ptr-poker
   - publicsuffixlistcreate
   - publish
   - pubnub
@@ -4019,9 +4025,6 @@ broken-packages:
   - SableCC2Hs
   - safe-buffer-monad
   - safe-coerce
-  - safe-coloured-text-gen
-  - safe-coloured-text-layout
-  - safe-coloured-text-terminfo
   - safecopy-migrate
   - safecopy-store
   - safe-freeze
@@ -4578,7 +4581,6 @@ broken-packages:
   - t3-server
   - table
   - tableaux
-  - table-layout
   - tables
   - Tables
   - tablestorage
@@ -4621,6 +4623,7 @@ broken-packages:
   - teeth
   - telegram
   - telegram-api
+  - telegram-bot-simple
   - teleport
   - teleshell
   - tellbot
@@ -5208,7 +5211,6 @@ broken-packages:
   - xmonad-dbus
   - xmonad-eval
   - xmonad-vanessa
-  - xmonad-wallpaper
   - xmonad-windownames
   - xor
   - Xorshift128Plus

@@ -1,5 +1,5 @@
 
-## Maintainer Workflow
+# Maintainer Workflow
 
 The goal of the [@NixOS/haskell](https://github.com/orgs/NixOS/teams/haskell)
 team is to keep the Haskell packages in Nixpkgs up-to-date, while making sure
@@ -20,7 +20,7 @@ The workflow generally proceeds in three main steps:
 
 Each of these steps is described in a separate section.
 
-### Initial `haskell-updates` PR
+## Initial `haskell-updates` PR
 
 In this section we create the PR for merging `haskell-updates` into `master`.
 
@@ -44,11 +44,13 @@ In this section we create the PR for merging `haskell-updates` into `master`.
     $ ./maintainers/scripts/haskell/regenerate-hackage-packages.sh --do-commit
     ```
 
-1.  Push these commits to the Nixpkgs repository.
+1.  Push these commits to the `haskell-updates` branch of the NixOS/nixpkgs repository.
 
 1.  Open a PR on Nixpkgs merging `haskell-updates` into `master`.
 
-Use the following message body:
+
+
+Use the title `haskellPackages: update stackage and hackage` and the following message body:
 
 ```markdown
 ### This Merge
@@ -68,8 +70,8 @@ The short version is this:
 * We regularly update the Stackage and Hackage pins on `haskell-updates` (normally at the beginning of a merge window).
 * The community fixes builds of Haskell packages on that branch.
 * We aim at at least one merge of `haskell-updates` into `master` every two weeks.
-* We only do the merge if the `mergeable` job is succeeding on hydra.
-* If a maintained package is still broken at the time of merge, we will only merge if the maintainer has been pinged 7 days in advance. (If you care about a Haskell package, become a maintainer!)
+* We only do the merge if the [`mergeable`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/mergeable) job is succeeding on hydra.
+* If a [`maintained`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/maintained) package is still broken at the time of merge, we will only merge if the maintainer has been pinged 7 days in advance. (If you care about a Haskell package, become a maintainer!)
 
 ---
 
@@ -78,14 +80,14 @@ This is the follow-up to #TODO.
 
 Make sure to replace all TODO with the actual values.
 
-### Notify Maintainers and Fix Broken Packages
+## Notify Maintainers and Fix Broken Packages
 
 After you've done the previous steps, Hydra will start building the new and
 updated Haskell packages.  You can see the progress Hydra is making at
 https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.  This Hydra jobset is
 defined in the file [release-haskell.nix](../../top-level/release-haskell.nix).
 
-#### Notify Maintainers
+### Notify Maintainers
 
 When Hydra finishes building all the updated packages for the `haskell-updates`
 jobset, you should generate a build report to notify maintainers of their
@@ -112,10 +114,12 @@ Maintainers should be given at least 7 days to fix up their packages when they
 break.  If maintainers don't fix up their packages with 7 days, then they
 may be marked broken before merging `haskell-updates` into `master`.
 
-#### Fix Broken Packages
+### Fix Broken Packages
 
 After getting the build report, you can see which packages and Hydra jobs are
-failing to build.  The most important jobs are the `maintained` and `mergeable`
+failing to build.  The most important jobs are the
+[`maintained`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/maintained) and
+[`mergeable`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/mergeable)
 jobs. These are both defined in
 [`release-haskell.nix`](../../top-level/release-haskell.nix).
 
@@ -131,7 +135,7 @@ Steps to fix Haskell packages that are failing to build is out of scope for
 this document, but it usually requires fixing up dependencies that are now
 out-of-bounds.
 
-#### Mark Broken Packages
+### Mark Broken Packages
 
 Packages that do not get fixed can be marked broken with the following
 commands.  First check which packages are broken:
@@ -176,7 +180,7 @@ following will happen:
 
 -   All updated files will be committed.
 
-#### Merge `master` into `haskell-updates`
+### Merge `master` into `haskell-updates`
 
 You should occasionally merge the `master` branch into the `haskell-updates`
 branch.
@@ -194,7 +198,7 @@ This is especially important after `staging-next` is merged into `master`,
 since there is a high chance that this will cause all the Haskell packages to
 rebuild.
 
-### Merge `haskell-updates` into `master`
+## Merge `haskell-updates` into `master`
 
 Now it is time to merge the `haskell-updates` PR you opened above.
 
@@ -213,15 +217,35 @@ Before doing this, make sure of the following:
     for Hydra to evaluate the new `haskell-updates` jobset.  Make sure you only
     merge `haskell-updates` into `master` when there are no evaluation errors.
 
+-   Due to Hydra having only a small number of Darwin build machines, the
+    `haskell-updates` jobset on Hydra often has many queued Darwin jobs.
+    In order to not have these queued Darwin jobs prevent the `haskell-updates`
+    branch from being merged to `master` in a timely manner, we have special
+    rules for Darwin jobs.
+
+    -   It is alright to merge the `haskell-updates` branch to `master` if
+        there are remaining queued Darwin jobs on Hydra.
+
+    -   We would like to keep GHC and the `mergeable` job building on Darwin.
+        Do not merge the `haskell-updates` branch to `master` if GHC is failing
+        to build, or the `mergeable` job has failing Darwin constituent jobs.
+
+        If GHC and the `mergeable` job are not failing, but merely queued,
+        it is alright to merge the `haskell-updates` branch to `master`.
+
+    -   We do not need to keep the `maintained` job building on Darwin.
+        If `maintained` packages are failing on Darwin, it is helpful to
+        mark them as broken on that platform.
+
 When you've double-checked these points, go ahead and merge the `haskell-updates` PR.
 After merging, **make sure not to delete the `haskell-updates` branch**, since it
 causes all currently open Haskell-related pull-requests to be automatically closed on GitHub.
 
-### Additional Info
+## Additional Info
 
 Here are some additional tips that didn't fit in above.
 
--   Hydra tries to evalute the `haskell-updates` branch (in the
+-   Hydra tries to evaluate the `haskell-updates` branch (in the
     [`nixpkgs:haskell-updates`](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)
     jobset) every 4 hours.  It is possible to force a new Hydra evaluation without
     waiting 4 hours by the following steps:
@@ -263,8 +287,3 @@ Here are some additional tips that didn't fit in above.
 
 -   The Haskell team members generally hang out in the Matrix room
     [#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org).
-
-## Contributor Workflow
-
-(TODO: this section is to describe the type of workflow for non-committers to
-contribute to `haskell-updates`)
