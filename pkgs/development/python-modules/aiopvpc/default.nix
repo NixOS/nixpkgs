@@ -4,6 +4,7 @@
 , backports-zoneinfo
 , buildPythonPackage
 , fetchFromGitHub
+, holidays
 , poetry-core
 , pytest-asyncio
 , pytest-timeout
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     backports-zoneinfo
+    holidays
     tzdata
     async-timeout
   ];
