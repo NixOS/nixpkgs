@@ -3174,6 +3174,8 @@ in {
 
   handout = callPackage ../development/python-modules/handout { };
 
+  hangups = callPackage ../development/python-modules/hangups { };
+
   hap-python = callPackage ../development/python-modules/hap-python { };
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
@@ -7313,6 +7315,8 @@ in {
 
   readchar = callPackage ../development/python-modules/readchar { };
 
+  readlike = callPackage ../development/python-modules/readlike { };
+
   readme = callPackage ../development/python-modules/readme { };
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
@@ -7350,6 +7354,8 @@ in {
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   rencode = callPackage ../development/python-modules/rencode { };
+
+  reparser = callPackage ../development/python-modules/reparser { };
 
   repeated_test = callPackage ../development/python-modules/repeated_test { };
 
