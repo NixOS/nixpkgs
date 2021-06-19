@@ -2970,13 +2970,14 @@ with pkgs;
     llvmPackages = llvmPackages_13;
   };
 
-  coreutils =  callPackage ../tools/misc/coreutils { };
+  coreutils = if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils else gnu-coreutils;
+  gnu-coreutils = callPackage ../tools/misc/coreutils { };
 
   # The coreutils above are built with dependencies from
   # bootstrapping. We cannot override it here, because that pulls in
   # openssl from the previous stage as well.
-  coreutils-full = callPackage ../tools/misc/coreutils { minimal = false; };
-  coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
+  coreutils-full = gnu-coreutils.override { minimal = false; };
+  coreutils-prefixed = gnu-coreutils.override { withPrefix = true; singleBinary = false; };
 
   create-cycle-app = nodePackages.create-cycle-app;
 
@@ -3301,7 +3302,9 @@ with pkgs;
     inherit (windows) libgnurx;
   };
 
-  findutils = callPackage ../tools/misc/findutils { };
+  findutils = callPackage ../tools/misc/findutils {
+    coreutils = if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils-minimal else gnu-coreutils;
+  };
 
   bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
