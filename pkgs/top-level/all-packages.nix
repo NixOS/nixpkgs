@@ -3941,9 +3941,11 @@ in
 
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
-  coreutils = callPackage ../tools/misc/coreutils { };
-  coreutils-full = coreutils.override { minimal = false; };
-  coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
+  # By declaring coreutils explicitly we can overwrite it globally without causing infinite loops
+  coreutils = if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils else gnu-coreutils;
+  gnu-coreutils = callPackage ../tools/misc/coreutils { };
+  coreutils-full = gnu-coreutils.override { minimal = false; };
+  coreutils-prefixed = gnu-coreutils.override { withPrefix = true; singleBinary = false; };
 
   corkscrew = callPackage ../tools/networking/corkscrew { };
 
@@ -4800,7 +4802,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  findutils = callPackage ../tools/misc/findutils { };
+  findutils = callPackage ../tools/misc/findutils {
+    coreutils = if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils-minimal else gnu-coreutils;
+  };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
 
