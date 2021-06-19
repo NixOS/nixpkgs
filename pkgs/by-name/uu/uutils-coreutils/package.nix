@@ -7,7 +7,7 @@
   python3Packages,
   versionCheckHook,
   nix-update-script,
-
+  withDocs ? true,
   prefix ? "uutils-",
   buildMulticallBinary ? true,
 }:
@@ -23,16 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OZ9AsCJmQmn271OzEmqSZtt1OPn7zHTScQiiqvPhqB0=";
   };
 
+  postPatch = ''
+    # don't enforce the building of the man page
+    substituteInPlace GNUmakefile \
+      --replace 'install: build' 'install:'
+  '';
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "uutils-coreutils-${finalAttrs.version}";
     hash = "sha256-DsVLp2Y15k+KQI7S6A4hylOhJN016MEdEWx9VQIQEgQ=";
   };
 
-  nativeBuildInputs = [
-    rustPlatform.cargoSetupHook
-    python3Packages.sphinx
-  ];
+  nativeBuildInputs = [ rustPlatform.cargoSetupHook ] ++ lib.optional withDocs python3Packages.sphinx;
 
   makeFlags =
     [
@@ -42,7 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
       "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
     ]
     ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
-    ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+    ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ]
+    ++ lib.optionals (!withDocs) [
+      "build-coreutils"
+      "build-pkgs"
+    ];
 
   # too many impure/platform-dependent tests
   doCheck = false;
@@ -69,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
       CLI utils in Rust. This repo is to aggregate the GNU coreutils rewrites.
     '';
     homepage = "https://github.com/uutils/coreutils";
-    changelog = "https://github.com/uutils/coreutils/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
