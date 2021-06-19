@@ -29946,6 +29946,8 @@ in
 
   leo3-bin = callPackage ../applications/science/logic/leo3/binary.nix {};
 
+  logica = python3.pkgs.callPackage ../applications/science/logic/logica {};
+
   logisim = callPackage ../applications/science/logic/logisim {};
 
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
