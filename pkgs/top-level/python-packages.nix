@@ -5268,6 +5268,8 @@ in {
 
   pyheos = callPackage ../development/python-modules/pyheos { };
 
+  pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
