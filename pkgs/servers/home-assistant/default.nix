@@ -436,6 +436,7 @@ in with py.pkgs; buildPythonApplication rec {
     "growatt_server"
     "guardian"
     "habitica"
+    "hangouts"
     "harmony"
     "hassio"
     "hddtemp"
