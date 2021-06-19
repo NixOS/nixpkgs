@@ -96,6 +96,8 @@ let
           throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
       );
 
+    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
+    dontAddStaticConfigureFlags = true;
     configureFlags = [
       "shared" # "shared" builds both shared and static libraries
       "--libdir=lib"

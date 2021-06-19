@@ -42,7 +42,7 @@
 
 let
   version = "2.32";
-  patchSuffix = "-46";
+  patchSuffix = "-48";
   sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
 in
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation ({
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
           $ git fetch --all -p && git checkout origin/release/2.32/master && git describe
-          glibc-2.32-46-g1799ac8eab
+          glibc-2.32-48-g16949aeaa0
           $ git show --minimal --reverse glibc-2.32.. | gzip -9n --rsyncable - > 2.32-master.patch.gz
 
          To compare the archive contents zdiff can be used.
@@ -153,6 +153,8 @@ stdenv.mkDerivation ({
       "--enable-add-ons"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
+      "--enable-static-pie"
+      "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
     ] ++ lib.optionals withLinuxHeaders [

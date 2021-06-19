@@ -11,7 +11,7 @@ in
       enable = mkEnableOption "nix-serve, the standalone Nix binary cache server";
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5000;
         description = ''
           Port number where nix-serve will listen on.

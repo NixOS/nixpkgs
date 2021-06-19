@@ -2,6 +2,8 @@
 # * wrap any installed executables with a wrapper that configures TCLLIBPATH
 # * write a setup hook that extends the TCLLIBPATH of any anti-dependencies
 
+tclWrapperArgs=( ${tclWrapperArgs-} )
+
 # Add a directory to TCLLIBPATH, provided that it exists
 _addToTclLibPath() {
     local tclPkg="$1"
@@ -50,10 +52,12 @@ wrapTclBins() {
         return
     fi
 
+    tclWrapperArgs+=(--prefix TCLLIBPATH ' ' "$TCLLIBPATH")
+
     find "$tclBinsDir" -type f -executable -print |
         while read -r someBin; do
             echo "Adding TCLLIBPATH wrapper for $someBin"
-            wrapProgram "$someBin" --prefix TCLLIBPATH ' ' "$TCLLIBPATH"
+            wrapProgram "$someBin" "${tclWrapperArgs[@]}"
         done
 }
 
