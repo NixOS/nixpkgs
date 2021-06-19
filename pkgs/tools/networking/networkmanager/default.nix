@@ -1,14 +1,57 @@
-{ lib, stdenv, fetchurl, substituteAll, intltool, pkg-config, fetchpatch, dbus
-, gnome, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
-, libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
-, gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, gnused, iputils, kmod, jansson, gtk-doc, libxslt
-, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43
-, openconnect, curl, meson, ninja, libpsl, mobile-broadband-provider-info, runtimeShell }:
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
+, intltool
+, pkg-config
+, fetchpatch
+, dbus
+, gnome
+, systemd
+, libuuid
+, polkit
+, gnutls
+, ppp
+, dhcp
+, iptables
+, python3
+, vala
+, libgcrypt
+, dnsmasq
+, bluez5
+, readline
+, libselinux
+, audit
+, gobject-introspection
+, modemmanager
+, openresolv
+, libndp
+, newt
+, libsoup
+, ethtool
+, gnused
+, iputils
+, kmod
+, jansson
+, gtk-doc
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_412
+, docbook_xml_dtd_42
+, docbook_xml_dtd_43
+, openconnect
+, curl
+, meson
+, ninja
+, libpsl
+, mobile-broadband-provider-info
+, runtimeShell
+}:
 
 let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "networkmanager";
   version = "1.30.4";
 
@@ -23,34 +66,45 @@ in stdenv.mkDerivation rec {
   # patch networkmanager to allow passing these path in config file. This will
   # remove unneeded build-time dependencies.
   mesonFlags = [
-    "-Ddhclient=${dhcp}/bin/dhclient"
+    # System paths
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    # to enable link-local connections
+    "-Dudev_dir=${placeholder "out"}/lib/udev"
+    "-Ddbus_conf_dir=${placeholder "out"}/share/dbus-1/system.d"
+    "-Dkernel_firmware_dir=/run/current-system/firmware"
+
+    # Platform
+    "-Dsession_tracking=systemd"
+    "-Dlibaudit=yes-disabled-by-default"
+    "-Dpolkit_agent_helper_1=/run/wrappers/bin/polkit-agent-helper-1"
+
+    # Features
+    # Allow using iwd when configured to do so
+    "-Diwd=true"
+    "-Dpppd=${ppp}/bin/pppd"
+    "-Diptables=${iptables}/bin/iptables"
+    "-Dmodem_manager=true"
+    "-Dnmtui=true"
     "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
+    "-Dqt=false"
+
+    # Handlers
+    "-Dresolvconf=${openresolv}/bin/resolvconf"
+
+    # DHCP clients
+    "-Ddhclient=${dhcp}/bin/dhclient"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
     "-Ddhcpcd=no"
     "-Ddhcpcanon=no"
-    "-Dpppd=${ppp}/bin/pppd"
-    "-Diptables=${iptables}/bin/iptables"
-    # to enable link-local connections
-    "-Dudev_dir=${placeholder "out"}/lib/udev"
-    "-Dresolvconf=${openresolv}/bin/resolvconf"
-    "-Ddbus_conf_dir=${placeholder "out"}/share/dbus-1/system.d"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "-Dkernel_firmware_dir=/run/current-system/firmware"
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "-Dcrypto=gnutls"
-    "-Dsession_tracking=systemd"
-    "-Dmodem_manager=true"
-    "-Dnmtui=true"
+
+    # Miscellaneous
     "-Ddocs=true"
-    "-Dtests=no"
-    "-Dqt=false"
-    "-Dpolkit_agent_helper_1=/run/wrappers/bin/polkit-agent-helper-1"
-    # Allow using iwd when configured to do so
-    "-Diwd=true"
-    "-Dlibaudit=yes-disabled-by-default"
     # We don't use firewalld in NixOS
     "-Dfirewalld_zone=false"
+    "-Dtests=no"
+    "-Dcrypto=gnutls"
   ];
 
   patches = [
@@ -66,17 +120,44 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    systemd libselinux audit libpsl libuuid polkit ppp libndp curl mobile-broadband-provider-info
-    bluez5 dnsmasq gobject-introspection modemmanager readline newt libsoup jansson
+    systemd
+    libselinux
+    audit
+    libpsl
+    libuuid
+    polkit
+    ppp
+    libndp
+    curl
+    mobile-broadband-provider-info
+    bluez5
+    dnsmasq
+    gobject-introspection
+    modemmanager
+    readline
+    newt
+    libsoup
+    jansson
   ];
 
   propagatedBuildInputs = [ gnutls libgcrypt ];
 
   nativeBuildInputs = [
-    meson ninja intltool pkg-config
-    vala gobject-introspection dbus
+    meson
+    ninja
+    intltool
+    pkg-config
+    vala
+    gobject-introspection
+    dbus
     # Docs
-    gtk-doc libxslt docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_42 docbook_xml_dtd_43 pythonForDocs
+    gtk-doc
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_412
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    pythonForDocs
   ];
 
   doCheck = false; # requires /sys, the net
