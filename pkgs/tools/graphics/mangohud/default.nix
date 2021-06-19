@@ -116,8 +116,7 @@ stdenv.mkDerivation rec {
   # Support overlaying Vulkan applications without requiring mangohud to be installed
   postFixup = ''
     wrapProgram "$out/bin/mangohud" \
-      --prefix VK_LAYER_PATH : "$out/share/vulkan/implicit_layer.d" \
-      --prefix VK_INSTANCE_LAYERS : VK_LAYER_MANGOHUD_overlay
+      --prefix XDG_DATA_DIRS : "$out/share"
   '';
 
   meta = with lib; {
