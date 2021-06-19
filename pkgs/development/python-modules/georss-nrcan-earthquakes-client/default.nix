@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "georss-nrcan-earthquakes-client";
-  version = "0.2";
+  version = "0.3";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-nrcan-earthquakes-client";
     rev = "v${version}";
-    sha256 = "0d5cdvi35wj30yvql1sr5n4vz0g4ydrslhql3bya1b7pndfs0h3y";
+    sha256 = "1brn6ycsw3d3znbqi2w2cxjw8hyfb44p2lra18rx2gyvgnkxg19l";
   };
 
   propagatedBuildInputs = [
