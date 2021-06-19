@@ -478,10 +478,7 @@ self: super: {
   doctest-discover = dontCheck super.doctest-discover;
 
   # Depends on itself for testing
-  tasty-discover = addBuildTool super.tasty-discover
-    (if pkgs.buildPlatform != pkgs.hostPlatform
-     then self.buildHaskellPackages.tasty-discover
-     else dontCheck super.tasty-discover);
+  tasty-discover = dontCheck super.tasty-discover;
 
   # Known issue with nondeterministic test suite failure
   # https://github.com/nomeata/tasty-expected-failure/issues/21
