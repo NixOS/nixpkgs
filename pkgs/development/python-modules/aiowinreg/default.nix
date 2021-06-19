@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, winacl
 }:
 
 buildPythonPackage rec {
@@ -14,6 +15,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "096663ec3db35fdc7ccc1c2d0d64a11cf64f4baa48955088e42b6a649ce418a5";
   };
+
+  propagatedBuildInputs = [ winacl ];
 
   # Project doesn't have tests
   doCheck = false;
