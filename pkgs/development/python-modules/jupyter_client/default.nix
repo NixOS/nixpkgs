@@ -3,6 +3,7 @@
 , fetchPypi
 , traitlets
 , jupyter_core
+, nest-asyncio
 , pyzmq
 , dateutil
 , isPyPy
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     traitlets
     jupyter_core
+    nest-asyncio
     pyzmq
     dateutil
     tornado
