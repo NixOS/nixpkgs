@@ -9020,6 +9020,10 @@ in {
 
   wasmer = callPackage ../development/python-modules/wasmer { };
 
+  wasmer-compiler-cranelift = callPackage ../development/python-modules/wasmer-compiler-cranelift {
+    inherit (pkgs) zlib ncurses libffi libxml2 pkg-config;
+  };
+
   watchdog = callPackage ../development/python-modules/watchdog {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
