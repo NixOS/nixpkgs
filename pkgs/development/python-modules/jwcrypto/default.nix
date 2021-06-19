@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , cryptography
+, deprecated
 }:
 
 buildPythonPackage rec {
@@ -15,6 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cryptography
+    deprecated
   ];
 
   meta = with lib; {
