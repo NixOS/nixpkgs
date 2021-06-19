@@ -1,11 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
+, unstableGitUpdater
 , rustPlatform
 , cargo
-, sphinx
 , Security
 , libiconv
+, withDocs ? true
+, sphinx
 , withPrefix ? false
 , buildMulticallBinary ? true
 }:
@@ -25,9 +28,9 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    # can be removed after https://github.com/uutils/coreutils/pull/1815 is included
+    # don't enforce the building of the man page
     substituteInPlace GNUmakefile \
-      --replace uutils coreutils
+      --replace 'install: build' 'install:'
   '';
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -36,7 +39,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-92BHPSVIPZLn399AcaJJjRq2WkxzDm8knKN3FIdAxAA=";
   };
 
-  nativeBuildInputs = [ rustPlatform.cargoSetupHook sphinx ];
+  nativeBuildInputs = [ rustPlatform.cargoSetupHook ]
+    ++ lib.optional withDocs sphinx;
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
@@ -46,7 +50,8 @@ stdenv.mkDerivation rec {
     "PROFILE=release"
     "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
   ] ++ lib.optionals withPrefix [ "PROG_PREFIX=${prefix}" ]
-  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ]
+  ++ lib.optionals (!withDocs) [ "build-coreutils" "build-pkgs" ];
 
   # too many impure/platform-dependent tests
   doCheck = false;
