@@ -1,9 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
-, enum34, hpack, hyperframe, pytestCheckHook, hypothesis }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, fetchpatch
+, hpack
+, hyperframe
+, pytestCheckHook
+, hypothesis
+}:
 
 buildPythonPackage rec {
   pname = "h2";
   version = "4.0.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,9 +29,20 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ enum34 hpack hyperframe ];
+  propagatedBuildInputs = [
+    hpack
+    hyperframe
+  ];
 
-  checkInputs = [ pytestCheckHook hypothesis ];
+  checkInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
+
+  pythonImportCheck = [
+    "h2.connection"
+    "h2.config"
+  ];
 
   meta = with lib; {
     description = "HTTP/2 State-Machine based protocol implementation";
