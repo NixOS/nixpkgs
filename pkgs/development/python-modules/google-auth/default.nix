@@ -10,6 +10,7 @@
 , mock
 , oauth2client
 , pyasn1-modules
+, pyu2f
 , pytest-localserver
 , responses
 , rsa
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     rsa
     six
     pyopenssl
+    pyu2f
   ];
 
   checkInputs = [
