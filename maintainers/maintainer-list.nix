@@ -7324,6 +7324,12 @@
     githubId = 17120571;
     name = "Xinhao Luo";
   };
+  newam = {
+    email = "alexmgit@protonmail.com";
+    github = "newAM";
+    githubId = 7845120;
+    name = "Alex M.";
+  };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";
     github = "nikitavoloboev";
