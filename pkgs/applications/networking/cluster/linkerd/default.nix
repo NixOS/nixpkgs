@@ -26,15 +26,6 @@ let generic = { channel, version, sha256, vendorSha256 }:
       env GOFLAGS="" go generate ./viz/static
     '';
 
-    buildFlagsArray = [
-      "-tags=prod"
-    ];
-
-    ldflags = [
-      "-s" "-w"
-      "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
-    ];
-
     nativeBuildInputs = [ installShellFiles ];
 
     postInstall = ''
