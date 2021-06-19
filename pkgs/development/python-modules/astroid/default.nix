@@ -1,13 +1,12 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
 , isPyPy
 , lazy-object-proxy
 , wrapt
 , typed-ast
 , pytestCheckHook
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -16,15 +15,10 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = "PyCQA";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "177hmysndgz4fzylfsqs5xi498q641gi0rcvy1xw0mszxp6lrc4y";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "2476b7f0d6cec13f4c1f53b54bea2ce072310ac9fc7acb669d5270190c748042";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [ setuptools-scm ];
 
   # From astroid/__pkginfo__.py
   propagatedBuildInputs = [
