@@ -1,32 +1,67 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
-, sqlalchemy, ruamel_yaml, CommonMark, lxml
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, aiohttp
+, asyncpg
+, attrs
+, CommonMark
+, lxml
+, prometheus_client
+, pycryptodome
+, python-olm
+, python_magic
+, ruamel_yaml
+, sqlalchemy
+, unpaddedbase64
+, uvloop
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.8.17";
+  version = "0.9.2";
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9a15a8e39f9d0b36c91dfe0f5dd1efc8752cc1d317057840a3dbffd6ee90e068";
+    sha256 = "0nv9nnr02asvkxziibdsb1vjc8crhil41l5a5zxw9h2vb0k2hjgx";
   };
 
   propagatedBuildInputs = [
+    # requirements.txt
     aiohttp
+    attrs
+    yarl
 
-    # defined in optional-requirements.txt
-    sqlalchemy
-    ruamel_yaml
+    # optional-requirements.txt
     CommonMark
+    asyncpg
     lxml
+    prometheus_client
+    pycryptodome
+    python-olm
+    python_magic
+    ruamel_yaml
+    sqlalchemy
+    unpaddedbase64
+    uvloop
   ];
-
-  disabled = pythonOlder "3.7";
 
   # no tests available
   doCheck = false;
 
-  pythonImportsCheck = [ "mautrix" ];
+  pythonImportsCheck = [
+    # https://github.com/tulir/mautrix-python#components
+    "mautrix"
+    "mautrix.api"
+    "mautrix.client.api"
+    "mautrix.appservice"
+    "mautrix.crypto"
+    "mautrix.bridge"
+    "mautrix.client"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/tulir/mautrix-python";

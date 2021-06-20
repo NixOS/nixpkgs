@@ -5489,6 +5489,8 @@ in {
 
   prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit { };
 
+  prompt_toolkit1 = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
+
   property-manager = callPackage ../development/python-modules/property-manager { };
 
   protego = callPackage ../development/python-modules/protego { };
@@ -5980,6 +5982,8 @@ in {
   pyinotify = callPackage ../development/python-modules/pyinotify { };
 
   pyinputevent = callPackage ../development/python-modules/pyinputevent { };
+
+  pyinquirer = callPackage ../development/python-modules/pyinquirer { };
 
   pyinsteon = callPackage ../development/python-modules/pyinsteon { };
 
