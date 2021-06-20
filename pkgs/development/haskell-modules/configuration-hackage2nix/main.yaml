@@ -118,9 +118,6 @@ extra-packages:
   - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
   - sbv == 7.13                         # required for pkgs.petrinizer
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
-  - gi-gdk == 3.0.24                    # 2021-05-07: For haskell-gi 0.25 without gtk4
-  - gi-gtk < 4.0                        # 2021-05-07: For haskell-gi 0.25 without gtk4
-  - gi-gdkx11 == 3.0.11                 # 2021-05-07: For haskell-gi 0.25 without gtk4
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
   - hackage-db < 2.1.1                  # 2021-06-10: Need older hackage-db as long as Cabal < 3.4, see https://github.com/NixOS/cabal2nix/issues/501
 
