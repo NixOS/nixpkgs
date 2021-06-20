@@ -12,20 +12,20 @@
 #
 # If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
 # Also note that your tts version might not support all available models so check:
-#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.15
+#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.15.1
 #
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
 python3Packages.buildPythonApplication rec {
   pname = "tts";
-  version = "0.0.15";
+  version = "0.0.15.1";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "0pbzkjk2hncj22xh5lq5anlnvzkpfa7nxr1s2p6hshpln3mqjqs7";
+    sha256 = "0z6sbzspgmw5ja8r2zysyhdk4jzlv88a0ihkvxvvwxslkyncdb89";
   };
 
   postPatch = ''
