@@ -1010,6 +1010,8 @@ in
 
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
+  timedoctor = callPackage ../applications/office/timedoctor { };
+
   twine = with python3Packages; toPythonApplication twine;
 
   wayst = callPackage ../applications/terminal-emulators/wayst { };
