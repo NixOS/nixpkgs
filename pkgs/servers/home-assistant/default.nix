@@ -515,6 +515,7 @@ in with py.pkgs; buildPythonApplication rec {
     "microsoft_face_detect"
     "microsoft_face_identify"
     "mikrotik"
+    "mill"
     "min_max"
     "minecraft_server"
     "minio"
