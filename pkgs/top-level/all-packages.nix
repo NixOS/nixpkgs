@@ -9820,6 +9820,8 @@ in
 
   unrar = callPackage ../tools/archivers/unrar { };
 
+  vul = callPackage ../applications/misc/vul { };
+
   xar = callPackage ../tools/compression/xar { };
 
   xarchive = callPackage ../tools/archivers/xarchive { };
