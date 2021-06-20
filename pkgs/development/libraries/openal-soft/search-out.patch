@@ -1,12 +1,13 @@
-diff -Nuar a/Alc/helpers.c b/Alc/helpers.c
---- a/Alc/helpers.c	1970-01-01 00:00:01.000000000 +0000
-+++ b/Alc/helpers.c	1970-01-01 00:00:02.000000000 +0000
-@@ -951,6 +951,8 @@
-             }
-         }
- 
-+        DirectorySearch("@OUT@/share", ext, &results);
-+
-         alstr_reset(&path);
+diff --git a/alc/helpers.cpp b/alc/helpers.cpp
+index 8c1c8562..59947ba2 100644
+--- a/alc/helpers.cpp
++++ b/alc/helpers.cpp
+@@ -384,7 +384,7 @@ al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
      }
  
+     // Search global data dirs
+-    std::string datadirs{al::getenv("XDG_DATA_DIRS").value_or("/usr/local/share/:/usr/share/")};
++    std::string datadirs{al::getenv("XDG_DATA_DIRS").value_or("@OUT@/share/:/usr/local/share/:/usr/share/")};
+ 
+     size_t curpos{0u};
+     while(curpos < datadirs.size())
