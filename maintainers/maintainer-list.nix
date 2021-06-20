@@ -9068,6 +9068,16 @@
     githubId = 3280280;
     name = "Ryne Everett";
   };
+  rytone = {
+    email = "max@ryt.one";
+    github = "rytone";
+    githubId = 8082305;
+    name = "Maxwell Beck";
+    keys = [{
+      longkeyid = "rsa2048/0xBB3EFA303760A0DB";
+      fingerprint = "D260 79E3 C2BC 2E43 905B  D057 BB3E FA30 3760 A0DB";
+    }];
+  };
   rzetterberg = {
     email = "richard.zetterberg@gmail.com";
     github = "rzetterberg";
