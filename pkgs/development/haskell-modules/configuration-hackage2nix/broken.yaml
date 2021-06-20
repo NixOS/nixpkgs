@@ -4755,7 +4755,6 @@ broken-packages:
   - Titim
   - tkhs
   - tkyprof
-  - tmp-postgres
   - todo
   - tofromxml
   - to-haskell

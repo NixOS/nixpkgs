@@ -787,6 +787,9 @@ self: super: {
 
   # Needs pginit to function and pgrep to verify.
   tmp-postgres = overrideCabal super.tmp-postgres (drv: {
+    preCheck = ''
+      export HOME="$TMPDIR"
+    '' + (drv.preCheck or "");
     libraryToolDepends = drv.libraryToolDepends or [] ++ [pkgs.postgresql];
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
