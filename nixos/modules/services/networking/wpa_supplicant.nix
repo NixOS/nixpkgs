@@ -8,28 +8,97 @@ let
     else pkgs.wpa_supplicant;
 
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
-    ${optionalString cfg.userControlled.enable ''
-      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
-      update_config=1''}
-    ${cfg.extraConfig}
-    ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
-      key = if psk != null
-        then ''"${psk}"''
-        else pskRaw;
-      baseAuth = if key != null
-        then "psk=${key}"
-        else "key_mgmt=NONE";
-    in ''
-      network={
-        ssid="${ssid}"
-        ${optionalString (priority != null) ''priority=${toString priority}''}
-        ${optionalString hidden "scan_ssid=1"}
-        ${if (auth != null) then auth else baseAuth}
-        ${extraConfig}
-      }
-    '') cfg.networks)}
-  '' else "/etc/wpa_supplicant.conf";
+
+  # Content of wpa_supplicant.conf
+  generatedConfig = concatStringsSep "\n" (
+    (mapAttrsToList mkNetwork cfg.networks)
+    ++ optional cfg.userControlled.enable (concatStringsSep "\n"
+      [ "ctrl_interface=/run/wpa_supplicant"
+        "ctrl_interface_group=${cfg.userControlled.group}"
+        "update_config=1"
+      ])
+    ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
+    ++ optional (cfg.extraConfig != "") cfg.extraConfig);
+
+  configFile =
+    if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable
+      then pkgs.writeText "wpa_supplicant.conf" generatedConfig
+      else "/etc/wpa_supplicant.conf";
+
+  # Creates a network block for wpa_supplicant.conf
+  mkNetwork = ssid: opts:
+  let
+    quote = x: ''"${x}"'';
+    indent = x: "  " + x;
+
+    pskString = if opts.psk != null
+      then quote opts.psk
+      else opts.pskRaw;
+
+    options = [
+      "ssid=${quote ssid}"
+      (if pskString != null || opts.auth != null
+        then "key_mgmt=${concatStringsSep " " opts.authProtocols}"
+        else "key_mgmt=NONE")
+    ] ++ optional opts.hidden "scan_ssid=1"
+      ++ optional (pskString != null) "psk=${pskString}"
+      ++ optionals (opts.auth != null) (filter (x: x != "") (splitString "\n" opts.auth))
+      ++ optional (opts.priority != null) "priority=${toString opts.priority}"
+      ++ optional (opts.extraConfig != "") opts.extraConfig;
+  in ''
+    network={
+    ${concatMapStringsSep "\n" indent options}
+    }
+  '';
+
+  # Creates a systemd unit for wpa_supplicant bound to a given (or any) interface
+  mkUnit = iface:
+    let
+      deviceUnit = optional (iface != null) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
+      configStr = if cfg.allowAuxiliaryImperativeNetworks
+        then "-c /etc/wpa_supplicant.conf -I ${configFile}"
+        else "-c ${configFile}";
+    in {
+      description = "WPA Supplicant instance" + optionalString (iface != null) "for interface ${iface}";
+
+      after = deviceUnit;
+      before = [ "network.target" ];
+      wants = [ "network.target" ];
+      requires = deviceUnit;
+      wantedBy = [ "multi-user.target" ];
+      stopIfChanged = false;
+
+      path = [ package ];
+
+      script =
+      ''
+        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]; then
+          echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+        fi
+
+        iface_args="-s -u -D${cfg.driver} ${configStr}"
+        ${if iface == null then
+        ''
+          # scan and use all available interfaces
+          for i in $(cd /sys/class/net && echo *); do
+            DEVTYPE=
+            UEVENT_PATH=/sys/class/net/$i/uevent
+            if [ -e "$UEVENT_PATH" ]; then
+              source "$UEVENT_PATH"
+              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
+                args+="''${args:+ -N} -i$i $iface_args"
+              fi
+            fi
+          done
+        '' else
+        ''
+          # use user-supplied interface
+          args="-i${iface} $iface_args"
+        ''}
+        exec wpa_supplicant $args
+      '';
+    };
+
 in {
   options = {
     networking.wireless = {
@@ -66,6 +135,16 @@ in {
         '';
       };
 
+      scanOnLowSignal = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to periodically scan for (better) networks when the signal of
+          the current one is low. This will make roaming between access points
+          faster, but will consume more power.
+        '';
+      };
+
       networks = mkOption {
         type = types.attrsOf (types.submodule {
           options = {
@@ -94,11 +173,52 @@ in {
               '';
             };
 
+            authProtocols = mkOption {
+              default = [
+                # WPA2 and WPA3
+                "WPA-PSK" "WPA-EAP" "SAE"
+                # 802.11r variants of the above
+                "FT-PSK" "FT-EAP" "FT-SAE"
+              ];
+              # The list can be obtained by running this command
+              # awk '
+              #   /^# key_mgmt: /{ run=1 }
+              #   /^#$/{ run=0 }
+              #   /^# [A-Z0-9-]{2,}/{ if(run){printf("\"%s\"\n", $2)} }
+              # ' /run/current-system/sw/share/doc/wpa_supplicant/wpa_supplicant.conf.example
+              type = types.listOf (types.enum [
+                "WPA-PSK"
+                "WPA-EAP"
+                "IEEE8021X"
+                "NONE"
+                "WPA-NONE"
+                "FT-PSK"
+                "FT-EAP"
+                "FT-EAP-SHA384"
+                "WPA-PSK-SHA256"
+                "WPA-EAP-SHA256"
+                "SAE"
+                "FT-SAE"
+                "WPA-EAP-SUITE-B"
+                "WPA-EAP-SUITE-B-192"
+                "OSEN"
+                "FILS-SHA256"
+                "FILS-SHA384"
+                "FT-FILS-SHA256"
+                "FT-FILS-SHA384"
+                "OWE"
+                "DPP"
+              ]);
+              description = ''
+                The list of authentication protocols accepted by this network.
+                This corresponds to the <literal>key_mgmt</literal> option in wpa_supplicant.
+              '';
+            };
+
             auth = mkOption {
               type = types.nullOr types.str;
               default = null;
               example = ''
-                key_mgmt=WPA-EAP
                 eap=PEAP
                 identity="user@example.com"
                 password="secret"
@@ -205,6 +325,7 @@ in {
           description = "Members of this group can control wpa_supplicant.";
         };
       };
+
       extraConfig = mkOption {
         type = types.str;
         default = "";
@@ -239,62 +360,27 @@ in {
       '';
 
     environment.systemPackages = [ package ];
-
     services.dbus.packages = [ package ];
     services.udev.packages = [ pkgs.crda ];
 
-    # FIXME: start a separate wpa_supplicant instance per interface.
-    systemd.services.wpa_supplicant = let
-      ifaces = cfg.interfaces;
-      deviceUnit = interface: [ "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device" ];
-    in {
-      description = "WPA Supplicant";
+    systemd.services =
+      if cfg.interfaces == []
+        then { wpa_supplicant = mkUnit null; }
+        else listToAttrs (map (i: nameValuePair "wpa_supplicant-${i}" (mkUnit i)) cfg.interfaces);
 
-      after = lib.concatMap deviceUnit ifaces;
-      before = [ "network.target" ];
-      wants = [ "network.target" ];
-      requires = lib.concatMap deviceUnit ifaces;
-      wantedBy = [ "multi-user.target" ];
-      stopIfChanged = false;
+    # Restart wpa_supplicant after resuming from sleep
+    powerManagement.resumeCommands = concatStringsSep "\n" (
+      optional (cfg.interfaces == []) "/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant"
+      ++ map (i: "/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant-${i}") cfg.interfaces
+    );
 
-      path = [ package ];
-
-      script = let
-        configStr = if cfg.allowAuxiliaryImperativeNetworks
-          then "-c /etc/wpa_supplicant.conf -I ${configFile}"
-          else "-c ${configFile}";
-      in ''
-        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
-        then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
-        fi
-        iface_args="-s -u -D${cfg.driver} ${configStr}"
-        ${if ifaces == [] then ''
-          for i in $(cd /sys/class/net && echo *); do
-            DEVTYPE=
-            UEVENT_PATH=/sys/class/net/$i/uevent
-            if [ -e "$UEVENT_PATH" ]; then
-              source "$UEVENT_PATH"
-              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-                args+="''${args:+ -N} -i$i $iface_args"
-              fi
-            fi
-          done
-        '' else ''
-          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
-        ''}
-        exec wpa_supplicant $args
-      '';
-    };
-
-    powerManagement.resumeCommands = ''
-      /run/current-system/systemd/bin/systemctl try-restart wpa_supplicant
-    '';
-
-    # Restart wpa_supplicant when a wlan device appears or disappears.
-    services.udev.extraRules = ''
-      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
+    # Restart wpa_supplicant when a wlan device appears or disappears. This is
+    # only needed when an interface hasn't been specified by the user.
+    services.udev.extraRules = optionalString (cfg.interfaces == []) ''
+      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", \
+      RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
     '';
   };
 
-  meta.maintainers = with lib.maintainers; [ globin ];
+  meta.maintainers = with lib.maintainers; [ globin rnhmjoj ];
 }
