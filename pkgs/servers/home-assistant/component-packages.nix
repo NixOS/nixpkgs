@@ -208,7 +208,7 @@
     "ecovacs" = ps: with ps; [ ]; # missing inputs: sucks
     "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
     "edimax" = ps: with ps; [ pyedimax ];
-    "edl21" = ps: with ps; [ ]; # missing inputs: pysml
+    "edl21" = ps: with ps; [ pysml ];
     "ee_brightbox" = ps: with ps; [ eebrightbox ];
     "efergy" = ps: with ps; [ ];
     "egardia" = ps: with ps; [ pythonegardia ];
