@@ -5268,6 +5268,8 @@ in {
 
   pyheos = callPackage ../development/python-modules/pyheos { };
 
+  pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
@@ -8741,6 +8743,8 @@ in {
   umap-learn = callPackage ../development/python-modules/umap-learn { };
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
+
+  unasync = callPackage ../development/python-modules/unasync { };
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
