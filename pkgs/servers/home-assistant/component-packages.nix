@@ -19,7 +19,7 @@
     "airly" = ps: with ps; [ airly ];
     "airnow" = ps: with ps; [ pyairnow ];
     "airvisual" = ps: with ps; [ pyairvisual ];
-    "aladdin_connect" = ps: with ps; [ ]; # missing inputs: aladdin_connect
+    "aladdin_connect" = ps: with ps; [ aladdin-connect ];
     "alarm_control_panel" = ps: with ps; [ ];
     "alarmdecoder" = ps: with ps; [ adext ];
     "alert" = ps: with ps; [ ];
