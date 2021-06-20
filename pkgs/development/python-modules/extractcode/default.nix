@@ -45,6 +45,10 @@ buildPythonPackage rec {
   disabledTests = [
     "test_uncompress_lz4_basic"
     "test_extract_tarlz4_basic"
+    # tries to parse /boot/vmlinuz-*, which is not available in the nix sandbox
+    "test_can_extract_qcow2_vm_image_as_tarball"
+    "test_can_extract_qcow2_vm_image_not_as_tarball"
+    "test_can_listfs_from_qcow2_image"
   ];
 
   pythonImportsCheck = [
