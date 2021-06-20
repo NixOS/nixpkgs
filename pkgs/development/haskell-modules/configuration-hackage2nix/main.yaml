@@ -73,10 +73,6 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # Needs Cabal 3.4 for Setup.hs
-  - gi-javascriptcore < 4.0.23 #
-  - gi-soup < 2.4.24 #
-  - gi-webkit2 < 4.0.27 #
   # 2021-05-11: not all diagrams libraries have adjusted to
   # monoid-extras 0.6 yet, keep them pinned to lower versions
   # until we can do a full migration, see
