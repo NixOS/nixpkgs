@@ -309,6 +309,12 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>antlr</literal> package now defaults to the 4.x
+          release instead of the old 2.7.7 version.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
