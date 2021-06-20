@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShellPackage }:
 
 rec {
 
@@ -213,17 +213,7 @@ rec {
    *
   */
   writeShellScript = name: text:
-    writeTextFile {
-      inherit name;
-      executable = true;
-      text = ''
-        #!${runtimeShell}
-        ${text}
-        '';
-      checkPhase = ''
-        ${stdenv.shell} -n $out
-      '';
-    };
+    runtimeShellPackage.writeScript name {} text;
 
   /*
    * Similar to writeShellScript and writeScriptBin.
@@ -239,18 +229,7 @@ rec {
    *
   */
   writeShellScriptBin = name : text :
-    writeTextFile {
-      inherit name;
-      executable = true;
-      destination = "/bin/${name}";
-      text = ''
-        #!${runtimeShell}
-        ${text}
-        '';
-      checkPhase = ''
-        ${stdenv.shell} -n $out/bin/${name}
-      '';
-    };
+    runtimeShellPackage.writeScriptBin name {} text;
 
   # Create a C binary
   writeCBin = name: code:
