@@ -790,6 +790,9 @@ environment.systemPackages = [
      <literal>filesystem_folder</literal> has to be added to
      <option>systemd.services.radicale.serviceConfig.ReadWritePaths</option> if
      the deprecated <option>services.radicale.config</option> is used.
+     The <literal>radicale</literal> user has no <option>home</option> anymore
+     but you can manually set
+     <programlisting>users.users.radicale.home = "/var/lib/radicale";</programlisting>
     </para>
    </listitem>
    <listitem>
