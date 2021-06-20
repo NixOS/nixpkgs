@@ -3,10 +3,13 @@
 , fetchurl
 , pkg-config
 , util-linux
+, coreutils
 , libuuid
 , thin-provisioning-tools, libaio
 , enableCmdlib ? false
 , enableDmeventd ? false
+, enableMdadm ? false, mdadm ? null
+, enableMultipath ? false, multipath-tools ? null
 , udev ? null
 , nixosTests
 }:
@@ -61,12 +64,20 @@ stdenv.mkDerivation rec {
 
     substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
+
+    substituteInPlace scripts/blkdeactivate.sh.in \
+      --replace '/bin/mountpoint' '${util-linux}/bin/mountpoint' \
+      --replace '/bin/umount' '${util-linux}/bin/umount' \
+      --replace '/bin/lsblk' '${util-linux}/bin/lsblk' \
+      --replace '/bin/findmnt' '${util-linux}/bin/findmnt' \
+      --replace '/bin/sort' '${coreutils}/bin/sort' \
+      --replace '/sbin/mdadm' '${if enableMdadm then mdadm else "/run/current-system/sw"}/bin/mdadm' \
+      --replace '/sbin/multipathd' '${if enableMultipath then multipath-tools else "/run/current-system/sw"}/bin/multipathd'
   '';
 
   postConfigure = ''
     sed -i 's|^#define LVM_CONFIGURE_LINE.*$|#define LVM_CONFIGURE_LINE "<removed>"|g' ./include/configure.h
   '';
-
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
