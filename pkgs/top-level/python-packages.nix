@@ -6486,6 +6486,8 @@ in {
 
   pysmi = callPackage ../development/python-modules/pysmi { };
 
+  pysml = callPackage ../development/python-modules/pysml { };
+
   pysmt = callPackage ../development/python-modules/pysmt { };
 
   pysnmp = callPackage ../development/python-modules/pysnmp { };
