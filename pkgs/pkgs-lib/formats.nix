@@ -128,4 +128,98 @@ rec {
     '';
 
   };
+
+  /*
+  Knot uses a configuration format that looks like YAML and quacks
+  like YAML but isn't YAML. In particular:
+
+    - The top level has to be formatted in YAML style, so we can't just
+      throw JSON in
+
+    - Keys may be duplicated, in which case the resulting value is a
+      list composed of all the values set (which we use here)
+
+    - The parser cares a great deal about the order of keys: for
+      instance, when defining an ACL, the `id` attribute must be the
+      first. Unfortunately, this is not documented, nor is the error
+      message thrown if these conditions aren't fulfilled very
+      helpful.
+
+   … so we have an extra format just for knot.
+
+  */
+  knotConf = { knot ? pkgs.knot-dns, debug ? false }: rec {
+    /*
+    The type isn't as strict as it could be: we're trying to strike a
+    balance here between how much code we have to write (and keep
+    synced with knot's behaviour) and how much checking we can do at
+    evaluation time. Either way, knot checks it for complete validity
+    at build time (see the definition of generate).
+
+    There is one special top-level object: "includes". This is a list
+    of paths to further config files which will be merged in at
+    runtime by knot. This is useful for secrets.
+
+    Top-level objects ("sections") can be either a "settings block"
+    (an attrset containing some named options) — like "server" and
+    "database" — or a list of settings blocks, like "acl" and "zone".
+    We'll just validate that we have settings blocks, but not if the
+    names or contents correspond to the blocks known by knot.
+    */
+    type = with lib.types; let
+      jsonType = (json {}).type;
+      settingsBlock = (attrsOf jsonType) // { description = "knot.conf(5) settings block"; };
+    in submodule {
+      freeformType = either settingsBlock (listOf settingsBlock);
+      options.include = lib.mkOption {
+        type = listOf path;
+        default = [];
+      };
+    };
+
+    generateString = settings: with lib; let
+      order = [ "domain" "id" "target" ];
+      attrNamesOrdered = s: intersectLists (attrNames s) order ++ subtractLists order (attrNames s);
+      mkSection = n: v:
+        "${n}:" + (
+          # Empty section
+          if v == [] || v == {} then "\n"
+          # Special case: includes
+          else if n == "include" && isList v then " " + builtins.toJSON v
+          # One settings block
+          else if isAttrs v then "\n  " + mkPairs v
+          # Multiple settings blocks
+          else if isList v then concatMapStrings (settingsBlock: "\n- " + mkPairs settingsBlock) v
+          # No settings blocks!?
+          else throw "${generators.toPretty {} v} does not appear to be a valid knot.conf section."
+        );
+      mkPairs = v: concatStringsSep "\n  " (flatten (map (e: mkPair e v.${e}) (attrNamesOrdered v)));
+      mkPair = n: v:
+        if isList v then map (mkPair n) v
+        else singleton ("${n}: " + (
+          if isBool v then boolToString v
+          else if strings.isCoercibleToString v then (builtins.toJSON (toString v))
+          else throw "unsupported value type ${n}=" + (generators.toPretty {} v)
+        ));
+    in concatStringsSep "\n" (mapAttrsToList mkSection settings);
+
+    generate = name: value: pkgs.runCommandNoCC name {
+      nativeBuildInputs = [ knot ];
+      value = generateString value;
+      passAsFile = [ "value" ];
+    } ''
+      ${lib.optionalString debug ''cat "$valuePath"; echo''}
+      # Remove includes, since we can't read these paths in the
+      # sandbox while building…
+      grep -v ^include: "$valuePath" > without-includes.conf
+
+      # Format the remaining configuration…
+      knotc --config without-includes.conf conf-export > formatted.conf
+
+      # … and splice the includes back in, while also removing the
+      # comment that contains the knot version string, making this
+      # harder to test.
+      cat <(grep ^include: "$valuePath") <(grep -v "^#" formatted.conf) > $out
+    '';
+  };
 }

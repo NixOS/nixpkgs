@@ -168,4 +168,35 @@ in runBuildTests {
       level4 = "deep"
     '';
   };
+
+  testKnotConf = {
+    drv = evalFormat formats.knotConf { debug = true; } {
+      include = ["/run/secrets/knot-tsig-keys.conf"];
+      server = {
+        identity = "KNOT DNS\nON NIXOS";
+        listen = [ "0.0.0.0@53" "::@53" ];
+      };
+      acl = [
+        { id = "transfer_to_replicas"; address = ["23.23.23.23"]; action = "transfer"; }
+        { id = "update_dyndns"; address = ["fd23::42"]; action = "update"; }
+      ];
+    };
+    expected = ''
+      include: ["/run/secrets/knot-tsig-keys.conf"]
+
+      server:
+          identity: "KNOT DNS\nON NIXOS"
+          listen: [ "0.0.0.0@53", "::@53" ]
+
+      acl:
+        - id: "transfer_to_replicas"
+          address: "23.23.23.23"
+          action: "transfer"
+
+        - id: "update_dyndns"
+          address: "fd23::42"
+          action: "update"
+
+    '';
+  };
 }
