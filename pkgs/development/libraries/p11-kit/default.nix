@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, which
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, which
 , gettext, libffi, libiconv, libtasn1
 }:
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
-  version = "0.23.22";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = pname;
     rev = version;
-    sha256 = "sha256-erWqElJr0iESNUk9EZiJRmSMYhns8GxuFLNw7mIIIWs=";
+    sha256 = "sha256-jvUzOhMvbq05SxQ+kjKQHDDMzNwo4U6nFHu3JjygJHw=";
   };
 
   outputs = [ "out" "dev"];
