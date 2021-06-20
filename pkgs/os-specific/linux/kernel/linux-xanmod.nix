@@ -1,18 +1,18 @@
 { lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
 
 let
-  version = "5.12.11";
+  version = "5.12.12";
   suffix = "xanmod1-cacule";
 in
 buildLinux (args // rec {
-  modDirVersion = "${version}-${suffix}";
   inherit version;
+  modDirVersion = "${version}-${suffix}";
 
   src = fetchFromGitHub {
     owner = "xanmod";
     repo = "linux";
     rev = modDirVersion;
-    sha256 = "sha256-EQ52Leg7i1Xb2b29JbaKFKRE/jKXB48GXhbM/Ay5QTY=";
+    sha256 = "sha256-99gVqdYhnBx3MDTCCHbxsljmvi+DixHp19vtNwCRM/M=";
   };
 
   extraMeta = {
