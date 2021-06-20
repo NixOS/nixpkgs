@@ -1928,4 +1928,8 @@ EOT
   # https://github.com/jcranch/tophat/issues/1
   tophat = doJailbreak super.tophat;
 
+  # 2021-06-20: Outdated upper bounds
+  # https://github.com/Porges/email-validate-hs/issues/58
+  email-validate = doJailbreak super.email-validate;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
