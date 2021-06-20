@@ -80,10 +80,6 @@ self: super: {
     sha256 = "1rzs764a0nhx002v4fadbys98s6qblw4kx4g46galzjf5f7n2dn4";
   });
   doctest = dontCheck (doJailbreak super.doctest_0_18_1);
-  generic-deriving = appendPatch (doJailbreak super.generic-deriving) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/generic-deriving-1.13.1.patch";
-    sha256 = "0z85kiwhi5p2wiqwyym0y8q8qrcifp125x5vm0n4482lz41kmqds";
-  });
   language-haskell-extract = appendPatch (doJailbreak super.language-haskell-extract) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
