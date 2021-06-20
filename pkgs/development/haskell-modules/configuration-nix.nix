@@ -790,6 +790,42 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   });
+  hls-ormolu-plugin = overrideCabal super.hls-ormolu-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-fourmolu-plugin = overrideCabal super.hls-fourmolu-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-module-name-plugin = overrideCabal super.hls-module-name-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-splice-plugin = overrideCabal super.hls-splice-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-floskell-plugin = overrideCabal super.hls-floskell-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-pragmas-plugin = overrideCabal super.hls-pragmas-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
   hls-haddock-comments-plugin = overrideCabal super.hls-haddock-comments-plugin (drv: {
@@ -799,6 +835,7 @@ self: super: builtins.intersectAttrs super {
     '';
   });
   hls-eval-plugin = overrideCabal super.hls-eval-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
     preCheck = ''
       export HOME=$TMPDIR/home
     '';

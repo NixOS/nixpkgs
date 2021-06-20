@@ -1394,38 +1394,15 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck super.haskell-language-server;
 
-  # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1808
-  hls-splice-plugin = dontCheck super.hls-splice-plugin;
-
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
   hls-eval-plugin = dontCheck super.hls-eval-plugin;
 
-  # 2021-03-19: Too restrictive upper bound on optparse-applicative
-  stylish-haskell = doJailbreak super.stylish-haskell;
-
-  # 2021-03-19: https://github.com/facebookincubator/retrie/issues/24
-  retrie = doJailbreak super.retrie;
-
-  # Jailbreak because of restrictive upper bound on base16-bytestring
-  # 2021-03-19: https://github.com/Avi-D-coder/implicit-hie-cradle/pull/8
-  implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
+  # 2021-06-20: Tests fail: https://github.com/haskell/haskell-language-server/issues/1949
+  hls-refine-imports-plugin = dontCheck super.hls-refine-imports-plugin;
 
   # 2021-03-09: Golden tests seem to be missing in hackage release:
   # https://github.com/haskell/haskell-language-server/issues/1536
   hls-tactics-plugin = dontCheck (super.hls-tactics-plugin.override { refinery = self.refinery_0_3_0_0; });
-
-  # 2021-03-24: hlint 3.3 is for ghc 9 compat, but hls only supports ghc 8.10
-  hls-hlint-plugin = super.hls-hlint-plugin.override {
-    hlint = super.hlint_3_2_7;
-  };
-
-  # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
-  hlint = super.hlint.overrideScope (self: super: {
-    ghc-lib-parser = overrideCabal self.ghc-lib-parser_9_0_1_20210324 {
-      doHaddock = false;
-    };
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
-  });
 
   # 2021-03-21 Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
