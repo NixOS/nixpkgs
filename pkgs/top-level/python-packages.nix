@@ -3214,6 +3214,8 @@ in {
     inherit python;
   });
 
+  herepy = callPackage ../development/python-modules/herepy { };
+
   hetzner = callPackage ../development/python-modules/hetzner { };
 
   heudiconv = callPackage ../development/python-modules/heudiconv { };
