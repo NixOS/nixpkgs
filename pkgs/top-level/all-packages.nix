@@ -3788,6 +3788,8 @@ in
 
   age = callPackage ../tools/security/age { };
 
+  agebox = callPackage ../tools/security/agebox { };
+
   brotli = callPackage ../tools/compression/brotli { };
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
