@@ -474,6 +474,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent"
     "intent_script"
     "ios"
+    "ipma"
     "ipp"
     "iqvia"
     "islamic_prayer_times"

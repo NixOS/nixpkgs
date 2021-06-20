@@ -5965,6 +5965,8 @@ in {
 
   pyintesishome = callPackage ../development/python-modules/pyintesishome { };
 
+  pyipma = callPackage ../development/python-modules/pyipma { };
+
   pyipp = callPackage ../development/python-modules/pyipp { };
 
   pyiqvia = callPackage ../development/python-modules/pyiqvia { };
