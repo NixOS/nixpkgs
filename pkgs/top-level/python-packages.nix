@@ -8379,6 +8379,8 @@ in {
 
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
+  tensorflow-addons = callPackage ../development/python-modules/tensorflow-addons { };
+
   tensorflow-bin_2 = callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
     inherit (pkgs.linuxPackages) nvidia_x11;
@@ -8401,9 +8403,13 @@ in {
 
   tensorflow-build = self.tensorflow-build_2;
 
+  tensorflow-datasets = callPackage ../development/python-modules/tensorflow-datasets { };
+
   tensorflow-estimator_2 = callPackage ../development/python-modules/tensorflow-estimator { };
 
   tensorflow-estimator = self.tensorflow-estimator_2;
+
+  tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
 
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
@@ -8473,6 +8479,8 @@ in {
   text-unidecode = callPackage ../development/python-modules/text-unidecode { };
 
   textwrap3 = callPackage ../development/python-modules/textwrap3 { };
+
+  tf-models-official = callPackage ../development/python-modules/tf-models-official { };
 
   tflearn = callPackage ../development/python-modules/tflearn { };
 
