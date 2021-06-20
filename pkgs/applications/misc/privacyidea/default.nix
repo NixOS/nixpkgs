@@ -1,43 +1,43 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cacert, openssl, python, nixosTests
-
-, cryptography, pyrad, pymysql, python-dateutil, flask-versioned, flask_script
-, defusedxml, croniter, flask_migrate, pyjwt1, configobj, sqlsoup, pillow
-, python-gnupg, passlib, pyopenssl, beautifulsoup4, smpplib, flask-babel
-, ldap3, huey, pyyaml, qrcode, oauth2client, requests, lxml, cbor2, psycopg2
-, pydash, ecdsa
-
-, mock, pytestCheckHook, responses, testfixtures
+{ lib, fetchFromGitHub, cacert, openssl, nixosTests
+, python3
 }:
 
-buildPythonPackage rec {
+let
+  python3' = python3.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.24";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
+        };
+      });
+    };
+  };
+in
+python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.5.2";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-k2om2LjkFRCT53ECPAJEztCiMdz4fF5eoipVUvSoyGo=";
+    sha256 = "sha256-yywkQ3TdBzRMbJGY0Seaprztgt0JrCAbgqosMQ5fcQM=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Subset of https://github.com/privacyidea/privacyidea/commit/359db6dd10212b8a210e0a83536e92e9e796a1f8,
-    # fixes app context errors in tests. Can be removed on the next bump.
-    ./fix-tests.patch
-  ];
-
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3'.pkgs; [
     cryptography pyrad pymysql python-dateutil flask-versioned flask_script
     defusedxml croniter flask_migrate pyjwt1 configobj sqlsoup pillow
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
-    pydash ecdsa
+    pydash ecdsa google-auth importlib-metadata
   ];
 
   passthru.tests = { inherit (nixosTests) privacyidea; };
 
-  checkInputs = [ openssl mock pytestCheckHook responses testfixtures ];
+  checkInputs = with python3'.pkgs; [ openssl mock pytestCheckHook responses testfixtures ];
   disabledTests = [
     "AESHardwareSecurityModuleTestCase"
     "test_01_cert_request"
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    rm -rf $out/${python.sitePackages}/tests
+    rm -r $out/${python3'.sitePackages}/tests
   '';
 
   meta = with lib; {

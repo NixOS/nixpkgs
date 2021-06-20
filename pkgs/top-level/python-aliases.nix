@@ -43,6 +43,7 @@ mapAliases ({
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
   HAP-python = hap-python; # added 2021-06-01
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
+  privacyidea = throw "renamed to pkgs.privacyidea"; # added 2021-06-20
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pytest-pep8 = pytestpep8; # added 2021-01-04
