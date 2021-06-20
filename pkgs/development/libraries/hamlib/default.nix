@@ -1,5 +1,5 @@
 {lib, stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb-compat-0_1, pkg-config,
- boost, libtool, perlPackages }:
+ gettext, boost, libtool, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "hamlib";
@@ -10,11 +10,30 @@ stdenv.mkDerivation rec {
     sha256 = "10788mgrhbc57zpzakcxv5aqnr2819pcshml6fbh8zvnkja562y9";
   };
 
-  buildInputs = [ perl perlPackages.ExtUtilsMakeMaker python2 swig gd libxml2
-                  tcl libusb-compat-0_1 pkg-config boost libtool ];
+  nativeBuildInputs = [
+    pkg-config
+    swig
+  ];
 
-  configureFlags = [ "--with-perl-binding" "--with-python-binding"
-                     "--with-tcl-binding" "--with-rigmatrix" ];
+  buildInputs = [
+    perl
+    perlPackages.ExtUtilsMakeMaker
+    python2
+    gd
+    libxml2
+    tcl
+    libusb-compat-0_1
+    boost
+    libtool
+    gettext
+  ];
+
+  configureFlags = [
+    "--with-perl-binding"
+    "--with-python-binding"
+    "--with-tcl-binding"
+    "--with-rigmatrix"
+  ];
 
   meta = {
     description = "Runtime library to control radio transceivers and receivers";
