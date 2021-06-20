@@ -7,6 +7,11 @@
 , fuse
 , wxGTK
 , lvm2
+, substituteAll
+, e2fsprogs
+, exfat
+, ntfs3g
+, btrfs-progs
 }:
 
 with lib;
@@ -19,6 +24,18 @@ stdenv.mkDerivation rec {
     url = "https://launchpad.net/${pname}/trunk/${toLower version}/+download/VeraCrypt_${version}_Source.tar.bz2";
     sha256 = "0i7h44zn2mjzgh416l7kfs0dk6qc7b1bxsaxqqqcvgrpl453n7bc";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      ext2 = "${e2fsprogs}/bin/mkfs.ext2";
+      ext3 = "${e2fsprogs}/bin/mkfs.ext3";
+      ext4 = "${e2fsprogs}/bin/mkfs.ext4";
+      exfat = "${exfat}/bin/mkfs.exfat";
+      ntfs = "${ntfs3g}/bin/mkfs.ntfs";
+      btrfs = "${btrfs-progs}/bin/mkfs.btrfs";
+    })
+  ];
 
   sourceRoot = "src";
 
