@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "GameNetworkingSockets";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zghyc4liml8gzxflyh5gp6zi11ny6ng5hv9wyqvp32rfx221gc6";
+    sha256 = "sha256-DB3l1eZf9M7gVrijTd2lK2vgAK9ukay7/RkxxCMLc7Q=";
   };
 
   nativeBuildInputs = [ cmake ninja go ];
