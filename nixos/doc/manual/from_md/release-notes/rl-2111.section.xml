@@ -55,6 +55,19 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>erigon</literal> ethereum node has moved to a new
+          database format in <literal>2021-05-04</literal>, and requires
+          a full resync
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>turbo-geth</literal> package has been renamed to
+          <literal>erigon</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>staticjinja</literal> package has been upgraded
           from 1.0.4 to 2.0.0
         </para>
