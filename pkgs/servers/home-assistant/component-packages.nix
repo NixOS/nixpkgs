@@ -352,7 +352,7 @@
     "history" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "history_stats" = ps: with ps; [ sqlalchemy ];
     "hitron_coda" = ps: with ps; [ ];
-    "hive" = ps: with ps; [ ]; # missing inputs: pyhiveapi
+    "hive" = ps: with ps; [ pyhiveapi ];
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
     "home_connect" = ps: with ps; [ aiohttp-cors homeconnect ];
     "home_plus_control" = ps: with ps; [ aiohttp-cors homepluscontrol ];

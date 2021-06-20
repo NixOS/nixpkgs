@@ -443,6 +443,7 @@ in with py.pkgs; buildPythonApplication rec {
     "heos"
     "history"
     "history_stats"
+    "hive"
     "home_connect"
     "home_plus_control"
     "homeassistant"
