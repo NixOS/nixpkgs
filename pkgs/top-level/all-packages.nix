@@ -8085,6 +8085,8 @@ in
 
   pywal = with python3Packages; toPythonApplication pywal;
 
+  pystring = callPackage ../development/libraries/pystring {};
+
   rbw = callPackage ../tools/security/rbw {
     inherit (darwin.apple_sdk.frameworks) Security;
   };

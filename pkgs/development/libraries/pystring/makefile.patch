@@ -1,0 +1,26 @@
+--- pystring/Makefile.orig	2020-02-04 03:24:44.000000000 -0300
++++ pystring/Makefile	2020-11-20 20:23:07.314247959 -0300
+@@ -1,7 +1,9 @@
+-LIBTOOL = libtool
+-LIBDIR = /usr/lib
+-CXX = g++
+-CXXFLAGS = -g -O3 -Wall -Wextra -Wshadow -Wconversion -Wcast-qual -Wformat=2
++LIBTOOL ?= libtool
++PREFIX ?= /usr
++INCLUDEDIR = ${PREFIX}/include/pystring
++LIBDIR = ${PREFIX}/lib
++CXX ?= g++
++CXXFLAGS ?= -g -O3 -Wall -Wextra -Wshadow -Wconversion -Wcast-qual -Wformat=2 -fPIC
+ 
+ all: libpystring.la
+ 
+@@ -12,7 +14,8 @@
+ 	$(LIBTOOL) --mode=link --tag=CXX $(CXX) -o $@ $< -rpath $(LIBDIR)
+ 
+ install: libpystring.la
+-	$(LIBTOOL) --mode=install install -c $< $(LIBDIR)/$<
++	$(LIBTOOL) --mode=install install -Dm755 $< $(DESTDIR)$(LIBDIR)/$<
++	$(LIBTOOL) --mode=install install -Dm644 pystring.h $(DESTDIR)$(INCLUDEDIR)/pystring.h
+ 
+ clean:
+ 	$(RM) -fr pystring.lo pystring.o libpystring.la .libs
