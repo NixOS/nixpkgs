@@ -25,6 +25,11 @@ buildPythonPackage rec {
     sha256 = "2f5de7dedaac8dd71bfea23c6a7d883e29947c91de1ba299a9242e0a4406ee46";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "ncclient==0.6.9" "ncclient"
+  '';
+
   checkInputs = [ nose ];
 
   propagatedBuildInputs = [
