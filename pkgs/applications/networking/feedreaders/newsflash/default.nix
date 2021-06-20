@@ -15,32 +15,26 @@
 , webkitgtk
 , glib-networking
 , librsvg
-, gst_all_1
 , xdg-utils
+, gst_all_1
 }:
 
 stdenv.mkDerivation rec {
   pname = "newsflash";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = version;
-    hash = "sha256-pskmvztKOwutXRHVnW5u68/0DAuV9Gb+Ovp2JbXiMYo=";
+    hash = "sha256-8W158GrvVGu5b3TG5bomK+hAF6jttZuImkmtcZOl91o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-qq8cZplt5YWUwsXUShMDhQm3RGH2kCEBk64x6bOa50E=";
+    hash = "sha256-zHtD3NVWYQ5njg17Z2YmEttiK2oiq01OiAXIZofIqKI=";
   };
-
-  # https://github.com/CasualX/obfstr/blob/v0.2.4/build.rs#L5
-  # obfstr 0.2.4 fails to set RUSTC_BOOTSTRAP in its build script because cargo
-  # build scripts are forbidden from setting RUSTC_BOOTSTRAP since rustc 1.52.0
-  # https://github.com/rust-lang/rust/blob/1.52.0/RELEASES.md#compatibility-notes
-  RUSTC_BOOTSTRAP = 1;
 
   patches = [
     # Post install tries to generate an icon cache & update the
@@ -79,14 +73,14 @@ stdenv.mkDerivation rec {
     sqlite
     webkitgtk
 
-    # open link in browser
-    xdg-utils
-
     # TLS support for loading external content in webkitgtk WebView
     glib-networking
 
     # SVG support for gdk-pixbuf
     librsvg
+
+    # Open links in browser
+    xdg-utils
   ] ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
     gstreamer
@@ -100,5 +94,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
+    platforms = platforms.unix;
   };
 }
