@@ -10008,6 +10008,8 @@ in
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
 
+  clipbuzz = callPackage ../tools/misc/clipbuzz { };
+
   xclip = callPackage ../tools/misc/xclip { };
 
   xcur2png = callPackage ../tools/graphics/xcur2png { };
