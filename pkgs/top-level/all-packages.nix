@@ -12095,6 +12095,8 @@ in
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
   };
 
+  octave-kernel = callPackage ../applications/editors/jupyter-kernels/octave { };
+
   octavePackages = recurseIntoAttrs octave.pkgs;
 
   ocropus = callPackage ../applications/misc/ocropus { };
