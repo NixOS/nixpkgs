@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, isPy27
 , fetchFromGitHub
 , pytestCheckHook
 }:
@@ -7,6 +8,8 @@
 buildPythonPackage rec {
   pname = "certifi";
   version = "2021.05.30";
+
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = pname;
