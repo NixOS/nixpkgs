@@ -202,7 +202,7 @@
     "eafm" = ps: with ps; [ aioeafm ];
     "ebox" = ps: with ps; [ ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [ ]; # missing inputs: ebusdpy
-    "ecoal_boiler" = ps: with ps; [ ]; # missing inputs: ecoaliface
+    "ecoal_boiler" = ps: with ps; [ ecoaliface ];
     "ecobee" = ps: with ps; [ python-ecobee-api ];
     "econet" = ps: with ps; [ pyeconet ];
     "ecovacs" = ps: with ps; [ ]; # missing inputs: sucks
