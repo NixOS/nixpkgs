@@ -81,8 +81,6 @@ default-package-overrides:
   - monoid-extras < 0.6
   - diagrams-core < 1.5.0
   - diagrams-lib < 1.4.4
-  # 2021-05-12: remove once versions >= 5.0.0 is in stackage
-  - futhark < 0.19.5
   # 2021-06-05: remove once pandoc 2.14 is in stackage
   - pandoc-crossref < 0.3.11.0
   # 2021-06-14: hnix still needs old versions https://github.com/haskell-nix/hnix/issues/952
