@@ -1,7 +1,7 @@
 { buildVersion, sha256, dev ? false }:
 
 { fetchurl, lib, stdenv, xorg, glib, libGL, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
-, pkexecPath ? "/run/wrappers/bin/pkexec"
+, redirectPkexec ? true, pkexecPath ? "/run/wrappers/bin/pkexec"
 , writeScript, common-updater-scripts, curl, gnugrep, coreutils
 }:
 
@@ -62,11 +62,15 @@ in let
     dontWrapGApps = true; # non-standard location, need to wrap the executables manually
 
     postFixup = ''
-      wrapProgram $out/${primaryBinary} \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-        --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
-        --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
+      wrapperArgs=(
+        ${lib.optionalString redirectPkexec ''
+          --set LD_PRELOAD "${libredirect}/lib/libredirect.so"
+          --set NIX_REDIRECTS "${builtins.concatStringsSep ":" redirects}"
+        ''}
+        --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive"
         "''${gappsWrapperArgs[@]}"
+      )
+      wrapProgram $out/${primaryBinary} "''${wrapperArgs[@]}"
 
       # We need to replace the ssh-askpass-sublime executable because the default one
       # will not function properly, in order to work it needs to pass an argv[0] to
