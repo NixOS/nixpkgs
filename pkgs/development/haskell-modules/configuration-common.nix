@@ -1936,4 +1936,7 @@ EOT
   # https://github.com/Porges/email-validate-hs/issues/58
   ghcup = doJailbreak super.ghcup;
 
+  # Break out of "Cabal < 3.2" constraint.
+  stylish-haskell = doJailbreak super.stylish-haskell;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
