@@ -89,8 +89,8 @@ let
 
   snapshot = {
     year = "2021";
-    month = "04";
-    day = "08";
+    month = "06";
+    day = "12";
   };
 
   # create a derivation that contains an unpacked upstream TL package
