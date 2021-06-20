@@ -17513,7 +17513,9 @@ in
 
   openldap = callPackage ../development/libraries/openldap { };
 
-  opencolorio = callPackage ../development/libraries/opencolorio { };
+  opencolorio1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
+  opencolorio2 = callPackage ../development/libraries/opencolorio { };
+  opencolorio = opencolorio1;
 
   opendmarc = callPackage ../development/libraries/opendmarc { };
 

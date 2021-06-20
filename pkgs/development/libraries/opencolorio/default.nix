@@ -1,47 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, pkg-config, lcms2, tinyxml, git }:
+{ stdenv, lib, fetchFromGitHub, cmake, expat, libyamlcpp, ilmbase, pystring, lcms2, python3Packages }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "1.1.1";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
-    owner = "imageworks";
+    owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "12srvxca51czpfjl0gabpidj9n84mw78ivxy5w75qhq2mmc798sb";
+    sha256 = "194j9jp5c8ws0fryiz936wyinphnpzwpqnzvw9ryx6rbiwrba487";
   };
 
-  outputs = [ "bin" "out" "dev" ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ expat libyamlcpp ilmbase pystring lcms2 python3Packages.pybind11 ];
 
-  # TODO: Investigate whether git can be dropped: It's only used to apply patches
-  nativeBuildInputs = [ cmake pkg-config git ];
-
-  buildInputs = [ lcms2 tinyxml ] ++ optional stdenv.isDarwin boost;
-
-  postPatch = ''
-    substituteInPlace src/core/CMakeLists.txt --replace "-Werror" ""
-    substituteInPlace src/pyglue/CMakeLists.txt --replace "-Werror" ""
-  '';
-
-  cmakeFlags = [
-    "-DUSE_EXTERNAL_LCMS=ON"
-    "-DUSE_EXTERNAL_TINYXML=ON"
-    # External libyamlcpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
-    "-DUSE_EXTERNAL_YAML=OFF"
-  ] ++ optional stdenv.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
-    ++ optional (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) "-DOCIO_USE_SSE=OFF";
-
-  postInstall = ''
-    mkdir -p $bin/bin; mv $out/bin $bin/
-  '';
+  cmakeFlags = [ "-DOCIO_INSTALL_EXT_PACKAGES=NONE" ];
 
   meta = with lib; {
     homepage = "https://opencolorio.org";
     description = "A color management framework for visual effects and animation";
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ maintainers.rytone ];
     platforms = platforms.unix;
   };
 }
