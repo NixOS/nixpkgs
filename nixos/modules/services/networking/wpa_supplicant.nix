@@ -42,11 +42,6 @@ in {
         description = ''
           The interfaces <command>wpa_supplicant</command> will use. If empty, it will
           automatically use all wireless interfaces.
-          <warning><para>
-            The automatic discovery of interfaces does not work reliably on boot:
-            it may fail and leave the system without network. When possible, specify
-            a known interface name.
-          </para></warning>
         '';
       };
 
@@ -230,14 +225,6 @@ in {
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
     });
 
-    warnings =
-      optional (cfg.interfaces == [] && config.systemd.services.wpa_supplicant.wantedBy != [])
-      ''
-        No network interfaces for wpa_supplicant have been configured: the service
-        may randomly fail to start at boot. You should specify at least one using the option
-        networking.wireless.interfaces.
-      '';
-
     environment.systemPackages = [ package ];
 
     services.dbus.packages = [ package ];
@@ -257,31 +244,45 @@ in {
       wantedBy = [ "multi-user.target" ];
       stopIfChanged = false;
 
-      path = [ package ];
+      path = [ package pkgs.udev ];
 
       script = let
         configStr = if cfg.allowAuxiliaryImperativeNetworks
           then "-c /etc/wpa_supplicant.conf -I ${configFile}"
           else "-c ${configFile}";
       in ''
-        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
-        then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]; then
+          echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
         fi
+
         iface_args="-s -u -D${cfg.driver} ${configStr}"
+
         ${if ifaces == [] then ''
-          for i in $(cd /sys/class/net && echo *); do
-            DEVTYPE=
-            UEVENT_PATH=/sys/class/net/$i/uevent
-            if [ -e "$UEVENT_PATH" ]; then
-              source "$UEVENT_PATH"
-              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-                args+="''${args:+ -N} -i$i $iface_args"
-              fi
-            fi
+          # detect interfaces automatically
+
+          # check if there are no wireless interface
+          if ! find -H /sys/class/net/* -name wireless | grep -q .; then
+            # if so, wait until one appears
+            echo "Waiting for wireless interfaces"
+            grep -q '^ACTION=add' < <(stdbuf -oL -- udevadm monitor -s net/wlan -pu)
+            # Note: the above line has been carefully written:
+            # 1. The process substitution avoids udevadm hanging (after grep has quit)
+            #    until it tries to write to the pipe again. Not even pipefail works here.
+            # 2. stdbuf is needed because udevadm output is buffered by default and grep
+            #    may hang until more udev events enter the pipe.
+          fi
+
+          # add any interface found to the daemon arguments
+          for name in $(find -H /sys/class/net/* -name wireless | cut -d/ -f 5); do
+            echo "Adding interface $name"
+            args+="''${args:+ -N} -i$name $iface_args"
           done
         '' else ''
+          # add known interfaces to the daemon arguments
           args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
         ''}
+
+        # finally start daemon
         exec wpa_supplicant $args
       '';
     };
