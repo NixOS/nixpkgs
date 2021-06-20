@@ -2223,6 +2223,8 @@ in {
 
   ecdsa = callPackage ../development/python-modules/ecdsa { };
 
+  ecoaliface = callPackage ../development/python-modules/ecoaliface { };
+
   ecos = callPackage ../development/python-modules/ecos { };
 
   ecpy = callPackage ../development/python-modules/ecpy { };
