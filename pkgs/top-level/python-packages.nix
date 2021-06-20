@@ -2160,6 +2160,8 @@ in {
 
   dotmap = callPackage ../development/python-modules/dotmap { };
 
+  downloader-cli = callPackage ../development/python-modules/downloader-cli { };
+
   dparse = callPackage ../development/python-modules/dparse { };
 
   dpath = callPackage ../development/python-modules/dpath { };
@@ -3579,6 +3581,8 @@ in {
   iterm2 = callPackage ../development/python-modules/iterm2 { };
 
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
+
+  itunespy = callPackage ../development/python-modules/itunespy { };
 
   itypes = callPackage ../development/python-modules/itypes { };
 
@@ -5773,6 +5777,8 @@ in {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  pydes = callPackage ../development/python-modules/pydes { };
+
   py-desmume = callPackage ../development/python-modules/py-desmume { };
 
   pydexcom = callPackage ../development/python-modules/pydexcom { };
@@ -7849,6 +7855,8 @@ in {
 
   simanneal = callPackage ../development/python-modules/simanneal { };
 
+  simber = callPackage ../development/python-modules/simber { };
+
   simpleaudio = callPackage ../development/python-modules/simpleaudio { };
 
   simplebayes = callPackage ../development/python-modules/simplebayes { };
@@ -9285,6 +9293,8 @@ in {
     ffmpegSupport = false;
     phantomjsSupport = false;
   };
+
+  youtube-search = callPackage ../development/python-modules/youtube-search { };
 
   yowsup = callPackage ../development/python-modules/yowsup { };
 

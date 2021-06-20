@@ -28023,6 +28023,8 @@ in
 
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
 
+  ytmdl = python3Packages.callPackage ../tools/misc/ytmdl { };
+
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zanshin = libsForQt5.callPackage ../applications/office/zanshin { };
