@@ -28163,6 +28163,8 @@ in
   };
   litecoind = litecoin.override { withGui = false; };
 
+  livedl = callPackage ../tools/misc/livedl { };
+
   lnd = callPackage ../applications/blockchains/lnd.nix { };
 
   lndconnect = callPackage ../applications/blockchains/lndconnect { };
