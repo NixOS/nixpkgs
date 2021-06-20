@@ -2,10 +2,9 @@
   lib, stdenv, buildPackages, fetchurl, fetchpatch,
   runCommand,
   autoconf, automake, libtool,
-  enablePython ? false, python ? null,
+  enablePython ? true, python, swig,
+  linuxHeaders ? stdenv.cc.libc.linuxHeaders
 }:
-
-assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   name = "audit-2.8.5"; # at the next release, remove the patches below!
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isMusl
     [ autoconf automake libtool ];
-  buildInputs = lib.optional enablePython python;
+  buildInputs = lib.optionals enablePython [ python swig ];
 
   configureFlags = [
     # z/OS plugin is not useful on Linux,
@@ -56,6 +55,9 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
+    substituteInPlace bindings/swig/src/auditswig.i \
+      --replace "/usr/include/linux/audit.h" \
+                "${linuxHeaders}/include/linux/audit.h"
   ''
   # According to https://stackoverflow.com/questions/13089166
   # --whole-archive linker flag is required to be sure that linker
