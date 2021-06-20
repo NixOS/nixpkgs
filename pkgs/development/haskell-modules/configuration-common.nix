@@ -1932,4 +1932,8 @@ EOT
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
 
+  # 2021-06-20: Outdated upper bounds
+  # https://github.com/Porges/email-validate-hs/issues/58
+  ghcup = doJailbreak super.ghcup;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
