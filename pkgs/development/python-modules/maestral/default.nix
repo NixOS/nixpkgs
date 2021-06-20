@@ -52,6 +52,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
-    inherit (src.meta) homepage;
+    homepage = "https://maestral.app";
   };
 }
