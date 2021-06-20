@@ -25,7 +25,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "sgxsdk";
-  version = "2.13.3";
+  version = "2.13.3a0";
   src = fetchFromGitHub {
     owner = "sbellem";
     repo = "linux-sgx";
@@ -34,8 +34,10 @@ stdenvNoCC.mkDerivation {
     fetchSubmodules = true;
   };
   dontConfigure = true;
-  preBuild = ''
-    export BINUTILS_DIR=$binutils/bin
+  prePatch = ''
+    patchShebangs ./linux/installer/bin/build-installpkg.sh
+    patchShebangs ./linux/installer/common/sdk/createTarball.sh
+    patchShebangs ./linux/installer/common/sdk/install.sh
     '';
   buildInputs = [
     autoconf
@@ -58,6 +60,9 @@ stdenvNoCC.mkDerivation {
     texinfo
     nasm
   ];
+  preBuild = ''
+    export BINUTILS_DIR=$binutils/bin
+    '';
   buildPhase = ''
     runHook preBuild
 
@@ -74,9 +79,11 @@ stdenvNoCC.mkDerivation {
     runHook postBuild
     '';
   postBuild = ''
+    patchShebangs ./linux/installer/bin/sgx_linux_x64_sdk_*.bin
+    '';
+  installPhase = ''
     echo -e 'no\n'$out | ./linux/installer/bin/sgx_linux_x64_sdk_*.bin
     '';
-  dontInstall = true;
   dontFixup = true;
 
   meta = with lib; {
