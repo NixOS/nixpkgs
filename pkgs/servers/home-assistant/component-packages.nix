@@ -216,7 +216,7 @@
     "elgato" = ps: with ps; [ elgato ];
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
     "elkm1" = ps: with ps; [ ]; # missing inputs: elkm1-lib
-    "elv" = ps: with ps; [ ]; # missing inputs: pypca
+    "elv" = ps: with ps; [ pypca ];
     "emby" = ps: with ps; [ pyemby ];
     "emoncms" = ps: with ps; [ ];
     "emoncms_history" = ps: with ps; [ ];
