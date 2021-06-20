@@ -9760,6 +9760,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  truecrack = callPackage ../tools/security/truecrack { };
+  truecrack-cuda = truecrack.override { cudaSupport = true; };
+
   ts = callPackage ../tools/system/ts { };
 
   transfig = callPackage ../tools/graphics/transfig {
