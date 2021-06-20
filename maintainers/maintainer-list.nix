@@ -5663,6 +5663,16 @@
     githubId = 72546287;
     name = "L3af";
   };
+  lach = {
+    email = "iam@lach.pw";
+    github = "CertainLach";
+    githubId = 6235312;
+    keys = [{
+      longkeyid = "rsa3072/40B5D6948143175F";
+      fingerprint = "323C 95B5 DBF7 2D74 8570  C0B7 40B5 D694 8143 175F";
+    }];
+    name = "Yaroslav Bolyukin";
+  };
   laikq = {
     email = "gwen@quasebarth.de";
     github = "laikq";

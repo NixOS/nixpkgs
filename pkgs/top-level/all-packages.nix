@@ -15773,6 +15773,8 @@ in
 
   jsonnet-bundler = callPackage ../development/tools/jsonnet-bundler { };
 
+  jrsonnet = callPackage ../development/compilers/jrsonnet { };
+
   go-jsonnet = callPackage ../development/compilers/go-jsonnet { };
 
   jsonrpc-glib = callPackage ../development/libraries/jsonrpc-glib { };
