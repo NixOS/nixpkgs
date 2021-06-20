@@ -441,6 +441,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hassio"
     "hddtemp"
     "heos"
+    "here_travel_time"
     "history"
     "history_stats"
     "hive"
@@ -743,6 +744,8 @@ in with py.pkgs; buildPythonApplication rec {
     "--only-rerun RuntimeError"
     # enable full variable printing on error
     "--showlocals"
+    # here_travel_time/test_sensor.py: Tries to access HERE API: herepy.error.HEREError: Error occured on __get
+    "--deselect tests/components/here_travel_time/test_sensor.py::test_invalid_credentials"
     # screenlogic/test_config_flow.py: Tries to send out UDP broadcasts
     "--deselect tests/components/screenlogic/test_config_flow.py::test_form_cannot_connect"
     # asuswrt/test_config_flow.py: Sandbox network limitations, fails with unexpected error
