@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs =
-    [ zlib libpng libjpeg libwebp libGLU libGL glm
+    buildInputs = [ zlib libpng libjpeg libwebp libGLU libGL glm
       libX11 libXext libXfixes libXrandr libXcomposite slop icu ];
 
   doCheck = false;
