@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation {
-  name = "NSPlist-713decf";
+  pname = "NSPlist";
+  version = "unstable-2017-04-11";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
