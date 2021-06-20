@@ -3393,6 +3393,8 @@ in {
 
   ics = callPackage ../development/python-modules/ics { };
 
+  idasen = callPackage ../development/python-modules/idasen { };
+
   identify = callPackage ../development/python-modules/identify { };
 
   idna = callPackage ../development/python-modules/idna { };

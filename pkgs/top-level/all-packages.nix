@@ -15668,6 +15668,8 @@ in
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
+  idasen = with python3Packages; toPythonApplication idasen;
+
   ilbc = callPackage ../development/libraries/ilbc { };
 
   ilixi = callPackage ../development/libraries/ilixi { };
