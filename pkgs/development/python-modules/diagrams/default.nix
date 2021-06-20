@@ -25,6 +25,11 @@ buildPythonPackage rec {
     sha256 = "1lcqsy3bvlnlnakjysp8qjhy26bhkp1izi5dvzq2fpsffgxk4si4";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'jinja2 = "^2.10"' 'jinja2 = "*"'
+  '';
+
   preConfigure = ''
     patchShebangs autogen.sh
     ./autogen.sh
