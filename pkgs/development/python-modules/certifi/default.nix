@@ -1,11 +1,14 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "certifi";
   version = "2020.12.5";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
