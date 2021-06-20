@@ -900,4 +900,6 @@ self: super: builtins.intersectAttrs super {
       '';
     }));
 
+  rel8 = addTestToolDepend super.rel8 pkgs.postgresql;
+
 }
