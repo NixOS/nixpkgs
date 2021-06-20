@@ -11004,6 +11004,16 @@
     githubId = 3889405;
     name = "vyp";
   };
+  wakira = {
+    name = "Sheng Wang";
+    email = "sheng@a64.work";
+    github = "wakira";
+    githubId = 2338339;
+    keys = [{
+      longkeyid = "rsa4096/0x8C9B0A8FC0C0D862";
+      fingerprint = "47F7 009E 3AE3 1DA7 988E  12E1 8C9B 0A8F C0C0 D862";
+    }];
+  };
   wamserma = {
     name = "Markus S. Wamser";
     email = "github-dev@mail2013.wamser.eu";
