@@ -2287,6 +2287,8 @@ in {
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
+  enturclient = callPackage ../development/python-modules/enturclient { };
+
   enum34 = callPackage ../development/python-modules/enum34 { };
 
   enum-compat = callPackage ../development/python-modules/enum-compat { };
