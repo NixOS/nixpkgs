@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ]; # requireFile src's should be excluded
-    maintainers = [ lib.maintainers.canndrew ];
+    maintainers = with lib.maintainers; [ canndrew kwohlfahrt ];
   };
 }
 
