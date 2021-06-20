@@ -13,7 +13,7 @@ let
   discoverTests = val:
     if !isAttrs val then val
     else if hasAttr "test" val then callTest val
-    else mapAttrs (n: s: discoverTests s) val;
+    else recurseIntoAttrs (mapAttrs (n: s: discoverTests s) val);
   handleTest = path: args:
     discoverTests (import path ({ inherit system pkgs; } // args));
   handleTestOn = systems: path: args:
