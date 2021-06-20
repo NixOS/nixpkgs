@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, php, which, makeWrapper, bash, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "drush-6.1.0";
+  pname = "drush";
+  version = "6.1.0";
 
   meta = with lib; {
     description = "Command-line shell and Unix scripting interface for Drupal";

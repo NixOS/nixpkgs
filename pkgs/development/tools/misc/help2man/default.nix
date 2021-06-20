@@ -6,10 +6,11 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "help2man-1.48.1";
+  pname = "help2man";
+  version = "1.48.1";
 
   src = fetchurl {
-    url = "mirror://gnu/help2man/${name}.tar.xz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-3op0dAvQWGRlZ7kqtOzeudqfGgfMfE9gejwU3TjRB5k=";
   };
 

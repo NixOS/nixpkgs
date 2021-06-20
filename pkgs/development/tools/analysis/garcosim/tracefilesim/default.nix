@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation {
 
-  name = "tracefilesim-2015-11-07";
+  pname = "tracefilesim";
+  version = "unstable-2015-11-07";
 
   src = fetchFromGitHub {
     owner = "GarCoSim";
