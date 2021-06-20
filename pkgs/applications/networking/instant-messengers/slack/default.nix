@@ -48,9 +48,13 @@ let
   x86_64-linux-version = "4.17.0";
   x86_64-linux-sha256 = "07ccms58pq27ilkyhcf6cgwb7qrddwil5kgy8yv95ljikqzi5rxi";
 
+  aarch64-darwin-version = "4.16.0";
+  aarch64-darwin-sha256 = "sha256-tR8tSU9tqtkwMRR+aI8kXQo0RH6c6pGvwPryZVRNYXc=";
+
   version = {
     x86_64-darwin = x86_64-darwin-version;
     x86_64-linux = x86_64-linux-version;
+    aarch64-darwin =  aarch64-darwin-version;
   }.${system} or throwSystem;
 
   src = let
@@ -64,6 +68,10 @@ let
       url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
       sha256 = x86_64-linux-sha256;
     };
+    aarch64-darwin = fetchurl {
+      url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+      sha256 = aarch64-darwin-sha256;
+    };
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -71,7 +79,7 @@ let
     homepage = "https://slack.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -174,7 +182,9 @@ let
     installPhase = ''
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
-      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
+    '' + lib.optionalString (!stdenv.isAarch64) ''
+      # on aarch64-darwin we get: Could not write domain com.tinyspeck.slackmacgap; exiting
+      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -Bool YES
     '';
   };
 in if stdenv.isDarwin
