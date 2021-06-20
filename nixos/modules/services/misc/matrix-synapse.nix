@@ -86,7 +86,9 @@ account_threepid_delegates:
   ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
   ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
 
-room_invite_state_types: ${builtins.toJSON cfg.room_invite_state_types}
+room_prejoin_state:
+  disable_default_event_types: ${boolToString cfg.room_prejoin_state.disable_default_event_types}
+  additional_event_types: ${builtins.toJSON cfg.room_prejoin_state.additional_event_types}
 ${optionalString (cfg.macaroon_secret_key != null) ''
   macaroon_secret_key: "${cfg.macaroon_secret_key}"
 ''}
@@ -577,11 +579,28 @@ in {
           Delegate SMS sending to this local process (https://localhost:8090)
         '';
       };
-      room_invite_state_types = mkOption {
+      room_prejoin_state.additional_event_types = mkOption {
+        default = [];
         type = types.listOf types.str;
-        default = ["m.room.join_rules" "m.room.canonical_alias" "m.room.avatar" "m.room.name"];
         description = ''
-          A list of event types that will be included in the room_invite_state
+          Additional events to share with users who received an invite.
+        '';
+      };
+      room_prejoin_state.disable_default_event_types = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to disable the default state-event types for users invited to a room.
+          These are:
+
+          <itemizedlist>
+          <listitem><para>m.room.join_rules</para></listitem>
+          <listitem><para>m.room.canonical_alias</para></listitem>
+          <listitem><para>m.room.avatar</para></listitem>
+          <listitem><para>m.room.encryption</para></listitem>
+          <listitem><para>m.room.name</para></listitem>
+          <listitem><para>m.room.create</para></listitem>
+          </itemizedlist>
         '';
       };
       macaroon_secret_key = mkOption {
@@ -680,12 +699,12 @@ in {
     ];
 
     users.users.matrix-synapse = {
-        group = "matrix-synapse";
-        home = cfg.dataDir;
-        createHome = true;
-        shell = "${pkgs.bash}/bin/bash";
-        uid = config.ids.uids.matrix-synapse;
-      };
+      group = "matrix-synapse";
+      home = cfg.dataDir;
+      createHome = true;
+      shell = "${pkgs.bash}/bin/bash";
+      uid = config.ids.uids.matrix-synapse;
+    };
 
     users.groups.matrix-synapse = {
       gid = config.ids.gids.matrix-synapse;
@@ -707,6 +726,10 @@ in {
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
+        ExecStartPre = [ ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
+          chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
+          chmod 0600 ${cfg.dataDir}/homeserver.signing.key
+        '')) ];
         ExecStart = ''
           ${cfg.package}/bin/homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
@@ -714,6 +737,7 @@ in {
         '';
         ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
+        UMask = "0077";
       };
     };
   };
@@ -728,6 +752,12 @@ in {
       <nixpkgs/nixos/tests/matrix-synapse.nix>
     '')
     (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
+      You may add additional event types via
+      `services.matrix-synapse.room_prejoin_state.additional_event_types` and
+      disable the default events via
+      `services.matrix-synapse.room_prejoin_state.disable_default_event_types`.
+    '')
   ];
 
   meta.doc = ./matrix-synapse.xml;

@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "1rmhg9xhljgd5yq3xs0fzw1b0bgz7jfpf5mr2gviwqahl5vxvfiq";
+  cargoSha256 = "0pxakfiidxfczh3harnjhb1zv340r812jxzwam8z2kyw3mkyhh8z";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

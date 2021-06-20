@@ -1,14 +1,18 @@
-{ vimUtils, vim_configurable, neovim, vimPlugins
-, lib, fetchFromGitHub,
+{ vimUtils, vim_configurable, writeText, vimPlugins
+, lib, fetchFromGitHub
+, pkgs
 }:
 let
   inherit (vimUtils) buildVimPluginFrom2Nix;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
+
 in
-{
+  pkgs.recurseIntoAttrs (rec {
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
+  ### vim tests
+  ##################
   vim_with_vim2nix = vim_configurable.customize {
     name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ];
   };
@@ -34,11 +38,6 @@ in
     vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
   };
 
-  # only neovim makes use of `requiredPlugins`, test this here
-  test_nvim_with_vim_nix_using_pathogen = neovim.override {
-    configure.pathogen.pluginNames = [ "vim-nix" ];
-  };
-
   # regression test for https://github.com/NixOS/nixpkgs/issues/53112
   # The user may have specified their own plugins which may not be formatted
   # exactly as the generated ones. In particular, they may not have the `pname`
@@ -61,12 +60,4 @@ in
       });
     vimrcConfig.vam.pluginDictionaries = [ { names = [ "vim-trailing-whitespace" ]; } ];
   };
-
-  # system remote plugin manifest should be generated, deoplete should be usable
-  # without the user having to do `UpdateRemotePlugins`. To test, launch neovim
-  # and do `:call deoplete#enable()`. It will print an error if the remote
-  # plugin is not registered.
-  test_nvim_with_remote_plugin = neovim.override {
-    configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim ];
-  };
-}
+})

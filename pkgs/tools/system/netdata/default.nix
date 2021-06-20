@@ -1,11 +1,12 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
 , CoreFoundation, IOKit, libossp_uuid
-, curl, libcap,  libuuid, lm_sensors, zlib
 , nixosTests
+, curl, libcap, libuuid, lm_sensors, zlib
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
+, withCloud ? (!stdenv.isDarwin), json_c
 , withSsl ? true, openssl
 , withDebug ? false
 }:
@@ -15,14 +16,15 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.29.3";
+  version = "1.31.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-GWIQZEC5agJ+Zw7l58IIAJhXP6dxirCmWVBJulzBO5Q=";
+    sha256 = "0735cxmljrp8zlkcq7hcxizy4j4xiv7vf782zkz5chn06n38mcik";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -33,6 +35,7 @@ in stdenv.mkDerivation rec {
     ++ optionals withDBengine [ libuv lz4.dev judy ]
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
+    ++ optionals withCloud [ json_c ]
     ++ optionals withSsl [ openssl.dev ];
 
   patches = [
@@ -50,6 +53,8 @@ in stdenv.mkDerivation rec {
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
        $out/libexec/netdata/plugins.d/apps.plugin.org
+    mv $out/libexec/netdata/plugins.d/cgroup-network \
+       $out/libexec/netdata/plugins.d/cgroup-network.org
     mv $out/libexec/netdata/plugins.d/perf.plugin \
        $out/libexec/netdata/plugins.d/perf.plugin.org
     mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
@@ -68,6 +73,9 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+  ] ++ optionals withCloud [
+    "--enable-cloud"
+    "--with-aclk-ng"
   ];
 
   postFixup = ''
@@ -81,6 +89,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
   };
 }

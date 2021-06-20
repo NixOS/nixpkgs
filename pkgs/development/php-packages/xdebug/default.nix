@@ -11,5 +11,10 @@ buildPecl {
 
   zendExtension = true;
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "Provides functions for function traces and profiling";
+    license = licenses.php301;
+    homepage = "https://xdebug.org/";
+    maintainers = teams.php.members;
+  };
 }

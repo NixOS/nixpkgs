@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "terraria-server";
-  version = "1.4.1.2";
+  version = "1.4.2.3";
   urlVersion = lib.replaceChars [ "." ] [ "" ] version;
 
   src = fetchurl {
-    url = "https://terraria.org/system/dedicated_servers/archives/000/000/042/original/terraria-server-${urlVersion}.zip";
-    sha256 = "18hcy7jfizyyp0h66rga8z948xg3nyk32rzl7hgv7ar1w43airhh";
+    url = "https://terraria.org/system/dedicated_servers/archives/000/000/046/original/terraria-server-${urlVersion}.zip";
+    sha256 = "0qm4pbm1d9gax47fk4zhw9rcxvajxs36w7dghirli89i994r7g8j";
   };
 
   buildInputs = [ file ];

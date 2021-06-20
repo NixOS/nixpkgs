@@ -7,14 +7,14 @@
 
   # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin
-, readline80 ? null
+, readline81 ? null
 , withDocs ? false
 , texinfo ? null
 }:
 
 with lib;
 
-assert interactive -> readline80 != null;
+assert interactive -> readline81 != null;
 assert withDocs -> texinfo != null;
 assert stdenv.hostPlatform.isDarwin -> binutils != null;
 let
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     ++ optional withDocs texinfo
     ++ optional stdenv.hostPlatform.isDarwin binutils;
 
-  buildInputs = optional interactive readline80;
+  buildInputs = optional interactive readline81;
 
   enableParallelBuilding = true;
 

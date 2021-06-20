@@ -8,19 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cage";
-  version = "0.1.2.1";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "Hjdskes";
     repo = "cage";
     rev = "v${version}";
-    sha256 = "1i4rm3dpmk7gkl6hfs6a7vwz76ba7yqcdp63nlrdbnq81m9cy2am";
+    sha256 = "0ixl45g0m8b75gvbjm3gf5qg0yplspgs0xpm2619wn5sygc47sb1";
   };
-
-  postPatch = ''
-    substituteInPlace meson.build --replace \
-      "0.1.2" "${version}"
-  '';
 
   nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
 

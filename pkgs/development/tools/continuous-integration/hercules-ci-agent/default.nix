@@ -1,4 +1,4 @@
-{ gnutar, gzip, git, haskell, haskellPackages, lib, makeWrapper, runc, stdenv }:
+{ gnutar, gzip, git, haskell, haskellPackages, lib, makeWrapper, nixos, runc, stdenv }:
 let
   inherit (haskell.lib) overrideCabal addBuildDepends;
   inherit (lib) makeBinPath;
@@ -16,8 +16,16 @@ let
           makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${makeBinPath bundledBins}
         '';
       });
-in pkg // {
-    meta = pkg.meta // {
+in pkg.overrideAttrs (o: {
+    meta = o.meta // {
       position = toString ./default.nix + ":1";
     };
-  }
+    passthru = o.passthru // {
+      # Does not test the package, but evaluation of the related NixOS module.
+      tests.nixos-minimal-config = nixos {
+        boot.loader.grub.enable = false;
+        fileSystems."/".device = "bogus";
+        services.hercules-ci-agent.enable = true;
+      };
+    };
+  })

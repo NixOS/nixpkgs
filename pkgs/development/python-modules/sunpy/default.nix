@@ -11,6 +11,7 @@
 , beautifulsoup4
 , drms
 , glymur
+, h5netcdf
 , hypothesis
 , matplotlib
 , numpy
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     pandas
     astropy
     astropy-helpers
+    h5netcdf
     parfive
     sqlalchemy
     scikitimage

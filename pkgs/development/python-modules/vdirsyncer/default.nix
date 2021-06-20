@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , isPy27
 , click
 , click-log
@@ -13,7 +14,7 @@
 , pytestCheckHook
 , pytest-localserver
 , pytest-subtesthack
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
@@ -43,6 +44,14 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-localserver
     pytest-subtesthack
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "update-usage-deprecated-method.patch";
+      url = "https://github.com/pimutils/vdirsyncer/commit/7577fa21177442aacc2d86640ef28cebf1c4aaef.patch";
+      sha256 = "0inkr1wfal20kssij8l5myhpjivxg8wlvhppqc3lvml9d1i75qbh";
+    })
   ];
 
   postPatch = ''

@@ -57,7 +57,7 @@ let
     };
     options.extraOptions = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Extra command-line options passed to the daemon. See upstream bees documentation.
       '';
@@ -67,7 +67,8 @@ let
     };
   };
 
-in {
+in
+{
 
   options.services.beesd = {
     filesystems = mkOption {
@@ -87,37 +88,42 @@ in {
     };
   };
   config = {
-    systemd.services = mapAttrs' (name: fs: nameValuePair "beesd@${name}" {
-      description = "Block-level BTRFS deduplication for %i";
-      after = [ "sysinit.target" ];
+    systemd.services = mapAttrs'
+      (name: fs: nameValuePair "beesd@${name}" {
+        description = "Block-level BTRFS deduplication for %i";
+        after = [ "sysinit.target" ];
 
-      serviceConfig = let
-        configOpts = [
-          fs.spec
-          "verbosity=${toString fs.verbosity}"
-          "idxSizeMB=${toString fs.hashTableSizeMB}"
-          "workDir=${fs.workDir}"
-        ];
-        configOptsStr = escapeShellArgs configOpts;
-      in {
-        # Values from https://github.com/Zygo/bees/blob/v0.6.1/scripts/beesd%40.service.in
-        ExecStart = "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${escapeShellArgs fs.extraOptions}";
-        ExecStopPost = "${pkgs.bees}/bin/bees-service-wrapper cleanup ${configOptsStr}";
-        CPUAccounting = true;
-        CPUWeight = 12;
-        IOSchedulingClass = "idle";
-        IOSchedulingPriority = 7;
-        IOWeight = 10;
-        KillMode = "control-group";
-        KillSignal = "SIGTERM";
-        MemoryAccounting = true;
-        Nice = 19;
-        Restart = "on-abnormal";
-        StartupCPUWeight = 25;
-        StartupIOWeight = 25;
-        SyslogIdentifier = "bees"; # would otherwise be "bees-service-wrapper"
-      };
-      wantedBy = ["multi-user.target"];
-    }) cfg.filesystems;
+        serviceConfig =
+          let
+            configOpts = [
+              fs.spec
+              "verbosity=${toString fs.verbosity}"
+              "idxSizeMB=${toString fs.hashTableSizeMB}"
+              "workDir=${fs.workDir}"
+            ];
+            configOptsStr = escapeShellArgs configOpts;
+          in
+          {
+            # Values from https://github.com/Zygo/bees/blob/v0.6.5/scripts/beesd@.service.in
+            ExecStart = "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${escapeShellArgs fs.extraOptions}";
+            ExecStopPost = "${pkgs.bees}/bin/bees-service-wrapper cleanup ${configOptsStr}";
+            CPUAccounting = true;
+            CPUSchedulingPolicy = "batch";
+            CPUWeight = 12;
+            IOSchedulingClass = "idle";
+            IOSchedulingPriority = 7;
+            IOWeight = 10;
+            KillMode = "control-group";
+            KillSignal = "SIGTERM";
+            MemoryAccounting = true;
+            Nice = 19;
+            Restart = "on-abnormal";
+            StartupCPUWeight = 25;
+            StartupIOWeight = 25;
+            SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
+          };
+        wantedBy = [ "multi-user.target" ];
+      })
+      cfg.filesystems;
   };
 }

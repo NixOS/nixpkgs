@@ -1,6 +1,6 @@
 # Firefox {#sec-firefox}
 
-## Build wrapped Firefox with extensions and policies
+## Build wrapped Firefox with extensions and policies {#build-wrapped-firefox-with-extensions-and-policies}
 
 The `wrapFirefox` function allows to pass policies, preferences and extension that are available to firefox. With the help of `fetchFirefoxAddon` this allows build a firefox version that already comes with addons pre-installed:
 

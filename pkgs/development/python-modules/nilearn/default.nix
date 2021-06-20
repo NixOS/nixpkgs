@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pytestCheckHook, matplotlib
-, nibabel, numpy, pandas, scikitlearn, scipy, joblib, requests }:
+, nibabel, numpy, pandas, scikit-learn, scipy, joblib, requests }:
 
 buildPythonPackage rec {
   pname = "nilearn";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     numpy
     pandas
     requests
-    scikitlearn
+    scikit-learn
     scipy
   ];
 

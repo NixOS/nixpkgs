@@ -20,7 +20,8 @@
 , dasht
 , direnv
 , fzf
-, gnome3
+, gnome
+, himalaya
 , khard
 , languagetool
 , llvmPackages
@@ -97,7 +98,7 @@ self: super: {
     # https://gist.github.com/Mic92/135e83803ed29162817fce4098dec144
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/clang_complete.vim \
-        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.clang.cc.lib}/lib/libclang.so'"
+        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.libclang.lib}/lib/libclang.so'"
 
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
         --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
@@ -273,6 +274,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
+  });
+
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
     buildInputs = [ python3.pkgs.jedi ];
@@ -281,6 +286,21 @@ self: super: {
       license = lib.licenses.mit;
     };
   });
+
+  himalaya-vim = buildVimPluginFrom2Nix {
+    pname = "himalaya-vim";
+    inherit (himalaya) src version;
+    configurePhase = "cd vim/";
+    dependencies = with self; [ himalaya ];
+    preFixup = ''
+      substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
+        --replace 'if !executable("himalaya")' 'if v:false'
+    '';
+    postFixup = ''
+      mkdir -p $out/bin
+      ln -s ${himalaya}/bin/himalaya $out/bin/himalaya
+    '';
+  };
 
   LanguageClient-neovim =
     let
@@ -511,7 +531,7 @@ self: super: {
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
     # on linux can use either Zenity or Yad.
-    propagatedBuildInputs = [ gnome3.zenity ];
+    propagatedBuildInputs = [ gnome.zenity ];
     meta = {
       description = "Simple color selector/picker plugin";
       license = lib.licenses.publicDomain;
@@ -601,7 +621,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "25UkYKhlGmlDg4fz1jZHjpQn5s4k5FKlFK0MU8YM5SE=";
+          cargoSha256 = "sha256-/ALOjJayCmLpMV8zC9ryEofUxYdvqj4Cn+sY1qRuqcs=";
         };
       in
       ''
@@ -609,16 +629,6 @@ self: super: {
       '';
 
     meta.platforms = lib.platforms.all;
-  });
-
-  vim-closer = super.vim-closer.overrideAttrs (old: {
-    patches = [
-      # Fix duplicate tag in doc
-      (fetchpatch {
-        url = "https://github.com/rstacruz/vim-closer/commit/a504be8c7050e41b7dfc50c2362948e2cf7c5422.patch";
-        sha256 = "065q30d913fm3pc7r5y53wmnb7q7bhv21qxavm65bkb91242d409";
-      })
-    ];
   });
 
   vim-codefmt = super.vim-codefmt.overrideAttrs (old: {
@@ -726,7 +736,7 @@ self: super: {
       vim-markdown-composer-bin = rustPlatform.buildRustPackage rec {
         pname = "vim-markdown-composer-bin";
         inherit (super.vim-markdown-composer) src version;
-        cargoSha256 = "iuhq2Zhdkib8hw4uvXBjwE5ZiN1kzairlzufaGuVkWc=";
+        cargoSha256 = "1cvnjsw5dd02wrm1q5xi8b033rsn44f7fkmw5j7lhskv5j286zrh";
       };
     in
     super.vim-markdown-composer.overrideAttrs (oldAttrs: rec {

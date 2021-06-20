@@ -22,6 +22,13 @@ stdenv.mkDerivation rec {
   # Enables SVG support by uncommenting the Makefile
   patches = [ ./000-enable-svg.patch ];
 
+  # The strip options are not recognized by Darwin.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -i -e '/strip -s/d' Makefile
+  '';
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   installFlags = [ "prefix=${placeholder "out"}" ];
 
   meta = with lib; {

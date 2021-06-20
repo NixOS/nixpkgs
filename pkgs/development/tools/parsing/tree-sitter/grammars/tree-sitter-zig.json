@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/GrayJack/tree-sitter-zig",
+  "rev": "41bbc7f7b94bde3e948e41e4d42673945238ff03",
+  "date": "2021-03-30T12:55:10-03:00",
+  "path": "/nix/store/av4xgzr3c1rhr7v4fa9mm68krd2qv1lg-tree-sitter-zig",
+  "sha256": "0gjxac43qpqc4332bp3mpdbvh7rqv0q3hvw8834b30ml5q0r0qr0",
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

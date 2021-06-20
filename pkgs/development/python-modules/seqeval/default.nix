@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
-, scikitlearn
+, scikit-learn
 , perl
 , pytestCheckHook
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    scikitlearn
+    scikit-learn
   ];
 
   checkInputs = [

@@ -1,15 +1,15 @@
 { stdenvNoCC, lib, fetchFromGitHub, makeWrapper
 , python3, binutils-unwrapped, findutils, kmod, pciutils, libraspberrypi
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
-  version = "2021-03-18";
+  version = "2021.04.29-138a1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "ff27ccf69403b01e337fc4ee6e7ae75244028cce";
-    sha256 = "1q1vlld0xxh9zinf5g0qa6jw1dggq93br938mvrfx3nb2aviiwcj";
+    rev = "v${version}";
+    sha256 = "sha256-nzAMPa4gqCAcROFa7z34IoMA3aoMHX9fYCsPFde9dac=";
   };
 
   buildInputs = [ python3 ];
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation {
     # Don't try to verify md5 signatures from /var/lib/dpkg and
     # fix path to the configuration.
     substituteInPlace rpi-eeprom-update \
-      --replace 'IGNORE_DPKG_CHECKSUMS=$LOCAL_MODE' 'IGNORE_DPKG_CHECKSUMS=1' \
+      --replace 'IGNORE_DPKG_CHECKSUMS=''${LOCAL_MODE}' 'IGNORE_DPKG_CHECKSUMS=1' \
       --replace '/etc/default' '/etc'
   '';
 

@@ -1,19 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config
-, wayland
-}:
+{ lib, stdenv, fetchurl, wayland-scanner }:
 
 stdenv.mkDerivation rec {
   pname = "wayland-protocols";
-  version = "1.20";
+  version = "1.21";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1rsdgvkkvxs3cjhpl6agvbkm53vm7k8rg127j9y2vn33m2hvg0lp";
+    sha256 = "1rfdlkzz67qsb955zqb8jbw3m22pl6ppvrvfq8bqiqcb5n24b6dr";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ wayland ];
+  nativeBuildInputs = [ wayland-scanner ];
 
   meta = {
     description = "Wayland protocol extensions";

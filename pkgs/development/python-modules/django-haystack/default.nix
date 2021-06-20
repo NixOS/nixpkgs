@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools, setuptools_scm, django, dateutil, whoosh, pysolr
+, setuptools, setuptools-scm, django, dateutil, whoosh, pysolr
 , coverage, mock, nose, geopy, requests }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pysolr whoosh dateutil geopy coverage nose mock coverage requests ];
   propagatedBuildInputs = [ django setuptools ];
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   postPatch = ''
     sed -i 's/geopy==/geopy>=/' setup.py

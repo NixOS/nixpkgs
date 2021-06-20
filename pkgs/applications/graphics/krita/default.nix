@@ -1,7 +1,7 @@
 { mkDerivation, lib, stdenv, makeWrapper, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
-, kio, kcrash
+, kio, kcrash, breeze-icons
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
 , openjpeg, opencolorio, vc, poppler, curl, ilmbase
 , qtmultimedia, qtx11extras, quazip
@@ -10,18 +10,18 @@
 
 mkDerivation rec {
   pname = "krita";
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "121fjdv5phx1aqk21vx9k9vsc5k1w8s86gp6pamy2y31r2ph7r8y";
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0rwghzci2wn2jmisvnzs23yxc2z3d4dcx2qbbhcvjyi3q8ij61nl";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip_4 makeWrapper ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
-    ki18n kitemmodels kitemviews kwindowsystem kio kcrash
+    ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
     openjpeg opencolorio poppler curl ilmbase
     qtmultimedia qtx11extras quazip
@@ -48,6 +48,6 @@ mkDerivation rec {
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl3Only;
   };
 }

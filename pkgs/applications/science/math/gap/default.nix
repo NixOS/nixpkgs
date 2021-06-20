@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , makeWrapper
 , readline
 , gmp
@@ -35,7 +34,7 @@ let
     "autpgrp-*"
     "alnuth-*"
     "crisp-*"
-    "ctbllib"
+    "ctbllib-*"
     "FactInt-*"
     "fga"
     "irredsol-*"
@@ -62,11 +61,11 @@ in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.11.0";
+  version = "4.11.1";
 
   src = fetchurl {
-    url = "https://files.gap-system.org/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
-    sha256 = "sha256-vwcKENwqxgWT/mXfD4c9ctTWdQHobrJipva9SPyGhgI=";
+    url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
+    sha256 = "sha256-ZjXF2n2CdV+DOUhrnKwzdm9YcS8pfoI0+6QIGJAuowQ=";
   };
 
   # remove all non-essential packages (which take up a lot of space)
@@ -82,23 +81,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ];
-
-  patches = [
-    # Fix for locale specific tests causing issues. Already upstream.
-    # Backport of https://github.com/gap-system/gap/pull/4022
-    (fetchpatch {
-      name = "remove-locale-specific-tests.patch";
-      url = "https://github.com/gap-system/gap/commit/c18b0c4215b5212a2cc4f305e2d5b94ba716bee8.patch";
-      sha256 = "sha256-De+T9Y7ewRT6plJrj2VR8axRvD/JCTYKOBWB7Bw0oq0=";
-    })
-
-    # fixes aarch64 gc crashes: https://github.com/gap-system/gap/pull/3965
-    (fetchpatch {
-      name = "mark-genstackfuncbags-as-noinline.patch";
-      url = "https://github.com/gap-system/gap/commit/f0a8f49ff8dad0a5fa77253d45457c6f40f96778.patch";
-      sha256 = "sha256-GU9tOP1stX2vn8m8kXOBupEpxIYArA76ibKL8eLn0MY=";
-    })
   ];
 
   # "teststandard" is a superset of testinstall. It takes ~1h instead of ~1min.

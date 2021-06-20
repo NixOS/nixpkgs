@@ -6,7 +6,7 @@
 , py
 , six
 , virtualenv
-, setuptools_scm
+, setuptools-scm
 , toml
 , filelock
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "tox";
   version = "3.23.0";
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ packaging pluggy py six virtualenv toml filelock ];
 
   doCheck = false;

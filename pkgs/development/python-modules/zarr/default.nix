@@ -2,7 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , asciitree
 , numpy
 , fasteners
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

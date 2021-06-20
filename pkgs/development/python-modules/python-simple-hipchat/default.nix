@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, unzip }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "python-simple-hipchat";
@@ -9,8 +8,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0zy6prrj85jjc4xmxgfg8h94j81k6zhfxfffcbvq9b10jis1rgav";
   };
-
-  nativeBuildInputs = [ unzip ];
 
   meta = with lib; {
     description = "Easy peasy wrapper for HipChat's v1 API";

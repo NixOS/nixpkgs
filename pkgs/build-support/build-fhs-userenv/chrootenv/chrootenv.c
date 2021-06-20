@@ -43,7 +43,6 @@ const gchar *create_tmpdir() {
 void pivot_host(const gchar *guest) {
   g_autofree gchar *point = g_build_filename(guest, "host", NULL);
   fail_if(g_mkdir(point, 0755));
-  fail_if(mount(0, "/", 0, MS_PRIVATE | MS_REC, 0));
   fail_if(pivot_root(guest, point));
 }
 
@@ -121,6 +120,9 @@ int main(gint argc, gchar **argv) {
 
       fail("unshare", unshare_errno);
     }
+
+    // hide all mounts we do from the parent
+    fail_if(mount(0, "/", 0, MS_PRIVATE | MS_REC, 0));
 
     if (uid != 0) {
       spit("/proc/self/setgroups", "deny");

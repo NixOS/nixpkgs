@@ -1,38 +1,31 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
-, libredirect
-, writeText
+, Security
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nym";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym";
     rev = "v${version}";
-    sha256 = "0wzk9qzjyax73lfjbbag412vw1fgk2wmhhry5hdlvdbkim42m5bn";
+    sha256 = "sha256-7x+B+6T0cnEOjXevA5n1k/SY1Q2tcu0bbZ9gIGoljw0=";
   };
 
-  # fix outdated Cargo.lock
-  cargoPatches = [ (writeText "fix-nym-cargo-lock.patch" ''
-    --- a/Cargo.lock
-    +++ b/Cargo.lock
-    @@ -1826 +1826 @@
-    -version = "0.8.0"
-    +version = "0.8.1"
-  '') ];
-
-  cargoSha256 = "0zr5nzmglmvn6xfqgvipbzy8nw5cl3nf7zjmghkqdwi6zj9p9272";
+  cargoSha256 = "0a7yja0ihjc66fqlshlaxpnpcpdy7h7gbv6120w2cr605qdnqvkx";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
+  patches = [ ./ignore-networking-tests.patch ];
   checkType = "debug";
 
   passthru.updateScript = ./update.sh;
@@ -46,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://nymtech.net";
     license = licenses.asl20;
     maintainers = [ maintainers.ehmry ];
-    platforms = with platforms; intersectLists (linux ++ darwin) (concatLists [ x86 x86_64 aarch64 arm ]);
+    platforms = platforms.all;
   };
 }

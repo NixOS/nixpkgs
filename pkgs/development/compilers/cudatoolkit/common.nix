@@ -6,7 +6,7 @@ args@
 , developerProgram ? false
 , runPatches ? []
 , addOpenGLRunpath
-, alsaLib
+, alsa-lib
 , expat
 , fetchurl
 , fontconfig
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     ncurses5 expat python27 zlib glibc
     xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsaLib
+    gtk2 glib fontconfig freetype unixODBC alsa-lib
   ];
 
   rpath = "${lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
@@ -146,6 +146,10 @@ stdenv.mkDerivation rec {
     # Ensure that cmake can find CUDA.
     mkdir -p $out/nix-support
     echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
+
+    # Set the host compiler to be used by nvcc for CMake-based projects:
+    # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+    echo "cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'" >> $out/nix-support/setup-hook
 
     # Move some libraries to the lib output so that programs that
     # depend on them don't pull in this entire monstrosity.

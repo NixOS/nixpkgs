@@ -11,16 +11,20 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.2.7";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yp3gc5hmlrs5rcmb2qbi4iqb5ndflgqw20qa7ziqayrdd15kzpn";
+    sha256 = "sha256-6RgT/SxO4vsk8Yx2AbaNIFvnAvgDmeTXvb/v6nUJxhc=";
   };
 
-  cargoSha256 = "1abz3s9c3byqc0vaws839hjlf96ivq4zbjyijsbg004ffbmbccpn";
+  cargoSha256 = "sha256-NEuIh7FwIdAWzlChna3+G0VukfV8nYZfVWa+3LxQCIA=";
+
+  # use --lib flag to avoid test with imap server
+  # https://github.com/soywod/himalaya/issues/145
+  cargoTestFlags = [ "--lib" ];
 
   nativeBuildInputs = [ ]
     ++ lib.optionals (enableCompletions) [ installShellFiles ]

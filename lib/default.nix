@@ -66,8 +66,9 @@ let
       stringLength sub substring tail trace;
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
-      importJSON importTOML warn info showWarnings nixpkgsVersion version mod compare
-      splitByAndCompare functionArgs setFunctionArgs isFunction toHexString toBaseDigits;
+      importJSON importTOML warn warnIf info showWarnings nixpkgsVersion version
+      mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
+      toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath

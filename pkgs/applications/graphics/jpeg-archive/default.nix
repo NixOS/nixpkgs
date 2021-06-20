@@ -22,9 +22,10 @@ stdenv.mkDerivation {
   '';
 
   makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
     "PREFIX=$(out)"
     "MOZJPEG_PREFIX=${mozjpeg}"
-    "LIBJPEG=${mozjpeg}/lib/libjpeg.so"
+    "LIBJPEG=${mozjpeg}/lib/libjpeg${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
   postInstall = ''

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, packaging, sip_5 }:
+{ lib, fetchPypi, buildPythonPackage, packaging, sip }:
 
 buildPythonPackage rec {
   pname = "pyqt-builder";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0g51yak53zzjs4gpq65i01cmpz7w8cjny9wfyxlgr2vi0wag107v";
   };
 
-  propagatedBuildInputs = [ packaging sip_5 ];
+  propagatedBuildInputs = [ packaging sip ];
 
   pythonImportsCheck = [ "pyqtbuild" ];
 

@@ -3,7 +3,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "journaldriver";
   version     = "1.1.0";
-  cargoSha256 = "1vyc9pglppfz5idahvcj01wpmmm6jw043zk896wdksywa5zcqn28";
+  cargoSha256 = "1gzfwkcm63fn41jls16c5sqxz28b0hrfpjhwsvvbwcfv40qxjhsg";
 
   src = fetchFromGitHub {
     owner  = "tazjin";

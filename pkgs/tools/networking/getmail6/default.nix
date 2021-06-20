@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "getmail6";
-  version = "6.15";
+  version = "6.16";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cvwvlhilrqlcvza06lsrm5l1yazzvym3s5kcjxcm9cminfaf4qb";
+    sha256 = "1y373nzbffjjjs43441cn3wrb0yq1mw2vqixhizbzdacrs45xbfa";
   };
 
   doCheck = false;

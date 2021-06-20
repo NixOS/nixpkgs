@@ -4,6 +4,7 @@
 , isPy3k
 , libGL
 , libX11
+, glcontext
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  buildInputs = [ libGL libX11 ];
+  buildInputs = [ libGL libX11 glcontext ];
 
   # Tests need a display to run.
   doCheck = false;

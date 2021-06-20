@@ -1,24 +1,24 @@
 diff --git a/packages/flutter_tools/lib/src/asset.dart b/packages/flutter_tools/lib/src/asset.dart
-index a6c59bae07..21f6c9812a 100644
+index 80fb16673f..5723f93f9f 100644
 --- a/packages/flutter_tools/lib/src/asset.dart
 +++ b/packages/flutter_tools/lib/src/asset.dart
-@@ -5,6 +5,7 @@
+@@ -7,6 +7,7 @@
  import 'package:meta/meta.dart';
  import 'package:package_config/package_config.dart';
  
 +import 'base/common.dart';
  import 'base/context.dart';
+ import 'base/deferred_component.dart';
  import 'base/file_system.dart';
- import 'base/logger.dart';
-@@ -14,6 +15,7 @@ import 'cache.dart';
+@@ -16,6 +17,7 @@ import 'build_info.dart';
+ import 'cache.dart';
  import 'convert.dart';
  import 'dart/package_map.dart';
- import 'devfs.dart';
 +import 'globals.dart' as globals;
+ import 'devfs.dart';
  import 'flutter_manifest.dart';
  import 'license_collector.dart';
- import 'project.dart';
-@@ -377,7 +379,7 @@ class ManifestAssetBundle implements AssetBundle {
+@@ -449,7 +451,7 @@ class ManifestAssetBundle implements AssetBundle {
        for (final Map<String, Object> font in family['fonts'] as List<Map<String, Object>>) {
          final Uri entryUri = _fileSystem.path.toUri(font['asset'] as String);
          result.add(_Asset(
@@ -28,32 +28,40 @@ index a6c59bae07..21f6c9812a 100644
            entryUri: entryUri,
            package: null,
 diff --git a/packages/flutter_tools/lib/src/cache.dart b/packages/flutter_tools/lib/src/cache.dart
-index 11e3bf3e11..39d6fae0d1 100644
+index 152d4e75e5..1fcff7e2bd 100644
 --- a/packages/flutter_tools/lib/src/cache.dart
 +++ b/packages/flutter_tools/lib/src/cache.dart
-@@ -321,8 +321,15 @@ class Cache {
+@@ -9,6 +9,7 @@ import 'package:file/memory.dart';
+ import 'package:meta/meta.dart';
+ import 'package:process/process.dart';
+ 
++import 'globals.dart' as globals;
+ import 'base/common.dart';
+ import 'base/error_handling_io.dart';
+ import 'base/file_system.dart';
+@@ -298,8 +299,15 @@ class Cache {
        return;
      }
      assert(_lock == null);
 +
-+    final Directory dir = _fileSystem.directory(_fileSystem.path.join(globals.fsUtils.homeDirPath, '.cache', 'flutter'));
++    final Directory dir = _fileSystem.directory(_fileSystem.path.join(globals.fsUtils.homeDirPath!, '.cache', 'flutter'));
 +    if (!dir.existsSync()) {
 +      dir.createSync(recursive: true);
 +      globals.os.chmod(dir, '755');
 +    }
 +
      final File lockFile =
--      _fileSystem.file(_fileSystem.path.join(flutterRoot, 'bin', 'cache', 'lockfile'));
-+      _fileSystem.file(_fileSystem.path.join(globals.fsUtils.homeDirPath, '.cache', 'flutter', 'lockfile'));
+-      _fileSystem.file(_fileSystem.path.join(flutterRoot!, 'bin', 'cache', 'lockfile'));
++      _fileSystem.file(_fileSystem.path.join(globals.fsUtils.homeDirPath!, '.cache', 'flutter', 'lockfile'));
      try {
        _lock = lockFile.openSync(mode: FileMode.write);
      } on FileSystemException catch (e) {
-@@ -424,7 +431,7 @@ class Cache {
+@@ -404,7 +412,7 @@ class Cache {
      if (_rootOverride != null) {
-       return _fileSystem.directory(_fileSystem.path.join(_rootOverride.path, 'bin', 'cache'));
+       return _fileSystem.directory(_fileSystem.path.join(_rootOverride!.path, 'bin', 'cache'));
      } else {
--      return _fileSystem.directory(_fileSystem.path.join(flutterRoot, 'bin', 'cache'));
-+      return _fileSystem.directory(_fileSystem.path.join(globals.fsUtils.homeDirPath, '.cache', 'flutter'));
+-      return _fileSystem.directory(_fileSystem.path.join(flutterRoot!, 'bin', 'cache'));
++      return _fileSystem.directory(_fileSystem.path.join(globals.fsUtils.homeDirPath!, '.cache', 'flutter'));
      }
    }
  

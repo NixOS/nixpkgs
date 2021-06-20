@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, buildPythonPackage, pkg-config, glib, gobject-introspection,
-pycairo, cairo, which, ncurses, meson, ninja, isPy3k, gnome3 }:
+pycairo, cairo, which, ncurses, meson, ninja, isPy3k, gnome }:
 
 buildPythonPackage rec {
   pname = "pygobject";
@@ -22,13 +22,6 @@ buildPythonPackage rec {
   buildInputs = [ glib gobject-introspection ]
                  ++ lib.optionals stdenv.isDarwin [ which ncurses ];
   propagatedBuildInputs = [ pycairo cairo ];
-
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-      attrPath = "python3.pkgs.${pname}3";
-    };
-  };
 
   meta = with lib; {
     homepage = "https://pygobject.readthedocs.io/";

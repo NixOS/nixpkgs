@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, config, makeWrapper
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , atk
 , cairo
@@ -13,7 +13,7 @@
 , gdk-pixbuf
 , glib
 , glibc
-, gnome3
+, gnome
 , gnugrep
 , gnupg
 , gnused
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
 
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib
+      alsa-lib
       at-spi2-atk
       atk
       cairo
@@ -115,7 +115,7 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   nativeBuildInputs = [ makeWrapper ];
 

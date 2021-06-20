@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, alsaLib
+, alsa-lib
 , coreutils
 , db
 , dpkg
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     db
     glib
     gtk3
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     libsecret
     nss
     xorg.libxkbfile
+    xorg.libXdamage
     xorg.libXScrnSaver
     xorg.libXtst
   ];

@@ -8,7 +8,7 @@
 , mock
 , pytorch
 , pynvml
-, scikitlearn
+, scikit-learn
 , tqdm
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook matplotlib mock pytest_xdist ];
-  propagatedBuildInputs = [ pytorch scikitlearn tqdm pynvml ];
+  propagatedBuildInputs = [ pytorch scikit-learn tqdm pynvml ];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";

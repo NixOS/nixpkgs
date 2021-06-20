@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , redis
-, pytest
+, pytestCheckHook
 , process-tests
 , pkgs
 , withDjango ? false, django_redis
@@ -17,15 +17,20 @@ buildPythonPackage rec {
     sha256 = "4265a476e39d476a8acf5c2766485c44c75f3a1bd6cf73bb195f3079153b8374";
   };
 
-  checkInputs = [ pytest process-tests pkgs.redis ];
+  propagatedBuildInputs = [
+    redis
+  ] ++ lib.optional withDjango django_redis;
 
-  checkPhase = ''
-    pytest tests/
-  '';
+  checkInputs = [
+    pytestCheckHook
+    process-tests
+    pkgs.redis
+  ];
 
-  propagatedBuildInputs = [ redis ]
-  ++ lib.optional withDjango django_redis;
-
+  disabledTests = [
+    # https://github.com/ionelmc/python-redis-lock/issues/86
+    "test_no_overlap2"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ionelmc/python-redis-lock";

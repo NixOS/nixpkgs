@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0wpfqbqjlfb9z0hafvdhkm7qw56cr9kfy6n8vb0q42dwlghpz1ff";
   };
 
-  nativeBuildInputs = with python3Packages; [ sphinx setuptools_scm ];
+  nativeBuildInputs = with python3Packages; [ sphinx setuptools-scm ];
 
   propagatedBuildInputs = with python3Packages; [
     python3Packages.setuptools python3Packages.notmuch chardet dkimpy

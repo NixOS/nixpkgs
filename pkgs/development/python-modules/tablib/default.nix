@@ -2,6 +2,7 @@
 , odfpy
 , openpyxl
 , pandas
+, setuptools-scm
 , pytest
 , pytestcov
 , pyyaml
@@ -20,6 +21,7 @@ buildPythonPackage rec {
     sha256 = "f83cac08454f225a34a305daa20e2110d5e6335135d505f93bc66583a5f9c10d";
   };
 
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ xlwt openpyxl pyyaml xlrd odfpy ];
   checkInputs = [ pytest pytestcov unicodecsv pandas ];
 

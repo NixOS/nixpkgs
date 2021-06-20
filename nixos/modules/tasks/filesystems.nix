@@ -272,10 +272,10 @@ in
         wants = [ "local-fs.target" "remote-fs.target" ];
       };
 
-    # Emit systemd services to format requested filesystems.
     systemd.services =
-      let
 
+    # Emit systemd services to format requested filesystems.
+      let
         formatDevice = fs:
           let
             mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
@@ -302,8 +302,35 @@ in
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig.Type = "oneshot";
           };
-
-      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
+      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems)) // {
+    # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
+    # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
+    # Since the pstore filesystem is usually empty right after mounting because the backend isn't registered yet, and a path unit cannot detect files inside of it, the same service waits for that to happen. systemd's restart mechanism can't be used here because the first failure also fails all dependent units.
+        "mount-pstore" = {
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.util-linux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore";
+            ExecStartPost = pkgs.writeShellScript "wait-for-pstore.sh" ''
+              set -eu
+              TRIES=0
+              while [ $TRIES -lt 20 ] && [ "$(cat /sys/module/pstore/parameters/backend)" = "(null)" ]; do
+                sleep 0.1
+                TRIES=$((TRIES+1))
+              done
+            '';
+            RemainAfterExit = true;
+          };
+          unitConfig = {
+            ConditionPathIsMountPoint = "!/sys/fs/pstore";
+            ConditionVirtualization = "!container";
+            DefaultDependencies = false; # needed to prevent a cycle
+          };
+          after = [ "modprobe@pstore.service" ];
+          requires = [ "modprobe@pstore.service" ];
+          before = [ "systemd-pstore.service" ];
+          wantedBy = [ "systemd-pstore.service" ];
+        };
+      };
 
     systemd.tmpfiles.rules = [
       "d /run/keys 0750 root ${toString config.ids.gids.keys}"

@@ -1,16 +1,16 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, perl, python3, Security, AppKit, openssl, xclip }:
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
-  version = "0.14.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ymvvmryzv5is535bjg8h9p7gsxygyawnpyd0hicdrdiwml5mgsq";
+    sha256 = "sha256-8RPIPimDImLUR9oHVZZ7ZeKLtIhebv/d0kl4CQ5NFdU=";
   };
 
-  cargoSha256 = "14hf3xkdvk2mgag5pzai5382h3g79fq76s0p9pj8q9v8q21wg6pr";
+  cargoSha256 = "sha256-1IHbOjZV8Rc0el7J983B8pvnbt8+QtYiknZU/I85OnY=";
 
   nativeBuildInputs = [ python3 perl ];
   buildInputs = [ openssl ]

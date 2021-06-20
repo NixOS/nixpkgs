@@ -30,7 +30,7 @@
 , libpthreadstubs
 , libsndfile
 , libtiff
-, libungif
+, giflib
 , libxcb
 , mkfontdir
 , pcre
@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "2.2.0";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
-    owner  = "bbidulock";
+    owner  = "ice-wm";
     repo = pname;
     rev = version;
-    hash = "sha256-STM8t311lf0xIqs2Onmwg48xgE7V9VZrUfJrUzYRxL4=";
+    hash = "sha256-UyLefj0eY/m3Of51NdhMNMq3z+kaLK28zDe63hbDK5A=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     libpthreadstubs
     libsndfile
     libtiff
-    libungif
+    giflib
     libxcb
     mkfontdir
     pcre

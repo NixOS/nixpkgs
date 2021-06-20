@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "0.40.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-N6o+1cfer8rgKJ3+CL25axJSjGV/YSG1sLIHXJzsC6o=";
+    sha256 = "sha256-f1UcvsXWW+fMAgTRtHkEXmUN/DTrJ/Xd+9HbR2FjFog=";
   };
 
   patches = [
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ protobuf ];
 
-  vendorSha256 = "sha256-vl+WqtpegoAvylx/lcyfJk8DAOub8U4Lx3Pe3eW4M/E=";
+  vendorSha256 = "sha256-XMGXVsSLEzuzujX5Fg3LLkgzyJY+nIBJEO9iI2t9eGc=";
 
   meta = with lib; {
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";

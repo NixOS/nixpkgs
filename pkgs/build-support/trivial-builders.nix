@@ -438,6 +438,35 @@ rec {
       done < graph
     '';
 
+  /*
+    Write the set of references to a file, that is, their immediate dependencies.
+
+    This produces the equivalent of `nix-store -q --references`.
+   */
+  writeDirectReferencesToFile = path: runCommand "runtime-references"
+    {
+      exportReferencesGraph = ["graph" path];
+      inherit path;
+    }
+    ''
+      touch ./references
+      while read p; do
+        read dummy
+        read nrRefs
+        if [[ $p == $path ]]; then
+          for ((i = 0; i < nrRefs; i++)); do
+            read ref;
+            echo $ref >>./references
+          done
+        else
+          for ((i = 0; i < nrRefs; i++)); do
+            read ref;
+          done
+        fi
+      done < graph
+      sort ./references >$out
+    '';
+
 
   /* Print an error message if the file with the specified name and
    * hash doesn't exist in the Nix store. This function should only
@@ -541,4 +570,37 @@ rec {
       phases = "unpackPhase patchPhase installPhase";
       installPhase = "cp -R ./ $out";
     };
+
+  /* Checks the command output contains the specified version
+   *
+   * Although simplistic, this test assures that the main program
+   * can run. While there's no substitute for a real test case,
+   * it does catch dynamic linking errors and such. It also provides
+   * some protection against accidentally building the wrong version,
+   * for example when using an 'old' hash in a fixed-output derivation.
+   *
+   * Examples:
+   *
+   * passthru.tests.version = testVersion { package = hello; };
+   *
+   * passthru.tests.version = testVersion {
+   *   package = seaweedfs;
+   *   command = "weed version";
+   * };
+   *
+   * passthru.tests.version = testVersion {
+   *   package = key;
+   *   command = "KeY --help";
+   *   # Wrong '2.5' version in the code. Drop on next version.
+   *   version = "2.5";
+   * };
+   */
+  testVersion =
+    { package,
+      command ? "${package.meta.mainProgram or package.pname or package.name} --version",
+      version ? package.version,
+    }: runCommand "test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
+      ${command} | grep -Fw ${version}
+      touch $out
+    '';
 }

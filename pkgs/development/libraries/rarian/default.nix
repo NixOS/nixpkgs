@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkg-config, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, gnome3}:
+{lib, stdenv, fetchurl, pkg-config, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, gnome}:
 let
   pname = "rarian";
   version = "0.8.1";
@@ -14,12 +14,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libxslt ]
     ++ (with perlPackages; [ perl XMLParser ]);
   configureFlags = [ "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/docbook.cat" ];
-
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-    };
-  };
 
   meta = with lib; {
     description = "Documentation metadata library based on the proposed Freedesktop.org spec";

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitLab, meson, ninja, cmake
 , wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
-, gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
+, gtk3, webkitgtk, glib-networking, gnome, gspell, texlive
 , shared-mime-info, libhandy
 }:
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     appstream-glib wrapGAppsHook ];
 
   buildInputs = [ glib pythonEnv gobject-introspection gtk3
-    gnome3.adwaita-icon-theme webkitgtk gspell texlive
+    gnome.adwaita-icon-theme webkitgtk gspell texlive
     glib-networking libhandy ];
 
   postPatch = ''

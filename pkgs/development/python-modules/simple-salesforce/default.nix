@@ -1,10 +1,8 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, authlib
 , requests
-, pyopenssl
-, cryptography
-, idna
 , mock
 , isPy27
 , nose
@@ -24,21 +22,20 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    authlib
     requests
-    pyopenssl
-    cryptography
-    idna
   ];
 
   checkInputs = [
     nose
     pytz
     responses
-  ] ++ lib.optionals isPy27 [ mock ];
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "mock==1.0.1" "mock"
+  checkPhase = ''
+    runHook preCheck
+    nosetests -v
+    runHook postCheck
   '';
 
   meta = with lib; {

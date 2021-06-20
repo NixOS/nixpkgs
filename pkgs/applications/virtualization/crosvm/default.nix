@@ -53,7 +53,7 @@ in
       ./default-seccomp-policy-dir.diff
     ];
 
-    cargoSha256 = "0lhivwvdihslwp81i3sa5q88p5hr83bzkvklrcgf6x73arwk8kdz";
+    cargoSha256 = "0aax0slg59afbyn3ygswwap2anv11k6sr9hfpysb4f8rvymvx7hd";
 
     nativeBuildInputs = [ pkg-config ];
 

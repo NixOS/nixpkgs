@@ -2,7 +2,6 @@
 , aiohttp
 , async_generator
 , buildPythonPackage
-, doCheck ? true
 , fetchFromGitHub
 , httpx
 , pytest
@@ -13,16 +12,18 @@
 
 buildPythonPackage rec {
   pname = "pytest-sanic";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "yunstanford";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zpgnw1lqbll59chv4hgcn31mdql1nv4gw9crbihky3ly3d3ncqi";
+    sha256 = "sha256-OtyulpSHUWERtcIRT5j3YtHciIxFiIFYKqtlEd1NSFw=";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -37,7 +38,26 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  inherit doCheck;
+  postPatch = ''
+    # https://github.com/yunstanford/pytest-sanic/issues/55
+    substituteInPlace setup.py \
+      --replace "websockets>=8.1,<9.0" "websockets>=9.1,<10.0"
+  '';
+
+  disabledTests = [
+    # https://github.com/yunstanford/pytest-sanic/issues/51
+    "test_fixture_sanic_client_get"
+    "test_fixture_sanic_client_post"
+    "test_fixture_sanic_client_put"
+    "test_fixture_sanic_client_delete"
+    "test_fixture_sanic_client_patch"
+    "test_fixture_sanic_client_options"
+    "test_fixture_sanic_client_head"
+    "test_fixture_sanic_client_close"
+    "test_fixture_sanic_client_passing_headers"
+    "test_fixture_sanic_client_context_manager"
+    "test_fixture_test_client_context_manager"
+  ];
 
   pythonImportsCheck = [ "pytest_sanic" ];
 

@@ -7,6 +7,7 @@
 , click
 , enum-compat
 , hypothesis
+, inquirer
 , jmespath
 , mock
 , mypy-extensions
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     botocore
     click
     enum-compat
+    inquirer
     jmespath
     mypy-extensions
     pip

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib, stdenv, llvm_meta
+, pkgsBuildBuild
 , fetch
 , fetchpatch
 , cmake
@@ -11,10 +12,10 @@
 , version
 , release_version
 , zlib
-, buildPackages
+, buildLlvmTools
 , debugVersion ? false
 , enableManpages ? false
-, enableSharedLibraries ? true
+, enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 , enablePFM ? !(stdenv.isDarwin
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
   || stdenv.isAarch32 # broken for the armv7l builder
@@ -46,8 +47,7 @@ in stdenv.mkDerivation ({
     mv polly-* $sourceRoot/tools/polly
   '';
 
-  outputs = [ "out" "python" ]
-    ++ optional enableSharedLibraries "lib";
+  outputs = [ "out" "lib" "dev" "python" ];
 
   nativeBuildInputs = [ cmake python3 ]
     ++ optional enableManpages python3.pkgs.sphinx;
@@ -67,12 +67,13 @@ in stdenv.mkDerivation ({
       url = "https://github.com/llvm-mirror/llvm/commit/cc1f2a595ead516812a6c50398f0f3480ebe031f.patch";
       sha256 = "0k6k1p5yisgwx417a67s7sr9930rqh1n0zv5jvply8vjjy4b3kf8";
     })
-  ];
+    ./gnu-install-dirs.patch
+  ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
-      --replace 'set(_install_rpath "@loader_path/../lib" ''${extra_libdir})' ""
+      --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}" ''${extra_libdir})' ""
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
   + optionalString (enableSharedLibraries) ''
@@ -110,6 +111,7 @@ in stdenv.mkDerivation ({
   '';
 
   cmakeFlags = with stdenv; [
+    "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=ON"
@@ -134,7 +136,20 @@ in stdenv.mkDerivation ({
     "-DCAN_TARGET_i386=false"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildPackages.llvm_7}/bin/llvm-tblgen"
+    "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+    (
+      let
+        nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;
+        nativeBintools = nativeCC.bintools.bintools;
+        nativeToolchainFlags = [
+          "-DCMAKE_C_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}cc"
+          "-DCMAKE_CXX_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}c++"
+          "-DCMAKE_AR=${nativeBintools}/bin/${nativeBintools.targetPrefix}ar"
+          "-DCMAKE_STRIP=${nativeBintools}/bin/${nativeBintools.targetPrefix}strip"
+          "-DCMAKE_RANLIB=${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib"
+        ];
+      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${lib.concatStringsSep ";" nativeToolchainFlags}"
+    )
   ];
 
   postBuild = ''
@@ -148,19 +163,20 @@ in stdenv.mkDerivation ({
   postInstall = ''
     mkdir -p $python/share
     mv $out/share/opt-viewer $python/share/opt-viewer
-  ''
-  + optionalString enableSharedLibraries ''
-    moveToOutput "lib/libLLVM-*" "$lib"
-    moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
-    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
+    moveToOutput "bin/llvm-config*" "$dev"
+    substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
+      --replace "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
+      --replace "$out/bin/llvm-config" "$dev/bin/llvm-config"
+    substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
+      --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
   ''
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
     ${lib.concatMapStringsSep "\n" (v: ''
       ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
     '') versionSuffixes}
+  ''
+  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 
   doCheck = stdenv.isLinux && (!stdenv.isx86_32);
@@ -168,12 +184,23 @@ in stdenv.mkDerivation ({
   checkTarget = "check-all";
 
   requiredSystemFeatures = [ "big-parallel" ];
-  meta = {
-    description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = "https://llvm.org/";
-    license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = lib.platforms.all;
+  meta = llvm_meta // {
+    homepage = "https://llvm.org/";
+    description = "A collection of modular and reusable compiler and toolchain technologies";
+    longDescription = ''
+      The LLVM Project is a collection of modular and reusable compiler and
+      toolchain technologies. Despite its name, LLVM has little to do with
+      traditional virtual machines. The name "LLVM" itself is not an acronym; it
+      is the full name of the project.
+      LLVM began as a research project at the University of Illinois, with the
+      goal of providing a modern, SSA-based compilation strategy capable of
+      supporting both static and dynamic compilation of arbitrary programming
+      languages. Since then, LLVM has grown to be an umbrella project consisting
+      of a number of subprojects, many of which are being used in production by
+      a wide variety of commercial and open source projects as well as being
+      widely used in academic research. Code in the LLVM project is licensed
+      under the "Apache 2.0 License with LLVM exceptions".
+    '';
   };
 } // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
@@ -195,5 +222,7 @@ in stdenv.mkDerivation ({
 
   doCheck = false;
 
-  meta.description = "man pages for LLVM ${version}";
+  meta = llvm_meta // {
+    description = "man pages for LLVM ${version}";
+  };
 })

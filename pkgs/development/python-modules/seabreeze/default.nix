@@ -1,8 +1,17 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
-, pyusb
+, cython
+, git
+, pkgconfig
+, pytest-runner
+, setuptools-scm
+, future
 , numpy
+, pyusb
+, mock
+, pytestCheckHook
+, zipp
 }:
 
 ## Usage
@@ -18,19 +27,35 @@ buildPythonPackage rec {
     owner = "ap--";
     repo = "python-seabreeze";
     rev = "v${version}";
-    sha256 = "1lna3w1vsci35dhyi7qjvbb99gxvzk23k195c7by7kkrps844q1j";
+    sha256 = "1hm9aalpb9sdp8s7ckn75xvyiacp5678pv9maybm5nz0z2h29ibq";
+    leaveDotGit = true;
   };
+
+  nativeBuildInputs = [
+    cython
+    git
+    pkgconfig
+    pytest-runner
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    future
+    numpy
+    pyusb
+  ];
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
-    cp misc/10-oceanoptics.rules $out/etc/udev/rules.d/10-oceanoptics.rules
+    cp os_support/10-oceanoptics.rules $out/etc/udev/rules.d/10-oceanoptics.rules
   '';
 
-  # underlying c libraries are tested and fail
-  # (c libs are used with anaconda, which we don't care about as we use the alternative path, being that of pyusb).
-  doCheck = false;
-
-  propagatedBuildInputs = [ pyusb numpy ];
+  # few backends enabled, but still some tests
+  checkInputs = [
+    pytestCheckHook
+    mock
+    zipp
+  ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 

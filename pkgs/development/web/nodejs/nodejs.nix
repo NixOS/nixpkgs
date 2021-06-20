@@ -142,6 +142,7 @@ in
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
+      mainProgram = "node";
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version

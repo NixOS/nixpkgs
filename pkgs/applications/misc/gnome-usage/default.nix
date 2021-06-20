@@ -12,7 +12,7 @@
 , gtk3
 , libgtop
 , libdazzle
-, gnome3
+, gnome
 , tracker
 , libhandy
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gtk3
     libdazzle
     libgtop
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

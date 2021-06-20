@@ -2,7 +2,7 @@
 , libxml2, gnutls, sane-backends }:
 stdenv.mkDerivation rec {
   pname = "sane-airscan";
-  version = "0.99.24";
+  version = "0.99.26";
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ avahi gnutls libjpeg libpng libxml2 sane-backends ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "alexpevzner";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2zSLC9P7Q/GMefHvmrUz6nV2hgScb4BhPAkahNBouqk=";
+    sha256 = "08snfg5zx9924ryww0kxf1kgl085yw7fg6l4f1kzlhcmqf1958w5";
   };
 
   meta = with lib; {

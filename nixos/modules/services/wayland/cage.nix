@@ -93,6 +93,6 @@ in {
     systemd.defaultUnit = "graphical.target";
   };
 
-  meta.maintainers = with lib.maintainers; [ matthewbauer flokli ];
+  meta.maintainers = with lib.maintainers; [ matthewbauer ];
 
 }

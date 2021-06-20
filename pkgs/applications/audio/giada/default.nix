@@ -7,7 +7,7 @@
 , libsamplerate
 , libsndfile
 , jack2
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , libXpm
 , libXinerama
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     rtmidi
     libXpm
     jack2
-    alsaLib
+    alsa-lib
     libpulseaudio
     libXinerama
     libXcursor

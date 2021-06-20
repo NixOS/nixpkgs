@@ -88,15 +88,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     with subtest("no authentication required"):
         pomerium.succeed(
-            "curl --resolve my.website:80:127.0.0.1 http://my.website | grep -q 'hello world'"
+            "curl --resolve my.website:80:127.0.0.1 http://my.website | grep 'hello world'"
         )
 
     with subtest("login required"):
         pomerium.succeed(
-            "curl -I --resolve login.required:80:127.0.0.1 http://login.required | grep -q pom-auth"
+            "curl -I --resolve login.required:80:127.0.0.1 http://login.required | grep pom-auth"
         )
         pomerium.succeed(
-            "curl -L --resolve login.required:80:127.0.0.1 http://login.required | grep -q 'hello I am login page'"
+            "curl -L --resolve login.required:80:127.0.0.1 http://login.required | grep 'hello I am login page'"
         )
   '';
 })

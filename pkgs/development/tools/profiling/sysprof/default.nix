@@ -5,6 +5,7 @@
 , gettext
 , glib
 , gtk3
+, json-glib
 , itstool
 , libdazzle
 , libxml2
@@ -15,18 +16,18 @@
 , shared-mime-info
 , systemd
 , wrapGAppsHook
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.38.1";
+  version = "3.40.1";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1z2i9187f2jx456l7h07wy8m9a0p7pj3xiv1aji3snq7rjb1lkj0";
+    sha256 = "0dvlzjwi3a4g37cpyhqpf41f5hypf0gim1jw9wqlv30flbb00l62";
   };
 
   nativeBuildInputs = [
@@ -39,17 +40,27 @@ stdenv.mkDerivation rec {
     pkg-config
     shared-mime-info
     wrapGAppsHook
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
-  buildInputs = [ glib gtk3 pango polkit systemd.dev (lib.getLib systemd) libdazzle ];
+
+  buildInputs = [
+    glib
+    gtk3
+    json-glib
+    pango
+    polkit
+    systemd
+    libdazzle
+  ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -65,6 +76,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
   ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace src/procattr.c \
+      --replace "#include <unistd.h>" ""
+  '';
+
   preInstall = optionalString enablePython ''
     mkdir -p $py/${python3.sitePackages}/selinux
   '';

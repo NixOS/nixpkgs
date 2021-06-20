@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, pytest }:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, pytest }:
 
 buildPythonPackage rec {
   pname = "setuptools-scm-git-archive";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "6026f61089b73fa1b5ee737e95314f41cb512609b393530385ed281d0b46c062";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [ pytest ];
 

@@ -859,7 +859,7 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
-    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+    } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enables support for the Allwinner Display Engine 2.0
       SUN8I_DE2_CCU = whenAtLeast "4.13" yes;
 
@@ -871,6 +871,14 @@ let
       # The kernel command line will override a platform-specific configuration from its device tree.
       # https://github.com/torvalds/linux/blob/856deb866d16e29bd65952e0289066f6078af773/kernel/dma/contiguous.c#L35-L44
       CMA_SIZE_MBYTES = freeform "32";
+
+      # Many ARM SBCs hand off a pre-configured framebuffer.
+      # This always can can be replaced by the actual native driver.
+      # Keeping it a built-in ensures it will be used if possible.
+      FB_SIMPLE = yes;
+
+    } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux") {
+      ARM_LPAE = yes;
     };
   };
 in

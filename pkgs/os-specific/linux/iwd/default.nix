@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.12";
+  version = "1.14";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-o3Vc5p/AFZwbkEWJZzO6wWAJ/BmSh0eKxdnjm5B9BFU=";
+    sha256 = "sha256-uGe4TO1/bs8k2z3wOJqaZgT6u6yX/7wx4HMSS2hN4XE=";
   };
 
   outputs = [ "out" "man" ]
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
   ];
 
   postUnpack = ''
+    mkdir -p iwd/ell
+    ln -s ${ell.src}/ell/useful.h iwd/ell/useful.h
     patchShebangs .
   '';
 

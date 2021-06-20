@@ -26,18 +26,18 @@
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-A3vo6678XFUV2RN1lcGYbIjCbBjR1oeORcidKZVnImg=";
+    sha256 = "sha256-u19WJupSqIzA8W0QG9mue8Ticy+HxBAniuKIUFl7ONs=";
   };
 
   jmpDist = fetchzip {
-    url = "https://github.com/iwalton3/jellyfin-web-jmp/releases/download/jwc-10.7.2-3/dist.zip";
-    sha256 = "sha256-Rb0q3NFmnYkueq0JkIWkX0C/oL+gFrNOELCNfh9X/P4=";
+    url = "https://github.com/iwalton3/jellyfin-web-jmp/releases/download/jwc-10.7.3/dist.zip";
+    sha256 = "sha256-P7WEYbVvpaVLwMgqC2e8QtMOaJclg0bX78J1fdGzcCU=";
   };
 
   patches = [
@@ -106,5 +106,6 @@ mkDerivation rec {
     license = with licenses; [ gpl2Only mit ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ jojosch ];
+    mainProgram = "jellyfinmediaplayer";
   };
 }

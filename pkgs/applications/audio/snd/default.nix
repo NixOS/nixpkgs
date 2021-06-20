@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config
-, alsaLib, fftw, gsl, motif, xorg
+, alsa-lib, fftw, gsl, motif, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ alsaLib fftw gsl motif ]
+  buildInputs = [ alsa-lib fftw gsl motif ]
     ++ (with xorg; [ libXext libXft libXpm libXt ]);
 
   configureFlags = [ "--with-motif" ];

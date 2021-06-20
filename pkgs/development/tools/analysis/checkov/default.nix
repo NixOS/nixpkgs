@@ -28,7 +28,7 @@ in
 python3.pkgs.buildPythonPackage rec {
   inherit pname version disabled src;
 
-  nativeBuildInputs = with python3.pkgs; [ setuptools_scm ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3.pkgs; [
     pytest

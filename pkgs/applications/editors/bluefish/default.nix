@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, intltool, wrapGAppsHook, pkg-config , gtk, libxml2
-, enchant, gucharmap, python3, gnome3
+, enchant, gucharmap, python3, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ intltool pkg-config wrapGAppsHook ];
-  buildInputs = [ gnome3.adwaita-icon-theme gtk libxml2
+  buildInputs = [ gnome.adwaita-icon-theme gtk libxml2
     enchant gucharmap python3 ];
 
   meta = with lib; {

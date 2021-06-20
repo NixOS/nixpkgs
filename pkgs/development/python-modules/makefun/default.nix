@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-2qNQpILtWLVyREPGUUMhkem5ewyDdDh50JExccaigIU=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   # Disabling tests for now due to various (transitive) dependencies on modules
   # from @smarie which are, as of yet, not part of nixpkgs. Also introduces

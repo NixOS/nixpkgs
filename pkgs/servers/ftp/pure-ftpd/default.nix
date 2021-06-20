@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A free, secure, production-quality and standard-conformant FTP server";
     homepage = "https://www.pureftpd.org";
     license = licenses.isc; # with some parts covered by BSD3(?)
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

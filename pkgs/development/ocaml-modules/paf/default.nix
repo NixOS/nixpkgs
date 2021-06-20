@@ -5,6 +5,7 @@
 , mirage-stack
 , mirage-time
 , httpaf
+, h2
 , tls-mirage
 , mimic
 , cohttp-lwt
@@ -31,11 +32,11 @@
 
 buildDunePackage rec {
   pname = "paf";
-  version = "0.0.1";
+  version = "0.0.3";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/paf-le-chien/releases/download/${version}/paf-${version}.tbz";
-    sha256 = "7a794c21ce458bda302553b0f5ac128c067579fbb3b7b8fba9b410446c43e790";
+    sha256 = "a0bbb84b19e1f0255337fc4d7017f3ea3611b241746e391b11c1d8b1f5f30a2b";
   };
 
   useDune2 = true;
@@ -45,6 +46,7 @@ buildDunePackage rec {
     mirage-stack
     mirage-time
     httpaf
+    h2
     tls-mirage
     mimic
     cohttp-lwt

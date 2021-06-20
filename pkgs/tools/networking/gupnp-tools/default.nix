@@ -10,7 +10,7 @@
 , gettext
 , gupnp-av
 , gtksourceview4
-, gnome3
+, gnome
 , wrapGAppsHook
 }:
 
@@ -38,12 +38,13 @@ stdenv.mkDerivation rec {
     gtk3
     gupnp-av
     gtksourceview4
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

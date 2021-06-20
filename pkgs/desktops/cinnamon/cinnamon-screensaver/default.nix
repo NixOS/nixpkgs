@@ -12,7 +12,7 @@
 , libxslt
 , gtk3
 , libgnomekbd
-, gnome3
+, gnome
 , libtool
 , wrapGAppsHook
 , gobject-introspection
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     cinnamon-desktop
     cinnamon-common
     libgnomekbd
-    gnome3.caribou
+    gnome.caribou
 
     # things
     iso-flags-png-320x420

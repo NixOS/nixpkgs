@@ -35,6 +35,7 @@ let
     "tree-sitter-jsdoc"
     "tree-sitter-ql"
     "tree-sitter-embedded-template"
+    "tree-sitter-tsq"
   ];
   knownTreeSitterOrgGrammarReposJson = jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos;
 
@@ -60,6 +61,8 @@ let
     "tree-sitter.github.io"
     # not maintained
     "tree-sitter-razor"
+    # rust library for constructing arbitrary graph structures from source code
+    "tree-sitter-graph"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -90,6 +93,14 @@ let
     "tree-sitter-yaml" = {
       orga = "ikatyang";
       repo = "tree-sitter-yaml";
+    };
+    "tree-sitter-toml" = {
+      orga = "ikatyang";
+      repo = "tree-sitter-toml";
+    };
+    "tree-sitter-zig" = {
+      orga = "GrayJack";
+      repo = "tree-sitter-zig";
     };
   };
 

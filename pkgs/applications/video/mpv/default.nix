@@ -30,7 +30,7 @@
   , libdrm ? null
   , mesa   ? null
 
-, alsaSupport        ? stdenv.isLinux, alsaLib       ? null
+, alsaSupport        ? stdenv.isLinux, alsa-lib       ? null
 , archiveSupport     ? true,           libarchive    ? null
 , bluraySupport      ? true,           libbluray     ? null
 , bs2bSupport        ? true,           libbs2b       ? null
@@ -61,7 +61,7 @@ with lib;
 let
   available = x: x != null;
 in
-assert alsaSupport        -> available alsaLib;
+assert alsaSupport        -> available alsa-lib;
 assert archiveSupport     -> available libarchive;
 assert bluraySupport      -> available libbluray;
 assert bs2bSupport        -> available libbs2b;
@@ -159,7 +159,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     ffmpeg freetype libass libpthreadstubs
     luaEnv libuchardet mujs
-  ] ++ optional alsaSupport        alsaLib
+  ] ++ optional alsaSupport        alsa-lib
     ++ optional archiveSupport     libarchive
     ++ optional bluraySupport      libbluray
     ++ optional bs2bSupport        libbs2b

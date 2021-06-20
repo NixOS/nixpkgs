@@ -6,7 +6,7 @@
 
 - Do not use tab characters, i.e. configure your editor to use soft tabs. For instance, use `(setq-default indent-tabs-mode nil)` in Emacs. Everybody has different tab settings so it’s asking for trouble.
 
-- Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in <xref linkend="sec-package-naming"/>.
+- Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in [](#sec-package-naming).
 
 - Function calls with attribute set arguments are written as
 
@@ -169,9 +169,19 @@
   })
   ```
 
-- Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
+- Unnecessary string conversions should be avoided. Do
 
-- Prefer using the top-level `lib` over its alias `stdenv.lib`. `lib` is unrelated to `stdenv`, and so `stdenv.lib` should only be used as a convenience alias when developing to avoid having to modify the function inputs just to test something out.
+  ```nix
+  rev = version;
+  ```
+
+  instead of
+
+  ```nix
+  rev = "${version}";
+  ```
+
+- Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
 ## Package naming {#sec-package-naming}
 
@@ -199,7 +209,7 @@ There are a few naming guidelines:
 
 - Dashes in the package name _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c-0-9` and `json-c-0-11`. If there is an obvious “default” version, make an attribute like `json-c = json-c-0-9;`. See also <xref linkend="sec-versioning" />
+- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c-0-9` and `json-c-0-11`. If there is an obvious “default” version, make an attribute like `json-c = json-c-0-9;`. See also [](#sec-versioning)
 
 ## File naming and organisation {#sec-organisation}
 
@@ -452,9 +462,9 @@ Preferred source hash type is sha256. There are several ways to get it.
 
     For package updates it is enough to change one symbol to make hash fake. For new packages, you can use `lib.fakeSha256`, `lib.fakeSha512` or any other fake hash.
 
-    This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn't applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73")). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
+    This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
 
-::: warning
+::: {.warning}
 This method has security problems. Check below for details.
 :::
 
@@ -512,3 +522,83 @@ If you do need to do create this sort of patch file, one way to do so is with gi
     ```ShellSession
     $ git diff > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
+
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`:
+
+- `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
+- `extraPrefix`: Prefix pathnames by this string.
+- `excludes`: Exclude files matching this pattern.
+- `includes`: Include only files matching this pattern.
+- `revert`: Revert the patch.
+
+Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
+
+## Package tests {#sec-package-tests}
+
+Tests are important to ensure quality and make reviews and automatic updates easy.
+
+Nix package tests are a lightweight alternative to [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests). They can be used to create simple integration tests for packages while the module tests are used to test services or programs with a graphical user interface on a NixOS VM. Unittests that are included in the source code of a package should be executed in the `checkPhase`.
+
+### Writing package tests {#ssec-package-tests-writing}
+
+This is an example using the `phoronix-test-suite` package with the current best practices.
+
+Add the tests in `passthru.tests` to the package definition like this:
+
+```nix
+{ stdenv, lib, fetchurl, callPackage }:
+
+stdenv.mkDerivation {
+  …
+
+  passthru.tests = {
+    simple-execution = callPackage ./tests.nix { };
+  };
+
+  meta = { … };
+}
+```
+
+Create `tests.nix` in the package directory:
+
+```nix
+{ runCommand, phoronix-test-suite }:
+
+let
+  inherit (phoronix-test-suite) pname version;
+in
+
+runCommand "${pname}-tests" { meta.timeout = 3; }
+  ''
+    # automatic initial setup to prevent interactive questions
+    ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
+    # get version of installed program and compare with package version
+    if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
+      echo "Error: program version does not match package version"
+      exit 1
+    fi
+    # run dummy command
+    ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
+    # needed for Nix to register the command as successful
+    touch $out
+  ''
+```
+
+### Running package tests {#ssec-package-tests-running}
+
+You can run these tests with:
+
+```ShellSession
+$ cd path/to/nixpkgs
+$ nix-build -A phoronix-test-suite.tests
+```
+
+### Examples of package tests {#ssec-package-tests-examples}
+
+Here are examples of package tests:
+
+- [Jasmin compile test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/jasmin/test-assemble-hello-world/default.nix)
+- [Lobster compile test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/lobster/test-can-run-hello-world.nix)
+- [Spacy annotation test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/spacy/annotation-test/default.nix)
+- [Libtorch test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/science/math/libtorch/test/default.nix)
+- [Multiple tests for nanopb](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/nanopb/default.nix)

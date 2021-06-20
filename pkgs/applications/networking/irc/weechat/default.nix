@@ -30,6 +30,8 @@ let
       version = "3.1";
       pname = "weechat";
 
+      hardeningEnable = [ "pie" ];
+
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
         sha256 = "06w147wzrzp6xbqiz6s5nq5xdjy7jn3f18xajxy50pynjd6vmfh5";
@@ -66,6 +68,11 @@ let
           mkdir -p $(dirname $to)
           mv $from $to
         done
+      '';
+
+      doInstallCheck = true;
+      installCheckPhase = ''
+        $out/bin/weechat --version
       '';
 
       meta = {

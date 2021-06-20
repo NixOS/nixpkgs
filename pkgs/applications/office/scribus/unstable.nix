@@ -2,7 +2,6 @@
 , cairo
 , cmake
 , cups
-, fetchpatch
 , fetchurl
 , fontconfig
 , freetype
@@ -36,19 +35,12 @@ in
 mkDerivation rec {
   pname = "scribus";
 
-  version = "1.5.6.1";
+  version = "1.5.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1CV2lVOc+kDerYq9rwTFHjTU10vK1aLJNNCObp1Dt6s=";
+    sha256 = "sha256-MYMWss/Hp2GR0+DT+MImUUfa6gVwFiAo4kPCktgm+M4=";
   };
-
-  patches = [
-    (fetchpatch {  # fix build with podofo 0.9.7
-      url = "https://github.com/scribusproject/scribus/commit/c6182ef92820b422d61c904e40e9fed865458eb5.patch";
-      sha256 = "0vp275xfbd4xnj5s55cgzsihgihby5mmjlbmrc7sa6jbrsm8aa2c";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

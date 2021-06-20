@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -71,7 +72,12 @@ buildPythonPackage rec {
     "test_list_formats"
     "test_base_url"
     "test_culling"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # attempts to use trashcan, build env doesn't allow this
+    "test_delete"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications.";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, makeWrapper
-, SDL2, alsaLib, libjack2, lhasa, perl, rtmidi, zlib, zziplib }:
+, SDL2, alsa-lib, libjack2, lhasa, perl, rtmidi, zlib, zziplib }:
 
 stdenv.mkDerivation rec {
   version = "1.03.00";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
-  buildInputs = [ SDL2 alsaLib libjack2 lhasa perl rtmidi zlib zziplib ];
+  buildInputs = [ SDL2 alsa-lib libjack2 lhasa perl rtmidi zlib zziplib ];
 
   # Somehow this does not get set automatically
   cmakeFlags = [ "-DSDL2MAIN_LIBRARY=${SDL2}/lib/libSDL2.so" ];

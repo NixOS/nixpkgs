@@ -32,7 +32,7 @@
 , libXft
 , libXcomposite
 , libXScrnSaver
-, alsaLib
+, alsa-lib
 , pulseaudio
 , makeWrapper
 , xdg-utils
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
         libXft
         libXcomposite
         libXScrnSaver
-        alsaLib
+        alsa-lib
         pulseaudio
       ];
 

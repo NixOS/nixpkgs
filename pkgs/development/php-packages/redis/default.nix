@@ -14,5 +14,10 @@ buildPecl {
     hash
   ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "PHP extension for interfacing with Redis";
+    license = licenses.php301;
+    homepage = "https://github.com/phpredis/phpredis/";
+    maintainers = teams.php.members;
+  };
 }

@@ -29,6 +29,28 @@ in
           xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
         '';
       };
+
+      additionalSearchPaths = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.bindfs ]";
+        description = ''
+          Additional programs to include in the search path of pam_mount.
+          Useful for example if you want to use some FUSE filesystems like bindfs.
+        '';
+      };
+
+      fuseMountOptions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = literalExample ''
+          [ "nodev" "nosuid" "force-user=%(USER)" "gid=%(USERGID)" "perms=0700" "chmod-deny" "chown-deny" "chgrp-deny" ]
+        '';
+        description = ''
+          Global mount options that apply to every FUSE volume.
+          You can define volume-specific options in the volume definitions.
+        '';
+      };
     };
 
   };
@@ -60,11 +82,12 @@ in
           <!-- if activated, requires ofl from hxtools to be present -->
           <logout wait="0" hup="no" term="no" kill="no" />
           <!-- set PATH variable for pam_mount module -->
-          <path>${pkgs.util-linux}/bin</path>
+          <path>${makeBinPath ([ pkgs.util-linux ] ++ cfg.additionalSearchPaths)}</path>
           <!-- create mount point if not present -->
           <mkmountpoint enable="1" remove="true" />
 
           <!-- specify the binaries to be called -->
+          <fusemount>${pkgs.fuse}/bin/mount.fuse %(VOLUME) %(MNTPT) -o ${concatStringsSep "," (cfg.fuseMountOptions ++ [ "%(OPTIONS)" ])}</fusemount>
           <cryptmount>${pkgs.pam_mount}/bin/mount.crypt %(VOLUME) %(MNTPT)</cryptmount>
           <cryptumount>${pkgs.pam_mount}/bin/umount.crypt %(MNTPT)</cryptumount>
           <pmvarrun>${pkgs.pam_mount}/bin/pmvarrun -u %(USER) -o %(OPERATION)</pmvarrun>

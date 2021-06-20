@@ -115,7 +115,7 @@ let
 in
 pkgs.mkShell rec {
   name = "androidenv-demo";
-  buildInputs = [ androidSdk platformTools jdk pkgs.android-studio ];
+  packages = [ androidSdk platformTools jdk pkgs.android-studio ];
 
   LANG = "C.UTF-8";
   LC_ALL = "C.UTF-8";

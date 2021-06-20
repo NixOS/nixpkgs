@@ -182,7 +182,7 @@ in {
  <xi:include href="option-declarations.xml" />
  <xi:include href="option-types.xml" />
  <xi:include href="option-def.xml" />
- <xi:include href="assertions.xml" />
+ <xi:include href="../from_md/development/assertions.section.xml" />
  <xi:include href="meta-attributes.xml" />
  <xi:include href="importing-modules.xml" />
  <xi:include href="replace-modules.xml" />

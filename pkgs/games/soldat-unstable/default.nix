@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, fpc, zip, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fpc, zip, makeWrapper
 , SDL2, freetype, physfs, openal, gamenetworkingsockets
 , xorg, autoPatchelfHook
 }:
@@ -39,29 +39,20 @@ in
 
 stdenv.mkDerivation rec {
   pname = "soldat";
-  version = "unstable-2021-02-09";
+  version = "unstable-2021-04-27";
 
   src = fetchFromGitHub {
     name = "soldat";
     owner = "Soldat";
     repo = "soldat";
-    rev = "c304c3912ca7a88461970a859049d217a44c6375";
-    sha256 = "09sl2zybfcmnl2n3qghp0gylmr71y01534l6nq0y9llbdy0bf306";
+    rev = "4d17667c316ff08934e97448b7f290a8dc434e81";
+    sha256 = "1pf557psmhfaagblfwdn36cw80j7bgs0lgjq8hmjbv58dysw3jdb";
   };
 
   nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook ];
 
   buildInputs = [ SDL2 freetype physfs openal gamenetworkingsockets ];
   runtimeDependencies = [ xorg.libX11 ];
-
-  patches = [
-    # fix an argument parsing issue which prevents
-    # us from passing nix store paths to soldat
-    (fetchpatch {
-      url = "https://github.com/sternenseemann/soldat/commit/9f7687430f5fe142c563b877d2206f5c9bbd5ca0.patch";
-      sha256 = "0wsrazb36i7v4idg06jlzfhqwf56q9szzz7jp5cg4wsvcky3wajf";
-    })
-  ];
 
   buildPhase = ''
     runHook preBuild

@@ -62,7 +62,7 @@ in rec {
   ];
 
   mkYarnModules = {
-    name, # safe name and version, e.g. testcompany-one-modules-1.0.0
+    name ? "${pname}-${version}", # safe name and version, e.g. testcompany-one-modules-1.0.0
     pname, # original name, e.g @testcompany/one
     version,
     packageJSON,
@@ -228,6 +228,7 @@ in rec {
     yarnNix ? mkYarnNix { inherit yarnLock; },
     yarnFlags ? defaultYarnFlags,
     yarnPreBuild ? "",
+    yarnPostBuild ? "",
     pkgConfig ? {},
     extraBuildInputs ? [],
     publishBinsFor ? null,
@@ -249,6 +250,7 @@ in rec {
       deps = mkYarnModules {
         name = "${safeName}-modules-${version}";
         preBuild = yarnPreBuild;
+        postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
         inherit packageJSON pname version yarnLock yarnNix yarnFlags pkgConfig;
       };

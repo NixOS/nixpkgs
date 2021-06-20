@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
-  version = "1.2.2";
+  version = "1.4.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "hhOistr5lHF6rIuMpudKwSuBQhaQDzTdelAOCjyVQZk=";
+    sha256 = "o8GPtSQ119AKB64hAH8VY6iJmhXcSFqjOanmXQl0tHo=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ rich prompt_toolkit requests pygments ];
+  propagatedBuildInputs = with python3Packages; [ rich prompt_toolkit requests pygments pyyaml ];
 
   checkPhase = ''
     $out/bin/piston --help > /dev/null

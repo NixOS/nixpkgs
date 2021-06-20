@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";
-  version = "3.13.2";
+  version = "3.14.1";
 
   src = fetchzip {
     url = "https://github.com/theotherp/${pname}/releases/download/v${version}/${pname}-${version}-linux.zip";
-    sha512 = "2pi91y966qnq6q9qqnhglmbj4610jxyyqxiwa8zfmb8r48mzwzy3q5ga00h9qbhi6a8ghrfh1yvj4h9m17gk7l3rc5fw0r3mrk437nj";
+    sha512 = "2mfrqqwrfjvr48vm4r0spda3vlg1h511r6hrlv7k9233ps97bjjir6hms82lgqnlirsixayxs47cldjy8amdn3vc6kxsifmbd6a924p";
     stripRoot = false;
   };
 
   nativeBuildInputs = [ jre makeWrapper unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d -m 755 "$out/lib/${pname}"
     cp -dpr --no-preserve=ownership "lib" "readme.md" "$out/lib/nzbhydra2"
     install -D -m 755 "nzbhydra2wrapperPy3.py" "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py"
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${python3}/bin/python $out/bin/nzbhydra2 \
       --add-flags "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py" \
       --prefix PATH ":" ${jre}/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

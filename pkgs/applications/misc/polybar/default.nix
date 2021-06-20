@@ -19,7 +19,7 @@
 , xcbutilxrm
 , makeWrapper
 , removeReferencesTo
-, alsaLib
+, alsa-lib
 , curl
 , libmpdclient
 , libpulseaudio
@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation rec {
     pname = "polybar";
-    version = "3.5.5";
+    version = "3.5.6";
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       rev = version;
-      sha256 = "sha256-oRtTm5bXdL0C2WJsaK8H2Oc40DPWgAfjP7FgIHrpKGI=";
+      sha256 = "sha256-Uvj9V2M/uQxyziTx1hecrcaQZECijlpVmWcUeT+PqrI=";
       fetchSubmodules = true;
     };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       xcbutilwm
       xcbutilxrm
     ]
-    ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional githubSupport curl
     ++ lib.optional mpdSupport libmpdclient
     ++ lib.optional pulseSupport libpulseaudio

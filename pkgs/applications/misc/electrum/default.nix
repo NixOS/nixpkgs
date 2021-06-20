@@ -20,7 +20,7 @@
 }:
 
 let
-  version = "4.1.1";
+  version = "4.1.2";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -51,12 +51,17 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "0yg6ld92a4xgn7y8i51hmr3kmgmrbrjwniikkmyq9q141h2drb80";
+    sha256 = "05m6vbd4sfjk536kwa5wa3kv21jxxqnglx0ddvnmxfhf98371bhk";
   };
 
   postUnpack = ''
     # can't symlink, tests get confused
     cp -ar ${tests} $sourceRoot/electrum/tests
+  '';
+
+  prePatch = ''
+    substituteInPlace contrib/requirements/requirements.txt \
+      --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
   '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];

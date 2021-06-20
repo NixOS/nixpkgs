@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "hyperscan";
-  version = "5.3.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = pname;
-    sha256 = "0psfkzmyhqfrs750b10d0xv37rcz6nwsw1mnc7zagijckwis2wvj";
+    sha256 = "sha256-AJAjaXVnGqIlMk+gb6lpTLUdZr8nxn2XSW4fj6j/cmk=";
     rev = "v${version}";
   };
 

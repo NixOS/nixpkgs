@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Sphinx spelling extension";
     homepage = "https://bitbucket.org/dhellmann/sphinxcontrib-spelling";
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd2;
   };
 

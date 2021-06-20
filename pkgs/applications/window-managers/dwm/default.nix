@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       tags.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ viric neonfuz ];
     platforms = platforms.all;
   };
 }

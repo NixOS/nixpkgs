@@ -1,4 +1,4 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
+{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring,
   harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
@@ -21,14 +21,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.19.3";
+  version = "0.21.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0r49bybqy6c0n1lz6yc85py80wb40w757m60f5rszjf200wnyl6s";
+    sha256 = "sha256-n8ipIQAfKPVApJhuTrlSSsd6dlPeCUvk7rdiVmL9i+4=";
   };
 
   buildInputs = [
@@ -62,10 +62,6 @@ buildPythonApplication rec {
   propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
 
   outputs = [ "out" "terminfo" ];
-
-  patches = [
-    ./fix-paths.patch
-  ];
 
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
@@ -135,7 +131,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog.html";
     platforms = platforms.darwin ++ platforms.linux;
     maintainers = with maintainers; [ tex rvolosatovs Luflosi ];

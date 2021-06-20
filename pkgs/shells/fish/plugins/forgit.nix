@@ -4,7 +4,11 @@ buildFishPlugin rec {
   pname = "forgit";
   version = "unstable-2021-04-09";
 
-  buildInputs = [ git fzf ];
+  preFixup = ''
+    substituteInPlace $out/share/fish/vendor_conf.d/forgit.plugin.fish \
+      --replace "fzf " "${fzf}/bin/fzf " \
+      --replace "git " "${git}/bin/git "
+  '';
 
   src = fetchFromGitHub {
     owner = "wfxr";

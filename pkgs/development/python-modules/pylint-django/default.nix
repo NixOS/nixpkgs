@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.4.2";
+  version = "2.4.3";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0535y4sdi521a9s7di8ld0i8aav0afbxmx0956v6sjpyqmqdm6hr";
+    sha256 = "1mybq9jynypxbaxj921s3sx8dph8n3hmipmv4nla1g9h07g9g02z";
   };
 
   propagatedBuildInputs = [
@@ -42,9 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Pylint plugin to analyze Django applications";
     homepage = "https://github.com/PyCQA/pylint-django";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

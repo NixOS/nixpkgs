@@ -34,7 +34,6 @@ in buildEnv {
   '';
 
   meta = with lib; {
-    broken = true;
     homepage = "https://frogatto.com";
     description = description;
     license = with licenses; [ cc-by-30 unfree ];

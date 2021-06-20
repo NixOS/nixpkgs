@@ -15,6 +15,7 @@
 , libheif
 , librsvg
 , ApplicationServices
+, Foundation
 , python27
 , libpng
 , fetchFromGitHub
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     python27
     libpng
     expat
-  ] ++ lib.optional stdenv.isDarwin ApplicationServices;
+  ] ++ lib.optionals stdenv.isDarwin [ApplicationServices Foundation];
 
   # Required by .pc file
   propagatedBuildInputs = [

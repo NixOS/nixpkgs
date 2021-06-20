@@ -4,7 +4,7 @@
 , numpy
 , pandas
 , pybind11
-, setuptools_scm
+, setuptools-scm
 , pytestrunner
 , pytestCheckHook
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pybind11
-    setuptools_scm
+    setuptools-scm
     pytestrunner
   ];
 

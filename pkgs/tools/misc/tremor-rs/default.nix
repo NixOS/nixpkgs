@@ -1,22 +1,23 @@
 { lib, rustPlatform, pkg-config, cmake, llvmPackages, openssl, fetchFromGitHub
-, installShellFiles }:
+, installShellFiles, stdenv, Security, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tremor";
-  version = "0.11.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "tremor-rs";
     repo = "tremor-runtime";
     rev = "v${version}";
-    sha256 = "19g0ijkclrza6s0qcbwwh3lhlkisy00ffcl0c0d7dfqwrcisgz57";
+    sha256 = "sha256-FedRwFVc+m25+Elj1Vp/fInbK6DVsUpniw29/dtecWo=";
   };
 
-  cargoSha256 = "1xv205czb2z6qpqi6vslyrx2n21510qqa11i2hwya3jdcc9lkrsd";
+  cargoSha256 = "sha256-jxXoFOwoBSkn7pv10ctLpD7ko8bokc1ADkB7NQFRC7c=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
 
   # TODO export TREMOR_PATH($out/lib) variable
   postInstall = ''
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/tremor completions zsh)
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     description = "Early stage event processing system for unstructured data with rich support for structural pattern matching, filtering and transformation";
     homepage = "https://www.tremor.rs/";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.x86_64;
     maintainers = with maintainers; [ humancalico ];
   };
 }
