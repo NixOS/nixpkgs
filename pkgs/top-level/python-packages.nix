@@ -4385,6 +4385,8 @@ in {
 
   milksnake = callPackage ../development/python-modules/milksnake { };
 
+  millheater = callPackage ../development/python-modules/millheater { };
+
   minidb = callPackage ../development/python-modules/minidb { };
 
   minidump = callPackage ../development/python-modules/minidump { };
@@ -5964,6 +5966,8 @@ in {
   pyinsteon = callPackage ../development/python-modules/pyinsteon { };
 
   pyintesishome = callPackage ../development/python-modules/pyintesishome { };
+
+  pyipma = callPackage ../development/python-modules/pyipma { };
 
   pyipp = callPackage ../development/python-modules/pyipp { };
 

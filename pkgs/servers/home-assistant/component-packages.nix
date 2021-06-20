@@ -405,7 +405,7 @@
     "ios" = ps: with ps; [ aiohttp-cors ifaddr zeroconf ];
     "iota" = ps: with ps; [ ]; # missing inputs: pyota
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
-    "ipma" = ps: with ps; [ ]; # missing inputs: pyipma
+    "ipma" = ps: with ps; [ pyipma ];
     "ipp" = ps: with ps; [ pyipp ];
     "iqvia" = ps: with ps; [ numpy pyiqvia ];
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
@@ -510,7 +510,7 @@
     "microsoft_face_identify" = ps: with ps; [ aiohttp-cors ];
     "miflora" = ps: with ps; [ bluepy ]; # missing inputs: miflora
     "mikrotik" = ps: with ps; [ librouteros ];
-    "mill" = ps: with ps; [ ]; # missing inputs: millheater
+    "mill" = ps: with ps; [ millheater ];
     "min_max" = ps: with ps; [ ];
     "minecraft_server" = ps: with ps; [ aiodns getmac mcstatus ];
     "minio" = ps: with ps; [ minio ];
