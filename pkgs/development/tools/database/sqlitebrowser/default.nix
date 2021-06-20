@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, antlr
+{ mkDerivation, lib, fetchFromGitHub, cmake
 , qtbase, qttools, sqlite }:
 
 mkDerivation rec {
@@ -16,7 +16,7 @@ mkDerivation rec {
   # but qscintilla is currently in a bit of a mess as some consumers expect a
   # -qt4 or -qt5 prefix while others do not.
   # We *really* should get that cleaned up.
-  buildInputs = [ antlr qtbase sqlite ];
+  buildInputs = [ qtbase sqlite ];
 
   nativeBuildInputs = [ cmake qttools ];
 

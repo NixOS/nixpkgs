@@ -12798,7 +12798,7 @@ in
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
-  antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
+  antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
     jdk = jdk8; # todo: remove override https://github.com/nixos/nixpkgs/pull/89731
   };
 
@@ -12815,6 +12815,8 @@ in
   };
 
   antlr4 = antlr4_8;
+
+  antlr = antlr4;
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
