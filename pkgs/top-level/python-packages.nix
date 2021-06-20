@@ -465,6 +465,8 @@ in {
     inherit (pkgs) antlr4;
   };
 
+  anyascii = callPackage ../development/python-modules/anyascii { };
+
   anyio = callPackage ../development/python-modules/anyio { };
 
   anyjson = callPackage ../development/python-modules/anyjson { };
@@ -8789,6 +8791,8 @@ in {
   };
 
   unidecode = callPackage ../development/python-modules/unidecode { };
+
+  unidic-lite = callPackage ../development/python-modules/unidic-lite { };
 
   unidiff = callPackage ../development/python-modules/unidiff { };
 

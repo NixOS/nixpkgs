@@ -12,20 +12,20 @@
 #
 # If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
 # Also note that your tts version might not support all available models so check:
-#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.14
+#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.15.1
 #
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
 python3Packages.buildPythonApplication rec {
   pname = "tts";
-  version = "0.0.14";
+  version = "0.0.15.1";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "0cl0ri90mx0y19fmqww73lp5nv6qkpc45rm4157i7p6q6llajdhp";
+    sha256 = "0z6sbzspgmw5ja8r2zysyhdk4jzlv88a0ihkvxvvwxslkyncdb89";
   };
 
   postPatch = ''
@@ -41,6 +41,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    anyascii
     coqpit
     flask
     gdown
@@ -48,6 +49,7 @@ python3Packages.buildPythonApplication rec {
     jieba
     librosa
     matplotlib
+    mecab-python3
     numba
     pandas
     pypinyin
@@ -56,9 +58,10 @@ python3Packages.buildPythonApplication rec {
     scipy
     soundfile
     tensorboardx
+    tensorflow
     tqdm
     umap-learn
-    unidecode
+    unidic-lite
   ];
 
   postInstall = ''
@@ -100,16 +103,15 @@ python3Packages.buildPythonApplication rec {
 
   disabledTestPaths = [
     # requires tensorflow
-    "tests/test_tacotron2_tf_model.py"
     "tests/vocoder_tests/test_vocoder_tf_pqmf.py"
     "tests/vocoder_tests/test_vocoder_tf_melgan_generator.py"
+    "tests/tts_tests/test_tacotron2_tf_model.py"
     # RuntimeError: fft: ATen not compiled with MKL support
     "tests/vocoder_tests/test_fullband_melgan_train.py"
     "tests/vocoder_tests/test_hifigan_train.py"
     "tests/vocoder_tests/test_melgan_train.py"
     "tests/vocoder_tests/test_multiband_melgan_train.py"
     "tests/vocoder_tests/test_parallel_wavegan_train.py"
-
   ];
 
   meta = with lib; {
