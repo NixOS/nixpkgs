@@ -113,11 +113,11 @@
   <itemizedlist>
    <listitem>
     <para>
-     <link xlink:href="https://www.gnuradio.org/">GNURadio</link> 3.8 was
+     <link xlink:href="https://www.gnuradio.org/">GNURadio</link> 3.8 and 3.9 were
      <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finally</link>
      packaged, along with a rewrite to the Nix expressions, allowing users to
      override the features upstream supports selecting to compile or not to.
-     Additionally, the attribute <code>gnuradio</code> and <code>gnuradio3_7</code>
+     Additionally, the attribute <code>gnuradio</code> (3.9), <code>gnuradio3_8</code> and <code>gnuradio3_7</code>
      now point to an externally wrapped by default derivations, that allow you to
      also add `extraPythonPackages` to the Python interpreter used by GNURadio.
      Missing environmental variables needed for operational GUI were also added
