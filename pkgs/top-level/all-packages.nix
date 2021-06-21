@@ -3119,6 +3119,8 @@ in
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
+  pn = callPackage ../tools/text/pn { };
+
   poweralertd = callPackage ../tools/misc/poweralertd { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
