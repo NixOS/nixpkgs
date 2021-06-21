@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
+, setuptools-scm
 , pytestCheckHook
 , packaging
 , appdirs
@@ -17,6 +18,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "f827e79ab51b21a8964a4b1ea8972aa4a1079cb9c1ff8e9ec61893eb7dab50cb";
   };
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ packaging appdirs requests ];
 
