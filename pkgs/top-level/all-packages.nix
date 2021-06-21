@@ -1535,6 +1535,8 @@ in
 
   gitless = callPackage ../applications/version-management/gitless { python = python3; };
 
+  gitlint = python3Packages.callPackage ../tools/misc/gitlint { };
+
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
   gjs = callPackage ../development/libraries/gjs { };
