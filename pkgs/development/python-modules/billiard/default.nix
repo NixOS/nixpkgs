@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, pytestCheckHook, case, psutil, fetchpatch }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, pytestCheckHook
+, case
+, psutil
+}:
 
 buildPythonPackage rec {
   pname = "billiard";
