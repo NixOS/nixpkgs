@@ -1,9 +1,9 @@
 {lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11}:
 
 let
-  pybind = pybind11.overridePythonAttrs(oldAttrs: {
+  pybind = pybind11.overridePythonAttrs (oldAttrs: {
     cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DPYBIND11_TEST=off"
+      "-DBUILD_TESTING=off"
     ];
     doCheck = false; # Circular test dependency
   });
