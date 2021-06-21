@@ -27177,6 +27177,8 @@ in
 
   tudu = callPackage ../applications/office/tudu { };
 
+  tuna = python3Packages.callPackage ../os-specific/linux/tuna { };
+
   tunefish = callPackage ../applications/audio/tunefish {
     stdenv = clangStdenv; # https://github.com/jpcima/tunefish/issues/4
   };
