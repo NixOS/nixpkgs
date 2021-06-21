@@ -48,6 +48,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
+    make install
     # Symlink the CMake-installed headers to the location expected by setuptools
     mkdir -p $out/include/${python.libPrefix}
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
