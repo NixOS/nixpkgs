@@ -129,6 +129,9 @@ package-maintainers:
     - pretty-simple
     - spago
     - termonad
+  domenkozar:
+    - cachix
+    - cachix-api
   expipiplus1:
     - VulkanMemoryAllocator
     - autoapply
