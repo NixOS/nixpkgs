@@ -4,7 +4,9 @@
   qtwebengine,
   kcmutils, kcrash, kdbusaddons, kparts, kwindowsystem,
   akonadi, grantleetheme, kontactinterface, kpimtextedit,
-  mailcommon, libkdepim, pimcommon
+  mailcommon, libkdepim, pimcommon,
+  # some PIM applications embedded by Kontact need to call external executables
+  pimExternalApplications
 }:
 
 mkDerivation {
@@ -19,5 +21,12 @@ mkDerivation {
     kcmutils kcrash kdbusaddons kparts kwindowsystem
     akonadi grantleetheme kontactinterface kpimtextedit
     mailcommon libkdepim pimcommon
-  ];
+  ]
+  ++ pimExternalApplications.kmailApplications;
+  # create wrapper for being able to call external executables,
+  # please concatenate the external dependencies of all PIM components specified in `pimExternalApplications`
+  postFixup = ''
+    wrapProgram "$out/bin/kontact" \
+    --prefix PATH : "${lib.makeBinPath ([] ++ pimExternalApplications.kmailApplications)}"
+    '';
 }

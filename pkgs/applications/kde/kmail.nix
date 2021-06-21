@@ -1,10 +1,8 @@
 { mkDerivation
 , lib
 , akonadi
-, akonadi-import-wizard
 , akonadi-search
 , extra-cmake-modules
-, kaddressbook
 , kbookmarks
 , kcalutils
 , kcmutils
@@ -22,8 +20,6 @@
 , kinit
 , kio
 , kldap
-, kleopatra
-, kmail-account-wizard
 , kmailtransport
 , knotifications
 , knotifyconfig
@@ -43,11 +39,13 @@
 , libsecret
 , mailcommon
 , messagelib
-, pim-data-exporter
 , pim-sieve-editor
 , qtkeychain
 , qtscript
 , qtwebengine
+# external applications needing to be called are specified in an external file,
+# such that they can be re-used by `kontact`
+, pimExternalApplications
 }:
 
 mkDerivation {
@@ -73,7 +71,6 @@ mkDerivation {
     kinit
     kio
     kldap
-    kmail-account-wizard
     kmailtransport
     knotifications
     knotifyconfig
@@ -96,15 +93,12 @@ mkDerivation {
     qtkeychain
     qtscript
     qtwebengine
-    akonadi-import-wizard
-    kaddressbook
-    kleopatra
-    pim-data-exporter
-  ];
+  ]
+  ++ pimExternalApplications.kmailApplications;
   outputs = [ "out" "doc" ];
   propagatedUserEnvPkgs = [ kdepim-runtime kwallet akonadi ];
   postFixup = ''
     wrapProgram "$out/bin/kmail" \
-      --prefix PATH : "${lib.makeBinPath [ akonadi akonadi-import-wizard kaddressbook kleopatra kmail-account-wizard pim-data-exporter ]}"
+      --prefix PATH : "${lib.makeBinPath pimExternalApplications.kmailApplications}"
   '';
 }
