@@ -6,6 +6,8 @@
 , git
 , gitdb
 , ddt
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -25,7 +27,12 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ gitdb ddt ];
+  propagatedBuildInputs = [
+    gitdb
+    ddt
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
   # Tests require a git repo
   doCheck = false;
