@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, docutils
 , sphinx
 , readthedocs-sphinx-ext
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -15,14 +16,25 @@ buildPythonPackage rec {
     sha256 = "32bd3b5d13dc8186d7a42fc816a23d32e83a4827d7d9882948e7b837c232da5a";
   };
 
-  propagatedBuildInputs = [ sphinx ];
-
-  checkInputs = [ readthedocs-sphinx-ext pytest ];
-  CI=1; # Don't use NPM to fetch assets. Assets are included in sdist.
-
-  checkPhase = ''
-    py.test
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "docutils<0.17" "docutils"
   '';
+
+  preBuild = ''
+    # Don't use NPM to fetch assets. Assets are included in sdist.
+    export CI=1
+  '';
+
+  propagatedBuildInputs = [
+    docutils
+    sphinx
+  ];
+
+  checkInputs = [
+    readthedocs-sphinx-ext
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "ReadTheDocs.org theme for Sphinx";
