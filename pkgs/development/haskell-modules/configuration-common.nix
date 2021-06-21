@@ -1946,16 +1946,4 @@ EOT
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
 
-  # Upgrade blucontrol ahead of hackage snapshot to 0.5.1.1
-  # for relaxed bounds on X11
-  blucontrol = let patchedVersion = "0.5.1.1"; in
-    assert pkgs.lib.versionOlder super.blucontrol.version patchedVersion;
-    overrideSrc super.blucontrol {
-      version = patchedVersion;
-      src = pkgs.fetchurl {
-        url = "https://hackage.haskell.org/package/blucontrol-${patchedVersion}/blucontrol-${patchedVersion}.tar.gz";
-        sha256 = "0v3ifwxjbxm86ybn5daqqfdm4nmbfzlbkyc19d4nawnzjyf8v2p9";
-      };
-    };
-
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
