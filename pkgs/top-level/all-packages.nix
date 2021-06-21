@@ -23423,6 +23423,8 @@ in
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
 
+  oed = callPackage ../applications/editors/oed { };
+
   ekho = callPackage ../applications/audio/ekho { };
 
   electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };
