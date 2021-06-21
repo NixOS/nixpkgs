@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchgit
 , unstableGitUpdater
+, callPackage
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru = {
+    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = with lib; {
     homepage = "https://c9x.me/compile/";
