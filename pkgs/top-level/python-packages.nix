@@ -5204,6 +5204,8 @@ in {
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
+  openapi-core = callPackage ../development/python-modules/openapi-core { };
+
   pdunehd = callPackage ../development/python-modules/pdunehd { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
