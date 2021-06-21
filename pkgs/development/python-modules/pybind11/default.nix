@@ -58,7 +58,6 @@ buildPythonPackage rec {
     catch
     numpy
     pytest
-    scipy
   ];
 
   checkPhase = ''

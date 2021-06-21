@@ -1,13 +1,6 @@
 {lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, pytest-xdist, numpy, pybind11 }:
 
-let
-  pybind = pybind11.overridePythonAttrs (oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DBUILD_TESTING=off"
-    ];
-    doCheck = false; # Circular test dependency
-  });
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "scipy";
   version = "1.6.3";
 
@@ -18,7 +11,7 @@ in buildPythonPackage rec {
 
   checkInputs = [ nose pytest pytest-xdist ];
   nativeBuildInputs = [ gfortran ];
-  buildInputs = [ numpy.blas pybind ];
+  buildInputs = [ numpy.blas pybind11 ];
   propagatedBuildInputs = [ numpy ];
 
   # Remove tests because of broken wrapper
