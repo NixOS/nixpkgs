@@ -142,6 +142,7 @@
 , "kaput-cli"
 , "katex"
 , "karma"
+, "keyoxide"
 , "lcov-result-merger"
 , "leetcode-cli"
 , "vsc-leetcode-cli"
