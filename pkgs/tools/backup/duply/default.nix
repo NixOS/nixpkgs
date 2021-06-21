@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.3.x/duply_${version}.tgz";
-    sha256 = "sha256:149hb9bk7hm5h3aqf19k37d0i2jf0viaqmpq2997i48qp3agji7h";
+    sha256 = "149hb9bk7hm5h3aqf19k37d0i2jf0viaqmpq2997i48qp3agji7h";
   };
 
   nativeBuildInputs = [ makeWrapper ];
