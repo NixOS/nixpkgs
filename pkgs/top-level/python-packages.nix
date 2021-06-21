@@ -6885,6 +6885,8 @@ in {
 
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
+  python-ethtool = callPackage ../development/python-modules/python-ethtool { };
+
   python_fedora = callPackage ../development/python-modules/python_fedora { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
