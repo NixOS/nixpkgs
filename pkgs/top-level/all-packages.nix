@@ -14117,6 +14117,8 @@ in
   swig = swig3;
   swigWithJava = swig;
 
+  c2ffi = callPackage ../development/tools/misc/c2ffi { };
+
   swfmill = callPackage ../tools/video/swfmill { };
 
   swftools = callPackage ../tools/video/swftools {
