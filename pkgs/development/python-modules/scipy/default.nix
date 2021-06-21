@@ -1,4 +1,4 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11}:
+{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, pytest-xdist, numpy, pybind11 }:
 
 let
   pybind = pybind11.overridePythonAttrs (oldAttrs: {
@@ -16,7 +16,7 @@ in buildPythonPackage rec {
     sha256 = "a75b014d3294fce26852a9d04ea27b5671d86736beb34acdfc05859246260707";
   };
 
-  checkInputs = [ nose pytest ];
+  checkInputs = [ nose pytest pytest-xdist ];
   nativeBuildInputs = [ gfortran ];
   buildInputs = [ numpy.blas pybind ];
   propagatedBuildInputs = [ numpy ];
@@ -40,7 +40,7 @@ in buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     pushd dist
-    ${python.interpreter} -c 'import scipy; scipy.test("fast", verbose=10)'
+    ${python.interpreter} -c "import scipy; scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES)"
     popd
     runHook postCheck
   '';
