@@ -1909,6 +1909,8 @@ in {
 
   dictionaries = callPackage ../development/python-modules/dictionaries { };
 
+  dictpath = callPackage ../development/python-modules/dictpath { };
+
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
