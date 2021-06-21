@@ -2562,6 +2562,8 @@ in
 
   electron-mail = callPackage ../applications/networking/mailreaders/electron-mail { };
 
+  element = callPackage ../applications/science/chemistry/element { };
+
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix { };
 
   element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
