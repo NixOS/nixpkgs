@@ -7,7 +7,7 @@
 , result
 , ounit
 , ocaml-migrate-parsetree
-, ocaml-migrate-parsetree-2-1
+, ocaml-migrate-parsetree-2
 }:
 
 let params =
@@ -40,7 +40,7 @@ buildDunePackage rec {
   buildInputs = [ ppxlib cppo ];
   propagatedBuildInputs = [
     (if params.useOMP2
-    then ocaml-migrate-parsetree-2-1
+    then ocaml-migrate-parsetree-2
     else ocaml-migrate-parsetree)
     ppx_derivers
     result
