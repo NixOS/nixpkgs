@@ -33,11 +33,6 @@ buildPythonPackage rec {
     sha256 = "8f0c75e0a577536125ad62a442ebb7cf02746f1a69d907e8a273c6225d281237";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "anyio>=2.0.2" "anyio"
-  '';
-
   propagatedBuildInputs = [
     argon2_cffi
     jinja2
