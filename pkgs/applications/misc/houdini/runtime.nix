@@ -1,4 +1,6 @@
-{ lib, stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsa-lib, dbus, xkeyboardconfig, nss, nspr, expat, pciutils, libxkbcommon, bc, addOpenGLRunpath }:
+{ lib, stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsa-lib
+, dbus, xkeyboardconfig, nss, nspr, expat, pciutils, libxkbcommon, bc, addOpenGLRunpath
+}:
 
 let
   # NOTE: Some dependencies only show in errors when run with QT_DEBUG_PLUGINS=1
@@ -84,4 +86,3 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ canndrew kwohlfahrt ];
   };
 }
-
