@@ -81,11 +81,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPgSQL "--with-pgsql"
     ++ lib.optional withSQLite "--with-sqlite";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with lib.maintainers; [ peti fpletz globin ajs124 ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ mit publicDomain lgpl21Only bsd3 bsdOriginal ];
+    maintainers = with maintainers; [ peti fpletz globin ajs124 ];
+    platforms = platforms.unix;
   };
   passthru.tests = {
     opensmtpd-interaction = nixosTests.opensmtpd;
