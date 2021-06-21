@@ -56,6 +56,12 @@ installPhase() {
         install -Dm755 nvidia.fixed $out/lib/systemd/system-sleep/nvidia
     fi
 
+    # Fail on missing files
+    if [ ! -e $out/bin/nvidia-sleep.sh ] || [ ! -e $out/lib/systemd/system-sleep/nvidia ]; then
+        echo "Failed to find necessary files for power management for systemd (nvidia-sleep.sh, nvidia)"
+        exit
+    fi
+
     for i in $lib32 $out; do
         rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately
         rm -f $i/lib/libnvidia-gtk* # built from source
