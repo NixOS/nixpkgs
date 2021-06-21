@@ -1701,6 +1701,18 @@
     githubId = 3471749;
     name = "Claudio Bley";
   };
+  cburstedde = {
+    email = "burstedde@ins.uni-bonn.de";
+    github = "cburstedde";
+    githubId = 109908;
+    name = "Carsten Burstedde";
+    keys = [
+      {
+        longkeyid = "rsa2048/0x0704CD9E550A6BCD";
+        fingerprint = "1127 A432 6524 BF02 737B  544E 0704 CD9E 550A 6BCD";
+      }
+    ];
+  };
   cdepillabout = {
     email = "cdep.illabout@gmail.com";
     github = "cdepillabout";
