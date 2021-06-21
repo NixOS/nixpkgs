@@ -56,6 +56,17 @@ installPhase() {
         install -Dm755 nvidia.fixed $out/lib/systemd/system-sleep/nvidia
     fi
 
+    ## 465.xx+ redundancies
+    if [ -e systemd/nvidia-sleep.sh ]; then
+        sed -E 's#(PATH=).*#\1"$PATH"#' systemd/nvidia-sleep.sh > nvidia-sleep.sh.fixed
+        install -Dm755 nvidia-sleep.sh.fixed $out/bin/nvidia-sleep.sh
+    fi
+
+    if [ -e systemd/system-sleep/nvidia ]; then
+        sed -E "s#/usr(/bin/nvidia-sleep.sh)#$out\\1#" systemd/system-sleep/nvidia > nvidia.fixed
+        install -Dm755 nvidia.fixed $out/lib/systemd/system-sleep/nvidia
+    fi
+
     # Fail on missing files
     if [ ! -e $out/bin/nvidia-sleep.sh ] || [ ! -e $out/lib/systemd/system-sleep/nvidia ]; then
         echo "Failed to find necessary files for power management for systemd (nvidia-sleep.sh, nvidia)"
