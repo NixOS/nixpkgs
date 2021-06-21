@@ -6,7 +6,7 @@ Given that most of the OCaml ecosystem is now built with dune, nixpkgs includes 
 
 Here is a simple package example.
 
-- It defines an (optional) attribute `minimumOCamlVersion` that will be used to
+- It defines an (optional) attribute `minimalOCamlVersion` that will be used to
   throw a descriptive evaluation error if building with an older OCaml is
   attempted.
 
