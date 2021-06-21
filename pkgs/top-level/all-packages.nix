@@ -8944,6 +8944,8 @@ in
     libpng = libpng12;
   };
 
+  snmpcheck = callPackage ../tools/networking/snmpcheck {};
+
   sniffglue = callPackage ../tools/networking/sniffglue { };
 
   snort = callPackage ../applications/networking/ids/snort { };

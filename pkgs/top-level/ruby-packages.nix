@@ -2522,6 +2522,16 @@
     };
     version = "0.2.0";
   };
+  snmp = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1xr7rwfk7mwxzqcgir0glmyy4j27g6yixfaswsbd2qn6r8c980qf";
+      type = "gem";
+    };
+    version = "1.3.2";
+  };
   solargraph = {
     dependencies = ["backport" "benchmark" "diff-lcs" "e2mmap" "jaro_winkler" "kramdown" "kramdown-parser-gfm" "parser" "reverse_markdown" "rubocop" "thor" "tilt" "yard"];
     groups = ["default"];
