@@ -27112,6 +27112,8 @@ in
 
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
+  tonelib-gfx = callPackage ../applications/audio/tonelib-gfx { };
+
   tony = libsForQt514.callPackage ../applications/audio/tony { };
 
   toot = callPackage ../applications/misc/toot { };
