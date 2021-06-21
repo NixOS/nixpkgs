@@ -21,9 +21,19 @@ buildPythonPackage rec {
     sha256 = "sha256-jNlX9LKajHqYPgpCfCcSUzxBu3AHt2qMyI1sZQdcZ5o=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-core
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   preCheck = ''
     # prevent shadowing imports

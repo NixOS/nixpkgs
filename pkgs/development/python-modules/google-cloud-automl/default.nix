@@ -21,7 +21,11 @@ buildPythonPackage rec {
     sha256 = "sha256-UjYzSWtP4cp0p7Is2qIGWBgEhjgTv0YeL0N9D7etIbY=";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    libcst
+    proto-plus
+  ];
 
   checkInputs = [
     google-cloud-storage
@@ -35,9 +39,12 @@ buildPythonPackage rec {
   preCheck = ''
     # do not shadow imports
     rm -r google
-    # requires credentials
-    rm tests/system/gapic/v1beta1/test_system_tables_client_v1.py
   '';
+
+  disabledTestPaths = [
+    # requires credentials
+    "tests/system/gapic/v1beta1/test_system_tables_client_v1.py"
+  ];
 
   disabledTests = [
     # requires credentials
