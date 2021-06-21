@@ -29,17 +29,13 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [
     Mako
     aiohttp
-    (mautrix.override {
-      sqlalchemy = sqlalchemy_1_3;
-    })
-    sqlalchemy_1_3
+    mautrix
+    sqlalchemy
     CommonMark
     ruamel_yaml
     python_magic
     telethon
-    (telethon-session-sqlalchemy.override {
-      sqlalchemy = sqlalchemy_1_3;
-    })
+    telethon-session-sqlalchemy
     pillow
     lxml
     setuptools
