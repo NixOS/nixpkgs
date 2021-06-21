@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  doCheck = true;
+
   passthru = {
     tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
     updateScript = unstableGitUpdater { };
