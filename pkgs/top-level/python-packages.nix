@@ -6929,6 +6929,8 @@ in {
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
 
+  python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
+
   python-logstash = callPackage ../development/python-modules/python-logstash { };
 
   python-ly = callPackage ../development/python-modules/python-ly { };
