@@ -3,13 +3,13 @@
 
 gcc9Stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.63.0";
+  version = "0.63.1";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+D1KosfeoEzRgAE6WheO0Vo/1oq7+1tWPa7rRemyZYo=";
+    sha256 = "sha256-SwkqFSAl99fQoXT96BPRqKFqJg3HEziiT+jXcugPyxM=";
   };
 
   nativeBuildInputs = [
