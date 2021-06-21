@@ -4017,6 +4017,12 @@
     githubId = 1742172;
     name = "Hamish Hutchings";
   };
+  hanemile = {
+    email = "nixos@emile.space";
+    github = "hanemile";
+    githubId = 22756350;
+    name = "Emile Hansmaennel";
+  };
   hansjoergschurr = {
     email = "commits@schurr.at";
     github = "hansjoergschurr";
