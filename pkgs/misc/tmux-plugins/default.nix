@@ -576,12 +576,12 @@ in rec {
 
   yank = mkTmuxPlugin {
     pluginName = "yank";
-    version = "unstable-2019-12-02";
+    version = "unstable-2021-06-20";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-yank";
-      rev = "648005db64d9bf3c4650eff694ecb6cf3e42b0c8";
-      sha256 = "1zg9k8yk1iw01vl8m44w4sv20lln4l0lq9dafc09lxmgxm9dllj4";
+      rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
+      sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
     };
   };
 }
