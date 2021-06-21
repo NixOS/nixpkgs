@@ -78,6 +78,7 @@ self: super: {
   schedule = dontCheck super.schedule;
   static = dontCheck super.static;
   strict-writer = dontCheck super.strict-writer;
+  termonad = dontCheck super.termonad;
   trifecta = dontCheck super.trifecta;
   twiml = dontCheck super.twiml;
   twitter-conduit = dontCheck super.twitter-conduit;
