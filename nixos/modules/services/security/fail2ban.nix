@@ -257,7 +257,6 @@ in
       partOf = optional config.networking.firewall.enable "firewall.service";
 
       restartTriggers = [ fail2banConf jailConf pathsConf ];
-      reloadIfChanged = true;
 
       path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
 

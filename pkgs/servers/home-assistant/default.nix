@@ -372,6 +372,7 @@ in with py.pkgs; buildPythonApplication rec {
     "emonitor"
     "emulated_hue"
     "emulated_kasa"
+    "emulated_roku"
     "enocean"
     "enphase_envoy"
     "epson"
@@ -434,11 +435,16 @@ in with py.pkgs; buildPythonApplication rec {
     "group"
     "growatt_server"
     "guardian"
+    "habitica"
+    "hangouts"
     "harmony"
     "hassio"
     "hddtemp"
+    "heos"
+    "here_travel_time"
     "history"
     "history_stats"
+    "hive"
     "home_connect"
     "home_plus_control"
     "homeassistant"
@@ -469,6 +475,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent"
     "intent_script"
     "ios"
+    "ipma"
     "ipp"
     "iqvia"
     "islamic_prayer_times"
@@ -509,6 +516,7 @@ in with py.pkgs; buildPythonApplication rec {
     "microsoft_face_detect"
     "microsoft_face_identify"
     "mikrotik"
+    "mill"
     "min_max"
     "minecraft_server"
     "minio"
@@ -736,8 +744,12 @@ in with py.pkgs; buildPythonApplication rec {
     "--only-rerun RuntimeError"
     # enable full variable printing on error
     "--showlocals"
+    # here_travel_time/test_sensor.py: Tries to access HERE API: herepy.error.HEREError: Error occured on __get
+    "--deselect tests/components/here_travel_time/test_sensor.py::test_invalid_credentials"
     # screenlogic/test_config_flow.py: Tries to send out UDP broadcasts
     "--deselect tests/components/screenlogic/test_config_flow.py::test_form_cannot_connect"
+    # abode/test_camera.py: Race condition in pickle file creationg
+    "--deselect tests/components/abode/test_camera.py::test_camera_off"
     # asuswrt/test_config_flow.py: Sandbox network limitations, fails with unexpected error
     "--deselect tests/components/asuswrt/test_config_flow.py::test_on_connect_failed"
     # shelly/test_config_flow.py: Tries to join multicast group

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2021.05";
+  version = "2021.06";
 
   src = fetchurl {
-    url    = "https://www.rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
-    sha256 = "0h9kdb4vvscflifmclx0zhwb5qfakiggnbvlf9cx2hmp5vnk71jk";
+    url    = "https://rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
+    sha256 = "11ixlqmvbb37abksdysg5r4lkbwzr486lkc0ssl3wca4iiy3mhgf";
   };
 
   buildInputs = [ icu zlib gmp perl ];
@@ -16,15 +16,9 @@ stdenv.mkDerivation rec {
     "--with-nqp=${nqp}/bin/nqp"
   ];
 
-  # Remove test of profiler, fails since 2020.09
-  preCheck = "rm t/09-moar/01-profilers.t";
-
-  # Some tests fail on Darwin
-  doCheck = !stdenv.isDarwin;
-
   meta = with lib; {
     description = "Raku implementation on top of Moar virtual machine";
-    homepage    = "https://www.rakudo.org";
+    homepage    = "https://rakudo.org";
     license     = licenses.artistic2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
