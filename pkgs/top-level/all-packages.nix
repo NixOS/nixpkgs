@@ -31992,6 +31992,8 @@ in
 
   xcolor = callPackage ../tools/graphics/xcolor { };
 
+  xcfun = callPackage ../development/libraries/science/chemistry/xcfun { };
+
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
