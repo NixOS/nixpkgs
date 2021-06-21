@@ -1,6 +1,18 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
-python3Packages.buildPythonPackage rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.18";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "32daf7a7dcf5d4013b37321df7b319f36523f38884ccc3e2e965917d0a5c73c1";
+        };
+      });
+    };
+  };
+in python.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
   version = "0.1.1";
 
@@ -11,7 +23,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "11snsl7i407855h39g1fgk26hinnq0inr8sjrgd319li0d3jwzxl";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     CommonMark
     aiohttp
     asyncpg
@@ -41,7 +53,7 @@ python3Packages.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python3Packages.python}/bin \
+      --set PATH ${python}/bin \
       --set PYTHONPATH "$PYTHONPATH"
   '';
 

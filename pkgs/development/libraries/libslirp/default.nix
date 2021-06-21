@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libslirp";
-  version = "4.6.0";
+  version = "4.6.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "slirp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1Zp1+PW0WtNzRYIA87X42CJeSzVFhi5sGi9/rlUP4Vo=";
+    sha256 = "sha256-AM6NxO4hjFiUAzRYbXV3fe18xwCBmzdM63n93UOxjKw=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

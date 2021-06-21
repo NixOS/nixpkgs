@@ -19,7 +19,7 @@
     "airly" = ps: with ps; [ airly ];
     "airnow" = ps: with ps; [ pyairnow ];
     "airvisual" = ps: with ps; [ pyairvisual ];
-    "aladdin_connect" = ps: with ps; [ ]; # missing inputs: aladdin_connect
+    "aladdin_connect" = ps: with ps; [ aladdin-connect ];
     "alarm_control_panel" = ps: with ps; [ ];
     "alarmdecoder" = ps: with ps; [ adext ];
     "alert" = ps: with ps; [ ];
@@ -202,13 +202,13 @@
     "eafm" = ps: with ps; [ aioeafm ];
     "ebox" = ps: with ps; [ ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [ ]; # missing inputs: ebusdpy
-    "ecoal_boiler" = ps: with ps; [ ]; # missing inputs: ecoaliface
+    "ecoal_boiler" = ps: with ps; [ ecoaliface ];
     "ecobee" = ps: with ps; [ python-ecobee-api ];
     "econet" = ps: with ps; [ pyeconet ];
     "ecovacs" = ps: with ps; [ ]; # missing inputs: sucks
     "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
     "edimax" = ps: with ps; [ pyedimax ];
-    "edl21" = ps: with ps; [ ]; # missing inputs: pysml
+    "edl21" = ps: with ps; [ pysml ];
     "ee_brightbox" = ps: with ps; [ eebrightbox ];
     "efergy" = ps: with ps; [ ];
     "egardia" = ps: with ps; [ pythonegardia ];
@@ -216,7 +216,7 @@
     "elgato" = ps: with ps; [ elgato ];
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
     "elkm1" = ps: with ps; [ ]; # missing inputs: elkm1-lib
-    "elv" = ps: with ps; [ ]; # missing inputs: pypca
+    "elv" = ps: with ps; [ pypca ];
     "emby" = ps: with ps; [ pyemby ];
     "emoncms" = ps: with ps; [ ];
     "emoncms_history" = ps: with ps; [ ];
@@ -227,7 +227,7 @@
     "enigma2" = ps: with ps; [ openwebifpy ];
     "enocean" = ps: with ps; [ enocean ];
     "enphase_envoy" = ps: with ps; [ envoy-reader ];
-    "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
+    "entur_public_transport" = ps: with ps; [ enturclient ];
     "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ pyenvisalink ];
@@ -345,7 +345,7 @@
     "hdmi_cec" = ps: with ps; [ pycec ];
     "heatmiser" = ps: with ps; [ ]; # missing inputs: heatmiserV3
     "heos" = ps: with ps; [ pyheos ];
-    "here_travel_time" = ps: with ps; [ ]; # missing inputs: herepy
+    "here_travel_time" = ps: with ps; [ herepy ];
     "hikvision" = ps: with ps; [ ]; # missing inputs: pyhik
     "hikvisioncam" = ps: with ps; [ ]; # missing inputs: hikvision
     "hisense_aehw4a1" = ps: with ps; [ ]; # missing inputs: pyaehw4a1

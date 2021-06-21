@@ -441,6 +441,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hassio"
     "hddtemp"
     "heos"
+    "here_travel_time"
     "history"
     "history_stats"
     "hive"
@@ -743,8 +744,12 @@ in with py.pkgs; buildPythonApplication rec {
     "--only-rerun RuntimeError"
     # enable full variable printing on error
     "--showlocals"
+    # here_travel_time/test_sensor.py: Tries to access HERE API: herepy.error.HEREError: Error occured on __get
+    "--deselect tests/components/here_travel_time/test_sensor.py::test_invalid_credentials"
     # screenlogic/test_config_flow.py: Tries to send out UDP broadcasts
     "--deselect tests/components/screenlogic/test_config_flow.py::test_form_cannot_connect"
+    # abode/test_camera.py: Race condition in pickle file creationg
+    "--deselect tests/components/abode/test_camera.py::test_camera_off"
     # asuswrt/test_config_flow.py: Sandbox network limitations, fails with unexpected error
     "--deselect tests/components/asuswrt/test_config_flow.py::test_on_connect_failed"
     # shelly/test_config_flow.py: Tries to join multicast group
