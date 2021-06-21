@@ -3840,6 +3840,8 @@ in
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
+  cobalt = callPackage ../applications/misc/cobalt { };
+
   cocoapods = callPackage ../development/mobile/cocoapods { };
 
   cocoapods-beta = lowPrio (callPackage ../development/mobile/cocoapods { beta = true; });
