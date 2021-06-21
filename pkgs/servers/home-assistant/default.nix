@@ -676,7 +676,8 @@ in with py.pkgs; buildPythonApplication rec {
     "telegram"
     "tellduslive"
     "template"
-    "tesla"
+    # disable tesla comonent tests while typer is incompatible with click>=8.0
+    # "tesla"
     "threshold"
     "tibber"
     "tile"
