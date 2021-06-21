@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qy7wv1xn7g3x5z0vvv0pwmxhin4hw2m9fs9iklnghy00vg37v0b";
+    sha256 = "sha256-VFPmTKiFwwL1THpjDeFeHgssXvIRB+ppvZb9aU1yPV4=";
   };
 
   propagatedBuildInputs = [ google-api-core ];
