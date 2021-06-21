@@ -302,6 +302,7 @@ package-maintainers:
     - large-hashable
     - haskell-ci
     - diagrams
+    - rel8
     # owothia
     - irc-client
     - chatter
