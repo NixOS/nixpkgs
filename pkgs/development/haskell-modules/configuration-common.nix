@@ -1473,8 +1473,6 @@ self: super: {
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/snap/pull/219
   snap = doJailbreak super.snap;
 
-  cachix = generateOptparseApplicativeCompletion "cachix" super.cachix;
-
   # 2020-11-23: Jailbreaking until: https://github.com/michaelt/text-pipes/pull/29
   pipes-text = doJailbreak super.pipes-text;
 
