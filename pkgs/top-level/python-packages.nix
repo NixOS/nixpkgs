@@ -3959,6 +3959,8 @@ in {
 
   libcst = callPackage ../development/python-modules/libcst { };
 
+  libdecsync = callPackage ../development/python-modules/libdecsync { };
+
   libevdev = callPackage ../development/python-modules/libevdev { };
 
   libfdt = toPythonModule (pkgs.dtc.override {
