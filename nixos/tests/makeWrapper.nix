@@ -41,6 +41,8 @@ import ./make-test-python.nix ({ ... }: {
       (mkWrapperBinary { name = "test-suffix"; args = [ "--suffix" "VAR" ":" "abc" ]; })
       (mkWrapperBinary { name = "test-suffix-spaces"; args = [ "--suffix" "VAR" " : " "abc" ]; })
       (mkWrapperBinary { name = "test-prefix-and-suffix"; args = [ "--prefix" "VAR" ":" "foo" "--suffix" "VAR" ":" "bar" ]; })
+      (mkWrapperBinary { name = "test-prefix-dedup"; args = [ "--prefix-dedup" "VAR" ":" "abc" ]; })
+      (mkWrapperBinary { name = "test-prefix-dedup-multi"; args = [ "--prefix-dedup" "VAR" ":" "abc:abc" ]; })
       (mkWrapperBinary { name = "test-suffix-each"; args = [ "--suffix-each" "VAR" ":" "foo bar" ]; })
       (mkWrapperBinary { name = "test-suffix-contents"; args = [ "--suffix-contents" "VAR" ":" "${foofile} ${barfile}" ]; })
       (mkWrapperBinary { name = "test-prefix-contents"; args = [ "--prefix-contents" "VAR" ":" "${foofile} ${barfile}" ]; })
@@ -104,6 +106,22 @@ import ./make-test-python.nix ({ ... }: {
         equals('VAR=abc test-suffix-spaces', 'var=abc : abc')
         # --prefix in combination with --suffix
         equals('VAR=abc test-prefix-and-suffix', 'var=foo:abc:bar')
+
+    with subtest('prefix-dedup'):
+        # --prefix-dedup works
+        equals('test-prefix-dedup', 'abc')
+        # Prepends value as expected
+        equals('VAR=foo test-prefix-dedup', 'abc:foo')
+        # Prepends value only once
+        equals('VAR=abc test-prefix-dedup', 'abc')
+        equals('VAR=abc:foo test-prefix-dedup', 'abc:foo')
+        # Moves value to the front if it already existed
+        equals('VAR=foo:abc test-prefix-dedup', 'abc:foo')
+        # Doesn't overwrite parts of the string
+        equals('VAR=test:abcde:test test-prefix-dedup', 'abc:test:abcde:test')
+        # Only append the value once when given multiple times in a parameter
+        # to makeWrapper
+        equals('test-prefix-dedup', 'abc')
 
     with subtest('suffix-each/prefix-contents/suffix-contents'):
         # --suffix-each works

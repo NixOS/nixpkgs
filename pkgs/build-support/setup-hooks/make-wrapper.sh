@@ -23,6 +23,8 @@ assertExecutable() {
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
+# --prefix-dedup    ENV SEP VAL   : same as --prefix/--suffix, but adding the same value twice skips it
+# --suffix-dedup
 # --suffix-each     ENV SEP VALS  : like --suffix, but VALS is a list
 # --prefix-contents ENV SEP FILES : like --suffix-each, but contents of FILES
 #                                   are read first and used as VALS
@@ -61,13 +63,30 @@ makeWrapper() {
             command="${params[$((n + 1))]}"
             n=$((n + 1))
             echo "$command" >> "$wrapper"
-        elif [[ ("$p" == "--suffix") || ("$p" == "--prefix") ]]; then
+        elif [[ ("$p" == "--suffix") || ("$p" == "--prefix") || ("$p" == "--suffix-dedup") || ("$p" == "--prefix-dedup") ]]; then
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
             value="${params[$((n + 3))]}"
             n=$((n + 3))
             if test -n "$value"; then
-                if test "$p" = "--suffix"; then
+                if [[ "$p" == *'-dedup' ]]; then
+                    {
+                        # We need extended globbing for ?()
+                        echo "shopt -s extglob"
+                        # This abomination removes all occurences of the value that is to be prepended/appended.
+                        # We add (or re-add) the value later. This ensures it's always the last or first value.
+                        # As an example, adding /bin to a colon-separated environment variable would remove:
+                        # - /bin:*
+                        # - *:/bin:*
+                        # - *:/bin
+                        echo "export $varName=\"\${$varName//?(${separator})$value?(${separator})/}\""
+                        # Disable the extended glob afterwards - slower when this code
+                        # is run multiple times but prevents potential breakages of other code
+                        echo "shopt -u extglob"
+                    } >> "$wrapper"
+                fi
+
+                if [[ "$p" == '--suffix'* ]]; then
                     echo "export $varName=\$$varName\${$varName:+${separator@Q}}${value@Q}" >> "$wrapper"
                 else
                     echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
