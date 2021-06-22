@@ -175,12 +175,6 @@ let
         sha256 = "1bxdhxmiy6h4acq26lq43x2mxx6rawmfmlgsh5j7w8kyhkw5af0c";
         revert = true;
       })
-      # To fix building from a release tarball (which we do):
-      (githubPatch {
-        # Revert back to generating chromium_git_revision.h via version.py
-        commit = "bd524d08f8465364d12d32a84fd1aa983aecc502";
-        sha256 = "1jsxidg5jzwkrcpx3lylx4gyg56zjyd7sc957kaaqqc853bn83b4";
-      })
     ];
 
     postPatch = ''
