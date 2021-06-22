@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "resolvelib";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "resolvelib";
     rev = version;
-    sha256 = "0r7cxwrfvpqz4kd7pdf8fsynzlmi6c754jd5hzd6vssc1zlyvvhx";
+    sha256 = "1fqz75riagizihvf4j7wc3zjw6kmg1dd8sf49aszyml105kb33n8";
   };
 
   checkInputs = [
