@@ -12,13 +12,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.19.0";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "07brvpsy40jv30h0a0ywrw4bgwajjd37xznw34s8k53y92qs8lfi";
+    sha256 = "0bz6gkrvn7mwmjsqrazgpy9r64m5jj462v0izgvdymkx8bjd8mpi";
   };
 
   postPatch = ''
