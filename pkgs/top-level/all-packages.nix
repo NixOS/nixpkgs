@@ -1537,6 +1537,8 @@ in
 
   gitless = callPackage ../applications/version-management/gitless { python = python3; };
 
+  gitlint = python3Packages.callPackage ../tools/misc/gitlint { };
+
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
   gjs = callPackage ../development/libraries/gjs { };
@@ -11925,6 +11927,7 @@ in
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
+  cargo-modules = callPackage ../development/tools/rust/cargo-modules { };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -23450,6 +23453,8 @@ in
   ed = callPackage ../applications/editors/ed { };
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
+
+  oed = callPackage ../applications/editors/oed { };
 
   ekho = callPackage ../applications/audio/ekho { };
 
