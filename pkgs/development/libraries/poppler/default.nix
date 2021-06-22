@@ -1,44 +1,46 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
+, cairo
 , cmake
-, ninja
-, pkg-config
+, pcre
+, boost
+, cups-filters
+, curl
+, fontconfig
+, freetype
+, inkscape
+, lcms
 , libiconv
 , libintl
-, zlib
-, curl
-, cairo
-, freetype
-, fontconfig
-, lcms
 , libjpeg
+, ninja
 , openjpeg
+, pkg-config
+, scribusUnstable
+, texlive
+, zlib
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
 , introspectionSupport ? false, gobject-introspection ? null
 , utils ? false, nss ? null
 , minimal ? false
 , suffix ? "glib"
-, inkscape
-, cups-filters
-, texlive
-, scribusUnstable
 }:
 
 let
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
-  name = "poppler-${suffix}-${version}";
-  version = "21.05.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  pname = "poppler-${suffix}";
+  version = "21.06.1"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "sha256-2v1Te2gPrRIVvED8U9HzjoRJ18GFvGDVqJ4dJskNvYw=";
+    url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
+    sha256 = "sha256-hrCeWgLeQAgaORbvhxHFEo6vSx/FnV+H0Oxm8E9ZXbQ=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    boost
+    pcre
     libiconv
     libintl
   ] ++ lib.optional withData [
@@ -98,13 +102,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://poppler.freedesktop.org/";
     description = "A PDF rendering library";
-
     longDescription = ''
-      Poppler is a PDF rendering library based on the xpdf-3.0 code
-      base. In addition it provides a number of tools that can be
-      installed separately.
+      Poppler is a PDF rendering library based on the xpdf-3.0 code base. In
+      addition it provides a number of tools that can be installed separately.
     '';
-
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
