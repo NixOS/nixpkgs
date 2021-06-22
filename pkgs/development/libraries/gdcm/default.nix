@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optional enableVTK [
+  buildInputs = lib.optionals enableVTK [
     vtk
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Cocoa
   ] ++ lib.optionals enablePython [ swig python ];
