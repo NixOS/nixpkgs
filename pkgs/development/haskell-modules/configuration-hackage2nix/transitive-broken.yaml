@@ -1434,6 +1434,7 @@ dont-distribute-packages:
  - HSoundFile
  - HsParrot
  - hspec-expectations-pretty
+ - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
  - hspec-test-sandbox
@@ -2262,6 +2263,7 @@ dont-distribute-packages:
  - poseidon
  - poseidon-postgis
  - postgresql-query
+ - postgresql-simple-queue
  - postgresql-simple-typed
  - postgresql-tx-query
  - postgresql-tx-squeal

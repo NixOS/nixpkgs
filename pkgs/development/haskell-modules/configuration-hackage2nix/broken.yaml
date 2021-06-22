@@ -3537,6 +3537,7 @@ broken-packages:
   - pg-recorder
   - pg-store
   - pgstream
+  - pg-transact
   - phasechange
   - phaser
   - phoityne
