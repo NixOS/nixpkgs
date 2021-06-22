@@ -6879,8 +6879,6 @@ in {
 
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
-  python-engineio_3 = callPackage ../development/python-modules/python-engineio/3.nix { };
-
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
   python-ethtool = callPackage ../development/python-modules/python-ethtool { };
