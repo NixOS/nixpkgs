@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.6.0";
+  version = "0.7.1";
   disabled = pythonOlder "3.8";
   format = "pyproject";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-wled";
     rev = "v${version}";
-    sha256 = "sha256-aFBcSGPCT49TbqzjUv/d8agdPOCC090rNxDnE9y91Pk=";
+    sha256 = "02xrml9mpq3akwyryg1m7xjmgnlgi5kjvx7vkq6110ai0f9hzpwi";
   };
 
   nativeBuildInputs = [
