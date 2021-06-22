@@ -10,7 +10,7 @@ let
 
   # interface options
 
-  interfaceOpts = { ... }: {
+  interfaceOpts = { config, ... }: {
 
     options = {
 
@@ -53,7 +53,7 @@ let
 
       listenPort = mkOption {
         default = null;
-        type = with types; nullOr int;
+        type = with types; nullOr port;
         example = 51820;
         description = ''
           16-bit port for listening. Optional; if not specified,
@@ -106,6 +106,27 @@ let
         type = with types; listOf (submodule peerOpts);
       };
 
+      peersAnnouncing = {
+        enable = mkEnableOption ''
+          announcing of peers' endpoints.
+        '';
+        listenPort = mkOption {
+          type = types.port;
+          defaultText = "<option>networking.wireguard.listenPort</option> or 51820 if null";
+          description = ''
+            TCP port on which to listen for peers queries for other peers' endpoints.
+
+            <warning><para>
+            This exposes the public key and current (or last known) endpoint address of all the peers
+            configured in the WireGuard interface, to all the peers,
+            and to any host connected to the peers or announcing peer
+            able to query the WireGuard interface
+            by spoofing the allowedIPs of any peer.
+            </para></warning>
+          '';
+        };
+      };
+
       allowedIPsAsRoutes = mkOption {
         example = false;
         default = true;
@@ -142,11 +163,17 @@ let
       };
     };
 
+    config = {
+      peersAnnouncing = {
+        listenPort = mkDefault (if config.listenPort == null then 51820 else config.listenPort);
+      };
+    };
+
   };
 
   # peer options
 
-  peerOpts = {
+  peerOpts = { config, ... }: {
 
     options = {
 
@@ -213,6 +240,50 @@ let
         '';
       };
 
+      endpointsUpdater = {
+        enable = mkEnableOption ''
+          receiving the enpoint of other peers from a periodic TCP connection.
+          That connection is meant to be to a peer using <option>networking.wireguard.peersAnnouncing.enable</option>.
+
+          This is especially useful to punch-through non-symmetric NATs
+          effectively establishing peer-to-peer connectivity:
+          the peers initiate a Wireguard connection to the announcing peer,
+          then use that Wireguard tunnel to query the endpoints of the other peers
+          to establish Wireguard tunnels to them,
+          using UDP hole punching when both peers are behind non-symmetric NATs.
+
+          Note that it can also work for two peers behind the same NAT
+          if that NAT can reflect (to its internal network) connections
+          from its internal network to its external IP address,
+          which may require to set persistentKeepalive as low as 1
+          and/or redirecting at least one host's WireGuard port, eg. with UPnP.
+        '';
+        addr = mkOption {
+          type = types.str;
+          defaultText = "address of the first item of the peer's <option>allowedIPs</option>";
+          description = ''
+            Address at which to contact the announcing peer,
+            configured on the announcing peer's <option>networking.wireguard.ips</option>.
+          '';
+        };
+        port = mkOption {
+          type = types.port;
+          defaultText = "port of the peer's endpoint";
+          description = ''
+            TCP port on which to contact the peer announcing other peers.
+            This is configured on the announcing peer's <option>networking.wireguard.peersAnnouncing.listenPort</option>.
+          '';
+        };
+        refreshSeconds = mkOption {
+          type = with types; int;
+          example = 120;
+          default = 60;
+          description = ''
+            Time to wait between two successive queries of the endpoints known by the peer.
+          '';
+        };
+      };
+
       dynamicEndpointRefreshSeconds = mkOption {
         default = 0;
         example = 5;
@@ -240,6 +311,13 @@ let
         interval of 25 seconds; however, most users will not need this.'';
       };
 
+    };
+
+    config = {
+      endpointsUpdater = {
+        addr = mkDefault (head (builtins.match "^\([^/]*\).*$" (head (config.allowedIPs))));
+        port = mkDefault (toInt (head (builtins.match "^.*:\([0-9]*\)$" config.endpoint)));
+      };
     };
 
   };
@@ -273,11 +351,12 @@ let
         '';
       };
 
+  keyToUnitName = replaceChars
+    [ "/" "-"    " "     "+"     "="      ]
+    [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
+
   peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
     let
-      keyToUnitName = replaceChars
-        [ "/" "-"    " "     "+"     "="      ]
-        [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
       unitName = keyToUnitName publicKey;
       refreshSuffix = optionalString dynamicRefreshEnabled "-refresh";
     in
@@ -308,7 +387,15 @@ let
         environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
         path = with pkgs; [ iproute2 wireguard-tools ];
 
+        unitConfig = {
+          StartLimitIntervalSec = 0;
+        };
         serviceConfig =
+          {
+            # Overcomes failure to resolve the endpoint's host
+            # (eg, when the resolver is not yet reachable).
+            Restart = "on-failure";
+          } // (
           if !dynamicRefreshEnabled
             then
               {
@@ -322,7 +409,8 @@ let
                 # cannot be used with systemd timers (see `man systemd.timer`),
                 # which is why `simple` with a loop is the best choice here.
                 # It also makes starting and stopping easiest.
-              };
+              }
+          );
 
         script = let
           wg_setup = concatStringsSep " " (
@@ -419,6 +507,136 @@ let
         '';
       };
 
+  # See:
+  # - systemd-analyze security wireguard-${iface}-peers-announcing@
+  # - systemd-analyze security wireguard-${iface}-endpoints-updater-${public_key}.service
+  # Note that PrivateUsers=true would be too restrictive wrt. capabilities.
+  peerUpdateSecurity = {
+    IPAddressDeny = "any";
+    # For running wg(1)
+    AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+    CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
+    RestrictNamespaces = true;
+    DynamicUser = true;
+    PrivateDevices = true;
+    ProtectClock = true;
+    ProtectControlGroups = true;
+    ProtectHome = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    ProtectProc = "invisible";
+    SystemCallArchitectures = "native";
+    # Remove (likely) unused groups from the basic @system-service group
+    SystemCallFilter = [
+      "@system-service"
+      "~@aio" "~@chown" "~@keyring" "~@privileged"
+      "~@memlock" "~@resources" "~@setuid"
+    ];
+    RestrictRealtime = true;
+    LockPersonality = true;
+    MemoryDenyWriteExecute = true;
+    UMask = 0077;
+    ProtectHostname = true;
+    ProcSubset = "pid";
+  };
+
+  generatePeersAnnouncingSocket = name: values:
+    nameValuePair "wireguard-${name}-peers-announcing"
+      {
+        enable = values.peersAnnouncing.enable;
+        listenStreams = [(toString values.peersAnnouncing.listenPort)];
+        socketConfig.Accept = true;
+        # Basic firewalling restricting answers to peers
+        # querying an internal IP address of the announcing peer.
+        # Note that IPv4 addresses can be spoofed using other interfaces unless
+        # sysctl net.ipv4.conf.${name}.rp_filter=1
+        socketConfig.BindToDevice = name;
+        socketConfig.IPAddressAllow = map (peer: peer.allowedIPs) values.peers;
+        socketConfig.IPAddressDeny = "any";
+        socketConfig.MaxConnectionsPerSource = 1;
+        socketConfig.ReusePort = true;
+        wantedBy = [ "sockets.target" ];
+      };
+
+  generatePeersAnnouncingUnit = name: values:
+    nameValuePair "wireguard-${name}-peers-announcing@"
+      {
+        description = "WireGuard Peers Announcing - ${name}";
+        requires = [ "wireguard-${name}.service" ];
+        after = [ "wireguard-${name}.service" ];
+
+        serviceConfig = mkMerge [
+          peerUpdateSecurity
+          {
+            Type = "simple";
+            ExecStart = "${pkgs.wireguard-tools}/bin/wg show '${name}' endpoints";
+            StandardInput = "null";
+            StandardOutput = "socket";
+            RestrictAddressFamilies = "";
+          }
+          (mkIf (values.interfaceNamespace != null)
+            { NetworkNamespacePath = "/var/run/netns/${values.interfaceNamespace}"; })
+        ];
+      };
+
+  generateEndpointsUpdaterUnit = { interfaceName, interfaceCfg, peer }: let
+      dynamicRefreshEnabled = peer.dynamicEndpointRefreshSeconds != 0;
+      peerService = peerUnitServiceName interfaceName peer.publicKey dynamicRefreshEnabled;
+    in
+    nameValuePair "wireguard-${interfaceName}-endpoints-updater-${keyToUnitName peer.publicKey}"
+      {
+        description = "WireGuard ${interfaceName} Endpoints Updater - ${peer.publicKey}";
+        requires = [ "${peerService}.service" ];
+        after = [ "${peerService}.service" ];
+        wantedBy = [ "${peerService}.service" ];
+        path = with pkgs; [ wireguard-tools ];
+
+        unitConfig = {
+          StartLimitIntervalSec = 0;
+        };
+        serviceConfig = mkMerge [
+          peerUpdateSecurity
+          {
+            Type = "simple";
+            IPAddressAllow = [ peer.endpointsUpdater.addr ];
+            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
+            Restart = "on-failure";
+          }
+          (mkIf (interfaceCfg.interfaceNamespace != null)
+            { NetworkNamespacePath = "/var/run/netns/${interfaceCfg.interfaceNamespace}"; })
+        ];
+
+        # Query the peer announcing other peers
+        # for setting the current endpoint of all configured peers
+        # (but the announcing peer).
+        # Note that socat is used instead of libressl's netcat
+        # (which would require MemoryDenyWriteExecute=true to load libtls.so)
+        # or netcat-gnu (which does not work on ARM and has last been released in 2004).
+        script = ''
+          wait="${toString peer.endpointsUpdater.refreshSeconds}"
+          declare -A configured_keys
+          configured_keys=(${concatMapStringsSep " " (p:
+            optionalString (p.publicKey != peer.publicKey) "[${p.publicKey}]=set")
+            interfaceCfg.peers})
+
+          while true; do
+            # Set stdin to socat's stdout
+            exec < <(exec ${pkgs.socat}/bin/socat STDOUT \
+              "TCP:${with peer.endpointsUpdater; addr+":"+toString port}")
+
+            # Update the endpoint of each configured peer
+            while read -t "$wait" -n 128 -r public_key endpoint x; do
+              if [ "$endpoint" != "(none)" -a "''${configured_keys[$public_key]}" ]; then
+                wg set "${interfaceName}" peer "$public_key" endpoint "$endpoint"
+              fi;
+            done
+
+            sleep "$wait"
+          done
+        '';
+      };
+
   nsWrap = cmd: src: dst:
     let
       nsList = filter (ns: ns != null) [ src dst ];
@@ -492,11 +710,19 @@ in
     boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
     environment.systemPackages = [ pkgs.wireguard-tools ];
 
+    systemd.sockets =
+      mapAttrs' generatePeersAnnouncingSocket cfg.interfaces;
+
     systemd.services =
       (mapAttrs' generateInterfaceUnit cfg.interfaces)
+      // (mapAttrs' generatePeersAnnouncingUnit cfg.interfaces)
       // (listToAttrs (map generatePeerUnit all_peers))
+      // (listToAttrs (map generateEndpointsUpdaterUnit
+      (filter ({peer, ...}: peer.endpointsUpdater.enable) all_peers)))
       // (mapAttrs' generateKeyServiceUnit
       (filterAttrs (name: value: value.generatePrivateKeyFile) cfg.interfaces));
+
+    meta.maintainers = with maintainers; [ julm ];
 
   });
 
