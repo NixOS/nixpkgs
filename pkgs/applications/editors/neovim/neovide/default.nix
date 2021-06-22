@@ -15,20 +15,21 @@
 , llvmPackages
 , makeFontsConf
 , libglvnd
+, libxkbcommon
 , xorg
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "unstable-2021-06-18";
+  version = "unstable-2021-06-21";
 
   src = fetchFromGitHub {
     owner = "Kethku";
     repo = "neovide";
-    rev = "599dc5887d8799ae8971259bc3bdbaa7b6e2ef45";
-    sha256 = "sha256-mwIJ9kI0N6W/3km8H6TdDfSO3TdLg+A/5DSxejRg3i8=";
+    rev = "4159c47ff4f30073b92b9d63fc6ab70e07b74b6d";
+    sha256 = "sha256-XwirJGXMGxc/NkpSeHBUc16ppvJ+H4ECnrOVu030Qfg=";
   };
 
-  cargoSha256 = "sha256-Fg2cDwjW6Ex5uUZ8226kgNd/6EoeJddp/rULqH70NRs=";
+  cargoSha256 = "sha256-WCk9kt81DtBwpEEdKH9gKQSVxAvH+vkyP2y24tU+vzY=";
 
   SKIA_SOURCE_DIR =
     let
@@ -85,7 +86,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
       wrapProgram $out/bin/neovide \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd xorg.libXcursor xorg.libXext xorg.libXrandr xorg.libXi ]}
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd libxkbcommon xorg.libXcursor xorg.libXext xorg.libXrandr xorg.libXi ]}
     '';
 
   postInstall = ''
