@@ -7,7 +7,7 @@ let
 
   uwsgi = pkgs.uwsgi.override { plugins = [ "python3" ]; };
   python = uwsgi.python3;
-  penv = python.withPackages (ps: [ ps.privacyidea ]);
+  penv = python.withPackages (const [ pkgs.privacyidea ]);
   logCfg = pkgs.writeText "privacyidea-log.cfg" ''
     [formatters]
     keys=detail
@@ -194,7 +194,7 @@ in
 
     (mkIf cfg.enable {
 
-      environment.systemPackages = [ python.pkgs.privacyidea ];
+      environment.systemPackages = [ pkgs.privacyidea ];
 
       services.postgresql.enable = mkDefault true;
 

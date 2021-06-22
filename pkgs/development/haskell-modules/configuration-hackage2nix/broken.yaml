@@ -60,6 +60,7 @@ broken-packages:
   - adaptive-containers
   - adaptive-tuple
   - adb
+  - addy
   - adjunction
   - adobe-swatch-exchange
   - ADPfusion
@@ -196,6 +197,7 @@ broken-packages:
   - ascii-flatten
   - ascii-string
   - ascii-vector-avc
+  - asif
   - asil
   - asn
   - asn1-codec
@@ -402,6 +404,7 @@ broken-packages:
   - bloomfilter-redis
   - blosum
   - blubber-server
+  - bludigon
   - Blueprint
   - bluetileutils
   - blunk-hask-tests
@@ -540,6 +543,7 @@ broken-packages:
   - canteven-parsedate
   - cantor
   - Capabilities
+  - capataz
   - capnp
   - capped-list
   - capri
@@ -651,6 +655,7 @@ broken-packages:
   - clipper
   - clisparkline
   - clit
+  - clock-extras
   - clogparse
   - clone-all
   - closure
@@ -678,6 +683,7 @@ broken-packages:
   - codec-beam
   - codec-libevent
   - codecov-haskell
+  - codeforces-cli
   - codepad
   - codeworld-api
   - codex
@@ -802,6 +808,7 @@ broken-packages:
   - CoreDump
   - CoreErlang
   - core-haskell
+  - corenlp-parser
   - Coroutine
   - coroutine-object
   - CouchDB
@@ -856,6 +863,7 @@ broken-packages:
   - css
   - css-easings
   - css-selectors
+  - css-syntax
   - csv-nptools
   - ctemplate
   - ctkl
@@ -1080,6 +1088,7 @@ broken-packages:
   - docusign-example
   - docvim
   - domplate
+  - do-spaces
   - dotfs
   - dot-linker
   - doublify-toolkit
@@ -1488,6 +1497,7 @@ broken-packages:
   - funpat
   - funspection
   - fused-effects-exceptions
+  - fused-effects-mwc-random
   - fused-effects-resumable
   - fusion
   - futun
@@ -1560,6 +1570,7 @@ broken-packages:
   - ghc-clippy-plugin
   - ghc-core-smallstep
   - ghc-datasize
+  - ghc-debug-convention
   - ghc-dump-tree
   - ghc-dup
   - ghc-events-analyze
@@ -2044,6 +2055,7 @@ broken-packages:
   - hgrib
   - hharp
   - HHDL
+  - hhp
   - hhwloc
   - hi
   - hi3status
@@ -2102,9 +2114,6 @@ broken-packages:
   - hlongurl
   - hlrdb-core
   - hls-exactprint-utils
-  - hls-floskell-plugin
-  - hls-fourmolu-plugin
-  - hls-pragmas-plugin
   - hlwm
   - hmarkup
   - hmatrix-banded
@@ -2363,6 +2372,7 @@ broken-packages:
   - hVOIDP
   - hwall-auth-iitk
   - hw-ci-assist
+  - hw-dump
   - hweblib
   - hwhile
   - hw-json-simd
@@ -2736,6 +2746,7 @@ broken-packages:
   - limp-cbc
   - linda
   - linden
+  - linear-accelerate
   - linear-algebra-cblas
   - linear-base
   - linear-code
@@ -3223,6 +3234,7 @@ broken-packages:
   - nix-freeze-tree
   - nixfromnpm
   - nixpkgs-update
+  - nix-thunk
   - nix-tools
   - nkjp
   - nlp-scores
@@ -3525,6 +3537,7 @@ broken-packages:
   - pg-recorder
   - pg-store
   - pgstream
+  - pg-transact
   - phasechange
   - phaser
   - phoityne
@@ -3612,6 +3625,7 @@ broken-packages:
   - poly-control
   - polydata-core
   - polynomial
+  - polysemy
   - polysemy-zoo
   - polytypeable
   - pomohoro
@@ -3630,6 +3644,7 @@ broken-packages:
   - posix-api
   - posix-realtime
   - posix-waitpid
+  - posplyu
   - postcodes
   - postgres-embedded
   - postgresql-lo-stream
@@ -4123,6 +4138,7 @@ broken-packages:
   - serokell-util
   - servant-aeson-specs
   - servant-auth-cookie
+  - servant-auth-docs
   - servant-auth-hmac
   - servant-auth-token-api
   - servant-avro
@@ -4216,6 +4232,7 @@ broken-packages:
   - shivers-cfg
   - shoap
   - shopify
+  - shortcut-links
   - shorten-strings
   - show-prettyprint
   - Shpadoinkle-backend-snabbdom
@@ -4377,6 +4394,7 @@ broken-packages:
   - sparse
   - sparsecheck
   - sparse-lin-alg
+  - spartacon
   - special-functors
   - special-keys
   - speculate
@@ -4501,6 +4519,7 @@ broken-packages:
   - string-quote
   - stringtable-atom
   - stripe
+  - stripeapi
   - stripe-hs
   - stripe-http-streams
   - stripe-signature
@@ -4549,6 +4568,7 @@ broken-packages:
   - swift-lda
   - swiss-ephemeris
   - swisstable
+  - sws
   - syb-extras
   - SybWidget
   - syb-with-class-instances-text
@@ -4618,6 +4638,7 @@ broken-packages:
   - tcod-haskell
   - tcp
   - tcp-streams-openssl
+  - tdigest-Chart
   - tds
   - teams
   - teeth
@@ -4648,6 +4669,7 @@ broken-packages:
   - terntup
   - terraform-http-backend-pass
   - tersmu
+  - tesla
   - testCom
   - testcontainers
   - test-fixture
@@ -4683,6 +4705,7 @@ broken-packages:
   - text-position
   - text-register-machine
   - text-replace
+  - text-time
   - textual
   - text-utf8
   - text-xml-qq
@@ -4759,7 +4782,6 @@ broken-packages:
   - Titim
   - tkhs
   - tkyprof
-  - tmp-postgres
   - todo
   - tofromxml
   - to-haskell
@@ -5103,6 +5125,7 @@ broken-packages:
   - weather-api
   - webapp
   - WebBits
+  - webby
   - webcloud
   - webcrank
   - webcrank-dispatch
@@ -5279,6 +5302,7 @@ broken-packages:
   - yesod-form-richtext
   - yesod-gitrev
   - yesod-goodies
+  - yesod-ip
   - yesod-job-queue
   - yesod-links
   - yesod-lucid
@@ -5346,3 +5370,4 @@ broken-packages:
   - ztar
   - Zwaluw
   - zxcvbn-dvorak
+  - zxcvbn-hs

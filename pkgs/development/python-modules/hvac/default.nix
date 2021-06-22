@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests, six }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pyhcl
+, requests
+, six
+}:
 
 buildPythonPackage rec {
   pname = "hvac";
@@ -6,10 +12,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c616f29d6642adaabcd408a04469374ed83be12b24501bb337e8f37badfef22";
+    sha256 = "sha256-DGFvKdZkKtqrzUCKBEaTdO2DvhKyRQG7M36PN7rf7yI=";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  propagatedBuildInputs = [
+    pyhcl
+    requests
+    six
+  ];
 
   # Requires running a Vault server
   doCheck = false;
@@ -20,5 +30,6 @@ buildPythonPackage rec {
     description = "HashiCorp Vault API client";
     homepage = "https://github.com/ianunruh/hvac";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

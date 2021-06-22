@@ -31,12 +31,12 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "2.1.5";
+  version = "3.0.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "df46101107b248577483d88e547badfc041dcbf6932bdc82004c4b3ee958baff";
+    sha256 = "sha256-N/DAvnO+S9E4tndEWpiG84P3FCFwxYNdGFxbxUVsTx8=";
   };
 
   nativeBuildInputs = [
@@ -74,9 +74,12 @@ buildPythonPackage rec {
 
   # darwin has write permission issues
   doCheck = stdenv.isLinux;
+
   # ignore documentation tests
   checkPhase = ''
-    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst'
+    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst' \
+    --deselect=sunpy/tests/tests/test_self_test.py::test_main_nonexisting_module \
+    --deselect=sunpy/tests/tests/test_self_test.py::test_main_stdlib_module
   '';
 
   meta = with lib; {

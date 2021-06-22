@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, openssl, lib }:
+{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, openssl, lib
+# miscellaneous
+, brotli, c-ares
+# databases
+, sqliteSupport ? true, sqlite
+, postgresSupport ? false, postgresql
+, redisSupport ? false, hiredis
+, mysqlSupport ? false, libmysqlclient, mariadb }:
 
 stdenv.mkDerivation rec {
   pname = "drogon";
@@ -24,7 +31,13 @@ stdenv.mkDerivation rec {
     libossp_uuid
     zlib
     openssl
-  ];
+    brotli
+    c-ares
+  ] ++ lib.optional sqliteSupport sqlite
+    ++ lib.optional postgresSupport postgresql
+    ++ lib.optional redisSupport hiredis
+    # drogon uses mariadb for mysql (see https://github.com/an-tao/drogon/wiki/ENG-02-Installation#Library-Dependencies)
+    ++ lib.optional mysqlSupport [ libmysqlclient mariadb ];
 
   patches = [
     # this part of the test would normally fail because it attempts to configure a CMake project that uses find_package on itself

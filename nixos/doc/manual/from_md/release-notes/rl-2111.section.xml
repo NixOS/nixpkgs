@@ -309,6 +309,8 @@
           </listitem>
         </itemizedlist>
       </listitem>
+    </itemizedlist>
+    <itemizedlist spacing="compact">
       <listitem>
         <para>
           The <literal>antlr</literal> package now defaults to the 4.x

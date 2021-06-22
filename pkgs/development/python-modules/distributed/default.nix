@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "67bf61fd6022a397625f69b20a1c7c1cf0167b6441e008f0ed86dc8785d46057";
+    sha256 = "sha256-Z79h/WAio5diX2myChx8HPAWe2RB4Ajw7Ybch4XUYFc=";
   };
 
   propagatedBuildInputs = [

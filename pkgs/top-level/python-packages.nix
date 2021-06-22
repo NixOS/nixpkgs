@@ -5471,8 +5471,6 @@ in {
 
   prison = callPackage ../development/python-modules/prison { };
 
-  privacyidea = callPackage ../development/python-modules/privacyidea { };
-
   pyjwt1 = callPackage ../development/python-modules/pyjwt/1.nix { };
 
   proboscis = callPackage ../development/python-modules/proboscis { };
@@ -6885,6 +6883,8 @@ in {
 
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
+  python-ethtool = callPackage ../development/python-modules/python-ethtool { };
+
   python_fedora = callPackage ../development/python-modules/python_fedora { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
@@ -6928,6 +6928,8 @@ in {
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
+
+  python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
 
   python-logstash = callPackage ../development/python-modules/python-logstash { };
 
