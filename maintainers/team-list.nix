@@ -136,6 +136,7 @@ with lib.maintainers; {
       mmilata
       petabyteboy
       ryantm
+      yuka
     ];
     scope = "Maintain Jitsi.";
   };
