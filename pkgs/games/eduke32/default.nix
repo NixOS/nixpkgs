@@ -3,10 +3,6 @@
 , SDL2, SDL2_mixer }:
 
 let
-  version = "20200907";
-  rev = "9257";
-  revExtra = "93f62bbad";
-
   desktopItem = makeDesktopItem {
     name = "eduke32";
     exec = "@out@/bin/${wrapper}";
@@ -18,9 +14,11 @@ let
 
   wrapper = "eduke32-wrapper";
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "eduke32";
-  inherit version;
+  version = "20200907";
+  rev = "9257";
+  revExtra = "93f62bbad";
 
   src = fetchurl {
     url = "http://dukeworld.duke4.net/eduke32/synthesis/latest/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";

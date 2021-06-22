@@ -2,9 +2,10 @@
 , physfs }:
 
 stdenv.mkDerivation rec {
-  name = "neverball-1.6.0";
+  pname = "neverball";
+  version = "1.6.0";
   src = fetchurl {
-    url = "https://neverball.org/${name}.tar.gz";
+    url = "https://neverball.org/neverball-${version}.tar.gz";
     sha256 = "184gm36c6p6vaa6gwrfzmfh86klhnb03pl40ahsjsvprlk667zkk";
   };
 

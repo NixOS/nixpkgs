@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, SDL, lua, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
-  name = "bitsnbots-20111230";
+  pname = "bitsnbots";
+  version = "20111230";
 
   src = fetchurl {
     url = "http://moikmellah.org/downloads/bitsnbots/bitsnbots.source.tgz";
@@ -19,10 +20,10 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lGL";
 
   installPhase = ''
-    mkdir -p $out/share/${name}
-    cp -R bitsnbots resource scripts README $out/share/${name}
+    mkdir -p $out/share/${pname}-${version}
+    cp -R bitsnbots resource scripts README $out/share/${pname}-${version}
     mkdir -p $out/bin
-    ln -s $out/share/${name}/bitsnbots $out/bin
+    ln -s $out/share/${pname}-${version}/bitsnbots $out/bin
   '';
 
   buildInputs = [ SDL lua libGLU libGL ];

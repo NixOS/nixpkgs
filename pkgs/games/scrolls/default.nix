@@ -2,7 +2,8 @@
 , libGLU, libX11, libXext, libXcursor, libpulseaudio
 }:
 stdenv.mkDerivation {
-  name = "scrolls-2015-10-13";
+  pname = "scrolls";
+  version = "2015-10-13";
 
   meta = {
     description = "A strategy collectible card game";
