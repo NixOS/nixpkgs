@@ -8239,6 +8239,8 @@ in {
 
   stone = callPackage ../development/python-modules/stone { };
 
+  stopit = callPackage ../development/python-modules/stopit { };
+
   strategies = callPackage ../development/python-modules/strategies { };
 
   stravalib = callPackage ../development/python-modules/stravalib { };
