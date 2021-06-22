@@ -21,8 +21,7 @@ mkDerivation {
     kcmutils kcrash kdbusaddons kparts kwindowsystem
     akonadi grantleetheme kontactinterface kpimtextedit
     mailcommon libkdepim pimcommon
-  ]
-  ++ pimExternalApplications.kmailApplications;
+  ] ++ pimExternalApplications.kmailApplications;
   # create wrapper for being able to call external executables,
   # please concatenate the external dependencies of all PIM components specified in `pimExternalApplications`
   postFixup = ''
