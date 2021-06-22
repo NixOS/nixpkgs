@@ -68,7 +68,7 @@ do
     OWNER=$(echo "$i" | cut -d. -f1)
     EXT=$(echo "$i" | cut -d. -f2)
 
-    ref=$(get_vsixpkg "$OWNER" "$EXT")
+    ref=$(get_vsixpkg "$OWNER" "$EXT") || continue
     echo "$ref"
     if test -v UPDATE_SOURCES; then
         if ! from=$(nix-instantiate --eval --expr "(import ./sources.nix).\"$i\".version") 2>&1 1>/dev/null; then

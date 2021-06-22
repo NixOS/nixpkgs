@@ -2,8 +2,8 @@
   "4ops.terraform" = {
     name = "terraform";
     publisher = "4ops";
-    sha256 = "196026a89pizj8p0hqdgkyllj2spx2qwpynsaqjq17s8v15vk5dg";
-    version = "0.2.1";
+    sha256 = "1f62sck05gvjp7bb6zv34mdbk57y0c9h1av9kp62vjfqggv4zdpf";
+    version = "0.2.2";
   };
   "CoenraadS.bracket-pair-colorizer-2" = {
     name = "bracket-pair-colorizer-2";
