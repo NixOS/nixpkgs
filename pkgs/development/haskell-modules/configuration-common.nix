@@ -706,20 +706,14 @@ self: super: {
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
-  # 2021-03-12: All of this libraries have to restrictive upper bounds
-  # https://github.com/diagrams/diagrams-core/issues/112
-  # https://github.com/diagrams/diagrams-cairo/issues/77
-  # https://github.com/diagrams/diagrams-rasterific/issues/63
-  # https://github.com/diagrams/diagrams-cairo/issues/77
-  active = doJailbreak super.active;
-  statestack = doJailbreak super.statestack;
-  force-layout = doJailbreak super.force-layout;
+  # Too strict bounds on template-haskell (doesn't allow 2.16)
+  # For 2.17 support: https://github.com/JonasDuregard/sized-functors/pull/10
   size-based = doJailbreak super.size-based;
+
+  # Remove as soon as we update to monoid-extras 0.6 and unpin these packages
   dual-tree = doJailbreak super.dual-tree;
   diagrams-core = doJailbreak super.diagrams-core;
-  diagrams-postscript = doJailbreak super.diagrams-postscript;
-  diagrams-svg = doJailbreak super.diagrams-svg;
-  diagrams-contrib = doJailbreak super.diagrams-contrib;
+
   # Apply patch from master to add compat with optparse-applicative >= 0.16.
   # We unfortunately can't upgrade to 1.4.4 which includes this patch yet
   # since it would require monoid-extras 0.6 which breaks other diagrams libs.
@@ -729,8 +723,6 @@ self: super: {
       sha256 = "0xqvzh3ip9i0nv8xnh41afxki64r259pxq8ir1a4v99ggnldpjaa";
       includes = [ "*/CmdLine.hs" ];
     }));
-  diagrams-rasterific = doJailbreak super.diagrams-rasterific;
-  diagrams-cairo = doJailbreak super.diagrams-cairo;
 
   # https://github.com/diagrams/diagrams-solve/issues/4
   diagrams-solve = dontCheck super.diagrams-solve;
