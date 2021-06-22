@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.14";
+  version = "2.3.15";
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "0jm3p52z619v7ajh533g2g7d790k82fk0w7ry0zqlm8ymzrxgcy8";
+    sha256 = "141manrh54cy8xizr7f8fsa3vdzc2ccfgdz87l9rjylm8mfxvfr1";
   };
 
   enableParallelBuilding = true;
 
   preConfigure = ''
     patchShebangs src/config/settings-get.pl
-  '';
+  '' + lib.optionalString (stdenv.isLinux) "export systemdsystemunitdir=$out/etc/systemd/system";
 
   # We need this for sysconfdir, see remark below.
   installFlags = [ "DESTDIR=$(out)" ];
@@ -75,17 +75,18 @@ stdenv.mkDerivation rec {
     "lib_cv_va_copy=yes"
     "lib_cv___va_copy=yes"
     "lib_cv_va_val_copy=yes"
-  ] ++ lib.optional (stdenv.isLinux) "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    ++ lib.optional (stdenv.isDarwin) "--enable-static"
+  ] ++ lib.optional stdenv.isLinux "--with-systemd"
+    ++ lib.optional stdenv.isDarwin "--enable-static"
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
     ++ lib.optional withSQLite "--with-sqlite";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with lib.maintainers; [ peti fpletz globin ajs124 ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ mit publicDomain lgpl21Only bsd3 bsdOriginal ];
+    maintainers = with maintainers; [ peti fpletz globin ajs124 ];
+    platforms = platforms.unix;
   };
   passthru.tests = {
     opensmtpd-interaction = nixosTests.opensmtpd;
