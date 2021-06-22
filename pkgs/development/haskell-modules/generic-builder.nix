@@ -289,7 +289,7 @@ in lib.fix (drv:
 assert allPkgconfigDepends != [] -> pkg-config != null;
 
 stdenv.mkDerivation ({
-  name = "${pname}-${version}";
+  inherit pname version;
 
   outputs = [ "out" ]
          ++ (optional enableSeparateDataOutput "data")
