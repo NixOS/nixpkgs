@@ -62,8 +62,8 @@
   "ms-toolsai.jupyter" = {
     name = "jupyter";
     publisher = "ms-toolsai";
-    sha256 = "0gjpsp61l8daqa87mpmxcrvsvb0pc2vwg7xbkvwn0f13c1739w9p";
-    version = "2021.5.745244803";
+    sha256 = "0n02ksz8smrb2sn4k6g7dr0cdih7y4qdkldlhgyz8sr9l6j1m6la";
+    version = "2021.7.956490266";
   };
   "shardulm94.trailing-spaces" = {
     name = "trailing-spaces";
