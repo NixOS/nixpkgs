@@ -111,7 +111,7 @@ mv bioc-annotation-packages.nix.new bioc-annotation-packages.nix
 mv bioc-experiment-packages.nix.new bioc-experiment-packages.nix
 ```
 
-`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming, but sometimes a delay is needed for the OS to release locks on the new file. 
+`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming, but sometimes a delay is needed for the OS to release locks on the new file.
 
 If `nix-shell generate-shell.nix` is causing a large number of packages to rebuild from source and taking too long, then any environment with both `R` and `nix-hash` should work as a substitute, as long as the packages `data.table`, `parallel` and `BiocManager` are installed and the `R` version matches master.
 
