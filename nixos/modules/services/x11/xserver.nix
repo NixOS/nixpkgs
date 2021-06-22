@@ -357,6 +357,13 @@ in
         description = ''
           The contents of the configuration file of the X server
           (<filename>xorg.conf</filename>).
+
+          This option is set by multiple modules, and the configs are
+          concatenated together.
+
+          In Xorg configs the last config entries take precedence,
+          so you may want to use <literal>lib.mkAfter</literal> on this option
+          to override NixOS's defaults.
         '';
       };
 
