@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "feedparser";
-  version = "6.0.2";
+  version = "6.0.6";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b00a105425f492f3954fd346e5b524ca9cef3a4bbf95b8809470e9857aa1074";
+    sha256 = "1syd15460a6m397rajdpbr9q0hgxm1j6xf9ba18z9pighxdjmxkq";
   };
 
   propagatedBuildInputs = [ sgmllib3k ];

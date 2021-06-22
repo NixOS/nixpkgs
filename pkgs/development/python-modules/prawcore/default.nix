@@ -1,17 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
 , requests
-, testfixtures, mock, requests_toolbelt
-, betamax, betamax-serializers, betamax-matchers, pytest
+, testfixtures
+, mock
+, requests_toolbelt
+, betamax
+, betamax-serializers
+, betamax-matchers
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "prawcore";
-  version = "2.0.0";
-  disabled = isPy27; # see https://github.com/praw-dev/prawcore/pull/101
+  version = "2.2.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tJjZtvVJkQBecn1SNcj0nqW6DJpteT+3Q7QPoInNNtE=";
+    sha256 = "08wiij1r3flpnqzdx8bf536yf7lqyhg9461aybhcykcw8nnjzr5x";
   };
 
   propagatedBuildInputs = [
@@ -25,18 +33,16 @@ buildPythonPackage rec {
     betamax-serializers
     betamax-matchers
     requests_toolbelt
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  pythonImportsCheck = [ "prawcore" ];
 
   meta = with lib; {
     description = "Low-level communication layer for PRAW";
     homepage = "https://praw.readthedocs.org/";
-    license = licenses.gpl3;
+    license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }
