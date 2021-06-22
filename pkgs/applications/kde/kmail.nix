@@ -93,8 +93,7 @@ mkDerivation {
     qtkeychain
     qtscript
     qtwebengine
-  ]
-  ++ pimExternalApplications.kmailApplications;
+  ] ++ pimExternalApplications.kmailApplications;
   outputs = [ "out" "doc" ];
   propagatedUserEnvPkgs = [ kdepim-runtime kwallet akonadi ];
   postFixup = ''
