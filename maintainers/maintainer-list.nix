@@ -1883,6 +1883,12 @@
     githubId = 2131991;
     name = "Elmo Todurov";
   };
+  cjab = {
+    email = "chad+nixpkgs@jablonski.xyz";
+    github = "cjab";
+    githubId = 136485;
+    name = "Chad Jablonski";
+  };
   ck3d = {
     email = "ck3d@gmx.de";
     github = "ck3d";
@@ -4016,6 +4022,12 @@
     github = "moredhel";
     githubId = 1742172;
     name = "Hamish Hutchings";
+  };
+  hanemile = {
+    email = "mail@emile.space";
+    github = "hanemile";
+    githubId = 22756350;
+    name = "Emile Hansmaennel";
   };
   hansjoergschurr = {
     email = "commits@schurr.at";
@@ -11419,6 +11431,12 @@
       longkeyid = "rsa4096/0xEC5065899AEAAF4C";
       fingerprint = "85F8 E850 F8F2 F823 F934  535B EC50 6589 9AEA AF4C";
     }];
+  };
+  yuka = {
+    email = "yuka@yuka.dev";
+    github = "yu-re-ka";
+    githubId = 86169957;
+    name = "Yureka";
   };
   yusdacra = {
     email = "y.bera003.06@protonmail.com";
