@@ -1860,6 +1860,8 @@ in
 
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
 
+  beats = callPackage ../tools/misc/beats { };
+
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
