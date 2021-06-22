@@ -15,7 +15,7 @@ in
     nix.gc = {
 
       automatic = mkOption {
-        default = false;
+        default = true;
         type = types.bool;
         description = "Automatically run the garbage collector at a specific time.";
       };
