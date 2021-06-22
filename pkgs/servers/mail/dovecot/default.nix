@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
-, bzip2, zlib, lz4, inotify-tools, pam, libcap
+, bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
 # Auth modules
@@ -24,6 +24,20 @@ stdenv.mkDerivation rec {
     url = "https://dovecot.org/releases/2.3/${pname}-${version}.tar.gz";
     sha256 = "1i7ijss79a23v7b6lycfzaa8r5rh01k0h0b9h0j4a6n11sw7by53";
   };
+
+  postPatch = ''
+    substituteInPlace src/lib-program-client/test-program-client-local.c \
+      --replace '"/bin/sh"' '"${stdenv.shell}"' \
+      --replace '"/bin/' '"${coreutils}/bin/' \
+      --replace 'head ' '${coreutils}/bin/head ' \
+      --replace 'sleep ' '${coreutils}/bin/sleep ' \
+      --replace ' cat' ' ${coreutils}/bin/cat'
+    patchShebangs src/lib-smtp/test-bin/*.sh
+    substituteInPlace src/lib-smtp/test-bin/sendmail-exit-1.sh \
+      --replace 'cat' ' ${coreutils}/bin/cat'
+    substituteInPlace src/lib-smtp/test-bin/sendmail-success.sh \
+      --replace 'cat' ' ${coreutils}/bin/cat'
+  '';
 
   enableParallelBuilding = true;
 
@@ -80,6 +94,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
     ++ lib.optional withSQLite "--with-sqlite";
+
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ coreutils ];
 
   meta = {
     homepage = "https://dovecot.org/";
