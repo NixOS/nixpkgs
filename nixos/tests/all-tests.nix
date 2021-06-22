@@ -234,6 +234,7 @@ in
   magnetico = handleTest ./magnetico.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
   mailhog = handleTest ./mailhog.nix {};
+  makeWrapper = handleTest ./makeWrapper.nix {};
   mariadb-galera-mariabackup = handleTest ./mysql/mariadb-galera-mariabackup.nix {};
   mariadb-galera-rsync = handleTest ./mysql/mariadb-galera-rsync.nix {};
   matomo = handleTest ./matomo.nix {};
