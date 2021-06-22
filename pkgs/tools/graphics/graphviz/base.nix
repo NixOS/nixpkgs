@@ -2,7 +2,7 @@
 
 { lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, cairo, expat, flex
 , fontconfig, gd, gettext, gts, libdevil, libjpeg, libpng, libtool, pango
-, bison, fetchpatch, xorg ? null, ApplicationServices }:
+, bison, fetchpatch, xorg, ApplicationServices, python3 }:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     inherit sha256 rev;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
 
   buildInputs = [
     libpng libjpeg expat bison libtool fontconfig gd gts libdevil flex pango
