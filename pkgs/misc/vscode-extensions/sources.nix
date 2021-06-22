@@ -55,9 +55,9 @@
   };
   "ms-python.vscode-pylance" = {
     name = "vscode-pylance";
-    publisher = "MS-python";
-    sha256 = "0n2dm21vgzir3hx1m3pmx7jq4zy3hdxfsandd2wv5da4fs9b5g50";
-    version = "2020.11.2";
+    publisher = "ms-python";
+    sha256 = "13ci4rgz97kjfhb60z95dzbhq2rq8kxi4wn9wp2xzaqgf50zx0v8";
+    version = "2021.6.2";
   };
   "ms-toolsai.jupyter" = {
     name = "jupyter";
