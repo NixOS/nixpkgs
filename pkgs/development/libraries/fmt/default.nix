@@ -44,7 +44,7 @@ let
 in
 {
   fmt_7 = generic {
-    version = "7.1.3";
-    sha256 = "08hyv73qp2ndbs0isk8pspsphdzz5qh8czl3wgyxy3mmif9xdg29";
+    version = "8.0.0";
+    sha256 = "sha256-Ek8MC/B66Eu23xhnrb21Ozg36Uq7Yfzke8PqJlxz2fo=";
   };
 }
