@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional enableVTK [
     vtk
-  ]
-  ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optional stdenv.isDarwin [
     ApplicationServices
     Cocoa
   ] ++ lib.optionals enablePython [ swig python ];
