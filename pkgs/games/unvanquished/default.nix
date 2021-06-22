@@ -185,7 +185,7 @@ in stdenv.mkDerivation rec {
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [
-      mit gpl3Only lib.licenses.zlib cc-by-sa-25
+      mit gpl3Plus lib.licenses.zlib cc-by-sa-25
     ];
   };
 }
