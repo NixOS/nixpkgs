@@ -1,20 +1,28 @@
-{ lib, fetchFromGitLab, rustPlatform }:
+{ lib, fetchFromGitLab, unstableGitUpdater, rustPlatform, scdoc }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kile-wl";
-  version = "unstable-2021-04-22";
+  version = "unstable-2021-06-01";
 
   src = fetchFromGitLab {
     owner = "snakedye";
     repo = "kile";
-    rev = "b97b9f1e5b33862b33918efaf23fd1c0c5d7058a";
-    sha256 = "sha256-97qJd3o8nJt8IX5tyGWtAmJsIv5Gcw1xoBFwxAqk7I8=";
+    rev = "28235f85ece148e7010c5d6ac088688100a18e04";
+    sha256 = "sha256-UTfYYywOwa728zLkLWQaz6wN0TM/4OzbHQGedjdHGSI=";
   };
 
-  # Upstream has Cargo.lock gitignored
-  cargoPatches = [ ./update-Cargo-lock.diff ];
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://gitlab.com/snakedye/kile.git";
+  };
 
-  cargoSha256 = "sha256-TEgIiw/XTDUOe9K7agHWI86f88w+eDJ332V0CgNHtfo=";
+  cargoSha256 = "sha256-dzOkiZYHQu5AuwkbWEtIJAyZ1TNIGYkfz+S3q6K384w=";
+
+  nativeBuildInputs = [ scdoc ];
+
+  postInstall = ''
+    mkdir -p $out/share/man
+    scdoc < doc/kile.1.scd > $out/share/man/kile.1
+  '';
 
   meta = with lib; {
     description = "A tiling layout generator for river";
