@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.1.7";
 
   src = fetchgit {
-    url = "http://git.sesse.net/plocate";
+    url = "https://git.sesse.net/plocate";
     rev = version;
     sha256 = "sha256-5Ie4qgiKUoI9Kma6YvjXirvBbpbKVuaMSSAZa36zN3M=";
   };
