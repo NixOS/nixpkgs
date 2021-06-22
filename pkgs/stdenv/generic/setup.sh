@@ -11,7 +11,7 @@ if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
 
-: ${outputs:=out}
+: "${outputs:=out}"
 
 
 ######################################################################
@@ -232,7 +232,7 @@ printWords() {
 # implementation uses zip archive and zip does not support dates going back to
 # 1970.
 export SOURCE_DATE_EPOCH
-: ${SOURCE_DATE_EPOCH:=315532800}
+: "${SOURCE_DATE_EPOCH:=315532800}"
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -437,12 +437,12 @@ findInputs() {
 }
 
 # Make sure all are at least defined as empty
-: ${depsBuildBuild=} ${depsBuildBuildPropagated=}
-: ${nativeBuildInputs=} ${propagatedNativeBuildInputs=} ${defaultNativeBuildInputs=}
-: ${depsBuildTarget=} ${depsBuildTargetPropagated=}
-: ${depsHostHost=} ${depsHostHostPropagated=}
-: ${buildInputs=} ${propagatedBuildInputs=} ${defaultBuildInputs=}
-: ${depsTargetTarget=} ${depsTargetTargetPropagated=}
+: "${depsBuildBuild=}" "${depsBuildBuildPropagated=}"
+: "${nativeBuildInputs=}" "${propagatedNativeBuildInputs=}" "${defaultNativeBuildInputs=}"
+: "${depsBuildTarget=}" "${depsBuildTargetPropagated=}"
+: "${depsHostHost=}" "${depsHostHostPropagated=}"
+: "${buildInputs=}" "${propagatedBuildInputs=}" "${defaultBuildInputs=}"
+: "${depsTargetTarget=}" "${depsTargetTargetPropagated=}"
 
 for pkg in $depsBuildBuild $depsBuildBuildPropagated; do
     findInputs "$pkg" -1 -1
@@ -718,6 +718,7 @@ substituteStream() {
 
 consumeEntire() {
     # read returns non-0 on EOF, so we want read to fail
+    # shellcheck disable=SC2086
     if IFS='' read -r -N 0 $1; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
@@ -889,7 +890,7 @@ unpackPhase() {
     # Find the source directory.
 
     # set to empty if unset
-    : ${sourceRoot=}
+    : "${sourceRoot=}"
 
     if [ -n "${setSourceRoot:-}" ]; then
         runOneHook setSourceRoot
@@ -967,8 +968,8 @@ configurePhase() {
     runHook preConfigure
 
     # set to empty if unset
-    : ${configureScript=}
-    : ${configureFlags=}
+    : "${configureScript=}"
+    : "${configureFlags=}"
 
     if [[ -z "$configureScript" && -x ./configure ]]; then
         configureScript=./configure
@@ -1022,7 +1023,7 @@ buildPhase() {
     runHook preBuild
 
     # set to empty if unset
-    : ${makeFlags=}
+    : "${makeFlags=}"
 
     if [[ -z "$makeFlags" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile, doing nothing"
@@ -1059,9 +1060,9 @@ checkPhase() {
     if [[ -z "${checkTarget:-}" ]]; then
         #TODO(@oxij): should flagsArray influence make -n?
         if make -n ${makefile:+-f $makefile} check >/dev/null 2>&1; then
-            checkTarget=check
+            checkTarget="check"
         elif make -n ${makefile:+-f $makefile} test >/dev/null 2>&1; then
-            checkTarget=test
+            checkTarget="test"
         fi
     fi
 
@@ -1291,7 +1292,7 @@ genericBuild() {
         if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
 
         if [[ -n $NIX_LOG_FD ]]; then
-            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&$NIX_LOG_FD
+            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
         fi
 
         showPhaseHeader "$curPhase"
