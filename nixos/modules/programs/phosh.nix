@@ -143,9 +143,13 @@ in {
       oskItem
     ];
 
+    systemd.packages = [ pkgs.phosh ];
+
     programs.feedbackd.enable = true;
 
     security.pam.services.phosh = {};
+
+    hardware.opengl.enable = mkDefault true;
 
     services.gnome.core-shell.enable = true;
     services.gnome.core-os-services.enable = true;

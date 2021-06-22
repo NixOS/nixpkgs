@@ -1,41 +1,55 @@
-{ stdenv, fetchFromGitHub, cmake, jsoncpp, libuuid, zlib, openssl, lib }:
+{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, openssl, lib
+# miscellaneous
+, brotli, c-ares
+# databases
+, sqliteSupport ? true, sqlite
+, postgresSupport ? false, postgresql
+, redisSupport ? false, hiredis
+, mysqlSupport ? false, libmysqlclient, mariadb }:
 
 stdenv.mkDerivation rec {
   pname = "drogon";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "an-tao";
     repo = "drogon";
     rev = "v${version}";
-    sha256 = "0ncdlsi3zhmpdwh83d52npb1b2q982y858yl88zl2nfq4zhcm3wa";
+    sha256 = "18wn9ashv3h3pal6x5za6y7byfcrd49zy3wfx4hx0ygxzplmss0r";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    # examples are used in the test during installCheckPhase, otherwise they are unnecessary
-    "-DBUILD_EXAMPLES=${if doInstallCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTING=${if doInstallCheck then "ON" else "OFF"}"
+    "-DBUILD_EXAMPLES=OFF"
   ];
 
   propagatedBuildInputs = [
     jsoncpp
-    libuuid
+    libossp_uuid
     zlib
     openssl
-  ];
+    brotli
+    c-ares
+  ] ++ lib.optional sqliteSupport sqlite
+    ++ lib.optional postgresSupport postgresql
+    ++ lib.optional redisSupport hiredis
+    # drogon uses mariadb for mysql (see https://github.com/an-tao/drogon/wiki/ENG-02-Installation#Library-Dependencies)
+    ++ lib.optional mysqlSupport [ libmysqlclient mariadb ];
 
   patches = [
-    # this part of the test fails because it attempts to configure a CMake project that uses find_package on itself
-    # the rest of the test runs fine because it uses executables that are built in buildPhase when BUILD_EXAMPLES is enabled
-    ./no_cmake_test.patch
+    # this part of the test would normally fail because it attempts to configure a CMake project that uses find_package on itself
+    # this patch makes drogon and trantor visible to the test
+    ./fix_find_package.patch
   ];
 
+  # modifying PATH here makes drogon_ctl visible to the test
   installCheckPhase = ''
     cd ..
     patchShebangs test.sh
-    ./test.sh
+    PATH=$PATH:$out/bin ./test.sh
   '';
 
   doInstallCheck = true;

@@ -142,6 +142,7 @@
 , "kaput-cli"
 , "katex"
 , "karma"
+, "keyoxide"
 , "lcov-result-merger"
 , "leetcode-cli"
 , "vsc-leetcode-cli"
@@ -273,4 +274,5 @@
 , "yaml-language-server"
 , "yarn"
 , "yo"
+, "zx"
 ]

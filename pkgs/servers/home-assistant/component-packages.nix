@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.6.5";
+  version = "2021.6.6";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -19,7 +19,7 @@
     "airly" = ps: with ps; [ airly ];
     "airnow" = ps: with ps; [ pyairnow ];
     "airvisual" = ps: with ps; [ pyairvisual ];
-    "aladdin_connect" = ps: with ps; [ ]; # missing inputs: aladdin_connect
+    "aladdin_connect" = ps: with ps; [ aladdin-connect ];
     "alarm_control_panel" = ps: with ps; [ ];
     "alarmdecoder" = ps: with ps; [ adext ];
     "alert" = ps: with ps; [ ];
@@ -202,13 +202,13 @@
     "eafm" = ps: with ps; [ aioeafm ];
     "ebox" = ps: with ps; [ ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [ ]; # missing inputs: ebusdpy
-    "ecoal_boiler" = ps: with ps; [ ]; # missing inputs: ecoaliface
+    "ecoal_boiler" = ps: with ps; [ ecoaliface ];
     "ecobee" = ps: with ps; [ python-ecobee-api ];
     "econet" = ps: with ps; [ pyeconet ];
     "ecovacs" = ps: with ps; [ ]; # missing inputs: sucks
     "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
     "edimax" = ps: with ps; [ pyedimax ];
-    "edl21" = ps: with ps; [ ]; # missing inputs: pysml
+    "edl21" = ps: with ps; [ pysml ];
     "ee_brightbox" = ps: with ps; [ eebrightbox ];
     "efergy" = ps: with ps; [ ];
     "egardia" = ps: with ps; [ pythonegardia ];
@@ -216,7 +216,7 @@
     "elgato" = ps: with ps; [ elgato ];
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
     "elkm1" = ps: with ps; [ ]; # missing inputs: elkm1-lib
-    "elv" = ps: with ps; [ ]; # missing inputs: pypca
+    "elv" = ps: with ps; [ pypca ];
     "emby" = ps: with ps; [ pyemby ];
     "emoncms" = ps: with ps; [ ];
     "emoncms_history" = ps: with ps; [ ];
@@ -227,7 +227,7 @@
     "enigma2" = ps: with ps; [ openwebifpy ];
     "enocean" = ps: with ps; [ enocean ];
     "enphase_envoy" = ps: with ps; [ envoy-reader ];
-    "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
+    "entur_public_transport" = ps: with ps; [ enturclient ];
     "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ pyenvisalink ];
@@ -335,8 +335,8 @@
     "gstreamer" = ps: with ps; [ ]; # missing inputs: gstreamer-player
     "gtfs" = ps: with ps; [ pygtfs ];
     "guardian" = ps: with ps; [ aioguardian ];
-    "habitica" = ps: with ps; [ ]; # missing inputs: habitipy
-    "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
+    "habitica" = ps: with ps; [ habitipy ];
+    "hangouts" = ps: with ps; [ hangups ];
     "harman_kardon_avr" = ps: with ps; [ ]; # missing inputs: hkavr
     "harmony" = ps: with ps; [ aioharmony ];
     "hassio" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
@@ -344,15 +344,15 @@
     "hddtemp" = ps: with ps; [ ];
     "hdmi_cec" = ps: with ps; [ pycec ];
     "heatmiser" = ps: with ps; [ ]; # missing inputs: heatmiserV3
-    "heos" = ps: with ps; [ ]; # missing inputs: pyheos
-    "here_travel_time" = ps: with ps; [ ]; # missing inputs: herepy
+    "heos" = ps: with ps; [ pyheos ];
+    "here_travel_time" = ps: with ps; [ herepy ];
     "hikvision" = ps: with ps; [ ]; # missing inputs: pyhik
     "hikvisioncam" = ps: with ps; [ ]; # missing inputs: hikvision
     "hisense_aehw4a1" = ps: with ps; [ ]; # missing inputs: pyaehw4a1
     "history" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "history_stats" = ps: with ps; [ sqlalchemy ];
     "hitron_coda" = ps: with ps; [ ];
-    "hive" = ps: with ps; [ ]; # missing inputs: pyhiveapi
+    "hive" = ps: with ps; [ pyhiveapi ];
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
     "home_connect" = ps: with ps; [ aiohttp-cors homeconnect ];
     "home_plus_control" = ps: with ps; [ aiohttp-cors homepluscontrol ];
@@ -405,7 +405,7 @@
     "ios" = ps: with ps; [ aiohttp-cors ifaddr zeroconf ];
     "iota" = ps: with ps; [ ]; # missing inputs: pyota
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
-    "ipma" = ps: with ps; [ ]; # missing inputs: pyipma
+    "ipma" = ps: with ps; [ pyipma ];
     "ipp" = ps: with ps; [ pyipp ];
     "iqvia" = ps: with ps; [ numpy pyiqvia ];
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
@@ -510,7 +510,7 @@
     "microsoft_face_identify" = ps: with ps; [ aiohttp-cors ];
     "miflora" = ps: with ps; [ bluepy ]; # missing inputs: miflora
     "mikrotik" = ps: with ps; [ librouteros ];
-    "mill" = ps: with ps; [ ]; # missing inputs: millheater
+    "mill" = ps: with ps; [ millheater ];
     "min_max" = ps: with ps; [ ];
     "minecraft_server" = ps: with ps; [ aiodns getmac mcstatus ];
     "minio" = ps: with ps; [ minio ];

@@ -5,12 +5,16 @@ stdenv.mkDerivation rec {
   version = "0.7.4";
 
   src = fetchurl {
-    url = "${meta.homepage}/files/${pname}-${version}.tar.gz";
+    url = "https://liba52.sourceforge.net/files/${pname}-${version}.tar.gz";
     sha256 = "oh1ySrOzkzMwGUNTaH34LEdbXfuZdRPu9MJd5shl7DM=";
   };
 
   configureFlags = [
     "--enable-shared"
+  ];
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
   # fails 1 out of 1 tests with "BAD GLOBAL SYMBOLS" on i686

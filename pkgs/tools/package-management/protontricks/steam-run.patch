@@ -69,7 +69,7 @@ index cc65a03..5c3fc7a 100755
              # Pass the command directly into the shell *without*
              # escaping it
 diff --git a/src/protontricks/steam.py b/src/protontricks/steam.py
-index f9fb9ec..e1e588a 100644
+index 4ab778b..f3f5f99 100644
 --- a/src/protontricks/steam.py
 +++ b/src/protontricks/steam.py
 @@ -12,8 +12,8 @@ from .util import lower_dict
@@ -81,9 +81,9 @@ index f9fb9ec..e1e588a 100644
 +    "get_appinfo_sections", "get_proton_appid",
 +    "find_steam_proton_app", "find_appid_proton_prefix",
      "find_proton_app", "get_steam_lib_paths", "get_compat_tool_dirs",
-     "get_proton_installations", "get_custom_proton_installations",
+     "get_custom_proton_installations_in_dir", "get_custom_proton_installations",
      "find_current_steamid3", "get_appid_from_shortcut",
-@@ -286,37 +286,6 @@ def find_steam_path():
+@@ -300,37 +300,6 @@ def find_steam_path():
      return None, None
  
  
@@ -122,7 +122,7 @@ index f9fb9ec..e1e588a 100644
  APPINFO_STRUCT_SECTION = "<LLLLQ20sL"
  
 diff --git a/src/protontricks/util.py b/src/protontricks/util.py
-index 2abda99..3a25368 100644
+index b6617de..85f8b2d 100644
 --- a/src/protontricks/util.py
 +++ b/src/protontricks/util.py
 @@ -4,15 +4,14 @@ import shlex
@@ -146,8 +146,8 @@ index 2abda99..3a25368 100644
  )
  
  logger = logging.getLogger("protontricks")
-@@ -39,24 +38,6 @@ def lower_dict(d):
-     return {k.lower(): v for k, v in d.items()}
+@@ -46,24 +45,6 @@ def lower_dict(d):
+     return {k.lower(): _lower_value(v) for k, v in d.items()}
  
  
 -def get_legacy_runtime_library_paths(legacy_steam_runtime_path, proton_app):
@@ -171,7 +171,7 @@ index 2abda99..3a25368 100644
  def get_host_library_paths():
      """
      Get host library paths to use when creating the LD_LIBRARY_PATH environment
-@@ -68,7 +49,7 @@ def get_host_library_paths():
+@@ -75,7 +56,7 @@ def get_host_library_paths():
      # Since that command is unavailable with newer Steam Runtime releases,
      # do it ourselves here.
      result = run(
@@ -180,7 +180,7 @@ index 2abda99..3a25368 100644
          check=True, stdout=PIPE, stderr=PIPE
      )
      lines = result.stdout.decode("utf-8").split("\n")
-@@ -86,7 +67,7 @@ RUNTIME_ROOT_GLOB_PATTERNS = (
+@@ -93,7 +74,7 @@ RUNTIME_ROOT_GLOB_PATTERNS = (
  )
  
  
@@ -189,7 +189,7 @@ index 2abda99..3a25368 100644
      """
      Get LD_LIBRARY_PATH value to use when running a command using Steam Runtime
      """
-@@ -109,7 +90,7 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
+@@ -116,7 +97,7 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
              )
          )
  
@@ -198,7 +198,7 @@ index 2abda99..3a25368 100644
          return "".join([
              str(proton_app.proton_dist_path / "lib"), os.pathsep,
              str(proton_app.proton_dist_path / "lib64"), os.pathsep
-@@ -125,14 +106,19 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
+@@ -132,14 +113,19 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
      ])
  
  
@@ -225,7 +225,7 @@ index 2abda99..3a25368 100644
  # Helper script created by Protontricks to run Wine binaries using Steam Runtime
  set -o errexit
  
-@@ -200,7 +186,10 @@ if [[ -n "$PROTONTRICKS_INSIDE_STEAM_RUNTIME" ]]; then
+@@ -207,7 +193,10 @@ if [[ -n "$PROTONTRICKS_INSIDE_STEAM_RUNTIME" ]]; then
    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH":"$PROTON_LD_LIBRARY_PATH"
    "$PROTON_DIST_PATH"/bin/{name} "$@"
  else
@@ -237,7 +237,7 @@ index 2abda99..3a25368 100644
    "${{mount_params[@]}}" -- \
    env PROTONTRICKS_INSIDE_STEAM_RUNTIME=1 \
    "$PROTONTRICKS_PROXY_SCRIPT_PATH" "$@"
-@@ -266,7 +255,6 @@ def create_wine_bin_dir(proton_app, use_bwrap=True):
+@@ -273,7 +262,6 @@ def create_wine_bin_dir(proton_app, use_bwrap=True):
  def run_command(
          winetricks_path, proton_app, steam_app, command,
          use_steam_runtime=False,
@@ -245,7 +245,7 @@ index 2abda99..3a25368 100644
          use_bwrap=True,
          **kwargs):
      """Run an arbitrary command with the correct environment variables
-@@ -343,7 +331,7 @@ def run_command(
+@@ -350,7 +338,7 @@ def run_command(
              os.environ["STEAM_RUNTIME_PATH"] = \
                  str(proton_app.required_tool_app.install_path)
              os.environ["PROTON_LD_LIBRARY_PATH"] = \
@@ -254,7 +254,7 @@ index 2abda99..3a25368 100644
  
              runtime_name = proton_app.required_tool_app.name
              logger.info(
-@@ -366,11 +354,8 @@ def run_command(
+@@ -373,11 +361,8 @@ def run_command(
                      "Current Steam Runtime not recognized by Protontricks."
                  )
          else:
@@ -267,7 +267,7 @@ index 2abda99..3a25368 100644
  
          # When Steam Runtime is enabled, create a set of helper scripts
          # that load the underlying Proton Wine executables with Steam Runtime
-@@ -378,8 +363,6 @@ def run_command(
+@@ -385,8 +370,6 @@ def run_command(
          wine_bin_dir = create_wine_bin_dir(
              proton_app=proton_app, use_bwrap=use_bwrap
          )

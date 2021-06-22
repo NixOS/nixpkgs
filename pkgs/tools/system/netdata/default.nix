@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
+{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
 , curl, libcap, libuuid, lm_sensors, zlib
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
   buildInputs = [ curl.dev zlib.dev ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    rm -r $out/sbin
+    wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
 
   passthru.tests.netdata = nixosTests.netdata;

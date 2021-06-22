@@ -180,7 +180,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.6.5";
+  hassVersion = "2021.6.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -197,7 +197,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1cp294hy35k9hjbp8iqmaf1m5qbbkh3jwf92ym49waw8di5a5wvh";
+    sha256 = "0r8l2qya9pdl65kq3xrnb1vhmbnxm3bj12hn1wyxmw56l8m9l5d5";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -435,11 +435,16 @@ in with py.pkgs; buildPythonApplication rec {
     "group"
     "growatt_server"
     "guardian"
+    "habitica"
+    "hangouts"
     "harmony"
     "hassio"
     "hddtemp"
+    "heos"
+    "here_travel_time"
     "history"
     "history_stats"
+    "hive"
     "home_connect"
     "home_plus_control"
     "homeassistant"
@@ -470,6 +475,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent"
     "intent_script"
     "ios"
+    "ipma"
     "ipp"
     "iqvia"
     "islamic_prayer_times"
@@ -510,6 +516,7 @@ in with py.pkgs; buildPythonApplication rec {
     "microsoft_face_detect"
     "microsoft_face_identify"
     "mikrotik"
+    "mill"
     "min_max"
     "minecraft_server"
     "minio"
@@ -737,8 +744,12 @@ in with py.pkgs; buildPythonApplication rec {
     "--only-rerun RuntimeError"
     # enable full variable printing on error
     "--showlocals"
+    # here_travel_time/test_sensor.py: Tries to access HERE API: herepy.error.HEREError: Error occured on __get
+    "--deselect tests/components/here_travel_time/test_sensor.py::test_invalid_credentials"
     # screenlogic/test_config_flow.py: Tries to send out UDP broadcasts
     "--deselect tests/components/screenlogic/test_config_flow.py::test_form_cannot_connect"
+    # abode/test_camera.py: Race condition in pickle file creationg
+    "--deselect tests/components/abode/test_camera.py::test_camera_off"
     # asuswrt/test_config_flow.py: Sandbox network limitations, fails with unexpected error
     "--deselect tests/components/asuswrt/test_config_flow.py::test_on_connect_failed"
     # shelly/test_config_flow.py: Tries to join multicast group

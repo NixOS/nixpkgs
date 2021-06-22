@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/inflect";
     changelog = "https://github.com/jaraco/inflect/blob/v${version}/CHANGES.rst";
     license = licenses.mit;
+    maintainers = teams.tts.members;
   };
 }

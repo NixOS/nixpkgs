@@ -204,6 +204,8 @@ in
 
   buf = callPackage ../development/tools/buf { };
 
+  elfcat = callPackage ../tools/misc/elfcat { };
+
   # Zip file format only allows times after year 1980, which makes e.g. Python wheel building fail with:
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
@@ -1010,6 +1012,8 @@ in
 
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
+  timedoctor = callPackage ../applications/office/timedoctor { };
+
   twine = with python3Packages; toPythonApplication twine;
 
   wayst = callPackage ../applications/terminal-emulators/wayst { };
@@ -1535,6 +1539,8 @@ in
 
   gitless = callPackage ../applications/version-management/gitless { python = python3; };
 
+  gitlint = python3Packages.callPackage ../tools/misc/gitlint { };
+
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
   gjs = callPackage ../development/libraries/gjs { };
@@ -1855,6 +1861,8 @@ in
   };
 
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
+
+  beats = callPackage ../tools/misc/beats { };
 
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -2562,6 +2570,8 @@ in
 
   electron-mail = callPackage ../applications/networking/mailreaders/electron-mail { };
 
+  element = callPackage ../applications/science/chemistry/element { };
+
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix { };
 
   element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
@@ -2813,6 +2823,10 @@ in
 
   gti = callPackage ../tools/misc/gti { };
 
+  grapejuice = callPackage ../games/grapejuice {
+    wine = wineWowPackages.unstable;
+  };
+
   hdate = callPackage ../applications/misc/hdate { };
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
@@ -3057,6 +3071,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  notify = callPackage ../tools/misc/notify { };
+
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
   nwipe = callPackage ../tools/security/nwipe { };
@@ -3116,6 +3132,8 @@ in
   piglit = callPackage ../tools/graphics/piglit { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
+
+  pn = callPackage ../tools/text/pn { };
 
   poweralertd = callPackage ../tools/misc/poweralertd { };
 
@@ -3788,6 +3806,8 @@ in
 
   age = callPackage ../tools/security/age { };
 
+  agebox = callPackage ../tools/security/agebox { };
+
   brotli = callPackage ../tools/compression/brotli { };
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
@@ -3837,6 +3857,8 @@ in
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
+
+  cobalt = callPackage ../applications/misc/cobalt { };
 
   cocoapods = callPackage ../development/mobile/cocoapods { };
 
@@ -5370,6 +5392,8 @@ in
   gource = callPackage ../applications/version-management/gource { };
 
   govc = callPackage ../tools/virtualization/govc { };
+
+  goverlay = callPackage ../tools/graphics/goverlay { };
 
   gpart = callPackage ../tools/filesystems/gpart { };
 
@@ -8710,6 +8734,8 @@ in
   # Not updated upstream since 2018, doesn't support qt newer than 5.12
   sleepyhead = libsForQt512.callPackage ../applications/misc/sleepyhead {};
 
+  slides = callPackage ../applications/misc/slides { };
+
   slirp4netns = callPackage ../tools/networking/slirp4netns/default.nix { };
 
   slsnif = callPackage ../tools/misc/slsnif { };
@@ -9758,6 +9784,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  truecrack = callPackage ../tools/security/truecrack { };
+  truecrack-cuda = truecrack.override { cudaSupport = true; };
+
   ts = callPackage ../tools/system/ts { };
 
   transfig = callPackage ../tools/graphics/transfig {
@@ -9810,6 +9839,8 @@ in
   unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
 
   unrar = callPackage ../tools/archivers/unrar { };
+
+  vul = callPackage ../applications/misc/vul { };
 
   xar = callPackage ../tools/compression/xar { };
 
@@ -10007,6 +10038,8 @@ in
   };
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
+
+  clipbuzz = callPackage ../tools/misc/clipbuzz { };
 
   xclip = callPackage ../tools/misc/xclip { };
 
@@ -11895,6 +11928,7 @@ in
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
+  cargo-modules = callPackage ../development/tools/rust/cargo-modules { };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -12366,6 +12400,8 @@ in
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
   };
 
+  octave-kernel = callPackage ../applications/editors/jupyter-kernels/octave { };
+
   octavePackages = recurseIntoAttrs octave.pkgs;
 
   ocropus = callPackage ../applications/misc/ocropus { };
@@ -12635,6 +12671,8 @@ in
 
   wasm = ocamlPackages.wasm;
 
+  wasm3 = callPackage ../development/interpreters/wasm3 { };
+
   proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm { };
 
 
@@ -12703,6 +12741,8 @@ in
 
   guile-sdl2 = callPackage ../development/guile-modules/guile-sdl2 { };
 
+  guile-ssh = callPackage ../development/guile-modules/guile-ssh { };
+
   guile-xcb = callPackage ../development/guile-modules/guile-xcb {
     guile = guile_2_0;
   };
@@ -12742,6 +12782,8 @@ in
   pharo-spur32 = pharo-vms.spur32;
   pharo-spur64 = assert stdenv.is64bit; pharo-vms.spur64;
   pharo-launcher = callPackage ../development/pharo/launcher { };
+
+  protege-distribution = callPackage ../development/web/protege-distribution { };
 
   umr = callPackage ../development/misc/umr {
     llvmPackages = llvmPackages_latest;
@@ -12787,7 +12829,7 @@ in
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
-  antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
+  antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
     jdk = jdk8; # todo: remove override https://github.com/nixos/nixpkgs/pull/89731
   };
 
@@ -12804,6 +12846,8 @@ in
   };
 
   antlr4 = antlr4_8;
+
+  antlr = antlr4;
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
@@ -13864,6 +13908,8 @@ in
 
   premake = premake4;
 
+  privacyidea = callPackage ../applications/misc/privacyidea { };
+
   procodile = callPackage ../tools/system/procodile { };
 
   pry = callPackage ../development/tools/pry { };
@@ -14095,6 +14141,8 @@ in
   swig4 = callPackage ../development/tools/misc/swig/4.nix { };
   swig = swig3;
   swigWithJava = swig;
+
+  c2ffi = callPackage ../development/tools/misc/c2ffi { };
 
   swfmill = callPackage ../tools/video/swfmill { };
 
@@ -15067,7 +15115,9 @@ in
 
   gdal_2 = callPackage ../development/libraries/gdal/2.4.nix { };
 
-  gdcm = callPackage ../development/libraries/gdcm { };
+  gdcm = callPackage ../development/libraries/gdcm {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
+  };
 
   ggz_base_libs = callPackage ../development/libraries/ggz_base_libs {};
 
@@ -15659,6 +15709,8 @@ in
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
+  idasen = with python3Packages; toPythonApplication idasen;
+
   ilbc = callPackage ../development/libraries/ilbc { };
 
   ilixi = callPackage ../development/libraries/ilixi { };
@@ -15765,6 +15817,8 @@ in
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
   jsonnet-bundler = callPackage ../development/tools/jsonnet-bundler { };
+
+  jrsonnet = callPackage ../development/compilers/jrsonnet { };
 
   go-jsonnet = callPackage ../development/compilers/go-jsonnet { };
 
@@ -19345,6 +19399,8 @@ in
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
 
+  jitsi-meet-prosody = callPackage ../misc/jitsi-meet-prosody { };
+
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
   kapowbang = callPackage ../servers/kapowbang { };
@@ -20635,6 +20691,7 @@ in
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
       kernelPatches.rtl8761b_support
+      kernelPatches.rtnetlink_fix_regression_in_bridge_vlan_configuration
     ];
   };
 
@@ -20649,6 +20706,7 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
+      kernelPatches.rtnetlink_fix_regression_in_bridge_vlan_configuration
     ];
   };
 
@@ -20656,6 +20714,7 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
+      kernelPatches.rtnetlink_fix_regression_in_bridge_vlan_configuration
     ];
   };
 
@@ -20715,6 +20774,7 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
+      kernelPatches.rtnetlink_fix_regression_in_bridge_vlan_configuration
     ];
   };
 
@@ -20772,7 +20832,7 @@ in
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
 
-    dpdk = throw "The dpdk driver has been renamed to dpdk-mods.";
+    dpdk = throw "The dpdk driver has been renamed to dpdk-kmods.";
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
@@ -22449,6 +22509,8 @@ in
 
   inter = callPackage ../data/fonts/inter { };
 
+  open-fonts = callPackage ../data/fonts/open-fonts { };
+
   scientifica = callPackage ../data/fonts/scientifica { };
 
   siji = callPackage ../data/fonts/siji
@@ -23403,6 +23465,8 @@ in
   ed = callPackage ../applications/editors/ed { };
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
+
+  oed = callPackage ../applications/editors/oed { };
 
   ekho = callPackage ../applications/audio/ekho { };
 
@@ -25762,6 +25826,8 @@ in
 
   mlocate = callPackage ../tools/misc/mlocate { };
 
+  plocate = callPackage ../tools/misc/plocate { };
+
   mypaint = callPackage ../applications/graphics/mypaint { };
 
   mypaint-brushes1 = callPackage ../development/libraries/mypaint-brushes/1.0.nix { };
@@ -27131,6 +27197,8 @@ in
 
   tudu = callPackage ../applications/office/tudu { };
 
+  tuna = python3Packages.callPackage ../os-specific/linux/tuna { };
+
   tunefish = callPackage ../applications/audio/tunefish {
     stdenv = clangStdenv; # https://github.com/jpcima/tunefish/issues/4
   };
@@ -27221,6 +27289,8 @@ in
   verbiste = callPackage ../applications/misc/verbiste {
     inherit (gnome2) libgnomeui;
   };
+
+  veusz = libsForQt5.callPackage ../applications/graphics/veusz { };
 
   vim = callPackage ../applications/editors/vim {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -28004,6 +28074,8 @@ in
 
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
 
+  ytmdl = python3Packages.callPackage ../tools/misc/ytmdl { };
+
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zanshin = libsForQt5.callPackage ../applications/office/zanshin { };
@@ -28160,6 +28232,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
   litecoind = litecoin.override { withGui = false; };
+
+  livedl = callPackage ../tools/misc/livedl { };
 
   lnd = callPackage ../applications/blockchains/lnd.nix { };
 
@@ -30140,10 +30214,7 @@ in
 
   ecm = callPackage ../applications/science/math/ecm { };
 
-  eukleides = callPackage ../applications/science/math/eukleides {
-    texLive = texlive.combine { inherit (texlive) scheme-small; };
-    texinfo = texinfo4;
-  };
+  eukleides = callPackage ../applications/science/math/eukleides { };
 
   form = callPackage ../applications/science/math/form { };
 
@@ -30184,6 +30255,8 @@ in
   calc = callPackage ../applications/science/math/calc { };
 
   pcalc = callPackage ../applications/science/math/pcalc { };
+
+  programmer-calculator = callPackage ../applications/science/math/programmer-calculator { };
 
   bcal = callPackage ../applications/science/math/bcal { };
 
@@ -31389,6 +31462,8 @@ in
 
   vaultenv = haskellPackages.vaultenv;
 
+  vazir-code-font = callPackage ../data/fonts/vazir-code-font { };
+
   vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
 
   vbam = callPackage ../misc/emulators/vbam { };
@@ -31962,6 +32037,8 @@ in
   lc3tools = callPackage ../development/tools/lc3tools {};
 
   xcolor = callPackage ../tools/graphics/xcolor { };
+
+  xcfun = callPackage ../development/libraries/science/chemistry/xcfun { };
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
 

@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-gcrypt";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitea {
     domain = "notabug.org";
     owner = "cwebber";
     repo = "guile-gcrypt";
     rev = "v${version}";
-    sha256 = "LKXIwO8v/T/h1JKARWD5ta57sgRcVu7hcYYwr3wUQ1g=";
+    sha256 = "sha256-lAaiKBOdTFWEWsmwKgx0C67ACvtnEKUxti66dslzSVQ=";
   };
 
   postConfigure = ''
