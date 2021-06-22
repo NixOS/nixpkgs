@@ -1,21 +1,27 @@
 { lib, stdenv
 , fetchgit
 , unstableGitUpdater
+, callPackage
 }:
 
 stdenv.mkDerivation rec {
   pname = "qbe";
-  version = "unstable-2020-10-05";
+  version = "unstable-2021-06-17";
 
   src = fetchgit {
     url = "git://c9x.me/qbe.git";
-    rev = "496c069405cd79aed968f59dd5a5f92d1f96809f";
-    sha256 = "1vpszl77j9mnw8r0p9l23k8nxbnz31lgii7v3mai130nbpjsjsdf";
+    rev = "6d9ee1389572ae985f6a39bb99dbd10cdf42c123";
+    sha256 = "NaURS5Eu8NBd92wGQcyFEXCALU9Z93nNQeZ8afq4KMw=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  doCheck = true;
+
+  passthru = {
+    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = with lib; {
     homepage = "https://c9x.me/compile/";
