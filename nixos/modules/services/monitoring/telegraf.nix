@@ -25,10 +25,9 @@ in {
         default = [];
         example = "/run/keys/telegraf.env";
         description = ''
-          File to load as environment file. Environment variables
-          from this file will be interpolated into the config file
-          using envsubst with this syntax:
-          <literal>$ENVIRONMENT ''${VARIABLE}</literal>
+          File to load as environment file. Environment variables from this file
+          will be interpolated into the config file using envsubst with this
+          syntax: <literal>$ENVIRONMENT</literal> or <literal>''${VARIABLE}</literal>.
           This is useful to avoid putting secrets into the nix store.
         '';
       };
