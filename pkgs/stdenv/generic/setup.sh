@@ -122,13 +122,14 @@ exitHandler() {
 
     if [ -n "${showBuildStats:-}" ]; then
         times > "$NIX_BUILD_TOP/.times"
-        local -a times=($(cat "$NIX_BUILD_TOP/.times"))
+        local -a buildTimesArray
+        IFS=" " read -r -a buildTimesArray <<< "$(cat "$NIX_BUILD_TOP/.times")"
         # Print the following statistics:
         # - user time for the shell
         # - system time for the shell
         # - user time for all child processes
         # - system time for all child processes
-        echo "build time elapsed: " "${times[@]}"
+        echo "build time elapsed: " "${buildTimesArray[@]}"
     fi
 
     if (( "$exitCode" != 0 )); then
@@ -1002,10 +1003,10 @@ configurePhase() {
     fi
 
     if [ -n "$configureScript" ]; then
-        # Old bash empty array hack
-        # shellcheck disable=SC2086
-        local flagsArray=(
-            $configureFlags ${configureFlagsArray+"${configureFlagsArray[@]}"}
+        IFS=" " read -r -a configureFlagsTemp <<< "$configureFlags"
+        local -a flagsArray=(
+            "${configureFlagsTemp[@]}"
+            ${configureFlagsArray+"${configureFlagsArray[@]}"}
         )
         echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
@@ -1029,14 +1030,15 @@ buildPhase() {
         echo "no Makefile, doing nothing"
     else
         foundMakefile=1
-
-        # Old bash empty array hack
-        # shellcheck disable=SC2086
-        local flagsArray=(
+        IFS=" " read -r -a makeFlagsTemp <<< "$makeFlags"
+        IFS=" " read -r -a buildFlagsTemp <<< "$buildFlags"
+        local -a flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
-            SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
+            SHELL="$SHELL"
+            "${makeFlagsTemp[@]}"
+            ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            "${buildFlagsTemp[@]}"
+            ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
@@ -1069,14 +1071,17 @@ checkPhase() {
     if [[ -z "${checkTarget:-}" ]]; then
         echo "no check/test target in ${makefile:-Makefile}, doing nothing"
     else
-        # Old bash empty array hack
-        # shellcheck disable=SC2086
-        local flagsArray=(
+        IFS=" " read -r -a makeFlagsTemp <<< "$makeFlags"
+        IFS=" " read -r -a checkFlagsTemp <<< "${checkFlags:-VERBOSE=y}"
+        IFS=" " read -r -a checkTargetTemp <<< "${checkTarget}"
+        local -a flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
-            SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
-            ${checkTarget}
+            SHELL="$SHELL"
+            "${makeFlagsTemp[@]}"
+            ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            "${checkFlagsTemp[@]}"
+            ${checkFlagsArray+"${checkFlagsArray[@]}"}
+            "${checkTargetTemp[@]}"
         )
 
         echoCmd 'check flags' "${flagsArray[@]}"
@@ -1095,14 +1100,16 @@ installPhase() {
     if [ -n "$prefix" ]; then
         mkdir -p "$prefix"
     fi
-
-    # Old bash empty array hack
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        SHELL=$SHELL
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
-        ${installTargets:-install}
+    IFS=" " read -r -a makeFlagsTemp <<< "$makeFlags"
+    IFS=" " read -r -a installFlagsTemp <<< "$installFlags"
+    IFS=" " read -r -a installTargetsTemp <<< "${installTargets:-install}"
+    local -a flagsArray=(
+        SHELL="$SHELL"
+        "${makeFlagsTemp[@]}"
+        ${makeFlagsArray+"${makeFlagsArray[@]}"}
+        "${installFlagsTemp[@]}"
+        ${installFlagsArray+"${installFlagsArray[@]}"}
+        "${installTargetsTemp[@]}"
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
@@ -1203,14 +1210,17 @@ installCheckPhase() {
        && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
-        # Old bash empty array hack
-        # shellcheck disable=SC2086
-        local flagsArray=(
+        IFS=" " read -r -a makeFlagsTemp <<< "$makeFlags"
+        IFS=" " read -r -a installCheckFlagsTemp <<< "$installCheckFlags"
+        IFS=" " read -r -a installCheckTargetTemp <<< "${installCheckTarget:-installcheck}"
+        local -a flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
-            SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
-            ${installCheckTarget:-installcheck}
+            SHELL="$SHELL"
+            "${makeFlagsTemp[@]}"
+            ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            "${installCheckFlagsTemp[@]}"
+            ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
+            "${installCheckTargetTemp[@]}"
         )
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
@@ -1225,10 +1235,12 @@ installCheckPhase() {
 distPhase() {
     runHook preDist
 
-    # Old bash empty array hack
-    # shellcheck disable=SC2086
+    IFS=" " read -r -a distFlagsTemp <<< "$distFlags"
+
     local flagsArray=(
-        $distFlags ${distFlagsArray+"${distFlagsArray[@]}"} ${distTarget:-dist}
+        "${distFlagsTemp[@]}"
+        ${distFlagsArray+"${distFlagsArray[@]}"}
+        ${distTarget:-dist}
     )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
