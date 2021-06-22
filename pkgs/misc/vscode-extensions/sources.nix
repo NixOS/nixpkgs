@@ -8,8 +8,8 @@
   "CoenraadS.bracket-pair-colorizer-2" = {
     name = "bracket-pair-colorizer-2";
     publisher = "CoenraadS";
-    sha256 = "0nppgfbmw0d089rka9cqs3sbd5260dhhiipmjfga3nar9vp87slh";
-    version = "0.2.0";
+    sha256 = "0bfvzs4ac537zqhnqaa38jf4lhiy1fmqcv6lq89nnx8k963380z7";
+    version = "0.2.1";
   };
   "bbenoist.Nix" = {
     name = "Nix";
