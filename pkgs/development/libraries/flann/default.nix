@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, unzip, cmake, python }:
 
-stdenv.mkDerivation {
-  name = "flann-1.9.1";
+stdenv.mkDerivation rec {
+  pname = "flann";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "mariusmuja";
     repo = "flann";
-    rev = "1.9.1";
+    rev = version;
     sha256 = "13lg9nazj5s9a41j61vbijy04v6839i67lqd925xmxsbybf36gjc";
   };
 

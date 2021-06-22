@@ -15,12 +15,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libvirt-glib-4.0.0";
+  pname = "libvirt-glib";
+  version = "4.0.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://libvirt.org/sources/glib/${name}.tar.xz";
+    url = "https://libvirt.org/sources/glib/${pname}-${version}.tar.xz";
     sha256 = "hCP3Bp2qR2MHMh0cEeLswoU0DNMsqfwFIHdihD7erL0=";
   };
 

@@ -6,10 +6,11 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "attr-2.4.48";
+  pname = "attr";
+  version = "2.4.48";
 
   src = fetchurl {
-    url = "mirror://savannah/attr/${name}.tar.gz";
+    url = "mirror://savannah/attr/${pname}-${version}.tar.gz";
     sha256 = "1rr4adzwax4bzr2c00f06zcsljv5y6p9wymz1g89ww7cb2rp5bay";
   };
 
