@@ -13,11 +13,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "R";
-  version = "4.0.4";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "0bl098xcv8v316kqnf43v6gb4kcsv31ydqfm1f7qr824jzb2fgsj";
+    sha256 = "109732arm6dq6d6v3fl1nyx63lcvv9569j8g6r3s2b18sxcqkrp8";
   };
 
   dontUseImakeConfigure = true;
@@ -30,7 +30,19 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-usr-local-search-paths.patch
-    ./fix-failing-test.patch
+  ] ++ lib.optionals (!withRecommendedPackages) [
+    (fetchpatch {
+       name = "fix-tests-without-recommended-packages.patch";
+       url = "https://github.com/wch/r-source/commit/7715c67cabe13bb15350cba1a78591bbb76c7bac.patch";
+       # this part of the patch reverts something that was committed after R 4.1.0, so ignore it.
+       excludes = [ "tests/Pkgs/xDir/pkg/DESCRIPTION" ];
+       sha256 = "sha256-iguLndCIuKuCxVCi/4NSu+9RzBx5JyeHx3K6IhpYshQ=";
+    })
+    (fetchpatch {
+      name = "use-codetools-conditionally.patch";
+      url = "https://github.com/wch/r-source/commit/7543c28b931db386bb254e58995973493f88e30d.patch";
+      sha256 = "sha256-+yHXB5AItFyQjSxfogxk72DrSDGiBh7OiLYFxou6Xlk=";
+    })
   ];
 
   prePatch = lib.optionalString stdenv.isDarwin ''
