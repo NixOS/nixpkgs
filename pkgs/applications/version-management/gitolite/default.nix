@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/gitolite-shell \
-      --prefix PATH : ${lib.makeBinPath [ git perl ]} \
-      --prefix PERL5LIB : "${with perlPackages; makePerlPath [ JSON ]}"
+      --prefix PATH : ${lib.makeBinPath [ git perl.withPackages (p: [ p.JSON ])]}
   '';
 
   installPhase = ''
