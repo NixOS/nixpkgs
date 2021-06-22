@@ -64,7 +64,14 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0s9md7bzblzxlpbpna1wa6pxaf44l4g7s0xqwj6rci7h7kp55qqv";
+      sha256 = "1hf2i36ayscdg7fa81akx031chg8c3scbjphj4c1qawif41bynmm";
+      # delete android and Android directories which cause issues on
+      # darwin (case insensitive directory). Since we don't need them
+      # during the build process, we can delete it to prevent a hash
+      # mismatch on darwin.
+      postFetch = ''
+        rm -r $out/doc/?ndroid*
+      '';
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
