@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ibara/oed";
     description = "Portable ed editor from OpenBSD";
     license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }
