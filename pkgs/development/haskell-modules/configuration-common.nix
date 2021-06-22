@@ -1487,20 +1487,7 @@ self: super: {
   # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
   servant-swagger = dontCheck super.servant-swagger;
 
-  hercules-ci-agent = super.hercules-ci-agent.override {
-    cachix =
-      # https://github.com/cachix/cachix/pull/361
-      (appendPatch
-        (addBuildDepend super.cachix super.hercules-ci-cnix-store)
-        (pkgs.fetchpatch {
-          name = "cachix-361.patch";
-          url = "https://patch-diff.githubusercontent.com/raw/cachix/cachix/pull/361.patch";
-          sha256 = "0wwlcpmnqmvk1css5f723dzgjvg4jr7i58ifhni5zg9h5iwycdfr";
-          stripLen = 1;
-          includes = ["*.cabal" "*.hs"];
-        })
-        );
-  };
+  hercules-ci-agent = generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent;
 
   hercules-ci-cli = generateOptparseApplicativeCompletion "hci" (
     # See hercules-ci-optparse-applicative in non-hackage-packages.nix.
