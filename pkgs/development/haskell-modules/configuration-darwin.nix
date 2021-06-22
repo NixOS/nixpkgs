@@ -172,5 +172,6 @@ self: super: {
   hls-class-plugin = dontCheck super.hls-class-plugin;
   hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
   hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
+  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
 
 }
