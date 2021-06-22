@@ -25804,6 +25804,8 @@ in
 
   mlocate = callPackage ../tools/misc/mlocate { };
 
+  plocate = callPackage ../tools/misc/plocate { };
+
   mypaint = callPackage ../applications/graphics/mypaint { };
 
   mypaint-brushes1 = callPackage ../development/libraries/mypaint-brushes/1.0.nix { };
