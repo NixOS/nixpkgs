@@ -4,7 +4,7 @@ for i in $initialPath; do
     PATH=$PATH${PATH:+:}$i/bin
 done
 
-mkdir $out
+mkdir "$out"
 
 echo "export SHELL=$shell" > $out/setup
 echo "initialPath=\"$initialPath\"" >> $out/setup
