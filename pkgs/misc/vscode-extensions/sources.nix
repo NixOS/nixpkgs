@@ -26,14 +26,14 @@
   "eamodio.gitlens" = {
     name = "gitlens";
     publisher = "eamodio";
-    sha256 = "sha256-Ic7eT8WX2GDYIj/aTu1d4m+fgPtXe4YQx04G0awbwnM=";
+    sha256 = "0wy23fnd21jfqw88cyspzf09yvz2bpnlxniz4bc61n4pqm7xxki1";
     version = "11.5.1";
   };
   "haskell.haskell" = {
     name = "haskell";
     publisher = "haskell";
-    sha256 = "1wg06lyk0qn9jd6gi007sg7v0z9z8gwq7x2449d4ihs9n3w5l0gb";
-    version = "1.1.0";
+    sha256 = "1jk702fd0b0aqfryixpiy6sc8njzd1brd0lbkdhcifp0qlbdwki0";
+    version = "1.4.0";
   };
   "jkillian.custom-local-formatters" = {
     name = "custom-local-formatters";
