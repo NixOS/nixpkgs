@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fastimport";
-  version = "0.9.8";
+  version = "0.9.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2f2e8eb97000256e1aab83d2a0a053fc7b93c3aa4f7e9b971a5703dfc5963b9";
+    sha256 = "486135a39edb85808fdbbe2c8009197978800a4544fca56cc2074df32e1304f3";
   };
 
   checkPhase = ''

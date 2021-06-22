@@ -3,6 +3,7 @@
 , fetchPypi
 , pytest
 , coverage
+, toml
 }:
 
 buildPythonPackage rec {
@@ -11,12 +12,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JhzuuMIntyYkmzdrhSa2APOGZ+4xT5EDU/oxjKoB9Nc=";
+    sha256 = "1mzl06m8qcgsac1r2krixrkqdwq0nqk8asrpkcj2ddr7qawfw716";
   };
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ coverage ];
+  propagatedBuildInputs = [ coverage toml ];
 
   # xdist related tests fail with the following error
   # OSError: [Errno 13] Permission denied: 'py/_code'

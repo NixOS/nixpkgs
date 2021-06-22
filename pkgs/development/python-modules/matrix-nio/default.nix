@@ -38,6 +38,11 @@ buildPythonPackage rec {
     sha256 = "QHNirglqSxGMmbST96LUp9MHoGj0yAwLoTRlsbMqwaM=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"'
+  '';
+
   nativeBuildInputs = [
     git
     poetry-core

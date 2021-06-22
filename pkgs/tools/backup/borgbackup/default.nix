@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh, nixosTests }:
+{ lib, stdenv, python3, fetchpatch, acl, libb2, lz4, zstd, openssl, openssh, nixosTests }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
@@ -8,6 +8,15 @@ python3.pkgs.buildPythonApplication rec {
     inherit pname version;
     sha256 = "0l1dqfwrd9l34rg30cmzmq5bs6yha6kg4vy313jq611jsqj94mmw";
   };
+
+  patches = [
+    # fix compatibility with sphinx 4
+    (fetchpatch {
+      url = "https://github.com/borgbackup/borg/commit/6a1f31bf2914d167e2f5051f1d531d5d4a19f54b.patch";
+      includes = [ "docs/conf.py" ];
+      sha256 = "0aa4kyb3j4apgwqcy1hzg6lxvpf60m2mijcj60vh101b42410hiz";
+    })
+  ];
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
