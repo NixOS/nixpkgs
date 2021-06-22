@@ -64,7 +64,7 @@ rec {
 
           wrapProgram $out/bin/nixos-test-driver \
             --argv0 ${name} \
-            --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
+            --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils socat ]}" \
             ${lib.optionalString enableOCR
               "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
 

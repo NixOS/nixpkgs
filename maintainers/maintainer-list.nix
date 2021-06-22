@@ -11420,6 +11420,12 @@
       fingerprint = "85F8 E850 F8F2 F823 F934  535B EC50 6589 9AEA AF4C";
     }];
   };
+  yuka = {
+    email = "yuka@yuka.dev";
+    github = "yu-re-ka";
+    githubId = 86169957;
+    name = "Yureka";
+  };
   yusdacra = {
     email = "y.bera003.06@protonmail.com";
     github = "yusdacra";

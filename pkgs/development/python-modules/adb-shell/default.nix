@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "adb-shell";
-  version = "0.3.3";
+  version = "0.3.4";
 
   disabled = !isPy3k;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "adb_shell";
     rev = "v${version}";
-    sha256 = "sha256-QVSPQk/QNnIjTgKGuIg0e58qCH91wn7e4TwgWSmOJEk=";
+    sha256 = "sha256-H1GVbMeaVUZh8T1jgZP2o+emEkK4fOi5k4aL9ayVesA=";
   };
 
   propagatedBuildInputs = [
