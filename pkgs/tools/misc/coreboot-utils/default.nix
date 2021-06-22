@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
-let
+
   version = "4.14";
 
   commonMeta = with lib; {
@@ -12,7 +12,7 @@ let
   };
 
   generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation (rec {
-    inherit pname version;
+     pname version;
 
     src = fetchurl {
       url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
@@ -96,13 +96,13 @@ let
     };
   };
 
-in utils // {
+ utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
     paths = lib.attrValues utils;
     postBuild = "rm -rf $out/sbin";
   }) // {
-    inherit version;
+     version;
     meta = commonMeta;
   };
 }
