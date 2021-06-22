@@ -7162,6 +7162,8 @@ in {
 
   pyvicare = callPackage ../development/python-modules/pyvicare { };
 
+  pyvis = callPackage ../development/python-modules/pyvis { };
+
   pyvisa = callPackage ../development/python-modules/pyvisa { };
 
   pyvisa-py = callPackage ../development/python-modules/pyvisa-py { };
