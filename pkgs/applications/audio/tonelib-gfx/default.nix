@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
 
   dontUnpack = "true";
 
-
   buildInputs = [
     dpkg
     gtk3
