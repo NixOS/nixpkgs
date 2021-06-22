@@ -1925,4 +1925,8 @@ EOT
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
 
+  # To strict bound on hspec
+  # https://github.com/dagit/zenc/issues/5
+  zenc = doJailbreak super.zenc;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
