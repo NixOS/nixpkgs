@@ -80,7 +80,7 @@
   "tamasfe.even-better-toml" = {
     name = "even-better-toml";
     publisher = "tamasfe";
-    sha256 = "16x2y58hkankazpwm93j8lqdn3mala7iayck548kki9zx4qrhhck";
-    version = "0.9.3";
+    sha256 = "170104cvdarzis7lsfxqnkds1sc921v4pp6nby6jf3l0bg6scfcw";
+    version = "0.12.3";
   };
 }
