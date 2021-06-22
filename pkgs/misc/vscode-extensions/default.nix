@@ -3,6 +3,8 @@
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
+  sources = import ./sources.nix;
+
   #
   # Unless there is a good reason not to, we attempt to use the same name as the
   # extension's unique identifier (the name the extension gets when installed
@@ -13,12 +15,7 @@ let
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
       _4ops.terraform = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "4ops";
-          name = "terraform";
-          version = "0.2.1";
-          sha256 = "196026a89pizj8p0hqdgkyllj2spx2qwpynsaqjq17s8v15vk5dg";
-        };
+        mktplcRef = sources."4ops.terraform";
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
@@ -98,12 +95,7 @@ let
       };
 
       ms-python.vscode-pylance = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vscode-pylance";
-          publisher = "MS-python";
-          version = "2020.11.2";
-          sha256 = "0n2dm21vgzir3hx1m3pmx7jq4zy3hdxfsandd2wv5da4fs9b5g50";
-        };
+        mktplcRef = sources."ms-python.vscode-pylance";
 
         buildInputs = [ nodePackages.pyright ];
 
@@ -144,12 +136,7 @@ let
       };
 
       bbenoist.Nix = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "Nix";
-          publisher = "bbenoist";
-          version = "1.0.1";
-          sha256 = "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b";
-        };
+        mktplcRef = sources."bbenoist.Nix";
         meta = with lib; {
           license = licenses.mit;
         };
@@ -233,24 +220,14 @@ let
       };
 
       coenraads.bracket-pair-colorizer-2 = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "bracket-pair-colorizer-2";
-          publisher = "CoenraadS";
-          version = "0.2.0";
-          sha256 = "0nppgfbmw0d089rka9cqs3sbd5260dhhiipmjfga3nar9vp87slh";
-        };
+        mktplcRef = sources."CoenraadS.bracket-pair-colorizer-2";
         meta = with lib; {
           license = licenses.mit;
         };
       };
 
       coolbear.systemd-unit-file = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "coolbear";
-          name = "systemd-unit-file";
-          version = "1.0.6";
-          sha256 = "0sc0zsdnxi4wfdlmaqwb6k2qc21dgwx6ipvri36x7agk7m8m4736";
-        };
+        mktplcRef = sources."coolbear.systemd-unit-file";
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
@@ -349,12 +326,7 @@ let
       };
 
       eamodio.gitlens = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "gitlens";
-          publisher = "eamodio";
-          version = "11.5.1";
-          sha256 = "sha256-Ic7eT8WX2GDYIj/aTu1d4m+fgPtXe4YQx04G0awbwnM=";
-        };
+        mktplcRef = sources."eamodio.gitlens";
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
           description = "GitLens supercharges the Git capabilities built into Visual Studio Code.";
@@ -548,12 +520,7 @@ let
       };
 
       jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "jkillian";
-          name = "custom-local-formatters";
-          version = "0.0.4";
-          sha256 = "1pmqnc759fq86g2z3scx5xqpni9khcqi5z2kpl1kb7yygsv314gm";
-        };
+        mktplcRef = sources."jkillian.custom-local-formatters";
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
@@ -626,12 +593,7 @@ let
       };
 
       haskell.haskell = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "haskell";
-          publisher = "haskell";
-          version = "1.1.0";
-          sha256 = "1wg06lyk0qn9jd6gi007sg7v0z9z8gwq7x2449d4ihs9n3w5l0gb";
-        };
+        mktplcRef = sources."haskell.haskell";
         meta = with lib; {
           license = licenses.mit;
         };
@@ -775,12 +737,7 @@ let
       };
 
       justusadam.language-haskell = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "language-haskell";
-          publisher = "justusadam";
-          version = "3.2.1";
-          sha256 = "0lxp8xz17ciy93nj4lzxqvz71vw1zdyamrnh2n792yair8890rr6";
-        };
+        mktplcRef = sources."justusadam.language-haskell";
         meta = {
           license = lib.licenses.bsd3;
         };
@@ -799,12 +756,7 @@ let
       };
 
       mads-hartmann.bash-ide-vscode = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "mads-hartmann";
-          name = "bash-ide-vscode";
-          version = "1.11.0";
-          sha256 = "1hq41fy2v1grjrw77mbs9k6ps6gncwlydm03ipawjnsinxc9rdkp";
-        };
+        mktplcRef = sources."mads-hartmann.bash-ide-vscode";
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
@@ -913,12 +865,7 @@ let
       };
 
       ms-toolsai.jupyter = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "jupyter";
-          publisher = "ms-toolsai";
-          version = "2021.5.745244803";
-          sha256 = "0gjpsp61l8daqa87mpmxcrvsvb0pc2vwg7xbkvwn0f13c1739w9p";
-        };
+        mktplcRef = sources."ms-toolsai.jupyter";
         meta = {
           license = lib.licenses.unfree;
         };
@@ -1078,12 +1025,7 @@ let
       };
 
       shardulm94.trailing-spaces = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "shardulm94";
-          name = "trailing-spaces";
-          version = "0.3.1";
-          sha256 = "0h30zmg5rq7cv7kjdr5yzqkkc1bs20d72yz9rjqag32gwf46s8b8";
-        };
+        mktplcRef = sources."shardulm94.trailing-spaces";
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
@@ -1156,12 +1098,7 @@ let
       };
 
       streetsidesoftware.code-spell-checker = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "code-spell-checker";
-          publisher = "streetsidesoftware";
-          version = "1.10.2";
-          sha256 = "1ll046rf5dyc7294nbxqk5ya56g2bzqnmxyciqpz2w5x7j75rjib";
-        };
+        mktplcRef = sources."streetsidesoftware.code-spell-checker";
         meta = with lib; {
           license = licenses.mit;
         };
@@ -1197,12 +1134,7 @@ let
       };
 
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "even-better-toml";
-          publisher = "tamasfe";
-          version = "0.9.3";
-          sha256 = "16x2y58hkankazpwm93j8lqdn3mala7iayck548kki9zx4qrhhck";
-        };
+        mktplcRef = sources."tamasfe.even-better-toml";
         meta = {
           license = lib.licenses.mit;
         };

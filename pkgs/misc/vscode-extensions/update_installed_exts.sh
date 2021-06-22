@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p curl jq unzip
+#! nix-shell -i bash -p curl jq nixpkgs-fmt unzip
 set -eu -o pipefail
 
 # Helper to just fail with a message and non-zero exit code.
@@ -68,7 +68,29 @@ do
     OWNER=$(echo "$i" | cut -d. -f1)
     EXT=$(echo "$i" | cut -d. -f2)
 
-    get_vsixpkg "$OWNER" "$EXT"
+    ref=$(get_vsixpkg "$OWNER" "$EXT")
+    echo "$ref"
+    if test -v UPDATE_SOURCES; then
+        if ! from=$(nix-instantiate --eval --expr "(import ./sources.nix).\"$i\".version") 2>&1 1>/dev/null; then
+            # The extension must exist in the manifest in order to update it
+            continue
+        fi
+
+        # Update the manifest
+        nix-instantiate --eval --expr --strict \
+            "(import ./sources.nix) // {\"$i\" = $ref;}" \
+            | sed 's|;|;\n|g' \
+            | nixpkgs-fmt \
+            > sources2.nix
+        mv sources2.nix sources.nix
+        to=$(nix-instantiate --eval --expr "(import ./sources.nix).\"$i\".version")
+
+        # Auto-commit its changes
+        if test "$from" != "$to"; then
+            git add ./sources.nix
+            git commit -m "vscode-extensions.$i: ${from//\"/} -> ${to//\"/}"
+        fi
+    fi
 done
 # Close off the nix expression.
 printf '];\n}'
