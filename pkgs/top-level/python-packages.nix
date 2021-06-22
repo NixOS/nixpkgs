@@ -2106,8 +2106,6 @@ in {
 
   dnspython = callPackage ../development/python-modules/dnspython { };
 
-  dns = self.dnspython; # Alias for compatibility, 2017-12-10
-
   doc8 = callPackage ../development/python-modules/doc8 { };
 
   docker = callPackage ../development/python-modules/docker { };
