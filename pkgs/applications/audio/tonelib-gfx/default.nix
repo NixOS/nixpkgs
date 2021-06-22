@@ -1,5 +1,6 @@
 { stdenv
 , dpkg
+, lib
 , autoPatchelfHook
 , fetchurl
 , gtk3
