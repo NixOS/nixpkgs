@@ -248,14 +248,14 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkg-config ];
-    cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
     data_table = [pkgs.zlib.dev] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.lapack ];
+    exactextractr = [ pkgs.geos ];
     fftw = [ pkgs.fftw.dev ];
-    fftwtools = [ pkgs.fftw.dev ];
+    fftwtools = [ pkgs.fftw.dev pkgs.pkg-config ];
     Formula = [ pkgs.gmp ];
     gdtools = [ pkgs.cairo.dev pkgs.fontconfig.lib pkgs.freetype.dev ];
     git2r = [ pkgs.zlib.dev pkgs.openssl.dev pkgs.libssh2.dev pkgs.libgit2 pkgs.pkg-config ];
@@ -276,7 +276,8 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
-    lwgeom = [ pkgs.gdal pkgs.geos pkgs.proj ];
+    lpsymphony = [ pkgs.pkgconfig pkgs.gfortran pkgs.gettext ];
+    lwgeom = [pkgs.proj.dev pkgs.proj pkgs.pkgconfig pkgs.geos pkgs.sqlite pkgs.gdal ];
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl_1 ];
@@ -323,14 +324,12 @@ let
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.bwidget ];
-    rpg = [ pkgs.postgresql ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = [ pkgs.postgresql pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
-    rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
     rzmq = [ pkgs.zeromq pkgs.pkg-config ];
@@ -418,6 +417,7 @@ let
     showtext = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     stringi = [ pkgs.pkg-config ];
+    svglite = [ pkgs.libpng.dev ];
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     tesseract = [ pkgs.pkg-config ];
@@ -491,9 +491,7 @@ let
     "DeducerText"
     "Demerelate"
     "detrendeR"
-    "dgmb"
     "dpa"
-    "DSpat"
     "dynamicGraph"
     "dynBiplotGUI"
     "EasyqpcR"
@@ -568,7 +566,6 @@ let
     "PredictABEL"
     "prefmod"
     "PrevMap"
-    "ProbForecastGOP"
     "r4ss"
     "RandomFields"
     "rareNMtests"
@@ -669,6 +666,20 @@ let
           cp ${icuSrc}/${icuName}.dat $out/library/stringi/libs
         '';
     });
+
+    R_cache = old.R_cache.overrideDerivation (attrs: {
+      preConfigure = ''
+        export R_CACHE_ROOTPATH=$TMP
+      '';
+    });
+
+
+    lpsymphony = old.lpsymphony.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
 
     xml2 = old.xml2.overrideDerivation (attrs: {
       preConfigure = ''
