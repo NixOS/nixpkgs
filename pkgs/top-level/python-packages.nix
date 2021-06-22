@@ -7031,8 +7031,6 @@ in {
 
   python-socketio = callPackage ../development/python-modules/python-socketio { };
 
-  python-socketio_4 = callPackage ../development/python-modules/python-socketio/4.nix { };
-
   python-socks = callPackage ../development/python-modules/python-socks { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
