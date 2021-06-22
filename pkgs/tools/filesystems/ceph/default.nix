@@ -2,7 +2,7 @@
 , ensureNewerSourcesHook
 , cmake, pkg-config
 , which, git
-, boost, python3Packages
+, boost
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
@@ -92,19 +92,35 @@ let
      platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
-  ceph-common = python3Packages.buildPythonPackage rec{
+  ceph-common = python.pkgs.buildPythonPackage rec{
     pname = "ceph-common";
     inherit src version;
 
     sourceRoot = "ceph-${version}/src/python-common";
 
-    checkInputs = [ python3Packages.pytest ];
-    propagatedBuildInputs = with python3Packages; [ pyyaml six ];
+    checkInputs = [ python.pkgs.pytest ];
+    propagatedBuildInputs = with python.pkgs; [ pyyaml six ];
 
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
 
-  ceph-python-env = python3Packages.python.withPackages (ps: [
+  python = python3.override {
+    packageOverrides = self: super: {
+      # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
+      # Bump once these issues are resolved:
+      # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
+      scipy = super.scipy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.3";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
+        };
+        doCheck = false;
+      });
+    };
+  };
+
+  ceph-python-env = python.withPackages (ps: [
     ps.sphinx
     ps.flask
     ps.cython
@@ -122,10 +138,7 @@ let
     ps.pyjwt
     ps.webob
     ps.bcrypt
-    # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
-    # Bump (and get rid of scipy_1_3) once these issues are resolved:
-    # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
-    ps.scipy_1_3
+    ps.scipy
     ps.six
     ps.pyyaml
   ]);
@@ -147,10 +160,10 @@ in rec {
 
     nativeBuildInputs = [
       cmake
-      pkg-config which git python3Packages.wrapPython makeWrapper
-      python3Packages.python # for the toPythonPath function
+      pkg-config which git python.pkgs.wrapPython makeWrapper
+      python.pkgs.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
-      python3
+      python
       fmt
       # for building docs/man-pages presumably
       doxygen
