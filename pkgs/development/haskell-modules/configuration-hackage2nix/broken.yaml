@@ -4519,6 +4519,7 @@ broken-packages:
   - string-quote
   - stringtable-atom
   - stripe
+  - stripeapi
   - stripe-hs
   - stripe-http-streams
   - stripe-signature
