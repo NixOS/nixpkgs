@@ -16592,6 +16592,8 @@ in
 
   libjwt = callPackage ../development/libraries/libjwt { };
 
+  libjxl = callPackage ../development/libraries/libjxl { };
+
   libkate = callPackage ../development/libraries/libkate { };
 
   libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
