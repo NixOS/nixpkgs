@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-usr-local-search-paths.patch
-    #./fix-failing-test.patch
   ];
 
   prePatch = lib.optionalString stdenv.isDarwin ''
