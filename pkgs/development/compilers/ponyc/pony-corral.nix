@@ -8,7 +8,7 @@ stdenv.mkDerivation ( rec {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "sha256:1g4dkf5hsnykn3x6yx6ycjzmzzr1nwl59lj13j7zyka1ibv53hwf";
+    sha256 = "1g4dkf5hsnykn3x6yx6ycjzmzzr1nwl59lj13j7zyka1ibv53hwf";
   };
 
   buildInputs = [ ponyc ];
