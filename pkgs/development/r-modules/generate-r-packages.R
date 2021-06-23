@@ -1,9 +1,11 @@
 #!/usr/bin/env Rscript
 library(data.table)
 library(parallel)
+library(BiocManager)
 cl <- makeCluster(10)
 
-biocVersion <- 3.11
+biocVersion <- BiocManager:::.version_map()
+biocVersion <-  as.numeric(as.character(max(biocVersion[biocVersion$R == getRversion()[, 1:2], "Bioc"])))
 snapshotDate <- Sys.Date()-1
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")
@@ -72,8 +74,8 @@ pkgs <- as.data.table(available.packages(mirrorUrl, filters=c("R_version", "OS_t
 pkgs <- pkgs[order(Package)]
 
 write(paste("updating", mirrorType, "packages"), stderr())
-pkgs$sha256 <- parApply(cl, pkgs, 1, function(p) nixPrefetch(p[1], p[2]))
-nix <- apply(pkgs, 1, function(p) formatPackage(p[1], p[2], p[18], p[4], p[5], p[6]))
+pkgs$sha256 <- parApply(cl, pkgs, 1, function(p) as.character(nixPrefetch(p[1], p[2])))
+nix <- apply(pkgs, 1, function(p) formatPackage(p[[1]], p[[2]], p[[18]], p[[4]], p[[5]], p[[6]]))
 write("done", stderr())
 
 cat("# This file is generated from generate-r-packages.R. DO NOT EDIT.\n")
