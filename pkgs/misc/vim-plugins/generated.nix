@@ -2674,6 +2674,18 @@ final: prev:
     meta.homepage = "https://github.com/hoob3rt/lualine.nvim/";
   };
 
+  luasnip = buildVimPluginFrom2Nix {
+    pname = "luasnip";
+    version = "2021-06-23";
+    src = fetchFromGitHub {
+      owner = "l3mon4d3";
+      repo = "luasnip";
+      rev = "943508a957d27d7b2050a37cb41774ae3a812987";
+      sha256 = "024c0k7mcwalkrzm0i45ah2ymaysm1jqmba2iq4m2glc6vgr6c2g";
+    };
+    meta.homepage = "https://github.com/l3mon4d3/luasnip/";
+  };
+
   lush-nvim = buildVimPluginFrom2Nix {
     pname = "lush-nvim";
     version = "2021-06-01";
