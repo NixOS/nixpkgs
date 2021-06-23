@@ -135,8 +135,9 @@ let
       to ~/.config/nixpkgs/config.nix.
 
       d) If you are using the unstable `nix` commands (e.g., `nix run`, `nix
-      build`, `nix shell`, etc.), in addition to one of the fixes above, you
-      may need to use the `--impure` flag as well.
+      build`, `nix shell`, etc.), then nix will evaluate in "restrict-eval" mode which
+      denies it the ability to read a user's local configuration. Add `--impure`
+      to enable reading from the user's nix config directory.
     '';
 
   remediate_insecure = attrs:
