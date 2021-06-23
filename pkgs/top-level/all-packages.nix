@@ -22539,6 +22539,8 @@ in
 
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
+  taskspooler = callPackage ../tools/system/taskspooler { };
+
   tamsyn = callPackage ../data/fonts/tamsyn { inherit (buildPackages.xorg) mkfontscale; };
 
   tamzen = callPackage ../data/fonts/tamzen { inherit (buildPackages.xorg) mkfontscale; };
