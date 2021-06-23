@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch
-, python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
+, python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns, qtwayland
 , which, perl, makeWrapper
 }:
 
@@ -30,6 +30,7 @@ mkDerivation rec {
     qtmultimedia
     qttools
     qtxmlpatterns
+    qtwayland
   ];
 
   buildPhase = ''
