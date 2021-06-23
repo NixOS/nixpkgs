@@ -4380,6 +4380,8 @@ in
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
+  updog = callPackage ../tools/networking/updog { };
+
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uusi = haskell.lib.justStaticExecutables haskellPackages.uusi;
