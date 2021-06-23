@@ -411,7 +411,7 @@
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
     "islamic_prayer_times" = ps: with ps; [ prayer-times-calculator ];
     "iss" = ps: with ps; [ ]; # missing inputs: pyiss
-    "isy994" = ps: with ps; [ ]; # missing inputs: pyisy
+    "isy994" = ps: with ps; [ pyisy ];
     "itach" = ps: with ps; [ ]; # missing inputs: pyitachip2ir
     "itunes" = ps: with ps; [ ];
     "izone" = ps: with ps; [ ]; # missing inputs: python-izone
