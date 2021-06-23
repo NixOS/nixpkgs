@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "coqpit";
-  version = "0.0.9";
+  version = "0.0.10";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dh3bp7m9fjfrfrahblibrx91sagndkdi0325ail63kyvlhzbkma";
+    sha256 = "1gcj5sffcmlvhhk6wbvmxppjpckb90q1avc07jbnb1vvrb2h9lr0";
   };
 
   checkInputs = [
