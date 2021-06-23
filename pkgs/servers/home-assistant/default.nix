@@ -457,6 +457,7 @@ in with py.pkgs; buildPythonApplication rec {
     "honeywell"
     "html5"
     "http"
+    "huawei_lte"
     "hue"
     "humidifier"
     "hyperion"
