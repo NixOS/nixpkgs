@@ -747,7 +747,8 @@ in {
         the option value in Nix and setting these variables accordingly in the
         environment file.
 
-        Environment variables from this file will be interpolated into the
+        Environment variables from this file that are present in
+        <option>environmentVariables</option> will be interpolated into the
         config file using envsubst with this syntax:
         <literal>$ENVIRONMENT ''${VARIABLE}</literal>
 
@@ -769,6 +770,22 @@ in {
 
         Note that this file needs to be available on the host on which
         <literal>Prometheus</literal> is running.
+      '';
+    };
+
+    environmentVariables = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = ["$FOO" "$bar"];
+      description = ''
+        Environment variables to interpolate into the final configuration from
+        <option>environmentFile</option>.
+
+        Note that Prometheus match groups share the same syntax as the
+        environment substitution mechanism, so if the Prometheus configurations
+        uses eg. the match group <literal>''${1}</literal> in your Prometheus
+        configuration, <literal>$1</literal> must not be present in this list,
+        or it will get substituted before startup of Prometheus.
       '';
     };
 
@@ -919,6 +936,11 @@ in {
           '';
         }
       )
+      {
+        assertion = cfg.environmentFile != null -> cfg.environmentVariables != [];
+        message = "
+          services.prometheus.environmentFile is set, but services.prometheus.environmentVariables is empty. Every variable that should be substituted must be contained in services.prometheus.environmentVariables.";
+      }
     ];
 
     users.groups.prometheus.gid = config.ids.gids.prometheus;
@@ -931,8 +953,10 @@ in {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
       preStart = ''
-         ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/run/prometheus/prometheus-substituted.yaml" \
-                                                  -i "${prometheusYml}"
+         ${lib.getBin pkgs.gettext}/bin/envsubst \
+          '${lib.concatStringsSep " " cfg.environmentVariables}' \
+           < "${prometheusYml}" \
+           > "/run/prometheus/prometheus-substituted.yaml"
       '';
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/prometheus" +
