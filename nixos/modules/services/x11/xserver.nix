@@ -513,9 +513,13 @@ in
           This option is set by multiple modules, and the configs are
           concatenated together.
 
-          In Xorg configs the last config entries take precedence,
-          so you may want to use `lib.mkAfter` on this option
-          to override NixOS's defaults.
+          In Xorg configs the last config entries take precedence.
+          The NixOS default config has a `lib.mkOrder`
+          set so that if you just set this option without explicit order,
+          your config will be rendered after the default config
+          (thus overriding the default config).
+          If you want your config to be rendered before the default config,
+          you can use `lib.mkBefore` on this option.
         '';
       };
 
@@ -922,7 +926,14 @@ in
         ''
     );
 
-    services.xserver.config = ''
+    # In xorg.conf, later configs override previous ones.
+    # We give the default NixOS entries a less-than-default order of 900,
+    # so that the order is:
+    #     mkBefore
+    #     this-default-config
+    #     user-setting-config-without-order-priority
+    #     mkAfter
+    services.xserver.config = mkOrder 900 ''
       Section "ServerFlags"
         Option "AllowMouseOpenFail" "on"
         Option "DontZap" "${if cfg.enableCtrlAltBackspace then "off" else "on"}"
