@@ -1593,6 +1593,18 @@ final: prev:
     meta.homepage = "https://github.com/floobits/floobits-neovim/";
   };
 
+  formatter-nvim = buildVimPluginFrom2Nix {
+    pname = "formatter-nvim";
+    version = "2021-06-23";
+    src = fetchFromGitHub {
+      owner = "mhartington";
+      repo = "formatter.nvim";
+      rev = "fc5757d6c9099125edba64b86cb5c9afac9b833b";
+      sha256 = "170lcd7qwzckxib98clld0hgydkjvrr86md3b035q7higgad386m";
+    };
+    meta.homepage = "https://github.com/mhartington/formatter.nvim/";
+  };
+
   forms = buildVimPluginFrom2Nix {
     pname = "forms";
     version = "2012-11-28";
@@ -5533,6 +5545,18 @@ final: prev:
       sha256 = "05yapm3g9rj7k69dhlm7hspakbczwwlbx1lcdydvkx639ka7j09d";
     };
     meta.homepage = "https://github.com/vim-airline/vim-airline-themes/";
+  };
+
+  vim-alias = buildVimPluginFrom2Nix {
+    pname = "vim-alias";
+    version = "2021-06-23";
+    src = fetchFromGitHub {
+      owner = "Konfekt";
+      repo = "vim-alias";
+      rev = "9d1a86284c223fad488137075867ba1c1bd20599";
+      sha256 = "1fqa39j3ax7cvj7bn33r545zwbplmf4b6n7z5jgqqn8h03hsq7x1";
+    };
+    meta.homepage = "https://github.com/Konfekt/vim-alias/";
   };
 
   vim-android = buildVimPluginFrom2Nix {

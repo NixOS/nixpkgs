@@ -1202,6 +1202,12 @@
     github = "beardhatcode";
     githubId = 662538;
   };
+  beezow = {
+    name = "beezow";
+    email = "zbeezow@gmail.com";
+    github = "beezow";
+    githubId = 42082156;
+  };
   bendlas = {
     email = "herwig@bendlas.net";
     github = "bendlas";
@@ -2268,6 +2274,12 @@
     github = "danielfullmer";
     githubId = 1298344;
     name = "Daniel Fullmer";
+  };
+  dan4ik605743 = {
+    email = "6057430gu@gmail.com";
+    github = "dan4ik605743";
+    githubId = 86075850;
+    name = "Danil Danevich";
   };
   das-g = {
     email = "nixpkgs@raphael.dasgupta.ch";

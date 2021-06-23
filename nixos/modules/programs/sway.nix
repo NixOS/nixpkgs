@@ -91,10 +91,9 @@ in {
       type = with types; listOf package;
       default = with pkgs; [
         swaylock swayidle alacritty dmenu
-        rxvt-unicode # For backward compatibility (old default terminal)
       ];
       defaultText = literalExample ''
-        with pkgs; [ swaylock swayidle rxvt-unicode alacritty dmenu ];
+        with pkgs; [ swaylock swayidle alacritty dmenu ];
       '';
       example = literalExample ''
         with pkgs; [

@@ -2106,10 +2106,6 @@ in {
 
   dnspython = callPackage ../development/python-modules/dnspython { };
 
-  dnspython_1 = callPackage ../development/python-modules/dnspython/1.nix { };
-
-  dns = self.dnspython; # Alias for compatibility, 2017-12-10
-
   doc8 = callPackage ../development/python-modules/doc8 { };
 
   docker = callPackage ../development/python-modules/docker { };
@@ -2388,7 +2384,7 @@ in {
       bzip2
       expat
       lz4
-      lzma
+      xz
       zlib
       zstd;
   };
@@ -3254,6 +3250,8 @@ in {
 
   hkdf = callPackage ../development/python-modules/hkdf { };
 
+  hlk-sw16 = callPackage ../development/python-modules/hlk-sw16 { };
+
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
@@ -3326,6 +3324,8 @@ in {
 
   httpx = callPackage ../development/python-modules/httpx { };
 
+  huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
+
   huey = callPackage ../development/python-modules/huey { };
 
   hug = callPackage ../development/python-modules/hug { };
@@ -3363,9 +3363,6 @@ in {
   hyperlink = callPackage ../development/python-modules/hyperlink { };
 
   hyperopt = callPackage ../development/python-modules/hyperopt { };
-
-  # File name is called 2.nix because this one will need to remain for Python 2.
-  hypothesis_4 = callPackage ../development/python-modules/hypothesis/2.nix { };
 
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
 
@@ -5278,6 +5275,8 @@ in {
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
+  pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
+
   pyatag = callPackage ../development/python-modules/pyatag { };
 
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
@@ -6927,6 +6926,8 @@ in {
 
   python-logstash = callPackage ../development/python-modules/python-logstash { };
 
+  python-louvain = callPackage ../development/python-modules/python-louvain { };
+
   python-ly = callPackage ../development/python-modules/python-ly { };
 
   python-lz4 = callPackage ../development/python-modules/python-lz4 { };
@@ -7694,16 +7695,6 @@ in {
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
-  scipy_1_3 = self.scipy.overridePythonAttrs (oldAttrs: rec {
-    version = "1.3.3";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
-    };
-    doCheck = false;
-    disabled = !isPy3k;
-  });
-
   scipy_1_4 = self.scipy.overridePythonAttrs (oldAttrs: rec {
     version = "1.4.1";
     src = oldAttrs.src.override {
@@ -8012,6 +8003,8 @@ in {
   solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 
   somajo = callPackage ../development/python-modules/somajo { };
+
+  somecomfort = callPackage ../development/python-modules/somecomfort { };
 
   sopel = callPackage ../development/python-modules/sopel { };
 
