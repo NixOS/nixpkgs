@@ -4,11 +4,11 @@
 
 with python3.pkgs; buildPythonPackage rec {
   pname = "esphome-dashboard";
-  version = "20210617.1";
+  version = "20210622.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kwg940pdzjsfbdmcml382khpxm6p1ip0bib0wk8rg8qdvmia7w5";
+    sha256 = "00qndincn8m7ap6ficsrl7vlr4dwb9q9ybjyj947r1fwprnbbj0l";
   };
 
   # no tests
