@@ -126,7 +126,7 @@ let
       ${if cfg.useBootLoader then ''
         # Create a writable copy/snapshot of the boot disk.
         # A writable boot disk can be booted from automatically.
-        ${qemu}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img" || exit 1
+        ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img" || exit 1
 
         NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${cfg.efiVars}}")
 
