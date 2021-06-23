@@ -1218,7 +1218,7 @@ installCheckPhase() {
         echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
-       && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
+       && ! make -n ${makefile:+-f $makefile} "${installCheckTarget:-installcheck}" >/dev/null 2>&1; then
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
         IFS=" " read -r -a makeFlagsTemp <<< "$makeFlags"
@@ -1253,7 +1253,7 @@ distPhase() {
     local flagsArray=(
         "${distFlagsTemp[@]}"
         ${distFlagsArray+"${distFlagsArray[@]}"}
-        ${distTarget:-dist}
+        "${distTarget:-dist}"
     )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
