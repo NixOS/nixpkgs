@@ -5,7 +5,6 @@
 , CommonMark
 , colorama
 , dataclasses
-, ipywidgets
 , poetry-core
 , pygments
 , typing-extensions
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     CommonMark
     colorama
-    ipywidgets
     pygments
     typing-extensions
   ] ++ lib.optional (pythonOlder "3.7") [

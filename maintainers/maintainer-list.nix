@@ -1202,6 +1202,12 @@
     github = "beardhatcode";
     githubId = 662538;
   };
+  beezow = {
+    name = "beezow";
+    email = "zbeezow@gmail.com";
+    github = "beezow";
+    githubId = 42082156;
+  };
   bendlas = {
     email = "herwig@bendlas.net";
     github = "bendlas";
@@ -5211,6 +5217,12 @@
   jwilberding = {
     email = "jwilberding@afiniate.com";
     name = "Jordan Wilberding";
+  };
+  jwoudenberg = {
+    email = "nixpkgs@jasperwoudenberg.com";
+    github = "jwoudenberg";
+    githubId = 1525551;
+    name = "Jasper Woudenberg";
   };
   jwygoda = {
     email = "jaroslaw@wygoda.me";

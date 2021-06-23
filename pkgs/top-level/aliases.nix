@@ -117,6 +117,7 @@ mapAliases ({
   clang9Stdenv = lowPrio llvmPackages_9.stdenv;
   clang10Stdenv = lowPrio llvmPackages_10.stdenv;
   clang11Stdenv = lowPrio llvmPackages_11.stdenv;
+  clang12Stdenv = lowPrio llvmPackages_12.stdenv;
 
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29

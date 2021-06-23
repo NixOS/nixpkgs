@@ -168,7 +168,7 @@ with self; with super; {
 
   http_signature = callPackage ../development/python-modules/http_signature { };
 
-  hypothesis = super.hypothesis_4;
+  hypothesis = callPackage ../development/python-modules/hypothesis/2.nix { };
 
   idna = callPackage ../development/python-modules/idna/2.nix { };
 
@@ -369,6 +369,8 @@ with self; with super; {
   pasteScript = callPackage ../development/python-modules/pastescript { };
 
   pathpy = callPackage ../development/python-modules/path.py/2.nix { };
+
+  pg8000 = callPackage ../development/python-modules/pg8000/1_12.nix { };
 
   pillow = callPackage ../development/python-modules/pillow/6.nix {
     inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;

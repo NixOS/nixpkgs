@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "herepy";
-  version = "3.5.2";
+  version = "3.5.3";
 
   disabled = pythonOlder "3.5";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "abdullahselek";
     repo = "HerePy";
     rev = version;
-    sha256 = "0z1brgnrzdzfmnydipja4hhrhnz4fwdjy3xa05mz28bwi6z52bcj";
+    sha256 = "sha256-05x3EQoyv38j4UcixN0sf5BI2oTjfasAIQyZqQSjdPM=";
   };
 
   propagatedBuildInputs = [

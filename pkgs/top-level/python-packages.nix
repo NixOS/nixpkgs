@@ -2386,7 +2386,7 @@ in {
       bzip2
       expat
       lz4
-      lzma
+      xz
       zlib
       zstd;
   };
@@ -3361,9 +3361,6 @@ in {
   hyperlink = callPackage ../development/python-modules/hyperlink { };
 
   hyperopt = callPackage ../development/python-modules/hyperopt { };
-
-  # File name is called 2.nix because this one will need to remain for Python 2.
-  hypothesis_4 = callPackage ../development/python-modules/hypothesis/2.nix { };
 
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
 
@@ -5184,8 +5181,6 @@ in {
 
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
-  pg8000_1_12 = callPackage ../development/python-modules/pg8000/1_12.nix { };
-
   pgcli = callPackage ../development/tools/database/pgcli { };
 
   pglast = callPackage ../development/python-modules/pglast { };
@@ -5279,6 +5274,8 @@ in {
   pmsensor = callPackage ../development/python-modules/pmsensor { };
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
+
+  pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
 
@@ -6877,8 +6874,6 @@ in {
 
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
-  python-engineio_3 = callPackage ../development/python-modules/python-engineio/3.nix { };
-
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
   python-ethtool = callPackage ../development/python-modules/python-ethtool { };
@@ -6930,6 +6925,8 @@ in {
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
 
   python-logstash = callPackage ../development/python-modules/python-logstash { };
+
+  python-louvain = callPackage ../development/python-modules/python-louvain { };
 
   python-ly = callPackage ../development/python-modules/python-ly { };
 
@@ -7028,8 +7025,6 @@ in {
   };
 
   python-socketio = callPackage ../development/python-modules/python-socketio { };
-
-  python-socketio_4 = callPackage ../development/python-modules/python-socketio/4.nix { };
 
   python-socks = callPackage ../development/python-modules/python-socks { };
 
@@ -7699,16 +7694,6 @@ in {
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
-
-  scipy_1_3 = self.scipy.overridePythonAttrs (oldAttrs: rec {
-    version = "1.3.3";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
-    };
-    doCheck = false;
-    disabled = !isPy3k;
-  });
 
   scipy_1_4 = self.scipy.overridePythonAttrs (oldAttrs: rec {
     version = "1.4.1";
@@ -8972,16 +8957,7 @@ in {
 
   vsure = callPackage ../development/python-modules/vsure { };
 
-  vtk = self.vtk_7;
-  vtk_7 = toPythonModule (pkgs.vtk_7.override {
-    pythonInterpreter = python;
-    enablePython = true;
-  });
-  vtk_8 = toPythonModule (pkgs.vtk_8.override {
-    pythonInterpreter = python;
-    enablePython = true;
-  });
-  vtk_9 = toPythonModule (pkgs.vtk_9.override {
+  vtk = toPythonModule (pkgs.vtk.override {
     pythonInterpreter = python;
     enablePython = true;
   });
