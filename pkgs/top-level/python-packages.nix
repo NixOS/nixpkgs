@@ -3330,6 +3330,8 @@ in {
 
   huggingface-hub = callPackage ../development/python-modules/huggingface-hub { };
 
+  huisbaasje-client = callPackage ../development/python-modules/huisbaasje-client { };
+
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
 
   humanize = callPackage ../development/python-modules/humanize { };
