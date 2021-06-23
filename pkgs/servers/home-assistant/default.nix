@@ -459,6 +459,7 @@ in with py.pkgs; buildPythonApplication rec {
     "http"
     "huawei_lte"
     "hue"
+    "huisbaasje"
     "humidifier"
     "hvv_departures"
     "hyperion"
