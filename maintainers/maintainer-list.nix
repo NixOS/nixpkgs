@@ -2529,6 +2529,12 @@
     githubId = 8404455;
     name = "Diego Lelis";
   };
+  diffumist = {
+    email = "diffumist@gmail.com";
+    github = "diffumist";
+    githubId = 32810399;
+    name = "Diffumist";
+  };
   diogox = {
     name = "Diogo Xavier";
     email = "13244408+diogox@users.noreply.github.com";
