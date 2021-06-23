@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OellGxW/2I/dKBxWgEv1Ta9OJ/2HUfDIzICQwvmjTCM=";
+    sha256 = "sha256-9o/njurf1AWt04A8u38FMFcteLZlRHDejbH9+ekDjKI=";
   };
 
   vendorSha256 = "sha256-9W1K01PJ+tRLSJ0L7NGHXT5w5oHmlBkT8kwnOLOzSCc=";
@@ -35,15 +35,7 @@ buildGoModule rec {
     installManPage gdu.1
   '';
 
-  # doCheck = !(stdenv.isAarch64 || stdenv.isDarwin);
-  # also fails x86_64-linux on hydra with:
-  # dir_test.go:82:
-  #             Error Trace:    dir_test.go:82
-  #             Error:          Not equal:
-  #                             expected: 0
-  #                             actual  : 512
-  #             Test:           TestFlags
-  doCheck = false;
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Disk usage analyzer with console interface";

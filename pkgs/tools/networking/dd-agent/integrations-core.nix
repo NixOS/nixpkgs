@@ -75,7 +75,7 @@ let
     mongo    = (ps: [ ps.pymongo ]);
     network  = (ps: [ ps.psutil ]);
     nginx    = (ps: []);
-    postgres = (ps: with ps; [ pg8000_1_12 psycopg2 ]);
+    postgres = (ps: with ps; [ pg8000 psycopg2 ]);
   };
 
   # All integrations (default + extra):

@@ -4380,6 +4380,8 @@ in
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
+  updog = callPackage ../tools/networking/updog { };
+
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uusi = haskell.lib.justStaticExecutables haskellPackages.uusi;
@@ -20959,6 +20961,8 @@ in
 
     system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
 
+    system76-power = callPackage ../os-specific/linux/system76-power { };
+
     system76-io = callPackage ../os-specific/linux/system76-io { };
 
     tmon = callPackage ../os-specific/linux/tmon { };
@@ -26604,7 +26608,7 @@ in
 
   scite = callPackage ../applications/editors/scite { };
 
-  scli = with python3Packages; callPackage ../applications/misc/scli { };
+  scli = callPackage ../applications/misc/scli { };
 
   scribus = callPackage ../applications/office/scribus {
     inherit (gnome2) libart_lgpl;
@@ -29886,6 +29890,11 @@ in
   ### SCIENCE/PHYSICS
 
   elmerfem = callPackage ../applications/science/physics/elmerfem {};
+
+  mcfm = callPackage ../applications/science/physics/MCFM {
+    stdenv = gccStdenv;
+    lhapdf = lhapdf.override { stdenv = gccStdenv; };
+  };
 
   professor = callPackage ../applications/science/physics/professor { };
 
