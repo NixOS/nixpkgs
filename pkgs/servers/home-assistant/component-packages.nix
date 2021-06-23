@@ -368,7 +368,7 @@
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
     "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
-    "huawei_lte" = ps: with ps; [ getmac stringcase url-normalize ]; # missing inputs: huawei-lte-api
+    "huawei_lte" = ps: with ps; [ getmac huawei-lte-api stringcase url-normalize ];
     "huawei_router" = ps: with ps; [ ];
     "hue" = ps: with ps; [ aiohue ];
     "huisbaasje" = ps: with ps; [ ]; # missing inputs: huisbaasje-client
