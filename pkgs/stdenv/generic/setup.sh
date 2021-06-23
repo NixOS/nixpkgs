@@ -141,6 +141,7 @@ exitHandler() {
         # normally.  Otherwise, return the original exit code.
         if [ -n "${succeedOnFailure:-}" ]; then
             echo "build failed with exit code $exitCode (ignored)"
+            # shellcheck disable=SC2154
             mkdir -p "$out/nix-support"
             printf "%s" "$exitCode" > "$out/nix-support/failed"
             exit 0
@@ -245,6 +246,7 @@ shopt -s nullglob
 # Set up the initial path.
 PATH=
 HOST_PATH=
+# shellcheck disable=SC2154
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH "$i/bin"
@@ -1031,6 +1033,7 @@ buildPhase() {
     else
         foundMakefile=1
         IFS=" " read -r -a makeFlagsTemp <<< "$makeFlags"
+        # shellcheck disable=SC2154
         IFS=" " read -r -a buildFlagsTemp <<< "$buildFlags"
         local -a flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
@@ -1101,7 +1104,9 @@ installPhase() {
         mkdir -p "$prefix"
     fi
     IFS=" " read -r -a makeFlagsTemp <<< "$makeFlags"
+    # shellcheck disable=SC2154
     IFS=" " read -r -a installFlagsTemp <<< "$installFlags"
+    # shellcheck disable=SC2154
     IFS=" " read -r -a installTargetsTemp <<< "${installTargets:-install}"
     local -a flagsArray=(
         SHELL="$SHELL"
@@ -1164,6 +1169,7 @@ fixupPhase() {
 
         [[ "${!propagatedInputsSlice}" ]] || continue
 
+        # shellcheck disable=SC2154
         mkdir -p "${!outputDev}/nix-support"
         # shellcheck disable=SC2086
         printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
@@ -1191,6 +1197,7 @@ fixupPhase() {
     # Propagate user-env packages into the output with binaries, TODO?
 
     if [ -n "${propagatedUserEnvPkgs:-}" ]; then
+        # shellcheck disable=SC2154
         mkdir -p "${!outputBin}/nix-support"
         # shellcheck disable=SC2086
         printWords $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
@@ -1211,6 +1218,7 @@ installCheckPhase() {
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
         IFS=" " read -r -a makeFlagsTemp <<< "$makeFlags"
+        # shellcheck disable=SC2154
         IFS=" " read -r -a installCheckFlagsTemp <<< "$installCheckFlags"
         IFS=" " read -r -a installCheckTargetTemp <<< "${installCheckTarget:-installcheck}"
         local -a flagsArray=(
@@ -1235,6 +1243,7 @@ installCheckPhase() {
 distPhase() {
     runHook preDist
 
+    # shellcheck disable=SC2154
     IFS=" " read -r -a distFlagsTemp <<< "$distFlags"
 
     local flagsArray=(
