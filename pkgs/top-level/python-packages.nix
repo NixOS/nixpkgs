@@ -6439,6 +6439,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
   };
 
+  pyscf = callPackage ../development/python-modules/pyscf { };
+
   pyschedule = callPackage ../development/python-modules/pyschedule { };
 
   pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
