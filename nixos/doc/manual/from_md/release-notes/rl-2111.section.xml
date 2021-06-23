@@ -466,13 +466,20 @@
         </itemizedlist>
       </listitem>
     </itemizedlist>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <literal>yggdrasil</literal> was upgraded to a new major
           release with breaking changes, see
           <link xlink:href="https://github.com/yggdrasil-network/yggdrasil-go/releases/tag/v0.4.0">upstream
           changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nix.buildMachines</literal> now ensures remote build
+          machines are configured to use SSH. Previously, it was
+          possible to accidentally use special store types.
         </para>
       </listitem>
     </itemizedlist>

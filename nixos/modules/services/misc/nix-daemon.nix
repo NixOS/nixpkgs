@@ -518,12 +518,12 @@ in
     };
 
     # List of machines for distributed Nix builds in the format
-    # expected by build-remote.pl.
+    # expected by libstore/machines.cc.
     environment.etc."nix/machines" =
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
-            "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
+            "ssh://${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
             + (if machine.system != null then machine.system else concatStringsSep "," machine.systems)
             + " ${if machine.sshKey != null then machine.sshKey else "-"} ${toString machine.maxJobs} "
             + toString (machine.speedFactor)
