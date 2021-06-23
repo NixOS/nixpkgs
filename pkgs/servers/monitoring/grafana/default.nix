@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "7.5.7";
+  version = "7.5.9";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -10,15 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-GTQK02zxOBTE+93vT0zLMhAeZ7F3Cq/0lbvbzwB2QZA=";
+    sha256 = "sha256-khk2K4V/FnvZ5/DHu/0dRBgkUipJ0vzVujyqpkttft8=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-IQ7aAuUrNa+bSh5ld6IttujM8AgKUSlu8H7pwzDi164=";
+    sha256 = "sha256-QMWcmedMOB7EBAWOl4t/kZ6G4Q7D9XxMzTh4BkW+pPI=";
   };
 
-  vendorSha256 = "sha256-AsPRaRLomp090XAKLXLXKm40ESPO4im9qi6VLpLYRQU=";
+  vendorSha256 = "sha256-FdotpFi1ee92mCX59bBuqzCyjIq6yujWixReYxmKbS8=";
 
   # grafana-aws-sdk is specified with two versions which causes a problem later:
   # go: inconsistent vendoring in /build/source:
