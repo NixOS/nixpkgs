@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyls-spyder";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2be1b05f2c7a72565b28de7289d2c2b16052b88e46914279a2d631e074ed158";
+    sha256 = "45a321c83f64267d82907492c55199fccabda45bc872dd23bf1efd08edac1b0b";
   };
 
   propagatedBuildInputs = [ python-language-server ];

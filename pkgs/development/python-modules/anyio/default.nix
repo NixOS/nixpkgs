@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools-scm
 , idna
 , sniffio
 , typing-extensions
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -28,6 +29,14 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-zQiSAQN7cp1s+8hDTvYaMkHUXV1ccNwIsl2IOztH7J8=";
   };
+
+  preBuild = ''
+    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
+  '';
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     idna

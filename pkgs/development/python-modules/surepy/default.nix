@@ -2,6 +2,7 @@
 , aiodns
 , aiohttp
 , async-timeout
+, attrs
 , brotlipy
 , buildPythonPackage
 , cchardet
@@ -28,12 +29,19 @@ buildPythonPackage rec {
     sha256 = "sha256-XoYiZPBc9SybyKocui1HqSA+YPiPpbupJWMCfmQT5RU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'click = "^7.1.2"' 'click = "*"' \
+      --replace 'attrs = "^20.3.0"' 'attrs = "*"'
+  '';
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiodns
     aiohttp
     async-timeout
+    attrs
     brotlipy
     cchardet
     click

@@ -204,6 +204,8 @@ in
 
   buf = callPackage ../development/tools/buf { };
 
+  elfcat = callPackage ../tools/misc/elfcat { };
+
   # Zip file format only allows times after year 1980, which makes e.g. Python wheel building fail with:
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
@@ -3068,6 +3070,8 @@ in
   noti = callPackage ../tools/misc/noti {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+
+  notify = callPackage ../tools/misc/notify { };
 
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
@@ -12672,6 +12676,8 @@ in
 
   wasm = ocamlPackages.wasm;
 
+  wasm3 = callPackage ../development/interpreters/wasm3 { };
+
   proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm { };
 
 
@@ -13906,6 +13912,8 @@ in
   };
 
   premake = premake4;
+
+  privacyidea = callPackage ../applications/misc/privacyidea { };
 
   procodile = callPackage ../tools/system/procodile { };
 
@@ -20830,7 +20838,7 @@ in
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
 
-    dpdk = throw "The dpdk driver has been renamed to dpdk-mods.";
+    dpdk = throw "The dpdk driver has been renamed to dpdk-kmods.";
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
@@ -22506,6 +22514,8 @@ in
   maligned = callPackage ../development/tools/maligned { };
 
   inter = callPackage ../data/fonts/inter { };
+
+  open-fonts = callPackage ../data/fonts/open-fonts { };
 
   scientifica = callPackage ../data/fonts/scientifica { };
 
@@ -27193,6 +27203,8 @@ in
 
   tudu = callPackage ../applications/office/tudu { };
 
+  tuna = python3Packages.callPackage ../os-specific/linux/tuna { };
+
   tunefish = callPackage ../applications/audio/tunefish {
     stdenv = clangStdenv; # https://github.com/jpcima/tunefish/issues/4
   };
@@ -30249,6 +30261,8 @@ in
   calc = callPackage ../applications/science/math/calc { };
 
   pcalc = callPackage ../applications/science/math/pcalc { };
+
+  programmer-calculator = callPackage ../applications/science/math/programmer-calculator { };
 
   bcal = callPackage ../applications/science/math/bcal { };
 

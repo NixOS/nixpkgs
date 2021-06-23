@@ -309,6 +309,8 @@
           </listitem>
         </itemizedlist>
       </listitem>
+    </itemizedlist>
+    <itemizedlist spacing="compact">
       <listitem>
         <para>
           The <literal>antlr</literal> package now defaults to the 4.x
@@ -319,7 +321,26 @@
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
     <title>Other Notable Changes</title>
-    <para>
-    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The setting
+          <link xlink:href="options.html#opt-services.openssh.logLevel"><literal>services.openssh.logLevel</literal></link>
+          <literal>&quot;VERBOSE&quot;</literal>
+          <literal>&quot;INFO&quot;</literal>. This brings NixOS in line
+          with upstream and other Linux distributions, and reduces log
+          spam on servers due to bruteforcing botnets.
+        </para>
+        <para>
+          However, if
+          <link xlink:href="options.html#opt-services.fail2ban.enable"><literal>services.fail2ban.enable</literal></link>
+          is <literal>true</literal>, the <literal>fail2ban</literal>
+          will override the verbosity to
+          <literal>&quot;VERBOSE&quot;</literal>, so that
+          <literal>fail2ban</literal> can observe the failed login
+          attempts from the SSH logs.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
 </section>

@@ -8,20 +8,21 @@
 , requests_oauthlib
 , freezegun
 , pytest-asyncio
+, pytest-mock
 , pytestCheckHook
 , requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "5.0.1";
+  version = "5.1.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
     rev = "v${version}";
-    sha256 = "0can9v602iqfn0l01fd7gr63qzvcngfm0qka4s1x0pldh6avxmfh";
+    sha256 = "0szk3wjcrllzvpix66iq3li54pw0c1knlx8wn1z9kqhkrb8r200x";
   };
 
   postPatch = ''
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   checkInputs = [
     freezegun
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
     requests-mock
   ];
