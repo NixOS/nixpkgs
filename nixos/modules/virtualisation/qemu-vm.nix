@@ -75,7 +75,7 @@ let
     in
       "-drive ${driveOpts} ${device}";
 
-  drivesCmdLine = drives: concatStringsSep " " (imap1 driveCmdline drives);
+  drivesCmdLine = drives: concatStringsSep "\\\n    " (imap1 driveCmdline drives);
 
 
   # Creates a device name from a 1-based a numerical index, e.g.
@@ -123,25 +123,27 @@ let
       # Create a directory for exchanging data with the VM.
       mkdir -p "$TMPDIR/xchg"
 
-      ${if cfg.useBootLoader then ''
+      ${lib.optionalString cfg.useBootLoader
+      ''
         # Create a writable copy/snapshot of the boot disk.
         # A writable boot disk can be booted from automatically.
         ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img" || exit 1
 
         NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${cfg.efiVars}}")
 
-        ${if cfg.useEFIBoot then ''
+        ${lib.optionalString cfg.useEFIBoot
+        ''
           # VM needs writable EFI vars
           if ! test -e "$NIX_EFI_VARS"; then
             cp ${bootDisk}/efi-vars.fd "$NIX_EFI_VARS" || exit 1
             chmod 0644 "$NIX_EFI_VARS" || exit 1
           fi
-        '' else ""}
-      '' else ""}
+        ''}
+      ''}
 
       cd "$TMPDIR" || exit 1
 
-      idx=0
+      ${lib.optionalString (cfg.emptyDiskImages != []) "idx=0"}
       ${flip concatMapStrings cfg.emptyDiskImages (size: ''
         if ! test -e "empty$idx.qcow2"; then
             ${qemu}/bin/qemu-img create -f qcow2 "empty$idx.qcow2" "${toString size}M"
@@ -160,7 +162,7 @@ let
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
           -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
           ${drivesCmdLine config.virtualisation.qemu.drives} \
-          ${toString config.virtualisation.qemu.options} \
+          ${concatStringsSep " \\\n    " config.virtualisation.qemu.options} \
           $QEMU_OPTS \
           "$@"
     '';
@@ -456,7 +458,7 @@ in
           type = types.listOf types.str;
           description = ''
             Networking-related command-line options that should be passed to qemu.
-            The default is to use userspace networking (slirp).
+            The default is to use userspace networking (SLiRP).
 
             If you override this option, be advised to keep
             ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the default)
