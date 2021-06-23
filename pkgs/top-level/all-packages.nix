@@ -29881,6 +29881,11 @@ in
 
   elmerfem = callPackage ../applications/science/physics/elmerfem {};
 
+  mcfm = callPackage ../applications/science/physics/MCFM {
+    stdenv = gccStdenv;
+    lhapdf = lhapdf.override { stdenv = gccStdenv; };
+  };
+
   professor = callPackage ../applications/science/physics/professor { };
 
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
