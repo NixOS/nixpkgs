@@ -14,7 +14,7 @@ rec {
 
   qemuNICFlags = nic: net: machine:
     [ "-device virtio-net-pci,netdev=vlan${toString nic},mac=${qemuNicMac net machine}"
-      "-netdev vde,id=vlan${toString nic},sock=$QEMU_VDE_SOCKET_${toString net}"
+      ''-netdev vde,id=vlan${toString nic},sock="$QEMU_VDE_SOCKET_${toString net}"''
     ];
 
   qemuSerialDevice = if pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64 then "ttyS0"

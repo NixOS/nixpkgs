@@ -108,7 +108,7 @@ let
     ''
       #! ${pkgs.runtimeShell}
 
-      NIX_DISK_IMAGE=$(readlink -f ''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}})
+      NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}}")
 
       if ! test -e "$NIX_DISK_IMAGE"; then
           ${qemu}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
@@ -121,14 +121,14 @@ let
       fi
 
       # Create a directory for exchanging data with the VM.
-      mkdir -p $TMPDIR/xchg
+      mkdir -p "$TMPDIR/xchg"
 
       ${if cfg.useBootLoader then ''
         # Create a writable copy/snapshot of the boot disk.
         # A writable boot disk can be booted from automatically.
-        ${qemu}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
+        ${qemu}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img" || exit 1
 
-        NIX_EFI_VARS=$(readlink -f ''${NIX_EFI_VARS:-${cfg.efiVars}})
+        NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${cfg.efiVars}}")
 
         ${if cfg.useEFIBoot then ''
           # VM needs writable EFI vars
@@ -139,7 +139,8 @@ let
         '' else ""}
       '' else ""}
 
-      cd $TMPDIR
+      cd "$TMPDIR" || exit 1
+
       idx=0
       ${flip concatMapStrings cfg.emptyDiskImages (size: ''
         if ! test -e "empty$idx.qcow2"; then
@@ -646,7 +647,7 @@ in
     virtualisation.qemu.drives = mkMerge [
       [{
         name = "root";
-        file = "$NIX_DISK_IMAGE";
+        file = ''"$NIX_DISK_IMAGE"'';
         driveExtraOpts.cache = "writeback";
         driveExtraOpts.werror = "report";
       }]
@@ -655,7 +656,7 @@ in
         # note [Disk layout with `useBootLoader`].
         {
           name = "boot";
-          file = "$TMPDIR/disk.img";
+          file = ''"$TMPDIR"/disk.img'';
           driveExtraOpts.media = "disk";
           deviceExtraOpts.bootindex = "1";
         }
