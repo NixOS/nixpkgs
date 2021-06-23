@@ -454,6 +454,7 @@ in with py.pkgs; buildPythonApplication rec {
     "homematicip_cloud"
     "html5"
     "http"
+    "huawei_lte"
     "hue"
     "humidifier"
     "hyperion"
