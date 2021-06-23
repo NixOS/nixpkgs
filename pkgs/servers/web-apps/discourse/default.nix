@@ -3,6 +3,8 @@
 , util-linux, gawk, imagemagick, optipng, pngquant, libjpeg, jpegoptim
 , gifsicle, libpsl, redis, postgresql, which, brotli, procps, rsync
 , nodePackages, v8
+
+, plugins ? []
 }:
 
 let
@@ -148,6 +150,8 @@ let
       mkdir $NIX_BUILD_TOP/tmp_home
       export HOME=$NIX_BUILD_TOP/tmp_home
 
+      ${lib.concatMapStringsSep "\n" (p: "cp -r ${p} plugins/") plugins}
+
       export RAILS_ENV=production
 
       bundle exec rake db:migrate >/dev/null
@@ -212,7 +216,6 @@ let
 
       mv config config.dist
       mv public public.dist
-      mv plugins plugins.dist
 
       runHook postBuild
     '';
@@ -230,6 +233,7 @@ let
       ln -sf /run/discourse/public $out/share/discourse/public
       ln -sf /run/discourse/plugins $out/share/discourse/plugins
       ln -sf ${assets} $out/share/discourse/public.dist/assets
+      ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/") plugins}
 
       runHook postInstall
     '';
@@ -244,6 +248,7 @@ let
 
     passthru = {
       inherit rubyEnv runtimeEnv runtimeDeps rake;
+      enabledPlugins = plugins;
       ruby = rubyEnv.wrappedRuby;
       tests = nixosTests.discourse;
     };
