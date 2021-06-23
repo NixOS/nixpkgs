@@ -93,7 +93,7 @@ rec {
                          "${config.networking.hostName}\n"));
 
                   virtualisation.qemu.options =
-                    forEach interfacesNumbered
+                    flip concatMap interfacesNumbered
                       ({ fst, snd }: qemuNICFlags snd fst m.snd);
                 };
             }
