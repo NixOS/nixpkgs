@@ -411,6 +411,75 @@ in
           '';
       };
 
+    virtualisation.forwardPorts = mkOption {
+      type = types.listOf
+        (types.submodule {
+          options.from = mkOption {
+            type = types.enum [ "host" "guest" ];
+            default = "host";
+            description =
+              ''
+                Controls the direction in which the ports are mapped:
+
+                - <literal>"host"</literal> means traffic from the host ports
+                is forwarded to the given guest port.
+
+                - <literal>"guest"</literal> means traffic from the guest ports
+                is forwarded to the given host port.
+              '';
+          };
+          options.proto = mkOption {
+            type = types.enum [ "tcp" "udp" ];
+            default = "tcp";
+            description = "The protocol to forward.";
+          };
+          options.host.address = mkOption {
+            type = types.str;
+            default = "";
+            description = "The IPv4 address of the host.";
+          };
+          options.host.port = mkOption {
+            type = types.port;
+            description = "The host port to be mapped.";
+          };
+          options.guest.address = mkOption {
+            type = types.str;
+            default = "";
+            description = "The IPv4 address on the guest VLAN.";
+          };
+          options.guest.port = mkOption {
+            type = types.port;
+            description = "The guest port to be mapped.";
+          };
+        });
+      default = [];
+      example = lib.literalExample
+        ''
+        [ # forward local port 2222 -> 22, to ssh into the VM
+          { from = "host"; host.port = 2222; guest.port = 22; }
+
+          # forward local port 80 -> 10.0.2.10:80 in the VLAN
+          { from = "guest";
+            guest.address = "10.0.2.10"; guest.port = 80;
+            host.address = "127.0.0.1"; host.port = 80;
+          }
+        ]
+        '';
+      description =
+        ''
+          When using the SLiRP user networking (default), this option allows to
+          forward ports to/from the host/guest.
+
+          <warning><para>
+            If the NixOS firewall on the virtual machine is enabled, you also
+            have to open the guest ports to enable the traffic between host and
+            guest.
+          </para></warning>
+
+          <note><para>Currently QEMU supports only IPv4 forwarding.</para></note>
+        '';
+    };
+
     virtualisation.vlans =
       mkOption {
         type = types.listOf types.ints.unsigned;
@@ -480,7 +549,7 @@ in
       consoles = mkOption {
         type = types.listOf types.str;
         default = let
-          consoles = [ "${qemuSerialDevice},115200n8" "tty0" ];
+          consoles = [ "${qemu-flags.qemuSerialDevice},115200n8" "tty0" ];
         in if cfg.graphics then consoles else reverseList consoles;
         example = [ "console=tty1" ];
         description = ''
@@ -496,17 +565,18 @@ in
 
       networkingOptions =
         mkOption {
-          default = [
-            "-net nic,netdev=user.0,model=virtio"
-            "-netdev user,id=user.0\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
-          ];
           type = types.listOf types.str;
+          default = [ ];
+          example = [
+            "-net nic,netdev=user.0,model=virtio"
+            "-netdev user,id=user.0,\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
+          ];
           description = ''
             Networking-related command-line options that should be passed to qemu.
             The default is to use userspace networking (SLiRP).
 
             If you override this option, be advised to keep
-            ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the default)
+            ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the example)
             to keep the default runtime behaviour.
           '';
         };
@@ -589,6 +659,25 @@ in
   };
 
   config = {
+
+    assertions =
+      lib.concatLists (lib.flip lib.imap cfg.forwardPorts (i: rule:
+        [
+          { assertion = rule.from == "guest" -> rule.proto == "tcp";
+            message =
+              ''
+                Invalid virtualisation.forwardPorts.<entry ${toString i}>.proto:
+                  Guest forwarding supports only TCP connections.
+              '';
+          }
+          { assertion = rule.from == "guest" -> lib.hasPrefix "10.0.2." rule.guest.address;
+            message =
+              ''
+                Invalid virtualisation.forwardPorts.<entry ${toString i}>.guest.address:
+                  The address must be in the default VLAN (10.0.2.0/24).
+              '';
+          }
+        ]));
 
     # Note [Disk layout with `useBootLoader`]
     #
@@ -675,6 +764,22 @@ in
       xchg      = { source = ''"$TMPDIR"/xchg''; target = "/tmp/xchg"; };
       shared    = { source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"''; target = "/tmp/shared"; };
     };
+
+    virtualisation.qemu.networkingOptions =
+      let
+        forwardingOptions = flip concatMapStrings cfg.forwardPorts
+          ({ proto, from, host, guest }:
+            if from == "host"
+              then "hostfwd=${proto}:${host.address}:${toString host.port}-" +
+                   "${guest.address}:${toString guest.port},"
+              else "'guestfwd=${proto}:${guest.address}:${toString guest.port}-" +
+                   "cmd:${pkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
+          );
+      in
+      [
+        "-net nic,netdev=user.0,model=virtio"
+        "-netdev user,id=user.0,${forwardingOptions}\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
+      ];
 
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
