@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Secure, Reliable, Transport";
-    homepage    = "https://www.srtalliance.org";
+    homepage    = "https://github.com/Haivision/srt";
     license     = licenses.mpl20;
     maintainers = with maintainers; [ nh2 ];
     platforms   = platforms.all;
