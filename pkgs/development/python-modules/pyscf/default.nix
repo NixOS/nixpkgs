@@ -29,6 +29,8 @@ buildPythonPackage rec {
   PYSCF_INC_DIR="${libcint}:${libxc}:${xcfun}";
 
   doCheck = true;
+  pythonImportsCheck = [ "pyscf" ];
+  checkInputs = [ ];
 
   meta = with lib; {
     description = "Python-based simulations of chemistry framework";
