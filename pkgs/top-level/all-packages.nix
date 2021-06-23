@@ -4380,6 +4380,8 @@ in
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
+  updog = callPackage ../tools/networking/updog { };
+
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uusi = haskell.lib.justStaticExecutables haskellPackages.uusi;
@@ -17701,7 +17703,10 @@ in
     suffix = "min";
   };
 
-  poppler_utils = poppler.override { suffix = "utils"; utils = true; };
+  poppler_utils = poppler.override {
+    suffix = "utils";
+    utils = true;
+  };
 
   popt = callPackage ../development/libraries/popt { };
 
@@ -20952,6 +20957,8 @@ in
     system76 = callPackage ../os-specific/linux/system76 { };
 
     system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
+
+    system76-power = callPackage ../os-specific/linux/system76-power { };
 
     system76-io = callPackage ../os-specific/linux/system76-io { };
 
@@ -26598,7 +26605,7 @@ in
 
   scite = callPackage ../applications/editors/scite { };
 
-  scli = with python3Packages; callPackage ../applications/misc/scli { };
+  scli = callPackage ../applications/misc/scli { };
 
   scribus = callPackage ../applications/office/scribus {
     inherit (gnome2) libart_lgpl;
@@ -27144,10 +27151,6 @@ in
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
   tonelib-gfx = callPackage ../applications/audio/tonelib-gfx { };
-
-  tonelib-jam = callPackage ../applications/audio/tonelib-jam { };
-
-  tonelib-zoom = callPackage ../applications/audio/tonelib-zoom { };
 
   tony = libsForQt514.callPackage ../applications/audio/tony { };
 
@@ -29887,6 +29890,11 @@ in
 
   elmerfem = callPackage ../applications/science/physics/elmerfem {};
 
+  mcfm = callPackage ../applications/science/physics/MCFM {
+    stdenv = gccStdenv;
+    lhapdf = lhapdf.override { stdenv = gccStdenv; };
+  };
+
   professor = callPackage ../applications/science/physics/professor { };
 
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
@@ -30433,6 +30441,8 @@ in
   apmplanner2 = libsForQt514.callPackage ../applications/science/robotics/apmplanner2 { };
 
   betaflight-configurator = callPackage ../applications/science/robotics/betaflight-configurator { };
+
+  emuflight-configurator = callPackage ../applications/science/robotics/emuflight-configurator { };
 
   mission-planner = callPackage ../applications/science/robotics/mission-planner { };
 
