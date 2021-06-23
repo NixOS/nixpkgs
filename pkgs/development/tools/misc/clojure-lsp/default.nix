@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
     license = licenses.mit;
-    maintainers = [ maintainers.ericdallo maintainers.babariviere ];
+    maintainers = with maintainers; [ ericdallo babariviere ];
     platforms = graalvm11-ce.meta.platforms;
   };
 }
