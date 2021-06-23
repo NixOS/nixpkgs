@@ -442,6 +442,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hddtemp"
     "heos"
     "here_travel_time"
+    "hisense_aehw4a1"
     "history"
     "history_stats"
     "hive"
