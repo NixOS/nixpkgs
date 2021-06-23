@@ -1,12 +1,12 @@
-# QEMU flags shared between various Nix expressions.
-{ pkgs }:
+# QEMU-related utilities shared between various Nix expressions.
+{ lib, pkgs }:
 
 let
   zeroPad = n:
-    pkgs.lib.optionalString (n < 16) "0" +
+    lib.optionalString (n < 16) "0" +
       (if n > 255
        then throw "Can't have more than 255 nets or nodes!"
-       else pkgs.lib.toHexString n);
+       else lib.toHexString n);
 in
 
 rec {

@@ -201,7 +201,7 @@ rec {
       nodes = qemu_pkg:
         let
           build-vms = import ./build-vms.nix {
-            inherit system pkgs minimal specialArgs;
+            inherit system lib pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ [(
               {
                 virtualisation.qemu.package = qemu_pkg;
