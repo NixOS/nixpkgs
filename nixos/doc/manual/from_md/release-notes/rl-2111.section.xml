@@ -310,11 +310,17 @@
         </itemizedlist>
       </listitem>
     </itemizedlist>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           The <literal>antlr</literal> package now defaults to the 4.x
           release instead of the old 2.7.7 version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>libwnck</literal> package now defaults to the 3.x
+          release instead of the old 2.31.0 version.
         </para>
       </listitem>
     </itemizedlist>

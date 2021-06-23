@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gnome, glib, gtk3, gtksourceview3, libwnck3
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gnome, glib, gtk3, gtksourceview3, libwnck
 , libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook
 , mateUpdateScript }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     gtk3
     gtksourceview3
     gnome.gucharmap
-    libwnck3
+    libwnck
     libgtop
     libxml2
     libnotify

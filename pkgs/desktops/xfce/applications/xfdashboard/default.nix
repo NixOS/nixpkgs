@@ -4,7 +4,7 @@
 , libXinerama
 , libXdamage
 , libX11
-, libwnck3
+, libwnck
 , libxfce4ui
 , libxfce4util
 , garcon
@@ -33,7 +33,7 @@ mkXfceDerivation {
     libXcomposite
     libXdamage
     libXinerama
-    libwnck3
+    libwnck
     libxfce4ui
     libxfce4util
     xfconf
