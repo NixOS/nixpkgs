@@ -29677,6 +29677,8 @@ in
 
   ### SCIENCE/MATH
 
+  _4ti2  = callPackage ../applications/science/math/4ti2 { };
+
   almonds = callPackage ../applications/science/math/almonds { };
 
   amd-blis = callPackage ../development/libraries/science/math/amd-blis { };
