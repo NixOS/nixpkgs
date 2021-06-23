@@ -13,23 +13,7 @@
 
 let
 
-  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34 pyqt-builder;
-
-  sip = if isPy3k then
-    pythonPackages.sip
-  else
-    (pythonPackages.sip_4.override { sip-module = "PyQt5.sip"; }).overridePythonAttrs(oldAttrs: {
-      # If we install sip in another folder, then we need to create a __init__.py as well
-      # if we want to be able to import it with Python 2.
-      # Python 3 could rely on it being an implicit namespace package, however,
-      # PyQt5 we made an explicit namespace package so sip should be as well.
-      postInstall = ''
-        cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
-        from pkgutil import extend_path
-        __path__ = extend_path(__path__, __name__)
-        EOF
-      '';
-    });
+  inherit (pythonPackages) buildPythonPackage python isPy27 dbus-python sip pyqt-builder;
 
   pyqt5_sip = buildPythonPackage rec {
     pname = "PyQt5_sip";
@@ -48,7 +32,9 @@ let
 in buildPythonPackage rec {
   pname = "PyQt5";
   version = "5.15.4";
-  format = if isPy3k then "pyproject" else "other";
+  format = "pyproject";
+
+  disabled = isPy27;
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
@@ -80,19 +66,20 @@ in buildPythonPackage rec {
     qtbase
     qtsvg
     qtdeclarative
+    pyqt-builder
   ]
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
-    ++ lib.optional isPy3k pyqt-builder
   ;
 
   propagatedBuildInputs = [
     dbus-python
-  ] ++ (if isPy3k then [ pyqt5_sip ] else [ sip enum34 ]);
+    pyqt5_sip
+  ];
 
   patches = [
-    # Fix some wrong assumptions by ./configure.py and ./project.py
+    # Fix some wrong assumptions by ./project.py
     # TODO: figure out how to send this upstream
     ./pyqt5-fix-dbus-mainloop-support.patch
   ];
@@ -104,39 +91,7 @@ in buildPythonPackage rec {
     WebSocketsEnabled = withWebSockets;
   };
 
-  # Configure only needed when building with sip 4 (python 2)
-  dontConfigure = isPy3k;
-
-  configurePhase = ''
-    runHook preConfigure
-
-    export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
-
-    ${python.executable} configure.py  -w \
-      --confirm-license \
-      --dbus-moduledir=$out/${python.sitePackages}/dbus/mainloop \
-      --no-qml-plugin \
-      --bindir=$out/bin \
-      --destdir=$out/${python.sitePackages} \
-      --stubsdir=$out/${python.sitePackages}/PyQt5 \
-      --sipdir=$out/share/sip/PyQt5 \
-      --designer-plugindir=$out/plugins/designer
-
-    runHook postConfigure
-  '';
-
-  postInstall = lib.optionalString (!isPy3k) ''
-    ln -s ${sip}/${python.sitePackages}/PyQt5/sip.* $out/${python.sitePackages}/PyQt5/
-    for i in $out/bin/*; do
-      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-    done
-
-    # Let's make it a namespace package
-    cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
-    from pkgutil import extend_path
-    __path__ = extend_path(__path__, __name__)
-    EOF
-  '';
+  dontConfigure = true;
 
   # Checked using pythonImportsCheck
   doCheck = false;
@@ -153,8 +108,6 @@ in buildPythonPackage rec {
     ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
     ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
   ;
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Python bindings for Qt5";
