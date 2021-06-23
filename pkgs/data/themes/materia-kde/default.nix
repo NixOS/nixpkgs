@@ -13,11 +13,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  # Make this a fixed-output derivation
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  ouputHash = "Xvr2yoIcErt5tCvwonSDN696juc9S9/F/RkAQgrIXOM=";
-
   meta = with lib; {
     description = "A port of the materia theme for Plasma";
     homepage = "https://github.com/PapirusDevelopmentTeam/materia-kde";
