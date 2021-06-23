@@ -1,18 +1,28 @@
-{ lib, buildPythonApplication, fetchFromGitHub, signal-cli, urwid
-, urwid-readline, dbus }:
+{ lib
+, python3
+, fetchFromGitHub
+, dbus
+, signal-cli
+, xclip
+}:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "scli";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "isamert";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hWzpqj/sxPq/doxdmytnj5rh2qKQE71WMB0ugomWhHg";
+    sha256 = "sha256-QGVBJKTBo2RckGwW1deM2toRPT73PYDLvr7YVepkQvg=";
   };
 
-  propagatedBuildInputs = [ signal-cli urwid urwid-readline dbus ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pyqrcode
+    urwid
+    urwid-readline
+  ];
+
   dontBuild = true;
 
   checkPhase = ''
@@ -28,6 +38,10 @@ buildPythonApplication rec {
     patchShebangs scli
     install -m755 -D scli $out/bin/scli
   '';
+
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ dbus signal-cli xclip ])
+  ];
 
   meta = with lib; {
     description = "Simple terminal user interface for Signal";

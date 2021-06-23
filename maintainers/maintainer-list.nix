@@ -5206,6 +5206,12 @@
     email = "jwilberding@afiniate.com";
     name = "Jordan Wilberding";
   };
+  jwoudenberg = {
+    email = "nixpkgs@jasperwoudenberg.com";
+    github = "jwoudenberg";
+    githubId = 1525551;
+    name = "Jasper Woudenberg";
+  };
   jwygoda = {
     email = "jaroslaw@wygoda.me";
     github = "jwygoda";
