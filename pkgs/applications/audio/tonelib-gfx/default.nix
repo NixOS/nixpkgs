@@ -6,7 +6,7 @@
 , gtk3
 , glib
 , desktop-file-utils
-, alsaLib
+, alsa-lib
 , libjack2
 , harfbuzz
 , fribidi
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     desktop-file-utils
-    alsaLib
+    alsa-lib
     libjack2
     harfbuzz
     fribidi
