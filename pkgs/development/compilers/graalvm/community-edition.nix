@@ -37,45 +37,40 @@ let
       javaVersionPlatform = "${javaVersion}-${platform}";
       graalvmXXX-ce = stdenv.mkDerivation rec {
         pname = "graalvm${javaVersion}-ce";
-        version = "21.0.0";
+        version = "21.1.0";
         srcs = [
           (fetchurl {
-             sha256 = {  "8-linux-amd64"  = "18q1plrpclp02rlwn3vvv2fcyspvqv2gkzn14f0b59pnladmlv1j";
-                        "11-linux-amd64"  = "1g1xjbr693rimdy2cy6jvz4vgnbnw76wa87xcmaszka206fmpnsc";
-                         "8-darwin-amd64" = "0giv8f7ybdykadzmxjy91i6njbdx6dclyx7g6vyhwk2l1cvxi4li";
-                        "11-darwin-amd64" = "1a8gjp6fp11ms05pd62h1x1ifkkr3wv0hrxic670v90bbps9lsqf";
+             sha256 = {  "8-linux-amd64"  = "1kshiwk1r6ph2hr21ak2gakxkz007cjl03f40p4wxnr1xn5vvczv";
+                        "11-linux-amd64"  = "1dsabrdzw9z82mb6416fzpzhwsij7awzhsa2rv4dn5nbs9a2j99r";
+                        "11-darwin-amd64" = "0axf0pj1p7mr5pbm8a7vfjvqn30l017rgqy0gyr9r8zyhnhdag5m";
                       }.${javaVersionPlatform};
              url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/graalvm-ce-java${javaVersionPlatform}-${version}.tar.gz";
           })
           (fetchurl {
-             sha256 = {  "8-linux-amd64"  = "0hpq2g9hc8b7j4d8a08kq1mnl6pl7a4kwaj0a3gka3d4m6r7cscg";
-                        "11-linux-amd64"  = "0z3hb2bf0lqzw760civ3h1wvx22a75n7baxc0l2i9h5wxas002y7";
-                         "8-darwin-amd64" = "1izbgl4hjg5jyi422xnkx006qnw163r1i1djf76q1plms40y01ph";
-                        "11-darwin-amd64" = "1d9z75gil0if74ndla9yw3xx9i2bfbcs32qa0z6wi5if66cmknb8";
+             sha256 = {  "8-linux-amd64"  = "1wj01pxgkfh85d0j0k6631in8ghayaw9k1q00cr0rg9yvc7g5laf";
+                        "11-linux-amd64"  = "0jk1g6fwff6m6sl53zplysv3sxa5dpn003chmvaimqpddxhjbdqs";
+                        "11-darwin-amd64" = "0dq1xzgha5s0dgf73lrzmpr7c8cyihsyy39cj52ffniffma0fybi";
                       }.${javaVersionPlatform};
              url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/native-image-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
           (fetchurl {
-             sha256 = {  "8-linux-amd64"  = "122p8psgmzhqnjb2fy1lwghg0kw5qa8xkzgyjp682lwg4j8brz43";
-                        "11-linux-amd64"  = "1vdc90m6s013cbhmj58nb4vyxllbxirw0idlgv0iv9cyhx90hzgz";
-                         "8-darwin-amd64" = "04q0s9xsaskqn9kbhz0mgdk28j2qnxrzqfmw6jn2znr8s8jsc6yp";
-                        "11-darwin-amd64" = "1pw4xd8g5cc9bm52awmm1zxs96ijws43vws7y10wxa6a0nhv7z5f";
+             sha256 = {  "8-linux-amd64"  = "1iknb74c23kyg7fprb7wzsq7yq5zkp5s1j3hginfqrdz3n597jk3";
+                        "11-linux-amd64"  = "1pxbgd51v2c6cjpq95w74dkky0q6vxq162n93bssvklzby1j730l";
+                        "11-darwin-amd64" = "18gzrqx5ylyx410333a69qn8sf78gg20js77jaa46wa9bixrx675";
                       }.${javaVersionPlatform};
              url    = "https://github.com/oracle/truffleruby/releases/download/vm-${version}/ruby-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
           (fetchurl {
-             sha256 = {  "8-linux-amd64"  = "19m7n4f5jrmsfvgv903sarkcjh55l0nlnw99lvjlcafw5hqzyb91";
-                        "11-linux-amd64"  = "18ibb7l7b4hmbnvyr8j7mrs11mvlsf2j0c8rdd2s93x2114f26ba";
-                         "8-darwin-amd64" = "1zlzi00339kvg4ym2j75ypfkzn8zbwdpriqmkaz4fh28qjmc1dwq";
-                        "11-darwin-amd64" = "0x301i1fimakhi2x29ldr0fsqkb3qs0g9jsmjv27d62dpqx8kgc8";
+             sha256 = {  "8-linux-amd64"  = "0vxrk14276hx8wjylgqphrcqr32x6yxdag2ffviqq29ddj8xgqhw";
+                        "11-linux-amd64"  = "1ya9jmcfizkkblrfkxfyin4q021cqhmm6l89yp7fj0z8npdaan9f";
+                        "11-darwin-amd64" = "1wb5364g72wsv55sq3ixm43hvw8acvck0f6az77kdpy30sq4jjfa";
                       }.${javaVersionPlatform};
              url    = "https://github.com/graalvm/graalpython/releases/download/vm-${version}/python-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
           (fetchurl {
-             sha256 = {  "8-linux-amd64"  = "0dlgbg6kri89r9zbk6n0ch3g8356j1g35bwjng87c2y5y0vcw0b5";
-                        "11-linux-amd64"  = "1yby65hww6zmd2g5pjwbq5pv3iv4gfv060b8fq75fjhwrisyj5gd";
-                         "8-darwin-amd64" = "1smdj491g23i3z7p5rybid18nnz8bphrqjkv0lg2ffyrpn8k6g93";
-                        "11-darwin-amd64" = "056zyn0lpd7741k1szzjwwacka0g7rn0j4ypfmav4h1245mjg8lx";
+             sha256 = {  "8-linux-amd64"  = "1gdvp6636n3pswlhbcvadm86j2dk4zgxiakkdz3vp357na6lblmd";
+                        "11-linux-amd64"  = "1ycxbipknalhwp2nrzyazx8fmfhjbvzslwv93ii3b3z5bgb1b6gc";
+                        "11-darwin-amd64" = "1b8xsd4fhawwdhb2vhh9brn0id8s8pm3bn4hxcx379sva4qbzsjf";
                       }.${javaVersionPlatform};
              url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/wasm-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
@@ -175,10 +170,6 @@ let
               ln -s $f $out/lib/svm/clibraries/${platform}/$(basename $f)
             done
           '';
-          "8-darwin-amd64" = ''
-            # allow using external truffle-api.jar and languages not included in the distrubution
-            rm $out/jre/lib/jvmci/parentClassLoader.classpath
-          '';
           "11-darwin-amd64" = ''
             echo ""
           '';
@@ -246,7 +237,6 @@ let
           echo "Testing interpreted languages"
           $out/bin/graalpython -c 'print(1 + 1)'
           $out/bin/ruby -e 'puts(1 + 1)'
-          $out/bin/node -e 'console.log(1 + 1)'
 
           echo '1 + 1' | $out/bin/graalpython
 
@@ -258,7 +248,6 @@ let
             echo '1 + 1' | $out/bin/irb
           ''}
 
-          echo '1 + 1' | $out/bin/node -i
         ${lib.optionalString (javaVersion == "11") ''
           echo '1 + 1' | $out/bin/jshell
         ''}'';
@@ -270,12 +259,15 @@ let
           description = "High-Performance Polyglot VM";
           license = with licenses; [ upl gpl2Classpath bsd3 ];
           maintainers = with maintainers; [ bandresen volth hlolli glittershark ];
-          platforms = [ "x86_64-linux" "x86_64-darwin" ];
+          platforms = if (stdenv.isDarwin && javaVersion == "8") then
+            [ "x86_64-linux" ]
+              else
+            [ "x86_64-linux" "x86_64-darwin" ];
         };
       };
     in
       graalvmXXX-ce;
 in {
-  graalvm8-ce  = common  "8";
+  graalvm8-ce = common "8";
   graalvm11-ce = common "11";
 }
