@@ -7693,16 +7693,6 @@ in {
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
-  scipy_1_4 = self.scipy.overridePythonAttrs (oldAttrs: rec {
-    version = "1.4.1";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "0ndw7zyxd2dj37775mc75zm4fcyiipnqxclc45mkpxy8lvrvpqfy";
-    };
-    doCheck = false;
-    disabled = !isPy3k;
-  });
-
   scipy = callPackage ../development/python-modules/scipy { };
 
   scour = callPackage ../development/python-modules/scour { };
