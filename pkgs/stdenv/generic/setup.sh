@@ -64,6 +64,7 @@ _callImplicitHook() {
     if declare -F "$hookName" > /dev/null; then
         "$hookName"
     elif test -e "$hookName" ; then
+        # shellcheck disable=SC1090
         source "$hookName"
     elif [ -n "${!hookName:-}" ]; then
         eval "${!hookName}"
@@ -478,6 +479,7 @@ activatePackage() {
     (( "$hostOffset" <= "$targetOffset" )) || exit 1
 
     if [ -f "$pkg" ]; then
+        # shellcheck disable=SC1090
         source "$pkg"
     fi
 
@@ -1281,6 +1283,7 @@ showPhaseHeader() {
 
 genericBuild() {
     if [ -f "${buildCommandPath:-}" ]; then
+        # shellcheck disable=SC1090
         source "$buildCommandPath"
         return
     fi
