@@ -273,10 +273,11 @@ in
 
     virtualisation.memorySize =
       mkOption {
+        type = types.ints.positive;
         default = 384;
         description =
           ''
-            Memory size (M) of virtual machine.
+            The memory size in megabytes of the virtual machine.
           '';
       };
 
@@ -294,15 +295,17 @@ in
 
     virtualisation.diskSize =
       mkOption {
+        type = types.nullOr types.ints.positive;
         default = 512;
         description =
           ''
-            Disk size (M) of virtual machine.
+            The disk size in megabytes of the virtual machine.
           '';
       };
 
     virtualisation.diskImage =
       mkOption {
+        type = types.str;
         default = "./${config.system.name}.qcow2";
         description =
           ''
@@ -314,7 +317,7 @@ in
 
     virtualisation.bootDevice =
       mkOption {
-        type = types.str;
+        type = types.path;
         example = "/dev/vda";
         description =
           ''
@@ -324,8 +327,8 @@ in
 
     virtualisation.emptyDiskImages =
       mkOption {
+        type = types.listOf types.ints.positive;
         default = [];
-        type = types.listOf types.int;
         description =
           ''
             Additional disk images to provide to the VM. The value is
@@ -336,6 +339,7 @@ in
 
     virtualisation.graphics =
       mkOption {
+        type = types.bool;
         default = true;
         description =
           ''
@@ -347,8 +351,8 @@ in
 
     virtualisation.cores =
       mkOption {
+        type = types.ints.positive;
         default = 1;
-        type = types.int;
         description =
           ''
             Specify the number of cores the guest is permitted to use.
@@ -359,6 +363,7 @@ in
 
     virtualisation.pathsInNixDB =
       mkOption {
+        type = types.listOf types.path;
         default = [];
         description =
           ''
@@ -372,6 +377,7 @@ in
 
     virtualisation.vlans =
       mkOption {
+        type = types.listOf types.ints.unsigned;
         default = [ 1 ];
         example = [ 1 2 ];
         description =
@@ -389,6 +395,7 @@ in
 
     virtualisation.writableStore =
       mkOption {
+        type = types.bool;
         default = true; # FIXME
         description =
           ''
@@ -400,6 +407,7 @@ in
 
     virtualisation.writableStoreUseTmpfs =
       mkOption {
+        type = types.bool;
         default = true;
         description =
           ''
@@ -410,6 +418,7 @@ in
 
     networking.primaryIPAddress =
       mkOption {
+        type = types.str;
         default = "";
         internal = true;
         description = "Primary IP address used in /etc/hosts.";
@@ -426,7 +435,7 @@ in
 
       options =
         mkOption {
-          type = types.listOf types.unspecified;
+          type = types.listOf types.str;
           default = [];
           example = [ "-vga std" ];
           description = "Options passed to QEMU.";
@@ -475,16 +484,16 @@ in
 
       diskInterface =
         mkOption {
+          type = types.enum [ "virtio" "scsi" "ide" ];
           default = "virtio";
           example = "scsi";
-          type = types.enum [ "virtio" "scsi" "ide" ];
           description = "The interface used for the virtual hard disks.";
         };
 
       guestAgent.enable =
         mkOption {
-          default = true;
           type = types.bool;
+          default = true;
           description = ''
             Enable the Qemu guest agent.
           '';
@@ -493,6 +502,7 @@ in
 
     virtualisation.useBootLoader =
       mkOption {
+        type = types.bool;
         default = false;
         description =
           ''
@@ -507,6 +517,7 @@ in
 
     virtualisation.useEFIBoot =
       mkOption {
+        type = types.bool;
         default = false;
         description =
           ''
@@ -518,6 +529,7 @@ in
 
     virtualisation.efiVars =
       mkOption {
+        type = types.str;
         default = "./${config.system.name}-efi-vars.fd";
         description =
           ''
@@ -528,8 +540,8 @@ in
 
     virtualisation.bios =
       mkOption {
-        default = null;
         type = types.nullOr types.package;
+        default = null;
         description =
           ''
             An alternate BIOS (such as <package>qboot</package>) with which to start the VM.
