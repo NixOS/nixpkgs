@@ -1,5 +1,5 @@
-{ buildPythonPackage, lib, fetchFromGitHub, libcint, libxc, xcfun, blas,
-  numpy, scipy, h5py, python3
+{ buildPythonPackage, lib, fetchFromGitHub, libcint, libxc, xcfun, blas
+, numpy, scipy, h5py
 } :
 
 buildPythonPackage rec {
@@ -24,7 +24,6 @@ buildPythonPackage rec {
     numpy
     scipy
     h5py
-    python3
   ];
 
   PYSCF_INC_DIR="${libcint}:${libxc}:${xcfun}";
