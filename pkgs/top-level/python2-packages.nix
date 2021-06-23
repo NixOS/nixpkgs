@@ -80,7 +80,7 @@ with self; with super; {
 
   django_evolution = callPackage ../development/python-modules/django_evolution { };
 
-  dnspython = super.dnspython_1;
+  dnspython = callPackage ../development/python-modules/dnspython/1.nix { };
 
   docker-py = disabled super.docker-py;
 
