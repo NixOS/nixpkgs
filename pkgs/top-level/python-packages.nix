@@ -3252,6 +3252,8 @@ in {
 
   hkdf = callPackage ../development/python-modules/hkdf { };
 
+  hlk-sw16 = callPackage ../development/python-modules/hlk-sw16 { };
+
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
