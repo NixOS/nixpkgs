@@ -8002,6 +8002,8 @@ in {
 
   somajo = callPackage ../development/python-modules/somajo { };
 
+  somecomfort = callPackage ../development/python-modules/somecomfort { };
+
   sopel = callPackage ../development/python-modules/sopel { };
 
   sorl_thumbnail = callPackage ../development/python-modules/sorl_thumbnail { };
