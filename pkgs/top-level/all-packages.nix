@@ -2887,6 +2887,8 @@ in
 
   joycond = callPackage ../os-specific/linux/joycond { };
 
+  joystickwake = callPackage ../tools/games/joystickwake {};
+
   jwt-cli = callPackage ../tools/security/jwt-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
