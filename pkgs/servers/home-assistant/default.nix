@@ -446,6 +446,7 @@ in with py.pkgs; buildPythonApplication rec {
     "history"
     "history_stats"
     "hive"
+    "hlk_sw16"
     "home_connect"
     "home_plus_control"
     "homeassistant"
