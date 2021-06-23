@@ -5535,6 +5535,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-airline/vim-airline-themes/";
   };
 
+  vim-alias = buildVimPluginFrom2Nix {
+    pname = "vim-alias";
+    version = "2021-06-23";
+    src = fetchFromGitHub {
+      owner = "Konfekt";
+      repo = "vim-alias";
+      rev = "9d1a86284c223fad488137075867ba1c1bd20599";
+      sha256 = "1fqa39j3ax7cvj7bn33r545zwbplmf4b6n7z5jgqqn8h03hsq7x1";
+    };
+    meta.homepage = "https://github.com/Konfekt/vim-alias/";
+  };
+
   vim-android = buildVimPluginFrom2Nix {
     pname = "vim-android";
     version = "2021-05-28";
