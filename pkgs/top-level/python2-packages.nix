@@ -370,6 +370,8 @@ with self; with super; {
 
   pathpy = callPackage ../development/python-modules/path.py/2.nix { };
 
+  pg8000 = callPackage ../development/python-modules/pg8000/1_12.nix { };
+
   pillow = callPackage ../development/python-modules/pillow/6.nix {
     inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
     inherit (pkgs.xorg) libX11;

@@ -5184,8 +5184,6 @@ in {
 
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
-  pg8000_1_12 = callPackage ../development/python-modules/pg8000/1_12.nix { };
-
   pgcli = callPackage ../development/tools/database/pgcli { };
 
   pglast = callPackage ../development/python-modules/pglast { };
