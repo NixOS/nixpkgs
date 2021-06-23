@@ -362,7 +362,7 @@
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [ homematicip ];
     "homeworks" = ps: with ps; [ ]; # missing inputs: pyhomeworks
-    "honeywell" = ps: with ps; [ ]; # missing inputs: somecomfort
+    "honeywell" = ps: with ps; [ somecomfort ];
     "horizon" = ps: with ps; [ ]; # missing inputs: horimote
     "hp_ilo" = ps: with ps; [ python-hpilo ];
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
