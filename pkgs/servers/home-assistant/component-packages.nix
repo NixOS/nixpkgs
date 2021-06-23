@@ -371,7 +371,7 @@
     "huawei_lte" = ps: with ps; [ getmac huawei-lte-api stringcase url-normalize ];
     "huawei_router" = ps: with ps; [ ];
     "hue" = ps: with ps; [ aiohue ];
-    "huisbaasje" = ps: with ps; [ ]; # missing inputs: huisbaasje-client
+    "huisbaasje" = ps: with ps; [ huisbaasje-client ];
     "humidifier" = ps: with ps; [ ];
     "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
     "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
