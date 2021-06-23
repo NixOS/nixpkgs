@@ -399,7 +399,7 @@ findInputs() {
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
-        mapOffset relHostOffset
+        mapOffset "$relHostOffset"
         local hostOffsetNext="$mapOffsetResult"
 
         # Ensure we're in bounds relative to the package currently
@@ -418,7 +418,7 @@ findInputs() {
 
             # Target offset relative to the package currently being
             # built.
-            mapOffset relTargetOffset
+            mapOffset "$relTargetOffset"
             local targetOffsetNext="$mapOffsetResult"
 
             # Once again, ensure we're in bounds relative to the
