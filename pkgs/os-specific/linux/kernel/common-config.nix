@@ -844,6 +844,7 @@ let
       PREEMPT_VOLUNTARY = yes;
 
       X86_AMD_PLATFORM_DEVICE = yes;
+      X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
