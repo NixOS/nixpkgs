@@ -168,7 +168,7 @@ with self; with super; {
 
   http_signature = callPackage ../development/python-modules/http_signature { };
 
-  hypothesis = super.hypothesis_4;
+  hypothesis = callPackage ../development/python-modules/hypothesis/2.nix { };
 
   idna = callPackage ../development/python-modules/idna/2.nix { };
 
