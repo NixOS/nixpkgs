@@ -13434,6 +13434,8 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  fsearch = callPackage ../tools/misc/fsearch { };
+
   fujprog = callPackage ../development/tools/misc/fujprog {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
