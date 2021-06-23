@@ -31,6 +31,7 @@ let
   };
 
   testmatch = "match group test";
+  testsubstitution = "substitution test";
 
 in import ./make-test-python.nix {
   name = "prometheus";
@@ -43,6 +44,10 @@ in import ./make-test-python.nix {
       networking.firewall.allowedTCPPorts = [ grpcPort ];
       services.prometheus = {
         enable = true;
+        environmentFile = pkgs.writeText "environment" ''
+          foo="${testsubstitution}"
+        '';
+        environmentVariables = [ "$foo" ];
         scrapeConfigs = [
           {
             job_name = "prometheus";
@@ -68,7 +73,7 @@ in import ./make-test-python.nix {
                 action = "replace";
                 regex = "(.+)";
                 # For testing that match groups work
-                replacement = "$1 \${1}";
+                replacement = "$1 \${1} \${foo}";
               }
             ];
           }
@@ -233,7 +238,7 @@ in import ./make-test-python.nix {
     # Ensure relabelling via match
     prometheus.succeed(
        "curl -sf 'http://127.0.0.1:${toString queryPort}/api/v1/label/relabel_target_label/values' | "
-       "grep -q \"${testmatch} ${testmatch}\""
+       "grep -q \"${testmatch} ${testmatch} ${testsubstitution}\""
     )
 
     # Let's test if the pushgateway persists metrics to the configured location.
