@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   outputHashAlgo = "sha256";
   ouputHash = "Xvr2yoIcErt5tCvwonSDN696juc9S9/F/RkAQgrIXOM=";
 
-  meta = {
+  meta = with lib; {
     description = "A port of the materia theme for Plasma";
-    homepage = "https://git.io/materia-kde";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.diffumist ];
-    platforms = lib.platforms.all;
+    homepage = "https://github.com/PapirusDevelopmentTeam/materia-kde";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.diffumist ];
+    platforms = platforms.all;
   };
 }
