@@ -10,10 +10,10 @@
 { config, lib, pkgs, options, ... }:
 
 with lib;
-with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
 let
 
+  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
 
   cfg = config.virtualisation;
 
@@ -152,7 +152,7 @@ let
       '')}
 
       # Start QEMU.
-      exec ${qemuBinary qemu} \
+      exec ${qemu-common.qemuBinary qemu} \
           -name ${config.system.name} \
           -m ${toString config.virtualisation.memorySize} \
           -smp ${toString config.virtualisation.cores} \
@@ -549,7 +549,7 @@ in
       consoles = mkOption {
         type = types.listOf types.str;
         default = let
-          consoles = [ "${qemu-flags.qemuSerialDevice},115200n8" "tty0" ];
+          consoles = [ "${qemu-common.qemuSerialDevice},115200n8" "tty0" ];
         in if cfg.graphics then consoles else reverseList consoles;
         example = [ "console=tty1" ];
         description = ''

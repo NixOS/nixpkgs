@@ -8,7 +8,7 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  qemu-flags = import ../lib/qemu-flags.nix { inherit pkgs; };
+  qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
 
   router = { config, pkgs, lib, ... }:
     with pkgs.lib;
@@ -42,7 +42,7 @@ let
         machines = flip map vlanIfs (vlan:
           {
             hostName = "client${toString vlan}";
-            ethernetAddress = qemu-flags.qemuNicMac vlan 1;
+            ethernetAddress = qemu-common.qemuNicMac vlan 1;
             ipAddress = "192.168.${toString vlan}.2";
           }
         );
