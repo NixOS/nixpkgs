@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python-based simulations of chemistry framework";
-    homepage = "https://pyscf.github.io/";
+    homepage = "https://github.com/pyscf/pyscf";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
