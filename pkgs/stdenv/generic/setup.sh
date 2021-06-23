@@ -68,7 +68,7 @@ _callImplicitHook() {
     local hookName="$2"
     if declare -F "$hookName" > /dev/null; then
         "$hookName"
-    elif type -p "$hookName" > /dev/null; then
+    elif test -e "$hookName" ; then
         source "$hookName"
     elif [ -n "${!hookName:-}" ]; then
         eval "${!hookName}"
