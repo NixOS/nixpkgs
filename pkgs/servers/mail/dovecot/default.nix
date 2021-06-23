@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
+{ stdenv, lib, fetchurl, fetchpatch, perl, pkgconfig, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
@@ -58,6 +58,12 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.3.x-module_dir.patch
+    ./2.3.13-CVE-2021-29157.patch
+    (fetchpatch {
+      name = "CVE-2021-33515.patch";
+      url = "https://github.com/dovecot/core/commit/65bd1a27a361545c9ccf405b955c72a9c4d29b38.patch";
+      sha256 = "0f1lz6qkwb9cbqc4p40fasr6gcyxxxgx1sxcsbqdypkz099m4psc";
+    })
   ];
 
   configureFlags = [
