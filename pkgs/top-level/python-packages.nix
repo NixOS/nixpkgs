@@ -5275,6 +5275,8 @@ in {
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
+  pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
+
   pyatag = callPackage ../development/python-modules/pyatag { };
 
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };

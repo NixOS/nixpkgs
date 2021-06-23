@@ -348,7 +348,7 @@
     "here_travel_time" = ps: with ps; [ herepy ];
     "hikvision" = ps: with ps; [ ]; # missing inputs: pyhik
     "hikvisioncam" = ps: with ps; [ ]; # missing inputs: hikvision
-    "hisense_aehw4a1" = ps: with ps; [ ]; # missing inputs: pyaehw4a1
+    "hisense_aehw4a1" = ps: with ps; [ pyaehw4a1 ];
     "history" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "history_stats" = ps: with ps; [ sqlalchemy ];
     "hitron_coda" = ps: with ps; [ ];
