@@ -246,6 +246,7 @@ shopt -s nullglob
 
 
 # Set up the initial path.
+# shellcheck disable=SC2123
 PATH=
 HOST_PATH=
 # shellcheck disable=SC2154
