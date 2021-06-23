@@ -341,6 +341,17 @@
           attempts from the SSH logs.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Sway: The terminal emulator <literal>rxvt-unicode</literal> is
+          no longer installed by default via
+          <literal>programs.sway.extraPackages</literal>. The current
+          default configuration uses <literal>alacritty</literal> (and
+          soon <literal>foot</literal>) so this is only an issue when
+          using a customized configuration and not installing
+          <literal>rxvt-unicode</literal> explicitly.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
