@@ -1312,6 +1312,8 @@ in
 
   bitwarden_rs-vault = callPackage ../tools/security/bitwarden_rs/vault.nix { };
 
+  blackmagicDesktopVideo = callPackage ../tools/video/blackmagic-desktop-video { };
+
   bkyml = callPackage ../tools/misc/bkyml { };
 
   blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
@@ -20832,6 +20834,8 @@ in
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
+
+    decklink = callPackage ../os-specific/linux/decklink { };
 
     digimend = callPackage ../os-specific/linux/digimend { };
 
