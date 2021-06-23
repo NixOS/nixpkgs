@@ -483,6 +483,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ipp"
     "iqvia"
     "islamic_prayer_times"
+    "isy994"
     "jewish_calendar"
     "kira"
     "kmtronic"
