@@ -158,9 +158,10 @@ let
           -smp ${toString config.virtualisation.cores} \
           -device virtio-rng-pci \
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
-          -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
-          -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
-          -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
+          ${concatStringsSep " \\\n    "
+            (mapAttrsToList
+              (tag: share: "-virtfs local,path=${share.source},security_model=none,mount_tag=${tag}")
+              config.virtualisation.sharedDirectories)} \
           ${drivesCmdLine config.virtualisation.qemu.drives} \
           ${concatStringsSep " \\\n    " config.virtualisation.qemu.options} \
           $QEMU_OPTS \
@@ -358,6 +359,31 @@ in
             Specify the number of cores the guest is permitted to use.
             The number can be higher than the available cores on the
             host system.
+          '';
+      };
+
+    virtualisation.sharedDirectories =
+      mkOption {
+        type = types.attrsOf
+          (types.submodule {
+            options.source = mkOption {
+              type = types.str;
+              description = "The path of the directory to share, can be a shell variable";
+            };
+            options.target = mkOption {
+              type = types.path;
+              description = "The mount point of the directory inside the virtual machine";
+            };
+          });
+        default = { };
+        example = {
+          my-share = { source = "/path/to/be/shared"; target = "/mnt/shared"; };
+        };
+        description =
+          ''
+            An attributes set of directories that will be shared with the
+            virtual machine using VirtFS (9P filesystem over VirtIO).
+            The attribute name will be used as the 9P mount tag.
           '';
       };
 
@@ -633,6 +659,12 @@ in
 
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
+    virtualisation.sharedDirectories = {
+      nix-store = { source = "/nix/store"; target = "/nix/store"; };
+      xchg      = { source = ''"$TMPDIR"/xchg''; target = "/tmp/xchg"; };
+      shared    = { source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"''; target = "/tmp/shared"; };
+    };
+
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
       (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
@@ -687,15 +719,26 @@ in
     # configuration, where the regular value for the `fileSystems'
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
-    fileSystems = mkVMOverride (
-      cfg.fileSystems //
-      { "/".device = cfg.bootDevice;
-        ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
-          { device = "store";
-            fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
-            neededForBoot = true;
-          };
+    fileSystems =
+    let
+      mkSharedDir = tag: share:
+        {
+          name =
+            if tag == "nix-store" && cfg.writableStore
+              then "/nix/.ro-store"
+              else share.target;
+          value.device = tag;
+          value.fsType = "9p";
+          value.neededForBoot = true;
+          value.options =
+            [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" ]
+            ++ lib.optional (tag == "nix-store") "cache=loose";
+        };
+    in
+      mkVMOverride (cfg.fileSystems //
+      {
+        "/".device = cfg.bootDevice;
+
         "/tmp" = mkIf config.boot.tmpOnTmpfs
           { device = "tmpfs";
             fsType = "tmpfs";
@@ -703,32 +746,20 @@ in
             # Sync with systemd's tmp.mount;
             options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmpOnTmpfsSize}" ];
           };
-        "/tmp/xchg" =
-          { device = "xchg";
-            fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
-            neededForBoot = true;
-          };
-        "/tmp/shared" =
-          { device = "shared";
-            fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
-            neededForBoot = true;
-          };
-      } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)
-      { "/nix/.rw-store" =
+
+        "/nix/.rw-store" = mkIf (cfg.writableStore && cfg.writableStoreUseTmpfs)
           { fsType = "tmpfs";
             options = [ "mode=0755" ];
             neededForBoot = true;
           };
-      } // optionalAttrs cfg.useBootLoader
-      { "/boot" =
+
+        "/boot" = mkIf cfg.useBootLoader
           # see note [Disk layout with `useBootLoader`]
           { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
             fsType = "vfat";
             noCheck = true; # fsck fails on a r/o filesystem
           };
-      });
+      } // lib.mapAttrs' mkSharedDir cfg.sharedDirectories);
 
     swapDevices = mkVMOverride [ ];
     boot.initrd.luks.devices = mkVMOverride {};
