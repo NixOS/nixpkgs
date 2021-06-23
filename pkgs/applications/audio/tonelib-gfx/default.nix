@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wdX3SQSr0IZHsTUl+1Y0iETme3gTyryexhZ/9XHkGeo=";
   };
 
-  dontUnpack = "true";
-
   buildInputs = [
     dpkg
     gtk3
@@ -42,12 +40,14 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
+  unpackPhase = ''
+    mkdir -p $TMP/ $out/
+    dpkg -x $src $TMP
+  '';
+
   installPhase = ''
-    mkdir -p $out/
-    dpkg -x $src $out 
-    cp $out/usr/* $out/ -r
+    cp -R $TMP/usr/* $out/
     mv $out/bin/ToneLib-GFX $out/bin/tonelib-gfx
-    rm $out/usr/ -r
   '';
 
   meta = with lib; {
