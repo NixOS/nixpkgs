@@ -374,7 +374,7 @@
     "huisbaasje" = ps: with ps; [ ]; # missing inputs: huisbaasje-client
     "humidifier" = ps: with ps; [ ];
     "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
-    "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
+    "hvv_departures" = ps: with ps; [ pygti ];
     "hydrawise" = ps: with ps; [ hydrawiser ];
     "hyperion" = ps: with ps; [ hyperion-py ];
     "ialarm" = ps: with ps; [ pyialarm ];
