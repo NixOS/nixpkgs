@@ -4297,6 +4297,8 @@ in
 
   ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { };
 
+  edgetpu-compiler = callPackage ../development/libraries/science/robotics/edgetpu-compiler { };
+
   edid-decode = callPackage ../tools/misc/edid-decode { };
 
   edid-generator = callPackage ../tools/misc/edid-generator { };
