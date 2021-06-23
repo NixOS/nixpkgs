@@ -5291,6 +5291,8 @@ in {
 
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
 
+  pyisy = callPackage ../development/python-modules/pyisy { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
