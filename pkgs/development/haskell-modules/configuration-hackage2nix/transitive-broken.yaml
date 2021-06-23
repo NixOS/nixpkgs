@@ -92,6 +92,7 @@ dont-distribute-packages:
  - ApplePush
  - approx-rand-test
  - arbor-monad-metric-datadog
+ - arch-hs
  - archlinux-web
  - arduino-copilot
  - arff
@@ -120,7 +121,6 @@ dont-distribute-packages:
  - atuin
  - audiovisual
  - aura
- - aura_3_2_5
  - authoring
  - AutoForms
  - autonix-deps-kf5
@@ -321,6 +321,7 @@ dont-distribute-packages:
  - cakyrespa
  - cal3d-examples
  - cal3d-opengl
+ - calamity-commands
  - calc
  - calculator
  - caldims
@@ -435,6 +436,7 @@ dont-distribute-packages:
  - code-conjure
  - codec-rpm
  - codemonitor
+ - co-feldspar
  - cognimeta-utils
  - coinbase-exchange
  - colada
@@ -631,6 +633,7 @@ dont-distribute-packages:
  - dingo-widgets
  - diplomacy
  - diplomacy-server
+ - di-polysemy
  - dirfiles
  - discogs-haskell
  - discord-gateway
@@ -695,6 +698,7 @@ dont-distribute-packages:
  - Dust-tools-pcap
  - dvda
  - dynamic-cabal
+ - dynamic-pipeline
  - dynamic-plot
  - dynobud
  - DysFRP-Cairo
@@ -928,6 +932,10 @@ dont-distribute-packages:
  - geodetic
  - geolite-csv
  - getemx
+ - ghc-debug-brick
+ - ghc-debug-client
+ - ghc-debug-common
+ - ghc-debug-stub
  - ghc-imported-from
  - ghc-instances
  - ghci-pretty
@@ -960,8 +968,10 @@ dont-distribute-packages:
  - global-config
  - glome-hs
  - GlomeView
+ - gloss-accelerate
  - gloss-devil
  - gloss-examples
+ - gloss-raster-accelerate
  - gloss-sodium
  - gmap
  - gmndl
@@ -1205,7 +1215,6 @@ dont-distribute-packages:
  - hasql-cursor-query
  - hasql-postgres
  - hasql-postgres-options
- - hasql-queue
  - hasql-th
  - hastache-aeson
  - haste-app
@@ -1253,7 +1262,6 @@ dont-distribute-packages:
  - hedgehog-gen-json
  - Hedi
  - hedis-pile
- - heidi
  - heist-aeson
  - helics
  - helics-wai
@@ -1892,7 +1900,6 @@ dont-distribute-packages:
  - MaybeT-transformers
  - MC-Fold-DP
  - mcmc
- - mcmc_0_5_0_0
  - mcmc-samplers
  - mDNSResponder-client
  - mealy
@@ -2183,7 +2190,6 @@ dont-distribute-packages:
  - peyotls
  - peyotls-codec
  - pgsql-simple
- - pg-transact
  - phonetic-languages-examples
  - phonetic-languages-simplified-lists-examples
  - phooey
@@ -2222,16 +2228,29 @@ dont-distribute-packages:
  - poke
  - polh-lexicon
  - polydata
+ - polysemy-chronos
+ - polysemy-conc
  - polysemy-extra
+ - polysemy-fs
  - polysemy-fskvstore
+ - polysemy-http
  - polysemy-kvstore-jsonfile
+ - polysemy-log
  - polysemy-log-co
+ - polysemy-log-di
  - polysemy-methodology
  - polysemy-methodology-composite
+ - polysemy-mocks
  - polysemy-optics
  - polysemy-path
+ - polysemy-plugin
  - polysemy-RandomFu
+ - polysemy-resume
+ - polysemy-test
+ - polysemy-time
+ - polysemy-video
  - polysemy-vinyl
+ - polysemy-webserver
  - polyseq
  - polytypeable-utils
  - pomodoro
@@ -2607,6 +2626,7 @@ dont-distribute-packages:
  - servant-streaming-docs
  - servant-streaming-server
  - servant-swagger-tags
+ - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
@@ -2805,6 +2825,7 @@ dont-distribute-packages:
  - structured-mongoDB
  - stunts
  - stutter
+ - stylist
  - subhask
  - substring-parser
  - summoner-tui
@@ -2824,7 +2845,6 @@ dont-distribute-packages:
  - swearjure
  - sweet-egison
  - switch
- - sydtest-persistent-postgresql
  - sylvia
  - symantic-atom
  - symantic-lib
