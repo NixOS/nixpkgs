@@ -30,6 +30,8 @@ let
     };
   };
 
+  testmatch = "match group test";
+
 in import ./make-test-python.nix {
   name = "prometheus";
 
@@ -57,6 +59,16 @@ in import ./make-test-python.nix {
             static_configs = [
               {
                 targets = [ "127.0.0.1:${toString pushgwPort}" ];
+              }
+            ];
+            metric_relabel_configs = [
+              {
+                source_labels = [ "relabel_source_label" ];
+                target_label = "relabel_target_label";
+                action = "replace";
+                regex = "(.+)";
+                # For testing that match groups work
+                replacement = "$1 \${1}";
               }
             ];
           }
@@ -199,7 +211,7 @@ in import ./make-test-python.nix {
     # Let's test if pushing a metric to the pushgateway succeeds:
     prometheus.wait_for_unit("pushgateway.service")
     prometheus.succeed(
-        "echo 'some_metric 3.14' | "
+        "echo 'some_metric{relabel_source_label=\"${testmatch}\"} 3.14' | "
         + "curl -f --data-binary \@- "
         + "http://127.0.0.1:${toString pushgwPort}/metrics/job/some_job"
     )
@@ -217,6 +229,12 @@ in import ./make-test-python.nix {
 
 
     wait_for_metric(prometheus)
+
+    # Ensure relabelling via match
+    prometheus.succeed(
+       "curl -sf 'http://127.0.0.1:${toString queryPort}/api/v1/label/relabel_target_label/values' | "
+       "grep -q \"${testmatch} ${testmatch}\""
+    )
 
     # Let's test if the pushgateway persists metrics to the configured location.
     prometheus.wait_until_succeeds("test -e /var/lib/prometheus-pushgateway/metrics")
