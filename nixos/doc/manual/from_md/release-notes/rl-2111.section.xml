@@ -318,6 +318,28 @@
         </para>
       </listitem>
     </itemizedlist>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The setting
+          <link xlink:href="options.html#opt-services.xorg.config"><literal>services.xorg.config</literal></link>
+          now has a changed order, so that if the user sets this option,
+          their config is rendered <emphasis>after</emphasis> NixOS’s
+          default Xorg config. This is because in
+          <literal>xorg.conf</literal>, later sections have precedence,
+          and we usually want the user section to take precedence
+          (otherwise the user settings may be silently ignored, see
+          example from
+          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/127166">#127166</link>).
+        </para>
+        <para>
+          There may be unlikely user configurations that rely on the
+          user config being overridden. If you have such a config, use
+          <literal>services.xorg.config = lib.mkBefore ...</literal> on
+          your config to invoke the old behaviour.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
     <title>Other Notable Changes</title>
