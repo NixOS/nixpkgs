@@ -43,10 +43,11 @@ in python.pkgs.buildPythonApplication rec {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  postFixup = ''
-    wrapProgram $out/bin/NanoVNASaver \
-      "''${gappsWrapperArgs[@]}" \
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
+    )
   '';
 
   meta = with lib; {
