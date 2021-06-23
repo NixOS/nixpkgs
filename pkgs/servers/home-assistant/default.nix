@@ -460,6 +460,7 @@ in with py.pkgs; buildPythonApplication rec {
     "huawei_lte"
     "hue"
     "humidifier"
+    "hvv_departures"
     "hyperion"
     "ialarm"
     "iaqualink"
