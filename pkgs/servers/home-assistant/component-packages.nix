@@ -561,7 +561,7 @@
     "neurio_energy" = ps: with ps; [ ]; # missing inputs: neurio
     "nexia" = ps: with ps; [ nexia ];
     "nextbus" = ps: with ps; [ ]; # missing inputs: py_nextbusnext
-    "nextcloud" = ps: with ps; [ ]; # missing inputs: nextcloudmonitor
+    "nextcloud" = ps: with ps; [ nextcloudmonitor ];
     "nfandroidtv" = ps: with ps; [ ];
     "nightscout" = ps: with ps; [ ]; # missing inputs: py-nightscout
     "niko_home_control" = ps: with ps; [ ]; # missing inputs: niko-home-control

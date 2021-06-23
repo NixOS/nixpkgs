@@ -4710,6 +4710,8 @@ in {
 
   nexia = callPackage ../development/python-modules/nexia { };
 
+  nextcloudmonitor = callPackage ../development/python-modules/nextcloudmonitor { };
+
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
     inherit (self) python cython setuptools;
     inherit (pkgs) ncurses;
