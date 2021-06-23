@@ -22224,6 +22224,8 @@ in
 
   materia-theme = callPackage ../data/themes/materia-theme { };
 
+  materia-kde-theme = callPackage ../data/themes/materia-kde { };
+
   material-design-icons = callPackage ../data/fonts/material-design-icons { };
 
   material-icons = callPackage ../data/fonts/material-icons { };
