@@ -452,6 +452,7 @@ in with py.pkgs; buildPythonApplication rec {
     "homekit_controller"
     "homematic"
     "homematicip_cloud"
+    "honeywell"
     "html5"
     "http"
     "hue"
