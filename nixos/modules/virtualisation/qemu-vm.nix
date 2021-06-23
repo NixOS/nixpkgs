@@ -350,6 +350,16 @@ in
             '';
       };
 
+    virtualisation.resolution =
+      mkOption {
+        type = options.services.xserver.resolutions.type.nestedTypes.elemType;
+        default = { x = 1024; y = 768; };
+        description =
+          ''
+            The resolution of the virtual machine display.
+          '';
+      };
+
     virtualisation.cores =
       mkOption {
         type = types.ints.positive;
@@ -601,6 +611,7 @@ in
         then driveDeviceName 2 # second disk
         else cfg.bootDevice
     );
+    boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
 
     boot.initrd.extraUtilsCommands =
       ''
@@ -780,7 +791,7 @@ in
     # video driver the host uses.
     services.xserver.videoDrivers = mkVMOverride [ "modesetting" ];
     services.xserver.defaultDepth = mkVMOverride 0;
-    services.xserver.resolutions = mkVMOverride [ { x = 1024; y = 768; } ];
+    services.xserver.resolutions = mkVMOverride [ cfg.resolution ];
     services.xserver.monitorSection =
       ''
         # Set a higher refresh rate so that resolutions > 800x600 work.
