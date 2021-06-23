@@ -466,6 +466,7 @@ in with py.pkgs; buildPythonApplication rec {
     "iaqualink"
     "icloud"
     "ifttt"
+    "ign_sismologia"
     "image"
     "image_processing"
     "imap_email_content"
