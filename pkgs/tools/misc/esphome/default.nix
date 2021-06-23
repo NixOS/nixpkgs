@@ -21,6 +21,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0bz6gkrvn7mwmjsqrazgpy9r64m5jj462v0izgvdymkx8bjd8mpi";
   };
 
+  patches = [
+    # fix missing write permissions on src files before modifing them
+   ./fix-src-permissions.patch
+  ];
+
   postPatch = ''
     # remove all version pinning (E.g tornado==5.1.1 -> tornado)
     sed -i -e "s/==[0-9.]*//" requirements.txt
