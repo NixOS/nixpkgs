@@ -17712,7 +17712,10 @@ in
     suffix = "min";
   };
 
-  poppler_utils = poppler.override { suffix = "utils"; utils = true; };
+  poppler_utils = poppler.override {
+    suffix = "utils";
+    utils = true;
+  };
 
   popt = callPackage ../development/libraries/popt { };
 
@@ -27156,6 +27159,8 @@ in
 
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
+  tonelib-gfx = callPackage ../applications/audio/tonelib-gfx { };
+
   tony = libsForQt514.callPackage ../applications/audio/tony { };
 
   toot = callPackage ../applications/misc/toot { };
@@ -30445,6 +30450,8 @@ in
   apmplanner2 = libsForQt514.callPackage ../applications/science/robotics/apmplanner2 { };
 
   betaflight-configurator = callPackage ../applications/science/robotics/betaflight-configurator { };
+
+  emuflight-configurator = callPackage ../applications/science/robotics/emuflight-configurator { };
 
   mission-planner = callPackage ../applications/science/robotics/mission-planner { };
 

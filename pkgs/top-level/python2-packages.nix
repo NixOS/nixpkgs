@@ -82,7 +82,7 @@ with self; with super; {
 
   django_evolution = callPackage ../development/python-modules/django_evolution { };
 
-  dnspython = super.dnspython_1;
+  dnspython = callPackage ../development/python-modules/dnspython/1.nix { };
 
   docker-py = disabled super.docker-py;
 
@@ -172,7 +172,7 @@ with self; with super; {
 
   http_signature = callPackage ../development/python-modules/http_signature { };
 
-  hypothesis = super.hypothesis_4;
+  hypothesis = callPackage ../development/python-modules/hypothesis/2.nix { };
 
   idna = callPackage ../development/python-modules/idna/2.nix { };
 
