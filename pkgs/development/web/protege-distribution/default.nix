@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, unzip, jre8, copyDesktopItems, makeDesktopItem }:
+{ lib, stdenv, fetchurl, unzip, jre8
+, copyDesktopItems
+, makeDesktopItem
+, iconConvTools
+}:
 
 stdenv.mkDerivation rec {
   pname = "protege-distribution";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "092x22wyisdnhccx817mqq15sxqdfc7iz4whr4mbvzrd9di6ipjq";
   };
 
-  nativeBuildInputs = [ unzip copyDesktopItems ];
+  nativeBuildInputs = [ unzip copyDesktopItems iconConvTools ];
 
   patches = [
     # Replace logic for searching the install directory with a static cd into $out
@@ -40,8 +44,8 @@ stdenv.mkDerivation rec {
     # Move launch script into /bin, giving it a recognizable name
     install -D run.sh $out/bin/run-protege
 
-    # Copy icon to where it can be found
-    install -D app/Protege.ico $out/share/icons/hicolor/128x128/apps/protege.ico
+    # Generate and copy icons to where they can be found
+    icoFileToHiColorTheme app/Protege.ico protege $out
 
     # Move everything else under protege/
     mkdir $out/protege
@@ -54,7 +58,7 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "Protege";
       desktopName = "Protege Desktop";
-      icon = "protege.ico";
+      icon = "protege";
       comment = "OWL2 ontology editor";
       exec = "run-protege";
     })
