@@ -8449,6 +8449,8 @@ in {
 
   txgithub = callPackage ../development/python-modules/txgithub { };
 
+  txredisapi = callPackage ../development/python-modules/txredisapi { };
+
   txrequests = callPackage ../development/python-modules/txrequests { };
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
