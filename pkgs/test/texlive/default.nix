@@ -105,4 +105,18 @@
     mkdir "$out"
     mv document*.svg "$out"/
   '';
+
+  texdoc = runCommandNoCC "texlive-test-texdoc" {
+    nativeBuildInputs = [
+      (with texlive; combine {
+        inherit scheme-infraonly luatex texdoc;
+        pkgFilter = pkg: lib.elem pkg.tlType [ "run" "bin" "doc" ];
+      })
+    ];
+  } ''
+    texdoc --version
+
+    texdoc --debug --list texdoc | tee "$out"
+    grep texdoc.pdf "$out"
+  '';
 }
