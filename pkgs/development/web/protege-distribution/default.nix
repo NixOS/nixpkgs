@@ -11,21 +11,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip copyDesktopItems ];
 
+  patches = [
+    # Replace logic for searching the install directory with a static cd into $out
+    ./static-path.patch
+    # Disable console logging, maintaining only file-based logging
+    ./disable-console-log.patch
+  ];
+
   postPatch = ''
-    # Delete all those commands meant to change directory to the source directory
-    sed -i -e '3,9d' run.sh
-
-    # Change directory to where the application is stored to avoid heavy patching
-    # of searchpaths
-    sed -i -e "2a\
-    cd $out/protege" run.sh
-
-    # Set the correct Java executable (Protege is a JRE 8 application)
+    # Resolve @out@ (introduced by "static-path.patch") to $out, and set the
+    # correct Java executable (Protege is a JRE 8 application)
     substituteInPlace run.sh \
-      --replace "java -X" "exec ${jre8.outPath}/bin/java -X" \
-
-    # Silence console logs, since these are not shown in graphical environments
-    sed -i -e '4,8d;21d' conf/logback.xml
+      --subst-var-by out $out \
+      --replace "java -X" "exec ${jre8.outPath}/bin/java -X"
   '';
 
   dontConfigure = true;
