@@ -487,6 +487,7 @@ in with py.pkgs; buildPythonApplication rec {
     "iqvia"
     "islamic_prayer_times"
     "isy994"
+    "izone"
     "jewish_calendar"
     "kira"
     "kmtronic"
