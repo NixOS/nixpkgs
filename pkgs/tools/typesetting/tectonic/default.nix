@@ -3,14 +3,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.6.4";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
     fetchSubmodules = true;
-    sha256 = "11q0vwgjlailkw4l9z7r54wkxi8dwh40pm7bd74dcvm0x4323fpd";
+    sha256 = "1qncjapqw2x44lnvhp0z860d1py4mhvjqv6h1rhl9h1f7bsd7jq8";
   };
 
   cargoSha256 = "1drfgrsfz44yqz15bcmb3dyyz7dr9zbs3idl1ssaiir24d4z1m9z";
