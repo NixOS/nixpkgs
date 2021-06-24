@@ -9026,6 +9026,8 @@ in {
 
   webhelpers = callPackage ../development/python-modules/webhelpers { };
 
+  webargs = callPackage ../development/python-modules/webargs { };
+
   webob = callPackage ../development/python-modules/webob { };
 
   weboob = callPackage ../development/python-modules/weboob { };
@@ -9041,6 +9043,8 @@ in {
   webssh = callPackage ../development/python-modules/webssh { };
 
   webtest = callPackage ../development/python-modules/webtest { };
+
+  webtest-aiohttp = callPackage ../development/python-modules/webtest-aiohttp { };
 
   webthing = callPackage ../development/python-modules/webthing { };
 
