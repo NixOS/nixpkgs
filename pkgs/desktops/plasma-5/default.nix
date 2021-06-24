@@ -124,6 +124,7 @@ let
       kscreenlocker = callPackage ./kscreenlocker.nix {};
       ksshaskpass = callPackage ./ksshaskpass.nix {};
       ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
+      ksystemstats = callPackage ./ksystemstats.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
       kwayland-server = callPackage ./kwayland-server {};
