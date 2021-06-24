@@ -1062,7 +1062,11 @@
     email = "babathriviere@gmail.com";
     github = "babariviere";
     githubId = 12128029;
-    name = "babariviere";
+    name = "Bastien Rivière";
+    keys = [{
+      longkeyid = "rsa4096/0xF202AD3B6EDF4BD1";
+      fingerprint = "2F85 B362 B274 0012 37E2  81EE F202 AD3B 6EDF 4BD1";
+    }];
   };
   babbaj = {
     name = "babbaj";

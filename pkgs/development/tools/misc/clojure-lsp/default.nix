@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
 
   GRAALVM_HOME = graalvm11-ce;
   CLOJURE_LSP_JAR = jar;
+  CLOJURE_LSP_XMX = "-J-Xmx4g";
+
+  patches = lib.optionals stdenv.isDarwin [ ./disable-check-toolchain.patch ];
 
   buildInputs = [ graalvm11-ce ];
 
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
     license = licenses.mit;
-    maintainers = [ maintainers.ericdallo ];
+    maintainers = with maintainers; [ ericdallo babariviere ];
     platforms = graalvm11-ce.meta.platforms;
   };
 }
