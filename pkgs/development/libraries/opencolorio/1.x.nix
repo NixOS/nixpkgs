@@ -1,7 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, boost, pkg-config, lcms2, tinyxml, git }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "opencolorio";
   version = "1.1.1";
@@ -18,7 +16,7 @@ stdenv.mkDerivation rec {
   # TODO: Investigate whether git can be dropped: It's only used to apply patches
   nativeBuildInputs = [ cmake pkg-config git ];
 
-  buildInputs = [ lcms2 tinyxml ] ++ optional stdenv.isDarwin boost;
+  buildInputs = [ lcms2 tinyxml ] ++ lib.optional stdenv.isDarwin boost;
 
   postPatch = ''
     substituteInPlace src/core/CMakeLists.txt --replace "-Werror" ""
@@ -30,8 +28,8 @@ stdenv.mkDerivation rec {
     "-DUSE_EXTERNAL_TINYXML=ON"
     # External libyamlcpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
     "-DUSE_EXTERNAL_YAML=OFF"
-  ] ++ optional stdenv.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
-    ++ optional (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) "-DOCIO_USE_SSE=OFF";
+  ] ++ lib.optional stdenv.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
+    ++ lib.optional (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) "-DOCIO_USE_SSE=OFF";
 
   postInstall = ''
     mkdir -p $bin/bin; mv $out/bin $bin/
