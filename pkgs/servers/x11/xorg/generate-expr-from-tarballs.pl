@@ -1,10 +1,7 @@
-#! /usr/bin/env perl
+#!/usr/bin/env nix-shell
+#!nix-shell --pure --keep NIX_PATH -i perl -p cacert nix perl
 
-# Usage:
-#
-# manually update tarballs.list
-# then run: cat tarballs.list | perl ./generate-expr-from-tarballs.pl
-
+# Usage: manually update tarballs.list then run: ./generate-expr-from-tarballs.pl tarballs.list
 
 use strict;
 use warnings;
