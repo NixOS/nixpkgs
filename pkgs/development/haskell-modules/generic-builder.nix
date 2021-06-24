@@ -24,6 +24,8 @@ in
 , description ? null
 , doCheck ? !isCross && lib.versionOlder "7.4" ghc.version
 , doBenchmark ? false
+, benchmarkPhase ? null, preBenchmark ? null, postBenchmark ? null
+, benchTarget ? "", benchFlags ? ""
 , doHoogle ? true
 , doHaddockQuickjump ? doHoogle && lib.versionAtLeast ghc.version "8.6"
 , editedCabalFile ? null
@@ -301,7 +303,7 @@ stdenv.mkDerivation ({
 
   prePhases = ["setupCompilerEnvironmentPhase"];
   preConfigurePhases = ["compileBuildDriverPhase"];
-  preInstallPhases = ["haddockPhase"];
+  preInstallPhases = ["benchmarkPhase" "haddockPhase"];
 
   inherit src;
 
@@ -462,6 +464,12 @@ stdenv.mkDerivation ({
     checkFlagsArray+=(${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)})
     ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
     runHook postCheck
+  '';
+
+  benchmarkPhase = ''
+    runHook preBenchmark
+    ${setupCommand} bench ${benchTarget} ${benchFlags}
+    runHook postBenchmark
   '';
 
   haddockPhase = ''
@@ -677,7 +685,9 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? postConfigure)          { inherit postConfigure; }
 // optionalAttrs (args ? preBuild)               { inherit preBuild; }
 // optionalAttrs (args ? postBuild)              { inherit postBuild; }
-// optionalAttrs (args ? doBenchmark)            { inherit doBenchmark; }
+// optionalAttrs (args ? benchmarkPhase)         { inherit benchmarkPhase; }
+// optionalAttrs (args ? preBenchmark)           { inherit preBenchmark; }
+// optionalAttrs (args ? postBenchmark)          { inherit postBenchmark; }
 // optionalAttrs (args ? checkPhase)             { inherit checkPhase; }
 // optionalAttrs (args ? preCheck)               { inherit preCheck; }
 // optionalAttrs (args ? postCheck)              { inherit postCheck; }
