@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ systemd ];
 
-  mesonFlags = [ "-Dlogind=enabled" ];
+  mesonFlags = [ "-Dlogind=enabled" "-Dbuiltin=enabled" ];
 
   meta = with lib; {
     description = "A universal seat management library";
