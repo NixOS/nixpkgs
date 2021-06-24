@@ -20107,6 +20107,7 @@ in
   tt-rss = callPackage ../servers/tt-rss { };
   tt-rss-plugin-ff-instagram = callPackage ../servers/tt-rss/plugin-ff-instagram { };
   tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
+  tt-rss-plugin-fever = callPackage ../servers/tt-rss/plugin-fever { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
 
   rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
