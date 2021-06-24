@@ -3332,6 +3332,8 @@ in {
 
   huggingface-hub = callPackage ../development/python-modules/huggingface-hub { };
 
+  huisbaasje-client = callPackage ../development/python-modules/huisbaasje-client { };
+
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
 
   humanize = callPackage ../development/python-modules/humanize { };
@@ -4706,6 +4708,8 @@ in {
 
   nexia = callPackage ../development/python-modules/nexia { };
 
+  nextcloudmonitor = callPackage ../development/python-modules/nextcloudmonitor { };
+
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
     inherit (self) python cython setuptools;
     inherit (pkgs) ncurses;
@@ -5287,9 +5291,13 @@ in {
 
   pyflick = callPackage ../development/python-modules/pyflick { };
 
+  pygti = callPackage ../development/python-modules/pygti { };
+
   pyheos = callPackage ../development/python-modules/pyheos { };
 
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
+
+  pyisy = callPackage ../development/python-modules/pyisy { };
 
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
@@ -8138,11 +8146,7 @@ in {
 
   spyder = callPackage ../development/python-modules/spyder { };
 
-  spyder_3 = callPackage ../development/python-modules/spyder/3.nix { };
-
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels { };
-
-  spyder-kernels_0_5 = callPackage ../development/python-modules/spyder-kernels/0.x.nix { };
 
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
