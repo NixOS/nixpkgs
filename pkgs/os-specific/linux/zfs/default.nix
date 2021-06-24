@@ -195,12 +195,12 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.12";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.13";
 
     # this package should point to the latest release.
-    version = "2.0.4";
+    version = "2.0.5";
 
-    sha256 = "sha256-ySTt0K3Lc0Le35XTwjiM5l+nIf9co7wBn+Oma1r8YHo=";
+    sha256 = "0n0d8ab7ibxxa8znfsprh7jxwgighx5g291v7hi8272vfjrmk1mj";
   };
 
   zfsUnstable = common {
