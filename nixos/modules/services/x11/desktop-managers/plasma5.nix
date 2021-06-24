@@ -278,6 +278,7 @@ in
           libkscreen
           libksysguard
           milou
+          plasma-systemmonitor
           plasma-browser-integration
           plasma-integration
           polkit-kde-agent
