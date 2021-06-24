@@ -371,10 +371,10 @@
     "huawei_lte" = ps: with ps; [ getmac huawei-lte-api stringcase url-normalize ];
     "huawei_router" = ps: with ps; [ ];
     "hue" = ps: with ps; [ aiohue ];
-    "huisbaasje" = ps: with ps; [ ]; # missing inputs: huisbaasje-client
+    "huisbaasje" = ps: with ps; [ huisbaasje-client ];
     "humidifier" = ps: with ps; [ ];
     "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
-    "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
+    "hvv_departures" = ps: with ps; [ pygti ];
     "hydrawise" = ps: with ps; [ hydrawiser ];
     "hyperion" = ps: with ps; [ hyperion-py ];
     "ialarm" = ps: with ps; [ pyialarm ];
@@ -411,7 +411,7 @@
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
     "islamic_prayer_times" = ps: with ps; [ prayer-times-calculator ];
     "iss" = ps: with ps; [ ]; # missing inputs: pyiss
-    "isy994" = ps: with ps; [ ]; # missing inputs: pyisy
+    "isy994" = ps: with ps; [ pyisy ];
     "itach" = ps: with ps; [ ]; # missing inputs: pyitachip2ir
     "itunes" = ps: with ps; [ ];
     "izone" = ps: with ps; [ ]; # missing inputs: python-izone
@@ -561,7 +561,7 @@
     "neurio_energy" = ps: with ps; [ ]; # missing inputs: neurio
     "nexia" = ps: with ps; [ nexia ];
     "nextbus" = ps: with ps; [ ]; # missing inputs: py_nextbusnext
-    "nextcloud" = ps: with ps; [ ]; # missing inputs: nextcloudmonitor
+    "nextcloud" = ps: with ps; [ nextcloudmonitor ];
     "nfandroidtv" = ps: with ps; [ ];
     "nightscout" = ps: with ps; [ ]; # missing inputs: py-nightscout
     "niko_home_control" = ps: with ps; [ ]; # missing inputs: niko-home-control
