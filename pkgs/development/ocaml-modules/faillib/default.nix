@@ -1,6 +1,6 @@
-{ stdenv, buildOcaml, fetchurl, ocaml, herelib, camlp4 }:
+{ lib, buildOcaml, fetchurl, ocaml, herelib, camlp4 }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "faillib-111.17.00 is not available for OCaml ${ocaml.version}"
 else
 
@@ -11,7 +11,7 @@ buildOcaml rec {
 
   src = fetchurl {
     url = "https://github.com/janestreet/faillib/archive/${version}.tar.gz";
-    sha256 = "12dvaxkmgf7yzzvbadcyk1n17llgh6p8qr33867d21npaljy7l9v"; 
+    sha256 = "12dvaxkmgf7yzzvbadcyk1n17llgh6p8qr33867d21npaljy7l9v";
   };
 
   propagatedBuildInputs = [ camlp4 herelib ];
@@ -19,7 +19,7 @@ buildOcaml rec {
   doCheck = true;
   checkPhase = "make test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ocaml.janestreet.com/";
     description = "Library for dealing with failure in OCaml";
     license = licenses.asl20;

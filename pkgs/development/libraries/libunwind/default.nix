@@ -1,12 +1,12 @@
-{ stdenv, lib, fetchurl, autoreconfHook, xz }:
+{ stdenv, lib, fetchurl, autoreconfHook, xz, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
-    sha256 = "1y0l08k6ak1mqbfj6accf9s5686kljwgsl4vcqpxzk5n74wpm6a3";
+    sha256 = "0dc46flppifrv2z0mrdqi60165ghxm1wk0g47vcbyzjdplqwjnfz";
   };
 
   patches = [ ./backtrace-only-with-glibc.patch ];
@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devman" ];
+
+  # Without latex2man, no man pages are installed despite being
+  # prebuilt in the source tarball.
+  configureFlags = [ "LATEX2MAN=${coreutils}/bin/true" ];
 
   propagatedBuildInputs = [ xz ];
 
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/libunwind";
     description = "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];

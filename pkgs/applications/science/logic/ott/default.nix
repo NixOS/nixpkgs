@@ -1,30 +1,31 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ocaml }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, ocaml, opaline }:
 
 stdenv.mkDerivation rec {
   pname = "ott";
-  version = "0.30";
+  version = "0.31";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
     rev = version;
-    sha256 = "16bxfnm30z94x36vr8vs6zd6fj55vnb7aypjl6hf7clk42040brc";
+    sha256 = "0l81126i2qkz11fs5yrjdgymnqgjcs5avb7f951h61yh1s68jpnn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config opaline ];
   buildInputs = [ ocaml ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp src/ott.opt $out/bin
-    ln -s $out/bin/ott.opt $out/bin/ott
+  installTargets = "ott.install";
 
-    mkdir -p $out/share/emacs/site-lisp
-    cp emacs/ott-mode.el $out/share/emacs/site-lisp
-    '';
+  postInstall = ''
+    opaline -prefix $out
+  ''
+  # There is `emacsPackages.ott-mode` for this now.
+  + ''
+    rm -r $out/share/emacs
+  '';
 
   meta = {
-    description = "Ott: tool for the working semanticist";
+    description = "A tool for the working semanticist";
     longDescription = ''
       Ott is a tool for writing definitions of programming languages and
       calculi. It takes as input a definition of a language syntax and
@@ -37,8 +38,8 @@ stdenv.mkDerivation rec {
       target-system terms.
     '';
     homepage = "http://www.cl.cam.ac.uk/~pes20/ott";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ jwiegley ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jwiegley ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,11 +1,13 @@
-{ stdenv, fetchzip, libfaketime, fonttosfnt, mkfontscale }:
+{ lib, stdenv, fetchFromGitHub, libfaketime, fonttosfnt, mkfontscale }:
 
 stdenv.mkDerivation rec {
   name = "siji-${version}";
   version = "2016-05-13";
 
-  src = fetchzip {
-    url = "https://github.com/stark/siji/archive/95369afac3e661cb6d3329ade5219992c88688c1.zip";
+  src = fetchFromGitHub {
+    owner = "stark";
+    repo = "siji";
+    rev = "3cbb7fe938c33aaadbb657803ea5946e5157d6e2";
     sha256 = "1408g4nxwdd682vjqpmgv0cp0bfnzzzwls62cjs9zrds16xa9dpf";
   };
 
@@ -24,17 +26,15 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -m 644 -D pcf/* -t "$out/share/fonts/misc"
+    install -m 644 -D *.otb pcf/* -t "$out/share/fonts/misc"
     install -m 644 -D bdf/* -t "$bdf/share/fonts/misc"
-    install -m 644 -D *.otb -t "$otb/share/fonts/misc"
     mkfontdir "$out/share/fonts/misc"
     mkfontdir "$bdf/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
   '';
 
-  outputs = [ "out" "bdf" "otb" ];
+  outputs = [ "out" "bdf" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/stark/siji";
     description = "An iconic bitmap font based on Stlarch with additional glyphs";
     license = licenses.gpl2;

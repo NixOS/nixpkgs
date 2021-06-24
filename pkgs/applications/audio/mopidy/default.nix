@@ -1,41 +1,39 @@
-{ newScope, python }:
+{ lib, newScope, python }:
 
 # Create a custom scope so we are consistent in which python version is used
+lib.makeScope newScope (self: with self; {
+  inherit python;
+  pythonPackages = python.pkgs;
 
-let
-  callPackage = newScope self;
+  mopidy = callPackage ./mopidy.nix { };
 
-  self = {
+  mopidy-iris = callPackage ./iris.nix { };
 
-    inherit python;
-    pythonPackages = python.pkgs;
+  mopidy-local = callPackage ./local.nix { };
 
-    mopidy = callPackage ./mopidy.nix { };
+  mopidy-moped = callPackage ./moped.nix { };
 
-    mopidy-gmusic = callPackage ./gmusic.nix { };
+  mopidy-mopify = callPackage ./mopify.nix { };
 
-    mopidy-local-images = callPackage ./local-images.nix { };
+  mopidy-mpd = callPackage ./mpd.nix { };
 
-    mopidy-local-sqlite = callPackage ./local-sqlite.nix { };
+  mopidy-mpris = callPackage ./mpris.nix { };
 
-    mopidy-spotify = callPackage ./spotify.nix { };
+  mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 
-    mopidy-moped = callPackage ./moped.nix { };
+  mopidy-scrobbler = callPackage ./scrobbler.nix { };
 
-    mopidy-mopify = callPackage ./mopify.nix { };
+  mopidy-somafm = callPackage ./somafm.nix { };
 
-    mopidy-mpd = callPackage ./mpd.nix { };
+  mopidy-soundcloud = callPackage ./soundcloud.nix { };
 
-    mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
+  mopidy-spotify = callPackage ./spotify.nix { };
 
-    mopidy-youtube = callPackage ./youtube.nix { };
+  mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
 
-    mopidy-soundcloud = callPackage ./soundcloud.nix { };
+  mopidy-tunein = callPackage ./tunein.nix { };
 
-    mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
+  mopidy-youtube = callPackage ./youtube.nix { };
 
-    mopidy-iris = callPackage ./iris.nix { };
-
-  };
-
-in self
+  mopidy-subidy = callPackage ./subidy.nix { };
+})

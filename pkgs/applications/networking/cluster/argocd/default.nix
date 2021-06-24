@@ -2,21 +2,21 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "1.4.2";
-  commit = "48cced9d925b5bc94f6aa9fa4a8a19b2a59e128a";
+  version = "1.8.6";
+  commit = "28aea3dfdede00443b52cc584814d80e8f896200";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    sha256 = "01vsyrks1k5yfvrarv8ia0isr7snilr21b7lfiy860si82r2r8hj";
+    sha256 = "sha256-kJ3/1owK5T+FbcvjmK2CO+i/KwmVZRSGzF6fCt8J9E8=";
   };
 
-  modSha256 = "1qivg7yy7ymmgkrvl365x29d8jnsphbz18j1ykgwwysyw3n4jkdg";
+  vendorSha256 = "sha256-rZ/ox180h9scocheYtMmKkoHY2/jH+I++vYX8R0fdlA=";
+
+  doCheck = false;
 
   nativeBuildInputs = [ packr ];
-
-  patches = [ ./use-go-module.patch ];
 
   buildFlagsArray = ''
      -ldflags=
@@ -25,12 +25,12 @@ buildGoModule rec {
       -X github.com/argoproj/argo-cd/common.gitCommit=${commit}
       -X github.com/argoproj/argo-cd/common.gitTreeState=clean
   '';
- 
+
   # run packr to embed assets
   preBuild = ''
     packr
   '';
-  
+
   meta = with lib; {
     description = "Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes";
     homepage = "https://github.com/argoproj/argo";

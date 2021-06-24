@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch
 , flask, flask_wtf, flask_testing, ldap
 , mock, nose }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   checkPhase = "nosetests -d";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ContinuumIO/flask-ldap-login";
     description = "User session management for Flask";
     license = licenses.mit;

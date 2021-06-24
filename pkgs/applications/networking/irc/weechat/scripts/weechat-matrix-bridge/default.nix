@@ -1,4 +1,4 @@
-{ stdenv, curl, fetchFromGitHub, cjson, olm, luaffi }:
+{ lib, stdenv, curl, fetchFromGitHub, cjson, olm, luaffi }:
 
 stdenv.mkDerivation {
   name = "weechat-matrix-bridge-2018-11-19";
@@ -36,10 +36,10 @@ stdenv.mkDerivation {
     cp ${luaffi}/lib/lua/${luaffi.lua.luaversion}/ffi.so $out/lib/ffi.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A WeeChat script in Lua that implements the matrix.org chat protocol";
     homepage = "https://github.com/torhve/weechat-matrix-protocol-script";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit; # see https://github.com/torhve/weechat-matrix-protocol-script/blob/0052e7275ae149dc5241226391c9b1889ecc3c6b/matrix.lua#L53
     platforms = platforms.unix;
 

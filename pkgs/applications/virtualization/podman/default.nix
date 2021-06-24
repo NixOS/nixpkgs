@@ -1,53 +1,86 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , installShellFiles
-, buildGoPackage
+, buildGoModule
 , gpgme
 , lvm2
 , btrfs-progs
+, libapparmor
 , libseccomp
+, libselinux
 , systemd
 , go-md2man
+, nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "podman";
-  version = "1.9.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = "libpod";
+    repo = "podman";
     rev = "v${version}";
-    sha256 = "19y48lpf7pvw5f5pzpknn92rq9xwbrpvi8mj7mc4dby6skqadrk4";
+    sha256 = "sha256-PS41e7myv5xCSJIeT+SRj4rLVCXpthq7KeHisYoSiOE=";
   };
 
-  goPackagePath = "github.com/containers/libpod";
+  patches = [
+    ./remove-unconfigured-runtime-warn.patch
+  ];
 
-  outputs = [ "bin" "out" "man" ];
+  vendorSha256 = null;
+
+  doCheck = false;
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs libseccomp gpgme lvm2 systemd ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+    systemd
+  ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
+    runHook preBuild
     patchShebangs .
     ${if stdenv.isDarwin
-      then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"
-      else "make binaries docs"}
+      then "make podman-remote"
+      else "make podman"}
+    make docs
+    runHook postBuild
   '';
 
   installPhase = ''
-    install -Dm555 bin/podman $bin/bin/podman
-    installShellCompletion --bash completions/bash/podman
-    installShellCompletion --zsh completions/zsh/_podman
-    MANDIR=$man/share/man make install.man
+    runHook preInstall
+  '' + lib.optionalString stdenv.isDarwin ''
+    mv bin/{podman-remote,podman}
+  '' + ''
+    install -Dm555 bin/podman $out/bin/podman
+    installShellCompletion --bash completions/bash/*
+    installShellCompletion --fish completions/fish/*
+    installShellCompletion --zsh completions/zsh/*
+    MANDIR=$man/share/man make install.man-nobuild
+  '' + lib.optionalString stdenv.isLinux ''
+    install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
+    install -Dm644 contrib/systemd/system/podman.{socket,service} -t $out/lib/systemd/system
+  '' + ''
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) podman; };
+
+  meta = with lib; {
     homepage = "https://podman.io/";
     description = "A program for managing pods, containers and container images";
+    changelog = "https://github.com/containers/podman/blob/v${version}/changelog.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
     platforms = platforms.unix;

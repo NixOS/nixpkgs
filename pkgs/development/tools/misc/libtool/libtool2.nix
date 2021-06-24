@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, perl, help2man
+{ lib, stdenv, fetchurl, m4, perl, help2man
 }:
 
 stdenv.mkDerivation rec {
@@ -26,11 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Don't run the native `strip' when cross-compiling.  This breaks at least
-  # with `.a' files for MinGW.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU Libtool, a generic library support script";
     longDescription = ''
       GNU libtool is a generic library support script.  Libtool hides

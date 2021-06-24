@@ -183,6 +183,24 @@ rec {
     else
       [];
 
+  /* Return the cartesian product of attribute set value combinations.
+
+    Example:
+      cartesianProductOfSets { a = [ 1 2 ]; b = [ 10 20 ]; }
+      => [
+           { a = 1; b = 10; }
+           { a = 1; b = 20; }
+           { a = 2; b = 10; }
+           { a = 2; b = 20; }
+         ]
+  */
+  cartesianProductOfSets = attrsOfLists:
+    lib.foldl' (listOfAttrs: attrName:
+      concatMap (attrs:
+        map (listValue: attrs // { ${attrName} = listValue; }) attrsOfLists.${attrName}
+      ) listOfAttrs
+    ) [{}] (attrNames attrsOfLists);
+
 
   /* Utility function that creates a {name, value} pair as expected by
      builtins.listToAttrs.
@@ -253,7 +271,7 @@ rec {
   /* Like `mapAttrsRecursive', but it takes an additional predicate
      function that tells it whether to recursive into an attribute
      set.  If it returns false, `mapAttrsRecursiveCond' does not
-     recurse, but does apply the map function.  It is returns true, it
+     recurse, but does apply the map function.  If it returns true, it
      does recurse, and does not apply the map function.
 
      Type:
@@ -469,6 +487,7 @@ rec {
   getBin = getOutput "bin";
   getLib = getOutput "lib";
   getDev = getOutput "dev";
+  getMan = getOutput "man";
 
   /* Pick the outputs of packages to place in buildInputs */
   chooseDevOutputs = drvs: builtins.map getDev drvs;
@@ -492,5 +511,4 @@ rec {
   zipWithNames = zipAttrsWithNames;
   zip = builtins.trace
     "lib.zip is deprecated, use lib.zipAttrsWith instead" zipAttrsWith;
-
 }

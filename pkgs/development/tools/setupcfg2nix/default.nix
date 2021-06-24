@@ -10,7 +10,7 @@ buildSetupcfg rec {
   };
   application = true;
   meta = {
-    description = "Generate nix expressions from setup.cfg for a python package.";
+    description = "Generate nix expressions from setup.cfg for a python package";
     homepage = "https://github.com/target/setupcfg2nix";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

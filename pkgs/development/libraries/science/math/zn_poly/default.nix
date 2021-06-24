@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   libbasename = "libzn_poly";
   libext = stdenv.targetPlatform.extensions.sharedLibrary;
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   # Tuning (either autotuning or with hand-written paramters) is possible
   # but not implemented here.
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "http://web.maths.unsw.edu.au/~davidharvey/code/zn_poly/";
     description = "Polynomial arithmetic over Z/nZ";
     license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

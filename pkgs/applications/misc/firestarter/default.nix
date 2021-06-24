@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, glibc, python3, cudatoolkit,
+{ lib, stdenv, fetchFromGitHub, glibc, python3, cudatoolkit,
   withCuda ? true
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "firestarter";
   version = "1.7.4";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "tud-zih-energy";
     repo = "FIRESTARTER";
     rev = "v${version}";
-    sha256 = "161mg0h1hvp6bxfjdhyfqrljvphys896mfd36254rbgzxm38ibi7";
+    sha256 = "0zqfqb7hf48z39g1qhbl1iraf8rz4d629h1q6ikizckpzfq23kd0";
   };
 
   nativeBuildInputs = [ python3 ];
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     cp FIRESTARTER $out/bin/firestarter
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
     description = "Processor Stress Test Utility";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [ astro marenz ];
     license = licenses.gpl3;
   };
 }

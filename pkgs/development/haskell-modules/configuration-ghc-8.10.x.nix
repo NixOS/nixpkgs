@@ -42,47 +42,33 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # cabal-install needs more recent versions of Cabal and random, but an older
+  # version of base16-bytestring.
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_4_0_0;
+    base16-bytestring = self.base16-bytestring_0_1_1_7;
+    random = dontCheck super.random_1_2_0;  # break infinite recursion
+    hashable = doJailbreak super.hashable;  # allow random 1.2.x
+  });
+
+  # cabal-install-parsers is written for Cabal 3.4
+  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_4_0_0; };
+
   # Jailbreak to fix the build.
-  async = doJailbreak super.async;
-  ChasingBottoms = doJailbreak super.ChasingBottoms;
-  hashable = doJailbreak super.hashable;
-  parallel = doJailbreak super.parallel;
-  regex-base = doJailbreak super.regex-base;
-  regex-compat = doJailbreak super.regex-compat;
-  regex-pcre-builtin = doJailbreak super.regex-pcre-builtin;
-  regex-posix = doJailbreak super.regex-posix;
-  regex-tdfa = doJailbreak super.regex-tdfa;
-  split = doJailbreak super.split;
-  tar = doJailbreak super.tar;
-  tasty-expected-failure = doJailbreak super.tasty-expected-failure;
+  base-noprelude = doJailbreak super.base-noprelude;
+  system-fileio = doJailbreak super.system-fileio;
   unliftio-core = doJailbreak super.unliftio-core;
-  vector = doJailbreak super.vector;
-  zlib = doJailbreak super.zlib;
 
-  # Use the latest version to fix the build.
-  microlens-th = self.microlens-th_0_4_3_5;
-  optics-core = self.optics-core_0_3;
-  repline = self.repline_0_3_0_0;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_4;
-  th-desugar = self.th-desugar_1_11;
-
-  # `ghc-lib-parser-ex` (see conditionals in its `.cabal` file) does not need
-  # the `ghc-lib-parser` dependency on GHC >= 8.8. However, because we have
-  # multiple verions of `ghc-lib-parser(-ex)` available, and the default ones
-  # are older ones, those older ones will complain. Because we have a newer
-  # GHC, we can just set the dependency to `null` as it is not used.
-  ghc-lib-parser-ex_8_10_0_4 = super.ghc-lib-parser-ex_8_10_0_4.override { ghc-lib-parser = null; };
+  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  monoidal-containers = doJailbreak super.monoidal-containers;
 
   # Jailbreak to fix the build.
-  aeson-diff = doJailbreak super.aeson-diff;
-  cborg = doJailbreak super.cborg;
-  cborg-json = doJailbreak super.cborg-json;
+  brick = doJailbreak super.brick;
   exact-pi = doJailbreak super.exact-pi;
-  relude = dontCheck (doJailbreak super.relude);
   serialise = doJailbreak super.serialise;
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
-  brick = doJailbreak super.brick;
+  shower = doJailbreak super.shower;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
@@ -93,5 +79,15 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/e48738ee1be774507887a90a0d67ad1319456afc/patches/language-haskell-extract-0.2.4.patch?inline=false";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
+
+  # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
+  hnix = generateOptparseApplicativeCompletion "hnix"
+    (overrideCabal super.hnix (drv: {
+      # executable is allowed for ghc >= 8.10 and needs repline
+      executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
+    }));
+
+  # Break out of "Cabal < 3.2" constraint.
+  stylish-haskell = doJailbreak super.stylish-haskell;
 
 }

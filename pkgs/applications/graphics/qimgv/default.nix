@@ -1,12 +1,14 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
+, fetchpatch
 
 , cmake
-, pkgconfig
+, pkg-config
 
 , exiv2
 , mpv
+, opencv4
 , qtbase
 , qtimageformats
 , qtsvg
@@ -14,23 +16,24 @@
 
 mkDerivation rec {
   pname = "qimgv";
-  version = "0.8.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "easymodo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cmya06j466v0pirhxbzbj1vbz0346y7rbc1gbv4n9xcp6c6bln6";
+    sha256 = "0b2hddps969gjim2r9a22zaxmnzp600av2zz6icq66ksfrx1rpac";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
     exiv2
     mpv
+    opencv4
     qtbase
     qtimageformats
     qtsvg

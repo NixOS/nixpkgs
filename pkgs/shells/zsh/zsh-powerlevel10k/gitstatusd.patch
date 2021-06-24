@@ -1,8 +1,8 @@
 diff --git a/gitstatus/gitstatus.plugin.zsh b/gitstatus/gitstatus.plugin.zsh
-index 46d0b3c..b082e24 100644
+index b469072..eb1e3be 100644
 --- a/gitstatus/gitstatus.plugin.zsh
 +++ b/gitstatus/gitstatus.plugin.zsh
-@@ -53,6 +53,8 @@
+@@ -44,6 +44,8 @@
  
  [[ -o 'interactive' ]] || 'return'
  
@@ -11,4 +11,3 @@ index 46d0b3c..b082e24 100644
  # Temporarily change options.
  'builtin' 'local' '-a' '_gitstatus_opts'
  [[ ! -o 'aliases'         ]] || _gitstatus_opts+=('aliases')
-

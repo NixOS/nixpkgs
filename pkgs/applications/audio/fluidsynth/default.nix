@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake
 , alsaLib, glib, libjack2, libsndfile, libpulseaudio
 , AudioUnit, CoreAudio, CoreMIDI, CoreServices
 , version ? "2"
@@ -30,7 +30,7 @@ stdenv.mkDerivation  {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ glib libsndfile libpulseaudio libjack2 ]
     ++ lib.optionals stdenv.isLinux [ alsaLib ]
@@ -40,7 +40,7 @@ stdenv.mkDerivation  {
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
-    homepage    = "http://www.fluidsynth.org";
+    homepage    = "https://www.fluidsynth.org";
     license     = licenses.lgpl21Plus;
     maintainers = with maintainers; [ goibhniu lovek323 ];
     platforms   = platforms.unix;

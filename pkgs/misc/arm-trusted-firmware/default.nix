@@ -6,7 +6,7 @@ let
             , platform ? null
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "2.2"
+            , version ? "2.4"
             , ... } @ args:
            stdenv.mkDerivation ({
 
@@ -16,8 +16,8 @@ let
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
-      rev = "refs/tags/v${version}";
-      sha256 = "03fjl5hy1bqlya6fg553bqz7jrvilzrzpbs87cv6jd04v8qrvry8";
+      rev = "v${version}";
+      sha256 = "12k0n79j156bdzqws18kpbli04kn00nh6dy42pjv6gakqrkx9px3";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -51,7 +51,7 @@ let
       homepage = "https://github.com/ARM-software/arm-trusted-firmware";
       description = "A reference implementation of secure world software for ARMv8-A";
       license = licenses.bsd3;
-      maintainers = [ maintainers.lopsided98 ];
+      maintainers = with maintainers; [ lopsided98 ];
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
 

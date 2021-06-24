@@ -1,6 +1,6 @@
-{ stdenv, pkgs }:
+{ lib, pkgs }:
 
-with stdenv.lib;
+with lib;
 with pkgs.javaPackages;
 
 let
@@ -83,6 +83,7 @@ in {
       apache_10
       apache_11
       apache_13
+      apache_14
       backportUtilConcurrent_3_1
       commonsParent_22
       doxia_1_0_alpha7
@@ -98,9 +99,11 @@ in {
       mavenParent_21
       mavenParent_22
       mavenParent_23
+      mavenParent_24
       mavenPlugins_22
       mavenPlugins_23
       mavenPlugins_24
+      mavenPlugins_25
       mavenPluginTools_3_1
       mavenReporting_2_0_6
       mavenReporting_2_0_9
@@ -121,7 +124,9 @@ in {
       plexus_3_3_1
       plexusCipher_1_4
       plexusCompiler_2_2
+      plexusCompiler_2_4
       plexusCompilers_2_2
+      plexusCompilers_2_4
       plexusComponents_1_1_7
       plexusComponents_1_1_14
       plexusComponents_1_1_15

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, vala, pkgconfig, meson, ninja, python3, pantheon
+{ lib, stdenv, fetchFromGitHub, nix-update-script, vala, pkg-config, meson, ninja, python3, pantheon
 , gtk3, gtksourceview, json-glib, libgee, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stupidly-simple sticky notes applet";
     homepage = "https://github.com/lainsce/notejot";
     license = licenses.gpl2Plus;

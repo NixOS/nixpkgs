@@ -143,6 +143,13 @@ let
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
     INITRD /boot/${config.system.boot.loader.initrdFile}
+
+    # A variant to boot with a serial console enabled
+    LABEL boot-serial
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
+    LINUX /boot/${config.system.boot.loader.kernelFile}
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0,115200n8
+    INITRD /boot/${config.system.boot.loader.initrdFile}
   '';
 
   isolinuxMemtest86Entry = ''
@@ -413,8 +420,21 @@ in
       default = false;
       description = ''
         Whether the ISO image should be compressed using
-        <command>bzip2</command>.
+        <command>zstd</command>.
       '';
+    };
+
+    isoImage.squashfsCompression = mkOption {
+      default = with pkgs.stdenv.targetPlatform; "xz -Xdict-size 100% "
+                + lib.optionalString (isx86_32 || isx86_64) "-Xbcj x86"
+                # Untested but should also reduce size for these platforms
+                + lib.optionalString (isAarch32 || isAarch64) "-Xbcj arm"
+                + lib.optionalString (isPowerPC) "-Xbcj powerpc"
+                + lib.optionalString (isSparc) "-Xbcj sparc";
+      description = ''
+        Compression settings to use for the squashfs nix store.
+      '';
+      example = "zstd -Xcompression-level 6";
     };
 
     isoImage.edition = mkOption {
@@ -614,6 +634,7 @@ in
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
       storeContents = config.isoImage.storeContents;
+      comp = config.isoImage.squashfsCompression;
     };
 
     # Individual files to be included on the CD, outside of the Nix

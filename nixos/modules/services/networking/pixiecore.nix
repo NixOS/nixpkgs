@@ -93,6 +93,7 @@ in
     users.users.pixiecore = {
       description = "Pixiecore daemon user";
       group = "pixiecore";
+      isSystemUser = true;
     };
 
     networking.firewall = mkIf cfg.openFirewall {
@@ -115,7 +116,7 @@ in
               if cfg.mode == "boot"
               then [ "boot" cfg.kernel ]
                    ++ optional (cfg.initrd != "") cfg.initrd
-                   ++ optional (cfg.cmdLine != "") "--cmdline=${lib.escapeShellArg cfg.cmdLine}"
+                   ++ optionals (cfg.cmdLine != "") [ "--cmdline" cfg.cmdLine ]
               else [ "api" cfg.apiServer ];
           in
             ''

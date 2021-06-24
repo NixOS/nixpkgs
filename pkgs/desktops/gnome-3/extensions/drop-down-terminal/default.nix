@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, gjs, vte, gnome3 }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, gjs, vte, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-drop-down-terminal";
@@ -21,11 +21,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions/
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configurable drop down terminal shell";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ericdallo ];

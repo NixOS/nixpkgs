@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , gflags
@@ -8,19 +8,19 @@
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "6.0.7";
+  version = "6.0.13";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     rev = "et-v${version}";
-    sha256 = "03pdspggqxkmz95qb96pig5x0xw18hy9a7ivszydr32ry6kxxx1h";
+    sha256 = "0sb1hypg2276y8c2a5vivrkcxp70swddvhnd9h273if3kv6j879r";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gflags libsodium protobuf ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
     license = licenses.asl20;
     homepage = "https://mistertea.github.io/EternalTerminal/";

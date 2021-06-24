@@ -1,17 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.34.7";
+  version = "1.54.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0k4l3nq1d6f5qjx8svgga0ygv9mmhykvs3n3xr824ih6d0vrkzbg";
+    sha256 = "sha256-nZSNn1vLk3y6s4ie1AkSkGmKUiIrcBr3yKW5uAEtRt0=";
   };
 
-  goPackagePath = "github.com/VictoriaMetrics/VictoriaMetrics";
+  vendorSha256 = null;
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}" ];
+
+  passthru.tests = { inherit (nixosTests) victoriametrics; };
 
   meta = with lib; {
     homepage = "https://victoriametrics.com/";

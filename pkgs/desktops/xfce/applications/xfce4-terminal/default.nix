@@ -1,11 +1,13 @@
-{ mkXfceDerivation, gtk3, libxfce4ui, vte, xfconf, pcre2 }:
+{ mkXfceDerivation, gtk3, libxfce4ui, vte, xfconf, pcre2, libxslt, docbook_xml_dtd_45, docbook_xsl }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
-  version = "0.8.8";
+  version = "0.8.10";
 
-  sha256 = "0sg9vwyvhh7pjp83biv7gvf42423a7ly4dc7q2gn28kp6bds2qcp";
+  sha256 = "0v58qcrdpqpd2nbwlc4ra7j9nkvfzfhb1zcp1kggbn627q86i0ql";
+
+  nativeBuildInputs = [ libxslt docbook_xml_dtd_45 docbook_xsl ];
 
   buildInputs = [ gtk3 libxfce4ui vte xfconf pcre2 ];
 

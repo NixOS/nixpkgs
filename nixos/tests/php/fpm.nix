@@ -1,8 +1,10 @@
-import ../make-test-python.nix ({pkgs, ...}: {
-  name = "php-fpm-nginx-test";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ etu ];
+import ../make-test-python.nix ({pkgs, lib, php, ...}: {
+  name = "php-${php.version}-fpm-nginx-test";
+  meta.maintainers = lib.teams.php.members;
 
   machine = { config, lib, pkgs, ... }: {
+    environment.systemPackages = [ php ];
+
     services.nginx = {
       enable = true;
 
@@ -10,7 +12,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
         testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
       in {
         root = "${testdir}/web";
-        locations."~ \.php$".extraConfig = ''
+        locations."~ \\.php$".extraConfig = ''
           fastcgi_pass unix:${config.services.phpfpm.pools.foobar.socket};
           fastcgi_index index.php;
           include ${pkgs.nginx}/conf/fastcgi_params;
@@ -25,6 +27,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
 
     services.phpfpm.pools."foobar" = {
       user = "nginx";
+      phpPackage = php;
       settings = {
         "listen.group" = "nginx";
         "listen.mode" = "0600";
@@ -43,13 +46,12 @@ import ../make-test-python.nix ({pkgs, ...}: {
     machine.wait_for_unit("phpfpm-foobar.service")
 
     # Check so we get an evaluated PHP back
-    assert "PHP Version ${pkgs.php.version}" in machine.succeed("curl -vvv -s http://127.0.0.1:80/")
+    response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/")
+    assert "PHP Version ${php.version}" in response, "PHP version not detected"
 
     # Check so we have database and some other extensions loaded
-    assert "json" in machine.succeed("curl -vvv -s http://127.0.0.1:80/")
-    assert "opcache" in machine.succeed("curl -vvv -s http://127.0.0.1:80/")
-    assert "pdo_mysql" in machine.succeed("curl -vvv -s http://127.0.0.1:80/")
-    assert "pdo_pgsql" in machine.succeed("curl -vvv -s http://127.0.0.1:80/")
-    assert "pdo_sqlite" in machine.succeed("curl -vvv -s http://127.0.0.1:80/")
+    for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite", "apcu"]:
+        assert ext in response, f"Missing {ext} extension"
+        machine.succeed(f'test -n "$(php -m | grep -i {ext})"')
   '';
 })

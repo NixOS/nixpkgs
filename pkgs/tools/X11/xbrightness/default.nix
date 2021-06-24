@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, imake, gccmakedep
+{ lib, stdenv, fetchurl, imake, gccmakedep
 , libX11, libXaw, libXext, libXmu, libXpm, libXxf86vm  }:
 
 stdenv.mkDerivation {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = {
     description = "X11 brigthness and gamma software control";
     homepage = "http://shallowsky.com/software";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

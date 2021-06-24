@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, jre }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, jre }:
 
 let
   desktopItem = makeDesktopItem {
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     icotool -x -i 2 -o $out/share/icons/hicolor/16x16/apps/groove.png groove-green-g.ico
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GRaphs for Object-Oriented VErification";
     homepage = "http://groove.cs.utwente.nl/";
     license = licenses.asl20;

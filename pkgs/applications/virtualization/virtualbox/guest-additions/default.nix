@@ -3,7 +3,7 @@
 
 let
   version = virtualbox.version;
-  xserverVListFunc = builtins.elemAt (stdenv.lib.splitVersion xorg.xorgserver.version);
+  xserverVListFunc = builtins.elemAt (lib.splitVersion xorg.xorgserver.version);
 
   # Forced to 1.18 in <nixpkgs/nixos/modules/services/x11/xserver.nix>
   # as it even fails to build otherwise.  Still, override this even here,
@@ -19,6 +19,7 @@ let
   dlopenLibs = [
     { name = "libdbus-1.so"; pkg = dbus; }
     { name = "libXfixes.so"; pkg = xorg.libXfixes; }
+    { name = "libXrandr.so"; pkg = xorg.libXrandr; }
   ];
 
 in stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "e2846a7576cce1b92a7c0744f41eaac750248d6e31dfca5c45d5766648b394c7";
+    sha256 = "904432eb331d7ae517afaa4e4304e6492b7947b46ecb8267de7ef792c4921b4c";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";

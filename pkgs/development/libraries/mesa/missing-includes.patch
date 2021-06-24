@@ -9,18 +9,6 @@
  #include "pipe/p_compiler.h"
  #include "pipe/p_state.h"
  
---- ./src/util/rand_xor.c.orig	2017-06-20 00:38:57.199474067 +0200
-+++ ./src/util/rand_xor.c	2017-06-20 00:40:31.351279557 +0200
-@@ -23,7 +23,9 @@
-  */
- 
- #if defined(__linux__)
-+#include <sys/types.h>
- #include <sys/file.h>
-+#include <sys/stat.h>
- #include <unistd.h>
- #include <fcntl.h>
- #else
 --- ./src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
 +++ ./src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
 @@ -28,6 +28,8 @@

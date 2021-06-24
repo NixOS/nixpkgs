@@ -48,7 +48,7 @@ in
       panel = mkOption {
         type = with types; nullOr path;
         default = null;
-        example = literalExample "''${pkgs.plasma5.plasma-desktop}/lib/libexec/kimpanel-ibus-panel";
+        example = literalExample "''${pkgs.plasma5Packages.plasma-desktop}/lib/libexec/kimpanel-ibus-panel";
         description = "Replace the IBus panel with another panel.";
       };
     };
@@ -64,7 +64,7 @@ in
     # Without dconf enabled it is impossible to use IBus
     programs.dconf.enable = true;
 
-    programs.dconf.profiles.ibus = "${ibusPackage}/etc/dconf/profile/ibus";
+    programs.dconf.packages = [ ibusPackage ];
 
     services.dbus.packages = [
       ibusAutostart

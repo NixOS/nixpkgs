@@ -2,21 +2,23 @@
 
 buildGoPackage rec {
   pname = "overmind";
-  version = "2.0.3";
+  version = "2.2.0";
   goPackagePath = "github.com/DarthSim/overmind";
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$bin/bin/overmind" --prefix PATH : "${lib.makeBinPath [ tmux which ]}"
+    wrapProgram "$out/bin/overmind" --prefix PATH : "${lib.makeBinPath [ tmux which ]}"
   '';
 
   src = fetchFromGitHub {
     owner = "DarthSim";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c551c240lqxdjg0jj01rh2fyhwls02k5lczlxacj05prp1plz9p";
+    sha256 = "00v6l4138vv32bqfkzrhk4hfl52a00rlg9ywhp4difgrnz7zj6xb";
   };
+
+  goDeps = ./deps.nix;
 
   meta = with lib; {
     homepage = "https://github.com/DarthSim/overmind";

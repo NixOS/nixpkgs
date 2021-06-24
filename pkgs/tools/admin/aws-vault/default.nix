@@ -1,16 +1,29 @@
-{ buildGoModule, lib, fetchFromGitHub }:
+{ buildGoModule, lib, fetchFromGitHub, installShellFiles }:
 buildGoModule rec {
   pname = "aws-vault";
-  version = "5.3.2";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "99designs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04dyibcaijv5011laycf39m4gvprvvsn5zkxslyih1kqd170w3wg";
+    sha256 = "sha256-yNmjoCq9fYzt/lZQlVgxQvxKWCh5Lxd4NSX7c+gE/As=";
   };
 
-  modSha256 = "1d3hjfmfmlpw2scfyn597zkzz864w97p0wrsxjp49m9mi0pgmhq9";
+  vendorSha256 = "sha256-Lb5iiuT/Fd3RMt98AafIi9I0FHJaSpJ8pH7r4yZiiiw=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd aws-vault \
+      --bash $src/contrib/completions/bash/aws-vault.bash \
+      --fish $src/contrib/completions/fish/aws-vault.fish \
+      --zsh $src/contrib/completions/zsh/aws-vault.zsh
+  '';
+
+
+  doCheck = false;
+
   subPackages = [ "." ];
 
   # set the version. see: aws-vault's Makefile

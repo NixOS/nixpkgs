@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   postFixup = ''
     rm $out/lib/libgpuarray-static.a
-  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
       patchelf --set-rpath "$p:$libraryPath" $1
@@ -63,8 +63,6 @@ buildPythonPackage rec {
     Mako
   ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
@@ -72,7 +70,7 @@ buildPythonPackage rec {
     nose
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Theano/libgpuarray";
     description = "Library to manipulate tensors on GPU.";
     license = licenses.free;

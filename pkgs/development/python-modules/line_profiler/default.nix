@@ -5,22 +5,30 @@
 , isPyPy
 , ipython
 , python
+, scikit-build
+, cmake
 }:
 
 buildPythonPackage rec {
   pname = "line_profiler";
-  version = "2.1.2";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "efa66e9e3045aa7cb1dd4bf0106e07dec9f80bc781a993fbaf8162a36c20af5c";
+    sha256 = "e73ff429236d59d48ce7028484becfa01449b3d52abdcf7337e0ff2acdc5093c";
   };
 
-  patches = [ ./python37.patch ];
+  nativeBuildInputs = [
+    cython
+    cmake
+    scikit-build
+  ];
 
-  buildInputs = [ cython ];
+  dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [ ipython ];
+  propagatedBuildInputs = [
+    ipython
+  ];
 
   disabled = isPyPy;
 
@@ -28,8 +36,12 @@ buildPythonPackage rec {
     rm -f _line_profiler.c
   '';
 
+  checkInputs = [
+    ipython
+  ];
+
   checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH cd tests && ${python.interpreter} -m unittest discover -s .
   '';
 
   meta = {

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
 
 in {
   name = "syncthing-init";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ lassulus ];
+  meta.maintainers = with pkgs.lib.maintainers; [ lassulus ];
 
   machine = {
     services.syncthing = {
@@ -24,9 +24,8 @@ in {
   testScript = ''
     machine.wait_for_unit("syncthing-init.service")
     config = machine.succeed("cat /var/lib/syncthing/.config/syncthing/config.xml")
-   
+
     assert "testFolder" in config
     assert "${testId}" in config
   '';
 })
-

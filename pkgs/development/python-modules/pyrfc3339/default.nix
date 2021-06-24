@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytz
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pytz ];
   buildInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate and parse RFC 3339 timestamps";
     homepage = "https://github.com/kurtraschke/pyRFC3339";
     license = licenses.mit;

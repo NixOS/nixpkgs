@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk }:
+{ lib, stdenv, fetchurl, jdk }:
 
 stdenv.mkDerivation rec {
   version = "2.7.2";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ jdk ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Build tooling for Clojure";
     homepage = "https://boot-clj.com/";
     license = licenses.epl10;

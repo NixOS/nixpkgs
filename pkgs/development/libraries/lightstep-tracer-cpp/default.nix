@@ -1,31 +1,27 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
-, opentracing-cpp, protobuf, zlib
-, enableGrpc ? false, grpc ? null, openssl ? null, c-ares ? null
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake
+, opentracing-cpp, protobuf
+, enableGrpc ? false, grpc, openssl
 }:
-
-assert enableGrpc -> grpc != null;
-assert enableGrpc -> openssl != null;
-assert enableGrpc -> c-ares != null;
 
 stdenv.mkDerivation rec {
   pname = "lightstep-tracer-cpp";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lightstep";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zwj5r0rmfk6cm5ikay4kh7na455vskylc5yrxkhisn4n850d1l4";
+    sha256 = "1xr11dm94qpbx3nxb7si7zy7hzg2akj01pyxkd8pzzbvmkmic16j";
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig
+    cmake pkg-config
   ];
 
   buildInputs = [
-    opentracing-cpp protobuf zlib
+    opentracing-cpp protobuf
   ] ++ lib.optionals enableGrpc [
-    grpc openssl c-ares c-ares.cmake-config
+    grpc openssl
   ];
 
   cmakeFlags = lib.optionals (!enableGrpc) [ "-DWITH_GRPC=OFF" ];

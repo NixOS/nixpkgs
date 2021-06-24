@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , alsaLib
 , glib
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = let
-    libPath = stdenv.lib.makeLibraryPath [
+    libPath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
       alsaLib
       glib
@@ -49,14 +49,14 @@ stdenv.mkDerivation rec {
       libGLU libGL
       xorg.libX11
     ];
-  in stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  in lib.optionalString (!stdenv.isDarwin) ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \
       $out/bin/KodeLife
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://hexler.net/products/kodelife";
     description = "Real-time GPU shader editor";
     license = licenses.unfree;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pam, systemd }:
+{ lib, stdenv, fetchFromGitHub, pam, systemd }:
 
 stdenv.mkDerivation rec {
   version = "v13";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "SESSION=systemd" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A secure suspend/hibernate-friendly alternative to `vlock -an`";
     license = licenses.gpl2;
     platforms = platforms.linux;

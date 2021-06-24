@@ -9,6 +9,7 @@ with lib;
   ];
 
   options.security.apparmor.confineSUIDApplications = mkOption {
+    type = types.bool;
     default = true;
     description = ''
       Install AppArmor profiles for commonly-used SUID application

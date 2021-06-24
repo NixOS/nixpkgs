@@ -1,52 +1,48 @@
-{ stdenv, fetchFromGitLab, meson, ninja, cmake
-, wrapGAppsHook, pkgconfig, desktop-file-utils
+{ lib, stdenv, fetchFromGitLab, meson, ninja, cmake
+, wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
-, shared-mime-info, haskellPackages}:
+, shared-mime-info, libhandy
+}:
 
 let
-  pythonEnv = pythonPackages.python.withPackages(p: with p;
-    [ regex setuptools python-Levenshtein pyenchant pygobject3 pycairo pypandoc ]);
-  texliveDist = texlive.combined.scheme-medium;
+  pythonEnv = pythonPackages.python.withPackages(p: with p; [
+    regex setuptools python-Levenshtein pyenchant
+    pygobject3 pycairo pypandoc chardet
+  ]);
 
 in stdenv.mkDerivation rec {
   pname = "apostrophe";
-  version = "unstable-2020-03-29";
+  version = "2.4";
 
   src = fetchFromGitLab {
     owner  = "somas";
     repo   = pname;
     domain = "gitlab.gnome.org";
-    rev    = "219fa8976e3b8a6f0cea15cfefe4e336423f2bdb";
-    sha256 = "192n5qs3x6rx62mqxd6wajwm453pns8kjyz5v3xc891an6bm1kqx";
+    rev    = "v${version}";
+    sha256 = "1qzy3zhi18wf42m034s8kcmx9gl05j620x3hf6rnycq2fvy7g4gz";
   };
 
-  nativeBuildInputs = [ meson ninja cmake pkgconfig desktop-file-utils
+  nativeBuildInputs = [ meson ninja cmake pkg-config desktop-file-utils
     appstream-glib wrapGAppsHook ];
 
   buildInputs = [ glib pythonEnv gobject-introspection gtk3
-    gnome3.adwaita-icon-theme webkitgtk gspell texliveDist
-    glib-networking ];
+    gnome3.adwaita-icon-theme webkitgtk gspell texlive
+    glib-networking libhandy ];
 
   postPatch = ''
     patchShebangs --build build-aux/meson_post_install.py
-
-    substituteInPlace ${pname}/config.py --replace "/usr/share/${pname}" "$out/share/${pname}"
-
-    # get rid of unused distributed dependencies
-    rm -r ${pname}/pylocales
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
-      --prefix PATH : "${texliveDist}/bin"
-      --prefix PATH : "${haskellPackages.pandoc-citeproc}/bin"
+      --prefix PATH : "${texlive}/bin"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/somas/apostrophe";
     description = "A distraction free Markdown editor for GNU/Linux";
     license = licenses.gpl3;

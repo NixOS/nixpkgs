@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -24,18 +24,17 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.22";
+  version = "3.31";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e9884dde128e1bd82f8746e8f8806c8d7d89d95ce9ed7bacf7cc5fdb094aa21";
+    sha256 = "426cff33c1d3a5ee6ae388089fd41dc47c4221800f43bd51779f823c781fb83b";
   };
 
   doCheck = false;
   propagatedBuildInputs = [
-    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python
+    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python file
   ];
-  buildInputs = [ file ];
   prePatch = ''
     sed -i -e "s|'file|'${file}/bin/file|" py3status/parse_config.py
     sed -i -e "s|\[\"acpi\"|\[\"${acpi}/bin/acpi\"|" py3status/modules/battery_level.py
@@ -49,7 +48,7 @@ buildPythonPackage rec {
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extensible i3status wrapper";
     license = licenses.bsd3;
     homepage = "https://github.com/ultrabug/py3status";

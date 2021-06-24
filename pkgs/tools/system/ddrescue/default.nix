@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl, lzip
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross;
   configureFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU ddrescue, a data recovery tool";
 
     longDescription =

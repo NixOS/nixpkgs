@@ -41,7 +41,7 @@ buildPythonApplication rec {
     distro
     appdirs
   ]
-  ++ lib.optional enableGoogle google_cloud_storage
+  ++ lib.optional enableGoogle google-cloud-storage
   ++ lib.optional enableAWS boto3
   ++ lib.optional enableAzure azure-storage-blob
   ++ lib.optional enableSSH paramiko;

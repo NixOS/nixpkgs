@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gperf, pkgconfig, librevenge, libxml2, boost, icu
+{ lib, stdenv, fetchurl, gperf, pkg-config, librevenge, libxml2, boost, icu
 , cppunit, zlib, liblangtag
 }:
 
@@ -13,7 +13,7 @@ let
     sha256="1yg1vws1wggzhjw672bpgh2x541g5i9wryf67g51m0r79zrqz3by";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gperf librevenge libxml2 boost icu cppunit zlib liblangtag
   ];
@@ -33,9 +33,9 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
   meta = {
     inherit (s) version;
-    description = ''Library for import of reflowable e-book formats'';
-    license = stdenv.lib.licenses.lgpl21Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    description = "Library for import of reflowable e-book formats";
+    license = lib.licenses.lgpl21Plus ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

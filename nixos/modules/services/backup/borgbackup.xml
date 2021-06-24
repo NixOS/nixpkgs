@@ -69,10 +69,10 @@
     access this single repository. You need the output of the generate pub file.
   </para>
     <para>
-        <programlisting>
-# sudo ssh-keygen -N '' -t ed25519 -f /run/keys/id_ed25519_my_borg_repo
-# cat /run/keys/id_ed25519_my_borg_repo
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/ root@nixos</programlisting>
+<screen>
+<prompt># </prompt>sudo ssh-keygen -N '' -t ed25519 -f /run/keys/id_ed25519_my_borg_repo
+<prompt># </prompt>cat /run/keys/id_ed25519_my_borg_repo
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/ root@nixos</screen>
     </para>
     <para>
       Add the following snippet to your NixOS configuration:
@@ -197,26 +197,8 @@ sudo borg init --encryption=repokey-blake2  \
     disk failure, ransomware and theft.
   </para>
   <para>
-    It is available as a flatpak package. To enable it you must set the
-    following two configuration items.
-  </para>
-  <para>
-    <programlisting>
-services.flatpak.enable = true ;
-# next line is needed to avoid the Error
-# Error deploying: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown:
-services.accounts-daemon.enable = true;
-    </programlisting>
-  </para>
-  <para>As a normal user you must first install, then run vorta using the
-    following commands:
-    <programlisting>
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub com.borgbase.Vorta
-flatpak run --branch=stable --arch=x86_64 --command=vorta com.borgbase.Vorta
-</programlisting>
-    After running <code>flatpak install</code> you can start Vorta also via
-        the KDE application menu.
+   It can be installed in NixOS e.g. by adding <package>pkgs.vorta</package>
+   to <xref linkend="opt-environment.systemPackages" />.
   </para>
   <para>
     Details about using Vorta can be found under <link

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "pdnsd-1.2.9a-par";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   # fix ipv6 on darwin
   CPPFLAGS = "-D__APPLE_USE_RFC_3542";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Permanent DNS caching";
     homepage = "http://members.home.nl/p.a.rombouts/pdnsd";
     license = licenses.gpl3Plus;

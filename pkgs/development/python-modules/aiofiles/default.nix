@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "aiofiles";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "021ea0ba314a86027c166ecc4b4c07f2d40fc0f4b3a950d1868a0f2571c2bbee";
+    sha256 = "e0281b157d3d5d59d803e3f4557dcc9a3dff28a4dd4829a9ff478adae50ca092";
   };
 
   disabled = pythonOlder "3.3";

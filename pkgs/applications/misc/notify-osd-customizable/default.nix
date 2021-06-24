@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , dbus-glib
 , fetchurl
 , glib
@@ -7,7 +7,7 @@
 , libtool
 , libwnck3
 , makeWrapper
-, pkgconfig
+, pkg-config
 , gsettings-desktop-schemas
 }:
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh --libexecdir=$(out)/bin";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     glib libwnck3 libnotify dbus-glib makeWrapper
     gsettings-desktop-schemas gnome3.gnome-common
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon that displays passive pop-up notifications";
     homepage = "https://launchpad.net/notify-osd";
     license = licenses.gpl3;

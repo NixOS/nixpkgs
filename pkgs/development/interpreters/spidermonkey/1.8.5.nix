@@ -1,4 +1,4 @@
-{ stdenv, lib, autoconf213, fetchurl, fetchpatch, pkgconfig, nspr, perl, python2, zip }:
+{ stdenv, lib, autoconf213, fetchurl, fetchpatch, pkg-config, nspr, perl, python2, zip }:
 
 stdenv.mkDerivation {
   pname = "spidermonkey";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ nspr ];
 
-  nativeBuildInputs = [ pkgconfig ] ++ lib.optional stdenv.isAarch32 autoconf213;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isAarch32 autoconf213;
   buildInputs = [ perl python2 zip ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       url = "https://sources.debian.org/data/main/m/mozjs/1.8.5-1.0.0+dfsg-6/debian/patches/fix-811665.patch";
       sha256 = "1q8477xqxiy5d8376k5902l45gd0qkd4nxmhl8vr6rr1pxfcny99";
     })
-  ] ++ stdenv.lib.optionals stdenv.isAarch32 [
+  ] ++ lib.optionals stdenv.isAarch32 [
     # Explained below in configureFlags for ARM
     ./1.8.5-findvanilla.patch
     # Fix for hard float flags.
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   # of polkit, which is what matters most, it does not override the allocator
   # so the failure of that test does not matter much.
   configureFlags = [ "--enable-threadsafe" "--with-system-nspr" ] ++
-    stdenv.lib.optionals (stdenv.hostPlatform.system == "armv5tel-linux") [
+    lib.optionals (stdenv.hostPlatform.system == "armv5tel-linux") [
         "--with-cpu-arch=armv5t"
         "--disable-tracejit" ];
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     rm jit-test/tests/sunspider/check-date-format-tofte.js    # https://bugzil.la/600522
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     # TODO: MPL/GPL/LGPL tri-license.

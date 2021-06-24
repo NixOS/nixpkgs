@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "kazoo";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jvpn1rcnnq3by1y6wlhfl9jynb110xv5lvd0x0ifkld7vfzd0v8";
+    sha256 = "1zpj5cc8624w6i0pxgcxqkjwbkm4pkrv19d7wh5df3jais32g3jq";
   };
 
   propagatedBuildInputs = [ six ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   doCheck = false;
   #ZOOKEEPER_PATH = "${pkgs.zookeeper}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kazoo.readthedocs.org";
     description = "Higher Level Zookeeper Client";
     license = licenses.asl20;

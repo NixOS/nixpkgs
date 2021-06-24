@@ -56,7 +56,7 @@ let
 
         ykinfo -v 1>/dev/null 2>&1
         if [ $? != 0 ]; then
-            echo -n "Waiting $secs seconds for Yubikey to appear..."
+            echo -n "Waiting $secs seconds for YubiKey to appear..."
             local success=false
             for try in $(seq $secs); do
                 echo -n .
@@ -118,7 +118,7 @@ let
     # Cryptsetup locking directory
     mkdir -p /run/cryptsetup
 
-    # For Yubikey salt storage
+    # For YubiKey salt storage
     mkdir -p /crypt-storage
 
     ${optionalString luks.gpgSupport ''
@@ -140,7 +140,7 @@ let
     umount /crypt-ramfs 2>/dev/null
   '';
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, gpgCard, fido2, fallbackToPassword, ... }: assert name' == name;
+  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, gpgCard, fido2, fallbackToPassword, preOpenCommands, postOpenCommands,... }: assert name' == name;
   let
     csopen   = "cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} ${optionalString (header != null) "--header=${header}"}";
     cschange = "cryptsetup luksChangeKey ${device} ${optionalString (header != null) "--header=${header}"}";
@@ -218,7 +218,7 @@ let
     }
 
     ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
-    # Yubikey
+    # YubiKey
     rbtohex() {
         ( od -An -vtx1 | tr -d ' \n' )
     }
@@ -244,7 +244,7 @@ let
         local new_k_luks
 
         mount -t ${yubikey.storage.fsType} ${yubikey.storage.device} /crypt-storage || \
-          die "Failed to mount Yubikey salt storage device"
+          die "Failed to mount YubiKey salt storage device"
 
         salt="$(cat /crypt-storage${yubikey.storage.path} | sed -n 1p | tr -d '\n')"
         iterations="$(cat /crypt-storage${yubikey.storage.path} | sed -n 2p | tr -d '\n')"
@@ -254,8 +254,27 @@ let
         for try in $(seq 3); do
             ${optionalString yubikey.twoFactor ''
             echo -n "Enter two-factor passphrase: "
-            read -r k_user
-            echo
+            k_user=
+            while true; do
+                if [ -e /crypt-ramfs/passphrase ]; then
+                    echo "reused"
+                    k_user=$(cat /crypt-ramfs/passphrase)
+                    break
+                else
+                    # Try reading it from /dev/console with a timeout
+                    IFS= read -t 1 -r k_user
+                    if [ -n "$k_user" ]; then
+                       ${if luks.reusePassphrases then ''
+                         # Remember it for the next device
+                         echo -n "$k_user" > /crypt-ramfs/passphrase
+                       '' else ''
+                         # Don't save it to ramfs. We are very paranoid
+                       ''}
+                       echo
+                       break
+                    fi
+                fi
+            done
             ''}
 
             if [ ! -z "$k_user" ]; then
@@ -268,6 +287,11 @@ let
 
             if [ $? == 0 ]; then
                 opened=true
+                ${if luks.reusePassphrases then ''
+                  # We don't rm here because we might reuse it for the next device
+                '' else ''
+                  rm -f /crypt-ramfs/passphrase
+                ''}
                 break
             else
                 opened=false
@@ -317,7 +341,7 @@ let
         if wait_yubikey ${toString yubikey.gracePeriod}; then
             do_open_yubikey
         else
-            echo "No yubikey found, falling back to non-yubikey open procedure"
+            echo "No YubiKey found, falling back to non-YubiKey open procedure"
             open_normally
         fi
     }
@@ -404,7 +428,7 @@ let
           echo "Please move your mouse to create needed randomness."
         ''}
           echo "Waiting for your FIDO2 device..."
-          fido2luks -i open ${device} ${name} ${fido2.credential} --await-dev ${toString fido2.gracePeriod} --salt string:$passphrase
+          fido2luks open ${device} ${name} ${fido2.credential} --await-dev ${toString fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
@@ -412,11 +436,17 @@ let
     }
     ''}
 
+    # commands to run right before we mount our device
+    ${preOpenCommands}
+
     ${if (luks.yubikeySupport && (yubikey != null)) || (luks.gpgSupport && (gpgCard != null)) || (luks.fido2Support && (fido2.credential != null)) then ''
     open_with_hardware
     '' else ''
     open_normally
     ''}
+
+    # commands to run right after we mounted our device
+    ${postOpenCommands}
   '';
 
   askPass = pkgs.writeScriptBin "cryptsetup-askpass" ''
@@ -467,8 +497,6 @@ in
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
           "af_alg" "algif_skcipher"
-
-          (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
@@ -512,7 +540,7 @@ in
         <filename>/dev/mapper/<replaceable>name</replaceable></filename>.
       '';
 
-      type = with types; loaOf (submodule (
+      type = with types; attrsOf (submodule (
         { name, ... }: { options = {
 
           name = mkOption {
@@ -637,7 +665,7 @@ in
             credential = mkOption {
               default = null;
               example = "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2";
-              type = types.str;
+              type = types.nullOr types.str;
               description = "The FIDO2 credential ID.";
             };
 
@@ -661,8 +689,8 @@ in
           yubikey = mkOption {
             default = null;
             description = ''
-              The options to use for this LUKS device in Yubikey-PBA.
-              If null (the default), Yubikey-PBA will be disabled for this device.
+              The options to use for this LUKS device in YubiKey-PBA.
+              If null (the default), YubiKey-PBA will be disabled for this device.
             '';
 
             type = with types; nullOr (submodule {
@@ -670,13 +698,13 @@ in
                 twoFactor = mkOption {
                   default = true;
                   type = types.bool;
-                  description = "Whether to use a passphrase and a Yubikey (true), or only a Yubikey (false).";
+                  description = "Whether to use a passphrase and a YubiKey (true), or only a YubiKey (false).";
                 };
 
                 slot = mkOption {
                   default = 2;
                   type = types.int;
-                  description = "Which slot on the Yubikey to challenge.";
+                  description = "Which slot on the YubiKey to challenge.";
                 };
 
                 saltLength = mkOption {
@@ -700,7 +728,7 @@ in
                 gracePeriod = mkOption {
                   default = 10;
                   type = types.int;
-                  description = "Time in seconds to wait for the Yubikey.";
+                  description = "Time in seconds to wait for the YubiKey.";
                 };
 
                 /* TODO: Add to the documentation of the current module:
@@ -735,6 +763,30 @@ in
               };
             });
           };
+
+          preOpenCommands = mkOption {
+            type = types.lines;
+            default = "";
+            example = ''
+              mkdir -p /tmp/persistent
+              mount -t zfs rpool/safe/persistent /tmp/persistent
+            '';
+            description = ''
+              Commands that should be run right before we try to mount our LUKS device.
+              This can be useful, if the keys needed to open the drive is on another partion.
+            '';
+          };
+
+          postOpenCommands = mkOption {
+            type = types.lines;
+            default = "";
+            example = ''
+              umount /tmp/persistent
+            '';
+            description = ''
+              Commands that should be run right after we have mounted our LUKS device.
+            '';
+          };
         };
       }));
     };
@@ -751,9 +803,9 @@ in
       default = false;
       type = types.bool;
       description = ''
-            Enables support for authenticating with a Yubikey on LUKS devices.
+            Enables support for authenticating with a YubiKey on LUKS devices.
             See the NixOS wiki for information on how to properly setup a LUKS device
-            and a Yubikey to work with this feature.
+            and a YubiKey to work with this feature.
           '';
     };
 
@@ -771,7 +823,7 @@ in
 
     assertions =
       [ { assertion = !(luks.gpgSupport && luks.yubikeySupport);
-          message = "Yubikey and GPG Card may not be used at the same time.";
+          message = "YubiKey and GPG Card may not be used at the same time.";
         }
 
         { assertion = !(luks.gpgSupport && luks.fido2Support);
@@ -779,7 +831,7 @@ in
         }
 
         { assertion = !(luks.fido2Support && luks.yubikeySupport);
-          message = "FIDO2 and Yubikey may not be used at the same time.";
+          message = "FIDO2 and YubiKey may not be used at the same time.";
         }
       ];
 

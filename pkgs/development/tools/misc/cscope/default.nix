@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses
+{ fetchurl, lib, stdenv, ncurses
 , emacsSupport ? true, emacs
 }:
 
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-ncurses=${ncurses.dev}" ];
 
   buildInputs = [ ncurses ];
-  nativeBuildInputs = stdenv.lib.optional emacsSupport emacs;
+  nativeBuildInputs = lib.optional emacsSupport emacs;
 
-  postInstall = stdenv.lib.optionalString emacsSupport ''
+  postInstall = lib.optionalString emacsSupport ''
     cd "contrib/xcscope"
 
     sed -i "cscope-indexer" \
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
 
     homepage = "http://cscope.sourceforge.net/";
 
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [viric];
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

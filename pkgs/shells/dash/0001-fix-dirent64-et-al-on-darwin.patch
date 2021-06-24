@@ -1,0 +1,41 @@
+From 7e75779eaeacdbb46a387a59d9aaf1481a1da3e5 Mon Sep 17 00:00:00 2001
+From: Adrian Gierakowski <agierakowski@gmail.com>
+Date: Sun, 19 Jul 2020 08:38:05 +0100
+Subject: [PATCH] fix dirent64 et al on darwin
+
+---
+ configure.ac | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index b8faca9..cee1e4d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -139,6 +139,7 @@ if test "$ac_cv_func_signal" != yes; then
+ 				 [klibc has bsd_signal instead of signal])])
+ fi
+ 
++dnl TODO: stat64 is deprecated since macOS 10.6
+ dnl Check for stat64 (dietlibc/klibc).
+ AC_CHECK_FUNC(stat64,, [
+ 	AC_DEFINE(fstat64, fstat, [64-bit operations are the same as 32-bit])
+@@ -155,6 +156,16 @@ AC_CHECK_FUNC(open64,, [
+ 	AC_DEFINE(open64, open, [64-bit operations are the same as 32-bit])
+ ])
+ 
++dnl OS X apparently has stat64 but not readdir64.
++AC_CHECK_FUNC(readdir64,, [
++	AC_DEFINE(readdir64, readdir, [64-bit operations are the same as 32-bit])
++])
++
++dnl OS X apparently has stat64 but not dirent64.
++AC_CHECK_TYPE(struct dirent64,, [
++	AC_DEFINE(dirent64, dirent, [64-bit operations are the same as 32-bit])
++],[#include <dirent.h>])
++
+ dnl Check if struct stat has st_mtim.
+ AC_MSG_CHECKING(for stat::st_mtim)
+ AC_COMPILE_IFELSE(
+-- 
+2.15.1
+

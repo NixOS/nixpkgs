@@ -1,15 +1,15 @@
 { fetchFromGitHub
-, stdenv
+, lib
 , mkDerivation
 , SDL2
 , libGL
 , libarchive
-, libusb
+, libusb-compat-0_1
 , qtbase
 , qmake
 , git
 , libpng_apng
-, pkgconfig
+, pkg-config
 }:
 
 mkDerivation rec {
@@ -26,14 +26,14 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     git
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
     SDL2
     libGL
     libarchive
-    libusb
+    libusb-compat-0_1
     qtbase
     libpng_apng
   ];
@@ -42,7 +42,7 @@ mkDerivation rec {
     "gui/qt"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     changelog = "https://github.com/CE-Programming/CEmu/releases/tag/v${version}";
     description = "Third-party TI-84 Plus CE / TI-83 Premium CE emulator, focused on developer features";
     homepage = "https://ce-programming.github.io/CEmu";

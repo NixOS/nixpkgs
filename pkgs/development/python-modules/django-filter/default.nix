@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "057xiijig8r2nxrd9gj1nki168422rsh8ap5vkbr9zyp1mzvbpn3";
+    sha256 = "84e9d5bb93f237e451db814ed422a3a625751cbc9968b484ecc74964a8696b06";
   };
 
   propagatedBuildInputs = [ django ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reusable Django application for allowing users to filter querysets dynamically";
     homepage = "https://pypi.org/project/django-filter/";
     license = licenses.bsd3;

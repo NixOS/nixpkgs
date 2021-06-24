@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, isPy27
-, ipaddress
+, rustPlatform
+, setuptools-rust
 , openssl
 , cryptography_vectors
 , darwin
@@ -13,31 +13,48 @@
 , isPyPy
 , cffi
 , pytest
+, pytest-subtests
 , pretend
 , iso8601
 , pytz
 , hypothesis
-, enum34
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "2.9"; # Also update the hash in vectors.nix
+  version = "3.4.7"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vlqy2pki0fh1h6l6cbb43z3g2n9fv0849dzb5gqwjv0bkpx7b0c";
+    sha256 = "04x7bhjkglxpllad10821vxddlmxdkd3gjvp35iljmnj2s0xw41x";
   };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sourceRoot = "${pname}-${version}/${cargoRoot}";
+    name = "${pname}-${version}";
+    sha256 = "1wisxmq26b8ml144m2458sgcbk8jpv419j01qmffsrfy50x9i1yw";
+  };
+
+  cargoRoot = "src/rust";
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = lib.optionals (!isPyPy) [
+    cffi
+  ] ++ [
+    rustPlatform.cargoSetupHook
+    setuptools-rust
+  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+
   buildInputs = [ openssl ]
-             ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+             ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     packaging
     six
-  ] ++ stdenv.lib.optional (!isPyPy) cffi
-  ++ stdenv.lib.optionals isPy27 [ ipaddress enum34 ];
+  ] ++ lib.optionals (!isPyPy) [
+    cffi
+  ];
 
   checkInputs = [
     cryptography_vectors
@@ -45,6 +62,7 @@ buildPythonPackage rec {
     iso8601
     pretend
     pytest
+    pytest-subtests
     pytz
   ];
 
@@ -56,7 +74,7 @@ buildPythonPackage rec {
   # can do until nix 1.11's release
   __impureHostDeps = [ "/usr/lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to

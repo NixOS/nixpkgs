@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "goconvey";
@@ -17,9 +17,9 @@ buildGoPackage rec {
   };
 
   meta = {
-    description = "Go testing in the browser. Integrates with `go test`. Write behavioral tests in Go.";
+    description = "Go testing in the browser. Integrates with `go test`. Write behavioral tests in Go";
     homepage = "https://github.com/smartystreets/goconvey";
-    maintainers = with stdenv.lib.maintainers; [ vdemeester ];
-    license = stdenv.lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vdemeester ];
+    license = lib.licenses.mit;
   };
 }

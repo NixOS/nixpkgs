@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , click
@@ -7,21 +8,26 @@
 , uvloop
 , websockets
 , wsproto
-, pytest
+, pytestCheckHook
+, pytest-mock
+, pyyaml
 , requests
+, trustme
+, typing-extensions
 , isPy27
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.11.2";
+  version = "0.13.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "145c569j4511zw3wglyv9qgd7g1757ypi2blcckpcmahqw11l5p2";
+    sha256 = "04zgmp9z46k72ay6cz7plga6d3w3a6x41anabm7ramp7jdqf6na9";
   };
 
   propagatedBuildInputs = [
@@ -31,23 +37,31 @@ buildPythonPackage rec {
     uvloop
     websockets
     wsproto
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "h11==0.8.*" "h11"
-  '';
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+    pyyaml
+    requests
+    trustme
+  ];
 
-  checkInputs = [ pytest requests ];
-  checkPhase = ''
-    pytest
-  '';
+  doCheck = !stdenv.isDarwin;
 
-  # LICENCE.md gets propagated without this, causing collisions
-  # see https://github.com/encode/uvicorn/issues/392
-  postInstall = ''
-    rm $out/LICENSE.md
-  '';
+  __darwinAllowLocalNetworking = true;
+
+  pytestFlagsArray = [
+    # watchgod required the watchgod package, which isn't available in nixpkgs
+    "--ignore=tests/supervisors/test_reload.py"
+  ];
+
+  disabledTests = [
+    "test_supported_upgrade_request"
+    "test_invalid_upgrade"
+  ];
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";

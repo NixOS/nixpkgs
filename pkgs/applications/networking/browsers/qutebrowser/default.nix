@@ -1,32 +1,42 @@
-{ stdenv, lib, fetchurl, fetchzip, python3Packages
-, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
+{ lib, fetchurl, fetchzip, fetchpatch, python3
+, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
-, withPdfReader        ? true
-, withMediaPlayback    ? true
+, withPdfReader      ? true
+, withMediaPlayback  ? true
+, backend            ? "webengine"
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
 
 let
+  python3Packages = python3.pkgs;
   pdfjs = let
-    version = "2.3.200";
+    version = "2.8.335";
   in
   fetchzip rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "1fpxsw0hzahccyng08acvc7g0gk29j2x701p6w6fg1718mvcrm1q";
+    sha256 = "1zschfpxnhdinn9nasl5in4s62ad0h1g369cglamjgxx36x27zly";
     stripRoot = false;
   };
 
+  backendPackage =
+   if backend == "webengine" then python3Packages.pyqtwebengine else
+   if backend == "webkit"    then python3Packages.pyqt5_with_qtwebkit else
+   throw ''
+     Unknown qutebrowser backend "${backend}".
+     Valid choices are qtwebengine (recommended) or qtwebkit.
+   '';
+
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.10.1";
+  version = "2.2.0";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "06bcnsfb4kz92bh8xjxwaghhy9x2mmcb76wk3fv868jb1ga75vd8";
+    sha256 = "sha256:0anxhrkxqb35mxr7jr820xcfw0v514s92wffsiqap2a2sqaj0pgs";
   };
 
   # Needs tox
@@ -45,23 +55,32 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    pyyaml pyqt5 pyqtwebengine jinja2 pygments
-    pypeg2 cssutils pyopengl attrs setuptools
+  propagatedBuildInputs = with python3Packages; ([
+    pyyaml backendPackage jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
     pyreadability pykeepass stem
-  ];
+    pynacl
+    # extensive ad blocking
+    adblock
+  ]
+    ++ lib.optional (pythonOlder "3.9") importlib-resources
+  );
 
   patches = [
     ./fix-restart.patch
+    (fetchpatch {
+      name = "add-qtwebengine-version-override.patch";
+      url = "https://github.com/qutebrowser/qutebrowser/commit/febb921040b6670d9b1694a6ce55ae39384d1306.patch";
+      sha256 = "15p11kk8via7c7m14jiqgzc63qwxxzayr2bkl93jd10l2gx7pk9v";
+    })
   ];
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
   postPatch = ''
-    substituteInPlace qutebrowser/app.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+    substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
     sed -i "s,/usr/share/,$out/share/,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
@@ -98,16 +117,19 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     done
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/qutebrowser \
-      "''${gappsWrapperArgs[@]}" \
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
+      --add-flags '--backend ${backend}'
+      --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
+    )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry ];
+    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda ];
   };
 }

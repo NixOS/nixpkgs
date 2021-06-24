@@ -1,5 +1,5 @@
 { gdk-pixbuf, glib, gobject-introspection, gtk3, lib, libnotify,
-  python3Packages, wrapGAppsHook
+  procps, xset, xautolock, xscreensaver, python3Packages, wrapGAppsHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -12,16 +12,24 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook glib ];
-  buildInputs = [ 
-    gdk-pixbuf gobject-introspection libnotify gtk3 
+  buildInputs = [
+    gdk-pixbuf gobject-introspection libnotify gtk3
     python3Packages.setuptools_scm
   ];
   pythonPath = with python3Packages; [
     dbus-python docopt ewmh pygobject3 pyxdg
-    setproctitle 
+    setproctitle
   ];
 
   doCheck = false; # There are no tests.
+
+  postPatch = ''
+    substituteInPlace caffeine/inhibitors.py \
+      --replace 'os.system("xset' 'os.system("${xset}/bin/xset' \
+      --replace 'os.system("xautolock' 'os.system("${xautolock}/bin/xautolock' \
+      --replace 'os.system("pgrep' 'os.system("${procps}/bin/pgrep' \
+      --replace 'os.system("xscreensaver-command' 'os.system("${xscreensaver}/bin/xscreensaver-command'
+  '';
 
   postInstall = ''
     mkdir -p $out/share

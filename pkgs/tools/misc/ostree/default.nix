@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
-, pkgconfig
+, pkg-config
 , gtk-doc
 , gobject-introspection
 , gjs
@@ -12,6 +12,8 @@
 , xz
 , e2fsprogs
 , libsoup
+, glib-networking
+, wrapGAppsHook
 , gpgme
 , which
 , makeWrapper
@@ -19,15 +21,17 @@
 , automake
 , libtool
 , fuse
-, utillinuxMinimal
+, util-linuxMinimal
 , libselinux
+, libsodium
 , libarchive
 , libcap
 , bzip2
-, yacc
+, bison
 , libxslt
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_42
+, openssl
 , python3
 }:
 
@@ -37,13 +41,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2020.3";
+  version = "2021.1";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "01cch4as23xspq6pck59al7x5jj60wl21g8p3iqbdxcjl1p3jxsq";
+    sha256 = "sha256-kbS9kmSDHSD/AOxELUjt5SbbVTeb2RdgaGPAX0O4WlE=";
   };
 
   patches = [
@@ -59,6 +63,7 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-test-paths.patch;
       python3 = testPython.interpreter;
+      openssl = "${openssl}/bin/openssl";
     })
   ];
 
@@ -66,15 +71,16 @@ in stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     gtk-doc
     gobject-introspection
     which
     makeWrapper
-    yacc
+    bison
     libxslt
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_42
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -82,23 +88,21 @@ in stdenv.mkDerivation rec {
     systemd
     e2fsprogs
     libsoup
+    glib-networking
     gpgme
     fuse
     libselinux
+    libsodium
     libcap
     libarchive
     bzip2
     xz
-    utillinuxMinimal # for libmount
+    util-linuxMinimal # for libmount
 
     # for installed tests
     testPython
     gjs
   ];
-
-  preConfigure = ''
-    env NOCONFIGURE=1 ./autogen.sh
-  '';
 
   enableParallelBuilding = true;
 
@@ -106,6 +110,7 @@ in stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"
+    "--with-ed25519-libsodium"
   ];
 
   makeFlags = [
@@ -113,8 +118,12 @@ in stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
 
+  preConfigure = ''
+    env NOCONFIGURE=1 ./autogen.sh
+  '';
+
   postFixup = let
-    typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
+    typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
       (placeholder "out")
       gobject-introspection
     ];
@@ -130,7 +139,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git for operating system binaries";
     homepage = "https://ostree.readthedocs.io/en/latest/";
     license = licenses.lgpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, boost
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, boost
 , log4cpp, pjsip, openssl, alsaLib, mumlib }:
 with lib; stdenv.mkDerivation {
   pname = "mumsi";
@@ -11,8 +11,8 @@ with lib; stdenv.mkDerivation {
     sha256 = "0vrivl1fiiwjsz4v26nrn8ra3k9v0mcz7zjm2z319fw8hv6n1nrk";
   };
 
-  buildInputs = [ boost log4cpp pkgconfig pjsip mumlib openssl alsaLib ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ boost log4cpp pkg-config pjsip mumlib openssl alsaLib ];
+  nativeBuildInputs = [ cmake pkg-config ];
   installPhase = ''
     install -Dm555 mumsi $out/bin/mumsi
   '';

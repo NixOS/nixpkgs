@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, unzip, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, makeWrapper, unzip, jre, runtimeShell }:
 
 let
   version = "1.9";
@@ -21,14 +21,14 @@ in stdenv.mkDerivation {
     rmdir $dir/${uname}
     cat <<_EOF > $out/bin/msgviewer
     #!${runtimeShell} -eu
-    exec ${stdenv.lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar "\$@"
+    exec ${lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar "\$@"
     _EOF
     chmod 755 $out/bin/msgviewer
   '';
 
   nativeBuildInputs = [ makeWrapper unzip ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Viewer for .msg files (MS Outlook)";
     homepage    = "https://www.washington.edu/alpine/";
     license     = licenses.asl20;

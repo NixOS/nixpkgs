@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libjpeg, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, libjpeg, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.0.7";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libjpeg ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://csl.name/jp2a/";
     description = "A small utility that converts JPG images to ASCII";
     license = licenses.gpl2;

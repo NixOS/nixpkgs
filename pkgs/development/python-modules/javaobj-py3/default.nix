@@ -1,26 +1,31 @@
 { buildPythonPackage
 , fetchPypi
+, isPy27
 , lib
+, numpy
 }:
 
 buildPythonPackage rec {
   pname = "javaobj-py3";
-  version = "0.3.0";
+  version = "0.4.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j9532i7bnjd0v4a8c36mjj9rsdnbmckk65dh9sbmvnhy3j6jx55";
+    sha256 = "sha256-7Tsf/P058WVynLU1h8ygKrC/pMMyyDepLV/+au9cgBA=";
   };
+
+  propagatedBuildInputs = [ numpy ];
 
   # Tests assume network connectivity
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "javaobj" ];
+
+  meta = with lib; {
     description = "Module for serializing and de-serializing Java objects";
     homepage = "https://github.com/tcalmant/python-javaobj";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

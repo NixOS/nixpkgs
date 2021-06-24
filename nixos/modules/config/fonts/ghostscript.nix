@@ -9,6 +9,7 @@ with lib;
     fonts = {
 
       enableGhostscriptFonts = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to add the fonts provided by Ghostscript (such as

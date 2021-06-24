@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkg-config, libsecret }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, pkg-config, libsecret }:
 
 buildGoPackage rec {
   pname = "docker-credential-helpers";
@@ -13,9 +13,9 @@ buildGoPackage rec {
     sha256 = "0xgmwjva3j1s0cqkbajbamj13bgzh5jkf2ir54m9a7w8gjnsh6dx";
   };
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libsecret ];
+  buildInputs = lib.optionals stdenv.isLinux [ libsecret ];
 
   buildPhase =
     if stdenv.isDarwin
@@ -32,14 +32,14 @@ buildGoPackage rec {
   installPhase =
     if stdenv.isDarwin
     then ''
-      install -Dm755 -t $bin/bin bin/docker-credential-osxkeychain
+      install -Dm755 -t $out/bin bin/docker-credential-osxkeychain
     ''
     else ''
-      install -Dm755 -t $bin/bin bin/docker-credential-pass
-      install -Dm755 -t $bin/bin bin/docker-credential-secretservice
+      install -Dm755 -t $out/bin bin/docker-credential-pass
+      install -Dm755 -t $out/bin bin/docker-credential-secretservice
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Suite of programs to use native stores to keep Docker credentials safe";
     homepage = "https://github.com/docker/docker-credential-helpers";
     license = licenses.mit;

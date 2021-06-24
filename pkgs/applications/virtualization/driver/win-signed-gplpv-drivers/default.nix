@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, p7zip }:
+{ lib, stdenv, fetchurl, p7zip }:
 
 let
   src_x86 = fetchurl {
@@ -31,7 +31,7 @@ stdenv.mkDerivation  {
     cp amd64/* $out/amd64/.
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A collection of open source Window PV drivers that allow
       Windows to be para-virtualized.

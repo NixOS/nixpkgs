@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , buildPythonPackage
 , six
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # runner seems to be upset by the project layout
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JP2 (JPEG 2000 Part 1) image validator and properties extractor";
     homepage = "https://jpylyzer.openpreservation.org/";
     license = licenses.lgpl3;

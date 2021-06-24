@@ -1,7 +1,6 @@
 {
   mkDerivation,
   lib,
-  copyPathsToStore,
   extra-cmake-modules,
   plymouth,
   nixos-icons,
@@ -16,19 +15,21 @@
   bottomColor ? "black"
 }:
 
-let 
+let
   validColors = [ "black" "cardboard_grey" "charcoal_grey" "icon_blue" "paper_white" "plasma_blue" "neon_blue" "neon_green" ];
   resolvedLogoName = if (logoFile != null && logoName == null) then lib.strings.removeSuffix ".png" (baseNameOf(toString logoFile)) else logoName;
 in
   assert lib.asserts.assertOneOf "topColor" topColor validColors;
   assert lib.asserts.assertOneOf "bottomColor" bottomColor validColors;
-  
+
 
 mkDerivation {
   name = "breeze-plymouth";
   nativeBuildInputs = [ extra-cmake-modules ] ++ lib.optionals (logoFile != null) [ imagemagick netpbm perl ];
   buildInputs = [ plymouth ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./install-paths.patch
+  ];
   cmakeFlags = []
     ++ lib.optional (osName      != null) "-DDISTRO_NAME=${osName}"
     ++ lib.optional (osVersion   != null) "-DDISTRO_VERSION=${osVersion}"
@@ -36,7 +37,7 @@ mkDerivation {
     ++ lib.optional (topColor    != null) "-DBACKGROUND_TOP_COLOR=${topColor}"
     ++ lib.optional (bottomColor != null) "-DBACKGROUND_BOTTOM_COLOR=${bottomColor}"
   ;
-  
+
   postPatch = ''
       substituteInPlace cmake/FindPlymouth.cmake --subst-var out
   '' + lib.optionalString (logoFile != null) ''

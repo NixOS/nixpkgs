@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , boost
@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmysqlconnectorcpp";
-  version = "8.0.19";
+  version = "8.0.23";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/Connector-C++/mysql-connector-c++-${version}-src.tar.gz";
-    sha256 = "fDvXTOZKkwDn1IG3aziK2VAXpSSAxpi3VVea7GLUoh4=";
+    sha256 = "sha256-mvBklaaggP7WLacJePHLDGbwWO3V6p7ak0WmS/jsaI8=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://dev.mysql.com/downloads/connector/cpp/";
-    description = "C++ library for connecting to mysql servers.";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    description = "C++ library for connecting to mysql servers";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,5 +1,6 @@
 { fetchurl
-, stdenv
+, fetchFromGitLab
+, lib, stdenv
 , substituteAll
 , accountsservice
 , adwaita-icon-theme
@@ -20,7 +21,6 @@
 , gnome-color-manager
 , gnome-desktop
 , gnome-online-accounts
-, gnome-session
 , gnome-settings-daemon
 , gnome3
 , grilo
@@ -50,13 +50,14 @@
 , networkmanagerapplet
 , libnma
 , ninja
-, pkgconfig
+, pkg-config
 , polkit
 , python3
 , samba
 , shared-mime-info
 , sound-theme-freedesktop
 , tracker
+, tracker-miners
 , tzdata
 , udisks2
 , upower
@@ -68,12 +69,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "3.36.1";
+  version = "3.38.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1466swjyw5vjym001qda94x6sisd4xhpyb6vq91grhkyzwf2vqzk";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-SdxjeNTTXBxu1ZIk9WNpFsK2+km7+4tW6xmoTW6QzRk=";
   };
+
+  # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
+  prePatch = (import ../gvc-with-ucm-prePatch.nix {
+    inherit fetchFromGitLab;
+  });
 
   nativeBuildInputs = [
     docbook_xsl
@@ -81,7 +87,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     shared-mime-info
     wrapGAppsHook
@@ -95,6 +101,7 @@ stdenv.mkDerivation rec {
     clutter-gtk
     colord
     colord-gtk
+    epoxy
     fontconfig
     gdk-pixbuf
     glib
@@ -116,6 +123,7 @@ stdenv.mkDerivation rec {
     libgudev
     libhandy
     libkrb5
+    libnma
     libpulseaudio
     libpwquality
     librsvg
@@ -126,13 +134,12 @@ stdenv.mkDerivation rec {
     modemmanager
     mutter # schemas for the keybindings
     networkmanager
-    libnma
     polkit
     samba
     tracker
+    tracker-miners # for search locations dialog
     udisks2
     upower
-    epoxy
   ];
 
   patches = [
@@ -149,10 +156,6 @@ stdenv.mkDerivation rec {
     chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
     patchShebangs build-aux/meson/meson_post_install.py
   '';
-
-  mesonFlags = [
-    "-Dgnome_session_libexecdir=${gnome-session}/libexec"
-  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -175,7 +178,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities to configure the GNOME desktop";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

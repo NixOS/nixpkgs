@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, automake, fftw, ladspaH, libxml2, pkgconfig
+{ lib, stdenv, fetchurl, autoreconfHook, automake, fftw, ladspaH, libxml2, pkg-config
 , perlPackages }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rqwh8xrw6hnp69dg4gy336bfbfpmbx4fjrk0nb8ypjcxkz91c6i";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fftw ladspaH libxml2 perlPackages.perl  perlPackages.XMLParser ];
 
   patchPhase = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://plugin.org.uk/";
     description = "LADSPA format audio plugins";
     license = licenses.gpl2;

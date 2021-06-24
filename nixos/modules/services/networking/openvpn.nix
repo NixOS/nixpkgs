@@ -11,7 +11,7 @@ let
   makeOpenVPNJob = cfg: name:
     let
 
-      path = (getAttr "openvpn-${name}" config.systemd.services).path;
+      path = makeBinPath (getAttr "openvpn-${name}" config.systemd.services).path;
 
       upScript = ''
         #! /bin/sh
@@ -63,7 +63,7 @@ let
       wantedBy = optional cfg.autoStart "multi-user.target";
       after = [ "network.target" ];
 
-      path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
+      path = [ pkgs.iptables pkgs.iproute2 pkgs.nettools ];
 
       serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
       serviceConfig.Restart = "always";

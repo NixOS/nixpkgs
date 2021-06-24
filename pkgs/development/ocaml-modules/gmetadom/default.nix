@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, gdome2, libxslt, pkgconfig}:
+{stdenv, lib, fetchurl, ocaml, findlib, gdome2, libxslt, pkg-config}:
 
 let
   pname = "gmetadom";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0skmlv0pnqvg99wzzzi1h4zhwzd82xg7xpkj1kwpfy7bzinjh7ig";
   };
 
-  patches = [ ./gcc-4.3.dpatch ];
+  patches = [ ./gcc-4.3.patch ];
 
   dontDisableStatic = true;
 
@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
   '';
 
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ocaml findlib gdome2 libxslt];
   propagatedBuildInputs = [gdome2];
 
   meta = {
     homepage = "http://gmetadom.sourceforge.net/";
     description = "A collection of librares, each library providing a DOM implementation";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.roconnor ];
   };
 }

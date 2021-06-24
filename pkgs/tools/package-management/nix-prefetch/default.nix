@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
+{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
 , docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
 , gnugrep, gnused, jq, nix }:
 
 let
-  binPath = stdenv.lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
+  binPath = lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
 
 in stdenv.mkDerivation rec {
   pname = "nix-prefetch";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "msteen";
     repo = "nix-prefetch";
     rev = version;
-    sha256 = "15h6f743nn6sdq8l771sjxh92cyzqznkcs7szrc7nm066xvx8rd4";
+    sha256 = "11792677zyi06jw641xi9aywwgh9002b8406w6qids212c14va6n";
     # the stat call has to be in a subshell or we get the current date
     extraPostFetch = ''
       echo $(stat -c %Y $out) > $out/.timestamp
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
     cp -r contrib/hello_rs $out/share/doc/${pname}/contrib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prefetch any fetcher function call, e.g. package sources";
     license = licenses.mit;
     maintainers = with maintainers; [ msteen ];

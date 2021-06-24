@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "kube-router";
-  version = "0.3.1";
+  version = "1.1.1";
 
   goPackagePath = "github.com/cloudnativelabs/kube-router";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "cloudnativelabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06azrghcxp6n4bvrqxpwhmg60qk4jqcrkl1lh1rardlzhl71lk1h";
+    sha256 = "sha256-U7vjWtVXmyEPYFS1fAPOgV3WILGPhWsmoawV7B0pZaE=";
   };
 
   buildFlagsArray = ''

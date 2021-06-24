@@ -121,6 +121,13 @@ FILE * fopen(const char * path, const char * mode)
     return fopen_real(rewrite(path, buf), mode);
 }
 
+FILE * __nss_files_fopen(const char * path)
+{
+    FILE * (*__nss_files_fopen_real) (const char *) = dlsym(RTLD_NEXT, "__nss_files_fopen");
+    char buf[PATH_MAX];
+    return __nss_files_fopen_real(rewrite(path, buf));
+}
+
 FILE * fopen64(const char * path, const char * mode)
 {
     FILE * (*fopen64_real) (const char *, const char *) = dlsym(RTLD_NEXT, "fopen64");

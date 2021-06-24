@@ -1,8 +1,8 @@
-{ stdenv, attemptoClex, callPackage }:
+{ lib, attemptoClex, callPackage }:
 
 callPackage ./. {
   pname = "ape-clex";
-  lexicon = "${attemptoClex}/clex_lexicon.pl";
+  lexiconPath = "${attemptoClex}/clex_lexicon.pl";
   description = "Parser for Attempto Controlled English (ACE) with a large lexicon (~100,000 entries)";
-  license = with stdenv.lib; [ licenses.lgpl3 licenses.gpl3 ];
+  license = with lib; [ licenses.lgpl3 licenses.gpl3 ];
 }

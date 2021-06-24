@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
   name = "rt5677-firmware";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     cp ./firmware/rt5677_elf_vad $out/lib/firmware
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Firmware for Realtek rt5677 device";
     license = licenses.unfreeRedistributableFirmware;
     maintainers = [ maintainers.zohl ];

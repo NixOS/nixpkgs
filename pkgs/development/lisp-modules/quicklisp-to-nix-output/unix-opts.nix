@@ -1,15 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''unix-opts'';
-  version = ''20180430-git'';
+  baseName = "unix-opts";
+  version = "20210124-git";
 
-  description = ''minimalistic parser of command line arguments'';
+  parasites = [ "unix-opts/tests" ];
+
+  description = "minimalistic parser of command line arguments";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/unix-opts/2018-04-30/unix-opts-20180430-git.tgz'';
-    sha256 = ''05glzp47kn022jkbbvhnygaibrqnpr44q19lwhm20h4nkpkj3968'';
+    url = "http://beta.quicklisp.org/archive/unix-opts/2021-01-24/unix-opts-20210124-git.tgz";
+    sha256 = "1gjjav035n6297vgc4wi3i64516b8sdyi0d02q0nwicciwg6mwsn";
   };
 
   packageName = "unix-opts";
@@ -18,8 +21,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM unix-opts DESCRIPTION minimalistic parser of command line arguments
-    SHA256 05glzp47kn022jkbbvhnygaibrqnpr44q19lwhm20h4nkpkj3968 URL
-    http://beta.quicklisp.org/archive/unix-opts/2018-04-30/unix-opts-20180430-git.tgz
-    MD5 2875ea0a1f5c49ef2697bb1046c4c4e5 NAME unix-opts FILENAME unix-opts DEPS
-    NIL DEPENDENCIES NIL VERSION 20180430-git SIBLINGS (unix-opts-tests)
-    PARASITES NIL) */
+    SHA256 1gjjav035n6297vgc4wi3i64516b8sdyi0d02q0nwicciwg6mwsn URL
+    http://beta.quicklisp.org/archive/unix-opts/2021-01-24/unix-opts-20210124-git.tgz
+    MD5 c75d3233c0f2e16793b1ce19bfc83811 NAME unix-opts FILENAME unix-opts DEPS
+    NIL DEPENDENCIES NIL VERSION 20210124-git SIBLINGS NIL PARASITES
+    (unix-opts/tests)) */

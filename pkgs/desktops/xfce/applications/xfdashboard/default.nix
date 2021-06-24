@@ -17,11 +17,11 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfdashboard";
-  version = "0.7.5";
+  version = "0.9.2";
   rev-prefix = "";
   odd-unstable = false;
 
-  sha256 = "0d0kg90h3li41bs75z3xldljsglkz220pba39c54qznnzb8v8a2i";
+  sha256 = "06pvzhhkr2mimsrzlkpsrzf5fxag4fhabyb3cpmgpyp5hcbgvaj3";
 
   buildInputs = [
     clutter

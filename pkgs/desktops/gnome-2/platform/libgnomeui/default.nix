@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libxml2, xorg, glib, pango
+{ stdenv, fetchurl, fetchpatch, pkg-config, libxml2, xorg, glib, pango
 , intltool, libgnome, libgnomecanvas, libbonoboui, GConf, libtool
 , gnome_vfs, libgnome-keyring, libglade }:
 
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "0001-gnome-scores.h-Convert-to-UTF-8.patch";
-      url = "https://github.com/GNOME/libgnomeui/commit/30334c28794ef85d8973f4ed0779b5ceed6594f2.diff";
+      url = "https://gitlab.gnome.org/Archive/libgnomeui/-/commit/30334c28794ef85d8973f4ed0779b5ceed6594f2.diff";
       sha256 = "1sn8j8dkam14wfkpw8nga3gk63wniff243mzv3jp0fvv52q8sqhk";
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
   buildInputs =
     [ xorg.xlibsWrapper libxml2 GConf pango glib libgnome-keyring libglade libtool ];
 

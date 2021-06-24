@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ion";
@@ -13,13 +13,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1ph3r3vspy700mb8pica8478v9arqz07k2nzpbrdkdkqgfcwlgcg";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern system shell with simple (and powerful) syntax";
     homepage = "https://gitlab.redox-os.org/redox-os/ion";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
+
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [
+    Security
+  ];
 
   passthru = {
     shellPath = "/bin/ion";

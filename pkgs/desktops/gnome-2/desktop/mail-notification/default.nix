@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, gnome2, dbus-glib, gmime, gnome-icon-theme, libnotify, libgnome-keyring, openssl, cyrus_sasl, gnonlin, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, gnome2, dbus-glib, gmime, gnome-icon-theme, libnotify, libgnome-keyring, openssl, cyrus_sasl, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
 
 stdenv.mkDerivation rec {
   rev = "9ae8768";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1slb7gajn30vdaq0hf5rikwdly1npmg1cf83hpjs82xd98knl13d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-   buildInputs = [ glib dbus-glib gmime libnotify libgnome-keyring openssl cyrus_sasl gnonlin sylpheed gob2 gettext intltool gnome2.GConf gnome2.libgnomeui dbus-glib gmime libnotify gnome2.scrollkeeper libxml2 gnome-icon-theme hicolor-icon-theme tango-icon-theme ];
+  nativeBuildInputs = [ pkg-config ];
+   buildInputs = [ glib dbus-glib gmime libnotify libgnome-keyring openssl cyrus_sasl sylpheed gob2 gettext intltool gnome2.GConf gnome2.libgnomeui dbus-glib gmime libnotify gnome2.scrollkeeper libxml2 gnome-icon-theme hicolor-icon-theme tango-icon-theme ];
 
   prePatch = ''
     sed -i  -e '/jb_rule_set_install_message/d' -e '/jb_rule_add_install_command/d' jbsrc/jb.c
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tray status icon, which notifies us when new email arrives";
     homepage = "https://www.nongnu.org/mailnotify/";
     license = with licenses; [ gpl3 ];

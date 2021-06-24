@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "dynamic-colors";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       --replace /usr/share/dynamic-colors $out/share/dynamic-colors
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Change terminal colors on the fly";
     homepage    = "https://github.com/peterhoeg/dynamic-colors";
     license     = licenses.mit;

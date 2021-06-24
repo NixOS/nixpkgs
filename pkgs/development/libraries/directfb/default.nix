@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, perl, pkgconfig, flux, zlib
+{ stdenv, lib, fetchFromGitHub, fetchpatch
+, autoreconfHook, perl, pkg-config, flux, zlib
 , libjpeg, freetype, libpng, giflib
 , enableX11 ? true, xorg
 , enableSDL ? true, SDL }:
@@ -14,7 +15,17 @@ stdenv.mkDerivation rec {
     sha256 = "0bs3yzb7hy3mgydrj8ycg7pllrd2b6j0gxj596inyr7ihssr3i0y";
   };
 
-  nativeBuildInputs = [ autoreconfHook perl pkgconfig flux ];
+  patches = [
+    # Fixes build in "davinci" with glibc >= 2.28
+    # The "davinci" module is only enabled on 32-bit arm.
+    # https://github.com/deniskropp/DirectFB/pull/17
+    (fetchpatch {
+      url = "https://github.com/deniskropp/DirectFB/commit/3a236241bbec3f15b012b6f0dbe94353d8094557.patch";
+      sha256 = "0rj3gv0zlb225sqjz04p4yagy4xacf3210aa8vra8i1f0fv0w4kw";
+    })
+  ];
+
+  nativeBuildInputs = [ autoreconfHook perl pkg-config flux ];
 
   buildInputs = [ zlib libjpeg freetype giflib libpng ]
     ++ lib.optional enableSDL SDL

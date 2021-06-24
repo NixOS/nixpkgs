@@ -1,22 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, protobuf3_6 }:
+{ lib, buildPythonPackage, fetchFromGitHub, python }:
 
 let
-  py = python.override {
-    packageOverrides = self: super: {
-      protobuf = super.protobuf.override {
-        protobuf = protobuf3_6;
-      };
-    };
-  };
+  py = python;
 in buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.19";
+  version = "8.0.24";
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "1jscmc5s7mwx43gvxjlqc30ylp5jjpmkqx7s3b9nllbh926p3ixg";
+    sha256 = "1zb5wf65rnpbk0lw31i4piy0bq09hqa62gx7bh241zc5310zccc7";
   };
 
   propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];
@@ -26,6 +20,8 @@ in buildPythonPackage rec {
   # But the library should be working as expected.
   doCheck = false;
 
+  pythonImportsCheck = [ "mysql" ];
+
   meta = {
     description = "A MySQL driver";
     longDescription = ''
@@ -33,7 +29,8 @@ in buildPythonPackage rec {
       implements the DB API v2.0 specification.
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
-    license = [ lib.licenses.gpl2 ];
-    maintainers = with lib.maintainers; [ primeos ];
+    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
+    license = [ lib.licenses.gpl2Only ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 , pkg-config
@@ -10,19 +10,22 @@
 
 buildGoModule rec {
   pname = "bettercap";
-  version = "2.27";
+  version = "2.30.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "18hwz9m16pxlb7wp78iqmdi0kimrx3h05fs0zhzm8qhzancq8alf";
+    sha256 = "sha256-5CAWMW0u/8BUn/8JJBApyHGH+/Tz8hzAmSChoT2gFr8=";
   };
 
-  modSha256 = "1qhmrjb3fvw6maxrl7hb3bizrw6szhwx6s2g59p5pj3dz4x8jajn";
+  vendorSha256 = "sha256-fApxHxdzEEc+M+U5f0271VgrkXTGkUD75BpDXpVYd5k=";
+
+  doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpcap libnfnetlink libnetfilter_queue libusb1 ];
+  buildInputs = [ libpcap libusb1 ]
+    ++ lib.optionals stdenv.isLinux [ libnfnetlink libnetfilter_queue ];
 
   meta = with lib; {
     description = "A man in the middle tool";
@@ -32,6 +35,5 @@ buildGoModule rec {
     homepage = "https://www.bettercap.org/";
     license = with licenses; gpl3;
     maintainers = with maintainers; [ y0no ];
-    platforms = platforms.all;
   };
 }

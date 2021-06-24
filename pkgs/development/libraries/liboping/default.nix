@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses ? null, perl ? null }:
+{ stdenv, fetchurl, ncurses ? null, perl ? null, lib }:
 
 stdenv.mkDerivation rec {
   name = "liboping-1.10.0";
@@ -8,13 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "1n2wkmvw6n80ybdwkjq8ka43z2x8mvxq49byv61b52iyz69slf7b";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+  NIX_CFLAGS_COMPILE = lib.optionalString
+    stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   buildInputs = [ ncurses perl ];
 
-  configureFlags = stdenv.lib.optional (perl == null) "--with-perl-bindings=no";
+  configureFlags = lib.optional (perl == null) "--with-perl-bindings=no";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library to generate ICMP echo requests (a.k.a. ping packets)";
     longDescription = ''
       liboping is a C library to generate ICMP echo requests, better known as

@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore, propagate,
+  mkDerivation, lib, propagate,
   extra-cmake-modules, kcoreaddons, polkit-qt, qttools
 }:
 
@@ -9,7 +9,9 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ polkit-qt qttools ];
   propagatedBuildInputs = [ kcoreaddons ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./cmake-install-paths.patch
+  ];
   # library stores reference to plugin path,
   # separating $out from $bin would create a reference cycle
   outputs = [ "out" "dev" ];

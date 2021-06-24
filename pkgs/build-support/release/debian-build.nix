@@ -11,8 +11,6 @@
   debRequires ? []
 , ... } @ args:
 
-with stdenv.lib;
-
 vmTools.runInLinuxImage (stdenv.mkDerivation (
 
   {
@@ -23,7 +21,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     prePhases = "installExtraDebsPhase sysInfoPhase";
   }
 
-  // removeAttrs args ["vmTools"] //
+  // removeAttrs args ["vmTools" "lib"] //
 
   {
     name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
@@ -59,8 +57,8 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       export PAGER=cat
       ${checkinstall}/sbin/checkinstall --nodoc -y -D \
         --fstrans=${if fsTranslation then "yes" else "no"} \
-        --requires="${concatStringsSep "," debRequires}" \
-        --provides="${concatStringsSep "," debProvides}" \
+        --requires="${lib.concatStringsSep "," debRequires}" \
+        --provides="${lib.concatStringsSep "," debProvides}" \
         ${if (src ? version) then "--pkgversion=$(echo ${src.version} | tr _ -)"
                              else "--pkgversion=0.0.0"} \
         ''${debMaintainer:+--maintainer="'$debMaintainer'"} \

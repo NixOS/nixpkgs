@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0bdf5ed600df30c8830455702338902528717c0af85ac5914f1dc5aa0bfa6eee";
   };
 
-  propagatedBuildInputs = [ pkgs.libGLU pkgs.libGL pkgs.freeglut pillow ];
+  propagatedBuildInputs = [ pillow ];
 
   patchPhase = let
     ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   # Should run test suite from $out/${python.sitePackages}
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pyopengl.sourceforge.net/";
     description = "PyOpenGL, the Python OpenGL bindings";
     longDescription = ''

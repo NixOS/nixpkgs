@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, fetchzip, pyopenssl, python }:
+{ lib, buildPythonPackage, fetchzip, gobject-introspection, idna, libsoup, precis-i18n, pygobject3, pyopenssl }:
 
 let
   pname = "nbxmpp";
-  version = "0.6.10";
+  version = "1.0.2";
   name = "${pname}-${version}";
 in buildPythonPackage {
   inherit pname version;
@@ -11,18 +11,13 @@ in buildPythonPackage {
     name = "${name}.tar.bz2";
     url = "https://dev.gajim.org/gajim/python-nbxmpp/repository/archive.tar.bz2?"
         + "ref=${name}";
-    sha256 = "1w31a747mj9rvlp3n20z0fnvyvihphkgkyr22sk2kap3migw8vai";
+    sha256 = "1rhzsakqrybzq5j5b9400wjd14pncph47c1ggn5a6f3di03lk4az";
   };
 
-  propagatedBuildInputs = [ pyopenssl ];
+  buildInputs = [ precis-i18n ];
+  propagatedBuildInputs = [ gobject-introspection idna libsoup pygobject3 pyopenssl ];
 
-  checkPhase = ''
-    # Disable tests requiring networking
-    echo "" > test/unit/test_xmpp_transports_nb2.py
-    ${python.executable} test/runtests.py
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
     description = "Non-blocking Jabber/XMPP module";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, fetchurl, jre }:
 stdenv.mkDerivation rec {
   pname = "zxing";
   version = "3.1.0";
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     inherit version;
-    description = ''1D and 2D code reading library'';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "1D and 2D code reading library";
+    license = lib.licenses.asl20;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/zxing/zxing";
   };
 }

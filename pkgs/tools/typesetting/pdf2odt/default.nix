@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
       --prefix PATH : ${path}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PDF to ODT format converter";
     homepage    = "https://github.com/gutschke/pdf2odt";
     license     = licenses.mit;

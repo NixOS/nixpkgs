@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , expat
 , gpgme
@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libisds";
-  version = "0.11";
+  version = "0.11.1";
 
   src = fetchurl {
     url = "http://xpisar.wz.cz/${pname}/dist/${pname}-${version}.tar.xz";
-    sha256 = "1cy161l7rl25xji2xpb9vjpvg02bc7mwd4fpp2sx9zhpifn5dfbr";
+    sha256 = "1n1vl05p78fksv6dm926rngd3wag41gyfbq76ajzcmq08j32y7y1";
   };
 
   configureFlags = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expat gpgme libgcrypt libxml2 libxslt curl docbook_xsl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client library for accessing SOAP services of Czech government-provided Databox infomation system";
     homepage = "http://xpisar.wz.cz/libisds/";
     license = licenses.lgpl3;

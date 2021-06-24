@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2-x11, glib, pango, cairo, atk, gdk-pixbuf, libX11 }:
+{ lib, stdenv, fetchurl, gtk2-x11, glib, pango, cairo, atk, gdk-pixbuf, libX11 }:
 
 # Arena is free software in the sense of "free beer" but not as in "free
 # speech". We can install it as we please, but we cannot re-distribute it in
@@ -7,16 +7,16 @@
 
 let
 
-  inherit (stdenv.lib) makeLibraryPath;
+  inherit (lib) makeLibraryPath;
   libDir = "lib64";
 
 in
 stdenv.mkDerivation rec {
-  name = "arena-1.1";
+  name = "arena-3.10-beta";
 
   src = fetchurl {
-    url = "http://www.playwitharena.de/downloads/arenalinux_64bit_1.1.tar.gz";
-    sha256 = "1sh71v5ymzwflq8ycx9j9kl0jhqllgs6z24h4h8j5z8pwdh528v6";
+    url = "http://www.playwitharena.de/downloads/arenalinux_64bit_3.10beta.tar.gz";
+    sha256 = "1pzb9sg4lzbbi4gbldvlb85p8xyl9xnplxwyb9pkk2mwzvvxkf0d";
   };
 
   # stdenv.cc.cc.lib is in that list to pick up libstdc++.so. Is there a better way?
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
     # Remove executable bits from data files. This matters for the find command
     # we'll use below to find all bundled engines.
-    chmod -x $out/lib/${name}/Engines/*/*.{txt,bin,bmp}
+    chmod -x $out/lib/${name}/Engines/*/*.{txt,bin,bmp,zip}
   '';
 
   buildPhase = ''
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
       UCI protocol I, II. Furthermore, compatible to Chess960, DGT electronic
       chess board & DGT clocks and much more.
     '';
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = ["x86_64-linux"];
-    hydraPlatforms = stdenv.lib.platforms.none;
+    hydraPlatforms = lib.platforms.none;
   };
 
 }

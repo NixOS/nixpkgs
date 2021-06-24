@@ -20,11 +20,6 @@ let
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
 
-  allSupportedNixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
-    supportedSystems = supportedSystems ++ limitedSupportedSystems;
-    nixpkgs = nixpkgsSrc;
-  })) [ "unstable" ];
-
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
@@ -54,7 +49,9 @@ in rec {
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
+        (onSystems ["x86_64-linux" "aarch64-linux"] "nixos.amazonImage")
         (onSystems ["x86_64-linux"] "nixos.iso_plasma5")
+        (onSystems ["x86_64-linux"] "nixos.iso_gnome")
         (onFullSupported "nixos.manual")
         (onSystems ["x86_64-linux"] "nixos.ova")
         (onSystems ["aarch64-linux"] "nixos.sd_image")
@@ -96,10 +93,12 @@ in rec {
         (onFullSupported "nixos.tests.keymap.dvp")
         (onFullSupported "nixos.tests.keymap.neo")
         (onFullSupported "nixos.tests.keymap.qwertz")
+        (onFullSupported "nixos.tests.latestKernel.login")
         (onFullSupported "nixos.tests.lightdm")
         (onFullSupported "nixos.tests.login")
         (onFullSupported "nixos.tests.misc")
         (onFullSupported "nixos.tests.mutableUsers")
+        (onFullSupported "nixos.tests.nano")
         (onFullSupported "nixos.tests.nat.firewall-conntrack")
         (onFullSupported "nixos.tests.nat.firewall")
         (onFullSupported "nixos.tests.nat.standalone")
@@ -107,16 +106,36 @@ in rec {
         (onFullSupported "nixos.tests.networking.scripted.bridge")
         (onFullSupported "nixos.tests.networking.scripted.dhcpOneIf")
         (onFullSupported "nixos.tests.networking.scripted.dhcpSimple")
+        (onFullSupported "nixos.tests.networking.scripted.link")
         (onFullSupported "nixos.tests.networking.scripted.loopback")
         (onFullSupported "nixos.tests.networking.scripted.macvlan")
+        (onFullSupported "nixos.tests.networking.scripted.privacy")
+        (onFullSupported "nixos.tests.networking.scripted.routes")
         (onFullSupported "nixos.tests.networking.scripted.sit")
         (onFullSupported "nixos.tests.networking.scripted.static")
+        (onFullSupported "nixos.tests.networking.scripted.virtual")
         (onFullSupported "nixos.tests.networking.scripted.vlan")
+        (onFullSupported "nixos.tests.networking.networkd.bond")
+        (onFullSupported "nixos.tests.networking.networkd.bridge")
+        (onFullSupported "nixos.tests.networking.networkd.dhcpOneIf")
+        (onFullSupported "nixos.tests.networking.networkd.dhcpSimple")
+        (onFullSupported "nixos.tests.networking.networkd.link")
+        (onFullSupported "nixos.tests.networking.networkd.loopback")
+        # Fails nondeterministically (https://github.com/NixOS/nixpkgs/issues/96709)
+        #(onFullSupported "nixos.tests.networking.networkd.macvlan")
+        (onFullSupported "nixos.tests.networking.networkd.privacy")
+        (onFullSupported "nixos.tests.networking.networkd.routes")
+        (onFullSupported "nixos.tests.networking.networkd.sit")
+        (onFullSupported "nixos.tests.networking.networkd.static")
+        (onFullSupported "nixos.tests.networking.networkd.virtual")
+        (onFullSupported "nixos.tests.networking.networkd.vlan")
+        (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
         (onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
         (onFullSupported "nixos.tests.openssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
+        (onFullSupported "nixos.tests.php.httpd")
         (onFullSupported "nixos.tests.php.pcre")
         (onFullSupported "nixos.tests.plasma5")
         (onFullSupported "nixos.tests.predictable-interface-names.predictableNetworkd")
@@ -126,6 +145,7 @@ in rec {
         (onFullSupported "nixos.tests.printing")
         (onFullSupported "nixos.tests.proxy")
         (onFullSupported "nixos.tests.sddm.default")
+        (onFullSupported "nixos.tests.shadow")
         (onFullSupported "nixos.tests.simple")
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.udisks2")

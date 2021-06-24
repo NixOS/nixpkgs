@@ -1,40 +1,34 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
-  xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash
+, xdg-utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick
+, libuchardet, spdlog, xercesc, fmt, openssl, libssh, samba, neon, libnfs, libarchive }:
 
-let
-  newer-colorer-schemes = fetchFromGitHub {
-    owner = "colorer";
-    repo = "Colorer-schemes";
-    rev = "7c831f5e94a90530ace8b2bb9916210e3a2fcda6"; # 2019-11-28 (far2l has older Colorer-schemes)
-    sha256 = "18vaahdz5i7xdf00c9h9kjjswm4jszywm8zkhva4c4ivr4qqnv2c";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2019-12-14.git${builtins.substring 0 7 src.rev}";
+  version = "2020-12-30.git${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
-    rev = "dceaa3918ea2c5e43600bad3fc63f861b8d26fc4";
-    sha256 = "1ssd3hwz4b7vl4r858d9whl61cn23pgcamcjmvfa6ysf4x2b7sgi";
+    rev = "52c1372441443aafd1a7dff6f17969a6ec19885d";
+    sha256 = "0s7427fgxzj5zkyy6mhb4y5hqa6adsr30m0bigycp12b0495ryx0";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
+  nativeBuildInputs = [ cmake pkg-config m4 makeWrapper imagemagick ];
 
-  buildInputs = [ wxGTK30 glib pcre ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  buildInputs = [ wxGTK30 glib pcre libuchardet spdlog xercesc fmt ] # base requirements of the build
+    ++ [ openssl libssh samba neon libnfs libarchive ]; # optional feature packages, like protocol support for Network panel, or archive formats
+    #++ lib.optional stdenv.isDarwin Cocoa # Mac support -- disabled, see "meta.broken" below
 
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace far2l/bootstrap/trash.sh \
       --replace 'gvfs-trash'  '${gvfs}/bin/gvfs-trash'
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace far2l/CMakeLists.txt \
       --replace "-framework System" -lSystem
   '' + ''
     echo 'echo ${version}' > far2l/bootstrap/scripts/vbuild.sh
     substituteInPlace far2l/bootstrap/open.sh              \
-      --replace 'xdg-open'    '${xdg_utils}/bin/xdg-open'
+      --replace 'xdg-open'    '${xdg-utils}/bin/xdg-open'
     substituteInPlace far2l/vtcompletor.cpp                \
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
     substituteInPlace multiarc/src/formats/zip/zip.cpp     \
@@ -48,10 +42,6 @@ stdenv.mkDerivation rec {
       --replace '"gzip '      '"${gzip}/bin/gzip '         \
       --replace '"bzip2 '     '"${bzip2}/bin/bzip2 '       \
       --replace '"tar '       '"${gnutar}/bin/tar '
-
-    cp ${newer-colorer-schemes}/hrc/hrc/base/nix.hrc     colorer/configs/base/hrc/base/
-    cp ${newer-colorer-schemes}/hrc/hrc/base/cpp.hrc     colorer/configs/base/hrc/base/
-    cp ${newer-colorer-schemes}/hrc/hrc/inet/jscript.hrc colorer/configs/base/hrc/base/
   '';
 
   installPhase = ''
@@ -70,19 +60,20 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/icons/hicolor/$size/apps
       convert -size $size ../far2l/DE/icons/hicolor/$size/apps/far2l.svg $out/share/icons/hicolor/$size/apps/far2l.png
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     wrapProgram $out/bin/far2l --argv0 $out/bin/far2l
   '';
 
   stripDebugList = [ "bin" "share" ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
-    description = "An orthodox file manager";
+  meta = with lib; {
+    description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
     homepage = "https://github.com/elfmz/far2l";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
+    license = licenses.gpl2Plus; # NOTE: might change in far2l repo soon, check next time
+    maintainers = with maintainers; [ volth hypersw ];
     platforms = platforms.all;
+    # fails to compile with:
+    # error: no member named 'st_ctim' in 'stat'
+    broken = stdenv.isDarwin;
   };
 }

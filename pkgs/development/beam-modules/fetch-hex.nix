@@ -1,10 +1,10 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 { pkg, version, sha256
 , meta ? {}
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation ({
   name = "hex-source-${pkg}-${version}";

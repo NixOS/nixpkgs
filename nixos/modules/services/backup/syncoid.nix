@@ -4,6 +4,15 @@ with lib;
 
 let
   cfg = config.services.syncoid;
+
+  # Extract pool names of local datasets (ones that don't contain "@") that
+  # have the specified type (either "source" or "target")
+  getPools = type: unique (map (d: head (builtins.match "([^/]+).*" d)) (
+    # Filter local datasets
+    filter (d: !hasInfix "@" d)
+    # Get datasets of the specified type
+    (catAttrs type (attrValues cfg.commands))
+  ));
 in {
 
     # Interface
@@ -26,12 +35,23 @@ in {
 
       user = mkOption {
         type = types.str;
-        default = "root";
+        default = "syncoid";
         example = "backup";
         description = ''
-          The user for the service. Sudo or ZFS privilege delegation must be
-          configured to use a user other than root.
+          The user for the service. ZFS privilege delegation will be
+          automatically configured for any local pools used by syncoid if this
+          option is set to a user other than root. The user will be given the
+          "hold" and "send" privileges on any pool that has datasets being sent
+          and the "create", "mount", "receive", and "rollback" privileges on
+          any pool that has datasets being received.
         '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "syncoid";
+        example = "backup";
+        description = "The group for the service.";
       };
 
       sshKey = mkOption {
@@ -150,6 +170,18 @@ in {
     # Implementation
 
     config = mkIf cfg.enable {
+      users =  {
+        users = mkIf (cfg.user == "syncoid") {
+          syncoid = {
+            group = cfg.group;
+            isSystemUser = true;
+          };
+        };
+        groups = mkIf (cfg.group == "syncoid") {
+          syncoid = {};
+        };
+      };
+
       systemd.services.syncoid = {
         description = "Syncoid ZFS synchronization service";
         script = concatMapStringsSep "\n" (c: lib.escapeShellArgs
@@ -160,10 +192,22 @@ in {
             ++ c.extraArgs
             ++ [ "--sendoptions" c.sendOptions
                  "--recvoptions" c.recvOptions
+                 "--no-privilege-elevation"
                  c.source c.target
                ])) (attrValues cfg.commands);
         after = [ "zfs.target" ];
-        serviceConfig.User = cfg.user;
+        serviceConfig = {
+          ExecStartPre = (map (pool: lib.escapeShellArgs [
+            "+/run/booted-system/sw/bin/zfs" "allow"
+            cfg.user "hold,send" pool
+          ]) (getPools "source")) ++
+          (map (pool: lib.escapeShellArgs [
+            "+/run/booted-system/sw/bin/zfs" "allow"
+            cfg.user "create,mount,receive,rollback" pool
+          ]) (getPools "target"));
+          User = cfg.user;
+          Group = cfg.group;
+        };
         startAt = cfg.interval;
       };
     };

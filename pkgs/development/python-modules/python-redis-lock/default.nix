@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , redis
@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "python-redis-lock";
-  version = "3.4.0";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e3ef458b9424daf35d587e69b63416a0c55ac46303f3aaff1bab4fe5a8f1e92";
+    sha256 = "4265a476e39d476a8acf5c2766485c44c75f3a1bd6cf73bb195f3079153b8374";
   };
 
   checkInputs = [ pytest process-tests pkgs.redis ];
@@ -24,10 +24,10 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ redis ]
-  ++ stdenv.lib.optional withDjango django_redis;
+  ++ lib.optional withDjango django_redis;
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ionelmc/python-redis-lock";
     license = licenses.bsd2;
     description = "Lock context manager implemented via redis SETNX/BLPOP";

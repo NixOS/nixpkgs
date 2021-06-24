@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, glib, gettext, readline }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glib, gettext, readline }:
 
 stdenv.mkDerivation rec {
   pname = "sdcv";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "Dushistov";
     repo = "sdcv";
     rev = "v${version}";
-    sha256 = "1b67s4nj0s5fh3cjk7858qvhiisc557xx72xwzrb8hq6ijpwx5k0";
+    sha256 = "144qpl9b8r2php0zhi9b7vg6flpvdgjy6yfaipydwwhxi4wy9600";
   };
 
   hardeningDisable = [ "format" ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib gettext readline ];
 
   preInstall = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dushistov.github.io/sdcv/";
     description = "Console version of StarDict";
     maintainers = with maintainers; [ lovek323 ];

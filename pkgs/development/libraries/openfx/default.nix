@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip }:
+{ lib, stdenv, fetchFromGitHub, unzip }:
 
 stdenv.mkDerivation {
   pname = "openfx";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0k9ggzr6bisn77mipjfvawg3mv4bz50b63v8f7w1jhldi1sfy548";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   outputs = [ "dev" "out" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
      cp -r include/* $dev/include/OpenFX/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Image processing plug-in standard";
     homepage = "http://openeffects.org/";
     license = licenses.bsd3;

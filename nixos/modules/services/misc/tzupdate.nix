@@ -11,7 +11,7 @@ in {
       default = false;
       description = ''
         Enable the tzupdate timezone updating service. This provides
-        a one-shot service which can be activated with systemctl to 
+        a one-shot service which can be activated with systemctl to
         update the timezone.
       '';
     };
@@ -21,7 +21,7 @@ in {
     # We need to have imperative time zone management for this to work.
     # This will give users an error if they have set an explicit time
     # zone, which is better than silently overriding it.
-    time.timeZone = null; 
+    time.timeZone = null;
 
     # We provide a one-shot service which can be manually run. We could
     # provide a service that runs on startup, but it's tricky to get

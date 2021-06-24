@@ -5,17 +5,18 @@
 , pytest
 , testpath
 , tornado
+, trio
 }:
 
 buildPythonPackage rec {
   pname = "jeepney";
-  version = "0.4.1";
+  version = "0.6.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13806f91a96e9b2623fd2a81b950d763ee471454aafd9eb6d75dbe7afce428fb";
+    sha256 = "7d59b6622675ca9e993a6bd38de845051d315f8b0c72cca3aef733a20b648657";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     testpath
+    trio
   ];
 
   checkPhase = ''

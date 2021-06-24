@@ -1,27 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, jre
-, version ? "1.6" }:
-
-let
-  versionMap = {
-    "1.5" = {
-      flinkVersion = "1.5.5";
-      sha256 = "18wqcqi3gyqd40nspih99gq7ylfs20b35f4dcrspffagwkfp2l4z";
-    };
-    "1.6" = {
-      flinkVersion = "1.9.0";
-      sha256 = "1dzfcmqz5j4b545wq2q3xb2xkbhqllr04s3av1afv54y61l5y952";
-    };
-  };
-in
-
-with versionMap.${version};
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "flink-${flinkVersion}";
+  pname = "flink";
+  version = "1.12.1";
 
   src = fetchurl {
-    url = "mirror://apache/flink/${name}/${name}-bin-scala_2.11.tgz";
-    inherit sha256;
+    url = "mirror://apache/flink/${pname}-${version}/${pname}-${version}-bin-scala_2.11.tgz";
+    sha256 = "146azc5wg1xby3nqz8mha959qy99z2h8032rfgs2mcl3d5rrsm2l";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre ];
 
   installPhase = ''
-    rm bin/*.bat
+    rm bin/*.bat || true
 
     mkdir -p $out/bin $out/opt/flink
     mv * $out/opt/flink/
@@ -42,7 +27,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed stream processing framework";
     homepage = "https://flink.apache.org";
     downloadPage = "https://flink.apache.org/downloads.html";

@@ -1,26 +1,25 @@
-{ stdenv
+{ lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , dateutil
-, six
-, mock
-, nose
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "freezegun";
-  version = "0.3.12";
+  version = "1.1.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2a4d9c8cd3c04a201e20c313caf8b6338f1cfa4cda43f46a94cc4a9fd13ea5e7";
+    sha256 = "177f9dd59861d871e27a484c3332f35a6e3f5d14626f2bf91be37891f18927f3";
   };
 
-  propagatedBuildInputs = [ dateutil six ];
-  checkInputs = [ mock nose pytest ];
+  propagatedBuildInputs = [ dateutil ];
+  checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FreezeGun: Let your Python tests travel through time";
     homepage = "https://github.com/spulec/freezegun";
     license = licenses.asl20;

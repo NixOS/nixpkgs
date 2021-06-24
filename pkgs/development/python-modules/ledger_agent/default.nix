@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , ledgerblue
@@ -20,7 +20,10 @@ buildPythonPackage rec {
     ledgerblue libagent setuptools wheel
   ];
 
-  meta = with stdenv.lib; {
+  # no tests
+  doCheck = false;
+
+  meta = with lib; {
     description = "Using Ledger as hardware-based SSH/PGP agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = licenses.gpl3;

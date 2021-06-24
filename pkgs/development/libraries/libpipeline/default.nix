@@ -1,16 +1,16 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libpipeline-1.5.1";
+  name = "libpipeline-1.5.3";
 
   src = fetchurl {
     url = "mirror://savannah/libpipeline/${name}.tar.gz";
-    sha256 = "0bwh5xz5f2czwb7f564jz1mp4znm8pldnvf65fs0hpw4gmmp0cyn";
+    sha256 = "1c5dl017xil2ssb6a5vg927bnsbc9vymfgi9ahvqbb8gypx0igsx";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./fix-on-osx.patch ];
+  patches = lib.optionals stdenv.isDarwin [ ./fix-on-osx.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libpipeline.nongnu.org";
     description = "C library for manipulating pipelines of subprocesses in a flexible and convenient way";
     platforms = platforms.unix;

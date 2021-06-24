@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkg-config
 , xorg }:
 stdenv.mkDerivation rec {
   pname = "eq10q";
@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "16mhcav8gwkp29k9ki4dlkajlcgh1i2wvldabxb046d37dq4qzrk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake fftw gtkmm2 libxcb lv2 xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fftw gtkmm2 libxcb lv2 xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
 
   patches = [
     (fetchpatch {
@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
       sha256 = "07b0wf6k4xqgigv4h095bzfaw8r218wa36r9w1817jcys13r6c5r";
     })
   ];
+
+  postPatch = ''
+     # Fix build with lv2 1.18: https://sourceforge.net/p/eq10q/bugs/23/
+     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
+       -exec sed -i {} -e 's/const _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+   '';
 
   installFlags = [ "DESTDIR=$(out)" ];
 
@@ -38,8 +44,8 @@ stdenv.mkDerivation rec {
       Nice GUI with powerful metering for every plugin.
     '';
     homepage = "http://eq10q.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

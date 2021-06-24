@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
 
 let
-  _version = "2.8.4";
-  _build = "453";
+  _version = "2.8.6";
+  _build = "455";
   version = "${_version}-${_build}";
   name = "jameica-${version}";
 
@@ -17,21 +17,21 @@ let
     comment = "Free Runtime Environment for Java Applications.";
     desktopName = "Jameica";
     genericName = "Jameica";
-    categories = "Application;Office;";
+    categories = "Office;";
   };
 in
 stdenv.mkDerivation rec {
   inherit name version;
 
   nativeBuildInputs = [ ant jdk makeWrapper ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
-                ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
+  buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
+                ++ lib.optional stdenv.isDarwin Cocoa;
 
   src = fetchFromGitHub {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
-    sha256 = "1imm3wpdrgh2sr2wh9vgaf2mp1ixs845vgzk5ib82mak7lg9m1zl";
+    sha256 = "1pndklxsvixy6zyblqr62ki3pqaq8lfrzgasrvhclqxxh76gjlss";
   };
 
   # there is also a build.gradle, but it only seems to be used to vendor 3rd party libraries
@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/jameica \
       --add-flags "-cp $out/share/java/jameica.jar:$out/share/${name}/* ${
-        stdenv.lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
+        lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
       } de.willuhn.jameica.Main" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath buildInputs} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
       --run "cd $out/share/java/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.willuhn.de/products/jameica/";
     description = "Free Runtime Environment for Java Applications";
     longDescription = ''

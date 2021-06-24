@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchPypi
 , attrs
 , bidict
 , bitstruct
@@ -9,17 +9,16 @@
 
 buildPythonPackage rec {
   pname = "audio-metadata";
-  version = "0.9.0";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1v7ww3csyxrhnpvpynla64hfn1wp37vbw7srh9343n4wc02mh65l";
+    sha256 = "9e7ba79d49cf048a911d5f7d55bb2715c10be5c127fe5db0987c5fe1aa7335eb";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "bidict>=0.17,<0.18" "bidict" \
-      --replace "more-itertools>=4.0,<8.0" "more-itertools"
+      --replace "'attrs>=18.2,<19.4'" "'attrs'"
   '';
 
   propagatedBuildInputs = [
@@ -33,8 +32,6 @@ buildPythonPackage rec {
 
   # No tests
   doCheck = false;
-
-  disabled = pythonOlder "3.6";
 
   meta = with lib; {
     homepage = "https://github.com/thebigmunch/audio-metadata";

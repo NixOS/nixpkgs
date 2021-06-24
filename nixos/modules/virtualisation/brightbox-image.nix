@@ -27,7 +27,7 @@ in
               popd
             '';
           diskImageBase = "nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw";
-          buildInputs = [ pkgs.utillinux pkgs.perl ];
+          buildInputs = [ pkgs.util-linux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
         }
@@ -119,7 +119,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      path = [ pkgs.wget pkgs.iproute ];
+      path = [ pkgs.wget pkgs.iproute2 ];
 
       script =
         ''

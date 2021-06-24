@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, liblockfile }:
+{ lib, stdenv, fetchurl, liblockfile }:
 
 stdenv.mkDerivation rec {
   _name   = "lockfile-progs";
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Programs for locking and unlocking files and mailboxes";
     homepage = "http://packages.debian.org/sid/lockfile-progs";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.bluescreen303 ];
+    platforms = lib.platforms.all;
   };
 }

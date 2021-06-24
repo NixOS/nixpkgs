@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , libsodium, mbedtls, libev, c-ares, pcre
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
 }:
 
 stdenv.mkDerivation rec {
   pname = "shadowsocks-libev";
-  version = "3.3.4";
+  version = "3.3.5";
 
   # Git tag includes CMake build files which are much more convenient.
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "05f1vvd0r0wanbb61rf4p6y991jp7625l0i223v23r2ji43y3i5a";
+    sha256 = "1iqpmhxk354db1x08axg6wrdy9p9a4mz0h9351i3mf3pqd1v6fdw";
     fetchSubmodules = true;
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cp lib/* $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight secured SOCKS5 proxy";
     longDescription = ''
       Shadowsocks-libev is a lightweight secured SOCKS5 proxy for embedded devices and low-end boxes.

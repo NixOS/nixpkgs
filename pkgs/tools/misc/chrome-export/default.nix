@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , python3
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     bash test/run_tests $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scripts to save Google Chrome's bookmarks and history as HTML bookmarks files";
     homepage = "https://github.com/bdesham/chrome-export";
     license = [ licenses.isc ];

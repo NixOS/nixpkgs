@@ -3,9 +3,6 @@
 with lib;
 
 let
-  dataDir  = "/var/lib/pdns-recursor";
-  username = "pdns-recursor";
-
   cfg = config.services.pdns-recursor;
 
   oneOrMore  = type: with types; either type (listOf type);
@@ -21,7 +18,7 @@ let
     else if builtins.isList val then (concatMapStringsSep "," serialize val)
     else "";
 
-  configFile = pkgs.writeText "recursor.conf"
+  configDir = pkgs.writeTextDir "recursor.conf"
     (concatStringsSep "\n"
       (flip mapAttrsToList cfg.settings
         (name: val: "${name}=${serialize val}")));
@@ -173,45 +170,30 @@ in {
       serve-rfc1918    = cfg.serveRFC1918;
       lua-config-file  = pkgs.writeText "recursor.lua" cfg.luaConfig;
 
+      daemon         = false;
+      write-pid      = false;
       log-timestamp  = false;
       disable-syslog = true;
     };
 
-    users.users.${username} = {
-      home = dataDir;
-      createHome = true;
-      uid = config.ids.uids.pdns-recursor;
+    systemd.packages = [ pkgs.pdns-recursor ];
+
+    systemd.services.pdns-recursor = {
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = {
+        ExecStart = [ "" "${pkgs.pdns-recursor}/bin/pdns_recursor --config-dir=${configDir}" ];
+      };
+    };
+
+    users.users.pdns-recursor = {
+      isSystemUser = true;
+      group = "pdns-recursor";
       description = "PowerDNS Recursor daemon user";
     };
 
-    systemd.services.pdns-recursor = {
-      unitConfig.Documentation = "man:pdns_recursor(1) man:rec_control(1)";
-      description = "PowerDNS recursive server";
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+    users.groups.pdns-recursor = {};
 
-      serviceConfig = {
-        User = username;
-        Restart    ="on-failure";
-        RestartSec = "5";
-        PrivateTmp = true;
-        PrivateDevices = true;
-        AmbientCapabilities = "cap_net_bind_service";
-        ExecStart = ''${pkgs.pdns-recursor}/bin/pdns_recursor \
-          --config-dir=${dataDir} \
-          --socket-dir=${dataDir}
-        '';
-      };
-
-      preStart = ''
-        # Link configuration file into recursor home directory
-        configPath=${dataDir}/recursor.conf
-        if [ "$(realpath $configPath)" != "${configFile}" ]; then
-          rm -f $configPath
-          ln -s ${configFile} $configPath
-        fi
-      '';
-    };
   };
 
   imports = [

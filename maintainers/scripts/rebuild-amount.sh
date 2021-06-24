@@ -60,7 +60,7 @@ nixexpr() {
 		    "darwin-tested" "unstable" "stdenvBootstrapTools"
 		    "moduleSystem" "lib-tests" # these just confuse the output
 		  ];
-		
+
 		in
 		  tweak (builtins.removeAttrs hydraJobs blacklist)
 	EONIX
@@ -124,4 +124,3 @@ if [ -n "$optPrint" ]; then
 	echo
 	cat "$newlist"
 fi
-

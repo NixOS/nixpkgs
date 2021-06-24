@@ -9,8 +9,9 @@ in {
   options = {
     hyperv = {
       baseImageSize = mkOption {
-        type = types.int;
-        default = 2048;
+        type = with types; either (enum [ "auto" ]) int;
+        default = "auto";
+        example = 2048;
         description = ''
           The size of the hyper-v base image in MiB.
         '';
@@ -37,6 +38,7 @@ in {
       name = cfg.vmDerivationName;
       postVM = ''
         ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=dynamic -O vhdx $diskImage $out/${cfg.vmFileName}
+        rm $diskImage
       '';
       format = "raw";
       diskSize = cfg.baseImageSize;

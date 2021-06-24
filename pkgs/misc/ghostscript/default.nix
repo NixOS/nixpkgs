@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
+{ config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
 , libiconv, ijs, lcms2, fetchpatch
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
@@ -9,10 +9,6 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 
 let
-  version = "9.${ver_min}";
-  ver_min = "50";
-  sha512 = "3p46kzn6kh7z4qqnqydmmvdlgzy5730z3yyvyxv6i4yb22mgihzrwqmhmvfn3b7lypwf6fdkkndarzv7ly3zndqpyvg89x436sms7iw";
-
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
 
@@ -37,28 +33,27 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghostscript";
-  inherit version;
+  version = "9.53.3";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${pname}-${version}.tar.xz";
-    inherit sha512;
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/${pname}-${version}.tar.xz";
+    sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
   };
 
   patches = [
+    (fetchpatch {
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
+      sha256 = "1qpc6q1fpxshqc0mqgg36kng47kgljk50bmr8p7wn21jgfkh7m8w";
+    })
     ./urw-font-files.patch
     ./doc-no-ref.diff
-    (fetchpatch {
-      name = "CVE-2019-14869.patch";
-      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=485904772c5f0aa1140032746e5a0abfc40f4cef";
-      sha256 = "0z5gnvgpp0dlzgvpw9a1yan7qyycv3mf88l93fvb1kyay893rshp";
-    })
   ];
 
   outputs = [ "out" "man" "doc" ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs =
     [ zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
@@ -101,21 +96,28 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    mkdir -p "$doc/share/doc/ghostscript"
-    mv "$doc/share/doc/${version}" "$doc/share/doc/ghostscript/"
-
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     for file in $out/lib/*.dylib* ; do
       install_name_tool -id "$file" $file
     done
   '';
 
+  # dynamic library name only contains maj.min, eg. '9.53'
+  dylib_version = lib.versions.majorMinor version;
   preFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libgs.dylib.${version} $out/lib/libgs.dylib.${version} $out/bin/gs
+    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
   '';
 
-  passthru = { inherit version; };
+  # validate dynamic linkage
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/gs --version
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     homepage = "https://www.ghostscript.com/";
@@ -130,9 +132,9 @@ stdenv.mkDerivation rec {
       of output drivers for various file formats and printers.
     '';
 
-    license = stdenv.lib.licenses.agpl3;
+    license = lib.licenses.agpl3;
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.viric ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.viric ];
   };
 }

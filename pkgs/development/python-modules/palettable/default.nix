@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "palettable";
@@ -10,16 +10,15 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
- 
+
   checkPhase = ''
-    pytest 
+    pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library of color palettes";
     homepage = "https://jiffyclub.github.io/palettable/";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

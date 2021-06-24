@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   # Latest commit touching the robotomono tree
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "0fkx2z97k29n1392bf76iwdyz44yp86hmqah7ai6bikzlia38qa0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.google.com/fonts/specimen/Roboto+Mono";
     description = "Google Roboto Mono fonts";
     longDescription = ''

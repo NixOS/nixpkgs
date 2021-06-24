@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "libthumbor";
-  version = "1.3.2";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vjhszsf8wl9k16wyg2rfjycjnawzl7z8j39bhiysbz5x4lqg91b";
+    sha256 = "ed4fe5f27f8f90e7285b7e6dce99c1b67d43a140bf370e989080b43d80ce25f0";
   };
 
   buildInputs = [ django ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "libthumbor is the python extension to thumbor";
     homepage = "https://github.com/heynemann/libthumbor";
     license = licenses.mit;

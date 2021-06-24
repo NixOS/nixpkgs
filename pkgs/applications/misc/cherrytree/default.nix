@@ -1,20 +1,20 @@
-{ lib, fetchFromGitHub, pythonPackages, gettext }:
+{ lib, fetchFromGitHub, python2Packages, gettext }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "cherrytree";
-  version = "0.39.2";
+  version = "0.39.4";
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
     rev = version;
-    sha256 = "1l6wh24bhp4yhmsfmc0r4n2n10nlilkv4cmv5sfl80i250fiw7xa";
+    sha256 = "1wycgn1f3b858qb6kn2bsaabak8n52qkpd24w54xz6fjizlnw7x0";
 
   };
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk dbus-python pygtksourceview ];
+  propagatedBuildInputs = with python2Packages; [ pygtk dbus-python pygtksourceview ];
 
   patches = [ ./subprocess.patch ];
 

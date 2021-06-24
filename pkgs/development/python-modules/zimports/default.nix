@@ -5,6 +5,7 @@
 , flake8-import-order
 , pyflakes
 , mock
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -23,11 +24,18 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pyflakes
     flake8-import-order
+    setuptools
   ];
 
   checkInputs = [
     mock
   ];
+
+  checkPhase = ''
+    runHook preInstallCheck
+    PYTHONPATH= $out/bin/zimports --help >/dev/null
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "Python import rewriter";

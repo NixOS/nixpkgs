@@ -1,15 +1,16 @@
-{ lib, fetchFromGitHub, buildPythonPackage, nose }:
+{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, nose }:
 
 buildPythonPackage rec {
   pname = "rx";
-  version = "1.6.1";
+  version = "3.1.1";
+  disabled = pythonOlder "3.6";
 
   # There are no tests on the pypi source
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "rxpy";
-    rev = version;
-    sha256 = "14bca67a26clzcf2abz2yb8g9lfxffjs2l236dp966sp0lfbpsn5";
+    rev = "v${version}";
+    sha256 = "0p0cs67l40npkvwgn5sb18l1b6df1b9fg6rzlqkwk2aa0v3cpvhf";
   };
 
   checkInputs = [ nose ];

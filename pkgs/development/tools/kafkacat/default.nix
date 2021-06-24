@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, pkgconfig, zlib, rdkafka, yajl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, rdkafka, yajl }:
 
 stdenv.mkDerivation rec {
   pname = "kafkacat";
 
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "kafkacat";
     rev = version;
-    sha256 = "0lf2pf3zqncd4a44h0mjm66qnw02k9kvz1hjkah6p6gp7mx3ksjv";
+    sha256 = "0z3bw00s269myfd1xqksjyznmgp74xfs09xqlq347adsgby3cmfs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zlib rdkafka yajl ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A generic non-JVM producer and consumer for Apache Kafka";
     homepage = "https://github.com/edenhill/kafkacat";
     license = licenses.bsd2;

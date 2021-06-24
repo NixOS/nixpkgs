@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, bison, flex, autoreconfHook
+{ lib, stdenv, fetchurl, bison, flex, autoreconfHook
 , openssl, db, attr, perl, tcsh
 } :
 
 stdenv.mkDerivation rec {
   pname = "orangefs";
-  version = "2.9.7";
+  version = "2.9.8";
 
   src = fetchurl {
     url = "http://download.orangefs.org/current/source/orangefs-${version}.tar.gz";
-    sha256 = "15669f5rcvn44wkas0mld0qmyclrmhbrw4bbbp66sw3a12vgn4sm";
+    sha256 = "0c2yla615j04ygclfavh8g5miqhbml2r0zs2c5mvkacf9in7p7sq";
   };
 
   nativeBuildInputs = [ bison flex perl autoreconfHook ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc/orangefs"
     "--enable-shared"
     "--enable-fast"
-    "--with-ssl=${stdenv.lib.getDev openssl}"
+    "--with-ssl=${lib.getDev openssl}"
   ];
 
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     sed -i 's:openssl:${openssl}/bin/openssl:' $out/bin/pvfs2-gen-keys.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scale-out network file system for use on high-end computing systems";
     homepage = "http://www.orangefs.org/";
     license = with licenses;  [ asl20 bsd3 gpl2 lgpl21 lgpl21Plus openldap ];

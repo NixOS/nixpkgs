@@ -36,6 +36,7 @@ let
     only_admins_can_pause_the_game = true;
     autosave_only_on_server = true;
     admins = [];
+    non_blocking_saving = cfg.nonBlockingSaving;
   } // cfg.extraSettings;
   serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods;
@@ -49,8 +50,13 @@ in
         default = 34197;
         description = ''
           The port to which the service should bind.
-
-          This option will also open up the UDP port in the firewall configuration.
+        '';
+      };
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to automatically open the specified UDP port in the firewall.
         '';
       };
       saveName = mkOption {
@@ -188,6 +194,15 @@ in
           Autosave interval in minutes.
         '';
       };
+      nonBlockingSaving = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Highly experimental feature, enable only at your own risk of losing your saves.
+          On UNIX systems, server will fork itself to create an autosave.
+          Autosaving on connected Windows clients will be disabled regardless of autosave_only_on_server option.
+        '';
+      };
     };
   };
 
@@ -237,6 +252,6 @@ in
       };
     };
 
-    networking.firewall.allowedUDPPorts = [ cfg.port ];
+    networking.firewall.allowedUDPPorts = if cfg.openFirewall then [ cfg.port ] else [];
   };
 }

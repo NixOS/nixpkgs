@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , paver
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ paver ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python IRC library";
     homepage = "https://github.com/jaraco/irc";
     license = with licenses; [ lgpl21 ];

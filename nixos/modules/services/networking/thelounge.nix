@@ -62,7 +62,6 @@ in {
     systemd.services.thelounge = {
       description = "The Lounge web IRC client";
       wantedBy = [ "multi-user.target" ];
-      environment = { THELOUNGE_HOME = dataDir; };
       preStart = "ln -sf ${pkgs.writeText "config.js" configJsData} ${dataDir}/config.js";
       serviceConfig = {
         User = "thelounge";

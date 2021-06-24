@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , dpkg
+, undmg
 , makeWrapper
 , nodePackages
 , alsaLib
@@ -19,32 +20,53 @@
 , gnome2
 , gtk3
 , libappindicator-gtk3
+, libdrm
 , libnotify
 , libpulseaudio
 , libuuid
 , libxcb
+, libxkbcommon
+, libxshmfence
+, mesa
 , nspr
 , nss
 , pango
 , systemd
-, xdg_utils
+, xdg-utils
 , xorg
 }:
 
 let
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
 
   pname = "slack";
 
-  inherit (stdenv.hostPlatform) system;
+  x86_64-darwin-version = "4.14.0";
+  x86_64-darwin-sha256 = "0kpjsnriav6rcddjkz0z9arxjd09i6bw2krnmf3dc31my64nmxs6";
 
-  throwSystem = throw "Unsupported system: ${system}";
+  x86_64-linux-version = "4.14.0";
+  x86_64-linux-sha256 = "0xy9i8ssjba62ca7lfan58rhwx69wkapfd0jzkaj95qhqnv019fg";
 
-  sha256 = {
-    x86_64-darwin = "05xsbiviikrwfayjr6rvvfkm70681x2an6mgcg1cxw1fsi4sr6fd";
-    x86_64-linux = "0h2rfgx92yq9a6dqsv9a0r8a6m5xfrywkljjk5w9snw49b0r1p12";
+  version = {
+    x86_64-darwin = x86_64-darwin-version;
+    x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  src = let
+    base = "https://downloads.slack-edge.com";
+  in {
+    x86_64-darwin = fetchurl {
+      url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+      sha256 = x86_64-darwin-sha256;
+    };
+    x86_64-linux = fetchurl {
+      url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
+      sha256 = x86_64-linux-sha256;
+    };
+  }.${system} or throwSystem;
+
+  meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
     license = licenses.unfree;
@@ -53,14 +75,11 @@ let
   };
 
   linux = stdenv.mkDerivation rec {
-    inherit pname meta;
-    version = "4.4.0";
-    src = fetchurl {
-      url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-      inherit sha256;
-    };
+    inherit pname version src meta;
 
-    rpath = stdenv.lib.makeLibraryPath [
+    passthru.updateScript = ./update.sh;
+
+    rpath = lib.makeLibraryPath [
       alsaLib
       at-spi2-atk
       at-spi2-core
@@ -77,10 +96,13 @@ let
       gnome2.GConf
       gtk3
       libappindicator-gtk3
+      libdrm
       libnotify
       libpulseaudio
       libuuid
       libxcb
+      libxkbcommon
+      mesa
       nspr
       nss
       pango
@@ -96,6 +118,7 @@ let
       xorg.libXi
       xorg.libXrandr
       xorg.libXrender
+      xorg.libxshmfence
       xorg.libXtst
       xorg.libxkbfile
     ] + ":${stdenv.cc.cc.lib}/lib64";
@@ -130,7 +153,7 @@ let
       rm $out/bin/slack
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${xdg_utils}/bin
+        --prefix PATH : ${xdg-utils}/bin
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
@@ -139,23 +162,19 @@ let
     '';
   };
 
-  darwin = stdenv.mkDerivation rec {
-    inherit pname meta;
-    version = "4.4.1";
+  darwin = stdenv.mkDerivation {
+    inherit pname version src meta;
 
-    phases = [ "installPhase" ];
+    passthru.updateScript = ./update.sh;
 
-    src = fetchurl {
-      url = "https://downloads.slack-edge.com/mac_releases/Slack-${version}-macOS.dmg";
-      inherit sha256;
-    };
+    nativeBuildInputs = [ undmg ];
+
+    sourceRoot = "Slack.app";
 
     installPhase = ''
-      /usr/bin/hdiutil mount -nobrowse -mountpoint slack-mnt $src
-      mkdir -p $out/Applications
-      cp -r ./slack-mnt/Slack.app $out/Applications
-      /usr/bin/hdiutil unmount slack-mnt
-      defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
+      mkdir -p $out/Applications/Slack.app
+      cp -R . $out/Applications/Slack.app
+      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
     '';
   };
 in if stdenv.isDarwin

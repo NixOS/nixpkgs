@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, gmp, cmake, python}:
+{lib, stdenv, fetchFromGitHub, gmp, cmake, python3}:
 
 stdenv.mkDerivation rec {
   pname = "libpoly";
@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ gmp python ];
+  buildInputs = [ gmp python3 ];
 
-  meta = with stdenv.lib; {
+  strictDeps = true;
+
+  meta = with lib; {
     homepage = "https://github.com/SRI-CSL/libpoly";
     description = "C library for manipulating polynomials";
     license = licenses.lgpl3;

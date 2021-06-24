@@ -3,6 +3,7 @@
 { pname
 , version
 , internalDeps ? []
+, peclDeps ? []
 , buildInputs ? []
 , nativeBuildInputs ? []
 , postPhpize ? ""
@@ -16,11 +17,12 @@
 
 stdenv.mkDerivation (args // {
   name = "php-${pname}-${version}";
+  extensionName = pname;
 
   inherit src;
 
   nativeBuildInputs = [ autoreconfHook re2c ] ++ nativeBuildInputs;
-  buildInputs = [ php ] ++ buildInputs;
+  buildInputs = [ php ] ++ peclDeps ++ buildInputs;
 
   makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
 

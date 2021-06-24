@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, setJavaClassPath, freetype }:
+{ lib, stdenv, fetchurl, unzip, setJavaClassPath, freetype }:
 let
   jce-policies = fetchurl {
     # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
@@ -18,7 +18,8 @@ let
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-linux/";
     };
 
-    buildInputs = [ unzip freetype ];
+    nativeBuildInputs = [ unzip ];
+    buildInputs = [ freetype ];
 
     installPhase = ''
       mkdir -p $out
@@ -56,7 +57,7 @@ let
       home = jdk;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       license = licenses.gpl2;
       platforms = platforms.darwin;
     };

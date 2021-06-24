@@ -41,6 +41,7 @@ in {
 
         openFilesLimit = mkOption {
           default = openFilesLimit;
+          type = types.either types.int types.str;
           description = ''
             Number of files to allow deluged to open.
           '';
@@ -142,7 +143,7 @@ in {
           description = ''
             Extra packages available at runtime to enable Deluge's plugins. For example,
             extraction utilities are required for the built-in "Extractor" plugin.
-            This always contains unzip, gnutar, xz, p7zip and bzip2.
+            This always contains unzip, gnutar, xz and bzip2.
           '';
         };
 
@@ -187,7 +188,7 @@ in {
     );
 
     # Provide a default set of `extraPackages`.
-    services.deluge.extraPackages = with pkgs; [ unzip gnutar xz p7zip bzip2 ];
+    services.deluge.extraPackages = with pkgs; [ unzip gnutar xz bzip2 ];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group}"

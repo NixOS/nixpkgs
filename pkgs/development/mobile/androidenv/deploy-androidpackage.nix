@@ -5,7 +5,8 @@ let
   extraParams = removeAttrs args [ "package" "os" "buildInputs" "patchInstructions" ];
 in
 stdenv.mkDerivation ({
-  name = package.name + "-" + package.revision;
+  pname = package.name;
+  version = package.revision;
   src = if os != null && builtins.hasAttr os package.archives then package.archives.${os} else package.archives.all;
   buildInputs = [ unzip ] ++ buildInputs;
   preferLocalBuild = true;
@@ -28,7 +29,7 @@ stdenv.mkDerivation ({
     packageBaseDir=$out/libexec/android-sdk/${package.path}
     mkdir -p $packageBaseDir
     cd $packageBaseDir
-    cp -av $sourceRoot/* .
+    cp -a $sourceRoot/* .
     ${patchInstructions}
   '';
 

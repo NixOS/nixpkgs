@@ -166,7 +166,7 @@ index f014c7d..7c8042a 100755
  #cd MPI              ; make lib
 -#cd MT               ; make lib
 +	cd MT               ; make lib
-+	gcc -shared */*/*.lo -Wl,-soname,libspooles.so.2.2 -o libspooles.so.2.2 -lpthread -lm
++	$(CC) -shared */*/*.lo -Wl,-soname,libspooles.so.2.2 -o libspooles.so.2.2 -lpthread -lm
 +	ln -s libspooles.so.2.2 libspooles.so
  
  global :

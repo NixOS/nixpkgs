@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
 , openal, libpng, libvorbis, libGLU, SDL2, SDL2_image, SDL2_ttf }:
 
 let
@@ -9,7 +9,7 @@ let
     name = pname;
     exec = "@out@/bin/${pname}";
     icon = pname;
-    terminal = "False";
+    terminal = "false";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
     categories = "Game;RolePlaying;";
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tales of Maj'eyal (rogue-like game)";
     homepage = "https://te4.org/";
     license = licenses.gpl3;

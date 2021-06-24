@@ -6,9 +6,10 @@
 , pytest
 , pycparser
 , psutil
-, pkgconfig
+, pkg-config
 , dotnetbuildhelpers
 , clang
+, glib
 , mono
 }:
 
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     pytest
     pycparser
 
-    pkgconfig
+    pkg-config
     dotnetbuildhelpers
     clang
 
@@ -63,6 +64,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    glib
     mono
     psutil # needed for memory leak tests
   ];

@@ -1,9 +1,10 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , isPy27
 , fetchPypi
 , glibcLocales
-, pytest
+, pytestCheckHook
 , testfixtures
 , pillow
 , twisted
@@ -18,15 +19,16 @@
 , cssselect
 , zope_interface
 , protego
-, lib
 , jmespath
 , sybil
 , pytest-twisted
 , botocore
+, itemadapter
+, itemloaders
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
+  version = "2.4.1";
   pname = "Scrapy";
 
   disabled = isPy27;
@@ -34,7 +36,7 @@ buildPythonPackage rec {
   checkInputs = [
     glibcLocales
     jmespath
-    pytest
+    pytestCheckHook
     sybil
     testfixtures
     pillow
@@ -55,30 +57,37 @@ buildPythonPackage rec {
     w3lib
     zope_interface
     protego
-  ];
-
-  patches = [
-    # Scrapy is usually installed via pip where copying all
-    # permissions makes sense. In Nix the files copied are owned by
-    # root and readonly. As a consequence scrapy can't edit the
-    # project templates.
-    ./permissions-fix.patch
+    itemadapter
+    itemloaders
   ];
 
   LC_ALL = "en_US.UTF-8";
 
-  # Disable doctest plugin—enabled in the shipped pytest.ini—because it causes pytest to hang
-  # Ignore proxy tests because requires mitmproxy
-  # Ignore test_retry_dns_error because tries to resolve an invalid dns and weirdly fails with "Reactor was unclean"
-  # Ignore xml encoding test on darwin because lxml can't find encodings https://bugs.launchpad.net/lxml/+bug/707396
-  checkPhase = ''
+  # Disable doctest plugin because it causes pytest to hang
+  preCheck = ''
     substituteInPlace pytest.ini --replace "--doctest-modules" ""
-    pytest --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py --deselect tests/test_crawl.py::CrawlTestCase::test_retry_dns_error ${lib.optionalString stdenv.isDarwin "--deselect tests/test_utils_iterators.py::LxmlXmliterTestCase::test_xmliter_encoding"}
   '';
+
+  pytestFlagsArray = [
+    "--ignore=tests/test_proxy_connect.py"
+    "--ignore=tests/test_utils_display.py"
+    "--ignore=tests/test_command_check.py"
+  ];
+
+  disabledTests = [
+    "FTPFeedStorageTest"
+    "test_noconnect"
+    "test_retry_dns_error"
+    "test_custom_asyncio_loop_enabled_true"
+    "test_custom_loop_asyncio"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_xmliter_encoding"
+    "test_download"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "85581a01f4160a103ca9906ffa4e44474f4ecd1685f0934728892c58ebf111f6";
+    sha256 = "68c48f01a58636bdf0f6fcd5035a19ecf277b58af24bd70c36dc6e556df3e005";
   };
 
   postInstall = ''
@@ -86,6 +95,8 @@ buildPythonPackage rec {
     install -m 644 -D extras/scrapy_bash_completion $out/share/bash-completion/completions/scrapy
     install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";

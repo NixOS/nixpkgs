@@ -1,4 +1,4 @@
-{stdenv, fetchurl, erlang, pam, perl }:
+{lib, stdenv, fetchurl, erlang, pam, perl }:
 
 stdenv.mkDerivation rec {
   pname = "yaws";
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     sed -i "s#which #type -P #" $out/bin/yaws
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high performance HTTP 1.1 server in Erlang";
     homepage = "http://yaws.hyber.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu the-kenny ];
+    maintainers = with maintainers; [ goibhniu ];
   };
 
 }

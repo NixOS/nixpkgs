@@ -1,20 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, six }:
 
 buildPythonPackage rec {
   pname = "pyvmomi";
-  version = "6.7.1.2018.12";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1pgl95rbghidbyr8hndjzfzgb1yjchfcknlqgg3qbqvljnz9hfja";
+    sha256 = "1i7zni4ygdikc22wfrbnzwqh6qy402s3di6sdlfcvky2y7fzx52x";
   };
 
   # requires old version of vcrpy
   doCheck = false;
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ requests six ];
 
   meta = with lib; {
     description = "Python SDK for the VMware vSphere API that allows you to manage ESX, ESXi, and vCenter";

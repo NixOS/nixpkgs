@@ -1,21 +1,24 @@
-{ stdenv, buildPythonPackage, fetchPypi, pip, pytest }:
+{ lib, buildPythonPackage, fetchPypi, toml }:
 
 buildPythonPackage rec {
   pname = "setuptools_scm";
-  version = "3.4.3";
+  version = "4.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "26b8a108783cd88f4b15ff1f0f347d6b476db25d0c226159b835d713f9487320";
+    sha256 = "a8994582e716ec690f33fec70cca0f85bd23ec974e3f783233e4879090a7faa8";
   };
+
+  propagatedBuildInputs = [ toml ];
 
   # Requires pytest, circular dependency
   doCheck = false;
+  pythonImportsCheck = [ "setuptools_scm" ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://bitbucket.org/pypa/setuptools_scm/";
+  meta = with lib; {
+    homepage = "https://github.com/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, docutils, meson, ninja, pkgconfig
+{ lib, stdenv, fetchFromGitHub, docutils, meson, ninja, pkg-config
 , dbus, linuxHeaders, systemd }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ docutils meson ninja pkgconfig ];
+  nativeBuildInputs = [ docutils meson ninja pkg-config ];
 
   buildInputs = [ dbus linuxHeaders systemd ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux D-Bus Message Broker";
     homepage    = "https://github.com/bus1/dbus-broker/wiki";
     license     = licenses.asl20;

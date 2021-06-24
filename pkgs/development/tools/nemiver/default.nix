@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , libxml2
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "0.9.6";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/nemiver/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/nemiver/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "85ab8cf6c4f83262f441cb0952a6147d075c3c53d0687389a3555e946b694ef2";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libxml2
     intltool
     itstool
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Nemiver";
     description = "Easy to use standalone C/C++ debugger";
     license = licenses.gpl2;

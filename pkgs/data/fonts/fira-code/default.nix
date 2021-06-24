@@ -1,21 +1,21 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
-  version = "3.1";
+  version = "5.2";
 in fetchzip {
   name = "fira-code-${version}";
 
-  url = "https://github.com/tonsky/FiraCode/releases/download/${version}/FiraCode_${version}.zip";
+  url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
 
+  # only extract the variable font because everything else is a duplicate
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    unzip -j $downloadedFile '*-VF.ttf' -d $out/share/fonts/truetype
   '';
 
-  sha256 = "1rk5hiix282b1gsxq9kqma2q9fnydj0xl9vbrd88rf7ywvn75817";
+  sha256 = "1wbfjgvr9m5azl5w49y0hpqzgcraw6spd1wnxgxlzfx57x6gcw0k";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tonsky/FiraCode";
     description = "Monospace font with programming ligatures";
     longDescription = ''

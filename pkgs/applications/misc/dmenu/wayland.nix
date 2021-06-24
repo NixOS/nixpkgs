@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, meson, ninja, cairo, pango, pkg-config, wayland-protocols
+{ lib, stdenv, fetchFromGitHub, meson, ninja, cairo, pango, pkg-config, wayland-protocols
 , glib, wayland, libxkbcommon, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "dmenu-wayland-unstable";
-  version = "2020-02-28";
+  version = "2020-07-06";
 
   src = fetchFromGitHub {
     owner = "nyyManni";
     repo = "dmenu-wayland";
-    rev = "68e08e8bcde10a10ac3290431f173c6c7fce4238";
-    sha256 = "10b1v2brgpgb6wkzn62haj56zmkf3aq6fs3p9rp6bxiw8bs2nvlm";
+    rev = "304c8e917651ee02b16ebf0b7097a5c53fa2236b";
+    sha256 = "0rkpmpk7xkcfbnv9vpg8n65423z5xpgp0hm2vg0rxf9354bjin7k";
   };
 
   outputs = [ "out" "man" ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     platforms = platforms.linux;
     description = "dmenu for wayland-compositors";

@@ -153,8 +153,8 @@ matching_cargo_toml_path() {
   # is referenced there.
   cargo metadata --no-deps --format-version 1 \
     --manifest-path "$manifest_path" \
-    | jq -r '.packages[] 
-            | select( .name == "'$expected_crate_name'") 
+    | jq -r '.packages[]
+            | select( .name == "'$expected_crate_name'")
             | .manifest_path'
 }
 

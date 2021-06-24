@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, lvm2, libuuid, gettext, readline
-, utillinux, check, enableStatic ? false }:
+{ lib,stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline
+, util-linux, check
+, enableStatic ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   name = "parted-3.1";
@@ -9,22 +11,31 @@ stdenv.mkDerivation rec {
     sha256 = "05fa4m1bky9d13hqv91jlnngzlyn7y4rnnyq6d86w0dg3vww372y";
   };
 
+  patches = [
+    # Fix build with glibc >= 2.28
+    # https://github.com/NixOS/nixpkgs/issues/86403
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-block/parted/files/parted-3.2-sysmacros.patch?id=8e2414f551c14166f259f9a25a594aec7a5b9ea0";
+      sha256 = "0fdgifjbri7n28hv74zksac05gw72p2czzvyar0jp62b9dnql3mp";
+    })
+  ];
+
   buildInputs = [ libuuid ]
-    ++ stdenv.lib.optional (readline != null) readline
-    ++ stdenv.lib.optional (gettext != null) gettext
-    ++ stdenv.lib.optional (lvm2 != null) lvm2;
+    ++ lib.optional (readline != null) readline
+    ++ lib.optional (gettext != null) gettext
+    ++ lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
        (if (readline != null)
         then [ "--with-readline" ]
         else [ "--without-readline" ])
-    ++ stdenv.lib.optional (lvm2 == null) "--disable-device-mapper"
-    ++ stdenv.lib.optional enableStatic "--enable-static";
+    ++ lib.optional (lvm2 == null) "--disable-device-mapper"
+    ++ lib.optional enableStatic "--enable-static";
 
   doCheck = true;
-  checkInputs = [ check utillinux ];
+  checkInputs = [ check util-linux ];
 
-  meta = {
+  meta = with lib; {
     description = "Create, destroy, resize, check, and copy partitions";
 
     longDescription = ''
@@ -38,13 +49,13 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/parted/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     maintainers = [
       # Add your name here!
     ];
 
     # GNU Parted requires libuuid, which is part of util-linux-ng.
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

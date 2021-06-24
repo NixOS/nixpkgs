@@ -16,15 +16,16 @@ fi
 
 source @out@/nix-support/utils.bash
 
-if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
+setDynamicLinker=1
 
 # Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
-        && ( -z "$NIX_@infixSalt@_IGNORE_LD_THROUGH_GCC" || -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ) ]]; then
+        && ( -z "$NIX_IGNORE_LD_THROUGH_GCC_@suffixSalt@" || -z "${NIX_LDFLAGS_SET_@suffixSalt@:-}" ) ]]; then
     rest=()
     nParams=${#params[@]}
     declare -i n=0
@@ -47,6 +48,11 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
             # Our ld is not built with sysroot support (Can we fix that?)
             :
         else
+            if [[ "$p" = -static || "$p" = -static-pie ]]; then
+                # Using a dynamic linker for static binaries can lead to crashes.
+                # This was observed for rust binaries.
+                setDynamicLinker=0
+            fi
             rest+=("$p")
         fi
         n+=1
@@ -60,12 +66,17 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=()
 extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
-if [ -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ]; then
-    extraAfter+=($NIX_@infixSalt@_LDFLAGS)
-    extraBefore+=($NIX_@infixSalt@_LDFLAGS_BEFORE)
+if [ -z "${NIX_LDFLAGS_SET_@suffixSalt@:-}" ]; then
+    extraAfter+=($NIX_LDFLAGS_@suffixSalt@)
+    extraBefore+=($NIX_LDFLAGS_BEFORE_@suffixSalt@)
+    # By adding dynamic linker to extraBefore we allow the users set their
+    # own dynamic linker as NIX_LD_FLAGS will override earlier set flags
+    if [[ "$setDynamicLinker" = 1 && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
+        extraBefore+=("-dynamic-linker" "$NIX_DYNAMIC_LINKER_@suffixSalt@")
+    fi
 fi
 
-extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER)
+extraAfter+=($NIX_LDFLAGS_AFTER_@suffixSalt@)
 
 # Specify the target emulation if nothing is passed in ("-m" overrides this
 # environment variable). Ensures we never blindly fallback on targeting the host
@@ -84,8 +95,8 @@ declare -A libs
 declare -i relocatable=0 link32=0
 
 if
-    [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] \
-        || [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ] \
+    [ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 ] \
+        || [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] \
         || [ -e @out@/nix-support/dynamic-linker-m32 ]
 then
     prev=
@@ -134,7 +145,7 @@ then
     done
 fi
 
-if [ -e "@out@/nix-support/dynamic-linker-m32" ] && (( "$link32" )); then
+if [[ "$link32" = "1" && "$setDynamicLinker" = 1 && -e "@out@/nix-support/dynamic-linker-m32" ]]; then
     # We have an alternate 32-bit linker and we're producing a 32-bit ELF, let's
     # use it.
     extraAfter+=(
@@ -144,7 +155,7 @@ if [ -e "@out@/nix-support/dynamic-linker-m32" ] && (( "$link32" )); then
 fi
 
 # Add all used dynamic libraries to the rpath.
-if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
+if [ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 ]; then
     # For each directory in the library search path (-L...),
     # see if it contains a dynamic library used by a -l... flag.  If
     # so, add the directory to the rpath.
@@ -186,7 +197,7 @@ fi
 
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
-if [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ] && ! (( "$relocatable" )); then
+if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
     extraAfter+=(--build-id)
 fi
 

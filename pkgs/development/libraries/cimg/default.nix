@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "cimg";
-  version = "2.9.0";
+  version = "2.9.6";
 
   src = fetchFromGitHub {
     owner = "dtschump";
     repo = "CImg";
     rev = "v.${version}";
-    sha256 = "1x43c1w2kzr6h3j7y3kwiwb7nba0iymck6bq9psvp53mh9xxrfd1";
+    sha256 = "sha256-RdOfog5FOw5XESyDFX68Lb2MUyCeUuPaq/0UVNTjNKo=";
   };
 
   installPhase = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small, open source, C++ toolkit for image processing";
     longDescription = ''
       CImg stands for Cool Image. It is easy to use, efficient and is intended

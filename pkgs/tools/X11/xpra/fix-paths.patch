@@ -1,13 +1,13 @@
-gdiff --git a/setup.py b/setup.py
-index 8d3df15..6156206 100755
+diff --git a/setup.py b/setup.py
+index f962330..b02b6dd 100755
 --- a/setup.py
 +++ b/setup.py
- -2322,11 +2322,7 @@ if v4l2_ENABLED:                                                                                                                                                       
-     videodev2_h = "/usr/include/linux/videodev2.h"                                                                                                                                           
-     constants_pxi = "xpra/codecs/v4l2/constants.pxi"                                                                                                                                         
-     if not os.path.exists(videodev2_h) or should_rebuild(videodev2_h, constants_pxi):                                                                                                        
--        ENABLE_DEVICE_CAPS = 0                                                                                                                                                               
--        if os.path.exists(videodev2_h):                                                                                                                                                      
+@@ -2224,11 +2224,7 @@ if v4l2_ENABLED:
+     videodev2_h = "/usr/include/linux/videodev2.h"
+     constants_pxi = "xpra/codecs/v4l2/constants.pxi"
+     if not os.path.exists(videodev2_h) or should_rebuild(videodev2_h, constants_pxi):
+-        ENABLE_DEVICE_CAPS = 0
+-        if os.path.exists(videodev2_h):
 -            with open(videodev2_h) as f:
 -                hdata = f.read()
 -            ENABLE_DEVICE_CAPS = int(hdata.find("device_caps")>=0)
@@ -29,3 +29,40 @@ index bd7023d..064c6b5 100644
 
  ###################################
  # Headers, python magic
+diff --git a/xpra/x11/fakeXinerama.py b/xpra/x11/fakeXinerama.py
+index c867258..617af7c 100755
+--- a/xpra/x11/fakeXinerama.py
++++ b/xpra/x11/fakeXinerama.py
+@@ -22,31 +22,7 @@ fakeXinerama_config_files = [
+            ]
+ 
+ def find_libfakeXinerama():
+-    libname = "fakeXinerama"
+-    try:
+-        from ctypes.util import find_library
+-        flibname = find_library("fakeXinerama")
+-        if flibname:
+-            libname = flibname
+-    except Exception:
+-        pass
+-    if POSIX:
+-        for lib_dir in os.environ.get("LD_LIBRARY_PATH", "/usr/lib").split(os.pathsep):
+-            lib_path = os.path.join(lib_dir, libname)
+-            if not os.path.exists(lib_dir):
+-                continue
+-            if os.path.exists(lib_path) and os.path.isfile(lib_path):
+-                return lib_path
+-    if LINUX:
+-        try:
+-            libpath = find_lib_ldconfig("fakeXinerama")
+-            if libpath:
+-                return libpath
+-        except Exception as e:
+-            log("find_libfakeXinerama()", exc_info=True)
+-            log.error("Error: cannot launch ldconfig -p to locate libfakeXinerama:")
+-            log.error(" %s", e)
+-    return find_lib(libname)
++    return "@libfakeXinerama@/lib/libfakeXinerama.so.1.0"
+ 
+ current_xinerama_config = None
+ 

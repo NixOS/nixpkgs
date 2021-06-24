@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flatpak portal library";
     homepage = "https://github.com/flatpak/libportal";
     license = licenses.lgpl2Plus;

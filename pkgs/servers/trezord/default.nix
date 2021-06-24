@@ -1,25 +1,32 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, trezor-udev-rules }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, trezor-udev-rules
+, AppKit
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "trezord-go";
-  version = "2.0.29";
-
-  goPackagePath = "github.com/trezor/trezord-go";
+  version = "2.0.31";
 
   src = fetchFromGitHub {
-    owner  = "trezor";
-    repo   = "trezord-go";
-    rev    = "v${version}";
-    sha256 = "1ks1fa0027s3xp0z6qp0dxmayvrb4dwwscfhbx7da0khp153f2cp";
+    owner = "trezor";
+    repo = "trezord-go";
+    rev = "v${version}";
+    sha256 = "130nhk1pnr3xx9qkcij81mm3jxrl5zvvdqhvrgvrikqg3zlb6v5b";
   };
 
-  propagatedBuildInputs = [ trezor-udev-rules ];
+  vendorSha256 = "0wb959xzyvr5zzjvkfqc422frmf97q5nr460f02wwx0pj6ch0y61";
 
-  meta = with stdenv.lib; {
-    description = "TREZOR Communication Daemon aka TREZOR Bridge";
+  propagatedBuildInputs = lib.optionals stdenv.isLinux [ trezor-udev-rules ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit ];
+
+  meta = with lib; {
+    description = "Trezor Communication Daemon aka Trezor Bridge";
     homepage = "https://trezor.io";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ canndrew jb55 prusnak mmahut maintainers."1000101" ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ canndrew jb55 prusnak mmahut _1000101 ];
     platforms = platforms.unix;
   };
 }

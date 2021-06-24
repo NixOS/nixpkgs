@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , cffi
 , numpy
 , portaudio
@@ -9,11 +10,12 @@
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.3.14";
+  version = "0.4.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7b0f7ad86550668da55404eabcb63d4212ec622fcce86510092306b77d2e80a";
+    sha256 = "f21978921186c0c7183af032fab77b735d824f3e926d76adb3fd0912e289ce0b";
   };
 
   propagatedBuildInputs = [ cffi numpy portaudio ];

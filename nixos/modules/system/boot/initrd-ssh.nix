@@ -83,6 +83,12 @@ in
         Authorized keys for the root user on initrd.
       '';
     };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = "Verbatim contents of <filename>sshd_config</filename>.";
+    };
   };
 
   imports =
@@ -126,6 +132,8 @@ in
       '' else ''
         UseDNS no
       ''}
+
+      ${cfg.extraConfig}
     '';
   in mkIf (config.boot.initrd.network.enable && cfg.enable) {
     assertions = [
@@ -151,9 +159,14 @@ in
 
     boot.initrd.extraUtilsCommandsTest = ''
       # sshd requires a host key to check config, so we pass in the test's
+      tmpkey="$(mktemp initrd-ssh-testkey.XXXXXXXXXX)"
+      cp "${../../../tests/initrd-network-ssh/ssh_host_ed25519_key}" "$tmpkey"
+      # keys from Nix store are world-readable, which sshd doesn't like
+      chmod 600 "$tmpkey"
       echo -n ${escapeShellArg sshdConfig} |
         $out/bin/sshd -t -f /dev/stdin \
-        -h ${../../../tests/initrd-network-ssh/ssh_host_ed25519_key}
+        -h "$tmpkey"
+      rm "$tmpkey"
     '';
 
     boot.initrd.network.postCommands = ''

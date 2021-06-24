@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, packagekit, polkit
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, gettext, gnome3, packagekit, polkit
 , gtk3, systemd, wrapGAppsHook, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
@@ -6,12 +6,12 @@ stdenv.mkDerivation rec {
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-packagekit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-packagekit/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "08rhsisdvx7pnx3rrg5v7c09jbw4grglkdj979gwl4a31j24zjsd";
   };
 
   nativeBuildInputs = [
-    pkgconfig meson ninja gettext wrapGAppsHook desktop-file-utils
+    pkg-config meson ninja gettext wrapGAppsHook desktop-file-utils
   ];
 
   buildInputs = [ gtk3 packagekit systemd polkit ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/software/PackageKit/";
     platforms = platforms.linux;
     maintainers = teams.gnome.members;

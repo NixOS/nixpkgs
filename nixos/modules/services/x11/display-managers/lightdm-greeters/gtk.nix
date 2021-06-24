@@ -88,6 +88,7 @@ in
       cursorTheme = {
 
         package = mkOption {
+          type = types.package;
           default = pkgs.gnome3.adwaita-icon-theme;
           defaultText = "pkgs.gnome3.adwaita-icon-theme";
           description = ''

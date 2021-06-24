@@ -2,7 +2,7 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : rec {
   name = "misc";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco ];
   };
 
@@ -16,9 +16,20 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
       environment.variables.EDITOR = mkOverride 0 "emacs";
       documentation.nixos.enable = mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
-      fileSystems = mkVMOverride { "/tmp2" =
+      virtualisation.fileSystems = { "/tmp2" =
         { fsType = "tmpfs";
           options = [ "mode=1777" "noauto" ];
+        };
+        # Tests https://discourse.nixos.org/t/how-to-make-a-derivations-executables-have-the-s-permission/8555
+        "/user-mount/point" = {
+          device = "/user-mount/source";
+          fsType = "none";
+          options = [ "bind" "rw" "user" "noauto" ];
+        };
+        "/user-mount/denied-point" = {
+          device = "/user-mount/denied-source";
+          fsType = "none";
+          options = [ "bind" "rw" "noauto" ];
         };
       };
       systemd.automounts = singleton
@@ -26,6 +37,7 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
           where = "/tmp2";
         };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
+      users.users.alice = { isNormalUser = true; };
       security.sudo = { enable = true; wheelNeedsPassword = false; };
       boot.kernel.sysctl."vm.swappiness" = 1;
       boot.kernelParams = [ "vsyscall=emulate" ];
@@ -76,8 +88,8 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
       with subtest("whether kernel.poweroff_cmd is set"):
           machine.succeed('[ -x "$(cat /proc/sys/kernel/poweroff_cmd)" ]')
 
-      with subtest("whether the blkio controller is properly enabled"):
-          machine.succeed("[ -e /sys/fs/cgroup/blkio/blkio.reset_stats ]")
+      with subtest("whether the io cgroupv2 controller is properly enabled"):
+          machine.succeed("grep -q '\\bio\\b' /sys/fs/cgroup/cgroup.controllers")
 
       with subtest("whether we have a reboot record in wtmp"):
           machine.shutdown
@@ -111,6 +123,26 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
           machine.fail("grep '/tmp2 tmpfs' /proc/mounts")
           machine.succeed("touch /tmp2/x")
           machine.succeed("grep '/tmp2 tmpfs' /proc/mounts")
+
+      with subtest(
+          "Whether mounting by a user is possible with the `user` option in fstab (#95444)"
+      ):
+          machine.succeed("mkdir -p /user-mount/source")
+          machine.succeed("touch /user-mount/source/file")
+          machine.succeed("chmod -R a+Xr /user-mount/source")
+          machine.succeed("mkdir /user-mount/point")
+          machine.succeed("chown alice:users /user-mount/point")
+          machine.succeed("su - alice -c 'mount /user-mount/point'")
+          machine.succeed("su - alice -c 'ls /user-mount/point/file'")
+      with subtest(
+          "Whether mounting by a user is denied without the `user` option in  fstab"
+      ):
+          machine.succeed("mkdir -p /user-mount/denied-source")
+          machine.succeed("touch /user-mount/denied-source/file")
+          machine.succeed("chmod -R a+Xr /user-mount/denied-source")
+          machine.succeed("mkdir /user-mount/denied-point")
+          machine.succeed("chown alice:users /user-mount/denied-point")
+          machine.fail("su - alice -c 'mount /user-mount/denied-point'")
 
       with subtest("shell-vars"):
           machine.succeed('[ -n "$NIX_PATH" ]')

@@ -1,25 +1,39 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "minio";
-  version = "2020-03-25T07-03-04Z";
+  version = "2021-04-06T23-11-00Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "0xdflc7pfx1misbh695x8kmqpysi5iydsarr9mwmjragf5b1kbl5";
+    sha256 = "sha256-gwf6qA63EFxGQxk8DiAiqLpIYVhVQDQYPffLNP5JfVw=";
   };
 
-  modSha256 = "09kbibsfa7qq55paqr7wcs4gpwk6g5pknc5fjssmd12nm2cji96k";
+  vendorSha256 = "sha256-VeYc+UtocpeNSV+0MocZj/83X/SMMv5PX2cPIPBV/sk=";
+
+  doCheck = false;
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [''-ldflags=
-    -X github.com/minio/minio/cmd.Version=${version}
-  ''];
+  patchPhase = ''
+    sed -i "s/Version.*/Version = \"${version}\"/g" cmd/build-constants.go
+    sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
+    sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
+  '';
 
-  meta = with stdenv.lib; {
+  postConfigure = ''
+    export CGO_ENABLED=0
+  '';
+
+  buildFlagsArray = [
+    "-tags=kqueue"
+  ];
+
+  passthru.tests.minio = nixosTests.minio;
+
+  meta = with lib; {
     homepage = "https://www.minio.io/";
     description = "An S3-compatible object storage server";
     maintainers = with maintainers; [ eelco bachp ];

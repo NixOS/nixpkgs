@@ -16,8 +16,6 @@ in buildGoPackage rec {
   goPackagePath = "github.com/Shopify/ejson";
   subPackages = [ "cmd/ejson" ];
 
-  goDeps = ./deps.nix;
-
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "ejson";
@@ -37,7 +35,7 @@ in buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "A small library to manage encrypted secrets using asymmetric encryption.";
+    description = "A small library to manage encrypted secrets using asymmetric encryption";
     license = licenses.mit;
     homepage = "https://github.com/Shopify/ejson";
     platforms = platforms.unix;

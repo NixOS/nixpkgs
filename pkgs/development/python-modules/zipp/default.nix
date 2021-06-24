@@ -5,18 +5,19 @@
 , pytest
 , pytest-flake8
 , more-itertools
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "zipp";
-  version = "0.6.0";
+  version = "3.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3718b1cbcd963c7d4c5511a8240812904164b7f381b647143a89d3b98f9bcd8e";
+    sha256 = "ed5eee1974372595f9e416cc7bbeeb12335201d8081ca8a0743c954d4446e5cb";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm toml ];
 
   propagatedBuildInputs = [ more-itertools ];
 

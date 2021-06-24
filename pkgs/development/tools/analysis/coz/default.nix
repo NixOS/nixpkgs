@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libelfin
 , ncurses
 , python3
+, python3Packages
 , makeWrapper
 }:
 stdenv.mkDerivation rec {
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     ncurses
     makeWrapper
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -42,15 +44,13 @@ stdenv.mkDerivation rec {
     # fix executable includes
     chmod -x $out/include/coz.h
 
-    # make sure that PYTHONPATH doesn't leak from the environment
-    wrapProgram $out/bin/coz \
-      --unset PYTHONPATH
+    wrapPythonPrograms
   '';
 
   meta = {
     homepage = "https://github.com/plasma-umass/coz";
-    description = "Coz: Causal Profiling";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ zimbatm ];
+    description = "Profiler based on casual profiling";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

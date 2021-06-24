@@ -3,7 +3,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , libftdi1
 , libusb1
 , pciutils
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ax4kqnh7kd3z120ypgp73qy1knz47l6qxsqzrfkd97mh5cdky71";
   };
 
-  nativeBuildInputs = [ meson pkgconfig ninja ];
+  mesonFlags = lib.optionals stdenv.isAarch64 [ "-Dpciutils=false" ];
+  nativeBuildInputs = [ meson pkg-config ninja ];
   buildInputs = [ libftdi1 libusb1 pciutils ];
 
   meta = with lib; {
@@ -27,7 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ funfunctor fpletz ];
     platforms = platforms.all;
-    # https://github.com/flashrom/flashrom/issues/125
-    badPlatforms = [ "aarch64-linux" ];
+    broken = stdenv.isDarwin; # requires DirectHW
   };
 }

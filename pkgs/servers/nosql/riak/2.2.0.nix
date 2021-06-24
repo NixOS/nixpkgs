@@ -28,8 +28,9 @@ in
 stdenv.mkDerivation {
   name = "riak-2.2.0";
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
-    which unzip erlang pam
+    which erlang pam
   ];
 
   src = srcs.riak;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake }:
+{ lib, stdenv, fetchgit, cmake }:
 
 stdenv.mkDerivation rec {
   version = "7";
@@ -10,11 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "1sm05aql75sh13ykgsv3ns4x4zzw9lvzid6misd22gfgf6r9n5fs";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Very small Elliptic Curve Cryptography library";
     homepage = "https://git.universe-factory.net/libuecc";
     license = licenses.bsd2;

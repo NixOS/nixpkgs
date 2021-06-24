@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, encfs
-, glib , gnome3, gtk3, libgnome-keyring, vala, wrapGAppsHook, xorg, gobject-introspection
+{ lib, stdenv, fetchurl, autoconf, automake, intltool, libtool, pkg-config, encfs
+, glib , libgee, gtk3, libgnome-keyring, vala, wrapGAppsHook, xorg, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1h6x8dyp1fvxvr8fwki98ppf4sa20qf7g59jc9797b2vrgm60h1i";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake intltool libtool vala glib encfs
-    gtk3 libgnome-keyring gnome3.libgee xorg.libSM xorg.libICE
+    gtk3 libgnome-keyring libgee xorg.libSM xorg.libICE
     wrapGAppsHook gobject-introspection  ];
 
   patches = [ ./makefile-mkdir.patch ];
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-appindicator" ];
 
-  preFixup = ''gappsWrapperArgs+=(--prefix PATH : ${encfs}/bin)'';
+  preFixup = "gappsWrapperArgs+=(--prefix PATH : ${encfs}/bin)";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.libertyzero.com/GEncfsM/";
     downloadPage = "https://launchpad.net/gencfsm/";
     description = "EncFS manager and mounter with GNOME3 integration";

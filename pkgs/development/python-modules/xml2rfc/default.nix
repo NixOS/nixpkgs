@@ -1,20 +1,22 @@
-{ lib, fetchPypi, buildPythonPackage, intervaltree, pyflakes, requests, lxml, google-i18n-address
-, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint
-, stdenv
+{ lib, fetchPypi, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
+, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2, ConfigArgParse, appdirs
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "2.41.0";
+  version = "3.5.0";
+  disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xmhgn62a8a7282yd003zz63mrgyajb6sg29bfyllx3mxmdlb0iz";
+    sha256 = "3ec836a9545f549707a8c8176038160185b9d08c1dd80304a906527da21bff68";
   };
 
   propagatedBuildInputs = [
     intervaltree
+    jinja2
     pyflakes
+    pyyaml
     requests
     lxml
     google-i18n-address
@@ -25,6 +27,8 @@ buildPythonPackage rec {
     pypdf2
     dict2xml
     weasyprint
+    ConfigArgParse
+    appdirs
   ];
 
   preCheck = ''
@@ -33,6 +37,7 @@ buildPythonPackage rec {
 
   # lxml tries to fetch from the internet
   doCheck = false;
+  pythonImportsCheck = [ "xml2rfc" ];
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";

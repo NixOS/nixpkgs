@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "tl-expected-unstable";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++11/14/17 std::expected with functional-style extensions";
     homepage = "https://tl.tartanllama.xyz/en/latest/api/expected.html";
     license = licenses.cc0;

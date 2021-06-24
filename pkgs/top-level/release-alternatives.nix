@@ -9,7 +9,7 @@ let
   blasUsers = [
     # "julia_07" "julia_10" "julia_11" "julia_13" "octave" "octaveFull"
     "fflas-ffpack" "linbox" "R" "ipopt" "hpl" "rspamd" "octopus"
-    "sundials" "sundials_2" "superlu" "suitesparse_5_3" "suitesparse_4_4"
+    "sundials" "superlu" "suitesparse_5_3" "suitesparse_4_4"
     "suitesparse_4_2" "scs" "scalapack" "petsc" "cholmod-extra"
     "arpack" "qrupdate" "libcint" "iml" "globalarrays" "arrayfire" "armadillo"
     "xfitter" "lammps" "plink-ng" "quantum-espresso" "siesta"
@@ -59,7 +59,7 @@ in
 {
   blas = mapListToAttrs supportedSystems (system': let system = lib.systems.elaborate { system = system'; };
     in mapListToAttrs (blasProviders system) (provider: let
-      is64bit = builtins.elem provider (["mkl64"] ++ lib.optional system.is64bit "openblas");
+      isILP64 = builtins.elem provider (["mkl64"] ++ lib.optional system.is64bit "openblas");
       pkgs = pkgsFun {
         config = { inherit allowUnfree; };
         system = system';
@@ -68,13 +68,13 @@ in
             lapackProvider = if provider == "mkl64"
                              then super.mkl
                              else builtins.getAttr provider super;
-            inherit is64bit;
+            inherit isILP64;
           };
           blas = super.blas.override {
             blasProvider = if provider == "mkl64"
                            then super.mkl
                            else builtins.getAttr provider super;
-            inherit is64bit;
+            inherit isILP64;
           };
         })];
       };

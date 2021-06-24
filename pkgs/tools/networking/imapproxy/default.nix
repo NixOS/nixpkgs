@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, ncurses}:
+{lib, stdenv, fetchurl, openssl, ncurses}:
 
 stdenv.mkDerivation {
   name = "imapproxy-1.2.7";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://imapproxy.org/";
     description = "It proxies IMAP transactions caching server connections";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

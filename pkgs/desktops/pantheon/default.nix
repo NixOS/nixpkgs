@@ -23,11 +23,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-session wingpanel-indicator-sound
   ];
 
-  nixpkgs-github-update = callPackage ./nixpkgs_github_update { };
-
-  updateScript = callPackage ./update.nix { };
-
-  maintainers = with pkgs.stdenv.lib.maintainers; [ worldofpeace ];
+  maintainers = with pkgs.lib.maintainers; [ worldofpeace ];
 
   mutter = pkgs.gnome3.mutter334;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, curl }:
+{ lib, stdenv, fetchgit, curl }:
 
 stdenv.mkDerivation {
   name = "metar-20161013.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/keesL/metar";
     license = licenses.gpl2;
     maintainers = [ maintainers.zalakain ];

@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "minidb";
-  version = "2.0.3";
+  version = "2.0.4";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "thp";
     repo = "minidb";
     rev = version;
-    sha256 = "0c6y3x957pc5sxkl34lymhkwpn4nlsfw07fcv4y9p2zdb7kjd1gc";
+    sha256 = "0i607rkfx0rkyllcx4vf3w2z0wxzs1gqigfw87q90pjrbbh2q4sb";
   };
 
   # module imports are incompatible with python2

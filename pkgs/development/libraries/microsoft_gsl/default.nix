@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, catch, cmake
+{ lib, stdenv, fetchFromGitHub, catch, cmake
 }:
 
 let
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mv ../include/ $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ Core Guideline support library";
     longDescription = ''
      The Guideline Support Library (GSL) contains functions and types that are suggested for

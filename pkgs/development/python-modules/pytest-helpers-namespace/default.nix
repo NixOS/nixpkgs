@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
 , pytest
-, stdenv
+, lib
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # The tests fail with newest pytest. They passed with pytest_3, which no longer exists
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/saltstack/pytest-helpers-namespace";
     description = "PyTest Helpers Namespace";
     license = licenses.asl20;

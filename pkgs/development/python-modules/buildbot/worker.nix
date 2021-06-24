@@ -1,13 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, setuptoolsTrial, mock, twisted, future,
-  coreutils }:
+{ lib, buildPythonPackage, fetchPypi, buildbot, setuptoolsTrial, mock, twisted,
+  future, coreutils }:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
-  version = "2.7.0";
+  inherit (buildbot) version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vwy46acvczgk1hhpsqdwpcw55j4hm5pkw6j01f92axiga8r5jk6";
+    sha256 = "0n5p9x9gz276nv1m8vn3d74jfbd35gff332cjxxqvabk06iqcjp6";
   };
 
   propagatedBuildInputs = [ twisted future ];

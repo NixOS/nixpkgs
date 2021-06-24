@@ -1,27 +1,56 @@
-{ stdenv, fetchFromGitHub , cmake, libjack2, libsndfile }:
+{ lib, stdenv, fetchFromGitHub
+, libjack2, libsndfile, xorg, freetype, libxkbcommon
+, cairo, glib, gnome3, flac, libogg, libvorbis, libopus
+, cmake, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
-  version = "unstable-2020-01-24";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = pname;
-    rev = "b9c332777853cb35faeeda2ff4bf34ea7121ffb9";
-    sha256 = "0wzgwpcwal5a7ifrm1hx8y6vx832qixk9ilp8wkjnsdxj6i88p2c";
+    rev = version;
+    sha256 = "sha256-3RdY5+BPsdk6vctDy24w5aJsVOV9qzSgXs62Pm5UEKs=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    libjack2
+    libsndfile
+    flac
+    libogg
+    libvorbis
+    libopus
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.xcbutil
+    xorg.xcbutilcursor
+    xorg.xcbutilrenderutil
+    xorg.xcbutilkeysyms
+    xorg.xcbutilimage
+    libxkbcommon
+    cairo
+    glib
+    gnome3.zenity
+    freetype
+  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libjack2 libsndfile ];
+  postPatch = ''
+  substituteInPlace editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
+    --replace '"/usr/bin/zenity' '"${gnome3.zenity}/bin/zenity'
+  '';
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DSFIZZ_TESTS=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sfztools/sfizz";
     description = "SFZ jack client and LV2 plugin";
     license = licenses.bsd2;

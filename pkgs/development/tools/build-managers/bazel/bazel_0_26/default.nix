@@ -1,8 +1,8 @@
 { stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
 , zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
+, which, python3, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # Apple dependencies
-, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
+, cctools, llvmPackages_8, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , buildJdkName
@@ -90,9 +90,10 @@ let
 
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
+  stdenv' = if stdenv.isDarwin then llvmPackages_8.libcxxStdenv else stdenv;
 
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
 
   version = "0.26.0";
 
@@ -182,10 +183,10 @@ stdenv.mkDerivation rec {
 
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${llvmPackages_8.libcxx}/include/c++/v1"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
-      sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
+      sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv'.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
         scripts/bootstrap/compile.sh \
         src/tools/xcode/realpath/BUILD \
         src/tools/xcode/stdredirect/BUILD \
@@ -209,8 +210,8 @@ stdenv.mkDerivation rec {
       # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
       # See also `postFixup` where python is added to $out/nix-support
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
-          --replace "/usr/bin/env python" "${python}/bin/python" \
-          --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
+          --replace "/usr/bin/env python" "${python3.interpreter}" \
+          --replace "NIX_STORE_PYTHON_PATH" "${python3.interpreter}" \
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|' \
@@ -236,6 +237,8 @@ stdenv.mkDerivation rec {
       fetch --experimental_distdir=${distDir}
       build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
       build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
+      build --linkopt="$(echo $(< ${stdenv'.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --linkopt="/g')"
+      build --host_linkopt="$(echo $(< ${stdenv'.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --host_linkopt="/g')"
       build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
       build --host_linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt="-Wl,/g')"
       build --host_javabase='@local_jdk//:jdk'
@@ -245,6 +248,8 @@ stdenv.mkDerivation rec {
       # add the same environment vars to compile.sh
       sed -e "/\$command \\\\$/a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
           -e "/\$command \\\\$/a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --linkopt=\"$(echo $(< ${stdenv'.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --linkopt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_linkopt=\"$(echo $(< ${stdenv'.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --host_linkopt=\"/g')\" \\\\" \
           -e "/\$command \\\\$/a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" \
           -e "/\$command \\\\$/a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" \
           -e "/\$command \\\\$/a --host_javabase='@local_jdk//:jdk' \\\\" \
@@ -282,16 +287,18 @@ stdenv.mkDerivation rec {
     buildJdk
   ];
 
+  strictDeps = true;
+
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
     zip
-    python
+    python3
     unzip
     makeWrapper
     which
     customBash
-  ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx CoreFoundation CoreServices Foundation ];
+  ] ++ lib.optionals (stdenv.isDarwin) [ cctools CoreFoundation CoreServices Foundation ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
@@ -375,7 +382,7 @@ stdenv.mkDerivation rec {
     echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
-    echo "${python}" >> $out/nix-support/depends
+    echo "${python3}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;

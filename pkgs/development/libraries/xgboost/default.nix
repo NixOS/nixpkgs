@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
     sha256 = "1zs15k9crkiq7bnr4gqq53mkn3w8z9dq4nwlavmfcr5xr5gw2pw4";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
 
   buildInputs = lib.optional cudaSupport cudatoolkit
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec {
     install -Dm755 ../xgboost $out/bin/xgboost
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, runtimeShell }:
 
 stdenv.mkDerivation {
   pname = "zsh-autoenv";
@@ -19,14 +19,14 @@ stdenv.mkDerivation {
 
     cat <<SCRIPT > $out/bin/zsh-autoenv-share
     #!${runtimeShell}
-    # Run this script to find the fzf shared folder where all the shell
+    # Run this script to find the zsh-autoenv shared folder where all the shell
     # integration scripts are living.
     echo $out/share/zsh-autoenv
     SCRIPT
     chmod +x $out/bin/zsh-autoenv-share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically sources whitelisted .autoenv.zsh files";
     longDescription = ''
       zsh-autoenv automatically sources (known/whitelisted)
@@ -35,6 +35,6 @@ stdenv.mkDerivation {
       variables (overwriting and restoring).
     '';
     homepage = "https://github.com/Tarrasch/zsh-autoenv";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

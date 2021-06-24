@@ -1,27 +1,25 @@
 { lib, pkgs, buildPythonPackage, fetchPypi, isPy3k
 , numpy
 , pyqt5
-, nose
 }:
 
 buildPythonPackage rec {
   pname = "qimage2ndarray";
-  version = "1.8.2";
+  version = "1.8.3";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f792693a0f1cd5f93fbf73bc3fb2d511fb9cceed3c9308bfb200f38c19a5545";
+    sha256 = "b02bd2dc7de774f954544312ec1020cf2d7e03fdd23ec9eb79901da55ccb3365";
   };
-
-  checkInputs = [
-    nose
-  ];
 
   propagatedBuildInputs = [
     numpy
     pyqt5
   ];
+
+  # no tests executed
+  doCheck = false;
 
   meta = {
     homepage = "https://github.com/hmeine/qimage2ndarray";

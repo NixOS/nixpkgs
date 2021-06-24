@@ -11,6 +11,7 @@ let
 
   haveAliases = cfg.postmasterAlias != "" || cfg.rootAlias != ""
                       || cfg.extraAliases != "";
+  haveCanonical = cfg.canonical != "";
   haveTransport = cfg.transport != "";
   haveVirtual = cfg.virtual != "";
   haveLocalRecipients = cfg.localRecipients != null;
@@ -50,7 +51,7 @@ let
       };
 
       type = mkOption {
-        type = types.enum [ "inet" "unix" "fifo" "pass" ];
+        type = types.enum [ "inet" "unix" "unix-dgram" "fifo" "pass" ];
         default = "unix";
         example = "inet";
         description = "The type of the service";
@@ -244,6 +245,7 @@ let
   ;
 
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
+  canonicalFile = pkgs.writeText "postfix-canonical" cfg.canonical;
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
   localRecipientMapFile = pkgs.writeText "postfix-local-recipient-map" (concatMapStrings (x: x + " ACCEPT\n") cfg.localRecipients);
   checkClientAccessFile = pkgs.writeText "postfix-check-client-access" cfg.dnsBlacklistOverrides;
@@ -269,6 +271,7 @@ in
       };
 
       enableSmtp = mkOption {
+        type = types.bool;
         default = true;
         description = "Whether to enable smtp in master.cf.";
       };
@@ -277,6 +280,17 @@ in
         type = types.bool;
         default = false;
         description = "Whether to enable smtp submission.";
+      };
+
+      enableSubmissions = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable smtp submission via smtps.
+
+          According to RFC 8314 this should be preferred
+          over STARTTLS for submission of messages by end user clients.
+        '';
       };
 
       submissionOptions = mkOption {
@@ -295,6 +309,29 @@ in
           milter_macro_daemon_name = "ORIGINATING";
         };
         description = "Options for the submission config in master.cf";
+      };
+
+      submissionsOptions = mkOption {
+        type = types.attrs;
+        default = {
+          smtpd_sasl_auth_enable = "yes";
+          smtpd_client_restrictions = "permit_sasl_authenticated,reject";
+          milter_macro_daemon_name = "ORIGINATING";
+        };
+        example = {
+          smtpd_sasl_auth_enable = "yes";
+          smtpd_sasl_type = "dovecot";
+          smtpd_client_restrictions = "permit_sasl_authenticated,reject";
+          milter_macro_daemon_name = "ORIGINATING";
+        };
+        description = ''
+          Options for the submission config via smtps in master.cf.
+
+          smtpd_tls_security_level will be set to encrypt, if it is missing
+          or has one of the values "may" or "none".
+
+          smtpd_tls_wrappermode with value "yes" will be added automatically.
+        '';
       };
 
       setSendmail = mkOption {
@@ -453,7 +490,7 @@ in
         '';
         example = {
           mail_owner = "postfix";
-          smtp_use_tls = true;
+          smtp_tls_security_level = "may";
         };
       };
 
@@ -465,16 +502,18 @@ in
         ";
       };
 
+      tlsTrustedAuthorities = mkOption {
+        type = types.str;
+        default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        description = ''
+          File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This basically sets smtp_tls_CAfile and enables opportunistic tls. Defaults to NixOS trusted certification authorities.
+        '';
+      };
+
       sslCert = mkOption {
         type = types.str;
         default = "";
         description = "SSL certificate to use.";
-      };
-
-      sslCACert = mkOption {
-        type = types.str;
-        default = "";
-        description = "SSL certificate of CA.";
       };
 
       sslKey = mkOption {
@@ -490,6 +529,15 @@ in
         description = "
           Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
         ";
+      };
+
+      canonical = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Entries for the <citerefentry><refentrytitle>canonical</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> table.
+        '';
       };
 
       virtual = mkOption {
@@ -523,6 +571,7 @@ in
 
       transport = mkOption {
         default = "";
+        type = types.lines;
         description = "
           Entries for the transport map, cf. man-page transport(8).
         ";
@@ -536,6 +585,7 @@ in
 
       dnsBlacklistOverrides = mkOption {
         default = "";
+        type = types.lines;
         description = "contents of check_client_access for overriding dnsBlacklists";
       };
 
@@ -770,27 +820,23 @@ in
         recipient_canonical_classes = [ "envelope_recipient" ];
       }
       // optionalAttrs cfg.enableHeaderChecks { header_checks = [ "regexp:/etc/postfix/header_checks" ]; }
+      // optionalAttrs (cfg.tlsTrustedAuthorities != "") {
+        smtp_tls_CAfile = cfg.tlsTrustedAuthorities;
+        smtp_tls_security_level = mkDefault "may";
+      }
       // optionalAttrs (cfg.sslCert != "") {
-        smtp_tls_CAfile = cfg.sslCACert;
         smtp_tls_cert_file = cfg.sslCert;
         smtp_tls_key_file = cfg.sslKey;
 
-        smtp_use_tls = true;
+        smtp_tls_security_level = mkDefault "may";
 
-        smtpd_tls_CAfile = cfg.sslCACert;
         smtpd_tls_cert_file = cfg.sslCert;
         smtpd_tls_key_file = cfg.sslKey;
 
-        smtpd_use_tls = true;
+        smtpd_tls_security_level = "may";
       };
 
       services.postfix.masterConfig = {
-        smtp_inet = {
-          name = "smtp";
-          type = "inet";
-          private = false;
-          command = "smtpd";
-        };
         pickup = {
           private = false;
           wakeup = 60;
@@ -872,16 +918,42 @@ in
           in concatLists (mapAttrsToList mkKeyVal cfg.submissionOptions);
         };
       } // optionalAttrs cfg.enableSmtp {
+        smtp_inet = {
+          name = "smtp";
+          type = "inet";
+          private = false;
+          command = "smtpd";
+        };
         smtp = {};
         relay = {
           command = "smtp";
           args = [ "-o" "smtp_fallback_relay=" ];
+        };
+      } // optionalAttrs cfg.enableSubmissions {
+        submissions = {
+          type = "inet";
+          private = false;
+          command = "smtpd";
+          args = let
+            mkKeyVal = opt: val: [ "-o" (opt + "=" + val) ];
+            adjustSmtpTlsSecurityLevel = !(cfg.submissionsOptions ? smtpd_tls_security_level) ||
+                                      cfg.submissionsOptions.smtpd_tls_security_level == "none" ||
+                                      cfg.submissionsOptions.smtpd_tls_security_level == "may";
+            submissionsOptions = cfg.submissionsOptions // {
+              smtpd_tls_wrappermode = "yes";
+            } // optionalAttrs adjustSmtpTlsSecurityLevel {
+              smtpd_tls_security_level = "encrypt";
+            };
+          in concatLists (mapAttrsToList mkKeyVal submissionsOptions);
         };
       };
     }
 
     (mkIf haveAliases {
       services.postfix.aliasFiles.aliases = aliasesFile;
+    })
+    (mkIf haveCanonical {
+      services.postfix.mapFiles.canonical = canonicalFile;
     })
     (mkIf haveTransport {
       services.postfix.mapFiles.transport = transportFile;
@@ -899,4 +971,13 @@ in
       services.postfix.mapFiles.client_access = checkClientAccessFile;
     })
   ]);
+
+  imports = [
+   (mkRemovedOptionModule [ "services" "postfix" "sslCACert" ]
+     "services.postfix.sslCACert was replaced by services.postfix.tlsTrustedAuthorities. In case you intend that your server should validate requested client certificates use services.postfix.extraConfig.")
+
+   (mkChangedOptionModule [ "services" "postfix" "useDane" ]
+     [ "services" "postfix" "config" "smtp_tls_security_level" ]
+     (config: mkIf config.services.postfix.useDane "dane"))
+  ];
 }

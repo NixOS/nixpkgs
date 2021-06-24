@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "html5lib";
-  version = "1.0.1";
+  version = "1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "66cb0dcfdbbc4f9c3ba1a63fdb511ffdbd4f513b2b6d81b80cd26ce6b3fb3736";
+    sha256 = "b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f";
   };
 
   checkInputs = [ flake8 pytest_4 pytest-expect mock ];

@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, autoPatchelfHook, writeScript }:
+{ lib, stdenv, fetchurl, postgresql, autoPatchelfHook, writeScript }:
 
 let
   arch = if stdenv.is64bit then "amd64" else "x86";
 in stdenv.mkDerivation rec {
   pname = "teamspeak-server";
-  version = "3.12.1";
+  version = "3.13.3";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "1dxbnk12ry6arn1p38hpv5jfak55pmfmxkkl7aihn3sp1aizpgyg"
-      else "0nfzx7pbzd95a7v08g29l84sc0lnv9fx8vz3mrmzhs0xqn9gxdkq";
+      then "sha256-+b9S0ekQmXF5KwvVcmHIDpp0iZRO2W1ls8eYhDzjUUw="
+      else "sha256-Qu6xPzbUdqO93j353cfQILlFYqmwFSnFWG9TjniX0+c=";
   };
 
-  buildInputs = [ stdenv.cc.cc ];
+  buildInputs = [ stdenv.cc.cc postgresql.lib ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     update-source-version teamspeak_server "$version" --system=x86_64-linux
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TeamSpeak voice communication server";
     homepage = "https://teamspeak.com/";
     license = licenses.unfreeRedistributable;

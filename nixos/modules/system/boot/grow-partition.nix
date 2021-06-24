@@ -20,10 +20,10 @@ with lib;
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.gawk}/bin/gawk
       copy_bin_and_libs ${pkgs.gnused}/bin/sed
-      copy_bin_and_libs ${pkgs.utillinux}/sbin/sfdisk
-      copy_bin_and_libs ${pkgs.utillinux}/sbin/lsblk
+      copy_bin_and_libs ${pkgs.util-linux}/sbin/sfdisk
+      copy_bin_and_libs ${pkgs.util-linux}/sbin/lsblk
 
-      substitute "${pkgs.cloud-utils}/bin/.growpart-wrapped" "$out/bin/growpart" \
+      substitute "${pkgs.cloud-utils.guest}/bin/.growpart-wrapped" "$out/bin/growpart" \
         --replace "${pkgs.bash}/bin/sh" "/bin/sh" \
         --replace "awk" "gawk" \
         --replace "sed" "gnused"

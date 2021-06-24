@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage  }:
+{ lib, fetchFromGitHub, buildGoPackage  }:
 
 buildGoPackage rec {
   pname = "datadog-process-agent";
@@ -15,11 +15,10 @@ buildGoPackage rec {
   goDeps = ./datadog-process-agent-deps.nix;
   goPackagePath = "github.com/${owner}/${repo}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Live process collector for the DataDog Agent v6";
     homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
-    platforms   = platforms.all;
     maintainers = with maintainers; [ domenkozar rvl ];
   };
 }

@@ -1,22 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libusb1, pkgconfig, freeglut, libGLU, libGL, libXi, libXmu
+{ stdenv, lib, fetchFromGitHub, cmake, libusb1, pkg-config, freeglut, libGLU, libGL, libXi, libXmu
 , GLUT, Cocoa
  }:
 
 stdenv.mkDerivation rec {
   pname = "freenect";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "OpenKinect";
     repo = "libfreenect";
     rev = "v${version}";
-    sha256 = "1963xndbiwgj01q17zv6xbqlsbhfd236dkbdwkbjw4b0gr8kqzq9";
+    sha256 = "0was1va167rqshmpn382h36yyprpfi9cwillb6ylppmnfdrfrhrr";
   };
 
   buildInputs = [ libusb1 freeglut libGLU libGL libXi libXmu ]
     ++ lib.optionals stdenv.isDarwin [ GLUT Cocoa ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = {
     description = "Drivers and libraries for the Xbox Kinect device on Windows, Linux, and macOS";

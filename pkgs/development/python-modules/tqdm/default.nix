@@ -1,34 +1,47 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
-, nose
-, coverage
-, glibcLocales
-, flake8
+, setuptools_scm
+, pytestCheckHook
+, pytest-asyncio
+, pytest-timeout
+, numpy
+, pandas
+, rich
+, tkinter
 }:
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.42.1";
+  version = "4.58.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "251ee8440dbda126b8dfa8a7c028eb3f13704898caaef7caa699b35e119301e2";
+    sha256 = "1fjvaag1wy70gglxjkfnn0acrya7fbhzi4adbs1bpap8x03wffn2";
   };
 
-  checkInputs = [ nose coverage glibcLocales flake8 ];
+  nativeBuildInputs = [
+    setuptools_scm
+  ];
 
-  postPatch = ''
-    # Remove performance testing.
-    # Too sensitive for on Hydra.
-    rm tqdm/tests/tests_perf.py
-  '';
+  checkInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-timeout
+    # tests of optional features
+    numpy
+    rich
+    tkinter
+  ] ++
+    # pandas is not supported on i686
+    lib.optional (!stdenv.isi686) pandas;
+
+  # Remove performance testing.
+  # Too sensitive for on Hydra.
+  PYTEST_ADDOPTS = "-k \"not perf\"";
 
   LC_ALL="en_US.UTF-8";
-
-#   doCheck = !stdenv.isDarwin;
-  # Test suite is too big and slow.
-  doCheck = false;
 
   meta = {
     description = "A Fast, Extensible Progress Meter";

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "hmmlearn";
-  version = "0.2.3";
+  version = "0.2.5";
 
   src = fetchurl {
     url = "mirror://pypi/h/hmmlearn/${pname}-${version}.tar.gz";
-    sha256 = "8003d5dc55612de8016156abdc7aa1dd995abc2431adb1ef33dd84a6d29e56bf";
+    sha256 = "14fb4ad3fb7529785844a25fae5d32272619fb5973cc02c8784018055470ca01";
   };
 
   buildInputs = [ setuptools_scm cython ];
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    pytest --doctest-modules --pyargs hmmlearn
+    pytest --pyargs hmmlearn
   '';
 
   meta = with lib; {

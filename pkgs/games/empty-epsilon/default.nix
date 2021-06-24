@@ -2,21 +2,23 @@
 
 let
 
-  major = "2020";
-  minor = "04";
-  patch = "09";
+  major = "2021";
+  minor = "03";
+  patch.seriousproton = "30";
+  patch.emptyepsilon = "31";
 
-  version = "${major}.${minor}.${patch}";
+  version.seriousproton = "${major}.${minor}.${patch.seriousproton}";
+  version.emptyepsilon = "${major}.${minor}.${patch.emptyepsilon}";
 
   serious-proton = stdenv.mkDerivation {
     pname = "serious-proton";
-    inherit version;
+    version = version.seriousproton;
 
     src = fetchFromGitHub {
       owner = "daid";
       repo = "SeriousProton";
-      rev = "EE-${version}";
-      sha256 = "0blqsii8pgxajargd1idry2zakhnvl7j309yjmddarpvafg73blj";
+      rev = "EE-${version.seriousproton}";
+      sha256 = "sha256-wxb/CxJ/HKsVngeahjygZFPMMxitkHdVD0EQ3svxgIU=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -36,13 +38,13 @@ in
 
 stdenv.mkDerivation {
   pname = "empty-epsilon";
-  inherit version;
+  version = version.emptyepsilon;
 
   src = fetchFromGitHub {
     owner = "daid";
     repo = "EmptyEpsilon";
-    rev = "EE-${version}";
-    sha256 = "1hdni8m6m7bgx11scqqqzhcjrmrl0jsxb6cr6rvjbqnahzi23slr";
+    rev = "EE-${version.emptyepsilon}";
+    sha256 = "sha256-x0XJPMU0prubTb4ti/W/dH5P9abNwbjqkeUhKQpct9o=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -50,10 +52,10 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DSERIOUS_PROTON_DIR=${serious-proton.src}"
-    "-DCPACK_PACKAGE_VERSION=${version}"
+    "-DCPACK_PACKAGE_VERSION=${version.emptyepsilon}"
     "-DCPACK_PACKAGE_VERSION_MAJOR=${major}"
     "-DCPACK_PACKAGE_VERSION_MINOR=${minor}"
-    "-DCPACK_PACKAGE_VERSION_PATCH=${patch}"
+    "-DCPACK_PACKAGE_VERSION_PATCH=${patch.emptyepsilon}"
   ];
 
   meta = with lib; {

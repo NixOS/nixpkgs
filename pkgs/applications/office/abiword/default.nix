@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, fribidi
+{ lib, stdenv, fetchurl, pkg-config, gtk3, fribidi
 , libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg, perl
 , boost, libxslt, goffice, wrapGAppsHook, gnome3
 }:
@@ -28,14 +28,14 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace 'enchant >=' 'enchant-2 >='
   '';
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   buildInputs = [
     gtk3 librsvg bzip2 fribidi libpng popt
     libgsf enchant wv libjpeg perl boost libxslt goffice gnome3.adwaita-icon-theme
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Word processing program, similar to Microsoft Word";
     homepage = "https://www.abisource.com/";
     license = licenses.gpl3;

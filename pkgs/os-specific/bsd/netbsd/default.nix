@@ -1,4 +1,4 @@
-{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, yacc, flex
+{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, bison, flex
 , writeText, buildPackages, splicePackages, symlinkJoin }:
 
 let
@@ -61,7 +61,7 @@ let
     builder = ./builder.sh;
 
     meta = with lib; {
-      maintainers = with maintainers; [matthewbauer];
+      maintainers = with maintainers; [ matthewbauer qyliss ];
       platforms = platforms.unix;
       license = licenses.bsd2;
     };
@@ -563,7 +563,7 @@ let
     sha256 = "0630lbvz6v4ic13bfg8ccwfhqkgcv76bfdw9f36rfsnwfgpxqsmq";
     meta.platforms = lib.platforms.netbsd;
     nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          yacc genassym gencat lorder tsort stat ];
+                          bison genassym gencat lorder tsort stat ];
     extraPaths = [ sys.src ld_elf_so.src ];
   };
 
@@ -587,7 +587,7 @@ let
                    librpcsvc.src libutil.src librt.src libcrypt.src ];
     buildInputs = [ buildPackages.netbsd.headers csu ];
     nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          yacc genassym gencat lorder tsort stat ];
+                          bison genassym gencat lorder tsort stat ];
     NIX_CFLAGS_COMPILE = "-B${csu}/lib";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
@@ -664,7 +664,7 @@ let
     path = "share/man";
     noCC = true;
     version = "8.0";
-    sha256 = "0d34b3irjbqsqfk8v8aaj36fjyvwyx410igl26jcx2ryh3ispch0";
+    sha256 = "0yp48syf3y5psm0mymxp6va6spym5izjym0ybr628iqwji21cqdz";
     makeFlags = [ "FILESDIR=$(out)/share" ];
   };
   #

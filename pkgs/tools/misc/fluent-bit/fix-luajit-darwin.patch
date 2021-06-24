@@ -1,0 +1,14 @@
+diff -Naur fluent-bit.old/cmake/luajit.cmake fluent-bit.new/cmake/luajit.cmake
+--- fluent-bit.old/cmake/luajit.cmake
++++ fluent-bit.new/cmake/luajit.cmake
+@@ -11,10 +11,6 @@
+ set(LUAJIT_SRC ${CMAKE_CURRENT_SOURCE_DIR}/${FLB_PATH_LIB_LUAJIT})
+ set(LUAJIT_DEST ${CMAKE_CURRENT_BINARY_DIR})
+ 
+-if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+-  set(CFLAGS "${CFLAGS} -isysroot ${CMAKE_OSX_SYSROOT}")
+-endif()
+-
+ # luajit (UNIX)
+ # =============
+ ExternalProject_Add(luajit

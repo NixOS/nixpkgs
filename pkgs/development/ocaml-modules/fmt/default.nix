@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner, seq, stdlib-shims }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner, seq, stdlib-shims }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.05"
+if !lib.versionAtLeast ocaml.version "4.05"
 then throw "fmt is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "0.8.8";
+  version = "0.8.9";
   pname = "ocaml${ocaml.version}-fmt";
 
   src = fetchurl {
     url = "https://erratique.ch/software/fmt/releases/fmt-${version}.tbz";
-    sha256 = "1iy0rwknd302mr15328g805k210xyigxbija6fzqqfzyb43azvk4";
+    sha256 = "0gkkkj4x678vxdda4xaw2dd44qjacavsvn5nx8gydfwah6pjbkxk";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://erratique.ch/software/fmt";
-    license = stdenv.lib.licenses.isc;
+    license = licenses.isc;
     description = "OCaml Format pretty-printer combinators";
     inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

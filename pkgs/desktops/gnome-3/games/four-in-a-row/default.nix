@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
 , gettext, meson, gsound, librsvg, itstool, vala
 , python3, ninja, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   pname = "four-in-a-row";
-  version = "3.36.0";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1bl63npcbr5ymka2y06wps612qynxa4hsqlzn7bvwpz2v53pai1z";
+    url = "mirror://gnome/sources/four-in-a-row/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "10ji60bdfdzb6wk5dkwjc3yww7hqi3yjcx1k1z7x2521h2dpdli1";
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook gettext meson itstool vala
+    pkg-config wrapGAppsHook gettext meson itstool vala
     ninja python3 desktop-file-utils
   ];
   buildInputs = [ gtk3 gsound librsvg gnome3.adwaita-icon-theme ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Four-in-a-row";
     description = "Make lines of the same color to win";
     maintainers = teams.gnome.members;

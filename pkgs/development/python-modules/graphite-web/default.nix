@@ -1,13 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, django, django_tagging, whisper, pycairo, cairocffi, ldap, memcached, pytz, urllib3, scandir
+{ lib, buildPythonPackage, fetchPypi
+, django
+, memcached
+, txamqp
+, django_tagging
+, gunicorn
+, pytz
+, pyparsing
+, cairocffi
+, whisper
+, whitenoise
+, scandir
+, urllib3
+, six
 }:
+
 buildPythonPackage rec {
   pname = "graphite-web";
-  version = "1.1.6";
+  version = "1.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f4c293008ad588456397cd125cdad7f47f4bab5b6dd82b5fb69f5467e7346a2a";
+    sha256 = "b3cb3b9affe1b9e3777aab046416b3d545390ceea4d35d55c753b1e4732eaad0";
   };
 
   patches = [
@@ -15,8 +28,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    django django_tagging whisper pycairo cairocffi
-    ldap memcached pytz urllib3 scandir
+    django
+    memcached
+    txamqp
+    django_tagging
+    gunicorn
+    pytz
+    pyparsing
+    cairocffi
+    whisper
+    whitenoise
+    scandir
+    urllib3
+    six
   ];
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
@@ -28,7 +52,9 @@ buildPythonPackage rec {
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "graphite" ];
+
+  meta = with lib; {
     homepage = "http://graphiteapp.org/";
     description = "Enterprise scalable realtime graphing";
     maintainers = with maintainers; [ offline basvandijk ];

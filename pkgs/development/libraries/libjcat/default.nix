@@ -1,6 +1,5 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , docbook_xml_dtd_43
 , docbook-xsl-nons
 , glib
@@ -20,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjcat";
-  version = "0.1.1";
+  version = "0.1.6";
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
 
@@ -28,18 +27,12 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
-    sha256 = "hWJUzpQvy2V4pS8C/nW7Xrs9U9LQWMsGuTVOnm5UJc0=";
+    sha256 = "sha256-X+mFl0YZpnt6zzvVTGZN7PROVUaQ8ZmU3T0EgyoZX6g=";
   };
 
   patches = [
     # Installed tests are installed to different output
     ./installed-tests-path.patch
-
-    # Fix version file generation
-    (fetchpatch {
-      url = "https://github.com/hughsie/libjcat/commit/cf2d9298a5fab7278ee040bc0b4be384a7b5538e.patch";
-      sha256 = "3749qih+wfhU8ECklh5BvReJ7pS+Ao1Q7YueZ1tT0Is=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -81,7 +74,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading and writing Jcat files";
     homepage = "https://github.com/hughsie/libjcat";
     license = licenses.lgpl21Plus;

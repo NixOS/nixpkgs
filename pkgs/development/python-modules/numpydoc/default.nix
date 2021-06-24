@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , jinja2
 , nose
 , pytest
@@ -7,12 +7,13 @@
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "0.9.2";
+  version = "1.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname;
     inherit version;
-    sha256 = "9140669e6b915f42c6ce7fef704483ba9b0aaa9ac8e425ea89c76fe40478f642";
+    sha256 = "c36fd6cb7ffdc9b4e165a43f67bf6271a7b024d0bb6b00ac468c9e2bfc76448e";
   };
 
   checkInputs = [ nose pytest ];

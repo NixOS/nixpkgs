@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cairo, gdk-pixbuf, libconfig, pango, pkgconfig
+{ stdenv, fetchFromGitHub, cairo, gdk-pixbuf, libconfig, pango, pkg-config
 , xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt, makeWrapper, docbook_xsl
 , configFile ? null, lib
 , rev, sha256, version, patches ? []
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo gdk-pixbuf libconfig pango xcbutilwm docbook_xsl
     alsaLib wirelesstools asciidoc libxslt makeWrapper
@@ -45,11 +45,11 @@ stdenv.mkDerivation {
     }
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern and lightweight status bar for X window managers";
     homepage    = "https://github.com/geommer/yabar";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

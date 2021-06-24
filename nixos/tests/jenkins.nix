@@ -5,7 +5,7 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "jenkins";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ bjornfor coconnor domenkozar eelco ];
   };
 

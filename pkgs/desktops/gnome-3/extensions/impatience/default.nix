@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib }:
+{ lib, stdenv, fetchFromGitHub, glib }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-impatience";
@@ -16,17 +16,21 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
     make schemas
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r impatience $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   uuid = "impatience@gfxmonk.net";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Speed up builtin gnome-shell animations";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ timbertson tiramiseb ];

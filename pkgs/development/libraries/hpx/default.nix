@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub, boost, cmake, hwloc, gperftools, pkgconfig, python }:
+{ lib, stdenv, fetchFromGitHub, boost, cmake, hwloc, gperftools, pkg-config, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "hpx";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "STEllAR-GROUP";
     repo = "hpx";
     rev = version;
-    sha256 = "0yjsrb11hlfwbiw0xi71ami9nrvz6jwj160h9qgl50icd79ngn46";
+    sha256 = "sha256-Fkntfk5AaWtS1x0fXfLSWW/9tvKcCBi1COqgNxurPmk=";
   };
 
   buildInputs = [ boost hwloc gperftools ];
-  nativeBuildInputs = [ cmake pkgconfig python ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
-  enableParallelBuilding = true;
+  strictDeps = true;
 
   meta = {
     description = "C++ standard library for concurrency and parallelism";
     homepage = "https://github.com/STEllAR-GROUP/hpx";
-    license = stdenv.lib.licenses.boost;
-    platforms = [ "x86_64-linux" ]; # stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ bobakker ];
+    license = lib.licenses.boost;
+    platforms = [ "x86_64-linux" ]; # lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bobakker ];
   };
 }

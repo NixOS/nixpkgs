@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, which, pkgconfig, makeWrapper
-, ffmpeg, libGLU, libGL, freetype, libxml2, python3
+{ lib, stdenv, fetchFromGitHub, which, pkg-config, makeWrapper
+, ffmpeg_3, libGLU, libGL, freetype, libxml2, python3
 , libobjc, AppKit, Foundation
 , alsaLib ? null
 , libdrm ? null
@@ -15,9 +15,11 @@
 , enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
 , withVulkan ? stdenv.isLinux, vulkan-loader ? null
 , fetchurl
+, wayland
+, libxkbcommon
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
@@ -30,19 +32,20 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config wayland ]
                       ++ optional withVulkan makeWrapper;
 
-  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ]
+  buildInputs = [ ffmpeg_3 freetype libxml2 libGLU libGL python3 SDL2 which ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
                 ++ optional withVulkan vulkan-loader
                 ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
                 ++ optionals stdenv.isLinux [ alsaLib libdrm libpulseaudio libv4l libX11
-                                              libXdmcp libXext libXxf86vm mesa udev ];
+                                              libXdmcp libXext libXxf86vm mesa udev
+                                              wayland libxkbcommon ];
 
   enableParallelBuilding = true;
 
-  configureFlags = stdenv.lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
+  configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
 
   postInstall = optionalString withVulkan ''
     wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib

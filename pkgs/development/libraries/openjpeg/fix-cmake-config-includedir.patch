@@ -1,14 +1,3 @@
---- a/cmake/OpenJPEGConfig.cmake.in
-+++ b/cmake/OpenJPEGConfig.cmake.in
-@@ -32,7 +32,7 @@
-   set(INC_DIR "@CMAKE_INSTALL_PREFIX@/@OPENJPEG_INSTALL_INCLUDE_DIR@")
-   file(RELATIVE_PATH PKG_TO_INC_RPATH "${PKG_DIR}" "${INC_DIR}")
- 
--  get_filename_component(OPENJPEG_INCLUDE_DIRS "${SELF_DIR}/${PKG_TO_INC_RPATH}" ABSOLUTE)
-+  get_filename_component(OPENJPEG_INCLUDE_DIRS "@OPENJPEG_INSTALL_INCLUDE_DIR@" ABSOLUTE)
- 
- else()
-   if(EXISTS ${SELF_DIR}/OpenJPEGExports.cmake)
 --- a/src/lib/openjp2/libopenjp2.pc.cmake.in
 +++ b/src/lib/openjp2/libopenjp2.pc.cmake.in
 @@ -3,7 +3,7 @@

@@ -1,12 +1,12 @@
-{ stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
+{ lib, stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 let wrapper = stdenv.mkDerivation rec {
   pname = "wrapper";
-  version = "3.5.35";
+  version = "3.5.44";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "0mjyw9ays9v6lnj21pmfd3qdvd9b6rwxfmw3pg6z0kyf2jadixw2";
+    sha256 = "1iq4j7srzy5p8q3nci9316bnwx4g71jyvzd1i5hp3s8v1k61910g";
   };
 
   buildInputs = [ jdk ];
@@ -32,11 +32,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "i2p";
-  version = "0.9.42";
+  version = "0.9.48";
 
   src = fetchurl {
     url = "https://download.i2p2.de/releases/${version}/i2psource_${version}.tar.bz2";
-    sha256 = "04y71hzkdpjzbac569rhyg1zfx37j0alggbl9gnkaqfbprb2nj1h";
+    sha256 = "0cnm4bwl1gqcx89i96j2qlq6adphy4l72h5whamqwv86n8bmpig8";
   };
 
   buildInputs = [ jdk ant gettext which ];
@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     rm $out/{osid,postinstall.sh,INSTALL-headless.txt}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ maintainers.joelmo ];
+    maintainers = with maintainers; [ joelmo ];
   };
 }

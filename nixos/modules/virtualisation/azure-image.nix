@@ -6,11 +6,12 @@ let
 in
 {
   imports = [ ./azure-common.nix ];
-  
+
   options = {
     virtualisation.azureImage.diskSize = mkOption {
-      type = with types; int;
-      default = 2048;
+      type = with types; either (enum [ "auto" ]) int;
+      default = "auto";
+      example = 2048;
       description = ''
         Size of disk image. Unit is MB.
       '';

@@ -1,11 +1,11 @@
-{ stdenv, llvmPackages }:
+{ lib, stdenv, llvmPackages }:
 
 let
   clang = llvmPackages.clang-unwrapped;
 
 in stdenv.mkDerivation {
   pname = "clang-tools";
-  version = stdenv.lib.getVersion clang;
+  version = lib.getVersion clang;
 
   dontUnpack = true;
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/bin
-    export libc_includes="${stdenv.lib.getDev stdenv.cc.libc}/include"
+    export libc_includes="${lib.getDev stdenv.cc.libc}/include"
     export libcpp_includes="${llvmPackages.libcxx}/include/c++/v1"
 
     export clang=${clang}
@@ -34,6 +34,6 @@ in stdenv.mkDerivation {
 
   meta = clang.meta // {
     description = "Standalone command line tools for C++ development";
-    maintainers = with stdenv.lib.maintainers; [ aherrmann ];
+    maintainers = with lib.maintainers; [ aherrmann ];
   };
 }

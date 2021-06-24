@@ -57,7 +57,8 @@ in
 # When no extensions are requested, we simply redirect to the original
 # non-wrapped vscode executable.
 runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
-  buildInputs = [ vscode makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ vscode ];
   dontPatchELF = true;
   dontStrip = true;
   meta = vscode.meta;
@@ -70,6 +71,6 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
   ln -sT "${vscode}/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
   makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${lib.optionalString (vscodeExtensions != []) ''
-    --add-flags "--extensions-dir ${combinedExtensionsDrv}"
+    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/vscode/extensions"
   ''}
 ''

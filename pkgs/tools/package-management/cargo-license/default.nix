@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/onur/cargo-license";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ basvandijk ];
-    platforms = platforms.all;
   };
 }

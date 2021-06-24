@@ -1,15 +1,17 @@
 {
-  mkDerivation, substituteAll,
+  mkDerivation, lib, substituteAll,
   extra-cmake-modules, kdoctools,
   kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative,
   kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews, knotifications,
   kservice, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
   mobile-broadband-provider-info, modemmanager-qt, networkmanager-qt,
-  openconnect, openvpn, plasma-framework, qca-qt5, qtdeclarative, qttools, solid
+  openconnect, openvpn, plasma-framework, qca-qt5, qtbase, qtdeclarative,
+  qttools, solid
 }:
 
 mkDerivation {
   name = "plasma-nm";
+  meta.broken = lib.versionOlder qtbase.version "5.15.0";
   nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
   buildInputs = [
     kdeclarative kdelibs4support ki18n kio kwindowsystem plasma-framework

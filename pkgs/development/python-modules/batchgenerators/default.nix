@@ -1,33 +1,37 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchPypi
-, pytest
+, fetchFromGitHub
+, pytestCheckHook
 , unittest2
 , future
 , numpy
+, pillow
 , scipy
 , scikitlearn
 , scikitimage
 , threadpoolctl
 }:
 
-
 buildPythonPackage rec {
   pname = "batchgenerators";
-  version = "0.19.7";
+  version = "0.21";
 
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0qqzwqf5r0q6jh8avz4f9kf8x96crvdnkznhf24pbm0faf8yk67q";
+  src = fetchFromGitHub {
+    owner = "MIC-DKFZ";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "16bk4r0q3m2c9fawpmj4l7kz0x3fyv1spb92grf44gmyricq3jdb";
+
   };
 
-  propagatedBuildInputs = [ future numpy scipy scikitlearn scikitimage threadpoolctl ];
-  checkInputs = [ pytest unittest2 ];
+  propagatedBuildInputs = [
+    future numpy pillow scipy scikitlearn scikitimage threadpoolctl
+  ];
 
-  checkPhase = "pytest tests";
+  checkInputs = [ pytestCheckHook unittest2 ];
 
   meta = {
     description = "2D and 3D image data augmentation for deep learning";

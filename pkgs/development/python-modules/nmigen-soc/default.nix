@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "nmigen-soc";
-  version = "unstable-2020-02-08";
+  version = "unstable-2021-02-09";
   # python setup.py --version
-  realVersion = "0.1.dev24+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.1.dev43+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "nmigen";
     repo = "nmigen-soc";
-    rev = "f1b009c7e075bca461d10ec963a7eaa3bf4dfc14";
-    sha256 = "04kjaq9qp6ac3h0r1wlb4jyz56bb52l1rikmz1x7azvnr10xhrad";
+    rev = "ecfad4d9abacf903a525f0a252c38844eda0d2dd";
+    sha256 = "0afmnfs1ms7p1r4c1nc0sfvlcq36zjwaim7775v5i2vajcn3020c";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

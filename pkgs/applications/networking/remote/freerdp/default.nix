@@ -1,9 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, alsaLib, ffmpeg, glib, openssl
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, alsaLib, ffmpeg, glib, openssl
 , pcre, zlib, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama
 , libXrandr, libXrender, libXv, libXtst, libxkbcommon, libxkbfile, wayland
-, gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc, libxslt
-, libusb1, libpulseaudio ? null, cups ? null, pcsclite ? null, systemd ? null
-, buildServer ? true, nocaps ? false }:
+, gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc, libxslt, cairo
+, libusb1, libpulseaudio, cups, pcsclite, systemd, libjpeg_turbo
+, buildServer ? true, nocaps ? false
+}:
 
 let
   cmFlag = flag: if flag then "ON" else "OFF";
@@ -17,13 +18,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.0.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    sha256 = "0d2559v0z1jnq6jlrvsgdf8p6gd27m8kwdnxckl1x0ygaxs50bqc";
+    sha256 = "sha256-qqpdMBDcVfXm/KB54zv23O8raGqBhAKqXo6Kj2VaI8w=";
   };
 
   postPatch = ''
@@ -49,6 +50,7 @@ in stdenv.mkDerivation rec {
   buildInputs = with lib;
     [
       alsaLib
+      cairo
       cups
       ffmpeg
       glib
@@ -65,6 +67,7 @@ in stdenv.mkDerivation rec {
       libXrender
       libXtst
       libXv
+      libjpeg_turbo
       libpulseaudio
       libunwind
       libusb1
@@ -79,7 +82,7 @@ in stdenv.mkDerivation rec {
       zlib
     ] ++ optional stdenv.isLinux systemd;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   doCheck = true;
 
@@ -93,6 +96,9 @@ in stdenv.mkDerivation rec {
       WITH_PULSE = (libpulseaudio != null);
       WITH_SERVER = buildServer;
       WITH_SSE2 = stdenv.isx86_64;
+      WITH_VAAPI = true;
+      WITH_JPEG = (libjpeg_turbo != null);
+      WITH_CAIRO = (cairo != null);
     };
 
   meta = with lib; {

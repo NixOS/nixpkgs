@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, libjpeg, libpng, imake, gccmakedep }:
+{ lib, stdenv, fetchurl, zlib, libjpeg, libpng, imake, gccmakedep }:
 
 stdenv.mkDerivation {
   name = "transfig-3.2.4";
@@ -11,11 +11,11 @@ stdenv.mkDerivation {
   buildInputs = [ zlib libjpeg libpng ];
 
   patches = [
-    ./patch-fig2dev-dev-Imakefile
-    ./patch-fig2dev-Imakefile
-    ./patch-transfig-Imakefile
-    ./patch-fig2dev-fig2dev.h
-    ./patch-fig2dev-dev-gensvg.c
+    ./patch-fig2dev-dev-Imakefile.patch
+    ./patch-fig2dev-Imakefile.patch
+    ./patch-transfig-Imakefile.patch
+    ./patch-fig2dev-fig2dev.h.patch
+    ./patch-fig2dev-dev-gensvg.c.patch
   ];
 
   patchPhase = ''
@@ -56,6 +56,6 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

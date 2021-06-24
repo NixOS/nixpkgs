@@ -8,7 +8,7 @@ let
   cfg  = config.programs.mininet;
 
   generatedPath = with pkgs; makeSearchPath "bin"  [
-    iperf ethtool iproute socat
+    iperf ethtool iproute2 socat
   ];
 
   pyEnv = pkgs.python.withPackages(ps: [ ps.mininet-python ]);

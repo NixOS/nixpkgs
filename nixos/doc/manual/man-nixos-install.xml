@@ -25,16 +25,6 @@
     </group>
    </arg>
    <arg>
-    <group choice='req'>
-     <arg choice='plain'>
-      <option>--print-build-logs</option>
-     </arg>
-     <arg choice='plain'>
-      <option>-L</option>
-     </arg>
-    </group>
-   </arg>
-   <arg>
     <arg choice='plain'>
      <option>-I</option>
     </arg>
@@ -53,6 +43,16 @@
      <option>--system</option>
     </arg>
      <replaceable>path</replaceable>
+   </arg>
+
+   <arg>
+    <option>--flake</option> <replaceable>flake-uri</replaceable>
+   </arg>
+
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--impure</option></arg>
+    </group>
    </arg>
 
    <arg>
@@ -103,6 +103,12 @@
    <arg>
     <arg choice='plain'>
      <option>--show-trace</option>
+    </arg>
+   </arg>
+
+   <arg>
+    <arg choice='plain'>
+     <option>--keep-going</option>
     </arg>
    </arg>
 
@@ -179,12 +185,6 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--print-build-logs</option> / <option>-L</option></term>
-    <listitem>
-     <para>Print the full build logs of <command>nix build</command> to stderr.</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
     <term>
      <option>--root</option>
     </term>
@@ -212,6 +212,18 @@
       closure is typically obtained with a command such as <command>nix-build
       -I nixos-config=./configuration.nix '&lt;nixpkgs/nixos&gt;' -A system
       --no-out-link</command>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--flake</option> <replaceable>flake-uri</replaceable>#<replaceable>name</replaceable>
+    </term>
+    <listitem>
+     <para>
+      Build the NixOS system from the specified flake.
+      The flake must contain an output named
+      <literal>nixosConfigurations.<replaceable>name</replaceable></literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -292,6 +304,17 @@
      <para>
       Causes Nix to print out a stack trace in case of Nix expression
       evaluation errors.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--keep-going</option>
+    </term>
+    <listitem>
+     <para>
+      Causes Nix to continue building derivations as far as possible
+      in the face of failed builds.
      </para>
     </listitem>
    </varlistentry>

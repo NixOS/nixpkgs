@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , removeReferencesTo
 , zlib
 , libjpeg
@@ -9,28 +9,26 @@
 , pam
 , dbus
 , enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
-, systemd ? null
+, systemd
 , acl
 , gmp
 , darwin
-, libusb ? null
+, libusb1 ? null
 , gnutls ? null
 , avahi ? null
 , libpaper ? null
 , coreutils
 }:
 
-assert enableSystemd -> systemd != null;
-
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "cups";
 
   # After 2.2.6, CUPS requires headers only available in macOS 10.12+
-  version = if stdenv.isDarwin then "2.2.6" else "2.3.1";
+  version = if stdenv.isDarwin then "2.2.6" else "2.3.3";
 
   passthru = { inherit version; };
 
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
     sha256 = if version == "2.2.6"
              then "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20"
-             else "1kkpmj17205j8w9hdff2bfpk6lwdmr3gx0j4r35nhgvya24rvjhv";
+             else "1vpk0b2vq830f8fvf9z8qjsm5k141i7pi8djbinpnr78pi4dj7r6";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -48,9 +46,9 @@ stdenv.mkDerivation rec {
       --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
   '';
 
-  nativeBuildInputs = [ pkgconfig removeReferencesTo ];
+  nativeBuildInputs = [ pkg-config removeReferencesTo ];
 
-  buildInputs = [ zlib libjpeg libpng libtiff libusb gnutls libpaper ]
+  buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus ]
     ++ optional enableSystemd systemd
     # Separate from above only to not modify order, to avoid mass rebuilds; merge this with the above at next big change.
@@ -70,7 +68,7 @@ stdenv.mkDerivation rec {
     "--enable-dbus"
     "--enable-pam"
     "--with-dbusdir=${placeholder "out"}/share/dbus-1"
-  ] ++ optional (libusb != null) "--enable-libusb"
+  ] ++ optional (libusb1 != null) "--enable-libusb"
     ++ optional (gnutls != null) "--enable-ssl"
     ++ optional (avahi != null) "--enable-avahi"
     ++ optional (libpaper != null) "--enable-libpaper"

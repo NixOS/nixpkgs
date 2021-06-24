@@ -1,54 +1,64 @@
-{ stdenv
-, buildGoPackage
-, lib
+{ lib, stdenv
+, buildGoModule
 , fetchFromGitHub
-, rocksdb
-, bzip2
-, zlib
 , packr
-, snappy
 , pkg-config
-, zeromq
+, bzip2
 , lz4
+, rocksdb
+, snappy
+, zeromq
+, zlib
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "blockbook";
-  version = "0.3.2";
-
-  goPackagePath = "blockbook";
+  version = "0.3.4";
+  commit = "eb4e10a";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "blockbook";
     rev = "v${version}";
-    sha256 = "0hcgz4b7k8ia4dnjg6bbii95sqg3clc40ybwwc4qz3jv21ikc54x";
+    sha256 = "0da1kav5x2xcmwvdgfk1q70l1k0sqqj3njgx2xx885d40m6qbnrs";
   };
 
-  goDeps = ./deps.nix;
+  runVend = true;
+  vendorSha256 = "0p7vyw61nwvmaz7gz2bdh9fi6wp62i2vnzw6iz2r8cims4sbz53b";
 
-  buildInputs = [ bzip2 zlib snappy zeromq lz4 ];
+  doCheck = false;
 
-  nativeBuildInputs = [ pkg-config packr ];
+  nativeBuildInputs = [ packr pkg-config ];
+
+  buildInputs = [ bzip2 lz4 rocksdb snappy zeromq zlib ];
+
+  buildFlagsArray = ''
+    -ldflags=
+       -X github.com/trezor/blockbook/common.version=${version}
+       -X github.com/trezor/blockbook/common.gitcommit=${commit}
+       -X github.com/trezor/blockbook/common.buildDate=unknown
+  '';
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192
   '' + ''
-    export CGO_CFLAGS="-I${rocksdb}/include"
-    export CGO_LDFLAGS="-L${rocksdb}/lib -lrocksdb -lstdc++ -lm -lz -lbz2 -lsnappy -llz4"
+    export CGO_LDFLAGS="-L${stdenv.cc.cc.lib}/lib -lrocksdb -lz -lbz2 -lsnappy -llz4 -lm -lstdc++"
     packr clean && packr
   '';
 
+  subPackages = [ "." ];
+
   postInstall = ''
-    rm $bin/bin/{scripts,templates,trezor-common}
+    mkdir -p $out/share/
+    cp -r $src/static/templates/ $out/share/
+    cp -r $src/static/css/ $out/share/
   '';
 
   meta = with lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mmahut ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ mmahut _1000101 ];
+    platforms = platforms.unix;
   };
 }
-

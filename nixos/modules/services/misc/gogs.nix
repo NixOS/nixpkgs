@@ -25,7 +25,6 @@ let
     HTTP_ADDR = ${cfg.httpAddress}
     HTTP_PORT = ${toString cfg.httpPort}
     ROOT_URL = ${cfg.rootUrl}
-    STATIC_ROOT_PATH = ${cfg.staticRootPath}
 
     [session]
     COOKIE_NAME = session
@@ -179,13 +178,6 @@ in
         '';
       };
 
-      staticRootPath = mkOption {
-        type = types.str;
-        default = "${pkgs.gogs.data}";
-        example = "/var/lib/gogs/data";
-        description = "Upper level of template and static files path.";
-      };
-
       extraConfig = mkOption {
         type = types.str;
         default = "";
@@ -200,7 +192,7 @@ in
       description = "Gogs (Go Git Service)";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.gogs.bin ];
+      path = [ pkgs.gogs ];
 
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
@@ -230,7 +222,7 @@ in
         HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 4 -type f -wholename "*git/hooks/*")
         if [ "$HOOKS" ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gogs,${pkgs.gogs.bin}/bin/gogs,g' $HOOKS
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gogs,${pkgs.gogs}/bin/gogs,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
@@ -242,7 +234,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
-        ExecStart = "${pkgs.gogs.bin}/bin/gogs web";
+        ExecStart = "${pkgs.gogs}/bin/gogs web";
         Restart = "always";
       };
 

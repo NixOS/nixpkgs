@@ -5,7 +5,7 @@ let
 in
 {
   name = "magnetico";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ rnhmjoj ];
   };
 
@@ -27,12 +27,13 @@ in
       start_all()
       machine.wait_for_unit("magneticod")
       machine.wait_for_unit("magneticow")
+      machine.wait_for_open_port(${toString port})
       machine.succeed(
-          "${pkgs.curl}/bin/curl "
+          "${pkgs.curl}/bin/curl --fail "
           + "-u user:password http://localhost:${toString port}"
       )
-      assert "Unauthorised." in machine.succeed(
-          "${pkgs.curl}/bin/curl "
+      machine.fail(
+          "${pkgs.curl}/bin/curl --fail "
           + "-u user:wrongpwd http://localhost:${toString port}"
       )
       machine.shutdown()

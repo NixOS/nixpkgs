@@ -6,36 +6,33 @@
 , astropy
 , astropy-healpix
 , astropy-helpers
+, astropy-extension-helpers
 , scipy
 , pytest
 , pytest-astropy
+, setuptools_scm
 , cython
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.6";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "484fde86d70d972d703038f138d7c2966ddf51171a6e79bd84e82ea270e27af3";
+    sha256 = "1jsc3ad518vyys5987fr1achq8qvnz8rm80zp5an9qxlwr4zmh4m";
   };
 
-  propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
-
-  nativeBuildInputs = [ astropy-helpers cython ];
-
-  # Fix tests
   patches = [ (fetchpatch {
-    url = "https://github.com/astropy/reproject/pull/218/commits/4661e075137424813ed77f1ebcbc251fee1b8467.patch";
-    sha256 = "13g3h824pqn2lgypzg1b87vkd44y7m302lhw3kh4rfww1dkzhm9v";
-  }) ];
+      # Can be removed in next release after 0.7.1
+      # See https://github.com/astropy/reproject/issues/246
+      url = "https://github.com/astropy/reproject/pull/243.patch";
+      sha256 = "0dq3ii39hsrks0b9v306dlqf07dx0hqad8rwajmzw6rfda9m3c2a";
+    })
+  ];
 
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
-  '';
-
+  propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
+  nativeBuildInputs = [ astropy-helpers cython astropy-extension-helpers setuptools_scm ];
   checkInputs = [ pytest pytest-astropy ];
 
   # Tests must be run in the build directory

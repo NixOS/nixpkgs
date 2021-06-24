@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitLab
 , cairo
 , dbus
@@ -6,20 +7,20 @@
 , gettext
 , glib
 , gtk3
-, libhandy
+, libhandy_0
+, libsass
 , meson
 , ninja
 , pango
-, pkgconfig
+, pkg-config
 , python3
-, rustc
 , rustPlatform
 , wrapGAppsHook
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "contrast";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -27,18 +28,25 @@ rustPlatform.buildRustPackage rec {
     owner = "design";
     repo = "contrast";
     rev = version;
-    sha256 = "0rm705zrk9rfv31pwbqxrswi5v6vhnghxa8dgxjmcrh00l8dm6j9";
+    sha256 = "0kk3mv7a6y258109xvgicmsi0lw0rcs00gfyivl5hdz7qh47iccy";
   };
 
-  cargoSha256 = "0qj0vmxa1d6war1vb3zgkf1drvk7awm970fw6692hd9msa9c1kkf";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-ePkPiWGn79PHrMsSEql5OXZW5uRMdTP+w0/DCcm2KG4=";
+  };
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
     wrapGAppsHook
     glib # for glib-compile-resources
   ];
@@ -48,7 +56,8 @@ rustPlatform.buildRustPackage rec {
     dbus
     glib
     gtk3
-    libhandy
+    libhandy_0
+    libsass
     pango
   ];
 
@@ -56,13 +65,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  # Don't use buildRustPackage phases, only use it for rust deps setup
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
     homepage = "https://gitlab.gnome.org/World/design/contrast";
     license = licenses.gpl3;

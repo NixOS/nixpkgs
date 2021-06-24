@@ -1,46 +1,53 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, requests
+, fetchFromGitHub
+, certifi
+, click
 , keyring
 , keyrings-alt
-, click
+, pytz
+, requests
 , six
 , tzlocal
-, certifi
-, bitstring
-, unittest2
+, pytest-mock
+, pytestCheckHook
 , future
 }:
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "0.9.5";
+  version = "0.10.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1c8sdlqcmpajcpf6jfpi6amncibm9c3zrl1860r0vfimps50m34h";
+  src = fetchFromGitHub {
+    owner = "picklepete";
+    repo = pname;
+    rev = version;
+    sha256 = "0bxbhvimwbj2jm8dg7sil8yvln17xgjhvpwr4m783vwfcf76kdmy";
   };
 
   propagatedBuildInputs = [
-    requests
+    certifi
+    click
+    future
     keyring
     keyrings-alt
-    click
+    pytz
+    requests
     six
     tzlocal
-    certifi
-    bitstring
-    future
   ];
 
-  checkInputs = [ unittest2 ];
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   postPatch = ''
     sed -i \
-      -e 's!click>=6.0,<7.0!click!' \
-      -e 's!keyring>=8.0,<9.0!keyring!' \
-      -e 's!keyrings.alt>=1.0,<2.0!keyrings.alt!' \
+      -e 's!click>=.*!click!' \
+      -e 's!keyring>=.*!keyring!' \
+      -e 's!keyrings.alt>=.*!keyrings.alt!' \
+      -e 's!tzlocal==.*!tzlocal!' \
       requirements.txt
   '';
 

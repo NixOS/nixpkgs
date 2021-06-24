@@ -1,15 +1,20 @@
-{ stdenv, fetchurl, makeWrapper, cmake, llvmPackages, kernel
+{ lib, stdenv, fetchFromGitHub
+, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash
+, systemtap, bash, libbpf
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.13.0";
+  version = "0.19.0";
 
-  src = fetchurl {
-    url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
-    sha256 = "15xpwf17x2j1c1wcb84cgfs35dp5w0rjd9mllmddmdjvn303wffx";
+  disabled = !stdenv.isLinux;
+
+  src = fetchFromGitHub {
+    owner = "iovisor";
+    repo = "bcc";
+    rev = "v${version}";
+    sha256 = "sha256:0k807vzznlb2icczw64ph6q28605kvghya2kd4h3c7jmap6gq1qg";
   };
   format = "other";
 
@@ -17,6 +22,7 @@ python.pkgs.buildPythonApplication rec {
     llvm clang-unwrapped kernel
     elfutils luajit netperf iperf
     systemtap.stapBuild flex bash
+    libbpf
   ];
 
   patches = [
@@ -28,13 +34,14 @@ python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = [ python.pkgs.netaddr ];
   nativeBuildInputs = [ makeWrapper cmake flex bison ]
     # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 
   cmakeFlags = [
     "-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules"
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
+    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
 
   postPatch = ''
@@ -65,7 +72,7 @@ python.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
     homepage    = "https://iovisor.github.io/bcc/";
     license     = licenses.asl20;

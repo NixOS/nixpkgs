@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , substituteAll
 , docbook_xml_dtd_42
@@ -19,11 +19,11 @@
 , libxslt
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pngquant
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.16";
+  name = "appstream-glib-0.7.18";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
-    rev = stdenv.lib.replaceStrings [ "." "-" ] [ "_" "_" ] name;
-    sha256 = "05x2pmsq18fcpgfvx0y54qdlryy5c9k3sxk6kgank8frkzhgnm9r";
+    rev = lib.replaceStrings [ "." "-" ] [ "_" "_" ] name;
+    sha256 = "12s7d3nqjs1fldnppbg2mkjg4280f3h8yzj3q1hiz3chh1w0vjbx";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     moveToOutput "share/installed-tests" "$installedTests"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Objects and helper methods to read and write AppStream metadata";
     homepage = "https://people.freedesktop.org/~hughsient/appstream-glib/";
     license = licenses.lgpl2Plus;

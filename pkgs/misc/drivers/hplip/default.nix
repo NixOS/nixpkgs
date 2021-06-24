@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, substituteAll
-, pkgconfig
+{ lib, stdenv, fetchurl, substituteAll
+, pkg-config
 , cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
 , dbus, file, ghostscript, usbutils
-, net-snmp, openssl, perl, nettools
-, bash, coreutils, utillinux
+, net-snmp, openssl, perl, nettools, avahi
+, bash, coreutils, util-linux
+# To remove references to gcc-unwrapped
+, removeReferencesTo, qt5
 , withQt5 ? true
 , withPlugin ? false
 , withStaticPPDInstall ? false
@@ -11,17 +13,17 @@
 
 let
 
-  name = "hplip-${version}";
-  version = "3.20.3";
+  pname = "hplip";
+  version = "3.20.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0sh6cg7yjc11x1cm4477iaslj9n8ksghs85hqwgfbk7m5b2pw2a1";
+    url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
+    sha256 = "CxZ1s9jnCaEyX+hj9arOO9NxB3mnPq6Gj3su6aVv2xE=";
   };
 
   plugin = fetchurl {
-    url = "https://developers.hp.com/sites/default/files/${name}-plugin.run";
-    sha256 = "13xyv30jqjysfk7gh0gyn7qj0pb0qvk2rlbhm85a3lw7bjycal8g";
+    url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
+    sha256 = "r8PoQQFfjdHKySPCFwtDR8Tl6v5Eag9gXpBAp6sCF9Q=";
   };
 
   hplipState = substituteAll {
@@ -48,7 +50,7 @@ assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
 python3Packages.buildPythonApplication {
-  inherit name src;
+  inherit pname version src;
   format = "other";
 
   buildInputs = [
@@ -63,19 +65,23 @@ python3Packages.buildPythonApplication {
     openssl
     perl
     zlib
+    avahi
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkg-config
+    removeReferencesTo
+  ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
   pythonPath = with python3Packages; [
     dbus
     pillow
-    pygobject2
+    pygobject3
     reportlab
     usbutils
     sip
     dbus-python
-  ] ++ stdenv.lib.optionals withQt5 [
+  ] ++ lib.optionals withQt5 [
     pyqt5
     enum-compat
   ];
@@ -87,6 +93,12 @@ python3Packages.buildPythonApplication {
     # https://bugs.launchpad.net/hplip/+bug/1788706
     # https://bugs.launchpad.net/hplip/+bug/1787289
     ./image-processor.patch
+
+    # HPLIP's getSystemPPDs() function relies on searching for PPDs below common FHS
+    # paths, and hp-setup crashes if none of these paths actually exist (which they
+    # don't on NixOS).  Add the equivalent NixOS path, /var/lib/cups/path/share.
+    # See: https://github.com/NixOS/nixpkgs/issues/21796
+    ./hplip-3.20.11-nixos-cups-ppd-search-path.patch
   ];
 
   prePatch = ''
@@ -115,9 +127,9 @@ python3Packages.buildPythonApplication {
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
-      ${stdenv.lib.optionalString withStaticPPDInstall "--enable-cups-ppd-install"}
+      ${lib.optionalString withStaticPPDInstall "--enable-cups-ppd-install"}
       --disable-qt4
-      ${stdenv.lib.optionalString withQt5 "--enable-qt5"}
+      ${lib.optionalString withQt5 "--enable-qt5"}
     "
 
     export makeFlags="
@@ -143,7 +155,7 @@ python3Packages.buildPythonApplication {
   # Running `hp-diagnose_plugin -g` can be used to diagnose
   # issues with plugins.
   #
-  postInstall = stdenv.lib.optionalString withPlugin ''
+  postInstall = lib.optionalString withPlugin ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
 
@@ -214,11 +226,21 @@ python3Packages.buildPythonApplication {
     substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
       --replace {,${bash}}/bin/sh \
       --replace /usr/bin/nohup "" \
-      --replace {,${utillinux}/bin/}logger \
+      --replace {,${util-linux}/bin/}logger \
       --replace {/usr,$out}/bin
+    remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
+  '' + lib.optionalString withQt5 ''
+    for f in $out/bin/hp-*;do
+      wrapQtApp $f
+    done
   '';
 
-  meta = with stdenv.lib; {
+  # There are some binaries there, which reference gcc-unwrapped otherwise.
+  stripDebugList = [
+    "share/hplip" "lib/cups/backend" "lib/cups/filter" python3Packages.python.sitePackages "lib/sane"
+  ];
+
+  meta = with lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";

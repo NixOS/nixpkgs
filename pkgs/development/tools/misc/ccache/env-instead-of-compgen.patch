@@ -1,0 +1,18 @@
+diff --git a/test/run b/test/run
+index cbdd98f0..bc930200 100755
+--- a/test/run
++++ b/test/run
+@@ -346,11 +346,11 @@ expect_perm() {
+ }
+ 
+ reset_environment() {
+-    while IFS= read -r name; do
++    while IFS='=' read -r name value; do
+         if [[ $name =~ ^CCACHE_[A-Z0-9_]*$ ]]; then
+             unset $name
+         fi
+-    done < <(compgen -e)
++    done < <(env)
+ 
+     unset GCC_COLORS
+     unset TERM

@@ -1,16 +1,16 @@
-{ mkXfceDerivation, automakeAddFlags, exo, garcon, gtk3, glib
+{ mkXfceDerivation, exo, garcon, gtk3, glib
 , libnotify, libxfce4ui, libxfce4util, libxklavier
 , upower, xfconf, xf86inputlibinput }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.14.0";
+  version = "4.16.1";
 
-  sha256 = "13gmxd4sfgd6wky7s03bar58w9vl4i6jv2wncd6iajww791y5akn";
+  sha256 = "0mjhglfsqmiycpv98l09n2556288g2713n4pvxn0srivm017fdir";
 
   postPatch = ''
-    for f in $(find . -name \*.c); do
+    for f in xfsettingsd/pointers.c dialogs/mouse-settings/main.c; do
       substituteInPlace $f --replace \"libinput-properties.h\" '<xorg/libinput-properties.h>'
     done
   '';

@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, gettext, itstool, libxml2, dbus-glib,
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, dbus-glib,
   libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3,
   desktop-file-utils, dconf, gtk3, polkit, mate, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-control-center";
-  version = "1.24.0";
+  version = "1.24.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "192plsh83m2qz7jgakns2yvhqbj53v7i54iwb0z26i2awy0j9rcd";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "08bai47fsmbxlw2lhig9n6c8sxr24ixkd1spq3j0635yzcqighb0";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     itstool
     desktop-file-utils
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities to configure the MATE desktop";
     homepage = "https://github.com/mate-desktop/mate-control-center";
     license = licenses.gpl2;

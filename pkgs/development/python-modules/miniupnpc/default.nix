@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "miniupnpc";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0ca94zz7sr2x57j218aypxqcwkr23n8js30f3yrvvqbg929nr93y";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "miniUPnP client";
     homepage = "http://miniupnp.free.fr/";
     license = licenses.mit;

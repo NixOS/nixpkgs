@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A dot-accessible dictionary (a la JavaScript objects)";
     license = licenses.mit;
     homepage = "https://github.com/Infinidat/munch";

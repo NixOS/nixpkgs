@@ -1,50 +1,55 @@
 { stdenv
+, lib
 , fetchFromGitLab
-, cargo
 , dbus
 , desktop-file-utils
 , gdk-pixbuf
 , gettext
+, gitMinimal
 , glib
 , gst_all_1
 , gtk3
-, libhandy
+, libhandy_0
 , meson
 , ninja
 , openssl
 , pkg-config
 , python3
-, rust
-, rustc
 , rustPlatform
 , sqlite
 , wrapGAppsHook
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "shortwave";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Shortwave";
     rev = version;
-    sha256 = "13lhlh75vw02vkcknl4nvy0yvpdf0qx811mmyja8bzs4rj1j9kr8";
+    sha256 = "1vlhp2ss06j41simjrrjg38alp85jddhqyvccy6bhfzm0gzynwld";
   };
 
-  cargoSha256 = "0aph5z54a6i5p8ga5ghhx1c9hjc8zdw5pkv9inmanca0bq3hkdlh";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-0+KEbjTLecL0u/3S9FWf2r2h9ZrgcRTY163kS3NKJqA=";
+  };
 
   nativeBuildInputs = [
-    cargo
     desktop-file-utils
     gettext
+    gitMinimal
     glib # for glib-compile-schemas
     meson
     ninja
     pkg-config
     python3
-    rustc
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
     wrapGAppsHook
   ];
 
@@ -53,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     gdk-pixbuf
     glib
     gtk3
-    libhandy
+    libhandy_0
     openssl
     sqlite
   ] ++ (with gst_all_1; [
@@ -63,17 +68,11 @@ rustPlatform.buildRustPackage rec {
     gst-plugins-bad
   ]);
 
-  # Don't use buildRustPackage phases, only use it for rust deps setup
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
-
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Shortwave";
     description = "Find and listen to internet radio stations";
     longDescription = ''

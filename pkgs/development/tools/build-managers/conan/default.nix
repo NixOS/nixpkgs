@@ -1,7 +1,7 @@
-{ lib, python3, git, pkgconfig }:
+{ lib, stdenv, python3, fetchFromGitHub, git, pkg-config }:
 
 # Note:
-# Conan has specific dependency demanands; check
+# Conan has specific dependency demands; check
 #     https://github.com/conan-io/conan/blob/master/conans/requirements.txt
 #     https://github.com/conan-io/conan/blob/master/conans/requirements_server.txt
 # on the release branch/commit we're packaging.
@@ -14,13 +14,6 @@
 
 let newPython = python3.override {
   packageOverrides = self: super: {
-    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
-      version = "1.1.0";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "1vn1db2akw98ybnpns92qi11v94hydwp130s8753k6ikby95883j";
-      };
-    });
     node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
       version = "0.6.1";
       src = oldAttrs.src.override {
@@ -28,23 +21,25 @@ let newPython = python3.override {
         sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
       };
     });
-    pluginbase = super.pluginbase.overridePythonAttrs (oldAttrs: rec {
-      version = "0.7";
+    urllib3 = super.urllib3.overridePythonAttrs (oldAttrs: rec {
+      version = "1.25.11";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8";
+        sha256 = "18hpzh1am1dqx81fypn57r2wk565fi4g14292qrc5jm1h9dalzld";
       };
     });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.24.0";
+  version = "1.35.0";
   pname = "conan";
 
-  src = newPython.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "0nkh4f6plamijwcfw536ydm0i04y74qmkh5l1nanyb8p0c3z3x0y";
+  src = fetchFromGitHub {
+    owner = "conan-io";
+    repo = "conan";
+    rev = version;
+    sha256 = "19rgylkjxvv47vz5vgh46rw108xskpv7lmax8y2fnm2wd1j3bq9c";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
@@ -67,30 +62,26 @@ in newPython.pkgs.buildPythonApplication rec {
     six
     tqdm
     urllib3
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ idna cryptography pyopenssl ];
 
   checkInputs = [
-    pkgconfig
+    pkg-config
     git
   ] ++ (with newPython.pkgs; [
     codecov
     mock
-    pytest
-    node-semver
     nose
     parameterized
     webtest
   ]);
 
-  # Conan 1.14.0 has removed all tests from the Pypi source dist:
-  #     https://github.com/conan-io/conan/pull/4713
-  # We have recommended they be added back:
-  #     https://github.com/conan-io/conan/issues/4563#issuecomment-602225083
+  # TODO: reenable tests now that we fetch tests w/ the source from GitHub.
+  # Not enabled right now due to time constraints/failing tests that I didn't have time to track down
   doCheck = false;
 
   postPatch = ''
     substituteInPlace conans/requirements.txt \
-      --replace "PyYAML>=3.11, <3.14.0" "PyYAML"
+      --replace "deprecation>=2.0, <2.1" "deprecation"
   '';
 
   meta = with lib; {
@@ -98,6 +89,5 @@ in newPython.pkgs.buildPythonApplication rec {
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];
-    platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, ocaml, makeWrapper, fetchsvn, ghostscript, imagemagick, perl, poppler_utils, tesseract, unpaper }:
+{ lib, stdenv, ocaml, makeWrapper, fetchsvn, ghostscript, imagemagick, perl, poppler_utils, tesseract, unpaper }:
 
 stdenv.mkDerivation {
   version = "0.1.7";
@@ -10,17 +10,18 @@ stdenv.mkDerivation {
     sha256 = "1420c33divch087xrr61lvyf975bapqkgjqaighl581i69nlzsm6";
   };
 
-  buildInputs = [ ocaml perl makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ ocaml perl ];
   installPhase = ''
     mkdir -p $out/bin
     cp -p pdfsandwich $out/bin
-    wrapProgram $out/bin/pdfsandwich --prefix PATH : ${stdenv.lib.makeBinPath [ imagemagick ghostscript poppler_utils unpaper tesseract ]}
+    wrapProgram $out/bin/pdfsandwich --prefix PATH : ${lib.makeBinPath [ imagemagick ghostscript poppler_utils unpaper tesseract ]}
 
     mkdir -p $out/man/man1
     cp -p pdfsandwich.1.gz $out/man/man1
   '';
 
-meta = with stdenv.lib; {
+meta = with lib; {
     description = "OCR tool for scanned PDFs";
     homepage = "http://www.tobias-elze.de/pdfsandwich/";
     license = licenses.gpl2;

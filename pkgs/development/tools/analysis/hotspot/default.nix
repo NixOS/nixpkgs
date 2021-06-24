@@ -1,4 +1,4 @@
-{ stdenv,
+{ lib,
   mkDerivation,
   cmake,
   elfutils,
@@ -17,18 +17,18 @@
 
 mkDerivation rec {
   pname = "hotspot";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
     rev = "v${version}";
-    sha256 = "05rkzrvak93z8mzcpm4mcjxb933l8pjsxr9a595wfn1gn2ihmada";
+    sha256 = "1f68bssh3p387hkavfjkqcf7qf7w5caznmjfjldicxphap4riqr5";
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    cmake
     elfutils
     extra-cmake-modules
     kconfigwidgets
@@ -50,8 +50,6 @@ mkDerivation rec {
     mkdir -p 3rdparty/perfparser/.git
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "A GUI for Linux perf";
     longDescription = ''
@@ -60,8 +58,8 @@ mkDerivation rec {
       then displays the result in a graphical way.
     '';
     homepage = "https://github.com/KDAB/hotspot";
-    license = with stdenv.lib.licenses; [ gpl2 gpl3 ];
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ nh2 ];
+    license = with lib.licenses; [ gpl2 gpl3 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nh2 ];
   };
 }

@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
+, pytestCheckHook
+, pytest_xdist
+, pythonOlder
+, matplotlib
 , mock
 , pytorch
 , pynvml
@@ -11,23 +14,45 @@
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.2.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15k6dd11yxn4923llcpmw4srl1by5ljhh7aw5pnkn4n4qpywh6cm";
+    sha256 = "00vcmhnp14s54g386izgaxzrdr2nqv3pz9nvpyiwrn33zawr308z";
   };
 
-  checkInputs = [ pytest mock ];
-
-  checkPhase = ''
-    pytest -k 'not visdom and not tensorboard and not mlflow and not polyaxon' tests/
-  '';
-  # these packages are not currently in nixpkgs
-
+  checkInputs = [ pytestCheckHook matplotlib mock pytest_xdist ];
   propagatedBuildInputs = [ pytorch scikitlearn tqdm pynvml ];
+
+  # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
+  doCheck = pythonOlder "3.9";
+
+  # Some packages are not in NixPkgs; other tests try to build distributed
+  # models, which doesn't work in the sandbox.
+  # avoid tests which need special packages
+  pytestFlagsArray = [
+    "--ignore=tests/ignite/contrib/handlers/test_trains_logger.py"
+    "--ignore=tests/ignite/metrics/test_dill.py"
+    "--ignore=tests/ignite/metrics/test_ssim.py"
+    "tests/"
+  ];
+
+  # disable tests which need specific packages
+  disabledTests = [
+    "idist"
+    "tensorboard"
+    "mlflow"
+    "trains"
+    "visdom"
+    "test_setup_neptune"
+    "test_output_handler" # needs mlflow
+    "test_integration"
+    "test_pbar" # slight output differences
+    "test_write_results"
+    "test_setup_plx"
+  ];
 
   meta = with lib; {
     description = "High-level training library for PyTorch";

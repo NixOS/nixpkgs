@@ -2,16 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , numpy
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.76";
+  version = "1.78";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wlch9xpa0fpgjzyxi6jsfca6iakaq9a05927xg8vqnmvaccnwrq";
+    sha256 = "1ee0a0b6c2376680fea6642d5080baa419fd73df104a62d58a8baf7a8bbe4564";
   };
+
+  disabled = !isPy3k;
 
   propagatedBuildInputs = [ numpy ];
   # Checks try to write to $HOME, which does not work with nix

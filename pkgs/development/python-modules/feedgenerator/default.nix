@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, glibcLocales, fetchPypi, six, pytz }:
+{ lib, buildPythonPackage, glibcLocales, fetchPypi, six, pytz }:
 
 buildPythonPackage rec {
   pname = "feedgenerator";
-  version = "1.9";
+  version = "1.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01mirwkm7xfx539hmvj7g9da1j51gw5lsx74dr0glizskjm5vq2s";
+    sha256 = "0m6fjnrx3sd0bm6pnbhxxx5ywlwqh8bx0lka386kj28mg3fmm2m2";
   };
 
   buildInputs = [ glibcLocales ];
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six pytz ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Standalone version of django.utils.feedgenerator, compatible with Py3k";
     homepage = "https://github.com/dmdm/feedgenerator-py3k.git";
     maintainers = with maintainers; [ ];

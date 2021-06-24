@@ -142,24 +142,17 @@ rec {
   /* Recursively map a (nested) set of derivations to an isomorphic
      set of meta.platforms values. */
   packagePlatforms = mapAttrs (name: value:
-    let res = builtins.tryEval (
       if isDerivation value then
         value.meta.hydraPlatforms
-          or (supportedMatches (value.meta.platforms or [ "x86_64-linux" ]))
+          or (value.meta.platforms or [ "x86_64-linux" ])
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
         packagePlatforms value
       else
-        []);
-    in if res.success then res.value else []
+        []
     );
 
 
   /* Common platform groups on which to test packages. */
   inherit (platforms) unix linux darwin cygwin all mesaPlatforms;
-
-  /* Platform groups for specific kinds of applications. */
-  x11Supported = linux;
-  gtkSupported = linux;
-  ghcSupported = linux;
 
 }

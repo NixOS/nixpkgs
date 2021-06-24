@@ -1,18 +1,29 @@
-{ lib, fetchurl, buildDunePackage, fmt, logs, stdlib-shims }:
+{ lib, fetchurl, buildDunePackage
+, repr, ppx_repr, fmt, logs, mtime, stdlib-shims
+, cmdliner, progress, semaphore-compat
+, alcotest, crowbar, re
+}:
 
 buildDunePackage rec {
   pname = "index";
-  version = "1.2.0";
+  version = "1.3.0";
 
-  minimumOCamlVersion = "4.07";
+  minimumOCamlVersion = "4.08";
+
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
-    sha256 = "0d44s1d2mpxvpg0zh57c928wf1w1wd33l1fw5r62al5zmi710ff6";
+    sha256 = "00qwhwg79scs5bgp8nbppv06qs9yhicf686q7lh64ngh0642iz6n";
   };
 
   buildInputs = [ stdlib-shims ];
-  propagatedBuildInputs = [ fmt logs ];
+  propagatedBuildInputs = [
+    fmt logs mtime repr ppx_repr cmdliner progress semaphore-compat
+  ];
+
+  doCheck = true;
+  checkInputs = [ alcotest crowbar re ];
 
   meta = {
     homepage = "https://github.com/mirage/index";
@@ -20,5 +31,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-
 }

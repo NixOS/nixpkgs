@@ -71,9 +71,9 @@ diff -ruN -x '*~' sysklogd-1.5-old/sd-daemon.c sysklogd-1.5/sd-daemon.c
 +#include <sys/stat.h>
 +#include <sys/socket.h>
 +#include <sys/un.h>
-+#include <sys/fcntl.h>
 +#include <netinet/in.h>
 +#include <stdlib.h>
++#include <fcntl.h>
 +#include <errno.h>
 +#include <unistd.h>
 +#include <string.h>

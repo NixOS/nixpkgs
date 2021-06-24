@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, popt }:
+{ lib, stdenv, fetchurl, popt }:
 
 stdenv.mkDerivation rec {
   name = "libdv-1.0.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   # This fixes an undefined symbol: _sched_setscheduler error on compile.
   # See the apple docs: http://cl.ly/2HeF bottom of the "Finding Imported Symbols" section
-  LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup";
+  LDFLAGS = lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup";
 
   configureFlags = [
     "--disable-asm"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ popt ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software decoder for DV format video, as defined by the IEC 61834 and SMPTE 314M standards";
     homepage = "https://sourceforge.net/projects/libdv/";
     license = licenses.lgpl21Plus;

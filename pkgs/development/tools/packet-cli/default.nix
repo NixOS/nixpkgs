@@ -1,23 +1,28 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "packet-cli";
-  version = "0.0.6";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "packethost";
     repo = pname;
     rev = version;
-    sha256 = "17f3ax7pjm5k93cxj7fd8hwr4id1lbzz9pkl2xflpxydi89bwdfz";
+    sha256 = "sha256-P1Bn6vli0d/MroHUsioTWBrjWN+UZmSo3qmzo+fCDwM=";
   };
 
-  modSha256 = "1hyv1vxk1rsr3jq3b08q0487sqf3y0km3mlwvqivib1y6hrknnnr";
+  vendorSha256 = "sha256-PjKiUdhN87guPAa0loZrWYuwbl0HaspuIjmKgyq4Zp8=";
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    ln -s $out/bin/packet-cli $out/bin/packet
+  '';
+
+  doCheck = false;
+
+  meta = with lib; {
     description = "Official Packet CLI";
     homepage = "https://github.com/packethost/packet-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

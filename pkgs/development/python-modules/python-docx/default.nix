@@ -22,6 +22,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     py.test tests
+    behave --format progress --stop --tags=-wip
   '';
 
   meta = {

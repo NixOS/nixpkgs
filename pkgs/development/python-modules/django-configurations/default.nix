@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django-discover-runner
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: django-configurations settings importer wasn't correctly installed
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://django-configurations.readthedocs.io/";
     description = "A helper for organizing Django settings";
     license = licenses.bsd0;

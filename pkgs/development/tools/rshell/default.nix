@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "rshell";
-  version = "0.0.27";
+  version = "0.0.30";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15pm60jfmr5nms43nrh5jlpz4lxxfhaahznfcys6nc4g80r2fwr2";
+    sha256 = "d2002d40d735204037d6142a6c2d51beecc763c124faaf759cabf7acd945be95";
   };
 
   propagatedBuildInputs = [ pyserial pyudev ];

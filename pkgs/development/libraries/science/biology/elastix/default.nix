@@ -1,23 +1,38 @@
-{ stdenv, fetchFromGitHub, cmake, itk, python }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, itk, python3, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname    = "elastix";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner  = "SuperElastix";
     repo   = pname;
     rev    = version;
-    sha256 = "1zrl7rz4lwsx88b2shnl985f3a97lmp4ksbd437h9y0hfjq8l0lj";
+    sha256 = "1mx8kkak2d3ibfrxrh8jkmh2zkdlgl9h578wiw3617zcwaa97bxw";
   };
-  nativeBuildInputs = [ cmake python ];
-  buildInputs = [ itk ];
 
-  meta = with stdenv.lib; {
+  patches = [
+    (fetchpatch {
+      name = "install-executables.patch";  # https://github.com/SuperElastix/elastix/issues/305
+      url = "https://github.com/SuperElastix/elastix/commit/8e26cdc0d66f6030c7be085fdc424d84d4fc7546.patch";
+      sha256 = "12y9wbpi9jlarnw6fk4iby97jxvx5g4daq9zqblbcmn51r134bj5";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake python3 ];
+  buildInputs = [ itk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  doCheck = !stdenv.isDarwin;  # usual dynamic linker issues
+
+  preCheck = "
+    export LD_LIBRARY_PATH=$(pwd)/bin
+  ";
+
+  meta = with lib; {
     homepage = "http://elastix.isi.uu.nl/";
     description = "Image registration toolkit based on ITK";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.linux;
+    platforms = platforms.x86_64;  # libitkpng linker issues with ITK 5.1
     license = licenses.asl20;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , installShellFiles
 , cmake
@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTING=ON"
     "-DBUILD_DOCS=ON"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DLYRA_INCLUDE_DIRS=${stdenv.lib.getDev lyra}/include"
+    "-DLYRA_INCLUDE_DIRS=${lib.getDev lyra}/include"
   ];
 
   # Required for ronn to compile the manpage.
   RUBYOPT = "-KU -E utf-8:utf-8";
 
-  meta = with stdenv.lib;
+  meta = with lib;
     {
       homepage = "https://github.com/codeplaysoftware/sycl-info";
       description = "Tool to show information about available SYCL implementations";

@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.3.0";
+  version = "0.4.0";
   pname = "azure-mgmt-imagebuilder";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r4sxr3pbcci5qif1ip1lrix3cryj0b3asqch3zds4q705jiakc4";
+    sha256 = "4c9291bf16b40b043637e5e4f15650f71418ac237393e62219cab478a7951733";
     extension = "zip";
   };
 

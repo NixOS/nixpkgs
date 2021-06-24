@@ -1,25 +1,29 @@
-{ stdenv, fetchFromGitHub, pkgconfig, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0";
+  version = "1.0.1";
   pname = "gpac";
 
   src = fetchFromGitHub {
     owner = "gpac";
     repo = "gpac";
     rev = "v${version}";
-    sha256 = "1w1dyrn6900yi8ngchfzy5hvxr6yc60blvdq8y8mczimmmq8khb5";
+    sha256 = "0gj46jpprfqv3wyagblv3a52chbplyzhvpra66v63czjibqsslm5";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile --replace 'dh_link' 'ln -s'
+  '';
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
   # For most other functionality, this should probably be extended
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zlib ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Source multimedia framework for research and academic purposes";
     longDescription = ''
       GPAC is an Open Source multimedia framework for research and academic purposes.

@@ -1,4 +1,4 @@
-{stdenv, packages}:
+{lib, stdenv, packages}:
 
 stdenv.mkDerivation {
   name = "xlibs-wrapper";
@@ -16,6 +16,6 @@ stdenv.mkDerivation {
   buildClientLibs = true;
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

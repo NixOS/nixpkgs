@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pygments
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Tests fail on python 3 due to writes to the read-only home directory
   doCheck = !isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full-screen, console-based Python debugger";
     license = licenses.mit;
     platforms = platforms.all;

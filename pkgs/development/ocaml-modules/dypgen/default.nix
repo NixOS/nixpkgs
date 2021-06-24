@@ -1,10 +1,10 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{stdenv, lib, fetchurl, ocaml, findlib}:
 
 let
   pname = "dypgen";
 in
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://dypgen.free.fr";
     description = "Dypgen GLR self extensible parser generator";
-    license = stdenv.lib.licenses.cecill-b;
+    license = lib.licenses.cecill-b;
     platforms = ocaml.meta.platforms or [];
   };
 }

@@ -12,12 +12,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "hopper";
-  version = "4.5.22";
+  version = "4.5.29";
   rev = "v${lib.versions.major version}";
 
   src = fetchurl {
     url = "https://d2ap6ypl1xbe4k.cloudfront.net/Hopper-${rev}-${version}-Linux.pkg.tar.xz";
-    sha256 = "1321i9ls5k677diwfccrjinzzb5586ygdgax7ryyha3ccdj1ikda";
+    sha256 = "1v1pff5fiv41khvrnlpdks2vddjnvziyn14qqj6v26snyhwi86zh";
   };
 
   sourceRoot = ".";
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       --replace "Exec=/opt/hopper-${rev}/bin/Hopper" "Exec=$out/bin/hopper"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.hopperapp.com/index.html";
     description = "A macOS and Linux Disassembler";
     license = licenses.unfree;

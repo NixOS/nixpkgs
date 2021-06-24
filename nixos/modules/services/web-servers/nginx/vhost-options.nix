@@ -151,6 +151,19 @@ with lib;
       '';
     };
 
+    http3 = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable HTTP 3.
+        This requires using <literal>pkgs.nginxQuic</literal> package
+        which can be achived by setting <literal>services.nginx.package = pkgs.nginxQuic;</literal>.
+        Note that HTTP 3 support is experimental and
+        *not* yet recommended for production.
+        Read more at https://quic.nginx.org/
+      '';
+    };
+
     root = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -198,7 +211,7 @@ with lib;
         Basic Auth protection for a vhost.
 
         WARNING: This is implemented to store the password in plain text in the
-        nix store.
+        Nix store.
       '';
     };
 
@@ -207,7 +220,10 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
-        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>
+        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>.
+
+        WARNING: The generate file contains the users' passwords in a
+        non-cryptographically-securely hashed way.
       '';
     };
 

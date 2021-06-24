@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, jam, cctools, pkgconfig
+{ lib, stdenv, fetchFromGitHub, substituteAll, jam, cctools, pkg-config
 , SDL, SDL_mixer, SDL_sound, gtk2, libvorbis, smpeg }:
 
 let
@@ -19,20 +19,21 @@ let
 
 in
 
-stdenv.mkDerivation {
-  name = "gargoyle-2018-10-06";
+stdenv.mkDerivation rec {
+  pname = "gargoyle";
+  version = "2019.1.1";
 
   src = fetchFromGitHub {
     owner = "garglk";
     repo = "garglk";
-    rev = "d03391563fa75942fbf8f8deeeacf3a8be9fc3b0";
-    sha256 = "0icwgc25gp7krq6zf66hljydc6vps6bb4knywnrfgnfcmcalqqx9";
+    rev = version;
+    sha256 = "0w54avmbp4i4zps2rb4acmpa641s6wvwbrln4vbdhcz97fx48nzz";
   };
 
-  nativeBuildInputs = [ jam pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = [ jam pkg-config ] ++ lib.optional stdenv.isDarwin cctools;
 
   buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ smpeg libvorbis ];
+    ++ lib.optionals stdenv.isDarwin [ smpeg libvorbis ];
 
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
@@ -57,7 +58,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://ccxvii.net/gargoyle/";
     license = licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";

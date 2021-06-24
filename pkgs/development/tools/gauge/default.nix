@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gauge";
-  version = "1.0.4";
+  version = "1.1.6";
 
   goPackagePath = "github.com/getgauge/gauge";
   excludedPackages = ''\(build\|man\)'';
@@ -11,10 +11,10 @@ buildGoPackage rec {
     owner = "getgauge";
     repo = "gauge";
     rev = "v${version}";
-    sha256 = "1b52kpv5561pyjvqi8xmidarqp6lcyyy4sjsl4qjx4cr7hmk8kc7";
+    sha256 = "02yrk4d5mm4j2grlhqkf4grxawx91kd2vhdn7k5wd2dl6wsnlgcl";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
    description = "Light weight cross-platform test automation";
    homepage    = "https://gauge.org";
    license     = licenses.gpl3;

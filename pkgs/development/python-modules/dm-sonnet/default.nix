@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, bazel_0_26
 , buildBazelPackage
 , buildPythonPackage
 , git
@@ -19,6 +20,8 @@ let
 
   # first build all binaries and generate setup.py using bazel
   bazel-build = buildBazelPackage {
+    bazel = bazel_0_26;
+
     name = "dm-sonnet-bazel-${version}";
 
     src = fetchFromGitHub {
@@ -36,13 +39,8 @@ let
     bazelTarget = ":install";
 
     fetchAttrs = {
-      sha256 = "0wb2gh9ji8bgq4s9ci9x017dybxqzjhncpw33b1wjksm2yhbkvlz";
+      sha256 = "09dzxs2v5wpiaxrz7qj257q1fbx0gxwbk0jyx58n81m5kys7yj9k";
     };
-
-    bazelFlags = [
-      # https://github.com/deepmind/sonnet/issues/134
-      "--incompatible_disable_deprecated_attr_params=false"
-    ];
 
     buildAttrs = {
       preBuild = ''

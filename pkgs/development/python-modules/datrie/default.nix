@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchPypi, fetchpatch
 , cython, pytest, pytestrunner, hypothesis }:
 
 buildPythonPackage rec {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     ./update_c.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Super-fast, efficiently stored Trie for Python";
     homepage = "https://github.com/kmike/datrie";
     license = licenses.lgpl2;

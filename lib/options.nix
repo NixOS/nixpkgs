@@ -1,11 +1,40 @@
 # Nixpkgs/NixOS option handling.
 { lib }:
 
-with lib.trivial;
-with lib.lists;
-with lib.attrsets;
-with lib.strings;
-
+let
+  inherit (lib)
+    all
+    collect
+    concatLists
+    concatMap
+    elemAt
+    filter
+    foldl'
+    head
+    isAttrs
+    isBool
+    isDerivation
+    isFunction
+    isInt
+    isList
+    isString
+    length
+    mapAttrs
+    optional
+    optionals
+    take
+    ;
+  inherit (lib.attrsets)
+    optionalAttrs
+    ;
+  inherit (lib.strings)
+    concatMapStrings
+    concatStringsSep
+    ;
+  inherit (lib.types)
+    mkOptionType
+    ;
+in
 rec {
 
   /* Returns true when the given argument is an option
@@ -96,22 +125,26 @@ rec {
     else if all isBool list then foldl' lib.or false list
     else if all isString list then lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then head list
-    else throw "Cannot merge definitions of `${showOption loc}' given in ${showFiles (getFiles defs)}.";
+    else throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
   mergeOneOption = loc: defs:
     if defs == [] then abort "This case should never happen."
     else if length defs != 1 then
-      throw "The unique option `${showOption loc}' is defined multiple times, in:\n - ${concatStringsSep "\n - " (getFiles defs)}."
+      throw "The unique option `${showOption loc}' is defined multiple times. Definition values:${showDefs defs}"
     else (head defs).value;
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
     if defs == [] then abort "This case should never happen."
-    else foldl' (val: def:
-      if def.value != val then
-        throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
+    # Return early if we only have one element
+    # This also makes it work for functions, because the foldl' below would try
+    # to compare the first element with itself, which is false for functions
+    else if length defs == 1 then (head defs).value
+    else (foldl' (first: def:
+      if def.value != first.value then
+        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
       else
-        val) (head defs).value defs;
+        first) (head defs) defs).value;
 
   /* Extracts values of all "value" keys of the given list.
 
@@ -209,6 +242,24 @@ rec {
          else escaped;
     in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
+
+  showDefs = defs: concatMapStrings (def:
+    let
+      # Pretty print the value for display, if successful
+      prettyEval = builtins.tryEval (lib.generators.toPretty {} def.value);
+      # Split it into its lines
+      lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
+      # Only display the first 5 lines, and indent them for better visibility
+      value = concatStringsSep "\n    " (take 5 lines ++ optional (length lines > 5) "...");
+      result =
+        # Don't print any value if evaluating the value strictly fails
+        if ! prettyEval.success then ""
+        # Put it on a new line if it consists of multiple
+        else if length lines > 1 then ":\n    " + value
+        else ": " + value;
+    in "\n- In `${def.file}'${result}"
+  ) defs;
+
   unknownModule = "<unknown-file>";
 
 }

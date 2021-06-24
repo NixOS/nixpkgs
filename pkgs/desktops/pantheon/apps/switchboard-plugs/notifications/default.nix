@@ -1,10 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , fetchpatch
 , pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -15,26 +16,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1ikq058svdan0whg4ks35m50apvbmzcz7h2wznxdbsimczzvj5sz";
+    sha256 = "sha256-MBCSQ+4l0mpS2OTDRJ7+91qo0SWm5nJNYO7SZaSoVQk=";
   };
 
-  patches = [
-    # Fix do not disturb on NixOS
-    # https://github.com/elementary/switchboard-plug-notifications/pull/66
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-notifications/commit/c306366b39c3199f0b64eda73419005fcb5e29b8.patch";
-      sha256 = "0m018rfw5iv582sw6qgwc8lzn0j32ix1w47fvlfmx0kw04irl2x3";
-    })
-  ];
-
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -42,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -54,7 +46,7 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Notifications Plug";
     homepage = "https://github.com/elementary/switchboard-plug-notifications";
     license = licenses.gpl2Plus;

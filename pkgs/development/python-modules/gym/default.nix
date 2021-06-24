@@ -5,17 +5,12 @@
 
 buildPythonPackage rec {
   pname = "gym";
-  version = "0.16.0";
+  version = "0.17.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06h5b639nmzhmy4m1j3vigm86iv5pv7k8jy6xpldyd4jdlf37nn5";
+    sha256 = "96a7dd4e9cdb39e30c7a79e5773570fd9408f7fdb58c714c293cfbb314818eb6";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyglet>=1.2.0,<=1.3.2" "pyglet"
-  '';
 
   propagatedBuildInputs = [
     numpy requests six pyglet scipy cloudpickle
@@ -23,6 +18,8 @@ buildPythonPackage rec {
 
   # The test needs MuJoCo that is not free library.
   doCheck = false;
+
+  pythonImportsCheck = [ "gym" ];
 
   meta = with lib; {
     description = "A toolkit by OpenAI for developing and comparing your reinforcement learning agents";

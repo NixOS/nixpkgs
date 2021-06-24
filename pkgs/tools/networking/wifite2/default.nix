@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
+{ lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
 , aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools
 , hcxdumptool, pyrit, which }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "2.5.2";
+  version = "2.5.5";
   pname = "wifite2";
 
   src = fetchFromGitHub {
     owner = "kimocoder";
     repo = "wifite2";
     rev = version;
-    sha256 = "0hsb59d86szn27s3hynpzkp49rmw4g692vrl67nal7rfcdvpp8hb";
+    sha256 = "0rh54gj471dn8442imxwasjrrwzsx4m40nylkw3y6p8rbjmb92h4";
   };
 
   patches = [
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = propagatedBuildInputs;
   checkPhase = "python -m unittest discover tests -v";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/derv82/wifite2";
     description = "Rewrite of the popular wireless network auditor, wifite";
     license = licenses.gpl2;

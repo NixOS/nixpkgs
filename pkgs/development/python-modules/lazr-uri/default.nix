@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "lazr.uri";
-  version = "1.0.3";
+  version = "1.0.5";
 
   disabled = isPy27; # namespace is broken for python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c620b5993c8c6a73084176bfc51de64972b8373620476ed841931a49752dc8b";
+    sha256 = "f36e7e40d5f8f2cf20ff2c81784a14a546e6c19c216d40a6617ebe0c96c92c49";
   };
 
   propagatedBuildInputs = [ setuptools ];

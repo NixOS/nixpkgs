@@ -2,7 +2,7 @@
 
 with lib;
 
-let 
+let
   cfg = config.hardware.tuxedo-keyboard;
   tuxedo-keyboard = config.boot.kernelPackages.tuxedo-keyboard;
 in
@@ -27,7 +27,7 @@ in
       '';
     };
 
-    config = mkIf cfg.enable 
+    config = mkIf cfg.enable
     {
       boot.kernelModules = ["tuxedo_keyboard"];
       boot.extraModulePackages = [ tuxedo-keyboard ];

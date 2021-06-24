@@ -1,17 +1,17 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "di";
-  version = "4.47.3";
+  version = "4.48.0.1";
 
   src = fetchurl {
     url = "https://gentoo.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0m4npba50sf5s61g5z3xd2r7937zwja941f2h3f081xi24c2hfck";
+    sha256 = "sha256-YFCFRDGeq2h/UXKme/NnnCuFdtw2Vim6Y3SbytaItGc=";
   };
 
   makeFlags = [ "INSTALL_DIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Disk information utility; displays everything 'df' does and more";
     homepage = "https://gentoo.com/di/";
     license = licenses.zlib;

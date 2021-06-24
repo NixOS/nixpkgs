@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl}:
+{lib, stdenv, fetchurl, openssl}:
 let
   s = # Generated upstream information
   rec {
@@ -31,10 +31,10 @@ stdenv.mkDerivation {
   ];
   meta = {
     inherit (s) version;
-    description = ''CLI email sending tool'';
-    license = stdenv.lib.licenses.bsd3 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "CLI email sending tool";
+    license = lib.licenses.bsd3 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/muquit/mailsend";
     downloadPage = "https://github.com/muquit/mailsend/releases";
   };

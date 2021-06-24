@@ -1,24 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pathlib2
+, setuptools_scm
+, toml
+, importlib-metadata
 , typing
-, isPy3k
+, singledispatch
 , pythonOlder
 , python
 }:
 
 buildPythonPackage rec {
   pname = "importlib_resources";
-  version = "1.0.2";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3279fd0f6f847cced9f7acc19bd3e5df54d34f93a2e7bb5f238f81545787078";
+    sha256 = "0ed250dbd291947d1a298e89f39afcc477d5a6624770503034b72588601bcc05";
   };
 
+  nativeBuildInputs = [ setuptools_scm toml ];
   propagatedBuildInputs = [
-  ] ++ lib.optional (!isPy3k) pathlib2
+    importlib-metadata
+  ] ++ lib.optional (pythonOlder "3.4") singledispatch
     ++ lib.optional (pythonOlder "3.5") typing
   ;
 

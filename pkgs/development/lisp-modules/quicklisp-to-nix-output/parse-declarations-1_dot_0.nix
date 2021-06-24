@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''parse-declarations-1_dot_0'';
-  version = ''parse-declarations-20101006-darcs'';
+  baseName = "parse-declarations-1_dot_0";
+  version = "parse-declarations-20101006-darcs";
 
-  description = ''Library to parse and rebuild declarations.'';
+  description = "Library to parse and rebuild declarations.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/parse-declarations/2010-10-06/parse-declarations-20101006-darcs.tgz'';
-    sha256 = ''0r85b0jfacd28kr65kw9c13dx4i6id1dpmby68zjy63mqbnyawrd'';
+    url = "http://beta.quicklisp.org/archive/parse-declarations/2010-10-06/parse-declarations-20101006-darcs.tgz";
+    sha256 = "0r85b0jfacd28kr65kw9c13dx4i6id1dpmby68zjy63mqbnyawrd";
   };
 
   packageName = "parse-declarations-1.0";

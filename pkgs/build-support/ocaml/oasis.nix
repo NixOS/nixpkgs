@@ -1,4 +1,4 @@
-{ stdenv, ocaml_oasis, ocaml, findlib, ocamlbuild }:
+{ lib, stdenv, ocaml_oasis, ocaml, findlib, ocamlbuild }:
 
 { pname, version, buildInputs ? [], meta ? { platforms = ocaml.meta.platforms or []; },
   minimumOCamlVersion ? null,
@@ -8,7 +8,7 @@
 }@args:
 
 if args ? minimumOCamlVersion &&
-   ! stdenv.lib.versionAtLeast ocaml.version args.minimumOCamlVersion
+   ! lib.versionAtLeast ocaml.version args.minimumOCamlVersion
 then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (args // {
   buildPhase = ''
     runHook preBuild
     oasis setup
-    ocaml setup.ml -configure
+    ocaml setup.ml -configure --prefix $OCAMLFIND_DESTDIR --exec-prefix $out
     ocaml setup.ml -build
     runHook postBuild
   '';
@@ -37,9 +37,7 @@ stdenv.mkDerivation (args // {
   installPhase = ''
     runHook preInstall
     mkdir -p $out
-    sed -i s+/usr/local+$out+g setup.ml
-    sed -i s+/usr/local+$out+g setup.data
-    prefix=$OCAMLFIND_DESTDIR ocaml setup.ml -install
+    ocaml setup.ml -install
     runHook postInstall
   '';
 

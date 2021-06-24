@@ -39,7 +39,7 @@ c3 - root (0)
   can terminate a session in a way that ensures that all the session’s
   processes are gone:
 <screen>
-# loginctl terminate-session c3
+<prompt># </prompt>loginctl terminate-session c3
 </screen>
  </para>
 </chapter>

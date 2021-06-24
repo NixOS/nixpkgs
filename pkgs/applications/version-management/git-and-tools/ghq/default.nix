@@ -1,17 +1,19 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ghq";
-  version = "1.1.0";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "x-motemen";
     repo = "ghq";
     rev = "v${version}";
-    sha256 = "1i0q9lxdxbyj0l0510cbkwkbycawrx8cxlbdrhb2p2fnk0vqnyiv";
+    sha256 = "sha256-kEs844gj1/PW7Kkpn1tvxfruznRIh2pjHCoSWGF1upQ=";
   };
 
-  modSha256 = "0hlbhky3c6zva9khn73n6xgq57k5p8anskxy3g2m0wzhr72cyc41";
+  vendorSha256 = "sha256-5Eth9v98z1gxf1Fz5Lbn2roX7dSBmA7GRzg8uvT0hTI=";
+
+  doCheck = false;
 
   buildFlagsArray = ''
     -ldflags=
@@ -26,7 +28,7 @@ buildGoModule rec {
   meta = {
     description = "Remote repository management made easy";
     homepage = "https://github.com/x-motemen/ghq";
-    maintainers = with stdenv.lib.maintainers; [ sigma ];
-    license = stdenv.lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigma ];
+    license = lib.licenses.mit;
   };
 }

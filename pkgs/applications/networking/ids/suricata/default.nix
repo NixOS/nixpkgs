@@ -3,7 +3,7 @@
 , fetchurl
 , clang
 , llvm
-, pkgconfig
+, pkg-config
 , makeWrapper
 , file
 , hyperscan
@@ -34,18 +34,18 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    sha256 = "1ryfa3bzd8mrq2k5kjfwmblxqqziz6b9n1dnh692mazf5z4wlc3z";
+    sha256 = "1nv5aq5lpkpskkzw05hr2lshkzcs4zqj5kfv4qjlbwigmp6kwh9l";
   };
 
   nativeBuildInputs = [
     clang
     llvm
     makeWrapper
-    pkgconfig
+    pkg-config
   ]
   ++ lib.optionals rustSupport [ rustc cargo ]
   ;
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
       --replace "/etc/suricata" "$out/etc/suricata"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free and open source, mature, fast and robust network threat detection engine";
     homepage = "https://suricata-ids.org";
     license = licenses.gpl2;

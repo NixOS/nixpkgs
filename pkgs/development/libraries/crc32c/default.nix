@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, gflags }:
+{ stdenv, lib, fetchFromGitHub, cmake, gflags
+, staticOnly ? stdenv.hostPlatform.isStatic
+}:
+
 stdenv.mkDerivation rec {
   pname = "crc32c";
   version = "1.1.0";
@@ -13,9 +16,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gflags ];
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc";
+  cmakeFlags = lib.optionals (!staticOnly) [ "-DBUILD_SHARED_LIBS=1"  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/crc32c";
     description = "CRC32C implementation with support for CPU-specific acceleration instructions";
     license = with licenses; [ bsd3 ];

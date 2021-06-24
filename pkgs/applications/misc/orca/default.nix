@@ -1,5 +1,5 @@
-{ stdenv
-, pkgconfig
+{ lib
+, pkg-config
 , fetchurl
 , buildPythonApplication
 , autoreconfHook
@@ -35,13 +35,13 @@
 
 buildPythonApplication rec {
   pname = "orca";
-  version = "3.36.1";
+  version = "3.38.2";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "07w3k0f791zd1pj9j6d27k7gk7c6hx112ngrdz18h573df5n9b61";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "UAX/LhHdH3E/WswZA6JwEZvFjDD9uMn4K8rHFJfGwjw=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     autoreconfHook
     wrapGAppsHook
-    pkgconfig
+    pkg-config
     libxmlxx3
     gettext
     yelp-tools
@@ -97,7 +97,7 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Orca";
     description = "Screen reader";
     longDescription = ''

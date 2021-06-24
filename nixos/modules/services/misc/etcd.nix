@@ -178,7 +178,7 @@ in {
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.etcd.bin}/bin/etcd";
+        ExecStart = "${pkgs.etcd}/bin/etcd";
         User = "etcd";
         LimitNOFILE = 40000;
       };

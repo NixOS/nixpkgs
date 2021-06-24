@@ -1,22 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi, prompt_toolkit, appdirs, docopt, jedi
-, pygments, isPy3k }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi
+, appdirs
+, black
+, importlib-metadata
+, isPy3k
+, jedi
+, prompt_toolkit
+, pygments
+}:
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.1";
+  version = "3.0.16";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a69cce0aa04f0075e2e65287a0ee2f3a928c0591b301ce22aa2e498af1ebcb4b";
+    sha256 = "4b0f6e381a8251ec8d6aa94fe12f3400bf6edf789f89c8a6099f8a91d4a5d2e1";
   };
 
-  propagatedBuildInputs = [ appdirs prompt_toolkit docopt jedi pygments ];
+  propagatedBuildInputs = [
+    appdirs
+    black # yes, this is in install_requires
+    jedi
+    prompt_toolkit
+    pygments
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # no tests to run
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An advanced Python REPL";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mlieberman85 ];

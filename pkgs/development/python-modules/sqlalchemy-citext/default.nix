@@ -7,20 +7,21 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-citext";
-  version = "1.3-0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d7343037a35153d6f94c3c2f6baf391f88a57651c3bde5d6749d216859ae4c5";
+    sha256 = "69ba00f5505f92a1455a94eefc6d3fcf72dda3691ab5398a0b4d0d8d85bd6aab";
   };
 
   propagatedBuildInputs = [
     sqlalchemy
   ];
 
-  checkPhase = ''
-    ${python.interpreter} tests/test_citext.py
-  '';
+  # tests are not packaged in pypi tarball
+  doCheck = false;
+
+  pythonImportsCheck = [ "citext" ];
 
   meta = with lib; {
     description = "A sqlalchemy plugin that allows postgres use of CITEXT";

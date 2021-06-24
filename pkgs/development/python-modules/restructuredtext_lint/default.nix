@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "restructuredtext_lint";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "97b3da356d5b3a8514d8f1f9098febd8b41463bed6a1d9f126cf0a048b6fd908";
+    sha256 = "d3b10a1fe2ecac537e51ae6d151b223b78de9fafdd50e5eb6b08c243df173c80";
   };
 
   checkInputs = [ nose testtools ];

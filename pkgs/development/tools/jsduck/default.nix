@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   phases = [ "installPhase" ];
 
-  buildInputs = [ env makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ env ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = bundlerUpdateScript "jsduck";
 
   meta = with lib; {
-    description = "Simple JavaScript Duckumentation generator.";
+    description = "Simple JavaScript Duckumentation generator";
     homepage    = "https://github.com/senchalabs/jsduck";
     license     = with licenses; gpl3;
     maintainers = with maintainers; [ periklis nicknovitski ];

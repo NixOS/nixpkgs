@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose mock twisted tornado ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
     homepage = "https://pika.readthedocs.org";
     license = licenses.bsd3;

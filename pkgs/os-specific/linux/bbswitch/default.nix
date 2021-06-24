@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, kernel, runtimeShell }:
+{ lib, stdenv, fetchurl, fetchpatch, kernel, runtimeShell }:
 
 let
   baseName = "bbswitch";
@@ -15,10 +15,16 @@ stdenv.mkDerivation {
     sha256 = "0xql1nv8dafnrcg54f3jsi3ny3cd2ca9iv73pxpgxd2gfczvvjkn";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/Bumblebee-Project/bbswitch/pull/102.patch";
-    sha256 = "1lbr6pyyby4k9rn2ry5qc38kc738d0442jhhq57vmdjb6hxjya7m";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Bumblebee-Project/bbswitch/pull/102.patch";
+      sha256 = "1lbr6pyyby4k9rn2ry5qc38kc738d0442jhhq57vmdjb6hxjya7m";
+    })
+    (fetchpatch {
+      url = "https://github.com/Bumblebee-Project/bbswitch/pull/196.patch";
+      sha256 = "02ihy3piws7783qbm9q0mb9s18ipn5ckdy1iar74xn31qjrsn99n";
+    })
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -48,7 +54,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/discrete_vga_poweroff $out/bin/discrete_vga_poweron
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A module for powering off hybrid GPUs";
     platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";

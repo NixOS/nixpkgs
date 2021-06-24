@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "3.2.2";
+  version = "3.5.0";
 
   src = fetchPypi {
     pname = "Paste";
     inherit version;
-    sha256 = "15p95br9x7zjy0cckdy6xmhfg61cg49rhi75jd00svrnz234s7qb";
+    sha256 = "17f3zppjjprs2jnklvzkz23mh9jdn6b1f445mvrjdm4ivi15q28v";
   };
 
   propagatedBuildInputs = [ six ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     py.test -k "not test_cgiapp and not test_proxy"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "http://pythonpaste.org/";
     license = licenses.mit;

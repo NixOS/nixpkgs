@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, typing, pythonOlder }:
+{ lib, fetchPypi, buildPythonPackage, typing, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "mypy-extensions";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = if pythonOlder "3.5" then [ typing ] else [ ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";
     homepage    = "http://www.mypy-lang.org";
     license     = licenses.mit;

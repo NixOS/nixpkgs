@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cairo, glib, libGLU, lv2, pango }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cairo, glib, libGLU, lv2, pango }:
 
 stdenv.mkDerivation rec {
   pname = "x42-avldrums";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo glib libGLU lv2 pango ];
 
   makeFlags = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Drum sample player LV2 plugin dedicated to Glen MacArthur's AVLdrums";
     homepage = "https://x42-plugins.com/x42/x42-avldrums";
     maintainers = with maintainers; [ magnetophon orivej ];

@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgconfig, fetchFromGitHub, scons
+{ stdenv, lib, pkg-config, fetchFromGitHub, sconsPackages
 , python, glibmm, libpulseaudio, libao }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    scons.py2 pkgconfig
+    sconsPackages.scons_3_1_2 pkg-config
   ];
 
   buildInputs = [

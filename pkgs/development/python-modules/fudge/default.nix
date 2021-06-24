@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     nosetests -v
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/fudge-py/fudge";
     description = "Replace real objects with fakes (mocks, stubs, etc) while testing";
     license = licenses.mit;

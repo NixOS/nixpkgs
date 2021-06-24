@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , intltool
 , fetchFromGitLab
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gtk3
 , adwaita-icon-theme
@@ -44,7 +44,7 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
-  version = "13.0.0";
+  version = "13.0.2";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -53,13 +53,13 @@ in stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "17arjigs1lw1h428s9g171n0idrpf9ks23sndldsik1zvvwzlldh";
+    sha256 = "099za9mc6qdq9pwcbjp3d7hxjbaa43vk2w9qw4yiyswl1xq3jw62";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     unzip
@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME Character Map, based on the Unicode Character Database";
     homepage = "https://wiki.gnome.org/Apps/Gucharmap";
     license = licenses.gpl3;

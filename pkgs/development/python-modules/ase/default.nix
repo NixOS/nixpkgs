@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.19.1";
+  version = "3.21.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03xzpmpask2q2609kkq0hfgzsfvkyjpbjws7qx00nnfrbbnjk443";
+    sha256 = "78b01d88529d5f604e76bc64be102d48f058ca50faad72ac740d717545711c7b";
   };
 
   propagatedBuildInputs = [ numpy scipy matplotlib flask pillow psycopg2 ];

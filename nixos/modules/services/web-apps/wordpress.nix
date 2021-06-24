@@ -109,7 +109,7 @@ let
                 sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
               };
               # We need unzip to build this package
-              buildInputs = [ pkgs.unzip ];
+              nativeBuildInputs = [ pkgs.unzip ];
               # Installing simply means copying all files to the output directory
               installPhase = "mkdir -p $out; cp -R * $out/";
             };
@@ -136,7 +136,7 @@ let
                 sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
               };
               # We need unzip to build this package
-              buildInputs = [ pkgs.unzip ];
+              nativeBuildInputs = [ pkgs.unzip ];
               # Installing simply means copying all files to the output directory
               installPhase = "mkdir -p $out; cp -R * $out/";
             };

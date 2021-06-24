@@ -1,18 +1,18 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.12.0";
+  version = "8.12.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mnicas0c5av322d7k6m14j3c10axh9mcvn3vx99vhngdnb9j6hn";
+    sha256 = "0aa0f5e1382d292a7ff2f8bc08673126521461c7f908e0220756449a734d8fef";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers";
     homepage    = "https://github.com/daviddrysdale/python-phonenumbers";
-    license     = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ fadenb ];
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ fadenb ];
   };
 }

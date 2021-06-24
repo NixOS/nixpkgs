@@ -1,35 +1,39 @@
 {
-  fetchFromGitHub, stdenv, pkgconfig, autoreconfHook,
-  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
+  fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook,
+  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
 
-  # Optional but increases closure only negligibly.
-  xarSupport ? true,
+  # Optional but increases closure only negligibly. Also, while libxml2
+  # builds fine on windows, but libarchive has trouble linking windows
+  # things it depends on for some reason.
+  xarSupport ? stdenv.hostPlatform.isUnix,
 }:
 
 assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   pname = "libarchive";
-  version = "3.4.2";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${version}";
-    sha256 = "0mjm77wbqs8sbn9j44lj39nwbg6anmgz6pkyfxsww54a4rs0p3iz";
+    sha256 = "sha256-RFPhe4PCq8OLwa6c7ir+5u9jBsUxS5M/fcZYAG9W6R0=";
   };
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ sharutils zlib bzip2 openssl xz lzo ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
-    ++ stdenv.lib.optional xarSupport libxml2;
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  buildInputs =
+    lib.optional stdenv.hostPlatform.isUnix sharutils
+    ++ [ zlib bzip2 openssl xz lzo zstd ]
+    ++ lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
+    ++ lib.optional xarSupport libxml2;
 
-  # Without this, pkgconfig-based dependencies are unhappy
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isLinux [ attr acl ];
+  # Without this, pkg-config-based dependencies are unhappy
+  propagatedBuildInputs = lib.optionals stdenv.isLinux [ attr acl ];
 
-  configureFlags = stdenv.lib.optional (!xarSupport) "--without-xml2";
+  configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
   preBuild = if stdenv.isCygwin then ''
     echo "#include <windows.h>" >> config.h
@@ -53,8 +57,9 @@ stdenv.mkDerivation rec {
       compressed with gzip, bzip2, lzma, xz, ...
     '';
     homepage = "http://libarchive.org";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = with stdenv.lib.platforms; all;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    changelog = "https://github.com/libarchive/libarchive/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; all;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 }

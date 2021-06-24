@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , symlinkJoin
 , makeWrapper
@@ -84,8 +84,8 @@ stdenv.mkDerivation rec {
       arbitrary special cases. Output is the C subset of C++.
     '';
     homepage = "http://eli-project.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ timokau ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ timokau ];
+    platforms = lib.platforms.linux;
   };
 }

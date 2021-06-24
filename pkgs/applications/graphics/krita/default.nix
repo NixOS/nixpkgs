@@ -10,15 +10,12 @@
 
 mkDerivation rec {
   pname = "krita";
-  version = "4.2.7.1";
+  version = "4.4.2";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1sx4j4brk71bas3cpqzk4bd8bknyl3x4fdg5pv4r7pcfd3vpq2vy";
+    sha256 = "121fjdv5phx1aqk21vx9k9vsc5k1w8s86gp6pamy2y31r2ph7r8y";
   };
-
-  # *somtimes* fails with can't find ui_manager.h, also see https://github.com/NixOS/nixpkgs/issues/35359
-  enableParallelBuilding = false;
 
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
 

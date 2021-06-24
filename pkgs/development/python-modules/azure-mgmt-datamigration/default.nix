@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datamigration";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1efda568d67af911156591eb308432b5f9a56075b57ac0a5dd9f7aee17d79217";
+    sha256 = "c33d1deb0ee173a15c8ec21a1e714ba544fe5f4895d3b1d8b0581f3c1b2e8ce4";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Data Migration Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer maxwilson ];
   };
 }

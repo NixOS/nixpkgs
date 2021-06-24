@@ -22,6 +22,13 @@ buildPythonPackage rec {
   # Tests fail on Darwin with `OSError: AF_UNIX path too long`
   doCheck = !stdenv.isDarwin;
 
+  # Disable all tests that need to terminate within a predetermined amount of
+  # time.  This is nondeterministic.
+  patchPhase = ''
+    sed -i 's/with self.assertCompletesWithin.*:/if True:/' \
+      tests/test_protocol.py
+  '';
+
   meta = with lib; {
     description = "WebSocket implementation in Python 3";
     homepage = "https://github.com/aaugustin/websockets";

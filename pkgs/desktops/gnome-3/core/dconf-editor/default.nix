@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3, dconf
+{ lib, stdenv, fetchurl, meson, ninja, vala, libxslt, pkg-config, glib, gtk3, gnome3, python3, dconf
 , libxml2, gettext, docbook_xsl, wrapGAppsHook, gobject-introspection }:
 
-let
+stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "3.36.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "14q678bwgmhzmi7565xhhw51y8b0pv3cqh0f411qwzwif1bd1vkj";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-ElPa2H5iE/vzE/+eydxDWKobECYfKAcsHcDgmXuS+DU=";
   };
 
   nativeBuildInputs = [
-    meson ninja vala libxslt pkgconfig wrapGAppsHook
+    meson ninja vala libxslt pkg-config wrapGAppsHook
     gettext docbook_xsl libxml2 gobject-introspection python3
   ];
 
@@ -31,7 +29,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };

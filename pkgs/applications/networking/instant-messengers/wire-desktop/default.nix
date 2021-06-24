@@ -5,10 +5,12 @@
 , makeDesktopItem
 , makeWrapper
 , stdenv
+, lib
 , udev
 , wrapGAppsHook
 , cpio
 , xar
+, libdbusmenu
 }:
 
 let
@@ -20,16 +22,16 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.16.3630";
-    x86_64-linux = "3.16.2923";
+    x86_64-darwin = "3.24.4059";
+    x86_64-linux = "3.24.2939";
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-darwin = "1lnjn45bhd36n9xgx6xx9cggwivvkr2s6r4zai2dwg0aac1bywr5";
-    x86_64-linux = "0c8jmlsg2gnxsvly04xj1al80nj52rg4czfdha58sg14x14lyspz";
+    x86_64-darwin = "1zjv3d8jp0wldrzl02q9kir7q3y5bcb6hsfli6wip8bmaq78dksy";
+    x86_64-linux = "1k9n58pr5fnqv9vacay5vrbs4pvq2p36c0dpg9rjdcnb2fwaqg5p";
   }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern, secure messenger for everyone";
     longDescription = ''
       Wire Personal is a secure, privacy-friendly messenger. It combines useful
@@ -93,9 +95,17 @@ let
 
     buildInputs = atomEnv.packages;
 
-    unpackPhase = "dpkg-deb -x $src .";
+    unpackPhase = ''
+      runHook preUnpack
+
+      dpkg-deb -x $src .
+
+      runHook postUnpack
+    '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/bin"
       cp -R "opt" "$out"
       cp -R "usr/share" "$out/share"
@@ -104,10 +114,13 @@ let
       # Desktop file
       mkdir -p "$out/share/applications"
       cp "${desktopItem}/share/applications/"* "$out/share/applications"
+
+      runHook postInstall
     '';
 
     runtimeDependencies = [
-      udev.lib
+      (lib.getLib udev)
+      libdbusmenu
     ];
 
     postFixup = ''
@@ -131,17 +144,29 @@ let
     ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       xar -xf $src
       cd com.wearezeta.zclient.mac.pkg
+
+      runHook postUnpack
     '';
 
     buildPhase = ''
+      runHook preBuild
+
       cat Payload | gunzip -dc | cpio -i
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications
       cp -r Wire.app $out/Applications
+
+      runHook postInstall
     '';
   };
 

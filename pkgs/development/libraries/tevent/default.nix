@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python3
 , pkg-config
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
-    sha256 = "+EJ4IuWyh4+4so1vUNloSHNPPzEwYS+1dP3S0hSKZpY=";
+    sha256 = "15k6i8ad5lpxfjsjyq9h64zlyws8d3cm0vwdnaw8z1xjwli7hhpq";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "--builtin-libraries=replace"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An event system based on the talloc memory management library";
     homepage = "https://tevent.samba.org/";
     license = licenses.lgpl3Plus;

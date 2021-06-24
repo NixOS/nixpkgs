@@ -1,6 +1,7 @@
 { fetchurl
-, stdenv
-, pkgconfig
+, lib, stdenv
+, pkg-config
+, fetchpatch
 , meson
 , ninja
 , glib
@@ -16,7 +17,6 @@
 , nss
 , dbus
 , libgee
-, telepathy-glib
 , evolution-data-server
 , libsecret
 , db
@@ -26,6 +26,8 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+, telepathy-glib
+, telepathySupport ? false
 }:
 
 # TODO: enable more folks backends
@@ -37,12 +39,22 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1f9b52vmwnq7s51vj26w2618dn2ph5g12ibbkbyk6fvxcgd7iryn";
   };
 
+  patches = [
+    # Fix tests with e-d-s linked with libphonenumber support
+    # https://gitlab.gnome.org/GNOME/folks/merge_requests/40
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/folks/commit/6d443480a137f6a6ff345b21bf3cb31066eefbcd.patch";
+      sha256 = "D/Y2g12TT0qrcH+iJ2umu4Hmp0EJ3Hoedh0H3aWI+HY=";
+    })
+  ];
+
   mesonFlags = [
     "-Ddocs=true"
+    "-Dtelepathy_backend=${lib.boolToString telepathySupport}"
   ];
 
   nativeBuildInputs = [
@@ -54,7 +66,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -69,8 +81,7 @@ stdenv.mkDerivation rec {
     nspr
     nss
     readline
-    telepathy-glib
-  ];
+  ] ++ lib.optional telepathySupport telepathy-glib;
 
   propagatedBuildInputs = [
     glib
@@ -91,6 +102,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Prevents e-d-s add-contacts-stress-test from timing out
+  checkPhase = ''
+    runHook preCheck
+    meson test --timeout-multiplier 4
+    runHook postCheck
+  '';
+
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
@@ -104,11 +122,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that aggregates people from multiple sources to create metacontacts";
     homepage = "https://wiki.gnome.org/Projects/Folks";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

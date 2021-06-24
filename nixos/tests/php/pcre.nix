@@ -1,12 +1,15 @@
 let
   testString = "can-use-subgroups";
-in import ../make-test-python.nix ({ ...}: {
-  name = "php-httpd-pcre-jit-test";
+in import ../make-test-python.nix ({lib, php, ...}: {
+  name = "php-${php.version}-httpd-pcre-jit-test";
+  meta.maintainers = lib.teams.php.members;
+
   machine = { lib, pkgs, ... }: {
     time.timeZone = "UTC";
     services.httpd = {
       enable = true;
       adminAddr = "please@dont.contact";
+      phpPackage = php;
       enablePHP = true;
       phpOptions = "pcre.jit = true";
       extraConfig = let
@@ -30,8 +33,8 @@ in import ../make-test-python.nix ({ ...}: {
     ''
       machine.wait_for_unit("httpd.service")
       # Ensure php evaluation by matching on the var_dump syntax
-      assert 'string(${toString (builtins.stringLength testString)}) "${testString}"' in machine.succeed(
-          "curl -vvv -s http://127.0.0.1:80/index.php"
-      )
+      response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/index.php")
+      expected = 'string(${toString (builtins.stringLength testString)}) "${testString}"'
+      assert expected in response, "Does not appear to be able to use subgroups."
     '';
 })

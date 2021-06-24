@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, expat, libmysqlclient,
+{ lib, stdenv, fetchurl, pkg-config, expat, libmysqlclient,
   enableXmlpipe2 ? false,
   enableMysql ? true
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--program-prefix=sphinxsearch-"
     "--enable-id64"
-  ] ++ stdenv.lib.optionals (!enableMysql) [
+  ] ++ lib.optionals (!enableMysql) [
     "--without-mysql"
   ];
 
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = stdenv.lib.optionals enableMysql [
+  buildInputs = lib.optionals enableMysql [
     libmysqlclient
-  ] ++ stdenv.lib.optionals enableXmlpipe2 [
+  ] ++ lib.optionals enableXmlpipe2 [
     expat
   ];
 
-  CXXFLAGS = with stdenv.lib; concatStringsSep " " (optionals stdenv.isDarwin [
+  CXXFLAGS = with lib; concatStringsSep " " (optionals stdenv.isDarwin [
     # see upstream bug: http://sphinxsearch.com/bugs/view.php?id=2578
     # workaround for "error: invalid suffix on literal
     "-Wno-reserved-user-defined-literal"
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An open source full text search server";
     homepage    = "http://sphinxsearch.com";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ ederoyd46 valodim ];
+    license     = lib.licenses.gpl2;
+    platforms   = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ederoyd46 valodim ];
   };
 }

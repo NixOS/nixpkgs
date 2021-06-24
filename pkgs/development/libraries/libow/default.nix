@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, libtool }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, libtool }:
 
 stdenv.mkDerivation rec {
-  version = "3.2p3";
+  version = "3.2p4";
   pname = "libow";
 
   src = fetchFromGitHub {
     owner = "owfs";
     repo = "owfs";
     rev = "v${version}";
-    sha256 = "02l3r4ixhicph5iqxdjanck2gbqkfs9vnnac112bzlvlw3x9r03m";
+    sha256 = "0dln1ar7bxwhpi36sccmpwapy7iz4j097rbf02mgn42lw5vrcg3s";
   };
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  nativeBuildInputs = [ autoconf automake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "1-Wire File System full library";
     homepage = "https://owfs.org/";
     license = licenses.gpl2;

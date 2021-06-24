@@ -64,13 +64,14 @@ in
       };
 
       extraPackages = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = p: [];
         description = ''
           Extra Python packages available to supybot plugins. The
           value must be a function which receives the attrset defined
           in <varname>python3Packages</varname> as the sole argument.
         '';
-        example = literalExample ''p: [ p.lxml p.requests ]'';
+        example = literalExample "p: [ p.lxml p.requests ]";
       };
 
     };
@@ -103,6 +104,8 @@ in
         rm -f '${cfg.stateDir}/supybot.cfg.bak'
       '';
 
+      startLimitIntervalSec = 5 * 60;  # 5 min
+      startLimitBurst = 1;
       serviceConfig = {
         ExecStart = "${pyEnv}/bin/supybot ${cfg.stateDir}/supybot.cfg";
         PIDFile = "/run/supybot.pid";
@@ -110,8 +113,6 @@ in
         Group = "supybot";
         UMask = "0007";
         Restart = "on-abort";
-        StartLimitInterval = "5m";
-        StartLimitBurst = "1";
 
         NoNewPrivileges = true;
         PrivateDevices = true;

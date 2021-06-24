@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, systemd, perl }:
+{ lib, stdenv, fetchurl, flex, systemd, perl }:
 
 stdenv.mkDerivation rec {
   name = "drbd-8.4.4";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "INITDIR=$(out)/etc/init.d"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.drbd.org/";
     description = "Distributed Replicated Block Device, a distributed storage system for Linux";
     license = licenses.gpl2;

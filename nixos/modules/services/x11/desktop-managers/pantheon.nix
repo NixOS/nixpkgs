@@ -42,6 +42,7 @@ in
 
       sessionPath = mkOption {
         default = [];
+        type = types.listOf types.package;
         example = literalExample "[ pkgs.gnome3.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
@@ -109,7 +110,7 @@ in
 
       # Without this, elementary LightDM greeter will pre-select non-existent `default` session
       # https://github.com/elementary/greeter/issues/368
-      services.xserver.displayManager.defaultSession = "pantheon";
+      services.xserver.displayManager.defaultSession = mkDefault "pantheon";
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
@@ -239,6 +240,8 @@ in
       # Otherwise you can't store NetworkManager Secrets with
       # "Store the password only for this user"
       programs.nm-applet.enable = true;
+      # Pantheon has its own network indicator
+      programs.nm-applet.indicator = false;
 
       # Shell integration for VTE terminals
       programs.bash.vteIntegration = mkDefault true;

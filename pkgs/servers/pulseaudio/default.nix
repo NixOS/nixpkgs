@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook
 , libsndfile, libtool, makeWrapper, perlPackages
 , xorg, libcap, alsaLib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
-, speexdsp, systemd, webrtc-audio-processing
+, soxr, speexdsp, systemd, webrtc-audio-processing
 
 , x11Support ? false
 
@@ -31,22 +31,22 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "13.0";
+  version = "14.2";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "0mw0ybrqj7hvf8lqs5gjzip464hfnixw453lr0mqzlng3b5266wn";
+    sha256 = "sha256-ddP3dCwa5EkEmkyIkA5FS4s1DsqoxUTzSIolYqn/ZvE=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ];
+  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ];
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile speexdsp fftwFloat ]
+    [ libtool libsndfile soxr speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
     ++ lib.optionals (!libOnly) (
@@ -60,6 +60,11 @@ stdenv.mkDerivation rec {
       ++ lib.optional remoteControlSupport lirc
       ++ lib.optional zeroconfSupport  avahi
   );
+
+  prePatch = ''
+    substituteInPlace bootstrap.sh \
+      --replace pkg-config $PKG_CONFIG
+  '';
 
   autoreconfPhase = ''
     # Performs an autoreconf
@@ -88,7 +93,8 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
     ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
-    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user";
+    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-gsettings";
 
   enableParallelBuilding = true;
 
@@ -113,11 +119,15 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
   '';
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
+
+  passthru = {
+    pulseDir = "lib/pulse-" + lib.versions.majorMinor version;
+  };
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

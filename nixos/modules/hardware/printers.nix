@@ -84,7 +84,7 @@ in {
             model = mkOption {
               type = types.str;
               example = literalExample ''
-                gutenprint.''${lib.version.majorMinor (lib.getVersion pkgs.cups)}://brother-hl-5140/expert
+                gutenprint.''${lib.versions.majorMinor (lib.getVersion pkgs.gutenprint)}://brother-hl-5140/expert
               '';
               description = ''
                 Location of the ppd driver file for the printer.

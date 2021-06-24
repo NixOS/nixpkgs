@@ -23,16 +23,8 @@ make_platform() {
   make clean
   make PROBE_HOST="$1"
 
-  if [ "$1" = "libftdi" ]; then
+  if [ "$1" = "hosted" ]; then
     install -m 0555 blackmagic "$out/bin"
-  fi
-
-  if [ "$1" = "pc-hosted" ]; then
-    install -m 0555 blackmagic_hosted "$out/bin"
-  fi
-
-  if [ "$1" = "pc-stlinkv2" ]; then
-    install -m 0555 blackmagic_stlinkv2 "$out/bin"
   fi
 
   for f in $PRODUCTS; do

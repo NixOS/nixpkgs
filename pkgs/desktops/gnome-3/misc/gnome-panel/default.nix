@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoreconfHook
 , dconf
@@ -15,22 +15,21 @@
 , libsoup
 , libwnck3
 , libxml2
-, pkgconfig
+, pkg-config
 , polkit
 , systemd
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-panel";
-  version = "3.36.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.38.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1lxba8syy9gb50zxdk13gr1f62dfphwbb7njg6p26x9rvlkbf88y";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-GosVrvCgKmyqm5IJyNP7Q+e5h6OAB2aRwj8DFOwwLxU=";
   };
 
   # make .desktop Exec absolute
@@ -55,7 +54,7 @@ in stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -89,7 +88,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Component of Gnome Flashback that provides panels and default applets for the desktop";
     homepage = "https://wiki.gnome.org/Projects/GnomePanel";
     license = licenses.gpl2Plus;

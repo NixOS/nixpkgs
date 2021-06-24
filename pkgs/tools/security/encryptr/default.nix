@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, nss, nspr, gconf, fontconfig, freetype
+{ stdenv, lib, fetchurl, glib, nss, nspr, gconf, fontconfig, freetype
 , pango , cairo, libX11 , libXi, libXcursor, libXext, libXfixes
 , libXrender, libXcomposite , alsaLib, libXdamage, libXtst, libXrandr
 , expat, libcap, systemd , dbus, gtk2 , gdk-pixbuf, libnotify
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     glib nss nspr gconf fontconfig freetype pango cairo libX11 libXi
     libXcursor libXext libXfixes libXrender libXcomposite alsaLib
     libXdamage libXtst libXrandr expat libcap dbus gtk2 gdk-pixbuf
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     cp -v {encryptr-bin,icudtl.dat,nw.pak} $out/bin
     mv -v $out/bin/encryptr{-bin,}
     cp -v lib* $out/lib
-    ln -sv ${systemd.lib}/lib/libudev.so.1 $out/lib/libudev.so.0
+    ln -sv ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
              --set-rpath $out/lib:${rpath} \
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   # its application and shows a generic page
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://spideroak.com/solutions/encryptr";
     description = "Free, private and secure password management tool and e-wallet";
     license = licenses.unfree;

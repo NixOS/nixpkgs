@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pastel";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dnaw44ss10i10z4ksy0xljknvjap7rb7g0b8p6yzm5x4g2my5a6";
+    sha256 = "e6581ac04e973cac858828c6202c1e1e81fee1dc7de7683f3e1ffe0bfd8a573d";
   };
 
   checkInputs = [ pytest ];

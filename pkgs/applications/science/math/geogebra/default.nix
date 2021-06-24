@@ -1,18 +1,7 @@
-{ stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, language ? "en_US" }:
-
-stdenv.mkDerivation rec {
+{ lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
+let
   pname = "geogebra";
-  version = "5-0-574-0";
-
-  preferLocalBuild = true;
-
-  src = fetchurl {
-    urls = [
-      "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
-      "http://web.archive.org/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
-    ];
-    sha256 = "0jbci4spqkf33yb079lsnsc684y4mdf1p8lm9r0037av8jlsrgrc";
-  };
+  version = "5-0-620-0";
 
   srcIcon = fetchurl {
     url = "http://static.geogebra.org/images/geogebra-logo.svg";
@@ -30,24 +19,7 @@ stdenv.mkDerivation rec {
     mimeType = "application/vnd.geogebra.file;application/vnd.geogebra.tool;";
   };
 
-  buildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    install -D geogebra/* -t "$out/libexec/geogebra/"
-
-    makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
-      --set JAVACMD "${jre}/bin/java" \
-      --set GG_PATH "$out/libexec/geogebra" \
-      --add-flags "--language=${language}"
-
-    install -Dm644 "${desktopItem}/share/applications/"* \
-      -t $out/share/applications/
-
-    install -Dm644 "${srcIcon}" \
-      "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
     longDescription = ''
       Dynamic mathematics software for all levels of education that brings
@@ -55,9 +27,66 @@ stdenv.mkDerivation rec {
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ sikmir ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
-    platforms = platforms.all;
+    platforms = with platforms; linux ++ darwin;
     hydraPlatforms = [];
   };
-}
+
+  linuxPkg = stdenv.mkDerivation {
+    inherit pname version meta srcIcon desktopItem;
+
+    preferLocalBuild = true;
+
+    src = fetchurl {
+      urls = [
+        "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
+        "http://web.archive.org/web/20210101213140/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
+      ];
+      sha256 = "0v4r76b91cj0pns78gh3d432g2jlq2pz37lslg3fnnpvlfh25s9j";
+    };
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    installPhase = ''
+      install -D geogebra/* -t "$out/libexec/geogebra/"
+
+      makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
+        --set JAVACMD "${jre}/bin/java" \
+        --set GG_PATH "$out/libexec/geogebra" \
+        --add-flags "--language=${language}"
+
+      install -Dm644 "${desktopItem}/share/applications/"* \
+        -t $out/share/applications/
+
+      install -Dm644 "${srcIcon}" \
+        "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
+    '';
+  };
+
+  darwinPkg = stdenv.mkDerivation {
+    inherit pname version meta;
+
+    preferLocalBuild = true;
+
+    src = fetchurl {
+      urls = [
+        "https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
+        "https://web.archive.org/web/20210101213641/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
+      ];
+      sha256 = "02sbxrns9zvhcfrr68ygv766and6f6b2a3dfarljxszwsviv6ljf";
+    };
+
+    dontUnpack = true;
+
+    nativeBuildInputs = [ unzip ];
+
+    installPhase = ''
+      install -dm755 $out/Applications
+      unzip $src -d $out/Applications
+    '';
+  };
+in
+if stdenv.isDarwin
+then darwinPkg
+else linuxPkg

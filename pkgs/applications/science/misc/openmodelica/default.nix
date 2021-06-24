@@ -1,11 +1,11 @@
-{stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
+{lib, stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
 hwloc, jre, lapack, blas, hdf5, expat, ncurses, readline, qt4, webkitgtk, which,
-lp_solve, omniorb, sqlite, libatomic_ops, pkgconfig, file, gettext, flex, bison,
+lp_solve, omniorb, sqlite, libatomic_ops, pkg-config, file, gettext, flex, bison,
 doxygen, boost, openscenegraph, gnome2, xorg, git, bash, gtk2, makeWrapper }:
 
 let
 
-  fakegit = import ./fakegit.nix {inherit stdenv fetchgit fetchsvn bash;} ;
+  fakegit = import ./fakegit.nix { inherit lib stdenv fetchgit fetchsvn bash; };
 
 in
 
@@ -16,13 +16,11 @@ stdenv.mkDerivation {
 
   buildInputs = [autoconf cmake automake libtool gfortran clang gnumake
     hwloc jre lapack blas hdf5 expat ncurses readline qt4 webkitgtk which
-    lp_solve omniorb sqlite libatomic_ops pkgconfig file gettext flex bison
+    lp_solve omniorb sqlite libatomic_ops pkg-config file gettext flex bison
     doxygen boost openscenegraph gnome2.gtkglext xorg.libXmu
     git gtk2 makeWrapper];
 
   hardeningDisable = [ "format" ];
-
-  enableParallelBuilding = true;
 
   patchPhase = ''
     cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh
@@ -40,12 +38,12 @@ stdenv.mkDerivation {
     for e in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$e \
         --prefix PATH : "${gnumake}/bin" \
-        --prefix LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ lapack blas ]}"
+        --prefix LIBRARY_PATH : "${lib.makeLibraryPath [ lapack blas ]}"
     done
   '';
 
-  meta = with stdenv.lib; {
-    description = "OpenModelica is an open-source Modelica-based modeling and simulation environment";
+  meta = with lib; {
+    description = "An open-source Modelica-based modeling and simulation environment";
     homepage    = "https://openmodelica.org";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ smironov ];

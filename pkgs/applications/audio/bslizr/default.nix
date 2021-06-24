@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, xorg, cairo, lv2, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "BSlizr";
-  version = "1.2.6";
+  version = "1.2.12";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = pname;
-    rev = "${version}";
-    sha256 = "1l0znwvvqd2s24c652q54pkizlh86mvmr8h0qqp9xma0i575fcrh";
+    rev = version;
+    sha256 = "sha256-vPkcgG+pAfjsPRMyxdMRUxWGch+RG+pdaAcekP5pKEA=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libX11 cairo lv2
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sjaehn/BSlizr";
     description = "Sequenced audio slicing effect LV2 plugin (step sequencer effect)";
     maintainers = [ maintainers.magnetophon ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, findutils, fixDarwinDylibNames
+{ lib, stdenv, fetchurl, findutils, fixDarwinDylibNames
 , sslSupport? true, openssl
 }:
 
@@ -6,32 +6,35 @@ assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   pname = "libevent";
-  version = "2.1.11";
+  version = "2.1.12";
 
   src = fetchurl {
     url = "https://github.com/libevent/libevent/releases/download/release-${version}-stable/libevent-${version}-stable.tar.gz";
-    sha256 = "0g988zqm45sj1hlhhz4il5z4dpi5dl74hzjwzl4md37a09iaqnx6";
+    sha256 = "1fq30imk8zd26x8066di3kpc5zyfc5z6frr3zll685zcx4dxxrlj";
   };
 
   # libevent_openssl is moved into its own output, so that openssl isn't present
   # in the default closure.
   outputs = [ "out" "dev" ]
-    ++ stdenv.lib.optional sslSupport "openssl"
+    ++ lib.optional sslSupport "openssl"
     ;
   outputBin = "dev";
   propagatedBuildOutputs = [ "out" ]
-    ++ stdenv.lib.optional sslSupport "openssl"
+    ++ lib.optional sslSupport "openssl"
+    ;
+
+  nativeBuildInputs = []
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
     ;
 
   buildInputs = []
-    ++ stdenv.lib.optional sslSupport openssl
-    ++ stdenv.lib.optional stdenv.isCygwin findutils
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
+    ++ lib.optional sslSupport openssl
+    ++ lib.optional stdenv.isCygwin findutils
     ;
 
   doCheck = false; # needs the net
 
-  postInstall = stdenv.lib.optionalString sslSupport ''
+  postInstall = lib.optionalString sslSupport ''
     moveToOutput "lib/libevent_openssl*" "$openssl"
     substituteInPlace "$dev/lib/pkgconfig/libevent_openssl.pc" \
       --replace "$out" "$openssl"
@@ -40,7 +43,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Event notification library";
     longDescription = ''
       The libevent API provides a mechanism to execute a callback function
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
       and then add or remove events dynamically without having to change
       the event loop.
     '';
-    homepage = "http://libevent.org/";
+    homepage = "https://libevent.org/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

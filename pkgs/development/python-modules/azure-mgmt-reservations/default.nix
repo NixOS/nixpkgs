@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-reservations";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "f65c1985a47e0ac55e7d5d9cc1bd5e95335a111566edc289d460aa2bc8f80991";
+    sha256 = "1dc97f48f3edb67116da8604ab76ef93233319f56455532be307f323e9ebf0e6";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Reservations Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

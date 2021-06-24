@@ -17,6 +17,7 @@ in
     services.shairport-sync = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable the shairport-sync daemon.
@@ -27,6 +28,7 @@ in
       };
 
       arguments = mkOption {
+        type = types.str;
         default = "-v -o pa";
         description = ''
           Arguments to pass to the daemon. Defaults to a local pulseaudio
@@ -35,6 +37,7 @@ in
       };
 
       user = mkOption {
+        type = types.str;
         default = "shairport";
         description = ''
           User account name under which to run shairport-sync. The account

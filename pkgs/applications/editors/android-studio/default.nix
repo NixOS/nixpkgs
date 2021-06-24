@@ -1,4 +1,4 @@
-{ callPackage, makeFontsConf, gnome2 }:
+{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv }:
 
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
@@ -6,21 +6,21 @@ let
       fontDirectories = [];
     };
     inherit (gnome2) GConf gnome_vfs;
+    inherit buildFHSUserEnv;
   };
   stableVersion = {
-    version = "3.6.3.0"; # "Android Studio 3.6.3"
-    build = "192.6392135";
-    sha256Hash = "0apxmp341m7mbpm2df3qvsbaifwy6yqq746kbhbwlw8bn9hrzv1k";
+    version = "4.1.3.0"; # "Android Studio 4.1.3"
+    build = "201.7199119";
+    sha256Hash = "06xwgk7bwcmljka8xa56cfwwg858r0bl0xp2jb9hdnkwljf796gm";
   };
   betaVersion = {
-    version = "4.0.0.13"; # "Android Studio 4.0 Beta 4"
-    build = "193.6348893";
-    sha256Hash = "0lchi3l50826n1af1z24yclpf27v2q5p1zjbvcmn37wz46d4s4g2";
+    version = "4.2.0.22"; # "Android Studio 4.2 Beta 6"
+    build = "202.7188722";
+    sha256Hash = "0mzwkx1csx194wzg7dc1cii3c16wbmlbq1jdv9ly4nmdxlvc2rxb";
   };
   latestVersion = { # canary & dev
-    version = "4.1.0.6"; # "Android Studio 4.1 Canary 6"
-    build = "193.6381907";
-    sha256Hash = "0sa5plr96m90wv5hi9bqwa11j6k8k9wa0ji8qmlimdhnpyzhsdrx";
+    version = "2020.3.1.10"; # "Android Studio Arctic Fox (2020.3.1) Canary 10"
+    sha256Hash = "15xxyjjjy5pnimc66dcwnqb7z4lq7ll4fl401a3br5ca4d1hpgsj";
   };
 in {
   # Attributes are named by their corresponding release channels

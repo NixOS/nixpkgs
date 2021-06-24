@@ -1,5 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, pandoc, haskellPackages, texlive }:
+{ lib, substituteAll, buildPythonPackage, fetchFromGitHub
+, pandoc, texlive
+}:
 
 buildPythonPackage rec {
   pname = "pypandoc";
@@ -12,19 +13,20 @@ buildPythonPackage rec {
     sha256 = "1lpslfns6zxx7b0xr13bzg921lwrj5am8za0b2dviywk6iiib0ld";
   };
 
-  postPatch = ''
-    # set pandoc path statically
-    sed -i '/^__pandoc_path = None$/c__pandoc_path = "${pandoc}/bin/pandoc"' pypandoc/__init__.py
+  patches = [
+    (substituteAll {
+      src = ./static-pandoc-path.patch;
+      pandoc = "${lib.getBin pandoc}/bin/pandoc";
+    })
+    ./skip-tests.patch
+    ./new-pandoc-headings.patch
+  ];
 
-    # Skip test that requires network access
-    sed -i '/test_basic_conversion_from_http_url/i\\    @unittest.skip\("no network access during checkPhase"\)' tests.py
-  '';
+  checkInputs = [
+    texlive.combined.scheme-small
+  ];
 
-  preCheck = ''
-    export PATH="${haskellPackages.pandoc-citeproc}/bin:${texlive.combined.scheme-small}/bin:$PATH"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thin wrapper for pandoc";
     homepage = "https://github.com/bebraw/pypandoc";
     license = licenses.mit;

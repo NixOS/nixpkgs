@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, pkgconfig, wrapGAppsHook
+{ lib, stdenv, fetchurl, perl, pkg-config, wrapGAppsHook
 , SDL, bzip2, glib, gtk3, libgcrypt, libpng, libspectrum, libxml2, zlib
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kaynjr28w42n3iha60mgr7nxm49w8j0v49plyrc7ka24qzmiqph";
   };
 
-  nativeBuildInputs = [ perl pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ perl pkg-config wrapGAppsHook ];
 
   buildInputs = [ SDL bzip2 glib gtk3 libgcrypt libpng libspectrum libxml2 zlib ];
 

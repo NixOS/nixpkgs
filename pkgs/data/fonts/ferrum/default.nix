@@ -19,7 +19,7 @@ fetchzip {
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";
-    description = "A decorative font.";
+    description = "A decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];
     license = licenses.cc0;

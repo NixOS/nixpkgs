@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cdrtools, m4 }:
+{ lib, stdenv, fetchurl, fetchpatch, cdrtools, m4 }:
 
 stdenv.mkDerivation rec {
   pname = "dvd+rw-tools";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://fy.chalmers.se/~appro/linux/DVD+RW/tools";
     description = "Tools for mastering Blu-ray and DVD+-RW/+-R media";
     platforms = platforms.linux;

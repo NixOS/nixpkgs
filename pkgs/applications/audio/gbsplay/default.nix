@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, libpulseaudio }:
 
 stdenv.mkDerivation {
   name = "gbsplay-2016-12-17";
@@ -11,15 +11,15 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ libpulseaudio ];
-  
-  configureFlagsArray =
+
+  configureFlags =
    [ "--without-test" "--without-contrib" "--disable-devdsp"
      "--enable-pulse" "--disable-alsa" "--disable-midi"
      "--disable-nas" "--disable-dsound" "--disable-i18n" ];
 
-  makeFlagsArray = [ "tests=" ];
+  makeFlags = [ "tests=" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "gameboy sound player";
     license = licenses.gpl1;
     platforms = ["i686-linux" "x86_64-linux"];

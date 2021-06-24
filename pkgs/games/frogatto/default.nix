@@ -1,4 +1,4 @@
-{ buildEnv, stdenv, callPackage, makeWrapper, makeDesktopItem }:
+{ buildEnv, lib, callPackage, makeWrapper, makeDesktopItem }:
 
 let
   description = "Action-adventure game, starring a certain quixotic frog";
@@ -12,9 +12,9 @@ let
     comment = description;
     desktopName = "Frogatto";
     genericName = "frogatto";
-    categories = "Application;Game;ArcadeGame;";
+    categories = "Game;ArcadeGame;";
   };
-  version = "unstable-2018-12-18";
+  version = "unstable-2020-12-04";
 in buildEnv {
   name = "frogatto-${version}";
 
@@ -33,7 +33,8 @@ in buildEnv {
       --run "cd $out/share/frogatto"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = true;
     homepage = "https://frogatto.com";
     description = description;
     license = with licenses; [ cc-by-30 unfree ];

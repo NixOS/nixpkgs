@@ -1,30 +1,36 @@
-{stdenv, fetchurl, which}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="firejail";
-    version="0.9.62";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/firejail/firejail/firejail-${version}.tar.xz";
-    sha256="1q2silgy882fl61p5qa9f9jqkxcqnwa71jig3c729iahx4f0hs05";
+{ lib, stdenv, fetchFromGitHub, fetchpatch, which, xdg-dbus-proxy, nixosTests }:
+
+stdenv.mkDerivation rec {
+  pname = "firejail";
+  version = "0.9.64.4";
+
+  src = fetchFromGitHub {
+    owner = "netblue30";
+    repo = "firejail";
+    rev = version;
+    sha256 = "sha256-q/XL8cznHlUXdubUEptEAVma1jRUqFb5XcLAV0RVCzs=";
   };
-  buildInputs = [
-    which
+
+  buildInputs = [ which ];
+
+  patches = [
+    # Adds the /nix directory when using an overlay.
+    # Required to run any programs under this mode.
+    ./mount-nix-dir-on-overlay.patch
+    # By default fbuilder hardcodes the firejail binary to the install path.
+    # On NixOS the firejail binary is a setuid wrapper available in $PATH.
+    ./fbuilder-call-firejail-on-path.patch
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-    name = "${s.name}.tar.bz2";
-  };
 
   prePatch = ''
     # Allow whitelisting ~/.nix-profile
     substituteInPlace etc/firejail.config --replace \
       '# follow-symlink-as-user yes' \
       'follow-symlink-as-user no'
+
+    # Fix the path to 'xdg-dbus-proxy' hardcoded in the 'common.h' file
+    substituteInPlace src/include/common.h \
+      --replace '/usr/bin/xdg-dbus-proxy' '${xdg-dbus-proxy}/bin/xdg-dbus-proxy'
   '';
 
   preConfigure = ''
@@ -63,13 +69,13 @@ stdenv.mkDerivation {
   # bash: src/fsec-optimize/fsec-optimize: No such file or directory
   enableParallelBuilding = false;
 
+  passthru.tests = nixosTests.firejail;
+
   meta = {
-    inherit (s) version;
-    description = ''Namespace-based sandboxing tool for Linux'';
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Namespace-based sandboxing tool for Linux";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://firejail.wordpress.com/";
-    downloadPage = "https://sourceforge.net/projects/firejail/files/firejail/";
   };
 }

@@ -1,45 +1,31 @@
-{ stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp
-, bignums ? null }:
+{ lib, mkCoqDerivation, which, autoconf
+, coq, coquelicot, flocq, mathcomp
+, bignums ? null, version ? null }:
 
-let params =
-  if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
-    version = "3.4.1";
-    uid = "38104";
-    sha256 = "1zklv2w34k866fpwmw8q692mid5n6s75d2mmhhigrzpx5l3d4z6y";
-  } else {
-    version = "3.3.0";
-    uid = "37077";
-    sha256 = "08fdcf3hbwqphglvwprvqzgkg0qbimpyhnqsgv3gac4y1ap0f903";
-  }
-; in
+with lib; mkCoqDerivation {
+  pname = "interval";
+  owner = "coqinterval";
+  domain = "gitlab.inria.fr";
+  inherit version;
+  defaultVersion = with versions; switch coq.coq-version [
+    { case = isGe "8.8" ;        out = "4.1.0"; }
+    { case = range "8.8" "8.12"; out = "4.0.0"; }
+    { case = range "8.7" "8.11"; out = "3.4.2"; }
+    { case = range "8.5" "8.6";  out = "3.3.0"; }
+  ] null;
+  release."4.1.0".sha256 = "1jv27n5c4f3a9d8sizraa920iqi35x8cik8lm7pjp1dkiifz47nb";
+  release."4.0.0".sha256 = "1hhih6zmid610l6c8z3x4yzdzw9jniyjiknd1vpkyb2rxvqm3gzp";
+  release."3.4.2".sha256 = "07ngix32qarl3pjnm9d0vqc9fdrgm08gy7zp306hwxjyq7h1v7z0";
+  release."3.3.0".sha256 = "0lz2hgggzn4cvklvm8rpaxvwaryf37i8mzqajqgdxdbd8f12acsz";
+  releaseRev = v: "interval-${v}";
 
-stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-interval-${params.version}";
-
-  src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/${params.uid}/interval-${params.version}.tar.gz";
-    inherit (params) sha256;
-  };
-
-  nativeBuildInputs = [ which ];
-  buildInputs = [ coq ];
+  nativeBuildInputs = [ which autoconf ];
   propagatedBuildInputs = [ bignums coquelicot flocq ];
+  useMelquiondRemake.logpath = "Interval";
 
-  configurePhase = "./configure --libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Interval";
-  buildPhase = "./remake";
-  installPhase = "./remake install";
-
-  meta = with stdenv.lib; {
-    homepage = "http://coq-interval.gforge.inria.fr/";
+  meta = with lib; {
     description = "Tactics for simplifying the proofs of inequalities on expressions of real numbers for the Coq proof assistant";
     license = licenses.cecill-c;
     maintainers = with maintainers; [ vbgl ];
-    platforms = coq.meta.platforms;
   };
-
-  passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" ];
-  };
-
-
 }

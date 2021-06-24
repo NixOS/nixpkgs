@@ -1,25 +1,57 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, pytest
+, fetchFromGitHub
+, isPy27
 , pytestrunner
+, pytestCheckHook
 , numpy
 , pillow
 }:
 
-buildPythonPackage rec {
-  version = "1.4.1";
+let
   pname = "pydicom";
+  version = "2.1.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ki4736h6mp77733rsrwicl8pyig39idywzcmwvw3nzi2r1yc7w8";
+  src = fetchFromGitHub {
+    owner = "${pname}";
+    repo = "${pname}";
+    rev = "v${version}";
+    sha256 = "sha256-iExy+mUs1uqs/u9N6btlqyP6/TvoPVsuOuzs56zZAS8=";
   };
 
-  propagatedBuildInputs = [ numpy pillow ];
-  checkInputs = [ pytest pytestrunner ];
+  # Pydicom needs pydicom-data to run some tests. If these files are downloaded
+  # before the package creation, it'll try to download during the checkPhase.
+  test_data = fetchFromGitHub {
+    owner = "${pname}";
+    repo = "${pname}-data";
+    rev = "bbb723879690bb77e077a6d57657930998e92bd5";
+    sha256 = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
+  };
 
-  meta = with stdenv.lib; {
+in
+buildPythonPackage {
+  inherit pname version src;
+  disabled = isPy27;
+
+  propagatedBuildInputs = [ numpy pillow ];
+
+  checkInputs = [ pytestrunner pytestCheckHook ];
+
+  # Setting $HOME to prevent pytest to try to create a folder inside
+  # /homeless-shelter which is read-only.
+  # Linking pydicom-data dicom files to $HOME/.pydicom/data
+  preCheck = ''
+    export HOME=$TMP/test-home
+    mkdir -p $HOME/.pydicom/
+    ln -s ${test_data}/data_store/data $HOME/.pydicom/data
+  '';
+
+  # This test try to remove a dicom inside $HOME/.pydicom/data/ and download it again.
+  disabledTests = [
+    "test_fetch_data_files"
+  ];
+
+  meta = with lib; {
     homepage = "https://pydicom.github.io";
     description = "Pure-Python package for working with DICOM files";
     license = licenses.mit;

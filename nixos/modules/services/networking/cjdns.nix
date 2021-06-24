@@ -245,7 +245,7 @@ in
         fi
 
         if [ -z "$CJDNS_ADMIN_PASSWORD" ]; then
-            echo "CJDNS_ADMIN_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 96)" \
+            echo "CJDNS_ADMIN_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 32)" \
                 >> /etc/cjdns.keys
         fi
       '';
@@ -264,10 +264,10 @@ in
          ''
       );
 
+      startLimitIntervalSec = 0;
       serviceConfig = {
         Type = "forking";
         Restart = "always";
-        StartLimitInterval = 0;
         RestartSec = 1;
         CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW CAP_SETUID";
         ProtectSystem = true;

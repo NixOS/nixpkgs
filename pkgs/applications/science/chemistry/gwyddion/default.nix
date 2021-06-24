@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, pkg-config, fftw, file,
+{ lib, stdenv, fetchurl, gtk2, pkg-config, fftw, file,
   pythonSupport ? false, pythonPackages ? null,
   gnome2 ? null,
   openexrSupport ? true, openexr ? null,
@@ -35,15 +35,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.55";
+   version = "2.57";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "0l00zszvginpriv12idc0y1x28qmicdmrwkqa007srkxvrdgxwdi";
+    sha256 = "sha256-kx/WqtNDaJQyVehxZ3weddXyaM1knX+fCuv47A9GaH0=";
   };
-  
+
   nativeBuildInputs = [ pkg-config file ];
-  
-  buildInputs = with stdenv.lib;
+
+  buildInputs = with lib;
     [ gtk2 fftw ] ++
     optional openglSupport gnome2.gtkglext ++
     optional openexrSupport openexr ++
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     optional libuniqueSupport libunique ++
     optional libzipSupport libzip;
 
-  propagatedBuildInputs = with stdenv.lib;
+  propagatedBuildInputs = with lib;
     optionals pythonSupport [ pygtk pygobject2 python gnome2.gtksourceview ];
 
   # This patch corrects problems with python support, but should apply cleanly
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
       analysis of profilometry data or thickness maps from imaging
       spectrophotometry.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = [ stdenv.lib.maintainers.cge ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.cge ];
   };
 }

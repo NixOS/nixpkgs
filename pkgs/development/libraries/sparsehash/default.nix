@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "sparsehash-2.0.3";
+  name = "sparsehash-2.0.4";
 
   src = fetchFromGitHub {
     owner = "sparsehash";
     repo = "sparsehash";
     rev = name;
-    sha256 = "0m3f0cnpnpf6aak52wn8xbrrdw8p0yhq8csgc8nlvf9zp8c402na";
+    sha256 = "1pf1cjvcjdmb9cd6gcazz64x0cd2ndpwh6ql2hqpypjv725xwxy7";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sparsehash/sparsehash";
     description = "An extremely memory-efficient hash_map implementation";
     platforms = platforms.all;

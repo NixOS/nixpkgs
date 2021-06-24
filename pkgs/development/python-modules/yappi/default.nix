@@ -1,17 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchFromGitHub, gevent, isPy27, python }:
 
 buildPythonPackage rec {
   pname = "yappi";
-  version = "1.2.3";
+  version = "1.3.0";
+  disabled = isPy27; # invalid syntax
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b8db9bc607610d6da4e27e87ec828ebddec4bdaac89ca07ebfe9a153b0641580";
+  src = fetchFromGitHub {
+    owner = "sumerc";
+    repo = pname;
+    rev = "30f94024a0e2e4fa21c220de6a0dc97b4cb2c319";
+    sha256 = "1kvwl3y3c2hivf9y2x1q1s8a2y724iwqd1krq6ryvsbg3inyh8qw";
   };
 
   patches = [ ./tests.patch ];
-
-  checkInputs = [ nose ];
+  checkInputs = [ gevent ];
+  checkPhase = ''
+    ${python.interpreter} run_tests.py
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/sumerc/yappi";

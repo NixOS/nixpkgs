@@ -1,40 +1,79 @@
-{ stdenv, fetchurl, pkgconfig, intltool, python3Packages, wrapGAppsHook
-, glib, libxml2, libxslt, sqlite, libsoup , webkitgtk, json-glib, gst_all_1
-, libnotify, gtk3, gsettings-desktop-schemas, libpeas, dconf, librsvg
-, gobject-introspection, glib-networking
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, python3Packages
+, wrapGAppsHook
+, glib
+, libxml2
+, libxslt
+, sqlite
+, libsoup
+, webkitgtk
+, json-glib
+, gst_all_1
+, libnotify
+, gtk3
+, gsettings-desktop-schemas
+, libpeas
+, libsecret
+, gobject-introspection
+, glib-networking
 }:
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.12.6";
+  version = "1.12.9";
 
   src = fetchurl {
-    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}b.tar.bz2";
-    sha256 = "sha256:03pr1gmiv5y0i92bkhcxr8s311ll91chz19wb96jkixx32xav91d";
+    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    sha256 = "06ybr1wjlfir8iqjx6x0v1knd4b2hsy30qmkk4kssy6ky2ahc66q";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook python3Packages.wrapPython intltool pkgconfig ];
+  nativeBuildInputs = [
+    wrapGAppsHook
+    python3Packages.wrapPython
+    intltool
+    pkg-config
+  ];
 
   buildInputs = [
-    glib gtk3 webkitgtk libxml2 libxslt sqlite libsoup gsettings-desktop-schemas
-    libpeas gsettings-desktop-schemas json-glib dconf gobject-introspection
-    librsvg glib-networking libnotify
+    glib
+    gtk3
+    webkitgtk
+    libxml2
+    libxslt
+    sqlite
+    libsoup
+    libpeas
+    gsettings-desktop-schemas
+    json-glib
+    gobject-introspection
+    libsecret
+    glib-networking
+    libnotify
   ] ++ (with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
   ]);
 
-  pythonPath = with python3Packages; [ pygobject3 pycairo ];
+  pythonPath = with python3Packages; [
+    pygobject3
+    pycairo
+  ];
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ vcunat romildo ];
+    maintainers = with maintainers; [ romildo ];
     platforms = platforms.linux;
 
     longDescription = ''

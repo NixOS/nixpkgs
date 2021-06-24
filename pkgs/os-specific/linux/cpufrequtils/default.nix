@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool, gettext }:
+{ lib, stdenv, fetchurl, libtool, gettext }:
 
 stdenv.mkDerivation rec {
   name = "cpufrequtils-008";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ stdenv.cc.libc.linuxHeaders libtool gettext ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to display or change the CPU governor settings";
     homepage = "http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/cpufrequtils.html";
     license = licenses.gpl2;

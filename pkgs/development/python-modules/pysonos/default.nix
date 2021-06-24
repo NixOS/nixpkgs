@@ -1,37 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
 , xmltodict
-, requests
 , ifaddr
+, requests
 
-# Test dependencies
-, pytest, pylint, flake8, graphviz
-, mock, sphinx, sphinx_rtd_theme
+  # Test dependencies
+, pytestCheckHook
+, mock
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "pysonos";
-  version = "0.0.24";
+  version = "0.0.43";
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "294ffce5394a3e0da6a6f4e23f84031f06d9eb76eaa362507c0b1033ffbf69b4";
+  # pypi package is missing test fixtures
+  src = fetchFromGitHub {
+    owner = "amelchio";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-OobKlAymXXvQH6m77Uqn2eoTlWgs8EBxYIDFJ5wwMKA=";
   };
 
-  propagatedBuildInputs = [ xmltodict requests ifaddr ];
+  propagatedBuildInputs = [ ifaddr requests xmltodict ];
 
   checkInputs = [
-    pytest pylint flake8 graphviz
-    mock sphinx sphinx_rtd_theme
+    pytestCheckHook
+    mock
+    requests-mock
   ];
 
-  checkPhase = ''
-    pytest --deselect=tests/test_discovery.py::TestDiscover::test_discover
-  '';
+  disabledTests = [
+    "test_desc_from_uri" # test requires network access
+  ];
 
   meta = {
     homepage = "https://github.com/amelchio/pysonos";

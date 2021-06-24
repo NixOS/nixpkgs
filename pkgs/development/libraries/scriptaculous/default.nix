@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, unzip, ... }: stdenv.mkDerivation rec {
+{ lib, stdenv, fetchurl, unzip, ... }:
+
+stdenv.mkDerivation rec {
   pname = "scriptaculous";
   version = "1.9.0";
 
@@ -14,7 +16,7 @@
     cp src/*.js $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of JavaScript libraries to enhance the user interface of web sites";
     longDescription = ''
       script.aculo.us provides you with

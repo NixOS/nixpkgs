@@ -83,9 +83,9 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [ 
+  config = lib.mkIf cfg.enable (lib.mkMerge [
   {
-    meta.maintainers = with lib.maintainers; [ kampka ];
+    meta.maintainers = with lib.maintainers; [ ];
 
     users.groups.trilium = {};
     users.users.trilium = {

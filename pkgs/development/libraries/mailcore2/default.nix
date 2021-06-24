@@ -1,22 +1,22 @@
 { stdenv, lib, fetchFromGitHub, cmake, libetpan, icu, cyrus_sasl, libctemplate
-, libuchardet, pkgconfig, glib, html-tidy, libxml2, libuuid, openssl
+, libuchardet, pkg-config, glib, html-tidy, libxml2, libuuid, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "mailcore2";
 
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner  = "MailCore";
     repo   = "mailcore2";
     rev    = version;
-    sha256 = "0yxynvfmifpw9hdhv499a813hb2ynan74r353lhcdajkkm7w8br5";
+    sha256 = "0a69q11z194fdfwyazjyyylx57sqs9j4lz7jwh5qcws8syqgb23z";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    libetpan cmake icu cyrus_sasl libctemplate libuchardet glib
+    libetpan icu cyrus_sasl libctemplate libuchardet glib
     html-tidy libxml2 libuuid openssl
   ];
 

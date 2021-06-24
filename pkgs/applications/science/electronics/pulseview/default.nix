@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, pkgconfig, cmake, glib, boost, libsigrok
+{ mkDerivation, lib, fetchurl, pkg-config, cmake, glib, boost, libsigrok
 , libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
 , pcre, librevisa, python3, qtbase, qtsvg
 }:
@@ -12,7 +12,7 @@ mkDerivation rec {
     sha256 = "0bvgmkgz37n2bi9niskpl05hf7rsj1lj972fbrgnlz25s4ywxrwy";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     glib boost libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm

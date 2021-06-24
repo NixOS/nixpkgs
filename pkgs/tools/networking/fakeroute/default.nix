@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "fakeroute";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sp342rxgm1gz4mvi5vvz1knz7kn9px9s39ii3jdjp4ks7lr5c8f";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Makes your machine appear to be anywhere on the internet
       to any host running a (UDP) unix traceroute

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "mandoc";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     echo $configureLocal > configure.local
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mandoc.bsd.lv/";
     description = "suite of tools compiling mdoc and man";
     downloadPage = "http://mandoc.bsd.lv/snapshots/";

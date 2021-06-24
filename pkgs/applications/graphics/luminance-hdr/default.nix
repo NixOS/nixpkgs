@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, cmake, fetchFromGitHub, pkgconfig
+{ lib, mkDerivation, cmake, fetchFromGitHub, pkg-config
 , boost, exiv2, fftwFloat, gsl
 , ilmbase, lcms2, libraw, libtiff, openexr
 , qtbase, qtdeclarative, qttools, qtwebengine, eigen
@@ -22,9 +22,9 @@ mkDerivation rec {
     boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://qtpfsgui.sourceforge.net/";
     description = "A complete open source solution for HDR photography";
     license = licenses.gpl2;

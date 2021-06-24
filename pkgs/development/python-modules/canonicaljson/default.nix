@@ -1,21 +1,22 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, frozendict, simplejson, six
+{ lib, buildPythonPackage, fetchPypi
+, frozendict, simplejson, six, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "canonicaljson";
-  version = "1.1.4";
+  version = "1.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "45bce530ff5fd0ca93703f71bfb66de740a894a3b5dd6122398c6d8f18539725";
+    sha256 = "899b7604f5a6a8a92109115d9250142cdf0b1dfdcb62cdb21d8fb5bf37780631";
   };
 
   propagatedBuildInputs = [
     frozendict simplejson six
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/matrix-org/python-canonicaljson";
     description = "Encodes objects and arrays as RFC 7159 JSON.";
     license = licenses.asl20;

@@ -1,8 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
-, fetchpatch
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , ell
 , coreutils
 , docutils
@@ -13,18 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.6";
+  version = "1.12";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "0c38c7a234cwdd5y1brq4w56xszs8zlp57rr3nvgp8z8djcy1qvx";
+    sha256 = "sha256-o3Vc5p/AFZwbkEWJZzO6wWAJ/BmSh0eKxdnjm5B9BFU=";
   };
+
+  outputs = [ "out" "man" ]
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
   nativeBuildInputs = [
     autoreconfHook
     docutils
-    pkgconfig
+    pkg-config
     python3Packages.wrapPython
   ];
 
@@ -36,7 +38,9 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ openssl ];
 
-  pythonPath = [
+  # wrapPython wraps the scripts in $test. They pull in gobject-introspection,
+  # which doesn't cross-compile.
+  pythonPath = lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     python3Packages.dbus-python
     python3Packages.pygobject3
   ];
@@ -59,10 +63,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = ''
-    cp -a test/* $out/bin/
     mkdir -p $out/share
     cp -a doc $out/share/
     cp -a README AUTHORS TODO $out/share/doc/
+  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p $test/bin
+    cp -a test/* $test/bin/
   '';
 
   preFixup = ''
@@ -78,10 +84,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dtzWill fpletz ];
   };

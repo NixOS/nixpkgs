@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "amazon-ecr-credential-helper";
-  version = "0.3.0";
+  version = "0.5.0";
 
   goPackagePath = "github.com/awslabs/amazon-ecr-credential-helper";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "awslabs";
     repo = "amazon-ecr-credential-helper";
     rev = "v${version}";
-    sha256 = "06pcwgahcbi13ca5rs6giwdw3w364lbvmzcs4ka82igvcffxjvnd";
+    sha256 = "sha256-GmGse+N7QeG2sAjCumGkUAWu/KfhnMltzeh+s8o+tiw=";
   };
 
   meta = with lib; {

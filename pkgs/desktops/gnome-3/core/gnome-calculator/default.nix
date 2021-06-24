@@ -1,18 +1,18 @@
-{ stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkgconfig, libxml2
+{ lib, stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkg-config, libxml2
 , gtk3, glib, gtksourceview4, wrapGAppsHook, gobject-introspection, python3
 , gnome3, mpfr, gmp, libsoup, libmpc, gsettings-desktop-schemas, libgee }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "3.36.0";
+  version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1cqd4b25qp1i0p04m669jssg1l5sdapc1mniv9jssvw5r7wk1s52";
+    url = "mirror://gnome/sources/gnome-calculator/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0sri58cp6v07cqpdsf8dhf9dnykz305kvkx0l9dd25g06djcr0wc";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gettext itstool wrapGAppsHook python3
+    meson ninja pkg-config vala gettext itstool wrapGAppsHook python3
     gobject-introspection # for finding vapi files
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Calculator";
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
     maintainers = teams.gnome.members;

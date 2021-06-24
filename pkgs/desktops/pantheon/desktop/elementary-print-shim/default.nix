@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , gtk3
 }:
@@ -18,11 +19,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1w3cfap7j42x14mqpfqdm46hk5xc0v5kv8r6wxcnknr3sfxi8qlp";
+    sha256 = "sha256-l2IUu9Mj22lZ5yajPcsGrJcJDakNu4srCV0Qea5ybPA=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -30,13 +31,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
   buildInputs = [ gtk3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple shim for printing support via Contractor";
     homepage = "https://github.com/elementary/print";
     license = licenses.gpl3Plus;

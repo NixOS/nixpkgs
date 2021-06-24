@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , pbr, requests
-, pytest, pytestpep8, waitress }:
+, pytest, waitress }:
 
 buildPythonPackage rec {
   pname = "requests-unixsocket";
@@ -14,8 +14,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pbr ];
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ pytest pytestpep8 waitress ];
+  checkInputs = [ pytest waitress ];
   checkPhase = ''
+    rm pytest.ini
     py.test
   '';
 

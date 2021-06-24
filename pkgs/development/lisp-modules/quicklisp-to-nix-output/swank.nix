@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''swank'';
-  version = ''slime-v2.24'';
+  baseName = "swank";
+  version = "slime-v2.26.1";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/slime/2019-07-10/slime-v2.24.tgz'';
-    sha256 = ''0gsq3i5818iwfbh710lf96kb66q3ap3qvvkcj06zyfh30n50x1g6'';
+    url = "http://beta.quicklisp.org/archive/slime/2020-12-20/slime-v2.26.1.tgz";
+    sha256 = "12q3la9lwzs01x0ii5vss0i8i78lgyjrn3adr3rs027f4b7386ny";
   };
 
   packageName = "swank";
@@ -18,7 +19,7 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM swank DESCRIPTION System lacks description SHA256
-    0gsq3i5818iwfbh710lf96kb66q3ap3qvvkcj06zyfh30n50x1g6 URL
-    http://beta.quicklisp.org/archive/slime/2019-07-10/slime-v2.24.tgz MD5
-    05f421f7a9dffa4ba206c548524ef1c0 NAME swank FILENAME swank DEPS NIL
-    DEPENDENCIES NIL VERSION slime-v2.24 SIBLINGS NIL PARASITES NIL) */
+    12q3la9lwzs01x0ii5vss0i8i78lgyjrn3adr3rs027f4b7386ny URL
+    http://beta.quicklisp.org/archive/slime/2020-12-20/slime-v2.26.1.tgz MD5
+    bd91e1fe29a4f7ebf53a0bfecc9e1e36 NAME swank FILENAME swank DEPS NIL
+    DEPENDENCIES NIL VERSION slime-v2.26.1 SIBLINGS NIL PARASITES NIL) */

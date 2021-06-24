@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libargon2";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0p4ry9dn0mi9js0byijxdyiwx74p1nr8zj7wjpd1fjgqva4sk23i";
   };
+
+  nativeBuildInputs = [ fixDarwinDylibNames ];
 
   patches = [
     # TODO: remove when https://github.com/P-H-C/phc-winner-argon2/pull/277 is merged + released
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     "PKGCONFIG_REL=lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A key derivation function that was selected as the winner of the Password Hashing Competition in July 2015";
     longDescription = ''
       A password-hashing function created by by Alex Biryukov, Daniel Dinu, and

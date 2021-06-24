@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake } :
+{ lib, stdenv, fetchFromGitHub, cmake } :
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "catimg";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "posva";
     repo = pname;
     rev = version;
-    sha256 = "0g9ywbgy162wiam9hc3yqpq5q4gyxa8fj4jskr3fdz8z8jjaabzz";
+    sha256 = "0a2dswbv4xddb2l2d55hc43lzvjwrjs5z9am7v6i0p0mi2fmc89s";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
+{ lib, stdenv, fetchFromGitHub, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
 
 stdenv.mkDerivation rec {
   pname = "edbrowse";
-  version = "3.7.6";
+  version = "3.7.7";
 
   buildInputs = [ curl pcre readline openssl duktape perl html-tidy ];
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     owner = "CMB";
     repo = "edbrowse";
     rev = "v${version}";
-    sha256 = "0yk4djb9q8ll94fs57y706bsqlar4pfx6ysasvkzj146926lrh8a";
+    sha256 = "0cw9d60mdhwna57r1vxn53s8gl81rr3cxnvm769ifq3xyh49vfcf";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command Line Editor Browser";
     longDescription = ''
       Edbrowse is a combination editor, browser, and mail client that is 100% text based.

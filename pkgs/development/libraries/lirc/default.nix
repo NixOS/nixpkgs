@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, help2man, python3,
-  alsaLib, xlibsWrapper, libxslt, systemd, libusb, libftdi1 }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
+  alsaLib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
 
 stdenv.mkDerivation rec {
   name = "lirc-0.10.1";
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     touch lib/lirc/input_map.inc
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig help2man
+  nativeBuildInputs = [ autoreconfHook pkg-config help2man
     (python3.withPackages (p: with p; [ pyyaml setuptools ])) ];
 
-  buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb libftdi1 ];
+  buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
     "localstatedir=$TMPDIR"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows to receive and send infrared signals";
-    homepage = "http://www.lirc.org/";
+    homepage = "https://www.lirc.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

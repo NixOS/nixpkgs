@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, gtk3
-, json-glib, libsoup, webkitgtk, geocode-glib
+{ lib, stdenv, fetchFromGitLab, vala, python3, pkg-config, meson, ninja, gtk3
+, json-glib, libsoup, webkitgtk, geocode-glib, nix-update-script
 , libappindicator, desktop-file-utils, appstream, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -38,7 +38,14 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+
+  meta = with lib; {
     description = "Know the forecast of the next hours & days";
     homepage = "https://gitlab.com/bitseater/meteo";
     license = licenses.gpl3Plus;

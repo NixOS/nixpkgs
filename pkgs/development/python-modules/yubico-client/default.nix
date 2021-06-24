@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "yubico-client";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d74c6341210c94b639f7c7c8930550e73d5c1be60402e418e9dc95e038f8527";
+    sha256 = "e3b86cd2a123105edfacad40551c7b26e9c1193d81ffe168ee704ebfd3d11162";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -1,5 +1,5 @@
-{ stdenv, python3, qt5, fetchFromGitHub, wrapPython, pyqt5, pyserial }:
- 
+{ lib, stdenv, python3, qt5, fetchFromGitHub, wrapPython, pyqt5, pyserial }:
+
 stdenv.mkDerivation rec {
   pname = "sumorobot-manager";
   version = "0.9.0";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/opt" "$pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop App for managing SumoRobots";
     homepage = "https://www.robokoding.com/kits/sumorobot/sumomanager/";
     license = licenses.mit;

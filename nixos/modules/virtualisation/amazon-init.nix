@@ -1,13 +1,17 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 let
+  cfg = config.virtualisation.amazon-init;
+
   script = ''
     #!${pkgs.runtimeShell} -eu
 
     echo "attempting to fetch configuration from EC2 user data..."
 
     export HOME=/root
-    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.git pkgs.gnutar pkgs.gzip pkgs.gnused config.system.build.nixos-rebuild]}:$PATH
+    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.git pkgs.gnutar pkgs.gzip pkgs.gnused pkgs.xz config.system.build.nixos-rebuild]}:$PATH
     export NIX_PATH=nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
 
     userData=/etc/ec2-metadata/user-data
@@ -41,20 +45,33 @@ let
     nixos-rebuild switch
   '';
 in {
-  systemd.services.amazon-init = {
-    inherit script;
-    description = "Reconfigure the system from EC2 userdata on startup";
 
-    wantedBy = [ "multi-user.target" ];
-    after = [ "multi-user.target" ];
-    requires = [ "network-online.target" ];
+  options.virtualisation.amazon-init = {
+    enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Enable or disable the amazon-init service.
+      '';
+    };
+  };
 
-    restartIfChanged = false;
-    unitConfig.X-StopOnRemoval = false;
+  config = mkIf cfg.enable {
+    systemd.services.amazon-init = {
+      inherit script;
+      description = "Reconfigure the system from EC2 userdata on startup";
 
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
+      wantedBy = [ "multi-user.target" ];
+      after = [ "multi-user.target" ];
+      requires = [ "network-online.target" ];
+
+      restartIfChanged = false;
+      unitConfig.X-StopOnRemoval = false;
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
     };
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gnome3
 , meson
@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mm-common";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1m4w33da9f4rx2d6kdj3ix3kl0gn16ml82v2mdn4hljr3q29nzdr";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "07b4s5ckcz9q5gwx8vchim19mhfgl8wysqwi30pndks3m4zrzad2";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common build files of GLib/GTK C++ bindings";
     longDescription = ''
       The mm-common module provides the build infrastructure and utilities

@@ -4,7 +4,7 @@ import ./make-test-python.nix (
     {
       name = "xandikos";
 
-      meta.maintainers = [ lib.maintainers."0x4A6F" ];
+      meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
       nodes = {
         xandikos_client = {};
@@ -17,7 +17,7 @@ import ./make-test-python.nix (
           services.xandikos.enable = true;
           services.xandikos.address = "localhost";
           services.xandikos.port = 8080;
-          services.xandikos.routePrefix = "/xandikos/";
+          services.xandikos.routePrefix = "/xandikos-prefix/";
           services.xandikos.extraOptions = [
             "--defaults"
           ];
@@ -28,7 +28,7 @@ import ./make-test-python.nix (
               serverName = "xandikos.local";
               basicAuth.xandikos = "snakeOilPassword";
               locations."/xandikos/" = {
-                proxyPass = "http://localhost:8080/";
+                proxyPass = "http://localhost:8080/xandikos-prefix/";
               };
             };
           };

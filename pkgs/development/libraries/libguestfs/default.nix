@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
-, acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
-, gmp, readline, file, numactl, xen, libapparmor, jansson
+, acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex, db
+, gmp, readline, file, numactl, libapparmor, jansson
 , getopt, perlPackages, ocamlPackages
+, libtirpc
 , appliance ? null
 , javaSupport ? false, jdk ? null }:
 
-assert appliance == null || stdenv.lib.isDerivation appliance;
+assert appliance == null || lib.isDerivation appliance;
 assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
@@ -14,19 +15,20 @@ stdenv.mkDerivation rec {
   version = "1.40.2";
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/1.40-stable/${pname}-${version}.tar.gz";
+    url = "https://libguestfs.org/download/1.40-stable/${pname}-${version}.tar.gz";
     sha256 = "ad6562c48c38e922a314cb45a90996843d81045595c4917f66b02a6c2dfe8058";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [
     ncurses cpio gperf jansson
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
-    systemd fuse yajl libvirt gmp readline file hivex
-    numactl xen libapparmor getopt perlPackages.ModuleBuild
+    systemd fuse yajl libvirt gmp readline file hivex db
+    numactl libapparmor getopt perlPackages.ModuleBuild
+    libtirpc
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
     ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
-    ++ stdenv.lib.optional javaSupport jdk;
+    ++ lib.optional javaSupport jdk;
 
   prePatch = ''
     # build-time scripts
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
   configureFlags = [ "--disable-appliance" "--disable-daemon" "--with-distro=NixOS" ]
-    ++ stdenv.lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
+    ++ lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
   installFlags = [ "REALLY_INSTALL=yes" ];
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = stdenv.lib.optionalString (appliance != null) ''
+  postFixup = lib.optionalString (appliance != null) ''
     mkdir -p $out/{lib,lib64}
     ln -s ${appliance} $out/lib64/guestfs
     ln -s ${appliance} $out/lib/guestfs
@@ -83,11 +85,13 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for accessing and modifying virtual machine disk images";
     license = with licenses; [ gpl2 lgpl21 ];
-    homepage = "http://libguestfs.org/";
+    homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [offline];
     platforms = platforms.linux;
+    # this is to avoid "output size exceeded"
+    hydraPlatforms = if appliance != null then appliance.meta.hydraPlatforms else platforms.linux;
   };
 }

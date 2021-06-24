@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, go-md2man, installShellFiles, libusb }:
+{ lib, stdenv, fetchFromGitHub, go-md2man, installShellFiles, libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
   pname = "teensy-loader-cli";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yx8vsh6b29pqr4zb6sx47429i9x51hj9psn8zksfz75j5ivfd5i";
   };
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   nativeBuildInputs = [ go-md2man installShellFiles ];
 
@@ -22,11 +22,10 @@ stdenv.mkDerivation rec {
     installManPage *.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Firmware uploader for the Teensy microcontroller boards";
     homepage = "https://www.pjrc.com/teensy/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ the-kenny ];
     platforms = platforms.unix;
   };
 }

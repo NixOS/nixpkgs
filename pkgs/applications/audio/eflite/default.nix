@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, flite, alsaLib, debug ? false }:
+{ lib, stdenv, fetchurl, fetchpatch, flite, alsaLib, debug ? false }:
 
 stdenv.mkDerivation rec {
   pname = "eflite";
@@ -33,19 +33,19 @@ stdenv.mkDerivation rec {
     ./format.patch
   ];
 
-  CFLAGS = stdenv.lib.optionalString debug " -DDEBUG=2";
+  CFLAGS = lib.optionalString debug " -DDEBUG=2";
 
   meta = {
     homepage = "http://eflite.sourceforge.net";
-    description = "EFlite is a speech server for screen readers";
+    description = "Speech server for screen readers";
     longDescription = ''
       EFlite is a speech server for Emacspeak and other screen
       readers that allows them to interface with Festival Lite,
       a free text-to-speech engine developed at the CMU Speech
       Center as an off-shoot of Festival.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jhhuh ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jhhuh ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl }:
+{ lib, stdenv, fetchurl, tcl }:
 
 stdenv.mkDerivation rec {
   pname = "tcllib";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://sourceforge.net/projects/tcllib/";
     description = "Tcl-only library of standard routines for Tcl";
-    license = stdenv.lib.licenses.tcltk;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.tcltk;
+    platforms = lib.platforms.unix;
   };
 }

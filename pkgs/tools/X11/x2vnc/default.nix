@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg }:
+{ lib, stdenv, fetchurl, xorg }:
 
 stdenv.mkDerivation {
   name = "x2vnc-1.7.2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://fredrik.hubbe.net/x2vnc.html";
     description = "A program to control a remote VNC server";
     platforms = platforms.unix;

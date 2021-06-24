@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
 , gettext
 , fetchurl
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , itstool
 , desktop-file-utils
@@ -13,7 +13,7 @@
 , evolution-data-server
 , gnome-online-accounts
 , libuuid
-, libhandy
+, libhandy_0
 , webkitgtk
 , zeitgeist
 , gnome3
@@ -22,16 +22,13 @@
 , tracker
 }:
 
-let
-  version = "3.36.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnome-notes";
-  inherit version;
+  version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
-    sha256 = "0421g9czdahk2w2kv7zg4gd9b4q8g1hl483jsfrxy5y7saincbr1";
+    url = "mirror://gnome/sources/bijiben/${lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
+    sha256 = "H/bMCsbGKQe/KgmhchXt0vF7dNrKs6XIminDBJFyvis=";
   };
 
   doCheck = true;
@@ -44,7 +41,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     libxml2
@@ -57,7 +54,7 @@ stdenv.mkDerivation {
     glib
     gtk3
     libuuid
-    libhandy
+    libhandy_0 # doesn't support libhandy-1 yet
     webkitgtk
     tracker
     gnome-online-accounts
@@ -79,7 +76,7 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Note editor designed to remain simple to use";
     homepage = "https://wiki.gnome.org/Apps/Notes";
     license = licenses.gpl3;

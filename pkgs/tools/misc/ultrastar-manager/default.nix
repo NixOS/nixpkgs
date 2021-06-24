@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, pkgconfig, symlinkJoin, qmake, diffPlugins
+{ lib, mkDerivation, fetchFromGitHub, pkg-config, symlinkJoin, qmake, diffPlugins
 , qtbase, qtmultimedia, taglib, libmediainfo, libzen, libbass }:
 
 let
@@ -109,7 +109,7 @@ in mkDerivation {
     make install
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   inherit buildInputs;
 
   meta = with lib; {

@@ -6,6 +6,12 @@ let
   cfg = config.services.cfdyndns;
 in
 {
+  imports = [
+    (mkRemovedOptionModule
+      [ "services" "cfdyndns" "apikey" ]
+      "Use services.cfdyndns.apikeyFile instead.")
+  ];
+
   options = {
     services.cfdyndns = {
       enable = mkEnableOption "Cloudflare Dynamic DNS Client";
@@ -17,10 +23,12 @@ in
         '';
       };
 
-      apikey = mkOption {
-        type = types.str;
+      apikeyFile = mkOption {
+        default = null;
+        type = types.nullOr types.str;
         description = ''
-          The API Key to use to authenticate to CloudFlare.
+          The path to a file containing the API Key
+          used to authenticate with CloudFlare.
         '';
       };
 
@@ -45,13 +53,17 @@ in
         Type = "simple";
         User = config.ids.uids.cfdyndns;
         Group = config.ids.gids.cfdyndns;
-        ExecStart = "/bin/sh -c '${pkgs.cfdyndns}/bin/cfdyndns'";
       };
       environment = {
         CLOUDFLARE_EMAIL="${cfg.email}";
-        CLOUDFLARE_APIKEY="${cfg.apikey}";
         CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
       };
+      script = ''
+        ${optionalString (cfg.apikeyFile != null) ''
+          export CLOUDFLARE_APIKEY="$(cat ${escapeShellArg cfg.apikeyFile})"
+        ''}
+        ${pkgs.cfdyndns}/bin/cfdyndns
+      '';
     };
 
     users.users = {

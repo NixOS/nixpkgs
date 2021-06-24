@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, unixODBC }:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, unixODBC }:
 
 buildPythonPackage rec {
   pname = "pyodbc";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   doCheck = false; # tests require a database server
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python ODBC module to connect to almost any database";
     homepage = "https://github.com/mkleehammer/pyodbc";
     license = licenses.mit;

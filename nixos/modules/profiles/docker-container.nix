@@ -2,6 +2,8 @@
 
 with lib;
 
+let inherit (pkgs) writeScript; in
+
 let
  pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
 
@@ -30,7 +32,12 @@ in {
     ];
 
     # Some container managers like lxc need these
-    extraCommands = "mkdir -p proc sys dev";
+    extraCommands =
+      let script = writeScript "extra-commands.sh" ''
+            rm etc
+            mkdir -p proc sys dev etc
+          '';
+      in script;
   };
 
   boot.isContainer = true;

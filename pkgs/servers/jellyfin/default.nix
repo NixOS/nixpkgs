@@ -18,45 +18,47 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "jellyfin";
-  version = "10.5.4";
+  version = "10.7.2";
 
   # Impossible to build anything offline with dotnet
   src = fetchurl {
-    url = "https://github.com/jellyfin/jellyfin/releases/download/v${version}/jellyfin_${version}_portable.tar.gz";
-    sha256 = "0jfqkbr5n5l7k3dpmjsy0bhvy4y1s6sccwcmcx239r6dhc7x0f9y";
+    url = "https://repo.jellyfin.org/releases/server/portable/versions/stable/combined/${version}/jellyfin_${version}.tar.gz";
+    sha256 = "sha256-l2tQmKez06cekq/QLper+OrcSU/0lWpZ85xY2wZcK1s=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     unzip
     makeWrapper
   ];
 
   propagatedBuildInputs = [
-    dotnetCorePackages.aspnetcore_3_1
+    dotnetCorePackages.aspnetcore_5_0
     sqlite
   ];
 
   preferLocalBuild = true;
 
   installPhase = ''
+    runHook preInstall
     install -dm 755 "$out/opt/jellyfin"
     cp -r * "$out/opt/jellyfin"
-
-    makeWrapper "${dotnetCorePackages.aspnetcore_3_1}/bin/dotnet" $out/bin/jellyfin \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
+    makeWrapper "${dotnetCorePackages.aspnetcore_5_0}/bin/dotnet" $out/bin/jellyfin \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         sqlite fontconfig freetype stdenv.cc.cc.lib
       ]}:$out/opt/jellyfin/runtimes/${runtimeDir}/native/" \
       --add-flags "$out/opt/jellyfin/jellyfin.dll --ffmpeg ${ffmpeg}/bin/ffmpeg"
+    runHook postInstall
   '';
 
   passthru.tests = {
     smoke-test = nixosTests.jellyfin;
   };
 
-  meta =  with stdenv.lib; {
+  meta =  with lib; {
     description = "The Free Software Media System";
-    homepage = "https://jellyfin.github.io/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ nyanloutre minijackson ];
+    homepage = "https://jellyfin.org/";
+    # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ nyanloutre minijackson purcell ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, makeWrapper, Security }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, makeWrapper, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "racerd";
@@ -26,20 +26,20 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -p target/release/racerd $out/bin/
+    cp -p $releaseDir/racerd $out/bin/
     wrapProgram $out/bin/racerd --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = true;
     description = "JSON/HTTP Server based on racer for adding Rust support to editors and IDEs";
     homepage = "https://github.com/jwilm/racerd";
     license = licenses.asl20;
-    platforms = platforms.all;
   };
 }

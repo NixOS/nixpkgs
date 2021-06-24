@@ -1,7 +1,7 @@
-sourcePerArch:
+{ sourcePerArch, knownVulnerabilities ? [] }:
 
 { swingSupport ? true # not used for now
-, stdenv
+, lib, stdenv
 , fetchurl
 }:
 
@@ -43,11 +43,12 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
   passthru.home = result;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = [ "x86_64-darwin" ]; # some inherit jre.meta.platforms
-    maintainers = with stdenv.lib.maintainers; [ taku0 ];
+    maintainers = with lib.maintainers; [ taku0 ];
+    inherit knownVulnerabilities;
   };
 
 }; in result

@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, readline }:
+{ lib, stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
   pname = "mujs";
-  version = "1.0.6";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://mujs.com/downloads/mujs-${version}.tar.xz";
-    sha256 = "1q9w2dcspfp580pzx7sw7x9gbn8j0ak6dvj75wd1ml3f3q3i43df";
+    sha256 = "sha256-meYfyWGfHVULVjVyA7NJ2Ih9CjbffblWc1yijU/3e7A=";
   };
 
   buildInputs = [ readline ];
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mujs.com/";
     description = "A lightweight, embeddable Javascript interpreter";
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
-    license = licenses.gpl3;
+    license = licenses.isc;
   };
 }

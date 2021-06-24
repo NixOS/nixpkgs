@@ -1,41 +1,48 @@
-{ stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
-, asciidoctor, libiconv, Security, makeWrapper }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkg-config, libxml2, json_c, ncurses
+, asciidoctor, libiconv, Security, Foundation, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.19";
+  version = "2.23";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    sha256 = "0yyrq8a90l6pkrczm9qvdg75jhsdq0niwp79vrdpm8rsxqpdmfq7";
+    sha256 = "0a0g9km515kipqmz6c09aj3lgy3nkzqwgnp87fh8f2vr098fn144";
   };
 
-  cargoSha256 = "1q3jf3d80c0ik38qk8jgbhfz5jxv0cy3lzmkyh2l002azp9hvv59";
+  cargoSha256 = "11dn1ixc7i29cv8kpqfkmikdqzr2v79vlyfxcvjwhgd0r34w4xhn";
 
-  postPatch = ''
-    substituteInPlace Makefile --replace "|| true" ""
+  # TODO: Check if that's still needed
+  postPatch = lib.optionalString stdenv.isDarwin ''
     # Allow other ncurses versions on Darwin
     substituteInPlace config.sh \
       --replace "ncurses5.4" "ncurses"
   '';
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     asciidoctor
     gettext
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper libiconv ];
+  ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];
 
   buildInputs = [ stfl sqlite curl libxml2 json_c ncurses ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ lib.optionals stdenv.isDarwin [ Security Foundation libiconv gettext ];
 
   postBuild = ''
-    make
+    make prefix="$out"
   '';
 
   # TODO: Check if that's still needed
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
+
+  # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
+  # these for all platforms, since upstream's gettext crate behavior might
+  # change in the future.
+  GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
+  GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+  GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
 
   doCheck = true;
 
@@ -46,13 +53,13 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     make prefix="$out" install
     cp -r contrib $out
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://newsboat.org/";
     description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with maintainers; [ dotlambda nicknovitski ];

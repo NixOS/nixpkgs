@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , gettext
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , gnome3
 , accountsservice
@@ -30,24 +30,25 @@
 , systemd
 , libnma
 , tzdata
-, yelp
 , libgnomekbd
+, gsettings-desktop-schemas
+, gnome-tour
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "3.36.1";
+  version = "3.38.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1sfn6bdz8snc2qmi3nzb07vlkdhy9s1ipwxxj0v2i36a7n0gv6ci";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "001jdzsvc541qracn68r609pr5qwymrh85xrqmvzzc1dbg5w3mlg";
   };
 
   nativeBuildInputs = [
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     systemd
     wrapGAppsHook
   ];
@@ -62,10 +63,12 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gnome-getting-started-docs
     gnome-online-accounts
+    gsettings-desktop-schemas
     gtk3
     json-glib
     krb5
     libgweather
+    libnma
     libpwquality
     librest
     libsecret
@@ -73,14 +76,13 @@ stdenv.mkDerivation rec {
     pango
     polkit
     webkitgtk
-    libnma
   ];
 
   patches = [
     (substituteAll {
-      src = ./fix-paths.patch;
+      src = ./0001-fix-paths.patch;
       inherit tzdata libgnomekbd;
-      yelp = "${yelp}/bin/yelp"; # gnome-welcome-tour
+      gnome_tour = "${gnome-tour}/bin/gnome-tour";
     })
   ];
 
@@ -98,7 +100,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple, easy, and safe way to prepare a new system";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-initial-setup";
     license = licenses.gpl2Plus;

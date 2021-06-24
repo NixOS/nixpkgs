@@ -1,10 +1,8 @@
-{ lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomJsSupport ? false, phantomjs2 ? null }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "grafana";
-  version = "6.7.2";
-
-  goPackagePath = "github.com/grafana/grafana";
+  version = "7.5.2";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -12,28 +10,34 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "03f6f9caxphrfbps0ljwwiq246vfjlznd8xs7a7va7kb823ff5li";
+    sha256 = "sha256-8Qy5YgJZpvaAjeBAi092Jxg4yAD1fYmMteTRm5b0Q+g=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "0sgpc34jfldi0hkbqx9idkzm1n1jy82yhg29kdsvndxvi44z49lv";
+    sha256 = "sha256-yVswMNOLX/AFtv45TXm8WcHEytyYgtjvi7V0dRewDdc=";
   };
+
+  vendorSha256 = "sha256-oh3GB6Iaqy05IS2MU5LJqTXnlr0vtkACZA6wpmW7W2Q=";
 
   postPatch = ''
     substituteInPlace pkg/cmd/grafana-server/main.go \
       --replace 'var version = "5.0.0"'  'var version = "${version}"'
   '';
 
-  preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+  # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
+  # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/dashboard-schemas
+  preBuild = ''
+    rm -r dashboard-schemas scripts/go
+  '';
 
   postInstall = ''
     tar -xvf $srcStatic
-    mkdir -p $bin/share/grafana
-    mv grafana-*/{public,conf,tools} $bin/share/grafana/
-  '' + lib.optionalString phantomJsSupport ''
-    ln -sf ${phantomjs2}/bin/phantomjs $bin/share/grafana/tools/phantomjs/phantomjs
+    mkdir -p $out/share/grafana
+    mv grafana-*/{public,conf,tools} $out/share/grafana/
   '';
+
+  passthru.tests = { inherit (nixosTests) grafana; };
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";

@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "parfive";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15dc8466922c8fb1f814d3f7c3f3656191ac17b38fd7cc3350b9bf726e144ebb";
+    sha256 = "118a0994bbb9536fd4574995a8485b6c4b97db247c55bc86ae4f4ae8fd9b0add";
   };
 
   buildInputs = [

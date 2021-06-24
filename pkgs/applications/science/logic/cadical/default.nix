@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "cadical";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "cadical";
     rev = "rel-${version}";
-    hash = "sha256:1a66xkw42ad330fvw8i0sawrmg913m8wrq5c85lw5qandkwvxdi6";
+    sha256 = "05lvnvapjawgkky38xknb9lgaliiwan4kggmb9yggl4ifpjrh8qf";
   };
 
+  doCheck = true;
   dontAddPrefix = true;
+
   installPhase = ''
     install -Dm0755 build/cadical "$out/bin/cadical"
     install -Dm0755 build/mobical "$out/bin/mobical"
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
     install -Dm0755 {LICEN?E,README*,VERSION} "$out/share/doc/${pname}-${version}/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simplified Satisfiability Solver";
     maintainers = with maintainers; [ shnarazk ];
     platforms = platforms.unix;

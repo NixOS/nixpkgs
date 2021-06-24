@@ -1,4 +1,4 @@
-{stdenv, fetchurl
+{lib, stdenv, fetchurl
 , libxml2, libxslt, curl
 , libvorbis, libtheora, speex, libkate, libopus }:
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
       open standards for commuincation and interaction.
     '';
 
-    homepage = "http://www.icecast.org";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
-    platforms = with stdenv.lib.platforms; unix;
+    homepage = "https://www.icecast.org";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ jcumming ];
+    platforms = with lib.platforms; unix;
   };
 }
 

@@ -1,8 +1,8 @@
-diff --git a/libqtile/manager.py b/libqtile/manager.py
-index fc198e9bae7..860b97d8db1 100644
---- a/libqtile/manager.py
-+++ b/libqtile/manager.py
-@@ -1402,7 +1402,7 @@ class Qtile(command.CommandObject):
+diff --git a/libqtile/core/manager.py b/libqtile/core/manager.py
+index c22eeb6a..2ffe4eab 100644
+--- a/libqtile/core/manager.py
++++ b/libqtile/core/manager.py
+@@ -278,7 +278,7 @@ class Qtile(CommandObject):
              logger.error("Unable to pickle qtile state")
          argv = [s for s in argv if not s.startswith('--with-state')]
          argv.append('--with-state=' + buf.getvalue().decode())
@@ -10,4 +10,4 @@ index fc198e9bae7..860b97d8db1 100644
 +        self._restart = (os.environ.get("QTILE_WRAPPER", "@out@/bin/qtile"), argv[1:])
          self.stop()
  
-     def cmd_spawn(self, cmd):
+     async def finalize(self):

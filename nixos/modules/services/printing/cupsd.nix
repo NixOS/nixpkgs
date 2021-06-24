@@ -104,7 +104,7 @@ let
     ignoreCollisions = true;
   };
 
-  filterGutenprint = pkgs: filter (pkg: pkg.meta.isGutenprint or false == true) pkgs;
+  filterGutenprint = filter (pkg: pkg.meta.isGutenprint or false == true);
   containsGutenprint = pkgs: length (filterGutenprint pkgs) > 0;
   getGutenprint = pkgs: head (filterGutenprint pkgs);
 
@@ -150,6 +150,16 @@ in
         example = [ "*:631" ];
         description = ''
           A list of addresses and ports on which to listen.
+        '';
+      };
+
+      allowFrom = mkOption {
+        type = types.listOf types.str;
+        default = [ "localhost" ];
+        example = [ "all" ];
+        apply = concatMapStringsSep "\n" (x: "Allow ${x}");
+        description = ''
+          From which hosts to allow unconditional access.
         '';
       };
 
@@ -260,7 +270,7 @@ in
       drivers = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "with pkgs; [ gutenprint hplip splix cups-googlecloudprint ]";
+        example = literalExample "with pkgs; [ gutenprint hplip splix ]";
         description = ''
           CUPS drivers to use. Drivers provided by CUPS, cups-filters,
           Ghostscript and Samba are added unconditionally. If this list contains
@@ -403,19 +413,19 @@ in
 
         <Location />
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Location /admin>
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Location /admin/conf>
           AuthType Basic
           Require user @SYSTEM
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Policy default>

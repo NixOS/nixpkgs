@@ -1,7 +1,7 @@
 { lib, stdenv
 , lapack-reference, openblasCompat, openblas
-, is64bit ? false
-, blasProvider ? if is64bit then openblas else openblasCompat }:
+, isILP64 ? false
+, blasProvider ? if isILP64 then openblas else openblasCompat }:
 
 let
   blasFortranSymbols = [
@@ -31,12 +31,12 @@ let
                        else stdenv.hostPlatform.extensions.sharedLibrary;
 
 
-  is64bit = blasProvider.blas64 or false;
+  isILP64 = blasProvider.blas64 or false;
   blasImplementation = lib.getName blasProvider;
 
 in
 
-assert is64bit -> (blasImplementation == "openblas" && blasProvider.blas64) || blasImplementation == "mkl";
+assert isILP64 -> (blasImplementation == "openblas" && blasProvider.blas64) || blasImplementation == "mkl";
 
 stdenv.mkDerivation {
   pname = "blas";
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    inherit is64bit;
+    inherit isILP64;
     provider = blasProvider;
     implementation = blasImplementation;
   };
@@ -58,19 +58,21 @@ stdenv.mkDerivation {
   dontConfigure = true;
   unpackPhase = "src=$PWD";
 
+  dontPatchELF = true;
+
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
 
-  libblas="${lib.getLib blasProvider}/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+  libblas="${lib.getLib blasProvider}/lib/libblas${canonicalExtension}"
 
   if ! [ -e "$libblas" ]; then
     echo "$libblas does not exist, ${blasProvider.name} does not provide libblas."
     exit 1
   fi
 
-  nm -an "$libblas" | cut -f3 -d' ' > symbols
+  $NM -an "$libblas" | cut -f3 -d' ' > symbols
   for symbol in ${toString blasFortranSymbols}; do
-    grep "^$symbol_$" symbols || { echo "$symbol" was not found in "$libblas"; exit 1; }
+    grep -q "^$symbol_$" symbols || { echo "$symbol" was not found in "$libblas"; exit 1; }
   done
 
   cp -L "$libblas" $out/lib/libblas${canonicalExtension}
@@ -81,7 +83,7 @@ stdenv.mkDerivation {
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libblas${canonicalExtension}):${lib.getLib blasProvider}/lib" $out/lib/libblas${canonicalExtension}
 '' else if stdenv.hostPlatform.isDarwin then ''
   install_name_tool \
-    -id libblas${canonicalExtension}
+    -id libblas${canonicalExtension} \
     -add_rpath ${lib.getLib blasProvider}/lib \
     $out/lib/libblas${canonicalExtension}
 '' else "") + ''
@@ -98,7 +100,7 @@ Libs: -L$out/lib -lblas
 Cflags: -I$dev/include
 EOF
 
-  libcblas="${lib.getLib blasProvider}/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+  libcblas="${lib.getLib blasProvider}/lib/libcblas${canonicalExtension}"
 
   if ! [ -e "$libcblas" ]; then
     echo "$libcblas does not exist, ${blasProvider.name} does not provide libcblas."
@@ -130,8 +132,10 @@ Description: BLAS C implementation
 Cflags: -I$dev/include
 Libs: -L$out/lib -lcblas
 EOF
-'' + stdenv.lib.optionalString (blasImplementation == "mkl") ''
+'' + lib.optionalString (blasImplementation == "mkl") ''
   mkdir -p $out/nix-support
-  echo 'export MKL_INTERFACE_LAYER=${lib.optionalString is64bit "I"}LP64,GNU' > $out/nix-support/setup-hook
+  echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
+  ln -s $out/lib/libblas${canonicalExtension} $out/lib/libmkl_rt${stdenv.hostPlatform.extensions.sharedLibrary}
+  ln -sf ${blasProvider}/include/* $dev/include
 '');
 }

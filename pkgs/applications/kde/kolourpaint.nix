@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "kolourpaint";
+  pname = "kolourpaint";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kdelibs4support libkexiv2 ];
   meta = {

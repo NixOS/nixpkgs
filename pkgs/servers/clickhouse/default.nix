@@ -1,38 +1,63 @@
-{ stdenv, fetchFromGitHub, cmake, libtool, lldClang, ninja
-, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion, gperftools
-, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl
-, poco, protobuf, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, libtool, lldClang, ninja
+, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
+, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
+, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
 , xxHash, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "19.17.9.60";
+  version = "20.11.4.13";
 
   src = fetchFromGitHub {
-    owner  = "yandex";
+    owner  = "ClickHouse";
     repo   = "ClickHouse";
     rev    = "v${version}-stable";
-    sha256 = "0k1ncn7i4szpw4jlhv3zmw6mrkkm8qfs39nj1zbawjqrkgnw70kg";
+    fetchSubmodules = true;
+    sha256 = "0c87k0xqwj9sc3xy2f3ngfszgjiz4rzd787bdg6fxp94w1adjhny";
   };
 
   nativeBuildInputs = [ cmake libtool lldClang.bintools ninja ];
   buildInputs = [
-    boost brotli capnproto cctz clang-unwrapped double-conversion gperftools
-    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl
-    poco protobuf rapidjson re2 rdkafka readline sparsehash unixODBC
+    boost brotli capnproto cctz clang-unwrapped double-conversion
+    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl perl
+    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
     xxHash zstd
   ];
 
-  cmakeFlags = [
-    "-DENABLE_TESTS=OFF"
-    "-DUNBUNDLED=ON"
-    "-DUSE_STATIC_LIBRARIES=OFF"
+  patches = [
+    # This patch is only required for 20.11.4.13 - it should be included in the
+    # next stable release from upstream by default
+    (fetchpatch {
+      url = "https://github.com/ClickHouse/ClickHouse/commit/e31753b4db7aa0a72a85757dc11fc403962e30db.patch";
+      sha256 = "12ax02dh9y9k8smkj6v50yfr46iprscbrvd4bb9vfbx8xqgw7grb";
+    })
   ];
 
   postPatch = ''
-    patchShebangs dbms/programs/clang/copy_headers.sh
+    patchShebangs src/
+
+    substituteInPlace contrib/openssl-cmake/CMakeLists.txt \
+      --replace '/usr/bin/env perl' perl
+    substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-duplicate-includes.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-ungrouped-includes.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/generate-ya-make/generate-ya-make.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/list-licenses/list-licenses.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-style \
+      --replace 'git rev-parse --show-toplevel' '$src'
   '';
+
+  cmakeFlags = [
+    "-DENABLE_TESTS=OFF"
+    "-DENABLE_EMBEDDED_COMPILER=ON"
+    "-USE_INTERNAL_LLVM_LIBRARY=OFF"
+  ];
 
   postInstall = ''
     rm -rf $out/share/clickhouse-test
@@ -45,8 +70,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://clickhouse.yandex/";
+  meta = with lib; {
+    homepage = "https://clickhouse.tech/";
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];

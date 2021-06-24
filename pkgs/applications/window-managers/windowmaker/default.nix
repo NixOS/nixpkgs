@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libX11, libXext, libXft, libXmu, libXinerama, libXrandr, libXpm
 , imagemagick, libpng, libjpeg, libexif, libtiff, libungif, libwebp }:
 
 stdenv.mkDerivation rec {
   pname = "windowmaker";
-  version = "0.95.8";
+  version = "0.95.9";
   srcName = "WindowMaker-${version}";
 
   src = fetchurl {
     url = "http://windowmaker.org/pub/source/release/${srcName}.tar.gz";
-    sha256 = "12p8kljqgx5hnic0zvs5mxwp7kg21sb6qjagb2qw8ydvf5amrgwx";
+    sha256 = "055pqvlkhipyjn7m6bb3fs4zz9rd1ynzl0mmwbhp05ihc3zmh8zj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libX11 libXext libXft libXmu libXinerama libXrandr libXpm
                   imagemagick libpng libjpeg libexif libtiff libungif libwebp ];
@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     "--with-x"
     "--enable-modelock"
     "--enable-randr"
-    "--enable-magick"
+    "--enable-webp"
+    "--disable-magick" # Many distros reported imagemagick fails to be found
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://windowmaker.org/";
     description = "NeXTSTEP-like window manager";
     longDescription = ''
@@ -40,5 +41,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.AndersonTorres ];
   };
 }
-
-# TODO: investigate support for WEBP (its autodetection is failing)

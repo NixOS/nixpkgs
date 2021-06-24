@@ -1,12 +1,12 @@
-{ stdenv, fetchPypi, buildPythonPackage, python, isPy3k, glibcLocales }:
+{ lib, fetchPypi, buildPythonPackage, python, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "aenum";
-  version = "2.2.3";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4334cabf47c167d44ab5a6198837b80deec5d5bad1b5cf70c966c3a330260e8";
+    sha256 = "17cd8cfed1ee4b617198c9fabbabd70ebd8f01e54ac29cd6c3a92df14bd86656";
   };
 
   # For Python 3, locale has to be set to en_US.UTF-8 for
@@ -22,11 +22,10 @@ buildPythonPackage rec {
   runHook postCheck
   '';
 
-
-  meta = {
+  meta = with lib; {
     description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";
-    maintainers = with stdenv.lib.maintainers; [ vrthra ];
-    license = with stdenv.lib.licenses; [ bsd3 ];
-    homepage = "https://bitbucket.org/stoneleaf/aenum";
+    maintainers = with maintainers; [ vrthra ];
+    license = licenses.bsd3;
+    homepage = "https://github.com/ethanfurman/aenum";
   };
 }

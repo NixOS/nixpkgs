@@ -9,7 +9,6 @@
   This profile just enables a <systemitem class="username">demo</systemitem>
   user, with password <literal>demo</literal>, uid <literal>1000</literal>,
   <systemitem class="groupname">wheel</systemitem> group and
-  <link linkend="opt-services.xserver.displayManager.sddm.autoLogin"> autologin
-  in the SDDM display manager</link>.
+  <link linkend="opt-services.xserver.displayManager.autoLogin">autologin in the SDDM display manager</link>.
  </para>
 </section>

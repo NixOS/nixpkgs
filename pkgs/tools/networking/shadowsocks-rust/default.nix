@@ -1,29 +1,29 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.7.2";
+  version = "1.10.7";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    sha256 = "0w7ysha46ml3j1i1knvll4pmqg291z8a2ypcy650m61dhrvkh2ng";
+    sha256 = "08k5j469750bhlq49qc5nwc2jjgmy9qsm58nf2jfwhxlpflv12sc";
   };
 
-  cargoSha256 = "0srmn8ndy7vdvcysyb7a5pjly0m3jchq0zrqzhrwicynm291w56h";
+  cargoSha256 = "1r8w5cdygd26m95q9qpqa85aixx25jr510hpjlllbpfvm7zjpbqk";
 
-  buildInputs = [ openssl libsodium ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
-  nativeBuildInputs = [ pkgconfig ];
+  RUSTC_BOOTSTRAP = 1;
 
-  # tries to read /etc/resolv.conf, hence fails in sandbox
-  doCheck = false;
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
-  meta = with stdenv.lib; {
+  checkFlags = [ "--skip=http_proxy" "--skip=udp_tunnel" ];
+
+  meta = with lib; {
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
     description = "A Rust port of shadowsocks";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
+    broken = stdenv.isAarch64;  # crypto2 crate doesn't build on aarch64
   };
 }

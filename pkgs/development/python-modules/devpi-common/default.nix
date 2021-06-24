@@ -3,18 +3,23 @@
 , py
 , pytest
 , pytest-flake8
+, lazy
 }:
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.4.0";
+  version = "3.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pfl29pnfn120rqv3zwxc22i1hyywwg60rcck9hzxsllbhmfbjqh";
+    sha256 = "fc14aa6b74d4d9e27dc2e9cbff000ed9be5cd723d3ac9672e66e4e8fce797227";
   };
 
-  propagatedBuildInputs = [ requests py ];
+  propagatedBuildInputs = [
+    requests
+    py
+    lazy
+  ];
   checkInputs = [ pytest pytest-flake8 ];
 
   checkPhase = ''

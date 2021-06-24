@@ -1,32 +1,27 @@
-{ stdenv, fetchFromGitHub, fetchpatch, clang,
-  pkg-config, curl, mpv, yajl }:
+{ lib, stdenv
+, fetchFromGitHub
+, pkg-config
+, curl
+, mpv
+, yajl
+}:
 
 stdenv.mkDerivation rec {
   pname = "jftui";
-  version = "0.2.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Aanok";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g93w8ahyh2v0cv2fyj5a7v6qyznavwk0dcxx1qw4kczdgmlxnkx";
+    sha256 = "0riwqfh5lyjg7as75kyx7jw6zq4gikbglhv8s05y7pzgsc9xy75j";
   };
-
-  patches = [
-    # Remove this patch with next version
-    (fetchpatch {
-      name = "curl-capability-check-fix";
-      url = "https://github.com/Aanok/jftui/commit/d63996b8bc0d2ac4b04c5de4169bc7f8ec9b2a30.patch";
-      sha256 = "1d595mkzgx3carq2cykxpvmf5klgdlyaq94fk9wj8812yswqlsr7";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
-    clang
     curl
     mpv
     yajl
@@ -36,7 +31,7 @@ stdenv.mkDerivation rec {
     install -Dm555 build/jftui $out/bin/jftui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jellyfin Terminal User Interface ";
     homepage = "https://github.com/Aanok/jftui";
     license = licenses.unlicense;

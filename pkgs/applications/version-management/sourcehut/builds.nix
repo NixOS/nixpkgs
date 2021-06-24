@@ -1,17 +1,15 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , buildGoModule
 , srht, redis, celery, pyyaml, markdown }:
 
 let
-  version = "0.56.13";
+  version = "0.63.4";
 
   buildWorker = src: buildGoModule {
     inherit src version;
     pname = "builds-sr-ht-worker";
-    goPackagePath = "git.sr.ht/~sircmpwn/builds.sr.ht/worker";
 
-    modSha256 = "10is7siscids9qz6jh9m1i17749dafqqkg4b3sslmxaxyn16yj97";
+    vendorSha256 = "1sbcjp93gb0c4p7dd1gjhmhwr1pygxvrrzp954j2fvxvi38w6571";
   };
 in buildPythonPackage rec {
   inherit version;
@@ -20,12 +18,8 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     rev = version;
-    sha256 = "uFoS9xaVXsZZf4neZQcUyTqKo2RshOQeifD27kaKSVE=";
+    sha256 = "1w3rb685nqg2h0k3ag681svc400si9r1gy0sdim3wa2qh8glbqni";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -39,7 +33,6 @@ in buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   postInstall = ''
@@ -51,7 +44,9 @@ in buildPythonPackage rec {
     cp ${buildWorker "${src}/worker"}/bin/worker $out/bin/builds.sr.ht-worker
   '';
 
-  meta = with stdenv.lib; {
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     description = "Continuous integration service for the sr.ht network";
     license = licenses.agpl3;

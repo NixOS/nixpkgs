@@ -185,9 +185,7 @@ in
           { description = "Initialisation of swap device ${sw.device}";
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
-            # If swap is encrypted, depending on rngd resolves a possible entropy starvation during boot
-            after = mkIf (config.security.rngd.enable && sw.randomEncryption.enable) [ "rngd.service" ];
-            path = [ pkgs.utillinux ] ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
+            path = [ pkgs.util-linux ] ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
 
             script =
               ''

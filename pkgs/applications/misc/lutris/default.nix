@@ -1,9 +1,45 @@
-{ buildPythonApplication, lib, fetchFromGitHub, fetchpatch
-, wrapGAppsHook, gobject-introspection, gnome-desktop, libnotify, libgnome-keyring, pango
-, gdk-pixbuf, atk, webkitgtk, gst_all_1
-, dbus-python, evdev, pyyaml, pygobject3, requests, pillow
-, xrandr, pciutils, psmisc, glxinfo, vulkan-tools, xboxdrv, pulseaudio, p7zip, xgamma
-, libstrangle, wine, fluidsynth, xorgserver
+{ buildPythonApplication, lib, fetchFromGitHub
+
+# build inputs
+, atk
+, gdk-pixbuf
+, glib-networking
+, gnome-desktop
+, gobject-introspection
+, gst_all_1
+, gtk3
+, libnotify
+, pango
+, webkitgtk
+, wrapGAppsHook
+
+# python dependencies
+, dbus-python
+, distro
+, evdev
+, lxml
+, pillow
+, pygobject3
+, pyyaml
+, requests
+, keyring
+, python_magic
+
+# commands that lutris needs
+, xrandr
+, pciutils
+, psmisc
+, glxinfo
+, vulkan-tools
+, xboxdrv
+, pulseaudio
+, p7zip
+, xgamma
+, libstrangle
+, wine
+, fluidsynth
+, xorgserver
+, xorg
 }:
 
 let
@@ -22,43 +58,72 @@ let
     wine
     fluidsynth
     xorgserver
+    xorg.setxkbmap
+    xorg.xkbcomp
   ];
 
   gstDeps = with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
     gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
   ];
 
 in buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.5";
+  version = "0.5.8.3";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    sha256 = "1g093g0difnkjmnm91p20issdsxn9ri4c56zzddj5wfrbmhwdfag";
+    sha256 = "sha256-NnWIP9oEndk/hDo5Z33pkmZ61pxT/ScmZ4YpS2ajK/8=";
   };
 
+  nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = [
-    wrapGAppsHook gobject-introspection gnome-desktop libnotify libgnome-keyring pango
-    gdk-pixbuf atk webkitgtk
+    atk
+    gdk-pixbuf
+    glib-networking
+    gnome-desktop
+    gobject-introspection
+    gtk3
+    libnotify
+    pango
+    webkitgtk
   ] ++ gstDeps;
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${binPath}"
+  propagatedBuildInputs = [
+    evdev
+    distro
+    lxml
+    pyyaml
+    pygobject3
+    requests
+    pillow
+    dbus-python
+    keyring
+    python_magic
   ];
 
-  propagatedBuildInputs = [
-    evdev pyyaml pygobject3 requests pillow dbus-python
+  # avoid double wrapping
+  dontWrapGApps = true;
+  makeWrapperArgs = [
+    "--prefix PATH : ${binPath}"
+    "\${gappsWrapperArgs[@]}"
   ];
+  # needed for glib-schemas to work correctly (will crash on dialogues otherwise)
+  # see https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   preCheck = "export HOME=$PWD";
 
   meta = with lib; {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.linux;
   };

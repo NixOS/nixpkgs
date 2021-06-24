@@ -1,18 +1,18 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "nine";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3064fbeb512e756a415606a1399f49c22de867d5ac7e2b6c91c35e757d3af42d";
+    sha256 = "e8a96b6326341637d25ca9c257c1d2af4033c957946438d9d37bf6eb798d3bbe";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Let's write Python 3 right now!";
     homepage = "https://github.com/nandoflorestan/nine";
     license = licenses.free;

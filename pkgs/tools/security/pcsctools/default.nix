@@ -1,26 +1,26 @@
-{ stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus, pcsclite
+{ stdenv, lib, fetchurl, makeWrapper, pkg-config, udev, dbus, pcsclite
 , wget, coreutils, perlPackages
 }:
 
 let deps = lib.makeBinPath [ wget coreutils ];
 
 in stdenv.mkDerivation rec {
-  name = "pcsc-tools-1.5.6";
+  name = "pcsc-tools-1.5.7";
 
   src = fetchurl {
     url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${name}.tar.bz2";
-    sha256 = "1a2zd06c6s4sqlpm5801gj41gh5g62jb8srd7vhlcm70hg3l3nsy";
+    sha256 = "17b9jxvcxmn007lavan20l25v4jvm6dqc4x9dlqzbg6mjs28zsp0";
   };
 
   buildInputs = [ udev dbus perlPackages.perl pcsclite ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   postInstall = ''
     wrapProgram $out/bin/scriptor \
       --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/gscriptor \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl Glib Gtk2 Pango Cairo ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl GlibObjectIntrospection Glib Gtk3 Pango Cairo CairoGObject ]}"
     wrapProgram $out/bin/ATR_analysis \
       --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/pcsc_scan \

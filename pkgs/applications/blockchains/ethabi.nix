@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ethabi";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1hx8qw51rl7sn9jmnclw0hc4rx619hf78hpaih5mvny3k0zgiwpm";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ethereum function call encoding (ABI) utility";
     homepage = "https://github.com/ethcore/ethabi/";
     maintainers = [ maintainers.dbrock ];

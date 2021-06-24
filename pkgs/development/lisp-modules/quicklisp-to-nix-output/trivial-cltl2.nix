@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-cltl2'';
-  version = ''20190710-git'';
+  baseName = "trivial-cltl2";
+  version = "20200325-git";
 
-  description = ''Compatibility package exporting CLtL2 functionality'';
+  description = "Compatibility package exporting CLtL2 functionality";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-cltl2/2019-07-10/trivial-cltl2-20190710-git.tgz'';
-    sha256 = ''1qaxwgws8ji6dyh30ff608zpdrplifgkhfdhfnn0367d3rvy11jb'';
+    url = "http://beta.quicklisp.org/archive/trivial-cltl2/2020-03-25/trivial-cltl2-20200325-git.tgz";
+    sha256 = "0hahi36v47alsvamg62d0cgay8l0razcgxl089ifj6sqy7s8iwys";
   };
 
   packageName = "trivial-cltl2";
@@ -19,8 +20,8 @@ rec {
 }
 /* (SYSTEM trivial-cltl2 DESCRIPTION
     Compatibility package exporting CLtL2 functionality SHA256
-    1qaxwgws8ji6dyh30ff608zpdrplifgkhfdhfnn0367d3rvy11jb URL
-    http://beta.quicklisp.org/archive/trivial-cltl2/2019-07-10/trivial-cltl2-20190710-git.tgz
-    MD5 8114f96b9770a9f0e0a94933918dc171 NAME trivial-cltl2 FILENAME
-    trivial-cltl2 DEPS NIL DEPENDENCIES NIL VERSION 20190710-git SIBLINGS NIL
+    0hahi36v47alsvamg62d0cgay8l0razcgxl089ifj6sqy7s8iwys URL
+    http://beta.quicklisp.org/archive/trivial-cltl2/2020-03-25/trivial-cltl2-20200325-git.tgz
+    MD5 aa18140b9840365ceb9a6cddbdbdd67b NAME trivial-cltl2 FILENAME
+    trivial-cltl2 DEPS NIL DEPENDENCIES NIL VERSION 20200325-git SIBLINGS NIL
     PARASITES NIL) */

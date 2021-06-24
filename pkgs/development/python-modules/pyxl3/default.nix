@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyxl3";
-  version = "1.3";
+  version = "1.4";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23831c6d60b2ce3fbb39966f6fb21a5e053d6ce0bd08b00bb50fa388631b69ee";
+    sha256 = "ad4cc56bf4b35def33783e6d4783882702111fe8f9a781c63228e2114067c065";
   };
 
   checkInputs = [ unittest2 ];

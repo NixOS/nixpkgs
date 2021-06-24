@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, libtool, pkgconfig, automake, autoconf, intltool
+{ lib, stdenv, fetchurl
+, libtool, pkg-config, automake, autoconf, intltool
 , glib, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh autogen.sh";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     automake autoconf libtool
     intltool
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     sed -i 's/GLfloat/gfloat/g' mx/mx-texture-frame.c
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.clutter-project.org/";
     description = "A Clutter-based toolkit";
     longDescription =

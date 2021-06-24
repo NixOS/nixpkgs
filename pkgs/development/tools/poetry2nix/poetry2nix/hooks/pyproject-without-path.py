@@ -6,7 +6,14 @@ import sys
 
 data = json.load(sys.stdin)
 
-for dep in data['tool']['poetry']['dependencies'].values():
+
+def get_deep(o, path):
+    for p in path.split('.'):
+        o = o.get(p, {})
+    return o
+
+
+for dep in get_deep(data, 'tool.poetry.dependencies').values():
     if isinstance(dep, dict):
         try:
             del dep['path'];

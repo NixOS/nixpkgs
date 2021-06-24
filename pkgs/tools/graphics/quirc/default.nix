@@ -1,4 +1,4 @@
-{stdenv, fetchgit, SDL_gfx, SDL, libjpeg, libpng, pkgconfig}:
+{lib, stdenv, fetchgit, SDL_gfx, SDL, libjpeg, libpng, pkg-config}:
 let
   s =
   rec {
@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     SDL SDL_gfx libjpeg libpng
   ];
@@ -31,9 +31,9 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
   meta = {
     inherit (s) version;
-    description = ''A small QR code decoding library'';
-    license = stdenv.lib.licenses.isc;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "A small QR code decoding library";
+    license = lib.licenses.isc;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

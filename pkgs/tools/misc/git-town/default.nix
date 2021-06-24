@@ -1,24 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "git-town";
-  version = "7.3.0";
+  version = "7.5.0";
 
-  goPackagePath = "github.com/Originate/git-town";
-
+  goPackagePath = "github.com/git-town/git-town";
   src = fetchFromGitHub {
-    owner = "Originate";
+    owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    sha256 = "166g9i79hqga8k5wvs0b84q6rqniizzsd39v37s9w16axgdrm6nb";
+    sha256 = "sha256-RmLDlTK+JO2KRLuLvO927W3WYdDlteBIpgTgDXh8lC8=";
   };
 
-  buildFlagsArray = [ "-ldflags=-X github.com/Originate/git-town/src/cmd.version=v${version} -X github.com/Originate/git-town/src/cmd.buildDate=nix" ];
+  buildFlagsArray = [ "-ldflags=-X github.com/git-town/git-town/src/cmd.version=v${version} -X github.com/git-town/git-town/src/cmd.buildDate=nix" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic, high-level git support for git-flow workflows";
-    homepage = "http://www.git-town.com/";
-    maintainers = [ maintainers.allonsy ];
+    homepage = "https://www.git-town.com/";
+    maintainers = [ maintainers.allonsy maintainers.blaggacao ];
     license = licenses.mit;
   };
 }

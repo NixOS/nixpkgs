@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "cereal";
   version = "1.3.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlagsArray = [ "-DJUST_INSTALL_CEREAL=yes" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A header-only C++11 serialization library";
     homepage    = "https://uscilab.github.io/cereal/";
     platforms   = platforms.all;

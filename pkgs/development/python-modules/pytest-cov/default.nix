@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pytest, coverage }:
 
 buildPythonPackage rec {
   pname = "pytest-cov";
-  version = "2.8.1";
+  version = "2.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc6742d8bac45070217169f5f72ceee1e0e55b0221f54bcf24845972d3a47f2b";
+    sha256 = "47bd0ce14056fdd79f93e1713f88fad7bdcc583dcd7783da86ef2f085a0bb88e";
   };
 
   buildInputs = [ pytest ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
     homepage = "https://github.com/pytest-dev/pytest-cov";
     license = licenses.mit;

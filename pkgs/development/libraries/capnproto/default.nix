@@ -1,15 +1,15 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "capnproto";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "https://capnproto.org/capnproto-c++-${version}.tar.gz";
-    sha256 = "0hfdnhlbskagzgvby8wy6lrxj53zfzpfqimbhga68c0ji2yw1969";
+    sha256 = "03f1862ljdshg7d0rg3j7jzgm3ip55kzd2y91q7p0racax3hxx6i";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://kentonv.github.io/capnproto";
     description = "Cap'n Proto cerealization protocol";
     longDescription = ''

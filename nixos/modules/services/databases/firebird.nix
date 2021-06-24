@@ -40,12 +40,7 @@ in
 
     services.firebird = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable the Firebird super server.
-        '';
-      };
+      enable = mkEnableOption "the Firebird super server";
 
       package = mkOption {
         default = pkgs.firebirdSuper;
@@ -64,6 +59,7 @@ in
 
       port = mkOption {
         default = "3050";
+        type = types.port;
         description = ''
           Port Firebird uses.
         '';
@@ -71,6 +67,7 @@ in
 
       user = mkOption {
         default = "firebird";
+        type = types.str;
         description = ''
           User account under which firebird runs.
         '';
@@ -78,6 +75,7 @@ in
 
       baseDir = mkOption {
         default = "/var/db/firebird"; # ubuntu is using /var/lib/firebird/2.1/data/.. ?
+        type = types.str;
         description = ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.
@@ -119,7 +117,7 @@ in
         serviceConfig.User = cfg.user;
         serviceConfig.LogsDirectory = "firebird";
         serviceConfig.LogsDirectoryMode = "0700";
-        serviceConfig.ExecStart = ''${firebird}/bin/fbserver -d'';
+        serviceConfig.ExecStart = "${firebird}/bin/fbserver -d";
 
         # TODO think about shutdown
       };

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , boltons
@@ -11,21 +11,20 @@
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "19.10.0";
+  version = "20.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8a50cb9fcf0c84807836c6a73cf61285557834b9050d7bde7732b936aceb7dd";
+    sha256 = "54051072bccc9cdb3ebbd8af0559195137a61d308f04bff19678e4b61350eb12";
   };
 
   propagatedBuildInputs = [ boltons attrs face ];
 
   checkInputs = [ pytest pyyaml ];
-  checkPhase = "pytest glom/test";
+  # test_cli.py checks the output of running "glom"
+  checkPhase = "PATH=$out/bin:$PATH pytest glom/test";
 
-  doCheck = !isPy37; # https://github.com/mahmoud/glom/issues/72
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mahmoud/glom";
     description = "Restructuring data, the Python way";
     longDescription = ''

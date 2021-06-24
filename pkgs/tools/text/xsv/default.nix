@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xsv";
@@ -13,13 +13,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1q59nvklh5r2mrsz656z6js3j2l6rqyhfz6l0yq28df5kyahk91b";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast CSV toolkit written in Rust";
     homepage = "https://github.com/BurntSushi/xsv";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = [ maintainers.jgertm ];
-    platforms = platforms.all;
   };
 }

@@ -1,14 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
-, libuv, lua, ncurses, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+, libuv, lua, ncurses, pkg-config
 , unibilium, xsel, gperf
 , libvterm-neovim
 , glibcLocales ? null, procps ? null
 
 # now defaults to false because some tests can be flaky (clipboard etc)
 , doCheck ? false
+, nodejs ? null, fish ? null, python ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   neovimLuaEnv = lua.withPackages(ps:
@@ -17,16 +18,26 @@ let
         nvim-client luv coxpcall busted luafilesystem penlight inspect
       ]
     ));
+
+  pyEnv = python.withPackages(ps: [ ps.pynvim ps.msgpack ]);
+
+  # FIXME: this is verry messy and strange.
+  # see https://github.com/NixOS/nixpkgs/pull/80528
+  luv = lua.pkgs.luv;
+  luvpath = with builtins ; if stdenv.isDarwin
+    then "${luv.libluv}/lib/lua/${lua.luaversion}/libluv.${head (match "([0-9.]+).*" luv.version)}.dylib"
+    else "${luv}/lib/lua/${lua.luaversion}/luv.so";
+
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.4.3";
+    version = "0.4.4";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "03p7pic7hw9yxxv7fbgls1f42apx3lik2k6mpaz1a109ngyc5kaj";
+      sha256 = "11zyj6jvkwas3n6w1ckj3pk6jf81z1g7ngg4smmwm7c27y2a6f2m";
     };
 
     patches = [
@@ -37,14 +48,13 @@ in
     ];
 
     dontFixCmake = true;
-    enableParallelBuilding = true;
 
     buildInputs = [
       gperf
       libtermkey
       libuv
       libvterm-neovim
-      lua.pkgs.luv.libluv
+      luv.libluv
       msgpack
       ncurses
       neovimLuaEnv
@@ -64,7 +74,14 @@ in
     nativeBuildInputs = [
       cmake
       gettext
-      pkgconfig
+      pkg-config
+    ];
+
+    # extra programs test via `make functionaltest`
+    checkInputs = [
+      fish
+      nodejs
+      pyEnv      # for src/clint.py
     ];
 
 
@@ -78,10 +95,8 @@ in
     cmakeFlags = [
       "-DGPERF_PRG=${gperf}/bin/gperf"
       "-DLUA_PRG=${neovimLuaEnv.interpreter}"
+      "-DLIBLUV_LIBRARY=${luvpath}"
     ]
-    # FIXME: this is verry messy and strange.
-    ++ optional (!stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv}/lib/lua/${lua.luaversion}/luv.so"
-    ++ optional (stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv.libluv}/lib/lua/${lua.luaversion}/libluv.dylib"
     ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
     ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
@@ -89,11 +104,11 @@ in
     # triggers on buffer overflow bug while running tests
     hardeningDisable = [ "fortify" ];
 
-    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
-    postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+    postInstall = lib.optionalString stdenv.isLinux ''
       sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '';
 

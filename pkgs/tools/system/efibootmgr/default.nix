@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, efivar, popt }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, efivar, popt }:
 
 stdenv.mkDerivation rec {
   pname = "efibootmgr";
   version = "17";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ efivar popt ];
 
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
   # We have no LTO here since commit 22284b07.
   postPatch = if stdenv.isi686 then "sed '/^CFLAGS/s/-flto//' -i Make.defaults" else null;
 
-  makeFlags = [ "EFIDIR=nixos" ];
+  makeFlags = [ "EFIDIR=nixos" "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config" ];
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
     homepage = "https://github.com/rhboot/efibootmgr";
     license = licenses.gpl2;

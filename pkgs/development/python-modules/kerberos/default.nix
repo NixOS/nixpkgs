@@ -1,24 +1,24 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, kerberos
+, libkrb5
 }:
 
 buildPythonPackage rec {
   pname = "kerberos";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19663qxmma0i8bfbjc2iwy5hgq0g4pfb75r023v5dps68zfvffgh";
+    sha256 = "cdd046142a4e0060f96a00eb13d82a5d9ebc0f2d7934393ed559bac773460a2c";
   };
 
-  nativeBuildInputs = [ kerberos ];
+  nativeBuildInputs = [ libkrb5 ];
 
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kerberos high-level interface";
     homepage = "https://pypi.python.org/pypi/kerberos";
     license = licenses.asl20;

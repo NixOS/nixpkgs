@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, libiconv, ocaml, findlib, ocamlbuild, ncurses }:
+{ stdenv, lib, fetchzip, libiconv, ocaml, findlib, ocamlbuild, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-text";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://ocaml-text.forge.ocamlcore.org/";
     description = "A library for convenient text manipulation";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
   };
 }
