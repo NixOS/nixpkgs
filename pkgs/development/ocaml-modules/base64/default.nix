@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "base64";
   version = "3.5.0";
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   useDune2 = true;
 

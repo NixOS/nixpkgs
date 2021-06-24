@@ -1,7 +1,7 @@
 { lib, fetchurl, buildDunePackage, cstruct, bigarray-compat }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
   pname = "eqaf";
   version = "0.7";
   useDune2 = true;

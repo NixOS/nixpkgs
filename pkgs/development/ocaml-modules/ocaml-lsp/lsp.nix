@@ -15,7 +15,7 @@ buildDunePackage {
   pname = "lsp";
   inherit (jsonrpc) version src;
   useDune2 = true;
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   # unvendor some (not all) dependencies.
   # They are vendored by upstream only because it is then easier to install

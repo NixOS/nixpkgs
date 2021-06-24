@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "sha256-/S6WpIo1c5J9uM3xgtAM/elhnsl0XimnIFsKy3ootbA=";
   };
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
   useDune2 = lib.versionAtLeast ocaml.version "4.08";
 
   doCheck = true;

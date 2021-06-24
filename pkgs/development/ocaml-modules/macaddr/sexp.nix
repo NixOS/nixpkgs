@@ -5,7 +5,7 @@
 buildDunePackage {
   pname = "macaddr-sexp";
 
-  inherit (macaddr) version src minimumOCamlVersion;
+  inherit (macaddr) version src minimalOCamlVersion;
 
   useDune2 = true;
 

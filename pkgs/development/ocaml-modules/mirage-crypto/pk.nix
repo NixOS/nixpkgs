@@ -4,7 +4,7 @@
 buildDunePackage {
   pname = "mirage-crypto-pk";
 
-  inherit (mirage-crypto) version src useDune2 minimumOCamlVersion;
+  inherit (mirage-crypto) version src useDune2 minimalOCamlVersion;
 
   buildInputs = [ gmp ];
   propagatedBuildInputs = [ cstruct mirage-crypto mirage-crypto-rng

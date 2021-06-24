@@ -4,7 +4,7 @@
 
 buildDunePackage {
   pname = "tls-mirage";
-  inherit (tls) src version minimumOCamlVersion useDune2;
+  inherit (tls) src version minimalOCamlVersion useDune2;
 
   propagatedBuildInputs = [
     fmt

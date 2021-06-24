@@ -6,7 +6,7 @@
 buildDunePackage {
   pname = "dns-resolver";
 
-  inherit (dns) version src useDune2 minimumOCamlVersion;
+  inherit (dns) version src useDune2 minimalOCamlVersion;
 
   propagatedBuildInputs = [
     dns

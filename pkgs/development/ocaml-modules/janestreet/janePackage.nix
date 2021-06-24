@@ -5,7 +5,7 @@
 buildDunePackage (args // {
   inherit version;
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
     owner = "janestreet";

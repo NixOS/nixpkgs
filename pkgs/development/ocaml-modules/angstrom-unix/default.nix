@@ -5,7 +5,7 @@ buildDunePackage rec {
 
   inherit (angstrom) version useDune2 src;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   propagatedBuildInputs = [ angstrom ];
 

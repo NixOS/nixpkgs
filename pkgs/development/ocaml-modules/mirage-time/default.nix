@@ -1,7 +1,7 @@
 { lib, buildDunePackage, fetchurl, ocaml_lwt }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   pname = "mirage-time";
   version = "2.0.1";

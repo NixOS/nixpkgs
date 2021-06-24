@@ -30,7 +30,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ base64 bos core lwt_react ocamlgraph rresult tyxml ];
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   meta = {
     inherit (src.meta) homepage;

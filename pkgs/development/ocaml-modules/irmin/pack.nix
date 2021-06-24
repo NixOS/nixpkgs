@@ -3,7 +3,7 @@
 }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.02.3";
+  minimalOCamlVersion = "4.02.3";
 
   pname = "irmin-pack";
 

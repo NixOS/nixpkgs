@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "mirage-random-test";
   version = "0.1.0";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   # due to cstruct
   useDune2 = true;

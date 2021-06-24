@@ -15,7 +15,7 @@
 
 buildDunePackage {
   pname = "opium";
-  inherit (opium_kernel) version src meta minimumOCamlVersion;
+  inherit (opium_kernel) version src meta minimalOCamlVersion;
 
   useDune2 = true;
 

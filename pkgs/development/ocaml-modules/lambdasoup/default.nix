@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "lambdasoup";
   version = "0.7.2";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   useDune2 = true;
 

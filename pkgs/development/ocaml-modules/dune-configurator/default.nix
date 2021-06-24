@@ -7,7 +7,7 @@ buildDunePackage rec {
 
   inherit (dune_2) src version patches;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   dontAddPrefix = true;
 

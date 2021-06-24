@@ -12,7 +12,7 @@ buildDunePackage rec {
     sha256 = "sha256-IE6Fuvem8A3lZ/M8GLNYNwCG+v7BbPQ4QdYS+fKT50c=";
   };
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
   useDune2 = true;
 
   propagatedBuildInputs = [

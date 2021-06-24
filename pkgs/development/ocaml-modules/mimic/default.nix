@@ -7,7 +7,7 @@ buildDunePackage rec {
   pname = "mimic";
   version = "0.0.3";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
   useDune2 = true;
 
   src = fetchurl {

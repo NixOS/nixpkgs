@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "progress";
   version = "0.1.1";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
   useDune2 = true;
 
   src = fetchurl {

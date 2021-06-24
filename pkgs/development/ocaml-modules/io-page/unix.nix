@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "io-page-unix";
 
-  inherit (io-page) version src useDune2 minimumOCamlVersion;
+  inherit (io-page) version src useDune2 minimalOCamlVersion;
 
   propagatedBuildInputs = [ cstruct io-page ];
   checkInputs = [ ounit ];

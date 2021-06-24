@@ -1,7 +1,7 @@
 { lib, buildDunePackage, ocaml, fetchurl, seq, qcheck-alcotest }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
   pname = "psq";
   version = "0.2.0";
 

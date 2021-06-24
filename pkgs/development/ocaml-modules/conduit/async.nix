@@ -5,7 +5,7 @@ buildDunePackage {
   inherit (conduit)
     version
     src
-    minimumOCamlVersion
+    minimalOCamlVersion
     useDune2
     ;
 

@@ -12,7 +12,7 @@
 
 buildDunePackage {
   pname = "git-unix";
-  inherit (git) version src minimumOCamlVersion;
+  inherit (git) version src minimalOCamlVersion;
 
   useDune2 = true;
 

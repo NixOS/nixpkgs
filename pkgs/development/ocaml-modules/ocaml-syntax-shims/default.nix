@@ -1,7 +1,7 @@
 { lib, buildDunePackage, fetchurl }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.02.3";
+  minimalOCamlVersion = "4.02.3";
 
   pname = "ocaml-syntax-shims";
   version = "1.0.0";

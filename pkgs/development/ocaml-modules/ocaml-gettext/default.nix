@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "gettext";
   version = "0.4.2";
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   useDune2 = true;
 

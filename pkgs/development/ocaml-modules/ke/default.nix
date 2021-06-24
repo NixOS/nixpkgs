@@ -19,7 +19,7 @@ buildDunePackage rec {
   checkInputs = [ alcotest bigstringaf ];
   doCheck = true;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   meta = {
     description = "Fast implementation of queue in OCaml";

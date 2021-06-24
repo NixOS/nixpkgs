@@ -1,14 +1,14 @@
 { lib, stdenv, ocaml_oasis, ocaml, findlib, ocamlbuild }:
 
 { pname, version, buildInputs ? [], meta ? { platforms = ocaml.meta.platforms or []; },
-  minimumOCamlVersion ? null,
+  minimalOCamlVersion ? null,
   createFindlibDestdir ? true,
   dontStrip ? true,
   ...
 }@args:
 
-if args ? minimumOCamlVersion &&
-   ! lib.versionAtLeast ocaml.version args.minimumOCamlVersion
+if args ? minimalOCamlVersion &&
+   ! lib.versionAtLeast ocaml.version args.minimalOCamlVersion
 then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 

@@ -10,7 +10,7 @@
 buildDunePackage {
   pname = "carton-lwt";
 
-  inherit (carton) version src useDune2 minimumOCamlVersion postPatch;
+  inherit (carton) version src useDune2 minimalOCamlVersion postPatch;
 
   propagatedBuildInputs = [
     carton

@@ -13,7 +13,7 @@ buildDunePackage rec {
     sha256 = "cc0e814fd54efe7a5b7a8c5eb1c04e2dece751b7d8dee2d95908a0768896e8af";
   };
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   propagatedBuildInputs = [ io-page mirage-block ];
 

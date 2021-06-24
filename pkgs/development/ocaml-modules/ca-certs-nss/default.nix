@@ -18,7 +18,7 @@ buildDunePackage rec {
   pname = "ca-certs-nss";
   version = "3.64.0.1";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-v${version}.tbz";

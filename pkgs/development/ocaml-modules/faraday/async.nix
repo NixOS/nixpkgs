@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "faraday-async";
   inherit (faraday) version src useDune2;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [ faraday core async ];
 

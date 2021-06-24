@@ -12,7 +12,7 @@ in buildDunePackage rec {
   pname = "dune-release";
   version = "1.4.0";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";

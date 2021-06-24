@@ -18,7 +18,7 @@ buildDunePackage {
     src
     version
     useDune2
-    minimumOCamlVersion
+    minimalOCamlVersion
     meta
     ;
 

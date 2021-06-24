@@ -11,7 +11,7 @@ buildDunePackage {
   pname = "ppx_cstruct";
   inherit (cstruct) version src useDune2 meta;
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   # prevent ANSI escape sequences from messing up the test cases
   # https://github.com/mirage/ocaml-cstruct/issues/283

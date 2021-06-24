@@ -5,7 +5,7 @@ buildDunePackage rec {
   pname = "encore";
   version = "0.8";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/mirage/encore/releases/download/v${version}/encore-v${version}.tbz";

@@ -7,7 +7,7 @@ buildDunePackage rec {
   pname = "mirage";
   inherit (mirage-runtime) version src;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   useDune2 = true;
 

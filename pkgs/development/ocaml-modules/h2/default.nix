@@ -31,7 +31,7 @@ buildDunePackage rec {
     useDune2
     ;
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   propagatedBuildInputs = [
     angstrom

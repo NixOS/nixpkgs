@@ -8,7 +8,7 @@ buildDunePackage rec {
   pname = "cstruct-sexp";
   inherit (cstruct) version src useDune2 meta;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   # alcotest is only available on OCaml >= 4.05 due to fmt
   doCheck = lib.versionAtLeast ocaml.version "4.05";

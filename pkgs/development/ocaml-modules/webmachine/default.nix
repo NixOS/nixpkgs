@@ -8,7 +8,7 @@ buildDunePackage rec {
   version = "0.7.0";
   useDune2 = true;
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";

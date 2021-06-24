@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "xenstore-tool";
 
-  inherit (xenstore_transport) src version useDune2 minimumOCamlVersion;
+  inherit (xenstore_transport) src version useDune2 minimalOCamlVersion;
 
   buildInputs = [ xenstore_transport xenstore lwt ];
 

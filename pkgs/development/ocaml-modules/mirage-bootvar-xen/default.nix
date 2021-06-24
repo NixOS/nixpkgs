@@ -10,7 +10,7 @@ buildDunePackage rec {
   pname = "mirage-bootvar-xen";
   version = "0.8.0";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   useDune2 = true;
 

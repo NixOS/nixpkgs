@@ -11,7 +11,7 @@ buildDunePackage rec {
   pname = "ppx_deriving_cmdliner";
   version = "0.6.0";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
   useDune2 = true;
 
   src = fetchFromGitHub {

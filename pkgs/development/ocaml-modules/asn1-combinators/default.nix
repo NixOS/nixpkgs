@@ -3,7 +3,7 @@
 }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.05";
 
   pname = "asn1-combinators";
   version = "0.2.5";

@@ -20,7 +20,7 @@ buildDunePackage {
   pname = "mirage-crypto-ec";
 
   inherit (mirage-crypto)
-    minimumOCamlVersion
+    minimalOCamlVersion
     src
     version
     useDune2

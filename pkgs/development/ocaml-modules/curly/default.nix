@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "curly";
   version = "0.2.0";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   useDune2 = true;
 

@@ -14,7 +14,7 @@ buildDunePackage rec {
     sha256 = "0pmypzp0rvlpzm8zpbcfkphwnhrpyfwfv44kshvx2f8nslmksh8c";
   };
 
-  minimumOCamlVersion = "4.08";  # e.g., uses Float.min
+  minimalOCamlVersion = "4.08";  # e.g., uses Float.min
 
   checkInputs = [ alcotest ];
   buildInputs = [ menhir ];

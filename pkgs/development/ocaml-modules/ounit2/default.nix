@@ -1,7 +1,7 @@
 { lib, ocaml, buildDunePackage, fetchurl, stdlib-shims, ncurses }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   pname = "ounit2";
   version = "2.2.4";
