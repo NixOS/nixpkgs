@@ -127,6 +127,15 @@ let
         '';
       };
 
+      options = mkOption {
+        default = [ "defaults" ];
+        example = [ "nofail" ];
+        type = types.listOf types.nonEmptyStr;
+        description = ''
+          Options used to mount the swap.
+        '';
+      };
+
       deviceName = mkOption {
         type = types.str;
         internal = true;
