@@ -1,12 +1,15 @@
 { lib
-, python3
+, pyqrcode
+, urwid
+, urwid-readline
 , fetchFromGitHub
 , dbus
 , signal-cli
 , xclip
+, buildPythonApplication
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "scli";
   version = "0.6.3";
 
@@ -17,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-QGVBJKTBo2RckGwW1deM2toRPT73PYDLvr7YVepkQvg=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     pyqrcode
     urwid
     urwid-readline
