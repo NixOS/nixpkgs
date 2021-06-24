@@ -510,6 +510,7 @@ activatePackage() {
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
+        # shellcheck disable=SC1091
         source "$pkg/nix-support/setup-hook"
     fi
 }
