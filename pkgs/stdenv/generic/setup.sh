@@ -1190,6 +1190,8 @@ fixupPhase() {
         mkdir -p "${!outputDev}/nix-support"
         local hook
         for hook in $setupHooks; do
+            # content is being assigned to in the following lines
+            # shellcheck disable=SC2034
             local content
             consumeEntire content < "$hook"
             substituteAllStream content "file '$hook'" >> "${!outputDev}/nix-support/setup-hook"
