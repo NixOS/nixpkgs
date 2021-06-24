@@ -5075,6 +5075,8 @@ in
 
   git-big-picture = callPackage ../applications/version-management/git-and-tools/git-big-picture { };
 
+  git-branchless = callPackage ../applications/version-management/git-and-tools/git-branchless { };
+
   inherit (haskellPackages) git-brunch;
 
   git-bug = callPackage ../applications/version-management/git-and-tools/git-bug { };
