@@ -2,6 +2,7 @@
 , aiohttp
 , aioresponses
 , buildPythonPackage
+, dacite
 , fetchFromGitHub
 , pytest-asyncio
 , pytest-error-for-skips
@@ -11,18 +12,19 @@
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "0.2.6";
+  version = "1.0.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "0zs14g02m1ahyrhl2ihk74fp390g4672r1jjiaawmkxrvib07dvp";
+    sha256 = "sha256-VTKIUo3rR/HyEW/d/Nm0fm7wbgSdLGf02i8R3om1oCE=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    dacite
   ];
 
   checkInputs = [
