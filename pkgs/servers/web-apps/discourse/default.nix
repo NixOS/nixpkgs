@@ -1,8 +1,9 @@
 { stdenv, makeWrapper, runCommandNoCC, lib, nixosTests, writeShellScript
-, fetchFromGitHub, bundlerEnv, ruby, replace, gzip, gnutar, git, cacert
-, util-linux, gawk, imagemagick, optipng, pngquant, libjpeg, jpegoptim
-, gifsicle, libpsl, redis, postgresql, which, brotli, procps, rsync
-, nodePackages, v8
+, fetchFromGitHub, bundlerEnv, callPackage
+
+, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
+, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, libpsl
+, redis, postgresql, which, brotli, procps, rsync, nodePackages, v8
 
 , plugins ? []
 }:
@@ -47,6 +48,35 @@ let
     RAILS_ENV = "production";
     UNICORN_LISTENER = "/run/discourse/sockets/unicorn.sock";
   };
+
+  mkDiscoursePlugin =
+    { name ? null
+    , pname ? null
+    , version ? null
+    , meta ? null
+    , bundlerEnvArgs ? {}
+    , src
+    , ...
+    }@args:
+    let
+      rubyEnv = bundlerEnv (bundlerEnvArgs // {
+        inherit name pname version ruby;
+      });
+    in
+      stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
+        inherit name pname version src meta;
+        pluginName = if name != null then name else "${pname}-${version}";
+        phases = [ "unpackPhase" "installPhase" ];
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out
+          cp -r * $out/
+        '' + lib.optionalString (bundlerEnvArgs != {}) ''
+          ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
+        '' + ''
+          runHook postInstall
+        '';
+      });
 
   rake = runCommandNoCC "discourse-rake" {
     nativeBuildInputs = [ makeWrapper ];
@@ -123,6 +153,12 @@ let
       nodePackages.uglify-js
     ];
 
+    patches = [
+      # Use the Ruby API version in the plugin gem path, to match the
+      # one constructed by bundlerEnv
+      ./plugin_gem_api_version.patch
+    ];
+
     # We have to set up an environment that is close enough to
     # production ready or the assets:precompile task refuses to
     # run. This means that Redis and PostgreSQL has to be running and
@@ -150,7 +186,7 @@ let
       mkdir $NIX_BUILD_TOP/tmp_home
       export HOME=$NIX_BUILD_TOP/tmp_home
 
-      ${lib.concatMapStringsSep "\n" (p: "cp -r ${p} plugins/") plugins}
+      ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/${p.pluginName or ""}") plugins}
 
       export RAILS_ENV=production
 
@@ -200,6 +236,10 @@ let
       # configurable
       ./unicorn_logging_and_timeout.patch
 
+      # Use the Ruby API version in the plugin gem path, to match the
+      # one constructed by bundlerEnv
+      ./plugin_gem_api_version.patch
+
       # Use mv instead of rename, since rename doesn't work across
       # device boundaries
       ./use_mv_instead_of_rename.patch
@@ -235,7 +275,7 @@ let
       ln -sf /run/discourse/public $out/share/discourse/public
       ln -sf /run/discourse/plugins $out/share/discourse/plugins
       ln -sf ${assets} $out/share/discourse/public.dist/assets
-      ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/") plugins}
+      ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}") plugins}
 
       runHook postInstall
     '';
@@ -249,8 +289,9 @@ let
     };
 
     passthru = {
-      inherit rubyEnv runtimeEnv runtimeDeps rake;
+      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin;
       enabledPlugins = plugins;
+      plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
       tests = nixosTests.discourse;
     };
