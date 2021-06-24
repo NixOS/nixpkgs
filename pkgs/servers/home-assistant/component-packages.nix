@@ -430,7 +430,7 @@
     "kmtronic" = ps: with ps; [ pykmtronic ];
     "knx" = ps: with ps; [ xknx ];
     "kodi" = ps: with ps; [ pykodi ];
-    "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
+    "konnected" = ps: with ps; [ aiohttp-cors konnected ];
     "kostal_plenticore" = ps: with ps; [ ]; # missing inputs: kostal_plenticore
     "kraken" = ps: with ps; [ ]; # missing inputs: krakenex pykrakenapi
     "kulersky" = ps: with ps; [ pykulersky ];
