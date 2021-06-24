@@ -13,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyvis";
   version = "unstable-2021-04-29";
 
-  disabled = !isPy3k;
-
   # We use unstable, as test are failing for 0.1.9
   src = fetchFromGitHub {
     owner = "WestHealth";
