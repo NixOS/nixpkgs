@@ -1335,6 +1335,8 @@ in {
 
   connect-box = callPackage ../development/python-modules/connect_box { };
 
+  connection-pool = callPackage ../development/python-modules/connection-pool { };
+
   coqpit = callPackage ../development/python-modules/coqpit { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
@@ -8225,6 +8227,8 @@ in {
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
   stone = callPackage ../development/python-modules/stone { };
+
+  stopit = callPackage ../development/python-modules/stopit { };
 
   strategies = callPackage ../development/python-modules/strategies { };
 
