@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fuzzel";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/fuzzel/archive/${version}.tar.gz";
-    sha256 = "sha256-Zg9KrRf2ntg2FU6lhllt/Fd63KJak6zB7hu4ujj/9AI=";
+    sha256 = "sha256-iTpUWvQszDtNc1gDqkPbhvgUVNWydpivhnOCHMJVtSw=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc git ];
