@@ -14,8 +14,8 @@ _moveToShare() {
                 echo "both $d/ and share/$d/ exist!"
             else
                 echo "moving $out/$d to $out/share/$d"
-                mkdir -p $out/share
-                mv $out/$d $out/share/
+                mkdir -p "$out/share"
+                mv "$out/$d" "$out/share/"
             fi
         fi
     done
