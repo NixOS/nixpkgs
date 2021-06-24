@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , SDL2
 , alsaLib
-, audec
+, libaudec
 , bash
 , bash-completion
 , carla
@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-alpha.15.0.1";
+  version = "v1.0.0-alpha.18.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    audec
+    libaudec
     git
     gtk3
     help2man
