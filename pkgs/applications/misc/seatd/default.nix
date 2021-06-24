@@ -3,12 +3,13 @@
 , meson
 , ninja
 , pkg-config
+, scdoc
 , stdenv
 , systemd
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libseat";
+  pname = "seatd";
   version = "0.5.0";
 
   src = fetchFromSourcehut {
@@ -18,13 +19,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JwlJLHkRgSRqfQEhXbzuFTmhxfbwKVdLICPbTDbC9M0=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  outputs = [ "bin" "out" "dev" "man" ];
 
-  buildInputs = [
-    systemd
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
 
-  mesonFlags = [ "-Dserver=disabled" "-Dseatd=disabled" "-Dlogind=enabled"];
+  buildInputs = [ systemd ];
+
+  mesonFlags = [ "-Dlogind=enabled" ];
 
   meta = with lib; {
     description = "A universal seat management library";

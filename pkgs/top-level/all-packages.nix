@@ -16853,8 +16853,6 @@ in
 
   libsearpc = callPackage ../development/libraries/libsearpc { };
 
-  libseat = callPackage ../development/libraries/libseat { };
-
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
   libsigcxx12 = callPackage ../development/libraries/libsigcxx/1.2.nix { };
@@ -26627,6 +26625,8 @@ in
   scribusUnstable = libsForQt5.callPackage ../applications/office/scribus/unstable.nix { };
 
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
+
+  seatd = callPackage ../applications/misc/seatd { };
 
   secretscanner = callPackage ../tools/security/secretscanner { };
 
