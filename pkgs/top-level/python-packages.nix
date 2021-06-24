@@ -3872,6 +3872,8 @@ in {
 
   kombu = callPackage ../development/python-modules/kombu { };
 
+  konnected = callPackage ../development/python-modules/konnected { };
+
   korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };

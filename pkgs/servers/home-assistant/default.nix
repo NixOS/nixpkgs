@@ -492,6 +492,7 @@ in with py.pkgs; buildPythonApplication rec {
     "kmtronic"
     "knx"
     "kodi"
+    "konnected"
     "kulersky"
     "lastfm"
     "lcn"
