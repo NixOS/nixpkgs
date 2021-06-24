@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tt-rss-theme-feedly";
-  version = "2.5.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "levito";
     repo = "tt-rss-feedly-theme";
     rev = "v${version}";
-    sha256 = "sha256-wZ6Q4cxvJKot1TWE8tOVZeaaeBSXghmkYkOK9GjAnEM=";
+    sha256 = "sha256-eeE8FDZa2ms5rNEV3RntmZaAYY2qeMpfwkMAFQHdUiE=";
   };
 
   dontBuild = true;
