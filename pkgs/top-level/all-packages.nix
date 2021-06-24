@@ -17513,11 +17513,10 @@ in
 
   openldap = callPackage ../development/libraries/openldap { };
 
-  opencolorio1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
-  opencolorio2 = callPackage ../development/libraries/opencolorio {
+  opencolorio = callPackage ../development/libraries/opencolorio {
     inherit (darwin.apple_sdk.frameworks) Carbon GLUT Cocoa;
   };
-  opencolorio = opencolorio1;
+  opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 
   opendmarc = callPackage ../development/libraries/opendmarc { };
 

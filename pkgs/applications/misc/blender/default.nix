@@ -1,7 +1,7 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU, libGL, openal, opencolorio2, openexr, openimagedenoise, openimageio2, openjpeg, python39Packages
+, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python39Packages
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
-      opencolorio2 openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
+      opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
