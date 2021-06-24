@@ -199,6 +199,10 @@ let
       # Log Unicorn messages to the journal and make request timeout
       # configurable
       ./unicorn_logging_and_timeout.patch
+
+      # Use mv instead of rename, since rename doesn't work across
+      # device boundaries
+      ./use_mv_instead_of_rename.patch
     ];
 
     postPatch = ''
@@ -207,8 +211,6 @@ let
       # warnings and means we don't have to link back to lib from the
       # state directory.
       find config -type f -execdir sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
-
-      ${replace}/bin/replace-literal -f -r -e 'File.rename(temp_destination, destination)' "FileUtils.mv(temp_destination, destination)" .
     '';
 
     buildPhase = ''
