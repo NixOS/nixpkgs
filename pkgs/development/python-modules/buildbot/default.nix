@@ -97,6 +97,7 @@ let
     passthru = {
       inherit withPlugins;
       tests.buildbot = nixosTests.buildbot;
+      updateScript = ./update.sh;
     };
 
     meta = with lib; {
