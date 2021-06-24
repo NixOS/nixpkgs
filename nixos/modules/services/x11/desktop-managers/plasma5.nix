@@ -271,6 +271,7 @@ in
           kmenuedit
           kscreen
           kscreenlocker
+          ksystemstats
           kwayland
           kwin
           kwrited
