@@ -889,16 +889,9 @@ let
 
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
 
-      ms-python.python =
-        let
-          raw-package = callPackage ./python {
-            extractNuGet = callPackage ./python/extract-nuget.nix { };
-          };
-        in
-        buildEnv {
-          name = "vscode-extension-ms-python-python-full";
-          paths = [ raw-package self.ms-toolsai.jupyter ];
-        };
+      ms-python.python = callPackage ./python {
+        extractNuGet = callPackage ./python/extract-nuget.nix { };
+      };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
         mktplcRef = {
