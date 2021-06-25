@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck3, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libwnck3
+    libwnck
     librsvg
     libxml2
     gtk3

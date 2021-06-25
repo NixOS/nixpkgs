@@ -5,7 +5,7 @@
 , gobject-introspection
 , gtk3
 , libdbusmenu-gtk3
-, libwnck3
+, libwnck
 , libxfce4ui
 , libxfce4util
 , tzdata
@@ -30,7 +30,7 @@ mkXfceDerivation {
     garcon
     libdbusmenu-gtk3
     libxfce4ui
-    libwnck3
+    libwnck
     xfconf
     tzdata
   ];

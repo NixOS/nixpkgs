@@ -2,7 +2,7 @@
 , mkXfceDerivation
 , gtk3
 , librsvg
-, libwnck3
+, libwnck
 , libxklavier
 , garcon
 , libxfce4ui
@@ -25,7 +25,7 @@ mkXfceDerivation {
     libxfce4ui
     libxfce4util
     libxklavier
-    libwnck3
+    libwnck
     xfce4-panel
     xfconf
   ];

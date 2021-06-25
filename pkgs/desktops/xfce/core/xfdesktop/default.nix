@@ -1,4 +1,4 @@
-{ mkXfceDerivation, exo, gtk3, libxfce4ui, libxfce4util, libwnck3, xfconf, libnotify, garcon, thunar }:
+{ mkXfceDerivation, exo, gtk3, libxfce4ui, libxfce4util, libwnck, xfconf, libnotify, garcon, thunar }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -12,7 +12,7 @@ mkXfceDerivation {
     gtk3
     libxfce4ui
     libxfce4util
-    libwnck3
+    libwnck
     xfconf
     libnotify
     garcon
