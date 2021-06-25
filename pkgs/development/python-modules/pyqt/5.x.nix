@@ -1,25 +1,27 @@
-{ lib, pythonPackages, pkg-config
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, pkg-config
 , dbus
-, qmake, lndir
-, qtbase
-, qtsvg
-, qtdeclarative
-, qtwebchannel
-, withConnectivity ? false, qtconnectivity
-, withMultimedia ? false, qtmultimedia
-, withWebKit ? false, qtwebkit
-, withWebSockets ? false, qtwebsockets
+, lndir
+, python
+, dbus-python
+, sip
+, pyqt-builder
+, libsForQt5
+, withConnectivity ? false
+, withMultimedia ? false
+, withWebKit ? false
+, withWebSockets ? false
 }:
 
 let
-
-  inherit (pythonPackages) buildPythonPackage python isPy27 dbus-python sip pyqt-builder;
-
   pyqt5_sip = buildPythonPackage rec {
     pname = "PyQt5_sip";
     version = "12.9.0";
 
-    src = pythonPackages.fetchPypi {
+    src = fetchPypi {
       inherit pname version;
       sha256 = "0cmfxb7igahxy74qkq199l6zdxrr75bnxris42fww3ibgjflir6k";
     };
@@ -28,7 +30,6 @@ let
     # > error: could not create 'PyQt5/sip.cpython-38-x86_64-linux-gnu.so': No such file or directory
     doCheck = false;
   };
-
 in buildPythonPackage rec {
   pname = "PyQt5";
   version = "5.15.4";
@@ -36,7 +37,7 @@ in buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "1gp5jz71nmg58zsm1h4vzhcphf36rbz37qgsfnzal76i1mz5js9a";
   };
@@ -45,7 +46,7 @@ in buildPythonPackage rec {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with libsForQt5; [
     pkg-config
     qmake
     lndir
@@ -61,7 +62,7 @@ in buildPythonPackage rec {
     ++ lib.optional withWebSockets qtwebsockets
   ;
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     dbus
     qtbase
     qtsvg
