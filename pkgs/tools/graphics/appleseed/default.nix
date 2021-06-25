@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost165, pkg-config, guile,
 eigen, libpng, python, libGLU, qt4, openexr, openimageio,
-opencolorio, xercesc, ilmbase, osl, seexpr, makeWrapper
+opencolorio_1, xercesc, ilmbase, osl, seexpr, makeWrapper
 }:
 
 let boost_static = boost165.override {
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   buildInputs = [
     boost_static guile eigen libpng python
-    libGLU qt4 openexr openimageio opencolorio xercesc
+    libGLU qt4 openexr openimageio opencolorio_1 xercesc
     osl seexpr
   ];
 

@@ -7,7 +7,7 @@
 , libjpeg
 , libpng
 , libtiff
-, opencolorio
+, opencolorio_1
 , openexr
 , robin-map
 , unzip
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libtiff
-    opencolorio
+    opencolorio_1
     openexr
     robin-map
     fmt
