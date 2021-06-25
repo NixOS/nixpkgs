@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
       desktopName = "Protege Desktop";
       icon = "protege";
       comment = "OWL2 ontology editor";
+      categories = "Development";
       exec = "run-protege";
     })
   ];
