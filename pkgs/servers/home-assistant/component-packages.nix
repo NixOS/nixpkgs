@@ -432,7 +432,7 @@
     "kodi" = ps: with ps; [ pykodi ];
     "konnected" = ps: with ps; [ aiohttp-cors konnected ];
     "kostal_plenticore" = ps: with ps; [ ]; # missing inputs: kostal_plenticore
-    "kraken" = ps: with ps; [ ]; # missing inputs: krakenex pykrakenapi
+    "kraken" = ps: with ps; [ krakenex pykrakenapi ];
     "kulersky" = ps: with ps; [ pykulersky ];
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb
     "lacrosse" = ps: with ps; [ pylacrosse ];
