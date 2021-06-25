@@ -106,7 +106,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsa-lib acl gpm gettext jansson harfbuzz.dev ]
-    ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
+    ++ lib.optionals stdenv.isLinux [ (dbus.override { x11Support = withX; }) libselinux systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg giflib libtiff libXft
         gconf cairo ]
