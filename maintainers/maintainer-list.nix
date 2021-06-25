@@ -690,6 +690,12 @@
       fingerprint = "AA4B 8EC3 F971 D350 482E  4E20 0299 AFF9 ECBB 5169";
     }];
   };
+  anhduy = {
+    email = "vo@anhduy.io";
+    github = "voanhduy1512";
+    githubId = 1771266;
+    name = "Vo Anh Duy";
+  };
   ankhers = {
     email = "me@ankhers.dev";
     github = "ankhers";
