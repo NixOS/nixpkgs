@@ -250,6 +250,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    # needed for TLS and multimedia functionality
     wrapGApp $out/libexec/webkit2gtk/MiniBrowser --argv0 MiniBrowser
   '';
 
