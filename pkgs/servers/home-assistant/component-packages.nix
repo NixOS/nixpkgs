@@ -421,7 +421,7 @@
     "kaiterra" = ps: with ps; [ ]; # missing inputs: kaiterra-async-client
     "kankun" = ps: with ps; [ ];
     "keba" = ps: with ps; [ ]; # missing inputs: keba-kecontact
-    "keenetic_ndms2" = ps: with ps; [ ]; # missing inputs: ndms2_client
+    "keenetic_ndms2" = ps: with ps; [ ndms2-client ];
     "kef" = ps: with ps; [ aiokef getmac ];
     "keyboard" = ps: with ps; [ ]; # missing inputs: pyuserinput
     "keyboard_remote" = ps: with ps; [ aionotify evdev ];
@@ -695,7 +695,7 @@
     "repetier" = ps: with ps; [ ]; # missing inputs: pyrepetier
     "rest" = ps: with ps; [ jsonpath xmltodict ];
     "rest_command" = ps: with ps; [ ];
-    "rflink" = ps: with ps; [ ]; # missing inputs: rflink
+    "rflink" = ps: with ps; [ rflink ];
     "rfxtrx" = ps: with ps; [ ]; # missing inputs: pyRFXtrx
     "ring" = ps: with ps; [ ha-ffmpeg ring-doorbell ];
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api

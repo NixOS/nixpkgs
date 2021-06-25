@@ -4682,6 +4682,8 @@ in {
 
   ndjson = callPackage ../development/python-modules/ndjson { };
 
+  ndms2-client = callPackage ../development/python-modules/ndms2-client { };
+
   ndspy = callPackage ../development/python-modules/ndspy { };
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
@@ -6459,6 +6461,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
   };
 
+  pyscf = callPackage ../development/python-modules/pyscf { };
+
   pyschedule = callPackage ../development/python-modules/pyschedule { };
 
   pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
@@ -7497,6 +7501,8 @@ in {
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 
   rfcat = callPackage ../development/python-modules/rfcat { };
+
+  rflink = callPackage ../development/python-modules/rflink { };
 
   rich = callPackage ../development/python-modules/rich { };
 
