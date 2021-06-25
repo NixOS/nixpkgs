@@ -7498,6 +7498,8 @@ in {
 
   rfcat = callPackage ../development/python-modules/rfcat { };
 
+  rflink = callPackage ../development/python-modules/rflink { };
+
   rich = callPackage ../development/python-modules/rich { };
 
   rig = callPackage ../development/python-modules/rig { };
