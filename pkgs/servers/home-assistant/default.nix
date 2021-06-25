@@ -603,6 +603,7 @@ in with py.pkgs; buildPythonApplication rec {
     "remote"
     "rest"
     "rest_command"
+    "rflink"
     "ring"
     "risco"
     "rituals_perfume_genie"

@@ -695,7 +695,7 @@
     "repetier" = ps: with ps; [ ]; # missing inputs: pyrepetier
     "rest" = ps: with ps; [ jsonpath xmltodict ];
     "rest_command" = ps: with ps; [ ];
-    "rflink" = ps: with ps; [ ]; # missing inputs: rflink
+    "rflink" = ps: with ps; [ rflink ];
     "rfxtrx" = ps: with ps; [ ]; # missing inputs: pyRFXtrx
     "ring" = ps: with ps; [ ha-ffmpeg ring-doorbell ];
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
