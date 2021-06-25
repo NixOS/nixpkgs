@@ -22666,6 +22666,8 @@ in
 
   weather-icons = callPackage ../data/fonts/weather-icons { };
 
+  whitesur-gtk-theme = callPackage ../data/themes/whitesur { };
+
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
