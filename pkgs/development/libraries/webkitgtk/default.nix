@@ -63,6 +63,7 @@
 
 assert enableGeoLocation -> geoclue2 != null;
 
+# NOTE: Run $out/libexec/MiniBrowser to test changes for this package
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
   version = "2.32.1";
@@ -203,9 +204,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_INTROSPECTION=ON"
     "-DPORT=GTK"
+    "-DENABLE_MINIBROWSER=ON"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
     "-DENABLE_MINIBROWSER=ON"
+    "-DLIBEXEC_INSTALL_DIR=${placeholder "out"}/libexec/webkit2gtk"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
@@ -230,10 +233,8 @@ stdenv.mkDerivation rec {
     sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
-  postInstall = ''
-    mv $out/libexec/MiniBrowser $out/bin/MiniBrowser
-    gappsWrapperArgsHook # FIXME: currently runs at preFixup
-    wrapGApp $out/bin/MiniBrowser --argv0 MiniBrowser
+  postFixup = ''
+    wrapGApp $out/libexec/webkit2gtk/MiniBrowser --argv0 MiniBrowser
   '';
 
   doCheck = true;
