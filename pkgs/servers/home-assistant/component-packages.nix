@@ -927,7 +927,7 @@
     "vesync" = ps: with ps; [ pyvesync ];
     "viaggiatreno" = ps: with ps; [ ];
     "vicare" = ps: with ps; [ pyvicare ];
-    "vilfo" = ps: with ps; [ ]; # missing inputs: vilfo-api-client
+    "vilfo" = ps: with ps; [ vilfo-api-client ];
     "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
     "vizio" = ps: with ps; [ pyvizio ];
     "vlc" = ps: with ps; [ python-vlc ];
