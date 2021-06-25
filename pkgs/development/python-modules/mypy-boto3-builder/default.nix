@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "4.14.1";
+  version = "4.18.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vemel";
     repo = "mypy_boto3_builder";
     rev = version;
-    sha256 = "sha256-y55bPi70ldd528Olr2atXHm5JHiLNBZ396D9qwbBmkc=";
+    sha256 = "sha256-Hr765L9t5Fv/9sApDrS5m0+sg/epf/Gpb1AOngB3RNs=";
   };
 
   propagatedBuildInputs = [
