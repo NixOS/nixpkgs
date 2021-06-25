@@ -22285,6 +22285,8 @@ in
 
   mustache-hpp = callPackage ../development/libraries/mustache-hpp { };
 
+  myrddin = callPackage ../development/compilers/myrddin { };
+
   myrica = callPackage ../data/fonts/myrica { };
 
   nafees = callPackage ../data/fonts/nafees { };
