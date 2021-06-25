@@ -1,6 +1,6 @@
 { buildPythonPackage, lib, fetchFromGitHub, libcint, libxc, xcfun, blas
 , numpy, scipy, h5py
-} :
+}:
 
 buildPythonPackage rec {
   pname = "pyscf";
