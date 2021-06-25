@@ -340,6 +340,7 @@ let
     seqinr = [ pkgs.zlib.dev ];
     seqminer = [ pkgs.zlib.dev pkgs.bzip2 ];
     sf = [ pkgs.gdal pkgs.proj pkgs.geos ];
+    terra = [ pkgs.gdal pkgs.proj pkgs.geos ];
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
     spate = [ pkgs.fftw.dev ];
@@ -415,13 +416,13 @@ let
     openssl = [ pkgs.pkg-config ];
     pdftools = [ pkgs.pkg-config ];
     sf = [ pkgs.pkg-config pkgs.sqlite.dev pkgs.proj.dev ];
+    terra = [ pkgs.pkg-config pkgs.sqlite.dev pkgs.proj.dev ];
     showtext = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     stringi = [ pkgs.pkg-config ];
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     tesseract = [ pkgs.pkg-config ];
-    terra = [ pkgs.gdal pkgs.proj pkgs.geos ];
     Cairo = [ pkgs.pkg-config ];
     CLVTools = [ pkgs.gsl ];
     JMcmprsk = [ pkgs.gsl ];
