@@ -114043,7 +114043,7 @@ in
   "vscode-lldb-build-deps-../../misc/vscode-extensions/vscode-lldb/build-deps" = nodeEnv.buildNodePackage {
     name = "vscode-lldb";
     packageName = "vscode-lldb";
-    version = "1.6.4";
+    version = "1.6.5";
     src = ../../misc/vscode-extensions/vscode-lldb/build-deps;
     dependencies = [
       sources."@discoveryjs/json-ext-0.5.3"
