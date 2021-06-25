@@ -18,7 +18,7 @@
   if (expr)                                                                    \
     fail(#expr, errno);
 
-const gchar *bind_blacklist[] = {"bin", "etc", "host", "real-host", "usr", "lib", "lib64", "lib32", "sbin", NULL};
+const gchar *bind_blacklist[] = {"bin", "etc", "host", "real-host", "usr", "lib", "lib64", "lib32", "sbin", "opt", NULL};
 
 int pivot_root(const char *new_root, const char *put_old) {
   return syscall(SYS_pivot_root, new_root, put_old);
