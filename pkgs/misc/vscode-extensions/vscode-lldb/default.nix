@@ -7,6 +7,8 @@ let
   pname = "vscode-lldb";
   version = "1.6.4";
 
+  vscodeExtUniqueId = "${publisher}.${pname}";
+
   src = fetchFromGitHub {
     owner = "vadimcn";
     repo = "vscode-lldb";
@@ -41,10 +43,10 @@ let
 
   nodeDeps = nodePackages."vscode-lldb-build-deps-../../misc/vscode-extensions/vscode-lldb/build-deps";
 
-in stdenv.mkDerivation rec {
-  name = "vscode-extension-${pname}";
-  inherit src;
-  vscodeExtUniqueId = "${publisher}.${pname}";
+in stdenv.mkDerivation {
+  pname = "vscode-extension-${publisher}-${pname}";
+  inherit src version vscodeExtUniqueId;
+
   installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
   nativeBuildInputs = [ cmake nodejs unzip makeWrapper ];
