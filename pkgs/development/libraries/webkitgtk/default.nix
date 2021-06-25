@@ -111,6 +111,14 @@ stdenv.mkDerivation rec {
       excludes = [ "Source/WebKit/ChangeLog" ];
     })
 
+    # keypresses are ignored with the GTK Quartz backend
+    # https://bugs.webkit.org/show_bug.cgi?id=227360
+    (fetchpatch {
+      url = "https://bug-227360-attachments.webkit.org/attachment.cgi?id=432180";
+      sha256 = "sha256-1JLJKu0G1hRTzqcHsZgbXIp9ZekwbYFWg/MtwB4jTjc=";
+      excludes = [ "Source/WebKit/ChangeLog" ];
+    })
+
     # hides webkit processes from the macOS Dock
     # https://source.atlas.engineer/view/repository/macports-port
     ./0001-Prevent-WebKitWebProcess-from-being-in-the-dock-or-p.patch
