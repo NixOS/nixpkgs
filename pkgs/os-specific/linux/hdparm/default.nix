@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hdparm";
-  version = "9.61";
+  version = "9.62";
 
   src = fetchurl {
     url = "mirror://sourceforge/hdparm/hdparm-${version}.tar.gz";
-    sha256 = "sha256-2hocOIfxC4OX6OAgE8qmEULg5yyw1zmXQhyi8vTfU0M=";
+    sha256 = "sha256-LA+ddc2+2pKKJaEozT0LcSBEXsCRDAsp1MEDjtG+d38=";
   };
 
   preBuild = ''

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, perl, pkg-config, systemd, openssl
-, bzip2, zlib, lz4, inotify-tools, pam, libcap
+, bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
 # Auth modules
@@ -27,9 +27,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
+  postPatch = ''
+    sed -i -E \
+      -e 's!/bin/sh\b!${stdenv.shell}!g' \
+      -e 's!([^[:alnum:]/_-])/bin/([[:alnum:]]+)\b!\1${coreutils}/bin/\2!g' \
+      -e 's!([^[:alnum:]/_-])(head|sleep|cat)\b!\1${coreutils}/bin/\2!g' \
+      src/lib-program-client/test-program-client-local.c
+
+    patchShebangs src/lib-smtp/test-bin/*.sh
+    sed -i -s -E 's!\bcat\b!${coreutils}/bin/cat!g' src/lib-smtp/test-bin/*.sh
+
     patchShebangs src/config/settings-get.pl
-  '' + lib.optionalString (stdenv.isLinux) "export systemdsystemunitdir=$out/etc/systemd/system";
+  '' + lib.optionalString stdenv.isLinux ''
+    export systemdsystemunitdir=$out/etc/systemd/system
+  '';
 
   # We need this for sysconfdir, see remark below.
   installFlags = [ "DESTDIR=$(out)" ];
@@ -80,6 +91,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
     ++ lib.optional withSQLite "--with-sqlite";
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     homepage = "https://dovecot.org/";
