@@ -4,9 +4,16 @@
 , jre
 , unzip
 , makeWrapper
+, makeDesktopItem
+, copyDesktopItems
 }:
 
-stdenv.mkDerivation {
+let
+  icon = fetchurl {
+    url = "https://imagej.net/media/icons/imagej.png";
+    sha256 = "sha256-nU2nWI1wxZB/xlOKsZzdUjj+qiCTjO6GwEKYgZ5Risg=";
+  };
+in stdenv.mkDerivation rec {
   pname = "imagej";
   version = "150";
 
@@ -14,7 +21,17 @@ stdenv.mkDerivation {
     url = "https://wsr.imagej.net/distros/cross-platform/ij${version}.zip";
     sha256 = "97aba6fc5eb908f5160243aebcdc4965726693cb1353d9c0d71b8f5dd832cb7b";
   };
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper unzip ];
+  desktopItems = lib.optionals stdenv.isLinux [
+    (makeDesktopItem {
+      name = "ImageJ";
+      desktopName = "ImageJ";
+      icon = "imagej";
+      categories = "Science;Utility;Graphics;";
+      exec = "imagej";
+    })
+  ];
+
   passthru = {
     inherit jre;
   };
@@ -34,6 +51,12 @@ stdenv.mkDerivation {
       --add-flags "-jar $out/share/java/ij.jar -ijpath $out/share"
 
     runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    install -Dm644 ${icon} $out/share/icons/hicolor/128x128/apps/imagej.png
+    substituteInPlace $out/share/applications/ImageJ.desktop \
+      --replace Exec=imagej Exec=$out/bin/imagej
   '';
 
   meta = with lib; {
