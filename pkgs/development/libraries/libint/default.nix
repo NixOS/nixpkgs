@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool
 , python3, perl, gmpxx, mpfr, boost, eigen, gfortran
 , enableFMA ? false
-} :
+}:
 
 stdenv.mkDerivation rec {
   pname = "libint2";
