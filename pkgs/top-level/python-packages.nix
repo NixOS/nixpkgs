@@ -3882,6 +3882,8 @@ in {
 
   korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
 
+  krakenex = callPackage ../development/python-modules/krakenex { };
+
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
   labelbox = callPackage ../development/python-modules/labelbox { };
