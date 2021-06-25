@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snippetpixie";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "bytepixie";
     repo = pname;
     rev = version;
-    sha256 = "047ghk0zfmcsnbr4h2h5ar7g1sw2mnk8r2887v81dh3vf767rqg2";
+    sha256 = "173fm9h7lnhhbg5qbjz40g0fy60dwd2l55mdcc1j8dh73vz96pfr";
   };
 
   nativeBuildInputs = [

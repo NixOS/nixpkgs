@@ -4,7 +4,6 @@
 , pkg-config
 , gtk3
 , gobject-introspection
-, pygtk
 , pygobject3
 , goocanvas2
 , isPy3k

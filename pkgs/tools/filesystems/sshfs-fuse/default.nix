@@ -22,7 +22,7 @@ in if stdenv.isDarwin then
   }
 else
   mkSSHFS {
-    version = "3.7.1";
-    sha256 = "088mgcsqv9f2vly4xn6lvvkmqkgr9jjmjs9qp8938hl7j6rrgd17";
+    version = "3.7.2";
+    sha256 = "0i0ycgwdxja8313hlkrlwrl85a4ykkyqddgg484jkr4rnr7ylk8w";
     platforms = lib.platforms.linux;
   }

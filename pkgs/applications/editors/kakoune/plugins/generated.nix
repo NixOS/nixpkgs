@@ -51,6 +51,18 @@ let
     meta.homepage = "https://github.com/andreyorst/fzf.kak/";
   };
 
+  kakboard = buildKakounePluginFrom2Nix {
+    pname = "kakboard";
+    version = "2020-05-09";
+    src = fetchFromGitHub {
+      owner = "lePerdu";
+      repo = "kakboard";
+      rev = "2f13f5cd99591b76ad5cba230815b80138825120";
+      sha256 = "1kvnbsv20y09rlnyar87qr0h26i16qsq801krswvxcwhid7ijlvd";
+    };
+    meta.homepage = "https://github.com/lePerdu/kakboard/";
+  };
+
   kakoune-buffer-switcher = buildKakounePluginFrom2Nix {
     pname = "kakoune-buffer-switcher";
     version = "2020-12-27";

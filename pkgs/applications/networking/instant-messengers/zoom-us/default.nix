@@ -3,11 +3,10 @@
 , fetchurl
 , makeWrapper
 # Dynamic libraries
-, alsaLib
+, alsa-lib
 , atk
 , cairo
 , dbus
-, dpkg
 , libGL
 , fontconfig
 , freetype
@@ -30,17 +29,17 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  version = "5.6.16775.0418";
+  version = "5.6.22045.0607";
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://zoom.us/client/${version}/zoom_amd64.deb";
-      sha256 = "1fmzwxq8jv5k1b2kvg1ij9g6cdp1hladd8vm3cxzd8fywdjcndim";
+      url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
+      sha256 = "0zdk02zq9apxnfbxwnlda9z8nqkqa1h1javbh9wwj8yy3y3a1lb5";
     };
   };
 
   libs = lib.makeLibraryPath ([
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
-    alsaLib
+    alsa-lib
     atk
     cairo
     dbus
@@ -71,21 +70,17 @@ in stdenv.mkDerivation rec {
   inherit version;
   src = srcs.${stdenv.hostPlatform.system};
 
+  dontUnpack = true;
+
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
-
-  unpackCmd = ''
-    mkdir out
-    dpkg -x $curSrc out
-  '';
 
   installPhase = ''
     runHook preInstall
     mkdir $out
-    mv usr/* $out/
-    mv opt $out/
+    tar -C $out -xf $src
+    mv $out/usr/* $out/
     runHook postInstall
   '';
 

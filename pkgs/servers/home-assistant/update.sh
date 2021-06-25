@@ -26,7 +26,7 @@ sed -i -e "s/hassVersion =.*/hassVersion = \"${TARGET_VERSION}\";/" \
 ./parse-requirements.py
 (
     cd ../../..
-    nix-update --version "$FRONTEND_VERSION" home-assistant.hass-frontend
+    nix-update --version "$FRONTEND_VERSION" home-assistant.python.pkgs.home-assistant-frontend
     nix-update --version "$TARGET_VERSION" --build home-assistant
 )
 

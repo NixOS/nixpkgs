@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "aiosyncthing";
-  version = "0.5.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "zhulik";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0704qbg3jy80vaw3bcvhy988s1qs3fahpfwkja71fy70bh0vc860";
+    sha256 = "sha256-vn8S2/kRW5C2Hbes9oLM4LGm1jWWK0zeLdujR14y6EI=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=aiosyncthing --cov-report=html" ""
+  '';
 
   pythonImportsCheck = [ "aiosyncthing" ];
 

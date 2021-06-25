@@ -6,13 +6,14 @@
 , numpy, toolz # dask[array]
 , numba
 , pandas
-, scikitlearn
+, scikit-learn
 , scipy
 , dask-glm
 , six
 , multipledispatch
 , packaging
 , distributed
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,10 @@ buildPythonPackage rec {
     sha256 = "8fc4ac3ec1915e382fb8cae9ff1ec9b5ac1bee0b6f4c6975d6e6cb7191a4a815";
   };
 
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     dask
     dask-glm
@@ -34,7 +39,7 @@ buildPythonPackage rec {
     numpy
     packaging
     pandas
-    scikitlearn
+    scikit-learn
     scipy
     six
     toolz

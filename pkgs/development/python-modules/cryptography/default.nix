@@ -15,6 +15,7 @@
 , pytest
 , pytest-subtests
 , pretend
+, libiconv
 , iso8601
 , pytz
 , hypothesis
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "1wisxmq26b8ml144m2458sgcbk8jpv419j01qmffsrfy50x9i1yw";
+    sha256 = "1m6smky4nahwlp4hn6yzibrcxlbsw4nx162dsq48vlw8h1lgjl62";
   };
 
   cargoRoot = "src/rust";
@@ -48,7 +49,7 @@ buildPythonPackage rec {
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
   buildInputs = [ openssl ]
-             ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+             ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
   propagatedBuildInputs = [
     packaging
     six
@@ -66,8 +67,18 @@ buildPythonPackage rec {
     pytz
   ];
 
+  pytestFlags = lib.concatStringsSep " " ([
+    "--disable-pytest-warnings"
+  ] ++
+    lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      # aarch64-darwin forbids W+X memory, but this tests depends on it:
+      # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+      "--ignore=tests/hazmat/backends/test_openssl_memleak.py"
+    ]
+  );
+
   checkPhase = ''
-    py.test --disable-pytest-warnings tests
+    py.test ${pytestFlags} tests
   '';
 
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we

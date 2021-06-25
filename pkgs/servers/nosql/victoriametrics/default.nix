@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.54.1";
+  version = "1.59.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nZSNn1vLk3y6s4ie1AkSkGmKUiIrcBr3yKW5uAEtRt0=";
+    sha256 = "sha256-2i9rmk9aAnjTJY+w/NKJOaLX+tpkt3vG07iLCsSGzdU=";
   };
 
   vendorSha256 = null;
@@ -22,5 +22,7 @@ buildGoModule rec {
     description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
     license = licenses.asl20;
     maintainers = [ maintainers.yorickvp ];
+    changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${version}";
+    platforms = [ "x86_64-linux" ];
   };
 }

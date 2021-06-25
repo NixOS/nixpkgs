@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, buildPackages
 , fetchFromGitHub
 , zlib
 , ilmbase

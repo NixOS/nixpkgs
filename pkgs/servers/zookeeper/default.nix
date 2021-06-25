@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, bash, coreutils, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, bash, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "zookeeper";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${pname}-${version}/apache-${pname}-${version}-bin.tar.gz";
-    sha512 = "caff5111bb6876b7124760bc006e6fa2523efa54b99321a3c9cd8192ea0d5596abc7d70a054b1aac9b20a411407dae7611c7aba870c23bff28eb1643ba499199";
+    sha512 = "3f7b1b7d9cf5647d52ad0076c922e108fa956e986b5624667c493cf6d8ff09d3ca88f623c79a799fe49c72e868cb3c9d0f77cb69608de74a183b2cbad10bc827";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   phases = ["unpackPhase" "installPhase"];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -R conf docs lib $out
     # Without this, zkCli.sh tries creating a log file in the Nix store.
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${bash}/bin"
     done
     chmod -x $out/bin/zkEnv.sh
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -64,7 +64,7 @@ in {
         type = types.str;
         default = "root";
         example = "wheel";
-        description = "Group to grant acces to the Yggdrasil control socket.";
+        description = "Group to grant access to the Yggdrasil control socket.";
       };
 
       openMulticastPort = mkOption {
@@ -122,12 +122,11 @@ in {
     system.activationScripts.yggdrasil = mkIf cfg.persistentKeys ''
       if [ ! -e ${keysPath} ]
       then
-        mkdir -p ${builtins.dirOf keysPath}
+        mkdir --mode=700 -p ${builtins.dirOf keysPath}
         ${binYggdrasil} -genconf -json \
           | ${pkgs.jq}/bin/jq \
               'to_entries|map(select(.key|endswith("Key")))|from_entries' \
           > ${keysPath}
-        chmod 600 ${keysPath}
       fi
     '';
 

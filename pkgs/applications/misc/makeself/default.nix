@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, which }:
+{ lib, stdenv, fetchFromGitHub, which, zstd, pbzip2 }:
 
 stdenv.mkDerivation rec {
   version = "2.4.2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  checkInputs = [ which ];
+  checkInputs = [ which zstd pbzip2 ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/{${pname}-${version},man/man1}}

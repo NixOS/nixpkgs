@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xYwnv30I0+CAx4QODSeMNhdlM2NuM8v4J3rx99NdYCc=";
+    sha256 = "09v0bp9zgwbs4zwcncvfccrna5rnihkhs3l4qy0f1lq8gnzjg365";
   };
 
   propagatedBuildInputs = [

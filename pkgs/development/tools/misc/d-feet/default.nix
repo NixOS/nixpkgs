@@ -7,7 +7,7 @@
 , gtk3
 , python3
 , wrapGAppsHook
-, gnome3
+, gnome
 , libwnck3
 , gobject-introspection
 , gettext
@@ -16,13 +16,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "d-feet";
-  version = "0.3.15";
+  version = "0.3.16";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-feet/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1cgxgpj546jgpyns6z9nkm5k48lid8s36mvzj8ydkjqws2d19zqz";
+    sha256 = "hzPOS5qaVOwYWx2Fv02p2dEQUogqiAdg/2D5d5stHMs=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gtk3
     libwnck3
   ];
@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "dfeet";
       versionPolicy = "none";

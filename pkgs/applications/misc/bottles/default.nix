@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub
 , meson, ninja, pkg-config, wrapGAppsHook
-, desktop-file-utils, gsettings-desktop-schemas, libnotify
+, desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy
 , python3Packages, gettext
 , appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3
 , steam-run-native
@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2.1.1";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "1hbjnd06h0h47gcwb1s1b9py5nwmia1m35da6zydbl70vs75imhn";
+    sha256 = "1izks01010akjf83xvi70dr4yzgk6yr84kd0slzz22yq204pdh5m";
   };
 
   postPatch = ''
@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication rec {
     gsettings-desktop-schemas
     gspell
     gtk3
+    libhandy
     libnotify
   ];
 
@@ -69,9 +70,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";
-    homepage = "https://github.com/bottlesdevs/Bottles";
+    homepage = "https://usebottles.com/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bloomvdomino ];
+    maintainers = with maintainers; [ bloomvdomino shamilton ];
     platforms = platforms.linux;
   };
 }

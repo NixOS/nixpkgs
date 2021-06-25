@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, coreutils }:
+{ lib, stdenv, fetchFromGitHub, coreutils, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "3proxy";
@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     "INSTALL=${coreutils}/bin/install"
     "DESTDIR=${placeholder "out"}"
   ];
+
+  passthru.tests = {
+    smoke-test = nixosTests._3proxy;
+  };
 
   meta = with lib; {
     description = "Tiny free proxy server";

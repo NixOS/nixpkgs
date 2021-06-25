@@ -1,35 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, mock
 , six
+, pytestCheckHook
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "IMAPClient";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "mjs";
     repo = "imapclient";
     rev = version;
-    sha256 = "1zc8qj8ify2zygbz255b6fcg7jhprswf008ccwjmbrnj08kh9l4x";
+    sha256 = "sha256-q/8LFKHgrY3pQV7Coz+5pZAw696uABMTEkYoli6C2KA=";
   };
-
-  # fix test failing in python 36
-  postPatch = ''
-    substituteInPlace tests/test_imapclient.py \
-      --replace "if sys.version_info >= (3, 7):" "if sys.version_info >= (3, 6, 4):"
-  '';
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ mock ];
+  checkInputs = [ pytestCheckHook mock ];
 
   meta = with lib; {
     homepage = "https://imapclient.readthedocs.io";
     description = "Easy-to-use, Pythonic and complete IMAP client library";
     license = licenses.bsd3;
-    maintainers = [ maintainers.almac ];
+    maintainers = with maintainers; [ almac dotlambda ];
   };
 }

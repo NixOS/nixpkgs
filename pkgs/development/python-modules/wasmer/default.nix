@@ -1,13 +1,14 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , buildPythonPackage
+, libiconv
 }:
-let
+
+buildPythonPackage rec {
   pname = "wasmer";
   version = "1.0.0";
-in buildPythonPackage rec {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "wasmerio";
@@ -25,6 +26,8 @@ in buildPythonPackage rec {
   format = "pyproject";
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   buildAndTestSubdir = "packages/api";
 

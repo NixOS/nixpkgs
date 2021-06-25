@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchhg
 , ruamel_base
-, ruamel_ordereddict
+, ruamel_ordereddict ? null
 , isPy3k
 }:
 

@@ -23,7 +23,7 @@ let
   # checking, only whitelist licenses used by notable
   # libcs in nixpkgs (musl and glibc).
   compatible = lib: drv:
-    lib.any (lic: lic == drv.meta.license) [
+    lib.any (lic: lic == (drv.meta.license or {})) [
       lib.licenses.mit        # musl
       lib.licenses.lgpl2Plus  # glibc
     ];
@@ -142,13 +142,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x3paasf4ynx4ddky2nq613vyirbhfnxzkjq148k7154pz3q426s";
+    sha256 = "1817gmxk4v7k5398d2fb6qkwadg0fd980gqmr80wdnppx450ikn7";
   };
 
   outputs = [ "bin" "lib" "man" "doc" "out" ];
@@ -160,6 +160,8 @@ stdenv.mkDerivation rec {
   buildInputs = extraInputs;
 
   configurePhase = ''
+    runHook preConfigure
+
     patchShebangs configure make/*.pl
 
     # configure is executed twice, once to set the extras
@@ -183,6 +185,8 @@ stdenv.mkDerivation rec {
       --module-dir  ${placeholder "lib"}/lib/inspircd \
       --runtime-dir /var/run \
       --script-dir  ${placeholder "bin"}/share/inspircd \
+
+    runHook postConfigure
   '';
 
   postInstall = ''

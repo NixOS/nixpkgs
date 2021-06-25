@@ -46,15 +46,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  # 5.0.3 crashes. Test carefully before updating.
-  # https://github.com/wwmm/pulseeffects/issues/927
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "14ir25q6bws26im6qmj3k6hkfdh5pc6mbvln7wkdwy5dv0vix3cm";
+    sha256 = "1dicvq17vajk3vr4g1y80599ahkw0dp5ynlany1cfljfjz40s8sx";
   };
 
   nativeBuildInputs = [

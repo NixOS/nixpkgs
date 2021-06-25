@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "10rxvxq48dhzlw5p9fsj6x0ci4pap85s9b192zakgvk4h97ifp2p";
   };
 
-  cargoSha256 = "1i58ix414klm72562scqhb0lmy4wgpiksriz5qs4ss7lzvqdsizy";
+  cargoSha256 = "04sx1dsznvh60s2yd9bzbvj6fgjvj37vv33qpww13fyph832i37g";
 
   meta = with lib; {
     description = "Tmuxinator for the i3 window manager";

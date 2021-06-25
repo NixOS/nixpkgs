@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome3, atk, at-spi2-atk, at-spi2-core
-, gtk3, glib, freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
+{ lib, stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome, atk, at-spi2-atk, at-spi2-core
+, gtk3, glib, freetype, dbus, nss, nspr, alsa-lib, cups, expat, udev, makeDesktopItem
 }:
 
 let
@@ -16,7 +16,7 @@ let
     dbus
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     expat
     udev

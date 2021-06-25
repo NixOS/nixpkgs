@@ -3,7 +3,7 @@
 with lib;
 
 qtModule {
-  name = "qttools";
+  pname = "qttools";
   qtInputs = [ qtbase qtdeclarative ];
   outputs = [ "out" "dev" "bin" ];
 

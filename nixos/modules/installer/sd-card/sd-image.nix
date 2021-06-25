@@ -29,6 +29,7 @@ in
   imports = [
     (mkRemovedOptionModule [ "sdImage" "bootPartitionID" ] "The FAT partition for SD image now only holds the Raspberry Pi firmware files. Use firmwarePartitionID to configure that partition's ID.")
     (mkRemovedOptionModule [ "sdImage" "bootSize" ] "The boot files for SD image have been moved to the main ext4 partition. The FAT partition now only holds the Raspberry Pi firmware files. Changing its size may not be required.")
+    ../../profiles/all-hardware.nix
   ];
 
   options.sdImage = {
@@ -126,6 +127,13 @@ in
       '';
     };
 
+    expandOnBoot = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to configure the sd image to expand it's partition on boot.
+      '';
+    };
   };
 
   config = {
@@ -215,7 +223,7 @@ in
       '';
     }) {};
 
-    boot.postBootCommands = ''
+    boot.postBootCommands = lib.mkIf config.sdImage.expandOnBoot ''
       # On the first boot do some maintenance tasks
       if [ -f /nix-path-registration ]; then
         set -euo pipefail

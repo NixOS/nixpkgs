@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyfaidx";
-  version = "0.5.9.2";
+  version = "0.5.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "73e740eaa45c097a09e543450f88d5ed06c0ece4b6936dad7e71077f67797b74";
+    sha256 = "9965644c5bd62bedc0ff7f336cbb2baef6406a36b4ec5c786b199872ce46192b";
   };
 
   propagatedBuildInputs = [ six ];

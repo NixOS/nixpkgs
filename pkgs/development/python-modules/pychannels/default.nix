@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pychannels";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "fancybits";
     repo = pname;
     rev = version;
-    sha256 = "0dqc0vhf6c5r3g7nfbpa668x6z2zxrznk6h907s6sxkq4sbqnhqf";
+    sha256 = "sha256-E+VL4mJ2KxS5bJZc3Va+wvyVjT55LJz+1wHkxDRa85s=";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -1,20 +1,30 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr";
-  version = "0.5.0";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f4gmlqzgw1r8n0w9dr9lpsn94f2hlnak9bbq5xgf6jwgc9mwqzg";
+    sha256 = "sha256-UYcJtBwbUDqDiRoj5PmO+urURfd7S7fSx2XhQRBrKTE=";
   };
 
-  cargoSha256 = "16d4dywwkgvvxw6ninrx87rqhx0whdq3yy01m27qjy4gz6z6ad8p";
+  cargoSha256 = "sha256-xDQV8wVlzItz0lzR1nVRPVsg7nSf/khUhevDlGgSO3g=";
 
-  # Most tests fail (at least some due to directory permissions)
-  doCheck = false;
+  nativeBuildInputs = [ installShellFiles shared-mime-info ];
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
+
+  preCheck = ''
+    export HOME=$TEMPDIR
+  '';
+
+  postInstall = ''
+    installShellCompletion \
+      --zsh  completions/_handlr \
+      --fish completions/handlr.fish
+  '';
 
   meta = with lib; {
     description = "Alternative to xdg-open to manage default applications with ease";

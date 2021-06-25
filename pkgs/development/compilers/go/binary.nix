@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.hostPlatform.isDarwin;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/go $out/bin
     mv bin/* $out/bin
     cp -r . $out/share/go
@@ -37,5 +38,6 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       $out/bin/go
     '')}
-  '' ;
+    runHook postInstall
+  '';
 }

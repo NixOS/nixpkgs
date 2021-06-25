@@ -7,7 +7,7 @@
 , wrapGAppsHook
 , at-spi2-core
 , atk
-, alsaLib
+, alsa-lib
 , cairo
 , cups
 , dbus
@@ -19,6 +19,7 @@
 , gtk3-x11
 , libudev0-shim
 , libuuid
+, mesa
 , nss
 , nspr
 , xorg
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = with xorg; [
     at-spi2-core
     atk
-    alsaLib
+    alsa-lib
     autoPatchelfHook
     cairo
     cups.lib
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
     glib
     pango
     gtk3-x11
+    mesa
     nss
     nspr
     libuuid

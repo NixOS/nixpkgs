@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, python3, sassc, glib, gdk-pixbuf, inkscape, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  version = "20200910";
   pname = "numix-solarized-gtk-theme";
+  version = "20210522";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
-    repo = "numix-solarized-gtk-theme";
+    repo = pname;
     rev = version;
-    sha256 = "05h1563sy6sfz76jadxsf730mav6bbjsk9xnadv49r16b8n8p9a9";
+    sha256 = "0hin73fmfir4w1z0j87k5hahhf2blhcq4r7gf89gz4slnl18cvjh";
   };
 
   nativeBuildInputs = [ python3 sassc glib gdk-pixbuf inkscape ];
@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
   buildPhase = "true";
 
   installPhase = ''
-    HOME="$NIX_BUILD_ROOT"  # shut up inkscape's warnings
+    runHook preInstall
     for theme in *.colors; do
       make THEME="''${theme/.colors/}" install
     done
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Ferdi265/numix-solarized-gtk-theme";
     downloadPage = "https://github.com/Ferdi265/numix-solarized-gtk-theme/releases";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.offline ];
   };

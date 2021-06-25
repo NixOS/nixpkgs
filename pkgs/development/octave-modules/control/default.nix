@@ -7,11 +7,11 @@
 
 buildOctavePackage rec {
   pname = "control";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0gjyjsxs01x0nyc4cgn3d5af17l3lzs8h4hsm57nxd3as48dbwgs";
+    sha256 = "1yksifligq2z3siqw701iq2ydgnj7pnkcw42bfmydcf6fc4drlvy";
   };
 
   nativeBuildInputs = [

@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, pkg-config, gettext, glib, libcanberra-gtk3,
-  libnotify, libwnck3, gtk3, libxml2, wrapGAppsHook }:
+  libnotify, libwnck3, gtk3, libxml2, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-notification-daemon";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ybzr8mni5pgrspf8hqnisd0r0hwdlgk7n5mzsh7xisbkgivpw2b";
+    sha256 = "02mf9186cbziyvz7ycb0j9b7rn085a7f9hrm03n28q5kz0z1k92q";
   };
 
   nativeBuildInputs = [
@@ -28,10 +28,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "Notification daemon for MATE Desktop";
     homepage = "https://github.com/mate-desktop/mate-notification-daemon";
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Plus gpl3Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

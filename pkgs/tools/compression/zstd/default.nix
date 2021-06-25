@@ -36,13 +36,15 @@ stdenv.mkDerivation rec {
       tests/playTests.sh
   '';
 
-  cmakeFlags = [
-    "-DZSTD_BUILD_SHARED:BOOL=${if (!static) then "ON" else "OFF"}"
-    "-DZSTD_BUILD_STATIC:BOOL=${if static then "ON" else "OFF"}"
-    "-DZSTD_PROGRAMS_LINK_SHARED:BOOL=${if (!static) then "ON" else "OFF"}"
-    "-DZSTD_LEGACY_SUPPORT:BOOL=${if legacySupport then "ON" else "OFF"}"
-    "-DZSTD_BUILD_TESTS:BOOL=ON"
-  ];
+  cmakeFlags = lib.attrsets.mapAttrsToList
+    (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
+      BUILD_SHARED = !static;
+      BUILD_STATIC = static;
+      PROGRAMS_LINK_SHARED = !static;
+      LEGACY_SUPPORT = legacySupport;
+      BUILD_TESTS = doCheck;
+    };
+
   cmakeDir = "../build/cmake";
   dontUseCmakeBuildDir = true;
   preConfigure = ''
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [ file ];
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkPhase = ''
     runHook preCheck
     # Patch shebangs for playTests

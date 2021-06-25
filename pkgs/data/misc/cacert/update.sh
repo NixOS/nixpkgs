@@ -12,6 +12,14 @@
 #
 # As of this writing there are a few magnitudes more packages depending on
 # cacert than on nss.
+#
+# If the current nixpkgs revision contains the attribute `nss_latest` that will
+# be used instead of `nss`. This is done to help the stable branch maintenance
+# where (usually) after branch-off during the first Firefox upgrade that
+# requries a new NSS version that attribute is introduced.
+# By having this change in the unstable branch we can safely carry it from
+# release to release without requiring more backport churn on those doing the
+# stable maintenance.
 
 
 set -ex
@@ -20,7 +28,7 @@ BASEDIR="$(dirname "$0")/../../../.."
 
 
 CURRENT_PATH=$(nix-build --no-out-link -A cacert.out)
-PATCHED_PATH=$(nix-build --no-out-link -E "with import $BASEDIR {}; (cacert.overrideAttrs (_: { inherit (nss) src version; })).out")
+PATCHED_PATH=$(nix-build --no-out-link -E "with import $BASEDIR {}; let nss_pkg = pkgs.nss_latest or pkgs.nss; in (cacert.overrideAttrs (_: { inherit (nss_pkg) src version; })).out")
 
 # Check the hash of the etc subfolder
 # We can't check the entire output as that contains the nix-support folder

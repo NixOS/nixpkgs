@@ -1,0 +1,21 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p curl nix
+set -euxo pipefail
+
+export NIXPKGS_ALLOW_BROKEN=1
+
+# This script piggybacks on the automatic code generation done by the nix-community emacs overlay
+# You can use this to avoid running lengthy code generation jobs locally
+
+curl -s -O https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos/elpa/elpa-generated.nix
+nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages --show-trace
+git diff --exit-code elpa-generated.nix > /dev/null || git commit -m "emacs.pkgs.elpa-packages: $(date --iso)" -- elpa-generated.nix
+
+curl -s -O https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos/org/org-generated.nix
+nix-instantiate ../../../../../ -A emacs.pkgs.orgPackages --show-trace
+git diff --exit-code org-generated.nix > /dev/null || git commit -m "emacs.pkgs.org-packages: $(date --iso)" -- org-generated.nix
+
+curl -s -O https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos/melpa/recipes-archive-melpa.json
+nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
+nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
+git diff --exit-code recipes-archive-melpa.json > /dev/null || git commit -m "emacs.pkgs.melpa-packages: $(date --iso)" -- recipes-archive-melpa.json

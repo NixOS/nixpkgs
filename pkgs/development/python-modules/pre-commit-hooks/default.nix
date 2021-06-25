@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
-  version = "3.3.0";
+  version = "3.4.0";
   disabled = isPy27;
 
   # fetchPypi does not provide tests
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1sppwcqsbr9gv2cpjslngcbggsxvdr84zgrin94yjr40jgkjzdpq";
+    sha256 = "1aqkmprdc2lhds9c59pkkf2js65j63197flanaggk7cm8k0kz7zs";
   };
 
   propagatedBuildInputs = [ toml ruamel_yaml ];

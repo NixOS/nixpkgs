@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, pkg-config, gettext, xtrans, dbus-glib, systemd,
   libSM, libXtst, gtk3, epoxy, polkit, hicolor-icon-theme, mate,
-  wrapGAppsHook, fetchpatch
+  wrapGAppsHook, fetchpatch, mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-session-manager";
-  version = "1.24.1";
+  version = "1.24.3";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1zwq8symyp3ijs28pyrknsdi9byf4dpp9wp93ndwdhi0vaip5i51";
+    sha256 = "18mhv8dq18hvx28gi88c9499s3s1nsq55m64sas8fqlvnp2sx84h";
   };
 
   patches = [
@@ -43,16 +43,17 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/xsessions/mate.desktop \
-      --replace "Exec=mate-session" "Exec=$out/bin/mate-session" \
-      --replace "TryExec=mate-session" "TryExec=$out/bin/mate-session"
+      --replace "Exec=mate-session" "Exec=$out/bin/mate-session"
   '';
 
   passthru.providedSessions = [ "mate" ];
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "MATE Desktop session manager";
     homepage = "https://github.com/mate-desktop/mate-session-manager";
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

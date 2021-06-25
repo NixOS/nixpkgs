@@ -1,7 +1,8 @@
 { buildDunePackage, conduit-lwt
-, ppx_sexp_conv, sexplib, cstruct, mirage-stack, mirage-flow
+, ppx_sexp_conv, sexplib, uri, cstruct, mirage-stack, mirage-flow
 , mirage-flow-combinators, mirage-random, mirage-time, mirage-clock
 , dns-client, vchan, xenstore, tls, tls-mirage, ipaddr, ipaddr-sexp
+, tcpip, ca-certs-nss
 }:
 
 buildDunePackage {
@@ -12,10 +13,10 @@ buildDunePackage {
   nativeBuildInputs = [ ppx_sexp_conv ];
 
   propagatedBuildInputs = [
-    sexplib cstruct mirage-stack mirage-clock mirage-flow
+    sexplib uri cstruct mirage-stack mirage-clock mirage-flow
     mirage-flow-combinators mirage-random mirage-time
     dns-client conduit-lwt vchan xenstore tls tls-mirage
-    ipaddr ipaddr-sexp
+    ipaddr ipaddr-sexp tcpip ca-certs-nss
   ];
 
   meta = conduit-lwt.meta // {

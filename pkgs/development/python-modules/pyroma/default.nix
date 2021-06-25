@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pyroma";
-  version = "2.6.1";
+  version = "3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2527423e3a24ccd56951f3ce1b0ebbcc4fa0518c82fca882e696c78726ab9c2f";
+    sha256 = "45ad8201da9a813b5597bb85c80bbece93af9ec89170fc2be5ad85fa9463cef1";
   };
 
   postPatch = ''

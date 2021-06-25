@@ -3,12 +3,13 @@
 , flit
 , isPy3k
 , toml
+, pytestCheckHook
+, testpath
 }:
 
 buildPythonPackage rec {
   pname = "flit-core";
-  version = "2.3.0";
-  disabled = !isPy3k;
+  version = "3.2.0";
   format = "pyproject";
 
   inherit (flit) src patches;
@@ -19,6 +20,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     toml
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    testpath
   ];
 
   passthru.tests = {

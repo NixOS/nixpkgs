@@ -28,6 +28,17 @@ let newPython = python3.override {
         sha256 = "18hpzh1am1dqx81fypn57r2wk565fi4g14292qrc5jm1h9dalzld";
       };
     });
+    # https://github.com/conan-io/conan/issues/8876
+    pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
+      version = "1.7.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
+      };
+      disabledTests = [
+        "test_ec_verify_should_return_false_if_signature_invalid"
+      ];
+    });
   };
 };
 

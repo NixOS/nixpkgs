@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "09xffklpz62h6yiksxdlv3a9s1z0wr3ax9syl399avwdmq3c0y49";
   };
 
-  cargoSha256 = "0rczas6sgcppacz48xx7sarkvc4s2sgcdz6c661d7vcry1y46xms";
+  cargoSha256 = "0fmz3q3yadymbqnkdhjd2z2g4zgf3z81ccixwywndd9zb7p47zdr";
 
   nativeBuildInputs = [ python3 pkg-config ];
   buildInputs = [ cairo libxkbcommon xorg.xcbutilkeysyms ];

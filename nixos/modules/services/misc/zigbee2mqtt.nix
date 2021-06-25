@@ -5,29 +5,17 @@ with lib;
 let
   cfg = config.services.zigbee2mqtt;
 
-  configJSON = pkgs.writeText "configuration.json"
-    (builtins.toJSON (recursiveUpdate defaultConfig cfg.config));
-  configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
-    ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
-  '';
+  format = pkgs.formats.yaml { };
+  configFile = format.generate "zigbee2mqtt.yaml" cfg.settings;
 
-  # the default config contains all required settings,
-  # so the service starts up without crashing.
-  defaultConfig = {
-    homeassistant = false;
-    permit_join = false;
-    mqtt = {
-      base_topic = "zigbee2mqtt";
-      server = "mqtt://localhost:1883";
-    };
-    serial.port = "/dev/ttyACM0";
-    # put device configuration into separate file because configuration.yaml
-    # is copied from the store on startup
-    devices = "devices.yaml";
-  };
 in
 {
-  meta.maintainers = with maintainers; [ sweber ];
+  meta.maintainers = with maintainers; [ sweber hexa ];
+
+  imports = [
+    # Remove warning before the 21.11 release
+    (mkRenamedOptionModule [ "services" "zigbee2mqtt" "config" ] [ "services" "zigbee2mqtt" "settings" ])
+  ];
 
   options.services.zigbee2mqtt = {
     enable = mkEnableOption "enable zigbee2mqtt service";
@@ -37,7 +25,11 @@ in
       default = pkgs.zigbee2mqtt.override {
         dataDir = cfg.dataDir;
       };
-      defaultText = "pkgs.zigbee2mqtt";
+      defaultText = literalExample ''
+        pkgs.zigbee2mqtt {
+          dataDir = services.zigbee2mqtt.dataDir
+        }
+      '';
       type = types.package;
     };
 
@@ -47,9 +39,9 @@ in
       type = types.path;
     };
 
-    config = mkOption {
+    settings = mkOption {
+      type = format.type;
       default = {};
-      type = with types; nullOr attrs;
       example = literalExample ''
         {
           homeassistant = config.services.home-assistant.enable;
@@ -61,11 +53,28 @@ in
       '';
       description = ''
         Your <filename>configuration.yaml</filename> as a Nix attribute set.
+        Check the <link xlink:href="https://www.zigbee2mqtt.io/information/configuration.html">documentation</link>
+        for possible options.
       '';
     };
   };
 
   config = mkIf (cfg.enable) {
+
+    # preset config values
+    services.zigbee2mqtt.settings = {
+      homeassistant = mkDefault config.services.home-assistant.enable;
+      permit_join = mkDefault false;
+      mqtt = {
+        base_topic = mkDefault "zigbee2mqtt";
+        server = mkDefault "mqtt://localhost:1883";
+      };
+      serial.port = mkDefault "/dev/ttyACM0";
+      # reference device configuration, that is kept in a separate file
+      # to prevent it being overwritten in the units ExecStartPre script
+      devices = mkDefault "devices.yaml";
+    };
+
     systemd.services.zigbee2mqtt = {
       description = "Zigbee2mqtt Service";
       wantedBy = [ "multi-user.target" ];
@@ -76,10 +85,48 @@ in
         User = "zigbee2mqtt";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        DeviceAllow = [
+          config.services.zigbee2mqtt.settings.serial.port
+        ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = false;
+        NoNewPrivileges = true;
+        PrivateDevices = false; # prevents access to /dev/serial, because it is set 0700 root:root
+        PrivateUsers = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
         ProtectSystem = "strict";
         ReadWritePaths = cfg.dataDir;
-        PrivateTmp = true;
         RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SupplementaryGroups = [
+          "dialout"
+        ];
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "0077";
       };
       preStart = ''
         cp --no-preserve=mode ${configFile} "${cfg.dataDir}/configuration.yaml"
@@ -90,7 +137,6 @@ in
       home = cfg.dataDir;
       createHome = true;
       group = "zigbee2mqtt";
-      extraGroups = [ "dialout" ];
       uid = config.ids.uids.zigbee2mqtt;
     };
 

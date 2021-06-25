@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchurl, boost, zlib, botan, libidn
-, lua, pcre, sqlite, perl, pkg-config, expect
+{ lib, stdenv, fetchurl, fetchFromGitHub, boost, zlib, botan2, libidn
+, lua, pcre, sqlite, perl, pkg-config, expect, less
 , bzip2, gmp, openssl
+, autoreconfHook, texinfo
 }:
 
 let
-  version = "1.1";
+  version = "1.1-unstable-2021-05-01";
   perlVersion = lib.getVersion perl;
 in
 
@@ -14,22 +15,41 @@ stdenv.mkDerivation rec {
   pname = "monotone";
   inherit version;
 
-  src = fetchurl {
-    url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.bz2";
-    sha256 = "124cwgi2q86hagslbk5idxbs9j896rfjzryhr6z63r6l485gcp7r";
+  #  src = fetchurl {
+  #    url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.bz2";
+  #    sha256 = "124cwgi2q86hagslbk5idxbs9j896rfjzryhr6z63r6l485gcp7r";
+  #  };
+
+  # My mirror of upstream Monotone repository
+  # Could fetchmtn, but circular dependency; snapshot requested
+  # https://lists.nongnu.org/archive/html/monotone-devel/2021-05/msg00000.html
+  src = fetchFromGitHub {
+    owner = "7c6f434c";
+    repo = "monotone-mirror";
+    rev = "b30b0e1c16def043d2dad57d1467d5bfdecdb070";
+    hash = "sha256:1hfy8vaap3184cd7h3qhz0da7c992idkc6q2nz9frhma45c5vgmd";
   };
 
   patches = [ ./monotone-1.1-Adapt-to-changes-in-pcre-8.42.patch ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ boost zlib botan libidn lua pcre sqlite expect
-    openssl gmp bzip2 ];
+  postPatch = ''
+    sed -e 's@/usr/bin/less@${less}/bin/less@' -i src/unix/terminal.cc
+  '';
+
+  nativeBuildInputs = [ pkg-config autoreconfHook texinfo ];
+  buildInputs = [ boost zlib botan2 libidn lua pcre sqlite expect
+    openssl gmp bzip2 perl ];
 
   postInstall = ''
     mkdir -p $out/share/${pname}-${version}
     cp -rv contrib/ $out/share/${pname}-${version}/contrib
     mkdir -p $out/${perl.libPrefix}/${perlVersion}
     cp -v contrib/Monotone.pm $out/${perl.libPrefix}/${perlVersion}
+
+    patchShebangs "$out/share/monotone"
+    patchShebangs "$out/share/${pname}-${version}"
+
+    find "$out"/share/{doc/monotone,${pname}-${version}}/contrib/ -type f | xargs sed -e 's@! */usr/bin/@!/usr/bin/env @; s@! */bin/bash@!/usr/bin/env bash@' -i
   '';
 
   #doCheck = true; # some tests fail (and they take VERY long)
@@ -38,6 +58,6 @@ stdenv.mkDerivation rec {
     description = "A free distributed version control system";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

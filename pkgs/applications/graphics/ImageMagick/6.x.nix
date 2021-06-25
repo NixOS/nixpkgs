@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
-, ApplicationServices
+, ApplicationServices, Foundation
 }:
 
 let
@@ -9,20 +9,20 @@ let
     if stdenv.hostPlatform.system == "i686-linux" then "i686"
     else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
+    else if stdenv.hostPlatform.system == "aarch64-linux"  || stdenv.hostPlatform.system == "aarch64-darwin" then "aarch64"
     else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
-    else throw "ImageMagick is not supported on this platform.";
+    else null;
 in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "6.9.12-3";
+  version = "6.9.12-16";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
     rev = version;
-    sha256 = "sha256-h9c0N9AcFVpNYpKl+95q1RVJWuacN4N4kbAJIKJp8Jc=";
+    sha256 = "sha256-kg8vt88G6huRbJlVYztKxHiFPhGz/QHuNKtbhmai790=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-frozenpaths" ]
-    ++ [ "--with-gcc-arch=${arch}" ]
+    ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
     ++ lib.optional (librsvg != null) "--with-rsvg"
     ++ lib.optionals (ghostscript != null)
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
@@ -50,7 +50,8 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
-    ++ lib.optional stdenv.isDarwin ApplicationServices;
+    ++ lib.optionals stdenv.isDarwin
+      [ ApplicationServices Foundation ];
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 fftw ]

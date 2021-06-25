@@ -2,7 +2,7 @@
 , fetchurl
 , fetchpatch
 , gnome-icon-theme
-, gnome3
+, gnome
 , gtk-engine-murrine
 , gtk3
 , hicolor-icon-theme
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     gnome-icon-theme
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     humanity-icon-theme
     hicolor-icon-theme
   ];

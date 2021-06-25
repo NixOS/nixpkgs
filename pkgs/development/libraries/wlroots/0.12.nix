@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dlogind-provider=systemd" "-Dlibseat=disabled" ];
 
+  CFLAGS = "-Wno-error=deprecated-declarations";
+
   postFixup = ''
     # Install ALL example programs to $examples:
     # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle

@@ -2,15 +2,14 @@
 
 buildGoModule rec {
   pname = "chroma";
-  version = "0.8.2";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner  = "alecthomas";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0vzxd0jvjaakwjvkkkjppakjb00z44k7gb5ng1i4924agh24n5ka";
+    sha256 = "sha256-+4UaQrJh3PBf68rlW1lOEyEVw3vWxfc+Casa5+H8F9A=";
     leaveDotGit = true;
-    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ git ];
@@ -27,7 +26,7 @@ buildGoModule rec {
       --replace 'date    = "?"' "date = \"$date\""
   '';
 
-  vendorSha256 = "16cnc4scgkx8jan81ymha2q1kidm6hzsnip5mmgbxpqcc2h7hv9m";
+  vendorSha256 = "0y8mp08zccn9qxrsj9j7vambz8dwzsxbbgrlppzam53rg8rpxhrg";
 
   subPackages = [ "cmd/chroma" ];
 

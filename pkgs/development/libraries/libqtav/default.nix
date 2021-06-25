@@ -2,7 +2,7 @@
 , qtbase, qtmultimedia, qtquick1, qttools
 , libGL, libX11
 , libass, openal, ffmpeg, libuchardet
-, alsaLib, libpulseaudio, libva
+, alsa-lib, libpulseaudio, libva
 }:
 
 with lib;
@@ -16,7 +16,7 @@ mkDerivation rec {
     qtbase qtmultimedia qtquick1
     libGL libX11
     libass openal ffmpeg libuchardet
-    alsaLib libpulseaudio libva
+    alsa-lib libpulseaudio libva
   ];
 
   src = fetchFromGitHub {

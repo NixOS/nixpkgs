@@ -15,6 +15,7 @@
 , glib-networking
 , sqlite
 , libsoup
+, libgdata
 , gtk3
 , pantheon /* granite, icons, maintainers */
 , webkitgtk
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     pantheon.granite
     sqlite
     webkitgtk
+    libgdata # required by some dependency transitively
   ];
 
   postPatch = ''

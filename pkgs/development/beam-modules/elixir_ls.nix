@@ -9,12 +9,12 @@ mixRelease rec {
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
-    rev = "v{version}";
+    rev = "v${version}";
     sha256 = "0d0hqc35hfjkpm88vz21mnm2a9rxiqfrdi83whhhh6d2ba216b7s";
     fetchSubmodules = true;
   };
 
-  mixDeps = fetchMixDeps {
+  mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
     sha256 = "0r9x223imq4j9pn9niskyaybvk7jmq8dxcyzk7kwfsi128qig1a1";

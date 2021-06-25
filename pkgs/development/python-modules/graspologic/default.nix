@@ -8,7 +8,7 @@
 , matplotlib
 , networkx
 , numpy
-, scikitlearn
+, scikit-learn
 , scipy
 , seaborn
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     matplotlib
     networkx
     numpy
-    scikitlearn
+    scikit-learn
     scipy
     seaborn
   ];

@@ -1,11 +1,10 @@
 {
-  mkDerivation, lib, propagate,
+  mkDerivation, propagate,
   extra-cmake-modules, kcoreaddons, polkit-qt, qttools
 }:
 
 mkDerivation {
   name = "kauth";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ polkit-qt qttools ];
   propagatedBuildInputs = [ kcoreaddons ];

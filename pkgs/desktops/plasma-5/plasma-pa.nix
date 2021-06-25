@@ -17,5 +17,4 @@ mkDerivation {
 
     qtbase qtdeclarative
   ];
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
 }

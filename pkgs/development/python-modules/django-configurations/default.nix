@@ -9,7 +9,7 @@
 , django-cache-url
 , six
 , django
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "9e3bcea1355ac50a4c9f854f751d214cb17e5f8adf18405a4488d0a1e8945915";
   };
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
   checkInputs = [ django-discover-runner mock dj-database-url dj-email-url dj-search-url django-cache-url ];
 

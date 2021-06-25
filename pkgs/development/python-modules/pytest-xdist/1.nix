@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage, execnet, pytest
-, setuptools_scm, pytest-forked, filelock, psutil, six, isPy3k }:
+, setuptools-scm, pytest-forked, filelock, psutil, six, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1vh4ps32lp5ignch5adbl3pgchvigdfmrl6qpmhxih54wa1qw3il";
   };
 
-  nativeBuildInputs = [ setuptools_scm pytest ];
+  nativeBuildInputs = [ setuptools-scm pytest ];
   checkInputs = [ pytest filelock ];
   propagatedBuildInputs = [ execnet pytest-forked psutil six ];
 

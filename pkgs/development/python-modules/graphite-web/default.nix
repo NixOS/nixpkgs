@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , django
 , memcached
 , txamqp
@@ -9,7 +11,6 @@
 , cairocffi
 , whisper
 , whitenoise
-, scandir
 , urllib3
 , six
 }:
@@ -27,6 +28,12 @@ buildPythonPackage rec {
     ./update-django-tagging.patch
   ];
 
+  postPatch = ''
+    # https://github.com/graphite-project/graphite-web/pull/2701
+    substituteInPlace setup.py \
+      --replace "'scandir'" "'scandir; python_version < \"3.5\"'"
+  '';
+
   propagatedBuildInputs = [
     django
     memcached
@@ -38,7 +45,6 @@ buildPythonPackage rec {
     cairocffi
     whisper
     whitenoise
-    scandir
     urllib3
     six
   ];

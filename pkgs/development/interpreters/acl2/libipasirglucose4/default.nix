@@ -1,6 +1,11 @@
 { lib, stdenv, fetchurl, zlib, unzip }:
 
-stdenv.mkDerivation rec {
+let
+
+  cxx = "${stdenv.cc.targetPrefix}c++";
+  libName = "libipasirglucose4" + stdenv.targetPlatform.extensions.sharedLibrary;
+
+in stdenv.mkDerivation rec {
   pname = "libipasirglucose4";
   # This library has no version number AFAICT (beyond generally being based on
   # Glucose 4.x), but it was submitted to the 2017 SAT competition so let's use
@@ -18,13 +23,16 @@ stdenv.mkDerivation rec {
   sourceRoot = "sat/glucose4";
   patches = [ ./0001-Support-shared-library-build.patch ];
 
+  makeFlags = [ "CXX=${cxx}" ];
+
   postBuild = ''
-    g++ -shared -Wl,-soname,libipasirglucose4.so -o libipasirglucose4.so \
+    ${cxx} -shared -o ${libName} \
+        ${if stdenv.cc.isClang then "" else "-Wl,-soname,${libName}"} \
         ipasirglucoseglue.o libipasirglucose4.a
   '';
 
   installPhase = ''
-    install -D libipasirglucose4.so $out/lib/libipasirglucose4.so
+    install -D ${libName} $out/lib/${libName}
   '';
 
   meta = with lib; {

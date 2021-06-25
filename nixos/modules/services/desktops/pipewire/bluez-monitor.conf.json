@@ -9,7 +9,7 @@
       ],
       "actions": {
         "update-props": {
-          "bluez5.reconnect-profiles": [
+          "bluez5.auto-connect": [
             "hfp_hf",
             "hsp_hs",
             "a2dp_sink"

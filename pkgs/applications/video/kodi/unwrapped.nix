@@ -6,7 +6,7 @@
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
 , gtest, ncurses, spdlog
 , libxml2, systemd
-, alsaLib, libGLU, libGL, fontconfig, freetype, ftgl
+, alsa-lib, libGLU, libGL, fontconfig, freetype, ftgl
 , libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
@@ -38,15 +38,15 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20210219";
-  kodiVersion = "19.0";
+  kodiReleaseDate = "20210508";
+  kodiVersion = "19.1";
   rel = "Matrix";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "097dg6a7v4ia85jx1pmlpwzdpqcqxlrmniqd005q73zvgj67zc2p";
+    sha256 = "0jh67vw3983lnfgqzqfislawwbpq0vxxk1ljsg7mar06mlwfxb7h";
   };
 
   ffmpeg = stdenv.mkDerivation rec {
@@ -114,7 +114,7 @@ in stdenv.mkDerivation {
       gettext pcre-cpp yajl fribidi libva libdrm
       openssl gperf tinyxml2 taglib libssh
       gtest ncurses spdlog
-      alsaLib libGL libGLU fontconfig freetype ftgl
+      alsa-lib libGL libGLU fontconfig freetype ftgl
       libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
@@ -127,6 +127,7 @@ in stdenv.mkDerivation {
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fmt fstrcmp rapidjson
       lirc
+      mesa # for libEGL
     ]
     ++ lib.optional x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp

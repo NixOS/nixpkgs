@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dyndnsc";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    hash = "sha256-Sy6U0XhIQ9mPmznmWKqoyqE34vaE84fwlivouaF7Dd0=";
+    sha256 = "13078d29eea2f9a4ca01f05676c3309ead5e341dab047e0d51c46f23d4b7fbb4";
   };
 
   postPatch = ''
@@ -19,9 +19,10 @@ python3Packages.buildPythonApplication rec {
     dnspython
     netifaces
     requests
+    json-logging
     setuptools
   ];
-  checkInputs = with python3Packages; [ bottle pytestCheckHook ];
+  checkInputs = with python3Packages; [ bottle mock pytest-console-scripts pytestCheckHook ];
 
   disabledTests = [
     # dnswanip connects to an external server to discover the

@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , fonttools
 , lxml, fs # for fonttools extras
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook, pytestcov, pytest_xdist
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sed -i '/setup(/a \     version="${version}",' setup.py
   '';
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ fonttools lxml fs ];
 

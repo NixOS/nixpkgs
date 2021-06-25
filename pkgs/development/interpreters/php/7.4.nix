@@ -1,11 +1,9 @@
-{ callPackage, lib, stdenv, nixosTests, ... }@_args:
+{ callPackage, lib, stdenv, ... }@_args:
 
 let
-  generic = (import ./generic.nix) _args;
-
-  base = callPackage generic (_args // {
-    version = "7.4.16";
-    sha256 = "0gnfb4vaj71fiap0q9lk6vs1xs7l6sha60isw6aaw3zxgh00ywc5";
+  base = callPackage ./generic.nix (_args // {
+    version = "7.4.20";
+    sha256 = "0d5ncz97y0271dsmz269wl4721vhq2fn6pmm9rxglc756p36pnha";
   });
 
 in base.withExtensions ({ all, ... }: with all; ([

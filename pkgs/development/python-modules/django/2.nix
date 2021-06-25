@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "2.2.19";
+  version = "2.2.22";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hysjf8bz4g8xrn2cdx6pmawimpyr6ag2fg3jxsnc1byr3g3bhih";
+    sha256 = "db2214db1c99017cbd971e58824e6f424375154fe358afc30e976f5b99fc6060";
   };
 
   patches = lib.optional withGdal

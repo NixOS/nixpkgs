@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+  CFLAGS = lib.optionals stdenv.isDarwin [
+    "-D_DARWIN_C_SOURCE"
+  ];
+
   postPatch = ''
     substituteInPlace config.mk \
       --replace curses ncurses \

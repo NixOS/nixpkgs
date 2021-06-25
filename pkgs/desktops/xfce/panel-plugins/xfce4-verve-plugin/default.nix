@@ -12,7 +12,7 @@ mkXfceDerivation {
   pname = "xfce4-verve-plugin";
   version = "2.0.1";
   rev-prefix = "";
-  sha256 = "YwUOSTZMoHsWWmi/ajQv/fX8a0IJoc3re3laVEmnX/M=";
+  sha256 = "sha256-YwUOSTZMoHsWWmi/ajQv/fX8a0IJoc3re3laVEmnX/M=";
 
   buildInputs = [ gtk3 libxfce4ui pcre libxfce4util xfce4-panel ];
 

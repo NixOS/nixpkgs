@@ -4,36 +4,26 @@
 , python3Packages
 , gnupg
 , pass
+, makeWrapper
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pass-import";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-import";
     rev = "v${version}";
-    sha256 = "sha256-nH2xAqWfMT+Brv3z9Aw6nbvYqArEZjpM28rKsRPihqA=";
+    sha256 = "0hrpg7yiv50xmbajfy0zdilsyhbj5iv0qnlrgkfv99q1dvd5qy56";
   };
-
-  # by default, tries to install scripts/pimport, which is a bash wrapper around "python -m pass_import ..."
-  # This is a better way to do the same, and takes advantage of the existing Nix python environments
-  patches = [
-    # from https://github.com/roddhjav/pass-import/pull/138
-    (fetchpatch {
-      name = "pass-import-pr-138-pimport-entrypoint.patch";
-      url = "https://github.com/roddhjav/pass-import/commit/ccdb6995bee6436992dd80d7b3101f0eb94c59bb.patch";
-      sha256 = "sha256-CO8PyWxa4eLuTQBB+jKTImFPlPn+1yt6NBsIp+SPk94=";
-    })
-  ];
 
   propagatedBuildInputs = with python3Packages; [
     cryptography
     defusedxml
     pyaml
     pykeepass
-    python_magic  # similar API to "file-magic", but already in nixpkgs.
+    python_magic # similar API to "file-magic", but already in nixpkgs.
     secretstorage
   ];
 
@@ -46,6 +36,17 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     "test_import_gnome_keyring" # requires dbus, which pytest doesn't support
   ];
+
+  postInstall = ''
+    mkdir -p $out/lib/password-store/extensions
+    cp ${src}/import.bash $out/lib/password-store/extensions/import.bash
+    wrapProgram $out/lib/password-store/extensions/import.bash \
+      --prefix PATH : "${python3Packages.python.withPackages (_: propagatedBuildInputs)}/bin" \
+      --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}" \
+      --run "export PREFIX"
+    cp -r ${src}/share $out/
+  '';
+
   postCheck = ''
     $out/bin/pimport --list-exporters --list-importers
   '';

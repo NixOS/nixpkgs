@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "myxer";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "Aurailus";
     repo = pname;
     rev = version;
-    sha256 = "10m5qkys96n4v6qiffdiy0w660yq7b5sa70ww2zskc8d0gbmxp6x";
+    sha256 = "0bnhpzmx4yyasv0j7bp31q6jm20p0qwcia5bzmpkz1jhnc27ngix";
   };
 
-  cargoSha256 = "0nsscdjl5fh24sg87vdmijjmlihc0zk0p3vac701v60xlz55qipn";
+  cargoSha256 = "1cyh0nk627sgyr78rcnhj7af5jcahvjkiv5sz7xwqfdhvx5kqsk5";
 
   nativeBuildInputs = [ pkg-config ];
 

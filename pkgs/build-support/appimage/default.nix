@@ -61,7 +61,7 @@ rec {
     targetPkgs = pkgs: with pkgs; [
       gtk3
       bashInteractive
-      gnome3.zenity
+      gnome.zenity
       python2
       xorg.xrandr
       which
@@ -171,7 +171,7 @@ rec {
       librsvg
       xorg.libXft
       libvdpau
-      alsaLib
+      alsa-lib
 
       harfbuzz
       e2fsprogs

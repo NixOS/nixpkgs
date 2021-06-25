@@ -78,6 +78,14 @@ fi
 
 extraAfter+=($NIX_LDFLAGS_AFTER_@suffixSalt@)
 
+# These flags *must not* be pulled up to -Wl, flags, so they can't go in
+# add-flags.sh. They must always be set, so must not be disabled by
+# NIX_LDFLAGS_SET.
+if [ -e @out@/nix-support/add-local-ldflags-before.sh ]; then
+    source @out@/nix-support/add-local-ldflags-before.sh
+fi
+
+
 # Specify the target emulation if nothing is passed in ("-m" overrides this
 # environment variable). Ensures we never blindly fallback on targeting the host
 # platform.
@@ -93,6 +101,8 @@ extraAfter+=($NIX_LDFLAGS_AFTER_@suffixSalt@)
 declare -a libDirs
 declare -A libs
 declare -i relocatable=0 link32=0
+
+linkerOutput="a.out"
 
 if
     [ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 ] \
@@ -144,6 +154,24 @@ then
         prev="$p"
     done
 fi
+
+# Determine linkerOutput
+prev=
+for p in \
+    ${extraBefore+"${extraBefore[@]}"} \
+    ${params+"${params[@]}"} \
+    ${extraAfter+"${extraAfter[@]}"}
+do
+    case "$prev" in
+        -o)
+            # Informational for post-link-hook
+            linkerOutput="$p"
+            ;;
+        *)
+            ;;
+    esac
+    prev="$p"
+done
 
 if [[ "$link32" = "1" && "$setDynamicLinker" = 1 && -e "@out@/nix-support/dynamic-linker-m32" ]]; then
     # We have an alternate 32-bit linker and we're producing a 32-bit ELF, let's
@@ -215,7 +243,11 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-exec @prog@ \
+@prog@ \
     ${extraBefore+"${extraBefore[@]}"} \
     ${params+"${params[@]}"} \
     ${extraAfter+"${extraAfter[@]}"}
+
+if [ -e "@out@/nix-support/post-link-hook" ]; then
+    source @out@/nix-support/post-link-hook
+fi

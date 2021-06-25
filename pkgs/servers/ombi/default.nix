@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, patchelf, openssl, libunwind, zlib, krb5, icu, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook, fixDarwinDylibNames, zlib, krb5, openssl, icu, nixosTests }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -10,20 +10,14 @@ let
     "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-Cuvz9Mhwpg8RIaiSXib+QW00DM66qPRQulrchRL2BSk=";
-    arm64-linux_hash = "sha256-uyVwa73moHWMZScNNSOU17lALuK3PC/cvTZPJ9qg7JQ=";
-    x64-osx_hash = "sha256-FGXLsfEuCW94D786LJ/wvA9TakOn5sG2M1rDXPQicYw=";
+    x64-linux_hash = "sha256-9m5vWobkibqOHsuIJmvEHuwsuJogvQQe8h0dvFj62tw=";
+    arm64-linux_hash = "sha256-OBm4j5Ez04XLjp4DHyOrwSOSGanuuI8g2y2wZaotH8M=";
+    x64-osx_hash = "sha256-UPf6Yl0nbhmiWq9oGyi7sRhlahB6zHL7nTj7GRlKoII=";
   }."${arch}-${os}_hash";
-
-  rpath = lib.makeLibraryPath [
-    stdenv.cc.cc openssl libunwind zlib krb5 icu
-  ];
-
-  dynamicLinker = stdenv.cc.bintools.dynamicLinker;
 
 in stdenv.mkDerivation rec {
   pname = "ombi";
-  version = "4.0.1292";
+  version = "4.0.1345";
 
   sourceRoot = ".";
 
@@ -32,23 +26,18 @@ in stdenv.mkDerivation rec {
     sha256 = hash;
   };
 
-  buildInputs = [ makeWrapper patchelf ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
+  propagatedBuildInputs = [ stdenv.cc.cc zlib krb5 ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}
 
     makeWrapper $out/share/${pname}-${version}/Ombi $out/bin/Ombi \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl icu ]} \
       --run "cd $out/share/${pname}-${version}"
-  '';
-
-  dontPatchELF = true;
-  postFixup = ''
-    patchelf --set-interpreter "${dynamicLinker}" \
-      --set-rpath "$ORIGIN:${rpath}" $out/share/${pname}-${version}/Ombi
-
-    find $out -type f -name "*.so" -exec \
-      patchelf --set-rpath '$ORIGIN:${rpath}' {} ';'
   '';
 
   passthru = {

@@ -26,6 +26,7 @@
 , phonon-backend-gstreamer
 , qtdeclarative
 , qtmultimedia
+, qtnetworkauth
 , qtquickcontrols2
 , qtscript
 , rttr
@@ -61,6 +62,7 @@ mkDerivation {
     phonon-backend-gstreamer
     qtdeclarative
     qtmultimedia
+    qtnetworkauth
     qtquickcontrols2
     qtscript
     shared-mime-info
@@ -100,5 +102,6 @@ mkDerivation {
 
   meta = {
     license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ turion ];
   };
 }

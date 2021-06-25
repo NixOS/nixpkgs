@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, sanic, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, sanic, sanic-testing, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Sanic-Auth";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sanic ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [ pytestCheckHook sanic-testing ];
 
   pythonImportsCheck = [ "sanic_auth" ];
 

@@ -111,6 +111,11 @@ let
         url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
       })
+      (fetchpatch {
+        name = "qtwebkit-glib-2.68.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
+        sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
+      })
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
     ] ++ optionals stdenv.isDarwin [
@@ -118,6 +123,7 @@ let
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
     qttools = [ ./qttools.patch ];
+    qtwayland = [ ./qtwayland-libdrm-build.patch ];
   };
 
   qtModule =

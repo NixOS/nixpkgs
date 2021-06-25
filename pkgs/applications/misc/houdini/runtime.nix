@@ -1,4 +1,4 @@
-{ lib, stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsaLib, dbus, xkeyboardconfig, bc, addOpenGLRunpath }:
+{ lib, stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsa-lib, dbus, xkeyboardconfig, bc, addOpenGLRunpath }:
 
 let
   ld_library_path = builtins.concatStringsSep ":" [
@@ -17,7 +17,7 @@ let
       xorg.libXcomposite
       xorg.libXdamage
       xorg.libXtst
-      alsaLib
+      alsa-lib
       fontconfig
       libSM
       libICE

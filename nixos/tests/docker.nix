@@ -45,5 +45,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     # Must match version 4 times to ensure client and server git commits and versions are correct
     docker.succeed('[ $(docker version | grep ${pkgs.docker.version} | wc -l) = "4" ]')
+    docker.succeed("systemctl restart systemd-sysctl")
+    docker.succeed("grep 1 /proc/sys/net/ipv4/conf/all/forwarding")
+    docker.succeed("grep 1 /proc/sys/net/ipv4/conf/default/forwarding")
   '';
 })

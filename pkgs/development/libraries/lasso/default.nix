@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   pname = "lasso";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchurl {
     url = "https://dev.entrouvert.org/lasso/lasso-${version}.tar.gz";
-    sha256 = "1pniisy4z9cshf6lvlz28kfa3qnwnhldb2rvkjxzc0l84g7dpa7q";
+    sha256 = "138x8pmj4k1pbah32z14rd8ylyx4lgz70s93m39vd17f8sjz50lj";
 
   };
 

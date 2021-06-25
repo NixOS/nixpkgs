@@ -1624,13 +1624,13 @@ let
         sha512 = "dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==";
       };
     };
-    "colorette-1.2.1" = {
+    "colorette-1.2.2" = {
       name = "colorette";
       packageName = "colorette";
-      version = "1.2.1";
+      version = "1.2.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/colorette/-/colorette-1.2.1.tgz";
-        sha512 = "puCDz0CzydiSYOrnXpz/PKd69zRrribezjtE9yd4zvytoRc8+RY/KJPvtPFKZS3E3wP6neGyMe0vOTlHO5L3Pw==";
+        url = "https://registry.npmjs.org/colorette/-/colorette-1.2.2.tgz";
+        sha512 = "MKGMzyfeuutC/ZJ1cba9NqcNpfeqMUcYmyF1ZFY6/Cn7CNSAKx6a+s48sqLqyAiZuaP2TcqMhoo+dlwFnVxT9w==";
       };
     };
     "command-line-usage-6.1.1" = {
@@ -2497,13 +2497,13 @@ let
         sha512 = "F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==";
       };
     };
-    "hosted-git-info-2.8.8" = {
+    "hosted-git-info-2.8.9" = {
       name = "hosted-git-info";
       packageName = "hosted-git-info";
-      version = "2.8.8";
+      version = "2.8.9";
       src = fetchurl {
-        url = "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.8.8.tgz";
-        sha512 = "f/wzC2QaWBs7t9IYqB4T3sR1xviIViXJRJTWBlx2Gf3g0Xi5vI7Yy4koXQ1c9OYDGHN9sBy1DQ2AB8fqZBWhUg==";
+        url = "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.8.9.tgz";
+        sha512 = "mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==";
       };
     };
     "html-minifier-terser-5.1.1" = {
@@ -2992,13 +2992,13 @@ let
         sha512 = "t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==";
       };
     };
-    "lodash-4.17.20" = {
+    "lodash-4.17.21" = {
       name = "lodash";
       packageName = "lodash";
-      version = "4.17.20";
+      version = "4.17.21";
       src = fetchurl {
-        url = "https://registry.npmjs.org/lodash/-/lodash-4.17.20.tgz";
-        sha512 = "PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==";
+        url = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
+        sha512 = "v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==";
       };
     };
     "lower-case-2.0.1" = {
@@ -3109,13 +3109,13 @@ let
         sha512 = "sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==";
       };
     };
-    "nanoid-3.1.18" = {
+    "nanoid-3.1.23" = {
       name = "nanoid";
       packageName = "nanoid";
-      version = "3.1.18";
+      version = "3.1.23";
       src = fetchurl {
-        url = "https://registry.npmjs.org/nanoid/-/nanoid-3.1.18.tgz";
-        sha512 = "rndlDjbbHbcV3xi+R2fpJ+PbGMdfBxz5v1fATIQFq0DP64FsicQdwnKLy47K4kZHdRpmQXtz24eGsxQqamzYTA==";
+        url = "https://registry.npmjs.org/nanoid/-/nanoid-3.1.23.tgz";
+        sha512 = "FiB0kzdP0FFVGDKlRLEQ1BgDzU87dy5NnzjeW9YZNt+/c3+q82EQDUwniSAUxp/F0gFNI1ZhKU1FqYsMuqZVnw==";
       };
     };
     "natural-compare-1.4.0" = {
@@ -3523,13 +3523,13 @@ let
         sha512 = "Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==";
       };
     };
-    "postcss-8.1.10" = {
+    "postcss-8.2.15" = {
       name = "postcss";
       packageName = "postcss";
-      version = "8.1.10";
+      version = "8.2.15";
       src = fetchurl {
-        url = "https://registry.npmjs.org/postcss/-/postcss-8.1.10.tgz";
-        sha512 = "iBXEV5VTTYaRRdxiFYzTtuv2lGMQBExqkZKSzkJe+Fl6rvQrA/49UVGKqB+LG54hpW/TtDBMGds8j33GFNW7pg==";
+        url = "https://registry.npmjs.org/postcss/-/postcss-8.2.15.tgz";
+        sha512 = "2zO3b26eJD/8rb106Qu2o7Qgg52ND5HPjcyQiK2B98O388h43A448LCslC0dI2P97wCAQRJsFvwTRcXxTKds+Q==";
       };
     };
     "postcss-loader-4.1.0" = {
@@ -4414,15 +4414,6 @@ let
         sha512 = "DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==";
       };
     };
-    "vfile-location-3.2.0" = {
-      name = "vfile-location";
-      packageName = "vfile-location";
-      version = "3.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vfile-location/-/vfile-location-3.2.0.tgz";
-        sha512 = "aLEIZKv/oxuCDZ8lkJGhuhztf/BW4M+iHdCwglA/eWc+vtuRFJj8EtgceYFX4LRjOhCAAiNHsKGssC6onJ+jbA==";
-      };
-    };
     "watchpack-2.0.1" = {
       name = "watchpack";
       packageName = "watchpack";
@@ -4536,7 +4527,7 @@ let
     name = "botamusique";
     packageName = "botamusique";
     version = "0.0.0";
-    src = ../../../../../../../../run/user/1000/tmp.ioJA7NbZmp;
+    src = ../../../../../../../../../tmp/tmp.UAoivnXH3n;
     dependencies = [
       sources."@babel/code-frame-7.10.4"
       sources."@babel/compat-data-7.12.7"
@@ -4735,7 +4726,7 @@ let
       })
       sources."color-convert-1.9.3"
       sources."color-name-1.1.3"
-      sources."colorette-1.2.1"
+      sources."colorette-1.2.2"
       sources."command-line-usage-6.1.1"
       sources."commander-4.1.1"
       sources."comment-parser-0.7.6"
@@ -4886,7 +4877,7 @@ let
       sources."has-flag-3.0.0"
       sources."has-symbols-1.0.1"
       sources."he-1.2.0"
-      sources."hosted-git-info-2.8.8"
+      sources."hosted-git-info-2.8.9"
       sources."html-minifier-terser-5.1.1"
       sources."html-webpack-plugin-4.5.0"
       (sources."htmlparser2-3.10.1" // {
@@ -4964,7 +4955,7 @@ let
         ];
       })
       sources."locate-path-2.0.0"
-      sources."lodash-4.17.20"
+      sources."lodash-4.17.21"
       sources."lower-case-2.0.1"
       sources."make-dir-2.1.0"
       sources."merge-stream-2.0.0"
@@ -4981,7 +4972,7 @@ let
       sources."minimist-1.2.5"
       sources."mkdirp-0.5.5"
       sources."ms-2.1.2"
-      sources."nanoid-3.1.18"
+      sources."nanoid-3.1.23"
       sources."natural-compare-1.4.0"
       sources."neo-async-2.6.2"
       sources."no-case-3.0.3"
@@ -5024,7 +5015,7 @@ let
       sources."pify-4.0.1"
       sources."pkg-dir-2.0.0"
       sources."popper.js-1.16.1"
-      (sources."postcss-8.1.10" // {
+      (sources."postcss-8.2.15" // {
         dependencies = [
           sources."source-map-0.6.1"
         ];
@@ -5179,7 +5170,6 @@ let
       sources."utila-0.4.0"
       sources."v8-compile-cache-2.2.0"
       sources."validate-npm-package-license-3.0.4"
-      sources."vfile-location-3.2.0"
       sources."watchpack-2.0.1"
       (sources."webpack-5.6.0" // {
         dependencies = [

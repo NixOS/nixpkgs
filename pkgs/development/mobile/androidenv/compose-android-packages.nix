@@ -3,10 +3,10 @@
 }:
 
 { toolsVersion ? "26.1.1"
-, platformToolsVersion ? "30.0.5"
+, platformToolsVersion ? "31.0.2"
 , buildToolsVersions ? [ "30.0.3" ]
 , includeEmulator ? false
-, emulatorVersion ? "30.3.4"
+, emulatorVersion ? "30.6.3"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -14,7 +14,8 @@
 , abiVersions ? [ "armeabi-v7a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "22.0.7026061"
+, ndkVersion ? "22.1.7171670"
+, ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
 , includeExtras ? []
@@ -175,10 +176,18 @@ rec {
     }
   ) cmakeVersions;
 
-  ndk-bundle = import ./ndk-bundle {
-    inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgsHostHost lib platform-tools;
-    package = packages.ndk-bundle.${ndkVersion};
-  };
+  # Creates a NDK bundle.
+  makeNdkBundle = ndkVersion:
+    import ./ndk-bundle {
+      inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgsHostHost lib platform-tools;
+      package = packages.ndk-bundle.${ndkVersion};
+    };
+
+  # All NDK bundles.
+  ndk-bundles = if includeNDK then map makeNdkBundle ndkVersions else [];
+
+  # The "default" NDK bundle.
+  ndk-bundle = if includeNDK then lib.findFirst (x: x != null) null ndk-bundles else null;
 
   google-apis = map (version:
     deployAndroidPackage {
@@ -200,6 +209,15 @@ rec {
       mkdir -p ${name}
       ${lib.concatMapStrings (plugin: ''
         ln -s ${plugin}/libexec/android-sdk/${name}/* ${name}
+      '') plugins}
+    '';
+
+  # Function that automatically links all NDK plugins.
+  linkNdkPlugins = {name, plugins, rootName ? name}:
+    lib.optionalString (plugins != []) ''
+      mkdir -p ${rootName}
+      ${lib.concatMapStrings (plugin: ''
+        ln -s ${plugin}/libexec/android-sdk/${name} ${rootName}/${plugin.version}
       '') plugins}
     '';
 
@@ -233,13 +251,13 @@ rec {
 
     postInstall = ''
       # Symlink all requested plugins
-
       ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
       ${linkPlugins { name = "build-tools"; plugins = build-tools; }}
       ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
       ${linkPlugins { name = "platforms"; plugins = platforms; }}
       ${linkPlatformPlugins { name = "sources"; plugins = sources; check = includeSources; }}
       ${linkPlugins { name = "cmake"; plugins = cmake; }}
+      ${linkNdkPlugins { name = "ndk-bundle"; rootName = "ndk"; plugins = ndk-bundles; }}
       ${linkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
 
       ${lib.optionalString includeSystemImages ''

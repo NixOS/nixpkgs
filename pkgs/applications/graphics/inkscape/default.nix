@@ -3,21 +3,20 @@
 , boost
 , cairo
 , cmake
-, double-conversion
 , fetchurl
 , gettext
-, gdl
 , ghostscript
 , glib
 , glib-networking
 , glibmm
 , gsl
+, gspell
 , gtk-mac-integration
 , gtkmm3
-, gtkspell3
 , gdk-pixbuf
 , imagemagick
 , lcms
+, lib2geom
 , libcdr
 , libexif
 , libpng
@@ -46,16 +45,17 @@ let
     (ps: with ps; [
       numpy
       lxml
+      pillow
       scour
     ]);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.0.2";
+  version = "1.1";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2j4jBRGgjL8h6GcQ0WFFhZT+qHhn6RV7Z+0BoE6ieYo=";
+    sha256 = "sha256-cebozj/fcC9Z28SidmZeuYLreCKwKbvb7O0t9DAXleY=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -83,6 +83,10 @@ stdenv.mkDerivation rec {
       --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
     patchShebangs share/templates
     patchShebangs man/fix-roff-punct
+
+    # double-conversion is a dependency of 2geom
+    substituteInPlace CMakeScripts/DefineDependsandFlags.cmake \
+      --replace 'find_package(DoubleConversion REQUIRED)' ""
   '';
 
   nativeBuildInputs = [
@@ -101,8 +105,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boehmgc
     boost
-    double-conversion
-    gdl
     gettext
     glib
     glib-networking
@@ -111,6 +113,7 @@ stdenv.mkDerivation rec {
     gtkmm3
     imagemagick
     lcms
+    lib2geom
     libcdr
     libexif
     libpng
@@ -130,7 +133,7 @@ stdenv.mkDerivation rec {
     python3Env
     zlib
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    gtkspell3
+    gspell
   ] ++ lib.optionals stdenv.isDarwin [
     cairo
     gtk-mac-integration

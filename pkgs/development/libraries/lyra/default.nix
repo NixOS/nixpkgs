@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja ];
 
-  enableParallelBuilding = true;
-
   postPatch = "sed -i s#/usr#$out#g meson.build";
 
   postInstall = ''

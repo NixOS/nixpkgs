@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, util-linux, fetchpatch, json_c, nixosTests
+, lvm2, pam, python, util-linux, json_c, nixosTests
 , ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.8.15";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1rqv1qfxr02qbkix1mpx91s4827irxryxkhby3ii0fdkm3ympsas";
+    sha256 = "1gx3ichbkdqlzl7w187vc3xpmr9prmnp7as0h6ympgigradj5c7g";
   };
 
   nativeBuildInputs = [
@@ -25,14 +25,6 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests.snapper = nixosTests.snapper;
-
-  patches = [
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://github.com/openSUSE/snapper/commit/c51708aea22d9436da287cba84424557ad03644b.patch";
-      sha256 = "106pf7pv8z3q37c8ckmgwxs1phf2fy7l53a9g5xq5kk2rjj1cx34";
-    })
-  ];
 
   postPatch = ''
     # Hard-coded root paths, hard-coded root paths everywhere...

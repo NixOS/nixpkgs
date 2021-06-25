@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitLab, cmake, gfortran, perl
 , openblas, hdf5-cpp, python3, texlive
 , armadillo, mpi, globalarrays, openssh
-, makeWrapper, fetchpatch
+, makeWrapper
 } :
 
 let
-  version = "20.10";
-  gitLabRev = "v${version}";
+  version = "21.02";
+  # The tag keeps moving, fix a hash instead
+  gitLabRev = "41cee871945ac712e86ee971425a49a8fc60a936";
 
   python = python3.withPackages (ps : with ps; [ six pyparsing ]);
 
@@ -18,13 +19,13 @@ in stdenv.mkDerivation {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = gitLabRev;
-    sha256 = "0xr9plgb0cfmxxqmd3wrhvl0hv2jqqfqzxwzs1jysq2m9cxl314v";
+    sha256 = "0cap53gy1wds2qaxbijw09fqhvfxphfkr93nhp9xdq84yxh4wzv6";
   };
 
   patches = [
     # Required to handle openblas multiple outputs
     ./openblasPath.patch
-];
+  ];
 
   nativeBuildInputs = [ perl cmake texlive.combined.scheme-minimal makeWrapper ];
   buildInputs = [
@@ -55,6 +56,10 @@ in stdenv.mkDerivation {
     # The Makefile will install pymolcas during the build grrr.
     mkdir -p $out/bin
     export PATH=$PATH:$out/bin
+  '';
+
+  postInstall = ''
+    mv $out/pymolcas $out/bin
   '';
 
   postFixup = ''

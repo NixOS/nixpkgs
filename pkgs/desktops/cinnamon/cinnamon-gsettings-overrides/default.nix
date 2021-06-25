@@ -15,6 +15,7 @@
 , cinnamon-session
 , cinnamon-settings-daemon
 , cinnamon-common
+, bulky
 }:
 
 let
@@ -24,6 +25,7 @@ let
     mint-artwork
 
     # on
+    bulky
     muffin
     nemo
     xapps

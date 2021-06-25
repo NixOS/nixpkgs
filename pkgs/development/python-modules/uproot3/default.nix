@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPy27
-, awkward0, backports_lzma, cachetools, lz4, pandas
+, awkward0, backports_lzma ? null, cachetools, lz4, pandas
 , pytestCheckHook, pkgconfig, mock
 , numpy, requests, uproot3-methods, xxhash, zstandard
 }:

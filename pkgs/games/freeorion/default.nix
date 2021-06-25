@@ -1,39 +1,81 @@
-{ lib, stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
-, boost168, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
-, libjpeg, libGLU, libGL, glew, libxslt
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, graphviz
+, makeWrapper
+, cppcheck
+, boost16x
+, SDL2
+, python3
+, freetype
+, openal
+, libogg
+, libvorbis
+, zlib
+, libpng
+, libtiff
+, libjpeg
+, libGLU
+, libGL
+, glew
+, libxslt
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.9";
+  version = "0.4.10.1";
   pname = "freeorion";
 
   src = fetchFromGitHub {
-    owner  = "freeorion";
-    repo   = "freeorion";
+    owner = "freeorion";
+    repo = "freeorion";
     rev = "v${version}";
-    sha256 = "18xigx4qla225ybf7mc1w8zfm81nhcm1i5181n5l2fbndvslb1wf";
+    sha256 = "sha256-Itt2JIStx+JsnMMBvbeJXSEJpaS/pd1UMvPGNd50k7I=";
   };
 
   buildInputs = [
-    (boost168.override { enablePython = true; })
-    SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU libGL glew ];
+    (boost16x.override { enablePython = true; python = python3; })
+    (python3.withPackages (p: with p; [ pycodestyle ]))
+    SDL2
+    freetype
+    glew
+    libGL
+    libGLU
+    libjpeg
+    libogg
+    libpng
+    libtiff
+    libvorbis
+    openal
+    zlib
+  ];
 
-  nativeBuildInputs = [ cmake doxygen graphviz makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    cppcheck
+    doxygen
+    graphviz
+    makeWrapper
+  ];
+
+  # as of 0.4.10.1 FreeOrion doesn't work with "-DOpenGL_GL_PREFERENCE=GLVND"
+  cmakeFlags = [ "-DOpenGL_GL_PREFERENCE=LEGACY" ];
 
   postInstall = ''
-    mkdir -p $out/fixpaths
+    mkdir -p $out/libexec
     # We need final slashes for XSLT replace to work properly
-    substitute ${./fix-paths.xslt} $out/fixpaths/fix-paths.xslt \
+    substitute ${./fix-paths.xslt} $out/share/freeorion/fix-paths.xslt \
       --subst-var-by nixStore "$NIX_STORE/" \
       --subst-var-by out "$out/"
-    substitute ${./fix-paths.sh} $out/fixpaths/fix-paths \
+    substitute ${./fix-paths.sh} $out/libexec/fix-paths \
       --subst-var-by libxsltBin ${libxslt.bin} \
       --subst-var-by shell ${stdenv.shell} \
       --subst-var out
-    chmod +x $out/fixpaths/fix-paths
+    chmod +x $out/libexec/fix-paths
 
     wrapProgram $out/bin/freeorion \
-      --run $out/fixpaths/fix-paths \
+      --run $out/libexec/fix-paths \
       --prefix LD_LIBRARY_PATH : $out/lib/freeorion
   '';
 

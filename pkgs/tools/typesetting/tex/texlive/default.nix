@@ -3,7 +3,7 @@
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
-, callPackage, ghostscriptX, harfbuzz, poppler_min
+, callPackage, ghostscriptX, harfbuzz
 , makeWrapper, python3, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
@@ -11,7 +11,6 @@
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
-    poppler = poppler_min; # otherwise depend on various X stuff
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
@@ -132,6 +131,7 @@ let
 
     in if sha512 == "" then
       # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
+      # currently unused as we prefer to keep the sha512 hashes for reproducibility
       fetchurl {
         inherit urls;
         sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
@@ -145,8 +145,7 @@ let
         // passthru
 
     else runCommand "texlive-${tlName}"
-      ( { # lots of derivations, not meant to be cached
-          preferLocalBuild = true; allowSubstitutes = false;
+      ( {
           inherit passthru;
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;

@@ -8,10 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0p3699msps07p40g9426lvxa3b41rg7k2fn7qxl2jm0kh4kkkvx9";
   };
 
+  # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
   configureFlags = [
     "--enable-pcre2-16"
     "--enable-pcre2-32"
-  ] ++ lib.optional (!stdenv.hostPlatform.isRiscV) "--enable-jit";
+  ] ++ lib.optional (!stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit";
 
   outputs = [ "bin" "dev" "out" "doc" "man" "devdoc" ];
 

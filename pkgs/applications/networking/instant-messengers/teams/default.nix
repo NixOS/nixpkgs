@@ -6,20 +6,22 @@
 , dpkg
 , atomEnv
 , libuuid
+, libappindicator-gtk3
 , pulseaudio
 , at-spi2-atk
 , coreutils
 , gawk
 , xdg-utils
-, systemd }:
+, systemd
+, enableRectOverlay ? false }:
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.4.00.7556";
+  version = "1.4.00.13653";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "0yak3jxh0gdn57wjss0s7sdjssf1b70j0klrcpv66bizqvw1xl7b";
+    sha256 = "1kx4j837fd344zy90nl0j3r8cdvihy6i6gf56wd5n56zngx1fhjv";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
@@ -34,6 +36,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     (lib.getLib systemd)
     pulseaudio
+    libappindicator-gtk3
   ];
 
   preFixup = ''
@@ -55,9 +58,11 @@ stdenv.mkDerivation rec {
 
     ln -s $out/opt/teams/teams $out/bin/
 
+    ${lib.optionalString (!enableRectOverlay) ''
     # Work-around screen sharing bug
     # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
     rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
+    ''}
 
     runHook postInstall
   '';

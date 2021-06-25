@@ -44,6 +44,9 @@ let
   crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
+  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                  "${stdenv.targetPlatform.config}-";
+
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
     [
@@ -112,6 +115,18 @@ let
 
     # Basic configuration
     ++ [
+      # Force target prefix. The behavior if `--target` and `--host`
+      # are specified is inconsistent: Sometimes specifying `--target`
+      # always causes a prefix to be generated, sometimes it's only
+      # added if the `--host` and `--target` differ. This means that
+      # sometimes there may be a prefix even though nixpkgs doesn't
+      # expect one and sometimes there may be none even though nixpkgs
+      # expects one (since not all information is serialized into the
+      # config attribute). The easiest way out of these problems is to
+      # always set the program prefix, so gcc will conform to our
+      # expectations.
+      "--program-prefix=${targetPrefix}"
+
       (lib.enableFeature enableLTO "lto")
       "--disable-libstdcxx-pch"
       "--without-included-gettext"
@@ -170,7 +185,8 @@ let
     ++ lib.optional javaAwtGtk "--enable-java-awt=gtk"
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
-    ++ (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
+    # TODO: aarch64-darwin has clang stdenv and its arch and cpu flag values are incompatible with gcc
+    ++ lib.optional (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
 

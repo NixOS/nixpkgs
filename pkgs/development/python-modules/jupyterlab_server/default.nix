@@ -41,6 +41,8 @@ buildPythonPackage rec {
     "test_get_language_pack"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "JupyterLab Server";
     homepage = "https://jupyter.org";

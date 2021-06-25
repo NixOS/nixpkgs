@@ -5,8 +5,8 @@
 , requests
 , psutil
 , pytest
-, setuptools_scm
-, subprocess32
+, setuptools-scm
+, subprocess32 ? null
 , toml
 , zc_lockfile
 }:
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
     toml
   ];
 

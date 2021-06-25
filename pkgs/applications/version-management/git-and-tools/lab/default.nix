@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "sha256-mkhJmrKpIISd0m0m8fQ9vKuEr6h23BBxK6yo5fB+xcA=";
+    sha256 = "sha256-CyXEmlsc40JtwDjRYNWqN+3cuoG8K07jAQdd1rktvS8=";
   };
 
   subPackages = [ "." ];
 
-  vendorSha256 = "sha256-cf+DVnGjSNV2eZ8S/Vk+VPlykoSjngrQuPeA9IshBUg=";
+  vendorSha256 = "sha256-PSS7OPbM+XsylqDlWc4h+oZrOua2kSWKLEuyjqo/cxM=";
 
   doCheck = false;
 

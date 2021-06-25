@@ -2,15 +2,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ledger-autosync";
-  version = "1.0.2";
+  version = "unstable-2021-04-01";
 
-# no tests included in PyPI tarball
+  # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "egh";
     repo = "ledger-autosync";
-    rev = "v${version}";
-    sha256 = "0sh32jcf8iznnbg1kqlrswbzfmn4h3gkw32q20xwxzz4935pz1qk";
+    rev = "0b674c57c833f75b1a36d8caf78e1567c8e2180c";
+    sha256 = "0q404gr85caib5hg83cnmgx4684l72w9slxyxrwsiwhlf7gm443q";
   };
+
+  patches = [
+    # ledger-autosync specifies an URL for its ofxparse
+    # dependency. This patch removes the URL to only use the
+    # `ofxparse` name. This works because nixpkgs' version of ofxparse
+    # is more recent than the latest release.
+    ./fix-ofxparse-dependency.patch
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     asn1crypto

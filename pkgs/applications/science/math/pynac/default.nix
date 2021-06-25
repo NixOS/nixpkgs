@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchurl
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , flint
@@ -11,15 +11,56 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.26";
+  version = "0.7.27";
   pname = "pynac";
 
   src = fetchFromGitHub {
     owner = "pynac";
     repo = "pynac";
     rev = "pynac-${version}";
-    sha256 = "09d2p74x1arkydlxy6pw4p4byi7r8q7f29w373h4d8a215kadc6d";
+    sha256 = "sha256-1HHCIeaNE2UsJNX92UlDGLJS8I4nC/8FnwX7Y4F9HpU=";
   };
+
+  patches = [
+    # the five patches below are included with sage 9.3. since pynac
+    # is a self-described "Sage Math support library", we include them
+    # here.
+
+    # https://trac.sagemath.org/ticket/30688
+    (fetchpatch {
+      name = "power_inf_loop.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/power_inf_loop.patch?h=9.3";
+      sha256 = "sha256-VYeaJl8u2wl7FQ/6xnpZv1KpdNYEmJoPhuMrBADyTRs=";
+    })
+
+    # https://trac.sagemath.org/ticket/31479
+    (fetchpatch {
+      name = "disable_poly_mul_expand.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/disable_poly_mul_expand.patch?h=9.3";
+      sha256 = "sha256-gRjoltU9Tzj7fjNyE25fY+iyDxERzSTOMigzxFpUqPo=";
+    })
+
+    # https://trac.sagemath.org/ticket/31530
+    (fetchpatch {
+      name = "too_much_sub.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/too_much_sub.patch?h=9.3";
+      sha256 = "sha256-lw7xSQ/l+rzPu+ghWF4omYF0mKksGGPuuHJTktvbdis=";
+    })
+
+    # https://trac.sagemath.org/ticket/31554
+    (fetchpatch {
+      name = "handle_factor.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/handle_factor.patch?h=9.3";
+      sha256 = "sha256-U1lb5qwBqZZgklfDMhBX4K5u8bz5x42O4w7hyNy2YVw=";
+    })
+
+    # https://trac.sagemath.org/ticket/31645
+    (fetchpatch {
+      name = "seriesbug.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/seriesbug.patch?h=9.3";
+      sha256 = "sha256-b3//oirN7JHDYqrvE+tDYcnKpSYQJ08yBzcNlII2Dts=";
+    })
+  ];
 
   buildInputs = [
     flint
@@ -32,14 +73,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ];
-
-  patches = [
-    (fetchurl {
-      name = "py_ssize_t_clean.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/py_ssize_t_clean.patch?h=9.2";
-      sha256 = "0l3gbg9hc4v671zf4w376krnk3wh8hj3649610nlvzzxckcryzab";
-    })
   ];
 
   meta = with lib; {

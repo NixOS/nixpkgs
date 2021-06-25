@@ -170,7 +170,7 @@ let
     else if k == "ServerTransportPlugin" then
       optionalString (v.transports != []) "${concatStringsSep "," v.transports} exec ${v.exec}"
     else if k == "HidServAuth" then
-      concatMapStringsSep "\n${k} " (settings: settings.onion + " " settings.auth) v
+      v.onion + " " + v.auth
     else generators.mkValueStringDefault {} v;
   genTorrc = settings:
     generators.toKeyValue {
@@ -715,7 +715,7 @@ in
               (submodule {
                 options = {
                   onion = mkOption {
-                    type = strMatching "[a-z2-7]{16}(\\.onion)?";
+                    type = strMatching "[a-z2-7]{16}\\.onion";
                     description = "Onion address.";
                     example = "xxxxxxxxxxxxxxxx.onion";
                   };
@@ -726,6 +726,12 @@ in
                 };
               })
             ]);
+            example = [
+              {
+                onion = "xxxxxxxxxxxxxxxx.onion";
+                auth = "xxxxxxxxxxxxxxxxxxxxxx";
+              }
+            ];
           };
           options.HiddenServiceNonAnonymousMode = optionBool "HiddenServiceNonAnonymousMode";
           options.HiddenServiceStatistics = optionBool "HiddenServiceStatistics";

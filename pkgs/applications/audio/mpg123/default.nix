@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , makeWrapper
-, alsaLib
+, alsa-lib
 , perl
 , withConplay ? !stdenv.targetPlatform.isWindows
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = lib.optionals withConplay [ makeWrapper ];
 
   buildInputs = lib.optionals withConplay [ perl ]
-    ++ lib.optionals (!stdenv.isDarwin && !stdenv.targetPlatform.isWindows) [ alsaLib ];
+    ++ lib.optionals (!stdenv.isDarwin && !stdenv.targetPlatform.isWindows) [ alsa-lib ];
 
   configureFlags = lib.optional
     (stdenv.hostPlatform ? mpg123)

@@ -1,19 +1,31 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, setuptools, swig, verilog }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, cocotb-bus
+, pytest
+, swig
+, verilog
+}:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.4.0";
+  version = "1.5.2";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0fv0mg8zh40ffq0q39s195y6hvjrzihpx0i3f7ba5881syw3x7p4";
+  # - we need to use the tarball from PyPi
+  #   or the full git checkout (with .git)
+  # - using fetchFromGitHub will cause a build failure,
+  #   because it does not include required metadata
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "9f4f3e6eb9caeb479e98d604770645b57469cd25b39e28df1916ffcd593efbe6";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  buildInputs = [ setuptools ];
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -25,16 +37,14 @@ buildPythonPackage rec {
     do
       substituteInPlace $f --replace 'shell which' 'shell command -v'
     done
+
+    # remove circular dependency cocotb-bus from setup.py
+    substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
   '';
 
-  checkInputs = [ swig verilog ];
+  checkInputs = [ cocotb-bus pytest swig verilog ];
 
   checkPhase = ''
-    # test expected failures actually pass because of a fix in our icarus version
-    # https://github.com/cocotb/cocotb/issues/1952
-    substituteInPlace tests/test_cases/test_discovery/test_discovery.py \
-      --replace 'def access_single_bit' $'def foo(x): pass\ndef foo'
-
     export PATH=$out/bin:$PATH
     make test
   '';

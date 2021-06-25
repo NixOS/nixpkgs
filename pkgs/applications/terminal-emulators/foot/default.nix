@@ -104,7 +104,9 @@ stdenv.mkDerivation rec {
     tllist
     wayland-protocols
     pkg-config
-  ] ++ lib.optional stdenv.cc.isClang stdenv.cc.cc.llvm;
+  ] ++ lib.optionals (compilerName == "clang") [
+    stdenv.cc.cc.libllvm.out
+  ];
 
   buildInputs = [
     fontconfig

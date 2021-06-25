@@ -1,5 +1,7 @@
 name: "Build Nixpkgs manual"
 
+permissions: read-all
+
 on:
   pull_request_target:
     branches:
@@ -10,6 +12,7 @@ on:
 jobs:
   nixpkgs:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'NixOS'
     steps:
       - uses: actions/checkout@v2
         with:

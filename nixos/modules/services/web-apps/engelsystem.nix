@@ -89,7 +89,7 @@ in {
     # create database
     services.mysql = mkIf cfg.createDatabase {
       enable = true;
-      package = mkDefault pkgs.mysql;
+      package = mkDefault pkgs.mariadb;
       ensureUsers = [{
         name = "engelsystem";
         ensurePermissions = { "engelsystem.*" = "ALL PRIVILEGES"; };

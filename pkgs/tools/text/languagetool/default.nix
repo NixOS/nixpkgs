@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
-  version = "5.2";
+  version = "5.3";
 
   src = fetchzip {
     url = "https://www.languagetool.org/download/${pname}-${version}.zip";
-    sha256 = "1fz3rxqg5z2jxbalraz8lwkzj0jh69zzfmf3vpwywilvl7xlhdrd";
+    sha256 = "1km20ajqb65vkhkrf94zy5srcss66ix8padp7ng59pa8pj11wmi2";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     mv -- * $out/share/
 
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/languagetool-http-server \
       --add-flags "-cp $out/share/languagetool-server.jar org.languagetool.server.HTTPServer"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -4,13 +4,13 @@
 
 let
   sources = {
-    "@bokeh/bokehjs-2.3.0" = {
+    "@bokeh/bokehjs-2.3.1" = {
       name = "_at_bokeh_slash_bokehjs";
       packageName = "@bokeh/bokehjs";
-      version = "2.3.0";
+      version = "2.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@bokeh/bokehjs/-/bokehjs-2.3.0.tgz";
-        sha512 = "geKBhYUVJ5IaY0UNk9k2P0yiYLCj+DOeNjdDneuTJ8K5R9fs0Rpp4iiaQKUGr1yUyQHGHLU8sk4CFZ+Bd5ZILg==";
+        url = "https://registry.npmjs.org/@bokeh/bokehjs/-/bokehjs-2.3.1.tgz";
+        sha512 = "DlNZaqAJFUw38IuSk2TUOcfyiK8Ya3kDRpYt/RgVUftIDW2CWLbBo47kbug9+ykEF49rcnlxcCXhNXzpg4V7gw==";
       };
     };
     "@bokeh/numbro-1.6.2" = {
@@ -476,10 +476,10 @@ let
   args = {
     name = "_at_holoviz_slash_panel";
     packageName = "@holoviz/panel";
-    version = "0.11.1";
+    version = "0.11.3";
     src = ./.;
     dependencies = [
-      sources."@bokeh/bokehjs-2.3.0"
+      sources."@bokeh/bokehjs-2.3.1"
       sources."@bokeh/numbro-1.6.2"
       (sources."@bokeh/slickgrid-2.4.2702" // {
         dependencies = [

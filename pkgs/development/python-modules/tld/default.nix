@@ -26,6 +26,12 @@ buildPythonPackage rec {
     tox
   ];
 
+  # these tests require network access, but disabledTestPaths doesn't work.
+  # the file needs to be `import`ed by another python test file, so it
+  # can't simply be removed.
+  preCheck = ''
+    echo > src/tld/tests/test_commands.py
+  '';
   pythonImportsCheck = [ "tld" ];
 
   meta = with lib; {

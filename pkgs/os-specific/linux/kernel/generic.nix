@@ -46,7 +46,6 @@
                        stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 
-, isXen      ? features.xen_dom0 or false
 , isZen      ? false
 , isLibre    ? false
 , isHardened ? false
@@ -73,8 +72,6 @@ let
     efiBootStub = true;
     needsCifsUtils = true;
     netfilterRPFilter = true;
-    grsecurity = false;
-    xen_dom0 = false;
     ia32Emulation = true;
   } // features) kernelPatches;
 
@@ -131,12 +128,16 @@ let
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"
+      export HOSTCC=$CC_FOR_BUILD
+      export HOSTCXX=$CXX_FOR_BUILD
+      export HOSTAR=$AR_FOR_BUILD
+      export HOSTLD=$LD_FOR_BUILD
 
       # Get a basic config file for later refinement with $generateConfig.
-      make -C .  O="$buildRoot" $kernelBaseConfig \
+      make -C . O="$buildRoot" $kernelBaseConfig \
           ARCH=$kernelArch \
-          HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
-          HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}g++
+          HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
+          CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF
 
       # Create the config file.
       echo "generating kernel configuration..."
@@ -178,7 +179,8 @@ let
 
   passthru = {
     features = kernelFeatures;
-    inherit commonStructuredConfig isXen isZen isHardened isLibre modDirVersion;
+    inherit commonStructuredConfig isZen isHardened isLibre modDirVersion;
+    isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
     kernelOlder = lib.versionOlder version;
     kernelAtLeast = lib.versionAtLeast version;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);

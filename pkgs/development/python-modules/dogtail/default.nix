@@ -10,7 +10,7 @@
 , gsettings-desktop-schemas
 , fetchurl
 , dbus
-, xvfb_run
+, xvfb-run
 , wrapGAppsHook
 # , fetchPypi
 }:
@@ -33,7 +33,7 @@ buildPythonPackage {
     ./nix-support.patch
   ];
 
-  nativeBuildInputs = [ gobject-introspection dbus xvfb_run wrapGAppsHook ]; # for setup hooks
+  nativeBuildInputs = [ gobject-introspection dbus xvfb-run wrapGAppsHook ]; # for setup hooks
   propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
   strictDeps = false; # issue 56943
 

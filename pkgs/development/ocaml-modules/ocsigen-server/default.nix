@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
 , lwt_log, ocamlnet, ocaml_pcre, cryptokit, tyxml, xml-light, ipaddr
 , pgocaml, camlzip, ocaml_sqlite3
-, makeWrapper, fetchpatch
+, makeWrapper
 }:
 
 if !lib.versionAtLeast ocaml.version "4.06.1"
@@ -13,21 +13,15 @@ let mkpath = p: n:
 in
 
 stdenv.mkDerivation rec {
-  version = "2.16.0";
+  version = "2.18.0";
   pname = "ocsigenserver";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
     rev = version;
-    sha256 = "0dd7zfk8dlajv0297dswaaqh96hjk2ppy8zb67jbkd26nimahk9y";
+    sha256 = "0c61wkq8ddy3qxb2x1jz04rz0722hk92r6jl1zvgikh74m5p5ipp";
   };
-
-  # unreleased fix for Makefile typos breaking compilation
-  patches = [ (fetchpatch {
-    url = "https://github.com/ocsigen/ocsigenserver/commit/014aefc4e460686a361b974f16ebb7e0c993b36b.patch";
-    sha256 = "0xda4fj8p5102lh9xmrn5mv3s0ps6yykqj3mpjf72gf4zd6fzcn7";
-  }) ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ which ocaml findlib lwt_react pgocaml camlzip ocaml_sqlite3 ];

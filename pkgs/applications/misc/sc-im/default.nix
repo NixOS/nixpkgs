@@ -7,6 +7,7 @@
 , bison
 , gnuplot
 , libxls
+, libxlsxwriter
 , libxml2
 , libzip
 , ncurses
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sc-im";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";
     repo = "sc-im";
     rev = "v${version}";
-    sha256 = "sha256-AIYa3d1ml1f5GNLKijeFPX+UabgEqzdXiP60BGvBPsQ=";
+    sha256 = "sha256-H+GQUpouiXc/w6GWdkSVvTXZ/Dtb7sUmBLGcpxG3Mts=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnuplot
     libxls
+    libxlsxwriter
     libxml2
     libzip
     ncurses

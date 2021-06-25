@@ -9,7 +9,6 @@
 
 mkDerivation {
   name = "xdg-desktop-portal-kde";
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
   nativeBuildInputs = [ extra-cmake-modules gettext kdoctools ];
   buildInputs = [
     cups epoxy mesa pcre pipewire wayland wayland-protocols

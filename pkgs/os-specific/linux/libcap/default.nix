@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, attr, perl
+{ stdenv, lib, buildPackages, fetchurl, attr, perl, runtimeShell
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # use full path to bash
-    substituteInPlace progs/capsh.c --replace "/bin/bash" "${stdenv.shell}"
+    substituteInPlace progs/capsh.c --replace "/bin/bash" "${runtimeShell}"
 
     # set prefixes
     substituteInPlace Make.Rules \

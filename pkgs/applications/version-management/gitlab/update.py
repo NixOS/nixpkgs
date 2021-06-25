@@ -131,9 +131,11 @@ def update_rubyenv():
     data = _get_data_json()
     rev = data['rev']
 
-    for fn in ['Gemfile.lock', 'Gemfile']:
-        with open(rubyenv_dir / fn, 'w') as f:
-            f.write(repo.get_file(fn, rev))
+    with open(rubyenv_dir / 'Gemfile.lock', 'w') as f:
+        f.write(repo.get_file('Gemfile.lock', rev))
+    with open(rubyenv_dir / 'Gemfile', 'w') as f:
+        original = repo.get_file('Gemfile', rev)
+        f.write(re.sub(r".*mail-smtp_pool.*", "", original))
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)

@@ -1,4 +1,20 @@
-{ buildPythonPackage, fetchPypi, lib, vcversioner, pytestrunner, mock, pytest, pytest-asyncio, pytest-trio, twisted, zipp, pyparsing, pyhamcrest, futures, attrs, isPy27 }:
+{ buildPythonPackage
+, fetchPypi
+, lib
+, vcversioner
+, pytestrunner
+, mock
+, pytest
+, pytest-asyncio
+, pytest-trio
+, twisted
+, zipp ? null
+, pyparsing ? null
+, pyhamcrest
+, futures ? null
+, attrs ? null
+, isPy27
+}:
 
 buildPythonPackage rec {
   pname = "pyee";

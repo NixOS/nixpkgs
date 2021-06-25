@@ -2,11 +2,11 @@
 , autoPatchelfHook
 , dpkg
 , fetchurl
+, lib
 , libsecret
 , makeDesktopItem
 , makeWrapper
 , stdenv
-, lib
 , udev
 , wrapGAppsHook
 }:
@@ -17,11 +17,11 @@ let
   pname = "bitwarden";
 
   version = {
-    x86_64-linux = "1.24.6";
+    x86_64-linux = "1.26.4";
   }.${system} or "";
 
   sha256 = {
-    x86_64-linux = "sha256-PaquU2CrtIJS1s9TKshmKxfs0L3Jhvs/sgO4ZrlJFzA=";
+    x86_64-linux = "sha256-PYqLf1Y3SwPFjq8JJMxHrKWKuCqbVpmzugi3DjRNWUg=";
   }.${system} or "";
 
   meta = with lib; {

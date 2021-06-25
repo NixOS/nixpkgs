@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "4.9.3";
 
   src = fetchurl {
-    url = "https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
-    sha256 = "sha256-xgdCjo2RLp+EtUTfSiys7PURhnC00R9IOLPtz3427pA=";
+    url = "https://web.archive.org/web/20210326102451/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
+    sha256 = "sha256-T+y8k757/qFCVOCc/SNc7a+KmyscPlowubNQYzMr8jY=";
   };
 
   unpackPhase = "tar xvf $src";

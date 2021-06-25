@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchgit, fetchurl, cmake, sip, protobuf, pythonOlder }:
+{ lib, buildPythonPackage, fetchgit, fetchurl, cmake, sip_4, protobuf, pythonOlder }:
 
 buildPythonPackage {
   pname = "libarcus";
@@ -13,7 +13,7 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.4.0";
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ sip_4 ];
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ];
 

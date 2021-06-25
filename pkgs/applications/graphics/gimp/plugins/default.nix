@@ -38,7 +38,7 @@ let
   }
   // attrs
   // {
-      name = "${gimp.name}-plugin-${name}";
+      name = "${gimp.pname}-plugin-${name}";
       buildInputs = [
         gimp
         gimp.gtk

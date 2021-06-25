@@ -4,8 +4,7 @@
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
-, libglvnd
-, enableRadv ? true
+, libglvnd, libunwind
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
@@ -32,11 +31,10 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.0.1";
+  version = "21.1.2";
   branch  = versions.major version;
-in
 
-stdenv.mkDerivation {
+self = stdenv.mkDerivation {
   pname = "mesa";
   inherit version;
 
@@ -47,7 +45,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "1fqj2xhhd1ary0pfg31jq6fqcnd6qgyrw1445nmz554k8n2ck7rp";
+    sha256 = "0pw2wba4q66rhdx0hpimvxmrl7k2vv315gmmk17kl7snc0vvdd13";
   };
 
   prePatch = "patchShebangs .";
@@ -88,7 +86,9 @@ stdenv.mkDerivation {
       "find_program('${stdenv.cc.targetPrefix}nm')"
   '';
 
-  outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
+  outputs = [ "out" "dev" "drivers" ]
+    ++ lib.optional enableOSMesa "osmesa"
+    ++ lib.optional stdenv.isLinux "driversdev";
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
@@ -121,12 +121,13 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = with xorg; [
-    expat llvmPackages.llvm libglvnd xorgproto
+    expat llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
+    ++ lib.optionals stdenv.isDarwin [ libunwind ]
     ++ lib.optional withValgrind valgrind-light;
 
   depsBuildBuild = [ pkg-config ];
@@ -144,7 +145,6 @@ stdenv.mkDerivation {
   ] ++ optional stdenv.isLinux libdrm
     ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
-  enableParallelBuilding = true;
   doCheck = false;
 
   postInstall = ''
@@ -181,20 +181,22 @@ stdenv.mkDerivation {
     mv -t $osmesa/lib/ $out/lib/libOSMesa*
   '';
 
-  # TODO:
-  #  check $out doesn't depend on llvm: builder failures are ignored
-  #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
   postFixup = optionalString stdenv.isLinux ''
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
+    [ -f "$dev/lib/pkgconfig/d3d.pc" ] && substituteInPlace "$dev/lib/pkgconfig/d3d.pc" --replace "$drivers" "${libglvnd.driverLink}"
 
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
     rm -f $dev/lib/pkgconfig/{gl,egl}.pc
 
-    # Update search path used by pkg-config
-    for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do
-      if [ -f "$pc" ]; then
-        substituteInPlace "$pc" --replace $out $drivers
+    # Move development files for libraries in $drivers to $driversdev
+    mkdir -p $driversdev/include
+    mv $dev/include/xa_* $dev/include/d3d* -t $driversdev/include || true
+    mkdir -p $driversdev/lib/pkgconfig
+    for pc in lib/pkgconfig/{xatracker,d3d}.pc; do
+      if [ -f "$dev/$pc" ]; then
+        substituteInPlace "$dev/$pc" --replace $out $drivers
+        mv $dev/$pc $driversdev/$pc
       fi
     done
 
@@ -212,6 +214,14 @@ stdenv.mkDerivation {
   passthru = {
     inherit libdrm;
     inherit (libglvnd) driverLink;
+
+    tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
+      name = "mesa-dev-does-not-depend-on-llvm";
+      buildCommand = ''
+        echo ${self.dev} >>$out
+      '';
+      disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+    };
   };
 
   meta = {
@@ -231,4 +241,6 @@ stdenv.mkDerivation {
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
-}
+};
+
+in self

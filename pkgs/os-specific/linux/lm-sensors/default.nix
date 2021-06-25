@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl21Plus gpl2Plus ];
     maintainers = with maintainers; [ pengmeiyu ];
     platforms = platforms.linux;
+    mainProgram = "sensors";
   };
 }

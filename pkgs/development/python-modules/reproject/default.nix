@@ -10,7 +10,7 @@
 , scipy
 , pytest
 , pytest-astropy
-, setuptools_scm
+, setuptools-scm
 , cython
 }:
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
-  nativeBuildInputs = [ astropy-helpers cython astropy-extension-helpers setuptools_scm ];
+  nativeBuildInputs = [ astropy-helpers cython astropy-extension-helpers setuptools-scm ];
   checkInputs = [ pytest pytest-astropy ];
 
   # Tests must be run in the build directory

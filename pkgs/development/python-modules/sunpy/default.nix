@@ -11,6 +11,7 @@
 , beautifulsoup4
 , drms
 , glymur
+, h5netcdf
 , hypothesis
 , matplotlib
 , numpy
@@ -30,12 +31,12 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "2.0.7";
+  version = "3.0.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d13ac67c14ea825652dc3e12c4c627e782e8e843e96a1d54440d39dd2ceb6a5c";
+    sha256 = "sha256-N/DAvnO+S9E4tndEWpiG84P3FCFwxYNdGFxbxUVsTx8=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     pandas
     astropy
     astropy-helpers
+    h5netcdf
     parfive
     sqlalchemy
     scikitimage
@@ -72,9 +74,12 @@ buildPythonPackage rec {
 
   # darwin has write permission issues
   doCheck = stdenv.isLinux;
+
   # ignore documentation tests
   checkPhase = ''
-    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst'
+    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst' \
+    --deselect=sunpy/tests/tests/test_self_test.py::test_main_nonexisting_module \
+    --deselect=sunpy/tests/tests/test_self_test.py::test_main_stdlib_module
   '';
 
   meta = with lib; {

@@ -12,7 +12,7 @@
 , file
 , cairo
 , gettext
-, gnome3
+, gnome
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     gtk3
     cairo
     gettext
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-good

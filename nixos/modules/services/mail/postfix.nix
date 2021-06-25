@@ -773,7 +773,7 @@ in
         };
 
       services.postfix.config = (mapAttrs (_: v: mkDefault v) {
-        compatibility_level  = "9999";
+        compatibility_level  = pkgs.postfix.version;
         mail_owner           = cfg.user;
         default_privs        = "nobody";
 

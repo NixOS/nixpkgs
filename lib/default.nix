@@ -66,8 +66,9 @@ let
       stringLength sub substring tail trace;
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
-      importJSON importTOML warn info showWarnings nixpkgsVersion version mod compare
-      splitByAndCompare functionArgs setFunctionArgs isFunction toHexString toBaseDigits;
+      importJSON importTOML warn warnIf info showWarnings nixpkgsVersion version
+      mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
+      toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
@@ -114,8 +115,8 @@ let
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
-      mkOptionDefault mkDefault mkForce mkVMOverride mkStrict
-      mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
+      mkOptionDefault mkDefault mkForce mkVMOverride
+      mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
       mkAliasOptionModule doRename;

@@ -28,6 +28,11 @@ buildPythonPackage rec {
     responses
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+    --replace "pyjwt[crypto]>=1.5.3,<2.0.0" "pyjwt[crypto] >=1.5.3, <3.0.0"
+  '';
+
   pythonImportsCheck = [ "globus_sdk" ];
 
   meta = with lib; {

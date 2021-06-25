@@ -476,11 +476,11 @@
     md5name = "b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523-libjpeg-turbo-1.5.3.tar.gz";
   }
   {
-    name = "language-subtag-registry-2020-12-18.tar.bz2";
-    url = "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-12-18.tar.bz2";
-    sha256 = "62ce680d5db0f28001b64bd57db47f388c13629cdefc9af8e8af0fbe93689ba1";
+    name = "language-subtag-registry-2021-03-05.tar.bz2";
+    url = "https://dev-www.libreoffice.org/src/language-subtag-registry-2021-03-05.tar.bz2";
+    sha256 = "ce80e8face06bf2ada363e0c159e3f990c4116fdae9232ca43e6369aa82bf16a";
     md5 = "";
-    md5name = "62ce680d5db0f28001b64bd57db47f388c13629cdefc9af8e8af0fbe93689ba1-language-subtag-registry-2020-12-18.tar.bz2";
+    md5name = "ce80e8face06bf2ada363e0c159e3f990c4116fdae9232ca43e6369aa82bf16a-language-subtag-registry-2021-03-05.tar.bz2";
   }
   {
     name = "JLanguageTool-1.7.0.tar.bz2";
@@ -637,11 +637,11 @@
     md5name = "a8c2c5b8f09e7ede322d5c602ff6a4b6-mythes-1.2.4.tar.gz";
   }
   {
-    name = "neon-0.31.1.tar.gz";
-    url = "https://dev-www.libreoffice.org/src/neon-0.31.1.tar.gz";
-    sha256 = "c9dfcee723050df37ce18ba449d7707b78e7ab8230f3a4c59d9112e17dc2718d";
+    name = "neon-0.31.2.tar.gz";
+    url = "https://dev-www.libreoffice.org/src/neon-0.31.2.tar.gz";
+    sha256 = "cf1ee3ac27a215814a9c80803fcee4f0ede8466ebead40267a9bd115e16a8678";
     md5 = "";
-    md5name = "c9dfcee723050df37ce18ba449d7707b78e7ab8230f3a4c59d9112e17dc2718d-neon-0.31.1.tar.gz";
+    md5name = "cf1ee3ac27a215814a9c80803fcee4f0ede8466ebead40267a9bd115e16a8678-neon-0.31.2.tar.gz";
   }
   {
     name = "nss-3.55-with-nspr-4.27.tar.gz";

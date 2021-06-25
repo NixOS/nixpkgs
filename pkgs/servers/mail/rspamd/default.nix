@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LMLRDnKfGpApVsIvPNY2nxl+H5+qeVvwvwr3wdyyhjs=";
   };
 
+  hardeningEnable = [ "pie" ];
+
   nativeBuildInputs = [ cmake pkg-config perl ];
   buildInputs = [ glib openssl pcre sqlite ragel icu jemalloc libsodium ]
     ++ lib.optional withHyperscan hyperscan

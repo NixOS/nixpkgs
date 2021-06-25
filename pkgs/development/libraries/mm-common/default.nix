@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, gnome3
+, gnome
 , meson
 , python3
 , ninja
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

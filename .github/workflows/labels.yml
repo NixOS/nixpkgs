@@ -4,6 +4,10 @@ on:
   pull_request_target:
     types: [edited, opened, synchronize, reopened]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   labels:
     runs-on: ubuntu-latest

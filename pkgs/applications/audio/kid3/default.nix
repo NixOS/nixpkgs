@@ -6,7 +6,7 @@
 , cmake
 , docbook_xml_dtd_45
 , docbook_xsl
-, ffmpeg_3
+, ffmpeg
 , flac
 , id3lib
 , libogg
@@ -31,21 +31,22 @@ stdenv.mkDerivation rec {
   version = "3.8.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/kid3/kid3/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ce+MWCJzAnN+u+07f0dvn0jnbqiUlS2RbcM9nAj5bgg=";
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    hash = "sha256-R4gAWlCw8RezhYbw1XDo+wdp797IbLoM3wqHwr+ul6k=";
   };
 
   nativeBuildInputs = [
     cmake
+    docbook_xml_dtd_45
+    docbook_xsl
     pkg-config
+    python3
     wrapQtAppsHook
   ];
   buildInputs = [
     automoc4
     chromaprint
-    docbook_xml_dtd_45
-    docbook_xsl
-    ffmpeg_3
+    ffmpeg
     flac
     id3lib
     libogg
@@ -53,7 +54,6 @@ stdenv.mkDerivation rec {
     libxslt
     mp4v2
     phonon
-    python3
     qtbase
     qtmultimedia
     qtquickcontrols
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage = "https://kid3.kde.org/";
     description = "A simple and powerful audio tag editor";
     longDescription = ''
       If you want to easily tag multiple MP3, Ogg/Vorbis, FLAC, MPC, MP4/AAC,
@@ -101,7 +102,6 @@ stdenv.mkDerivation rec {
       - Edit synchronized lyrics and event timing codes, import and export
         LRC files.
     '';
-    homepage = "http://kid3.sourceforge.net/";
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
