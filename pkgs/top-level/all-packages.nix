@@ -916,6 +916,8 @@ in
 
   archi = callPackage ../tools/misc/archi { };
 
+  contour = libsForQt5.callPackage ../applications/terminal-emulators/contour { };
+
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
   eterm = callPackage ../applications/terminal-emulators/eterm { };
