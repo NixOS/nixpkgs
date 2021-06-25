@@ -4,11 +4,11 @@
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bssk0jqspmsvr8kha9l5cslyhjvc50y30wdgavbca256lv75gh8";
+    sha256 = "1sw6b1jaddacfm4kvvhgxn743khmsi1c4b4f5mgvm3rabv0h473h";
   };
 
   nativeBuildInputs = [ installShellFiles pbr ];
