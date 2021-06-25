@@ -118,7 +118,7 @@ in
       let speeds = concatStringsSep "," (map toString config.services.getty.serialSpeed); in
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
-          (gettyCmd "%I ${speeds} $TERM")
+          (gettyCmd "%I --keep-baud ${speeds} $TERM")
         ];
         restartIfChanged = false;
       };
