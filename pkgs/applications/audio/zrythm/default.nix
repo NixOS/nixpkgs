@@ -1,20 +1,28 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , SDL2
 , alsaLib
 , libaudec
 , bash
 , bash-completion
+, breeze-icons
 , carla
 , chromaprint
+, epoxy
 , ffmpeg
 , fftw
 , fftwFloat
+, flex
 , git
+, glib
 , gtk3
 , gtksourceview3
+, gtksourceview4
 , guile
+, graphviz
 , help2man
+, libbacktrace
 , libcyaml
 , libgtop
 , libjack2
@@ -23,12 +31,15 @@
 , libxml2
 , libyaml
 , lilv
+, lv2
 , meson
 , ninja
 , pandoc
 , pcre
+, pcre2
 , pkg-config
 , python3
+, reproc
 , rtaudio
 , rtmidi
 , rubberband
@@ -38,24 +49,26 @@
 , texi2html
 , wrapGAppsHook
 , xdg_utils
+, xxHash
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "v1.0.0-alpha.18.2.1";
+  version = "1.0.0-alpha.19.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ps5rvpb21ndi4ja487j478r80ha68id75xp30ck2wvcv8i18z9l";
+    sha256 = "sha256-wNkciSDOb82zlHDUck+mN6WSzbAFP6XJDExbbuZ+E94=";
   };
 
   nativeBuildInputs = [
-    libaudec
     git
     gtk3
     help2man
+    libaudec
     libxml2
     meson
     ninja
@@ -73,11 +86,18 @@ stdenv.mkDerivation rec {
     bash-completion
     carla
     chromaprint
+    epoxy
     ffmpeg
     fftw
     fftwFloat
+    flex
+    breeze-icons
+    glib
     gtksourceview3
+    gtksourceview4
+    graphviz
     guile
+    libbacktrace
     libcyaml
     libgtop
     libjack2
@@ -85,7 +105,10 @@ stdenv.mkDerivation rec {
     libsndfile
     libyaml
     lilv
+    lv2
     pcre
+    pcre2
+    reproc
     rtaudio
     rtmidi
     rubberband
@@ -93,6 +116,8 @@ stdenv.mkDerivation rec {
     sord
     sratom
     xdg_utils
+    xxHash
+    zstd
   ];
 
   mesonFlags = [
@@ -101,19 +126,24 @@ stdenv.mkDerivation rec {
     "-Denable_rtaudio=true"
     "-Denable_sdl=true"
     "-Dmanpage=true"
-    "-Duser_manual=true"
+    # "-Duser_manual=true" # needs sphinx-intl
+    "-Dlsp_dsp=disabled"
   ];
 
+  NIX_LDFLAGS = ''
+    -lfftw3_threads -lfftw3f_threads
+  '';
+
   postPatch = ''
-    chmod +x resources/gen_gtk_resources_xml_wrap.sh # patchShebangs only works on executable files
-    patchShebangs resources/gen_gtk_resources_xml_wrap.sh
+    patchShebangs ext/sh-manpage-completions/run.sh
+    patchShebangs scripts/generic_guile_wrap.sh
+    chmod +x scripts/meson-post-install.sh # patchShebangs only works on executable files
+    patchShebangs scripts/meson-post-install.sh
+    patchShebangs tools/check_have_unlimited_memlock.sh
   '';
 
-  preInstall = ''
-    patchShebangs meson_post_install_wrap.sh # gets created during build.
-  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.zrythm.org";
     description = "highly automated and intuitive digital audio workstation";
     maintainers = [ maintainers.magnetophon ];
