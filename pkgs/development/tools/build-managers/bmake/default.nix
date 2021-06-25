@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch
 , getopt, tzdata
+, pkgsMusl # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -78,6 +79,10 @@ stdenv.mkDerivation rec {
   '';
 
   setupHook = ./setup-hook.sh;
+
+  passthru.tests = {
+    bmakeMusl = pkgsMusl.bmake;
+  };
 
   meta = with lib; {
     description = "Portable version of NetBSD 'make'";
