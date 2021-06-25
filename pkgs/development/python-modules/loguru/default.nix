@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
+, fetchFromGitHub
 , isPy27
 , colorama
 , pytestCheckHook
@@ -11,22 +10,15 @@
 
 buildPythonPackage rec {
   pname = "loguru";
-  version = "0.5.3";
+  version = "unstable-2021-03-19";
 
-  # python3.9 compatibility should be in the next release after 0.5.3
-  disabled = isPy27 || pythonAtLeast "3.9";
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b28e72ac7a98be3d28ad28570299a393dfcd32e5e3f6a353dec94675767b6319";
+  disabled = isPy27;
+  src = fetchFromGitHub {
+    owner = "Delgan";
+    repo = "loguru";
+    rev = "68616485f4f0decb5fced36a16040f5e05e2842f";
+    sha256 = "1gnn7hgs3c521kzlas7vs4js3ljbky6w7j61v650zrjdnas67zqd";
   };
-
-  patches = [
-    # Fixes tests with pytest>=6.2.2. Will be part of the next release after 0.5.3
-    (fetchpatch {
-      url = "https://github.com/Delgan/loguru/commit/31cf758ee9d22dbfa125f38153782fe20ac9dce5.patch";
-      sha256 = "1lzbs8akg1s7s6xjl3samf4c4bpssqvwg5fn3mwlm4ysr7jd5y67";
-    })
-  ];
 
   checkInputs = [ pytestCheckHook colorama ];
 
