@@ -49,6 +49,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-feedback = callPackage ./apps/elementary-feedback { };
 
+  elementary-mail = callPackage ./apps/elementary-mail { };
+
   elementary-music = callPackage ./apps/elementary-music { };
 
   elementary-photos = callPackage ./apps/elementary-photos { };
