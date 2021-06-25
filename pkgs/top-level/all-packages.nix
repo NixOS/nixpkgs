@@ -6614,6 +6614,8 @@ in
 
   libinsane = callPackage ../development/libraries/libinsane { };
 
+  libint = callPackage ../development/libraries/libint {};
+
   libipfix = callPackage ../development/libraries/libipfix { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
