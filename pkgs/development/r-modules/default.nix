@@ -252,9 +252,10 @@ let
     data_table = [pkgs.zlib.dev] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
+    exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
     fftw = [ pkgs.fftw.dev ];
-    fftwtools = [ pkgs.fftw.dev ];
+    fftwtools = [ pkgs.fftw.dev pkgs.pkg-config ];
     Formula = [ pkgs.gmp ];
     gdtools = [ pkgs.cairo.dev pkgs.fontconfig.lib pkgs.freetype.dev ];
     git2r = [ pkgs.zlib.dev pkgs.openssl.dev pkgs.libssh2.dev pkgs.libgit2 pkgs.pkg-config ];
@@ -275,7 +276,8 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
-    lwgeom = [ pkgs.gdal pkgs.geos pkgs.proj ];
+    lpsymphony = [ pkgs.pkgconfig pkgs.gfortran pkgs.gettext ];
+    lwgeom = [pkgs.proj.dev pkgs.proj pkgs.pkg-config pkgs.geos pkgs.sqlite pkgs.gdal ];
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl_1 ];
@@ -344,6 +346,7 @@ let
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl_1 ];
     stringi = [ pkgs.icu.dev ];
+    svglite = [ pkgs.libpng.dev ];
     survSNP = [ pkgs.gsl_1 ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     systemfonts = [ pkgs.fontconfig.dev pkgs.freetype.dev ];
@@ -947,6 +950,19 @@ let
         # these won't run without special provisions, so better remove them
         rm -r $out/library/littler/script-tests
       '';
+    });
+
+    R_cache = old.R_cache.overrideDerivation (attrs: {
+      preConfigure = ''
+        export R_CACHE_ROOTPATH=$TMP
+      '';
+    });
+
+
+    lpsymphony = old.lpsymphony.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
     });
 
   };
