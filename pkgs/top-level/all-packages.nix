@@ -21376,6 +21376,10 @@ in
 
   octomap = callPackage ../development/libraries/octomap { };
 
+  odin = callPackage ../development/compilers/odin {
+    llvmPackages = llvmPackages_11;
+  };
+
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
   odroid-xu3-bootloader = callPackage ../tools/misc/odroid-xu3-bootloader { };
