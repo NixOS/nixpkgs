@@ -126,5 +126,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ puffnfresh vojta001 ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64;
   };
 }
