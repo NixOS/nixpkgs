@@ -418,6 +418,7 @@ let
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     tesseract = [ pkgs.pkg-config ];
+    terra = [ pkgs.gdal pkgs.proj pkgs.geos ];
     Cairo = [ pkgs.pkg-config ];
     CLVTools = [ pkgs.gsl ];
     JMcmprsk = [ pkgs.gsl ];
