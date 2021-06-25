@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkEnableOption mkIf mkOption types;
-  inherit (pkgs) solanum;
+  inherit (pkgs) solanum util-linux;
   cfg = config.services.solanum;
 
   configFile = pkgs.writeText "solanum.conf" cfg.config;
@@ -78,15 +78,20 @@ in
 
   config = mkIf cfg.enable (lib.mkMerge [
     {
+
+      environment.etc."solanum/ircd.conf".source = configFile;
+
       systemd.services.solanum = {
         description = "Solanum IRC daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        environment = {
-          BANDB_DBPATH = "/var/lib/solanum/ban.db";
-        };
+        reloadIfChanged = true;
+        restartTriggers = [
+          configFile
+        ];
         serviceConfig = {
-          ExecStart   = "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile ${configFile} -pidfile /run/solanum/ircd.pid";
+          ExecStart = "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile /etc/solanum/ircd.conf -pidfile /run/solanum/ircd.pid";
+          ExecReload = "${util-linux}/bin/kill -HUP $MAINPID";
           DynamicUser = true;
           User = "solanum";
           StateDirectory = "solanum";

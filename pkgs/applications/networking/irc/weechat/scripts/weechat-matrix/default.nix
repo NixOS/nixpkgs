@@ -73,6 +73,7 @@ in buildPythonPackage {
   postFixup = ''
     addToSearchPath program_PYTHONPATH $out/${python.sitePackages}
     patchPythonScript $out/share/matrix.py
+    substituteInPlace $out/${python.sitePackages}/matrix/server.py --replace \"matrix_sso_helper\" \"$out/bin/matrix_sso_helper\"
   '';
 
   meta = with lib; {

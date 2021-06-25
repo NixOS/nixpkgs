@@ -15,8 +15,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.16.2";
-    commit = "e98e41a8e168af7acae8079fc0cd68155f699aa3";
+    version = "1.16.4";
+    commit = "bf5d0eb44b781ac26ff1513700bcb114b7cf4300";
   };
 in
 buildBazelPackage rec {
@@ -26,7 +26,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     rev = srcVer.commit;
-    hash = "sha256-aWVMRKFCZzf9/96NRPCP4jiW38DJhXyi0gEqW7uIpnQ=";
+    sha256 = "0zabb9w4x3lai4ly4qq85dfslpm95ag9dyvl7y0bh4r9prbvqh7w";
 
     extraPostFetch = ''
       chmod -R +w $out

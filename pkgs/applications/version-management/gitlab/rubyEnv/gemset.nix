@@ -1978,10 +1978,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1y1sk3xmxj14nzx7v2zgq4q4d5lh4v1pvhs03n03j3kp4fbrj469";
+      sha256 = "0184rq6sal3xz4f0w5iaa5zf3q55i4dh0rlvr25l1g0s2imwr3fa";
       type = "gem";
     };
-    version = "0.17.1";
+    version = "0.16.2";
   };
   gitlab-license = {
     groups = ["default"];
@@ -2127,10 +2127,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0d9ayd4c69iag9nny7yydjx6dw4ymd52x1kv917ngv3vmsdkv51x";
+      sha256 = "0pbm2kjhxvazx9d5c071bxcjx5cbip6d2y36dii2a4558nqjd12p";
       type = "gem";
     };
-    version = "3.15.8";
+    version = "3.14.0";
   };
   googleapis-common-protos-types = {
     dependencies = ["google-protobuf"];
@@ -3811,15 +3811,14 @@
     version = "1.2.3";
   };
   pg_query = {
-    dependencies = ["google-protobuf"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1mii63kgppy2zil2qn54c94z93b6ama6x7gq6rbv4xxlfk8ncrag";
+      sha256 = "1i9l3y502ddm2lq3ajhxhqq17vs9hgxkxm443yw221ccibcfh6qf";
       type = "gem";
     };
-    version = "2.0.3";
+    version = "1.3.0";
   };
   plist = {
     groups = ["default"];

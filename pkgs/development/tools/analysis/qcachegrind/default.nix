@@ -1,4 +1,4 @@
-{ lib, stdenv, qmake, qtbase, perl, python, php, kcachegrind }:
+{ lib, stdenv, qmake, qtbase, perl, python, php, kcachegrind, wrapQtAppsHook }:
 
 let
   name = lib.replaceStrings ["kcachegrind"] ["qcachegrind"] kcachegrind.name;
@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ qtbase perl python php ];
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   dontWrapQtApps = true;
 
@@ -33,9 +33,13 @@ in stdenv.mkDerivation {
     install -Dm644 kcachegrind/48-apps-kcachegrind.png "$out/share/icons/hicolor/48x48/apps/kcachegrind.png"
   '');
 
+  preFixup = ''
+    wrapQtApp "$out/bin/qcachegrind"
+  '';
+
   meta = with lib; {
     description = "A Qt GUI to visualize profiling data";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ periklis ];
   };

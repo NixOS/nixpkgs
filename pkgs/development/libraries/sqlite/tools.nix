@@ -8,7 +8,7 @@ let
 
     src = assert version == sqlite.version; fetchurl {
       url = "https://sqlite.org/2021/sqlite-src-${archiveVersion version}.zip";
-      sha256 = "9StypcMZw+UW7XqS4SMTmm6Hrwii3EPXdXck9hMubbA=";
+      sha256 = "049vdpk50sba786345ibmlxnkzk5zp4xj859658ancswb6jyrgpl";
     };
 
     nativeBuildInputs = [ unzip ];

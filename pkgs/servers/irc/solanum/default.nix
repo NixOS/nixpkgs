@@ -23,8 +23,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./dont-create-logdir.patch
-    ./bandb.patch # https://github.com/solanum-ircd/solanum/issues/156
   ];
+
+  postPatch = ''
+    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
+  '';
 
   configureFlags = [
     "--enable-epoll"
@@ -58,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hexa ];
     platforms = platforms.unix;
   };
