@@ -489,6 +489,7 @@ in with py.pkgs; buildPythonApplication rec {
     "isy994"
     "izone"
     "jewish_calendar"
+    "keenetic_ndms2"
     "kira"
     "kmtronic"
     "knx"

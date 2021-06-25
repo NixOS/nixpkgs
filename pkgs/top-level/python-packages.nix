@@ -4684,6 +4684,8 @@ in {
 
   ndjson = callPackage ../development/python-modules/ndjson { };
 
+  ndms2-client = callPackage ../development/python-modules/ndms2-client { };
+
   ndspy = callPackage ../development/python-modules/ndspy { };
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
