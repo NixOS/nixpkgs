@@ -30733,6 +30733,8 @@ in
 
   idsk = callPackage ../tools/filesystems/idsk { };
 
+  lima = callPackage ../applications/virtualization/lima {};
+
   logtop = callPackage ../tools/misc/logtop { };
 
   igraph = callPackage ../development/libraries/igraph { };
