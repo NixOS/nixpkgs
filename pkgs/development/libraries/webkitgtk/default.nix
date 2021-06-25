@@ -229,6 +229,12 @@ stdenv.mkDerivation rec {
     "-DENABLE_X11_TARGET=OFF"
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
+
+    # FIXME: Remove this option once the macOS SDK has been updated to 10.13.
+    # This option disables WebKit's bmalloc memory allocator, which includes
+    # various mitigations against heap exploits.
+    #
+    # https://blogs.gnome.org/mcatanzaro/2018/11/02/on-webkit-build-options-also-how-to-accidentally-disable-important-security-features/
     "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-DUSE_SYSTEMD=OFF"
