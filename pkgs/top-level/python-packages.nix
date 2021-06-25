@@ -5311,6 +5311,8 @@ in {
 
   pyisy = callPackage ../development/python-modules/pyisy { };
 
+  pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
