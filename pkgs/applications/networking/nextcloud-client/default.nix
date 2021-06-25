@@ -38,6 +38,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
+    inkscape
   ];
 
   buildInputs = [
@@ -54,7 +55,6 @@ mkDerivation rec {
     qtgraphicaleffects
     qtwebsockets
     sqlite
-    inkscape
   ];
 
   qtWrapperArgs = [
