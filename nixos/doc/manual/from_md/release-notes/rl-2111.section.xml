@@ -81,6 +81,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>consul</literal> was upgraded to a new major release
+          with breaking changes, see
+          <link xlink:href="https://github.com/hashicorp/consul/releases/tag/v1.10.0">upstream
+          changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           fsharp41 has been removed in preference to use the latest
           dotnet-sdk
         </para>

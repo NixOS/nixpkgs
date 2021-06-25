@@ -1062,7 +1062,11 @@
     email = "babathriviere@gmail.com";
     github = "babariviere";
     githubId = 12128029;
-    name = "babariviere";
+    name = "Bastien Rivière";
+    keys = [{
+      longkeyid = "rsa4096/0xF202AD3B6EDF4BD1";
+      fingerprint = "2F85 B362 B274 0012 37E2  81EE F202 AD3B 6EDF 4BD1";
+    }];
   };
   babbaj = {
     name = "babbaj";
@@ -1225,6 +1229,16 @@
     email = "benedikt.tissot@googlemail.com";
     github = "benneti";
     githubId = 11725645;
+  };
+  bertof = {
+    name = "Filippo Berto";
+    email = "berto.f@protonmail.com";
+    github = "bertof";
+    githubId = 9915675;
+    keys = [{
+      longkeyid = "rsa4096/0xFE98AE5EC52B1056";
+      fingerprint = "17C5 1EF9 C0FE 2EB2 FE56  BB53 FE98 AE5E C52B 1056";
+    }];
   };
   bennofs = {
     email = "benno.fuenfstueck@gmail.com";
@@ -2540,6 +2554,12 @@
     github = "diegolelis";
     githubId = 8404455;
     name = "Diego Lelis";
+  };
+  diffumist = {
+    email = "diffumist@gmail.com";
+    github = "diffumist";
+    githubId = 32810399;
+    name = "Diffumist";
   };
   diogox = {
     name = "Diogo Xavier";

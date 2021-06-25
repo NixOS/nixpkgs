@@ -241,11 +241,11 @@ xkb_symbols &quot;us-greek&quot;
   description = "US layout with alt-gr greek";
   languages   = [ "eng" ];
   symbolsFile = /yourpath/symbols/us-greek;
-}
+};
 </programlisting>
   <note>
   <para>
-   The name should match the one given to the
+   The name (after <literal>extraLayouts.</literal>) should match the one given to the
    <literal>xkb_symbols</literal> block.
   </para>
   </note>

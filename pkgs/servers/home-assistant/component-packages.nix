@@ -414,7 +414,7 @@
     "isy994" = ps: with ps; [ pyisy ];
     "itach" = ps: with ps; [ ]; # missing inputs: pyitachip2ir
     "itunes" = ps: with ps; [ ];
-    "izone" = ps: with ps; [ ]; # missing inputs: python-izone
+    "izone" = ps: with ps; [ python-izone ];
     "jewish_calendar" = ps: with ps; [ hdate ];
     "joaoapps_join" = ps: with ps; [ ]; # missing inputs: python-join-api
     "juicenet" = ps: with ps; [ ]; # missing inputs: python-juicenet
@@ -430,7 +430,7 @@
     "kmtronic" = ps: with ps; [ pykmtronic ];
     "knx" = ps: with ps; [ xknx ];
     "kodi" = ps: with ps; [ pykodi ];
-    "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
+    "konnected" = ps: with ps; [ aiohttp-cors konnected ];
     "kostal_plenticore" = ps: with ps; [ ]; # missing inputs: kostal_plenticore
     "kraken" = ps: with ps; [ ]; # missing inputs: krakenex pykrakenapi
     "kulersky" = ps: with ps; [ pykulersky ];
