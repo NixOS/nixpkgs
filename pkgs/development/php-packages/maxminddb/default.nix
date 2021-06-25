@@ -1,7 +1,7 @@
 { buildPecl, lib, fetchFromGitHub, libmaxminddb }:
 let
   pname = "maxminddb";
-  version = "1.10.0";
+  version = "1.10.1";
 in
 buildPecl {
   inherit pname version;
@@ -10,7 +10,7 @@ buildPecl {
     owner = "maxmind";
     repo = "MaxMind-DB-Reader-php";
     rev = "v${version}";
-    sha256 = "sha256-2SnajDdO5uAYcuVpEbOuFlZzMxwo/EqFtUSr9XxT0KQ=";
+    sha256 = "1m5y733x4ykldi1pym54mdahfwfnwy2r1n6fnndwi8jz9px9pa5k";
   };
 
   buildInputs = [ libmaxminddb ];
