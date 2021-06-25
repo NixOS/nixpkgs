@@ -15,11 +15,11 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "imagej";
-  version = "150";
+  version = "153";
 
   src = fetchurl {
     url = "https://wsr.imagej.net/distros/cross-platform/ij${version}.zip";
-    sha256 = "97aba6fc5eb908f5160243aebcdc4965726693cb1353d9c0d71b8f5dd832cb7b";
+    sha256 = "sha256-MGuUdUDuW3s/yGC68rHr6xxzmYScUjdXRawDpc1UQqw=";
   };
   nativeBuildInputs = [ copyDesktopItems makeWrapper unzip ];
   desktopItems = lib.optionals stdenv.isLinux [
