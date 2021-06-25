@@ -662,6 +662,7 @@ in with py.pkgs; buildPythonApplication rec {
     "surepetcare"
     "switch"
     "switcher_kis"
+    "syncthing"
     "system_health"
     "system_log"
     "tado"
