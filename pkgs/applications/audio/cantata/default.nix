@@ -78,13 +78,13 @@ let
 in
 mkDerivation rec {
   pname = "cantata";
-  version = "2.4.2";
+  version = "unstable-2021-06-14";
 
   src = fetchFromGitHub {
     owner = "CDrummond";
     repo = "cantata";
-    rev = "v${version}";
-    sha256 = "15qfx9bpfdplxxs08inwf2j8kvf7g5cln5sv1wj1l2l41vbf1mjr";
+    rev = "b5775c77578ea147b327fc6076751a392c8e27b1";
+    sha256 = "fkYxoPGfjk0wnvVEJmIps0k+C0BZ1HzDkJurzk7ObWs=";
   };
 
   patches = [
