@@ -564,12 +564,12 @@ _addToEnv() {
                 #
                 # TODO(@Ericson2314): Don't special-case native compilation
                 for pkg in \
-                    ${pkgsBuildBuild+"${pkgsBuildBuild[@]}"} \
-                    ${pkgsBuildHost+"${pkgsBuildHost[@]}"} \
-                    ${pkgsBuildTarget+"${pkgsBuildTarget[@]}"} \
-                    ${pkgsHostHost+"${pkgsHostHost[@]}"} \
-                    ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
-                    ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
+                    "${pkgsBuildBuild[@]}" \
+                    "${pkgsBuildHost[@]}" \
+                    "${pkgsBuildTarget[@]}" \
+                    "${pkgsHostHost[@]}" \
+                    "${pkgsHostTarget[@]}" \
+                    "${pkgsTargetTarget[@]}"
                 do
                     if [[ "$visitedPkgs" = *"$pkg"* ]]; then
                         continue
@@ -1014,7 +1014,7 @@ configurePhase() {
         IFS=" " read -r -a configureFlagsTemp <<< "$configureFlags"
         local -a flagsArray=(
             "${configureFlagsTemp[@]}"
-            ${configureFlagsArray+"${configureFlagsArray[@]}"}
+            "${configureFlagsArray[@]}"
         )
         echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
@@ -1045,9 +1045,9 @@ buildPhase() {
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL="$SHELL"
             "${makeFlagsTemp[@]}"
-            ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            "${makeFlagsArray[@]}"
             "${buildFlagsTemp[@]}"
-            ${buildFlagsArray+"${buildFlagsArray[@]}"}
+            "${buildFlagsArray[@]}"
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
@@ -1087,9 +1087,9 @@ checkPhase() {
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL="$SHELL"
             "${makeFlagsTemp[@]}"
-            ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            "${makeFlagsArray[@]}"
             "${checkFlagsTemp[@]}"
-            ${checkFlagsArray+"${checkFlagsArray[@]}"}
+            "${checkFlagsArray[@]}"
             "${checkTargetTemp[@]}"
         )
 
@@ -1117,9 +1117,9 @@ installPhase() {
     local -a flagsArray=(
         SHELL="$SHELL"
         "${makeFlagsTemp[@]}"
-        ${makeFlagsArray+"${makeFlagsArray[@]}"}
+        "${makeFlagsArray[@]}"
         "${installFlagsTemp[@]}"
-        ${installFlagsArray+"${installFlagsArray[@]}"}
+        "${installFlagsArray[@]}"
         "${installTargetsTemp[@]}"
     )
 
@@ -1233,9 +1233,9 @@ installCheckPhase() {
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL="$SHELL"
             "${makeFlagsTemp[@]}"
-            ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            "${makeFlagsArray[@]}"
             "${installCheckFlagsTemp[@]}"
-            ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
+            "${installCheckFlagsArray[@]}"
             "${installCheckTargetTemp[@]}"
         )
 
