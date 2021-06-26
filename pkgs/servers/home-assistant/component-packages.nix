@@ -25,7 +25,7 @@
     "alert" = ps: with ps; [ ];
     "alexa" = ps: with ps; [ aiohttp-cors ];
     "almond" = ps: with ps; [ aiohttp-cors pyalmond ];
-    "alpha_vantage" = ps: with ps; [ ]; # missing inputs: alpha_vantage
+    "alpha_vantage" = ps: with ps; [ alpha-vantage ];
     "amazon_polly" = ps: with ps; [ boto3 ];
     "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
     "ambient_station" = ps: with ps; [ aioambient ];
