@@ -16,6 +16,7 @@
 , tllist
 , wayland-protocols
 , pkg-config
+, utf8proc
 , allowPgo ? true
 , python3  # for PGO
 # for clang stdenv check
@@ -25,7 +26,7 @@
 }:
 
 let
-  version = "1.7.2";
+  version = "1.8.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -39,7 +40,7 @@ let
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "019bdiqfi3wx2lwrv3nhq83knc1r3lmqd5zgisa33wwshm2kyv7p";
+      sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
     };
 
     dontUnpack = true;
@@ -93,7 +94,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
-    sha256 = "0iabj9c0dj1r0m89i5gk2jdmwj4wfsai8na54x2w4fq406q6g9nh";
+    sha256 = "07irlhkvziv51cp5zn1yz8ljfnrnfjcykv5pgfwmpslw3nl5szxv";
   };
 
   nativeBuildInputs = [
@@ -115,6 +116,7 @@ stdenv.mkDerivation rec {
     wayland
     libxkbcommon
     fcft
+    utf8proc
   ];
 
   # recommended build flags for performance optimized foot builds
@@ -129,7 +131,11 @@ stdenv.mkDerivation rec {
     export AR="${ar}"
   '';
 
-  mesonFlags = [ "--buildtype=release" "-Db_lto=true" ];
+  mesonFlags = [
+    "--buildtype=release"
+    "-Db_lto=true"
+    "-Dterminfo-install-location=${placeholder "terminfo"}/share/terminfo"
+  ];
 
   # build and run binary generating PGO profiles,
   # then reconfigure to build the normal foot binary utilizing PGO
@@ -144,6 +150,15 @@ stdenv.mkDerivation rec {
     meson configure -Db_pgo=use
   '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
+  '';
+
+  outputs = [ "out" "terminfo" ];
+
+  # make sure nix-env and buildEnv also include the
+  # terminfo output when the package is installed
+  postInstall = ''
+    mkdir -p "$out/nix-support"
+    echo "$terminfo" >> "$out/nix-support/propagated-user-env-packages"
   '';
 
   passthru.tests = {
