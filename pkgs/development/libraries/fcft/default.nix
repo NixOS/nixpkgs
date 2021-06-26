@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/fcft/archive/${version}.tar.gz";
-    sha256 = "0z1r0s5s3dr1g4f3ylxfcmy3xb0ax02rw9mg7z8hzh0gxazrpndx";
+    sha256 = "sha256-QxAp6pnZPLPwarurbKovz0BVOO4XdckBzjB65XCBPAM=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];

@@ -11,7 +11,7 @@
 , glib
 , gtk3
 , bamf
-, libwnck3
+, libwnck
 , libgee
 , libgtop
 , wrapGAppsHook
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     pantheon.wingpanel
     libgee
     libgtop
-    libwnck3
+    libwnck
   ];
 
   postPatch = ''

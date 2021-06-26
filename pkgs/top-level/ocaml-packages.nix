@@ -274,6 +274,8 @@ let
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
+    dose3 = callPackage ../development/ocaml-modules/dose3 { };
+
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
     duff = callPackage ../development/ocaml-modules/duff { };
