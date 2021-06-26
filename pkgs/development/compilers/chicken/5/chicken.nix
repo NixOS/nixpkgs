@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://call-cc.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ corngood ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin; # Maybe other Unix
+    platforms = lib.platforms.unix;
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''
       CHICKEN is a compiler for the Scheme programming language.
