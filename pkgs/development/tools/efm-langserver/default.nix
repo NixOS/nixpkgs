@@ -19,6 +19,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ Philipp-M ];
     homepage = "https://github.com/mattn/efm-langserver";
     license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }
