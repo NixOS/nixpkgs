@@ -72,6 +72,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl3Only gpl3Only ];
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;
-    timeout = 3 * 3600; # Long build time, not parallelized.
   };
 }
