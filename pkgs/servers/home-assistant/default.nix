@@ -715,6 +715,7 @@ in with py.pkgs; buildPythonApplication rec {
     "unifi"
     "unifi_direct"
     "universal"
+    "upb"
     "updater"
     "upnp"
     "uptime"

@@ -2,15 +2,15 @@
 
 buildDunePackage rec {
    pname = "ocaml-migrate-parsetree";
-   version = "2.1.0";
+   version = "2.2.0";
 
    useDune2 = true;
 
-   minimumOCamlVersion = "4.02";
+   minimalOCamlVersion = "4.02";
 
    src = fetchurl {
      url = "https://github.com/ocaml-ppx/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-     sha256 = "07x7lm45kny0mi0fjvzw51445brm0dgy099cw0gpyly0wj77hyrq";
+     sha256 = "188v3z09bg4gyv80c138fa3a3j2w54w5gc4r1ajw7klr70yqz9mj";
    };
 
    meta = {

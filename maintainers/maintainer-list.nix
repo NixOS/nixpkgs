@@ -8120,6 +8120,12 @@
     githubId = 1640697;
     name = "Philipp Hausmann";
   };
+  Philipp-M = {
+    email = "philipp@mildenberger.me";
+    github = "Philipp-M";
+    githubId = 9267430;
+    name = "Philipp Mildenberger";
+  };
   Phlogistique = {
     email = "noe.rubinstein@gmail.com";
     github = "Phlogistique";

@@ -3500,6 +3500,8 @@ in {
 
   injector = callPackage ../development/python-modules/injector { };
 
+  inkex = callPackage ../development/python-modules/inkex { };
+
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
   inquirer = callPackage ../development/python-modules/inquirer { };
@@ -8836,6 +8838,8 @@ in {
   untokenize = callPackage ../development/python-modules/untokenize { };
 
   upass = callPackage ../development/python-modules/upass { };
+
+  upb-lib = callPackage ../development/python-modules/upb-lib { };
 
   update_checker = callPackage ../development/python-modules/update_checker { };
 

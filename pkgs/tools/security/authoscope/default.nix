@@ -11,17 +11,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "badtouch";
-  version = "0.7.3";
+  pname = "authoscope";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05dzwx9y8zh0y9zd4mibp02255qphc6iqy916fkm3ahaw0rg84h3";
+    sha256 = "11ci38m6d3lj4f0g7cl3dqf10kfk258k2k92phd2nav1my4i90pf";
   };
 
-  cargoSha256 = "0mmglgz037dk3g7qagf1dyss5hvvsdy0m5m1h6c3rk5bp5kjzg87";
+  cargoSha256 = "13x7i52i3k88vkfvk2smy2aqfg3na4317scvw7ali1rv545nbxds";
 
   nativeBuildInputs = [
     installShellFiles
@@ -43,8 +43,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Scriptable network authentication cracker";
-    homepage = "https://github.com/kpcyrd/badtouch";
-    license = with licenses; [ gpl3Only ];
+    homepage = "https://github.com/kpcyrd/authoscope";
+    license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };
 }
