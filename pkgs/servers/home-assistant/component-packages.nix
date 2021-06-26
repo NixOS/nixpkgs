@@ -79,7 +79,7 @@
     "bh1750" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "binary_sensor" = ps: with ps; [ ];
     "bitcoin" = ps: with ps; [ blockchain ];
-    "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
+    "bizkaibus" = ps: with ps; [ bizkaibus ];
     "blackbird" = ps: with ps; [ pyblackbird ];
     "blebox" = ps: with ps; [ blebox-uniapi ];
     "blink" = ps: with ps; [ blinkpy ];
