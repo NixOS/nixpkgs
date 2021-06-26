@@ -31595,6 +31595,7 @@ in
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
 
+  vikunja-api = callPackage ../servers/web-apps/vikunja/api.nix { };
   vikunja-frontend = callPackage ../servers/web-apps/vikunja/frontend.nix { };
 
   vips = callPackage ../tools/graphics/vips {
