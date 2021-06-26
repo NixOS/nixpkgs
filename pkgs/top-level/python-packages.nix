@@ -5990,6 +5990,8 @@ in {
 
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 
+  pyhomepilot = callPackage ../development/python-modules/pyhomepilot { };
+
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
 
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
