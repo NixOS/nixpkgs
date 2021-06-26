@@ -13,6 +13,7 @@
 , gawk
 , xdg-utils
 , systemd
+, nodePackages
 , enableRectOverlay ? false }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kx4j837fd344zy90nl0j3r8cdvihy6i6gf56wd5n56zngx1fhjv";
   };
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook nodePackages.asar ];
 
   unpackCmd = "dpkg -x $curSrc .";
 
@@ -40,10 +41,26 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin:${xdg-utils}/bin")
+    gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin")
     gappsWrapperArgs+=(--add-flags --disable-namespace-sandbox)
     gappsWrapperArgs+=(--add-flags --disable-setuid-sandbox)
   '';
+
+
+  buildPhase = ''
+    runHook preBuild
+
+    asar extract share/teams/resources/app.asar "$TMP/work"
+    substituteInPlace $TMP/work/main.bundle.js \
+        --replace "/usr/share/pixmaps/" "$out/share/pixmaps" \
+        --replace "/usr/bin/xdg-mime" "${xdg-utils}/bin/xdg-mime" \
+        --replace "Exec=/usr/bin/" "Exec=" # Remove usage of absolute path in autostart.
+    asar pack --unpack='{*.node,*.ftz,rect-overlay}' "$TMP/work" share/teams/resources/app.asar
+
+    runHook postBuild
+  '';
+
+  preferLocalBuild = true;
 
   installPhase = ''
     runHook preInstall
