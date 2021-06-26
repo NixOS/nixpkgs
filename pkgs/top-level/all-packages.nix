@@ -1777,6 +1777,10 @@ in
 
   atftp = callPackage ../tools/networking/atftp { };
 
+  authoscope = callPackage ../tools/security/authoscope {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   autogen = callPackage ../development/tools/misc/autogen { };
 
   autojump = callPackage ../tools/misc/autojump { };
@@ -1826,10 +1830,6 @@ in
   b3sum = callPackage ../tools/security/b3sum {};
 
   backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
-
-  badtouch = callPackage ../tools/security/badtouch {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   bandwhich = callPackage ../tools/networking/bandwhich {
     inherit (darwin.apple_sdk.frameworks) Security;
