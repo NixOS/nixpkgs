@@ -119,7 +119,7 @@ exitHandler() {
     if [ -n "${showBuildStats:-}" ]; then
         times > "$NIX_BUILD_TOP/.times"
         local -a buildTimesArray
-        IFS=" " read -r -a buildTimesArray <<< "$(cat "$NIX_BUILD_TOP/.times")"
+        IFS=" " read -r -a buildTimesArray < "$NIX_BUILD_TOP/.times"
         # Print the following statistics:
         # - user time for the shell
         # - system time for the shell
