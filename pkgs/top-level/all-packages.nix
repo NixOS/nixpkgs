@@ -5638,6 +5638,8 @@ in
 
   hash_extender = callPackage ../tools/security/hash_extender { };
 
+  hash-identifier = callPackage ../tools/security/hash-identifier { };
+
   hash-slinger = callPackage ../tools/security/hash-slinger { };
 
   haskell-language-server = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { };
