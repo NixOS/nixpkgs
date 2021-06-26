@@ -627,6 +627,7 @@ in with py.pkgs; buildPythonApplication rec {
     "shell_command"
     "shelly"
     "shopping_list"
+    "sia"
     "sigfox"
     "sighthound"
     "simplisafe"
