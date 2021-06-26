@@ -284,6 +284,10 @@ let
           export NIXOS_INSTALL_BOOTLOADER=1
           ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
+          # Record the nix db to load on boot (underlying nix store is shared with host)
+          # This is a poor man's symlink, as the /boot fs doesn't support true symlinks
+          echo "${regInfo}/registration" > /boot/regInfo
+
           umount /boot
         '' # */
     );
@@ -905,17 +909,31 @@ in
 
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
-    # allows Nix operations to work in the VM.  The path to the
-    # registration file is passed through the kernel command line to
-    # allow `system.build.toplevel' to be included.  (If we had a direct
-    # reference to ${regInfo} here, then we would get a cyclic
-    # dependency.)
-    boot.postBootCommands = lib.mkIf config.nix.enable
+    # allows Nix operations to work in the VM.
+    # When running without a bootloader, the path to the registration file is
+    # passed through the kernel command line to allow `system.build.toplevel'
+    # to be included.  (If we had a direct reference to ${regInfo} here, then
+    # we would get a cyclic dependency.)
+    # When running with a bootloader, we instead pass through a file in /boot,
+    # which is loaded by systemd after the fs is mounted. (This is to support
+    # both systemd-boot and grub.)
+    boot.postBootCommands = lib.mkIf (config.nix.enable && !cfg.useBootLoader)
       ''
         if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
           ${config.nix.package.out}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
         fi
       '';
+
+    systemd.services.nix-load-db = lib.mkIf (config.nix.enable && cfg.useBootLoader) {
+        description = "Load nix db shared by host";
+        wantedBy = [ "default.target" ];
+        wants = ["boot.mount"];
+        after = ["boot.mount"];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "/bin/sh -c 'cat $(cat /boot/regInfo) | ${config.nix.package.out}/bin/nix-store --load-db'";
+        };
+      };
 
     boot.initrd.availableKernelModules =
       optional cfg.writableStore "overlay"
