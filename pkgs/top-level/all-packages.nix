@@ -1198,6 +1198,8 @@ in
 
   aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
 
+  aws-client-vpn = callPackage ../applications/networking/aws-client-vpn { };
+
   aws-env = callPackage ../tools/admin/aws-env { };
 
   aws-google-auth = python3Packages.callPackage ../tools/admin/aws-google-auth { };
