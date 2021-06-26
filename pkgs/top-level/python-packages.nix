@@ -1099,6 +1099,8 @@ in {
 
   bitvavo-aio = callPackage ../development/python-modules/bitvavo-aio { };
 
+  bizkaibus = callPackage ../development/python-modules/bizkaibus { };
+
   bjoern = callPackage ../development/python-modules/bjoern { };
 
   bkcharts = callPackage ../development/python-modules/bkcharts { };
