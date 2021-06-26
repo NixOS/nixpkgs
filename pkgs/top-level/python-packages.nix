@@ -8939,6 +8939,8 @@ in {
 
   viewstate = callPackage ../development/python-modules/viewstate { };
 
+  vilfo-api-client = callPackage ../development/python-modules/vilfo-api-client { };
+
   vincenty = callPackage ../development/python-modules/vincenty { };
 
   vine = callPackage ../development/python-modules/vine { };
