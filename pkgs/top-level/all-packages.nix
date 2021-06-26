@@ -13939,6 +13939,8 @@ in
 
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
+  pycritty = with python3Packages; toPythonApplication pycritty;
+
   qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit {} ;

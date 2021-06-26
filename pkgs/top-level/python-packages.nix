@@ -5763,6 +5763,8 @@ in {
 
   pycrc = callPackage ../development/python-modules/pycrc { };
 
+  pycritty = callPackage ../development/python-modules/pycritty { };
+
   pycron = callPackage ../development/python-modules/pycron { };
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
