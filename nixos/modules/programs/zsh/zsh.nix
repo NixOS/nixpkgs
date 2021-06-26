@@ -91,7 +91,7 @@ in
           # before setting your PS1 and etc. Otherwise this will likely to interact with
           # your ~/.zshrc configuration in unexpected ways as the default prompt sets
           # a lot of different prompt variables.
-          autoload -U promptinit && promptinit && prompt walters && setopt prompt_sp
+          autoload -U promptinit && promptinit && prompt suse && setopt prompt_sp
         '';
         description = ''
           Shell script code used to initialise the zsh prompt.
