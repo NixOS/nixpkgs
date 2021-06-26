@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, ... }:
+{ stdenv, lib, fetchurl, unzip, nixosTests, ... }:
 
 stdenv.mkDerivation rec {
   pname = "vikunja-frontend";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.vikunja = nixosTests.vikunja;
 
   meta = {
     description = "Frontend of the Vikunja to-do list app";
