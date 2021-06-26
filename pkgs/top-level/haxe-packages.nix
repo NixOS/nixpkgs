@@ -23,20 +23,22 @@ let
     buildHaxeLib = {
       libname,
       version,
-      sha256,
+      sha256 ? null,
+      src ? null,
       meta,
       ...
     } @ attrs:
+      assert sha256 != null || src != null;
       stdenv.mkDerivation (attrs // {
         name = "${libname}-${version}";
 
         buildInputs = (attrs.buildInputs or []) ++ [ haxe neko ]; # for setup-hook.sh to work
-        src = fetchzip rec {
+        src = attrs.src or (fetchzip rec {
           name = "${libname}-${version}";
           url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
           inherit sha256;
           stripRoot = false;
-        };
+        });
 
         installPhase = attrs.installPhase or ''
           runHook preInstall
@@ -61,8 +63,8 @@ let
 
     hxcpp = buildHaxeLib rec {
       libname = "hxcpp";
-      version = "4.1.15";
-      sha256 = "1ybxcvwi4655563fjjgy6xv5c78grjxzadmi3l1ghds48k1rh50p";
+      version = "4.2.1";
+      sha256 = "10ijb8wiflh46bg30gihg7fyxpcf26gibifmq5ylx0fam4r51lhp";
       postFixup = ''
         for f in $out/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
           chmod +w "$f"
@@ -115,5 +117,107 @@ let
         description = "Extern definitions for node.js 6.9";
       };
     };
+
+    hscript = buildHaxeLib {
+      libname = "hscript";
+      version = "2.4.0";
+      sha256 = "0qdxgqb75j1v125l9xavs1d32wwzi60rhfymngdhjqhdvq72bhxx";
+      meta = with lib; {
+        license = licenses.mit;
+        description = "Scripting engine for a subset of the Haxe language";
+      };
+    };
+
+    lime = buildHaxeLib {
+      libname = "lime";
+      version = "7.9.0";
+      sha256 = "0n2qkvfbwgk35py26vlnmgga711x37rik32dca63jhh46j1m4h7d";
+      meta = with lib; {
+        license = licenses.mit;
+        description = "Flexible, lightweight layer for Haxe cross-platform developers";
+      };
+    };
+
+    openfl = buildHaxeLib {
+      libname = "openfl";
+      version = "9.1.0";
+      sha256 = "0ri9s8d7973d2jz6alhl5i4fx4ijh0kb27mvapq28kf02sp8kgim";
+      meta = with lib; {
+        license = licenses.mit;
+        description = "Open Flash Library for fast 2D development";
+      };
+    };
+
+    flixel = buildHaxeLib {
+      libname = "flixel";
+      version = "4.8.1";
+      sha256 = "1m7l92xg6nndy7m98yfmcrsqvd2rhafckx1xbv0im69y823c27a3";
+      meta = with lib; {
+        license = licenses.mit;
+        description = "2D game engine based on OpenFL that delivers cross-platform games";
+      };
+    };
+
+    flixel-addons = buildHaxeLib {
+      libname = "flixel-addons";
+      version = "2.9.0";
+      sha256 = "1zz1pcp20j3r87m0laq32dg0708kir3188dpgpx7c3c3mmxlw6sp";
+      meta = with lib; {
+        license = licenses.mit;
+        description = "Set of useful, but optional classes for HaxeFlixel created by the community";
+      };
+    };
+
+    flixel-ui = buildHaxeLib {
+      libname = "flixel-ui";
+      version = "2.3.3";
+      sha256 = "1xrsjzcg1wv7j9fbifcg5v9zvfr1vhs0spar8nmi86liiqv1iwka";
+      meta = with lib; {
+        license = licenses.mit;
+        description = "UI library for Flixel";
+      };
+    };
+
+    newgrounds = buildHaxeLib {
+      libname = "newgrounds";
+      version = "1.1.4";
+      sha256 = "0lk4wiqj3k209qfxc1c6qs038m6a3hd1mhjk0z40y90r13n3hfzj";
+      meta = with lib; {
+        license = licenses.mit;
+        description = "Newgrounds API for haxe";
+      };
+    };
+
+    polymod = buildHaxeLib {
+      libname = "polymod";
+      version = "unstable-2021-04-06";
+      src = fetchFromGitHub {
+        owner = "larsiusprime";
+        repo = "polymod";
+        rev = "bb5f0a120419ac3a7132d96aff1e6f7a36b97d67";
+        sha256 = "1afrajf4mcw0kqz64gsa8h71r54c4i6hhb2pn6kw6z4rg3ilixlf";
+      };
+      meta = with lib; {
+        license = licenses.mit;
+        description = "Atomic modding framework for Haxe games/apps";
+      };
+    };
+
+    discord_rpc = buildHaxeLib {
+      libname = "discord_rpc";
+      version = "unstable-2021-03-26";
+      src = fetchFromGitHub {
+        owner = "Aidan63";
+        repo = "linc_discord-rpc";
+        rev = "2d83fa863ef0c1eace5f1cf67c3ac315d1a3a8a5";
+        fetchSubmodules = true;
+        sha256 = "0w3f9772ypqil348dq8xvhh5g1z5dii5rrwlmmvcdr2gs2c28c7k";
+      };
+      meta = with lib; {
+        license = licenses.mit;
+        description = "Native bindings for discord-rpc";
+      };
+    };
+
   };
 in self
