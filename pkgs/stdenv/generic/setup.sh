@@ -657,11 +657,11 @@ export NIX_BUILD_CORES
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
 # Leave it in impure shells for convenience.
-if [ -z "${NIX_SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+if [[ -z "${NIX_SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
   export NIX_SSL_CERT_FILE=/no-cert-file.crt
 fi
 # Another variant left for compatibility.
-if [ -z "${SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+if [[ -z "${SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
   export SSL_CERT_FILE=/no-cert-file.crt
 fi
 
