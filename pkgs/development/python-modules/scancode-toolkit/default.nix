@@ -37,12 +37,12 @@
 }:
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "21.3.31";
+  version = "21.6.7";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7e0301031a302dedbb4304a91249534f3d036f84a119170b8a9fe70bd57cff95";
+    sha256 = "056923ce556cd6d402e5cc98567cb0331a1b6349d03ec565f8ce1c9c37f3a783";
   };
 
   dontConfigure = true;

@@ -4,6 +4,7 @@
 , backports-zoneinfo
 , buildPythonPackage
 , fetchFromGitHub
+, holidays
 , poetry-core
 , pytest-asyncio
 , pytest-timeout
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiopvpc";
-  version = "2.1.2";
+  version = "2.2.0";
   disabled = pythonOlder "3.8";
   format = "pyproject";
 
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "azogue";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s8ki46dh39kw6qvsjcfcxa0gblyi33m3hry137kbi4lw5ws6qhr";
+    sha256 = "1hk3giwzzlcqnpw9kx3zrr808nmdb7qwac60fki5395qffd2fpqw";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     backports-zoneinfo
+    holidays
     tzdata
     async-timeout
   ];

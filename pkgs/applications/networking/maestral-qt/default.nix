@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.4.3";
+  version = "1.4.4";
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "v${version}";
-    sha256 = "sha256-+eBwBZx+kp2ACbFjtYK6ux9lcPmEQsunvxAAZ2HgAYw=";
+    sha256 = "sha256-4IrLwpdMepXBxjgR6euENuVKaPRU0dLiApJO45DB2C4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -45,6 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
-    inherit (src.meta) homepage;
+    homepage = "https://maestral.app";
   };
 }

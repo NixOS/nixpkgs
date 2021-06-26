@@ -356,7 +356,7 @@ in
           };
 
           port = lib.mkOption {
-            type = lib.types.int;
+            type = lib.types.port;
             default = 25;
             description = ''
               The port of the SMTP server Discourse should use to

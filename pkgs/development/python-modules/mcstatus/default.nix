@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Dinnerbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ncw8ILOD+i5aW78opv62VRcV58MQb5IG33MGTqNgDRk=";
+    sha256 = "068dc2ilw1kkvw394vqhqgkia5smnvzaca5zbdd2xyl3nch3rk4x";
   };
 
   propagatedBuildInputs = [

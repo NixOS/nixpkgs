@@ -1,11 +1,11 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "popt";
   version = "1.18";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/p/popt/popt_${version}.orig.tar.gz";
+    url = "https://ftp.osuosl.org/pub/rpm/popt/releases/popt-1.x/popt-${version}.tar.gz";
     sha256 = "1lf5zlj5rbg6s4bww7hbhpca97prgprnarx978vcwa0bl81vqnai";
   };
 
@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with lib; {
+    homepage = "https://github.com/rpm-software-management/popt";
     description = "Command line option parsing library";
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

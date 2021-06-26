@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q4p592i3kv2yrgax1g03yz8316rzzydpyfsnmqrbc7ilxrgyjm2";
+    sha256 = "a24aff72a7f1b09571b5daf9dbfcffd98481be1fe085ae5ef662cf11452a97e0";
   };
 
   checkPhase = ''
