@@ -29,6 +29,7 @@ buildPythonPackage rec {
       url = "https://github.com/samuelcolvin/pydantic/commit/a5b0e741e585040a0ab8b0be94dd9dc2dd3afcc7.patch";
       sha256 = "0v91ac3dw23rm73370s2ns84vi0xqbfzpvj84zb7xdiicx8fhmf1";
     })
+    ./1.5.1-CVE-2021-29510.patch
   ];
 
   propagatedBuildInputs = [
