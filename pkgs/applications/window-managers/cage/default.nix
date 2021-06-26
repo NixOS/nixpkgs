@@ -8,19 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cage";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "Hjdskes";
     repo = "cage";
     rev = "v${version}";
-    sha256 = "0ixl45g0m8b75gvbjm3gf5qg0yplspgs0xpm2619wn5sygc47sb1";
+    sha256 = "0vm96gxinhy48m3x9p1sfldyd03w3gk6iflb7n9kn06j1vqyswr6";
   };
-
-  patches = [
-    # To fix the build with wlroots 0.14.0:
-    ./wlroots-0_14.patch
-  ];
 
   nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
 
