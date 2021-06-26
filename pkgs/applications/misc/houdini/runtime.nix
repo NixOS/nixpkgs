@@ -68,15 +68,6 @@ stdenv.mkDerivation rec {
     echo "export LD_LIBRARY_PATH=${ld_library_path}" >> $out/houdini/sbin/app_init.sh
     echo "export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"" >> $out/houdini/sbin/app_init.sh
   '';
-  postFixup = ''
-    INTERPRETER="$(cat "$NIX_CC"/nix-support/dynamic-linker)"
-    for BIN in $(find $out/bin -type f -executable); do
-      if patchelf $BIN 2>/dev/null ; then
-        echo "Patching ELF $BIN"
-        patchelf --set-interpreter "$INTERPRETER" "$BIN"
-      fi
-    done
-  '';
   meta = {
     description = "3D animation application software";
     homepage = "https://www.sidefx.com";
