@@ -24575,7 +24575,6 @@ in
   };
 
   wlroots_0_12 = callPackage ../development/libraries/wlroots/0.12.nix {};
-  wlroots_0_13 = callPackage ../development/libraries/wlroots/0.13.nix {};
 
   sway-unwrapped = callPackage ../applications/window-managers/sway { };
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
