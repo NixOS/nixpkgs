@@ -15,9 +15,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ networkx numpy ];
 
-  # no tests
-  doCheck = false;
-
   pythonImportsCheck = [ "community" ];
 
   meta = with lib; {

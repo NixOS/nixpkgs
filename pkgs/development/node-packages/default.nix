@@ -217,13 +217,13 @@ let
     netlify-cli =
       let
         esbuild = pkgs.esbuild.overrideAttrs (old: rec {
-          version = "0.11.14";
+          version = "0.13.6";
 
           src = fetchFromGitHub {
-            owner = "evanw";
+            owner = "netlify";
             repo = "esbuild";
             rev = "v${version}";
-            sha256 = "sha256-N7WNam0zF1t++nLVhuxXSDGV/JaFtlFhufp+etinvmM=";
+            sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
           };
 
         });

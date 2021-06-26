@@ -81,6 +81,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>consul</literal> was upgraded to a new major release
+          with breaking changes, see
+          <link xlink:href="https://github.com/hashicorp/consul/releases/tag/v1.10.0">upstream
+          changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           fsharp41 has been removed in preference to use the latest
           dotnet-sdk
         </para>
@@ -310,11 +318,17 @@
         </itemizedlist>
       </listitem>
     </itemizedlist>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           The <literal>antlr</literal> package now defaults to the 4.x
           release instead of the old 2.7.7 version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>libwnck</literal> package now defaults to the 3.x
+          release instead of the old 2.31.0 version.
         </para>
       </listitem>
     </itemizedlist>
@@ -339,6 +353,17 @@
           <literal>&quot;VERBOSE&quot;</literal>, so that
           <literal>fail2ban</literal> can observe the failed login
           attempts from the SSH logs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Sway: The terminal emulator <literal>rxvt-unicode</literal> is
+          no longer installed by default via
+          <literal>programs.sway.extraPackages</literal>. The current
+          default configuration uses <literal>alacritty</literal> (and
+          soon <literal>foot</literal>) so this is only an issue when
+          using a customized configuration and not installing
+          <literal>rxvt-unicode</literal> explicitly.
         </para>
       </listitem>
     </itemizedlist>

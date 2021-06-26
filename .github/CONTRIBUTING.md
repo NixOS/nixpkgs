@@ -70,6 +70,8 @@ Anything that does not cause user or downstream dependency regressions can be ba
 
 ## Generating 21.11 Release Notes
 
+(This section also applies to backporting 21.05 release notes: substitute "rl-2111" for "rl-2105".)
+
 Documentation in nixpkgs is transitioning to a markdown-centric workflow. Release notes now require a translation step to convert from markdown to a compatible docbook document.
 
 Steps for updating 21.11 Release notes:

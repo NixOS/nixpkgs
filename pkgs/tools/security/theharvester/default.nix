@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     beautifulsoup4
     censys
     certifi
-    dns
+    dnspython
     gevent
     grequests
     lxml

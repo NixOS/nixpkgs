@@ -622,6 +622,7 @@ in
     };
 
   mkShell = callPackage ../build-support/mkshell { };
+  mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacs.pkgs) inherit-local; };
 
@@ -914,6 +915,8 @@ in
   };
 
   archi = callPackage ../tools/misc/archi { };
+
+  contour = libsForQt5.callPackage ../applications/terminal-emulators/contour { };
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
@@ -2887,6 +2890,8 @@ in
 
   joycond = callPackage ../os-specific/linux/joycond { };
 
+  joystickwake = callPackage ../tools/games/joystickwake {};
+
   jwt-cli = callPackage ../tools/security/jwt-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -4295,6 +4300,8 @@ in
 
   ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { };
 
+  edgetpu-compiler = callPackage ../development/libraries/science/robotics/edgetpu-compiler { };
+
   edid-decode = callPackage ../tools/misc/edid-decode { };
 
   edid-generator = callPackage ../tools/misc/edid-generator { };
@@ -5076,6 +5083,8 @@ in
   };
 
   git-big-picture = callPackage ../applications/version-management/git-and-tools/git-big-picture { };
+
+  git-branchless = callPackage ../applications/version-management/git-and-tools/git-branchless { };
 
   inherit (haskellPackages) git-brunch;
 
@@ -8110,6 +8119,8 @@ in
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   pywal = with python3Packages; toPythonApplication pywal;
+
+  pystring = callPackage ../development/libraries/pystring {};
 
   rbw = callPackage ../tools/security/rbw {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -12008,6 +12019,10 @@ in
   scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; jre = jdk8; };
 
   scala = scala_2_13;
+  scala-runners = callPackage ../development/compilers/scala-runners/default.nix {
+    coursier = coursier.override { jre = jdk8; };
+    jre = jdk8;
+  };
 
   metal = callPackage ../development/libraries/metal { };
   metals = callPackage ../development/tools/metals { };
@@ -12116,9 +12131,7 @@ in
   vala-lint = callPackage ../development/tools/vala-lint { };
 
   inherit (callPackage ../development/compilers/vala { })
-    vala_0_36
     vala_0_40
-    vala_0_44
     vala_0_46
     vala_0_48
     vala_0_50
@@ -13435,6 +13448,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  fsearch = callPackage ../tools/misc/fsearch { };
 
   fujprog = callPackage ../development/tools/misc/fujprog {
     inherit (darwin.apple_sdk.frameworks) IOKit;
@@ -16804,6 +16819,7 @@ in
   libpfm = callPackage ../development/libraries/libpfm { };
 
   libpqxx = callPackage ../development/libraries/libpqxx { };
+  libpqxx_6 = callPackage ../development/libraries/libpqxx/6.nix { };
 
   inherit (callPackages ../development/libraries/prometheus-client-c {
     stdenv = gccStdenv; # Required for darwin
@@ -16845,8 +16861,6 @@ in
   libschrift = callPackage ../development/libraries/libschrift { };
 
   libsearpc = callPackage ../development/libraries/libsearpc { };
-
-  libseat = callPackage ../development/libraries/libseat { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
@@ -17063,9 +17077,8 @@ in
 
   libwmf = callPackage ../development/libraries/libwmf { };
 
-  libwnck = libwnck2;
-  libwnck2 = callPackage ../development/libraries/libwnck { };
-  libwnck3 = callPackage ../development/libraries/libwnck/3.x.nix { };
+  libwnck = callPackage ../development/libraries/libwnck { };
+  libwnck2 = callPackage ../development/libraries/libwnck/2.nix { };
 
   libwpd = callPackage ../development/libraries/libwpd { };
 
@@ -17567,7 +17580,10 @@ in
 
   openldap = callPackage ../development/libraries/openldap { };
 
-  opencolorio = callPackage ../development/libraries/opencolorio { };
+  opencolorio = callPackage ../development/libraries/opencolorio {
+    inherit (darwin.apple_sdk.frameworks) Carbon GLUT Cocoa;
+  };
+  opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 
   opendmarc = callPackage ../development/libraries/opendmarc { };
 
@@ -20779,7 +20795,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
-      kernelPatches.rtnetlink_fix_regression_in_bridge_vlan_configuration
     ];
   };
 
@@ -22231,6 +22246,8 @@ in
 
   materia-theme = callPackage ../data/themes/materia-theme { };
 
+  materia-kde-theme = callPackage ../data/themes/materia-kde { };
+
   material-design-icons = callPackage ../data/fonts/material-design-icons { };
 
   material-icons = callPackage ../data/fonts/material-icons { };
@@ -22276,6 +22293,8 @@ in
   mustache-go = callPackage ../development/tools/mustache-go { };
 
   mustache-hpp = callPackage ../development/libraries/mustache-hpp { };
+
+  myrddin = callPackage ../development/compilers/myrddin { };
 
   myrica = callPackage ../data/fonts/myrica { };
 
@@ -22546,6 +22565,8 @@ in
 
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
+  taskspooler = callPackage ../tools/system/taskspooler { };
+
   tamsyn = callPackage ../data/fonts/tamsyn { inherit (buildPackages.xorg) mkfontscale; };
 
   tamzen = callPackage ../data/fonts/tamzen { inherit (buildPackages.xorg) mkfontscale; };
@@ -22655,6 +22676,8 @@ in
   vollkorn = callPackage ../data/fonts/vollkorn { };
 
   weather-icons = callPackage ../data/fonts/weather-icons { };
+
+  whitesur-gtk-theme = callPackage ../data/themes/whitesur { };
 
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 
@@ -24541,6 +24564,7 @@ in
   };
 
   wlroots_0_12 = callPackage ../development/libraries/wlroots/0.12.nix {};
+  wlroots_0_13 = callPackage ../development/libraries/wlroots/0.13.nix {};
 
   sway-unwrapped = callPackage ../applications/window-managers/sway { };
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
@@ -24562,7 +24586,9 @@ in
 
   wbg = callPackage ../applications/misc/wbg { };
 
-  hikari = callPackage ../applications/window-managers/hikari { };
+  hikari = callPackage ../applications/window-managers/hikari {
+    wlroots = wlroots_0_13;
+  };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
@@ -26615,6 +26641,8 @@ in
 
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
+  seatd = callPackage ../applications/misc/seatd { };
+
   secretscanner = callPackage ../tools/security/secretscanner { };
 
   semiphemeral = callPackage ../tools/misc/semiphemeral { };
@@ -27620,7 +27648,9 @@ in
 
   weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
 
-  wio = callPackage ../applications/window-managers/wio { };
+  wio = callPackage ../applications/window-managers/wio {
+    wlroots = wlroots_0_13;
+  };
 
   whitebox-tools = callPackage ../applications/gis/whitebox-tools {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -29716,6 +29746,8 @@ in
 
   ### SCIENCE/MATH
 
+  _4ti2  = callPackage ../applications/science/math/4ti2 { };
+
   almonds = callPackage ../applications/science/math/almonds { };
 
   amd-blis = callPackage ../development/libraries/science/math/amd-blis { };
@@ -30728,6 +30760,8 @@ in
   utsushi = callPackage ../misc/drivers/utsushi { };
 
   idsk = callPackage ../tools/filesystems/idsk { };
+
+  lima = callPackage ../applications/virtualization/lima {};
 
   logtop = callPackage ../tools/misc/logtop { };
 

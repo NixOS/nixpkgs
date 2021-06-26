@@ -16,13 +16,17 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sha256 = "1970izjaa60r5cg9i35rzz9lk5c5d8q1vw1rh2skvfbf63z1hnzv";
   };
 
+  patches = [
+    ./spyder4.patch
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     cadquery
     Logbook
     pyqt5
     pyparsing
     pyqtgraph
-    spyder_3
+    spyder
     pathpy
     qtconsole
     requests

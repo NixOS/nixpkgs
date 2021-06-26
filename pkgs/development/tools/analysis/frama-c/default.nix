@@ -15,6 +15,7 @@ let
     mlgmpidl
     num
     ocamlgraph
+    stdlib-shims
     why3
     yojson
     zarith
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf wrapGAppsHook ];
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhirLib camlzip
+    ncurses ocaml findlib ltl2ba ocamlgraph ocamlgraph_gtk yojson menhirLib camlzip
     lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
     gdk-pixbuf
   ];
