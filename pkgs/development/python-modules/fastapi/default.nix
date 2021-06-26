@@ -27,6 +27,10 @@ buildPythonPackage rec {
     sha256 = "1515nhwari48v0angyl5z3cfpvwn4al2nvqh0cjd9xgxzvm310s8";
   };
 
+  patches = [
+    ./0.55.1-CVE-2021-32677.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "starlette ==0.13.2" "starlette"
