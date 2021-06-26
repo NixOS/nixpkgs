@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     # Documentation
     rubber hevea
     # GUI
-    lablgtk
+    lablgtk3-sourceview3
     # WebIDE
     js_of_ocaml js_of_ocaml-ppx
     # S-expression output for why3pp
