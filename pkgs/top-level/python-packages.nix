@@ -397,6 +397,8 @@ in {
 
   alot = callPackage ../development/python-modules/alot { };
 
+  alpha-vantage = callPackage ../development/python-modules/alpha-vantage { };
+
   altair = callPackage ../development/python-modules/altair { };
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
