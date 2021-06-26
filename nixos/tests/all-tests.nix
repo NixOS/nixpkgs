@@ -448,6 +448,7 @@ in
   vault-postgresql = handleTest ./vault-postgresql.nix {};
   vector = handleTest ./vector.nix {};
   victoriametrics = handleTest ./victoriametrics.nix {};
+  vikunja = handleTest ./vikunja.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   vscodium = handleTest ./vscodium.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
