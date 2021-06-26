@@ -2186,6 +2186,8 @@ in {
 
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
+  dtlssocket = callPackage ../development/python-modules/dtlssocket { };
+
   duckdb = callPackage ../development/python-modules/duckdb {
     inherit (pkgs) duckdb;
   };
@@ -7129,6 +7131,8 @@ in {
   pytorchWithoutCuda = self.pytorch.override {
     cudaSupport = false;
   };
+
+  pytradfri = callPackage ../development/python-modules/pytradfri { };
 
   pytrafikverket = callPackage ../development/python-modules/pytrafikverket { };
 
