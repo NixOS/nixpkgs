@@ -17,7 +17,6 @@
 }:
 
 stdenv.mkDerivation rec {
-
   pname = "libjxl";
   version = "unstable-2021-06-22";
 
