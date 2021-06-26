@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.52.0";
+  version = "0.52.1";
   binary-deps-version = "5";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ let
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1acda1559q6zwmhg3x00nai88hy83i5hcfli2bqfab7slr95lm27";
+    sha256 = "1fiqn9f6nsh4cfjy7gfsv950hphwi9ca0ddgsjvn77g7yc0arp6c";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -77,15 +77,14 @@ let
     chmod +x $out/bin/${wrappername}
   '';
 
-
   unvanquished-assets = stdenv.mkDerivation {
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256:1fy85cjnjk9rrqkhgx5701inff2yv14hnxglzx3209c553gn31n7";
+    outputHash = "sha256:084jdisb48xyk9agjifn0nlnsdnjgg32si8zd1khsywd0kffplzx";
     outputHashMode = "recursive";
     nativeBuildInputs = [ aria2 cacert ];
-    buildCommand = "bash $src/download-paks $out";
+    buildCommand = "bash $src/download-paks --cache=$(pwd) --version=${version} $out";
   };
 
 # this really is the daemon game engine, the game itself is in the assets
@@ -186,7 +185,8 @@ in stdenv.mkDerivation rec {
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [
-      mit gpl3Only lib.licenses.zlib cc-by-sa-25
+      mit gpl3Plus lib.licenses.zlib bsd3 # engine
+      cc-by-sa-25 cc-by-sa-30 cc-by-30 cc-by-sa-40 cc0 # assets
     ];
   };
 }

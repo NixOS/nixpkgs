@@ -87,7 +87,7 @@ Most contributions are based on and merged into these branches:
   deemed of sufficiently high quality
 
 For more information about contributing to the project, please visit
-the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
+the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
 
 # Donations
 

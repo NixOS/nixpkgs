@@ -4,7 +4,7 @@
   then if lib.versionAtLeast ocaml.version "4.08"
   then "0.22.0" else "0.15.0" else "0.13.0"
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
-, stdlib-shims, ocaml-migrate-parsetree-2-1
+, stdlib-shims, ocaml-migrate-parsetree-2
 }:
 
 let param = {
@@ -57,7 +57,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     ocaml-compiler-libs
     (if param.useOMP2 or true
-     then ocaml-migrate-parsetree-2-1
+     then ocaml-migrate-parsetree-2
      else ocaml-migrate-parsetree)
     ppx_derivers
     stdio

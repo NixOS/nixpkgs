@@ -903,7 +903,7 @@
     "unifi_direct" = ps: with ps; [ pexpect ];
     "unifiled" = ps: with ps; [ unifiled ];
     "universal" = ps: with ps; [ ];
-    "upb" = ps: with ps; [ ]; # missing inputs: upb_lib
+    "upb" = ps: with ps; [ upb-lib ];
     "upc_connect" = ps: with ps; [ connect-box ];
     "upcloud" = ps: with ps; [ ]; # missing inputs: upcloud-api
     "updater" = ps: with ps; [ distro ];

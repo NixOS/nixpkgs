@@ -83,7 +83,7 @@ buildDunePackage {
       ocaml-version
       # Changed since 0.16.0:
       (ppxlib.override { version = "0.22.0"; })
-      ocaml-migrate-parsetree-2-1
+      ocaml-migrate-parsetree-2
     ]
     else if lib.versionAtLeast version "0.15.1"
     then [

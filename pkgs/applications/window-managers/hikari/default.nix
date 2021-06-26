@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip,
+{ lib, stdenv, fetchzip, fetchpatch,
   pkg-config, bmake,
   cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman,
   libucl, wayland, wayland-protocols, wlroots, mesa,
@@ -22,6 +22,15 @@ stdenv.mkDerivation {
     url = "https://hikari.acmelabs.space/releases/${pname}-${version}.tar.gz";
     sha256 = "0vxwma2r9mb2h0c3dkpvf8dbrc2x2ykhc5bb0vd72sl9pwj4jxmy";
   };
+
+  patches = [
+    # To fix the build with wlroots 0.14.0:
+    (fetchpatch {
+      url = "https://cgit.freebsd.org/ports/plain/x11-wm/hikari/files/patch-wlroots-0.14?id=f2820b6cc2170feef17989c422f2cf46644a5b57";
+      sha256 = "1kpbcmgdm4clmf2ryrs5pv3ghycnq4glvs3d3ll6zr244ks5yf43";
+      extraPrefix = "";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config bmake ];
 
