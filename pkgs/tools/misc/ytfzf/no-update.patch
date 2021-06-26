@@ -1,8 +1,8 @@
 diff --git a/ytfzf b/ytfzf
-index d5ff8c9..96f9c8f 100755
+index f4d2e0d..7a3b4b6 100755
 --- a/ytfzf
 +++ b/ytfzf
-@@ -934,23 +934,8 @@ send_notify () {
+@@ -1260,22 +1260,8 @@ EOF
  }
  
  update_ytfzf () {
@@ -12,19 +12,18 @@ index d5ff8c9..96f9c8f 100755
 -
 -	if sed -n '1p' < "$updatefile" | grep -q '#!/bin/sh'; then
 -		chmod 755 "$updatefile"
--		if [ "$(uname)" = "Darwin" ]; then
--			sudo cp "$updatefile" "/usr/local/bin/ytfzf"
--		else
--			sudo cp "$updatefile" "/usr/bin/ytfzf"
--		fi
+-		[ "$(uname)" = "Darwin" ] && prefix="/usr/local/bin" || prefix="/usr/bin"
+-		function_exists "sudo" && doasroot="sudo" || doasroot="doas"
+-		$doasroot cp "$updatefile" "$prefix/ytfzf"
+-		unset prefix doasroot
 -	else
 -		printf "%bFailed to update ytfzf. Try again later.%b" "$c_red" "$c_reset"
 -	fi
 -
 -	rm "$updatefile"
--	exit
+-	exit 0
 +	printf "%bUpdates have to be installed through Nix.%b\n" "$c_red" "$c_reset"
 +	exit 1
  }
  
- sort_video_data_date () {
+ #gives a value to sort by (this will give the unix time the video was uploaded)
