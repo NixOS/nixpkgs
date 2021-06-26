@@ -3884,6 +3884,8 @@ in {
 
   korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
 
+  krakenex = callPackage ../development/python-modules/krakenex { };
+
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
   labelbox = callPackage ../development/python-modules/labelbox { };
@@ -5309,6 +5311,8 @@ in {
 
   pyisy = callPackage ../development/python-modules/pyisy { };
 
+  pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
@@ -5324,6 +5328,8 @@ in {
   pysbd = callPackage ../development/python-modules/pysbd { };
 
   pyshark = callPackage ../development/python-modules/pyshark { };
+
+  pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
 
   pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
 

@@ -432,7 +432,7 @@
     "kodi" = ps: with ps; [ pykodi ];
     "konnected" = ps: with ps; [ aiohttp-cors konnected ];
     "kostal_plenticore" = ps: with ps; [ ]; # missing inputs: kostal_plenticore
-    "kraken" = ps: with ps; [ ]; # missing inputs: krakenex pykrakenapi
+    "kraken" = ps: with ps; [ krakenex pykrakenapi ];
     "kulersky" = ps: with ps; [ pykulersky ];
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb
     "lacrosse" = ps: with ps; [ pylacrosse ];
@@ -750,7 +750,7 @@
     "shodan" = ps: with ps; [ shodan ];
     "shopping_list" = ps: with ps; [ aiohttp-cors ];
     "sht31" = ps: with ps; [ ]; # missing inputs: Adafruit-GPIO Adafruit-SHT31
-    "sia" = ps: with ps; [ ]; # missing inputs: pysiaalarm
+    "sia" = ps: with ps; [ pysiaalarm ];
     "sigfox" = ps: with ps; [ ];
     "sighthound" = ps: with ps; [ pillow simplehound ];
     "signal_messenger" = ps: with ps; [ ]; # missing inputs: pysignalclirestapi
