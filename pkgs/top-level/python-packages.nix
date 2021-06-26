@@ -7130,6 +7130,8 @@ in {
     cudaSupport = false;
   };
 
+  pytradfri = callPackage ../development/python-modules/pytradfri { };
+
   pytrafikverket = callPackage ../development/python-modules/pytrafikverket { };
 
   pytrends = callPackage ../development/python-modules/pytrends { };
