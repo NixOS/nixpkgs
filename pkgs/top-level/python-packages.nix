@@ -3498,6 +3498,8 @@ in {
 
   injector = callPackage ../development/python-modules/injector { };
 
+  inkex = callPackage ../development/python-modules/inkex { };
+
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
   inquirer = callPackage ../development/python-modules/inquirer { };
