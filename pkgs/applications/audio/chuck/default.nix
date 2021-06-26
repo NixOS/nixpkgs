@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0.1";
+  version = "1.4.1.0";
   pname = "chuck";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "1m0fhndbqaf0lii1asyc50c66bv55ib6mbnm8fzk5qc5ncs0r8hi";
+    sha256 = "sha256-dL+ZrVFeMRPFW4MxUpNvrQKjzwBqVBBf8Rd3xHMZSSg=";
   };
 
   nativeBuildInputs = [ flex bison which ];
