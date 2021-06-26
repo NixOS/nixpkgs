@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -av etc opt/awsvpnclient usr/share $out
+    mkdir -p $out/bin
+    ln -s "$out/awsvpnclient/AWS VPN Client" "$out/bin/AWS VPN Client"
+    ln -s "$out/awsvpnclient/Service/ACVC.GTK.Service" "$out/bin/ACVC.GTK.Service"
   '';
 
   meta = with lib; {
