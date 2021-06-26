@@ -710,6 +710,7 @@ in with py.pkgs; buildPythonApplication rec {
     "verisure"
     "version"
     "vesync"
+    "vilfo"
     "vizio"
     "voicerss"
     "volumio"
