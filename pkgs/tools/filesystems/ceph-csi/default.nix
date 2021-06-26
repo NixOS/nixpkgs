@@ -1,6 +1,6 @@
 { stdenv, lib, go, ceph, fetchFromGitHub }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "ceph-csi";
   version = "3.3.1";
 
@@ -31,4 +31,3 @@ stdenv.mkDerivation rec{
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
-
