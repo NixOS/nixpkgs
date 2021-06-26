@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, darwin, bootstrap-chicken ? null }:
 
 let
-  version = "5.2.0";
   platform = with stdenv;
     if isDarwin then "macosx"
     else if isCygwin then "cygwin"
@@ -9,9 +8,9 @@ let
     else if isSunOS then "solaris"
     else "linux"; # Should be a sane default
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "chicken";
-  inherit version;
+  version = "5.2.0";
 
   binaryVersion = 11;
 
@@ -46,10 +45,14 @@ stdenv.mkDerivation {
     done
   '';
 
-  # TODO: Assert csi -R files -p '(pathname-file (repository-path))' == binaryVersion
+  doCheck = true;
+  postCheck = ''
+    ./csi -R chicken.pathname -R chicken.platform \
+       -p "(assert (equal? \"${toString binaryVersion}\" (pathname-file (car (repository-path)))))"
+  '';
 
   meta = {
-    homepage = "http://www.call-cc.org/";
+    homepage = "https://call-cc.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ corngood ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin; # Maybe other Unix
