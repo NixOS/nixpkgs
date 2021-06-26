@@ -644,7 +644,7 @@ export NIX_INDENT_MAKE=1
 
 if [ -z "${NIX_BUILD_CORES:-}" ]; then
   NIX_BUILD_CORES="1"
-elif [ "$NIX_BUILD_CORES" -le 0 ]; then
+elif (( "$NIX_BUILD_CORES" <= 0 )); then
   NIX_BUILD_CORES=$(nproc 2>/dev/null || true)
   if expr >/dev/null 2>&1 "$NIX_BUILD_CORES" : "^[0-9][0-9]*$"; then
     :
