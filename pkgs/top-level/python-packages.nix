@@ -8837,6 +8837,8 @@ in {
 
   upass = callPackage ../development/python-modules/upass { };
 
+  upb-lib = callPackage ../development/python-modules/upb-lib { };
+
   update_checker = callPackage ../development/python-modules/update_checker { };
 
   update-copyright = callPackage ../development/python-modules/update-copyright { };
