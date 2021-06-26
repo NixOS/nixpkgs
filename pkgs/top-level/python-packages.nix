@@ -2184,6 +2184,8 @@ in {
 
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
+  dtlssocket = callPackage ../development/python-modules/dtlssocket { };
+
   duckdb = callPackage ../development/python-modules/duckdb {
     inherit (pkgs) duckdb;
   };
