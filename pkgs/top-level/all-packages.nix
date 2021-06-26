@@ -17618,6 +17618,8 @@ in
 
   openvdb = callPackage ../development/libraries/openvdb {};
 
+  openvr = callPackage ../development/libraries/openvr {};
+
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_1
     libressl_3_2;
@@ -27527,6 +27529,8 @@ in
   vorbis-tools = callPackage ../applications/audio/vorbis-tools {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  vr-video-player = callPackage ../applications/video/vr-video-player { };
 
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
   vscode-fhs = vscode.fhs;
