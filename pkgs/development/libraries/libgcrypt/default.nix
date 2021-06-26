@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap, buildPackages }:
+{ lib, stdenv, fetchurl, fetchpatch, gettext, libgpgerror, enableCapabilities ? false, libcap, buildPackages }:
 
 assert enableCapabilities -> stdenv.isLinux;
 
@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
     sha256 = "sha256-ssENCRUTsnHkcXcnRgex/7o9lbGIu/qHl/lIrskFPFo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-33560.patch";
+      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blobdiff_plain;f=cipher/elgamal.c;h=eead45022abc9d367563f065071afbbf9b5e3e55;hp=9835122fb18c615f58ad1ea580682dfb48970bf1;hb=3462280f2e23e16adf3ed5176e0f2413d8861320;hpb=8d3db6add149696bd777c6969442d771e9efdecf";
+      sha256 = "01kxy41bddhphizjyha5nwh9k6np7s4b1cfljxgwywc5hvdsz0zx";
+    })
+  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev";
