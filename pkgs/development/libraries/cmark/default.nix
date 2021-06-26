@@ -1,18 +1,26 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "0.29.0";
   pname = "cmark";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "jgm";
-    repo = "cmark";
+    repo = pname;
     rev = version;
-    sha256 = "0r7jpqhgnssq444i8pwji2g36058vfzwkl70wbiwj13h4w5rfc8f";
+    sha256 = "sha256-SU31kJL+8wt57bGW5fNeXjXPgPeCXZIknZwDxMXCfdc=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    # https://github.com/commonmark/cmark/releases/tag/0.30.0
+    # recommends distributions dynamically link
+    "-DCMARK_STATIC=OFF"
+  ];
+
   doCheck = !stdenv.isDarwin;
+
   preCheck = ''
     export LD_LIBRARY_PATH=$(readlink -f ./src)
   '';

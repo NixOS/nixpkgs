@@ -9,6 +9,7 @@
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
   ./config/xdg/portal.nix
+  ./config/xdg/portals/wlr.nix
   ./config/appstream.nix
   ./config/console.nix
   ./config/xdg/sounds.nix
@@ -696,6 +697,7 @@
   ./services/networking/gdomap.nix
   ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
+  ./services/networking/globalprotect-vpn.nix
   ./services/networking/gnunet.nix
   ./services/networking/go-neb.nix
   ./services/networking/go-shadowsocks2.nix

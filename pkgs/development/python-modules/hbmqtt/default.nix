@@ -18,6 +18,10 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    # https://github.com/beerfactory/hbmqtt/pull/241
+    substituteInPlace hbmqtt/adapters.py \
+      --replace "websockets.protocol" "websockets.legacy.protocol"
+
     # test tries to bind same port multiple times and fails
     rm tests/test_client.py
   '';

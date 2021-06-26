@@ -42,7 +42,7 @@ in
       };
 
       port = mkOption {
-        type        = types.int;
+        type        = types.port;
         default     = 7777;
         description = ''
           Specifies the port to listen on.
@@ -50,7 +50,7 @@ in
       };
 
       maxPlayers = mkOption {
-        type        = types.int;
+        type        = types.ints.u8;
         default     = 255;
         description = ''
           Sets the max number of players (between 1 and 255).

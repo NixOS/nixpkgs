@@ -301,6 +301,7 @@ kevinhwang91/rnvimr@main
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
+Konfekt/vim-alias
 konfekt/vim-DetectSpellLang
 kosayoda/nvim-lightbulb
 kristijanhusak/defx-git
@@ -313,6 +314,7 @@ kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
 kyazdani42/nvim-tree.lua
 kyazdani42/nvim-web-devicons
+l3mon4d3/luasnip
 lambdalisue/fern.vim
 lambdalisue/gina.vim
 lambdalisue/suda.vim
@@ -392,6 +394,7 @@ mfussenegger/nvim-dap
 mfussenegger/nvim-jdtls
 mg979/vim-visual-multi
 mg979/vim-xtabline
+mhartington/formatter.nvim
 mhartington/oceanic-next
 mhinz/vim-crates
 mhinz/vim-grepper

@@ -7,6 +7,7 @@
 , makeWrapper, python3, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
+, fetchpatch
 }:
 let
   # various binaries (compiled)
@@ -56,6 +57,37 @@ let
       collection-plaingeneric = orig.collection-plaingeneric // {
         deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
       };
+
+      texdoc = orig.texdoc // {
+        # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
+        postUnpack = let
+          # commit that ensures reproducibility of Data.tlpdb.lua
+          # remove on the next texdoc update
+          reproPatch = fetchpatch {
+            name = "make-data-tlpdb-lua-reproducible.patch";
+            url = "https://github.com/TeX-Live/texdoc/commit/82aff83d5453a887c1117b9e771a98bddd8a605a.patch";
+            sha256 = "0y04y468i7db4p5bsyyhgzip8q4fi1756x9a15ndha9xfnasbf44";
+            stripLen = 2;
+            extraPrefix = "scripts/texdoc/";
+          };
+        in ''
+          if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
+            patch -p1 -d "$out" < "${reproPatch}"
+
+            unxz --stdout "${tlpdb}" > texlive.tlpdb
+
+            # create dummy doc file to ensure that texdoc does not return an error
+            mkdir -p support/texdoc
+            touch support/texdoc/NEWS
+
+            TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+              "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
+              -c texlive_tlpdb=texlive.tlpdb -lM texdoc
+
+            cp texdoc/cache-tlpdb.lua "$out"/scripts/texdoc/Data.tlpdb.lua
+          fi
+        '';
+      };
     }); # overrides
 
     # tl =
@@ -91,6 +123,16 @@ let
     year = "2021";
     month = "04";
     day = "08";
+  };
+
+  tlpdb = fetchurl {
+    # use the same mirror(s) as urlPrefixes below
+    urls = [
+      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      #"ftp://tug.org/texlive/historic/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
+    ];
+    sha512 = "1dsj4bza84g2f2z0w31yil3iwcnggcyg9f1xxwmp6ljk5xlzyr39cb556prx9691zbwpbrwbb5hnbqxqlnwsivgk0pmbl9mbjbk9cz0";
   };
 
   # create a derivation that contains an unpacked upstream TL package

@@ -12,14 +12,19 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.19.2";
+  version = "1.19.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bz6gkrvn7mwmjsqrazgpy9r64m5jj462v0izgvdymkx8bjd8mpi";
+    sha256 = "029ykjk24h21b0s0gha6kv9pvgallin6marzkb2vfbvr3icsmbz2";
   };
+
+  patches = [
+    # fix missing write permissions on src files before modifing them
+   ./fix-src-permissions.patch
+  ];
 
   postPatch = ''
     # remove all version pinning (E.g tornado==5.1.1 -> tornado)

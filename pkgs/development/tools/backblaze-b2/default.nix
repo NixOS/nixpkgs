@@ -12,15 +12,17 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-nNQDdSjUolj3PjWRn1fPBAEtPlgeent2PxzHqwH1Z6s=";
+    sha256 = "0sh9k9fnj73ydqnk056m01xkilpxh7f4597cnczqhy21lxzr3d45";
   };
 
   postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace 'docutils==0.16' 'docutils'
     substituteInPlace setup.py \
       --replace 'setuptools_scm<6.0' 'setuptools_scm'
   '';

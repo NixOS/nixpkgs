@@ -10,6 +10,7 @@
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
+, fetchpatch
 }:
 
 let
@@ -36,6 +37,15 @@ let
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
         sha256 = "0pck4lczkk52mgwa1n0habp1xqi9xsgsh5q6bbsjmdbandvy5vc8";
       };
+
+      patches = [
+        # weechat 3.2 fails to build on Darwin, but is fixed for the next release:
+        (fetchpatch {
+          url = "https://github.com/weechat/weechat/commit/0b7e4977bef763993e361c23db0f52117b799949.patch";
+          sha256 = "eVdrhr4mrqv+OkqYOv1E7mUkmzd5NC3LmZhbXJnCpFg=";
+          excludes = [ "ChangeLog.adoc" ];
+        })
+      ];
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 

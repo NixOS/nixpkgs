@@ -1,6 +1,8 @@
-{ stdenv, rustPlatform, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
+{ stdenv, rustPlatform, rust, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
 
-rustPlatform.buildRustPackage rec {
+let
+  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
   version = "0.4.1";
 
@@ -31,11 +33,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   postBuild = ''
-    cargo cbuild --release --frozen --prefix=${placeholder "out"}
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
-    cargo cinstall --release --frozen --prefix=${placeholder "out"}
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   meta = with lib; {

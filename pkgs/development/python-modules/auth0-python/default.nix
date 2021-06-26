@@ -18,6 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
+    pyjwt
   ];
 
   checkInputs = [

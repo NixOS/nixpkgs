@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, which, qmake, mkDerivation,
-  qtmultimedia, wrapQtAppsHook, frei0r, opencolorio, ffmpeg-full,
+  qtmultimedia, wrapQtAppsHook, frei0r, opencolorio_1, ffmpeg-full,
   CoreFoundation }:
 
 mkDerivation rec {
@@ -23,7 +23,7 @@ mkDerivation rec {
   buildInputs = [
     ffmpeg-full
     frei0r
-    opencolorio
+    opencolorio_1
     qtmultimedia
   ] ++ lib.optional stdenv.isDarwin CoreFoundation;
 

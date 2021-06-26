@@ -248,7 +248,6 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkg-config ];
-    cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
     data_table = [pkgs.zlib.dev] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
@@ -323,14 +322,12 @@ let
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.bwidget ];
-    rpg = [ pkgs.postgresql ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = [ pkgs.postgresql pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
-    rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
     rzmq = [ pkgs.zeromq pkgs.pkg-config ];
@@ -491,9 +488,7 @@ let
     "DeducerText"
     "Demerelate"
     "detrendeR"
-    "dgmb"
     "dpa"
-    "DSpat"
     "dynamicGraph"
     "dynBiplotGUI"
     "EasyqpcR"
@@ -568,7 +563,6 @@ let
     "PredictABEL"
     "prefmod"
     "PrevMap"
-    "ProbForecastGOP"
     "r4ss"
     "RandomFields"
     "rareNMtests"

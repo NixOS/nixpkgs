@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, jre8 }: # TODO: Update this to the latest version of java upon the next release. This is currently not done because of https://github.com/toolbox4minecraft/amidst/issues/960
+, jre }:
 
 stdenv.mkDerivation rec {
   pname = "amidst";
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ jre8 makeWrapper ];
+  nativeBuildInputs = [ jre makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib/amidst}
     cp $src $out/lib/amidst/amidst.jar
-    makeWrapper ${jre8}/bin/java $out/bin/amidst \
+    makeWrapper ${jre}/bin/java $out/bin/amidst \
       --add-flags "-jar $out/lib/amidst/amidst.jar"
   '';
 

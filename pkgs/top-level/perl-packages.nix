@@ -8092,7 +8092,7 @@ let
       sha256 = "0wm87gpagb35d7c4nyaf9z3ry0jb3g5xpyjfzcxqcfxyj2zy9ip2";
     };
     doCheck = false; # Failed test 'desktop file is the right one'
-    buildInputs = [ FileBaseDir FileDesktopEntry ];
+    buildInputs = [ FileBaseDir FileDesktopEntry EncodeLocale ];
   };
 
   FileMMagic = buildPerlPackage {
@@ -8930,7 +8930,7 @@ let
       url = "mirror://cpan/authors/id/T/TS/TSCH/Gnome2-Wnck-0.16.tar.gz";
       sha256 = "604a8ece88ac29f132d59b0caac27657ec31371c1606a4698a2160e88ac586e5";
     };
-    buildInputs = [ pkgs.libwnck pkgs.glib pkgs.gtk2 ];
+    buildInputs = [ pkgs.libwnck2 pkgs.glib pkgs.gtk2 ];
     propagatedBuildInputs = [ Gtk2 ];
     meta = {
       description = "Perl interface to the Window Navigator Construction Kit";

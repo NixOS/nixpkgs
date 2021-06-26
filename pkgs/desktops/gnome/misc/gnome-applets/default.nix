@@ -7,7 +7,7 @@
 , gnome-panel
 , gtk3
 , glib
-, libwnck3
+, libwnck
 , libgtop
 , libnotify
 , upower
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     libxml2
-    libwnck3
+    libwnck
     libgtop
     libnotify
     upower

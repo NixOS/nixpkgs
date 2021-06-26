@@ -7,7 +7,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "appres-1.0.5";
+    pname = "appres";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/appres-1.0.5.tar.bz2";
@@ -21,7 +22,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   bdftopcf = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "bdftopcf-1.1";
+    pname = "bdftopcf";
+    version = "1.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/bdftopcf-1.1.tar.bz2";
@@ -35,7 +37,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   bitmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "bitmap-1.0.9";
+    pname = "bitmap";
+    version = "1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/bitmap-1.0.9.tar.gz";
@@ -49,7 +52,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   editres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "editres-1.0.7";
+    pname = "editres";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/editres-1.0.7.tar.bz2";
@@ -63,7 +67,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   encodings = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "encodings-1.0.5";
+    pname = "encodings";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/encodings-1.0.5.tar.bz2";
@@ -77,7 +82,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobe100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-adobe-100dpi-1.0.3";
+    pname = "font-adobe-100dpi";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-adobe-100dpi-1.0.3.tar.bz2";
@@ -92,7 +98,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobe75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-adobe-75dpi-1.0.3";
+    pname = "font-adobe-75dpi";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-adobe-75dpi-1.0.3.tar.bz2";
@@ -107,7 +114,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobeutopia100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-adobe-utopia-100dpi-1.0.4";
+    pname = "font-adobe-utopia-100dpi";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-adobe-utopia-100dpi-1.0.4.tar.bz2";
@@ -122,7 +130,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobeutopia75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-adobe-utopia-75dpi-1.0.4";
+    pname = "font-adobe-utopia-75dpi";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-adobe-utopia-75dpi-1.0.4.tar.bz2";
@@ -137,7 +146,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobeutopiatype1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
-    name = "font-adobe-utopia-type1-1.0.4";
+    pname = "font-adobe-utopia-type1";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-adobe-utopia-type1-1.0.4.tar.bz2";
@@ -152,7 +162,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontalias = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "font-alias-1.0.3";
+    pname = "font-alias";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-alias-1.0.3.tar.bz2";
@@ -166,7 +177,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontarabicmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-arabic-misc-1.0.3";
+    pname = "font-arabic-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-arabic-misc-1.0.3.tar.bz2";
@@ -181,7 +193,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbh100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-bh-100dpi-1.0.3";
+    pname = "font-bh-100dpi";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-bh-100dpi-1.0.3.tar.bz2";
@@ -196,7 +209,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbh75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-bh-75dpi-1.0.3";
+    pname = "font-bh-75dpi";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-bh-75dpi-1.0.3.tar.bz2";
@@ -211,7 +225,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhlucidatypewriter100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-bh-lucidatypewriter-100dpi-1.0.3";
+    pname = "font-bh-lucidatypewriter-100dpi";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2";
@@ -226,7 +241,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhlucidatypewriter75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-bh-lucidatypewriter-75dpi-1.0.3";
+    pname = "font-bh-lucidatypewriter-75dpi";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2";
@@ -241,7 +257,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhttf = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
-    name = "font-bh-ttf-1.0.3";
+    pname = "font-bh-ttf";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-bh-ttf-1.0.3.tar.bz2";
@@ -256,7 +273,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhtype1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
-    name = "font-bh-type1-1.0.3";
+    pname = "font-bh-type1";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-bh-type1-1.0.3.tar.bz2";
@@ -271,7 +289,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbitstream100dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-bitstream-100dpi-1.0.3";
+    pname = "font-bitstream-100dpi";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-bitstream-100dpi-1.0.3.tar.bz2";
@@ -286,7 +305,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbitstream75dpi = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-bitstream-75dpi-1.0.3";
+    pname = "font-bitstream-75dpi";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-bitstream-75dpi-1.0.3.tar.bz2";
@@ -301,7 +321,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbitstreamtype1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
-    name = "font-bitstream-type1-1.0.3";
+    pname = "font-bitstream-type1";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-bitstream-type1-1.0.3.tar.bz2";
@@ -316,7 +337,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontcronyxcyrillic = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-cronyx-cyrillic-1.0.3";
+    pname = "font-cronyx-cyrillic";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-cronyx-cyrillic-1.0.3.tar.bz2";
@@ -331,7 +353,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontcursormisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-cursor-misc-1.0.3";
+    pname = "font-cursor-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-cursor-misc-1.0.3.tar.bz2";
@@ -346,7 +369,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontdaewoomisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-daewoo-misc-1.0.3";
+    pname = "font-daewoo-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-daewoo-misc-1.0.3.tar.bz2";
@@ -361,7 +385,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontdecmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-dec-misc-1.0.3";
+    pname = "font-dec-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-dec-misc-1.0.3.tar.bz2";
@@ -376,7 +401,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontibmtype1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
-    name = "font-ibm-type1-1.0.3";
+    pname = "font-ibm-type1";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-ibm-type1-1.0.3.tar.bz2";
@@ -391,7 +417,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontisasmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-isas-misc-1.0.3";
+    pname = "font-isas-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-isas-misc-1.0.3.tar.bz2";
@@ -406,7 +433,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontjismisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-jis-misc-1.0.3";
+    pname = "font-jis-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-jis-misc-1.0.3.tar.bz2";
@@ -421,7 +449,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmicromisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-micro-misc-1.0.3";
+    pname = "font-micro-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-micro-misc-1.0.3.tar.bz2";
@@ -436,7 +465,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmisccyrillic = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-misc-cyrillic-1.0.3";
+    pname = "font-misc-cyrillic";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-misc-cyrillic-1.0.3.tar.bz2";
@@ -451,7 +481,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmiscethiopic = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
-    name = "font-misc-ethiopic-1.0.3";
+    pname = "font-misc-ethiopic";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-misc-ethiopic-1.0.3.tar.bz2";
@@ -466,7 +497,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmiscmeltho = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
-    name = "font-misc-meltho-1.0.3";
+    pname = "font-misc-meltho";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-misc-meltho-1.0.3.tar.bz2";
@@ -481,7 +513,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmiscmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-misc-misc-1.1.2";
+    pname = "font-misc-misc";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-misc-misc-1.1.2.tar.bz2";
@@ -496,7 +529,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmuttmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-mutt-misc-1.0.3";
+    pname = "font-mutt-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-mutt-misc-1.0.3.tar.bz2";
@@ -511,7 +545,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontschumachermisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
-    name = "font-schumacher-misc-1.1.2";
+    pname = "font-schumacher-misc";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-schumacher-misc-1.1.2.tar.bz2";
@@ -526,7 +561,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontscreencyrillic = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-screen-cyrillic-1.0.4";
+    pname = "font-screen-cyrillic";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-screen-cyrillic-1.0.4.tar.bz2";
@@ -541,7 +577,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontsonymisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-sony-misc-1.0.3";
+    pname = "font-sony-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-sony-misc-1.0.3.tar.bz2";
@@ -556,7 +593,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontsunmisc = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-sun-misc-1.0.3";
+    pname = "font-sun-misc";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-sun-misc-1.0.3.tar.bz2";
@@ -571,7 +609,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fonttosfnt = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto }: stdenv.mkDerivation {
-    name = "fonttosfnt-1.2.2";
+    pname = "fonttosfnt";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/fonttosfnt-1.2.2.tar.bz2";
@@ -585,7 +624,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontutil = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "font-util-1.3.1";
+    pname = "font-util";
+    version = "1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-util-1.3.1.tar.bz2";
@@ -599,7 +639,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontwinitzkicyrillic = callPackage ({ stdenv, pkg-config, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
-    name = "font-winitzki-cyrillic-1.0.3";
+    pname = "font-winitzki-cyrillic";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.3.tar.bz2";
@@ -614,7 +655,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontxfree86type1 = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
-    name = "font-xfree86-type1-1.0.4";
+    pname = "font-xfree86-type1";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/font/font-xfree86-type1-1.0.4.tar.bz2";
@@ -629,7 +671,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   gccmakedep = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "gccmakedep-1.0.3";
+    pname = "gccmakedep";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/util/gccmakedep-1.0.3.tar.bz2";
@@ -643,7 +686,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   iceauth = callPackage ({ stdenv, pkg-config, fetchurl, libICE, xorgproto }: stdenv.mkDerivation {
-    name = "iceauth-1.0.8";
+    pname = "iceauth";
+    version = "1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/iceauth-1.0.8.tar.bz2";
@@ -657,7 +701,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   ico = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "ico-1.0.5";
+    pname = "ico";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/ico-1.0.5.tar.bz2";
@@ -671,7 +716,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   imake = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "imake-1.0.8";
+    pname = "imake";
+    version = "1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/util/imake-1.0.8.tar.bz2";
@@ -685,7 +731,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libAppleWM = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
-    name = "libAppleWM-1.4.1";
+    pname = "libAppleWM";
+    version = "1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libAppleWM-1.4.1.tar.bz2";
@@ -699,7 +746,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libFS = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xtrans }: stdenv.mkDerivation {
-    name = "libFS-1.0.8";
+    pname = "libFS";
+    version = "1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libFS-1.0.8.tar.bz2";
@@ -713,7 +761,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libICE = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xtrans }: stdenv.mkDerivation {
-    name = "libICE-1.0.10";
+    pname = "libICE";
+    version = "1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libICE-1.0.10.tar.bz2";
@@ -727,7 +776,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libSM = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libuuid, xorgproto, xtrans }: stdenv.mkDerivation {
-    name = "libSM-1.2.3";
+    pname = "libSM";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libSM-1.2.3.tar.bz2";
@@ -741,7 +791,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libWindowsWM = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
-    name = "libWindowsWM-1.0.1";
+    pname = "libWindowsWM";
+    version = "1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2";
@@ -755,11 +806,12 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
-    name = "libX11-1.7.1";
+    pname = "libX11";
+    version = "1.7.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.7.1.tar.bz2";
-      sha256 = "0isxad59hvdwggbxqqjjjg3zmih9xiq4d9mdsnqbyb2nmbg46kp6";
+      url = "mirror://xorg/individual/lib/libX11-1.7.2.tar.bz2";
+      sha256 = "0v7aj8q3rlchdyfwdna7n7vgpyzyir391dlv5rwy9fxagbikbyhw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -769,7 +821,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXScrnSaver = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
-    name = "libXScrnSaver-1.2.3";
+    pname = "libXScrnSaver";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXScrnSaver-1.2.3.tar.bz2";
@@ -783,7 +836,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXTrap = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXt }: stdenv.mkDerivation {
-    name = "libXTrap-1.0.1";
+    pname = "libXTrap";
+    version = "1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXTrap-1.0.1.tar.bz2";
@@ -797,7 +851,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXau = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "libXau-1.0.9";
+    pname = "libXau";
+    version = "1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXau-1.0.9.tar.bz2";
@@ -811,7 +866,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXaw = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXmu, libXpm, libXt }: stdenv.mkDerivation {
-    name = "libXaw-1.0.14";
+    pname = "libXaw";
+    version = "1.0.14";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXaw-1.0.14.tar.bz2";
@@ -825,7 +881,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXaw3d = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, libXpm, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "libXaw3d-1.6.3";
+    pname = "libXaw3d";
+    version = "1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2";
@@ -839,7 +896,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcomposite = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
-    name = "libXcomposite-0.4.5";
+    pname = "libXcomposite";
+    version = "0.4.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXcomposite-0.4.5.tar.bz2";
@@ -853,7 +911,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcursor = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes, libXrender }: stdenv.mkDerivation {
-    name = "libXcursor-1.2.0";
+    pname = "libXcursor";
+    version = "1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXcursor-1.2.0.tar.bz2";
@@ -867,7 +926,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXdamage = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
-    name = "libXdamage-1.1.5";
+    pname = "libXdamage";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXdamage-1.1.5.tar.bz2";
@@ -881,7 +941,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXdmcp = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "libXdmcp-1.1.3";
+    pname = "libXdmcp";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXdmcp-1.1.3.tar.bz2";
@@ -895,7 +956,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXext = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "libXext-1.3.4";
+    pname = "libXext";
+    version = "1.3.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXext-1.3.4.tar.bz2";
@@ -909,11 +971,12 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXfixes = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
-    name = "libXfixes-5.0.3";
+    pname = "libXfixes";
+    version = "6.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXfixes-5.0.3.tar.bz2";
-      sha256 = "1miana3y4hwdqdparsccmygqr3ic3hs5jrqfzp70hvi2zwxd676y";
+      url = "mirror://xorg/individual/lib/libXfixes-6.0.0.tar.bz2";
+      sha256 = "0k2v4i4r24y3kdr5ici1qqhp69djnja919xfqp54c2rylm6s5hd7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -923,7 +986,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXfont = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
-    name = "libXfont-1.5.4";
+    pname = "libXfont";
+    version = "1.5.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXfont-1.5.4.tar.bz2";
@@ -937,7 +1001,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXfont2 = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
-    name = "libXfont2-2.0.4";
+    pname = "libXfont2";
+    version = "2.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXfont2-2.0.4.tar.bz2";
@@ -951,7 +1016,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXft = callPackage ({ stdenv, pkg-config, fetchurl, fontconfig, freetype, libX11, xorgproto, libXrender }: stdenv.mkDerivation {
-    name = "libXft-2.3.3";
+    pname = "libXft";
+    version = "2.3.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXft-2.3.3.tar.bz2";
@@ -965,7 +1031,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXi = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXfixes }: stdenv.mkDerivation {
-    name = "libXi-1.7.10";
+    pname = "libXi";
+    version = "1.7.10";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXi-1.7.10.tar.bz2";
@@ -979,7 +1046,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXinerama = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
-    name = "libXinerama-1.1.4";
+    pname = "libXinerama";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXinerama-1.1.4.tar.bz2";
@@ -993,7 +1061,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXmu = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "libXmu-1.1.3";
+    pname = "libXmu";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXmu-1.1.3.tar.bz2";
@@ -1007,7 +1076,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXp = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXau, libXext }: stdenv.mkDerivation {
-    name = "libXp-1.0.3";
+    pname = "libXp";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXp-1.0.3.tar.bz2";
@@ -1021,7 +1091,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXpm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXt, gettext }: stdenv.mkDerivation {
-    name = "libXpm-3.5.13";
+    pname = "libXpm";
+    version = "3.5.13";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXpm-3.5.13.tar.bz2";
@@ -1035,7 +1106,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXpresent = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
-    name = "libXpresent-1.0.0";
+    pname = "libXpresent";
+    version = "1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXpresent-1.0.0.tar.bz2";
@@ -1049,7 +1121,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXrandr = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXrender }: stdenv.mkDerivation {
-    name = "libXrandr-1.5.2";
+    pname = "libXrandr";
+    version = "1.5.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXrandr-1.5.2.tar.bz2";
@@ -1063,7 +1136,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXrender = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
-    name = "libXrender-0.9.10";
+    pname = "libXrender";
+    version = "0.9.10";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXrender-0.9.10.tar.bz2";
@@ -1077,7 +1151,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXres = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
-    name = "libXres-1.2.1";
+    pname = "libXres";
+    version = "1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXres-1.2.1.tar.bz2";
@@ -1091,7 +1166,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXt = callPackage ({ stdenv, pkg-config, fetchurl, libICE, xorgproto, libSM, libX11 }: stdenv.mkDerivation {
-    name = "libXt-1.2.1";
+    pname = "libXt";
+    version = "1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXt-1.2.1.tar.bz2";
@@ -1105,7 +1181,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXtst = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXi }: stdenv.mkDerivation {
-    name = "libXtst-1.2.3";
+    pname = "libXtst";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXtst-1.2.3.tar.bz2";
@@ -1119,7 +1196,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXv = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
-    name = "libXv-1.0.11";
+    pname = "libXv";
+    version = "1.0.11";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXv-1.0.11.tar.bz2";
@@ -1133,7 +1211,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXvMC = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXv }: stdenv.mkDerivation {
-    name = "libXvMC-1.0.12";
+    pname = "libXvMC";
+    version = "1.0.12";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXvMC-1.0.12.tar.bz2";
@@ -1147,7 +1226,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXxf86dga = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
-    name = "libXxf86dga-1.1.5";
+    pname = "libXxf86dga";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXxf86dga-1.1.5.tar.bz2";
@@ -1161,7 +1241,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXxf86misc = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
-    name = "libXxf86misc-1.0.4";
+    pname = "libXxf86misc";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXxf86misc-1.0.4.tar.bz2";
@@ -1175,7 +1256,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXxf86vm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
-    name = "libXxf86vm-1.1.4";
+    pname = "libXxf86vm";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libXxf86vm-1.1.4.tar.bz2";
@@ -1189,7 +1271,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libdmx = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
-    name = "libdmx-1.1.4";
+    pname = "libdmx";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libdmx-1.1.4.tar.bz2";
@@ -1203,7 +1286,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libfontenc = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, zlib }: stdenv.mkDerivation {
-    name = "libfontenc-1.1.4";
+    pname = "libfontenc";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libfontenc-1.1.4.tar.bz2";
@@ -1217,7 +1301,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, zlib }: stdenv.mkDerivation {
-    name = "libpciaccess-0.16";
+    pname = "libpciaccess";
+    version = "0.16";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libpciaccess-0.16.tar.bz2";
@@ -1231,7 +1316,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libpthreadstubs = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "libpthread-stubs-0.4";
+    pname = "libpthread-stubs";
+    version = "0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "https://xcb.freedesktop.org/dist/libpthread-stubs-0.4.tar.bz2";
@@ -1245,7 +1331,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxcb = callPackage ({ stdenv, pkg-config, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python3 }: stdenv.mkDerivation {
-    name = "libxcb-1.14";
+    pname = "libxcb";
+    version = "1.14";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libxcb-1.14.tar.xz";
@@ -1259,7 +1346,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxkbfile = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
-    name = "libxkbfile-1.1.0";
+    pname = "libxkbfile";
+    version = "1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libxkbfile-1.1.0.tar.bz2";
@@ -1273,7 +1361,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxshmfence = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "libxshmfence-1.3";
+    pname = "libxshmfence";
+    version = "1.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2";
@@ -1287,7 +1376,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   listres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "listres-1.0.4";
+    pname = "listres";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/listres-1.0.4.tar.bz2";
@@ -1301,7 +1391,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   lndir = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "lndir-1.0.3";
+    pname = "lndir";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/util/lndir-1.0.3.tar.bz2";
@@ -1315,7 +1406,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   luit = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "luit-20190106";
+    pname = "luit";
+    version = "20190106";
     builder = ./builder.sh;
     src = fetchurl {
       url = "https://invisible-mirror.net/archives/luit/luit-20190106.tgz";
@@ -1329,7 +1421,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   makedepend = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "makedepend-1.0.6";
+    pname = "makedepend";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/util/makedepend-1.0.6.tar.bz2";
@@ -1343,7 +1436,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   mkfontscale = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto, zlib }: stdenv.mkDerivation {
-    name = "mkfontscale-1.2.1";
+    pname = "mkfontscale";
+    version = "1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/mkfontscale-1.2.1.tar.bz2";
@@ -1357,7 +1451,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   oclock = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
-    name = "oclock-1.0.4";
+    pname = "oclock";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/oclock-1.0.4.tar.bz2";
@@ -1371,7 +1466,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   sessreg = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "sessreg-1.1.2";
+    pname = "sessreg";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/sessreg-1.1.2.tar.bz2";
@@ -1385,7 +1481,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   setxkbmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
-    name = "setxkbmap-1.3.2";
+    pname = "setxkbmap";
+    version = "1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/setxkbmap-1.3.2.tar.bz2";
@@ -1399,7 +1496,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   smproxy = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libXmu, libXt }: stdenv.mkDerivation {
-    name = "smproxy-1.0.6";
+    pname = "smproxy";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/smproxy-1.0.6.tar.bz2";
@@ -1413,7 +1511,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   transset = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "transset-1.0.2";
+    pname = "transset";
+    version = "1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/transset-1.0.2.tar.bz2";
@@ -1427,7 +1526,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   twm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXext, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "twm-1.0.10";
+    pname = "twm";
+    version = "1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/twm-1.0.10.tar.bz2";
@@ -1441,7 +1541,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   utilmacros = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "util-macros-1.19.3";
+    pname = "util-macros";
+    version = "1.19.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/util/util-macros-1.19.3.tar.bz2";
@@ -1455,7 +1556,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   viewres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, libXt }: stdenv.mkDerivation {
-    name = "viewres-1.0.5";
+    pname = "viewres";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/viewres-1.0.5.tar.bz2";
@@ -1469,7 +1571,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   x11perf = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXft, libXmu, xorgproto, libXrender }: stdenv.mkDerivation {
-    name = "x11perf-1.6.1";
+    pname = "x11perf";
+    version = "1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/x11perf-1.6.1.tar.bz2";
@@ -1483,7 +1586,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xauth = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXext, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xauth-1.1";
+    pname = "xauth";
+    version = "1.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xauth-1.1.tar.bz2";
@@ -1497,7 +1601,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xbacklight = callPackage ({ stdenv, pkg-config, fetchurl, libxcb, xcbutil }: stdenv.mkDerivation {
-    name = "xbacklight-1.2.3";
+    pname = "xbacklight";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xbacklight-1.2.3.tar.bz2";
@@ -1511,7 +1616,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xbitmaps = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "xbitmaps-1.1.2";
+    pname = "xbitmaps";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/data/xbitmaps-1.1.2.tar.bz2";
@@ -1525,7 +1631,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcalc = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "xcalc-1.1.0";
+    pname = "xcalc";
+    version = "1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xcalc-1.1.0.tar.bz2";
@@ -1539,7 +1646,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbproto = callPackage ({ stdenv, pkg-config, fetchurl, python3 }: stdenv.mkDerivation {
-    name = "xcb-proto-1.14.1";
+    pname = "xcb-proto";
+    version = "1.14.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/proto/xcb-proto-1.14.1.tar.xz";
@@ -1553,7 +1661,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutil = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
-    name = "xcb-util-0.4.0";
+    pname = "xcb-util";
+    version = "0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "https://xcb.freedesktop.org/dist/xcb-util-0.4.0.tar.bz2";
@@ -1567,7 +1676,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilcursor = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbutilimage, xcbutilrenderutil, xorgproto, m4 }: stdenv.mkDerivation {
-    name = "xcb-util-cursor-0.1.3";
+    pname = "xcb-util-cursor";
+    version = "0.1.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.3.tar.bz2";
@@ -1581,7 +1691,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilerrors = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbproto, xorgproto, m4 }: stdenv.mkDerivation {
-    name = "xcb-util-errors-1.0";
+    pname = "xcb-util-errors";
+    version = "1.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "https://xcb.freedesktop.org/dist/xcb-util-errors-1.0.tar.bz2";
@@ -1595,7 +1706,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilimage = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbutil, xorgproto, m4 }: stdenv.mkDerivation {
-    name = "xcb-util-image-0.4.0";
+    pname = "xcb-util-image";
+    version = "0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "https://xcb.freedesktop.org/dist/xcb-util-image-0.4.0.tar.bz2";
@@ -1609,7 +1721,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilkeysyms = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
-    name = "xcb-util-keysyms-0.4.0";
+    pname = "xcb-util-keysyms";
+    version = "0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "https://xcb.freedesktop.org/dist/xcb-util-keysyms-0.4.0.tar.bz2";
@@ -1623,7 +1736,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilrenderutil = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
-    name = "xcb-util-renderutil-0.3.9";
+    pname = "xcb-util-renderutil";
+    version = "0.3.9";
     builder = ./builder.sh;
     src = fetchurl {
       url = "https://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.9.tar.bz2";
@@ -1637,7 +1751,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilwm = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
-    name = "xcb-util-wm-0.4.1";
+    pname = "xcb-util-wm";
+    version = "0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "https://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2";
@@ -1651,7 +1766,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xclock = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
-    name = "xclock-1.0.9";
+    pname = "xclock";
+    version = "1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xclock-1.0.9.tar.bz2";
@@ -1665,7 +1781,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcmsdb = callPackage ({ stdenv, pkg-config, fetchurl, libX11 }: stdenv.mkDerivation {
-    name = "xcmsdb-1.0.5";
+    pname = "xcmsdb";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xcmsdb-1.0.5.tar.bz2";
@@ -1679,7 +1796,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcompmgr = callPackage ({ stdenv, pkg-config, fetchurl, libXcomposite, libXdamage, libXext, libXfixes, libXrender }: stdenv.mkDerivation {
-    name = "xcompmgr-1.1.8";
+    pname = "xcompmgr";
+    version = "1.1.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xcompmgr-1.1.8.tar.bz2";
@@ -1693,7 +1811,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xconsole = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "xconsole-1.0.7";
+    pname = "xconsole";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xconsole-1.0.7.tar.bz2";
@@ -1707,7 +1826,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcursorgen = callPackage ({ stdenv, pkg-config, fetchurl, libpng, libX11, libXcursor }: stdenv.mkDerivation {
-    name = "xcursorgen-1.0.7";
+    pname = "xcursorgen";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xcursorgen-1.0.7.tar.bz2";
@@ -1721,7 +1841,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcursorthemes = callPackage ({ stdenv, pkg-config, fetchurl, libXcursor }: stdenv.mkDerivation {
-    name = "xcursor-themes-1.0.6";
+    pname = "xcursor-themes";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/data/xcursor-themes-1.0.6.tar.bz2";
@@ -1735,7 +1856,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
-    name = "xdm-1.1.12";
+    pname = "xdm";
+    version = "1.1.12";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xdm-1.1.12.tar.bz2";
@@ -1749,7 +1871,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xdpyinfo = callPackage ({ stdenv, pkg-config, fetchurl, libdmx, libX11, libxcb, libXcomposite, libXext, libXi, libXinerama, xorgproto, libXrender, libXtst, libXxf86dga, libXxf86misc, libXxf86vm }: stdenv.mkDerivation {
-    name = "xdpyinfo-1.3.2";
+    pname = "xdpyinfo";
+    version = "1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xdpyinfo-1.3.2.tar.bz2";
@@ -1763,7 +1886,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xdriinfo = callPackage ({ stdenv, pkg-config, fetchurl, libGL, xorgproto, libX11 }: stdenv.mkDerivation {
-    name = "xdriinfo-1.0.6";
+    pname = "xdriinfo";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xdriinfo-1.0.6.tar.bz2";
@@ -1777,7 +1901,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xev = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXrandr }: stdenv.mkDerivation {
-    name = "xev-1.2.3";
+    pname = "xev";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xev-1.2.3.tar.bz2";
@@ -1791,7 +1916,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xeyes = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
-    name = "xeyes-1.1.2";
+    pname = "xeyes";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xeyes-1.1.2.tar.bz2";
@@ -1805,7 +1931,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputevdev = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libevdev, udev, mtdev, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-input-evdev-2.10.6";
+    pname = "xf86-input-evdev";
+    version = "2.10.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-input-evdev-2.10.6.tar.bz2";
@@ -1819,7 +1946,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputjoystick = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-input-joystick-1.6.3";
+    pname = "xf86-input-joystick";
+    version = "1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-input-joystick-1.6.3.tar.bz2";
@@ -1833,7 +1961,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputkeyboard = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-input-keyboard-1.9.0";
+    pname = "xf86-input-keyboard";
+    version = "1.9.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-input-keyboard-1.9.0.tar.bz2";
@@ -1847,11 +1976,12 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputlibinput = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libinput, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-input-libinput-1.0.1";
+    pname = "xf86-input-libinput";
+    version = "1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.0.1.tar.bz2";
-      sha256 = "0nr4r9x8c7y1l0ipivjch5zps093mxmg2nqmfn2934am26fc9ppx";
+      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.1.0.tar.bz2";
+      sha256 = "05ldqr10f2rrnshyk3lc773rz0gp3ccdzwa8n7lsc94i850jl7g1";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -1861,7 +1991,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputmouse = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-input-mouse-1.9.3";
+    pname = "xf86-input-mouse";
+    version = "1.9.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-input-mouse-1.9.3.tar.bz2";
@@ -1875,7 +2006,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputsynaptics = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libevdev, libX11, libXi, xorgserver, libXtst }: stdenv.mkDerivation {
-    name = "xf86-input-synaptics-1.9.1";
+    pname = "xf86-input-synaptics";
+    version = "1.9.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-input-synaptics-1.9.1.tar.bz2";
@@ -1889,7 +2021,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputvmmouse = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, udev, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-input-vmmouse-13.1.0";
+    pname = "xf86-input-vmmouse";
+    version = "13.1.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-input-vmmouse-13.1.0.tar.bz2";
@@ -1903,7 +2036,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputvoid = callPackage ({ stdenv, pkg-config, fetchurl, xorgserver, xorgproto }: stdenv.mkDerivation {
-    name = "xf86-input-void-1.4.1";
+    pname = "xf86-input-void";
+    version = "1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-input-void-1.4.1.tar.bz2";
@@ -1917,7 +2051,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoamdgpu = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-amdgpu-19.1.0";
+    pname = "xf86-video-amdgpu";
+    version = "19.1.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-amdgpu-19.1.0.tar.bz2";
@@ -1931,7 +2066,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoapm = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-apm-1.3.0";
+    pname = "xf86-video-apm";
+    version = "1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-apm-1.3.0.tar.bz2";
@@ -1945,7 +2081,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoark = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-ark-0.7.5";
+    pname = "xf86-video-ark";
+    version = "0.7.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2";
@@ -1959,7 +2096,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoast = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-ast-1.1.5";
+    pname = "xf86-video-ast";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-ast-1.1.5.tar.bz2";
@@ -1973,7 +2111,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoati = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-ati-19.1.0";
+    pname = "xf86-video-ati";
+    version = "19.1.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-ati-19.1.0.tar.bz2";
@@ -1987,7 +2126,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videochips = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-chips-1.4.0";
+    pname = "xf86-video-chips";
+    version = "1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-chips-1.4.0.tar.bz2";
@@ -2001,7 +2141,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videocirrus = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-cirrus-1.5.3";
+    pname = "xf86-video-cirrus";
+    version = "1.5.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-cirrus-1.5.3.tar.bz2";
@@ -2015,7 +2156,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videodummy = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-dummy-0.3.8";
+    pname = "xf86-video-dummy";
+    version = "0.3.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-dummy-0.3.8.tar.bz2";
@@ -2029,7 +2171,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videofbdev = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-fbdev-0.5.0";
+    pname = "xf86-video-fbdev";
+    version = "0.5.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-fbdev-0.5.0.tar.bz2";
@@ -2043,7 +2186,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videogeode = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-geode-2.11.19";
+    pname = "xf86-video-geode";
+    version = "2.11.19";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-geode-2.11.19.tar.bz2";
@@ -2057,7 +2201,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoglide = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-glide-1.2.2";
+    pname = "xf86-video-glide";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-glide-1.2.2.tar.bz2";
@@ -2071,7 +2216,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoglint = callPackage ({ stdenv, pkg-config, fetchurl, libpciaccess, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-glint-1.2.9";
+    pname = "xf86-video-glint";
+    version = "1.2.9";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-glint-1.2.9.tar.bz2";
@@ -2085,7 +2231,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoi128 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-i128-1.4.0";
+    pname = "xf86-video-i128";
+    version = "1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-i128-1.4.0.tar.bz2";
@@ -2099,7 +2246,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoi740 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-i740-1.4.0";
+    pname = "xf86-video-i740";
+    version = "1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-i740-1.4.0.tar.bz2";
@@ -2113,7 +2261,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videointel = callPackage ({ stdenv, pkg-config, fetchurl, cairo, xorgproto, libdrm, libpng, udev, libpciaccess, libX11, xcbutil, libxcb, libXcursor, libXdamage, libXext, libXfixes, xorgserver, libXrandr, libXrender, libxshmfence, libXtst, libXvMC }: stdenv.mkDerivation {
-    name = "xf86-video-intel-2.99.917";
+    pname = "xf86-video-intel";
+    version = "2.99.917";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-intel-2.99.917.tar.bz2";
@@ -2127,7 +2276,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videomach64 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-mach64-6.9.6";
+    pname = "xf86-video-mach64";
+    version = "6.9.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-mach64-6.9.6.tar.bz2";
@@ -2141,7 +2291,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videomga = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-mga-2.0.0";
+    pname = "xf86-video-mga";
+    version = "2.0.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-mga-2.0.0.tar.bz2";
@@ -2155,7 +2306,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoneomagic = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-neomagic-1.3.0";
+    pname = "xf86-video-neomagic";
+    version = "1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-neomagic-1.3.0.tar.bz2";
@@ -2169,7 +2321,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videonewport = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-newport-0.2.4";
+    pname = "xf86-video-newport";
+    version = "0.2.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-newport-0.2.4.tar.bz2";
@@ -2183,7 +2336,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videonouveau = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-nouveau-1.0.17";
+    pname = "xf86-video-nouveau";
+    version = "1.0.17";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-nouveau-1.0.17.tar.bz2";
@@ -2197,7 +2351,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videonv = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-nv-2.1.21";
+    pname = "xf86-video-nv";
+    version = "2.1.21";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-nv-2.1.21.tar.bz2";
@@ -2211,7 +2366,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoomap = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-omap-0.4.5";
+    pname = "xf86-video-omap";
+    version = "0.4.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-omap-0.4.5.tar.bz2";
@@ -2225,7 +2381,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoopenchrome = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver, libXvMC }: stdenv.mkDerivation {
-    name = "xf86-video-openchrome-0.6.0";
+    pname = "xf86-video-openchrome";
+    version = "0.6.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-openchrome-0.6.0.tar.bz2";
@@ -2239,7 +2396,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoqxl = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-qxl-0.1.5";
+    pname = "xf86-video-qxl";
+    version = "0.1.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-qxl-0.1.5.tar.bz2";
@@ -2253,7 +2411,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videor128 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-r128-6.11.0";
+    pname = "xf86-video-r128";
+    version = "6.11.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-r128-6.11.0.tar.bz2";
@@ -2267,7 +2426,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videorendition = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-rendition-4.2.7";
+    pname = "xf86-video-rendition";
+    version = "4.2.7";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-rendition-4.2.7.tar.bz2";
@@ -2281,7 +2441,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videos3virge = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-s3virge-1.11.0";
+    pname = "xf86-video-s3virge";
+    version = "1.11.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-s3virge-1.11.0.tar.bz2";
@@ -2295,7 +2456,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosavage = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-savage-2.3.9";
+    pname = "xf86-video-savage";
+    version = "2.3.9";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-savage-2.3.9.tar.bz2";
@@ -2309,7 +2471,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosiliconmotion = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-siliconmotion-1.7.9";
+    pname = "xf86-video-siliconmotion";
+    version = "1.7.9";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.9.tar.bz2";
@@ -2323,7 +2486,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosis = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-sis-0.11.0";
+    pname = "xf86-video-sis";
+    version = "0.11.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-sis-0.11.0.tar.bz2";
@@ -2337,7 +2501,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosisusb = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-sisusb-0.9.7";
+    pname = "xf86-video-sisusb";
+    version = "0.9.7";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-sisusb-0.9.7.tar.bz2";
@@ -2351,7 +2516,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosuncg6 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-suncg6-1.1.2";
+    pname = "xf86-video-suncg6";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-suncg6-1.1.2.tar.bz2";
@@ -2365,7 +2531,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosunffb = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-sunffb-1.2.2";
+    pname = "xf86-video-sunffb";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-sunffb-1.2.2.tar.bz2";
@@ -2379,7 +2546,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosunleo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-sunleo-1.2.2";
+    pname = "xf86-video-sunleo";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-sunleo-1.2.2.tar.bz2";
@@ -2393,7 +2561,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videotdfx = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-tdfx-1.5.0";
+    pname = "xf86-video-tdfx";
+    version = "1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-tdfx-1.5.0.tar.bz2";
@@ -2407,7 +2576,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videotga = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-tga-1.2.2";
+    pname = "xf86-video-tga";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-tga-1.2.2.tar.bz2";
@@ -2421,7 +2591,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videotrident = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-trident-1.3.8";
+    pname = "xf86-video-trident";
+    version = "1.3.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-trident-1.3.8.tar.bz2";
@@ -2435,7 +2606,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videov4l = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-v4l-0.3.0";
+    pname = "xf86-video-v4l";
+    version = "0.3.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-v4l-0.3.0.tar.bz2";
@@ -2449,7 +2621,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovboxvideo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-vboxvideo-1.0.0";
+    pname = "xf86-video-vboxvideo";
+    version = "1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-vboxvideo-1.0.0.tar.bz2";
@@ -2463,7 +2636,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovesa = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-vesa-2.5.0";
+    pname = "xf86-video-vesa";
+    version = "2.5.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-vesa-2.5.0.tar.bz2";
@@ -2477,7 +2651,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovmware = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-vmware-13.3.0";
+    pname = "xf86-video-vmware";
+    version = "13.3.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-vmware-13.3.0.tar.bz2";
@@ -2491,7 +2666,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovoodoo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-voodoo-1.2.5";
+    pname = "xf86-video-voodoo";
+    version = "1.2.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-voodoo-1.2.5.tar.bz2";
@@ -2505,7 +2681,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videowsfb = callPackage ({ stdenv, pkg-config, fetchurl, xorgserver, xorgproto }: stdenv.mkDerivation {
-    name = "xf86-video-wsfb-0.4.0";
+    pname = "xf86-video-wsfb";
+    version = "0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-wsfb-0.4.0.tar.bz2";
@@ -2519,7 +2696,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoxgi = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-xgi-1.6.1";
+    pname = "xf86-video-xgi";
+    version = "1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/driver/xf86-video-xgi-1.6.1.tar.bz2";
@@ -2533,7 +2711,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext }: stdenv.mkDerivation {
-    name = "xfd-1.1.3";
+    pname = "xfd";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xfd-1.1.3.tar.bz2";
@@ -2547,7 +2726,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfontsel = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
-    name = "xfontsel-1.0.6";
+    pname = "xfontsel";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xfontsel-1.0.6.tar.bz2";
@@ -2561,7 +2741,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfs = callPackage ({ stdenv, pkg-config, fetchurl, libXfont2, xorgproto, xtrans }: stdenv.mkDerivation {
-    name = "xfs-1.2.0";
+    pname = "xfs";
+    version = "1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xfs-1.2.0.tar.bz2";
@@ -2575,7 +2756,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfsinfo = callPackage ({ stdenv, pkg-config, fetchurl, libFS, xorgproto }: stdenv.mkDerivation {
-    name = "xfsinfo-1.0.6";
+    pname = "xfsinfo";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xfsinfo-1.0.6.tar.bz2";
@@ -2589,7 +2771,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xgamma = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXxf86vm }: stdenv.mkDerivation {
-    name = "xgamma-1.0.6";
+    pname = "xgamma";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xgamma-1.0.6.tar.bz2";
@@ -2603,7 +2786,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xgc = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
-    name = "xgc-1.0.5";
+    pname = "xgc";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xgc-1.0.5.tar.bz2";
@@ -2617,7 +2801,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xhost = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xhost-1.0.8";
+    pname = "xhost";
+    version = "1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xhost-1.0.8.tar.bz2";
@@ -2631,7 +2816,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xinit = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xinit-1.4.1";
+    pname = "xinit";
+    version = "1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xinit-1.4.1.tar.bz2";
@@ -2645,7 +2831,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xinput = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXi, libXinerama, libXrandr }: stdenv.mkDerivation {
-    name = "xinput-1.6.3";
+    pname = "xinput";
+    version = "1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xinput-1.6.3.tar.bz2";
@@ -2659,7 +2846,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbcomp = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
-    name = "xkbcomp-1.4.5";
+    pname = "xkbcomp";
+    version = "1.4.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xkbcomp-1.4.5.tar.bz2";
@@ -2673,7 +2861,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbevd = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
-    name = "xkbevd-1.1.4";
+    pname = "xkbevd";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xkbevd-1.1.4.tar.bz2";
@@ -2687,7 +2876,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbprint = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
-    name = "xkbprint-1.0.4";
+    pname = "xkbprint";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xkbprint-1.0.4.tar.bz2";
@@ -2701,7 +2891,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbutils = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXaw, libXt }: stdenv.mkDerivation {
-    name = "xkbutils-1.0.4";
+    pname = "xkbutils";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xkbutils-1.0.4.tar.bz2";
@@ -2715,11 +2906,12 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, python3 }: stdenv.mkDerivation {
-    name = "xkeyboard-config-2.31";
+    pname = "xkeyboard-config";
+    version = "2.33";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.31.tar.bz2";
-      sha256 = "18xddaxh83zm698syh50w983jg6b7b8zgv0dfaf7ha485hgihi6s";
+      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.33.tar.bz2";
+      sha256 = "1g6kn7l0mixw50kgn7d97gwv1990c5rczr2x776q3xywss8dfzv5";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config python3 ];
@@ -2729,7 +2921,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkill = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xkill-1.0.5";
+    pname = "xkill";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xkill-1.0.5.tar.bz2";
@@ -2743,7 +2936,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xload = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext }: stdenv.mkDerivation {
-    name = "xload-1.1.3";
+    pname = "xload";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xload-1.1.3.tar.bz2";
@@ -2757,7 +2951,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xlsatoms = callPackage ({ stdenv, pkg-config, fetchurl, libxcb }: stdenv.mkDerivation {
-    name = "xlsatoms-1.1.3";
+    pname = "xlsatoms";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xlsatoms-1.1.3.tar.bz2";
@@ -2771,7 +2966,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xlsclients = callPackage ({ stdenv, pkg-config, fetchurl, libxcb }: stdenv.mkDerivation {
-    name = "xlsclients-1.1.4";
+    pname = "xlsclients";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xlsclients-1.1.4.tar.bz2";
@@ -2785,7 +2981,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xlsfonts = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xlsfonts-1.0.6";
+    pname = "xlsfonts";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xlsfonts-1.0.6.tar.bz2";
@@ -2799,7 +2996,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmag = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
-    name = "xmag-1.0.6";
+    pname = "xmag";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xmag-1.0.6.tar.bz2";
@@ -2813,7 +3011,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmessage = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
-    name = "xmessage-1.0.5";
+    pname = "xmessage";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xmessage-1.0.5.tar.bz2";
@@ -2827,7 +3026,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmodmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xmodmap-1.0.10";
+    pname = "xmodmap";
+    version = "1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xmodmap-1.0.10.tar.bz2";
@@ -2841,7 +3041,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmore = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
-    name = "xmore-1.0.3";
+    pname = "xmore";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xmore-1.0.3.tar.bz2";
@@ -2855,7 +3056,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgcffiles = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "xorg-cf-files-1.0.6";
+    pname = "xorg-cf-files";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/util/xorg-cf-files-1.0.6.tar.bz2";
@@ -2869,7 +3071,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgdocs = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "xorg-docs-1.7.1";
+    pname = "xorg-docs";
+    version = "1.7.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/doc/xorg-docs-1.7.1.tar.bz2";
@@ -2882,22 +3085,24 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xorgproto = callPackage ({ stdenv, pkg-config, fetchurl, libXt }: stdenv.mkDerivation {
-    name = "xorgproto-2021.3";
+  xorgproto = callPackage ({ stdenv, pkg-config, fetchurl, libXt, python3 }: stdenv.mkDerivation {
+    pname = "xorgproto";
+    version = "2021.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xorgproto-2021.3.tar.bz2";
-      sha256 = "0dypp7cvjf0rvwa7cn1zp7djw5ynhs1rwk9p0r1vczbwzha2nwsc";
+      url = "mirror://xorg/individual/proto/xorgproto-2021.4.tar.bz2";
+      sha256 = "1gwz8lhvczjinndrq2jb0swfvhk7p65rprkwiqwlp132041mfl8g";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config python3 ];
     buildInputs = [ libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgserver = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
-    name = "xorg-server-1.20.11";
+    pname = "xorg-server";
+    version = "1.20.11";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/xserver/xorg-server-1.20.11.tar.bz2";
@@ -2911,7 +3116,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgsgmldoctools = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "xorg-sgml-doctools-1.11";
+    pname = "xorg-sgml-doctools";
+    version = "1.11";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/doc/xorg-sgml-doctools-1.11.tar.bz2";
@@ -2925,7 +3131,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xpr = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xpr-1.0.5";
+    pname = "xpr";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xpr-1.0.5.tar.bz2";
@@ -2939,7 +3146,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xprop = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xprop-1.2.5";
+    pname = "xprop";
+    version = "1.2.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xprop-1.2.5.tar.bz2";
@@ -2953,7 +3161,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrandr = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXrandr, libXrender }: stdenv.mkDerivation {
-    name = "xrandr-1.5.1";
+    pname = "xrandr";
+    version = "1.5.1";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xrandr-1.5.1.tar.xz";
@@ -2967,7 +3176,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrdb = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xrdb-1.2.0";
+    pname = "xrdb";
+    version = "1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xrdb-1.2.0.tar.bz2";
@@ -2981,7 +3191,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrefresh = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xrefresh-1.0.6";
+    pname = "xrefresh";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xrefresh-1.0.6.tar.bz2";
@@ -2995,7 +3206,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xset = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, xorgproto, libXxf86misc }: stdenv.mkDerivation {
-    name = "xset-1.2.4";
+    pname = "xset";
+    version = "1.2.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xset-1.2.4.tar.bz2";
@@ -3009,7 +3221,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xsetroot = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xbitmaps, libXcursor, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xsetroot-1.1.2";
+    pname = "xsetroot";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xsetroot-1.1.2.tar.bz2";
@@ -3023,7 +3236,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xsm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXaw, libXt }: stdenv.mkDerivation {
-    name = "xsm-1.0.4";
+    pname = "xsm";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xsm-1.0.4.tar.bz2";
@@ -3037,7 +3251,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xstdcmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xstdcmap-1.0.4";
+    pname = "xstdcmap";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xstdcmap-1.0.4.tar.bz2";
@@ -3051,7 +3266,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xtrans = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "xtrans-1.4.0";
+    pname = "xtrans";
+    version = "1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/xtrans-1.4.0.tar.bz2";
@@ -3065,7 +3281,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xtrap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXt, libXTrap }: stdenv.mkDerivation {
-    name = "xtrap-1.0.3";
+    pname = "xtrap";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xtrap-1.0.3.tar.bz2";
@@ -3079,7 +3296,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xvinfo = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXv }: stdenv.mkDerivation {
-    name = "xvinfo-1.1.4";
+    pname = "xvinfo";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xvinfo-1.1.4.tar.bz2";
@@ -3093,7 +3311,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xwd-1.0.7";
+    pname = "xwd";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xwd-1.0.7.tar.bz2";
@@ -3107,7 +3326,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwininfo = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxcb, xorgproto }: stdenv.mkDerivation {
-    name = "xwininfo-1.1.4";
+    pname = "xwininfo";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xwininfo-1.1.4.tar.bz2";
@@ -3121,7 +3341,8 @@ lib.makeScope newScope (self: with self; {
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwud = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xwud-1.0.5";
+    pname = "xwud";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/app/xwud-1.0.5.tar.bz2";

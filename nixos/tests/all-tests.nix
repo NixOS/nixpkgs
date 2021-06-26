@@ -201,6 +201,7 @@ in
   jitsi-meet = handleTest ./jitsi-meet.nix {};
   k3s = handleTest ./k3s.nix {};
   kafka = handleTest ./kafka.nix {};
+  kbd-setfont-decompress = handleTest ./kbd-setfont-decompress.nix {};
   keepalived = handleTest ./keepalived.nix {};
   keepassxc = handleTest ./keepassxc.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
@@ -431,6 +432,7 @@ in
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
+  txredisapi = handleTest ./txredisapi.nix {};
   tuptime = handleTest ./tuptime.nix {};
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
   ucarp = handleTest ./ucarp.nix {};

@@ -278,6 +278,8 @@ let
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
+    dose3 = callPackage ../development/ocaml-modules/dose3 { };
+
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
     duff = callPackage ../development/ocaml-modules/duff { };
@@ -829,6 +831,7 @@ let
     gettext-stub = callPackage ../development/ocaml-modules/ocaml-gettext/stub.nix { };
 
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
+    ocamlgraph_gtk = callPackage ../development/ocaml-modules/ocamlgraph/gtk.nix { };
 
     ocaml_http = callPackage ../development/ocaml-modules/http { };
 
