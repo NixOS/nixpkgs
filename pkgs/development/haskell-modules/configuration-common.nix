@@ -1932,4 +1932,8 @@ EOT
   # https://github.com/dagit/zenc/issues/5
   zenc = doJailbreak super.zenc;
 
+  # Indeterministic tests
+  # Fixed on upstream: https://github.com/softwarefactory-project/matrix-client-haskell/commit/4ca4963cfd06379d9bdce49742af854aed6a0d37
+  matrix-client = dontCheck super.matrix-client;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
