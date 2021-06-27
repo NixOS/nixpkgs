@@ -16480,6 +16480,20 @@ let
     };
   };
 
+  PARPacker = buildPerlPackage {
+    pname = "PAR-Packer";
+    version = "1.052";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RS/RSCHUPP/PAR-Packer-1.052.tar.gz";
+      sha256 = "16il9sgcnjg9w07grwrxagvk30bfn0hhrqa9f5z606k7yhvdbypz";
+    };
+    propagatedBuildInputs = [ ArchiveZip GetoptArgvFile IPCRun3 ModuleScanDeps PAR PARDist ];
+    meta = {
+      description = "PAR Packager for generating stand-alone executables, perl scripts and PAR files";
+    };
+    NIX_LDFLAGS = [ "-lpthread" ];
+  };
+
   PAUSEPermissions = buildPerlPackage {
      pname = "PAUSE-Permissions";
      version = "0.17";
