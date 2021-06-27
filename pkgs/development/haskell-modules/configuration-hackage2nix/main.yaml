@@ -218,6 +218,7 @@ package-maintainers:
     - hlint
     - hmatrix
     - iCalendar
+    - matrix-client
     - neuron
     - optics
     - reflex-dom
