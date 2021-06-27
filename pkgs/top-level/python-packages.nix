@@ -6349,9 +6349,7 @@ in {
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { };
 
-  pyqt5 = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix {
-    pythonPackages = self;
-  };
+  pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
 
   pyqt5_with_qtmultimedia = self.pyqt5.override {
     withMultimedia = true;

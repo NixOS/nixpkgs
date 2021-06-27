@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "5.5.0";
+  version = "6.1.1";
 
   src = fetchPypi {
     pname = "sip";
     inherit version;
-    sha256 = "1idaivamp1jvbbai9yzv471c62xbqxhaawccvskaizihkd0lq0jx";
+    sha256 = "083ykzg7zbvrfrg3ram2vx93zrmhpm817kf9bkhw8r6pzkr5mljj";
   };
 
   propagatedBuildInputs = [ packaging toml ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "http://www.riverbankcomputing.co.uk/";
+    homepage    = "https://riverbankcomputing.com/";
     license     = licenses.gpl3Only;
     maintainers = with maintainers; [ eduardosm ];
   };
