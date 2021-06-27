@@ -12,12 +12,11 @@
 , Security
 , pytestCheckHook
 , toml
-, python
 }:
 
 buildPythonPackage rec {
   pname = "adblock";
-  version = "0.4.4";
+  version = "0.5.0";
   disabled = isPy27;
 
   # Pypi only has binary releases
@@ -25,13 +24,13 @@ buildPythonPackage rec {
     owner = "ArniDagur";
     repo = "python-adblock";
     rev = version;
-    sha256 = "sha256-zNQ8zEpTLzyU5AnFBNpOGDJ02Ogu2+xl85LA+ia7Si4=";
+    sha256 = "sha256-JjmMfL24778T6LCuElXsD7cJxQ+RkqbNEnEqwoN24WE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-ajVZ0xPxC31hM1gQr3DC1HWdpIYBCSmqm0z2cflcClg=";
+    hash = "sha256-w+/W4T3ukRHNpCPjhlHZLPn6sgCpz4QHVD8VW+Rw5BI=";
   };
 
   format = "pyproject";
