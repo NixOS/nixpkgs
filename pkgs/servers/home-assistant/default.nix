@@ -682,6 +682,7 @@ in with py.pkgs; buildPythonApplication rec {
     "switch"
     "switcher_kis"
     "syncthing"
+    "synology_dsm"
     "system_health"
     "system_log"
     "tado"
