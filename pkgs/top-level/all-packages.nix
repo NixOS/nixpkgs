@@ -3875,6 +3875,8 @@ in
 
   conda = callPackage ../tools/package-management/conda { };
 
+  conduktor = callPackage ../applications/misc/conduktor { };
+
   console-bridge = callPackage ../development/libraries/console-bridge { };
 
   convbin = callPackage ../tools/misc/convbin { };
