@@ -3566,6 +3566,8 @@ in
 
   nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
 
+  ceph-csi = callPackage ../tools/filesystems/ceph-csi { };
+
   libceph = ceph.lib;
   inherit (callPackages ../tools/filesystems/ceph {
     boost = boost17x.override { enablePython = true; python = python3; };
@@ -3868,6 +3870,10 @@ in
   cocoapods = callPackage ../development/mobile/cocoapods { };
 
   cocoapods-beta = lowPrio (callPackage ../development/mobile/cocoapods { beta = true; });
+
+  cocom = callPackage ../tools/networking/cocom {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   codebraid = callPackage ../tools/misc/codebraid { };
 
@@ -6578,6 +6584,10 @@ in
 
   leela = callPackage ../tools/graphics/leela { };
 
+  lethe = callPackage ../tools/security/lethe {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   lftp = callPackage ../tools/networking/lftp { };
 
   libck = callPackage ../development/libraries/libck { };
@@ -6618,6 +6628,8 @@ in
   libgumath = callPackage ../development/libraries/libgumath { };
 
   libinsane = callPackage ../development/libraries/libinsane { };
+
+  libint = callPackage ../development/libraries/libint {};
 
   libipfix = callPackage ../development/libraries/libipfix { };
 
@@ -13951,6 +13963,8 @@ in
   puppeteer-cli = callPackage ../tools/graphics/puppeteer-cli {};
 
   pyrseas = callPackage ../development/tools/database/pyrseas { };
+
+  pycritty = with python3Packages; toPythonApplication pycritty;
 
   qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
 
@@ -27299,7 +27313,6 @@ in
   unipicker = callPackage ../applications/misc/unipicker { };
 
   unison = callPackage ../applications/networking/sync/unison {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_09;
     enableX11 = config.unison.enableX11 or true;
   };
 

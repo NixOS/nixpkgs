@@ -828,7 +828,7 @@
     "syncthing" = ps: with ps; [ aiosyncthing ];
     "syncthru" = ps: with ps; [ url-normalize ]; # missing inputs: pysyncthru
     "synology_chat" = ps: with ps; [ ];
-    "synology_dsm" = ps: with ps; [ ]; # missing inputs: synologydsm-api
+    "synology_dsm" = ps: with ps; [ synologydsm-api ];
     "synology_srm" = ps: with ps; [ ]; # missing inputs: synology-srm
     "syslog" = ps: with ps; [ ];
     "system_bridge" = ps: with ps; [ aiohttp-cors ifaddr systembridge zeroconf ];
@@ -873,7 +873,7 @@
     "tomato" = ps: with ps; [ ];
     "toon" = ps: with ps; [ aiohttp-cors hass-nabucasa toonapi ];
     "torque" = ps: with ps; [ aiohttp-cors ];
-    "totalconnect" = ps: with ps; [ ]; # missing inputs: total_connect_client
+    "totalconnect" = ps: with ps; [ total-connect-client ];
     "touchline" = ps: with ps; [ ]; # missing inputs: pytouchline
     "tplink" = ps: with ps; [ pyhs100 ];
     "tplink_lte" = ps: with ps; [ ]; # missing inputs: tp-connected
@@ -905,7 +905,7 @@
     "universal" = ps: with ps; [ ];
     "upb" = ps: with ps; [ upb-lib ];
     "upc_connect" = ps: with ps; [ connect-box ];
-    "upcloud" = ps: with ps; [ ]; # missing inputs: upcloud-api
+    "upcloud" = ps: with ps; [ upcloud-api ];
     "updater" = ps: with ps; [ distro ];
     "upnp" = ps: with ps; [ async-upnp-client ];
     "uptime" = ps: with ps; [ ];
