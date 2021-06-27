@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep
+{lib, stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep, fetchpatch
 , enableX11 ? true}:
 
 let inherit (ocamlPackages) ocaml lablgtk; in
@@ -16,6 +16,16 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ ocaml ncurses ];
+
+  patches = [
+    # Patch to fix build with ocaml 4.12. Remove in 2.51.4
+    # https://github.com/bcpierce00/unison/pull/481
+    (fetchpatch {
+      name = "fix-compile-with-ocaml-4.12.patch";
+      url = "https://github.com/bcpierce00/unison/commit/14b885316e0a4b41cb80fe3daef7950f88be5c8f.patch?full_index=1";
+      sha256 = "0j1rma1cwdsfql19zvzhfj2ys5c4lbhjcp6jrnck04xnckxxiy3d";
+    })
+  ];
 
   preBuild = (if enableX11 then ''
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml
