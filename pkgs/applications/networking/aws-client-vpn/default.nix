@@ -3,6 +3,7 @@
 , curl
 , dpkg
 , fetchurl
+, gtk3
 , icu
 , kerberos
 , lttng-ust
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
 
   postFixup = let libPath = lib.makeLibraryPath [
     curl
+    gtk3
     icu
     kerberos
     lttng-ust
