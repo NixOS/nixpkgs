@@ -4822,6 +4822,8 @@ in
 
   exfat = callPackage ../tools/filesystems/exfat { };
 
+  exfatprogs = callPackage ../tools/filesystems/exfatprogs { };
+
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
