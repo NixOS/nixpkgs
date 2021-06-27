@@ -1,0 +1,26 @@
+diff --git a/src/p4est_connectivity.c b/src/p4est_connectivity.c
+index 95339136..c93528f2 100644
+--- a/src/p4est_connectivity.c
++++ b/src/p4est_connectivity.c
+@@ -3715,6 +3715,7 @@ p4est_connectivity_reorder_newid (sc_MPI_Comm comm, int k,
+                                   sc_array_t * newid)
+ {
+   const int           n = (int) conn->num_trees;
++  int                 metis_n;
+   int                *xadj;
+   int                *adjncy;
+   int                *part;
+@@ -3862,10 +3863,12 @@ p4est_connectivity_reorder_newid (sc_MPI_Comm comm, int k,
+ 
+     P4EST_GLOBAL_INFO ("Entering metis\n");
+     /* now call metis */
++    metis_n = n;
+     P4EST_EXECUTE_ASSERT_INT
+-      (METIS_PartGraphRecursive (&n, &ncon, xadj, adjncy, NULL, NULL,
++      (METIS_PartGraphRecursive (&metis_n, &ncon, xadj, adjncy, NULL, NULL,
+                                  NULL, &k, NULL, NULL, NULL, &volume, part),
+        METIS_OK);
++    P4EST_ASSERT (metis_n == n);
+     P4EST_GLOBAL_INFO ("Done metis\n");
+ 
+     P4EST_GLOBAL_STATISTICSF ("metis volume %d\n", volume);
