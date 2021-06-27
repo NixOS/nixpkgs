@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, unzip, jre8, copyDesktopItems, makeDesktopItem }:
+{ lib, stdenv, fetchurl, unzip, jre8
+, copyDesktopItems
+, makeDesktopItem
+, iconConvTools
+}:
 
 stdenv.mkDerivation rec {
   pname = "protege-distribution";
@@ -9,23 +13,21 @@ stdenv.mkDerivation rec {
     sha256 = "092x22wyisdnhccx817mqq15sxqdfc7iz4whr4mbvzrd9di6ipjq";
   };
 
-  nativeBuildInputs = [ unzip copyDesktopItems ];
+  nativeBuildInputs = [ unzip copyDesktopItems iconConvTools ];
+
+  patches = [
+    # Replace logic for searching the install directory with a static cd into $out
+    ./static-path.patch
+    # Disable console logging, maintaining only file-based logging
+    ./disable-console-log.patch
+  ];
 
   postPatch = ''
-    # Delete all those commands meant to change directory to the source directory
-    sed -i -e '3,9d' run.sh
-
-    # Change directory to where the application is stored to avoid heavy patching
-    # of searchpaths
-    sed -i -e "2a\
-    cd $out/protege" run.sh
-
-    # Set the correct Java executable (Protege is a JRE 8 application)
+    # Resolve @out@ (introduced by "static-path.patch") to $out, and set the
+    # correct Java executable (Protege is a JRE 8 application)
     substituteInPlace run.sh \
-      --replace "java -X" "exec ${jre8.outPath}/bin/java -X" \
-
-    # Silence console logs, since these are not shown in graphical environments
-    sed -i -e '4,8d;21d' conf/logback.xml
+      --subst-var-by out $out \
+      --replace "java -X" "exec ${jre8.outPath}/bin/java -X"
   '';
 
   dontConfigure = true;
@@ -42,8 +44,8 @@ stdenv.mkDerivation rec {
     # Move launch script into /bin, giving it a recognizable name
     install -D run.sh $out/bin/run-protege
 
-    # Copy icon to where it can be found
-    install -D app/Protege.ico $out/share/icons/hicolor/128x128/apps/protege.ico
+    # Generate and copy icons to where they can be found
+    icoFileToHiColorTheme app/Protege.ico protege $out
 
     # Move everything else under protege/
     mkdir $out/protege
@@ -56,8 +58,9 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "Protege";
       desktopName = "Protege Desktop";
-      icon = "protege.ico";
+      icon = "protege";
       comment = "OWL2 ontology editor";
+      categories = "Development";
       exec = "run-protege";
     })
   ];

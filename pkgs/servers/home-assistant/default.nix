@@ -703,6 +703,7 @@ in with py.pkgs; buildPythonApplication rec {
     "toon"
     "tplink"
     "trace"
+    "tradfri"
     "transmission"
     "trend"
     "tts"

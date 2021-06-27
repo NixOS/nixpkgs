@@ -25,7 +25,7 @@
     "alert" = ps: with ps; [ ];
     "alexa" = ps: with ps; [ aiohttp-cors ];
     "almond" = ps: with ps; [ aiohttp-cors pyalmond ];
-    "alpha_vantage" = ps: with ps; [ ]; # missing inputs: alpha_vantage
+    "alpha_vantage" = ps: with ps; [ alpha-vantage ];
     "amazon_polly" = ps: with ps; [ boto3 ];
     "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
     "ambient_station" = ps: with ps; [ aioambient ];
@@ -79,7 +79,7 @@
     "bh1750" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "binary_sensor" = ps: with ps; [ ];
     "bitcoin" = ps: with ps; [ blockchain ];
-    "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
+    "bizkaibus" = ps: with ps; [ bizkaibus ];
     "blackbird" = ps: with ps; [ pyblackbird ];
     "blebox" = ps: with ps; [ blebox-uniapi ];
     "blink" = ps: with ps; [ blinkpy ];
@@ -880,7 +880,7 @@
     "traccar" = ps: with ps; [ aiohttp-cors stringcase ]; # missing inputs: pytraccar
     "trace" = ps: with ps; [ ];
     "trackr" = ps: with ps; [ ]; # missing inputs: pytrackr
-    "tradfri" = ps: with ps; [ ]; # missing inputs: pytradfri[async]
+    "tradfri" = ps: with ps; [ pytradfri ];
     "trafikverket_train" = ps: with ps; [ pytrafikverket ];
     "trafikverket_weatherstation" = ps: with ps; [ pytrafikverket ];
     "transmission" = ps: with ps; [ transmissionrpc ];
