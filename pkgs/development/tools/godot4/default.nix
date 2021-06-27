@@ -44,20 +44,18 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" ];
 
   installPhase = ''
-    mkdir -p "$out/bin"
+    mkdir -p $out/bin $dev
     cp bin/godot.* $out/bin/godot
-
-    mkdir "$dev"
     cp -r modules/gdnative/include $dev
 
     mkdir -p "$man/share/man/man6"
     cp misc/dist/linux/godot.6 "$man/share/man/man6/"
 
-    mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
-    cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/"
-    cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
-    cp icon.png "$out/share/icons/godot.png"
-    substituteInPlace "$out/share/applications/org.godotengine.Godot.desktop" \
+    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+    cp misc/dist/linux/org.godotengine.Godot.desktop $out/share/applications/
+    cp icon.svg $out/share/icons/hicolor/scalable/apps/godot.svg
+    cp icon.png $out/share/icons/godot.png
+    substituteInPlace $out/share/applications/org.godotengine.Godot.desktop \
       --replace "Exec=godot" "Exec=$out/bin/godot"
   '';
 
