@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3 nix
+#! nix-shell -i python3 -p python3 nix nix-prefetch-git
 
 import fileinput
 import json
@@ -32,6 +32,13 @@ def get_commit_date(repo, sha):
         return 'unstable-' + date
 
 
+def nix_prefetch_git(url, rev):
+    """Prefetches the requested Git revision (incl. submodules) of the given repository URL."""
+    print(f'nix-prefetch-git {url} {rev}')
+    out = subprocess.check_output(['nix-prefetch-git', '--quiet', '--url', url, '--rev', rev, '--fetch-submodules'])
+    return json.loads(out)['sha256']
+
+
 def nix_prefetch_url(url, unpack=False):
     """Prefetches the content of the given URL."""
     print(f'nix-prefetch-url {url}')
@@ -57,11 +64,11 @@ def update_file(relpath, version, sha256, rev=None):
 if __name__ == "__main__":
     tdesktop_tag = github_api_request('repos/telegramdesktop/tdesktop/releases/latest')['tag_name']
     tdesktop_version = tdesktop_tag.lstrip('v')
-    tdesktop_hash = nix_prefetch_url(f'https://github.com/telegramdesktop/tdesktop/releases/download/{tdesktop_tag}/tdesktop-{tdesktop_version}-full.tar.gz')
+    tdesktop_hash = nix_prefetch_git('https://github.com/telegramdesktop/tdesktop.git', tdesktop_tag)
     update_file('default.nix', tdesktop_version, tdesktop_hash)
     tg_owt_ref = github_api_request('repos/desktop-app/tg_owt/commits/master')['sha']
     tg_owt_version = get_commit_date('desktop-app/tg_owt', tg_owt_ref)
-    tg_owt_hash = 'TODO'
+    tg_owt_hash = nix_prefetch_git('https://github.com/desktop-app/tg_owt.git', tg_owt_ref)
     update_file('tg_owt.nix', tg_owt_version, tg_owt_hash, tg_owt_ref)
     tg_owt_ref = github_api_request('repos/desktop-app/tg_owt/commits/master')['sha']
     libtgvoip_ref = github_api_request(f'repos/telegramdesktop/tdesktop/contents/Telegram/ThirdParty/libtgvoip?ref={tdesktop_tag}')['sha']
