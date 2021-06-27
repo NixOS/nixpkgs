@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, callPackage
+{ mkDerivation, lib, fetchFromGitHub, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
@@ -23,12 +23,15 @@ let
   tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.8.0";
+  version = "2.8.1";
 
   # Telegram-Desktop with submodules
-  src = fetchurl {
-    url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0689bmdpsj8qmv9ih6ckay23mivhlps8c081qljb8wqplmf2c4ds";
+  src = fetchFromGitHub {
+    owner = "telegramdesktop";
+    repo = "tdesktop";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "1wf9806al6mzyd8nr37cdk6q2r354acixdqyjchi4r58drm99yv0";
   };
 
   postPatch = ''
