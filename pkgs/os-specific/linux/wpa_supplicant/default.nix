@@ -1,9 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
-
 , withDbus ? true, dbus
 , withReadline ? true, readline
 , withPcsclite ? true, pcsclite
-
 , readOnlyModeSSIDs ? false
 }:
 
