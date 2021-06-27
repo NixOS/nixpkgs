@@ -7397,6 +7397,20 @@ let
     };
   };
 
+  EncodeIMAPUTF7 = buildPerlPackage {
+    pname = "Encode-IMAPUTF7";
+    version = "1.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMAKHOLM/Encode-IMAPUTF7-1.05.tar.gz";
+      sha256 = "1q9pgjckjxz0qfwaqmzm1dh1y09819vi6vf1sglcz0vlqgfha0s7";
+    };
+    buildInputs = [ TestNoWarnings ];
+    meta = {
+      description = "Modification of UTF-7 encoding for IMAP";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   EncodeJIS2K = buildPerlPackage {
     pname = "Encode-JIS2K";
     version = "0.03";
