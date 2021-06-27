@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, git }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "chroma";
@@ -8,23 +8,26 @@ buildGoModule rec {
     owner  = "alecthomas";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0g5l961sr05p0kfj56qcxs9f4x3ji3p6n96zrc16cij5ncncasxw";
+    sha256 = "19d7yr6q8kwrm91yyglmw9n7wa861sgi6dbwn8sl6dp55czfwvaq";
+    # populate values otherwise taken care of by goreleaser,
+    # unfortunately these require us to use git. By doing
+    # this in postFetch we can delete .git afterwards and
+    # maintain better reproducibility of the src.
     leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+
+      commit="$(git rev-parse HEAD)"
+      date=$(git show -s --format=%aI "$commit")
+
+      substituteInPlace "$out/cmd/chroma/main.go" \
+        --replace 'version = "?"' 'version = "${version}"' \
+        --replace 'commit  = "?"' "commit = \"$commit\"" \
+        --replace 'date    = "?"' "date = \"$date\""
+
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
-
-  nativeBuildInputs = [ git ];
-
-  # populate values otherwise taken care of by goreleaser
-  # https://github.com/alecthomas/chroma/issues/435
-  postPatch = ''
-    commit="$(git rev-parse HEAD)"
-    date=$(git show -s --format=%aI "$commit")
-
-    substituteInPlace cmd/chroma/main.go \
-      --replace 'version = "?"' 'version = "${version}"' \
-      --replace 'commit  = "?"' "commit = \"$commit\"" \
-      --replace 'date    = "?"' "date = \"$date\""
-  '';
 
   vendorSha256 = "0y8mp08zccn9qxrsj9j7vambz8dwzsxbbgrlppzam53rg8rpxhrg";
 
