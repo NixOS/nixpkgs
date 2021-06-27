@@ -397,6 +397,8 @@ in {
 
   alot = callPackage ../development/python-modules/alot { };
 
+  alpha-vantage = callPackage ../development/python-modules/alpha-vantage { };
+
   altair = callPackage ../development/python-modules/altair { };
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
@@ -1096,6 +1098,8 @@ in {
   bitstruct = callPackage ../development/python-modules/bitstruct { };
 
   bitvavo-aio = callPackage ../development/python-modules/bitvavo-aio { };
+
+  bizkaibus = callPackage ../development/python-modules/bizkaibus { };
 
   bjoern = callPackage ../development/python-modules/bjoern { };
 
@@ -2186,6 +2190,8 @@ in {
 
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
+  dtlssocket = callPackage ../development/python-modules/dtlssocket { };
+
   duckdb = callPackage ../development/python-modules/duckdb {
     inherit (pkgs) duckdb;
   };
@@ -2675,6 +2681,8 @@ in {
   foolscap = callPackage ../development/python-modules/foolscap { };
 
   forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };
+
+  fordpass = callPackage ../development/python-modules/fordpass { };
 
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
@@ -5992,6 +6000,8 @@ in {
 
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 
+  pyhomepilot = callPackage ../development/python-modules/pyhomepilot { };
+
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
 
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
@@ -7129,6 +7139,8 @@ in {
   pytorchWithoutCuda = self.pytorch.override {
     cudaSupport = false;
   };
+
+  pytradfri = callPackage ../development/python-modules/pytradfri { };
 
   pytrafikverket = callPackage ../development/python-modules/pytrafikverket { };
 

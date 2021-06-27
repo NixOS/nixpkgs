@@ -20838,6 +20838,8 @@ in
 
     anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
 
+    apfs = callPackage ../os-specific/linux/apfs { };
+
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bcc = callPackage ../os-specific/linux/bcc {

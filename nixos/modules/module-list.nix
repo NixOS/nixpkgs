@@ -153,6 +153,7 @@
   ./programs/iftop.nix
   ./programs/iotop.nix
   ./programs/java.nix
+  ./programs/kdeconnect.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
   ./programs/liboping.nix
