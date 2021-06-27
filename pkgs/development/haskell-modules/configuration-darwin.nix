@@ -173,6 +173,7 @@ self: super: {
   hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
   hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
   hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
+  hls-splice-plugin = dontCheck super.hls-splice-plugin;
 
   # We are lacking pure pgrep at the moment for tests to work
   tmp-postgres = dontCheck super.tmp-postgres;
