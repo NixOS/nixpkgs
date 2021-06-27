@@ -3142,6 +3142,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/neomru.vim/";
   };
 
+  neorg = buildVimPluginFrom2Nix {
+    pname = "neorg";
+    version = "2021-06-26";
+    src = fetchFromGitHub {
+      owner = "vhyrro";
+      repo = "neorg";
+      rev = "950ed23a61ba0b4bb455033f191f15b9b8170fd6";
+      sha256 = "0c8zqkyjlkbz109k3321ys7jjggwk9w13p72907k64ypfmr70p30";
+    };
+    meta.homepage = "https://github.com/vhyrro/neorg/";
+  };
+
   neosnippet-snippets = buildVimPluginFrom2Nix {
     pname = "neosnippet-snippets";
     version = "2021-05-05";
