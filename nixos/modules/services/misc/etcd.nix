@@ -184,7 +184,7 @@ in {
       };
     };
 
-    environment.systemPackages = [ pkgs.etcdctl ];
+    environment.systemPackages = [ pkgs.etcd ];
 
     users.users.etcd = {
       uid = config.ids.uids.etcd;
