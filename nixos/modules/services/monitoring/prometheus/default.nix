@@ -378,6 +378,10 @@ let
         relevant Prometheus configuration docs</link> for more detail.
       '';
 
+      kubernetes_sd_configs = mkOpt (types.listOf promTypes.kubernetes_sd_config) ''
+        List of Kubernetes service discovery configurations.
+      '';
+
       static_configs = mkOpt (types.listOf promTypes.static_config) ''
         List of labeled target groups for this job.
       '';
@@ -609,6 +613,25 @@ let
         See the GCP documentation on network tags for more information: <link
         xlink:href="https://cloud.google.com/vpc/docs/add-remove-network-tags"
         />
+      '';
+    };
+  };
+
+  promTypes.kubernetes_sd_config = types.submodule {
+    options = {
+      api_server = mkOpt types.str ''
+        The API server address.
+      '';
+
+      role = mkOption {
+        type = types.enum [ "node" "service" "pod" "endpoints" "ingress" ];
+        description = ''
+          The Kubernetes role of entities that should be discovered.
+        '';
+      };
+
+      tls_config = mkOpt promTypes.tls_config ''
+        Configures TLS settings.
       '';
     };
   };

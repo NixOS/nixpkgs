@@ -60,6 +60,15 @@ in import ./make-test-python.nix {
               }
             ];
           }
+          # This is only here to test the resulting configuration.
+          # No Kubernetes clusters are spun up.
+          {
+            job_name = "kubernetes-sd";
+            kubernetes_sd_configs = [{
+              role = "node";
+              api_server = "http://127.0.0.1:8001";
+            }];
+          }
         ];
         rules = [
           ''
