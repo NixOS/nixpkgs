@@ -31,6 +31,15 @@ jobs:
           target_branch: staging
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Merge master into haskell-updates
+        id: haskell_updates
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          type: now
+          from_branch: master
+          target_branch: haskell-updates
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Comment on failure
         uses: peter-evans/create-or-update-comment@v1
         if: ${{ failure() }}
