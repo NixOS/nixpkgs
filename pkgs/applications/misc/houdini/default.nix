@@ -1,14 +1,18 @@
 { callPackage, buildFHSUserEnv, undaemonize, unwrapped ? callPackage ./runtime.nix {} }:
 
-let
-  houdini-runtime = callPackage ./runtime.nix { };
-in buildFHSUserEnv {
-  name = "houdini-${houdini-runtime.version}";
+buildFHSUserEnv {
+  name = "houdini-${unwrapped.version}";
+
+  targetPkgs = pkgs: with pkgs; [
+    libGLU libGL alsa-lib fontconfig zlib libpng dbus nss nspr expat pciutils libxkbcommon
+  ] ++ (with xorg; [
+    libICE libSM libXmu libXi libXext libX11 libXrender libXcursor libXfixes
+    libXrender libXcomposite libXdamage libXtst libxcb libXScrnSaver
+  ]);
 
   passthru = {
-    unwrapped = houdini-runtime;
+    inherit unwrapped;
   };
 
-  runScript = "${undaemonize}/bin/undaemonize ${houdini-runtime}/bin/houdini";
+  runScript = "${undaemonize}/bin/undaemonize ${unwrapped}/bin/houdini";
 }
-
