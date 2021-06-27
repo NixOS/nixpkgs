@@ -1,4 +1,5 @@
 diff --git a/platform/x11/detect.py b/platform/x11/detect.py
+index 91652aad55..d12389f9f2 100644
 --- a/platform/x11/detect.py
 +++ b/platform/x11/detect.py
 @@ -218,6 +218,11 @@ def configure(env):
