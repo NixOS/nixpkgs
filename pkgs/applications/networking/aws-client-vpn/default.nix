@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aws-client-vpn-${version}";
+  pname = "aws-client-vpn";
   version = "1.0.0";
 
   src = fetchurl {
