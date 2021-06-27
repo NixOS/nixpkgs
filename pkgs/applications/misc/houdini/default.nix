@@ -1,10 +1,11 @@
-{ callPackage, buildFHSUserEnv, undaemonize, unwrapped ? callPackage ./runtime.nix {} }:
+{ lib, stdenv, writeScript, callPackage, buildFHSUserEnv, undaemonize, unwrapped ? callPackage ./runtime.nix {} }:
 
-buildFHSUserEnv {
+buildFHSUserEnv rec {
   name = "houdini-${unwrapped.version}";
 
   targetPkgs = pkgs: with pkgs; [
-    libGLU libGL alsa-lib fontconfig zlib libpng dbus nss nspr expat pciutils libxkbcommon
+    libGLU libGL alsa-lib fontconfig zlib libpng dbus nss nspr expat pciutils
+    libxkbcommon libudev tbb
   ] ++ (with xorg; [
     libICE libSM libXmu libXi libXext libX11 libXrender libXcursor libXfixes
     libXrender libXcomposite libXdamage libXtst libxcb libXScrnSaver
@@ -14,5 +15,23 @@ buildFHSUserEnv {
     inherit unwrapped;
   };
 
-  runScript = "${undaemonize}/bin/undaemonize ${unwrapped}/bin/houdini";
+  extraInstallCommands = let
+    executables = [ "bin/houdini" "bin/hkey" "houdini/sbin/sesinetd" ];
+  in ''
+    WRAPPER=$out/bin/${name}
+    EXECUTABLES="${lib.concatStringsSep " " executables}"
+    for executable in $EXECUTABLES; do
+      mkdir -p $out/$(dirname $executable)
+
+      echo "#!${stdenv.shell}" >> $out/$executable
+      echo "$WRAPPER ${unwrapped}/$executable \$@" >> $out/$executable
+    done
+
+    cd $out
+    chmod +x $EXECUTABLES
+  '';
+
+  runScript = writeScript "${name}-wrapper" ''
+    exec $@
+  '';
 }
