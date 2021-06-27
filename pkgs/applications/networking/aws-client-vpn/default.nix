@@ -6,7 +6,9 @@
 , gtk3
 , icu
 , kerberos
+, libredirect
 , lttng-ust
+, wrapGAppsHook
 , zlib
 }:
 
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nxmx83wbzgx648fcw5rqbdzi6v93qkpcnbb6qf1z6zzpg17c4br";
   };
 
-  nativeBuildInputs = [ dpkg ];
+  nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
   unpackPhase = ''
     dpkg -x $src .
@@ -33,23 +35,36 @@ stdenv.mkDerivation rec {
     ln -s "$out/awsvpnclient/Service/ACVC.GTK.Service" "$out/bin/ACVC.GTK.Service"
   '';
 
-  postFixup = let libPath = lib.makeLibraryPath [
-    curl
-    gtk3
-    icu
-    kerberos
-    lttng-ust
-    stdenv.cc.cc.lib
-    zlib
-  ]; in
+  dontWrapGApps = true;
+
+  postFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        curl
+        gtk3
+        icu
+        kerberos
+        lttng-ust
+        stdenv.cc.cc.lib
+        zlib
+      ]; in
     ''
-      for file in "$out/awsvpnclient/AWS VPN Client" $out/awsvpnclient/Service/ACVC.GTK.Service; do
+      exes=("$out/awsvpnclient/AWS VPN Client" $out/awsvpnclient/Service/ACVC.GTK.Service)
+
+      for file in "''${exes[@]}"; do
         patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath ${libPath} "$file"
       done
 
       while IFS= read -r -d $'\0' file; do
         patchelf --set-rpath ${libPath} "$file"
       done < <(find $out/awsvpnclient -name '*.so' -print0)
+
+      for file in "''${exes[@]}"; do
+        wrapProgram "$file" \
+          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+          --set NIX_REDIRECTS /opt/awsvpnclient=$out/awsvpnclient \
+          "''${gappsWrapperArgs[@]}"
+      done
     '';
 
   meta = with lib; {
