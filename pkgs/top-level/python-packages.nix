@@ -8855,6 +8855,8 @@ in {
 
   upb-lib = callPackage ../development/python-modules/upb-lib { };
 
+  upcloud-api = callPackage ../development/python-modules/upcloud-api { };
+
   update_checker = callPackage ../development/python-modules/update_checker { };
 
   update-copyright = callPackage ../development/python-modules/update-copyright { };
