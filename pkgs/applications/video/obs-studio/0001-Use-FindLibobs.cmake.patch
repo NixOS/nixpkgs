@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d116619..a1366ce 100644
+index f6d8fa3..5f0657d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -1,6 +1,17 @@
@@ -7,7 +7,7 @@ index d116619..a1366ce 100644
 +	cmake_policy(SET CMP0048 NEW)
 +endif (POLICY CMP0048)
 +
- project(move-transition VERSION 2.3.0)
+ project(move-transition VERSION 2.4.3)
  set(PROJECT_FULL_NAME "Move Transition")
  
 +include(FindLibobs.cmake)
@@ -18,9 +18,8 @@ index d116619..a1366ce 100644
 +	"${LIBOBS_INCLUDE_DIR}/../UI/obs-frontend-api")
 +
  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h)
-
  set(move-transition_HEADERS
-@@ -34,4 +45,10 @@ target_link_libraries(move-transition
+@@ -38,4 +49,10 @@ target_link_libraries(move-transition
  	libobs)
  
  set_target_properties(move-transition PROPERTIES FOLDER "plugins/exeldro")
