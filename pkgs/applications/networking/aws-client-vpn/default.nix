@@ -48,21 +48,22 @@ stdenv.mkDerivation rec {
         zlib
       ]; in
     ''
-      for exe in "$out/awsvpnclient/AWS VPN Client" \
-                 "$out/awsvpnclient/Service/ACVC.GTK.Service" \
-                 "$out/awsvpnclient/createdump" \
-                 "$out/awsvpnclient/Service/createdump"
-      do
-        patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath $out/awsvpnclient:${libPath} "$exe"
-      done
+      patchPrefix() {
+        prefix="$1"
+        shift
+        for exe in "$@"; do
+          patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath "$prefix:${libPath}" "$prefix/$exe"
+        done
 
-      while IFS= read -r -d $'\0' file; do
-        patchelf --set-rpath $out/awsvpnclient:${libPath} "$file"
-      done < <(find $out/awsvpnclient -name '*.so' -print0)
+        while IFS= read -r -d $'\0' elf; do
+          patchelf --set-rpath "$prefix:${libPath}" "$elf"
+        done < <(find $prefix -name '*.so' -maxdepth 1 -print0)
+      }
 
-      for prog in "$out/awsvpnclient/AWS VPN Client" \
-                  "$out/awsvpnclient/Service/ACVC.GTK.Service"
-      do
+      patchPrefix $out/awsvpnclient "AWS VPN Client" createdump
+      patchPrefix $out/awsvpnclient/Service ACVC.GTK.Service createdump
+
+      for prog in "$out/awsvpnclient/AWS VPN Client" "$out/awsvpnclient/Service/ACVC.GTK.Service"; do
         wrapProgram "$prog" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
           --set NIX_REDIRECTS /opt/awsvpnclient=$out/awsvpnclient \
