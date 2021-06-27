@@ -1640,7 +1640,6 @@ broken-packages:
   - gitter
   - git-vogue
   - gi-vips
-  - gi-wnck
   - glade
   - glapp
   - Gleam
