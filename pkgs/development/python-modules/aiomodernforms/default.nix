@@ -11,19 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiomodernforms";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "wonderslug";
     repo = "aiomodernforms";
     rev = "v${version}";
-    sha256 = "1yrs5q4ggasbjn6z8x04yamn2wra702i09iqyzj9aqq31bc9jnd1";
+    sha256 = "sha256-Vx51WBjjNPIfLlwMnAuwHnGNljhnjKkU0tWB9M9rjsw=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "packaging" ""
-  '';
 
   propagatedBuildInputs = [
     aiohttp
