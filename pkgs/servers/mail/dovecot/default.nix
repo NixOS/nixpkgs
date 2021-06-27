@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
-, bzip2, zlib, lz4, inotify-tools, pam, libcap
+{ stdenv, lib, fetchurl, fetchpatch, perl, pkgconfig, systemd, openssl
+, bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
 # Auth modules
@@ -25,6 +25,20 @@ stdenv.mkDerivation rec {
     sha256 = "1i7ijss79a23v7b6lycfzaa8r5rh01k0h0b9h0j4a6n11sw7by53";
   };
 
+  postPatch = ''
+    substituteInPlace src/lib-program-client/test-program-client-local.c \
+      --replace '"/bin/sh"' '"${stdenv.shell}"' \
+      --replace '"/bin/' '"${coreutils}/bin/' \
+      --replace 'head ' '${coreutils}/bin/head ' \
+      --replace 'sleep ' '${coreutils}/bin/sleep ' \
+      --replace ' cat' ' ${coreutils}/bin/cat'
+    patchShebangs src/lib-smtp/test-bin/*.sh
+    substituteInPlace src/lib-smtp/test-bin/sendmail-exit-1.sh \
+      --replace 'cat' ' ${coreutils}/bin/cat'
+    substituteInPlace src/lib-smtp/test-bin/sendmail-success.sh \
+      --replace 'cat' ' ${coreutils}/bin/cat'
+  '';
+
   enableParallelBuilding = true;
 
   preConfigure = ''
@@ -44,6 +58,12 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.3.x-module_dir.patch
+    ./2.3.13-CVE-2021-29157.patch
+    (fetchpatch {
+      name = "CVE-2021-33515.patch";
+      url = "https://github.com/dovecot/core/commit/65bd1a27a361545c9ccf405b955c72a9c4d29b38.patch";
+      sha256 = "0f1lz6qkwb9cbqc4p40fasr6gcyxxxgx1sxcsbqdypkz099m4psc";
+    })
   ];
 
   configureFlags = [
@@ -80,6 +100,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
     ++ lib.optional withSQLite "--with-sqlite";
+
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ coreutils ];
 
   meta = {
     homepage = "https://dovecot.org/";
