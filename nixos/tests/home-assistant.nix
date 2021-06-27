@@ -24,7 +24,7 @@ in {
       inherit configDir;
       enable = true;
       # includes the package with all tests enabled
-      package = pkgs.home-assistant;
+      #package = pkgs.home-assistant;
       config = {
         homeassistant = {
           name = "Home";
