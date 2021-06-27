@@ -42,11 +42,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     cat <<EOF >> pyproject.toml
-    sip-include-dirs = ["${pyqt5}/share/sip/PyQt5"]
-
     [tool.sip.bindings.Poppler-Qt5]
     include-dirs = ["${poppler.dev}/include/poppler"]
-    tags = ["${sip.platform_tag}"]
     EOF
   '';
 
