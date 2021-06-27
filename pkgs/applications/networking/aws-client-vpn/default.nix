@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     in
     ''
       for file in ${lib.concatMapStringsSep " " (s: ''"$out/awsvpnclient/${s}"'') executables}; do
-        patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath ${libPath} "$file"
+        patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath $out/awsvpnclient:${libPath} "$file"
       done
 
       while IFS= read -r -d $'\0' file; do
-        patchelf --set-rpath ${libPath} "$file"
+        patchelf --set-rpath $out/awsvpnclient:${libPath} "$file"
       done < <(find $out/awsvpnclient -name '*.so' -print0)
 
       for file in ${lib.concatMapStringsSep " " (s: ''"$out/awsvpnclient/${s}"'') entryPoints}; do
