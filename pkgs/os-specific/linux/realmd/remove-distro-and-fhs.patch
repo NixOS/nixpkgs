@@ -1,0 +1,14 @@
+diff --git a/service/Makefile.am b/service/Makefile.am
+index c17bf3b..954ce59 100644
+--- a/service/Makefile.am
++++ b/service/Makefile.am
+@@ -135,9 +135,6 @@ realmd_LDADD = \
+ # Install and uninstall the config for this distro
+ install-service:
+ 	$(INSTALL_PROGRAM) -d $(DESTDIR)$(privatedir)
+-	$(INSTALL_PROGRAM) -d $(DESTDIR)$(localstatedir)/lib/realmd
+-	$(INSTALL_PROGRAM) -d $(DESTDIR)$(cachedir)
+-	$(INSTALL_DATA) $(srcdir)/service/realmd-$(DISTRO).conf $(DESTDIR)$(privatedir)/realmd-distro.conf
+ uninstall-service:
+ 	rm -f $(DESTDIR)$(privatedir)/realmd-distro.conf
+ 
