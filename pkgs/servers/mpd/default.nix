@@ -116,13 +116,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22.8";
+      version = "0.22.9";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-nlUgFmiIrheN/FsSlQ/16iqwBXDw6xuwJG/foPZD07M=";
+        sha256 = "sha256-Qw7qJqxcBKxshT/qbVUegE1Tpt4QV5WbUHT2+qLbr9o=";
       };
 
       buildInputs = [
