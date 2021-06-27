@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
   patches = [ ./0001-Use-FindLibobs.cmake.patch ];
 
   postPatch = ''
-    cat CMakeLists.txt
     substituteInPlace move-source-filter.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'
     substituteInPlace move-value-filter.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'
     substituteInPlace move-transition.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'

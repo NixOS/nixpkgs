@@ -1,12 +1,3 @@
-From 699c9df239d8a86c2ec07811d9df2e9e10b33665 Mon Sep 17 00:00:00 2001
-From: Tristan Gosselin-Hane <starcraft66@gmail.com>
-Date: Sat, 26 Jun 2021 22:26:02 -0400
-Subject: [PATCH] Use FindLibobs.cmake
-
----
- CMakeLists.txt | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index f6d8fa3..5f0657d 100644
 --- a/CMakeLists.txt
@@ -27,7 +18,6 @@ index f6d8fa3..5f0657d 100644
 +	"${LIBOBS_INCLUDE_DIR}/../UI/obs-frontend-api")
 +
  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h)
- 
  set(move-transition_HEADERS
 @@ -38,4 +49,10 @@ target_link_libraries(move-transition
  	libobs)
@@ -41,6 +31,3 @@ index f6d8fa3..5f0657d 100644
 +
 +install(DIRECTORY data/locale/
 +	DESTINATION "${CMAKE_INSTALL_PREFIX}/share/obs/obs-plugins/move-transition/locale")
--- 
-2.31.1
-
