@@ -1,4 +1,4 @@
-# shellcheck disable=SC2148
+# shellcheck shell=bash
 set -eu
 set -o pipefail
 
