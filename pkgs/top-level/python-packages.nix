@@ -5355,6 +5355,8 @@ in {
 
   python-izone = callPackage ../development/python-modules/python-izone { };
 
+  python-juicenet = callPackage ../development/python-modules/python-juicenet { };
+
   python-openems = callPackage ../development/python-modules/python-openems { };
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
