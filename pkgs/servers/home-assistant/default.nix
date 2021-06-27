@@ -255,6 +255,8 @@ in with py.pkgs; buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
+    # Not in setup.py, but used in homeassistant/util/package.py
+    setuptools
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
   ] ++ componentBuildInputs ++ extraBuildInputs;
