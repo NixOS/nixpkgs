@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "chroma";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner  = "alecthomas";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-+4UaQrJh3PBf68rlW1lOEyEVw3vWxfc+Casa5+H8F9A=";
+    sha256 = "0g5l961sr05p0kfj56qcxs9f4x3ji3p6n96zrc16cij5ncncasxw";
     leaveDotGit = true;
   };
 
