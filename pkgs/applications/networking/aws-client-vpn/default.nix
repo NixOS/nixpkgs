@@ -8,6 +8,7 @@
 , kerberos
 , libredirect
 , lttng-ust
+, numactl
 , wrapGAppsHook
 , zlib
 }:
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
         icu
         kerberos
         lttng-ust
+        numactl
         stdenv.cc.cc.lib
         zlib
       ]; in
