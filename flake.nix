@@ -27,40 +27,33 @@
     {
       lib = lib.extend (final: prev: {
         nixosSystem = { modules, ... } @ args:
-          import ./nixos/lib/eval-config.nix (args // {
-            modules =
-              let
-                vmConfig = (import ./nixos/lib/eval-config.nix
-                  (args // {
-                    modules = modules ++ [ ./nixos/modules/virtualisation/qemu-vm.nix ];
-                  })).config;
-
-                vmWithBootLoaderConfig = (import ./nixos/lib/eval-config.nix
-                  (args // {
-                    modules = modules ++ [
-                      ./nixos/modules/virtualisation/qemu-vm.nix
-                      { virtualisation.useBootLoader = true; }
-                      ({ config, ... }: {
-                        virtualisation.useEFIBoot =
-                          config.boot.loader.systemd-boot.enable ||
-                          config.boot.loader.efi.canTouchEfiVariables;
-                      })
-                    ];
-                  })).config;
-              in
-              modules ++ [
-                {
+          let
+            mkSystem = extraModules: import ./nixos/lib/eval-config.nix
+              ({ lib = final; } // args // {
+                modules = modules ++ [{
                   system.nixos.versionSuffix =
                     ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
                   system.nixos.revision = final.mkIf (self ? rev) self.rev;
+                }] ++ extraModules;
+              });
+          in
+          mkSystem [{
+            system.build = {
+              vm = (mkSystem [
+                ./nixos/modules/virtualisation/qemu-vm.nix
+              ]).config.system.build.vm;
 
-                  system.build = {
-                    vm = vmConfig.system.build.vm;
-                    vmWithBootLoader = vmWithBootLoaderConfig.system.build.vm;
-                  };
-                }
-              ];
-          });
+              vmWithBootLoader = (mkSystem [
+                ./nixos/modules/virtualisation/qemu-vm.nix
+                { virtualisation.useBootLoader = true; }
+                ({ config, ... }: {
+                  virtualisation.useEFIBoot =
+                    config.boot.loader.systemd-boot.enable ||
+                    config.boot.loader.efi.canTouchEfiVariables;
+                })
+              ]).config.system.build.vm;
+            };
+          }];
       });
 
       checks.x86_64-linux.tarball = jobs.tarball;
