@@ -2686,6 +2686,8 @@ in {
 
   fordpass = callPackage ../development/python-modules/fordpass { };
 
+  forecast-solar = callPackage ../development/python-modules/forecast-solar { };
+
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
   FormEncode = callPackage ../development/python-modules/FormEncode { };
