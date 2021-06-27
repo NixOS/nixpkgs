@@ -436,7 +436,7 @@
     "kulersky" = ps: with ps; [ pykulersky ];
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb
     "lacrosse" = ps: with ps; [ pylacrosse ];
-    "lametric" = ps: with ps; [ ]; # missing inputs: lmnotify
+    "lametric" = ps: with ps; [ lmnotify ];
     "lannouncer" = ps: with ps; [ ];
     "lastfm" = ps: with ps; [ pylast ];
     "launch_library" = ps: with ps; [ ]; # missing inputs: pylaunches
