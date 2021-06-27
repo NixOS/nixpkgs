@@ -417,7 +417,7 @@
     "izone" = ps: with ps; [ python-izone ];
     "jewish_calendar" = ps: with ps; [ hdate ];
     "joaoapps_join" = ps: with ps; [ ]; # missing inputs: python-join-api
-    "juicenet" = ps: with ps; [ ]; # missing inputs: python-juicenet
+    "juicenet" = ps: with ps; [ python-juicenet ];
     "kaiterra" = ps: with ps; [ ]; # missing inputs: kaiterra-async-client
     "kankun" = ps: with ps; [ ];
     "keba" = ps: with ps; [ ]; # missing inputs: keba-kecontact
