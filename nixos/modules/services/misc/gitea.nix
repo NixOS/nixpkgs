@@ -217,7 +217,9 @@ in
 
       domain = mkOption {
         type = types.str;
-        default = "localhost";
+        default = if (config.networking.fqdn != "")
+          then ("gitea" + config.networking.fqdn)
+          else ("gitea" + "localhost");
         description = "Domain name of your server.";
       };
 
