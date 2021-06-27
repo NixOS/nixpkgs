@@ -64,6 +64,7 @@ let
 
 in {
   meta.maintainers = teams.home-assistant.members;
+  # We are the maintainers, does ofBorg request our review for module changes?
 
   options.services.home-assistant = {
     # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
