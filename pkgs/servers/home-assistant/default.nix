@@ -701,6 +701,7 @@ in with py.pkgs; buildPythonApplication rec {
     "tod"
     "tomato"
     "toon"
+    "totalconnect"
     "tplink"
     "trace"
     "tradfri"

@@ -873,7 +873,7 @@
     "tomato" = ps: with ps; [ ];
     "toon" = ps: with ps; [ aiohttp-cors hass-nabucasa toonapi ];
     "torque" = ps: with ps; [ aiohttp-cors ];
-    "totalconnect" = ps: with ps; [ ]; # missing inputs: total_connect_client
+    "totalconnect" = ps: with ps; [ total-connect-client ];
     "touchline" = ps: with ps; [ ]; # missing inputs: pytouchline
     "tplink" = ps: with ps; [ pyhs100 ];
     "tplink_lte" = ps: with ps; [ ]; # missing inputs: tp-connected
