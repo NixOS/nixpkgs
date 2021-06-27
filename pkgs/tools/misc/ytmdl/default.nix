@@ -1,4 +1,7 @@
-{ lib, fetchFromGitHub, buildPythonApplication, ffmpeg, ffmpeg-python, musicbrainzngs, rich, simber, pydes, youtube-search, unidecode, pyxdg, downloader-cli, beautifulsoup4, itunespy, mutagen, pysocks, youtube-dl, ytmusicapi }:
+{ lib, fetchFromGitHub, buildPythonApplication, ffmpeg, ffmpeg-python, musicbrainzngs, rich, simber
+, pydes, youtube-search, unidecode, pyxdg, downloader-cli, beautifulsoup4, itunespy, mutagen, pysocks
+, youtube-dl, ytmusicapi
+}:
 
 buildPythonApplication rec {
   pname = "ytmdl";
