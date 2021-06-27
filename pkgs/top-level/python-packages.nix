@@ -8342,6 +8342,8 @@ in {
 
   syncer = callPackage ../development/python-modules/syncer { };
 
+  synologydsm-api = callPackage ../development/python-modules/synologydsm-api { };
+
   systembridge = callPackage ../development/python-modules/systembridge { };
 
   systemd = callPackage ../development/python-modules/systemd {

@@ -828,7 +828,7 @@
     "syncthing" = ps: with ps; [ aiosyncthing ];
     "syncthru" = ps: with ps; [ url-normalize ]; # missing inputs: pysyncthru
     "synology_chat" = ps: with ps; [ ];
-    "synology_dsm" = ps: with ps; [ ]; # missing inputs: synologydsm-api
+    "synology_dsm" = ps: with ps; [ synologydsm-api ];
     "synology_srm" = ps: with ps; [ ]; # missing inputs: synology-srm
     "syslog" = ps: with ps; [ ];
     "system_bridge" = ps: with ps; [ aiohttp-cors ifaddr systembridge zeroconf ];
