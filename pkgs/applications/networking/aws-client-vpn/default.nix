@@ -47,11 +47,22 @@ stdenv.mkDerivation rec {
         lttng-ust
         stdenv.cc.cc.lib
         zlib
-      ]; in
-    ''
-      exes=("$out/awsvpnclient/AWS VPN Client" $out/awsvpnclient/Service/ACVC.GTK.Service)
+      ];
 
-      for file in "''${exes[@]}"; do
+      executables = [
+        "AWS VPN Client"
+        "Service/ACVC.GTK.Service"
+        "createdump"
+        "Service/createdump"
+      ];
+
+      entryPoints = [
+        "AWS VPN Client"
+        "Service/ACVC.GTK.Service"
+      ];
+    in
+    ''
+      for file in ${lib.concatMapStringsSep " " (s: ''"$out/awsvpnclient/${s}"'') executables}; do
         patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath ${libPath} "$file"
       done
 
@@ -59,7 +70,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${libPath} "$file"
       done < <(find $out/awsvpnclient -name '*.so' -print0)
 
-      for file in "''${exes[@]}"; do
+      for file in ${lib.concatMapStringsSep " " (s: ''"$out/awsvpnclient/${s}"'') entryPoints}; do
         wrapProgram "$file" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
           --set NIX_REDIRECTS /opt/awsvpnclient=$out/awsvpnclient \
