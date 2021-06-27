@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       patchPrefix $out/awsvpnclient "AWS VPN Client" createdump
       patchPrefix $out/awsvpnclient/Service ACVC.GTK.Service createdump
 
-      for prog in "$out/awsvpnclient/AWS VPN Client" "$out/awsvpnclient/Service/ACVC.GTK.Service"; do
+      for prog in $out/awsvpnclient/"AWS VPN Client" $out/awsvpnclient/Service/ACVC.GTK.Service; do
         wrapProgram "$prog" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
           --set NIX_REDIRECTS /opt/awsvpnclient=$out/awsvpnclient \
