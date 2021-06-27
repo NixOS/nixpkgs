@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ] ++ optional stdenv.isLinux libseccomp
     ++ optional stdenv.isDarwin gtk-mac-integration;
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     homepage = "https://git.pwmt.org/pwmt/zathura";

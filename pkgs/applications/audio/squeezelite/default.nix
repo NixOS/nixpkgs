@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub
-, alsaLib, flac, libmad, libvorbis, mpg123
+, alsa-lib, flac, libmad, libvorbis, mpg123
 , dsdSupport ? true
 , faad2Support ? true, faad2
-, ffmpegSupport ? true, ffmpeg_3
+, ffmpegSupport ? true, ffmpeg
 , opusSupport ? true, opusfile
 , resampleSupport ? true, soxr
 , sslSupport ? true, openssl
@@ -33,9 +33,9 @@ in stdenv.mkDerivation {
     sha256 = "024ypr1da2r079k3hgiifzd3d3wcfprhbl5zdm40zm0c7frzmr8i";
   };
 
-  buildInputs = [ alsaLib flac libmad libvorbis mpg123 ]
+  buildInputs = [ alsa-lib flac libmad libvorbis mpg123 ]
     ++ optional faad2Support faad2
-    ++ optional ffmpegSupport ffmpeg_3
+    ++ optional ffmpegSupport ffmpeg
     ++ optional opusSupport opusfile
     ++ optional resampleSupport soxr
     ++ optional sslSupport openssl;

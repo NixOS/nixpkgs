@@ -3,20 +3,21 @@
 , xz
 , wrapQtAppsHook
 , miniupnpc_2
+, enableSwftools ? false
 , swftools
 , pythonPackages
 }:
 
 pythonPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "436";
+  version = "441";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "v${version}";
-    sha256 = "sha256-FXm8VUEY0OZ6/dc/qNwOXekhv5H2C9jjg/eNDoMvMn0==";
+    sha256 = "13h4qcz0iqba4mwyvgmdqh99jy22x7kw20f3g43b5aq3qyk9ca2h";
   };
 
   nativeBuildInputs = [
@@ -79,7 +80,7 @@ pythonPackages.buildPythonPackage rec {
   postPatch = ''
     sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${miniupnpc_2}/bin/upnpc";' \
       -i ./hydrus/core/networking/HydrusNATPunch.py
-
+  '' + lib.optionalString enableSwftools ''
     sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${swftools}/bin/swfrender";' \
       -i ./hydrus/core/HydrusFlashHandling.py
   '';

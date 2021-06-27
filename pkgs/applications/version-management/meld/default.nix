@@ -12,7 +12,7 @@
 , gobject-introspection
 , gtk3
 , gtksourceview4
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 }:
 
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     gtksourceview4
     gsettings-desktop-schemas
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -57,8 +57,9 @@ python3.pkgs.buildPythonApplication rec {
   strictDeps = false;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -6,7 +6,7 @@
 , intltool
 , libpeas
 , libsoup
-, gnome3
+, gnome
 , totem-pl-parser
 , tdb
 , json-glib
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     gtk3
     libpeas
     totem-pl-parser
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

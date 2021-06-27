@@ -1,4 +1,4 @@
-{ lib, menhir, easy-format, fetchurl, buildDunePackage, which, re }:
+{ lib, menhir, easy-format, fetchurl, buildDunePackage, which, re, nixosTests }:
 
 buildDunePackage rec {
   pname = "atd";
@@ -17,6 +17,10 @@ buildDunePackage rec {
   propagatedBuildInputs = [ easy-format re ];
 
   doCheck = true;
+
+  passthru.tests = {
+    smoke-test = nixosTests.atd;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/mjambon/atd";

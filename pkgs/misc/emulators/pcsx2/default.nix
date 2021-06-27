@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , cmake
 , fetchFromGitHub
 , fmt
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake makeWrapper perl pkg-config wrapGAppsHook ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     fmt
     gettext
     glib

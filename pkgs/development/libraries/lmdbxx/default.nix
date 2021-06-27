@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    homepage = "https://github.com/drycpp/lmdbxx#readme";
+    homepage = "https://github.com/hoytech/lmdbxx#readme";
     description = "C++11 wrapper for the LMDB embedded B+ tree database library";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ fgaz ];

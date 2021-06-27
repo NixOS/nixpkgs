@@ -34,10 +34,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love zip ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
     zip -9 -r ${pname}.love ./*
     mv ${pname}.love $out/share/games/lovegames/${pname}.love
@@ -53,5 +52,4 @@ stdenv.mkDerivation {
     license = licenses.free;
     downloadPage = "http://stabyourself.net/orthorobot/";
   };
-
 }

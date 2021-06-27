@@ -128,12 +128,16 @@ let
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"
+      export HOSTCC=$CC_FOR_BUILD
+      export HOSTCXX=$CXX_FOR_BUILD
+      export HOSTAR=$AR_FOR_BUILD
+      export HOSTLD=$LD_FOR_BUILD
 
       # Get a basic config file for later refinement with $generateConfig.
-      make -C .  O="$buildRoot" $kernelBaseConfig \
+      make -C . O="$buildRoot" $kernelBaseConfig \
           ARCH=$kernelArch \
-          HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
-          HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}g++
+          HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
+          CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF
 
       # Create the config file.
       echo "generating kernel configuration..."

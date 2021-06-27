@@ -102,7 +102,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       # `doSetup` is is true.
       test = doSetup: ''
         gitlab.succeed(
-            "curl -isSf http://gitlab | grep -i location | grep -q http://gitlab/users/sign_in"
+            "curl -isSf http://gitlab | grep -i location | grep http://gitlab/users/sign_in"
         )
         gitlab.succeed(
             "${pkgs.sudo}/bin/sudo -u gitlab -H gitlab-rake gitlab:check 1>&2"

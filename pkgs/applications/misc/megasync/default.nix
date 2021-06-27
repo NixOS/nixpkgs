@@ -7,7 +7,7 @@
 , curl
 , doxygen
 , fetchFromGitHub
-, ffmpeg
+  #, ffmpeg
 , libmediainfo
 , libraw
 , libsodium
@@ -52,7 +52,8 @@ mkDerivation rec {
     c-ares
     cryptopp
     curl
-    ffmpeg
+    # temporarily disable until patched for ffmpeg 4.4
+    #ffmpeg
     libmediainfo
     libraw
     libsodium
@@ -94,7 +95,8 @@ mkDerivation rec {
     "--with-cares"
     "--with-cryptopp"
     "--with-curl"
-    "--with-ffmpeg"
+    # temporarily disable until patched for ffmpeg 4.4
+    #"--with-ffmpeg"
     "--without-freeimage" # unreferenced even when found
     "--without-readline"
     "--without-termcap"

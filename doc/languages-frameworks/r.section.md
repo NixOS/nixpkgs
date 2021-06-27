@@ -1,6 +1,6 @@
 # R {#r}
 
-## Installation
+## Installation {#installation}
 
 Define an environment for R that contains all the libraries that you'd like to
 use by adding the following snippet to your $HOME/.config/nixpkgs/config.nix file:
@@ -31,6 +31,7 @@ output is the name that has to be passed to rWrapper in the code snipped above.
 However, if you'd like to add a file to your project source to make the
 environment available for other contributors, you can create a `default.nix`
 file like so:
+
 ```nix
 with import <nixpkgs> {};
 {
@@ -50,7 +51,7 @@ with import <nixpkgs> {};
 and then run `nix-shell .` to be dropped into a shell with those packages
 available.
 
-## RStudio
+## RStudio {#rstudio}
 
 RStudio uses a standard set of packages and ignores any custom R
 environments or installed packages you may have.  To create a custom
@@ -93,7 +94,7 @@ Executing `nix-shell` will then drop you into an environment equivalent to the
 one above. If you need additional packages just add them to the list and
 re-enter the shell.
 
-## Updating the package set
+## Updating the package set {#updating-the-package-set}
 
 ```bash
 nix-shell generate-shell.nix
@@ -113,8 +114,7 @@ mv bioc-experiment-packages.nix.new bioc-experiment-packages.nix
 
 `generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.
 
-
-## Testing if the Nix-expression could be evaluated
+## Testing if the Nix-expression could be evaluated {#testing-if-the-nix-expression-could-be-evaluated}
 
 ```bash
 nix-build test-evaluation.nix --dry-run

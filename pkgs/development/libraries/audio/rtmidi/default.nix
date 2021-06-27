@@ -5,7 +5,7 @@
 , cmake
 , pkg-config
 , alsaSupport ? stdenv.hostPlatform.isLinux
-, alsaLib
+, alsa-lib
 , jackSupport ? true
 , jack
 , coremidiSupport ? stdenv.hostPlatform.isDarwin
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = lib.optional alsaSupport alsaLib
+  buildInputs = lib.optional alsaSupport alsa-lib
     ++ lib.optional jackSupport jack
     ++ lib.optionals coremidiSupport [ CoreMIDI CoreAudio CoreServices ];
 

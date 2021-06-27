@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , requests
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    websocket_client
+    websocket-client
     requests
   ];
 

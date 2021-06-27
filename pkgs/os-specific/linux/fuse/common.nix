@@ -82,8 +82,6 @@ in stdenv.mkDerivation rec {
     cp ${fusePackages.fuse_3.common}/etc/udev/rules.d/99-fuse.rules etc/udev/rules.d/99-fuse.rules
   '');
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Library that allows filesystems to be implemented in user space";
     longDescription = ''

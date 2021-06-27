@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
 , qtbase, qtxmlpatterns, qttools, qtwebkit, libGL, fontconfig, openssl, poppler
-, ffmpeg, libva, alsaLib, SDL, x264, libvpx, libvorbis, libtheora, libogg
+, ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
 
 let
@@ -34,7 +34,8 @@ in mkDerivation rec {
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
-      --replace '/usr/include/quazip' '${quazip}/include/quazip5' \
+      --replace '/usr/include/quazip' '${quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
+      --replace '-lquazip5' '-lquazip1-qt5' \
       --replace '/usr/include/poppler' '${poppler.dev}/include/poppler'
   '';
 
@@ -51,7 +52,7 @@ in mkDerivation rec {
     poppler
     ffmpeg
     libva
-    alsaLib
+    alsa-lib
     SDL
     x264
     libvpx

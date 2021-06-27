@@ -1,4 +1,5 @@
-{ rustPlatform, fetchFromGitHub, pkg-config, openssl, lib }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config
+, openssl, libiconv, CoreServices, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk";
@@ -12,9 +13,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = if stdenv.isDarwin
+    then [ libiconv CoreServices Security ]
+    else [ openssl ];
 
-  cargoSha256 = "Qv7knTmNYtw0tbyWhFIV7tYkQiwFxcNPAeNiGCyeV8s=";
+  cargoSha256 = "sha256-0ehz0ETNA2gOvTJUu8uq5H+bv4VXOJMq6AA8kn65m/Q=";
 
   meta = with lib; {
     homepage = "https://github.com/thedodd/trunk";

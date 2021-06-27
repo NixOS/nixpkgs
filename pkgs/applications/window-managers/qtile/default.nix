@@ -38,7 +38,7 @@ python37Packages.buildPythonApplication rec {
     xcffib
     cairocffi-xcffib
     setuptools
-    setuptools_scm
+    setuptools-scm
     dateutil
     dbus-python
     mpd2

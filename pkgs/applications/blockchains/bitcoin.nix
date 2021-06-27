@@ -16,6 +16,7 @@
 , python3
 , qrencode
 , libevent
+, nixosTests
 , withGui
 , withWallet ? true
 }:
@@ -80,6 +81,10 @@ stdenv.mkDerivation rec {
     ++ optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    smoke-test = nixosTests.bitcoind;
+  };
 
   meta = {
     description = "Peer-to-peer electronic cash system";

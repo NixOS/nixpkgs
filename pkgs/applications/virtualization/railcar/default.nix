@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   # Submitted upstream https://github.com/oracle/railcar/pull/44
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "10qxkxpdprl2rcgy52s3q5gyg3i75qmx68rpl7cx1bgjzppfn9c3";
+  cargoSha256 = "1zsch6gpbw96j5wa68ksbk4x6nbsl7dbvdhdprljpcyrwwkhz47x";
 
   buildInputs = [ libseccomp ];
 

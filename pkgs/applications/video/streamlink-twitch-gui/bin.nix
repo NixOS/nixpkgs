@@ -7,7 +7,7 @@
 , wrapGAppsHook
 , at-spi2-core
 , atk
-, alsaLib
+, alsa-lib
 , cairo
 , cups
 , dbus
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = with xorg; [
     at-spi2-core
     atk
-    alsaLib
+    alsa-lib
     autoPatchelfHook
     cairo
     cups.lib

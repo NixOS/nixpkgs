@@ -17,7 +17,7 @@
       sha256 = "1hdg5491phx6svrxxsxp8v6n4b25y7y4wxw7x3bxlbyhaskgj53r";
     };
 
-    nativeBuildInputs     = [ setuptools_scm ];
+    nativeBuildInputs     = [ setuptools-scm ];
     buildInputs           = [ pytest mock ];
     propagatedBuildInputs = [
       six setuptools pyserial appdirs hidapi wxPython xlib wmctrl dbus-python

@@ -6,7 +6,7 @@
   cudaArchList ? null,
 
   # Native build inputs
-  cmake, util-linux, linkFarm, symlinkJoin, which,
+  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11,
 
   # Build inputs
   numactl,
@@ -117,7 +117,7 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.8.1";
+  version = "1.9.0";
 
   disabled = !isPy3k;
 
@@ -132,7 +132,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-HERbvmrfhWwH164GFHU/M0KbhVAuhI5sBZSxCZy8mRk=";
+    sha256 = "sha256-gZmEhV1zzfr/5T2uNfS+8knzyJIxnv2COWVyiAzU9jM=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -216,6 +216,7 @@ in buildPythonPackage rec {
     util-linux
     which
     ninja
+    pybind11
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
   buildInputs = [ blas blas.provider ]

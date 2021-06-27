@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "thrift";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
-    sha256 = "198c855mjy5byqfb941hiyq2j37baz63f0wcfy4vp8y8v4f5xnhk";
+    sha256 = "sha256-QZG/wLdJDiDMafn03G6ZH7thLUVRqp7vHb9/TEfOVU0=";
   };
 
   # Workaround to make the python wrapper not drop this package:

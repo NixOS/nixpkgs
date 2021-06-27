@@ -1,19 +1,35 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkg-config, qttools, qtwebengine, hunspell }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, pkg-config
+, qttools
+, qtwebengine
+, hunspell
+, cmark
+, multimarkdown
+, pandoc
+}:
 
 mkDerivation rec {
   pname = "ghostwriter";
-  version = "2.0.0-rc5";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "wereturtle";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Gc0/AHxxJd5Cq3dBQ0Xy2TF78CBmQFYUzm4s7q1aHEE=";
+    sha256 = "sha256-kNt0IIAcblDJ81ENIkoJuJvrI+F+fdVgWUJ6g1YpjqU=";
   };
 
   nativeBuildInputs = [ qmake pkg-config qttools ];
 
   buildInputs = [ qtwebengine hunspell ];
+
+  qtWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ cmark multimarkdown pandoc ])
+  ];
 
   meta = with lib; {
     description = "A cross-platform, aesthetic, distraction-free Markdown editor";

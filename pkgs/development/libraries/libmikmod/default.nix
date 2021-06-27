@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, texinfo, alsaLib, libpulseaudio, CoreAudio }:
+{ lib, stdenv, fetchurl, texinfo, alsa-lib, libpulseaudio, CoreAudio }:
 
 let
   inherit (lib) optional optionalString;
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ texinfo ]
-    ++ optional stdenv.isLinux alsaLib
+    ++ optional stdenv.isLinux alsa-lib
     ++ optional stdenv.isDarwin CoreAudio;
   propagatedBuildInputs =
     optional stdenv.isLinux libpulseaudio;

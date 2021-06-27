@@ -1,5 +1,5 @@
 diff --git a/src/services/log.js b/src/services/log.js
-index b4c39e99..4c249154 100644
+index 1345ce39..a9770516 100644
 --- a/src/services/log.js
 +++ b/src/services/log.js
 @@ -1,14 +1,5 @@
@@ -17,7 +17,7 @@ index b4c39e99..4c249154 100644
  const SECOND = 1000;
  const MINUTE = 60 * SECOND;
  const HOUR = 60 * MINUTE;
-@@ -16,41 +7,7 @@ const DAY = 24 * HOUR;
+@@ -16,45 +7,7 @@ const DAY = 24 * HOUR;
  
  const NEW_LINE = process.platform === "win32" ? '\r\n' : '\n';
  
@@ -46,16 +46,19 @@ index b4c39e99..4c249154 100644
 -function checkDate(millisSinceMidnight) {
 -    if (millisSinceMidnight >= DAY) {
 -        initLogFile();
+-
+-        millisSinceMidnight =- DAY;
 -    }
+-
+-    return millisSinceMidnight;
 -}
 -
  function log(str) {
--    const millisSinceMidnight = Date.now() - todaysMidnight.getTime();
+-    let millisSinceMidnight = Date.now() - todaysMidnight.getTime();
 -
--    checkDate(millisSinceMidnight);
+-    millisSinceMidnight = checkDate(millisSinceMidnight);
 -
 -    logFile.write(formatTime(millisSinceMidnight) + ' ' + str + NEW_LINE);
 -
      console.log(str);
  }
- 

@@ -25,7 +25,7 @@ self: super: let
   }; in stdenv // {
     mkDerivation = args: stdenv.mkDerivation (args // {
       NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + optionalString stdenv.cc.isGNU " -static-libgcc";
+                      + optionalString (stdenv_.cc.isGNU or false) " -static-libgcc";
       nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
         substitutions = {
           libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
@@ -50,14 +50,10 @@ self: super: let
     # ++ optional (super.stdenv.hostPlatform.libc == "glibc") ((flip overrideInStdenv) [ self.stdenv.glibc.static ])
   ;
 
-  removeUnknownConfigureFlags = f: with self.lib;
-    remove "--disable-shared"
-    (remove "--enable-static" f);
-
   ocamlFixPackage = b:
     b.overrideAttrs (o: {
       configurePlatforms = [ ];
-      configureFlags = removeUnknownConfigureFlags (o.configureFlags or [ ]);
+      dontAddStaticConfigureFlags = true;
       buildInputs = o.buildInputs ++ o.nativeBuildInputs or [ ];
       propagatedNativeBuildInputs = o.propagatedBuildInputs or [ ];
     });
@@ -75,7 +71,8 @@ self: super: let
         preConfigure = ''
           configureFlagsArray+=("-cc" "$CC" "-as" "$AS" "-partialld" "$LD -r")
         '';
-        configureFlags = (removeUnknownConfigureFlags o.configureFlags) ++ [
+        dontAddStaticConfigureFlags = true;
+        configureFlags = [
           "--no-shared-libs"
           "-host ${o.stdenv.hostPlatform.config}"
           "-target ${o.stdenv.targetPlatform.config}"
@@ -123,11 +120,6 @@ in {
   ocaml-ng = self.lib.mapAttrs (_: set:
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
-
-  openssl = super.openssl_1_1.overrideAttrs (o: {
-    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
-    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
-  });
 
   perl = super.perl.override {
     # Don’t use new stdenv zlib because

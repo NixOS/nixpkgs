@@ -36,6 +36,13 @@ rec {
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; documentation.nixos.enable = false; }
+          { key = "no-revision";
+            # Make the revision metadata constant, in order to avoid needless retesting.
+            # The human version (e.g. 21.05-pre) is left as is, because it is useful
+            # for external modules that test with e.g. nixosTest and rely on that
+            # version number.
+            config.system.nixos.revision = mkForce "constant-nixos-revision";
+          }
           { key = "nodes"; _module.args.nodes = nodes; }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
     };

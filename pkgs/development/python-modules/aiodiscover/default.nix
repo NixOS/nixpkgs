@@ -1,6 +1,6 @@
 { lib
-, async-dns
 , buildPythonPackage
+, dnspython
 , fetchFromGitHub
 , ifaddr
 , pyroute2
@@ -11,34 +11,32 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.3.4";
+  version = "1.4.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TmWl5d5HwyqWPUjwtEvc5FzVfxV/K1pekljcMkGN0Ag=";
+    sha256 = "sha256-xiIN/YLIOdPuqenyxybu0iUpYEy3MyBssXswza5InU0=";
   };
 
   propagatedBuildInputs = [
-    async-dns
+    dnspython
     pyroute2
     ifaddr
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner>=5.2",' ""
+    substituteInPlace setup.py \
+      --replace '"pytest-runner>=5.2",' "" \
+      --replace "pyroute2>=0.5.18,!=0.6.1" "pyroute2"
   '';
 
   checkInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
-
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests = [
     # Tests require access to /etc/resolv.conf

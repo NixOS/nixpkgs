@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "kbdd";
-  version = "unstable-2017-01-29";
+  version = "unstable-2021-04-26";
 
   src = fetchFromGitHub {
     owner = "qnikst";
     repo = "kbdd";
-    rev = "0e1056f066ab6e3c74fd0db0c9710a9a2b2538c3";
-    sha256 = "068iqkqxh7928xlmz2pvnykszn9bcq2qgkkiwf37k1vm8fdmgzlj";
+    rev = "3145099e1fbbe65b27678be72465aaa5b5872874";
+    sha256 = "1gzcjnflgdqnjgphiqpzwbcx60hm0h2cprncm7i8xca3ln5q6ba1";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple daemon and library to make per window layout using XKB";
     homepage = "https://github.com/qnikst/kbdd";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.wedens ];
   };

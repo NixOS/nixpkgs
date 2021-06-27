@@ -3,11 +3,11 @@
 , autoconf
 , automake
 , libtool
-, gnome3
+, gnome
 , which
 , fetchgit
 , libgtop
-, libwnck3
+, libwnck
 , glib
 , vala
 , pkg-config
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     automake
     dbus
     docbook_xsl
-    gnome3.gnome-common
+    gnome.gnome-common
     gobject-introspection
     gtk-doc
     libtool
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     glib
     libgtop
     libstartup_notification
-    libwnck3
+    libwnck
   ];
 
   patches = [

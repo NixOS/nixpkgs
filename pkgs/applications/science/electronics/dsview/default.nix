@@ -25,6 +25,17 @@ mkDerivation rec {
     # Using local file instead of content of commit #33e3d896a47 because
     # sourceRoot make it unappliable
     ./qt515.patch
+
+    # Change from upstream master that removes extern-C scopes which
+    # cause failures with modern glib. This can likely be removed if
+    # there is an upstream release >1.12
+    (fetchpatch {
+      name = "fix-extern-c.patch";
+      url = "https://github.com/DreamSourceLab/DSView/commit/33cc733abe19872bf5ed08540a94b798d0d4ecf4.patch";
+      sha256 = "sha256-TLfLQa3sdyNHTpMMvId/V6uUuOFihOZMFJOj9frnDoY=";
+      stripLen = 2;
+      extraPrefix = "";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];

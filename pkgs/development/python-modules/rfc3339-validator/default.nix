@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , pytestCheckHook
 , hypothesis
@@ -9,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "rfc3339-validator";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchPypi {
     pname = "rfc3339_validator";
     inherit version;
-    sha256 = "7a578aa0740e9ee2b48356fe1f347139190c4c72e27f303b3617054efd15df32";
+    sha256 = "0srg0b89aikzinw72s433994k5gv5lfyarq1adhas11kz6yjm2hk";
   };
 
   propagatedBuildInputs = [ six ];

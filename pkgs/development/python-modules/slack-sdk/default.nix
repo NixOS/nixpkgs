@@ -15,20 +15,20 @@
 , pytestCheckHook
 , pytestrunner
 , sqlalchemy
-, websocket_client
+, websocket-client
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.5.0";
+  version = "3.7.0";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "v${version}";
-    sha256 = "sha256-5ZBaF/6p/eOWjAmo+IlF9zCb9xBr2bP6suPZblRogUg=";
+    sha256 = "0bc52v5n8r3b2fy1c90w253r1abl752kaqdk6bgzkwsvbhgcxf2s";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     aiohttp
     boto3
     sqlalchemy
-    websocket_client
+    websocket-client
     websockets
   ];
 

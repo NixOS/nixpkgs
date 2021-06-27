@@ -2,27 +2,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
-  version = "0.21.4.18";
+  version = "0.21.6.10.1";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    sha256 = "16xmg2d9rfmm5l1dxj3dydijpv3kwswrqsbj1sihyyka4s915g61";
+    sha256 = "0mhpzf3vmd876aldl5gazmk4si0zvrh0v1rwsz2hbrn0571zmzy9";
   };
 
   propagatedBuildInputs = [ python3Packages.psutil ];
 
   checkInputs = with python3Packages; [
     mock
-    pytest
+    pytestCheckHook
   ];
 
-  # Run tests, skipping `test_user_specified` since its result depends on the
-  # mount path.
-  checkPhase = ''
-    pytest -k 'not test_user_specified'
-  '';
+  # Skip `test_user_specified` since its result depends on the mount path.
+  disabledTests = [ "test_user_specified" ];
 
   meta = with lib; {
     homepage = "https://github.com/andreafrancia/trash-cli";

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2021.02";
+  version = "2021.06";
 
   src = fetchurl {
-    url = "https://www.moarvm.org/releases/MoarVM-${version}.tar.gz";
-    sha256 = "08ri9mvbk97qfxcy6lj4cb7j3a789ck052m2vqfhis3vkrkw780r";
+    url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
+    sha256 = "19vjcyb9fg9msjw1ih00c2qby480gl4highw24zx7j84slhsj013";
    };
 
   buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
-    homepage    = "https://www.moarvm.org/";
+    homepage    = "https://moarvm.org";
     license     = licenses.artistic2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];

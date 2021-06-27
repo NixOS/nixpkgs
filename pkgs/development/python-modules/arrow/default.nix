@@ -1,35 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, nose, chai, simplejson, backports_functools_lru_cache
-, python-dateutil, pytz, pytest-mock, sphinx, dateparser, pytestcov
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, python-dateutil
+, typing-extensions
 , pytestCheckHook
+, pytest-mock
+, pytz
+, simplejson
 }:
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "1.0.3";
+  version = "1.1.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "399c9c8ae732270e1aa58ead835a79a40d7be8aa109c579898eb41029b5a231d";
+    sha256 = "1n2vzyrirfj7fp0zn6iipm3i8bch0g4m14z02nrvlyjiyfmi7zmq";
   };
 
+  postPatch = ''
+    # no coverage reports
+    sed -i "/addopts/d" tox.ini
+  '';
+
   propagatedBuildInputs = [ python-dateutil ]
-    ++ lib.optionals isPy27 [ backports_functools_lru_cache ];
+    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   checkInputs = [
-    dateparser
     pytestCheckHook
-    pytestcov
     pytest-mock
     pytz
     simplejson
-    sphinx
   ];
 
   # ParserError: Could not parse timezone expression "America/Nuuk"
   disabledTests = [
     "test_parse_tz_name_zzz"
   ];
+
+  pythonImportsCheck = [ "arrow" ];
 
   meta = with lib; {
     description = "Python library for date manipulation";

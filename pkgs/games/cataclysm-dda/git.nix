@@ -2,9 +2,9 @@
 , tiles ? true, Cocoa
 , debug ? false
 , useXdgDir ? false
-, version ? "2019-11-22"
-, rev ? "a6c8ece992bffeae3788425dd4b3b5871e66a9cd"
-, sha256 ? "0ww2q5gykxm802z1kffmnrfahjlx123j1gfszklpsv0b1fccm1ab"
+, version ? "2020-12-09"
+, rev ? "cb02195d9fb5ba71f35a105be4104c3d8883065c"
+, sha256 ? "108cs6vp99qmqqfnmczad0xjgcl82bypm5xszwnlfcswdsrfs4da"
 }:
 
 let

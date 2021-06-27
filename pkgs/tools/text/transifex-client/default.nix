@@ -27,6 +27,6 @@ buildPythonApplication rec {
     homepage = "https://www.transifex.com/";
     license = licenses.gpl2;
     description = "Transifex translation service client";
-    maintainers = [ maintainers.etu ];
+    maintainers = with maintainers; [ ];
   };
 }

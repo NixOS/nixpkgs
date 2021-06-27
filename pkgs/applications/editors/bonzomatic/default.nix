@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, makeWrapper
-, alsaLib, fontconfig, mesa_glu, libXcursor, libXinerama, libXrandr, xorg
+, alsa-lib, fontconfig, mesa_glu, libXcursor, libXinerama, libXrandr, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    alsaLib fontconfig mesa_glu
+    alsa-lib fontconfig mesa_glu
     libXcursor libXinerama libXrandr xorg.xinput xorg.libXi xorg.libXext
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/bonzomatic --prefix LD_LIBRARY_PATH : "${alsaLib}/lib"
+    wrapProgram $out/bin/bonzomatic --prefix LD_LIBRARY_PATH : "${alsa-lib}/lib"
   '';
 
   meta = with lib; {

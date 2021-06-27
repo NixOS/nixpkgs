@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoSha256 = "1z0dh2j9ik66i6nww3z7z2gw7nhc0b061zxbjzamk1jybpc845lq";
+  cargoSha256 = "08zn65c5ivhn2qs02aiixyqwhywrw8kfvs0kgzxdzsipic47n2qq";
 
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP=1;

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "sha256-mnDUIJhEGNoh3eq2Vhww1T/tpZh9RP+RxbRsBNrpOzw=";
+  cargoSha256 = "sha256-y9yg4EQDL+RcD6NI7n6W/Hi6Tw4Wr1Kf6hbcIuidIf4=";
 
   checkInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.

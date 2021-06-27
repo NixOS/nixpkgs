@@ -1,8 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, python3Packages
-, perl
+, yuicompressor
 , zopfli
 , stdenv
 }:
@@ -23,8 +22,7 @@ buildGoModule {
   doCheck = false;
 
   nativeBuildInputs = [
-    python3Packages.slimit
-    (perl.withPackages (p: [ p.CSSMinifier ]))
+    yuicompressor
     zopfli
   ];
 

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, httpcore
 , httpx
 , pytest-asyncio
 , sanic
@@ -11,16 +10,31 @@
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "0.3.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-testing";
     rev = "v${version}";
-    hash = "sha256-hBAq+/BKs0a01M89Nb8HaClqxB+W5PTfjVzef/m9SWs=";
+    sha256 = "1pf619cd3dckn3d8gh18vbn7dflvb0mzpf6frx4y950x2j3rdplk";
   };
 
-  propagatedBuildInputs = [ httpx sanic websockets httpcore ];
+  propagatedBuildInputs = [
+    httpx
+    sanic
+    websockets
+  ];
+
+  checkInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    # https://github.com/sanic-org/sanic-testing/issues/19
+    substituteInPlace setup.py \
+      --replace '"websockets==8.1",' '"websockets>=9.1",'
+  '';
 
   # `sanic` is explicitly set to null when building `sanic` itself
   # to prevent infinite recursion.  In that case we skip running
@@ -28,7 +42,6 @@ buildPythonPackage rec {
   doCheck = sanic != null;
   dontUsePythonImportsCheck = sanic == null;
 
-  checkInputs = [ pytestCheckHook pytest-asyncio ];
   pythonImportsCheck = [ "sanic_testing" ];
 
   meta = with lib; {

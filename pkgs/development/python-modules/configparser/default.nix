@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm
+{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools-scm
 , toml
 }:
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
-  nativeBuildInputs = [ setuptools_scm toml ];
+  nativeBuildInputs = [ setuptools-scm toml ];
 
   preConfigure = ''
     export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8

@@ -9,18 +9,16 @@
 
 buildPythonPackage rec {
   pname = "aioasuswrt";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = pname;
-    rev = "V${version}";
-    sha256 = "1h1qwc7szgrcwiz4q6x4mlf26is20lj1ds5rcb9i611j26656v6d";
+    rev = version;
+    sha256 = "101d76zarvilzfmcy8n3bjqzyars8hsjzr0zc80d4rngv4vhrki1";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cryptography==3.3.2" "cryptography"
     substituteInPlace setup.cfg \
       --replace "--cov-report html" "" \
       --replace "--cov-report term-missing" ""

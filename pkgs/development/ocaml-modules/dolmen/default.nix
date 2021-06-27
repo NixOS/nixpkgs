@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, menhirLib }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-dolmen-${version}";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1b9mf8p6mic0n76acx8x82hhgm2n40sdv0jri95im65l52223saf";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-  propagatedBuildInputs = [ menhir ];
+  buildInputs = [ ocaml findlib ocamlbuild menhir ];
+  propagatedBuildInputs = [ menhirLib ];
 
   makeFlags = [ "-C" "src" ];
 

@@ -4,7 +4,7 @@
 , filelock
 , pytest
 , mypy
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1fa55723a4bf1d054fcba1c3bd694215a2a65cc95ab10164f5808afd893f3b11";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
 

@@ -6,7 +6,7 @@
 , jsonschema
 , rfc3987
 , setuptools
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "d9f88f069068dc5dc7e895785d7172d260cbbc34cab3b52704b20e89b80c6de8";
   };
 
-  nativeBuildInputs = [ setuptools_scm git ];
+  nativeBuildInputs = [ setuptools-scm git ];
   propagatedBuildInputs = [
     setuptools
     ruamel_yaml

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip,
+{ lib, stdenv, fetchzip, fetchpatch,
   pkg-config, bmake,
   cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman,
   libucl, wayland, wayland-protocols, wlroots, mesa,
@@ -12,7 +12,7 @@
 
 let
   pname = "hikari";
-  version = "2.3.0";
+  version = "2.3.1";
 in
 
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://hikari.acmelabs.space/releases/${pname}-${version}.tar.gz";
-    sha256 = "0vxwma2r9mb2h0c3dkpvf8dbrc2x2ykhc5bb0vd72sl9pwj4jxmy";
+    sha256 = "sha256-o6YsUATcWHSuAEfU7WnwxKNxRNuBt069qCv0FKDWStg=";
   };
 
   nativeBuildInputs = [ pkg-config bmake ];

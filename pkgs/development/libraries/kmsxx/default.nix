@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
     homepage = "https://github.com/tomba/kmsxx";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     broken = true; # marked broken 2021-03-26
   };

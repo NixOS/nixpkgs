@@ -33,7 +33,7 @@ buildPythonPackage rec {
   '';
   # Set directory containing llvm-config binary
   preConfigure = ''
-    export LLVM_CONFIG=${llvm}/bin/llvm-config
+    export LLVM_CONFIG=${llvm.dev}/bin/llvm-config
   '';
   checkPhase = ''
     ${python.executable} runtests.py

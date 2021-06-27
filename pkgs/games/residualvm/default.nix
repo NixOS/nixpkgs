@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib
+{ lib, stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsa-lib
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGLU, libGL ? null
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "99c419b13885a49bdfc10a50a3a6000fd1ba9504f6aae04c74b840ec6f57a963";
   };
 
-  buildInputs = [ stdenv SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib ]
+  buildInputs = [ stdenv SDL zlib libmpeg2 libmad libogg libvorbis flac alsa-lib ]
     ++ lib.optionals openglSupport [ libGL libGLU ];
 
   configureFlags = [ "--enable-all-engines" ];

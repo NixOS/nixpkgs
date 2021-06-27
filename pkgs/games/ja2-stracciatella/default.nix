@@ -11,7 +11,7 @@ let
     pname = "libstracciatella";
     inherit version;
     src = "${src}/rust";
-    cargoSha256 = "0blb971cv9k6c460mwq3zq8vih687bdnb39b9gph1hr90pxjviba";
+    cargoHash = "sha256-asUt+wUpwwDvSyuNZds6yMC4Ef4D8woMYWamzcJJiy4=";
 
     preBuild = ''
       mkdir -p $out/include/stracciatella

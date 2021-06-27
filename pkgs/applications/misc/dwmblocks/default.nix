@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/torrinfail/dwmblocks";
     license = licenses.isc;
     maintainers = with maintainers; [ sophrosyne ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

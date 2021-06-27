@@ -1,40 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
 , amqp
-, botocore
+, vine
+, cached-property
+, importlib-metadata
+, azure-servicebus
 , case
 , Pyro4
-, pytest
+, pytestCheckHook
 , pytz
-, sqlalchemy
-, importlib-metadata
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.0.2";
+  version = "5.1.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f4965fba0a4718d47d470beeb5d6446e3357a62402b16c510b6a2f251e05ac3c";
+    sha256 = "01481d99f4606f6939cdc9b637264ed353ee9e3e4f62cfb582324142c41a572d";
   };
-
-  postPatch = ''
-    substituteInPlace requirements/test.txt \
-      --replace "pytest-sugar" ""
-  '';
 
   propagatedBuildInputs = [
     amqp
+    vine
   ] ++ lib.optionals (pythonOlder "3.8") [
+    cached-property
     importlib-metadata
   ];
 
-  checkInputs = [ botocore pytest case pytz Pyro4 sqlalchemy ];
-  # test_redis requires fakeredis, which isn't trivial to package
-  checkPhase = ''
-    pytest --ignore t/unit/transport/test_redis.py
-  '';
+  checkInputs = [
+    azure-servicebus
+    case
+    Pyro4
+    pytestCheckHook
+    pytz
+  ];
 
   meta = with lib; {
     description = "Messaging library for Python";

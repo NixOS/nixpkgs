@@ -1,16 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, isPy27, pytestCheckHook
-, requests, arrow, logfury, tqdm }:
+{ lib
+, arrow
+, buildPythonPackage
+, fetchPypi
+, importlib-metadata
+, isPy27
+, logfury
+, pytestCheckHook
+, pytest-lazy-fixture
+, pytest-mock
+, pythonOlder
+, requests
+, setuptools-scm
+, tqdm
+}:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.6.0";
-
+  version = "1.9.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6fjreuMUC056ljddfAidfBbJkvEDndB/dIkx1bF7efs=";
+    sha256 = "ff9c27c89f53583fd83c711d0a642d9b3bdbb8682c2e8e2315674b517cb441ec";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    arrow
+    logfury
+    requests
+    tqdm
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-lazy-fixture
+    pytest-mock
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -19,16 +50,16 @@ buildPythonPackage rec {
       --replace 'arrow>=0.8.0,<1.0.0' 'arrow'
   '';
 
+  disabledTests = [
+    # Test requires an API key
+    "test_raw_api"
+    "test_files_headers"
+  ];
+
   pythonImportsCheck = [ "b2sdk" ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ requests arrow logfury tqdm ];
-
-  # requires unpackaged dependencies like liccheck
-  doCheck = false;
-
   meta = with lib; {
-    description = "Client library and utilities for access to B2 Cloud Storage (backblaze).";
+    description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     license = licenses.mit;
   };

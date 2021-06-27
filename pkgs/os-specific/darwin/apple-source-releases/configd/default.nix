@@ -1,6 +1,6 @@
-{ stdenv, appleDerivation, launchd, bootstrap_cmds, xnu, ppp, IOKit, eap8021x, Security }:
+{ stdenv, appleDerivation', launchd, bootstrap_cmds, xnu, ppp, IOKit, eap8021x, Security }:
 
-appleDerivation {
+appleDerivation' stdenv {
   meta.broken = stdenv.cc.nativeLibc;
 
   nativeBuildInputs = [ bootstrap_cmds ];
@@ -127,78 +127,78 @@ appleDerivation {
     mig -arch x86_64 -header derived/helper.h          -user derived/helperUser.c          -sheader /dev/null -server /dev/null helper/helper.defs
     mig -arch x86_64 -header derived/pppcontroller.h   -user derived/pppcontrollerUser.c   -sheader /dev/null -server /dev/null pppcontroller.defs
 
-    cc -I. -Ihelper -Iderived -F. -c SCSchemaDefinitions.c -o SCSchemaDefinitions.o
-    cc -I. -Ihelper -Iderived -F. -c SCD.c -o SCD.o
-    cc -I. -Ihelper -Iderived -F. -c SCDKeys.c -o SCDKeys.o
-    cc -I. -Ihelper -Iderived -F. -c SCDPrivate.c -o SCDPrivate.o
-    cc -I. -Ihelper -Iderived -F. -c SCDPlugin.c -o SCDPlugin.o
-    cc -I. -Ihelper -Iderived -F. -c CaptiveNetwork.c -o CaptiveNetwork.o
-    cc -I. -Ihelper -Iderived -F. -c SCDOpen.c -o SCDOpen.o
-    cc -I. -Ihelper -Iderived -F. -c SCDList.c -o SCDList.o
-    cc -I. -Ihelper -Iderived -F. -c SCDAdd.c -o SCDAdd.o
-    cc -I. -Ihelper -Iderived -F. -c SCDGet.c -o SCDGet.o
-    cc -I. -Ihelper -Iderived -F. -c SCDSet.c -o SCDSet.o
-    cc -I. -Ihelper -Iderived -F. -c SCDRemove.c -o SCDRemove.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotify.c -o SCDNotify.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotifierSetKeys.c -o SCDNotifierSetKeys.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotifierAdd.c -o SCDNotifierAdd.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotifierRemove.c -o SCDNotifierRemove.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotifierGetChanges.c -o SCDNotifierGetChanges.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotifierWait.c -o SCDNotifierWait.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotifierInformViaCallback.c -o SCDNotifierInformViaCallback.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotifierInformViaFD.c -o SCDNotifierInformViaFD.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotifierInformViaSignal.c -o SCDNotifierInformViaSignal.o
-    cc -I. -Ihelper -Iderived -F. -c SCDNotifierCancel.c -o SCDNotifierCancel.o
-    cc -I. -Ihelper -Iderived -F. -c SCDSnapshot.c -o SCDSnapshot.o
-    cc -I. -Ihelper -Iderived -F. -c SCP.c -o SCP.o
-    cc -I. -Ihelper -Iderived -F. -c SCPOpen.c -o SCPOpen.o
-    cc -I. -Ihelper -Iderived -F. -c SCPLock.c -o SCPLock.o
-    cc -I. -Ihelper -Iderived -F. -c SCPUnlock.c -o SCPUnlock.o
-    cc -I. -Ihelper -Iderived -F. -c SCPList.c -o SCPList.o
-    cc -I. -Ihelper -Iderived -F. -c SCPGet.c -o SCPGet.o
-    cc -I. -Ihelper -Iderived -F. -c SCPAdd.c -o SCPAdd.o
-    cc -I. -Ihelper -Iderived -F. -c SCPSet.c -o SCPSet.o
-    cc -I. -Ihelper -Iderived -F. -c SCPRemove.c -o SCPRemove.o
-    cc -I. -Ihelper -Iderived -F. -c SCPCommit.c -o SCPCommit.o
-    cc -I. -Ihelper -Iderived -F. -c SCPApply.c -o SCPApply.o
-    cc -I. -Ihelper -Iderived -F. -c SCPPath.c -o SCPPath.o
-    cc -I. -Ihelper -Iderived -F. -c SCDConsoleUser.c -o SCDConsoleUser.o
-    cc -I. -Ihelper -Iderived -F. -c SCDHostName.c -o SCDHostName.o
-    cc -I. -Ihelper -Iderived -F. -c SCLocation.c -o SCLocation.o
-    cc -I. -Ihelper -Iderived -F. -c SCNetwork.c -o SCNetwork.o
-    cc -I. -Ihelper -Iderived -F. -c derived/pppcontrollerUser.c -o pppcontrollerUser.o
-    cc -I. -Ihelper -Iderived -F. -c SCNetworkConnection.c -o SCNetworkConnection.o
-    cc -I. -Ihelper -Iderived -F. -c SCNetworkConnectionPrivate.c -o SCNetworkConnectionPrivate.o
-    cc -I. -Ihelper -Iderived -I../dnsinfo -F. -c SCNetworkReachability.c -o SCNetworkReachability.o
-    cc -I. -Ihelper -Iderived -F. -c SCProxies.c -o SCProxies.o
-    cc -I. -Ihelper -Iderived -F. -c DHCP.c -o DHCP.o
-    cc -I. -Ihelper -Iderived -F. -c moh.c -o moh.o
-    cc -I. -Ihelper -Iderived -F. -c DeviceOnHold.c -o DeviceOnHold.o
-    cc -I. -Ihelper -Iderived -I $HACK -F. -c LinkConfiguration.c -o LinkConfiguration.o
-    cc -I. -Ihelper -Iderived -F. -c dy_framework.c -o dy_framework.o
-    cc -I. -Ihelper -Iderived -I $HACK -F. -c VLANConfiguration.c -o VLANConfiguration.o
-    cc -I. -Ihelper -Iderived -F. -c derived/configUser.c -o configUser.o
-    cc -I. -Ihelper -Iderived -F. -c SCPreferencesPathKey.c -o SCPreferencesPathKey.o
-    cc -I. -Ihelper -Iderived -I../dnsinfo -F. -c derived/shared_dns_infoUser.c -o shared_dns_infoUser.o
-    cc -I. -Ihelper -Iderived -F. -c SCNetworkConfigurationInternal.c -o SCNetworkConfigurationInternal.o
-    cc -I. -Ihelper -Iderived -F. -c SCNetworkInterface.c -o SCNetworkInterface.o
-    cc -I. -Ihelper -Iderived -F. -c SCNetworkProtocol.c -o SCNetworkProtocol.o
-    cc -I. -Ihelper -Iderived -F. -c SCNetworkService.c -o SCNetworkService.o
-    cc -I. -Ihelper -Iderived -F. -c SCNetworkSet.c -o SCNetworkSet.o
-    cc -I. -Ihelper -Iderived -I $HACK -F. -c BondConfiguration.c -o BondConfiguration.o
-    cc -I. -Ihelper -Iderived -I $HACK -F. -c BridgeConfiguration.c -o BridgeConfiguration.o
-    cc -I. -Ihelper -Iderived -F. -c helper/SCHelper_client.c -o SCHelper_client.o
-    cc -I. -Ihelper -Iderived -F. -c SCPreferencesKeychainPrivate.c -o SCPreferencesKeychainPrivate.o
-    cc -I. -Ihelper -Iderived -F. -c SCNetworkSignature.c -o SCNetworkSignature.o
-    cc -I. -Ihelper -Iderived -F. -c VPNPrivate.c -o VPNPrivate.o
-    cc -I. -Ihelper -Iderived -F. -c VPNConfiguration.c -o VPNConfiguration.o
-    cc -I. -Ihelper -Iderived -F. -c VPNTunnel.c -o VPNTunnel.o
-    cc -I. -Ihelper -Iderived -F. -c derived/helperUser.c -o helperUser.o
-    cc -I. -Ihelper -Iderived -F. -c reachability/SCNetworkReachabilityServer_client.c -o SCNetworkReachabilityServer_client.o
-    cc -I. -Ihelper -Iderived -F. -c reachability/rb.c -o rb.o
-    cc -I. -Ihelper -Iderived -F. -c derived/SystemConfiguration_vers.c -o SystemConfiguration_vers.o
+    $CC -I. -Ihelper -Iderived -F. -c SCSchemaDefinitions.c -o SCSchemaDefinitions.o
+    $CC -I. -Ihelper -Iderived -F. -c SCD.c -o SCD.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDKeys.c -o SCDKeys.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDPrivate.c -o SCDPrivate.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDPlugin.c -o SCDPlugin.o
+    $CC -I. -Ihelper -Iderived -F. -c CaptiveNetwork.c -o CaptiveNetwork.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDOpen.c -o SCDOpen.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDList.c -o SCDList.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDAdd.c -o SCDAdd.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDGet.c -o SCDGet.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDSet.c -o SCDSet.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDRemove.c -o SCDRemove.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotify.c -o SCDNotify.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotifierSetKeys.c -o SCDNotifierSetKeys.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotifierAdd.c -o SCDNotifierAdd.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotifierRemove.c -o SCDNotifierRemove.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotifierGetChanges.c -o SCDNotifierGetChanges.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotifierWait.c -o SCDNotifierWait.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotifierInformViaCallback.c -o SCDNotifierInformViaCallback.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotifierInformViaFD.c -o SCDNotifierInformViaFD.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotifierInformViaSignal.c -o SCDNotifierInformViaSignal.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDNotifierCancel.c -o SCDNotifierCancel.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDSnapshot.c -o SCDSnapshot.o
+    $CC -I. -Ihelper -Iderived -F. -c SCP.c -o SCP.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPOpen.c -o SCPOpen.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPLock.c -o SCPLock.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPUnlock.c -o SCPUnlock.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPList.c -o SCPList.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPGet.c -o SCPGet.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPAdd.c -o SCPAdd.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPSet.c -o SCPSet.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPRemove.c -o SCPRemove.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPCommit.c -o SCPCommit.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPApply.c -o SCPApply.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPPath.c -o SCPPath.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDConsoleUser.c -o SCDConsoleUser.o
+    $CC -I. -Ihelper -Iderived -F. -c SCDHostName.c -o SCDHostName.o
+    $CC -I. -Ihelper -Iderived -F. -c SCLocation.c -o SCLocation.o
+    $CC -I. -Ihelper -Iderived -F. -c SCNetwork.c -o SCNetwork.o
+    $CC -I. -Ihelper -Iderived -F. -c derived/pppcontrollerUser.c -o pppcontrollerUser.o
+    $CC -I. -Ihelper -Iderived -F. -c SCNetworkConnection.c -o SCNetworkConnection.o
+    $CC -I. -Ihelper -Iderived -F. -c SCNetworkConnectionPrivate.c -o SCNetworkConnectionPrivate.o
+    $CC -I. -Ihelper -Iderived -I../dnsinfo -F. -c SCNetworkReachability.c -o SCNetworkReachability.o
+    $CC -I. -Ihelper -Iderived -F. -c SCProxies.c -o SCProxies.o
+    $CC -I. -Ihelper -Iderived -F. -c DHCP.c -o DHCP.o
+    $CC -I. -Ihelper -Iderived -F. -c moh.c -o moh.o
+    $CC -I. -Ihelper -Iderived -F. -c DeviceOnHold.c -o DeviceOnHold.o
+    $CC -I. -Ihelper -Iderived -I $HACK -F. -c LinkConfiguration.c -o LinkConfiguration.o
+    $CC -I. -Ihelper -Iderived -F. -c dy_framework.c -o dy_framework.o
+    $CC -I. -Ihelper -Iderived -I $HACK -F. -c VLANConfiguration.c -o VLANConfiguration.o
+    $CC -I. -Ihelper -Iderived -F. -c derived/configUser.c -o configUser.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPreferencesPathKey.c -o SCPreferencesPathKey.o
+    $CC -I. -Ihelper -Iderived -I../dnsinfo -F. -c derived/shared_dns_infoUser.c -o shared_dns_infoUser.o
+    $CC -I. -Ihelper -Iderived -F. -c SCNetworkConfigurationInternal.c -o SCNetworkConfigurationInternal.o
+    $CC -I. -Ihelper -Iderived -F. -c SCNetworkInterface.c -o SCNetworkInterface.o
+    $CC -I. -Ihelper -Iderived -F. -c SCNetworkProtocol.c -o SCNetworkProtocol.o
+    $CC -I. -Ihelper -Iderived -F. -c SCNetworkService.c -o SCNetworkService.o
+    $CC -I. -Ihelper -Iderived -F. -c SCNetworkSet.c -o SCNetworkSet.o
+    $CC -I. -Ihelper -Iderived -I $HACK -F. -c BondConfiguration.c -o BondConfiguration.o
+    $CC -I. -Ihelper -Iderived -I $HACK -F. -c BridgeConfiguration.c -o BridgeConfiguration.o
+    $CC -I. -Ihelper -Iderived -F. -c helper/SCHelper_client.c -o SCHelper_client.o
+    $CC -I. -Ihelper -Iderived -F. -c SCPreferencesKeychainPrivate.c -o SCPreferencesKeychainPrivate.o
+    $CC -I. -Ihelper -Iderived -F. -c SCNetworkSignature.c -o SCNetworkSignature.o
+    $CC -I. -Ihelper -Iderived -F. -c VPNPrivate.c -o VPNPrivate.o
+    $CC -I. -Ihelper -Iderived -F. -c VPNConfiguration.c -o VPNConfiguration.o
+    $CC -I. -Ihelper -Iderived -F. -c VPNTunnel.c -o VPNTunnel.o
+    $CC -I. -Ihelper -Iderived -F. -c derived/helperUser.c -o helperUser.o
+    $CC -I. -Ihelper -Iderived -F. -c reachability/SCNetworkReachabilityServer_client.c -o SCNetworkReachabilityServer_client.o
+    $CC -I. -Ihelper -Iderived -F. -c reachability/rb.c -o rb.o
+    $CC -I. -Ihelper -Iderived -F. -c derived/SystemConfiguration_vers.c -o SystemConfiguration_vers.o
 
-    cc -dynamiclib *.o -install_name $out/Library/Frameworks/SystemConfiguration.framework/SystemConfiguration -dead_strip -framework CoreFoundation -single_module -o SystemConfiguration.framework/SystemConfiguration
+    $CC -dynamiclib *.o -install_name $out/Library/Frameworks/SystemConfiguration.framework/SystemConfiguration -dead_strip -framework CoreFoundation -single_module -o SystemConfiguration.framework/SystemConfiguration
 
     popd >/dev/null
   '';

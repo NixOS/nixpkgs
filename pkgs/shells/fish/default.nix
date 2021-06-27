@@ -19,6 +19,9 @@
 , fishPlugins
 , procps
 
+# used to generate autocompletions from manpages and for configuration editing in the browser
+, usePython ? true
+
 , runCommand
 , writeText
 , nixosTests
@@ -200,12 +203,10 @@ let
     '';
 
     # Required binaries during execution
-    # Python: Autocompletion generated from manpages and config editing
     propagatedBuildInputs = [
       coreutils
       gnugrep
       gnused
-      python3
       groff
       gettext
     ] ++ lib.optional (!stdenv.isDarwin) man-db;
@@ -233,18 +234,17 @@ let
       sed -e "s|sed |${gnused}/bin/sed |"                  \
           -i "$out/share/fish/functions/alias.fish"        \
              "$out/share/fish/functions/prompt_pwd.fish"
-      sed -i "s|nroff |${groff}/bin/nroff |"               \
+      sed -i "s|nroff|${groff}/bin/nroff|"                 \
              "$out/share/fish/functions/__fish_print_help.fish"
       sed -e "s|clear;|${getBin ncurses}/bin/clear;|"      \
           -i "$out/share/fish/functions/fish_default_key_bindings.fish"
-      sed -e "s|python3|${getBin python3}/bin/python3|"    \
-          -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
       sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
              $out/share/fish/completions/{sudo.fish,doas.fish}
       sed -e "s| awk | ${gawk}/bin/awk |"                  \
           -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
              $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
 
+    '' + optionalString usePython ''
       cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
       function __fish_anypython
           echo ${python3.interpreter}

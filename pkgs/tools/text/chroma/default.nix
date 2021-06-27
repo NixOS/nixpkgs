@@ -8,7 +8,7 @@ buildGoModule rec {
     owner  = "alecthomas";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0zzk4wcjgxa9lsx8kwpmxvcw67f2fr7ai37jxmdahnws0ai2c2f7";
+    sha256 = "sha256-+4UaQrJh3PBf68rlW1lOEyEVw3vWxfc+Casa5+H8F9A=";
     leaveDotGit = true;
   };
 

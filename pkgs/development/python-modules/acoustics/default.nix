@@ -14,8 +14,12 @@ buildPythonPackage rec {
   };
 
   checkPhase = ''
+    export HOME=$TMPDIR
+    mkdir -p $HOME/.matplotlib
+    echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
+
     pushd tests
-    py.test ./.
+    py.test -Wignore::DeprecationWarning ./.
     popd
   '';
 

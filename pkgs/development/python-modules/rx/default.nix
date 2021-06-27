@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "rx";
-  version = "3.1.1";
+  version = "3.2.0";
   disabled = pythonOlder "3.6";
 
   # There are no tests on the pypi source
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "ReactiveX";
     repo = "rxpy";
     rev = "v${version}";
-    sha256 = "0p0cs67l40npkvwgn5sb18l1b6df1b9fg6rzlqkwk2aa0v3cpvhf";
+    sha256 = "159ln0c721rrdz0mqyl3zvv6qsry7ql7ddlpwpnxs9q15ik15mnj";
   };
 
   checkInputs = [ nose ];

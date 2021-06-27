@@ -75,7 +75,7 @@ let
     else ''
       def assemble_qemu_flags():
           flags = "-cpu max"
-          ${if system == "x86_64-linux"
+          ${if (system == "x86_64-linux" || system == "i686-linux")
             then ''flags += " -m 1024"''
             else ''flags += " -m 768 -enable-kvm -machine virt,gic-version=host"''
           }

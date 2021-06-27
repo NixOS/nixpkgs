@@ -25,7 +25,7 @@
 <programlisting>
 <xref linkend="opt-services.xserver.desktopManager.plasma5.enable"/> = true;
 <xref linkend="opt-services.xserver.desktopManager.xfce.enable"/> = true;
-<xref linkend="opt-services.xserver.desktopManager.gnome3.enable"/> = true;
+<xref linkend="opt-services.xserver.desktopManager.gnome.enable"/> = true;
 <xref linkend="opt-services.xserver.desktopManager.mate.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.xmonad.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.twm.enable"/> = true;
@@ -191,9 +191,12 @@
   <para>
    GTK themes can be installed either to user profile or system-wide (via
    <literal>environment.systemPackages</literal>). To make Qt 5 applications
-   look similar to GTK2 ones, you can install <literal>qt5.qtbase.gtk</literal>
-   package into your system environment. It should work for all Qt 5 library
-   versions.
+   look similar to GTK ones, you can use the following configuration:
+<programlisting>
+<xref linkend="opt-qt5.enable"/> = true;
+<xref linkend="opt-qt5.platformTheme"/> = "gtk2";
+<xref linkend="opt-qt5.style"/> = "gtk2";
+</programlisting>
   </para>
  </simplesect>
  <simplesect xml:id="custom-xkb-layouts">
@@ -238,11 +241,11 @@ xkb_symbols &quot;us-greek&quot;
   description = "US layout with alt-gr greek";
   languages   = [ "eng" ];
   symbolsFile = /yourpath/symbols/us-greek;
-}
+};
 </programlisting>
   <note>
   <para>
-   The name should match the one given to the
+   The name (after <literal>extraLayouts.</literal>) should match the one given to the
    <literal>xkb_symbols</literal> block.
   </para>
   </note>

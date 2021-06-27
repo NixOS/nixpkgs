@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
-, perl, pixman, vde2, alsaLib, texinfo, flex
+, perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl, ninja, meson
 , makeWrapper, autoPatchelfHook
 , attr, libcap, libcap_ng
@@ -17,6 +17,7 @@
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
+, glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, epoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
 , libiscsiSupport ? true, libiscsi
@@ -69,9 +70,10 @@ stdenv.mkDerivation rec {
     ++ optionals smartcardSupport [ libcacard ]
     ++ optionals spiceSupport [ spice-protocol spice ]
     ++ optionals usbredirSupport [ usbredir ]
-    ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
+    ++ optionals stdenv.isLinux [ alsa-lib libaio libcap_ng libcap attr ]
     ++ optionals xenSupport [ xen ]
     ++ optionals cephSupport [ ceph ]
+    ++ optionals glusterfsSupport [ glusterfs libuuid ]
     ++ optionals openGLSupport [ mesa epoxy libdrm ]
     ++ optionals virglSupport [ virglrenderer ]
     ++ optionals libiscsiSupport [ libiscsi ]
@@ -101,10 +103,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # Otherwise tries to ensure /var/run exists.
   postPatch = ''
+    # Otherwise tries to ensure /var/run exists.
     sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
         qga/meson.build
+
+    # TODO: On aarch64-darwin, we automatically codesign everything, but qemu
+    # needs specific entitlements and does its own signing. This codesign
+    # command fails, but we have no fix at the moment, so this disables it.
+    # This means `-accel hvf` is broken for now, on aarch64-darwin only.
+    substituteInPlace meson.build \
+      --replace 'if exe_sign' 'if false'
   '';
 
   preConfigure = ''
@@ -142,6 +151,7 @@ stdenv.mkDerivation rec {
     ++ optional gtkSupport "--enable-gtk"
     ++ optional xenSupport "--enable-xen"
     ++ optional cephSupport "--enable-rbd"
+    ++ optional glusterfsSupport "--enable-glusterfs"
     ++ optional openGLSupport "--enable-opengl"
     ++ optional virglSupport "--enable-virglrenderer"
     ++ optional tpmSupport "--enable-tpm"

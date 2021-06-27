@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, clang-unwrapped
 , cmake
 , libclang
 , libffi
@@ -26,22 +25,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    llvm
+    llvm.dev
   ] ++ lib.optionals (withManual || withHTML) [
     sphinx
   ];
 
   cmakeFlags = [
-    "-DCLANG_RESOURCE_DIR=${clang-unwrapped}/lib/clang/${lib.getVersion clang-unwrapped}/"
+    "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
     "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
     "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
   ];
 
   buildInputs = [
-    clang-unwrapped
     libffi
     libxml2
     zlib
+    libclang
   ];
 
   propagatedBuildInputs = [

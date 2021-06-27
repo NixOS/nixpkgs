@@ -6,11 +6,14 @@
 , docbook5
 , dvdauthor
 , dvdplusrwtools
+, ffmpeg
 , flex
 , fontconfig
 , gettext
+, libexif
 , makeWrapper
 , pkg-config
+, wxGTK30
 , wxSVG
 , xine-ui
 , xmlto
@@ -42,11 +45,14 @@ in stdenv.mkDerivation rec {
     docbook5
     dvdauthor
     dvdplusrwtools
+    ffmpeg
     flex
     fontconfig
     gettext
+    libexif
     makeWrapper
     wxSVG
+    wxGTK30
     xine-ui
     xmlto
     zip
@@ -66,6 +72,8 @@ in stdenv.mkDerivation rec {
     ''
        wrapProgram $out/bin/dvdstyler --prefix PATH ":" "${binPath}"
     '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://www.dvdstyler.org/";

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
-  version = "0.11.2";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${version}";
-    sha256 = "1jcfv96ws6sm3kc2q8zriwqhry24qbq3zbp8gkqw75wssbv82rmc";
+    sha256 = "133m5ifs8ylhdh78m99n0y76q0nix68xsqfwcsrak4yr1n5pj9qp";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    broken = lib.versionOlder qtbase.version "5.14";
     maintainers = [ maintainers.bugworm ];
   };
 }

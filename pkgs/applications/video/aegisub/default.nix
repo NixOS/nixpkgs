@@ -30,7 +30,7 @@
 , openal ? null
 
 , alsaSupport ? stdenv.isLinux
-, alsaLib ? null
+, alsa-lib ? null
 
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio ? null
@@ -42,7 +42,7 @@
 assert spellcheckSupport -> (hunspell != null);
 assert automationSupport -> (lua != null);
 assert openalSupport -> (openal != null);
-assert alsaSupport -> (alsaLib != null);
+assert alsaSupport -> (alsa-lib != null);
 assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
@@ -76,6 +76,20 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Aegisub/Aegisub/commit/6bd3f4c26b8fc1f76a8b797fcee11e7611d59a39.patch";
       sha256 = "sha256-rG8RJokd4V4aSYOQw2utWnrWPVrkqSV3TAvnGXNhLOk=";
     })
+
+    # Compatibility with ffms2
+    (fetchpatch {
+      url = "https://github.com/Aegisub/Aegisub/commit/1aa9215e7fc360de05da9b7ec2cd68f1940af8b2.patch";
+      sha256 = "sha256-JsuI4hQTcT0TEqHHoSsGbuiTg4hMCH3Cxp061oLk8Go=";
+    })
+
+    ./update-ffms2.patch
+
+    # Compatibility with X11
+    (fetchpatch {
+      url = "https://github.com/Aegisub/Aegisub/commit/7a6da26be6a830f4e1255091952cc0a1326a4520.patch";
+      sha256 = "sha256-/aTcIjFlZY4N9+IyHL4nwR0hUR4HTJM7ibbdKmNxq0w=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -98,7 +112,7 @@ stdenv.mkDerivation rec {
     wxGTK
     zlib
   ]
-  ++ optional alsaSupport alsaLib
+  ++ optional alsaSupport alsa-lib
   ++ optional automationSupport lua
   ++ optional openalSupport openal
   ++ optional portaudioSupport portaudio
@@ -112,6 +126,10 @@ stdenv.mkDerivation rec {
     "bindnow"
     "relro"
   ];
+
+  postPatch = ''
+    sed -i 's/-Wno-c++11-narrowing/-Wno-narrowing/' configure.ac src/Makefile
+  '';
 
   # compat with icu61+
   # https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554

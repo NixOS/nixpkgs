@@ -3,12 +3,15 @@
 , fetchPypi
 , curtsies
 , greenlet
-, mock
+, jedi
 , pygments
+, pyxdg
 , requests
 , substituteAll
 , urwid
-, which }:
+, watchdog
+, which
+}:
 
 buildPythonPackage rec {
   pname = "bpython";
@@ -24,17 +27,22 @@ buildPythonPackage rec {
     which = "${which}/bin/which";
   })];
 
-  propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];
+  propagatedBuildInputs = [
+    curtsies
+    greenlet
+    pygments
+    pyxdg
+    requests
+    urwid
+  ];
 
   postInstall = ''
     substituteInPlace "$out/share/applications/org.bpython-interpreter.bpython.desktop" \
       --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
   '';
 
-  checkInputs = [ mock ];
-
-  # tests fail: https://github.com/bpython/bpython/issues/712
-  doCheck = false;
+  checkInputs = [ jedi watchdog ];
+  pythonImportsCheck = [ "bpython" ];
 
   meta = with lib; {
     description = "A fancy curses interface to the Python interactive interpreter";

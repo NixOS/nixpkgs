@@ -72,10 +72,10 @@ in {
         )
 
     with subtest("test a connection"):
-        client.execute("systemd-run snapclient -h server -p ${toString port}")
+        client.execute("systemd-run --unit=snapcast-client snapclient -h server -p ${toString port}")
         server.wait_until_succeeds(
             "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
         )
-        client.wait_until_succeeds("journalctl -o cat -u run-\* | grep -q ${toString bufferSize}")
+        client.wait_until_succeeds("journalctl -o cat -u snapcast-client | grep -q 'buffer: ${toString bufferSize}'")
   '';
 })

@@ -3,25 +3,32 @@
 , removeReferencesTo
 , zlib ? null
 , enableShared ? !stdenv.hostPlatform.isStatic
+, javaSupport ? false
+, jdk
 }:
 
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.7";
+  # pinned to 1.10.6 for pythonPackages.tables v3.6.1. tables has test errors for hdf5 > 1.10.6. https://github.com/PyTables/PyTables/issues/845
+  version = "1.10.6";
   pname = "hdf5";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "0pm5xxry55i0h7wmvc7svzdaa90rnk7h78rrjmnlkz2ygsn8y082";
+    sha256 = "1gf38x51128hn00744358w27xgzjk0ff4wra4yxh2lk804ck1mh9";
   };
 
   outputs = [ "out" "dev" ];
+
+  buildInputs = optional javaSupport jdk;
 
   nativeBuildInputs = [ removeReferencesTo ];
 
   propagatedBuildInputs = optional (zlib != null) zlib;
 
-  configureFlags = optional enableShared "--enable-shared";
+  configureFlags = []
+    ++ optional enableShared "--enable-shared"
+    ++ optional javaSupport "--enable-java";
 
   patches = [
     ./bin-mv.patch

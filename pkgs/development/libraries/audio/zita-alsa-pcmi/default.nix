@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl , alsaLib, }:
+{ lib, stdenv, fetchurl , alsa-lib, }:
 
 stdenv.mkDerivation rec {
   pname = "zita-alsa-pcmi";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "12d7vdg74yh21w69qi0wg57iz4876j94qbiq09bvscih6xz9y78s";
   };
 
-  buildInputs = [ alsaLib ];
+  buildInputs = [ alsa-lib ];
 
   buildPhase = ''
     cd source

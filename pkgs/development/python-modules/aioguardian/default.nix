@@ -5,7 +5,7 @@
 , asynctest
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "aioguardian";
   version = "1.0.7";
-  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -27,7 +26,9 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -44,8 +45,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples as they are prefixed with test_
-  pytestFlagsArray = [ "--ignore examples/" ];
+  postPatch = ''
+    # https://github.com/bachya/aioguardian/pull/66
+    substituteInPlace pyproject.toml \
+      --replace 'asyncio_dgram = "^1.0.1"' 'asyncio_dgram = "^2.0.0"'
+    # https://github.com/bachya/aioguardian/pull/67
+    substituteInPlace pyproject.toml \
+      --replace "poetry>=0.12" "poetry-core"
+  '';
+
+  disabledTestPaths = [ "examples/" ];
+
   pythonImportsCheck = [ "aioguardian" ];
 
   meta = with lib; {

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "5.1.4";
+  version = "6.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Dinnerbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1k8hjv965svbm95m7jaawlhdbxqpkjchlwvjwn1n7z90dfgn5kih";
+    sha256 = "068dc2ilw1kkvw394vqhqgkia5smnvzaca5zbdd2xyl3nch3rk4x";
   };
 
   propagatedBuildInputs = [
@@ -35,10 +35,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "dnspython3" "dnspython"
-  '';
 
   pythonImportsCheck = [ "mcstatus" ];
 

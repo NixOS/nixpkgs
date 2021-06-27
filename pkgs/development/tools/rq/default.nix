@@ -11,13 +11,20 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0km9d751jr6c5qy4af6ks7nv3xfn13iqi03wq59a1c73rnf0zinp";
   };
 
-  cargoSha256 = "0c5vwy3c5ji602dj64z6jqvcpi2xff03zvjbnwihb3ydqwnb3v67";
+  cargoSha256 = "0071q08f75qrxdkbx1b9phqpbj15r79jbh391y32acifi7hr35hj";
 
-  buildInputs = [ llvmPackages.clang-unwrapped v8 ]
+  buildInputs = [ llvmPackages.libclang v8 ]
   ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
+  postPatch = ''
+    # Remove #[deny(warnings)] which is equivalent to -Werror in C.
+    # Prevents build failures when upgrading rustc, which may give more warnings.
+    substituteInPlace src/lib.rs \
+      --replace "#![deny(warnings)]" ""
+  '';
+
   configurePhase = ''
-    export LIBCLANG_PATH="${llvmPackages.clang-unwrapped}/lib"
+    export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
     export V8_SOURCE="${v8}"
   '';
 

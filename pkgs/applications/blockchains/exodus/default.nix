@@ -1,14 +1,14 @@
 { stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango,
-atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsaLib, dbus, at-spi2-atk,
+atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsa-lib, dbus, at-spi2-atk,
 cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "21.1.18";
+  version = "21.1.29";
 
   src = fetchurl {
     url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "sha256-cc0m1gOwIY4M0ljSSdj8WaQfU/ikGI1Zlf8gGDdht4Q=";
+    sha256 = "sha256-Qdiyjutzt8r1tIfcW7/AtSuOpf1Un5TeHoeZx5uQthM=";
   };
 
   sourceRoot = ".";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       util-linux
       xorg.libXrandr
       xorg.libXScrnSaver
-      alsaLib
+      alsa-lib
       dbus.lib
       at-spi2-atk
       at-spi2-core

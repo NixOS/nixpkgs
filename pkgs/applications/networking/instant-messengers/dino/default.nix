@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
-, gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
+, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
@@ -18,23 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dino";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
-    sha256 = "0wy1hb3kz3k4gqqwx308n37cqag2d017jwfz0b5s30nkx2pbwspw";
+    sha256 = "11m38syqzb1z92wmdaf45gryl6gjxwbcnk32j4p984ipqj2vdzd8";
   };
-
-  patches = [
-    # Fixes https://github.com/dino/dino/issues/1010 (double' is not a supported generic type argument)
-    (fetchpatch {
-      name = "dino-vala-boxing.patch";
-      url = "https://github.com/dino/dino/commit/9acb54df9254609f2fe4de83c9047d408412de28.patch";
-      sha256 = "1jz4r7d8b1ljwgq846wihp864b6gjdkgh6fnmxh13b2i10x52xsm";
-    })
-  ];
 
   nativeBuildInputs = [
     vala
@@ -51,7 +42,7 @@ stdenv.mkDerivation rec {
     glib-networking
     glib
     libgee
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     sqlite
     gdk-pixbuf
     gtk3

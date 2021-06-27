@@ -1,31 +1,30 @@
-{ lib, stdenv, fetchgit, autoconf, libtool, automake, pkg-config, git
-, bison, flex, postgresql }:
+{ lib, stdenv, fetchFromGitHub, autoconf, libtool, automake, pkg-config, git
+, bison, flex, postgresql, ripgrep }:
 
-let
+stdenv.mkDerivation rec {
   pname = "stellar-core";
-  version = "0.5.1";
+  version = "17.0.0";
 
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
-
-  src = fetchgit {
-    url = "https://github.com/stellar/stellar-core.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "0ldw3qr0sajgam38z2w2iym0214ial6iahbzx3b965cw92n8n88z";
+  src = fetchFromGitHub {
+    owner = "stellar";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1ngl8yjqb8xzhdwzlxzzxf14q2hgwy2ysb17sn5380rrn0jswin1";
     fetchSubmodules = true;
-    leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake libtool git ];
+  nativeBuildInputs = [ automake autoconf git libtool pkg-config ripgrep ];
 
   propagatedBuildInputs = [ bison flex postgresql ];
 
-  patches = [ ./stellar-core-dirty-version.patch ];
-
   preConfigure = ''
+    # Due to https://github.com/NixOS/nixpkgs/issues/8567 we cannot rely on
+    # having the .git directory present, so directly provide the version
+    substituteInPlace src/Makefile.am --replace '$$vers' '${pname} ${version}';
+
     # Everything needs to be staged in git because the build uses
     # `git ls-files` to search for source files to compile.
+    git init
     git add .
 
     ./autogen.sh
@@ -41,7 +40,7 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://www.stellar.org/";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };
 }

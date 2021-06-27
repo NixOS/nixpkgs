@@ -1,39 +1,54 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, GitPython
+, jupyter-packaging
+, jupyter_client
+, jupyterlab
 , markdown-it-py
+, mdit-py-plugins
 , nbformat
-, pytest
+, notebook
+, pytestCheckHook
 , pyyaml
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.11.0";
+  version = "1.11.2";
+  format = "pyproject";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9062d001baaa32430fbb94a2c9394ac906db0a58da94e7aa4e414b73fd7d51bc";
+  src = fetchFromGitHub {
+    owner = "mwouts";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-S2SKAC2oT4VIVMMDbu/Puo87noAgnQs1hh88JphutA8=";
   };
 
+  buildInputs = [ jupyter-packaging jupyterlab ];
   propagatedBuildInputs = [
     markdown-it-py
+    mdit-py-plugins
     nbformat
     pyyaml
     toml
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
+    GitPython
+    jupyter_client
+    notebook
   ];
-
-  # requires test notebooks which are not shipped with the pypi release
-  # also, pypi no longer includes tests
-  doCheck = false;
-  checkPhase = ''
-    pytest
-  '';
+  # Tests that use a Jupyter notebook require $HOME to be writable.
+  HOME = "$TMPDIR";
+  # Pre-commit tests expect the source directory to be a Git repository.
+  pytestFlagsArray = [ "--ignore-glob='tests/test_pre_commit_*.py'" ];
+  pythonImportsCheck = [ "jupytext" "jupytext.cli" ];
 
   meta = with lib; {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";

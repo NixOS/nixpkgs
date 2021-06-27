@@ -1,6 +1,6 @@
 {lib, stdenv, fetchFromGitHub, fuse, bison, flex_2_5_35, openssl, python3, ncurses, readline,
  autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
- liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which,
+ liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
  rsync, glibc, rpcsvc-proto, libtirpc
 }:
@@ -17,6 +17,7 @@ let
     fuse bison flex_2_5_35 openssl ncurses readline
     autoconf automake libtool pkg-config zlib libaio libxml2
     acl sqlite liburcu attr makeWrapper util-linux libtirpc
+    liburing
     (python3.withPackages (pkgs: [
       pkgs.flask
       pkgs.prettytable
@@ -54,13 +55,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "9.0";
+  version = "9.2";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pjJQAFEb44yNqvNAOclZsiEDZBgcfIxliD3La1IsKPs=";
+    sha256 = "00y2xs7nj4d59x4fp6gq7qql3scykq9lppdvx7y3xbgfmkrwixx9";
   };
   inherit buildInputs propagatedBuildInputs;
 

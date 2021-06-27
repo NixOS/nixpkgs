@@ -5,25 +5,23 @@
 , libopus
 , pynacl
 , pythonOlder
-, websockets
 , withVoice ? true
 }:
 
 buildPythonPackage rec {
   pname = "discord.py";
-  version = "1.7.1";
+  version = "1.7.3";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Rapptz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dpASIqe6rJEyiWJyPbQhq9M54lX1ilfp4UuGnbJcFLo=";
+    sha256 = "sha256-eKXCzGFSzxpdZed4/4G6uJ96s5yCm6ci8K8XYR1zQlE=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    websockets
   ] ++ lib.optionalString withVoice [
     libopus
     pynacl

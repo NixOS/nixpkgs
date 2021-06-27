@@ -1,6 +1,5 @@
 { newScope
 , llvmPackages
-, giflib_4_1
 }:
 
 let
@@ -16,7 +15,7 @@ let
     libobjc = callPackage ./libobjc2 {};
     make = callPackage ./make {};
     back = callPackage ./back {};
-    base = callPackage ./base { giflib = giflib_4_1; };
+    base = callPackage ./base { };
     gui = callPackage ./gui {};
     gworkspace = callPackage ./gworkspace {};
   };

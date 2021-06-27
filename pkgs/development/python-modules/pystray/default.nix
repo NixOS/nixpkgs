@@ -1,20 +1,20 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, pillow, xlib, six, xvfb_run, sphinx }:
+, pillow, xlib, six, xvfb-run, sphinx }:
 
 buildPythonPackage rec {
   pname = "pystray";
-  version = "0.17.3";
+  version = "0.17.4";
 
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pystray";
     rev = "v${version}";
-    sha256 = "sha256-da2ZkehyXrxW5LdMR3K5AEQhiCpx8ygn6eswTC8fsRo=";
+    sha256 = "sha256-Rg2bbFTXLc1hXdShUmFxPcJtlcyWhspcjZtJYDSQ6vQ=";
   };
 
   nativeBuildInputs = [ sphinx ];
   propagatedBuildInputs = [ pillow xlib six ];
-  checkInputs = [ xvfb_run ];
+  checkInputs = [ xvfb-run ];
 
   checkPhase = ''
     rm tests/icon_tests.py # test needs user input

@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3.6'
+gem 'rails', '~> 6.1.3.2'
 
 gem 'bootsnap', '~> 1.4.6'
 
@@ -18,10 +18,13 @@ gem 'default_value_for', '~> 3.4.0'
 gem 'pg', '~> 1.1'
 
 gem 'rugged', '~> 1.1'
-gem 'grape-path-helpers', '~> 1.6.1'
+gem 'grape-path-helpers', '~> 1.6.3'
 
 gem 'faraday', '~> 1.0'
 gem 'marginalia', '~> 1.10.0'
+
+# Authorization
+gem 'declarative_policy', '~> 1.0.0'
 
 # Authentication libraries
 gem 'devise', '~> 4.7.2'
@@ -46,7 +49,7 @@ gem 'omniauth-shibboleth', '~> 1.3.0'
 gem 'omniauth-twitter', '~> 1.4'
 gem 'omniauth_crowd', '~> 2.4.0'
 gem 'omniauth-authentiq', '~> 0.3.3'
-gem 'omniauth_openid_connect', '~> 0.3.5'
+gem 'gitlab-omniauth-openid-connect', '~> 0.4.0', require: 'omniauth_openid_connect'
 gem 'omniauth-salesforce', '~> 1.0.5'
 gem 'omniauth-atlassian-oauth2', '~> 0.2.0'
 gem 'rack-oauth2', '~> 1.16.0'
@@ -89,7 +92,7 @@ gem 'net-ldap', '~> 0.16.3'
 
 # API
 gem 'grape', '~> 1.5.2'
-gem 'grape-entity', '~> 0.7.1'
+gem 'grape-entity', '~> 0.9.0'
 gem 'rack-cors', '~> 1.0.6', require: 'rack/cors'
 
 # GraphQL API
@@ -126,7 +129,7 @@ gem 'fog-local', '~> 0.6'
 gem 'fog-openstack', '~> 1.0'
 gem 'fog-rackspace', '~> 0.1.1'
 gem 'fog-aliyun', '~> 0.3'
-gem 'gitlab-fog-azure-rm', '~> 1.0.1', require: false
+gem 'gitlab-fog-azure-rm', '~> 1.1.1', require: false
 
 # for Google storage
 gem 'google-api-client', '~> 0.33'
@@ -180,13 +183,8 @@ gem 'rack', '~> 2.2.3'
 # https://github.com/sharpstone/rack-timeout/blob/master/README.md#rails-apps-manually
 gem 'rack-timeout', '~> 0.5.1', require: 'rack/timeout/base'
 
-group :unicorn do
-  gem 'unicorn', '~> 5.5'
-  gem 'unicorn-worker-killer', '~> 0.4.4'
-end
-
 group :puma do
-  gem 'puma', '~> 5.1.1', require: false
+  gem 'puma', '~> 5.3.1', require: false
   gem 'puma_worker_killer', '~> 0.3.1', require: false
 end
 
@@ -251,7 +249,7 @@ gem 'flowdock', '~> 0.7'
 gem 'slack-messenger', '~> 2.3.4'
 
 # Hangouts Chat integration
-gem 'hangouts-chat', '~> 0.0.5'
+gem 'hangouts-chat', '~> 0.0.5', require: 'hangouts_chat'
 
 # Asana integration
 gem 'asana', '~> 0.10.3'
@@ -264,7 +262,7 @@ gem 'kubeclient', '~> 4.9.1'
 
 # Sanitize user input
 gem 'sanitize', '~> 5.2.1'
-gem 'babosa', '~> 1.0.2'
+gem 'babosa', '~> 1.0.4'
 
 # Sanitizes SVG input
 gem 'loofah', '~> 2.2'
@@ -297,21 +295,26 @@ gem 'gon', '~> 6.4.0'
 gem 'request_store', '~> 1.5'
 gem 'base32', '~> 0.3.0'
 
-gem "gitlab-license", "~> 1.4"
+gem 'gitlab-license', '~> 1.5'
 
 # Protect against bruteforcing
 gem 'rack-attack', '~> 6.3.0'
 
 # Sentry integration
-gem 'sentry-raven', '~> 3.0'
+gem 'sentry-raven', '~> 3.1'
 
 # PostgreSQL query parsing
-gem 'pg_query', '~> 1.3.0'
+#
+# We need this fork until https://github.com/pganalyze/pg_query/pull/212
+# and https://github.com/pganalyze/pg_query/pull/213 are
+# released. gitlab-labkit will need to be updated to use the pg_query
+# version.
+gem 'gitlab-pg_query', '~> 2.0.4', require: 'pg_query'
 
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.16.2'
+gem 'gitlab-labkit', '~> 0.18.0'
 # Thrift is a dependency of gitlab-labkit, we want a version higher than 0.14.0
 # because of https://gitlab.com/gitlab-org/gitlab/-/issues/321900
 gem 'thrift', '>= 0.14.0'
@@ -338,11 +341,11 @@ group :metrics do
 
   # Prometheus
   gem 'prometheus-client-mmap', '~> 0.12.0'
-  gem 'raindrops', '~> 0.18'
 end
 
 group :development do
   gem 'lefthook', '~> 0.7.0', require: false
+  gem 'solargraph', '~> 0.42', require: false
 
   gem 'letter_opener_web', '~> 1.4.0'
 
@@ -356,9 +359,9 @@ end
 group :development, :test do
   gem 'deprecation_toolkit', '~> 1.5.1', require: false
   gem 'bullet', '~> 6.1.3'
-  gem 'gitlab-pry-byebug', platform: :mri, require: ['pry-byebug', 'pry-byebug/pry_remote_ext']
+  gem 'pry-byebug'
   gem 'pry-rails', '~> 0.3.9'
-  gem 'pry-remote'
+  gem 'pry-shell', '~> 0.4.0'
 
   gem 'awesome_print', require: false
 
@@ -399,7 +402,7 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 1.1.1', require: false
+  gem 'gitlab-dangerfiles', '~> 2.1.2', require: false
 end
 
 group :development, :test, :coverage do
@@ -413,13 +416,12 @@ group :development, :test, :omnibus do
 end
 
 group :test do
-  gem 'json-schema', '~> 2.8.0'
   gem 'fuubar', '~> 2.2.0'
   gem 'rspec-retry', '~> 0.6.1'
   gem 'rspec_profiling', '~> 0.0.6'
   gem 'rspec-parameterized', require: false
 
-  gem 'capybara', '~> 3.34.0'
+  gem 'capybara', '~> 3.35.3'
   gem 'capybara-screenshot', '~> 1.0.22'
   gem 'selenium-webdriver', '~> 3.142'
 
@@ -474,21 +476,27 @@ group :ed25519 do
   gem 'bcrypt_pbkdf', '~> 1.0'
 end
 
+# Spamcheck GRPC protocol definitions
+gem 'spamcheck', '~> 0.1.0'
+
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 13.11.0.pre.rc1'
+gem 'gitaly', '~> 14.0.0.pre.rc2'
+
+# KAS GRPC protocol definitions
+gem 'kas-grpc', '~> 0.0.2'
 
 gem 'grpc', '~> 1.30.2'
 
-gem 'google-protobuf', '~> 3.14.0'
+gem 'google-protobuf', '~> 3.17.1'
 
 gem 'toml-rb', '~> 1.0.0'
 
 # Feature toggles
-gem 'flipper', '~> 0.17.1'
-gem 'flipper-active_record', '~> 0.17.1'
-gem 'flipper-active_support_cache_store', '~> 0.17.1'
+gem 'flipper', '~> 0.21.0'
+gem 'flipper-active_record', '~> 0.21.0'
+gem 'flipper-active_support_cache_store', '~> 0.21.0'
 gem 'unleash', '~> 0.1.5'
-gem 'gitlab-experiment', '~> 0.5.3'
+gem 'gitlab-experiment', '~> 0.5.4'
 
 # Structured logging
 gem 'lograge', '~> 0.5'
@@ -511,6 +519,7 @@ gem 'erubi', '~> 1.9.0'
 # Monkey-patched in `config/initializers/mail_encoding_patch.rb`
 # See https://gitlab.com/gitlab-org/gitlab/issues/197386
 gem 'mail', '= 2.7.1'
+
 
 # File encryption
 gem 'lockbox', '~> 0.6.2'

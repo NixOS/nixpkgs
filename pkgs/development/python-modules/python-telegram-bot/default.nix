@@ -1,27 +1,29 @@
 { lib
 , APScheduler
 , buildPythonPackage
+, cachetools
 , certifi
 , decorator
 , fetchPypi
 , future
-, isPy3k
 , tornado
 , urllib3
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "13.4.1";
-  disabled = !isPy3k;
+  version = "13.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "141w3701jjl460702xddqvi3hswp24jnkl6cakvz2aqrmcyxq7sc";
+    sha256 = "37cfe8faba16fb68a8b5ab41a10e787c385f6296200c84256cc54d7c16334643";
   };
 
   propagatedBuildInputs = [
     APScheduler
+    cachetools
     certifi
     decorator
     future

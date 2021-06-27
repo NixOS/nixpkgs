@@ -4,37 +4,41 @@ let
   fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
 in stdenv.mkDerivation rec {
   pname = "tup";
-  version = "0.7.10";
+  version = "0.7.11";
   outputs = [ "bin" "man" "out" ];
 
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
     rev = "v${version}";
-    sha256 = "1qd07h4wi0743l7z2vybfvhwp61g2p2pc5qhl40672ryl24nvd1d";
+    hash = "sha256-Q2Y5ErcfhLChi9Wezn8+7eNXYX2UXW1fBOqEclmgzOo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse pcre ];
 
   configurePhase = ''
-    sed -i 's/`git describe`/v${version}/g' src/tup/link.sh
-    sed -i 's/pcre-confg/pkg-config pcre/g' Tupfile Tuprules.tup
+    substituteInPlace  src/tup/link.sh --replace '`git describe' '`echo ${version}'
+    substituteInPlace Tuprules.tup --replace 'pcre-config' 'pkg-config libpcre'
   '';
 
   # Regular tup builds require fusermount to have suid, which nix cannot
   # currently provide in a build environment, so we bootstrap and use 'tup
   # generate' instead
   buildPhase = ''
+    runHook preBuild
     ./build.sh
     ./build/tup init
     ./build/tup generate script.sh
     ./script.sh
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -D tup -t $bin/bin/
     install -D tup.1 -t $man/share/man/man1/
+    runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;

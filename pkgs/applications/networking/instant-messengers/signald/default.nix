@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchgit, jre, coreutils, gradle_6, git, perl
+{ lib, stdenv, fetchurl, fetchgit, jre_headless, coreutils, gradle_6, git, perl
 , makeWrapper }:
 
 let
@@ -52,20 +52,28 @@ in stdenv.mkDerivation rec {
   inherit pname src version postPatch patches;
 
   buildPhase = ''
+    runHook preBuild
+
     export GRADLE_USER_HOME=$(mktemp -d)
 
     # Use the local packages from -deps
     sed -i -e 's|mavenCentral()|mavenLocal(); maven { url uri("${deps}") }|' build.gradle
 
     gradle --offline --no-daemon distTar
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
       --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
-      --set JAVA_HOME "${jre}"
+      --set JAVA_HOME "${jre_headless}"
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ git gradle_6 makeWrapper ];

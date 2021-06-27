@@ -1,5 +1,5 @@
 {fetchurl, lib, stdenv, dpkg, makeWrapper,
- alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
+ alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
  harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
  nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
@@ -9,7 +9,8 @@ stdenv.mkDerivation {
   version = "13.3.1.22";
 
   src = fetchurl {
-    url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
+    url = "http://web.archive.org/web/20210602004133/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
     sha256 = "0rs26x0lycavybn6k1hbb5kzms0zzcmxlrmi4g8k7vyafj6s8dqh";
   };
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   libPath = lib.makeLibraryPath [
-      alsaLib
+      alsa-lib
       cups
       curl
       dbus

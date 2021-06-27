@@ -17,6 +17,10 @@
 , target ? null
 # Select whether DYNAMIC_ARCH is enabled or not.
 , dynamicArch ? null
+# enable AVX512 optimized kernels.
+# These kernels have been a source of trouble in the past.
+# Use with caution.
+, enableAVX512 ? false
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -71,6 +75,7 @@ let
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = false;
       MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
@@ -79,6 +84,7 @@ let
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
 
@@ -87,6 +93,13 @@ let
       TARGET = setTarget "POWER5";
       DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
+
+    riscv64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "RISCV64_GENERIC";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = true;
     };
   };
 in
@@ -116,7 +129,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.13";
+  version = "0.3.15";
 
   outputs = [ "out" "dev" ];
 
@@ -124,16 +137,20 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "14jxh0v3jfbw4mfjx4mcz4dd51lyq7pqvh9k8dg94539ypzjr2lj";
+    sha256 = "1qjr02cqncv20abdp1yzr55n7smhx6h9chqvb0xbp18byynvj87w";
   };
 
-  # apply https://github.com/xianyi/OpenBLAS/pull/3060 to fix a crash on arm
-  # remove this when updating to 0.3.14 or newer
+  # remove both patches when updating to 0.3.16
   patches = [
     (fetchpatch {
-      name = "label-get_cpu_ftr-as-volatile.patch";
-      url = "https://github.com/xianyi/OpenBLAS/commit/6fe0f1fab9d6a7f46d71d37ebb210fbf56924fbc.diff";
-      sha256 = "06gwh73k4sas1ap2fi3jvpifbjkys2vhmnbj4mzrsvj279ljsfdk";
+      name = "riscv64-imin-fix-wrong-comparison.patch";
+      url = "https://github.com/xianyi/OpenBLAS/commit/1e0192a5ccac28fc0c749f49d36ec7eda9757428.patch";
+      sha256 = "0kjkmrj8023vcjxhgin5dqs5w3gf93hzhwdhg0vsjhdra2ghkwzj";
+    })
+    (fetchpatch {
+      name = "riscv64-generic-use-generic-kernel-for-dsdot.patch";
+      url = "https://github.com/xianyi/OpenBLAS/commit/3521cd48cbfb3d50f6ae9a10377382d37075c696.patch";
+      sha256 = "0ljwbldff4db377s8rzmqxrszilqdivy656yqvfq46x5338v3gi0";
     })
   ];
 

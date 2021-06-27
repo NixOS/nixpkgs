@@ -25,7 +25,7 @@ pythonPackages.buildPythonApplication rec {
     boto
     click
     consul
-    dns
+    dnspython
     kazoo
     kubernetes
     prettytable

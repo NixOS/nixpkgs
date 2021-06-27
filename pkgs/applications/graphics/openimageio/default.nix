@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, boost, cmake, ilmbase, libjpeg, libpng, libtiff
-, opencolorio, openexr, unzip
+, opencolorio_1, openexr, unzip
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake unzip ];
   buildInputs = [
     boost ilmbase libjpeg libpng
-    libtiff opencolorio openexr
+    libtiff opencolorio_1 openexr
   ];
 
   cmakeFlags = [

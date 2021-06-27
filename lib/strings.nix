@@ -659,7 +659,7 @@ rec {
      Example:
        isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
        => false
-       isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/"
+       isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11"
        => true
        isStorePath pkgs.python
        => true
@@ -667,7 +667,7 @@ rec {
        => false
   */
   isStorePath = x:
-    if isCoercibleToString x then
+    if !(isList x) && isCoercibleToString x then
       let str = toString x; in
       substring 0 1 str == "/"
       && dirOf str == storeDir

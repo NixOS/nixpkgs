@@ -13,10 +13,12 @@ assert withBlas -> openblas != null && blas.implementation == "openblas" && lapa
 stdenv.mkDerivation rec {
   pname = "flint";
   version = "2.7.1";
+
   src = fetchurl {
     url = "http://www.flintlib.org/flint-${version}.tar.gz";
     sha256 = "07j8r96kdzp19cy3a5yvpjxf90mkd6103yr2n42qmpv7mgcjyvhq";
   };
+
   buildInputs = [
     gmp
     mpir
@@ -36,9 +38,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withBlas [
     "--with-blas=${openblas}"
   ];
-
-  # issues with ntl -- https://github.com/wbhart/flint2/issues/487
-  NIX_CXXSTDLIB_COMPILE = "-std=c++11";
 
   doCheck = true;
   meta = {

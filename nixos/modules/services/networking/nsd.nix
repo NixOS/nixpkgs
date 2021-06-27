@@ -20,6 +20,15 @@ let
 
   mkZoneFileName = name: if name == "." then "root" else name;
 
+  # replaces include: directives for keys with fake keys for nsd-checkconf
+  injectFakeKeys = keys: concatStrings
+    (mapAttrsToList
+      (keyName: keyOptions: ''
+        fakeKey="$(${pkgs.bind}/bin/tsig-keygen -a ${escapeShellArgs [ keyOptions.algorithm keyName ]} | grep -oP "\s*secret \"\K.*(?=\";)")"
+        sed "s@^\s*include:\s*\"${stateDir}/private/${keyName}\"\$@secret: $fakeKey@" -i $out/nsd.conf
+      '')
+      keys);
+
   nsdEnv = pkgs.buildEnv {
     name = "nsd-env";
 
@@ -34,9 +43,9 @@ let
         echo "|- checking zone '$out/zones/$zoneFile'"
         ${nsdPkg}/sbin/nsd-checkzone "$zoneFile" "$zoneFile" || {
           if grep -q \\\\\\$ "$zoneFile"; then
-            echo zone "$zoneFile" contains escaped dollar signes \\\$
-            echo Escaping them is not needed any more. Please make shure \
-                 to unescape them where they prefix a variable name
+            echo zone "$zoneFile" contains escaped dollar signs \\\$
+            echo Escaping them is not needed any more. Please make sure \
+                 to unescape them where they prefix a variable name.
           fi
 
           exit 1
@@ -44,7 +53,14 @@ let
       done
 
       echo "checking configuration file"
+      # Save original config file including key references...
+      cp $out/nsd.conf{,.orig}
+      # ...inject mock keys into config
+      ${injectFakeKeys cfg.keys}
+      # ...do the checkconf
       ${nsdPkg}/sbin/nsd-checkconf $out/nsd.conf
+      # ... and restore original config file.
+      mv $out/nsd.conf{.orig,}
     '';
   };
 

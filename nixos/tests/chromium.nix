@@ -54,7 +54,8 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
     in "${pkgs.xdotool}/bin/xdotool ${xdoScript}";
   in ''
     import shlex
-    from contextlib import contextmanager, _GeneratorContextManager
+    import re
+    from contextlib import contextmanager
 
 
     # Run as user alice

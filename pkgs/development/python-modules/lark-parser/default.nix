@@ -1,35 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, python
 , regex
-  # Test inputs
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "lark-parser";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     rev = version;
-    sha256 = "1v1piaxpz4780km2z5i6sr9ygi9wpn09yyh999b3f4y0dcz20pbd";
+    sha256 = "1ggvlzpdzlrxl46fgi8cfq2rzlwn21shpdkm4pknnhfjlsinv913";
   };
 
+  # Optional import, but fixes some re known bugs & allows advanced regex features
   propagatedBuildInputs = [ regex ];
 
-  checkInputs = [ pytestCheckHook ];
-  disabledTestPaths = [
-    "tests/test_nearley" # requires Js2Py package (not in nixpkgs)
-  ];
-  disabledTests = [
-    "test_override_rule"  # has issue with file access paths
-  ];
+  checkPhase = ''
+    runHook preCheck
+
+    # Official way to run the tests. Runs unittest internally.
+    # pytest produces issues with some test resource paths (relies on __main__)
+    ${python.interpreter} -m tests
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "A modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
-    homepage = "https://github.com/lark-parser/lark";
+    homepage = "https://lark-parser.readthedocs.io/";
+    changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fridh drewrisinger ];
   };

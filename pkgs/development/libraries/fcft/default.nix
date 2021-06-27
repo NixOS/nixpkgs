@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, pkg-config, meson, ninja, scdoc
+{ stdenv, lib, fetchzip, pkg-config, meson, ninja, scdoc
 , freetype, fontconfig, pixman, tllist, check
 , withHarfBuzz ? true
 , harfbuzz
@@ -6,12 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.3.3";
+  version = "2.4.1";
 
-  src = fetchgit {
-    url = "https://codeberg.org/dnkl/fcft.git";
-    rev = version;
-    sha256 = "0314r038jl17hrhc9nrbx30jk0pz8ckbdnizws4r46b1rf4h0b1f";
+  src = fetchzip {
+    url = "https://codeberg.org/dnkl/fcft/archive/${version}.tar.gz";
+    sha256 = "sha256-QxAp6pnZPLPwarurbKovz0BVOO4XdckBzjB65XCBPAM=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];

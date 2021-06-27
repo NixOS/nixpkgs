@@ -4,21 +4,21 @@ let
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "cf396f868aebb8ba654ea2398c25f033181e7114";
-    sha256 = "sha256-12jkpWl/kL0ttRHtxyDnKjYAZNrheEGQF8HEGSXvvAk=";
+    rev = "8a30ee4e3570c7db0566028b6b562167aa40f646";
+    sha256 = "sha256-noMVcB1cjiMcRke6/qJIzDaEh4uPIewsedLQRdPbzIQ=";
   };
 in
 
 buildGoModule rec {
   pname = "teleport";
-  version = "6.1.2";
+  version = "6.2.5";
 
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-4ZaebTTgGrGRQbMfDw1PL/qtDKmHbSY6kPmWyFeIcAU=";
+    sha256 = "sha256-OBo1TWN7KxI7DAUcRLwXXQjErhhgpLBrJBR55ewKiYw=";
   };
 
   vendorSha256 = null;
@@ -26,6 +26,9 @@ buildGoModule rec {
   subPackages = [ "tool/tctl" "tool/teleport" "tool/tsh" ];
 
   nativeBuildInputs = [ zip makeWrapper ];
+
+  # https://github.com/NixOS/nixpkgs/issues/120738
+  patches = [ ./tsh.patch ];
 
   postBuild = ''
     pushd .
@@ -54,8 +57,8 @@ buildGoModule rec {
 
   postInstall = ''
     install -Dm755 -t $client/bin $out/bin/tsh
-    wrapProgram $client/bin/tsh --prefix PATH : ${xdg-utils}/bin
-    wrapProgram $out/bin/tsh --prefix PATH : ${xdg-utils}/bin
+    wrapProgram $client/bin/tsh --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    wrapProgram $out/bin/tsh --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
   doInstallCheck = true;

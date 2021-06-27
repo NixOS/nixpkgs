@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   buildPhase = if nativeBuild then "make" else "true";
 
   # https://github.com/microsoft/GSL/issues/806
-  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-Wno-catch-value" ];
+  cmakeFlags = lib.optionals stdenv.cc.isGNU
+    [ "-DCMAKE_CXX_FLAGS=-Wno-catch-value" ];
 
   installPhase = ''
     mkdir -p $out/include

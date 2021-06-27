@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, qt4, pkg-config, boost, expat, cairo, python2Packages,
   cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
-  poppler, imagemagick, openexr, ffmpeg, opencolorio, openimageio,
+  poppler, imagemagick, openexr, ffmpeg, opencolorio_1, openimageio,
   qmake4Hook, libpng, libGL, lndir, libraw, openjpeg, libwebp, fetchFromGitHub }:
 
 let
@@ -53,7 +53,7 @@ let
       sha256 = "sha256-fAXQyYnLbFYqwKmkwHSoOGa/0cruHJbf2QLMsttiarM=";
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
-        pango librsvg librevenge libcdr opencolorio libxml2 libzip
+        pango librsvg librevenge libcdr opencolorio_1 libxml2 libzip
         poppler imagemagick
       ];
       preConfigure = ''
@@ -65,7 +65,7 @@ let
       sha256 = "sha256-tt+G2YqHQn8vPdiWtRYuOF3ffz9Qo19oD8Z9DsTDvQQ=";
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
-        libpng ffmpeg openexr opencolorio openimageio boost libGL
+        libpng ffmpeg openexr opencolorio_1 openimageio boost libGL
         seexpr libraw openjpeg libwebp
       ];
     })

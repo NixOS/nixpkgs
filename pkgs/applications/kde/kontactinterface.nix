@@ -12,6 +12,7 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kiconthemes kparts kwindowsystem kxmlgui
+    kiconthemes kwindowsystem kxmlgui
   ];
+  propagatedBuildInputs = [ kparts ];
 }

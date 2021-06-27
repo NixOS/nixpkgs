@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ freeglut glew libX11 libXext libGL libGLU mesa mesa.osmesa wayland ];
   nativeBuildInputs = [ pkg-config ];
 
+  configureFlags = [ "--with-system-data-files" ];
   enableParallelBuilding = true;
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools_scm, six }:
+{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools-scm, six }:
 
 let
   _arrow-cpp = arrow-cpp.override { python3 = python; };
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   sourceRoot = "apache-arrow-${version}/python";
 
-  nativeBuildInputs = [ cmake cython pkg-config setuptools_scm ];
+  nativeBuildInputs = [ cmake cython pkg-config setuptools-scm ];
   propagatedBuildInputs = [ numpy six ];
   checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    maintainers = with maintainers; [ veprbl ];
   };
 }

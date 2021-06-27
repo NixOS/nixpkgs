@@ -2,8 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , glibcLocales
-, setuptools_scm
+, setuptools-scm
 , wcwidth
+, importlib-metadata
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -15,10 +17,14 @@ buildPythonPackage rec {
     sha256 = "5882ed9092b391bb8f6e91f59bcdbd748924ff556bb7c634089d5519be87baa0";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [ wcwidth ];
+  propagatedBuildInputs = [
+    wcwidth
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   preCheck = ''
     export LANG="en_US.UTF-8"
