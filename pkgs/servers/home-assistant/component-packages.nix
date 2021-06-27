@@ -905,7 +905,7 @@
     "universal" = ps: with ps; [ ];
     "upb" = ps: with ps; [ upb-lib ];
     "upc_connect" = ps: with ps; [ connect-box ];
-    "upcloud" = ps: with ps; [ ]; # missing inputs: upcloud-api
+    "upcloud" = ps: with ps; [ upcloud-api ];
     "updater" = ps: with ps; [ distro ];
     "upnp" = ps: with ps; [ async-upnp-client ];
     "uptime" = ps: with ps; [ ];
