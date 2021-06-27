@@ -16455,6 +16455,19 @@ let
     };
   };
 
+  PAR = buildPerlPackage {
+    pname = "PAR";
+    version = "1.017";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RS/RSCHUPP/PAR-1.017.tar.gz";
+      sha256 = "0l4nfab7sh7452wgfnn0gdlh8pnrlnvim8njrfgkhk3miqjmnzf3";
+    };
+    propagatedBuildInputs = [ ArchiveZip CompressZlib DigestSHA FileTemp PARDist ];
+    meta = {
+      description = "Perl Archive Toolkit";
+    };
+  };
+
   PARDist = buildPerlPackage {
     pname = "PAR-Dist";
     version = "0.51";
