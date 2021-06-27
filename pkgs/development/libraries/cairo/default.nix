@@ -71,14 +71,15 @@ in stdenv.mkDerivation rec {
     ++ optional glSupport libGL
     ; # TODO: maybe liblzo but what would it be for here?
 
-  configureFlags = (if stdenv.isDarwin then [
+  configureFlags = [
+    "--enable-tee"
+  ] ++ (if stdenv.isDarwin then [
     "--disable-dependency-tracking"
     "--enable-quartz"
     "--enable-quartz-font"
     "--enable-quartz-image"
     "--enable-ft"
-  ] else ([ "--enable-tee" ]
-    ++ optional xcbSupport "--enable-xcb"
+  ] else (optional xcbSupport "--enable-xcb"
     ++ optional glSupport "--enable-gl"
     ++ optional pdfSupport "--enable-pdf"
   )) ++ optional (!x11Support) "--disable-xlib";
