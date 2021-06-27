@@ -63,7 +63,7 @@ let
   };
 
 in {
-  meta.maintainers = teams.home-assistant.members;
+  meta.maintainers = maintainers.hexa;
   # We are the maintainers, does ofBorg request our review for module changes?
 
   options.services.home-assistant = {
