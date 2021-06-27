@@ -184,6 +184,7 @@ dont-distribute-packages:
  - beam-th
  - beautifHOL
  - bech32-th
+ - bech32-th_1_1_1
  - bein
  - belka
  - BerlekampAlgorithm
@@ -363,7 +364,6 @@ dont-distribute-packages:
  - cfopu
  - cgrep
  - chainweb-mining-client
- - chakra
  - chalkboard-viewer
  - charade
  - chart-cli
@@ -401,7 +401,6 @@ dont-distribute-packages:
  - clash-verilog
  - clash-vhdl
  - classify-frog
- - classy-miso
  - clckwrks
  - clckwrks-cli
  - clckwrks-dot-com
@@ -1059,6 +1058,7 @@ dont-distribute-packages:
  - guess-combinator
  - GuiHaskell
  - GuiTV
+ - H
  - habit
  - hablo
  - hablog
@@ -1524,6 +1524,7 @@ dont-distribute-packages:
  - ide-backend-common
  - ide-backend-server
  - ige-mac-integration
+ - ihaskell-inline-r
  - ihaskell-rlangqq
  - ihttp
  - imap
@@ -1549,7 +1550,6 @@ dont-distribute-packages:
  - indentation-trifecta
  - indexation
  - IndexedList
- - indieweb-algorithms
  - infernu
  - InfixApplicative
  - inline-java
@@ -1921,7 +1921,6 @@ dont-distribute-packages:
  - MFlow
  - Mhailist
  - Michelangelo
- - microformats2-parser
  - microformats2-types
  - micro-gateway
  - MicrosoftTranslator
@@ -2245,6 +2244,7 @@ dont-distribute-packages:
  - polysemy-path
  - polysemy-plugin
  - polysemy-RandomFu
+ - polysemy-readline
  - polysemy-resume
  - polysemy-test
  - polysemy-time
@@ -2475,7 +2475,6 @@ dont-distribute-packages:
  - rewrite
  - rewriting
  - rezoom
- - rfc
  - rfc-env
  - rfc-http-client
  - rfc-psql
@@ -3101,7 +3100,6 @@ dont-distribute-packages:
  - vty-ui-extras
  - waargonaut
  - wahsp
- - wai-cli
  - wai-devel
  - wai-dispatch
  - wai-handler-snap

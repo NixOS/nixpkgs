@@ -617,6 +617,7 @@ broken-packages:
   - chunky
   - church
   - church-maybe
+  - churros
   - cielo
   - cil
   - cinvoke
@@ -2288,6 +2289,7 @@ broken-packages:
   - hs-rs-notify
   - hs-scrape
   - hsseccomp
+  - hssh
   - hs-snowtify
   - hs-speedscope
   - hsSqlite3
@@ -2452,6 +2454,7 @@ broken-packages:
   - initialize
   - inject-function
   - inline-asm
+  - inline-r
   - inserts
   - instana-haskell-trace-sdk
   - instance-map
@@ -3596,6 +3599,7 @@ broken-packages:
   - plat
   - platinum-parsing
   - PlayingCards
+  - plex
   - plist
   - plist-buddy
   - plot-gtk
@@ -4868,6 +4872,7 @@ broken-packages:
   - turing-music
   - turtle-options
   - tweak
+  - twee
   - twentefp-websockets
   - twfy-api-client
   - twhs
