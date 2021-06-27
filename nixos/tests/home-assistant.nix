@@ -6,7 +6,7 @@ let
   mqttPassword = "secret";
 in {
   name = "home-assistant";
-  meta.maintainers = lib.teams.home-assistant.members;
+  meta.maintainers = lib.maintainers.hexa;
 
   nodes.hass = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [ mosquitto ];
