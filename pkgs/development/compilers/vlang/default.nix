@@ -4,13 +4,13 @@ assert stdenv.hostPlatform.isUnix -> upx != null;
 
 stdenv.mkDerivation rec {
   pname = "vlang";
-  version = "0.1.21";
+  version = "weekly.2021.25";
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "0npd7a7nhd6r9mr99naib9scqk30209hz18nxif27284ckjbl4fk";
+    sha256 = "0y4a5rmpcdqina32d6azbmsbi3zqqfl413sicg72x6a1pm2vg33j";
   };
 
   # V compiler source translated to C for bootstrap.
@@ -18,18 +18,19 @@ stdenv.mkDerivation rec {
   vc = fetchFromGitHub {
     owner = "vlang";
     repo = "vc";
-    rev = "950a90b6acaebad1c6ddec5486fc54307e38a9cd";
-    sha256 = "1dh5l2m207rip1xj677hvbp067inw28n70ddz5wxzfpmaim63c0l";
+    rev = "3201d2dd2faadfa370da0bad2a749a664ad5ade3";
+    sha256 = "0xzkjdph5wfjr3qfkihgc27vsbbjh2l31rp8z2avq9hc531hwvrz";
   };
 
-  enableParallelBuilding = true;
   propagatedBuildInputs = [ glfw freetype openssl ]
     ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
   buildPhase = ''
     runHook preBuild
     cc -std=gnu11 $CFLAGS -w -o v $vc/v.c -lm $LDFLAGS
-    ./v -prod -cflags `$CFLAGS` -o v compiler
+    # vlang seems to want to write to $HOME/.vmodules,
+    # so lets give it a writable HOME
+    HOME=$PWD ./v -prod self
     # Exclude thirdparty/vschannel as it is windows-specific.
     find thirdparty -path thirdparty/vschannel -prune -o -type f -name "*.c" -execdir cc -std=gnu11 $CFLAGS -w -c {} $LDFLAGS ';'
     runHook postBuild
@@ -39,8 +40,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/{bin,lib,share}
     cp -r examples $out/share
-    cp -r {vlib,thirdparty} $out/lib
-    cp v $out/lib
+    cp -r {cmd,vlib,thirdparty} $out/lib
+    mv v $out/lib
     ln -s $out/lib/v $out/bin/v
     runHook postInstall
   '';
