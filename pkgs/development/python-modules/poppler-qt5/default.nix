@@ -1,9 +1,7 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , isPy3k
 , fetchPypi
-, pythonPackages
 , sip
 , qtbase
 , qmake
