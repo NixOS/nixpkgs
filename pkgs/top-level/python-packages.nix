@@ -4171,6 +4171,8 @@ in {
 
   lml = callPackage ../development/python-modules/lml { };
 
+  lmnotify = callPackage ../development/python-modules/lmnotify { };
+
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   localimport = callPackage ../development/python-modules/localimport { };
