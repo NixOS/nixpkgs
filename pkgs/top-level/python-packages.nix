@@ -5349,6 +5349,8 @@ in {
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
 
+  pyspcwebgw = callPackage ../development/python-modules/pyspcwebgw { };
+
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
   pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
