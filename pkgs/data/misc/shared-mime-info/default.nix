@@ -39,8 +39,10 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     libxml2
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) shared-mime-info;
+    shared-mime-info
+  ];
 
   buildInputs = [
     libxml2
