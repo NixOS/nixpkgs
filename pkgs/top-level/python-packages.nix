@@ -1457,6 +1457,8 @@ in {
 
   click = callPackage ../development/python-modules/click { };
 
+  click_7 = callPackage ../development/python-modules/click/7.nix { };
+
   clickclick = callPackage ../development/python-modules/clickclick { };
 
   click-completion = callPackage ../development/python-modules/click-completion { };

@@ -1,5 +1,5 @@
 diff --git a/setup.py b/setup.py
-index c5cf95db..b783a9e6 100644
+index f17adb11..45a8f714 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -8,7 +8,7 @@ dependencies = [
@@ -11,3 +11,13 @@ index c5cf95db..b783a9e6 100644
      "aiosqlite==0.17.0",  # asyncio wrapper for sqlite, to store blocks
      "bitstring==3.1.7",  # Binary data management library
      "colorlog==5.0.1",  # Adds color to logs
+@@ -20,7 +20,7 @@ dependencies = [
+     #  See https://github.com/frispete/keyrings.cryptfile/issues/15
+     "PyYAML==5.4.1",  # Used for config file format
+     "setproctitle==1.2.2",  # Gives the chia processes readable names
+-    "sortedcontainers==2.3.0",  # For maintaining sorted mempools
++    "sortedcontainers==2.4.0",  # For maintaining sorted mempools
+     "websockets==9.1",  # For use in wallet RPC and electron UI
+     "click==7.1.2",  # For the CLI
+     "dnspython==2.1.0",  # Query DNS seeds
+
