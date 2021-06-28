@@ -5347,6 +5347,8 @@ in {
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
 
+  pysyncthru = callPackage ../development/python-modules/pysyncthru { };
+
   pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
