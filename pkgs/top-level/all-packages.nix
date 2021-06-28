@@ -22485,6 +22485,8 @@ in
 
   skeu = callPackage ../data/themes/skeu { };
 
+  svi = callPackage ../data/misc/svi { };
+
   sweet = callPackage ../data/themes/sweet { };
 
   mime-types = callPackage ../data/misc/mime-types { };
