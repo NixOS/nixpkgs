@@ -6,7 +6,7 @@ let
   mqttPassword = "secret";
 in {
   name = "home-assistant";
-  meta.maintainers = lib.teams.home-assistant.members;
+  meta.maintainers = lib.maintainers.hexa;
 
   nodes.hass = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [ mosquitto ];
@@ -24,7 +24,7 @@ in {
       inherit configDir;
       enable = true;
       # includes the package with all tests enabled
-      package = pkgs.home-assistant;
+      #package = pkgs.home-assistant;
       config = {
         homeassistant = {
           name = "Home";
