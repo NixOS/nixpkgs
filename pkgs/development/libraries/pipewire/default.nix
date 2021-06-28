@@ -192,6 +192,7 @@ let
           paths-out-media-session = [
             "nix-support/etc/pipewire/media-session.d/alsa-monitor.conf.json"
             "nix-support/etc/pipewire/media-session.d/bluez-monitor.conf.json"
+            "nix-support/etc/pipewire/media-session.d/bluez-hardware.conf.json"
             "nix-support/etc/pipewire/media-session.d/media-session.conf.json"
             "nix-support/etc/pipewire/media-session.d/v4l2-monitor.conf.json"
           ];
