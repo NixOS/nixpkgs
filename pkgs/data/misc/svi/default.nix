@@ -33,7 +33,7 @@ in
       '';
     homepage = "https://www.atsdr.cdc.gov/placeandhealth/svi/index.html";
     license = licenses.publicDomain;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ jake-gillberg ];
     platforms = platforms.all;
   };
 })

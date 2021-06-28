@@ -29,7 +29,7 @@ sources =
 
 nationSources year =
   let
-    nation_geoms = 
+    nation_geoms =
       [ "county"
       , "tract"
       , "ttract"
@@ -63,7 +63,7 @@ nationSources year =
 
 sanatize = T.replace " " "_"
 
-stateSources year state = 
+stateSources year state =
   let
     state_geoms :: [T.Text]
     state_geoms =
