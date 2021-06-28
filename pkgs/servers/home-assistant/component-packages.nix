@@ -801,7 +801,7 @@
     "squeezebox" = ps: with ps; [ pysqueezebox ];
     "srp_energy" = ps: with ps; [ ]; # missing inputs: srpenergy
     "ssdp" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr netdisco zeroconf ];
-    "starline" = ps: with ps; [ ]; # missing inputs: starline
+    "starline" = ps: with ps; [ starline ];
     "starlingbank" = ps: with ps; [ ]; # missing inputs: starlingbank
     "startca" = ps: with ps; [ xmltodict ];
     "statistics" = ps: with ps; [ sqlalchemy ];
