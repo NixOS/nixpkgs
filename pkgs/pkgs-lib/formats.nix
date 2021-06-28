@@ -91,7 +91,9 @@ rec {
         else
           singleIniAtom;
 
-    in attrsOf (attrsOf iniAtom);
+    in attrsOf (either iniAtom (attrsOf iniAtom)) // {
+      description = "attribute set of either top-level ${iniAtom.description} or attribute sets of ${iniAtom.description} (INI sections)";
+    };
 
     generate = name: value:
       let

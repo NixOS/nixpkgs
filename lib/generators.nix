@@ -92,10 +92,13 @@ rec {
    * attrset of sections to an attrset of key-value pairs.
    *
    * generators.toINI {} {
+   *   toplevel = "value";
    *   foo = { hi = "${pkgs.hello}"; ciao = "bar"; };
    *   baz = { "also, integers" = 42; };
    * }
    *
+   *> toplevel=value
+   *>
    *> [baz]
    *> also, integers=42
    *>
@@ -106,7 +109,7 @@ rec {
    * The mk* configuration attributes can generically change
    * the way sections and key-value strings are generated.
    *
-   * For more examples see the test cases in ./tests.nix.
+   * For more examples see the test cases in ./tests/misc.nix.
    */
   toINI = {
     # apply transformations (e.g. escapes) to section names
@@ -117,6 +120,9 @@ rec {
     listsAsDuplicateKeys ? false
   }: attrsOfAttrs:
     let
+        isSection = builtins.isAttrs;
+        topLevel = lib.filterAttrs (_: v: !(isSection v)) attrsOfAttrs;
+        sections = lib.filterAttrs (_: v: isSection v) attrsOfAttrs;
         # map function to string for each key val
         mapAttrsToStringsSep = sep: mapFn: attrs:
           libStr.concatStringsSep sep
@@ -125,8 +131,10 @@ rec {
           [${mkSectionName sectName}]
         '' + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues;
     in
+      # construct toplevel keys
+      toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } topLevel
       # map input to ini sections
-      mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
+      + mapAttrsToStringsSep "\n" mkSection sections;
 
   /* Generate a git-config file from an attrset.
    *
