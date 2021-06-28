@@ -23,7 +23,8 @@ let
   tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.8.1";
+  version = "2.8.3";
+  # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
   src = fetchFromGitHub {
@@ -31,7 +32,7 @@ in mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1wf9806al6mzyd8nr37cdk6q2r354acixdqyjchi4r58drm99yv0";
+    sha256 = "1ywxsy3a99sdibipriblbzskmkqbnxwrz3lavfdr134wq8w8rjf7";
   };
 
   postPatch = ''
@@ -97,6 +98,7 @@ in mkDerivation rec {
 
   passthru = {
     inherit tg_owt;
+    updateScript = ./update.py;
   };
 
   meta = {
