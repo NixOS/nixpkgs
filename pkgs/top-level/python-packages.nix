@@ -8218,6 +8218,8 @@ in {
 
   srp = callPackage ../development/python-modules/srp { };
 
+  srpenergy = callPackage ../development/python-modules/srpenergy { };
+
   srptools = callPackage ../development/python-modules/srptools { };
 
   srsly = callPackage ../development/python-modules/srsly { };
