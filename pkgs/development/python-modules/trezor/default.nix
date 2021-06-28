@@ -65,6 +65,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  # ease requirements for click
+  preBuild = ''
+    substituteInPlace setup.py --replace '"click>=7,<8"' '"click>=7"'
+  '';
+
   postFixup = ''
     mkdir completions
     _TREZORCTL_COMPLETE=source_bash $out/bin/trezorctl > completions/trezorctl || true
