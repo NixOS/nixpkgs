@@ -14,6 +14,7 @@
 , dbus
 , alsaLib
 , libjack2
+, libusb1
 , udev
 , libva
 , libsndfile
@@ -43,10 +44,11 @@ let
   };
 
   mesonEnable = b: if b then "enabled" else "disabled";
+  mesonList = l: "[" + lib.concatStringsSep "," l + "]";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.30";
+    version = "0.3.31";
 
     outputs = [
       "out"
@@ -64,7 +66,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-DnaPvZoDaegjtJNKBmCJEAZe5FQBnSER79FPnxiWQUE=";
+      sha256 = "1dirz69ami7bcgy6hhh0ffi9gzwcy9idg94nvknwvwkjw4zm8m79";
     };
 
     patches = [
@@ -96,6 +98,7 @@ let
       dbus
       glib
       libjack2
+      libusb1
       libsndfile
       ncurses
       udev
@@ -122,6 +125,7 @@ let
       "-Dmedia-session-prefix=${placeholder "mediaSession"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
       "-Dlibcamera=disabled"
+      "-Droc=disabled"
       "-Dlibpulse=${mesonEnable pulseTunnelSupport}"
       "-Davahi=${mesonEnable zeroconfSupport}"
       "-Dgstreamer=${mesonEnable gstreamerSupport}"
@@ -133,6 +137,7 @@ let
       "-Dbluez5-backend-hsphfpd=${mesonEnable hsphfpdSupport}"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
+      "-Dsession-managers=${mesonList (lib.optional withMediaSession "media-session")}"
     ];
 
     FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
