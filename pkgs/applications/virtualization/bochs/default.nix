@@ -1,23 +1,24 @@
-{ lib, stdenv, fetchurl
-, pkg-config, libtool
-, gtk2, libGLU, libGL, readline, libX11, libXpm
-, docbook_xml_dtd_45, docbook_xsl
-, sdlSupport ? true, SDL2 ? null
-, termSupport ? true, ncurses ? null
-, wxSupport ? true, wxGTK ? null
-, wgetSupport ? false, wget ? null
-, curlSupport ? false, curl ? null
+{ lib
+, stdenv
+, fetchurl
+, SDL2
+, curl
+, docbook_xml_dtd_45
+, docbook_xsl
+, gtk2
+, libGL
+, libGLU
+, libX11
+, libXpm
+, libtool
+, ncurses
+, pkg-config
+, readline
+, wget
+, wxGTK
 }:
 
-assert sdlSupport -> (SDL2 != null);
-assert termSupport -> (ncurses != null);
-assert wxSupport -> (gtk2 != null && wxGTK != null);
-assert wgetSupport -> (wget != null);
-assert curlSupport -> (curl != null);
-
-with lib;
 stdenv.mkDerivation rec {
-
   pname = "bochs";
   version = "2.6.11";
 
@@ -27,18 +28,33 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # A flip between two lines of code, in order to compile with GLIBC 2.26
     ./bochs-2.6.11-glibc-2.26.patch
-    ./fix-build-smp.patch
+    # Fix compilation for MSYS2 GCC 10; remove it when the next version arrives
     ./bochs_fix_narrowing_conv_warning.patch
+    # SMP-enabled configs; remove it when the next version arrives
+    ./fix-build-smp.patch
   ];
 
-  buildInputs =
-  [ pkg-config libtool gtk2 libGLU libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
-  ++ optionals termSupport [ ncurses ]
-  ++ optionals sdlSupport [ SDL2 ]
-  ++ optionals wxSupport [ wxGTK ]
-  ++ optionals wgetSupport [ wget ]
-  ++ optionals curlSupport [ curl ];
+  nativeBuildInputs = [
+    docbook_xml_dtd_45
+    docbook_xsl
+    pkg-config
+  ];
+  buildInputs = [
+    SDL2
+    curl
+    gtk2
+    libGL
+    libtool
+    libGLU
+    libX11
+    libXpm
+    ncurses
+    readline
+    wget
+    wxGTK
+  ];
 
   configureFlags = [
     "--with-x=yes"
@@ -64,49 +80,51 @@ stdenv.mkDerivation rec {
     # Dangerous options - they are marked as "incomplete/experimental" on Bochs documentation
     "--enable-3dnow=no"
     "--enable-monitor-mwait=no"
-    "--enable-raw-serial=no" ]
-    # Boolean flags
-    ++ optionals termSupport [ "--with-term" ]
-    ++ optionals sdlSupport [ "--with-sdl2" ]
-    ++ optionals wxSupport [ "--with-wx" ]
+    "--enable-raw-serial=no"
+
     # These are completely configurable, and they don't depend of external tools
-    ++ [ "--enable-cpu-level=6" # from 3 to 6
-         "--enable-largefile"
-         "--enable-idle-hack"
-         "--enable-plugins=no" # Plugins are a bit buggy in Bochs
-         "--enable-a20-pin"
-         "--enable-x86-64"
-         "--enable-smp"
-         "--enable-large-ramfile"
-         "--enable-repeat-speedups"
-         "--enable-handlers-chaining"
-         "--enable-trace-linking"
-         "--enable-configurable-msrs"
-         "--enable-show-ips"
-         "--enable-debugger" #conflicts with gdb-stub option
-         "--enable-disasm"
-         "--enable-debugger-gui"
-         "--enable-gdb-stub=no" # conflicts with debugger option
-         "--enable-iodebug"
-         "--enable-fpu"
-         "--enable-svm"
-         "--enable-avx"
-         "--enable-evex"
-         "--enable-x86-debugger"
-         "--enable-pci"
-         "--enable-usb"
-         "--enable-usb-ohci"
-         "--enable-usb-ehci"
-         "--enable-usb-xhci"
-         "--enable-ne2000"
-         "--enable-pnic"
-         "--enable-e1000"
-         "--enable-clgd54xx"
-         "--enable-voodoo"
-         "--enable-cdrom"
-         "--enable-sb16"
-         "--enable-es1370"
-         "--enable-busmouse" ];
+    "--enable-a20-pin"
+    "--enable-avx"
+    "--enable-busmouse"
+    "--enable-cdrom"
+    "--enable-clgd54xx"
+    "--enable-configurable-msrs"
+    "--enable-cpu-level=6" # from 3 to 6
+    "--enable-debugger" #conflicts with gdb-stub option
+    "--enable-debugger-gui"
+    "--enable-disasm"
+    "--enable-e1000"
+    "--enable-es1370"
+    "--enable-evex"
+    "--enable-fpu"
+    "--enable-gdb-stub=no" # conflicts with debugger option
+    "--enable-handlers-chaining"
+    "--enable-idle-hack"
+    "--enable-iodebug"
+    "--enable-large-ramfile"
+    "--enable-largefile"
+    "--enable-ne2000"
+    "--enable-pci"
+    "--enable-plugins=no" # Plugins are a bit buggy in Bochs
+    "--enable-pnic"
+    "--enable-repeat-speedups"
+    "--enable-sb16"
+    "--enable-show-ips"
+    "--enable-smp"
+    "--enable-svm"
+    "--enable-trace-linking"
+    "--enable-usb"
+    "--enable-usb-ehci"
+    "--enable-usb-ohci"
+    "--enable-usb-xhci"
+    "--enable-voodoo"
+    "--enable-x86-64"
+    "--enable-x86-debugger"
+  ]
+  # Boolean flags
+  ++ lib.optionals (SDL2 != null) [ "--with-sdl2" ]
+  ++ lib.optionals (ncurses != null) [ "--with-term" ]
+  ++ lib.optionals (gtk2 != null && wxGTK != null) [ "--with-wx" ];
 
   NIX_CFLAGS_COMPILE="-I${gtk2.dev}/include/gtk-2.0/ -I${libtool}/include/";
   NIX_LDFLAGS="-L${libtool.lib}/lib";
@@ -115,19 +133,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
+    homepage = "http://bochs.sourceforge.io/";
     description = "An open-source IA-32 (x86) PC emulator";
     longDescription = ''
       Bochs is an open-source (LGPL), highly portable IA-32 PC emulator, written
       in C++, that runs on most popular platforms. It includes emulation of the
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
-    homepage = "http://bochs.sourceforge.net/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }
 # TODO: plugins
-# TODO: svga support - the Bochs sources explicitly cite /usr/include/vga.h
 # TODO: a better way to organize the options
