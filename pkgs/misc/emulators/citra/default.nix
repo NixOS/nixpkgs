@@ -2,13 +2,13 @@
 
 mkDerivation {
   pname = "citra";
-  version = "2020-12-07";
+  version = "2021-06-22";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/citra-emu/citra";
-    rev = "3f13e1cc2419fac837952c44d7be9db78b054a2f";
-    sha256 = "1bbg8cwrgncmcavqpj3yp4dbfkip1i491krp6dcpgvsd5yfr7f0v";
+    rev = "5241032fc58b322e0ede29966dd28490ef0c3cb8";
+    sha256 = "0rgwv5cabd6kkfbsak3fwbx7skkg0x31z4qs4c6afd6y4hda1vxv";
   };
 
   nativeBuildInputs = [ cmake ];
