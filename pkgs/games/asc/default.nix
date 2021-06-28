@@ -3,10 +3,11 @@
 , libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
 
 stdenv.mkDerivation rec {
-  name = "asc-2.6.0.0";
+  pname = "asc";
+  version = "2.6.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/asc-hq/${name}.tar.bz2";
+    url = "mirror://sourceforge/asc-hq/asc-${version}.tar.bz2";
     sha256 = "1fybasb6srqfg6pqbvh0s0vvzjq9r0n6aq0z44hs7n68kmaam775";
   };
 

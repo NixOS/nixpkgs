@@ -8218,6 +8218,8 @@ in {
 
   srp = callPackage ../development/python-modules/srp { };
 
+  srpenergy = callPackage ../development/python-modules/srpenergy { };
+
   srptools = callPackage ../development/python-modules/srptools { };
 
   srsly = callPackage ../development/python-modules/srsly { };
@@ -8247,6 +8249,8 @@ in {
   };
 
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
+
+  starline = callPackage ../development/python-modules/starline { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
