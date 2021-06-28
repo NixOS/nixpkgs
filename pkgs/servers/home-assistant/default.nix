@@ -665,6 +665,7 @@ in with py.pkgs; buildPythonApplication rec {
     "solaredge"
     "soma"
     "somfy"
+    "songpal"
     "sonos"
     "soundtouch"
     "spaceapi"
