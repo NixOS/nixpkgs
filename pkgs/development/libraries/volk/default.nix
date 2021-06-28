@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitHub
 , cmake
-, cppunit
 , python3
 , enableModTool ? true
 , removeReferencesTo
