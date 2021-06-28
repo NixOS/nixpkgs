@@ -8248,6 +8248,8 @@ in {
 
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 
+  starline = callPackage ../development/python-modules/starline { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statistics = callPackage ../development/python-modules/statistics { };
