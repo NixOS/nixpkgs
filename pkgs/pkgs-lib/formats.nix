@@ -30,6 +30,7 @@ rec {
         int
         float
         str
+        path
         (attrsOf valueType)
         (listOf valueType)
       ]) // {
@@ -112,6 +113,7 @@ rec {
         int
         float
         str
+        path
         (attrsOf valueType)
         (listOf valueType)
       ] // {
