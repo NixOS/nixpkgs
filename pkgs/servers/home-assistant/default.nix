@@ -673,6 +673,7 @@ in with py.pkgs; buildPythonApplication rec {
     "spotify"
     "sql"
     "squeezebox"
+    "srp_energy"
     "ssdp"
     "startca"
     "statistics"
