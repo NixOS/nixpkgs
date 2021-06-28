@@ -16,6 +16,7 @@
 , makeFontsConf
 , libglvnd
 , libxkbcommon
+, wayland
 , xorg
 }:
 rustPlatform.buildRustPackage rec {
@@ -86,7 +87,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
       wrapProgram $out/bin/neovide \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd libxkbcommon xorg.libXcursor xorg.libXext xorg.libXrandr xorg.libXi ]}
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd libxkbcommon wayland xorg.libXcursor xorg.libXext xorg.libXrandr xorg.libXi ]}
     '';
 
   postInstall = ''
