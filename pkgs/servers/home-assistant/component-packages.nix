@@ -787,7 +787,7 @@
     "somfy" = ps: with ps; [ aiohttp-cors pymfy ];
     "somfy_mylink" = ps: with ps; [ ]; # missing inputs: somfy-mylink-synergy
     "sonarr" = ps: with ps; [ ]; # missing inputs: sonarr
-    "songpal" = ps: with ps; [ ]; # missing inputs: python-songpal
+    "songpal" = ps: with ps; [ python-songpal ];
     "sonos" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket pysonos ];
     "sony_projector" = ps: with ps; [ ]; # missing inputs: pysdcp
     "soundtouch" = ps: with ps; [ aiohttp-cors ifaddr libsoundtouch zeroconf ];
