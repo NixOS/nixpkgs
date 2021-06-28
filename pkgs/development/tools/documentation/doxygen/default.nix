@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.8.20";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "17chvi3i80rj4750smpizf562xjzd2xcv5rfyh997pyvc1zbq5rh";
+    sha256 = "0z5wj6plax78a3sshsq1rfjfn1fhq8dnnbpvdk3yv92198bg53xi";
   };
 
   nativeBuildInputs = [
@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isSunOS libiconv
     ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
+
+  # Last verified as of v1.9.1 that this will race on codegen.
+  enableParallelBuild = false;
+
   cmakeFlags =
     [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
     lib.optional (qt5 != null) "-Dbuild_wizard=YES";
@@ -35,6 +39,7 @@ stdenv.mkDerivation rec {
   meta = {
     license = lib.licenses.gpl2Plus;
     homepage = "http://doxygen.nl/";
+    changelog = "https://www.doxygen.nl/manual/changelog.html";
     description = "Source code documentation generator tool";
 
     longDescription = ''
