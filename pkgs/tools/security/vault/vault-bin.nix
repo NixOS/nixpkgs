@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, gawk, glibc }:
 
 let
   version = "1.7.3";
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   sourceRoot = ".";
 
@@ -40,6 +40,9 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin $out/share/bash-completion/completions
     mv vault $out/bin
     echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
+
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
 
     runHook postInstall
   '';
