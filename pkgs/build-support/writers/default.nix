@@ -15,12 +15,12 @@ rec {
       name = last (builtins.split "/" nameOrPath);
     in
 
-    pkgs.runCommandLocal name (if types.path.check content then {
-      inherit interpreter;
-      contentPath = content;
-    } else {
+    pkgs.runCommandLocal name (if (types.str.check content) then {
       inherit content interpreter;
       passAsFile = [ "content" ];
+    } else {
+      inherit interpreter;
+      contentPath = content;
     }) ''
       # On darwin a script cannot be used as an interpreter in a shebang but
       # there doesn't seem to be a limit to the size of shebang and multiple
