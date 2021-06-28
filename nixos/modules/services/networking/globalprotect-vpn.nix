@@ -26,7 +26,7 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     services.dbus.packages = [ pkgs.globalprotect-openconnect ];
 
     systemd.services.gpservice = {
