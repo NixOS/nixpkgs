@@ -826,7 +826,7 @@
     "switcher_kis" = ps: with ps; [ aioswitcher ];
     "switchmate" = ps: with ps; [ ]; # missing inputs: pySwitchmate
     "syncthing" = ps: with ps; [ aiosyncthing ];
-    "syncthru" = ps: with ps; [ url-normalize ]; # missing inputs: pysyncthru
+    "syncthru" = ps: with ps; [ pysyncthru url-normalize ];
     "synology_chat" = ps: with ps; [ ];
     "synology_dsm" = ps: with ps; [ synologydsm-api ];
     "synology_srm" = ps: with ps; [ ]; # missing inputs: synology-srm
