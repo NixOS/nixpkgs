@@ -799,7 +799,7 @@
     "spotify" = ps: with ps; [ aiohttp-cors spotipy ];
     "sql" = ps: with ps; [ sqlalchemy ];
     "squeezebox" = ps: with ps; [ pysqueezebox ];
-    "srp_energy" = ps: with ps; [ ]; # missing inputs: srpenergy
+    "srp_energy" = ps: with ps; [ srpenergy ];
     "ssdp" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr netdisco zeroconf ];
     "starline" = ps: with ps; [ ]; # missing inputs: starline
     "starlingbank" = ps: with ps; [ ]; # missing inputs: starlingbank
