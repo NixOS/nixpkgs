@@ -10,10 +10,10 @@
     "owner": "vancluever",
     "provider-source-address": "registry.terraform.io/vancluever/acme",
     "repo": "terraform-provider-acme",
-    "rev": "v2.4.0",
-    "sha256": "0r7i55gdscw94b954nfkvgfsrw7piq63gp06vh9smrwax9i2xc2f",
-    "vendorSha256": "09zmw2xm5fwwsa9bqwscq0s67hlxjk2kd3j02ayr4mxzhaagh1z9",
-    "version": "2.4.0"
+    "rev": "v2.5.2",
+    "sha256": "0yk5yxx8vdfymxggydpzsb2a0iw4n8010wlprz23qg37gb2p26yf",
+    "vendorSha256": "04zrrn67w30ib0n5s4f31x3nl3h3xz2r522ldkbbx20jy5iabrkk",
+    "version": "2.5.2"
   },
   "akamai": {
     "owner": "terraform-providers",
