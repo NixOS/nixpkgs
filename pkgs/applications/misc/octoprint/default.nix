@@ -44,6 +44,7 @@ let
                   inherit version;
                   sha256 = "63509b41d158ae5b7f67eb4ad20fecbb4eee99434e73e140354dc3ff8e09716f";
                 };
+                propagatedBuildInputs = [ self.six ];
               }
             );
           }
