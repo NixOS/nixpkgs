@@ -179,9 +179,15 @@ let
       ) cfg.allowedUDPPortRanges
     ) allInterfaces)}
 
-    # Accept IPv4 multicast.  Not a big security risk since
-    # probably nobody is listening anyway.
-    #iptables -A nixos-fw -d 224.0.0.0/4 -j nixos-fw-accept
+    ${optionalString cfg.allowBroadcast ''
+      # Accept broadcast.
+      ip46tables -A nixos-fw -m pkttype --pkt-type broadcast -j nixos-fw-accept
+    ''}
+
+    ${optionalString cfg.allowMulticast ''
+      # Accept multicast.
+      ip46tables -A nixos-fw -m pkttype --pkt-type multicast -j nixos-fw-accept
+    ''}
 
     # Optionally respond to ICMPv4 pings.
     ${optionalString cfg.allowPing ''
@@ -399,6 +405,24 @@ in
             ("pings").  ICMPv6 pings are always allowed because the
             larger address space of IPv6 makes network scanning much
             less effective.
+          '';
+      };
+
+      allowBroadcast = mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          ''
+            Whether to allow broadcast traffic.
+          '';
+      };
+
+      allowMulticast = mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          ''
+            Whether to allow multicast traffic.
           '';
       };
 
