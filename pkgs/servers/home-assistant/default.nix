@@ -675,6 +675,7 @@ in with py.pkgs; buildPythonApplication rec {
     "squeezebox"
     "srp_energy"
     "ssdp"
+    "starline"
     "startca"
     "statistics"
     "statsd"
