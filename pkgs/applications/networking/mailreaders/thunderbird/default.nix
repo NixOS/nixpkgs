@@ -335,7 +335,7 @@ stdenv.mkDerivation rec {
     attrPath = "thunderbird-78";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
     inherit writeScript lib common-updater-scripts xidel coreutils gnused
-      gnugrep curl runtimeShell;
+      gnugrep gnupg curl runtimeShell;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
