@@ -25847,6 +25847,8 @@ in
 
   sndpeek = callPackage ../applications/audio/sndpeek { };
 
+  easystroke = callPackage ../applications/misc/easystroke { };
+
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
   mpop = callPackage ../applications/networking/mpop {
