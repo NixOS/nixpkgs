@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromBitbucket
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -20,22 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wio";
-  version = "0.0.0+unstable=2021-06-01";
+  version = "0.0.0+unstable=2021-06-27";
 
   src = fetchFromBitbucket {
     owner = "anderson_torres";
     repo = pname;
-    rev = "ad57eb45ba0459cd0b16ba486cb6e01626079c29";
-    sha256 = "sha256-mCggAscQ+Ej3SNwhA6QxecV1nH6Rw8RDf8yAsbadqjE=";
+    rev = "e0b258777995055d69e61a0246a6a64985743f42";
+    sha256 = "sha256-8H9fOnZsNjjq9XvOv68F4RRglGNluxs5/jp/h4ROLiI=";
   };
-
-  patches = [
-    # Fix the build with wlroots 0.14:
-    (fetchpatch {
-      url = "https://git.sr.ht/~primeos/wio/commit/9d5093c019f6966b8ee0dba1da3361a761d04bcc.patch";
-      sha256 = "08hfmcs1fbz8pdxwcaidrhvydf19482i6wics75a41ilrdh0dpi1";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
