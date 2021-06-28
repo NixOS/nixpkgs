@@ -23,8 +23,6 @@ in {
     services.home-assistant = {
       inherit configDir;
       enable = true;
-      # includes the package with all tests enabled
-      package = pkgs.home-assistant;
       config = {
         homeassistant = {
           name = "Home";
