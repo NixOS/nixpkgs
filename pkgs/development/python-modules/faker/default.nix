@@ -11,11 +11,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Faker";
+  pname = "faker";
   version = "8.8.2";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Faker";
+    inherit version;
     sha256 = "sha256-IlNMOqbS7584QDojTcm3G1y4ePt2XHKZS+Xce06vCGU=";
   };
 
