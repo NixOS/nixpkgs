@@ -264,6 +264,8 @@ in
         #
         # To make changes, edit the fileSystems and swapDevices NixOS options
         # in your /etc/nixos/configuration.nix file.
+        #
+        # <file system> <mount point>   <type>  <options>       <dump>  <pass>
 
         # Filesystems.
         ${concatMapStrings (fs:
