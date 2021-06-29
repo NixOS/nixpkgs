@@ -19,6 +19,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.wait_for_unit("vault.service")
       machine.wait_for_open_port(8200)
       machine.succeed("vault operator init")
-      machine.succeed("vault status | grep Sealed | grep true")
+      # vault now returns exit code 2 for sealed vaults
+      machine.fail("vault status")
+      machine.succeed("vault status || test $? -eq 2")
     '';
 })
