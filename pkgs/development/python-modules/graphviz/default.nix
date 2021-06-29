@@ -8,7 +8,6 @@
 , mock
 , pytestCheckHook
 , pytest-mock
-, pytestcov
 }:
 
 buildPythonPackage rec {
@@ -30,12 +29,20 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
   # Fontconfig error: Cannot load default config file
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ mock pytestCheckHook pytest-mock pytestcov ];
+  checkInputs = [ mock pytestCheckHook pytest-mock ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   meta = with lib; {
     description = "Simple Python interface for Graphviz";
