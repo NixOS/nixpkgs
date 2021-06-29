@@ -1,4 +1,5 @@
 { lib, stdenv, SDL, fetchurl, gzip, libvorbis, libmad }:
+
 stdenv.mkDerivation rec {
   pname = "quakespasm";
   majorVersion = "0.93";
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "An engine for iD software's Quake";
     homepage = "http://quakespasm.sourceforge.net/";
     longDescription = ''
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
       and smoother mouse input - though no CD support.
     '';
 
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.m3tti ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ m3tti ];
   };
 }
