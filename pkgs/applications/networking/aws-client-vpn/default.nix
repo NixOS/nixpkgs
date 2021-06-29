@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://docs.aws.amazon.com/vpn/latest/clientvpn-user/client-vpn-user-what-is.html";
-    description = "Managed client-based VPN service";
+    description = "AWS Client VPN";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mcwitt ];
