@@ -88,6 +88,11 @@ let
       mkdir -p ${installDir}
       cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
 
+      mkdir -p "$out/nix-support"
+      ${lib.concatMapStrings (file: ''
+        echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
+      '') filesToInstall}
+
       runHook postInstall
     '';
 

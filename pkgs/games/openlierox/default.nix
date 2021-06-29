@@ -1,8 +1,9 @@
 { lib, stdenv, fetchurl, libX11, xorgproto, gd, SDL, SDL_image, SDL_mixer, zlib
 , libxml2, pkg-config, curl, cmake, libzip }:
 
-stdenv.mkDerivation {
-  name = "openlierox-0.58rc3";
+stdenv.mkDerivation rec {
+  pname = "openlierox";
+  version = "0.58rc3";
 
   src = fetchurl {
     url = "mirror://sourceforge/openlierox/OpenLieroX_0.58_rc3.src.tar.bz2";
