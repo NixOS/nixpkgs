@@ -7102,10 +7102,10 @@
     name = "Marko Poikonen";
   };
   mtreca = {
-    email = "maxime@treca.dev";
-    name = "Maxime Tréca";
+    email = "maxime.treca@gmail.com";
     github = "mtreca";
     githubId = 16440823;
+    name = "Maxime Tréca";
   };
   mtreskin = {
     email = "zerthurd@gmail.com";
