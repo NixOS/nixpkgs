@@ -135,7 +135,6 @@ self = stdenv.mkDerivation {
   postPatch = ''
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
-    substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
     substituteInPlace configure.ml --replace '"md5 -q"' '"md5sum"'
     ${csdpPatch}
