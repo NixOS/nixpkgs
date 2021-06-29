@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "spdx-license-list-data";
   version = "3.13";
 
