@@ -16,7 +16,11 @@ buildGoModule rec {
   doCheck = false;
 
   subPackages = [ "cmd/helm" ];
-  buildFlagsArray = [ "-ldflags=-w -s -X helm.sh/helm/v3/internal/version.version=v${version} -X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}" ];
+  ldflags = [
+    "-w" "-s"
+    "-X helm.sh/helm/v3/internal/version.version=v${version}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
