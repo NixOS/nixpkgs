@@ -46,6 +46,10 @@ if stdenv.isLinux then
     extraInstallCommands = ''
       mv $out/bin/$name $out/bin/arduino-cli
     '';
+
+    targetPkgs = pkgs: with pkgs; [
+      zlib
+    ];
   }
 else
   pkg
