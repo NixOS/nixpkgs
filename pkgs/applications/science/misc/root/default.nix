@@ -2,7 +2,7 @@
 , libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, lz4, xz, pcre
 , pkg-config, python, xxHash, zlib, zstd
 , libAfterImage, giflib, libjpeg, libtiff, libpng
-, Cocoa, OpenGL, noSplash ? false }:
+, Cocoa, CoreSymbolication, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   pname = "root";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper cmake pkg-config llvm_5.dev ];
   buildInputs = [ ftgl gl2ps glew pcre zlib zstd llvm_5 libxml2 lz4 xz gsl xxHash libAfterImage giflib libjpeg libtiff libpng python.pkgs.numpy ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-    ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
+    ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
     ;
 
   patches = [
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     patchShebangs build/unix/
   '' + lib.optionalString noSplash ''
     substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Eliminate impure reference to /System/Library/PrivateFrameworks
+    substituteInPlace core/CMakeLists.txt \
+      --replace "-F/System/Library/PrivateFrameworks" ""
   '';
 
   cmakeFlags = [
