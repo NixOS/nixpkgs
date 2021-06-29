@@ -2562,7 +2562,7 @@
     name = "Diego Lelis";
   };
   diffumist = {
-    email = "diffumist@gmail.com";
+    email = "git@diffumist.me";
     github = "diffumist";
     githubId = 32810399;
     name = "Diffumist";
