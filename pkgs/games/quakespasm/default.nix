@@ -1,4 +1,8 @@
-{ lib, stdenv, SDL, fetchurl, gzip, libvorbis, libmad, copyDesktopItems, makeDesktopItem }:
+{ lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad
+, Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL
+, copyDesktopItems, makeDesktopItem
+, useSDL2 ? stdenv.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
+}:
 
 stdenv.mkDerivation rec {
   pname = "quakespasm";
@@ -12,16 +16,58 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${pname}-${version}/Quake";
 
-  nativeBuildInputs = [ copyDesktopItems ];
-  buildInputs = [
-    gzip SDL libvorbis libmad
+  patches = lib.optionals stdenv.isDarwin [
+    # Makes Darwin Makefile use system libraries instead of ones from app bundle
+    ./quakespasm-darwin-makefile-improvements.patch
   ];
 
-  buildFlags = [ "DO_USERDIRS=1" ];
+  nativeBuildInputs = [ copyDesktopItems ];
+  buildInputs = [
+    gzip libvorbis libmad (if useSDL2 then SDL2 else SDL)
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa CoreAudio IOKit OpenGL
+  ] ++ lib.optionals (stdenv.isDarwin && useSDL2) [
+    CoreFoundation
+  ];
+
+  buildFlags = [
+    "DO_USERDIRS=1"
+    # Makefile defaults, set here to enforce consistency on Darwin build
+    "USE_CODEC_WAVE=1"
+    "USE_CODEC_MP3=1"
+    "USE_CODEC_VORBIS=1"
+    "USE_CODEC_FLAC=0"
+    "USE_CODEC_OPUS=0"
+    "USE_CODEC_MIKMOD=0"
+    "USE_CODEC_UMX=0"
+    "MP3LIB=mad"
+    "VORBISLIB=vorbis"
+  ] ++ lib.optionals useSDL2 [
+    "SDL_CONFIG=sdl2-config"
+    "USE_SDL2=1"
+  ];
+
+  makefile = if (stdenv.isDarwin) then "Makefile.darwin" else "Makefile";
 
   preInstall = ''
     mkdir -p "$out/bin"
     substituteInPlace Makefile --replace "/usr/local/games" "$out/bin"
+    substituteInPlace Makefile.darwin --replace "/usr/local/games" "$out/bin"
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    # Let's build app bundle
+    mkdir -p $out/Applications/Quake.app/Contents/MacOS
+    mkdir -p $out/Applications/Quake.app/Contents/Resources
+    cp ../MacOSX/Info.plist $out/Applications/Quake.app/Contents/
+    cp ../MacOSX/QuakeSpasm.icns $out/Applications/Quake.app/Contents/Resources/
+    cp -r ../MacOSX/English.lproj $out/Applications/Quake.app/Contents/Resources/
+    ln -sf $out/bin/quake $out/Applications/Quake.app/Contents/MacOS/quake
+
+    substituteInPlace $out/Applications/Quake.app/Contents/Info.plist \
+      --replace '>''${EXECUTABLE_NAME}' '>quake'
+    substituteInPlace $out/Applications/Quake.app/Contents/Info.plist \
+      --replace '>''${PRODUCT_NAME}' '>QuakeSpasm'
   '';
 
   enableParallelBuilding = true;
@@ -47,7 +93,7 @@ stdenv.mkDerivation rec {
       and smoother mouse input - though no CD support.
     '';
 
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ m3tti ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ mikroskeem m3tti ];
   };
 }
