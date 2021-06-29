@@ -5651,6 +5651,8 @@ in {
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
+  py17track = callPackage ../development/python-modules/py17track { };
+
   py2bit = callPackage ../development/python-modules/py2bit { };
 
   py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
