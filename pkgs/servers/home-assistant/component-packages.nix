@@ -228,7 +228,7 @@
     "enocean" = ps: with ps; [ enocean ];
     "enphase_envoy" = ps: with ps; [ envoy-reader ];
     "entur_public_transport" = ps: with ps; [ enturclient ];
-    "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
+    "environment_canada" = ps: with ps; [ env-canada ];
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ pyenvisalink ];
     "ephember" = ps: with ps; [ ]; # missing inputs: pyephember

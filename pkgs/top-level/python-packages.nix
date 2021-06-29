@@ -2307,6 +2307,8 @@ in {
 
   enum-compat = callPackage ../development/python-modules/enum-compat { };
 
+  env-canada = callPackage ../development/python-modules/env-canada { };
+
   envisage = callPackage ../development/python-modules/envisage { };
 
   envs = callPackage ../development/python-modules/envs { };
