@@ -10,7 +10,7 @@
   developing or debugging a test:
 <screen>
 <prompt>$ </prompt>nix-build nixos/tests/login.nix -A driverInteractive
-<prompt>$ </prompt>./result/bin/nixos-test-driver
+<prompt>$ </prompt>./result/bin/nixos-test-driver --interactive
 starting VDE switch for network 1
 <prompt>&gt;</prompt>
 </screen>
@@ -28,20 +28,10 @@ starting VDE switch for network 1
  </para>
 
  <para>
-  To just start and experiment with the VMs, run:
-<screen>
-<prompt>$ </prompt>nix-build nixos/tests/login.nix -A driverInteractive
-<prompt>$ </prompt>./result/bin/nixos-run-vms
-</screen>
-  The script <command>nixos-run-vms</command> starts the virtual machines
-  defined by test.
- </para>
-
- <para>
    You can re-use the VM states coming from a previous run
    by setting the <command>--keep-vm-state</command> flag.
 <screen>
-<prompt>$ </prompt>./result/bin/nixos-run-vms --keep-vm-state
+<prompt>$ </prompt>./result/bin/nixos-test-driver --keep-vm-state
 </screen>
   The machine state is stored in the
   <filename>$TMPDIR/vm-state-</filename><varname>machinename</varname> directory.
