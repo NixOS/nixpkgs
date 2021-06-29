@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.4.4";
+  version = "1.4.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "v${version}";
-    sha256 = "03scg4y13jbi8n454hc4vq8p02isbhppqx0zhbady639p7l3ggfg";
+    sha256 = "sha256-kyOBF+qsl/+9u0P+EmfxbuJNGMqPSLCWJUlcZMyKJH4=";
   };
 
   propagatedBuildInputs = [
