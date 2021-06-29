@@ -26584,6 +26584,8 @@ in
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 
+  restique = libsForQt5.callPackage ../applications/backup/restique { };
+
   retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
 
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
