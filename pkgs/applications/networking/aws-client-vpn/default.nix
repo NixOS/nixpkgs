@@ -29,10 +29,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -av etc opt/awsvpnclient usr/share $out
-    ln -s "$out/awsvpnclient/AWS VPN Client" "$out/bin/AWS VPN Client"
-    ln -s "$out/awsvpnclient/Service/ACVC.GTK.Service" "$out/bin/ACVC.GTK.Service"
+    mkdir -p $out/bin $out/lib
+    cp -av opt/awsvpnclient $out/lib/awsvpnclient
+    cp -av etc usr/share $out
+    ln -s "$out/lib/awsvpnclient/AWS VPN Client" "$out/bin/AWS VPN Client"
+    ln -s "$out/lib/awsvpnclient/Service/ACVC.GTK.Service" "$out/bin/ACVC.GTK.Service"
   '';
 
   dontWrapGApps = true;
@@ -62,16 +63,18 @@ stdenv.mkDerivation rec {
         done < <(find $prefix -name '*.so' -maxdepth 1 -print0)
       }
 
-      patchPrefix $out/awsvpnclient "AWS VPN Client" createdump
-      patchPrefix $out/awsvpnclient/Service ACVC.GTK.Service createdump
+      patchPrefix $out/lib/awsvpnclient "AWS VPN Client" createdump
+      patchPrefix $out/lib/awsvpnclient/Service ACVC.GTK.Service createdump
 
-      for prog in $out/awsvpnclient/"AWS VPN Client" $out/awsvpnclient/Service/ACVC.GTK.Service; do
+      for prog in $out/lib/awsvpnclient/"AWS VPN Client" $out/lib/awsvpnclient/Service/ACVC.GTK.Service; do
         wrapProgram "$prog" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-          --set NIX_REDIRECTS /opt/awsvpnclient=$out/awsvpnclient \
+          --set NIX_REDIRECTS /opt/awsvpnclient=$out/lib/awsvpnclient \
           "''${gappsWrapperArgs[@]}"
       done
     '';
+
+  dontStrip = true;
 
   meta = with lib; {
     homepage = "https://docs.aws.amazon.com/vpn/latest/clientvpn-user/client-vpn-user-what-is.html";
