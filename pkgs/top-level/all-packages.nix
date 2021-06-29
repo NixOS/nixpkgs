@@ -19478,6 +19478,8 @@ in
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
+  janus-gateway = callPackage ../servers/janus-gateway { };
+
   jboss = callPackage ../servers/http/jboss { };
 
   jboss_mysql_jdbc = callPackage ../servers/http/jboss/jdbc/mysql { };
