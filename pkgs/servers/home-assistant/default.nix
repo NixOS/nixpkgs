@@ -625,6 +625,7 @@ in with py.pkgs; buildPythonApplication rec {
     "rest"
     "rest_command"
     "rflink"
+    "rfxtrx"
     "ring"
     "risco"
     "rituals_perfume_genie"
