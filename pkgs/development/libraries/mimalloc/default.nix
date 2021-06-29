@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Compact, fast, general-purpose memory allocator";
     homepage    = "https://github.com/microsoft/mimalloc";
