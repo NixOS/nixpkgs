@@ -1936,4 +1936,8 @@ EOT
   # Fixed on upstream: https://github.com/softwarefactory-project/matrix-client-haskell/commit/4ca4963cfd06379d9bdce49742af854aed6a0d37
   matrix-client = dontCheck super.matrix-client;
 
+  # Flakey tests
+  # upstream https://github.com/circuithub/rel8/issues/86
+  rel8 = dontCheck super.rel8;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
