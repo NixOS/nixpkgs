@@ -27,7 +27,7 @@ in buildLinux (args // {
       url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
       sha256 = "1z8jgsq5fkg486xxawg4c4wk1l9xra7x1cfqaf4grhw0csbbx883";
     };
-  }; in [ rt-patch ] ++ lib.remove rt-patch kernelPatches;
+  }; in [ rt-patch ] ++ kernelPatches;
 
   structuredExtraConfig = with lib.kernel; {
     PREEMPT_RT = yes;

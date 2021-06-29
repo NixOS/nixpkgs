@@ -2307,6 +2307,8 @@ in {
 
   enum-compat = callPackage ../development/python-modules/enum-compat { };
 
+  env-canada = callPackage ../development/python-modules/env-canada { };
+
   envisage = callPackage ../development/python-modules/envisage { };
 
   envs = callPackage ../development/python-modules/envs { };
@@ -7986,6 +7988,8 @@ in {
 
   smart-open = callPackage ../development/python-modules/smart-open { };
 
+  smarthab = callPackage ../development/python-modules/smarthab { };
+
   smartypants = callPackage ../development/python-modules/smartypants { };
 
   smbprotocol = callPackage ../development/python-modules/smbprotocol { };
@@ -8055,6 +8059,8 @@ in {
   somajo = callPackage ../development/python-modules/somajo { };
 
   somecomfort = callPackage ../development/python-modules/somecomfort { };
+
+  sonarr = callPackage ../development/python-modules/sonarr { };
 
   sopel = callPackage ../development/python-modules/sopel { };
 
