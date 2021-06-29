@@ -53,7 +53,7 @@ in
       };
 
       shellAliases = mkOption {
-        default = {};
+        default = { };
         description = ''
           Set of aliases for zsh shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
@@ -118,7 +118,9 @@ in
       setOptions = mkOption {
         type = types.listOf types.str;
         default = [
-          "HIST_IGNORE_DUPS" "SHARE_HISTORY" "HIST_FCNTL_LOCK"
+          "HIST_IGNORE_DUPS"
+          "SHARE_HISTORY"
+          "HIST_FCNTL_LOCK"
         ];
         example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
         description = ''
@@ -279,14 +281,18 @@ in
     environment.etc.zinputrc.source = ./zinputrc;
 
     environment.systemPackages = [ pkgs.zsh ]
-      ++ optional (cfg.enableCompletion && ! lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre") pkgs.nix-zsh-completions;
+      ++ optional
+      (cfg.enableCompletion
+        && !lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre")
+      pkgs.nix-zsh-completions;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
 
     #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 
     environment.shells =
-      [ "/run/current-system/sw/bin/zsh"
+      [
+        "/run/current-system/sw/bin/zsh"
         "${pkgs.zsh}/bin/zsh"
       ];
 
