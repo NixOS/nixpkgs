@@ -658,6 +658,7 @@ in with py.pkgs; buildPythonApplication rec {
     "sleepiq"
     "sma"
     "smappee"
+    "smart_meter_texas"
     "smarthab"
     "smartthings"
     "smarttub"
