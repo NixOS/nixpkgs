@@ -75,6 +75,7 @@ let
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       reglang = callPackage ../development/coq-modules/reglang {};
       relation-algebra = callPackage ../development/coq-modules/relation-algebra {};
+      semantics = callPackage ../development/coq-modules/semantics {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};

@@ -2786,7 +2786,10 @@ in
       Accelerate CoreGraphics CoreVideo;
   };
 
-  gpg-tui = callPackage ../tools/security/gpg-tui { };
+  gpg-tui = callPackage ../tools/security/gpg-tui {
+    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
+    inherit (darwin) libobjc libresolv;
+  };
 
   goa = callPackage ../development/tools/goa { };
 
@@ -4953,6 +4956,8 @@ in
   fwknop = callPackage ../tools/security/fwknop { };
 
   exfat = callPackage ../tools/filesystems/exfat { };
+
+  exfatprogs = callPackage ../tools/filesystems/exfatprogs { };
 
   dos2unix = callPackage ../tools/text/dos2unix { };
 
@@ -30401,7 +30406,7 @@ in
 
   root = callPackage ../applications/science/misc/root {
     python = python3;
-    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
   };
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
