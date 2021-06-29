@@ -136,7 +136,7 @@ self = stdenv.mkDerivation {
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    substituteInPlace configure.ml --replace '"md5 -q"' '"md5sum"'
+    substituteInPlace ${if versionAtLeast "8.14" then "tools/configure/" else ""}configure.ml --replace '"md5 -q"' '"md5sum"'
     ${csdpPatch}
   '';
 
