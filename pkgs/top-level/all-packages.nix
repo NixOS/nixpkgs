@@ -2786,7 +2786,10 @@ in
       Accelerate CoreGraphics CoreVideo;
   };
 
-  gpg-tui = callPackage ../tools/security/gpg-tui { };
+  gpg-tui = callPackage ../tools/security/gpg-tui {
+    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
+    inherit (darwin) libobjc libresolv;
+  };
 
   goa = callPackage ../development/tools/goa { };
 

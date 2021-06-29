@@ -1,10 +1,16 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , gpgme
 , libgpgerror
 , libxcb
 , python3
+, AppKit
+, Foundation
+, libiconv
+, libobjc
+, libresolv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +36,12 @@ rustPlatform.buildRustPackage rec {
     gpgme
     libgpgerror
     libxcb
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Foundation
+    libiconv
+    libobjc
+    libresolv
   ];
 
   meta = with lib; {
