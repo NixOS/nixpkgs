@@ -767,7 +767,7 @@
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ pysma ];
     "smappee" = ps: with ps; [ aiohttp-cors pysmappee ];
-    "smart_meter_texas" = ps: with ps; [ ]; # missing inputs: smart-meter-texas
+    "smart_meter_texas" = ps: with ps; [ smart-meter-texas ];
     "smarthab" = ps: with ps; [ smarthab ];
     "smartthings" = ps: with ps; [ aiohttp-cors hass-nabucasa pysmartapp pysmartthings ];
     "smarttub" = ps: with ps; [ python-smarttub ];
