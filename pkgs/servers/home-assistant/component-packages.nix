@@ -347,7 +347,7 @@
     "heos" = ps: with ps; [ pyheos ];
     "here_travel_time" = ps: with ps; [ herepy ];
     "hikvision" = ps: with ps; [ ]; # missing inputs: pyhik
-    "hikvisioncam" = ps: with ps; [ ]; # missing inputs: hikvision
+    "hikvisioncam" = ps: with ps; [ hikvision ];
     "hisense_aehw4a1" = ps: with ps; [ pyaehw4a1 ];
     "history" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "history_stats" = ps: with ps; [ sqlalchemy ];
