@@ -5341,6 +5341,8 @@ in {
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
+  pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
+
   pyrogram = callPackage ../development/python-modules/pyrogram { };
 
   pysbd = callPackage ../development/python-modules/pysbd { };

@@ -696,7 +696,7 @@
     "rest" = ps: with ps; [ jsonpath xmltodict ];
     "rest_command" = ps: with ps; [ ];
     "rflink" = ps: with ps; [ rflink ];
-    "rfxtrx" = ps: with ps; [ ]; # missing inputs: pyRFXtrx
+    "rfxtrx" = ps: with ps; [ pyrfxtrx ];
     "ring" = ps: with ps; [ ha-ffmpeg ring-doorbell ];
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
     "risco" = ps: with ps; [ pyrisco ];
