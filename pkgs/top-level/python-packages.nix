@@ -5365,6 +5365,8 @@ in {
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
 
+  python-songpal = callPackage ../development/python-modules/python-songpal { };
+
   python-tado = callPackage ../development/python-modules/python-tado { };
 
   pkutils = callPackage ../development/python-modules/pkutils { };
