@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/evaleev/libint";
     license = with licenses; [ lgpl3Only gpl3Only ];
     maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
