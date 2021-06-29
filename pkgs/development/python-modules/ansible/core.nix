@@ -2,6 +2,7 @@
 , callPackage
 , buildPythonPackage
 , fetchPypi
+, fetchFromGitHub
 , installShellFiles
 , cryptography
 , jinja2
@@ -22,10 +23,24 @@
 }:
 
 let
+
   ansible-collections = callPackage ./collections.nix {
     version = "4.1.0";
     sha256 = "0rrivq1g0vizah8zmf012lzig2xxfk5x1371k16s3nn4zfkwqqgm";
   };
+
+  # resolvelib 0.x minor versions are breaking.
+  # Ansible specifically needs this version for ansible-galaxy to work.
+  resolvelib-0_5 = resolvelib.overrideAttrs (old: rec {
+    version = "0.5.4";
+    src = fetchFromGitHub {
+      owner = "sarugaku";
+      repo = "resolvelib";
+      rev = version;
+      sha256 = "0697y330sqhiclk25v151qxg7aixzpj434lbg5qib0qlna5zg9la";
+    };
+  });
+
 in
 buildPythonPackage rec {
   pname = "ansible-core";
@@ -42,9 +57,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
-
-    substituteInPlace requirements.txt \
-      --replace "resolvelib >= 0.5.3, < 0.6.0" "resolvelib"
   '';
 
   nativeBuildInputs = [
@@ -59,7 +71,7 @@ buildPythonPackage rec {
     jinja2
     packaging
     pyyaml
-    resolvelib
+    resolvelib-0_5
     # optional dependencies
     junit-xml
     lxml
