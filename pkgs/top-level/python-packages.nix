@@ -3246,6 +3246,8 @@ in {
 
   hijri-converter = callPackage ../development/python-modules/hijri-converter { };
 
+  hikvision = callPackage ../development/python-modules/hikvision { };
+
   hiredis = callPackage ../development/python-modules/hiredis { };
 
   hiro = callPackage ../development/python-modules/hiro { };
