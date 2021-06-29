@@ -7986,6 +7986,8 @@ in {
 
   smart-open = callPackage ../development/python-modules/smart-open { };
 
+  smarthab = callPackage ../development/python-modules/smarthab { };
+
   smartypants = callPackage ../development/python-modules/smartypants { };
 
   smbprotocol = callPackage ../development/python-modules/smbprotocol { };
