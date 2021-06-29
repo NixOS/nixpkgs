@@ -19,7 +19,6 @@ buildDunePackage {
 
   meta = {
     homepage = "https://github.com/rgrinberg/stringext";
-    platforms = ocaml.meta.platforms or [];
     description = "Extra string functions for OCaml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vbgl ];
