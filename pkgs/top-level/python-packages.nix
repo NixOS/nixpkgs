@@ -8062,6 +8062,8 @@ in {
 
   somecomfort = callPackage ../development/python-modules/somecomfort { };
 
+  somfy-mylink-synergy = callPackage ../development/python-modules/somfy-mylink-synergy { };
+
   sonarr = callPackage ../development/python-modules/sonarr { };
 
   sopel = callPackage ../development/python-modules/sopel { };
