@@ -785,7 +785,7 @@
     "solax" = ps: with ps; [ solax ];
     "soma" = ps: with ps; [ pysoma ];
     "somfy" = ps: with ps; [ aiohttp-cors pymfy ];
-    "somfy_mylink" = ps: with ps; [ ]; # missing inputs: somfy-mylink-synergy
+    "somfy_mylink" = ps: with ps; [ somfy-mylink-synergy ];
     "sonarr" = ps: with ps; [ sonarr ];
     "songpal" = ps: with ps; [ python-songpal ];
     "sonos" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket pysonos ];
