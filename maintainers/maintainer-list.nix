@@ -1558,6 +1558,12 @@
     githubId = 7214361;
     name = "Roman Gerasimenko";
   };
+  busti = {
+    email = "nixos@busti.cool";
+    github = "busti";
+    githubId = 3575167;
+    name = "Moritz Bust";
+  };
   bburdette = {
     email = "bburdette@protonmail.com";
     github = "bburdette";
