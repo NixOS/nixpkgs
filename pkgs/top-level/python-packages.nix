@@ -8056,6 +8056,8 @@ in {
 
   somecomfort = callPackage ../development/python-modules/somecomfort { };
 
+  sonarr = callPackage ../development/python-modules/sonarr { };
+
   sopel = callPackage ../development/python-modules/sopel { };
 
   sorl_thumbnail = callPackage ../development/python-modules/sorl_thumbnail { };
