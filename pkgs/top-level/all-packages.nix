@@ -12065,8 +12065,11 @@ in
 
   shmig = callPackage ../development/tools/database/shmig { };
 
+  # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
-  smlnj = callPackage ../development/compilers/smlnj { };
+  smlnj = callPackage ../development/compilers/smlnj {
+    inherit (darwin) Libsystem;
+  };
 
   smlpkg = callPackage ../tools/package-management/smlpkg { };
 
@@ -30078,11 +30081,7 @@ in
 
   iprover = callPackage ../applications/science/logic/iprover { };
 
-  jonprl = callPackage ../applications/science/logic/jonprl {
-    smlnj = if stdenv.isDarwin
-      then smlnjBootstrap
-      else smlnj;
-  };
+  jonprl = callPackage ../applications/science/logic/jonprl { };
 
   key = callPackage ../applications/science/logic/key { };
 
@@ -30141,19 +30140,11 @@ in
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
-  celf = callPackage ../applications/science/logic/celf {
-    smlnj = if stdenv.isDarwin
-      then smlnjBootstrap
-      else smlnj;
-  };
+  celf = callPackage ../applications/science/logic/celf { };
 
   fast-downward = callPackage ../applications/science/logic/fast-downward { };
 
-  twelf = callPackage ../applications/science/logic/twelf {
-    smlnj = if stdenv.isDarwin
-      then smlnjBootstrap
-      else smlnj;
-  };
+  twelf = callPackage ../applications/science/logic/twelf { };
 
   verifast = callPackage ../applications/science/logic/verifast {};
 
