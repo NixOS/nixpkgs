@@ -208,7 +208,6 @@ in
         ''}
 
         ${optionalString cfg.localBinInPath ''
-          # ~/.local/bin if it exists overrides other bin directories.
           export PATH="$HOME/.local/bin:$PATH"
         ''}
       '';
