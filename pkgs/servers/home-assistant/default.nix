@@ -606,6 +606,7 @@ in with py.pkgs; buildPythonApplication rec {
     "plant"
     "plex"
     "plugwise"
+    "point"
     "poolsense"
     "profiler"
     "prometheus"
