@@ -959,7 +959,6 @@ let
       '';
     });
 
-
     lpsymphony = old.lpsymphony.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
