@@ -137,6 +137,47 @@ For more information about the generation process, consult the
 [README.md](https://github.com/svanderburg/node2nix) file of the `node2nix`
 tool.
 
+## Vendoring of dependencies {#nodejs-vendoring-of-dependencies}
+
+For projects that include a NPM lock file (`package-lock.json`), it's
+also possible to fetch a reproducible set of dependencies from NPM using
+the `fetchNodeModules` fetcher. `fetchNodeModules` can be used as follows:
+
+```nix
+nodeModules = nodePackages.fetchNodeModules {
+  inherit src;
+  hash = "sha256-TMsC8eEQ4whZtSoiVyjcEg72j9VEms82QeJrgl6zCsA=";
+}
+```
+
+The `src` attribute is required, as well as a hash specified through
+one of the `sha256` or `hash` attributes. The following optional
+attributes can also be used:
+
+* `name`: the name that is used for the dependencies tarball/directory.
+  If `name` is not specified, then one will be created from the name of
+  `src`.
+* `sourceRoot`: when `package.json` and `package-lock.json` are in a
+  subdirectory, `sourceRoot` specifies the relative path to these
+  files.
+* `makeTarball`: whether to create a tarball or a directory as the
+  output. By default, a tarball is created.
+* `runScripts`: whether to run NPM scripts bundled with the packages.
+  By default, scripts are not run as they may lead to non-deterministic
+  output.
+* `production`: whether to only install runtime dependencies or not.
+  By default, this is `true` so that dev dependencies will not be
+  installed.
+* `exposeBin`: whether to expose executables in `$out/bin`. This can
+  only be used when `makeTarball` is set to `false`.
+* `npmFlags`: additional flags to be passed to the `npm` command.
+
+Depending on whether `makeTarball` is set, the output of `fetchNodeModules`
+is either a tarball containing the `node_modules` directory, or a directory
+with the modules located in `lib/node_modules`. If the dependencies provide
+executable commands, a `bin` directory will also be created containing the
+executables.
+
 ## Tool specific instructions {#javascript-tool-specific}
 
 ### node2nix {#javascript-node2nix}
