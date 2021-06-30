@@ -544,8 +544,7 @@ _activatePkgs
 # with this information to the relevant env hook array, but bash
 # doesn't have closures, so it's easier to just pass this in.
 _addToEnv() {
-    local depHostOffset depTargetOffset
-    local pkg
+    local depHostOffset depTargetOffset pkg
 
     for depHostOffset in "${allPlatOffsets[@]}"; do
         local hookVar="${pkgHookVarVars[$(( depHostOffset + 1 ))]}"
