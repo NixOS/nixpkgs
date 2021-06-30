@@ -839,7 +839,7 @@ sets are
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python38Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python39Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
