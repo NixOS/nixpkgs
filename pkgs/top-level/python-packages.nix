@@ -5327,6 +5327,8 @@ in {
 
   pyflick = callPackage ../development/python-modules/pyflick { };
 
+  pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
+
   pygti = callPackage ../development/python-modules/pygti { };
 
   pyheos = callPackage ../development/python-modules/pyheos { };
