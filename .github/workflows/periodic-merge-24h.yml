@@ -5,14 +5,14 @@
 #  * and make sure that all major rebuilds happen before the staging
 #    branch get’s merged back into its base branch.
 
-name: "Periodic Merges"
+name: "Periodic Merges (24h)"
 
 
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     # Merge every 6 hours
-    - cron:  '0 */24 * * *'
+    - cron:  '0 0 * * *'
 
 jobs:
   periodic-merge:
