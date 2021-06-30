@@ -18,6 +18,7 @@ index f6d8fa3..5f0657d 100644
 +	"${LIBOBS_INCLUDE_DIR}/../UI/obs-frontend-api")
 +
  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h)
+
  set(move-transition_HEADERS
 @@ -38,4 +49,10 @@ target_link_libraries(move-transition
  	libobs)
