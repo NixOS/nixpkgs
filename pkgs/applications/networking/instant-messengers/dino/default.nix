@@ -4,7 +4,6 @@
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
-, fetchpatch
 , libgcrypt
 , epoxy
 , at-spi2-core
