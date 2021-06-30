@@ -36,8 +36,7 @@ stdenv.mkDerivation {
     ${if mpiSupport then "unset CC" else ""}
   '';
 
-  configureFlags = [ ]
-    ++ lib.optional debugEnable "--enable-debug"
+  configureFlags = lib.optional debugEnable "--enable-debug"
     ++ lib.optional mpiSupport "--enable-mpi"
   ;
 
