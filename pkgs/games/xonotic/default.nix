@@ -58,8 +58,8 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://dl.xonotic.org/xonotic-${version}.zip";
-      sha256 = "sha256-oi9yMPSGxYJbVc/a3XM5nJsPrpjJ4IHdisduygg1mtU=";
+      url = "https://dl.xonotic.org/xonotic-${version}-source.zip";
+      sha256 = "0axxw04fyz6jlfqd0kp7hdrqa0li31sx1pbipf2j5qp9wvqicsay";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -120,7 +120,7 @@ let
 in rec {
   xonotic-data = fetchzip {
     name = "xonotic-data";
-    url = "https://dl.xonotic.org/xonotic-data-${version}.zip";
+    url = "https://dl.xonotic.org/xonotic-${version}.zip";
     sha256 = "1ygkh0v68y4sd1w5vpk8dgb65h5jm599hwszdfgjp3ax4d3ml81x";
     extraPostFetch = ''
       cd $out
