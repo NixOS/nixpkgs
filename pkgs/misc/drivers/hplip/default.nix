@@ -102,6 +102,10 @@ python3Packages.buildPythonApplication {
   ];
 
   prePatch = ''
+    # https://github.com/NixOS/nixpkgs/issues/44230
+    substituteInPlace createPPD.sh \
+    --replace ppdc "${cups}/bin/ppdc"
+
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
       -e s,/etc/hp,$out/etc/hp,g \
