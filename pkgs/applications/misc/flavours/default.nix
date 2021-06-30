@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    $out/bin/flavours --completions bash > flavours.bash
-    $out/bin/flavours --completions fish > flavours.fish
-    $out/bin/flavours --completions zsh > _flavours
-    installShellCompletion --zsh _flavours --fish flavours.fish --bash flavours.bash
+    installShellCompletion --cmd flavours \
+      --zsh <($out/bin/flavours --completions zsh) \
+      --fish <($out/bin/flavours --completions fish) \
+      --bash <($out/bin/flavours --completions bash)
   '';
 
   meta = with lib; {
