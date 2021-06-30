@@ -31,7 +31,7 @@
 , usbutils
 , vala
 , zlib
-, withPolkit ? true
+, withPolkit ? !stdenv.isDarwin
 }:
 
 # If this package is built with polkit support (withPolkit=true),
@@ -70,6 +70,9 @@ stdenv.mkDerivation rec {
     # get rid of absolute path to helper in store so we can use a setuid wrapper
     substituteInPlace src/usb-acl-helper.c \
       --replace 'ACL_HELPER_PATH"/' '"'
+
+    substituteInPlace subprojects/spice-common/meson.build \
+      --replace '-Werror' ""
   '';
 
   nativeBuildInputs = [
@@ -89,8 +92,8 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-  ];
+    gst_all_1.gst-plugins-base
+  ] ++ lib.optional stdenv.isLinux gst_all_1.gst-plugins-good;
 
   buildInputs = [
     cyrus_sasl
@@ -98,24 +101,27 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libcacard
-    libdrm
     libjpeg_turbo
     libopus
     libusb1
     lz4
     openssl
-    phodav
     pixman
     spice-protocol
-    usbredir
     zlib
-  ] ++ lib.optionals withPolkit [ polkit acl usbutils ] ;
+  ] ++ lib.optionals withPolkit [ polkit acl usbutils ]
+    ++ lib.optionals stdenv.isLinux [ libdrm phodav usbredir ];
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+
 
   mesonFlags = [
     "-Dcelt051=disabled"
     "-Dpulse=disabled" # is deprecated upstream
+    "-Dpolkit=${if withPolkit then "enabled" else "disabled"}"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dwebdav=disabled"
+    "-Dusbredir=disabled" 
   ];
 
   meta = with lib; {
@@ -130,6 +136,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.xeji ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

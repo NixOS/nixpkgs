@@ -27473,7 +27473,6 @@ in
   virt-what = callPackage ../applications/virtualization/virt-what { };
 
   virt-manager = callPackage ../applications/virtualization/virt-manager {
-    spiceSupport = false;
     system-libvirt = libvirt;
   };
 
