@@ -25716,6 +25716,8 @@ in
 
   nwg-menu = callPackage ../applications/misc/nwg-menu { };
 
+  nwg-panel = callPackage ../applications/misc/nwg-panel { };
+
   ocenaudio = callPackage ../applications/audio/ocenaudio { };
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
