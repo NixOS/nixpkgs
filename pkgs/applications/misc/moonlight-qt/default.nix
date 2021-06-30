@@ -10,7 +10,7 @@
 , libva
 , libvdpau
 , libxkbcommon
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , openssl
 , libopus
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libva
     libvdpau
     libxkbcommon
-    alsaLib
+    alsa-lib
     libpulseaudio
     openssl
     libopus

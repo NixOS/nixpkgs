@@ -15,7 +15,7 @@
 , libsndfile
 , withLibao ? true, libao
 , withPulse ? false, libpulseaudio
-, withAlsa ? false, alsaLib
+, withAlsa ? false, alsa-lib
 , withOss ? false
 , withFlite ? true, flite
 # , withFestival ? false, festival-freebsoft-utils
@@ -77,7 +77,7 @@ in stdenv.mkDerivation rec {
     libsndfile
     libao
     libpulseaudio
-    alsaLib
+    alsa-lib
     python
   ] ++ optionals withEspeak [
     espeak

@@ -1,12 +1,14 @@
-{ lib, python, buildPythonPackage, fetchPypi, flask }:
+{ lib, python, isPy3k, buildPythonPackage, fetchPypi, flask }:
 
 buildPythonPackage rec {
   pname = "Flask-HTTPAuth";
-  version = "4.3.0";
+  version = "4.4.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05j1mckwhgicrlj4j7ni2rhcf9w4i7phll06jbjjyvs3rj1l4q1f";
+    sha256 = "0fl1if91hg2c92b6sic7h2vhxxvb06ri7wflmwp0pfiwbaisgamw";
   };
 
   propagatedBuildInputs = [ flask ];

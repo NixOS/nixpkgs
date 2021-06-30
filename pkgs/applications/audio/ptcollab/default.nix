@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , nix-update-script
 , qmake
+, pkg-config
 , qtbase
 , qtmultimedia
 , libvorbis
@@ -12,21 +13,16 @@
 
 mkDerivation rec {
   pname = "ptcollab";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${version}";
-    sha256 = "1yfnf47saxxj17x0vyxihr343kp7gz3fashzky79j80sqlm6ng85";
+    sha256 = "sha256-98v9it9M5FXCsOpWvO10uKYmEH15v1FEH1hH73XHa7w=";
   };
 
-  postPatch = ''
-    substituteInPlace src/editor.pro \
-      --replace '/usr/include/rtmidi' '${rtmidi}/include/rtmidi'
-  '';
-
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake pkg-config ];
 
   buildInputs = [ qtbase qtmultimedia libvorbis rtmidi ];
 

@@ -16,6 +16,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       networking.firewall.allowedTCPPorts = [ ircPort ];
       services.solanum = {
         enable = true;
+        motd = ''
+          The default MOTD doesn't contain the word "nixos" in it.
+          This one does.
+        '';
       };
     };
   } // lib.listToAttrs (builtins.map (client: lib.nameValuePair client {
@@ -47,6 +51,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           ${client}.systemctl("start ii")
           ${client}.wait_for_unit("ii")
           ${client}.wait_for_file("${iiDir}/${server}/out")
+        ''
+        # look for the custom text in the MOTD.
+        ''
+          ${client}.wait_until_succeeds("grep 'nixos' ${iiDir}/${server}/out")
         ''
         # wait until first PING from server arrives before joining,
         # so we don't try it too early

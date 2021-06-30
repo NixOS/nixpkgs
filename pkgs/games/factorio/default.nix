@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
-, alsaLib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
+, alsa-lib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , libSM, libICE, libXext, factorio-utils
 , releaseType
 , mods ? []
@@ -182,7 +182,7 @@ let
       buildInputs = [ libpulseaudio ];
 
       libPath = lib.makeLibraryPath [
-        alsaLib
+        alsa-lib
         libpulseaudio
         libX11
         libXcursor

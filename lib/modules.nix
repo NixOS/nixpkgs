@@ -713,10 +713,6 @@ rec {
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
 
-  mkStrict = builtins.trace "`mkStrict' is obsolete; use `mkOverride 0' instead." (mkOverride 0);
-
-  mkFixStrictness = id; # obsolete, no-op
-
   mkOrder = priority: content:
     { _type = "order";
       inherit priority content;

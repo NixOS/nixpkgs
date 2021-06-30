@@ -1,5 +1,5 @@
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="release-21.11">
-  <title>Release 21.11 (<quote>?</quote>, 2021.11/??)</title>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-21.11">
+  <title>Release 21.11 (“?”, 2021.11/??)</title>
   <para>
     In addition to numerous new and upgraded packages, this release has
     the following highlights:
@@ -12,7 +12,7 @@
       </para>
     </listitem>
   </itemizedlist>
-  <section xml:id="highlights">
+  <section xml:id="sec-release-21.11-highlights">
     <title>Highlights</title>
     <itemizedlist spacing="compact">
       <listitem>
@@ -22,9 +22,9 @@
       </listitem>
     </itemizedlist>
   </section>
-  <section xml:id="new-services">
+  <section xml:id="sec-release-21.11-new-services">
     <title>New Services</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
@@ -32,9 +32,33 @@
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sr.ht">sourcehut</link>, a
+          collection of tools useful for software development. Available
+          as
+          <link xlink:href="options.html#opt-services.sourcehut.enable">services.sourcehut</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://download.pureftpd.org/pub/ucarp/README">ucarp</link>,
+          an userspace implementation of the Common Address Redundancy
+          Protocol (CARP). Available as
+          <link xlink:href="options.html#opt-networking.ucarp.enable">networking.ucarp</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Users of flashrom should migrate to
+          <link xlink:href="options.html#opt-programs.flashrom.enable">programs.flashrom.enable</link>
+          and add themselves to the <literal>flashrom</literal> group to
+          be able to access programmers supported by flashrom.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
-  <section xml:id="backward-incompatibilities">
+  <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
       <listitem>
@@ -56,11 +80,300 @@
           this version for the entire lifecycle of the 21.11 release.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Those making use of <literal>buildBazelPackage</literal> will
+          need to regenerate the fetch hashes (preferred), or set
+          <literal>fetchConfigured = false;</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>consul</literal> was upgraded to a new major release
+          with breaking changes, see
+          <link xlink:href="https://github.com/hashicorp/consul/releases/tag/v1.10.0">upstream
+          changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          fsharp41 has been removed in preference to use the latest
+          dotnet-sdk
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The following F#-related packages have been removed for being
+          unmaintaned. Please use <literal>fetchNuGet</literal> for
+          specific packages.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              ExtCore
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Fake
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Fantomas
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsCheck
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsCheck262
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsCheckNunit
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpAutoComplete
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCompilerCodeDom
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCompilerService
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCompilerTools
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCore302
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCore3125
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCore4001
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpCore4117
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpData
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpData225
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpDataSQLProvider
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FSharpFormatting
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsLexYacc
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsLexYacc706
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsLexYaccRuntime
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsPickler
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              FsUnit
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Projekt
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Suave
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              UnionArgParser
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              ExcelDnaRegistration
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              MathNetNumerics
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>programs.x2goserver</literal> is now
+          <literal>services.x2goserver</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The following dotnet-related packages have been removed for
+          being unmaintaned. Please use <literal>fetchNuGet</literal>
+          for specific packages.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Autofac
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemValueTuple
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              MicrosoftDiaSymReader
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              MicrosoftDiaSymReaderPortablePdb
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemCollectionsImmutable
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemCollectionsImmutable131
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SystemReflectionMetadata
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              NUnit350
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Deedle
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              ExcelDna
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              GitVersionTree
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              NDeskOptions
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>antlr</literal> package now defaults to the 4.x
+          release instead of the old 2.7.7 version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>libwnck</literal> package now defaults to the 3.x
+          release instead of the old 2.31.0 version.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
-  <section xml:id="other-notable-changes">
+  <section xml:id="sec-release-21.11-notable-changes">
     <title>Other Notable Changes</title>
-    <para>
-    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The setting
+          <link xlink:href="options.html#opt-services.openssh.logLevel"><literal>services.openssh.logLevel</literal></link>
+          <literal>&quot;VERBOSE&quot;</literal>
+          <literal>&quot;INFO&quot;</literal>. This brings NixOS in line
+          with upstream and other Linux distributions, and reduces log
+          spam on servers due to bruteforcing botnets.
+        </para>
+        <para>
+          However, if
+          <link xlink:href="options.html#opt-services.fail2ban.enable"><literal>services.fail2ban.enable</literal></link>
+          is <literal>true</literal>, the <literal>fail2ban</literal>
+          will override the verbosity to
+          <literal>&quot;VERBOSE&quot;</literal>, so that
+          <literal>fail2ban</literal> can observe the failed login
+          attempts from the SSH logs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Sway: The terminal emulator <literal>rxvt-unicode</literal> is
+          no longer installed by default via
+          <literal>programs.sway.extraPackages</literal>. The current
+          default configuration uses <literal>alacritty</literal> (and
+          soon <literal>foot</literal>) so this is only an issue when
+          using a customized configuration and not installing
+          <literal>rxvt-unicode</literal> explicitly.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
 </section>

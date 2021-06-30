@@ -12,6 +12,7 @@
 , docbook_xsl
 , docbook_xml_dtd_43
 , gobject-introspection
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     python3
+    makeWrapper
   ];
 
   buildInputs = [
@@ -62,6 +64,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tests/gen-installed-test.py
+    PATH=${python3.withPackages (pp: [ pp.pygobject3 pp.tappy ])}/bin:$PATH patchShebangs tests/introspection.py
+  '';
+
+  postFixup = ''
+    wrapProgram "${placeholder "installedTests"}/libexec/installed-tests/graphene-1.0/introspection.py" \
+      --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
   '';
 
   passthru = {

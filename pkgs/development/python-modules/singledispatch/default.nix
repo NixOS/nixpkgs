@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "singledispatch";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58b46ce1cc4d43af0aac3ac9a047bdb0f44e05f0b2fa2eec755863331700c865";
+    sha256 = "d5bb9405a4b8de48e36709238e8b91b4f6f300f81a5132ba2531a9a738eca391";
   };
 
   nativeBuildInputs = [

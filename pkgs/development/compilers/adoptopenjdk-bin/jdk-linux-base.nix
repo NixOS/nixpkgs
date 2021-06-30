@@ -7,7 +7,7 @@
 , makeWrapper
 , setJavaClassPath
 # minimum dependencies
-, alsaLib
+, alsa-lib
 , fontconfig
 , freetype
 , libffi
@@ -44,7 +44,7 @@ let result = stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib # libasound.so wanted by lib/libjsound.so
+    alsa-lib # libasound.so wanted by lib/libjsound.so
     fontconfig
     freetype
     stdenv.cc.cc.lib # libstdc++.so.6

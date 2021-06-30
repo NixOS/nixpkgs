@@ -12,7 +12,7 @@ mkXfceDerivation {
   version = "0.8.1";
 
   rev-prefix = "xfce4-datetime-plugin-";
-  sha256 = "06h13bmh2sni4qbr3kfnqaa5dq5f48h4xkywrm9pa6h2nyvn4rma";
+  sha256 = "sha256-qmZit7cCGnVTzdzPTiAiruBWlMLWzZEXJtFqAesaARo=";
 
   nativeBuildInputs = [
     gettext
@@ -26,6 +26,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Shows the date and time in the panel, and a calendar appears when you left-click on it";
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }

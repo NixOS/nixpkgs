@@ -16,6 +16,7 @@
  <xi:include href="gnome.section.xml" />
  <xi:include href="go.section.xml" />
  <xi:include href="haskell.section.xml" />
+ <xi:include href="hy.section.xml" />
  <xi:include href="idris.section.xml" />
  <xi:include href="ios.section.xml" />
  <xi:include href="java.section.xml" />

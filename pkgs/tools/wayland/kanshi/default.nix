@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "kanshi";
     rev = "v${version}";
-    sha256 = "0nbpgm8qnn7ljsg9vgs35kl8l4rrk542vdcbx8wrn9r909ld3x92";
+    sha256 = "sha256-RVMeS2qEjTYK6r7IwMeFSqfRpKR8di2eQXhewfhTnYI=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];

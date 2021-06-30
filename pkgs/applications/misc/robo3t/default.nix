@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, curl, zlib, glib, xorg, dbus, fontconfig, libGL,
-  freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, curl
+, zlib
+, glib
+, xorg
+, dbus
+, fontconfig
+, libGL
+, freetype
+, xkeyboard_config
+, makeDesktopItem
+, makeWrapper
+}:
 
 let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
@@ -30,7 +43,7 @@ stdenv.mkDerivation rec {
     categories = "Development;IDE;";
   };
 
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
 
   ldLibraryPath = lib.makeLibraryPath [
     stdenv.cc.cc
@@ -51,6 +64,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     BASEDIR=$out/lib/robo3t
 
     mkdir -p $BASEDIR/bin
@@ -72,13 +87,15 @@ stdenv.mkDerivation rec {
     makeWrapper $BASEDIR/bin/robo3t $out/bin/robo3t \
       --suffix LD_LIBRARY_PATH : ${ldLibraryPath} \
       --suffix QT_XKB_CONFIG_ROOT : ${xkeyboard_config}/share/X11/xkb
+
+    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://robomongo.org/";
-    description = "Query GUI for mongodb";
+    description = "Query GUI for mongodb. Formerly called Robomongo";
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.eperuffo ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ eperuffo ];
   };
 }

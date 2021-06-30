@@ -33,7 +33,7 @@ in {
 
           autosnap = true;
         };
-        datasets."pool/sanoid".useTemplate = [ "test" ];
+        datasets."pool/sanoid".use_template = [ "test" ];
         extraArgs = [ "--verbose" ];
       };
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, gettext, glib, libcanberra-gtk3,
-  libnotify, libwnck3, gtk3, libxml2, wrapGAppsHook, mateUpdateScript }:
+  libnotify, libwnck, gtk3, libxml2, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-notification-daemon";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libcanberra-gtk3
     libnotify
-    libwnck3
+    libwnck
     gtk3
   ];
 

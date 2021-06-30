@@ -120,7 +120,7 @@ in stdenv.mkDerivation rec {
 
     # Sourcetrail attempts to copy clang headers from the LLVM store path
     substituteInPlace CMakeLists.txt \
-      --replace "\''${LLVM_BINARY_DIR}" '${llvmPackages.clang-unwrapped}'
+      --replace "\''${LLVM_BINARY_DIR}" '${lib.getLib llvmPackages.clang-unwrapped}'
 
     patchShebangs script
     ln -sf ${installJavaIndexer} script/update_java_indexer.sh

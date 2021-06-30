@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, alsaLib, libxmp }:
+{ lib, stdenv, fetchurl, pkg-config, alsa-lib, libxmp }:
 
 stdenv.mkDerivation rec {
   name = "xmp-4.1.0";
@@ -16,5 +16,5 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib libxmp ];
+  buildInputs = [ alsa-lib libxmp ];
 }

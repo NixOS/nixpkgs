@@ -17,18 +17,14 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "3.1.2";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-PS41e7myv5xCSJIeT+SRj4rLVCXpthq7KeHisYoSiOE=";
+    sha256 = "sha256-D1gtKaDZ7/SyySYWmDa3eDHbh2f5B3q1VEYKgl1pXCE=";
   };
-
-  patches = [
-    ./remove-unconfigured-runtime-warn.patch
-  ];
 
   vendorSha256 = null;
 
@@ -61,7 +57,7 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
   '' + lib.optionalString stdenv.isDarwin ''
-    mv bin/{podman-remote,podman}
+    mv bin/{darwin/podman,podman}
   '' + ''
     install -Dm555 bin/podman $out/bin/podman
     installShellCompletion --bash completions/bash/*

@@ -13,5 +13,10 @@ buildPecl {
   makeFlags = [ "phpincludedir=$(dev)/include" ];
   outputs = [ "out" "dev" ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "Userland cache for PHP";
+    license = licenses.php301;
+    homepage = "https://pecl.php.net/package/APCu";
+    maintainers = teams.php.members;
+  };
 }

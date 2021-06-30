@@ -1,65 +1,52 @@
-{ lib, pythonPackages, pkg-config
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, pkg-config
 , dbus
-, qmake, lndir
-, qtbase
-, qtsvg
-, qtdeclarative
-, qtwebchannel
-, withConnectivity ? false, qtconnectivity
-, withMultimedia ? false, qtmultimedia
-, withWebKit ? false, qtwebkit
-, withWebSockets ? false, qtwebsockets
+, lndir
+, python
+, dbus-python
+, sip
+, pyqt-builder
+, libsForQt5
+, withConnectivity ? false
+, withMultimedia ? false
+, withWebKit ? false
+, withWebSockets ? false
 }:
 
 let
-
-  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
-
-  sip = if isPy3k then
-    pythonPackages.sip
-  else
-    (pythonPackages.sip_4.override { sip-module = "PyQt5.sip"; }).overridePythonAttrs(oldAttrs: {
-      # If we install sip in another folder, then we need to create a __init__.py as well
-      # if we want to be able to import it with Python 2.
-      # Python 3 could rely on it being an implicit namespace package, however,
-      # PyQt5 we made an explicit namespace package so sip should be as well.
-      postInstall = ''
-        cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
-        from pkgutil import extend_path
-        __path__ = extend_path(__path__, __name__)
-        EOF
-      '';
-    });
-
   pyqt5_sip = buildPythonPackage rec {
     pname = "PyQt5_sip";
-    version = "12.8.1";
+    version = "12.9.0";
 
-    src = pythonPackages.fetchPypi {
+    src = fetchPypi {
       inherit pname version;
-      sha256 = "30e944db9abee9cc757aea16906d4198129558533eb7fadbe48c5da2bd18e0bd";
+      sha256 = "0cmfxb7igahxy74qkq199l6zdxrr75bnxris42fww3ibgjflir6k";
     };
 
     # There is no test code and the check phase fails with:
     # > error: could not create 'PyQt5/sip.cpython-38-x86_64-linux-gnu.so': No such file or directory
     doCheck = false;
   };
-
 in buildPythonPackage rec {
   pname = "PyQt5";
-  version = "5.15.2";
-  format = "other";
+  version = "5.15.4";
+  format = "pyproject";
 
-  src = pythonPackages.fetchPypi {
+  disabled = isPy27;
+
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "1z74295i69cha52llsqffzhb5zz7qnbjc64h8qg21l91jgf0harp";
+    sha256 = "1gp5jz71nmg58zsm1h4vzhcphf36rbz37qgsfnzal76i1mz5js9a";
   };
 
   outputs = [ "out" "dev" ];
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with libsForQt5; [
     pkg-config
     qmake
     lndir
@@ -75,11 +62,12 @@ in buildPythonPackage rec {
     ++ lib.optional withWebSockets qtwebsockets
   ;
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     dbus
     qtbase
     qtsvg
     qtdeclarative
+    pyqt-builder
   ]
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebKit qtwebkit
@@ -88,10 +76,11 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [
     dbus-python
-  ] ++ (if isPy3k then [ pyqt5_sip ] else [ sip enum34 ]);
+    pyqt5_sip
+  ];
 
   patches = [
-    # Fix some wrong assumptions by ./configure.py
+    # Fix some wrong assumptions by ./project.py
     # TODO: figure out how to send this upstream
     ./pyqt5-fix-dbus-mainloop-support.patch
   ];
@@ -103,36 +92,7 @@ in buildPythonPackage rec {
     WebSocketsEnabled = withWebSockets;
   };
 
-  configurePhase = ''
-    runHook preConfigure
-
-    export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
-
-    ${python.executable} configure.py  -w \
-      --confirm-license \
-      --dbus-moduledir=$out/${python.sitePackages}/dbus/mainloop \
-      --no-qml-plugin \
-      --bindir=$out/bin \
-      --destdir=$out/${python.sitePackages} \
-      --stubsdir=$out/${python.sitePackages}/PyQt5 \
-      --sipdir=$out/share/sip/PyQt5 \
-      --designer-plugindir=$out/plugins/designer
-
-    runHook postConfigure
-  '';
-
-  postInstall = lib.optionalString (!isPy3k) ''
-    ln -s ${sip}/${python.sitePackages}/PyQt5/sip.* $out/${python.sitePackages}/PyQt5/
-    for i in $out/bin/*; do
-      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-    done
-
-    # Let's make it a namespace package
-    cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
-    from pkgutil import extend_path
-    __path__ = extend_path(__path__, __name__)
-    EOF
-  '';
+  dontConfigure = true;
 
   # Checked using pythonImportsCheck
   doCheck = false;
@@ -150,12 +110,10 @@ in buildPythonPackage rec {
     ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
   ;
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = "http://www.riverbankcomputing.co.uk";
-    license     = licenses.gpl3;
+    homepage    = "https://riverbankcomputing.com/";
+    license     = licenses.gpl3Only;
     platforms   = platforms.mesaPlatforms;
     maintainers = with maintainers; [ sander ];
   };

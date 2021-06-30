@@ -44,7 +44,7 @@ pet = buildGoModule rec {
 
 The function `buildGoPackage` builds legacy Go programs, not supporting Go modules.
 
-### Example for `buildGoPackage`
+### Example for `buildGoPackage` {#example-for-buildgopackage}
 
 In the following is an example expression using buildGoPackage, the following arguments are of special significance to the function:
 
@@ -140,4 +140,4 @@ Removes the pre-existing vendor directory. This should only be used if the depen
 
 ### `subPackages` {#var-go-subPackages}
 
-Limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
+Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.

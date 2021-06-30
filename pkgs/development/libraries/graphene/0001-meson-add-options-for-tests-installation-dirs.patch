@@ -23,7 +23,7 @@ index b9a2fb5..4b8629f 100644
 +       value: '',
 +       description: 'Installation directory for binary files in tests')
 diff --git a/tests/meson.build b/tests/meson.build
-index 77281f5..c4c7fac 100644
+index 77281f5..7522456 100644
 --- a/tests/meson.build
 +++ b/tests/meson.build
 @@ -21,8 +21,17 @@ unit_tests = [
@@ -71,7 +71,12 @@ index 77281f5..c4c7fac 100644
        ),
        env: ['MUTEST_OUTPUT=tap'],
        protocol: 'tap',
-@@ -70,13 +79,13 @@ if build_gir and host_system == 'linux' and not meson.is_cross_build()
+@@ -66,17 +75,18 @@ endif
+ if build_gir and host_system == 'linux' and not meson.is_cross_build()
+   foreach unit: ['introspection.py']
+     wrapper = '@0@.test'.format(unit)
++    install_data(unit, install_dir: test_bindir)
+     custom_target(wrapper,
        output: wrapper,
        command: [
          gen_installed_test,

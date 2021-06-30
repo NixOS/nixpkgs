@@ -142,8 +142,6 @@ stdenv.mkDerivation ({
     wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${lib.makeBinPath [ gnused gawk ]}"
   '';
 
-  setupHook = ./setup-hook.sh;
-
   passthru = {
     updateScript =
       let major = builtins.head (builtins.splitVersion version);

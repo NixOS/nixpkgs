@@ -8,19 +8,19 @@
 , tox
 , requests
 , python-dateutil
-, websocket_client
+, websocket-client
 , ibm-cloud-sdk-core
 }:
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     rev = "v${version}";
-    sha256 = "sha256:16llw7kybwndgf2ryrg5698v4j3rhrdx52lf3kdzhxdi0q3kmwdn";
+    sha256 = "1abink5mv9nw506nwm9hlvnr1lq6dkxxj2j12iwphcyd7xs63n2s";
   };
 
   checkInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     python-dateutil
-    websocket_client
+    websocket-client
     ibm-cloud-sdk-core
   ];
 

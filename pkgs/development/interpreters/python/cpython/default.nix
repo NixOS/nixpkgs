@@ -208,7 +208,7 @@ in with passthru; stdenv.mkDerivation {
     # * https://bugs.python.org/issue35523
     # * https://github.com/python/cpython/commit/e6b247c8e524
     ./3.7/no-win64-workaround.patch
-  ] ++ optionals (isPy37 || isPy38 || isPy39) [
+  ] ++ optionals (pythonAtLeast "3.7") [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
   ] ++ optionals (pythonOlder "3.8") [
@@ -227,7 +227,7 @@ in with passthru; stdenv.mkDerivation {
     (
       if isPy35 then
         ./3.5/python-3.x-distutils-C++.patch
-      else if isPy37 || isPy38 || isPy39 then
+      else if pythonAtLeast "3.7" then
         ./3.7/python-3.x-distutils-C++.patch
       else
         fetchpatch {

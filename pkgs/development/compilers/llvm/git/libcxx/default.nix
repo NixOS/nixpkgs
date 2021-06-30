@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, src, cmake, python3, libcxxabi, fixDarwinDylibNames, version
+{ lib, stdenv, llvm_meta, src, cmake, python3, fixDarwinDylibNames, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -24,10 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [ libcxxabi ];
-
   cmakeFlags = [
-    "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optional stdenv.hostPlatform.isWasm [

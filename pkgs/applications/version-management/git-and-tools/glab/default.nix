@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "glab";
-  version = "1.17.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "profclems";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UW6KYqqeDnswPSHrjprbClnIwpX5zA+ePq7kwlsWEfA=";
+    sha256 = "sha256-ahP5y5i0SMj2+mP4RYc7MLZGElX5eLgKwiVhBYGOX2g=";
   };
 
-  vendorSha256 = "sha256-5hVIwEG70r9EDyapQ/OBlHfA1Zw5y4KxEysX415t3xk=";
+  vendorSha256 = "sha256-ssVmqcJ/DxUqAkHm9tn4RwWuKzTHvxoqJquXPIRy4b8=";
   runVend = true;
 
   # Tests are trying to access /homeless-shelter

@@ -1,6 +1,6 @@
 { channel, pname, version, build ? null, sha256Hash }:
 
-{ alsaLib
+{ alsa-lib
 , bash
 , buildFHSUserEnv
 , cacert
@@ -121,7 +121,7 @@ let
           libXrandr
 
           # For Android emulator
-          alsaLib
+          alsa-lib
           dbus
           expat
           libpulseaudio

@@ -56,6 +56,8 @@ with self; with super; {
 
   cliapp = callPackage ../development/python-modules/cliapp { };
 
+  click = callPackage ../development/python-modules/click/7.nix { };
+
   closure-linter = callPackage ../development/python-modules/closure-linter { };
 
   cmdtest = callPackage ../development/python-modules/cmdtest { };
@@ -80,7 +82,7 @@ with self; with super; {
 
   django_evolution = callPackage ../development/python-modules/django_evolution { };
 
-  dnspython = super.dnspython_1;
+  dnspython = callPackage ../development/python-modules/dnspython/1.nix { };
 
   docker-py = disabled super.docker-py;
 
@@ -97,6 +99,8 @@ with self; with super; {
   fdint = callPackage ../development/python-modules/fdint { };
 
   feedparser = callPackage ../development/python-modules/feedparser/5.nix { };
+
+  flask = callPackage ../development/python-modules/flask/1.nix { };
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };
 
@@ -168,7 +172,7 @@ with self; with super; {
 
   http_signature = callPackage ../development/python-modules/http_signature { };
 
-  hypothesis = super.hypothesis_4;
+  hypothesis = callPackage ../development/python-modules/hypothesis/2.nix { };
 
   idna = callPackage ../development/python-modules/idna/2.nix { };
 
@@ -188,9 +192,13 @@ with self; with super; {
 
   isort = callPackage ../development/python-modules/isort/4.nix { };
 
+  itsdangerous = callPackage ../development/python-modules/itsdangerous/1.nix { };
+
   jaraco_functools = callPackage ../development/python-modules/jaraco_functools/2.nix { };
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream/2.nix { };
+
+  jinja2 = callPackage ../development/python-modules/jinja2/2.nix { };
 
   jsonrpclib = callPackage ../development/python-modules/jsonrpclib { };
 
@@ -255,6 +263,8 @@ with self; with super; {
   marionette_driver = callPackage ../development/python-modules/marionette-harness/marionette_driver.nix { };
 
   markdown = callPackage ../development/python-modules/markdown/3_1.nix { };
+
+  markupsafe = callPackage ../development/python-modules/markupsafe/1.nix { };
 
   matplotlib = callPackage ../development/python-modules/matplotlib/2.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
@@ -369,6 +379,8 @@ with self; with super; {
   pasteScript = callPackage ../development/python-modules/pastescript { };
 
   pathpy = callPackage ../development/python-modules/path.py/2.nix { };
+
+  pg8000 = callPackage ../development/python-modules/pg8000/1_12.nix { };
 
   pillow = callPackage ../development/python-modules/pillow/6.nix {
     inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
@@ -510,6 +522,9 @@ with self; with super; {
   ruamel-ordereddict = self.ruamel_ordereddict;
   ruamel_ordereddict = callPackage ../development/python-modules/ruamel_ordereddict { };
 
+  ruamel_yaml = self.ruamel-yaml;
+  ruamel-yaml = callPackage ../development/python-modules/ruamel_yaml/0.16.nix { };
+
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
   rpm = disabled super.rpm;
@@ -623,6 +638,8 @@ with self; with super; {
   urllib3 = callPackage ../development/python-modules/urllib3/2.nix { };
 
   wptserve = callPackage ../development/python-modules/wptserve { };
+
+  werkzeug = callPackage ../development/python-modules/werkzeug/1.nix { };
 
   WSGIProxy = callPackage ../development/python-modules/wsgiproxy { };
 

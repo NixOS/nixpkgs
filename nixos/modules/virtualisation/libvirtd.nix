@@ -155,6 +155,13 @@ in {
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      {
+        assertion = config.security.polkit.enable;
+        message = "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
+      }
+    ];
+
     environment = {
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e:

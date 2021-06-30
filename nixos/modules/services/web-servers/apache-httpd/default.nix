@@ -202,7 +202,7 @@ let
     let
       documentRoot = if hostOpts.documentRoot != null
         then hostOpts.documentRoot
-        else pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out"
+        else pkgs.emptyDirectory
       ;
 
       mkLocations = locations: concatStringsSep "\n" (map (config: ''

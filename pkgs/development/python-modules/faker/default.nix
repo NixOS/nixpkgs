@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "Faker";
-  version = "6.6.2";
+  version = "6.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f43ac743c34affb1c7fccca8b06450371cd482b6ddcb4110e420acb24356e70b";
+    sha256 = "c2852cadc99a4ebdbf06934e4c15e30f2307d414ead21d15605759602645f152";
   };
 
   propagatedBuildInputs = [

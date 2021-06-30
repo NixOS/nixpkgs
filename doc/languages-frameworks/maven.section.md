@@ -43,9 +43,9 @@ public class Main {
 
 You find this demo project at https://github.com/fzakaria/nixos-maven-example
 
-## Solving for dependencies
+## Solving for dependencies {#solving-for-dependencies}
 
-### buildMaven with NixOS/mvn2nix-maven-plugin
+### buildMaven with NixOS/mvn2nix-maven-plugin {#buildmaven-with-nixosmvn2nix-maven-plugin}
 
 > ⚠️ Although `buildMaven` is the "blessed" way within nixpkgs, as of 2020, it hasn't seen much activity in quite a while.
 
@@ -82,6 +82,7 @@ This file is then given to the `buildMaven` function, and it returns 2 attribute
     A simple derivation that runs through `mvn compile` & `mvn package` to build the JAR. You may use this as inspiration for more complicated derivations.
 
 Here is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/build-maven-repository.nix) of building the Maven repository
+
 ```nix
 { pkgs ? import <nixpkgs> { } }:
 with pkgs;
@@ -103,7 +104,8 @@ The benefit over the _double invocation_ as we will see below, is that the _/nix
 │       └── 4.1.3
 │           ├── avalon-framework-4.1.3.jar -> /nix/store/iv5fp3955w3nq28ff9xfz86wvxbiw6n9-avalon-framework-4.1.3.jar
 ```
-### Double Invocation
+
+### Double Invocation {#double-invocation}
 
 > ⚠️ This pattern is the simplest but may cause unnecessary rebuilds due to the output hash changing.
 
@@ -163,7 +165,7 @@ The build will fail, and tell you the expected `outputHash` to place. When you'v
 
 If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over-time your output hash will change since the resolved dependencies may change. Hence this method is less recommended then using `buildMaven`.
 
-## Building a JAR
+## Building a JAR {#building-a-jar}
 
 Regardless of which strategy is chosen above, the step to build the derivation is the same.
 
@@ -201,7 +203,7 @@ in stdenv.mkDerivation rec {
 2 directories, 1 file
 ```
 
-## Runnable JAR
+## Runnable JAR {#runnable-jar}
 
 The previous example builds a `jar` file but that's not a file one can run.
 
@@ -213,7 +215,7 @@ We will use the same repository we built above (either _double invocation_ or _b
 
 The following two methods are more suited to Nix then building an [UberJar](https://imagej.net/Uber-JAR) which may be the more traditional approach.
 
-### CLASSPATH
+### CLASSPATH {#classpath}
 
 > This is ideal if you are providing a derivation for _nixpkgs_ and don't want to patch the project's `pom.xml`.
 
@@ -252,11 +254,12 @@ in stdenv.mkDerivation rec {
 }
 ```
 
-### MANIFEST file via Maven Plugin
+### MANIFEST file via Maven Plugin {#manifest-file-via-maven-plugin}
 
 > This is ideal if you are the project owner and want to change your `pom.xml` to set the CLASSPATH within it.
 
 Augment the `pom.xml` to create a JAR with the following manifest:
+
 ```xml
 <build>
   <plugins>

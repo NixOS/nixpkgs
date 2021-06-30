@@ -9,8 +9,8 @@
 { stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
-, jansson, harfbuzz
+, alsa-lib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
+, sigtool, jansson, harfbuzz
 , dontRecurseIntoAttrs ,emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , systemd ? null
@@ -46,10 +46,10 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
 let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
-} // lib.optionalAttrs stdenv.isDarwin {
-  CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
 } // {
-  inherit pname version patches;
+  inherit pname version;
+
+  patches = patches fetchpatch;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
@@ -105,7 +105,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext jansson harfbuzz.dev ]
+    [ ncurses gconf libxml2 gnutls alsa-lib acl gpm gettext jansson harfbuzz.dev ]
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg giflib libtiff libXft
@@ -118,8 +118,8 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional (withX && withMotif) motif
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ]
-    ++ lib.optionals nativeComp [ libgccjit ]
-    ;
+    ++ lib.optionals stdenv.isDarwin [ sigtool ]
+    ++ lib.optionals nativeComp [ libgccjit ];
 
   hardeningDisable = [ "format" ];
 
@@ -138,7 +138,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional withXwidgets "--with-xwidgets"
     ++ lib.optional nativeComp "--with-native-compilation"
     ++ lib.optional withImageMagick "--with-imagemagick"
-    ;
+  ;
 
   installTargets = [ "tags" "install" ];
 

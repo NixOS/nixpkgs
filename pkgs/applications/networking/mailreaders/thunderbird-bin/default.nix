@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, config, makeWrapper
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , atk
 , cairo
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
 
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib
+      alsa-lib
       at-spi2-atk
       atk
       cairo

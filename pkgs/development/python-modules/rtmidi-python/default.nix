@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, cython, alsaLib }:
+{ lib, buildPythonPackage, fetchPypi, cython, alsa-lib }:
 
 buildPythonPackage rec {
   pname = "rtmidi-python";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ cython ];
-  buildInputs = [ alsaLib ];
+  buildInputs = [ alsa-lib ];
 
   setupPyBuildFlags = [ "--from-cython" ];
 

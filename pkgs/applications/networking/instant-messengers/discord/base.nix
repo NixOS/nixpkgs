@@ -1,6 +1,6 @@
 { pname, version, src, binaryName, desktopName
 , autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook
-, alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
+, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
 , freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   inherit pname version src;
 
   nativeBuildInputs = [
-    alsaLib
+    alsa-lib
     autoPatchelfHook
     cups
     libdrm
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   libPath = lib.makeLibraryPath [
     libcxx systemd libpulseaudio libdrm mesa
-    stdenv.cc.cc alsaLib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
+    stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
     gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
     libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
     libXtst nspr nss libxcb pango systemd libXScrnSaver
@@ -54,6 +54,8 @@ in stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
+    # Without || true the install would fail on case-insensitive filesystems
+    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
 
     ln -s "${desktopItem}/share/applications" $out/share/

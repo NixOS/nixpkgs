@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tanka";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aCgr56nXZCkG8k/ZGH2/cDOaqkznnyb6JLEcImqLH64=";
+    sha256 = "sha256-KvQIVJZD/VvLE5RocWLRVGbb8faLY2cBeFSE/6E7x50=";
   };
 
   vendorSha256 = "sha256-vpm2y/CxRNWkz6+AOMmmZH5AjRQWAa6WD5Fnx5lqJYw=";

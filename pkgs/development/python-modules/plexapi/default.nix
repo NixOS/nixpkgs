@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , requests
 , tqdm
-, websocket_client
+, websocket-client
 , isPy27
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     tqdm
-    websocket_client
+    websocket-client
   ];
 
   # Tests require a running Plex instance

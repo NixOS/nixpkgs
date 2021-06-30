@@ -4,6 +4,7 @@
 , cairo
 , cmake
 , fetchurl
+, fetchpatch
 , gettext
 , ghostscript
 , glib
@@ -70,6 +71,15 @@ stdenv.mkDerivation rec {
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
+    })
+
+    # Fix parsing paths by Python extensions.
+    # https://gitlab.com/inkscape/extensions/-/merge_requests/342
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/extensions/-/commit/a82c382c610d37837c8f3f5b13224bab8fd3667e.patch";
+      sha256 = "YWrgjCnQ9q6BUsxSLQojIXnDzPxM/SgrIfj1gxQ/JKM=";
+      stripLen = 1;
+      extraPrefix = "share/extensions/";
     })
   ];
 

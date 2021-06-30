@@ -131,6 +131,7 @@ stdenv.mkDerivation {
     ${lib.optionalString (!gitlabEnterprise) ''
       # Remove all proprietary components
       rm -rf ee
+      sed -i 's/-ee//' ./VERSION
     ''}
 
     # For reasons I don't understand "bundle exec" ignores the
@@ -181,6 +182,7 @@ stdenv.mkDerivation {
     GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
     GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
     GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
+    gitlabEnv.FOSS_ONLY = lib.boolToString (!gitlabEnterprise);
     tests = {
       nixos-test-passes = nixosTests.gitlab;
     };
@@ -189,7 +191,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz ];
+    maintainers = with maintainers; [ fpletz globin krav talyz yuka ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

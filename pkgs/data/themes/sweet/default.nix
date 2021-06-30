@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "sweet";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
       sha256 = "0rza3yxwj256ibqimymjhd6lpjzr7fkhggq0ijdg1wab3q91x66q";
     })
   ];
+
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   sourceRoot = ".";
 

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, alsaLib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
+, alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
 , nixosTests }:
 
 let
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   # not needed
   buildInputs = [
     boost17x
-    alsaLib asio avahi flac libogg libvorbis
+    alsa-lib asio avahi flac libogg libvorbis
     aixlog popl soxr
   ];
 

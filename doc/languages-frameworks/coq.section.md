@@ -1,6 +1,6 @@
 # Coq and coq packages {#sec-language-coq}
 
-## Coq derivation: `coq`
+## Coq derivation: `coq` {#coq-derivation-coq}
 
 The Coq derivation is overridable through the `coq.override overrides`, where overrides is an attribute set which contains the arguments to override. We recommend overriding either of the following
 
@@ -8,7 +8,7 @@ The Coq derivation is overridable through the `coq.override overrides`, where ov
 * `customOCamlPackage` (optional, defaults to `null`, which lets Coq choose a version automatically), which can be set to any of the ocaml packages attribute of `ocaml-ng` (such as `ocaml-ng.ocamlPackages_4_10` which is the default for Coq 8.11 for example).
 * `coq-version` (optional, defaults to the short version e.g. "8.10"), is a version number of the form "x.y" that indicates which Coq's version build behavior to mimic when using a source which is not a release. E.g. `coq.override { version = "d370a9d1328a4e1cdb9d02ee032f605a9d94ec7a"; coq-version = "8.10"; }`.
 
-## Coq packages attribute sets: `coqPackages`
+## Coq packages attribute sets: `coqPackages` {#coq-packages-attribute-sets-coqpackages}
 
 The recommended way of defining a derivation for a Coq library, is to use the `coqPackages.mkCoqDerivation` function, which is essentially a specialization of `mkDerivation` taking into account most of the specifics of Coq libraries. The following attributes are supported:
 

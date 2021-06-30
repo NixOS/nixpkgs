@@ -278,7 +278,7 @@ let format' = format; in let
       additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') + reservedSpace ))
 
       # Compute required space in filesystem blocks
-      diskUsage=$(find . ! -type d -exec 'du' '--apparent-size' '--block-size' "${blockSize}" '{}' ';' | cut -f1 | sum_lines)
+      diskUsage=$(find . ! -type d -print0 | du --files0-from=- --apparent-size --block-size "${blockSize}" | cut -f1 | sum_lines)
       # Each inode takes space!
       numInodes=$(find . | wc -l)
       # Convert to bytes, inodes take two blocks each!

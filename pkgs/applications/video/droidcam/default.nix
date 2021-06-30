@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, ffmpeg, libjpeg_turbo, gtk3, alsaLib, speex, libusbmuxd, libappindicator-gtk3
+, ffmpeg, libjpeg_turbo, gtk3, alsa-lib, speex, libusbmuxd, libappindicator-gtk3
 , pkg-config
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     libjpeg_turbo
     gtk3
-    alsaLib
+    alsa-lib
     speex
     libusbmuxd
     libappindicator-gtk3

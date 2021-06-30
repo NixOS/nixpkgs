@@ -12,6 +12,11 @@ with python3Packages; buildPythonApplication rec {
     sha256 = "1vy30nwsns4jnv0s5i9jpyplxpclgwyw0gldpywv4z3fljs0lzik";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "Click>=7.0,<8.0" "Click"
+  '';
+
   propagatedBuildInputs = [
     click
     click-option-group

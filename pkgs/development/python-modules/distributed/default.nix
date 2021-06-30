@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2021.3.0";
+  version = "2021.6.1";
   disabled = pythonOlder "3.6";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Qn/n4Ee7rXQTxl1X5W+k1rHPkh/SBqPSyquUv5FTw9s=";
+    sha256 = "sha256-Z79h/WAio5diX2myChx8HPAWe2RB4Ajw7Ybch4XUYFc=";
   };
 
   propagatedBuildInputs = [

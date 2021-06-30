@@ -63,7 +63,7 @@ in {
     ):
         serviceClient.sleep(20)
         socketActivatedClient.wait_until_succeeds(
-            "systemctl status ensure-printers | grep -q -E 'code=exited, status=0/SUCCESS'"
+            "systemctl show ensure-printers | grep -q -E 'code=exited ; status=0'"
         )
 
 

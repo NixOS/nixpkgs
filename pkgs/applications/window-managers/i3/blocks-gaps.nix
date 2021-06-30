@@ -1,5 +1,5 @@
 { fetchFromGitHub, lib, stdenv, perl, makeWrapper
-, iproute2, acpi, sysstat, alsaUtils
+, iproute2, acpi, sysstat, alsa-utils
 , scripts ? [ "bandwidth" "battery" "cpu_usage" "disk" "iface"
               "load_average" "memory" "volume" "wifi" ]
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/libexec/i3blocks/iface \
       --prefix PATH : ${makeBinPath (optional (elem "iface" scripts) iproute2)}
     wrapProgram $out/libexec/i3blocks/volume \
-      --prefix PATH : ${makeBinPath (optional (elem "volume" scripts) alsaUtils)}
+      --prefix PATH : ${makeBinPath (optional (elem "volume" scripts) alsa-utils)}
   '';
 
   meta = with lib; {

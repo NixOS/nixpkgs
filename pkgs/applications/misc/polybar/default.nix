@@ -19,7 +19,7 @@
 , xcbutilxrm
 , makeWrapper
 , removeReferencesTo
-, alsaLib
+, alsa-lib
 , curl
 , libmpdclient
 , libpulseaudio
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       xcbutilwm
       xcbutilxrm
     ]
-    ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional githubSupport curl
     ++ lib.optional mpdSupport libmpdclient
     ++ lib.optional pulseSupport libpulseaudio

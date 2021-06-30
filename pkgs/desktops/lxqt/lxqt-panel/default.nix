@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, alsaLib
+, alsa-lib
 , kguiaddons
 , kwindowsystem
 , libXdamage
@@ -46,7 +46,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     kguiaddons
     kwindowsystem
     libXdamage

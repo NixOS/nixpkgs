@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, alsaLib
+, alsa-lib
 , libopus
 , libogg
 , gmp
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "seren";
   version = "0.0.21";
 
-  buildInputs = [ alsaLib libopus libogg gmp ncurses ];
+  buildInputs = [ alsa-lib libopus libogg gmp ncurses ];
 
   src = fetchurl {
     url = "http://holdenc.altervista.org/seren/downloads/${pname}-${version}.tar.gz";

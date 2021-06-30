@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "1.0.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = version;
-    sha256 = "0ciia8hhkkyh6rmrxgbk3bgwjwzkcba6645wlcm0vlgk2w4i5m3z";
+    sha256 = "191f60db2y1f3xw1x81mw88vclf1c4kgvnfv74g5vb3vn7n57c5j";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "140bzxhsyfif99x5a1m1d45ppb6jzvy9m4xil7z1wg2pnq9k7zz8";
+  cargoSha256 = "0hhwixqhrl79hpzmvq7ga3kp2cfrwr4i8364cwnr7195xwnfxb0k";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -32,7 +32,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoTestFlags = [
-    "--features" "test-cranelift,test-jit"
+    "--features" "test-cranelift"
+    # Can't use test-jit :
+    # error: Package `wasmer-workspace v2.0.0 (/build/source)` does not have the feature `test-jit`
   ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
@@ -47,6 +49,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://wasmer.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne shamilton ];
   };
 }

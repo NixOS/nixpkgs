@@ -8,7 +8,7 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pleroma-otp;
+        default = pkgs.pleroma;
         description = "Pleroma package to use.";
       };
 

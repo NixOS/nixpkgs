@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , autoPatchelfHook
-, alsaLib
+, alsa-lib
 , gtk2
 , libXrandr
 , libXScrnSaver
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     zlib
 
     # Run-time libraries (loaded with dlopen)
-    alsaLib # ALSA sound
+    alsa-lib # ALSA sound
     libXrandr # X11 resolution detection
     libXScrnSaver # X11 screensaver prevention
     udev # udev input drivers

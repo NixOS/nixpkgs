@@ -4,7 +4,7 @@
 , gobject-introspection
 , gtk3
 , keybinder3
-, libwnck3
+, libwnck
 , python3Packages
 , wrapGAppsHook
 }:
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gobject-introspection
     gtk3
-    libwnck3
+    libwnck
     keybinder3
   ];
 

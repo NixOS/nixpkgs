@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , aalib
-, alsaLib
+, alsa-lib
 , ffmpeg
 , flac
 , libGL
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     aalib
-    alsaLib
+    alsa-lib
     ffmpeg
     flac
     libGL

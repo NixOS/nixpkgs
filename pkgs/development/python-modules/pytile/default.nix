@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "pytile";
   version = "5.2.1";
-  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";

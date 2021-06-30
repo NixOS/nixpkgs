@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , buildPythonPackage
 , rustPlatform
-, pythonImportsCheckHook
 , pkg-config
 , openssl
 , publicsuffix-list
@@ -11,11 +10,13 @@
 , libiconv
 , CoreFoundation
 , Security
+, pytestCheckHook
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "adblock";
-  version = "0.4.0";
+  version = "0.5.0";
   disabled = isPy27;
 
   # Pypi only has binary releases
@@ -23,18 +24,18 @@ buildPythonPackage rec {
     owner = "ArniDagur";
     repo = "python-adblock";
     rev = version;
-    sha256 = "10d6ks2fyzbizq3kb69q478idj0h86k6ygjb6wl3zq3mf65ma4zg";
+    sha256 = "sha256-JjmMfL24778T6LCuElXsD7cJxQ+RkqbNEnEqwoN24WE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-gEFmj3/KvhvvsOK2nX2L1RUD4Wfp3nYzEzVnQZIsIDY=";
+    hash = "sha256-w+/W4T3ukRHNpCPjhlHZLPn6sgCpz4QHVD8VW+Rw5BI=";
   };
 
   format = "pyproject";
 
-  nativeBuildInputs = [ pkg-config pythonImportsCheckHook ]
+  nativeBuildInputs = [ pkg-config ]
     ++ (with rustPlatform; [ cargoSetupHook maturinBuildHook ]);
 
   buildInputs = [ openssl ]
@@ -42,10 +43,19 @@ buildPythonPackage rec {
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
-  # There are no rust tests
-  doCheck = false;
+  checkInputs = [ pytestCheckHook toml ];
 
-  pythonImportsCheck = [ "adblock" ];
+  preCheck = ''
+    # import from $out instead
+    rm -r adblock
+  '';
+
+  disabledTestPaths = [
+    # relies on directory removed above
+    "tests/test_typestubs.py"
+  ];
+
+  pythonImportsCheck = [ "adblock" "adblock.adblock" ];
 
   meta = with lib; {
     description = "Python wrapper for Brave's adblocking library, which is written in Rust";

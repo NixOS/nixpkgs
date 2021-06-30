@@ -8,6 +8,7 @@
 , useOpenSSL ? !isBootstrap, openssl
 , useNcurses ? false, ncurses
 , withQt5 ? false, qtbase
+, buildDocs ? (!isBootstrap && (useNcurses || withQt5)), sphinx, texinfo
 }:
 
 stdenv.mkDerivation (rec {
@@ -35,14 +36,16 @@ stdenv.mkDerivation (rec {
 
   ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
-  outputs = [ "out" ];
+  outputs = [ "out" ]
+    ++ lib.optionals buildDocs [ "man" "info" ];
   setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ setupHook pkg-config ];
+  nativeBuildInputs = [ setupHook pkg-config ]
+    ++ lib.optionals buildDocs [ texinfo ];
 
   buildInputs = []
     ++ lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
@@ -68,6 +71,11 @@ stdenv.mkDerivation (rec {
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ lib.optional withQt5 "--qt-gui"
+    ++ lib.optionals buildDocs [
+      "--sphinx-build=${sphinx}/bin/sphinx-build"
+      "--sphinx-man"
+      "--sphinx-info"
+    ]
     # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
     ++ lib.optionals stdenv.hostPlatform.is32bit [
       "CFLAGS=-D_FILE_OFFSET_BITS=64"

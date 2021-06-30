@@ -1,6 +1,16 @@
-{ stdenv, config, lib, fetchFromGitHub, cmake, libusb1, ninja, pkg-config, gcc
+{ stdenv
+, config
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libusb1
+, ninja
+, pkg-config
+, gcc
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
-, enablePython ? false, pythonPackages ? null }:
+, enablePython ? false, pythonPackages ? null
+}:
 
 assert cudaSupport -> cudatoolkit != null;
 assert enablePython -> pythonPackages != null;
@@ -24,7 +34,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional cudaSupport cudatoolkit
     ++ lib.optionals enablePython (with pythonPackages; [python pybind11 ]);
 
-  patches = lib.optionals enablePython [
+  patches = [
+    # fix build on aarch64-darwin
+    # https://github.com/IntelRealSense/librealsense/pull/9253
+    (fetchpatch {
+      url = "https://github.com/IntelRealSense/librealsense/commit/beb4c44debc8336de991c983274cad841eb5c323.patch";
+      sha256 = "05mxsd2pz3xrvywdqyxkwdvxx8hjfxzcgl51897avz4v2j89pyq8";
+    })
     ./py_sitepackage_dir.patch
     ./py_pybind11_no_external_download.patch
   ];
@@ -57,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;
     maintainers = with maintainers; [ brian-dawn ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
   };
 }

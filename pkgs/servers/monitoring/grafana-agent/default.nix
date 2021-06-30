@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.13.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-ySdBHlUSGIyhMwInoFT90mm+HfAkO/60wBPACQgxDAM=";
+    sha256 = "sha256-mRDd9G/VMbDwp/GYPoUE0v9j+BmUd08wOMJjgcg2qdo=";
   };
 
-  vendorSha256 = null;
+  vendorSha256 = "sha256-sQFWdBOjfYb1e7ZzHGgtgnuEQCU4xnkJTyzC/9DRcYs=";
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351

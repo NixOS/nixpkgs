@@ -13,7 +13,7 @@
 , libhandy
 , gtk3
 , openssl
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , wrapGAppsHook
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     gtk3
     libhandy
     openssl
-    alsaLib
+    alsa-lib
     libpulseaudio
   ];
 

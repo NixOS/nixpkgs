@@ -98,9 +98,19 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
-  # ld.gold is disabled for musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
+  # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
+  # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
-  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false) && !targetPlatform.isMusl;
+  useLdGold = targetPlatform.linker == "gold" || (targetPlatform.linker == "bfd" && !targetPlatform.isMusl);
+
+  runtimeDeps = [
+    targetPackages.stdenv.cc.bintools
+    coreutils
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
 
 in
 stdenv.mkDerivation (rec {
@@ -124,6 +134,9 @@ stdenv.mkDerivation (rec {
     # upstream patch. Don't forget to check backport status of the upstream patch
     # when adding new GHC releases in nixpkgs.
     ./respect-ar-path.patch
+    # Fix documentation configuration which causes a syntax error with sphinx 4.*
+    # See also https://gitlab.haskell.org/ghc/ghc/-/issues/19962
+    ./sphinx-4-configuration.patch
   ];
 
   postPatch = "patchShebangs .";
@@ -242,7 +255,7 @@ stdenv.mkDerivation (rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
+      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
     done
   '';
 

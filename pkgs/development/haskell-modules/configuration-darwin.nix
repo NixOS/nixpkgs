@@ -170,5 +170,11 @@ self: super: {
 
   # 2021-05-25: Tests fail and I have no way to debug them.
   hls-class-plugin = dontCheck super.hls-class-plugin;
+  hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
+  hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
+  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
+
+  # We are lacking pure pgrep at the moment for tests to work
+  tmp-postgres = dontCheck super.tmp-postgres;
 
 }

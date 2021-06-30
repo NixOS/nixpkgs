@@ -30,6 +30,9 @@ in
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.discourse;
+        apply = p: p.override {
+          plugins = lib.unique (p.enabledPlugins ++ cfg.plugins);
+        };
         defaultText = "pkgs.discourse";
         description = ''
           The discourse package to use.
@@ -356,7 +359,7 @@ in
           };
 
           port = lib.mkOption {
-            type = lib.types.int;
+            type = lib.types.port;
             default = 25;
             description = ''
               The port of the SMTP server Discourse should use to
@@ -731,8 +734,6 @@ in
 
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
-          cp -r ${cfg.package}/share/discourse/plugins.dist/* /run/discourse/plugins/
-          ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} /run/discourse/plugins/") cfg.plugins}
           ln -sf /var/lib/discourse/uploads /run/discourse/public/uploads
           ln -sf /var/lib/discourse/backups /run/discourse/public/backups
 

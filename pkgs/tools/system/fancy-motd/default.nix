@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fancy-motd";
-  version = "unstable-2021-05-15";
+  version = "unstable-2021-06-27";
 
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = pname;
-    rev = "b25c1e7d76927d7f947a048d844dad4400de3598";
-    sha256 = "05jazmijk3im1wl4nprkwmrq6bxhb3ah8syyqym109blajy72841";
+    rev = "839320ab261612c9ba5b13fc8d1445d094ea0ab3";
+    sha256 = "00wv7nk2f3q186z2qfks5salf97s04vk7ilk8jnbimxg4fl7hcda";
   };
 
   buildInputs = [ bc curl figlet fortune gawk iproute2 ];

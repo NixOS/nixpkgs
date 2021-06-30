@@ -1,5 +1,5 @@
 { config, lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config
-, alsaLib, libtool, icu
+, alsa-lib, libtool, icu
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     libtool
     icu
   ] ++ lib.optional pulseaudioSupport libpulseaudio;

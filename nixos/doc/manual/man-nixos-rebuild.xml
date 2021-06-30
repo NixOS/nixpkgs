@@ -91,6 +91,10 @@
     <option>--flake</option> <replaceable>flake-uri</replaceable>
    </arg>
 
+   <arg>
+    <option>--override-input</option> <replaceable>input-name</replaceable> <replaceable>flake-uri</replaceable>
+   </arg>
+
    <sbr />
 
    <arg>

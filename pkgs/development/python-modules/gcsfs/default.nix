@@ -1,31 +1,54 @@
-{ buildPythonPackage, fetchFromGitHub, lib, pytestCheckHook, google-auth
-, google-auth-oauthlib, requests, decorator, fsspec, ujson, aiohttp, crcmod
-, pytest-vcr, vcrpy }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, google-auth
+, google-auth-oauthlib
+, requests
+, decorator
+, fsspec
+, ujson
+, aiohttp
+, crcmod
+, pytest-vcr
+, vcrpy
+}:
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2021.04.0";
+  version = "2021.06.0";
+  disabled = pythonOlder "3.6";
 
-  # github sources needed for test data
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OA43DaQue7R5d6SzfKThEQFEwJndjLfznu1LMubs5fs=";
+    sha256 = "sha256-tJeCSGK24WC8E7NKupg6/Tv861idWg6WYir+ZXeU+e0=";
   };
 
   propagatedBuildInputs = [
+    aiohttp
+    crcmod
+    decorator
+    fsspec
     google-auth
     google-auth-oauthlib
     requests
-    decorator
-    fsspec
-    aiohttp
     ujson
-    crcmod
   ];
 
-  checkInputs = [ pytestCheckHook pytest-vcr vcrpy ];
+  checkInputs = [
+    pytest-vcr
+    pytestCheckHook
+    vcrpy
+  ];
+
+  disabledTests = [
+    # Tests wants to communicate with the Link-local address
+    "test_GoogleCredentials_None"
+  ];
+
   pythonImportsCheck = [ "gcsfs" ];
 
   meta = with lib; {

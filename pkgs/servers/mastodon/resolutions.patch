@@ -1,13 +1,13 @@
 diff --git a/package.json b/package.json
-index 5bc1f6bf3..8cc22a403 100644
+index f485b1370..ce8e42699 100644
 --- a/package.json
 +++ b/package.json
 @@ -168,7 +168,8 @@
      "webpack-cli": "^3.3.12",
      "webpack-merge": "^5.7.3",
      "wicg-inert": "^3.1.1",
--    "ws": "^7.4.5"
-+    "ws": "^7.4.5",
+-    "ws": "^7.4.6"
++    "ws": "^7.4.6",
 +    "kind-of": "^6.0.3"
    },
    "devDependencies": {
@@ -23,12 +23,12 @@ index 5bc1f6bf3..8cc22a403 100644
      "bufferutil": "^4.0.3",
      "utf-8-validate": "^5.0.5"
 diff --git a/yarn.lock b/yarn.lock
-index 6c8bcf549..bda3adbe8 100644
+index b8ea0f369..32e929c0d 100644
 --- a/yarn.lock
 +++ b/yarn.lock
-@@ -5833,6 +5833,11 @@ is-binary-path@~2.1.0:
+@@ -5939,6 +5939,11 @@ is-boolean-object@^1.1.0:
    dependencies:
-     binary-extensions "^2.0.0"
+     call-bind "^1.0.2"
  
 +is-buffer@^1.1.5:
 +  version "1.1.6"
@@ -38,7 +38,7 @@ index 6c8bcf549..bda3adbe8 100644
  is-callable@^1.1.4, is-callable@^1.2.2:
    version "1.2.2"
    resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.2.tgz#c7c6715cd22d4ddb48d3e19970223aceabb080d9"
-@@ -6769,7 +6774,26 @@ killable@^1.0.1:
+@@ -6971,7 +6976,26 @@ killable@^1.0.1:
    resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
    integrity sha512-LzqtLKlUwirEUyl/nicirVmNiPvYs7l5n8wOPP7fyJVpUPkvCnW/vuiXGpylGUlnPDnB7311rARzAt3Mhswpjg==
  

@@ -945,6 +945,7 @@ in {
         RuntimeDirectoryMode = "0700";
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
+        StateDirectoryMode = "0700";
       };
     };
   };

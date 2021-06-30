@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "amqtt";
-  version = "0.10.0-alpha.3";
+  version = "0.10.0-alpha.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Yakifo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wz85ykjgi2174qcdgpakmc4m0p96v62az7pvc9hyallq1v1k4n6";
+    sha256 = "1v5hlcciyicnhwk1xslh3kxyjqaw526fb05pvhjpp3zqrmbxya4d";
   };
 
   nativeBuildInputs = [ poetry-core ];

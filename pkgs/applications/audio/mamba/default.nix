@@ -6,7 +6,7 @@
 , fluidsynth
 , libX11
 , libjack2
-, alsaLib
+, alsa-lib
 , liblo
 , libsigcxx
 , libsmf
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config xxd ];
-  buildInputs = [ cairo fluidsynth libX11 libjack2 alsaLib liblo libsigcxx libsmf ];
+  buildInputs = [ cairo fluidsynth libX11 libjack2 alsa-lib liblo libsigcxx libsmf ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

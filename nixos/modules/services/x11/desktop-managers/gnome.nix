@@ -180,7 +180,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable Gnome 3 desktop manager.";
+        description = "Enable GNOME desktop manager.";
       };
 
       sessionPath = mkOption {
@@ -283,7 +283,7 @@ in
     (mkIf (cfg.enable || flashbackEnabled) {
       # Seed our configuration into nixos-generate-config
       system.nixos-generate-config.desktopConfiguration = [''
-        # Enable the GNOME 3 Desktop Environment.
+        # Enable the GNOME Desktop Environment.
         services.xserver.displayManager.gdm.enable = true;
         services.xserver.desktopManager.gnome.enable = true;
       ''];

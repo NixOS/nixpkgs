@@ -1,30 +1,46 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k
-, nose, mock, blinker, pytest
-, flask, six, pytz, aniso8601, pycrypto
+{ lib
+, buildPythonPackage
+, fetchPypi
+, aniso8601
+, flask
+, pytz
+, six
+, blinker
+, mock
+, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "Flask-RESTful";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05b9lzx5yc3wgml2bcq50lq35h66m8zpj6dc9advcb5z3acsbaay";
+    sha256 = "0gm5dz088v3d2k1dkcp9b3nnqpkk0fp2jly870hijj2xhc5nbv6c";
   };
 
-  propagatedBuildInputs = [ flask six pytz aniso8601 pycrypto ];
+  propagatedBuildInputs = [
+    aniso8601
+    flask
+    pytz
+    six
+  ];
 
-  checkInputs = [ pytest nose mock blinker ];
-
-  # test_reqparse.py: werkzeug move Multidict location (only imported in tests)
-  # handle_non_api_error isn't updated for addition encoding argument
-  checkPhase = ''
-    pytest --ignore=tests/test_reqparse.py -k 'not handle_non_api_error'
-  '';
+  checkInputs = [
+    pytestCheckHook
+    mock
+    nose
+    blinker
+  ];
 
   meta = with lib; {
-    homepage = "https://flask-restful.readthedocs.io/";
-    description = "REST API building blocks for Flask";
+    homepage = "https://flask-restful.readthedocs.io";
+    description = "Simple framework for creating REST APIs";
+    longDescription = ''
+      Flask-RESTful provides the building blocks for creating a great
+      REST API.
+    '';
     license = licenses.bsd3;
   };
 }

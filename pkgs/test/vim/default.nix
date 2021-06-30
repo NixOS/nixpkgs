@@ -1,49 +1,15 @@
-{ vimUtils, vim_configurable, writeText, neovim, vimPlugins
-, lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
-, neovim-unwrapped
+{ vimUtils, vim_configurable, writeText, vimPlugins
+, lib, fetchFromGitHub
+, pkgs
 }:
 let
   inherit (vimUtils) buildVimPluginFrom2Nix;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
-  plugins = with vimPlugins; [
-    {
-      plugin = vim-obsession;
-      config = ''
-        map <Leader>$ <Cmd>Obsession<CR>
-      '';
-    }
-  ];
-
-  nvimConfNix = neovimUtils.makeNeovimConfig {
-    inherit plugins;
-    customRC = ''
-      " just a comment
-    '';
-  };
-
-  wrapNeovim = suffix: config:
-    wrapNeovimUnstable neovim-unwrapped (config // {
-      extraName = suffix;
-      wrapRc = true;
-    });
 in
-{
+  pkgs.recurseIntoAttrs (rec {
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
-
-  ### neovim tests
-  ##################
-  nvim_with_plugins = wrapNeovim "-with-plugins" nvimConfNix;
-
-  nvim_via_override = neovim.override {
-    configure = {
-      packages.foo.start = [ vimPlugins.ale ];
-      customRC = ''
-        :help ale
-      '';
-    };
-  };
 
   ### vim tests
   ##################
@@ -72,11 +38,6 @@ in
     vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
   };
 
-  # only neovim makes use of `requiredPlugins`, test this here
-  test_nvim_with_vim_nix_using_pathogen = neovim.override {
-    configure.pathogen.pluginNames = [ "vim-nix" ];
-  };
-
   # regression test for https://github.com/NixOS/nixpkgs/issues/53112
   # The user may have specified their own plugins which may not be formatted
   # exactly as the generated ones. In particular, they may not have the `pname`
@@ -99,12 +60,4 @@ in
       });
     vimrcConfig.vam.pluginDictionaries = [ { names = [ "vim-trailing-whitespace" ]; } ];
   };
-
-  # system remote plugin manifest should be generated, deoplete should be usable
-  # without the user having to do `UpdateRemotePlugins`. To test, launch neovim
-  # and do `:call deoplete#enable()`. It will print an error if the remote
-  # plugin is not registered.
-  test_nvim_with_remote_plugin = neovim.override {
-    configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim ];
-  };
-}
+})

@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://dwheeler.com/flawfinder/";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.all;
   };
 }

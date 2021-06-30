@@ -18,7 +18,7 @@
 , sqlite
 , sratom
 , suil
-, alsaLib
+, alsa-lib
 , libsndfile
 , soxr
 , flac
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     expat
     ffmpeg
     file

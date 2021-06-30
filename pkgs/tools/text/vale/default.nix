@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "vale";
-  version = "2.10.2";
+  version = "2.10.4";
 
   subPackages = [ "cmd/vale" ];
   outputs = [ "out" "data" ];
@@ -11,10 +11,10 @@ buildGoModule rec {
     owner  = "errata-ai";
     repo   = "vale";
     rev    = "v${version}";
-    sha256 = "0cpq2pv6d67fdnm2qbb7p9amk0as8bm4knkywak8fsqadxfadx80";
+    sha256 = "0gw7b6gvzp2f7la1mb74bg92nd8zk5fiajsihcqpni2a79js1s6y";
   };
 
-  vendorSha256 = "14zimsl0f7sxqqka00krix3q2mxdcpk8n2zh7bz8awjwzn4kg8m3";
+  vendorSha256 = "15r97mpsailsa4ja6mh5wrjcjacppm0vwma9q6znsa2f1x2apc6y";
 
   postInstall = ''
     mkdir -p $data/share/vale

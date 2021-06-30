@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchFromGitHub
 , autoconf, automake, which, libtool, pkg-config
-, portaudio, alsaLib
+, portaudio, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake which libtool pkg-config ];
 
   buildInputs = [ portaudio ]
-    ++ lib.optionals stdenv.isLinux [ alsaLib ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   preConfigure = "./autogen.sh";

@@ -10,6 +10,7 @@
 , openssl
 , xclip
 , xdotool
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     extra-cmake-modules
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
@@ -35,12 +37,18 @@ rustPlatform.buildRustPackage rec {
     libXtst
     libXi
     libnotify
+    xclip
     openssl
     xdotool
   ];
 
   # Some tests require networking
   doCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/espanso \
+      --prefix PATH : ${lib.makeBinPath [ libnotify xclip ]}
+  '';
 
   meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";

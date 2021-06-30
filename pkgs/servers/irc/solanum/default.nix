@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     ./dont-create-logdir.patch
   ];
 
+  postPatch = ''
+    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
+  '';
+
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
@@ -57,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hexa ];
     platforms = platforms.unix;
   };

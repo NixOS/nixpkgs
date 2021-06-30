@@ -8,10 +8,12 @@ rec {
   };
 
   fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetchCargoTarball.nix {
+    git = buildPackages.gitMinimal;
     inherit cargo;
   };
 
   buildRustPackage = callPackage ../../../build-support/rust {
+    git = buildPackages.gitMinimal;
     inherit cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook
       fetchCargoTarball importCargoLock rustc;
   };

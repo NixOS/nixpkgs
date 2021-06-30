@@ -3,7 +3,7 @@
 , pkg-config
 , autoconf
 , gtk2
-, alsaLib
+, alsa-lib
 , SDL
 , jack2
 , audiofile
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     jack2
     audiofile
     goocanvas
-  ] ++ lib.optional stdenv.isLinux alsaLib;
+  ] ++ lib.optional stdenv.isLinux alsa-lib;
 
   hardeningDisable = [ "format" ];
 

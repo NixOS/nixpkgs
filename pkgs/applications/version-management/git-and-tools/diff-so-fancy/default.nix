@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "diff-so-fancy";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
-    sha256 = "sha256-bV22x459QerWg4MVLWsXPDhM38QWG6BE+dVmKIFfDiE=";
+    sha256 = "sha256-1kBarsRiuB8fv7VLlWfpotPfHeMrfmIXHXTFu8TzC2A=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
       diff-so-fancy builds on the good-lookin' output of git contrib's
       diff-highlight to upgrade your diffs' appearances.
     '';
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin ma27 ];
   };
 }

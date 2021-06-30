@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , gtk2
 , hicolor-icon-theme
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     libpulseaudio
     gtk2
     hicolor-icon-theme

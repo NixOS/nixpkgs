@@ -79,7 +79,8 @@ unwrapped = stdenv.mkDerivation rec {
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
-  doInstallCheck = with stdenv; hostPlatform == buildPlatform;
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform
+    && !(isDarwin && isAarch64); # avoid luarocks, as it's broken ATM on the platform
   installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
     meson test --print-errorlogs

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "skytemple-dtef";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "177ydif01fai6z5yhgpa27pzfgabblzhl8nsczczcmw74vxqwzyc";
+    sha256 = "0hisg7gq6ph0as9vvx2p1h104bn6x2kx8y477p9zcqc71f3yrx82";
   };
 
   propagatedBuildInputs = [ skytemple-files ];

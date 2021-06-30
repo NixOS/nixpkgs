@@ -58,7 +58,7 @@
 
 , debugBuild ? false
 
-, alsaSupport ? stdenv.isLinux, alsaLib
+, alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libdrm
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
     xorg.libXdamage
     zip
     zlib
-  ] ++ lib.optional alsaSupport alsaLib
+  ] ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional gtk3Support gtk3
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optionals waylandSupport [ libxkbcommon libdrm ];
@@ -335,7 +335,7 @@ stdenv.mkDerivation rec {
     attrPath = "thunderbird-78";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
     inherit writeScript lib common-updater-scripts xidel coreutils gnused
-      gnugrep curl runtimeShell;
+      gnugrep gnupg curl runtimeShell;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

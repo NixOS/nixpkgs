@@ -4,9 +4,9 @@
 
 In this document and related Nix expressions, we use the term, _BEAM_, to describe the environment. BEAM is the name of the Erlang Virtual Machine and, as far as we're concerned, from a packaging perspective, all languages that run on the BEAM are interchangeable. That which varies, like the build system, is transparent to users of any given BEAM package, so we make no distinction.
 
-## Available versions and deprecations schedule
+## Available versions and deprecations schedule {#available-versions-and-deprecations-schedule}
 
-### Elixir
+### Elixir {#elixir}
 
 nixpkgs follows the [official elixir deprecation schedule](https://hexdocs.pm/elixir/compatibility-and-deprecations.html) and keeps the last 5 released versions of Elixir available.
 
@@ -68,7 +68,7 @@ Erlang.mk functions similarly to Rebar3, except we use `buildErlangMk` instead o
 
 `mixRelease` is used to make a release in the mix sense. Dependencies will need to be fetched with `fetchMixDeps` and passed to it.
 
-#### mixRelease - Elixir Phoenix example
+#### mixRelease - Elixir Phoenix example {#mixrelease---elixir-phoenix-example}
 
 Here is how your `default.nix` file would look.
 
@@ -148,7 +148,7 @@ Setup will require the following steps:
 - you can now `nix-build .`
 - To run the release, set the `RELEASE_TMP` environment variable to a directory that your program has write access to. It will be used to store the BEAM settings.
 
-#### Example of creating a service for an Elixir - Phoenix project
+#### Example of creating a service for an Elixir - Phoenix project {#example-of-creating-a-service-for-an-elixir---phoenix-project}
 
 In order to create a service with your release, you could add a `service.nix`
 in your project with the following
@@ -228,7 +228,7 @@ mkShell {
 }
 ```
 
-#### Elixir - Phoenix project
+#### Elixir - Phoenix project {#elixir---phoenix-project}
 
 Here is an example `shell.nix`.
 
