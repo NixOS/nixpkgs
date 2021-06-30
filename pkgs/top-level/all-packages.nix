@@ -871,6 +871,8 @@ in
 
   elkhound = callPackage ../development/tools/elkhound { };
 
+  weidu = callPackage ../tools/games/weidu { };
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
