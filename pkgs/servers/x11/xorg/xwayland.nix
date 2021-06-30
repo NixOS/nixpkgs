@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   ];
   mesonFlags = [
     "-Dxwayland_eglstream=true"
-    "-Ddefault_font-path=${defaultFontPath}"
+    "-Ddefault_font_path=${defaultFontPath}"
     "-Dxkb_bin_dir=${xkbcomp}/bin"
     "-Dxkb_dir=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb_output_dir=${placeholder "out"}/share/X11/xkb/compiled"
