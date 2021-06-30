@@ -24846,6 +24846,8 @@ in
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
 
+  kirc = callPackage ../applications/networking/irc/kirc { };
+
   ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
   istioctl = callPackage ../applications/networking/cluster/istioctl { };
