@@ -130,7 +130,7 @@ self = stdenv.mkDerivation {
       (if versionAtLeast "8.10"
        then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme wrapGAppsHook ]
        else [ ocamlPackages.lablgtk ])
-    ++ optional (versionAtLeast "8.14") [ ocamlPackages.dune_2 ]
+    ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2
   ;
 
   postPatch = ''
