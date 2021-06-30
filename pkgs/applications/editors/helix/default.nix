@@ -1,4 +1,5 @@
 { fetchFromGitHub, lib, rustPlatform }:
+
 rustPlatform.buildRustPackage rec {
   pname = "helix";
   version = "0.3.0";
@@ -20,6 +21,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
     maintainers = with maintainers; [ yusdacra ];
-    platforms = platforms.unix;
   };
 }
