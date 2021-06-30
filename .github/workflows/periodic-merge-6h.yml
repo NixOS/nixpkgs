@@ -5,7 +5,7 @@
 #  * and make sure that all major rebuilds happen before the staging
 #    branch get’s merged back into its base branch.
 
-name: "Periodic Merges"
+name: "Periodic Merges (6h)"
 
 
 on:
