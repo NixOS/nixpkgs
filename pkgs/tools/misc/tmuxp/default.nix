@@ -1,14 +1,14 @@
-{ lib, python }:
+{ lib, python3 }:
 
-with python.pkgs;
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.7.2";
+  version = "1.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14296b62db260420d4600dcd805408ea908b3a78d4ea0a6a403d092fdbf6d075";
+    sha256 = "0hy21qa80namd2s6zqhf1wkn7f7dpp59sbr32726nl5vi9n566fx";
   };
 
   postPatch = ''
