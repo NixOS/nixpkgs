@@ -42,6 +42,10 @@ in stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
+    # required to put IPC socket in globally accessible
+    # directory, until a proper solurion is provided
+    # upstream
+    ./ipc-socket-in-run.patch
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
