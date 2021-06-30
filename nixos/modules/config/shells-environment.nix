@@ -128,7 +128,7 @@ in
 
     environment.localBinInPath = mkOption {
       description = ''
-        Include ~/.local/bin/ in $PATH.
+        Add ~/.local/bin/ to $PATH
       '';
       default = false;
       type = types.bool;
