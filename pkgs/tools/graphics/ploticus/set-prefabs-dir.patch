@@ -1,10 +1,11 @@
---- a/src/Makefile
-+++ b/src/Makefile
-@@ -133,6 +133,6 @@
- #### To set a hard-coded directory for prefabs files, uncomment & edit the following..
- #### If done, users won't be required to have PLOTICUS_PREFABS environment variable defined.
- #### This option not available for win32
--# PREFABS_DIR = "/usr/lib/ploticus/prefabs"
-+PREFABS_DIR = "$(out)/share/ploticus/prefabs"
+--- a/src/pl.h
++++ b/src/pl.h
+@@ -8,7 +8,7 @@
+ #include <stdlib.h>
+ #include "plg.h"
  
+-#define PREFABS_DIR ""  	 /* INSTALLERS can set this to a valid pathname, so that users don't need to set PLOTICUS_PREFABS env var */
++#define PREFABS_DIR "@out@/share/ploticus/prefabs"  	 /* INSTALLERS can set this to a valid pathname, so that users don't need to set PLOTICUS_PREFABS env var */
+ 
+ #define PLVERSION "2.42-May2013" /* see also the Copyright page, and page headers and footers */
  

@@ -6,13 +6,13 @@
 , libpng
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ploticus";
   version = "2.42";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ploticus/ploticus/2.41/pl241src.tar.gz";
-    sha256 = "1065r0nizjixi9sxxfxrnwg10r458i6fgsd23nrxa200rypvdk7c";
+    url = "mirror://sourceforge/ploticus/ploticus/${version}/ploticus${lib.replaceStrings [ "." ] [ "" ] version}_src.tar.gz";
+    sha256 = "PynkufQFIDqT7+yQDlgW2eG0OBghiB4kHAjKt91m4LA=";
   };
 
   patches = [
@@ -46,11 +46,7 @@ stdenv.mkDerivation {
     mkdir -p "$out/share/ploticus/prefabs"
     cp -rv prefabs/* "$out/share/ploticus/prefabs"
 
-    # Install the man pages.
-    cp -rv man $out/share
-
     # Add aliases for backwards compatibility.
-    ln -s "pl.1" "$out/share/man/man1/ploticus.1"
     ln -s "pl" "$out/bin/ploticus"
   '';
 
