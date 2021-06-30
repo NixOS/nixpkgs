@@ -28,7 +28,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText; } ({
 
     emacs --batch -Q -l ${./elpa2nix.el} \
         -f elpa2nix-install-package \
-        "${src}" "$out/share/emacs/site-lisp/elpa"
+        "$src" "$out/share/emacs/site-lisp/elpa"
 
     runHook postInstall
   '';
