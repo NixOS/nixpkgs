@@ -2,9 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, pytest
-, pytestrunner
 , future
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,7 +16,17 @@ buildPythonPackage rec {
     sha256 = "4cb368fbb18a0b7231f4d76119165451c8d2e35951455dfee97c62a87b04d455";
   };
 
-  buildInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "tests/" ];
+
+  disabledTests = [
+    # https://github.com/bear/parsedatetime/issues/263
+    "testDate3ConfusedHourAndYear"
+    # https://github.com/bear/parsedatetime/issues/215
+    "testFloat"
+  ];
+  pythonImportChecks = [ "parsedatetime" ];
+
   propagatedBuildInputs = [ future ];
 
   meta = with lib; {
@@ -25,5 +34,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/bear/parsedatetime";
     license = licenses.asl20;
   };
-
 }
