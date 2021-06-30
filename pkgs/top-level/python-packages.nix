@@ -5233,6 +5233,8 @@ in {
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
+  netmap = callPackage ../development/python-modules/netmap { };
+
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
