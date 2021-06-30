@@ -325,6 +325,8 @@ in {
 
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
 
+  aiomusiccast = callPackage ../development/python-modules/aiomusiccast { };
+
   aiomysql = callPackage ../development/python-modules/aiomysql { };
 
   aionotify = callPackage ../development/python-modules/aionotify { };
