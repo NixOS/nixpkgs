@@ -869,6 +869,8 @@ in
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
+  elkhound = callPackage ../development/tools/elkhound { };
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
