@@ -29883,6 +29883,18 @@ in
 
   rubiks = callPackage ../development/libraries/science/math/rubiks { };
 
+  p4est-sc = callPackage ../development/libraries/science/math/p4est-sc {
+    p4est-sc-debugEnable = false;
+  };
+
+  p4est-sc-dbg = callPackage ../development/libraries/science/math/p4est-sc { };
+
+  p4est = callPackage ../development/libraries/science/math/p4est { };
+
+  p4est-dbg = callPackage ../development/libraries/science/math/p4est {
+    p4est-sc = p4est-sc-dbg;
+  };
+
   petsc = callPackage ../development/libraries/science/math/petsc { };
 
   parmetis = callPackage ../development/libraries/science/math/parmetis { };
