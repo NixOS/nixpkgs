@@ -13718,6 +13718,8 @@ in
 
   kustomize = callPackage ../development/tools/kustomize { };
 
+  kustomize_3 = callPackage ../development/tools/kustomize/3.nix { };
+
   kustomize-sops = callPackage ../development/tools/kustomize/kustomize-sops.nix { };
 
   ktlint = callPackage ../development/tools/ktlint { };
