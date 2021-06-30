@@ -15,7 +15,7 @@ appimageTools.wrapType2 {
     url = "https://repo2.timedoctor.com/td-desktop-hybrid/prod/v${version}/timedoctor-desktop_${version}_linux-x86_64.AppImage";
   };
   multiPkgs = _: with _; [
-    alsaLib
+    alsa-lib
     atk
     at-spi2-atk
     at-spi2-core
