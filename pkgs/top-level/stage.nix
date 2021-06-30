@@ -247,6 +247,17 @@ let
     });
   };
 
+  nixosTests = self: _: {
+    ### Push NixOS tests inside the fixed point
+
+    nixosTests = import ../../nixos/tests/all-tests.nix {
+      inherit (self) pkgs;
+      pkgsFun = nixpkgsFun;
+      system = stdenv.hostPlatform.system;
+      callTest = t: t.test;
+    };
+  };
+
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlayed.
@@ -260,6 +271,7 @@ let
     otherPackageSets
     aliases
     configOverrides
+    nixosTests
   ] ++ overlays ++ [
     stdenvOverrides ]);
 

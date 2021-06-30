@@ -82,6 +82,12 @@ in
 
     nix = {
 
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to enable the Nix daemon.";
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.nix;
@@ -499,7 +505,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf cfg.enable {
 
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     nix.binaryCaches = [ "https://cache.nixos.org/" ];

@@ -1,4 +1,4 @@
-{ system, pkgs, callTest }:
+{ system, pkgsFun, pkgs, callTest }:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leafs.
 # The tests not supported by `system` will be replaced with `{}`, so that
@@ -15,7 +15,7 @@ let
     else if hasAttr "test" val then callTest val
     else mapAttrs (n: s: discoverTests s) val;
   handleTest = path: args:
-    discoverTests (import path ({ inherit system pkgs; } // args));
+    discoverTests (import path ({ inherit system pkgsFun pkgs; } // args));
   handleTestOn = systems: path: args:
     if elem system systems then handleTest path args
     else {};
@@ -453,6 +453,7 @@ in
   wasabibackend = handleTest ./wasabibackend.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};
+  without-nix = handleTest ./without-nix.nix {};
   wmderland = handleTest ./wmderland.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xandikos = handleTest ./xandikos.nix {};

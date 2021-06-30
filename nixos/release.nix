@@ -18,9 +18,10 @@ let
   # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
   # ‘nix-build tests/login.nix -A result’.
   allTestsForSystem = system:
-    import ./tests/all-tests.nix {
+    import ./tests/all-tests.nix rec {
       inherit system;
-      pkgs = import ./.. { inherit system; };
+      pkgsFun = args: import ./.. ({ inherit system; } // args);
+      pkgs = pkgsFun {};
       callTest = t: {
         ${system} = hydraJob t.test;
       };

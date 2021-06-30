@@ -124,14 +124,6 @@ in
 
   nix-update-script = callPackage ../common-updater/nix-update.nix { };
 
-  ### Push NixOS tests inside the fixed point
-
-  nixosTests = import ../../nixos/tests/all-tests.nix {
-    inherit pkgs;
-    system = stdenv.hostPlatform.system;
-    callTest = t: t.test;
-  };
-
   ### BUILD SUPPORT
 
   auditBlasHook = makeSetupHook
