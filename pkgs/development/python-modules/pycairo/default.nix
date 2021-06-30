@@ -35,6 +35,7 @@ buildPythonPackage rec {
     cairo
   ];
 
+  doCheck = false;
   checkInputs = [
     pytestCheckHook
   ];

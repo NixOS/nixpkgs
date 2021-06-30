@@ -63,8 +63,7 @@ stdenv.mkDerivation rec {
     pcre2
     zlib
     icu
-    systemd
-  ];
+  ] ++ lib.optional stdenv.isLinux systemd;
 
   propagatedBuildInputs = [
     # Required by vte-2.91.pc.
@@ -86,6 +85,11 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
     };
   };
+
+  mesonFlags = [
+  ] ++ lib.optional stdenv.isDarwin [
+    "-D_b_symbolic_functions=false"
+  ];
 
   meta = with lib; {
     homepage = "https://www.gnome.org/";

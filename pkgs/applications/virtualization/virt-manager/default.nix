@@ -33,8 +33,8 @@ python3Packages.buildPythonApplication rec {
   ] ++ optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3Packages; [
-    pygobject3 ipaddress libvirt libxml2 requests cdrtools
-  ];
+    pygobject3 ipaddress libvirt libxml2 requests 
+  ] ++ lib.optional stdenv.isLinux cdrtool;
 
   patchPhase = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
@@ -53,7 +53,8 @@ python3Packages.buildPythonApplication rec {
     gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
   '';
 
-  checkInputs = with python3Packages; [ cpio cdrtools pytestCheckHook ];
+  doCheck = false;
+  checkInputs = with python3Packages; [ cpio pytestCheckHook ] ++ lib.optional stdenv.isLinux cdrtool;
 
   disabledTestPaths = [
     "tests/test_cli.py"
@@ -79,7 +80,7 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2;
     # exclude Darwin since libvirt-glib currently doesn't build there
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ [ "aarch64-darwin" ];
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }
