@@ -1,4 +1,20 @@
-{ stdenv, lib, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsa-lib, udev, unzip, wrapGAppsHook, mesa }:
+{
+  alsa-lib,
+  autoPatchelfHook,
+  callPackage,
+  fetchzip,
+  gnome2,
+  gtk2,
+  gtk3,
+  lib,
+  mesa,
+  nss,
+  stdenv,
+  udev,
+  unzip,
+  wrapGAppsHook,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cypress";
@@ -8,8 +24,6 @@ stdenv.mkDerivation rec {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
     sha256 = "1mr46raha5aqi8ba0cqvyil5z4vcr46hnxqqmpk3fkrr8awd2897";
   };
-
-  passthru.updateScript = ./update.sh;
 
   # don't remove runtime deps
   dontPatchELF = true;
@@ -40,6 +54,14 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+
+    tests = {
+      example = callPackage ./cypress-example-kitchensink {};
+    };
+  };
 
   meta = with lib; {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
