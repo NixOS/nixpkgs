@@ -6,7 +6,7 @@ let
     prePatch = (attrs.prePatch or "") + ''
       rm -f azure_bdist_wheel.py tox.ini
       substituteInPlace setup.py \
-        --replace "cryptography>=2.3.1,<3.0.0" "cryptography"
+        --replace "cryptography>=3.2,<3.4" "cryptography"
       sed -i "/azure-namespace-package/c\ " setup.cfg
     '';
 
@@ -118,6 +118,12 @@ let
           applicationinsights
           portalocker
         ];
+
+        # upstream doesn't update this requirement probably because they use pip
+        postPatch = ''
+          substituteInPlace setup.py \
+            --replace "portalocker~=1.6" "portalocker"
+        '';
 
         # ignore flaky test
         checkPhase = ''
