@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2;
     # exclude Darwin since libvirt-glib currently doesn't build there
-    platforms = platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }
