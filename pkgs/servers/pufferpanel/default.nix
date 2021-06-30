@@ -26,12 +26,11 @@ buildGoModule rec {
   # Getting the frontend to build in the Nix environment fails even
   # with all the proper node_modules populated. To work around this,
   # we just download the built frontend and package that.
-  frontend = fetchzip
-    {
-      url = "https://github.com/PufferPanel/PufferPanel/releases/download/v${version}/pufferpanel_${version}_linux_arm64.zip";
-      sha256 = "0phbf4asr0dns7if84crx05kfgr44yaxrbsbihdywbhh2mb16052";
-      stripRoot = false;
-    } + "/www";
+  frontend = fetchzip {
+    url = "https://github.com/PufferPanel/PufferPanel/releases/download/v${version}/pufferpanel_${version}_linux_arm64.zip";
+    sha256 = "0phbf4asr0dns7if84crx05kfgr44yaxrbsbihdywbhh2mb16052";
+    stripRoot = false;
+  } + "/www";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -46,7 +45,8 @@ buildGoModule rec {
     mv $out/bin/cmd $out/bin/pufferpanel
     wrapProgram "$out/bin/pufferpanel" \
       --set PUFFER_PANEL_EMAIL_TEMPLATES $out/share/pufferpanel/templates/emails.json \
-      --set GIN_MODE release --set PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www \
+      --set GIN_MODE release \
+      --set PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www \
       --prefix PATH : ${lib.makeBinPath pathDeps}
   '';
 
