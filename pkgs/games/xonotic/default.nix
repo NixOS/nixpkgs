@@ -58,8 +58,8 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://dl.xonotic.org/xonotic-${version}.zip";
-      sha256 = "sha256-oi9yMPSGxYJbVc/a3XM5nJsPrpjJ4IHdisduygg1mtU=";
+      url = "https://dl.xonotic.org/${pname}-${version}-source.zip";
+      sha256 = "0axxw04fyz6jlfqd0kp7hdrqa0li31sx1pbipf2j5qp9wvqicsay";
     };
 
     nativeBuildInputs = [ unzip ];
