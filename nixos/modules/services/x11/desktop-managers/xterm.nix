@@ -15,7 +15,7 @@ in
     services.xserver.desktopManager.xterm.enable = mkOption {
       type = types.bool;
       default = (versionOlder config.system.stateVersion "19.09") && xSessionEnabled;
-      defaultText = if versionOlder config.system.stateVersion "19.09" then "config.services.xserver.enable" else "false";
+      defaultText = "The value of config.services.xserver.enable when system.stateVersion is lower than 19.09, false if at least 19.09";
       description = "Enable a xterm terminal as a desktop manager.";
     };
 

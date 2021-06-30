@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
@@ -114,6 +114,13 @@ in
         BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
       '';
 
+    # We have to use `warnings` because when warning in the default of the option
+    # the warning would also be shown when building the manual since the manual
+    # has to evaluate the default.
+    #
+    # TODO Remove this and drop the default of the option so people are forced to set it.
+    # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
+    warnings = optional (options.system.stateVersion.highestPrio == (mkOptionDefault { }).priority)
+      "system.stateVersion is not set, defaulting to ${config.system.stateVersion}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion.";
   };
-
 }
