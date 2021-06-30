@@ -23665,6 +23665,8 @@ in
 
   haruna = libsForQt5.callPackage ../applications/video/haruna { };
 
+  helix = callPackage ../applications/editors/helix { };
+
   icesl = callPackage ../applications/misc/icesl { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
