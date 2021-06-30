@@ -133,7 +133,7 @@ let
               unwrapped = php;
               # Select the right php tests for the php version
               tests = nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
-              inherit (php-packages) extensions buildPecl;
+              inherit (php-packages) extensions buildPecl mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
