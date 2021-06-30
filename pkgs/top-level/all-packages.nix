@@ -13299,6 +13299,8 @@ in
     inherit (llvmPackages_11) llvm libclang;
   };
 
+  dprint = callPackage ../development/tools/dprint { };
+
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
 
