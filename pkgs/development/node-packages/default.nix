@@ -107,6 +107,19 @@ let
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
+    jsonplaceholder = super.jsonplaceholder.override (drv: {
+      buildInputs = [ nodejs ];
+      postInstall = ''
+        exe=$out/bin/jsonplaceholder
+        mkdir -p $out/bin
+        cat >$exe <<EOF
+        #!${pkgs.runtimeShell}
+        exec -a jsonplaceholder ${nodejs}/bin/node $out/lib/node_modules/jsonplaceholder/index.js
+        EOF
+        chmod a+x $exe
+      '';
+    });
+
     makam =  super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
       postFixup = ''
