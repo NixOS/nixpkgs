@@ -1,0 +1,15 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-profile-minimal">
+  <title>Minimal</title>
+  <para>
+    This profile defines a small NixOS configuration. It does not
+    contain any graphical stuff. It’s a very short file that enables
+    <link xlink:href="options.html#opt-environment.noXlibs">noXlibs</link>,
+    sets
+    <link xlink:href="options.html#opt-i18n.supportedLocales"><literal>i18n.supportedLocales</literal></link>
+    to only support the user-selected locale,
+    <link xlink:href="options.html#opt-documentation.enable">disables
+    packages’ documentation</link>, and
+    <link xlink:href="options.html#opt-sound.enable">disables
+    sound</link>.
+  </para>
+</section>
