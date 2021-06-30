@@ -125,6 +125,7 @@ let
     default = [];
   };
   optionORPort = optionName: mkOption {
+    # NOTE(Krey): Set as `auto` if relaying is enable by default to avoid failure (https://github.com/NixOS/nixpkgs/pull/128713)
     default = if (services.tor.relay.enable == true)
       then "auto"
       else 0;
