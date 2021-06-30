@@ -1,5 +1,23 @@
-{ lib, stdenv , darwin , fetchurl , blas , gfortran , lapack , python }:
+{ lib
+, stdenv
+, fetchurl
+, darwin
+, gfortran
+, python
+, blas
+, lapack
+, mpi                   # generic mpi dependency
+, openmpi               # to compare against mpi
+, openssh               # required for openmpi tests
+, petsc-withp4est ? true
+, p4est
+, zlib                  # propagated by p4est but required by petsc
+}:
 
+let
+  mpiSupport = !withp4est || p4est.mpiSupport;
+  withp4est = petsc-withp4est;
+in
 stdenv.mkDerivation rec {
   pname = "petsc";
   version = "3.14.2";
@@ -9,7 +27,12 @@ stdenv.mkDerivation rec {
     sha256 = "04vy3qyakikslc58qyv8c9qrwlivix3w6znc993i37cvfg99dch9";
   };
 
-  nativeBuildInputs = [ blas gfortran gfortran.cc.lib lapack python ];
+  nativeBuildInputs = [ python gfortran gfortran.cc.lib ];
+  buildInputs = [ blas lapack ]
+    ++ lib.optional mpiSupport mpi
+    ++ lib.optional (mpiSupport && mpi == openmpi) openssh
+    ++ lib.optional withp4est p4est
+  ;
 
   # Upstream does some hot she-py-bang stuff, this change streamlines that
   # process. The original script in upstream is both a shell script and a
@@ -30,23 +53,35 @@ stdenv.mkDerivation rec {
     patchShebangs .
     configureFlagsArray=(
       $configureFlagsArray
-      "--CC=$CC"
-      "--with-cxx=$CXX"
-      "--with-fc=$FC"
-      "--with-mpi=0"
+      ${if !mpiSupport then ''
+        "--CC=$CC"
+        "--with-cxx=$CXX"
+        "--with-fc=$FC"
+        "--with-mpi=0"
+      '' else ''
+        "--CC=mpicc"
+        "--with-cxx=mpicxx"
+        "--with-fc=mpif90"
+        "--with-mpi=1"
+      ''}
+      ${if withp4est then ''
+        "--with-p4est=1"
+        "--with-zlib-include=${zlib.dev}/include"
+        "--with-zlib-lib=-L${zlib}/lib -lz"
+      '' else ""}
       "--with-blas-lib=[${blas}/lib/libblas.so,${gfortran.cc.lib}/lib/libgfortran.a]"
       "--with-lapack-lib=[${lapack}/lib/liblapack.so,${gfortran.cc.lib}/lib/libgfortran.a]"
     )
   '';
 
+  inherit mpiSupport withp4est;
+  enableParallelBuilding = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+
   meta = with lib; {
-    description = ''
-      Library of linear algebra algorithms for solving partial differential
-      equations
-    '';
+    description = "Linear algebra algorithms for solving partial differential equations";
     homepage = "https://www.mcs.anl.gov/petsc/index.html";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ wucke13 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ wucke13 cburstedde ];
   };
 }
