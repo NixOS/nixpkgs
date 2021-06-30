@@ -125,7 +125,9 @@ let
     default = [];
   };
   optionORPort = optionName: mkOption {
-    default = [];
+    default = if (services.tor.relay.enable == true)
+      then "auto"
+      else 0;
     example = 443;
     type = with types; oneOf [port (enum ["auto"]) (listOf (oneOf [
       port
