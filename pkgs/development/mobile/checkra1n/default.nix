@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "checkra1n";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     install -m755 $src $out/bin/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jailbreak for iPhone 5s though iPhone X, iOS 12.0 and up";
     homepage = "https://checkra.in/";
     license = licenses.unfreeRedistributable;
