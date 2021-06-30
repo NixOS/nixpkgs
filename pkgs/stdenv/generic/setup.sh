@@ -511,8 +511,7 @@ activatePackage() {
 }
 
 _activatePkgs() {
-    local hostOffset targetOffset
-    local pkg
+    local hostOffset targetOffset pkg
 
     for hostOffset in "${allPlatOffsets[@]}"; do
         local pkgsVar="${pkgAccumVarVars[$(( hostOffset + 1 ))]}"
