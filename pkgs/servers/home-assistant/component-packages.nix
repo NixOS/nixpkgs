@@ -347,7 +347,7 @@
     "heos" = ps: with ps; [ pyheos ];
     "here_travel_time" = ps: with ps; [ herepy ];
     "hikvision" = ps: with ps; [ ]; # missing inputs: pyhik
-    "hikvisioncam" = ps: with ps; [ ]; # missing inputs: hikvision
+    "hikvisioncam" = ps: with ps; [ hikvision ];
     "hisense_aehw4a1" = ps: with ps; [ pyaehw4a1 ];
     "history" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "history_stats" = ps: with ps; [ sqlalchemy ];
@@ -696,7 +696,7 @@
     "rest" = ps: with ps; [ jsonpath xmltodict ];
     "rest_command" = ps: with ps; [ ];
     "rflink" = ps: with ps; [ rflink ];
-    "rfxtrx" = ps: with ps; [ ]; # missing inputs: pyRFXtrx
+    "rfxtrx" = ps: with ps; [ pyrfxtrx ];
     "ring" = ps: with ps; [ ha-ffmpeg ring-doorbell ];
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
     "risco" = ps: with ps; [ pyrisco ];
@@ -767,7 +767,7 @@
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ pysma ];
     "smappee" = ps: with ps; [ aiohttp-cors pysmappee ];
-    "smart_meter_texas" = ps: with ps; [ ]; # missing inputs: smart-meter-texas
+    "smart_meter_texas" = ps: with ps; [ smart-meter-texas ];
     "smarthab" = ps: with ps; [ smarthab ];
     "smartthings" = ps: with ps; [ aiohttp-cors hass-nabucasa pysmartapp pysmartthings ];
     "smarttub" = ps: with ps; [ python-smarttub ];
@@ -785,7 +785,7 @@
     "solax" = ps: with ps; [ solax ];
     "soma" = ps: with ps; [ pysoma ];
     "somfy" = ps: with ps; [ aiohttp-cors pymfy ];
-    "somfy_mylink" = ps: with ps; [ ]; # missing inputs: somfy-mylink-synergy
+    "somfy_mylink" = ps: with ps; [ somfy-mylink-synergy ];
     "sonarr" = ps: with ps; [ sonarr ];
     "songpal" = ps: with ps; [ python-songpal ];
     "sonos" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket pysonos ];

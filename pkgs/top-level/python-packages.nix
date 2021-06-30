@@ -3260,6 +3260,8 @@ in {
 
   hijri-converter = callPackage ../development/python-modules/hijri-converter { };
 
+  hikvision = callPackage ../development/python-modules/hikvision { };
+
   hiredis = callPackage ../development/python-modules/hiredis { };
 
   hiro = callPackage ../development/python-modules/hiro { };
@@ -5340,6 +5342,8 @@ in {
   pynws = callPackage ../development/python-modules/pynws { };
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
+
+  pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
 
@@ -7986,6 +7990,8 @@ in {
 
   sly = callPackage ../development/python-modules/sly { };
 
+  smart-meter-texas = callPackage ../development/python-modules/smart-meter-texas { };
+
   smart-open = callPackage ../development/python-modules/smart-open { };
 
   smarthab = callPackage ../development/python-modules/smarthab { };
@@ -8059,6 +8065,8 @@ in {
   somajo = callPackage ../development/python-modules/somajo { };
 
   somecomfort = callPackage ../development/python-modules/somecomfort { };
+
+  somfy-mylink-synergy = callPackage ../development/python-modules/somfy-mylink-synergy { };
 
   sonarr = callPackage ../development/python-modules/sonarr { };
 

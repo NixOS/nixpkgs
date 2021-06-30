@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "spdx-license-list-data";
-  version = "3.12";
+  version = "3.13";
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "license-list-data";
     rev = "v${version}";
-    sha256 = "09xci8dzblg3d30jf7s43zialbcxlxly03zrkiymcvnzixg8v48f";
+    sha256 = "184qfz8jifkd4jvqkdfmcgplf12cdx83gynb7mxzmkfg2xymlr0g";
   };
 
   installPhase = ''
