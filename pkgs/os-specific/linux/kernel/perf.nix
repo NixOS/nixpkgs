@@ -56,6 +56,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs scripts/bpf_helpers_doc.py
+    patchShebangs scripts/bpf_doc.py
   '';
 
   doCheck = false; # requires "sparse"
