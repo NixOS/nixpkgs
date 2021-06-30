@@ -10884,6 +10884,12 @@
     githubId = 608417;
     name = "Jos van den Oever";
   };
+  vanilla = {
+    email = "neko@hydev.org";
+    github = "VergeDX";
+    githubId = 25173827;
+    name = "Vanilla";
+  };
   vanschelven = {
     email = "klaas@vanschelven.com";
     github = "vanschelven";
