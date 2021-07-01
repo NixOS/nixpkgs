@@ -16036,6 +16036,8 @@ in
     inherit (ocaml-ng.ocamlPackages) bap ocaml findlib ctypes;
   };
 
+  libbaseencode = callPackage ../development/libraries/libbaseencode { };
+
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
 
