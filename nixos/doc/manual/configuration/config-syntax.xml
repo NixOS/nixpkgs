@@ -20,6 +20,5 @@ xlink:href="https://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
  </para>
  <xi:include href="../from_md/configuration/config-file.section.xml" />
  <xi:include href="../from_md/configuration/abstractions.section.xml" />
- <xi:include href="modularity.xml" />
- <xi:include href="summary.xml" />
+ <xi:include href="../from_md/configuration/modularity.section.xml" />
 </chapter>
