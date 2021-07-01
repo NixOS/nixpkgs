@@ -16155,6 +16155,8 @@ in
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
+  libcotp = callPackage ../development/libraries/libcotp { };
+
   libcouchbase = callPackage ../development/libraries/libcouchbase { };
 
   libcue = callPackage ../development/libraries/libcue { };
