@@ -241,7 +241,7 @@ let
     git
     # replace with beam.packages.erlang.elixir_1_11 if you need
     beam.packages.erlang.elixir
-    nodejs-15_x
+    nodejs
     postgresql_13
     # only used for frontend dependencies
     # you are free to use yarn2nix as well
