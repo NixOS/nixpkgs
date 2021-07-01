@@ -13,6 +13,9 @@
 , zlib                  # propagated by p4est but required by petsc
 }:
 
+# This version of PETSc does not support a non-MPI p4est build
+assert petsc-withp4est -> p4est.mpiSupport;
+
 stdenv.mkDerivation rec {
   pname = "petsc";
   version = "3.14.2";
