@@ -8,7 +8,7 @@
   This section describes how to configure networking components on your NixOS
   machine.
  </para>
- <xi:include href="network-manager.xml" />
+ <xi:include href="../from_md/configuration/network-manager.section.xml" />
  <xi:include href="ssh.xml" />
  <xi:include href="ipv4-config.xml" />
  <xi:include href="ipv6-config.xml" />
