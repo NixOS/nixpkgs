@@ -15,6 +15,6 @@
  <xi:include href="../from_md/configuration/firewall.section.xml" />
  <xi:include href="../from_md/configuration/wireless.section.xml" />
  <xi:include href="../from_md/configuration/ad-hoc-network-config.section.xml" />
- <xi:include href="renaming-interfaces.xml" />
+ <xi:include href="../from_md/configuration/renaming-interfaces.section.xml" />
 <!-- TODO: OpenVPN, NAT -->
 </chapter>
