@@ -2,18 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, winacl
 }:
 
 buildPythonPackage rec {
   pname = "aiowinreg";
-  version = "0.0.4";
+  version = "0.0.5";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "956278a90ef6958f9e2392891b2a305273f695b15b14489cd2097197d6cbe155";
+    sha256 = "096663ec3db35fdc7ccc1c2d0d64a11cf64f4baa48955088e42b6a649ce418a5";
   };
+
+  propagatedBuildInputs = [ winacl ];
 
   # Project doesn't have tests
   doCheck = false;

@@ -52,7 +52,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 6379;
         description = "The port for Redis to listen to.";
       };

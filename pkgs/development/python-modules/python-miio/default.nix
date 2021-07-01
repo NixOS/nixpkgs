@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'click = "^7"' 'click = "*"' \
       --replace 'croniter = "^0"' 'croniter = "*"' \
       --replace 'defusedxml = "^0.6"' 'defusedxml = "*"'
   '';
@@ -44,24 +45,24 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    click
-    cryptography
-    construct
-    zeroconf
-    attrs
-    pytz
-    appdirs
-    tqdm
-    netifaces
     android-backup
+    appdirs
+    attrs
+    click
+    construct
     croniter
+    cryptography
     defusedxml
+    netifaces
+    pytz
+    pyyaml
+    tqdm
+    zeroconf
   ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   checkInputs = [
     pytestCheckHook
     pytest-mock
-    pyyaml
   ];
 
   pythonImportsCheck = [ "miio" ];

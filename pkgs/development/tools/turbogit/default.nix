@@ -1,20 +1,21 @@
-{ fetchFromGitHub, buildGoModule, lib, installShellFiles }:
+{ fetchFromGitHub, buildGoModule, lib, installShellFiles, libgit2, pkg-config }:
 buildGoModule rec {
   pname = "turbogit";
-  version = "1.2.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "b4nst";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-alVgXnsoC2nmUe6i/l0ttUjoXpKLHr0n/7p6WbIIGBU=";
+    sha256 = "sha256-UIPI1r6BnfD5ukk5yGg3VJHMyaMp30MXhJfOkoNT6vs=";
   };
 
-  vendorSha256 = "sha256-6fxbxpROYiNw5SYdQAIdy5NfqzOcFfAlJ+vTQyFtink=";
+  vendorSha256 = "sha256-SX0VPENcfw8ysL+dDGPSJ/FNdyecjENx4+UHXdu71O8=";
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [ libgit2 ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
   postInstall = ''
     # Move turbogit binary to tug
     ln -s $out/bin/turbogit $out/bin/tug
@@ -37,6 +38,7 @@ buildGoModule rec {
     '';
     homepage = "https://b4nst.github.io/turbogit";
     license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.yusdacra ];
   };
 }

@@ -2,15 +2,13 @@
 , CoreServices ? null
 , buildPackages }:
 
-let version = "4.30"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "nspr";
-  inherit version;
+  version = "4.31";
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    sha256 = "0fwivizfz88625lwv1ngxirnal7w9csq1q9i7m6dr14l83wdhk4d";
+    sha256 = "1j5b2m8cjlhnnv8sq34587avaagkqvh521w4f95miwgvsn3xlaap";
   };
 
   patches = [

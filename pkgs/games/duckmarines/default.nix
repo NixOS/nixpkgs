@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
-let
+stdenv.mkDerivation rec {
   pname = "duckmarines";
   version = "1.0c";
 
@@ -18,11 +18,6 @@ let
     genericName = "duckmarines";
     categories = "Game;";
   };
-
-in
-
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-1.0c.love";

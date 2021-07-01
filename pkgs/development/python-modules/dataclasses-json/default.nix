@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "lidatong";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gcnm41rwg0jvq4vhr57vv9hyasws425zl8h4p05x2nzq86l0w1n";
+    sha256 = "193xklf1xrsin7fr24yqx5ckr4m5s9v1bdyr00qr51j74hiy8qsv";
   };
 
   propagatedBuildInputs = [

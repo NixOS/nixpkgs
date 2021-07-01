@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "python-izone";
-  version = "1.1.5";
+  version = "1.1.6";
 
   disabled = pythonOlder "3.5";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Swamp-Ig";
     repo = "pizone";
     rev = "v${version}";
-    sha256 = "0ilvawlhyg5p08ri26zbcvgysrfsmza23scy4ijrx3jbc3669r2c";
+    sha256 = "sha256-zgE1ccEPSa9nX0SEMN02VEGfnHexk/+jCJe7ugUL5UA=";
   };
 
   propagatedBuildInputs = [
@@ -31,13 +31,6 @@ buildPythonPackage rec {
     asynctest
     pytest-aiohttp
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # attempt network connection
-    "test_fail_on_connect"
-    "test_connection_lost"
-    "test_ip_addr_change"
   ];
 
   pythonImportsCheck = [ "pizone" ];

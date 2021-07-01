@@ -6,6 +6,7 @@
 , withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
 , withSQLite ? true, sqlite
+, withLua ? false, lua5_3
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL postgresql
-    ++ lib.optional withSQLite sqlite;
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withLua lua5_3;
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
@@ -90,7 +92,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin "--enable-static"
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
-    ++ lib.optional withSQLite "--with-sqlite";
+    ++ lib.optional withSQLite "--with-sqlite"
+    ++ lib.optional withLua "--with-lua";
 
   doCheck = !stdenv.isDarwin;
 

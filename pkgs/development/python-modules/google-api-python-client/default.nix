@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.7.0";
+  version = "2.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mHm40dGCEq6Ss1urYejqntXqY++cjKhHk4U42hDdGTs=";
+    sha256 = "2b5274f06799d80222fd3f20fd4ebcd19f57c009703bd4cf7b00492e7e05e15a";
   };
 
   # No tests included in archive

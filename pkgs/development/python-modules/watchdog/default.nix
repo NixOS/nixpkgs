@@ -5,6 +5,7 @@
 , argh
 , pathtools
 , pyyaml
+, flaky
 , pytest-timeout
 , pytestCheckHook
 , CoreServices
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    flaky
     pytest-timeout
     pytestCheckHook
   ];

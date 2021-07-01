@@ -23,27 +23,16 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
-    # https://github.com/NixOS/nixpkgs/pull/125414
-    (mkOverride "flask" "2.0.1" "0mcgwq7b4qd99mf5bsvs3wphchxarf8kgil4hwww3blj31xjak0w")
-    (mkOverride "itsdangerous" "2.0.1" "1w6gfb2zhbcmrfj6digwzw1z68w6zg1q87rm6la2m412zil4swly")
-    (mkOverride "jinja2" "3.0.1" "197ms1wimxql650245v63wkv04n8bicj549wfhp51bx68x5lhgvh")
-    (mkOverride "markupsafe" "2.0.1" "02k2ynmqvvd0z0gakkf8s4idyb606r7zgga41jrkhqmigy06fk2r")
+    # Pinned due to API changes in aiopvpc>=2.2.0, remove after 2021.7.0
     (self: super: {
-      werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0hlwawnn8c41f254qify5jnjj8xb97n294h09bqimzqhs0qdpq8x";
+      aiopvpc = super.aiopvpc.overridePythonAttrs (oldAttr: rec {
+        version = "2.1.2";
+        src = fetchFromGitHub {
+          owner = "azogue";
+          repo = "aiopvpc";
+          rev = "v${version}";
+          sha256 = "0s8ki46dh39kw6qvsjcfcxa0gblyi33m3hry137kbi4lw5ws6qhr";
         };
-        checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.pytest-xprocess ];
-        pytestFlagsArray = [ "-m 'not filterwarnings'" ];
-      });
-    })
-    (mkOverride "flask-restful" "0.3.9" "0gm5dz088v3d2k1dkcp9b3nnqpkk0fp2jly870hijj2xhc5nbv6c")
-    (self: super: {
-      debugpy = super.debugpy.overridePythonAttrs (oldAttrs: rec {
-        # tests fail with flask/werkezug>=2.0
-        doCheck = false;
       });
     })
 
@@ -80,6 +69,32 @@ let
     # https://github.com/tchellomello/python-ring-doorbell/issues/240
     (mkOverride "ring-doorbell" "0.6.2"
       "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
+
+    # Pinned due to API changes in pyatmo>=5.1.0
+    (self: super: {
+      pyatmo = super.pyatmo.overridePythonAttrs (oldAttrs: rec {
+        version = "5.0.1";
+        src = fetchFromGitHub {
+          owner = "jabesq";
+          repo = "pyatmo";
+          rev = "v${version}";
+          sha256 = "0can9v602iqfn0l01fd7gr63qzvcngfm0qka4s1x0pldh6avxmfh";
+        };
+      });
+    })
+
+    # Pinned due to API changes in pyatv>=0.8.0
+    (self: super: {
+      pyatv = super.pyatv.overridePythonAttrs (olAttrs: rec {
+        version = "0.7.7";
+        src = fetchFromGitHub {
+          owner = "postlund";
+          repo = "pyatv";
+          rev = "v${version}";
+          sha256 = "sha256-dPnh8XZN7ZVR2rYNnj7GSYXW5I2GNQwD/KRDTgs2AtI=";
+        };
+      });
+    })
 
     # Pinned due to API changes in pyflunearyou>=2.0
     (self: super: {
@@ -133,6 +148,8 @@ let
         };
       });
     })
+
+    (mkOverride "pysma" "0.4.3" "sha256-vriMnJFS7yfTyDT1f4sx1xEBTQjqc4ZHmkdHp1vcd+Q=")
 
     # Pinned due to API changes in eebrightbox>=0.0.5
     (self: super: {
@@ -238,6 +255,8 @@ in with py.pkgs; buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
+    # Not in setup.py, but used in homeassistant/util/package.py
+    setuptools
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
   ] ++ componentBuildInputs ++ extraBuildInputs;
@@ -489,12 +508,14 @@ in with py.pkgs; buildPythonApplication rec {
     "isy994"
     "izone"
     "jewish_calendar"
+    "juicenet"
     "keenetic_ndms2"
     "kira"
     "kmtronic"
     "knx"
     "kodi"
     "konnected"
+    "kraken"
     "kulersky"
     "lastfm"
     "lcn"
@@ -593,6 +614,7 @@ in with py.pkgs; buildPythonApplication rec {
     "pushbullet"
     "pvpc_hourly_pricing"
     "python_script"
+    "qld_bushfire"
     "rachio"
     "radarr"
     "rainmachine"
@@ -604,6 +626,7 @@ in with py.pkgs; buildPythonApplication rec {
     "rest"
     "rest_command"
     "rflink"
+    "rfxtrx"
     "ring"
     "risco"
     "rituals_perfume_genie"
@@ -627,6 +650,7 @@ in with py.pkgs; buildPythonApplication rec {
     "shell_command"
     "shelly"
     "shopping_list"
+    "sia"
     "sigfox"
     "sighthound"
     "simplisafe"
@@ -635,6 +659,8 @@ in with py.pkgs; buildPythonApplication rec {
     "sleepiq"
     "sma"
     "smappee"
+    "smart_meter_texas"
+    "smarthab"
     "smartthings"
     "smarttub"
     "smhi"
@@ -643,6 +669,9 @@ in with py.pkgs; buildPythonApplication rec {
     "solaredge"
     "soma"
     "somfy"
+    "somfy_mylink"
+    "sonarr"
+    "songpal"
     "sonos"
     "soundtouch"
     "spaceapi"
@@ -651,7 +680,9 @@ in with py.pkgs; buildPythonApplication rec {
     "spotify"
     "sql"
     "squeezebox"
+    "srp_energy"
     "ssdp"
+    "starline"
     "startca"
     "statistics"
     "statsd"
@@ -662,6 +693,9 @@ in with py.pkgs; buildPythonApplication rec {
     "surepetcare"
     "switch"
     "switcher_kis"
+    "syncthing"
+    "syncthru"
+    "synology_dsm"
     "system_health"
     "system_log"
     "tado"
@@ -671,7 +705,8 @@ in with py.pkgs; buildPythonApplication rec {
     "telegram"
     "tellduslive"
     "template"
-    "tesla"
+    # disable tesla comonent tests while typer is incompatible with click>=8.0
+    # "tesla"
     "threshold"
     "tibber"
     "tile"
@@ -680,8 +715,10 @@ in with py.pkgs; buildPythonApplication rec {
     "tod"
     "tomato"
     "toon"
+    "totalconnect"
     "tplink"
     "trace"
+    "tradfri"
     "transmission"
     "trend"
     "tts"
@@ -694,6 +731,8 @@ in with py.pkgs; buildPythonApplication rec {
     "unifi"
     "unifi_direct"
     "universal"
+    "upb"
+    "upcloud"
     "updater"
     "upnp"
     "uptime"
@@ -707,6 +746,7 @@ in with py.pkgs; buildPythonApplication rec {
     "verisure"
     "version"
     "vesync"
+    "vilfo"
     "vizio"
     "voicerss"
     "volumio"

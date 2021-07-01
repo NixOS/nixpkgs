@@ -231,9 +231,9 @@ in {
           }
         fi
       '' + optionalString cfg.autoMount ''
-        ipfs --local config Mounts.FuseAllowOther --json true
-        ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
-        ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
+        ipfs --offline config Mounts.FuseAllowOther --json true
+        ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
+        ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
       '' + concatStringsSep "\n" (collect
             isString
             (mapAttrsRecursive
@@ -243,7 +243,7 @@ in {
                 read value <<EOF
                 ${builtins.toJSON value}
                 EOF
-                ipfs --local config --json "${concatStringsSep "." path}" "$value"
+                ipfs --offline config --json "${concatStringsSep "." path}" "$value"
               '')
               ({ Addresses.API = cfg.apiAddress;
                  Addresses.Gateway = cfg.gatewayAddress;

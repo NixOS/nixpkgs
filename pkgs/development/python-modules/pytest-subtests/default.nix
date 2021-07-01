@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-subtests";
-  version = "0.4.0";
+  version = "0.5.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jZ4sHR3OEfe30snQkgLr/HdXt/8MrJtyrTKO3+fuA3s=";
+    sha256 = "5bd1e4bf0eda4c89a6cd42b0ee28e1d2ca0848de3fd67ad8cdd6d559ed00f120";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "relatorio";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0753e78b235b1e8da275509351257a861cf2cf9fafe1b414f8c1deb858a4f94e";
+    sha256 = "1d5d08f5323a1cdf6d860cd13c3408482a822d9924899927a8c7cd2ebeaa8699";
   };
 
   propagatedBuildInputs = [

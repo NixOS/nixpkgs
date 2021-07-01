@@ -32,8 +32,8 @@ mkDerivation rec {
     ++ lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy";
 
   cmakeFlags = [
-    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
-    "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/share/sip/PyQt5"
+    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
+    "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   ];
 

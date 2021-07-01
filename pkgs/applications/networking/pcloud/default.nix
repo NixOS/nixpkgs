@@ -26,14 +26,14 @@
 
 let
   pname = "pcloud";
-  version = "1.9.2";
-  code = "XZCBKnXZdbHEAu1ec7bMDQCb1oCztBc169Py";
+  version = "1.9.3";
+  code = "XZh0QTXZIYkI66plpzLAJ4G2mwDvJFvKvEzy";
   name = "${pname}-${version}";
 
   # Archive link's code thanks to: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pcloud-drive
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${name}.zip";
-    hash = "sha256-9I4xl9cO1MDvdXaTv6ER/NPdqKoo0y7HNWxGl0Fn1O0=";
+    hash = "sha256-NFbSYZRysRIg6q0aaDocpK7xJbiCWc1S0McXKlCRGjU=";
   };
 
   appimageContents = appimageTools.extractType2 {

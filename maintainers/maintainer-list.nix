@@ -1701,6 +1701,18 @@
     githubId = 3471749;
     name = "Claudio Bley";
   };
+  cburstedde = {
+    email = "burstedde@ins.uni-bonn.de";
+    github = "cburstedde";
+    githubId = 109908;
+    name = "Carsten Burstedde";
+    keys = [
+      {
+        longkeyid = "rsa2048/0x0704CD9E550A6BCD";
+        fingerprint = "1127 A432 6524 BF02 737B  544E 0704 CD9E 550A 6BCD";
+      }
+    ];
+  };
   cdepillabout = {
     email = "cdep.illabout@gmail.com";
     github = "cdepillabout";
@@ -2562,7 +2574,7 @@
     name = "Diego Lelis";
   };
   diffumist = {
-    email = "diffumist@gmail.com";
+    email = "git@diffumist.me";
     github = "diffumist";
     githubId = 32810399;
     name = "Diffumist";
@@ -7228,10 +7240,10 @@
     name = "Marko Poikonen";
   };
   mtreca = {
-    email = "maxime@treca.dev";
-    name = "Maxime Tréca";
+    email = "maxime.treca@gmail.com";
     github = "mtreca";
     githubId = 16440823;
+    name = "Maxime Tréca";
   };
   mtreskin = {
     email = "zerthurd@gmail.com";
@@ -8119,6 +8131,12 @@
     github = "phile314";
     githubId = 1640697;
     name = "Philipp Hausmann";
+  };
+  Philipp-M = {
+    email = "philipp@mildenberger.me";
+    github = "Philipp-M";
+    githubId = 9267430;
+    name = "Philipp Mildenberger";
   };
   Phlogistique = {
     email = "noe.rubinstein@gmail.com";
@@ -10865,6 +10883,12 @@
     github = "vandenoever";
     githubId = 608417;
     name = "Jos van den Oever";
+  };
+  vanilla = {
+    email = "neko@hydev.org";
+    github = "VergeDX";
+    githubId = 25173827;
+    name = "Vanilla";
   };
   vanschelven = {
     email = "klaas@vanschelven.com";

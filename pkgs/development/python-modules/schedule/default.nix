@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "schedule";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1654cf70860a6d4d58236c98b0f1bb71521cc2a4bbf031b6cc39c96e77d59a91";
+    sha256 = "e6ca13585e62c810e13a08682e0a6a8ad245372e376ba2b8679294f377dfc8e4";
   };
 
   buildInputs = [ mock ];

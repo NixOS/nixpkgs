@@ -8092,7 +8092,7 @@ let
       sha256 = "0wm87gpagb35d7c4nyaf9z3ry0jb3g5xpyjfzcxqcfxyj2zy9ip2";
     };
     doCheck = false; # Failed test 'desktop file is the right one'
-    buildInputs = [ FileBaseDir FileDesktopEntry ];
+    buildInputs = [ FileBaseDir FileDesktopEntry EncodeLocale ];
   };
 
   FileMMagic = buildPerlPackage {

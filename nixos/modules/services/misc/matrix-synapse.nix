@@ -238,7 +238,7 @@ in {
         type = types.listOf (types.submodule {
           options = {
             port = mkOption {
-              type = types.int;
+              type = types.port;
               example = 8448;
               description = ''
                 The port to listen for HTTP(S) requests on.

@@ -138,6 +138,7 @@
   ./programs/file-roller.nix
   ./programs/firejail.nix
   ./programs/fish.nix
+  ./programs/flashrom.nix
   ./programs/flexoptix-app.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
@@ -153,6 +154,7 @@
   ./programs/iftop.nix
   ./programs/iotop.nix
   ./programs/java.nix
+  ./programs/kdeconnect.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
   ./programs/liboping.nix
@@ -697,6 +699,7 @@
   ./services/networking/gdomap.nix
   ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
+  ./services/networking/globalprotect-vpn.nix
   ./services/networking/gnunet.nix
   ./services/networking/go-neb.nix
   ./services/networking/go-shadowsocks2.nix

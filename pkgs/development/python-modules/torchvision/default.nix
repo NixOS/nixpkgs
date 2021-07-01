@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "torchvision";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     rev = "v${version}";
-    sha256 = "0rw186nki7q8igk481p2mvx4n763i3kpn663yp3dibkimddpnf9k";
+    sha256 = "13j04ij0jmi58nhav1p69xrm8dg7jisg23268i3n6lnms37n02kc";
   };
 
   nativeBuildInputs = [ libpng ninja which ];

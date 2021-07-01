@@ -1,4 +1,4 @@
-{ config, lib, buildEnv, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq, shellcheck }:
+{ config, lib, buildEnv, callPackage, vscode-utils, asciidoctor, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq, shellcheck }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -92,6 +92,40 @@ let
           version = "0.2.2";
           sha256 = "0mfap16la09mn0jhvy8s3dainrmjz64vra7d0d4fbcpgg420kv3f";
         };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      arrterian.nix-env-selector = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nix-env-selector";
+          publisher = "arrterian";
+          version = "1.0.7";
+          sha256 = "0e76885c9dbb6dca4eac8a75866ec372b948cc64a3a3845327d7c3ef6ba42a57";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      asciidoctor.asciidoctor-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "asciidoctor-vscode";
+          publisher = "asciidoctor";
+          version = "2.8.9";
+          sha256 = "1xkxx5i3nhd0dzqhhdmx0li5jifsgfhv0p5h7xwsscz3gzgsdcyb";
+        };
+
+        postPatch = ''
+          substituteInPlace dist/src/text-parser.js \
+            --replace "get('asciidoctor_command', 'asciidoctor')" \
+                      "get('asciidoctor_command', '${asciidoctor}/bin/asciidoctor')"
+          substituteInPlace dist/src/commands/exportAsPDF.js \
+            --replace "get('asciidoctorpdf_command', 'asciidoctor-pdf')" \
+                      "get('asciidoctorpdf_command', '${asciidoctor}/bin/asciidoctor-pdf')"
+        '';
+
         meta = with lib; {
           license = licenses.mit;
         };
@@ -273,8 +307,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.38.0";
-          sha256 = "0d6hbsjrx1j8wrmfnvdwsa7sci1brplgxwkmy6sp74va7zxfjnqv";
+          version = "0.42.1";
+          sha256 = "c8c0647e0dd786fe68becca6dc73eade5f4220a26ab9faff8dd813a14b25df51";
         };
         meta = with lib; {
           license = licenses.mit;

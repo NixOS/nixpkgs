@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ansicolor";
-  version = "0.2.6";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d17e1b07b9dd7ded31699fbca53ae6cd373584f9b6dcbc124d1f321ebad31f1d";
+    sha256 = "3b840a6b1184b5f1568635b1adab28147947522707d41ceba02d5ed0a0877279";
   };
 
   meta = with lib; {

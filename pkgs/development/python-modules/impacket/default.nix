@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "113isxb9rd2n761nnh3skg3vqa0v5dalz9kbavyczqyv1jjyh6qw";
+    sha256 = "1c1be8a50cdbe3cffc566ba64f552b1b28bcc79b7a406b833956b49c56d77184";
   };
 
   propagatedBuildInputs = [ flask ldapdomaindump pycryptodomex pyasn1 pyopenssl chardet ];

@@ -134,6 +134,9 @@ stdenv.mkDerivation (rec {
     # upstream patch. Don't forget to check backport status of the upstream patch
     # when adding new GHC releases in nixpkgs.
     ./respect-ar-path.patch
+    # Fix documentation configuration which causes a syntax error with sphinx 4.*
+    # See also https://gitlab.haskell.org/ghc/ghc/-/issues/19962
+    ./sphinx-4-configuration.patch
   ];
 
   postPatch = "patchShebangs .";

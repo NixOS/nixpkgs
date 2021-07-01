@@ -10,7 +10,7 @@
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , OpenGL, Xplugin
-, withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
+, withValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 }:
@@ -31,7 +31,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.1.2";
+  version = "21.1.3";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -45,7 +45,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0pw2wba4q66rhdx0hpimvxmrl7k2vv315gmmk17kl7snc0vvdd13";
+    sha256 = "0s8yi7y63xsyqw19ihil18fykkjxr6ibcir2fvymz1vh4ql23qnb";
   };
 
   prePatch = "patchShebangs .";
@@ -63,6 +63,12 @@ self = stdenv.mkDerivation {
       name = "nine_debug-Make-tid-more-type-correct";
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
+    })
+    # For RISC-V support:
+    (fetchpatch {
+      name = "add-riscv-default-selections.patch";
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/9908da1b7a5eaf0156d458e0e24b694c070ba345.patch";
+      sha256 = "036gv95m5gzzs6qpgkydf5fwgdlm7kpbdfalg8vmayghd260rw1w";
     })
   ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.

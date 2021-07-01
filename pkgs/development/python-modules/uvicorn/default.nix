@@ -1,67 +1,71 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
+, callPackage
 , fetchFromGitHub
+, asgiref
 , click
+, colorama
 , h11
 , httptools
-, uvloop
-, websockets
-, wsproto
-, pytestCheckHook
-, pytest-mock
+, python-dotenv
 , pyyaml
 , requests
-, trustme
 , typing-extensions
-, isPy27
+, uvloop
+, watchgod
+, websockets
+, wsproto
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.13.2";
-  disabled = isPy27;
+  version = "0.14.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "04zgmp9z46k72ay6cz7plga6d3w3a6x41anabm7ramp7jdqf6na9";
+    sha256 = "164x92k3rs47ihkmwq5av396576dxp4rzv6557pwgc1ign2ikqy1";
   };
 
+  outputs = [
+    "out"
+    "testsout"
+  ];
+
   propagatedBuildInputs = [
+    asgiref
     click
+    colorama
     h11
     httptools
+    python-dotenv
+    pyyaml
     uvloop
+    watchgod
     websockets
     wsproto
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
-    pyyaml
-    requests
-    trustme
+  postInstall = ''
+    mkdir $testsout
+    cp -R tests $testsout/tests
+  '';
+
+  pythonImportsCheck = [
+    "uvicorn"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  # check in passthru.tests.pytest to escape infinite recursion with httpx/httpcore
+  doCheck = false;
 
-  __darwinAllowLocalNetworking = true;
-
-  pytestFlagsArray = [
-    # watchgod required the watchgod package, which isn't available in nixpkgs
-    "--ignore=tests/supervisors/test_reload.py"
-  ];
-
-  disabledTests = [
-    "test_supported_upgrade_request"
-    "test_invalid_upgrade"
-  ];
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";

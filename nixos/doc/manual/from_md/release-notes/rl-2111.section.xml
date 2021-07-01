@@ -48,6 +48,14 @@
           <link xlink:href="options.html#opt-networking.ucarp.enable">networking.ucarp</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Users of flashrom should migrate to
+          <link xlink:href="options.html#opt-programs.flashrom.enable">programs.flashrom.enable</link>
+          and add themselves to the <literal>flashrom</literal> group to
+          be able to access programmers supported by flashrom.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">

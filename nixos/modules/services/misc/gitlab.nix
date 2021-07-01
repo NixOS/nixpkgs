@@ -462,7 +462,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8080;
         description = ''
           GitLab server port for copy-paste URLs, e.g. 80 or 443 if you're

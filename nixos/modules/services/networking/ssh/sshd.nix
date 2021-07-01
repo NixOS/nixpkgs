@@ -453,6 +453,7 @@ in
               { ExecStart =
                   (optionalString cfg.startWhenNeeded "-") +
                   "${cfgc.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "-D " +  # don't detach into a daemon process
                   "-f /etc/ssh/sshd_config";
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {

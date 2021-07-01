@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "20.0.4";
+  version = "20.1.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626";
+    sha256 = "e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8";
   };
 
   propagatedBuildInputs = [ setuptools ];

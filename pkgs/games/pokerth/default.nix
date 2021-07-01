@@ -15,7 +15,7 @@ let
 in
 
 mkDerivation rec {
-  name = "pokerth-${target}-${version}";
+  pname = "pokerth-${target}";
   version = "1.1.2";
 
   src = fetchFromGitHub {
