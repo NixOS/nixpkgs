@@ -42,7 +42,8 @@
 # enableNoSemanticInterposition is a subset of the enableOptimizations flag that doesn't harm reproducibility.
 , enableNoSemanticInterposition ? true
 # enableLTO is a subset of the enableOptimizations flag that doesn't harm reproducibility.
-, enableLTO ? true
+# enabling LTO on 32bit arch causes downstream packages to fail when linking
+, enableLTO ? stdenv.is64bit
 , reproducibleBuild ? true
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
