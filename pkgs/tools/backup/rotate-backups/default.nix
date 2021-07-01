@@ -1,6 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, update-dotdee, simpleeval, dateutil }:
+{ lib
+, python3
+, fetchFromGitHub
+}:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "rotate-backups";
   version = "6.0";
 
@@ -11,7 +14,20 @@ buildPythonPackage rec {
     sha256 = "0i59qfv1cfm0ss63ab2nrkn5wr4rxpqqmvfd7pf9c3pl9dbfq20c";
   };
 
-  propagatedBuildInputs = [ update-dotdee simpleeval dateutil ];
+  propagatedBuildInputs = with python3.pkgs; [
+    python-dateutil
+    simpleeval
+    update-dotdee
+  ];
+
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/xolox/python-rotate-backups/issues/33
+    "test_removal_command"
+  ];
 
   meta = with lib; {
     description = "Simple command line interface for backup rotation";
@@ -20,4 +36,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ eyjhb ];
   };
 }
-
