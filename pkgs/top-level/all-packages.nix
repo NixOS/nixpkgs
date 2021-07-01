@@ -21182,6 +21182,9 @@ in
   # XanMod kernel
   linuxPackages_xanmod = recurseIntoAttrs (linuxPackagesFor pkgs.linux_xanmod);
 
+  # ck-kernel
+  linuxPackages_ck = recurseIntoAttrs (linuxPackagesFor pkgs.linux_ck);
+
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
 
