@@ -614,6 +614,7 @@ in with py.pkgs; buildPythonApplication rec {
     "pushbullet"
     "pvpc_hourly_pricing"
     "python_script"
+    "qld_bushfire"
     "rachio"
     "radarr"
     "rainmachine"
