@@ -7,17 +7,12 @@
 , blas
 , lapack
 , mpi                   # generic mpi dependency
-, openmpi               # to compare against mpi
 , openssh               # required for openmpi tests
 , petsc-withp4est ? true
 , p4est
 , zlib                  # propagated by p4est but required by petsc
 }:
 
-let
-  mpiSupport = !withp4est || p4est.mpiSupport;
-  withp4est = petsc-withp4est;
-in
 stdenv.mkDerivation rec {
   pname = "petsc";
   version = "3.14.2";
@@ -27,10 +22,13 @@ stdenv.mkDerivation rec {
     sha256 = "04vy3qyakikslc58qyv8c9qrwlivix3w6znc993i37cvfg99dch9";
   };
 
+  mpiSupport = !withp4est || p4est.mpiSupport;
+  withp4est = petsc-withp4est;
+
   nativeBuildInputs = [ python gfortran gfortran.cc.lib ];
   buildInputs = [ blas lapack ]
     ++ lib.optional mpiSupport mpi
-    ++ lib.optional (mpiSupport && mpi == openmpi) openssh
+    ++ lib.optional (mpiSupport && mpi.pname == "openmpi") openssh
     ++ lib.optional withp4est p4est
   ;
 
@@ -74,12 +72,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  inherit mpiSupport withp4est;
   enableParallelBuilding = true;
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = with lib; {
-    description = "Linear algebra algorithms for solving partial differential equations";
+    description = "Portable Extensible Toolkit for Scientific computation";
     homepage = "https://www.mcs.anl.gov/petsc/index.html";
     license = licenses.bsd2;
     maintainers = with maintainers; [ wucke13 cburstedde ];
