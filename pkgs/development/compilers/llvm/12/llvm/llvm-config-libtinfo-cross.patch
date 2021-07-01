@@ -1,0 +1,49 @@
+From 6dbc1c9e2069d30e6e7c5d2f79e447b8b1090dd1 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Thu, 1 Jul 2021 10:20:37 +0000
+Subject: [PATCH llvm] [CMake] Don't link to libtinfo by absolute path
+
+TERMINFO_LIB is the absolute path to the libtinfo library for the
+target system.  Since llvm-config is built for the host system, not
+the target, this would try to link llvm-config with the libtinfo for
+the wrong system.  Instead, just give the linker the name of the
+library, and let it figure it out, the same as for zlib.
+---
+ lib/Support/CMakeLists.txt | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/lib/Support/CMakeLists.txt b/lib/Support/CMakeLists.txt
+index cdee11412eb5..d4f34b549e10 100644
+--- a/lib/Support/CMakeLists.txt
++++ b/lib/Support/CMakeLists.txt
+@@ -4,6 +4,10 @@ if(LLVM_ENABLE_ZLIB)
+   set(imported_libs ZLIB::ZLIB)
+ endif()
+ 
++if(LLVM_ENABLE_TERMINFO)
++  get_library_name(${TERMINFO_LIB} terminfo_library)
++endif()
++
+ if( MSVC OR MINGW )
+   # libuuid required for FOLDERID_Profile usage in lib/Support/Windows/Path.inc.
+   # advapi32 required for CryptAcquireContextW in lib/Support/Windows/Path.inc.
+@@ -24,7 +28,7 @@ elseif( CMAKE_HOST_UNIX )
+     set(system_libs ${system_libs} ${Backtrace_LIBFILE})
+   endif()
+   if( LLVM_ENABLE_TERMINFO )
+-    set(imported_libs ${imported_libs} "${TERMINFO_LIB}")
++    set(imported_libs ${imported_libs} "${terminfo_library}")
+   endif()
+   if( LLVM_ENABLE_THREADS AND (HAVE_LIBATOMIC OR HAVE_CXX_LIBATOMICS64) )
+     set(system_libs ${system_libs} atomic)
+@@ -249,7 +253,6 @@ if(LLVM_ENABLE_ZLIB)
+ endif()
+ 
+ if(LLVM_ENABLE_TERMINFO)
+-  get_library_name(${TERMINFO_LIB} terminfo_library)
+   set(llvm_system_libs ${llvm_system_libs} "${terminfo_library}")
+ endif()
+ 
+-- 
+2.31.1
+
