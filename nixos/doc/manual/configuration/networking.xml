@@ -13,7 +13,7 @@
  <xi:include href="../from_md/configuration/ipv4-config.section.xml" />
  <xi:include href="../from_md/configuration/ipv6-config.section.xml" />
  <xi:include href="../from_md/configuration/firewall.section.xml" />
- <xi:include href="wireless.xml" />
+ <xi:include href="../from_md/configuration/wireless.section.xml" />
  <xi:include href="ad-hoc-network-config.xml" />
  <xi:include href="renaming-interfaces.xml" />
 <!-- TODO: OpenVPN, NAT -->
