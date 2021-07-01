@@ -195,8 +195,6 @@ let
 
         # PCRE
         ++ lib.optionals (lib.versionAtLeast version "7.4") [ "--with-external-pcre=${pcre2.dev}" ]
-        ++ lib.optionals (lib.versions.majorMinor version == "7.3") [ "--with-pcre-regex=${pcre2.dev}" ]
-        ++ lib.optionals (lib.versionOlder version "7.3") [ "--with-pcre-regex=${pcre2.dev}" ]
         ++ [ "PCRE_LIBDIR=${pcre2}" ]
 
 
