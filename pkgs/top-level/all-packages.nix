@@ -18077,7 +18077,7 @@ in
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
 
-  rotate-backups = with python3Packages; toPythonApplication rotate-backups;
+  rotate-backups = callPackage ../tools/backup/rotate-backups { };
 
   rote = callPackage ../development/libraries/rote { };
 
