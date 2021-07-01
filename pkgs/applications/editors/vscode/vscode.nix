@@ -27,7 +27,7 @@ in
     version = "1.58.2";
     pname = "vscode";
 
-    sourceExecutableName = "code";
+    sourceExecutableName = executableName;
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
