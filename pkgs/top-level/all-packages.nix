@@ -27243,6 +27243,8 @@ in
 
   tonelib-gfx = callPackage ../applications/audio/tonelib-gfx { };
 
+  tonelib-jam = callPackage ../applications/audio/tonelib-jam { };
+
   tony = libsForQt514.callPackage ../applications/audio/tony { };
 
   toot = callPackage ../applications/misc/toot { };
