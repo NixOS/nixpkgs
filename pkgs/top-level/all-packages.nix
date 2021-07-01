@@ -1149,6 +1149,8 @@ in
 
   ascii = callPackage ../tools/text/ascii { };
 
+  ascii2binary = callPackage ../tools/text/ascii2binary { };
+
   asciinema = callPackage ../tools/misc/asciinema {};
 
   asciinema-scenario = callPackage ../tools/misc/asciinema-scenario {};
@@ -4964,6 +4966,8 @@ in
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
+
+  uniutils = callPackage ../tools/text/uniutils { };
 
   galculator = callPackage ../applications/misc/galculator {
     gtk = gtk3;
