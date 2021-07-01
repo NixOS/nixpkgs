@@ -42,9 +42,10 @@ in stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
-    # required to put IPC socket in globally accessible
-    # directory, until a proper solurion is provided
-    # upstream
+    # The current IPC location is unsafe as it writes
+    # a fixed path in /tmp, which is world-writable.
+    # Therefore we put it into `/run/netdata`, which is owned
+    # by netdata only.
     ./ipc-socket-in-run.patch
   ];
 
