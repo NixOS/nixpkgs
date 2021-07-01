@@ -6,7 +6,6 @@
 , withSqlite ? false, sqlite
 , withPam ? false, pam
 , withZlib ? true, zlib
-, withRiak ? false
 , withIconv ? true
 , withTools ? false
 , withRedis ? false
@@ -80,7 +79,6 @@ in stdenv.mkDerivation rec {
       (lib.enableFeature withSqlite "sqlite")
       (lib.enableFeature withPam "pam")
       (lib.enableFeature withZlib "zlib")
-      (lib.enableFeature withRiak "riak")
       (lib.enableFeature withIconv "iconv")
       (lib.enableFeature withTools "tools")
       (lib.enableFeature withRedis "redis")
