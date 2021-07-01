@@ -17836,6 +17836,8 @@ in
 
   pstreams = callPackage ../development/libraries/pstreams {};
 
+  pufferpanel = callPackage ../servers/pufferpanel { };
+
   pugixml = callPackage ../development/libraries/pugixml { };
 
   pylode = callPackage ../misc/pylode {};
