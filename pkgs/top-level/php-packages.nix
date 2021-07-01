@@ -270,7 +270,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       { name = "dba"; }
       { name = "dom";
         buildInputs = [ libxml2 ];
-        patches = [
+        patches = lib.optionals (lib.versionOlder php.version "7.4") [
           # https://github.com/php/php-src/pull/7030
           (fetchpatch {
             url = "https://github.com/php/php-src/commit/4cc261aa6afca2190b1b74de39c3caa462ec6f0b.patch";
@@ -280,7 +280,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         ];
         # For some reason `patch` fails to remove these files correctly.
         # Since `postPatch` is already used in `mkExtension`, we have to make it here.
-        preCheck = ''
+        preCheck = lib.optionals (lib.versionOlder php.version "7.4") ''
           rm tests/bug43364.phpt
           rm tests/bug80268.phpt
         '';
