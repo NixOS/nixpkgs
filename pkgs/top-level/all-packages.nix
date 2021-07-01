@@ -20850,6 +20850,11 @@ in
     ];
   };
 
+  linux_ck = callPackage ../os-specific/linux/kernel/linux-ck.nix {
+    kernelPatches = [
+    ];
+  };
+
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
       rather than provide specific instances of those packages for a
       specific kernel, we have a function that builds those packages
