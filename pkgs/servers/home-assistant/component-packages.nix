@@ -646,7 +646,7 @@
     "plugwise" = ps: with ps; [ plugwise ];
     "plum_lightpad" = ps: with ps; [ ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [ ]; # missing inputs: pycketcasts
-    "point" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pypoint
+    "point" = ps: with ps; [ aiohttp-cors pypoint ];
     "poolsense" = ps: with ps; [ poolsense ];
     "powerwall" = ps: with ps; [ ]; # missing inputs: tesla-powerwall
     "profiler" = ps: with ps; [ guppy3 objgraph pyprof2calltree ];
