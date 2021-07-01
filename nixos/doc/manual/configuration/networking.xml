@@ -10,7 +10,7 @@
  </para>
  <xi:include href="../from_md/configuration/network-manager.section.xml" />
  <xi:include href="../from_md/configuration/ssh.section.xml" />
- <xi:include href="ipv4-config.xml" />
+ <xi:include href="../from_md/configuration/ipv4-config.section.xml" />
  <xi:include href="ipv6-config.xml" />
  <xi:include href="firewall.xml" />
  <xi:include href="wireless.xml" />
