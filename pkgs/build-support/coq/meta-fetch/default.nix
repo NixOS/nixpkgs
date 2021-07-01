@@ -1,6 +1,4 @@
 { lib, stdenv, fetchzip }@args:
-let lib' = lib; in
-let lib = import ../extra-lib.nix {lib = lib';}; in
 with builtins; with lib;
 let
   default-fetcher = {domain ? "github.com", owner ? "", repo, rev, name ? "source", sha256 ? null, ...}@args:
@@ -37,7 +35,7 @@ arg:
 switch arg [
   { case = isNull;       out = { version = "broken"; src = ""; broken = true; }; }
   { case = isPathString; out = { version = "dev"; src = arg; }; }
-  { case = pred.union isVersion isShortVersion;
+  { case = preds.union isVersion isShortVersion;
     out = let v = if isVersion arg then arg else shortVersion arg; in
       let
         given-sha256 = release.${v}.sha256 or "";

@@ -1,7 +1,6 @@
 { lib, stdenv, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
 , ocamlPackages_4_10, fetchpatch, makeWrapper, coq2html
 }@args:
-let lib = import ../build-support/coq/extra-lib.nix {inherit (args) lib;}; in
 let
   mkCoqPackages' = self: coq:
     let callPackage = self.callPackage; in {
