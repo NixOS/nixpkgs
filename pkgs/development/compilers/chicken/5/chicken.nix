@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     for f in $out/bin/*
     do
       wrapProgram $f \
-        --prefix PATH : ${stdenv.cc}/bin
+        --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
     done
   '';
 

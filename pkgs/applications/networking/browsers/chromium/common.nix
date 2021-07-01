@@ -175,18 +175,6 @@ let
         sha256 = "1bxdhxmiy6h4acq26lq43x2mxx6rawmfmlgsh5j7w8kyhkw5af0c";
         revert = true;
       })
-      # To fix build errors with the older system FFmpeg:
-      (githubPatch {
-        # unbundle: add libavcodec/packet.h to shim headers
-        commit = "e4d228ec30607b06bf3fed77497abef89c29966a";
-        sha256 = "02jg2bdmgjcpmk6alb72jc93wy3nf2fpa72hb4aarq337i2mwn4v";
-      })
-      (githubPatch {
-        # Roll src/third_party/ffmpeg/ 7e1d53a09..cf7ee6598 (1000 commits)
-        commit = "3ec3b2992238d4b4764f99f04605e154688c7990";
-        sha256 = "1fwb154s5qcis490rvcvm14zrmaj59g5lg9zg8ada36vw9hycbrf";
-        revert = true;
-      })
     ];
 
     postPatch = ''
