@@ -50,5 +50,5 @@ nixos.firefox   firefox-23.0   Mozilla Firefox - the browser, reloaded
 
  <xi:include href="customizing-packages.xml" />
 
- <xi:include href="adding-custom-packages.xml" />
+ <xi:include href="../from_md/configuration/adding-custom-packages.section.xml" />
 </section>
