@@ -99,7 +99,8 @@ in
       autoSuspend = mkOption {
         default = true;
         description = ''
-          Suspend the machine after inactivity.
+          On the GNOME Display Manager login screen, suspend the machine after inactivity.
+          (Does not affect automatic suspend while logged in, or at lock screen.)
         '';
         type = types.bool;
       };

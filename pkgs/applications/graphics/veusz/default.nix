@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "4ClgYwiU21wHDve2q9cItSAVb9hbR2F+fJc8znGI8OA=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook python3Packages.sip ];
+  nativeBuildInputs = [ wrapQtAppsHook python3Packages.sip_4 ];
 
   buildInputs = [ qtbase ];
 
@@ -25,21 +25,21 @@ python3Packages.buildPythonApplication rec {
     wrapQtApp "$out/bin/veusz"
   '';
 
-  # For some reason, if sip5 is found on the PATH, the option --sip-dir is
-  # ignored in setupPyBuildFlags, see
-  # https://github.com/veusz/veusz/blob/53b99dffa999f2bc41fdc5335d7797ae857c761f/pyqtdistutils.py#L292
+  # Since sip 6 (we use sip 4 here, but pyqt5 is built with sip 6), sip files are
+  # placed in a different directory layout and --sip-dir won't work anymore.
+  # --sip-dir expects a directory with a PyQt5 subdirectory (where sip files are located),
+  # but the new directory layout places sip files in a subdirectory named 'bindings'.
+  # To workaround this, we patch the full path into pyqtdistutils.py.
   postPatch = ''
     substituteInPlace pyqtdistutils.py \
-      --replace "'-I', pyqt5_include_dir," "'-I', '${python3Packages.pyqt5}/share/sip/PyQt5',"
+      --replace "'-I', pyqt5_include_dir," "'-I', '${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings',"
     patchShebangs tests/runselftest.py
   '';
 
   # you can find these options at
   # https://github.com/veusz/veusz/blob/53b99dffa999f2bc41fdc5335d7797ae857c761f/pyqtdistutils.py#L71
+  # --sip-dir cannot be used here for the reasons explained above
   setupPyBuildFlags = [
-    # --sip-dir does nothing here, but it should be the correct way to set the
-    # sip_dir, so I'm leaving it here for future versions
-    "--sip-dir=${python3Packages.pyqt5}/share/sip"
     "--qt-include-dir=${qtbase.dev}/include"
     # veusz tries to find a libinfix and fails without one
     # but we simply don't need a libinfix, so set it to empty here

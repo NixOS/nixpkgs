@@ -1,7 +1,8 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
-  name = "steam-fonts-1";
+  pname = "steam-fonts";
+  version = "1";
 
   src = fetchurl {
     url = "https://support.steampowered.com/downloads/1974-YFKL-4947/SteamFonts.zip";

@@ -1,8 +1,9 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, callPackage
+{ mkDerivation, lib, fetchFromGitHub, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk, libtgvoip
+, tl-expected, hunspell, glibmm, webkitgtk
+, libtgvoip, rnnoise, abseil-cpp, extra-cmake-modules
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
@@ -22,25 +23,17 @@ let
   tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.7.5";
+  version = "2.8.3";
+  # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
-  src = fetchurl {
-    url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "sha256-9GxBw5ii9Musjq7D3KMf/P5BA4h690EgXRbhynHwO98=";
+  src = fetchFromGitHub {
+    owner = "telegramdesktop";
+    repo = "tdesktop";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "1ywxsy3a99sdibipriblbzskmkqbnxwrz3lavfdr134wq8w8rjf7";
   };
-
-  patches = [
-    # fixes issue with ffmpeg>=4.4 crashes, hasn't been upstreamed yet
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/gentoo/1c91884873968997be4b0c954169d04dc839f1db/net-im/telegram-desktop/files/tdesktop-2.7.4-voice-crash.patch";
-      sha256 = "sha256-inLXcP70yJlkkmdeXlc3HRL7Vt+Sf00LLJG33gwBKdY=";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/gentoo/1c91884873968997be4b0c954169d04dc839f1db/net-im/telegram-desktop/files/tdesktop-2.7.4-voice-ffmpeg44.patch";
-      sha256 = "sha256-p57LipNf7BDhVvNKRuicVqx0vU6IBL/Cvr5BAfLF4Hs=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Telegram/lib_spellcheck/spellcheck/platform/linux/linux_enchant.cpp \
@@ -59,7 +52,8 @@ in mkDerivation rec {
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
     tl-expected hunspell glibmm webkitgtk
-    tg_owt libtgvoip
+    libtgvoip rnnoise abseil-cpp extra-cmake-modules
+    tg_owt
     # Transitive dependencies:
     pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
     at-spi2-core libXtst libthai libdatrie libsysprof-capture libpsl brotli
@@ -104,6 +98,7 @@ in mkDerivation rec {
 
   passthru = {
     inherit tg_owt;
+    updateScript = ./update.py;
   };
 
   meta = {

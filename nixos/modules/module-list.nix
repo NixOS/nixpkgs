@@ -138,6 +138,7 @@
   ./programs/file-roller.nix
   ./programs/firejail.nix
   ./programs/fish.nix
+  ./programs/flashrom.nix
   ./programs/flexoptix-app.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
@@ -153,6 +154,7 @@
   ./programs/iftop.nix
   ./programs/iotop.nix
   ./programs/java.nix
+  ./programs/kdeconnect.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
   ./programs/liboping.nix

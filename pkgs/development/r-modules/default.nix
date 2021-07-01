@@ -345,6 +345,7 @@ let
     stsm = [ pkgs.gsl_1 ];
     stringi = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl_1 ];
+    svglite = [ pkgs.libpng.dev ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     systemfonts = [ pkgs.fontconfig.dev pkgs.freetype.dev ];
     TAQMNGR = [ pkgs.zlib.dev ];

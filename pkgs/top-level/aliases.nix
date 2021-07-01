@@ -70,6 +70,7 @@ mapAliases ({
   aucdtect = throw "aucdtect: Upstream no longer provides download urls."; # added 2020-12-26
   avldrums-lv2 = x42-avldrums; # added 2020-03-29
   avxsynth = throw "avxsynth was removed because it was broken"; # added 2021-05-18
+  badtouch = authoscope; # Project was renamed, added 20210626
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10

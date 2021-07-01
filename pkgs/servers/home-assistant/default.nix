@@ -255,6 +255,8 @@ in with py.pkgs; buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
+    # Not in setup.py, but used in homeassistant/util/package.py
+    setuptools
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
   ] ++ componentBuildInputs ++ extraBuildInputs;
@@ -506,6 +508,7 @@ in with py.pkgs; buildPythonApplication rec {
     "isy994"
     "izone"
     "jewish_calendar"
+    "juicenet"
     "keenetic_ndms2"
     "kira"
     "kmtronic"
@@ -622,6 +625,7 @@ in with py.pkgs; buildPythonApplication rec {
     "rest"
     "rest_command"
     "rflink"
+    "rfxtrx"
     "ring"
     "risco"
     "rituals_perfume_genie"
@@ -654,6 +658,8 @@ in with py.pkgs; buildPythonApplication rec {
     "sleepiq"
     "sma"
     "smappee"
+    "smart_meter_texas"
+    "smarthab"
     "smartthings"
     "smarttub"
     "smhi"
@@ -662,6 +668,9 @@ in with py.pkgs; buildPythonApplication rec {
     "solaredge"
     "soma"
     "somfy"
+    "somfy_mylink"
+    "sonarr"
+    "songpal"
     "sonos"
     "soundtouch"
     "spaceapi"
@@ -670,7 +679,9 @@ in with py.pkgs; buildPythonApplication rec {
     "spotify"
     "sql"
     "squeezebox"
+    "srp_energy"
     "ssdp"
+    "starline"
     "startca"
     "statistics"
     "statsd"
@@ -682,6 +693,8 @@ in with py.pkgs; buildPythonApplication rec {
     "switch"
     "switcher_kis"
     "syncthing"
+    "syncthru"
+    "synology_dsm"
     "system_health"
     "system_log"
     "tado"
@@ -701,8 +714,10 @@ in with py.pkgs; buildPythonApplication rec {
     "tod"
     "tomato"
     "toon"
+    "totalconnect"
     "tplink"
     "trace"
+    "tradfri"
     "transmission"
     "trend"
     "tts"
@@ -715,6 +730,8 @@ in with py.pkgs; buildPythonApplication rec {
     "unifi"
     "unifi_direct"
     "universal"
+    "upb"
+    "upcloud"
     "updater"
     "upnp"
     "uptime"

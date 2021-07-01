@@ -3,20 +3,26 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "enturclient";
-  version = "0.2.1";
-  disabled = pythonOlder "3.7";
+  version = "0.2.2";
+  disabled = pythonOlder "3.8";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hfurubotten";
     repo = pname;
     rev = "v${version}";
-    sha256 = "158xzv9c2drjgrdhfqm0xzx2d34v45gr5rnjfsi94scffvprgwrg";
+    sha256 = "1kl44ch8p31pr70yv6na2m0w40frackdwzph9rpb05sc83va701i";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp

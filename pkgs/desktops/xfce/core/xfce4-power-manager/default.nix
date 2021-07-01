@@ -1,5 +1,5 @@
 { mkXfceDerivation, automakeAddFlags, exo, gtk3, libnotify
-, libxfce4ui, libxfce4util, upower, xfconf }:
+, libxfce4ui, libxfce4util, upower, xfconf, xfce4-panel }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -9,7 +9,7 @@ mkXfceDerivation {
   sha256 = "sha256-Qk++1db+agiU99p+QW8/WNnNqFVejV/BcnmgvfoB3OU=";
 
   nativeBuildInputs = [ automakeAddFlags exo ];
-  buildInputs = [ gtk3 libnotify libxfce4ui libxfce4util upower xfconf ];
+  buildInputs = [ gtk3 libnotify libxfce4ui libxfce4util upower xfconf xfce4-panel ];
 
   postPatch = ''
     substituteInPlace configure.ac.in --replace gio-2.0 gio-unix-2.0
