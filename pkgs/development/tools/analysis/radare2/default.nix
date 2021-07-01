@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-xndnRVlqTB/NH1ROo7xkftLP7DufsJu4CCA9MCOEeng=";
+    sha256 = "sha256-VS8eG5RXwKtJSLmyaSifopJU7WYGMUcznn+burPqEYE=";
   };
 
   postInstall = ''

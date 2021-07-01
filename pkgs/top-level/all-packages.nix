@@ -4822,6 +4822,8 @@ in
 
   exfat = callPackage ../tools/filesystems/exfat { };
 
+  exfatprogs = callPackage ../tools/filesystems/exfatprogs { };
+
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
@@ -26878,7 +26880,6 @@ in
   unipicker = callPackage ../applications/misc/unipicker { };
 
   unison = callPackage ../applications/networking/sync/unison {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_09;
     enableX11 = config.unison.enableX11 or true;
   };
 
