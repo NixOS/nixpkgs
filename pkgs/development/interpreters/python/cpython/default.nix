@@ -97,9 +97,12 @@ let
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
   ] ++ [
     nukeReferences
+    buildPackages.which
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonForBuild
+  ] ++ optionals (stdenv.cc.isClang && enableOptimizations) [
+    stdenv.cc.cc.llvm
   ];
 
   buildInputs = filter (p: p != null) ([
