@@ -4454,6 +4454,8 @@ in {
 
   miniupnpc = callPackage ../development/python-modules/miniupnpc { };
 
+  mip = callPackage ../development/python-modules/mip { };
+
   misaka = callPackage ../development/python-modules/misaka { };
 
   mistletoe = callPackage ../development/python-modules/mistletoe { };
