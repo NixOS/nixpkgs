@@ -1,13 +1,14 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config
 , p4est-sc-debugEnable ? true, p4est-sc-mpiSupport ? true
-, mpi, openmpi, openssh, zlib
+, mpi, openssh, zlib
 }:
 
 let
   dbg = if debugEnable then "-dbg" else "";
   debugEnable = p4est-sc-debugEnable;
   mpiSupport = p4est-sc-mpiSupport;
+  isOpenmpi = mpiSupport && mpi.pname == "openmpi";
 in
 stdenv.mkDerivation {
   pname = "p4est-sc${dbg}";
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   propagatedBuildInputs = [ zlib ]
     ++ lib.optional mpiSupport mpi
-    ++ lib.optional (mpiSupport && mpi == openmpi) openssh
+    ++ lib.optional isOpenmpi openssh
   ;
   inherit debugEnable mpiSupport;
 
@@ -36,15 +37,17 @@ stdenv.mkDerivation {
     ${if mpiSupport then "unset CC" else ""}
   '';
 
-  configureFlags = lib.optional debugEnable "--enable-debug"
+  configureFlags = [ "--enable-pthread=-pthread" ]
+    ++ lib.optional debugEnable "--enable-debug"
     ++ lib.optional mpiSupport "--enable-mpi"
   ;
 
   makeFlags = [ "V=0" ];
+  checkFlags = lib.optional isOpenmpi "-j1";
 
   dontDisableStatic = true;
   enableParallelBuilding = true;
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = !stdenv.isAarch64 && stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = {
     branch = "prev3-develop";
