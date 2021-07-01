@@ -55,9 +55,6 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(
       $configureFlagsArray
       ${if !mpiSupport then ''
-        "--CC=$CC"
-        "--with-cxx=$CXX"
-        "--with-fc=$FC"
         "--with-mpi=0"
       '' else ''
         "--CC=mpicc"
