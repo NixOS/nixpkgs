@@ -19,8 +19,84 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
 
-  tt-rss-config = pkgs.writeText "config.php" ''
+  tt-rss-config = let
+    password =
+      if (cfg.database.password != null) then
+        "${(escape ["'" "\\"] cfg.database.password)}"
+      else if (cfg.database.passwordFile != null) then
+        "file_get_contents('${cfg.database.passwordFile}'"
+      else
+        ""
+      ;
+  in pkgs.writeText "config.php" ''
     <?php
+      putenv('TTRSS_PHP_EXECUTABLE=${pkgs.php}/bin/php');
+
+      putenv('TTRSS_LOCK_DIRECTORY=${lockDir}');
+      putenv('TTRSS_CACHE_DIR=${cacheDir}');
+      putenv('TTRSS_ICONS_DIR=${feedIconsDir}');
+      putenv('TTRSS_ICONS_URL=${feedIconsDir}');
+      putenv('TTRSS_SELF_URL_PATH=${cfg.selfUrlPath}');
+
+      putenv('TTRSS_MYSQL_CHARSET=UTF8');
+
+      putenv('TTRSS_DB_TYPE=${cfg.database.type}');
+      putenv('TTRSS_DB_HOST=${optionalString (cfg.database.host != null) cfg.database.host}');
+      putenv('TTRSS_DB_USER=${cfg.database.user}');
+      putenv('TTRSS_DB_NAME=${cfg.database.name}');
+      putenv('TTRSS_DB_PASS=${password}');
+      putenv('TTRSS_DB_PORT=${toString dbPort}');
+
+      putenv('TTRSS_AUTH_AUTO_CREATE=${boolToString cfg.auth.autoCreate}');
+      putenv('TTRSS_AUTH_AUTO_LOGIN=${boolToString cfg.auth.autoLogin}');
+
+      putenv('TTRSS_FEED_CRYPT_KEY=${escape ["'" "\\"] cfg.feedCryptKey}');
+
+
+      putenv('TTRSS_SINGLE_USER_MODE=${boolToString cfg.singleUserMode}');
+
+      putenv('TTRSS_SIMPLE_UPDATE_MODE=${boolToString cfg.simpleUpdateMode}');
+
+      # Never check for updates - the running version of the code should
+      # be controlled entirely by the version of TT-RSS active in the
+      # current Nix profile. If TT-RSS updates itself to a version
+      # requiring a database schema upgrade, and then the SystemD
+      # tt-rss.service is restarted, the old code copied from the Nix
+      # store will overwrite the updated version, causing the code to
+      # detect the need for a schema "upgrade" (since the schema version
+      # in the database is different than in the code), but the update
+      # schema operation in TT-RSS will do nothing because the schema
+      # version in the database is newer than that in the code.
+      putenv('TTRSS_CHECK_FOR_UPDATES=false');
+
+      putenv('TTRSS_FORCE_ARTICLE_PURGE=${toString cfg.forceArticlePurge}');
+      putenv('TTRSS_SESSION_COOKIE_LIFETIME=${toString cfg.sessionCookieLifetime}');
+      putenv('TTRSS_ENABLE_GZIP_OUTPUT=${boolToString cfg.enableGZipOutput}');
+
+      putenv('TTRSS_PLUGINS=${builtins.concatStringsSep "," cfg.plugins}');
+
+      putenv('TTRSS_LOG_DESTINATION=${cfg.logDestination}');
+      putenv('TTRSS_CONFIG_VERSION=${toString configVersion}');
+
+
+      putenv('TTRSS_PUBSUBHUBBUB_ENABLED=${boolToString cfg.pubSubHubbub.enable}');
+      putenv('TTRSS_PUBSUBHUBBUB_HUB=${cfg.pubSubHubbub.hub}');
+
+      putenv('TTRSS_SPHINX_SERVER=${cfg.sphinx.server}');
+      putenv('TTRSS_SPHINX_INDEX=${builtins.concatStringsSep "," cfg.sphinx.index}');
+
+      putenv('TTRSS_ENABLE_REGISTRATION=${boolToString cfg.registration.enable}');
+      putenv('TTRSS_REG_NOTIFY_ADDRESS=${cfg.registration.notifyAddress}');
+      putenv('TTRSS_REG_MAX_USERS=${toString cfg.registration.maxUsers}');
+
+      putenv('TTRSS_SMTP_SERVER=${cfg.email.server}');
+      putenv('TTRSS_SMTP_LOGIN=${cfg.email.login}');
+      putenv('TTRSS_SMTP_PASSWORD=${escape ["'" "\\"] cfg.email.password}');
+      putenv('TTRSS_SMTP_SECURE=${cfg.email.security}');
+
+      putenv('TTRSS_SMTP_FROM_NAME=${escape ["'" "\\"] cfg.email.fromName}');
+      putenv('TTRSS_SMTP_FROM_ADDRESS=${escape ["'" "\\"] cfg.email.fromAddress}');
+      putenv('TTRSS_DIGEST_SUBJECT=${escape ["'" "\\"] cfg.email.digestSubject}');
 
       ${cfg.extraConfig}
   '';
@@ -564,85 +640,6 @@ let
           Restart = "on-failure";
           RestartSec = "60";
           SyslogIdentifier = "tt-rss";
-        };
-
-        environment = let
-          password =
-            if (cfg.database.password != null) then
-              "${(escape ["'" "\\"] cfg.database.password)}"
-            else if (cfg.database.passwordFile != null) then
-              "file_get_contents('${cfg.database.passwordFile}'"
-            else
-              ""
-            ;
-        in {
-          TTRSS_PHP_EXECUTABLE = "${pkgs.php}/bin/php";
-
-          TTRSS_LOCK_DIRECTORY = "${lockDir}";
-          TTRSS_CACHE_DIR = "${cacheDir}";
-          TTRSS_ICONS_DIR = "${feedIconsDir}";
-          TTRSS_ICONS_URL = "${feedIconsDir}";
-          TTRSS_SELF_URL_PATH = "${cfg.selfUrlPath}";
-
-          TTRSS_MYSQL_CHARSET = "UTF8";
-
-          TTRSS_DB_TYPE = "${cfg.database.type}";
-          TTRSS_DB_HOST = "${optionalString (cfg.database.host != null) cfg.database.host}";
-          TTRSS_DB_USER = "${cfg.database.user}";
-          TTRSS_DB_NAME = "${cfg.database.name}";
-          TTRSS_DB_PASS = "${password}";
-          TTRSS_DB_PORT = "${toString dbPort}";
-
-          TTRSS_AUTH_AUTO_CREATE = "${boolToString cfg.auth.autoCreate}";
-          TTRSS_AUTH_AUTO_LOGIN = "${boolToString cfg.auth.autoLogin}";
-
-          TTRSS_FEED_CRYPT_KEY = "${escape ["'" "\\"] cfg.feedCryptKey}";
-
-
-          TTRSS_SINGLE_USER_MODE = "${boolToString cfg.singleUserMode}";
-
-          TTRSS_SIMPLE_UPDATE_MODE = "${boolToString cfg.simpleUpdateMode}";
-
-          # Never check for updates - the running version of the code should
-          # be controlled entirely by the version of TT-RSS active in the
-          # current Nix profile. If TT-RSS updates itself to a version
-          # requiring a database schema upgrade, and then the SystemD
-          # tt-rss.service is restarted, the old code copied from the Nix
-          # store will overwrite the updated version, causing the code to
-          # detect the need for a schema "upgrade" (since the schema version
-          # in the database is different than in the code), but the update
-          # schema operation in TT-RSS will do nothing because the schema
-          # version in the database is newer than that in the code.
-          TTRSS_CHECK_FOR_UPDATES = "false";
-
-          TTRSS_FORCE_ARTICLE_PURGE = "${toString cfg.forceArticlePurge}";
-          TTRSS_SESSION_COOKIE_LIFETIME = "${toString cfg.sessionCookieLifetime}";
-          TTRSS_ENABLE_GZIP_OUTPUT = "${boolToString cfg.enableGZipOutput}";
-
-          TTRSS_PLUGINS = "${builtins.concatStringsSep "," cfg.plugins}";
-
-          TTRSS_LOG_DESTINATION = "${cfg.logDestination}";
-          TTRSS_CONFIG_VERSION = "${toString configVersion}";
-
-
-          TTRSS_PUBSUBHUBBUB_ENABLED = "${boolToString cfg.pubSubHubbub.enable}";
-          TTRSS_PUBSUBHUBBUB_HUB = "${cfg.pubSubHubbub.hub}";
-
-          TTRSS_SPHINX_SERVER = "${cfg.sphinx.server}";
-          TTRSS_SPHINX_INDEX = "${builtins.concatStringsSep "," cfg.sphinx.index}";
-
-          TTRSS_ENABLE_REGISTRATION = "${boolToString cfg.registration.enable}";
-          TTRSS_REG_NOTIFY_ADDRESS = "${cfg.registration.notifyAddress}";
-          TTRSS_REG_MAX_USERS = "${toString cfg.registration.maxUsers}";
-
-          TTRSS_SMTP_SERVER = "${cfg.email.server}";
-          TTRSS_SMTP_LOGIN = "${cfg.email.login}";
-          TTRSS_SMTP_PASSWORD = "${escape ["'" "\\"] cfg.email.password}";
-          TTRSS_SMTP_SECURE = "${cfg.email.security}";
-
-          TTRSS_SMTP_FROM_NAME = "${escape ["'" "\\"] cfg.email.fromName}";
-          TTRSS_SMTP_FROM_ADDRESS = "${escape ["'" "\\"] cfg.email.fromAddress}";
-          TTRSS_DIGEST_SUBJECT = "${escape ["'" "\\"] cfg.email.digestSubject}";
         };
 
         wantedBy = [ "multi-user.target" ];
