@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rotate-backups";
-  version = "6.0";
+  version = "8.1";
 
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-rotate-backups";
     rev = version;
-    sha256 = "0i59qfv1cfm0ss63ab2nrkn5wr4rxpqqmvfd7pf9c3pl9dbfq20c";
+    sha256 = "0r4dyd7hj403rksgp3vh1azp9n4af75r3wq3x39wxcqizpms3vkx";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
