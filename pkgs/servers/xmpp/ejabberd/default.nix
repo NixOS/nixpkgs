@@ -7,7 +7,6 @@
 , withPam ? false, pam
 , withZlib ? true, zlib
 , withRiak ? false
-, withElixir ? false, elixir
 , withIconv ? true
 , withTools ? false
 , withRedis ? false
@@ -38,11 +37,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional withSqlite sqlite
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib
-    ++ lib.optional withElixir elixir
-    ;
-
-  # Apparently needed for Elixir
-  LANG = "en_US.UTF-8";
+  ;
 
   deps = stdenv.mkDerivation {
     pname = "ejabberd-deps";
@@ -52,7 +47,7 @@ in stdenv.mkDerivation rec {
 
     configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
-    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
+    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib ];
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
@@ -86,7 +81,6 @@ in stdenv.mkDerivation rec {
       (lib.enableFeature withPam "pam")
       (lib.enableFeature withZlib "zlib")
       (lib.enableFeature withRiak "riak")
-      (lib.enableFeature withElixir "elixir")
       (lib.enableFeature withIconv "iconv")
       (lib.enableFeature withTools "tools")
       (lib.enableFeature withRedis "redis")
@@ -97,7 +91,7 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     cp -r $deps deps
     chmod -R +w deps
-    patchShebangs deps
+    patchShebangs .
   '';
 
   postInstall = ''
@@ -108,6 +102,7 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
     wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    rm $out/bin/{mix,iex,elixir}
   '';
 
   meta = with lib; {
@@ -116,6 +111,5 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
     maintainers = with maintainers; [ sander abbradar ];
-    broken = withElixir;
   };
 }
