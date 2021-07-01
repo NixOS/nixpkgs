@@ -152,6 +152,17 @@ let cfg = config.services.xserver.libinput;
           '';
       };
 
+      tappingDrag = mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          ''
+            Enables or disables drag during tapping behavior ("tap-and-drag"). When enabled, a tap
+            followed by a finger held down causes a single button down only, all motions of that finger
+            thus translate into dragging motion. Tap-and-drag requires option Tapping to be enabled.
+          '';
+      };
+
       tappingDragLock = mkOption {
         type = types.bool;
         default = true;
@@ -205,6 +216,7 @@ let cfg = config.services.xserver.libinput;
         Option "HorizontalScrolling" "${xorgBool cfg.${deviceType}.horizontalScrolling}"
         Option "SendEventsMode" "${cfg.${deviceType}.sendEventsMode}"
         Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"
+        Option "TappingDrag" "${xorgBool cfg.${deviceType}.tappingDrag}"
         Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"
         Option "DisableWhileTyping" "${xorgBool cfg.${deviceType}.disableWhileTyping}"
         ${cfg.${deviceType}.additionalOptions}
@@ -226,6 +238,7 @@ in {
       "horizontalScrolling"
       "sendEventsMode"
       "tapping"
+      "tappingDrag"
       "tappingDragLock"
       "disableWhileTyping"
       "additionalOptions"
