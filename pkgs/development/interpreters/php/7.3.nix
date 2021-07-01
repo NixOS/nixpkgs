@@ -4,8 +4,8 @@ let
   generic = (import ./generic.nix) _args;
 
   base = callPackage generic (_args // {
-    version = "7.3.28";
-    sha256 = "0r4r8famg3a8x6ch24y1370nsphkxg4k9zq5x8v88f4l8mj6wqwg";
+    version = "7.3.29";
+    sha256 = "1l74brhbkmmd0jbwyk5yixlapj3j4vlvysq4y0snkn0b2iw2hfm8";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
