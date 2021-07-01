@@ -7668,6 +7668,8 @@ in
 
   otfcc = callPackage ../tools/misc/otfcc { };
 
+  otpclient = callPackage ../applications/misc/otpclient { };
+
   otpw = callPackage ../os-specific/linux/otpw { };
 
   ovftool = callPackage ../tools/virtualization/ovftool { };
