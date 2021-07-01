@@ -61,7 +61,7 @@ def write_loader_conf(profile: Optional[str], generation: int) -> None:
 
 
 def profile_path(profile: Optional[str], generation: int, name: str) -> str:
-    return os.readlink("%s/%s" % (system_dir(profile, generation), name))
+    return os.path.realpath("%s/%s" % (system_dir(profile, generation), name))
 
 
 def copy_from_profile(profile: Optional[str], generation: int, name: str, dry_run: bool = False) -> str:
