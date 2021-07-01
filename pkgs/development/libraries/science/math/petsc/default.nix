@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   mpiSupport = !withp4est || p4est.mpiSupport;
   withp4est = petsc-withp4est;
 
-  nativeBuildInputs = [ python gfortran gfortran.cc.lib ];
+  nativeBuildInputs = [ python gfortran ];
   buildInputs = [ blas lapack ]
     ++ lib.optional mpiSupport mpi
     ++ lib.optional (mpiSupport && mpi.pname == "openmpi") openssh
@@ -67,8 +67,8 @@ stdenv.mkDerivation rec {
         "--with-zlib-include=${zlib.dev}/include"
         "--with-zlib-lib=-L${zlib}/lib -lz"
       '' else ""}
-      "--with-blas-lib=[${blas}/lib/libblas.so,${gfortran.cc.lib}/lib/libgfortran.a]"
-      "--with-lapack-lib=[${lapack}/lib/liblapack.so,${gfortran.cc.lib}/lib/libgfortran.a]"
+      "--with-blas=1"
+      "--with-lapack=1"
     )
   '';
 
