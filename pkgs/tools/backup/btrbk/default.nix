@@ -1,13 +1,28 @@
-{ lib, stdenv, fetchurl, bash, btrfs-progs, openssh, perl, perlPackages
-, util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, bash
+, btrfs-progs
+, openssh
+, perl
+, perlPackages
+, util-linux
+, asciidoc
+, asciidoctor
+, mbuffer
+, makeWrapper
+, genericUpdater
+, curl
+, writeShellScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "btrbk";
-  version = "0.29.1";
+  version = "0.31.1";
 
   src = fetchurl {
     url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
-    sha256 = "153inyvvnl17hq1w3nsa783havznaykdam2yrj775bmi2wg6fvwn";
+    sha256 = "0yks5fbpvzil24a7p2v3xf95s1dvlpjl52fwpnacf3pnv0r1aimb";
   };
 
   nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
@@ -22,7 +37,9 @@ stdenv.mkDerivation rec {
     done
 
     # Tainted Mode disables PERL5LIB
-    substituteInPlace btrbk --replace "perl -T" "perl"
+    substituteInPlace btrbk \
+      --replace "perl -T" "perl" \
+      --replace "\$0" "\$ENV{'program_name'}"
 
     # Fix SSH filter script
     sed -i '/^export PATH/d' ssh_filter_btrbk.sh
@@ -30,15 +47,24 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram $out/sbin/btrbk \
+    wrapProgram $out/bin/btrbk \
       --set PERL5LIB $PERL5LIB \
+      --run 'export program_name=$0' \
       --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
+
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    versionLister = writeShellScript "btrbk-versionLister" ''
+      echo "# Versions for $1:" >> "$2"
+      ${curl}/bin/curl -s https://digint.ch/btrbk/download.html | ${perl}/bin/perl -lne 'print $1 if /<li>btrbk-([0-9.]*) /'
+    '';
+  };
 
   meta = with lib; {
     description = "A backup tool for btrfs subvolumes";
     homepage = "https://digint.ch/btrbk";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ asymmetric ];
     inherit version;
