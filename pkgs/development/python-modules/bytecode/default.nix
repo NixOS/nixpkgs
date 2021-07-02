@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "bytecode";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "vstinner";
     repo = pname;
     rev = version;
-    sha256 = "097k83zr0z71pha7bafzhs4ink174wk9ls2883bic274rihsnc5r";
+    sha256 = "sha256-CEfDoJ+JlnxLLVnSxv7bEN891tmwG9zAvtT8GNvp8JU=";
   };
 
   disabled = pythonOlder "3.5";
