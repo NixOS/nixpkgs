@@ -153,10 +153,15 @@ stdenv.mkDerivation ({
       "--enable-add-ons"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
-      "--enable-static-pie"
       "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
+    ] ++ lib.optionals (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isAarch64) [
+      # This feature is currently supported on
+      # i386, x86_64 and x32 with binutils 2.29 or later,
+      # and on aarch64 with binutils 2.30 or later.
+      # https://sourceware.org/glibc/wiki/PortStatus
+      "--enable-static-pie"
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
