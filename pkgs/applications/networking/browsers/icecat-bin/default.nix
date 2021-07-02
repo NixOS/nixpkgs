@@ -3,11 +3,8 @@
 , fetchurl
 , autoPatchelfHook
 , wrapGAppsHook
-, flac
 , gnome2
-, harfbuzzFull
 , nss
-, snappy
 , xdg-utils
 , xorg
 , alsa-lib
