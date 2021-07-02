@@ -2965,6 +2965,7 @@ broken-packages:
   - mi
   - miconix-test
   - microbase
+  - microformats2-parser
   - microgroove
   - microlens-each
   - micrologger
@@ -3982,6 +3983,7 @@ broken-packages:
   - reversi
   - ReviewBoard
   - rewrite-inspector
+  - rfc
   - rfc-prelude
   - rhbzquery
   - ribbit

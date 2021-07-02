@@ -721,6 +721,7 @@ dont-distribute-packages:
  - clash-verilog
  - clash-vhdl
  - classify-frog
+ - classy-miso
  - clckwrks
  - clckwrks-cli
  - clckwrks-dot-com
@@ -1723,6 +1724,7 @@ dont-distribute-packages:
  - indentation-parsec
  - indentation-trifecta
  - indexation
+ - indieweb-algorithms
  - infernu
  - inline-java
  - inspector-wrecker
