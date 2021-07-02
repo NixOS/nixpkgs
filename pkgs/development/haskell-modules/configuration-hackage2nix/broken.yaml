@@ -617,6 +617,7 @@ broken-packages:
   - chunky
   - church
   - church-maybe
+  - churros
   - cielo
   - cil
   - cinvoke
@@ -1640,7 +1641,6 @@ broken-packages:
   - gitter
   - git-vogue
   - gi-vips
-  - gi-wnck
   - glade
   - glapp
   - Gleam
@@ -2289,6 +2289,7 @@ broken-packages:
   - hs-rs-notify
   - hs-scrape
   - hsseccomp
+  - hssh
   - hs-snowtify
   - hs-speedscope
   - hsSqlite3
@@ -2453,6 +2454,7 @@ broken-packages:
   - initialize
   - inject-function
   - inline-asm
+  - inline-r
   - inserts
   - instana-haskell-trace-sdk
   - instance-map
@@ -2963,6 +2965,7 @@ broken-packages:
   - mi
   - miconix-test
   - microbase
+  - microformats2-parser
   - microgroove
   - microlens-each
   - micrologger
@@ -3597,6 +3600,7 @@ broken-packages:
   - plat
   - platinum-parsing
   - PlayingCards
+  - plex
   - plist
   - plist-buddy
   - plot-gtk
@@ -3979,6 +3983,7 @@ broken-packages:
   - reversi
   - ReviewBoard
   - rewrite-inspector
+  - rfc
   - rfc-prelude
   - rhbzquery
   - ribbit
@@ -4869,6 +4874,7 @@ broken-packages:
   - turing-music
   - turtle-options
   - tweak
+  - twee
   - twentefp-websockets
   - twfy-api-client
   - twhs

@@ -44,6 +44,7 @@ in
 , libraryFrameworkDepends ? [], executableFrameworkDepends ? []
 , homepage ? "https://hackage.haskell.org/package/${pname}"
 , platforms ? with lib.platforms; all # GHC can cross-compile
+, badPlatforms ? lib.platforms.none
 , hydraPlatforms ? null
 , hyperlinkSource ? true
 , isExecutable ? false, isLibrary ? !isExecutable
@@ -289,7 +290,7 @@ in lib.fix (drv:
 assert allPkgconfigDepends != [] -> pkg-config != null;
 
 stdenv.mkDerivation ({
-  name = "${pname}-${version}";
+  inherit pname version;
 
   outputs = [ "out" ]
          ++ (optional enableSeparateDataOutput "data")
@@ -663,6 +664,7 @@ stdenv.mkDerivation ({
          // optionalAttrs (args ? description)    { inherit description; }
          // optionalAttrs (args ? maintainers)    { inherit maintainers; }
          // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
+         // optionalAttrs (args ? badPlatforms)   { inherit badPlatforms; }
          // optionalAttrs (args ? changelog)      { inherit changelog; }
          ;
 
