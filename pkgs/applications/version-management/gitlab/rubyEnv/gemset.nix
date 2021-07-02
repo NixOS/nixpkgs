@@ -2095,6 +2095,16 @@
     };
     version = "2.0.4";
   };
+  gitlab-rdoc = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "04vdirkdj42as3rgj6qlgz5ly5vg45i9k184bmf5z556i3b1fyf9";
+      type = "gem";
+    };
+    version = "6.3.2";
+  };
   gitlab-sidekiq-fetcher = {
     dependencies = ["sidekiq"];
     groups = ["default"];
@@ -3396,10 +3406,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19d78mdg2lbz9jb4ph6nk783c9jbsdm8rnllwhga6pd53xffp6x0";
+      sha256 = "05rfzi8wksps5pgaavq1n1vkngsrjhqz8rcd1qdb52hnpg9q9p9b";
       type = "gem";
     };
-    version = "1.11.3";
+    version = "1.11.4";
   };
   nokogumbo = {
     dependencies = ["nokogiri"];
@@ -4305,16 +4315,6 @@
       type = "gem";
     };
     version = "1.8.0";
-  };
-  rdoc = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0zh39dpsqlhhi4aba1sbrk504d88p38djk8cansjq0fwndq7w4zb";
-      type = "gem";
-    };
-    version = "6.1.2";
   };
   re2 = {
     groups = ["default"];
