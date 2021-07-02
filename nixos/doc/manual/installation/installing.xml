@@ -570,7 +570,7 @@ Retype new UNIX password: ***</screen>
 
   <xi:include href="../from_md/installation/installing-pxe.section.xml" />
 
-  <xi:include href="installing-virtualbox-guest.xml" />
+  <xi:include href="../from_md/installation/installing-virtualbox-guest.section.xml" />
 
   <xi:include href="installing-from-other-distro.xml" />
 
