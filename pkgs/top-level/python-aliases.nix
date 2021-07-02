@@ -56,4 +56,5 @@ mapAliases ({
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
   websocket_client = websocket-client;
+  bt_proximity = bt-proximity; # added 2021-07-02
 })
