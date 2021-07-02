@@ -17,7 +17,8 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests/" ];
+
+  pytestFlagsArray = [ "tests/Test*.py" ];
 
   disabledTests = [
     # https://github.com/bear/parsedatetime/issues/263
