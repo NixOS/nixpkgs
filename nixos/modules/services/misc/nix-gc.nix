@@ -65,7 +65,7 @@ in
 
       options = mkOption {
         default = "";
-        example = "--max-freed $((64 * 1024**3))";
+        example = ''--max-freed ''${64 * 1024 * 1024 * 1024}'';
         type = types.str;
         description = ''
           Options given to <filename>nix-collect-garbage</filename> when the
@@ -84,7 +84,7 @@ in
 
     systemd.services.nix-gc = {
       description = "Nix Garbage Collector";
-      script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
+      serviceConfig.ExecStart = "${lib.getBin config.nix.package}/bin/nix-collect-garbage ${cfg.options}";
       startAt = optional cfg.automatic cfg.dates;
     };
 
