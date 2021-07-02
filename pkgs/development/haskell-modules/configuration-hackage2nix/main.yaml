@@ -218,6 +218,7 @@ package-maintainers:
     - hlint
     - hmatrix
     - iCalendar
+    - matrix-client
     - neuron
     - optics
     - reflex-dom
@@ -356,6 +357,7 @@ unsupported-platforms:
   gi-ibus:                                      [ x86_64-darwin ]
   gi-ostree:                                    [ x86_64-darwin ]
   gi-vte:                                       [ x86_64-darwin ]
+  gi-wnck:                                      [ x86_64-darwin ]
   gnome-keyring:                                [ x86_64-darwin ]
   gtk-mac-integration:                          [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   gtk-sni-tray:                                 [ x86_64-darwin ]
