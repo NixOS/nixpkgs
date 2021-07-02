@@ -182,6 +182,7 @@
 , "patch-package"
 , "peerflix"
 , "peerflix-server"
+, "pkg"
 , "pm2"
 , "pnpm"
 , "poor-mans-t-sql-formatter-cli"
