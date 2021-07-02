@@ -1,0 +1,150 @@
+From 8c3ee18d3eaf3e8a00dce677386dfae649ea309e Mon Sep 17 00:00:00 2001
+From: Ultima1252 <ultima1252@gmail.com>
+Date: Mon, 15 Jan 2018 17:05:52 -0800
+Subject: [PATCH] Update http-server.c
+
+diff --git a/server/http-server.c b/server/http-server.c
+index b0319b9..fdfe8fe 100644
+--- a/server/http-server.c
++++ b/server/http-server.c
+@@ -2122,7 +2122,7 @@ http_server_run (void *arg)
+ 
+     http_request_init (server);
+ 
+-    evhtp_use_threads (priv->evhtp, NULL, server->worker_threads, NULL);
++    evhtp_use_threads_wexit (priv->evhtp, NULL, NULL, server->worker_threads, NULL);
+ 
+     struct timeval tv;
+     tv.tv_sec = CLEANING_INTERVAL_SEC;
+
+From 84038d1665423b5d72ee840318a337a1907c693b Mon Sep 17 00:00:00 2001
+From: Ultima1252 <ultima1252@gmail.com>
+Date: Mon, 15 Jan 2018 17:13:02 -0800
+Subject: [PATCH] Update upload-file.c
+
+---
+ server/upload-file.c | 30 +++++++++++++++---------------
+  1 file changed, 15 insertions(+), 15 deletions(-)
+  adjusted by schmittlauch
+
+--- a/server/upload-file.c	2019-12-26 00:43:14.743019721 +0100
++++ b/server/upload-file.new	2019-12-26 01:05:11.166580920 +0100
+@@ -2306,7 +2306,7 @@
+         /* Set keepalive to 0. This will cause evhtp to close the
+          * connection after sending the reply.
+          */
+-        req->keepalive = 0;
++        evhtp_request_set_keepalive(req, 0);
+ 
+         fsm->state = RECV_ERROR;
+     }
+@@ -2607,8 +2607,8 @@
+     }
+ 
+     /* Set up per-request hooks, so that we can read file data piece by piece. */
+-    evhtp_set_hook (&req->hooks, evhtp_hook_on_read, upload_read_cb, fsm);
+-    evhtp_set_hook (&req->hooks, evhtp_hook_on_request_fini, upload_finish_cb, fsm);
++    evhtp_callback_set_hook (req, evhtp_hook_on_read, upload_read_cb, fsm);
++    evhtp_callback_set_hook (req, evhtp_hook_on_request_fini, upload_finish_cb, fsm);
+     /* Set arg for upload_cb or update_cb. */
+     req->cbarg = fsm;
+ 
+@@ -2623,7 +2623,7 @@
+     /* Set keepalive to 0. This will cause evhtp to close the
+      * connection after sending the reply.
+      */
+-    req->keepalive = 0;
++    evhtp_request_set_keepalive(req, 0);
+     send_error_reply (req, EVHTP_RES_BADREQ, err_msg);
+ 
+     g_free (repo_id);
+@@ -2724,32 +2724,32 @@
+     g_free (cluster_shared_dir);
+ 
+     cb = evhtp_set_regex_cb (htp, "^/upload-api/.*", upload_api_cb, NULL);
+-    evhtp_set_hook(&cb->hooks, evhtp_hook_on_headers, upload_headers_cb, NULL);
++    evhtp_callback_set_hook(cb, evhtp_hook_on_headers, upload_headers_cb, NULL);
+ 
+     cb = evhtp_set_regex_cb (htp, "^/upload-raw-blks-api/.*",
+                              upload_raw_blks_api_cb, NULL);
+-    evhtp_set_hook(&cb->hooks, evhtp_hook_on_headers, upload_headers_cb, NULL);
++    evhtp_callback_set_hook(cb, evhtp_hook_on_headers, upload_headers_cb, NULL);
+ 
+     cb = evhtp_set_regex_cb (htp, "^/upload-blks-api/.*", upload_blks_api_cb, NULL);
+-    evhtp_set_hook(&cb->hooks, evhtp_hook_on_headers, upload_headers_cb, NULL);
++    evhtp_callback_set_hook(cb, evhtp_hook_on_headers, upload_headers_cb, NULL);
+ 
+     /* cb = evhtp_set_regex_cb (htp, "^/upload-blks-aj/.*", upload_blks_ajax_cb, NULL); */
+-    /* evhtp_set_hook(&cb->hooks, evhtp_hook_on_headers, upload_headers_cb, NULL); */
++    /* evhtp_callback_set_hook(cb, evhtp_hook_on_headers, upload_headers_cb, NULL); */
+ 
+     cb = evhtp_set_regex_cb (htp, "^/upload-aj/.*", upload_ajax_cb, NULL);
+-    evhtp_set_hook(&cb->hooks, evhtp_hook_on_headers, upload_headers_cb, NULL);
++    evhtp_callback_set_hook(cb, evhtp_hook_on_headers, upload_headers_cb, NULL);
+ 
+     cb = evhtp_set_regex_cb (htp, "^/update-api/.*", update_api_cb, NULL);
+-    evhtp_set_hook(&cb->hooks, evhtp_hook_on_headers, upload_headers_cb, NULL);
++    evhtp_callback_set_hook(cb, evhtp_hook_on_headers, upload_headers_cb, NULL);
+ 
+     cb = evhtp_set_regex_cb (htp, "^/update-blks-api/.*", update_blks_api_cb, NULL);
+-    evhtp_set_hook(&cb->hooks, evhtp_hook_on_headers, upload_headers_cb, NULL);
++    evhtp_callback_set_hook(cb, evhtp_hook_on_headers, upload_headers_cb, NULL);
+ 
+     /* cb = evhtp_set_regex_cb (htp, "^/update-blks-aj/.*", update_blks_ajax_cb, NULL); */
+-    /* evhtp_set_hook(&cb->hooks, evhtp_hook_on_headers, upload_headers_cb, NULL); */
++	/* evhtp_callback_set_hook(cb, evhtp_hook_on_headers, upload_headers_cb, NULL); */
+ 
+     cb = evhtp_set_regex_cb (htp, "^/update-aj/.*", update_ajax_cb, NULL);
+-    evhtp_set_hook(&cb->hooks, evhtp_hook_on_headers, upload_headers_cb, NULL);
++	evhtp_callback_set_hook(cb, evhtp_hook_on_headers, upload_headers_cb, NULL);
+ 
+     evhtp_set_regex_cb (htp, "^/upload_progress.*", upload_progress_cb, NULL);
+ 
+
+From bb2cd57f39450db39c1b6b222b06ac7987f3cd32 Mon Sep 17 00:00:00 2001
+From: Ultima1252 <ultima1252@gmail.com>
+Date: Mon, 15 Jan 2018 17:17:27 -0800
+Subject: [PATCH] Update configure.ac
+
+---
+ configure.ac | 10 ++++++++++
+  1 file changed, 10 insertions(+)
+ rebased by schmittlauch
+
+diff --git a/configure.ac b/configure.ac
+index c6fef89..78dece3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -194,6 +194,8 @@ ZDB_REQUIRED=2.10
+ CURL_REQUIRED=7.17
+ FUSE_REQUIRED=2.7.3
+ ZLIB_REQUIRED=1.2.0
++LIBEVHTP_REQUIRED=1.2.16
++ONIGURUMA_REQUIRED=5.9.2
+ 
+ PKG_CHECK_MODULES(SSL, [openssl])
+ AC_SUBST(SSL_CFLAGS)
+@@ -189,6 +189,8 @@ ZDB_REQUIRED=2.10
+ CURL_REQUIRED=7.17
+ FUSE_REQUIRED=2.7.3
+ ZLIB_REQUIRED=1.2.0
++LIBEVHTP_REQUIRED=1.2.16
++ONIGURUMA_REQUIRED=5.9.2
+ 
+ PKG_CHECK_MODULES(SSL, [openssl])
+ AC_SUBST(SSL_CFLAGS)
+@@ -222,6 +224,14 @@ PKG_CHECK_MODULES(ZLIB, [zlib >= $ZLIB_REQUIRED])
+ AC_SUBST(ZLIB_CFLAGS)
+ AC_SUBST(ZLIB_LIBS)
+ 
++PKG_CHECK_MODULES(LIBEVHTP, [evhtp >= $LIBEVHTP_REQUIRED])
++AC_SUBST(LIBEVHTP_CFLAGS)
++AC_SUBST(LIBEVHTP_LIBS)
++
++PKG_CHECK_MODULES(ONIGURUMA, [oniguruma >= $ONIGURUMA_REQUIRED])
++AC_SUBST(ONIGURUMA_CFLAGS)
++AC_SUBST(ONIGURUMA_LIBS)
++
+ if test x${compile_python} = xyes; then
+     AM_PATH_PYTHON([2.6])
+     if test "$bwin32" = true; then
