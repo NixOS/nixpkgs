@@ -5349,6 +5349,8 @@ in {
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
+  pypoint = callPackage ../development/python-modules/pypoint { };
+
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
@@ -7621,8 +7623,6 @@ in {
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 
   ropper = callPackage ../development/python-modules/ropper { };
-
-  rotate-backups = callPackage ../tools/backup/rotate-backups { };
 
   routes = callPackage ../development/python-modules/routes { };
 
