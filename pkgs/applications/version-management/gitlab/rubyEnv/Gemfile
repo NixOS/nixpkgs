@@ -157,7 +157,7 @@ gem 'github-markup', '~> 1.7.0', require: 'github/markup'
 gem 'commonmarker', '~> 0.21'
 gem 'kramdown', '~> 2.3.1'
 gem 'RedCloth', '~> 4.3.2'
-gem 'rdoc', '~> 6.1.2'
+gem 'gitlab-rdoc', '~> 6.3.2', require: 'rdoc' # We need this fork until rdoc releases a new version. See https://gitlab.com/gitlab-org/gitlab/-/issues/334695
 gem 'org-ruby', '~> 0.9.12'
 gem 'creole', '~> 0.5.0'
 gem 'wikicloth', '0.8.1'
@@ -168,7 +168,7 @@ gem 'asciidoctor-kroki', '~> 0.4.0', require: false
 gem 'rouge', '~> 3.26.0'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
-gem 'nokogiri', '~> 1.11.1'
+gem 'nokogiri', '~> 1.11.4'
 gem 'escape_utils', '~> 1.1'
 
 # Calendar rendering
