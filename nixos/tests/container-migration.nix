@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
   };
 in {
   name = "container-migration";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ma27 ];
   };
 

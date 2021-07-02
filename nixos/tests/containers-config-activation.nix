@@ -38,7 +38,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
   };
 in {
   name = "container-tests";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ma27 ];
   };
 
@@ -66,12 +66,12 @@ in {
         }
       ];
 
-      systemd.nspawn.restart.filesConfig.BindReadOnly = [ "/etc:/tmp" ];
-      systemd.nspawn.reload.filesConfig.BindReadOnly = [ "/etc:/tmp" ];
+      systemd.nspawn.restart.filesConfig.BindReadOnly = [ "/etc:/foo" ];
+      systemd.nspawn.reload.filesConfig.BindReadOnly = [ "/etc:/foo" ];
     };
     configchange2 = {
       imports = [ configchange ];
-      systemd.nspawn.dynamic.filesConfig.BindReadOnly = [ "/etc:/tmp" ];
+      systemd.nspawn.dynamic.filesConfig.BindReadOnly = [ "/etc:/foo" ];
       nixos.containers.instances = {
         new = {
           network.v4.static.containerPool = [ "10.231.150.2/24" ];
@@ -106,13 +106,14 @@ in {
 
         for m in ['reload', 'restart']:
             base.fail(
-                f"systemd-run -M {m} --pty --quiet -- /bin/sh --login -c 'test -e /tmp/systemd'"
+                f"systemd-run -M {m} --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
             )
 
     with subtest("Activate changes"):
         act_output = base.succeed(
             "${change}/bin/switch-to-configuration test 2>&1 | tee /dev/stderr"
         ).split('\n')
+        base.succeed("sleep 10")
 
         units = {}
         for state in ['stopping', 'starting', 'restarting', 'reloading']:
@@ -144,12 +145,12 @@ in {
 
         base.wait_until_succeeds("ping -c3 10.231.138.2 >&2")
         base.succeed(
-            f"systemd-run -M restart --pty --quiet -- /bin/sh --login -c 'test -e /tmp/systemd'"
+            f"systemd-run -M restart --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
         )
 
         # A reload is forced for this machine, but a reload doesn't refresh bind mounts.
         base.fail(
-            f"systemd-run -M reload --pty --quiet -- /bin/sh --login -c 'test -e /tmp/systemd'"
+            f"systemd-run -M reload --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
         )
 
     with subtest("More changes"):
@@ -160,7 +161,7 @@ in {
         base.wait_until_succeeds(f"ping -c3 10.231.136.2 >&2")
 
         base.succeed(
-            f"systemd-run -M dynamic --pty --quiet -- /bin/sh --login -c 'test -e /tmp/systemd'"
+            f"systemd-run -M dynamic --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
         )
 
         base.wait_until_succeeds("ping -c3 10.231.150.2 >&2")

@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
     snakeOilPrivateKey snakeOilPublicKey;
 in {
   name = "container-tests";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ma27 ];
   };
 
@@ -168,9 +168,13 @@ in {
       container0 = {
         network.v6.static = {
           containerPool = [ "fd24::2/64" ];
+            hostAddresses = [
+              "fd24::3/64"
+            ];
         };
         network.v6.addrPool = lib.mkForce [];
         config = { pkgs, ... }: {
+          environment.systemPackages = [ pkgs.tcpdump pkgs.tmux pkgs.dnsutils ];
           networking.firewall.allowedTCPPorts = [ 80 ];
           systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
           services.openssh.enable = true;
@@ -245,7 +249,12 @@ in {
     # proxies NDP traffic of container IPs.
     services.ndppd = {
       enable = true;
-      proxies.eth1.rules."fd24::2/128" = {};
+      #proxies.ve-container0.rules."fd24::1/64" = {};
+      #proxies.ve-container0.rules."fd24::2/64" = {};
+      #proxies.ve-container0.rules."fd24::3/64" = {};
+      #proxies.eth1.rules."fd24::1/64" = {};
+      proxies.eth1.rules."fd24::2/64" = {};
+      #proxies.eth1.rules."fd24::3/64" = {};
     };
 
     programs.mtr.enable = true;

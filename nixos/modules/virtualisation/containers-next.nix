@@ -515,11 +515,12 @@ in {
               # picked up if an override exists and `systemd-nspawn@ldap` exists.
               RestartForceExitStatus = 133;
               Type = "notify";
-              Delegate = "yes";
               TasksMax = 16384;
               WatchdogSec = "3min";
               SuccessExitStatus = 133;
+              Delegate = "yes";
               KillMode = "mixed";
+              Slice = "machine.slice";
               DevicePolicy = "closed";
               DeviceAllow = [
                 "/dev/net/tun rwm"
@@ -537,7 +538,7 @@ in {
                 then "${activation.reloadScript}"
                 else "${pkgs.writeShellScriptBin "activate" ''
                   pid=$(machinectl show ${container} --value --property Leader)
-                  ${pkgs.utillinux}/bin/nsenter -t "$pid" -m -u -i -n -p \
+                  ${pkgs.util-linux}/bin/nsenter -t "$pid" -m -u -i -n -p \
                     -- ${images.${container}.container.config.system.build.toplevel}/bin/switch-to-configuration test
                 ''}/bin/activate";
             })
