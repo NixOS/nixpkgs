@@ -30,5 +30,5 @@
  </para>
  <xi:include href="../from_md/administration/imperative-containers.section.xml" />
  <xi:include href="../from_md/administration/declarative-containers.section.xml" />
- <xi:include href="container-networking.xml" />
+ <xi:include href="../from_md/administration/container-networking.section.xml" />
 </chapter>
