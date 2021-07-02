@@ -7061,6 +7061,8 @@ in {
 
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
 
+  python-pkcs11 = callPackage ../development/python-modules/python-pkcs11 { };
+
   python-prctl = callPackage ../development/python-modules/python-prctl { };
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
