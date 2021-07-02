@@ -10,4 +10,5 @@ rec {
   # Arcan
 
   arcan = callPackage ./arcan.nix { };
+  arcan-wrapped = callPackage ./wrapper.nix { };
 }
