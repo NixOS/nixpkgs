@@ -1937,7 +1937,7 @@ in {
 
   discid = callPackage ../development/python-modules/discid { };
 
-  discogs_client = callPackage ../development/python-modules/discogs_client { };
+  discogs-client = callPackage ../development/python-modules/discogs-client { };
 
   discordpy = callPackage ../development/python-modules/discordpy { };
 
