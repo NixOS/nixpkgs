@@ -11,6 +11,10 @@ buildPythonPackage rec {
     sha256 = "28352387efbbe772cfb307570019f81957a13ff718d994a9125fa705efb73680";
   };
 
+  postPatch = ''
+    sed -i -e 's/use_scm_version=.*/version="${version}",/' setup.py
+  '';
+
   propagatedBuildInputs = [ flask brotli ];
 
   meta = with lib; {
