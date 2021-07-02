@@ -568,7 +568,7 @@ Retype new UNIX password: ***</screen>
 
   <xi:include href="../from_md/installation/installing-usb.section.xml" />
 
-  <xi:include href="installing-pxe.xml" />
+  <xi:include href="../from_md/installation/installing-pxe.section.xml" />
 
   <xi:include href="installing-virtualbox-guest.xml" />
 
