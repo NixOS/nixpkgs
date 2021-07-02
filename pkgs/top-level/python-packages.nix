@@ -7624,8 +7624,6 @@ in {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
-  rotate-backups = callPackage ../tools/backup/rotate-backups { };
-
   routes = callPackage ../development/python-modules/routes { };
 
   rpdb = callPackage ../development/python-modules/rpdb { };
