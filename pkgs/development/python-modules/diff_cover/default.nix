@@ -1,41 +1,51 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
 , chardet
+, fetchPypi
 , inflect
 , jinja2
 , jinja2_pluralize
-, pygments
-, six
-# test dependencies
-, coverage
-, mock
-, nose
 , pycodestyle
 , pyflakes
+, pygments
 , pylint
-, pytest
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "diff_cover";
-  version = "5.2.0";
-
-  preCheck = ''
-    export LC_ALL=en_US.UTF-8;
-  '';
+  version = "5.4.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a1cd54232d2e48bd4c1eabc96cfe4a8727a9a92fd2556b52ff8f65bb8adf8768";
+    sha256 = "sha256-4iQ9/QcXh/lW8HE6wFZWc6Y57xhAEWu2TQnIUZJNAMs=";
   };
 
-  propagatedBuildInputs = [ chardet jinja2 jinja2_pluralize pygments six inflect ];
+  propagatedBuildInputs = [
+    chardet
+    inflect
+    jinja2
+    jinja2_pluralize
+    pygments
+  ];
 
-  checkInputs = [ mock coverage pytest nose pylint pyflakes pycodestyle ];
+  checkInputs = [
+    pycodestyle
+    pyflakes
+    pylint
+    pytest-mock
+    pytestCheckHook
+  ];
 
-  # ignore tests which try to write files
-  checkPhase = ''
-    pytest -k 'not added_file_pylint_console and not file_does_not_exist'
-  '';
+  disabledTests = [
+    "added_file_pylint_console"
+    "file_does_not_exist"
+  ];
+
+  pythonImportsCheck = [ "diff_cover" ];
 
   meta = with lib; {
     description = "Automatically find diff lines that need test coverage";
