@@ -20,7 +20,7 @@ in with lib; {
     enable = mkEnableOption "zeronet";
 
     settings = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
+      type = with types; attrsOf (attrsOf (oneOf [ str int bool (listOf str) ]));
       default = {};
       example = literalExample "global.tor = enable;";
 
