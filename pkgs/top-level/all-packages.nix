@@ -5802,7 +5802,11 @@ in
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
-  ipfs = callPackage ../applications/networking/ipfs/0.8.nix { };
+  ipfs = ipfs_0_8;
+  ipfs_latest = ipfs_0_9;
+  ipfs_0_8 = callPackage ../applications/networking/ipfs/0.8.nix { };
+  ipfs_0_9 = callPackage ../applications/networking/ipfs/0.9.nix { };
+
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ipfs";
-  version = "0.8.0";
+  version = "0.9.0";
   rev = "v${version}";
 
   # go-ipfs makes changes to it's source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/go-ipfs/releases/download/${rev}/go-ipfs-source.tar.gz";
-    sha256 = "sha256-uK3+Ekr5AM6mmGmjFSj1Rotm5pbH657BYUlP9B39WEw=";
+    sha256 = "sha256:1fyffnw1d860w7gwm6ijbgrh68297z5bmvww8yqfshm3xgvcs6bf";
   };
 
   # tarball contains multiple files/directories
