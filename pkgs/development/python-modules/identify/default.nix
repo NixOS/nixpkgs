@@ -2,23 +2,23 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, editdistance
+, editdistance-s
 }:
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "1.6.1";
+  version = "2.2.10";
 
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1sqhqqjp53dwm8yq4nrgggxbvzs3szbg49z5sj2ss9xzlgmimclm";
+    sha256 = "017xcwm8m42a1v3v0fs8v3m2sga97rx9a7vk0cb2g14777f4w4si";
   };
 
   checkInputs = [
-    editdistance
+    editdistance-s
     pytestCheckHook
   ];
 
