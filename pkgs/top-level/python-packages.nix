@@ -2245,6 +2245,8 @@ in {
 
   editdistance = callPackage ../development/python-modules/editdistance { };
 
+  editdistance-s = callPackage ../development/python-modules/editdistance-s { };
+
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
   edward = callPackage ../development/python-modules/edward { };
