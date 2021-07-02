@@ -393,6 +393,7 @@ in
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
+  pgadmin4 = handleTest ./pgadmin4.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   php = handleTest ./php {};
