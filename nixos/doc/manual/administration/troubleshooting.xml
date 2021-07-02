@@ -12,5 +12,5 @@
  <xi:include href="../from_md/administration/maintenance-mode.section.xml" />
  <xi:include href="../from_md/administration/rollback.section.xml" />
  <xi:include href="../from_md/administration/store-corruption.section.xml" />
- <xi:include href="network-problems.xml" />
+ <xi:include href="../from_md/administration/network-problems.section.xml" />
 </chapter>
