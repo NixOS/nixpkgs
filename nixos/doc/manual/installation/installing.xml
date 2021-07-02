@@ -566,7 +566,7 @@ Retype new UNIX password: ***</screen>
  <section xml:id="sec-installation-additional-notes">
   <title>Additional installation notes</title>
 
-  <xi:include href="installing-usb.xml" />
+  <xi:include href="../from_md/installation/installing-usb.section.xml" />
 
   <xi:include href="installing-pxe.xml" />
 
