@@ -12,4 +12,12 @@ rec {
   arcan = callPackage ./arcan.nix { };
   arcan-wrapped = callPackage ./wrapper.nix { };
   xarcan = callPackage ./xarcan.nix { };
+
+  # Appls
+
+  durden = callPackage ./durden.nix { };
+  durden-wrapped = callPackage ./wrapper.nix {
+    name = "durden-wrapped";
+    appls = [ durden ];
+  };
 }
