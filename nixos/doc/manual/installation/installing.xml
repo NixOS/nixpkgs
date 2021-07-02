@@ -574,6 +574,6 @@ Retype new UNIX password: ***</screen>
 
   <xi:include href="../from_md/installation/installing-from-other-distro.section.xml" />
 
-  <xi:include href="installing-behind-a-proxy.xml" />
+  <xi:include href="../from_md/installation/installing-behind-a-proxy.section.xml" />
  </section>
 </chapter>
