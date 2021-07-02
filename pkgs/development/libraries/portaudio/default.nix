@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, alsa-lib, pkg-config, libjack2
 , AudioUnit, AudioToolbox, CoreAudio, CoreServices, Carbon }:
 
-stdenv.mkDerivation {
-  name = "portaudio-190600-20161030";
+stdenv.mkDerivation rec {
+  pname = "portaudio";
+  version = "190600-20161030";
 
   src = fetchurl {
-    url = "http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz";
+    url = "http://www.portaudio.com/archives/pa_stable_v${lib.replaceStrings ["-"] ["_"] version}.tgz";
     sha256 = "04qmin6nj144b8qb9kkd9a52xfvm0qdgm8bg8jbl7s3frmyiv8pm";
   };
 
