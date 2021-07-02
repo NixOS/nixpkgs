@@ -3328,6 +3328,8 @@ in {
 
   httpauth = callPackage ../development/python-modules/httpauth { };
 
+  httpagentparser = callPackage ../development/python-modules/httpagentparser { };
+
   httpbin = callPackage ../development/python-modules/httpbin { };
 
   httpcore = callPackage ../development/python-modules/httpcore { };
