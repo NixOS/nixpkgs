@@ -1155,6 +1155,8 @@ let
 
     rope = callPackage ../development/ocaml-modules/rope { };
 
+    routes = callPackage ../development/ocaml-modules/routes { };
+
     rpclib = callPackage ../development/ocaml-modules/rpclib { };
 
     rpclib-lwt = callPackage ../development/ocaml-modules/rpclib/lwt.nix { };
