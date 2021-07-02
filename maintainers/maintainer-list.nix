@@ -10776,6 +10776,12 @@
     githubId = 347983;
     name = "Udo Spallek";
   };
+  ulrikstrid = {
+    email = "ulrik.strid@outlook.com";
+    github = "ulrikstrid";
+    githubId = 1607770;
+    name = "Ulrik Strid";
+  };
   unode = {
     email = "alves.rjc@gmail.com";
     github = "unode";
