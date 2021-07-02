@@ -11980,4 +11980,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  nitsky = {
+    name = "nitsky";
+    email = "492793+nitsky@users.noreply.github.com";
+    github = "nitsky";
+    githubId = 492793;
+  };
 }
