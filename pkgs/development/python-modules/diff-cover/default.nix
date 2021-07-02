@@ -15,12 +15,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "diff_cover";
+  pname = "diff-cover";
   version = "5.4.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "diff_cover";
+    inherit version;
     sha256 = "sha256-4iQ9/QcXh/lW8HE6wFZWc6Y57xhAEWu2TQnIUZJNAMs=";
   };
 
