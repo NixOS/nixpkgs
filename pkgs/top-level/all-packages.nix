@@ -32153,4 +32153,6 @@ in
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  nullfs = callPackage ../tools/filesystems/nullfs {};
 }
