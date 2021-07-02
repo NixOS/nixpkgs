@@ -63,6 +63,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
           jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
         };
       };
+
+      services.postgresql.package = pkgs.postgresql_13;
     };
   };
 
