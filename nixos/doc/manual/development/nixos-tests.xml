@@ -14,6 +14,6 @@ xlink:href="https://github.com/NixOS/nixpkgs/tree/master/nixos/tests">nixos/test
   test.
  </para>
  <xi:include href="../from_md/development/writing-nixos-tests.section.xml" />
- <xi:include href="running-nixos-tests.xml" />
+ <xi:include href="../from_md/development/running-nixos-tests.section.xml" />
  <xi:include href="running-nixos-tests-interactively.xml" />
 </chapter>
