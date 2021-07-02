@@ -340,6 +340,15 @@
         </para>
       </listitem>
     </itemizedlist>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/pimutils/todoman">todoman</link>
+          has been upgraded from 3.9.0 to 4.0.0. This introduces
+          breaking changes in the configuration file and format.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
     <title>Other Notable Changes</title>
