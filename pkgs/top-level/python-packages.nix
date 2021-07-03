@@ -5379,6 +5379,8 @@ in {
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
+  python-crfsuite = callPackage ../development/python-modules/python-crfsuite { };
+
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
