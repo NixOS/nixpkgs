@@ -60,7 +60,7 @@ let
 
   vaapiSupport = reqMin "0.6" && ((isLinux || isFreeBSD) && !isAarch32);
 
-  vpxSupport = reqMin "0.6" && !isAarch32;
+  vpxSupport = reqMin "0.6" && !isAarch32 && (stdenv.hostPlatform == stdenv.buildPlatform);
 in
 
 assert openglSupport -> libGL != null && libGLU != null;
