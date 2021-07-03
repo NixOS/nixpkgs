@@ -34,7 +34,7 @@ index 43162797e..613266e07 100644
                  Some(TypeNs::TypeAliasId((*alias).into()))
              }
 diff --git a/crates/hir_def/src/item_tree/pretty.rs b/crates/hir_def/src/item_tree/pretty.rs
-index e63bc8232..b1e1b70d0 100644
+index 8b12e5a67..d03c11377 100644
 --- a/crates/hir_def/src/item_tree/pretty.rs
 +++ b/crates/hir_def/src/item_tree/pretty.rs
 @@ -63,7 +63,7 @@ impl<'a> Printer<'a> {
@@ -56,7 +56,7 @@ index e63bc8232..b1e1b70d0 100644
          }
      }
 diff --git a/crates/hir_def/src/nameres/collector.rs b/crates/hir_def/src/nameres/collector.rs
-index 927a7b6e8..fc2c50fb8 100644
+index 634e02205..250eb1c3e 100644
 --- a/crates/hir_def/src/nameres/collector.rs
 +++ b/crates/hir_def/src/nameres/collector.rs
 @@ -1260,7 +1260,7 @@ impl DefCollector<'_> {
@@ -69,7 +69,7 @@ index 927a7b6e8..fc2c50fb8 100644
                              continue;
                          }
 diff --git a/crates/hir_def/src/resolver.rs b/crates/hir_def/src/resolver.rs
-index 49c573087..5edd93a2a 100644
+index a11439c3b..1841fe989 100644
 --- a/crates/hir_def/src/resolver.rs
 +++ b/crates/hir_def/src/resolver.rs
 @@ -605,7 +605,8 @@ fn to_value_ns(per_ns: PerNs) -> Option<ValueNs> {
@@ -362,7 +362,7 @@ index ffa8bd182..93d3760bf 100644
  
  fn compute_ws(left: SyntaxKind, right: SyntaxKind) -> &'static str {
 diff --git a/crates/ide/src/references.rs b/crates/ide/src/references.rs
-index 5808562a7..945c9b9e1 100644
+index 2d3a0f598..7a7654b6c 100644
 --- a/crates/ide/src/references.rs
 +++ b/crates/ide/src/references.rs
 @@ -79,7 +79,8 @@ pub(crate) fn find_all_refs(
@@ -376,10 +376,10 @@ index 5808562a7..945c9b9e1 100644
                      it.retain(|reference| {
                          reference.name.as_name_ref().map_or(false, is_lit_name_ref)
 diff --git a/crates/ide/src/syntax_highlighting.rs b/crates/ide/src/syntax_highlighting.rs
-index d44a1b45f..e186b82b7 100644
+index 5259d86d2..365d0c4de 100644
 --- a/crates/ide/src/syntax_highlighting.rs
 +++ b/crates/ide/src/syntax_highlighting.rs
-@@ -294,7 +294,7 @@ fn traverse(
+@@ -295,7 +295,7 @@ fn traverse(
                  Some(parent) => {
                      // We only care Name and Name_ref
                      match (token.kind(), parent.kind()) {
@@ -388,7 +388,7 @@ index d44a1b45f..e186b82b7 100644
                          _ => token.into(),
                      }
                  }
-@@ -310,7 +310,7 @@ fn traverse(
+@@ -311,7 +311,7 @@ fn traverse(
                  Some(parent) => {
                      // We only care Name and Name_ref
                      match (token.kind(), parent.kind()) {
@@ -398,10 +398,10 @@ index d44a1b45f..e186b82b7 100644
                      }
                  }
 diff --git a/crates/ide_assists/src/handlers/extract_function.rs b/crates/ide_assists/src/handlers/extract_function.rs
-index ac7f0959b..9b78cf4b1 100644
+index 870d4f665..454de2645 100644
 --- a/crates/ide_assists/src/handlers/extract_function.rs
 +++ b/crates/ide_assists/src/handlers/extract_function.rs
-@@ -1384,7 +1384,7 @@ fn fix_param_usages(ctx: &AssistContext, params: &[Param], syntax: &SyntaxNode)
+@@ -1398,7 +1398,7 @@ fn fix_param_usages(ctx: &AssistContext, params: &[Param], syntax: &SyntaxNode)
      for (param, usages) in usages_for_param {
          for usage in usages {
              match usage.syntax().ancestors().skip(1).find_map(ast::Expr::cast) {
@@ -429,7 +429,7 @@ index 841537c77..d9d9124b6 100644
          }
          (None, ExpectedResult::NotApplicable) => (),
 diff --git a/crates/ide_completion/src/completions/qualified_path.rs b/crates/ide_completion/src/completions/qualified_path.rs
-index f5dbd203b..88f4d940d 100644
+index 1b8997ecf..aaaef27d2 100644
 --- a/crates/ide_completion/src/completions/qualified_path.rs
 +++ b/crates/ide_completion/src/completions/qualified_path.rs
 @@ -65,11 +65,9 @@ pub(crate) fn complete_qualified_path(acc: &mut Completions, ctx: &CompletionCon
@@ -465,10 +465,19 @@ index f5dbd203b..88f4d940d 100644
                  add_enum_variants(acc, ctx, e);
              }
 diff --git a/crates/ide_completion/src/completions/unqualified_path.rs b/crates/ide_completion/src/completions/unqualified_path.rs
-index 81c4fb305..8ea5a2d5b 100644
+index 5abd6ee37..5e6a2e661 100644
 --- a/crates/ide_completion/src/completions/unqualified_path.rs
 +++ b/crates/ide_completion/src/completions/unqualified_path.rs
-@@ -74,11 +74,9 @@ pub(crate) fn complete_unqualified_path(acc: &mut Completions, ctx: &CompletionC
+@@ -40,7 +40,7 @@ pub(crate) fn complete_unqualified_path(acc: &mut Completions, ctx: &CompletionC
+         ctx.scope.process_all_names(&mut |name, res| {
+             let add_resolution = match res {
+                 ScopeDef::MacroDef(mac) => mac.is_fn_like(),
+-                ScopeDef::ModuleDef(hir::ModuleDef::Trait(_) | hir::ModuleDef::Module(_)) => true,
++                ScopeDef::ModuleDef(hir::ModuleDef::Trait(_)) | ScopeDef::ModuleDef(hir::ModuleDef::Module(_)) => true,
+                 _ => false,
+             };
+             if add_resolution {
+@@ -88,11 +88,9 @@ pub(crate) fn complete_unqualified_path(acc: &mut Completions, ctx: &CompletionC
              // Don't suggest attribute macros and derives.
              ScopeDef::MacroDef(mac) => mac.is_fn_like(),
              // no values in type places
@@ -484,7 +493,7 @@ index 81c4fb305..8ea5a2d5b 100644
              // unless its a constant in a generic arg list position
              ScopeDef::ModuleDef(hir::ModuleDef::Const(_))
 diff --git a/crates/ide_completion/src/context.rs b/crates/ide_completion/src/context.rs
-index 7b76600df..09eb953fd 100644
+index f0da98739..ea1e110da 100644
 --- a/crates/ide_completion/src/context.rs
 +++ b/crates/ide_completion/src/context.rs
 @@ -242,23 +242,24 @@ impl<'a> CompletionContext<'a> {
@@ -518,7 +527,7 @@ index 7b76600df..09eb953fd 100644
              _ => None,
          }
      }
-@@ -282,7 +283,7 @@ impl<'a> CompletionContext<'a> {
+@@ -282,28 +283,28 @@ impl<'a> CompletionContext<'a> {
      pub(crate) fn expects_ident_pat_or_ref_expr(&self) -> bool {
          matches!(
              self.completion_location,
@@ -527,7 +536,14 @@ index 7b76600df..09eb953fd 100644
          )
      }
  
-@@ -293,14 +294,14 @@ impl<'a> CompletionContext<'a> {
+     pub(crate) fn expect_field(&self) -> bool {
+         matches!(
+             self.completion_location,
+-            Some(ImmediateLocation::RecordField | ImmediateLocation::TupleField)
++            Some(ImmediateLocation::RecordField) | Some(ImmediateLocation::TupleField)
+         )
+     }
+ 
      pub(crate) fn in_use_tree(&self) -> bool {
          matches!(
              self.completion_location,
@@ -544,7 +560,7 @@ index 7b76600df..09eb953fd 100644
          )
      }
  
-@@ -321,16 +322,14 @@ impl<'a> CompletionContext<'a> {
+@@ -324,16 +325,14 @@ impl<'a> CompletionContext<'a> {
              || self.previous_token_is(T![unsafe])
              || matches!(
                  self.prev_sibling,
@@ -566,7 +582,7 @@ index 7b76600df..09eb953fd 100644
              )
      }
  
-@@ -704,8 +703,8 @@ fn path_or_use_tree_qualifier(path: &ast::Path) -> Option<(ast::Path, bool)> {
+@@ -707,8 +706,8 @@ fn path_or_use_tree_qualifier(path: &ast::Path) -> Option<(ast::Path, bool)> {
  
  fn has_ref(token: &SyntaxToken) -> bool {
      let mut token = token.clone();
@@ -591,7 +607,7 @@ index 33d3a5ee1..749dfc665 100644
                  ctx.completion_location,
                  Some(ImmediateLocation::MethodCall { has_parens: true, .. })
 diff --git a/crates/mbe/src/expander/matcher.rs b/crates/mbe/src/expander/matcher.rs
-index b4f2fe9a4..c2a9a38c9 100644
+index 0d694b1a7..5c4680d19 100644
 --- a/crates/mbe/src/expander/matcher.rs
 +++ b/crates/mbe/src/expander/matcher.rs
 @@ -804,17 +804,33 @@ impl<'a> TtIter<'a> {

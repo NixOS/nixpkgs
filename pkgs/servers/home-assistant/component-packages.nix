@@ -228,7 +228,7 @@
     "enocean" = ps: with ps; [ enocean ];
     "enphase_envoy" = ps: with ps; [ envoy-reader ];
     "entur_public_transport" = ps: with ps; [ enturclient ];
-    "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
+    "environment_canada" = ps: with ps; [ env-canada ];
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ pyenvisalink ];
     "ephember" = ps: with ps; [ ]; # missing inputs: pyephember
@@ -347,7 +347,7 @@
     "heos" = ps: with ps; [ pyheos ];
     "here_travel_time" = ps: with ps; [ herepy ];
     "hikvision" = ps: with ps; [ ]; # missing inputs: pyhik
-    "hikvisioncam" = ps: with ps; [ ]; # missing inputs: hikvision
+    "hikvisioncam" = ps: with ps; [ hikvision ];
     "hisense_aehw4a1" = ps: with ps; [ pyaehw4a1 ];
     "history" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "history_stats" = ps: with ps; [ sqlalchemy ];
@@ -646,7 +646,7 @@
     "plugwise" = ps: with ps; [ plugwise ];
     "plum_lightpad" = ps: with ps; [ ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [ ]; # missing inputs: pycketcasts
-    "point" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pypoint
+    "point" = ps: with ps; [ aiohttp-cors pypoint ];
     "poolsense" = ps: with ps; [ poolsense ];
     "powerwall" = ps: with ps; [ ]; # missing inputs: tesla-powerwall
     "profiler" = ps: with ps; [ guppy3 objgraph pyprof2calltree ];
@@ -696,7 +696,7 @@
     "rest" = ps: with ps; [ jsonpath xmltodict ];
     "rest_command" = ps: with ps; [ ];
     "rflink" = ps: with ps; [ rflink ];
-    "rfxtrx" = ps: with ps; [ ]; # missing inputs: pyRFXtrx
+    "rfxtrx" = ps: with ps; [ pyrfxtrx ];
     "ring" = ps: with ps; [ ha-ffmpeg ring-doorbell ];
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
     "risco" = ps: with ps; [ pyrisco ];
@@ -767,8 +767,8 @@
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ pysma ];
     "smappee" = ps: with ps; [ aiohttp-cors pysmappee ];
-    "smart_meter_texas" = ps: with ps; [ ]; # missing inputs: smart-meter-texas
-    "smarthab" = ps: with ps; [ ]; # missing inputs: smarthab
+    "smart_meter_texas" = ps: with ps; [ smart-meter-texas ];
+    "smarthab" = ps: with ps; [ smarthab ];
     "smartthings" = ps: with ps; [ aiohttp-cors hass-nabucasa pysmartapp pysmartthings ];
     "smarttub" = ps: with ps; [ python-smarttub ];
     "smarty" = ps: with ps; [ ]; # missing inputs: pysmarty
@@ -785,9 +785,9 @@
     "solax" = ps: with ps; [ solax ];
     "soma" = ps: with ps; [ pysoma ];
     "somfy" = ps: with ps; [ aiohttp-cors pymfy ];
-    "somfy_mylink" = ps: with ps; [ ]; # missing inputs: somfy-mylink-synergy
-    "sonarr" = ps: with ps; [ ]; # missing inputs: sonarr
-    "songpal" = ps: with ps; [ ]; # missing inputs: python-songpal
+    "somfy_mylink" = ps: with ps; [ somfy-mylink-synergy ];
+    "sonarr" = ps: with ps; [ sonarr ];
+    "songpal" = ps: with ps; [ python-songpal ];
     "sonos" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket pysonos ];
     "sony_projector" = ps: with ps; [ ]; # missing inputs: pysdcp
     "soundtouch" = ps: with ps; [ aiohttp-cors ifaddr libsoundtouch zeroconf ];
@@ -799,9 +799,9 @@
     "spotify" = ps: with ps; [ aiohttp-cors spotipy ];
     "sql" = ps: with ps; [ sqlalchemy ];
     "squeezebox" = ps: with ps; [ pysqueezebox ];
-    "srp_energy" = ps: with ps; [ ]; # missing inputs: srpenergy
+    "srp_energy" = ps: with ps; [ srpenergy ];
     "ssdp" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr netdisco zeroconf ];
-    "starline" = ps: with ps; [ ]; # missing inputs: starline
+    "starline" = ps: with ps; [ starline ];
     "starlingbank" = ps: with ps; [ ]; # missing inputs: starlingbank
     "startca" = ps: with ps; [ xmltodict ];
     "statistics" = ps: with ps; [ sqlalchemy ];

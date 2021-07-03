@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub, cmake
-, qtbase, qttools, sqlite }:
+, qtbase, qttools, sqlite, wrapGAppsHook }:
 
 mkDerivation rec {
   pname = "sqlitebrowser";
@@ -18,7 +18,7 @@ mkDerivation rec {
   # We *really* should get that cleaned up.
   buildInputs = [ qtbase sqlite ];
 
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [ cmake qttools wrapGAppsHook ];
 
   meta = with lib; {
     description = "DB Browser for SQLite";

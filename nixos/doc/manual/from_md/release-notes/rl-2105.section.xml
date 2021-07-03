@@ -101,16 +101,18 @@
       <listitem>
         <para>
           <link xlink:href="https://www.gnuradio.org/">GNURadio</link>
-          3.8 was
+          3.8 and 3.9 were
           <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finally</link>
           packaged, along with a rewrite to the Nix expressions,
           allowing users to override the features upstream supports
           selecting to compile or not to. Additionally, the attribute
-          <literal>gnuradio</literal> and <literal>gnuradio3_7</literal>
-          now point to an externally wrapped by default derivations,
-          that allow you to also add `extraPythonPackages` to the Python
-          interpreter used by GNURadio. Missing environmental variables
-          needed for operational GUI were also added
+          <literal>gnuradio</literal> (3.9),
+          <literal>gnuradio3_8</literal> and
+          <literal>gnuradio3_7</literal> now point to an externally
+          wrapped by default derivations, that allow you to also add
+          `extraPythonPackages` to the Python interpreter used by
+          GNURadio. Missing environmental variables needed for
+          operational GUI were also added
           (<link xlink:href="https://github.com/NixOS/nixpkgs/issues/75478">#75478</link>).
         </para>
       </listitem>
@@ -1026,7 +1028,7 @@ self: super:
         <para>
           <link xlink:href="https://kodi.tv/">Kodi</link> has been
           updated to version 19.1 &quot;Matrix&quot;. See the
-          <link xlink:href="https://kodi.tv/article/kodi-190-matrix-release">announcement</link>
+          <link xlink:href="https://kodi.tv/article/kodi-19-0-matrix-release">announcement</link>
           for further details.
         </para>
       </listitem>

@@ -19,11 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "0ax4kqnh7kd3z120ypgp73qy1knz47l6qxsqzrfkd97mh5cdky71";
   };
 
+  postPatch = ''
+    substituteInPlace util/z60_flashrom.rules \
+      --replace "plugdev" "flashrom"
+  '';
+
   # Meson build doesn't build and install manpage. Only Makefile can.
   # Build manpage from source directory. Here we're inside the ./build subdirectory
   postInstall = ''
     make flashrom.8 -C ..
     installManPage ../flashrom.8
+    install -Dm644 ../util/z60_flashrom.rules $out/etc/udev/rules.d/flashrom.rules
   '';
 
   mesonFlags = lib.optionals stdenv.isAarch64 [ "-Dpciutils=false" ];
@@ -34,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ funfunctor fpletz ];
+    maintainers = with maintainers; [ funfunctor fpletz felixsinger ];
     platforms = platforms.all;
     broken = stdenv.isDarwin; # requires DirectHW
   };

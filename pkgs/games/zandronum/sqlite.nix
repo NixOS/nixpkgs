@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "sqlite-zandronum-3.0";
+  pname = "sqlite-zandronum";
+  version = "3.0";
 
   src = fetchurl {
     url = "https://www.sqlite.org/2017/sqlite-autoconf-3180000.tar.gz";

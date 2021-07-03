@@ -42,6 +42,11 @@ in stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
+    # The current IPC location is unsafe as it writes
+    # a fixed path in /tmp, which is world-writable.
+    # Therefore we put it into `/run/netdata`, which is owned
+    # by netdata only.
+    ./ipc-socket-in-run.patch
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";

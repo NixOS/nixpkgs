@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
 
   nimFlags = [ "-d:release" ] ++ map (lib: "--path:${lib}/src") nimLibs;
 
-  HOTTEXT_FONT_PATH = "${gentium}/share/fonts/truetype/GentiumPlus-R.ttf";
+  HOTTEXT_FONT_PATH = "${gentium}/share/fonts/truetype/GentiumPlus-Regular.ttf";
 
   buildPhase = ''
     runHook preBuild

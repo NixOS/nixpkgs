@@ -13,6 +13,7 @@
 , prettytable
 , idna
 }:
+
 buildPythonPackage rec {
   pname = "tern";
   version = "2.6.1";
@@ -21,14 +22,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "749c18ef493ebe3ac28624b2b26c6e38f77de2afd6a6579d2c92393d8fbdbd46";
   };
-
-  patches = [
-    # debut was renamed to debian-inspector
-    # https://github.com/tern-tools/tern/pull/962
-    # NOTE: Has to be in-tree because the upstream patch doesn't apply cleanly
-    # to the PyPi source.
-    ./0001-Replace-debut-with-debian-inspector.patch
-  ];
 
   preBuild = ''
     cp requirements.{in,txt}

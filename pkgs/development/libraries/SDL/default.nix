@@ -5,7 +5,7 @@
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 , libXext, libICE, libXrandr
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
-, OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
+, OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -16,7 +16,8 @@ with lib;
 let
   extraPropagatedBuildInputs = [ ]
     ++ optionals x11Support [ libXext libICE libXrandr ]
-    ++ optionals openglSupport [ libGL libGLU ]
+    ++ optionals (openglSupport && stdenv.isLinux) [ libGL libGLU ]
+    ++ optionals (openglSupport && stdenv.isDarwin) [ OpenGL GLUT ]
     ++ optional alsaSupport alsa-lib
     ++ optional pulseaudioSupport libpulseaudio
     ++ optional stdenv.isDarwin Cocoa;

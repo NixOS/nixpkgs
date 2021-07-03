@@ -133,7 +133,7 @@ let
               unwrapped = php;
               # Select the right php tests for the php version
               tests = nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
-              inherit (php-packages) extensions buildPecl;
+              inherit (php-packages) extensions buildPecl mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
@@ -195,8 +195,6 @@ let
 
         # PCRE
         ++ lib.optionals (lib.versionAtLeast version "7.4") [ "--with-external-pcre=${pcre2.dev}" ]
-        ++ lib.optionals (lib.versions.majorMinor version == "7.3") [ "--with-pcre-regex=${pcre2.dev}" ]
-        ++ lib.optionals (lib.versionOlder version "7.3") [ "--with-pcre-regex=${pcre2.dev}" ]
         ++ [ "PCRE_LIBDIR=${pcre2}" ]
 
 

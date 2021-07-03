@@ -9,6 +9,7 @@
 , itstool
 , libxml2
 , glib
+, shared-mime-info
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,9 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    libxml2
+    shared-mime-info
   ];
 
   buildInputs = [

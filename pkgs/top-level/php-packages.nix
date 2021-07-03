@@ -59,6 +59,73 @@ lib.makeScope pkgs.newScope (self: with self; {
     pname = "php-${pname}";
   });
 
+  # Function to build an extension which is shipped as part of the php
+  # source, based on the php version.
+  #
+  # Name passed is the name of the extension and is automatically used
+  # to add the configureFlag "--enable-${name}", which can be overriden.
+  #
+  # Build inputs is used for extra deps that may be needed. And zendExtension
+  # will mark the extension as a zend extension or not.
+  mkExtension =
+    { name
+    , configureFlags ? [ "--enable-${name}" ]
+    , internalDeps ? [ ]
+    , postPhpize ? ""
+    , buildInputs ? [ ]
+    , zendExtension ? false
+    , doCheck ? true
+    , ...
+    }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
+      pname = "php-${name}";
+      extensionName = name;
+
+      inherit (php.unwrapped) version src;
+      sourceRoot = "php-${php.version}/ext/${name}";
+
+      enableParallelBuilding = true;
+      nativeBuildInputs = [ php.unwrapped autoconf pkg-config re2c ];
+      inherit configureFlags internalDeps buildInputs
+        zendExtension doCheck;
+
+      prePatch = "pushd ../..";
+      postPatch = "popd";
+
+      preConfigure = ''
+        nullglobRestore=$(shopt -p nullglob)
+        shopt -u nullglob   # To make ?-globbing work
+
+        # Some extensions have a config0.m4 or config9.m4
+        if [ -f config?.m4 ]; then
+          mv config?.m4 config.m4
+        fi
+
+        $nullglobRestore
+        phpize
+        ${postPhpize}
+        ${lib.concatMapStringsSep "\n"
+          (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
+          internalDeps}
+      '';
+      checkPhase = "runHook preCheck; NO_INTERACTON=yes make test; runHook postCheck";
+      outputs = [ "out" "dev" ];
+      installPhase = ''
+        mkdir -p $out/lib/php/extensions
+        cp modules/${name}.so $out/lib/php/extensions/${name}.so
+        mkdir -p $dev/include
+        ${rsync}/bin/rsync -r --filter="+ */" \
+                              --filter="+ *.h" \
+                              --filter="- *" \
+                              --prune-empty-dirs \
+                              . $dev/include/
+      '';
+
+      meta = {
+        description = "PHP upstream extension: ${name}";
+        inherit (php.meta) maintainers homepage license;
+      };
+    });
+
   php = phpPackage;
 
   # This is a set of interactive tools based on PHP.
@@ -171,72 +238,6 @@ lib.makeScope pkgs.newScope (self: with self; {
     yaml = callPackage ../development/php-packages/yaml { };
   } // (
     let
-      # Function to build a single php extension based on the php version.
-      #
-      # Name passed is the name of the extension and is automatically used
-      # to add the configureFlag "--enable-${name}", which can be overriden.
-      #
-      # Build inputs is used for extra deps that may be needed. And zendExtension
-      # will mark the extension as a zend extension or not.
-      mkExtension =
-        { name
-        , configureFlags ? [ "--enable-${name}" ]
-        , internalDeps ? [ ]
-        , postPhpize ? ""
-        , buildInputs ? [ ]
-        , zendExtension ? false
-        , doCheck ? true
-        , ...
-        }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
-          pname = "php-${name}";
-          extensionName = name;
-
-          inherit (php.unwrapped) version src;
-          sourceRoot = "php-${php.version}/ext/${name}";
-
-          enableParallelBuilding = true;
-          nativeBuildInputs = [ php.unwrapped autoconf pkg-config re2c ];
-          inherit configureFlags internalDeps buildInputs
-            zendExtension doCheck;
-
-          prePatch = "pushd ../..";
-          postPatch = "popd";
-
-          preConfigure = ''
-            nullglobRestore=$(shopt -p nullglob)
-            shopt -u nullglob   # To make ?-globbing work
-
-            # Some extensions have a config0.m4 or config9.m4
-            if [ -f config?.m4 ]; then
-              mv config?.m4 config.m4
-            fi
-
-            $nullglobRestore
-            phpize
-            ${postPhpize}
-            ${lib.concatMapStringsSep "\n"
-              (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
-              internalDeps}
-          '';
-          checkPhase = "runHook preCheck; NO_INTERACTON=yes make test; runHook postCheck";
-          outputs = [ "out" "dev" ];
-          installPhase = ''
-            mkdir -p $out/lib/php/extensions
-            cp modules/${name}.so $out/lib/php/extensions/${name}.so
-            mkdir -p $dev/include
-            ${rsync}/bin/rsync -r --filter="+ */" \
-                                  --filter="+ *.h" \
-                                  --filter="- *" \
-                                  --prune-empty-dirs \
-                                  . $dev/include/
-          '';
-
-          meta = {
-            description = "PHP upstream extension: ${name}";
-            inherit (php.meta) maintainers homepage license;
-          };
-        });
-
       # This list contains build instructions for different modules that one may
       # want to build.
       #
@@ -256,20 +257,6 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "dom";
           buildInputs = [ libxml2 ];
-          patches = [
-            # https://github.com/php/php-src/pull/7030
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4cc261aa6afca2190b1b74de39c3caa462ec6f0b.patch";
-              sha256 = "11qsdiwj1zmpfc2pgh6nr0sn7qa1nyjg4jwf69cgwnd57qfjcy4k";
-              excludes = [ "ext/dom/tests/bug43364.phpt" "ext/dom/tests/bug80268.phpt" ];
-            })
-          ];
-          # For some reason `patch` fails to remove these files correctly.
-          # Since `postPatch` is already used in `mkExtension`, we have to make it here.
-          preCheck = ''
-            rm tests/bug43364.phpt
-            rm tests/bug80268.phpt
-          '';
           configureFlags = [ "--enable-dom" ]
             # Required to build on darwin.
             ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
