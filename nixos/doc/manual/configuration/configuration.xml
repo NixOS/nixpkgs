@@ -15,7 +15,7 @@
  </partintro>
  <xi:include href="config-syntax.xml" />
  <xi:include href="package-mgmt.xml" />
- <xi:include href="user-mgmt.xml" />
+ <xi:include href="../from_md/configuration/user-mgmt.chapter.xml" />
  <xi:include href="file-systems.xml" />
  <xi:include href="x-windows.xml" />
  <xi:include href="wayland.xml" />
