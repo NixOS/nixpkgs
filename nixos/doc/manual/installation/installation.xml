@@ -10,7 +10,7 @@
    first-time use.
   </para>
  </partintro>
- <xi:include href="obtaining.xml" />
+ <xi:include href="../from_md/installation/obtaining.chapter.xml" />
  <xi:include href="installing.xml" />
  <xi:include href="changing-config.xml" />
  <xi:include href="upgrading.xml" />
