@@ -2303,6 +2303,8 @@ in
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
+  wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl { };
+
   wev = callPackage ../tools/wayland/wev { };
 
   wdomirror = callPackage ../tools/wayland/wdomirror { };
