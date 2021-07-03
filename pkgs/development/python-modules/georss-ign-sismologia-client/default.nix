@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "georss-ign-sismologia-client";
-  version = "0.3";
+  version = "0.4";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-ign-sismologia-client";
     rev = "v${version}";
-    sha256 = "sha256-7Jj6uWb4HyPAh3/XtVTy0N23bk33mlIiqlt9z/PW+4Y=";
+    sha256 = "sha256-g7lZC5ZiJV8dNZJceLROqyBRZSuqaivGFhaQrKe4B7g=";
   };
 
   propagatedBuildInputs = [
