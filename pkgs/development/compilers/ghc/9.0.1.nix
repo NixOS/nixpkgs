@@ -94,6 +94,15 @@ let
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false) && !targetPlatform.isMusl;
 
+  runtimeDeps = [
+    targetPackages.stdenv.cc.bintools
+    coreutils
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
+
 in
 stdenv.mkDerivation (rec {
   version = "9.0.1";
@@ -225,7 +234,7 @@ stdenv.mkDerivation (rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
+      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
     done
   '';
 
