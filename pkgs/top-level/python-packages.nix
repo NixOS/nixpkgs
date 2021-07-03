@@ -1919,7 +1919,7 @@ in {
 
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
-  diff_cover = callPackage ../development/python-modules/diff_cover { };
+  diff-cover = callPackage ../development/python-modules/diff-cover { };
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
