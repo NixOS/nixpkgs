@@ -88,6 +88,7 @@ in
   containers-tmpfs = handleTest ./containers-tmpfs.nix {};
   convos = handleTest ./convos.nix {};
   corerad = handleTest ./corerad.nix {};
+  coturn = handleTest ./coturn.nix {};
   couchdb = handleTest ./couchdb.nix {};
   cri-o = handleTestOn ["x86_64-linux"] ./cri-o.nix {};
   custom-ca = handleTest ./custom-ca.nix {};
