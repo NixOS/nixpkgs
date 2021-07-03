@@ -9,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.1.7";
+  version = "3.2.0";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "sha256-82ZD32dqRYGbGM/uyaJ5VqVZbhDZthiEcTihkV43JOU=";
+    sha256 = "126xpx8i85giy3hkhqh0qcln9i1qj5bfciaqh9486rkl54xm8zsr";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
@@ -48,7 +48,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
-    changelog = "https://github.com/nicolargo/glances/releases/tag/v${version}";
+    changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ jonringer primeos koral ];
   };
