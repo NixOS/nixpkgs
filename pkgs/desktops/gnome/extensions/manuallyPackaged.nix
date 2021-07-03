@@ -35,6 +35,5 @@
   topicons-plus = callPackage ./topicons-plus { };
   unite = callPackage ./unite { };
   window-corner-preview = callPackage ./window-corner-preview { };
-  window-is-ready-remover = callPackage ./window-is-ready-remover { };
   workspace-matrix = callPackage ./workspace-matrix { };
 }
