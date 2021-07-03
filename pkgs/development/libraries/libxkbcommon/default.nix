@@ -16,6 +16,7 @@
 , withWaylandTools ? stdenv.isLinux
 , wayland
 , wayland-protocols
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config bison doxygen ]
-    ++ lib.optional withWaylandTools wayland;
+    ++ lib.optional withWaylandTools wayland-scanner;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
     ++ lib.optionals withWaylandTools [ wayland wayland-protocols ];
   checkInputs = [ python3 ];

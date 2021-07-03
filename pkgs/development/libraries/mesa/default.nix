@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch, buildPackages
 , meson, pkg-config, ninja
-, intltool, bison, flex, file, python3Packages
+, intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
@@ -143,7 +143,7 @@ self = stdenv.mkDerivation {
     intltool bison flex file
     python3Packages.python python3Packages.Mako
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
-    wayland # For wayland-scanner during the build
+    wayland-scanner
   ];
 
   propagatedBuildInputs = with xorg; [

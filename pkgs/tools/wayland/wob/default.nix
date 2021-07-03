@@ -5,9 +5,10 @@
 , ninja
 , pkg-config
 , scdoc
-, libseccomp
-, wayland # wayland-scanner
+, wayland-scanner
+, wayland
 , wayland-protocols
+, libseccomp
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "13mx6nzab6msp57s9mv9ambz53a4zkafms9v97xv5zvd6xarnrya";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland ];
-  buildInputs = [ wayland-protocols ]
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
+  buildInputs = [ wayland wayland-protocols ]
     ++ lib.optional stdenv.isLinux libseccomp;
 
   mesonFlags = lib.optional stdenv.isLinux "-Dseccomp=enabled";
