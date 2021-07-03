@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchFromGitHub, lib,
-  datasette, pytest, pytest-asyncio, sqlite-utils }:
+  datasette, pytestCheckHook, pytest, pytest-asyncio, sqlite-utils }:
 
 buildPythonPackage rec {
   pname = "datasette-template-sql";
@@ -14,7 +14,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ datasette ];
 
-  checkInputs = [ pytest pytest-asyncio sqlite-utils ];
+  checkInputs = [ pytestCheckHook pytest pytest-asyncio sqlite-utils ];
+
+  pythonImportsCheck = [ "datasette_template_sql" ];
 
   meta = with lib; {
     description = "Datasette plugin for executing SQL queries from templates";
