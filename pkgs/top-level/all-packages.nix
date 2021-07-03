@@ -2943,6 +2943,8 @@ in
 
   lite = callPackage ../applications/editors/lite { };
 
+  librewolf-bin = callPackage ../applications/networking/browsers/librewolf-bin { };
+
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
