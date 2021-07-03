@@ -185,7 +185,7 @@ in {
  <xi:include href="../from_md/development/assertions.section.xml" />
  <xi:include href="../from_md/development/meta-attributes.section.xml" />
  <xi:include href="../from_md/development/importing-modules.section.xml" />
- <xi:include href="replace-modules.xml" />
+ <xi:include href="../from_md/development/replace-modules.section.xml" />
  <xi:include href="freeform-modules.xml" />
  <xi:include href="settings-options.xml" />
 </chapter>
