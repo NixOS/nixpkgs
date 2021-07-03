@@ -88,6 +88,14 @@ mapAliases ({
   bittorrentSync = throw "bittorrentSync has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
+
+  # bitwarden_rs renamed to vaultwarden with release 1.21.0 (2021-04-30)
+  bitwarden_rs = vaultwarden;
+  bitwarden_rs-sqlite = vaultwarden-sqlite;
+  bitwarden_rs-mysql = vaultwarden-mysql;
+  bitwarden_rs-postgresql = vaultwarden-postgresql;
+  bitwarden_rs-vault = vaultwarden-vault;
+
   bs1770gain = throw "bs1770gain has been removed from nixpkgs, as it had no maintainer or reverse dependencies."; # added 2021-01-02
   btc1 = throw "btc1 has been removed, it was abandoned by upstream"; # added 2020-11-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12

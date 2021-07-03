@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
-  pname = "bitwarden_rs-vault";
+  pname = "vaultwarden-vault";
   version = "2.19.0";
 
   src = fetchurl {
@@ -10,16 +10,16 @@ stdenv.mkDerivation rec {
   };
 
   buildCommand = ''
-    mkdir -p $out/share/bitwarden_rs/
-    cd $out/share/bitwarden_rs/
+    mkdir -p $out/share/vaultwarden/
+    cd $out/share/vaultwarden/
     tar xf $src
     mv web-vault vault
   '';
 
-  passthru.tests = nixosTests.bitwarden;
+  passthru.tests = nixosTests.vaultwarden;
 
   meta = with lib; {
-    description = "Integrates the web vault into bitwarden_rs";
+    description = "Integrates the web vault into vaultwarden";
     homepage = "https://github.com/dani-garcia/bw_web_builds";
     platforms = platforms.all;
     license = licenses.gpl3Plus;

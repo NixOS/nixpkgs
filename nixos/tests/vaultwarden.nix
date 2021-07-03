@@ -4,7 +4,7 @@
 }:
 
 # These tests will:
-#  * Set up a bitwarden-rs server
+#  * Set up a vaultwarden server
 #  * Have Firefox use the web vault to create an account, log in, and save a password to the valut
 #  * Have the bw cli log in and read that password from the vault
 #
@@ -24,8 +24,8 @@ let
 
   storedPassword = "seeeecret";
 
-  makeBitwardenTest = backend: makeTest {
-    name = "bitwarden_rs-${backend}";
+  makeVaultwardenTest = backend: makeTest {
+    name = "vaultwarden-${backend}";
     meta = {
       maintainers = with pkgs.lib.maintainers; [ jjjollyjim ];
     };
@@ -45,9 +45,9 @@ let
               package = pkgs.mariadb;
             };
 
-            services.bitwarden_rs.config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+            services.vaultwarden.config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
 
-            systemd.services.bitwarden_rs.after = [ "mysql.service" ];
+            systemd.services.vaultwarden.after = [ "mysql.service" ];
           };
 
           postgresql = {
@@ -60,9 +60,9 @@ let
               '';
             };
 
-            services.bitwarden_rs.config.databaseUrl = "postgresql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+            services.vaultwarden.config.databaseUrl = "postgresql://bitwardenuser:${dbPassword}@localhost/bitwarden";
 
-            systemd.services.bitwarden_rs.after = [ "postgresql.service" ];
+            systemd.services.vaultwarden.after = [ "postgresql.service" ];
           };
 
           sqlite = { };
@@ -71,7 +71,7 @@ let
         mkMerge [
           backendConfig.${backend}
           {
-            services.bitwarden_rs = {
+            services.vaultwarden = {
               enable = true;
               dbBackend = backend;
               config.rocketPort = 80;
@@ -152,7 +152,7 @@ let
 
     testScript = ''
       start_all()
-      server.wait_for_unit("bitwarden_rs.service")
+      server.wait_for_unit("vaultwarden.service")
       server.wait_for_open_port(80)
 
       with subtest("configure the cli"):
@@ -184,6 +184,6 @@ let
 in
 builtins.listToAttrs (
   map
-    (backend: { name = backend; value = makeBitwardenTest backend; })
+    (backend: { name = backend; value = makeVaultwardenTest backend; })
     backends
 )
