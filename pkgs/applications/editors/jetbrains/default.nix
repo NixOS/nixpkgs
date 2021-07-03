@@ -193,7 +193,7 @@ let
         platforms = platforms.linux;
       };
     }).overrideAttrs (attrs: {
-      patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
+      postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
         rm -rf lib/ReSharperHost/linux-x64/dotnet
         mkdir -p lib/ReSharperHost/linux-x64/dotnet/
         ln -s ${dotnet-sdk_5}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
@@ -229,7 +229,7 @@ let
         platforms = platforms.linux;
       };
     }).overrideAttrs (attrs: {
-      patchPhase = (attrs.patchPhase or "") + optionalString (stdenv.isLinux) ''
+      postPatch = (attrs.postPatch or "") + optionalString (stdenv.isLinux) ''
         # Webstorm tries to use bundled jre if available.
         # Lets prevent this for the moment
         rm -r jbr
