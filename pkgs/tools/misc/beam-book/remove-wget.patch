@@ -1,0 +1,12 @@
+--- a/Makefile	1969-12-31 18:00:01.000000000 -0600
++++ b/Makefile.fix	2021-07-02 21:45:39.916118702 -0500
+@@ -20,8 +20,7 @@
+ 	erl -pa code/book/ebin/ -noshell -s generate_op_doc from_shell genop.tab chapters/opcodes_doc.asciidoc
+ 
+ genop.tab:
+-	wget -O genop.tab https://raw.githubusercontent.com/erlang/otp/master/lib/compiler/src/genop.tab
+-	touch $@
++	touch genop.tab 
+ 
+ clean:
+ 	find site -type f -name '.[^gitignore]*' -delete
