@@ -17,7 +17,7 @@
  <xi:include href="package-mgmt.xml" />
  <xi:include href="../from_md/configuration/user-mgmt.chapter.xml" />
  <xi:include href="file-systems.xml" />
- <xi:include href="x-windows.xml" />
+ <xi:include href="../from_md/configuration/x-windows.chapter.xml" />
  <xi:include href="wayland.xml" />
  <xi:include href="gpu-accel.xml" />
  <xi:include href="xfce.xml" />
