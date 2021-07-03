@@ -20,7 +20,7 @@
  <xi:include href="../from_md/configuration/x-windows.chapter.xml" />
  <xi:include href="../from_md/configuration/wayland.chapter.xml" />
  <xi:include href="../from_md/configuration/gpu-accel.chapter.xml" />
- <xi:include href="xfce.xml" />
+ <xi:include href="../from_md/configuration/xfce.chapter.xml" />
  <xi:include href="networking.xml" />
  <xi:include href="linux-kernel.xml" />
  <xi:include href="subversion.xml" />
