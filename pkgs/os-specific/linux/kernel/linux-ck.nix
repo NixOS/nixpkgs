@@ -17,6 +17,5 @@ buildLinux (args // rec {
     branch = "5.12-ck1";
     maintainers = with lib.maintainers; [ dan4ik605743 ];
     description = "The Linux-ck kernel and modules with the ck1 patchset featuring MuQSS CPU scheduler";
-    broken = stdenv.isAarch64;
   };
 } // (args.argsOverride or { }))
