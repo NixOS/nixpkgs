@@ -28979,6 +28979,7 @@ in
       static = true;
     };
   };
+  openttd-grfcodec = callPackage ../games/openttd/grfcodec.nix {};
 
   opentyrian = callPackage ../games/opentyrian { };
 
