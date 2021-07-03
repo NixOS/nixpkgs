@@ -3131,6 +3131,8 @@ in {
 
   grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
 
+  gruut = callPackage ../development/python-modules/gruut { };
+
   gruut-ipa = callPackage ../development/python-modules/gruut-ipa { };
 
   gsd = callPackage ../development/python-modules/gsd { };
