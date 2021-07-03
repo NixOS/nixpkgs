@@ -10,7 +10,7 @@ mkDerivation rec {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    sha256 = "lhdKbR19ScNeezICf7vwZaeJikPjwbqrz42bo4lhxJs=";
+    sha256 = "cG3OSqRhYnxlzfauQia6pM/1gu+iE5mtHTGk3kGMFH0=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
