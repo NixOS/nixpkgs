@@ -25416,7 +25416,7 @@ in
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
+  mercurialFull = appendToName "full" (pkgs.mercurial.override { fullBuild = true; });
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
