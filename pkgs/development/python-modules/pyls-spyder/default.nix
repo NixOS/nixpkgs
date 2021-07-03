@@ -1,18 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, python-language-server }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python-lsp-server
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyls-spyder";
   version = "0.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "45a321c83f64267d82907492c55199fccabda45bc872dd23bf1efd08edac1b0b";
+  src = fetchFromGitHub {
+    owner = "spyder-ide";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "11ajbsia60d4c9s6m6rbvaqp1d69fcdbq6a98lkzkkzv2b9pdhkk";
   };
 
-  propagatedBuildInputs = [ python-language-server ];
+  propagatedBuildInputs = [
+    python-lsp-server
+  ];
 
-  # no tests
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "pyls_spyder" ];
 
   meta = with lib; {
