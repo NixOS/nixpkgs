@@ -27,6 +27,15 @@
     <itemizedlist>
       <listitem>
         <para>
+          <link xlink:href="https://digint.ch/btrbk/index.html">btrbk</link>,
+          a backup tool for btrfs subvolumes, taking advantage of btrfs
+          specific capabilities to create atomic snapshots and transfer
+          them incrementally to your backup locations. Available as
+          <link xlink:href="options.html#opt-services.brtbk.instances">services.btrbk</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
           a GeoIP database updater from MaxMind. Available as
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
