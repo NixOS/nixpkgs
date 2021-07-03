@@ -32,7 +32,7 @@ let
   # Map the list of extensions to an attrset based on the UUID as key
   mapUuidNames = extensions:
     lib.trivial.pipe extensions [
-      (map (extension: lib.nameValuePair extension.extensionUuid extension))
+      (map (extension: lib.nameValuePair extension.uuid extension))
       builtins.listToAttrs
     ];
 
@@ -42,13 +42,13 @@ let
     # Filter out all extensions that map to null
     (lib.filter (extension:
       !(
-        (builtins.hasAttr extension.extensionUuid extensionRenames)
-        && ((builtins.getAttr extension.extensionUuid extensionRenames) == null)
+        (builtins.hasAttr extension.uuid extensionRenames)
+        && ((builtins.getAttr extension.uuid extensionRenames) == null)
       )
     ))
     # Map all extensions to their pname, with potential overwrites
     (map (extension:
-      lib.nameValuePair (extensionRenames.${extension.extensionUuid} or extension.extensionPortalSlug) extension
+      lib.nameValuePair (extensionRenames.${extension.uuid} or extension.extensionPortalSlug) extension
     ))
     builtins.listToAttrs
   ];
