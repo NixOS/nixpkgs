@@ -53,7 +53,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "yandex-browser-beta";
+  pname = "yandex-browser";
   version = "21.5.3.753-1";
 
   src = fetchurl {
