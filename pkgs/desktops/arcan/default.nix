@@ -26,4 +26,10 @@ rec {
     name = "pipeworld-wrapped";
     appls = [ pipeworld ];
   };
+
+  prio = callPackage ./prio.nix { };
+  prio-wrapped = callPackage ./wrapper.nix {
+    name = "prio-wrapped";
+    appls = [ prio ];
+  };
 }
