@@ -25,7 +25,7 @@
       explains NixOS specific things worth knowing.
     </para>
     <para>
-      Without any arguments, <literal>systmctl</literal> the status of
+      Without any arguments, <literal>systemctl</literal> the status of
       active units:
     </para>
     <programlisting>
@@ -109,12 +109,13 @@ systemd.packages = [ pkgs.packagekit ];
       <emphasis>User</emphasis> systemd services on the other hand,
       should be treated differently. Given a package that has a systemd
       unit file at <literal>#pkg-out#/lib/systemd/user/</literal>, using
-      <xref linkend="opt-systemd.packages" /> will make you able to
-      start the service via <literal>systemctl --user start</literal>,
-      but it won't start automatically on login. However, You can
-      imperatively enable it by adding the package's attribute to
-      <link linkend="opt-environment.systemPackages">
-      <literal>systemd.packages</literal></link> and then do this (e.g):
+      <link xlink:href="options.html#opt-systemd.packages"><literal>systemd.packages</literal></link>
+      will make you able to start the service via
+      <literal>systemctl --user start</literal>, but it won't start
+      automatically on login. However, You can imperatively enable it by
+      adding the package's attribute to
+      <link xlink:href="options.html#opt-systemd.packages"><literal>systemd.packages</literal></link>
+      and then do this (e.g):
     </para>
     <programlisting>
 $ mkdir -p ~/.config/systemd/user/default.target.wants

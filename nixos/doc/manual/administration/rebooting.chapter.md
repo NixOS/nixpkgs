@@ -22,9 +22,8 @@ directly loading the new kernel into memory:
 # systemctl kexec
 ```
 
-The machine can be suspended to RAM (if supported) using `systemctl
-  suspend`, and suspended to disk using `systemctl
-  hibernate`.
+The machine can be suspended to RAM (if supported) using `systemctl suspend`,
+and suspended to disk using `systemctl hibernate`.
 
 These commands can be run by any user who is logged in locally, i.e. on
 a virtual console or in X11; otherwise, the user is asked for
