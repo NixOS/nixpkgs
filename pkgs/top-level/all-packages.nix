@@ -8353,6 +8353,8 @@ in
 
   renderdoc = libsForQt5.callPackage ../applications/graphics/renderdoc { };
 
+  rendersvg = libsForQt5.callPackage ../applications/graphics/rendersvg { };
+
   replace = callPackage ../tools/text/replace { };
 
   resvg = callPackage ../tools/graphics/resvg { };
