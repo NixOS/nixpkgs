@@ -26801,6 +26801,7 @@ in
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
   wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
+  watir = callPackage ../applications/misc/watir { };
 
   sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
 
