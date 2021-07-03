@@ -4061,6 +4061,12 @@
     github = "gytis-ivaskevicius";
     githubId = 23264966;
   };
+  hagl = {
+    email = "harald@glie.be";
+    github = "hagl";
+    githubId = 1162118;
+    name = "Harald Gliebe";
+  };
   hakuch = {
     email = "hakuch@gmail.com";
     github = "hakuch";
