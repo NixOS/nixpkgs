@@ -32,6 +32,7 @@
 , stdenv
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xkbcomp
 , xkeyboard_config
 , xorgproto
@@ -47,7 +48,16 @@ stdenv.mkDerivation rec {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
     sha256 = "sha256-MfJhzlG77namyj7AKqNn/6K176K5hBLfV8zv16GQA84=";
   };
-  nativeBuildInputs = [ pkg-config meson ninja ];
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    wayland-scanner
+  ];
   buildInputs = [
     egl-wayland
     epoxy
