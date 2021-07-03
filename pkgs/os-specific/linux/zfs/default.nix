@@ -198,9 +198,9 @@ in {
     kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.13";
 
     # this package should point to the latest release.
-    version = "2.0.5";
+    version = "2.1.0";
 
-    sha256 = "0n0d8ab7ibxxa8znfsprh7jxwgighx5g291v7hi8272vfjrmk1mj";
+    sha256 = "16l7kva4i3xvzls7n8vi7gpjhxxsgxs37p81fi0n0r2p5d4kimk1";
   };
 
   zfsUnstable = common {
@@ -208,9 +208,9 @@ in {
     kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.14";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.1.0-rc8";
+    version = "2.1.0";
 
-    sha256 = "0c53ca6xd59c30h3b2hmvyy63yqyk745x1kdfypnfqj3lnsj1pac";
+    sha256 = "16l7kva4i3xvzls7n8vi7gpjhxxsgxs37p81fi0n0r2p5d4kimk1";
 
     isUnstable = true;
   };
