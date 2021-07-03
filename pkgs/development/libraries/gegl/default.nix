@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }
