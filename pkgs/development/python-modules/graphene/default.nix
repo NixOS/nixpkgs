@@ -50,6 +50,12 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 
+  disabledTests = [
+    # Expects different Exeception classes, but receives none of them
+    # https://github.com/graphql-python/graphene/issues/1346
+    "test_unexpected_error"
+  ];
+
   pythonImportsCheck = [ "graphene" ];
 
   meta = with lib; {
