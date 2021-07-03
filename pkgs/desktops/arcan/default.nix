@@ -20,4 +20,10 @@ rec {
     name = "durden-wrapped";
     appls = [ durden ];
   };
+
+  pipeworld = callPackage ./pipeworld.nix { };
+  pipeworld-wrapped = callPackage ./wrapper.nix {
+    name = "pipeworld-wrapped";
+    appls = [ pipeworld ];
+  };
 }
