@@ -181,7 +181,7 @@ in {
  </example>
  <xi:include href="../from_md/development/option-declarations.section.xml" />
  <xi:include href="../from_md/development/option-types.section.xml" />
- <xi:include href="option-def.xml" />
+ <xi:include href="../from_md/development/option-def.section.xml" />
  <xi:include href="../from_md/development/assertions.section.xml" />
  <xi:include href="meta-attributes.xml" />
  <xi:include href="importing-modules.xml" />
