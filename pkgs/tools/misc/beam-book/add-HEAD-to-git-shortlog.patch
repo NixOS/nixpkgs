@@ -1,0 +1,7 @@
+--- a/bin/gitlog.sh	1969-12-31 18:00:01.000000000 -0600
++++ b/bin/gitlog.sh.fix	2021-07-03 12:07:09.851636280 -0500
+@@ -1,3 +1,3 @@
+ #!/nix/store/ca5hi4m78vhqarchh9p71pl98lbpbh2f-bash-interactive-4.4-p23/bin/bash
+ 
+-git shortlog -s -n | awk '{$1=""}1' | grep -v "Erik Stenman" | grep -v "Your Name" > $1
++git shortlog -s -n HEAD | awk '{$1=""}1' | grep -v "Erik Stenman" | grep -v "Your Name" > $1
