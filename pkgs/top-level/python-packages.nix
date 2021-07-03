@@ -3914,8 +3914,6 @@ in {
 
   labmath = callPackage ../development/python-modules/labmath { };
 
-  lammps-cython = callPackage ../development/python-modules/lammps-cython { };
-
   langcodes = callPackage ../development/python-modules/langcodes { };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
