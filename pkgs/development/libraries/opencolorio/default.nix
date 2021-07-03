@@ -1,5 +1,5 @@
 {
-  stdenv, lib, fetchFromGitHub,
+  stdenv, lib, fetchFromGitHub, symlinkJoin,
   cmake, expat, libyamlcpp, ilmbase, pystring, # Base dependencies
 
   glew, freeglut, # Only required on Linux
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "194j9jp5c8ws0fryiz936wyinphnpzwpqnzvw9ryx6rbiwrba487";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ expat libyamlcpp ilmbase pystring ]
+  nativeBuildInputs = [ cmake (symlinkJoin { name = "expat"; paths = [ expat.out expat.dev ]; }) ];
+  buildInputs = [ expat.out libyamlcpp ilmbase pystring ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ glew freeglut ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
     ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
