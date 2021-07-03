@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ libopcodes libbfd libelf zlib readline ];
 
   preConfigure = ''
-    patchShebangs scripts/bpf_helpers_doc.py
+    patchShebangs scripts/bpf_doc.py
 
     cd tools/bpf
     substituteInPlace ./bpftool/Makefile \
