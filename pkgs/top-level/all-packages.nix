@@ -799,6 +799,8 @@ in
 
   acme-client = callPackage ../tools/networking/acme-client { stdenv = gccStdenv; };
 
+  adriconf = callPackage ../tools/graphics/adriconf { };
+
   amass = callPackage ../tools/networking/amass { };
 
   afew = callPackage ../applications/networking/mailreaders/afew { };
