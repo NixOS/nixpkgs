@@ -5231,6 +5231,8 @@ in {
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
+  micloud = callPackage ../development/python-modules/micloud { };
+
   netmap = callPackage ../development/python-modules/netmap { };
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
