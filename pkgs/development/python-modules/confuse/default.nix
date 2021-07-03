@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kvwEUcbiwnMqw2PQ9Z1+pgir3b7QYt2o6Y6ajJhs5GQ=";
+    sha256 = "sha256-kvvKHHBhESDqciNy4MBxwNNCp195a0veS/A0jqSfAi4=";
   };
 
   propagatedBuildInputs = [ pyyaml ] ++ lib.optionals isPy27 [ enum34 pathlib ] ;
