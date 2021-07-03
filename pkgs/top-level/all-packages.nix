@@ -20535,8 +20535,6 @@ in
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
 
-    dpdk = throw "The dpdk driver has been renamed to dpdk-mods.";
-
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
     evdi = callPackage ../os-specific/linux/evdi { };
