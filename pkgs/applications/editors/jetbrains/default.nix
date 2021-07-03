@@ -255,12 +255,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2021.1.2"; /* updated by script */
+    version = "2021.1.3"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "1znb4m7sv7xqi1mq3yw0m51m06wfwmhhxmvck0xkv8s0cfg18qim"; /* updated by script */
+      sha256 = "0lhi3vwhwb359va4sa17y071i03l4mfwqpsp7haqxjf900dcld7d"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -268,12 +268,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2021.1.2"; /* updated by script */
+    version = "2021.1.3"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "0g20r7yn4r2h08wv3i8bnnma8x4jljixsbmfml8kixk0pzfhv4px"; /* updated by script */
+      sha256 = "0xy9k90v3kcm9sj48l809qn0vws4ygsxxyqwsg6y9a3r1raqgqxd"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -281,12 +281,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2021.1.2"; /* updated by script */
+    version = "2021.1.3"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "03i5f6p0abr9yfs9fg90fg7hb1a7zar9q4d4iiag30cmndwpslg2"; /* updated by script */
+      sha256 = "1phpfa9i3k7g92ankmibp53c1469ifnb12g6s8gklln7v7xxakmi"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -294,12 +294,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2021.1.2"; /* updated by script */
+    version = "2021.1.3"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "0mw4acaik1bkr7gqbwgs3i8f8px8zw95hm1zxgd5gd5kh88n17x5"; /* updated by script */
+      sha256 = "13c7a96zbw05w1gy4ds4wzac853hdlnbflww2xaz60jnr1k24gnp"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -320,12 +320,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2021.1.3"; /* updated by script */
+    version = "2021.1.4"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "05hjv1nz1b82bkakadjvsy23v0qv8fyni6h31lcg9198h1890f7v"; /* updated by script */
+      sha256 = "0p9a8l2bpjm25x4af1hlqhmw5xsirsfajznd6y723yqmjy8hs46l"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -333,12 +333,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2021.1.2"; /* updated by script */
+    version = "2021.1.3"; /* updated by script */
     description = "PyCharm Community Edition";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0sp7w1xrl0y36dai08kqfd0jk06yr7jdbaf1a9f3fgxp5pmspxp1"; /* updated by script */
+      sha256 = "0c03grsrjydb6jcnbq1qi4158c14vni3znr7vysnbvldi8al6w8m"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -346,12 +346,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2021.1.2"; /* updated by script */
+    version = "2021.1.3"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0ny7rbl8g5azpqnlcq8l6bwh6hrp8rgp06lf4a8gdr9rpvw9xsqb"; /* updated by script */
+      sha256 = "01nwc9nprlyrwyij98px915w66g6vxbznsmmmg56rv3rvjvjp7yl"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";

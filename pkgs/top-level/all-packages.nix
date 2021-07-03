@@ -799,6 +799,8 @@ in
 
   acme-client = callPackage ../tools/networking/acme-client { stdenv = gccStdenv; };
 
+  adriconf = callPackage ../tools/graphics/adriconf { };
+
   amass = callPackage ../tools/networking/amass { };
 
   afew = callPackage ../applications/networking/mailreaders/afew { };
@@ -5613,6 +5615,8 @@ in
   pgformatter = callPackage ../development/tools/pgformatter { };
 
   pgloader = callPackage ../development/tools/pgloader { };
+
+  pgtop = callPackage ../development/tools/pgtop { };
 
   pigz = callPackage ../tools/compression/pigz { };
 
@@ -16504,6 +16508,8 @@ in
 
   liblcf = callPackage ../development/libraries/liblcf { };
 
+  libliftoff = callPackage ../development/libraries/libliftoff { };
+
   liblqr1 = callPackage ../development/libraries/liblqr-1 { };
 
   liblockfile = callPackage ../development/libraries/liblockfile { };
@@ -20903,8 +20909,6 @@ in
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
-
-    dpdk = throw "The dpdk driver has been renamed to dpdk-kmods.";
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
