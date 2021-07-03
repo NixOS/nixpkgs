@@ -589,6 +589,8 @@ in
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
+  fosspay = callPackage ../servers/fosspay { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
