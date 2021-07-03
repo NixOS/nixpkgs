@@ -4,6 +4,7 @@
 , pkg-config
 , meson
 , ninja
+, wayland-scanner
 , libX11
 , mesa
 , libGL
@@ -51,10 +52,15 @@ in stdenv.mkDerivation rec {
     sha256 = "1n9lg8hpjgxlf7dpddkjhbslsfd0symla2wk6jjmnl9n9jv2gmzk";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

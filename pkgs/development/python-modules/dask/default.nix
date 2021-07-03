@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.06.1";
+  version = "2021.06.2";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wrUqLSmlKhd0NSjWBwbow8aX53ZBTgl2n4lEmvxC3bs=";
+    sha256 = "sha256-qvfjdijzlqaJQrDztRAVr5PudTaVd3WOTBid2ElZQgg=";
   };
 
   propagatedBuildInputs = [
