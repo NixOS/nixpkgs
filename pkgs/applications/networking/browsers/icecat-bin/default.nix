@@ -43,7 +43,6 @@
 , systemd
 , at-spi2-atk
 , at-spi2-core
-, xlibs
 }:
 
 let
@@ -106,7 +105,7 @@ stdenv.mkDerivation rec {
     nspr
     nss
     pango
-    xlibs.libXt
+    xorg.libXt
     stdenv.cc.cc.lib
   ];
 
