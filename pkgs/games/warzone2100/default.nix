@@ -84,10 +84,15 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DWZ_DISTRIBUTOR=NixOS"
     # The cmake builder automatically sets CMAKE_INSTALL_BINDIR to an absolute
-    # path, but this results in an error.
-    # By resetting it, we let the CMakeLists set it to an accepted value
-    # based on prefix.
-    "-DCMAKE_INSTALL_BINDIR="
+    # path, but this results in an error:
+    #
+    # > An absolute CMAKE_INSTALL_BINDIR path cannot be used if the following
+    # > are not also absolute paths: WZ_DATADIR
+    #
+    # WZ_DATADIR is based on CMAKE_INSTALL_DATAROOTDIR, so we set that.
+    #
+    # Alternatively, we could have set CMAKE_INSTALL_BINDIR to "bin".
+    "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
   ];
 
   postInstall = lib.optionalString withVideos ''
