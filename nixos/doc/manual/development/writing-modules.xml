@@ -179,7 +179,7 @@ in {
 }
 </programlisting>
  </example>
- <xi:include href="option-declarations.xml" />
+ <xi:include href="../from_md/development/option-declarations.section.xml" />
  <xi:include href="option-types.xml" />
  <xi:include href="option-def.xml" />
  <xi:include href="../from_md/development/assertions.section.xml" />
