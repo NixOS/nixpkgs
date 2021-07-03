@@ -1,0 +1,81 @@
+{ lib
+, autopep8
+, buildPythonPackage
+, fetchFromGitHub
+, flake8
+, flaky
+, jedi
+, matplotlib
+, mccabe
+, numpy
+, pandas
+, pluggy
+, pycodestyle
+, pydocstyle
+, pyflakes
+, pylint
+, pyqt5
+, pytestCheckHook
+, python-lsp-jsonrpc
+, pythonOlder
+, rope
+, ujson
+, yapf
+}:
+
+buildPythonPackage rec {
+  pname = "python-lsp-server";
+  version = "1.1.0";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "python-lsp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1akdpfnylqg2mcwpkqmdwcg6j6hab23slp5rfjfidhphig2f2yjv";
+  };
+
+  propagatedBuildInputs = [
+    autopep8
+    flake8
+    jedi
+    mccabe
+    pluggy
+    pycodestyle
+    pydocstyle
+    pyflakes
+    pylint
+    python-lsp-jsonrpc
+    rope
+    ujson
+    yapf
+  ];
+
+  checkInputs = [
+    flaky
+    matplotlib
+    numpy
+    pandas
+    pyqt5
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
+      --replace "--cov pylsp --cov test" ""
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
+  pythonImportsCheck = [ "pylsp" ];
+
+  meta = with lib; {
+    description = "Python implementation of the Language Server Protocol";
+    homepage = "https://github.com/python-lsp/python-lsp-server";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
+}
