@@ -39,7 +39,7 @@ python37Packages.buildPythonApplication rec {
     cairocffi-xcffib
     setuptools
     setuptools-scm
-    dateutil
+    python-dateutil
     dbus-python
     mpd2
     psutil

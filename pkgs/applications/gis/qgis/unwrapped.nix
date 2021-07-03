@@ -12,7 +12,7 @@ let
     numpy
     psycopg2
     chardet
-    dateutil
+    python-dateutil
     pyyaml
     pytz
     requests

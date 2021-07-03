@@ -8,7 +8,7 @@
 , pytest
 , glibcLocales
 , cython
-, dateutil
+, python-dateutil
 , scipy
 , moto
 , numexpr
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
   buildInputs = lib.optional stdenv.isDarwin libcxx;
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     scipy
     numexpr
     pytz
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
 
   disabledTests = lib.concatMapStringsSep " and " (s: "not " + s) ([
-    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+    # since python-dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
     # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
     "test_fallback_plural"
     "test_ambiguous_flags"

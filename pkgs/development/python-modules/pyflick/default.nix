@@ -3,7 +3,7 @@
 , pythonOlder
 , fetchPypi
 , aiohttp
-, dateutil
+, python-dateutil
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    dateutil
+    python-dateutil
   ];
 
   # no tests implemented

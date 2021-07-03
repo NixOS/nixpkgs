@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    dateutil
+    python-dateutil
     falcon
     gunicorn
     isodate
