@@ -474,6 +474,8 @@ in
 
   pkger = callPackage ../development/libraries/pkger { };
 
+  tapview = callPackage ../development/tools/tapview { };
+
   run = callPackage ../development/tools/run { };
 
   mod = callPackage ../development/tools/mod { };
@@ -1309,15 +1311,6 @@ in
   bitwarden = callPackage ../tools/security/bitwarden { };
 
   inherit (nodePackages) bitwarden-cli;
-
-  bitwarden_rs = callPackage ../tools/security/bitwarden_rs {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
-  };
-  bitwarden_rs-sqlite = bitwarden_rs;
-  bitwarden_rs-mysql = bitwarden_rs.override { dbBackend = "mysql"; };
-  bitwarden_rs-postgresql = bitwarden_rs.override { dbBackend = "postgresql"; };
-
-  bitwarden_rs-vault = callPackage ../tools/security/bitwarden_rs/vault.nix { };
 
   bkyml = callPackage ../tools/misc/bkyml { };
 
@@ -2300,6 +2293,8 @@ in
   swaycwd = callPackage ../tools/wayland/swaycwd { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
+
+  wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl { };
 
   wev = callPackage ../tools/wayland/wev { };
 
@@ -7671,6 +7666,8 @@ in
   ostree = callPackage ../tools/misc/ostree { };
 
   otfcc = callPackage ../tools/misc/otfcc { };
+
+  otpclient = callPackage ../applications/misc/otpclient { };
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
@@ -16035,6 +16032,8 @@ in
     inherit (ocaml-ng.ocamlPackages) bap ocaml findlib ctypes;
   };
 
+  libbaseencode = callPackage ../development/libraries/libbaseencode { };
+
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
 
@@ -16147,6 +16146,8 @@ in
   libctb = callPackage ../development/libraries/libctb { };
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
+
+  libcotp = callPackage ../development/libraries/libcotp { };
 
   libcouchbase = callPackage ../development/libraries/libcouchbase { };
 
@@ -31572,6 +31573,15 @@ in
   vaultenv = haskellPackages.vaultenv;
 
   vazir-code-font = callPackage ../data/fonts/vazir-code-font { };
+
+  vaultwarden = callPackage ../tools/security/vaultwarden {
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
+  };
+  vaultwarden-sqlite = vaultwarden;
+  vaultwarden-mysql = vaultwarden.override { dbBackend = "mysql"; };
+  vaultwarden-postgresql = vaultwarden.override { dbBackend = "postgresql"; };
+
+  vaultwarden-vault = callPackage ../tools/security/vaultwarden/vault.nix { };
 
   vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
 

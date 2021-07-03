@@ -3,9 +3,9 @@
 with lib;
 
 let
-  cfg = config.services.bitwarden_rs;
-  user = config.users.users.bitwarden_rs.name;
-  group = config.users.groups.bitwarden_rs.name;
+  cfg = config.services.vaultwarden;
+  user = config.users.users.vaultwarden.name;
+  group = config.users.groups.vaultwarden.name;
 
   # Convert name from camel case (e.g. disable2FARemember) to upper case snake case (e.g. DISABLE_2FA_REMEMBER).
   nameToEnvVar = name:
@@ -26,22 +26,26 @@ let
         if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
       ) cfg.config));
     in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
-      WEB_VAULT_FOLDER = "${pkgs.bitwarden_rs-vault}/share/bitwarden_rs/vault";
+      WEB_VAULT_FOLDER = "${pkgs.vaultwarden-vault}/share/vaultwarden/vault";
     } // configEnv;
 
-  configFile = pkgs.writeText "bitwarden_rs.env" (concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
+  configFile = pkgs.writeText "vaultwarden.env" (concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
 
-  bitwarden_rs = pkgs.bitwarden_rs.override { inherit (cfg) dbBackend; };
+  vaultwarden = pkgs.vaultwarden.override { inherit (cfg) dbBackend; };
 
 in {
-  options.services.bitwarden_rs = with types; {
-    enable = mkEnableOption "bitwarden_rs";
+  imports = [
+    (mkRenamedOptionModule [ "services" "bitwarden_rs" ] [ "services" "vaultwarden" ])
+  ];
+
+  options.services.vaultwarden = with types; {
+    enable = mkEnableOption "vaultwarden";
 
     dbBackend = mkOption {
       type = enum [ "sqlite" "mysql" "postgresql" ];
       default = "sqlite";
       description = ''
-        Which database backend bitwarden_rs will be using.
+        Which database backend vaultwarden will be using.
       '';
     };
 
@@ -49,7 +53,7 @@ in {
       type = nullOr str;
       default = null;
       description = ''
-        The directory under which bitwarden_rs will backup its persistent data.
+        The directory under which vaultwarden will backup its persistent data.
       '';
     };
 
@@ -65,7 +69,7 @@ in {
         }
       '';
       description = ''
-        The configuration of bitwarden_rs is done through environment variables,
+        The configuration of vaultwarden is done through environment variables,
         therefore the names are converted from camel case (e.g. disable2FARemember)
         to upper case snake case (e.g. DISABLE_2FA_REMEMBER).
         In this conversion digits (0-9) are handled just like upper case characters,
@@ -75,17 +79,17 @@ in {
         This allows working around any potential future conflicting naming conventions.
 
         Based on the attributes passed to this config option an environment file will be generated
-        that is passed to bitwarden_rs's systemd service.
+        that is passed to vaultwarden's systemd service.
 
         The available configuration options can be found in
-        <link xlink:href="https://github.com/dani-garcia/bitwarden_rs/blob/${bitwarden_rs.version}/.env.template">the environment template file</link>.
+        <link xlink:href="https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template">the environment template file</link>.
       '';
     };
 
     environmentFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      example = "/root/bitwarden_rs.env";
+      example = "/root/vaultwarden.env";
       description = ''
         Additional environment file as defined in <citerefentry>
         <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
@@ -95,7 +99,7 @@ in {
         may be passed to the service without adding them to the world-readable Nix store.
 
         Note that this file needs to be available on the host on which
-        <literal>bitwarden_rs</literal> is running.
+        <literal>vaultwarden</literal> is running.
       '';
     };
   };
@@ -106,20 +110,21 @@ in {
       message = "Backups for database backends other than sqlite will need customization";
     } ];
 
-    users.users.bitwarden_rs = {
+    users.users.vaultwarden = {
       inherit group;
       isSystemUser = true;
     };
-    users.groups.bitwarden_rs = { };
+    users.groups.vaultwarden = { };
 
-    systemd.services.bitwarden_rs = {
+    systemd.services.vaultwarden = {
+      aliases = [ "bitwarden_rs" ];
       after = [ "network.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
         User = user;
         Group = group;
         EnvironmentFile = [ configFile ] ++ optional (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${bitwarden_rs}/bin/bitwarden_rs";
+        ExecStart = "${vaultwarden}/bin/vaultwarden";
         LimitNOFILE = "1048576";
         PrivateTmp = "true";
         PrivateDevices = "true";
@@ -131,15 +136,16 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.services.backup-bitwarden_rs = mkIf (cfg.backupDir != null) {
-      description = "Backup bitwarden_rs";
+    systemd.services.backup-vaultwarden = mkIf (cfg.backupDir != null) {
+      aliases = [ "backup-bitwarden_rs" ];
+      description = "Backup vaultwarden";
       environment = {
         DATA_FOLDER = "/var/lib/bitwarden_rs";
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
       serviceConfig = {
-        SyslogIdentifier = "backup-bitwarden_rs";
+        SyslogIdentifier = "backup-vaultwarden";
         Type = "oneshot";
         User = mkDefault user;
         Group = mkDefault group;
@@ -148,12 +154,13 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.timers.backup-bitwarden_rs = mkIf (cfg.backupDir != null) {
-      description = "Backup bitwarden_rs on time";
+    systemd.timers.backup-vaultwarden = mkIf (cfg.backupDir != null) {
+      aliases = [ "backup-bitwarden_rs" ];
+      description = "Backup vaultwarden on time";
       timerConfig = {
         OnCalendar = mkDefault "23:00";
         Persistent = "true";
-        Unit = "backup-bitwarden_rs.service";
+        Unit = "backup-vaultwarden.service";
       };
       wantedBy = [ "multi-user.target" ];
     };

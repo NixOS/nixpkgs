@@ -53,6 +53,7 @@ in
 , enableParallelBuilding ? true
 , maintainers ? null
 , changelog ? null
+, mainProgram ? null
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
 , passthru ? {}
@@ -666,6 +667,7 @@ stdenv.mkDerivation ({
          // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
          // optionalAttrs (args ? badPlatforms)   { inherit badPlatforms; }
          // optionalAttrs (args ? changelog)      { inherit changelog; }
+         // optionalAttrs (args ? mainProgram)    { inherit mainProgram; }
          ;
 
 }

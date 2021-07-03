@@ -1905,8 +1905,6 @@ in {
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
 
-  dftfit = callPackage ../development/python-modules/dftfit { };
-
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
@@ -3913,8 +3911,6 @@ in {
   labgrid = callPackage ../development/python-modules/labgrid { };
 
   labmath = callPackage ../development/python-modules/labmath { };
-
-  lammps-cython = callPackage ../development/python-modules/lammps-cython { };
 
   langcodes = callPackage ../development/python-modules/langcodes { };
 
