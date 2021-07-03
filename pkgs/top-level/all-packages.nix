@@ -5047,6 +5047,8 @@ in
 
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
 
+  gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
+
   gibo = callPackage ../tools/misc/gibo { };
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
