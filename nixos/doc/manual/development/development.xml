@@ -9,7 +9,7 @@
    This chapter describes how you can modify and extend NixOS.
   </para>
  </partintro>
- <xi:include href="sources.xml" />
+ <xi:include href="../from_md/development/sources.chapter.xml" />
  <xi:include href="writing-modules.xml" />
  <xi:include href="building-parts.xml" />
  <xi:include href="writing-documentation.xml" />
