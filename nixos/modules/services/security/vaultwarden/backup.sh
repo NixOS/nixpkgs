@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Based on: https://github.com/dani-garcia/bitwarden_rs/wiki/Backing-up-your-vault
+# Based on: https://github.com/dani-garcia/vaultwarden/wiki/Backing-up-your-vault
 if ! mkdir -p "$BACKUP_FOLDER"; then
   echo "Could not create backup folder '$BACKUP_FOLDER'" >&2
   exit 1
