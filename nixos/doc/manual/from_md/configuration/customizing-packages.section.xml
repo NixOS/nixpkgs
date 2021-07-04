@@ -33,8 +33,8 @@ environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
     <literal>pkgs.gtk3</literal>, causing Emacs to depend on GTK 3. (The
     parentheses are necessary because in Nix, function application binds
     more weakly than list construction, so without them,
-    <link xlink:href="options.html#opt-environment.systemPackages"><literal>environment.systemPackages</literal></link>
-    would be a list with two elements.)
+    <xref linkend="opt-environment.systemPackages" /> would be a list
+    with two elements.)
   </para>
   <para>
     Even greater customisation is possible using the function

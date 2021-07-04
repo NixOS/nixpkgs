@@ -16,8 +16,7 @@ $ cd nixpkgs
   <para>
     Then you write and test the package as described in the Nixpkgs
     manual. Finally, you add it to
-    <link xlink:href="options.html#opt-environment.systemPackages"><literal>environment.systemPackages</literal></link>,
-    e.g.
+    <xref linkend="opt-environment.systemPackages" />, e.g.
   </para>
   <programlisting language="bash">
 environment.systemPackages = [ pkgs.my-package ];

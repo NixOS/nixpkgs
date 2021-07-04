@@ -28,7 +28,7 @@ arguments specified by you. So here the function argument `gtk` gets the
 value `pkgs.gtk3`, causing Emacs to depend on GTK 3. (The parentheses
 are necessary because in Nix, function application binds more weakly
 than list construction, so without them,
-[`environment.systemPackages`](options.html#opt-environment.systemPackages)
+[](#opt-environment.systemPackages)
 would be a list with two elements.)
 
 Even greater customisation is possible using the function

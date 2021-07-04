@@ -13,7 +13,7 @@ $ cd nixpkgs
 ```
 
 Then you write and test the package as described in the Nixpkgs manual.
-Finally, you add it to [`environment.systemPackages`](options.html#opt-environment.systemPackages), e.g.
+Finally, you add it to [](#opt-environment.systemPackages), e.g.
 
 ```nix
 environment.systemPackages = [ pkgs.my-package ];
