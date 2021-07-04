@@ -459,6 +459,16 @@
         </itemizedlist>
       </listitem>
     </itemizedlist>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <literal>yggdrasil</literal> was upgraded to a new major
+          release with breaking changes, see
+          <link xlink:href="https://github.com/yggdrasil-network/yggdrasil-go/releases/tag/v0.4.0">upstream
+          changelog</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
     <title>Other Notable Changes</title>
