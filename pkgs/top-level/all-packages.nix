@@ -26443,6 +26443,8 @@ in
 
   protonvpn-gui = callPackage ../applications/networking/protonvpn-gui { };
 
+  protonvpn-gui-official = callPackage ../applications/networking/protonvpn-gui-official { };
+
   ps2client = callPackage ../applications/networking/ps2client { };
 
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
