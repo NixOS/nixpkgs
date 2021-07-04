@@ -26,7 +26,6 @@ xdg.portal.wlr.enable = true;
 </programlisting>
   <para>
     and configure Pipewire using
-    <link xlink:href="options.html#opt-services.pipewire.enable"><literal>services.pipewire.enable</literal></link>
-    and related options.
+    <xref linkend="opt-services.pipewire.enable" /> and related options.
   </para>
 </chapter>

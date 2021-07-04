@@ -23,8 +23,7 @@
       To configure, include in
       <literal>/etc/nixos/configuration.nix</literal> code to activate
       Apache HTTP, setting
-      <link xlink:href="options.html#opt-services.httpd.adminAddr"><literal>services.httpd.adminAddr</literal></link>
-      appropriately:
+      <xref linkend="opt-services.httpd.adminAddr" /> appropriately:
     </para>
     <programlisting language="bash">
 services.httpd.enable = true;

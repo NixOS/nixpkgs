@@ -48,9 +48,7 @@ nixpkgs.config.packageOverrides = pkgs:
   <para>
     Kernel modules for hardware devices are generally loaded
     automatically by <literal>udev</literal>. You can force a module to
-    be loaded via
-    <link xlink:href="options.html#opt-boot.kernelModules"><literal>boot.kernelModules</literal></link>,
-    e.g.
+    be loaded via <xref linkend="opt-boot.kernelModules" />, e.g.
   </para>
   <programlisting language="bash">
 boot.kernelModules = [ &quot;fuse&quot; &quot;kvm-intel&quot; &quot;coretemp&quot; ];
@@ -58,7 +56,7 @@ boot.kernelModules = [ &quot;fuse&quot; &quot;kvm-intel&quot; &quot;coretemp&quo
   <para>
     If the module is required early during the boot (e.g. to mount the
     root file system), you can use
-    <link xlink:href="options.html#opt-boot.initrd.kernelModules"><literal>boot.initrd.kernelModules</literal></link>:
+    <xref linkend="opt-boot.initrd.kernelModules" />:
   </para>
   <programlisting language="bash">
 boot.initrd.kernelModules = [ &quot;cifs&quot; ];
@@ -69,8 +67,7 @@ boot.initrd.kernelModules = [ &quot;cifs&quot; ];
   </para>
   <para>
     Kernel runtime parameters can be set through
-    <link xlink:href="options.html#opt-boot.kernel.sysctl"><literal>boot.kernel.sysctl</literal></link>,
-    e.g.
+    <xref linkend="opt-boot.kernel.sysctl" />, e.g.
   </para>
   <programlisting language="bash">
 boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 120;

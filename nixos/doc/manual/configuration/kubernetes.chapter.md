@@ -39,8 +39,8 @@ services.kubernetes.roles = [ "master" "node" ];
 ```
 
 Note: Assigning either role will also default both
-[`services.kubernetes.flannel.enable`](options.html#opt-services.kubernetes.flannel.enable)
-and [`services.kubernetes.easyCerts`](options.html#opt-services.kubernetes.easyCerts)
+[](#opt-services.kubernetes.flannel.enable)
+and [](#opt-services.kubernetes.easyCerts)
 to true. This sets up flannel as CNI and activates automatic PKI bootstrapping.
 
 As of kubernetes 1.10.X it has been deprecated to open non-tls-enabled
@@ -48,12 +48,12 @@ ports on kubernetes components. Thus, from NixOS 19.03 all plain HTTP
 ports have been disabled by default. While opening insecure ports is
 still possible, it is recommended not to bind these to other interfaces
 than loopback. To re-enable the insecure port on the apiserver, see options:
-[`services.kubernetes.apiserver.insecurePort`](options.html#opt-services.kubernetes.apiserver.insecurePort) and
-[`services.kubernetes.apiserver.insecureBindAddress`](options.html#opt-services.kubernetes.apiserver.insecureBindAddress)
+[](#opt-services.kubernetes.apiserver.insecurePort) and
+[](#opt-services.kubernetes.apiserver.insecureBindAddress)
 
 ::: {.note}
 As of NixOS 19.03, it is mandatory to configure:
-[`services.kubernetes.masterAddress`](options.html#opt-services.kubernetes.masterAddress).
+[](#opt-services.kubernetes.masterAddress).
 The masterAddress must be resolveable and routeable by all cluster nodes.
 In single node clusters, this can be set to `localhost`.
 :::
@@ -69,19 +69,19 @@ Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 
 The NixOS kubernetes module provides an option for automatic certificate
 bootstrapping and configuration,
-[`services.kubernetes.easyCerts`](options.html#opt-services.kubernetes.easyCerts).
+[](#opt-services.kubernetes.easyCerts).
 The PKI bootstrapping process involves setting up a certificate authority (CA)
 daemon (cfssl) on the kubernetes master node. cfssl generates a CA-cert
 for the cluster, and uses the CA-cert for signing subordinate certs issued
 to each of the cluster components. Subsequently, the certmgr daemon monitors
 active certificates and renews them when needed. For single node Kubernetes
-clusters, setting [`services.kubernetes.easyCerts`](options.html#opt-services.kubernetes.easyCerts)
+clusters, setting [](#opt-services.kubernetes.easyCerts)
 = true is sufficient and no further action is required. For joining extra node
 machines to an existing cluster on the other hand, establishing initial
 trust is mandatory.
 
 To add new nodes to the cluster: On any (non-master) cluster node where
-[`services.kubernetes.easyCerts`](options.html#opt-services.kubernetes.easyCerts)
+[](#opt-services.kubernetes.easyCerts)
 is enabled, the helper script `nixos-kubernetes-node-join` is available on PATH.
 Given a token on stdin, it will copy the token to the kubernetes secrets directory
 and restart the certmgr service. As requested certificates are issued, the
@@ -96,7 +96,7 @@ In order to interact with an RBAC-enabled cluster as an administrator,
 one needs to have cluster-admin privileges. By default, when easyCerts
 is enabled, a cluster-admin kubeconfig file is generated and linked into
 `/etc/kubernetes/cluster-admin.kubeconfig` as determined by
-[`services.kubernetes.pki.etcClusterAdminKubeconfig`](options.html#opt-services.kubernetes.pki.etcClusterAdminKubeconfig).
+[](#opt-services.kubernetes.pki.etcClusterAdminKubeconfig).
 `export KUBECONFIG=/etc/kubernetes/cluster-admin.kubeconfig` will make
 kubectl use this kubeconfig to access and authenticate the cluster. The
 cluster-admin kubeconfig references an auto-generated keypair owned by

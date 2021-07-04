@@ -43,11 +43,9 @@ services.kubernetes.roles = [ &quot;master&quot; &quot;node&quot; ];
 </programlisting>
   <para>
     Note: Assigning either role will also default both
-    <link xlink:href="options.html#opt-services.kubernetes.flannel.enable"><literal>services.kubernetes.flannel.enable</literal></link>
-    and
-    <link xlink:href="options.html#opt-services.kubernetes.easyCerts"><literal>services.kubernetes.easyCerts</literal></link>
-    to true. This sets up flannel as CNI and activates automatic PKI
-    bootstrapping.
+    <xref linkend="opt-services.kubernetes.flannel.enable" /> and
+    <xref linkend="opt-services.kubernetes.easyCerts" /> to true. This
+    sets up flannel as CNI and activates automatic PKI bootstrapping.
   </para>
   <para>
     As of kubernetes 1.10.X it has been deprecated to open
@@ -56,15 +54,15 @@ services.kubernetes.roles = [ &quot;master&quot; &quot;node&quot; ];
     opening insecure ports is still possible, it is recommended not to
     bind these to other interfaces than loopback. To re-enable the
     insecure port on the apiserver, see options:
-    <link xlink:href="options.html#opt-services.kubernetes.apiserver.insecurePort"><literal>services.kubernetes.apiserver.insecurePort</literal></link>
+    <xref linkend="opt-services.kubernetes.apiserver.insecurePort" />
     and
-    <link xlink:href="options.html#opt-services.kubernetes.apiserver.insecureBindAddress"><literal>services.kubernetes.apiserver.insecureBindAddress</literal></link>
+    <xref linkend="opt-services.kubernetes.apiserver.insecureBindAddress" />
   </para>
   <note>
     <para>
       As of NixOS 19.03, it is mandatory to configure:
-      <link xlink:href="options.html#opt-services.kubernetes.masterAddress"><literal>services.kubernetes.masterAddress</literal></link>.
-      The masterAddress must be resolveable and routeable by all cluster
+      <xref linkend="opt-services.kubernetes.masterAddress" />. The
+      masterAddress must be resolveable and routeable by all cluster
       nodes. In single node clusters, this can be set to
       <literal>localhost</literal>.
     </para>
@@ -83,24 +81,22 @@ services.kubernetes.roles = [ &quot;master&quot; &quot;node&quot; ];
   <para>
     The NixOS kubernetes module provides an option for automatic
     certificate bootstrapping and configuration,
-    <link xlink:href="options.html#opt-services.kubernetes.easyCerts"><literal>services.kubernetes.easyCerts</literal></link>.
-    The PKI bootstrapping process involves setting up a certificate
-    authority (CA) daemon (cfssl) on the kubernetes master node. cfssl
-    generates a CA-cert for the cluster, and uses the CA-cert for
-    signing subordinate certs issued to each of the cluster components.
+    <xref linkend="opt-services.kubernetes.easyCerts" />. The PKI
+    bootstrapping process involves setting up a certificate authority
+    (CA) daemon (cfssl) on the kubernetes master node. cfssl generates a
+    CA-cert for the cluster, and uses the CA-cert for signing
+    subordinate certs issued to each of the cluster components.
     Subsequently, the certmgr daemon monitors active certificates and
     renews them when needed. For single node Kubernetes clusters,
-    setting
-    <link xlink:href="options.html#opt-services.kubernetes.easyCerts"><literal>services.kubernetes.easyCerts</literal></link>
-    = true is sufficient and no further action is required. For joining
-    extra node machines to an existing cluster on the other hand,
-    establishing initial trust is mandatory.
+    setting <xref linkend="opt-services.kubernetes.easyCerts" /> = true
+    is sufficient and no further action is required. For joining extra
+    node machines to an existing cluster on the other hand, establishing
+    initial trust is mandatory.
   </para>
   <para>
     To add new nodes to the cluster: On any (non-master) cluster node
-    where
-    <link xlink:href="options.html#opt-services.kubernetes.easyCerts"><literal>services.kubernetes.easyCerts</literal></link>
-    is enabled, the helper script
+    where <xref linkend="opt-services.kubernetes.easyCerts" /> is
+    enabled, the helper script
     <literal>nixos-kubernetes-node-join</literal> is available on PATH.
     Given a token on stdin, it will copy the token to the kubernetes
     secrets directory and restart the certmgr service. As requested
@@ -120,7 +116,7 @@ services.kubernetes.roles = [ &quot;master&quot; &quot;node&quot; ];
     is generated and linked into
     <literal>/etc/kubernetes/cluster-admin.kubeconfig</literal> as
     determined by
-    <link xlink:href="options.html#opt-services.kubernetes.pki.etcClusterAdminKubeconfig"><literal>services.kubernetes.pki.etcClusterAdminKubeconfig</literal></link>.
+    <xref linkend="opt-services.kubernetes.pki.etcClusterAdminKubeconfig" />.
     <literal>export KUBECONFIG=/etc/kubernetes/cluster-admin.kubeconfig</literal>
     will make kubectl use this kubeconfig to access and authenticate the
     cluster. The cluster-admin kubeconfig references an auto-generated

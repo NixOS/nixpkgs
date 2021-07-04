@@ -24,10 +24,10 @@ log in via mechanisms that require a password. However, you can use the
 `passwd` program to set a password, which is retained across invocations
 of `nixos-rebuild`.
 
-If you set [`users.mutableUsers`](options.html#opt-users.mutableUsers) to
+If you set [](#opt-users.mutableUsers) to
 false, then the contents of `/etc/passwd` and `/etc/group` will be congruent
 to your NixOS configuration. For instance, if you remove a user from
-[`users.users`](options.html#opt-users.users) and run nixos-rebuild, the user
+[](#opt-users.users) and run nixos-rebuild, the user
 account will cease to exist. Also, imperative commands for managing users and
 groups, such as useradd, are no longer available. Passwords may still be
 assigned by setting the user\'s

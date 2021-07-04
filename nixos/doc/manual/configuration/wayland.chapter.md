@@ -23,5 +23,5 @@ xdg.portal.wlr.enable = true;
 ```
 
 and configure Pipewire using
-[`services.pipewire.enable`](options.html#opt-services.pipewire.enable)
+[](#opt-services.pipewire.enable)
 and related options.

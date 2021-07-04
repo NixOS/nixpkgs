@@ -42,14 +42,14 @@ something as a kernel module).
 
 Kernel modules for hardware devices are generally loaded automatically
 by `udev`. You can force a module to be loaded via
-[`boot.kernelModules`](options.html#opt-boot.kernelModules), e.g.
+[](#opt-boot.kernelModules), e.g.
 
 ```nix
 boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
 ```
 
 If the module is required early during the boot (e.g. to mount the root
-file system), you can use [`boot.initrd.kernelModules`](options.html#opt-boot.initrd.kernelModules):
+file system), you can use [](#opt-boot.initrd.kernelModules):
 
 ```nix
 boot.initrd.kernelModules = [ "cifs" ];
@@ -59,7 +59,7 @@ This causes the specified modules and their dependencies to be added to
 the initial ramdisk.
 
 Kernel runtime parameters can be set through
-[`boot.kernel.sysctl`](options.html#opt-boot.kernel.sysctl), e.g.
+[](#opt-boot.kernel.sysctl), e.g.
 
 ```nix
 boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120;

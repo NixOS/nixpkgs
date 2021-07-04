@@ -36,10 +36,9 @@ $ export \
 </programlisting>
     <para>
       The second mechanism is to add the OpenCL driver package to
-      <link xlink:href="options.html#opt-hardware.opengl.extraPackages"><literal>hardware.opengl.extraPackages</literal></link>.
-      This links the ICD file under
-      <literal>/run/opengl-driver</literal>, where it will be visible to
-      the ICD loader.
+      <xref linkend="opt-hardware.opengl.extraPackages" />. This links
+      the ICD file under <literal>/run/opengl-driver</literal>, where it
+      will be visible to the ICD loader.
     </para>
     <para>
       The proper installation of OpenCL drivers can be verified through
@@ -60,8 +59,8 @@ Platform Vendor      Advanced Micro Devices, Inc.
         <link xlink:href="https://en.wikipedia.org/wiki/Graphics_Core_Next">Graphics
         Core Next</link> (GCN) GPUs are supported through the
         rocm-opencl-icd package. Adding this package to
-        <link xlink:href="options.html#opt-hardware.opengl.extraPackages"><literal>hardware.opengl.extraPackages</literal></link>
-        enables OpenCL support:
+        <xref linkend="opt-hardware.opengl.extraPackages" /> enables
+        OpenCL support:
       </para>
       <programlisting language="bash">
 hardware.opengl.extraPackages = [
@@ -82,10 +81,9 @@ hardware.opengl.extraPackages = [
       </para>
       <para>
         The intel-compute-runtime, beignet, or intel-ocl package can be
-        added to
-        <link xlink:href="options.html#opt-hardware.opengl.extraPackages"><literal>hardware.opengl.extraPackages</literal></link>
-        to enable OpenCL support. For example, for Gen8 and later GPUs,
-        the following configuration can be used:
+        added to <xref linkend="opt-hardware.opengl.extraPackages" /> to
+        enable OpenCL support. For example, for Gen8 and later GPUs, the
+        following configuration can be used:
       </para>
       <programlisting language="bash">
 hardware.opengl.extraPackages = [
@@ -103,8 +101,7 @@ hardware.opengl.extraPackages = [
       <link xlink:href="https://github.com/doitsujin/dxvk/wiki">DXVK</link>.
     </para>
     <para>
-      By default, if
-      <link xlink:href="options.html#opt-hardware.opengl.driSupport"><literal>hardware.opengl.driSupport</literal></link>
+      By default, if <xref linkend="opt-hardware.opengl.driSupport" />
       is enabled, mesa is installed and provides Vulkan for supported
       hardware.
     </para>
@@ -129,10 +126,9 @@ $ export \
 </programlisting>
     <para>
       The second mechanism is to add the Vulkan driver package to
-      <link xlink:href="options.html#opt-hardware.opengl.extraPackages"><literal>hardware.opengl.extraPackages</literal></link>.
-      This links the ICD file under
-      <literal>/run/opengl-driver</literal>, where it will be visible to
-      the ICD loader.
+      <xref linkend="opt-hardware.opengl.extraPackages" />. This links
+      the ICD file under <literal>/run/opengl-driver</literal>, where it
+      will be visible to the ICD loader.
     </para>
     <para>
       The proper installation of Vulkan drivers can be verified through
@@ -162,8 +158,7 @@ GPU1:
         <link xlink:href="https://en.wikipedia.org/wiki/Graphics_Core_Next">Graphics
         Core Next</link> (GCN) GPUs are supported through either radv,
         which is part of mesa, or the amdvlk package. Adding the amdvlk
-        package to
-        <link xlink:href="options.html#opt-hardware.opengl.extraPackages"><literal>hardware.opengl.extraPackages</literal></link>
+        package to <xref linkend="opt-hardware.opengl.extraPackages" />
         makes amdvlk the default driver and hides radv and lavapipe from
         the device list. A specific driver can be forced as follows:
       </para>

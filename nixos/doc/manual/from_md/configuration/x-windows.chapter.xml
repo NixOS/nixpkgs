@@ -128,8 +128,8 @@ services.xserver.displayManager.autoLogin.user = &quot;alice&quot;;
     <para>
       The results vary depending on the hardware, so you may have to try
       both drivers. Use the option
-      <link xlink:href="options.html#opt-services.xserver.videoDrivers"><literal>services.xserver.videoDrivers</literal></link>
-      to set one. The recommended configuration for modern systems is:
+      <xref linkend="opt-services.xserver.videoDrivers" /> to set one.
+      The recommended configuration for modern systems is:
     </para>
     <programlisting language="bash">
 services.xserver.videoDrivers = [ &quot;modesetting&quot; ];
@@ -204,10 +204,8 @@ services.xserver.videoDrivers = [ &quot;amdgpu-pro&quot; ];
 services.xserver.libinput.enable = true;
 </programlisting>
     <para>
-      The driver has many options (see
-      <link xlink:href="options.html">Appendix A, Configuration
-      Options</link>). For instance, the following disables tap-to-click
-      behavior:
+      The driver has many options (see <xref linkend="ch-options" />).
+      For instance, the following disables tap-to-click behavior:
     </para>
     <programlisting language="bash">
 services.xserver.libinput.touchpad.tapping = false;

@@ -22,13 +22,13 @@ services.picom = {
 
 Some Xfce programs are not installed automatically. To install them
 manually (system wide), put them into your
-[`environment.systemPackages`](options.html#opt-environment.systemPackages) from `pkgs.xfce`.
+[](#opt-environment.systemPackages) from `pkgs.xfce`.
 
 ## Thunar Plugins {#sec-xfce-thunar-plugins .unnumbered}
 
 If you\'d like to add extra plugins to Thunar, add them to
-[`services.xserver.desktopManager.xfce.thunarPlugins`](options.html#opt-services.xserver.desktopManager.xfce.thunarPlugins).
-You shouldn\'t just add them to [`environment.systemPackages`](options.html#opt-environment.systemPackages).
+[](#opt-services.xserver.desktopManager.xfce.thunarPlugins).
+You shouldn\'t just add them to [](#opt-environment.systemPackages).
 
 ## Troubleshooting {#sec-xfce-troubleshooting .unnumbered}
 

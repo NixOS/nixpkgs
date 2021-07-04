@@ -115,7 +115,7 @@ officially updated since 2015.
 
 The results vary depending on the hardware, so you may have to try both
 drivers. Use the option
-[`services.xserver.videoDrivers`](options.html#opt-services.xserver.videoDrivers)
+[](#opt-services.xserver.videoDrivers)
 to set one. The recommended configuration for modern systems is:
 
 ```nix
@@ -183,7 +183,7 @@ Latitude series) can be enabled as follows:
 services.xserver.libinput.enable = true;
 ```
 
-The driver has many options (see [Appendix A, Configuration Options](options.html)).
+The driver has many options (see [](#ch-options)).
 For instance, the following disables tap-to-click behavior:
 
 ```nix

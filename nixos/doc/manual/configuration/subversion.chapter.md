@@ -17,7 +17,7 @@ appropriate section of the Subversion
 book](http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.serverconfig.httpd).
 
 To configure, include in `/etc/nixos/configuration.nix` code to activate
-Apache HTTP, setting [`services.httpd.adminAddr`](options.html#opt-services.httpd.adminAddr)
+Apache HTTP, setting [](#opt-services.httpd.adminAddr)
 appropriately:
 
 ```nix
