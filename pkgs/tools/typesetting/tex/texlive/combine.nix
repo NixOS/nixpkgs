@@ -127,9 +127,11 @@ in (buildEnv {
     script =
       writeText "hyphens.sed" (
         # pick up the header
-        "1,/^% from/p;"
+        "1,/^% from/p;\n"
         # pick up all sections matching packages that we combine
         + lib.concatMapStrings (pname: "/^% from ${pname}:$/,/^%/p;\n") pnames
+        # pick up footer (for language.def)
+        + "/^%%% No changes may be made beyond this point.$/,$p;\n"
       );
   in ''
     (
