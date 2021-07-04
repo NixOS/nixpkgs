@@ -2564,6 +2564,8 @@ in
 
   eddy = libsForQt5.callPackage ../applications/graphics/eddy { };
 
+  eg25-manager = callPackage ../applications/networking/eg25-manager { };
+
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   eksctl = callPackage ../tools/admin/eksctl { };
