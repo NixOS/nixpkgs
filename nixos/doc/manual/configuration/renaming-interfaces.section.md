@@ -14,7 +14,7 @@ settings can result in a [name
 change](https://github.com/systemd/systemd/issues/3715#issue-165347602).
 If this is undesirable, for example if you have a single ethernet card,
 you can revert to the traditional scheme by setting
-[`networking.usePredictableInterfaceNames`](options.html#opt-networking.usePredictableInterfaceNames)
+[](#opt-networking.usePredictableInterfaceNames)
 to `false`.
 
 ## Assigning custom names {#sec-custom-ifnames}

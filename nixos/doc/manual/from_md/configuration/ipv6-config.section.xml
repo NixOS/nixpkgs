@@ -5,10 +5,10 @@
     used to automatically assign IPv6 addresses to all interfaces, and
     Privacy Extensions (RFC 4946) are enabled by default. You can adjust
     the default for this by setting
-    <link xlink:href="options.html#opt-networking.tempAddresses"><literal>networking.tempAddresses</literal></link>.
-    This option may be overridden on a per-interface basis by
-    <link xlink:href="options.html#opt-networking.interfaces._name_.tempAddress"><literal>networking.interfaces.&lt;name&gt;.tempAddress</literal></link>.
-    You can disable IPv6 support globally by setting:
+    <xref linkend="opt-networking.tempAddresses" />. This option may be
+    overridden on a per-interface basis by
+    <xref linkend="opt-networking.interfaces._name_.tempAddress" />. You
+    can disable IPv6 support globally by setting:
   </para>
   <programlisting language="bash">
 networking.enableIPv6 = false;

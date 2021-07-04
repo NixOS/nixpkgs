@@ -25,9 +25,9 @@ users.users.alice.extraGroups = [ &quot;networkmanager&quot; ];
     environments (GNOME, KDE) have their own configuration tools for
     NetworkManager. On XFCE, there is no configuration tool for
     NetworkManager by default: by enabling
-    <link xlink:href="options.html#opt-programs.nm-applet.enable"><literal>programs.nm-applet.enable</literal></link>,
-    the graphical applet will be installed and will launch automatically
-    when the graphical session is started.
+    <xref linkend="opt-programs.nm-applet.enable" />, the graphical
+    applet will be installed and will launch automatically when the
+    graphical session is started.
   </para>
   <note>
     <para>

@@ -8,7 +8,7 @@ services.openssh.enable = true;
 
 By default, root logins using a password are disallowed. They can be
 disabled entirely by setting
-[`services.openssh.permitRootLogin`](options.html#opt-services.openssh.permitRootLogin) to `"no"`.
+[](#opt-services.openssh.permitRootLogin) to `"no"`.
 
 You can declaratively specify authorised RSA/DSA public keys for a user
 as follows:

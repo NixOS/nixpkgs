@@ -30,7 +30,7 @@ networking.nameservers = [ &quot;8.8.8.8&quot; ];
   </note>
   <para>
     The host name is set using
-    <link xlink:href="options.html#opt-networking.hostName"><literal>networking.hostName</literal></link>:
+    <xref linkend="opt-networking.hostName" />:
   </para>
   <programlisting language="bash">
 networking.hostName = &quot;cartman&quot;;

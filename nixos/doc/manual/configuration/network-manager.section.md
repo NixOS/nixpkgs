@@ -22,7 +22,7 @@ NetworkManager is controlled using either `nmcli` or `nmtui`
 details on their usage. Some desktop environments (GNOME, KDE) have
 their own configuration tools for NetworkManager. On XFCE, there is no
 configuration tool for NetworkManager by default: by enabling
-[`programs.nm-applet.enable`](options.html#opt-programs.nm-applet.enable), the graphical applet will be
+[](#opt-programs.nm-applet.enable), the graphical applet will be
 installed and will launch automatically when the graphical session is
 started.
 

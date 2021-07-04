@@ -18,8 +18,8 @@
     change</link>. If this is undesirable, for example if you have a
     single ethernet card, you can revert to the traditional scheme by
     setting
-    <link xlink:href="options.html#opt-networking.usePredictableInterfaceNames"><literal>networking.usePredictableInterfaceNames</literal></link>
-    to <literal>false</literal>.
+    <xref linkend="opt-networking.usePredictableInterfaceNames" /> to
+    <literal>false</literal>.
   </para>
   <section xml:id="sec-custom-ifnames">
     <title>Assigning custom names</title>

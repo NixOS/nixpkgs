@@ -21,7 +21,7 @@ networking.firewall.allowedTCPPorts = [ 80 443 ];
     daemon is enabled
     (<literal>services.openssh.enable = true</literal>). UDP ports can
     be opened through
-    <link xlink:href="options.html#opt-networking.firewall.allowedUDPPorts"><literal>networking.firewall.allowedUDPPorts</literal></link>.
+    <xref linkend="opt-networking.firewall.allowedUDPPorts" />.
   </para>
   <para>
     To open ranges of TCP ports:
@@ -34,6 +34,6 @@ networking.firewall.allowedTCPPortRanges = [
 </programlisting>
   <para>
     Similarly, UDP port ranges can be opened through
-    <link xlink:href="options.html#opt-networking.firewall.allowedUDPPortRanges"><literal>networking.firewall.allowedUDPPortRanges</literal></link>.
+    <xref linkend="opt-networking.firewall.allowedUDPPortRanges" />.
   </para>
 </section>

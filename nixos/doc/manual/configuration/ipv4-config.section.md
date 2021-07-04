@@ -25,7 +25,7 @@ Statically configured interfaces are set up by the systemd service
 configuration is performed by `network-setup.service`.
 :::
 
-The host name is set using [`networking.hostName`](options.html#opt-networking.hostName):
+The host name is set using [](#opt-networking.hostName):
 
 ```nix
 networking.hostName = "cartman";
