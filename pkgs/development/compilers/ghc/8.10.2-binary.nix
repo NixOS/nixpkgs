@@ -204,9 +204,6 @@ stdenv.mkDerivation rec {
     lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 -exec patchelf \
           --interpreter ${glibcDynLinker} {} \;
-
-      sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
-      sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
     '' +
     # We're kludging a glibc bindist into working with non-glibc...
     # Here we patch up the use of `__strdup` (part of glibc binary ABI)
