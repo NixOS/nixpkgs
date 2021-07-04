@@ -1,0 +1,45 @@
+diff --git a/Makefile.am b/Makefile.am
+index 50ef4fa..52f8564 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,12 +1,16 @@
+ 
+ ACLOCAL_AMFLAGS = -I m4
+ 
+-SUBDIRS = lib doc tinytest tests
++SUBDIRS = lib doc
+ 
+ if BUILDEXAMPLES
+ SUBDIRS += examples
+ endif
+ 
++if BUILDTESTS
++SUBDIRS += tinytest tests
++endif
++
+ .PHONY: dist-rpm
+ 
+ dist-rpm: distcheck
+diff --git a/configure.ac b/configure.ac
+index 62c5c56..5a42c2a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -111,6 +111,18 @@ doexamples=yes
+ 
+ AM_CONDITIONAL(BUILDEXAMPLES, test x$doexamples = xyes)
+ 
++dotests=yes
++
++AC_ARG_ENABLE(tests,
++AS_HELP_STRING([--disable-tests], [Disable building of the tests]),
++[if test "$enableval" = "no"; then dotests="no"; fi],
++[
++dotests=yes
++]
++)
++
++AM_CONDITIONAL(BUILDTESTS, test x$dotests = xyes)
++
+ dnl Check for MinGW. Workaround for libtool's DLL_EXPORT stupidity.
+ 
+ case "$target" in
