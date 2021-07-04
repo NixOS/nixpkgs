@@ -22489,6 +22489,8 @@ in
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
+  rime-data = callPackage ../data/misc/rime-data { };
+
   route159 = callPackage ../data/fonts/route159 { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
