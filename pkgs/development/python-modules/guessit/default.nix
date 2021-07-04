@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestrunner
-, dateutil
+, python-dateutil
 , babelfish
 , rebulk
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
   buildInputs = [ pytestrunner ];
   propagatedBuildInputs = [
-    dateutil babelfish rebulk
+    python-dateutil babelfish rebulk
   ];
 
   meta = {

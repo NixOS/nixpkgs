@@ -5,7 +5,7 @@
 , attrs
 , colorlog
 , csvw
-, dateutil
+, python-dateutil
 , tabulate
 , mock
 , postgresql
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     tabulate
     colorlog
     attrs

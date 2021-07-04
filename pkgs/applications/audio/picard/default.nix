@@ -40,7 +40,7 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     chromaprint
-    dateutil
+    python-dateutil
     discid
     fasteners
     mutagen

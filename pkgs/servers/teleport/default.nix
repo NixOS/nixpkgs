@@ -11,14 +11,14 @@ in
 
 buildGoModule rec {
   pname = "teleport";
-  version = "6.2.5";
+  version = "6.2.7";
 
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-OBo1TWN7KxI7DAUcRLwXXQjErhhgpLBrJBR55ewKiYw=";
+    sha256 = "0ychs2pqi3awbr0vraz0ksddwk5hihrd1d9raq8mxyw5dz5124ki";
   };
 
   vendorSha256 = null;

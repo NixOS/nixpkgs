@@ -14,7 +14,7 @@
 , psutil
 , pyelftools
 , pyserial
-, dateutil
+, python-dateutil
 , requests
 , rpyc
 , tox
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     psutil
     pyelftools
     pyserial
-    dateutil
+    python-dateutil
     requests
     rpyc
     tox

@@ -4,7 +4,7 @@
 , pythonOlder
 , pybind11
 , pytestCheckHook
-, dateutil
+, python-dateutil
 , doxygen
 , python
 , pelican
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
 
-    dateutil
+    python-dateutil
     doxygen
     python
     pelican

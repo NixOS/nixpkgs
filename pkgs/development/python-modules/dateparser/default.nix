@@ -2,7 +2,7 @@
 , buildPythonPackage
 , isPy3k
 , fetchFromGitHub
-, dateutil
+, python-dateutil
 , pytz
 , regex
 , tzlocal
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # install_requires
-    dateutil pytz regex tzlocal
+    python-dateutil pytz regex tzlocal
     # extra_requires
     hijri-converter convertdate
   ];

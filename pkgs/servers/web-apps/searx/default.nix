@@ -33,7 +33,7 @@ toPythonModule (buildPythonApplication rec {
   propagatedBuildInputs = [
     Babel
     certifi
-    dateutil
+    python-dateutil
     flask
     flaskbabel
     gevent

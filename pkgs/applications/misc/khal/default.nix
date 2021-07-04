@@ -18,7 +18,7 @@ with python3.pkgs; buildPythonApplication rec {
     click
     click-log
     configobj
-    dateutil
+    python-dateutil
     icalendar
     lxml
     pkgs.vdirsyncer

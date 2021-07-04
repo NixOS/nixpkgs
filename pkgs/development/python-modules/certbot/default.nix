@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , ConfigArgParse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
 , dialog, gnureadline
-, pytest_xdist, pytestCheckHook, dateutil
+, pytest_xdist, pytestCheckHook, python-dateutil
 }:
 
 buildPythonPackage rec {
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   buildInputs = [ dialog gnureadline ];
 
   checkInputs = [
-    dateutil
+    python-dateutil
     pytestCheckHook
     pytest_xdist
   ];

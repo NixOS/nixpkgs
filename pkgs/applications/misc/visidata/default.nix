@@ -2,7 +2,7 @@
 , lib
 , buildPythonApplication
 , fetchFromGitHub
-, dateutil
+, python-dateutil
 , pandas
 , requests
 , lxml
@@ -36,7 +36,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     # from visidata/requirements.txt
     # packages not (yet) present in nixpkgs are commented
-    dateutil
+    python-dateutil
     pandas
     requests
     lxml

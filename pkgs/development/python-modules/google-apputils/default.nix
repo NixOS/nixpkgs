@@ -4,7 +4,7 @@
 , isPy3k
 , pytz
 , gflags
-, dateutil
+, python-dateutil
 , mox
 , python
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sed -i '/ez_setup/d' setup.py
   '';
 
-  propagatedBuildInputs = [ pytz gflags dateutil mox ];
+  propagatedBuildInputs = [ pytz gflags python-dateutil mox ];
 
   checkPhase = ''
     ${python.executable} setup.py google_test

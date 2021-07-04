@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pycurl, dateutil, configobj, sqlalchemy, sdnotify, flask }:
+{ lib, buildPythonApplication, fetchFromGitHub, pycurl, python-dateutil, configobj, sqlalchemy, sdnotify, flask }:
 
 buildPythonApplication rec {
   pname = "pyca";
@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     pycurl
-    dateutil
+    python-dateutil
     configobj
     sqlalchemy
     sdnotify

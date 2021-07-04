@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     pynzb
     pyparsing
     PyRSS2Gen
-    dateutil
+    python-dateutil
     pyyaml
     rebulk
     requests
