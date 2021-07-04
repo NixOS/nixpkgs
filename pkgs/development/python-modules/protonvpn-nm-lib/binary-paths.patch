@@ -1,0 +1,25 @@
+--- a/protonvpn_nm_lib/core/subprocess_wrapper.py
++++ b/protonvpn_nm_lib/core/subprocess_wrapper.py
+@@ -44,11 +44,9 @@
+         binary_short_name => full secure path.
+         """
+         # Look for root-owned directories in the system path in order
+-        for path in os.environ.get('PATH', '').split(os.path.pathsep):
++        for path in "@path@".split(os.path.pathsep):
+             if not os.path.isdir(path):
+                 continue
+-            if not self.is_root_owned(path):
+-                continue
+ 
+             # Check for all the binaries that we haven't matched yet
+             for binary in self._acceptable_binaries.difference(
+@@ -58,9 +56,6 @@
+                 if not os.path.isfile(binary_path_candidate):
+                     continue
+ 
+-                if not self.is_root_owned(binary_path_candidate):
+-                    continue
+-
+                 # We're happy with that one, store it
+                 self._path_to_binaries[binary] = binary_path_candidate
+ 

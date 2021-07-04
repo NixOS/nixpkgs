@@ -5591,6 +5591,8 @@ in {
 
   proton-client = callPackage ../development/python-modules/proton-client { };
 
+  protonvpn-nm-lib = callPackage ../development/python-modules/protonvpn-nm-lib { };
+
   prov = callPackage ../development/python-modules/prov { };
 
   prox-tv = callPackage ../development/python-modules/prox-tv { };

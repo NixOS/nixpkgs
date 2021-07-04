@@ -1,0 +1,8 @@
+--- a/protonvpn_nm_lib/__init__.py
++++ b/protonvpn_nm_lib/__init__.py
+@@ -0,0 +1,5 @@
++import gi
++gi.require_version('GIRepository', '2.0')
++from gi.repository import GIRepository
++repo = GIRepository.Repository.get_default()
++repo.prepend_search_path('@networkmanager_path@')
