@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl, perl, gcc
+, ncurses5
 , ncurses6, gmp, glibc, libiconv, numactl
 , llvmPackages
 
@@ -58,7 +59,11 @@ let
   useLLVM = !stdenv.targetPlatform.isx86;
 
   libPath = lib.makeLibraryPath ([
-    ncurses6 gmp
+    # The i686-linux bindist provided by GHC HQ is currently built on Debian 9,
+    # which link it against `libtinfo.so.5` (ncurses 5).
+    # Other bindists are linked `libtinfo.so.6` (ncurses 6).
+    (if stdenv.hostPlatform.system == "i686-linux" then ncurses5 else ncurses6)
+    gmp
   ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv
     ++ lib.optional (stdenv.hostPlatform.isAarch64) numactl);
 
@@ -124,7 +129,6 @@ stdenv.mkDerivation rec {
     # Rename needed libraries and binaries, fix interpreter
     lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 -exec patchelf \
-          --replace-needed libncurses${lib.optionalString stdenv.is64bit "w"}.so.6 libncurses.so \
           --interpreter ${glibcDynLinker} {} \;
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
