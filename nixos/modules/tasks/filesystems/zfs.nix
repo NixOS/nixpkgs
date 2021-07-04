@@ -27,7 +27,7 @@ let
 
   fsToPool = fs: datasetToPool fs.device;
 
-  zfsFilesystems = filter (x: x.fsType == "zfs") config.system.build.fileSystems;
+  zfsFilesystems = filter (x: x.fsType == "zfs") config.system.fileSystems;
 
   allPools = unique ((map fsToPool zfsFilesystems) ++ cfgZfs.extraPools);
 
@@ -498,7 +498,7 @@ in
 
       systemd.services = let
         getPoolFilesystems = pool:
-          filter (x: x.fsType == "zfs" && (fsToPool x) == pool) config.system.build.fileSystems;
+          filter (x: x.fsType == "zfs" && (fsToPool x) == pool) config.system.fileSystems;
 
         getPoolMounts = pool:
           let
