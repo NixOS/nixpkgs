@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "amass";
-  version = "3.11.2";
+  version = "3.13.2";
 
   src = fetchFromGitHub {
     owner = "OWASP";
@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-3J4yT7GTuVzkxMb+fCD3S9u0XBHa4Y0W+BnkDJ4PhWI=";
   };
 
-  vendorSha256 = "sha256-8GzzihKhrf71lLKgb2i3NnmSctvKb95V5pOGoWAgclk=";
+  vendorSha256 = "0nbj41ha31lkwraxwvyavdr94y9nnxl6z85jjkszxbd12a5g6v7h";
 
   outputs = [ "out" "wordlists" ];
 
