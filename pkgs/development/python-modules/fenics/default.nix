@@ -53,10 +53,9 @@ buildPythonPackage rec {
 
   doCheck = false; # Tries to orte_ess_init and call ssh to localhost
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for the DOLFIN FEM compiler";
     homepage = "https://fenicsproject.org/";
-    platforms = lib.platforms.all;
-    license = lib.licenses.lgpl3;
+    license = with licenses; [ lgpl3Plus ];
   };
 }
