@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl
-, linuxHeaders ? null
+, linuxHeaders
 , useBSDCompatHeaders ? true
 }:
 let

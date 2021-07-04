@@ -2,8 +2,8 @@
 , fetchurl, binutils ? null, bison, autoconf, util-linux
 
 # patch for cygwin requires readline support
-, interactive ? stdenv.isCygwin, readline70 ? null
-, withDocs ? false, texinfo ? null
+, interactive ? stdenv.isCygwin, readline70
+, withDocs ? false, texinfo
 }:
 
 with lib;

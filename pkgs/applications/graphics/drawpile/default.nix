@@ -27,7 +27,7 @@
 , libmicrohttpd
 , libsodium
 , withSystemd ? stdenv.isLinux
-, systemd ? null
+, systemd
 
 # options
 , buildClient ? true

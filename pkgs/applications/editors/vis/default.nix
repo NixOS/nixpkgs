@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper, makeDesktopItem
 , ncurses, libtermkey, lpeg, lua
-, acl ? null, libselinux ? null
+, acl, libselinux
 }:
 
 stdenv.mkDerivation rec {

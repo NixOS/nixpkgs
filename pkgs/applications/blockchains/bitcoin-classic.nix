@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, qtbase ? null, qttools ? null, util-linux, protobuf, qrencode, libevent
+, zlib, miniupnpc, qtbase, qttools, util-linux, protobuf, qrencode, libevent
 , withGui }:
 
 with lib;

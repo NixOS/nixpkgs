@@ -1,15 +1,15 @@
 { lib, stdenv, fetchFromGitHub, cmake, libsndfile, libsamplerate, flex, bison, boost, gettext
-, alsa-lib ? null
-, libpulseaudio ? null
-, libjack2 ? null
-, liblo ? null
-, ladspa-sdk ? null
-, fluidsynth ? null
-# , gmm ? null  # opcodes don't build with gmm 5.1
-, eigen ? null
-, curl ? null
+, alsa-lib
+, libpulseaudio
+, libjack2
+, liblo
+, ladspa-sdk
+, fluidsynth
+# , gmm  # opcodes don't build with gmm 5.1
+, eigen
+, curl
 , tcltk ? null
-, fltk ? null
+, fltk
 }:
 
 stdenv.mkDerivation rec {

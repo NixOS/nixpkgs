@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkg-config, systemd ? null, libobjc, IOKit, fetchpatch }:
+{ stdenv, lib, fetchurl, pkg-config, systemd, libobjc, IOKit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "libusb-1.0.19";

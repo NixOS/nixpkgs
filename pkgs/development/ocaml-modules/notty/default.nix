@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, ocb-stubblr
 , result, uucp, uuseg, uutf
-, lwt     ? null }:
+, lwt     }:
 
 with lib;
 

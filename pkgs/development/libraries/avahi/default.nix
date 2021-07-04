@@ -1,13 +1,13 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, libdaemon, dbus, perlPackages
 , expat, gettext, intltool, glib, libiconv, writeShellScriptBin, libevent
 , nixosTests
-, gtk3Support ? false, gtk3 ? null
-, qt4 ? null
+, gtk3Support ? false, gtk3
+, qt4
 , qt4Support ? false
-, qt5 ? null
+, qt5
 , qt5Support ? false
 , withLibdnssdCompat ? false
-, python ? null
+, python
 , withPython ? false }:
 
 assert qt4Support -> qt4 != null;

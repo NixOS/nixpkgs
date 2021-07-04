@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, bison, flex, libsepol, libselinux, bzip2, audit
-, enablePython ? true, swig ? null, python ? null
+, enablePython ? true, swig, python
 }:
 
 with lib;

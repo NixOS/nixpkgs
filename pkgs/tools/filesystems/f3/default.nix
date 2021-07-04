@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, parted, systemd ? null
+, parted, systemd
 }:
 
 stdenv.mkDerivation rec {

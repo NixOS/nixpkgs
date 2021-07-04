@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, which, autoconf, coq, coquelicot, flocq, bignums ? null, version ? null }:
+{ lib, mkCoqDerivation, which, autoconf, coq, coquelicot, flocq, bignums, version ? null }:
 
 with lib; mkCoqDerivation {
   pname = "interval";

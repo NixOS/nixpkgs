@@ -10,21 +10,21 @@
 , readline
 # configureable options
 , firewallType ? "iptables" # or "nftables"
-, iptables ? null
-, libnftnl ? null # for nftables
+, iptables
+, libnftnl # for nftables
 , dnsType ? "internal" # or "systemd-resolved"
 # optional features which are turned *on* by default
 , enableOpenconnect ? true
-, openconnect ? null
+, openconnect
 , enableOpenvpn ? true
-, openvpn ? null
+, openvpn
 , enableVpnc ? true
-, vpnc ? true
+, vpnc
 , enablePolkit ? true
-, polkit ? null
+, polkit
 , enablePptp ? true
-, pptp ? null
-, ppp ? null
+, pptp
+, ppp
 , enableLoopback ? true
 , enableEthernet ? true
 , enableWireguard ? true

@@ -23,7 +23,7 @@
 , pciutils
 , procps
 , util-linux
-, pulseaudioSupport ? true, libpulseaudio ? null
+, pulseaudioSupport ? true, libpulseaudio
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;

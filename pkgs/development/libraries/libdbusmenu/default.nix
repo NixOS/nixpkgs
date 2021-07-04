@@ -2,7 +2,7 @@
 , pkg-config, intltool
 , glib, dbus-glib, json-glib
 , gobject-introspection, vala
-, gtkVersion ? null, gtk2 ? null, gtk3 ? null }:
+, gtkVersion ? null, gtk2, gtk3 }:
 
 with lib;
 

@@ -46,7 +46,7 @@
 , bzip2
 , pcre2
 , e2fsprogs
-, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, linuxHeaders
 , gnu-efi
 , iptables
 , withSelinux ? false

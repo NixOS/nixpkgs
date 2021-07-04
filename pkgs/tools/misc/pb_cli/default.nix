@@ -1,5 +1,5 @@
 { screenshots ? true, video ? false, clipboard ? true
-, lib, stdenv, jq, curl, fetchFromGitHub, makeWrapper, maim ? null, xclip ? null, capture ? null }:
+, lib, stdenv, jq, curl, fetchFromGitHub, makeWrapper, maim, xclip, capture }:
 
 assert screenshots -> maim != null;
 assert video -> capture != null;

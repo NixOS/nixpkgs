@@ -1,7 +1,7 @@
-{ lib, fetchFromGitHub, cmake, pkg-config, alsa-lib ? null, fftwFloat, fltk13
-, fluidsynth_1 ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
-, libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
-, qtbase, qtx11extras, qttools, SDL ? null, mkDerivation }:
+{ lib, fetchFromGitHub, cmake, pkg-config, alsa-lib, fftwFloat, fltk13
+, fluidsynth_1, lame, libgig, libjack2, libpulseaudio
+, libsamplerate, libsoundio, libsndfile, libvorbis, portaudio
+, qtbase, qtx11extras, qttools, SDL, mkDerivation }:
 
 mkDerivation rec {
   pname = "lmms";

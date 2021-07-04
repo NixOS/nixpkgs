@@ -1,6 +1,6 @@
 { lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
 , libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison, runtimeShell
-, pam ? null, glibcCross ? null
+, pam, glibcCross
 }:
 
 let

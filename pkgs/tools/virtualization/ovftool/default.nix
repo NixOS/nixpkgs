@@ -1,4 +1,4 @@
-{ lib, stdenv, system ? builtins.currentSystem, ovftoolBundles ? {}
+{ lib, stdenv, system, ovftoolBundles ? {}
 , requireFile, buildFHSUserEnv, patchelf, autoPatchelfHook, makeWrapper, nix, unzip
 , glibc, c-ares, openssl_1_0_2, curl, expat, icu60, xercesc, zlib
 }:

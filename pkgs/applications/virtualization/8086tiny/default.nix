@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
-, localBios ? true, nasm ? null
-, sdlSupport ? true, SDL ? null }:
+, localBios ? true, nasm
+, sdlSupport ? true, SDL }:
 
 assert sdlSupport -> (SDL != null);
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib
 , pandoc, pkg-config, makeWrapper, curl, openssl, tpm2-tss, libuuid
-, abrmdSupport ? true, tpm2-abrmd ? null }:
+, abrmdSupport ? true, tpm2-abrmd }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tools";

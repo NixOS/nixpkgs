@@ -5,8 +5,10 @@
 , eigen
 , hdf5
 , mpiSupport ? hdf5.mpiSupport
-, mpi ? hdf5.mpi
 }:
+let
+  mpi = hdf5.mpi;
+in
 
 assert mpiSupport -> mpi != null;
 

@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
 , pcre, liblinear, libssh2
 , graphicalSupport ? false
-, libX11 ? null
-, gtk2 ? null
-, python2 ? null
-, makeWrapper ? null
+, libX11
+, gtk2
+, python2
+, makeWrapper
 , withLua ? true
 }:
 

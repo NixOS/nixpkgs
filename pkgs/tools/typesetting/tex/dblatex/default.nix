@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, python3, libxslt, texlive
-, enableAllFeatures ? false, imagemagick ? null, transfig ? null, inkscape ? null, fontconfig ? null, ghostscript ? null
+, enableAllFeatures ? false, imagemagick, transfig, inkscape, fontconfig, ghostscript
 
 , tex ? texlive.combine { # satisfy all packages that ./configure mentions
     inherit (texlive) scheme-basic epstopdf anysize appendix changebar

@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, pkg-config, fontconfig, autoreconfHook, DiskArbitration
-, withJava ? false, jdk ? null, ant ? null
-, withAACS ? false, libaacs ? null
-, withBDplus ? false, libbdplus ? null
-, withMetadata ? true, libxml2 ? null
-, withFonts ? true, freetype ? null
+, withJava ? false, jdk, ant
+, withAACS ? false, libaacs
+, withBDplus ? false, libbdplus
+, withMetadata ? true, libxml2
+, withFonts ? true, freetype
 }:
 
 with lib;

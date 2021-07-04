@@ -1,6 +1,6 @@
 { stdenv, lib, makeWrapper, p7zip
 , gawk, util-linux, xorg, glib, dbus-glib, zlib
-, kernel ? null, libsOnly ? false
+, kernel, libsOnly ? false
 , undmg, fetchurl
 }:
 

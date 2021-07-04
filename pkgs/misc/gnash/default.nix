@@ -4,24 +4,24 @@
 , libpng, libjpeg, giflib, speex, atk
 
 # renderers
-, enableAGG    ? true,  agg   ? null
-, enableCairo  ? false, cairo ? null
+, enableAGG    ? true,  agg
+, enableCairo  ? false, cairo
 , enableOpenGL ? false
-, libGLU ? null
-, libGL  ? null
+, libGLU
+, libGL
 
 # GUI toolkits
-, enableGTK ? true,  gtk2 ? null, gnome2 ? null
+, enableGTK ? true,  gtk2, gnome2
 , enableSDL ? false
-, enableQt  ? false, qt4  ? null
+, enableQt  ? false, qt4
 
 # media
-, enableFFmpeg   ? true, ffmpeg_2 ? null
+, enableFFmpeg   ? true, ffmpeg_2
 
 # misc
-, enableJemalloc ? true, jemalloc ? null
+, enableJemalloc ? true, jemalloc
 , enableHwAccel  ? true
-, enablePlugins  ? false, xulrunner ? null, npapi_sdk ? null
+, enablePlugins  ? false, xulrunner, npapi_sdk
 }:
 
 with lib;

@@ -2,10 +2,10 @@
 , coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
 , which, procps , qrencode , makeWrapper, pass, symlinkJoin
 
-, xclip ? null, xdotool ? null, dmenu ? null
+, xclip, xdotool, dmenu
 , x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
-, waylandSupport ? false, wl-clipboard ? null
-, ydotool ? null, dmenu-wayland ? null
+, waylandSupport ? false, wl-clipboard
+, ydotool, dmenu-wayland
 
 # For backwards-compatibility
 , tombPluginSupport ? false

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, libdbi
-, libmysqlclient ? null
-, sqlite ? null
-, postgresql ? null
+, libmysqlclient
+, sqlite
+, postgresql
 }:
 
 with lib;

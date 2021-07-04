@@ -2,7 +2,7 @@
 , freetype, harfbuzz, jbig2dec, libjpeg, libX11, mupdf_1_17, ncurses, openjpeg
 , openssl
 
-, imageSupport ? true, imlib2 ? null }:
+, imageSupport ? true, imlib2 }:
 
 let
   package = if imageSupport

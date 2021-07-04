@@ -19,10 +19,10 @@
 , xmlto
 , zip
 
-, dvdisasterSupport ? true, dvdisaster ? null
-, thumbnailSupport ? true, libgnomeui ? null
-, udevSupport ? true, udev ? null
-, dbusSupport ? true, dbus ? null
+, dvdisasterSupport ? true, dvdisaster
+, thumbnailSupport ? true, libgnomeui
+, udevSupport ? true, udev
+, dbusSupport ? true, dbus
 }:
 
 let

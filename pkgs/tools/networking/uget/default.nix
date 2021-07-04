@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, openssl, curl, libnotify,
-  libappindicator-gtk3, gst_all_1, gtk3, dconf, wrapGAppsHook, aria2 ? null
+  libappindicator-gtk3, gst_all_1, gtk3, dconf, wrapGAppsHook, aria2
 }:
 
 stdenv.mkDerivation rec {

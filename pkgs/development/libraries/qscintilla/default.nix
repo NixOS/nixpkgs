@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip
-, qt4 ? null, qmake4Hook ? null
+, qt4, qmake4Hook
 , withQt5 ? false, libsForQt5
 , fixDarwinDylibNames
 }:

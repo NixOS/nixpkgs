@@ -7,9 +7,9 @@
 , procps
 , zlib
 # optional packages that enable certain features
-, acl ? null  # EXT2/EXT3/XFS ACL support
-, jdk8 ? null  # Java GUI
-, lvm2 ? null  # LVM image backup and restore functions
+, acl  # EXT2/EXT3/XFS ACL support
+, jdk8  # Java GUI
+, lvm2  # LVM image backup and restore functions
 # path to `dsm.sys` configuration files
 , dsmSysCli ? "/etc/tsm-client/cli.dsm.sys"
 , dsmSysApi ? "/etc/tsm-client/api.dsm.sys"

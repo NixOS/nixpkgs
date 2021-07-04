@@ -27,15 +27,15 @@
 , callPackage
 , nixosTests
 , withMediaSession ? true
-, gstreamerSupport ? true, gst_all_1 ? null
-, ffmpegSupport ? true, ffmpeg ? null
-, bluezSupport ? true, bluez ? null, sbc ? null, libopenaptx ? null, ldacbt ? null, fdk_aac ? null
+, gstreamerSupport ? true, gst_all_1
+, ffmpegSupport ? true, ffmpeg
+, bluezSupport ? true, bluez, sbc, libopenaptx, ldacbt, fdk_aac
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
 , hsphfpdSupport ? true
-, pulseTunnelSupport ? true, libpulseaudio ? null
-, zeroconfSupport ? true, avahi ? null
+, pulseTunnelSupport ? true, libpulseaudio
+, zeroconfSupport ? true, avahi
 }:
 
 let

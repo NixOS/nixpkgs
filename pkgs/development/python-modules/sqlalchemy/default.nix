@@ -7,7 +7,7 @@
 , greenlet
 , importlib-metadata
 , mock
-, pysqlite ? null
+, pysqlite
 , pytestCheckHook
 }:
 

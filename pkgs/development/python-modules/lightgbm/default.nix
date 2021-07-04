@@ -5,7 +5,7 @@
 , numpy
 , scipy
 , scikit-learn
-, llvmPackages ? null
+, llvmPackages
 }:
 
 buildPythonPackage rec {

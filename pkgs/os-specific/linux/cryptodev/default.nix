@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, kernel ? false }:
+{ fetchFromGitHub, lib, stdenv, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "cryptodev-linux-1.12";

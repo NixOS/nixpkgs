@@ -27,25 +27,25 @@
 , curl
 , blas, lapack
 # These two should use the same lapack and blas as the above
-, qrupdate, arpack, suitesparse ? null
+, qrupdate, arpack, suitesparse
 # If set to true, the above 5 deps are overriden to use the blas and lapack
 # with 64 bit indexes support. If all are not compatible, the build will fail.
 , use64BitIdx ? false
 , libwebp
 , gl2ps
-, ghostscript ? null
-, hdf5 ? null
-, glpk ? null
-, gnuplot ? null
+, ghostscript
+, hdf5
+, glpk
+, gnuplot
 # - Include support for GNU readline:
 , enableReadline ? true
-, readline ? null
+, readline
 # - Build Java interface:
 , enableJava ? true
-, jdk ? null
-, python ? null
+, jdk
+, python
 , overridePlatforms ? null
-, sundials ? null
+, sundials
 # - Packages required for building extra packages.
 , newScope
 , callPackage
@@ -53,14 +53,14 @@
 , makeWrapper
 # - Build Octave Qt GUI:
 , enableQt ? false
-, qtbase ? null
-, qtsvg ? null
-, qtscript ? null
-, qscintilla ? null
-, qttools ? null
+, qtbase
+, qtsvg
+, qtscript
+, qscintilla
+, qttools
 # - JIT compiler for loops:
 , enableJIT ? false
-, llvm ? null
+, llvm
 , libiconv
 , darwin
 }:

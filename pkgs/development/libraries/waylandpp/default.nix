@@ -8,7 +8,7 @@
 , libffi
 , buildPackages
 , docSupport ? true
-, doxygen ? null
+, doxygen
 }:
 
 assert docSupport -> doxygen != null;

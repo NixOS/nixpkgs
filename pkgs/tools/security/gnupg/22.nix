@@ -4,9 +4,8 @@
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
 , guiSupport ? true, enableMinimal ? false
-, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
-, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
-null
+, adns, bzip2, gnutls, libusb1, openldap
+, pcsclite, pinentry, readline, sqlite, zlib
 }:
 
 with lib;

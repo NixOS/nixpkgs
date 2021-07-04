@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, xz, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
 , asciidoc, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
-, jdk ? null, python ? null, systemd, libunwind, which, minizip
+, jdk, python, systemd, libunwind, which, minizip
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
 

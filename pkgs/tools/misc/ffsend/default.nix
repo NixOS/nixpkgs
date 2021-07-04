@@ -3,7 +3,7 @@
 , CoreFoundation, CoreServices, Security, AppKit, libiconv
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
-, xclip ? null, xsel ? null
+, xclip, xsel
 , preferXsel ? false # if true and xsel is non-null, use it instead of xclip
 }:
 

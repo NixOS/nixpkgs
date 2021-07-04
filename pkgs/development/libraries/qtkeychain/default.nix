@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qt4 ? null
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qt4
 , withQt5 ? false, libsForQt5
-, darwin ? null
+, darwin
 , libsecret
 }:
 

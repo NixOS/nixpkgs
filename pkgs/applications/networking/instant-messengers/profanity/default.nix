@@ -2,12 +2,12 @@
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
 , cmocka, libmicrohttpd, expat, sqlite, libmesode, autoconf-archive
 
-, autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
-, notifySupport ? true,         libnotify ? null, gdk-pixbuf ? null
-, traySupport ? true,           gtk2 ? null
-, pgpSupport ? true,            gpgme ? null
-, pythonPluginSupport ? true,   python ? null
-, omemoSupport ? true,          libsignal-protocol-c ? null, libgcrypt ? null
+, autoAwaySupport ? true,       libXScrnSaver, libX11
+, notifySupport ? true,         libnotify, gdk-pixbuf
+, traySupport ? true,           gtk2
+, pgpSupport ? true,            gpgme
+, pythonPluginSupport ? true,   python
+, omemoSupport ? true,          libsignal-protocol-c, libgcrypt
 }:
 
 assert autoAwaySupport     -> libXScrnSaver != null && libX11 != null;

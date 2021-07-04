@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-doc, intltool
 , audit, glib, libusb1, libxml2
 , wrapGAppsHook
-, gstreamer ? null
-, gst-plugins-base ? null
-, gst-plugins-good ? null
-, gst-plugins-bad ? null
-, libnotify ? null
-, gnome ? null
-, gtk3 ? null
+, gstreamer
+, gst-plugins-base
+, gst-plugins-good
+, gst-plugins-bad
+, libnotify
+, gnome
+, gtk3
 , enableUsb ? true
 , enablePacketSocket ? true
 , enableViewer ? true

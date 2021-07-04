@@ -4,7 +4,7 @@
 , util-linux, file, which, groff
 
   # adds support for handling removable media (vifm-media). Linux only!
-, mediaSupport ? false, python3 ? null, udisks2 ? null, lib ? null
+, mediaSupport ? false, python3, udisks2, lib
 }:
 
 let isFullPackage = mediaSupport;

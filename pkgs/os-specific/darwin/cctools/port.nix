@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
 , installShellFiles
 , libuuid
-, libobjc ? null, maloader ? null
+, libobjc, maloader
 , enableTapiSupport ? true, libtapi
 }:
 

@@ -3418,7 +3418,7 @@ in
   arpoison = callPackage ../tools/networking/arpoison { };
 
   asciidoc = callPackage ../tools/typesetting/asciidoc {
-    inherit (python3.pkgs) matplotlib numpy aafigure recursivePthLoader;
+    inherit (python3.pkgs) matplotlib numpy aafigure recursivePthLoader pygments;
     enableStandardFeatures = false;
   };
 
@@ -12737,7 +12737,7 @@ in
     python = python3;
   };
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
-    inherit pkgs lib;
+    inherit pkgs lib poetry;
   };
 
   pipenv = callPackage ../development/tools/pipenv {};

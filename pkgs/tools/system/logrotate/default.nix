@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
-, mailutils ? null
+, mailutils
 , aclSupport ? true, acl
 }:
 

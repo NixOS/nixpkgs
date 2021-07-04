@@ -8,7 +8,7 @@
 { name ? ""
 , lib
 , stdenvNoCC
-, bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, bintools ? null, libc ? null, coreutils, shell ? stdenvNoCC.shell, gnugrep
 , netbsd ? null, netbsdCross ? null
 , sharedLibraryLoader ?
   if libc == null then
@@ -25,7 +25,7 @@
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
-, buildPackages ? {}
+, buildPackages
 , targetPackages ? {}
 , useMacosReexportHack ? false
 

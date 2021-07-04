@@ -11,7 +11,7 @@
 , enableMonitor   ? false    # Support for the Hiawatha Monitor.
 , enableRproxy    ? true     # Reverse proxy support.
 , enableTomahawk  ? false    # Tomahawk, the Hiawatha command shell.
-, enableXslt      ? true, libxml2 ? null, libxslt ? null
+, enableXslt      ? true, libxml2, libxslt
 , enableToolkit   ? true     # The URL Toolkit.
 }:
 

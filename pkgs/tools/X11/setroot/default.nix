@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, libX11, imlib2
-, enableXinerama ? true, libXinerama ? null
+, enableXinerama ? true, libXinerama
 }:
 
 assert enableXinerama -> libXinerama != null;

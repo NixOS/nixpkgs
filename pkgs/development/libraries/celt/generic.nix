@@ -1,5 +1,5 @@
 { lib, stdenv, version, src
-, liboggSupport ? true, libogg ? null # if disabled only the library will be built
+, liboggSupport ? true, libogg # if disabled only the library will be built
 , prePatch ? ""
 , ...
 }:

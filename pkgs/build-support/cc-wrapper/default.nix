@@ -8,15 +8,15 @@
 { name ? ""
 , lib
 , stdenvNoCC
-, cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
-, gccForLibs ? null
-, zlib ? null
+, cc, libc, bintools, coreutils, shell ? stdenvNoCC.shell
+, gccForLibs
+, zlib
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
-, isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
-, buildPackages ? {}
-, libcxx ? null
+, isGNU ? false, isClang ? cc.isClang or false, gnugrep
+, buildPackages
+, libcxx
 }:
 
 with lib;

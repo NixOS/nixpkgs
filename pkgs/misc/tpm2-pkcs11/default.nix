@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, substituteAll
 , pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
 , tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python37, glibc, libyaml
-, abrmdSupport ? true, tpm2-abrmd ? null
+, abrmdSupport ? true, tpm2-abrmd
 }:
 
 stdenv.mkDerivation rec {

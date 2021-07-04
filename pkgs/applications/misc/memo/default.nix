@@ -1,6 +1,6 @@
 { fetchFromGitHub, silver-searcher, tree, man, lib, stdenv,
   git,
-  pandocSupport ? true, pandoc ? null
+  pandocSupport ? true, pandoc
   , ... }:
 
 assert pandocSupport -> pandoc != null;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, libtool, groff, ghostscript, libgcrypt ? null }:
+{ lib, stdenv, fetchurl, boost, libtool, groff, ghostscript, libgcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "srecord";

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchgit
 , cmake, pkgconfig
 , python
-, mpi ? null
+, mpi
 }:
 
 let components = {

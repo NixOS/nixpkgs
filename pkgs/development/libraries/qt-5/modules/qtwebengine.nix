@@ -16,7 +16,7 @@
 , enableProprietaryCodecs ? true
 , gn
 , cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg ? null
+, ffmpeg
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion

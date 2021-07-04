@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, meson, ninja
-, gtk-doc ? null, file, docbook_xsl
+, gtk-doc, file, docbook_xsl
 , buildDevDoc ? gtk-doc != null
 }: let
   inherit (lib) optional optionals;

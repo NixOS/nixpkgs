@@ -2,9 +2,9 @@
 , fetchurl
 , removeReferencesTo
 , cpp ? false
-, gfortran ? null
-, zlib ? null
-, szip ? null
+, gfortran
+, zlib
+, szip
 , mpiSupport ? false
 , mpi
 , enableShared ? !stdenv.hostPlatform.isStatic

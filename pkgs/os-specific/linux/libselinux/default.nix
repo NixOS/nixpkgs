@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pcre, pkg-config, libsepol
-, enablePython ? true, swig ? null, python3 ? null
+, enablePython ? true, swig, python3
 , fts
 }:
 

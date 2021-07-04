@@ -3,7 +3,7 @@
 , libwebp, libxml2, proj, python, sqlite, zlib
 
 # supply a postgresql package to enable the PostGIS input plugin
-, postgresql ? null
+, postgresql
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
 { stdenv, lib, fetchgit, cmake, llvmPackages, boost, python
-, gocode ? null
-, godef ? null
-, gotools ? null
-, nodePackages ? null
-, rustracerd ? null
-, fixDarwinDylibNames, Cocoa ? null
+, gocode
+, godef
+, gotools
+, nodePackages
+, rustracerd
+, fixDarwinDylibNames, Cocoa
 }:
 
 stdenv.mkDerivation {

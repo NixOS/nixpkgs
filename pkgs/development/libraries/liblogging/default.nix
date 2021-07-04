@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config
-, systemd ? null
+, systemd
 }:
 
 stdenv.mkDerivation rec {

@@ -4,7 +4,7 @@
 # imlib2 can load images from ID3 tags.
 , libid3tag
 , freetype , bzip2, pkg-config
-, x11Support ? true, xlibsWrapper ? null
+, x11Support ? true, xlibsWrapper
 }:
 
 let

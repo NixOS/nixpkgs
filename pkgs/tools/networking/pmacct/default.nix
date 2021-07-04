@@ -6,12 +6,12 @@
 , libpcap
 
 # Optional Dependencies
-, zlib ? null
-, withJansson ? true, jansson ? null
-, withNflog ? true, libnetfilter_log ? null
-, withSQLite ? true, sqlite ? null
-, withPgSQL ? true, postgresql ? null
-, withMysql ? true, libmysqlclient ? null }:
+, zlib
+, withJansson ? true, jansson
+, withNflog ? true, libnetfilter_log
+, withSQLite ? true, sqlite
+, withPgSQL ? true, postgresql
+, withMysql ? true, libmysqlclient }:
 
 assert withJansson -> jansson != null;
 assert withNflog -> libnetfilter_log != null;

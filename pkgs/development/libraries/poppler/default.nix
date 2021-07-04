@@ -23,8 +23,8 @@
 , zlib
 , withData ? true, poppler_data
 , qt5Support ? false, libsForQt5
-, introspectionSupport ? false, gobject-introspection ? null
-, utils ? false, nss ? null
+, introspectionSupport ? false, gobject-introspection
+, utils ? false, nss
 , minimal ? false
 , suffix ? "glib"
 }:

@@ -1,7 +1,7 @@
-{ fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook, wrapQtAppsHook ? null
+{ fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook, wrapQtAppsHook
 , openssl, db48, boost, zlib, miniupnpc, gmp
 , qrencode, glib, protobuf, yasm, libevent
-, util-linux, qtbase ? null, qttools ? null
+, util-linux, qtbase, qttools
 , enableUpnp ? false
 , disableWallet ? false
 , disableDaemon ? false

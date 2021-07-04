@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, autoreconfHook
 , ncurses #acinclude.m4 wants headers for tgetent().
 , historySupport ? false
-, readline ? null
+, readline
 }:
 
 stdenv.mkDerivation rec {

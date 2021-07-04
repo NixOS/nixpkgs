@@ -2,7 +2,7 @@
 , lib
 , substituteAll
 , aspellWithDicts
-, at-spi2-core ? null
+, at-spi2-core
 , atspiSupport ? true
 , bash
 , glib

@@ -2,7 +2,7 @@
 , libgcrypt, libgpgerror, libtasn1
 
 # Optional Dependencies
-, pam ? null, libidn ? null, gnutls ? null
+, pam, libidn, gnutls
 }:
 
 let

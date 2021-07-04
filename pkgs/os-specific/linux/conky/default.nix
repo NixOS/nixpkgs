@@ -10,31 +10,31 @@
 # optional features with extra dependencies
 
 # ouch, this is ugly, but this gives the man page
-, docsSupport         ? true, docbook2x, libxslt ? null
-                            , man ? null, less ? null
-                            , docbook_xsl ? null , docbook_xml_dtd_44 ? null
+, docsSupport         ? true, docbook2x, libxslt
+                            , man, less
+                            , docbook_xsl , docbook_xml_dtd_44
 
-, ncursesSupport      ? true      , ncurses       ? null
-, x11Support          ? true      , xlibsWrapper           ? null
-, xdamageSupport      ? x11Support, libXdamage    ? null
+, ncursesSupport      ? true      , ncurses
+, x11Support          ? true      , xlibsWrapper
+, xdamageSupport      ? x11Support, libXdamage
 , doubleBufferSupport ? x11Support
-, imlib2Support       ? x11Support, imlib2        ? null
+, imlib2Support       ? x11Support, imlib2
 
-, luaSupport          ? true      , lua           ? null
+, luaSupport          ? true      , lua
 , luaImlib2Support    ? luaSupport && imlib2Support
-, luaCairoSupport     ? luaSupport && x11Support, cairo ? null
-, toluapp ? null
+, luaCairoSupport     ? luaSupport && x11Support, cairo
+, toluapp
 
-, wirelessSupport     ? true      , wirelesstools ? null
-, nvidiaSupport       ? false     , libXNVCtrl ? null
-, pulseSupport        ? config.pulseaudio or false, libpulseaudio ? null
+, wirelessSupport     ? true      , wirelesstools
+, nvidiaSupport       ? false     , libXNVCtrl
+, pulseSupport        ? config.pulseaudio or false, libpulseaudio
 
-, curlSupport         ? true      , curl ? null
+, curlSupport         ? true      , curl
 , rssSupport          ? curlSupport
 , weatherMetarSupport ? curlSupport
 , weatherXoapSupport  ? curlSupport
-, journalSupport      ? true, systemd ? null
-, libxml2 ? null
+, journalSupport      ? true, systemd
+, libxml2
 }:
 
 assert docsSupport         -> docbook2x != null && libxslt != null

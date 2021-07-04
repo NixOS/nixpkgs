@@ -2,7 +2,7 @@
 , avahiSupport ? false # build support for Avahi in libinfinity
 , lib, stdenv, fetchurl, pkg-config, glib, libxml2, gnutls, gsasl
 , gobject-introspection
-, gtk3 ? null, gtk-doc, docbook_xsl, docbook_xml_dtd_412, avahi ? null, libdaemon, libidn, gss
+, gtk3, gtk-doc, docbook_xsl, docbook_xml_dtd_412, avahi, libdaemon, libidn, gss
 , libintl }:
 
 assert avahiSupport -> avahi != null;

@@ -3,7 +3,7 @@
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
 , withInternalSeabios ? true
-, withSeabios ? !withInternalSeabios, seabios ? null
+, withSeabios ? !withInternalSeabios, seabios
 , withInternalOVMF ? false # FIXME: tricky to build
 , withOVMF ? false, OVMF
 , withLibHVM ? true

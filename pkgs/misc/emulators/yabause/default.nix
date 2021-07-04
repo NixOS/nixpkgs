@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl, cmake, pkg-config, qtbase, qt5, libGLU, libGL
-, freeglut ? null, openal ? null, SDL2 ? null }:
+, freeglut, openal, SDL2 }:
 
 mkDerivation rec {
   pname = "yabause";

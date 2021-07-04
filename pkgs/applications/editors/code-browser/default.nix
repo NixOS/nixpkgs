@@ -7,7 +7,7 @@
 , gtk3
 , pkg-config
 , withQt ? false
-, withGtk ? false, wrapQtAppsHook ? null
+, withGtk ? false, wrapQtAppsHook
 }:
 stdenv.mkDerivation rec {
   pname = "code-browser";

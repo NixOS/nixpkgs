@@ -1,4 +1,4 @@
-{ buildEnv, indilib ? indilib, pname ? "indi-with-drivers", version ? null, extraDrivers ? null }:
+{ buildEnv, indilib, pname ? "indi-with-drivers", version, extraDrivers }:
 
 buildEnv {
   name = "${pname}-${version}";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
+, ncurses, perl, pam, systemd, minimal ? false }:
 
 stdenv.mkDerivation rec {
   pname = "util-linux";

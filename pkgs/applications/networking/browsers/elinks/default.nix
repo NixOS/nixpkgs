@@ -2,9 +2,9 @@
 , brotli, zstd, xz, openssl, autoreconfHook, gettext, pkg-config, libev
 , gpm, libidn, tre, expat
 , # Incompatible licenses, LGPLv3 - GPLv2
-  enableGuile        ? false,                                         guile ? null
-, enablePython       ? false,                                         python ? null
-, enablePerl         ? (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
+  enableGuile        ? false,                                         guile
+, enablePython       ? false,                                         python
+, enablePerl         ? (stdenv.hostPlatform == stdenv.buildPlatform), perl
 # re-add javascript support when upstream supports modern spidermonkey
 }:
 

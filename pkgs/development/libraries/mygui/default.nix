@@ -1,5 +1,5 @@
 {  lib, stdenv, fetchFromGitHub, libX11, cmake, ois, freetype, libuuid,
-   boost, pkg-config, withOgre ? false, ogre ? null, libGL, libGLU ? null } :
+   boost, pkg-config, withOgre ? false, ogre, libGL, libGLU } :
 
 let
   renderSystem = if withOgre then "3" else "4";

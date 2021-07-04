@@ -28,8 +28,8 @@
 , libpulseaudio
 , libuuid
 , systemd
-, flite ? null
-, libXxf86vm ? null
+, flite
+, libXxf86vm
 }:
 let
   desktopItem = makeDesktopItem {

@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
-, libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
-, libdbi ? null, net-snmp ? null, libuuid ? null, curl ? null, gnutls ? null
-, libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
-, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
-, libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null, mongoc ? null
-, libmaxminddb ? null
-, nixosTests ? null
+, libkrb5, systemd, jemalloc, libmysqlclient, postgresql
+, libdbi, net-snmp, libuuid, curl, gnutls
+, libgcrypt, liblognorm, openssl, librelp, libksi
+, liblogging, libnet, hadoop, rdkafka
+, libmongo-client, czmq, rabbitmq-c, hiredis, mongoc
+, libmaxminddb
+, nixosTests
 }:
 
 with lib;

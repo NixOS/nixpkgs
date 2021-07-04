@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, nlohmann_json,
   libtoxcore, libsodium, libcap, zeromq,
-  systemd ? null }:
+  systemd }:
 
 with lib;
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, utmp, pam }:
 
 stdenv.mkDerivation rec {
   pname = "screen";

@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, alsa-lib, file, fluidsynth, jack2,
   liblo, libpulseaudio, libsndfile, pkg-config, python3Packages,
   which, withFrontend ? true,
-  withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
-  withGtk2 ? true, gtk2 ? null,
-  withGtk3 ? true, gtk3 ? null }:
+  withQt ? true, qtbase, wrapQtAppsHook,
+  withGtk2 ? true, gtk2,
+  withGtk3 ? true, gtk3 }:
 
 with lib;
 

@@ -2,11 +2,11 @@
 , fetchFromGitHub
 , autoPatchelfHook
 , libusb-compat-0_1
-, readline ? null
+, readline
 , enableReadline ? true
-, hidapi ? null
-, pkg-config ? null
-, mspds ? null
+, hidapi
+, pkg-config
+, mspds
 , enableMspds ? false
 }:
 

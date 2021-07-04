@@ -15,28 +15,28 @@
   # we opt to always build everything unlike our usual policy.
   enableShared ? true
 , enableLTO ? true
-, texinfo ? null
-, perl ? null # optional, for texi2pod (then pod2man); required for Java
+, texinfo
+, perl # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, libmpc, gettext, which, patchelf
 , libelf                      # optional, for link-time optimizations (LTO)
-, cloog ? null, isl ? null # optional, for the Graphite optimization framework.
-, zlib ? null, boehmgc ? null
-, zip ? null, unzip ? null, pkg-config ? null
-, gtk2 ? null, libart_lgpl ? null
-, libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
-, libXrender ? null, xorgproto ? null
-, libXrandr ? null, libXi ? null
+, cloog, isl # optional, for the Graphite optimization framework.
+, zlib, boehmgc
+, zip, unzip, pkg-config
+, gtk2, libart_lgpl ? null
+, libX11, libXt, libSM, libICE, libXtst
+, libXrender, xorgproto
+, libXrandr, libXi
 , x11Support ? langJava
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
-, libcCross ? null
-, threadsCross ? null # for MinGW
+, libcCross
+, threadsCross # for MinGW
 , crossStageStatic ? false
 , # Strip kills static libs of other archs (hence no cross)
   stripped ? stdenv.hostPlatform == stdenv.buildPlatform
           && stdenv.targetPlatform == stdenv.hostPlatform
-, gnused ? null
+, gnused
 , buildPackages
 }:
 

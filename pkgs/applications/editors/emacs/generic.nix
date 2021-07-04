@@ -13,15 +13,15 @@
 , sigtool, jansson, harfbuzz
 , dontRecurseIntoAttrs ,emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
-, systemd ? null
+, systemd
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
-, withGTK2 ? false, gtk2-x11 ? null
-, withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
-, withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
-, withMotif ? false, motif ? null
+, withGTK2 ? false, gtk2-x11
+, withGTK3 ? true, gtk3-x11, gsettings-desktop-schemas
+, withXwidgets ? false, webkitgtk, wrapGAppsHook, glib-networking
+, withMotif ? false, motif
 , withCsrc ? true
-, srcRepo ? false, autoreconfHook ? null, texinfo ? null
+, srcRepo ? false, autoreconfHook, texinfo
 , siteStart ? ./site-start.el
 , nativeComp ? false
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)

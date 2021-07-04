@@ -2,8 +2,8 @@
 , stdenv
 , fetchurl
 , pkg-config
-, openssl ? null
-, gnutls ? null
+, openssl
+, gnutls
 , gmp
 , libxml2
 , stoken

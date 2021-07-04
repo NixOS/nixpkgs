@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, gettext, pkg-config, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
 , python3, lzip
-, libpsl ? null
-, openssl ? null }:
+, libpsl
+, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "wget";

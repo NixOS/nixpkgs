@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , mock, pytest, pytest-runner
-, configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing ? null, importlib-metadata
+, configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing, importlib-metadata
 }:
 
 buildPythonPackage rec {

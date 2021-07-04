@@ -13,10 +13,10 @@
 , acl
 , gmp
 , darwin
-, libusb1 ? null
-, gnutls ? null
-, avahi ? null
-, libpaper ? null
+, libusb1
+, gnutls
+, avahi
+, libpaper
 , coreutils
 }:
 

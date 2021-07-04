@@ -1,39 +1,39 @@
 { fetchurl, lib, stdenv, python3
 , fetchFromGitHub, autoreconfHook
 , enableStandardFeatures ? false
-, sourceHighlight ? null
-, highlight ? null
-, pygments ? null
-, graphviz ? null
-, texlive ? null
-, dblatexFull ? null
-, libxslt ? null
-, w3m ? null
-, lynx ? null
-, imagemagick ? null
-, lilypond ? null
-, libxml2 ? null
-, docbook_xml_dtd_45 ? null
-, docbook_xsl_ns ? null
-, docbook_xsl ? null
-, fop ? null
+, sourceHighlight
+, highlight
+, pygments
+, graphviz
+, texlive
+, dblatexFull
+, libxslt
+, w3m
+, lynx
+, imagemagick
+, lilypond
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl_ns
+, docbook_xsl
+, fop
 # TODO: Package this:
 #, epubcheck ? null
-, gnused ? null
-, coreutils ? null
+, gnused
+, coreutils
 
 # if true, enable all the below filters and backends
 , enableExtraPlugins ? false
 
 # unzip is needed to extract filter and backend plugins
-, unzip ? null
+, unzip
 # filters
-, enableDitaaFilter ? false, jre ? null
-, enableMscgenFilter ? false, mscgen ? null
-, enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
-, enableQrcodeFilter ? false, qrencode ? null
-, enableMatplotlibFilter ? false, matplotlib ? null, numpy ? null
-, enableAafigureFilter ? false, aafigure ? null, recursivePthLoader ? null
+, enableDitaaFilter ? false, jre
+, enableMscgenFilter ? false, mscgen
+, enableDiagFilter ? false, blockdiag, seqdiag, actdiag, nwdiag
+, enableQrcodeFilter ? false, qrencode
+, enableMatplotlibFilter ? false, matplotlib, numpy
+, enableAafigureFilter ? false, aafigure, recursivePthLoader
 # backends
 , enableDeckjsBackend ? false
 , enableOdfBackend ? false

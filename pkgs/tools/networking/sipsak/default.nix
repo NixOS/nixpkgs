@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, c-ares, openssl ? null }:
+{ lib, stdenv, fetchurl, autoreconfHook, c-ares, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "sipsak";

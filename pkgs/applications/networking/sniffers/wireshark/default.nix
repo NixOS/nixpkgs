@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python3, libcap, glib
 , libssh, nghttp2, zlib, cmake, makeWrapper
-, withQt ? true, qt5 ? null
+, withQt ? true, qt5
 , ApplicationServices, SystemConfiguration, gmp
 }:
 

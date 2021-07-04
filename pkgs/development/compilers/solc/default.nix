@@ -6,11 +6,11 @@
 , ncurses
 , python3
 , z3Support ? true
-, z3 ? null
+, z3
 , cvc4Support ? gccStdenv.isLinux
-, cvc4 ? null
-, cln ? null
-, gmp ? null
+, cvc4
+, cln
+, gmp
 }:
 
 # compiling source/libsmtutil/CVC4Interface.cpp breaks on clang on Darwin,

@@ -15,9 +15,9 @@
 , gnome, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
 , withHelp ? true
-, kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
-, ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
-, wrapQtAppsHook ? null
+, kdeIntegration ? false, mkDerivation, qtbase, qtx11extras
+, ki18n, kconfig, kcoreaddons, kio, kwindowsystem
+, wrapQtAppsHook
 , variant ? "fresh"
 } @ args:
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pam ? null, libX11, libXext, libXinerama
+{ stdenv, lib, fetchurl, pam, libX11, libXext, libXinerama
 , libXdmcp, libXt, autoreconfHook }:
 
 stdenv.mkDerivation rec {

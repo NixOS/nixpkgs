@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, file, nettools, iputils, iproute2, makeWrapper
-, coreutils, gnused, openldap ? null
+, coreutils, gnused, openldap
 , buildPackages, lib
 }:
 

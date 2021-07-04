@@ -3,8 +3,8 @@
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xine-lib,
   withDbusPython ? false, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false,
-  webkitgtk ? null,
-  keybinder3 ? null, gtksourceview ? null, libmodplug ? null, kakasi ? null, libappindicator-gtk3 ? null }:
+  webkitgtk,
+  keybinder3, gtksourceview, libmodplug, kakasi, libappindicator-gtk3 }:
 
 let optionals = lib.optionals; in
 python3.pkgs.buildPythonApplication rec {

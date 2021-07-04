@@ -7,9 +7,9 @@
 , systemd
 , audit
 , libapparmor
-, libX11 ? null
-, libICE ? null
-, libSM ? null
+, libX11
+, libICE
+, libSM
 , x11Support ? (stdenv.isLinux || stdenv.isDarwin)
 , dbus
 , docbook_xml_dtd_44

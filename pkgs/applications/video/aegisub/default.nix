@@ -21,22 +21,22 @@
 , zlib
 
 , spellcheckSupport ? true
-, hunspell ? null
+, hunspell
 
 , automationSupport ? true
-, lua ? null
+, lua
 
 , openalSupport ? false
-, openal ? null
+, openal
 
 , alsaSupport ? stdenv.isLinux
-, alsa-lib ? null
+, alsa-lib
 
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
-, libpulseaudio ? null
+, libpulseaudio
 
 , portaudioSupport ? false
-, portaudio ? null
+, portaudio
 }:
 
 assert spellcheckSupport -> (hunspell != null);

@@ -2,15 +2,15 @@
 , cairo, gd, libcerf, pango, readline, zlib
 , withTeXLive ? false, texlive
 , withLua ? false, lua
-, libX11 ? null
-, libXt ? null
-, libXpm ? null
-, libXaw ? null
+, libX11
+, libXt
+, libXpm
+, libXaw
 , aquaterm ? false
-, withWxGTK ? false, wxGTK ? null
-, fontconfig ? null
-, gnused ? null
-, coreutils ? null
+, withWxGTK ? false, wxGTK
+, fontconfig
+, gnused
+, coreutils
 , withQt ? false, mkDerivation, qttools, qtbase, qtsvg
 }:
 

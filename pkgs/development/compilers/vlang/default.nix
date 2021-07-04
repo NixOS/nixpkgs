@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, upx ? null }:
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, upx }:
 
 assert stdenv.hostPlatform.isUnix -> upx != null;
 

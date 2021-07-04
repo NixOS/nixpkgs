@@ -3,8 +3,8 @@
 , file, which, ncurses
 , texinfo
 , buildPackages
-, qtbase ? null
-, pythonSupport ? false, swig2 ? null, python ? null
+, qtbase
+, pythonSupport ? false, swig2, python
 }:
 
 let

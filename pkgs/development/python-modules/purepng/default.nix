@@ -3,8 +3,8 @@
 , python
 , fetchFromGitHub
 , fetchpatch
-, cython ? null
-, numpy ? null
+, cython
+, numpy
 }:
 
 buildPythonPackage {

@@ -20,28 +20,28 @@
   # Optical media
   libdvdread, libdvdnav, libdvdcss, libbluray,
   # Darwin-specific
-  AudioToolbox ? null,
-  Foundation ? null,
-  libobjc ? null,
-  VideoToolbox ? null,
+  AudioToolbox,
+  Foundation,
+  libobjc,
+  VideoToolbox,
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
   # for now we disable GTK GUI support on Darwin. (It may be possible to remove
   # this restriction later.)
-  useGtk ? !stdenv.isDarwin, wrapGAppsHook ? null,
-  intltool ? null,
-  glib ? null,
-  gtk3 ? null,
-  libappindicator-gtk3 ? null,
-  libnotify ? null,
-  gst_all_1 ? null,
-  dbus-glib ? null,
-  udev ? null,
-  libgudev ? null,
-  hicolor-icon-theme ? null,
+  useGtk ? !stdenv.isDarwin, wrapGAppsHook,
+  intltool,
+  glib,
+  gtk3,
+  libappindicator-gtk3,
+  libnotify,
+  gst_all_1,
+  dbus-glib,
+  udev,
+  libgudev,
+  hicolor-icon-theme,
   # FDK
-  useFdk ? false, fdk_aac ? null
+  useFdk ? false, fdk_aac
 }:
 
 stdenv.mkDerivation rec {

@@ -12,9 +12,9 @@
 , zeromq
 , libsodium
 , withGui
-, qtbase ? null
-, qttools ? null
-, wrapQtAppsHook ? null
+, qtbase
+, qttools
+, wrapQtAppsHook
 }:
 
 with lib;

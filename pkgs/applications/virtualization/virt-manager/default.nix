@@ -3,7 +3,7 @@
 , gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, libosinfo, gnome
 , gtksourceview4, docutils
-, spiceSupport ? true, spice-gtk ? null
+, spiceSupport ? true, spice-gtk
 , cpio, e2fsprogs, findutils, gzip
 , cdrtools
 }:

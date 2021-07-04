@@ -23,14 +23,14 @@
 , curl
 
 # optional dependencies
-, libgcrypt ? null # gnomeSupport || cupsSupport
+, libgcrypt # gnomeSupport || cupsSupport
 
 # package customization
-, gnomeSupport ? false, gnome2 ? null
-, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
+, gnomeSupport ? false, gnome2
+, gnomeKeyringSupport ? false, libgnome-keyring3
 , proprietaryCodecs ? true
 , cupsSupport ? true
-, pulseSupport ? false, libpulseaudio ? null
+, pulseSupport ? false, libpulseaudio
 , ungoogled ? false, ungoogled-chromium
 
 , channel

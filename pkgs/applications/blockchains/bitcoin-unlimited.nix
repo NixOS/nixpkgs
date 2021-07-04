@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, db48, boost
 , zlib, miniupnpc, util-linux, protobuf, qrencode, libevent, python3
-, withGui, wrapQtAppsHook ? null, qtbase ? null, qttools ? null
+, withGui, wrapQtAppsHook, qtbase, qttools
 , Foundation, ApplicationServices, AppKit }:
 
 with lib;

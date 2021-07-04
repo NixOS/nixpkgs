@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , removeReferencesTo
-, zlib ? null
+, zlib
 , enableShared ? !stdenv.hostPlatform.isStatic
 , javaSupport ? false
 , jdk

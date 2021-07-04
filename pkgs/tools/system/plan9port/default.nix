@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, which
-, darwin ? null
-, xorgproto ? null
+, darwin
+, xorgproto
 , libX11
-, libXext ? null
-, libXt ? null
-, fontconfig ? null
-, freetype ? null
-, perl ? null  # For building web manuals
+, libXext
+, libXt
+, fontconfig
+, freetype
+, perl  # For building web manuals
 }:
 
 stdenv.mkDerivation {

@@ -3,7 +3,7 @@
 , tileMode ? false, enableSound ? tileMode, buildPackages
 
 # MacOS / Darwin builds
-, darwin ? null
+, darwin
 }:
 
 stdenv.mkDerivation rec {
