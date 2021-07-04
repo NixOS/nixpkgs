@@ -5,13 +5,10 @@
     by the graphical installation CD.
   </para>
   <para>
-    It sets
-    <link xlink:href="options.html#opt-services.xserver.enable"><literal>services.xserver.enable</literal></link>,
-    <link xlink:href="options.html#opt-services.xserver.displayManager.sddm.enable"><literal>services.xserver.displayManager.sddm.enable</literal></link>,
-    <link xlink:href="options.html#opt-services.xserver.desktopManager.plasma5.enable"><literal>services.xserver.desktopManager.plasma5.enable</literal></link>,
-    and
-    <link xlink:href="options.html#opt-services.xserver.libinput.enable"><literal>services.xserver.libinput.enable</literal></link>
-    to true. It also includes glxinfo and firefox in the system packages
-    list.
+    It sets <xref linkend="opt-services.xserver.enable" />,
+    <xref linkend="opt-services.xserver.displayManager.sddm.enable" />,
+    <xref linkend="opt-services.xserver.desktopManager.plasma5.enable" />,
+    and <xref linkend="opt-services.xserver.libinput.enable" /> to true.
+    It also includes glxinfo and firefox in the system packages list.
   </para>
 </section>

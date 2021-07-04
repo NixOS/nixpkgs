@@ -4,7 +4,7 @@
     This profile just enables a <literal>demo</literal> user, with
     password <literal>demo</literal>, uid <literal>1000</literal>,
     <literal>wheel</literal> group and
-    <link xlink:href="options.html#opt-services.xserver.displayManager.autoLogin">autologin
+    <link linkend="opt-services.xserver.displayManager.autoLogin">autologin
     in the SDDM display manager</link>.
   </para>
 </section>

@@ -5,13 +5,10 @@
     instances).
   </para>
   <para>
-    Disables
-    <link xlink:href="options.html#opt-sound.enable">sound</link>,
-    <link xlink:href="options.html#opt-boot.vesa">vesa</link>, serial
-    consoles,
-    <link xlink:href="options.html#opt-systemd.enableEmergencyMode">emergency
-    mode</link>,
-    <link xlink:href="options.html#opt-boot.loader.grub.splashImage">grub
+    Disables <link linkend="opt-sound.enable">sound</link>,
+    <link linkend="opt-boot.vesa">vesa</link>, serial consoles,
+    <link linkend="opt-systemd.enableEmergencyMode">emergency
+    mode</link>, <link linkend="opt-boot.loader.grub.splashImage">grub
     splash images</link> and configures the kernel to reboot
     automatically on panic.
   </para>

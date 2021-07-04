@@ -6,6 +6,6 @@ use is in the NixOS installation CDs.
 
 The enabled kernel modules include support for SATA and PATA, SCSI
 (partially), USB, Firewire (untested), Virtio (QEMU, KVM, etc.), VMware, and
-Hyper-V. Additionally, [`hardware.enableAllFirmware`](options.html#opt-hardware.enableAllFirmware) is
+Hyper-V. Additionally, [](#opt-hardware.enableAllFirmware) is
 enabled, and the firmware for the ZyDAS ZD1211 chipset is specifically
 installed.
