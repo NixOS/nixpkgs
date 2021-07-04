@@ -21188,6 +21188,10 @@ with pkgs;
   };
 
   mariadb = callPackage ../servers/sql/mariadb {
+    # libcxx-11.1.0 includes `<version>` in some places and this picks up
+    # storage/mroonga/version under clang-11 so we build mariadb with a clang-7
+    # stdenv instead.
+    stdenv = if stdenv.cc.isClang then llvmPackages_7.stdenv else stdenv;
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
