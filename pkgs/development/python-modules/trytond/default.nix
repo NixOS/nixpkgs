@@ -6,7 +6,7 @@
 , lxml
 , relatorio
 , genshi
-, dateutil
+, python-dateutil
 , polib
 , python-sql
 , werkzeug
@@ -41,7 +41,7 @@ buildPythonApplication rec {
     lxml
     relatorio
     genshi
-    dateutil
+    python-dateutil
     polib
     python-sql
     werkzeug

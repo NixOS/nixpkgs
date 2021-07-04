@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, dateutil
+, python-dateutil
 , pkgs
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pkgs.coreutils ];
-  propagatedBuildInputs = [ dateutil ];
+  propagatedBuildInputs = [ python-dateutil ];
 
   preInstall = lib.optionalString stdenv.isDarwin ''
     sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.terminal-notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py

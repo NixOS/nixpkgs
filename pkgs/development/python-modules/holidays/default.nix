@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , convertdate
-, dateutil
+, python-dateutil
 , fetchPypi
 , hijri-converter
 , korean-lunar-calendar
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     convertdate
-    dateutil
+    python-dateutil
     hijri-converter
     korean-lunar-calendar
     six

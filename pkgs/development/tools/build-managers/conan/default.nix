@@ -56,7 +56,7 @@ in newPython.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with newPython.pkgs; [
     bottle
     colorama
-    dateutil
+    python-dateutil
     deprecation
     distro
     fasteners

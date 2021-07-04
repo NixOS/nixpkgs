@@ -2,7 +2,7 @@
 , brotli
 , buildPythonPackage
 , cryptography
-, dateutil
+, python-dateutil
 , fetchPypi
 , idna
 , isPy27
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    dateutil
+    python-dateutil
     mock
     pytest-freezegun
     pytest-timeout

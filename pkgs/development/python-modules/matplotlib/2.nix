@@ -1,5 +1,5 @@
 { lib, stdenv, fetchPypi, writeText, python, buildPythonPackage, pycairo, backports_functools_lru_cache
-, which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
+, which, cycler, python-dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection, functools32, subprocess32
 , fetchpatch
 , enableGhostscript ? false, ghostscript, gtk3
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler dateutil nose numpy pyparsing tornado freetype kiwisolver
+    [ cycler python-dateutil nose numpy pyparsing tornado freetype kiwisolver
       libpng mock pytz ]
     ++ lib.optional (pythonOlder "3.3") backports_functools_lru_cache
     ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
