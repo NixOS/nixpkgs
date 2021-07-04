@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl, perl, gcc
 , ncurses5
-, ncurses6, gmp, glibc, libiconv, numactl
+, ncurses6, gmp, libiconv, numactl
 , llvmPackages
 
   # minimal = true; will remove files that aren't strictly necessary for
@@ -49,16 +49,33 @@ let
         { nixPackage = ncurses5; fileToCheckFor = "libtinfo.so.5"; }
       ];
     };
-    x86_64-linux = {
-      src = {
-        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
-        sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
-      };
-      exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
-      archSpecificLibraries = [
-        { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
-      ];
-    };
+    x86_64-linux =
+      if stdenv.hostPlatform.isMusl
+        then
+          { # musl-bindist (referred to below)
+            src = {
+              url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-alpine3.10-linux-integer-simple.tar.xz";
+              sha256 = "0xpcbyaxqyhbl6f0i3s4rp2jm67nqpkfh2qlbj3i2fiaix89ml0l";
+            };
+            exePathForLibraryCheck = "bin/ghc";
+            archSpecificLibraries = [
+              # In contrast to glibc builds, the musl-bindist uses `libncursesw.so.*`
+              # instead of `libtinfo.so.*.`
+              { nixPackage = ncurses6; fileToCheckFor = "libncursesw.so.6"; }
+            ];
+          }
+        else
+          { # normal glibc based bindist
+            src = {
+              url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
+              sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
+            };
+            exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+            archSpecificLibraries = [
+              { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
+            ];
+          }
+        ;
     armv7l-linux = {
       src = {
         url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
@@ -110,12 +127,6 @@ let
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
-  glibcDynLinker = assert stdenv.isLinux;
-    if stdenv.hostPlatform.libc == "glibc" then
-       # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
-       ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
-    else
-      "${lib.getLib glibc}/lib/ld-linux*";
 in
 
 stdenv.mkDerivation rec {
@@ -126,7 +137,20 @@ stdenv.mkDerivation rec {
   src = fetchurl binDistUsed.src;
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
+  propagatedBuildInputs =
+    lib.optionals useLLVM [ llvmPackages.llvm ]
+    # Because musl bindists currently provide no way to tell where
+    # libgmp is (see not [musl bindists have no .buildinfo]), we need
+    # to propagate `gmp`, otherwise programs built by this ghc will
+    # fail linking with `cannot find -lgmp` errors.
+    # Also, as of writing, the release pages of musl bindists claim
+    # that they use `integer-simple` and do not require `gmp`; however
+    # that is incorrect, so `gmp` is required until a release has been
+    # made that includes https://gitlab.haskell.org/ghc/ghc/-/issues/20059.
+    # (Note that for packaging the `-binary` compiler, nixpkgs does not care
+    # about whether or not `gmp` is used; this comment is just here to explain
+    # why the `gmp` dependency exists despite what the release page says.)
+    ++ lib.optionals stdenv.hostPlatform.isMusl [ gmp ]; # musl bindist needs this
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -187,6 +211,9 @@ stdenv.mkDerivation rec {
       patchShebangs ghc-${version}/configure
     '' +
     # We have to patch the GMP paths for the integer-gmp package.
+    # Note [musl bindists have no .buildinfo]
+    # Note that musl bindists do not contain them; unclear if that's intended;
+    # see: https://gitlab.haskell.org/ghc/ghc/-/issues/20073#note_363231
     ''
       find . -name integer-gmp.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp.out}/lib@" {} \;
@@ -203,16 +230,7 @@ stdenv.mkDerivation rec {
     # Rename needed libraries and binaries, fix interpreter
     lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 -exec patchelf \
-          --interpreter ${glibcDynLinker} {} \;
-    '' +
-    # We're kludging a glibc bindist into working with non-glibc...
-    # Here we patch up the use of `__strdup` (part of glibc binary ABI)
-    # to instead use `strdup` since musl doesn't provide __strdup
-    # (`__strdup` is defined to be an alias of `strdup` anyway[1]).
-    # [1] http://refspecs.linuxbase.org/LSB_4.0.0/LSB-Core-generic/LSB-Core-generic/baselib---strdup-1.html
-    # Use objcopy magic to make the change:
-    lib.optionalString stdenv.hostPlatform.isMusl ''
-      find ./ghc-${version}/rts -name "libHSrts*.a" -exec ''${OBJCOPY:-objcopy} --redefine-sym __strdup=strdup {} \;
+          --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
     '';
 
   # fix for `configure: error: Your linker is affected by binutils #16177`
@@ -222,6 +240,9 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ ];
   configureFlags = [
+    # Note that musl-based bindists seem to do nothing with the
+    # `--with-gmp-libraries` flag, see:
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/20073#note_363231
     "--with-gmp-libraries=${lib.getLib gmp}/lib"
     "--with-gmp-includes=${lib.getDev gmp}/include"
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
@@ -231,6 +252,22 @@ stdenv.mkDerivation rec {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # Apparently necessary for the ghc Alpine (musl) bindist:
+  # When we strip, and then run the
+  #     patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
+  # below, running ghc (e.g. during `installCheckPhase)` gives some apparently
+  # corrupted rpath or whatever makes the loader work on nonsensical strings:
+  #     running install tests
+  #     Error relocating /nix/store/...-ghc-8.10.2-binary/lib/ghc-8.10.5/bin/ghc: : symbol not found
+  #     Error relocating /nix/store/...-ghc-8.10.2-binary/lib/ghc-8.10.5/bin/ghc: ir6zf6c9f86pfx8sr30n2vjy-ghc-8.10.2-binary/lib/ghc-8.10.5/bin/../lib/x86_64-linux-ghc-8.10.5/libHSexceptions-0.10.4-ghc8.10.5.so: symbol not found
+  #     Error relocating /nix/store/...-ghc-8.10.2-binary/lib/ghc-8.10.5/bin/ghc: y/lib/ghc-8.10.5/bin/../lib/x86_64-linux-ghc-8.10.5/libHStemplate-haskell-2.16.0.0-ghc8.10.5.so: symbol not found
+  #     Error relocating /nix/store/...-ghc-8.10.2-binary/lib/ghc-8.10.5/bin/ghc: 8.10.5/libHStemplate-haskell-2.16.0.0-ghc8.10.5.so: symbol not found
+  #     Error relocating /nix/store/...-ghc-8.10.2-binary/lib/ghc-8.10.5/bin/ghc: �: symbol not found
+  #     Error relocating /nix/store/...-ghc-8.10.2-binary/lib/ghc-8.10.5/bin/ghc: �?: symbol not found
+  #     Error relocating /nix/store/...-ghc-8.10.2-binary/lib/ghc-8.10.5/bin/ghc: 64-linux-ghc-8.10.5/libHSexceptions-0.10.4-ghc8.10.5.so: symbol not found
+  # This is extremely bogus and should be investigated.
+  dontStrip = if stdenv.hostPlatform.isMusl then true else false; # `if` for explicitness
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
@@ -279,12 +316,22 @@ stdenv.mkDerivation rec {
     find $out -type f -name '*.p_o' -delete
     find $out -type f -name '*.p_hi' -delete
     find $out -type f -name '*_p.a' -delete
-    rm $out/lib/ghc-*/bin/ghc-iserv-prof
+    # `-f` because e.g. musl bindist does not have this file.
+    rm -f $out/lib/ghc-*/bin/ghc-iserv-prof
     # Hydra will redistribute this derivation, so we have to keep the docs for
     # legal reasons (retaining the legal notices etc)
     # As a last resort we could unpack the docs separately and symlink them in.
     # They're in $out/share/{doc,man}.
   '';
+
+  # In nixpkgs, musl based builds currently enable `pie` hardening by default
+  # (see `defaultHardeningFlags` in `make-derivation.nix`).
+  # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+  # See:
+  # * https://github.com/NixOS/nixpkgs/issues/129247
+  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
 
   doInstallCheck = true;
   installCheckPhase = ''
