@@ -36,7 +36,7 @@ See https://tug.org/texlive/acquire-mirror.html for instructions.
 
 ```bash
 curl -L http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-         | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
+         | xzcat | sed -rn -f ./tl2nix.sed | uniq > ./pkgs.nix
 ```
 
 This will download a current snapshot of the CTAN package database `texlive.tlpdb.xz`

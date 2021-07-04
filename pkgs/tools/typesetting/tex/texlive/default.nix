@@ -110,7 +110,11 @@ let
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
             # the fake derivations are used for filtering of hyphenation patterns
-          else { inherit pname version; tlType = "run"; }
+          else {
+            inherit pname version;
+            tlType = "run";
+            hasHyphens = attrs.hasHyphens or false;
+          }
         )]
         ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
         ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
@@ -165,7 +169,10 @@ let
           src = fetchurl { inherit urls sha512; };
           inherit stripPrefix;
           # metadata for texlive.combine
-          passthru = { inherit pname tlType version; };
+          passthru = {
+            inherit pname tlType version;
+            hasHyphens = args.hasHyphens or false;
+          };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
           outputHashAlgo = "sha1";
