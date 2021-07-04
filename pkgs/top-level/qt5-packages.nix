@@ -45,6 +45,9 @@ let
 
 in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
+  # Override the libsForQt5 that would be provided by the pkgs scope
+  libsForQt5 = pkgs.dontRecurseIntoAttrs self;
+
   inherit kdeFrameworks plasma5 kdeGear qt5;
 
   # Alias for backwards compatibility. Added 2021-05-07.

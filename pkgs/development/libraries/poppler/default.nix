@@ -22,7 +22,7 @@
 , texlive
 , zlib
 , withData ? true, poppler_data
-, qt5Support ? false, qtbase ? null
+, qt5Support ? false, libsForQt5
 , introspectionSupport ? false, gobject-introspection ? null
 , utils ? false, nss ? null
 , minimal ? false
@@ -30,6 +30,7 @@
 }:
 
 let
+  inherit (libsForQt5) qtbase;
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
