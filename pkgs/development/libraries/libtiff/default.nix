@@ -22,7 +22,12 @@ stdenv.mkDerivation rec {
   };
 
   # FreeImage needs this patch
-  patches = [ ./headers.patch ];
+  patches = [ ./headers.patch ]
+    # CMake manages to detect the OpenGL and GLUT system frameworks but doesn't
+    # find the `gl.h` header, making the tests fail. With older Clangs OpenGL
+    # wasn't detected so the simplest fix was to keep CMake from checking for
+    # it. This means `tiffgt` isn't built and tested.
+    ++ lib.optional stdenv.isDarwin ./0001-Disable-OpenGL.patch;
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
