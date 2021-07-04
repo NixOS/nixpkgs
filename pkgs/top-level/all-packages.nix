@@ -3340,7 +3340,11 @@ in
 
   apparix = callPackage ../tools/misc/apparix { };
 
-  appleseed = callPackage ../tools/graphics/appleseed { };
+  appleseed = libsForQt5.callPackage ../tools/graphics/appleseed {
+    boost = boost16x.override {
+      enablePython = true;
+    };
+  };
 
   apple-music-electron = callPackage ../applications/audio/apple-music-electron { };
 
