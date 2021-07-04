@@ -21,7 +21,8 @@ with python3.pkgs; buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace 'click = "^7.0"' 'click = "*"' \
       --replace 'docutils = "^0.16"' 'docutils = "*"' \
-      --replace 'sqlalchemy = "^1.3"' 'sqlalchemy = "*"'
+      --replace 'sqlalchemy = "^1.3"' 'sqlalchemy = "*"' \
+      --replace 'token-bucket = "^0.2.0"' 'token-bucket = "*"'
   '';
 
   nativeBuildInputs = [
