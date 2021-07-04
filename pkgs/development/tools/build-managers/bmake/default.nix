@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch
-, getopt, tzdata
+, getopt, tzdata, ksh
 , pkgsMusl # for passthru.tests
 }:
 
@@ -14,9 +14,12 @@ stdenv.mkDerivation rec {
 
   # Make tests work with musl
   # * Disable deptgt-delete_on_error test (alpine does this too)
+  # * Disable shell-ksh test (ksh doesn't compile with musl)
   # * Fix test failing due to different strerror(3) output for musl and glibc
   postPatch = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    sed -i unit-tests/Makefile -e '/deptgt-delete_on_error/d'
+    sed -i unit-tests/Makefile \
+      -e '/deptgt-delete_on_error/d' \
+      -e '/shell-ksh/d'
     substituteInPlace unit-tests/opt-chdir.exp --replace "File name" "Filename"
   '';
 
@@ -29,6 +32,8 @@ stdenv.mkDerivation rec {
     ./fix-unexport-env-test.patch
     # Fix localtime tests without global /etc/zoneinfo directory
     ./fix-localtime-test.patch
+    # Always enable ksh test since it checks in a impure location /bin/ksh
+    ./unconditional-ksh-test.patch
     # decouple tests from build phase
     (fetchpatch {
       name = "separate-tests.patch";
@@ -69,7 +74,11 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkInputs = [ tzdata ];
+  checkInputs = [
+    tzdata
+  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
+    ksh
+  ];
   checkPhase = ''
     runHook preCheck
 
