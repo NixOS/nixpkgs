@@ -1355,6 +1355,8 @@ in
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
 
+  chatty = callPackage ../applications/networking/instant-messengers/chatty { };
+
   chezmoi = callPackage ../tools/misc/chezmoi { };
 
   chipsec = callPackage ../tools/security/chipsec {

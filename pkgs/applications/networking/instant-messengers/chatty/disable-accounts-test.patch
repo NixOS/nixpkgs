@@ -1,0 +1,12 @@
+diff --git a/tests/meson.build b/tests/meson.build
+index e9a2f89..8848e7b 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -10,7 +10,6 @@ env.set('GSETTINGS_SCHEMA_DIR', join_paths(meson.build_root(), 'data'))
+ env.set('MALLOC_CHECK_', '2')
+ 
+ test_items = [
+-  'account',
+   'history',
+   'settings',
+   'utils',
