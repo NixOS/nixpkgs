@@ -20,36 +20,76 @@ let
   version = "8.10.2";
 
   # Information about available bindists that we use in the build.
+  #
+  # # Bindist library checking
+  #
+  # The field `archSpecificLibraries` also provides a way for us get notified
+  # early when the upstream bindist changes its dependencies (e.g. because a
+  # newer Debian version is used that uses a new `ncurses` version).
+  #
+  # Usage:
+  #
+  # * You can find the `fileToCheckFor` of libraries by running `readelf -d`
+  #   on the compiler binary (`exePathForLibraryCheck`).
+  # * To skip library checking for an architecture,
+  #   set `exePathForLibraryCheck = null`.
+  # * To skip file checking for a specific arch specfic library,
+  #   set `fileToCheckFor = null`.
   ghcBinDists = {
     i686-linux = {
       src = {
         url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
         sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
       };
+      exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+      archSpecificLibraries = [
+        # The i686-linux bindist provided by GHC HQ is currently built on Debian 9,
+        # which link it against `libtinfo.so.5` (ncurses 5).
+        # Other bindists are linked `libtinfo.so.6` (ncurses 6).
+        { nixPackage = ncurses5; fileToCheckFor = "libtinfo.so.5"; }
+      ];
     };
     x86_64-linux = {
       src = {
         url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
         sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
       };
+      exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+      archSpecificLibraries = [
+        { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
+      ];
     };
     armv7l-linux = {
       src = {
         url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
         sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
       };
+      exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+      archSpecificLibraries = [
+        { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
+      ];
     };
     aarch64-linux = {
       src = {
         url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
         sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
       };
+      exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+      archSpecificLibraries = [
+        { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
+        { nixPackage = numactl; fileToCheckFor = null; }
+      ];
     };
     x86_64-darwin = {
       src = {
         url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
         sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
       };
+      exePathForLibraryCheck = null; # we don't have a library check for darwin yet
+      archSpecificLibraries = [
+        { nixPackage = ncurses6; fileToCheckFor = null; }
+        { nixPackage = libiconv; fileToCheckFor = null; }
+      ];
     };
   };
 
@@ -58,14 +98,14 @@ let
 
   useLLVM = !stdenv.targetPlatform.isx86;
 
-  libPath = lib.makeLibraryPath ([
-    # The i686-linux bindist provided by GHC HQ is currently built on Debian 9,
-    # which link it against `libtinfo.so.5` (ncurses 5).
-    # Other bindists are linked `libtinfo.so.6` (ncurses 6).
-    (if stdenv.hostPlatform.system == "i686-linux" then ncurses5 else ncurses6)
-    gmp
-  ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv
-    ++ lib.optional (stdenv.hostPlatform.isAarch64) numactl);
+  libPath =
+    lib.makeLibraryPath (
+      [
+        gmp
+      ]
+      # Add arch-specific libraries.
+      ++ map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
+    );
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
@@ -95,9 +135,43 @@ stdenv.mkDerivation rec {
   ${libEnvVar} = libPath;
 
   postUnpack =
+    # Verify our assumptions of which `libtinfo.so` (ncurses) version is used,
+    # so that we know when ghc bindists upgrade that and we need to update the
+    # version used in `libPath`.
+    lib.optionalString
+      (binDistUsed.exePathForLibraryCheck != null)
+      # Note the `*` glob because some GHCs have a suffix when unpacked, e.g.
+      # the musl bindist has dir `ghc-VERSION-x86_64-unknown-linux/`.
+      # As a result, don't shell-quote this glob when splicing the string.
+      (let buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"''; in
+        lib.concatStringsSep "\n" [
+          (''
+            echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
+            if ! test -e ${buildExeGlob}; then
+              echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
+            fi
+          '')
+          (lib.concatMapStringsSep
+            "\n"
+            ({ fileToCheckFor, nixPackage }:
+              lib.optionalString (fileToCheckFor != null) ''
+                echo "Checking bindist for ${fileToCheckFor} to ensure that is still used"
+                if ! readelf -d ${buildExeGlob} | grep "${fileToCheckFor}"; then
+                  echo >&2 "File ${fileToCheckFor} could not be found in ${binDistUsed.exePathForLibraryCheck} for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
+                fi
+
+                echo "Checking that the nix package ${nixPackage} contains ${fileToCheckFor}"
+                if ! test -e "${lib.getLib nixPackage}/lib/${fileToCheckFor}"; then
+                  echo >&2 "Nix package ${nixPackage} did not contain ${fileToCheckFor} for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
+                fi
+              ''
+            )
+            binDistUsed.archSpecificLibraries
+          )
+        ])
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
-    lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
