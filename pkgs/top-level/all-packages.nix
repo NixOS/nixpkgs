@@ -2891,6 +2891,8 @@ in
 
   jiten = callPackage ../applications/misc/jiten { };
 
+  kanjidraw = callPackage ../applications/misc/kanjidraw { };
+
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
   joycond = callPackage ../os-specific/linux/joycond { };
