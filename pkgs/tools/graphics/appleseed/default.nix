@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, boost, pkg-config,
+{ mkDerivation, stdenv, lib, fetchFromGitHub, fetchpatch, cmake, boost, pkg-config,
 eigen, libpng, python, openexr, openimageio2,
 opencolorio_1, xercesc, osl, makeWrapper, lz4
 }:
@@ -39,10 +39,9 @@ mkDerivation rec {
   cmakeFlags = [
     "-DINSTALL_TESTS=OFF"
     "-DWITH_BENCH=OFF" # installation fails
-    "-DUSE_SSE=ON"
-    "-DUSE_SSE42=ON"
     "-DUSE_STATIC_BOOST=OFF"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 ([ "-DUSE_SSE=ON" ] ++
+      lib.optional stdenv.hostPlatform.sse4_2Support "-DUSE_SSE42=ON");
 
   meta = with lib; {
     description = "Open source, physically-based global illumination rendering engine";
