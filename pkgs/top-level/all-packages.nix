@@ -26439,6 +26439,8 @@ in
 
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
+  protonvpn-cli-official = callPackage ../applications/networking/protonvpn-cli-official { };
+
   protonvpn-gui = callPackage ../applications/networking/protonvpn-gui { };
 
   ps2client = callPackage ../applications/networking/ps2client { };
