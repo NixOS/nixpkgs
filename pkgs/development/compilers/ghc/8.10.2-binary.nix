@@ -68,8 +68,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
 
+  # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
+  # of the bindist installer can find the libraries they expect.
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
-  # the final install location/
+  # the final install location.
   ${libEnvVar} = libPath;
 
   postUnpack =
@@ -133,6 +135,7 @@ stdenv.mkDerivation rec {
     "--with-gmp-libraries=${lib.getLib gmp}/lib"
     "--with-gmp-includes=${lib.getDev gmp}/include"
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+    # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
