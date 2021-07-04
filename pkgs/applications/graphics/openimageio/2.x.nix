@@ -50,7 +50,13 @@ stdenv.mkDerivation rec {
     "-DUSE_QT=OFF"
     # GNUInstallDirs
     "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkg-config
+    "-DOIIO_BUILD_TESTS=OFF"
   ];
+
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/OpenImageIO/OpenImageIOTargets-*.cmake \
+      --replace "\''${_IMPORT_PREFIX}/lib/lib" "$out/lib/lib"
+  '';
 
   meta = with lib; {
     homepage = "http://www.openimageio.org";
