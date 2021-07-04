@@ -16,7 +16,7 @@ If NixOS fails to boot, there are a number of kernel command line parameters tha
 
 `boot.debug1mounts`
 
-: Like `boot.debug1` or `boot.debug1devices`, but runs stage1 until all filesystems that are mounted during initrd are mounted (see [neededForBoot](#opt-fileSystems._name_.neededForBoot)). As a motivating example, this could be useful if you've forgotten to set [neededForBoot](options.html#opt-fileSystems._name_.neededForBoot) on a file system.
+: Like `boot.debug1` or `boot.debug1devices`, but runs stage1 until all filesystems that are mounted during initrd are mounted (see [neededForBoot](#opt-fileSystems._name_.neededForBoot)). As a motivating example, this could be useful if you've forgotten to set [neededForBoot](#opt-fileSystems._name_.neededForBoot) on a file system.
 
 `boot.trace`
 

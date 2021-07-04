@@ -96,13 +96,11 @@ the service on boot.
 
 *User* systemd services on the other hand, should be treated
 differently. Given a package that has a systemd unit file at
-`#pkg-out#/lib/systemd/user/`, using
-[`systemd.packages`](options.html#opt-systemd.packages) will
+`#pkg-out#/lib/systemd/user/`, using [](#opt-systemd.packages) will
 make you able to start the service via `systemctl --user start`, but it
 won\'t start automatically on login. However, You can imperatively
 enable it by adding the package\'s attribute to
-[`systemd.packages`](options.html#opt-systemd.packages)
-and then do this (e.g):
+[](#opt-systemd.packages) and then do this (e.g):
 
 ```ShellSession
 $ mkdir -p ~/.config/systemd/user/default.target.wants
