@@ -13,7 +13,7 @@ booting, and try to realise the configuration in the running system
 (e.g., by restarting system services).
 
 ::: {.warning}
-This command doesn\'t start/stop [user services](options.html#opt-systemd.user.services)
+This command doesn\'t start/stop [user services](#opt-systemd.user.services)
 automatically. `nixos-rebuild` only runs a `daemon-reload` for each user with running
 user services.
 :::

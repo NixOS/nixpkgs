@@ -17,10 +17,10 @@
   <warning>
     <para>
       This command doesn't start/stop
-      <link xlink:href="options.html#opt-systemd.user.services">user
-      services</link> automatically. <literal>nixos-rebuild</literal>
-      only runs a <literal>daemon-reload</literal> for each user with
-      running user services.
+      <link linkend="opt-systemd.user.services">user services</link>
+      automatically. <literal>nixos-rebuild</literal> only runs a
+      <literal>daemon-reload</literal> for each user with running user
+      services.
     </para>
   </warning>
   <warning>
