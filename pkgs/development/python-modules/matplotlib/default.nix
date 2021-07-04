@@ -1,5 +1,5 @@
 { lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
-, which, cycler, dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
+, which, cycler, python-dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
 , enableGhostscript ? true, ghostscript, gtk3
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler dateutil numpy pyparsing tornado freetype qhull
+    [ cycler python-dateutil numpy pyparsing tornado freetype qhull
       kiwisolver certifi libpng mock pytz pillow ]
     ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]

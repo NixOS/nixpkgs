@@ -6919,8 +6919,6 @@ in {
   python-daemon = callPackage ../development/python-modules/python-daemon { };
 
   python-dateutil = callPackage ../development/python-modules/dateutil { };
-  # Alias that we should deprecate
-  dateutil = self.python-dateutil;
 
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
 

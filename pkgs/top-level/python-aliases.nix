@@ -35,6 +35,7 @@ in
 mapAliases ({
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # Added 2020-11-29
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
+  dateutil = python-dateutil; # added 2021-07-03
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
   diff_cover = diff-cover; # added 2021-07-02
   dns = dnspython; # Alias for compatibility, 2017-12-10

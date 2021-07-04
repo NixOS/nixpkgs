@@ -77,7 +77,7 @@ mkDerivation rec {
       cchardet
       css-parser
       cssselect
-      dateutil
+      python-dateutil
       dnspython
       feedparser
       html2text

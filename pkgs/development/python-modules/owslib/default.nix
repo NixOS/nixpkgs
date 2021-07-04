@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, dateutil, requests, pytz, pyproj , pytest, pyyaml } :
+{ lib, buildPythonPackage, fetchPypi, python-dateutil, requests, pytz, pyproj , pytest, pyyaml } :
 buildPythonPackage rec {
   pname = "OWSLib";
   version = "0.24.1";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ dateutil pyproj pytz requests pyyaml ];
+  propagatedBuildInputs = [ python-dateutil pyproj pytz requests pyyaml ];
 
   # 'tests' dir not included in pypy distribution archive.
   doCheck = false;

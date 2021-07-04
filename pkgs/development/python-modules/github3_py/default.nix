@@ -9,7 +9,7 @@
 , mock
 , requests
 , uritemplate
-, dateutil
+, python-dateutil
 , jwcrypto
 , pyopenssl
 , ndg-httpsclient
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   checkInputs = [ betamax pytest betamax-matchers ]
     ++ lib.optional (pythonOlder "3") unittest2
     ++ lib.optional (pythonOlder "3.3") mock;
-  propagatedBuildInputs = [ requests uritemplate dateutil jwcrypto pyopenssl ndg-httpsclient pyasn1 ];
+  propagatedBuildInputs = [ requests uritemplate python-dateutil jwcrypto pyopenssl ndg-httpsclient pyasn1 ];
 
   postPatch = ''
     sed -i -e 's/unittest2 ==0.5.1/unittest2>=0.5.1/' setup.py

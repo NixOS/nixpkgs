@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, dateutil
+, python-dateutil
 , text-unidecode
 , freezegun
 , pytestCheckHook
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     text-unidecode
   ];
 

@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       six
       pyasn1
       pyasn1-modules
-      dateutil
+      python-dateutil
       argcomplete
       libselinux
     ]))
