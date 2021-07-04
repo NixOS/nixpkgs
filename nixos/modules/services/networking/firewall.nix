@@ -339,6 +339,8 @@ in
         description =
           ''
             Whether to log rejected or dropped incoming connections.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
@@ -350,6 +352,8 @@ in
             Whether to log all rejected or dropped incoming packets.
             This tends to give a lot of log messages, so it's mostly
             useful for debugging.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
