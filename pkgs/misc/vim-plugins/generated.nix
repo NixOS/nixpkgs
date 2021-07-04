@@ -1544,6 +1544,18 @@ final: prev:
     meta.homepage = "https://github.com/bogado/file-line/";
   };
 
+  FixCursorHold-nvim = buildVimPluginFrom2Nix {
+    pname = "FixCursorHold-nvim";
+    version = "2021-04-16";
+    src = fetchFromGitHub {
+      owner = "antoinemadec";
+      repo = "FixCursorHold.nvim";
+      rev = "b5158c93563ee6192ce8d903bfef839393bfeccd";
+      sha256 = "1y6hv7vl268zbf3bzd72l43jjgi0cq364p15z8ia9jlph1syk9zz";
+    };
+    meta.homepage = "https://github.com/antoinemadec/FixCursorHold.nvim/";
+  };
+
   flake8-vim = buildVimPluginFrom2Nix {
     pname = "flake8-vim";
     version = "2020-10-20";
@@ -2676,12 +2688,12 @@ final: prev:
 
   luasnip = buildVimPluginFrom2Nix {
     pname = "luasnip";
-    version = "2021-07-03";
+    version = "2021-07-04";
     src = fetchFromGitHub {
       owner = "l3mon4d3";
       repo = "luasnip";
-      rev = "db8d1609b65fca4d99cc43c9e86054ecad7afcfc";
-      sha256 = "0ayjc87k53c891d3cjph2rszk48dpwczdxanbf49105qs1di69fz";
+      rev = "1ad9f925b1455ea92829a261bf7bd75f1a635f03";
+      sha256 = "1bd0ky19lh5vn2xlyrbn25h5c9kcc2wa2q0mjn4v9ckvahcwrxiz";
     };
     meta.homepage = "https://github.com/l3mon4d3/luasnip/";
   };
