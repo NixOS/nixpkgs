@@ -14,6 +14,47 @@
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
+  downloadsUrl = "https://downloads.haskell.org/ghc";
+
+  version = "8.10.2";
+
+  # Information about available bindists that we use in the build.
+  ghcBinDists = {
+    i686-linux = {
+      src = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
+        sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
+      };
+    };
+    x86_64-linux = {
+      src = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
+        sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
+      };
+    };
+    armv7l-linux = {
+      src = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
+        sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
+      };
+    };
+    aarch64-linux = {
+      src = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
+        sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
+      };
+    };
+    x86_64-darwin = {
+      src = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+        sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
+      };
+    };
+  };
+
+  binDistUsed = ghcBinDists.${stdenv.hostPlatform.system}
+    or (throw "cannot bootstrap GHC on this platform");
+
   useLLVM = !stdenv.targetPlatform.isx86;
 
   libPath = lib.makeLibraryPath ([
@@ -30,40 +71,14 @@ let
        ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
       "${lib.getLib glibc}/lib/ld-linux*";
-
-  downloadsUrl = "https://downloads.haskell.org/ghc";
-
 in
 
 stdenv.mkDerivation rec {
-  version = "8.10.2";
+  inherit version;
 
   name = "ghc-${version}-binary";
 
-  # https://downloads.haskell.org/~ghc/8.10.2/
-  src = fetchurl ({
-    i686-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
-      sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
-    };
-    x86_64-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
-      sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
-    };
-    armv7l-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
-      sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
-    };
-    aarch64-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
-      sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
-    };
-    x86_64-darwin = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
-      sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
-    };
-  }.${stdenv.hostPlatform.system}
-    or (throw "cannot bootstrap GHC on this platform"));
+  src = fetchurl binDistUsed.src;
 
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
