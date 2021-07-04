@@ -142,11 +142,14 @@ stdenv.mkDerivation (rec {
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
-  preConfigure = lib.optionalString stdenv.isAarch64 ''
+  preConfigure =
     # Aarch64 allow backward bootstrapping since earlier versions are unstable.
-    find . -name \*\.cabal\* -exec sed -i -e 's/\(base.*\)4.14/\14.16/' {} \; \
-      -exec sed -i -e 's/\(prim.*\)0.6/\10.8/' {} \;
-  '' + ''
+    # Same for musl, as earlier versions do not provide a musl bindist for bootstrapping.
+    lib.optionalString (stdenv.isAarch64 || stdenv.hostPlatform.isMusl) ''
+      find . -name \*\.cabal\* -exec sed -i -e 's/\(base.*\)4.14/\14.16/' {} \; \
+        -exec sed -i -e 's/\(prim.*\)0.6/\10.8/' {} \;
+    ''
+  + ''
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
       export "''${env#TARGET_}=''${!env}"
     done
