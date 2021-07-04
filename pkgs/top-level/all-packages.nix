@@ -8631,7 +8631,9 @@ in
 
   securefs = callPackage ../tools/filesystems/securefs { };
 
-  seexpr = callPackage ../development/compilers/seexpr { };
+  seexpr = libsForQt5.callPackage ../development/compilers/seexpr {
+    boost = boost17x.override { enablePython = true; python = python3; };
+  };
 
   setroot = callPackage  ../tools/X11/setroot { };
 
