@@ -56,8 +56,8 @@ enables OpenCL support:
 
 ```nix
 hardware.opengl.extraPackages = [
-         rocm-opencl-icd
-       ];
+  rocm-opencl-icd
+];
 ```
 
 ### Intel {#sec-gpu-accel-opencl-intel}
@@ -77,8 +77,8 @@ configuration can be used:
 
 ```nix
 hardware.opengl.extraPackages = [
-        intel-compute-runtime
-      ];
+  intel-compute-runtime
+];
 ```
 
 ## Vulkan {#sec-gpu-accel-vulkan}
@@ -144,19 +144,19 @@ A specific driver can be forced as follows:
 
 ```nix
 hardware.opengl.extraPackages = [
-         pkgs.amdvlk
-       ];
+  pkgs.amdvlk
+];
 
-       # To enable Vulkan support for 32-bit applications, also add:
-       hardware.opengl.extraPackages32 = [
-         pkgs.driversi686Linux.amdvlk
-       ];
+# To enable Vulkan support for 32-bit applications, also add:
+hardware.opengl.extraPackages32 = [
+  pkgs.driversi686Linux.amdvlk
+];
 
-       # Force radv
-       environment.variables.AMD_VULKAN_ICD = "RADV";
-       # Or
-       environment.variables.VK_ICD_FILENAMES =
-         "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+# Force radv
+environment.variables.AMD_VULKAN_ICD = "RADV";
+# Or
+environment.variables.VK_ICD_FILENAMES =
+  "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 ```
 
 ## Common issues {#sec-gpu-accel-common-issues}

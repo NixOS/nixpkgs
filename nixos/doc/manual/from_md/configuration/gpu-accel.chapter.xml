@@ -64,8 +64,8 @@ Platform Vendor      Advanced Micro Devices, Inc.
       </para>
       <programlisting language="bash">
 hardware.opengl.extraPackages = [
-         rocm-opencl-icd
-       ];
+  rocm-opencl-icd
+];
 </programlisting>
     </section>
     <section xml:id="sec-gpu-accel-opencl-intel">
@@ -87,8 +87,8 @@ hardware.opengl.extraPackages = [
       </para>
       <programlisting language="bash">
 hardware.opengl.extraPackages = [
-        intel-compute-runtime
-      ];
+  intel-compute-runtime
+];
 </programlisting>
     </section>
   </section>
@@ -164,19 +164,19 @@ GPU1:
       </para>
       <programlisting language="bash">
 hardware.opengl.extraPackages = [
-         pkgs.amdvlk
-       ];
+  pkgs.amdvlk
+];
 
-       # To enable Vulkan support for 32-bit applications, also add:
-       hardware.opengl.extraPackages32 = [
-         pkgs.driversi686Linux.amdvlk
-       ];
+# To enable Vulkan support for 32-bit applications, also add:
+hardware.opengl.extraPackages32 = [
+  pkgs.driversi686Linux.amdvlk
+];
 
-       # Force radv
-       environment.variables.AMD_VULKAN_ICD = &quot;RADV&quot;;
-       # Or
-       environment.variables.VK_ICD_FILENAMES =
-         &quot;/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json&quot;;
+# Force radv
+environment.variables.AMD_VULKAN_ICD = &quot;RADV&quot;;
+# Or
+environment.variables.VK_ICD_FILENAMES =
+  &quot;/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json&quot;;
 </programlisting>
     </section>
   </section>
