@@ -4061,6 +4061,12 @@
     github = "gytis-ivaskevicius";
     githubId = 23264966;
   };
+  hagl = {
+    email = "harald@glie.be";
+    github = "hagl";
+    githubId = 1162118;
+    name = "Harald Gliebe";
+  };
   hakuch = {
     email = "hakuch@gmail.com";
     github = "hakuch";
@@ -10637,6 +10643,12 @@
     email = "git@thym.at";
     github = "totoroot";
     githubId = 39650930;
+  };
+  ToxicFrog = {
+    email = "toxicfrog@ancilla.ca";
+    github = "ToxicFrog";
+    githubId = 90456;
+    name = "Rebecca (Bex) Kelly";
   };
   travisbhartwell = {
     email = "nafai@travishartwell.net";

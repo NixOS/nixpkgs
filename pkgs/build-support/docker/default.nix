@@ -117,7 +117,8 @@ rec {
         --tmpdir=$TMPDIR \
         --override-os ${os} \
         --override-arch ${arch} \
-        copy "$sourceURL" "docker-archive://$out:$destNameTag"
+        copy "$sourceURL" "docker-archive://$out:$destNameTag" \
+        | cat  # pipe through cat to force-disable progress bar
     '';
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.

@@ -339,8 +339,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   inherit (pkgs) gnome-user-docs; # added 2019-11-20
 
-  inherit (pkgs) gegl_0_4; # added 2019-10-31
-
   inherit (pkgs) gjs; # added 2019-01-05
 
   inherit (pkgs) yelp-tools; # added 2019-11-20

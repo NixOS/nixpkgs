@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libvmaf";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "netflix";
     repo = "vmaf";
     rev = "v${version}";
-    sha256 = "0dynk1pmsyf23vfxljaazqkr27vfrvhj3dyjzm06zxpzsn59aif3";
+    sha256 = "1jlmivmdzlhizljbmsvqqxnhjfyjh8zxyf5xv6j040vbfj4mf14f";
   };
 
   sourceRoot = "source/libvmaf";

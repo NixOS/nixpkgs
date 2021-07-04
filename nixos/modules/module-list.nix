@@ -260,6 +260,7 @@
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
   ./services/backup/borgmatic.nix
+  ./services/backup/btrbk.nix
   ./services/backup/duplicati.nix
   ./services/backup/duplicity.nix
   ./services/backup/mysql-backup.nix
@@ -874,7 +875,6 @@
   ./services/search/hound.nix
   ./services/search/kibana.nix
   ./services/search/solr.nix
-  ./services/security/bitwarden_rs/default.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
@@ -900,6 +900,7 @@
   ./services/security/torsocks.nix
   ./services/security/usbguard.nix
   ./services/security/vault.nix
+  ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix

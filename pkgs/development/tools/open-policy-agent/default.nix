@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.29.4";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
@@ -10,14 +10,11 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-AjNr+t30ftF92+cEfvt8iHBDVD/SO52ojJRLAkYF9l4=";
   };
-
   vendorSha256 = null;
 
   subPackages = [ "." ];
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X github.com/open-policy-agent/opa/version.Version=${version}")
-  '';
+  ldflags = [ "-s" "-w" "-X github.com/open-policy-agent/opa/version.Version=${version}" ];
 
   doInstallCheck = true;
   installCheckPhase = ''

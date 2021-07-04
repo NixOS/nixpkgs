@@ -24,6 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/paradoxxxzero/pyls-isort";
     description = "Isort plugin for python-language-server";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ ];
   };
 }

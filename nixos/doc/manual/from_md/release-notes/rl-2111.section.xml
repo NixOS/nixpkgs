@@ -27,6 +27,15 @@
     <itemizedlist>
       <listitem>
         <para>
+          <link xlink:href="https://digint.ch/btrbk/index.html">btrbk</link>,
+          a backup tool for btrfs subvolumes, taking advantage of btrfs
+          specific capabilities to create atomic snapshots and transfer
+          them incrementally to your backup locations. Available as
+          <link xlink:href="options.html#opt-services.brtbk.instances">services.btrbk</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
           a GeoIP database updater from MaxMind. Available as
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
@@ -64,7 +73,7 @@
       <listitem>
         <para>
           The <literal>staticjinja</literal> package has been upgraded
-          from 1.0.4 to 2.0.0
+          from 1.0.4 to 3.0.1
         </para>
       </listitem>
       <listitem>
@@ -338,6 +347,116 @@
           The <literal>libwnck</literal> package now defaults to the 3.x
           release instead of the old 2.31.0 version.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>bitwarden_rs</literal> packages and modules were
+          renamed to <literal>vaultwarden</literal>
+          <link xlink:href="https://github.com/dani-garcia/vaultwarden/discussions/1642">following
+          upstream</link>. More specifically,
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              <literal>pkgs.bitwarden_rs</literal>,
+              <literal>pkgs.bitwarden_rs-sqlite</literal>,
+              <literal>pkgs.bitwarden_rs-mysql</literal> and
+              <literal>pkgs.bitwarden_rs-postgresql</literal> were
+              renamed to <literal>pkgs.vaultwarden</literal>,
+              <literal>pkgs.vaultwarden-sqlite</literal>,
+              <literal>pkgs.vaultwarden-mysql</literal> and
+              <literal>pkgs.vaultwarden-postgresql</literal>,
+              respectively.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  Old names are preserved as aliases for backwards
+                  compatibility, but may be removed in the future.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  The <literal>bitwarden_rs</literal> executable was
+                  also renamed to <literal>vaultwarden</literal> in all
+                  packages.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>pkgs.bitwarden_rs-vault</literal> was renamed to
+              <literal>pkgs.vaultwarden-vault</literal>.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <literal>pkgs.bitwarden_rs-vault</literal> is
+                  preserved as an alias for backwards compatibility, but
+                  may be removed in the future.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  The static files were moved from
+                  <literal>/usr/share/bitwarden_rs</literal> to
+                  <literal>/usr/share/vaultwarden</literal>.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+              The <literal>services.bitwarden_rs</literal> config module
+              was renamed to <literal>services.vaultwarden</literal>.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <literal>services.bitwarden_rs</literal> is preserved
+                  as an alias for backwards compatibility, but may be
+                  removed in the future.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>systemd.services.bitwarden_rs</literal>,
+              <literal>systemd.services.backup-bitwarden_rs</literal>
+              and <literal>systemd.timers.backup-bitwarden_rs</literal>
+              were renamed to
+              <literal>systemd.services.vaultwarden</literal>,
+              <literal>systemd.services.backup-vaultwarden</literal> and
+              <literal>systemd.timers.backup-vaultwarden</literal>,
+              respectively.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  Old names are preserved as aliases for backwards
+                  compatibility, but may be removed in the future.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>users.users.bitwarden_rs</literal> and
+              <literal>users.groups.bitwarden_rs</literal> were renamed
+              to <literal>users.users.vaultwarden</literal> and
+              <literal>users.groups.vaultwarden</literal>, respectively.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The data directory remains located at
+              <literal>/var/lib/bitwarden_rs</literal>, for backwards
+              compatibility.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>

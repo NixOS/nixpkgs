@@ -1905,8 +1905,6 @@ in {
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
 
-  dftfit = callPackage ../development/python-modules/dftfit { };
-
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
@@ -1921,7 +1919,7 @@ in {
 
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
-  diff_cover = callPackage ../development/python-modules/diff_cover { };
+  diff-cover = callPackage ../development/python-modules/diff-cover { };
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
@@ -3914,8 +3912,6 @@ in {
 
   labmath = callPackage ../development/python-modules/labmath { };
 
-  lammps-cython = callPackage ../development/python-modules/lammps-cython { };
-
   langcodes = callPackage ../development/python-modules/langcodes { };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
@@ -5234,6 +5230,8 @@ in {
   phik = callPackage ../development/python-modules/phik { };
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
+
+  micloud = callPackage ../development/python-modules/micloud { };
 
   netmap = callPackage ../development/python-modules/netmap { };
 
@@ -6997,6 +6995,10 @@ in {
   python-logstash = callPackage ../development/python-modules/python-logstash { };
 
   python-louvain = callPackage ../development/python-modules/python-louvain { };
+
+  python-lsp-jsonrpc = callPackage ../development/python-modules/python-lsp-jsonrpc { };
+
+  python-lsp-server = callPackage ../development/python-modules/python-lsp-server { };
 
   python-ly = callPackage ../development/python-modules/python-ly { };
 
