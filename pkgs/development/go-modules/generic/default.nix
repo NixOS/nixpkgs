@@ -236,6 +236,8 @@ let
 
     passthru = passthru // { inherit go go-modules vendorSha256 ; };
 
+    enableParallelBuilding = enableParallelBuilding;
+
     meta = {
       # Add default meta information
       platforms = go.meta.platforms or lib.platforms.all;
