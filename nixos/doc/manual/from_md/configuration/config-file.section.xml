@@ -37,9 +37,9 @@
   <para>
     Sets can be nested, and in fact dots in option names are shorthand
     for defining a set containing another set. For instance,
-    <link xlink:href="options.html#opt-services.httpd.enable"><literal>services.httpd.enable</literal></link>
-    defines a set named <literal>services</literal> that contains a set
-    named <literal>httpd</literal>, which in turn contains an option
+    <xref linkend="opt-services.httpd.enable" /> defines a set named
+    <literal>services</literal> that contains a set named
+    <literal>httpd</literal>, which in turn contains an option
     definition named <literal>enable</literal> with value
     <literal>true</literal>. This means that the example above can also
     be written as:

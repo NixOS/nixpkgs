@@ -34,9 +34,9 @@ Here, we include two modules from the same directory, `vpn.nix` and
 ```
 
 Note that both `configuration.nix` and `kde.nix` define the option
-[`environment.systemPackages`](options.html#opt-environment.systemPackages). When multiple modules define an
+[](#opt-environment.systemPackages). When multiple modules define an
 option, NixOS will try to *merge* the definitions. In the case of
-[`environment.systemPackages`](options.html#opt-environment.systemPackages), that's easy: the lists of
+[](#opt-environment.systemPackages), that's easy: the lists of
 packages can simply be concatenated. The value in `configuration.nix` is
 merged last, so for list-type options, it will appear at the end of the
 merged list. If you want it to appear first, you can use `mkBefore`:
@@ -49,7 +49,7 @@ This causes the `kvm-intel` kernel module to be loaded before any other
 kernel modules.
 
 For other types of options, a merge may not be possible. For instance,
-if two modules define [`services.httpd.adminAddr`](options.html#opt-services.httpd.adminAddr),
+if two modules define [](#opt-services.httpd.adminAddr),
 `nixos-rebuild` will give an error:
 
 ```plain
@@ -68,8 +68,8 @@ defined in other modules. This is what the `config` function argument is
 for: it contains the complete, merged system configuration. That is,
 `config` is the result of combining the configurations returned by every
 module [^1] . For example, here is a module that adds some packages to
-[`environment.systemPackages`](options.html#opt-environment.systemPackages) only if
-[`services.xserver.enable`](options.html#opt-services.xserver.enable) is set to `true` somewhere else:
+[](#opt-environment.systemPackages) only if
+[](#opt-services.xserver.enable) is set to `true` somewhere else:
 
 ```nix
 { config, pkgs, ... }:

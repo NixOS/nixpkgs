@@ -30,7 +30,7 @@ enable the Apache HTTP Server with `/webroot` as the document root.
 
 Sets can be nested, and in fact dots in option names are shorthand for
 defining a set containing another set. For instance,
-[`services.httpd.enable`](options.html#opt-services.httpd.enable) defines a set named
+[](#opt-services.httpd.enable) defines a set named
 `services` that contains a set named `httpd`, which in turn contains an
 option definition named `enable` with value `true`. This means that the
 example above can also be written as:

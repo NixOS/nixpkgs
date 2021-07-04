@@ -40,12 +40,12 @@
   <para>
     Note that both <literal>configuration.nix</literal> and
     <literal>kde.nix</literal> define the option
-    <link xlink:href="options.html#opt-environment.systemPackages"><literal>environment.systemPackages</literal></link>.
-    When multiple modules define an option, NixOS will try to
+    <xref linkend="opt-environment.systemPackages" />. When multiple
+    modules define an option, NixOS will try to
     <emphasis>merge</emphasis> the definitions. In the case of
-    <link xlink:href="options.html#opt-environment.systemPackages"><literal>environment.systemPackages</literal></link>,
-    that’s easy: the lists of packages can simply be concatenated. The
-    value in <literal>configuration.nix</literal> is merged last, so for
+    <xref linkend="opt-environment.systemPackages" />, that’s easy: the
+    lists of packages can simply be concatenated. The value in
+    <literal>configuration.nix</literal> is merged last, so for
     list-type options, it will appear at the end of the merged list. If
     you want it to appear first, you can use
     <literal>mkBefore</literal>:
@@ -60,7 +60,7 @@ boot.kernelModules = mkBefore [ &quot;kvm-intel&quot; ];
   <para>
     For other types of options, a merge may not be possible. For
     instance, if two modules define
-    <link xlink:href="options.html#opt-services.httpd.adminAddr"><literal>services.httpd.adminAddr</literal></link>,
+    <xref linkend="opt-services.httpd.adminAddr" />,
     <literal>nixos-rebuild</literal> will give an error:
   </para>
   <programlisting>
@@ -89,11 +89,9 @@ services.httpd.adminAddr = pkgs.lib.mkForce &quot;bob@example.org&quot;;
         configuration value depends on itself.
       </para>
     </footnote> . For example, here is a module that adds some packages
-    to
-    <link xlink:href="options.html#opt-environment.systemPackages"><literal>environment.systemPackages</literal></link>
-    only if
-    <link xlink:href="options.html#opt-services.xserver.enable"><literal>services.xserver.enable</literal></link>
-    is set to <literal>true</literal> somewhere else:
+    to <xref linkend="opt-environment.systemPackages" /> only if
+    <xref linkend="opt-services.xserver.enable" /> is set to
+    <literal>true</literal> somewhere else:
   </para>
   <programlisting language="bash">
 { config, pkgs, ... }:
