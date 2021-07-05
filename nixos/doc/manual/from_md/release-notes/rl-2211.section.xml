@@ -1801,6 +1801,13 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="http://www.litech.org/tayga/">TAYGA</link>,
+          an out-of-kernel stateless NAT64 implementation. Available as
+          <link linkend="opt-services.tayga.enable">services.tayga</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/tmate-io/tmate-ssh-server">tmate-ssh-server</link>,
           server side part of
           <link xlink:href="https://tmate.io/">tmate</link>. Available
