@@ -176,7 +176,7 @@ in
       };
 
       daemonNiceLevel = mkOption {
-        type = types.int;
+        type = types.ints.between (-20) 19;
         default = 0;
         description = ''
           Nix daemon process priority. This priority propagates to build processes.
