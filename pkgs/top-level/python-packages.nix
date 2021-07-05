@@ -8733,8 +8733,6 @@ in {
 
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
-  tvnamer = callPackage ../development/python-modules/tvnamer { };
-
   tweedledum = callPackage ../development/python-modules/tweedledum { };
 
   tweepy = callPackage ../development/python-modules/tweepy { };
