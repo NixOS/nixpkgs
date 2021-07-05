@@ -64,8 +64,8 @@ in
     };
     edge = generic {
       channel = "edge";
-      version = "21.6.3";
-      sha256 = "sha256-NgfbkeVRl0AGNkZSS2nSAHp4eZ49QNSEYMuFe1G5iBY=";
-      vendorSha256 = "sha256-rq/MHo5MG2EKZ3d937TIDXFCoWnLlQO3C/fo1bhRxCA=";
+      version = "21.7.1";
+      sha256 = "sha256-VLq776A0H2IZLBeYjXpYzFixcydw/OcYsvKFxeLuewo=";
+      vendorSha256 = "sha256-xSOPMFHfyCmG+yTzBfKR7F5KYV0gcKRNM0UrxpGBpE4=";
     };
   }
