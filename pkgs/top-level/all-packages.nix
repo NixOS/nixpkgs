@@ -4724,7 +4724,9 @@ in
 
   flatpak = callPackage ../development/libraries/flatpak { };
 
-  flatpak-builder = callPackage ../development/tools/flatpak-builder { };
+  flatpak-builder = callPackage ../development/tools/flatpak-builder {
+    binutils = binutils-unwrapped;
+  };
 
   fltrdr = callPackage ../tools/misc/fltrdr {
     icu = icu63;
@@ -13192,6 +13194,8 @@ in
   matter-compiler = callPackage ../development/compilers/matter-compiler {};
 
   cfr = callPackage ../development/tools/java/cfr { };
+
+  checkra1n = callPackage ../development/mobile/checkra1n { };
 
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
@@ -26214,6 +26218,8 @@ in
 
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
+  pianoteq = callPackage ../applications/audio/pianoteq { };
+
   picard = callPackage ../applications/audio/picard { };
 
   picocom = callPackage ../tools/misc/picocom {
@@ -26261,6 +26267,8 @@ in
   purple-lurch = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-lurch { };
 
   purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
+
+  purple-mm-sms = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-mm-sms { };
 
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
 
@@ -31553,6 +31561,8 @@ in
   unityhub = callPackage ../development/tools/unityhub { };
 
   urbit = callPackage ../misc/urbit { };
+
+  usb-reset = callPackage ../applications/misc/usb-reset { };
 
   usql = callPackage ../applications/misc/usql { };
 
