@@ -19,11 +19,15 @@
 , x11Support? !stdenv.isDarwin, libXft
 }:
 
+let
+  withDocs = stdenv.buildPlatform == stdenv.hostPlatform;
+in
 stdenv.mkDerivation rec {
   pname = "pango";
   version = "1.48.4";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ]
+    ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -58,9 +62,11 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=${lib.boolToString withDocs}"
   ] ++ lib.optionals (!x11Support) [
     "-Dxft=disabled" # only works with x11
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -70,7 +76,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # test-font: FAIL
 
-  postInstall = ''
+  postInstall = lib.optionalString withDocs ''
     # So that devhelp can find this.
     # https://gitlab.gnome.org/GNOME/pango/merge_requests/293/diffs#note_1058448
     mkdir -p "$devdoc/share/devhelp"

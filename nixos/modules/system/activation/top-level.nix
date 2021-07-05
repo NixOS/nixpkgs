@@ -13,7 +13,7 @@ let
   # !!! fix this
   children = mapAttrs (childName: childConfig:
       (import ../../../lib/eval-config.nix {
-        inherit baseModules specialArgs;
+        inherit lib baseModules specialArgs;
         system = config.nixpkgs.initialSystem;
         modules =
            (optionals childConfig.inheritParentConfig modules)

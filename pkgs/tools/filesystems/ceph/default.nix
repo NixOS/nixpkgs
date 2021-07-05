@@ -38,7 +38,7 @@
 
 # Linux Only Dependencies
 , linuxHeaders, util-linux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
-, libaio ? null, libxfs ? null, zfs ? null
+, libaio ? null, libxfs ? null, zfs ? null, liburing ? null
 , ...
 }:
 
@@ -130,7 +130,9 @@ let
     ps.Mako
     ceph-common
     ps.cherrypy
-    ps.dateutil
+    ps.cmd2
+    ps.colorama
+    ps.python-dateutil
     ps.jsonpatch
     ps.pecan
     ps.prettytable
@@ -176,7 +178,7 @@ in rec {
       snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
       cryptsetup sqlite lua icu bzip2
     ] ++ lib.optionals stdenv.isLinux [
-      linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
+      linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
     ] ++ lib.optionals hasRadosgw [
@@ -207,11 +209,12 @@ in rec {
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_SYSTEMD=OFF"
       "-DWITH_TESTS=OFF"
+      "-DWITH_CEPHFS_SHELL=ON"
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
-    ];
+    ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
     postFixup = ''
       wrapPythonPrograms

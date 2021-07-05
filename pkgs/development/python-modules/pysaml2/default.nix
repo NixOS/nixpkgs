@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , substituteAll
 , xmlsec
-, cryptography, defusedxml, pyopenssl, dateutil, pytz, requests, six
+, cryptography, defusedxml, pyopenssl, python-dateutil, pytz, requests, six
 , mock, pyasn1, pymongo, pytest, responses, xmlschema, importlib-resources
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cryptography
-    dateutil
+    python-dateutil
     defusedxml
     importlib-resources
     pyopenssl

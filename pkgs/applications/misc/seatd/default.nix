@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "man" ];
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];
 
   buildInputs = [ systemd ];

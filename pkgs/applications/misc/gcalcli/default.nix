@@ -20,7 +20,7 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    dateutil gflags httplib2 parsedatetime six vobject
+    python-dateutil gflags httplib2 parsedatetime six vobject
     google-api-python-client oauth2client uritemplate
     libnotify
   ];

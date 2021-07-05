@@ -5,7 +5,7 @@
 , beautifulsoup4
 , bottle
 , chardet
-, dateutil
+, python-dateutil
 , google-api-python-client
 , google-auth-oauthlib
 , lxml
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     beautifulsoup4
     bottle
     chardet
-    dateutil
+    python-dateutil
     google-api-python-client
     google-auth-oauthlib
     lxml

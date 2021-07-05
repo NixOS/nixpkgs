@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "slides";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "slides";
     rev = "v${version}";
-    sha256 = "00sml6b9q3df9dgl7fpsn6a3qkq6xklnbfvvblf91xdf4ssn7wrx";
+    sha256 = "15f4sn1zsqqhzxnmwb1igh8xhka6li31ygdqgbjvxzm93lkarxvs";
   };
 
   checkInputs = [

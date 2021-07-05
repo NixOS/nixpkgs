@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    oci arrow certifi pinned_click configparser cryptography jmespath dateutil
+    oci arrow certifi pinned_click configparser cryptography jmespath python-dateutil
     pytz retrying six terminaltables pyopenssl pyyaml
   ];
 

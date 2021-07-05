@@ -7,7 +7,7 @@
 , beautifulsoup4
 , bottleneck
 , cython
-, dateutil
+, python-dateutil
 , html5lib
 , jinja2
 , lxml
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     beautifulsoup4
     bottleneck
-    dateutil
+    python-dateutil
     html5lib
     numexpr
     lxml

@@ -14,7 +14,7 @@ sub semantic_less {
 }
 
 sub get_latest_versions {
-  my @channels = get("http://www.jetbrains.com/updates/updates.xml") =~ /(<channel .+?<\/channel>)/gs;
+  my @channels = get("https://www.jetbrains.com/updates/updates.xml") =~ /(<channel .+?<\/channel>)/gs;
   my %h = {};
   for my $ch (@channels) {
     my ($id) = $ch =~ /^<channel id="[^"]+" name="([^"]+)"/;

@@ -4,7 +4,7 @@
 , isPy27
 # python dependencies
 , click
-, dateutil
+, python-dateutil
 , etelemetry
 , filelock
 , funcsigs
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click
-    dateutil
+    python-dateutil
     etelemetry
     filelock
     funcsigs

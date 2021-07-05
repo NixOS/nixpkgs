@@ -4061,6 +4061,12 @@
     github = "gytis-ivaskevicius";
     githubId = 23264966;
   };
+  hagl = {
+    email = "harald@glie.be";
+    github = "hagl";
+    githubId = 1162118;
+    name = "Harald Gliebe";
+  };
   hakuch = {
     email = "hakuch@gmail.com";
     github = "hakuch";
@@ -8192,6 +8198,12 @@
     githubId = 1179566;
     name = "Nicolas B. Pierron";
   };
+  pimeys = {
+    email = "julius@nauk.io";
+    github = "pimeys";
+    githubId = 34967;
+    name = "Julius de Bruijn";
+  };
   pingiun = {
     email = "nixos@pingiun.com";
     github = "pingiun";
@@ -10638,6 +10650,12 @@
     github = "totoroot";
     githubId = 39650930;
   };
+  ToxicFrog = {
+    email = "toxicfrog@ancilla.ca";
+    github = "ToxicFrog";
+    githubId = 90456;
+    name = "Rebecca (Bex) Kelly";
+  };
   travisbhartwell = {
     email = "nafai@travishartwell.net";
     github = "travisbhartwell";
@@ -10787,6 +10805,12 @@
     github = "udono";
     githubId = 347983;
     name = "Udo Spallek";
+  };
+  ulrikstrid = {
+    email = "ulrik.strid@outlook.com";
+    github = "ulrikstrid";
+    githubId = 1607770;
+    name = "Ulrik Strid";
   };
   unode = {
     email = "alves.rjc@gmail.com";

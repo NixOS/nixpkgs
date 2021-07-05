@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, dateutil
+, python-dateutil
 , fetchPypi
 , isPy3k
 , mock
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
   ];
 
   checkInputs = [

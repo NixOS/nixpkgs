@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , coverage
-, dateutil
+, python-dateutil
 , freezegun
 , mock
 , requests-mock
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.3.1";
 
   checkInputs = [ coverage freezegun mock requests-mock sphinx ];
-  propagatedBuildInputs = [ dateutil requests_oauthlib ];
+  propagatedBuildInputs = [ python-dateutil requests_oauthlib ];
 
   # The source package on PyPi is missing files required for unit testing.
   # https://github.com/orcasgit/python-fitbit/issues/148
