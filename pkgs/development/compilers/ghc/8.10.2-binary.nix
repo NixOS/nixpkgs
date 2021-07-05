@@ -244,11 +244,9 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ ];
   configureFlags = [
-    # Note that musl-based bindists seem to do nothing with the
-    # `--with-gmp-libraries` flag, see:
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/20073#note_363231
-    "--with-gmp-libraries=${lib.getLib gmp}/lib"
     "--with-gmp-includes=${lib.getDev gmp}/include"
+    # Note `--with-gmp-libraries` does nothing for GHC bindists:
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
     # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
