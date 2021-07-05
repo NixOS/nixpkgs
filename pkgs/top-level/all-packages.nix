@@ -15284,6 +15284,9 @@ in
   });
 
   glfw = glfw3;
+  glfw-wayland = glfw.override {
+    waylandSupport = true;
+  };
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa Kernel;
