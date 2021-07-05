@@ -446,8 +446,8 @@
      password for the <literal>root</literal> user, e.g.
 <screen>
 setting root password...
-Enter new UNIX password: ***
-Retype new UNIX password: ***</screen>
+New password: ***
+Retype new password: ***</screen>
      <note>
       <para>
        For unattended installations, it is possible to use
