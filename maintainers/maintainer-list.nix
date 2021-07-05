@@ -11980,4 +11980,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  kranzes = {
+    name = "Ilan Joselevich";
+    email = "personal@ilanjoselevich.com";
+    github = "Kranzes";
+    githubId = 56614642;
+  };
 }
