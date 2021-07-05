@@ -29,12 +29,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/include
+    mkdir -p $out/bin $out/lib $out/include $out/share/doc/jsonnet
     cp jsonnet $out/bin/
     cp jsonnetfmt $out/bin/
     cp libjsonnet*.so $out/lib/
     cp -a include/*.h $out/include/
-    mkdir -p $out/share/doc/jsonnet
     cp -r ./html $out/share/doc/jsonnet
   '';
 
