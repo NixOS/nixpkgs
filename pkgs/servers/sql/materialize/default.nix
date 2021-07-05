@@ -40,17 +40,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
-  version = "0.8.0";
-  rev = "b2fe225f1afcfec4912976bdaa4a44caf3ca0842";
+  version = "0.8.1";
+  rev = "ef996c54db7c9504690b9f230a4a676ae1fb617f";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = pname;
-    inherit rev;
-    hash = "sha256:09q1bfgsp6j8l8wv2abgibndwfkg2w3nm4dif4qgdkd52fdg0kc5";
+    rev = "v${version}";
+    sha256 = "1lrv0q191rhdqk316557qk2a6b00vrf07j1g63ri6mp8ad1g8gk3";
   };
 
-  cargoSha256 = "sha256:0y2r4980dyajf2ql9vb2jxcsn0a2q0gd3f8v932fgjqw13ysmi0s";
+  cargoSha256 = "0fx7m1ci4zak7sm71kdiaj2l29rlqax15hd424i9yn4aj1bd358b";
 
   nativeBuildInputs = [ cmake perl pkg-config ]
     # Provides the mig command used by the krb5-src build script
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   MZ_DEV_BUILD_SHA = rev;
-  cargoBuildFlags = [ "--package materialized" ];
+  cargoBuildFlags = [ "--bin materialized" ];
 
   postInstall = ''
     install --mode=444 -D ./misc/dist/materialized.service $out/etc/systemd/system/materialized.service
