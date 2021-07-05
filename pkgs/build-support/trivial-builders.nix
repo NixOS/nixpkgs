@@ -116,7 +116,7 @@ rec {
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     }:
     runCommand name
-      { inherit text executable;
+      { inherit text executable checkPhase;
         passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
@@ -132,7 +132,7 @@ rec {
           echo -n "$text" > "$n"
         fi
 
-        ${checkPhase}
+        eval "$checkPhase"
 
         (test -n "$executable" && chmod +x "$n") || true
       '';

@@ -292,7 +292,7 @@ in {
     port = mkOption {
       description = "Listening port.";
       default = 3000;
-      type = types.int;
+      type = types.port;
     };
 
     socket = mkOption {

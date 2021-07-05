@@ -33,7 +33,7 @@ in
       enable = mkEnableOption "ttyd daemon";
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 7681;
         description = "Port to listen on (use 0 for random port)";
       };
