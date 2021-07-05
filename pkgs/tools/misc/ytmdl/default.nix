@@ -1,9 +1,10 @@
-{ lib, fetchFromGitHub, buildPythonApplication, ffmpeg, ffmpeg-python, musicbrainzngs, rich, simber
-, pydes, youtube-search, unidecode, pyxdg, downloader-cli, beautifulsoup4, itunespy, mutagen, pysocks
-, youtube-dl, ytmusicapi
+{ lib
+, fetchFromGitHub
+, python3
+, ffmpeg
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ytmdl";
   version = "2021.06.26";
 
@@ -20,8 +21,7 @@ buildPythonApplication rec {
   '';
 
 
-  propagatedBuildInputs = [
-    ffmpeg
+  propagatedBuildInputs = with python3.pkgs; [
     ffmpeg-python
     musicbrainzngs
     rich
@@ -39,6 +39,10 @@ buildPythonApplication rec {
     ytmusicapi
   ];
 
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
+  ];
+
   # This application has no tests
   doCheck = false;
 
@@ -46,7 +50,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/deepjyoti30/ytmdl";
     description = "YouTube Music Downloader";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ j0hax ];
   };
 }
