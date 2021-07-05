@@ -24,6 +24,7 @@ andweeb/presence.nvim@main
 andymass/vim-matchup
 andys8/vim-elm-syntax
 antoinemadec/coc-fzf
+antoinemadec/FixCursorHold.nvim
 ap/vim-css-color
 arcticicestudio/nord-vim
 arthurxavierx/vim-unicoder
