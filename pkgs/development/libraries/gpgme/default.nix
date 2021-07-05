@@ -13,11 +13,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    sha256 = "1bg13l5s8x9p1v0jyv29n84bay27pflindpzjsc9gj7i4wdkrg7f";
+    sha256 = "sha256-bIzErtsQ1dTJBYlLodhQVEYZ7nZWBqxD33QFhl3intA=";
   };
 
   patches = [
