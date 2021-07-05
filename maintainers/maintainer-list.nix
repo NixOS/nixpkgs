@@ -1915,6 +1915,16 @@
     githubId = 3956062;
     name = "Simon Lackerbauer";
   };
+  citadelcore = {
+    email = "alex@arctarus.co.uk";
+    github = "citadelcore";
+    githubId = 5567402;
+    name = "Alex Zero";
+    keys = [{
+      longkeyid = "rsa4096/0xA51550EDB450302C";
+      fingerprint = "A0AA 4646 B8F6 9D45 4553  5A88 A515 50ED B450 302C";
+    }];
+  };
   cizra = {
     email = "todurov+nix@gmail.com";
     github = "cizra";
