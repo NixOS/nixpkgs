@@ -207,7 +207,7 @@ in
   keepassxc = handleTest ./keepassxc.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-generic = handleTest ./kernel-generic.nix {};
-  kernel-latest-ath-user-regd = handleTest ./kernel-latest-ath-user-regd.nix {};
+  kernel-ath-user-regd = handleTest ./kernel-ath-user-regd.nix {};
   keycloak = discoverTests (import ./keycloak.nix);
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
