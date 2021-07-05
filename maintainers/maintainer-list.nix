@@ -1731,6 +1731,12 @@
     githubId = 977929;
     name = "Cody Allen";
   };
+  centromere = {
+    email = "nix@centromere.net";
+    github = "centromere";
+    githubId = 543423;
+    name = "Alex Wied";
+  };
   cfouche = {
     email = "chaddai.fouche@gmail.com";
     github = "Chaddai";
