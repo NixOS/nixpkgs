@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bore";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromBitbucket {
     owner = "delan";
     repo = "nonymous";
     rev = version;
-    sha256 = "1xa94kqx5j24vb0nfwc4fzmr9pl6lcf2smbxwahv2yhjpl3yjlhz";
+    sha256 = "0gws1f625izrb3armh6bay1k8l9p9csl37jx03yss1r720k4vn2x";
   };
 
-  cargoSha256 = "0qsxvk77s14bxbhw8c9ixmn3glhw2w68wdz9vwcv722g04pfdwap";
+  cargoSha256 = "1n09gcp1y885lz6g2f73zw3fd0fmv7nwlvaqba2yl0kylzk7naa6";
   cargoBuildFlags = "-p ${pname}";
 
   # FIXME can’t test --all-targets and --doc in a single invocation
