@@ -22,11 +22,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/include/libusb-1.0 \
-        ${libusb1.dev}/include/libusb-1.0
+      --replace /usr/include/libusb-1.0 ${libusb1.dev}/include/libusb-1.0
   '';
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" "prefix=" ];
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "prefix="
+  ];
 
   meta = with lib; {
     description = "Perform a bus reset on a USB device using its vendor and product ID";
