@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     -lgdk_pixbuf-2.0 -lpango-1.0 -latk-1.0 -lcairo -lc -lcrypto
   ";
 
+  patches = [ ./1354.patch ]; #TDDO: remove when transgui updates for transmission-daemon v3 rpc protocol
+
   prePatch = ''
     substituteInPlace restranslator.pas --replace /usr/ $out/
   '';
