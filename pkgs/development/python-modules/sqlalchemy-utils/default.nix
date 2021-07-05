@@ -1,6 +1,6 @@
 { lib, fetchPypi, buildPythonPackage
 , six, sqlalchemy
-, mock, pytz, isort, flake8, jinja2, pg8000, pyodbc, pytest, pymysql, dateutil
+, mock, pytz, isort, flake8, jinja2, pg8000, pyodbc, pytest, pymysql, python-dateutil
 , docutils, flexmock, psycopg2, pygments }:
 
 buildPythonPackage rec {
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pyodbc
     pytest
     pymysql
-    dateutil
+    python-dateutil
     docutils
     flexmock
     psycopg2

@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    dateutil
+    python-dateutil
     pygobject3
     goocalendar
     pycairo

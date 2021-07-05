@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , six
 , pytest
-, dateutil
+, python-dateutil
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ dateutil pytest ];
+  checkInputs = [ python-dateutil pytest ];
   checkPhase = ''
     rm tox.ini
     pytest -k 'not dumps and not time' --ignore=test/test_propclass.py

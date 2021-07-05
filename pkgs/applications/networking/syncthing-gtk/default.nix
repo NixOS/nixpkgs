@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
 , gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
-, gnome, buildPythonApplication, dateutil, pyinotify, pygobject3
+, gnome, buildPythonApplication, python-dateutil, pyinotify, pygobject3
 , bcrypt, gobject-introspection, gsettings-desktop-schemas
 , pango, gdk-pixbuf, atk }:
 
@@ -30,7 +30,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    dateutil pyinotify pygobject3 bcrypt
+    python-dateutil pyinotify pygobject3 bcrypt
   ];
 
   patches = [

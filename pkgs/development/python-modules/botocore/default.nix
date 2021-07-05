@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, dateutil
+, python-dateutil
 , jmespath
 , docutils
 , ordereddict
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     jmespath
     docutils
     ordereddict

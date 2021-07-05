@@ -2952,6 +2952,8 @@ in
 
   numworks-udev-rules = callPackage ../os-specific/linux/numworks-udev-rules { };
 
+  num-utils = callPackage ../tools/text/num-utils { };
+
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
   ipvsadm = callPackage ../os-specific/linux/ipvsadm { };
@@ -8201,6 +8203,8 @@ in
   };
 
   qhull = callPackage ../development/libraries/qhull { };
+
+  qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
@@ -22489,6 +22493,8 @@ in
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
+  rime-data = callPackage ../data/misc/rime-data { };
+
   route159 = callPackage ../data/fonts/route159 { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
@@ -22795,7 +22801,7 @@ in
 
   acd-cli = callPackage ../applications/networking/sync/acd_cli {
     inherit (python3Packages)
-      buildPythonApplication appdirs colorama dateutil
+      buildPythonApplication appdirs colorama python-dateutil
       requests requests_toolbelt setuptools sqlalchemy fusepy;
   };
 

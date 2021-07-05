@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , pytest, pytestcov, mock, coverage, setuptools
-, Mako, sqlalchemy, python-editor, dateutil
+, Mako, sqlalchemy, python-editor, python-dateutil
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest pytestcov mock coverage ];
-  propagatedBuildInputs = [ Mako sqlalchemy python-editor dateutil setuptools ];
+  propagatedBuildInputs = [ Mako sqlalchemy python-editor python-dateutil setuptools ];
 
   # no traditional test suite
   doCheck = false;

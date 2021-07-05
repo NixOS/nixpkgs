@@ -3,7 +3,7 @@
 , Babel
 , blinker
 , buildPythonPackage
-, dateutil
+, python-dateutil
 , docutils
 , doit
 , fetchPypi
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     aiohttp
     Babel
     blinker
-    dateutil
+    python-dateutil
     docutils
     doit
     ghp-import
