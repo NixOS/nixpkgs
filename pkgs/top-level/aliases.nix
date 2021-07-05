@@ -645,6 +645,7 @@ mapAliases ({
   ppl-address-book = throw "ppl-address-book deprecated on 2019-05-02: abandoned by upstream.";
   privateer = throw "privateer was removed because it was broken"; # added 2021-05-18
   processing3 = processing; # added 2019-08-16
+  procmail = throw "procmail has been unmaintained for two decades and is abandoned by upstream."; # added 2021-01-21
   procps-ng = procps; # added 2018-06-08
   proj_5 = throw "Proj-5 has been removed from nixpkgs, use proj instead."; # added 2021-04-12
   prometheus-cups-exporter = throw "outdated and broken by design; removed by developer."; # added 2021-03-16
