@@ -9,7 +9,6 @@ buildPythonPackage rec {
   pname = "editdistance-s";
   version = "1.0.0";
 
-
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
