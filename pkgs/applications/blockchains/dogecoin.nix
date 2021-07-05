@@ -2,28 +2,36 @@
 , pkg-config, autoreconfHook
 , db5, openssl, boost, zlib, miniupnpc, libevent
 , protobuf, util-linux, qt4, qrencode
-, withGui }:
+, withGui, withUpnp ? true, withUtils ? true, withWallet ? true
+, withZmq ? true, zeromq }:
 
 with lib;
 stdenv.mkDerivation rec {
   name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.14.2";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "dogecoin";
     repo = "dogecoin";
     rev = "v${version}";
-    sha256 = "1gw46q63mjzwvb17ck6p1bap2xpdrap08szw2kjhasa3yvd5swyy";
+    sha256 = "15yjzyvgic96pybadfk37zb032xvra0v37iphbnh15dci2fd934j";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db5 openssl util-linux
-                  protobuf boost zlib miniupnpc libevent ]
-                  ++ optionals withGui [ qt4 qrencode ];
+  nativeBuildInputs = [ pkg-config autoreconfHook util-linux ];
+  buildInputs = [ openssl protobuf boost zlib libevent ]
+    ++ optionals withGui [ qt4 qrencode ]
+    ++ optionals withUpnp [ miniupnpc ]
+    ++ optionals withWallet [ db5 ]
+    ++ optionals withZmq [ zeromq ];
 
-  configureFlags = [ "--with-incompatible-bdb"
-                     "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui" ];
+  configureFlags = [
+    "--with-incompatible-bdb"
+    "--with-boost-libdir=${boost.out}/lib"
+  ] ++ optionals (!withGui) [ "--with-gui=no" ]
+    ++ optionals (!withUpnp) [ "--without-miniupnpc" ]
+    ++ optionals (!withUtils) [ "--without-utils" ]
+    ++ optionals (!withWallet) [ "--disable-wallet" ]
+    ++ optionals (!withZmq) [ "--disable-zmq" ];
 
   meta = {
     description = "Wow, such coin, much shiba, very rich";
