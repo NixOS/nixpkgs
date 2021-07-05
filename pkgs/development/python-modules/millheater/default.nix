@@ -2,25 +2,27 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.4.2";
+  version = "0.5.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pymill";
     rev = version;
-    sha256 = "sha256-B9/nxlPHAPZzbOMQj81CxTEjI03JQxfH8F8vy1E4HIQ=";
+    sha256 = "sha256-uMvCpXz+amb5mR9ebkAit21UFYpsTkjkZRXtmcvWt8k=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     async-timeout
+    cryptography
   ];
 
   # Project has no tests
