@@ -375,7 +375,7 @@ let
         }
         trap cleanup EXIT
 
-        tmp=$(mktemp -d initrd-secrets.XXXXXXXXXX)
+        tmp=$(mktemp -d ''${TMPDIR:-/tmp}/initrd-secrets.XXXXXXXXXX)
 
         ${lib.concatStringsSep "\n" (mapAttrsToList (dest: source:
             let source' = if source == null then dest else toString source; in
