@@ -5438,6 +5438,16 @@
     githubId = 788813;
     name = "Bryan Gardiner";
   };
+  khushraj = {
+    email = "khushraj.rathod@gmail.com";
+    github = "KhushrajRathod";
+    githubId = 44947946;
+    name = "Khushraj Rathod";
+    keys = [{
+      longkeyid = "rsa2048/0xB77B2A40E7702F19";
+      fingerprint = "1988 3FD8 EA2E B4EC 0A93  1E22 B77B 2A40 E770 2F19";
+    }];
+  };
   KibaFox = {
     email = "kiba.fox@foxypossibilities.com";
     github = "KibaFox";
