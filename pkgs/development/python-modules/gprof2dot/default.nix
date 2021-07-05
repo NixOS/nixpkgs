@@ -1,12 +1,13 @@
 { lib, fetchFromGitHub, buildPythonApplication, python, graphviz }:
 
-buildPythonApplication {
-  name = "gprof2dot-2019-11-30";
+buildPythonApplication rec {
+  pname = "gprof2dot";
+  version = "2019.11.30";
 
   src = fetchFromGitHub {
     owner = "jrfonseca";
     repo = "gprof2dot";
-    rev = "2019.11.30";
+    rev = version;
     sha256 = "1nw4cfwimd0djarw4wc756q095xir78js8flmycg6g7sl3l6p27s";
   };
 
