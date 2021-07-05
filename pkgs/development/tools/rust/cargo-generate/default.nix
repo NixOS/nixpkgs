@@ -2,27 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.5.3";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ashleygwilliams";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-RrDwq5VufMDsPlqRmBP3x2RUWU740L0L18noByO1IDY=";
+    sha256 = "0mclrkp3rbm9cs5g2x6k8dhbhdq53db16kfr3p07zb5iiyksvk5g";
   };
 
-  cargoSha256 = "sha256-/0pxEQFhovPRI4Knv5xq6+PHRuGN6+tF8CdK5X30LKI=";
+  cargoSha256 = "0pyfrd7cf6g71v660vk0q2wgwa4ga0ljwf5dzcszrgsjay3nnl7f";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl  ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv curl ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d) USER=nixbld
-    git config --global user.name Nixbld
-    git config --global user.email nixbld@localhost.localnet
-  '';
+  doCheck = false;
 
   meta = with lib; {
     description = "cargo, make me a project";
