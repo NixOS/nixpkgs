@@ -148,6 +148,21 @@ in {
       '';
     };
 
+    tpmSupport = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Provide tpm support in libvirt
+      '';
+    };
+
+    tpmPackage = mkOption {
+      type = types.package;
+      default = pkgs.swtpm;
+      description = ''
+        swtpm package to use with libvirt.
+      '';
+    };
   };
 
 
@@ -239,7 +254,8 @@ in {
         ] ++ cfg.extraOptions);
 
       path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
-             ++ optional vswitch.enable vswitch.package;
+             ++ optional vswitch.enable vswitch.package
+             ++ optional cfg.tpmSupport cfg.tpmPackage;
 
       serviceConfig = {
         Type = "notify";
