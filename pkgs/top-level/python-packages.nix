@@ -1220,7 +1220,7 @@ in {
 
   btchip = callPackage ../development/python-modules/btchip { };
 
-  bt_proximity = callPackage ../development/python-modules/bt-proximity { };
+  bt-proximity = callPackage ../development/python-modules/bt-proximity { };
 
   BTrees = callPackage ../development/python-modules/btrees { };
 
