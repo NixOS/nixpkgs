@@ -733,13 +733,12 @@ in
             XMLLibXML XMLSAX XMLSAXBase
             ListCompare JSON
           ]);
-        in pkgs.writeScript "install-grub.sh" (''
-        #!${pkgs.runtimeShell}
-        set -e
-        ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
-      '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
-      '') + cfg.extraInstallCommands);
+        in pkgs.writers.writeDash "install-grub.sh" ''
+          ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
+          ${flip concatMapStrings cfg.mirroredBoots (args: ''
+            ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
+          '')}
+        '';
 
       system.build.grub = grub;
 

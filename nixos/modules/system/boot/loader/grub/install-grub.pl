@@ -3,7 +3,7 @@ use warnings;
 use Class::Struct;
 use XML::LibXML;
 use File::Basename;
-use File::Path;
+use File::Path qw(make_path rmtree);
 use File::stat;
 use File::Copy;
 use File::Copy::Recursive qw(rcopy pathrm);
@@ -91,7 +91,12 @@ die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
 
 print STDERR "updating GRUB $grubVersion menu...\n";
 
-mkpath("$bootPath/grub", 0, 0700);
+# Make GRUB directory
+make_path("$bootPath/grub", {mode => 0700});
+# Make BLS entries directory, see addBLSEntry
+make_path("$bootPath/loader/entries", {mode => 0700});
+# and a temporary one for new entries
+make_path("$bootPath/loader/entries.tmp", {mode => 0700});
 
 # Discover whether the bootPath is on the same filesystem as / and
 # /nix/store.  If not, then all kernels and initrds must be copied to
@@ -404,7 +409,7 @@ $conf .= "$extraConfig\n";
 $conf .= "\n";
 
 my %copied;
-mkpath("$bootPath/kernels", 0, 0755) if $copyKernels;
+make_path("$bootPath/kernels", {mode => 0755}) if $copyKernels;
 
 sub copyToKernelsDir {
     my ($path) = @_;
@@ -424,6 +429,31 @@ sub copyToKernelsDir {
     return ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$name";
 }
 
+sub addBLSEntry {
+    # Creates a Boot Loader Specification[1] entry for a given
+    # NixOS generation. The information contained in the entry
+    # mirrors a boot entry in GRUB menu.
+    #
+    # [1]: https://systemd.io/BOOT_LOADER_SPECIFICATION/
+    my ($gen, $name, $version, $kernel, $initrd, $kernelParams) = @_;
+
+    # The paths are actually relative to $bootPath
+    my $kernelsDir = $copyKernels ? "/kernels" : $storePath;
+    if ($copyKernels) {
+      $kernel =~ s/\(\$drive\d+\)\/+kernels/$kernelsDir/;
+      $initrd =~ s/\(\$drive\d+\)\/+kernels/$kernelsDir/;
+    }
+    my $entry = <<~END;
+      title $name
+      version $version
+      linux $kernel
+      initrd $initrd
+      options $kernelParams
+      END
+    # write entry to the temp directory
+    writeFile("$bootPath/loader/entries.tmp/nixos-generation-$gen.conf", $entry);
+}
+
 sub addEntry {
     my ($name, $path, $options) = @_;
     return unless -e "$path/kernel" && -e "$path/initrd";
@@ -436,7 +466,7 @@ sub addEntry {
         my $initrdName = basename($initrd);
         my $initrdSecretsPath = "$bootPath/kernels/$initrdName-secrets";
 
-        mkpath(dirname($initrdSecretsPath), 0, 0755);
+        make_path(dirname($initrdSecretsPath), {mode => 0755});
         my $oldUmask = umask;
         # Make sure initrd is not world readable (won't work if /boot is FAT)
         umask 0137;
@@ -481,6 +511,8 @@ sub addEntry {
         $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n";
         $conf .= "}\n\n";
     }
+
+    return ($kernel, $initrd, $kernelParams);
 }
 
 
@@ -521,7 +553,7 @@ $conf =~ s/\@bootRoot\@/$grubBootPath/g;
 
 # Emit submenus for all system profiles.
 sub addProfile {
-    my ($profile, $description) = @_;
+    my ($profile, $description, $hasName) = @_;
 
     # Add entries for all generations of this profile.
     $conf .= "submenu \"$description\" {\n" if $grubVersion == 2;
@@ -533,6 +565,7 @@ sub addProfile {
     (glob "$profile-*-link");
 
     my $curEntry = 0;
+    my @curGens;
     foreach my $link (@links) {
         last if $curEntry++ >= $configurationLimit;
         if (! -e "$link/nixos-version") {
@@ -540,25 +573,39 @@ sub addProfile {
             next;
         }
         my $date = strftime("%F", localtime(lstat($link)->mtime));
+        my $gen = nrFromGen($link);
         my $version =
         -e "$link/nixos-version"
         ? readFile("$link/nixos-version")
         : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-        addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link);
+        my ($kernel, $initrd, $kernelParams) =
+            addEntry("NixOS - Generation $gen ($date - $version)", $link);
+        addBLSEntry($gen,
+            $hasName ? $description : "NixOS",
+            "Generation $gen ($date - $version)",
+            $kernel, $initrd, $kernelParams);
+
+        push @curGens, $gen;
     }
 
     $conf .= "}\n" if $grubVersion == 2;
 }
 
-addProfile "/nix/var/nix/profiles/system", "NixOS - All configurations";
+addProfile("/nix/var/nix/profiles/system", "NixOS - All configurations", 0);
 
 if ($grubVersion == 2) {
     for my $profile (glob "/nix/var/nix/profiles/system-profiles/*") {
         my $name = basename($profile);
         next unless $name =~ /^\w+$/;
-        addProfile $profile, "NixOS - Profile '$name'";
+        addProfile($profile, "NixOS - Profile '$name'", 1);
     }
 }
+
+# Atomically replace the BLS entries directory
+my $entriesDir = "$bootPath/loader/entries";
+rename $entriesDir, "$entriesDir.bak" or die "cannot rename $entriesDir to $entriesDir.bak: $!\n";
+rename "$entriesDir.tmp", $entriesDir or die "cannot rename $entriesDir.tmp to $entriesDir: $!\n";
+rmtree "$entriesDir.bak" or die "cannot remove $entriesDir.bak: $!\n";
 
 # extraPrepareConfig could refer to @bootPath@, which we have to substitute
 $extraPrepareConfig =~ s/\@bootPath\@/$bootPath/g;
