@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
   version = "1.41.0";
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-i6AYD1Ony0L2+3yWK6bxOfwoZEvd9qCg33QSqA7bRXI=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fixes out-of-bounds read in uv__idna_toascii() function
+      name = "CVE-2021-22918.patch";
+      url = "https://github.com/libuv/libuv/commit/b7466e31e4bee160d82a68fca11b1f61d46debae.patch";
+      sha256 = "0fbjy0jh7r9nrd27ag1k6am6d8p5ih7p0ywvjn53nq4cyqdqxhi7";
+    })
+  ];
 
   postPatch = let
     toDisable = [
