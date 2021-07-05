@@ -5337,6 +5337,8 @@ in {
 
   pyisy = callPackage ../development/python-modules/pyisy { };
 
+  PyInstaller = callPackage ../development/python-modules/PyInstaller { };
+
   pyinstaller-hooks-contrib = callPackage ../development/python-modules/pyinstaller-hooks-contrib { };
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
