@@ -65,14 +65,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-        # tweak version requirements to what's available in Nixpkgs
+    # tweak version requirements to what's available in Nixpkgs
     substituteInPlace setup.py \
-    --replace "aiohttp==3.7.4" "aiohttp>=3.7.4" \
-    --replace "sortedcontainers==2.3.0" "sortedcontainers>=2.3.0" \
-    --replace "click==7.1.2" "click>=7.1.2" \
-    --replace "clvm_rs==0.1.7" "clvm_rs>=0.1.7" \
-    --replace "clvm==0.9.6" "clvm>=0.9.6" \
-    #
+      --replace "aiohttp==3.7.4" "aiohttp>=3.7.4" \
+      --replace "sortedcontainers==2.3.0" "sortedcontainers>=2.3.0" \
+      --replace "click==7.1.2" "click>=7.1.2" \
+      --replace "clvm_rs==0.1.7" "clvm_rs>=0.1.7" \
+      --replace "clvm==0.9.6" "clvm>=0.9.6" \
   '';
 
   preCheck = ''
