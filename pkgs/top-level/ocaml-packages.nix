@@ -1080,6 +1080,7 @@ let
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
+    pprint_20171003 = callPackage ../development/ocaml-modules/pprint/20171003.nix { };
 
     ppx_blob = callPackage ../development/ocaml-modules/ppx_blob { };
 
