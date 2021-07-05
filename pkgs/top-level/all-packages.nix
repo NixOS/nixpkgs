@@ -3148,6 +3148,8 @@ in
 
   ps_mem = callPackage ../tools/system/ps_mem { };
 
+  pscale = callPackage ../development/tools/pscale { };
+
   psstop = callPackage ../tools/system/psstop { };
 
   precice = callPackage ../development/libraries/precice { };
