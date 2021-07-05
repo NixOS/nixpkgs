@@ -5338,7 +5338,7 @@ in {
 
   pyisy = callPackage ../development/python-modules/pyisy { };
 
-  PyInstaller = callPackage ../development/python-modules/PyInstaller { };
+  pyinstaller = callPackage ../development/python-modules/pyinstaller { };
 
   pyinstaller-hooks-contrib = callPackage ../development/python-modules/pyinstaller-hooks-contrib { };
 
