@@ -30453,7 +30453,8 @@ in
 
   root = callPackage ../applications/science/misc/root {
     python = python3;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+    CoreSymbolication = darwin.apple_sdk.frameworks.CoreSymbolication or null;
   };
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
