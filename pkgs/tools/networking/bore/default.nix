@@ -1,5 +1,4 @@
 { lib, stdenv, rustPlatform, fetchFromBitbucket, llvmPackages, darwin, installShellFiles }:
-
 rustPlatform.buildRustPackage rec {
   pname = "bore";
   version = "0.3.3";
@@ -43,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     description = "DNS query tool";
     homepage = "https://crates.io/crates/bore";
     license = licenses.isc;
-    maintainers = maintainers.delan;
+    maintainers = [ maintainers.delan ];
     mainProgram = "bore";
   };
 }
