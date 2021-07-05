@@ -27720,6 +27720,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  wikidpad = callPackage ../applications/office/wikidpad/2.3.nix { };
+
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
