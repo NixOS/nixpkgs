@@ -36,82 +36,86 @@ let
   # * To skip file checking for a specific arch specfic library,
   #   set `fileToCheckFor = null`.
   ghcBinDists = {
-    i686-linux = {
-      src = {
-        url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
-        sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
+    # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
+    # nixpkgs uses for the respective system.
+    defaultLibc = {
+      i686-linux = {
+        src = {
+          url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
+          sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
+        };
+        exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+        archSpecificLibraries = [
+          # The i686-linux bindist provided by GHC HQ is currently built on Debian 9,
+          # which link it against `libtinfo.so.5` (ncurses 5).
+          # Other bindists are linked `libtinfo.so.6` (ncurses 6).
+          { nixPackage = ncurses5; fileToCheckFor = "libtinfo.so.5"; }
+        ];
       };
-      exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
-      archSpecificLibraries = [
-        # The i686-linux bindist provided by GHC HQ is currently built on Debian 9,
-        # which link it against `libtinfo.so.5` (ncurses 5).
-        # Other bindists are linked `libtinfo.so.6` (ncurses 6).
-        { nixPackage = ncurses5; fileToCheckFor = "libtinfo.so.5"; }
-      ];
+      x86_64-linux = {
+        src = {
+          url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
+          sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
+        };
+        exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+        archSpecificLibraries = [
+          { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
+        ];
+      };
+      armv7l-linux = {
+        src = {
+          url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
+          sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
+        };
+        exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+        archSpecificLibraries = [
+          { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
+        ];
+      };
+      aarch64-linux = {
+        src = {
+          url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
+          sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
+        };
+        exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+        archSpecificLibraries = [
+          { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
+          { nixPackage = numactl; fileToCheckFor = null; }
+        ];
+      };
+      x86_64-darwin = {
+        src = {
+          url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+          sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
+        };
+        exePathForLibraryCheck = null; # we don't have a library check for darwin yet
+        archSpecificLibraries = [
+          { nixPackage = ncurses6; fileToCheckFor = null; }
+          { nixPackage = libiconv; fileToCheckFor = null; }
+        ];
+      };
     };
-    x86_64-linux =
-      if stdenv.hostPlatform.isMusl
-        then
-          { # musl-bindist (referred to below)
-            src = {
-              url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-alpine3.10-linux-integer-simple.tar.xz";
-              sha256 = "0xpcbyaxqyhbl6f0i3s4rp2jm67nqpkfh2qlbj3i2fiaix89ml0l";
-            };
-            exePathForLibraryCheck = "bin/ghc";
-            archSpecificLibraries = [
-              # In contrast to glibc builds, the musl-bindist uses `libncursesw.so.*`
-              # instead of `libtinfo.so.*.`
-              { nixPackage = ncurses6; fileToCheckFor = "libncursesw.so.6"; }
-            ];
-          }
-        else
-          { # normal glibc based bindist
-            src = {
-              url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
-              sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
-            };
-            exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
-            archSpecificLibraries = [
-              { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
-            ];
-          }
-        ;
-    armv7l-linux = {
-      src = {
-        url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
-        sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
+    # Binary distributions for the musl libc for the respective system.
+    musl = {
+      x86_64-linux = {
+        src = {
+          url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-alpine3.10-linux-integer-simple.tar.xz";
+          sha256 = "0xpcbyaxqyhbl6f0i3s4rp2jm67nqpkfh2qlbj3i2fiaix89ml0l";
+        };
+        exePathForLibraryCheck = "bin/ghc";
+        archSpecificLibraries = [
+          # In contrast to glibc builds, the musl-bindist uses `libncursesw.so.*`
+          # instead of `libtinfo.so.*.`
+          { nixPackage = ncurses6; fileToCheckFor = "libncursesw.so.6"; }
+        ];
       };
-      exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
-      archSpecificLibraries = [
-        { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
-      ];
-    };
-    aarch64-linux = {
-      src = {
-        url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
-        sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
-      };
-      exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
-      archSpecificLibraries = [
-        { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
-        { nixPackage = numactl; fileToCheckFor = null; }
-      ];
-    };
-    x86_64-darwin = {
-      src = {
-        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
-        sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
-      };
-      exePathForLibraryCheck = null; # we don't have a library check for darwin yet
-      archSpecificLibraries = [
-        { nixPackage = ncurses6; fileToCheckFor = null; }
-        { nixPackage = libiconv; fileToCheckFor = null; }
-      ];
     };
   };
 
-  binDistUsed = ghcBinDists.${stdenv.hostPlatform.system}
-    or (throw "cannot bootstrap GHC on this platform");
+  distSetName = if stdenv.hostPlatform.isMusl then "musl" else "defaultLibc";
+
+  binDistUsed = ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}
+    or (throw "cannot bootstrap GHC on this platform ('${stdenv.hostPlatform.system}' with libc '${distSetName}')");
 
   useLLVM = !stdenv.targetPlatform.isx86;
 
@@ -361,7 +365,16 @@ stdenv.mkDerivation rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
-    platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+    # HACK: since we can't encode the libc / abi in platforms, we need
+    # to make the platform list dependent on the evaluation platform
+    # in order to avoid eval errors with musl which supports less
+    # platforms than the default libcs (i. e. glibc / libSystem).
+    # This is done for the benefit of Hydra, so `packagePlatforms`
+    # won't return any platforms that would cause an evaluation
+    # failure for `pkgsMusl.haskell.compiler.ghc8102Binary`, as
+    # long as the evaluator runs on a platform that supports
+    # `pkgsMusl`.
+    platforms = builtins.attrNames ghcBinDists.${distSetName};
     hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
     maintainers = with lib.maintainers; [ lostnet ];
   };
