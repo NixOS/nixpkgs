@@ -1,0 +1,42 @@
+From 6edec83653ce1b5fc201ff6db93b966394766814 Mon Sep 17 00:00:00 2001
+From: rmnull <rmnull@users.noreply.github.com>
+Date: Tue, 18 Aug 2020 20:22:52 +0530
+Subject: [PATCH] mark phdrs synced with sections, avoid rechecking it when
+ syncing note sections to segments.
+
+This also serves as a bug fix when a previously synced note segment
+overlaps with another section and creates a false alarm.
+---
+ src/patchelf.cc | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/patchelf.cc b/src/patchelf.cc
+index 05ec793..622f0b6 100644
+--- a/src/patchelf.cc
++++ b/src/patchelf.cc
+@@ -669,6 +669,7 @@ void ElfFile<ElfFileParamNames>::writeReplacedSections(Elf_Off & curOff,
+             memset(contents + rdi(shdr.sh_offset), 'X', rdi(shdr.sh_size));
+     }
+ 
++    std::set<unsigned int> noted_phdrs = {};
+     for (auto & i : replacedSections) {
+         std::string sectionName = i.first;
+         auto & shdr = findSection(sectionName);
+@@ -721,7 +722,7 @@ void ElfFile<ElfFileParamNames>::writeReplacedSections(Elf_Off & curOff,
+                 shdr.sh_addralign = orig_shdr.sh_addralign;
+ 
+             for (unsigned int j = 0; j < phdrs.size(); ++j)
+-                if (rdi(phdrs[j].p_type) == PT_NOTE) {
++                if (rdi(phdrs[j].p_type) == PT_NOTE && noted_phdrs.find(j) == noted_phdrs.end()) {
+                     Elf_Off p_start = rdi(phdrs[j].p_offset);
+                     Elf_Off p_end = p_start + rdi(phdrs[j].p_filesz);
+                     Elf_Off s_start = rdi(orig_shdr.sh_offset);
+@@ -739,6 +740,8 @@ void ElfFile<ElfFileParamNames>::writeReplacedSections(Elf_Off & curOff,
+                     phdrs[j].p_offset = shdr.sh_offset;
+                     phdrs[j].p_vaddr = phdrs[j].p_paddr = shdr.sh_addr;
+                     phdrs[j].p_filesz = phdrs[j].p_memsz = shdr.sh_size;
++
++                    noted_phdrs.insert(j);
+                 }
+         }
+ 
