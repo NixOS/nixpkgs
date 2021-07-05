@@ -20618,6 +20618,8 @@ in
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
+  juju = callPackage ../applications/networking/juju { };
+
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
