@@ -29,8 +29,7 @@ let
   '';
 
   mattermostPluginDerivations = with pkgs;
-    if cfg.plugins == null then null
-    else map (plugin: stdenv.mkDerivation {
+    map (plugin: stdenv.mkDerivation {
       name = "mattermost-plugin";
       installPhase = ''
         mkdir -p $out/share
@@ -44,7 +43,7 @@ let
     }) cfg.plugins;
 
   mattermostPlugins = with pkgs;
-    if mattermostPluginDerivations == null then null
+    if mattermostPluginDerivations == [] then null
     else stdenv.mkDerivation {
       name = "${cfg.package.name}-plugins";
       nativeBuildInputs = [
@@ -177,8 +176,8 @@ in
       };
 
       plugins = mkOption {
-        type = types.nullOr (types.listOf (types.oneOf [types.path types.package]));
-        default = null;
+        type = types.listOf (types.oneOf [types.path types.package]);
+        default = [];
         example = "[ ./com.github.moussetc.mattermost.plugin.giphy-2.0.0.tar.gz ]";
         description = ''
           Plugins to add to the configuration. Overrides any installed if non-null.
@@ -306,11 +305,11 @@ in
           rm -f ${cfg.statePath}/config/config.json
           echo "$new_config" > ${cfg.statePath}/config/config.json
         '' + lib.optionalString cfg.localDatabaseCreate (createDb {}) + ''
-          find . -maxdepth 1 -not -name data -not -name . -exec chown ${cfg.user}:${cfg.group} -R {} \;
-          find . -maxdepth 1 -not -name data -not -name . -exec chmod u+rw,g+r,o-rwx -R {} \;
-
-          # Don't change permissions recursively on the data and current directory.
+          # Don't change permissions recursively on the data, current, and symlinked directories (see ln -sf command above).
           # This dramatically increases startup times for installations with a lot of files.
+          find . -maxdepth 1 -not -name data -not -name client -not -name templates -not -name i18n -not -name fonts -not -name bin -not -name . \
+            -exec chown ${cfg.user}:${cfg.group} -R {} \; -exec chmod u+rw,g+r,o-rwx -R {} \;
+
           chown ${cfg.user}:${cfg.group} ${cfg.statePath}/data .
           chmod u+rw,g+r,o-rwx ${cfg.statePath}/data .
         '';
