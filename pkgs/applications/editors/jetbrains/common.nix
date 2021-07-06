@@ -38,7 +38,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper patchelf unzip ];
 
-  patchPhase = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.isDarwin) ''
       get_file_size() {
         local fname="$1"
         echo $(ls -l $fname | cut -d ' ' -f5)
@@ -64,6 +64,8 @@ with stdenv; lib.makeOverridable mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,$name,share/pixmaps,libexec/${name}}
     cp -a . $out/$name
     ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${mainProgram}.png
@@ -86,6 +88,8 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --set ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$item/share/applications" $out/share
+
+    runHook postInstall
   '';
 
 } // lib.optionalAttrs (!(meta.license.free or true)) {

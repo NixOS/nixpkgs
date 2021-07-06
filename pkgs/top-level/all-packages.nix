@@ -1092,6 +1092,8 @@ in
 
   apkid = callPackage ../development/tools/apkid { };
 
+  apksigcopier = callPackage ../development/tools/apksigcopier { };
+
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };
@@ -5051,6 +5053,8 @@ in
   ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
 
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
+
+  gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gibo = callPackage ../tools/misc/gibo { };
 
@@ -21447,6 +21451,10 @@ in
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
   octomap = callPackage ../development/libraries/octomap { };
+
+  odin = callPackage ../development/compilers/odin {
+    llvmPackages = llvmPackages_11;
+  };
 
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
