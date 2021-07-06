@@ -43,6 +43,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://buy.hpe.com/uk/en/software/server-management-software/server-ilo-management/ilo-management-engine/hpe-agentless-management/p/5219980">hp-ams</link>,
+          the HP Agentless Management Service for ProLiant servers.
+          Available as
+          <link xlink:href="options.html#opt-services.hardware.hp-ams.enable">services.hardware.hp-ams</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht">sourcehut</link>, a
           collection of tools useful for software development. Available
           as
