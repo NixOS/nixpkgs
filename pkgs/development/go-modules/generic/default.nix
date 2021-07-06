@@ -214,7 +214,7 @@ let
       runHook preCheck
 
       for pkg in $(getGoDirs test); do
-        buildGoDir test "$pkg"
+        buildGoDir test $checkFlags "$pkg"
       done
 
       runHook postCheck
@@ -235,6 +235,8 @@ let
     disallowedReferences = lib.optional (!allowGoReference) go;
 
     passthru = passthru // { inherit go go-modules vendorSha256 ; };
+
+    enableParallelBuilding = enableParallelBuilding;
 
     meta = {
       # Add default meta information

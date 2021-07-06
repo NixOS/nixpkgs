@@ -1220,7 +1220,7 @@ in {
 
   btchip = callPackage ../development/python-modules/btchip { };
 
-  bt_proximity = callPackage ../development/python-modules/bt-proximity { };
+  bt-proximity = callPackage ../development/python-modules/bt-proximity { };
 
   BTrees = callPackage ../development/python-modules/btrees { };
 
@@ -7062,6 +7062,8 @@ in {
   python-picnic-api = callPackage ../development/python-modules/python-picnic-api { };
 
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
+
+  python-pkcs11 = callPackage ../development/python-modules/python-pkcs11 { };
 
   python-prctl = callPackage ../development/python-modules/python-prctl { };
 

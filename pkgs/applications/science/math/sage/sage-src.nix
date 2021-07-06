@@ -126,6 +126,15 @@ stdenv.mkDerivation rec {
       rev = "bc84af8c795b7da433d2000afc3626ee65ba28b8";
       sha256 = "sha256-5Kvs9jarC8xRIU1rdmvIWxQLC25ehiTLJpg5skh8WNM=";
     })
+
+    # eclib 20210625 update
+    # https://trac.sagemath.org/ticket/31443
+    (fetchSageDiff {
+      base = "9.4.beta3";
+      name = "eclib-20210625.patch";
+      rev = "789550ca04c94acfb1e803251538996a34962038";
+      sha256 = "sha256-VlyEn5hg3joG8t/GwiRfq9TzJ54AoHxLolsNQ3shc2c=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
