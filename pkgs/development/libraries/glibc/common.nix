@@ -41,9 +41,9 @@
 } @ args:
 
 let
-  version = "2.32";
-  patchSuffix = "-48";
-  sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
+  version = "2.33";
+  patchSuffix = "-45";
+  sha256 = "sha256-LiVWAA4QXb1X8Layoy/yzxc73k8Nhd/8z9i35RoGd/8=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -60,14 +60,14 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.32/master && git describe
-          glibc-2.32-48-g16949aeaa0
-          $ git show --minimal --reverse glibc-2.32.. | gzip -9n --rsyncable - > 2.32-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.33/master && git describe
+          glibc-2.33-45-g58b90461ae
+          $ git show --minimal --reverse glibc-2.33.. | gzip -9n --rsyncable - > 2.33-master.patch.gz
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.32-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.32-master.patch.gz
+          $ zdiff -u 2.33-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.33-master.patch.gz
        */
-      ./2.32-master.patch.gz
+      ./2.33-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
