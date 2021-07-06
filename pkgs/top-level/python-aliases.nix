@@ -63,4 +63,5 @@ mapAliases ({
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
   tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
   websocket_client = websocket-client;
+  bt_proximity = bt-proximity; # added 2021-07-02
 })

@@ -42,12 +42,18 @@ stdenv.mkDerivation {
     ++ lib.optional mpiSupport "--enable-mpi"
   ;
 
-  makeFlags = [ "V=0" ];
-  checkFlags = lib.optional isOpenmpi "-j1";
-
   dontDisableStatic = true;
   enableParallelBuilding = true;
-  doCheck = !stdenv.isAarch64 && stdenv.hostPlatform == stdenv.buildPlatform;
+  makeFlags = [ "V=0" ];
+
+  preCheck = ''
+    export OMPI_MCA_rmaps_base_oversubscribe=1
+    export HYDRA_IFACE=lo
+  '';
+
+  # disallow Darwin checks due to prototype incompatibility of qsort_r
+  # to be fixed in a future version of the source code
+  doCheck = !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = {
     branch = "prev3-develop";

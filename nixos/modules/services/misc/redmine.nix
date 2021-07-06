@@ -71,7 +71,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = "Port on which Redmine is ran.";
       };
