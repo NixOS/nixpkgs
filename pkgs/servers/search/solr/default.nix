@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "solr";
-  version = "8.6.3";
+  version = "8.8.2";
 
   src = fetchurl {
     url = "mirror://apache/lucene/${pname}/${version}/${pname}-${version}.tgz";
-    sha256 = "0mbbmamajamxzcvdlrzx9wmv26kg9nhg9bzazk176dhhx3rjajf2";
+    sha256 = "0zngvszrbnyhgbxvf22jq6amhpns3xpnxkw6bqbc7c1a34jkzd0n";
   };
 
   nativeBuildInputs = [ makeWrapper ];
