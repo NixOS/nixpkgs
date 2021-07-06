@@ -2157,18 +2157,6 @@ final: prev:
     meta.homepage = "https://github.com/haya14busa/incsearch.vim/";
   };
 
-  indent-blankline-nvim-lua = buildVimPluginFrom2Nix {
-    pname = "indent-blankline-nvim-lua";
-    version = "2021-07-03";
-    src = fetchFromGitHub {
-      owner = "lukas-reineke";
-      repo = "indent-blankline.nvim";
-      rev = "1a61a0bb0e67675b0a4cf9ffbfca100e498a1d04";
-      sha256 = "1d20rzl2bzg9v70cz30g0z2ickqw6986sv32xsnpzmlwxdxkg959";
-    };
-    meta.homepage = "https://github.com/lukas-reineke/indent-blankline.nvim/";
-  };
-
   indent-blankline-nvim = buildVimPluginFrom2Nix {
     pname = "indent-blankline-nvim";
     version = "2021-07-03";
