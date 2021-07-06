@@ -12331,7 +12331,7 @@ in
   erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
-    erlang-ls
+    erlang-ls erlfmt
     rebar rebar3 rebar3WithPlugins
     fetchHex beamPackages;
 
