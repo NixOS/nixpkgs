@@ -503,6 +503,15 @@
           <literal>rxvt-unicode</literal> explicitly.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Zfs: <literal>latestCompatibleLinuxPackges</literal> is now
+          exported on the zfs package. One can use
+          <literal>boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackges;</literal>
+          to always track the latest compatible kernel with a given
+          version of zfs.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
