@@ -59,6 +59,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://software.intel.com/content/www/us/en/develop/topics/software-guard-extensions.html">sgx</link>,
+          support for Intel’s Software Guard Extensions (SGX) subsystem,
+          on supported platforms. Available as
+          <link xlink:href="options.html#opt-security.sgx.enable">security.sgx</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Users of flashrom should migrate to
           <link xlink:href="options.html#opt-programs.flashrom.enable">programs.flashrom.enable</link>
           and add themselves to the <literal>flashrom</literal> group to
