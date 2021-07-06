@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "07cq7q71bv3fwddkp2863ylry2ivds00f8sjy8npjpdbkailxm21";
   };
 
-  patchPhase = "patchShebangs test";
+  patches = [ ./tests-use-better-shell.patch ];
+  postPatch = "patchShebangs test";
 
   doCheck = true;
   checkTarget = "test";
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://megastep.org/makeself";
+    homepage = "https://makeself.io";
     description = "Utility to create self-extracting packages";
     license = licenses.gpl2;
     maintainers = [ maintainers.wmertens ];

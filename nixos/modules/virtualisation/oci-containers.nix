@@ -262,9 +262,6 @@ let
     postStop = "${cfg.backend} rm -f ${name} || true";
 
     serviceConfig = {
-      StandardOutput = "null";
-      StandardError = "null";
-
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
       ### init process, but it is not guaranteed; some apps have other reload

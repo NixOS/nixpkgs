@@ -110,7 +110,9 @@ in rec {
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-                              # Musl-based platforms will keep "pie", other platforms will not.
+      # Musl-based platforms will keep "pie", other platforms will not.
+      # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
+      # in the nixpkgs manual to inform users about the defaults.
       defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
                                 # Except when:
                                 #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.

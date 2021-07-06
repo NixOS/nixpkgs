@@ -1,0 +1,10 @@
+Use full bash's sh in tests instead of /bin/sh, as that would be
+too minimalist in the build sandbox.  See issue:
+https://github.com/NixOS/nixpkgs/issues/110149#issuecomment-874258128
+diff --git a/test/extracttest b/test/extracttest
+--- a/test/extracttest
++++ b/test/extracttest
+@@ -9,2 +9,3 @@ setupTests() {
+   $SUT $* archive makeself-test.run "Test $*" echo Testing
++  sed "1s|/bin|$(dirname "$SHELL")|" -i ./makeself-test.run
+ }
