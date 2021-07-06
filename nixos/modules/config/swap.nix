@@ -215,7 +215,7 @@ in
                   fi
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
-                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${sw.device} ${sw.deviceName}
+                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${optionalString (sw.discardPolicy != null) "--allow-discards"} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';
