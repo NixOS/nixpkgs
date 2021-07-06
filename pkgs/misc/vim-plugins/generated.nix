@@ -4837,6 +4837,19 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/tabmerge/";
   };
 
+  tabnine-vim = buildVimPluginFrom2Nix {
+    pname = "tabnine-vim";
+    version = "2021-01-14";
+    src = fetchFromGitHub {
+      owner = "codota";
+      repo = "tabnine-vim";
+      rev = "fa891e62903501f7eeb2f00f6574ec9684e1c4ee";
+      sha256 = "0cra1l31fcngp3iyn61rlngz4qx7zwk68h07bgp9w5gjx59a7npz";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/codota/tabnine-vim/";
+  };
+
   tabpagebuffer-vim = buildVimPluginFrom2Nix {
     pname = "tabpagebuffer-vim";
     version = "2014-09-30";

@@ -93,10 +93,10 @@ let
       inherit (erlang.meta) platforms;
     } // meta;
 
-    passthru = {
+    passthru = ({
       packageName = name;
       env = shell self;
-   };
+    } // (if attrs ? passthru then attrs.passthru else {}));
   } // customPhases);
 in
   fix pkg

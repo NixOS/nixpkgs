@@ -38,6 +38,7 @@ let
       mixRelease = callPackage ./mix-release.nix { };
 
       erlang-ls = callPackage ./erlang-ls { };
+      erlfmt = callPackage ./erlfmt { };
 
       # BEAM-based languages.
       elixir = elixir_1_12;
