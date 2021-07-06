@@ -3,7 +3,7 @@
 , fetchurl
 , darwin
 , gfortran
-, python
+, python3
 , blas
 , lapack
 , mpi                   # generic mpi dependency
@@ -28,23 +28,14 @@ stdenv.mkDerivation rec {
   mpiSupport = !withp4est || p4est.mpiSupport;
   withp4est = petsc-withp4est;
 
-  nativeBuildInputs = [ python gfortran ];
+  nativeBuildInputs = [ python3 gfortran ];
   buildInputs = [ blas lapack ]
     ++ lib.optional mpiSupport mpi
     ++ lib.optional (mpiSupport && mpi.pname == "openmpi") openssh
     ++ lib.optional withp4est p4est
   ;
 
-  # Upstream does some hot she-py-bang stuff, this change streamlines that
-  # process. The original script in upstream is both a shell script and a
-  # python script, where the shellscript just finds a suitable python
-  # interpreter to execute the python script. See
-  # https://github.com/NixOS/nixpkgs/pull/89299#discussion_r450203444
-  # for more details.
-  prePatch = ''
-    substituteInPlace configure \
-      --replace /bin/sh /usr/bin/python
-  '' + lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/install.py \
       --replace /usr/bin/install_name_tool ${darwin.cctools}/bin/install_name_tool
   '';
@@ -71,6 +62,7 @@ stdenv.mkDerivation rec {
       "--with-lapack=1"
     )
   '';
+
   configureScript = "python ./configure";
 
   enableParallelBuilding = true;
