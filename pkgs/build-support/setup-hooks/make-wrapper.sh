@@ -67,24 +67,21 @@ makeWrapper() {
             fi
             for v in $value; do
                 {
-                    if [[ "$mode" == '--prefix'* ]]; then
-                        # Match the value (${v@Q}), optionally surrounded by separators and other values
-                        echo "if [[ \$$varName =~ ^((.*)${separator@Q})?${v@Q}(${separator@Q}(.*))?$ ]]; then"
-                        echo "    pre=\${BASH_REMATCH[2]:+${separator@Q}\${BASH_REMATCH[2]}}"   # the stuff matched before the value plus a leading separator
-                        echo "    post=\${BASH_REMATCH[4]:+${separator@Q}\${BASH_REMATCH[4]}}"  # the same, but after the value
-                        echo "    export $varName=${v@Q}\$pre\$post"
-                        echo "else"
-                        echo "    export $varName=${v@Q}\${$varName:+:\$$varName}"
-                        echo "fi"
-                    elif [[ "$mode" == '--suffix'* ]]; then
-                        # Same match as for `prefix`, but negated
-                        echo "if [[ ! \$$varName =~ ^((.*)${separator@Q})?${v@Q}(${separator@Q}(.*))?$ ]]; then"
-                        echo "    export $varName=\$$varName\${$varName:+${separator@Q}}${v@Q}"
+                    echo "$varName=\${$varName:+${separator@Q}\$$varName${separator@Q}}"               # add separators on both ends unless empty
+                    if [[ "$mode" == '--prefix'* ]]; then                                              # -- in prefix mode --
+                        echo "$varName=\${$varName/${separator@Q}${v@Q}${separator@Q}/${separator@Q}}" # remove the first instance of the value (if any)
+                        echo "$varName=${v@Q}\$$varName"                                               # prepend the value
+                    elif [[ "$mode" == '--suffix'* ]]; then                                            # -- in suffix mode --
+                        echo "if [[ \$$varName != *${separator@Q}${v@Q}${separator@Q}* ]]; then"       # if the value isn't already in the list
+                        echo "    $varName=\$$varName${v@Q}"                                           # append the value
                         echo "fi"
                     else
                         echo "unknown mode $mode!" 1>&2
                         exit 1
                     fi
+                    echo "$varName=\${$varName#${separator@Q}}"                                        # remove leading separator
+                    echo "$varName=\${$varName%${separator@Q}}"                                        # remove trailing separator
+                    echo "export $varName"
                 } >> "$wrapper"
             done
             IFS=$old_ifs
