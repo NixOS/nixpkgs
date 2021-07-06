@@ -816,6 +816,7 @@
   ./services/networking/smokeping.nix
   ./services/networking/softether.nix
   ./services/networking/solanum.nix
+  ./services/networking/sozu.nix
   ./services/networking/spacecookie.nix
   ./services/networking/spiped.nix
   ./services/networking/squid.nix
