@@ -13,12 +13,16 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/tfsec/tfsec";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/version.Version=${version}" ];
+  ldflags = [
+    "-w"
+    "-s"
+    "-X ${goPackagePath}/version.Version=${version}"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/tfsec/tfsec";
     description = "Static analysis powered security scanner for your terraform code";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }
