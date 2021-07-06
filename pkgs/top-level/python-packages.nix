@@ -7063,6 +7063,8 @@ in {
 
   python-picnic-api = callPackage ../development/python-modules/python-picnic-api { };
 
+  python-pidfile = callPackage ../development/python-modules/python-pidfile { };
+
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
 
   python-pkcs11 = callPackage ../development/python-modules/python-pkcs11 { };
