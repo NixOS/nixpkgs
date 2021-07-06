@@ -9610,6 +9610,8 @@ in
     inherit lib udisks2 python3;
   };
 
+  via = callPackage ../tools/misc/via {};
+
   viking = callPackage ../applications/misc/viking { };
 
   vim-vint = callPackage ../development/tools/vim-vint { };
