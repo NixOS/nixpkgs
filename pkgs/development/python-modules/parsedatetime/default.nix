@@ -16,6 +16,8 @@ buildPythonPackage rec {
     sha256 = "4cb368fbb18a0b7231f4d76119165451c8d2e35951455dfee97c62a87b04d455";
   };
 
+  propagatedBuildInputs = [ future ];
+
   checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests/Test*.py" ];
@@ -27,8 +29,6 @@ buildPythonPackage rec {
     "testFloat"
   ];
   pythonImportChecks = [ "parsedatetime" ];
-
-  propagatedBuildInputs = [ future ];
 
   meta = with lib; {
     description = "Parse human-readable date/time text";
