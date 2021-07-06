@@ -9660,6 +9660,12 @@
     githubId = 11135311;
     name = "Simon Chatterjee";
   };
+  simonkampe = {
+    email = "simon.kampe+nix@gmail.com";
+    github = "simonkampe";
+    githubId = 254799;
+    name = "Simon Kämpe";
+  };
   simonvandel = {
     email = "simon.vandel@gmail.com";
     github = "simonvandel";
