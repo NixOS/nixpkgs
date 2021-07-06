@@ -28200,7 +28200,7 @@ in
 
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
 
-  ytmdl = python3Packages.callPackage ../tools/misc/ytmdl { };
+  ytmdl = callPackage ../tools/misc/ytmdl { };
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
