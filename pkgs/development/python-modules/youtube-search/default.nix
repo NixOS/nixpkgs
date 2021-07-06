@@ -1,20 +1,19 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests }:
+{ lib, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "youtube-search";
-  version = "unstable-2021-02-27";
+  version = "2.1.0";
 
-  src = fetchFromGitHub {
-    owner = "joetats";
-    repo = "youtube_search";
-    rev = "886fe1b16c829215ee0984b6859f874b4a30d875";
-    sha256 = "sha256-3ECJ6iHNzx5PLgpTFraFzAYbKnyMYRf/iJ0zajU+hlo=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1541120273996fa433698b2e57b73296dfb8e90536211f29ea997dcf161b66fe";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  # Check disabled due to relative import with no known parent package
+  # tests require network connection
   doCheck = false;
+
   pythonImportsCheck = [ "youtube_search" ];
 
   meta = with lib; {
