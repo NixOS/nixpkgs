@@ -102,6 +102,7 @@ digitaltoad/vim-pug
 direnv/direnv.vim
 dleonard0/pony-vim-syntax
 dmix/elvish.vim
+doki-theme/doki-theme-vim
 dominikduda/vim_current_word
 dpelle/vim-LanguageTool
 dracula/vim as dracula-vim
