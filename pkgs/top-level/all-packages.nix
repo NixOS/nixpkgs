@@ -20603,6 +20603,9 @@ in
 
   intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
 
+  intel-sgx-sdk = callPackage (import ../os-specific/linux/intel-sgx { type = "sdk"; }) { };
+  intel-sgx-psw = callPackage (import ../os-specific/linux/intel-sgx { type = "psw"; }) { };
+
   iomelt = callPackage ../os-specific/linux/iomelt { };
 
   iotop = callPackage ../os-specific/linux/iotop { };
