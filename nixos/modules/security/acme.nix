@@ -736,6 +736,7 @@ in {
       } // (mapAttrs' (cert: conf: nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs)));
 
       systemd.timers = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
+      systemd.mutex.acme = map (cert: "acme-${cert}.service") (attrNames certConfigs);
 
       systemd.targets = let
         # Create some targets which can be depended on to be "active" after cert renewals
