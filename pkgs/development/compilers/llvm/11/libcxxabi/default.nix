@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional withLibunwind libunwind;
 
-  cmakeFlags = lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+  cmakeFlags = lib.optionals standalone [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
