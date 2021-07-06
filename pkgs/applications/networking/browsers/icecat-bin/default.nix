@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchzip
 , autoPatchelfHook
 , wrapGAppsHook
 , gnome2
@@ -45,18 +45,13 @@
 , at-spi2-core
 }:
 
-let
-  mirror = "https://mirror.tochlab.net/pub/gnu/gnuzilla";
-  name = "icecat";
-in
-
 stdenv.mkDerivation rec {
   pname = "icecat-bin";
   version = "60.7.0";
 
-  src = fetchurl {
-    url = "${mirror}/${version}/${name}-${version}.en-US.gnulinux-x86_64.tar.bz2";
-    sha256 = "sha256-Tw3/565dmKY71EsrDb05+T1gBWORIU6FZYkqsa3jaoU=";
+  src = fetchzip {
+    url = "https://mirror.tochlab.net/pub/gnu/gnuzilla/${version}/icecat-${version}.en-US.gnulinux-x86_64.tar.bz2";
+    sha256 = "sha256-bEapbQIcZXQ0Tip/X1Q0guowpr3wNDYsFbHGmTbc5mE=";
   };
 
   nativeBuildInputs = [
@@ -111,11 +106,11 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     mkdir -p $TMP/ $out/{opt,bin}
-    tar -xvf $src -C $TMP/
+    cp $src/* $TMP/ -r
   '';
 
   installPhase = ''
-    cp -r $TMP/icecat/* $out/opt/
+    cp -r $TMP/* $out/opt/
     ln -sf $out/opt/icecat-bin $out/bin/icecat
   '';
 
