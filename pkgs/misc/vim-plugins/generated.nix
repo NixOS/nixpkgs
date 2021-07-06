@@ -3430,6 +3430,18 @@ final: prev:
     meta.homepage = "https://github.com/kevinhwang91/nvim-bqf/";
   };
 
+  nvim-bufdel = buildVimPluginFrom2Nix {
+    pname = "nvim-bufdel";
+    version = "2021-05-21";
+    src = fetchFromGitHub {
+      owner = "ojroques";
+      repo = "nvim-bufdel";
+      rev = "9a1f0f3ed55db86f66ad87f72639269ac1374169";
+      sha256 = "0f10pik2msm7rdi9lx9ll7jgh1gk9y3q8756ri6jdzk4bwd8j4is";
+    };
+    meta.homepage = "https://github.com/ojroques/nvim-bufdel/";
+  };
+
   nvim-bufferline-lua = buildVimPluginFrom2Nix {
     pname = "nvim-bufferline-lua";
     version = "2021-07-05";
