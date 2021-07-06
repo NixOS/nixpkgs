@@ -9441,6 +9441,8 @@ in
 
   twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
 
+  twurl = callPackage ../tools/misc/twurl { };
+
   txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
 
   txt2man = callPackage ../tools/misc/txt2man { };
