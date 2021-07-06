@@ -26,6 +26,14 @@ buildDunePackage rec {
     ./makefile-no-opam.patch
   ];
 
+  # Make tests compatible with alcotest 1.4.0
+  postPatch = ''
+    for p in common.ml test_tcp_options.ml
+    do
+      substituteInPlace test/$p --replace 'Fmt.kstrf Alcotest.fail' 'Fmt.kstrf (fun s -> Alcotest.fail s)'
+    done
+  '';
+
   nativeBuildInputs = [
     bisect_ppx
     ppx_cstruct
