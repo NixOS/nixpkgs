@@ -1,8 +1,9 @@
 { callPackage, libsForQt5 }:
 
 let
-  stableVersion = "2.2.18";
+  stableVersion = "2.2.22";
   previewVersion = stableVersion;
+
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
         branch = if args.stable then "stable" else "preview";
@@ -18,17 +19,15 @@ let
         });
       };
     commonOverrides = [
-      (mkOverride "psutil" "5.6.7"
-        "1an5llivfkwpbcfaapbx78p8sfnvzyfypf60wfxihib1mjr8xbgz")
-      (mkOverride "jsonschema" "3.2.0"
-        "0ykr61yiiizgvm3bzipa3l73rvj49wmrybbfwhvpgk3pscl5pa68")
+      #(mkOverride "module-name" "module-version" "module-hash")
     ];
   };
   mkGui = args: libsForQt5.callPackage (import ./gui.nix (addVersion args // extraArgs)) { };
   mkServer = args: callPackage (import ./server.nix (addVersion args // extraArgs)) { };
-  guiSrcHash = "118z6asl6hsv0777rld4plnrwzkbkh3gb9lg9i6bqrjs93p028fw";
-  serverSrcHash = "0gd37zpvibhlvqqpflpwlrgg8g9rpbxwi9w9fsym00mfwf7sdd3b";
-in {
+  guiSrcHash = "10sk3aybi24kfbmvgbsv68qvdn3za1hvnb6jgrkb93cgamszynmp";
+  serverSrcHash = "0zagnxbjzcfsmj6fkrr9ifylnmwv96mkhypgigkxdpjsf494lwds";
+in
+{
   guiStable = mkGui {
     stable = true;
     sha256Hash = guiSrcHash;

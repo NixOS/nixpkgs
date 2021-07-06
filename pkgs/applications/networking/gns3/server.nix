@@ -4,14 +4,14 @@
 
 let
   defaultOverrides = commonOverrides ++ [
-    (mkOverride "aiofiles" "0.5.0"
-      "98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af")
+    #(mkOverride "module-name" "module-version" "module-hash")
   ];
 
   python = python3.override {
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
-in python.pkgs.buildPythonPackage {
+in
+python.pkgs.buildPythonPackage {
   pname = "gns3-server";
   inherit version;
 
@@ -22,16 +22,22 @@ in python.pkgs.buildPythonPackage {
     sha256 = sha256Hash;
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2" \
-      --replace "py-cpuinfo==7.0.0" "py-cpuinfo>=8.0.0"
-  '';
-
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict setuptools
-    jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
-    prompt_toolkit py-cpuinfo
+    aiofiles
+    aiohttp
+    aiohttp-cors
+    async_generator
+    distro
+    jinja2
+    jsonschema
+    multidict
+    prompt_toolkit
+    psutil
+    py-cpuinfo
+    sentry-sdk
+    setuptools
+    yarl
+    zipstream
   ];
 
   # Requires network access
