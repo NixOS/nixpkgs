@@ -73,6 +73,7 @@ clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
+codota/tabnine-vim
 cohama/lexima.vim
 ConradIrwin/vim-bracketed-paste
 crusoexia/vim-monokai
