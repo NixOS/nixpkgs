@@ -1,16 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi
-, capstone}:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, capstone
+}:
 
 buildPythonPackage rec {
-  pname = "ROPGadget";
-  version = "6.5";
+  pname = "ropgadget";
+  version = "6.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4c0e56f2ba0aef13b2c8ca286aad663525b92020b11bacd16791f5236247905c";
+  src = fetchFromGitHub {
+    owner = "JonathanSalwan";
+    repo = "ROPgadget";
+    rev = "v${version}";
+    sha256 = "1i0gx0cwhxk6d8byvck17hh83szz3k6ndd118ha3q0r0msap0lz1";
   };
 
-  propagatedBuildInputs = [ capstone ];
+  propagatedBuildInputs = [
+    capstone
+  ];
+
+  # Test suite is working with binaries
+  doCheck = false;
+
+  pythonImportsCheck = [ "ropgadget" ];
 
   meta = with lib; {
     description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
