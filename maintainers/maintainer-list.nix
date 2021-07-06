@@ -10976,6 +10976,12 @@
     githubId = 8889722;
     name = "Vitomir Čanadi";
   };
+  vctibor = {
+    name = "Vladim�r Ctibor";
+    email = "vladimir.ctibor@gmail.com";
+    github = "vctibor";
+    githubId = 54367119;
+  };
   vcunat = {
     name = "Vladimír Čunát";
     # vcunat@gmail.com predominated in commits before 2019/03

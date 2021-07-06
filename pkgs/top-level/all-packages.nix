@@ -11546,6 +11546,8 @@ in
 
   kotlin = callPackage ../development/compilers/kotlin { };
 
+  kotlin-native = callPackage ../development/compilers/kotlin-native { };
+
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
   };
