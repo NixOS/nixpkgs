@@ -1,8 +1,8 @@
 { lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
 
 let
-  version = "5.12.13";
-  suffix = "xanmod1-cacule";
+  version = "5.13.0";
+  suffix = "xanmod2-cacule";
 in
 buildLinux (args // rec {
   inherit version;
@@ -12,11 +12,10 @@ buildLinux (args // rec {
     owner = "xanmod";
     repo = "linux";
     rev = modDirVersion;
-    sha256 = "sha256-eFIWlguU1hnkAgTbRxSMTStq0X7XW4IT1/9XlQSgdMQ=";
+    sha256 = "sha256-q+m1Ys/Gfr56cihoX8LS/w7icNcM3oefcXRtvzgx3cM=";
   };
 
   structuredExtraConfig = with lib.kernel; {
-
     # Preemptive Full Tickless Kernel at 500Hz
     PREEMPT_VOLUNTARY = lib.mkForce no;
     PREEMPT = lib.mkForce yes;
@@ -47,7 +46,7 @@ buildLinux (args // rec {
   };
 
   extraMeta = {
-    branch = "5.12-cacule";
+    branch = "5.13-cacule";
     maintainers = with lib.maintainers; [ fortuneteller2k ];
     description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
     broken = stdenv.isAarch64;

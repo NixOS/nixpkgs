@@ -120,12 +120,8 @@ let
       then callPackage ../development/ocaml-modules/camomile { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
-    camlimages_4_1_2 =
-      if lib.versionOlder "4.02" ocaml.version
-      then null
-      else callPackage ../development/ocaml-modules/camlimages/4.1.2.nix {
-      libpng = pkgs.libpng12;
-    };
+    camlimages_4_2_4 = callPackage ../development/ocaml-modules/camlimages/4.2.4.nix { };
+
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };

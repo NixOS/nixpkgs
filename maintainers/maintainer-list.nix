@@ -1915,6 +1915,16 @@
     githubId = 3956062;
     name = "Simon Lackerbauer";
   };
+  citadelcore = {
+    email = "alex@arctarus.co.uk";
+    github = "citadelcore";
+    githubId = 5567402;
+    name = "Alex Zero";
+    keys = [{
+      longkeyid = "rsa4096/0xA51550EDB450302C";
+      fingerprint = "A0AA 4646 B8F6 9D45 4553  5A88 A515 50ED B450 302C";
+    }];
+  };
   cizra = {
     email = "todurov+nix@gmail.com";
     github = "cizra";
@@ -5428,6 +5438,16 @@
     githubId = 788813;
     name = "Bryan Gardiner";
   };
+  khushraj = {
+    email = "khushraj.rathod@gmail.com";
+    github = "KhushrajRathod";
+    githubId = 44947946;
+    name = "Khushraj Rathod";
+    keys = [{
+      longkeyid = "rsa2048/0xB77B2A40E7702F19";
+      fingerprint = "1988 3FD8 EA2E B4EC 0A93  1E22 B77B 2A40 E770 2F19";
+    }];
+  };
   KibaFox = {
     email = "kiba.fox@foxypossibilities.com";
     github = "KibaFox";
@@ -8197,6 +8217,12 @@
     github = "nbp";
     githubId = 1179566;
     name = "Nicolas B. Pierron";
+  };
+  pimeys = {
+    email = "julius@nauk.io";
+    github = "pimeys";
+    githubId = 34967;
+    name = "Julius de Bruijn";
   };
   pingiun = {
     email = "nixos@pingiun.com";

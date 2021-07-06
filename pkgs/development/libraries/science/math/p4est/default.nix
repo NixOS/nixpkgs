@@ -35,13 +35,12 @@ stdenv.mkDerivation {
     ${if mpiSupport then "unset CC" else ""}
   '';
 
-  configureFlags = [ "--with-sc=${p4est-sc}" ]
+  configureFlags = p4est-sc.configureFlags
+    ++ [ "--with-sc=${p4est-sc}" ]
     ++ lib.optional withMetis "--with-metis"
-    ++ lib.optional debugEnable "--enable-debug"
-    ++ lib.optional mpiSupport "--enable-mpi"
   ;
 
-  inherit (p4est-sc) makeFlags dontDisableStatic enableParallelBuilding doCheck;
+  inherit (p4est-sc) makeFlags dontDisableStatic enableParallelBuilding preCheck doCheck;
 
   meta = {
     branch = "prev3-develop";

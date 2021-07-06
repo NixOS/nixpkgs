@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
 let
-  version = "0.55.1";
+  version = "0.55.2";
 in fetchzip {
   name = "sudo-font-${version}";
   url = "https://github.com/jenskutilek/sudo-font/releases/download/v${version}/sudo.zip";
-  sha256 = "17vmcdz73mvy5m5zblgm2fi98v520hsl4lglww8gkhzl5zc6wb9y";
+  sha256 = "0r7w58r80yblyzlh6qb57pmafxb3frg1iny644bfr3p64j4cbzzb";
 
   postFetch = ''
     mkdir -p $out/share/fonts/

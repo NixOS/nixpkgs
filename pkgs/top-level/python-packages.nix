@@ -1220,7 +1220,7 @@ in {
 
   btchip = callPackage ../development/python-modules/btchip { };
 
-  bt_proximity = callPackage ../development/python-modules/bt-proximity { };
+  bt-proximity = callPackage ../development/python-modules/bt-proximity { };
 
   BTrees = callPackage ../development/python-modules/btrees { };
 
@@ -1937,7 +1937,7 @@ in {
 
   discid = callPackage ../development/python-modules/discid { };
 
-  discogs_client = callPackage ../development/python-modules/discogs_client { };
+  discogs-client = callPackage ../development/python-modules/discogs-client { };
 
   discordpy = callPackage ../development/python-modules/discordpy { };
 
@@ -7063,6 +7063,8 @@ in {
 
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
 
+  python-pkcs11 = callPackage ../development/python-modules/python-pkcs11 { };
+
   python-prctl = callPackage ../development/python-modules/python-prctl { };
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
@@ -8732,8 +8734,6 @@ in {
   tuyaha = callPackage ../development/python-modules/tuyaha { };
 
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
-
-  tvnamer = callPackage ../development/python-modules/tvnamer { };
 
   tweedledum = callPackage ../development/python-modules/tweedledum { };
 

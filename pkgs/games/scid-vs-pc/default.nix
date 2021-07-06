@@ -42,6 +42,7 @@ tcl.mkTclDerivation rec {
 
   dontPatchShebangs = true;
 
+  # TODO: can this use tclWrapperArgs?
   postFixup = ''
     sed -i -e '1c#!'"$out"'/bin/tcscid' "$out/bin/scidpgn"
     sed -i -e '1c#!${tk}/bin/wish' "$out/bin/sc_remote"

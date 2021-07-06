@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dbeaver";
-  version = "21.1.1"; # When updating also update fetchedMavenDeps.sha256
+  version = "21.1.2"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-enUwX+BxgPy4c1Vwo1+vN3lFYz4LgofgKvZOYuz/050=";
+    sha256 = "sha256-3q5LTllyqw7s8unJHTuasBCM4iaJ9lLpwgbXwBGUtIw=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     dontFixup = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-vNC+LmGEepZCepPodY3c783moReppqNw32d7AUuvBZc=";
+    outputHash = "sha256-QPDnIXP3yB1Dn0LBbBBLvRDbCyguWvG9Zzb1Vjh72UA=";
   };
 
   nativeBuildInputs = [

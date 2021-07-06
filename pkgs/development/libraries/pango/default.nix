@@ -24,14 +24,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.48.4";
+  version = "1.48.5";
 
   outputs = [ "bin" "out" "dev" ]
     ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ym3cvajy2asapj8xbhfpy05rak79afrhi32hiss0w900vxi72a1";
+    sha256 = "0aivpd6l5687lj5293j859zd7vq97yxpzvad0b6jvh3kc54p87jh";
   };
 
   nativeBuildInputs = [

@@ -37,8 +37,9 @@ mapAliases ({
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
   dateutil = python-dateutil; # added 2021-07-03
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
-  diff_cover = diff-cover; # added 2021-07-02
   dftfit = throw "it's dependency lammps-cython no longer builds";
+  diff_cover = diff-cover; # added 2021-07-02
+  discogs_client = discogs-client; # added 2021-07-02
   dns = dnspython; # Alias for compatibility, 2017-12-10
   faulthandler = throw "faulthandler is built into ${python.executable}";
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
@@ -60,5 +61,7 @@ mapAliases ({
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
+  tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
   websocket_client = websocket-client;
+  bt_proximity = bt-proximity; # added 2021-07-02
 })
