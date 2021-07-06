@@ -8008,6 +8008,8 @@ in {
 
   slob = callPackage ../development/python-modules/slob { };
 
+  slowapi = callPackage ../development/python-modules/slowapi { };
+
   sly = callPackage ../development/python-modules/sly { };
 
   smart-meter-texas = callPackage ../development/python-modules/smart-meter-texas { };
