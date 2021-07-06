@@ -8809,6 +8809,10 @@ in {
 
   typer = callPackage ../development/python-modules/typer { };
 
+  types-decorator = callPackage ../development/python-modules/types-decorator { };
+
+  types-requests = callPackage ../development/python-modules/types-requests { };
+
   typesentry = callPackage ../development/python-modules/typesentry { };
 
   typesystem = callPackage ../development/python-modules/typesystem { };

@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
-  version = "6.17";
+  version = "6.18";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pPf+98zoS1t59RoqbmS4V0OsTLMR37Wcsl9BSWuvc0k=";
+    sha256 = "sha256-n2ADzxkd7bO6cO8UioCdRdCqUu03G9jxs9biEZACSus=";
   };
 
   # needs a Docker setup

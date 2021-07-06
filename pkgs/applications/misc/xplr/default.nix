@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
-  version = "0.14.3";
+  version = "0.14.4";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "012wyl6qvwca5r8kqf8j7r50r1lbv802c90m13xb7rqyb6jjfv0m";
+    sha256 = "1jfclwpip4xvwkvz5g0fb3v04pdnk3ddvkdll0yr7wm0g6p44xfd";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  cargoSha256 = "1mgi7hxsn9wajxr78kr3n4g7fa0rwp4riah8dq06cqwjlh0pkfjd";
+  cargoSha256 = "06iwx3s7h6l9kvd17hx0ihy6zrz4jbfjmdlkyij2fs0fhvas110x";
 
   meta = with lib; {
     description = "A hackable, minimal, fast TUI file explorer";

@@ -12331,7 +12331,7 @@ in
   erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
-    erlang-ls
+    erlang-ls erlfmt
     rebar rebar3 rebar3WithPlugins
     fetchHex beamPackages;
 
@@ -12445,10 +12445,6 @@ in
   minder = callPackage ../applications/misc/minder { };
 
   mujs = callPackage ../development/interpreters/mujs { };
-
-  nix-exec = callPackage ../development/interpreters/nix-exec {
-    git = gitMinimal;
-  };
 
   octave = callPackage ../development/interpreters/octave {
     python = python3;
@@ -26033,7 +26029,7 @@ in
   oberon-risc-emu = callPackage ../misc/emulators/oberon-risc-emu { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {};
-  obs-studio-plugins = callPackage ../applications/video/obs-studio/plugins {};
+  obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
   obsidian = callPackage ../applications/misc/obsidian { };
@@ -28421,6 +28417,8 @@ in
   wownero = callPackage ../applications/blockchains/wownero.nix {};
 
   zcash = callPackage ../applications/blockchains/zcash { stdenv = llvmPackages_11.stdenv; };
+
+  lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
 
   openethereum = callPackage ../applications/blockchains/openethereum { };
 
@@ -31533,6 +31531,8 @@ in
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
   terranix = callPackage ../applications/networking/cluster/terranix {};
+
+  tfswitch = callPackage ../applications/networking/cluster/tfswitch {};
 
   tilt = callPackage ../applications/networking/cluster/tilt {};
 
