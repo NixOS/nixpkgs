@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, curlFull
+, curl
 , zulip
 , p7zip
 , glibc
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    curlFull
+    curl
     ncurses
     openssl
   ];
@@ -39,18 +39,11 @@ stdenv.mkDerivation rec {
     install -D vk-cli --target-directory=$out/bin/
   '';
 
-  postFixup = let
-    libPath = lib.makeLibraryPath [
-      curlFull
-      zulip
-      glibc
-    ];
-  in ''
-    patchelf \
+  postFixup = ''
+    patchelf $out/bin/vk-cli \
     --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-    --set-rpath "${libPath}" \
-    $out/bin/vk-cli
-    '';
+    --set-rpath "${lib.makeLibraryPath [ curl zulip glibc ]}"
+  '';
 
   meta = with lib; {
     description = "A console (ncurses) client for vk.com written in D";
