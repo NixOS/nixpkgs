@@ -242,6 +242,8 @@ let
 
     dap =  callPackage ../development/ocaml-modules/dap { };
 
+    data-encoding = callPackage ../development/ocaml-modules/data-encoding { };
+
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
     diet =  callPackage ../development/ocaml-modules/diet { };

@@ -14,10 +14,7 @@ buildDunePackage {
     crowbar
   ];
 
-  meta = {
-    homepage = "https://gitlab.com/nomadic-labs/json-data-encoding";
+  meta = json-data-encoding.meta // {
     description = "Type-safe encoding to and decoding from JSON (bson support)";
-    license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.ulrikstrid ];
   };
 }
