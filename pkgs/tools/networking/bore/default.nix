@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromBitbucket, llvmPackages, darwin, installShellFiles }:
+{ lib, stdenv, rustPlatform, fetchFromBitbucket, llvmPackages, Libsystem, SystemConfiguration, installShellFiles }:
+
 rustPlatform.buildRustPackage rec {
   pname = "bore";
   version = "0.3.3";
@@ -21,13 +22,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optional stdenv.isDarwin [
-    darwin.Libsystem
-    darwin.apple_sdk.frameworks.SystemConfiguration
+    Libsystem
+    SystemConfiguration
   ];
 
   LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
 
-  preFixup = ''
+  postInstall = ''
     installManPage $src/bore/doc/bore.1
   '';
 
@@ -43,6 +44,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://crates.io/crates/bore";
     license = licenses.isc;
     maintainers = [ maintainers.delan ];
-    mainProgram = "bore";
   };
 }
