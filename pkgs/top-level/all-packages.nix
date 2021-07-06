@@ -31536,6 +31536,8 @@ in
 
   terranix = callPackage ../applications/networking/cluster/terranix {};
 
+  tfswitch = callPackage ../applications/networking/cluster/tfswitch {};
+
   tilt = callPackage ../applications/networking/cluster/tilt {};
 
   timeular = callPackage ../applications/office/timeular {};
