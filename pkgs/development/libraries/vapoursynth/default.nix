@@ -10,13 +10,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "R52";
+  version = "R53";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "1krfdzc2x2vxv4nq9kiv1c09hgj525qn120ah91fw2ikq8ldvmx4";
+    sha256 = "0qcsfkpkry0cmvi60khjwvfz4fqhy23nqmn4pb9qrwll26sn9dcr";
   };
 
   patches = [

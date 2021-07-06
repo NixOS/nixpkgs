@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, boto3 }:
+{ lib, buildPythonPackage, fetchPypi, boto3, cryptography }:
 
 buildPythonPackage rec {
   pname = "ec2instanceconnectcli";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-VaCyCnEhSx1I3bNo57p0IXf92+tO1tT7KSUXzO1IyIU=";
   };
 
-  propagatedBuildInputs = [ boto3 ];
+  propagatedBuildInputs = [ boto3 cryptography ];
 
   # has no tests
   doCheck = false;

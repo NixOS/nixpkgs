@@ -3,8 +3,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
 let
   hello-world = pkgs.writeText "hello-world" ''
     open import IO
+    open import Level
 
-    main = run(putStrLn "Hello World!")
+    main = run {0ℓ} (putStrLn "Hello World!")
   '';
 in
 {

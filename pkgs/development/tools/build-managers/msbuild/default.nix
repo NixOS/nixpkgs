@@ -1,23 +1,33 @@
-{ lib, stdenv, fetchurl, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnet-sdk }:
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnet-sdk, writeText, roslyn }:
 
 let
 
   xplat = fetchurl {
-    url = "https://github.com/mono/msbuild/releases/download/0.07/mono_msbuild_xplat-master-8f608e49.zip";
-    sha256 = "1jxq3fk9a6q2a8i9zacxaz3fkvc22i9qvzlpa7wbb95h42g0ffhq";
+    url = "https://github.com/mono/msbuild/releases/download/0.08/mono_msbuild_6.4.0.208.zip";
+    sha256 = "05k7qmnhfvrdgyjn6vp81jb97y21m261jnwdyqpjqpcmzz18j93g";
   };
 
-  deps = import ./nuget.nix { inherit fetchurl; };
+  deps = map (package: package.src)
+    (import ./deps.nix { inherit fetchurl; });
+
+  nuget-config = writeText "NuGet.config" ''
+    <?xml version="1.0" encoding="utf-8"?>
+    <configuration>
+      <packageSources>
+        <clear />
+      </packageSources>
+    </configuration>
+  '';
 
 in
 
 stdenv.mkDerivation rec {
   pname = "msbuild";
-  version = "16.3+xamarinxplat.2019.07.26.14.57";
+  version = "16.8+xamarinxplat.2020.07.30.15.02";
 
   src = fetchurl {
     url = "https://download.mono-project.com/sources/msbuild/msbuild-${version}.tar.xz";
-    sha256 = "1zcdfx4xsh62wj3g1jc2an0lppsfs691lz4dv05xbgi01aq1hk6a";
+    sha256 = "10amyca78b6pjfsy54b1rgwz2c1bx0sfky9zhldvzy4divckp25g";
   };
 
   nativeBuildInputs = [
@@ -32,24 +42,33 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=msbuild
-  phases = ["unpackPhase" "buildPhase" "installPhase" "installCheckPhase"];
-
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
   LOCALE_ARCHIVE = lib.optionalString stdenv.isLinux
       "${glibcLocales}/lib/locale/locale-archive";
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mono/msbuild/commit/cad85cefabdaa001fb4bdbea2f5bf1d1cdb83c9b.patch";
+      sha256 = "1s8agc7nxxs69b3fl1v1air0c4dpig3hy4sk11l1560jrlx06dhh";
+    })
+  ];
+
+  postPatch = ''
+    sed -i -e "/<\/projectImportSearchPaths>/a <property name=\"MSBuildExtensionsPath\" value=\"$out/lib/mono/xbuild\"/>" \
+      src/MSBuild/app.config
+  '';
+
   buildPhase = ''
     # nuget would otherwise try to base itself in /homeless-shelter
     export HOME=$(pwd)/fake-home
 
+    cp ${nuget-config} NuGet.config
+    nuget sources Add -Name nixos -Source $(pwd)/nixos
+
     for package in ${toString deps}; do
       nuget add $package -Source nixos
     done
-
-    nuget sources Disable -Name "nuget.org"
-    nuget sources Add -Name nixos -Source $(pwd)/nixos
 
     # license check is case sensitive
     mv LICENSE license.bak && mv license.bak license
@@ -64,27 +83,25 @@ stdenv.mkDerivation rec {
     # overwrite the file
     echo "#!${stdenv.shell}" > eng/common/dotnet-install.sh
 
-    # msbuild response files to use only the nixos source
-    echo "/p:RestoreSources=nixos" > artifacts/mono-msbuild/MSBuild.rsp
-    echo "/p:RestoreSources=nixos" > src/MSBuild/MSBuild.rsp
-
     # not patchShebangs, there is /bin/bash in the body of the script as well
     substituteInPlace ./eng/cibuild_bootstrapped_msbuild.sh --replace /bin/bash ${stdenv.shell}
 
     # DisableNerdbankVersioning https://gitter.im/Microsoft/msbuild/archives/2018/06/27?at=5b33dbc4ce3b0f268d489bfa
     # TODO there are some (many?) failing tests
     ./eng/cibuild_bootstrapped_msbuild.sh --host_type mono --configuration Release --skip_tests /p:DisableNerdbankVersioning=true
+    patchShebangs stage1/mono-msbuild/msbuild
   '';
 
   installPhase = ''
-    mono artifacts/mono-msbuild/MSBuild.dll mono/build/install.proj /p:MonoInstallPrefix="$out" /p:Configuration=Release-MONO
+    stage1/mono-msbuild/msbuild mono/build/install.proj /p:MonoInstallPrefix="$out" /p:Configuration=Release-MONO
 
-    ln -s ${mono}/lib/mono/msbuild/Current/bin/Roslyn $out/lib/mono/msbuild/Current/bin/Roslyn
+    ln -s ${roslyn}/lib/dotnet/microsoft.net.compilers.toolset/*/tasks/net472 $out/lib/mono/msbuild/Current/bin/Roslyn
 
     makeWrapper ${mono}/bin/mono $out/bin/msbuild \
-      --set MSBuildExtensionsPath $out/lib/mono/xbuild \
       --set-default MONO_GC_PARAMS "nursery-size=64m" \
       --add-flags "$out/lib/mono/msbuild/15.0/bin/MSBuild.dll"
+
+    ln -s $(find ${dotnet-sdk} -name libhostfxr.so) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
   '';
 
   doInstallCheck = true;
@@ -130,4 +147,3 @@ EOF
     platforms = platforms.unix;
   };
 }
-

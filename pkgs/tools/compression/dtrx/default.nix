@@ -1,4 +1,4 @@
-{ lib, fetchurl, pythonPackages
+{ lib, fetchurl, python2Packages
 , gnutar, unzip, lhasa, rpm, binutils, cpio, gzip, p7zip, cabextract, unrar, unshield
 , bzip2, xz, lzip
 # unzip is handled by p7zip
@@ -11,7 +11,7 @@ let
   ++ lib.optional (unrarSupport) unrar
   ++ [ bzip2 xz lzip ]);
 
-in pythonPackages.buildPythonApplication rec {
+in python2Packages.buildPythonApplication rec {
   pname = "dtrx";
   version = "7.1";
 
@@ -23,6 +23,17 @@ in pythonPackages.buildPythonApplication rec {
   postInstall = ''
     wrapProgram "$out/bin/dtrx" --prefix PATH : "${archivers}"
   '';
+
+  checkPhase = ''
+    python2 tests/compare.py
+  '';
+
+  checkInputs = with python2Packages; [
+    pyyaml
+  ];
+
+  # custom test suite fails
+  doCheck = false;
 
   meta = with lib; {
     description = "Do The Right Extraction: A tool for taking the hassle out of extracting archives";

@@ -3,14 +3,14 @@
 with python3Packages; buildPythonApplication rec {
 
   pname = "isso";
-  version = "0.12.4";
+  version = "0.12.5";
 
   # no tests on PyPI
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
     rev = version;
-    sha256 = "16wjpz8r74fzjvzhl6by3sjc2g1riz8lh59ccgp14bns1yhsh2yi";
+    sha256 = "12ccfba2kwbfm9h4zhlxrcigi98akbdm4qi89iglr4z53ygzpay5";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +23,7 @@ with python3Packages; buildPythonApplication rec {
     flask-caching
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     cffi
   ];
 

@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest, setuptools_scm, tempora, pytest-black, pytestcov }:
+, pytest, setuptools-scm, tempora, pytest-black, pytestcov }:
 
 buildPythonPackage rec {
   pname = "portend";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     substituteInPlace pytest.ini --replace "--flake8" ""
   '';
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ tempora ];
 

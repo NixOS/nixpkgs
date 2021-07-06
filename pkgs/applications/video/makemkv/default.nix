@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , pkg-config
-, ffmpeg_3
+, ffmpeg
 , openssl
 , qtbase
 , zlib
@@ -39,7 +39,7 @@ in mkDerivation {
 
   nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
-  buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
+  buildInputs = [ ffmpeg openssl qtbase zlib ];
 
   qtWrapperArgs =
     let
@@ -72,6 +72,6 @@ in mkDerivation {
     license = licenses.unfree;
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ danieldk titanous ];
+    maintainers = with maintainers; [ titanous ];
   };
 }

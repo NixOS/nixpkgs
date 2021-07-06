@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , aubio
 , cmake
 , dssi
@@ -45,7 +45,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     aubio
     dssi
     flac

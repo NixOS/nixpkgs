@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python
+{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python2
 , enableLibPurple ? false, pidgin ? null
 , enablePam ? false, pam ? null
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ] ++ optional doCheck check;
 
-  buildInputs = [ gnutls libotr python ]
+  buildInputs = [ gnutls libotr python2 ]
     ++ optional enableLibPurple pidgin
     ++ optional enablePam pam;
 

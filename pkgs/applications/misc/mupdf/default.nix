@@ -1,11 +1,27 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkg-config, freetype, harfbuzz, openjpeg
-, jbig2dec, libjpeg , darwin
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, pkg-config
+, freetype
+, harfbuzz
+, openjpeg
+, jbig2dec
+, libjpeg
+, darwin
 , gumbo
-, enableX11 ? true, libX11, libXext, libXi, libXrandr
-, enableCurl ? true, curl, openssl
-, enableGL ? true, freeglut, libGLU
+, enableX11 ? true
+, libX11
+, libXext
+, libXi
+, libXrandr
+, enableCurl ? true
+, curl
+, openssl
+, enableGL ? true
+, freeglut
+, libGLU
 }:
-
 let
 
   # OpenJPEG version is hardcoded in package source
@@ -13,7 +29,8 @@ let
     lib.versions.majorMinor (lib.getVersion openjpeg);
 
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "1.18.0";
   pname = "mupdf";
 
@@ -52,17 +69,21 @@ in stdenv.mkDerivation rec {
   # Use shared libraries to decrease size
   buildFlags = [ "shared" ];
 
-  makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
+  makeFlags = [ "prefix=$(out)" "USE_SYSTEM_LIBS=yes" ]
+    ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
+    ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ];
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU gumbo ]
-                ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
-                ++ lib.optionals enableCurl [ curl openssl ]
-                ++ lib.optionals enableGL (
-                  if stdenv.isDarwin then
-                    with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
-                  else
-                    [ freeglut libGLU ])
-                ;
+  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
+    ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
+    ++ lib.optionals enableCurl [ curl openssl ]
+    ++ lib.optionals enableGL (
+    if stdenv.isDarwin then
+      with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
+    else
+      [ freeglut libGLU ]
+  )
+  ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
@@ -85,6 +106,7 @@ in stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
+  '' + lib.optionalString enableX11 ''
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
     mkdir -p $bin/share/applications
     cat > $bin/share/applications/mupdf.desktop <<EOF

@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, python, bzip2, zlib, gmp, openssl, boost
+{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, openssl, boost
 # Passed by version specific builders
 , baseVersion, revision, sha256
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
 , postPatch ? null
+, knownVulnerabilities ? [ ]
 , CoreServices
 , Security
 , ...
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   };
   inherit postPatch;
 
-  buildInputs = [ python bzip2 zlib gmp openssl boost ]
+  buildInputs = [ python3 bzip2 zlib gmp openssl boost ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
     license = licenses.bsd2;
+    inherit knownVulnerabilities;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";
 }

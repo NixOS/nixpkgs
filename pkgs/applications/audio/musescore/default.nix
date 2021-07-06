@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
-, alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
+, alsa-lib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
 , portaudio, portmidi, qtbase, qtdeclarative, qtgraphicaleffects
 , qtquickcontrols2, qtscript, qtsvg, qttools
 , qtwebengine, qtxmlpatterns
@@ -35,7 +35,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    alsaLib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
+    alsa-lib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
     portaudio portmidi # tesseract
     qtbase qtdeclarative qtgraphicaleffects qtquickcontrols2
     qtscript qtsvg qttools qtwebengine qtxmlpatterns

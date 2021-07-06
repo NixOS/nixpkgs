@@ -6,6 +6,8 @@
 import re
 import textwrap
 
+from collections import OrderedDict
+
 import feedparser
 import requests
 
@@ -25,11 +27,12 @@ for entry in feed.entries:
     print('\n' + url)
     if fixes := re.search(r'This update includes .+ security fixes\.', content):
         fixes = html_tags.sub('', fixes.group(0))
-        zero_days = re.search(r'Google is aware of reports that .+ in the wild\.', content)
+        zero_days = re.search(r'Google is aware( of reports)? that .+ in the wild\.', content)
         if zero_days:
             fixes += " " + zero_days.group(0)
         print('\n' + '\n'.join(textwrap.wrap(fixes, width=72)))
     if cve_list := re.findall(r'CVE-[^: ]+', content):
+        cve_list = list(OrderedDict.fromkeys(cve_list))  # Remove duplicates but preserve the order
         cve_string = ' '.join(cve_list)
         print("\nCVEs:\n" + '\n'.join(textwrap.wrap(cve_string, width=72)))
     break  # We only care about the most recent stable channel update

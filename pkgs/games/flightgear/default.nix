@@ -6,15 +6,15 @@
 }:
 
 let
-  version = "2020.3.4";
+  version = "2020.3.8";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "1cqikbqvidfaynml9bhqfr9yw5ga35gpqrbz62z94a1skdijkpkg";
+      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
+      sha256 = "sha256-/KFumHRkmRvsU/L1i11jG/KbqobnOEP7l4lyPMKHycA=";
     };
 
     phases = [ "installPhase" ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "02d9h10p8hyn0a25csragj6pbwmrir1z8zb92023s9vi21j7bwy8";
+    sha256 = "XXDqhZ9nR+FwQ3LauZe8iGxOjlyDXDrEtj61BQGVDYc=";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, config, makeWrapper
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , atk
 , cairo
@@ -13,14 +13,14 @@
 , gdk-pixbuf
 , glib
 , glibc
-, gnome3
+, gnome
 , gnugrep
 , gnupg
 , gnused
 , gpgme
 , gtk2
 , gtk3
-, kerberos
+, libkrb5
 , libcanberra
 , libGL
 , libGLU
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
 
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib
+      alsa-lib
       at-spi2-atk
       atk
       cairo
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
       glibc
       gtk2
       gtk3
-      kerberos
+      libkrb5
       libX11
       libXScrnSaver
       libXcomposite
@@ -115,7 +115,7 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, ncurses }:
+{ lib, stdenv, fetchurl, alsa-lib, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "speech_tools-${version}.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k2xh13miyv48gh06rgsq2vj25xwj7z6vwq9ilsn8i7ig3nrgzg4";
   };
 
-  buildInputs = [ alsaLib ncurses ];
+  buildInputs = [ alsa-lib ncurses ];
 
   preConfigure = ''
     sed -e s@/usr/bin/@@g -i $( grep -rl '/usr/bin/' . )

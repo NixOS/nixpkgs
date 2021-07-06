@@ -1,8 +1,10 @@
-{ stdenv, writeText, erlang, rebar3, openssl,
+{ stdenv, erlang, rebar3WithPlugins, openssl,
   lib }:
 
 { name, version
 , src
+, beamDeps ? []
+, buildPlugins ? []
 , checkouts ? null
 , releaseType
 , buildInputs ? []
@@ -12,7 +14,6 @@
 , buildPhase ? null
 , configurePhase ? null
 , meta ? {}
-, enableDebugInfo ? false
 , ... }@attrs:
 
 with lib;
@@ -27,28 +28,35 @@ let
     (_: v: v != null)
     { inherit setupHook configurePhase buildPhase installPhase; };
 
-  pkg = self: stdenv.mkDerivation (attrs // {
+  # When using the `beamDeps` argument, it is important that we use
+  # `rebar3WithPlugins` here even when there are no plugins. The vanilla
+  # `rebar3` package is an escript archive with bundled dependencies which can
+  # interfere with those in the app we are trying to build. `rebar3WithPlugins`
+  # doesn't have this issue since it puts its own deps last on the code path.
+  rebar3 = rebar3WithPlugins {
+    plugins = buildPlugins;
+  };
+
+  pkg =
+    assert beamDeps != [] -> checkouts == null;
+    self: stdenv.mkDerivation (attrs // {
 
     name = "${name}-${version}";
     inherit version;
 
-    buildInputs = buildInputs ++ [ erlang rebar3 openssl ];
-    propagatedBuildInputs = [checkouts];
+    buildInputs = buildInputs ++ [ erlang rebar3 openssl ] ++ beamDeps;
 
-    dontStrip = true;
+    # ensure we strip any native binaries (eg. NIFs, ports)
+    stripDebugList = lib.optional (releaseType == "release") "rel";
 
     inherit src;
 
-    setupHook = writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
-    '';
+    REBAR_IGNORE_DEPS = beamDeps != [ ];
 
     configurePhase = ''
       runHook preConfigure
-      ${if checkouts != null then
-          "cp --no-preserve=all -R ${checkouts}/_checkouts ."
-        else
-          ""}
+      ${lib.optionalString (checkouts != null)
+      "cp --no-preserve=all -R ${checkouts}/_checkouts ."}
       runHook postConfigure
     '';
 
@@ -65,9 +73,20 @@ let
       dir=${if releaseType == "escript"
             then "bin"
             else "rel"}
-      mkdir -p "$out/$dir"
+      mkdir -p "$out/$dir" "$out/bin"
       cp -R --preserve=mode "_build/${profile}/$dir" "$out"
+      ${lib.optionalString (releaseType == "release")
+        "find $out/rel/*/bin -type f -executable -exec ln -s -t $out/bin {} \\;"}
       runHook postInstall
+    '';
+
+    postInstall = ''
+      for dir in $out/rel/*/erts-*; do
+        echo "ERTS found in $dir - removing references to erlang to reduce closure size"
+        for f in $dir/bin/{erl,start}; do
+          substituteInPlace "$f" --replace "${erlang}/lib/erlang" "''${dir/\/erts-*/}"
+        done
+      done
     '';
 
     meta = {

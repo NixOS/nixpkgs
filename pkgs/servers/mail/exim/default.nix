@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.94";
+  version = "4.94.2";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    sha256 = "1nsb2i5mqxfz1sl1bmbxmpb2qiaf3wffhfiw4j9vfpagy3xfhzpp";
+    sha256 = "0x4j698gsawm8a3bz531pf1k6izyxfvry4hj5wb0aqphi7y62605";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
         s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
         s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
         s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient}/include/mysql/:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient.dev}/include/mysql/:
       ''}
       ${lib.optionalString enableAuthDovecot ''
         s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
@@ -100,10 +100,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://exim.org/";
+    homepage = "https://exim.org/";
     description = "A mail transfer agent (MTA)";
     license = with licenses; [ gpl2Plus bsd3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tv ajs124 das_j ];
+    changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
   };
 }

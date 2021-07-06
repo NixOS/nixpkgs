@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "django-versatileimagefield";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b197e7066f23bb73b001a61525f2b1cae3dd654bf208a944a7ff5a3fe6107b51";
+    sha256 = "e98f7b0abfbf2559d55b08be40911dcc44b6f3437a6c40d81bf66b6914837fdf";
   };
   propagatedBuildInputs = [ pillow python_magic ];
 

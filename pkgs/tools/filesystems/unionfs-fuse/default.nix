@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fuse, macfuse-stubs }:
+{ lib, stdenv, fetchFromGitHub, cmake, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "unionfs-fuse";
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace '/usr/local/include/osxfuse/fuse' '${macfuse-stubs}/include/fuse'
+      --replace '/usr/local/include/osxfuse/fuse' '${fuse}/include/fuse'
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ (if stdenv.isDarwin then macfuse-stubs else fuse) ];
+  buildInputs = [ fuse ];
 
   # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it
   # possible to do:

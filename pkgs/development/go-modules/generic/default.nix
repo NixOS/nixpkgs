@@ -7,6 +7,9 @@
 , passthru ? {}
 , patches ? []
 
+# Go linker flags, passed to go via -ldflags
+, ldflags ? []
+
 # A function to override the go-modules derivation
 , overrideModAttrs ? (_oldAttrs : {})
 
@@ -153,7 +156,7 @@ let
         echo "$d" | grep -q "\(/_\|examples\|Godeps\|testdata\)" && return 0
         [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v -p $NIX_BUILD_CORES $d 2>&1)"; then
+        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -211,7 +214,7 @@ let
       runHook preCheck
 
       for pkg in $(getGoDirs test); do
-        buildGoDir test "$pkg"
+        buildGoDir test $checkFlags "$pkg"
       done
 
       runHook postCheck
@@ -232,6 +235,8 @@ let
     disallowedReferences = lib.optional (!allowGoReference) go;
 
     passthru = passthru // { inherit go go-modules vendorSha256 ; };
+
+    enableParallelBuilding = enableParallelBuilding;
 
     meta = {
       # Add default meta information

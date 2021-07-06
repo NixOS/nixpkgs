@@ -11,31 +11,6 @@ let
 
   cfg = config.programs.bash;
 
-  bashCompletion = optionalString cfg.enableCompletion ''
-    # Check whether we're running a version of Bash that has support for
-    # programmable completion. If we do, enable all modules installed in
-    # the system and user profile in obsolete /etc/bash_completion.d/
-    # directories. Bash loads completions in all
-    # $XDG_DATA_DIRS/bash-completion/completions/
-    # on demand, so they do not need to be sourced here.
-    if shopt -q progcomp &>/dev/null; then
-      . "${pkgs.bash-completion}/etc/profile.d/bash_completion.sh"
-      nullglobStatus=$(shopt -p nullglob)
-      shopt -s nullglob
-      for p in $NIX_PROFILES; do
-        for m in "$p/etc/bash_completion.d/"*; do
-          . $m
-        done
-      done
-      eval "$nullglobStatus"
-      unset nullglobStatus p m
-    fi
-  '';
-
-  lsColors = optionalString cfg.enableLsColors ''
-    eval "$(${pkgs.coreutils}/bin/dircolors -b)"
-  '';
-
   bashAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
@@ -123,20 +98,13 @@ in
         type = types.lines;
       };
 
-      enableCompletion = mkOption {
-        default = true;
+      promptPluginInit = mkOption {
+        default = "";
         description = ''
-          Enable Bash completion for all interactive bash shells.
+          Shell script code used to initialise bash prompt plugins.
         '';
-        type = types.bool;
-      };
-
-      enableLsColors = mkOption {
-        default = true;
-        description = ''
-          Enable extra colors in directory listings.
-        '';
-        type = types.bool;
+        type = types.lines;
+        internal = true;
       };
 
     };
@@ -167,8 +135,7 @@ in
         set +h
 
         ${cfg.promptInit}
-        ${bashCompletion}
-        ${lsColors}
+        ${cfg.promptPluginInit}
         ${bashAliases}
 
         ${cfge.interactiveShellInit}

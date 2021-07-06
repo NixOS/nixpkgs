@@ -25,7 +25,8 @@
 
 <screen>
 <prompt>$ </prompt>cd /path/to/nixpkgs/nixos/doc/manual
-<prompt>$ </prompt>make
+<prompt>$ </prompt>nix-shell
+<prompt>nix-shell$ </prompt>make
 </screen>
 
   <para>

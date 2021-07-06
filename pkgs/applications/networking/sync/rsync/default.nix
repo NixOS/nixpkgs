@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, perl, libiconv, zlib, popt
-, enableACLs ? !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD), acl ? null
+, enableACLs ? lib.meta.availableOn stdenv.hostPlatform acl, acl ? null
 , enableLZ4 ? true, lz4 ? null
 , enableOpenSSL ? true, openssl ? null
 , enableXXHash ? true, xxHash ? null
@@ -15,7 +15,7 @@ assert enableXXHash -> xxHash != null;
 assert enableZstd -> zstd != null;
 
 let
-  base = import ./base.nix { inherit lib stdenv fetchurl; };
+  base = import ./base.nix { inherit lib fetchurl; };
 in
 stdenv.mkDerivation rec {
   name = "rsync-${base.version}";

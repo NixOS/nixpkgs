@@ -10,6 +10,7 @@
 , libpng
 , boost
 , guile
+, stdenv
 }:
 
 mkDerivation {
@@ -26,8 +27,19 @@ mkDerivation {
   nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config ];
   buildInputs = [ eigen zlib libpng boost guile ];
 
-  # Link "Studio" binary to "libfive-studio" to be more obvious:
-  postFixup = ''
+  postInstall = if stdenv.isDarwin then ''
+    # No rules to install the mac app, so do it manually.
+    mkdir -p $out/Applications
+    cp -r studio/Studio.app $out/Applications/Studio.app
+
+    install_name_tool \
+      -change libfive.dylib $out/lib/libfive.dylib \
+      -change libfive-guile.dylib $out/lib/libfive-guile.dylib \
+      $out/Applications/Studio.app/Contents/MacOS/Studio
+
+    wrapQtApp $out/Applications/Studio.app/Contents/MacOS/Studio
+  '' else ''
+    # Link "Studio" binary to "libfive-studio" to be more obvious:
     ln -s "$out/bin/Studio" "$out/bin/libfive-studio"
   '';
 

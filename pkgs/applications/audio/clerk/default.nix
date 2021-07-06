@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, rofi, mpc_cli, perl,
-util-linux, pythonPackages, libnotify }:
+util-linux, python3Packages, libnotify }:
 
 stdenv.mkDerivation {
   name = "clerk-2016-10-14";
@@ -12,9 +12,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ pythonPackages.mpd2 ];
+  buildInputs = [ python3Packages.mpd2 ];
 
   dontBuild = true;
+
+  strictDeps = true;
 
   installPhase = ''
     DESTDIR=$out PREFIX=/ make install

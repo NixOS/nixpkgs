@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, yacc, bootstrap_cmds
+{ lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
 , openssl, openldap, libedit, keyutils
 
 # Extra Arguments
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
        ];
 
   nativeBuildInputs = [ pkg-config perl ]
-    ++ optional (!libOnly) yacc
+    ++ optional (!libOnly) bison
     # Provides the mig command used by the build scripts
     ++ optional stdenv.isDarwin bootstrap_cmds;
 

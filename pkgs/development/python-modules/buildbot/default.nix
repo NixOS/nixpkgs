@@ -1,6 +1,6 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, sqlalchemy,
-  sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
+  sqlalchemy_migrate, python-dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq,
   txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
   isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
   parameterized, git, openssh, glibcLocales, ldap3, nixosTests }:
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "3.0.2";
+    version = "3.1.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0iywcvq1sx9z5f37pw7g9qqm19fr3bymzawb0i2afm737hxr2xfp";
+      sha256 = "0vh2v1qs65kwcj1x8r1wj2g456kflspyz7mjara9ph9qs7j97y74";
     };
 
     propagatedBuildInputs = [
@@ -39,11 +39,12 @@ let
       zope_interface
       sqlalchemy
       sqlalchemy_migrate
-      dateutil
+      python-dateutil
       txaio
       autobahn
       pyjwt
       pyyaml
+      unidiff
     ]
       # tls
       ++ twisted.extras.tls;
@@ -100,7 +101,7 @@ let
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "An open-source continuous integration framework for automating software build, test, and release processes";
-      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
+      maintainers = with maintainers; [ ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };
   };

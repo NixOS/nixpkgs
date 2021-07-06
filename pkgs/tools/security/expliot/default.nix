@@ -22,14 +22,14 @@
 
 buildPythonApplication rec {
   pname = "expliot";
-  version = "0.9.6";
+  version = "0.9.8";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = pname;
     rev = version;
-    sha256 = "1wn8fyrvis0gw80zzmpivinw6mz5n33inhv39iallsl3is8xpgpa";
+    sha256 = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
   };
 
   propagatedBuildInputs = [

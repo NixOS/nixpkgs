@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ xnwdd ];
+    # error: token ""1.1"" is not valid in preprocessor expression
+    # TODO: fix pname being different from the attribute name
+    broken = true;
   };
 
   src = fetchgit {
@@ -53,8 +56,8 @@ stdenv.mkDerivation rec {
     e = "\");";
     v = lib.getVersion llvmPackages.clang;
   in
-    p+llvmPackages.libcxx+"/include/c++/v1"+e
-    +p+llvmPackages.clang-unwrapped+"/lib/clang/"+v+"/include/"+e
+    p+llvmPackages.libcxx.dev+"/include/c++/v1"+e
+    +p+llvmPackages.clang-unwrapped.lib+"/lib/clang/"+v+"/include/"+e
     +p+glibc.dev+"/include"+e;
 
   preConfigure = ''

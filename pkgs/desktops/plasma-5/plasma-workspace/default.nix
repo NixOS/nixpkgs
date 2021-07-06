@@ -53,9 +53,10 @@ mkDerivation {
     ./0002-absolute-wallpaper-install-dir.patch
   ];
 
+  # QT_INSTALL_BINS refers to qtbase, and qdbus is in qttools
   postPatch = ''
-    substituteInPlace wallpapers/image/wallpaper.knsrc.cmake \
-      --replace '@QtBinariesDir@/qdbus' ${getBin qttools}/bin/qdbus
+    substituteInPlace CMakeLists.txt \
+      --replace 'query_qmake(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
   '';
 
   NIX_CFLAGS_COMPILE = [

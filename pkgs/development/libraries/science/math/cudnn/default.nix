@@ -1,4 +1,4 @@
-{ callPackage, cudatoolkit_9_0, cudatoolkit_9_1, cudatoolkit_9_2, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2, cudatoolkit_11_0, cudatoolkit_11_1, cudatoolkit_11_2 }:
+{ callPackage, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2, cudatoolkit_11_0, cudatoolkit_11_1, cudatoolkit_11_2 }:
 
 let
   generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
@@ -6,29 +6,6 @@ let
   };
 
 in rec {
-  cudnn_cudatoolkit_9_0 = generic rec {
-    version = "7.3.0";
-    cudatoolkit = cudatoolkit_9_0;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.3.0.29.tgz";
-    sha256 = "16z4vgbcmbayk4hppz0xshgs3g07blkp4j25cxcjqyrczx1r0gs0";
-  };
-
-  cudnn_cudatoolkit_9_1 = generic rec {
-    version = "7.1.3";
-    cudatoolkit = cudatoolkit_9_1;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.1.tgz";
-    sha256 = "0a0237gpr0p63s92njai0xvxmkbailzgfsvh7n9fnz0njhvnsqfx";
-  };
-
-  cudnn_cudatoolkit_9_2 = generic rec {
-    version = "7.2.1";
-    cudatoolkit = cudatoolkit_9_2;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.2.1.38.tgz";
-    sha256 = "1sf215wm6zgr17gs6sxfhw61b7a0qmcxiwhgy1b4nqdyxpqgay1y";
-  };
-
-  cudnn_cudatoolkit_9 = cudnn_cudatoolkit_9_2;
-
   cudnn_cudatoolkit_10_0 = generic rec {
     version = "7.4.2";
     cudatoolkit = cudatoolkit_10_0;
@@ -53,12 +30,12 @@ in rec {
   cudnn_cudatoolkit_10 = cudnn_cudatoolkit_10_2;
 
   cudnn_cudatoolkit_11_0 = generic rec {
-    version = "8.1.0";
+    version = "8.1.1";
     cudatoolkit = cudatoolkit_11_0;
     # 8.1.0 is compatible with CUDA 11.0, 11.1, and 11.2:
     # https://docs.nvidia.com/deeplearning/cudnn/support-matrix/index.html#cudnn-cuda-hardware-versions
-    srcName = "cudnn-11.2-linux-x64-v8.1.0.77.tgz";
-    sha256 = "sha256-2+gvrwcdkbqbzwBIAUatM/RiSC3+5WyvRHnBuNq+Pss=";
+    srcName = "cudnn-11.2-linux-x64-v8.1.1.33.tgz";
+    hash = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
   };
 
   cudnn_cudatoolkit_11_1 = cudnn_cudatoolkit_11_0.override {

@@ -1,4 +1,4 @@
-{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
 
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
@@ -19,16 +19,16 @@ let
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.45.10";
+  version = "0.47.5";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "06ykgcak7l3q812c4xrp720db3yq0v2lkrzkmwchlwp5rpwhqpck";
+    sha256 = "16sm93vzlsqmrykbzdvgwszbhq79brd74zp9n9q5wrf4s44xizzv";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "1252zgyb23vfvy63cqd8jdjbm4w9ddwnp32z5vf1fqvd2rrz6lz9";
+    sha256 = "0jk9pf3ljzfdv7d91wxda8z9qz653qas58wsrx42gnf7zxn1l648";
   };
 
 in {
@@ -55,9 +55,10 @@ in {
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages ++ [ gtk3 ];
+    buildInputs = atomEnv.packages ++ [ gtk3 libxshmfence ];
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
       mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
@@ -67,6 +68,7 @@ in {
 
       ln -s ${trilium_svg} $out/share/icons/hicolor/scalable/apps/trilium.svg
       cp ${desktopItem}/share/applications/* $out/share/applications
+      runHook postInstall
     '';
 
     # LD_LIBRARY_PATH "shouldn't" be needed, remove when possible :)
@@ -91,8 +93,6 @@ in {
 
     buildInputs = [
       stdenv.cc.cc.lib
-      zlib
-      libxkbfile
     ];
 
     patches = [

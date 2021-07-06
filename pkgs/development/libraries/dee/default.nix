@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://launchpad.net/dee";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar worldofpeace ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

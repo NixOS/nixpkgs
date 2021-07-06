@@ -16,11 +16,13 @@
 , exempi
 , intltool
 , shared-mime-info
+, cinnamon-translations
+, libgsf
 }:
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "4.6.5";
+  version = "5.0.0";
 
   # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
 
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "04rgdph9pxdj5wzzv2i0pgyhg3s74nh9jf1ry9z6v5bvv222ili4";
+    sha256 = "07n9p93iyrzb7636qqwknq8dd3im1y6wb9jfvif96mbvvdwsnfyz";
   };
 
   outputs = [ "out" "dev" ];
@@ -43,6 +45,7 @@ stdenv.mkDerivation rec {
     libexif
     exempi
     gobject-introspection
+    libgsf
   ];
 
   nativeBuildInputs = [
@@ -57,6 +60,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # TODO: https://github.com/NixOS/nixpkgs/issues/36468
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    # use locales from cinnamon-translations
+    "--localedir=${cinnamon-translations}/share/locale"
   ];
 
   meta = with lib; {

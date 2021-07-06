@@ -110,7 +110,7 @@ in
   systemd.services.google-network-daemon = {
     description = "Google Compute Engine Network Daemon";
     after = [ "network-online.target" "network.target" "google-instance-setup.service" ];
-    path = with pkgs; [ iproute ];
+    path = with pkgs; [ iproute2 ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_network_daemon";
       StandardOutput="journal+console";

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, glib, dbus-glib
 , desktopSupport ? "gnomeflashback", xorg
 , gtk2
-, gtk3, gnome3, mate
+, gtk3, gnome, mate
 , libxfce4util, xfce4-panel
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib dbus-glib xorg.xcbutilwm ]
-    ++ lib.optionals (desktopSupport == "gnomeflashback") [ gtk3 gnome3.gnome-panel ]
+    ++ lib.optionals (desktopSupport == "gnomeflashback") [ gtk3 gnome.gnome-panel ]
     ++ lib.optionals (desktopSupport == "mate") [ gtk3 mate.mate-panel ]
     ++ lib.optionals (desktopSupport == "xfce4") [ gtk2 libxfce4util xfce4-panel ]
   ;
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/kalj/xmonad-log-applet";
     license = licenses.bsd3;
-    broken = desktopSupport == "gnomeflashback";
+    broken = desktopSupport == "gnomeflashback" || desktopSupport == "xfce4";
     description = "An applet that will display XMonad log information (${desktopSupport} version)";
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "p7zip";
-  version = "17.03";
+  version = "17.04";
 
   src = fetchFromGitHub {
     owner  = "szcnick";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0zgpa90z5p30jbpqydiig1h8hn41c76n2x26rh8cc92xw72ni33d";
+    sha256 = "sha256-19F4hPV0nKVuFZNbOcXrcA1uW6Y3HQolaHVIYXGmh18=";
   };
 
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     description = "A new p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.raskin ];
+    mainProgram = "7z";
     # RAR code is under non-free UnRAR license, but we remove it
     license = if enableUnfree then lib.licenses.unfree else lib.licenses.lgpl2Plus;
   };

@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nimlsp";
-  version = "0.2.6";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "PMunch";
     repo = "nimlsp";
     rev = "v${version}";
-    sha256 = "13kw3zjh0iqymwqxwhyj8jz6hgswwahf1rjd6iad7c6gcwrrg6yl";
+    sha256 = "1lm823nvpp3bj9527jd8n1jxh6y8p8ngkfkj91p94m7ffai6jazq";
   };
 
   nativeBuildInputs = [ nim ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR
     nim -d:release -p:${astpatternmatching}/src -p:${jsonschema}/src \
       c --threads:on -d:nimcore -d:nimsuggest -d:debugCommunication \
-      -d:debugLogging -d:explicitSourcePath=${srcOnly nim.unwrapped} -d:tempDir=/tmp src/nimlsp
+      -d:debugLogging -d:explicitSourcePath=${srcOnly nim.passthru.nim} -d:tempDir=/tmp src/nimlsp
   '';
 
   installPhase = ''

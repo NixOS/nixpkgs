@@ -5,7 +5,7 @@ with haskellLib;
 self: super: {
 
   # This compiler version needs llvm 6.x.
-  llvmPackages = pkgs.llvmPackages_6;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_6;
 
   # Disable GHC 8.6.x core libraries.
   array = null;
@@ -105,5 +105,9 @@ self: super: {
 
   # https://github.com/haskellari/time-compat/issues/23
   time-compat = dontCheck super.time-compat;
+
+  # hackage-db 2.1.1 is incompatible with Cabal < 3.4
+  # See https://github.com/NixOS/cabal2nix/issues/501
+  hackage-db = super.hackage-db_2_1_0;
 
 }

@@ -145,7 +145,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes apiserver extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     extraSANs = mkOption {

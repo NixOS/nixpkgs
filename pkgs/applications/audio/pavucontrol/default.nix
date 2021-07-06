@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, intltool, libpulseaudio,
-gtkmm3 , libcanberra-gtk3, gnome3, wrapGAppsHook }:
+gtkmm3 , libcanberra-gtk3, gnome, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "pavucontrol";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   })];
 
   buildInputs = [ libpulseaudio gtkmm3 libcanberra-gtk3
-                  gnome3.adwaita-icon-theme ];
+                  gnome.adwaita-icon-theme ];
 
   nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 

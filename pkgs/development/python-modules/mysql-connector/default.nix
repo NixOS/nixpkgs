@@ -4,13 +4,13 @@ let
   py = python;
 in buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.23";
+  version = "8.0.24";
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "sha256-YVtcHbDsW1mTjbCY1YhqgtqWv4keKlLExn2AhlOzNEw=";
+    sha256 = "1zb5wf65rnpbk0lw31i4piy0bq09hqa62gx7bh241zc5310zccc7";
   };
 
   propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];
@@ -20,6 +20,8 @@ in buildPythonPackage rec {
   # But the library should be working as expected.
   doCheck = false;
 
+  pythonImportsCheck = [ "mysql" ];
+
   meta = {
     description = "A MySQL driver";
     longDescription = ''
@@ -28,7 +30,7 @@ in buildPythonPackage rec {
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
     changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
-    license = [ lib.licenses.gpl2 ];
-    maintainers = with lib.maintainers; [ primeos ];
+    license = [ lib.licenses.gpl2Only ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

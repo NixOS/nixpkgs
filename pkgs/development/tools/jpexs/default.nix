@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jindrapetrik/jpexs-decompiler";
     license = licenses.gpl3;
     platforms = jdk8.meta.platforms;
-    maintainers = with maintainers; [ samuelgrf ];
+    maintainers = [ ];
   };
 }

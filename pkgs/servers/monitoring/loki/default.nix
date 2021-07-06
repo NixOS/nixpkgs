@@ -1,15 +1,21 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, nixosTests, systemd
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, systemd
 }:
 
 buildGoModule rec {
-  version = "2.2.0";
+  version = "2.2.1";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "sha256-mEu9z3lhHSE0NMXXViX4OBbIiNba7/RPr+AFmIM77g4=";
+    sha256 = "sha256-ujZD5GIgMewvEQW3Wnt0eHdMIFs77PkkEecgCDw9290=";
   };
 
   vendorSha256 = null;
@@ -32,9 +38,10 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) loki; };
 
-  buildFlagsArray = let t = "github.com/grafana/loki/pkg/build"; in ''
-    -ldflags=-s -w -X ${t}.Version=${version} -X ${t}.BuildUser=nix@nixpkgs -X ${t}.BuildDate=unknown -X ${t}.Branch=unknown -X ${t}.Revision=unknown
-  '';
+  buildFlagsArray = let t = "github.com/grafana/loki/pkg/build"; in
+    ''
+      -ldflags=-s -w -X ${t}.Version=${version} -X ${t}.BuildUser=nix@nixpkgs -X ${t}.BuildDate=unknown -X ${t}.Branch=unknown -X ${t}.Revision=unknown
+    '';
 
   doCheck = true;
 

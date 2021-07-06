@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Make it build with macFUSE
+    # Backported from https://github.com/netheril96/securefs/pull/114
+    ./add-macfuse-support.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fuse ];
 
@@ -31,6 +37,6 @@ stdenv.mkDerivation rec {
       contents.
     '';
     license = with licenses; [ bsd2 mit ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

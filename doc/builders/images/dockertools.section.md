@@ -1,6 +1,6 @@
 # pkgs.dockerTools {#sec-pkgs-dockerTools}
 
-`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [ Docker Image Specification v1.2.0 ](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#docker-image-specification-v120). Docker itself is not used to perform any of the operations done by these functions.
+`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#docker-image-specification-v120). Docker itself is not used to perform any of the operations done by these functions.
 
 ## buildImage {#ssec-pkgs-dockerTools-buildImage}
 
@@ -52,7 +52,7 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 > **_NOTE:_** Using this parameter requires the `kvm` device to be available.
 
-- `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [ Docker Image Specification v1.2.0 ](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+- `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
 After the new layer has been created, its closure (to which `contents`, `config` and `runAsRoot` contribute) will be copied in the layer itself. Only new dependencies that are not already in the existing layers will be copied.
 
@@ -111,6 +111,12 @@ Create a Docker image with many of the store paths being on their own layer to i
 
     *Default:* the output path's hash
 
+`fromImage` _optional_
+
+: The repository tarball containing the base image. It must be a valid Docker image, such as one exported by `docker save`.
+
+    *Default:* `null`, which can be seen as equivalent to `FROM scratch` of a `Dockerfile`.
+
 `contents` _optional_
 
 : Top level paths in the container. Either a single derivation, or a list of derivations.
@@ -140,6 +146,10 @@ Create a Docker image with many of the store paths being on their own layer to i
 `extraCommands` _optional_
 
 : Shell commands to run while building the final layer, without access to most of the layer contents. Changes to this layer are "on top" of all the other layers, so can create additional directories and files.
+
+`fakeRootCommands` _optional_
+
+: Shell commands to run while creating the archive for the final layer in a fakeroot environment. Unlike `extraCommands`, you can run `chown` to change the owners of the files in the archive, changing fakeroot's state instead of the real filesystem. The latter would require privileges that the build user does not have. Static binaries do not interact with the fakeroot environment. By default all files in the archive will be owned by root.
 
 ### Behavior of `contents` in the final image {#dockerTools-buildLayeredImage-arg-contents}
 

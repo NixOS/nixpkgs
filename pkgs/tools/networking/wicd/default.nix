@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, python2Packages
 , wpa_supplicant, dhcp, dhcpcd, wirelesstools
-, nettools, openresolv, iproute, iputils }:
+, nettools, openresolv, iproute2, iputils }:
 
 let
   inherit (python2Packages) python pygobject2 dbus-python pyGtkGlade pycairo;
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace in/scripts=wicd.in --subst-var-by TEMPLATE-DEFAULT $out/share/other/dhclient.conf.template.default
 
-    sed -i "2iexport PATH=${lib.makeBinPath [ python wpa_supplicant dhcpcd dhcp wirelesstools nettools nettools iputils openresolv iproute ]}\$\{PATH:+:\}\$PATH" in/scripts=wicd.in
+    sed -i "2iexport PATH=${lib.makeBinPath [ python wpa_supplicant dhcpcd dhcp wirelesstools nettools nettools iputils openresolv iproute2 ]}\$\{PATH:+:\}\$PATH" in/scripts=wicd.in
     sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pygobject2}):$(toPythonPath ${dbus-python})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd.in
     sed -i "2iexport PATH=${python}/bin\$\{PATH:+:\}\$PATH" in/scripts=wicd-client.in
     sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject2}):$(toPythonPath ${pygobject2})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${dbus-python})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-client.in

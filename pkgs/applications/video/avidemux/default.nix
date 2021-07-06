@@ -2,7 +2,7 @@
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
-, alsaLib
+, alsa-lib
 , withX265 ? true, x265
 , withX264 ? true, x264
 , withXvid ? true, xvidcore
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsaLib libXext libGLU makeWrapper
+    freetype alsa-lib libXext libGLU makeWrapper
   ] ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore

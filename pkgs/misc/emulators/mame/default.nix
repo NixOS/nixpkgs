@@ -1,5 +1,5 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
-, python, pkg-config, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
+, python, pkg-config, SDL2, SDL2_ttf, alsa-lib, which, qtbase, libXinerama
 , libpcap, CoreAudioKit, ForceFeedback
 , installShellFiles }:
 
@@ -41,7 +41,7 @@ in mkDerivation {
 
   buildInputs =
     [ SDL2 SDL2_ttf qtbase libXinerama ]
-    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ]
     ;
   nativeBuildInputs = [ python pkg-config which makeWrapper installShellFiles ];
@@ -82,6 +82,6 @@ in mkDerivation {
     platforms = platforms.unix;
     # makefile needs fixes for install target
     badPlatforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

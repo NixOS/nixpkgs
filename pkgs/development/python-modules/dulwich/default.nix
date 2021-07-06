@@ -8,25 +8,38 @@
 , geventhttpclient
 , git
 , glibcLocales
+, gpgme
 , mock
+, pkgs
 , urllib3
 }:
 
 buildPythonPackage rec {
-  version = "0.20.20";
+  version = "0.20.23";
   pname = "dulwich";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QmlZuXBfrcxsgg5a3zKR1xpIq6CvzPdBFCLjMI8RX4c=";
+    sha256 = "sha256-QC5WtcB/BAR50RiOXC9AbiwAaqOUMIAVXUxtBeX8qGU=";
   };
 
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = [ urllib3 certifi ];
+  propagatedBuildInputs = [
+    certifi
+    urllib3
+  ];
 
-  # Only test dependencies
-  checkInputs = [ git glibcLocales gevent geventhttpclient mock fastimport ];
+  checkInputs = [
+    fastimport
+    gevent
+    geventhttpclient
+    git
+    glibcLocales
+    gpgme
+    pkgs.gnupg
+    mock
+  ];
 
   doCheck = !stdenv.isDarwin;
 

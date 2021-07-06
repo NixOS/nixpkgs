@@ -84,11 +84,13 @@ let
       # Kernel module loading.
       "systemd-modules-load.service"
       "kmod-static-nodes.service"
+      "modprobe@.service"
 
       # Filesystems.
       "systemd-fsck@.service"
       "systemd-fsck-root.service"
       "systemd-remount-fs.service"
+      "systemd-pstore.service"
       "local-fs.target"
       "local-fs-pre.target"
       "remote-fs.target"
@@ -1182,14 +1184,18 @@ in
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-importd.environment = proxy_env;
+    systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
-    boot.kernel.sysctl = mkIf (!cfg.coredump.enable) {
-      "kernel.core_pattern" = "core";
-    };
+    boot.kernel.sysctl."kernel.core_pattern" = mkIf (!cfg.coredump.enable) "core";
+
+    # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
+    # https://github.com/systemd/systemd/pull/12226
+    boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
+
     boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
   };
 

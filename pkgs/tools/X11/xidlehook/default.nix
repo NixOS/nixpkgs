@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoBuildFlags = lib.optionals (!stdenv.isLinux) [ "--no-default-features" "--features" "pulse" ];
-  cargoSha256 = "1r2xir0x04056kq7j13cpk8984kjrgxbixlacp6vz79yq9c8pv7k";
+  cargoSha256 = "1y7m61j07gvqfqz97mda39nc602sv7a826c06m8l22i7z380xfms";
 
   buildInputs = [ xlibsWrapper xorg.libXScrnSaver libpulseaudio ] ++ lib.optional stdenv.isDarwin Security;
   nativeBuildInputs = [ pkg-config patchelf python3 ];
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     description = "xautolock rewrite in Rust, with a few extra features";
     homepage = "https://github.com/jD91mZM2/xidlehook";
     license = licenses.mit;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     badPlatforms = platforms.darwin;
   };

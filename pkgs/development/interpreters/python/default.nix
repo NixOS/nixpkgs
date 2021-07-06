@@ -44,6 +44,8 @@ with pkgs;
               toPythonModule toPythonApplication
               buildSetupcfg
 
+              condaInstallHook
+              condaUnpackHook
               eggUnpackHook
               eggBuildHook
               eggInstallHook
@@ -69,12 +71,18 @@ with pkgs;
               recursivePthLoader
             ;
           };
+          extra = _: {};
+          optionalExtensions = cond: as: if cond then as else [];
+          python2Extension = import ../../../top-level/python2-packages.nix;
+          extensions = lib.composeManyExtensions ((optionalExtensions (!self.isPy3k) [python2Extension]) ++ [ overrides ]);
+          aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ../../../top-level/python-aliases.nix lib self super);
         in lib.makeScopeWithSplicing
           pkgs.splicePackages
           pkgs.newScope
           otherSplices
           keep
-          (lib.extends overrides pythonPackagesFun))
+          extra
+          (lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun))
         {
           overrides = packageOverrides;
         };
@@ -108,6 +116,19 @@ with pkgs;
           python = self;
         };
   };
+
+  sources = {
+    "python38" = {
+      sourceVersion = {
+        major = "3";
+        minor = "8";
+        patch = "9";
+        suffix = "";
+      };
+      sha256 = "XjkfPsRdopVEGcqwvq79i+OIlepc4zV3w+wUlAxLlXI=";
+    };
+  };
+
 in {
 
   python27 = callPackage ./cpython/2.7 {
@@ -149,28 +170,21 @@ in {
     inherit passthruFun;
   };
 
-  python38 = callPackage ./cpython {
+  python38 = callPackage ./cpython ({
     self = python38;
-    sourceVersion = {
-      major = "3";
-      minor = "8";
-      patch = "8";
-      suffix = "";
-    };
-    sha256 = "fGZCSf935EPW6g5M8OWH6ukYyjxI0IHRkV/iofG8xcw=";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python38);
 
   python39 = callPackage ./cpython {
     self = python39;
     sourceVersion = {
       major = "3";
       minor = "9";
-      patch = "2";
+      patch = "4";
       suffix = "";
     };
-    sha256 = "PCA0xU+BFEj1FmaNzgnSQAigcWw6eU3YY5tTiMveJH0=";
+    sha256 = "Sw5mRKdvjfhkriSsUApRu/aL0Jj2oXPifTthzcqaoTQ=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -189,8 +203,9 @@ in {
   };
 
   # Minimal versions of Python (built without optional dependencies)
-  python3Minimal = (python38.override {
+  python3Minimal = (callPackage ./cpython ({
     self = python3Minimal;
+    inherit passthruFun;
     pythonAttr = "python3Minimal";
     # strip down that python version as much as possible
     openssl = null;
@@ -199,6 +214,7 @@ in {
     gdbm = null;
     sqlite = null;
     configd = null;
+    tzdata = null;
     stripConfig = true;
     stripIdlelib = true;
     stripTests = true;
@@ -207,7 +223,8 @@ in {
     stripBytecode = true;
     includeSiteCustomize = false;
     enableOptimizations = false;
-  }).overrideAttrs(old: {
+    mimetypesSupport = false;
+  } // sources.python38)).overrideAttrs(old: {
     pname = "python3-minimal";
     meta = old.meta // {
       maintainers = [];

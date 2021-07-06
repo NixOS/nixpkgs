@@ -1,15 +1,13 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
-let
+buildGoModule rec {
   pname = "dapr";
-  version = "0.9.0";
-  sha256 = "1vdbh5pg3j7kqqqhhf4d9xfzbpqmjc4x373sk43pb05prg4w71s7";
-  vendorSha256 = "19qcpd5i60xmsr8m8mx16imm5falkqcgqpwpx3clfvqxjyflglpp";
-in buildGoModule {
-  inherit pname version vendorSha256;
+  version = "1.1.0";
+
+  vendorSha256 = "0fng5a1pvpbwil79xapdalzgkgc9dwsdxs6bznjfwnkyd1vvw6fm";
 
   src = fetchFromGitHub {
-    inherit sha256;
+    sha256 = "0x2mvlzlmcik6ys6xp722px9l4lj9ssyxb06bzxd7yj7m1wwcwp9";
 
     owner = "dapr";
     repo = "cli";

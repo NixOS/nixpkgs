@@ -19,6 +19,7 @@ buildPythonApplication rec {
     ConfigArgParse
     argcomplete
     beautifulsoup4
+    pyopenssl
     dnspython
     pyxdg
     requests

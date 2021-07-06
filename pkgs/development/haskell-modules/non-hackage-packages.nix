@@ -11,12 +11,18 @@ self: super: {
 
   ldgallery-compiler = self.callPackage ../../tools/graphics/ldgallery/compiler { };
 
+  # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
+  # from the latest master instead of the current version on Hackage.
+  cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix { };
+
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
   # spago is not released to Hackage.
   # https://github.com/spacchetti/spago/issues/512
   spago = self.callPackage ../tools/purescript/spago/spago.nix { };
+
+  nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
 
   nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
 

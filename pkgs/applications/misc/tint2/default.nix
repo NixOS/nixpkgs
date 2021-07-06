@@ -8,7 +8,7 @@
 , pcre
 , glib
 , imlib2
-, gtk2
+, gtk3
 , libXinerama
 , libXrender
 , libXcomposite
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tint2";
-  version = "16.7";
+  version = "17.0";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "tint2";
     rev = version;
-    sha256 = "1937z0kixb6r82izj12jy4x8z4n96dfq1hx05vcsvsg1sx3wxgb0";
+    sha256 = "1gy5kki7vqrj43yl47cw5jqwmj45f7a8ppabd5q5p1gh91j7klgm";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     pcre
     glib
     imlib2
-    gtk2
+    gtk3
     libXinerama
     libXrender
     libXcomposite
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.com/o9000/tint2";
     description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

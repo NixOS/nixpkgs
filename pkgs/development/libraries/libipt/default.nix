@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libipt";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libipt";
     rev = "v${version}";
-    sha256 = "1i6jmv345rqd88qmap6iqbaph4pkd6wbjgkixf22a80pj7cfm1s4";
+    sha256 = "sha256-KhRmRoIHvpx5rV7roCnUH+a7JtPb6UqD41Wi4wHSR1c=";
   };
 
   nativeBuildInputs = [ cmake ];

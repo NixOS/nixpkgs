@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
-, alsaLib
+, alsa-lib
 , audiofile
 , libjack2
 , liblo
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     audiofile
     libjack2
     liblo
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  CXXFLAGS = "-std=c++11";
   configureFlags = "--enable-liblilv --with-extra-cppflags=-Dnullptr=0";
 
   postPatch = ''

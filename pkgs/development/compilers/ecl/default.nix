@@ -70,5 +70,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;
+    changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${s.version}/CHANGELOG";
   };
 }

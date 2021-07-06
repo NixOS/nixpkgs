@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     substituteInPlace oasis/elf-loader --replace bitstring.ppx ppx_bitstring
   '';
 
-  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm}/bin/llvm-config" ];
+  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm.dev}/bin/llvm-config" ];
 
   meta = with lib; {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages.";

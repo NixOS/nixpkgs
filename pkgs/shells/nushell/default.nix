@@ -10,21 +10,23 @@
 , libiconv
 , AppKit
 , Security
+, nghttp2
+, libgit2
 , withStableFeatures ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.28.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-8mS4Yvzyka85ZkV2LT68h4EGmumQtYpOxCIDRqa3fk0=";
+    sha256 = "sha256-Asjm3IoAfzphITLQuNh6r/i/pjEM/A+wpCsAB83bu2U=";
   };
 
-  cargoSha256 = "sha256-jbziXOrmHkZPp3YkPJypNj7l62Q6nKyamBBYjlfYiVE=";
+  cargoSha256 = "sha256-Ly59mdUzSI2pIPbckWn1WBz/o2zVzpAzaCDROLdjG7Y=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
@@ -32,9 +34,14 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit ];
+    ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
   cargoBuildFlags = lib.optional withStableFeatures "--features stable";
+
+  # TODO investigate why tests are broken on darwin
+  # failures show that tests try to write to paths
+  # outside of TMPDIR
+  doCheck = ! stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -48,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
+    mainProgram = "nu";
   };
 
   passthru = {

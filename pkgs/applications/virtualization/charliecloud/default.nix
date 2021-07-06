@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, python3, python3Packages, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, python3, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.22";
+  version = "0.24";
   pname = "charliecloud";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "charliecloud";
     rev = "v${version}";
-    sha256 = "sha256-+9u7WRKAJ9F70+I68xNRck5Q22XzgLKTCnjGbIcsyW8=";
+    sha256 = "sha256-kdaVlwE3vdCxsmJTOUwx8J+9UcBuXbKDwS2MHX2ZPPM=";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];

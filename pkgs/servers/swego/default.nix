@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "swego";
-  version = "0.93";
+  version = "0.94";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
     rev = "v${version}";
-    sha256 = "sha256-oTeSh7OzjzbgKbSQSNhnCUZw5FdUkN+Y9LkIbWFhn5c=";
+    sha256 = "sha256-PquedlfBzNSXa3l6IIHlf6Xb4M4uEb1XCKRfN229IEA=";
   };
 
   vendorSha256 = "sha256-TK1LN9EmVH95jPO6K7gtCwdnW4WOKH3K7Q0FhgNMVUQ=";

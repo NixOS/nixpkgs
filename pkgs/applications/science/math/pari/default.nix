@@ -12,13 +12,22 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.11.4";
+  version = "2.13.1";
 
   src = fetchurl {
-    # Versions with current majorMinor values are at http://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-v8iPxPc1L0hA5uNSxy8DacvqikVAOxg0piafNwmXCxw=";
+    urls = [
+      "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz"
+      # old versions are at the url below
+      "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
+    ];
+    sha256 = "sha256-gez31wzNquIwFlz/Ynyc4uwpe48i+fQHQiedhfht/LE=";
   };
+
+  patches = [
+    # rebased version of 3edb98db78, see
+    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2284
+    ./rnfdisc.patch
+  ];
 
   buildInputs = [
     gmp

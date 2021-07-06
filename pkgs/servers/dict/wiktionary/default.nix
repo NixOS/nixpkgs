@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, dict, glibcLocales }:
+{ lib, stdenv, fetchurl, python2, dict, glibcLocales }:
 
 stdenv.mkDerivation rec {
   version = "20210201";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   convert = ./wiktionary2dict.py;
-  buildInputs = [ python dict glibcLocales ];
+  buildInputs = [ python2 dict glibcLocales ];
   builder = ./builder.sh;
 
   passthru.updateScript = ./update.sh;

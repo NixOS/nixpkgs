@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, nasm
-, gtk2, glib, ffmpeg, alsaLib, libmad, libogg, libvorbis
+, gtk2, glib, ffmpeg, alsa-lib, libmad, libogg, libvorbis
 , glew, libpulseaudio, udev
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake nasm ];
 
   buildInputs = [
-    gtk2 glib ffmpeg alsaLib libmad libogg libvorbis
+    gtk2 glib ffmpeg alsa-lib libmad libogg libvorbis
     glew libpulseaudio udev
   ];
 

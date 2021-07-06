@@ -1,4 +1,4 @@
-{lib, stdenv, which, coreutils, perl, fetchurl, perlPackages, makeWrapper, diffutils , writeScriptBin, bzip2}:
+{lib, stdenv, which, coreutils, perl, fetchurl, makeWrapper, diffutils , writeScriptBin, bzip2}:
 
 # quick usage:
 # storeBackup.pl --sourceDir /home/user --backupDir /tmp/my_backup_destination
@@ -37,12 +37,10 @@ stdenv.mkDerivation rec {
     find $out -name "*.pl" | xargs sed -i \
       -e 's@/bin/pwd@${coreutils}/bin/pwd@' \
       -e 's@/bin/sync@${coreutils}/bin/sync@' \
-      -e '1 s@/usr/bin/env perl@${perl}/bin/perl@'
+      -e '1 s@/usr/bin/env perl@${perl.withPackages (p: [ p.DBFile ])}/bin/perl@'
 
     for p in $out/bin/*
-      do wrapProgram "$p" \
-      --prefix PERL5LIB ":" "${perlPackages.DBFile}/${perlPackages.perl.libPrefix}" \
-      --prefix PATH ":" "${lib.makeBinPath [ which bzip2 ]}"
+      do wrapProgram "$p" --prefix PATH ":" "${lib.makeBinPath [ which bzip2 ]}"
     done
 
     patchShebangs $out

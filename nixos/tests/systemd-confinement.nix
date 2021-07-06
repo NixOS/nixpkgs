@@ -59,7 +59,8 @@ import ./make-test-python.nix {
                   "chroot-exec chown 65534 /bin",
               )
               machine.succeed(
-                  'test "$(chroot-exec id -u)" = 0', "chroot-exec chown 0 /bin",
+                  'test "$(chroot-exec id -u)" = 0',
+                  "chroot-exec chown 0 /bin",
               )
         '';
       }
@@ -150,6 +151,7 @@ import ./make-test-python.nix {
 
     config.users.groups.chroot-testgroup = {};
     config.users.users.chroot-testuser = {
+      isSystemUser = true;
       description = "Chroot Test User";
       group = "chroot-testgroup";
     };

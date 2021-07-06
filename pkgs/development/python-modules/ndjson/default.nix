@@ -16,6 +16,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/rhgrant10/ndjson";
     description = "JsonDecoder";
     platforms = platforms.unix;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ freezeboy ];
   };
 }

@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, python
+{ lib, stdenv, fetchFromGitHub, python2
 , unzip, makeWrapper }:
 let
-  python' = python.override {
+  python' = python2.override {
     packageOverrides = self: super: {
       docker = self.buildPythonPackage rec {
         name = "docker-${version}";
@@ -17,7 +17,7 @@ let
         propagatedBuildInputs = with self; [
           six
           requests
-          websocket_client
+          websocket-client
           ipaddress
           docker_pycreds
           uptime
@@ -82,7 +82,7 @@ in stdenv.mkDerivation rec {
 
     cat > $out/bin/dd-jmxfetch <<EOF
     #!/usr/bin/env bash
-    exec ${python}/bin/python $out/agent/jmxfetch.py $@
+    exec ${python'.interpreter} $out/agent/jmxfetch.py $@
     EOF
     chmod a+x $out/bin/dd-jmxfetch
 

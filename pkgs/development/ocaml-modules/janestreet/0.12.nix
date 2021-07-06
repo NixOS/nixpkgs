@@ -1,13 +1,10 @@
-{ janePackage
-, ctypes
-, num
-, octavius
-, ppxlib
-, re
+{ self
 , openssl
 }:
 
-rec {
+with self;
+
+{
 
   ocaml-compiler-libs = janePackage {
     pname = "ocaml-compiler-libs";

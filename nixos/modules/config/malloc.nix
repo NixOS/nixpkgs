@@ -87,5 +87,12 @@ in
     environment.etc."ld-nix.so.preload".text = ''
       ${providerLibPath}
     '';
+    security.apparmor.includes = {
+      "abstractions/base" = ''
+        r /etc/ld-nix.so.preload,
+        r ${config.environment.etc."ld-nix.so.preload".source},
+        mr ${providerLibPath},
+      '';
+    };
   };
 }

@@ -1,11 +1,11 @@
-{ substituteAll, perlPackages, shadow, util-linux }:
+{ substituteAll, perl, shadow, util-linux }:
 
 substituteAll {
     name = "nixos-container";
     dir = "bin";
     isExecutable = true;
     src = ./nixos-container.pl;
-    perl = "${perlPackages.perl}/bin/perl -I${perlPackages.FileSlurp}/${perlPackages.perl.libPrefix}";
+    perl = perl.withPackages (p: [ p.FileSlurp ]);
     su = "${shadow.su}/bin/su";
     utillinux = util-linux;
 

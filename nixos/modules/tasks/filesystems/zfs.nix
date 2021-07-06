@@ -103,6 +103,7 @@ in
         readOnly = true;
         type = types.package;
         default = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
+        defaultText = "if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs";
         description = "Configured ZFS userland tools package.";
       };
 
@@ -302,7 +303,7 @@ in
     };
 
     services.zfs.autoScrub = {
-      enable = mkEnableOption "Enables periodic scrubbing of ZFS pools.";
+      enable = mkEnableOption "periodic scrubbing of ZFS pools";
 
       interval = mkOption {
         default = "Sun, 02:00";
@@ -446,7 +447,8 @@ in
         '') rootPools));
       };
 
-      boot.loader.grub = mkIf inInitrd {
+      # TODO FIXME See https://github.com/NixOS/nixpkgs/pull/99386#issuecomment-798813567. To not break people's bootloader and as probably not everybody would read release notes that thoroughly add inSystem.
+      boot.loader.grub = mkIf (inInitrd || inSystem) {
         zfsSupport = true;
       };
 

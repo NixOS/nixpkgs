@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyzerproc";
-  version = "0.4.8";
+  version = "0.4.9";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PNvkgjPcBbnETjWpVF3De9O9IprdpCke0nWvJ9Tju1M=";
+    sha256 = "11bsvmvazx9gpj0w80b6wgdp41z8y2sk6bhkj3ps7grsgr59n7rz";
   };
 
   postPatch = ''

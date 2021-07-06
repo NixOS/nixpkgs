@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "stagit";
-  version = "0.9.4";
+  version = "0.9.6";
 
   src = fetchgit {
     url = "git://git.codemadness.org/stagit";
     rev = version;
-    sha256 = "1n0f2pf4gmqnkx4kfn2c79zx2vk4xkg03h7wvdigijkkbhs7a3pm";
+    sha256 = "sha256-0vkdxtKZv7LyEHKGPrB4uOI2lD74+haelEanq2sOjkE=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.codemadness.org/stagit/file/README.html";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 sikmir ];
   };
 }

@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/ikatyang/tree-sitter-markdown",
-  "rev": "5a139bed455268a06410471bf48b19d11abdd367",
-  "date": "2021-01-24T15:17:18+08:00",
-  "path": "/nix/store/125cbxcqvwyq8b7kvmg7wxjjz16s2jvw-tree-sitter-markdown",
-  "sha256": "072b4nnpymrh90y4dk18kr8l1g7m83r3gvp6v0ad9f9dnq47fgax",
+  "rev": "8b8b77af0493e26d378135a3e7f5ae25b555b375",
+  "date": "2021-04-18T20:49:21+08:00",
+  "path": "/nix/store/4z2k0q6rwqmb7vbqr4vgc26w28szlan3-tree-sitter-markdown",
+  "sha256": "1a2899x7i6dgbsrf13qzmh133hgfrlvmjsr3bbpffi1ixw1h7azk",
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false

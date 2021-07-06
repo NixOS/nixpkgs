@@ -10,18 +10,7 @@
 , zstd
 }:
 
-let
-  shdeps = [
-    bzip2
-    coreutils
-    cpio
-    gnutar
-    gzip
-    xz
-    zstd
-  ];
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "rpm2targz";
   version = "2021.03.16";
 
@@ -31,9 +20,17 @@ in stdenv.mkDerivation rec {
     hash = "sha256-rcV+o9V2wWKznqSW2rA8xgnpQ02kpK4te6mYvLRC5vQ=";
   };
 
-  buildInputs = shdeps;
-
-  postPatch = ''
+  postPatch = let
+    shdeps = [
+      bzip2
+      coreutils
+      cpio
+      gnutar
+      gzip
+      xz
+      zstd
+    ];
+  in ''
     substituteInPlace rpm2targz --replace "=\"rpmoffset\"" "=\"$out/bin/rpmoffset\""
     # rpm2targz relies on the executable name
     # to guess what compressor it should use
@@ -41,9 +38,7 @@ in stdenv.mkDerivation rec {
     sed -i -e '2iexport PATH="${lib.makeBinPath shdeps}"' rpm2targz
   '';
 
-  preBuild = ''
-    makeFlagsArray+=(prefix=$out)
-  '';
+  installFlags = [ "prefix=$(out)" ];
 
   meta = with lib; {
     description = "Convert a .rpm file to a .tar.gz archive";

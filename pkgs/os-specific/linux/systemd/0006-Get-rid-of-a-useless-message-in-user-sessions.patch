@@ -1,7 +1,7 @@
-From 3aeb3a10c4a7ad387b004bf41efbd171913bcca9 Mon Sep 17 00:00:00 2001
+From 7a6529ee27028860b93bc539e8bbf3f2374d712f Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Mon, 11 May 2015 15:39:38 +0200
-Subject: [PATCH 06/18] Get rid of a useless message in user sessions
+Subject: [PATCH 06/19] Get rid of a useless message in user sessions
 
 Namely lots of variants of
 
@@ -27,5 +27,5 @@ index 45a417a090..8af3cb08d6 100644
          /* A unit we need to run is gone. Sniff. Let's stop this. */
          r = manager_add_job(u->manager, JOB_STOP, u, JOB_FAIL, NULL, &error, NULL);
 -- 
-2.29.2
+2.30.1
 

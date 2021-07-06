@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.7.1";
+  version = "2.7.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10nrvzk1naf5ryawmi59wp99k31053sz37q3x9li2hj2cf7i1kl1";
+    sha256 = "0e21d3b80b96740909d77206d741aa3ce0b06b41be375d92e1f3244a274c1f8a";
   };
 
   nativeBuildInputs = [
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://pylint.pycqa.org/";
     description = "A bug and style checker for Python";
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

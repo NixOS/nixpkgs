@@ -1,21 +1,22 @@
-{lib, stdenv, fetchurl, pkg-config, alsaLib, spice-protocol, glib,
+{lib, stdenv, fetchurl, pkg-config, alsa-lib, spice-protocol, glib,
  libpciaccess, libxcb, libXrandr, libXinerama, libXfixes, dbus, libdrm,
  systemd}:
 stdenv.mkDerivation rec {
-  name = "spice-vdagent-0.20.0";
+  pname = "spice-vdagent";
+  version = "0.21.0";
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/${name}.tar.bz2";
-    sha256 = "0n9k2kna2gd1zi6jv45zsp2jlv439nz5l5jjijirxqaycwi74srf";
+    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
+    sha256 = "0n8jlc1pv6mkry161y656b1nk9hhhminjq6nymzmmyjl7k95ymzx";
   };
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
-  patchFlags = [ "-uNp1" ];
-  # included in the next release.
-  patches = [ ./timeout.diff ];
+
+  # FIXME: May no longer be needed with spice-vdagent versions over 0.21.0
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   postPatch = ''
     substituteInPlace data/spice-vdagent.desktop --replace /usr $out
   '';
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib spice-protocol glib libdrm
+  buildInputs = [ alsa-lib spice-protocol glib libdrm
                   libpciaccess libxcb libXrandr libXinerama libXfixes
                   dbus systemd ] ;
   meta = {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
        * Multiple displays
     '';
     homepage = "https://www.spice-space.org/";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.aboseley ];
     platforms = lib.platforms.linux;
   };

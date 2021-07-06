@@ -18,7 +18,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.8.0";
+  version = "1.9.0";
 in buildPythonPackage {
   inherit version;
 
@@ -64,6 +64,7 @@ in buildPythonPackage {
   meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage = "https://pytorch.org/";
+    changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
     license = licenses.unfree; # Includes CUDA and Intel MKL.
     platforms = platforms.linux;
     maintainers = with maintainers; [ danieldk ];

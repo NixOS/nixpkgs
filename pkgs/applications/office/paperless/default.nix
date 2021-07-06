@@ -122,7 +122,7 @@ let
 
   runtimePackages = with python.pkgs; [
     dateparser
-    dateutil
+    python-dateutil
     django
     django-cors-headers
     django-crispy-forms

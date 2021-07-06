@@ -17,7 +17,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ pytest ];
+  buildInputs = [ pytest ];
 
   checkInputs = [ pytest ];
 

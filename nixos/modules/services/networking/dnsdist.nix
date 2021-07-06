@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.dnsdist;
-  configFile = pkgs.writeText "dndist.conf" ''
+  configFile = pkgs.writeText "dnsdist.conf" ''
     setLocal('${cfg.listenAddress}:${toString cfg.listenPort}')
     ${cfg.extraConfig}
   '';

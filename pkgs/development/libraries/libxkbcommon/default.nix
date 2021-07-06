@@ -1,37 +1,46 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, yacc, doxygen
-, xkeyboard_config, libxcb, libxml2
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, bison
+, doxygen
+, xkeyboard_config
+, libxcb
+, libxml2
 , python3
 , libX11
-# To enable the "interactive-wayland" subcommand of xkbcli:
-, withWaylandSupport ? false, wayland, wayland-protocols
+  # To enable the "interactive-wayland" subcommand of xkbcli. This is the
+  # wayland equivalent of `xev` on X11.
+, withWaylandTools ? stdenv.isLinux
+, wayland
+, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "1.0.3";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "0lmwglj16anhpaq0h830xsl1ivknv75i4lir9bk88aq73s2jy852";
+    sha256 = "0ysynzzgzd9jdrh1321r4bgw8wd5zljrlyn5y1a31g39xacf02bv";
   };
-
-  patches = [
-    ./fix-cross-compilation.patch
-  ];
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config yacc doxygen ]
-    ++ lib.optional withWaylandSupport wayland;
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config bison doxygen ]
+    ++ lib.optional withWaylandTools wayland;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
-    ++ lib.optionals withWaylandSupport [ wayland wayland-protocols ];
+    ++ lib.optionals withWaylandTools [ wayland wayland-protocols ];
   checkInputs = [ python3 ];
 
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
-    "-Denable-wayland=${lib.boolToString withWaylandSupport}"
+    "-Denable-wayland=${lib.boolToString withWaylandTools}"
   ];
 
   doCheck = true;

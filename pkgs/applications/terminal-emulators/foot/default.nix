@@ -16,12 +16,17 @@
 , tllist
 , wayland-protocols
 , pkg-config
+, utf8proc
 , allowPgo ? true
 , python3  # for PGO
+# for clang stdenv check
+, foot
+, llvmPackages
+, llvmPackages_latest
 }:
 
 let
-  version = "1.7.0";
+  version = "1.8.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -35,7 +40,7 @@ let
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "019bdiqfi3wx2lwrv3nhq83knc1r3lmqd5zgisa33wwshm2kyv7p";
+      sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
     };
 
     dontUnpack = true;
@@ -67,8 +72,8 @@ let
 
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#performance-optimized-pgo
   pgoCflags = {
-    "clang" = "-O3 -Wno-ignored-optimization-argument -Wno-profile-instr-out-of-date -Wno-profile-instr-unprofiled";
-    "gcc" = "-O3 -Wno-missing-profile";
+    "clang" = "-O3 -Wno-ignored-optimization-argument";
+    "gcc" = "-O3";
   }."${compilerName}";
 
   # ar with lto support
@@ -89,7 +94,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
-    sha256 = "0w07fw7y31g891335ji3fm783r4dsk5py82qp0zx6z3rfr07paby";
+    sha256 = "0yrz7n0wls8g8w7ja934icwxmng3sxh70x87qmzc9c9cb1wyd989";
   };
 
   nativeBuildInputs = [
@@ -100,7 +105,9 @@ stdenv.mkDerivation rec {
     tllist
     wayland-protocols
     pkg-config
-  ] ++ lib.optional stdenv.cc.isClang stdenv.cc.cc.llvm;
+  ] ++ lib.optionals (compilerName == "clang") [
+    stdenv.cc.cc.libllvm.out
+  ];
 
   buildInputs = [
     fontconfig
@@ -109,6 +116,7 @@ stdenv.mkDerivation rec {
     wayland
     libxkbcommon
     fcft
+    utf8proc
   ];
 
   # recommended build flags for performance optimized foot builds
@@ -123,18 +131,45 @@ stdenv.mkDerivation rec {
     export AR="${ar}"
   '';
 
-  mesonFlags = [ "--buildtype=release" "-Db_lto=true" ];
+  mesonFlags = [
+    "--buildtype=release"
+    "-Db_lto=true"
+    "-Dterminfo-install-location=${placeholder "terminfo"}/share/terminfo"
+  ];
 
   # build and run binary generating PGO profiles,
   # then reconfigure to build the normal foot binary utilizing PGO
   preBuild = lib.optionalString doPgo ''
     meson configure -Db_pgo=generate
     ninja
+    # make sure there is _some_ profiling data on all binaries
+    ./footclient --version
+    ./foot --version
+    # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
-  '' + lib.optionalString (doPgo && stdenv.cc.cc.pname == "clang") ''
+  '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
+
+  outputs = [ "out" "terminfo" ];
+
+  # make sure nix-env and buildEnv also include the
+  # terminfo output when the package is installed
+  postInstall = ''
+    mkdir -p "$out/nix-support"
+    echo "$terminfo" >> "$out/nix-support/propagated-user-env-packages"
+  '';
+
+  passthru.tests = {
+    clang-default-compilation = foot.override {
+      inherit (llvmPackages) stdenv;
+    };
+
+    clang-latest-compilation = foot.override {
+      inherit (llvmPackages_latest) stdenv;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/foot/";

@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, alsaLib
+, alsa-lib
 , dbus
 , glib
 , json_c
@@ -19,15 +19,15 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.56";
+  version = "5.58";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-WcTbqfyKripqX48S8ZvBsMLcJzVcfKMSPu0/5r19C50=";
+    sha256 = "1wgiv8cqya6n1w5fz24cb8q401bhn5aa6s7g95l26rzblmsmw1n8";
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     dbus
     glib
     json_c

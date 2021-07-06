@@ -410,7 +410,7 @@ in
         StateDirectoryMode = "0700";
 
         AmbientCapabilities = [];
-        CapabilityBoundingSet = [];
+        CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         LockPersonality = true;
         NoNewPrivileges = true;

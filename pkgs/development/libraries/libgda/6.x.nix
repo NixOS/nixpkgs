@@ -12,7 +12,7 @@
 , json-glib
 , isocodes
 , openssl
-, gnome3
+, gnome
 , gobject-introspection
 , vala
 , libgee
@@ -71,9 +71,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "libgda6";
+      versionPolicy = "odd-unstable";
     };
   };
 

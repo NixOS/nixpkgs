@@ -4,7 +4,7 @@
 , python3Packages
 , gdk-pixbuf
 , glib
-, gnome3
+, gnome
 , gobject-introspection
 , gtk3
 , wrapGAppsHook
@@ -14,7 +14,7 @@
 , libappindicator
 , intltool
 , wmctrl
-, xvfb_run
+, xvfb-run
 , librsvg
 }:
 
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gdk-pixbuf
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gobject-introspection
     gtk3
     keybinder3
@@ -59,14 +59,14 @@ python3Packages.buildPythonApplication rec {
     python-Levenshtein
     pyxdg
     requests
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = with python3Packages; [
     mock
     pytest
     pytest-mock
-    xvfb_run
+    xvfb-run
   ];
 
   patches = [
@@ -115,6 +115,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse worldofpeace ];
+    maintainers = with maintainers; [ aaronjanse ];
   };
 }

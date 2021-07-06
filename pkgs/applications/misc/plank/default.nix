@@ -5,9 +5,9 @@
 , cairo
 , dconf
 , glib
-, gnome3
+, gnome
 , gtk3
-, libwnck3
+, libwnck
 , libX11
 , libXfixes
 , libXi
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     gettext
-    gnome3.gnome-common
+    gnome.gnome-common
     libxml2 # xmllint
     pkg-config
     vala
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libXi
     libdbusmenu-gtk3
     libgee
-    libwnck3
+    libwnck
     pango
   ];
 

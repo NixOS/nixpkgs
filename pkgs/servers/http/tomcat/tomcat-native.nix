@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tomcat-native";
-  version = "1.2.26";
+  version = "1.2.30";
 
   src = fetchurl {
     url = "mirror://apache/tomcat/tomcat-connectors/native/${version}/source/${pname}-${version}-src.tar.gz";
-    sha512 = "319lrb0b5vvm2m46rdz2zbicisijvim6948ghz0mypck6f419yjr68j8rpmxpckscaj0ghmbq3p28jpxbjpig84ygy0m63cvgpxknfa";
+    sha512 = "51a8c55214de166cace193c3330abe77cabea56c2d05efc8c3408bc06369c328899376c94c572725ebe2887f2faf99fea05d1819fa84c712d57fd309d0476953";
   };
 
   sourceRoot = "${pname}-${version}-src/native";

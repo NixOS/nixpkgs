@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
-, lv2, makeWrapper, pkg-config, python, raul, rdflib, serd, sord, sratom
+, lv2, makeWrapper, pkg-config, python3, raul, serd, sord, sratom
 , wafHook
 , suil
 }:
@@ -16,24 +16,21 @@ stdenv.mkDerivation  rec {
     deepClone = true;
   };
 
-  nativeBuildInputs = [ pkg-config wafHook ];
+  nativeBuildInputs = [ pkg-config wafHook python3 python3.pkgs.wrapPython ];
   buildInputs = [
-    boost ganv glibmm gtkmm2 libjack2 lilv lv2 makeWrapper
-    python raul serd sord sratom suil
+    boost ganv glibmm gtkmm2 libjack2 lilv lv2
+    python3 raul serd sord sratom suil
   ];
 
-  preConfigure = ''
-    sed -e "s@{PYTHONDIR}/'@out/'@" -i wscript
-  '';
+  strictDeps = true;
 
-  propagatedBuildInputs = [ rdflib ];
+  pythonPath = [
+    python3
+    python3.pkgs.rdflib
+  ];
 
   postInstall = ''
-    for program in ingenams ingenish
-    do
-      wrapProgram $out/bin/$program \
-        --prefix PYTHONPATH : $out/${python.sitePackages}:$PYTHONPATH
-    done
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
   '';
 
   meta = with lib; {

@@ -3,7 +3,7 @@
 , extra-cmake-modules
 , gettext
 , kdoctools
-, python
+, python3
 , appstream-qt
 , discount
 , flatpak
@@ -33,8 +33,7 @@
 
 mkDerivation {
   name = "discover";
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
-  nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python ];
+  nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python3 ];
   buildInputs = [
     # discount is needed for libmarkdown
     appstream-qt

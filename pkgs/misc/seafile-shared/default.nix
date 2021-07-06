@@ -1,11 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, ccnet
 , curl
-, fuse
-, glib
-, intltool
 , libevent
 , libsearpc
 , libuuid
@@ -13,18 +9,17 @@
 , python3
 , sqlite
 , vala
-, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "seafile-shared";
-  version = "8.0.1";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
-    rev = "d34499a2aafa024623a4210fe7f663cef13fe9a6";
-    sha256 = "VKoGr3CTDFg3Q0X+MTlwa4BbfLB+28FeTyTJRCq37RA=";
+    rev = "v${version}";
+    sha256 = "QflLh3fj+jOq/8etr9aG8LGrvtIlB/htVkWbdO+GIbM=";
   };
 
   nativeBuildInputs = [

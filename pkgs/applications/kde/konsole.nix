@@ -2,7 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons, kguiaddons,
-  ki18n, kiconthemes, kinit, kdelibs4support, kio, knotifications,
+  ki18n, kiconthemes, kinit, kio, knotifications,
   knotifyconfig, kparts, kpty, kservice, ktextwidgets, kwidgetsaddons,
   kwindowsystem, kxmlgui, qtscript, knewstuff
 }:
@@ -15,7 +15,7 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kbookmarks kcompletion kconfig kconfigwidgets kcoreaddons kdelibs4support
+    kbookmarks kcompletion kconfig kconfigwidgets kcoreaddons
     kguiaddons ki18n kiconthemes kinit kio knotifications knotifyconfig kparts kpty
     kservice ktextwidgets kwidgetsaddons kwindowsystem kxmlgui qtscript knewstuff
   ];

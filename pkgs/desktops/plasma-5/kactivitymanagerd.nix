@@ -7,7 +7,6 @@
 
 mkDerivation {
   name = "kactivitymanagerd";
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     boost kconfig kcoreaddons kdbusaddons kglobalaccel ki18n kio kwindowsystem

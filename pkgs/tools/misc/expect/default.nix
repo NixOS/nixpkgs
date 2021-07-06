@@ -1,6 +1,6 @@
 { lib, stdenv, buildPackages, fetchurl, tcl, makeWrapper, autoreconfHook, fetchpatch }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "expect";
   version = "5.45.4";
 
@@ -20,25 +20,14 @@ stdenv.mkDerivation rec {
     sed -i "s,/bin/stty,$(type -p stty),g" configure.in
   '';
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper tcl ];
-  buildInputs = [ tcl ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
   strictDeps = true;
   hardeningDisable = [ "format" ];
 
-  configureFlags = [
-    "--with-tcl=${buildPackages.tcl}/lib"
-    "--with-tclinclude=${tcl}/include"
-    "--exec-prefix=${placeholder "out"}"
-  ];
-
   postInstall = ''
-    for i in $out/bin/*; do
-      wrapProgram $i \
-        --prefix PATH : "${tcl}/bin" \
-        --prefix TCLLIBPATH ' ' $out/lib/* \
-        ${lib.optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version}"}
-    done
+    tclWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ tcl ]})
+    ${lib.optionalString stdenv.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version})"}
   '';
 
   outputs = [ "out" "dev" ];

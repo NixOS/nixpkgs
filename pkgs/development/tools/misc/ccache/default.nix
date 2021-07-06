@@ -1,45 +1,64 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , binutils
 , asciidoc
 , cmake
 , perl
 , zstd
+, bashInteractive
 , xcodebuild
 , makeWrapper
 }:
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lr9804xyzbs72f9jbbzy1fjqxwrwpb4rp431wqialvms4251d8f";
+    hash = "sha256-ZBxDTMUZiZJLIYbvACTFwvlss+IZiMjiL0khfM5hFCM=";
   };
-
-  patches = lib.optional stdenv.isDarwin (substituteAll {
-    src = ./force-objdump-on-darwin.patch;
-    objdump = "${binutils.bintools}/bin/objdump";
-  });
-
-  nativeBuildInputs = [ asciidoc cmake perl ];
-
-  buildInputs = [ zstd ];
 
   outputs = [ "out" "man" ];
 
+  patches = [
+    # When building for Darwin, test/run uses dwarfdump, whereas on
+    # Linux it uses objdump. We don't have dwarfdump packaged for
+    # Darwin, so this patch updates the test to also use objdump on
+    # Darwin.
+    (substituteAll {
+      src = ./force-objdump-on-darwin.patch;
+      objdump = "${binutils.bintools}/bin/objdump";
+    })
+    # Fix clang C++ modules test (remove in next release)
+    (fetchpatch {
+      url = "https://github.com/ccache/ccache/commit/8b0c783ffc77d29a3e3520345b776a5c496fd892.patch";
+      sha256 = "13qllx0qhfrdila6bdij9lk74fhkm3vdj01zgq1ri6ffrv9lqrla";
+    })
+  ];
+
+  nativeBuildInputs = [ asciidoc cmake perl ];
+  buildInputs = [ zstd ];
+
   doCheck = true;
-  checkInputs = lib.optional stdenv.isDarwin xcodebuild;
+  checkInputs = [
+    # test/run requires the compgen function which is available in
+    # bashInteractive, but not bash.
+    bashInteractive
+  ] ++ lib.optional stdenv.isDarwin xcodebuild;
+
   checkPhase = ''
+    runHook preCheck
     export HOME=$(mktemp -d)
     ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
-      -E '^(test.nocpp2|test.modules)$'
+      -E '^(test.nocpp2|test.basedir|test.multi_arch)$'
     ''}
+    runHook postCheck
   '';
 
   passthru = {
@@ -89,7 +108,7 @@ let ccache = stdenv.mkDerivation rec {
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ metadark r-burns ];
+    maintainers = with maintainers; [ kira-bruneau r-burns ];
     platforms = platforms.unix;
   };
 };

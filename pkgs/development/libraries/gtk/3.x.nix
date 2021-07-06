@@ -29,26 +29,24 @@
 , libxkbcommon
 , libxml2
 , gmp
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , sassc
 , trackerSupport ? stdenv.isLinux
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
-, mesa
+, libGL
 , wayland
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , withGtkDoc ? stdenv.isLinux
-, cups ? null
+, cups
 , AppKit
 , Cocoa
 , broadwaySupport ? true
 }:
-
-assert cupsSupport -> cups != null;
 
 let
 
@@ -62,7 +60,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.24";
+  version = "3.24.27";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -74,7 +72,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "12ipk1d376bai9v820qzhxba93kkh5abi6mhyqr4hwjvqmkl77fc";
+    sha256 = "09ksflq5j257bf5zn8q2nnf2flicg9qqgfy7za79z7rkf1shc77p";
   };
 
   patches = [
@@ -143,7 +141,7 @@ stdenv.mkDerivation rec {
     # explicitly propagated, always needed
     Cocoa
   ] ++ lib.optionals waylandSupport [
-    mesa
+    libGL
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [
@@ -188,6 +186,8 @@ stdenv.mkDerivation rec {
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
+    # Broadway daemon
+    moveToOutput bin/broadwayd "$out"
 
     # TODO: patch glib directly
     for f in $dev/bin/gtk-encode-symbolic-svg; do
@@ -206,7 +206,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtk+";
       attrPath = "gtk3";
     };
@@ -226,7 +226,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin lethalman worldofpeace ];
+    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };

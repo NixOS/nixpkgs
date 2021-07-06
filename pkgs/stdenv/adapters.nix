@@ -44,6 +44,7 @@ rec {
       then throw "Cannot build fully static binaries on Darwin/macOS"
       else stdenv'.mkDerivation (args // {
         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+      } // pkgs.lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
         configureFlags = (args.configureFlags or []) ++ [
             "--disable-shared" # brrr...
           ];
@@ -56,6 +57,7 @@ rec {
   makeStaticLibraries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontDisableStatic = true;
+      } // pkgs.lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
         configureFlags = (args.configureFlags or []) ++ [
           "--enable-static"
           "--disable-shared"

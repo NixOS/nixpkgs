@@ -243,6 +243,10 @@ rec {
   /* Call a function for each attribute in the given set and return
      the result in a list.
 
+     Type:
+       mapAttrsToList ::
+         (String -> a -> b) -> AttrSet -> [b]
+
      Example:
        mapAttrsToList (name: value: name + value)
           { x = "a"; y = "b"; }

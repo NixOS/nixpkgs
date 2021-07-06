@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "multilockscreen";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jeffmhubbard";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gmnrq7ibbhiwsn7mfi2r71fwm6nvhiwf4wsyz44cscm474z83p0";
+    sha256 = "1bfpbazvhaz9x356nsghz0czysh9b75g79cd9s35v0x0rrzdr9qj";
   };
 
   nativeBuildInputs = [ makeWrapper ];

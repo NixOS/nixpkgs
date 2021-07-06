@@ -5,7 +5,7 @@
 , ant
 , jre
 , makeWrapper
-, runCommand
+, testVersion
 , key
 }:
 
@@ -51,10 +51,13 @@ in stdenv.mkDerivation rec {
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
   '';
 
-  passthru.tests.check-version = runCommand "key-help" {} ''
-    ${key}/bin/KeY --help | grep 2.5 # Wrong version in the code. On next version change to ${version}
-    touch $out
-  '';
+  passthru.tests.version =
+    testVersion {
+      package = key;
+      command = "KeY --help";
+      # Wrong '2.5' version in the code. On next version change to ${version}
+      version = "2.5";
+    };
 
   meta = with lib; {
     description = "Java formal verification tool";

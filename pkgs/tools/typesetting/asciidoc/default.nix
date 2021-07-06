@@ -136,6 +136,7 @@ let
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odt-backend-0.1.zip";
     sha256 = "1zaa97h9sx6ncxcdkl1x3ggydi7f8kjgvrnpjnkjiizi45k350kw";
   };
+
   odpBackendSrc = fetchurl {
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odp-backend-0.1.zip";
     sha256 = "08ya4bskygzqkfqwjllpg31qc5k08xp2k78z9b2480g8y57bfy10";
@@ -145,7 +146,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "asciidoc";
-  version = "9.0.4";
+  version = "9.1.0";
 
   # Note: a substitution to improve reproducibility should be updated once 10.0.0 is
   # released. See the comment in `patchPhase` for more information.
@@ -153,13 +154,13 @@ stdenv.mkDerivation rec {
     owner = "asciidoc";
     repo = "asciidoc-py3";
     rev = version;
-    sha256 = "1gspxw5i0axymxdjzj5rmhf10gyl2gqr666gz141nv042l9dm5vi";
+    sha256 = "1clf1axkns23wfmh48xfspzsnw04pjh4mq1pshpzvj0cwxhz0yaq";
   };
 
   nativeBuildInputs = [ python3 unzip autoreconfHook ];
 
   # install filters early, so their shebangs are patched too
-  patchPhase = with lib; ''
+  postPatch = with lib; ''
     mkdir -p "$out/etc/asciidoc/filters"
     mkdir -p "$out/etc/asciidoc/backends"
   '' + optionalString _enableDitaaFilter ''

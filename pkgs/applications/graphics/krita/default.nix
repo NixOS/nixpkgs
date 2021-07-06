@@ -1,29 +1,29 @@
 { mkDerivation, lib, stdenv, makeWrapper, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
-, kio, kcrash
+, kio, kcrash, breeze-icons
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
-, openjpeg, opencolorio, vc, poppler, curl, ilmbase
+, openjpeg, opencolorio_1, vc, poppler, curl, ilmbase
 , qtmultimedia, qtx11extras, quazip
 , python3Packages
 }:
 
 mkDerivation rec {
   pname = "krita";
-  version = "4.4.2";
+  version = "4.4.5";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "121fjdv5phx1aqk21vx9k9vsc5k1w8s86gp6pamy2y31r2ph7r8y";
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-S/1ygIcNEGCgDREj2Db8Gltb+KAoZ2Z58CaM1ef7dWg=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip_4 makeWrapper ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
-    ki18n kitemmodels kitemviews kwindowsystem kio kcrash
+    ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
-    openjpeg opencolorio poppler curl ilmbase
+    openjpeg opencolorio_1 poppler curl ilmbase
     qtmultimedia qtx11extras quazip
     python3Packages.pyqt5
   ] ++ lib.optional (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) vc;
@@ -32,8 +32,8 @@ mkDerivation rec {
     ++ lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy";
 
   cmakeFlags = [
-    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
-    "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/share/sip/PyQt5"
+    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
+    "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   ];
 
@@ -48,6 +48,6 @@ mkDerivation rec {
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl3Only;
   };
 }

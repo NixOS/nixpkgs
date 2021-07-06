@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, pkg-config
 
 # Optional Dependencies
-, alsaLib ? null, db ? null, libuuid ? null, libffado ? null, celt ? null
+, alsa-lib ? null, db ? null, libuuid ? null, libffado ? null, celt ? null
 }:
 
 let
-  shouldUsePkg = pkg: if pkg != null && lib.any (lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
-  optAlsaLib = shouldUsePkg alsaLib;
+  optAlsaLib = shouldUsePkg alsa-lib;
   optDb = shouldUsePkg db;
   optLibuuid = shouldUsePkg libuuid;
   optLibffado = shouldUsePkg libffado;

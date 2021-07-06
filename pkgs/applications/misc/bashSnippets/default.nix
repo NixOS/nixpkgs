@@ -1,12 +1,12 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, curl, python, bind, iproute, bc, gitMinimal }:
+, curl, python3, bind, iproute2, bc, gitMinimal }:
 let
   version = "1.23.0";
   deps = lib.makeBinPath [
     curl
-    python
+    python3
     bind.dnsutils
-    iproute
+    iproute2
     bc
     gitMinimal
   ];
@@ -24,10 +24,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs install.sh
     substituteInPlace install.sh --replace /usr/local "$out"
   '';
+
+  strictDeps = true;
 
   dontBuild = true;
 

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.2.774";
+  version = "1.10.3.855";
 
   src = fetchurl {
     # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "0z3j8m9k7prmx6n3kpyhj04pjdg7y0plyxv4kp7789shanr6y4qp";
+    sha256 = "sha256-y2PuOBRq5kZlTpPV8NwkWhspQKlNxwjl+k/Drwixk4Q=";
   };
 
   nativeBuildInputs = [
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  # See https://github.com/clojure/brew-install/blob/1.10.1/src/main/resources/clojure/install/linux-install.sh
+  # See https://github.com/clojure/brew-install/blob/1.10.3/src/main/resources/clojure/install/linux-install.sh
   installPhase =
     let
       binPath = lib.makeBinPath [ rlwrap jdk ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
       echo "Installing clojure and clj into $bin_dir"
       substituteInPlace clojure --replace PREFIX $out
+      substituteInPlace clj --replace BINDIR $bin_dir
       install -Dm755 clojure "$bin_dir/clojure"
       install -Dm755 clj "$bin_dir/clj"
 

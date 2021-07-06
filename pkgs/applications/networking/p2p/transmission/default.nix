@@ -17,9 +17,12 @@
 , wrapGAppsHook
 , enableQt ? false
 , qt5
+, nixosTests
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
 , enableCli ? true
+, installLib ? false
+, apparmorRulesFromClosure
 }:
 
 let
@@ -37,6 +40,8 @@ in stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  outputs = [ "out" "apparmor" ];
+
   cmakeFlags =
     let
       mkFlag = opt: if opt then "ON" else "OFF";
@@ -47,6 +52,7 @@ in stdenv.mkDerivation {
       "-DENABLE_QT=${mkFlag enableQt}"
       "-DENABLE_DAEMON=${mkFlag enableDaemon}"
       "-DENABLE_CLI=${mkFlag enableCli}"
+      "-DINSTALL_LIB=${mkFlag installLib}"
     ];
 
   nativeBuildInputs = [
@@ -71,6 +77,37 @@ in stdenv.mkDerivation {
   ;
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+
+  postInstall = ''
+    mkdir $apparmor
+    cat >$apparmor/bin.transmission-daemon <<EOF
+    include <tunables/global>
+    $out/bin/transmission-daemon {
+      include <abstractions/base>
+      include <abstractions/nameservice>
+      include <abstractions/ssl_certs>
+      include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
+        curl libevent openssl pcre zlib
+      ] ++ lib.optionals enableSystemd [ systemd ]
+        ++ lib.optionals stdenv.isLinux [ inotify-tools ]
+      )}"
+      r @{PROC}/sys/kernel/random/uuid,
+      r @{PROC}/sys/vm/overcommit_memory,
+      r @{PROC}/@{pid}/environ,
+      r @{PROC}/@{pid}/mounts,
+      rwk /tmp/tr_session_id_*,
+      r /run/systemd/resolve/stub-resolv.conf,
+
+      r $out/share/transmission/web/**,
+
+      include <local/bin.transmission-daemon>
+    }
+    EOF
+  '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.bittorrent;
+  };
 
   meta = {
     description = "A fast, easy and free BitTorrent client";

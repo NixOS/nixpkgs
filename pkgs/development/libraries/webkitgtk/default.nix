@@ -1,5 +1,7 @@
 { lib, stdenv
+, runCommandNoCC
 , fetchurl
+, fetchpatch
 , perl
 , python3
 , ruby
@@ -34,9 +36,12 @@
 , libidn
 , libedit
 , readline
+, sdk
 , libGL
 , libGLU
+, mesa
 , libintl
+, libmanette
 , openjpeg
 , enableGeoLocation ? true
 , geoclue2
@@ -51,15 +56,14 @@
 , xdg-dbus-proxy
 , substituteAll
 , glib
+, addOpenGLRunpath
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.30.5";
+  version = "2.32.1";
 
   outputs = [ "out" "dev" ];
 
@@ -67,15 +71,42 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "07vzbbnvz69rn9pciji4axfpclp98bpj4a0br2z0gbn5wc4an3bx";
+    sha256 = "05v9hgpkc6mi2klrd8nqql1n8xzq8rgdz3hvyy369xkhgwqifq8k";
   };
 
-  patches = optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.isLinux [
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
+      inherit (addOpenGLRunpath) driverLink;
     })
     ./libglvnd-headers.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/94cdcd289b993ed4d39c17d4b8b90db7c81a9b10.diff";
+      sha256 = "sha256-ywrTEjf3ATqI0Vvs60TeAZ+m58kCibum4DamRWrQfaA=";
+      excludes = [ "Source/WebKit/ChangeLog" ];
+    })
+
+    # https://bugs.webkit.org/show_bug.cgi?id=225856
+    (fetchpatch {
+      url = "https://bug-225856-attachments.webkit.org/attachment.cgi?id=428797";
+      sha256 = "sha256-ffo5p2EyyjXe3DxdrvAcDKqxwnoqHtYBtWod+1fOjMU=";
+      excludes = [ "Source/WebCore/ChangeLog" ];
+    })
+
+    # https://bugs.webkit.org/show_bug.cgi?id=225850
+    ./428774.patch # https://bug-225850-attachments.webkit.org/attachment.cgi?id=428774
+    (fetchpatch {
+      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428776";
+      sha256 = "sha256-ryNRYMsk72SL0lNdh6eaAdDV3OT8KEqVq1H0j581jmQ=";
+      excludes = [ "Source/WTF/ChangeLog" ];
+    })
+    (fetchpatch {
+      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428778";
+      sha256 = "sha256-78iP+T2vaIufO8TmIPO/tNDgmBgzlDzalklrOPrtUeo=";
+      excludes = [ "Source/WebKit/ChangeLog" ];
+    })
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -83,7 +114,7 @@ stdenv.mkDerivation rec {
     # pick up the wrong gettext. TODO: Find a better solution for
     # this, maybe make cmake not look up executables in
     # CMAKE_PREFIX_PATH.
-    cmakeFlags+=" -DCMAKE_IGNORE_PATH=${getBin gettext}/bin"
+    cmakeFlags+=" -DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin"
   '';
 
   nativeBuildInputs = [
@@ -94,6 +125,7 @@ stdenv.mkDerivation rec {
     gperf
     ninja
     perl
+    perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
     pkg-config
     python3
     ruby
@@ -112,9 +144,13 @@ stdenv.mkDerivation rec {
     harfbuzz
     libGL
     libGLU
+    mesa # for libEGL headers
     libgcrypt
     libidn
     libintl
+  ] ++ lib.optionals stdenv.isLinux [
+    libmanette
+  ] ++ [
     libnotify
     libpthreadstubs
     libsecret
@@ -134,16 +170,22 @@ stdenv.mkDerivation rec {
     libXdmcp
     libXt
     libXtst
-  ]) ++ optionals stdenv.isDarwin [
+  ]) ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
-  ] ++ optionals stdenv.isLinux [
+    # Pull a header that contains a definition of proc_pid_rusage().
+    # (We pick just that one because using the other headers from `sdk` is not
+    # compatible with our C++ standard library)
+    (runCommandNoCC "${pname}_headers" {} ''
+      install -Dm444 "${lib.getDev sdk}"/include/libproc.h "$out"/include/libproc.h
+    '')
+  ] ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
     systemd
     wayland
     xdg-dbus-proxy
-  ] ++ optional enableGeoLocation geoclue2;
+  ] ++ lib.optional enableGeoLocation geoclue2;
 
   propagatedBuildInputs = [
     gtk3
@@ -155,25 +197,34 @@ stdenv.mkDerivation rec {
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
-  ] ++ optionals stdenv.isDarwin [
-    "-DENABLE_GRAPHICS_CONTEXT_3D=OFF"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
     "-DENABLE_MINIBROWSER=OFF"
-    "-DENABLE_OPENGL=OFF"
     "-DENABLE_QUARTZ_TARGET=ON"
     "-DENABLE_VIDEO=ON"
     "-DENABLE_WEBGL=OFF"
     "-DENABLE_WEB_AUDIO=OFF"
     "-DENABLE_X11_TARGET=OFF"
-    "-DUSE_ACCELERATE=0"
+    "-DUSE_APPLE_ICU=OFF"
+    "-DUSE_OPENGL_OR_ES=OFF"
     "-DUSE_SYSTEM_MALLOC=ON"
-  ] ++ optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-DUSE_SYSTEMD=OFF"
+  ] ++ lib.optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
 
   postPatch = ''
     patchShebangs .
+  '' + lib.optionalString stdenv.isDarwin ''
+    # It needs malloc_good_size.
+    sed 22i'#include <malloc/malloc.h>' -i Source/WTF/wtf/FastMalloc.h
+    # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
+    sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
-  meta = {
+  requiredSystemFeatures = [ "big-parallel" ];
+
+  meta = with lib; {
     description = "Web content rendering engine, GTK port";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;

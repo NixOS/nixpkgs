@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, autoreconfHook, musl-fts
 , musl-obstack, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs
-, argp-standalone }:
+, argp-standalone
+, enableDebuginfod ? false, sqlite, curl, libmicrohttpd_0_9_70, libarchive
+}:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
@@ -52,17 +54,25 @@ stdenv.mkDerivation rec {
     })
   ] ++ lib.optional stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 
+  outputs = [ "bin" "dev" "out" "man" ];
+
   hardeningDisable = [ "format" ];
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
   nativeBuildInputs = [ m4 bison flex gettext bzip2 ]
-    ++ lib.optional stdenv.hostPlatform.isMusl [ pkg-config autoreconfHook ];
+    ++ lib.optional stdenv.hostPlatform.isMusl autoreconfHook
+    ++ lib.optional (enableDebuginfod || stdenv.hostPlatform.isMusl) pkg-config;
   buildInputs = [ zlib bzip2 xz ]
-    ++ lib.optional stdenv.hostPlatform.isMusl [
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
     argp-standalone
     musl-fts
     musl-obstack
+  ] ++ lib.optionals enableDebuginfod [
+    sqlite
+    curl
+    libmicrohttpd_0_9_70
+    libarchive
   ];
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
@@ -74,6 +84,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--program-prefix=eu-" # prevent collisions with binutils
     "--enable-deterministic-archives"
+  ] ++ lib.optionals (!enableDebuginfod) [
     "--disable-libdebuginfod"
     "--disable-debuginfod"
   ];

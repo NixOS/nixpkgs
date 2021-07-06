@@ -3,7 +3,7 @@
 , fetchPypi
 , mecab
 , swig
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     mecab # for mecab-config
     swig
-    setuptools_scm
+    setuptools-scm
   ];
 
   buildInputs = [ mecab ];

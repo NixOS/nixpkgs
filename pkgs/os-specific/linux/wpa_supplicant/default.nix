@@ -1,5 +1,8 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
-, dbus, readline ? null, pcsclite ? null
+, withDbus ? true, dbus
+, withReadline ? true, readline
+, withPcsclite ? true, pcsclite
+, readOnlyModeSSIDs ? false
 }:
 
 with lib;
@@ -37,6 +40,15 @@ stdenv.mkDerivation rec {
       url = "https://w1.fi/security/2021-1/0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch";
       sha256 = "04cnds7hmbqc44jasabjvrdnh66i5hwvk2h2m5z94pmgbzncyh3z";
     })
+    # In wpa_supplicant and hostapd 2.9, forging attacks may occur because AlgorithmIdentifier parameters are mishandled in tls/pkcs1.c and tls/x509v3.c.
+    (fetchpatch {
+      name = "CVE-2021-30004.patch";
+      url = "https://w1.fi/cgit/hostap/patch/?id=a0541334a6394f8237a4393b7372693cd7e96f15";
+      sha256 = "1gbhlz41x1ar1hppnb76pqxj6vimiypy7c4kq6h658637s4am3xg";
+    })
+  ] ++ lib.optionals readOnlyModeSSIDs [
+    # Allow read-only networks
+    ./0001-Implement-read-only-mode-for-ssids.patch
   ];
 
   # TODO: Patch epoll so that the dbus actually responds
@@ -75,16 +87,17 @@ stdenv.mkDerivation rec {
     CONFIG_P2P=y
     CONFIG_TDLS=y
     CONFIG_BGSCAN_SIMPLE=y
-  '' + optionalString (pcsclite != null) ''
+    CONFIG_BGSCAN_LEARN=y
+  '' + optionalString withPcsclite ''
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y
     CONFIG_EAP_AKA_PRIME=y
     CONFIG_PCSC=y
-  '' + optionalString (dbus != null) ''
+  '' + optionalString withDbus ''
     CONFIG_CTRL_IFACE_DBUS=y
     CONFIG_CTRL_IFACE_DBUS_NEW=y
     CONFIG_CTRL_IFACE_DBUS_INTRO=y
-  '' + (if readline != null then ''
+  '' + (if withReadline then ''
     CONFIG_READLINE=y
   '' else ''
     CONFIG_WPA_CLI_EDIT=y
@@ -101,10 +114,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
       -I$(echo "${lib.getDev libnl}"/include/libnl*/) \
-      -I${lib.getDev pcsclite}/include/PCSC/"
+      ${optionalString withPcsclite "-I${lib.getDev pcsclite}/include/PCSC/"}"
   '';
 
-  buildInputs = [ openssl libnl dbus readline pcsclite ];
+  buildInputs = [ openssl libnl ]
+    ++ optional withDbus dbus
+    ++ optional withReadline readline
+    ++ optional withPcsclite pcsclite;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -127,7 +143,7 @@ stdenv.mkDerivation rec {
     homepage = "https://w1.fi/wpa_supplicant/";
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marcweber ];
+    maintainers = with maintainers; [ marcweber ma27 ];
     platforms = platforms.linux;
   };
 }

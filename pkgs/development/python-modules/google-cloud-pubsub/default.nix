@@ -13,23 +13,36 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff9933573dadb02176dc514662354949d0ea784cc4588d22226c2bf7eb90e797";
+    sha256 = "8706557b71532c76aec48409dcac189caac47cf2decb8850ae75694bf70326b2";
   };
 
-  propagatedBuildInputs = [ grpc_google_iam_v1 google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    grpc_google_iam_v1
+    google-api-core
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   preCheck = ''
     # prevent google directory from shadowing google imports
     rm -r google
-    # Tests in pubsub_v1 attempt to contact pubsub.googleapis.com
-    rm -r tests/unit/pubsub_v1
   '';
+
+  disabledTestPaths = [
+    # Tests in pubsub_v1 attempt to contact pubsub.googleapis.com
+    "tests/unit/pubsub_v1"
+  ];
 
   pythonImportsCheck = [ "google.cloud.pubsub" ];
 

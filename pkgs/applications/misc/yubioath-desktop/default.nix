@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   pname = "yubioath-desktop";
-  version = "5.0.4";
+  version = "5.0.5";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
-    sha256 = "1aw88xvg6gjsfwmmlcrdcgyycn2cp7b8vxjzj14h7igcj02xh84h";
+    sha256 = "05xs6xh9pi50h0668arirj0gnz11adpixgsdkds072077gasdm0g";
   };
 
   doCheck = false;
@@ -18,10 +18,6 @@ mkDerivation rec {
   buildInputs = [ stdenv qtbase qtquickcontrols2 qtgraphicaleffects python3 ];
 
   nativeBuildInputs = [ qmake makeWrapper python3.pkgs.wrapPython ];
-
-  patches = [
-    ./0001-replace-git-with-normal-python-package.patch
-  ];
 
   postPatch = ''
     substituteInPlace deployment.pri \
@@ -48,7 +44,7 @@ mkDerivation rec {
       cp resources/icons/*.{icns,ico,png,svg} $out/share/yubioath/icons
       substituteInPlace $out/share/applications/com.yubico.yubioath.desktop \
         --replace 'Exec=yubioath-desktop' "Exec=$out/bin/yubioath-desktop" \
-        --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/com.yubico.yubioath.png"
+        --replace 'Icon=com.yubico.yubioath' "Icon=$out/share/yubioath/icons/com.yubico.yubioath.png"
   '';
 
   meta = with lib; {

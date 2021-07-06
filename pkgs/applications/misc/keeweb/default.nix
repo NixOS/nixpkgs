@@ -1,26 +1,24 @@
 { lib, stdenv, fetchurl, appimageTools, undmg, libsecret, libxshmfence }:
 let
-  inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
-
   pname = "keeweb";
-  version = "1.17.0";
+  version = "1.18.6";
   name = "${pname}-${version}";
 
-  suffix = {
-    x86_64-linux = "linux.AppImage";
-    x86_64-darwin = "mac.x64.dmg";
-    aarch64-darwin = "mac.arm64.dmg";
-  }.${system} or throwSystem;
-
-  src = fetchurl {
-    url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.${suffix}";
-    sha256 = {
-      x86_64-linux = "1c7zvwnd46d3lrlcdigv341flz44jl6mnvr6zqny5mfz221ynbj7";
-      x86_64-darwin = "1n4haxychm5jjhjnpncavjh0wr4dagqi78qfsx5gwlv86hzryzwy";
-      aarch64-darwin = "1j7z63cbfms02f2lhl949wy3lc376jw8kqmjfn9j949s0l5fanpb";
-    }.${system} or throwSystem;
+  srcs = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.linux.AppImage";
+      sha256 = "sha256-hxXs8Dfh5YQy1zaFb20KDWNl8eqFjuN5QY7tsO6+E/U=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.mac.x64.dmg";
+      sha256 = "sha256-8+7NzaHVcLinKb57SAcJmF2Foy9RfxFhcTxzvL0JSJQ=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.mac.arm64.dmg";
+      sha256 = "sha256-1BNY6kRS0F+AUI+80ZGFi/ek28NMP1uexo1UORz5D6g=";
+    };
   };
+  src = srcs.${stdenv.hostPlatform.system};
 
   appimageContents = appimageTools.extract {
     inherit name src;
@@ -32,7 +30,7 @@ let
     changelog = "https://github.com/keeweb/keeweb/blob/v${version}/release-notes.md";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = builtins.attrNames srcs;
   };
 
   linux = appimageTools.wrapType2 rec {

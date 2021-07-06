@@ -2,30 +2,33 @@
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 
 , bison, coreutils, flex, git, gperf, ninja, pkg-config, python2, which
+, nodejs, qtbase, perl
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
-, alsaLib
+, alsa-lib
 , libcap
 , pciutils
 , systemd
+, pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
 , cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg_3 ? null
+, ffmpeg ? null
 , lib, stdenv, fetchpatch
+, version ? null
 , qtCompatVersion
 }:
 
 with lib;
 
 qtModule {
-  name = "qtwebengine";
+  pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf ninja pkg-config python2 which gn
+    bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
   ] ++ optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -40,9 +43,17 @@ qtModule {
   hardeningDisable = [ "format" ];
 
   postPatch =
-    # Patch Chromium build tools
     ''
-      ( cd src/3rdparty/chromium; patchShebangs . )
+      # Patch Chromium build tools
+      (
+        cd src/3rdparty/chromium;
+
+        # Manually fix unsupported shebangs
+        substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
+          --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
+
+        patchShebangs .
+      )
     ''
     # Prevent Chromium build script from making the path to `clang` relative to
     # the build directory.  `clang_base_path` is the value of `QMAKE_CLANG_DIR`
@@ -120,11 +131,11 @@ qtModule {
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
-   '';
+  '';
 
-  qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
-    then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
-    else optional enableProprietaryCodecs "-- -proprietary-codecs";
+  qmakeFlags = [ "--" "-system-ffmpeg" ]
+    ++ optional (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
+    ++ optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
     # Image formats
@@ -140,13 +151,12 @@ qtModule {
     harfbuzz icu
 
     libevent
-  ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
-    ffmpeg_3
+    ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
     # Audio formats
-    alsaLib
+    alsa-lib
 
     # Text rendering
     fontconfig freetype
@@ -157,6 +167,10 @@ qtModule {
     # X11 libs
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm
+
+  ] ++ optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
+    # Pipewire
+    pipewire_0_2
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
@@ -213,7 +227,12 @@ qtModule {
     [Paths]
     Prefix = ..
     EOF
+  '' + lib.optionalString (lib.versions.majorMinor qtCompatVersion == "5.15") ''
+    # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
+    sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";

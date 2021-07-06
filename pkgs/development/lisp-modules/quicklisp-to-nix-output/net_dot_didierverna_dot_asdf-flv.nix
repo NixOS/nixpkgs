@@ -1,3 +1,4 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "net_dot_didierverna_dot_asdf-flv";

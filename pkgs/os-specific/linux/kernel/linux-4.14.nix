@@ -1,9 +1,9 @@
-{ lib, buildPackages, fetchurl, perl, buildLinux, modDirVersionArg ? null, ... } @ args:
+{ lib, buildPackages, fetchurl, perl, buildLinux, nixosTests, modDirVersionArg ? null, ... } @ args:
 
 with lib;
 
 buildLinux (args // rec {
-  version = "4.14.226";
+  version = "4.14.238";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
   modDirVersion = if (modDirVersionArg == null) then concatStringsSep "." (take 3 (splitVersion "${version}.0")) else modDirVersionArg;
@@ -13,6 +13,8 @@ buildLinux (args // rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "09llp8jl5xgxxzj0f2sfx32annwyz82k1zmgd26zy90lz0d09p3s";
+    sha256 = "1phjgm1fhyfpm2h9b2bngcbh91v2qrxcm7vma86q7pdqrcbh1fih";
   };
+
+  kernelTests = args.kernelTests or [ nixosTests.kernel-generic.linux_4_14 ];
 } // (args.argsOverride or {}))

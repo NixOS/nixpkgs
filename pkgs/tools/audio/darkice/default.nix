@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config
-, libjack2, alsaLib, libpulseaudio
+, libjack2, alsa-lib, libpulseaudio
 , faac, lame, libogg, libopus, libvorbis, libsamplerate
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libopus libvorbis libogg libpulseaudio alsaLib libsamplerate libjack2 lame
+    libopus libvorbis libogg libpulseaudio alsa-lib libsamplerate libjack2 lame
   ];
 
   NIX_CFLAGS_COMPILE = "-fpermissive";

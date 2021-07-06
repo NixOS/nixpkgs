@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , click
@@ -10,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nai9k86g7g7w1pxk105dllncgax8nc5hpmk758b3jnqkb1mpdk5";
+    sha256 = "sha256-CYMsbnUDL5OBjt8a/+R0YSHWQMYlpb75tclq9nbpju4=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +28,8 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_run_local_server" ];
 
   meta = with lib; {
     description = "Google Authentication Library: oauthlib integration";

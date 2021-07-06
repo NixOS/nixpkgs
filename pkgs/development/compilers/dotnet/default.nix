@@ -1,6 +1,9 @@
 /*
 How to combine packages for use in development:
 dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_3_1 sdk_2_2 sdk_3_0 sdk aspnetcore_2_1 ];
+
+Hashes below are retrived from:
+https://dotnet.microsoft.com/download/dotnet
 */
 { callPackage }:
 let
@@ -124,11 +127,11 @@ rec {
   };
 
   sdk_5_0 = buildNetCoreSdk {
-    version = "5.0.100";
+    version = "5.0.202";
     sha512 = {
-      x86_64-linux = "bec37bfb327c45cc01fd843ef93b22b556f753b04724bba501622df124e7e144c303a4d7e931b5dbadbd4f7b39e5adb8f601cb6293e317ad46d8fe7d52aa9a09";
-      aarch64-linux = "5fceac0a9468097d66af25516da597eb4836b294ed1647ba272ade5c8faea2ed977a95d9ce720c44d71607fa3a0cf9de55afe0e66c0c89ab1cc6736945978204";
-      x86_64-darwin = "69ccc7c686ac06f6c658d118f59cf1a0e7284b4570375dd88d3e3043098e311745922301f2650d159624d09c4d39a1f3cbdd5daee0e408eef915de839e3bce8f";
+      x86_64-linux = "Ae1Z8jYYSYdAVnPSSUDVXOKdgw59u8GVVv3AOJMDnmBGcS3m+QHcmREEeg3uT9FTGbfpT4ox32uYH6Nb2T2YOA==";
+      aarch64-linux = "JuwSWgY35xrK0gOGR034mhAemulIkhtd4M00P0vA6EtOeyMY4Vl4cj6zudMh6Jt5DD8EJKQ8KbABX8byuePp2Q==";
+      x86_64-darwin = "jxnfTbQUb0dJ2/NX2pu8Pi/F/e4EaDm2Ta5U+6sSYj/s6nNp6NHxtEn7BzhQ9/EVLszl/oXi3lL0d/BPbzldEA==";
     };
   };
 }

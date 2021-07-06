@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "matio-1.5.19";
+  name = "matio-1.5.21";
   src = fetchurl {
     url = "mirror://sourceforge/matio/${name}.tar.gz";
-    sha256 = "0vr8c1mz1k6mz0sgh6n3scl5c3a71iqmy5fnydrgq504icj4vym4";
+    sha256 = "sha256-IYCRd+VYOefJTa2nRO5Vwd6n11fdqriWBXdtUBIvsGU=";
   };
 
   meta = with lib; {

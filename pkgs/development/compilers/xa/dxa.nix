@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
   version = "0.1.4";
 
   src = fetchurl {
-    url = "https://www.floodgap.com/retrotech/xa/dists/${pname}-${version}.tar.gz";
+    urls = [
+      "https://www.floodgap.com/retrotech/xa/dists/${pname}-${version}.tar.gz"
+      "https://www.floodgap.com/retrotech/xa/dists/unsupported/${pname}-${version}.tar.gz"
+    ];
     hash = "sha256-C0rgwK51Ij9EZCm9GeiVnWIkEkse0d60ok8G9hm2a5U=";
   };
 

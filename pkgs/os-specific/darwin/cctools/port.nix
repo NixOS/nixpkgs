@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
 , installShellFiles
-, libcxxabi, libuuid
+, libuuid
 , libobjc ? null, maloader ? null
 , enableTapiSupport ? true, libtapi
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
   buildInputs = [ libuuid ]
-    ++ lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc ]
     ++ lib.optional enableTapiSupport libtapi;
 
   patches = [ ./ld-ignore-rpath-link.patch ./ld-rpath-nonfinal.patch ];

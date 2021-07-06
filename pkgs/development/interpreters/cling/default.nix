@@ -1,5 +1,5 @@
 { lib, stdenv
-, python
+, python3
 , libffi
 , git
 , cmake
@@ -10,6 +10,7 @@
 , runCommandNoCC
 , llvmPackages_5
 , glibc
+, ncurses
 }:
 
 let
@@ -38,8 +39,10 @@ let
       chmod -R a+w ./tools/cling
     '';
 
-    nativeBuildInputs = [ python git cmake ];
-    buildInputs = [ libffi llvmPackages_5.llvm zlib ];
+    nativeBuildInputs = [ python3 git cmake llvmPackages_5.llvm.dev ];
+    buildInputs = [ libffi llvmPackages_5.llvm zlib ncurses ];
+
+    strictDeps = true;
 
     cmakeFlags = [
       "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
@@ -74,8 +77,8 @@ let
     "-nostdinc"
     "-nostdinc++"
     "-isystem" "${lib.getDev stdenv.cc.libc}/include"
-    "-I" "${unwrapped}/include"
-    "-I" "${unwrapped}/lib/clang/5.0.2/include"
+    "-I" "${lib.getDev unwrapped}/include"
+    "-I" "${lib.getLib unwrapped}/lib/clang/5.0.2/include"
   ];
 
   # Autodetect the include paths for the compiler used to build Cling, in the same way Cling does at

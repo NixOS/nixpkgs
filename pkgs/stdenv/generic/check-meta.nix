@@ -203,6 +203,7 @@ let
   metaTypes = with lib.types; rec {
     # These keys are documented
     description = str;
+    mainProgram = str;
     longDescription = str;
     branch = str;
     homepage = either (listOf str) str;

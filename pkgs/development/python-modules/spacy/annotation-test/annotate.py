@@ -26,10 +26,11 @@ def test_entities(doc_en_core_web_sm):
 
     assert entities == [
         ('Sebastian Thrun', 'PERSON'),
-        ('Google', 'ORG'), ('2007', 'DATE'),
+        ('2007', 'DATE'),
         ('American', 'NORP'),
-        ('Thrun', 'ORG'),
-        ('earlier this week', 'DATE')
+        ('Thrun', 'PERSON'),
+        ('Recode', 'PERSON'),
+        ('earlier this week', 'DATE'),
     ]
 
 
@@ -60,10 +61,9 @@ def test_verbs(doc_en_core_web_sm):
         'work',
         'drive',
         'take',
-        'can',
         'tell',
-        'would',
         'shake',
         'turn',
+        'be',
         'talk',
         'say']

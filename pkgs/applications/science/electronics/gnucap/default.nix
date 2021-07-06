@@ -21,6 +21,7 @@ It performs nonlinear dc and transient analyses, fourier analysis, and ac analys
     changelog = "https://git.savannah.gnu.org/cgit/gnucap.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # Relies on LD_LIBRARY_PATH
     maintainers = [ maintainers.raboof ];
   };
 }

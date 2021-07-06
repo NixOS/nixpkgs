@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, alsaLib, atk, cairo, cups, udev
+{ stdenv, lib, fetchurl, alsa-lib, atk, cairo, cups, udev, libdrm, mesa
 , dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
 , runtimeShell, gsettings-desktop-schemas }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     atk
     cairo
     cups
@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
+    libdrm
+    mesa.out
   ];
 
   runtimeDependencies = [

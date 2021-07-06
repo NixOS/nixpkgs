@@ -5,17 +5,16 @@ with lib;
 let
   cfg = config.services.getty;
 
-  loginArgs = [
+  baseArgs = [
     "--login-program" "${pkgs.shadow}/bin/login"
   ] ++ optionals (cfg.autologinUser != null) [
     "--autologin" cfg.autologinUser
   ] ++ optionals (cfg.loginOptions != null) [
     "--login-options" cfg.loginOptions
-  ];
+  ] ++ cfg.extraArgs;
 
-  gettyCmd = extraArgs:
-    "@${pkgs.util-linux}/sbin/agetty agetty ${escapeShellArgs loginArgs} "
-      + extraArgs;
+  gettyCmd = args:
+    "@${pkgs.util-linux}/sbin/agetty agetty ${escapeShellArgs baseArgs} ${args}";
 
 in
 
@@ -54,7 +53,16 @@ in
           will not be invoked with a <option>--login-options</option>
           option.
         '';
-        example = "-h darkstar -- \u";
+        example = "-h darkstar -- \\u";
+      };
+
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          Additional arguments passed to agetty.
+        '';
+        example = [ "--nohostname" ];
       };
 
       greetingLine = mkOption {
@@ -110,7 +118,7 @@ in
       let speeds = concatStringsSep "," (map toString config.services.getty.serialSpeed); in
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
-          (gettyCmd "%I ${speeds} $TERM")
+          (gettyCmd "%I --keep-baud ${speeds} $TERM")
         ];
         restartIfChanged = false;
       };

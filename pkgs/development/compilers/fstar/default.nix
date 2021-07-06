@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   buildInputs = with ocamlPackages; [
-    z3 ocaml findlib batteries menhir stdint
+    z3 ocaml findlib batteries menhir menhirLib stdint
     zarith camlp4 yojson pprint
     ulex ocaml-migrate-parsetree process ppx_deriving ppx_deriving_yojson ocamlbuild
   ];

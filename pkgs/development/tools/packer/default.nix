@@ -1,25 +1,26 @@
-{ lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
-buildGoPackage rec {
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+
+buildGoModule rec {
   pname = "packer";
-  version = "1.7.0";
-
-  goPackagePath = "github.com/hashicorp/packer";
-
-  subPackages = [ "." ];
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-x62C44vTIysk9Lx9HZeTBf8k1+P5hfMIijvTWu3cZrA=";
+    sha256 = "sha256-k5GCUFzjf0mipIQlnf7VCUS2j7cFwoGCeM7T6qgGnJA=";
   };
+
+  vendorSha256 = "sha256-5Wb7WAUGXJ7VMWiQyboH3PXJazsqitD9N0Acd+WItaY=";
+
+  subPackages = [ "." ];
 
   buildFlagsArray = [ "-ldflags=-s -w" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    installShellCompletion --zsh go/src/${goPackagePath}/contrib/zsh-completion/_packer
+    installShellCompletion --zsh contrib/zsh-completion/_packer
   '';
 
   meta = with lib; {

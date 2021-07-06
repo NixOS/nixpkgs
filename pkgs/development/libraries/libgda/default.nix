@@ -7,7 +7,7 @@
 , libxml2
 , gtk3
 , openssl
-, gnome3
+, gnome
 , gobject-introspection
 , vala
 , libgee
@@ -84,8 +84,9 @@ assert postgresSupport -> postgresql != null;
   hardeningDisable = [ "format" ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

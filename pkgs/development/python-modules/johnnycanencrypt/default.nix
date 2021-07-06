@@ -37,9 +37,7 @@ buildPythonPackage rec {
 
   patches = [ ./Cargo.lock.patch ];
 
-  cargoSha256 = "0ifvpdizcdp2c5x2x2j1bhhy5a75q0pk7a63dmh52mlpmh45fy6r";
-
-  LIBCLANG_PATH = llvmPackages.libclang + "/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   propagatedBuildInputs = [
     requests

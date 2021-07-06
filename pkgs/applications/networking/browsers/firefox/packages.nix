@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "87.0";
+    ffversion = "89.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "c1c08be2283e7a162c8be2f2647ec2bb85cab592738dc45e4b4ffb72969229cc0019a30782a4cb27f09a13b088c63841071dd202b3543dfba295140a7d6246a4";
+      sha512 = "ffd98ab0887611c5b4aba68346c49a7a31a58150fd8bbae610a4d941c4cff0acef0daaebfbb577787a759b4c1ef3c1199f02681148612f4f5b709983e07e0ccb";
     };
 
     meta = {
@@ -32,10 +32,10 @@ rec {
 
   firefox-esr-78 = common rec {
     pname = "firefox-esr";
-    ffversion = "78.9.0esr";
+    ffversion = "78.11.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "28582fc0a03fb50c0a817deb1083817bb7f2f5d38e98439bf655ed4ee18c83568b3002a59ef76edf357bfb11f55832a221d14130f116aac19d850768fba3ac8b";
+      sha512 = "d02fc2eda587155b1c54ca12a6c5cde220a29f41f154f1c9b71ae8f966d8cc9439201a5b241e03fc0795b74e2479f7aa5d6b69f70b7639432e5382f321f7a6f4";
     };
 
     meta = {
@@ -51,6 +51,7 @@ rec {
     tests = [ nixosTests.firefox-esr ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-78-unwrapped";
+      versionSuffix = "esr";
       versionKey = "ffversion";
     };
   };

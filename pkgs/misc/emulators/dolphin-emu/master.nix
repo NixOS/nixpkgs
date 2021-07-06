@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, makeDesktopItem, pkg-config, cmake
 , wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
 , libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
-, libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsaLib
+, libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsa-lib
 , miniupnpc, enet, mbedtls, soundtouch, sfml
 , vulkan-loader ? null, libpulseaudio ? null
 
@@ -21,13 +21,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-13603";
+  version = "5.0-14002";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "7250d6e4e091f4b5b4f2289c2c732349b69a2e8a";
-    sha256 = "0l4vvxmc79x0b5p8k4km7p380wv8wsbmxjnif08rj0p3brbavc1i";
+    rev = "53222560650e4a99eceafcd537d4e04d1c50b3a6";
+    sha256 = "1m71gk9hm011fpv5hmpladf7abkylmawgr60d0czkr276pzg04ky";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
-    bluez udev libevdev alsaLib vulkan-loader
+    bluez udev libevdev alsa-lib vulkan-loader
   ] ++ lib.optionals stdenv.isDarwin [
     CoreBluetooth OpenGL ForceFeedback IOKit
   ];

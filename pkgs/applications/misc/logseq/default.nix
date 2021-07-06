@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.0.13";
+  version = "0.2.2";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    sha256 = "0a7c33f7d5ylcy6lqkpxp78wwyi4n5q4jdy7b8nx7p34sn2jnpf7";
+    sha256 = "03l5w0fg3laiz85k4g4w98ngaziyfr9s24xshjrfl71q6r9s813m";
     name = "${pname}-${version}.AppImage";
   };
 

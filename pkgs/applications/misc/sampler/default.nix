@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, alsaLib }:
+{ lib, buildGoModule, fetchFromGitHub, alsa-lib }:
 
 buildGoModule rec {
   pname = "sampler";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildInputs = [ alsaLib ];
+  buildInputs = [ alsa-lib ];
 
   meta = with lib; {
     description = "Tool for shell commands execution, visualization and alerting";

@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "prompt_toolkit";
-  version = "3.0.16";
+  version = "3.0.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fa02fa80363844a4ab4b8d6891f62dd0645ba672723130423ca4037b80c1974";
+    sha256 = "08360ee3a3148bdb5163621709ee322ec34fc4375099afa4bbf751e9b7b7fa4f";
   };
   checkPhase = ''
     py.test -k 'not test_pathcompleter_can_expanduser'

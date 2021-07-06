@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "b4563921ed8bccd59d32b031f81825dc57fbe90882f0ecd5da89e48b59ff18b2";
+    sha256 = "5154e67780dddbf12f64c4b1994c3ee3834236f05b6462adf25e8a5f3fa407ea";
   };
 
   nativeBuildInputs = [ autogen autoconf automake gettext libtool pkg-config py3 unzip which ];

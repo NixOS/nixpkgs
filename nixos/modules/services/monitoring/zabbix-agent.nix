@@ -128,11 +128,16 @@ in
       {
         LogType = "console";
         Server = cfg.server;
-        ListenIP = cfg.listen.ip;
         ListenPort = cfg.listen.port;
-        LoadModule = builtins.attrNames cfg.modules;
       }
-      (mkIf (cfg.modules != {}) { LoadModulePath = "${moduleEnv}/lib"; })
+      (mkIf (cfg.modules != {}) {
+        LoadModule = builtins.attrNames cfg.modules;
+        LoadModulePath = "${moduleEnv}/lib";
+      })
+
+      # the default value for "ListenIP" is 0.0.0.0 but zabbix agent 2 cannot accept configuration files which
+      # explicitly set "ListenIP" to the default value...
+      (mkIf (cfg.listen.ip != "0.0.0.0") { ListenIP = cfg.listen.ip; })
     ];
 
     networking.firewall = mkIf cfg.openFirewall {
@@ -152,7 +157,10 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      path = [ "/run/wrappers" ] ++ cfg.extraPackages;
+      # https://www.zabbix.com/documentation/current/manual/config/items/userparameters
+      # > User parameters are commands executed by Zabbix agent.
+      # > /bin/sh is used as a command line interpreter under UNIX operating systems.
+      path = with pkgs; [ bash "/run/wrappers" ] ++ cfg.extraPackages;
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/sbin/zabbix_agentd zabbix_agentd -f --config ${configFile}";

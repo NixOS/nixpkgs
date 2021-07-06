@@ -1,8 +1,8 @@
 diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
-index 8d613de739..a673466726 100644
+index be9320210e..6eb50aae95 100644
 --- a/bin/internal/shared.sh
 +++ b/bin/internal/shared.sh
-@@ -204,8 +204,6 @@ function shared::execute() {
+@@ -218,8 +218,6 @@ function shared::execute() {
    # FLUTTER_TOOL_ARGS="--enable-asserts $FLUTTER_TOOL_ARGS"
    # FLUTTER_TOOL_ARGS="$FLUTTER_TOOL_ARGS --observe=65432"
  
@@ -12,20 +12,25 @@ index 8d613de739..a673466726 100644
    case "$BIN_NAME" in
      flutter*)
 diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-index 8a1a1e29da..778f253358 100644
+index 550a75bc65..c98a4591cc 100644
 --- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
 +++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-@@ -293,13 +293,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+@@ -244,7 +244,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
            globals.flutterUsage.suppressAnalytics = true;
          }
  
--        try {
--          await globals.flutterVersion.ensureVersionFile();
--        } on FileSystemException catch (e) {
--          globals.printError('Failed to write the version file to the artifact cache: "$e".');
--          globals.printError('Please ensure you have permissions in the artifact cache directory.');
--          throwToolExit('Failed to write the version file');
--        }
+-        globals.flutterVersion.ensureVersionFile();
          final bool machineFlag = topLevelResults['machine'] as bool;
-         if (topLevelResults.command?.name != 'upgrade' && topLevelResults['version-check'] as bool && !machineFlag) {
-           await globals.flutterVersion.checkFlutterVersionFreshness();
+         final bool ci = await globals.botDetector.isRunningOnBot;
+         final bool redirectedCompletion = !globals.stdio.hasTerminal &&
+@@ -253,10 +252,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+         final bool versionCheckFlag = topLevelResults['version-check'] as bool;
+         final bool explicitVersionCheckPassed = topLevelResults.wasParsed('version-check') && versionCheckFlag;
+ 
+-        if (topLevelResults.command?.name != 'upgrade' &&
+-            (explicitVersionCheckPassed || (versionCheckFlag && !isMachine))) {
+-          await globals.flutterVersion.checkFlutterVersionFreshness();
+-        }
+ 
+         // See if the user specified a specific device.
+         globals.deviceManager.specifiedDeviceId = topLevelResults['device-id'] as String;

@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "exdown";
-  version = "0.8.5";
+  version = "0.8.6";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ly67whyfn74nr0dncarf3xbd96hacvzgjihx4ibckkc4h9z46bj";
+    sha256 = "sha256-BCn+rkMxQSw/gO+dpzgpYSOqEiooWFzSh7LUYIFr6wE=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];

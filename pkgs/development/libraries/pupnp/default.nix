@@ -6,15 +6,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libupnp";
-  version = "1.14.1";
+  version = "1.14.6";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
-    owner = "mrjimenez";
+    owner = "pupnp";
     repo = "pupnp";
     rev = "release-${version}";
-    sha256 = "sha256-QWwgtfgO+7zGW1M5qdfrIilVw6D/A/Er3l2bZ8V35kE=";
+    sha256 = "1f9861q5dicp6rx3jnp1j788xfjfaf3k4620p9r0b0k0lj2gk38c";
   };
 
   nativeBuildInputs = [

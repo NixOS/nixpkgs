@@ -152,7 +152,7 @@ in
     systemd.services.strongswan = {
       description = "strongSwan IPSec Service";
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ kmod iproute iptables util-linux ]; # XXX Linux
+      path = with pkgs; [ kmod iproute2 iptables util-linux ]; # XXX Linux
       after = [ "network-online.target" ];
       environment = {
         STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins; };

@@ -39,7 +39,7 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.12.1";
+  version = "0.13.1";
 
   disabled = pythonOlder "3.6";
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "1i5dj5dl0hxqd61bdflyy6yq958fj9qhf6s6m40n1vnql7g50gdx";
+    hash = "sha256-DlHlXncttzGo4uVoh2aQ7urW6krN3ej2sJ/EwuxeF2I=";
   };
 
   propagatedBuildInputs = [
@@ -83,7 +83,9 @@ buildPythonPackage rec {
 
   # Skip tests that rely on internet access (mostly to IBM Quantum Experience cloud).
   # Options defined in qiskit.terra.test.testing_options.py::get_test_options
-  QISKIT_TESTS = "skip_online";
+  preCheck = ''
+    export QISKIT_TESTS=skip_online
+  '';
 
   meta = with lib; {
     description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ";

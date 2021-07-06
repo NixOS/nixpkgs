@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "plone.testing";
-  version = "8.0.2";
+  version = "8.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "082b03aebe81d0bdcc44a917a795ae60d3add2c2abbee11e7c335fb13d5e7ca7";
+    sha256 = "39bc23bbb59b765702090ad61fe579f8bd9fe1f005f4dd1c2988a5bd1a71faf0";
   };
 
   propagatedBuildInputs = [ six setuptools zope_testing ];

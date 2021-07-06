@@ -28,7 +28,7 @@ with python3Packages; buildPythonApplication rec {
     pyusb
   ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"

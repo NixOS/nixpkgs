@@ -5,7 +5,7 @@
 , lv2
 , pkg-config
 , qt5
-, alsaLib
+, alsa-lib
 , libjack2
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     lv2
     libjack2
   ] ++ (with qt5; [

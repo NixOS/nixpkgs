@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   # Enable feature flags, so that build fail if libs are missing
   configureFlags = [ "--enable-c-plugins" "--enable-otr" ]
     ++ optionals notifySupport       [ "--enable-notifications" ]
-    ++ optionals traySupport         [ "--enable-icons" ]
+    ++ optionals traySupport         [ "--enable-icons-and-clipboard" ]
     ++ optionals pgpSupport          [ "--enable-pgp" ]
     ++ optionals pythonPluginSupport [ "--enable-python-plugins" ]
     ++ optionals omemoSupport        [ "--enable-omemo" ];

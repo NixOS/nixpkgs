@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.17.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-IyYlmatgcVbUj1WCPAFVOIgn1iHM80P4ie6d1YD3ISM=";
+    sha256 = "sha256-duJSTk5LmJWbaVYybZZHWDe8E/ZqZLCCsdPIiH5d/G4=";
   };
 
   vendorSha256 = null;
@@ -24,6 +24,8 @@ buildGoModule rec {
   excludedPackages = "\\(third_party\\|cmd/docs\\)";
 
   preCheck = ''
+    # Some tests try to write to the home dir
+    export HOME="$TMPDIR"
     # Change the golden files to match our desired version
     sed -i "s/dev/${version}/" pkg/cmd/version/testdata/TestGetVersions-*.golden
   '';
@@ -41,7 +43,8 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/tkn --help
-    $out/bin/tkn version | grep "Client version: ${version}"
+    # New tkn version functionality outputs empty https://github.com/tektoncd/cli/issues/1389
+    # $out/bin/tkn version | grep "Client version: ${version}"
     runHook postInstallCheck
   '';
 

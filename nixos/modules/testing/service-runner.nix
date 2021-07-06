@@ -6,7 +6,7 @@ let
 
   makeScript = name: service: pkgs.writeScript "${name}-runner"
     ''
-      #! ${pkgs.perl}/bin/perl -w -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}
+      #! ${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl -w
 
       use File::Slurp;
 

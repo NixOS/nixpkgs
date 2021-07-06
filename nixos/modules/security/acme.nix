@@ -24,7 +24,7 @@ let
       Type = "oneshot";
       User = "acme";
       Group = mkDefault "acme";
-      UMask = 0023;
+      UMask = 0022;
       StateDirectoryMode = 750;
       ProtectSystem = "full";
       PrivateTmp = true;
@@ -152,7 +152,7 @@ let
     );
     renewOpts = escapeShellArgs (
       commonOpts
-      ++ [ "renew" "--reuse-key" ]
+      ++ [ "renew" ]
       ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRenewFlags
     );
@@ -303,9 +303,15 @@ let
         }
 
         ${optionalString (data.webroot != null) ''
-          # Ensure the webroot exists
-          mkdir -p '${data.webroot}/.well-known/acme-challenge'
-          chown 'acme:${data.group}' ${data.webroot}/{.well-known,.well-known/acme-challenge}
+          # Ensure the webroot exists. Fixing group is required in case configuration was changed between runs.
+          # Lego will fail if the webroot does not exist at all.
+          (
+            mkdir -p '${data.webroot}/.well-known/acme-challenge' \
+            && chgrp '${data.group}' ${data.webroot}/.well-known/acme-challenge
+          ) || (
+            echo 'Please ensure ${data.webroot}/.well-known/acme-challenge exists and is writable by acme:${data.group}' \
+            && exit 1
+          )
         ''}
 
         echo '${domainHash}' > domainhash.txt

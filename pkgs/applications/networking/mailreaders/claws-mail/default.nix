@@ -21,7 +21,7 @@
 , enableLdap ? true, openldap
 , enableNetworkManager ? true, networkmanager
 , enableLibetpan ? true, libetpan
-, enableValgrind ? true, valgrind
+, enableValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind, valgrind
 , enableSvg ? true, librsvg
 
 # Configure claws-mail's plugins

@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames
+{ stdenv, lib, fetchurl, fetchFromGitHub, fixDarwinDylibNames
 , autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4
-, perl, python3, rapidjson, re2, snappy, thrift, utf8proc, which, zlib, zstd
+, perl, python3, rapidjson, re2, snappy, thrift, utf8proc, which, xsimd
+, zlib, zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -15,18 +16,18 @@ let
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "e31fe1a02c9e9f271e4bfb8002d403c52f1ef8eb";
-    sha256 = "02f51dvx8w5mw0bx3hn70hkn55mn1m65kzdps1ifvga9hghpy0sh";
+    rev = "ddd898958803cb89b7156c6350584d1cda0fe8de";
+    sha256 = "0n16xqlpxn2ryp43w8pppxrbwmllx6sk4hv3ycgikfj57nd3ibc0";
   };
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "3.0.0";
+  version = "4.0.1";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "0yp2b02wrc3s50zd56fmpz4nhhbihp0zw329v4zizaipwlxwrhkk";
+    sha256 = "0vl926i6jvsvj5vigdgqzp9v1i1h5zzj1abqr6qwc9drfsibzk3m";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
@@ -90,6 +91,10 @@ in stdenv.mkDerivation rec {
     "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
     "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
+    "-DARROW_COMPUTE=ON"
+    "-DARROW_CSV=ON"
+    "-DARROW_DATASET=ON"
+    "-DARROW_JSON=ON"
     "-DARROW_PLASMA=ON"
     # Disable Python for static mode because openblas is currently broken there.
     "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
@@ -110,6 +115,8 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
+
+  ARROW_XSIMD_URL = xsimd.src;
 
   doInstallCheck = true;
   ARROW_TEST_DATA =
@@ -139,11 +146,11 @@ in stdenv.mkDerivation rec {
       --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A  cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tobim veprbl ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ tobim veprbl ];
   };
 }

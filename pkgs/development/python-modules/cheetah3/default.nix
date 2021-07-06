@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Cheetah3";
-  version = "3.2.6";
+  version = "3.2.6.post2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f1c2b693cdcac2ded2823d363f8459ae785261e61c128d68464c8781dba0466b";
+    sha256 = "63157d7a00a273b59676b5be5aa817c75c37efc88478231f1a160f4cfb7f7878";
   };
 
   doCheck = false; # Circular dependency

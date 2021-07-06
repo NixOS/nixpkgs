@@ -63,6 +63,18 @@ in {
       '';
     };
 
+    user = mkOption {
+      default = "caddy";
+      type = types.str;
+      description = "User account under which caddy runs.";
+    };
+
+    group = mkOption {
+      default = "caddy";
+      type = types.str;
+      description = "Group account under which caddy runs.";
+    };
+
     adapter = mkOption {
       default = "caddyfile";
       example = "nginx";
@@ -123,8 +135,8 @@ in {
         ExecStart = "${cfg.package}/bin/caddy run --config ${configJSON}";
         ExecReload = "${cfg.package}/bin/caddy reload --config ${configJSON}";
         Type = "simple";
-        User = "caddy";
-        Group = "caddy";
+        User = cfg.user;
+        Group = cfg.group;
         Restart = "on-abnormal";
         AmbientCapabilities = "cap_net_bind_service";
         CapabilityBoundingSet = "cap_net_bind_service";
@@ -142,13 +154,18 @@ in {
       };
     };
 
-    users.users.caddy = {
-      group = "caddy";
-      uid = config.ids.uids.caddy;
-      home = cfg.dataDir;
-      createHome = true;
+    users.users = optionalAttrs (cfg.user == "caddy") {
+      caddy = {
+        group = cfg.group;
+        uid = config.ids.uids.caddy;
+        home = cfg.dataDir;
+        createHome = true;
+      };
     };
 
-    users.groups.caddy.gid = config.ids.uids.caddy;
+    users.groups = optionalAttrs (cfg.group == "caddy") {
+      caddy.gid = config.ids.gids.caddy;
+    };
+
   };
 }

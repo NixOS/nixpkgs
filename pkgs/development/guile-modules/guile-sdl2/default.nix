@@ -1,36 +1,50 @@
-{ lib, stdenv, fetchurl, guile, libtool, pkg-config
-, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
+{ lib
+, stdenv
+, fetchurl
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, guile
+, libtool
+, pkg-config
 }:
 
-let
-  name = "${pname}-${version}";
+stdenv.mkDerivation rec {
   pname = "guile-sdl2";
   version = "0.5.0";
-in stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
-    url = "https://files.dthompson.us/${pname}/${name}.tar.gz";
-    sha256 = "118x0cg7fzbsyrfhy5f9ab7dqp9czgia0ycgzp6sn3nlsdrcnr4m";
+    url = "https://files.dthompson.us/${pname}/${pname}-${version}.tar.gz";
+    hash = "sha256-lWTLctPUDqvN/Y95oOL7LF3czlLJFQ9d9np9dx4DHYU=";
   };
 
-  nativeBuildInputs = [ libtool pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+  ];
   buildInputs = [
-    guile SDL2 SDL2_image SDL2_ttf SDL2_mixer
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    guile
   ];
 
   configureFlags = [
-    "--with-libsdl2-prefix=${SDL2}"
     "--with-libsdl2-image-prefix=${SDL2_image}"
-    "--with-libsdl2-ttf-prefix=${SDL2_ttf}"
     "--with-libsdl2-mixer-prefix=${SDL2_mixer}"
+    "--with-libsdl2-prefix=${SDL2}"
+    "--with-libsdl2-ttf-prefix=${SDL2_ttf}"
   ];
 
-  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+  makeFlags = [
+    "GUILE_AUTO_COMPILE=0"
+  ];
 
   meta = with lib; {
-    description = "Bindings to SDL2 for GNU Guile";
     homepage = "https://dthompson.us/projects/guile-sdl2.html";
+    description = "Bindings to SDL2 for GNU Guile";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ seppeljordan vyp ];
     platforms = platforms.all;

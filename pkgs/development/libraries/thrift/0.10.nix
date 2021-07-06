@@ -35,5 +35,12 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
+    knownVulnerabilities = [
+      "CVE-2018-1320"
+      "CVE-2018-11798"
+      "CVE-2019-0205"
+      "CVE-2019-0210"
+      "CVE-2020-13949"
+    ];
   };
 }

@@ -44,7 +44,7 @@
   sdlSupport ? false,
   faudioSupport ? false,
   vkd3dSupport ? false,
-  mingwSupport ? false,
+  mingwSupport ? wineRelease != "stable",
 }:
 
 let wine-build = build: release:

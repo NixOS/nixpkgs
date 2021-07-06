@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsaLib, AppKit }:
+{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit }:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl libsamplerate ]
-    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional stdenv.isDarwin AppKit;
 
   preConfigure = ''

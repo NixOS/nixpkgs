@@ -1,22 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, Security, CoreServices, CoreFoundation }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, Security, CoreServices, CoreFoundation, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wrangler";
-  version = "1.15.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/5iIdEUbesX+IRQQzeJazt3i/xAtghblct718EmYci4=";
+    sha256 = "sha256-chKmn38yB05NqDvtYWo4EwEIiD6kjy/1OMaMFM4qAA8=";
   };
 
-  cargoSha256 = "sha256-6XWFhfY8QIl4S6zDyyM2YvFUoGMnKZQ3d/GT4yQWb7A=";
+  cargoSha256 = "sha256-pG3ZsRPa/7QRkUik6a987SlGrl3B0thnN3h62JyzdJo=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ curl CoreFoundation CoreServices Security ];
+    ++ lib.optionals stdenv.isDarwin [ curl CoreFoundation CoreServices Security libiconv ];
 
   OPENSSL_NO_VENDOR = 1;
 

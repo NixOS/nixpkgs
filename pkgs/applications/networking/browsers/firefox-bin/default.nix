@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, config, wrapGAppsHook
-, alsaLib
+, alsa-lib
 , atk
 , cairo
 , curl
@@ -13,7 +13,7 @@
 , glibc
 , gtk2
 , gtk3
-, kerberos
+, libkrb5
 , libX11
 , libXScrnSaver
 , libxcb
@@ -28,11 +28,12 @@
 , libXt
 , libcanberra
 , libnotify
-, gnome3
+, gnome
 , libGLU, libGL
 , nspr
 , nss
 , pango
+, pipewire
 , pciutils
 , libheimdal
 , libpulseaudio
@@ -92,7 +93,7 @@ stdenv.mkDerivation {
 
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib
+      alsa-lib
       atk
       cairo
       curl
@@ -106,7 +107,7 @@ stdenv.mkDerivation {
       glibc
       gtk2
       gtk3
-      kerberos
+      libkrb5
       mesa
       libX11
       libXScrnSaver
@@ -126,6 +127,7 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
+      pipewire
       pciutils
       libheimdal
       libpulseaudio
@@ -137,7 +139,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 gnome.adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -201,6 +203,7 @@ stdenv.mkDerivation {
       url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
     platforms = builtins.attrNames mozillaPlatforms;
+    timeout = 86400; # 24 hours (increased from the Hydra default of 10h, c.f. #129115)
     maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

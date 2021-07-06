@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub, cmake, flex
-, clang-unwrapped, llvm, unifdef
+, libclang, llvm, unifdef
 , pebble, psutil, pytestCheckHook, pytest-flake8
 }:
 
@@ -19,8 +19,8 @@ buildPythonApplication rec {
     ./unifdef.patch
   ];
 
-  nativeBuildInputs = [ cmake flex ];
-  buildInputs = [ clang-unwrapped llvm unifdef ];
+  nativeBuildInputs = [ cmake flex llvm.dev ];
+  buildInputs = [ libclang llvm llvm.dev unifdef ];
   propagatedBuildInputs = [ pebble psutil ];
   checkInputs = [ pytestCheckHook pytest-flake8 unifdef ];
 

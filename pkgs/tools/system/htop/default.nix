@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     description = "An interactive process viewer for Linux";
     homepage = "https://htop.dev";
     license = licenses.gpl2Only;
-    platforms = with platforms; linux ++ freebsd ++ openbsd ++ darwin;
+    platforms = platforms.all;
     maintainers = with maintainers; [ rob relrod ];
+    changelog = "https://github.com/htop-dev/${pname}/blob/${version}/ChangeLog";
   };
 }

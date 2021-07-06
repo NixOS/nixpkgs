@@ -1,6 +1,8 @@
 { lib, stdenv
+, makeWrapper
 , awscli
 , jq
+, unixtools
 , fetchgit
 , installShellFiles
 , bashInteractive
@@ -22,9 +24,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     awscli
     jq
+    unixtools.column
     bashInteractive
   ];
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   checkPhase = ''
     pushd test
@@ -50,6 +53,7 @@ stdenv.mkDerivation rec {
         --replace .bash-my-aws ""
     substituteInPlace bin/bma \
         --replace '~/.bash-my-aws' $out
+    wrapProgram $out/bin/bma --prefix PATH : ${lib.makeBinPath [awscli jq unixtools.column bashInteractive ]}
     installShellCompletion --bash --name bash-my-aws.bash bash_completion.sh
     chmod +x $out/lib/*
     patchShebangs --host $out/lib

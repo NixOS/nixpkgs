@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, vala, libcanberra, gobject-introspection, libtool, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, glib, vala, libcanberra, gobject-introspection, libtool, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gsound";
@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libcanberra ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

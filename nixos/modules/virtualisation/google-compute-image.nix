@@ -18,8 +18,9 @@ in
 
   options = {
     virtualisation.googleComputeImage.diskSize = mkOption {
-      type = with types; int;
-      default = 1536;
+      type = with types; either (enum [ "auto" ]) int;
+      default = "auto";
+      example = 1536;
       description = ''
         Size of disk image. Unit is MB.
       '';

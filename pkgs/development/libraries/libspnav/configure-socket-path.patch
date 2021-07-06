@@ -24,10 +24,10 @@ index f9e10f8..27149f7 100644
 +		if ( spath == NULL ) {
 +			spath = malloc(strlen(xdg_runtime_dir) + strlen("/spnav.sock") + 1);
 +			if ( spath != NULL ) {
-+				sprintf(spath, sizeof(spath), "%s/spnav.sock", xdg_runtime_dir);
++				sprintf(spath, "%s/spnav.sock", xdg_runtime_dir);
 +			}
 +		}
-+		if(access(spath, F_OK)){
++		if(access(spath, F_OK) != -1){
 +			return spath;
 +		}
 +	}

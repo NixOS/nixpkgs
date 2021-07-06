@@ -1,19 +1,19 @@
-{ stdenv, rustPlatform, fetchFromGitHub, lib, Security, nixosTests }:
+{ stdenv, rustPlatform, fetchFromGitHub, lib, libiconv, Security, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wireguard-exporter";
-  version = "3.4.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "MindFlavor";
     repo = "prometheus_wireguard_exporter";
     rev = version;
-    sha256 = "sha256-nzY+pCkj0/m7cWPq5+xvQ1b1/PqdI6QuxNdTRT030tY=";
+    sha256 = "sha256-LHhqQ0p2qt6ZAdkpY1SEAcGXH47TPhHvlDv+eL8GC58=";
   };
 
-  cargoSha256 = "sha256-L2ohowt5+F3XJSzoihtJ2prW2bzZiNMUL9vqHIZBy1M=";
+  cargoSha256 = "sha256-lNFsO7FSmH1+DLM7ID0vn6234qTdtUoaLSnqKcbHoXE=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) wireguard; };
 

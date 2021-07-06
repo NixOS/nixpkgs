@@ -2,7 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   baloo, baloo-widgets, kactivities, kbookmarks, kcmutils,
-  kcompletion, kconfig, kcoreaddons, kdelibs4support, kdbusaddons,
+  kcompletion, kconfig, kcoreaddons, kdbusaddons,
   kfilemetadata, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications,
   kparts, ktexteditor, kwindowsystem, phonon, solid,
   wayland, qtbase, qtwayland
@@ -19,7 +19,7 @@ mkDerivation {
   propagatedUserEnvPkgs = [ baloo ];
   propagatedBuildInputs = [
     baloo baloo-widgets kactivities kbookmarks kcmutils kcompletion kconfig
-    kcoreaddons kdelibs4support kdbusaddons kfilemetadata ki18n kiconthemes
+    kcoreaddons kdbusaddons kfilemetadata ki18n kiconthemes
     kinit kio knewstuff knotifications kparts ktexteditor kwindowsystem
     phonon solid
     wayland qtwayland

@@ -51,9 +51,9 @@
 , iptables
 , withSelinux ? false
 , libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
+, withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp
 , libseccomp
-, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
+, withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexectools
 , kexectools
 , bashInteractive
 , libmicrohttpd
@@ -113,7 +113,7 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247.3";
+  version = "247.6";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -124,12 +124,12 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "0zn0b74iwz3vxabqsk4yydwpgky3c5z4dl83wxbs1qi5d2dnbqa7";
+    sha256 = "sha256-7XYEq3Qw25suwjbtPzx9lVPHUu9ZY/1bADXl2wQbkJc=";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
   # systemd worktree, rebase to the more recent systemd version, and export the
-  # patches again via `git format-patch v${version}`.
+  # patches again via `git -c format.signoff=false format-patch v${version}`.
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
@@ -150,7 +150,13 @@ stdenv.mkDerivation {
     ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-logind-seat-debus-show-CanMultiSession-again.patch
-    ./0019-Revert-pkg-config-prefix-is-not-really-configurable-.patch
+    ./0019-pkg-config-derive-prefix-from-prefix.patch
+
+    # Fix -Werror=format.
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/ab1aa6368a883bce88e3162fee2bea14aacedf23.patch";
+      sha256 = "1b280l5jrjsg8qhsang199mpqjhkpix4c8bm3blknjnq9iv43add";
+    })
   ];
 
   postPatch = ''
@@ -415,6 +421,7 @@ stdenv.mkDerivation {
       src/shared/generator.c \
       src/shutdown/shutdown.c \
       units/emergency.service.in \
+      units/modprobe@.service \
       units/rescue.service.in \
       units/systemd-logind.service.in \
       units/systemd-nspawn@.service.in; \
@@ -506,8 +513,6 @@ stdenv.mkDerivation {
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
   '';
-
-  enableParallelBuilding = true;
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is

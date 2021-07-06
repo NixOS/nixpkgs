@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "beets-alternatives";
-  version = "0.10.2";
+  version = "unstable-2021-02-01";
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
-    rev = "v${version}";
-    sha256 = "1dsz94fb29wra1f9580w20bz2f1bgkj4xnsjgwgbv14flbfw4bp0";
+    rev = "288299e3aa9a1602717b04c28696fce5ce4259bf";
+    sha256 = "sha256-Xl7AHr33hXQqQDuFbWuj8HrIugeipJFPmvNXpCkU/mI=";
   };
 
   postPatch = ''
@@ -23,10 +23,10 @@ pythonPackages.buildPythonApplication rec {
     mock
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Beets plugin to manage external files";
     homepage = "https://github.com/geigerzaehler/beets-alternatives";
-    maintainers = [ lib.maintainers.aszlig ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ aszlig lovesegfault ];
+    license = licenses.mit;
   };
 }

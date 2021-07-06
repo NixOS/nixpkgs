@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, unzip }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "openfx";
@@ -10,8 +10,6 @@ stdenv.mkDerivation {
     rev = "OFX_Release_1_4_TAG";
     sha256 = "0k9ggzr6bisn77mipjfvawg3mv4bz50b63v8f7w1jhldi1sfy548";
   };
-
-  nativeBuildInputs = [ unzip ];
 
   outputs = [ "dev" "out" ];
 

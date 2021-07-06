@@ -22,6 +22,6 @@ buildDunePackage rec {
   meta = with lib; {
     description = "Low-level libraries for connecting to a xenstore service on a xen host";
     license = licenses.lgpl21Only;
-    homepage = "http://github.com/xapi-project/ocaml-xenstore-clients";
+    homepage = "https://github.com/xapi-project/ocaml-xenstore-clients";
   };
 }

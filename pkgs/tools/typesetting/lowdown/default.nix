@@ -2,17 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
-  version = "0.8.3";
+  version = "0.8.4";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "17q1jd2vih26yjjc4f9kg0qihrym8h0ydnli6z8p3h4rdwm4kfnvckrpkwminz5wl0k5z6d65dk7q4pynyfynp31d6s7q4yzkkqy6kc";
+    sha512 = "1rbsngfw36lyc8s6qxl8hgb1pzj0gdzlb7yqkfblb8fpgs2z0ggyhnfszrqfir8s569i7a9yk9bdx2ggwqhjj56hmi2i4inlnb3rmni";
   };
 
   nativeBuildInputs = [ which ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+
+  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    echo 'HAVE_SANDBOX_INIT=0' > configure.local
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -30,6 +34,17 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional (!stdenv.hostPlatform.isStatic) ./shared.patch;
 
+  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    echo '# TEST' > test.md
+    $out/bin/lowdown test.md
+    runHook postInstallCheck
+  '';
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkTarget = "regress";
+
   meta = with lib; {
     homepage = "https://kristaps.bsd.lv/lowdown/";
     description = "Simple markdown translator";
@@ -38,4 +53,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

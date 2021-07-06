@@ -16,17 +16,18 @@
 , qtquickcontrols2
 , qtgraphicaleffects
 , sqlite
+, inkscape
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.1.3";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-8Ql6tOvWOjAvMJA87WlT9TbpnbciBsjDxRuYlMVi/m8=";
+    sha256 = "sha256-NE0P6bG/msoP29c/1r/fTC5vDcqgkQuqfRK+IDftMqY=";
   };
 
   patches = [
@@ -37,6 +38,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
+    inkscape
   ];
 
   buildInputs = [

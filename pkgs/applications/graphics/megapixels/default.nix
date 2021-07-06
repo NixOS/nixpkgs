@@ -1,12 +1,12 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromSourcehut
 , meson
 , ninja
 , pkg-config
 , wrapGAppsHook
-, gtk3
-, gnome3
+, epoxy
+, gtk4
 , zbar
 , tiffSupport ? true
 , libraw
@@ -26,19 +26,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "0.15.0";
+  version = "1.1.0";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~martijnbraam/megapixels";
+  src = fetchFromSourcehut {
+    owner = "~martijnbraam";
+    repo = "megapixels";
     rev = version;
-    sha256 = "1y8irwi8lbjs948j90gpic96dx5wjmwacd41hb3d9vzhkyni2dvb";
+    sha256 = "0y56c6vchlzidfmp3a3bdc228vbhy7zaxvmhkyxchfb752yzr0n3";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme zbar ]
-  ++ optional tiffSupport libraw
-  ++ optional jpgSupport graphicsmagick;
+  buildInputs = [
+    epoxy
+    gtk4
+    zbar
+  ];
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
@@ -49,8 +52,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GTK3 camera application using raw v4l2 and media-requests";
     homepage = "https://sr.ht/~martijnbraam/Megapixels";
+    changelog = "https://git.sr.ht/~martijnbraam/megapixels/refs/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 dotlambda ];
     platforms = platforms.linux;
   };
 }

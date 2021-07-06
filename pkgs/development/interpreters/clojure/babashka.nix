@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.2.10";
+  version = "0.4.5";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "1c7f0z1hi0vcfz532r3fhr4c64jjqppf94idpa1jziz1dljkwk85";
+    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
+    sha256 = "sha256-TVFdGFXclJE9GpolKzTGSmeianBdb2Yp3kbNUWlddPw=";
   };
 
   src = fetchurl {
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "0j6k3vmdljf3bjmj5dywhxjmxcs1axscc8dlnw94g5rwf9bin0dn";
+    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
+    sha256 = "sha256-SnKs30c6VTp1yzW2Glooi6ghSUIZgF6nsob1hDljTA8=";
   };
 
   dontUnpack = true;
@@ -110,9 +110,15 @@ stdenv.mkDerivation rec {
     - Batteries included (tools.cli, cheshire, ...)
     - Library support via popular tools like the clojure CLI
     '';
-    homepage = "https://github.com/borkdude/babashka";
+    homepage = "https://github.com/babashka/babashka";
     license = licenses.epl10;
     platforms = graalvm11-ce.meta.platforms;
-    maintainers = with maintainers; [ bandresen bhougland DerGuteMoritz jlesquembre ];
+    maintainers = with maintainers; [
+      bandresen
+      bhougland
+      DerGuteMoritz
+      jlesquembre
+      thiagokokada
+    ];
   };
 }

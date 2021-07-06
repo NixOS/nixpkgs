@@ -33,6 +33,11 @@ buildPythonPackage rec {
     sha256 = "0r0j0y0ii62ppawc8qqjyaq0fkmmb0zk1xb3f9navxp556w2dljv";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'click>=7,<8' 'click>=7,<9'
+  '';
+
   nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = [

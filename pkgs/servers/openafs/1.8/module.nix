@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, which, autoconf, automake, flex, yacc
-, kernel, glibc, perl, libtool_2, kerberos, fetchpatch }:
+{ lib, stdenv, fetchurl, which, autoconf, automake, flex, bison
+, kernel, glibc, perl, libtool_2, libkrb5, fetchpatch }:
 
 with (import ./srcs.nix {
   inherit fetchurl;
@@ -13,10 +13,10 @@ in stdenv.mkDerivation {
   name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 
-  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which yacc ]
+  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
     ++ kernel.moduleBuildDependencies;
 
-  buildInputs = [ kerberos ];
+  buildInputs = [ libkrb5 ];
 
   patches = [
     # LINUX 5.8: Replace kernel_setsockopt with new funcs
@@ -48,6 +48,16 @@ in stdenv.mkDerivation {
     (fetchpatch {
       url = "https://github.com/openafs/openafs/commit/ee53dd3bc087a05e22fc4111297a51ddb30013f0.patch";
       sha256 = "0dfab3zk0dmf6iksna5n09lf5dn4f8w43q4irl2yf5dgqm35shkr";
+    })
+    # Linux: Create wrapper for setattr_prepare
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/5a5d358b02b88d6d2c7a27a75149e35b1de7db38.patch";
+      sha256 = "07gywsg41cz5h6iafr4pb0gb9jnsb58xkwn479lw46b3y5jgz7ki";
+    })
+    # Linux 5.12: Add user_namespace param to inode ops
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/c747b15dd2877e6d17e3e6b940ae78c1e1ccd3ea.patch";
+      sha256 = "0bbqmx4nkmfkapk25zrv9ivhhs91rn9dizb1lkfs7a6937q1kaqh";
     })
   ];
 
@@ -91,5 +101,4 @@ in stdenv.mkDerivation {
     maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
     broken = versionOlder kernel.version "3.18" || kernel.isHardened;
   };
-
 }

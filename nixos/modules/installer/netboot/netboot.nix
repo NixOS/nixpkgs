@@ -57,6 +57,12 @@ with lib;
           "upperdir=/nix/.rw-store/store"
           "workdir=/nix/.rw-store/work"
         ];
+
+        depends = [
+          "/nix/.ro-store"
+          "/nix/.rw-store/store"
+          "/nix/.rw-store/work"
+        ];
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];

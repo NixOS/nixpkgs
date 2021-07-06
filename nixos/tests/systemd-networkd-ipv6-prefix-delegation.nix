@@ -43,7 +43,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
       # Everyone on the "isp" machine will be able to add routes to the kernel.
       security.wrappers.add-dhcpd-lease = {
         source = pkgs.writeShellScript "add-dhcpd-lease" ''
-          exec ${pkgs.iproute}/bin/ip -6 route replace "$1" via "$2"
+          exec ${pkgs.iproute2}/bin/ip -6 route replace "$1" via "$2"
         '';
         capabilities = "cap_net_admin+ep";
       };

@@ -7,7 +7,7 @@
   akonadi-calendar, akonadi-contacts, akonadi-notes, akonadi-search,
   calendarsupport, eventviews, incidenceeditor, kcalutils,
   kholidays, kidentitymanagement, kldap, kmailtransport, kontactinterface,
-  kpimtextedit, pimcommon,
+  kparts, kpimtextedit, pimcommon,
 }:
 
 mkDerivation {
@@ -24,6 +24,6 @@ mkDerivation {
     akonadi-calendar akonadi-contacts akonadi-notes akonadi-search
     calendarsupport eventviews incidenceeditor kcalutils
     kholidays kidentitymanagement kldap kmailtransport kontactinterface
-    kpimtextedit pimcommon
+    kparts kpimtextedit pimcommon
   ];
 }

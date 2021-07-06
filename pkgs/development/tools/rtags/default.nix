@@ -3,8 +3,8 @@
 stdenv.mkDerivation rec {
   pname = "rtags";
   version = "2.38";
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ llvmPackages.llvm openssl emacs ]
+  nativeBuildInputs = [ cmake pkg-config llvmPackages.llvm.dev ];
+  buildInputs = [ llvmPackages.llvm llvmPackages.libclang openssl emacs ]
     ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
     ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
 

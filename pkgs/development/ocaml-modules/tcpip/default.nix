@@ -7,6 +7,8 @@
 , alcotest, mirage-flow, mirage-vnetif, pcap-format
 , mirage-clock-unix, arp, ipaddr-cstruct, mirage-random-test
 , lru
+, withFreestanding ? false
+, ocaml-freestanding
 }:
 
 buildDunePackage rec {
@@ -17,11 +19,11 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "e81c98a6e80e05f9fa4e5fbee50e6c247f6011254c7b1d9a0e58bae318c1f0c8";
+    sha256 = "7b3ed2e1ca835c1cc65ac911bcb0de12ebc2b580dd195006bdea2cb387510474";
   };
 
   patches = [
-    ./no-opam-pkg-config-path.patch
+    ./makefile-no-opam.patch
   ];
 
   nativeBuildInputs = [
@@ -53,6 +55,8 @@ buildDunePackage rec {
     randomconv
     ethernet
     lru
+  ] ++ lib.optionals withFreestanding [
+    ocaml-freestanding
   ];
 
   doCheck = true;

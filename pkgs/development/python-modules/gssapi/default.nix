@@ -17,20 +17,20 @@
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.6.10";
+  version = "1.6.12";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "11w8z9ik6zzv3pw3319mz91cgbfkgx0mffxbapqnhilzij2jad4q";
+    sha256 = "0r6w52vji1095n3wgzjz9ddaqsvsf3f4gal0rv5i62hpqwlbzkn7";
   };
 
   # It's used to locate headers
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "get_output('krb5-config gssapi --prefix')" "'${lib.getDev krb5Full}'"
+      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5Full}"'
   '';
 
   nativeBuildInputs = [

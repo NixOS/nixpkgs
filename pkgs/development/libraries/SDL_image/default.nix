@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, libungif, libXpm }:
+{ lib, stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, giflib, libXpm }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_image";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "--disable-tif-shared"
   ] ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  buildInputs = [ SDL libpng libjpeg libtiff libungif libXpm ];
+  buildInputs = [ SDL libpng libjpeg libtiff giflib libXpm ];
 
   meta = with lib; {
     description = "SDL image library";

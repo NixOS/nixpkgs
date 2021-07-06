@@ -125,6 +125,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsdOriginalUC = spdx {
+    spdxId = "BSD-4-Clause-UC";
+    fullName = "BSD 4-Clause University of California-Specific";
+  };
+
   bsdProtection = spdx {
     spdxId = "BSD-Protection";
     fullName = "BSD Protection License";
@@ -339,6 +344,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
 
   free = {
     fullName = "Unspecified free software license";
+  };
+
+  ftl = spdx {
+    spdxId = "FTL";
+    fullName = "Freetype Project License";
   };
 
   g4sl = {
@@ -729,6 +739,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     free = false;
   };
 
+  stk = {
+    shortName = "stk";
+    fullName = "Synthesis Tool Kit 4.3";
+    url = "https://github.com/thestk/stk/blob/master/LICENSE";
+  };
+
   tcltk = spdx {
     spdxId = "TCL";
     fullName = "TCL/TK License";
@@ -753,6 +769,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     fullName = "Unfree redistributable firmware";
     # Note: we currently consider these "free" for inclusion in the
     # channel and NixOS images.
+  };
+
+  unicode-dfs-2015 = spdx {
+    spdxId = "Unicode-DFS-2015";
+    fullName = "Unicode License Agreement - Data Files and Software (2015)";
   };
 
   unicode-dfs-2016 = spdx {

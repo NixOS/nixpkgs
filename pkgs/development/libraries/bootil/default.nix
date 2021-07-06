@@ -1,23 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, premake4 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, premake4
+}:
 
 stdenv.mkDerivation {
   pname = "bootil";
-  version = "unstable-2015-12-17";
+  version = "unstable-2019-11-18";
 
   src = fetchFromGitHub {
     owner = "garrynewman";
     repo = "bootil";
-    rev = "1d3e321fc2be359e2350205b8c7f1cad2164ee0b";
-    sha256 = "03wq526r80l2px797hd0n5m224a6jibwipcbsvps6l9h740xabzg";
+    rev = "beb4cec8ad29533965491b767b177dc549e62d23";
+    sha256 = "1njdj6nvmwf7j2fwqbyvd1cf5l52797vk2wnsliylqdzqcjmfpij";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/garrynewman/bootil/pull/22.patch";
-      name = "github-pull-request-22.patch";
-      sha256 = "1qf8wkv00pb9w1aa0dl89c8gm4rmzkxfl7hidj4gz0wpy7a24qa2";
-    })
-  ];
 
   # Avoid guessing where files end up. Just use current directory.
   postPatch = ''
@@ -28,6 +24,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ premake4 ];
+
   premakefile = "projects/premake4.lua";
 
   installPhase = ''
@@ -40,8 +37,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/garrynewman/bootil";
     # License unsure - see https://github.com/garrynewman/bootil/issues/21
     license = licenses.free;
-    maintainers = [ maintainers.abigailbuccaneer ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ abigailbuccaneer ];
     # Build uses `-msse` and `-mfpmath=sse`
     badPlatforms = [ "aarch64-linux" ];
   };

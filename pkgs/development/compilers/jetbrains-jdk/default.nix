@@ -2,12 +2,12 @@
 
 openjdk11.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk";
-  version = "11.0.7-b64";
+  version = "11.0.10-b1427";
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1gxqi6dkyriv9j29ppan638w1ns2g9m4q1sq7arf9kwqr05zim90";
+    sha256 = "sha256-2cn+FiFfGpp7CBeQMAASVZwTm6DOFaXaWxAL/nVC2Nk=";
   };
   patches = [];
   meta = with lib; {
@@ -24,9 +24,8 @@ openjdk11.overrideAttrs (oldAttrs: rec {
      your own risk.
     '';
     homepage = "https://bintray.com/jetbrains/intellij-jdk/";
-    license = licenses.gpl2;
+    inherit (openjdk11.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo petabyteboy ];
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ];
   };
   passthru = oldAttrs.passthru // {
     home = "${jetbrains.jdk}/lib/openjdk";

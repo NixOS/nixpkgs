@@ -14,7 +14,7 @@ sub semantic_less {
 }
 
 sub get_latest_versions {
-  my @channels = get("http://www.jetbrains.com/updates/updates.xml") =~ /(<channel .+?<\/channel>)/gs;
+  my @channels = get("https://www.jetbrains.com/updates/updates.xml") =~ /(<channel .+?<\/channel>)/gs;
   my %h = {};
   for my $ch (@channels) {
     my ($id) = $ch =~ /^<channel id="[^"]+" name="([^"]+)"/;
@@ -61,8 +61,9 @@ sub update_nix_block {
         # try to interpret some nix
         my ($name) = $block =~ /name\s*=\s*"([^"]+)"/;
         $name =~ s/\$\{version\}/$latest_versions{$channel}/;
-        $url =~ s/\$\{name\}/$name/;
-        $url =~ s/\$\{version\}/$latest_versions{$channel}/;
+        # Some url paattern contain variables more than once
+        $url =~ s/\$\{name\}/$name/g;
+        $url =~ s/\$\{version\}/$latest_versions{$channel}/g;
         die "$url still has some interpolation" if $url =~ /\$/;
         my ($sha256) = get("$url.sha256") =~ /^([0-9a-f]{64})/;
         my $version_string = $latest_versions{$channel};

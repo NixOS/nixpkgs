@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "z88dk";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "z88dk";
     repo = "z88dk";
     rev = "v${version}";
-    sha256 = "14r9bjw6lgz85a59a4ajspvg12swiqxi17zicl8r7p29pi9lsibp";
+    sha256 = "sha256-NgO8rbM31IX4nrJRU0p1DUafHPagMQepKLLoOLuGlT8=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "git_rev=${short_rev}"
     "version=${version}"
-    "prefix=$(out)"
+    "DESTDIR=$(out)"
     "git_count=0"
   ];
 

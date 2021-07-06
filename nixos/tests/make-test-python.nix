@@ -1,6 +1,6 @@
 f: {
   system ? builtins.currentSystem,
-  pkgs ? import ../.. { inherit system; config = {}; },
+  pkgs ? import ../.. { inherit system; },
   ...
 } @ args:
 

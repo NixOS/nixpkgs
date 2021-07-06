@@ -62,6 +62,8 @@ mkChromiumDerivation (base: rec {
       -e '/\[Desktop Entry\]/a\' \
       -e 'StartupWMClass=chromium-browser' \
       $out/share/applications/chromium-browser.desktop
+  '' + lib.optionalString (channel != "stable") ''
+    cp -v "$buildPath/crashpad_handler" "$libExecPath/"
   '';
 
   passthru = { inherit sandboxExecutableName; };
@@ -85,10 +87,10 @@ mkChromiumDerivation (base: rec {
       else [ primeos thefloweringash bendlas ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
+    mainProgram = "chromium";
     hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
       then ["aarch64-linux" "x86_64-linux"]
       else [];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
-    broken = elem channel [ "beta" "dev" ]; # Build requires LLVM 12
   };
 })

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.3.4";
+  version = "2.3.5";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v2.3/${pname}-${version}.tar.xz";
-    sha256 = "0wrpz2fzbsszmsgxxbssxjgylpyiindh24z8g13m2fxmjsxyw5lx";
+    sha256 = "sha256-ztmUb0RNEyU22vkvyKykJ3Y4o8LZbiBUCyuuTTb9cME=";
   };
 
   # Disable 4 test cases that fail in a sandbox

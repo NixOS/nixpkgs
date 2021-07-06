@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       the system's terminfo database.
     '';
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ astsmtl antono lethalman ];
+    maintainers = with maintainers; [ astsmtl antono ];
     platforms = platforms.linux;
   };
 }

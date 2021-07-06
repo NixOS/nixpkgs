@@ -5,7 +5,7 @@
 , meson
 , ninja
 , scdoc
-, alsaLib
+, alsa-lib
 , fcft
 , json_c
 , libmpdclient
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
   buildInputs = [
-    alsaLib
+    alsa-lib
     fcft
     json_c
     libmpdclient

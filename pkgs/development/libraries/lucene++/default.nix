@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, boost, gtest }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "lucene++";
   version = "3.0.7";
 
-  src = fetchurl {
-    url = "https://github.com/luceneplusplus/LucenePlusPlus/"
-        + "archive/rel_${version}.tar.gz";
-    sha256 = "032yb35b381ifm7wb8cy2m3yndklnxyi5cgprjh48jqy641z46bc";
+  src = fetchFromGitHub {
+    owner = "luceneplusplus";
+    repo = "LucenePlusPlus";
+    rev = "rel_${version}";
+    sha256 = "06b37fly6l27zc6kbm93f6khfsv61w792j8xihfagpcm9cfz2zi1";
   };
 
   postPatch = ''

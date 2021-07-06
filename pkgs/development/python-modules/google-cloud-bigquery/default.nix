@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "2.12.0";
+  version = "2.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "484bb733e5dd14bb82d28480a5d7f540b8ee59f081fcf32782546b717180d1b8";
+    sha256 = "ff728f9a4a64d6b4ec5beb7fd2f6ed550b49bfe2b8bb3755c00821716e0d1f91";
   };
 
   propagatedBuildInputs = [
@@ -51,6 +51,8 @@ buildPythonPackage rec {
     # requires credentials
     "test_bigquery_magic"
     "TestBigQuery"
+    # Mocking of _ensure_bqstorage_client fails
+    "test_to_arrow_ensure_bqstorage_client_wo_bqstorage"
   ];
 
   pythonImportsCheck = [

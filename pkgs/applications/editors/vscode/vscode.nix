@@ -13,38 +13,39 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1px6x99cv8nb8lcy3vgcicr4ar0bfj5rfnc5a1yw8rs5p1qnflgw";
-    x86_64-darwin = "0grzivqb2fyvwh0fjh9vr205fjcsrd1iqhkwk3mgv792zfrb7ksf";
-    aarch64-linux = "0p0msxgc13kqmpq7wk61igc1qbgmgg9463s44dp4ii3630iyr4lw";
-    armv7l-linux = "147lki1wr5nzsg1mq12jmdjq9qr6vbdpmzbpr5nrvq23cak94ff8";
+    x86_64-linux = "0cklp0mp7qylzrqnfbvzs308q0bzpswlqw5n98qhl1jb5783svx1";
+    x86_64-darwin = "04yyv0wpkzdjfiy9kj2jslhv7nc5i6nw2207vfnbzysgs55l3x63";
+    aarch64-linux = "1ygk51902g0q7x3r6kd3s7gi2gx86x10svpvbipl494qcyfngqzs";
+    armv7l-linux = "0z5rg1nl8lz7zsvml6dfz093dbyrkr4zvvfssqiyarw4n24d2mim";
   }.${system};
 in
   callPackage ./generic.nix rec {
-    # The update script doesn't correctly change the hash for darwin, so please:
-    # nixpkgs-update: no auto update
-
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.54.2";
+    version = "1.57.1";
     pname = "vscode";
 
+    sourceExecutableName = "code";
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
-      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/stable";
+      url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
       inherit sha256;
     };
 
     sourceRoot = "";
+
+    updateScript = ./update-vscodium.sh;
 
     meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS
       '';
+      mainProgram = "code";
       longDescription = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS. It includes support for debugging, embedded Git

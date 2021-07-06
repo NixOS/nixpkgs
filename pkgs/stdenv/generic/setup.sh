@@ -1,6 +1,12 @@
 set -eu
 set -o pipefail
 
+if [ -n "${BASH_VERSINFO-}" ] && [ "${BASH_VERSINFO-}" -lt 4 ]; then
+    echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
+    echo "Please install Bash 4 or greater to continue."
+    exit 1
+fi
+
 if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
@@ -157,7 +163,8 @@ addToSearchPathWithCustomDelimiter() {
     local delimiter="$1"
     local varName="$2"
     local dir="$3"
-    if [ -d "$dir" ]; then
+    if [[ -d "$dir" && "${!varName:+${delimiter}${!varName}${delimiter}}" \
+          != *"${delimiter}${dir}${delimiter}"* ]]; then
         export "${varName}=${!varName:+${!varName}${delimiter}}${dir}"
     fi
 }

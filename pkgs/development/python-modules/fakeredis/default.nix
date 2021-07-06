@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.4.5";
+  version = "1.5.2";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0slb23zxn47a4z8b7jq7gq40g4zsn52y9h29zdqs29b85394gjq1";
+    sha256 = "18fc1808d2ce72169d3f11acdb524a00ef96bd29970c6d34cfeb2edb3fc0c020";
   };
 
   propagatedBuildInputs = [

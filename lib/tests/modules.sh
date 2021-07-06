@@ -169,12 +169,15 @@ checkConfigOutput "foo" config.submodule.foo ./declare-submoduleWith-special.nix
 ## shorthandOnlyDefines config behaves as expected
 checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
-checkConfigError 'value is a boolean while a set was expected' config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError "You're trying to declare a value of type \`bool'\nrather than an attribute-set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
 
 ## submoduleWith should merge all modules in one swoop
 checkConfigOutput "true" config.submodule.inner ./declare-submoduleWith-modules.nix
 checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.nix
+# Should also be able to evaluate the type name (which evaluates freeformType,
+# which evaluates all the modules defined by the type)
+checkConfigOutput "submodule" options.submodule.type.description ./declare-submoduleWith-modules.nix
 
 ## Paths should be allowed as values and work as expected
 checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
