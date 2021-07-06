@@ -17,11 +17,10 @@ rustPlatform.buildRustPackage rec {
   # FIXME can’t test --all-targets and --doc in a single invocation
   cargoTestFlags = "--features std --all-targets --workspace";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isDarwin [
-    llvmPackages.libclang
-  ];
+  nativeBuildInputs = [ installShellFiles ]
+    ++ lib.optional stdenv.isDarwin llvmPackages.libclang;
 
-  buildInputs = lib.optional stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     Libsystem
     SystemConfiguration
   ];
