@@ -1092,6 +1092,8 @@ in
 
   apkid = callPackage ../development/tools/apkid { };
 
+  apksigcopier = callPackage ../development/tools/apksigcopier { };
+
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };
