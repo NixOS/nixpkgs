@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-    patchShebangs .
+    patchShebangs ./lib/petsc/bin
     configureFlagsArray=(
       $configureFlagsArray
       ${if !mpiSupport then ''
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
       "--with-lapack=1"
     )
   '';
+  configureScript = "python ./configure";
 
   enableParallelBuilding = true;
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
