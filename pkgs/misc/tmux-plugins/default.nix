@@ -132,7 +132,7 @@ in rec {
       owner = "dracula";
       repo = "tmux";
       rev = "v${version}";
-      sha256 = "sha256-+sKA/EkiKia/31SY1zYPz/bxLuwm6sSrGlip1DULw=";
+      sha256 = "sha256-hq+sKA/EkiKia/31SY1zYPz/bxLuwm6sSrGlip1DULw=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
