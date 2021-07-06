@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.rutorrent;
 
-  pluginDependencies = with pkgs; {
+  rtorrentPluginDependencies = with pkgs; {
     _task = [ procps ];
     unpack = [ unzip unrar ];
     rss = [ curl ];
@@ -14,7 +14,11 @@ let
     screenshots = [ ffmpeg ];
   };
 
-  getPluginDependencies = concatMap (p: attrByPath [ p ] [] pluginDependencies);
+  phpPluginDependencies = with pkgs; {
+    _cloudflare = [ python3 ];
+  };
+
+  getPluginDependencies = dependencies: concatMap (p: attrByPath [ p ] [] dependencies);
 
 in {
   options = {
@@ -128,7 +132,7 @@ in {
 
       systemd = {
         services = {
-          rtorrent.path = getPluginDependencies cfg.plugins;
+          rtorrent.path = getPluginDependencies rtorrentPluginDependencies cfg.plugins;
           rutorrent-setup = let
             rutorrentConfig = pkgs.writeText "rutorrent-config.php" ''
               <?php
@@ -247,6 +251,7 @@ in {
                 "listen.owner" = config.services.nginx.user;
                 "listen.group" = config.services.nginx.group;
               } // cfg.poolSettings;
+              phpEnv.PATH = lib.makeBinPath (getPluginDependencies phpPluginDependencies cfg.plugins);
             };
           };
 
