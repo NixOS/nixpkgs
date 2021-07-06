@@ -64,7 +64,6 @@ let
       });
     in
       stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
-        inherit name pname version src meta;
         pluginName = if name != null then name else "${pname}-${version}";
         phases = [ "unpackPhase" "installPhase" ];
         installPhase = ''
