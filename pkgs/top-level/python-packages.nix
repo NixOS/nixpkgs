@@ -8743,6 +8743,8 @@ in {
 
   typer = callPackage ../development/python-modules/typer { };
 
+  types-decorator = callPackage ../development/python-modules/types-decorator { };
+
   typesentry = callPackage ../development/python-modules/typesentry { };
 
   typesystem = callPackage ../development/python-modules/typesystem { };
