@@ -20,6 +20,12 @@
           PHP now defaults to PHP 8.0, updated from 7.4.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          kOps now defaults to 1.21.0, which uses containerd as the
+          default runtime.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">
