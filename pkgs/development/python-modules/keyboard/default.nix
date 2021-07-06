@@ -11,7 +11,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "sha256-U4GWhPp28azBE3Jn9xpLxudOKx0PjnYO77EM2HsJ9lM=";
   };
 
-  doCheck = false;
+  doCheck = false; # Source does not include any tests.
 
   meta = with lib; {
     description = "Hook and simulate keyboard events";
