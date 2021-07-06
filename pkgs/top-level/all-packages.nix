@@ -2481,6 +2481,10 @@ in
 
   discourse = callPackage ../servers/web-apps/discourse { };
 
+  discourseAllPlugins = discourse.override {
+    plugins = lib.filter (p: p ? pluginName) (builtins.attrValues discourse.plugins);
+  };
+
   discourse-mail-receiver = callPackage ../servers/web-apps/discourse/mail_receiver { };
 
   discocss = callPackage ../tools/misc/discocss { };
