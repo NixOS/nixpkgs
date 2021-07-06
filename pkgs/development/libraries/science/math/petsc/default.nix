@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   mpiSupport = !withp4est || p4est.mpiSupport;
-  withp4est = !(stdenv.isAarch64 || stdenv.isDarwin) && petsc-withp4est;
+  withp4est = petsc-withp4est;
 
   nativeBuildInputs = [ python gfortran ];
   buildInputs = [ blas lapack ]
