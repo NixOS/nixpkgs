@@ -58,6 +58,7 @@ mapAliases ({
   rotate-backups = throw "pythonPackages.rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # Added 2021-06-10
   setuptools_scm = setuptools-scm; # added 2021-06-03
+  ROPGadget = ropgadget; # added 2021-07-06
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
