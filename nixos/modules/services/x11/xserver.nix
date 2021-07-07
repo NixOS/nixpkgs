@@ -804,14 +804,14 @@ in
       ];
 
     system.checks = singleton (pkgs.runCommand "xkb-validated" {
-      inherit (cfg.xkb) model layout variant options;
+      inherit (cfg.xkb) dir model layout variant options;
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
       ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
         "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
       }
-      xkbvalidate "$model" "$layout" "$variant" "$options"
+      XKB_CONFIG_ROOT="$dir" xkbvalidate "$model" "$layout" "$variant" "$options"
       touch "$out"
     '');
 
