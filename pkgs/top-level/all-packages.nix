@@ -3122,6 +3122,8 @@ in
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter {};
 
+  osm-cli = callPackage ../applications/networking/cluster/osm/cli {};
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
