@@ -26,7 +26,7 @@
     in
     {
       lib = lib.extend (final: prev: {
-        nixosSystem = { modules, ... } @ args:
+        nixosSystem = final.makeOverridable ({ modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
             modules =
               let
@@ -60,7 +60,7 @@
                   };
                 }
               ];
-          });
+          }));
       });
 
       checks.x86_64-linux.tarball = jobs.tarball;
