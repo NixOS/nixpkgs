@@ -3,6 +3,7 @@
 , fetchpatch
 , cups
 , python3Packages
+, patchPpdFilesHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
   format = "other";
-  nativeBuildInputs = [ (lib.getBin cups) ];
+  nativeBuildInputs = [ (lib.getBin cups) patchPpdFilesHook ];
   # The source image also brings pre-built ppd files,
   # but we prefer to generate from source where possible, so
   # the following line generates ppd files from the drv file.
@@ -35,6 +36,7 @@ python3Packages.buildPythonApplication rec {
     ln -vst "${placeholder "out"}/lib/cups/filter/" "${placeholder "out"}/bin/rastertosag-gdi"
     runHook postInstall
   '';
+  ppdFileCommands = [ "rastertosag-gdi" ];
   postFixup = ''
     gzip -9nv "${placeholder "out"}/share/cups/model/rastertosag-gdi"/*.ppd
   '';
