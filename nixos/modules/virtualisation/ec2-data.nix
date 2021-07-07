@@ -4,14 +4,15 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
+let
+  cfg = config.ec2.metadata;
+in
 {
-  imports = [
-    (mkRemovedOptionModule [ "ec2" "metadata" ] "")
-  ];
+  options.ec2.metadata = {
+    enable = lib.mkEnableOption "EC2 metadata";
+  };
 
-  config = {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.apply-ec2-data =
       { description = "Apply EC2 Data";
@@ -23,7 +24,7 @@ with lib;
 
         script =
           ''
-            ${optionalString (config.networking.hostName == "") ''
+            ${lib.optionalString (config.networking.hostName == "") ''
               echo "setting host name..."
               if [ -s /etc/ec2-metadata/hostname ]; then
                   ${pkgs.nettools}/bin/hostname $(cat /etc/ec2-metadata/hostname)

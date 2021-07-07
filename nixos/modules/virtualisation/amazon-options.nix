@@ -2,6 +2,8 @@
 {
   options = {
     ec2 = {
+      enable = lib.mkEnableOption "EC2 instance configuration";
+
       hvm = lib.mkOption {
         default = lib.versionAtLeast config.system.stateVersion "17.03";
         internal = true;
