@@ -12680,7 +12680,7 @@ in
 
   bundler-audit = callPackage ../tools/security/bundler-audit { };
 
-  solargraph = callPackage ../development/ruby-modules/solargraph { };
+  solargraph = rubyPackages.solargraph;
 
   rbenv = callPackage ../development/ruby-modules/rbenv { };
 
