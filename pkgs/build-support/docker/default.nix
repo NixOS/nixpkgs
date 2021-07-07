@@ -235,10 +235,10 @@ rec {
           )"
         else
           echo "From-image name or tag wasn't set. Reading the first ID."
-          parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
+          parentID="$(cat "image/manifest.json" | jq -r '.[-1].Config | rtrimstr(".json")')"
         fi
 
-        cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+        cat ./image/manifest.json  | jq -r '.[-1].Layers | .[]' > layer-list
       else
         touch layer-list
       fi
@@ -573,15 +573,15 @@ rec {
 
         mkdir image
         touch baseFiles
-        baseEnvs='[]'
+        baseVars='{}'
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
 
           # Store the layers and the environment variables from the base image
-          cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
-          configName="$(cat ./image/manifest.json | jq -r '.[0].Config')"
-          baseEnvs="$(cat "./image/$configName" | jq '.config.Env // []')"
+          cat ./image/manifest.json  | jq -r '.[-1].Layers | .[]' > layer-list
+          configName="$(cat ./image/manifest.json | jq -r '.[-1].Config')"
+          baseVars="$(cat "./image/$configName" | jq '.config | {Hostname, User, ExposedPorts, Env, Cmd, Volumes, WorkingDir, Entrypoint, Labels, Shell, Healthcheck} | with_entries(select(.value != null))')"
 
           # Extract the parentID from the manifest
           if [[ -n "$fromImageName" ]] && [[ -n "$fromImageTag" ]]; then
@@ -592,7 +592,7 @@ rec {
             )"
           else
             echo "From-image name or tag wasn't set. Reading the first ID."
-            parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
+            parentID="$(cat "image/manifest.json" | jq -r '.[-1].Config | rtrimstr(".json")')"
           fi
 
           # Otherwise do not import the base image configuration and manifest
@@ -664,8 +664,27 @@ rec {
           echo "$layerID/layer.tar"
         ) | sponge layer-list
 
-        # Create image json and image manifest
-        imageJson=$(cat ${baseJson} | jq '.config.Env = $baseenv + .config.Env' --argjson baseenv "$baseEnvs")
+        # Create env json, image json and image manifest
+        envJson=$(jq -s '
+# this will essantially split up the list seperated by `=`,
+# so that we get a key value list, which we convert into
+# a object of { key = value }; which we use to find duplicates
+# later on. Keep in mind that we do support `KEY`, as suppose to
+# `KEY=VALUE`, we will still add the `=` to a plain (`KEY` -> `KEY=`).
+# this should be fixed at some point (TODO/BUG as this sets the value,
+# to empty as opposed to doing nothing).
+def envListToDict: (
+    map(match("([^=]+)=?(.*)?")
+    | {(.captures[0].string): .captures[1].string})
+    | if (. | length) > 0 then . | add else {} end
+);
+
+($basevars.Env // [] | envListToDict) * (.[0].config.Env // [] | envListToDict)
+| to_entries | map(.key+"="+(.value))
+' --argjson basevars "$baseVars" ${baseJson})
+
+        imageJson=$(cat ${baseJson} | jq '.config = ($basevars * (.config // {}))' --argjson basevars "$baseVars")
+        imageJson=$(echo "$imageJson" | jq '.config.Env = $newenv' --argjson newenv "$envJson")
         imageJson=$(echo "$imageJson" | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
 
@@ -674,12 +693,12 @@ rec {
           imageJson=$(echo "$imageJson" | jq ".history |= . + [{\"created\": \"$(jq -r .created ${baseJson})\"}]")
           # diff_ids order is from the bottom-most to top-most layer
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= . + [\"sha256:$layerChecksum\"]")
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= . + [\"$layerTar\"]")
+          manifestJson=$(echo "$manifestJson" | jq ".[-1].Layers |= . + [\"$layerTar\"]")
         done
 
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
         echo "$imageJson" > "image/$imageJsonChecksum.json"
-        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
+        manifestJson=$(echo "$manifestJson" | jq ".[-1].Config = \"$imageJsonChecksum.json\"")
         echo "$manifestJson" > image/manifest.json
 
         # Store the json under the name image/repositories.
