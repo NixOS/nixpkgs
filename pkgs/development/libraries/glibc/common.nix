@@ -226,6 +226,28 @@ stdenv.mkDerivation ({
     libc_cv_c_cleanup=yes
     libc_cv_gnu89_inline=yes
     EOF
+
+    # ./configure has logic like
+    #
+    #     AR=`$CC -print-prog-name=ar`
+    #
+    # This searches various directories in the gcc and its wrapper. In nixpkgs,
+    # this returns the bare string "ar", which is build ar. This can result as
+    # a build failure with the following message:
+    #
+    #     libc_pic.a: error adding symbols: archive has no index; run ranlib to add one
+    #
+    # (Observed cross compiling from aarch64-linux -> armv7l-linux).
+    #
+    # Nixpkgs passes a correct value for AR and friends, so to use the correct
+    # set of tools, we only need to delete this special handling.
+    sed -i \
+      -e '/^AR=/d' \
+      -e '/^AS=/d' \
+      -e '/^LD=/d' \
+      -e '/^OBJCOPY=/d' \
+      -e '/^OBJDUMP=/d' \
+      $configureScript
   '';
 
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
