@@ -142,7 +142,6 @@ stdenv.mkDerivation rec {
     patchShebangs tools/check_have_unlimited_memlock.sh
   '';
 
-
   meta = with lib; {
     homepage = "https://www.zrythm.org";
     description = "highly automated and intuitive digital audio workstation";
