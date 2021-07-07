@@ -161,6 +161,11 @@ server = stdenv.mkDerivation (common // {
 
   patches = common.patches;
 
+  postPatch = ''
+    substituteInPlace scripts/galera_new_cluster.sh \
+      --replace ":-mariadb" ":-mysql"
+  '';
+
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
     "-DENABLED_LOCAL_INFILE=OFF"
@@ -202,7 +207,6 @@ server = stdenv.mkDerivation (common // {
     mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
     mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
     rm -r "$out"/OFF
-    sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
   '';
 
   # perlPackages.DBDmysql is broken on darwin
