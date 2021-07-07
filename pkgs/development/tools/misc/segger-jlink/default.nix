@@ -14,25 +14,25 @@ let
   supported = {
     x86_64-linux = {
       name = "x86_64";
-      sha256 = "19gh6hlpq4dm3ji9wdf9n435zimybvgkzshdww25j9bdm0dl0595";
+      sha256 = "0cmd9ny6mslj9260scply573gbmn6k5r9wyxmcbjb14k4b3sldic";
     };
     i686-linux = {
       name = "i386";
-      sha256 = "1f0iik519panf3649nxszzh61vss927k7zgr4yx1lj991ba6rjdq";
+      sha256 = "1jjh5a8y17ma369s9k0xlyr8i10v2r1kxmv0i9v4cix5dnjyq0pp";
     };
     aarch64-linux = {
       name = "arm64";
-      sha256 = "0gyka0w7xiphp22vkszkx8bvm46k3pnsxmpg0mzi580gpwh3ay1q";
+      sha256 = "0p3gjv36a82xyps20drm7h0vm0jmz5gd930ynwr3iy46md41hgyv";
     };
     armv7l-linux = {
       name = "arm";
-      sha256 = "0ws8l85fl4slvx6d4q779f24ppdwm901kbdbksjl66zn25wz8g33";
+      sha256 = "0z9q3mqhfwb341mk5p1d3vp6mfwffcdk68968jy1qr2ga2s34wpb";
     };
   };
 
   platform = supported.${system} or (throw "unsupported platform ${system}");
 
-  version = "720";
+  version = "750";
 
   url = "https://www.segger.com/downloads/jlink/JLink_Linux_V${version}_${platform.name}.tgz";
 
