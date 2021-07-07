@@ -1326,6 +1326,18 @@ final: prev:
     meta.homepage = "https://github.com/direnv/direnv.vim/";
   };
 
+  doki-theme-vim = buildVimPluginFrom2Nix {
+    pname = "doki-theme-vim";
+    version = "2021-06-16";
+    src = fetchFromGitHub {
+      owner = "doki-theme";
+      repo = "doki-theme-vim";
+      rev = "8a3a7b64d5509f87564d846faae5ef0b2b77d2a6";
+      sha256 = "05s7fph5bm9gz2b0biqrpsvvh8ccfxh5csxya3rkja86ppz6wawr";
+    };
+    meta.homepage = "https://github.com/doki-theme/doki-theme-vim/";
+  };
+
   DoxygenToolkit-vim = buildVimPluginFrom2Nix {
     pname = "DoxygenToolkit-vim";
     version = "2010-11-06";
