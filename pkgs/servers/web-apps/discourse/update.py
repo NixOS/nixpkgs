@@ -173,6 +173,10 @@ def update(rev):
             f.write(repo.get_file(fn, rev))
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
+    for platform in ['arm64-darwin-20', 'x86_64-darwin-18',
+                     'x86_64-darwin-19', 'x86_64-darwin-20',
+                     'x86_64-linux']:
+        subprocess.check_output(['bundle', 'lock', '--remove-platform', platform], cwd=rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
     _call_nix_update('discourse', repo.rev2version(rev))
