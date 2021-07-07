@@ -59,6 +59,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://www.vaultproject.io/docs/agent">vault-agent</link>,
+          a client daemon that handles auto-auth, caching, and
+          templating for Vault secrets. Available as
+          <link xlink:href="options.html#opt-services.security.vault-agent.enable">services.security.vault-agent</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Users of flashrom should migrate to
           <link xlink:href="options.html#opt-programs.flashrom.enable">programs.flashrom.enable</link>
           and add themselves to the <literal>flashrom</literal> group to
