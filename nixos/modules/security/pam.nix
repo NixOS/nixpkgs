@@ -372,7 +372,8 @@ let
       text = mkDefault
         (''
           # Account management.
-          account required pam_unix.so
+          ${optionalString unixAuth
+            "account required pam_unix.so"}
           ${optionalString use_ldap
               "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false)
@@ -424,7 +425,8 @@ let
             || cfg.googleAuthenticator.enable
             || cfg.gnupg.enable
             || cfg.duoSecurity.enable)) ''
-              auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
+              ${optionalString unixAuth
+                  "auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth"}
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
               ${optionalString cfg.pamMount
@@ -477,7 +479,8 @@ let
           ${optionalString cfg.setEnvironment ''
             session required pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
           ''}
-          session required pam_unix.so
+          ${optionalString unixAuth 
+            "session required pam_unix.so"}
           ${optionalString cfg.setLoginUid
               "session ${
                 if config.boot.isContainer then "optional" else "required"
