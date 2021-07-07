@@ -9,6 +9,8 @@ let
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5
+      # Disable to avoid depending on LLVM and Clang by default.
+      , jitSupport ? false, llvm, clang
 
       # for postgreql.pkgs
       , self, newScope, buildEnv
@@ -19,11 +21,15 @@ let
       # for tests
       nixosTests, thisAttr
     }:
+
   let
     atLeast = lib.versionAtLeast version;
     icuEnabled = atLeast "10";
     lz4Enabled = atLeast "14";
-    this = stdenv.mkDerivation rec {
+  in
+    assert jitSupport -> atLeast "11";
+
+    let this = stdenv.mkDerivation rec {
       pname = "postgresql";
       inherit version;
 
@@ -43,7 +49,8 @@ let
         ++ lib.optionals lz4Enabled [ lz4 ]
         ++ lib.optionals enableSystemd [ systemd ]
         ++ lib.optionals gssSupport [ libkrb5 ]
-        ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
+        ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ]
+        ++ lib.optionals jitSupport [ llvm clang ];
 
       nativeBuildInputs = [ makeWrapper ] ++ lib.optionals icuEnabled [ pkg-config ];
 
@@ -70,7 +77,8 @@ let
       ] ++ lib.optionals icuEnabled [ "--with-icu" ]
         ++ lib.optionals lz4Enabled [ "--with-lz4" ]
         ++ lib.optionals gssSupport [ "--with-gssapi" ]
-        ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ];
+        ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ]
+        ++ lib.optionals jitSupport [ "--with-llvm" ];
 
       patches =
         [ (if atLeast "9.4" then ./patches/disable-resolve_symlinks-94.patch else ./patches/disable-resolve_symlinks.patch)
