@@ -4289,6 +4289,8 @@ in {
 
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
 
+  manimpango = callPackage ../development/python-modules/manimpango { };
+
   manuel = callPackage ../development/python-modules/manuel { };
 
   manticore = callPackage ../development/python-modules/manticore {
@@ -4296,6 +4298,8 @@ in {
   };
 
   mapbox = callPackage ../development/python-modules/mapbox { };
+
+  mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
 
   marisa-trie = callPackage ../development/python-modules/marisa-trie { };
 
