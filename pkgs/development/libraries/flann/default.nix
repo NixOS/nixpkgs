@@ -1,24 +1,58 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, unzip, cmake, python }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, unzip
+, cmake
+, python ? null
+, lz4
+, pkg-config
+, enablePython ? false
+}:
+
+assert enablePython -> python != null;
 
 stdenv.mkDerivation {
   name = "flann-1.9.1";
 
   src = fetchFromGitHub {
-    owner = "mariusmuja";
+    owner = "flann-lib";
     repo = "flann";
     rev = "1.9.1";
     sha256 = "13lg9nazj5s9a41j61vbijy04v6839i67lqd925xmxsbybf36gjc";
   };
 
   patches = [
-    # Upstream issue: https://github.com/mariusmuja/flann/issues/369
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/buildroot/buildroot/45a39b3e2ba42b72d19bfcef30db1b8da9ead51a/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch";
-      sha256 = "1gmj06cmnqvwxx649mxaivd35727wj6w7710zbcmmgmsnyfh2js4";
+      url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-Updated-fix-cmake-hdf5.patch";
+      sha256 = "yM1ONU4mu6lctttM5YcSTg8F344TNUJXwjxXLqzr5Pk=";
+    })
+    (fetchpatch {
+      url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-src-cpp-fix-cmake-3.11-build.patch";
+      sha256 = "REsBnbe6vlrZ+iCcw43kR5wy2o6q10RM73xjW5kBsr4=";
+    })
+    (fetchpatch {
+      url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0003-Use-system-version-of-liblz4.patch";
+      sha256 = "xi+GyFn9PEjLgbJeAIEmsbp7ut9G9KIBkVulyT3nfsg=";
     })
   ];
 
-  nativeBuildInputs = [ unzip cmake python ];
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES:BOOL=OFF"
+    "-DBUILD_TESTS:BOOL=OFF"
+    "-DBUILD_MATLAB_BINDINGS:BOOL=OFF"
+    "-DBUILD_PYTHON_BINDINGS:BOOL=${if enablePython then "ON" else "OFF"}"
+  ];
+
+  nativeBuildInputs = [
+    unzip
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [] ++ lib.optionals enablePython [ python ];
+
+  propagatedBuildInputs = [ lz4 ];
 
   meta = {
     homepage = "http://people.cs.ubc.ca/~mariusm/flann/";
