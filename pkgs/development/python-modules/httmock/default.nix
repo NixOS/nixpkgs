@@ -1,7 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  pname   = "httmock";
+  pname = "httmock";
   version = "1.4.0";
 
   src = fetchFromGitHub {
@@ -11,12 +16,19 @@ buildPythonPackage rec {
     sha256 = "sha256-yid4vh1do0zqVzd1VV7gc+Du4VPrkeGFsDHqNbHL28I=";
   };
 
-  checkInputs = [ requests ];
+  checkInputs = [
+    requests
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "tests.py" ];
+
+  pythonImportsCheck = [ "httmock" ];
 
   meta = with lib; {
     description = "A mocking library for requests";
-    homepage    = "https://github.com/patrys/httmock";
-    license     = licenses.asl20;
+    homepage = "https://github.com/patrys/httmock";
+    license = licenses.asl20;
     maintainers = with maintainers; [ nyanloutre ];
   };
 }
