@@ -1159,6 +1159,8 @@ let
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
 
+    resto = callPackage ../development/ocaml-modules/resto { };
+
     rope = callPackage ../development/ocaml-modules/rope { };
 
     routes = callPackage ../development/ocaml-modules/routes { };
