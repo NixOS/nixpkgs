@@ -11,7 +11,13 @@
 # }
 # (This advice was tested on the 1st November 2016.)
 
-{ lib, stdenv, fetchurl, cups, libusb-compat-0_1 }:
+{ lib
+, stdenv
+, cups
+, libusb-compat-0_1
+, fetchurl
+, patchPpdFilesHook
+}:
 
 # Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
 # to see what will break when upgrading. Consider a new versioned attribute.
@@ -27,6 +33,8 @@ in stdenv.mkDerivation rec {
     url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
     sha256 = "1vv3pzvqpg1dq3xjr8161x2yp3v7ca75vil56ranhw5pkjwq66x0";
   };
+
+  nativeBuildInputs = [ patchPpdFilesHook ];
 
   dontPatchELF = true;
   dontStrip = true;
@@ -63,14 +71,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/cups/model/samsung
     cd -
     cd ../noarch/at_opt/share/ppd
-    for i in *.ppd; do
-      sed -i $i -e \
-        "s,pstosecps,$out/lib/cups/filter/pstosecps,g; \
-         s,pstospl,$out/lib/cups/filter/pstospl,g; \
-         s,rastertospl,$out/lib/cups/filter/rastertospl,g"
-    done;
     cp -r ./* $out/share/cups/model/samsung
   '';
+
+  ppdFileCommands = [ "pstosecps" "pstospl" "rastertospl" ];
 
   meta = with lib; {
     description = "Samsung's Linux printing drivers; includes binaries without source code";
