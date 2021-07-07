@@ -237,6 +237,13 @@
           set <literal>autoSubUidGidRange = true</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.thelounge.private</literal> was removed in
+          favor of <literal>services.thelounge.public</literal>, to
+          follow with upstream changes.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
