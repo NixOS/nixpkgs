@@ -1161,6 +1161,7 @@ let
 
     resto = callPackage ../development/ocaml-modules/resto { };
     resto-acl = callPackage ../development/ocaml-modules/resto/acl.nix { };
+    resto-directory = callPackage ../development/ocaml-modules/resto/directory.nix { };
     resto-json = callPackage ../development/ocaml-modules/resto/json.nix { };
 
     rope = callPackage ../development/ocaml-modules/rope { };
