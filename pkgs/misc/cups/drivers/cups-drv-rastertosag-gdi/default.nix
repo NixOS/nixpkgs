@@ -35,6 +35,9 @@ python3Packages.buildPythonApplication rec {
     ln -vst "${placeholder "out"}/lib/cups/filter/" "${placeholder "out"}/bin/rastertosag-gdi"
     runHook postInstall
   '';
+  postFixup = ''
+    gzip -9nv "${placeholder "out"}/share/cups/model/rastertosag-gdi"/*.ppd
+  '';
   meta = {
     description = "CUPS driver for Ricoh Aficio SP 1000S and SP 1100S printers";
     downloadPage = "https://www.openprinting.org/download/printing/rastertosag-gdi/";
