@@ -11,17 +11,20 @@ let
     eula=true
   '';
 
-  whitelistFile = pkgs.writeText "whitelist.json"
-    (builtins.toJSON
-      (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
+  whitelistFile = pkgs.writeText "whitelist.json" (builtins.toJSON
+    (mapAttrsToList (n: v: {
+      name = n;
+      uuid = v;
+    }) cfg.whitelist));
+
+  opsFile = pkgs.writeText "ops.json" (builtins.toJSON cfg.ops);
 
   cfgToString = v: if builtins.isBool v then boolToString v else toString v;
 
   serverPropertiesFile = pkgs.writeText "server.properties" (''
     # server.properties managed by NixOS configuration
-  '' + concatStringsSep "\n" (mapAttrsToList
-    (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
-
+  '' + concatStringsSep "\n"
+    (mapAttrsToList (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
 
   # To be able to open the firewall, we need to read out port values in the
   # server properties, but fall back to the defaults when those don't exist.
@@ -30,13 +33,20 @@ let
 
   serverPort = cfg.serverProperties.server-port or defaultServerPort;
 
-  rconPort = if cfg.serverProperties.enable-rcon or false
-    then cfg.serverProperties."rcon.port" or 25575
-    else null;
+  rconPort = if cfg.serverProperties.enable-rcon or false then
+    cfg.serverProperties."rcon.port" or 25575
+  else
+    null;
 
-  queryPort = if cfg.serverProperties.enable-query or false
-    then cfg.serverProperties."query.port" or 25565
-    else null;
+  queryPort = if cfg.serverProperties.enable-query or false then
+    cfg.serverProperties."query.port" or 25565
+  else
+    null;
+
+  minecraftUUID = types.strMatching
+    "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
+      description = "Minecraft UUID";
+    };
 
 in {
   options = {
@@ -92,13 +102,8 @@ in {
       };
 
       whitelist = mkOption {
-        type = let
-          minecraftUUID = types.strMatching
-            "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
-              description = "Minecraft UUID";
-            };
-          in types.attrsOf minecraftUUID;
-        default = {};
+        type = types.attrsOf minecraftUUID;
+        default = { };
         description = ''
           Whitelisted players, only has an effect when
           <option>services.minecraft-server.declarative</option> is
@@ -117,9 +122,55 @@ in {
         '';
       };
 
+      ops = mkOption {
+        type = with types;
+          listOf (submodule {
+            options = {
+              name = mkOption {
+                type = str;
+                description = "Name of the OP user";
+              };
+              uuid = mkOption {
+                type = minecraftUUID;
+                description = ''
+                  UUID of the OP user. Note that the UUIDs for a user in
+                  offline mode and online mode are different.
+                  You can use <link xlink:href="https://mcuuid.net/"/> to get a
+                  Minecraft UUID for a username in online mode.
+                  Or you can use <link xlink:href="https://www.fabianwennink.nl/projects/OfflineUUID/"/>
+                  for usernames in offline mode.
+                '';
+              };
+              level = mkOption {
+                type = int;
+                description = "Level of the OP permissions of the OP user.";
+              };
+            };
+          });
+        description = ''
+          Server operators, only has an effect when
+          <option>services.minecraft-server.declarative</option> is
+          <literal>true</literal>.
+        '';
+        example = literalExample ''
+          [
+            {
+              uuid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+              name = "username1";
+              level = 4;
+            }
+            {
+              uuid = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
+              name = "username2";
+              level = 3;
+            }
+          ];
+        '';
+      };
+
       serverProperties = mkOption {
         type = with types; attrsOf (oneOf [ bool int str ]);
-        default = {};
+        default = { };
         example = literalExample ''
           {
             server-port = 43000;
@@ -164,16 +215,16 @@ in {
   config = mkIf cfg.enable {
 
     users.users.minecraft = {
-      description     = "Minecraft server service user";
-      home            = cfg.dataDir;
-      createHome      = true;
-      uid             = config.ids.uids.minecraft;
+      description = "Minecraft server service user";
+      home = cfg.dataDir;
+      createHome = true;
+      uid = config.ids.uids.minecraft;
     };
 
     systemd.services.minecraft-server = {
-      description   = "Minecraft Server Service";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Minecraft Server Service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
@@ -185,25 +236,23 @@ in {
       preStart = ''
         ln -sf ${eulaFile} eula.txt
       '' + (if cfg.declarative then ''
-
         if [ -e .declarative ]; then
-
           # Was declarative before, no need to back up anything
           ln -sf ${whitelistFile} whitelist.json
           cp -f ${serverPropertiesFile} server.properties
-
+          cp -f ${opsFile} ops.json
         else
-
           # Declarative for the first time, backup stateful files
           ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
           cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
-
+          cp -b --suffix=.stateful ${opsFile} ops.json
           # server.properties must have write permissions, because every time
           # the server starts it first parses the file and then regenerates it..
           chmod +w server.properties
+          # For the same reason, ops.json has to have write permissions as well.
+          chmod +w ops.json
           echo "Autogenerated file that signifies that this server configuration is managed declaratively by NixOS" \
             > .declarative
-
         fi
       '' else ''
         if [ -e .declarative ]; then
@@ -214,21 +263,19 @@ in {
 
     networking.firewall = mkIf cfg.openFirewall (if cfg.declarative then {
       allowedUDPPorts = [ serverPort ];
-      allowedTCPPorts = [ serverPort ]
-        ++ optional (queryPort != null) queryPort
+      allowedTCPPorts = [ serverPort ] ++ optional (queryPort != null) queryPort
         ++ optional (rconPort != null) rconPort;
     } else {
       allowedUDPPorts = [ defaultServerPort ];
       allowedTCPPorts = [ defaultServerPort ];
     });
 
-    assertions = [
-      { assertion = cfg.eula;
-        message = "You must agree to Mojangs EULA to run minecraft-server."
-          + " Read https://account.mojang.com/documents/minecraft_eula and"
-          + " set `services.minecraft-server.eula` to `true` if you agree.";
-      }
-    ];
+    assertions = [{
+      assertion = cfg.eula;
+      message = "You must agree to Mojangs EULA to run minecraft-server."
+        + " Read https://account.mojang.com/documents/minecraft_eula and"
+        + " set `services.minecraft-server.eula` to `true` if you agree.";
+    }];
 
   };
 }
