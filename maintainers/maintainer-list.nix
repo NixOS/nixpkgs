@@ -12040,6 +12040,6 @@
     name = "Tejas Agarwal";
     email = "tejas.agarwal.bly@gmail.com";
     github = "tejasag";
-    githubId = "67542663";
+    githubId = 67542663;
   };
 }
