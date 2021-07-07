@@ -69,9 +69,8 @@ with lib;
       permitRootLogin = "yes";
     };
 
-    # Enable wpa_supplicant, but don't start it by default.
-    networking.wireless.enable = mkDefault true;
-    systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [];
+    # Enable iwd by default for wireless networking
+    networking.wireless.iwd.enable = mkDefault true;
 
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't
