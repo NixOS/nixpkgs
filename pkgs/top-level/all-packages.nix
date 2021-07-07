@@ -9188,6 +9188,9 @@ in
 
   termplay = callPackage ../tools/misc/termplay { };
 
+  inherit (import ../build-support/test-equal-derivation.nix pkgs)
+    testEqualDerivation;
+
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = if stdenv.isDarwin
