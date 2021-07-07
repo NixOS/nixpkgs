@@ -1092,6 +1092,8 @@ in
 
   apkid = callPackage ../development/tools/apkid { };
 
+  apksigcopier = callPackage ../development/tools/apksigcopier { };
+
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };
@@ -3829,6 +3831,11 @@ in
 
   agebox = callPackage ../tools/security/agebox { };
 
+  bore = callPackage ../tools/networking/bore {
+    inherit (darwin) Libsystem;
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   brotli = callPackage ../tools/compression/brotli { };
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
@@ -5057,6 +5064,8 @@ in
   ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
 
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
+
+  gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gibo = callPackage ../tools/misc/gibo { };
 
@@ -12327,7 +12336,7 @@ in
   erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
-    erlang-ls
+    erlang-ls erlfmt
     rebar rebar3 rebar3WithPlugins
     fetchHex beamPackages;
 
@@ -12441,10 +12450,6 @@ in
   minder = callPackage ../applications/misc/minder { };
 
   mujs = callPackage ../development/interpreters/mujs { };
-
-  nix-exec = callPackage ../development/interpreters/nix-exec {
-    git = gitMinimal;
-  };
 
   octave = callPackage ../development/interpreters/octave {
     python = python3;
@@ -21456,6 +21461,10 @@ in
 
   octomap = callPackage ../development/libraries/octomap { };
 
+  odin = callPackage ../development/compilers/odin {
+    llvmPackages = llvmPackages_11;
+  };
+
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
   odroid-xu3-bootloader = callPackage ../tools/misc/odroid-xu3-bootloader { };
@@ -26025,7 +26034,7 @@ in
   oberon-risc-emu = callPackage ../misc/emulators/oberon-risc-emu { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {};
-  obs-studio-plugins = callPackage ../applications/video/obs-studio/plugins {};
+  obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
   obsidian = callPackage ../applications/misc/obsidian { };
@@ -28200,7 +28209,7 @@ in
 
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
 
-  ytmdl = python3Packages.callPackage ../tools/misc/ytmdl { };
+  ytmdl = callPackage ../tools/misc/ytmdl { };
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
@@ -28413,6 +28422,8 @@ in
   wownero = callPackage ../applications/blockchains/wownero.nix {};
 
   zcash = callPackage ../applications/blockchains/zcash { stdenv = llvmPackages_11.stdenv; };
+
+  lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
 
   openethereum = callPackage ../applications/blockchains/openethereum { };
 
@@ -31525,6 +31536,8 @@ in
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
   terranix = callPackage ../applications/networking/cluster/terranix {};
+
+  tfswitch = callPackage ../applications/networking/cluster/tfswitch {};
 
   tilt = callPackage ../applications/networking/cluster/tilt {};
 

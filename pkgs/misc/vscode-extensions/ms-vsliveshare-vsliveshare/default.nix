@@ -38,8 +38,8 @@ in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtens
   mktplcRef = {
     name = "vsliveshare";
     publisher = "ms-vsliveshare";
-    version = "1.0.4419";
-    sha256 = "1r2xp8ggcrfsf4yzxjiss3hprk4dw7nchwxy920yn2iglvkaalsh";
+    version = "1.0.4498";
+    sha256 = "01gg9jqkq9z05ckw0mnqfr769359j6h3z8ay6r17jj6m4mhy2m5g";
   };
 }).overrideAttrs({ nativeBuildInputs ? [], buildInputs ? [], ... }: {
   nativeBuildInputs = nativeBuildInputs ++ [

@@ -55,13 +55,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "9.2";
+  version = "9.3";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00y2xs7nj4d59x4fp6gq7qql3scykq9lppdvx7y3xbgfmkrwixx9";
+    sha256 = "sha256-xV7griN453f63jwX5jTdW0KJdLi14Km7JengbNeh4iI=";
   };
   inherit buildInputs propagatedBuildInputs;
 

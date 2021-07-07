@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "lmnotify";
-  version = "0.0.4";
+  version = "0.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l0h4yab7ix8psf65iygc1wy5xwq3v2rwwjixvd8rwk46d2477dx";
+    sha256 = "sha256-cCP7BU2f7QJe9gAI298cvkp3OGijvBv8G1RN7qfZ5PE=";
   };
 
   propagatedBuildInputs = [ oauthlib requests requests_oauthlib ];

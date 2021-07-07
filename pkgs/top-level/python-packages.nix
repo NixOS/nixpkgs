@@ -1218,6 +1218,8 @@ in {
 
   bsblan = callPackage ../development/python-modules/bsblan { };
 
+  bson = callPackage ../development/python-modules/bson { };
+
   btchip = callPackage ../development/python-modules/btchip { };
 
   bt-proximity = callPackage ../development/python-modules/bt-proximity { };
@@ -2243,6 +2245,8 @@ in {
 
   editdistance = callPackage ../development/python-modules/editdistance { };
 
+  editdistance-s = callPackage ../development/python-modules/editdistance-s { };
+
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
   edward = callPackage ../development/python-modules/edward { };
@@ -2863,6 +2867,8 @@ in {
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
   ghp-import = callPackage ../development/python-modules/ghp-import { };
+
+  gibberish-detector = callPackage ../development/python-modules/gibberish-detector { };
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
@@ -7061,6 +7067,8 @@ in {
 
   python-picnic-api = callPackage ../development/python-modules/python-picnic-api { };
 
+  python-pidfile = callPackage ../development/python-modules/python-pidfile { };
+
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
 
   python-pkcs11 = callPackage ../development/python-modules/python-pkcs11 { };
@@ -8800,6 +8808,10 @@ in {
   typeguard = callPackage ../development/python-modules/typeguard { };
 
   typer = callPackage ../development/python-modules/typer { };
+
+  types-decorator = callPackage ../development/python-modules/types-decorator { };
+
+  types-requests = callPackage ../development/python-modules/types-requests { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
 

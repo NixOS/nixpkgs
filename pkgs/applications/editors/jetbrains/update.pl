@@ -6,6 +6,8 @@ use List::Util qw(reduce);
 use File::Slurp;
 use LWP::Simple;
 
+my $only_free = grep { $_ eq "--only-free" } @ARGV;
+
 sub semantic_less {
   my ($a, $b) = @_;
   $a =~ s/\b(\d+)\b/sprintf("%010s", $1)/eg;
@@ -55,13 +57,15 @@ sub update_nix_block {
       die "no version in $block" unless $version;
       if ($version eq $latest_versions{$channel}) {
         print("$channel is up to date at $version\n");
+      } elsif ($only_free && $block =~ /licenses\.unfree/) {
+        print("$channel is unfree, skipping\n");
       } else {
         print("updating $channel: $version -> $latest_versions{$channel}\n");
         my ($url) = $block =~ /url\s*=\s*"([^"]+)"/;
         # try to interpret some nix
         my ($name) = $block =~ /name\s*=\s*"([^"]+)"/;
         $name =~ s/\$\{version\}/$latest_versions{$channel}/;
-        # Some url paattern contain variables more than once
+        # Some url pattern contain variables more than once
         $url =~ s/\$\{name\}/$name/g;
         $url =~ s/\$\{version\}/$latest_versions{$channel}/g;
         die "$url still has some interpolation" if $url =~ /\$/;

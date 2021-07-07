@@ -3,6 +3,10 @@
 , libidn, qca-qt5, libXScrnSaver, hunspell
 , libsecret, libgcrypt, libotr, html-tidy, libgpgerror, libsignal-protocol-c
 , usrsctp
+
+# Voice messages
+, voiceMessagesSupport ? true
+, gst_all_1
 }:
 
 mkDerivation rec {
@@ -27,7 +31,16 @@ mkDerivation rec {
     libidn qca-qt5 libXScrnSaver hunspell
     libsecret libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
     usrsctp
+  ] ++ lib.optionals voiceMessagesSupport [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
+
+  preFixup = lib.optionalString voiceMessagesSupport ''
+    qtWrapperArgs+=(
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+    )
+  '';
 
   meta = with lib; {
     homepage = "https://psi-plus.com";

@@ -73,6 +73,7 @@ clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
+codota/tabnine-vim
 cohama/lexima.vim
 ConradIrwin/vim-bracketed-paste
 crusoexia/vim-monokai
@@ -345,7 +346,6 @@ LucHermitte/lh-vim-lib
 ludovicchabant/vim-gutentags
 ludovicchabant/vim-lawrencium
 lukas-reineke/indent-blankline.nvim
-lukas-reineke/indent-blankline.nvim@lua as indent-blankline-nvim-lua
 lukaszkorecki/workflowish
 lumiliet/vim-twig
 luochen1990/rainbow
@@ -489,6 +489,7 @@ nvim-treesitter/playground
 oberblastmeister/termwrapper.nvim
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
+ojroques/nvim-bufdel@main
 ojroques/vim-oscyank@main
 Olical/aniseed
 Olical/conjure

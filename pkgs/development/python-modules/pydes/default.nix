@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub, python }:
 
 buildPythonPackage rec {
   pname = "pydes";
@@ -11,7 +11,9 @@ buildPythonPackage rec {
     sha256 = "0sic8wbyk5azb4d4m6zbc96lfqcw8s2pzcv9nric5yqc751613ww";
   };
 
-  checkPhase = "python test_pydes.py";
+  checkPhase = ''
+    ${python.interpreter} test_pydes.py
+  '';
 
   pythonImportsCheck = [ "pyDes" ];
 
