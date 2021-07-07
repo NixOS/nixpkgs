@@ -64,6 +64,17 @@
           templating for Vault secrets. Available as
           <link xlink:href="options.html#opt-services.security.vault-agent.enable">services.security.vault-agent</link>.
         </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              A convenience module has been added to automatically issue
+              and renew different types of Vault secrets to machines.
+              This requires vault-agent to be enabled, and is available
+              as
+              <link xlink:href="options.html#opt-security.vault-keys">security.vault-keys</link>.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>

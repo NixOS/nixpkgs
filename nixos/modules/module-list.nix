@@ -215,6 +215,7 @@
   ./rename.nix
   ./security/acme.nix
   ./security/apparmor.nix
+  ./security/vault/keys.nix
   ./security/audit.nix
   ./security/auditd.nix
   ./security/ca.nix
