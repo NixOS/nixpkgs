@@ -382,6 +382,8 @@
   ./services/games/quake3-server.nix
   ./services/games/teeworlds.nix
   ./services/games/terraria.nix
+  ./services/games/pterodactyl-panel.nix
+  ./services/games/pterodactyl-daemon.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/auto-cpufreq.nix

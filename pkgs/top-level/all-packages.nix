@@ -29054,6 +29054,10 @@ in
 
   pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
 
+  pterodactyl-panel = callPackage ../games/pterodactyl-panel { noDev=true; };
+
+  pterodactyl-daemon = callPackage ../games/pterodactyl-daemon { };
+
   prboom = callPackage ../games/prboom { };
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };

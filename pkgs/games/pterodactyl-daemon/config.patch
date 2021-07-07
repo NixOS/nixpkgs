@@ -1,0 +1,145 @@
+diff --git a/scripts/migrate.js b/scripts/migrate.js
+index 387ca08..de650fc 100644
+--- a/scripts/migrate.js
++++ b/scripts/migrate.js
+@@ -72,7 +72,7 @@ Inquirer.prompt([
+     this.folders = [];
+     Async.series([
+         callback => {
+-            Klaw('./config/servers/').on('data', data => {
++            Klaw(process.env.DATA_DIR + '/config/servers/').on('data', data => {
+                 this.folders.push(data.path);
+             }).on('end', callback);
+         },
+diff --git a/src/controllers/delete.js b/src/controllers/delete.js
+index 46fec7b..4fcf610 100644
+--- a/src/controllers/delete.js
++++ b/src/controllers/delete.js
+@@ -97,10 +97,10 @@ class Delete {
+             delete_config: ['clear_object', (r, callback) => {
+                 this.log.debug('Attempting to remove configuration files...');
+ 
+-                let pathToRemove = Path.join('./config/servers', this.json.uuid);
+-                if (Fs.existsSync(Path.join('./config/servers', this.json.uuid, 'install.log'))) {
++                let pathToRemove = Path.join(process.env.DATA_DIR  + '/config/servers', this.json.uuid);
++                if (Fs.existsSync(Path.join(process.env.DATA_DIR  + '/config/servers', this.json.uuid, 'install.log'))) {
+                     this.log.debug('Not removing entire configuration folder because an installation log exists.');
+-                    pathToRemove = Path.join('./config/servers', this.json.uuid, 'server.json');
++                    pathToRemove = Path.join(process.env.DATA_DIR  + '/config/servers', this.json.uuid, 'server.json');
+                 }
+ 
+                 Fs.remove(pathToRemove, err => {
+diff --git a/src/controllers/server.js b/src/controllers/server.js
+index 5337dcc..5e6a795 100644
+--- a/src/controllers/server.js
++++ b/src/controllers/server.js
+@@ -68,7 +68,7 @@ class Server extends EventEmitter {
+         this.shouldRestart = false;
+         this.knownWrite = false;
+         this.buildInProgress = false;
+-        this.configDataLocation = Path.join(__dirname, '../../config/servers/', this.uuid);
++        this.configDataLocation = Path.join(process.env.DATA_DIR, './config/servers/', this.uuid);
+         this.configLocation = Path.join(this.configDataLocation, 'server.json');
+         this.containerInitialized = false;
+ 
+@@ -577,7 +577,7 @@ class Server extends EventEmitter {
+     }
+ 
+     path(location) {
+-        const dataPath = Path.join(Config.get('sftp.path', '/srv/daemon-data'), this.json.uuid);
++        const dataPath = Path.join(Config.get('sftp.path', '/var/lib/pterodactyl/daemon-data'), this.json.uuid);
+ 
+         if (_.isUndefined(location) || _.replace(location, /\s+/g, '').length < 1) {
+             return dataPath;
+diff --git a/src/controllers/service.js b/src/controllers/service.js
+index 4808f76..a424724 100644
+--- a/src/controllers/service.js
++++ b/src/controllers/service.js
+@@ -46,7 +46,7 @@ class Service {
+ 
+                 const needsUpdate = [];
+                 Async.eachOf(results.services, (hash, uuid, loopCallback) => {
+-                    const currentFile = `./src/services/configs/${uuid}.json`;
++                    const currentFile = process.env.DATA_DIR + `/config/eggs/${uuid}.json`;
+                     Log.debug({ egg: uuid }, 'Checking that egg exists and is up-to-date.');
+                     Fs.stat(currentFile, (err, stats) => {
+                         if (err && err.code === 'ENOENT') {
+@@ -123,7 +123,7 @@ class Service {
+             }
+ 
+             Log.debug({ egg: uuid }, 'Writing new egg file to filesystem.');
+-            Fs.outputFile(`./src/services/configs/${uuid}.json`, body, next);
++            Fs.outputFile(process.env.DATA_DIR + `/config/eggs/${uuid}.json`, body, next);
+         });
+     }
+ }
+diff --git a/src/helpers/config.js b/src/helpers/config.js
+index fc9c092..c1b636c 100644
+--- a/src/helpers/config.js
++++ b/src/helpers/config.js
+@@ -37,7 +37,7 @@ class Config {
+ 
+     raw() {
+         try {
+-            return rfr('config/core.json');
++          return require(process.env.DATA_DIR + '/config/core.json');
+         } catch (ex) {
+             if (ex.code === 'MODULE_NOT_FOUND') {
+                 console.error('+ ------------------------------------ +'); // eslint-disable-line
+@@ -72,7 +72,7 @@ class Config {
+             throw new Error('Invalid JSON was passed to Builder.');
+         }
+ 
+-        Fs.writeJson('./config/core.json', json, { spaces: 2 }, err => {
++        Fs.writeJson(process.env.DATA_DIR + '/config/core.json', json, { spaces: 2 }, err => {
+             if (!err) Cache.put('config', json);
+             return next(err);
+         });
+@@ -87,7 +87,7 @@ class Config {
+         });
+         const modifiedJson = deepExtend(Cache.get('config'), object);
+ 
+-        Fs.writeJson('./config/core.json', modifiedJson, { spaces: 2 }, err => {
++      Fs.writeJson(process.env.DATA_DIR + '/config/core.json', modifiedJson, { spaces: 2 }, err => {
+             if (err) return next(err);
+ 
+             Cache.put('config', modifiedJson);
+diff --git a/src/helpers/initialize.js b/src/helpers/initialize.js
+index 2047bb0..dcb24bd 100644
+--- a/src/helpers/initialize.js
++++ b/src/helpers/initialize.js
+@@ -106,7 +106,7 @@ class Initialize {
+      * Sets up a server given its UUID.
+      */
+     setupByUuid(uuid, next) {
+-        Fs.readJson(Util.format('./config/servers/%s/server.json', uuid), (err, object) => {
++        Fs.readJson(Util.format(process.env.DATA_DIR  + '/config/servers/%s/server.json', uuid), (err, object) => {
+             if (err) return next(err);
+             this.setup(object, next);
+         });
+diff --git a/src/index.js b/src/index.js
+index 353f096..6d2d482 100644
+--- a/src/index.js
++++ b/src/index.js
+@@ -107,7 +107,7 @@ Async.auto({
+         });
+     },
+     check_structure: callback => {
+-        Fs.ensureDirSync('config/servers');
++        Fs.ensureDirSync(process.env.DATA_DIR  + '/config/servers');
+         Fs.ensureDirSync('config/.sftp');
+         Fs.ensureDirSync(Config.get('filesystem.server_logs', '/tmp/pterodactyl'));
+ 
+diff --git a/src/services/index.js b/src/services/index.js
+index 0b51479..4c0f4f9 100644
+--- a/src/services/index.js
++++ b/src/services/index.js
+@@ -56,7 +56,7 @@ module.exports = class Core {
+             }
+ 
+             try {
+-                this.config = require(`./configs/${this.service.egg}.json`);
++                this.config = require(process.env.DATA_DIR + `/config/eggs/${this.service.egg}.json`);
+             } catch (ex) {
+                 if (ex.code !== 'MODULE_NOT_FOUND') {
+                     return reject(ex);
