@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "bitarray";
-  version = "2.1.3";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a24aff72a7f1b09571b5daf9dbfcffd98481be1fe085ae5ef662cf11452a97e0";
+    sha256 = "sha256-xF7u+qYA9vL2hD/EaZhprl18HouPtY/zgFhM6bx6cII=";
   };
 
   checkPhase = ''
