@@ -24,4 +24,6 @@
   weechat-go = callPackage ./weechat-go { };
 
   buffer_autoset = callPackage ./buffer_autoset { };
+
+  highmon = callPackage ./highmon { };
 }
