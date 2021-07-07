@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 
@@ -6,24 +6,22 @@ let
 
   cfg = config.services.redshift;
   lcfg = config.location;
+  settingsFormat = pkgs.formats.ini {};
 
 in {
 
+  meta.maintainers = with maintainers; [ thiagokokada ];
+
   imports = [
-    (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "latitude" ] config;
-        in if value == null then
-          throw "services.redshift.latitude is set to null, you can remove this"
-          else builtins.fromJSON value))
-    (mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "longitude" ] config;
-        in if value == null then
-          throw "services.redshift.longitude is set to null, you can remove this"
-          else builtins.fromJSON value))
     (mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
-  ];
+    (mkRemovedOptionModule [ "services" "redshift" "extraOptions" ] "All Redshift configuration is now available through services.redshift.settings instead.")
+  ] ++
+  (map (option: mkRenamedOptionModule ([ "services" "redshift" ] ++ option.old) [ "services" "redshift" "settings" "redshift" option.new ]) [
+      { old = [ "temperature" "day" ];    new = "temp-day"; }
+      { old = [ "temperature" "night" ];  new = "temp-night"; }
+      { old = [ "brightness" "day" ];     new = "brightness-day"; }
+      { old = [ "brightness" "night" ];   new = "brightness-night"; }
+    ]);
 
   options.services.redshift = {
     enable = mkOption {
@@ -32,45 +30,64 @@ in {
       description = ''
         Enable Redshift to change your screen's colour temperature depending on
         the time of day.
+
+        This module also supports Gammastep, look for
+        <literal>services.redshift.package</literal> and
+        <literal>services.redshift.executable</literal> options.
       '';
     };
 
-    temperature = {
-      day = mkOption {
-        type = types.int;
-        default = 5500;
-        description = ''
-          Colour temperature to use during the day, between
-          <literal>1000</literal> and <literal>25000</literal> K.
-        '';
-      };
-      night = mkOption {
-        type = types.int;
-        default = 3700;
-        description = ''
-          Colour temperature to use at night, between
-          <literal>1000</literal> and <literal>25000</literal> K.
-        '';
-      };
+    dawnTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "6:00-7:45";
+      description = ''
+        Set the time interval of dawn manually.
+
+        The times must be specified as HH:MM in 24-hour format.
+      '';
     };
 
-    brightness = {
-      day = mkOption {
-        type = types.str;
-        default = "1";
-        description = ''
-          Screen brightness to apply during the day,
-          between <literal>0.1</literal> and <literal>1.0</literal>.
-        '';
-      };
-      night = mkOption {
-        type = types.str;
-        default = "1";
-        description = ''
-          Screen brightness to apply during the night,
-          between <literal>0.1</literal> and <literal>1.0</literal>.
-        '';
-      };
+    duskTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "18:35-20:15";
+      description = ''
+        Set the time interval of dusk manually.
+
+        The times must be specified as HH:MM in 24-hour format.
+      '';
+    };
+
+    latitude = mkOption {
+      type = types.nullOr types.float;
+      default = null;
+      example = "0.0";
+      description = ''
+        Set the current location latitude.
+
+        Keep in mind that latitudes south of Equator (e.g. Australia) are negative numbers.
+      '';
+    };
+
+    longitude = mkOption {
+      type = types.nullOr types.float;
+      default = null;
+      example = "0.0";
+      description = ''
+        Set the current location longitude.
+
+        Keep in mind that longitudes west of Greenwich (e.g. the Americas) are negative numbers.
+      '';
+    };
+
+    useGeoclue = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Use Geoclue2 as a location provider for Redshift.
+      '';
     };
 
     package = mkOption {
@@ -78,7 +95,9 @@ in {
       default = pkgs.redshift;
       defaultText = "pkgs.redshift";
       description = ''
-        redshift derivation to use.
+        Redshift derivation to use.
+
+        To use Gammastep, pass <package>gammastep</package>.
       '';
     };
 
@@ -88,51 +107,122 @@ in {
       example = "/bin/redshift-gtk";
       description = ''
         Redshift executable to use within the package.
+
+        To use Gammastep, pass either <literal>/bin/gammastep</literal>
+        or <literal>/bin/gammastep-indicator</literal>.
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = [ "-v" "-m randr" ];
+    settings = mkOption {
+      type = types.submodule ({ options, ... }: {
+        freeformType = settingsFormat.type;
+
+        options.redshift = mkOption {
+          type = settingsFormat.type.functor.wrapped;
+          description = "Main Redshift/Gammastep configuration.";
+        };
+
+        # Copy all redshift definitions to general, such that in case of gammastep,
+        # which prefers general over redshift, gets both values from general and redshift
+        # While the original redshift just gets values from redshift, as it should
+        # https://gitlab.com/chinstrap/gammastep/-/commit/1608ed61154cc652b087e85c4ce6125643e76e2f
+        config.general = modules.mkAliasAndWrapDefsWithPriority id options.redshift;
+      });
+
+      default = {};
+
+      example = literalExample ''
+        {
+          redshift = {
+            temp-day = 5500;
+            temp-night = 3700;
+            brightness-day = 1.0;
+            brightness-night = 0.8;
+            fade = 1;
+          };
+          randr = {
+            screen = 0;
+          };
+        };
+      '';
+
       description = ''
-        Additional command-line arguments to pass to
-        <command>redshift</command>.
+        The configuration to pass to Redshift/Gammastep.
+
+        Available options for Redshift described in
+        <citerefentry>
+          <refentrytitle>redshift</refentrytitle>
+          <manvolnum>1</manvolnum>
+        </citerefentry> and for Gammastep in
+        <citerefentry>
+          <refentrytitle>gammastep</refentrytitle>
+          <manvolnum>1</manvolnum>
+        </citerefentry>.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = let
+    target = if (cfg.settings.redshift.adjustment-method or null) == "drm"
+      then "basic.target"
+      else "graphical-session.target";
+    configFile = settingsFormat.generate "redshift.conf" cfg.settings;
+  in mkIf cfg.enable {
     # needed so that .desktop files are installed, which geoclue cares about
     environment.systemPackages = [ cfg.package ];
 
-    services.geoclue2.appConfig.redshift = {
+    location.provider = mkIf cfg.useGeoclue "geoclue2";
+
+    services.geoclue2.appConfig.redshift = mkIf cfg.useGeoclue {
       isAllowed = true;
       isSystem = true;
     };
 
-    systemd.user.services.redshift =
-    let
-      providerString = if lcfg.provider == "manual"
-        then "${toString lcfg.latitude}:${toString lcfg.longitude}"
-        else lcfg.provider;
-    in
-    {
+    assertions = [
+      {
+        assertion = (cfg.settings ? redshift.dawn-time) == (cfg.settings ? redshift.dusk-time);
+        message = "Time of dawn and time of dusk must be provided together.";
+      }
+      {
+        assertion = (cfg.settings ? redshift.lat) == (cfg.settings ? redshift.lon);
+        message = "Latitude and longitude must be provided together.";
+      }
+      # Only checking for dawn-time or lat because the above two assertions cover the dusk-time/lon.
+      {
+        assertion = (cfg.settings ? redshift.dawn-time) ||
+                    (cfg.settings.redshift.location-provider or "") == "geoclue2" ||
+                    ((cfg.settings.redshift.location-provider or "") == "manual" && (cfg.settings ? manual.lat));
+        message = ''Either set "redshift.dawnTime" and "redshift.duskTime" OR "redshift.latitude" and "redshift.longitude" OR "redshift.useGeoclue".'' ;
+      }
+    ];
+
+    services.redshift.settings = {
+      redshift = {
+        location-provider = if cfg.useGeoclue then "geoclue2" else "manual";
+        dawn-time = mkIf (cfg.dawnTime != null) cfg.dawnTime;
+        dusk-time = mkIf (cfg.duskTime != null) cfg.duskTime;
+      };
+      manual = {
+        lat = if (lcfg.provider == "manual" && options.location.latitude.isDefined)
+              then lcfg.latitude
+              else mkIf (cfg.latitude != null) cfg.latitude;
+        lon = if (lcfg.provider == "manual" && options.location.longitude.isDefined)
+              then lcfg.longitude
+              else mkIf (cfg.longitude != null) cfg.longitude;
+      };
+    };
+
+    systemd.user.services.redshift = {
       description = "Redshift colour temperature adjuster";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+      wantedBy = [ target ];
+      partOf = [ target ];
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package}${cfg.executable} \
-            -l ${providerString} \
-            -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
-            -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
-            ${lib.strings.concatStringsSep " " cfg.extraOptions}
+          ${cfg.package}${cfg.executable} -c ${configFile}
         '';
         RestartSec = 3;
-        Restart = "always";
+        Restart = "on-failure";
       };
     };
   };
-
 }

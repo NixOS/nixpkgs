@@ -7,6 +7,7 @@
 , withRandr ? stdenv.isLinux, libxcb
 , withDrm ? stdenv.isLinux, libdrm
 
+, nixosTests
 , withGeolocation ? true
 , withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
 , withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
@@ -65,6 +66,9 @@ let
       preConfigure = "./bootstrap";
 
       postFixup = "wrapPythonPrograms";
+
+      # TODO: Enable for redshift-wlr/gammstep
+      passthru.tests.redshift = lib.mkIf (pname == "redshift") nixosTests.redshift;
 
       # the geoclue agent may inspect these paths and expect them to be
       # valid without having the correct $PATH set
