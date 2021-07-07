@@ -1159,6 +1159,8 @@ let
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
 
+    ezresto = callPackage ../development/ocaml-modules/resto/ezresto.nix { };
+
     resto = callPackage ../development/ocaml-modules/resto { };
     resto-acl = callPackage ../development/ocaml-modules/resto/acl.nix { };
     resto-cohttp = callPackage ../development/ocaml-modules/resto/cohttp.nix { };
