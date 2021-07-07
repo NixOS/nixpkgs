@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "01zvc8519fcg14nmcx3iqap9jnspcnr6pvlr59ipqxs0jprnrxl2";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
   buildInputs = [ freetype fontconfig pixman tllist ]
     ++ lib.optional withHarfBuzz harfbuzz;
