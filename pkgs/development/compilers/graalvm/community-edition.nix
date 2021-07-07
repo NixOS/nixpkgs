@@ -185,7 +185,10 @@ let
               --replace file:/dev/random    file:/dev/./urandom \
               --replace NativePRNGBlocking  SHA1PRNG
           '';
-        }.${javaVersionPlatform};
+        }.${javaVersionPlatform} + ''
+          # jni.h expects jni_md.h to be in the header search path.
+          ln -s $out/include/linux/*_md.h $out/include/
+        '';
 
         dontStrip = true;
 
