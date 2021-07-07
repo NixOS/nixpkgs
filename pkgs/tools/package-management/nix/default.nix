@@ -2,7 +2,8 @@
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
-, boehmgc
+, boehmgc_nix
+, boehmgc_nixUnstable
 , Security
 }:
 
@@ -209,7 +210,9 @@ in rec {
       sha256 = "sha256-ITp9ScRhB5syNh5NAI0kjX9o400syTR/Oo/5Ap+a+10=";
     };
 
-    inherit storeDir stateDir confDir boehmgc;
+    boehmgc = boehmgc_nix;
+
+    inherit storeDir stateDir confDir;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
@@ -224,7 +227,9 @@ in rec {
       sha256 = "sha256-ARRiLrDOK+JQtvVXsYegspENYimQzilvdTfO7eiBuaA=";
     };
 
-    inherit storeDir stateDir confDir boehmgc;
+    boehmgc = boehmgc_nixUnstable;
+
+    inherit storeDir stateDir confDir;
 
   });
 
