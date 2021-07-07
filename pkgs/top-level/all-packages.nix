@@ -4946,6 +4946,8 @@ in
 
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
 
+  fulcio = callPackage ../tools/security/fulcio { };
+
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
   fusuma = callPackage ../tools/inputmethods/fusuma {};
