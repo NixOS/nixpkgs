@@ -708,10 +708,14 @@ rec {
       inherit priority content;
     };
 
-  mkOptionDefault = mkOverride 1500; # priority of option defaults
-  mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
-  mkForce = mkOverride 50;
-  mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+  # 0 - `nix-env` assignes this as default priority if value somehow came without priority
+  # 5 - `buildEnv` assignes this as default priority if other was not set before
+  mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’, and for overrides for virtualization purposes
+  mkForce = mkOverride 50; # use to override in cases when one admin-set values overlapping with other admin-set values
+  defaultPriority = 100; # default priority of admin-set values, and default priority if somehow in NixPkgs value did not got assigned priority
+  mkDefault = mkOverride 1000; # use to set defaults in config sections of NixPkgs-native modules (ex. default system-wide `env` variables, if admin not set them)
+  # ~1001~1499 - hardware-based overrides
+  mkOptionDefault = mkOverride 1500; # priority of default option values defaults, so all configuration overrides it by having higher priority
 
   mkOrder = priority: content:
     { _type = "order";
@@ -721,8 +725,6 @@ rec {
   mkBefore = mkOrder 500;
   mkAfter = mkOrder 1500;
 
-  # The default priority for things that don't have a priority specified.
-  defaultPriority = 100;
 
   # Convenient property used to transfer all definitions and their
   # properties from one option to another. This property is useful for
