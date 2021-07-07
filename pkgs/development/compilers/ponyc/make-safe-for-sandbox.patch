@@ -1,21 +1,21 @@
---- a/lib/CMakeLists.txt	2021-05-27 15:58:36.819331229 -0400
-+++ b/lib/CMakeLists.txt	2021-05-27 16:00:19.768268649 -0400
-@@ -10,12 +10,12 @@
+--- a/lib/CMakeLists.txt.orig	2021-07-07 13:40:20.209410160 -0400
++++ a/lib/CMakeLists.txt	2021-07-07 13:43:11.886969662 -0400
+@@ -15,12 +15,12 @@
  endif()
  
  ExternalProject_Add(gbenchmark
--    URL https://github.com/google/benchmark/archive/v1.5.2.tar.gz
-+    SOURCE_DIR gbenchmark-prefix/src/benchmark
+-    URL ${PONYC_GBENCHMARK_URL}
++	SOURCE_DIR gbenchmark-prefix/src/benchmark
      CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_CXX_FLAGS=-fpic --no-warn-unused-cli
  )
  
  ExternalProject_Add(googletest
 -    URL https://github.com/google/googletest/archive/release-1.8.1.tar.gz
-+    URL @googletest@
++	URL @googletest@
      CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_CXX_FLAGS=-fpic -Dgtest_force_shared_crt=ON --no-warn-unused-cli
  )
  
-@@ -28,75 +28,6 @@
+@@ -33,75 +33,6 @@
      COMPONENT library
  )
  
