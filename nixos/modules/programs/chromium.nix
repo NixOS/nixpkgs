@@ -7,6 +7,7 @@ let
 
   defaultProfile = filterAttrs (k: v: v != null) {
     HomepageLocation = cfg.homepageLocation;
+    DefaultSearchProviderEnabled = cfg.defaultSearchProviderSearchURL != null;
     DefaultSearchProviderSearchURL = cfg.defaultSearchProviderSearchURL;
     DefaultSearchProviderSuggestURL = cfg.defaultSearchProviderSuggestURL;
     ExtensionInstallForcelist = cfg.extensions;
