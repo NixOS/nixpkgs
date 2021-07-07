@@ -135,11 +135,9 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    patchShebangs ext/sh-manpage-completions/run.sh
-    patchShebangs scripts/generic_guile_wrap.sh
-    chmod +x scripts/meson-post-install.sh # patchShebangs only works on executable files
-    patchShebangs scripts/meson-post-install.sh
-    patchShebangs tools/check_have_unlimited_memlock.sh
+    chmod +x scripts/meson-post-install.sh
+    patchShebangs ext/sh-manpage-completions/run.sh scripts/generic_guile_wrap.sh \
+      scripts/meson-post-install.sh tools/check_have_unlimited_memlock.sh
   '';
 
   meta = with lib; {
