@@ -12,10 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "07cq7q71bv3fwddkp2863ylry2ivds00f8sjy8npjpdbkailxm21";
   };
 
-  patches = [ ./tests-use-better-shell.patch ];
   postPatch = "patchShebangs test";
 
-  doCheck = true;
+  # Issue #110149: our default /bin/sh apparently has 32-bit math only
+  # (attribute busybox-sandbox-shell), and that causes problems
+  # when running these tests inside build, based on free disk space.
+  doCheck = false;
   checkTarget = "test";
   checkInputs = [ which zstd pbzip2 ];
 
