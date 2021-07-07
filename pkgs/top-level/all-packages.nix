@@ -6335,6 +6335,8 @@ in
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
+  logiops = callPackage ../tools/inputmethods/logiops { };
+
   logstash6 = callPackage ../tools/misc/logstash/6.x.nix {
     # https://www.elastic.co/support/matrix#logstash-and-jvm
     jre = jdk11_headless;
