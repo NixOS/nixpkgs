@@ -482,7 +482,7 @@ in {
           before = [ "phpfpm-nextcloud.service" ];
           path = [ occ ];
           script = ''
-            install -m750 --owner nextcloud --group nextloud -d ${cfg.home}
+            install -m750 --owner nextcloud --group nextcloud -d ${cfg.home}
 
             ${optionalString (c.dbpassFile != null) ''
               if [ ! -r "${c.dbpassFile}" ]; then
