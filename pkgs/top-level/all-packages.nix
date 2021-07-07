@@ -21017,6 +21017,8 @@ in
 
     jool = callPackage ../os-specific/linux/jool { };
 
+    kvmfr = callPackage ../os-specific/linux/kvmfr { };
+
     mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
 
     mwprocapture = callPackage ../os-specific/linux/mwprocapture { };
