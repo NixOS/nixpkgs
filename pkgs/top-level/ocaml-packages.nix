@@ -397,6 +397,8 @@ let
 
     genspio = callPackage ../development/ocaml-modules/genspio { };
 
+    getopt = callPackage ../development/ocaml-modules/getopt { };
+
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
     gnuplot = callPackage ../development/ocaml-modules/gnuplot {
