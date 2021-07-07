@@ -14274,6 +14274,18 @@ in
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
   boehmgc_766 = callPackage ../development/libraries/boehm-gc/7.6.6.nix { };
+  boehmgc_nix = pkgs.boehmgc.override {
+    enableLargeConfig = true;
+  };
+  boehmgc_nixUnstable = pkgs.boehmgc_nix.overrideAttrs (drv: {
+    patches = (drv.patches or []) ++ [
+      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+      (pkgs.fetchpatch {
+        url = https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff;
+        sha256 = "sha256-JvnWVTlkltmQUs/0qApv/LPZ690UX1/2hEP+LYRwKbI=";
+      })
+    ];
+  });
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
@@ -30440,7 +30452,6 @@ in
   inherit (callPackage ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
-      boehmgc = boehmgc.override { enableLargeConfig = true; };
       inherit (darwin.apple_sdk.frameworks) Security;
       })
     nix
