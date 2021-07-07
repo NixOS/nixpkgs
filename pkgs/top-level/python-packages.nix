@@ -7390,6 +7390,8 @@ in {
 
   quantities = callPackage ../development/python-modules/quantities { };
 
+  quart = callPackage ../development/python-modules/quart { };
+
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
   questionary = callPackage ../development/python-modules/questionary { };
