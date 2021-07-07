@@ -1,8 +1,7 @@
 { stdenv, lib, fetchFromGitHub, kernel }:
 
 let
-  modDestDir =
-    "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtw89";
+  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtw89";
 in
 stdenv.mkDerivation {
   pname = "rtw89";
