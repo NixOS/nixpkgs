@@ -5,7 +5,8 @@
 , lib
 }:
 
-{ name
+{ name ? null
+, pname ? name
 , version
 , src
 , beamDeps ? [ ]
@@ -47,8 +48,8 @@ let
     assert beamDeps != [ ] -> checkouts == null;
     self: stdenv.mkDerivation (attrs // {
 
-      name = "${name}-${version}";
-      inherit version;
+      name = "${pname}-${version}";
+      inherit version pname;
 
       buildInputs = buildInputs ++ [ erlang rebar3 openssl ] ++ beamDeps;
 
