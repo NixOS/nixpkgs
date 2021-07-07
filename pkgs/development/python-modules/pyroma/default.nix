@@ -1,22 +1,20 @@
 { lib, buildPythonPackage, fetchPypi
-, docutils, pygments, setuptools
+, docutils, pygments, setuptools, requests
 }:
 
 buildPythonPackage rec {
   pname = "pyroma";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "45ad8201da9a813b5597bb85c80bbece93af9ec89170fc2be5ad85fa9463cef1";
+    sha256 = "sha256-+MGB4NXSkvEXka/Bj30CGKg8hc9k1vj7FXHOnSmiTko=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pygments < 2.6" "pygments"
-  '';
+  propagatedBuildInputs = [ docutils pygments setuptools requests ];
 
-  propagatedBuildInputs = [ docutils pygments setuptools ];
+  # Tests require network access
+  doCheck = false;
 
   meta = with lib; {
     description = "Test your project's packaging friendliness";
