@@ -1,5 +1,5 @@
-{ pname, ffversion, meta, updateScript ? null
-, src, unpackPhase ? null, patches ? []
+{ pname, ffversion, rev, meta, updateScript ? null
+, src, unpackPhase ? null, patches ? [], pgodata
 , extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
@@ -9,7 +9,7 @@
 , hunspell, libevent, libstartup_notification
 , libvpx_1_8
 , icu67, libpng, jemalloc, glib, pciutils
-, autoconf213, which, gnused, rustPackages, rustPackages_1_45
+, autoconf213, which, gnused, rustPackages_1_51, rustPackages_1_45
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , debugBuild ? false
@@ -24,6 +24,7 @@
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon, libdrm
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
+, pgoSupport ? (stdenv.isLinux && stdenv.is64bit)
 , gssSupport ? true, libkrb5
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
@@ -74,6 +75,7 @@
 assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "pipewireSupport requires both wayland and webrtc support.";
 assert ltoSupport -> stdenv.isDarwin -> throw "LTO is broken on Darwin (see PR#19312).";
+assert pgoSupport -> !ltoSupport -> throw "PGO requires LTO, and currently supports only Linux 64-bit.";
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
@@ -91,13 +93,17 @@ let
             else "/bin";
 
   # 78 ESR won't build with rustc 1.47
-  inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
+  inherit (if lib.versionAtLeast ffversion "82" then rustPackages_1_51 else rustPackages_1_45)
     rustc cargo;
 
   # Darwin's stdenv provides the default llvmPackages version, match that since
   # clang LTO on Darwin is broken so the stdenv is not being changed.
-  # Target the LLVM version that rustc -Vv reports it is built with for LTO.
-  # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
+  # Ensure the LLVM version that rustc -Vv reports is the LLVM version used for
+  # LTO. For PGO to work with Mozilla's generated profile LLVM and rustc need
+  # to match Mozilla's build environments. (i.e., if the compilers in
+  # about:buildconfig in firefox-bin report LLVM 11 and rustc 1.51
+  # try to match those.)
+  # rustPackages_1_45 -> LLVM 10, rustPackages_1_51 -> LLVM 11
   llvmPackages0 =
     /**/ if stdenv.isDarwin
       then buildPackages.llvmPackages
@@ -126,6 +132,20 @@ let
   releaseFlags = if stdenv.is32bit
                  then [ "--disable-release" "--disable-debug-symbols" ]
                  else [ "--enable-release" ];
+
+  pgo = buildStdenv.mkDerivation {
+    pname = "firefox-pgo-data";
+    version = ffversion;
+
+    src = pgodata;
+
+    setSourceRoot = "sourceRoot=$(pwd)";
+
+    installPhase = ''
+      mkdir -p $out
+      install -D -m0644 {en-US.log,merged.profdata} $out
+    '';
+  };
 in
 
 buildStdenv.mkDerivation ({
@@ -294,6 +314,7 @@ buildStdenv.mkDerivation ({
     "--with-system-nspr"
     "--with-system-nss"
   ]
+  ++ lib.optional (!buildStdenv.isx86_32 && !buildStdenv.isAarch32 && !buildStdenv.isAarch64) "--enable-rust-simd"
   ++ lib.optional (buildStdenv.isDarwin) "--disable-xcode-checks"
   ++ lib.optional (!ltoSupport) "--with-clang-path=${llvmPackages.clang}/bin/clang"
   # LTO is done using clang and lld on Linux.
@@ -301,9 +322,15 @@ buildStdenv.mkDerivation ({
   #   https://bugzilla.mozilla.org/show_bug.cgi?id=1538724
   # elf-hack is broken when using clang+lld:
   #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional ltoSupport "--enable-lto"
+  ++ lib.optional (ltoSupport && !pgoSupport) "--enable-lto"
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
+  ++ lib.optionals (pgoSupport) [
+    "--enable-lto=cross"
+    "--enable-profile-use=cross"
+    "--with-pgo-jarlog=${pgo}/en-US.log"
+    "--with-pgo-profile-path=${pgo}/merged.profdata"
+  ]
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"

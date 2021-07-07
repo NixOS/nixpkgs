@@ -5,6 +5,8 @@
 , coreutils
 , gnused
 , gnugrep
+, gnutar
+, xz
 , curl
 , gnupg
 , attrPath
@@ -16,7 +18,7 @@
 
 writeScript "update-${attrPath}" ''
   #!${runtimeShell}
-  PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnupg gnused xidel ]}
+  PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnupg gnused gnutar xidel xz ]}
 
   set -eux
   HOME=`mktemp -d`
@@ -43,5 +45,11 @@ writeScript "update-${attrPath}" ''
 
   hash=$(grep '\.source\.tar\.xz$' "$HOME"/shasums | grep '^[^ ]*' -o)
 
-  update-source-version ${attrPath} "$version" "$hash" "" --version-key=${versionKey}
+  # Obtain revision of release
+  curl --silent --show-error -o "$HOME"/source.tar.xz "$url$version/source/firefox-$version.source.tar.xz"
+  mkdir -p "$HOME"/source
+  tar xf "$HOME"/source.tar.xz -C "$HOME"/source
+  revision=$(tail -1 "$HOME"/source/firefox-*/sourcestamp.txt | sed s#.*rev/##g)
+
+  update-source-version ${attrPath} "$version" "$hash" "" --version-key=${versionKey} --rev=$revision
 ''
