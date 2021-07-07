@@ -1076,6 +1076,8 @@ with pkgs;
     { name = "validate-pkg-config"; deps = [ findutils pkg-config ]; }
     ../build-support/setup-hooks/validate-pkg-config.sh;
 
+  patchPpdFilesHook = callPackage ../build-support/setup-hooks/patch-ppd-files {};
+
   #package writers
   writers = callPackage ../build-support/writers {};
 
