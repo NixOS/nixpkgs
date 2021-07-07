@@ -1,14 +1,16 @@
-{ mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
+{ mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost, fetchFromGitHub  }:
 
 mkDerivation {
   pname = "citra";
   version = "2021-06-22";
 
   # Submodules
-  src = fetchgit {
-    url = "https://github.com/citra-emu/citra";
-    rev = "5241032fc58b322e0ede29966dd28490ef0c3cb8";
+  src = fetchFromGitHub {
+    owner = "citra-emu";
+    repo = "citra";
+    rev = "afed4953bccfb9b39558cf196492c2558ca1f109";
     sha256 = "0rgwv5cabd6kkfbsak3fwbx7skkg0x31z4qs4c6afd6y4hda1vxv";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
