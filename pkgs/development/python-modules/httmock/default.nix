@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname   = "httmock";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "patrys";
     repo = "httmock";
     rev = version;
-    sha256 = "1dy7pjq4gz476jcnbbpzk8w8qxr9l8wwgw9x2c7lf6fzsgnf404q";
+    sha256 = "sha256-yid4vh1do0zqVzd1VV7gc+Du4VPrkeGFsDHqNbHL28I=";
   };
 
   checkInputs = [ requests ];
