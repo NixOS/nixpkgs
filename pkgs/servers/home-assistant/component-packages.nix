@@ -287,7 +287,7 @@
     "fritzbox" = ps: with ps; [ pyfritzhome ];
     "fritzbox_callmonitor" = ps: with ps; [ fritzconnection ];
     "fritzbox_netmonitor" = ps: with ps; [ fritzconnection ];
-    "fronius" = ps: with ps; [ ]; # missing inputs: pyfronius
+    "fronius" = ps: with ps; [ pyfronius ];
     "frontend" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow ];
     "frontier_silicon" = ps: with ps; [ ]; # missing inputs: afsapi
     "futurenow" = ps: with ps; [ pyfnip ];

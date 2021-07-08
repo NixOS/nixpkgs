@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "chiapos";
-  version = "1.0.2";
+  version = "1.0.3";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09mwj9m9rcvcb3zn6v2xykgd4a9lpwl6c86nwl8d1iqr82gb5hb5";
+    sha256 = "sha256-2Ye0gaOsv/Hg1363E6+NmezsK9EcLEZVKKUHikM2hr0=";
   };
 
   patches = [
