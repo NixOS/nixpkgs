@@ -7264,7 +7264,7 @@ in
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud18 nextcloud19 nextcloud20 nextcloud21;
+    nextcloud19 nextcloud20 nextcloud21;
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
