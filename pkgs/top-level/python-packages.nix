@@ -2736,6 +2736,8 @@ in {
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
+  fritzprofiles = callPackage ../development/python-modules/fritzprofiles { };
+
   frozendict = callPackage ../development/python-modules/frozendict { };
 
   frozenlist = callPackage ../development/python-modules/frozenlist { };
