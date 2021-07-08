@@ -35,7 +35,10 @@ stdenv.mkDerivation {
     "--enable-xft"
   ];
 
-  preConfigure = "make clean";
+  preConfigure = ''
+    make clean
+    rm VERSION
+  '';
 
   enableParallelBuilding = true;
 
