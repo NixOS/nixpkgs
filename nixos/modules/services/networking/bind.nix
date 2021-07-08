@@ -7,6 +7,7 @@ let
   cfg = config.services.bind;
 
   bindUser = "named";
+  bindGroup = "named";
 
   bindZoneCoerce = list: builtins.listToAttrs (lib.forEach list (zone: { name = zone.name; value = zone; }));
 
@@ -211,11 +212,17 @@ in
 
     networking.resolvconf.useLocalResolver = mkDefault true;
 
-    users.users.${bindUser} =
-      {
+    users = {
+      groups = {
+        named = { };
+        gid = config.ids.gids.bind;
+      }
+      users.${bindUser} = {
         uid = config.ids.uids.bind;
+        groups = "${bindGroup}";
         description = "BIND daemon user";
       };
+    };
 
     systemd.services.bind = {
       description = "BIND Domain Name Server";
@@ -223,13 +230,14 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        mkdir -m 0755 -p /etc/bind
+        mkdir -m 7600 -p /etc/bind
+        chown ${bindGroup} /etc/bind
         if ! [ -f "/etc/bind/rndc.key" ]; then
           ${pkgs.bind.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
         fi
 
         ${pkgs.coreutils}/bin/mkdir -p /run/named
-        chown ${bindUser} /run/named
+        chown ${bindGroup} /run/named
       '';
 
       serviceConfig = {
