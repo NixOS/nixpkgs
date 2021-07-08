@@ -344,6 +344,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>pulseeffects</literal> package updated to
+          <link xlink:href="https://github.com/wwmm/easyeffects/releases/tag/v6.0.0">version
+          4.x</link> and renamed to <literal>easyeffects</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>libwnck</literal> package now defaults to the 3.x
           release instead of the old 2.31.0 version.
         </para>
