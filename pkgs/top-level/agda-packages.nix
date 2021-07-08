@@ -1,4 +1,7 @@
-{ pkgs, lib, callPackage, newScope, Agda }:
+{ pkgs, lib, callPackage, newScope, Agda
+
+# Recursion only for testing
+, agdaPackages }:
 
 let
   mkAgdaPackages = Agda: lib.makeScope newScope (mkAgdaPackages' Agda);
@@ -13,7 +16,10 @@ let
 
     lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
 
-    agda = withPackages [] // { inherit withPackages; };
+    agda = withPackages [] // {
+      inherit withPackages;
+      passthru.tests.all = withPackages (lib.filter (pkg: agdaPackages.lib.isUnbrokenAgdaPackage pkg) (lib.attrValues agdaPackages));
+    };
 
     standard-library = callPackage ../development/libraries/agda/standard-library {
       inherit (pkgs.haskellPackages) ghcWithPackages;
