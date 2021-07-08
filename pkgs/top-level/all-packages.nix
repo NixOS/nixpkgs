@@ -23473,6 +23473,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  dnd-tools = callPackage ../applications/misc/dnd-tools { };
+
   inherit (callPackage ../applications/virtualization/docker {})
     docker_20_10;
 
