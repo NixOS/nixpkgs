@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cairo
 , fontconfig
 , libxkbcommon
@@ -30,6 +31,15 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-1IztedN5/I/4TDKHLJ26fSrDsvJ5QAr+cbzS2PQITDE=";
   };
+
+  patches = [
+    # To fix the build with wlroots 0.14.0:
+    (fetchpatch {
+      # Add fixes for wlroots 0.14.0
+      url = "https://github.com/project-repo/cagebreak/commit/d57869d43add58331386fc8e89c14bb2b74afe17.patch";
+      sha256 = "0g6sl8y4kk0bm5x6pxqbxw2j0gyg3ybr2v9m70q2pxp70kms4lqg";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
