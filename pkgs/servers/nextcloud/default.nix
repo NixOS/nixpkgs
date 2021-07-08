@@ -60,8 +60,8 @@ in {
   };
 
   nextcloud21 = generic {
-    version = "21.0.2";
-    sha256 = "5e5b38109a3485db5fd2d248f24478eabe6c0790ec10b030acbbee207d5511fe";
+    version = "21.0.3";
+    sha256 = "8adcd175c7a70c33332586fa9ce36d03ba02d1df5d4c334d1210201d3fb953ee";
   };
   # tip: get she sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
