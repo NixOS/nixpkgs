@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.7.6";
 
   src = fetchurl {
-    url = "https://github.com/vk-cli/vk/releases/download/${version}/vk-0.7.6-64-bin.7z";
+    url = "https://github.com/vk-cli/vk/releases/download/${version}/vk-${version}-64-bin.7z";
     sha256 = "sha256-Y40oLjddunrd7ZF1JbCcgjSCn8jFTubq69jhAVxInXw=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin/
-    mv $TMP/vk-0.7.6-64-bin vk-cli
+    mv $TMP/vk-${version}-64-bin vk-cli
     install -D vk-cli --target-directory=$out/bin/
   '';
 
@@ -47,8 +47,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A console (ncurses) client for vk.com written in D";
+    homepage = "https://github.com/vk-cli/vk";
     license = licenses.asl20;
     maintainers = with maintainers; [ dan4ik605743 ];
-    homepage = "https://github.com/vk-cli/vk";
+    platforms = [ "x86_64-linux" ];
   };
 }
