@@ -3011,6 +3011,8 @@ in
 
   meson-tools = callPackage ../misc/meson-tools { };
 
+  meson64-tools = callPackage ../misc/meson64-tools { };
+
   metabase = callPackage ../servers/metabase { };
 
   midicsv = callPackage ../tools/audio/midicsv { };
@@ -21767,6 +21769,7 @@ in
     ubootNanoPCT4
     ubootNovena
     ubootOdroidC2
+    ubootOdroidC4
     ubootOdroidXU3
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
@@ -21794,6 +21797,12 @@ in
     ubootUtilite
     ubootWandboard
     ;
+
+  # Hardkernel Odroid devices firmware:
+  inherit (callPackage ../misc/uboot/hardkernel-firmware.nix {})
+    firmwareOdroidC2
+    firmwareOdroidC4
+  ;
 
   # Upstream Barebox:
   inherit (callPackage ../misc/barebox {})
