@@ -4643,6 +4643,12 @@
     githubId = 6874204;
     name = "Jason Carr";
   };
+  j-brn = {
+    email = "me@bricker.io";
+    github = "j-brn";
+    githubId = 40566146;
+    name = "Jonas Braun";
+  };
   j-keck = {
     email = "jhyphenkeck@gmail.com";
     github = "j-keck";

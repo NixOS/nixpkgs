@@ -6,4 +6,5 @@
   obs-multi-rtmp = libsForQt5.callPackage ./obs-multi-rtmp.nix {};
   obs-ndi = libsForQt5.callPackage ./obs-ndi.nix {};
   wlrobs = callPackage ./wlrobs.nix {};
+  looking-glass-obs = callPackage ./looking-glass-obs.nix {};
 }
