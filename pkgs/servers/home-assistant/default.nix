@@ -22,19 +22,7 @@
 let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
-
-    # Pinned due to API changes in aiopvpc>=2.2.0, remove after 2021.7.0
-    (self: super: {
-      aiopvpc = super.aiopvpc.overridePythonAttrs (oldAttr: rec {
-        version = "2.1.2";
-        src = fetchFromGitHub {
-          owner = "azogue";
-          repo = "aiopvpc";
-          rev = "v${version}";
-          sha256 = "0s8ki46dh39kw6qvsjcfcxa0gblyi33m3hry137kbi4lw5ws6qhr";
-        };
-      });
-    })
+    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
@@ -69,19 +57,6 @@ let
     # https://github.com/tchellomello/python-ring-doorbell/issues/240
     (mkOverride "ring-doorbell" "0.6.2"
       "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
-
-    # Pinned due to API changes in pyatmo>=5.1.0
-    (self: super: {
-      pyatmo = super.pyatmo.overridePythonAttrs (oldAttrs: rec {
-        version = "5.0.1";
-        src = fetchFromGitHub {
-          owner = "jabesq";
-          repo = "pyatmo";
-          rev = "v${version}";
-          sha256 = "0can9v602iqfn0l01fd7gr63qzvcngfm0qka4s1x0pldh6avxmfh";
-        };
-      });
-    })
 
     # Pinned due to API changes in pyatv>=0.8.0
     (self: super: {
@@ -149,8 +124,6 @@ let
       });
     })
 
-    (mkOverride "pysma" "0.4.3" "sha256-vriMnJFS7yfTyDT1f4sx1xEBTQjqc4ZHmkdHp1vcd+Q=")
-
     # Pinned due to API changes in eebrightbox>=0.0.5
     (self: super: {
       eebrightbox = super.eebrightbox.overridePythonAttrs (oldAttrs: rec {
@@ -197,7 +170,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.6.6";
+  hassVersion = "2021.7.0";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -214,7 +187,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0r8l2qya9pdl65kq3xrnb1vhmbnxm3bj12hn1wyxmw56l8m9l5d5";
+    sha256 = "1dx1pmi0w265pyajmmvd7k6vb5z7s77a7b161zd0n4zsb989dil6";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
