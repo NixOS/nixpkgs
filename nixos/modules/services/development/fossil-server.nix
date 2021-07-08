@@ -168,6 +168,7 @@ in
         # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
         ProtectSystem = "strict";
         ProtectHome = mkDefault true;
+        ReadWritePaths = [ cfg.repository ];
         PrivateTmp = true;
         PrivateDevices = true;
         ProtectHostname = true;
