@@ -9620,6 +9620,8 @@ in
 
   via = callPackage ../tools/misc/via {};
 
+  vial = callPackage ../tools/misc/vial {};
+
   viking = callPackage ../applications/misc/viking { };
 
   vim-vint = callPackage ../development/tools/vim-vint { };
