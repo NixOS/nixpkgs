@@ -102,13 +102,4 @@
     name = "mac_nvme_t2";
     patch = ./mac-nvme-t2.patch;
   };
-
-  rtnetlink_fix_regression_in_bridge_vlan_configuration = rec {
-    name = "rtnetlink_fix_regression_in_bridge_vlan_configuration";
-    patch = fetchpatch {
-      name = name + ".patch";
-      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=d2e381c4963663bca6f30c3b996fa4dbafe8fcb5";
-      sha256 = "0ragdi13yh5ypp9x49vrdjqx8ddh7sq7i1qjp8fyrbk3n0jdaac3";
-    };
-  };
 }
