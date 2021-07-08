@@ -3382,6 +3382,18 @@ final: prev:
     meta.homepage = "https://github.com/chrisbra/NrrwRgn/";
   };
 
+  numb-nvim = buildVimPluginFrom2Nix {
+    pname = "numb-nvim";
+    version = "2021-07-05";
+    src = fetchFromGitHub {
+      owner = "nacro90";
+      repo = "numb.nvim";
+      rev = "ec916bc8db72f576a83d47fc63e09a1c8687bb38";
+      sha256 = "0d8m9rh51ibwy1cxsagi78774lrg92iwjwinhk04i3i3smc6z7ja";
+    };
+    meta.homepage = "https://github.com/nacro90/numb.nvim/";
+  };
+
   nvcode-color-schemes-vim = buildVimPluginFrom2Nix {
     pname = "nvcode-color-schemes-vim";
     version = "2021-07-03";
