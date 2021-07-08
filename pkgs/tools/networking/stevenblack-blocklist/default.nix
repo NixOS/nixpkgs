@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub }:
 
 let
-  version = "3.7.12";
+  version = "3.7.13";
 in
 fetchFromGitHub {
   name = "stevenblack-blocklist-${version}";
@@ -9,7 +9,7 @@ fetchFromGitHub {
   owner = "StevenBlack";
   repo = "hosts";
   rev = version;
-  sha256 = "sha256-hGaiIFHgsLb6oLJ4k4yfxqeDhK0W+diCAI5odo08Q0E=";
+  sha256 = "sha256-nSajiRDpcFp3MwnQPnoBVB/OWnhVqkeSmS7OBrfhMnw=";
 
   meta = with lib; {
     description = "Unified hosts file with base extensions";

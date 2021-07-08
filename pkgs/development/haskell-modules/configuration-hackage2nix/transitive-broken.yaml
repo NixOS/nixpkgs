@@ -564,6 +564,7 @@ dont-distribute-packages:
  - bip32
  - birch-beer
  - bird
+ - biscuit-servant
  - bit-array
  - bitcoin-address
  - bitcoin-api
@@ -2344,6 +2345,7 @@ dont-distribute-packages:
  - polysemy-path
  - polysemy-plugin
  - polysemy-readline
+ - polysemy-req
  - polysemy-resume
  - polysemy-test
  - polysemy-time
