@@ -124,6 +124,7 @@ in
     users.users.${cfg.user} = {
       description     = "Fossil server user";
       group           = cfg.group;
+      isSystemUser    = true;
     };
 
     users.groups.${cfg.group} = {
