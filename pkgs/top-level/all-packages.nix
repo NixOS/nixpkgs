@@ -7636,6 +7636,8 @@ in
 
   openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
 
+  optifine = callPackage ../tools/games/minecraft/optifine { };
+
   optipng = callPackage ../tools/graphics/optipng {
     libpng = libpng12;
   };
