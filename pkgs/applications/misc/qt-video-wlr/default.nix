@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, meson, ninja, wayland, pixman, cairo, librsvg, wayland-protocols, wlroots, libxkbcommon, gst_all_1, wrapQtAppsHook, qtbase, qtmultimedia }:
 let
- gstreamerPath = with gst_all_1; lib.makeSearchPath "lib/gstreamer-1.0" [
+ gstreamerPath = with gst_all_1; lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
      gstreamer
      gst-plugins-base
      gst-plugins-good
