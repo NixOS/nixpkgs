@@ -1,13 +1,14 @@
-diff -ruN a/libtiff/CMakeLists.txt b/libtiff/CMakeLists.txt
---- a/libtiff/CMakeLists.txt	2019-05-31 13:05:22.849705817 +0000
-+++ b/libtiff/CMakeLists.txt	2020-11-27 21:50:03.527831837 +0000
-@@ -42,6 +42,9 @@
-   libtiffxx.map)
+diff --git i/libtiff/CMakeLists.txt w/libtiff/CMakeLists.txt
+index 90105b28..340c75cf 100755
+--- i/libtiff/CMakeLists.txt
++++ w/libtiff/CMakeLists.txt
+@@ -31,6 +31,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
+                @ONLY)
  
- set(tiff_HEADERS
-+  tiffiop.h
-+  ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h
-+  tif_dir.h
-   tiff.h
-   tiffio.h
-   tiffvers.h)
+ set(tiff_public_HEADERS
++        tiffiop.h
++        ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h
++        tif_dir.h
+         tiff.h
+         tiffio.h
+         tiffvers.h
