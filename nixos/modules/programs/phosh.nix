@@ -159,5 +159,10 @@ in {
       if builtins.isPath cfg.phocConfig then cfg.phocConfig
       else if builtins.isString cfg.phocConfig then pkgs.writeText "phoc.ini" cfg.phocConfig
       else pkgs.writeText "phoc.ini" (renderPhocConfig cfg.phocConfig);
+
+    services.geoclue2.appConfig."sm.puri.Phosh" = {
+      isAllowed = true;
+      isSystem = true;
+    };
   };
 }
