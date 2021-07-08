@@ -5,8 +5,7 @@
 , lib
 }:
 
-{ name ? null
-, pname ? name
+{ pname
 , version
 , src
 , beamDeps ? [ ]
@@ -27,7 +26,7 @@ with lib;
 
 let
   shell = drv: stdenv.mkDerivation {
-    name = "interactive-shell-${drv.name}";
+    name = "interactive-shell-${drv.pname}";
     buildInputs = [ drv ];
   };
 
@@ -101,7 +100,7 @@ let
       } // meta;
 
       passthru = ({
-        packageName = name;
+        packageName = pname;
         env = shell self;
       } // (if attrs ? passthru then attrs.passthru else { }));
     } // customPhases);
