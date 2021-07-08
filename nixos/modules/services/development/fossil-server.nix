@@ -150,16 +150,45 @@ in
         + (optionalString cfg.repolist "--repolist ")
         + "--port ${toString cfg.port} "
         + cfg.repository;
-        PrivateTmp = "yes";
+
+        # Proc filesystem
+        ProcSubset = "pid";
+        ProtectProc = "invisible";
+
+        # New file permissions
+        UMask = "0027"; # 0640 / 0750
+
+        # Capabilities
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+
+        # Security
         NoNewPrivileges = true;
+
+        # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
         ProtectSystem = "strict";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH";
-        RestrictNamespaces = "uts ipc pid user cgroup";
-        ProtectKernelTunables = "yes";
-        ProtectKernelModules = "yes";
-        ProtectControlGroups = "yes";
-        PrivateDevices = "yes";
+        ProtectHome = mkDefault true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        PrivateMounts = true;
+
+        # System Call Filtering
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
+
       };
     };
 
