@@ -758,7 +758,7 @@ in
         Rules for creating and cleaning up temporary files
         automatically. See
         <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
-        for the exact format.
+        for the exact format and https://www.freedesktop.org/software/systemd/man/tmpfiles.d.html for the upstream docs.
       '';
     };
 
