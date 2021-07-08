@@ -214,8 +214,9 @@ in
 
     users = {
       groups = {
-        named = { };
-        gid = config.ids.gids.bind;
+        "${bindGroup}" = {
+          gid = config.ids.gids.bind;
+        };
       }
       users.${bindUser} = {
         uid = config.ids.uids.bind;
