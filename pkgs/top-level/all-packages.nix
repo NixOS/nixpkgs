@@ -19196,6 +19196,7 @@ in
     mod_ca = callPackage ../servers/http/apache-modules/mod_ca { };
     mod_crl = callPackage ../servers/http/apache-modules/mod_crl { };
     mod_csr = callPackage ../servers/http/apache-modules/mod_csr { };
+    mod_cspnonce = callPackage ../servers/http/apache-modules/mod_cspnonce { };
     mod_ocsp = callPackage ../servers/http/apache-modules/mod_ocsp{ };
     mod_scep = callPackage ../servers/http/apache-modules/mod_scep { };
     mod_pkcs12 = callPackage ../servers/http/apache-modules/mod_pkcs12 { };
@@ -19556,6 +19557,7 @@ in
   mod_wsgi = pkgs.apacheHttpdPackages.mod_wsgi;
   mod_ca = pkgs.apacheHttpdPackages.mod_ca;
   mod_crl = pkgs.apacheHttpdPackages.mod_crl;
+  mod_cspnonce = pkgs.apacheHttpdPackages.mod_cspnonce;
   mod_csr = pkgs.apacheHttpdPackages.mod_csr;
   mod_ocsp = pkgs.apacheHttpdPackages.mod_ocsp;
   mod_scep = pkgs.apacheHttpdPackages.mod_scep;
