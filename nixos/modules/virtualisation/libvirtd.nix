@@ -7,9 +7,9 @@ let
   cfg = config.virtualisation.libvirtd;
   vswitch = config.virtualisation.vswitch;
   configFile = pkgs.writeText "libvirtd.conf" ''
+    ${cfg.extraConfig}
     auth_unix_ro = "polkit"
     auth_unix_rw = "polkit"
-    ${cfg.extraConfig}
   '';
   ovmfFilePrefix = if pkgs.stdenv.isAarch64 then "AAVMF" else "OVMF";
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
