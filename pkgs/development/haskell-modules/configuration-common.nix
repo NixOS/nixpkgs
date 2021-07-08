@@ -1940,4 +1940,10 @@ EOT
   # upstream https://github.com/circuithub/rel8/issues/86
   rel8 = dontCheck super.rel8;
 
+  # Release 1.0.0.0 added version bounds (was unrestricted before),
+  # but with too strict lower bounds for our lts-18.
+  graphql = assert pkgs.lib.versionOlder self.parser-combinators.version "1.3.0";
+    assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
+    doJailbreak super.graphql;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
