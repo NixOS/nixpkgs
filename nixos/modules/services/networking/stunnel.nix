@@ -77,6 +77,18 @@ let
         default = null;
         description = "If set, stunnel checks if the provided certificate is valid for the given hostname.";
       };
+
+      cert = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = "Client's certificate with which it authenticates to the server.";
+      };
+
+      key = mkOption {
+        type = with types; nullOr (strMatching "/.*");
+        default = null;
+        description = "Client's key with which it authenticates to the server.";
+      };
     };
   };
 
@@ -207,6 +219,8 @@ in
                ${optionalString (v.CAPath != null) "CApath = ${v.CAPath}"}
                ${optionalString (v.CAFile != null) "CAFile = ${v.CAFile}"}
                ${optionalString (v.verifyHostname != null) "checkHost = ${v.verifyHostname}"}
+               ${optionalString (v.cert != null) (assert v.key != null; "cert = ${v.cert}")}
+               ${optionalString (v.key != null) (assert v.cert != null; "key = ${v.key}")}
                OCSPaia = yes
 
              '')
