@@ -117,6 +117,10 @@ extra-packages:
 package-maintainers:
   abbradar:
     - Agda
+  Anton-Latukha:
+    - hnix
+    - hnix-store-core
+    - hnix-store-remote
   berberman:
     - nvfetcher
     - arch-web
