@@ -6452,6 +6452,8 @@ in
 
   memtester = callPackage ../tools/system/memtester { };
 
+  merge-request-notifier = callPackage ../applications/version-management/merge-request-notifier { };
+
   mesa-demos = callPackage ../tools/graphics/mesa-demos { };
 
   mftrace = callPackage ../tools/typesetting/tex/mftrace { };
