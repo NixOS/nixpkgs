@@ -487,7 +487,7 @@ sub addEntry {
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
-addEntry("NixOS - Default", $defaultConfig, "--unrestricted");
+addEntry("NixOS - Default", $defaultConfig, "--class nixos --class gnu-linux --class gnu --class os --unrestricted");
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
