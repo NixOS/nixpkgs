@@ -23816,6 +23816,8 @@ in
 
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
+  fritzprofiles = with python3.pkgs; toPythonApplication fritzprofiles;
+
   fsv = callPackage ../applications/misc/fsv {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
