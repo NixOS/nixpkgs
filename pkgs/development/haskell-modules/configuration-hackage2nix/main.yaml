@@ -85,9 +85,6 @@ default-package-overrides:
   - dual-tree < 0.2.3.0
   - diagrams-core < 1.5.0
   - diagrams-lib < 1.4.4
-  # 2021-06-14: hnix still needs old versions https://github.com/haskell-nix/hnix/issues/952
-  - hnix-store-core < 0.5
-  - hnix-store-remote < 0.5
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
