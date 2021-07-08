@@ -1,6 +1,8 @@
 { lib
 , python3
 
+, ninja
+
 , writeTextDir
 , substituteAll
 , fetchpatch
@@ -79,6 +81,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+
+  propagatedBuildInputs = [ ninja ];
 
   postInstall = ''
     installShellCompletion --zsh data/shell-completions/zsh/_meson
