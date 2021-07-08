@@ -74,6 +74,7 @@ broken-packages:
   - aeson-filthy
   - aeson-flowtyped
   - aeson-match-qq
+  - aeson-modern-tojson
   - aeson-options
   - aeson-prefix
   - aeson-schema
@@ -261,6 +262,7 @@ broken-packages:
   - aws-route53
   - aws-sdk-text-converter
   - aws-simple
+  - aws-xray-client-persistent
   - axel
   - azubi
   - azure-acs
@@ -1904,6 +1906,7 @@ broken-packages:
   - haskell-src-match
   - haskell-src-meta-mwotton
   - haskell-stack-trace-plugin
+  - haskell-to-elm
   - HaskellTorrent
   - HaskellTutorials
   - haskell-type-exts
@@ -2755,6 +2758,7 @@ broken-packages:
   - linear-maps
   - linear-opengl
   - linearscan
+  - linear-smc
   - linear-vect
   - line-drawing
   - lines-of-action
@@ -3183,6 +3187,7 @@ broken-packages:
   - nested-sequence
   - netclock
   - netease-fm
+  - net-mqtt-rpc
   - netrium
   - NetSNMP
   - netspec
@@ -4511,6 +4516,7 @@ broken-packages:
   - streaming-png
   - streaming-utils
   - streaming-with
+  - streamly-examples
   - streamly-fsnotify
   - stream-monad
   - streamproc
