@@ -69,11 +69,15 @@ stdenv.mkDerivation {
     # searching for ppd files can find this package
     longDescription = ''
       The collected knowledge about printers,
-      drivers, and driver options in XML files.
+      drivers, and driver options in XML files,
+      used by `foomatic-db-engine` to generate PPD files.
       This is a package of PPD and Foomatic XML files
       that may have restrictions that keep them
       from being used on a variety of machines
       for licensing and other non-technical reasons.
+      The XML files in this package enable `foomatic-db-ppds`
+      to create about 120 additional PPD files, for printer from
+      Dell, Genicom, Lexmark, Oce, Tektronix and Xerox.
       Besides the XML files, this package contains
       about 130 PPD files, for printers from
       Dell, Genicom, Lexmark, Oce and Xerox.

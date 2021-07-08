@@ -88,7 +88,10 @@ stdenv.mkDerivation {
     # searching for ppd files can find this package
     longDescription = ''
       The collected knowledge about printers,
-      drivers, and driver options in XML files.
+      drivers, and driver options in XML files,
+      used by `foomatic-db-engine` to generate PPD files.
+      PPD files generated from the XML files in this package
+      are contained in the package 'foomatic-db-ppds'.
       Besides the XML files, this package contains
       about 6,600 PPD files, for printers from
       Brother, Canon, Epson, Gestetner, HP, InfoPrint,

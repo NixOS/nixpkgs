@@ -36322,6 +36322,8 @@ with pkgs;
   foomatic-db = callPackage ../misc/cups/drivers/foomatic-db {};
   foomatic-db-engine = callPackage ../misc/cups/drivers/foomatic-db-engine {};
   foomatic-db-nonfree = callPackage ../misc/cups/drivers/foomatic-db-nonfree {};
+  foomatic-db-ppds = callPackage ../misc/cups/drivers/foomatic-db-ppds {};
+  foomatic-db-ppds-withNonfreeDb = callPackage ../misc/cups/drivers/foomatic-db-ppds { withNonfreeDb = true; };
 
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
