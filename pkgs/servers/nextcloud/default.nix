@@ -55,8 +55,8 @@ in {
   };
 
   nextcloud20 = generic {
-    version = "20.0.7";
-    sha256 = "sha256-jO2Ct3K/CvZ9W+EyPkD5d0KbwKK8yGQJXvx4dnUAtys=";
+    version = "20.0.11";
+    sha256 = "sha256-CLrJH5eNTiJJrDzfCg+re3J2qmwxFOe12nUU/QgtD6A=";
   };
 
   nextcloud21 = generic {
