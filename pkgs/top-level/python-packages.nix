@@ -823,6 +823,8 @@ in {
 
   azure-mgmt-eventhub = callPackage ../development/python-modules/azure-mgmt-eventhub { };
 
+  azure-mgmt-extendedlocation = callPackage ../development/python-modules/azure-mgmt-extendedlocation { };
+
   azure-mgmt-hanaonazure = callPackage ../development/python-modules/azure-mgmt-hanaonazure { };
 
   azure-mgmt-hdinsight = callPackage ../development/python-modules/azure-mgmt-hdinsight { };
