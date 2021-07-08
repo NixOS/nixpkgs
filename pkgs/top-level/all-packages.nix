@@ -2880,6 +2880,8 @@ in
 
   ink = callPackage ../tools/misc/ink { };
 
+  inklecate = callPackage ../development/compilers/inklecate {};
+
   interlock = callPackage ../servers/interlock {};
 
   iotools = callPackage ../tools/misc/iotools { };
