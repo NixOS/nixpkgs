@@ -95,10 +95,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/vncserver \
       --prefix PATH : ${lib.makeBinPath (with xorg; [ xauth ])}
 
-    # The viewer is in Java and requires `JAVA_HOME`.
+    # The viewer is in Java and requires `JAVA_HOME` (which is a single
+    # path, cannot be multiple separated paths).
     # For SSH support, `ssh` is required on `PATH`.
     wrapProgram $out/bin/vncviewer \
-      --prefix JAVA_HOME : "${lib.makeLibraryPath [ openjdk ]}/openjdk" \
+      --set JAVA_HOME "${lib.makeLibraryPath [ openjdk ]}/openjdk" \
       --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
