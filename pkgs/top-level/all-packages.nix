@@ -28328,6 +28328,13 @@ in
 
   aeon = callPackage ../applications/blockchains/aeon { };
 
+  alfis = callPackage ../applications/blockchains/alfis {
+    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
+  };
+  alfis-nogui = alfis.override {
+    withGui = false;
+  };
+
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
