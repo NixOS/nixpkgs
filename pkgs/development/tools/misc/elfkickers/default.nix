@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.muppetlabs.com/~breadbox/software/elfkickers.html";
     description = "A collection of programs that access and manipulate ELF files";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.dtzWill ];
   };
 }
