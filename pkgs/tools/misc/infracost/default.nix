@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-TM+7Am5hoiRk/StAwCh5yAN1GKv3oPun38pvhArBoJg=";
+    sha256 = "sha256-3AH/VUKIno/jObep5GNfIpyOW5TcfZ5UZyornJWTGOw=";
   };
 
-  vendorSha256 = "sha256-6sMtM7MTFTDXwH8AKr5Dxq8rPqE92xzcWqBTixcPi+8=";
+  vendorSha256 = "sha256-zMEtVPyzwW4SrbpydDFDqgHEC0/khkrSxlEnQ5I0he8=";
 
   checkInputs = [ terraform ];
   checkPhase = "make test";
