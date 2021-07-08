@@ -1,30 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, darwin, python2 }:
+{ lib, stdenv, fetchurl, darwin, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
   pname = "iproute2mac";
+  version = "1.3.0";
 
-  src = fetchFromGitHub {
-    owner = "brona";
-    repo = "iproute2mac";
-    rev = "v${version}";
-    sha256 = "1n6la7blbxza2m79cpnywsavhzsdv4gzdxrkly4dppyidjg6jy1h";
+  src = fetchurl {
+    url = "https://github.com/brona/iproute2mac/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "1drk2b2nssb9ahw6mnss9sv12qlhvp5k8jdhzman65jy1xmwxvrz";
   };
 
-  buildInputs = [ python2 ];
+  buildInputs = [ python3 ];
 
-  postPatch = ''
+  __impureHostDeps = [ "/usr/bin/sudo" ];
+
+  postPatch = with darwin; ''
     substituteInPlace src/ip.py \
-      --replace /usr/bin/python ${python2}/bin/python \
-      --replace /sbin/ifconfig ${darwin.network_cmds}/bin/ifconfig \
-      --replace /sbin/route ${darwin.network_cmds}/bin/route \
-      --replace /usr/sbin/netstat ${darwin.network_cmds}/bin/netstat \
-      --replace /usr/sbin/ndp ${darwin.network_cmds}/bin/ndp \
-      --replace /usr/sbin/arp ${darwin.network_cmds}/bin/arp \
-      --replace /usr/sbin/networksetup ${darwin.network_cmds}/bin/networksetup
+      --replace /sbin/ifconfig ${network_cmds}/bin/ifconfig \
+      --replace /sbin/route ${network_cmds}/bin/route \
+      --replace /usr/sbin/netstat ${network_cmds}/bin/netstat \
+      --replace /usr/sbin/ndp ${network_cmds}/bin/ndp \
+      --replace /usr/sbin/arp ${network_cmds}/bin/arp \
+      --replace /usr/sbin/networksetup ${network_cmds}/bin/networksetup
   '';
+
   installPhase = ''
-    mkdir -p $out/bin
     install -D -m 755 src/ip.py $out/bin/ip
   '';
 
