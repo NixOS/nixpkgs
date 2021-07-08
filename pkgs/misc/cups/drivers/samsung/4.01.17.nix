@@ -74,7 +74,12 @@ in stdenv.mkDerivation rec {
     cp -r ./* $out/share/cups/model/samsung
   '';
 
-  ppdFileCommands = [ "pstosecps" "pstospl" "rastertospl" ];
+  ppdFileCommands = [
+    "pstosecps"
+    "pstospl"
+    "pstosplc"
+    "rastertospl"
+  ];
 
   meta = with lib; {
     description = "Samsung's Linux printing drivers; includes binaries without source code";
