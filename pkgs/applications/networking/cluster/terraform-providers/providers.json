@@ -533,10 +533,10 @@
     "owner": "mrparkers",
     "provider-source-address": "registry.terraform.io/mrparkers/keycloak",
     "repo": "terraform-provider-keycloak",
-    "rev": "v3.0.0",
-    "sha256": "1q9vzmj9c7mznv6al58d3rs5kk1fh28k1qccx46hcbk82z52da3a",
-    "vendorSha256": "0kh6lljvqd577s19gx0fmfsmx9wm3ikla3jz16lbwwb8ahbqcw1f",
-    "version": "3.0.0"
+    "rev": "v3.1.1",
+    "sha256": "0qh0y1j3y5hzcr8h8wzralv7h8dmrg8jnjccz0fzcmhbkazfrs4p",
+    "vendorSha256": "0il4rvwa23zghrq0b8qrzgxyjy0211v9z2a4ln2xmlhcz0105zg8",
+    "version": "3.1.1"
   },
   "ksyun": {
     "owner": "terraform-providers",
