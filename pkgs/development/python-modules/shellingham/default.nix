@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "shellingham";
-  version = "1.3.2";
+  version = "1.4.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "576c1982bea0ba82fb46c36feb951319d7f42214a82634233f58b40d858a751e";
+    sha256 = "sha256-SFXCRY1pBIKb00wpnxH97tfP77+KLFIuTK6mzXazFx4=";
   };
 
   meta = with lib; {
