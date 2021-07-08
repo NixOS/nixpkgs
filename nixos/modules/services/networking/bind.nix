@@ -232,13 +232,13 @@ in
 
       preStart = ''
         mkdir -m 7600 -p /etc/bind
-        chown ${bindGroup} /etc/bind
+        chown root:${bindGroup} /etc/bind
         if ! [ -f "/etc/bind/rndc.key" ]; then
           ${pkgs.bind.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
         fi
 
         ${pkgs.coreutils}/bin/mkdir -p /run/named
-        chown ${bindGroup} /run/named
+        chown root:${bindGroup} /run/named
       '';
 
       serviceConfig = {
