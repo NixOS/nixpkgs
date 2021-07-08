@@ -7,11 +7,11 @@
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
 , useOpenSSL ? !isBootstrap, openssl
 , useNcurses ? false, ncurses
-, withQt5 ? false, qtbase
+, withQt5 ? false, qtbase, wrapQtAppsHook
 , buildDocs ? (!isBootstrap && (useNcurses || withQt5)), sphinx, texinfo
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "cmake"
           + lib.optionalString isBootstrap "-boot"
           + lib.optionalString useNcurses "-cursesUI"
@@ -45,7 +45,8 @@ stdenv.mkDerivation (rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ setupHook pkg-config ]
-    ++ lib.optionals buildDocs [ texinfo ];
+    ++ lib.optionals buildDocs [ texinfo ]
+    ++ lib.optionals withQt5 [ wrapQtAppsHook ];
 
   buildInputs = []
     ++ lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
@@ -130,5 +131,4 @@ stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;
   };
-} // (if withQt5 then { dontWrapQtApps = true; } else {})
-)
+}
