@@ -29639,6 +29639,8 @@ in
     gstreamerSupport = true;
   });
 
+  dkh = callPackage ../applications/science/chemistry/dkh { };
+
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
   pymol = callPackage ../applications/science/chemistry/pymol { };
