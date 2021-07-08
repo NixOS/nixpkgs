@@ -5677,6 +5677,12 @@
     githubId = 735008;
     name = "Louis Taylor";
   };
+  kranzes = {
+    email = "personal@ilanjoselevich.com";
+    github = "Kranzes";
+    githubId = 56614642;
+    name = "Ilan Joselevich";
+  };
   krav = {
     email = "kristoffer@microdisko.no";
     github = "krav";
