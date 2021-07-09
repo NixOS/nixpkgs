@@ -3886,6 +3886,18 @@ final: prev:
     meta.homepage = "https://github.com/Th3Whit3Wolf/one-nvim/";
   };
 
+  onedark-nvim = buildVimPluginFrom2Nix {
+    pname = "onedark-nvim";
+    version = "2021-06-18";
+    src = fetchFromGitHub {
+      owner = "olimorris";
+      repo = "onedark.nvim";
+      rev = "1304235686bc682e744ba9691c7545e0b27762ea";
+      sha256 = "0ygy9hl171qa9zp8gmj80azp4vxxn5ba3v19mgy36qf390jgrwc4";
+    };
+    meta.homepage = "https://github.com/olimorris/onedark.nvim/";
+  };
+
   onedark-vim = buildVimPluginFrom2Nix {
     pname = "onedark-vim";
     version = "2021-06-22";
