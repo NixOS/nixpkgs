@@ -31197,6 +31197,8 @@ in
 
   nix-linter = haskell.lib.justStaticExecutables (haskellPackages.nix-linter);
 
+  nixos-option = callPackage ../tools/nix/nixos-option { };
+
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
   nix-prefetch = callPackage ../tools/package-management/nix-prefetch { };
