@@ -4321,6 +4321,8 @@ in {
 
   marshmallow-enum = callPackage ../development/python-modules/marshmallow-enum { };
 
+  marshmallow-oneofschema = callPackage ../development/python-modules/marshmallow-oneofschema { };
+
   marshmallow-polyfield = callPackage ../development/python-modules/marshmallow-polyfield { };
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
@@ -4887,6 +4889,8 @@ in {
   nunavut = callPackage ../development/python-modules/nunavut { };
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
+
+  python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
@@ -8237,6 +8241,8 @@ in {
   sqlalchemy-i18n = callPackage ../development/python-modules/sqlalchemy-i18n { };
 
   SQLAlchemy-ImageAttach = callPackage ../development/python-modules/sqlalchemy-imageattach { };
+
+  sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
