@@ -57,7 +57,7 @@ let
     pathsToLink = [ "/bin" ];
   };
 
-  initialRamdisk = pkgs.callPackage ./make-initrd.nix { inherit findLibs; contents = config.boot.initrd.objects; };
+  initialRamdisk = pkgs.makeInitrdNG { contents = config.boot.initrd.objects; };
 
   # Script to add secret files to the initrd at bootloader update time
   initialRamdiskSecretAppender =
