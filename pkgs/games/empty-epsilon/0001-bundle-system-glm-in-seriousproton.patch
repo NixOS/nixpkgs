@@ -16,7 +16,7 @@ index cbd68ca..730df82 100644
  endif()
  
 +
-+find_package(glm )
++find_package(glm)
 +
  add_subdirectory(src/Box2D)
  add_subdirectory(src/lua)
@@ -32,4 +32,3 @@ index cbd68ca..730df82 100644
          "$<$<AND:$<BOOL:${CMAKE_COMPILER_IS_GNUCC}>,$<OR:$<CONFIG:RelWithDebInfo>,$<CONFIG:Release>>>:-flto>"
 -- 
 2.31.1
-
