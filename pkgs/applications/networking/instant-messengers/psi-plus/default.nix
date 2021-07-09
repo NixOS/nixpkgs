@@ -4,24 +4,27 @@
 , libsecret, libgcrypt, libotr, html-tidy, libgpgerror, libsignal-protocol-c
 , usrsctp
 
-# Voice messages
-, voiceMessagesSupport ? true
-, gst_all_1
-
 , chatType ? "basic" # See the assertion below for available options
 , qtwebkit
 , qtwebengine
 
+, enablePlugins ? true
+
+# Voice messages
+, voiceMessagesSupport ? true
+, gst_all_1
+
 , extraCmakeFlags ? [] # In addition to existing ones
 }:
-
-assert builtins.isBool voiceMessagesSupport;
 
 assert builtins.elem (lib.toLower chatType) [
   "basic"     # Basic implementation, no web stuff involved
   "webkit"    # Legacy one, based on WebKit (see https://wiki.qt.io/Qt_WebKit)
   "webengine" # QtWebEngine (see https://wiki.qt.io/QtWebEngine)
 ];
+
+assert builtins.isBool voiceMessagesSupport;
+assert builtins.isBool enablePlugins;
 
 mkDerivation rec {
   pname = "psi-plus";
@@ -36,7 +39,7 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DCHAT_TYPE=${chatType}"
-    "-DENABLE_PLUGINS=ON"
+    "-DENABLE_PLUGINS=${if enablePlugins then "ON" else "OFF"}"
   ] ++ (
     assert builtins.all builtins.isString extraCmakeFlags; extraCmakeFlags
   );
