@@ -1,10 +1,9 @@
-{ mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost, fetchFromGitHub  }:
+{ mkDerivation, lib, cmake, SDL2, qtbase, qtmultimedia, boost, fetchFromGitHub  }:
 
 mkDerivation {
   pname = "citra";
   version = "2021-07-01";
 
-  # Submodules
   src = fetchFromGitHub {
     owner = "citra-emu";
     repo = "citra";
