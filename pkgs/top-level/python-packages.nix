@@ -5952,6 +5952,8 @@ in {
 
   pyfritzhome = callPackage ../development/python-modules/pyfritzhome { };
 
+  pyfronius = callPackage ../development/python-modules/pyfronius { };
+
   pyftdi = callPackage ../development/python-modules/pyftdi { };
 
   pyftgl = callPackage ../development/python-modules/pyftgl { };
@@ -8005,6 +8007,8 @@ in {
   };
 
   slob = callPackage ../development/python-modules/slob { };
+
+  slowapi = callPackage ../development/python-modules/slowapi { };
 
   sly = callPackage ../development/python-modules/sly { };
 

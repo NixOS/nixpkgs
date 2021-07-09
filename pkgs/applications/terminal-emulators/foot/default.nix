@@ -15,6 +15,7 @@
 , scdoc
 , tllist
 , wayland-protocols
+, wayland-scanner
 , pkg-config
 , utf8proc
 , allowPgo ? true
@@ -77,7 +78,7 @@ let
   }."${compilerName}";
 
   # ar with lto support
-  ar = {
+  ar = stdenv.cc.bintools.targetPrefix + {
     "clang" = "llvm-ar";
     "gcc" = "gcc-ar";
     "unknown" = "ar";
@@ -97,19 +98,24 @@ stdenv.mkDerivation rec {
     sha256 = "0yrz7n0wls8g8w7ja934icwxmng3sxh70x87qmzc9c9cb1wyd989";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
+    wayland-scanner
     meson
     ninja
     ncurses
     scdoc
-    tllist
-    wayland-protocols
     pkg-config
   ] ++ lib.optionals (compilerName == "clang") [
     stdenv.cc.cc.libllvm.out
   ];
 
   buildInputs = [
+    tllist
+    wayland-protocols
     fontconfig
     freetype
     pixman

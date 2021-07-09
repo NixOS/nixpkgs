@@ -363,7 +363,6 @@ in
   grsync = callPackage ../applications/misc/grsync { };
 
   dockerTools = callPackage ../build-support/docker {
-    go = buildPackages.go_1_15;
     writePython3 = buildPackages.writers.writePython3;
   };
 
@@ -4947,6 +4946,8 @@ in
   fstl = qt5.callPackage ../applications/graphics/fstl { };
 
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
+
+  fulcio = callPackage ../tools/security/fulcio { };
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
@@ -9617,6 +9618,10 @@ in
     inherit lib udisks2 python3;
   };
 
+  via = callPackage ../tools/misc/via {};
+
+  vial = callPackage ../tools/misc/vial {};
+
   viking = callPackage ../applications/misc/viking { };
 
   vim-vint = callPackage ../development/tools/vim-vint { };
@@ -12680,7 +12685,7 @@ in
 
   bundler-audit = callPackage ../tools/security/bundler-audit { };
 
-  solargraph = callPackage ../development/ruby-modules/solargraph { };
+  solargraph = rubyPackages.solargraph;
 
   rbenv = callPackage ../development/ruby-modules/rbenv { };
 
@@ -17081,6 +17086,8 @@ in
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libutempter = callPackage ../development/libraries/libutempter { };
+
+  libuldaq = callPackage ../development/libraries/libuldaq { };
 
   libunwind =
     if stdenv.isDarwin then darwin.libunwind
@@ -23473,6 +23480,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  dnd-tools = callPackage ../applications/misc/dnd-tools { };
+
   inherit (callPackage ../applications/virtualization/docker {})
     docker_20_10;
 
@@ -27489,7 +27498,32 @@ in
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../applications/editors/neovim {
-    lua = luajit;
+    # neovim doesn't build with luajit on aarch64:
+    # ./luarocks init
+    # PANIC: unprotected error in call to Lua API (module 'luarocks.core.hardcoded' not found:
+    #         no field package.preload['luarocks.core.hardcoded']
+    #         no file '/private/tmp/nix-build-luarocks-3.2.1.drv-0/source/src/luarocks/core/hardcoded.lua'
+    #         no file './luarocks/core/hardcoded.lua'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/share/luajit-2.1.0-beta3/luarocks/core/hardcoded.lua'
+    #         no file '/usr/local/share/lua/5.1/luarocks/core/hardcoded.lua'
+    #         no file '/usr/local/share/lua/5.1/luarocks/core/hardcoded/init.lua'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/share/lua/5.1/luarocks/core/hardcoded.lua'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/share/lua/5.1/luarocks/core/hardcoded/init.lua'
+    #         no file './luarocks/core/hardcoded.so'
+    #         no file '/usr/local/lib/lua/5.1/luarocks/core/hardcoded.so'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/lib/lua/5.1/luarocks/core/hardcoded.so'
+    #         no file '/usr/local/lib/lua/5.1/loadall.so'
+    #         no file './luarocks.so'
+    #         no file '/usr/local/lib/lua/5.1/luarocks.so'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/lib/lua/5.1/luarocks.so'
+    #         no file '/usr/local/lib/lua/5.1/loadall.so')
+    # make: *** [GNUmakefile:57: luarocks] Error 1
+    #
+    # See https://github.com/NixOS/nixpkgs/issues/129099
+    # Possibly related: https://github.com/neovim/neovim/issues/7879
+    lua =
+      if stdenv.isAarch64 then lua5_1 else
+      luajit;
   };
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix { };
@@ -28295,6 +28329,13 @@ in
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
 
   aeon = callPackage ../applications/blockchains/aeon { };
+
+  alfis = callPackage ../applications/blockchains/alfis {
+    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
+  };
+  alfis-nogui = alfis.override {
+    withGui = false;
+  };
 
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 
@@ -29558,6 +29599,10 @@ in
   rox-filer = callPackage ../desktops/rox/rox-filer {
     gtk = gtk2;
   };
+
+  arcan = recurseIntoAttrs (callPackage ../desktops/arcan {
+    callPackage = newScope pkgs.arcan;
+  });
 
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
@@ -30940,6 +30985,8 @@ in
 
   mas = callPackage ../os-specific/darwin/mas { };
 
+  micromamba = callPackage ../tools/package-management/micromamba { };
+
   moltengamepad = callPackage ../misc/drivers/moltengamepad { };
 
   openzwave = callPackage ../development/libraries/openzwave { };
@@ -31651,6 +31698,9 @@ in
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
+
+  vikunja-api = callPackage ../servers/web-apps/vikunja/api.nix { };
+  vikunja-frontend = callPackage ../servers/web-apps/vikunja/frontend.nix { };
 
   vips = callPackage ../tools/graphics/vips {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;

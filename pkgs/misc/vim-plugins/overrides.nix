@@ -395,6 +395,10 @@ self: super: {
     dependencies = with self; [ ultisnips ];
   });
 
+  neogit = super.neogit.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with self; [ popfix ];
   });

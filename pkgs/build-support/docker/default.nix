@@ -132,6 +132,7 @@ rec {
     cp ${./tarsum.go} tarsum.go
     export GOPATH=$(pwd)
     export GOCACHE="$TMPDIR/go-cache"
+    export GO111MODULE=off
     mkdir -p src/github.com/docker/docker/pkg
     ln -sT ${docker.moby-src}/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
     go build
