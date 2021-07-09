@@ -14,6 +14,9 @@
 , voiceMessagesSupport ? true
 , gst_all_1
 
+, enablePsiMedia ? false
+, pkg-config
+
 , extraCmakeFlags ? [] # In addition to existing ones
 }:
 
@@ -25,6 +28,8 @@ assert builtins.elem (lib.toLower chatType) [
 
 assert builtins.isBool voiceMessagesSupport;
 assert builtins.isBool enablePlugins;
+assert builtins.isBool enablePsiMedia;
+assert enablePsiMedia -> enablePlugins;
 
 mkDerivation rec {
   pname = "psi-plus";
@@ -40,24 +45,28 @@ mkDerivation rec {
   cmakeFlags = [
     "-DCHAT_TYPE=${chatType}"
     "-DENABLE_PLUGINS=${if enablePlugins then "ON" else "OFF"}"
+    "-DBUILD_PSIMEDIA=${if enablePsiMedia then "ON" else "OFF"}"
   ] ++ (
     assert builtins.all builtins.isString extraCmakeFlags; extraCmakeFlags
   );
 
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs =
+    [ cmake qttools ]
+    ++ lib.optional enablePsiMedia pkg-config;
 
-  buildInputs = [
-    qtbase qtmultimedia qtx11extras
-    libidn qca-qt5 libXScrnSaver hunspell
-    libsecret libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
-    usrsctp
-  ]
-  ++ lib.optionals voiceMessagesSupport [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-  ]
-  ++ lib.optional (chatType == "webkit") qtwebkit
-  ++ lib.optional (chatType == "webengine") qtwebengine;
+  buildInputs =
+    [
+      qtbase qtmultimedia qtx11extras
+      libidn qca-qt5 libXScrnSaver hunspell
+      libsecret libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
+      usrsctp
+    ]
+    ++ lib.optionals voiceMessagesSupport [
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+    ]
+    ++ lib.optional (chatType == "webkit") qtwebkit
+    ++ lib.optional (chatType == "webengine") qtwebengine;
 
   preFixup = lib.optionalString voiceMessagesSupport ''
     qtWrapperArgs+=(
