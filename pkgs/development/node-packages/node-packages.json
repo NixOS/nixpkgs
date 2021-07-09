@@ -227,6 +227,7 @@
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
 , "teck-programmer"
 , "tern"
+, "terser"
 , "textlint"
 , "textlint-plugin-latex"
 , "textlint-rule-abbr-within-parentheses"

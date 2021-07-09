@@ -868,7 +868,7 @@ in
 
   auditwheel = callPackage ../tools/package-management/auditwheel { };
 
-  amidst = callPackage ../tools/games/amidst { };
+  amidst = callPackage ../tools/games/minecraft/amidst { };
 
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
@@ -4806,6 +4806,8 @@ in
 
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
+  fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
+
   fastlane = callPackage ../tools/admin/fastlane { };
 
   fatresize = callPackage ../tools/filesystems/fatresize {};
@@ -7657,6 +7659,8 @@ in
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
   openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
+
+  optifine = callPackage ../tools/games/minecraft/optifine { };
 
   optipng = callPackage ../tools/graphics/optipng {
     libpng = libpng12;
@@ -24042,6 +24046,8 @@ in
 
   fbida = callPackage ../applications/graphics/fbida { };
 
+  fcp = callPackage ../tools/misc/fcp { };
+
   fdupes = callPackage ../tools/misc/fdupes { };
 
   feh = callPackage ../applications/graphics/feh { };
@@ -29630,6 +29636,8 @@ in
     vlcSupport = true;
     gstreamerSupport = true;
   });
+
+  dkh = callPackage ../applications/science/chemistry/dkh { };
 
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 

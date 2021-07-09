@@ -6172,6 +6172,18 @@ final: prev:
     meta.homepage = "https://github.com/kristijanhusak/vim-dadbod-completion/";
   };
 
+  vim-dadbod-ui = buildVimPluginFrom2Nix {
+    pname = "vim-dadbod-ui";
+    version = "2021-05-12";
+    src = fetchFromGitHub {
+      owner = "kristijanhusak";
+      repo = "vim-dadbod-ui";
+      rev = "09fb2f51dcd022a6be20b48a730df493f4b3ca2d";
+      sha256 = "1bsy8illa9xsawx6lfs67y2xri38fpxdb4xz25ajy43snls41say";
+    };
+    meta.homepage = "https://github.com/kristijanhusak/vim-dadbod-ui/";
+  };
+
   vim-dasht = buildVimPluginFrom2Nix {
     pname = "vim-dasht";
     version = "2020-07-11";
