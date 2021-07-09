@@ -9,16 +9,31 @@
 
 with lib;
 
+let
+  info = splitString "-" stdenv.hostPlatform.system;
+  arch = elemAt info 0;
+  plat = elemAt info 1;
+  shas =
+    if enableUnfree
+    then {
+      x86_64-linux  = "0yjaki7gjffrz86hvqgn1gzhd9dc9llcj50g2x1sgpyn88zk0z0p";
+      x86_64-darwin = "0dqm66c89w1nvmbwqzphlqmf7avrycgv1nwd5b0k1z168fj0c3zm";
+      aarch64-linux = "11hjhyb48mjagmvqyxb780n57kr619h6p4adl2vs1zm97g9gslx8";
+    }
+    else {
+      x86_64-linux  = "14b1649avjcalcsi0ffkgznq6d93qdk6m3j0i73mwfqka5d3dvy3";
+      x86_64-darwin = "0ypgdfklr5rxvsnc3czh231pa1z2h70366j1c6q5g64b3xnxpphs";
+      aarch64-linux = "01ainayr8fwwfix7dmxfhhmb23ji65dn4lbjwnj2w0pl0ym9h9w2";
+    };
+in
+
 let this = stdenv.mkDerivation rec {
+  pname = "logstash${optionalString (!enableUnfree) "-oss"}";
   version = elk7Version;
-  name = "logstash-${optionalString (!enableUnfree) "oss-"}${version}";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
-    sha256 =
-      if enableUnfree
-      then "01l6alwgsq6yf0z9d08i0hi8g708nph1vm78nl4xbpg8h964bybj"
-      else "0nlwgaw6rmhp5b68zpp1pzsjs30b0bjzdg8f7xy6rarpk338s8yb";
+    url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}-${plat}-${arch}.tar.gz";
+    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   dontBuild         = true;

@@ -1,17 +1,17 @@
-{ lib, fetchFromGitHub, elk7Version, buildGoPackage, libpcap, nixosTests, systemd }:
+{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd }:
 
-let beat = package : extraArgs : buildGoPackage (rec {
-      name = "${package}-${version}";
+let beat = package : extraArgs : buildGoModule (rec {
+      pname = package;
       version = elk7Version;
 
       src = fetchFromGitHub {
         owner = "elastic";
         repo = "beats";
         rev = "v${version}";
-        sha256 = "192ygz3ppfah8d2b811x67jfqhcr5ivz7qh4vwrd729rjfr0bbgb";
+        sha256 = "0gjyzprgj9nskvlkm2bf125b7qn3608llz4kh1fyzsvrw6zb7sm8";
       };
 
-      goPackagePath = "github.com/elastic/beats";
+      vendorSha256 = "04cwf96fh60ld3ndjzzssgirc9ssb53yq71j6ksx36m3y1x7fq9c";
 
       subPackages = [ package ];
 
