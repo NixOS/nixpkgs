@@ -28755,6 +28755,8 @@ in
 
   tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
 
+  tecnoballz = callPackage ../games/tecnoballz { };
+
   teetertorture = callPackage ../games/teetertorture { };
 
   teeworlds = callPackage ../games/teeworlds { };
