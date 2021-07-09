@@ -150,6 +150,7 @@ let
       brotli
       procps
       nodePackages.uglify-js
+      nodePackages.terser
     ];
 
     patches = [
