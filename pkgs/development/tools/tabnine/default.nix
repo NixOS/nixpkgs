@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     description = "Smart Compose for code that uses deep learning to help you write code faster";
     license = licenses.unfree;
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    maintainers = with maintainers; [ lovesegfault ];
   };
 }
