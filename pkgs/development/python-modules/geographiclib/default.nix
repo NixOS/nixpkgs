@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "geographiclib";
-  version = "1.50";
+  version = "1.52";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cn6ap5fkh3mkfa57l5b44z3gvz7j6lpmc9rl4g2jny2gvp4dg8j";
+    sha256 = "sha256-rEANZyuJVLAwa8qJCwiLuLoqdX3IEzzKC4ePNLM7J0A=";
   };
 
   meta = with lib; {
@@ -18,5 +18,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ va1entin ];
   };
-
 }
