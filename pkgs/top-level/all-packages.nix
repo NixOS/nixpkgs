@@ -4350,6 +4350,8 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
+
   epubcheck = callPackage ../tools/text/epubcheck { };
 
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
