@@ -443,7 +443,8 @@
     </para>
     <para>
      As the last step, <command>nixos-install</command> will ask you to set the
-     password for the <literal>root</literal> user, e.g.
+     password for users declared in <literal>configuration.nix</literal>
+     and the <literal>root</literal> user, e.g.
 <screen>
 setting root password...
 New password: ***
@@ -451,8 +452,8 @@ Retype new password: ***</screen>
      <note>
       <para>
        For unattended installations, it is possible to use
-       <command>nixos-install --no-root-passwd</command> in order to disable
-       the password prompt entirely.
+       <command>nixos-install &lt; /dev/null</command> in order to disable
+       the password prompts entirely.
       </para>
      </note>
     </para>
@@ -475,15 +476,12 @@ Retype new password: ***</screen>
      a previous configuration if something goes wrong.
     </para>
     <para>
-     You should log in and change the <literal>root</literal> password with
-     <command>passwd</command>.
-    </para>
-    <para>
-     You’ll probably want to create some user accounts as well, which can be
-     done with <command>useradd</command>:
-<screen>
-<prompt>$ </prompt>useradd -c 'Eelco Dolstra' -m eelco
-<prompt>$ </prompt>passwd eelco</screen>
+     Use your declared user account to log in. If you didn't declare one,
+     you should still be able to log in using <literal>root</literal> user.
+     Note that some graphical display managers like SDDM do not allow
+     <literal>root</literal> login by default so you might need to switch to TTY.
+     Head to <xref linkend="sec-user-management" /> for more info regarding
+     declaring user accounts.
     </para>
     <para>
      You may also want to install some software. This will be covered

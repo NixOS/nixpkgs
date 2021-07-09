@@ -64,6 +64,9 @@ while [ "$#" -gt 0 ]; do
         --no-bootloader)
             noBootLoader=1
             ;;
+        --no-interaction)
+            noInteraction=1
+            ;;
         --show-trace|--impure|--keep-going)
             extraBuildFlags+=("$i")
             ;;
@@ -197,19 +200,67 @@ if [[ -z $noBootLoader ]]; then
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -- /run/current-system/bin/switch-to-configuration boot
 fi
 
-# Ask the user to set a root password, but only if the passwd command
-# exists (i.e. when mutable user accounts are enabled).
-if [[ -z $noRootPasswd ]] && [ -t 0 ]; then
-    if nixos-enter --root "$mountPoint" -c 'test -e /nix/var/nix/profiles/system/sw/bin/passwd'; then
-        set +e
-        nixos-enter --root "$mountPoint" -c 'echo "setting root password..." && /nix/var/nix/profiles/system/sw/bin/passwd'
-        exit_code=$?
-        set -e
+confirm() {
+    local ans IFS=
+    while read -rp "$1 (Y/n) " -n1 ans; do
+        printf '\n'
+        case $ans in
+            "")   return 0 ;;
+            [Yy]) return 0 ;;
+            [Nn]) return 1 ;;
+        esac
+    done
+}
 
-        if [[ $exit_code != 0 ]]; then
-            echo "Setting a root password failed with the above printed error."
-            echo "You can set the root password manually by executing \`nixos-enter --root ${mountPoint@Q}\` and then running \`passwd\` in the shell of the new system."
-            exit $exit_code
+# Do not ask to set passwords if stdin is unavailable
+if [[ -z $noInteraction && -t 0 ]]; then
+    # Ask the user to set passwords, but only if the passwd command
+    # exists (i.e. when mutable user accounts are enabled).
+    if nixos-enter --root "$mountPoint" -c 'test -e /nix/var/nix/profiles/system/sw/bin/passwd'; then
+
+        # Get users without password.
+        # If `mutableUsers` is `false`, this variable is empty.
+        # If `users-groups.json` doesn't exist or invalid, this variable is set to `root`.
+        usersWithoutPassword=$(jq -Mr '
+            if .mutableUsers then .users else [] end |
+            map(select(
+                (.isNormalUser or .name == "root") and
+                .hashedPassword == null and
+                .initialHashedPassword == null and
+                .initialPassword == null and
+                .password == null and
+                .passwordFile == null)) |
+            .[] | .name' "$mountPoint$(readlink -f $mountPoint$system/users-groups.json)" 2> /dev/null || echo root)
+
+        if [[ ! -z "$usersWithoutPassword" ]]; then
+            passwd_exit_code=0
+
+            echo "Found the following users without passwords:" $usersWithoutPassword
+
+            for user in $usersWithoutPassword; do
+                if [[ -n $noRootPasswd && $user == "root" ]]; then
+                    continue
+                fi
+
+                if ! confirm "Do you want to set password for $user?"; then
+                    continue
+                fi
+
+                set +e
+                nixos-enter --root "$mountPoint" -c "echo \"setting $user password...\" && /nix/var/nix/profiles/system/sw/bin/passwd $user"
+                exit_code=$?
+                set -e
+
+                if [[ $exit_code != 0 ]]; then
+                    echo "Setting a $user password failed with the above printed error."
+                    echo "You can set the $user password manually by executing \`nixos-enter --root ${mountPoint@Q}\` and then running \`passwd $user\` in the shell of the new system."
+                    passwd_exit_code=$exit_code
+                fi
+            done
+
+            if [[ $passwd_exit_code != 0 ]]; then
+                exit $passwd_exit_code
+            fi
         fi
     fi
 fi

@@ -81,6 +81,12 @@
    </arg>
 
    <arg>
+    <arg choice='plain'>
+     <option>--no-interaction</option>
+    </arg>
+   </arg>
+
+   <arg>
     <group choice='req'>
     <arg choice='plain'>
      <option>--max-jobs</option>
@@ -157,7 +163,10 @@
     <listitem>
      <para>
       It prompts you for a password for the root account (unless
-      <option>--no-root-passwd</option> is specified).
+      <option>--no-root-passwd</option> is specified) and for users declared in
+      <literal>configuration.nix</literal>.
+      Password prompts can be entirely disabled via
+      <option>--no-interaction</option>.
      </para>
     </listitem>
    </itemizedlist>
