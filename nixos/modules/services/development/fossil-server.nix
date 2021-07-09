@@ -47,6 +47,12 @@ in
       description = "Comma-separated list of glob patterns for static files";
     };
 
+    localhost = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Listen on 127.0.0.1 only";
+    };
+
     https = mkOption {
       type = types.bool;
       default = false;
@@ -148,6 +154,7 @@ in
         + (optionalString cfg.https "--https ")
         + (optionalString cfg.nossl "--nossl ")
         + (optionalString cfg.repolist "--repolist ")
+        + (optionalString cfg.localhost "--localhost ")
         + "--port ${toString cfg.port} "
         + cfg.repository;
 
