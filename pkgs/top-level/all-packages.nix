@@ -14425,6 +14425,8 @@ in
 
   cmrt = callPackage ../development/libraries/cmrt { };
 
+  coeurl = callPackage ../development/libraries/coeurl { };
+
   cogl = callPackage ../development/libraries/cogl { };
 
   coin3d = callPackage ../development/libraries/coin3d { };

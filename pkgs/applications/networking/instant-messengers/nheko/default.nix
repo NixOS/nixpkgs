@@ -4,6 +4,7 @@
 , fetchpatch
 , cmake
 , cmark
+, coeurl
 , lmdb
 , lmdbxx
 , libsecret
@@ -25,17 +26,23 @@
 , voipSupport ? true
 , gst_all_1
 , libnice
+, libevent
+, curl
+, xorg
+, pcre
+, libunwind
+, elfutils
 }:
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.8.2";
+  version = "0.8.2-git";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
-    rev = "v${version}";
-    sha256 = "sha256-w4l91/W6F1FL+Q37qWSjYRHv4vad/10fxdKwfNeEwgw=";
+    rev = "f5d3804476f8450f96eb54868dab8ea91c9b0930";
+    sha256 = "0irb8ccbc868mh7k244d5almhasqs21945brdbcvy2slbqj4k8dp";
   };
 
   nativeBuildInputs = [
@@ -45,10 +52,17 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    xorg.libXdmcp
+    pcre
+    libunwind
+    elfutils # for libdw
     nlohmann_json
     mtxclient
     olm
     boost17x
+    coeurl
+    curl
+    libevent
     libsecret
     lmdb
     spdlog
@@ -69,8 +83,13 @@ mkDerivation rec {
       libnice
     ]);
 
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace "# Fixup bundled keychain include dirs" "find_package(Boost COMPONENTS iostreams system  thread REQUIRED)"
+  '';
+
   cmakeFlags = [
     "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
+    "-DBUILD_SHARED_LIBS=OFF"
   ];
 
   preFixup = lib.optionalString voipSupport ''
