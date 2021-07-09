@@ -2680,7 +2680,6 @@ broken-packages:
   - language-vhdl
   - language-webidl
   - lapack-ffi
-  - large-hashable
   - Lastik
   - latest-npm-version
   - latex-formulae-image
