@@ -150,6 +150,38 @@ let
     in
       builtins.listToAttrs nameValuePairs;
 
+  # Overrides package definition requiring a home directory to install or to
+  # run tests.
+  # For example,
+  #
+  # overrideRequireHome [
+  #   "foo"
+  # ] old
+  #
+  # results in
+  #
+  # {
+  #   foo = old.foo.overrideAttrs (oldAttrs:  {
+  #     preInstall = ''
+  #       ${oldAttrs.preInstall or ""}
+  #       export HOME=$(mktemp -d)
+  #     '';
+  #   });
+  # }
+  overrideRequireHome = packageNames: old:
+    let
+      nameValuePairs = map (name: {
+        inherit name;
+        value = (builtins.getAttr name old).overrideAttrs (oldAttrs: {
+          preInstall = ''
+            ${oldAttrs.preInstall or ""}
+            export HOME=$(mktemp -d)
+          '';
+        });
+      }) packageNames;
+    in
+      builtins.listToAttrs nameValuePairs;
+
   # Overrides package definition to skip check.
   # For example,
   #
@@ -204,12 +236,13 @@ let
     let old0 = old; in
     let
       old1 = old0 // (overrideRequireX packagesRequiringX old0);
-      old2 = old1 // (overrideSkipCheck packagesToSkipCheck old1);
-      old3 = old2 // (overrideRDepends packagesWithRDepends old2);
-      old4 = old3 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old3);
-      old5 = old4 // (overrideBuildInputs packagesWithBuildInputs old4);
-      old6 = old5 // (overrideBroken brokenPackages old5);
-      old = old6;
+      old2 = old1 // (overrideRequireHome packagesRequiringHome old1);
+      old3 = old2 // (overrideSkipCheck packagesToSkipCheck old2);
+      old4 = old3 // (overrideRDepends packagesWithRDepends old3);
+      old5 = old4 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old4);
+      old6 = old5 // (overrideBuildInputs packagesWithBuildInputs old5);
+      old7 = old6 // (overrideBroken brokenPackages old6);
+      old = old7;
     in old // (otherOverrides old new);
 
   # Recursive override pattern.
@@ -640,11 +673,14 @@ let
     "x12GUI"
   ];
 
+  packagesRequiringHome = [
+    "R_cache"  # tries to write to home folder on check
+  ];
+
   packagesToSkipCheck = [
     "Rmpi"     # tries to run MPI processes
     "pbdMPI"   # tries to run MPI processes
     "data_table" # fails to rename shared library before check
-    "R_cache"  # tries to write to home folder on check
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
