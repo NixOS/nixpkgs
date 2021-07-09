@@ -11,7 +11,7 @@ buildPythonApplication rec {
     owner = "joakimmj";
     repo = "md-tangle";
     rev = "v${version}";
-    sha256 = "1xsqbq7kbgq5r050b07ixfn5v0w61a8nwd9d0vbbyjqgc8i6m6c6"; # Fix
+    sha256 = "1xsqbq7kbgq5r050b07ixfn5v0w61a8nwd9d0vbbyjqgc8i6m6c6";
   };
 
   propagatedBuildInputs = [
@@ -22,6 +22,6 @@ buildPythonApplication rec {
     description = "Generates (\"tangles\") source code from Markdown documents";
     homepage = "https://github.com/joakimmj/md-tangle";
     license = licenses.mit;
-    maintainers = with maintainers; [ womfoo SuperSandro2000 ]; #fix this too
+    maintainers = with maintainers; [ michaelhthomas ];
   };
 }
