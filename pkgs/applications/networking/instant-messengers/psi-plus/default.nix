@@ -11,6 +11,8 @@
 , chatType ? "basic" # See the assertion below for available options
 , qtwebkit
 , qtwebengine
+
+, extraCmakeFlags ? [] # In addition to existing ones
 }:
 
 assert builtins.isBool voiceMessagesSupport;
@@ -35,7 +37,9 @@ mkDerivation rec {
   cmakeFlags = [
     "-DCHAT_TYPE=${chatType}"
     "-DENABLE_PLUGINS=ON"
-  ];
+  ] ++ (
+    assert builtins.all builtins.isString extraCmakeFlags; extraCmakeFlags
+  );
 
   nativeBuildInputs = [ cmake qttools ];
 
