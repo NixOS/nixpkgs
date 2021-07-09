@@ -26327,6 +26327,8 @@ in
 
   pidgin-opensteamworks = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-opensteamworks { };
 
+  pigpio = callPackage ../applications/misc/pigpio { };
+
   purple-facebook = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-facebook { };
 
   pikopixel = callPackage ../applications/graphics/pikopixel { };
