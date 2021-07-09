@@ -15,13 +15,14 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = "lemmy";
-    rev = "3022c00a0bcd421f9732bd307fce804387268b59";
+    rev = version;
     sha256 = "sha256-wDRBeAYjPpAd3DL99fH4Yng994hGmAmxlBqzOeXTP88=";
   };
 
   cargoSha256 = "sha256-7wF5mUjSeJvCNLZcR6XB31RX2RLOOEyTGpOQxg+NcWk=";
 
-  buildInputs = [ postgresql ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ postgresql ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   # Using OPENSSL_NO_VENDOR is not an option on darwin
   # As of version 0.10.35 rust-openssl looks for openssl on darwin
