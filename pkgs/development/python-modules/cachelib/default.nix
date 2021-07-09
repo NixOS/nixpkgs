@@ -1,13 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-xprocess
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "cachelib";
   version = "0.2.0";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-3LX6/mtrVEqqjQyssS1wu/m79ywEHxf8rRYY23vt6to=";
+  src = fetchFromGitHub {
+    owner = "pallets";
+    repo = pname;
+    rev = version;
+    sha256 = "1jh1ghvrv1mnw6mdq19s6x6fblz9qi0vskc6mjp0cxjpnxxblaml";
   };
+
+  checkInputs = [
+    pytest-xprocess
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "cachelib" ];
 
   meta = with lib; {
     homepage = "https://github.com/pallets/cachelib";
