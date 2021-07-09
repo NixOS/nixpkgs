@@ -529,6 +529,7 @@
   ./services/misc/mediatomb.nix
   ./services/misc/metabase.nix
   ./services/misc/mwlib.nix
+  ./services/misc/mx-puppet-discord.nix
   ./services/misc/n8n.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
