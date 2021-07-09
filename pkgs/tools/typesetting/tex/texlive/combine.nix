@@ -38,46 +38,58 @@ let
   mkUniqueOutPaths = pkgs: uniqueStrings
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
-in (buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
-  extraPrefix = "/share/texmf";
+  texmf = (buildEnv {
+    name = "${name}-texmf";
+
+    paths = pkgList.nonbin;
+    extraPrefix = "/share/texmf";
+
+    nativeBuildInputs = [ perl bin.core.out ];
+
+    postBuild =
+    # generate ls-R database
+    ''
+      perl -I "${bin.core.out}/share/texmf-dist/scripts/texlive" \
+        -- "$out/share/texmf/scripts/texlive/mktexlsr.pl" --sort "$out/share/texmf"
+    '' +
+    # link info and man pages
+    ''
+      for d in {info,man}; do
+        [[ -e "$out/share/texmf/doc/$d" ]] && ln -s "texmf/doc/$d" "$out/share/$d"
+      done
+    '';
+  }).overrideAttrs (_: { allowSubstitutes = true; });
+
+in (buildEnv {
+  inherit name;
 
   ignoreCollisions = false;
-  paths = pkgList.nonbin;
+  paths = pkgList.bin ++ [ texmf ];
   pathsToLink = [
     "/"
-    "/tex/generic/config" # make it a real directory for scheme-infraonly
+    "/share/texmf-var" # ensure these are writeable directories and not symlinks
+    "/share/texmf-var/scripts"
+    "/share/texmf-var/web2c"
+    "/share/texmf-var/tex/generic/config"
+    "/share/texmf-dist"
+    "/share/texmf-local"
   ];
 
-  buildInputs = [ makeWrapper ] ++ pkgList.extraInputs;
+  buildInputs = [ makeWrapper perl ] ++ pkgList.extraInputs;
 
   # This is set primarily to help find-tarballs.nix to do its job
   passthru.packages = pkgList.all;
 
   postBuild = ''
     cd "$out"
-    mkdir -p ./bin
-  '' +
-    lib.concatMapStrings
-      (path: ''
-        for f in '${path}'/bin/*; do
-          if [[ -L "$f" ]]; then
-            cp -d "$f" ./bin/
-          else
-            ln -s "$f" ./bin/
-          fi
-        done
-      '')
-      pkgList.bin
-    +
-  ''
-    export PATH="$out/bin:$out/share/texmf/scripts/texlive:${perl}/bin:$PATH"
-    export TEXMFCNF="$out/share/texmf/web2c"
-    export TEXMFDIST="$out/share/texmf"
+    export TEXMFDIST="${texmf}/share/texmf"
+    export PATH="$out/bin:$TEXMFDIST/scripts/texlive:$PATH"
     export TEXMFSYSCONFIG="$out/share/texmf-config"
     export TEXMFSYSVAR="$out/share/texmf-var"
-    export PERL5LIB="$out/share/texmf/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
+    export TEXMFCNF="$TEXMFSYSVAR/web2c"
+    export PERL5LIB="$TEXMFDIST/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
   '' +
     # patch texmf-dist  -> $out/share/texmf
     # patch texmf-local -> $out/share/texmf-local
@@ -85,39 +97,34 @@ in (buildEnv {
     # tried inspiration from install-tl, sub do_texmf_cnf
   ''
     patchCnfLua() {
-      local cnfLua="$1"
+      local cnfLua="$TEXMFDIST/web2c/texmfcnf.lua"
 
       if [ -e "$cnfLua" ]; then
-        local cnfLuaOrig="$(realpath "$cnfLua")"
-        rm ./texmfcnf.lua
         sed \
-          -e 's,texmf-dist,texmf,g' \
           -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
+          -e "s,\(TEXMFDIST[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFDIST\",g" \
           -e "s,\$SELFAUTOLOC,$out,g" \
           -e "s,selfautodir:/,$out/share/,g" \
           -e "s,selfautodir:,$out/share/,g" \
           -e "s,selfautoparent:/,$out/share/,g" \
           -e "s,selfautoparent:,$out/share/,g" \
-          "$cnfLuaOrig" > "$cnfLua"
+          "$cnfLua" > ./texmfcnf.lua
       fi
     }
 
     (
-      cd ./share/texmf/web2c/
-      local cnfOrig="$(realpath ./texmf.cnf)"
-      rm ./texmf.cnf
+      cd "$TEXMFSYSVAR/web2c/"
+      local cnf="$TEXMFDIST/web2c/texmf.cnf"
       sed \
-        -e 's,texmf-dist,texmf,g' \
+        -e "s,\(TEXMFDIST[ ]*=[ ]*\)[^\,]*,\1$TEXMFDIST,g" \
         -e "s,\$SELFAUTOLOC,$out,g" \
         -e "s,\$SELFAUTODIR,$out/share,g" \
         -e "s,\$SELFAUTOPARENT,$out/share,g" \
         -e "s,\$SELFAUTOGRANDPARENT,$out/share,g" \
         -e "/^mpost,/d" `# CVE-2016-10243` \
-        "$cnfOrig" > ./texmf.cnf
+        "$cnf" > ./texmf.cnf
 
-      patchCnfLua "./texmfcnf.lua"
-
-      mkdir $out/share/texmf-local
+      patchCnfLua
     )
   '' +
     # now filter hyphenation patterns, in a hacky way ATM
@@ -132,12 +139,11 @@ in (buildEnv {
       );
   in ''
     (
-      cd ./share/texmf/tex/generic/config/
+      cd "$TEXMFSYSVAR/tex/generic/config/"
       for fname in language.dat language.def; do
-        [ -e $fname ] || continue;
-        cnfOrig="$(realpath ./$fname)"
-        rm ./$fname
-        cat "$cnfOrig" | sed -n -f '${script}' > ./$fname
+        local cnf="$TEXMFDIST/tex/generic/config/$fname"
+        [ -e "$cnf" ] || continue;
+        cat "$cnf" | sed -n -f '${script}' > "./$fname"
       done
     )
   '') +
@@ -188,17 +194,16 @@ in (buildEnv {
   # texlive post-install actions
   ''
     for tool in updmap; do
-      ln -sf "$out/share/texmf/scripts/texlive/$tool."* "$out/bin/$tool"
+      ln -sf "$TEXMFDIST/scripts/texlive/$tool."* "$out/bin/$tool"
     done
   '' +
     # now hack to preserve "$0" for mktexfmt
   ''
-    cp "$out"/share/texmf/scripts/texlive/fmtutil.pl "$out/bin/fmtutil"
+    cp "$TEXMFDIST"/scripts/texlive/fmtutil.pl "$out/bin/fmtutil"
     patchShebangs "$out/bin/fmtutil"
-    sed "1s|$| -I $out/share/texmf/scripts/texlive|" -i "$out/bin/fmtutil"
+    sed "1s|$| -I $TEXMFDIST/scripts/texlive|" -i "$out/bin/fmtutil"
     ln -sf fmtutil "$out/bin/mktexfmt"
 
-    perl `type -P mktexlsr.pl` ./share/texmf
     ${bin.texlinks} "$out/bin" && wrapBin
     (perl `type -P fmtutil.pl` --sys --all || true) | grep '^fmtutil' # too verbose
     #${bin.texlinks} "$out/bin" && wrapBin # do we need to regenerate format links?
@@ -208,12 +213,12 @@ in (buildEnv {
     # Regenerate the map files (this is optional)
     perl `type -P updmap.pl` --sys --force
 
-    perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
+    perl -- `type -P mktexlsr.pl` --sort ./share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
   ''
     (
-      cd "$out/share/texmf/scripts"
+      cd "$TEXMFDIST/scripts"
       source '${bin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
       for s in $texmf_scripts; do
         [[ -x "./$s" ]] || continue
@@ -228,8 +233,8 @@ in (buildEnv {
     #  * ./bin/repstopdf needs to be a symlink to be processed by wrapBin
   ''
     if [[ -e ./bin/epstopdf ]]; then
-      cp $(realpath ./bin/epstopdf) ./share/texmf/scripts/repstopdf
-      ln -s "$out"/share/texmf/scripts/repstopdf ./bin/repstopdf
+      cp $(realpath ./bin/epstopdf) "$TEXMFSYSVAR/scripts/repstopdf"
+      ln -s "$TEXMFSYSVAR/scripts/repstopdf" ./bin/repstopdf
     fi
   '' +
     # finish up the wrappers
@@ -249,18 +254,6 @@ in (buildEnv {
   # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
     # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29
 
-    # I would just create links from "$out"/share/{man,info},
-    #   but buildenv has problems with merging symlinks with directories;
-    #   note: it's possible we might need deepen the work-around to man/*.
-  ''
-    for d in {man,info}; do
-      [[ -e "./share/texmf/doc/$d" ]] || continue;
-      (
-        mkdir -p "./share/$d" && cd "./share/$d"
-        ln -s -t . ../texmf/doc/"$d"/*
-      )
-    done
-  '' +
   # MkIV uses its own lookup mechanism and we need to initialize
   # caches for it. Unsetting TEXMFCNF is needed to let mtxrun
   # determine it from kpathsea so that the config path is given with
