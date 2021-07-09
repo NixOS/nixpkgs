@@ -63,17 +63,25 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         return "su - ${user} -c " + shlex.quote(cmd)
 
 
-    def get_browser_binary():
-        """Returns the name of the browser binary."""
+    def get_browser_call():
+        """Returns the name of the browser binary as well as CLI options."""
+        # Determine the name of the binary:
         pname = "${getName chromiumPkg.name}"
         if pname.find("chromium") != -1:
-            return "chromium"  # Same name for all channels and ungoogled-chromium
-        if pname == "google-chrome":
-            return "google-chrome-stable"
-        if pname == "google-chrome-dev":
-            return "google-chrome-unstable"
-        # For google-chrome-beta and as fallback:
-        return pname
+            binary = "chromium"  # Same name for all channels and ungoogled-chromium
+        elif pname == "google-chrome":
+            binary = "google-chrome-stable"
+        elif pname == "google-chrome-dev":
+            binary = "google-chrome-unstable"
+        else:  # For google-chrome-beta and as fallback:
+            binary = pname
+        # Add optional CLI options:
+        options = ""
+        major_version = "${versions.major (getVersion chromiumPkg.name)}"
+        if major_version > "91":
+            # To avoid a GPU crash:
+            options += "--use-gl=angle --use-angle=swiftshader"
+        return f"{binary} {options}"
 
 
     def create_new_win():
@@ -135,9 +143,9 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
     machine.wait_for_x()
 
     url = "file://${startupHTML}"
-    machine.succeed(ru(f'ulimit -c unlimited; "{get_browser_binary()}" "{url}" & disown'))
+    machine.succeed(ru(f'ulimit -c unlimited; {get_browser_call()} "{url}" & disown'))
 
-    if get_browser_binary().startswith("google-chrome"):
+    if get_browser_call().startswith("google-chrome"):
         # Need to click away the first window:
         machine.wait_for_text("Make Google Chrome the default browser")
         machine.screenshot("google_chrome_default_browser_prompt")
