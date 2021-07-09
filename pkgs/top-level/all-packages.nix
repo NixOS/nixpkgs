@@ -24347,6 +24347,8 @@ in
 
   rhvoice = callPackage ../applications/audio/rhvoice { };
 
+  skipper = callPackage ../applications/editors/inventic/skipper.nix { };
+
   svox = callPackage ../applications/audio/svox { };
 
   giada = callPackage ../applications/audio/giada {};
