@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -11,6 +12,12 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-rEANZyuJVLAwa8qJCwiLuLoqdX3IEzzKC4ePNLM7J0A=";
   };
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "geographiclib" ];
 
   meta = with lib; {
     homepage = "https://geographiclib.sourceforge.io";
