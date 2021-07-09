@@ -22871,6 +22871,8 @@ in
 
   ahoviewer = callPackage ../applications/graphics/ahoviewer { };
 
+  airwindows = callPackage ../applications/audio/airwindows { };
+
   airwave = callPackage ../applications/audio/airwave { qt5 = qt514; };
 
   akira-unstable = callPackage ../applications/graphics/akira { };
