@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cachelib";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "47e95a67d68c729cbad63285a790a06f0e0d27d71624c6e44c1ec3456bb4476f";
+    sha256 = "sha256-3LX6/mtrVEqqjQyssS1wu/m79ywEHxf8rRYY23vt6to=";
   };
 
   meta = with lib; {
