@@ -29020,6 +29020,8 @@ in
 
   pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
 
+  powermanga = callPackage ../games/powermanga { };
+
   prboom = callPackage ../games/prboom { };
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
