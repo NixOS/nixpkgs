@@ -13828,6 +13828,8 @@ in
 
   mbed-cli = callPackage ../development/tools/mbed-cli { };
 
+  md-tangle = callPackage ../development/tools/md-tangle { };
+
   mdl = callPackage ../development/tools/misc/mdl { };
 
   python-language-server = callPackage ../development/dotnet-modules/python-language-server {
