@@ -188,6 +188,7 @@
 , "poor-mans-t-sql-formatter-cli"
 , "postcss-cli"
 , "prettier"
+, "prettier-plugin-toml"
 , "pscid"
 , "pulp"
 , "purescript-language-server"

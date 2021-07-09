@@ -29592,6 +29592,10 @@ in
     gtk = gtk2;
   };
 
+  arcan = recurseIntoAttrs (callPackage ../desktops/arcan {
+    callPackage = newScope pkgs.arcan;
+  });
+
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
@@ -31686,6 +31690,9 @@ in
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
+
+  vikunja-api = callPackage ../servers/web-apps/vikunja/api.nix { };
+  vikunja-frontend = callPackage ../servers/web-apps/vikunja/frontend.nix { };
 
   vips = callPackage ../tools/graphics/vips {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
