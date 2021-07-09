@@ -8266,6 +8266,8 @@ in
 
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
+  qusb2snes = libsForQt5.callPackage ../applications/networking/qusb2snes { };
+
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
 
   qview = libsForQt5.callPackage ../applications/graphics/qview {};
