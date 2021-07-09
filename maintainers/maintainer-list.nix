@@ -9644,6 +9644,16 @@
     githubId = 819413;
     name = "Benedict Aas";
   };
+  shreerammodi = {
+    name = "Shreeram Modi";
+    email = "shreerammodi10@gmail.com";
+    github = "Shrimpram";
+    githubId = 67710369;
+    keys = [{
+      longkeyid = "rsa4096/0x163B16EE76ED24CE";
+      fingerprint = "EA88 EA07 26E9 6CBF 6365  3966 163B 16EE 76ED 24CE";
+    }];
+  };
   shyim = {
     email = "s.sayakci@gmail.com";
     github = "shyim";
