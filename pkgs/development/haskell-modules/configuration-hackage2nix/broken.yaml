@@ -91,6 +91,7 @@ broken-packages:
   - Agata
   - agda-language-server
   - agda-snippets
+  - agda-unused
   - AGI
   - ag-pictgen
   - AhoCorasick
@@ -661,6 +662,7 @@ broken-packages:
   - clock-extras
   - clogparse
   - clone-all
+  - closed-intervals
   - closure
   - cloudfront-signer
   - clr-inline
@@ -1778,6 +1780,7 @@ broken-packages:
   - hakismet
   - hakka
   - hako
+  - hakyll-agda
   - hakyll-blaze-templates
   - hakyll-contrib
   - hakyll-contrib-csv
@@ -2382,6 +2385,7 @@ broken-packages:
   - hw-json-simd
   - hw-mquery
   - hworker
+  - hw-prim-bits
   - hw-simd
   - hwsl2
   - hx
@@ -2676,6 +2680,7 @@ broken-packages:
   - language-vhdl
   - language-webidl
   - lapack-ffi
+  - large-hashable
   - Lastik
   - latest-npm-version
   - latex-formulae-image
@@ -3108,6 +3113,7 @@ broken-packages:
   - MuCheck
   - mud
   - muesli
+  - mu-graphql
   - mulang
   - multext-east-msd
   - multiaddr
@@ -3266,6 +3272,8 @@ broken-packages:
   - np-extras
   - np-linear
   - nptools
+  - nri-kafka
+  - nri-postgresql
   - ntp-control
   - ntrip-client
   - n-tuple
@@ -3941,6 +3949,7 @@ broken-packages:
   - rei
   - reified-records
   - reify
+  - rel8
   - relacion
   - relapse
   - relational-postgresql8
@@ -4508,6 +4517,7 @@ broken-packages:
   - streamdeck
   - streamed
   - stream-fusion
+  - streaming-benchmarks
   - streaming-conduit
   - streaming-events
   - streaming-lzma
@@ -4535,6 +4545,7 @@ broken-packages:
   - stripe-http-streams
   - stripe-signature
   - stripe-tests
+  - strong-path
   - strongswan-sql
   - structural-traversal
   - structures
