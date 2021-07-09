@@ -581,7 +581,17 @@ rec {
       in
       mkOptionType rec {
         name = "enum";
-        description = "one of ${concatMapStringsSep ", " show values}";
+        description =
+          # Length 0 or 1 enums may occur in a design pattern with type merging
+          # where an "interface" module declares an empty enum and other modules
+          # provide implementations, each extending the enum with their own
+          # identifier.
+          if values == [] then
+            "impossible (empty enum)"
+          else if builtins.length values == 1 then
+            "value ${show (builtins.head values)} (singular enum)"
+          else
+            "one of ${concatMapStringsSep ", " show values}";
         check = flip elem values;
         merge = mergeEqualOption;
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
