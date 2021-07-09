@@ -32272,4 +32272,6 @@ in
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  md-tangle = callPackage ../development/tools/md-tangle { };
 }
