@@ -10,6 +10,11 @@
     sha256 = "1rjdxd4fq5z3n51qx8vrcaf4i277ccc62jxk88xzbsxapdmjjdf9";
   })
   (fetchNuGet {
+    name = "CommandLineParser";
+    version = "2.8.0";
+    sha256 = "1m32xyilv2b7k55jy8ddg08c20glbcj2yi545kxs9hj2ahanhrbb";
+  })
+  (fetchNuGet {
     name = "Concentus";
     version = "1.1.7";
     sha256 = "0y5z444wrbhlmsqpy2sxmajl1fbf74843lvgj3y6vz260dn2q0l0";
@@ -260,11 +265,6 @@
     sha256 = "0dkl9j0yd65s5ds9xj5z6yb7yca7wlycqz25m8dng20d13sqr1zp";
   })
   (fetchNuGet {
-    name = "ppy.SDL2-CS";
-    version = "1.0.225-alpha";
-    sha256 = "1x8hvk9kikwi7wrvwxdxk3pkbs491iss2mvqgiw844zld5izihqc";
-  })
-  (fetchNuGet {
     name = "runtime.any.System.Collections";
     version = "4.3.0";
     sha256 = "0bv5qgm6vr47ynxqbnkc7i797fdi8gbjjxii173syrx14nmrkwg0";
@@ -513,6 +513,11 @@
     name = "Ryujinx.Graphics.Nvdec.Dependencies";
     version = "4.4.0-build7";
     sha256 = "0g1l3lgs0ffxp64ka81v6q1cgsdirl1qlf73255v29r3v337074m";
+  })
+  (fetchNuGet {
+    name = "Ryujinx.SDL2-CS";
+    version = "2.0.15-build11";
+    sha256 = "0s4h69l2b508l5wxp4v4ip8k83k78p3963xxv8bfamin9517przi";
   })
   (fetchNuGet {
     name = "SharpZipLib";
