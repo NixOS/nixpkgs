@@ -236,15 +236,13 @@ in
         if ! [ -f "/etc/bind/rndc.key" ]; then
           ${pkgs.bind.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
         fi
-
-        ${pkgs.coreutils}/bin/mkdir -p /run/named
-        chown root:${bindGroup} /run/named
       '';
 
       serviceConfig = {
         ExecStart = "${pkgs.bind.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
         ExecReload = "${pkgs.bind.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
         ExecStop = "${pkgs.bind.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
+        RuntimeDirectory = "${bindGroup}";
       };
 
       unitConfig.Documentation = "man:named(8)";
