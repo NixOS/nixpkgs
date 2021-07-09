@@ -24054,6 +24054,8 @@ in
 
   fbida = callPackage ../applications/graphics/fbida { };
 
+  fcp = callPackage ../tools/misc/fcp { };
+
   fdupes = callPackage ../tools/misc/fdupes { };
 
   feh = callPackage ../applications/graphics/feh { };
