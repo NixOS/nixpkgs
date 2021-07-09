@@ -285,6 +285,10 @@ in {
     pytestCheckHook = self.pytestCheckHook_6_1;
   };
 
+  aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec {
+    webargs = self.webargs5;
+  };
+
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
@@ -478,6 +482,8 @@ in {
   apipkg = callPackage ../development/python-modules/apipkg { };
 
   apispec = callPackage ../development/python-modules/apispec { };
+
+  apispec3 = callPackage ../development/python-modules/apispec/3.nix { };
 
   aplpy = callPackage ../development/python-modules/aplpy { };
 
@@ -9030,6 +9036,10 @@ in {
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
+  webargs = callPackage ../development/python-modules/webargs { };
+
+  webargs5 = callPackage ../development/python-modules/webargs/5.nix { };
+
   webapp2 = callPackage ../development/python-modules/webapp2 { };
 
   webassets = callPackage ../development/python-modules/webassets { };
@@ -9047,8 +9057,6 @@ in {
   webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
 
   webhelpers = callPackage ../development/python-modules/webhelpers { };
-
-  webargs = callPackage ../development/python-modules/webargs { };
 
   webob = callPackage ../development/python-modules/webob { };
 
