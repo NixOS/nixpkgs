@@ -203,7 +203,7 @@ let
   defaultOverrides = old: new:
     let old0 = old; in
     let
-      old1 = old0 // (overrideRequireX packagesRequireingX old0);
+      old1 = old0 // (overrideRequireX packagesRequiringX old0);
       old2 = old1 // (overrideSkipCheck packagesToSkipCheck old1);
       old3 = old2 // (overrideRDepends packagesWithRDepends old2);
       old4 = old3 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old3);
@@ -452,7 +452,7 @@ let
     statmod = [ pkgs.libiconv ];
   };
 
-  packagesRequireingX = [
+  packagesRequiringX = [
     "accrual"
     "ade4TkGUI"
     "analogue"
