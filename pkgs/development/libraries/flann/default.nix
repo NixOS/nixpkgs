@@ -1,39 +1,48 @@
 { lib
-, stdenv
+, cmake
 , fetchFromGitHub
 , fetchpatch
-, unzip
-, cmake
-, python ? null
 , lz4
 , pkg-config
+, stdenv
+, unzip
 , enablePython ? false
 }:
 
-assert enablePython -> python != null;
+let
+  pname = "flann";
+  version = "1.9.1";
 
-stdenv.mkDerivation {
-  name = "flann-1.9.1";
+in stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "flann-lib";
     repo = "flann";
-    rev = "1.9.1";
+    rev = version;
     sha256 = "13lg9nazj5s9a41j61vbijy04v6839i67lqd925xmxsbybf36gjc";
   };
 
   patches = [
+    # Patch HDF5_INCLUDE_DIR -> HDF_INCLUDE_DIRS.
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-Updated-fix-cmake-hdf5.patch";
       sha256 = "yM1ONU4mu6lctttM5YcSTg8F344TNUJXwjxXLqzr5Pk=";
     })
+    # Patch no-source library workaround that breaks on CMake > 3.11.
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-src-cpp-fix-cmake-3.11-build.patch";
       sha256 = "REsBnbe6vlrZ+iCcw43kR5wy2o6q10RM73xjW5kBsr4=";
     })
+    # Avoid the bundled version of LZ4 and instead use the system one.
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0003-Use-system-version-of-liblz4.patch";
       sha256 = "xi+GyFn9PEjLgbJeAIEmsbp7ut9G9KIBkVulyT3nfsg=";
+    })
+    # Fix LZ4 string separator issue, see: https://github.com/flann-lib/flann/pull/480
+    (fetchpatch {
+      url = "https://github.com/flann-lib/flann/commit/25eb56ec78472bd419a121c6905095a793cf8992.patch";
+      sha256 = "qt8h576Gn8uR7+T9u9bEBIRz6e6AoTKpa1JfdZVvW9s=";
     })
   ];
 
@@ -45,12 +54,10 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    unzip
     cmake
     pkg-config
+    unzip
   ];
-
-  buildInputs = [] ++ lib.optionals enablePython [ python ];
 
   propagatedBuildInputs = [ lz4 ];
 
