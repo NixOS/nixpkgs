@@ -28,7 +28,9 @@ let
 
     TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
-  // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
+  // (if cfg.redis.enableUnixSocket then { REDIS_URL = "unix://${config.services.redis.unixSocket}"; } else {})
+  // (if cfg.redis.nameSpace != null then { REDIS_NAMESPACE = cfg.redis.nameSpace; } else {})
+  // (if cfg.smtp.authenticate then { SMTP_LOGIN = cfg.smtp.user; } else {})
   // cfg.extraConfig;
 
   systemCallsList = [ "@clock" "@cpu-emulation" "@debug" "@keyring" "@module" "@mount" "@obsolete" "@raw-io" "@reboot" "@setuid" "@swap" ];
@@ -258,6 +260,22 @@ in {
           description = "Redis port.";
           type = lib.types.port;
           default = 6379;
+        };
+
+        enableUnixSocket = lib.mkOption {
+          description = "Use Unix socket";
+          type = lib.types.bool;
+          default = true;
+        };
+
+        nameSpace = lib.mkOption {
+          description = ''
+            If provided, namespaces all Redis keys. This allows sharing the same Redis database between
+            different projects or Mastodon servers.
+          '';
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "my_mastodon";
         };
       };
 
@@ -566,9 +584,15 @@ in {
     services.postfix = lib.mkIf (cfg.smtp.createLocally && cfg.smtp.host == "127.0.0.1") {
       enable = true;
     };
-    services.redis = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
-      enable = true;
-    };
+    services.redis = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") (lib.mkMerge [
+      ({
+        enable = true;
+      })
+      (lib.mkIf cfg.redis.enableUnixSocket {
+        unixSocket = "/run/redis/redis.sock";
+        unixSocketPerm = 770;
+      })
+    ]);
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = [
@@ -589,6 +613,7 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package mastodonEnv ])
+      (lib.mkIf cfg.redis.enableUnixSocket {${config.services.mastodon.user}.extraGroups = [ "redis" ];})
     ];
 
     users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;
