@@ -30,19 +30,33 @@ let
   # mounting `/`, like `/` on a loopback).
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
-  # A utility for enumerating the shared-library dependencies of a program
-  findLibs = pkgs.buildPackages.callPackage ./find-libs.nix {};
-
   extraUnitsObjects = map (u: { object = u; }) (builtins.attrValues config.boot.initrd.extraUnits
     ++ lib.concatLists (lib.mapAttrsToList (_: builtins.attrValues) config.boot.initrd.unitOverrides));
   systemdUnits = pkgs.callPackage ./systemd-units.nix {
     inherit systemd;
     inherit (config.boot.initrd) extraUnits unitOverrides;
+    systemdPackages = config.boot.initrd.systemd.packages;
   };
 
   fstab = pkgs.writeText "fstab" (lib.concatMapStringsSep "\n"
     ({ fsType, mountPoint, device, options, ... }:
       "${device} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," options}") fileSystems);
+
+  groups = [
+    "root"
+    "tty"
+    "dialout"
+    "kmem"
+    "input"
+    "video"
+    "render"
+    "audio"
+    "lp"
+    "disk"
+    "cdrom"
+    "tape"
+    "kvm"
+  ];
 
   initrdUdevRules = pkgs.runCommandNoCC "udev-rules" { udevPackages = [ systemd pkgs.lvm2 ]; } ''
     mkdir -p $out/lib/udev
