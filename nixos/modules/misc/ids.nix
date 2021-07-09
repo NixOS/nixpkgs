@@ -406,7 +406,7 @@ in
       mpd = 50;
       clamav = 51;
       fprot = 52;
-      #bind = 53; # unused
+      bind = 53; # unused
       wwwrun = 54;
       adm = 55;
       spamd = 56;
