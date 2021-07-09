@@ -4,6 +4,7 @@
 , fetchpatch
 , lz4
 , pkg-config
+, python3
 , stdenv
 , unzip
 , enablePython ? false
@@ -60,6 +61,8 @@ in stdenv.mkDerivation {
   ];
 
   propagatedBuildInputs = [ lz4 ];
+
+  buildInputs = lib.optionals enablePython [ python3 ];
 
   meta = {
     homepage = "http://people.cs.ubc.ca/~mariusm/flann/";
