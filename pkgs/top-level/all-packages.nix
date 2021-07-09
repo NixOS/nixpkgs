@@ -19513,6 +19513,10 @@ in
 
   leafnode = callPackage ../servers/news/leafnode { };
 
+  lemmy = callPackage ../servers/web-apps/lemmy {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   lighttpd = callPackage ../servers/http/lighttpd { };
 
   livepeer = callPackage ../servers/livepeer { };
