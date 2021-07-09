@@ -28347,6 +28347,10 @@ in
     boost = boost17x;
   };
 
+  oxen = callPackage ../applications/blockchains/oxen {
+    boost = boost17x;
+  };
+
   monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
     boost = boost17x;
   };
