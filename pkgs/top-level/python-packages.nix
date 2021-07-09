@@ -4888,6 +4888,8 @@ in {
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
+  python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oath = callPackage ../development/python-modules/oath { };
