@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ pythonPackages.pycrypto pythonPackages.distorm3 ];
+  propagatedBuildInputs = [ pythonPackages.pycrypto pythonPackages.distorm3 pythonPackages.pillow ];
 
   meta = with lib; {
     homepage = "https://www.volatilityfoundation.org/";
