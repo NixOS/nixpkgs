@@ -1,14 +1,16 @@
-diff --git i/libtiff/CMakeLists.txt w/libtiff/CMakeLists.txt
-index 90105b28..340c75cf 100755
---- i/libtiff/CMakeLists.txt
-+++ w/libtiff/CMakeLists.txt
-@@ -31,6 +31,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
-                @ONLY)
+diff --git i/libtiff/Makefile.am w/libtiff/Makefile.am
+index 44522b62..d66e5948 100644
+--- i/libtiff/Makefile.am
++++ w/libtiff/Makefile.am
+@@ -36,8 +36,11 @@ EXTRA_DIST = \
+ 	tiffconf.h.cmake.in
  
- set(tiff_public_HEADERS
-+        tiffiop.h
-+        ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h
-+        tif_dir.h
-         tiff.h
-         tiffio.h
-         tiffvers.h
+ libtiffinclude_HEADERS = \
++	tif_config.h \
++	tif_dir.h \
+ 	tiff.h \
+ 	tiffio.h \
++	tiffiop.h \
+ 	tiffvers.h
+ 
+ if HAVE_CXX
