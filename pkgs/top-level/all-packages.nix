@@ -13813,6 +13813,8 @@ in
       stdenv = overrideCC stdenv llvmPackages_latest.clang;
     });
 
+  malt = callPackage ../development/tools/profiling/malt {};
+
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
   mastodon-archive = callPackage ../tools/backup/mastodon-archive { };
