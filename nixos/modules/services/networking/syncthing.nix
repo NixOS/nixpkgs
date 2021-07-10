@@ -47,7 +47,10 @@ let
     # generate the new config by merging with the nixos config options
     NEW_CFG=$(echo "$OLD_CFG" | ${pkgs.jq}/bin/jq -s '.[] as $in | $in * {
       "devices": (${builtins.toJSON devices}${optionalString (! cfg.declarative.overrideDevices) " + $in.devices"}),
-      "folders": (${builtins.toJSON folders}${optionalString (! cfg.declarative.overrideFolders) " + $in.folders"})
+      "folders": (${builtins.toJSON folders}${optionalString (! cfg.declarative.overrideFolders) " + $in.folders"}),
+      ${optionalString (cfg.username != null && cfg.hashedPassword != null) ''
+        "gui": ($in.gui + {"user": "${cfg.username}", "password": "${cfg.hashedPassword}"}),
+      ''}
     }')
 
     # POST the new config to syncthing
@@ -347,6 +350,29 @@ in {
         description = ''
           Address to serve the GUI.
         '';
+      };
+
+      username = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Username used for logging into the GUI.
+          Uses imperative setup if set to null.
+        '';
+      };
+
+      hashedPassword = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          bcrypt hash of the password used for logging into the GUI.
+          Uses imperative setup if set to null.
+
+          To obtain the bcrypt hash of your password run:
+          $ nix-shell -p 'python3.withPackages (ps: with ps; [bcrypt])'
+          impure $ python -c 'import bcrypt; print(bcrypt.hashpw(b"PASSWORD", bcrypt.gensalt(rounds=15)).decode("ascii"))'
+        '';
+        # Source: https://unix.stackexchange.com/questions/307994/compute-bcrypt-hash-from-command-line
       };
 
       systemService = mkOption {
