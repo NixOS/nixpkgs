@@ -8365,6 +8365,8 @@ in
 
   qt-box-editor = libsForQt5.callPackage ../applications/misc/qt-box-editor { };
 
+  realmd = callPackage ../os-specific/linux/realmd { };
+
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = libsForQt5.callPackage ../applications/search/recoll { };
