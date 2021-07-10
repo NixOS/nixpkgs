@@ -7,12 +7,18 @@
 }:
 
 let
+  inherit (buildPackages.buildPackages) rsync;
+
   fetchNetBSD = path: version: sha256: fetchcvs {
     cvsRoot = ":pserver:anoncvs@anoncvs.NetBSD.org:/cvsroot";
     module = "src/${path}";
     inherit sha256;
     tag = "netbsd-${lib.replaceStrings ["."] ["-"] version}-RELEASE";
   };
+
+  netbsdSetupHook = makeSetupHook {
+    name = "netbsd-setup-hook";
+  } ./setup-hook.sh;
 
   otherSplices = {
     selfBuildBuild = pkgsBuildBuild.netbsd;
@@ -58,9 +64,9 @@ in lib.makeScopeWithSplicing
     extraPaths = [ ];
 
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
-      install tsort lorder mandoc groff statHook
+      install tsort lorder mandoc groff statHook rsync
     ];
     buildInputs = with self; compatIfNeeded;
 
@@ -116,7 +122,7 @@ in lib.makeScopeWithSplicing
     version = "9.2";
 
     buildInputs = with self; [];
-    nativeBuildInputs = with buildPackages.netbsd; [ bsdSetupHook ];
+    nativeBuildInputs = with buildPackages.netbsd; [ bsdSetupHook netbsdSetupHook rsync ];
 
     skipIncludesPhase = true;
 
@@ -124,6 +130,7 @@ in lib.makeScopeWithSplicing
       patchShebangs configure
       ${self.make.postPatch}
     '';
+
     buildPhase = ''
       runHook preBuild
 
@@ -131,6 +138,7 @@ in lib.makeScopeWithSplicing
 
       runHook postBuild
     '';
+
     installPhase = ''
       runHook preInstall
 
@@ -141,6 +149,7 @@ in lib.makeScopeWithSplicing
 
       runHook postInstall
     '';
+
     extraPaths = with self; [ make.src ] ++ make.extraPaths;
   };
 
@@ -163,8 +172,9 @@ in lib.makeScopeWithSplicing
     HOST_CC = "${buildPackages.stdenv.cc.targetPrefix}cc";
 
     nativeBuildInputs = with buildPackages.netbsd; commonDeps ++ [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
+      rsync
     ];
 
     buildInputs = with self; commonDeps;
@@ -235,9 +245,9 @@ in lib.makeScopeWithSplicing
     sha256 = "1f6pbz3qv1qcrchdxif8p5lbmnwl8b9nq615hsd3cyl4avd5bfqj";
     extraPaths = with self; [ mtree.src make.src ];
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
-      mandoc groff
+      mandoc groff rsync
     ];
     skipIncludesPhase = true;
     buildInputs = with self; compatIfNeeded ++ [ fts ];
@@ -259,7 +269,7 @@ in lib.makeScopeWithSplicing
     sha256 = "01d4fpxvz1pgzfk5xznz5dcm0x0gdzwcsfm1h3d0xc9kc6hj2q77";
     version = "9.2";
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook rsync
     ];
     propagatedBuildInputs = with self; compatIfNeeded;
     extraPaths = with self; [
@@ -295,9 +305,9 @@ in lib.makeScopeWithSplicing
     version = "9.2";
     sha256 = "18nqwlndfc34qbbgqx5nffil37jfq9aw663ippasfxd2hlyc106x";
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
-      install mandoc groff
+      install mandoc groff rsync
     ];
   };
 
@@ -317,9 +327,9 @@ in lib.makeScopeWithSplicing
     version = "9.2";
     sha256 = "1dqvf9gin29nnq3c4byxc7lfd062pg7m84843zdy6n0z63hnnwiq";
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
-      install mandoc groff
+      install mandoc groff rsync
     ];
   };
 
@@ -328,9 +338,9 @@ in lib.makeScopeWithSplicing
     version = "9.2";
     sha256 = "0rjf9blihhm0n699vr2bg88m4yjhkbxh6fxliaay3wxkgnydjwn2";
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
-      install mandoc groff
+      install mandoc groff rsync
     ];
   };
   ##
@@ -430,7 +440,7 @@ in lib.makeScopeWithSplicing
     HOSTPROG = "tic";
     buildInputs = with self; compatIfNeeded;
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
       install mandoc groff nbperf
     ];
@@ -462,8 +472,8 @@ in lib.makeScopeWithSplicing
     sha256 = "1yz3n4hncdkk6kp595fh2q5lg150vpqg8iw2dccydkyw4y3hgsjj";
     NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
-      makeMinimal install mandoc byacc flex
+      bsdSetupHook netbsdSetupHook
+      makeMinimal install mandoc byacc flex rsync
     ];
     buildInputs = with self; compatIfNeeded;
     extraPaths = with self; [ cksum.src ];
@@ -480,9 +490,9 @@ in lib.makeScopeWithSplicing
     version = "9.2";
     sha256 = "0nxnmj4c8s3hb9n3fpcmd0zl3l1nmhivqgi9a35sis943qvpgl9h";
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
-      install mandoc groff nbperf rpcgen
+      install mandoc groff rsync nbperf rpcgen
     ];
     extraPaths = with self; [ common ];
     headersOnly = true;
@@ -507,8 +517,8 @@ in lib.makeScopeWithSplicing
 
     propagatedBuildInputs = with self; [ include ];
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
-      makeMinimal install tsort lorder statHook uudecode config genassym
+      bsdSetupHook netbsdSetupHook
+      makeMinimal install tsort lorder statHook rsync uudecode config genassym
     ];
 
     postConfigure = ''
@@ -570,7 +580,7 @@ in lib.makeScopeWithSplicing
     sha256 = "02gm5a5zhh8qp5r5q5r7x8x6x50ir1i0ncgsnfwh1vnrz6mxbq7z";
     extraPaths = with self; [ common libc.src sys.src ];
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
       byacc install tsort lorder mandoc statHook
     ];
@@ -604,7 +614,7 @@ in lib.makeScopeWithSplicing
     version = "9.2";
     sha256 = "0pq05k3dj0dfsczv07frnnji92mazmy2qqngqbx2zgqc1x251414";
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal install tsort lorder mandoc statHook nbperf tic
     ];
     buildInputs = with self; compatIfNeeded;
@@ -667,7 +677,7 @@ in lib.makeScopeWithSplicing
     makeFlags = [ "INCSDIR=$(out)/include/rpcsvc" ];
     meta.platforms = lib.platforms.netbsd;
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
       install tsort lorder rpcgen statHook
     ];
@@ -745,10 +755,10 @@ in lib.makeScopeWithSplicing
     sha256 = "0al5jfazvhlzn9hvmnrbchx4d0gm282hq5gp4xs2zmj9ycmf6d03";
     meta.platforms = lib.platforms.netbsd;
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
       install mandoc groff flex
-      byacc genassym gencat lorder tsort statHook
+      byacc genassym gencat lorder tsort statHook rsync
     ];
     buildInputs = with self; [ headers ];
     extraPaths = with self; [ sys.src ld_elf_so.src ];
@@ -783,10 +793,10 @@ in lib.makeScopeWithSplicing
       (fetchNetBSD "external/bsd/jemalloc" "9.2" "0cq704swa0h2yxv4gc79z2lwxibk9k7pxh3q5qfs7axx3jx3n8kb")
     ];
     nativeBuildInputs = with buildPackages.netbsd; [
-      bsdSetupHook
+      bsdSetupHook netbsdSetupHook
       makeMinimal
       install mandoc groff flex
-      byacc genassym gencat lorder tsort statHook rpcgen
+      byacc genassym gencat lorder tsort statHook rsync rpcgen
     ];
     buildInputs = with self; [ headers csu ];
     NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";

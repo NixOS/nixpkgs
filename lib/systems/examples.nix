@@ -265,6 +265,13 @@ rec {
 
   # BSDs
 
+  x86_64-freebsd = {
+    config = "x86_64-unknown-freebsd";
+    libc = "freebsd";
+    useLLVM = true;
+  };
+
+  # Deprecate
   amd64-netbsd = lib.warn "The amd64-netbsd system example is deprecated. Use x86_64-netbsd instead." x86_64-netbsd;
 
   x86_64-netbsd = {

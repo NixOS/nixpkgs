@@ -413,6 +413,8 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "redox";                      }
       else if (elemAt l 2 == "mmixware")
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "mmixware";                   }
+      else if hasPrefix "freebsd" (elemAt l 2)
+        then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
