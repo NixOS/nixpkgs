@@ -23556,6 +23556,8 @@ in
 
   dunst = callPackage ../applications/misc/dunst { };
 
+  dust3d = callPackage ../applications/misc/dust3d { };
+
   du-dust = callPackage ../tools/misc/dust { };
 
   devede = callPackage ../applications/video/devede { };
