@@ -24651,6 +24651,8 @@ in
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap/default.nix { };
 
+  postrunner = callPackage ../applications/misc/postrunner { };
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   slack-cli = callPackage ../tools/networking/slack-cli { };
