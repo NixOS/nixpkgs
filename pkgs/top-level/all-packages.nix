@@ -5759,6 +5759,8 @@ in
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
+  headscale = callPackage ../servers/headscale { };
+
   heisenbridge = callPackage ../servers/heisenbridge { };
 
   helio-workstation = callPackage ../applications/audio/helio-workstation { };
