@@ -38,8 +38,9 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText; } ({
   packageBuild = fetchFromGitHub {
     owner = "melpa";
     repo = "package-build";
-    rev = "0a22c3fbbf661822ec1791739953b937a12fa623";
-    sha256 = "0dpy5p34il600sc8ic5jdgb3glya9si3lrvhxab0swks8fdydjgs";
+    rev = "c40adc46ee1a29e8d7e2aa296bef335a1e4ea100";
+    sha256 = "06x20z69242i32bqjmmnjy8q4x5f0g3yyfkazkh5cm09zayri00c";
+    # date = 2020-12-27T19:45:05+01:00;
   };
 
   elpa2nix = ./elpa2nix.el;
