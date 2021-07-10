@@ -23284,6 +23284,8 @@ in
 
   cipher = callPackage ../applications/misc/cipher { };
 
+  clapper = callPackage ../applications/video/clapper { };
+
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (xorg) libSM;
   };
