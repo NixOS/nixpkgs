@@ -3355,7 +3355,11 @@ in
 
   apparix = callPackage ../tools/misc/apparix { };
 
-  appleseed = callPackage ../tools/graphics/appleseed { };
+  appleseed = libsForQt5.callPackage ../tools/graphics/appleseed {
+    boost = boost16x.override {
+      enablePython = true;
+    };
+  };
 
   apple-music-electron = callPackage ../applications/audio/apple-music-electron { };
 
@@ -8667,7 +8671,9 @@ in
 
   securefs = callPackage ../tools/filesystems/securefs { };
 
-  seexpr = callPackage ../development/compilers/seexpr { };
+  seexpr = libsForQt5.callPackage ../development/compilers/seexpr {
+    boost = boost17x.override { enablePython = true; python = python3; };
+  };
 
   setroot = callPackage  ../tools/X11/setroot { };
 

@@ -1,22 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpng, zlib, qt4,
-bison, flex, libGLU, pythonPackages
+{ mkDerivation, lib, stdenv, fetchFromGitHub, cmake, libpng, zlib,
+bison, flex, libGLU, boost, python3
 }:
 
-stdenv.mkDerivation {
+mkDerivation rec {
   pname = "seexpr";
-  version = "2.11";
+  version = "3.0.1";
+
   src = fetchFromGitHub {
     owner  = "wdas";
     repo   = "SeExpr";
-    rev    = "v2.11";
-    sha256 = "0a44k56jf6dl36fwgg4zpc252wq5lf9cblg74mp73k82hxw439l4";
+    rev    = "v${version}";
+    sha256 = "0jdlaxkcm8s557vy17d6ykwcxa124qw2r84kc453w6y5pz4s1adg";
   };
 
+  cmakeFlags = [
+    "-DUSE_PYTHON=OFF" # doesn't work with either qt4 or qt5 at the moment
+  ];
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libGLU libpng zlib qt4 pythonPackages.pyqt4 bison flex ];
+
+  buildInputs = [ libpng zlib boost bison flex ];
+
   meta = with lib; {
     description = "Embeddable expression evaluation engine from Disney Animation";
-    homepage = "https://www.disneyanimation.com/technology/seexpr.html";
+    homepage = "http://wdas.github.io/SeExpr/";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.asl20;
     platforms = platforms.linux;
