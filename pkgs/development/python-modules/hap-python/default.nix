@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "3.5.0";
-  disabled = pythonOlder "3.5";
+  version = "3.5.1";
+  disabled = pythonOlder "3.6";
 
   # pypi package does not include tests
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
     rev = "v${version}";
-    sha256 = "1vzlfx0gpidl0rzv4z94pziwm6rj4lrilly5pykgq984y708pcqf";
+    sha256 = "sha256-ZHTqlb7LIDp8MFNW8MFg6jX7QwaxT40cLi3H13ONLCI=";
   };
 
   propagatedBuildInputs = [
