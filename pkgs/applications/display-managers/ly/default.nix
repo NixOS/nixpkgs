@@ -1,19 +1,26 @@
-{ stdenv, lib, fetchFromGitHub, linux-pam }:
+{ stdenv, lib, fetchFromGitHub, linux-pam, git, libxcb, ncurses }:
+
+# This package is intended to be reworked, it is temporarily using a fork since
+# the original developer used a non-standard method of specifying .gitmodules.
+# https://github.com/nullgemm/ly/pull/279
 
 stdenv.mkDerivation rec {
   pname = "ly";
-  version = "0.2.1";
+  version = "unstable-2021-03-25";
+
+  hardeningDisable = [ "all" ];
+
+  nativeBuildInputs = [ git ];
+
+  buildInputs = [ libxcb linux-pam ncurses ];
 
   src = fetchFromGitHub {
-    owner = "cylgom";
+    owner = "matthewcroughan";
     repo = "ly";
-    rev = version;
-    sha256 = "16gjcrd4a6i4x8q8iwlgdildm7cpdsja8z22pf2izdm6rwfki97d";
+    rev = "850c7b1112c44f4b0e9c0837d8b3d0c7fe02821f";
+    sha256 = "sha256-XLVfKnxr5GKMN6pRTOIaKW6KMH6hzW8KwboEFtuOkY0=";
     fetchSubmodules = true;
   };
-
-  buildInputs = [ linux-pam ];
-  makeFlags = [ "FLAGS=-Wno-error" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -23,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "TUI display manager";
     license = licenses.wtfpl;
-    homepage = "https://github.com/cylgom/ly";
-    maintainers = [ maintainers.spacekookie ];
+    homepage = "https://github.com/nullgemm/ly";
+    maintainers = with maintainers; [ matthewcroughan nixinator ];
   };
 }
