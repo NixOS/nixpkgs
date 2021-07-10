@@ -14,7 +14,7 @@
 
 let
   pname = "setuptools";
-  version = "54.2.0";
+  version = "56.2.0";
 
   bootstrap = fetchurl {
     url = "https://raw.githubusercontent.com/pypa/setuptools/v52.0.0/bootstrap.py";
@@ -29,7 +29,7 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-ZHJZiwlWLHP4vf2TLwj/DYB9wjbRp0apVmmjsKCLPq0=";
+      sha256 = "02mynrprzzwhifik7v27n6ymz2lbd2nvrsg5fcrgc80pfi3jr62b";
       name = "${pname}-${version}-source";
     };
 
