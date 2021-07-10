@@ -15,18 +15,6 @@ let
     meta.homepage = "https://github.com/greenfork/active-window.kak/";
   };
 
-  auto-pairs-kak = buildKakounePluginFrom2Nix {
-    pname = "auto-pairs-kak";
-    version = "2021-03-28";
-    src = fetchFromGitHub {
-      owner = "alexherbo2";
-      repo = "auto-pairs.kak";
-      rev = "526779a26a5cf5f48e7c4f5c5fecca274968a737";
-      sha256 = "0gkhvwxyh8pdfydrj7zkfidk0drrbhvdi1fq3pkzllna3vz8q181";
-    };
-    meta.homepage = "https://github.com/alexherbo2/auto-pairs.kak/";
-  };
-
   connect-kak = buildKakounePluginFrom2Nix {
     pname = "connect-kak";
     version = "2021-02-24";
@@ -41,12 +29,12 @@ let
 
   fzf-kak = buildKakounePluginFrom2Nix {
     pname = "fzf-kak";
-    version = "2021-04-03";
+    version = "2021-06-23";
     src = fetchFromGitHub {
       owner = "andreyorst";
       repo = "fzf.kak";
-      rev = "1b3a3beebbe7134e671fde2ef2f4242b34ae2c60";
-      sha256 = "0rsd65zcizbq3isy8576gqw7mcml5ixw84padaz6ndwfif5fv701";
+      rev = "124c3a27510d6ef707250a2f31cb66a923f54ca6";
+      sha256 = "0rwmc5n20yyx37djaczsk684rrwpilkcy46waxxqlanlcnb61wsw";
     };
     meta.homepage = "https://github.com/andreyorst/fzf.kak/";
   };
@@ -77,12 +65,12 @@ let
 
   kakoune-buffers = buildKakounePluginFrom2Nix {
     pname = "kakoune-buffers";
-    version = "2021-04-02";
+    version = "2021-04-28";
     src = fetchFromGitHub {
       owner = "Delapouite";
       repo = "kakoune-buffers";
-      rev = "7832ea7a4528363482f5684f16cbcebcbec0adfd";
-      sha256 = "196d36jww6asf5zr03l1rwg49kkv16s2d4zyryb2m3zvy7prf2bb";
+      rev = "9cfef59d231ed02d69e26b2ae3db3a1b8e98dea7";
+      sha256 = "13cz7z0pfrfiq2mgxx9hvryn1q931ypzkxwbdj65dk6vcg171zi1";
     };
     meta.homepage = "https://github.com/Delapouite/kakoune-buffers/";
   };
@@ -101,12 +89,12 @@ let
 
   kakoune-extra-filetypes = buildKakounePluginFrom2Nix {
     pname = "kakoune-extra-filetypes";
-    version = "2021-01-15";
+    version = "2021-05-16";
     src = fetchFromGitHub {
       owner = "kakoune-editor";
       repo = "kakoune-extra-filetypes";
-      rev = "c6f8aaccd8c9cd6b487964c8943416e21fbe7c18";
-      sha256 = "1vkff8xbycfgxv8x09cvc79qcg5fdzn2x77mbmifmkq236khrwrg";
+      rev = "8ffeec08068edfee42e076c5f6d56a54a498bad2";
+      sha256 = "1v87aqfk2jcysbdls3mh2v1yafk1albbinfxsxp11m4nxd2b9agl";
     };
     meta.homepage = "https://github.com/kakoune-editor/kakoune-extra-filetypes/";
   };
@@ -161,24 +149,24 @@ let
 
   pandoc-kak = buildKakounePluginFrom2Nix {
     pname = "pandoc-kak";
-    version = "2020-11-30";
+    version = "2021-06-29";
     src = fetchFromGitHub {
       owner = "basbebe";
       repo = "pandoc.kak";
-      rev = "63979f7e08b86d80436bbe2d9dba173a56057b97";
-      sha256 = "16pmmnpyxf8r7gpj8g1lwa960nscjmcl52n1a7s6xcqkp9856wxs";
+      rev = "e9597e8df58427884161ce27392a9558930832a7";
+      sha256 = "1baslidszbybx2ngdkm7wns2m5l27gc0mb3blhhydiav8fcfvc6m";
     };
     meta.homepage = "https://github.com/basbebe/pandoc.kak/";
   };
 
   powerline-kak = buildKakounePluginFrom2Nix {
     pname = "powerline-kak";
-    version = "2021-04-06";
+    version = "2021-05-08";
     src = fetchFromGitHub {
       owner = "andreyorst";
       repo = "powerline.kak";
-      rev = "6fa5ad383f2884f201d6e3ef07a4687c606df525";
-      sha256 = "1s7ggjby0bymq48njzhdvkkarmzl44803xv0dlnzrj7q9c3xv27a";
+      rev = "c15ee7e46e4f73bd5cc83134bcbbd0a067301369";
+      sha256 = "18sm0l8jd1fgwvsyd6nbxrn629wgqqp97sr7v3k7qyl1gjz9zcbq";
     };
     meta.homepage = "https://github.com/andreyorst/powerline.kak/";
   };
@@ -195,28 +183,16 @@ let
     meta.homepage = "https://github.com/kakounedotcom/prelude.kak/";
   };
 
-  replace-mode-kak = buildKakounePluginFrom2Nix {
-    pname = "replace-mode-kak";
-    version = "2020-10-07";
+  smarttab-kak = buildKakounePluginFrom2Nix {
+    pname = "smarttab-kak";
+    version = "2021-02-24";
     src = fetchFromGitHub {
-      owner = "alexherbo2";
-      repo = "replace-mode.kak";
-      rev = "5f4c73cdbaf5aeb964ee35ad4b9081b233af90c0";
-      sha256 = "1cmylx99bm7jwfb4hclb69sdc4n8f29ssyy2byjiw53ni9rnc8q0";
+      owner = "andreyorst";
+      repo = "smarttab.kak";
+      rev = "1dd3f33c4f65da5c13aee5d44b2e77399595830f";
+      sha256 = "0g49k47ggppng95nwanv2rqmcfsjsgy3z1764wrl5b49h9wifhg2";
     };
-    meta.homepage = "https://github.com/alexherbo2/replace-mode.kak/";
-  };
-
-  sleuth-kak = buildKakounePluginFrom2Nix {
-    pname = "sleuth-kak";
-    version = "2020-11-06";
-    src = fetchFromGitHub {
-      owner = "alexherbo2";
-      repo = "sleuth.kak";
-      rev = "911db8bd208ad0d289b8fa15a2ac665ff39bd6bd";
-      sha256 = "0g41c0038fpmihqva71xl4vfbmvsp13i47gp6fnmaikajpynzc51";
-    };
-    meta.homepage = "https://github.com/alexherbo2/sleuth.kak/";
+    meta.homepage = "https://github.com/andreyorst/smarttab.kak/";
   };
 
   tabs-kak = buildKakounePluginFrom2Nix {
