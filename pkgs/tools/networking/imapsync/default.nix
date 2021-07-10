@@ -1,10 +1,13 @@
-{lib, stdenv, makeWrapper, fetchurl, perl, openssl, perlPackages }:
+{lib, stdenv, makeWrapper, fetchFromGitHub, perl, openssl, perlPackages, procps }:
 
 stdenv.mkDerivation rec {
-  name = "imapsync-1.727";
-  src = fetchurl {
-    url = "https://releases.pagure.org/imapsync/${name}.tgz";
-    sha256 = "1axacjw2wyaphczfw3kfmi5cl83fyr8nb207nks40fxkbs8q5dlr";
+  pname = "imapsync";
+  version = "1.977";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "1a9dpnzmi2lhqwj3skvxl62kc911my0x64x2djqn89cj52c5lhaa";
   };
 
   patchPhase = ''
@@ -17,17 +20,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = with perlPackages; [ perl openssl MailIMAPClient TermReadKey
+  buildInputs = with perlPackages; [ perl openssl CGI EncodeIMAPUTF7 FileTail ModuleScanDeps PackageStashXS MailIMAPClient TermReadKey
     IOSocketSSL DigestHMAC URI FileCopyRecursive IOTee UnicodeString
     DataUniqid JSONWebToken TestMockGuard LWP CryptOpenSSLRSA
-    LWPProtocolHttps Readonly TestPod TestMockObject ParseRecDescent
+    LWPProtocolHttps Readonly RegexpCommon SysMemInfo TestDeep TestFatal TestPod TestRequires TestMockObject PARPacker ParseRecDescent
     IOSocketInet6 NTLM
-  ];
+  ] ++ [ procps ];
 
   meta = with lib; {
-    homepage = "http://www.linux-france.org/prj/imapsync/";
+    homepage = "https://imapsync.lamiral.info/";
     description = "Mail folder synchronizer between IMAP servers";
-    license = licenses.gpl2Plus;
+    license = licenses.nlpl;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
   };

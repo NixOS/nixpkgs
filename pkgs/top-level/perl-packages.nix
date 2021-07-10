@@ -7202,6 +7202,20 @@ let
     };
   };
 
+  EncodeIMAPUTF7 = buildPerlPackage {
+    pname = "Encode-IMAPUTF7";
+    version = "1.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMAKHOLM/Encode-IMAPUTF7-1.05.tar.gz";
+      sha256 = "1q9pgjckjxz0qfwaqmzm1dh1y09819vi6vf1sglcz0vlqgfha0s7";
+    };
+    buildInputs = [ TestNoWarnings ];
+    meta = {
+      description = "Modification of UTF-7 encoding for IMAP";
+      license = lib.licenses.free;
+    };
+  };
+
   EncodeJIS2K = buildPerlPackage {
     pname = "Encode-JIS2K";
     version = "0.03";
@@ -16441,6 +16455,19 @@ let
     };
   };
 
+  PAR = buildPerlPackage {
+    pname = "PAR";
+    version = "1.017";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RS/RSCHUPP/PAR-1.017.tar.gz";
+      sha256 = "0l4nfab7sh7452wgfnn0gdlh8pnrlnvim8njrfgkhk3miqjmnzf3";
+    };
+    propagatedBuildInputs = [ ArchiveZip CompressZlib DigestSHA FileTemp PARDist ];
+    meta = {
+      description = "Perl Archive Toolkit";
+    };
+  };
+
   PARDist = buildPerlPackage {
     pname = "PAR-Dist";
     version = "0.51";
@@ -16451,6 +16478,20 @@ let
     meta = {
       description = "Create and manipulate PAR distributions";
     };
+  };
+
+  PARPacker = buildPerlPackage {
+    pname = "PAR-Packer";
+    version = "1.052";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RS/RSCHUPP/PAR-Packer-1.052.tar.gz";
+      sha256 = "16il9sgcnjg9w07grwrxagvk30bfn0hhrqa9f5z606k7yhvdbypz";
+    };
+    propagatedBuildInputs = [ ArchiveZip GetoptArgvFile IPCRun3 ModuleScanDeps PAR PARDist ];
+    meta = {
+      description = "PAR Packager for generating stand-alone executables, perl scripts and PAR files";
+    };
+    NIX_LDFLAGS = [ "-lpthread" ];
   };
 
   PAUSEPermissions = buildPerlPackage {
