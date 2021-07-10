@@ -755,7 +755,7 @@ in
       default = [];
       example = [ "d /tmp 1777 root root 10d" ];
       description = ''
-        Rules for creating and cleaning up temporary files
+        Rules for creation, deletion and cleaning of volatile and temporary files
         automatically. See
         <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
         for the exact format.
