@@ -1,9 +1,8 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, zlib, python3
+, jdk, cmake, zlib
 , dotnet-sdk_5
-, autoPatchelfHook
-, libdbusmenu
 , vmopts ? null
+, python3
 }:
 
 with lib;
@@ -27,26 +26,12 @@ let
         platforms = platforms.linux;
       };
     }).overrideAttrs (attrs: {
-      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
-        autoPatchelfHook
-      ];
-      buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
-        python3
-        stdenv.cc.cc
-        libdbusmenu
-      ];
-      dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
         (
-          cd $out/clion-${version}
+          cd $out/${name}
           # bundled cmake does not find libc
           rm -rf bin/cmake/linux
           ln -s ${cmake} bin/cmake/linux
-
-          autoPatchelf $PWD/bin
-
-          wrapProgram $out/bin/clion \
-            --set CL_JDK "${jdk}"
         )
       '';
     });

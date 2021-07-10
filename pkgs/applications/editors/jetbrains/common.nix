@@ -1,6 +1,6 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, patchelf, writeText
 , coreutils, gnugrep, which, git, unzip, libsecret, libnotify
-, vmopts ? null
+, vmopts ? null, autoPatchelfHook, libdbusmenu, python3
 }:
 
 { name, product, version, src, wmClass, jdk, meta, extraLdPath ? [] }@args:
@@ -36,7 +36,25 @@ with stdenv; lib.makeOverridable mkDerivation rec {
 
   vmoptsFile = optionalString (vmopts != null) (writeText vmoptsName vmopts);
 
-  nativeBuildInputs = [ makeWrapper patchelf unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    patchelf
+    unzip
+  ] ++ optional (!stdenv.isDarwin) [ autoPatchelfHook ];
+  buildInputs = lib.optional (!stdenv.isDarwin) [
+    libdbusmenu
+    python3
+    stdenv.cc.cc
+  ];
+  dontAutoPatchelf = true;
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+    (
+      cd $out/${name}
+      autoPatchelf $PWD/bin
+      wrapProgram $out/bin/* \
+        --set CL_JDK "${jdk}"
+    )
+  '';
 
   postPatch = lib.optionalString (!stdenv.isDarwin) ''
       get_file_size() {
