@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "034rd6kr1bmnvj8rg2kcxdjb0cgj3dn9310mmm94j1awxan71byr";
   };
 
+  enableParallelBuilding = true;
   dontPatchELF = true;
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     # glibc-2.26 reorganized internal includes
     sed '1i#include <stdint.h>' -i src/libstrongswan/utils/utils/memory.h
 
-    substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
+    substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "/run/current-system/sw/bin/resolvconf"
     '';
 
   configureFlags =
