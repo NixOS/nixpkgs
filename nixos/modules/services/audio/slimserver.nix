@@ -63,6 +63,7 @@ in {
         description = "Slimserver daemon user";
         home = cfg.dataDir;
         group = "slimserver";
+        isSystemUser = true;
       };
       groups.slimserver = {};
     };
