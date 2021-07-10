@@ -10381,6 +10381,16 @@
     githubId = 347983;
     name = "Udo Spallek";
   };
+  unclechu = {
+    name = "Viacheslav Lotsmanov";
+    email = "lotsmanov89@gmail.com";
+    github = "unclechu";
+    githubId = 799353;
+    keys = [{
+      longkeyid = "rsa4096/0xD276FF7467007335";
+      fingerprint = "EE59 5E29 BB5B F2B3 5ED2  3F1C D276 FF74 6700 7335";
+    }];
+  };
   unode = {
     email = "alves.rjc@gmail.com";
     github = "unode";
