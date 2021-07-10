@@ -1,7 +1,7 @@
 ---
 name: Packaging requests
 about: For packages that are missing
-title: ''
+title: 'Package request: '
 labels: '0.kind: packaging request'
 assignees: ''
 
