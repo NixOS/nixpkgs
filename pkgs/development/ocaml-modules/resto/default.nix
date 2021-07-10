@@ -16,14 +16,6 @@ buildDunePackage rec {
     uri
   ];
 
-  checkInputs = [
-    json-data-encoding
-    json-data-encoding-bson
-    ezjsonm
-    lwt
-    # resto-directory
-  ];
-
   # resto has infinite recursion in their tests
   doCheck = false;
 
