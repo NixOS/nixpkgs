@@ -2,7 +2,7 @@
 
 ## Introduction {#sec-cross-intro}
 
-"Cross-compilation" means compiling a program on one machine for another type of machine. For example, a typical use of cross-compilation is to compile programs for embedded devices. These devices often don't have the computing power and memory to compile their own programs. One might think that cross-compilation is a fairly niche concern. However, there are significant advantages to rigorously distinguishing between build-time and run-time environments! Significant, because the benefits apply even when one is developing and deploying on the same machine. Nixpkgs is increasingly adopting the opinion that packages should be written with cross-compilation in mind, and Nixpkgs should evaluate in a similar way (by minimizing cross-compilation-specific special cases) whether or not one is cross-compiling.
+"Cross-compilation" means compiling a program on one machine for another type of machine. For example, a typical use of cross-compilation is to compile programs for embedded devices. These devices often don't have the computing power and memory to compile their own programs. One might think that cross-compilation is a fairly niche concern. However, there are significant advantages to rigorously distinguishing between build-time and run-time environments! Significant, because the benefits apply even when one is developing and deploying on the same machine. Nixpkgs adopts the opinion that packages should be written with cross-compilation in mind, and Nixpkgs should evaluate in a similar way (by minimizing cross-compilation-specific special cases) whether or not one is cross-compiling.
 
 This chapter will be organized in three parts. First, it will describe the basics of how to package software in a way that supports cross-compilation. Second, it will describe how to use Nixpkgs when cross-compiling. Third, it will describe the internal infrastructure supporting cross-compilation.
 
@@ -10,7 +10,14 @@ This chapter will be organized in three parts. First, it will describe the basic
 
 ### Platform parameters {#ssec-cross-platform-parameters}
 
-Nixpkgs follows the [conventions of GNU autoconf](https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html). We distinguish between 3 types of platforms when building a derivation: _build_, _host_, and _target_. In summary, _build_ is the platform on which a package is being built, _host_ is the platform on which it will run. The third attribute, _target_, is relevant only for certain specific compilers and build tools.
+Nixpkgs follows the [conventions of GNU autoconf](https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html). We distinguish between 3 types of platforms when building a derivation: _build_, _host_, and _target_. In summary, _build_ is the platform on which a package is being built, _host_ is the platform on which it will run. The third attribute, _target_, is relevant only for certain specific compilers and build tools. Using this terminology, we can summarize the different types of compilation as follows:
+
+| Type of compilation        | Condition               |
+|----------------------------|-------------------------|
+| native compilation         | build == host == target |
+| cross-compilation          | build /= host == target |
+| Canadian cross-compilation | build /= host /= target |
+
 
 In Nixpkgs, these three platforms are defined as attribute sets under the names `buildPlatform`, `hostPlatform`, and `targetPlatform`. They are always defined as attributes in the standard environment. That means one can access them like:
 
@@ -62,15 +69,17 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 
 : This is, quite frankly, a dumping ground of ad-hoc settings (it's an attribute set). See `lib.systems.platforms` for examples—there's hopefully one in there that will work verbatim for each platform that is working. Please help us triage these flags and give them better homes!
 
+Using these attributes, the build process of a package can change depending on the situation, for instance, when cross-compiling, one may want to apply specific patches or disable tests.
+
 ### Theory of dependency categorization {#ssec-cross-dependency-categorization}
 
 ::: {.note}
 This is a rather philosophical description that isn't very Nixpkgs-specific. For an overview of all the relevant attributes given to `mkDerivation`, see [](#ssec-stdenv-dependencies). For a description of how everything is implemented, see [](#ssec-cross-dependency-implementation).
 :::
 
-In this section we explore the relationship between both runtime and build-time dependencies and the 3 Autoconf platforms.
+In this section we explore the relationship between both run-time and build-time dependencies and the 3 Autoconf platforms.
 
-A run time dependency between two packages requires that their host platforms match. This is directly implied by the meaning of "host platform" and "runtime dependency": The package dependency exists while both packages are running on a single host platform.
+A run time dependency between two packages requires that their host platforms match. This is directly implied by the meaning of "host platform" and "run-time dependency": The package dependency exists while both packages are running on a single host platform.
 
 A build time dependency, however, has a shift in platforms between the depending package and the depended-on package. "build time dependency" means that to build the depending package we need to be able to run the depended-on's package. The depending package's build platform is therefore equal to the depended-on package's host platform.
 
