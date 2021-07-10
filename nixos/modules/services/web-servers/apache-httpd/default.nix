@@ -282,7 +282,7 @@ let
   ;
 
 
-  confFile = pkgs.writeText "httpd.conf" ''
+  confFile = pkgs.writers.writeHttpdConfig "httpd.conf" ''
 
     ServerRoot ${pkg}
     ServerName ${config.networking.hostName}
