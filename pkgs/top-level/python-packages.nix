@@ -593,6 +593,8 @@ in {
 
   async-lru = callPackage ../development/python-modules/async-lru { };
 
+  asynccmd = callPackage ../development/python-modules/asynccmd { };
+
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
   asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
@@ -5376,6 +5378,8 @@ in {
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
+
+  pyspcwebgw = callPackage ../development/python-modules/pyspcwebgw { };
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 

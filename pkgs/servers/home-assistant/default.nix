@@ -676,6 +676,7 @@ in with py.pkgs; buildPythonApplication rec {
     "sonos"
     "soundtouch"
     "spaceapi"
+    "spc"
     "speedtestdotnet"
     "spider"
     "spotify"
