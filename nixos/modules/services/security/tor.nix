@@ -125,7 +125,10 @@ let
     default = [];
   };
   optionORPort = optionName: mkOption {
-    default = [];
+    # NOTE(Krey): Set as `auto` if relaying is enable by default to avoid failure (https://github.com/NixOS/nixpkgs/pull/128713)
+    default = if (services.tor.relay.enable == true)
+      then "auto"
+      else 0;
     example = 443;
     type = with types; oneOf [port (enum ["auto"]) (listOf (oneOf [
       port
