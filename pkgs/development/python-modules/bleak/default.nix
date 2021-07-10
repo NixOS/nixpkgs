@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.12.0";
+  version = "0.12.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pNHz24YjB6FB9ZLC3LoXS+2qzhforflNXzG6OWFqCvk=";
+    sha256 = "1va9138igcgbpsnzgr90qwprmhr9h8lryqslc22jxra4r56a502a";
   };
 
   postPatch = ''
