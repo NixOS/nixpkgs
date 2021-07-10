@@ -7,12 +7,13 @@
     "version": "0.2.3"
   },
   "acme": {
-    "owner": "getstackhead",
-    "provider-source-address": "registry.terraform.io/getstackhead/acme",
+    "owner": "vancluever",
+    "provider-source-address": "registry.terraform.io/vancluever/acme",
     "repo": "terraform-provider-acme",
-    "rev": "v1.5.0-patched",
-    "sha256": "1wdrjpd3l0xadsa3lqhsc9c57g8x2qkwb76q824sk8za1a7lapii",
-    "version": "1.5.0-patched"
+    "rev": "v2.5.2",
+    "sha256": "0yk5yxx8vdfymxggydpzsb2a0iw4n8010wlprz23qg37gb2p26yf",
+    "vendorSha256": "04zrrn67w30ib0n5s4f31x3nl3h3xz2r522ldkbbx20jy5iabrkk",
+    "version": "2.5.2"
   },
   "aiven": {
     "owner": "aiven",
