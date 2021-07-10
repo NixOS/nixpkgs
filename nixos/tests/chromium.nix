@@ -30,7 +30,10 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
   machine.imports = [ ./common/user-account.nix ./common/x11.nix ];
   machine.virtualisation.memorySize = 2047;
   machine.test-support.displayManager.auto.user = user;
-  machine.environment.systemPackages = [ chromiumPkg ];
+  machine.environment = {
+    systemPackages = [ chromiumPkg ];
+    variables."XAUTHORITY" = "/home/alice/.Xauthority";
+  };
 
   startupHTML = pkgs.writeText "chromium-startup.html" ''
     <!DOCTYPE html>
@@ -139,10 +142,25 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
 
     @contextmanager
-    def test_new_win(description):
+    def test_new_win(description, url, window_name):
         create_new_win()
+        machine.wait_for_window("New Tab")
+        machine.send_chars(f"{url}\n")
+        machine.wait_for_window(window_name)
+        machine.screenshot(description)
+        machine.succeed(
+            ru(
+                "${xdo "copy-all" ''
+                  key --delay 1000 Ctrl+a Ctrl+c
+                ''}"
+            )
+        )
+        clipboard = machine.succeed(
+            ru("${pkgs.xclip}/bin/xclip -o")
+        )
+        print(f"{description} window content:\n{clipboard}")
         with machine.nested(description):
-            yield
+            yield clipboard
         # Close the newly created window:
         machine.send_key("ctrl-w")
 
@@ -172,49 +190,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
     machine.screenshot("startup_done")
 
-    with test_new_win("check sandbox"):
-        machine.succeed(
-            ru(
-                "${xdo "type-url" ''
-                  search --sync --onlyvisible --name "New Tab"
-                  windowfocus --sync
-                  type --delay 1000 "chrome://sandbox"
-                ''}"
-            )
-        )
-
-        machine.succeed(
-            ru(
-                "${xdo "submit-url" ''
-                  search --sync --onlyvisible --name "New Tab"
-                  windowfocus --sync
-                  key --delay 1000 Return
-                ''}"
-            )
-        )
-
-        machine.screenshot("sandbox_info")
-
-        machine.succeed(
-            ru(
-                "${xdo "find-window" ''
-                  search --sync --onlyvisible --name "Sandbox Status"
-                  windowfocus --sync
-                ''}"
-            )
-        )
-        machine.succeed(
-            ru(
-                "${xdo "copy-sandbox-info" ''
-                  key --delay 1000 Ctrl+a Ctrl+c
-                ''}"
-            )
-        )
-
-        clipboard = machine.succeed(
-            ru("${pkgs.xclip}/bin/xclip -o")
-        )
-
+    with test_new_win("sandbox_info", "chrome://sandbox", "Sandbox Status") as clipboard:
         filters = [
             "layer 1 sandbox.*namespace",
             "pid namespaces.*yes",
@@ -260,6 +236,11 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
             assert False, f"copying twice in a row does not work properly: {clipboard}"
 
         machine.screenshot("after_copy_from_chromium")
+
+
+    with test_new_win("gpu_info", "chrome://gpu", "chrome://gpu"):
+        pass
+
 
     machine.shutdown()
   '';
