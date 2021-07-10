@@ -611,7 +611,7 @@ class Machine:
 
             tic = time.time()
             if self.shell.recv(1024) == 0:
-                 raise Exception("connect failed (qemu died)")
+                raise Exception("connect failed (qemu died)")
             # TODO: Timeout
             toc = time.time()
 
