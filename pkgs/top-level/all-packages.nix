@@ -17284,6 +17284,8 @@ in
 
   live555 = callPackage ../development/libraries/live555 { };
 
+  log4c = callPackage ../development/libraries/log4c { };
+  
   log4cpp = callPackage ../development/libraries/log4cpp { };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
@@ -27274,6 +27276,10 @@ in
   tipp10 = qt5.callPackage ../applications/misc/tipp10 { };
 
   tixati = callPackage ../applications/networking/p2p/tixati { };
+
+  tizonia-openmax-il = callPackage ../applications/audio/tizonia-openmax-il {
+    boost = python3.pkgs.boost.override { enablePython = true; };
+  };
 
   tkcvs = callPackage ../applications/version-management/tkcvs { };
 
