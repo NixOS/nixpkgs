@@ -1,8 +1,7 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, zlib
+, jdk, cmake, zlib, python3
 , dotnet-sdk_5
 , vmopts ? null
-, python3
 }:
 
 with lib;

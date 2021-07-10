@@ -40,8 +40,8 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     makeWrapper
     patchelf
     unzip
-  ] ++ optional (!stdenv.isDarwin) [ autoPatchelfHook ];
-  buildInputs = lib.optional (!stdenv.isDarwin) [
+  ] ++ optionals (!stdenv.isDarwin) [ autoPatchelfHook ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [
     libdbusmenu
     python3
     stdenv.cc.cc
