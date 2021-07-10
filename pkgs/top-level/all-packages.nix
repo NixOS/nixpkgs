@@ -31765,6 +31765,8 @@ in
 
   websocketd = callPackage ../applications/networking/websocketd { };
 
+  whalebird = callPackage ../applications/networking/whalebird { };
+
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;
   };
