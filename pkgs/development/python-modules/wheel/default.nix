@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pipInstallFlags = [ "--ignore-installed" ];
 
   meta = with lib; {
-    homepage = "https://bitbucket.org/pypa/wheel/";
+    homepage = "https://github.com/pypa/wheel/";
     description = "A built-package format for Python";
     longDescription = ''
       This library is the reference implementation of the Python wheel packaging standard,
