@@ -30930,6 +30930,8 @@ in
 
   utsushi = callPackage ../misc/drivers/utsushi { };
 
+  iconnconfig = libsForQt5.callPackage ../applications/audio/iconnconfig { };
+
   idsk = callPackage ../tools/filesystems/idsk { };
 
   lima = callPackage ../applications/virtualization/lima {};
