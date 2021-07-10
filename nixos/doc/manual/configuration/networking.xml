@@ -8,13 +8,13 @@
   This section describes how to configure networking components on your NixOS
   machine.
  </para>
- <xi:include href="network-manager.xml" />
- <xi:include href="ssh.xml" />
- <xi:include href="ipv4-config.xml" />
- <xi:include href="ipv6-config.xml" />
- <xi:include href="firewall.xml" />
- <xi:include href="wireless.xml" />
- <xi:include href="ad-hoc-network-config.xml" />
- <xi:include href="renaming-interfaces.xml" />
+ <xi:include href="../from_md/configuration/network-manager.section.xml" />
+ <xi:include href="../from_md/configuration/ssh.section.xml" />
+ <xi:include href="../from_md/configuration/ipv4-config.section.xml" />
+ <xi:include href="../from_md/configuration/ipv6-config.section.xml" />
+ <xi:include href="../from_md/configuration/firewall.section.xml" />
+ <xi:include href="../from_md/configuration/wireless.section.xml" />
+ <xi:include href="../from_md/configuration/ad-hoc-network-config.section.xml" />
+ <xi:include href="../from_md/configuration/renaming-interfaces.section.xml" />
 <!-- TODO: OpenVPN, NAT -->
 </chapter>
