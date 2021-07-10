@@ -7418,6 +7418,8 @@ in {
     gdal = pkgs.gdal_2;
   };
 
+  ratelim = callPackage ../development/python-modules/ratelim { };
+
   ratelimit = callPackage ../development/python-modules/ratelimit { };
 
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
