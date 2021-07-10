@@ -13141,6 +13141,8 @@ in
 
   black-macchiato = with python3Packages; toPythonApplication black-macchiato;
 
+  bisonpp = callPackage ../development/tools/parsing/bisonpp { };
+
   blackmagic = callPackage ../development/tools/misc/blackmagic { };
 
   bloaty = callPackage ../development/tools/bloaty { };
