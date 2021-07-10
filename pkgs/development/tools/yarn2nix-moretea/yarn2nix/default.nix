@@ -73,6 +73,7 @@ in rec {
     preBuild ? "",
     postBuild ? "",
     workspaceDependencies ? [], # List of yarn packages
+    packageResolutions ? {},
   }:
     let
       offlineCache = importOfflineCache yarnNix;
@@ -94,7 +95,7 @@ in rec {
 
       workspaceJSON = pkgs.writeText
         "${name}-workspace-package.json"
-        (builtins.toJSON { private = true; workspaces = ["deps/**"]; }); # scoped packages need second splat
+        (builtins.toJSON { private = true; workspaces = ["deps/**"]; resolutions = packageResolutions; }); # scoped packages need second splat
 
       workspaceDependencyLinks = lib.concatMapStringsSep "\n"
         (dep: ''
@@ -165,6 +166,8 @@ in rec {
 
     packageGlobs = package.workspaces;
 
+    packageResolutions = package.resolutions;
+
     globElemToRegex = lib.replaceStrings ["*"] [".*"];
 
     # PathGlob -> [PathGlobElem]
@@ -212,7 +215,7 @@ in rec {
         inherit name;
         value = mkYarnPackage (
           builtins.removeAttrs attrs ["packageOverrides"]
-          // { inherit src packageJSON yarnLock workspaceDependencies; }
+          // { inherit src packageJSON yarnLock packageResolutions workspaceDependencies; }
           // lib.attrByPath [name] {} packageOverrides
         );
       })
@@ -233,6 +236,7 @@ in rec {
     extraBuildInputs ? [],
     publishBinsFor ? null,
     workspaceDependencies ? [], # List of yarnPackages
+    packageResolutions ? {},
     ...
   }@attrs:
     let
@@ -252,7 +256,7 @@ in rec {
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock yarnNix yarnFlags pkgConfig;
+        inherit packageJSON pname version yarnLock yarnNix yarnFlags pkgConfig packageResolutions;
       };
 
       publishBinsFor_ = unlessNull publishBinsFor [pname];
@@ -286,7 +290,7 @@ in rec {
         '')
         workspaceDependenciesTransitive;
 
-    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies"] // {
+    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies" "packageResolutions"] // {
       inherit src pname;
 
       name = baseName;
