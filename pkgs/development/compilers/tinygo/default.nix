@@ -1,58 +1,51 @@
-{ lib, buildGoModule, fetchFromGitHub, llvm, clang-unwrapped, lld, avrgcc
-, avrdude, openocd, gcc-arm-embedded, makeWrapper, fetchurl }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper
+, llvm, clang-unwrapped, lld, avrgcc, go, gcc-arm-embedded
+, avrdude, openocd }:
 
-let main = ./main.go;
-    gomod = ./go.mod;
-in
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.16.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
-    repo = "tinygo";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "063aszbsnr0myq56kms1slmrfs7m4nmg0zgh2p66lxdsifrfly7j";
+    sha256 = "0v3k9pinwy6d4xwlzgnisj2lmmgl5kfk2hwmfcggqxxrpr3ppaw8";
     fetchSubmodules = true;
   };
 
-  overrideModAttrs = (_: {
-      patches = [];
-      preBuild = ''
-      rm -rf *
-      cp ${main} main.go
-      cp ${gomod} go.mod
-      chmod +w go.mod
-      '';
-  });
+  vendorSha256 = "0dmy1g6w7awf807qf4mw67lmp6hkzbzx1a6il59wrx442rsz5l1b";
 
-  preBuild = "cp ${gomod} go.mod";
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ llvm clang-unwrapped ];
+  propagatedBuildInputs = [
+    clang-unwrapped lld avrgcc avrdude
+    openocd gcc-arm-embedded
+  ];
 
-  postBuild = "make gen-device";
-
-  vendorSha256 = "12k2gin0v7aqz5543m12yhifc0xsz26qyqra5l4c68xizvzcvkxb";
-
-  doCheck = false;
+  # We need to set GOROOT to import and compile
+  # standard go libraries with tinygo
+  allowGoReference = true;
 
   prePatch = ''
+    patchShebangs lib/wasi-libc
     sed -i s/', "-nostdlibinc"'// builder/builtins.go
     sed -i s/'"-nostdlibinc", '// compileopts/config.go builder/picolibc.go
   '';
 
-  subPackages = [ "." ];
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ llvm clang-unwrapped ];
-  propagatedBuildInputs = [ lld avrgcc avrdude openocd gcc-arm-embedded ];
+  postBuild = ''
+    make gen-device
+  '';
 
   postInstall = ''
     mkdir -p $out/share/tinygo
     cp -a lib src targets $out/share/tinygo
-    wrapProgram $out/bin/tinygo --prefix "TINYGOROOT" : "$out/share/tinygo" \
-      --prefix "PATH" : "$out/libexec/tinygo"
-    mkdir -p $out/libexec/tinygo
-    ln -s ${clang-unwrapped}/bin/clang $out/libexec/tinygo/clang-10
-    ln -s ${lld}/bin/lld $out/libexec/tinygo/ld.lld-10
-    ln -sf $out/bin $out/share/tinygo
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/tinygo \
+      --prefix "TINYGOROOT" : $out/share/tinygo \
+      --prefix "GOROOT" : ${go}/share/go \
   '';
 
   meta = with lib; {
