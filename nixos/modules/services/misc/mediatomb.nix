@@ -65,6 +65,14 @@ let
     </transcoding>
 '';
 
+  virtualLayout =
+    let toCustomImportScript = import-script-path: "<import-script>${import-script-path}</import-script>\n";
+    in if ((builtins.length cfg.customImportJS) > 0) then ''
+        <virtual-layout type="js">${concatMapStrings toCustomImportScript cfg.customImportJS}</virtual-layout>
+      '' else ''
+        <virtual-layout type="builtin"><import-script>${pkg}/share/${name}/js/import.js</import-script></virtual-layout>
+      '';
+
   configText = optionalString (! cfg.customCfg) ''
 <?xml version="1.0" encoding="UTF-8"?>
 <config version="2" xmlns="http://mediatomb.cc/config/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
@@ -113,9 +121,7 @@ let
       <scripting script-charset="UTF-8">
         <common-script>${pkg}/share/${name}/js/common.js</common-script>
         <playlist-script>${pkg}/share/${name}/js/playlists.js</playlist-script>
-        <virtual-layout type="builtin">
-          <import-script>${pkg}/share/${name}/js/import.js</import-script>
-        </virtual-layout>
+        ${virtualLayout}
       </scripting>
       <mappings>
         <extension-mimetype ignore-unknown="no">
@@ -332,6 +338,18 @@ in {
         example = [
           { path = "/data/pictures"; recursive = false; hidden-files = false; }
           { path = "/data/audio"; recursive = true; hidden-files = false; }
+        ];
+      };
+
+      customImportJS = mkOption {
+        type = with types; listOf path;
+        default = [];
+        description = ''
+          A list of user customized javascript files to import. If unspecified,
+          the default, this uses the default builtin engine.
+        '';
+        example = [
+          ./import.js
         ];
       };
 
