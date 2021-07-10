@@ -2,12 +2,12 @@
 
 
 let
-  version = "5.1";
+  version = "5.1.1";
 
   src = fetchgit {
     url = "https://github.com/kmkolasinski/AwesomeBump.git";
-    rev = "Winx32v${version}";
-    sha256 = "1c8b9jki0v8kzkvsvyv7q1w3s7j40br6ph15hh2xi0a1mpwckq56";
+    rev = "Linuxv${version}";
+    sha256 = "0qm9sf6la40qc0872qcx09cfpgdpgmk1k89af2kkn7p2p5bdfrfc";
     fetchSubmodules = true;
   };
 
