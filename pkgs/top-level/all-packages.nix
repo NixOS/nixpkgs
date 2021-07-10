@@ -23280,10 +23280,11 @@ in
 
   cipher = callPackage ../applications/misc/cipher { };
 
-  claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
+  claws-mail-gtk2 = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (xorg) libSM;
+    useGtk3 = false;
   };
-  claws-mail-gtk3 = callPackage ../applications/networking/mailreaders/claws-mail {
+  claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (xorg) libSM;
     useGtk3 = true;
   };

@@ -129,6 +129,7 @@ mapAliases ({
   clang12Stdenv = lowPrio llvmPackages_12.stdenv;
 
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
+  claws-mail-gtk3 = claws-mail; # added 2021-07-10
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
   cmakeWithQt4Gui = throw "cmakeWithQt4Gui has been removed in favor of cmakeWithGui (Qt 5)"; # added 2021-05
