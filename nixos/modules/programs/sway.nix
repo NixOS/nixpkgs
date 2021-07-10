@@ -97,8 +97,24 @@ in {
       '';
       example = literalExample ''
         with pkgs; [
-          i3status i3status-rust
-          termite rofi light
+          # To run Qt5 applications natively on Wayland:
+          qt5.qtwayland
+          # Status bars:
+          i3status waybar
+          # Notification daemon:
+          mako
+          # Screenshots
+          grim slurp sway-contrib.grimshot
+          # dmenu replacements:
+          bemenu
+          # Redshift
+          gammastep wlsunset
+          # Alternative terminals:
+          foot
+          # Backlight management:
+          brightnessctl
+          # Clipboard:
+          wl-clipboard
         ]
       '';
       description = ''
