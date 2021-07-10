@@ -2669,6 +2669,8 @@ in
 
   firestarter = callPackage ../applications/misc/firestarter { };
 
+  flitter = callPackage ../tools/misc/flitter { };
+
   frangipanni = callPackage ../tools/text/frangipanni { };
 
   fselect = callPackage ../tools/misc/fselect { };
