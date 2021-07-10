@@ -102,7 +102,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable (
+  config = mkMerge [
+    (mkIf cfg.enable (
     let
       atop =
         if cfg.atopgpu.enable then
@@ -111,14 +112,6 @@ in
           cfg.package;
     in
     {
-      environment.etc = mkIf (cfg.settings != { }) {
-        atoprc.text = concatStrings
-          (mapAttrsToList
-            (n: v: ''
-              ${n} ${toString v}
-            '')
-            cfg.settings);
-      };
       environment.systemPackages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
       boot.extraModulePackages = [ (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
       systemd =
@@ -143,6 +136,16 @@ in
         };
       security.wrappers =
         lib.mkIf cfg.setuidWrapper.enable { atop = { source = "${atop}/bin/atop"; }; };
+    }))
+    {
+      environment.etc = mkIf (cfg.settings != { }) {
+        atoprc.text = concatStrings
+          (mapAttrsToList
+            (n: v: ''
+              ${n} ${toString v}
+            '')
+            cfg.settings);
+      };
     }
-  );
+  ];
 }
