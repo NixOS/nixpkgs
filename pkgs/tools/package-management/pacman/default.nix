@@ -1,30 +1,29 @@
-{ stdenv, lib, fetchurl, pkg-config, m4, perl, libarchive, openssl, zlib, bzip2,
+{ asciidoc, stdenv, gpgme, meson, python3, ninja, lib, fetchurl, pkg-config, m4, perl, libarchive, openssl, zlib, bzip2,
 xz, curl, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "pacman";
-  version = "5.2.2";
+  version = "6.0.0";
 
   src = fetchurl {
-    url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1829jcc300fxidr3cahx5kpnxkpg500daqgn2782hg5m5ygil85v";
+    url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0228bn8gk25hk816x80i064nnv2mnwgmvpd4l33vsivpb844hi00";
   };
+
+  nativeBuildInputs = [ pkg-config meson ninja python3 ];
+  buildInputs = [ asciidoc gpgme curl perl libarchive openssl zlib bzip2 xz ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    # trying to build docs fails with a2x errors, unable to fix through asciidoc
-    "--disable-doc"
-
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-scriptlet-shell=${runtimeShell}"
+  mesonFlags = [
+    "--sysconfdir=etc"
+    "--localstatedir=var"
+    "-Dscriptlet-shell=${runtimeShell}"
   ];
 
-  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
-
-  nativeBuildInputs = [ pkg-config m4 ];
-  buildInputs = [ curl perl libarchive openssl zlib bzip2 xz ];
+  installPhase = ''
+    meson install
+  '';
 
   postFixup = ''
     substituteInPlace $out/bin/repo-add \
