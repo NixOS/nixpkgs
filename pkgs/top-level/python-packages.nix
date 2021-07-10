@@ -2585,6 +2585,8 @@ in {
 
   flask_elastic = callPackage ../development/python-modules/flask-elastic { };
 
+  flask-gravatar = callPackage ../development/python-modules/flask-gravatar { };
+
   flask-httpauth = callPackage ../development/python-modules/flask-httpauth { };
 
   flask-jwt-extended = callPackage ../development/python-modules/flask-jwt-extended { };
@@ -2605,6 +2607,8 @@ in {
 
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
+  flask-paranoid = callPackage ../development/python-modules/flask-paranoid { };
+
   flask_principal = callPackage ../development/python-modules/flask-principal { };
 
   flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
@@ -2620,6 +2624,8 @@ in {
   flask_script = callPackage ../development/python-modules/flask-script { };
 
   flask-seasurf = callPackage ../development/python-modules/flask-seasurf { };
+
+  flask-security-too = callPackage ../development/python-modules/flask-security-too { };
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
@@ -3337,6 +3343,8 @@ in {
   httmock = callPackage ../development/python-modules/httmock { };
 
   httpauth = callPackage ../development/python-modules/httpauth { };
+
+  httpagentparser = callPackage ../development/python-modules/httpagentparser { };
 
   httpbin = callPackage ../development/python-modules/httpbin { };
 
@@ -8145,6 +8153,8 @@ in {
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
   speaklater = callPackage ../development/python-modules/speaklater { };
+
+  speaklater3 = callPackage ../development/python-modules/speaklater3 { };
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
