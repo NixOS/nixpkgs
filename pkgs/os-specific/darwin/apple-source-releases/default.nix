@@ -6,6 +6,9 @@ let
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
   # now it's staying here.
   versions = {
+    "osx-10.14.6" = {
+      CommonCrypto  = "60118.250.2";
+    };
     "osx-10.12.6" = {
       xnu           = "3789.70.16";
       libiconv      = "50";
@@ -245,7 +248,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     architecture    = applePackage "architecture"      "osx-10.11.6"     "1pbpjcd7is69hn8y29i98ci0byik826if8gnp824ha92h90w0fq3" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
-    CommonCrypto    = applePackage "CommonCrypto"      "osx-10.12.6"     "0sgsqjcxbdm2g2zfpc50mzmk4b4ldyw7xvvkwiayhpczg1fga4ff" {};
+    CommonCrypto    = applePackage "CommonCrypto"      "osx-10.14.6"     "12yksbqhj1lg7s0kkqpqcpfgvhr5wv0xwfgi06ngv7dj526xm9s8" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {
       Security      = applePackage "Security/boot.nix" "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
     };
