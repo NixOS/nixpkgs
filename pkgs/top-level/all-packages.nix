@@ -8216,8 +8216,6 @@ in
 
   quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
-  ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
-
   q-text-as-data = callPackage ../tools/misc/q-text-as-data { };
 
   qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
