@@ -28328,6 +28328,8 @@ in
 
   zotero = callPackage ../applications/office/zotero { };
 
+  zrythm = callPackage ../applications/audio/zrythm { };
+
   zscroll = callPackage ../applications/misc/zscroll {};
 
   zsteg = callPackage ../tools/security/zsteg { };
