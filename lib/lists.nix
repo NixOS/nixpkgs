@@ -95,7 +95,7 @@ rec {
   */
   foldl' = builtins.foldl' or foldl;
 
-  /* Map with index starting from 0
+  /* Like `map`, but with an index. O(n) complexity.
 
      Type: imap0 :: (int -> a -> b) -> [a] -> [b]
 
@@ -103,9 +103,10 @@ rec {
        imap0 (i: v: "${v}-${toString i}") ["a" "b"]
        => [ "a-0" "b-1" ]
   */
-  imap0 = f: list: genList (n: f n (elemAt list n)) (length list);
+  imap0 = f: list:
+    let eAt = elemAt list; in genList (n: f n (eAt n)) (length list);
 
-  /* Map with index starting from 1
+  /* Same as `imap0`, but indices start from 1. O(n) complexity.
 
      Type: imap1 :: (int -> a -> b) -> [a] -> [b]
 
@@ -113,7 +114,65 @@ rec {
        imap1 (i: v: "${v}-${toString i}") ["a" "b"]
        => [ "a-1" "b-2" ]
   */
-  imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
+  imap1 = f: list:
+    let eAt = elemAt list; in genList (n: f (n + 1) (eAt n)) (length list);
+
+  /* Like `filter`, but with an index. O(n) complexity.
+
+     Note that `ifilter0` does not stack allocate any intermediate lists.
+
+     Type: filter :: (int -> a -> bool) -> [a] -> [a]
+
+     Example:
+       ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ]
+       => [ 1 3 ]
+  */
+  ifilter0 =
+    ipred:
+    list:
+    let listLength = length list; in
+    if listLength <= 0 then list else
+    /* For a function `generator :: n -> a` and variable `count :: n`,
+       list `list :: [a]` of `list = genList generator count` memoizes
+       `generator` over the domain ((domain of `list`) union `range 0 count`).
+       Function `(elemAt list) :: n -> a` provides the same interface as
+       `generator`.
+    */
+    let
+      # View `list` as a memoization.
+      # `nToE` maps `n` (a `list` index) to `e` (a `list` element). Memoized.
+      nToE = elemAt list;
+      # `nToKeep` maps `n` (a `list` index) to `keep` (whether a `list` element
+      # `e` should be kept, according to `ipred`). Memoized.
+      nToKeep = elemAt nToKeepList;
+      nToKeepList = genList (n: ipred n (nToE n)) listLength;
+      # `keptNToEKept` maps `keptN` (a `keptList` index) to `eKept` (a kept
+      # `list` element). Our final result is this memoization, viewed as a list.
+      keptList = keptNToEKeptList;
+      # The length of `keptList` will be the count of kept elements in `list`.
+      keptLength =
+        foldl' (count: keep: count + (if keep then 1 else 0)) 0 nToKeepList;
+      # `nToNKept` maps `n` (a `list` index) to `nKept` (the closest `list`
+      # index greater than or equal to `n` for which `keep` is true).
+      nToNKept = n: if nToKeep n then n else nToNKept (n + 1);
+      # `keptNToNUniq` maps `keptN` (a `keptList` index) to `nKept` (a `list`
+      # index with a kept element). Memoized.
+      keptNToNKept = elemAt keptNToNKeptList;
+      keptNToNKeptList = let keptNToNKeptUnmemoized = keptN:
+        # Base case. Begin searching for a kept element from the beginning.
+        if keptN == 0 then nToNKept 0 else let
+          # To get `keptN`'s `nKept`, we need the previous `keptN`'s `nKept`.
+          prevKeptN = keptN - 1;
+          # This recursion is cheap thanks to memoization.
+          prevNKept = keptNToNKept prevKeptN;
+          # Find the next `nKept`, not `prevNKept` again.
+          n = prevNKept + 1;
+        in nToNKept n
+      ; in genList keptNToNKeptUnmemoized keptLength;
+      keptNToEKeptList = let keptNToEKeptUnmemoized = keptN:
+        nToE (keptNToNKept keptN)
+      ; in genList keptNToEKeptUnmemoized keptLength;
+    in keptList;
 
   /* Map and concatenate the result.
 
@@ -633,6 +692,31 @@ rec {
     "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
     (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
+  /* Remove duplicate adjacent elements from the list, using the supplied
+     equality predicate. O(n) complexity.
+
+     Type: uniqBy :: (a -> a -> bool) -> [a] -> [a]
+
+     Example:
+       uniqBy (x: y: x == y) [ 1 2 2 3 1 1 1 3 1 1 2 ]
+       => [ 1 2 3 1 3 1 2 ]
+  */
+  uniqBy =
+    pred:
+    list:
+    let eAt = elemAt list; in
+    # The first element is never considered a duplicate.
+    ifilter0 (n: e: n == 0 || !(pred (eAt (n - 1)) e)) list;
+
+  /* Remove duplicate adjacent elements from the list. O(n) complexity.
+
+     Type: uniq :: [a] -> [a]
+
+     Example:
+       uniq [ 1 2 2 3 1 1 3 1 1 2 ]
+       => [ 1 2 3 1 3 1 2 ]
+  */
+  uniq = uniqBy (a: b: a == b);
 
   /* Remove duplicate elements from the list. O(n^2) complexity.
 
@@ -641,8 +725,19 @@ rec {
      Example:
        unique [ 3 2 3 4 ]
        => [ 3 2 4 ]
-   */
- unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
+  */
+  unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
+
+  /* Sort and remove duplicate elements from the list.
+     O(n) complexity on top of `sort`.
+
+     Type: fastUnique :: (a -> a -> bool) -> [a] -> [a]
+
+     Example:
+       fastUnique (a: b: a < b) [ 3 2 3 4 ]
+       => [ 2 3 4 ]
+  */
+  fastUnique = comparator: list: uniq (sort comparator list);
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 
