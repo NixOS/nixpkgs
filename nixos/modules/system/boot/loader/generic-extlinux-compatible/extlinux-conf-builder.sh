@@ -2,8 +2,7 @@
 
 shopt -s nullglob
 
-export PATH=/empty
-for i in @path@; do PATH=$PATH:$i/bin; done
+export PATH='@path@'
 
 usage() {
     echo "usage: $0 -t <timeout> -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>] [-n <dtbName>]" >&2
@@ -34,7 +33,7 @@ while getopts "t:c:d:g:n:" opt; do
     esac
 done
 
-[ "$timeout" = "" -o "$default" = "" ] && usage
+[ -z "$timeout" -o -z "$default" ] && usage
 
 mkdir -p $target/nixos
 mkdir -p $target/extlinux

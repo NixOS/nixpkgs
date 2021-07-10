@@ -182,6 +182,7 @@ in
     system.boot.loader.id = mkOption {
       internal = true;
       default = "";
+      type = types.str;
       description = ''
         Id string of the used bootloader.
       '';
