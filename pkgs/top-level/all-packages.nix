@@ -10760,6 +10760,8 @@ in
 
   fasmg = callPackage ../development/compilers/fasmg { };
 
+  fennel = callPackage ../development/compilers/fennel { };
+
   flasm = callPackage ../development/compilers/flasm { };
 
   flyctl = callPackage ../development/web/flyctl { };
