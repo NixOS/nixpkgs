@@ -61,6 +61,9 @@ mapAliases ({
   apacheKafka_2_1 = throw "kafka 2.1 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
   apacheKafka_2_2 = throw "kafka 2.2 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
   apacheKafka_2_3 = throw "kafka 2.3 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
+  apacheKafka_2_4 = throw "kafka 2.4 is no longer supported. Please upgrade to a newer version."; # added 2021-06-24
+  apacheKafka_2_5 = throw "kafka 2.5 is no longer supported. Please upgrade to a newer version."; # added 2021-06-24
+  apacheKafka_2_6 = throw "kafka 2.6 is no longer supported. Please upgrade to a newer version."; # added 2021-06-24
   arduino_core = arduino-core;  # added 2015-02-04
   arora = throw "arora has been removed."; # added 2020-09-09
   asciidocFull = asciidoc-full;  # added 2014-06-22
