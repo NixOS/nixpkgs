@@ -8,7 +8,7 @@
 , cjson
 , libuuid
 , libuv
-, libwebsockets_3_1
+, libwebsockets
 , openssl
 , withSystemd ? stdenv.isLinux
 , systemd
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     cjson
     libuuid
     libuv
-    libwebsockets_3_1
+    libwebsockets
     openssl
   ] ++ lib.optional withSystemd systemd;
 
