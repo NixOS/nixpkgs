@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, six, pytestCheckHook, pytest-benchmark, enum34, numpy, arrow, ruamel_yaml
+, six, pytestCheckHook, enum34, numpy, arrow, ruamel_yaml
 }:
 
 buildPythonPackage rec {
@@ -14,11 +14,9 @@ buildPythonPackage rec {
     sha256 = "1mqspsn6bf3ibvih1zna2glkg8iw7vy5zg9gzg0d1m8zcndk2c48";
   };
 
-  checkInputs = [ pytestCheckHook pytest-benchmark enum34 numpy arrow ruamel_yaml ];
+  checkInputs = [ pytestCheckHook enum34 numpy arrow ruamel_yaml ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
-
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";

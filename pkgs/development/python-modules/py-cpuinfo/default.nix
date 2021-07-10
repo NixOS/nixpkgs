@@ -41,6 +41,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/workhorsy/py-cpuinfo";
     changelog = "https://github.com/workhorsy/py-cpuinfo/blob/v${version}/ChangeLog";
     license = licenses.mit;
+    badPlatforms = [ "riscv32-linux" "riscv64-linux" ];
     maintainers = with maintainers; [ costrouc ];
   };
 }
