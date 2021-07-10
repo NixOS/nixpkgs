@@ -8917,8 +8917,6 @@ in
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
-  stubby = callPackage ../tools/networking/stubby { };
-
   sunwait = callPackage ../applications/misc/sunwait { };
 
   surface-control = callPackage ../applications/misc/surface-control { };
@@ -15195,7 +15193,8 @@ in
 
   getdata = callPackage ../development/libraries/getdata { };
 
-  getdns = callPackage ../development/libraries/getdns { };
+  inherit (callPackage ../development/libraries/getdns { })
+    getdns stubby;
 
   gettext = callPackage ../development/libraries/gettext { };
 
