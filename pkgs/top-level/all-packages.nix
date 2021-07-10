@@ -20369,6 +20369,7 @@ in
     buildArmTrustedFirmware
     armTrustedFirmwareTools
     armTrustedFirmwareAllwinner
+    armTrustedFirmwareAllwinnerH6
     armTrustedFirmwareQemu
     armTrustedFirmwareRK3328
     armTrustedFirmwareRK3399
@@ -21783,6 +21784,7 @@ in
     ubootOdroidC2
     ubootOdroidXU3
     ubootOrangePiPc
+    ubootOrangePi3
     ubootOrangePiZeroPlus2H5
     ubootOrangePiZero
     ubootPcduino3Nano
