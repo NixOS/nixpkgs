@@ -25,15 +25,15 @@
   What follows is a brief explanation on the purpose and use-case for each
   profile. Detailing each option configured by each one is out of scope.
  </para>
- <xi:include href="profiles/all-hardware.xml" />
- <xi:include href="profiles/base.xml" />
- <xi:include href="profiles/clone-config.xml" />
- <xi:include href="profiles/demo.xml" />
- <xi:include href="profiles/docker-container.xml" />
- <xi:include href="profiles/graphical.xml" />
- <xi:include href="profiles/hardened.xml" />
- <xi:include href="profiles/headless.xml" />
- <xi:include href="profiles/installation-device.xml" />
- <xi:include href="profiles/minimal.xml" />
- <xi:include href="profiles/qemu-guest.xml" />
+ <xi:include href="../from_md/configuration/profiles/all-hardware.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/base.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/clone-config.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/demo.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/docker-container.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/graphical.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/hardened.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/headless.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/installation-device.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/minimal.section.xml" />
+ <xi:include href="../from_md/configuration/profiles/qemu-guest.section.xml" />
 </chapter>
