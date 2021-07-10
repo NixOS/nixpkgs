@@ -42,6 +42,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://fortproject.net/en/validator">fort-validator</link>,
+          a RPKI validator and RTR server. Available as
+          <link xlink:href="options.html#opt-services.networking.fort-validator.enable">services.networking.fort-validator</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
           a GeoIP database updater from MaxMind. Available as
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
