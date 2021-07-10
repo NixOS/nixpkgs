@@ -19715,6 +19715,8 @@ in
 
   rspamd = callPackage ../servers/mail/rspamd { };
 
+  smtp-to-telegram = callPackage ../servers/mail/smtp-to-telegram { };
+
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix {
     gperf = gperf_3_0;
   };
