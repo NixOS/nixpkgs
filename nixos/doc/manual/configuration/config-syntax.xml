@@ -18,8 +18,8 @@ xlink:href="https://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
   manual</link>, but here we give a short overview of the most important
   constructs useful in NixOS configuration files.
  </para>
- <xi:include href="config-file.xml" />
+ <xi:include href="../from_md/configuration/config-file.section.xml" />
  <xi:include href="../from_md/configuration/abstractions.section.xml" />
- <xi:include href="modularity.xml" />
- <xi:include href="summary.xml" />
+ <xi:include href="../from_md/configuration/modularity.section.xml" />
+ <xi:include href="../from_md/configuration/summary.section.xml" />
 </chapter>
