@@ -11,6 +11,15 @@ let
     " --search " + (getLuaPath path "share") +
     " --search " + (getLuaPath path "lib")
   );
+  awesomeWrapped = pkgs.buildEnv { 
+    name = "awesome-wrapper"; 
+    paths = [ (writeScriptBin "awesome" ''
+      exec ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} "$@"
+    '')
+  awesome-clientWrapped = (writeScriptBin "awesome" ''
+      exec ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} "$@"
+    '') ];
+  };
 in
 
 {
@@ -55,12 +64,12 @@ in
       { name = "awesome";
         start =
           ''
-            ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} &
+            ${awesomeWrapped}/bin/.awesome-wrapped &
             waitPID=$!
           '';
       };
 
-    environment.systemPackages = [ awesome ];
+    environment.systemPackages = [ awesomeWrapped ];
 
   };
 }
