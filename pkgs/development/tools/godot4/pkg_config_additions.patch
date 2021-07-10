@@ -1,0 +1,30 @@
+diff --git a/platform/linuxbsd/detect.py b/platform/linuxbsd/detect.py
+index 1487210..394cb9e 100755
+--- a/platform/linuxbsd/detect.py
++++ b/platform/linuxbsd/detect.py
+@@ -214,6 +214,9 @@ def configure(env):
+     env.ParseConfig("pkg-config xrandr --cflags --libs")
+     env.ParseConfig("pkg-config xrender --cflags --libs")
+     env.ParseConfig("pkg-config xi --cflags --libs")
++    env.ParseConfig("pkg-config xfixes --cflags --libs")
++    env.ParseConfig("pkg-config glu --cflags --libs")
++    env.ParseConfig("pkg-config zlib --cflags --libs")
+ 
+     if env["touch"]:
+         env.Append(CPPDEFINES=["TOUCH_ENABLED"])
+@@ -336,6 +339,7 @@ def configure(env):
+         print("Enabling ALSA")
+         env["alsa"] = True
+         env.Append(CPPDEFINES=["ALSA_ENABLED", "ALSAMIDI_ENABLED"])
++        env.ParseConfig("pkg-config alsa --cflags --libs")
+     else:
+         print("ALSA libraries not found, disabling driver")
+ 
+@@ -353,6 +357,7 @@ def configure(env):
+             if os.system("pkg-config --exists libudev") == 0:  # 0 means found
+                 print("Enabling udev support")
+                 env.Append(CPPDEFINES=["UDEV_ENABLED"])
++                env.ParseConfig("pkg-config libudev --cflags --libs")
+             else:
+                 print("libudev development libraries not found, disabling udev support")
+     else:
