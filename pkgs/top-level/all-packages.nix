@@ -4165,6 +4165,8 @@ in
 
   diffstat = callPackage ../tools/text/diffstat { };
 
+  difftastic = callPackage ../tools/text/difftastic { };
+
   diffutils = callPackage ../tools/text/diffutils { };
 
   dir2opus = callPackage ../tools/audio/dir2opus {
