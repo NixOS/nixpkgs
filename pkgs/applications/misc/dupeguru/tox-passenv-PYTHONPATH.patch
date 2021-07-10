@@ -1,0 +1,23 @@
+diff --color -ur a/requirements-extra.txt b/requirements-extra.txt
+--- a/requirements-extra.txt	2021-04-22 21:19:32.538524831 +0200
++++ b/requirements-extra.txt	2021-04-22 22:18:15.680305134 +0200
+@@ -1,5 +1,4 @@
+-pytest>=5,<6
++pytest
+ flake8
+-tox-travis
+ black
+-pyinstaller>=4.0,<5.0; sys_platform != 'linux'
+\ Pas de fin de ligne à la fin du fichier
++pyinstaller>=4.0,<5.0; sys_platform != 'linux'
+diff --color -ur a/tox.ini b/tox.ini
+--- a/tox.ini	2021-04-22 21:19:32.538524831 +0200
++++ b/tox.ini	2021-04-22 21:20:11.390752642 +0200
+@@ -6,6 +6,7 @@
+ [testenv]
+ setenv =
+     PYTHON="{envpython}"
++    PYTHONPATH = {env:PYTHONPATH}
+ commands =
+     python build.py --modules
+     flake8
