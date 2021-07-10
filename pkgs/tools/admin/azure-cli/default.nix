@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.24.2";
+  version = "2.26.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,7 +9,7 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-4XmwM0/89hacA8ARs5Zq/ahzeqIc9wS18zT/ale+wQ4=";
+    sha256 = "sha256-O5EL51RRxrp6D82p0Qbo59y/GAkBDhIkIdTxnagKgkY=";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -81,6 +81,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-dns
     azure-mgmt-eventgrid
     azure-mgmt-eventhub
+    azure-mgmt-extendedlocation
     azure-mgmt-hdinsight
     azure-mgmt-imagebuilder
     azure-mgmt-iotcentral

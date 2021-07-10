@@ -15,12 +15,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ persistent zope_interface ];
   checkInputs = [ zope_testrunner ];
 
-  # disable a failing test that looks broken
-  postPatch = ''
-    substituteInPlace BTrees/tests/common.py \
-      --replace "testShortRepr" "no_testShortRepr"
-  '';
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "d33323655924192c4ac998d9ee3002e787915d19c1e17a6baf47c9a63d9556e3";

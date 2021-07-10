@@ -1215,6 +1215,8 @@ let
 
     uchar = callPackage ../development/ocaml-modules/uchar { };
 
+    uecc = callPackage ../development/ocaml-modules/uecc { };
+
     utop = callPackage ../development/tools/ocaml/utop { };
 
     uuidm = callPackage ../development/ocaml-modules/uuidm { };
