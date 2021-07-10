@@ -51,8 +51,8 @@ SHA256:yjxl3UbTn31fLWeyLYTAKYJPRmzknjQZoyG8gSNEoIE my-user@workstation
     </para>
     <para>
       The file system can be configured in NixOS via the usual
-      <link xlink:href="options.html#opt-fileSystems">fileSystems</link>
-      option. Here’s a typical setup:
+      <link linkend="opt-fileSystems">fileSystems</link> option. Here’s
+      a typical setup:
     </para>
     <programlisting language="bash">
 {
