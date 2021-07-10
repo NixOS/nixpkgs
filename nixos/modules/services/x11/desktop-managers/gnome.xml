@@ -47,10 +47,7 @@
     and none of them will be installed.
    </para>
 
-   <para>
-    If you’d only like to omit a subset of the core utilities, you can use <xref linkend="opt-environment.gnome.excludePackages"/>.
-    Note that this mechanism can only exclude core utilities, games and core developer tools.
-   </para>
+   <!--TODO: update documentation-->
   </section>
 
   <section xml:id="sec-gnome-disabling-services">
