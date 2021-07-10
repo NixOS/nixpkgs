@@ -1,0 +1,14 @@
+diff --git a/msglint.c b/msglint.c
+index cf48b4b..de2ce4e 100644
+--- a/msglint.c
++++ b/msglint.c
+@@ -3980,9 +3980,6 @@ int main(int argc, char **argv)
+ 
+ 	r = parsemessage(buf, used);
+ 
+-	/* close file */
+-	if (infile != stdin) fclose(infile);
+-
+ 	/* release buffer */
+ 	free(basebuf);
+     } while (r == 0 && *argv != NULL);

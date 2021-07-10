@@ -25952,6 +25952,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  msglint = callPackage ../applications/misc/msglint { };
+
   msmtp = callPackage ../applications/networking/msmtp {
     inherit (darwin.apple_sdk.frameworks) Security;
     autoreconfHook = buildPackages.autoreconfHook269;
