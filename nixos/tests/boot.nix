@@ -17,6 +17,16 @@ let
         ];
     }).config.system.build.isoImage;
 
+  sd =
+    (import ../lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ ../modules/installer/sd-card/sd-image-x86_64.nix
+          ../modules/testing/test-instrumentation.nix
+          { sdImage.compressImage = false; }
+        ];
+    }).config.system.build.sdImage;
+
   pythonDict = params: "\n    {\n        ${concatStringsSep ",\n        " (mapAttrsToList (name: param: "\"${name}\": \"${param}\"") params)},\n    }\n";
 
   makeBootTest = name: extraConfig:
@@ -101,5 +111,10 @@ in {
       bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
       # Custom ROM is needed for EFI PXE boot. I failed to understand exactly why, because QEMU should still use iPXE for EFI.
       netFrontendArgs = "romfile=${pkgs.ipxe}/ipxe.efirom";
+    };
+
+    ubootExtlinux = makeBootTest "uboot-extlinux" {
+      usb = "${sd}/sd-image/${sd.imageName}";
+      bios = "${pkgs.ubootQemuX86_64}/u-boot.rom";
     };
 }

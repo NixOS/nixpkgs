@@ -328,6 +328,18 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootQemuX86_64 = buildUBoot {
+    defconfig = "qemu-x86_64_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraMeta.platforms = ["x86_64-linux"];
+    filesToInstall = ["u-boot.rom"];
+  };
+
   ubootRaspberryPi = buildUBoot {
     defconfig = "rpi_defconfig";
     extraMeta.platforms = ["armv6l-linux"];

@@ -44,12 +44,12 @@ in
       "ohci1394" "sbp2"
 
       # Virtio (QEMU, KVM etc.) support.
-      "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
+      "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
 
       # VMware support.
       "mptspi" "vmxnet3" "vsock"
     ] ++ lib.optional platform.isx86 "vmw_balloon"
-    ++ lib.optionals (!platform.isAarch64 && !platform.isAarch32) [ # not sure where else they're missing
+    ++ lib.optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
       "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
 
       # Hyper-V support.

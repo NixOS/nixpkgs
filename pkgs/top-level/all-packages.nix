@@ -21796,6 +21796,7 @@ in
     ubootPinebookPro
     ubootQemuAarch64
     ubootQemuArm
+    ubootQemuX86_64
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
