@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "imagelol";
-  version = "0.2";
+  version = "unstable-2021-03-27";
 
   src = fetchFromGitHub {
     owner = "MCRedstoner2004";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0978zdrfj41jsqm78afyyd1l64iki9nwjvhd8ynii1b553nn4dmd";
+    rev = "9be8791554d5090e1eb36af8ecb34fb711480ef1";
+    sha256 = "0843aqx42rsh99m23qjp8lwavydh49d113ih1x3b6yy22ax9asnx";
     fetchSubmodules = true;
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ./ImageLOL $out/bin
+    cp ./imagelol $out/bin
   '';
 
   meta = with lib; {
