@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     "--with-gmp"
   ];
 
+  buildFlags = [ "compiler" ];
+
   src = fetchFromGitHub {
     owner = "polyml";
     repo = "polyml";
