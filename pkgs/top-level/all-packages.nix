@@ -15291,6 +15291,8 @@ in
 
   elf-header-real = callPackage ../development/libraries/elf-header { };
 
+  elfio = callPackage ../development/libraries/elfio { };
+
   glibc_memusage = callPackage ../development/libraries/glibc {
     withGd = true;
   };
