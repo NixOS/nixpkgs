@@ -11249,6 +11249,8 @@ in
       graphviz = graphviz-nox;
     });
 
+  hashlink = callPackage ../development/compilers/hashlink { };
+
   inherit (callPackage ../development/compilers/haxe {
     inherit (darwin.apple_sdk.frameworks) Security;
   })
