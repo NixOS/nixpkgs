@@ -61,14 +61,7 @@ in
           let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
             ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
           in optionalAttrs (gateway != [ ]) {
-            routes = override [
-              {
-                routeConfig = {
-                  Gateway = gateway;
-                  GatewayOnLink = false;
-                };
-              }
-            ];
+            gateway = override gateway;
           } // optionalAttrs (domains != [ ]) {
             domains = override domains;
           };
