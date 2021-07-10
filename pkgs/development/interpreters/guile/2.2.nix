@@ -22,12 +22,12 @@ then coverageAnalysis
 else stdenv.mkDerivation)
 
   (rec {
-    pname = "guile";
-    version = "3.0.5";
+    name = "guile-${version}";
+    version = "2.2.7";
 
     src = fetchurl {
-      url = "mirror://gnu/guile/${pname}-${version}.tar.xz";
-      sha256 = "sha256-LXb7Aj0jZhJqX6wEcE+b2EOEa4DMy6baXXUjGLAzUPE=";
+      url = "mirror://gnu/guile/${name}.tar.xz";
+      sha256 = "013mydzhfswqci6xmyc1ajzd59pfbdak15i0b090nhr9bzm7dxyd";
     };
 
     outputs = [ "out" "dev" "info" ];
@@ -96,12 +96,12 @@ else stdenv.mkDerivation)
     # why `--with-libunistring-prefix' and similar options coming from
     # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
     + ''
-      substituteInPlace "$out/lib/pkgconfig/guile-3.0.pc" \
-        --replace "-lunistring" "-L${libunistring}/lib -lunistring" \
-        --replace "^Cflags:\(.*\)$" "Cflags: -I${libunistring}/include \1" \
-        --replace "-lltdl" "-L${libtool.lib}/lib -lltdl" \
-        --replace "includedir=$out" "includedir=$dev"
-
+      sed -i "$out/lib/pkgconfig/guile"-*.pc    \
+          -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
+              s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
+              s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
+              s|includedir=$out|includedir=$dev|g
+              "
     '';
 
     # make check doesn't work on darwin
@@ -109,14 +109,14 @@ else stdenv.mkDerivation)
     doCheck = false;
     doInstallCheck = doCheck;
 
-    setupHook = ./setup-hook-3.0.sh;
+    setupHook = ./setup-hook-2.2.sh;
 
-    meta = with lib; {
+    meta = {
       description = "Embeddable Scheme implementation";
       homepage = "https://www.gnu.org/software/guile/";
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ ludo lovek323 vrthra ];
-      platforms = platforms.all;
+      license = lib.licenses.lgpl3Plus;
+      maintainers = with lib.maintainers; [ ludo lovek323 vrthra ];
+      platforms = lib.platforms.all;
 
       longDescription = ''
         GNU Guile is an implementation of the Scheme programming language, with
