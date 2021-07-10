@@ -6,17 +6,19 @@ let
   cfg = config.services.thelounge;
   dataDir = "/var/lib/thelounge";
   configJsData = "module.exports = " + builtins.toJSON (
-    { private = cfg.private; port = cfg.port; } // cfg.extraConfig
+    { public = cfg.public; port = cfg.port; } // cfg.extraConfig
   );
-in {
+in
+{
   options.services.thelounge = {
     enable = mkEnableOption "The Lounge web IRC client";
 
-    private = mkOption {
+    public = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
-        Make your The Lounge instance private. You will need to configure user
+        Make your The Lounge instance public.
+        Setting this to <literal>false</literal> will require you to configure user
         accounts by using the (<command>thelounge</command>) command or by adding
         entries in <filename>${dataDir}/users</filename>. You might need to restart
         The Lounge after making changes to the state directory.
@@ -30,7 +32,7 @@ in {
     };
 
     extraConfig = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
       example = literalExample ''{
         reverseProxy = true;
@@ -58,7 +60,7 @@ in {
       group = "thelounge";
       isSystemUser = true;
     };
-    users.groups.thelounge = {};
+    users.groups.thelounge = { };
     systemd.services.thelounge = {
       description = "The Lounge web IRC client";
       wantedBy = [ "multi-user.target" ];
@@ -72,4 +74,6 @@ in {
 
     environment.systemPackages = [ pkgs.thelounge ];
   };
+
+  imports = [ (mkRemovedOptionModule [ "private" ] [ "public" ]) ];
 }

@@ -479,13 +479,20 @@
         </itemizedlist>
       </listitem>
     </itemizedlist>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <literal>yggdrasil</literal> was upgraded to a new major
           release with breaking changes, see
           <link xlink:href="https://github.com/yggdrasil-network/yggdrasil-go/releases/tag/v0.4.0">upstream
           changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.thelounge.private</literal> was removed in
+          favor of <literal>services.thelounge.public</literal>, to
+          follow with upstream changes.
         </para>
       </listitem>
     </itemizedlist>
