@@ -6,8 +6,8 @@ let
   ## fetchgit info
   url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
-  sha256 = "0mmpiq7bsrwhp7z07a1pwka4q6d2fbmdx5wp83nxj31rvdxhqwnw";
-  version = "4.1";
+  sha256 = "07a9pdwlgqvzz3fhz9camp4fzmb0a40a8282i9j44vazldna3qhp";
+  version = "4.4";
 
   inherit (kernel) stdenv;
 
@@ -16,6 +16,7 @@ let
     pname = "systemtap";
     inherit version;
     src = fetchgit { inherit url rev sha256; };
+    patches = [ ./PR27001.patch ];
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
     enableParallelBuilding = true;

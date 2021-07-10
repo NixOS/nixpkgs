@@ -1,0 +1,23 @@
+commit 0d80048e02ecf6876c9f9ebeea387af9fb2a8051
+Author: Guillaume Morin <guillaume@morinfr.org>
+Date:   Fri Dec 4 12:18:44 2020 -0500
+
+    PR27001: fix runtime/transport/transport.c lockdown build problem
+    
+    On some kernel/configs, CONFIG_SECURITY_LOCKDOWN_LSM !=
+    STAPCONF_LOCKDOWN_DEBUGFS, which broke the runtime build.
+    Using the matching macro as detected by autoconf to fix.
+
+diff --git a/runtime/transport/transport.c b/runtime/transport/transport.c
+index 44e69b68c..96426eb7b 100644
+--- a/runtime/transport/transport.c
++++ b/runtime/transport/transport.c
+@@ -21,7 +21,7 @@
+ #include <linux/namei.h>
+ #include <linux/delay.h>
+ #include <linux/mutex.h>
+-#ifdef CONFIG_SECURITY_LOCKDOWN_LSM
++#ifdef STAPCONF_LOCKDOWN_DEBUGFS
+ #include <linux/security.h>
+ #endif
+ #include "../uidgid_compatibility.h"
