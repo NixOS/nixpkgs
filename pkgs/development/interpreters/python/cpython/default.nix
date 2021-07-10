@@ -35,11 +35,11 @@
 , stripTests ? false
 , stripTkinter ? false
 , rebuildBytecode ? true
-, stripBytecode ? reproducibleBuild
+, stripBytecode ? true
 , includeSiteCustomize ? true
 , static ? stdenv.hostPlatform.isStatic
 , enableOptimizations ? false
-, reproducibleBuild ? true
+, reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 
@@ -65,6 +65,9 @@ assert lib.assertMsg (reproducibleBuild -> stripBytecode)
 
 assert lib.assertMsg (reproducibleBuild -> (!enableOptimizations))
   "Deterministic builds are not achieved when optimizations are enabled.";
+
+assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
+  "Deterministic builds are not achieved when (default unoptimized) bytecode is created.";
 
 with lib;
 
@@ -396,11 +399,14 @@ in with passthru; stdenv.mkDerivation {
     # First we delete all old bytecode.
     find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
     '' + optionalString rebuildBytecode ''
-    # Then, we build for the two optimization levels.
-    # We do not build unoptimized bytecode, because its not entirely deterministic yet.
     # Python 3.7 implements PEP 552, introducing support for deterministic bytecode.
-    # compileall uses this checked-hash method by default when `SOURCE_DATE_EPOCH` is set.
+    # compileall uses the therein introduced checked-hash method by default when
+    # `SOURCE_DATE_EPOCH` is set.
     # We exclude lib2to3 because that's Python 2 code which fails
+    # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
+    # is not reproducible yet. https://bugs.python.org/issue29708
+    # Not creating bytecode will result in a large performance loss however, so we do build it.
+    find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
   '';
