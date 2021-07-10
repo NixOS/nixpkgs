@@ -5562,6 +5562,10 @@ in
     stdenv = stdenv_32bit;
   };
 
+  gruut = with python3.pkgs; toPythonApplication gruut;
+
+  gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
+
   gx = callPackage ../tools/package-management/gx { };
   gx-go = callPackage ../tools/package-management/gx/go { };
 
