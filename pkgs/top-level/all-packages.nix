@@ -2257,6 +2257,8 @@ in
 
   compactor = callPackage ../applications/networking/compactor { };
 
+  concurrentqueue = callPackage ../development/libraries/concurrentqueue { };
+
   consul = callPackage ../servers/consul { };
 
   consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
