@@ -14,6 +14,7 @@
 in
 { url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
+, sparseCheckout ? null
 , branchName ? null
 , name ? urlToName url rev
 , # Shell code executed after the file has been fetched
@@ -62,7 +63,7 @@ stdenvNoCC.mkDerivation {
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName postFetch;
+  inherit url rev leaveDotGit fetchLFS fetchSubmodules sparseCheckout deepClone branchName postFetch;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
