@@ -411,6 +411,8 @@ let
 
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
+    hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
@@ -778,6 +780,8 @@ let
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
+
+    mparser-pcre =  callPackage ../development/ocaml-modules/mparser/pcre.nix { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
