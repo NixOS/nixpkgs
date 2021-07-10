@@ -9,7 +9,7 @@ let
 
   dnsmasqConf = pkgs.writeText "dnsmasq.conf" ''
     dhcp-leasefile=${stateDir}/dnsmasq.leases
-    ${optionalString cfg.resolveLocalQueries ''
+    ${optionalString cfg.useResolvConfUpstreams ''
       conf-file=/etc/dnsmasq-conf.conf
       resolv-file=/etc/dnsmasq-resolv.conf
     ''}
@@ -43,6 +43,15 @@ in
         description = ''
           Whether dnsmasq should resolve local queries (i.e. add 127.0.0.1 to
           /etc/resolv.conf).
+        '';
+      };
+
+      useResolvConfUpstreams = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether dnsmasq should include as upstream servers the DNS servers
+          provided by resolvconf (which are typically determined via DHCP).
         '';
       };
 
@@ -91,10 +100,10 @@ in
       description = "Dnsmasq daemon user";
     };
 
-    networking.resolvconf = mkIf cfg.resolveLocalQueries {
-      useLocalResolver = mkDefault true;
+    networking.resolvconf = {
+      useLocalResolver = mkIf cfg.resolveLocalQueries (mkDefault true);
 
-      extraConfig = ''
+      extraConfig = mkIf cfg.useResolvConfUpstreams ''
         dnsmasq_conf=/etc/dnsmasq-conf.conf
         dnsmasq_resolv=/etc/dnsmasq-resolv.conf
       '';
