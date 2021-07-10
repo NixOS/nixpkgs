@@ -13,7 +13,23 @@ in
   ###### interface
 
   options = {
-    services.xserver.windowManager.dwm.enable = mkEnableOption "dwm";
+    services.xserver.windowManager.dwm = {
+      enable = mkEnableOption "dwm";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.dwm;
+        example = ''
+          pkgs.dwm.override {
+            patches = [
+              my_patch_1
+              my_patch_2
+            ];
+          }
+        '';
+        description = "dwm package to use.";
+      };
+    };
   };
 
 
@@ -30,7 +46,7 @@ in
           '';
       };
 
-    environment.systemPackages = [ pkgs.dwm ];
+    environment.systemPackages = [ cfg.package ];
 
   };
 
