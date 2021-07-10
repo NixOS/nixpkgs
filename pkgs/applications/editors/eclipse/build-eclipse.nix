@@ -1,6 +1,6 @@
 { lib, stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
 , zlib, jdk, glib, gtk, libXtst, gsettings-desktop-schemas, webkitgtk
-, makeWrapper, perl, ... }:
+, makeWrapper, perl, glib_networking, ... }:
 
 { name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description }:
 
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${jdk}/bin \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst ] ++ lib.optional (webkitgtk != null) webkitgtk)} \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
       --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
 
     # Create desktop item.
