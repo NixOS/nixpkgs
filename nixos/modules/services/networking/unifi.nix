@@ -28,10 +28,36 @@ let
     }
   ];
   systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}.mount") mountPoints;
+
+  siteRules = concatLists (mapAttrsToList (siteId: site:
+    let gwCfg = site.configGateway;
+        gwCfgFile = pkgs.writeText "config.gateway.json" (if isAttrs gwCfg
+                                                          then builtins.toJSON gwCfg
+                                                          else gwCfg);
+    in
+    [
+        "d '${stateDir}/data/sites/${siteId}' 0700 unifi - - -"
+        "L+ '${stateDir}/data/sites/${siteId}/config.gateway.json' - - - - ${gwCfgFile}"
+    ]
+  ) cfg.sites);
 in
 {
 
   options = {
+    services.unifi.sites = mkOption {
+      description = "Site configuration";
+      default = {};
+      type = with types; attrsOf (submodule {
+        options = {
+          configGateway = mkOption {
+            type = types.either types.str types.attrs;
+            description = ''
+              The gateway configuration as per https://help.ui.com/hc/en-us/articles/215458888-UniFi-USG-Advanced-Configuration-Using-config-gateway-json.
+            '';
+          };
+        };
+      });
+    };
 
     services.unifi.enable = mkOption {
       type = types.bool;
@@ -149,9 +175,10 @@ in
     systemd.tmpfiles.rules = [
       "d '${stateDir}' 0700 unifi - - -"
       "d '${stateDir}/data' 0700 unifi - - -"
+      "d '${stateDir}/data/sites' 0700 unifi - - -"
       "d '${stateDir}/webapps' 0700 unifi - - -"
       "L+ '${stateDir}/webapps/ROOT' - - - - ${cfg.unifiPackage}/webapps/ROOT"
-    ];
+    ] ++ siteRules;
 
     systemd.services.unifi = {
       description = "UniFi controller daemon";
