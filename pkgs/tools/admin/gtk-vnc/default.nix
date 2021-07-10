@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     sha256 = "0jmr6igyzcj2wmx5v5ywaazvdz3hx6a6rys26yb4l4s71l281bvs";
   };
 
+  patches = [
+    ./gdkquarz.patch
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -49,9 +53,11 @@ stdenv.mkDerivation rec {
     glib
     libgcrypt
     cyrus_sasl
-    libpulseaudio
     gtk3
-  ];
+  ] ++ lib.optional stdenv.isLinux libpulseaudio;
+
+  mesonFlags = [
+  ] ++ lib.optional stdenv.isDarwin "-Dpulseaudio=disabled";
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -65,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/gtk-vnc";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin offline ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

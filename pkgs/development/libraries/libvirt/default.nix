@@ -6,6 +6,8 @@
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus, libtirpc, rpcsvc-proto, darwin
 , meson, ninja, audit, cmake, bash-completion, pkg-config
+, Carbon, AppKit
+, gnumake
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
@@ -32,13 +34,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "7.0.0";
+  version = "7.4.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "12fxkpy7j2qhfxypw9jg3bzdd9xx6vf6x96iy5kjihh89n236f6a";
+        sha256 = "b366d73dee6ce77a226bedef592e0620ceb8e22e5998f60768017f79fc4ead26";
       }
     else
       fetchgit {
@@ -76,7 +78,7 @@ in stdenv.mkDerivation rec {
   ] ++ optionals enableGlusterfs [
     glusterfs
   ] ++ optionals stdenv.isDarwin [
-    libiconv gmp
+    libiconv gmp gnumake Carbon AppKit
   ];
 
   preConfigure = let
@@ -94,6 +96,9 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
     patchShebangs .
+    sed -iE 's/gmake/make/g' build-aux/meson.build
+    sed -iE 's/gsed/sed/g' build-aux/meson.build
+    sed -iE 's/ggrep/grep/g' build-aux/meson.build
   ''
   + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
 
@@ -106,14 +111,14 @@ in stdenv.mkDerivation rec {
     "-Dinstall_prefix=${placeholder "out"}"
     "-Dlocalstatedir=/var"
     "-Drunstatedir=/run"
-    "-Dlibpcap=enabled"
+    #"-Dlibpcap=enabled"
     "-Ddriver_qemu=enabled"
-    "-Ddriver_vmware=enabled"
-    "-Ddriver_vbox=enabled"
+    #"-Ddriver_vmware=enabled"
+    #"-Ddriver_vbox=enabled"
     "-Ddriver_test=enabled"
     "-Ddriver_esx=enabled"
     "-Ddriver_remote=enabled"
-    "-Dpolkit=enabled"
+    #"-Dpolkit=enabled"
     (opt "storage_iscsi" enableIscsi)
   ] ++ optionals stdenv.isLinux [
     (opt "storage_zfs" (zfs != null))
