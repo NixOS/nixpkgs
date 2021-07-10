@@ -1,0 +1,21 @@
+Add option to toggle easystroke on/off.
+diff -Naur a/main.cc b/main.cc
+--- a/main.cc	2013-03-27 16:52:38.000000000 +0100
++++ b/main.cc	2015-05-10 17:31:00.223132604 +0200
+@@ -315,6 +315,8 @@
+ 			disabled.set(true);
+ 		} else if (!strcmp(arg[i], "enable")) {
+ 			disabled.set(false);
++		} else if (!strcmp(arg[i], "toggle")) {
++			disabled.set(!disabled.get());
+ 		} else if (!strcmp(arg[i], "about")) {
+ 			win->show_about();
+ 		} else if (!strcmp(arg[i], "quit")) {
+@@ -428,6 +430,7 @@
+ 	printf("  hide                   Hide configuration window\n");
+ 	printf("  disable                Disable easystroke\n");
+ 	printf("  enable                 Enable easystroke\n");
++	printf("  toggle                 Toggle easystroke\n");
+ 	printf("  about                  Show about dialog\n");
+ 	printf("  quit                   Quit easystroke\n");
+ 	printf("\n");

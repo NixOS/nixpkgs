@@ -1,0 +1,14 @@
+DOn't ignore xshape setting when saving.
+diff -Naur a/prefdb.cc b/prefdb.cc
+--- a/prefdb.cc	2015-11-04 19:56:49.354441037 +0100
++++ b/prefdb.cc	2015-11-04 20:00:26.609473508 +0100
+@@ -72,8 +72,6 @@
+ 		ar & help;
+ 	}
+ 	ar & trace.unsafe_ref();
+-	if (trace.get() == TraceShape)
+-		trace.unsafe_ref() = TraceDefault;
+ 	if (version < 3) {
+ 		int delay;
+ 		ar & delay;
+

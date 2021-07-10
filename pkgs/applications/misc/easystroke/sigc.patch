@@ -1,0 +1,31 @@
+Fix build with libsigc++ 2.4+ (group was removed).
+diff -Naur a/actions.cc b/actions.cc
+--- a/actions.cc	2015-11-04 19:56:49.351107678 +0100
++++ b/actions.cc	2015-11-04 19:57:07.161246969 +0100
+@@ -51,10 +51,8 @@
+ 	context->set_icon(pb, pb->get_width(), pb->get_height());
+ }
+ 
+-bool negate(bool b) { return !b; }
+-
+ TreeViewMulti::TreeViewMulti() : Gtk::TreeView(), pending(false) {
+-	get_selection()->set_select_function(sigc::group(&negate, sigc::ref(pending)));
++    get_selection()->set_select_function(sigc::mem_fun(*this, &TreeViewMulti::negate_pending));
+ }
+ 
+ enum Type { COMMAND, KEY, TEXT, SCROLL, IGNORE, BUTTON, MISC };
+diff -Naur a/actions.h b/actions.h
+--- a/actions.h	2015-11-04 19:56:49.351107678 +0100
++++ b/actions.h	2015-11-04 19:57:07.161246969 +0100
+@@ -30,6 +30,11 @@
+ 	virtual void on_drag_begin(const Glib::RefPtr<Gdk::DragContext> &context);
+ public:
+ 	TreeViewMulti();
++    bool negate_pending(const Glib::RefPtr<Gtk::TreeModel>& model,
++                        const Gtk::TreeModel::Path& path,
++                        bool path_currently_selected) {
++        return !pending;
++    }
+ };
+ 
+ class Actions {

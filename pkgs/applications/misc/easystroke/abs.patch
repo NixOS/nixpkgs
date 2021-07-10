@@ -1,0 +1,10 @@
+--- easystroke.orig/handler.cc	2017-06-10 18:29:45.785935113 +0200
++++ easystroke/handler.cc	2017-06-10 18:34:59.931032754 +0200
+@@ -533,7 +533,6 @@
+ 	virtual Grabber::State grab_mode() { return parent->grab_mode(); }
+ };
+ 
+-static inline float abs(float x) { return x > 0 ? x : -x; }
+ 
+ class AbstractScrollHandler : public Handler {
+ 	bool have_x, have_y;
