@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config
+{ lib, stdenv, fetchurl, pkg-config, fetchFromGitLab
 , python3
 , perl
 , perlPackages
@@ -6,6 +6,7 @@
 , intltool
 , libpeas
 , libsoup
+, libdmapsharing
 , gnome
 , totem-pl-parser
 , tdb
@@ -18,6 +19,25 @@
 let
   pname = "rhythmbox";
   version = "3.4.4";
+
+  # The API version of libdmapsharing required by rhythmbox 3.4.4 is 3.0.
+
+  # This PR would solve the issue:
+  # https://gitlab.gnome.org/GNOME/rhythmbox/-/merge_requests/12
+  # Unfortunately applying this patch produces a rhythmbox which
+  # cannot fetch data from DAAP shares.
+
+  libdmapsharing_3 = libdmapsharing.overrideAttrs (old: rec {
+    version = "2.9.41";
+    src = fetchFromGitLab {
+      domain = "gitlab.gnome.org";
+      owner = "GNOME";
+      repo = old.pname;
+      rev = "${lib.toUpper old.pname}_${lib.replaceStrings ["."] ["_"] version}";
+      sha256 = "05kvrzf0cp3mskdy6iv7zqq24qdczl800q2dn1h4bk3d9wchgm4p";
+    };
+  });
+
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -46,7 +66,11 @@ in stdenv.mkDerivation rec {
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+
+    libdmapsharing_3 # necessary for daap support
   ] ++ gst_plugins;
+
+  configureFlags = [ "--enable-daap" ];
 
   enableParallelBuilding = true;
 
