@@ -8,6 +8,12 @@ let
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
 
+  interfaceGateways = i:
+    let
+      address = gw: optional (gw != null && (gw.address or "") != "" && (gw.interface or null) == i.name) gw.address;
+    in
+      address cfg.defaultGateway ++ address cfg.defaultGateway6;
+
   interfaceIps = i:
     i.ipv4.addresses
     ++ optionals cfg.enableIPv6 i.ipv6.addresses;
@@ -36,12 +42,6 @@ in
       assertion = cfg.vswitches == {};
       message = "networking.vswitches are not supported by networkd.";
     } {
-      assertion = cfg.defaultGateway == null || cfg.defaultGateway.interface == null;
-      message = "networking.defaultGateway.interface is not supported by networkd.";
-    } {
-      assertion = cfg.defaultGateway6 == null || cfg.defaultGateway6.interface == null;
-      message = "networking.defaultGateway6.interface is not supported by networkd.";
-    } {
       assertion = cfg.useDHCP == false;
       message = ''
         networking.useDHCP is not supported by networkd.
@@ -58,8 +58,8 @@ in
       let
         domains = cfg.search ++ (optional (cfg.domain != null) cfg.domain);
         genericNetwork = override:
-          let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
-            ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
+          let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "" && (cfg.defaultGateway.interface or null) == null) cfg.defaultGateway.address
+                        ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "" && (cfg.defaultGateway6.interface or null) == null) cfg.defaultGateway6.address;
           in optionalAttrs (gateway != [ ]) {
             routes = override [
               {
@@ -91,6 +91,7 @@ in
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
             (if i.useDHCP != null then i.useDHCP else false));
+          gateway = let gws = interfaceGateways i; in mkIf (gws != []) gws;
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
           networkConfig.IPv6PrivacyExtensions = "kernel";
