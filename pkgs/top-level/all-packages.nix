@@ -22507,6 +22507,10 @@ in
 
   poly = callPackage ../data/fonts/poly { };
 
+  polychromatic = python3Packages.callPackage ../applications/misc/polychromatic {
+    meson = pkgs.meson;
+  };
+
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
