@@ -20,7 +20,7 @@ Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-
    - [ ] NixOS
    - [ ] macOS
    - [ ] other Linux distributions
-- [ ] Tested via one or more NixOS test(s) if existing and applicable for the change (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
+- [ ] Tested via one or more NixOS test(s) if existing and applicable for the change ([cf. manual documentation on how to run/write/debug tests](https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests))
 - [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review wip"`
 - [ ] Tested execution of all binary files (usually in `./result/bin/`)
 - [21.11 Release Notes (or backporting 21.05 Relase notes)](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#generating-2111-release-notes)
