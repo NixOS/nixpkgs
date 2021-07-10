@@ -37,9 +37,8 @@ xlink:href="https://nixos.org/nixpkgs/manual/#sec-package-naming">
     </term>
     <listitem>
      <para>
-      The type of the option (see <xref linkend='sec-option-types' />). It may
-      be omitted, but that’s not advisable since it may lead to errors that
-      are hard to diagnose.
+      The type of the option (see <xref linkend='sec-option-types' />). This
+      argument is mandatory.
      </para>
     </listitem>
    </varlistentry>
