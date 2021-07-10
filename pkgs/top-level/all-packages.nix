@@ -20623,6 +20623,8 @@ in
 
   intel-compute-runtime = callPackage ../os-specific/linux/intel-compute-runtime { };
 
+  intel-gpa = callPackage ../development/tools/intel-gpa { };
+
   intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
 
   iomelt = callPackage ../os-specific/linux/iomelt { };
