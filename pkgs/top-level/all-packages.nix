@@ -30006,6 +30006,8 @@ in
   mathematica10 = callPackage ../applications/science/math/mathematica/10.nix { };
   mathematica11 = callPackage ../applications/science/math/mathematica/11.nix { };
 
+  wolframscript = callPackage ../applications/science/math/wolframscript { };
+
   metis = callPackage ../development/libraries/science/math/metis {};
 
   nauty = callPackage ../applications/science/math/nauty {};
