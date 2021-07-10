@@ -10,8 +10,7 @@
 }:
 
 let deps = import ./deps.nix { inherit fetchurl; };
-
-    version = "2020-10-08";
+    version = "2021-05-20";
 
     # Build the nuget source needed for the later build all by itself
     # since it's a time-consuming step that only depends on ./deps.nix.
@@ -49,8 +48,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "python-language-server";
-    rev = "76a29da373a4bb1e81b052f25802f3ca872d0a67";
-    sha256 = "16jb90lacdrhi4dpp084bqzx351mv23f4mhl4lz5h6rkfzj5jxgg";
+    rev = "86825796eae15d4d46919bc6e32f1197196ba1b3";
+    sha256 = "sha256-izDE7Oil9g47Jf3eHPtW5coNixF71t9i0oYSuelakCo=";
   };
 
   buildInputs = [dotnet-sdk_3 openssl icu];

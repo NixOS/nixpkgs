@@ -24,13 +24,13 @@
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "0mvf2603d9b0s6rh7sl7mg4ipbh0nk05xgh1078mwvx31qjsmq1i";
+    sha256 = "1iijggdgj36v7d2zm45c00nrbzxaaah2azflpca0f6fjaaxh3lr2";
   };
 
   propagatedBuildInputs = [
@@ -75,12 +75,6 @@ buildPythonApplication rec {
     rm tests/load-http.vd            # http
     rm tests/graph-cursor-nosave.vd  # http
     rm tests/messenger-nosave.vd     # dns
-
-    # disable some tests which expect Python == 3.6 (not our current version)
-    # see https://github.com/saulpw/visidata/issues/1014
-    rm tests/describe.vd
-    rm tests/describe-error.vd
-    rm tests/edit-type.vd
 
     # tests use git to compare outputs to references
     git init -b "test-reference"
