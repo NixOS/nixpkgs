@@ -147,6 +147,14 @@ if [[ -z $system ]]; then
     outLink="$tmpdir/system"
     if [[ -z $flake ]]; then
         echo "building the configuration in $NIXOS_CONFIG..."
+
+        # We build the flake twice to populate the local nix store with
+        # all of the paths needed to do installation.
+        # This is to avoid situations where `nix-build --store <path> --extra-substitutres auto?trusted=1`
+        # errors on paths not being found in the local nix store.
+        # See https://github.com/NixOS/nixpkgs/issues/126141 for more details.
+        nix-build --no-out-link "${extraBuildFlags[@]}" \
+            '<nixpkgs/nixos>' -A system -I "nixos-config=$NIXOS_CONFIG" "${verbosity[@]}"
         nix-build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
             --extra-substituters "$sub" \
             '<nixpkgs/nixos>' -A system -I "nixos-config=$NIXOS_CONFIG" "${verbosity[@]}"
