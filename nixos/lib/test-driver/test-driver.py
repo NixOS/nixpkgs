@@ -449,6 +449,8 @@ class Machine:
 
         while True:
             chunk = self.shell.recv(4096).decode(errors="ignore")
+            if len(chunk) == 0:
+                 raise Exception(f"command `{command}` failed (qemu died)")
             match = status_code_pattern.match(chunk)
             if match:
                 output += match[1]
@@ -608,7 +610,8 @@ class Machine:
             self.start()
 
             tic = time.time()
-            self.shell.recv(1024)
+            if self.shell.recv(1024) == 0:
+                 raise Exception("connect failed (qemu died)")
             # TODO: Timeout
             toc = time.time()
 
