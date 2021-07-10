@@ -7,11 +7,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "myfreeweb";
     repo = pname;
-    rev = "47f86f0d15add2af785ea1ff47f24d130026d1b4";
-    sha256 = "1xm8297k0d8d0aq7fxgmibr4qva4d02cb6gnnlzq77jcmnknxv14";
+    rev = "410603abf4810320bf79bde90cc85367b71a8b12";
+    sha256 = "sha256-apq3kHipEX6zOTNwqpIQR46JqmeE7EKVSOGrNNSkyu8=";
   };
 
-  cargoSha256 = "1z0xxbjnhhzn1fnc3zhvy727l88qyyfqdayj5yvf3nh23m7sr87l";
+  cargoHash = "sha256-5PWyxUfE6lkQ8CYXxq2/xp8hr5k73ZpK2RVJCgaWX1c=";
 
   meta = with lib; {
     homepage = "https://github.com/myfreeweb/${pname}";
