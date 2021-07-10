@@ -4618,9 +4618,13 @@ in {
 
   munch = callPackage ../development/python-modules/munch { };
 
+  mung = callPackage ../development/python-modules/mung { };
+
   munkres = callPackage ../development/python-modules/munkres { };
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
+
+  muscima = callPackage ../development/python-modules/muscima { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
@@ -4940,6 +4944,8 @@ in {
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
+
+  omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
 
   ondilo = callPackage ../development/python-modules/ondilo { };
 
