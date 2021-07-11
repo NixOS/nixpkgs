@@ -14,7 +14,7 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "sha256-/tX45t/DsWd0/R9VJJsqNjoOkgGIvqvq05YaVp0pLf0=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace fdroidserver/common.py --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
     substituteInPlace setup.py --replace "pyasn1-modules == 0.2.1" "pyasn1-modules"
   '';
