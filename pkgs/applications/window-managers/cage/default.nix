@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ixl45g0m8b75gvbjm3gf5qg0yplspgs0xpm2619wn5sygc47sb1";
   };
 
+  patches = [
+    # To fix the build with wlroots 0.14.0:
+    ./wlroots-0_14.patch
+  ];
+
   nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
 
   buildInputs = [
