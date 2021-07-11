@@ -1946,7 +1946,9 @@ EOT
 
   # Flakey tests
   # upstream https://github.com/circuithub/rel8/issues/86
-  rel8 = dontCheck super.rel8;
+  rel8 = dontCheck (super.rel8.override {
+    opaleye = dontCheck super.opaleye_0_7_2_0;
+  });
 
   # Release 1.0.0.0 added version bounds (was unrestricted before),
   # but with too strict lower bounds for our lts-18.

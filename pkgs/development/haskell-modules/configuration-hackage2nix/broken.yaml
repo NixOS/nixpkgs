@@ -3948,7 +3948,6 @@ broken-packages:
   - rei
   - reified-records
   - reify
-  - rel8
   - relacion
   - relapse
   - relational-postgresql8
