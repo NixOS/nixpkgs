@@ -10793,24 +10793,14 @@ let
     };
   };
 
-  ImageExifTool = buildPerlPackage {
+  ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.16";
+    version = "12.29";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXIFTOOL/Image-ExifTool-12.16.tar.gz";
-      sha256 = "0skm22b3gg1bfk0amklrprpva41m6mkrhqp0gi7z1nmcf9ypjh61";
+      url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
+      sha256 = "09yszwhirprqr94jwrsr9kyav5syv0mjmnjngqn20fn7m135wv95";
     };
-
-    patches = [
-      # Unfortunately, not every release is uploaded to CPAN so security fixes
-      # would need to be cherry-picked from releases
-      (fetchpatch {
-        name = "CVE-2021-22204.patch";
-        url = "https://salsa.debian.org/perl-team/modules/packages/libimage-exiftool-perl/-/raw/0347501fda93cb8366d6451aedcf258b34fb4a2b/debian/patches/CVE-2021-22204.patch";
-        sha256 = "1fxw32zcssillnv764wsd05lyswn8bbrc90q5cy9aknx0ncgsrxj";
-      })
-    ];
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
