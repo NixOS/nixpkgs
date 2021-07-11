@@ -8304,6 +8304,8 @@ in
 
   rarian = callPackage ../development/libraries/rarian { };
 
+  ratarmount = python3Packages.callPackage ../tools/archivers/ratarmount { };
+
   ratools = callPackage ../tools/networking/ratools { };
 
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };

@@ -3512,6 +3512,12 @@ in {
 
   incremental = callPackage ../development/python-modules/incremental { };
 
+  indexed_bzip2 = callPackage ../development/python-modules/indexed_bzip2 { };
+
+  indexed_gzip = callPackage ../development/python-modules/indexed_gzip { };
+
+  indexed-zstd = callPackage ../development/python-modules/indexed-zstd { };
+
   inflect = callPackage ../development/python-modules/inflect { };
 
   inflection = callPackage ../development/python-modules/inflection { };
@@ -4242,6 +4248,8 @@ in {
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
 
   lz4 = self.python-lz4; # alias 2018-12-05
+
+  lzmaffi = callPackage ../development/python-modules/lzmaffi { };
 
   lzstring = callPackage ../development/python-modules/lzstring { };
 
