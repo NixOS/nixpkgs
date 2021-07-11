@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz hexa ];
   };
 }
