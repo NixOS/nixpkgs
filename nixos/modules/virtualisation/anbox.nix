@@ -6,6 +6,7 @@ let
 
   cfg = config.virtualisation.anbox;
   kernelPackages = config.boot.kernelPackages;
+  useAnboxModules = kernelPackages.kernelOlder "5.0";
   addrOpts = v: addr: pref: name: {
     address = mkOption {
       default = addr;
@@ -73,13 +74,17 @@ in
 
     environment.systemPackages = with pkgs; [ anbox ];
 
-    boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
-    boot.extraModulePackages = [ kernelPackages.anbox ];
+    # Mainline ashmem/binder drivers not available as modules
+    boot.kernelModules = optionals useAnboxModules [ "ashmem_linux" "binder_linux" ];
+    boot.extraModulePackages = optional useAnboxModules kernelPackages.anbox;
 
-    services.udev.extraRules = ''
-      KERNEL=="ashmem", NAME="%k", MODE="0666"
-      KERNEL=="binder*", NAME="%k", MODE="0666"
-    '';
+    systemd.mounts = optional (!useAnboxModules) {
+      requiredBy = [ "anbox-container-manager.service" ];
+      description = "Anbox Binder File System";
+      what = "binder";
+      where = "/dev/binderfs";
+      type = "binder";
+    };
 
     virtualisation.lxc.enable = true;
     networking.bridges.anbox0.interfaces = [];
@@ -129,7 +134,8 @@ in
             --container-network-gateway=${cfg.ipv4.gateway.address} \
             --container-network-dns-servers=${cfg.ipv4.dns} \
             --use-rootfs-overlay \
-            --privileged
+            --privileged \
+            --daemon
         '';
       };
     };

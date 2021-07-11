@@ -76,7 +76,15 @@ stdenv.mkDerivation rec {
     libcap
     libdwarf
     libGL
-    lxc
+    # Broken with lxc 4.0.7 or later
+    # https://github.com/anbox/anbox/issues/1801
+    (lxc.overrideAttrs (old: rec {
+      version = "4.0.6";
+      src = fetchurl {
+        url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
+        sha256 = "0qz4l7mlhq7hx53q606qgvkyzyr01glsw290v8ppzvxn1fydlrci";
+      };
+    }))
     mesa
     properties-cpp
     protobuf protobufc
