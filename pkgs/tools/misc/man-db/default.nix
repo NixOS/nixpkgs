@@ -1,17 +1,30 @@
-{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
+{ buildPackages
+, db
+, fetchurl
+, groff
+, lib
+, libiconv
+, libpipeline
+, makeWrapper
+, pkg-config
+, stdenv
+, zstd
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "man-db-2.9.4";
+  pname = "man-db";
+  version = "2.9.4";
 
   src = fetchurl {
-    url = "mirror://savannah/man-db/${name}.tar.xz";
+    url = "mirror://savannah/man-db/${pname}-${version}.tar.xz";
     sha256 = "sha256-tmyZ7frRatkoyIn4fPdjgCY8FgkyPCgLOp5pY/2xZ1Y=";
   };
 
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ pkg-config makeWrapper groff ];
+  nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
@@ -27,6 +40,12 @@ stdenv.mkDerivation rec {
 
     # Add mandb locations for the above
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
+
+    # use absolute paths to reference programs, otherwise artifacts will have undeclared dependencies
+    for f in configure.ac m4/man-check-progs.m4 m4/man-po4a.m4; do
+      substituteInPlace $f \
+        --replace AC_CHECK_PROGS AC_PATH_PROGS
+    done
   '';
 
   configureFlags = [
@@ -43,7 +62,12 @@ stdenv.mkDerivation rec {
     "ac_cv_func_mempcpy=no"
   ];
 
+
   preConfigure = ''
+    # deal with autoconf 2.70 bug: https://lists.gnu.org/archive/html/bug-autoconf/2020-12/msg00036.html
+    # can be removed once autoconf 2.71 is merged
+    patch < ${./fix-configure.patch}
+
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
   '';
 
