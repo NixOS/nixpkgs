@@ -402,6 +402,7 @@ in
   sway = handleTest ./sway.nix {};
   switchTest = handleTest ./switch-test.nix {};
   sympa = handleTest ./sympa.nix {};
+  synapse-bt = handleTest ./synapse-bt.nix {};
   syncthing = handleTest ./syncthing.nix {};
   syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
