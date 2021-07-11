@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromRepoOrCz, perl, texinfo }:
+{ stdenv, lib
+, fetchFromRepoOrCz
+, darwin
+, perl
+, texinfo
+, which
+, xcbuild
+}:
 with lib;
 
 stdenv.mkDerivation rec {
@@ -8,11 +15,12 @@ stdenv.mkDerivation rec {
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
-    rev = upstreamVersion;
-    sha256 = "12mm1lqywz0akr2yb2axjfbw8lwv57nh395vzsk534riz03ml977";
+    rev = "78da4586a002275e7f4c29d0f545430f1fc055e7";
+    sha256 = "00piy8gvnf3g8agibrlplc4jr7sifaafvwgd2dgyxb6lrj2psw1n";
   };
 
-  nativeBuildInputs = [ perl texinfo ];
+  nativeBuildInputs = [ perl texinfo which ]
+    ++ optional stdenv.isDarwin xcbuild;
 
   hardeningDisable = [ "fortify" ];
 
@@ -21,6 +29,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace "texi2pod.pl" \
       --replace "/usr/bin/perl" "${perl}/bin/perl"
+  '' + optionalString stdenv.isDarwin ''
+    substituteInPlace tests/tests2/Makefile \
+      --replace 'SKIP = ' 'SKIP = 106_pthread.test '
   '';
 
   preConfigure = ''
@@ -77,7 +88,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.tinycc.org/";
     license = licenses.mit;
 
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = [ maintainers.joachifm ];
   };
 }
