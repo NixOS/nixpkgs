@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BiglySoftware";
     repo = "BiglyBT";
-    rev = "4e1fff3f0dbe5a1065ac4661f865b01232357db6"; 
+    rev = "v2.8.0.0";
     sha256 = "c05b488fcc48e98a568813f82a39b1a596efababadc77ca443e7f7a1007252f5";
   };
 
