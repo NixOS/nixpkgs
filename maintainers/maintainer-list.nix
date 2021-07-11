@@ -6847,6 +6847,12 @@
       fingerprint = "3DEE 1C55 6E1C 3DC5 54F5  875A 003F 2096 411B 5F92";
     }];
   };
+  michaelhthomas = {
+    email = "linuxoveruser@protonmail.com";
+    github = "michaelhthomas";
+    githubId = 18223295;
+    name = "Michael Thomas";
+  };
   michaelpj = {
     email = "michaelpj@gmail.com";
     github = "michaelpj";
