@@ -3131,6 +3131,10 @@ in {
 
   grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
 
+  gruut = callPackage ../development/python-modules/gruut { };
+
+  gruut-ipa = callPackage ../development/python-modules/gruut-ipa { };
+
   gsd = callPackage ../development/python-modules/gsd { };
 
   gspread = callPackage ../development/python-modules/gspread { };
@@ -3385,6 +3389,8 @@ in {
   hydrawiser = callPackage ../development/python-modules/hydrawiser { };
 
   hypchat = callPackage ../development/python-modules/hypchat { };
+
+  hypercorn = callPackage ../development/python-modules/hypercorn { };
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
 
@@ -5376,6 +5382,8 @@ in {
   pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
+
+  python-crfsuite = callPackage ../development/python-modules/python-crfsuite { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 

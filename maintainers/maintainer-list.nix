@@ -2571,6 +2571,12 @@
     githubId = 4708206;
     name = "Daniel Fox Franke";
   };
+  dgliwka = {
+    email = "dawid.gliwka@gmail.com";
+    github = "dgliwka";
+    githubId = 33262214;
+    name = "Dawid Gliwka";
+  };
   dgonyeo = {
     email = "derek@gonyeo.com";
     github = "dgonyeo";
@@ -7592,6 +7598,16 @@
     githubId = 3159451;
     name = "Nicolas Schneider";
   };
+  nkje = {
+    name = "Niels Kristian Lyshøj Jensen";
+    email = "n@nk.je";
+    github = "NKJe";
+    githubId = 1102306;
+    keys = [{
+      longkeyid = "nistp256/0xDE3BADFECD31A89D";
+      fingerprint = "B956 C6A4 22AF 86A0 8F77  A8CA DE3B ADFE CD31 A89D";
+    }];
+  };
   nkpvk = {
     email = "niko.pavlinek@gmail.com";
     github = "nkpvk";
@@ -10877,6 +10893,16 @@
     github = "ulrikstrid";
     githubId = 1607770;
     name = "Ulrik Strid";
+  };
+  unclechu = {
+    name = "Viacheslav Lotsmanov";
+    email = "lotsmanov89@gmail.com";
+    github = "unclechu";
+    githubId = 799353;
+    keys = [{
+      longkeyid = "rsa4096/0xD276FF7467007335";
+      fingerprint = "EE59 5E29 BB5B F2B3 5ED2  3F1C D276 FF74 6700 7335";
+    }];
   };
   unode = {
     email = "alves.rjc@gmail.com";
