@@ -1,0 +1,107 @@
+---
+ CMakeLists.txt                    | 6 +++---
+ tests/CMakeLists.txt              | 2 +-
+ user/libs/CMakeLists.txt          | 4 ++--
+ user/libs/swig/CMakeLists.txt     | 2 +-
+ user/tools/CMakeLists.txt         | 6 +++---
+ user/tools/rinacat/CMakeLists.txt | 2 +-
+ user/uipcps/CMakeLists.txt        | 2 +-
+ 7 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e581ddb4..30000006 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -44,9 +44,9 @@ endif()
+ 
+ include_directories(${INCLUDE_DIR})
+ 
+-install(FILES ${RLITE_HEADERS} DESTINATION usr/include/rlite)
+-install(FILES include/rina/cdap.hpp DESTINATION usr/include/rina)
+-install(FILES "include/rina/api.h" DESTINATION usr/include/rina)
++install(FILES ${RLITE_HEADERS} DESTINATION include/rlite)
++install(FILES include/rina/cdap.hpp DESTINATION include/rina)
++install(FILES "include/rina/api.h" DESTINATION include/rina)
+ file(GLOB BASH_COMPLETION_FILES "scripts/bash_completion/*")
+ install(FILES ${BASH_COMPLETION_FILES} DESTINATION etc/bash_completion.d)
+ 
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 72b52bba..08df9607 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -1 +1 @@
+-install(PROGRAMS rlite-rand-clients DESTINATION usr/bin)
++install(PROGRAMS rlite-rand-clients DESTINATION bin)
+diff --git a/user/libs/CMakeLists.txt b/user/libs/CMakeLists.txt
+index 1bcd0f05..bb53a952 100644
+--- a/user/libs/CMakeLists.txt
++++ b/user/libs/CMakeLists.txt
+@@ -23,8 +23,8 @@ target_link_libraries(cdap-test cdap pthread)
+ target_link_libraries(raft-test rlite-raft)
+ 
+ # Installation directives
+-install(TARGETS rina-api cdap rlite-conf DESTINATION usr/lib)
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CDAP.pb.h DESTINATION usr/include/rlite)
++install(TARGETS rina-api cdap rlite-conf DESTINATION lib)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CDAP.pb.h DESTINATION include/rlite)
+ 
+ add_test(NAME raft COMMAND raft-test)
+ add_test(NAME cdap COMMAND cdap-test)
+diff --git a/user/libs/swig/CMakeLists.txt b/user/libs/swig/CMakeLists.txt
+index c77c9248..8b547653 100644
+--- a/user/libs/swig/CMakeLists.txt
++++ b/user/libs/swig/CMakeLists.txt
+@@ -46,7 +46,7 @@ elseif (WITH_SWIG)
+     get_filename_component(_ABS_PYTHON_MODULE_PATH ${_ABS_PYTHON_MODULE_PATH} ABSOLUTE)
+     file(RELATIVE_PATH _REL_PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX} ${_ABS_PYTHON_MODULE_PATH})
+     set(PYTHON_MODULE_PATH ${_REL_PYTHON_MODULE_PATH})
+-    string(REGEX REPLACE "^lib" "usr/lib" PYTHON_MODULE_PATH ${PYTHON_MODULE_PATH})
++    string(REGEX REPLACE "^lib" "lib" PYTHON_MODULE_PATH ${PYTHON_MODULE_PATH})
+     message("PYTHON_MODULE_PATH = ${PYTHON_MODULE_PATH}")
+ 
+     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${SWIG_MODULE_rina_REAL_NAME}.so DESTINATION ${PYTHON_MODULE_PATH})
+diff --git a/user/tools/CMakeLists.txt b/user/tools/CMakeLists.txt
+index d22de828..74ec2954 100644
+--- a/user/tools/CMakeLists.txt
++++ b/user/tools/CMakeLists.txt
+@@ -28,11 +28,11 @@ target_link_libraries(iporinad rina-api cdap fdfwd ${CMAKE_THREAD_LIBS_INIT})
+ target_link_libraries(test-wifi rina-api rlite-wifi)
+ 
+  # Installation directives
+-install(TARGETS rinaperf rlite-ctl rina-gw rina-echo-async iporinad DESTINATION usr/bin)
++install(TARGETS rinaperf rlite-ctl rina-gw rina-echo-async iporinad DESTINATION bin)
+ if (MAC2IFNAME)
+-install(TARGETS mac2ifname DESTINATION usr/bin)
++install(TARGETS mac2ifname DESTINATION bin)
+ endif()
+ install(FILES rina-gw.conf iporinad.conf initscript DESTINATION etc/rina)
+-install(PROGRAMS inet-toy rina-toy rlite-node-config DESTINATION usr/bin)
++install(PROGRAMS inet-toy rina-toy rlite-node-config DESTINATION bin)
+ 
+ add_subdirectory(rinacat)
+diff --git a/user/tools/rinacat/CMakeLists.txt b/user/tools/rinacat/CMakeLists.txt
+index 94d36209..0defb94b 100644
+--- a/user/tools/rinacat/CMakeLists.txt
++++ b/user/tools/rinacat/CMakeLists.txt
+@@ -3,4 +3,4 @@ add_executable(rinacat rinacat.c)
+ target_link_libraries(rinacat rina-api)
+ 
+  # Installation directives
+-install(TARGETS rinacat DESTINATION usr/bin)
++install(TARGETS rinacat DESTINATION bin)
+diff --git a/user/uipcps/CMakeLists.txt b/user/uipcps/CMakeLists.txt
+index e58726f6..6c0effff 100644
+--- a/user/uipcps/CMakeLists.txt
++++ b/user/uipcps/CMakeLists.txt
+@@ -20,7 +20,7 @@ add_executable(rlite-uipcps uipcp-container.c uipcp-unix.c uipcp-shim-tcp4.c uip
+ target_link_libraries(rlite-uipcps rina-api rlite-conf uipcp-normal rlite-wifi)
+ 
+ # Installation directives
+-install(TARGETS rlite-uipcps DESTINATION usr/bin)
++install(TARGETS rlite-uipcps DESTINATION bin)
+ install(FILES shim-tcp4-dir DESTINATION etc/rina)
+ 
+ # Tests
+-- 
+2.26.2
+
