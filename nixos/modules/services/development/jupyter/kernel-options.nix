@@ -40,6 +40,17 @@ with lib;
       '';
     };
 
+    env = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+      example = {
+        OMP_NUM_THREADS = "1";
+      };
+      description = ''
+        Environment variables to set for the kernel.
+      '';
+    };
+
     logo32 = mkOption {
       type = types.nullOr types.path;
       default = null;
