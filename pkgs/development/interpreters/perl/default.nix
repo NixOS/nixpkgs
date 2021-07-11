@@ -59,6 +59,9 @@ let
       unset src
     '';
 
+    # Overridden below when cross compiling
+    configurePlatforms = [ ];
+
     # Build a thread-safe Perl with a dynamic libperls.o.  We need the
     # "installstyle" option to ensure that modules are put under
     # $out/lib/perl5 - this is the general default, but because $out
