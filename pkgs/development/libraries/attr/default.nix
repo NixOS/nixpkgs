@@ -7,21 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "attr";
-  version = "2.4.48";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "mirror://savannah/attr/${pname}-${version}.tar.gz";
-    sha256 = "1rr4adzwax4bzr2c00f06zcsljv5y6p9wymz1g89ww7cb2rp5bay";
+    sha256 = "1y6sibbkrcjygv8naadnsg6xmsqwfh6cwrqk01l0v2i5kfacdqds";
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   nativeBuildInputs = [ gettext ];
-
-  patches = [
-    # fix fakechroot: https://github.com/dex4er/fakechroot/issues/57
-    ./syscall.patch
-  ];
 
   postPatch = ''
     for script in install-sh include/install-sh; do
