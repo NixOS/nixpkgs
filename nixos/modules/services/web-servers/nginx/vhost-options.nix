@@ -145,7 +145,7 @@ with lib;
     sslTrustedCertificate = mkOption {
       type = types.nullOr types.path;
       default = null;
-      example = "/var/root.cert";
+      example = "\${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
       description = "Path to root SSL certificate for stapling and client certificates.";
     };
 
