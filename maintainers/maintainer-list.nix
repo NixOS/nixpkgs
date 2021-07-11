@@ -7882,6 +7882,12 @@
     githubId = 757752;
     name = "Jonas Heinrich";
   };
+  onsails = {
+    email = "andrey@onsails.com";
+    github = "onsails";
+    githubId = 107261;
+    name = "Andrey Kuznetsov";
+  };
   OPNA2608 = {
     email = "christoph.neidahl@gmail.com";
     github = "OPNA2608";
