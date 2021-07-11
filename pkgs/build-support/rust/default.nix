@@ -15,7 +15,6 @@
 , git
 , rust
 , rustc
-, libiconv
 , windows
 }:
 
@@ -124,7 +123,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoLock" ]) // lib.o
   ];
 
   buildInputs = buildInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
   patches = cargoPatches ++ patches;
