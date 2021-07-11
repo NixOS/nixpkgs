@@ -10,12 +10,9 @@
 , enablePython ? false
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "flann";
   version = "1.9.1";
-
-in stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "flann-lib";
