@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cod";
-  version = "unstable-2020-09-10";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "dim-an";
     repo = pname;
-    rev = "ae68da08339471dd278d6df79abbfd6fe89a10fe";
-    sha256 = "1l3gn9v8dcy72f5xq9hwbkvkis0vp4dp8qyinsrii3acmhksg9v6";
+    rev = "v${version}";
+    sha256 = "0h95y2pci3czwn9dh2xblq5cah7znx526khnla34rkxghkrdd3ix";
   };
 
   vendorSha256 = "1arllkiz1hk12hq5b2zpg3f8i9lxl66mil5sdv8gnhflmb37vbv3";
@@ -18,7 +18,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Tool for generating Bash/Zsh autocompletions based on `--help` output";
+    description = "Tool for generating Bash/Fish/Zsh autocompletions based on `--help` output";
     homepage = src.meta.homepage;
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
