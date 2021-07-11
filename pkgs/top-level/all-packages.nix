@@ -15692,7 +15692,9 @@ in
 
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
 
-  hamlib = callPackage ../development/libraries/hamlib { };
+  hamlib = hamlib_3;
+  hamlib_3 = callPackage ../development/libraries/hamlib { };
+  hamlib_4 = callPackage ../development/libraries/hamlib/4.nix { };
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
