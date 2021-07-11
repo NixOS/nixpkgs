@@ -1979,6 +1979,8 @@ in
 
   bfetch = callPackage ../tools/misc/bfetch { };
 
+  biglybt = callPackage ../applications/networking/p2p/biglybt { };
+
   bless = callPackage ../applications/editors/bless { };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
