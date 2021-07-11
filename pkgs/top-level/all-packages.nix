@@ -24066,6 +24066,8 @@ in
 
   termshark = callPackage ../tools/networking/termshark { };
 
+  farge = callPackage ../applications/graphics/farge { };
+
   fbida = callPackage ../applications/graphics/fbida { };
 
   fcp = callPackage ../tools/misc/fcp { };
