@@ -24,11 +24,19 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
 
             inherit (wg-snakeoil-keys.peer0) privateKey;
 
-            peers = lib.singleton {
-              allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
+            peers = [
+              {
+                allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
 
-              inherit (wg-snakeoil-keys.peer1) publicKey;
-            };
+                inherit (wg-snakeoil-keys.peer1) publicKey;
+              }
+
+              {
+                allowedIPs = [ "10.23.42.3/32" "fc00::3/128" ];
+
+                inherit (wg-snakeoil-keys.peer1) publicKey;
+              }
+            ];
           };
         };
       };
@@ -52,6 +60,28 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
           };
         };
       };
+
+      peer2 = peer {
+        ip4 = "192.168.0.3";
+        ip6 = "fd00::3";
+        extraConfig = {
+          boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
+          networking.wg-quick.interfaces.wg0 = {
+            userspaceImplementation = "${pkgs.boringtun}/bin/boringtun";
+
+            address = [ "10.23.42.3/32" "fc00::3/128" ];
+            inherit (wg-snakeoil-keys.peer1) privateKey;
+
+            peers = lib.singleton {
+              allowedIPs = [ "0.0.0.0/0" "::/0" ];
+              endpoint = "192.168.0.1:23542";
+              persistentKeepalive = 25;
+
+              inherit (wg-snakeoil-keys.peer0) publicKey;
+            };
+          };
+        };
+      };
     };
 
     testScript = ''
@@ -59,9 +89,13 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
 
       peer0.wait_for_unit("wg-quick-wg0.service")
       peer1.wait_for_unit("wg-quick-wg0.service")
+      peer2.wait_for_unit("wg-quick-wg0.service")
 
       peer1.succeed("ping -c5 fc00::1")
       peer1.succeed("ping -c5 10.23.42.1")
+
+      peer2.succeed("ping -c5 fc00::1")
+      peer2.succeed("ping -c5 10.23.42.1")
     '';
   }
 )
