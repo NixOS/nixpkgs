@@ -319,10 +319,7 @@ in
       
       # Appstream refresh so gnome picks up new or changed applications without having to restart gnome
       system.activationScripts = {
-        appstream.text =
-        ''
-          ${pkgs.appstream}/bin/appstreamcli refresh-cache --force
-        '';
+        appstream.text = "${pkgs.appstream}/bin/appstreamcli refresh-cache --force";
       };
     })
 
