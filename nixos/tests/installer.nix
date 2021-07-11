@@ -380,6 +380,31 @@ let
       '';
     };
 
+    makeLuksWholeTest = name: luksFormatOpts: makeInstallerTest name {
+      createPartitions = ''
+        machine.succeed(
+            "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+            + " mkpart primary 1024M -1s"  # LUKS
+            "udevadm settle",
+            "modprobe dm_mod dm_crypt",
+            "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda1 -",
+            "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda1 cryptroot",
+            "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
+            "mount LABEL=nixos /mnt",
+        )
+      '';
+      extraConfig = ''
+        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+        boot.loader.grub.enableCryptodisk = true;
+      '';
+      enableOCR = true;
+      preBootCommands = ''
+        machine.start()
+        machine.wait_for_text("Enter passphrase")
+        machine.send_chars("supersecret\n")
+      '';
+    };
+
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
   simple-test-config = {
@@ -583,13 +608,22 @@ in {
   };
 
   # Boot off an encrypted root partition with the default LUKS header format
-  luksroot = makeLuksRootTest "luksroot-format1" "";
+  luksroot = makeLuksRootTest "luksroot-default" "";
 
   # Boot off an encrypted root partition with LUKS1 format
   luksroot-format1 = makeLuksRootTest "luksroot-format1" "--type=LUKS1";
 
   # Boot off an encrypted root partition with LUKS2 format
   luksroot-format2 = makeLuksRootTest "luksroot-format2" "--type=LUKS2";
+
+  # Boot off a fully encrypted disk with the default LUKS header format
+  lukswhole = makeLuksWholeTest "lukswhole-default" "";
+
+  # Boot off a fully encrypted disk with LUKS1 format
+  lukswhole-format1 = makeLuksWholeTest "lukswhole-format1" "--type=LUKS1";
+
+  # Boot off a fully encrypted disk with LUKS2 format
+  lukswhole-format2 = makeLuksWholeTest "lukswhole-format2" "--type=LUKS2";
 
   # Test whether opening encrypted filesystem with keyfile
   # Checks for regression of missing cryptsetup, when no luks device without
