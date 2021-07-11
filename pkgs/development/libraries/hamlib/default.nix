@@ -1,20 +1,50 @@
-{lib, stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb-compat-0_1, pkg-config,
- boost, libtool, perlPackages }:
+{ lib
+, stdenv
+, fetchurl
+, perl
+, swig
+, gd
+, ncurses
+, python3
+, libxml2
+, tcl
+, libusb-compat-0_1
+, pkg-config
+, boost
+, libtool
+, perlPackages
+, pythonBindings ? true
+, tclBindings ? true
+, perlBindings ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "hamlib";
-  version = "3.3";
+  version = "4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "10788mgrhbc57zpzakcxv5aqnr2819pcshml6fbh8zvnkja562y9";
+    sha256 = "e200b22f307e9a0c826187c2b08fe81c7d0283cf07056e6db3463d1481580fd5";
   };
 
-  buildInputs = [ perl perlPackages.ExtUtilsMakeMaker python2 swig gd libxml2
-                  tcl libusb-compat-0_1 pkg-config boost libtool ];
+  nativeBuildInputs = [
+    swig
+    pkg-config
+    libtool
+  ];
 
-  configureFlags = [ "--with-perl-binding" "--with-python-binding"
-                     "--with-tcl-binding" "--with-rigmatrix" ];
+  buildInputs = [
+    gd
+    libxml2
+    libusb-compat-0_1
+    boost
+  ] ++ lib.optionals pythonBindings [ python3 ncurses ]
+    ++ lib.optionals tclBindings [ tcl ]
+    ++ lib.optionals perlBindings [ perl perlPackages.ExtUtilsMakeMaker ];
+
+  configureFlags = lib.optionals perlBindings [ "--with-perl-binding" ]
+    ++ lib.optionals tclBindings [ "--with-tcl-binding" "--with-tcl=${tcl}/lib/" ]
+    ++ lib.optionals pythonBindings [ "--with-python-binding" ];
 
   meta = {
     description = "Runtime library to control radio transceivers and receivers";
