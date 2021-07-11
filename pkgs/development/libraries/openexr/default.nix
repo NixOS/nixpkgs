@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "2.5.3";
+  version = "3.0.5";
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
