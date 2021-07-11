@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bf2e791..389aa90 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,6 +2,8 @@ project(input-overlay)
+
+ find_path(UIOHOOK_INCLUDE_DIR uiohook.h)
+ find_library(UIOHOOK_LIBRARY uiohook)
++find_package(LibObs REQUIRED)
++include(${OBS_SRC_DIR}/cmake/Modules/ObsHelpers.cmake)
+
+ if (MSVC)
+     set(input-overlay_PLATFORM_DEPS

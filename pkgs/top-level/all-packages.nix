@@ -20533,6 +20533,10 @@ in
     then util-linuxMinimal
     else null;
 
+  libuiohook = callPackage ../development/libraries/libuiohook {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon;
+  };
+
   light = callPackage ../os-specific/linux/light { };
 
   lightum = callPackage ../os-specific/linux/lightum { };
@@ -26075,6 +26079,8 @@ in
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
   obsidian = callPackage ../applications/misc/obsidian { };
+
+  obs-input-overlay = callPackage ../applications/video/obs-studio/input-overlay.nix { };
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
