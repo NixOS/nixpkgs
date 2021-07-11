@@ -1,0 +1,25 @@
+From dc0da3a6b745c77f0cdd11f84035910a7efd3fcb Mon Sep 17 00:00:00 2001
+From: Attila Lendvai <attila@lendvai.name>
+Date: Sat, 30 Jan 2021 15:24:57 +0100
+Subject: [PATCH] nix diff for bee-clef
+
+---
+ packaging/bee-clef-service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packaging/bee-clef-service b/packaging/bee-clef-service
+index f079140..f6d2b32 100755
+--- a/packaging/bee-clef-service
++++ b/packaging/bee-clef-service
+@@ -34,7 +34,7 @@ start() {
+         fi
+     done
+     ) &
+-    clef --stdio-ui --keystore $KEYSTORE --configdir ${DATA_DIR} --chainid $CHAINID --rules ${CONFIG_DIR}/rules.js --nousb --lightkdf --4bytedb-custom ${CONFIG_DIR}/4byte.json --pcscdpath "" --auditlog "" --loglevel 3 --ipcpath ${DATA_DIR} < ${DATA_DIR}/stdin | tee ${DATA_DIR}/stdout
++    @clefBinary@ --stdio-ui --keystore $KEYSTORE --configdir ${DATA_DIR} --chainid $CHAINID --rules ${CONFIG_DIR}/rules.js --nousb --lightkdf --4bytedb-custom ${CONFIG_DIR}/4byte.json --pcscdpath "" --auditlog "${AUDIT_LOG_FILE}" --loglevel 3 --ipcpath ${DATA_DIR} < ${DATA_DIR}/stdin | tee ${DATA_DIR}/stdout
+ }
+ 
+ stop() {
+-- 
+2.29.2
+

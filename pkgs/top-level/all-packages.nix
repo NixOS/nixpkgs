@@ -3435,7 +3435,13 @@ in
     version = "unstable";
   };
 
-  bee-clef = callPackage ../applications/networking/bee/bee-clef.nix { };
+  bee-clef = callPackage ../applications/networking/bee/bee-clef.nix {
+    version = "release";
+  };
+
+  bee-clef-unstable = bee-clef.override {
+    version = "unstable";
+  };
 
   beets = callPackage ../tools/audio/beets {
     pythonPackages = python3Packages;

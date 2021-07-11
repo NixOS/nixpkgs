@@ -10,13 +10,18 @@ set -e
 # What follows was extracted from, and should be in sync with
 # https://github.com/ethersphere/bee-clef/tree/master/packaging
 
-DATA_DIR="$1"
-CONFIG_DIR="$2"
-PASSWORD_FILE=${DATA_DIR}/password
-MASTERSEED=${DATA_DIR}/masterseed.json
+if [ -z "${DATA_DIR}" ]; then
+    DATA_DIR=/var/lib/bee-clef/
+fi
+if [ -z "${PASSWORD_FILE}" ]; then
+    PASSWORD_FILE=${DATA_DIR}/password
+fi
+if [ -z "${CONFIG_DIR}" ]; then
+    CONFIG_DIR=/etc/bee-clef/
+fi
 KEYSTORE=${DATA_DIR}/keystore
 
-echo "ensure-clef-account $DATA_DIR $CONFIG_DIR"
+echo "ensure-clef-account ${DATA_DIR} ${PASSWORD_FILE} ${CONFIG_DIR}"
 
 if ! test -f ${PASSWORD_FILE}; then
     < /dev/urandom tr -dc _A-Z-a-z-0-9 2> /dev/null | head -c32 > ${PASSWORD_FILE}
@@ -24,10 +29,10 @@ if ! test -f ${PASSWORD_FILE}; then
     echo "Initialized ${PASSWORD_FILE} from /dev/urandom"
 fi
 
-if ! test -f ${MASTERSEED}; then
+if ! test -f ${DATA_DIR}/masterseed.json; then
     parse_json() { echo $1|sed -e 's/[{}]/''/g'|sed -e 's/", "/'\",\"'/g'|sed -e 's/" ,"/'\",\"'/g'|sed -e 's/" , "/'\",\"'/g'|sed -e 's/","/'\"---SEPERATOR---\"'/g'|awk -F=':' -v RS='---SEPERATOR---' "\$1~/\"$2\"/ {print}"|sed -e "s/\"$2\"://"|tr -d "\n\t"|sed -e 's/\\"/"/g'|sed -e 's/\\\\/\\/g'|sed -e 's/^[ \t]*//g'|sed -e 's/^"//' -e 's/"$//' ; }
     SECRET=$(cat ${PASSWORD_FILE})
-    CLEF="@clefBinary@ --configdir ${DATA_DIR} --keystore ${KEYSTORE} --stdio-ui"
+    CLEF="@clefBinary@ --configdir ${DATA_DIR} --keystore ${KEYSTORE} --stdio-ui --lightkdf"
     $CLEF init >/dev/null << EOF
 $SECRET
 $SECRET
@@ -43,5 +48,5 @@ EOF
     $CLEF attest $(sha256sum ${CONFIG_DIR}/rules.js | cut -d' ' -f1 | tr -d '\n') >/dev/null << EOF
 $SECRET
 EOF
-    echo "Clef data dir initialized"
+    echo "Bee Clef data dir initialized"
 fi

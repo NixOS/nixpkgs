@@ -1,37 +1,51 @@
 { version ? "release", stdenv, lib, fetchFromGitHub, go-ethereum }:
 
+let
+
+  versionSpec = rec {
+    unstable = rec {
+      pname = "bee-clef-unstable";
+      version = "2021-06-24";
+      rev = "cc816b56526c575b325122f1b65a20258e30ac2c";
+      hash = "sha256:1dr3ghj8l28mq9w03nv1lv2df54c6r5vnqnjksgzji0zb64nf0ja";
+    };
+    release = rec {
+      pname = "bee-clef";
+      version = "0.5.0";
+      rev = "v${version}";
+      hash = "sha256:1dr3ghj8l28mq9w03nv1lv2df54c6r5vnqnjksgzji0zb64nf0ja";
+    };
+  }.${version};
+
+in
+
 stdenv.mkDerivation rec {
-  pname = "bee-clef";
-  version = "0.4.7";
+  inherit (versionSpec) pname version;
 
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee-clef";
-    rev = "refs/tags/v${version}";
-    sha256 = "1sfwql0kvnir8b9ggpqcyc0ar995gxgfbhqb1xpfzp6wl0g3g4zz";
+    inherit (versionSpec) rev hash;
   };
 
-  buildInputs = [ go-ethereum ];
+  buildInputs = [ go-ethereum.clef ];
 
-  clefBinary = "${go-ethereum}/bin/clef";
+  clefBinary = "${go-ethereum.clef}/bin/clef";
 
   patches = [
-    ./0001-clef-service-accept-default-CONFIGDIR-from-the-envir.patch
-    ./0002-nix-diff-for-substituteAll.patch
+    ./0001-nix-diff-for-bee-clef.patch
   ];
 
   dontBuild = true;
 
+  # NOTE we do not package the .service file, because we generate a variable number
+  # or instances from the service nix file. it also confuses users, see e.g.:
+  # https://github.com/NixOS/nixpkgs/issues/113697
   installPhase = ''
-    mkdir -p $out/bin/
     mkdir -p $out/share/bee-clef/
-    mkdir -p $out/lib/systemd/system/
-    cp packaging/bee-clef.service $out/lib/systemd/system/
     substituteAll packaging/bee-clef-service $out/share/bee-clef/bee-clef-service
     substituteAll ${./ensure-clef-account} $out/share/bee-clef/ensure-clef-account
-    substituteAll packaging/bee-clef-keys $out/bin/bee-clef-keys
     cp packaging/rules.js packaging/4byte.json $out/share/bee-clef/
-    chmod +x $out/bin/bee-clef-keys
     chmod +x $out/share/bee-clef/bee-clef-service
     chmod +x $out/share/bee-clef/ensure-clef-account
     patchShebangs $out/
