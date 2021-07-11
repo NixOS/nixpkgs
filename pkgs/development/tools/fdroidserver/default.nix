@@ -41,7 +41,6 @@ python.pkgs.buildPythonApplication rec {
     paramiko
     pillow
     pyasn1
-    pyasn1-modules
     python-vagrant
     pyyaml
     qrcode
