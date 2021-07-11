@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
      sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
      sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
-     sed -i 's,$(UDEVRULESDIR),''${prefix}/$(UDEVRULESDIR),' udev/Makefile.am
 
      # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
      sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
      sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
   '';
 
-  configureFlags = [ "--without-kernel-modules" "--without-xmlsecurity" ]
+  configureFlags = [ "--without-kernel-modules" "--without-xmlsecurity" "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d" ]
     ++ lib.optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
@@ -50,9 +49,14 @@ stdenv.mkDerivation rec {
     "-Wno-error=format-overflow"
   ];
 
+  preConfigure = ''
+    mkdir -p ${placeholder "out"}/lib/udev/rules.d
+  '';
+
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
       --prefix PATH ':' "${lib.makeBinPath [ iproute2 dbus systemd which ]}"
+    substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace "/bin/sh" "${bash}/bin/sh"
   '';
 
   meta = with lib; {
