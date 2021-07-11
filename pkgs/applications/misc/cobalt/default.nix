@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cobalt";
@@ -13,10 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "27LcoGBI4elt80uQkTwvToOyEmd2+/3ma5Y32OFrJaw=";
 
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+
   meta = with lib; {
     description = "Static site generator written in Rust";
     homepage = "https://github.com/cobalt-org/cobalt.rs/";
     license = licenses.mit;
     maintainers = with maintainers; [ ethancedwards8 ];
+    platforms = platforms.unix;
   };
 }
