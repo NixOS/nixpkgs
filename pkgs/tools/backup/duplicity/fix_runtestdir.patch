@@ -1,0 +1,19 @@
+commit 5c229a9b42f67257c747fbc0022c698fec405bbc
+Author: Guillaume Girol <symphorien+git@xlumurb.eu>
+Date:   Sun Jul 11 12:00:00 2021 +0000
+
+    fix functional tests when _runtestdir is not /tmp
+
+diff --git a/testing/functional/test_restart.py b/testing/functional/test_restart.py
+index 6d972c82..10399485 100644
+--- a/testing/functional/test_restart.py
++++ b/testing/functional/test_restart.py
+@@ -194,7 +194,7 @@ class RestartTest(FunctionalTestCase):
+         assert not os.system(u"""echo 'Volume 2:
+     StartingPath   foo
+     EndingPath     bar
+-    Hash SHA1 sha1' >> /tmp/testfiles/cache/%s/*.manifest.part""" % name)
++    Hash SHA1 sha1' >> {0}/testfiles/cache/{1}/*.manifest.part""".format(_runtest_dir, name))
+ 
+     def test_split_after_small(self):
+         u"""
