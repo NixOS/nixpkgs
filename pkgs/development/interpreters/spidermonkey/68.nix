@@ -14,6 +14,15 @@ in stdenv.mkDerivation rec {
     sha256 = "0azdinwqjfv2q37gqpxmfvzsk86pvsi6cjaq1310zs26gric5j1f";
   };
 
+  patches = [
+    # Backport a change from Firefox 75 that fixes finding the
+    # location of clang and libclang.
+    (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ccd1356fc8f1d0bfa9d896e88d3cc924425623da";
+      sha256 = "005g3mfmal9nw32khrgyiv3221z7pazfhhm2qvgc8d48i2yzj3j0";
+    })
+  ];
+
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
 
@@ -54,9 +63,6 @@ in stdenv.mkDerivation rec {
     "--enable-posix-nspr-emulation"
     "--with-system-zlib"
     "--with-system-icu"
-
-    "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
-    "--with-clang-path=${llvmPackages.clang}/bin/clang"
 
     "--enable-shared-js"
     "--enable-readline"
