@@ -109,6 +109,7 @@
   ./misc/passthru.nix
   ./misc/version.nix
   ./misc/nixops-autoluks.nix
+  ./programs/1password-gui.nix
   ./programs/adb.nix
   ./programs/appgate-sdp.nix
   ./programs/atop.nix
