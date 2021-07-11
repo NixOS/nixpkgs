@@ -1676,7 +1676,10 @@ in
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
-  goku = callPackage ../os-specific/darwin/goku { };
+  goku = callPackage ../os-specific/darwin/goku {
+    graalvm = graalvm11-ce;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   kwakd = callPackage ../servers/kwakd { };
 
