@@ -17665,6 +17665,8 @@ in
 
   opencv = opencv4;
 
+  imath = callPackage ../development/libraries/imath { };
+
   openexr = callPackage ../development/libraries/openexr { };
 
   openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
