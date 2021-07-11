@@ -363,20 +363,22 @@ findInputs() {
     # Sanity check
     (( "$hostOffset" <= "$targetOffset" )) || exit 1
 
+    # shellcheck disable=SC2034
+    local emptyArray=()
     local varVar="${pkgAccumVarVars[$(( hostOffset + 1 ))]}"
     local varRef="${varVar}[$(( targetOffset - hostOffset ))]"
-    local var="${!varRef}"
+    # var is a reference to an array and can sometimes be undefined
+    local -n var="${!varRef:-emptyArray}"
     unset -v varVar varRef
 
-    # var is a reference to an array and can sometimes be undefined
-    # so checking the array with "${!var}[@]" does not work
-    # check if $pkgs is in the var ref array
     # TODO(@Ericson2314): Restore using associative array
-    if [[ "${var}[*]" = *" $pkg "* ]]; then
-        return 0
-    fi
+    for el in "${var[@]}"; do
+        if [[ "$el" = "$pkg" ]]; then
+            return 0
+        fi
+    done
 
-    eval "$var"'+=("$pkg")'
+    var+=("$pkg")
 
     if ! [ -e "$pkg" ]; then
         echo "build input $pkg does not exist" >&2
