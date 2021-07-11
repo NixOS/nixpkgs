@@ -180,5 +180,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = ["x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
     hydraPlatforms = builtins.filter (p: p != "aarch64-linux") platforms;
+    maintainers = with lib.maintainers; [ guibou ];
   };
 }

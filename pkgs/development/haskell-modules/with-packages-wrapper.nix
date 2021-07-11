@@ -106,7 +106,7 @@ symlinkJoin {
 
   '' + (lib.optionalString (stdenv.targetPlatform.isDarwin && !isGhcjs && !stdenv.targetPlatform.isiOS) ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):
-    local packageConfDir="$out/lib/${ghc.name}/package.conf.d";
+    local packageConfDir="${libDir}/package.conf.d";
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir
     # Clean up the old links that may have been (transitively) included by
@@ -133,8 +133,8 @@ symlinkJoin {
      # to another nix derivation, so they are not writable.  Removing
      # them allow the correct behavior of ghc-pkg recache
      # See: https://github.com/NixOS/nixpkgs/issues/79441
-     rm $out/lib/${ghc.name}/package.conf.d/package.cache.lock
-     rm $out/lib/${ghc.name}/package.conf.d/package.cache
+     rm ${libDir}/package.conf.d/package.cache.lock
+     rm ${libDir}/package.conf.d/package.cache
 
      $out/bin/${ghcCommand}-pkg recache
      ''}
