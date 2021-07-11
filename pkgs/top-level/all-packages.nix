@@ -404,6 +404,8 @@ in
 
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_2_1;
 
+  dracut = callPackage ../os-specific/linux/dracut { };
+
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
   umoci = callPackage ../applications/virtualization/umoci {};
