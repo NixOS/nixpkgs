@@ -4,14 +4,14 @@
 , lib }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.1.9";
+  version = "2.0.3";
   pname = "fdroidserver";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = version;
-    sha256 = "098dcg8jdi4q1prfjmd2lbhcyzb8fmmfhbxhid4kqx8vcv7r0iql";
+    sha256 = "sha256-/tX45t/DsWd0/R9VJJsqNjoOkgGIvqvq05YaVp0pLf0=";
   };
 
   patchPhase = ''
@@ -47,6 +47,7 @@ python.pkgs.buildPythonApplication rec {
     qrcode
     requests
     ruamel_yaml
+    yamllint
   ];
 
   # no tests
