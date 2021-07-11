@@ -401,6 +401,13 @@ in {
 
   ubootRockPro64 = buildUBoot {
     extraMakeFlags = [ "all" "u-boot.itb" ];
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/237654/mbox/";
+        sha256 = "0aiw9zk8w4msd3v8nndhkspjify0yq6a5f0zdy6mhzs0ilq896c3";
+      })
+    ];
     defconfig = "rockpro64-rk3399_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31="${armTrustedFirmwareRK3399}/bl31.elf";
