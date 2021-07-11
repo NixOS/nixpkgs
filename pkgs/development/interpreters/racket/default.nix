@@ -71,6 +71,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
     ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
 
+  patches = [
+    # this patch hard codes runtime type to be equal "cs"
+    # disabling dynamic runtime detection which fails on NixOS
+    # see: https://github.com/NixOS/nixpkgs/issues/114993#issuecomment-812951247
+    ./variant.patch
+  ];
+
   preConfigure = ''
     unset AR
     for f in src/lt/configure src/cs/c/configure src/bc/src/string.c src/ChezScheme/workarea; do
