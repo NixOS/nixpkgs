@@ -31572,7 +31572,9 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  sumneko-lua-language-server = callPackage ../development/tools/sumneko-lua-language-server { };
+  sumneko-lua-language-server = callPackage ../development/tools/sumneko-lua-language-server {
+    inherit (darwin.apple_sdk.frameworks) CoreServices CoreFoundation;
+  };
 
   go-swag = callPackage ../development/tools/go-swag { };
 
