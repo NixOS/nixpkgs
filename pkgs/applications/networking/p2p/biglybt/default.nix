@@ -4,12 +4,12 @@ stdenv.mkDerivation rec {
   pname = "BiglyBT";
   version = "v2.8.0.0";
 
-    src = fetchFromGitHub {
-      owner = "BiglySoftware";
-      repo = "BiglyBT";
-      rev = "v2.8.0.0";
-      sha256 = "c05b488fcc48e98a568813f82a39b1a596efababadc77ca443e7f7a1007252f5";
-    };
+  src = fetchFromGitHub {
+    owner = "BiglySoftware";
+    repo = "BiglyBT";
+    rev = "v2.8.0.0"; 
+    sha256 = "c05b488fcc48e98a568813f82a39b1a596efababadc77ca443e7f7a1007252f5";
+  };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jdk ant ];
