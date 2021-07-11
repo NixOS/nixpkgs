@@ -314,8 +314,16 @@ in
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-       # If gnome is installed, build vim for gtk3 too.
+      # If gnome is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
+      
+      # Appstream refresh so gnome picks up new or changed applications without having to restart gnome
+      system.activationScripts = {
+        appstream.text =
+        ''
+          ${pkgs.appstream}/bin/appstreamcli refresh-cache --force
+        '';
+      };
     })
 
     (mkIf flashbackEnabled {
