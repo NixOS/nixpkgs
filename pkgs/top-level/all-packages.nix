@@ -31813,6 +31813,11 @@ in
 
   wordpress = callPackage ../servers/web-apps/wordpress { };
 
+  wordpressPackages = {
+    plugins = recurseIntoAttrs (callPackage ../servers/web-apps/wordpress/plugins.nix { });
+    themes = recurseIntoAttrs (callPackage ../servers/web-apps/wordpress/themes.nix { });
+  };
+
   wprecon = callPackage ../tools/security/wprecon { };
 
   wraith = callPackage ../applications/networking/irc/wraith {
