@@ -20,7 +20,7 @@ in
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
-      type = types.enum [ "btrfs" "overlay" "vfs" ];
+      type = types.enum [ "aufs" "btrfs" "devmapper" "overlay" "vfs" "zfs" ];
       default = "overlay";
       description = "Storage driver to be used";
     };
@@ -126,7 +126,7 @@ in
       documentation = [ "https://github.com/cri-o/cri-o" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ cfg.package ];
+      path = [ cfg.package pkgs.conntrack-tools ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs;
       serviceConfig = {
         Type = "notify";
         ExecStart = "${cfg.package}/bin/crio";
