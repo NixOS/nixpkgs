@@ -1566,6 +1566,8 @@ in
 
   gmnisrv = callPackage ../servers/gemini/gmnisrv { };
 
+  gmnitohtml = callPackage ../applications/misc/gmnitohtml { };
+
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
   gojsontoyaml = callPackage ../development/tools/gojsontoyaml { };
