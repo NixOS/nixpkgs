@@ -5776,6 +5776,9 @@ in
   hevea = callPackage ../tools/typesetting/hevea { };
 
   hexd = callPackage ../tools/misc/hexd { };
+
+  hey-mail = callPackage ../applications/networking/mailreaders/hey-mail { };
+
   pixd = callPackage ../tools/misc/pixd { };
 
   hey = callPackage ../tools/networking/hey { };
