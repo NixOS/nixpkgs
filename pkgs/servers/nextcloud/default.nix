@@ -46,8 +46,8 @@ in {
   '';
 
   nextcloud19 = generic {
-    version = "19.0.6";
-    sha256 = "sha256-pqqIayE0OyTailtd2zeYi+G1APjv/YHqyO8jCpq7KJg=";
+    version = "19.0.13";
+    sha256 = "sha256-pc5sS7cK65c5vwG7NhKaWU2DeXHovSHH0wEmeosxIg8=";
     extraVulnerabilities = [
       "Nextcloud 19 is still supported, but CVE-2020-8259 & CVE-2020-8152 are unfixed! Please note that both CVEs only affect the file encryption module which is turned off by default. Alternatively, `pkgs.nextcloud20` can be used."
       "Nextcloud 19 is EOL!"
