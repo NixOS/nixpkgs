@@ -21,7 +21,13 @@ rec {
        attrByPath ["z" "z"] 6 x
        => 6
   */
-  attrByPath = attrPath: default: e:
+  attrByPath =
+    # A list of strings representing the path through the nested attribute set `set`
+    attrPath:
+    # Default value if `attrPath` does not resolve to an existing value
+    default:
+    # The nested attributeset to select values from
+    e:
     let attr = head attrPath;
     in
       if attrPath == [] then e
@@ -39,7 +45,11 @@ rec {
        => false
 
   */
-  hasAttrByPath = attrPath: e:
+  hasAttrByPath =
+    # A list of strings representing the path through the nested attribute set `set`
+    attrPath:
+    # The nested attributeset to check
+    e:
     let attr = head attrPath;
     in
       if attrPath == [] then true
@@ -54,7 +64,11 @@ rec {
        setAttrByPath ["a" "b"] 3
        => { a = { b = 3; }; }
   */
-  setAttrByPath = attrPath: value:
+  setAttrByPath =
+    # A list of strings representing the path through the nested attribute set
+    attrPath:
+    # The value to set at the location described by `attrPath`
+    value:
     if attrPath == [] then value
     else listToAttrs
       [ { name = head attrPath; value = setAttrByPath (tail attrPath) value; } ];
@@ -70,7 +84,11 @@ rec {
        getAttrFromPath ["z" "z"] x
        => error: cannot find attribute `z.z'
   */
-  getAttrFromPath = attrPath: set:
+  getAttrFromPath =
+    # A list of strings representing the path through the nested attribute set `set`
+    attrPath:
+    # The nested attribute set to find the value in
+    set:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
     in attrByPath attrPath (abort errorMsg) set;
 
@@ -81,7 +99,11 @@ rec {
        attrVals ["a" "b" "c"] as
        => [as.a as.b as.c]
   */
-  attrVals = nameList: set: map (x: set.${x}) nameList;
+  attrVals =
+    # The list of attributes to fetch from `set`. Each attribute name must exist on the attrbitue set
+    nameList:
+    # The set to get attribute values from
+    set: map (x: set.${x}) nameList;
 
 
   /* Return the values of all attributes in the given set, sorted by
@@ -101,7 +123,11 @@ rec {
        getAttrs [ "a" "b" ] { a = 1; b = 2; c = 3; }
        => { a = 1; b = 2; }
   */
-  getAttrs = names: attrs: genAttrs names (name: attrs.${name});
+  getAttrs =
+    # A list of attribute names to get out of `set`
+    names:
+    # The set to get the named attributes from
+    attrs: genAttrs names (name: attrs.${name});
 
   /* Collect each attribute named `attr' from a list of attribute
      sets.  Sets that don't contain the named attribute are ignored.
@@ -121,7 +147,11 @@ rec {
        filterAttrs (n: v: n == "foo") { foo = 1; bar = 2; }
        => { foo = 1; }
   */
-  filterAttrs = pred: set:
+  filterAttrs =
+    # String (Name) -> Any (Value) -> Bool, returns `true` to include the attribute, `false` to exclude the attribute.
+    pred:
+    # The attribute set to filter
+    set:
     listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
 
 
@@ -132,7 +162,20 @@ rec {
        filterAttrsRecursive (n: v: v != null) { foo = { bar = null; }; }
        => { foo = {}; }
   */
-  filterAttrsRecursive = pred: set:
+  filterAttrsRecursive =
+    # String -> Any -> Bool
+    #
+    # Predicate which returns true to include an attribute, or returns false to exclude it
+    #
+    # `name`
+    # : The attribute's name
+    # `value`
+    # : The attribute's value
+    #
+    # Returns `true` to include the attribute, `false` to exclude the attribute.
+    pred:
+    # The attribute set to filter
+    set:
     listToAttrs (
       concatMap (name:
         let v = set.${name}; in

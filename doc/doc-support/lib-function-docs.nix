@@ -17,6 +17,8 @@ with pkgs; stdenv.mkDerivation {
     mkdir -p $out
     ln -s ${locationsXml} $out/locations.xml
 
+    docgen asserts 'Assert functions'
+    docgen attrsets 'Attribute-set functions'
     docgen strings 'String manipulation functions'
     docgen trivial 'Miscellaneous functions'
     docgen lists 'List manipulation functions'
