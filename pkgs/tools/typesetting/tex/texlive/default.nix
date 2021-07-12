@@ -113,6 +113,7 @@ let
           else {
             inherit pname version;
             tlType = "run";
+            hasFormats = attrs.hasFormats or false;
             hasHyphens = attrs.hasHyphens or false;
           }
         )]
@@ -171,6 +172,7 @@ let
           # metadata for texlive.combine
           passthru = {
             inherit pname tlType version;
+            hasFormats = args.hasFormats or false;
             hasHyphens = args.hasHyphens or false;
           };
         } // lib.optionalAttrs (fixedHash != null) {
