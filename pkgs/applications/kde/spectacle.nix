@@ -4,17 +4,20 @@
   ki18n, xcb-util-cursor,
   kconfig, kcoreaddons, kdbusaddons, kdeclarative, kio, kipi-plugins,
   knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi,
-  qtx11extras, knewstuff, kwayland, qttools
+  qtbase, qtx11extras, knewstuff, kwayland, qttools, kcolorpicker, kimageannotator
 }:
 
 mkDerivation {
   pname = "spectacle";
-  meta = with lib; { maintainers = with maintainers; [ ttuegel ]; };
+  meta = with lib; {
+    maintainers = with maintainers; [ ttuegel ];
+    broken = versionOlder qtbase.version "5.15";
+  };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
     kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi qtx11extras xcb-util-cursor
-    knewstuff kwayland
+    knewstuff kwayland kcolorpicker kimageannotator
   ];
   postPatch = ''
     substituteInPlace desktop/org.kde.spectacle.desktop.cmake \
