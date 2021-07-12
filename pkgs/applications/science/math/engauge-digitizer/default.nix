@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "engauge-digitizer";
-  version = "12.1";
+  version = "12.2.2";
 
   src = fetchFromGitHub {
     owner = "markummitchell";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12gflxqaa4w6vifwpaqwl0l3f9qq5pbrh45s1rpc584nmr0897a7";
+    sha256 = "sha256-Wj9o3wWbtHsEi6LFH4xDpwVR9BwcWc472jJ/QFDQZvY=";
   };
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];

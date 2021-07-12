@@ -6,6 +6,8 @@ let
 
   cfg = config.services.bind;
 
+  bindPkg = config.services.bind.package;
+
   bindUser = "named";
 
   bindZoneCoerce = list: builtins.listToAttrs (lib.forEach list (zone: { name = zone.name; value = zone; }));
@@ -103,6 +105,14 @@ in
     services.bind = {
 
       enable = mkEnableOption "BIND domain name server";
+
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.bind;
+        defaultText = "pkgs.bind";
+        description = "The BIND package to use.";
+      };
 
       cacheNetworks = mkOption {
         default = [ "127.0.0.0/24" ];
@@ -225,7 +235,7 @@ in
       preStart = ''
         mkdir -m 0755 -p /etc/bind
         if ! [ -f "/etc/bind/rndc.key" ]; then
-          ${pkgs.bind.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
+          ${bindPkg.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
         fi
 
         ${pkgs.coreutils}/bin/mkdir -p /run/named
@@ -233,9 +243,9 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.bind.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
-        ExecReload = "${pkgs.bind.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
-        ExecStop = "${pkgs.bind.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
+        ExecStart = "${bindPkg.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
+        ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
+        ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
       };
 
       unitConfig.Documentation = "man:named(8)";
