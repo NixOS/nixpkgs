@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, resto, resto-json, uri, lwt }:
+{ lib, buildDunePackage, resto, resto-json, uri }:
 
 buildDunePackage {
   pname = "ezresto";
@@ -8,9 +8,5 @@ buildDunePackage {
     uri
     resto
     resto-json
-  ];
-
-  checkInputs = [
-    lwt
   ];
 }

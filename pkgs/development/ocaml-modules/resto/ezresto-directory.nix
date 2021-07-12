@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, resto, resto-acl, resto-directory, ezresto, lwt }:
+{ buildDunePackage, resto, resto-directory, ezresto, lwt }:
 
 buildDunePackage {
   pname = "ezresto-directory";
@@ -9,9 +9,5 @@ buildDunePackage {
     resto-directory
     resto
     lwt
-  ];
-
-  checkInputs = [
-    resto-acl
   ];
 }

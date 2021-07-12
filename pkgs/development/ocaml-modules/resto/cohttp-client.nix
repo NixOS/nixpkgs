@@ -1,11 +1,6 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , resto
-, resto-directory
 , resto-cohttp
-, resto-cohttp-self-serving-client
-, resto-cohttp-server
-, ezresto-directory
 , uri
 , cohttp-lwt
 , lwt
@@ -20,11 +15,5 @@ buildDunePackage {
     resto-cohttp
     cohttp-lwt
     lwt
-  ];
-
-  checkInputs = [
-    resto-cohttp-server
-    ezresto-directory
-    # resto-cohttp-self-serving-client
   ];
 }

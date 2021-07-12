@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, resto, resto-directory, cohttp-lwt, resto-acl, }:
+{ buildDunePackage, resto, resto-directory, cohttp-lwt }:
 
 buildDunePackage {
   pname = "resto-cohttp";
@@ -7,9 +7,5 @@ buildDunePackage {
   propagatedBuildInputs = [
     resto-directory
     cohttp-lwt
-  ];
-
-  checkInputs = [
-    resto-acl
   ];
 }
