@@ -9,6 +9,20 @@ rec {
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
+  # List of all our tier 1 systems
+  tier1 = [
+    "x86_64-linux"
+  ];
+
+  # List of all our tier 2 systems
+  tier2 = [
+    "aarch64-linux"
+    "x86_64-darwin"
+  ];
+
+  # TODO: all the other tiers and systems
+  # See https://github.com/NixOS/rfcs/blob/fd559bdb8276901711e8813cbbf45a1f02578833/rfcs/0046-platform-support-tiers.md
+
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
   #
