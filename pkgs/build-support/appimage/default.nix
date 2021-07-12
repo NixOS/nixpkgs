@@ -45,7 +45,7 @@ rec {
       targetPkgs = pkgs: [ appimage-exec ]
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-      runScript = "appimage-exec.sh -w ${src}";
+      runScript = "appimage-exec.sh -w ${src} --";
     } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
   wrapType2 = args@{ name, src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
