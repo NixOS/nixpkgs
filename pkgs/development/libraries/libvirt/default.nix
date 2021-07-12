@@ -32,19 +32,19 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "7.0.0";
+  version = "7.3.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "12fxkpy7j2qhfxypw9jg3bzdd9xx6vf6x96iy5kjihh89n236f6a";
+        sha256 = "sha256:1gn13mfwbdhp31pkzvrba7avz84yc9f1ik9f3ympa51hq22vpg97";
       }
     else
       fetchgit {
         url = "https://gitlab.com/libvirt/libvirt.git";
         rev = "v${version}";
-        sha256 = "0xg9d410008mny73r2cp5ipghqpk0gz9gy7j32vcfk691dq75b3c";
+        sha256 = "sha256:0qf814y47l4fdd7vgp4d4jv6inf3kbi3nf1907asy77jb1ww05hm";
         fetchSubmodules = true;
       };
 
