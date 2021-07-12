@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pytest
 , pyqt5
 }:
@@ -16,10 +16,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     pytest
   ];
 

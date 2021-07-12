@@ -1,7 +1,7 @@
-{ stdenv, fetchdarcs, pythonPackages, libvncserver, zlib
+{ lib, fetchdarcs, python2Packages, libvncserver, zlib
 , gnutls, libvpx, makeDesktopItem, mkDerivationWith }:
 
-mkDerivationWith pythonPackages.buildPythonApplication rec {
+mkDerivationWith python2Packages.buildPythonApplication rec {
 
   pname = "blink";
   version = "3.2.0";
@@ -17,16 +17,16 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
     sed -i 's|@out@|'"''${out}"'|g' blink/resources.py
   '';
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     pyqt5_with_qtwebkit
     cjson
     sipsimple
     twisted
-    google_api_python_client
+    google-api-python-client
   ];
 
   buildInputs = [
-    pythonPackages.cython
+    python2Packages.cython
     zlib
     libvncserver
     libvpx
@@ -58,7 +58,7 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://icanblink.com/";
     description = "A state of the art, easy to use SIP client for Voice, Video and IM";
     platforms = platforms.linux;

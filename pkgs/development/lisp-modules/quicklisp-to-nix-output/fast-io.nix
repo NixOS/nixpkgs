@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''fast-io'';
-  version = ''20200925-git'';
+  baseName = "fast-io";
+  version = "20200925-git";
 
-  description = ''Alternative I/O mechanism to a stream or vector'';
+  description = "Alternative I/O mechanism to a stream or vector";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."static-vectors" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fast-io/2020-09-25/fast-io-20200925-git.tgz'';
-    sha256 = ''1rgyr6y20fp3jqnx5snpjf9lngzalip2a28l04ssypwagmhaa975'';
+    url = "http://beta.quicklisp.org/archive/fast-io/2020-09-25/fast-io-20200925-git.tgz";
+    sha256 = "1rgyr6y20fp3jqnx5snpjf9lngzalip2a28l04ssypwagmhaa975";
   };
 
   packageName = "fast-io";

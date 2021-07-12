@@ -1,6 +1,6 @@
 # Taken from a past commit of nixpkgs
 
-{ stdenv, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # tox required for tests: https://github.com/davidhalter/jedi/issues/808
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/davidhalter/jedi";
     description = "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;

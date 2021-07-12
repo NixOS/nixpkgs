@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "23";
+  version = "26";
 
   disabled = ! isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0628058b644776132f2f893f1a2201a0142a38b6acf089c6b11a63ad5a752ba7";
+    sha256 = "3dd0f9fc59edff5d87905ddef3eecc93f974c209d818d3a91061b05925da04af";
   };
 
   propagatedBuildInputs = [ aiohttp ];

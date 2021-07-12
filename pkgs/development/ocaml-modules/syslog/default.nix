@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.03.0";
+assert lib.versionAtLeast (lib.getVersion ocaml) "4.03.0";
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-syslog";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rixed/ocaml-syslog";
     description = "Simple wrapper to access the system logger from OCaml";
     license = licenses.lgpl21Plus;

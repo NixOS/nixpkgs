@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, poppler, pkgconfig, libunarr
+{ mkDerivation, lib, fetchFromGitHub, qmake, poppler, pkg-config, libunarr
 , libGLU, qtdeclarative, qtgraphicaleffects, qtmultimedia, qtquickcontrols
 , qtscript
 }:
@@ -14,7 +14,7 @@ mkDerivation rec {
     sha256 = "17kzh69sxpyk4n7c2gkbsvr9y4j14azdy1qxzghsbwp7ij4iw9kv";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [ poppler libunarr libGLU qtmultimedia qtscript ];
   propagatedBuildInputs = [ qtquickcontrols qtgraphicaleffects qtdeclarative ];
 

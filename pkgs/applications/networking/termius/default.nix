@@ -12,11 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "6.4.1";
+  version = "7.15.1";
 
   src = fetchurl {
-    url = "https://deb.termius.com/pool/main/t/termius-app/termius-app_${version}_amd64.deb";
-    sha256 = "0vc4nz5yndg11zhs92xj496jqzlhy9g0vqlfqrmg8zpf9ciygbqz";
+    # Termius switched to using non-versioned downloads https://s3.amazonaws.com/termius.desktop.autoupdate/linux/Termius.deb
+    url = "https://web.archive.org/web/20210710174019/https://s3.amazonaws.com/termius.desktop.autoupdate/linux/Termius.deb";
+    sha256 = "16zc7ywz3hl1awkc4wk0rd94nsy55l98j2yzfdxcjiixky4gk8wn";
   };
 
   desktopItem = makeDesktopItem {
@@ -41,14 +42,17 @@ stdenv.mkDerivation rec {
   unpackPhase = "dpkg-deb -x $src .";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp -R "opt" "$out"
     cp -R "usr/share" "$out/share"
     chmod -R g-w "$out"
-
     # Desktop file
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
+
+    runHook postInstall
   '';
 
   runtimeDependencies = [ (lib.getLib udev) ];
@@ -58,12 +62,12 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform SSH client with cloud data sync and more";
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne th0rgal ];
     platforms = [ "x86_64-linux" ];
   };
 }

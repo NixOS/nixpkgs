@@ -8,7 +8,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
 2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/fetch-kde-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
+   `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION`.
 3. Check that the new packages build correctly.
 4. Commit the changes and open a pull request.
 
@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
+  lib, stdenv, fetchurl, fetchpatch, fetchgit, fetchFromGitHub, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
   llvmPackages_5,
@@ -27,7 +27,7 @@ top-level attribute to `top-level/all-packages.nix`.
   debug ? false,
 }:
 
-with stdenv.lib;
+with lib;
 
 let
 
@@ -48,13 +48,62 @@ let
       };
       version = "5.212.0-alpha4";
     };
+
+    # Even if developed in the public, QtWebEngine does not have official
+    # releases or new tags since the Qt company made 5.15.3 proprietary.
+    # Apparently they care more about licensing than the security of their users.
+    # See https://lists.qt-project.org/pipermail/interest/2021-March/036387.html
+    qtwebengine =
+      let
+        branchName = "5.15.3";
+        rev = "a059e7404a6db799f4da0ad696e65ae9c854b4b0";
+      in
+      {
+        version = "${branchName}-${lib.substring 0 7 rev}";
+
+        src = fetchgit {
+          url = "https://github.com/qt/qtwebengine.git";
+          sha256 = "1vdgxfbmx4z4qrm2g61dl64gqn3fv5f83jwpp7h1gyfx5z2qvfmv";
+          inherit rev branchName;
+          fetchSubmodules = true;
+          leaveDotGit = true;
+          name = "qtwebengine-${substring 0 7 rev}.tar.gz";
+          postFetch = ''
+            # remove submodule .git directory
+            rm -rf $out/src/3rdparty/.git
+
+            # compress to not exceed the 2GB output limit
+            mv $out source
+            # try to make a deterministic tarball
+            tar -I 'gzip -n' \
+              --sort name \
+              --mtime 1970-01-01 \
+              --owner=root --group=root \
+              --numeric-owner --mode=go=rX,u+rw,a-s \
+              -cf $out source
+          '';
+        };
+      };
   };
 
   patches = {
     qtbase =
       optionals stdenv.isDarwin [
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
-        ./qtbase.patch.d/0002-qtbase-mac.patch
+
+        # Downgrade minimal required SDK to 10.12
+        ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0001-Revert-QCocoaDrag-set-image-only-on-the-first-drag-i.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0002-Revert-QCocoaDrag-drag-make-sure-clipboard-is-ours-a.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0003-Revert-QCocoaDrag-maybeDragMultipleItems-fix-erroneo.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0004-Revert-QCocoaDrag-avoid-using-the-deprecated-API-if-.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0005-Revert-macOS-Fix-use-of-deprecated-NSOffState.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0006-git-checkout-v5.15.0-src-plugins-platforms-cocoa-qco.patch
+        ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
+
+        # Patch framework detection to support X.framework/X.tbd,
+        # extending the current support for X.framework/X.
+        ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
@@ -70,13 +119,33 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = [ ]
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
-    qtwebkit = [ ./qtwebkit.patch ]
-      ++ optionals stdenv.isDarwin [
-        ./qtwebkit-darwin-no-readline.patch
-        ./qtwebkit-darwin-no-qos-classes.patch
-      ];
+    qtwebengine = [
+      # Fix crashes with non en_US.UTF-8 locales
+      (fetchpatch {
+        url = "https://github.com/qt/qtwebengine/commit/199ea00a9eea13315a652c62778738629185b059.patch";
+        sha256 = "1b5k2g1v8913cvsgvp6ja4mcprjlk5vcwqzi0p1qq7b1wyi4f0g2";
+      })
+    ] ++ optionals stdenv.isDarwin [
+      ./qtwebengine-darwin-no-platform-check.patch
+      ./qtwebengine-mac-dont-set-dsymutil-path.patch
+    ];
+    qtwebkit = [
+      (fetchpatch {
+        name = "qtwebkit-bison-3.7-build.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
+        sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
+      })
+      (fetchpatch {
+        name = "qtwebkit-glib-2.68.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
+        sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
+      })
+      ./qtwebkit.patch
+      ./qtwebkit-icu68.patch
+    ] ++ optionals stdenv.isDarwin [
+      ./qtwebkit-darwin-no-readline.patch
+      ./qtwebkit-darwin-no-qos-classes.patch
+    ];
     qttools = [ ./qttools.patch ];
   };
 
@@ -84,12 +153,12 @@ let
     import ../qtModule.nix
     {
       inherit perl;
-      inherit (stdenv) lib;
+      inherit lib;
       # Use a variant of mkDerivation that does not include wrapQtApplications
       # to avoid cyclic dependencies between Qt modules.
       mkDerivation =
         import ../mkDerivation.nix
-        { inherit (stdenv) lib; inherit debug; wrapQtAppsHook = null; }
+        { inherit lib; inherit debug; wrapQtAppsHook = null; }
         stdenvActual.mkDerivation;
     }
     { inherit self srcs patches; };
@@ -101,7 +170,7 @@ let
 
       mkDerivationWith =
         import ../mkDerivation.nix
-        { inherit (stdenv) lib; inherit debug; inherit (self) wrapQtAppsHook; };
+        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
 
       mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
 
@@ -117,6 +186,7 @@ let
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
+      qtgamepad = callPackage ../modules/qtgamepad.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
@@ -139,7 +209,9 @@ let
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
-      qtwebengine = callPackage ../modules/qtwebengine.nix {};
+      qtwebengine = callPackage ../modules/qtwebengine.nix {
+        inherit (srcs.qtwebengine) version;
+      };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
       qtwebkit = callPackage ../modules/qtwebkit.nix {};
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
@@ -160,6 +232,7 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
+          inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;

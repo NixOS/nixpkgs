@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libexttextcat-3.4.5";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j6sjwkyhqvsgyw938bxxfwkzzi1mahk66g5342lv6j89jfvrz8k";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An N-Gram-Based Text Categorization library primarily intended for language guessing";
     homepage = "https://wiki.documentfoundation.org/Libexttextcat";
     platforms = platforms.all;

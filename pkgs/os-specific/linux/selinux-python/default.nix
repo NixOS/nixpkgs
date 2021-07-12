@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, python3
+{ lib, stdenv, fetchurl, python3
 , libselinux, libsemanage, libsepol, setools }:
 
 # this is python3 only because setools only supports python3
 
-with stdenv.lib;
+with lib;
 with python3.pkgs;
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "BASHCOMPLETIONDIR=$(out)/share/bash-completion/completions"
     "PYTHON=python"
     "PYTHONLIBDIR=$(out)/${python.sitePackages}"
-    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
 

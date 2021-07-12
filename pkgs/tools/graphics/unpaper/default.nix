@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libav, libxslt }:
+{ lib, stdenv, fetchurl, pkg-config, ffmpeg, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "unpaper";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0c5rbkxbmy9k8vxjh4cv0bgnqd3wqc99yzw215vkyjslvbsq8z13";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libav libxslt ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ ffmpeg libxslt ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.flameeyes.eu/projects/unpaper";
     description = "Post-processing tool for scanned sheets of paper";
     license = licenses.gpl2;

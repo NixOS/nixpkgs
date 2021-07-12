@@ -1,5 +1,5 @@
 {
-  stdenv, buildPackages, fetchurl, fetchpatch,
+  lib, stdenv, buildPackages, fetchurl, fetchpatch,
   runCommand,
   autoconf, automake, libtool,
   enablePython ? false, python ? null,
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = stdenv.lib.optionals stdenv.hostPlatform.isMusl
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isMusl
     [ autoconf automake libtool ];
-  buildInputs = stdenv.lib.optional enablePython python;
+  buildInputs = lib.optional enablePython python;
 
   configureFlags = [
     # z/OS plugin is not useful on Linux,
@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   # TODO: Remove the musl patches when
   #         https://github.com/linux-audit/audit-userspace/pull/25
   #       is available with the next release.
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl [
+  patches = [ ./patches/weak-symbols.patch ]
+  ++ lib.optional stdenv.hostPlatform.isMusl [
     (
       let patch = fetchpatch {
             url = "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
@@ -55,12 +56,19 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
+  ''
+  # According to https://stackoverflow.com/questions/13089166
+  # --whole-archive linker flag is required to be sure that linker
+  # correctly chooses strong version of symbol regardless of order of
+  # object files at command line.
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    export LDFLAGS=-Wl,--whole-archive
   '';
   meta = {
     description = "Audit Library";
     homepage = "https://people.redhat.com/sgrubb/audit/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
   };
 }

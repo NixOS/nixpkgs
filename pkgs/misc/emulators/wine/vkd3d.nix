@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, vulkan-headers, spirv-headers, vulkan-loader }:
+{ lib, stdenv, fetchurl, vulkan-headers, spirv-headers, vulkan-loader }:
 
 #TODO: MoltenVK
 #TODO: unstable
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 3d library build on top on Vulkan with a similar api to DirectX 12";
     homepage = "https://source.winehq.org/git/vkd3d.git";
     license = licenses.lgpl21;

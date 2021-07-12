@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, xorg, freetype, fontconfig, libGLU, libGL, glibc, makeWrapper }:
+{ fetchurl, lib, stdenv, xorg, freetype, fontconfig, libGLU, libGL, glibc, makeWrapper }:
 
 let
   system = if stdenv.hostPlatform.system == "x86_64-linux" then "linux64" else "linux32";
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0ri7qmpc1xpy12lpzl6k298c641wcibcwrzz8jn75wdg4rr176r5";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
       xorg.libX11
       xorg.libxcb
       freetype
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://ocz.com/ssd-guru";
     description = "SSD Management Tool for OCZ disks";
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jagajaga ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jagajaga ];
   };
 
 }

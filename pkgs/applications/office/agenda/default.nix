@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, fast, no-nonsense to-do (task) list designed for elementary OS";
     homepage = "https://github.com/dahenson/agenda";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;

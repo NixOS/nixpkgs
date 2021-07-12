@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 let
     version = "0.1.3";
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://sourceforge.net/projects/opencore-amr/";
     description = "VisualOn Adaptive Multi Rate Wideband (AMR-WB) encoder";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.Esteth ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.Esteth ];
+    platforms = lib.platforms.unix;
   };
 }

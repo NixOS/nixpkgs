@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''woo'';
-  version = ''20200427-git'';
+  baseName = "woo";
+  version = "20200427-git";
 
-  description = ''An asynchronous HTTP server written in Common Lisp'';
+  description = "An asynchronous HTTP server written in Common Lisp";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-utilities" args."clack-socket" args."fast-http" args."fast-io" args."flexi-streams" args."lev" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."swap-bytes" args."trivial-features" args."trivial-gray-streams" args."trivial-utf-8" args."vom" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/woo/2020-04-27/woo-20200427-git.tgz'';
-    sha256 = ''1mmgwgf9n74zab96x1n4faij30l2vk19xy74fcp0xnpj4lrp7v29'';
+    url = "http://beta.quicklisp.org/archive/woo/2020-04-27/woo-20200427-git.tgz";
+    sha256 = "1mmgwgf9n74zab96x1n4faij30l2vk19xy74fcp0xnpj4lrp7v29";
   };
 
   packageName = "woo";

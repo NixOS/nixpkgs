@@ -3,7 +3,7 @@
 , fetchurl
 , substituteAll
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , intltool
 , babl
 , gegl
@@ -33,6 +33,7 @@
 , libexif
 , gettext
 , makeWrapper
+, gtk-doc
 , xorg
 , glib-networking
 , libmypaint
@@ -52,13 +53,13 @@ let
   python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation rec {
   pname = "gimp";
-  version = "2.10.22";
+  version = "2.10.24";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1fqqyshakvdarf1jipk2n33ibqr23ni22z3d8srq13bpydblpf1d";
+    sha256 = "17lq6ns5qhspd171zqh76yf98xnn5n0hcl7hbhbx63cc6ribf6xx";
   };
 
   patches = [
@@ -76,10 +77,11 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
-    pkgconfig
+    pkg-config
     intltool
     gettext
     makeWrapper
+    gtk-doc
   ];
 
   buildInputs = [
@@ -163,8 +165,10 @@ in stdenv.mkDerivation rec {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
     majorVersion = "${lib.versions.major version}.0";
-    targetPluginDir = "lib/gimp/${majorVersion}/plug-ins";
-    targetScriptDir = "share/gimp/${majorVersion}/scripts";
+    targetLibDir = "lib/gimp/${majorVersion}";
+    targetDataDir = "share/gimp/${majorVersion}";
+    targetPluginDir = "${targetLibDir}/plug-ins";
+    targetScriptDir = "${targetDataDir}/scripts";
 
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk2;

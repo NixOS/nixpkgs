@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libusb-compat-0_1, makeWrapper}:
+{lib, stdenv, fetchurl, libusb-compat-0_1, makeWrapper}:
 
 stdenv.mkDerivation {
   name = "pk2cmd-1.20";
@@ -16,11 +16,12 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/pk2cmd --prefix PATH : $out/share/pk2
   '';
 
-  buildInputs = [ libusb-compat-0_1 makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   meta = {
     homepage = "https://www.microchip.com/pickit2";
-    license = stdenv.lib.licenses.unfree; #MicroChip-PK2
+    license = lib.licenses.unfree; #MicroChip-PK2
     description = "Microchip PIC programming software for the PICKit2 programmer";
   };
 }

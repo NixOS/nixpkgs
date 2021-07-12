@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, python, cmake, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, zlib, python, cmake, pkg-config }:
 
 stdenv.mkDerivation rec
 {
@@ -14,9 +14,8 @@ stdenv.mkDerivation rec
 
   outputs = [ "bin" "dev" "out" "lib" ];
 
-  buildInputs = [ zlib python cmake pkg-config ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib python pkg-config ];
 
   # Can be removed in the next release
   # https://github.com/wdas/ptex/pull/42
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec
     echo v${version} >version
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Per-Face Texture Mapping for Production Rendering";
     homepage = "http://ptex.us/";
     license = licenses.bsd3;

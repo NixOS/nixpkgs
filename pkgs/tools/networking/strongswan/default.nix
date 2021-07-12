@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch
-, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch
+, pkg-config, autoreconfHook
 , gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
 , systemd, pam
@@ -13,7 +13,7 @@
 # strongswan curl plugin may break.
 # See https://wiki.strongswan.org/projects/strongswan/wiki/Curl for more info.
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "strongswan";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs =
     [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]

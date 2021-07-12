@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 let
   version = "1.4";
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     cp deer $out/share/zsh/site-functions/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ranger-like file navigation for zsh";
     homepage = "https://github.com/Vifon/deer";
     license = licenses.gpl3Plus;

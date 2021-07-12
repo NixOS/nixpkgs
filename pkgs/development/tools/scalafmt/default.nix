@@ -1,4 +1,4 @@
-{ stdenv, jdk, jre, coursier, makeWrapper }:
+{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
 
 let
   baseName = "scalafmt";
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";
     license = licenses.asl20;

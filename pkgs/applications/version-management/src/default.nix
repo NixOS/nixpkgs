@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, rcs, git, makeWrapper }:
+{ lib, stdenv, fetchurl, python, rcs, git, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "src";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --suffix PATH ":" "${rcs}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple single-file revision control";
     longDescription = ''
       SRC, acronym of Simple Revision Control, is RCS/SCCS reloaded with a

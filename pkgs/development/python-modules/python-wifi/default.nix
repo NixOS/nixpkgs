@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "149c3dznb63d82143cz5hqdim0mqjysz6p3yk0zv271vq3xnmzvv";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "Read & write wireless card capabilities using the Linux Wireless Extensions";
     homepage = "http://pythonwifi.tuxfamily.org/";

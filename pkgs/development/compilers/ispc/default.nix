@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , cmake, which, m4, python3, bison, flex, llvmPackages
 
   # the default test target is sse4, but that is not supported by all Hydra agents
@@ -7,19 +7,30 @@
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.13.0";
+  version = "unstable-2021-04-02";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
-    rev    = "v${version}";
-    sha256 = "1l74xkpwwxc38k2ngg7mpvswziiy91yxslgfad6688hh1n5jvayd";
+    # ISPC release 1.15.0 doesn't build against LLVM 11.1, only against 11.0. So we
+    # use latest ISPC main branch for now, until they support an LLVM version we have.
+    # https://github.com/ispc/ispc/issues/2027#issuecomment-784470530
+    rev    = "3e8313568265d2adfbf95bd6b6e1a4c70ef59bed";
+    sha256 = "sha256-gvr+VpoacmwQlP5gT4MnfmKdACZWJduVMIpR0YRzseg=";
   };
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 ];
+  patches = [
+    # Fix cmake error: `Failed to find clang++`
+    # https://github.com/ispc/ispc/pull/2055
+    (fetchpatch {
+      url = "https://github.com/erictapen/ispc/commit/338119b2f4e11fcf0b0852de296c320928e572a2.patch";
+      sha256 = "sha256-+RqDq1LMWomu/K4SgK0Nip47b1RwyM6W0cTSNGD4+m4=";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.llvm.dev ];
   buildInputs = with llvmPackages; [
-    # we need to link against libclang, so we need the unwrapped
-    llvm llvmPackages.clang-unwrapped
+    llvm llvmPackages.libclang
   ];
 
   postPatch = ''
@@ -54,13 +65,15 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
+    "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
     "-DISPC_INCLUDE_UTILS=OFF"
     "-DARM_ENABLED=FALSE"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     license     = licenses.bsd3;

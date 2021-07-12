@@ -1,9 +1,11 @@
-{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin,
-  runtimeShell }:
+{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeScriptBin
+, runtimeShell
+, bash
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
-  version = "0.55.1";
+  version = "0.57.0";
 
   RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
 
@@ -11,19 +13,21 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cbc78zrhda4adza88g05sy04chixqay2ylgdjgmf13h607hp3kn";
+    sha256 = "sha256-0d8+Rkb4h1DoFUQ7u2/kPR/fUUz0YvI+hNT4iXL3mxY=";
   };
 
-  cargoSha256 = "1dv1ywdy701bnc2jv5jq0hnpal1snlizaj9w6k1wxyrp9szjd48w";
+  cargoSha256 = "0r60smhlx1992a1s1k5sxjpdqllb2xsqcimgx3ldp5fdkfphk3cw";
 
-  libclang = llvmPackages.libclang.lib; #for substituteAll
+  #for substituteAll
+  libclang = llvmPackages_latest.libclang.lib;
+  inherit bash;
 
   buildInputs = [ libclang ];
 
   propagatedBuildInputs = [ clang ]; # to populate NIX_CXXSTDLIB_COMPILE
 
   configurePhase = ''
-    export LIBCLANG_PATH="${libclang}/lib"
+    export LIBCLANG_PATH="${libclang.lib}/lib"
   '';
 
   postInstall = ''
@@ -50,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically generates Rust FFI bindings to C (and some C++) libraries";
     longDescription = ''
       Bindgen takes a c or c++ header file and turns them into

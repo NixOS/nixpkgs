@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, which
+{ lib, stdenv, fetchurl, pkg-config, gettext, which
 , glib, gtk2
 , enableSoftening ? true
 }:
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0f8gjnia2fxcbmhl8b3qkr5b7idl8m855dw7xw2fnmbqwvcm6k4w";
   };
 
-  nativeBuildInputs = [ gettext pkgconfig which ];
+  nativeBuildInputs = [ gettext pkg-config which ];
   buildInputs = [ glib gtk2 ];
 
-  patches = stdenv.lib.optional enableSoftening [
+  patches = lib.optional enableSoftening [
     ./encryption.patch
     ./dvdrom.patch
   ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "--docdir=share/doc"
     "--with-nls=yes"
     "--with-embedded-src-path=no"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
+  ] ++ lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
 
   # fatal error: inlined-icons.h: No such file or directory
   enableParallelBuilding = false;
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dvdisaster.net/";
     description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''

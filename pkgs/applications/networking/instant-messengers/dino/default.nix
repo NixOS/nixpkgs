@@ -1,10 +1,9 @@
 { lib, stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
+, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
+, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
-, fetchpatch
 , libgcrypt
 , epoxy
 , at-spi2-core
@@ -18,29 +17,20 @@
 
 stdenv.mkDerivation rec {
   pname = "dino";
-  version = "0.1.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
-    sha256 = "1k5cgj5n8s40i71wqdh6m1q0njl45ichfdbbywx9rga5hljz1c54";
+    sha256 = "11m38syqzb1z92wmdaf45gryl6gjxwbcnk32j4p984ipqj2vdzd8";
   };
-
-  patches = [
-    (fetchpatch {
-      # Allow newer versions of libsignal-protocol-c
-      url = "https://github.com/dino/dino/commit/fbd70ceaac5ebbddfa21a580c61165bf5b861303.patch";
-      sha256 = "0ydpwsmwrzfsry89fsffkfalhki4n1dw99ixjvpiingdrhjmwyl2";
-      excludes = [ "plugins/signal-protocol/libsignal-protocol-c" ];
-    })
-  ];
 
   nativeBuildInputs = [
     vala
     cmake
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gettext
   ];
@@ -51,7 +41,7 @@ stdenv.mkDerivation rec {
     glib-networking
     glib
     libgee
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     sqlite
     gdk-pixbuf
     gtk3
@@ -88,7 +78,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = "https://github.com/dino/dino";
     license = licenses.gpl3;

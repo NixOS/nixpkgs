@@ -1,4 +1,4 @@
-{ stdenv, requireFile, perl, unzip, glibc, zlib, bzip2, gdk-pixbuf, xorg, glib, fontconfig, freetype, cairo, pango, gtk3, gtk2, ffmpeg, libGL, atk, alsaLib, libav_0_8, setJavaClassPath }:
+{ lib, stdenv, requireFile, perl, unzip, glibc, zlib, bzip2, gdk-pixbuf, xorg, glib, fontconfig, freetype, cairo, pango, gtk3, gtk2, ffmpeg, libGL, atk, alsa-lib, setJavaClassPath }:
 
 let
   common = javaVersion:
@@ -124,8 +124,8 @@ let
                       "11" = "$out/lib/jli:$out/lib/server:$out/lib";
                     }.${javaVersion}
                  }:${
-            stdenv.lib.strings.makeLibraryPath [ glibc xorg.libXxf86vm xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXrender
-                                                 glib zlib bzip2 alsaLib fontconfig freetype pango gtk3 gtk2 cairo gdk-pixbuf atk ffmpeg libGL ]}"
+            lib.strings.makeLibraryPath [ glibc xorg.libXxf86vm xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXrender
+                                                 glib zlib bzip2 alsa-lib fontconfig freetype pango gtk3 gtk2 cairo gdk-pixbuf atk ffmpeg libGL ]}"
 
           for f in $(find $out -type f -perm -0100); do
             patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f" || true
@@ -141,7 +141,7 @@ let
 
         doInstallCheck = true;
         installCheckPhase = ''
-          echo ${stdenv.lib.escapeShellArg ''
+          echo ${lib.escapeShellArg ''
                    public class HelloWorld {
                      public static void main(String[] args) {
                        System.out.println("Hello World");
@@ -167,7 +167,7 @@ let
 
         passthru.home = graalvmXXX-ee;
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           homepage = "https://www.graalvm.org/";
           description = "High-Performance Polyglot VM";
           license = licenses.unfree;

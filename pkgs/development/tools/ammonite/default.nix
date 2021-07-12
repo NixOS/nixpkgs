@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts, git
-, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
+{ lib, stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts
+, git, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
 
-with stdenv.lib;
+with lib;
 
 let
   repo = "git@github.com:lihaoyi/Ammonite.git";
@@ -9,7 +9,7 @@ let
   common = { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "2.2.0";
+      version = "2.4.0";
 
       src = fetchurl {
         url =
@@ -23,7 +23,7 @@ let
         install -Dm755 $src $out/bin/amm
         sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
       '' + optionalString (disableRemoteLogging) ''
-        sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
+        sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
         sed -i '1i #!/bin/sh' $out/bin/amm
       '';
 
@@ -34,7 +34,7 @@ let
           #!${stdenv.shell}
           set -o errexit
           PATH=${
-            stdenv.lib.makeBinPath [
+            lib.makeBinPath [
               common-updater-scripts
               coreutils
               git
@@ -75,10 +75,10 @@ let
 in {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "9xe4GT5YpVCtDPaZvi9PZwFW/wcNhg+QCdbJ4Tl2lFk=";
+    sha256 = "K8JII6SAmnBjMWQ9a3NqSLLuP1OLcbwobj3G+OCiLdA=";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "KRwh2YOcHpXLA9BlBKzkc9oswdOQbcm3WVqgYaGyi4A=";
+    sha256 = "2F35qhWI6hNb+Eh9ZTDznqo116yN7MZIGVchaAIM36A=";
   };
 }

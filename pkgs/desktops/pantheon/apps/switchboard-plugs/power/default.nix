@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
 , substituteAll
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , elementary-dpms-helper
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Power Plug";
     homepage = "https://github.com/elementary/switchboard-plug-power";
     license = licenses.gpl2Plus;

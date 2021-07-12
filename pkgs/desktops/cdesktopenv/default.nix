@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorgproto, libX11, bison, ksh, perl, gnum4
+{ lib, stdenv, fetchurl, xorgproto, libX11, bison, ksh, perl, gnum4
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
 , ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales, gawk
@@ -71,11 +71,11 @@ EOF
     mv $out/opt/dt/bin/dtmail $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common Desktop Environment";
     homepage = "https://sourceforge.net/projects/cdesktopenv/";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

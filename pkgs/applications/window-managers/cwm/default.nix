@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXinerama, libXrandr, libXft, yacc, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXinerama, libXrandr, libXft, bison, pkg-config }:
 
 stdenv.mkDerivation rec {
 
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "0f9xmki2hx10k8iisfzc7nm1l31zkf1r06pdgn06ar9w9nizrld9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libX11 libXinerama libXrandr libXft yacc ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libX11 libXinerama libXrandr libXft bison ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight and efficient window manager for X11";
     homepage    = "https://github.com/leahneukirchen/cwm";
     maintainers = with maintainers; [ _0x4A6F mkf ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages, picocom
+{ lib, fetchurl, python2Packages, picocom
 , avrdude, arduino-core }:
 
 python2Packages.buildPythonApplication rec {
@@ -36,11 +36,11 @@ python2Packages.buildPythonApplication rec {
       --replace "'-C', self.e['avrdude.conf']," ""
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command line toolkit for working with Arduino hardware";
     homepage = "http://inotool.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ antono ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ antono ];
+    platforms = platforms.linux;
   };
 }

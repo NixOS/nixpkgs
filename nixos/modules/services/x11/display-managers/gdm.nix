@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.services.xserver.displayManager;
-  gdm = pkgs.gnome3.gdm;
+  gdm = pkgs.gnome.gdm;
 
   xSessionWrapper = if (cfg.setupCommands == "") then null else
     pkgs.writeScript "gdm-x-session-wrapper" ''
@@ -99,7 +99,8 @@ in
       autoSuspend = mkOption {
         default = true;
         description = ''
-          Suspend the machine after inactivity.
+          On the GNOME Display Manager login screen, suspend the machine after inactivity.
+          (Does not affect automatic suspend while logged in, or at lock screen.)
         '';
         type = types.bool;
       };
@@ -154,14 +155,14 @@ in
     ] ++ optionals config.hardware.pulseaudio.enable [
       "d /run/gdm/.config/pulse 0711 gdm gdm"
       "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
-    ] ++ optionals config.services.gnome3.gnome-initial-setup.enable [
+    ] ++ optionals config.services.gnome.gnome-initial-setup.enable [
       # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
       "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
     ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
-    systemd.packages = with pkgs.gnome3; [ gdm gnome-session gnome-shell ];
-    environment.systemPackages = [ pkgs.gnome3.adwaita-icon-theme ];
+    systemd.packages = with pkgs.gnome; [ gdm gnome-session gnome-shell ];
+    environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
 
     systemd.services.display-manager.wants = [
       # Because sd_login_monitor_new requires /run/systemd/machines
@@ -183,13 +184,19 @@ in
       "systemd-udev-settle.service"
     ];
     systemd.services.display-manager.conflicts = [
-       "getty@tty${gdm.initialVT}.service"
-       # TODO: Add "plymouth-quit.service" so GDM can control when plymouth quits.
-       # Currently this breaks switching configurations while using plymouth.
+      "getty@tty${gdm.initialVT}.service"
+      "plymouth-quit.service"
     ];
     systemd.services.display-manager.onFailure = [
       "plymouth-quit.service"
     ];
+
+    # Prevent nixos-rebuild switch from bringing down the graphical
+    # session. (If multi-user.target wants plymouth-quit.service which
+    # conflicts display-manager.service, then when nixos-rebuild
+    # switch starts multi-user.target, display-manager.service is
+    # stopped so plymouth-quit.service can be started.)
+    systemd.services.plymouth-quit.wantedBy = lib.mkForce [];
 
     systemd.services.display-manager.serviceConfig = {
       # Restart = "always"; - already defined in xserver.nix
@@ -202,7 +209,7 @@ in
       EnvironmentFile = "-/etc/locale.conf";
     };
 
-    systemd.services.display-manager.path = [ pkgs.gnome3.gnome-session ];
+    systemd.services.display-manager.path = [ pkgs.gnome.gnome-session ];
 
     # Allow choosing an user account
     services.accounts-daemon.enable = true;
@@ -212,14 +219,14 @@ in
     # We duplicate upstream's udev rules manually to make wayland with nvidia configurable
     services.udev.extraRules = ''
       # disable Wayland on Cirrus chipsets
-      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
       # disable Wayland on Hi1710 chipsets
-      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
       ${optionalString (!cfg.gdm.nvidiaWayland) ''
-        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-disable-wayland"
+        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
       ''}
       # disable Wayland when modesetting is disabled
-      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
     '';
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];

@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa
+{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeWrapper, openssl, freetype
+, glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curl, zlib, gnome
+, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
 }:
 
 let
@@ -10,17 +10,17 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.1.42.622.gbd112320-37";
+  version = "1.1.55.498.gf9a83c60";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "42";
+  rev = "46";
 
   deps = [
-    alsaLib
+    alsa-lib
     atk
     at-spi2-atk
     at-spi2-core
@@ -29,17 +29,18 @@ let
     curl
     dbus
     expat
-    ffmpeg_3
+    ffmpeg
     fontconfig
     freetype
     gdk-pixbuf
     glib
-    gtk2
+    gtk3
     libdrm
     libgcrypt
     libnotify
     libpng
     libpulseaudio
+    libxkbcommon
     mesa
     nss
     pango
@@ -78,10 +79,10 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "06371c6a285aba916a779cd9f2a933f97db8fb38393545baa94c8984302e003c559af7b1b35afd7df5f2c35e379e2cb80c00facf527bc22df09061cdb67d9d7a";
+    sha512 = "dabb55d2ba41f977b6d3f03bfcf147d11785136dd1277efc62011c8371ef25cc04531266bd16608639b9b6a500c1a18a45f44ba7a43e17ab5ac139e36eff7149";
   };
 
-  buildInputs = [ squashfsTools makeWrapper ];
+  nativeBuildInputs = [ makeWrapper squashfsTools ];
 
   dontStrip = true;
   dontPatchELF = true;
@@ -126,8 +127,8 @@ stdenv.mkDerivation {
       ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
-      ln -s ${ffmpeg_3.out}/lib/libavcodec.so* $libdir
-      ln -s ${ffmpeg_3.out}/lib/libavformat.so* $libdir
+      ln -s ${ffmpeg.out}/lib/libavcodec.so* $libdir
+      ln -s ${ffmpeg.out}/lib/libavformat.so* $libdir
 
       rpath="$out/share/spotify:$libdir"
 
@@ -135,10 +136,10 @@ stdenv.mkDerivation {
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath $rpath $out/share/spotify/spotify
 
-      librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
+      librarypath="${lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome3.zenity}/bin"
+        --prefix PATH : "${gnome.zenity}/bin"
 
       # fix Icon line in the desktop file (#48062)
       sed -i "s:^Icon=.*:Icon=spotify-client:" "$out/share/spotify/spotify.desktop"
@@ -158,7 +159,7 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.spotify.com/";
     description = "Play music from the Spotify music service";
     license = licenses.unfree;

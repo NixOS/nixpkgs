@@ -1,15 +1,10 @@
----
-title: Android
-author: Sander van der Burg
-date: 2018-11-18
----
-# Android
+# Android {#android}
 
 The Android build environment provides three major features and a number of
 supporting features.
 
-Deploying an Android SDK installation with plugins
---------------------------------------------------
+## Deploying an Android SDK installation with plugins {#deploying-an-android-sdk-installation-with-plugins}
+
 The first use case is deploying the SDK with a desired set of plugins or subsets
 of an SDK.
 
@@ -18,21 +13,19 @@ with import <nixpkgs> {};
 
 let
   androidComposition = androidenv.composeAndroidPackages {
-    toolsVersion = "25.2.5";
-    platformToolsVersion = "27.0.1";
-    buildToolsVersions = [ "27.0.3" ];
+    toolsVersion = "26.1.1";
+    platformToolsVersion = "30.0.5";
+    buildToolsVersions = [ "30.0.3" ];
     includeEmulator = false;
-    emulatorVersion = "27.2.0";
-    platformVersions = [ "24" ];
+    emulatorVersion = "30.3.4";
+    platformVersions = [ "28" "29" "30" ];
     includeSources = false;
-    includeDocs = false;
     includeSystemImages = false;
-    systemImageTypes = [ "default" ];
-    abiVersions = [ "armeabi-v7a" ];
-    lldbVersions = [ "2.0.2558144" ];
-    cmakeVersions = [ "3.6.4111459" ];
-    includeNDK = false;
-    ndkVersion = "16.1.4479499";
+    systemImageTypes = [ "google_apis_playstore" ];
+    abiVersions = [ "armeabi-v7a" "arm64-v8a" ];
+    cmakeVersions = [ "3.10.2" ];
+    includeNDK = true;
+    ndkVersions = ["22.0.7026061"];
     useGoogleAPIs = false;
     useGoogleTVAddOns = false;
     includeExtras = [
@@ -51,17 +44,19 @@ The following parameters are supported:
 
 * `toolsVersion`, specifies the version of the tools package to use
 * `platformsToolsVersion` specifies the version of the `platform-tools` plugin
-* `buildToolsVersion` specifies the versions of the `build-tools` plugins to
+* `buildToolsVersions` specifies the versions of the `build-tools` plugins to
   use.
 * `includeEmulator` specifies whether to deploy the emulator package (`false`
   by default). When enabled, the version of the emulator to deploy can be
   specified by setting the `emulatorVersion` parameter.
-* `includeDocs` specifies whether the documentation catalog should be included.
-* `lldbVersions` specifies what LLDB versions should be deployed.
 * `cmakeVersions` specifies which CMake versions should be deployed.
 * `includeNDK` specifies that the Android NDK bundle should be included.
   Defaults to: `false`.
-* `ndkVersion` specifies the NDK version that we want to use.
+* `ndkVersions` specifies the NDK versions that we want to use. These are linked
+  under the `ndk` directory of the SDK root, and the first is linked under the
+  `ndk-bundle` directory.
+* `ndkVersion` is equivalent to specifying one entry in `ndkVersions`, and
+  `ndkVersions` overrides this parameter if provided.
 * `includeExtras` is an array of identifier strings referring to arbitrary
   add-on packages that should be installed.
 * `platformVersions` specifies which platform SDK versions should be included.
@@ -87,6 +82,38 @@ For each requested system image we can specify the following options:
 
 Most of the function arguments have reasonable default settings.
 
+You can specify license names:
+
+* `extraLicenses` is a list of license names.
+  You can get these names from repo.json or `querypackages.sh licenses`. The SDK
+  license (`android-sdk-license`) is accepted for you if you set accept_license
+  to true. If you are doing something like working with preview SDKs, you will
+  want to add `android-sdk-preview-license` or whichever license applies here.
+
+Additionally, you can override the repositories that composeAndroidPackages will
+pull from:
+
+* `repoJson` specifies a path to a generated repo.json file. You can generate this
+  by running `generate.sh`, which in turn will call into `mkrepo.rb`.
+* `repoXmls` is an attribute set containing paths to repo XML files. If specified,
+  it takes priority over `repoJson`, and will trigger a local build writing out a
+  repo.json to the Nix store based on the given repository XMLs.
+
+```nix
+repoXmls = {
+  packages = [ ./xml/repository2-1.xml ];
+  images = [
+    ./xml/android-sys-img2-1.xml
+    ./xml/android-tv-sys-img2-1.xml
+    ./xml/android-wear-sys-img2-1.xml
+    ./xml/android-wear-cn-sys-img2-1.xml
+    ./xml/google_apis-sys-img2-1.xml
+    ./xml/google_apis_playstore-sys-img2-1.xml
+  ];
+  addons = [ ./xml/addon2-1.xml ];
+};
+```
+
 When building the above expression with:
 
 ```bash
@@ -109,8 +136,8 @@ in
 androidComposition.platform-tools
 ```
 
-Using predefine Android package compositions
---------------------------------------------
+## Using predefined Android package compositions {#using-predefined-android-package-compositions}
+
 In addition to composing an Android package set manually, it is also possible
 to use a predefined composition that contains all basic packages for a specific
 Android version, such as version 9.0 (API-level 28).
@@ -132,11 +159,12 @@ with import <nixpkgs> {};
 androidenv.androidPkgs_9_0.platform-tools
 ```
 
-Building an Android application
--------------------------------
+## Building an Android application {#building-an-android-application}
+
 In addition to the SDK, it is also possible to build an Ant-based Android
 project and automatically deploy all the Android plugins that a project
 requires.
+
 
 ```nix
 with import <nixpkgs> {};
@@ -172,8 +200,8 @@ to build Android apps. An Android APK gets exposed as a build product and can be
 installed on any Android device with a web browser by navigating to the build
 result page.
 
-Spawning emulator instances
----------------------------
+## Spawning emulator instances {#spawning-emulator-instances}
+
 For testing purposes, it can also be quite convenient to automatically generate
 scripts that spawn emulator instances with all desired configuration settings.
 
@@ -214,27 +242,104 @@ androidenv.emulateApp {
 In addition to prebuilt APKs, you can also bind the APK parameter to a
 `buildApp {}` function invocation shown in the previous example.
 
-Querying the available versions of each plugin
-----------------------------------------------
-When using any of the previously shown functions, it may be a bit inconvenient
-to find out what options are supported, since the Android SDK provides many
-plugins.
+## Notes on environment variables in Android projects {#notes-on-environment-variables-in-android-projects}
 
-A shell script in the `pkgs/development/mobile/androidenv/` sub directory can be used to retrieve all
+* `ANDROID_SDK_ROOT` should point to the Android SDK. In your Nix expressions, this should be
+  `${androidComposition.androidsdk}/libexec/android-sdk`. Note that `ANDROID_HOME` is deprecated,
+  but if you rely on tools that need it, you can export it too.
+* `ANDROID_NDK_ROOT` should point to the Android NDK, if you're doing NDK development.
+  In your Nix expressions, this should be `${ANDROID_SDK_ROOT}/ndk-bundle`.
+
+If you are running the Android Gradle plugin, you need to export GRADLE_OPTS to override aapt2
+to point to the aapt2 binary in the Nix store as well, or use a FHS environment so the packaged
+aapt2 can run. If you don't want to use a FHS environment, something like this should work:
+
+```nix
+let
+  buildToolsVersion = "30.0.3";
+
+  # Use buildToolsVersion when you define androidComposition
+  androidComposition = <...>;
+in
+pkgs.mkShell rec {
+  ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
+  ANDROID_NDK_ROOT = "${ANDROID_SDK_ROOT}/ndk-bundle";
+
+  # Use the same buildToolsVersion here
+  GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_SDK_ROOT}/build-tools/${buildToolsVersion}/aapt2";
+}
+```
+
+If you are using cmake, you need to add it to PATH in a shell hook or FHS env profile.
+The path is suffixed with a build number, but properly prefixed with the version.
+So, something like this should suffice:
+
+```nix
+let
+  cmakeVersion = "3.10.2";
+
+  # Use cmakeVersion when you define androidComposition
+  androidComposition = <...>;
+in
+pkgs.mkShell rec {
+  ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
+  ANDROID_NDK_ROOT = "${ANDROID_SDK_ROOT}/ndk-bundle";
+
+  # Use the same cmakeVersion here
+  shellHook = ''
+    export PATH="$(echo "$ANDROID_SDK_ROOT/cmake/${cmakeVersion}".*/bin):$PATH"
+  '';
+}
+```
+
+Note that running Android Studio with ANDROID_SDK_ROOT set will automatically write a
+`local.properties` file with `sdk.dir` set to $ANDROID_SDK_ROOT if one does not already
+exist. If you are using the NDK as well, you may have to add `ndk.dir` to this file.
+
+An example shell.nix that does all this for you is provided in examples/shell.nix.
+This shell.nix includes a shell hook that overwrites local.properties with the correct
+sdk.dir and ndk.dir values. This will ensure that the SDK and NDK directories will
+both be correct when you run Android Studio inside nix-shell.
+
+## Notes on improving build.gradle compatibility {#notes-on-improving-build.gradle-compatibility}
+
+Ensure that your buildToolsVersion and ndkVersion match what is declared in androidenv.
+If you are using cmake, make sure its declared version is correct too.
+
+Otherwise, you may get cryptic errors from aapt2 and the Android Gradle plugin warning
+that it cannot install the build tools because the SDK directory is not writeable.
+
+```gradle
+android {
+    buildToolsVersion "30.0.3"
+    ndkVersion = "22.0.7026061"
+    externalNativeBuild {
+        cmake {
+            version "3.10.2"
+        }
+    }
+}
+
+```
+
+## Querying the available versions of each plugin {#querying-the-available-versions-of-each-plugin}
+
+repo.json provides all the options in one file now.
+
+A shell script in the `pkgs/development/mobile/androidenv/` subdirectory can be used to retrieve all
 possible options:
 
 ```bash
-sh ./querypackages.sh packages build-tools
+./querypackages.sh packages
 ```
 
-The above command-line instruction queries all build-tools versions in the
-generated `packages.nix` expression.
+The above command-line instruction queries all package versions in repo.json.
 
-Updating the generated expressions
-----------------------------------
-Most of the Nix expressions are generated from XML files that the Android
-package manager uses. To update the expressions run the `generate.sh` script
-that is stored in the `pkgs/development/mobile/androidenv/` sub directory:
+## Updating the generated expressions {#updating-the-generated-expressions}
+
+repo.json is generated from XML files that the Android Studio package manager uses.
+To update the expressions run the `generate.sh` script that is stored in the
+`pkgs/development/mobile/androidenv/` subdirectory:
 
 ```bash
 ./generate.sh

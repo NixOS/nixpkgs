@@ -2,23 +2,27 @@
 
 buildGoPackage rec {
   pname = "tfsec";
-  version = "0.27.0";
+  version = "0.45.3";
 
   src = fetchFromGitHub {
-    owner = "liamg";
+    owner = "tfsec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12n6l18g0kg28clzyzwc2lq9rnch3vshp07isgvfp7193bhf8hyv";
+    sha256 = "sha256-I0TOddYO++tw26gS/h15FSATqCjdQfQXVYSTkV+r5HM=";
   };
 
-  goPackagePath = "github.com/liamg/tfsec";
+  goPackagePath = "github.com/tfsec/tfsec";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/version.Version=${version}" ];
+  ldflags = [
+    "-w"
+    "-s"
+    "-X ${goPackagePath}/version.Version=${version}"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/liamg/tfsec";
+    homepage = "https://github.com/tfsec/tfsec";
     description = "Static analysis powered security scanner for your terraform code";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

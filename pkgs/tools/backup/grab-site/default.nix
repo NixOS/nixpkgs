@@ -1,5 +1,4 @@
-{ stdenv, python37, fetchFromGitHub }:
-
+{ lib, python37, fetchFromGitHub }:
 let
   python = python37.override {
     self = python;
@@ -8,19 +7,32 @@ let
     };
   };
 
-in with python.pkgs; buildPythonApplication rec {
-  version = "2.1.19";
-  name = "grab-site-${version}";
+in
+with python.pkgs; buildPythonApplication rec {
+  pname = "grab-site";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "ArchiveTeam";
     repo = "grab-site";
-    sha256 = "1v1hnhv5knzdl0kj3574ccwlh171vcb7faddp095ycdmiiybalk4";
+    sha256 = "1jxcv9dral6h7vfpfqkp1yif6plj0vspzakymkj8hfl75nh0wpv8";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"wpull @ https://github.com/ArchiveTeam/ludios_wpull/tarball/master#egg=wpull-3.0.7"' '"wpull"'
+  '';
+
   propagatedBuildInputs = [
-    click ludios_wpull manhole lmdb autobahn fb-re2 websockets cchardet
+    click
+    ludios_wpull
+    manhole
+    lmdb
+    autobahn
+    fb-re2
+    websockets
+    cchardet
   ];
 
   checkPhase = ''
@@ -28,7 +40,7 @@ in with python.pkgs; buildPythonApplication rec {
     bash ./tests/offline-tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Crawler for web archiving with WARC output";
     homepage = "https://github.com/ArchiveTeam/grab-site";
     license = licenses.mit;

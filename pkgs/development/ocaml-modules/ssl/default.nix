@@ -1,17 +1,20 @@
-{ lib, buildDunePackage, fetchFromGitHub, pkg-config, openssl }:
+{ lib, buildDunePackage, fetchFromGitHub, pkg-config, openssl
+, dune-configurator }:
 
 buildDunePackage rec {
   pname = "ssl";
-  version = "0.5.9";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ssl";
-    rev = version;
-    sha256 = "04h02rvzrwp886n5hsx84rnc9b150iggy38g5v1x1rwz3pkdnmf0";
+    rev = "v${version}";
+    sha256 = "1rszqiqayh67xlwd5411k8vib47x9kapdr037z1majd2c14z3kcb";
   };
 
+  useDune2 = true;
   nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [openssl];
 
   meta = {
@@ -20,6 +23,7 @@ buildDunePackage rec {
     license = "LGPL+link exception";
     maintainers = [
       lib.maintainers.maggesi
+      lib.maintainers.anmonteiro
     ];
   };
 }

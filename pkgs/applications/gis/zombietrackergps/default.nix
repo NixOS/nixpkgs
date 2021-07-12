@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitLab
 , qmake
-, qtbase
 , qtcharts
 , qtsvg
 , marble
@@ -12,18 +11,17 @@
 
 mkDerivation rec {
   pname = "zombietrackergps";
-  version = "1.01";
+  version = "1.03";
 
   src = fetchFromGitLab {
     owner = "ldutils-projects";
     repo = pname;
     rev = "v_${version}";
-    sha256 = "0h354ydbahy8rpkmzh5ym5bddbl6irjzklpcg6nbkv6apry84d48";
+    sha256 = "1rmdy6kijmcxamm4mqmz8638xqisijlnpv8mimgxywpf90h9rrwq";
   };
 
   buildInputs = [
     ldutils
-    qtbase
     qtcharts
     qtsvg
     marble.dev
@@ -49,7 +47,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "GPS track manager for Qt using KDE Marble maps";
-    homepage = "https://gitlab.com/ldutils-projects/zombietrackergps";
+    homepage = "https://www.zombietrackergps.net/ztgps/";
+    changelog = "https://www.zombietrackergps.net/ztgps/history.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sohalt ];
     platforms = platforms.linux;

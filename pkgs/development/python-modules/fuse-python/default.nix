@@ -1,21 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi, pkgconfig, fuse }:
+{ lib, buildPythonPackage, fetchPypi, pkg-config, fuse }:
 
 buildPythonPackage rec {
   pname = "fuse-python";
-  version = "1.0.0";
+  version = "1.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbaa21c8f0a440302d1ba9fd57a80cf9ff227e5a3820708a8ba8450db883cc05";
+    sha256 = "b9a69c38b3909ffd35d77cb1a73ebfdc3a103a6d4cdd20c86c70ed1141771580";
   };
 
   buildInputs = [ fuse ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  # no tests in the Pypi archive
+  # no tests implemented
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "fuse" ];
+
+  meta = with lib; {
     description = "Python bindings for FUSE";
     homepage = "https://github.com/libfuse/python-fuse";
     license = licenses.lgpl21;

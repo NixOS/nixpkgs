@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "b43-fwcutter-019";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Firmware extractor for cards supported by the b43 kernel module";
     homepage = "http://wireless.kernel.org/en/users/Drivers/b43";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.free;
+    platforms = lib.platforms.linux;
   };
 }

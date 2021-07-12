@@ -1,18 +1,18 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python2, lndir
-, openssl_1_1, openldap, sope, libmemcached, curl, libsodium, libzip, pkgconfig }:
+{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
+, openssl_1_1, openldap, sope, libmemcached, curl, libsodium, libzip, pkg-config, nixosTests }:
 with lib; gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "5.0.1";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    sha256 = "145hdlwnqds5zmpxbh4yainsbv5vy99ji93d6pl7xkbqwncfi80i";
+    sha256 = "19qkznk20fi47zxvg24hqnim5bpjlawk76w04jgd93yqakidl8ax";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python2 ];
-  buildInputs = [ gnustep.base sope openssl_1_1 libmemcached (curl.override { openssl = openssl_1_1; }) libsodium libzip pkgconfig ]
+  nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
+  buildInputs = [ gnustep.base sope openssl_1_1 libmemcached (curl.override { openssl = openssl_1_1; }) libsodium libzip pkg-config ]
     ++ optional (openldap != null) openldap;
 
   patches = [
@@ -66,9 +66,11 @@ with lib; gnustep.stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.tests.sogo = nixosTests.sogo;
+
   meta = {
     description = "A very fast and scalable modern collaboration suite (groupware)";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Only lgpl21Only ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ajs124 das_j ];

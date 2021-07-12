@@ -9,7 +9,7 @@ let
 in {
   name = "gerrit";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ flokli zimbatm ];
   };
 

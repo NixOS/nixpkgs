@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bison, file, flex
+{ lib, stdenv, fetchurl, pkg-config, bison, file, flex
 , asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
 , libmnl, libnftnl, libpcap
 , gmp, jansson, readline
@@ -7,20 +7,20 @@
 , withXtables ? false , iptables
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.9.6";
+  version = "0.9.9";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.bz2";
-    sha256 = "0vmn6xwqa1nq6crfxshh049b199d0aj6hfgin7k068xhibzgvmk8";
+    sha256 = "1d7iwc8xlyfsbgn6qx1sdfcq7jhpl8wpfj39hcd06y8dzp3jvvvn";
   };
 
   nativeBuildInputs = [
-    pkgconfig bison file flex
-    asciidoc docbook_xml_dtd_45 docbook_xsl findXMLCatalogs libxslt 
+    pkg-config bison file flex
+    asciidoc docbook_xml_dtd_45 docbook_xsl findXMLCatalogs libxslt
   ];
 
   buildInputs = [
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://netfilter.org/projects/nftables/";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ izorkin ];
   };
 }

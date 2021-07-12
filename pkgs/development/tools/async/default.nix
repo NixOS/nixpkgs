@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "async";
@@ -11,9 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "19ypflbayi5l0mb8yw7w0a4bq9a3w8nl9jsxapp9m3xggzmsvrxx";
   };
 
-  cargoSha256 = "1zgds5rjjikvaj0rxc7slyvkjn067s0v8vdnxn3vsv819q5yd707";
+  cargoSha256 = "0y2q46i838gha58p95vcv5r5i14il1kv86k35s30ncfibijgp0lc";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to parallelize shell commands";
     longDescription = ''
       `async` is a tool to run shell commands in parallel and is designed to be

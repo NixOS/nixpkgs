@@ -1,6 +1,6 @@
-{ fetchFromGitHub, stdenv, bitlbee, autoreconfHook, pkgconfig, glib }:
+{ lib, fetchFromGitHub, stdenv, bitlbee, autoreconfHook, pkg-config, glib }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-discord";
   version = "0.4.3";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "00qgdvrp7hv02n0ns685igp810zxmv3adsama8601122al6x041n";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ bitlbee ];
 
   preConfigure = ''
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sm00th/bitlbee-discord";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lassulus jb55 ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

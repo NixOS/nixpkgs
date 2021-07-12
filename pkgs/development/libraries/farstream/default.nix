@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , libnice
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , gstreamer
 , gst-plugins-base
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gobject-introspection
   ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     gst-libav
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/Farstream";
     description = "Audio/Video Communications Framework formely known as farsight";
     platforms = platforms.linux;

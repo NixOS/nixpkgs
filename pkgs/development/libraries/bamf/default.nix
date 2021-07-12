@@ -1,16 +1,16 @@
-{ stdenv
+{ lib, stdenv
 , pantheon
 , autoconf
 , automake
 , libtool
-, gnome3
+, gnome
 , which
 , fetchgit
 , libgtop
-, libwnck3
+, libwnck
 , glib
 , vala
-, pkgconfig
+, pkg-config
 , libstartup_notification
 , gobject-introspection
 , gtk-doc
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     automake
     dbus
     docbook_xsl
-    gnome3.gnome-common
+    gnome.gnome-common
     gobject-introspection
     gtk-doc
     libtool
-    pkgconfig
+    pkg-config
     vala
     which
     wrapGAppsHook
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     glib
     libgtop
     libstartup_notification
-    libwnck3
+    libwnck
   ];
 
   patches = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application matching framework";
     longDescription = ''
       Removes the headache of applications matching

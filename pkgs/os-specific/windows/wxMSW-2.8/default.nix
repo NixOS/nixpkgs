@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true }:
+{ lib, stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true }:
 
 stdenv.mkDerivation {
   name = "wxMSW-2.8.11";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   passthru = {inherit compat24 compat26 unicode;};
 
   meta = {
-    platforms = stdenv.lib.platforms.windows;
+    platforms = lib.platforms.windows;
 
     broken = true;
   };

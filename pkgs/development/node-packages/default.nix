@@ -1,4 +1,4 @@
-{ pkgs, nodejs, stdenv }:
+{ pkgs, nodejs, stdenv, fetchFromGitHub }:
 
 let
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
@@ -13,11 +13,24 @@ let
         export NG_CLI_ANALYTICS=false
       '';
     };
+
+    aws-azure-login = super.aws-azure-login.override {
+      meta.platforms = pkgs.lib.platforms.linux;
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/aws-azure-login \
+            --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium}/bin/chromium
+      '';
+    };
+
     bower2nix = super.bower2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         for prog in bower2nix fetch-bower; do
-          wrapProgram "$out/bin/$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.git pkgs.nix ]}
+          wrapProgram "$out/bin/$prog" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.git pkgs.nix ]}
         done
       '';
     };
@@ -47,8 +60,9 @@ let
       };
     });
 
-    bitwarden-cli = pkgs.lib.overrideDerivation super."@bitwarden/cli" (drv: {
+    bitwarden-cli = super."@bitwarden/cli".override (drv: {
       name = "bitwarden-cli-${drv.version}";
+      meta.mainProgram = "bw";
     });
 
     fast-cli = super."fast-cli-1.x".override {
@@ -59,15 +73,35 @@ let
       buildInputs = [ pkgs.phantomjs2 ];
     };
 
+    flood = super.flood.override {
+      buildInputs = [ self.node-pre-gyp ];
+      meta.mainProgram = "flood";
+    };
+
     expo-cli = super."expo-cli".override (attrs: {
       # The traveling-fastlane-darwin optional dependency aborts build on Linux.
       dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") attrs.dependencies;
     });
 
+    "@electron-forge/cli" = super."@electron-forge/cli".override {
+      buildInputs = [ self.node-pre-gyp self.rimraf ];
+    };
+
     git-ssb = super.git-ssb.override {
       buildInputs = [ self.node-gyp-build ];
       meta.broken = since "10";
     };
+
+    hsd = super.hsd.override {
+      buildInputs = [ self.node-gyp-build pkgs.unbound ];
+    };
+
+    ijavascript = super.ijavascript.override (oldAttrs: {
+      preRebuild = ''
+        export NPM_CONFIG_ZMQ_EXTERNAL=true
+      '';
+      buildInputs = oldAttrs.buildInputs ++ [ self.node-gyp-build pkgs.zeromq ];
+    });
 
     insect = super.insect.override (drv: {
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
@@ -76,7 +110,7 @@ let
     makam =  super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
       postFixup = ''
-        wrapProgram "$out/bin/makam" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nodejs ]}
+        wrapProgram "$out/bin/makam" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nodejs ]}
         ${
           if stdenv.isLinux
             then "patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
@@ -85,10 +119,14 @@ let
       '';
     };
 
+    markdownlint-cli = super.markdownlint-cli.override {
+      meta.mainProgram = "markdownlint";
+    };
+
     mirakurun = super.mirakurun.override rec {
       nativeBuildInputs = with pkgs; [ makeWrapper ];
       postInstall = let
-        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l_utils ]);
+        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
       in
       ''
         substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
@@ -123,7 +161,7 @@ let
     node2nix = super.node2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
-        wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}
+        wrapProgram "$out/bin/node2nix" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
       '';
     };
 
@@ -153,7 +191,7 @@ let
       '';
 
       postInstall = let
-        pnpmLibPath = stdenv.lib.makeBinPath [
+        pnpmLibPath = pkgs.lib.makeBinPath [
           nodejs.passthru.python
           nodejs
         ];
@@ -170,14 +208,38 @@ let
 
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall =  ''
-        wrapProgram "$out/bin/pulp" --suffix PATH : ${stdenv.lib.makeBinPath [
+        wrapProgram "$out/bin/pulp" --suffix PATH : ${pkgs.lib.makeBinPath [
           pkgs.purescript
         ]}
       '';
     };
 
+    netlify-cli =
+      let
+        esbuild = pkgs.esbuild.overrideAttrs (old: rec {
+          version = "0.13.6";
+
+          src = fetchFromGitHub {
+            owner = "netlify";
+            repo = "esbuild";
+            rev = "v${version}";
+            sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
+          };
+
+        });
+      in
+      super.netlify-cli.override {
+        preRebuild = ''
+          export ESBUILD_BINARY_PATH="${esbuild}/bin/esbuild"
+        '';
+      };
+
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
+      meta.broken = since "10";
+    };
+
+    stf = super.stf.override {
       meta.broken = since "10";
     };
 
@@ -197,12 +259,20 @@ let
       '';
     });
 
-    stf = super.stf.override {
-      meta.broken = since "10";
+    typescript-language-server = super.typescript-language-server.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/typescript-language-server" \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
+      '';
+    };
+
+    teck-programmer = super.teck-programmer.override {
+      buildInputs = [ pkgs.libusb ];
     };
 
     vega-cli = super.vega-cli.override {
-      nativeBuildInputs = [ pkgs.pkgconfig ];
+      nativeBuildInputs = [ pkgs.pkg-config ];
       buildInputs = with pkgs; [
         super.node-pre-gyp
         pixman
@@ -241,6 +311,9 @@ let
         libsecret
         self.node-gyp-build
         self.node-pre-gyp
+      ] ++ lib.optionals stdenv.isDarwin [
+        darwin.apple_sdk.frameworks.AppKit
+        darwin.apple_sdk.frameworks.Security
       ];
     };
 
@@ -249,6 +322,25 @@ let
       postInstall = ''
         echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
       '';
+    };
+
+    yaml-language-server = super.yaml-language-server.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/yaml-language-server" \
+        --prefix NODE_PATH : ${self.prettier}/lib/node_modules
+      '';
+    };
+
+    wavedrom-cli = super.wavedrom-cli.override {
+      nativeBuildInputs = [ pkgs.pkg-config self.node-pre-gyp ];
+      # These dependencies are required by
+      # https://github.com/Automattic/node-canvas.
+      buildInputs = with pkgs; [
+        pixman
+        cairo
+        pango
+      ];
     };
   };
 in self

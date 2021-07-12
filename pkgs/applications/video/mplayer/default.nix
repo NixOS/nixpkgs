@@ -1,11 +1,11 @@
-{ config, stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg_3
+{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
-, alsaSupport ? stdenv.isLinux, alsaLib ? null
+, alsaSupport ? stdenv.isLinux, alsa-lib ? null
 , screenSaverSupport ? true, libXScrnSaver ? null
 , vdpauSupport ? false, libvdpau ? null
 , cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
@@ -21,6 +21,7 @@
 , jackaudioSupport ? false, libjack2 ? null
 , pulseSupport ? config.pulseaudio or false, libpulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
+, v4lSupport ? false, libv4l ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
 , libjpegSupport ? true, libjpeg ? null
@@ -35,7 +36,7 @@ assert fribidiSupport -> (fribidi != null);
 assert x11Support -> (libX11 != null && libXext != null && libGLU != null && libGL != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
-assert alsaSupport -> alsaLib != null;
+assert alsaSupport -> alsa-lib != null;
 assert screenSaverSupport -> libXScrnSaver != null;
 assert vdpauSupport -> libvdpau != null;
 assert cddaSupport -> cdparanoia != null;
@@ -53,6 +54,7 @@ assert pulseSupport -> libpulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
 assert libjpegSupport -> libjpeg != null;
+assert v4lSupport -> libv4l != null;
 
 let
 
@@ -82,7 +84,7 @@ let
       cp -prv * $out
     '';
 
-    meta.license = stdenv.lib.licenses.unfree;
+    meta.license = lib.licenses.unfree;
   } else null;
 
   crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
@@ -104,15 +106,17 @@ stdenv.mkDerivation rec {
     rm -rf ffmpeg
   '';
 
+  patches = [ ./svn-r38199-ffmpeg44fix.patch ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig yasm ];
-  buildInputs = with stdenv.lib;
-    [ freetype ffmpeg_3 ]
+  nativeBuildInputs = [ pkg-config yasm ];
+  buildInputs = with lib;
+    [ freetype ffmpeg ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
     ++ optionals x11Support [ libX11 libXext libGLU libGL ]
-    ++ optional alsaSupport alsaLib
+    ++ optional alsaSupport alsa-lib
     ++ optional xvSupport libXv
     ++ optional theoraSupport libtheora
     ++ optional cacaSupport libcaca
@@ -132,11 +136,12 @@ stdenv.mkDerivation rec {
     ++ optional libpngSupport libpng
     ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
+    ++ optional v4lSupport libv4l
     ++ (with darwin.apple_sdk.frameworks; optionals stdenv.isDarwin [ Cocoa OpenGL ])
     ;
 
   configurePlatforms = [ ];
-  configureFlags = with stdenv.lib; [
+  configureFlags = with lib; [
     "--enable-freetype"
     (if fontconfigSupport then "--enable-fontconfig" else "--disable-fontconfig")
     (if x11Support then "--enable-x11 --enable-gl" else "--disable-x11 --disable-gl")
@@ -156,6 +161,7 @@ stdenv.mkDerivation rec {
     (if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc")
     (if jackaudioSupport then "" else "--disable-jack")
     (if pulseSupport then "--enable-pulse" else "--disable-pulse")
+    (if v4lSupport then "--enable-v4l2 --enable-tv-v4l2" else "--disable-v4l2 --disable-tv-v4l2")
     "--disable-xanim"
     "--disable-ivtv"
     "--disable-xvid --disable-xvid-lavc"
@@ -195,19 +201,20 @@ stdenv.mkDerivation rec {
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
-  NIX_LDFLAGS = with stdenv.lib; toString (
+  NIX_LDFLAGS = with lib; toString (
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
+    ++ optional  x264Support "-lx264"
     ++ [ "-lfreetype" ]
   );
 
-  installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";
+  installTargets = [ "install" ] ++ lib.optional x11Support "install-gui";
 
   enableParallelBuilding = true;
 
   # Provide a reasonable standard font when not using fontconfig. Maybe we should symlink here.
-  postInstall = stdenv.lib.optionalString (!fontconfigSupport)
+  postInstall = lib.optionalString (!fontconfigSupport)
     ''
       mkdir -p $out/share/mplayer
       cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
@@ -220,7 +227,7 @@ stdenv.mkDerivation rec {
     description = "A movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    maintainers = [ lib.maintainers.eelco ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "httplab";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "0442nnpxyfl2gi9pilv7q6cxs2cd98wblg8d4nw6dx98yh4h99zs";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gchaincl/httplab";
     description = "Interactive WebServer";
     license = licenses.mit;

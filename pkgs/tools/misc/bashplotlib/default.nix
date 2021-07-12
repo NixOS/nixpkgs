@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication {
   pname = "bashplotlib";
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/glamp/bashplotlib";
     description = "Plotting in the terminal";
     maintainers = with maintainers; [ dtzWill ];

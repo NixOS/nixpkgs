@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "spirv-headers";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Machine-readable components of the Khronos SPIR-V Registry";
     license = licenses.mit;

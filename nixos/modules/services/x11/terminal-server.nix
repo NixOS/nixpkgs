@@ -32,7 +32,7 @@ with lib;
 
         path =
           [ pkgs.xorg.xorgserver.out pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xauth
-            pkgs.nettools pkgs.shadow pkgs.procps pkgs.utillinux pkgs.bash
+            pkgs.nettools pkgs.shadow pkgs.procps pkgs.util-linux pkgs.bash
           ];
 
         environment.FD_GEOM = "1024x786x24";

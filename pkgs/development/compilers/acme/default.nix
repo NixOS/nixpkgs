@@ -1,13 +1,13 @@
-{ stdenv, fetchsvn }:
+{ lib, stdenv, fetchsvn }:
 
 stdenv.mkDerivation rec {
   pname = "acme";
-  version = "120";
+  version = "unstable-2021-02-14";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/acme-crossass/code-0/trunk";
-    rev = version;
-    sha256 = "0w17b8f8bis22m6l5bg8qg8nniy20f8yg2xmzjipblmc39vpv6s2";
+    rev = "319";
+    sha256 = "sha256-VifIQ+UEVMKJ+cNS+Xxusazinr5Cgu1lmGuhqj/5Mpk=";
   };
 
   sourceRoot = "code-0-r${src.rev}/src";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace "= gcc" "?= gcc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multi-platform cross assembler for 6502/6510/65816 CPUs";
     homepage = "https://sourceforge.net/projects/acme-crossass/";
     license = licenses.gpl2Plus;

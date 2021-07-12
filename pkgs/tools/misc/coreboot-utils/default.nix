@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
+{ lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.12";
+  version = "4.14";
 
-  commonMeta = with stdenv.lib; {
+  commonMeta = with lib; {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
     license = licenses.gpl2;
-    maintainers = [ maintainers.petabyteboy ];
+    maintainers = with maintainers; [ petabyteboy felixsinger yuka ];
     platforms = platforms.linux;
   };
 
@@ -16,13 +16,14 @@ let
 
     src = fetchurl {
       url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "1qibds9lsk22wf1sxwg0jg32fgcvc9an39vf74y1hwwvxq0d1jpd";
+      sha256 = "0viw2x4ckjwiylb92w85k06b0g9pmamjy2yqs7fxfqbmfadkf1yr";
     };
 
     enableParallelBuilding = true;
 
     postPatch = ''
       cd ${path}
+      patchShebangs .
     '';
 
     makeFlags = [
@@ -42,7 +43,7 @@ let
     };
     cbmem = generic {
       pname = "cbmem";
-      meta.description = "Coreboot console log reader";
+      meta.description = "coreboot console log reader";
     };
     ifdtool = generic {
       pname = "ifdtool";
@@ -89,16 +90,16 @@ let
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
       installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
-      postFixup = let 
+      postFixup = let
         binPath = [ coreutils  acpica-tools iasl gnugrep  gnused  file ];
-      in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
+      in "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
     };
   };
 
 in utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
-    paths = stdenv.lib.attrValues utils;
+    paths = lib.attrValues utils;
     postBuild = "rm -rf $out/sbin";
   }) // {
     inherit version;

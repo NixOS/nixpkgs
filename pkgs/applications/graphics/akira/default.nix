@@ -6,7 +6,7 @@
 , meson
 , ninja
 , pantheon
-, pkgconfig
+, pkg-config
 , python3
 , vala
 , vala-lint
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     vala-lint
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "Native Linux Design application built in Vala and GTK";
     homepage = "https://github.com/akiraux/Akira";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ filalex77 neonfuz ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ Br1ght0ne neonfuz ] ++ pantheon.maintainers;
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage }:
+{ lib, fetchFromGitHub, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "beanstalkc";
@@ -13,10 +13,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "A simple beanstalkd client library for Python";
-    maintainers = with stdenv.lib.maintainers; [ aanderse ];
-    license = with stdenv.lib.licenses; [ asl20 ];
+    maintainers = with maintainers; [ aanderse ];
+    license = licenses.asl20;
     homepage = "https://github.com/earl/beanstalkc";
   };
 }

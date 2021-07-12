@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "randomX";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "13h2cw8drq7xn3v8fbpxrlsl8zq3fs8gd2pc1pv28ahr9qqjz1gc";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Proof of work algorithm based on random code execution";
     homepage = "https://github.com/tevador/RandomX";
     license = licenses.bsd3;

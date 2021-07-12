@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
 , installShellFiles
-, libcxxabi, libuuid
+, libuuid
 , libobjc ? null, maloader ? null
 , enableTapiSupport ? true, libtapi
 }:
@@ -9,7 +9,7 @@ let
 
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  targetPrefix = stdenv.lib.optionalString
+  targetPrefix = lib.optionalString
     (stdenv.targetPlatform != stdenv.hostPlatform)
     "${stdenv.targetPlatform.config}-";
 in
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
   buildInputs = [ libuuid ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
-    ++ stdenv.lib.optional enableTapiSupport libtapi;
+    ++ lib.optionals stdenv.isDarwin [ libobjc ]
+    ++ lib.optional enableTapiSupport libtapi;
 
   patches = [ ./ld-ignore-rpath-link.patch ./ld-rpath-nonfinal.patch ];
 
@@ -47,14 +47,14 @@ stdenv.mkDerivation {
 
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms = [ "build" "host" ]
-    ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
   configureFlags = [ "--disable-clang-as" ]
-    ++ stdenv.lib.optionals enableTapiSupport [
+    ++ lib.optionals enableTapiSupport [
       "--enable-tapi-support"
       "--with-libtapi=${libtapi}"
     ];
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cctools/Makefile.am --replace libobjc2 ""
   '' + ''
     sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
@@ -100,7 +100,7 @@ stdenv.mkDerivation {
     broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
     homepage = "http://www.opensource.apple.com/source/cctools/";
     description = "MacOS Compiler Tools (cross-platform port)";
-    license = stdenv.lib.licenses.apsl20;
-    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    license = lib.licenses.apsl20;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

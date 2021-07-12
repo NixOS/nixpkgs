@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
+{ lib, stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
 
 let version = "3.2.1";
 in stdenv.mkDerivation {
@@ -12,9 +12,10 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper cmake ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper ];
 
-  cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
+  cmakeFlags = lib.optionals stdenv.isDarwin [
                  "-DOPENGL_INCLUDE_DIR=${libGL}/include"
                  "-DOPENGL_gl_LIBRARY:FILEPATH=${libGL}/lib/libGL.dylib"
                  "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
@@ -22,9 +23,7 @@ in stdenv.mkDerivation {
                  "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
                ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create and manage windows containing OpenGL contexts";
     longDescription = ''
       FreeGLUT is an open source alternative to the OpenGL Utility Toolkit

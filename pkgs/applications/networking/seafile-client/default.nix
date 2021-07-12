@@ -1,19 +1,19 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools
-, seafile-shared, ccnet, jansson, libsearpc
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools
+, seafile-shared, jansson, libsearpc
 , withShibboleth ? true, qtwebengine }:
 
 mkDerivation rec {
   pname = "seafile-client";
-  version = "7.0.9";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    sha256 = "0pcn6lfzma2hvpwsp9q0002wvym7zabpp8fvq29l101gzirn79m9";
+    sha256 = "cG3OSqRhYnxlzfauQia6pM/1gu+iE5mtHTGk3kGMFH0=";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ qtbase qttools seafile-shared jansson libsearpc ]
     ++ lib.optional withShibboleth qtwebengine;
 
@@ -21,7 +21,7 @@ mkDerivation rec {
     ++ lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
   qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ ccnet seafile-shared ]}"
+    "--suffix PATH : ${lib.makeBinPath [ seafile-shared ]}"
   ];
 
   meta = with lib; {
@@ -29,6 +29,6 @@ mkDerivation rec {
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ eduardosm ];
   };
 }

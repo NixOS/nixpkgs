@@ -38,24 +38,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.115.0";
+  version = "1.137.2";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "0q7gfpzc97fvyvabjdb9a4d3c2qhm4zf5bqgnsj73vkly80kgww8";
+    sha256 = "sha256-OiLYXx1sBkEJpMPTa/45QPHLtmeI6ZLles7GfjEBGtQ=";
   };
-
-  patches = [
-    # Don't check for update
-    ./dont-check-update.patch
-  ];
 
   postPatch = ''
     substituteInPlace app/proc_globdata.pas \
       --replace "/usr/share/cudatext" "$out/share/cudatext" \
-      --replace "libpython3.so" "${python3}/lib/libpython3.so"
+      --replace "libpython3.so" "${python3}/lib/libpython${python3.pythonVersion}.so" \
+      --replace "AllowProgramUpdates:= true;" "AllowProgramUpdates:= false;"
   '';
 
   nativeBuildInputs = [ lazarus fpc ]
@@ -95,7 +91,12 @@ stdenv.mkDerivation rec {
     install -Dm644 setup/debfiles/cudatext-512.png -t $out/share/pixmaps
     install -Dm644 setup/debfiles/cudatext.desktop -t $out/share/applications
   '' + lib.concatMapStringsSep "\n" (lexer: ''
-    install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
+    if [ -d "CudaText-lexers/${lexer}" ]; then
+      install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
+    else
+      echo "${lexer} lexer not found"
+      exit 1
+    fi
   '') additionalLexers;
 
   meta = with lib; {
@@ -105,7 +106,8 @@ stdenv.mkDerivation rec {
       Config system in JSON files. Multi-carets and multi-selections.
       Search and replace with RegEx. Extendable by Python plugins and themes.
     '';
-    homepage = "http://www.uvviewsoft.com/cudatext/";
+    homepage = "https://cudatext.github.io/";
+    changelog = "https://cudatext.github.io/history.txt";
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;

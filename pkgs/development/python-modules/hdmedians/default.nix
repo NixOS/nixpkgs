@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.14.1";
+  version = "0.14.2";
   pname = "hdmedians";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ccefaae26302afd843c941b3b662f1119d5a36dec118077310f811a7a1ed8871";
+    sha256 = "b47aecb16771e1ba0736557255d80ae0240b09156bff434321de559b359ac2d6";
   };
 
   # nose was specified in setup.py as a build dependency...
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/daleroberts/hdmedians";
     description = "High-dimensional medians";
     license = licenses.gpl3;

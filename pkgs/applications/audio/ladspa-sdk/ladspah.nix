@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   pname = "ladspa.h";
   version = "1.15";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
       For the full SDK, use the ladspa-sdk package.
     '';
     homepage = "http://www.ladspa.org/ladspa_sdk/overview.html";
-    license = stdenv.lib.licenses.lgpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.all;
   };
 }

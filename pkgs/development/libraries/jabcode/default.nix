@@ -3,7 +3,7 @@
 , lib
 , subproject ? "library" # one of "library", "reader" or  "writer"
 , zlib, libpng, libtiff
-, jabcode 
+, jabcode
 }:
 let
   subdir = lib.getAttr subproject {

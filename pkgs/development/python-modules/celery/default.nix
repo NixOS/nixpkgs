@@ -1,23 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, libredirect
-, case, pytest, boto3, moto, kombu, billiard, pytz, future, vine
+{ lib, buildPythonPackage, fetchPypi
+, billiard, click, click-didyoumean, click-plugins, click-repl, kombu, pytz, vine
+, boto3, case, moto, pytest, pytest-celery, pytest-subtests, pytest-timeout
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.4.7";
+  version = "5.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d220b13a8ed57c78149acf82c006785356071844afe0b27012a4991d44026f9f";
+    sha256 = "54436cd97b031bf2e08064223240e2a83d601d9414bcb1b702f94c6c33c29485";
   };
 
+  # click  is only used for the repl, in most cases this shouldn't impact
+  # downstream packages
   postPatch = ''
-    substituteInPlace requirements/default.txt \
-      --replace "kombu>=4.6.10,<4.7" "kombu"
     substituteInPlace requirements/test.txt \
-      --replace "moto==1.3.7" moto \
-      --replace "pytest>=4.3.1,<4.4.0" pytest
+      --replace "moto==1.3.7" moto
+    substituteInPlace requirements/default.txt \
+      --replace "click>=7.0,<8.0" click
   '';
+
+  propagatedBuildInputs = [ billiard click click-didyoumean click-plugins click-repl kombu pytz vine ];
+
+  checkInputs = [ boto3 case moto pytest pytest-celery pytest-subtests pytest-timeout ];
 
   # ignore test that's incompatible with pytest5
   # test_eventlet touches network
@@ -32,12 +38,10 @@ buildPythonPackage rec {
       --ignore=t/unit/backends/test_mongodb.py
   '';
 
-  checkInputs = [ case pytest boto3 moto ];
-  propagatedBuildInputs = [ kombu billiard pytz future vine ];
-
   meta = with lib; {
     homepage = "https://github.com/celery/celery/";
     description = "Distributed task queue";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -1,21 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, autoconf, automake, libiconv }:
+{ lib, stdenv, fetchurl, autoconf, automake, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "unrtf";
-  version = "0.21.9";
+  version = "0.21.10";
 
   src = fetchurl {
-    url = "https://www.gnu.org/software/unrtf/${pname}-${version}.tar.gz";
-    sha256 = "1pcdzf2h1prn393dkvg93v80vh38q0v817xnbwrlwxbdz4k7i8r2";
+    url = "https://ftp.gnu.org/gnu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1bil6z4niydz9gqm2j861dkxmqnpc8m7hvidsjbzz7x63whj17xl";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2016-10091-0001-convert.c-Use-safe-buffer-size-and-snprintf.patch";
-      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=849705;filename=0001-convert.c-Use-safe-buffer-size-and-snprintf.patch;msg=20";
-      sha256 = "0s0fjvm3zdm9967sijlipfrwjs0h23n2n8fa6f40xxp8y5qq5a0b";
-    })
-  ];
 
   nativeBuildInputs = [ autoconf automake ];
 
@@ -25,7 +17,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A converter from Rich Text Format to other formats";
     longDescription = ''
       UnRTF converts documents in Rich Text Format to other

@@ -1,43 +1,35 @@
-{ stdenv, wrapQtAppsHook, makeDesktopItem
+{ lib, stdenv, wrapQtAppsHook, makeDesktopItem
 , fetchFromGitHub
-, cmake, qttools, pkgconfig
+, cmake, qttools, pkg-config
 , qtbase, qtdeclarative, qtgraphicaleffects
 , qtmultimedia, qtxmlpatterns
 , qtquickcontrols, qtquickcontrols2
+, qtmacextras
 , monero, miniupnpc, unbound, readline
 , boost, libunwind, libsodium, pcsclite
 , randomx, zeromq, libgcrypt, libgpgerror
-, hidapi, rapidjson
+, hidapi, rapidjson, quirc
 , trezorSupport ? true
-,   libusb1  ? null
-,   protobuf ? null
-,   python3  ? null
+,   libusb1
+,   protobuf
+,   python3
 }:
 
-with stdenv.lib;
-
-assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
-
-let
-  arch = if stdenv.isx86_64  then "x86-64"
-    else if stdenv.isi686    then "i686"
-    else if stdenv.isAarch64 then "armv8-a"
-    else throw "unsupported architecture";
-in
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.1.1";
+  version = "0.17.2.2";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "0aqhp4rmqsgwjb875kgh6qwz0wyyiag1fksyic9cnhgg5j5y95nx";
+    sha256 = "1k3grbd3wydy5gv6d8x35skv1v97lhh6awd9i87im9lz4kn8ywkd";
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig wrapQtAppsHook
+    cmake pkg-config wrapQtAppsHook
     (getDev qttools)
   ];
 
@@ -48,8 +40,9 @@ stdenv.mkDerivation rec {
     monero miniupnpc unbound readline
     randomx libgcrypt libgpgerror
     boost libunwind libsodium pcsclite
-    zeromq hidapi rapidjson
-  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ];
+    zeromq hidapi rapidjson quirc
+  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ]
+    ++ optionals stdenv.isDarwin [ qtmacextras ];
 
   postUnpack = ''
     # copy monero sources here
@@ -58,7 +51,10 @@ stdenv.mkDerivation rec {
     chmod -R +w source/monero
   '';
 
-  patches = [ ./move-log-file.patch ];
+  patches = [
+    ./move-log-file.patch
+    ./use-system-libquirc.patch
+  ];
 
   postPatch = ''
     # set monero-gui version
@@ -69,13 +65,15 @@ stdenv.mkDerivation rec {
     substituteInPlace src/daemon/DaemonManager.cpp \
       --replace 'QApplication::applicationDirPath() + "' '"${monero}/bin'
 
-    # only build external deps, *not* the full monero
+    # 1: only build external deps, *not* the full monero
+    # 2: use nixpkgs libraries
     substituteInPlace CMakeLists.txt \
       --replace 'add_subdirectory(monero)' \
-                'add_subdirectory(monero EXCLUDE_FROM_ALL)'
+                'add_subdirectory(monero EXCLUDE_FROM_ALL)' \
+      --replace 'add_subdirectory(external)' ""
   '';
 
-  cmakeFlags = [ "-DARCH=${arch}" ];
+  cmakeFlags = [ "-DARCH=default" ];
 
   desktopItem = makeDesktopItem {
     name = "monero-wallet-gui";
@@ -105,7 +103,6 @@ stdenv.mkDerivation rec {
     homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;
     platforms    = platforms.all;
-    badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];
   };
 }

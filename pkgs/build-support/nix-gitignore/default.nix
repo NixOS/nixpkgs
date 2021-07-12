@@ -148,10 +148,10 @@ in rec {
       '');
 
   withGitignoreFile = patterns: root:
-    lib.toList patterns ++ [(root + "/.gitignore")];
+    lib.toList patterns ++ [ ".git" ] ++ [(root + "/.gitignore")];
 
   withRecursiveGitignoreFile = patterns: root:
-    lib.toList patterns ++ [(compileRecursiveGitignore root)];
+    lib.toList patterns ++ [ ".git" ] ++ [(compileRecursiveGitignore root)];
 
   # filterSource derivatives
 

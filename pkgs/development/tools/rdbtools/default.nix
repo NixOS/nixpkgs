@@ -1,4 +1,4 @@
-{ stdenv, python }:
+{ lib, python }:
 
 with python.pkgs;
 
@@ -16,7 +16,7 @@ buildPythonApplication rec {
   # No tests in published package
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parse Redis dump.rdb files, Analyze Memory, and Export Data to JSON";
     homepage = "https://github.com/sripathikrishnan/redis-rdb-tools";
     license = licenses.mit;

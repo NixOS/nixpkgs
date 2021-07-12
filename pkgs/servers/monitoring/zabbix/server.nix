@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, curl, libevent, libiconv, libxml2, openssl, pcre, zlib
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, curl, libevent, libiconv, libxml2, openssl, pcre, zlib
 , jabberSupport ? true, iksemel
 , ldapSupport ? true, openldap
 , odbcSupport ? true, unixODBC
@@ -13,7 +13,7 @@ assert mysqlSupport -> !postgresqlSupport;
 assert postgresqlSupport -> !mysqlSupport;
 
 let
-  inherit (stdenv.lib) optional optionalString;
+  inherit (lib) optional optionalString;
 in
   import ./versions.nix ({ version, sha256 }:
     stdenv.mkDerivation {
@@ -21,11 +21,11 @@ in
       inherit version;
 
       src = fetchurl {
-        url = "https://cdn.zabbix.com/zabbix/sources/stable/${stdenv.lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
+        url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
         inherit sha256;
       };
 
-      nativeBuildInputs = [ autoreconfHook pkgconfig ];
+      nativeBuildInputs = [ autoreconfHook pkg-config ];
       buildInputs = [
         curl
         libevent
@@ -83,7 +83,7 @@ in
         cp -prvd database/postgresql/*.sql $out/share/zabbix/database/postgresql/
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "An enterprise-class open source distributed monitoring solution";
         homepage = "https://www.zabbix.com/";
         license = licenses.gpl2;

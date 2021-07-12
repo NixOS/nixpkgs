@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''utilities_dot_print-items'';
-  version = ''20190813-git'';
+  baseName = "utilities_dot_print-items";
+  version = "20210411-git";
 
   parasites = [ "utilities.print-items/test" ];
 
-  description = ''A protocol for flexible and composable printing.'';
+  description = "A protocol for flexible and composable printing.";
 
   deps = [ args."alexandria" args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/utilities.print-items/2019-08-13/utilities.print-items-20190813-git.tgz'';
-    sha256 = ''12l4kzz621qfcg8p5qzyxp4n4hh9wdlpiziykwb4c80g32rdwkc2'';
+    url = "http://beta.quicklisp.org/archive/utilities.print-items/2021-04-11/utilities.print-items-20210411-git.tgz";
+    sha256 = "0da2m4b993w31wph2ybdmdd6rycadrp44ccjdba5pygpkf3x00gx";
   };
 
   packageName = "utilities.print-items";
@@ -21,10 +22,10 @@ rec {
 }
 /* (SYSTEM utilities.print-items DESCRIPTION
     A protocol for flexible and composable printing. SHA256
-    12l4kzz621qfcg8p5qzyxp4n4hh9wdlpiziykwb4c80g32rdwkc2 URL
-    http://beta.quicklisp.org/archive/utilities.print-items/2019-08-13/utilities.print-items-20190813-git.tgz
-    MD5 0f26580bb5d3587ed1815f70976b2a0a NAME utilities.print-items FILENAME
+    0da2m4b993w31wph2ybdmdd6rycadrp44ccjdba5pygpkf3x00gx URL
+    http://beta.quicklisp.org/archive/utilities.print-items/2021-04-11/utilities.print-items-20210411-git.tgz
+    MD5 35be0e5ee4c957699082fb6ae8f14ef2 NAME utilities.print-items FILENAME
     utilities_dot_print-items DEPS
     ((NAME alexandria FILENAME alexandria) (NAME fiveam FILENAME fiveam))
-    DEPENDENCIES (alexandria fiveam) VERSION 20190813-git SIBLINGS NIL
+    DEPENDENCIES (alexandria fiveam) VERSION 20210411-git SIBLINGS NIL
     PARASITES (utilities.print-items/test)) */

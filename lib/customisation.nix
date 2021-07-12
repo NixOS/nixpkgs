@@ -217,4 +217,33 @@ rec {
         };
     in self;
 
+  /* Like the above, but aims to support cross compilation. It's still ugly, but
+     hopefully it helps a little bit. */
+  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: extra: f:
+    let
+      spliced0 = splicePackages {
+        pkgsBuildBuild = otherSplices.selfBuildBuild;
+        pkgsBuildHost = otherSplices.selfBuildHost;
+        pkgsBuildTarget = otherSplices.selfBuildTarget;
+        pkgsHostHost = otherSplices.selfHostHost;
+        pkgsHostTarget = self; # Not `otherSplices.selfHostTarget`;
+        pkgsTargetTarget = otherSplices.selfTargetTarget;
+      };
+      spliced = extra spliced0 // spliced0 // keep self;
+      self = f self // {
+        newScope = scope: newScope (spliced // scope);
+        callPackage = newScope spliced; # == self.newScope {};
+        # N.B. the other stages of the package set spliced in are *not*
+        # overridden.
+        overrideScope = g: makeScopeWithSplicing
+          splicePackages
+          newScope
+          otherSplices
+          keep
+          extra
+          (lib.fixedPoints.extends g f);
+        packages = f;
+      };
+    in self;
+
 }

@@ -1,18 +1,18 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchurl
 , autoPatchelfHook
 , dpkg
 , wrapGAppsHook
 , wrapQtAppsHook
-, alsaLib
+, alsa-lib
 , atk
 , bzip2
 , cairo
 , cups
 , dbus
 , expat
-, ffmpeg_3
+, ffmpeg
 , fontconfig
 , freetype
 , gdk-pixbuf
@@ -23,7 +23,7 @@
 , libtool
 , libuuid
 , libxml2
-, lzma
+, xz
 , nspr
 , nss
 , openssl
@@ -38,16 +38,16 @@
 
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
-  version = "11.1.0.9505";
+  version = "11.1.0.9615";
 
   src = fetchurl {
-    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9505/wps-office_11.1.0.9505.XA_amd64.deb";
-    sha256 = "1bvaxwd3npw3kswk7k1p6mcbfg37x0ym4sp6xis6ykz870qivqk5";
+    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9615/wps-office_11.1.0.9615.XA_amd64.deb";
+    sha256 = "0dpd4njpizclllps3qagipycfws935rhj9k5gmdhjfgsk0ns188w";
   };
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  postUnpack = stdenv.lib.optionalString (version == "11.1.0.9505") ''
+  postUnpack = lib.optionalString (version == "11.1.0.9505") ''
     # distribution is missing libjsapiservice.so, so we should not let
     # autoPatchelfHook fail on the following dead libraries
     rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
@@ -55,23 +55,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook wrapQtAppsHook ];
 
-  meta = {
-    description = "Office program originally named Kingsoft Office";
-    homepage = "http://wps-community.org/";
+  meta = with lib; {
+    description = "Office suite, formerly Kingsoft Office";
+    homepage = "https://www.wps.com/";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = with stdenv.lib.maintainers; [ mlatus th0rgal ];
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ mlatus th0rgal ];
   };
 
   buildInputs = with xorg; [
-    alsaLib
+    alsa-lib
     atk
     bzip2
     cairo
     dbus.lib
     expat
-    ffmpeg_3
+    ffmpeg
     fontconfig
     freetype
     gdk-pixbuf
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     libuuid
     libxcb
     libxml2
-    lzma
+    xz
     nspr
     nss
     openssl
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  runtimeLibPath = stdenv.lib.makeLibraryPath [
+  runtimeLibPath = lib.makeLibraryPath [
     cups.lib
   ];
 

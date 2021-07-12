@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite, darwin, fixDarwinDylibNames, buildPackages, ninja
+{ lib, stdenv, fetchurl, nspr, perl, zlib
+, sqlite, ninja
+, darwin, fixDarwinDylibNames, buildPackages
+, useP11kit ? true, p11-kit
 , # allow FIPS mode. Note that this makes the output non-reproducible.
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
@@ -9,7 +12,13 @@ let
     url = "http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz";
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
-  version = "3.57";
+
+  # NOTE: Whenever you updated this version check if the `cacert` package also
+  #       needs an update. You can run the regular updater script for cacerts.
+  #       It will rebuild itself using the version of this package (NSS) and if
+  #       an update is required do the required changes to the expression.
+  #       Example: nix-shell ./maintainers/scripts/update.nix --argstr package cacert
+  version = "3.67";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
@@ -18,13 +27,13 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    sha256 = "55a86c01be860381d64bb4e5b94eb198df9b0f098a8af0e58c014df398bdc382";
+    sha256 = "0zyfi27lbdz1bmk9dmsivcya4phx25rzlxqcnjab69yd928rlm7n";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ darwin.cctools fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.cctools fixDarwinDylibNames ];
 
   buildInputs = [ zlib sqlite ];
 
@@ -57,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
      substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
      substituteInPlace nss/coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
    '';
@@ -71,6 +80,9 @@ in stdenv.mkDerivation rec {
           else if platform.isx86_32 then "ia32"
           else if platform.isAarch32 then "arm"
           else if platform.isAarch64 then "arm64"
+          else if platform.isPower && platform.is64bit then (
+            if platform.isLittleEndian then "ppc64le" else "ppc64"
+          )
           else platform.parsed.cpu.name;
     # yes, this is correct. nixpkgs uses "host" for the platform the binary will run on whereas nss uses "host" for the platform that the build is running on
     target = getArch stdenv.hostPlatform;
@@ -87,14 +99,14 @@ in stdenv.mkDerivation rec {
       -Dhost_arch=${host} \
       -Duse_system_zlib=1 \
       --enable-libpkix \
-      ${stdenv.lib.optionalString enableFIPS "--enable-fips"} \
-      ${stdenv.lib.optionalString stdenv.isDarwin "--clang"} \
-      ${stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
+      ${lib.optionalString enableFIPS "--enable-fips"} \
+      ${lib.optionalString stdenv.isDarwin "--clang"} \
+      ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
 
     runHook postBuild
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\"";
+  NIX_CFLAGS_COMPILE = "-Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\" " + lib.optionalString stdenv.hostPlatform.is64bit "-DNSS_USE_64=1";
 
   installPhase = ''
     runHook preInstall
@@ -130,11 +142,16 @@ in stdenv.mkDerivation rec {
     chmod 0755 $out/bin/nss-config
   '';
 
+  postInstall = lib.optionalString useP11kit ''
+    # Replace built-in trust with p11-kit connection
+    ln -sf ${p11-kit}/lib/pkcs11/p11-kit-trust.so $out/lib/libnssckbi.so
+  '';
+
   postFixup = let
     isCross = stdenv.hostPlatform != stdenv.buildPlatform;
     nss = if isCross then buildPackages.nss.tools else "$out";
   in
-  (stdenv.lib.optionalString enableFIPS (''
+  (lib.optionalString enableFIPS (''
     for libname in freebl3 nssdbm3 softokn3
     do '' +
     (if stdenv.isDarwin
@@ -157,7 +174,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/NSS";
     description = "A set of libraries for development of security-enabled client and server applications";
     license = licenses.mpl20;

@@ -1,9 +1,10 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_mixer}:
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_mixer }:
 
-stdenv.mkDerivation {
-  name = "teeter-torture-20051018";
+stdenv.mkDerivation rec {
+  pname = "teeter-torture";
+  version = "2005-10-18";
   src = fetchurl {
-    url = "ftp://ftp.tuxpaint.org/unix/x/teetertorture/source/teetertorture-2005-10-18.tar.gz";
+    url = "ftp://ftp.tuxpaint.org/unix/x/teetertorture/source/teetertorture-${version}.tar.gz";
     sha256 = "175gdbkx3m82icyzvwpyzs4v2fd69c695k5n8ca0lnjv81wnw2hr";
   };
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.newbreedsoftware.com/teetertorture/";
     description = "Simple shooting game with your cannon is sitting atop a teeter totter";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

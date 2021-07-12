@@ -1,37 +1,77 @@
-{ stdenv, fetchurl, glib, meson, ninja, pkgconfig, gettext
-, gobject-introspection, fixDarwinDylibNames, gnome3
+{ lib
+, stdenv
+, fetchurl
+, glib
+, meson
+, ninja
+, pkg-config
+, gettext
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
+, gobject-introspection
+, fixDarwinDylibNames
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gnome
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.4.4";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.6.2";
+
+  outputs = [ "out" "dev" ]
+    ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0ixwyis47v5bkx6h8a1iqlw3638cxcv57ivxv4gw2gaig51my33j";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "092g2dyy1hhl0ix9kp33wcab0pg1qicnsv0cj5ms9g9qs336cgd3";
   };
 
-  propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection glib ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  strictDeps = true;
 
-  outputs = [ "out" "dev" ];
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    glib
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gtk-doc
+  ];
+
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  mesonFlags = lib.optionals (!withIntrospection) [
+    "-Dintrospection=disabled"
+    # doc gen uses introspection, doesn't work properly
+    "-Dgtk_doc=disabled"
+  ];
 
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library providing (de)serialization support for the JavaScript Object Notation (JSON) format";
     homepage = "https://wiki.gnome.org/Projects/JsonGlib";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ lethalman ];
+    license = licenses.lgpl21Plus;
+    maintainers = teams.gnome.members;
     platforms = with platforms; unix;
   };
 }

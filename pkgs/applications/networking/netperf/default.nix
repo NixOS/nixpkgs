@@ -1,4 +1,4 @@
-{ libsmbios, stdenv, autoreconfHook, fetchFromGitHub }:
+{ libsmbios, lib, stdenv, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "netperf";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1wbbgdvhadd3qs3afv6i777argdpcyxkwz4yv6aqp223n8ki6dm8";
   };
 
-  buildInputs = stdenv.lib.optional (stdenv.hostPlatform.isx86) libsmbios;
+  buildInputs = lib.optional (with stdenv.hostPlatform; isx86 && isLinux) libsmbios;
   nativeBuildInputs = [ autoreconfHook ];
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     homepage = "http://www.netperf.org/netperf/";
     license = "Hewlett-Packard BSD-like license";
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mmlb ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.mmlb ];
   };
 }

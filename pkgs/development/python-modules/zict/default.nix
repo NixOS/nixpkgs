@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pytest, heapdict, pythonOlder }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   buildInputs = [ pytest ];
   propagatedBuildInputs = [ heapdict ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mutable mapping tools.";
     homepage = "https://github.com/dask/zict";
     license = licenses.bsd3;

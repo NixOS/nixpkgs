@@ -34,7 +34,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.mysql";
+        example = literalExample "pkgs.mariadb";
         description = "
           Which MySQL derivation to use. MariaDB packages are supported too.
         ";
@@ -48,7 +48,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3306;
         description = "Port of MySQL.";
       };
@@ -375,6 +375,18 @@ in
           fi
         '';
 
+        script = ''
+          # https://mariadb.com/kb/en/getting-started-with-mariadb-galera-cluster/#systemd-and-galera-recovery
+          if test -n "''${_WSREP_START_POSITION}"; then
+            if test -e "${cfg.package}/bin/galera_recovery"; then
+              VAR=$(cd ${cfg.package}/bin/..; ${cfg.package}/bin/galera_recovery); [[ $? -eq 0 ]] && export _WSREP_START_POSITION=$VAR || exit 1
+            fi
+          fi
+
+          # The last two environment variables are used for starting Galera clusters
+          exec ${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION
+        '';
+
         postStart = let
           # The super user account to use on *first* run of MySQL server
           superUser = if isMariaDB then cfg.user else "root";
@@ -481,8 +493,7 @@ in
           Type = if hasNotify then "notify" else "simple";
           Restart = "on-abort";
           RestartSec = "5s";
-          # The last two environment variables are used for starting Galera clusters
-          ExecStart = "${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
+
           # User and group
           User = cfg.user;
           Group = cfg.group;

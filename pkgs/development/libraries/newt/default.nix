@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
-  makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fedorahosted.org/newt/";
     description = "Library for color text mode, widget based user interfaces";
 

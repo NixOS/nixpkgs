@@ -3,8 +3,7 @@
 , docutils
 , fetchFromGitHub
 , isPy27
-, nose
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -21,7 +20,13 @@ buildPythonPackage rec {
 
   checkInputs = [
     docutils
-    pytest
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # file imports 'dummy_threading', which was deprecated since py37
+    # and removed in py39
+    "test_python_toolbox/test_cute_profile/test_cute_profile.py"
   ];
 
   meta = with lib; {

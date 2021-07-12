@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, fetchpatch, ... } @ args:
+{ lib, stdenv, callPackage, fetchurl, fetchpatch, ... } @ args:
 
 callPackage ./generic.nix (args // {
   version = "1.67.0";
@@ -9,7 +9,7 @@ callPackage ./generic.nix (args // {
       sha256 = "0x65nkwzv8fdacj8sw5njl3v63jj19dirrpklbwy6qpsncw7fc7h";
       stripLen = 1;
     })
-  ] ++ stdenv.lib.optionals stdenv.cc.isClang [
+  ] ++ lib.optionals stdenv.cc.isClang [
     # Fixes https://github.com/boostorg/atomic/issues/15
     (fetchpatch {
       url = "https://github.com/boostorg/atomic/commit/6e14ca24dab50ad4c1fa8c27c7dd6f1cb791b534.patch";

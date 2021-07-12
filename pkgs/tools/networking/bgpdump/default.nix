@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, zlib, bzip2 }:
+{ lib, stdenv, fetchurl, autoreconfHook, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "bgpdump";
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://bitbucket.org/ripencc/bgpdump/";
-    description = ''Analyze dump files produced by Zebra/Quagga or MRT'';
-    license = stdenv.lib.licenses.hpnd;
-    maintainers = with stdenv.lib.maintainers; [ lewo ];
-    platforms = with stdenv.lib.platforms; linux;
+    description = "Analyze dump files produced by Zebra/Quagga or MRT";
+    license = lib.licenses.hpnd;
+    maintainers = with lib.maintainers; [ lewo ];
+    platforms = with lib.platforms; linux;
   };
 }

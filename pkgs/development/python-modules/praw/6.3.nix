@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , betamax
 , betamax-serializers
 , betamax-matchers
@@ -9,7 +9,7 @@
 , pytest
 , requests-toolbelt
 , update_checker
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     mock
     prawcore
     update_checker
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     six
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
     license = licenses.bsd2;

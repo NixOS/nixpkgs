@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kcolorchooser";
+  pname = "kcolorchooser";
   meta = {
     license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.ttuegel ];

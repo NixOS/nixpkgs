@@ -1,12 +1,14 @@
 { stdenv
 , lib
 , fetchurl
-, alsaLib
+, alsa-lib
 , dbus
+, ell
 , glib
 , json_c
 , libical
-, pkgconfig
+, docutils
+, pkg-config
 , python3
 , readline
 , systemd
@@ -19,16 +21,17 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.55";
+  version = "5.60";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "124v9s4y1s7s6klx5vlmzpk1jlr4x84ch7r7scm7x2f42dqp2qw8";
+    sha256 = "sha256-cQmZWA0B7lnsWF5efAf9lO3e3AAaom/nRkxUb52UUwQ=";
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     dbus
+    ell
     glib
     json_c
     libical
@@ -38,7 +41,8 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    docutils
+    pkg-config
     python3.pkgs.wrapPython
   ];
 
@@ -55,6 +59,7 @@ in stdenv.mkDerivation rec {
     "--enable-library"
     "--enable-cups"
     "--enable-pie"
+    "--enable-external-ell"
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
     "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
@@ -67,7 +72,6 @@ in stdenv.mkDerivation rec {
     "--enable-nfc"
     "--enable-sap"
     "--enable-sixaxis"
-    "--enable-wiimote"
   ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
@@ -112,7 +116,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth support for Linux";
     homepage = "http://www.bluez.org/";
     license = with licenses; [ gpl2 lgpl21 ];

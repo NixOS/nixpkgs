@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, gettext, libgpgerror, libgcrypt, libksba, zlib }:
+{ lib, stdenv, fetchurl, gettext, libgpgerror, libgcrypt, libksba, zlib }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "ntbtls";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchurl {
     url = "mirror://gnupg/ntbtls/ntbtls-${version}.tar.bz2";
-    sha256 = "1rywgdyj7prmwdi5r1rpglakqpnjskgln1mqksqm28qcwn2dnh42";
+    sha256 = "sha256-ZJ/nSjEdE+Q7FrJuuqkWZd22MpJbc5AlkurD7TBRnhc=";
   };
 
   outputs = [ "dev" "out" ];
 
   buildInputs = [ libgcrypt libgpgerror libksba zlib ]
-    ++ stdenv.lib.optional stdenv.isDarwin gettext;
+    ++ lib.optional stdenv.isDarwin gettext;
 
   postInstall = ''
     moveToOutput "bin/ntbtls-config" $dev

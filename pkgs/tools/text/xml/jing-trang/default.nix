@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre_headless, jdk, ant, saxon }:
+{ lib, stdenv, fetchFromGitHub, jre_headless, jdk, ant, saxon }:
 
 stdenv.mkDerivation {
   pname = "jing-trang";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     chmod +x "$out"/bin/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A RELAX NG validator in Java";
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".

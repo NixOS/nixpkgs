@@ -1,6 +1,18 @@
-{ stdenv, lib, runCommand, patchelf
-, fetchFromGitHub, rustPlatform, makeWrapper
-, pkgconfig, curl, zlib, Security, CoreServices }:
+{ stdenv
+, lib
+, runCommand
+, patchelf
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, pkg-config
+, curl
+, zlib
+, Security
+, CoreServices
+, libiconv
+, xz
+}:
 
 let
   libPath = lib.makeLibraryPath [
@@ -10,32 +22,33 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.22.1";
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "0nf42pkyn87y0n93vd63bihx74h4bpisv74aqldg3vcav2iv35s1";
+    sha256 = "sha256-uRCzVeTr5rr0CvE/1Uz7RHcw4Kt/sOItwcbZJBjjNjg=";
   };
 
-  cargoSha256 = "0ghjrx7y25s6rjp06h0iyv4195x7daj57bqza01i1j4hm5nkhqhi";
+  cargoSha256 = "sha256-+E6Wa4QrMG/Ow3KehsxIzLzubXJQxCWo/rowC4MPdgk=";
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
-    curl zlib
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    curl
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
-    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC=stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
-     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-       --subst-var patchelf \
-       --subst-var dynamicLinker \
-       --subst-var libPath
+    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC = stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
+      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+        --subst-var patchelf \
+        --subst-var dynamicLinker \
+        --subst-var libPath
     '')
   ];
 
@@ -70,7 +83,7 @@ rustPlatform.buildRustPackage rec {
     $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
     license = with licenses; [ asl20 /* or */ mit ];

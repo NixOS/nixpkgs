@@ -75,9 +75,9 @@ let
     else ''
       def assemble_qemu_flags():
           flags = "-cpu max"
-          ${if system == "x86_64-linux"
-            then ''flags += " -m 768"''
-            else ''flags += " -m 512 -enable-kvm -machine virt,gic-version=host"''
+          ${if (system == "x86_64-linux" || system == "i686-linux")
+            then ''flags += " -m 1024"''
+            else ''flags += " -m 768 -enable-kvm -machine virt,gic-version=host"''
           }
           return flags
 
@@ -270,7 +270,7 @@ let
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
-      meta = with pkgs.stdenv.lib.maintainers; {
+      meta = with pkgs.lib.maintainers; {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or []);
       };
@@ -284,7 +284,9 @@ let
             extraInstallerConfig
           ];
 
+          # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
+          virtualisation.cores = 8;
           virtualisation.memorySize = 1536;
 
           # Use a small /dev/vdb as the root disk for the
@@ -292,7 +294,7 @@ let
           # the same during and after installation.
           virtualisation.emptyDiskImages = [ 512 ];
           virtualisation.bootDevice =
-            if grubVersion == 1 then "/dev/sdb" else "/dev/vdb";
+            if grubVersion == 1 then "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive2" else "/dev/vdb";
           virtualisation.qemu.diskInterface =
             if grubVersion == 1 then "scsi" else "virtio";
 
@@ -323,10 +325,13 @@ let
             curl
           ]
           ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
-          ++ optionals (bootLoader == "grub" && grubVersion == 2) [
-            pkgs.grub2
-            pkgs.grub2_efi
-          ];
+          ++ optionals (bootLoader == "grub" && grubVersion == 2) (let
+            zfsSupport = lib.any (x: x == "zfs")
+              (extraInstallerConfig.boot.supportedFilesystems or []);
+          in [
+            (pkgs.grub2.override { inherit zfsSupport; })
+            (pkgs.grub2_efi.override { inherit zfsSupport; })
+          ]);
 
           nix.binaryCaches = mkForce [ ];
           nix.extraOptions = ''
@@ -396,9 +401,9 @@ let
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
-          + " mkpart ESP fat32 1M 50MiB"  # /boot
+          + " mkpart ESP fat32 1M 100MiB"  # /boot
           + " set 1 boot on"
-          + " mkpart primary linux-swap 50MiB 1024MiB"
+          + " mkpart primary linux-swap 100MiB 1024MiB"
           + " mkpart primary ext2 1024MiB -1MiB",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
@@ -690,22 +695,23 @@ in {
   };
 
   # Test a basic install using GRUB 1.
-  grub1 = makeInstallerTest "grub1" {
+  grub1 = makeInstallerTest "grub1" rec {
     createPartitions = ''
       machine.succeed(
-          "flock /dev/sda parted --script /dev/sda -- mklabel msdos"
+          "flock ${grubDevice} parted --script ${grubDevice} -- mklabel msdos"
           + " mkpart primary linux-swap 1M 1024M"
           + " mkpart primary ext2 1024M -1s",
           "udevadm settle",
-          "mkswap /dev/sda1 -L swap",
+          "mkswap ${grubDevice}-part1 -L swap",
           "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/sda2",
+          "mkfs.ext3 -L nixos ${grubDevice}-part2",
           "mount LABEL=nixos /mnt",
           "mkdir -p /mnt/tmp",
       )
     '';
     grubVersion = 1;
-    grubDevice = "/dev/sda";
+    # /dev/sda is not stable, even when the SCSI disk number is.
+    grubDevice = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive1";
   };
 
   # Test using labels to identify volumes in grub

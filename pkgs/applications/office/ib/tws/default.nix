@@ -1,4 +1,4 @@
-{ stdenv, requireFile, jdk }:
+{ lib, stdenv, requireFile, jdk }:
 
 stdenv.mkDerivation rec {
   version = "9542";
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     chmod u+x $out/bin/ib-gw
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Trader Work Station of Interactive Brokers";
     homepage = "https://www.interactivebrokers.com";
     license = licenses.unfree;

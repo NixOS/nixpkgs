@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''lisp-unit2'';
-  version = ''20180131-git'';
+  baseName = "lisp-unit2";
+  version = "20180131-git";
 
   parasites = [ "lisp-unit2-test" ];
 
-  description = ''Common Lisp library that supports unit testing.'';
+  description = "Common Lisp library that supports unit testing.";
 
   deps = [ args."alexandria" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."flexi-streams" args."iterate" args."named-readtables" args."symbol-munger" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lisp-unit2/2018-01-31/lisp-unit2-20180131-git.tgz'';
-    sha256 = ''04kwrg605mqzf3ghshgbygvvryk5kipl6gyc5kdaxafjxvhxaak7'';
+    url = "http://beta.quicklisp.org/archive/lisp-unit2/2018-01-31/lisp-unit2-20180131-git.tgz";
+    sha256 = "04kwrg605mqzf3ghshgbygvvryk5kipl6gyc5kdaxafjxvhxaak7";
   };
 
   packageName = "lisp-unit2";

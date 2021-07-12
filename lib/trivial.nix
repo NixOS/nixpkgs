@@ -158,7 +158,7 @@ rec {
     seq deepSeq genericClosure;
 
 
-  ## nixpks version strings
+  ## nixpkgs version strings
 
   /* Returns the current full nixpkgs version number. */
   version = release + versionSuffix;
@@ -171,7 +171,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Okapi";
+  codeName = "Porcupine";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -297,12 +297,15 @@ rec {
   # Usage:
   # {
   #   foo = lib.warn "foo is deprecated" oldFoo;
+  #   bar = lib.warnIf (bar == "") "Empty bar is deprecated" bar;
   # }
   #
   # TODO: figure out a clever way to integrate location information from
   # something like __unsafeGetAttrPos.
 
   warn = msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+  warnIf = cond: msg: if cond then warn msg else id;
+
   info = msg: builtins.trace "INFO: ${msg}";
 
   showWarnings = warnings: res: lib.fold (w: x: warn w x) res warnings;

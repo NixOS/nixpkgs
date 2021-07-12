@@ -233,7 +233,7 @@ in
             type = types.str;
             default = "Check.Valid=1,Check.Unexpired=1";
             description = ''
-	      "Peer verification string". This may be used to adjust which TLS
+              "Peer verification string". This may be used to adjust which TLS
               client certificates a server will accept, as a form of user
               authorization; for example, it may only accept TLS clients who
               offer a certificate abiding by some locality or organization name.

@@ -6,6 +6,8 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.02";
 
+  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+
   src = fetchurl {
     url = "https://github.com/ocaml/ocaml-re/releases/download/${version}/re-${version}.tbz";
     sha256 = "1gas4ky49zgxph3870nffzkr6y41kkpqp4nj38pz1gh49zcf12aj";

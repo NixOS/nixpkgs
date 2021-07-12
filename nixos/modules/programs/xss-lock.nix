@@ -11,7 +11,7 @@ in
 
     lockerCommand = mkOption {
       default = "${pkgs.i3lock}/bin/i3lock";
-      example = literalExample ''''${pkgs.i3lock-fancy}/bin/i3lock-fancy'';
+      example = literalExample "\${pkgs.i3lock-fancy}/bin/i3lock-fancy";
       type = types.separatedString " ";
       description = "Locker to be used with xsslock";
     };

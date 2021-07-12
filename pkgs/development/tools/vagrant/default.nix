@@ -1,13 +1,13 @@
 { stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux, fetchpatch
+, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux
 }:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.11";
+  version = "2.2.17";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "sha256-KDQDEMebqQYgsBroHmQrm/OJWTES9C9eGl0dDHTBpIc=";
+  sha256 = "sha256-T48ui7jgq9ni3pC09Jd2WzkT9PBaJ+SUDfcXA5QMjM8=";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -34,7 +34,7 @@ let
       for gem in "$out"/lib/ruby/gems/*/gems/*; do
         cp -a "$gem/" "$gem.new"
         rm "$gem"
-        # needed on macOS, otherwise the mv yields permission denied 
+        # needed on macOS, otherwise the mv yields permission denied
         chmod +w "$gem.new"
         mv "$gem.new" "$gem"
       done
@@ -54,6 +54,7 @@ in buildRubyGem rec {
     ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
+    ./0001-Revert-Merge-pull-request-12225-from-chrisroberts-re.patch
   ];
 
   postPatch = ''

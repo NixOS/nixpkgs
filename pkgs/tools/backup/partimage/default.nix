@@ -1,11 +1,11 @@
-{stdenv
+{lib, stdenv
 , fetchurl
 , fetchpatch
 , bzip2
 , zlib
 , newt
 , openssl
-, pkgconfig
+, pkg-config
 , slang
 , autoreconfHook
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-ssl-headers=${openssl.dev}/include/openssl" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ bzip2 zlib newt newt openssl slang ];
 
   patches = [
@@ -40,8 +40,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Opensource disk backup software";
     homepage = "http://www.partimage.org";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [lib.maintainers.marcweber];
+    platforms = lib.platforms.linux;
   };
 }

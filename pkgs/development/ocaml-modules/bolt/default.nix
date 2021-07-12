@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, which, camlp4 }:
+{ lib, stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, which, camlp4 }:
 
-let inherit (stdenv.lib) getVersion versionAtLeast; in
+let inherit (lib) getVersion versionAtLeast; in
 
 assert versionAtLeast (getVersion ocaml) "4.00.0";
 assert versionAtLeast (getVersion findlib) "1.3.3";
@@ -50,7 +50,7 @@ EOF
   doCheck = true;
   checkTarget = "tests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://bolt.x9c.fr";
     description = "A logging tool for the OCaml language";
     longDescription = ''

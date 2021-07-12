@@ -69,6 +69,31 @@ in
   # GC has 1460 MTU
   networking.interfaces.eth0.mtu = 1460;
 
+  # Used by NixOps
+  systemd.services.fetch-instance-ssh-keys = {
+    description = "Fetch host keys and authorized_keys for root user";
+
+    wantedBy = [ "sshd.service" ];
+    before = [ "sshd.service" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    path = [ pkgs.wget ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.runCommand "fetch-instance-ssh-keys" { } ''
+        cp ${./fetch-instance-ssh-keys.bash} $out
+        chmod +x $out
+        ${pkgs.shfmt}/bin/shfmt -i 4 -d $out
+        ${pkgs.shellcheck}/bin/shellcheck $out
+        patchShebangs $out
+      '';
+      PrivateTmp = true;
+      StandardError = "journal+console";
+      StandardOutput = "journal+console";
+    };
+  };
+
   systemd.services.google-instance-setup = {
     description = "Google Compute Engine Instance Setup";
     after = [ "network-online.target" "network.target" "rsyslog.service" ];
@@ -85,7 +110,7 @@ in
   systemd.services.google-network-daemon = {
     description = "Google Compute Engine Network Daemon";
     after = [ "network-online.target" "network.target" "google-instance-setup.service" ];
-    path = with pkgs; [ iproute ];
+    path = with pkgs; [ iproute2 ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_network_daemon";
       StandardOutput="journal+console";

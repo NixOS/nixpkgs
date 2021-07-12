@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl, perl, gcc
 , ncurses6, gmp, glibc, libiconv, numactl
 , llvmPackages
@@ -7,8 +7,6 @@
   # regular builds and GHC bootstrapping.
   # This is "useful" for staying within hydra's output limits for at least the
   # aarch64-linux architecture.
-  # Examples of unnecessary files are the bundled documentation and files that
-  # are only needed for profiling builds.
 , minimal ? false
 }:
 
@@ -18,12 +16,12 @@ assert stdenv.targetPlatform == stdenv.hostPlatform;
 let
   useLLVM = !stdenv.targetPlatform.isx86;
 
-  libPath = stdenv.lib.makeLibraryPath ([
+  libPath = lib.makeLibraryPath ([
     ncurses6 gmp
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv
-    ++ stdenv.lib.optional (stdenv.hostPlatform.isAarch64) numactl);
+  ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv
+    ++ lib.optional (stdenv.hostPlatform.isAarch64) numactl);
 
-  libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
+  libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
   glibcDynLinker = assert stdenv.isLinux;
@@ -31,7 +29,9 @@ let
        # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
        ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
-      "${stdenv.lib.getLib glibc}/lib/ld-linux*";
+      "${lib.getLib glibc}/lib/ld-linux*";
+
+  downloadsUrl = "https://downloads.haskell.org/ghc";
 
 in
 
@@ -43,30 +43,30 @@ stdenv.mkDerivation rec {
   # https://downloads.haskell.org/~ghc/8.10.2/
   src = fetchurl ({
     i686-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
       sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
     };
     x86_64-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
       sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
     };
     armv7l-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
       sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
     };
     aarch64-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
       sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
     };
     x86_64-darwin = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
     };
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = stdenv.lib.optionals useLLVM [ llvmPackages.llvm ];
+  propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   postUnpack =
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
-    stdenv.lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
@@ -94,20 +94,20 @@ stdenv.mkDerivation rec {
     ''
       find . -name integer-gmp.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp.out}/lib@" {} \;
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.isDarwin ''
       find . -name base.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
     '' +
     # aarch64 does HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
     # FFI_LIB_DIR is a good indication of places it must be needed.
-    stdenv.lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    lib.optionalString stdenv.hostPlatform.isAarch64 ''
       find . -name package.conf.in \
           -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    stdenv.lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 -exec patchelf \
-          --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.6 libncurses.so \
+          --replace-needed libncurses${lib.optionalString stdenv.is64bit "w"}.so.6 libncurses.so \
           --interpreter ${glibcDynLinker} {} \;
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
@@ -119,21 +119,21 @@ stdenv.mkDerivation rec {
     # (`__strdup` is defined to be an alias of `strdup` anyway[1]).
     # [1] http://refspecs.linuxbase.org/LSB_4.0.0/LSB-Core-generic/LSB-Core-generic/baselib---strdup-1.html
     # Use objcopy magic to make the change:
-    stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    lib.optionalString stdenv.hostPlatform.isMusl ''
       find ./ghc-${version}/rts -name "libHSrts*.a" -exec ''${OBJCOPY:-objcopy} --redefine-sym __strdup=strdup {} \;
     '';
 
   # fix for `configure: error: Your linker is affected by binutils #16177`
-  preConfigure = stdenv.lib.optionalString
+  preConfigure = lib.optionalString
     stdenv.targetPlatform.isAarch32
     "LD=ld.gold";
 
   configurePlatforms = [ ];
   configureFlags = [
-    "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
-    "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+    "--with-gmp-libraries=${lib.getLib gmp}/lib"
+    "--with-gmp-includes=${lib.getDev gmp}/include"
+  ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  postFixup = stdenv.lib.optionalString stdenv.isLinux
+  postFixup = lib.optionalString stdenv.isLinux
     (if stdenv.hostPlatform.isAarch64 then
       # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
       # are 2 directories deep from $out/lib, so pooling symlinks there makes
@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
           patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
         fi
       done
-    '') + stdenv.lib.optionalString stdenv.isDarwin ''
+    '') + lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue
@@ -181,12 +181,16 @@ stdenv.mkDerivation rec {
       substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
     done
   '' +
-  stdenv.lib.optionalString minimal ''
-    # Remove profiling objects
+  lib.optionalString minimal ''
+    # Remove profiling files
     find $out -type f -name '*.p_o' -delete
+    find $out -type f -name '*.p_hi' -delete
+    find $out -type f -name '*_p.a' -delete
     rm $out/lib/ghc-*/bin/ghc-iserv-prof
-    # Remove docs
-    rm -r $out/share/{doc,man}
+    # Hydra will redistribute this derivation, so we have to keep the docs for
+    # legal reasons (retaining the legal notices etc)
+    # As a last resort we could unpack the docs separately and symlink them in.
+    # They're in $out/share/{doc,man}.
   '';
 
   doInstallCheck = true;
@@ -208,20 +212,17 @@ stdenv.mkDerivation rec {
   passthru = {
     targetPrefix = "";
     enableShared = true;
+
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc-${version}";
   };
 
-  meta = let
-    platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
-  in {
+  meta = rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    license = stdenv.lib.licenses.bsd3;
-
-    # The minimal variation can not be distributed because it removes the
-    # documentation, including licensing information that is required for
-    # distribution.
-    inherit platforms;
-    hydraPlatforms = stdenv.lib.optionals (!minimal) platforms;
-    maintainers = with stdenv.lib.maintainers; [ lostnet ];
+    license = lib.licenses.bsd3;
+    platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+    hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
+    maintainers = with lib.maintainers; [ lostnet ];
   };
 }

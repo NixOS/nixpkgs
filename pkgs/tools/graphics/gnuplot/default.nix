@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, texinfo
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, texinfo
 , cairo, gd, libcerf, pango, readline, zlib
 , withTeXLive ? false, texlive
 , withLua ? false, lua
@@ -20,14 +20,14 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "5.4.0";
+  version = "5.4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "0iwwliq5a6qcawbpxk4d7l17fpkq9xxcz05kwblx37rr7bq84h7b";
+    sha256 = "sha256-5Xx14TGBM5UdMqg7zcSv8X/tKHIsTnHyMFz8KuHK57o=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig texinfo ] ++ lib.optional withQt qttools;
+  nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
 
   buildInputs =
     [ cairo gd libcerf pango readline zlib ]

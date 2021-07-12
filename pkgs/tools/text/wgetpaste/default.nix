@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wget, bash }:
+{ lib, stdenv, fetchurl, wget, bash }:
 
 stdenv.mkDerivation rec {
   version = "2.30";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command-line interface to various pastebins";
     homepage = "http://wgetpaste.zlin.dk/";
-    license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [ qknight domenkozar ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ qknight domenkozar ];
+    platforms = lib.platforms.all;
   };
 }

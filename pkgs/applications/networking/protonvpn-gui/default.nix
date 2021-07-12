@@ -76,6 +76,9 @@ in python3Packages.buildPythonApplication rec {
     done
   '';
 
+  # no tests
+  doCheck = false;
+
   meta = with lib; {
     description = "Linux GUI for ProtonVPN, written in Python";
     homepage = "https://github.com/ProtonVPN/linux-gui";

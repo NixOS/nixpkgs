@@ -1,12 +1,19 @@
-{ lib, buildPythonApplication, fetchPypi, pyyaml }:
+{ lib, buildPythonApplication, fetchFromGitHub, pyyaml }:
 
 buildPythonApplication rec {
-  version = "0.1.5";
+  version = "0.2.0pre-2021-05-18";
   pname = "podman-compose";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1sgbc889zq127qhxa9frhswa1mid19fs5qnyzfihx648y5i968pv";
+  # "This project is still under development." -- README.md
+  #
+  # As of May 2021, the latest release (0.1.5) has fewer than half of all
+  # commits. This project seems to have no release management, so the last
+  # commit is the best one until proven otherwise.
+  src = fetchFromGitHub {
+    repo = "podman-compose";
+    owner = "containers";
+    rev = "62d2024feecf312e9591cc145f49cee9c70ab4fe";
+    sha256 = "17992imkvi6129wvajsp0iz5iicfmh53i20qy2mzz17kcz30r2pp";
   };
 
   propagatedBuildInputs = [ pyyaml ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, avahi }:
+{ lib, stdenv, fetchurl, pkg-config, pure, avahi }:
 
 stdenv.mkDerivation rec {
   baseName = "avahi";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "5fac8a6e3a54e45648ceb207ee0061b22eac8c4e668b8d53f13eb338b09c9160";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure avahi ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A digital audio interface for the Pure programming language";
     homepage = "http://puredocs.bitbucket.org/pure-avahi.html";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

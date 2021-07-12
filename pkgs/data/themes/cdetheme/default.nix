@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ lib, stdenv, fetchFromGitHub, python2Packages }:
 
 stdenv.mkDerivation rec {
   pname = "cdetheme";
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/share/themes/cdetheme/scripts" "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gtk2 / Gtk3 theme mimicking CDE / Motif";
     homepage = "https://www.gnome-look.org/p/1231025";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
     hydraPlatforms = [];
   };
 }

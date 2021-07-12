@@ -1,19 +1,25 @@
-{ stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi, libunwind, Security
+{ lib, stdenv, substituteAll, fetchurl
+, zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
-, self, gdbm, db, lzma
+, self, gdbm, db, xz
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
 , sourceVersion
 , pythonVersion
 , sha256
 , passthruFun
+, pythonAttr ? "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}"
 }:
 
 assert zlibSupport -> zlib != null;
 
-with stdenv.lib;
+with lib;
 
 let
   isPy3k = substring 0 1 pythonVersion == "3";
@@ -22,9 +28,14 @@ let
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
     executable = "pypy${if isPy3k then "3" else ""}";
-    pythonForBuild = self; # No cross-compiling for now.
     sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
+
+    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or {};
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
@@ -34,15 +45,15 @@ in with passthru; stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://bitbucket.org/pypy/pypy/downloads/pypy${pythonVersion}-v${version}-src.tar.bz2";
+    url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-src.tar.bz2";
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
   ]  ++ optionals isPy3k [
-    lzma
+    xz
   ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [
     stdenv.cc.libc
   ] ++ optionals zlibSupport [
@@ -133,7 +144,7 @@ in with passthru; stdenv.mkDerivation rec {
     ln -s $out/${executable}-c/include $out/include/${libPrefix}
     ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
 
-    ${stdenv.lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.isDarwin ''
       install_name_tool -change @rpath/libpypy${optionalString isPy3k "3"}-c.dylib $out/lib/libpypy${optionalString isPy3k "3"}-c.dylib $out/bin/${executable}
     ''}
 
@@ -147,11 +158,11 @@ in with passthru; stdenv.mkDerivation rec {
   inherit passthru;
   enableParallelBuilding = true;  # almost no parallelization without STM
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ andersk ];
   };
 }

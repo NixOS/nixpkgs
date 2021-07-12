@@ -1,8 +1,8 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.8.5";
+  version = "1.10.0";
   rev = "v${version}";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "1cf3zvb3xh97hz5hav9f1q3b22lwryw6a7gcmm7cphk6bdrdiva5";
+    sha256 = "sha256:0gc5shz1nbya7jdkggw2izbw1p4lwkbqgbc5ihlvnwrfdgksfqqd";
   };
 
   passthru.tests.consul = nixosTests.consul;
@@ -26,7 +26,7 @@ buildGoModule rec {
   # has a split module structure in one repo
   subPackages = ["." "connect/certgen"];
 
-  vendorSha256 = "1zz3hhngvx7989m73cp5a9j6spg42hgqd9vs8v332fvcr277lyxj";
+  vendorSha256 = "sha256:0sxnnzzsp58ma42ylysdgxibqf65f4f9vbf8c20r44426vg75as7";
 
   doCheck = false;
 
@@ -39,7 +39,7 @@ buildGoModule rec {
                        -X github.com/hashicorp/consul/version.VersionPrerelease=")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for service discovery, monitoring and configuration";
     homepage = "https://www.consul.io/";
     platforms = platforms.linux ++ platforms.darwin;

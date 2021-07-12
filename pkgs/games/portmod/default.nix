@@ -1,5 +1,5 @@
-{ lib, stdenv, callPackage, python3Packages, fetchFromGitLab, cacert,
-  rustPlatform, bubblewrap, git, perlPackages, imagemagick7, fetchurl, fetchzip,
+{ lib, callPackage, python3Packages, fetchFromGitLab, cacert,
+  rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip,
   jre, makeWrapper, tr-patcher, tes3cmd }:
 
 let
@@ -16,7 +16,7 @@ let
     inherit src version;
     pname = "portmod-rust";
 
-    cargoSha256 = "14p1aywwbkf2pk85sir5g9ni08zam2hid0kaz111718b006nrxh7";
+    cargoHash = "sha256-7Ce+EIbZuOur7iGOUXNWiXReuZO54LQJu+sJPw1CJGg=";
 
     nativeBuildInputs = [ python3Packages.python ];
 
@@ -29,7 +29,7 @@ let
     python3Packages.virtualenv
     tr-patcher
     tes3cmd
-    imagemagick7
+    imagemagick
   ];
 
 in
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3Packages; [
-    setuptools_scm
+    setuptools-scm
     setuptools
     requests
     chardet

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, gtk2, gnome2, gnome3,
+{ lib, stdenv, fetchurl, pkg-config, wrapGAppsHook, gtk2, gnome2, gnome,
   libstartup_notification, libgtop, perlPackages,
   autoreconfHook, intltool, docbook_xsl, xauth
 }:
@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig autoreconfHook intltool docbook_xsl wrapGAppsHook
+    pkg-config autoreconfHook intltool docbook_xsl wrapGAppsHook
   ];
 
   buildInputs = [
     gtk2 gnome2.GConf libstartup_notification
-    gnome3.libgnome-keyring libgtop gnome2.libglade
+    gnome.libgnome-keyring libgtop gnome2.libglade
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
       programs in an X session.
     '';
     homepage = "https://www.nongnu.org/gksu/";
-    license = stdenv.lib.licenses.lgpl2;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.romildo ];
+    platforms = lib.platforms.linux;
   };
 }

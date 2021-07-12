@@ -1,25 +1,28 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "velero";
-  version = "1.5.1";
+  # When updating, change the commit underneath
+  version = "1.6.0";
+  commit = "5bd70fd8eef316d220317245e46dc6016c348dce";
+
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "vmware-tanzu";
     repo = "velero";
-    sha256 = "1rmymwmglcia5j0c692g34hlffba1yqs2s0iyjpafma2zabrcnai";
+    sha256 = "sha256-2d4xsffh5DpxGahmzXpgUBRFAt5CsDnHCm8xU1ksqyQ=";
   };
 
   buildFlagsArray = ''
     -ldflags=
       -s -w
       -X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=${version}
-      -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=87d86a45a6ca66c6c942c7c7f08352e26809426c
+      -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=${commit}
       -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean
   '';
 
-  vendorSha256 = "1izl7z689jf3i3wax7rfpk0jjly7nsi7vzasy1j9v5cwjy2d5z4v";
+  vendorSha256 = "sha256-aQjtebIyV69nRwc/zvK/9v0mX3pAPKfOunSL/FpFZJU=";
 
   excludedPackages = [ "issue-template-gen" ];
 
@@ -27,12 +30,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
-    $out/bin/velero completion bash > helm.bash
-    $out/bin/velero completion zsh > helm.zsh
-    installShellCompletion helm.{bash,zsh}
+    $out/bin/velero completion bash > velero.bash
+    $out/bin/velero completion zsh > velero.zsh
+    installShellCompletion velero.{bash,zsh}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "A utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
     homepage = "https://velero.io/";
@@ -40,6 +43,6 @@ buildGoModule rec {
       "https://github.com/vmware-tanzu/velero/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.mbode maintainers.bryanasdev000 ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper, makeDesktopItem
 , ncurses, libtermkey, lpeg, lua
 , acl ? null, libselinux ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "vis";
-  version  = "0.6";
+  version  = "0.7";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    sha256 = "1zjm89cn3rfq8fxpwp66khy53s6vqlmw6q103qyyvix8ydzxdmsh";
+    sha256 = "1g05ncsnk57kcqm9wsv6sz8b24kyzj8r5rfpa1wfwj8qkjzx3vji";
     repo = "vis";
     owner = "martanne";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [
     ncurses
     libtermkey
     lua
     lpeg
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     acl
     libselinux
   ];
@@ -51,17 +51,17 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "vis";
     genericName = "Text editor";
-    categories = stdenv.lib.concatStringsSep ";" [
+    categories = lib.concatStringsSep ";" [
       "Application" "Development" "IDE"
     ];
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    mimeType = lib.concatStringsSep ";" [
       "text/plain" "application/octet-stream"
     ];
     startupNotify = "false";
     terminal = "true";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A vim like editor";
     homepage = "https://github.com/martanne/vis";
     license = licenses.isc;

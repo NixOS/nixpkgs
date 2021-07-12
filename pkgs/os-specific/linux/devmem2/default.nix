@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "devmem2-2004-08-05";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     install -D devmem2 "$out/bin/devmem2"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple program to read/write from/to any location in memory";
     homepage = "http://lartmaker.nl/lartware/port/";
     license = licenses.gpl2Plus;

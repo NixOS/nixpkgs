@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , db48
+, sqlite
 , boost
 , zeromq
 , hexdump
@@ -11,16 +12,18 @@
 , qtbase ? null
 , qttools ? null
 , wrapQtAppsHook ? null
-, utillinux
+, util-linux
 , python3
 , qrencode
 , libevent
+, nixosTests
 , withGui
+, withWallet ? true
 }:
 
-with stdenv.lib;
+with lib;
 let
-  version = "0.20.1";
+  version = "0.21.1";
   majorMinorVersion = versions.majorMinor version;
   desktop = fetchurl {
     url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorMinorVersion}/debian/bitcoin-qt.desktop";
@@ -36,20 +39,22 @@ stdenv.mkDerivation rec {
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
       "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
-    sha256 = "4bbd62fd6acfa5e9864ebf37a24a04bc2dcfe3e3222f056056288d854c53b978";
+    sha256 = "caff23449220cf45753f312cefede53a9eac64000bb300797916526236b6a1e0";
   };
 
   nativeBuildInputs =
-    [ pkgconfig autoreconfHook ]
+    [ pkg-config autoreconfHook ]
     ++ optional stdenv.isDarwin hexdump
     ++ optional withGui wrapQtAppsHook;
-  buildInputs = [ db48 boost zlib zeromq miniupnpc libevent ]
-    ++ optionals stdenv.isLinux [ utillinux ]
+  buildInputs = [ boost zlib zeromq miniupnpc libevent ]
+    ++ optionals stdenv.isLinux [ util-linux ]
+    ++ optionals withWallet [ db48 sqlite ]
     ++ optionals withGui [ qtbase qttools qrencode ];
 
   postInstall = optional withGui ''
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
-    install -Dm644 share/pixmaps/bitcoin128.png $out/share/pixmaps/bitcoin128.png
+    substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
+    install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
   '';
 
   configureFlags = [
@@ -58,8 +63,9 @@ stdenv.mkDerivation rec {
   ] ++ optionals (!doCheck) [
     "--disable-tests"
     "--disable-gui-tests"
-  ]
-  ++ optionals withGui [
+  ] ++ optionals (!withWallet) [
+    "--disable-wallet"
+  ] ++ optionals withGui [
     "--with-gui=qt5"
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
@@ -76,6 +82,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    smoke-test = nixosTests.bitcoind;
+  };
+
   meta = {
     description = "Peer-to-peer electronic cash system";
     longDescription = ''
@@ -87,7 +97,7 @@ stdenv.mkDerivation rec {
     homepage = "https://bitcoin.org/";
     downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
     changelog = "https://bitcoincore.org/en/releases/${version}/";
-    maintainers = with maintainers; [ roconnor ];
+    maintainers = with maintainers; [ prusnak roconnor ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

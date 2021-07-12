@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sconsPackages, libX11, pkgconfig
+{ lib, stdenv, fetchurl, sconsPackages, libX11, pkg-config
 , libusb1, boost, glib, dbus-glib }:
 
 let
@@ -13,11 +13,11 @@ in stdenv.mkDerivation {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
-  nativeBuildInputs = [ pkgconfig sconsPackages.scons_3_1_2 ];
+  nativeBuildInputs = [ pkg-config sconsPackages.scons_3_1_2 ];
   buildInputs = [ libX11 libusb1 boost glib dbus-glib ];
   dontUseSconsInstall = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pingus.seul.org/~grumbel/xboxdrv/";
     description = "Xbox/Xbox360 (and more) gamepad driver for Linux that works in userspace";
     license = licenses.gpl3Plus;

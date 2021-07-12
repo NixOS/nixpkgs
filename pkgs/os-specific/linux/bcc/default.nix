@@ -1,49 +1,47 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash
+, systemtap, bash, libbpf
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.16.0";
+  version = "0.20.0";
 
   disabled = !stdenv.isLinux;
 
-  src = fetchurl {
-    url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
-    sha256 = "sha256-ekVRyugpZOU1nr0N9kWCSoJTmtD2qGsn/DmWgK7XZ/c=";
+  src = fetchFromGitHub {
+    owner = "iovisor";
+    repo = "bcc";
+    rev = "v${version}";
+    sha256 = "1xnpz2zv445dp5h0160drv6xlvrnwfj23ngc4dp3clcd59jh1baq";
   };
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm clang-unwrapped kernel
+    llvm llvm.dev libclang kernel
     elfutils luajit netperf iperf
     systemtap.stapBuild flex bash
+    libbpf
   ];
 
   patches = [
     # This is needed until we fix
     # https://github.com/NixOS/nixpkgs/issues/40427
     ./fix-deadlock-detector-import.patch
-
-    # This is already upstream; remove it on the next release
-    (fetchpatch {
-      url = "https://github.com/iovisor/bcc/commit/60de17161fe7f44b534a8da343edbad2427220e3.patch";
-      sha256 = "0pd5b4vgpdxbsrjwrw2kmn4l9hpj0rwdm3hvwvk7dsr3raz7w4b3";
-    })
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
-  nativeBuildInputs = [ makeWrapper cmake flex bison ]
+  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ]
     # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 
   cmakeFlags = [
     "-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules"
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
+    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
 
   postPatch = ''
@@ -74,7 +72,7 @@ python.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
     homepage    = "https://iovisor.github.io/bcc/";
     license     = licenses.asl20;

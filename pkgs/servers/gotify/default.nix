@@ -1,6 +1,5 @@
-{ stdenv
+{ lib
 , buildGoPackage
-, lib
 , fetchFromGitHub
 , buildGoModule
 , sqlite
@@ -19,6 +18,12 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = import ./source-sha.nix;
   };
+
+  # With `allowGoReference = true;`, `buildGoModule` adds the `-trimpath`
+  # argument for Go builds which apparently breaks the UI like this:
+  #
+  #   server[780]: stat /var/lib/private/ui/build/index.html: no such file or directory
+  allowGoReference = true;
 
   vendorSha256 = import ./vendor-sha.nix;
 
@@ -44,7 +49,7 @@ buildGoModule rec {
     "-ldflags=-X main.Version=${version} -X main.Mode=prod"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple server for sending and receiving messages in real-time per WebSocket";
     homepage = "https://gotify.net";
     license = licenses.mit;

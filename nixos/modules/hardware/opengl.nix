@@ -63,8 +63,7 @@ in
         description = ''
           On 64-bit systems, whether to support Direct Rendering for
           32-bit applications (such as Wine).  This is currently only
-          supported for the <literal>nvidia</literal> and
-          <literal>ati_unfree</literal> drivers, as well as
+          supported for the <literal>nvidia</literal> as well as
           <literal>Mesa</literal>.
         '';
       };

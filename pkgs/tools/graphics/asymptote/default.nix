@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchurl, fetchpatch
-, autoreconfHook, bison, glm, yacc, flex
+{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
+, autoreconfHook, bison, glm, flex
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
 , python3Packages
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    (stdenv.lib.optional (stdenv.lib.versionOlder version "2.68")
+    (lib.optional (lib.versionOlder version "2.68")
       (fetchpatch {
         url = "https://github.com/vectorgraphics/asymptote/commit/3361214340d58235f4dbb8f24017d0cd5d94da72.patch";
         sha256 = "sha256:1z2b41x8v7683myd45lq6niixpdjy0b185x0xl61130vrijhq5nm";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     bison
     flex
-    yacc
+    bison
     texinfo
   ];
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     glm
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     freeglut libGLU libGL mesa.osmesa
-  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT Cocoa
   ]);
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin maintainers.peti ];

@@ -4,7 +4,7 @@
 , traitlets
 , jupyter_core
 , pyzmq
-, dateutil
+, python-dateutil
 , isPyPy
 , py
 , tornado
@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "6.1.7";
+  version = "6.1.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "49e390b36fe4b4226724704ea28d9fb903f1a3601b6882ce3105221cd09377a1";
+    sha256 = "c4bca1d0846186ca8be97f4d2fa6d2bae889cce4892a167ffa1ba6bd1f73e782";
   };
 
   propagatedBuildInputs = [
     traitlets
     jupyter_core
     pyzmq
-    dateutil
+    python-dateutil
     tornado
   ] ++ lib.optional isPyPy py;
 

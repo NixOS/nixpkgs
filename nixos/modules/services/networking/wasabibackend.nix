@@ -21,7 +21,7 @@ let
       RegTestBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
   };
 
-	configFile = pkgs.writeText "wasabibackend.conf" (builtins.toJSON confOptions);
+  configFile = pkgs.writeText "wasabibackend.conf" (builtins.toJSON confOptions);
 
 in {
 

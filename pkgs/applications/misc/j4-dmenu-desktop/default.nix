@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, dmenu }:
+{ lib, stdenv, fetchFromGitHub, cmake, dmenu }:
 
 stdenv.mkDerivation rec {
   pname = "j4-dmenu-desktop";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "-DWITH_GIT_CATCH=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A wrapper for dmenu that recognize .desktop files";
     homepage = "https://github.com/enkore/j4-dmenu-desktop";
     license = licenses.gpl3;

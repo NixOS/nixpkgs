@@ -1,17 +1,21 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
 , defusedxml
-, pytest }:
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "python-didl-lite";
-  version = "1.2.4";
+  version = "1.2.6";
   disabled = pythonOlder "3.5.3";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = pname;
     rev = version;
-    sha256 = "0jf1d5m4r8qd3pn0hh1xqbkblkx9wzrrcmk7qa7q8lzfysp4z217";
+    sha256 = "sha256-1rr26dnV5As15HeFLWEDBDYPiRDHkGfYOYFhSJi7iyU=";
   };
 
   propagatedBuildInputs = [
@@ -19,12 +23,10 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [ "didl_lite" ];
 
   meta = with lib; {
     description = "DIDL-Lite (Digital Item Declaration Language) tools for Python";

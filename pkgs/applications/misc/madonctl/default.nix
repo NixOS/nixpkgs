@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "madonctl";
@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI for the Mastodon social network API";
     homepage = "https://github.com/McKael/madonctl";
     license = licenses.mit;

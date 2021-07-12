@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , SDL2, libGLU, libGL, openal, luajit
 , libdevil, freetype, physfs
 , libmodplug, mpg123, libvorbis, libogg
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pikd0bzb44r4bf0jbgn78whz1yswpq1n5jc8nf87v42pm30kp84";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     SDL2 libGLU libGL openal luajit
     libdevil freetype physfs libmodplug mpg123 libvorbis libogg
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://love2d.org";
     description = "A Lua-based 2D game engine/scripting language";
-    license = stdenv.lib.licenses.zlib;
+    license = lib.licenses.zlib;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
     broken = true;
   };
 }

@@ -70,7 +70,7 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
   };
 
   # Note: the order in which lightdm greeter modules are imported

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
 
 let
 
@@ -31,12 +31,15 @@ buildPythonPackage rec {
     sha256 = "1rkpv7gbjxl9h9g7kncmsrgmi77l7pgfq8d7dbnsr3ia2jmjqb8y";
   };
 
+  # started redis-server makes this hang on darwin
+  doCheck = !stdenv.isDarwin;
+
   checkPhase = ''
     redis-server &
     nosetests . --exclude test_worker_pids
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python resque clone";
     homepage = "https://github.com/binarydud/pyres";
     license = licenses.mit;

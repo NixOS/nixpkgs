@@ -1,4 +1,5 @@
 { stdenv
+, fetchurl
 , buildPythonPackage
 , fetchFromGitHub
 , python
@@ -13,7 +14,12 @@
 
 let
   pname = "setuptools";
-  version = "47.3.1";
+  version = "54.2.0";
+
+  bootstrap = fetchurl {
+    url = "https://raw.githubusercontent.com/pypa/setuptools/v52.0.0/bootstrap.py";
+    sha256 = "sha256-HzhlnJvMskBfb3kVnYltdnjS63wt1GWd0RK+VQqrJQ8=";
+  };
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -23,18 +29,28 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "0sy3p4ibgqx67hzn1f254jh8070a8kl9g2la62p3c74k2x7p0r7f";
+      sha256 = "sha256-ZHJZiwlWLHP4vf2TLwj/DYB9wjbRp0apVmmjsKCLPq0=";
       name = "${pname}-${version}-source";
     };
 
+    patches = [
+      ./tag-date.patch
+    ];
+
     buildPhase = ''
+      cp ${bootstrap} bootstrap.py
       ${python.pythonForBuild.interpreter} bootstrap.py
       ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
+
+      # Here we untar the sdist and retar it in order to control the timestamps
+      # of all the files included
+      tar -xzf dist/${pname}-${version}.post0.tar.gz -C dist/
+      tar -czf dist/${name} -C dist/ --mtime="@$SOURCE_DATE_EPOCH" --sort=name ${pname}-${version}.post0
     '';
 
     installPhase = ''
       echo "Moving sdist..."
-      mv dist/*.tar.gz $out
+      mv dist/${name} $out
     '';
   };
 in buildPythonPackage rec {
@@ -64,7 +80,7 @@ in buildPythonPackage rec {
   # Requires pytest, causing infinite recursion.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = "https://pypi.python.org/pypi/setuptools";
     license = with licenses; [ psfl zpl20 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, elfutils, libunwind }:
+{ lib, stdenv, fetchurl, elfutils, libunwind }:
 
 stdenv.mkDerivation {
   name = "ltrace-0.7.3";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
       patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library call tracer";
     homepage = "https://www.ltrace.org/";
     platforms = [ "i686-linux" "x86_64-linux" ];

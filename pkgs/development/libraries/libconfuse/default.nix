@@ -1,15 +1,21 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, flex }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, flex }:
 
 stdenv.mkDerivation rec {
   pname = "libconfuse";
-  version = "3.2.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
-    sha256 = "0djjq7j9iiyqxqqrlzm476xkibjasqvgzjwkalgj1l3f2smi53aw";
+    sha256 = "1npfk5jv59kk4n8pkyx89fn9s6p8x3gbffs42jaw24frgxfgp8ca";
     rev = "v${version}";
     repo = "libconfuse";
     owner = "martinh";
   };
+
+  postPatch = ''
+    substituteInPlace tests/Makefile.am \
+      --replace 'TESTS            += empty_string' "" \
+      --replace 'TESTS            += print_filter' ""
+  '';
 
   nativeBuildInputs = [ autoreconfHook flex ];
 
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "check";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Small configuration file parser library for C";
     longDescription = ''

@@ -17,7 +17,7 @@ rec {
       environment.systemPackages = with pkgs; [ netcat ];
       services.tor.enable = true;
       services.tor.client.enable = true;
-      services.tor.controlPort = 9051;
+      services.tor.settings.ControlPort = 9051;
     };
 
   testScript = ''

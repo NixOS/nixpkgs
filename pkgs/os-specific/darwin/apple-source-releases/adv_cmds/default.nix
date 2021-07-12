@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, xcbuild, ncurses, libutil }:
+{ lib, appleDerivation, xcbuild, ncurses, libutil }:
 
 appleDerivation {
   # We can't just run the root build, because https://github.com/facebook/xcbuild/issues/264
@@ -45,7 +45,7 @@ appleDerivation {
   buildInputs = [ ncurses libutil ];
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

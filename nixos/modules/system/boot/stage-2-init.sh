@@ -167,6 +167,7 @@ exec {logOutFd}>&- {logErrFd}>&-
 
 # Start systemd.
 echo "starting systemd..."
+
 PATH=/run/current-system/systemd/lib/systemd:@fsPackagesPath@ \
-    LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
+    LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive @systemdUnitPathEnvVar@ \
     exec @systemdExecutable@

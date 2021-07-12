@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''unix-options'';
-  version = ''20151031-git'';
+  baseName = "unix-options";
+  version = "20151031-git";
 
-  description = ''Easy to use command line option parser'';
+  description = "Easy to use command line option parser";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/unix-options/2015-10-31/unix-options-20151031-git.tgz'';
-    sha256 = ''0c9vbvvyx5qwvns87624gzxjcbdkbkcwssg29cxjfv3ci3qwqcd5'';
+    url = "http://beta.quicklisp.org/archive/unix-options/2015-10-31/unix-options-20151031-git.tgz";
+    sha256 = "0c9vbvvyx5qwvns87624gzxjcbdkbkcwssg29cxjfv3ci3qwqcd5";
   };
 
   packageName = "unix-options";

@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -11,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slirp4netns";
-  version = "1.1.6";
+  version = "1.1.11";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "slirp4netns";
     rev = "v${version}";
-    sha256 = "1nspvzcpwmaipdq49jm7z3ymdg95zqgcyv1cjfs1zb950knrrggr";
+    sha256 = "sha256-Gxcu9XlLPLcFUoCDrMeWJ6SGUSHU9ZKPHq1oBvmNoJ8=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rootless-containers/slirp4netns";
     description = "User-mode networking for unprivileged network namespaces";
     license = licenses.gpl2;

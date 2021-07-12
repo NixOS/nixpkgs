@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, openssl, readline }:
+{ lib, stdenv, fetchurl, fetchpatch, neon, pkg-config, readline, zlib}:
 
 stdenv.mkDerivation rec {
   name = "cadaver-0.23.3";
@@ -14,13 +14,17 @@ stdenv.mkDerivation rec {
       name = "disable-sslv2.patch";
       sha256 = "1qx65hv584wdarks51yhd3y38g54affkphm5wz27xiz4nhmbssrr";
     })
+    # Cadaver also works with newer versions of neon than stated
+    # in the configure script
+    ./configure.patch
   ];
 
   configureFlags = [ "--with-ssl" "--with-readline" ];
 
-  buildInputs = [ openssl readline ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ neon readline zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command-line WebDAV client";
     homepage    = "http://www.webdav.org/cadaver";
     maintainers = with maintainers; [ ianwookim ];

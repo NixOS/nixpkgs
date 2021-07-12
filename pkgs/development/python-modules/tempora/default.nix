@@ -1,21 +1,21 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools_scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
+, setuptools-scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
 , six, pytz, jaraco_functools, pythonOlder
 , pytest-flake8, pytestcov, pytest-black, pytest-mypy
 }:
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "4.0.0";
+  version = "4.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "599a3a910b377f2b544c7b221582ecf4cb049b017c994b37f2b1a9ed1099716e";
+    sha256 = "10fdc29bf85fa0df39a230a225bb6d093982fc0825b648a414bbc06bddd79909";
   };
 
   disabled = pythonOlder "3.2";
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ six pytz jaraco_functools ];
 

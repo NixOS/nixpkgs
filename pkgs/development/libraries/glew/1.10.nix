@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
-, AGL ? null
+{ lib, stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+, AGL, OpenGL
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "glew-1.10.0";
@@ -12,9 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "01zki46dr5khzlyywr3cg615bcal32dazfazkf360s1znqh17i4r";
   };
 
-  buildInputs = [ xlibsWrapper libXmu libXi ]
-              ++ optionals stdenv.isDarwin [ AGL ];
-  propagatedBuildInputs = [ libGLU ]; # GL/glew.h includes GL/glu.h
+  buildInputs = if stdenv.isDarwin then [ AGL ] else [ xlibsWrapper libXmu libXi ];
+  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OpenGL extension loading library for C(++)";
     homepage = "http://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses

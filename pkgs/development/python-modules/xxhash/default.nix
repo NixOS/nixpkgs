@@ -1,18 +1,18 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "2.0.2";
   pname = "xxhash";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58ca818554c1476fa1456f6cd4b87002e2294f09baf0f81e5a2a4968e62c423c";
+    sha256 = "b7bead8cf6210eadf9cecf356e17af794f57c0939a3d420a00d87ea652f87b49";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ifduyue/python-xxhash";
     description = "Python Binding for xxHash https://pypi.org/project/xxhash/";
     license = licenses.bsd2;

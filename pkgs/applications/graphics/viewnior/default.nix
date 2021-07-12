@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, desktop-file-utils, gtk2, libpng, exiv2, lcms
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, desktop-file-utils, gtk2, libpng, exiv2, lcms
 , intltool, gettext, shared-mime-info, glib, gdk-pixbuf, perl}:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     desktop-file-utils
     intltool
     gettext
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and simple image viewer";
     longDescription =
       '' Viewnior is insipred by big projects like Eye of Gnome, because of it's

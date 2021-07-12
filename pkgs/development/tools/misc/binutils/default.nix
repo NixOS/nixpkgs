@@ -2,12 +2,13 @@
 , fetchFromGitHub, fetchurl, zlib, autoreconfHook, gettext
 # Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
-, enableShared ? true
+, enableShared ? !stdenv.hostPlatform.isStatic
 , noSysDirs
-, gold ? !stdenv.buildPlatform.isDarwin || stdenv.hostPlatform == stdenv.targetPlatform
+, gold ? true
 , bison ? null
 , flex
 , texinfo
+, perl
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -18,10 +19,7 @@
 let
   reuseLibs = enableShared && withAllTargets;
 
-  # Remove gold-symbol-visibility patch when updating, the proper fix
-  # is now upstream.
-  # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
-  version = "2.31.1";
+  version = "2.35.1";
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -36,7 +34,7 @@ let
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
-    sha256 = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
+    sha256 = "sha256-Mg56HQ9G/Nn0E/EEbiFsviO7K85t62xqYzBEJeSLGUI=";
   });
 in
 
@@ -49,12 +47,6 @@ stdenv.mkDerivation {
   patches = [
     # Make binutils output deterministic by default.
     ./deterministic.patch
-
-    # Bfd looks in BINDIR/../lib for some plugins that don't
-    # exist. This is pointless (since users can't install plugins
-    # there) and causes a cycle between the lib and bin outputs, so
-    # get rid of it.
-    ./no-plugins.patch
 
     # Help bfd choose between elf32-littlearm, elf32-littlearm-symbian, and
     # elf32-littlearm-vxworks in favor of the first.
@@ -69,26 +61,27 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
-  ] ++ lib.optionals (!stdenv.targetPlatform.isVc4)
-  [
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
-    ./gold-symbol-visibility.patch
-
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=23428
-    # un-break features so linking against musl doesn't produce crash-only binaries
-    ./0001-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
-    ./0001-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
-    ./0001-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
-  ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch;
+    ./CVE-2020-35448.patch
+  ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
+    ++ # This patch was suggested by Nick Clifton to fix
+       # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
+       # It can be removed when that 7-year-old bug is closed.
+       # This binutils bug causes GHC to emit broken binaries on armv7, and
+       # indeed GHC will refuse to compile with a binutils suffering from it. See
+       # this comment for more information:
+       # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
+       lib.optional (stdenv.targetPlatform.isAarch32 && stdenv.hostPlatform.system != stdenv.targetPlatform.system) ./R_ARM_COPY.patch;
 
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     bison
+    perl
+    texinfo
   ] ++ (lib.optionals stdenv.targetPlatform.isiOS [
     autoreconfHook
-  ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ texinfo flex ];
+  ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ flex ];
   buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;
@@ -114,8 +107,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" "pie" ];
 
-  # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-  configurePlatforms = [ "build" "host" ] ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags =
     (if enableShared then [ "--enable-shared" "--disable-static" ]
@@ -133,7 +125,19 @@ stdenv.mkDerivation {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     "--enable-new-dtags"
-  ] ++ lib.optionals gold [ "--enable-gold" "--enable-plugins" ];
+
+    # force target prefix. Some versions of binutils will make it empty
+    # if `--host` and `--target` are too close, even if Nixpkgs thinks
+    # the platforms are different (e.g. because not all the info makes
+    # the `config`). Other versions of binutils will always prefix if
+    # `--target` is passed, even if `--host` and `--target` are the same.
+    # The easiest thing for us to do is not leave it to chance, and force
+    # the program prefix to be what we want it to be.
+    "--program-prefix=${targetPrefix}"
+  ] ++ lib.optionals gold [
+    "--enable-gold"
+    "--enable-plugins"
+  ];
 
   doCheck = false; # fails
 
@@ -150,6 +154,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit targetPrefix;
+    isGNU = true;
   };
 
   meta = with lib; {

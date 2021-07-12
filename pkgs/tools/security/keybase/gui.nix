@@ -1,20 +1,20 @@
-{ stdenv, lib, fetchurl, alsaLib, atk, cairo, cups, udev
+{ stdenv, lib, fetchurl, alsa-lib, atk, cairo, cups, udev, libdrm, mesa
 , dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
 , runtimeShell, gsettings-desktop-schemas }:
 
 let
-  versionSuffix = "20200527202541.39ca0071e5";
+  versionSuffix = "20210125164223.f3b21527b9";
 in
 
 stdenv.mkDerivation rec {
   pname = "keybase-gui";
-  version = "5.5.1"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  version = "5.6.1"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
 
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    sha256 = "1n54a86491aqazqa4rgljbji638nj83ciibqxq46sa2m1php9dfd";
+    sha256 = "12ckfd02j0f3p3pdlwc640f61z1wzblf2414h6fkf5vzd289h35p";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     atk
     cairo
     cups
@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
+    libdrm
+    mesa.out
   ];
 
   runtimeDependencies = [
@@ -105,11 +107,11 @@ stdenv.mkDerivation rec {
       --replace run_keybase $out/bin/keybase-gui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.keybase.io/";
     description = "The Keybase official GUI";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np filalex77 ];
+    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np Br1ght0ne ];
     license = licenses.bsd3;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
 
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
@@ -11,24 +11,24 @@ let
     categories = "Office";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit description;
     homepage = "https://github.com/zadam/trilium";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ emmanuelrosa dtzWill kampka ];
+    maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.43.3";
+  version = "0.47.5";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "1k9vcs7pwa89bzivqp0gfs45jzqw216fpypg3ja4n2dzn4qkv2as";
+    sha256 = "16sm93vzlsqmrykbzdvgwszbhq79brd74zp9n9q5wrf4s44xizzv";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "1n3v7wdav6mvgcy72mmfhncsa74i0ax1ij5rjczgfjjyiyc5y0rk";
+    sha256 = "0jk9pf3ljzfdv7d91wxda8z9qz653qas58wsrx42gnf7zxn1l648";
   };
 
 in {
@@ -55,9 +55,10 @@ in {
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages ++ [ gtk3 ];
+    buildInputs = atomEnv.packages ++ [ gtk3 libxshmfence ];
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
       mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
@@ -67,6 +68,7 @@ in {
 
       ln -s ${trilium_svg} $out/share/icons/hicolor/scalable/apps/trilium.svg
       cp ${desktopItem}/share/applications/* $out/share/applications
+      runHook postInstall
     '';
 
     # LD_LIBRARY_PATH "shouldn't" be needed, remove when possible :)
@@ -91,16 +93,20 @@ in {
 
     buildInputs = [
       stdenv.cc.cc.lib
-      zlib
-      libxkbfile
     ];
 
-    patches = [ ./0001-Use-console-logger-instead-of-rolling-files.patch ] ;
+    patches = [
+      # patch logger to use console instead of rolling files
+      ./0001-Use-console-logger-instead-of-rolling-files.patch
+    ];
+
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium-server
 
       cp -r ./* $out/share/trilium-server
+      runHook postInstall
     '';
 
     postFixup = ''

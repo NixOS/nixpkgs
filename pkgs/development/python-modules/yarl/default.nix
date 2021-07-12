@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
@@ -12,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.5.1";
+  version = "1.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c22c75b5f394f3d47105045ea551e08a3e804dc7e01b37800ca35b58f856c3d6";
+    sha256 = "8a9066529240171b68893d60dca86a763eae2139dd42f42106b03cf4b426bf10";
   };
 
   checkInputs = [ pytest pytestrunner ];
@@ -25,7 +24,7 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yet another URL library";
     homepage = "https://github.com/aio-libs/yarl/";
     license = licenses.asl20;

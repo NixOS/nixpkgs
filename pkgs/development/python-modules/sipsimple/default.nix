@@ -5,7 +5,7 @@
 , pkgs
 , cython
 , dnspython
-, dateutil
+, python-dateutil
 , xcaplib
 , msrplib
 , lxml
@@ -32,9 +32,9 @@ buildPythonPackage rec {
     export LD=$CC
   '';
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
-  buildInputs = with pkgs; [ alsaLib ffmpeg_3 libv4l sqlite libvpx ];
-  propagatedBuildInputs = [ cython pkgs.openssl dnspython dateutil xcaplib msrplib lxml python-otr ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
+  buildInputs = with pkgs; [ alsa-lib ffmpeg_3 libv4l sqlite libvpx ];
+  propagatedBuildInputs = [ cython pkgs.openssl dnspython python-dateutil xcaplib msrplib lxml python-otr ];
 
   meta = with lib; {
     description = "SIP SIMPLE implementation for Python";

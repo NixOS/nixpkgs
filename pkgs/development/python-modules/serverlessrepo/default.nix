@@ -29,10 +29,6 @@ buildPythonPackage rec {
     pytest tests/unit
   '';
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "pyyaml~=3.12" "pyyaml~=5.1"
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/awslabs/aws-serverlessrepo-python";
     description = "Helpers for working with the AWS Serverless Application Repository";

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, file, getopt
 , gtk2, gtk3, gdk-pixbuf, glib, libGL, libGLU, nss, nspr, udev, tbb
-, alsaLib, GConf, cups, libcap, fontconfig, freetype, pango
+, alsa-lib, GConf, cups, libcap, fontconfig, freetype, pango
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
 , libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
 , libXcomposite, libXext, libXrandr, libXtst, libSM, libICE, libxcb, chromium
@@ -10,7 +10,7 @@
 let
   libPath64 = lib.makeLibraryPath [
     gcc.cc gtk2 gdk-pixbuf glib libGL libGLU nss nspr
-    alsaLib GConf cups libcap fontconfig freetype pango
+    alsa-lib GConf cups libcap fontconfig freetype pango
     cairo dbus expat zlib libpng12 udev tbb
     libX11 libXcursor libXdamage libXfixes libXrender libXi
     libXcomposite libXext libXrandr libXtst libSM libICE libxcb
@@ -29,8 +29,8 @@ in stdenv.mkDerivation {
   version = "${ver}x${build}";
 
   src = fetchurl {
-  	url = "https://beta.unity3d.com/download/6e9a27477296/LinuxEditorInstaller/Unity.tar.xz";
-    sha1 = "083imikkrgha5w9sihjvv1m74naxm5yv";
+    url = "https://beta.unity3d.com/download/6e9a27477296/LinuxEditorInstaller/Unity.tar.xz";
+    sha256 = "10gppnqacs1qzahj077nkcgbfz2lryd0dxnfcmvyc64xpxnj9nlk";
   };
 
   nosuidLib = ./unity-nosuid.c;
@@ -129,7 +129,7 @@ in stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://unity3d.com/";
     description = "Game development tool";
     longDescription = ''

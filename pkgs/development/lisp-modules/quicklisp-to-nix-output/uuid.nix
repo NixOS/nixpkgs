@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''uuid'';
-  version = ''20200715-git'';
+  baseName = "uuid";
+  version = "20200715-git";
 
-  description = ''UUID Generation'';
+  description = "UUID Generation";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."trivial-utf-8" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/uuid/2020-07-15/uuid-20200715-git.tgz'';
-    sha256 = ''1ymir6hgax1vbbcgyprnwbsx224ih03a55v10l35xridwyzhzrx0'';
+    url = "http://beta.quicklisp.org/archive/uuid/2020-07-15/uuid-20200715-git.tgz";
+    sha256 = "1ymir6hgax1vbbcgyprnwbsx224ih03a55v10l35xridwyzhzrx0";
   };
 
   packageName = "uuid";

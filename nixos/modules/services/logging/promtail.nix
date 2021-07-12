@@ -40,6 +40,7 @@ in {
 
       serviceConfig = {
         Restart = "on-failure";
+        TimeoutStopSec = 10;
 
         ExecStart = "${pkgs.grafana-loki}/bin/promtail -config.file=${prettyJSON cfg.configuration} ${escapeShellArgs cfg.extraFlags}";
 

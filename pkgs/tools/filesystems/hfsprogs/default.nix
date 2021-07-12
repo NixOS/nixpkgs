@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libbsd }:
+{ lib, stdenv, fetchurl, openssl, libbsd }:
 
 let version = "332.25";
     package_name = "hfsprogs"; in
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "HFS/HFS+ user space utils";
-    license = stdenv.lib.licenses.apsl20;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.apsl20;
+    platforms = lib.platforms.linux;
   };
 }

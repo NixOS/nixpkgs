@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, bison, flex, pkg-config, libpng}:
+{lib, stdenv, fetchFromGitHub, bison, flex, pkg-config, libpng}:
 
 # TODO: byacc is the recommended parser generator but due to https://github.com/rednex/rgbds/issues/333
 # it does not work for the moment. We should switch back to byacc as soon as the fix is integrated
@@ -6,17 +6,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rgbds";
-  version = "0.4.1";
+  version = "0.4.2";
   src = fetchFromGitHub {
     owner = "rednex";
     repo = "rgbds";
     rev = "v${version}";
-    sha256 = "05djzl3h18zg2z5p2a881wjbmgikzkhf67cgk00frhw4v05sq0lf";
+    sha256 = "0lygj7jzjlq4w0mkiir7ycysrd1p1akyvzrppjcchja05mi8wy9p";
   };
   nativeBuildInputs = [ bison flex pkg-config libpng ];
   installFlags = [ "PREFIX=\${out}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://rednex.github.io/rgbds/";
     description = "A free assembler/linker package for the Game Boy and Game Boy Color";
     license = licenses.mit;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
         This is a fork of the original RGBDS which aims to make the programs more like other UNIX tools.
       '';
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer NieDzejkob ];
     platforms = platforms.all;
   };
 }

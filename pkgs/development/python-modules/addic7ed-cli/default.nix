@@ -1,4 +1,6 @@
-{ lib, python3Packages, }:
+{ lib
+, python3Packages
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "addic7ed-cli";
@@ -13,6 +15,10 @@ python3Packages.buildPythonApplication rec {
     requests
     pyquery
   ];
+
+  # Tests require network access
+  doCheck = false;
+  pythonImportsCheck = [ "addic7ed_cli" ];
 
   meta = with lib; {
     description = "A commandline access to addic7ed subtitles";

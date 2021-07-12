@@ -1,13 +1,13 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ lib, pythonPackages, fetchFromGitHub }:
 
 let
-  pgdbconn = pythonPackages.buildPythonPackage {
+  pgdbconn = pythonPackages.buildPythonPackage rec {
     pname = "pgdbconn";
     version = "0.8.0";
     src = fetchFromGitHub {
       owner = "perseas";
       repo = "pgdbconn";
-      rev = "26c1490e4f32e4b5b925e5b82014ad106ba5b057";
+      rev = "v${version}";
       sha256 = "09r4idk5kmqi3yig7ip61r6js8blnmac5n4q32cdcbp1rcwzdn6z";
     };
     # The tests are impure (they try to access a PostgreSQL server)
@@ -39,7 +39,7 @@ pythonPackages.buildPythonApplication {
   meta = {
     description = "A declarative language to describe PostgreSQL databases";
     homepage = "https://perseas.github.io/";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ pmeunier ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ pmeunier ];
   };
 }

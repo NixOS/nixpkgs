@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, libsForQt5, ghostscript, qt5}:
+{ lib, fetchFromGitHub, python3Packages, libsForQt5, ghostscript, qt5}:
 
 python3Packages.buildPythonApplication rec {
   pname = "krop";
@@ -44,8 +44,8 @@ python3Packages.buildPythonApplication rec {
     your eReader does not support convenient scrolling. Krop also has a command line
     interface.
     '';
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ leenaars ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.linux;
   };
 }

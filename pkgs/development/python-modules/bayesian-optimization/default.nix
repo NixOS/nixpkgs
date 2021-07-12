@@ -2,14 +2,16 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, scikitlearn
+, scikit-learn
 , scipy
 , pytest
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
   version = "1.2.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "fmfn";
@@ -19,7 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    scikitlearn
+    scikit-learn
     scipy
   ];
 

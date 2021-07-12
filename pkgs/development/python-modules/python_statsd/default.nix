@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   buildInputs = [ mock nose coverage ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for Etsy's node-js statsd server";
     homepage = "https://github.com/WoLpH/python-statsd";
     license = licenses.bsd3;

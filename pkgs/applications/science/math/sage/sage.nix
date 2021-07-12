@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , sage-tests
 , sage-with-env
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     makeWrapper "${sage-with-env}/bin/sage" "$out/bin/sage" \
       --set SAGE_DOC_SRC_OVERRIDE "${src}/src/doc" ${
-        stdenv.lib.optionalString withDoc "--set SAGE_DOC_OVERRIDE ${sagedoc}/share/doc/sage"
+        lib.optionalString withDoc "--set SAGE_DOC_OVERRIDE ${sagedoc}/share/doc/sage"
       } \
       --prefix JUPYTER_PATH : "${kernel-specs}"
   '';
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
     kernelspec = jupyter-kernel-definition;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
   };
 }

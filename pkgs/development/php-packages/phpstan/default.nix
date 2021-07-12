@@ -1,18 +1,18 @@
-{ mkDerivation, fetchurl, pkgs, lib, php }:
+{ mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "phpstan";
-  version = "0.12.52";
+  version = "0.12.90";
 in
 mkDerivation {
   inherit pname version;
 
-  src = pkgs.fetchurl {
+  src = fetchurl {
     url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-    sha256 = "0zhbpcja7fyhqi2p8mky7v3dv50dgi4yxpj2hvmxs61kp9irf0nb";
+    sha256 = "0f8858w9b421s3dfz8a56g0mik4zyi1lp88lijw4zs2d94dcdl9s";
   };
 
   phases = [ "installPhase" ];
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -21,7 +21,7 @@ mkDerivation {
       --add-flags "$out/libexec/phpstan/phpstan.phar"
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "PHP Static Analysis Tool";
     longDescription = ''
       PHPStan focuses on finding errors in your code without actually

@@ -1,19 +1,14 @@
-{ lib
-, python3
-, groff
-, less
-, fetchFromGitHub
-}:
+{ lib, python3, groff, less, fetchFromGitHub }:
 let
   py = python3.override {
     packageOverrides = self: super: {
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev58";
+        version = "2.0.0dev122";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "2d65a1bdf85d24b40a40bc681b44d167ce1cc8cb";
-          hash = "sha256-HPeNWLhNFjRoD4TZ54ZGgJPp8fsnh8Rt6DMJ8Q0nPkY=";
+          rev = "8dd916418c8193f56226b7772f263b2435eae27a";
+          sha256 = "sha256-iAZmqnffqrmFuxlQyOpEQzSCcL/hRAjuXKulOXoy4hY=";
         };
       });
       prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
@@ -29,26 +24,29 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.0.54"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.2.14"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-RVF9/2s5oy3Re6hdvbhwPf0nXSoizBDwOgtXCc7cwgc=";
+    sha256 = "sha256-LU9Tqzdi8ULZ5y3FbfSXdrip4NcxFkXRCTpVGo05LcM=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "cryptography>=2.8.0,<=2.9.0" "cryptography>=2.8.0"
-    substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
-    substituteInPlace setup.py --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml>=0.15.0"
-    substituteInPlace setup.py --replace "wcwidth<0.2.0" "wcwidth"
+    substituteInPlace setup.py \
+      --replace "awscrt==0.11.13" "awscrt" \
+      --replace "colorama>=0.2.5,<0.4.4" "colorama" \
+      --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
+      --replace "docutils>=0.10,<0.16" "docutils" \
+      --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
+      --replace "wcwidth<0.2.0" "wcwidth"
   '';
 
-  # No tests included
-  doCheck = false;
+  checkInputs = [ jsonschema mock nose ];
 
   propagatedBuildInputs = [
+    awscrt
     bcdoc
     botocore
     colorama
@@ -66,11 +64,25 @@ with py.pkgs; buildPythonApplication rec {
     wcwidth
   ];
 
+  checkPhase = ''
+    export PATH=$PATH:$out/bin
+
+    # https://github.com/NixOS/nixpkgs/issues/16144#issuecomment-225422439
+    export HOME=$TMP
+
+    AWS_TEST_COMMAND=$out/bin/aws python scripts/ci/run-tests
+  '';
+
   postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    echo "complete -C $out/bin/aws_completer aws" > $out/etc/bash_completion.d/awscli
+    mkdir -p $out/${python3.sitePackages}/awscli/data
+    ${python3.interpreter} scripts/gen-ac-index --index-location $out/${python3.sitePackages}/awscli/data/ac.index
+
+    mkdir -p $out/share/bash-completion/completions
+    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/aws
+
     mkdir -p $out/share/zsh/site-functions
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
+
     rm $out/bin/aws.cmd
   '';
 

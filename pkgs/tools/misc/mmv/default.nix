@@ -1,49 +1,30 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gengetopt, m4, gnupg
+, git, perl, autoconf, automake, help2man, boehmgc }:
 
 stdenv.mkDerivation rec {
   pname = "mmv";
-  version = "1.01b";
+  version = "2.1";
 
-  src = fetchurl {
-    url = "mirror://debian/pool/main/m/mmv/mmv_${version}.orig.tar.gz";
-    sha256 = "0399c027ea1e51fd607266c1e33573866d4db89f64a74be8b4a1d2d1ff1fdeef";
+  src = fetchFromGitHub {
+    owner = "rrthomas";
+    repo = "mmv";
+    rev = "v${version}";
+    sha256 = "sha256-3XWXOp30P/bOd+c7PC8duidewX8h0hk9VsEUw05dAE4=";
+    fetchSubmodules = true;
   };
 
-  hardeningDisable = [ "format" ];
-
-  patches = [
-    # Use Debian patched version, as upstream is no longer maintained and it
-    # contains a _lot_ of fixes.
-    (fetchurl {
-      url = "mirror://debian/pool/main/m/mmv/mmv_${version}-15.diff.gz";
-      sha256 = "9ad3e3d47510f816b4a18bae04ea75913588eec92248182f85dd09bc5ad2df13";
-    })
-  ];
-
-  postPatch = ''
-    sed -i \
-      -e 's/^\s*LDFLAGS\s*=\s*-s\s*-N/LDFLAGS = -s/' \
-      -e "s|/usr/bin|$out/bin|" \
-      -e "s|/usr/man|$out/share/man|" \
-      Makefile
+  preConfigure = ''
+    ./bootstrap
   '';
 
-  preInstall = ''
-    mkdir -p "$out/bin" "$out/share/man/man1"
-  '';
-
-  postInstall = ''
-    for variant in mcp mad mln
-    do
-      ln -s mmv "$out/bin/$variant"
-      ln -s mmv.1 "$out/share/man/man1/$variant.1"
-    done
-  '';
+  nativeBuildInputs = [ gengetopt m4 git gnupg perl autoconf automake help2man pkg-config ];
+  buildInputs = [ boehmgc ];
 
   meta = {
-    homepage = "http://linux.maruhn.com/sec/mmv.html";
+    homepage = "https://github.com/rrthomas/mmv";
     description = "Utility for wildcard renaming, copying, etc";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

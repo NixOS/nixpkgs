@@ -87,6 +87,26 @@ runTests {
     expected = true;
   };
 
+  testComposeManyExtensions0 = {
+    expr = let obj = makeExtensible (self: { foo = true; });
+               emptyComposition = composeManyExtensions [];
+               composed = obj.extend emptyComposition;
+           in composed.foo;
+    expected = true;
+  };
+
+  testComposeManyExtensions =
+    let f = self: super: { bar = false; baz = true; };
+        g = self: super: { bar = super.baz or false; };
+        h = self: super: { qux = super.bar or false; };
+        obj = makeExtensible (self: { foo = self.qux; });
+    in {
+    expr = let composition = composeManyExtensions [f g h];
+               composed = obj.extend composition;
+           in composed.foo;
+    expected = (obj.extend (composeExtensions f (composeExtensions g h))).foo;
+  };
+
   testBitAnd = {
     expr = (bitAnd 3 10);
     expected = 2;
@@ -640,4 +660,71 @@ runTests {
     expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
   };
 
+  testCartesianProductOfEmptySet = {
+    expr = cartesianProductOfSets {};
+    expected = [ {} ];
+  };
+
+  testCartesianProductOfOneSet = {
+    expr = cartesianProductOfSets { a = [ 1 2 3 ]; };
+    expected = [ { a = 1; } { a = 2; } { a = 3; } ];
+  };
+
+  testCartesianProductOfTwoSets = {
+    expr = cartesianProductOfSets { a = [ 1 ]; b = [ 10 20 ]; };
+    expected = [
+      { a = 1; b = 10; }
+      { a = 1; b = 20; }
+    ];
+  };
+
+  testCartesianProductOfTwoSetsWithOneEmpty = {
+    expr = cartesianProductOfSets { a = [ ]; b = [ 10 20 ]; };
+    expected = [ ];
+  };
+
+  testCartesianProductOfThreeSets = {
+    expr = cartesianProductOfSets {
+      a = [   1   2   3 ];
+      b = [  10  20  30 ];
+      c = [ 100 200 300 ];
+    };
+    expected = [
+      { a = 1; b = 10; c = 100; }
+      { a = 1; b = 10; c = 200; }
+      { a = 1; b = 10; c = 300; }
+
+      { a = 1; b = 20; c = 100; }
+      { a = 1; b = 20; c = 200; }
+      { a = 1; b = 20; c = 300; }
+
+      { a = 1; b = 30; c = 100; }
+      { a = 1; b = 30; c = 200; }
+      { a = 1; b = 30; c = 300; }
+
+      { a = 2; b = 10; c = 100; }
+      { a = 2; b = 10; c = 200; }
+      { a = 2; b = 10; c = 300; }
+
+      { a = 2; b = 20; c = 100; }
+      { a = 2; b = 20; c = 200; }
+      { a = 2; b = 20; c = 300; }
+
+      { a = 2; b = 30; c = 100; }
+      { a = 2; b = 30; c = 200; }
+      { a = 2; b = 30; c = 300; }
+
+      { a = 3; b = 10; c = 100; }
+      { a = 3; b = 10; c = 200; }
+      { a = 3; b = 10; c = 300; }
+
+      { a = 3; b = 20; c = 100; }
+      { a = 3; b = 20; c = 200; }
+      { a = 3; b = 20; c = 300; }
+
+      { a = 3; b = 30; c = 100; }
+      { a = 3; b = 30; c = 200; }
+      { a = 3; b = 30; c = 300; }
+    ];
+  };
 }

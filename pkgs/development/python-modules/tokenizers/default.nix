@@ -1,12 +1,11 @@
-{ stdenv
-, rustPlatform
+{ lib
 , fetchFromGitHub
 , fetchurl
-, pipInstallHook
+, buildPythonPackage
+, rustPlatform
 , setuptools-rust
-, wheel
 , numpy
-, python
+, datasets
 , pytestCheckHook
 , requests
 }:
@@ -32,6 +31,14 @@ let
     url = "https://norvig.com/big.txt";
     sha256 = "0yz80icdly7na03cfpl0nfk5h3j3cam55rj486n03wph81ynq1ps";
   };
+  docPipelineTokenizer = fetchurl {
+    url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-pipeline/tokenizer.json";
+    hash = "sha256-i533xC8J5CDMNxBjo+p6avIM8UOcui8RmGAmK0GmfBc=";
+  };
+  docQuicktourTokenizer = fetchurl {
+    url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-quicktour/tokenizer.json";
+    hash = "sha256-ipY9d5DR5nxoO6kj7rItueZ9AO5wq9+Nzr6GuEIfIBI=";
+  };
   openaiVocab = fetchurl {
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-vocab.json";
     sha256 = "0y40gc9bixj5rxv674br1rxmxkd3ly29p80x1596h8yywwcrpx7x";
@@ -40,39 +47,40 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
     sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
   };
-in rustPlatform.buildRustPackage rec {
+in buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.9.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    sha256 = "0rsm1g5zfq3ygdb3s8v9xqqpgfzvvkc4n5ik3ahy8sw7pyjljb4m";
+    hash = "sha256-X7aUiJJjB2ZDlE8LbK7Pn/15SLTZbP8kb4l9ED7/xvU=";
   };
 
-  cargoSha256 = "0yn699dq9hdjh7fyci99ni8mmd5qdhzrsi80grzgf5cch8g38rbi";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src sourceRoot;
+    name = "${pname}-${version}";
+    hash = "sha256-gRqxlL6q87sGC0birDhCmGF+CVbfxwOxW6Tl6+5mGoo=";
+  };
 
   sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = [
-    pipInstallHook
-    setuptools-rust
-    wheel
-  ];
+  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
+    cargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
 
   propagatedBuildInputs = [
     numpy
-    python
   ];
 
-  installCheckInputs = [
+  checkInputs = [
+    datasets
     pytestCheckHook
     requests
   ];
-
-  doCheck = false;
-  doInstallCheck = true;
 
   postUnpack = ''
     # Add data files for tests, otherwise tests attempt network access.
@@ -82,20 +90,23 @@ in rustPlatform.buildRustPackage rec {
       ln -s ${robertaMerges} roberta-base-merges.txt
       ln -s ${albertVocab} albert-base-v1-tokenizer.json
       ln -s ${bertVocab} bert-base-uncased-vocab.txt
+      ln -s ${docPipelineTokenizer} bert-wiki.json
+      ln -s ${docQuicktourTokenizer} tokenizer-wiki.json
       ln -s ${norvigBig} big.txt
       ln -s ${openaiVocab} openai-gpt-vocab.json
       ln -s ${openaiMerges} openai-gpt-merges.txt )
   '';
 
-  buildPhase = ''
-    ${python.interpreter} setup.py bdist_wheel
+  preCheck = ''
+    HOME=$TMPDIR
   '';
 
-  installPhase = ''
-    pipInstallPhase
-  '';
+  disabledTests = [
+    # Downloads data using the datasets module.
+    "TestTrainFromIterators"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/huggingface/tokenizers";
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     license = licenses.asl20;

@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , python3
 , ninja
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-bluetooth";
     license = licenses.lgpl21Plus;

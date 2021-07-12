@@ -1,11 +1,13 @@
-{ stdenv }:
-with stdenv.lib;
+{ lib, stdenv, glibc }:
+
 let
   # Sanitizers are not supported on Darwin.
   # Sanitizer headers aren't available in older libc++ stdenvs due to a bug
-  sanitizersWorking =
-       (stdenv.cc.isClang && versionAtLeast (getVersion stdenv.cc.name) "5.0.0")
-    || (stdenv.cc.isGNU && stdenv.isLinux);
+  sanitizersWorking = !stdenv.hostPlatform.isMusl && (
+    (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc.name) "5.0.0")
+    || (stdenv.cc.isGNU && stdenv.isLinux)
+  );
+  staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
 in stdenv.mkDerivation {
   name = "cc-wrapper-test";
 
@@ -21,11 +23,23 @@ in stdenv.mkDerivation {
     $CXX -o cxx-check ${./cxx-main.cc}
     ./cxx-check
 
-    ${optionalString (stdenv.isDarwin && stdenv.cc.isClang) ''
+    ${lib.optionalString (stdenv.isDarwin && stdenv.cc.isClang) ''
       printf "checking whether compiler can build with CoreFoundation.framework... " >&2
       mkdir -p foo/lib
       $CC -framework CoreFoundation -o core-foundation-check ${./core-foundation-main.c}
       ./core-foundation-check
+    ''}
+
+
+    ${lib.optionalString (!stdenv.isDarwin) ''
+      printf "checking whether compiler builds valid static C binaries... " >&2
+      $CC ${staticLibc} -static -o cc-static ${./cc-main.c}
+      ./cc-static
+      ${lib.optionalString (stdenv.cc.isGNU && lib.versionAtLeast (lib.getVersion stdenv.cc.name) "8.0.0") ''
+        printf "checking whether compiler builds valid static pie C binaries... " >&2
+        $CC ${staticLibc} -static-pie -o cc-static-pie ${./cc-main.c}
+        ./cc-static-pie
+      ''}
     ''}
 
     printf "checking whether compiler uses NIX_CFLAGS_COMPILE... " >&2
@@ -37,7 +51,7 @@ in stdenv.mkDerivation {
     printf "checking whether compiler uses NIX_LDFLAGS... " >&2
     mkdir -p foo/lib
     $CC -shared \
-      ${optionalString stdenv.isDarwin "-Wl,-install_name,@rpath/libfoo.dylib"} \
+      ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,@rpath/libfoo.dylib"} \
       -DVALUE=42 \
       -o foo/lib/libfoo${stdenv.hostPlatform.extensions.sharedLibrary} \
       ${./foo.c}
@@ -53,7 +67,7 @@ in stdenv.mkDerivation {
     $CXX -I std-include -nostdinc++ -o nostdinc-main++ ${./nostdinc-main.c}
     ./nostdinc-main++
 
-    ${optionalString sanitizersWorking ''
+    ${lib.optionalString sanitizersWorking ''
       printf "checking whether sanitizers are fully functional... ">&2
       $CC -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
       ./sanitizers
@@ -62,5 +76,5 @@ in stdenv.mkDerivation {
     touch $out
   '';
 
-  meta.platforms = platforms.all;
+  meta.platforms = lib.platforms.all;
 }

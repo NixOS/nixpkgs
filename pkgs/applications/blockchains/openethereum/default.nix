@@ -5,44 +5,46 @@
 , llvmPackages
 , openssl
 , pkg-config
+, stdenv
 , systemd
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "openethereum";
-  version = "3.0.1";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "openethereum";
     repo = "openethereum";
     rev = "v${version}";
-    sha256 = "08dkcrga1x18csh6pw6f54x5xwijppyjhg46cf4p452xc1l3a6ir";
+    sha256 = "0lxps3cyg8dzb9qr1kg91s9jc3mnm6hxybwcbhva38pcq4yc40xc";
   };
 
-  cargoSha256 = "1xliragihwjfc5qmfm0ng519bw8a28m1w1yqcl9mpk8zywiybaah";
+  cargoSha256 = "08yrpls3szmw6vy2c4d6b1k907ga0809ylvyx0zb6f8mp8z7ahl2";
 
-  cargoPatches = [ ./lock.patch ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
-  nativeBuildInputs = [
-    cmake
-    llvmPackages.clang
-    llvmPackages.libclang
-    pkg-config
-  ];
-
-  buildInputs = [ openssl systemd ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isLinux [ systemd ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
 
   cargoBuildFlags = [ "--features final" ];
 
-  # test result: FAILED. 88 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
-  doCheck = false;
+  # Fix tests by preventing them from writing to /homeless-shelter.
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # Exclude some tests that don't work in the sandbox
+  # - Nat test requires network access
+  checkFlags = "--skip configuration::tests::should_resolve_external_nat_hosts";
 
   meta = with lib; {
     description = "Fast, light, robust Ethereum implementation";
     homepage = "http://parity.io/ethereum";
     license = licenses.gpl3;
     maintainers = with maintainers; [ akru xrelkd ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

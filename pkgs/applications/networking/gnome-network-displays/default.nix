@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 # native
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "0.90.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "04snnfz5jxxpjkrwa7dchc2h4shszi8mq9g3ihvsvipgzjw3d498";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./build-aux/meson/postinstall.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-network-displays";
     description = "Miracast implementation for GNOME";
     maintainers = with maintainers; [ doronbehar ];

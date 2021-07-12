@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, lib
-, intltool, glib, pkgconfig, polkit, python3, sqlite
+, intltool, glib, pkg-config, polkit, python3, sqlite
 , gobject-introspection, vala, gtk-doc, autoreconfHook, autoconf-archive
 , nix, enableNixBackend ? false, boost
 , enableCommandNotFound ? false
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     [ sqlite boost ]
     ++ lib.optional enableNixBackend nix;
-  nativeBuildInputs = [ vala intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
+  nativeBuildInputs = [ vala intltool pkg-config autoreconfHook autoconf-archive gtk-doc ];
 
   preAutoreconf = ''
     gtkdocize

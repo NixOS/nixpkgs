@@ -1,13 +1,18 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, attrs }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, attrs
+}:
 
 buildPythonPackage rec {
   pname = "aiorpcx";
-  version = "0.18.4";
+  version = "0.18.7";
 
   src = fetchPypi {
     inherit version;
     pname = "aiorpcX";
-    sha256 = "0jpvrkan6w8bpq017m8si7r9hb1pyw3ip4vr1fl2pmi8ngzc1jdy";
+    sha256 = "808a9ec9172df11677a0f7b459b69d1a6cf8b19c19da55541fa31fb1afce5ce7";
   };
 
   propagatedBuildInputs = [ attrs ];
@@ -17,9 +22,12 @@ buildPythonPackage rec {
   # Checks needs internet access
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "aiorpcx" ];
+
+  meta = with lib; {
     description = "Transport, protocol and framing-independent async RPC client and server implementation";
-    license = lib.licenses.mit;
     homepage = "https://github.com/kyuupichan/aiorpcX";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
   };
 }

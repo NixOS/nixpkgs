@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , libtool, autoconf, automake
 , gmp, mpfr, libffi, makeWrapper
 , noUnicode ? false
@@ -23,7 +23,7 @@ let
   ];
   propagatedBuildInputs = [
     libffi gmp mpfr gcc
-  ] ++ stdenv.lib.optionals useBoehmgc [
+  ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     "--with-libffi-prefix=${libffi.dev}"
     ]
     ++
-    (stdenv.lib.optional (! noUnicode)
+    (lib.optional (! noUnicode)
       "--enable-unicode")
     ;
 
@@ -77,8 +77,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

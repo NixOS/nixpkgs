@@ -1,14 +1,14 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "1.3.0";
+  version = "1.3.2";
   pname = "libthreadar";
 
   src = fetchurl {
     url = "mirror://sourceforge/libthreadar/${pname}-${version}.tar.gz";
-    sha256 = "0g2wxykawlsj6ma9slbbk0bxynqvmkwhaln2fiwc21x7nhjvpn9z";
+    sha256 = "sha256-q5FiBlncbhdXDgRm7wgxcd4rkxqje/1ls9kPGqmomP0=";
   };
 
   outputs = [ "out" "dev" ];

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python3
-, zlib, bzip2, curl, lzma, gettext, libiconv
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkg-config, python3
+, zlib, bzip2, curl, xz, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
 , gtkClient ? false, gtk3
 , qtClient ? false, qt5
@@ -8,17 +8,17 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 
 in stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "2.6.2";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "023slffi06j52amrnmd8n12rmf778cngxx6xg4hbsgckj2nyfmg9";
+    sha256 = "sha256-7KVtBGihABpcbUm5ac2fuBVaDvbucEJSREPulGUdnUE=";
   };
 
   postPatch = ''
@@ -28,14 +28,17 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ]
+    ++ optional qtClient [ qt5.wrapQtAppsHook ];
 
-  buildInputs = [ lua5_3 zlib bzip2 curl lzma gettext libiconv ]
+  buildInputs = [ lua5_3 zlib bzip2 curl xz gettext libiconv ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
     ++ optionals gtkClient [ gtk3 ]
     ++ optionals qtClient  [ qt5.qtbase ]
     ++ optional server readline
     ++ optional enableSqlite sqlite;
+
+  dontWrapQtApps = true;
 
   configureFlags = [ "--enable-shared" ]
     ++ optional sdlClient "--enable-client=sdl"
@@ -49,7 +52,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiplayer (or single player), turn-based strategy game";
 
     longDescription = ''

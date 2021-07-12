@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, isPy3k, isPy35, async_generator }:
+{ lib, buildPythonPackage, fetchPypi, pytest, isPy3k, isPy35, async_generator }:
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.14.0";
+  version = "0.15.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9882c0c6b24429449f5f969a5158b528f39bde47dc32e85b9f0403965017e700";
+    sha256 = "2564ceb9612bbd560d19ca4b41347b54e7835c2f792c504f698e05395ed63f6f";
   };
 
   buildInputs = [ pytest ]
-    ++ stdenv.lib.optionals isPy35 [ async_generator ];
+    ++ lib.optionals isPy35 [ async_generator ];
 
   # No tests in archive
   doCheck = false;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "license_file = LICENSE" ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "library for testing asyncio code with pytest";
     license = licenses.asl20;
     homepage = "https://github.com/pytest-dev/pytest-asyncio";

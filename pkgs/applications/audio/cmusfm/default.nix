@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, libnotify, gdk-pixbuf }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, curl, libnotify, gdk-pixbuf }:
 
 stdenv.mkDerivation {
-  version = "2018-10-11";
+  version = "2021-05-19";
   pname = "cmusfm-unstable";
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "cmusfm";
-    rev = "ad2fd0aad3f4f1a25add1b8c2f179e8859885873";
-    sha256 = "0wpwdwgyrp64nvwc6shy0n387p31j6aw6cnmfi9x2y1jhl5hbv6b";
+    rev = "a1f9f37c5819ca8a5b48e6185c2ec7ad478b9f1a";
+    sha256 = "19akgvh9gl99xvpmzgqv88w2mnnln7k6290dr5rn3h6a1ihvllaw";
   };
   # building
   configureFlags = [ "--enable-libnotify" ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ curl libnotify gdk-pixbuf ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Last.fm and Libre.fm standalone scrobbler for the cmus music player";
     longDescription = ''
       Features:
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       + Inside cmus run `:set status_display_program=cmusfm` to set up cmusfm
     '';
     homepage = "https://github.com/Arkq/cmusfm/";
-    maintainers = with stdenv.lib.maintainers; [ CharlesHD ];
+    maintainers = with lib.maintainers; [ CharlesHD mudri ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };

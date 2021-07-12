@@ -5,7 +5,7 @@ let
 in
 stdenv.mkDerivation {
   name = (appendToName "with-dicts" hunspell).name;
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   buildCommand = ''
     makeWrapper ${hunspell.bin}/bin/hunspell $out/bin/hunspell --prefix DICPATH : ${searchPath}
   '';

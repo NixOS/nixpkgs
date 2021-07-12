@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, git, pkgconfig }:
+{ lib, stdenv, python3, fetchFromGitHub, git, pkg-config }:
 
 # Note:
 # Conan has specific dependency demands; check
@@ -14,13 +14,6 @@
 
 let newPython = python3.override {
   packageOverrides = self: super: {
-    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
-      version = "1.1.0";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "1vn1db2akw98ybnpns92qi11v94hydwp130s8753k6ikby95883j";
-      };
-    });
     node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
       version = "0.6.1";
       src = oldAttrs.src.override {
@@ -28,31 +21,58 @@ let newPython = python3.override {
         sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
       };
     });
-    pluginbase = super.pluginbase.overridePythonAttrs (oldAttrs: rec {
-      version = "0.7";
+    urllib3 = super.urllib3.overridePythonAttrs (oldAttrs: rec {
+      version = "1.25.11";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8";
+        sha256 = "18hpzh1am1dqx81fypn57r2wk565fi4g14292qrc5jm1h9dalzld";
+      };
+    });
+    # https://github.com/conan-io/conan/issues/8876
+    pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
+      version = "1.7.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
+      };
+      disabledTests = [
+        "test_ec_verify_should_return_false_if_signature_invalid"
+      ];
+    });
+    # conan needs jinja2<3
+    jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
+      version = "2.11.3";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
+      };
+    });
+    # old jinja2 needs old markupsafe
+    markupsafe = super.markupsafe.overridePythonAttrs (oldAttrs: rec {
+      version = "1.1.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
       };
     });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.27.0";
+  version = "1.35.0";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    sha256 = "0ncqs1p4g23fmzgdmwppgxr8w275h38hgjdzs456cgivz8xs9rjl";
+    sha256 = "19rgylkjxvv47vz5vgh46rw108xskpv7lmax8y2fnm2wd1j3bq9c";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
     bottle
     colorama
-    dateutil
+    python-dateutil
     deprecation
     distro
     fasteners
@@ -69,10 +89,10 @@ in newPython.pkgs.buildPythonApplication rec {
     six
     tqdm
     urllib3
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ idna cryptography pyopenssl ];
 
   checkInputs = [
-    pkgconfig
+    pkg-config
     git
   ] ++ (with newPython.pkgs; [
     codecov
@@ -88,9 +108,8 @@ in newPython.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace conans/requirements.txt \
-      --replace "PyYAML>=3.11, <3.14.0" "PyYAML" \
       --replace "deprecation>=2.0, <2.1" "deprecation" \
-      --replace "six>=1.10.0,<=1.14.0" "six"
+      --replace "six>=1.10.0,<=1.15.0" "six>=1.10.0,<=1.16.0"
   '';
 
   meta = with lib; {
@@ -98,6 +117,5 @@ in newPython.pkgs.buildPythonApplication rec {
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];
-    platforms = platforms.linux;
   };
 }

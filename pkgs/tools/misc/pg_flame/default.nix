@@ -19,6 +19,6 @@ buildGoModule rec {
     description = "Flamegraph generator for Postgres EXPLAIN ANALYZE output";
     homepage = "https://github.com/mgartner/pg_flame";
     license = licenses.asl20;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

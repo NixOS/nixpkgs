@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "kati-unstable";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     install -D ckati $out/bin/ckati
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An experimental GNU make clone";
     homepage = "https://github.com/google/kati";
     platforms = platforms.all;

@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, pkgconfig, intltool, libpulseaudio, gtkmm3
-, libcanberra-gtk3, gnome3, wrapGAppsHook }:
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, intltool, libpulseaudio,
+gtkmm3 , libcanberra-gtk3, gnome, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "pavucontrol";
@@ -10,14 +10,23 @@ stdenv.mkDerivation rec {
     sha256 = "1qhlkl3g8d7h72xjskii3g1l7la2cavwp69909pzmbi2jyn5pi4g";
   };
 
-  buildInputs = [ libpulseaudio gtkmm3 libcanberra-gtk3
-                  gnome3.adwaita-icon-theme ];
+  patches = [
+    # Can be removed with the next version bump
+    # https://gitlab.freedesktop.org/pulseaudio/pavucontrol/-/merge_requests/20
+    (fetchpatch {
+      name = "streamwidget-fix-drop-down-wayland.patch";
+      url = "https://gitlab.freedesktop.org/pulseaudio/pavucontrol/-/commit/ae278b8643cf1089f66df18713c8154208d9a505.patch";
+      sha256 = "066vhxjz6gmi2sp2n4pa1cdsxjnq6yml5js094g5n7ld34p84dpj";
+  })];
 
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+  buildInputs = [ libpulseaudio gtkmm3 libcanberra-gtk3
+                  gnome.adwaita-icon-theme ];
+
+  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 
   configureFlags = [ "--disable-lynx" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PulseAudio Volume Control";
 
     longDescription = ''
@@ -28,7 +37,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://freedesktop.org/software/pulseaudio/pavucontrol/";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = with maintainers; [ abbradar globin ];
     platforms = platforms.linux;

@@ -1,30 +1,25 @@
-{ stdenv, fetchFromGitHub, python3Packages, docutils, fetchpatch }:
+{ lib, fetchFromGitHub, python3Packages, docutils }:
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
-    owner = "jakubroztocil";
+    owner = "httpie";
     repo = "httpie";
     rev = version;
-    sha256 = "0caazv24jr0844c4mdx77vzwwi5m869n10wa42cydb08ppx1xxj6";
+    sha256 = "00lafjqg9nfnak0nhcr2l2hzzkwn2y6qv0wdkm6r6f69snizy3hf";
   };
+
+  patches = [
+    ./strip-venv.patch
+  ];
 
   outputs = [ "out" "doc" "man" ];
 
-  propagatedBuildInputs = with python3Packages; [ pygments requests setuptools ];
-  dontUseSetuptoolsCheck = true;
-  patches = [
-    ./strip-venv.patch
+  nativeBuildInputs = [ docutils ];
 
-    # Fix `test_ciphers_none_can_be_selected`
-    # TODO: remove on next release
-    (fetchpatch {
-      url = "https://github.com/jakubroztocil/httpie/commit/49e71d252f54871a6bc49cb1cba103d385a543b8.patch";
-      sha256 = "13b2faf50gimj7f17dlx4gmd8ph8ipgihpzfqbvmfjlbf1v95fsj";
-    })
-  ];
+  propagatedBuildInputs = with python3Packages; [ pygments requests requests-toolbelt setuptools ];
 
   checkInputs = with python3Packages; [
     mock
@@ -56,7 +51,7 @@ python3Packages.buildPythonApplication rec {
     sed -e 's/^|build|//g' -i README.rst
 
     toHtml() {
-      ${docutils}/bin/rst2html5 \
+      rst2html5 \
         --strip-elements-with-class=no-web \
         --title=http \
         --no-generator \
@@ -70,16 +65,7 @@ python3Packages.buildPythonApplication rec {
     toHtml CHANGELOG.rst $docdir/html/CHANGELOG.html
     toHtml CONTRIBUTING.rst $docdir/html/CONTRIBUTING.html
 
-    # change a few links to the local files
-    substituteInPlace $docdir/html/index.html \
-      --replace \
-        'https://github.com/jakubroztocil/httpie/blob/master/CHANGELOG.rst' \
-        "CHANGELOG.html" \
-      --replace \
-        'https://github.com/jakubroztocil/httpie/blob/master/CONTRIBUTING.rst' \
-        "CONTRIBUTING.html"
-
-    ${docutils}/bin/rst2man \
+    rst2man \
       --strip-elements-with-class=no-web \
       --title=http \
       --no-generator \
@@ -94,10 +80,14 @@ python3Packages.buildPythonApplication rec {
     export PATH=${docutils}/bin:$PATH
   '';
 
-  meta = {
+  checkPhase = ''
+    py.test ./httpie ./tests --doctest-modules --verbose ./httpie ./tests -k 'not test_chunked and not test_verbose_chunked and not test_multipart_chunked and not test_request_body_from_file_by_path_chunked'
+  '';
+
+  meta = with lib; {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ antono relrod schneefux ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ antono relrod schneefux SuperSandro2000 ];
   };
 }

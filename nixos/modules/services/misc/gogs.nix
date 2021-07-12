@@ -25,7 +25,6 @@ let
     HTTP_ADDR = ${cfg.httpAddress}
     HTTP_PORT = ${toString cfg.httpPort}
     ROOT_URL = ${cfg.rootUrl}
-    STATIC_ROOT_PATH = ${cfg.staticRootPath}
 
     [session]
     COOKIE_NAME = session
@@ -177,13 +176,6 @@ in
           Marks session cookies as "secure" as a hint for browsers to only send
           them via HTTPS. This option is recommend, if Gogs is being served over HTTPS.
         '';
-      };
-
-      staticRootPath = mkOption {
-        type = types.str;
-        default = "${pkgs.gogs.data}";
-        example = "/var/lib/gogs/data";
-        description = "Upper level of template and static files path.";
       };
 
       extraConfig = mkOption {

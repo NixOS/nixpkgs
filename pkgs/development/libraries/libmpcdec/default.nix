@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "libmpcdec-1.2.6";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Musepack SV7 decoder library";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
   };
 }

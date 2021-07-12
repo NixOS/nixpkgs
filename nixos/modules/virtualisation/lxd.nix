@@ -5,13 +5,12 @@
 with lib;
 
 let
-
   cfg = config.virtualisation.lxd;
-  zfsCfg = config.boot.zfs;
+in {
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
+  ];
 
-in
-
-{
   ###### interface
 
   options = {
@@ -51,18 +50,10 @@ in
         '';
       };
 
-      zfsPackage = mkOption {
-        type = types.package;
-        default = with pkgs; if zfsCfg.enableUnstable then zfsUnstable else zfs;
-        defaultText = "pkgs.zfs";
-        description = ''
-          The ZFS package to use with LXD.
-        '';
-      };
-
       zfsSupport = mkOption {
         type = types.bool;
-        default = false;
+        default = config.boot.zfs.enabled;
+        defaultText = "config.boot.zfs.enabled";
         description = ''
           Enables lxd to use zfs as a storage for containers.
 
@@ -75,7 +66,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          enables various settings to avoid common pitfalls when
+          Enables various settings to avoid common pitfalls when
           running containers requiring many file operations.
           Fixes errors like "Too many open files" or
           "neighbour: ndisc_cache: neighbor table overflow!".
@@ -83,43 +74,81 @@ in
           for details.
         '';
       };
+
+      startTimeout = mkOption {
+        type = types.int;
+        default = 600;
+        apply = toString;
+        description = ''
+          Time to wait (in seconds) for LXD to become ready to process requests.
+          If LXD does not reply within the configured time, lxd.service will be
+          considered failed and systemd will attempt to restart it.
+        '';
+      };
     };
   };
 
   ###### implementation
-
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
+    # Note: the following options are also declared in virtualisation.lxc, but
+    # the latter can't be simply enabled to reuse the formers, because it
+    # does a bunch of unrelated things.
+    systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
+
     security.apparmor = {
-      enable = true;
-      profiles = [
-        "${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start"
-        "${cfg.lxcPackage}/etc/apparmor.d/lxc-containers"
-      ];
       packages = [ cfg.lxcPackage ];
+      policies = {
+        "bin.lxc-start".profile = ''
+          include ${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start
+        '';
+        "lxc-containers".profile = ''
+          include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
+        '';
+      };
+    };
+
+    # TODO: remove once LXD gets proper support for cgroupsv2
+    # (currently most of the e.g. CPU accounting stuff doesn't work)
+    systemd.enableUnifiedCgroupHierarchy = false;
+
+    systemd.sockets.lxd = {
+      description = "LXD UNIX socket";
+      wantedBy = [ "sockets.target" ];
+
+      socketConfig = {
+        ListenStream = "/var/lib/lxd/unix.socket";
+        SocketMode = "0660";
+        SocketGroup = "lxd";
+        Service = "lxd.service";
+      };
     };
 
     systemd.services.lxd = {
       description = "LXD Container Management Daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
+      after = [ "network-online.target" "lxcfs.service" ];
+      requires = [ "network-online.target" "lxd.socket"  "lxcfs.service" ];
+      documentation = [ "man:lxd(1)" ];
 
-      path = lib.optional cfg.zfsSupport cfg.zfsPackage;
-
-      preStart = ''
-        mkdir -m 0755 -p /var/lib/lxc/rootfs
-      '';
+      path = optional cfg.zfsSupport config.boot.zfs.package;
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
-        Type = "simple";
+        ExecStartPost = "${cfg.package}/bin/lxd waitready --timeout=${cfg.startTimeout}";
+        ExecStop = "${cfg.package}/bin/lxd shutdown";
+
         KillMode = "process"; # when stopping, leave the containers alone
         LimitMEMLOCK = "infinity";
         LimitNOFILE = "1048576";
         LimitNPROC = "infinity";
         TasksMax = "infinity";
+
+        Restart = "on-failure";
+        TimeoutStartSec = "${cfg.startTimeout}s";
+        TimeoutStopSec = "30s";
 
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
@@ -146,5 +175,8 @@ in
       "net.ipv6.neigh.default.gc_thresh3" = 8192;
       "kernel.keys.maxkeys" = 2000;
     };
+
+    boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" ]
+      ++ optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
   };
 }

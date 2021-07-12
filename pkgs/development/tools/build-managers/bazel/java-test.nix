@@ -38,7 +38,7 @@ let
   ''));
 
   testBazel = bazelTest {
-    name = "bazel-test-cpp";
+    name = "bazel-test-java";
     inherit workspaceDir;
     bazelPkg = bazel;
     buildInputs = [ openjdk8 ];

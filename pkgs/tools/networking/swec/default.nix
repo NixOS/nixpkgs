@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, perlPackages }:
+{ fetchurl, lib, stdenv, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "swec-0.4";
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m3971z4z1wr0paggprfz0n8ng8vsnkc9m6s3bdplgyz7qjk6jwx";
   };
 
-  buildInputs = [ makeWrapper perlPackages.perl perlPackages.LWP perlPackages.URI perlPackages.HTMLParser ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perlPackages.perl perlPackages.LWP perlPackages.URI perlPackages.HTMLParser ];
   checkInputs = [ perlPackages.HTTPServerSimple perlPackages.Parent ];
 
   configurePhase = ''
@@ -64,9 +65,9 @@ stdenv.mkDerivation rec {
          (well, not exactly true, SWEC will ignore robots.txt).
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

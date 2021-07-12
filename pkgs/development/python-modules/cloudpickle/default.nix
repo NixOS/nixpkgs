@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytest, mock }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "1.5.0";
+  version = "1.6.0";
   disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "820c9245cebdec7257211cbe88745101d5d6a042bca11336d78ebd4897ddbc82";
+    sha256 = "9bc994f9e9447593bd0a45371f0e7ac7333710fcf64a4eb9834bf149f4ef2f32";
   };
 
   buildInputs = [ pytest mock ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # TypeError: cannot serialize '_io.FileIO' object
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
     license = with licenses; [ bsd3 ];

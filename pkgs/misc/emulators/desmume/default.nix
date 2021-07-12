@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, fetchpatch
-, pkgconfig, libtool, intltool
+{ lib, stdenv, fetchurl, fetchpatch
+, pkg-config, libtool, intltool
 , libXmu
 , lua
 , tinyxml
-, agg, alsaLib, soundtouch, openal
+, agg, alsa-lib, soundtouch, openal
 , desktop-file-utils
 , gtk2, gtkglext, libglade
 , libGLU, libpcap, SDL, zziplib }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "desmume";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = "-fpermissive";
 
   buildInputs =
-  [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
+  [ pkg-config libtool intltool libXmu lua agg alsa-lib soundtouch
     openal desktop-file-utils gtk2 gtkglext libglade
     libGLU libpcap SDL zziplib tinyxml ];
 

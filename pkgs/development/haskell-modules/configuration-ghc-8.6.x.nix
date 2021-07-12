@@ -5,7 +5,7 @@ with haskellLib;
 self: super: {
 
   # This compiler version needs llvm 6.x.
-  llvmPackages = pkgs.llvmPackages_6;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_6;
 
   # Disable GHC 8.6.x core libraries.
   array = null;
@@ -92,6 +92,22 @@ self: super: {
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
 
-  # Only 0.6 is compatible with ghc 8.6 https://hackage.haskell.org/package/apply-refact/changelog
-  apply-refact = super.apply-refact_0_6_0_0;
+  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
+  exceptions = super.exceptions_0_10_4;
+
+  # Older compilers need the latest ghc-lib to build this package.
+  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
+
+  # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
+  vector = dontCheck super.vector;
+
+  mmorph = super.mmorph_1_1_3;
+
+  # https://github.com/haskellari/time-compat/issues/23
+  time-compat = dontCheck super.time-compat;
+
+  # hackage-db 2.1.1 is incompatible with Cabal < 3.4
+  # See https://github.com/NixOS/cabal2nix/issues/501
+  hackage-db = super.hackage-db_2_1_0;
+
 }

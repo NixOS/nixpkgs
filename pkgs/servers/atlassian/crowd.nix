@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, home ? "/var/lib/crowd"
+{ lib, stdenv, fetchurl, home ? "/var/lib/crowd"
 , port ? 8092, proxyUrl ? null, openidPassword ? "WILL_NEVER_BE_SET" }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
                 "http://localhost:${toString port}/"
     sed -r -i crowd-openidserver-webapp/WEB-INF/classes/crowd.properties \
       -e 's,application.password\s+password,application.password ${openidPassword},'
-  '' + stdenv.lib.optionalString (proxyUrl != null) ''
+  '' + lib.optionalString (proxyUrl != null) ''
     sed -i crowd-openidserver-webapp/WEB-INF/classes/crowd.properties \
       -e 's,http://localhost:${toString port}/openidserver,${proxyUrl}/openidserver,'
   '';
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     cp -rva . $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Single sign-on and identity management tool";
     homepage = "https://www.atlassian.com/software/crowd";
     license = licenses.unfree;

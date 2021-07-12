@@ -1,36 +1,43 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
-, nose
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
 , pandas
-, pytest
-, scikitlearn
-, tensorflow
+, pytestCheckHook
+, scikit-learn
 }:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.7.0";
+  version = "0.8.0";
   disabled = isPy27; # scikit-learn>=0.21 doesn't work on python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "da59de0d1c0fa66f62054dd9a0a295a182563aa1abbb3bf9224a3678fcfe8fa4";
+    sha256 = "0a9xrw4qsh95g85pg2611hvj6xcfncw646si2icaz22haw1x410w";
   };
 
-  propagatedBuildInputs = [ scikitlearn ];
-  checkInputs = [ nose pytest pandas ];
-  checkPhase = ''
+  propagatedBuildInputs = [ scikit-learn ];
+  checkInputs = [ pytestCheckHook pandas ];
+  preCheck = ''
     export HOME=$TMPDIR
-    # skip some tests that fail because of minimal rounding errors
-    # or very large dependencies (keras + tensorflow)
-    py.test imblearn -k 'not estimator \
-                         and not classification \
-                         and not _generator \
-                         and not show_versions'
   '';
+  disabledTests = [
+    "estimator"
+    "classification"
+    "_generator"
+    "show_versions"
+    "test_make_imbalanced_iris"
+    "test_rusboost[SAMME.R]"
 
-  meta = with stdenv.lib; {
+    # https://github.com/scikit-learn-contrib/imbalanced-learn/issues/824
+    "ValueDifferenceMetric"
+  ];
+
+  meta = with lib; {
     description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
     homepage = "https://github.com/scikit-learn-contrib/imbalanced-learn";
     license = licenses.mit;
+    maintainers = [ maintainers.rmcgibbo ];
   };
 }

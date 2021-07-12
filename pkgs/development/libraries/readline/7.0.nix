@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses
+{ fetchurl, lib, stdenv, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ]
     ++ upstreamPatches;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for interactive line editing";
 
     longDescription = ''

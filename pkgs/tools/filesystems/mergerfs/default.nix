@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, pkgconfig, gettext, libtool, pandoc, which, attr, libiconv }:
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gettext, libtool, pandoc, which, attr, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
-  version = "2.31.0";
+  version = "2.32.4";
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = pname;
     rev = version;
-    sha256 = "0j7nbxzv85as76glzk4cf7j6ggfihcjaihp06s0zcar4i7zaiy9z";
+    sha256 = "sha256-VTnAAJWya1JLZA0gjzpUsdnO5XQP8sJzEP8qHBH+t5k=";
   };
 
   nativeBuildInputs = [
-    automake autoconf pkgconfig gettext libtool pandoc which
+    automake autoconf pkg-config gettext libtool pandoc which
   ];
   prePatch = ''
     sed -i -e '/chown/d' -e '/chmod/d' libfuse/Makefile
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A FUSE based union filesystem";
     homepage = "https://github.com/trapexit/mergerfs";
-    license = stdenv.lib.licenses.isc;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jfrankenau makefu ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jfrankenau makefu ];
   };
 }

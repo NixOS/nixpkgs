@@ -7,15 +7,26 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.22.2";
+  version = "1.24.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lq2x95553vdmhw13cxcgsd2g2i32izhsb7hxd4m1iwf9b3msbpv";
+    sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
   };
 
   propagatedBuildInputs = [
-    paramiko pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
+    cli-helpers
+    click
+    configobj
+    importlib-resources
+    paramiko
+    prompt_toolkit
+    pyaes
+    pycrypto
+    pygments
+    pymysql
+    pyperclip
+    sqlparse
   ];
 
   checkInputs = [ pytest mock glibcLocales ];
@@ -28,7 +39,13 @@ buildPythonApplication rec {
       --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
 
-  meta = {
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
+      --replace "importlib_resources >= 5.0.0" "importlib_resources"
+  '';
+
+  meta = with lib; {
     inherit version;
     description = "Command-line interface for MySQL";
     longDescription = ''
@@ -36,7 +53,7 @@ buildPythonApplication rec {
       syntax highlighting.
     '';
     homepage = "http://mycli.net";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.jojosch ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jojosch ];
   };
 }

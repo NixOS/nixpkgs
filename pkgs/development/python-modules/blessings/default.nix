@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/erikrose/blessings";
     description = "A thin, practical wrapper around terminal coloring, styling, and positioning";
     license = licenses.mit;

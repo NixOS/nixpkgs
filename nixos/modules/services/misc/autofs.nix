@@ -52,6 +52,7 @@ in
       };
 
       timeout = mkOption {
+        type = types.int;
         default = 600;
         description = "Set the global minimum timeout, in seconds, until directories are unmounted";
       };

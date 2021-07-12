@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "dmidecode-3.2";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/dmidecode/";
     description = "A tool that reads information about your system's hardware from the BIOS according to the SMBIOS/DMI standard";
     license = licenses.gpl2Plus;

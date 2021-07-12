@@ -17,13 +17,13 @@ let
 
   pname = "simplenote";
 
-  version = "1.21.1";
+  version = "2.9.0";
 
   sha256 = {
-    x86_64-linux = "00qx82d17yrrg2mxwhm40av0mpf5hy14j338i5ijhwp79yc8fk8x";
+    x86_64-linux = "sha256-uwd9fYqZepJ/BBttprqkJhswqMepGsHDTd5Md9gjI68=";
   }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The simplest way to keep notes";
     homepage = "https://github.com/Automattic/simplenote-electron";
     license = licenses.gpl2;
@@ -88,7 +88,7 @@ let
 
     postFixup = ''
       makeWrapper $out/opt/Simplenote/simplenote $out/bin/simplenote \
-        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] }" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }" \
         "''${gappsWrapperArgs[@]}"
     '';
   };

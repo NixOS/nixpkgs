@@ -46,6 +46,12 @@
    to increase the font size.
   </para>
 
+  <para>
+    To install over a serial port connect with <literal>115200n8</literal>
+    (e.g. <command>picocom -b 115200 /dev/ttyUSB0</command>). When the
+    bootloader lists boot entries, select the serial console boot entry.
+  </para>
+
   <section xml:id="sec-installation-booting-networking">
    <title>Networking in the installer</title>
 
@@ -374,7 +380,7 @@
         You may want to look at the options starting with
         <option><link linkend="opt-boot.loader.efi.canTouchEfiVariables">boot.loader.efi</link></option>
         and
-        <option><link linkend="opt-boot.loader.systemd-boot.enable">boot.loader.systemd</link></option>
+        <option><link linkend="opt-boot.loader.systemd-boot.enable">boot.loader.systemd-boot</link></option>
         as well.
        </para>
       </listitem>
@@ -440,8 +446,8 @@
      password for the <literal>root</literal> user, e.g.
 <screen>
 setting root password...
-Enter new UNIX password: ***
-Retype new UNIX password: ***</screen>
+New password: ***
+Retype new password: ***</screen>
      <note>
       <para>
        For unattended installations, it is possible to use
@@ -480,13 +486,8 @@ Retype new UNIX password: ***</screen>
 <prompt>$ </prompt>passwd eelco</screen>
     </para>
     <para>
-     You may also want to install some software. For instance,
-<screen>
-<prompt>$ </prompt>nix-env -qaP \*</screen>
-     shows what packages are available, and
-<screen>
-<prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -iA w3m</screen>
-     installs the <literal>w3m</literal> browser.
+     You may also want to install some software. This will be covered
+     in <xref linkend="sec-package-management" />.
     </para>
    </listitem>
   </orderedlist>

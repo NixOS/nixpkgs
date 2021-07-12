@@ -1,18 +1,18 @@
-{ stdenv, mkDerivation, fetchurl, cmake, pkgconfig, xlibsWrapper
+{ lib, mkDerivation, fetchurl, cmake, pkg-config, xlibsWrapper
 , qtbase, qttools, qtmultimedia, qtx11extras
 # transports
 , curl, libmms
 # input plugins
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
-, libcdio, cdparanoia, libcddb, faad2, ffmpeg_3, wildmidi
+, libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi
 # output plugins
-, alsaLib, libpulseaudio
+, alsa-lib, libpulseaudio
 # effect plugins
 , libsamplerate
 }:
 
 # Additional plugins that can be added:
-#  wavpack (http://www.wavpack.com/)
+#  wavpack (https://www.wavpack.com/)
 #  gme (Game music support)
 #  Ogg Opus support
 #  BS2B effect plugin (http://bs2b.sourceforge.net/)
@@ -29,14 +29,14 @@
 # handle that.
 
 mkDerivation rec {
-  name = "qmmp-1.4.1";
+  name = "qmmp-1.4.4";
 
   src = fetchurl {
     url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
-    sha256 = "0p18r2ri75vbyjzfa7bcl1dm372m6jvn9zj2p5ia2rh1g77fbm9a";
+    sha256 = "sha256-sZRZVhCf2ceETuV4AULA0kVkuIMn3C+aYdKThqvPnVQ=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs =
     [ # basic requirements
       qtbase qttools qtmultimedia qtx11extras xlibsWrapper
@@ -44,21 +44,19 @@ mkDerivation rec {
       curl libmms
       # input plugins
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
-      libcdio cdparanoia libcddb faad2 ffmpeg_3 wildmidi
+      libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
       # output plugins
-      alsaLib libpulseaudio
+      alsa-lib libpulseaudio
       # effect plugins
       libsamplerate
     ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";
-    homepage = "http://qmmp.ylsoftware.com/";
-    license = licenses.gpl2;
+    homepage = "https://qmmp.ylsoftware.com/";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    repositories.svn = "http://qmmp.googlecode.com/svn/";
+    repositories.svn = "https://svn.code.sf.net/p/qmmp-dev/code";
   };
 }

@@ -1,25 +1,27 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig
-, freetype, giflib, gtk2, lcms2, libjpeg, libpng, libtiff, openjpeg, gifsicle
+{ lib, stdenv, fetchFromGitHub
+, pkg-config
+, freetype, giflib, gtk3, lcms2, libjpeg, libpng, libtiff, openjpeg, gifsicle
 }:
 
 stdenv.mkDerivation rec {
   p_name  = "mtPaint";
-  ver_maj = "3.49";
-  ver_min = "12";
+  ver_maj = "3.50";
+  ver_min = "01";
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   src = fetchFromGitHub {
     owner = "wjaguar";
     repo = p_name;
-    rev = "6aed1b0441f99055fc7d475942f8bd5cb23c41f8";
-    sha256 = "0bvf623g0n2ifijcxv1nw0z3wbs2vhhdky4n04ywsbjlykm44nd1";
+    rev = "a4675ff5cd9fcd57d291444cb9f332b48f11243f";
+    sha256 = "04wqxz8i655gz5rnz90cksy8v6m2jhcn1j8rzhqpp5xhawlmq24y";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    freetype giflib gtk2 lcms2 libjpeg libpng libtiff openjpeg gifsicle
+    freetype giflib gtk3 lcms2 libjpeg libpng libtiff openjpeg gifsicle
   ];
+
+  configureFlags = [ "gtk3" "intl" "man" ];
 
   meta = {
     description = "A simple GTK painting program";
@@ -33,9 +35,9 @@ stdenv.mkDerivation rec {
       GNU/Linux, Windows and older PC hardware.
     '';
     homepage = "http://mtpaint.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.vklquevs ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.vklquevs ];
   };
 }
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, libGLU, libGL, libX11, libXext, libXfixes
+{ lib, stdenv, fetchurl, pkg-config, libGLU, libGL, libX11, libXext, libXfixes
 , libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib
-, gobject-introspection, gtk3, gnome3, libinput, libgudev, libxkbcommon
+, gobject-introspection, gtk3, gnome, libinput, libgudev, libxkbcommon
 }:
 
 let
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1rn4cd1an6a9dfda884aqpcwcgq8dgydpqvb19nmagw4b70zlj4b";
   };
 
   outputs = [ "out" "dev" ];
 
   buildInputs = [ gtk3 ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs =
     [ libX11 libGL libGLU libXext libXfixes libXdamage libXcomposite libXi cogl pango
       atk json-glib gobject-introspection libxcb libinput libgudev libxkbcommon
@@ -29,8 +29,9 @@ stdenv.mkDerivation rec {
   #doCheck = true; # no tests possible without a display
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -52,10 +53,10 @@ stdenv.mkDerivation rec {
          specific needs.
       '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     homepage = "http://www.clutter-project.org/";
 
-    maintainers = with stdenv.lib.maintainers; [ lethalman ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.mesaPlatforms;
   };
 }

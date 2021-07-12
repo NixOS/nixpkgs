@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gsctl";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0s5bli08wfd9xszx3kc90k51vlgjc00r0qg4mikb6qdc4pxpgsxj";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Giant Swarm command line interface";
     homepage = "https://github.com/giantswarm/gsctl";
     license = licenses.asl20;

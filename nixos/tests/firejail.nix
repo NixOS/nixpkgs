@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "firejail";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ sgo ];
   };
 
@@ -11,6 +11,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       enable = true;
       wrappedBinaries = {
         bash-jailed  = "${pkgs.bash}/bin/bash";
+        bash-jailed2  = {
+          executable = "${pkgs.bash}/bin/bash";
+          extraArgs = [ "--private=~/firejail-home" ];
+        };
       };
     };
 
@@ -53,6 +57,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     )
     machine.fail("sudo -u alice bash-jailed -c 'cat ~/my-secrets/secret' | grep -q s3cret")
 
+    # Test extraArgs
+    machine.succeed("sudo -u alice mkdir /home/alice/firejail-home")
+    machine.succeed("sudo -u alice bash-jailed2 -c 'echo test > /home/alice/foo'")
+    machine.fail("sudo -u alice cat /home/alice/foo")
+    machine.succeed("sudo -u alice cat /home/alice/firejail-home/foo | grep test")
 
     # Test path acl with firejail executable
     machine.succeed("sudo -u alice firejail -- bash -c 'cat ~/public' | grep -q publ1c")

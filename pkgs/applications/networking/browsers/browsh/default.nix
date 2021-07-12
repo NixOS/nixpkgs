@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchurl, fetchFromGitHub, go-bindata }:
+{ lib, buildGoPackage, fetchurl, fetchFromGitHub, go-bindata }:
 
 let
   version = "1.6.4";
@@ -51,11 +51,11 @@ in buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fully-modern text-based browser, rendering to TTY and browsers";
     homepage = "https://www.brow.sh/";
     maintainers = [ maintainers.kalbasit ];
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

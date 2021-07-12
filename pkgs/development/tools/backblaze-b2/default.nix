@@ -1,42 +1,59 @@
-{
-  fetchFromGitHub,
-  lib,
-  python3Packages,
-}:
+{ fetchFromGitHub, lib, python3Packages }:
 
+let
+  python3Packages2 = python3Packages.override {
+    overrides = self: super: {
+      arrow = self.callPackage ../../python-modules/arrow/2.nix { };
+    };
+  };
+in
+let
+  python3Packages = python3Packages2; # two separate let … in to avoid infinite recursion
+in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "2.0.2";
+  version = "2.5.0";
 
-  src = fetchFromGitHub {
-    owner = "Backblaze";
-    repo = "B2_Command_Line_Tool";
-    rev = "v${version}";
-    sha256 = "00zs0a580vvfm2w4ja68mc46360p475wlgagjkq1hi4m8s4qwd75";
+  src = python3Packages.fetchPypi {
+    inherit version;
+    pname = "b2";
+    sha256 = "0sh9k9fnj73ydqnk056m01xkilpxh7f4597cnczqhy21lxzr3d45";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace 'docutils==0.16' 'docutils'
+    substituteInPlace setup.py \
+      --replace 'setuptools_scm<6.0' 'setuptools_scm'
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     b2sdk
     class-registry
+    phx-class-registry
     setuptools
+    docutils
+    rst2ansi
   ];
 
-  checkInputs = with python3Packages; [
-    nose
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
   ];
 
-  # doCheck = false;
-  checkPhase = ''
-    nosetests
-  '';
+  checkInputs = with python3Packages; [ pytestCheckHook ];
+
+  disabledTests = [
+    "test_files_headers"
+    "test_integration"
+  ];
 
   postInstall = ''
     mv "$out/bin/b2" "$out/bin/backblaze-b2"
 
     sed 's/b2/backblaze-b2/' -i contrib/bash_completion/b2
 
-    mkdir -p "$out/etc/bash_completion.d"
-    cp contrib/bash_completion/b2 "$out/etc/bash_completion.d/backblaze-b2"
+    mkdir -p "$out/share/bash-completion/completions"
+    cp contrib/bash_completion/b2 "$out/share/bash-completion/completions/backblaze-b2"
   '';
 
   meta = with lib; {

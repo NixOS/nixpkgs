@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage {
   name = "manul-unstable-2016-09-30";
@@ -16,7 +16,7 @@ buildGoPackage {
   deleteVendor = true;
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The madness vendoring utility for Golang programs";
     homepage = "https://github.com/kovetskiy/manul";
     license = licenses.mit;

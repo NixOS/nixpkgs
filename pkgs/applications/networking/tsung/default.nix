@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "6394445860ef34faedf8c46da95a3cb206bc17301145bc920151107ffa2ce52a";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   propagatedBuildInputs = [
     erlang
     gnuplot
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
         --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.TemplateToolkit ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://tsung.erlang-projects.org/";
     description = "A high-performance benchmark framework for various protocols including HTTP, XMPP, LDAP, etc";
     longDescription = ''

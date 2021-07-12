@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, faust, meson, ninja, pkg-config
-, boost, cairo, fftw, gnome3, ladspa-sdk, libxcb, lv2, xcbutilwm
+{ lib, stdenv, fetchFromGitHub, faust, meson, ninja, pkg-config
+, boost, cairo, fftw, gnome, ladspa-sdk, libxcb, lv2, xcbutilwm
 , zita-convolver, zita-resampler
  }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     zita-resampler
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of LADSPA and LV2 plugins for guitar sound processing";
     homepage = https://github.com/olegkapitonov/Kapitonov-Plugins-Pack;
     license = licenses.gpl3;

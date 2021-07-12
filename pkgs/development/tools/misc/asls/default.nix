@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , erlangR22
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ erlangR22 ];
   installPhase = "install -Dm755 -t $out/bin asls";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AssemblyScript Language Server";
     homepage = "https://github.com/saulecabrera/asls";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXxf86vm, libXext, libXrandr }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXxf86vm, libXext, libXrandr }:
 
 stdenv.mkDerivation rec {
   name = "xcalib-0.10";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp xcalib $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A tiny monitor calibration loader for X and MS-Windows";
     license = licenses.gpl2;

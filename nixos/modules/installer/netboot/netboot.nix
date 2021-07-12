@@ -57,6 +57,12 @@ with lib;
           "upperdir=/nix/.rw-store/store"
           "workdir=/nix/.rw-store/work"
         ];
+
+        depends = [
+          "/nix/.ro-store"
+          "/nix/.rw-store/store"
+          "/nix/.rw-store/work"
+        ];
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
@@ -88,7 +94,7 @@ with lib;
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
       #!ipxe
-      kernel ${pkgs.stdenv.hostPlatform.platform.kernelTarget} init=${config.system.build.toplevel}/init initrd=initrd ${toString config.boot.kernelParams}
+      kernel ${pkgs.stdenv.hostPlatform.linux-kernel.target} init=${config.system.build.toplevel}/init initrd=initrd ${toString config.boot.kernelParams}
       initrd initrd
       boot
     '';

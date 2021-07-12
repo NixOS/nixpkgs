@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, perl, autoconf, automake
+{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake
 , libtool, flex, libevent, hwloc, munge, zlib, pandoc
 } :
 
 let
-  version = "3.2.0";
+  version = "3.2.3";
 
 in stdenv.mkDerivation {
   pname = "pmix";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     repo = "openpmix";
     owner = "openpmix";
     rev = "v${version}";
-    sha256 = "171hpz0m6lpyjd1hkxy7fl06fcgymz8cssqgbxzg92b7x595276b";
+    sha256 = "sha256-w3j4zgEAn6RxIHAvy0B3MPFTV46ocCvc0Z36tN1T+rc=";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Process Management Interface for HPC environments";
     homepage = "https://openpmix.github.io/";
     license = licenses.bsd3;

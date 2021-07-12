@@ -1,18 +1,23 @@
-{ stdenv, lib, fetchgit, libftdi1, libusb1, pkgconfig, hidapi, autoreconfHook }:
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, hidapi
+, libftdi1
+, libusb1
+}:
 
 stdenv.mkDerivation rec {
   pname = "openocd";
-  version = "2020-09-02";
-
-  src = fetchgit {
-    url = "https://git.code.sf.net/p/openocd/code";
-    rev = "d46f28c2ea2611f5fbbc679a5eed253d3dcd2fe3";
-    sha256 = "1256qqhn3pxmijfk1x0y5b5kc5ar88ivykkvx0h1m7pdwqfs6zm9";
-    fetchSubmodules = true;
+  version = "0.11.0";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0z8y7mmv0mhn2l5gs3vz6l7cnwak7agklyc7ml33f7gz99rwx8s3";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ libftdi1 libusb1 hidapi ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ hidapi libftdi1 libusb1 ];
 
   configureFlags = [
     "--enable-jtag_vpi"
@@ -29,6 +34,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     "-Wno-error=cpp"
+    "-Wno-error=strict-prototypes" # fixes build failure with hidapi 0.10.0
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''
@@ -54,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://openocd.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor prusnak ];
     platforms = platforms.unix;
   };
 }

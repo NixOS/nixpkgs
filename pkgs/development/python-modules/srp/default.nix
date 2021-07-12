@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, lib }:
+{ buildPythonPackage, fetchPypi, six, lib }:
 
 buildPythonPackage rec {
   pname = "srp";
-  version = "1.0.16";
+  version = "1.0.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c943b7181322a2bdd50d20e1244536c404916e546131dc1fae10a7cb99a013e9";
+    sha256 = "1582317ccd383dc39d54f223424c588254d73d1cfb2c5c24d945e018ec9516bb";
   };
 
   propagatedBuildInputs = [ six ];

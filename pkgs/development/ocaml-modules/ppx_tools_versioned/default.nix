@@ -2,13 +2,15 @@
 
 buildDunePackage rec {
   pname = "ppx_tools_versioned";
-  version = "5.3.0";
+  version = "5.4.0";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = pname;
     rev = version;
-    sha256 = "0c735w9mq49dmvkdw9ahfwh0icsk2sbhnfwmdhpibj86phfm17yj";
+    sha256 = "07lnj4yzwvwyh5fhpp1dxrys4ddih15jhgqjn59pmgxinbnddi66";
   };
 
   propagatedBuildInputs = [ ocaml-migrate-parsetree ];

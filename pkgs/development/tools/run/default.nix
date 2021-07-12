@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "run";
   version = "0.7.2";
@@ -14,11 +14,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easily manage and invoke small scripts and wrappers";
     homepage    = "https://github.com/TekWizely/run";
     license     = licenses.mit;
-    maintainers = with maintainers; [ rawkode filalex77 ];
+    maintainers = with maintainers; [ rawkode Br1ght0ne ];
     platforms   = platforms.unix;
   };
 }

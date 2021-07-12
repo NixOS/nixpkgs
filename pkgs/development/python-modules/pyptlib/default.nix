@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   doCheck = false;  # No such file or directory errors on 32bit
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.org/project/pyptlib/";
     description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
     license = licenses.bsd2;

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, substituteAll
-, pkgconfig
+{ lib, stdenv, fetchurl, substituteAll
+, pkg-config
 , cups, libjpeg, libusb1, python2Packages, sane-backends, dbus, usbutils
 , net-snmp, openssl, nettools
-, bash, coreutils, utillinux
+, bash, coreutils, util-linux
 , qtSupport ? true
 , withPlugin ? false
 }:
@@ -60,7 +60,7 @@ python2Packages.buildPythonApplication {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   pythonPath = with python2Packages; [
@@ -69,7 +69,7 @@ python2Packages.buildPythonApplication {
     pygobject2
     reportlab
     usbutils
-  ] ++ stdenv.lib.optionals qtSupport [
+  ] ++ lib.optionals qtSupport [
     pyqt4
   ];
 
@@ -111,7 +111,7 @@ python2Packages.buildPythonApplication {
 
   enableParallelBuilding = true;
 
-  postInstall = stdenv.lib.optionalString withPlugin ''
+  postInstall = lib.optionalString withPlugin ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
 
@@ -175,11 +175,11 @@ python2Packages.buildPythonApplication {
     substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
       --replace {,${bash}}/bin/sh \
       --replace /usr/bin/nohup "" \
-      --replace {,${utillinux}/bin/}logger \
+      --replace {,${util-linux}/bin/}logger \
       --replace {/usr,$out}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "http://hplipopensource.com/";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";

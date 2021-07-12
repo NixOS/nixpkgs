@@ -1,22 +1,27 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytestrunner, requests, urllib3, mock, setuptools }:
+{ lib, buildPythonPackage, fetchPypi
+, pytestrunner, requests, urllib3, mock, setuptools, stone }:
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "10.7.0";
+  version = "11.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08c1e0bbc16499e0138431e34777c35ea086734ff15ee5067b0df3424df2a9ec";
+    sha256 = "14dd51e0e3981cb81384a8e13a308de0df13c7c4b6ba7f080177ede947761cbb";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner == 5.2.0" "pytest-runner"
+  '';
 
   # Set DROPBOX_TOKEN environment variable to a valid token.
   doCheck = false;
 
-  buildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ requests urllib3 mock setuptools ];
+  nativeBuildInputs = [ pytestrunner ];
+  propagatedBuildInputs = [ requests urllib3 mock setuptools stone ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://www.dropbox.com/developers/core/docs";
     license = licenses.mit;

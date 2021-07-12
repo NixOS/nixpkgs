@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , localBios ? true, nasm ? null
 , sdlSupport ? true, SDL ? null }:
 
@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "00aydg8f28sgy8l3rd2a7jvp56lx3b63hhak43p7g7vjdikv495w";
   };
 
-  buildInputs = with stdenv.lib;
+  buildInputs = with lib;
   optionals localBios [ nasm ]
   ++  optionals sdlSupport [ SDL ];
-  
+
   bios = localBios;
-  
+
   builder = ./builder.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source small 8086 emulator";
     longDescription = ''
       8086tiny is a tiny, open-source (MIT), portable (little-endian hosts)

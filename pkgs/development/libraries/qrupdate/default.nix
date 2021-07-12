@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchurl
 , gfortran
 , blas
@@ -24,11 +25,11 @@ stdenv.mkDerivation rec {
       "LAPACK=-L${lapack}/lib -llapack"
       "BLAS=-L${blas}/lib -lblas"
       "PREFIX=${placeholder "out"}"
-      ${stdenv.lib.optionalString blas.isILP64
-      # Use their FFLAGS along with `-fdefault-integer-8`. If another
-      # application intends to use arpack, it should add this to it's FFLAGS as
-      # well. Otherwise (e.g): https://savannah.gnu.org/bugs/?50339
-      "FFLAGS=-fimplicit-none -O3 -funroll-loops -fdefault-integer-8"
+      ${lib.optionalString blas.isILP64
+      # If another application intends to use qrupdate compiled with blas with
+      # 64 bit support, it should add this to it's FFLAGS as well. See (e.g):
+      # https://savannah.gnu.org/bugs/?50339
+      "FFLAGS=-fdefault-integer-8"
       }
     )
   '';
@@ -39,13 +40,13 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "lib" "solib" ];
 
-  installTargets = stdenv.lib.optionals stdenv.isDarwin [ "install-staticlib" "install-shlib" ];
+  installTargets = lib.optionals stdenv.isDarwin [ "install-staticlib" "install-shlib" ];
 
   buildInputs = [ gfortran ];
 
   nativeBuildInputs = [ which ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for fast updating of qr and cholesky decompositions";
     homepage = "https://sourceforge.net/projects/qrupdate/";
     license = licenses.gpl3Plus;

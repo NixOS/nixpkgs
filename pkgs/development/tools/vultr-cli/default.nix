@@ -1,24 +1,24 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "vultr-cli";
-  version = "0.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "vultr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gp1v62iqh3hk46cc5sh8a1nw5nf98m969fdhgxdppwr5dhj9isp";
+    sha256 = "sha256:0qbsybs91v9vnkxj4kpwqhzk4hgpkq36wnixxjajg038x7slds4i";
   };
 
   vendorSha256 = null;
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official command line tool for Vultr services";
     homepage = "https://github.com/vultr/vultr-cli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

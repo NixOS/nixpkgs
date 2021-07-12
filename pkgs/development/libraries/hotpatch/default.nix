@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "hotpatch-0.2";
@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "169vdh55wsbn6fl58lpzqx64v6ifzh7krykav33x1d9hsk98qjqh";
   };
 
-  enableParallelBuilding = true;
   doCheck = true;
 
   nativeBuildInputs = [ cmake ];
@@ -27,11 +26,11 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$(pwd)/src make test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hot patching executables on Linux using .so file injection";
     homepage = src.meta.homepage;
     license = licenses.bsd3;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = ["i686-linux" "x86_64-linux"];
   };
 }

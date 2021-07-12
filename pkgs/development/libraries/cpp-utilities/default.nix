@@ -1,31 +1,35 @@
 { stdenv
+, lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , cppunit
 }:
 
 stdenv.mkDerivation rec {
   pname = "cpp-utilities";
-  version = "5.7.0";
+  version = "5.10.5";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04483v9bw6wp831f34fn46zj54v9y7f6qqfmx85fjxhkr3rqk4i0";
+    sha256 = "sha256-1GAZKMfA2cB/7/TZfV+WOvjlu0sWq1loOauX4EfHogA=";
   };
 
   nativeBuildInputs = [ cmake ];
   checkInputs = [ cppunit ];
   # Otherwise, tests fail since the resulting shared object libc++utilities.so is only available in PWD of the make files
-  checkFlagsArray = [ "LD_LIBRARY_PATH=$(PWD)" ];
+  preCheck = ''
+    checkFlagsArray+=(
+      "LD_LIBRARY_PATH=$PWD"
+    )
+  '';
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Martchus/cpp-utilities";
     description = "Common C++ classes and routines used by @Martchus' applications featuring argument parser, IO and conversion utilities";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux;
   };

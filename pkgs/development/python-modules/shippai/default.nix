@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "shippai";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0r6iwvmay8ygn2m15pyjrk9am4mfpk7rkf0lcbcb15pnabixlyzj";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Use Rust failures as Python exceptions";
     homepage = "https://github.com/untitaker/shippai";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext }:
 
 stdenv.mkDerivation rec {
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ./configure --prefix=$out --enable-openmp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package comprising of implementations of algorithms for
     vertex coloring and derivative computation";
     homepage = "http://cscapes.cs.purdue.edu/coloringpage/software.htm#functionalities";

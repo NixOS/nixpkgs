@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , isPy3k
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ simplejson psutil ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rapid7/le";
     description = "Logentries agent";
     license = licenses.mit;

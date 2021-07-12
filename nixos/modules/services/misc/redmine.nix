@@ -28,7 +28,7 @@ let
   unpack = id: (name: source:
     pkgs.stdenv.mkDerivation {
       name = "redmine-${id}-${name}";
-      buildInputs = [ pkgs.unzip ];
+      nativeBuildInputs = [ pkgs.unzip ];
       buildCommand = ''
         mkdir -p $out
         cd $out
@@ -71,7 +71,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = "Port on which Redmine is ran.";
       };
@@ -230,7 +230,7 @@ in
       production = {
         scm_subversion_command = "${pkgs.subversion}/bin/svn";
         scm_mercurial_command = "${pkgs.mercurial}/bin/hg";
-        scm_git_command = "${pkgs.gitAndTools.git}/bin/git";
+        scm_git_command = "${pkgs.git}/bin/git";
         scm_cvs_command = "${pkgs.cvs}/bin/cvs";
         scm_bazaar_command = "${pkgs.breezy}/bin/bzr";
         scm_darcs_command = "${pkgs.darcs}/bin/darcs";
@@ -299,7 +299,7 @@ in
         breezy
         cvs
         darcs
-        gitAndTools.git
+        git
         mercurial
         subversion
       ];

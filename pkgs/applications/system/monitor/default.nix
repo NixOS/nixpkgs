@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -11,7 +11,7 @@
 , glib
 , gtk3
 , bamf
-, libwnck3
+, libwnck
 , libgee
 , libgtop
 , wrapGAppsHook
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     pantheon.wingpanel
     libgee
     libgtop
-    libwnck3
+    libwnck
   ];
 
   postPatch = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manage processes and monitor system resources";
     longDescription = ''
       Manage processes and monitor system resources.

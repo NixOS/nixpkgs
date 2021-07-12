@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, automake, autoconf, pkgconfig, gtk3 }:
+{ lib, stdenv, fetchurl, automake, autoconf, pkg-config, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "gsimplecal";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchurl {
     url = "https://github.com/dmedvinsky/gsimplecal/archive/v${version}.tar.gz";
-    sha256 = "1sa05ifjp41xipfspk5n6l3wzpzmp3i45q88l01p4l6k6drsq336";
+    sha256 = "sha256-f19cnTX83LZT2d01B1EdWSaHcfHqpFPTo5glYkAokq8=";
   };
 
   postPatch = ''
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ automake autoconf gtk3 ];
 
   preConfigure = "./autogen.sh";
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
       Also, you can configure it to not only show the calendar, but also
       display multiple clocks for different world time zones.
     '';
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.romildo ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , avahi, libao }:
 
 stdenv.mkDerivation rec {
@@ -12,20 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "02xkd9al79pbqh8rhzz5w99vv43jg5vqkqg7kxsw8c8sz9di9wsa";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ avahi libao ];
 
   enableParallelBuilding = true;
 
   # the build will fail without complaining about a reference to /tmp
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     patchelf \
-      --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}:$out/lib" \
+      --set-rpath "${lib.makeLibraryPath buildInputs}:$out/lib" \
       $out/bin/shairplay
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Apple AirPlay and RAOP protocol server";
     license     = licenses.mit;

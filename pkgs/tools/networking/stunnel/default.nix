@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "stunnel";
-  version = "5.56";
+  version = "5.59";
 
   src = fetchurl {
     url    = "https://www.stunnel.org/downloads/${pname}-${version}.tar.gz";
-    sha256 = "08kb4gi9fzqngrczykvba6xhaxhq9m4wmdbhxvgrva5rasrvz13k";
+    sha256 = "sha256-E3d232vo8XAfHNWQt3eZMuEjR5+5HlGSFxwWeYgVzp8=";
     # please use the contents of "https://www.stunnel.org/downloads/${name}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Universal tls/ssl wrapper";
     homepage    = "https://www.stunnel.org/";
-    license     = stdenv.lib.licenses.gpl2Plus;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.gpl2Plus;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

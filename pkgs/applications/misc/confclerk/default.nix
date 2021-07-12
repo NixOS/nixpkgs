@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qmake4Hook }:
+{ lib, stdenv, fetchurl, qt4, qmake4Hook }:
 
 let version = "0.6.4"; in
 stdenv.mkDerivation {
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Offline conference schedule viewer";
     homepage = "http://www.toastfreeware.priv.at/confclerk";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ ehmry ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -37,7 +37,7 @@ let
   '';
 in {
   name = "knot";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];
   };
 

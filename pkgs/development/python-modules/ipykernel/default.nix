@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , flaky
 , ipython
 , jupyter_client
@@ -15,22 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "5.2.1";
+  version = "5.5.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a3hr7wx3ywwskr99hgp120dw9ab1vmcaxdixlsbd9bg6ly3fdr9";
+    sha256 = "e976751336b51082a89fc2099fb7f96ef20f535837c398df6eab1283c2070884";
   };
 
   propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
-
-  # https://github.com/ipython/ipykernel/pull/377
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ipython/ipykernel/commit/a3bf849dbd368a1826deb9dfc94c2bd3e5ed04fe.patch";
-      sha256 = "1yhpwqixlf98a3n620z92mfips3riw6psijqnc5jgs2p58fgs2yc";
-    })
-  ];
 
   checkInputs = [ pytestCheckHook nose flaky ];
   dontUseSetuptoolsCheck = true;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ethtool";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0srbqp4a3x9ryrbm5q854375y04ni8j0bmsrl89nmsyn4x4ixy12";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility for controlling network drivers and hardware";
     homepage = "https://www.kernel.org/pub/software/network/ethtool/";
     license = licenses.gpl2;

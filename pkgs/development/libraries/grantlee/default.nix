@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, cmake }:
+{ lib, stdenv, fetchurl, qt4, cmake }:
 
 stdenv.mkDerivation rec {
   name = "grantlee-0.5.1";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1b501xbimizmbmysl1j5zgnp48qw0r2r7lhgmxvzhzlv9jzhj60r";
   };
 
-  buildInputs = [ cmake qt4 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 ];
 
   meta = {
     description = "Qt4 port of Django template system";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
       and the design of Django is reused in Grantlee.'';
 
     homepage = "http://gitorious.org/grantlee";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     inherit (qt4.meta) platforms;
   };
 }

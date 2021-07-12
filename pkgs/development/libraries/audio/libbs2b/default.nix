@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libsndfile }:
+{ lib, stdenv, fetchurl, pkg-config, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "libbs2b";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vz442kkjn2h0dlxppzi4m5zx8qfyrivq581n06xzvnyxi5rg6a7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
   hardeningDisable = [ "format" ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://bs2b.sourceforge.net/";
     description = "Bauer stereophonic-to-binaural DSP library";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

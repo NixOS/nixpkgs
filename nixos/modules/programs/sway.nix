@@ -31,6 +31,7 @@ let
     extraOptions = cfg.extraOptions;
     withBaseWrapper = cfg.wrapperFeatures.base;
     withGtkWrapper = cfg.wrapperFeatures.gtk;
+    isNixOS = true;
   };
 in {
   options.programs.sway = {
@@ -38,9 +39,8 @@ in {
       Sway, the i3-compatible tiling Wayland compositor. You can manually launch
       Sway by executing "exec sway" on a TTY. Copy /etc/sway/config to
       ~/.config/sway/config to modify the default configuration. See
-      https://github.com/swaywm/sway/wiki and "man 5 sway" for more information.
-      Please have a look at the "extraSessionCommands" example for running
-      programs natively under Wayland'';
+      <link xlink:href="https://github.com/swaywm/sway/wiki" /> and
+      "man 5 sway" for more information'';
 
     wrapperFeatures = mkOption {
       type = wrapperOptions;
@@ -55,16 +55,20 @@ in {
       type = types.lines;
       default = "";
       example = ''
+        # SDL:
         export SDL_VIDEODRIVER=wayland
-        # needs qt5.qtwayland in systemPackages
-        export QT_QPA_PLATFORM=wayland
+        # QT (needs qt5.qtwayland in systemPackages):
+        export QT_QPA_PLATFORM=wayland-egl
         export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
         # Fix for some Java AWT applications (e.g. Android Studio),
         # use this if they aren't displayed properly:
         export _JAVA_AWT_WM_NONREPARENTING=1
       '';
       description = ''
-        Shell commands executed just before Sway is started.
+        Shell commands executed just before Sway is started. See
+        <link xlink:href="https://github.com/swaywm/sway/wiki/Running-programs-natively-under-wayland" />
+        and <link xlink:href="https://github.com/swaywm/wlroots/blob/master/docs/env_vars.md" />
+        for some useful environment variables.
       '';
     };
 
@@ -87,20 +91,21 @@ in {
       type = with types; listOf package;
       default = with pkgs; [
         swaylock swayidle alacritty dmenu
-        rxvt-unicode # For backward compatibility (old default terminal)
       ];
       defaultText = literalExample ''
-        with pkgs; [ swaylock swayidle xwayland rxvt-unicode dmenu ];
+        with pkgs; [ swaylock swayidle alacritty dmenu ];
       '';
       example = literalExample ''
         with pkgs; [
-          xwayland
           i3status i3status-rust
           termite rofi light
         ]
       '';
       description = ''
-        Extra packages to be installed system wide.
+        Extra packages to be installed system wide. See
+        <link xlink:href="https://github.com/swaywm/sway/wiki/Useful-add-ons-for-sway" /> and
+        <link xlink:href="https://github.com/swaywm/sway/wiki/i3-Migration-Guide#common-x11-apps-used-on-i3-with-wayland-alternatives" />
+        for a list of useful software.
       '';
     };
 
@@ -120,8 +125,11 @@ in {
       systemPackages = [ swayPackage ] ++ cfg.extraPackages;
       etc = {
         "sway/config".source = mkOptionDefault "${swayPackage}/etc/sway/config";
-        #"sway/security.d".source = mkOptionDefault "${swayPackage}/etc/sway/security.d/";
-        #"sway/config.d".source = mkOptionDefault "${swayPackage}/etc/sway/config.d/";
+        "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
+          # Import the most important environment variables into the D-Bus and systemd
+          # user environments (e.g. required for screen sharing and Pinentry prompts):
+          exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+        '';
       };
     };
     security.pam.services.swaylock = {};
@@ -131,7 +139,9 @@ in {
     # To make a Sway session available if a display manager like SDDM is enabled:
     services.xserver.displayManager.sessionPackages = [ swayPackage ];
     programs.xwayland.enable = mkDefault true;
+    # For screen sharing (this option only has an effect with xdg.portal.enable):
+    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
   };
 
-  meta.maintainers = with lib.maintainers; [ gnidorah primeos colemickens ];
+  meta.maintainers = with lib.maintainers; [ primeos colemickens ];
 }

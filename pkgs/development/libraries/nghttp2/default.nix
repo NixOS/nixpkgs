@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 
 # Optional Dependencies
 , openssl ? null, zlib ? null
@@ -8,7 +8,7 @@
 , enableAsioLib ? false, boost ? null
 , enableGetAssets ? false, libxml2 ? null
 , enableJemalloc ? false, jemalloc ? null
-, enableApp ? !stdenv.hostPlatform.isWindows
+, enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic
 , enablePython ? false, python ? null, cython ? null, ncurses ? null, setuptools ? null
 }:
 
@@ -23,21 +23,21 @@ assert enableGetAssets -> libxml2 != null;
 assert enableJemalloc -> jemalloc != null;
 assert enablePython -> python != null && cython != null && ncurses != null && setuptools != null;
 
-let inherit (stdenv.lib) optional optionals optionalString; in
+let inherit (lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.41.0";
+  version = "1.43.0";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0h12wz72paxnj8l9vv2qfgfbmj20c6pz6xbilb7ns9zcwxwa0p34";
+    sha256 = "0qhgyphzdv72dgdfxin2xbk9623za3jwbcvhhaxixiwp6djj8vsm";
   };
 
   outputs = [ "bin" "out" "dev" "lib" ]
     ++ optional enablePython "python";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
     ++ optional enableLibEv libev
     ++ [ zlib ]
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-spdylay=no"
     "--disable-examples"
-    (stdenv.lib.enableFeature enableApp "app")
+    (lib.enableFeature enableApp "app")
   ] ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib"
     ++ (if enablePython then [
     "--with-cython=${cython}/bin/cython"
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nghttp2.org/";
     description = "A C implementation of HTTP/2";
     license = licenses.mit;

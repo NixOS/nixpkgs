@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   # Suppress overly verbose output if tests run successfully
-  checkPhase = ''pytest >/dev/null || pytest'';
+  checkPhase = "pytest >/dev/null || pytest";
 
   meta = {
    homepage = "https://github.com/jpvanhal/inflection";

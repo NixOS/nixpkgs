@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , asciidoc
@@ -11,7 +11,7 @@
 , tracker
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , bzip2
@@ -20,7 +20,7 @@
 , exempi
 , giflib
 , glib
-, gnome3
+, gnome
 , gst_all_1
 , icu
 , json-glib
@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.0.1";
+  version = "3.1.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1kfi5d6pccqx28hbnja6k1mpwjd53k5zs704sg01rlzmbshz1zn6";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-5NNhNRsVbyhipSRBX76/BTnHgc2HxmKWYvAmW0gDuLg=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -122,13 +122,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;

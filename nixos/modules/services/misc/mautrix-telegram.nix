@@ -6,8 +6,9 @@ let
   dataDir = "/var/lib/mautrix-telegram";
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
-  # TODO: switch to configGen.json once RFC42 is implemented
-  settingsFile = pkgs.writeText "mautrix-telegram-settings.json" (builtins.toJSON cfg.settings);
+  settingsFormat = pkgs.formats.json {};
+  settingsFileUnsubstituted = settingsFormat.generate "mautrix-telegram-config-unsubstituted.json" cfg.settings;
+  settingsFile = "${dataDir}/config.json";
 
 in {
   options = {
@@ -15,12 +16,12 @@ in {
       enable = mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
 
       settings = mkOption rec {
-        # TODO: switch to types.config.json as prescribed by RFC42 once it's implemented
-        type = types.attrs;
         apply = recursiveUpdate default;
+        inherit (settingsFormat) type;
         default = {
           appservice = rec {
             database = "sqlite:///${dataDir}/mautrix-telegram.db";
+            database_opts = {};
             hostname = "0.0.0.0";
             port = 8080;
             address = "http://localhost:${toString port}";
@@ -29,6 +30,8 @@ in {
           bridge = {
             permissions."*" = "relaybot";
             relaybot.whitelist = [ ];
+            double_puppet_server_map = {};
+            login_shared_secret_map = {};
           };
 
           logging = {
@@ -121,6 +124,16 @@ in {
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
 
       preStart = ''
+        # Not all secrets can be passed as environment variable (yet)
+        # https://github.com/tulir/mautrix-telegram/issues/584
+        [ -f ${settingsFile} ] && rm -f ${settingsFile}
+        old_umask=$(umask)
+        umask 0277
+        ${pkgs.envsubst}/bin/envsubst \
+          -o ${settingsFile} \
+          -i ${settingsFileUnsubstituted}
+        umask $old_umask
+
         # generate the appservice's registration file if absent
         if [ ! -f '${registrationFile}' ]; then
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
@@ -156,6 +169,8 @@ in {
             --config='${settingsFile}'
         '';
       };
+
+      restartTriggers = [ settingsFileUnsubstituted ];
     };
   };
 

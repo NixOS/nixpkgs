@@ -1,16 +1,17 @@
-{ lib, python2Packages }:
+{ lib, python3 }:
 
-# Using python 2 because when packaging with python 3 pipreqs fails to parse python 2 code.
-python2Packages.buildPythonApplication rec {
+with python3.pkgs;
+
+buildPythonApplication rec {
   pname = "pipreqs";
   version = "0.4.10";
 
-  src = python2Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "0fdr3mbxjpmrxr7yfc1sn9kbpcyb0qwafimhhrrqvf989dj1sdcy";
   };
 
-  propagatedBuildInputs = with python2Packages; [ yarg docopt ];
+  propagatedBuildInputs = [ yarg docopt ];
 
   # Tests requires network access. Works fine without sandboxing
   doCheck = false;

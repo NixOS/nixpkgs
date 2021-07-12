@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "fira-mono-3.206";
@@ -12,7 +12,7 @@ fetchzip {
 
   sha256 = "1ci3fxhdwabvfj4nl16pwcgqnh7s2slp8vblribk8zkpx8cbp1dj";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mozilla.github.io/Fira/";
     description = "Monospace font for Firefox OS";
     longDescription = ''

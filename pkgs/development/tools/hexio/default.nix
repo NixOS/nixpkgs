@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, pcsclite, pth }:
+{ lib, stdenv, fetchFromGitHub, pcsclite, pth, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "hexio";
@@ -11,12 +11,13 @@ stdenv.mkDerivation rec {
     repo = "hexio";
   };
 
-  propagatedBuildInputs = [ python ];
-  buildInputs = [ pcsclite pth ];
+  strictDeps = true;
+
+  buildInputs = [ pcsclite pth python2 ];
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace '-I/usr/local/include/PCSC/' '-I${stdenv.lib.getDev pcsclite}/include/PCSC/' \
+      --replace '-I/usr/local/include/PCSC/' '-I${lib.getDev pcsclite}/include/PCSC/' \
       --replace '-L/usr/local/lib/pth' '-I${pth}/lib/'
     '';
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     make DESTDIR=$out PREFIX=/ install
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Low-level I/O helpers for hexadecimal, tty/serial devices and so on";
     homepage = "https://github.com/vanrein/hexio";
     license = licenses.bsd2;

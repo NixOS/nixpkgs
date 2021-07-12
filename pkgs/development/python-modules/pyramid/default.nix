@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , webtest
@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "pyramid";
-  version = "1.10.4";
+  version = "1.10.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d80ccb8cfa550139b50801591d4ca8a5575334adb493c402fce2312f55d07d66";
+    sha256 = "b7cd66595bef92f81764b976ddde2b2fa8e4f5f325e02f65f6ec7f3708b29cf6";
   };
 
   checkInputs = [ webtest zope_component ];
@@ -33,7 +33,9 @@ buildPythonPackage rec {
   # https://github.com/Pylons/pyramid/issues/1899
   doCheck = !isPy35;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "pyramid" ];
+
+  meta = with lib; {
     description = "The Pyramid Web Framework, a Pylons project";
     homepage = "https://trypyramid.com/";
     license = licenses.bsd0;

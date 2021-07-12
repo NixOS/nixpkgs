@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjack2, zita-resampler }:
+{ lib, stdenv, fetchurl, libjack2, zita-resampler }:
 
 stdenv.mkDerivation rec {
   version = "0.4.4";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "command line Jack clients to transmit full quality multichannel audio over a local IP network";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = licenses.gpl3;

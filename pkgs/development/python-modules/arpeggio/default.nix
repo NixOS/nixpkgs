@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "Arpeggio";
-  version = "1.9.2";
+  version = "1.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "948ce06163a48a72c97f4fe79ad3d1c1330b6fec4f22ece182fb60ef60bd022b";
+    sha256 = "bfe349f252f82f82d84cb886f1d5081d1a31451e6045275e9f90b65d0daa06f1";
   };
 
   # Shall not be needed for next release

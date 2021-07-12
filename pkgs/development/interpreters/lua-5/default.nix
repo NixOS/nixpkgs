@@ -1,35 +1,24 @@
 # similar to interpreters/python/default.nix
 { stdenv, lib, callPackage, fetchurl, fetchpatch }:
-let
-  dsoPatch51 = fetchurl {
-    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/lua-arch.patch?h=packages/lua51";
-    sha256 = "11fcyb4q55p4p7kdb8yp85xlw8imy14kzamp2khvcyxss4vw8ipw";
-    name = "lua-arch.patch";
+
+rec {
+  lua5_4 = callPackage ./interpreter.nix {
+    sourceVersion = { major = "5"; minor = "4"; patch = "3"; };
+    hash = "1yxvjvnbg4nyrdv10bq42gz6dr66pyan28lgzfygqfwy2rv24qgq";
+
+    patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch;
   };
 
-  dsoPatch52 = fetchurl {
-    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/liblua.so.patch?h=packages/lua52";
-    sha256 = "1by1dy4ql61f5c6njq9ibf9kaqm3y633g2q8j54iyjr4cxvqwqz9";
-    name = "lua-arch.patch";
-  };
-
-in rec {
+  lua5_4_compat = lua5_4.override({
+    compat = true;
+  });
 
   lua5_3 = callPackage ./interpreter.nix {
-    sourceVersion = { major = "5"; minor = "3"; patch = "5"; };
-    hash = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac";
-    patches =
-      lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ] ++ [
-        ./CVE-2019-6706.patch
-      ];
-    postConfigure = lib.optionalString (!stdenv.isDarwin) ''
-      cat ${./lua-5.3-dso.make} >> src/Makefile
-      sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
-    '';
+    sourceVersion = { major = "5"; minor = "3"; patch = "6"; };
+    hash = "0q3d8qhd7p0b7a4mh9g7fxqksqfs6mr1nav74vq26qvkp2dxcpzw";
 
-    postBuild = stdenv.lib.optionalString (!stdenv.isDarwin) ''
-      ( cd src; make $makeFlags "''${makeFlagsArray[@]}" liblua.so )
-    '';
+    patches =
+      lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ];
   };
 
   lua5_3_compat = lua5_3.override({
@@ -40,7 +29,7 @@ in rec {
   lua5_2 = callPackage ./interpreter.nix {
     sourceVersion = { major = "5"; minor = "2"; patch = "4"; };
     hash = "0jwznq0l8qg9wh5grwg07b5cy3lzngvl5m2nl1ikp6vqssmf9qmr";
-    patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [ dsoPatch52 ];
+    patches = lib.optional stdenv.isDarwin ./5.2.darwin.patch;
   };
 
   lua5_2_compat = lua5_2.override({
@@ -51,7 +40,7 @@ in rec {
   lua5_1 = callPackage ./interpreter.nix {
     sourceVersion = { major = "5"; minor = "1"; patch = "5"; };
     hash = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
-    patches = (if stdenv.isDarwin then [ ./5.1.darwin.patch ] else [ dsoPatch51 ])
+    patches = (lib.optional stdenv.isDarwin ./5.1.darwin.patch)
       ++ [ ./CVE-2014-5461.patch ];
   };
 

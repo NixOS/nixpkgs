@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , openssl
@@ -17,17 +17,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1vvb619cq3n88y2s8lncwcyrhb5s4gpjfiyia91pilcpnfdb04y2";
   };
 
-  cargoSha256 = "0k0ig3dynj46kh8g7d6bljcaalmp40pvdbhbjmlxrmwnjq6bhzcq";
+  cargoSha256 = "1pjd62yz7pavcinc96g2x0f5giadl9aqvz1i5vhfanh6mj6mrbl1";
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = [ ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Expose your local web server to the internet with a public URL";
     homepage = "https://tunnelto.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

@@ -1,26 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, gtkmm3, glibmm, gtksourceview3, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, gtkmm3, glibmm, gtksourceview3, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gtksourceviewmm";
   version = "3.21.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtksourceviewmm/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtksourceviewmm/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1danc9mp5mnb65j01qxkwj92z8jf1gns41wbgp17qh7050f0pc6v";
   };
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtksourceviewmm";
       versionPolicy = "none";
     };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glibmm gtkmm3 gtksourceview3 ];
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
+  meta = with lib; {
+    platforms = platforms.unix;
     homepage = "https://developer.gnome.org/gtksourceviewmm/";
     description = "C++ wrapper for gtksourceview";
     license = licenses.lgpl2;

@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , fetchpatch
+, bazel_0_26
 , buildBazelPackage
 , buildPythonPackage
 , python
@@ -26,6 +27,8 @@ let
 
   # first build all binaries and generate setup.py using bazel
   bazel-wheel = buildBazelPackage {
+    bazel = bazel_0_26;
+
     name = "${pname}-${version}-py2.py3-none-any.whl";
 
     src = fetchFromGitHub {
@@ -122,9 +125,10 @@ in buildPythonPackage {
   '';
 
   meta = with lib; {
+    broken = true;  # tf-probability 0.8.0 is not compatible with tensorflow 2.3.2
     description = "Library for probabilistic reasoning and statistical analysis";
     homepage = "https://www.tensorflow.org/probability/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = with maintainers; [];  # This package is maintainerless.
   };
 }

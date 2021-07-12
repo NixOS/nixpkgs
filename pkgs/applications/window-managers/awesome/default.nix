@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk-pixbuf
+{ lib, stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkg-config, gdk-pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobject-introspection
 , which, dbus, nettools, git, doxygen
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     doxygen
     imagemagick
     makeWrapper
-    pkgconfig
+    pkg-config
     xmlto docbook_xml_dtd_45
     docbook_xsl findXMLCatalogs
     asciidoctor
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
                   xcbutilxrm ]
-                  ++ stdenv.lib.optional gtk3Support gtk3;
+                  ++ lib.optional gtk3Support gtk3;
 
   cmakeFlags = [
     #"-DGENERATE_MANPAGES=ON"
     "-DOVERRIDE_VERSION=${version}"
-  ] ++ stdenv.lib.optional luaPackages.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so"
+  ] ++ lib.optional luaPackages.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so"
   ;
 
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     inherit lua;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly configurable, dynamic window manager for X";
     homepage    = "https://awesomewm.org/";
     license     = licenses.gpl2Plus;

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-html-parse'';
-  version = ''20200925-git'';
+  baseName = "cl-html-parse";
+  version = "20200925-git";
 
-  description = ''HTML Parser'';
+  description = "HTML Parser";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-html-parse/2020-09-25/cl-html-parse-20200925-git.tgz'';
-    sha256 = ''14pfd4gwjb8ywr79dqrcznw6h8a1il3g5b6cm5x9aiyr49zdv15f'';
+    url = "http://beta.quicklisp.org/archive/cl-html-parse/2020-09-25/cl-html-parse-20200925-git.tgz";
+    sha256 = "14pfd4gwjb8ywr79dqrcznw6h8a1il3g5b6cm5x9aiyr49zdv15f";
   };
 
   packageName = "cl-html-parse";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "mp3cat";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "install_bin"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line program which concatenates MP3 files";
     longDescription = ''
       A command line program which concatenates MP3 files, mp3cat

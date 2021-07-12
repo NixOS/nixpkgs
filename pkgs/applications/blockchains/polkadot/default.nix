@@ -7,26 +7,27 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.8.26";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "1bvma6k3gsjqh8w76k4kf52sjg8wxn1b7a409kmnmmvmd9j6z5ia";
+    sha256 = "sha256-5PNogoahAZUjIlQsVXwm7j5OmP3/uEEdV0vrIDXXBx8=";
   };
 
-  cargoSha256 = "0pacmmvvjgzmaxgg47qbfhqwl02jxj3i6vnmkjbj9npzqfmqf72d";
+  cargoSha256 = "0iikys90flzmnnb6l2wzag8mp91p6z9y7rjzym2sd6m7xhgbc1x6";
 
   nativeBuildInputs = [ clang ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
 
   # NOTE: We don't build the WASM runtimes since this would require a more
-  # complicated rust environment setup. The resulting binary is still useful for
-  # live networks since those just use the WASM blob from the network chainspec.
-  BUILD_DUMMY_WASM_BINARY = 1;
+  # complicated rust environment setup and this is only needed for developer
+  # environments. The resulting binary is useful for end-users of live networks
+  # since those just use the WASM blob from the network chainspec.
+  SKIP_WASM_BUILD = 1;
 
   # We can't run the test suite since we didn't compile the WASM runtimes.
   doCheck = false;
@@ -34,8 +35,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Polkadot Node Implementation";
     homepage = "https://polkadot.network";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ akru andresilva RaghavSood ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ akru andresilva asymmetric FlorianFranzen RaghavSood ];
     platforms = platforms.linux;
   };
 }

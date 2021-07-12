@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
+{ lib, stdenv, fetchurl, pkg-config, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
 , libtool, makeWrapper, autoreconfHook, fetchpatch
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ neon libusb-compat-0_1 openssl udev avahi freeipmi ];
 
-  nativeBuildInputs = [ autoreconfHook libtool pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook libtool pkg-config makeWrapper ];
 
   configureFlags =
     [ "--with-all"
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       "$out/lib:${neon}/lib:${libusb-compat-0_1.out}/lib:${avahi}/lib:${freeipmi}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network UPS Tools";
     longDescription = ''
       Network UPS Tools is a collection of programs which provide a common

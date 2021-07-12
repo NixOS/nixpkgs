@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, texinfo }:
+{ lib, stdenv, fetchurl, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "indent-2.2.12";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ texinfo ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-implicit-function-declaration";
 
   hardeningDisable = [ "format" ];
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.gnu.org/software/indent/";
     description = "A source code reformatter";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.mmahut ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.mmahut ];
+    platforms = lib.platforms.unix;
   };
 }

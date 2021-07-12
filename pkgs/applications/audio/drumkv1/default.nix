@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5 }:
+{ mkDerivation, lib, fetchurl, pkg-config, libjack2, alsa-lib, libsndfile, liblo, lv2, qt5 }:
 
 mkDerivation rec {
   pname = "drumkv1";
@@ -9,9 +9,9 @@ mkDerivation rec {
     sha256 = "1bzkaz7sqx1pvirja8zm7i2ckzl5ad6xspr4840389ik3l8qpnr5";
   };
 
-  buildInputs = [ libjack2 alsaLib libsndfile liblo lv2 qt5.qtbase qt5.qttools ];
+  buildInputs = [ libjack2 alsa-lib libsndfile liblo lv2 qt5.qtbase qt5.qttools ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "An old-school drum-kit sampler synthesizer with stereo fx";

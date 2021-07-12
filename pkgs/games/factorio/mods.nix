@@ -2,12 +2,12 @@
 # mods. It will eventually be replaced by a nixos-channel that will provide
 # derivations for most or all of the mods tracked through the official mod
 # manager site.
-{ stdenv, fetchurl
+{ lib, fetchurl
 , factorio-utils
 , allRecommendedMods ? true
 , allOptionalMods ? false
 }:
-with stdenv.lib;
+with lib;
 let
   modDrv = factorio-utils.modDrv { inherit allRecommendedMods allOptionalMods; };
 in

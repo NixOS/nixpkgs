@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi, six}:
+{ lib, buildPythonPackage, fetchPypi, six}:
 
 buildPythonPackage rec {
   pname = "bumps";
-  version = "0.7.16";
+  version = "0.8.0";
 
   propagatedBuildInputs = [six];
 
@@ -12,10 +12,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3594452487b8404f1efaace9b70aefaeb345fa44dd74349f7829a61161d2f69a";
+    sha256 = "9f92c05effd8175763799d19ca55592e89b053318f611148a6725159aea41d67";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.reflectometry.org/danse/software.html";
     description = "Data fitting with bayesian uncertainty analysis";
     maintainers = with maintainers; [ rprospero ];

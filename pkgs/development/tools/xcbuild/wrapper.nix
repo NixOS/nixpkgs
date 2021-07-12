@@ -3,7 +3,7 @@
 , runtimeShell, callPackage
 , xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
 , xcodeVer ? stdenv.targetPlatform.xcodeVer or "9.4.1"
-, sdkVer ? stdenv.targetPlatform.sdkVer or "10.12" }:
+, sdkVer ? stdenv.targetPlatform.darwinSdkVersion or "10.12" }:
 
 let
 
@@ -28,7 +28,7 @@ let
   };
 
   platforms = callPackage ./platforms.nix {
-    inherit sdks xcodePlatform;
+    inherit sdks xcodePlatform stdenv;
   };
 
   xcconfig = writeText "nix.xcconfig" ''

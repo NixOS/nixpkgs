@@ -1,19 +1,19 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , attr, e2fsprogs
 , curl, librsync, libthreadar
 , gpgme, libgcrypt, openssl
 , bzip2, lzo, xz, zlib
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.6.12";
+  version = "2.7.1";
   pname = "dar";
 
   src = fetchurl {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "0jwgaim2p93skdpjwiz5qgibd3j9965ycqn47wrrjlcvzk93mvyk";
+    sha256 = "sha256-dtreitvrgX/8eL9ZLIIASHq1ZQI0z1OVOanLxdNGvu8=";
   };
 
   outputs = [ "out" "dev" ];

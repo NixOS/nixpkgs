@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "e8c237239d3ffb061069aa04fc5b3d8ae4fb0af16a9713fe0977f02261d323e9";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/samuel/python-pagerduty";
     description = "Library for the PagerDuty service API";
     license = licenses.bsd0;

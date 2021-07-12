@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "bravado-core";
-  version = "5.16.1";
+  version = "5.17.0";
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0r9gk5vkjbc407fjydms3ik3hnzajq54znyz58d8rm6pvqcvjjpl";
+    sha256 = "sha256-okQA4YJq0lyVJuDzD8mMRlOS/K3gf1qRUpw/5M0LlZE=";
   };
 
   checkInputs = [
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pytest-benchmark
   ];
 
-  checkPhase = ''pytest --benchmark-skip'';
+  checkPhase = "pytest --benchmark-skip";
 
   propagatedBuildInputs = [
     python-dateutil

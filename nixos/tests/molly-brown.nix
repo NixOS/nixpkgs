@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   in {
 
     name = "molly-brown";
-    meta = with pkgs.stdenv.lib.maintainers; { maintainers = [ ehmry ]; };
+    meta = with pkgs.lib.maintainers; { maintainers = [ ehmry ]; };
 
     nodes = {
 

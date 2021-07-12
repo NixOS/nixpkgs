@@ -5,7 +5,7 @@
 , ninja
 , patchelf
 , perl
-, pkgconfig
+, pkg-config
 , python3
 , expat
 , libdrm
@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2020.Q4.3";
+  version = "2021.Q2.5";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "O1+w2R9Fvoc+1vegiCkBA9pE/yi/p0aK82fY4jML/2c=";
+    sha256 = "0NJoGk++SHt4dtoUj3UQeW4zFtwa7osczUr+vxi8DG8=";
   };
 
   buildInputs = [
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     ninja
     patchelf
     perl
-    pkgconfig
+    pkg-config
     python3
   ];
 
@@ -66,16 +66,12 @@ in stdenv.mkDerivation rec {
   cmakeDir = "../drivers/xgl";
 
   # LTO is disabled in gcc for i686 as of #66528
-  cmakeFlags = stdenv.lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
+  cmakeFlags = lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
 
   installPhase = ''
     install -Dm755 -t $out/lib icd/amdvlk${suffix}.so
-    install -Dm644 -t $out/share/vulkan/icd.d ../drivers/AMDVLK/json/Redhat/amd_icd${suffix}.json
-
-    substituteInPlace $out/share/vulkan/icd.d/amd_icd${suffix}.json --replace \
-      "/usr/lib64" "$out/lib"
-    substituteInPlace $out/share/vulkan/icd.d/amd_icd${suffix}.json --replace \
-      "/usr/lib" "$out/lib"
+    install -Dm644 -t $out/share/vulkan/icd.d icd/amd_icd${suffix}.json
+    install -Dm644 -t $out/share/vulkan/implicit_layer.d icd/amd_icd${suffix}.json
 
     patchelf --set-rpath "$rpath" $out/lib/amdvlk${suffix}.so
   '';
@@ -83,12 +79,12 @@ in stdenv.mkDerivation rec {
   # Keep the rpath, otherwise vulkaninfo and vkcube segfault
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AMD Open Source Driver For Vulkan";
     homepage = "https://github.com/GPUOpen-Drivers/AMDVLK";
     changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ danieldk Flakebi ];
+    maintainers = with maintainers; [ Flakebi ];
   };
 }

@@ -1,32 +1,53 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , argh
 , pathtools
 , pyyaml
-, pkgs
+, flaky
+, pytest-timeout
+, pytestCheckHook
+, CoreServices
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "0.10.3";
+  version = "2.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4214e1379d128b0588021880ccaf40317ee156d4603ac388b9adcf29165e0c04";
+    sha256 = "sha256-AjfbTZAkhZvqJ9DvtZ/nXu8pCDP9mIuOrXqHmwMIwts=";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin
-    [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
-  propagatedBuildInputs = [ argh pathtools pyyaml ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  doCheck = false;
+  propagatedBuildInputs = [
+    argh
+    pathtools
+    pyyaml
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    flaky
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=watchdog" "" \
+      --replace "--cov-report=term-missing" ""
+  '';
+
+  pythonImportsCheck = [ "watchdog" ];
+
+  meta = with lib; {
     description = "Python API and shell utilities to monitor file system events";
     homepage = "https://github.com/gorakhargosh/watchdog";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
+    # error: use of undeclared identifier 'kFSEventStreamEventFlagItemCloned'
+    broken = stdenv.isDarwin;
   };
-
 }

@@ -1,0 +1,22 @@
+diff --git a/tests/base.py b/tests/base.py
+index b05de1d..5ec356f 100644
+--- a/tests/base.py
++++ b/tests/base.py
+@@ -94,6 +94,7 @@ class TestMemoryLeaks(unittest.TestCase):
+ 
+     def load_xml(self, name, xpath=None):
+         """returns xml.etree"""
++        etree.set_default_parser(parser=etree.XMLParser())
+         root = etree.parse(self.path(name)).getroot()
+         if xpath is None:
+             return root
+diff --git a/tests/test_doc_examples.py b/tests/test_doc_examples.py
+index 2fc490f..53d2377 100644
+--- a/tests/test_doc_examples.py
++++ b/tests/test_doc_examples.py
+@@ -42,3 +42,5 @@ def test_doc_example(example):
+     """
+     with cd(example.parent):
+         runpy.run_path(str(example))
++    from lxml import etree
++    etree.set_default_parser(parser=etree.XMLParser())

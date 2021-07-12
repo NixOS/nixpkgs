@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , gtk3
@@ -24,16 +24,16 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ gtk3 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = lib.optionals stdenv.isLinux [ gtk3 ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config python3 ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config python3 ];
 
-  cargoSha256 = "1a0zy8gfc1gdk8nnv5qr4yspqy1jsip5nql3w74rl6h46cplpf5y";
+  cargoSha256 = "0z1ip667d1qwvm9md3zg8ib9jixpg7qj5ypwib7r2928h14yg7ck";
 
   cargoBuildFlags = [ "--bin" "xprite-native" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rickyhan/xprite-editor";
     description = "Pixel art editor";
     license = licenses.gpl3;

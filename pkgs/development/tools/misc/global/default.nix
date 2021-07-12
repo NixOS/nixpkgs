@@ -1,21 +1,23 @@
-{ fetchurl, stdenv, libtool, makeWrapper
-, coreutils, ctags, ncurses, pythonPackages, sqlite, universal-ctags
+{ fetchurl, lib, stdenv, libtool, makeWrapper
+, coreutils, ctags, ncurses, python3Packages, sqlite, universal-ctags
 }:
 
-stdenv.mkDerivation rec {
+let
+  pygments = python3Packages.pygments;
+in stdenv.mkDerivation rec {
   pname = "global";
-  version = "6.6.5";
+  version = "6.6.7";
 
   src = fetchurl {
     url = "mirror://gnu/global/${pname}-${version}.tar.gz";
-    sha256 = "10vvsgx8v54whb4j9mk5qqyb5h3rdd9da0il3wir8pcpksyk0dww";
+    sha256 = "sha256-aaD3f1OCfFVoF2wdOCFm3zYedCY6BH8LMFiqLyrVijw=";
   };
 
   nativeBuildInputs = [ libtool makeWrapper ];
 
   buildInputs = [ ncurses ];
 
-  propagatedBuildInputs = [ pythonPackages.pygments ];
+  propagatedBuildInputs = [ pygments ];
 
   configureFlags = [
     "--with-ltdl-include=${libtool}/include"
@@ -34,12 +36,12 @@ stdenv.mkDerivation rec {
     cp -v *.el "$out/share/emacs/site-lisp"
 
     wrapProgram $out/bin/gtags \
-      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
+      --prefix PYTHONPATH : "$(toPythonPath ${pygments})"
     wrapProgram $out/bin/global \
-      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
+      --prefix PYTHONPATH : "$(toPythonPath ${pygments})"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Source code tag system";
     longDescription = ''
       GNU GLOBAL is a source code tagging system that works the same way

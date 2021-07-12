@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, qt5 }:
+{ lib, python3Packages, fetchFromGitHub, qt5 }:
   python3Packages.buildPythonApplication rec {
     pname = "labelImg";
     version = "1.8.3";
@@ -15,7 +15,7 @@
     propagatedBuildInputs = with python3Packages; [
       pyqt5
       lxml
-      sip
+      sip_4
     ];
     preBuild = ''
       make qt5py3
@@ -27,7 +27,7 @@
     preFixup = ''
       makeWrapperArgs+=("''${qtWrapperArgs[@]}")
     '';
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A graphical image annotation tool and label object bounding boxes in images";
       homepage = "https://github.com/tzutalin/labelImg";
       license = licenses.mit;

@@ -1,14 +1,26 @@
-{ stdenv, fetchurl, automake, autoconf, subversion, fuse, apr, perl }: 
+{ lib, stdenv, fetchurl, autoreconfHook, subversion, fuse, apr, perl }:
 
-stdenv.mkDerivation {
-  name = "svnfs-0.4";
+stdenv.mkDerivation rec {
+  pname = "svnfs";
+  version = "0.4";
 
   src = fetchurl {
-    url = "http://www.jmadden.eu/wp-content/uploads/svnfs/svnfs-0.4.tgz";
+    url = "http://www.jmadden.eu/wp-content/uploads/svnfs/svnfs-${version}.tgz";
     sha256 = "1lrzjr0812lrnkkwk60bws9k1hq2iibphm0nhqyv26axdsygkfky";
   };
 
-  buildInputs = [automake autoconf subversion fuse apr perl];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ subversion fuse apr perl ];
+
+  # autoconf's AC_CHECK_HEADERS and AC_CHECK_LIBS fail to detect libfuse on
+  # Darwin if FUSE_USE_VERSION isn't set at configure time.
+  #
+  # NOTE: Make sure the value of FUSE_USE_VERSION specified here matches the
+  # actual version used in the source code:
+  #
+  #     $ tar xf "$(nix-build -A svnfs.src)"
+  #     $ grep -R FUSE_USE_VERSION
+  configureFlags = lib.optionals stdenv.isDarwin [ "CFLAGS=-DFUSE_USE_VERSION=25" ];
 
   # why is this required?
   preConfigure=''
@@ -21,8 +33,8 @@ stdenv.mkDerivation {
   meta = {
     description = "FUSE filesystem for accessing Subversion repositories";
     homepage = "http://www.jmadden.eu/index.php/svnfs/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [lib.maintainers.marcweber];
+    platforms = lib.platforms.unix;
   };
 }

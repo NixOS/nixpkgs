@@ -16,7 +16,14 @@ let
   alias = domain: list: "${list}: \"|${pkgs.mlmmj}/bin/mlmmj-receive -L ${listDir domain list}/\"";
   subjectPrefix = list: "[${list}]";
   listAddress = domain: list: "${list}@${domain}";
-  customHeaders = domain: list: [ "List-Id: ${list}" "Reply-To: ${list}@${domain}" ];
+  customHeaders = domain: list: [
+    "List-Id: ${list}"
+    "Reply-To: ${list}@${domain}"
+    "List-Post: <mailto:${list}@${domain}>"
+    "List-Help: <mailto:${list}+help@${domain}>"
+    "List-Subscribe: <mailto:${list}+subscribe@${domain}>"
+    "List-Unsubscribe: <mailto:${list}+unsubscribe@${domain}>"
+  ];
   footer = domain: list: "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
   createList = d: l:
     let ctlDir = listCtl d l; in
@@ -110,17 +117,29 @@ in
     services.postfix = {
       enable = true;
       recipientDelimiter= "+";
-      extraMasterConf = ''
-        mlmmj unix - n n - - pipe flags=ORhu user=mlmmj argv=${pkgs.mlmmj}/bin/mlmmj-receive -F -L ${spoolDir}/$nexthop
-      '';
+      masterConfig.mlmmj = {
+        type = "unix";
+        private = true;
+        privileged = true;
+        chroot = false;
+        wakeup = 0;
+        command = "pipe";
+        args = [
+          "flags=ORhu"
+          "user=mlmmj"
+          "argv=${pkgs.mlmmj}/bin/mlmmj-receive"
+          "-F"
+          "-L"
+          "${spoolDir}/$nexthop"
+        ];
+      };
 
       extraAliases = concatMapLines (alias cfg.listDomain) cfg.mailLists;
 
-      extraConfig = ''
-        transport_maps = hash:${stateDir}/transports
-        virtual_alias_maps = hash:${stateDir}/virtuals
-        propagate_unmatched_extensions = virtual
-      '';
+      extraConfig = "propagate_unmatched_extensions = virtual";
+
+      virtual = concatMapLines (virtual cfg.listDomain) cfg.mailLists;
+      transport = concatMapLines (transport cfg.listDomain) cfg.mailLists;
     };
 
     environment.systemPackages = [ pkgs.mlmmj ];
@@ -129,10 +148,8 @@ in
           ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
           ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
           ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-          echo "${concatMapLines (virtual cfg.listDomain) cfg.mailLists}" > ${stateDir}/virtuals
-          echo "${concatMapLines (transport cfg.listDomain) cfg.mailLists}" > ${stateDir}/transports
-          ${pkgs.postfix}/bin/postmap ${stateDir}/virtuals
-          ${pkgs.postfix}/bin/postmap ${stateDir}/transports
+          ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
+          ${pkgs.postfix}/bin/postmap /etc/postfix/transport
       '';
 
     systemd.services.mlmmj-maintd = {

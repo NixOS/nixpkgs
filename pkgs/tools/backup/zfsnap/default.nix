@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, coreutils, installShellFiles }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0-beta3";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     installShellCompletion completion/*.{bash,zsh}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A portable, performant script to make rolling ZFS snapshots easy";
     homepage = "https://github.com/zfsnap/zfsnap";
     license = licenses.bsd3;

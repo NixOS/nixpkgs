@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "jitsi-meet";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = teams.jitsi.members;
   };
 
@@ -8,6 +8,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client = { nodes, pkgs, ... }: {
     };
     server = { config, pkgs, ... }: {
+      virtualisation.memorySize = 512;
       services.jitsi-meet = {
         enable = true;
         hostName = "server";
@@ -37,13 +38,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "journalctl -b -u jitsi-videobridge2 -o cat | grep -q 'Performed a successful health check'"
     )
     server.wait_until_succeeds(
-        "journalctl -b -u jicofo -o cat | grep -q 'connected .JID: focus@auth.server'"
-    )
-    server.wait_until_succeeds(
         "journalctl -b -u prosody -o cat | grep -q 'Authenticated as focus@auth.server'"
-    )
-    server.wait_until_succeeds(
-        "journalctl -b -u prosody -o cat | grep -q 'focus.server:component: External component successfully authenticated'"
     )
     server.wait_until_succeeds(
         "journalctl -b -u prosody -o cat | grep -q 'Authenticated as jvb@auth.server'"

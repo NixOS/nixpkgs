@@ -1,21 +1,17 @@
-{ stdenv, cmake, llvmPackages, irony }:
+{ lib, stdenv, cmake, llvmPackages, llvm, irony }:
 
 stdenv.mkDerivation {
   pname = "irony-server";
   inherit (irony) src version;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmPackages.libclang llvmPackages.llvm ];
+  nativeBuildInputs = [ cmake llvm ];
+  buildInputs = [ llvmPackages.libclang ];
 
   dontUseCmakeBuildDir = true;
 
   cmakeDir = "server";
 
-  cmakeFlags = [
-    "-DCMAKE_PREFIX_PATH=${llvmPackages.clang-unwrapped}"
-  ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The server part of irony";
     homepage = "https://melpa.org/#/irony";
     maintainers = [ maintainers.deepfire ];

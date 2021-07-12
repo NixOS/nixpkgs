@@ -4,7 +4,7 @@ let
 
   python = let
     packageOverrides = self: super: {
-      typeddep = super.callPackage ./typeddep {};
+      typeddep = self.callPackage ./typeddep {};
     };
   in interpreter.override {inherit packageOverrides; self = python;};
 

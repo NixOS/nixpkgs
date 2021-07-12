@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 let
 
@@ -69,7 +69,7 @@ in
     outputHashMode = "recursive";
     outputHash = "0if9l8pzwgfnbdjg5yblcy08dwn9yj3wzz29l0fycia46xlzd4ym";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/librefonts/lobstertwo";
       description = "Script font with many ligatures";
       license = licenses.ofl;

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, wrapPython }:
+{ stdenv, lib, fetchFromGitHub, wrapPython, fetchpatch }:
 
 with lib;
 
@@ -12,6 +12,13 @@ stdenv.mkDerivation {
     rev = "7a9c7bc46c4ff8b743755be86a9b29bd1a8ba1d9";
     sha256 = "03i1arwyj9qpfyyvccl21lbpz3rnnp1hsadvc0b23nh1z2ng9sff";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/stackp/Droopy/pull/30.patch";
+      sha256 = "Y6jBraKvVQAiScbvLwezSKeWY3vaAbhaNXEGNaItigQ=";
+    })
+  ];
 
   nativeBuildInputs = [ wrapPython ];
 

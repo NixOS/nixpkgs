@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, dpkg, ghostscript, a2ps, coreutils, gnused, gawk, file, makeWrapper }:
+{ lib, stdenv, fetchurl, cups, dpkg, ghostscript, a2ps, coreutils, gnused, gawk, file, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "mfcj470dw-cupswrapper";
@@ -28,18 +28,18 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw $out/lib/cups/filter/brother_lpdwrapper_mfcj470dw
 
     wrapProgram $out/opt/brother/Printers/mfcj470dw/lpd/psconvertij2 \
-    --prefix PATH ":" ${ stdenv.lib.makeBinPath [ gnused coreutils gawk ] }
+    --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }
 
     wrapProgram $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw \
-    --prefix PATH ":" ${ stdenv.lib.makeBinPath [ ghostscript a2ps file gnused coreutils ] }
+    --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused coreutils ] }
     '';
 
   meta = {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-J470DW LPR driver";
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj470dw_us_eu_as&os=128";
-    maintainers = [ stdenv.lib.maintainers.yochai ];
+    maintainers = [ lib.maintainers.yochai ];
   };
 }

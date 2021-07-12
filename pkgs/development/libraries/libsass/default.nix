@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libsass";
-  version = "3.6.4";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    sha256 = "074kvacdan85h4qrvsk97575ys9xgkc044gplz3m6vn4a8pcl2rn";
+    sha256 = "1cxj6r85d5f3qxdwzxrmkx8z875hig4cr8zsi30w6vj23cyds3l2";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C/C++ implementation of a Sass compiler";
     homepage = "https://github.com/sass/libsass";
     license = licenses.mit;

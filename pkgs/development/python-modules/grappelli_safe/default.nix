@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "35b7ccaf9acc54684c73aeefbeaddc63b8a16143bd981bd5b3ebef253def07df";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A snapshot of django-grappelli for the Mezzanine CMS";
     longDescription = ''
       grappelli_safe was created to provide a snapshot of the

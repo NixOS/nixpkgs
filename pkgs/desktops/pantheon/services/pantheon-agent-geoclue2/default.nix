@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
    ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pantheon Geoclue2 Agent";
     homepage = "https://github.com/elementary/pantheon-agent-geoclue2";
     license = licenses.gpl3Plus;

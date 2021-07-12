@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, mock }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, mock }:
 
 buildPythonPackage rec {
   pname = "darcsver";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # AttributeError: 'module' object has no attribute 'test_darcsver'
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Darcsver, generate a version number from Darcs history";
     homepage = "https://pypi.python.org/pypi/darcsver";
     license = "BSD-style";

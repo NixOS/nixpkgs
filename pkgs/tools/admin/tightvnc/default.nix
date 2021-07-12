@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibsWrapper, zlib, libjpeg, imake, gccmakedep, libXmu
+{ lib, stdenv, fetchurl, xlibsWrapper, zlib, libjpeg, imake, gccmakedep, libXmu
 , libXaw, libXpm, libXp , perl, xauth, fontDirectories, openssh }:
 
 stdenv.mkDerivation {
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://vnc-tight.sourceforge.net/";
     description = "Improved version of VNC";
 
@@ -80,6 +80,6 @@ stdenv.mkDerivation {
     '';
 
     maintainers = [];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

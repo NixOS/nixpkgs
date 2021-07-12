@@ -1,6 +1,6 @@
-{ stdenv, mkChromiumDerivation, channel, enableWideVine }:
+{ lib, mkChromiumDerivation, channel, enableWideVine, ungoogled }:
 
-with stdenv.lib;
+with lib;
 
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
@@ -62,6 +62,8 @@ mkChromiumDerivation (base: rec {
       -e '/\[Desktop Entry\]/a\' \
       -e 'StartupWMClass=chromium-browser' \
       $out/share/applications/chromium-browser.desktop
+  '' + lib.optionalString (channel != "stable") ''
+    cp -v "$buildPath/crashpad_handler" "$libExecPath/"
   '';
 
   passthru = { inherit sandboxExecutableName; };
@@ -69,19 +71,26 @@ mkChromiumDerivation (base: rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
-    description = "An open source web browser from Google";
+    description = "An open source web browser from Google"
+      + optionalString ungoogled ", with dependencies on Google web services removed";
     longDescription = ''
       Chromium is an open source web browser from Google that aims to build a
       safer, faster, and more stable way for all Internet users to experience
       the web. It has a minimalist user interface and provides the vast majority
       of source code for Google Chrome (which has some additional features).
     '';
-    homepage = "https://www.chromium.org/";
-    maintainers = with maintainers; [ primeos thefloweringash bendlas ]; # See README.md
+    homepage = if ungoogled
+      then "https://github.com/Eloston/ungoogled-chromium"
+      else "https://www.chromium.org/";
+    maintainers = with maintainers; if ungoogled
+      then [ squalus primeos ]
+      else [ primeos thefloweringash bendlas ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
-    hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
+    mainProgram = "chromium";
+    hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
+      then ["aarch64-linux" "x86_64-linux"]
+      else [];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
-    broken = channel == "dev"; # Blocked on https://bugs.chromium.org/p/chromium/issues/detail?id=1141896
   };
 })

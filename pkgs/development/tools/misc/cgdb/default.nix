@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, readline, flex, texinfo }:
+{ lib, stdenv, fetchurl, ncurses, readline, flex, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "cgdb";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses readline flex texinfo ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A curses interface to gdb";
 
     homepage = "https://cgdb.github.io/";

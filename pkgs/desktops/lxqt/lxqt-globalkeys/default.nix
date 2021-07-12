@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "lxqt-globalkeys";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "09vib713zbmnwicijycl3n9q35l45lrcw129lf9z95s3ch81x1hm";
+    sha256 = "135292l8w9sngg437n1zigkap15apifyqd9847ln84bxsmcj8lay";
   };
 
   nativeBuildInputs = [
@@ -42,9 +42,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "LXQt service for global keyboard shortcuts registration";
     homepage = "https://github.com/lxqt/lxqt-globalkeys";
-    license = licenses.lgpl21;
+    description = "LXQt service for global keyboard shortcuts registration";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

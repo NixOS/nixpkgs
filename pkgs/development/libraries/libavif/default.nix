@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libaom
 , cmake
@@ -11,21 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libavif";
-  version = "0.8.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0f0l8ywz2jhc9mkfrzdxdvr3q39a404yn9wcyvqshfbkbprsan4p";
+    sha256 = "sha256-0/5JLynYzr7ZewBbrNoxr26UkVzpSP9RqlmH2ql8tfs=";
   };
 
   # reco: encode libaom slowest but best, decode dav1d fastest
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DAVIF_CODEC_AOM=ON"
-    "-DAVIF_CODEC_DAV1D=ON"
+    "-DAVIF_CODEC_AOM=ON" # best encoder (slow but small)
+    "-DAVIF_CODEC_DAV1D=ON" # best decoder (fast)
+    "-DAVIF_CODEC_AOM_DECODE=OFF"
     "-DAVIF_BUILD_APPS=ON"
   ];
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     dav1d
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "C implementation of the AV1 Image File Format";
     longDescription = ''
       Libavif aims to be a friendly, portable C implementation of the

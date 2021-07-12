@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, django, dj-database-url }:
+{ lib, buildPythonPackage, fetchFromGitHub, python, django, dj-database-url }:
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
@@ -19,9 +19,9 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/django-polymorphic/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
   };
 }

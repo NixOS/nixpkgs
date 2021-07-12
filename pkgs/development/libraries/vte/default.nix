@@ -3,14 +3,15 @@
 , fetchurl
 , fetchpatch
 , gettext
-, pkgconfig
+, pkg-config
 , meson
 , ninja
-, gnome3
+, gnome
 , glib
 , gtk3
 , gobject-introspection
 , vala
+, python3
 , libxml2
 , gnutls
 , gperf
@@ -24,18 +25,25 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.62.1";
+  version = "0.64.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "139had0zcggzrxx9rjy0a67mahzm474amafh168y11421iyfhsf3";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-EvtBqf+OA8XxcRtGVgkQpLmzECrsPp52Cc7vTfqYqio=";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = pname; };
-  };
+  patches = [
+    # VTE needs a small patch to work with musl:
+    # https://gitlab.gnome.org/GNOME/vte/issues/72
+    # Taken from https://git.alpinelinux.org/aports/tree/community/vte3
+    (fetchpatch {
+      name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
+      sha256 = "FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -44,8 +52,9 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
+    python3
   ];
 
   buildInputs = [
@@ -64,23 +73,21 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  patches =
-    # VTE needs a small patch to work with musl:
-    # https://gitlab.gnome.org/GNOME/vte/issues/72
-    lib.optional
-      stdenv.hostPlatform.isMusl
-      (fetchpatch {
-            name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
-            url = "https://gitlab.gnome.org/GNOME/vte/uploads/c334f767f5d605e0f30ecaa2a0e4d226/0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
-            sha256 = "1ii9db9i5l3fy2alxz7bjfsgjs3lappnlx339dvxbi2141zknf5r";
-      });
-
   postPatch = ''
     patchShebangs perf/*
     patchShebangs src/box_drawing_generate.sh
+    patchShebangs src/parser-seq.py
+    patchShebangs src/modes.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+  };
+
+  meta = with lib; {
     homepage = "https://www.gnome.org/";
     description = "A library implementing a terminal emulator widget for GTK";
     longDescription = ''
@@ -91,8 +98,8 @@ stdenv.mkDerivation rec {
       character set conversion, as well as emulating any terminal known to
       the system's terminfo database.
     '';
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ astsmtl antono lethalman ] ++ teams.gnome.members;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ astsmtl antono ] ++ teams.gnome.members;
     platforms = platforms.unix;
   };
 }

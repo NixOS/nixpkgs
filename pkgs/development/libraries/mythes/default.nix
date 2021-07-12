@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, hunspell, ncurses, pkgconfig, perl }:
+{ lib, stdenv, fetchurl, hunspell, ncurses, pkg-config, perl }:
 
 stdenv.mkDerivation rec {
   name = "mythes-1.2.4";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ hunspell ];
-  nativeBuildInputs = [ ncurses pkgconfig perl ];
+  nativeBuildInputs = [ ncurses pkg-config perl ];
 
   meta = {
     homepage = "http://hunspell.sourceforge.net/";
     description = "Thesaurus library from Hunspell project";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     inherit (hunspell.meta) platforms;
   };
 }

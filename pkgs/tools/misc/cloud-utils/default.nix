@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, makeWrapper
-, gawk, gnused, utillinux, file
-, wget, python3, qemu-utils, euca2ools
+{ lib, stdenv, fetchurl, makeWrapper
+, gawk, gnused, util-linux, file
+, wget, python3, qemu-utils
 , e2fsprogs, cdrkit
 , gptfdisk }:
 
 let
   # according to https://packages.debian.org/sid/cloud-image-utils + https://packages.debian.org/sid/admin/cloud-guest-utils
   guestDeps = [
-    e2fsprogs gptfdisk gawk gnused utillinux
+    e2fsprogs gptfdisk gawk gnused util-linux
   ];
   binDeps = guestDeps ++ [
     wget file qemu-utils cdrkit
@@ -37,18 +37,18 @@ in stdenv.mkDerivation rec {
     moveToOutput bin/vcs-run $guest
 
     for i in $out/bin/*; do
-      wrapProgram $i --prefix PATH : "${stdenv.lib.makeBinPath binDeps}:$out/bin"
+      wrapProgram $i --prefix PATH : "${lib.makeBinPath binDeps}:$out/bin"
     done
 
     for i in $guest/bin/*; do
-      wrapProgram $i --prefix PATH : "${stdenv.lib.makeBinPath guestDeps}:$guest/bin"
+      wrapProgram $i --prefix PATH : "${lib.makeBinPath guestDeps}:$guest/bin"
       ln -s $i $out/bin
     done
   '';
 
   dontBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.unix;
     license = licenses.gpl3;
   };

@@ -4,14 +4,14 @@ with pythonPackages;
 
 buildPythonApplication rec {
   pname = "rss2email";
-  version = "3.12.2";
+  version = "3.13";
 
   propagatedBuildInputs = [ feedparser html2text ];
   checkInputs = [ beautifulsoup4 ];
 
   src = fetchurl {
     url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
-    sha256 = "12w6x80wsw6xm17fxyymnl45aavsagg932zw621wcjz154vjghjr";
+    sha256 = "09vp2y0ibv20y9yysniv6njzigif4h74pkj31l2a8xw5g19gclna";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -32,8 +32,10 @@ buildPythonApplication rec {
     cp AUTHORS COPYING CHANGELOG README.rst $doc/share/doc/rss2email/
   '';
 
-  postCheck = ''
+  checkPhase = ''
+    runHook preCheck
     env PATH=$out/bin:$PATH python ./test/test.py
+    runHook postCheck
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
   name = "aws-mturk-clt-1.3.0";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://requester.mturk.com/developer";
     description = "Command line tools for interacting with the Amazon Mechanical Turk";
-    license = stdenv.lib.licenses.amazonsl;
+    license = lib.licenses.amazonsl;
 
     longDescription =
       ''

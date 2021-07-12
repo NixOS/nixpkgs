@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     substituteInPlace gnutls/library/__init__.py --replace "/usr/local/lib" "${pkgs.gnutls.out}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python wrapper for the GnuTLS library";
     homepage = "https://github.com/AGProjects/python-gnutls";
     license = licenses.lgpl2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -6,16 +6,16 @@
 
 buildPythonPackage rec {
   pname = "qserve";
-  version = "0.2.8";
+  version = "0.3.0";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0b04b2d4d11b464ff1efd42a9ea9f8136187d59f4076f57c9ba95361d41cd7ed";
+    sha256 = "dac1ee4ec60af6beb9af8f3f02d08d6db4cc9868b0915d626cb900a50d003ed4";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Job queue server";
     homepage = "https://github.com/pediapress/qserve";
     license = licenses.bsd3;

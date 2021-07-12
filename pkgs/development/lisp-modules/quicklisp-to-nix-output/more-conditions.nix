@@ -1,18 +1,19 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''more-conditions'';
-  version = ''20180831-git'';
+  baseName = "more-conditions";
+  version = "20180831-git";
 
   parasites = [ "more-conditions/test" ];
 
-  description = ''This system provides some generic condition classes in
-                conjunction with support functions and macros.'';
+  description = "This system provides some generic condition classes in
+                conjunction with support functions and macros.";
 
   deps = [ args."alexandria" args."closer-mop" args."fiveam" args."let-plus" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/more-conditions/2018-08-31/more-conditions-20180831-git.tgz'';
-    sha256 = ''0wa989kv3sl977g9szxkx52fdnww6aj2a9i77363f90iq02vj97x'';
+    url = "http://beta.quicklisp.org/archive/more-conditions/2018-08-31/more-conditions-20180831-git.tgz";
+    sha256 = "0wa989kv3sl977g9szxkx52fdnww6aj2a9i77363f90iq02vj97x";
   };
 
   packageName = "more-conditions";

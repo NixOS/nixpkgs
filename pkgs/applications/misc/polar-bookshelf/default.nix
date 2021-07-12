@@ -1,24 +1,60 @@
-{ stdenv, lib, makeWrapper, fetchurl
-, dpkg, wrapGAppsHook, autoPatchelfHook
-, gtk3, cairo, pango, atk, gdk-pixbuf, glib
-, at-spi2-atk, dbus, libX11, libxcb, libXi
-, libXcursor, libXdamage, libXrandr, libXcomposite
-, libXext, libXfixes, libXrender, libXtst, libXScrnSaver
-, nss, nspr, alsaLib, cups, fontconfig, expat
-, libudev0-shim, glibc, curl, openssl, libnghttp2, gsettings-desktop-schemas }:
+{ stdenv
+, lib
+, makeWrapper
+, fetchurl
+, dpkg
+, wrapGAppsHook
+, autoPatchelfHook
+, gtk3
+, cairo
+, pango
+, atk
+, gdk-pixbuf
+, glib
+, at-spi2-atk
+, dbus
+, libX11
+, libxcb
+, libXi
+, libXcursor
+, libXdamage
+, libXrandr
+, libXcomposite
+, libXext
+, libXfixes
+, libXrender
+, libXtst
+, libXScrnSaver
+, nss
+, nspr
+, alsa-lib
+, cups
+, fontconfig
+, expat
+, libudev0-shim
+, glibc
+, curl
+, openssl
+, libnghttp2
+, gsettings-desktop-schemas
+, libdrm
+, mesa
+}:
 
 
 stdenv.mkDerivation rec {
   pname = "polar-bookshelf";
-  version = "2.0.42";
+  version = "2.0.103";
 
   # fetching a .deb because there's no easy way to package this Electron app
   src = fetchurl {
     url = "https://github.com/burtonator/polar-bookshelf/releases/download/v${version}/polar-desktop-app-${version}-amd64.deb";
-    hash = "sha256-JyO71wyE6b0iHAYs/6/WbG+OdUVUUPpJla+ZUzg0Gng=";
+    hash = "sha256-jcq0hW698bAhVM3fLQQeKAnld33XLkHsGjS3QwUpciQ=";
   };
 
   buildInputs = [
+    libdrm
+    mesa
     gsettings-desktop-schemas
     glib
     gtk3
@@ -42,7 +78,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     fontconfig
     expat
@@ -60,6 +96,8 @@ stdenv.mkDerivation rec {
   unpackPhase = "dpkg-deb -x $src .";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/polar-bookshelf
     mkdir -p $out/bin
     mkdir -p $out/lib
@@ -73,6 +111,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/share/applications/polar-desktop-app.desktop \
       --replace "/opt/Polar/polar-desktop-app" "$out/bin/polar-desktop-app"
+
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -82,9 +122,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://getpolarized.io/";
     description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.noneucat ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.noneucat ];
   };
 
 }

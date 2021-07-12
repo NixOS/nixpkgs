@@ -3,6 +3,9 @@
 , fetchFromGitHub
 , dill
 , filelock
+, fsspec
+, huggingface-hub
+, multiprocess
 , numpy
 , pandas
 , pyarrow
@@ -13,18 +16,21 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "1.0.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = version;
-    sha256 = "14f7847b8md5kf631zl8x2f53wy8zbzxypq4wdgzvwsjz4k7v4jn";
+    sha256 = "sha256-is8TS84varARWyfeDTbQH0pcYFTk0PcEyK183emB4GE=";
   };
 
   propagatedBuildInputs = [
     dill
     filelock
+    fsspec
+    huggingface-hub
+    multiprocess
     numpy
     pandas
     pyarrow
@@ -32,6 +38,12 @@ buildPythonPackage rec {
     tqdm
     xxhash
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"tqdm>=4.27,<4.50.0"' '"tqdm>=4.27"' \
+      --replace "huggingface_hub==0.0.2" "huggingface_hub>=0.0.2"
+  '';
 
   # Tests require pervasive internet access.
   doCheck = false;

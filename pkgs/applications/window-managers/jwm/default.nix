@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, automake, autoconf, libtool, gettext
+{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf, libtool, gettext
 , which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
 , libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-Fix-Gettext-Requirement.patch ];
 
-  nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];
+  nativeBuildInputs = [ pkg-config automake autoconf libtool gettext which ];
 
   buildInputs = [
     libX11
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://joewing.net/projects/jwm/";
     description = "Joe's Window Manager is a light-weight X11 window manager";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

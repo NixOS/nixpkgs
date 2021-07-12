@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bzip2, lzo, zlib, xz, bash, python, gnutar, gnused, gnugrep, which }:
+{ lib, stdenv, fetchurl, bzip2, lzo, zlib, xz, bash, python, gnutar, gnused, gnugrep, which }:
 
 stdenv.mkDerivation (rec {
   pname = "xe-guest-utilities";
@@ -6,9 +6,9 @@ stdenv.mkDerivation (rec {
   meta = {
     description = "Citrix XenServer Tools";
     homepage = "http://citrix.com/English/ps2/products/product.asp?contentID=683148&ntref=hp_nav_US";
-    maintainers = with stdenv.lib.maintainers; [ benwbooth ];
-    platforms = stdenv.lib.platforms.linux;
-    license = [ stdenv.lib.licenses.gpl2 stdenv.lib.licenses.lgpl21 ];
+    maintainers = with lib.maintainers; [ benwbooth ];
+    platforms = lib.platforms.linux;
+    license = [ lib.licenses.gpl2 lib.licenses.lgpl21 ];
   };
   src = fetchurl {
     url = "https://sources.archlinux.org/other/community/xe-guest-utilities/xe-guest-utilities_${version}-1120.tar.gz";

@@ -27,16 +27,17 @@ pythonPackages.callPackage
     , ...
     }@args:
     let
-      inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromPypi moduleName;
+      inherit (pkgs) stdenv;
+      inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromLegacy fetchFromPypi moduleName;
 
       inherit (import ./pep425.nix {
-        inherit lib python;
+        inherit lib poetryLib python;
         inherit (pkgs) stdenv;
       }) selectWheel
         ;
       fileCandidates =
         let
-          supportedRegex = ("^.*?(" + builtins.concatStringsSep "|" supportedExtensions + ")");
+          supportedRegex = ("^.*(" + builtins.concatStringsSep "|" supportedExtensions + ")");
           matchesVersion = fname: builtins.match ("^.*" + builtins.replaceStrings [ "." ] [ "\\." ] version + ".*$") fname != null;
           hasSupportedExtension = fname: builtins.match supportedRegex fname != null;
           isCompatibleEgg = fname: ! lib.strings.hasSuffix ".egg" fname || lib.strings.hasSuffix "py${python.pythonVersion}.egg" fname;
@@ -45,7 +46,9 @@ pythonPackages.callPackage
       toPath = s: pwd + "/${s}";
       isSource = source != null;
       isGit = isSource && source.type == "git";
+      isUrl = isSource && source.type == "url";
       isLocal = isSource && source.type == "directory";
+      isLegacy = isSource && source.type == "legacy";
       localDepPath = toPath source.url;
 
       buildSystemPkgs =
@@ -91,7 +94,7 @@ pythonPackages.callPackage
         "toml" # Toml is an extra for setuptools-scm
       ];
       baseBuildInputs = lib.optional (! lib.elem name skipSetupToolsSCM) pythonPackages.setuptools-scm;
-      format = if isLocal then "pyproject" else if isGit then "pyproject" else fileInfo.format;
+      format = if isLocal || isGit || isUrl then "pyproject" else fileInfo.format;
     in
     buildPythonPackage {
       pname = moduleName name;
@@ -113,9 +116,10 @@ pythonPackages.callPackage
 
       buildInputs = (
         baseBuildInputs
+        ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
         ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
         ++ lib.optional isLocal buildSystemPkgs
-        ++ lib.optional (!__isBootstrap) [ pythonPackages.poetry ]
+        ++ lib.optional (!__isBootstrap) pythonPackages.poetry
       );
 
       propagatedBuildInputs =
@@ -157,14 +161,31 @@ pythonPackages.callPackage
           (
             builtins.fetchGit {
               inherit (source) url;
-              rev = source.reference;
-              ref = sourceSpec.branch or sourceSpec.rev or sourceSpec.tag or "HEAD";
+              rev = source.resolved_reference or source.reference;
+              ref = sourceSpec.branch or sourceSpec.rev or (if sourceSpec?tag then "refs/tags/${sourceSpec.tag}" else "HEAD");
             }
-          ) else if isLocal then (poetryLib.cleanPythonSources { src = localDepPath; }) else
-        fetchFromPypi {
-          pname = name;
-          inherit (fileInfo) file hash kind;
-        };
+          )
+        else if isUrl then
+          builtins.fetchTarball
+            {
+              inherit (source) url;
+            }
+        else if isLocal then
+          (poetryLib.cleanPythonSources { src = localDepPath; })
+        else if isLegacy then
+          fetchFromLegacy
+            {
+              pname = name;
+              inherit python;
+              inherit (fileInfo) file hash;
+              inherit (source) url;
+            }
+        else
+          fetchFromPypi {
+            pname = name;
+            inherit (fileInfo) file hash kind;
+            inherit version;
+          };
     }
   )
 { }

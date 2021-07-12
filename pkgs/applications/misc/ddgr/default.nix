@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, python3, installShellFiles }:
 
 stdenv.mkDerivation rec {
   version = "1.9";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --zsh auto-completion/zsh/_ddgr
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jarun/ddgr";
     description = "Search DuckDuckGo from the terminal";
     license = licenses.gpl3;

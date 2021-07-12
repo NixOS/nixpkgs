@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -8,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita";
-  version = "7.7";
+  version = "9.5";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "09r9ggngskazddhcm9c2n0cjc4qs9215vyri4i02cbp1jl82kwvg";
+    sha256 = "0hhiwims4nxq06kakc0hc4rn4hvnlrpbx6ca929vd2qbi6wa2k9h";
   };
 
   buildInputs = [
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";
     homepage = "https://www.pling.com/p/1239855/";
     license = licenses.cc0;

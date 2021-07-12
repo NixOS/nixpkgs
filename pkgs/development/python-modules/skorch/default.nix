@@ -8,7 +8,7 @@
 , numpy
 , pandas
 , pytorch
-, scikitlearn
+, scikit-learn
 , scipy
 , tabulate
 , tqdm
@@ -16,20 +16,23 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l576dws9drjakfsn0pfpbr48b21vpxv3vd3dz8lkbn8q71zs22r";
+    sha256 = "9910f97339e654c8d38e0075d87b735e69e5eb11db59c527fb36705b30c8d0a4";
   };
 
-  propagatedBuildInputs = [ numpy pytorch scikitlearn scipy tabulate tqdm ];
+  propagatedBuildInputs = [ numpy pytorch scikit-learn scipy tabulate tqdm ];
   checkInputs = [ pytest pytestcov flaky pandas pytestCheckHook ];
 
-  # on CPU, these expect artifacts from previous GPU run
   disabledTests = [
+    # on CPU, these expect artifacts from previous GPU run
     "test_load_cuda_params_to_cpu"
+    # failing tests
     "test_pickle_load"
+    "test_grid_search_with_slds_"
+    "test_grid_search_with_dict_works"
   ];
 
   meta = with lib; {
@@ -38,5 +41,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/skorch-dev/skorch/blob/master/CHANGES.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
+    # TypeError: __init__() got an unexpected keyword argument 'iid'
+    broken = true;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage
+{ lib, fetchFromGitHub, buildPythonPackage
 , openssl, pytest, cffi, six }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ cffi six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Ayrx/python-fastpbkdf2";
     description = "Python bindings for fastpbkdf2";
     license = licenses.bsd3;

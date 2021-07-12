@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pixman
-, alsaLib
+, alsa-lib
 , openssl
 , libXrandr
 , libXfixes
@@ -26,17 +26,12 @@
 
 stdenv.mkDerivation rec {
   pname = "spice";
-  version = "0.14.2";
+  version = "0.15.0";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
-    sha256 = "19r999py9v9c7md2bb8ysj809ag1hh6djl1ik8jcgx065s4b60xj";
+    url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
+    sha256 = "1xd0xffw0g5vvwbq4ksmm3jjfq45f9dw20xpmi82g1fj9f7wy85k";
   };
-
-  patches = [
-    # submitted https://gitlab.freedesktop.org/spice/spice/merge_requests/4
-    ./correct-meson.patch
-  ];
 
   postPatch = ''
     patchShebangs build-aux
@@ -46,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     spice-protocol
     python3
     python3.pkgs.six
@@ -54,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     cyrus_sasl
     glib
     gst_all_1.gst-plugins-base
@@ -85,7 +80,7 @@ stdenv.mkDerivation rec {
     ln -s spice-server $out/include/spice
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Complete open source solution for interaction with virtualized desktop devices";
     longDescription = ''
       The Spice project aims to provide a complete open source solution for interaction

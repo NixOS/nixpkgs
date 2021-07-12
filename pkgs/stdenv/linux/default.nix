@@ -42,7 +42,7 @@
 assert crossSystem == localSystem;
 
 let
-  inherit (localSystem) system platform;
+  inherit (localSystem) system;
 
   commonPreHook =
     ''
@@ -61,7 +61,16 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) { inherit system bootstrapFiles; };
+  bootstrapTools = import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
+    inherit system bootstrapFiles;
+    extraAttrs = lib.optionalAttrs
+      (config.contentAddressedByDefault or false)
+      {
+        __contentAddressed = true;
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+      };
+  };
 
   getLibc = stage: stage.${localSystem.libc};
 
@@ -107,15 +116,11 @@ let
           bintools = prevStage.binutils;
           isGNU = true;
           libc = getLibc prevStage;
+          inherit lib;
           inherit (prevStage) coreutils gnugrep;
           stdenvNoCC = prevStage.ccWrapperStdenv;
         };
 
-        extraAttrs = {
-          # Having the proper 'platform' in all the stdenvs allows getting proper
-          # linuxHeaders for example.
-          inherit platform;
-        };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
@@ -154,7 +159,8 @@ in
       # create a dummy Glibc here, which will be used in the stdenv of
       # stage1.
       ${localSystem.libc} = self.stdenv.mkDerivation {
-        name = "bootstrap-stage0-${localSystem.libc}";
+        pname = "bootstrap-stage0-${localSystem.libc}";
+        version = "bootstrap";
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
@@ -171,6 +177,7 @@ in
         nativeLibc = false;
         buildPackages = { };
         libc = getLibc self;
+        inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
         bintools = bootstrapTools;
       };
@@ -274,9 +281,13 @@ in
       gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
       mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
       libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      isl_0_17 = super.isl_0_17.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      isl_0_20 = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
       gcc-unwrapped = super.gcc-unwrapped.override {
-        isl = isl_0_17;
+        isl = isl_0_20;
+        # Use a deterministically built compiler
+        # see https://github.com/NixOS/nixpkgs/issues/108475 for context
+        reproducibleBuild = true;
+        profiledCompiler = false;
       };
     };
     extraNativeBuildInputs = [ prevStage.patchelf ] ++
@@ -317,6 +328,7 @@ in
         cc = prevStage.gcc-unwrapped;
         bintools = self.binutils;
         libc = getLibc self;
+        inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
         shell = self.bash + "/bin/bash";
       };
@@ -369,7 +381,7 @@ in
         # TODO: remove this!
         inherit (prevStage) glibc;
 
-        inherit platform bootstrapTools;
+        inherit bootstrapTools;
         shellPackage = prevStage.bash;
       };
 

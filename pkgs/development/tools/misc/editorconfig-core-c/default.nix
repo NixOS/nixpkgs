@@ -1,14 +1,14 @@
-{ stdenv, fetchgit, cmake, pcre, doxygen }:
+{ lib, stdenv, fetchgit, cmake, pcre, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "editorconfig-core-c-${meta.version}";
+  pname = "editorconfig-core-c";
+  version = "0.12.1";
 
   src = fetchgit {
     url = "https://github.com/editorconfig/editorconfig-core-c.git";
-    rev = "v${meta.version}";
+    rev = "v${version}";
     sha256 = "0awpb63ci85kal3pnlj2b54bay8igj1rbc13d8gqkvidlb51nnx4";
     fetchSubmodules = true;
-    inherit name;
   };
 
   buildInputs = [ pcre ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # parallel: https://bugzilla.gnome.org/show_bug.cgi?id=791153
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://editorconfig.org/";
     description = "EditorConfig core library written in C";
     longDescription = ''
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/editorconfig/editorconfig-core-c";
     license = with licenses; [ bsd2 bsd3 ];
-    version = "0.12.1";
     maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
   };

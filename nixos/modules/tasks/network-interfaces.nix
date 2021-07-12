@@ -144,33 +144,20 @@ let
       };
 
       tempAddress = mkOption {
-        type = types.enum [ "default" "enabled" "disabled" ];
-        default = if cfg.enableIPv6 then "default" else "disabled";
-        defaultText = literalExample ''if cfg.enableIPv6 then "default" else "disabled"'';
+        type = types.enum (lib.attrNames tempaddrValues);
+        default = cfg.tempAddresses;
+        defaultText = literalExample ''config.networking.tempAddresses'';
         description = ''
           When IPv6 is enabled with SLAAC, this option controls the use of
-          temporary address (aka privacy extensions). This is used to reduce tracking.
-          The three possible values are:
+          temporary address (aka privacy extensions) on this
+          interface. This is used to reduce tracking.
 
-          <itemizedlist>
-           <listitem>
-            <para>
-             <literal>"default"</literal> to generate temporary addresses and use
-             them by default;
-            </para>
-           </listitem>
-           <listitem>
-            <para>
-             <literal>"enabled"</literal> to generate temporary addresses but keep
-             using the standard EUI-64 ones by default;
-            </para>
-           </listitem>
-           <listitem>
-            <para>
-             <literal>"disabled"</literal> to completely disable temporary addresses.
-            </para>
-           </listitem>
-          </itemizedlist>
+          See also the global option
+          <xref linkend="opt-networking.tempAddresses"/>, which
+          applies to all interfaces where this is not set.
+
+          Possible values are:
+          ${tempaddrDoc}
         '';
       };
 
@@ -366,6 +353,32 @@ let
 
   isHexString = s: all (c: elem c hexChars) (stringToCharacters (toLower s));
 
+  tempaddrValues = {
+    disabled = {
+      sysctl = "0";
+      description = "completely disable IPv6 temporary addresses";
+    };
+    enabled = {
+      sysctl = "1";
+      description = "generate IPv6 temporary addresses but still use EUI-64 addresses as source addresses";
+    };
+    default = {
+      sysctl = "2";
+      description = "generate IPv6 temporary addresses and use these as source addresses in routing";
+    };
+  };
+  tempaddrDoc = ''
+    <itemizedlist>
+     ${concatStringsSep "\n" (mapAttrsToList (name: { description, ... }: ''
+       <listitem>
+         <para>
+           <literal>"${name}"</literal> to ${description};
+         </para>
+       </listitem>
+     '') tempaddrValues)}
+    </itemizedlist>
+  '';
+
 in
 
 {
@@ -395,6 +408,24 @@ in
         network node hostname (uname --nodename) the option
         boot.kernel.sysctl."kernel.hostname" can be used as a workaround (but
         the 64 character limit still applies).
+      '';
+    };
+
+    networking.fqdn = mkOption {
+      readOnly = true;
+      type = types.str;
+      default = if (cfg.hostName != "" && cfg.domain != null)
+        then "${cfg.hostName}.${cfg.domain}"
+        else throw ''
+          The FQDN is required but cannot be determined. Please make sure that
+          both networking.hostName and networking.domain are set properly.
+        '';
+      defaultText = literalExample ''''${networking.hostName}.''${networking.domain}'';
+      description = ''
+        The fully qualified domain name (FQDN) of this host. It is the result
+        of combining networking.hostName and networking.domain. Using this
+        option will result in an evaluation error if the hostname is empty or
+        no domain is specified.
       '';
     };
 
@@ -1021,6 +1052,21 @@ in
       '';
     };
 
+    networking.tempAddresses = mkOption {
+      default = if cfg.enableIPv6 then "default" else "disabled";
+      type = types.enum (lib.attrNames tempaddrValues);
+      description = ''
+        Whether to enable IPv6 Privacy Extensions for interfaces not
+        configured explicitly in
+        <xref linkend="opt-networking.interfaces._name_.tempAddress" />.
+
+        This sets the ipv6.conf.*.use_tempaddr sysctl for all
+        interfaces. Possible values are:
+
+        ${tempaddrDoc}
+      '';
+    };
+
   };
 
 
@@ -1062,7 +1108,6 @@ in
       ];
 
     boot.kernelModules = [ ]
-      ++ optional cfg.enableIPv6 "ipv6"
       ++ optional hasVirtuals "tun"
       ++ optional hasSits "sit"
       ++ optional hasBonds "bonding";
@@ -1081,7 +1126,7 @@ in
       // listToAttrs (forEach interfaces
         (i: let
           opt = i.tempAddress;
-          val = { disabled = 0; enabled = 1; default = 2; }.${opt};
+          val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
 
     # Capabilities won't work unless we have at-least a 4.3 Linux
@@ -1094,6 +1139,21 @@ in
     } else {
       ping.source = "${pkgs.iputils.out}/bin/ping";
     };
+    security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
+      /run/wrappers/bin/ping {
+        include <abstractions/base>
+        include <nixos/security.wrappers>
+        rpx /run/wrappers/wrappers.*/ping,
+      }
+      /run/wrappers/wrappers.*/ping {
+        include <abstractions/base>
+        include <nixos/security.wrappers>
+        r /run/wrappers/wrappers.*/ping.real,
+        mrpx ${config.security.wrappers.ping.source},
+        capability net_raw,
+        capability setpcap,
+      }
+    '');
 
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,
@@ -1127,7 +1187,7 @@ in
 
     environment.systemPackages =
       [ pkgs.host
-        pkgs.iproute
+        pkgs.iproute2
         pkgs.iputils
         pkgs.nettools
       ]
@@ -1154,7 +1214,7 @@ in
         wantedBy = [ "network.target" ];
         after = [ "network-pre.target" ];
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
-        path = [ pkgs.iproute ];
+        path = [ pkgs.iproute2 ];
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
         script = ''
@@ -1171,9 +1231,11 @@ in
       (pkgs.writeTextFile rec {
         name = "ipv6-privacy-extensions.rules";
         destination = "/etc/udev/rules.d/98-${name}";
-        text = ''
+        text = let
+          sysctl-value = tempaddrValues.${cfg.tempAddresses}.sysctl;
+        in ''
           # enable and prefer IPv6 privacy addresses by default
-          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo 2 > /proc/sys/net/ipv6/conf/%k/use_tempaddr'"
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/%k/use_tempaddr'"
         '';
       })
       (pkgs.writeTextFile rec {
@@ -1182,15 +1244,13 @@ in
         text = concatMapStrings (i:
           let
             opt = i.tempAddress;
-            val = if opt == "disabled" then 0 else 1;
-            msg = if opt == "disabled"
-                  then "completely disable IPv6 privacy addresses"
-                  else "enable IPv6 privacy addresses but prefer EUI-64 addresses";
+            val = tempaddrValues.${opt}.sysctl;
+            msg = tempaddrValues.${opt}.description;
           in
           ''
             # override to ${msg} for ${i.name}
-            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=${toString val}"
-          '') (filter (i: i.tempAddress != "default") interfaces);
+            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=${val}"
+          '') (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})
       (pkgs.writeTextFile {
@@ -1232,7 +1292,7 @@ in
               ${optionalString (current.type == "mesh" && current.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${current.meshID}"}
               ${optionalString (current.type == "monitor" && current.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${current.flags}"}
               ${optionalString (current.type == "managed" && current.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if current.fourAddr then "on" else "off"}"}
-              ${optionalString (current.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${current.mac}"}
+              ${optionalString (current.mac != null) "${pkgs.iproute2}/bin/ip link set dev ${device} address ${current.mac}"}
             '';
 
             # Udev script to execute for a new WLAN interface. The script configures the new WLAN interface.
@@ -1243,11 +1303,11 @@ in
               ${optionalString (new.type == "mesh" && new.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${new.meshID}"}
               ${optionalString (new.type == "monitor" && new.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${new.flags}"}
               ${optionalString (new.type == "managed" && new.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if new.fourAddr then "on" else "off"}"}
-              ${optionalString (new.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${new.mac}"}
+              ${optionalString (new.mac != null) "${pkgs.iproute2}/bin/ip link set dev ${device} address ${new.mac}"}
             '';
 
             # Udev attributes for systemd to name the device and to create a .device target.
-            systemdAttrs = n: ''NAME:="${n}", ENV{INTERFACE}:="${n}", ENV{SYSTEMD_ALIAS}:="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
+            systemdAttrs = n: ''NAME:="${n}", ENV{INTERFACE}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
           in
           flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (device:
             let

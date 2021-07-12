@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , arrayfire, expat, fontconfig, freeimage, freetype, boost
 , mesa, libGLU, libGL, glfw3, SDL2, cudatoolkit
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     arrayfire
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OpenGL interop library that can be used with ArrayFire or any other application using CUDA or OpenCL compute backend";
     longDescription = ''
       An OpenGL interop library that can be used with ArrayFire or any other application using CUDA or OpenCL compute backend.

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchPypi, python }:
 
 buildPythonPackage rec {
   pname = "pycparser";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover -s tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C parser in Python";
     homepage = "https://github.com/eliben/pycparser";
     license = licenses.bsd3;

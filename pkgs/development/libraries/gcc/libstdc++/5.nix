@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, flex, bison, file }:
+{ lib, stdenv, fetchurl, fetchpatch, flex, bison, file }:
 
 stdenv.mkDerivation rec {
   pname = "libstdc++5";
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib/!(libstdc++*)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gcc.gnu.org/";
     license = licenses.lgpl3Plus;
     description = "GNU Compiler Collection, version ${version} -- C++ standard library";

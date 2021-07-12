@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 # The homepage says this script is mature..
 stdenv.mkDerivation {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Convert MySQL dump files to PostgreSQL-loadable files";
     homepage = "https://pgfoundry.org/projects/mysql2pgsql/";
-    license = stdenv.lib.licenses.bsdOriginal;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.unix;
   };
 }

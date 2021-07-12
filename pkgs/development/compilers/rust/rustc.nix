@@ -1,7 +1,9 @@
-{ stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
+{ lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
+, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget
 , fetchurl, file, python3
-, llvm_10, darwin, cmake, rust, rustPlatform
-, pkgconfig, openssl
+, darwin, cmake, rust, rustPlatform
+, pkg-config, openssl
+, libiconv
 , which, libffi
 , withBundledLLVM ? false
 , enableRustcDev ? true
@@ -11,15 +13,8 @@
 }:
 
 let
-  inherit (stdenv.lib) optionals optional optionalString;
+  inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
-
-  llvmSharedForBuild = pkgsBuildBuild.llvm_10.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvm_10.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvm_10.override { enableSharedLibraries = true; };
-
-  # For use at runtime
-  llvmShared = llvm_10.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
   inherit version;
@@ -70,9 +65,16 @@ in stdenv.mkDerivation rec {
     "--set=build.cargo=${rustPlatform.rust.cargo}/bin/cargo"
     "--enable-rpath"
     "--enable-vendor"
-    "--build=${rust.toRustTarget stdenv.buildPlatform}"
-    "--host=${rust.toRustTarget stdenv.hostPlatform}"
-    "--target=${rust.toRustTarget stdenv.targetPlatform}"
+    "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
+    "--host=${rust.toRustTargetSpec stdenv.hostPlatform}"
+    # std is built for all platforms in --target. When building a cross-compiler
+    # we need to add the host platform as well so rustc can compile build.rs
+    # scripts.
+    "--target=${concatStringsSep "," ([
+      (rust.toRustTargetSpec stdenv.targetPlatform)
+    ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
+      (rust.toRustTargetSpec stdenv.hostPlatform)
+    ])}"
 
     "${setBuild}.cc=${ccForBuild}"
     "${setHost}.cc=${ccForHost}"
@@ -87,11 +89,17 @@ in stdenv.mkDerivation rec {
     "${setTarget}.cxx=${cxxForTarget}"
   ] ++ optionals (!withBundledLLVM) [
     "--enable-llvm-link-shared"
-    "${setBuild}.llvm-config=${llvmSharedForBuild}/bin/llvm-config"
-    "${setHost}.llvm-config=${llvmSharedForHost}/bin/llvm-config"
-    "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
+    "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
+    "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
+    "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
   ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
     "--enable-profiler" # build libprofiler_builtins
+  ] ++ optionals stdenv.buildPlatform.isMusl [
+    "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
+  ] ++ optionals stdenv.hostPlatform.isMusl [
+    "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
+  ] ++ optionals stdenv.targetPlatform.isMusl [
+    "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
@@ -110,7 +118,7 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs src/etc
 
-    ${optionalString (!withBundledLLVM) ''rm -rf src/llvm''}
+    ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
     # Fix the configure script to not require curl as we won't use it
     sed -i configure \
@@ -126,26 +134,34 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     file python3 rustPlatform.rust.rustc cmake
-    which libffi removeReferencesTo pkgconfig
+    which libffi removeReferencesTo pkg-config
   ];
 
   buildInputs = [ openssl ]
-    ++ optional stdenv.isDarwin Security
+    ++ optionals stdenv.isDarwin [ libiconv Security ]
     ++ optional (!withBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  postInstall = stdenv.lib.optionalString enableRustcDev ''
+  postInstall = lib.optionalString enableRustcDev ''
     # install rustc-dev components. Necessary to build rls, clippy...
     python x.py dist rustc-dev
     tar xf build/dist/rustc-dev*tar.gz
     cp -r rustc-dev*/rustc-dev*/lib/* $out/lib/
+    rm $out/lib/rustlib/install.log
+    for m in $out/lib/rustlib/manifest-rust*
+    do
+      sort --output=$m < $m
+    done
 
   '' + ''
     # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so
     # and thus a transitive dependency on ncurses
     find $out/lib -name "*.so" -type f -exec remove-references-to -t ${llvmShared} '{}' '+'
+
+    # remove uninstall script that doesn't really make sense for Nix.
+    rm $out/lib/rustlib/uninstall.sh
   '';
 
   configurePlatforms = [];
@@ -160,7 +176,7 @@ in stdenv.mkDerivation rec {
 
   passthru.llvm = llvmShared;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan globin havvy ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -8,7 +8,7 @@
 , pyfiglet
 , requests
 , arrow
-, dateutil
+, python-dateutil
 , pysocks
 , pocket
 }:
@@ -42,9 +42,9 @@ buildPythonPackage rec {
     done
   '';
 
-  buildInputs =  [ pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales pillow twitter pyfiglet requests arrow dateutil pysocks pocket ];
+  buildInputs =  [ pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales pillow twitter pyfiglet requests arrow python-dateutil pysocks pocket ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Streaming command-line twitter client";
     homepage    = "http://www.rainbowstream.org/";
     license     = licenses.mit;

@@ -99,6 +99,7 @@ in
 
       extraConfig = mkOption {
         default = { };
+        type = types.attrsOf types.anything;
         description = ''
           Extra configuration options which are serialized to json and added
           to the config.json file.
@@ -190,7 +191,7 @@ in
           ExecStop = "${cfg.package}/bin/consul leave";
         });
 
-        path = with pkgs; [ iproute gnugrep gawk consul ];
+        path = with pkgs; [ iproute2 gnugrep gawk consul ];
         preStart = ''
           mkdir -m 0700 -p ${dataDir}
           chown -R consul ${dataDir}

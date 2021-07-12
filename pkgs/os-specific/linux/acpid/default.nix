@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "acpid-2.0.32";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       --replace "strrchr strtol" "strrchr strtol malloc realloc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/acpid2/";
     description = "A daemon for delivering ACPI events to userspace programs";
     license = licenses.gpl2Plus;

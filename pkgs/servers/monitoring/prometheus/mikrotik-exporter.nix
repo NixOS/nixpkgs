@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "mikrotik-exporter-unstable";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) mikrotik; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Prometheus MikroTik device(s) exporter";
     license = licenses.bsd3;

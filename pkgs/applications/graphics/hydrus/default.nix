@@ -1,23 +1,23 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
-, lzma
-, qt5
+, xz
 , wrapQtAppsHook
 , miniupnpc_2
+, enableSwftools ? false
 , swftools
 , pythonPackages
 }:
 
-pythonPackages.buildPythonPackage {
+pythonPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "413";
+  version = "441";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "9fbed11bef499e01a6799b298bea7d0967d30430";
-    sha256 = "1dl7qpzmlxl376lzm0chmwvf4nl55wz6fwcsw0ikb33rm8r33gq4";
+    rev = "v${version}";
+    sha256 = "13h4qcz0iqba4mwyvgmdqh99jy22x7kw20f3g43b5aq3qyk9ca2h";
   };
 
   nativeBuildInputs = [
@@ -39,11 +39,12 @@ pythonPackages.buildPythonPackage {
     service-identity
     twisted
     lz4
-    lzma
+    xz
     pysocks
     matplotlib
     qtpy
     pyside2
+    mpv
   ];
 
   checkInputs = with pythonPackages; [ nose httmock ];
@@ -74,12 +75,12 @@ pythonPackages.buildPythonPackage {
     -e TestServer \
   '';
 
-  extraOutputsToLink = [ "doc" ];
+  outputs = [ "out" "doc" ];
 
   postPatch = ''
     sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${miniupnpc_2}/bin/upnpc";' \
-      -i ./hydrus/core/HydrusNATPunch.py
-
+      -i ./hydrus/core/networking/HydrusNATPunch.py
+  '' + lib.optionalString enableSwftools ''
     sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${swftools}/bin/swfrender";' \
       -i ./hydrus/core/HydrusFlashHandling.py
   '';
@@ -103,7 +104,7 @@ pythonPackages.buildPythonPackage {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Danbooru-like image tagging and searching system for the desktop";
     license = licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";

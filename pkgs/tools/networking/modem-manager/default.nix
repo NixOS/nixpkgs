@@ -1,19 +1,33 @@
-{ stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
-, libmbim, libqmi, systemd, vala, gobject-introspection, dbus }:
+{ lib, stdenv, fetchurl, fetchpatch
+, glib, udev, libgudev, polkit, ppp, gettext, pkg-config, python3
+, libmbim, libqmi, systemd, vala, gobject-introspection, dbus
+}:
 
 stdenv.mkDerivation rec {
   pname = "modem-manager";
-  version = "1.12.10";
+  version = "1.16.6";
 
-  package = "ModemManager";
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
-    sha256 = "1apq9camys2gaw6y6ic1ld20cncfwpmxnzvh4j5zkbbjpf5hbcxj";
+    url = "https://www.freedesktop.org/software/ModemManager/ModemManager-${version}.tar.xz";
+    sha256 = "05wn94x71qr36avxjzvyf56nj5illynnf9nn15b17lv61wkbd41a";
   };
 
-  nativeBuildInputs = [ vala gobject-introspection gettext pkgconfig ];
+  patches = [
+    # Fix a broken test.
+    # https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/merge_requests/556
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/commit/a324667386f35df0c3b3bbf615fa0560d215485d.patch";
+      sha256 = "1xj9gfl6spbp4xdp6gn76k8zvzam5m6lgmbiwdn6ixffzhlfwi5l";
+    })
+  ];
+
+  nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];
 
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
+
+  installCheckInputs = [
+    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3
+  ];
 
   configureFlags = [
     "--with-polkit"
@@ -26,19 +40,29 @@ stdenv.mkDerivation rec {
     "--with-systemd-journal"
   ];
 
-  preCheck = ''
-    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
+  postPatch = ''
+    patchShebangs tools/test-modemmanager-service.py
   '';
+
+  # In Nixpkgs g-ir-scanner is patched to produce absolute paths, and
+  # that interferes with ModemManager's tests, causing them to try to
+  # load libraries from the install path, which doesn't usually exist
+  # when `make check' is run.  So to work around that, we run it as an
+  # install check instead, when those paths will have been created.
+  doInstallCheck = true;
+  preInstallCheck = ''
+    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
+    patchShebangs tools/tests/test-wrapper.sh
+  '';
+  installCheckTarget = "check";
 
   enableParallelBuilding = true;
 
-  doCheck = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WWAN modem manager, part of NetworkManager";
     homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
     license = licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = teams.freedesktop.members;
     platforms = platforms.linux;
   };
 }

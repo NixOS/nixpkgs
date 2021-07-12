@@ -1,12 +1,12 @@
-{ buildPecl, lib, pcre' }:
+{ buildPecl, lib, pcre2 }:
 
 buildPecl {
   pname = "protobuf";
 
-  version = "3.13.0.1";
-  sha256 = "0vzxwisa8g3xgzcwa5b6cx6nyf41gkm71rxiisnnz1axz4q0hzqf";
+  version = "3.17.3";
+  sha256 = "05nn6ps271vwrbr9w08lyyzsszabnqhz1x0vbblg0q8y2xrmb6dl";
 
-  buildInputs = [ pcre' ];
+  buildInputs = [ pcre2 ];
 
   meta = with lib; {
     description = ''

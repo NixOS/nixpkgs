@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoPatchelfHook
 , dpkg
 , fetchurl
@@ -10,8 +10,8 @@
 , zlib
 }:
 let
-  majMin = stdenv.lib.versions.majorMinor version;
-  version = "7.6.13";
+  majMin = lib.versions.majorMinor version;
+  version = "7.6.21";
 in
 stdenv.mkDerivation rec {
   inherit version;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.foldingathome.org/releases/public/release/fahviewer/debian-stable-64bit/v${majMin}/fahviewer_${version}_amd64.deb";
-    sha256 = "09yfvk16j1iwx8h1xg678ks3bc8760gfdn7n32j8r893kd32cwyk";
+    sha256 = "00fd00pf6fcpplcaahvy9ir60mk69d9rcmwsyq3jrv9mxqm9aq7p";
   };
 
   nativeBuildInputs = [
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Folding@home viewer";
     homepage = "https://foldingathome.org/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.zimbatm ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.zimbatm ];
     platforms = [ "x86_64-linux" ];
   };
 }

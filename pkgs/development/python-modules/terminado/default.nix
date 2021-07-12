@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "terminado";
-  version = "0.8.3";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4804a774f802306a7d9af7322193c5390f1da0abb429e082a10ef1d46e6fb2c2";
+    sha256 = "89d5dac2f4e2b39758a0ff9a3b643707c95a020a6df36e70583b88297cd59cbe";
   };
 
   propagatedBuildInputs = [ ptyprocess tornado ];

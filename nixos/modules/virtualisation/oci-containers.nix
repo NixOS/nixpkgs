@@ -31,6 +31,30 @@ let
           example = literalExample "pkgs.dockerTools.buildDockerImage {...};";
         };
 
+        login = {
+
+          username = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Username for login.";
+          };
+
+          passwordFile = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Path to file containing password.";
+            example = "/etc/nixos/dockerhub-password.txt";
+          };
+
+          registry = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Registry where to login to.";
+            example = "https://docker.pkg.github.com";
+          };
+
+        };
+
         cmd = mkOption {
           type =  with types; listOf str;
           default = [];
@@ -56,6 +80,18 @@ let
               DATABASE_HOST = "db.example.com";
               DATABASE_PORT = "3306";
             }
+        '';
+        };
+
+        environmentFiles = mkOption {
+          type = with types; listOf path;
+          default = [];
+          description = "Environment files for this container.";
+          example = literalExample ''
+            [
+              /path/to/.env
+              /path/to/.env.secret
+            ]
         '';
         };
 
@@ -176,10 +212,10 @@ let
           description = ''
             Define which other containers this one depends on. They will be added to both After and Requires for the unit.
 
-            Use the same name as the attribute under <literal>virtualisation.oci-containers</literal>.
+            Use the same name as the attribute under <literal>virtualisation.oci-containers.containers</literal>.
           '';
           example = literalExample ''
-            virtualisation.oci-containers = {
+            virtualisation.oci-containers.containers = {
               node1 = {};
               node2 = {
                 dependsOn = [ "node1" ];
@@ -208,6 +244,8 @@ let
       };
     };
 
+  isValidLogin = login: login.username != null && login.passwordFile != null && login.registry != null;
+
   mkService = name: container: let
     dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
   in {
@@ -217,40 +255,46 @@ let
     environment = proxy_env;
 
     path =
-      if cfg.backend == "docker" then [ pkgs.docker ]
+      if cfg.backend == "docker" then [ config.virtualisation.docker.package ]
       else if cfg.backend == "podman" then [ config.virtualisation.podman.package ]
       else throw "Unhandled backend: ${cfg.backend}";
 
     preStart = ''
       ${cfg.backend} rm -f ${name} || true
+      ${optionalString (isValidLogin container.login) ''
+        cat ${container.login.passwordFile} | \
+          ${cfg.backend} login \
+            ${container.login.registry} \
+            --username ${container.login.username} \
+            --password-stdin
+        ''}
       ${optionalString (container.imageFile != null) ''
         ${cfg.backend} load -i ${container.imageFile}
         ''}
       '';
+
+    script = concatStringsSep " \\\n  " ([
+      "exec ${cfg.backend} run"
+      "--rm"
+      "--name=${escapeShellArg name}"
+      "--log-driver=${container.log-driver}"
+    ] ++ optional (container.entrypoint != null)
+      "--entrypoint=${escapeShellArg container.entrypoint}"
+      ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
+      ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
+      ++ map (p: "-p ${escapeShellArg p}") container.ports
+      ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
+      ++ map (v: "-v ${escapeShellArg v}") container.volumes
+      ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
+      ++ map escapeShellArg container.extraOptions
+      ++ [container.image]
+      ++ map escapeShellArg container.cmd
+    );
+
+    preStop = "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}";
     postStop = "${cfg.backend} rm -f ${name} || true";
 
     serviceConfig = {
-      StandardOutput = "null";
-      StandardError = "null";
-      ExecStart = concatStringsSep " \\\n  " ([
-        "${config.system.path}/bin/${cfg.backend} run"
-        "--rm"
-        "--name=${name}"
-        "--log-driver=${container.log-driver}"
-      ] ++ optional (container.entrypoint != null)
-        "--entrypoint=${escapeShellArg container.entrypoint}"
-        ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
-        ++ map (p: "-p ${escapeShellArg p}") container.ports
-        ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
-        ++ map (v: "-v ${escapeShellArg v}") container.volumes
-        ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
-        ++ map escapeShellArg container.extraOptions
-        ++ [container.image]
-        ++ map escapeShellArg container.cmd
-      );
-
-      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}"'';
-
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
       ### init process, but it is not guaranteed; some apps have other reload

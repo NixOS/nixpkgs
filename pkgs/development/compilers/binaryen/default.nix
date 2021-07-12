@@ -1,4 +1,4 @@
-{ stdenv, cmake, python3, fetchFromGitHub, fetchpatch, emscripten }:
+{ lib, stdenv, cmake, python3, fetchFromGitHub, fetchpatch, emscripten }:
 
 stdenv.mkDerivation rec {
   pname = "binaryen";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
     platforms = platforms.all;

@@ -1,11 +1,11 @@
-{ stdenv, lib, makeWrapper, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
+{ stdenv, lib, fetchurl, dpkg
+, alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
+, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
 , xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 }:
 
 let deps = [
-    alsaLib
+    alsa-lib
     atk
     cairo
     cups
@@ -20,6 +20,7 @@ let deps = [
     gtk3
     libappindicator
     libnotify
+    mesa
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXcomposite
@@ -41,11 +42,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2020.6";
+  version = "2021.3";
 
   src = fetchurl {
-    url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "0d9rv874avx86jppl1dky0nfq1633as0z8yz3h3f69nhmcbwhlr3";
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
+    sha256 = "sha256-f7ZCDZ/RN+Z0Szmnx8mbzhKZiRPjqXTsgClfWViFYzo=";
   };
 
   nativeBuildInputs = [
@@ -80,13 +81,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ymarkus ];
   };
 
 }

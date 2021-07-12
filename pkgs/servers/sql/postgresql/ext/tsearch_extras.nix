@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, postgresql }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, postgresql }:
 
 stdenv.mkDerivation {
   pname = "tsearch-extras";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "18j0saqblg3jhrz38splk173xjwdf32c67ymm18m8n5y94h8d2ba";
   };
 
-  nativenativeBuildInputs = [ pkgconfig ];
+  nativenativeBuildInputs = [ pkg-config ];
   buildInputs = [ postgresql ];
 
   installPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     install -D ./{tsearch_extras--1.0.sql,tsearch_extras.control} -t $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a few PostgreSQL functions for a lower-level data full text search";
     homepage = "https://github.com/zulip/tsearch_extras/";
     license = licenses.postgresql;

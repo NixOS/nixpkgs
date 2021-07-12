@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, hdf5, boost }:
+{ lib, stdenv, fetchFromGitHub, cmake, hdf5, boost }:
 
 stdenv.mkDerivation rec {
   pname = "minia";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     rm -rf thirdparty/gatb-core/gatb-core/thirdparty/{hdf5,boost}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Short read genome assembler";
     homepage = "https://github.com/GATB/minia";
     license = licenses.agpl3;

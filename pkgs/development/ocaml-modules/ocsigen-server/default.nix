@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
+{ stdenv, lib, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
 , lwt_log, ocamlnet, ocaml_pcre, cryptokit, tyxml, xml-light, ipaddr
 , pgocaml, camlzip, ocaml_sqlite3
-, makeWrapper, fetchpatch
+, makeWrapper
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.06.1"
+if !lib.versionAtLeast ocaml.version "4.06.1"
 then throw "ocsigenserver is not available for OCaml ${ocaml.version}"
 else
 
@@ -13,25 +13,18 @@ let mkpath = p: n:
 in
 
 stdenv.mkDerivation rec {
-  version = "2.16.0";
+  version = "2.18.0";
   pname = "ocsigenserver";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
     rev = version;
-    sha256 = "0dd7zfk8dlajv0297dswaaqh96hjk2ppy8zb67jbkd26nimahk9y";
+    sha256 = "0c61wkq8ddy3qxb2x1jz04rz0722hk92r6jl1zvgikh74m5p5ipp";
   };
 
-  # unreleased fix for Makefile typos breaking compilation
-  patches = [ (fetchpatch {
-    url = "https://github.com/ocsigen/ocsigenserver/commit/014aefc4e460686a361b974f16ebb7e0c993b36b.patch";
-    sha256 = "0xda4fj8p5102lh9xmrn5mv3s0ps6yykqj3mpjf72gf4zd6fzcn7";
-  }) ];
-
-  buildInputs = [ which makeWrapper ocaml findlib
-    lwt_react pgocaml camlzip ocaml_sqlite3
-  ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ which ocaml findlib lwt_react pgocaml camlzip ocaml_sqlite3 ];
 
   propagatedBuildInputs = [ cryptokit ipaddr lwt_log lwt_ssl ocamlnet
     ocaml_pcre tyxml xml-light
@@ -58,9 +51,9 @@ stdenv.mkDerivation rec {
     longDescription =''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
       '';
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
-    maintainers = [ stdenv.lib.maintainers.gal_bolle ];
+    maintainers = [ lib.maintainers.gal_bolle ];
   };
 
 }

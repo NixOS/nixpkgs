@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , ncurses, boehmgc, gettext, zlib
 , sslSupport ? true, openssl ? null
 , graphicsSupport ? !stdenv.isDarwin, imlib2 ? null
 , x11Support ? graphicsSupport, libX11 ? null
 , mouseSupport ? !stdenv.isDarwin, gpm-ncurses ? null
-, perl, man, pkgconfig, buildPackages, w3m
+, perl, man, pkg-config, buildPackages, w3m
 }:
 
 assert sslSupport -> openssl != null;
@@ -12,13 +12,13 @@ assert graphicsSupport -> imlib2 != null;
 assert x11Support -> graphicsSupport && libX11 != null;
 assert mouseSupport -> gpm-ncurses != null;
 
-with stdenv.lib;
+with lib;
 
 let
   mktable = buildPackages.stdenv.mkDerivation {
     name = "w3m-mktable";
     inherit (w3m) src;
-    nativeBuildInputs = [ pkgconfig boehmgc ];
+    nativeBuildInputs = [ pkg-config boehmgc ];
     makeFlags = [ "mktable" ];
     installPhase = ''
       install -D mktable $out/bin/mktable
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
     sed -ie 's!mktable.*:.*!mktable:!' Makefile.in
   '';
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkg-config gettext ];
   buildInputs = [ ncurses boehmgc zlib ]
     ++ optional sslSupport openssl
     ++ optional mouseSupport gpm-ncurses
@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://w3m.sourceforge.net/";
     description = "A text-mode web browser";
     maintainers = [ maintainers.cstrahan ];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 }

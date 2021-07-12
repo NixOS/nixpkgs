@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation {
   name = "figlet-2.2.5";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Program for making large letters out of ordinary text";
     homepage = "http://www.figlet.org/";
-    license = stdenv.lib.licenses.afl21;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.afl21;
+    platforms = lib.platforms.unix;
   };
 }

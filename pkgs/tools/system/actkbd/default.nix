@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "actkbd-0.2.8";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp -r README samples $out/share/doc/actkbd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A keyboard shortcut daemon";
     longDescription = ''
       actkbd is a simple daemon that binds actions to keyboard events

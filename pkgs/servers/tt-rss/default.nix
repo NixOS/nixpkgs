@@ -1,13 +1,13 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "tt-rss";
-  version = "2019-01-29";
-  rev = "c7c9c5fb0ab6b3d4ea3078865670d6c1dfe2ecac";
+  version = "2021-01-29";
+  rev = "6d8f2221b82b6a31becbeed8baf5e05ad9e053fe";
 
   src = fetchurl {
-    url = "https://git.tt-rss.org/git/tt-rss/archive/${rev}.tar.gz";
-    sha256 = "0k184zqrfscv17gnl106q4yzhqmxb0g1dn1wkdkrclc3qcrviyp6";
+    url = "https://git.tt-rss.org/fox/tt-rss/archive/${rev}.tar.gz";
+    sha256 = "124c62hck631xlq5aa1miz9rbg711ygk7z1yx92m5dfcy630l7x5";
   };
 
   installPhase = ''
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     cp -ra * $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
     license = licenses.gpl2Plus;
     homepage = "https://tt-rss.org";

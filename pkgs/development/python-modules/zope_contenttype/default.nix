@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_testrunner
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ zope_testrunner ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.contenttype";
     description = "A utility module for content-type (MIME type) handling";
     license = licenses.zpl20;

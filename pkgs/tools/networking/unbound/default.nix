@@ -7,6 +7,7 @@
 , libevent
 , dns-root-data
 , pkg-config
+, makeWrapper
   #
   # By default unbound will not be built with systemd support. Unbound is a very
   # commmon dependency. The transitive dependency closure of systemd also
@@ -18,20 +19,27 @@
   #
 , withSystemd ? false
 , systemd ? null
+  # optionally support DNS-over-HTTPS as a server
+, withDoH ? false
+, libnghttp2
 }:
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.12.0";
+  version = "1.13.1";
 
   src = fetchurl {
     url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0daqxzvknvcz7sgag3wcrxhp4a39ik93lsrfpwcl9whjg2lm74jv";
+    sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  buildInputs = [ openssl nettle expat libevent ] ++ lib.optionals withSystemd [ pkg-config systemd ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ openssl nettle expat libevent ]
+    ++ lib.optionals withSystemd [ pkg-config systemd ]
+    ++ lib.optionals withDoH [ libnghttp2 ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -43,16 +51,20 @@ stdenv.mkDerivation rec {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isStatic [
+  ] ++ lib.optional stdenv.hostPlatform.isStatic [
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"
+  ] ++ lib.optionals withDoH [
+    "--with-libnghttp2=${libnghttp2.dev}"
   ];
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
   postInstall = ''
     make unbound-event-install
+    wrapProgram $out/bin/unbound-control-setup \
+      --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
 
   preFixup = lib.optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) # XXX: revisit

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "goa";
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://goa.design";
     description = "A framework for building microservices in Go using a unique design-first approach";
     license = licenses.mit;

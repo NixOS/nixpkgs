@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchFromGitLab, cmake, qtbase }:
+{ mkDerivation, lib, fetchFromGitLab, cmake, qtbase }:
 
 mkDerivation rec {
   pname = "enyo-doom";
@@ -15,13 +15,11 @@ mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "https://gitlab.com/sdcofer70/enyo-doom";
     description = "Frontend for Doom engines";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.tadfisher ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.tadfisher ];
   };
 }

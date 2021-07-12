@@ -93,6 +93,8 @@ rec {
     mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
     mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
 
+    mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
+
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
     powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
@@ -114,18 +116,33 @@ rec {
 
     vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
 
+    or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
+
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
   };
 
-  # Determine where two CPUs are compatible with each other. That is,
-  # can we run code built for system b on system a? For that to
-  # happen, then the set of all possible possible programs that system
-  # b accepts must be a subset of the set of all programs that system
-  # a accepts. This compatibility relation forms a category where each
-  # CPU is an object and each arrow from a to b represents
-  # compatibility. CPUs with multiple modes of Endianness are
-  # isomorphic while all CPUs are endomorphic because any program
-  # built for a CPU can run on that CPU.
+  # GNU build systems assume that older NetBSD architectures are using a.out.
+  gnuNetBSDDefaultExecFormat = cpu:
+    if (cpu.family == "x86" && cpu.bits == 32) ||
+       (cpu.family == "arm" && cpu.bits == 32) ||
+       (cpu.family == "sparc" && cpu.bits == 32)
+    then execFormats.aout
+    else execFormats.elf;
+
+  # Determine when two CPUs are compatible with each other. That is,
+  # can code built for system B run on system A? For that to happen,
+  # the programs that system B accepts must be a subset of the
+  # programs that system A accepts.
+  #
+  # We have the following properties of the compatibility relation,
+  # which must be preserved when adding compatibility information for
+  # additional CPUs.
+  # - (reflexivity)
+  #   Every CPU is compatible with itself.
+  # - (transitivity)
+  #   If A is compatible with B and B is compatible with C then A is compatible with C.
+  # - (compatible under multiple endianness)
+  #   CPUs with multiple modes of endianness are pairwise compatible.
   isCompatible = a: b: with cpuTypes; lib.any lib.id [
     # x86
     (b == i386 && isCompatible a i486)
@@ -267,20 +284,21 @@ rec {
 
   kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
     # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
-    # the nnormalized name for macOS.
-    macos   = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
-    ios     = { execFormat = macho;   families = { inherit darwin; }; };
-    freebsd = { execFormat = elf;     families = { inherit bsd; }; };
-    linux   = { execFormat = elf;     families = { }; };
-    netbsd  = { execFormat = elf;     families = { inherit bsd; }; };
-    none    = { execFormat = unknown; families = { }; };
-    openbsd = { execFormat = elf;     families = { inherit bsd; }; };
-    solaris = { execFormat = elf;     families = { }; };
-    wasi    = { execFormat = wasm;    families = { }; };
-    redox   = { execFormat = elf;     families = { }; };
-    windows = { execFormat = pe;      families = { }; };
-    ghcjs   = { execFormat = unknown; families = { }; };
-    genode  = { execFormat = elf;     families = { }; };
+    # the normalized name for macOS.
+    macos    = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
+    ios      = { execFormat = macho;   families = { inherit darwin; }; };
+    freebsd  = { execFormat = elf;     families = { inherit bsd; }; };
+    linux    = { execFormat = elf;     families = { }; };
+    netbsd   = { execFormat = elf;     families = { inherit bsd; }; };
+    none     = { execFormat = unknown; families = { }; };
+    openbsd  = { execFormat = elf;     families = { inherit bsd; }; };
+    solaris  = { execFormat = elf;     families = { }; };
+    wasi     = { execFormat = wasm;    families = { }; };
+    redox    = { execFormat = elf;     families = { }; };
+    windows  = { execFormat = pe;      families = { }; };
+    ghcjs    = { execFormat = unknown; families = { }; };
+    genode   = { execFormat = elf;     families = { }; };
+    mmixware = { execFormat = unknown; families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;
@@ -382,7 +400,7 @@ rec {
       else if (elemAt l 1) == "elf"
         then { cpu = elemAt l 0; vendor = "unknown";  kernel = "none";     abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
-    "3" = # Awkwards hacks, beware!
+    "3" = # Awkward hacks, beware!
       if elemAt l 1 == "apple"
         then { cpu = elemAt l 0; vendor = "apple";    kernel = elemAt l 2;                   }
       else if (elemAt l 1 == "linux") || (elemAt l 2 == "gnu")
@@ -393,6 +411,8 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "wasi";                       }
       else if (elemAt l 2 == "redox")
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "redox";                      }
+      else if (elemAt l 2 == "mmixware")
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "mmixware";                   }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
@@ -451,8 +471,12 @@ rec {
     else "${cpu.name}-${kernel.name}";
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
+    optExecFormat =
+      lib.optionalString (kernel.name == "netbsd" &&
+                          gnuNetBSDDefaultExecFormat cpu != kernel.execFormat)
+        kernel.execFormat.name;
     optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
-  in "${cpu.name}-${vendor.name}-${kernel.name}${optAbi}";
+  in "${cpu.name}-${vendor.name}-${kernel.name}${optExecFormat}${optAbi}";
 
   ################################################################################
 

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , gmp
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sagemath/FlintQS";
     description = "Highly optimized multi-polynomial quadratic sieve for integer factorization";
     license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.all;
   };
 }

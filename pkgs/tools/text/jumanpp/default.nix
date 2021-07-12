@@ -1,15 +1,19 @@
-{ stdenv, fetchurl, cmake, protobuf }:
+{ lib, stdenv, fetchurl, cmake, protobuf, libiconv }:
+
 stdenv.mkDerivation rec {
   pname = "jumanpp";
-  version = "2.0.0-rc2";
+  version = "2.0.0-rc3";
 
   src = fetchurl {
     url = "https://github.com/ku-nlp/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "17fzmd0f5m9ayfhsr0mg7hjp3pg1mhbgknhgyd8v87x46g8bg6qp";
+    sha256 = "sha256-ASdr6qbkSe71M7QmuuwidCa4xQhDVoXBJ2XqvSY53pQ=";
   };
-  buildInputs = [ cmake protobuf ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ protobuf ]
+    ++ lib.optional stdenv.isDarwin libiconv;
+
+  meta = with lib; {
     description = "A Japanese morphological analyser using a recurrent neural network language model (RNNLM)";
     longDescription = ''
       JUMAN++ is a new morphological analyser that considers semantic

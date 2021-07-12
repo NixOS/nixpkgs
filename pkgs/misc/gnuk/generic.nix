@@ -1,5 +1,5 @@
-{ stdenv, gcc-arm-embedded, binutils-arm-embedded, makeWrapper
-, python, pythonPackages
+{ lib, stdenv, gcc-arm-embedded, binutils-arm-embedded, makeWrapper
+, python2Packages
 
 # Extra options
 , device ? "fsij", vid ? "234b", pid ? "0000"
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   inherit src;
 
   nativeBuildInputs = [ gcc-arm-embedded binutils-arm-embedded makeWrapper ];
-  buildInputs = [ python ] ++ (with pythonPackages; [ pyusb colorama ]);
+  buildInputs = with python2Packages; [ python pyusb colorama ];
 
   configurePhase = ''
     cd src
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/{unlock,flash}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.fsij.org/pages/gnuk";
     description = "An implementation of USB cryptographic token for gpg";
     license = licenses.gpl3;

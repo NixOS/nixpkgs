@@ -1,27 +1,36 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 , dpkg
-, luajit
-, gtk3-x11
-, SDL2
 , glib
+, gnutar
+, gtk3-x11
+, luajit
+, sdcv
+, SDL2
 , noto-fonts
 , nerdfonts }:
 let font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
 in stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2020.09";
+  version = "2021.03";
 
   src = fetchurl {
     url =
       "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    sha256 = "12kiw3mw8g8d9fb8ywd4clm2bgblhq2gqcxzadwpmf0wxq7p0v8z";
+    sha256 = "sha256-XdCyx+SdcV1QitDVkOl9EZCHpU8Qiwu0qhcXkU6b+9o=";
   };
 
   sourceRoot = ".";
   nativeBuildInputs = [ makeWrapper dpkg ];
-  buildInputs = [ luajit gtk3-x11 SDL2 glib ];
+  buildInputs = [
+    glib
+    gnutar
+    gtk3-x11
+    luajit
+    sdcv
+    SDL2
+  ];
   unpackCmd = "dpkg-deb -x ${src} .";
 
   dontConfigure = true;
@@ -30,23 +39,25 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -R usr/* $out/
-    cp ${luajit}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${luajit}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
+    ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
     find $out -xtype l -delete
     for i in ${noto-fonts}/share/fonts/truetype/noto/*; do
         ln -s "$i" $out/lib/koreader/fonts/noto/
     done
     ln -s "${font-droid}/share/fonts/opentype/NerdFonts/Droid Sans Mono Nerd Font Complete Mono.otf" $out/lib/koreader/fonts/droid/DroidSansMono.ttf
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
-      stdenv.lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
+      lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
     }
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/koreader/koreader";
     description =
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
     platforms = intersectLists platforms.x86_64 platforms.linux;
-    license = licenses.agpl3;
-    maintainers = [ maintainers.contrun ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ contrun neonfuz];
   };
 }

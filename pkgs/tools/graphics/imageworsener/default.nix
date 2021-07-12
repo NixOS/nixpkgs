@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , zlib
 , libpng
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A raster image scaling and processing utility";
     homepage = "https://entropymine.com/imageworsener/";
     changelog = "https://github.com/jsummers/${pname}/blob/${version}/changelog.txt";

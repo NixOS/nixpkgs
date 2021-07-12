@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "enamlx";
-  version = "0.4.3";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "frmdstryr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rlrx3cw6h1zl9svnqbzwdfy8469qa1y7w6576lbhdwpfhpipscy";
+    sha256 = "144bsh6lfrrjk6dygrbc2bfhlv742avj53awxnhgai04hab0214r";
   };
 
   propagatedBuildInputs = [

@@ -31,14 +31,14 @@ in
 
 buildPythonApplication rec {
   pname = "lexicon";
-  version = "3.4.3";
+  version = "3.5.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ym4gj4xyd69rsc5niilvcb72gys22rjxhj4qd574vyx3ryl34za";
+    sha256 = "1jsc2ybbf3mbvgzkgliria494dpj23mgqnw2lh43cnd9rgsjvzn3";
   };
 
   nativeBuildInputs = [

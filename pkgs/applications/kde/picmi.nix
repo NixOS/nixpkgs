@@ -4,7 +4,7 @@
 }:
 
 mkDerivation {
-  name = "picmi";
+  pname = "picmi";
   meta = with lib; {
     description = "Nonogram game";
     longDescription = ''The goal is to reveal the hidden pattern in the board by coloring or

@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "marble";
+  pname = "marble";
   meta.license = with lib.licenses; [ lgpl21 gpl3 ];
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools perl ];

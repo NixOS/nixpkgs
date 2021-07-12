@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchFromGitHub, ruby, dune_2, ocamlPackages
+{ lib, stdenv, fetchFromGitHub, ruby, dune_2, ocamlPackages
 , ipaexfont, junicode, lmodern, lmmath
 }:
 let
@@ -35,12 +35,12 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "satysfi";
-    version = "0.0.5";
+    version = "0.0.6";
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "SATySFi";
       rev = "v${version}";
-      sha256 = "1y72by6d15bc6qb1lv1ch6cm1i74gyr0w127nnvs2s657snm0y1n";
+      sha256 = "1wdmcz2b7v37msmsvjvbyj7x5a80qfws8a7w72q0g5959pw5fdxj";
       fetchSubmodules = true;
     };
 
@@ -53,7 +53,7 @@ in
     nativeBuildInputs = [ ruby dune_2 ];
 
     buildInputs = [ camlpdf otfm yojson-with-position ] ++ (with ocamlPackages; [
-      ocaml findlib menhir
+      ocaml findlib menhir menhirLib
       batteries camlimages core_kernel ppx_deriving uutf omd cppo re
     ]);
 
@@ -67,10 +67,11 @@ in
       cp -r lib-satysfi/dist/ $out/share/satysfi/
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/gfngfn/SATySFi";
       description = "A statically-typed, functional typesetting system";
-      license = licenses.lgpl3;
+      changelog = "https://github.com/gfngfn/SATySFi/blob/v${version}/CHANGELOG.md";
+      license = licenses.lgpl3Only;
       maintainers = [ maintainers.mt-caret maintainers.marsam ];
       platforms = platforms.all;
     };

@@ -1,7 +1,7 @@
-{ config, stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
-# use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
-, utillinuxMinimal ? null
+{ config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
+, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
+# use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
+, util-linuxMinimal ? null
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
@@ -11,9 +11,9 @@
 , darwin, fetchpatch
 }:
 
-with stdenv.lib;
+with lib;
 
-assert stdenv.isLinux -> utillinuxMinimal != null;
+assert stdenv.isLinux -> util-linuxMinimal != null;
 
 # TODO:
 # * Make it build without python
@@ -29,7 +29,7 @@ assert stdenv.isLinux -> utillinuxMinimal != null;
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
 */
 let
-  # Some packages don't get "Cflags" from pkgconfig correctly
+  # Some packages don't get "Cflags" from pkg-config correctly
   # and then fail to build when directly including like <glib/...>.
   # This is intended to be run in postInstall of any package
   # which has $out/include/ containing just some disjunct directories.
@@ -45,15 +45,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.66.2";
+  version = "2.68.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1i0pd8y6xz64qlzfj73wxyqp0x7x9j6mwf4gj6ggil4d9vnhnfgc";
+    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0f1iprj7v0b5wn9njj39dkl25g6filfs7i4ybk20jq821k1a7qg7";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
+    ./link-with-coreservices.patch
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
@@ -94,13 +95,26 @@ stdenv.mkDerivation rec {
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
     libselinux
-    utillinuxMinimal # for libmount
+    util-linuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]);
+  ]) ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    # Note: this needs to be both in buildInputs and nativeBuildInputs. The
+    # Meson gtkdoc module uses find_program to look it up (-> build dep), but
+    # glib's own Meson configuration uses the host pkg-config to find its
+    # version (-> host dep). We could technically go and fix this in glib, add
+    # pkg-config to depsBuildBuild, but this would be a futile exercise since
+    # Meson's gtkdoc integration does not support cross compilation[1] anyway
+    # and this derivation disables the docs build when cross compiling.
+    #
+    # [1] https://github.com/mesonbuild/meson/issues/2003
+    gtk-doc
+  ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45
+    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -110,7 +124,7 @@ stdenv.mkDerivation rec {
     # Instead we just copy them over from the native output.
     "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
     "-Dnls=enabled"
-    "-Ddevbindir=${placeholder ''dev''}/bin"
+    "-Ddevbindir=${placeholder "dev"}/bin"
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -119,6 +133,8 @@ stdenv.mkDerivation rec {
     # we're using plain
     "-DG_DISABLE_CAST_CHECKS"
   ];
+
+  hardeningDisable = [ "pie" ];
 
   postPatch = ''
     chmod +x gio/tests/gengiotypefuncs.py
@@ -144,7 +160,7 @@ stdenv.mkDerivation rec {
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 
-  checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
+  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
   preCheck = optionalString doCheck ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -179,14 +195,14 @@ stdenv.mkDerivation rec {
     makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     inherit flattenInclude;
-    updateScript = gnome3.updateScript { packageName = "glib"; };
+    updateScript = gnome.updateScript { packageName = "glib"; };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library of programming buildings blocks";
     homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lovek323 raskin worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
     platforms   = platforms.unix;
 
     longDescription = ''

@@ -32,25 +32,29 @@
 , libXft
 , libXcomposite
 , libXScrnSaver
-, alsaLib
+, alsa-lib
 , pulseaudio
 , makeWrapper
+, xdg-utils
 }:
+
+let
+  getFirst = n: v: builtins.concatStringsSep "." (lib.take n (lib.splitString "." v));
+in
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.17.0";
-  buildNumber = "11";
+  version = "2.22.0.87";
 
   src = fetchurl {
-    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans_${version}.${buildNumber}.rpm";
-    sha256 = "1h5jbnp5bwy6bpma9a1ia08v7bpz09fm66jsip470k1r7vjjwa68";
+    url = "https://swdl.bluejeans.com/desktop-app/linux/${getFirst 3 version}/BlueJeans_${version}.rpm";
+    sha256 = "sha256-0nobn+YcvqakwvBdkoEJrzHoL+OGym2zJ806oUabYfo=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
   libPath =
-    stdenv.lib.makeLibraryPath
+    lib.makeLibraryPath
       [
         libnotify
         libuuid
@@ -83,7 +87,7 @@ stdenv.mkDerivation rec {
         libXft
         libXcomposite
         libXScrnSaver
-        alsaLib
+        alsa-lib
         pulseaudio
       ];
 
@@ -100,15 +104,17 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/BlueJeans/bluejeans-v2
+
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       opt/BlueJeans/resources/BluejeansHelper
 
-    cc $localtime64_stub -shared -o "$out"/opt/BlueJeans/liblocaltime64_stub.so
+    cc $localtime64_stub -shared -o "${placeholder "out"}"/opt/BlueJeans/liblocaltime64_stub.so
 
     makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
-      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so
+      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so \
+      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
       --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"
@@ -116,11 +122,14 @@ stdenv.mkDerivation rec {
     patchShebangs "$out"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
+

@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , requireFile
 , xorg
 , zlib
 , freetype
-, alsaLib
+, alsa-lib
 , setJavaClassPath
 }:
 
@@ -30,7 +30,7 @@ let result = stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    rpath="$out/lib/jli:$out/lib/server:$out/lib:${stdenv.lib.strings.makeLibraryPath [ stdenv.cc.cc zlib xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXrender freetype alsaLib]}"
+    rpath="$out/lib/jli:$out/lib/server:$out/lib:${lib.strings.makeLibraryPath [ stdenv.cc.cc zlib xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXrender freetype alsa-lib]}"
 
     for f in $(find $out -name "*.so") $(find $out -type f -perm -0100); do
       patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f" || true
@@ -47,7 +47,7 @@ let result = stdenv.mkDerivation rec {
 
   dontStrip = true; # See: https://github.com/NixOS/patchelf/issues/10
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

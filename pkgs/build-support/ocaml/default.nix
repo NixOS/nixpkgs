@@ -1,4 +1,4 @@
-{ stdenv, writeText, ocaml, findlib, ocamlbuild, camlp4 }:
+{ lib, stdenv, writeText, ocaml, findlib, ocamlbuild, camlp4 }:
 
 { name, version, buildInputs ? [],
   createFindlibDestdir ?  true,
@@ -14,7 +14,7 @@ let
   };
 in
   assert minimumSupportedOcamlVersion != null ->
-          stdenv.lib.versionOlder minimumSupportedOcamlVersion ocaml.version;
+          lib.versionOlder minimumSupportedOcamlVersion ocaml.version;
 
 stdenv.mkDerivation (args // {
   name = "ocaml-${name}-${version}";

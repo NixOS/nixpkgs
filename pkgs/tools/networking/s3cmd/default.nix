@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, python_magic, dateutil }:
+{ lib, buildPythonApplication, fetchFromGitHub, python_magic, python-dateutil }:
 
 buildPythonApplication rec {
   pname = "s3cmd";
@@ -11,11 +11,11 @@ buildPythonApplication rec {
     sha256 = "0p6mbgai7f0c12pkw4s7d649gj1f8hywj60pscxvj9jsna3iifhs";
   };
 
-  propagatedBuildInputs = [ python_magic dateutil ];
+  propagatedBuildInputs = [ python_magic python-dateutil ];
 
   dontUseSetuptoolsCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://s3tools.org/s3cmd";
     description = "Command line tool for managing Amazon S3 and CloudFront services";
     license = licenses.gpl2;

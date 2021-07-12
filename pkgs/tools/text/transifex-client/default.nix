@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi
+{ lib, buildPythonApplication, fetchPypi
 , python-slugify, requests, urllib3, six, setuptools }:
 
 buildPythonApplication rec {
@@ -23,10 +23,10 @@ buildPythonApplication rec {
   # Requires external resources
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.transifex.com/";
     license = licenses.gpl2;
     description = "Transifex translation service client";
-    maintainers = [ maintainers.etu ];
+    maintainers = with maintainers; [ ];
   };
 }

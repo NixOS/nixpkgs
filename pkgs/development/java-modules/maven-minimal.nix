@@ -1,6 +1,6 @@
-{ stdenv, pkgs }:
+{ lib, pkgs }:
 
-with stdenv.lib;
+with lib;
 with pkgs.javaPackages;
 
 let

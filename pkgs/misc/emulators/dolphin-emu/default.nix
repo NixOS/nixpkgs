@@ -1,10 +1,10 @@
 { stdenv
 , lib
 , fetchpatch
-, pkgconfig
+, pkg-config
 , cmake
 , bluez
-, ffmpeg_3
+, ffmpeg
 , libao
 , gtk2
 , glib
@@ -69,16 +69,14 @@ stdenv.mkDerivation rec {
     "-DENABLE_LTO=True"
   ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ];
 
   buildInputs = [
     bluez
-    ffmpeg_3
+    ffmpeg
     libao
     libGLU
     libGL
@@ -107,6 +105,10 @@ stdenv.mkDerivation rec {
     lzo
     sfml
   ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
+  '';
 
   meta = with lib; {
     homepage = "https://dolphin-emu.org/";

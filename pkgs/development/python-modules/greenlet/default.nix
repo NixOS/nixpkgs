@@ -8,20 +8,15 @@
 
 buildPythonPackage rec {
   pname = "greenlet";
-  version = "0.4.16";
+  version = "1.1.0";
   disabled = isPyPy;  # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e06eac722676797e8fce4adb8ad3dc57a1bb3adfb0dd3fdf8306c055a38456c";
+    sha256 = "c87df8ae3f01ffb4483c796fe1b15232ce2b219f0b18126948616224d3f658ee";
   };
 
   propagatedBuildInputs = [ six ];
-
-  # see https://github.com/python-greenlet/greenlet/issues/85
-  preCheck = ''
-    rm tests/test_leaks.py
-  '';
 
   meta = {
     homepage = "https://pypi.python.org/pypi/greenlet";

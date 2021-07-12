@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, eprover, ocaml, perl, zlib }:
+{ lib, stdenv, fetchurl, makeWrapper, eprover, ocaml, perl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "leo2";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wjpmizb181iygnd18lx7p77fwaci2clgzs5ix5j51cc8f3pazmv";
   };
 
-  buildInputs = [ makeWrapper eprover ocaml perl zlib ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ eprover ocaml perl zlib ];
 
   sourceRoot = "leo2/src";
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
       --add-flags "--atprc $out/etc/leoatprc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-performance typed higher order prover";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "the_platinum_searcher";
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/monochromegane/the_platinum_searcher";
     description = "A code search tool similar to ack and the_silver_searcher(ag)";
     license = licenses.mit;

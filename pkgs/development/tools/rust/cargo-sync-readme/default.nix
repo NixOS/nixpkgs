@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-sync-readme";
@@ -11,9 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1c38q87fyfmj6nlwdpavb1xxpi26ncywkgqcwbvblad15c6ydcyc";
   };
 
-  cargoSha256 = "1x15q6wv5278hm3ns2wmw4i8602g35y1jyv1b8wa5i4dnh52dj83";
+  cargoSha256 = "0vrbgs49ghhl4z4ljhghcs9fnbf7qx1an9kwbrgv9wng8m1dccah";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cargo plugin that generates a Markdown section in your README based on your Rust documentation";
     homepage = "https://github.com/phaazon/cargo-sync-readme";
     license = licenses.bsd3;

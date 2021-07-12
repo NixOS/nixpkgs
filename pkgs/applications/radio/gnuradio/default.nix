@@ -1,165 +1,268 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, makeWrapper
-, writeText
-# Dependencies documented @ https://gnuradio.org/doc/doxygen/build_guide.html
-# => core dependencies
+, fetchpatch
 , cmake
-, pkgconfig
-, git
-, boost
+# Remove gcc and python references
+, removeReferencesTo
+, pkg-config
+, volk
 , cppunit
-, fftw
-# => python wrappers
-# May be able to upgrade to swig3
-, python
-, swig2
-, numpy
-, scipy
-, matplotlib
-# => grc - the gnu radio companion
-, Mako
-, cheetah
-, pygtk # Note: GR is migrating to Mako. Cheetah should be removed for GR3.8
-# => gr-wavelet: collection of wavelet blocks
-, gsl
-# => gr-qtgui: the Qt-based GUI
-, qt4
-, qwt
-, pyqt4
-# => gr-wxgui: the Wx-based GUI
-, wxPython
-, lxml
-# => gr-audio: audio subsystems (system/OS dependent)
-, alsaLib   # linux   'audio-alsa'
-, CoreAudio # darwin  'audio-osx'
-# => uhd: the Ettus USRP Hardware Driver Interface
-, uhd
-# => gr-video-sdl: PAL and NTSC display
-, SDL
-# Other
-, libusb1
 , orc
-, pyopengl
+, boost
+, log4cpp
+, mpir
+, doxygen
+, python
+, codec2
+, gsm
+, fftwFloat
+, alsa-lib
+, libjack2
+, CoreAudio
+, uhd
+, SDL
+, gsl
+, soapysdr
+, libsodium
+, libsndfile
+, libunwind
+, cppzmq
+, zeromq
+# Needed only if qt-gui is disabled, from some reason
+, icu
+# GUI related
+, gtk3
+, pango
+, gobject-introspection
+, cairo
+, qt5
+, libsForQt5
+# Features available to override, the list of them is in featuresInfo. They
+# are all turned on by default.
+, features ? {}
+# If one wishes to use a different src or name for a very custom build
+, overrideSrc ? {}
+, pname ? "gnuradio"
+, versionAttr ? {
+  major = "3.9";
+  minor = "2";
+  patch = "0";
+}
+, fetchSubmodules ? false
 }:
 
+let
+  sourceSha256 = "01wyqazrpphmb0fl69j93k0w4vm4d1l4177m1fyg7qx8hzia0aaq";
+  featuresInfo = {
+    # Needed always
+    basic = {
+      native = [
+        cmake
+        pkg-config
+        orc
+      ];
+      runtime = [
+        volk
+        boost
+        log4cpp
+        mpir
+      ]
+        # when gr-qtgui is disabled, icu needs to be included, otherwise
+        # building with boost 1.7x fails
+        ++ lib.optionals (!(hasFeature "gr-qtgui" features)) [ icu ];
+      pythonNative = with python.pkgs; [
+        Mako
+        six
+      ];
+    };
+    doxygen = {
+      native = [ doxygen ];
+      cmakeEnableFlag = "DOXYGEN";
+    };
+    python-support = {
+      pythonRuntime = [ python.pkgs.six ];
+      native = [
+        python
+      ];
+      cmakeEnableFlag = "PYTHON";
+    };
+    testing-support = {
+      native = [ cppunit ];
+      cmakeEnableFlag = "TESTING";
+    };
+    post-install = {
+      cmakeEnableFlag = "POSTINSTALL";
+    };
+    gnuradio-runtime = {
+      cmakeEnableFlag = "GNURADIO_RUNTIME";
+      pythonRuntime = [
+        python.pkgs.pybind11
+      ];
+    };
+    gr-ctrlport = {
+      # Thrift support is not really working well, and even the patch they
+      # recommend applying on 0.9.2 won't apply. See:
+      # https://github.com/gnuradio/gnuradio/blob/v3.9.0.0/gnuradio-runtime/lib/controlport/thrift/README
+      runtime = [
+        libunwind
+      ];
+      cmakeEnableFlag = "GR_CTRLPORT";
+    };
+    gnuradio-companion = {
+      pythonRuntime = with python.pkgs; [
+        pyyaml
+        Mako
+        numpy
+        pygobject3
+      ];
+      native = [
+        python.pkgs.pytest
+      ];
+      runtime = [
+        gtk3
+        pango
+        gobject-introspection
+        cairo
+        libsndfile
+      ];
+      cmakeEnableFlag = "GRC";
+    };
+    gr-blocks = {
+      cmakeEnableFlag = "GR_BLOCKS";
+    };
+    gr-fec = {
+      cmakeEnableFlag = "GR_FEC";
+    };
+    gr-fft = {
+      runtime = [ fftwFloat ];
+      cmakeEnableFlag = "GR_FFT";
+    };
+    gr-filter = {
+      runtime = [ fftwFloat ];
+      cmakeEnableFlag = "GR_FILTER";
+    };
+    gr-analog = {
+      cmakeEnableFlag = "GR_ANALOG";
+    };
+    gr-digital = {
+      cmakeEnableFlag = "GR_DIGITAL";
+    };
+    gr-dtv = {
+      cmakeEnableFlag = "GR_DTV";
+    };
+    gr-audio = {
+      runtime = []
+        ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
+        ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
+      ;
+      cmakeEnableFlag = "GR_AUDIO";
+    };
+    gr-channels = {
+      cmakeEnableFlag = "GR_CHANNELS";
+    };
+    gr-qtgui = {
+      runtime = [ qt5.qtbase libsForQt5.qwt ];
+      pythonRuntime = [ python.pkgs.pyqt5 ];
+      cmakeEnableFlag = "GR_QTGUI";
+    };
+    gr-trellis = {
+      cmakeEnableFlag = "GR_TRELLIS";
+    };
+    gr-uhd = {
+      runtime = [
+        uhd
+      ];
+      cmakeEnableFlag = "GR_UHD";
+    };
+    gr-utils = {
+      cmakeEnableFlag = "GR_UTILS";
+    };
+    gr-modtool = {
+      pythonRuntime = with python.pkgs; [
+        click
+        click-plugins
+      ];
+      cmakeEnableFlag = "GR_MODTOOL";
+    };
+    gr-blocktool = {
+      cmakeEnableFlag = "GR_BLOCKTOOL";
+    };
+    gr-video-sdl = {
+      runtime = [ SDL ];
+      cmakeEnableFlag = "GR_VIDEO_SDL";
+    };
+    gr-vocoder = {
+      runtime = [ codec2 gsm ];
+      cmakeEnableFlag = "GR_VOCODER";
+    };
+    gr-wavelet = {
+      cmakeEnableFlag = "GR_WAVELET";
+      runtime = [ gsl libsodium ];
+    };
+    gr-zeromq = {
+      runtime = [ cppzmq zeromq ];
+      cmakeEnableFlag = "GR_ZEROMQ";
+    };
+    gr-network = {
+      cmakeEnableFlag = "GR_NETWORK";
+    };
+    gr-soapy = {
+      cmakeEnableFlag = "GR_SOAPY";
+      runtime = [
+        soapysdr
+      ];
+    };
+  };
+  shared = (import ./shared.nix {
+    inherit
+      stdenv
+      lib
+      python
+      removeReferencesTo
+      featuresInfo
+      features
+      versionAttr
+      sourceSha256
+      overrideSrc
+      fetchFromGitHub
+      fetchSubmodules
+    ;
+    qt = qt5;
+    gtk = gtk3;
+  });
+  inherit (shared) hasFeature; # function
+in
+
 stdenv.mkDerivation rec {
-  pname = "gnuradio";
-  version = "3.7.14.0";
-
-  src = fetchFromGitHub {
-    owner = "gnuradio";
-    repo = "gnuradio";
-    rev = "v${version}";
-    sha256 = "1nh4f9dmygprlbqybd3j1byg9fsr6065n140mvc4b0v8qqygmhrc";
-    fetchSubmodules = true;
+  inherit pname;
+  inherit (shared)
+    version
+    src
+    nativeBuildInputs
+    buildInputs
+    cmakeFlags
+    disallowedReferences
+    stripDebugList
+    doCheck
+    dontWrapPythonPrograms
+    dontWrapQtApps
+    meta
+  ;
+  passthru = shared.passthru // {
+    # Deps that are potentially overriden and are used inside GR plugins - the same version must
+    inherit boost volk;
+  } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
+    inherit uhd;
+  } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
+    inherit (libsForQt5) qwt;
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkgconfig
-    git
-    makeWrapper
-    cppunit
-    orc
-  ];
-
-  buildInputs = [
-    boost
-    fftw
-    python
-    swig2
-    lxml
-    qt4
-    qwt
-    SDL
-    libusb1
-    uhd
-    gsl
-  ] ++ stdenv.lib.optionals stdenv.isLinux  [ alsaLib   ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreAudio ];
-
-  propagatedBuildInputs = [
-    Mako
-    cheetah
-    numpy
-    scipy
-    matplotlib
-    pyqt4
-    pygtk
-    wxPython
-    pyopengl
-  ];
-
-  NIX_LDFLAGS = "-lpthread";
-
-  enableParallelBuilding = true;
-
-  postPatch = ''
-    substituteInPlace \
-        gr-fec/include/gnuradio/fec/polar_decoder_common.h \
-        --replace BOOST_CONSTEXPR_OR_CONST const
-  '';
-
-  # Enables composition with nix-shell
-  grcSetupHook = writeText "grcSetupHook.sh" ''
-    addGRCBlocksPath() {
-      addToSearchPath GRC_BLOCKS_PATH $1/share/gnuradio/grc/blocks
-    }
-    addEnvHooks "$targetOffset" addGRCBlocksPath
-  '';
-
-  setupHook = [ grcSetupHook ];
-
-  # patch wxgui and pygtk check due to python importerror in a headless environment
-  # wxgtk gui will be removed in GR3.8
-  # c++11 hack may not be necessary anymore
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable ${stdenv.lib.optionalString (!stdenv.isDarwin) "-std=c++11"}"
-    sed -i 's/.*wx\.version.*/set(WX_FOUND TRUE)/g' gr-wxgui/CMakeLists.txt
-    sed -i 's/.*pygtk_version.*/set(PYGTK_FOUND TRUE)/g' grc/CMakeLists.txt
-    find . -name "CMakeLists.txt" -exec sed -i '1iadd_compile_options($<$<COMPILE_LANGUAGE:CXX>:-std=c++11>)' "{}" ";"
-  '';
-
-  # Framework path needed for qwt6_qt4 but not qwt5
-  cmakeFlags =
-    stdenv.lib.optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt}/lib" ];
-
-  # - Ensure we get an interactive backend for matplotlib. If not the gr_plot_*
-  #   programs will not display anything. Yes, $MATPLOTLIBRC must point to the
-  #   *dirname* where matplotlibrc is located, not the file itself.
-  # - GNU Radio core is C++ but the user interface (GUI and API) is Python, so
-  #   we must wrap the stuff in bin/.
-  # Notes:
-  # - May want to use makeWrapper instead of wrapProgram
-  # - may want to change interpreter path on Python examples instead of wrapping
-  # - see https://github.com/NixOS/nixpkgs/issues/22688 regarding use of --prefix / python.withPackages
-  # - see https://github.com/NixOS/nixpkgs/issues/24693 regarding use of DYLD_FRAMEWORK_PATH on Darwin
-  postInstall = ''
-    printf "backend : Qt4Agg\n" > "$out/share/gnuradio/matplotlibrc"
-
-    for file in $(find $out/bin $out/share/gnuradio/examples -type f -executable); do
-        wrapProgram "$file" \
-            --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out") \
-            --set MATPLOTLIBRC "$out/share/gnuradio" \
-            ${stdenv.lib.optionalString stdenv.isDarwin "--set DYLD_FRAMEWORK_PATH /System/Library/Frameworks"}
-    done
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Software Defined Radio (SDR) software";
-    longDescription = ''
-      GNU Radio is a free & open-source software development toolkit that
-      provides signal processing blocks to implement software radios. It can be
-      used with readily-available low-cost external RF hardware to create
-      software-defined radios, or without hardware in a simulation-like
-      environment. It is widely used in hobbyist, academic and commercial
-      environments to support both wireless communications research and
-      real-world radio systems.
-    '';
-    homepage = "https://www.gnuradio.org";
-    license = licenses.gpl3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor fpletz ];
-  };
+  postInstall = shared.postInstall
+    # This is the only python reference worth removing, if needed.
+    + lib.optionalString (!hasFeature "python-support" features) ''
+      ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
+      ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
+    ''
+  ;
 }

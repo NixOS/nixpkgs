@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, libressl
+{ lib, stdenv, fetchurl, libressl
 , privsepPath ? "/var/empty"
 , privsepUser ? "ntp"
 }:
 
 stdenv.mkDerivation rec {
   pname = "openntpd";
-  version = "6.2p3";
+  version = "6.8p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenNTPD/${pname}-${version}.tar.gz";
-    sha256 = "0fn12i4kzsi0zkr4qp3dp9bycmirnfapajqvdfx02zhr4hanj0kv";
+    sha256 = "0ijsylc7a4jlpxsqa0jq1w1c7333id8pcakzl7a5749ria1xp0l5";
   };
 
   prePatch = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.openntpd.org/";
     license = licenses.bsd3;
     description = "OpenBSD NTP daemon (Debian port)";

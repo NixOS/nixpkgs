@@ -1,37 +1,38 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk-pixbuf, libnotify, makeWrapper, pkgconfig, xorg
-, enableAlsaUtils ? true, alsaUtils, coreutils
-, enableNetwork ? true, dnsutils, iproute, wirelesstools }:
+{ lib, rustPlatform, fetchFromGitHub, dbus, gdk-pixbuf, libnotify, makeWrapper, pkg-config, xorg
+, enableAlsaUtils ? true, alsa-utils, coreutils
+, enableNetwork ? true, dnsutils, iproute2, wirelesstools }:
 
 let
-  bins = lib.optionals enableAlsaUtils [ alsaUtils coreutils ]
-    ++ lib.optionals enableNetwork [ dnsutils iproute wirelesstools ];
+  bins = lib.optionals enableAlsaUtils [ alsa-utils coreutils ]
+    ++ lib.optionals enableNetwork [ dnsutils iproute2 wirelesstools ];
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "dwm-status";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
-    repo = "dwm-status";
+    repo = pname;
     rev = version;
-    sha256 = "172qkzbi37j6wx81pyqqffi9wxbg3bf8nis7d15ncn1yfd5r4gqh";
+    sha256 = "sha256-Y1J0nCVEmGKgQP+GEtPqK8l3SRuls5yesvJuowLDzUo=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ dbus gdk-pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "041sd9zm1c3v6iihnwjcya2xg5yxb2y4biyxpjlfblz2srxa15dm";
+  cargoSha256 = "sha256-8/vzJXZjSQmefHMo5BXKTRiLy2F3wfIn8VgPMJxtIvY=";
 
   postInstall = lib.optionalString (bins != [])  ''
-    wrapProgram $out/bin/dwm-status --prefix "PATH" : "${stdenv.lib.makeBinPath bins}"
+    wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly performant and configurable DWM status service";
     homepage = "https://github.com/Gerschtli/dwm-status";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];
+    mainProgram = pname;
     platforms = platforms.linux;
   };
 }

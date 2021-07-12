@@ -585,6 +585,22 @@ EOF
     return $config;
 }
 
+sub generateXserverConfig {
+    my $xserverEnabled = "@xserverEnabled@";
+
+    my $config = "";
+    if ($xserverEnabled eq "1") {
+        $config = <<EOF;
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+EOF
+    } else {
+        $config = <<EOF;
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
+EOF
+    }
+}
 
 if ($showHardwareConfig) {
     print STDOUT $hwConfig;
@@ -629,6 +645,8 @@ EOF
         }
 
         my $networkingDhcpConfig = generateNetworkingDhcpConfig();
+
+        my $xserverConfig = generateXserverConfig();
 
         (my $desktopConfiguration = <<EOF)=~s/^/  /gm;
 @desktopConfiguration@

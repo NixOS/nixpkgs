@@ -1,26 +1,26 @@
-{ stdenv, rustPlatform, fetchFromGitHub, darwin }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sozu";
-  version = "0.11.50";
+  version = "0.11.56";
 
   src = fetchFromGitHub {
     owner = "sozu-proxy";
     repo = pname;
     rev = version;
-    sha256 = "1srg2b8vwc4vp07kg4fizqj1rbm9hvf6hj1mjdh6yvb9cpbw3jz7";
+    sha256 = "sha256-/XyBzhZCsX9sGk+iTFlDnblWfDCZdI4b9yfo4Z+Wp1U=";
   };
 
-  cargoSha256 = "5WOigCiQZQ5DaTd15vV8pUh8Xl3UIe9yLG1ptUtY+iA=";
+  cargoSha256 = "sha256-xnps3/i6BpzdwUAQmb8aoOPc39L2P52y/ZDAeLoEIU8=";
 
   buildInputs =
-    stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

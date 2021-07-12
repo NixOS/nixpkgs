@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline}:
+{lib, stdenv, fetchurl, readline}:
 
 stdenv.mkDerivation rec {
   # FIXME: replace Makefile so we can build MPI & MAC support
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
   buildInputs = [readline];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description     = "Bayesian Inference of Phylogeny";
     longDescription = ''
       Bayesian inference of phylogeny is based upon a

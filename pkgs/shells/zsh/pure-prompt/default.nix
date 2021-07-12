@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "pure-prompt";
-  version = "1.13.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "pure";
     rev = "v${version}";
-    sha256 = "16q9v4c8lagp4vxm7qhagilqnwf1g4pbds56x5wfj4cwc0x2gclw";
+    sha256 = "sha256-6j6QZtsA5ZgfXthYjXRrND2zAJwZx0/6WRI1f3c+2mE=";
   };
 
   installPhase = ''

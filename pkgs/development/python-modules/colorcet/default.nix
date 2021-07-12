@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , param
@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "colorcet";
-  version = "2.0.2";
+  version = "2.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vkx00im4s6zhr2m1j9r0a5vmhkl488b4xpzxb1pidbl19wi6j2i";
+    sha256 = "efa44b6f4078261e62d0039c76aba17ac8d3ebaf0bc2291a111aee3905313433";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +24,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    nbsmoke
     pytest
     flake8
     pytest-mpl
@@ -40,7 +39,7 @@ buildPythonPackage rec {
     pytest colorcet -k 'not matplotlib_default_colormap_plot'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of perceptually uniform colormaps";
     homepage = "https://colorcet.pyviz.org";
     license = licenses.cc-by-40;

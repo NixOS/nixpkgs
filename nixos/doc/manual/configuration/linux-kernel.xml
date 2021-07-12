@@ -87,7 +87,7 @@ nixpkgs.config.packageOverrides = pkgs:
    You can edit the config with this snippet (by default <command>make
    menuconfig</command> won't work out of the box on nixos):
 <screen><![CDATA[
-      nix-shell -E 'with import <nixpkgs> {}; kernelToOverride.overrideAttrs (o: {nativeBuildInputs=o.nativeBuildInputs ++ [ pkgconfig ncurses ];})'
+      nix-shell -E 'with import <nixpkgs> {}; kernelToOverride.overrideAttrs (o: {nativeBuildInputs=o.nativeBuildInputs ++ [ pkg-config ncurses ];})'
   ]]></screen>
    or you can let nixpkgs generate the configuration. Nixpkgs generates it via
    answering the interactive kernel utility <command>make config</command>. The

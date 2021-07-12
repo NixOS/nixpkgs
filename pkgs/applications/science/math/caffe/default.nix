@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     sha256 = "104jp3cm823i3cdph7hgsnj6l77ygbwsy35mdmzhmsi4jxprd9j3";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake doxygen ];
 
   cmakeFlags =
@@ -78,7 +76,7 @@ stdenv.mkDerivation rec {
     let pp = python.pkgs; in ([
       pp.numpy pp.scipy pp.scikitimage pp.h5py
       pp.matplotlib pp.ipython pp.networkx pp.nose
-      pp.pandas pp.dateutil pp.protobuf pp.gflags
+      pp.pandas pp.python-dateutil pp.protobuf pp.gflags
       pp.pyyaml pp.pillow pp.six
     ] ++ lib.optional leveldbSupport pp.leveldb)
   );
@@ -127,7 +125,7 @@ stdenv.mkDerivation rec {
       -weights "${test_model_weights}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deep learning framework";
     longDescription = ''
       Caffe is a deep learning framework made with expression, speed, and

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256:0fh1lq793k4ddpqsf2av447hcb74vcq53afkm3g4672k48mjjw1y";
   };
 
-  cargoSha256 = "1h1sy54p7zxijydnhzvkxli90d72biv1inni17licb0vb9dihmnf";
+  cargoSha256 = "0ah3zjx36ibax4gi66g13finh4m2k0aidxkg2nxx1c2aqj847mm1";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     description = "A utility for managing cargo dependencies from the command line";
     homepage = "https://github.com/killercup/cargo-edit";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ gerschtli jb55 filalex77 killercup ];
+    maintainers = with maintainers; [ gerschtli jb55 Br1ght0ne killercup ];
   };
 }

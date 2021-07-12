@@ -1,12 +1,12 @@
-{ stdenv, fetchzip, jdk, makeWrapper }:
+{ lib, stdenv, fetchzip, jdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchzip {
     url = "http://dl.bintray.com/asciidoctor/maven/org/asciidoctor/${pname}/${version}/${pname}-${version}-bin.zip";
-    sha256 = "1m00cdg1520ampg3i2j64si8gmwph7j4189agjlimx3fjjsp3xrh";
+    sha256 = "1b4ivyzpg9p3idk48nfvgpz18qlxyycswkaab31j3dp1mniwvjla";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       --prefix JAVA_HOME : ${jdk}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official library for running Asciidoctor on the JVM";
     longDescription = ''
       AsciidoctorJ is the official library for running Asciidoctor on the JVM.

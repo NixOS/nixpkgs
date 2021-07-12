@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libX11, libXext, xorgproto, libICE, libSM, libpng12, zlib }:
+{ lib, stdenv, fetchurl, fetchpatch, libX11, libXext, xorgproto, libICE, libSM, libpng12, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "lincity";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "City simulation game";
     license = licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";

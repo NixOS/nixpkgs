@@ -1,10 +1,10 @@
-{ stdenv, fetchzip, Carbon, Cocoa, ScriptingBridge }:
+{ lib, stdenv, fetchzip, Carbon, Cocoa, ScriptingBridge }:
 
 stdenv.mkDerivation rec {
   pname = "chunkwm";
   version = "0.4.9";
   src = fetchzip {
-    url = "http://github.com/koekeishiya/chunkwm/archive/v${version}.tar.gz";
+    url = "https://github.com/koekeishiya/chunkwm/archive/v${version}.tar.gz";
     sha256 = "0w8q92q97fdvbwc3qb5w44jn4vi3m65ssdvjp5hh6b7llr17vspl";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cp plugins/*.so $out/lib/chunkwm/plugins
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiling window manager for macOS based on plugin architecture";
     homepage = "https://github.com/koekeishiya/chunkwm";
     platforms = platforms.darwin;

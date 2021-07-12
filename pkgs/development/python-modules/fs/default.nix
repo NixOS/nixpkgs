@@ -4,9 +4,9 @@
 , fetchPypi
 , six
 , appdirs
-, scandir
-, backports_os
-, typing
+, scandir ? null
+, backports_os ? null
+, typing ? null
 , pytz
 , enum34
 , pyftpdlib
@@ -20,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "fs";
-  version = "2.4.11";
+  version = "2.4.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc99d476b500f993df8ef697b96dc70928ca2946a455c396a566efe021126767";
+    sha256 = "caab4dc1561d63c92f36ee78976f6a4a01381830d8420ce34a78d4f1bb1dc95f";
   };
 
   buildInputs = [ glibcLocales ];
@@ -47,6 +47,10 @@ buildPythonPackage rec {
     "user_data_repr"
   ] ++ lib.optionals (stdenv.isDarwin) [ # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
     "test_ftpfs"
+  ] ++ lib.optionals (pythonAtLeast "3.9") [
+    # update friend version of this commit: https://github.com/PyFilesystem/pyfilesystem2/commit/3e02968ce7da7099dd19167815c5628293e00040
+    # merged into master, able to be removed after >2.4.1
+    "test_copy_sendfile"
   ];
 
   __darwinAllowLocalNetworking = true;

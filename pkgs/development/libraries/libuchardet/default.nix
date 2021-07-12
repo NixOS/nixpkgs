@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "uchardet";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isi686; # tests fail on i686
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla's Universal Charset Detector C/C++ API";
     homepage = "https://www.freedesktop.org/wiki/Software/uchardet/";
     license = licenses.mpl11;

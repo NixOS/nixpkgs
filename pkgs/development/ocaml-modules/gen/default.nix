@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, ounit }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, ounit }:
 
 let version = "0.5"; in
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/c-cube/gen";
     description = "Simple, efficient iterators for OCaml";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
   };
 }

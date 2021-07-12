@@ -1,4 +1,15 @@
-MD_TARGETS=$(addsuffix .xml, $(basename $(shell find . -type f -regex '.*\.md$$')))
+MD_TARGETS=$(addsuffix .xml, $(basename $(shell find . -type f -regex '.*\.md$$' -not -name README.md)))
+
+PANDOC ?= pandoc
+
+pandoc_media_dir = media
+# NOTE: Keep in sync with NixOS manual (/nixos/doc/manual/md-to-db.sh).
+# TODO: Remove raw-attribute when we can get rid of DocBook altogether.
+pandoc_commonmark_enabled_extensions = +attributes+fenced_divs+footnotes+bracketed_spans+definition_lists+pipe_tables+raw_attribute
+pandoc_flags = --extract-media=$(pandoc_media_dir) \
+	--lua-filter=$(PANDOC_LUA_FILTERS_DIR)/diagram-generator.lua \
+	--lua-filter=labelless-link-is-xref.lua \
+	-f commonmark$(pandoc_commonmark_enabled_extensions)+smart
 
 .PHONY: all
 all: validate format out/html/index.html out/epub/manual.epub
@@ -22,7 +33,7 @@ fix-misc-xml:
 .PHONY: clean
 clean:
 	rm -f ${MD_TARGETS} doc-support/result .version manual-full.xml functions/library/locations.xml functions/library/generated
-	rm -rf ./out/ ./highlightjs
+	rm -rf ./out/ ./highlightjs ./media
 
 .PHONY: validate
 validate: manual-full.xml doc-support/result
@@ -39,6 +50,7 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 	mkdir -p out/html/highlightjs/
 	cp -r highlightjs out/html/
 
+	cp -r $(pandoc_media_dir) out/html/
 	cp ./overrides.css out/html/
 	cp ./style.css out/html/style.css
 
@@ -53,6 +65,7 @@ out/epub/manual.epub: manual-full.xml
 		doc-support/result/epub.xsl \
 		./manual-full.xml
 
+	cp -r $(pandoc_media_dir) out/epub/scratch/OEBPS
 	cp ./overrides.css out/epub/scratch/OEBPS
 	cp ./style.css out/epub/scratch/OEBPS
 	mkdir -p out/epub/scratch/OEBPS/images/callouts/
@@ -87,24 +100,12 @@ functions/library/generated: doc-support/result
 	ln -rfs ./doc-support/result/function-docs functions/library/generated
 
 %.section.xml: %.section.md
-	pandoc $^ -w docbook \
-		-f markdown+smart \
-	  | sed -e 's|<ulink url=|<link xlink:href=|' \
-	      -e 's|</ulink>|</link>|' \
-	      -e 's|<sect. id=|<section xml:id=|' \
-	      -e 's|</sect[0-9]>|</section>|' \
-	      -e '1s| id=| xml:id=|' \
-	      -e '1s|\(<[^ ]* \)|\1xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" |' \
-	| cat  > $@
+	$(PANDOC) $^ -t docbook \
+		$(pandoc_flags) \
+		-o $@
 
 %.chapter.xml: %.chapter.md
-	pandoc $^ -w docbook \
+	$(PANDOC) $^ -t docbook \
 		--top-level-division=chapter \
-		-f markdown+smart \
-	  | sed -e 's|<ulink url=|<link xlink:href=|' \
-	      -e 's|</ulink>|</link>|' \
-	      -e 's|<sect. id=|<section xml:id=|' \
-	      -e 's|</sect[0-9]>|</section>|' \
-	      -e '1s| id=| xml:id=|' \
-	      -e '1s|\(<[^ ]* \)|\1|' \
-	| cat  > $@
+		$(pandoc_flags) \
+		-o $@

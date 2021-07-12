@@ -1,4 +1,4 @@
-{ stdenv, python3Packages }:
+{ lib, python3Packages }:
 
 with python3Packages;
 
@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ colorama veryprettytable pyperclip ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line interface for The Pirate Bay";
     homepage = "https://github.com/vikstrous/pirate-get";
     license = licenses.gpl1;

@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, libressl, libxml2, cmake, z3, substituteAll,
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll,
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
-  version = "0.38.1";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "1hk810k9h3bl641pgw91y4x2qw67rvbapx6p2pk9qz5p7nfcn7qh";
+    sha256 = "1s8glmzz0g5lj1fjwwy4m3n660smiq5wl9r1lg686wqh42hcgnsy";
 
 # Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
 # LLVM.  (The submodule is a specific tag in the LLVM source tree).
@@ -23,33 +23,33 @@ stdenv.mkDerivation (rec {
     fetchSubmodules = true;
   };
 
-  ponygbenchmark = fetchurl {
-    url = https://github.com/google/benchmark/archive/v1.5.0.tar.gz;
-    sha256 = "06i2cr4rj126m1zfz0x1rbxv1mw1l7a11mzal5kqk56cdrdicsiw";
-    name = "v1.5.0.tar.gz";
+  ponygbenchmark = fetchFromGitHub {
+    owner = "google";
+    repo = "benchmark";
+    rev = "v1.5.2";
+    sha256 = "13rxagpzw6bal6ajlmrxlh9kgfvcixn6j734b2bvfqz7lch8n0pa";
   };
 
-  buildInputs = [ makeWrapper which libxml2 cmake z3 ];
-  propagatedBuildInputs = [ cc ];
+  nativeBuildInputs = [ cmake makeWrapper which ];
+  buildInputs = [ libxml2 z3 ];
 
   # Sandbox disallows network access, so disabling problematic networking tests
   patches = [
     ./disable-tests.patch
+    ./fix-libstdcpp-path.patch
     (substituteAll {
       src = ./make-safe-for-sandbox.patch;
       googletest = fetchurl {
-        url = https://github.com/google/googletest/archive/release-1.8.1.tar.gz;
+        url = "https://github.com/google/googletest/archive/release-1.8.1.tar.gz";
         sha256 = "17147961i01fl099ygxjx4asvjanwdd446nwbq9v8156h98zxwcv";
-        name = "release-1.8.1.tar.gz";
       };
     })
   ];
 
   postUnpack = ''
     mkdir -p source/build/build_libs/gbenchmark-prefix/src
-    tar -C source/build/build_libs/gbenchmark-prefix/src -zxvf "$ponygbenchmark"
-    mv source/build/build_libs/gbenchmark-prefix/src/benchmark-1.5.0 \
-       source/build/build_libs/gbenchmark-prefix/src/benchmark
+    cp -r "$ponygbenchmark"/ source/build/build_libs/gbenchmark-prefix/src/benchmark
+    chmod -R u+w source/build/build_libs/gbenchmark-prefix/src/benchmark
   '';
 
   dontConfigure = true;
@@ -60,7 +60,6 @@ stdenv.mkDerivation (rec {
     patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-09-01-is-trivially-copyable.diff
     patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-01-07-01-c-exports.diff
     patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2019-12-23-01-jit-eh-frames.diff
-
     substituteInPlace packages/process/_test.pony \
         --replace '"/bin/' '"${coreutils}/bin/' \
         --replace '=/bin' "${coreutils}/bin"
@@ -79,31 +78,27 @@ stdenv.mkDerivation (rec {
     "PONYC_VERSION=${version}"
     "prefix=${placeholder "out"}"
   ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "bits=64" ]
-    ++ stdenv.lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
-
-  enableParallelBuilding = true;
+    ++ lib.optionals stdenv.isDarwin [ "bits=64" ]
+    ++ lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
   doCheck = true;
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
 
-  installPhase = ''
-    make config=release prefix=$out ''
-    + stdenv.lib.optionalString stdenv.isDarwin '' bits=64 ''
-    + stdenv.lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no ''
+  installPhase = "make config=release prefix=$out "
+    + lib.optionalString stdenv.isDarwin "bits=64 "
+    + lib.optionalString (stdenv.isDarwin && (!lto)) "lto=no "
     + '' install
-
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \
       --set-default CC "$CC" \
-      --prefix PONYPATH : "${stdenv.lib.makeLibraryPath [ pcre2 libressl (placeholder "out") ]}"
+      --prefix PONYPATH : "${lib.makeLibraryPath [ pcre2 openssl (placeholder "out") ]}"
   '';
 
   # Stripping breaks linking for ponyc
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
     homepage = "https://www.ponylang.org";
     license = licenses.bsd2;

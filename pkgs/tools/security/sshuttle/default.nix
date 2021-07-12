@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3Packages
 , makeWrapper
 , coreutils
@@ -19,18 +19,18 @@ python3Packages.buildPythonApplication rec {
 
   patches = [ ./sudo.patch ];
 
-  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ];
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools-scm ];
 
   checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
 
-  runtimeDeps = [ coreutils openssh procps ] ++ stdenv.lib.optionals stdenv.isLinux [ iptables nettools ];
+  runtimeDeps = [ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ];
 
   postInstall = ''
     wrapProgram $out/bin/sshuttle \
-      --prefix PATH : "${stdenv.lib.makeBinPath runtimeDeps}" \
+      --prefix PATH : "${lib.makeBinPath runtimeDeps}" \
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sshuttle/sshuttle/";
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''

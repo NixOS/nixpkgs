@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, coreutils }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, coreutils }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.2.2";
   pname = "light";
   src = fetchFromGitHub {
     owner = "haikarainen";
     repo = "light";
     rev = "v${version}";
-    sha256 = "0zrjipd392bzjvxx0rjrb0cgi0ix1d83fwgw1mcy8kc4d16cgyjg";
+    sha256 = "1a70zcf88ifsnwll486aicjnh48zisdf8f7vi34ihw61kdadsq9s";
   };
 
   configureFlags = [ "--with-udev" ];
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GNU/Linux application to control backlights";
     homepage = "https://haikarainen.github.io/light/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ puffnfresh dtzWill ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ puffnfresh dtzWill ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,12 +4,15 @@
 
 buildDunePackage rec {
   pname = "toml";
-  version = "5.0.0";
+  version = "6.0.0";
+
+  useDune2 = true;
+
   src = fetchFromGitHub {
     owner = "ocaml-toml";
     repo = "to.ml";
-    rev = "v${version}";
-    sha256 = "1505kwcwklcfaxw8wckajm8kc6yrlikmxyhi8f8cpvhlw9ys90nj";
+    rev = version;
+    sha256 = "08ywzqckllvwawl1wpgg7qzvx6jhq7d6vysa0d5hj7qdwq213ggm";
   };
 
   buildInputs = [ menhir ];

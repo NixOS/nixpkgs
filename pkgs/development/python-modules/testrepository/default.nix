@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , testtools
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ${python.interpreter} ./testr
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A database of test results which can be used as part of developer workflow";
     homepage = "https://pypi.python.org/pypi/testrepository";
     license = licenses.bsd2;

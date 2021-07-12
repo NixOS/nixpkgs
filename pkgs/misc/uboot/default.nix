@@ -18,10 +18,10 @@
 }:
 
 let
-  defaultVersion = "2020.10";
+  defaultVersion = "2021.04";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "08m6f1bh4pdcqbxf983qdb66ccd5vak5cbzc114yf3jwq2yinj0d";
+    sha256 = "06p1vymf0dl6jc2xy5w7p42mpgppa46lmpm2ishmgsycnldqnhqd";
   };
   buildUBoot = {
     version ? null
@@ -40,7 +40,9 @@ let
 
     src = if src == null then defaultSrc else src;
 
-    patches = extraPatches;
+    patches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ] ++ extraPatches;
 
     postPatch = ''
       patchShebangs tools
@@ -53,7 +55,10 @@ let
       dtc
       flex
       openssl
-      (buildPackages.python3.withPackages (p: [ p.libfdt ]))
+      (buildPackages.python3.withPackages (p: [
+        p.libfdt
+        p.setuptools # for pkg_resources
+      ]))
       swig
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -82,6 +87,11 @@ let
 
       mkdir -p ${installDir}
       cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
+
+      mkdir -p "$out/nix-support"
+      ${lib.concatMapStrings (file: ''
+        echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
+      '') filesToInstall}
 
       runHook postInstall
     '';
@@ -173,6 +183,28 @@ in {
     '';
   };
 
+  ubootNanoPCT4 = buildUBoot rec {
+    rkbin = fetchFromGitHub {
+      owner = "armbian";
+      repo = "rkbin";
+      rev = "3bd0321cae5ef881a6005fb470009ad5a5d1462d";
+      sha256 = "09r4dzxsbs3pff4sh70qnyp30s3rc7pkc46v1m3152s7jqjasp31";
+    };
+
+    defconfig = "nanopc-t4-rk3399_defconfig";
+
+    extraMeta = {
+      platforms = ["aarch64-linux"];
+      license = lib.licenses.unfreeRedistributableFirmware;
+    };
+    BL31="${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = ["u-boot.itb" "idbloader.img"];
+    postBuild = ''
+      ./tools/mkimage -n rk3399 -T rksd -d ${rkbin}/rk33/rk3399_ddr_800MHz_v1.24.bin idbloader.img
+      cat ${rkbin}/rk33/rk3399_miniloader_v1.19.bin >> idbloader.img
+    '';
+  };
+
   ubootNovena = buildUBoot {
     defconfig = "novena_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -241,6 +273,12 @@ in {
     defconfig = "orangepi_zero_plus2_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePiZero = buildUBoot {
+    defconfig = "orangepi_zero_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -314,6 +352,18 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootRaspberryPi4_32bit = buildUBoot {
+    defconfig = "rpi_4_32b_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi4_64bit = buildUBoot {
+    defconfig = "rpi_4_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   ubootRaspberryPiZero = buildUBoot {
     defconfig = "rpi_0_w_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
@@ -351,6 +401,13 @@ in {
 
   ubootRockPro64 = buildUBoot {
     extraMakeFlags = [ "all" "u-boot.itb" ];
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/237654/mbox/";
+        sha256 = "0aiw9zk8w4msd3v8nndhkspjify0yq6a5f0zdy6mhzs0ilq896c3";
+      })
+    ];
     defconfig = "rockpro64-rk3399_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31="${armTrustedFirmwareRK3399}/bl31.elf";
@@ -393,5 +450,12 @@ in {
     defconfig = "wandboard_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.img" "SPL"];
+  };
+
+  ubootRockPi4 = buildUBoot {
+    defconfig = "rock-pi-4-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL }:
+{ lib, stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_net";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1d5c9xqlf4s1c01gzv6cxmg0r621pq9kfgxcg3197xw4p25pljjz";
   };
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
   propagatedBuildInputs = [ SDL ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SDL networking library";
     platforms = platforms.unix;
     license = licenses.zlib;

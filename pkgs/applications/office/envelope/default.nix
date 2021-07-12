@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , vala
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Personal finance manager for elementary OS";
     homepage = "https://github.com/cjfloss/envelope";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;

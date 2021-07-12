@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnulib, perl, autoconf, automake }:
+{ lib, stdenv, fetchFromGitHub, gnulib, perl, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   version = "2.5";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./build-aux/autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kjn/lbzip2"; # Formerly http://lbzip2.org/
     description = "Parallel bzip2 compression utility";
     license = licenses.gpl3;

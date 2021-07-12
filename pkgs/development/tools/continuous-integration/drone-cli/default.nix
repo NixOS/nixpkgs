@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-let version = "1.2.2";
+let version = "1.3.0";
 in buildGoModule rec {
   inherit version;
   pname = "drone-cli";
   revision = "v${version}";
 
-  vendorSha256 = "1ryh94cj37j8x6qwxr5ydyw6cnjppakg1w84sipm11d0vvv98bhi";
+  vendorSha256 = "sha256-I+UBa6gqkPRXNV72iyJcCBLYShZxMtHFHSK77mhDv+U=";
 
   doCheck = false;
 
@@ -18,10 +18,10 @@ in buildGoModule rec {
     owner = "drone";
     repo = "drone-cli";
     rev = revision;
-    sha256 = "082yqm72y8s3v06gkcg947p62sd63y3r2bmdsrfgdrzb5w5a75bl";
+    sha256 = "sha256-j6drDMxvAVfQ1aCFooc9g9HhMRMlFZXGZPiuJZKBbY4=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ bricewge ];
     license = licenses.asl20;
     description = "Command line client for the Drone continuous integration server";

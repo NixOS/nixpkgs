@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitLab, ocaml, findlib
+{ stdenv, lib, fetchFromGitLab, ocaml, findlib
 , sedlex, uunf, uutf
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "4.03"
 then throw "iri is not available for OCaml ${ocaml.version}"
 else
 
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "IRI (RFC3987) native OCaml implementation";
-    license = stdenv.lib.licenses.lgpl3;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl3;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
   };

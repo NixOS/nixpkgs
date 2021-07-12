@@ -1,40 +1,36 @@
-{ stdenv, fetchurl, gcc, makeWrapper
+{ lib, stdenv, fetchurl, gcc, makeWrapper
 , db, gmp, ncurses }:
 
-let
-  version = "2.2";
-  lib = stdenv.lib;
-in
 stdenv.mkDerivation rec {
   pname = "gnu-cobol";
-  inherit version;
+  version = "3.1.2";
 
   src = fetchurl {
-    url = "https://sourceforge.com/projects/open-cobol/files/gnu-cobol/${version}/gnucobol-${version}.tar.gz";
-    sha256 = "1jrjmdx0swssjh388pp08awhiisbrs2i7gx4lcm4p1k5rpg3hn4j";
+    url = "mirror://sourceforge/gnucobol/${lib.versions.majorMinor version}/gnucobol-${version}.tar.xz";
+    sha256 = "0x15ybfm63g7c9340fc6712h9v59spnbyaz4rf85pmnp3zbhaw2r";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ db gmp ncurses ];
 
-  cflags  = stdenv.lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
-  ldflags = stdenv.lib.concatMapStringsSep " " (p: "-I" + (lib.getDev p) + "/include ") buildInputs;
+  cflags  = lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
+  ldflags = lib.concatMapStringsSep " " (p: "-I" + (lib.getDev p) + "/include ") buildInputs;
 
   cobolCCFlags = "-I$out/include ${ldflags} -L$out/lib ${cflags}";
 
-  postInstall = with stdenv.lib; ''
+  postInstall = with lib; ''
     wrapProgram "$out/bin/cobc" \
       --set COB_CC "${gcc}/bin/gcc" \
       --prefix COB_LDFLAGS " " "${cobolCCFlags}" \
       --prefix COB_CFLAGS " " "${cobolCCFlags}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source COBOL compiler";
-    homepage = "https://sourceforge.net/projects/open-cobol/";
-    license = licenses.gpl3;
+    homepage = "https://sourceforge.net/projects/gnucobol/";
+    license = with licenses; [ gpl3Only lgpl3Only ];
     maintainers = with maintainers; [ ericsagnes ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.all;
   };
 }

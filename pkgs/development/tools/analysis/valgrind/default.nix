@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
+{ lib, stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
   name = "valgrind-3.16.1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
-  buildInputs = [ gdb perl ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   # Perl is also a native build input.
   nativeBuildInputs = [ perl ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
+  preConfigure = lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
       <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   postPatch = "";
 
   configureFlags =
-    stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
-    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
+    lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
 
   doCheck = false; # fails
 
@@ -76,10 +76,10 @@ stdenv.mkDerivation rec {
       Valgrind to build new tools.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.unix;
     badPlatforms = [
       "armv5tel-linux" "armv6l-linux" "armv6m-linux"
       "sparc-linux" "sparc64-linux"

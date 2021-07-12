@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper
+{ stdenv, fetchurl, perl, file, nettools, iputils, iproute2, makeWrapper
 , coreutils, gnused, openldap ? null
 , buildPackages, lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "dhcp";
-  version = "4.4.2";
+  version = "4.4.2-P1";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/dhcp/${version}/${pname}-${version}.tar.gz";
-    sha256 = "08a5003zdxgl41b29zjkxa92h2i40zyjgxg0npvnhpkfl5jcsz0s";
+    sha256 = "06jsr0cg5rsmyibshrpcb9za0qgwvqccashdma7mlm1rflrh8pmh";
   };
 
   patches =
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
       ./set-hostname.patch
     ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl makeWrapper ];
 
-  buildInputs = [ makeWrapper openldap ];
+  buildInputs = [ openldap ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -37,13 +37,14 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
-    ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+    ++ lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
   NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=pointer-compare"
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-truncation"
     "-Wno-error=format-overflow"
+    "-Wno-error=stringop-overflow=8"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
 
       cp client/scripts/linux $out/sbin/dhclient-script
       substituteInPlace $out/sbin/dhclient-script \
-        --replace /sbin/ip ${iproute}/sbin/ip
+        --replace /sbin/ip ${iproute2}/sbin/ip
       wrapProgram "$out/sbin/dhclient-script" --prefix PATH : \
         "${nettools}/bin:${nettools}/sbin:${iputils}/bin:${coreutils}/bin:${gnused}/bin"
     '';
@@ -67,12 +68,12 @@ stdenv.mkDerivation rec {
     ''
       substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
       sed -i "includes/dhcpd.h" \
-	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
+          -e "s|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
 
       export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";
 
     longDescription = ''
@@ -83,7 +84,7 @@ stdenv.mkDerivation rec {
    '';
 
     homepage = "https://www.isc.org/dhcp/";
-    license = licenses.isc;
+    license = licenses.mpl20;
     platforms = platforms.unix;
   };
 }

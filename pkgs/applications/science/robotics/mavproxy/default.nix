@@ -1,14 +1,19 @@
-{ lib, buildPythonApplication, fetchPypi, matplotlib, numpy, pymavlink, pyserial
-, setuptools, wxPython_4_0 }:
+{ stdenv, lib, buildPythonApplication, fetchPypi, matplotlib, numpy, pymavlink, pyserial
+, setuptools, wxPython_4_0, billiard, gnureadline }:
 
 buildPythonApplication rec {
   pname = "MAVProxy";
-  version = "1.8.22";
+  version = "1.8.39";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "87d7f9c0b8f4f1db3ce3521f67cd244fe3b89ffead797e92f35a7f71bbe8b958";
+    sha256 = "sha256-1RXuAiz9i5ZnLtDGQ+o3DNgWJ2FDJGIoelmlDmEzrts=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "opencv-python" ""
+  '';
 
   propagatedBuildInputs = [
     matplotlib
@@ -17,7 +22,7 @@ buildPythonApplication rec {
     pyserial
     setuptools
     wxPython_4_0
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ billiard gnureadline ];
 
   # No tests
   doCheck = false;
@@ -25,7 +30,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "MAVLink proxy and command line ground station";
     homepage = "https://github.com/ArduPilot/MAVProxy";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lopsided98 ];
   };
 }

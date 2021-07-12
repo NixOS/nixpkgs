@@ -1,9 +1,20 @@
-{ aiofiles, buildPythonPackage, cryptography, fetchFromGitHub, isPy3k, lib
-, libusb1, mock, pyasn1, python, pycryptodome, rsa }:
+{ lib
+, aiofiles
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, isPy3k
+, libusb1
+, mock
+, pyasn1
+, pycryptodome
+, pytestCheckHook
+, rsa
+}:
 
 buildPythonPackage rec {
   pname = "adb-shell";
-  version = "0.2.3";
+  version = "0.3.4";
 
   disabled = !isPy3k;
 
@@ -12,19 +23,27 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "adb_shell";
     rev = "v${version}";
-    sha256 = "1ay598avmg656cxnc9phdx43z1plsrfjf9png9jwjwyhyjjiqxil";
+    sha256 = "sha256-H1GVbMeaVUZh8T1jgZP2o+emEkK4fOi5k4aL9ayVesA=";
   };
 
-  propagatedBuildInputs = [ aiofiles cryptography libusb1 pyasn1 rsa ];
+  propagatedBuildInputs = [
+    aiofiles
+    cryptography
+    libusb1
+    pyasn1
+    rsa
+  ];
 
-  checkInputs = [ mock pycryptodome ];
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests -t .
-  '';
+  checkInputs = [
+    mock
+    pycryptodome
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "adb_shell" ];
 
   meta = with lib; {
-    description =
-      "A Python implementation of ADB with shell and FileSync functionality.";
+    description = "Python implementation of ADB with shell and FileSync functionality";
     homepage = "https://github.com/JeffLIrion/adb_shell";
     license = licenses.asl20;
     maintainers = with maintainers; [ jamiemagee ];

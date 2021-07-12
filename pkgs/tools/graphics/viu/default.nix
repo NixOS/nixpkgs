@@ -2,18 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "viu";
-  version = "1.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "atanunq";
     repo = "viu";
     rev = "v${version}";
-    sha256 = "1algvndpl63g3yzp3hhbgm7839njpbmw954nsiwf0j591spz4lph";
+    sha256 = "1n1qwlh1zinq5ngx04cvs69z8zr12yywr70vbrc946kbh4hx6pk9";
   };
-  # tests are failing, reported at upstream: https://github.com/atanunq/viu/issues/40
+
+  # tests need an interactive terminal
   doCheck = false;
 
-  cargoSha256 = "1jccaln72aqa9975nbs95gimndqx5kgfkjmh40z6chx1hvn4m2ga";
+  cargoSha256 = "0s6i42n4jivzj4ad62r7nc6ailydy686ivszcd6cj5f4dinsbgq3";
 
   meta = with lib; {
     description = "A command-line application to view images from the terminal written in Rust";

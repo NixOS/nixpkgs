@@ -2,13 +2,13 @@
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr
 , libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver
 , libxcb, makeWrapper, nodejs
-, nss, nspr, alsaLib, cups, expat, systemd, libpulseaudio }:
+, nss, nspr, alsa-lib, cups, expat, systemd, libpulseaudio }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc gtk2 atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
-    libXrender libX11 libXtst libXScrnSaver gnome2.GConf nss nspr alsaLib cups expat systemd libpulseaudio
+    libXrender libX11 libXtst libXScrnSaver gnome2.GConf nss nspr alsa-lib cups expat systemd libpulseaudio
   ];
 in
 stdenv.mkDerivation rec {
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     url = "https://github.com/Eugeny/terminus/releases/download/v${version}/terminus_${version}_amd64.deb";
     sha256 = "1r5n75n71zwahg4rxlnf9qzrb0651gxv0987m6bykqmfpnw91nmb";
   };
-  buildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ dpkg ];
   unpackPhase = ''
     mkdir pkg
     dpkg-deb -x $src pkg

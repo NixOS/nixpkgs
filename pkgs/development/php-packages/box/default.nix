@@ -1,4 +1,4 @@
-{ mkDerivation, fetchurl, pkgs, lib, php }:
+{ mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "box";
   version = "2.7.5";
@@ -12,7 +12,7 @@ mkDerivation {
   };
 
   phases = [ "installPhase" ];
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin

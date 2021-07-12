@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchzip, jre, makeWrapper }:
 
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
 
   installPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for liberating data tables locked inside PDF files";
     longDescription = ''
       If you’ve ever tried to do anything with data provided to you in PDFs, you

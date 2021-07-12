@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , openssl
 , pandoc
 , which
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     install -Dm644 bdsync.1 -t $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast block device synchronizing tool";
     homepage = "https://github.com/TargetHolding/bdsync";
     license = licenses.gpl2;

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
-  python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
-  pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
+  python, python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
+  pcre, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, ldap, systemd, nspr, check, cmocka, uid_wrapper,
   nss_wrapper, ncurses, Po4a, http-parser, jansson,
   docbook_xsl, docbook_xml_dtd_44,
@@ -12,17 +12,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "1.16.4";
+  version = "1.16.5";
 
-  src = fetchurl {
-    url = "https://fedorahosted.org/released/sssd/${pname}-${version}.tar.gz";
-    sha256 = "0ngr7cgimyjc6flqkm7psxagp1m4jlzpqkn28pliifbmdg6i5ckb";
+  src = fetchFromGitHub {
+    owner = "SSSD";
+    repo = pname;
+    rev = "${pname}-${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "0zbs04lkjbp7y92anmafl7gzamcnq1f147p13hc4byyvjk9rg6f7";
   };
   patches = [
     # Fix build failure against samba 4.12.0rc1
     (fetchpatch {
       url = "https://github.com/SSSD/sssd/commit/bc56b10aea999284458dcc293b54cf65288e325d.patch";
       sha256 = "0q74sx5n41srq3kdn55l5j1sq4xrjsnl5y4v8yh5mwsijj74yh4g";
+    })
+    # Fix collision with external nss symbol
+    (fetchpatch {
+      url = "https://github.com/SSSD/sssd/commit/fe9eeb51be06059721e873f77092b1e9ba08e6c1.patch";
+      sha256 = "0b83b2w0rnvm26pg03a4lpmkmi7n3gqxg7lk751q61q79gnzrpz4";
     })
   ];
 
@@ -50,14 +57,15 @@ stdenv.mkDerivation rec {
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
     )
-  '' + stdenv.lib.optionalString withSudo ''
+  '' + lib.optionalString withSudo ''
     configureFlagsArray+=("--with-sudo")
   '';
 
   enableParallelBuilding = true;
+  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
-                  samba nfs-utils doxygen python python3 popt
-                  talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
+                  samba nfs-utils python python3 popt
+                  talloc tdb tevent ldb pam openldap pcre libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid ldap systemd nspr check cmocka uid_wrapper
                   nss_wrapper ncurses Po4a http-parser jansson ];
@@ -88,10 +96,11 @@ stdenv.mkDerivation rec {
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System Security Services Daemon";
-    homepage = "https://fedorahosted.org/sssd/";
-    license = licenses.gpl3;
+    homepage = "https://sssd.io/";
+    changelog = "https://sssd.io/release-notes/sssd-${version}.html";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.e-user ];
   };

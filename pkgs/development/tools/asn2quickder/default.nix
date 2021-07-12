@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, makeWrapper, cmake
+{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper, cmake
 , pytestrunner, pytest, six, pyparsing, asn1ate }:
 
 buildPythonApplication rec {
@@ -23,7 +23,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pyparsing asn1ate six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An ASN.1 compiler with a backend for Quick DER";
     homepage = "https://github.com/vanrein/asn2quickder";
     license = licenses.bsd3;

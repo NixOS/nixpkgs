@@ -4,15 +4,17 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/xattr.h>
 #include <fcntl.h>
 #include <dirent.h>
 #include <assert.h>
 #include <errno.h>
 #include <linux/capability.h>
-#include <sys/capability.h>
 #include <sys/prctl.h>
 #include <limits.h>
-#include <cap-ng.h>
+#include <stdint.h>
+#include <syscall.h>
+#include <byteswap.h>
 
 // Make sure assertions are not compiled out, we use them to codify
 // invariants about this program and we want it to fail fast and
@@ -23,182 +25,172 @@ extern char **environ;
 
 // The WRAPPER_DIR macro is supplied at compile time so that it cannot
 // be changed at runtime
-static char * wrapperDir = WRAPPER_DIR;
+static char *wrapper_dir = WRAPPER_DIR;
 
 // Wrapper debug variable name
-static char * wrapperDebug = "WRAPPER_DEBUG";
+static char *wrapper_debug = "WRAPPER_DEBUG";
 
-// Update the capabilities of the running process to include the given
-// capability in the Ambient set.
-static void set_ambient_cap(cap_value_t cap)
-{
-    capng_get_caps_process();
+#define CAP_SETPCAP 8
 
-    if (capng_update(CAPNG_ADD, CAPNG_INHERITABLE, (unsigned long) cap))
-    {
-        perror("cannot raise the capability into the Inheritable set\n");
-        exit(1);
+#if __BYTE_ORDER == __BIG_ENDIAN
+#define LE32_TO_H(x) bswap_32(x)
+#else
+#define LE32_TO_H(x) (x)
+#endif
+
+int get_last_cap(unsigned *last_cap) {
+    FILE* file = fopen("/proc/sys/kernel/cap_last_cap", "r");
+    if (file == NULL) {
+        int saved_errno = errno;
+        fprintf(stderr, "failed to open /proc/sys/kernel/cap_last_cap: %s\n", strerror(errno));
+        return -saved_errno;
     }
-
-    capng_apply(CAPNG_SELECT_CAPS);
-    
-    if (prctl(PR_CAP_AMBIENT, PR_CAP_AMBIENT_RAISE, (unsigned long) cap, 0, 0))
-    {
-        perror("cannot raise the capability into the Ambient set\n");
-        exit(1);
+    int res = fscanf(file, "%u", last_cap);
+    if (res == EOF) {
+        int saved_errno = errno;
+        fprintf(stderr, "could not read number from /proc/sys/kernel/cap_last_cap: %s\n", strerror(errno));
+        return -saved_errno;
     }
+    fclose(file);
+    return 0;
 }
 
 // Given the path to this program, fetch its configured capability set
 // (as set by `setcap ... /path/to/file`) and raise those capabilities
 // into the Ambient set.
-static int make_caps_ambient(const char *selfPath)
-{
-    cap_t caps = cap_get_file(selfPath);
+static int make_caps_ambient(const char *self_path) {
+    struct vfs_ns_cap_data data = {};
+    int r = getxattr(self_path, "security.capability", &data, sizeof(data));
 
-    if(!caps)
-    {
-        if(getenv(wrapperDebug))
-            fprintf(stderr, "no caps set or could not retrieve the caps for this file, not doing anything...");
-
+    if (r < 0) {
+        if (errno == ENODATA) {
+            // no capabilities set
+            return 0;
+        }
+        fprintf(stderr, "cannot get capabilities for %s: %s", self_path, strerror(errno));
         return 1;
     }
 
-    // We use `cap_to_text` and iteration over the tokenized result
-    // string because, as of libcap's current release, there is no
-    // facility for retrieving an array of `cap_value_t`'s that can be
-    // given to `prctl` in order to lift that capability into the
-    // Ambient set.
-    //
-    // Some discussion was had around shot-gunning all of the
-    // capabilities we know about into the Ambient set but that has a
-    // security smell and I deemed the risk of the current
-    // implementation crashing the program to be lower than the risk
-    // of a privilege escalation security hole being introduced by
-    // raising all capabilities, even ones we didn't intend for the
-    // program, into the Ambient set.
-    //
-    // `cap_t` which is returned by `cap_get_*` is an opaque type and
-    // even if we could retrieve the bitmasks (which, as far as I can
-    // tell we cannot) in order to get the `cap_value_t`
-    // representation for each capability we would have to take the
-    // total number of capabilities supported and iterate over the
-    // sequence of integers up-to that maximum total, testing each one
-    // against the bitmask ((bitmask >> n) & 1) to see if it's set and
-    // aggregating each "capability integer n" that is set in the
-    // bitmask.
-    //
-    // That, combined with the fact that we can't easily get the
-    // bitmask anyway seemed much more brittle than fetching the
-    // `cap_t`, transforming it into a textual representation,
-    // tokenizing the string, and using `cap_from_name` on the token
-    // to get the `cap_value_t` that we need for `prctl`. There is
-    // indeed risk involved if the output string format of
-    // `cap_to_text` ever changes but at this time the combination of
-    // factors involving the below list have led me to the conclusion
-    // that the best implementation at this time is reading then
-    // parsing with *lots of documentation* about why we're doing it
-    // this way.
-    //
-    // 1. No explicit API for fetching an array of `cap_value_t`'s or
-    //    for transforming a `cap_t` into such a representation
-    // 2. The risk of a crash is lower than lifting all capabilities
-    //    into the Ambient set
-    // 3. libcap is depended on heavily in the Linux ecosystem so
-    //    there is a high chance that the output representation of
-    //    `cap_to_text` will not change which reduces our risk that
-    //    this parsing step will cause a crash
-    //
-    // The preferred method, should it ever be available in the
-    // future, would be to use libcap API's to transform the result
-    // from a `cap_get_*` into an array of `cap_value_t`'s that can
-    // then be given to prctl.
-    //
-    // - Parnell
-    ssize_t capLen;
-    char* capstr = cap_to_text(caps, &capLen);
-    cap_free(caps);
-    
-    // TODO: For now, we assume that cap_to_text always starts its
-    // result string with " =" and that the first capability is listed
-    // immediately after that. We should verify this.
-    assert(capLen >= 2);
-    capstr += 2;
-
-    char* saveptr = NULL;
-    for(char* tok = strtok_r(capstr, ",", &saveptr); tok; tok = strtok_r(NULL, ",", &saveptr))
-    {
-      cap_value_t capnum;
-      if (cap_from_name(tok, &capnum))
-      {
-          if(getenv(wrapperDebug))
-              fprintf(stderr, "cap_from_name failed, skipping: %s", tok);
-      }
-      else if (capnum == CAP_SETPCAP)
-      {
-          // Check for the cap_setpcap capability, we set this on the
-          // wrapper so it can elevate the capabilities to the Ambient
-          // set but we do not want to propagate it down into the
-          // wrapped program.
-          //
-          // TODO: what happens if that's the behavior you want
-          // though???? I'm preferring a strict vs. loose policy here.
-          if(getenv(wrapperDebug))
-              fprintf(stderr, "cap_setpcap in set, skipping it\n");
-      }
-      else
-      {
-          set_ambient_cap(capnum);
-
-          if(getenv(wrapperDebug))
-              fprintf(stderr, "raised %s into the Ambient capability set\n", tok);
-      }
+    size_t size;
+    uint32_t version = LE32_TO_H(data.magic_etc) & VFS_CAP_REVISION_MASK;
+    switch (version) {
+        case VFS_CAP_REVISION_1:
+            size = VFS_CAP_U32_1;
+            break;
+        case VFS_CAP_REVISION_2:
+        case VFS_CAP_REVISION_3:
+            size = VFS_CAP_U32_3;
+            break;
+        default:
+            fprintf(stderr, "BUG! Unsupported capability version 0x%x on %s. Report to NixOS bugtracker\n", version, self_path);
+            return 1;
     }
-    cap_free(capstr);
+
+    const struct __user_cap_header_struct header = {
+      .version = _LINUX_CAPABILITY_VERSION_3,
+      .pid = getpid(),
+    };
+    struct __user_cap_data_struct user_data[2] = {};
+
+    for (size_t i = 0; i < size; i++) {
+        // merge inheritable & permitted into one
+        user_data[i].permitted = user_data[i].inheritable =
+            LE32_TO_H(data.data[i].inheritable) | LE32_TO_H(data.data[i].permitted);
+    }
+
+    if (syscall(SYS_capset, &header, &user_data) < 0) {
+        fprintf(stderr, "failed to inherit capabilities: %s", strerror(errno));
+        return 1;
+    }
+    unsigned last_cap;
+    r = get_last_cap(&last_cap);
+    if (r < 0) {
+        return 1;
+    }
+    uint64_t set = user_data[0].permitted | (uint64_t)user_data[1].permitted << 32;
+    for (unsigned cap = 0; cap < last_cap; cap++) {
+        if (!(set & (1ULL << cap))) {
+            continue;
+        }
+
+        // Check for the cap_setpcap capability, we set this on the
+        // wrapper so it can elevate the capabilities to the Ambient
+        // set but we do not want to propagate it down into the
+        // wrapped program.
+        //
+        // TODO: what happens if that's the behavior you want
+        // though???? I'm preferring a strict vs. loose policy here.
+        if (cap == CAP_SETPCAP) {
+            if(getenv(wrapper_debug)) {
+                fprintf(stderr, "cap_setpcap in set, skipping it\n");
+            }
+            continue;
+        }
+        if (prctl(PR_CAP_AMBIENT, PR_CAP_AMBIENT_RAISE, (unsigned long) cap, 0, 0)) {
+            fprintf(stderr, "cannot raise the capability %d into the ambient set: %s\n", cap, strerror(errno));
+            return 1;
+        }
+        if (getenv(wrapper_debug)) {
+            fprintf(stderr, "raised %d into the ambient capability set\n", cap);
+        }
+    }
 
     return 0;
 }
 
-int main(int argc, char * * argv)
-{
-    // I *think* it's safe to assume that a path from a symbolic link
-    // should safely fit within the PATH_MAX system limit. Though I'm
-    // not positive it's safe...
-    char selfPath[PATH_MAX];
-    int selfPathSize = readlink("/proc/self/exe", selfPath, sizeof(selfPath));
+int readlink_malloc(const char *p, char **ret) {
+    size_t l = FILENAME_MAX+1;
+    int r;
 
-    assert(selfPathSize > 0);
+    for (;;) {
+        char *c = calloc(l, sizeof(char));
+        if (!c) {
+            return -ENOMEM;
+        }
 
-    // Assert we have room for the zero byte, this ensures the path
-    // isn't being truncated because it's too big for the buffer.
-    //
-    // A better way to handle this might be to use something like the
-    // whereami library (https://github.com/gpakosz/whereami) or a
-    // loop that resizes the buffer and re-reads the link if the
-    // contents are being truncated.
-    assert(selfPathSize < sizeof(selfPath));
+        ssize_t n = readlink(p, c, l-1);
+        if (n < 0) {
+            r = -errno;
+            free(c);
+            return r;
+        }
 
-    // Set the zero byte since readlink doesn't do that for us.
-    selfPath[selfPathSize] = '\0';
+        if ((size_t) n < l-1) {
+            c[n] = 0;
+            *ret = c;
+            return 0;
+        }
+
+        free(c);
+        l *= 2;
+    }
+}
+
+int main(int argc, char **argv) {
+    char *self_path = NULL;
+    int self_path_size = readlink_malloc("/proc/self/exe", &self_path);
+    if (self_path_size < 0) {
+        fprintf(stderr, "cannot readlink /proc/self/exe: %s", strerror(-self_path_size));
+    }
 
     // Make sure that we are being executed from the right location,
-    // i.e., `safeWrapperDir'.  This is to prevent someone from creating
+    // i.e., `safe_wrapper_dir'.  This is to prevent someone from creating
     // hard link `X' from some other location, along with a false
     // `X.real' file, to allow arbitrary programs from being executed
     // with elevated capabilities.
-    int len = strlen(wrapperDir);
-    if (len > 0 && '/' == wrapperDir[len - 1])
+    int len = strlen(wrapper_dir);
+    if (len > 0 && '/' == wrapper_dir[len - 1])
       --len;
-    assert(!strncmp(selfPath, wrapperDir, len));
-    assert('/' == wrapperDir[0]);
-    assert('/' == selfPath[len]);
+    assert(!strncmp(self_path, wrapper_dir, len));
+    assert('/' == wrapper_dir[0]);
+    assert('/' == self_path[len]);
 
     // Make *really* *really* sure that we were executed as
-    // `selfPath', and not, say, as some other setuid program. That
+    // `self_path', and not, say, as some other setuid program. That
     // is, our effective uid/gid should match the uid/gid of
-    // `selfPath'.
+    // `self_path'.
     struct stat st;
-    assert(lstat(selfPath, &st) != -1);
+    assert(lstat(self_path, &st) != -1);
 
     assert(!(st.st_mode & S_ISUID) || (st.st_uid == geteuid()));
     assert(!(st.st_mode & S_ISGID) || (st.st_gid == getegid()));
@@ -207,33 +199,35 @@ int main(int argc, char * * argv)
     assert(!(st.st_mode & (S_IWGRP | S_IWOTH)));
 
     // Read the path of the real (wrapped) program from <self>.real.
-    char realFN[PATH_MAX + 10];
-    int realFNSize = snprintf (realFN, sizeof(realFN), "%s.real", selfPath);
-    assert (realFNSize < sizeof(realFN));
+    char real_fn[PATH_MAX + 10];
+    int real_fn_size = snprintf(real_fn, sizeof(real_fn), "%s.real", self_path);
+    assert(real_fn_size < sizeof(real_fn));
 
-    int fdSelf = open(realFN, O_RDONLY);
-    assert (fdSelf != -1);
+    int fd_self = open(real_fn, O_RDONLY);
+    assert(fd_self != -1);
 
-    char sourceProg[PATH_MAX];
-    len = read(fdSelf, sourceProg, PATH_MAX);
-    assert (len != -1);
-    assert (len < sizeof(sourceProg));
-    assert (len > 0);
-    sourceProg[len] = 0;
+    char source_prog[PATH_MAX];
+    len = read(fd_self, source_prog, PATH_MAX);
+    assert(len != -1);
+    assert(len < sizeof(source_prog));
+    assert(len > 0);
+    source_prog[len] = 0;
 
-    close(fdSelf);
+    close(fd_self);
 
     // Read the capabilities set on the wrapper and raise them in to
-    // the Ambient set so the program we're wrapping receives the
+    // the ambient set so the program we're wrapping receives the
     // capabilities too!
-    make_caps_ambient(selfPath);
+    if (make_caps_ambient(self_path) != 0) {
+        free(self_path);
+        return 1;
+    }
+    free(self_path);
 
-    execve(sourceProg, argv, environ);
+    execve(source_prog, argv, environ);
     
     fprintf(stderr, "%s: cannot run `%s': %s\n",
-        argv[0], sourceProg, strerror(errno));
+        argv[0], source_prog, strerror(errno));
 
-    exit(1);
+    return 1;
 }
-
-

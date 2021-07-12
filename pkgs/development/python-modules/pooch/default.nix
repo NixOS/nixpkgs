@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy27
 , fetchPypi
+, setuptools-scm
 , pytestCheckHook
 , packaging
 , appdirs
@@ -10,17 +11,21 @@
 
 buildPythonPackage rec {
   pname = "pooch";
-  version = "1.0.0";
+  version = "1.4.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k2vinlhkzl7lzhvbz20x3a2r2zqqila0yxg3a3fax2r6qxbxxzi";
+    sha256 = "f827e79ab51b21a8964a4b1ea8972aa4a1079cb9c1ff8e9ec61893eb7dab50cb";
   };
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ packaging appdirs requests ];
 
+  preCheck = "HOME=$TMPDIR";
   checkInputs = [ pytestCheckHook ];
+  # tries to touch network
   disabledTests = [
     "pooch_custom_url"
     "pooch_download"
@@ -29,6 +34,8 @@ buildPythonPackage rec {
     "pooch_corrupted"
     "check_availability"
     "downloader"
+    "test_retrieve"
+    "test_stream_download"
     "test_fetch"
     "decompress"
     "extractprocessor_fails"
@@ -36,7 +43,7 @@ buildPythonPackage rec {
     "integration"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A friend to fetch your data files.";
     homepage = "https://github.com/fatiando/pooch";
     license = licenses.bsd3;

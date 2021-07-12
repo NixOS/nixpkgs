@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "uisp-20050207";
@@ -12,8 +12,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Tool for AVR microcontrollers which can interface to many hardware in-system programmers";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://savannah.nongnu.org/projects/uisp";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

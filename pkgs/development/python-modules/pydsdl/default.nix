@@ -2,25 +2,24 @@
 
  buildPythonPackage rec {
   pname = "pydsdl";
-  version = "1.4.2";
+  version = "1.12.1";
   disabled = pythonOlder "3.5"; # only python>=3.5 is supported
 
   src = fetchFromGitHub {
     owner = "UAVCAN";
     repo = pname;
     rev = version;
-    sha256 = "03kbpzdrjzj5vpgz5rhc110pm1axdn3ynv88b42zq6iyab4k8k1x";
+    sha256 = "sha256-5AwwqduIvLSZk6WcI59frwRKwjniQXfNWWVsy6V6I1E=";
   };
-
-  propagatedBuildInputs = [
-  ];
 
   # allow for writable directory for darwin
   preBuild = ''
     export HOME=$TMPDIR
   '';
 
-  # repo doesn't contain tests, ensure imports aren't broken
+  # repo doesn't contain tests
+  doCheck = false;
+
   pythonImportsCheck = [
     "pydsdl"
   ];

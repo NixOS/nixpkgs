@@ -1,24 +1,24 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "pdfcpu";
-  version = "0.3.6";
+  version = "0.3.11";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cbbbf93gxx768fs6pldy25xk46k7mc8k94r3f7cd83f1qd3s5zn";
+    sha256 = "sha256-kLRxZW89Bm2N/KxFYetIq+auPBW/vFoUnB8uaEcM8Yo=";
   };
 
-  vendorSha256 = "1i0w4284icbl40yrjny9qd5iqrq18x63lrs7p1gz58nybc606azx";
+  vendorSha256 = "sha256-p/2Bu5h2P3ebgvSC12jdR2Zpd27xCFwtB/KZV0AULAM=";
 
   # No tests
   doCheck = false;
 
   subPackages = [ "cmd/pdfcpu" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A PDF processor written in Go";
     homepage = "https://pdfcpu.io";
     license = licenses.asl20;

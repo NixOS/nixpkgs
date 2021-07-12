@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , python
-, alsaLib, glew, libGL, libpng
+, alsa-lib, glew, libGL, libpng
 , libogg, libtheora, libvorbis
 , SDL2, SDL2_image, SDL2_ttf
 , freetype, tcl, zlib
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkg-config python ];
 
-  buildInputs = [ alsaLib glew libGL libpng
+  buildInputs = [ alsa-lib glew libGL libpng
     libogg libtheora libvorbis freetype
     SDL2 SDL2_image SDL2_ttf tcl zlib ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # for providing support to Nixpkgs :)
   TCL_CONFIG="${tcl}/lib/";
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "The MSX emulator that aims for perfection";
     longDescription = ''
       OpenMSX is an emulator for the MSX home computer system. Its goal is

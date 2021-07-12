@@ -1,6 +1,6 @@
-{ fetchFromGitHub, stdenv, lib, pkgconfig, autoreconfHook
+{ fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
 , ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre
+, openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
 , ldns, libedit, yasm, which, libsndfile, libtiff
 
 , callPackage
@@ -88,13 +88,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.3";
+  version = "1.10.6";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rp4sxqxd2wsb5iyv0mh11l16zxvh7rbgfg0vcgns823gvh8lqai";
+    sha256 = "1i5n06pds3kvzhhzfwvhwxnvcb2p2fcr8k52157aplm2i7prl4q2";
   };
+
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
     substituteInPlace libs/libvpx/build/make/configure.sh \
@@ -109,11 +110,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config autoreconfHook perl which yasm ];
   buildInputs = [
-    openssl ncurses gnutls readline perl libjpeg
-    sqlite pcre speex ldns libedit yasm which
+    openssl ncurses gnutls readline libjpeg
+    sqlite pcre speex ldns libedit
     libsndfile libtiff
+    libuuid
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
@@ -141,8 +144,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
-    license = stdenv.lib.licenses.mpl11;
-    maintainers = with stdenv.lib.maintainers; [ misuzu ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.mpl11;
+    maintainers = with lib.maintainers; [ misuzu ];
+    platforms = with lib.platforms; unix;
   };
 }

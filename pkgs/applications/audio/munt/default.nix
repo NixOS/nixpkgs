@@ -1,38 +1,51 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, qtbase, alsaLib, makeDesktopItem, libjack2 }:
+{ lib
+, mkDerivation
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, cmake
+, pkg-config
+, qtbase
+, glib
+, alsa-lib
+, withJack ? stdenv.hostPlatform.isUnix, jack
+}:
 
 let
-  desktopItem = makeDesktopItem rec {
-    name = "Munt";
-    exec = "mt32emu-qt";
-    desktopName = name;
-    genericName = "Munt synthesiser";
-    categories = "Audio;AudioVideo;";
-  };
-in mkDerivation rec {
-  version = "2.4.1";
+  mainProgram = "mt32emu-qt";
+in
+mkDerivation rec {
   pname = "munt";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = with stdenv.lib.versions; "libmt32emu_${major version}_${minor version}_${patch version}";
-    sha256 = "0bszhkbz24hhx32f973l6h5lkyn4lxhqrckiwmv765d1sba8n5bk";
+    rev = "munt_${lib.replaceChars [ "." ] [ "_" ] version}";
+    sha256 = "1lknq2a72gv1ddhzr7f967wpa12lh805jj4gjacdnamgrc1h22yn";
   };
-
-  postInstall = ''
-    ln -s ${desktopItem}/share/applications $out/share
-  '';
 
   dontFixCmake = true;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase alsaLib libjack2 ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [ qtbase glib ]
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+    ++ lib.optional withJack jack;
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    mv $out/bin/${mainProgram}.app $out/Applications/
+    wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
+    ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}/${mainProgram}
+  '';
+
+  meta = with lib; {
+    inherit mainProgram;
     description = "Multi-platform software synthesiser emulating Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
     homepage = "http://munt.sourceforge.net/";
     license = with licenses; [ lgpl21 gpl3 ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ OPNA2608 ];
   };
 }

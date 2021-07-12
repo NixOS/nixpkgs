@@ -1,5 +1,6 @@
 {
   appindicator-sharp,
+  bash,
   coreutils,
   fetchFromGitHub,
   git,
@@ -18,18 +19,18 @@
   stdenv,
   symlinkJoin,
   webkit2-sharp,
-  xdg_utils,
+  xdg-utils,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sparkleshare";
-  version = "3.28";
+  version = "3.38";
 
   src = fetchFromGitHub {
     owner = "hbons";
     repo = "SparkleShare";
     rev = version;
-    sha256 = "sha256:1x5nv2f3mrsr4a336bz5kc2lzkzilfh43bxy2yqhhjp2dgb20497";
+    sha256 = "1a9csflmj96iyr1l0mdm3ziv1bljfcjnzm9xb2y4qqk7ha2p6fbq";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
         --set PATH ${symlinkJoin {
           name = "mono-path";
           paths = [
+            bash
             coreutils
             git
             git-lfs
@@ -64,7 +66,7 @@ stdenv.mkDerivation rec {
             mono
             openssh
             openssl
-            xdg_utils
+            xdg-utils
           ];
         }}/bin \
         --set MONO_GAC_PREFIX ${lib.concatStringsSep ":" [

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ spake2 pynacl six attrs twisted autobahn automat hkdf tqdm click humanize txtorcon ];
   checkInputs = [ mock magic-wormhole-transit-relay magic-wormhole-mailbox-server ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
   '';
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       --replace 'locale_env = dict(LC_ALL=locale, LANG=locale)' 'locale_env = dict(LC_ALL=locale, LANG=locale, LOCALE_ARCHIVE=os.getenv("LOCALE_ARCHIVE"))'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Securely transfer data between computers";
     homepage = "https://github.com/warner/magic-wormhole";
     license = licenses.mit;

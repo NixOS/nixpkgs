@@ -1,24 +1,24 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dex";
-  version = "2.23.0";
+  version = "2.28.1";
 
   src = fetchFromGitHub {
     owner = "dexidp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fr5r7d0xwj0b69jhszyyif4yc4kiy7zpfcpf83zdy12mh8f96c8";
+    sha256 = "sha256-MdrkQ4qclylkan8y845BjLiL+W16iqRuNMmvWsKo+zw=";
   };
 
-  goPackagePath = "github.com/dexidp/dex";
+  vendorSha256 = "sha256-rAqqvnP72BQY/qbSvqNzxh2ZUlF/rP0MR/+yqJai+KY=";
 
   subPackages = [
     "cmd/dex"
   ];
 
   buildFlagsArray = [
-    "-ldflags=-w -X github.com/dexidp/dex/version.Version=${src.rev}"
+    "-ldflags=-w -s -X github.com/dexidp/dex/version.Version=${src.rev}"
   ];
 
   postInstall = ''

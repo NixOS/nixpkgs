@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpcap, pixiewps, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, libpcap, pixiewps, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "reaver-wps-t6x";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Online and offline brute force attack against WPS";
     homepage = "https://github.com/t6x/reaver-wps-fork-t6x";
     license = licenses.gpl2Plus;

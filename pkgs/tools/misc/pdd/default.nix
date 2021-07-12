@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonApplication, dateutil }:
+{ lib, fetchFromGitHub, buildPythonApplication, python-dateutil }:
 
 buildPythonApplication rec {
   pname = "pdd";
@@ -13,11 +13,11 @@ buildPythonApplication rec {
 
   format = "other";
 
-  propagatedBuildInputs = [ dateutil ];
+  propagatedBuildInputs = [ python-dateutil ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jarun/pdd";
     description = "Tiny date, time diff calculator";
     longDescription = ''

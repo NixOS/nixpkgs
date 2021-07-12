@@ -1,4 +1,4 @@
-{ stdenv, cmake, ninja, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, cmake, ninja, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "gtest";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google's framework for writing C++ tests";
     homepage = "https://github.com/google/googletest";
     license = licenses.bsd3;

@@ -10,7 +10,7 @@ rec {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideDerivation
     (old: {
-      nativeBuildInputs = [ autoreconfHook pkgconfig ];
+      nativeBuildInputs = [ autoreconfHook pkg-config ];
       propagatedBuildInputs = [ zlib ];
       buildInputs = old.buildInputs ++ [ automake autoconf ];
       configurePhase = ''
@@ -49,7 +49,7 @@ rec {
   }).overrideDerivation
     (old: { 
       propagatedBuildInputs = [ zlib ];
-      buildInputs = old.buildInputs ++ [ pkgconfig ];
+      buildInputs = old.buildInputs ++ [ pkg-config ];
 
       # just override it with nothing so it does not fail
       autoreconfPhase = "echo autoreconfPhase not used..."; 
@@ -84,8 +84,8 @@ rec {
     pname = "xmlmirror";
     version = "unstable-2016-06-05";
 
-    buildInputs = [ pkgconfig autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
-    nativeBuildInputs = [ pkgconfig zlib ];
+    buildInputs = [ pkg-config autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
+    nativeBuildInputs = [ pkg-config zlib ];
 
     src = pkgs.fetchgit {
       url = "https://gitlab.com/odfplugfest/xmlmirror.git";
@@ -136,7 +136,7 @@ rec {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideDerivation
     (old: { 
-      buildInputs = old.buildInputs ++ [ pkgconfig ];
+      buildInputs = old.buildInputs ++ [ pkg-config ];
       # we need to reset this setting!
       NIX_CFLAGS_COMPILE="";
       configurePhase = ''
@@ -178,7 +178,7 @@ rec {
         echo "================= /testing zlib using node ================="
       '';
 
-      postPatch = pkgs.stdenv.lib.optionalString pkgs.stdenv.isDarwin ''
+      postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
         substituteInPlace configure \
           --replace '/usr/bin/libtool' 'ar' \
           --replace 'AR="libtool"' 'AR="ar"' \

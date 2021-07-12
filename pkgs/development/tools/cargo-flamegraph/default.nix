@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, perf
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, perf, nix-update-script
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flamegraph";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "flamegraph-rs";
     repo = "flamegraph";
     rev = "v${version}";
-    sha256 = "0d6k2qr76p93na39j4zbcpc9kaswd806wrqhcwisqxdrcxrjbwhk";
+    sha256 = "sha256-IpmvFUWNaFQ1ls7u625vvj1TnRYXR+X1mAGdBcwRFLk=";
   };
 
-  cargoSha256 = "1qz4a1b58j3bv3akqvc3bcgvqq4bi8cbm3gzws6a52dz7ycrgq46";
+  cargoSha256 = "sha256-ccy5ZFS2Gp4Dwo8gsS6vzHHO1siicOp7uZTsCh6SKsM=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -22,10 +22,14 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/cargo-flamegraph \
-      --suffix PATH ':' ${perf}/bin
+      --set-default PERF ${perf}/bin/perf
     wrapProgram $out/bin/flamegraph \
-      --suffix PATH ':' ${perf}/bin
+      --set-default PERF ${perf}/bin/perf
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "Easy flamegraphs for Rust projects and everything else, without Perl or pipes <3";

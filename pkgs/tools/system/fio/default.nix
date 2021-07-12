@@ -1,22 +1,24 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, libaio, python, zlib
+{ lib, stdenv, fetchFromGitHub, makeWrapper
+, libaio, python3, zlib
 , withGnuplot ? false, gnuplot ? null }:
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.23";
+  version = "3.27";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "0xr1d1jh7zhdhf0zfv8w6r99hk8h5d22v36h13hrd8mqyaz1g8m0";
+    sha256 = "sha256-/VzqmDbCTOOwFBMDj9nYuAW7ZJNM8B2LQ3QxReWG+iw=";
   };
 
-  buildInputs = [ python zlib ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) libaio;
+  buildInputs = [ python3 zlib ]
+    ++ lib.optional (!stdenv.isDarwin) libaio;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -27,12 +29,12 @@ stdenv.mkDerivation rec {
     substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
   '';
 
-  postInstall = stdenv.lib.optionalString withGnuplot ''
+  postInstall = lib.optionalString withGnuplot ''
     wrapProgram $out/bin/fio2gnuplot \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ gnuplot ]}
+      --prefix PATH : ${lib.makeBinPath [ gnuplot ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flexible IO Tester - an IO benchmark tool";
     homepage = "https://git.kernel.dk/cgit/fio/";
     license = licenses.gpl2;

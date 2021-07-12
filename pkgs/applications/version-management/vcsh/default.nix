@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, git, ronn, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, which, git, ronn, perlPackages }:
 
 stdenv.mkDerivation {
   version = "1.20170915";       # date of commit we're pulling
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   installPhase = "make install PREFIX=$out";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Version Control System for $HOME";
     homepage = "https://github.com/RichiH/vcsh";
     license = licenses.gpl2Plus;

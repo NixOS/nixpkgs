@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python }:
+{ lib, stdenv, fetchurl, fetchpatch, python2 }:
 
 stdenv.mkDerivation rec {
   name = "clearsilver-0.10.5";
@@ -8,10 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1046m1dpq3nkgxbis2dr2x7hynmy51n64465q78d7pdgvqwa178y";
   };
 
-  PYTHON_SITE = "$(out)/site-packages";
+  PYTHON_SITE = "${placeholder "out"}/${python2.sitePackages}";
 
   configureFlags = [
-    "--with-python=${python}/bin/python"
+    "--with-python=${python2.interpreter}"
     "--disable-apache"
     "--disable-perl"
     "--disable-ruby"
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p $out
-    mkdir -p $out/site-packages
+    mkdir -p $out/${python2.sitePackages}
   '';
 
   patches = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, powerful, and language-neutral HTML template system";
     homepage = "http://www.clearsilver.net/";
     license = licenses.free;

@@ -95,7 +95,7 @@ rec {
      result with the specified separator interspersed between
      elements.
 
-     Type: concatMapStringsSep :: string -> (string -> string) -> [string] -> string
+     Type: concatMapStringsSep :: string -> (a -> string) -> [a] -> string
 
      Example:
         concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
@@ -112,7 +112,7 @@ rec {
   /* Same as `concatMapStringsSep`, but the mapping function
      additionally receives the position of its argument.
 
-     Type: concatIMapStringsSep :: string -> (int -> string -> string) -> [string] -> string
+     Type: concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string
 
      Example:
        concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
@@ -561,15 +561,17 @@ rec {
        enableFeature false "shared"
        => "--disable-shared"
   */
-  enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
+  enableFeature = enable: feat:
+    assert isString feat; # e.g. passing openssl instead of "openssl"
+    "--${if enable then "enable" else "disable"}-${feat}";
 
   /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
-       enableFeature true "shared" "foo"
+       enableFeatureAs true "shared" "foo"
        => "--enable-shared=foo"
-       enableFeature false "shared" (throw "ignored")
+       enableFeatureAs false "shared" (throw "ignored")
        => "--disable-shared"
   */
   enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
@@ -583,15 +585,17 @@ rec {
        withFeature false "shared"
        => "--without-shared"
   */
-  withFeature = with_: feat: "--${if with_ then "with" else "without"}-${feat}";
+  withFeature = with_: feat:
+    assert isString feat; # e.g. passing openssl instead of "openssl"
+    "--${if with_ then "with" else "without"}-${feat}";
 
   /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
-       with_Feature true "shared" "foo"
+       withFeatureAs true "shared" "foo"
        => "--with-shared=foo"
-       with_Feature false "shared" (throw "ignored")
+       withFeatureAs false "shared" (throw "ignored")
        => "--without-shared"
   */
   withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
@@ -602,7 +606,7 @@ rec {
      This function will fail if the input string is longer than the
      requested length.
 
-     Type: fixedWidthString :: int -> string -> string
+     Type: fixedWidthString :: int -> string -> string -> string
 
      Example:
        fixedWidthString 5 "0" (toString 15)
@@ -640,8 +644,8 @@ rec {
   floatToString = float: let
     result = toString float;
     precise = float == fromJSON result;
-  in if precise then result
-    else lib.warn "Imprecise conversion from float to string ${result}" result;
+  in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
+    result;
 
   /* Check whether a value can be coerced to a string */
   isCoercibleToString = x:
@@ -655,7 +659,7 @@ rec {
      Example:
        isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
        => false
-       isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/"
+       isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11"
        => true
        isStorePath pkgs.python
        => true
@@ -663,14 +667,14 @@ rec {
        => false
   */
   isStorePath = x:
-    if isCoercibleToString x then
+    if !(isList x) && isCoercibleToString x then
       let str = toString x; in
       substring 0 1 str == "/"
       && dirOf str == storeDir
     else
       false;
 
-  /* Parse a string string as an int.
+  /* Parse a string as an int.
 
      Type: string -> int
 

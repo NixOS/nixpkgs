@@ -1,26 +1,23 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, pythonAtLeast, isPy27
 , flake8
-, importlib-metadata
 , pycodestyle
-, pytestrunner
-, pytest
+, six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "flake8-debugger";
-  version = "3.2.1";
+  version = "4.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "712d7c1ff69ddf3f0130e94cc88c2519e720760bce45e8c330bfdcb61ab4090d";
+    sha256 = "e43dc777f7db1481db473210101ec2df2bd39a45b149d7218a618e954177eda6";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  propagatedBuildInputs = [ flake8 pycodestyle six ];
 
-  propagatedBuildInputs = [ flake8 pycodestyle ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
-
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   # Tests not included in PyPI tarball
   # FIXME: Remove when https://github.com/JBKahn/flake8-debugger/pull/15 is merged

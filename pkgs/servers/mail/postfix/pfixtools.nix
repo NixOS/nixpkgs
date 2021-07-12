@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, git, gperf, pcre, unbound, libev, tokyocabinet, pkgconfig, bash, libsrs2 }:
+{ stdenv, lib, fetchFromGitHub, git, gperf, pcre, unbound, libev, tokyocabinet, pkg-config, bash, libsrs2 }:
 
 let
   version = "0.9";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   patches = [ ./0001-Fix-build-with-unbound-1.6.1.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [git gperf pcre unbound libev tokyocabinet bash libsrs2];
 
   postUnpack = ''
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     description = "A collection of postfix-related tools";
     license = with lib.licenses; [ bsd3 ];
     homepage = "https://github.com/Fruneau/pfixtools";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jerith666 ];
   };
 }

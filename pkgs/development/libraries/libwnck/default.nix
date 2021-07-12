@@ -1,27 +1,76 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, intltool, xorg }:
+{ lib, stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, libX11
+, glib
+, gtk3
+, pango
+, cairo
+, libXres
+, libstartup_notification
+, gettext
+, gobject-introspection
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
-  version = "2.31.0";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "17isfjvrzgj5znld2a7zsk9vd39q9wnsysnw5jr8iz410z935xw3";
-  };
+  version = "3.36.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 intltool xorg.libX11 xorg.libXres ];
-  # ?another optional: startup-notification
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0pwjdhca9lz2n1gf9b60xf0m6ipf9snp8rqf9csj4pgdnd882l5w";
+  };
 
-  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
 
-  meta = {
-    description = "A library for creating task lists and pagers";
-    homepage = "https://gitlab.gnome.org/GNOME/libwnck";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ johnazoidberg ];
+  buildInputs = [
+    libX11
+    libstartup_notification
+    pango
+    cairo
+    libXres
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      attrPath = "${pname}${lib.versions.major version}";
+      versionPolicy = "odd-unstable";
+    };
+  };
+
+  meta = with lib; {
+    description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ liff ];
   };
 }

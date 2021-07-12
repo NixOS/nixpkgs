@@ -1,22 +1,26 @@
-From 26f9c65ef037892977a824f0d7d7111066856b53 Mon Sep 17 00:00:00 2001
-From: Michael Weiss <dev.primeos@gmail.com>
-Date: Sat, 27 Apr 2019 14:26:16 +0200
+From 92283df3acbffa5c1bb21f23cdd686113d905114 Mon Sep 17 00:00:00 2001
+From: Patrick Hilhorst <git@hilhorst.be>
+Date: Wed, 31 Mar 2021 21:14:13 +0200
 Subject: [PATCH] Load configs from /etc but fallback to /nix/store
 
 This change will load all configuration files from /etc, to make it easy
 to override them, but fallback to /nix/store/.../etc/sway/config to make
 Sway work out-of-the-box with the default configuration on non NixOS
 systems.
+
+Original patch by Michael Weiss, updated for Sway 1.6 by Patrick Hilhorst
+
+Co-authored-by: Michael Weiss <dev.primeos@gmail.com>
 ---
  meson.build   | 3 ++-
- sway/config.c | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ sway/config.c | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/meson.build b/meson.build
-index 02b5d606..c03a9c0f 100644
+index b7a29660..8ae8ceb3 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -129,7 +129,8 @@ if scdoc.found()
+@@ -164,7 +164,8 @@ if scdoc.found()
  	endforeach
  endif
  
@@ -25,18 +29,20 @@ index 02b5d606..c03a9c0f 100644
 +add_project_arguments('-DNIX_SYSCONFDIR="/@0@"'.format(join_paths(prefix, sysconfdir)), language : 'c')
  
  version = '"@0@"'.format(meson.project_version())
- if git.found()
+ git = find_program('git', native: true, required: false)
 diff --git a/sway/config.c b/sway/config.c
-index 4cd21bbc..dd855753 100644
+index 76b9ec08..fb5b51aa 100644
 --- a/sway/config.c
 +++ b/sway/config.c
-@@ -317,6 +317,7 @@ static char *get_config_path(void) {
- 		"$XDG_CONFIG_HOME/i3/config",
- 		SYSCONFDIR "/sway/config",
- 		SYSCONFDIR "/i3/config",
-+		NIX_SYSCONFDIR "/sway/config",
+@@ -374,7 +374,8 @@ static char *get_config_path(void) {
+ 		{ .prefix = home, .config_folder = ".i3"},
+ 		{ .prefix = config_home, .config_folder = "i3"},
+ 		{ .prefix = SYSCONFDIR, .config_folder = "sway"},
+-		{ .prefix = SYSCONFDIR, .config_folder = "i3"}
++		{ .prefix = SYSCONFDIR, .config_folder = "i3"},
++		{ .prefix = NIX_SYSCONFDIR, .config_folder = "sway"},
  	};
  
- 	char *config_home = getenv("XDG_CONFIG_HOME");
+ 	size_t num_config_paths = sizeof(config_paths)/sizeof(config_paths[0]);
 -- 
-2.19.2
+2.30.1

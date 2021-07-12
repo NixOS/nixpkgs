@@ -1,20 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "5.4.5";
+  version = "5.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07f558fece33b05caf857474a366dfcc00562bca13dd8b47b2b3e22d9f9bf55c";
+    sha256 = "42df03e7797b796625b1029c0400279c7c34fd7df24a7d7818a1abb5b38710dd";
   };
 
   # circular dependencies with fixtures
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://docs.openstack.org/developer/pbr/";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
     description = "Python Build Reasonableness";
   };
 }

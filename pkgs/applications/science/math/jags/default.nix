@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gfortran, blas, lapack}:
+{lib, stdenv, fetchurl, gfortran, blas, lapack}:
 
 stdenv.mkDerivation rec {
   name = "JAGS-4.3.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   buildInputs = [gfortran blas lapack];
   configureFlags = [ "--with-blas=-lblas" "--with-lapack=-llapack" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Just Another Gibbs Sampler";
     license     = licenses.gpl2;
     homepage    = "http://mcmc-jags.sourceforge.net";

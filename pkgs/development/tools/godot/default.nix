@@ -1,28 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkgconfig, libX11, libXcursor
-, libXinerama, libXrandr, libXrender, libpulseaudio ? null
-, libXi ? null, libXext, libXfixes, freetype, openssl
-, alsaLib, libGLU, zlib, yasm ? null }:
+{ stdenv, lib, fetchFromGitHub, scons, pkg-config, udev, libX11
+, libXcursor , libXinerama, libXrandr, libXrender, libpulseaudio
+, libXi, libXext, libXfixes, freetype, openssl
+, alsa-lib, libGLU, zlib, yasm
+, withUdev ? true
+}:
 
 let
   options = {
     touch = libXi != null;
     pulseaudio = false;
+    udev = withUdev;
   };
 in stdenv.mkDerivation rec {
   pname = "godot";
-  version = "3.2.3";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "19vrp5lhyvxbm6wjxzn28sn3i0s8j08ca7nani8l1nrhvlc8wi0v";
+    sha256 = "0rfm6sbbwzvsn76a8aqagd7cqdzmk8qxphgl89k7y982l9a5sz50";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    scons libX11 libXcursor libXinerama libXrandr libXrender
-    libXi libXext libXfixes freetype openssl alsaLib libpulseaudio
+    scons udev libX11 libXcursor libXinerama libXrandr libXrender
+    libXi libXext libXfixes freetype openssl alsa-lib libpulseaudio
     libGLU zlib yasm
   ];
 
@@ -58,11 +61,11 @@ in stdenv.mkDerivation rec {
       --replace "Exec=godot" "Exec=$out/bin/godot"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage    = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
-    license     = stdenv.lib.licenses.mit;
+    license     = licenses.mit;
     platforms   = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.twey ];
+    maintainers = with maintainers; [ twey ];
   };
 }

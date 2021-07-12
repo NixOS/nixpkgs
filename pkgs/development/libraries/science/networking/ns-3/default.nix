@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , python
 , wafHook
 
@@ -32,22 +33,22 @@
 
 let
   pythonEnv = python.withPackages(ps:
-    stdenv.lib.optional withManual ps.sphinx
-    ++ stdenv.lib.optionals pythonSupport (with ps;[ pybindgen pygccxml ])
+    lib.optional withManual ps.sphinx
+    ++ lib.optionals pythonSupport (with ps;[ pybindgen pygccxml ])
   );
 in
 stdenv.mkDerivation rec {
   pname = "ns-3";
-  version = "32";
+  version = "33";
 
   src = fetchFromGitLab {
     owner = "nsnam";
     repo   = "ns-3-dev";
     rev    = "ns-3.${version}";
-    sha256 = "158yjhsrmslj1q4zcq5p16hv9i82qnxx714l7idicncn0wzrfx7k";
+    sha256 = "0ds8h0f2qcb0gc2a8bk38cbhdb122i4sbg589bjn59rblzw0hkq4";
   };
 
-  nativeBuildInputs = [ wafHook ];
+  nativeBuildInputs = [ wafHook python ];
 
   outputs = [ "out" ] ++ lib.optional pythonSupport "py";
 
@@ -60,11 +61,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs doc/ns3_html_theme/get_version.sh
-    # FIX/Remove when https://github.com/NixOS/nixpkgs/pull/69310 gets merged
-    sed -i 's/program.ns3_module_dependencies.copy()/program.ns3_module_dependencies[:]/g' wscript
   '';
 
-  wafConfigureFlags = with stdenv.lib; [
+  wafConfigureFlags = with lib; [
       "--enable-modules=${concatStringsSep "," modules}"
       "--with-python=${pythonEnv.interpreter}"
   ]
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
   # to prevent fatal error: 'backward_warning.h' file not found
   CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
-  postBuild = with stdenv.lib; let flags = concatStringsSep ";" (
+  postBuild = with lib; let flags = concatStringsSep ";" (
       optional enableDoxygen "./waf doxygen"
       ++ optional withManual "./waf sphinx"
     );
@@ -99,14 +98,22 @@ stdenv.mkDerivation rec {
     ${pythonEnv.interpreter} ./test.py --nowaf
   '';
 
+  patches = [
+    (fetchpatch {
+      name = "upstream-issue-336.patch";
+      url = "https://gitlab.com/nsnam/ns-3-dev/-/commit/673004edae1112e6cb249b698aad856d728530fb.patch";
+      sha256 = "0q96ividinbh9xlws014b2ir6gaavygnln5ca9m1db06m4vfwhng";
+    })
+  ];
+
   # strictoverflow prevents clang from discovering pyembed when bindings
   hardeningDisable = [ "fortify" "strictoverflow"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.nsnam.org";
     license = licenses.gpl3;
     description = "A discrete time event network simulator";
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [ teto rgrunbla ];
   };
 }

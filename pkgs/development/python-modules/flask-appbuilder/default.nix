@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
 , apispec
 , colorama
 , click
+, email_validator
 , flask
 , flask-babel
 , flask_login
@@ -25,22 +25,24 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "2.3.0";
+  version = "3.3.1";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "04bsswi7daaqda01a83rd1f2gq6asii520f9arjf7bsy24pmbprc";
+    sha256 = "13rlpdf3ipm39zpc62sywn8qjn6gwfbgr43x7lqpxr28br2jcg3j";
   };
 
-  checkInputs = [
-    nose
-  ];
+  # See here: https://github.com/dpgaspar/Flask-AppBuilder/commit/7097a7b133f27c78d2b54d2a46e4a4c24478a066.patch
+  #           https://github.com/dpgaspar/Flask-AppBuilder/pull/1610
+  # The patch from the PR doesn't apply cleanly so I edited it manually.
+  patches = [ ./upgrade-to-flask_jwt_extended-4.patch ];
 
   propagatedBuildInputs = [
     apispec
     colorama
     click
+    email_validator
     flask
     flask-babel
     flask_login
@@ -55,23 +57,28 @@ buildPythonPackage rec {
     python-dateutil
     prison
     pyjwt
-    sqlalchemy-utils
     pyyaml
+    sqlalchemy-utils
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "apispec[yaml]>=1.1.1, <2" "apispec" \
-      --replace "jsonschema>=3.0.1, <4" "jsonschema" \
-      --replace "marshmallow>=2.18.0, <4.0.0" "marshmallow" \
-      --replace "PyJWT>=1.7.1" "PyJWT" \
-      --replace "Flask-SQLAlchemy>=2.4, <3" "Flask-SQLAlchemy" \
-      --replace "Flask-JWT-Extended>=3.18, <4" "Flask-JWT-Extended" \
-      --replace "Flask-Login>=0.3, <0.5" "Flask-Login"
+      --replace "apispec[yaml]>=3.3, <4" "apispec[yaml] >=3.3, <5" \
+      --replace "click>=6.7, <8" "click" \
+      --replace "Flask>=0.12, <2" "Flask" \
+      --replace "Flask-Login>=0.3, <0.5" "Flask-Login >=0.3, <0.6" \
+      --replace "Flask-Babel>=1, <2" "Flask-Babel >=1, <3" \
+      --replace "Flask-WTF>=0.14.2, <0.15.0" "Flask-WTF" \
+      --replace "marshmallow-sqlalchemy>=0.22.0, <0.24.0" "marshmallow-sqlalchemy" \
+      --replace "Flask-JWT-Extended>=3.18, <4" "Flask-JWT-Extended>=4.1.0" \
+      --replace "PyJWT>=1.7.1, <2.0.0" "PyJWT>=2.0.1" \
+      --replace "SQLAlchemy<1.4.0" "SQLAlchemy"
   '';
 
-  # majority of tests require network access or mongo
+  # Majority of tests require network access or mongo
   doCheck = false;
+
+  pythonImportsCheck = [ "flask_appbuilder" ];
 
   meta = with lib; {
     description = "Simple and rapid application development framework, built on top of Flask";

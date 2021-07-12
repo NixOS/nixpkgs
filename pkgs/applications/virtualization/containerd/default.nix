@@ -1,48 +1,51 @@
-{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, installShellFiles, utillinux }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, btrfs-progs
+, go-md2man
+, installShellFiles
+, util-linux
+, nixosTests
+}:
 
-with lib;
-
-buildGoPackage rec {
+buildGoModule rec {
   pname = "containerd";
-  version = "1.4.1";
-  # git commit for the above version's tag
-  commit = "7ad184331fa3e55e52b890ea95e65ba581ae3429";
+  version = "1.5.2";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "1k6dqaidnldf7kpxdszf0wn6xb8m6vaizm2aza81fri1q0051213";
+    sha256 = "sha256-RDLAmPBjDHCx9al+gstUTrvKc/L0vAm8IEd/mvX5Als=";
   };
 
-  goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "out" "man" ];
+  vendorSha256 = null;
 
-  nativeBuildInputs = [ go-md2man installShellFiles utillinux ];
+  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" "REVISION=${commit}" ];
+  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
 
-  BUILDTAGS = []
-    ++ optional (btrfs-progs == null) "no_btrfs";
+  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
     patchShebangs .
-    make binaries $buildFlags
+    make binaries man $buildFlags
   '';
 
   installPhase = ''
-    for b in bin/*; do
-      install -Dm555 $b $out/$b
-    done
-
-    make man
+    install -Dm555 bin/* -t $out/bin
     installManPage man/*.[1-9]
+    installShellCompletion --bash contrib/autocomplete/ctr
+    installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
   '';
 
-  meta = {
+  passthru.tests = { inherit (nixosTests) docker; };
+
+  meta = with lib; {
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;

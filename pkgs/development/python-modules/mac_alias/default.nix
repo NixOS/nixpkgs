@@ -2,12 +2,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.1.0";
+  version = "2.2.0";
   pname = "mac_alias";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f07926e9befcc4ab35212d19541fe0e4e4abd67a7641aa75252a3ffd8deae94";
+    sha256 = "0eb84a63f98bf54c2f9fbdc4de956a63e64eb8a4a124143a1c1f5a78326442f0";
   };
 
   # pypi package does not include tests;

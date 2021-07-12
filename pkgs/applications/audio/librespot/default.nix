@@ -1,23 +1,22 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, withRodio ? true
-, withALSA ? true, alsaLib ? null, withPulseAudio ? false, libpulseaudio ? null
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, withRodio ? true
+, withALSA ? true, alsa-lib ? null, withPulseAudio ? false, libpulseaudio ? null
 , withPortAudio ? false, portaudio ? null }:
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
-  version = "0.1.3";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
     rev = "v${version}";
-    sha256 = "1ixh47yvaamrpzagqsiimc3y6bi4nbym95843d23am55zkrgnmy5";
+    sha256 = "153i9n3qwmmwc29f62cz8nbqrlry16iygvibm1sdnvpf0s6wk5f3";
   };
 
-  cargoSha256 = "1csls8kzzx28ng6w9vdwhnnav5sqp2m5fj430db5z306xh5acg3d";
-
   cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "11d64rpq4b5rdxk5wx0hhzgc6mvs6h2br0w3kfncfklp67vn3v4v";
 
-  cargoBuildFlags = with stdenv.lib; [
+  cargoBuildFlags = with lib; [
     "--no-default-features"
     "--features"
     (concatStringsSep "," (filter (x: x != "") [
@@ -29,15 +28,15 @@ rustPlatform.buildRustPackage rec {
     ]))
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ stdenv.lib.optional withALSA alsaLib
-    ++ stdenv.lib.optional withPulseAudio libpulseaudio
-    ++ stdenv.lib.optional withPortAudio portaudio;
+  buildInputs = [ openssl ] ++ lib.optional withALSA alsa-lib
+    ++ lib.optional withPulseAudio libpulseaudio
+    ++ lib.optional withPortAudio portaudio;
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Source Spotify client library and playback daemon";
     homepage = "https://github.com/librespot-org/librespot";
     license = with licenses; [ mit ];

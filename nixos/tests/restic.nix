@@ -19,7 +19,7 @@ import ./make-test-python.nix (
       {
         name = "restic";
 
-        meta = with pkgs.stdenv.lib.maintainers; {
+        meta = with pkgs.lib.maintainers; {
           maintainers = [ bbigras i077 ];
         };
 
@@ -44,6 +44,10 @@ import ./make-test-python.nix (
                       type=ftp
                     '';
                     inherit passwordFile initialize paths pruneOpts;
+                  };
+                  remoteprune = {
+                    inherit repository passwordFile;
+                    pruneOpts = [ "--keep-last 1" ];
                   };
                 };
 
@@ -84,6 +88,8 @@ import ./make-test-python.nix (
               "systemctl start restic-backups-rclonebackup.service",
               '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
               '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
+              "systemctl start restic-backups-remoteprune.service",
+              '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
           )
         '';
       }

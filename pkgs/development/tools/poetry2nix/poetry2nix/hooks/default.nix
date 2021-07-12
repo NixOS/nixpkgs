@@ -1,11 +1,11 @@
 { python
-, callPackage
+, buildPackages
 , makeSetupHook
-, yj
 , wheel
 , pip
 }:
 let
+  callPackage = python.pythonForBuild.pkgs.callPackage;
   pythonInterpreter = python.pythonForBuild.interpreter;
   pythonSitePackages = python.sitePackages;
 in
@@ -20,7 +20,7 @@ in
           deps = [ ];
           substitutions = {
             inherit pythonInterpreter;
-            yj = "${yj}/bin/yj";
+            yj = "${buildPackages.yj}/bin/yj";
             pyprojectPatchScript = "${./pyproject-without-path.py}";
           };
         } ./remove-path-dependencies.sh

@@ -1,26 +1,59 @@
-{ stdenv, buildFHSUserEnv, fetchurl, makeWrapper, makeDesktopItem, libxslt, atk
-, fontconfig, freetype, gdk-pixbuf, glib, gtk2, libudev0-shim, libxml2
-, pango, pixman, libX11, libXext, libXinerama, libXrandr , libXrender
-, libXtst, libXcursor, libXi, libxkbfile , libXScrnSaver, zlib, liberation_ttf
-, libtiff, dbus, at-spi2-atk, harfbuzz, gtk3-x11, libuuid, pcsclite
+{ stdenv
+, lib
+, at-spi2-atk
+, atk
+, buildFHSUserEnv
+, cairo
+, dbus
+, fetchurl
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gsettings-desktop-schemas
+, gtk2
+, gtk3-x11
+, harfbuzz
+, liberation_ttf
+, libjpeg
+, libtiff
+, libudev0-shim
+, libuuid
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXinerama
+, libxkbfile
+, libxml2
+, libXrandr
+, libXrender
+, libXScrnSaver
+, libxslt
+, libXtst
+, makeDesktopItem
+, makeWrapper
+, pango
+, pcsclite
+, pixman
+, zlib
 }:
-
 let
-  version = "2006";
+  version = "2103";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
-    # The downloaded archive also contains i386 and ARM binaries, but these have not been tested.
+  # The downloaded archive also contains ARM binaries, but these have not been tested.
 
   vmwareHorizonClientFiles = stdenv.mkDerivation {
     name = "vmwareHorizonClientFiles";
     inherit version;
     src = fetchurl {
-      url = https://download3.vmware.com/software/view/viewclients/CART21FQ2/vmware-view-client-linux-2006-8.0.0-16522670.tar.gz;
-      sha256 = "8c46d49fea42f8c1f7cf32a5f038f5a47d2b304743b1e4f4c68c658621b0e79c";
+      url = "https://download3.vmware.com/software/view/viewclients/CART22FQ1/VMware-Horizon-Client-Linux-2103-8.2.0-17742757.tar.gz";
+      sha256 = "62f95bb802b058a98f5ee6c2296b89bd7e15884a24dc8a8ba7ce89de7e0798e4";
     };
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
       mkdir ext $out
       find ${sysArch} -type f -print0 | xargs -0n1 tar -Cext --strip-components=1 -xf
@@ -30,12 +63,19 @@ let
       # when it cannot detect a new enough version already present on the system.
       # The checks are distribution-specific and do not function correctly on NixOS.
       # Deleting the bundled library is the simplest way to force it to use our version.
-      rm -f "$out/lib/vmware/gcc/libstdc++.so.6"
+      rm "$out/lib/vmware/gcc/libstdc++.so.6"
+
+      # This libjpeg library interferes with Chromium, so we will be using ours instead.
+      rm $out/lib/vmware/libjpeg.*
+
+      # This library causes the program to core-dump occasionally. Use ours instead.
+      rm $out/lib/vmware/view/crtbora/libcairo.*
 
       # Force the default GTK theme (Adwaita) because Horizon is prone to
       # UI usability issues when using non-default themes, such as Adwaita-dark.
       makeWrapper "$out/bin/vmware-view" "$out/bin/vmware-view_wrapper" \
           --set GTK_THEME Adwaita \
+          --suffix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
           --suffix LD_LIBRARY_PATH : "$out/lib/vmware/view/crtbora:$out/lib/vmware"
     '';
   };
@@ -46,10 +86,38 @@ let
     runScript = "${vmwareHorizonClientFiles}/bin/vmware-view_wrapper";
 
     targetPkgs = pkgs: [
-      pcsclite dbus vmwareHorizonClientFiles atk fontconfig freetype gdk-pixbuf glib gtk2
-      libudev0-shim libxml2 pango pixman liberation_ttf libX11 libXext libXinerama
-      libXrandr libXrender libXtst libXcursor libXi libxkbfile at-spi2-atk libXScrnSaver
-      zlib libtiff harfbuzz gtk3-x11 libuuid
+      at-spi2-atk
+      atk
+      cairo
+      dbus
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      gtk2
+      gtk3-x11
+      harfbuzz
+      liberation_ttf
+      libjpeg
+      libtiff
+      libudev0-shim
+      libuuid
+      libX11
+      libXcursor
+      libXext
+      libXi
+      libXinerama
+      libxkbfile
+      libxml2
+      libXrandr
+      libXrender
+      libXScrnSaver
+      libXtst
+      pango
+      pcsclite
+      pixman
+      vmwareHorizonClientFiles
+      zlib
     ];
   };
 
@@ -61,16 +129,23 @@ let
     mimeType = "x-scheme-handler/vmware-view";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "vmware-view";
+
   dontUnpack = true;
+
   installPhase = ''
     mkdir -p $out/bin $out/share/applications
     cp "${desktopItem}"/share/applications/* $out/share/applications/
     ln -s "${vmwareFHSUserEnv}/bin/vmware-view" "$out/bin/"
   '';
 
-  meta = with stdenv.lib; {
+  unwrapped = vmwareHorizonClientFiles;
+
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
     description = "Allows you to connect to your VMware Horizon virtual desktop";
     homepage = "https://www.vmware.com/go/viewclients";
     license = licenses.unfree;

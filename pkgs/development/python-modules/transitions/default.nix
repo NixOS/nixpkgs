@@ -1,28 +1,42 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, six, nose, mock, dill, pycodestyle }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, six
+, pygraphviz
+, pytestCheckHook
+, mock
+, graphviz
+, pycodestyle
+, fontconfig
+}:
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.8.2";
+  version = "0.8.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j3pswbckrhd6plblb0bwzsbvk50nqmxq6dvjclvcr5cljzs7xvg";
+    sha256 = "sha256-56hrMaFhp2Ez8Ymzrp2tJ1WoDqTB4O7hgFZI0CH7Z30=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "dill<0.2.7" dill
+  propagatedBuildInputs = [
+    six
+    pygraphviz # optional
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    mock
+    graphviz
+    pycodestyle
+  ];
+
+  preCheck = ''
+    export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+    export HOME=$TMPDIR
   '';
 
-  propagatedBuildInputs = [ six ];
-
-  checkInputs = [ nose mock dill pycodestyle ];
-
-  checkPhase = ''
-    nosetests
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pytransitions/transitions";
     description = "A lightweight, object-oriented finite state machine implementation in Python";
     license = licenses.mit;

@@ -97,6 +97,7 @@ in
   gsconnect = callInstalledTest ./gsconnect.nix {};
   ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
+  librsvg = callInstalledTest ./librsvg.nix {};
   glib-testing = callInstalledTest ./glib-testing.nix {};
   libjcat = callInstalledTest ./libjcat.nix {};
   libxmlb = callInstalledTest ./libxmlb.nix {};

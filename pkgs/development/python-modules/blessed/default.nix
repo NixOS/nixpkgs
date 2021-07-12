@@ -1,14 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, six
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, six
 , wcwidth, pytest, mock, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "blessed";
-  version = "1.17.11";
+  version = "1.18.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d4914079a6e8e14fbe080dcaf14dee596a088057cdc598561080e3266123b48";
+    sha256 = "8b09936def6bc06583db99b65636b980075733e13550cb6af262ce724a55da23";
   };
 
   checkInputs = [ pytest mock glibcLocales ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ wcwidth six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jquast/blessed";
     description = "A thin, practical wrapper around terminal capabilities in Python.";
     maintainers = with maintainers; [ eqyiel ];

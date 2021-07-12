@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libspotify, alsaLib, readline, pkgconfig, apiKey ? null, unzip, gnused }:
+{ lib, stdenv, fetchurl, libspotify, alsa-lib, readline, pkg-config, apiKey ? null, unzip, gnused }:
 
 let
   version = "12.1.51";
@@ -47,14 +47,14 @@ else stdenv.mkDerivation {
 
 
   # darwin-specific
-  buildInputs = stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
+  nativeBuildInputs = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
 
   # linux-specific
-  installFlags = stdenv.lib.optional isLinux
+  installFlags = lib.optional isLinux
     "prefix=$(out)";
-  patchPhase = stdenv.lib.optionalString isLinux
+  patchPhase = lib.optionalString isLinux
     "${gnused}/bin/sed -i 's/ldconfig//' Makefile";
-  postInstall = stdenv.lib.optionalString isLinux
+  postInstall = lib.optionalString isLinux
     "mv -v share $out";
 
   passthru = {
@@ -65,9 +65,9 @@ else stdenv.mkDerivation {
         pname = "libspotify-samples";
         inherit version;
         src = libspotify.src;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
         buildInputs = [ libspotify readline ]
-          ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+          ++ lib.optional (!stdenv.isDarwin) alsa-lib;
         postUnpack = "sourceRoot=$sourceRoot/share/doc/libspotify/examples";
         patchPhase = "cp ${apiKey} appkey.c";
         installPhase = ''
@@ -82,7 +82,7 @@ else stdenv.mkDerivation {
     inherit apiKey;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Spotify API library";
     homepage    = "https://developer.spotify.com/technologies/libspotify";
     maintainers = with maintainers; [ lovek323 ];

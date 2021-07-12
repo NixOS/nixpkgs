@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, ncurses, conf ? null }:
+{ lib, stdenv, fetchgit, ncurses, conf ? null }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "noice";

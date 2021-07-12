@@ -1,21 +1,22 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
 , boost
 , enableLibuhd_C_api ? true
 # requires numpy
 , enableLibuhd_Python_api ? false
-, python3 ? null
+, python3
 , enableExamples ? false
 , enableUtils ? false
 , enableLiberio ? false
-, liberio ? null
-, libusb1 ? null
+, liberio
+, libusb1
 , enableDpdk ? false
-, dpdk ? null
+, dpdk
 # Devices
 , enableOctoClock ? true
 , enableMpmd ? true
@@ -33,28 +34,26 @@
 
 let
   onOffBool = b: if b then "ON" else "OFF";
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 
 stdenv.mkDerivation rec {
   pname = "uhd";
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf... style keeps changing
-  version = "3.15.0.0";
+  version = "4.0.0.0";
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
     rev = "v${version}";
-    sha256 = "0jknln88a69fh244670nb7qrflbyv0vvdxfddb5g8ncpb6hcg8qf";
+    sha256 = "NCyiI4pIPw0nBRFdUGpgZ/x2mWz+Qm78ZGACUnSbGSs=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${version}/uhd-images_${version}.tar.xz";
-    sha256 = "1fir1a13ac07mqhm4sr34cixiqj2difxq0870qv1wr7a7cbfw6vp";
+    sha256 = "Xfx0bsHUQ5+Dp+xk0sVWWP83oyXQcUH5AX4PNEE7fY4=";
   };
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DENABLE_LIBUHD=ON"
@@ -83,7 +82,7 @@ stdenv.mkDerivation rec {
     # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
-    ++ [ (stdenv.lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
+    ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
   ;
 
   # Python + Mako are always required for the build itself but not necessary for runtime.
@@ -94,7 +93,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ]
     # If both enableLibuhd_Python_api and enableUtils are off, we don't need
     # pythonEnv in buildInputs as it's a 'build' dependency and not a runtime
@@ -143,7 +142,7 @@ stdenv.mkDerivation rec {
     mv $out/lib/uhd/utils/uhd-usrp.rules $out/lib/udev/rules.d/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "USRP Hardware Driver (for Software Defined Radio)";
     longDescription = ''
       The USRP Hardware Driver (UHD) software is the hardware driver for all

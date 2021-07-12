@@ -1,14 +1,14 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2020.10.2";
+  version = "2021.6.0";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256 = "0ppl74gb46r2x65hl7z1hjdqlr8la0pvhy8af8isk11sbxmprqjj";
+    sha256 = "sha256-cX0kdBPDgwjHphxGWrnXohHPp1nzs4SnvCry4AxMtp0=";
   };
 
   vendorSha256 = null;
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CloudFlare Argo Tunnel daemon (and DNS-over-HTTPS client)";
     homepage    = "https://www.cloudflare.com/products/argo-tunnel";
     license     = licenses.unfree;

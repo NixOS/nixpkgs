@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, lm_sensors, libgtop, libatasmart, gtk3
+{ stdenv, lib, fetchurl, pkg-config, lm_sensors, libgtop, libatasmart, gtk3
 , libnotify, udisks2, libXNVCtrl, wrapGAppsHook
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ark901va79gfq5p8h8dqypjgm3f8crmj37520q3slwz2rfphkq8";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   buildInputs = [
     lm_sensors libgtop libatasmart gtk3 libnotify udisks2

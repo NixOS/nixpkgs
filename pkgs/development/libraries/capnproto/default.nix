@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "capnproto";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "03f1862ljdshg7d0rg3j7jzgm3ip55kzd2y91q7p0racax3hxx6i";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://kentonv.github.io/capnproto";
     description = "Cap'n Proto cerealization protocol";
     longDescription = ''

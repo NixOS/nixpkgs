@@ -1,5 +1,5 @@
-{ stdenv
-, pkgconfig
+{ lib
+, pkg-config
 , fetchurl
 , meson
 , ninja
@@ -7,8 +7,8 @@
 , gtk3
 , python3
 , wrapGAppsHook
-, gnome3
-, libwnck3
+, gnome
+, libwnck
 , gobject-introspection
 , gettext
 , itstool
@@ -16,13 +16,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "d-feet";
-  version = "0.3.15";
+  version = "0.3.16";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/d-feet/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1cgxgpj546jgpyns6z9nkm5k48lid8s36mvzj8ydkjqws2d19zqz";
+    url = "mirror://gnome/sources/d-feet/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "hzPOS5qaVOwYWx2Fv02p2dEQUogqiAdg/2D5d5stHMs=";
   };
 
   nativeBuildInputs = [
@@ -31,16 +31,16 @@ python3.pkgs.buildPythonApplication rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
 
   buildInputs = [
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gtk3
-    libwnck3
+    libwnck
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -61,14 +61,14 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "dfeet";
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D-Feet is an easy to use D-Bus debugger";
     longDescription = ''
       D-Feet can be used to inspect D-Bus interfaces of running programs

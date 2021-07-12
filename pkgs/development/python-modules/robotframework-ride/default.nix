@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy3k, pygments, wxPython }:
+{ lib, fetchurl, buildPythonPackage, isPy3k, pygments, wxPython }:
 
 buildPythonPackage rec {
   version = "1.2.3";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Light-weight and intuitive editor for Robot Framework test case files";
     homepage = "https://code.google.com/p/robotframework-ride/";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   mkNixBackground = { name, src, description }:
@@ -33,7 +33,7 @@ _EOF
         kdeFilePath = "${pkg}/share/wallpapers/${name}/contents/images/${src.name}";
       };
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         inherit description;
         homepage = "https://github.com/NixOS/nixos-artwork";
         license = licenses.free;

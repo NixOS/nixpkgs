@@ -1,21 +1,27 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , azure-common
+, azure-mgmt-core
 , msrest
 , msrestazure
 }:
 
 buildPythonPackage rec {
-  version = "0.13.0";
+  version = "4.0.0";
   pname = "azure-mgmt-netapp";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e86034d073144bd5dbafe17e20fef3f48b5bf98a31b27cc0de462dc8f98303bb";
+    sha256 = "7195e413a0764684cd42bec9e429c13c290db9ab5c465dbed586a6f6d0ec8a42";
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ azure-common msrest msrestazure ];
+  propagatedBuildInputs = [
+    azure-common
+    azure-mgmt-core
+    msrest
+    msrestazure
+  ];
 
   # no tests included
   doCheck = false;

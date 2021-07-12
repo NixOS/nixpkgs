@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
       creating reports from databases and other data sources that produce csv files.
       csv2odf can be combined with cron and shell scripts to automatically generate
       business reports.
-      
+
       The output format (fonts, number formatting, etc.) is controlled by a
       template file that you can design in your office application of choice.
     '';

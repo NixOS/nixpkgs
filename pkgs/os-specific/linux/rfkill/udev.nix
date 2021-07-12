@@ -1,4 +1,4 @@
-{ stdenv, substituteAll }:
+{ lib, stdenv, substituteAll }:
 
 # Provides a facility to hook into rfkill changes.
 #
@@ -47,7 +47,7 @@ in stdenv.mkDerivation {
     cp ${rfkillHook} "$out/bin/rfkill-hook.sh"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://wireless.kernel.org/en/users/Documentation/rfkill";
     description = "Rules+hook for udev to catch rfkill state changes";
     platforms = platforms.linux;

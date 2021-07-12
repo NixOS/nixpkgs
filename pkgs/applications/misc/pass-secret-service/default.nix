@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, dbus, gnupg }:
+{ lib, fetchFromGitHub, python3, dbus, gnupg }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pass-secret-service";
@@ -54,8 +54,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Libsecret D-Bus API with pass as the backend";
     homepage = "https://github.com/mdellweg/pass_secret_service/";
-    license = stdenv.lib.licenses.gpl3Only;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

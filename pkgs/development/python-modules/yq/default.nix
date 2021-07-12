@@ -1,27 +1,35 @@
 { lib
+, nixosTests
 , buildPythonPackage
 , fetchPypi
-, pkgs
+, substituteAll
 , argcomplete
 , pyyaml
 , xmltodict
-# Test inputs
-, coverage
-, flake8
 , jq
-, pytest
-, unixtools
-, toml
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "2.11.1";
+  version = "2.12.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q4rky0a6n4izmq7slb91a54g8swry1xrbfqxwc8lkd3hhvlxxkl";
+    sha256 = "2f156d0724b61487ac8752ed4eaa702a5737b804d5afa46fa55866951cd106d2";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./jq-path.patch;
+      jq = "${lib.getBin jq}/bin/jq";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace test/test.py \
+      --replace "expect_exit_codes={0} if sys.stdin.isatty() else {2}" "expect_exit_codes={0}"
+  '';
 
   propagatedBuildInputs = [
     pyyaml
@@ -29,26 +37,20 @@ buildPythonPackage rec {
     argcomplete
   ];
 
-  doCheck = true;
-
   checkInputs = [
-   unixtools.script
-   pytest
-   coverage
-   flake8
-   pkgs.jq
-   toml
+   pytestCheckHook
   ];
 
-  # tests fails if stdin is not a tty
-  checkPhase = "echo | script -c 'pytest ./test/test.py'";
+  pytestFlagsArray = [ "test/test.py" ];
 
   pythonImportsCheck = [ "yq" ];
+
+  passthru.tests = { inherit (nixosTests) yq; };
 
   meta = with lib; {
     description = "Command-line YAML processor - jq wrapper for YAML documents";
     homepage = "https://github.com/kislyuk/yq";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.womfoo ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ womfoo SuperSandro2000 ];
   };
 }

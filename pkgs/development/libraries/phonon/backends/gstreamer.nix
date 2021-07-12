@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, gst_all_1, phonon, pkgconfig
+{ stdenv, lib, fetchurl, cmake, gst_all_1, phonon, pkg-config
 , extra-cmake-modules, qttools, qtbase, qtx11extras
 , debug ? false
 }:
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "phonon-backend-gstreamer";
   version = "4.10.0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://phonon.kde.org/";
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   # on system paths being set.
   patches = [ ./gst-plugin-paths.patch ];
 
+  dontWrapQtApps = true;
+
   NIX_CFLAGS_COMPILE =
     let gstPluginPaths =
           lib.makeSearchPathOutput "lib" "/lib/gstreamer-1.0"
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
             gst-libav
           ]);
     in toString [
-      # This flag should be picked up through pkgconfig, but it isn't.
+      # This flag should be picked up through pkg-config, but it isn't.
       "-I${gst_all_1.gstreamer.dev}/lib/gstreamer-1.0/include"
 
       ''-DGST_PLUGIN_PATH_1_0="${gstPluginPaths}"''
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     extra-cmake-modules
     qttools
   ];

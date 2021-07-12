@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgconfig, meson, ninja, glib, glib-networking
+{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja, glib, glib-networking
 , sqlite, gobject-introspection, vala, gtk-doc, libsecret, docbook_xsl
 , docbook_xml_dtd_43, docbook_xml_dtd_45, glibcLocales, makeWrapper
 , symlinkJoin, gsignondPlugins, plugins }:
@@ -26,7 +26,7 @@ unwrapped = stdenv.mkDerivation rec {
     gtk-doc
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -50,11 +50,11 @@ unwrapped = stdenv.mkDerivation rec {
     ./plugin-load-env.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D-Bus service which performs user authentication on behalf of its clients";
     homepage = "https://gitlab.com/accounts-sso/gsignond";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 };

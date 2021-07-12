@@ -1,4 +1,4 @@
-{stdenv, darwin}:
+{lib, stdenv, darwin}:
 
 /*
  * This is needed to build GCC on Darwin.
@@ -19,5 +19,5 @@ stdenv.mkDerivation {
     ln -sf ${darwin.CF}/Library/Frameworks/CoreFoundation.framework/Headers/* CoreFoundation
   '';
 
-  meta.platforms = stdenv.lib.platforms.darwin;
+  meta.platforms = lib.platforms.darwin;
 }

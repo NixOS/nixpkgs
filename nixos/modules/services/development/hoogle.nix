@@ -25,6 +25,7 @@ in {
     };
 
     packages = mkOption {
+      type = types.functionTo (types.listOf types.package);
       default = hp: [];
       defaultText = "hp: []";
       example = "hp: with hp; [ text lens ]";
@@ -49,6 +50,11 @@ in {
       default = "https://hoogle.haskell.org";
     };
 
+    host = mkOption {
+      type = types.str;
+      description = "Set the host to bind on.";
+      default = "127.0.0.1";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -59,12 +65,10 @@ in {
 
       serviceConfig = {
         Restart = "always";
-        ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home}'';
+        ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host}'';
 
-        User = "nobody";
-        Group = "nogroup";
+        DynamicUser = true;
 
-        PrivateTmp = true;
         ProtectHome = true;
 
         RuntimeDirectory = "hoogle";

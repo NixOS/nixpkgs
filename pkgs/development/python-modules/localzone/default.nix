@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , dnspython
@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "localzone";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "ags-slc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vzn1vm3zf86l7qncbmghjrwyvla9dc2v8abn8jajbl47gm7r5f7";
+    sha256 = "1cbiv21yryjqy46av9hbjccks95sxznrx8nypd3yzihf1vkjiq5a";
   };
 
   propagatedBuildInputs = [ dnspython sphinx ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple DNS library for managing zone files";
     homepage = "https://localzone.iomaestro.com";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkg-config, xorg, imlib2, makeWrapper }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, xorg, imlib2, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "xteddy";
@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "games-team";
-    repo = "xteddy";
-    rev = "debian%2F${version}"; # %2F = urlquote("/");
+    repo = pname;
+    rev = "debian/${version}";
     sha256 = "0rm7w78d6qajq4fvi4agyqm0c70f3c1i0cy2jdb6kqql2k8w78qy";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/xteddy --run "cd $out/share/images/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cuddly teddy bear for your X desktop";
     homepage = "https://weber.itn.liu.se/~stegu/xteddy/";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxslt, docbook_xsl, libcap }:
+{ lib, stdenv, fetchurl, libxslt, docbook_xsl, libcap }:
 
 stdenv.mkDerivation rec {
   pname = "bubblewrap";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libxslt docbook_xsl ];
   buildInputs = [ libcap ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unprivileged sandboxing tool";
     homepage = "https://github.com/containers/bubblewrap";
     license = licenses.lgpl2Plus;

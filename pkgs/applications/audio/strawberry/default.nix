@@ -3,8 +3,8 @@
 , lib
 , fetchFromGitHub
 , cmake
-, pkgconfig
-, alsaLib
+, pkg-config
+, alsa-lib
 , boost
 , chromaprint
 , fftw
@@ -23,7 +23,7 @@
 , libselinux ? null
 , libsepol ? null
 , p11-kit ? null
-, utillinux ? null
+, util-linux ? null
 , qtbase
 , qtx11extras
 , qttools
@@ -35,17 +35,17 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.8.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tJcpjviCXA1Y/PX1jlXphXZZMWBAAg3kdbsj41tmunE=";
+    sha256 = "sha256:0d9asg21j9ai23sb35cimws8bd8fsnpha777rgscraa7i09q0rx2";
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     boost
     chromaprint
     fftw
@@ -67,7 +67,6 @@ mkDerivation rec {
     libselinux
     libsepol
     p11-kit
-    utillinux
   ]
   ++ lib.optionals withGstreamer (with gst_all_1; [
     gstreamer
@@ -77,10 +76,10 @@ mkDerivation rec {
   ])
   ++ lib.optional withVlc libvlc;
 
-  nativeBuildInputs = [ cmake ninja pkgconfig qttools ];
-
-  cmakeFlags = [
-    "-DUSE_SYSTEM_TAGLIB=ON"
+  nativeBuildInputs = [
+    cmake ninja pkg-config qttools
+  ] ++ lib.optionals stdenv.isLinux [
+    util-linux
   ];
 
   postInstall = ''
@@ -91,7 +90,7 @@ mkDerivation rec {
     description = "Music player and music collection organizer";
     homepage = "https://www.strawberrymusicplayer.org/";
     changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${version}/Changelog";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6
     platforms = platforms.linux;

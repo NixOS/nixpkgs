@@ -8,7 +8,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
 2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/fetch-kde-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
+   `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION`.
 3. Check that the new packages build correctly.
 4. Commit the changes and open a pull request.
 
@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
+  lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
   llvmPackages_5,
@@ -27,7 +27,7 @@ top-level attribute to `top-level/all-packages.nix`.
   debug ? false,
 }:
 
-with stdenv.lib;
+with lib;
 
 let
 
@@ -54,7 +54,14 @@ let
     qtbase =
       optionals stdenv.isDarwin [
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
-        ./qtbase.patch.d/0002-qtbase-mac.patch
+
+        # Downgrade minimal required SDK to 10.12
+        ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
+        ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
+
+        # Patch framework detection to support X.framework/X.tbd,
+        # extending the current support for X.framework/X.
+        ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
@@ -68,9 +75,35 @@ let
         ./qtbase.patch.d/0011-fix-header_module.patch
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
+    qtlocation = [ ./qtlocation-gcc-9.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = [ ]
+    qtwebengine = [
+      # Fix build with bison-3.7: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=1a53f599
+      (fetchpatch {
+        name = "qtwebengine-bison-3.7-build.patch";
+        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=1a53f599";
+        sha256 = "1nqpyn5fq37q7i9nasag6i14lnz0d7sld5ikqhlm8qwq9d7gbmjy";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+      })
+      # Fix build with GCC 10 (part 1): https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=fad3e27b
+      (fetchpatch {
+        name = "qtwebengine-gcc10-part1.patch";
+        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=fad3e27bfb50d1e23a07577f087a826b5e00bb1d";
+        sha256 = "0c55j9zww8jyif6wl7jy1qqidgw9fdhiyfjgzhzi85r716m4pwwd";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+      })
+      # Fix build with GCC 10 (part 2): https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=193c5bed
+      (fetchpatch {
+        name = "qtwebengine-gcc10-part2.patch";
+        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=193c5bed1cff123e21b7e6d12f464d6709ace2e3";
+        sha256 = "1jb6s32ara6l4rbn4h3gg95mzv8sd8dl1zpjaqwywf1w7p8ymk86";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+      })
+    ]
       ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [
       (fetchpatch {
@@ -78,24 +111,31 @@ let
         url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
       })
+      (fetchpatch {
+        name = "qtwebkit-glib-2.68.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
+        sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
+      })
       ./qtwebkit.patch
+      ./qtwebkit-icu68.patch
     ] ++ optionals stdenv.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
     qttools = [ ./qttools.patch ];
+    qtwayland = [ ./qtwayland-libdrm-build.patch ];
   };
 
   qtModule =
     import ../qtModule.nix
     {
       inherit perl;
-      inherit (stdenv) lib;
+      inherit lib;
       # Use a variant of mkDerivation that does not include wrapQtApplications
       # to avoid cyclic dependencies between Qt modules.
       mkDerivation =
         import ../mkDerivation.nix
-        { inherit (stdenv) lib; inherit debug; wrapQtAppsHook = null; }
+        { inherit lib; inherit debug; wrapQtAppsHook = null; }
         stdenvActual.mkDerivation;
     }
     { inherit self srcs patches; };
@@ -107,7 +147,7 @@ let
 
       mkDerivationWith =
         import ../mkDerivation.nix
-        { inherit (stdenv) lib; inherit debug; inherit (self) wrapQtAppsHook; };
+        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
 
       mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
 
@@ -116,7 +156,7 @@ let
         patches = patches.qtbase;
         inherit bison cups harfbuzz libGL;
         withGtk3 = true; inherit dconf gtk3;
-        inherit developerBuild decryptSslTraffic;
+        inherit debug developerBuild decryptSslTraffic;
       };
 
       qtcharts = callPackage ../modules/qtcharts.nix {};
@@ -166,6 +206,7 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
+          inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;

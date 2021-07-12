@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libnfnetlink-1.0.1";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
       It is only used by other netfilter.org projects, like the aforementioned ones.
     '';
     homepage = "http://www.netfilter.org/projects/libnfnetlink/index.html";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

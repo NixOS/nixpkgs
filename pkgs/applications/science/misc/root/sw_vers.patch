@@ -1,28 +1,16 @@
-diff a/build/unix/compiledata.sh b/build/unix/compiledata.sh
---- a/build/unix/compiledata.sh
-+++ b/build/unix/compiledata.sh
-@@ -47,7 +47,7 @@ fi
- 
- if [ "$ARCH" = "macosx" ] || [ "$ARCH" = "macosx64" ] || \
-    [ "$ARCH" = "macosxicc" ]; then
--   macosx_minor=`sw_vers | sed -n 's/ProductVersion://p' | cut -d . -f 2`
-+   macosx_minor=12
-    SOEXT="so"
-    if [ $macosx_minor -ge 5 ]; then
-       if [ "x`echo $SOFLAGS | grep -- '-install_name'`" != "x" ]; then
 diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 --- a/cmake/modules/SetUpMacOS.cmake
 +++ b/cmake/modules/SetUpMacOS.cmake
-@@ -2,17 +2,8 @@ set(ROOT_ARCHITECTURE macosx)
- set(ROOT_PLATFORM macosx)
+@@ -28,17 +28,10 @@ if(CMAKE_VERSION VERSION_LESS 3.14.4)
+ endif()
  
  if (CMAKE_SYSTEM_NAME MATCHES Darwin)
 -  EXECUTE_PROCESS(COMMAND sw_vers "-productVersion"
 -                  COMMAND cut -d . -f 1-2
 -                  OUTPUT_VARIABLE MACOSX_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
 -
--  MESSAGE(STATUS "Found a Mac OS X System ${MACOSX_VERSION}")
--
+   MESSAGE(STATUS "Found a macOS system ${MACOSX_VERSION}")
+ 
 -  if(MACOSX_VERSION VERSION_GREATER 10.7 AND ${CMAKE_CXX_COMPILER_ID} MATCHES Clang)
      set(libcxx ON CACHE BOOL "Build using libc++" FORCE)
 -  endif()
@@ -31,16 +19,15 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
      #TODO: check haveconfig and rpath -> set rpath true
      #TODO: check Thread, define link command
      #TODO: more stuff check configure script
-@@ -25,23 +16,7 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+@@ -57,22 +50,7 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+        SET(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -m64")
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
         SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-        SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -m64")
 -    else()
--       MESSAGE(STATUS "Found a 32bit system")
 -       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
 -       SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
 -       SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -m32")
--    endif()
+     endif()
 -  endif()
 -
 -  if(MACOSX_VERSION VERSION_GREATER 10.6)
@@ -52,11 +39,10 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 -  if(MACOSX_VERSION VERSION_GREATER 10.8)
 -    set(MACOSX_GLU_DEPRECATED ON)
 -  endif()
-+     endif()
  
    if (CMAKE_COMPILER_IS_GNUCXX)
-      message(STATUS "Found GNU compiler collection")
-@@ -104,7 +79,6 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe -W -Wshadow -Wall -Woverloaded-virtual -fsigned-char -fno-common")
+@@ -130,7 +108,6 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
    endif()
  
    #---Set Linker flags----------------------------------------------------------------------
@@ -67,33 +53,33 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 diff a/config/root-config.in b/config/root-config.in
 --- a/config/root-config.in
 +++ b/config/root-config.in
-@@ -306,12 +306,6 @@ macosxicc)
-    auxlibs="-lm -ldl"
+@@ -312,12 +312,6 @@ macosxicc)
     ;;
- macosx64)
--   # MacOS X with gcc (GNU cc v4.x) in 64 bit mode
+ macosx64|macosxarm64)
+    # MacOS X with gcc (GNU cc v4.x) in 64 bit mode
+-   macosx_major=`sw_vers | sed -n 's/ProductVersion://p' | cut -d . -f 1 | sed -e 's/^[[:space:]]*//'`
 -   macosx_minor=`sw_vers | sed -n 's/ProductVersion://p' | cut -d . -f 2`
 -   # cannot find the one linked to libGraf if relocated after built
--   if [ $macosx_minor -le 4 ]; then
+-   if [ $macosx_major -eq 10 -a $macosx_minor -le 4 ]; then
 -      rootlibs="$rootlibs -lfreetype"
 -   fi
     auxcflags="${cxxversionflag} -m64"
     auxldflags="-m64"
     auxlibs="-lm -ldl"
-@@ -375,18 +369,11 @@ freebsd* | openbsd* | linux*)
+@@ -378,18 +372,11 @@ freebsd* | openbsd* | linux*)
+    done
+    ;;
  macosx*)
+-   if [ \( $macosx_major -eq 10 -a $macosx_minor -ge 5 \) -o $macosx_major -gt 10  ]; then
+       auxcflags="-pthread $auxcflags"
+       auxlibs="-lpthread $auxlibs"
+-   else
+-      auxcflags="-D_REENTRANT $auxcflags"
+-      auxlibs="-lpthread $auxlibs"
+-   fi
     for f in $features ; do
-       if test "x$f" = "xthread" ; then
--         if [ $macosx_minor -ge 5 ]; then
-             auxcflags="-pthread $auxcflags"
-             auxlibs="-lpthread $auxlibs"
--         else
--            auxcflags="-D_REENTRANT $auxcflags"
--            auxlibs="-lpthread $auxlibs"
--         fi
-       fi
        if test "x$f" = "xrpath" ; then
--         if [ $macosx_minor -ge 5 ]; then
+-         if [ \( $macosx_major -eq 10 -a $macosx_minor -ge 5 \) -o $macosx_major -gt 10  ]; then
              auxlibs="-Wl,-rpath,$libdir $auxlibs"
 -         fi
        fi

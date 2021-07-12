@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchpatch
 , fetchurl
 , cmake
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A complete open-source clone/rewrite of the masterpiece jump-and-run platformer Doukutsu Monogatari (also known as Cave Story)";
-    license = with stdenv.lib.licenses; [
+    license = with lib.licenses; [
       gpl3                   # Game engine
       unfreeRedistributable  # Game assets, freeware
     ];
-    maintainers = [ stdenv.lib.maintainers.scubed2 ];
+    maintainers = [ lib.maintainers.scubed2 ];
     homepage = "https://github.com/nxengine/nxengine-evo";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

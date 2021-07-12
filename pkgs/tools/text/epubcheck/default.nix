@@ -1,4 +1,4 @@
-{ stdenv, fetchzip
+{ lib, stdenv, fetchzip
 , jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       --add-flags "-classpath $classpath com.adobe.epubcheck.tool.Checker"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/w3c/epubcheck";
     description = "Validation tool for EPUB";
     license = with licenses; [ asl20 bsd3 mpl10 w3c ];

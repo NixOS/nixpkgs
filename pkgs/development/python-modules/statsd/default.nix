@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sed -i 's/assert_called_once()/called/' statsd/tests.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ domenkozar ];
     description = "A simple statsd client";
     license = licenses.mit;

@@ -1,21 +1,31 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, intltool, libxml2
-, pciutils, pkgconfig, gtk2, ddccontrol-db
-, makeDesktopItem
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, intltool
+, libxml2
+, pciutils
+, pkg-config
+, gtk2
+, ddccontrol-db
 }:
 
-let version = "0.4.4"; in
 stdenv.mkDerivation rec {
   pname = "ddccontrol";
-  inherit version;
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
-    rev = "0.4.4";
-    sha256 = "09npy6z2j3jrvpvlr46vih31y2mbrh7wsqlbrjprxjv1j0kkz5q2";
+    rev = "0.5.2";
+    sha256 = "sha256-kul0sjbwbCwadvrccG3KwL/fKWACFUg74QGvgfWE4FQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+  nativeBuildInputs = [
+    autoreconfHook
+    intltool
+    pkg-config
+  ];
 
   buildInputs = [
     libxml2
@@ -24,7 +34,9 @@ stdenv.mkDerivation rec {
     ddccontrol-db
   ];
 
-  hardeningDisable = [ "format" "bindnow" ];
+  configureFlags = [
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  ];
 
   prePatch = ''
     oldPath="\$""{datadir}/ddccontrol-db"
@@ -37,29 +49,11 @@ stdenv.mkDerivation rec {
     intltoolize --force
   '';
 
-  postInstall = ''
-    mkdir -p $out/share/applications/
-    cp $desktopItem/share/applications/* $out/share/applications/
-    for entry in $out/share/applications/*.desktop; do
-      substituteAllInPlace $entry
-    done
-  '';
-
-  desktopItem = makeDesktopItem {
-    name = "gddccontrol";
-    desktopName = "gddccontrol";
-    genericName = "DDC/CI control";
-    comment = meta.description;
-    exec = "@out@/bin/gddccontrol";
-    icon = "gddccontrol";
-    categories = "Settings;HardwareSettings;";
-  };
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program used to control monitor parameters by software";
     homepage = "https://github.com/ddccontrol/ddccontrol";
-    license = licenses.gpl2;
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.pakhfn ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ pakhfn ];
   };
 }

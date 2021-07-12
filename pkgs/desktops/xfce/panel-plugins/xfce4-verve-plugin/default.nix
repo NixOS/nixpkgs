@@ -1,18 +1,25 @@
-{ lib, mkXfceDerivation, gtk3, libxfce4ui, pcre, libxfce4util, xfce4-panel, xfconf }:
+{ lib
+, mkXfceDerivation
+, gtk3
+, libxfce4ui
+, pcre
+, libxfce4util
+, xfce4-panel
+}:
 
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-verve-plugin";
-  version = "2.0.0";
+  version = "2.0.1";
   rev-prefix = "";
-  sha256 = "09vpa6m0ah7pgmra094c16vb79xrcwva808g6zpawwrhcwz85lcz";
+  sha256 = "sha256-YwUOSTZMoHsWWmi/ajQv/fX8a0IJoc3re3laVEmnX/M=";
 
   buildInputs = [ gtk3 libxfce4ui pcre libxfce4util xfce4-panel ];
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "A command-line plugin";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

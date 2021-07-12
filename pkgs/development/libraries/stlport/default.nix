@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "STLport-5.2.1";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An implementation of the C++ Standard Library";
     homepage = "https://sourceforge.net/projects/stlport/";
-    license = stdenv.lib.licenses.free; # seems BSD-like
+    license = lib.licenses.free; # seems BSD-like
     broken = true; # probably glibc-2.20 -related issue
   };
 }

@@ -39,10 +39,13 @@ mkdir -p $out
 for PREP in $prepend; do
   cat $PREP >> $out/initrd
 done
-(cd root && find * -print0 | xargs -0r touch -h -d '@1')
-(cd root && find * -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null | $compressor >> $out/initrd)
+(cd root && find * .[^.*] -exec touch -h -d '@1' '{}' +)
+(cd root && find * .[^.*] -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
 
 if [ -n "$makeUInitrd" ]; then
-    mv $out/initrd $out/initrd.gz
-    mkimage -A arm -O linux -T ramdisk -C gzip -d $out/initrd.gz $out/initrd
+    mkimage -A $uInitrdArch -O linux -T ramdisk -C "$uInitrdCompression" -d $out/initrd"$extension" $out/initrd.img
+    # Compatibility symlink
+    ln -s "initrd.img" "$out/initrd"
+else
+    ln -s "initrd" "$out/initrd$extension"
 fi

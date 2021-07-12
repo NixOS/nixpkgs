@@ -3,24 +3,24 @@
 , fetchFromGitHub
 , bluez-tools
 , cinnamon
-, gnome3
+, gnome
 , gobject-introspection
 , intltool
 , pavucontrol
 , python3Packages
-, utillinux
+, util-linux
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "blueberry";
-  version = "1.3.9";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "0llvz1h2dmvhvwkkvl0q4ggi1nmdbllw34ppnravs5lybqkicyw9";
+    sha256 = "sha256-dz0uGesyuQVXI7aEONCeOsa2vVw5yuStSFPnrqv2VcM=";
   };
 
   nativeBuildInputs = [
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bluez-tools
     cinnamon.xapps
-    gnome3.gnome-bluetooth
+    gnome.gnome-bluetooth
     python3Packages.python
-    utillinux
+    util-linux
   ];
 
   pythonPath = with python3Packages; [
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
       --replace /usr/lib/blueberry $out/lib/blueberry \
       --replace /usr/share $out/share
     substituteInPlace $out/lib/blueberry/rfkillMagic.py \
-      --replace /usr/bin/rfkill ${utillinux}/bin/rfkill \
-      --replace /usr/sbin/rfkill ${utillinux}/bin/rfkill \
+      --replace /usr/bin/rfkill ${util-linux}/bin/rfkill \
+      --replace /usr/sbin/rfkill ${util-linux}/bin/rfkill \
       --replace /usr/lib/blueberry $out/lib/blueberry
     substituteInPlace $out/share/applications/blueberry.desktop \
       --replace Exec=blueberry Exec=$out/bin/blueberry

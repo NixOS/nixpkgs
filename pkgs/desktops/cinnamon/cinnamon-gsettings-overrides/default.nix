@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , runCommand
 , nixos-artwork
 , glib
@@ -15,6 +15,7 @@
 , cinnamon-session
 , cinnamon-settings-daemon
 , cinnamon-common
+, bulky
 }:
 
 let
@@ -24,6 +25,7 @@ let
     mint-artwork
 
     # on
+    bulky
     muffin
     nemo
     xapps
@@ -36,7 +38,7 @@ let
 
 in
 
-with stdenv.lib;
+with lib;
 
 # TODO: Having https://github.com/NixOS/nixpkgs/issues/54150 would supersede this
 runCommand "cinnamon-gsettings-overrides" {}

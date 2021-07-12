@@ -7,18 +7,18 @@
 , azure-core
 , cryptography
 , msrest
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
-  version = "12.2.0";
+  version = "12.5.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b649ed8afd67c10c9833f349a7c579d771a6425ad6b88027130a6b8cfa433ffb";
+    sha256 = "ed82e9bf8d25d62e50996604fce701cec6a39ec0ceba6efbf8790f7f8b7746a8";
   };
 
   propagatedBuildInputs = [

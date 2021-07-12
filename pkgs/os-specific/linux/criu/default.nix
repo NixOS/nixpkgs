@@ -1,24 +1,25 @@
 { stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
-, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
-, which, python, makeWrapper, docbook_xml_dtd_45 }:
+, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config
+, which, python3, makeWrapper, docbook_xml_dtd_45, perl }:
 
 stdenv.mkDerivation rec {
   pname = "criu";
-  version = "3.14";
+  version = "3.15";
 
   src = fetchurl {
     url    = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
-    sha256 = "1jrr3v99g18gc0hriz0avq6ccdvyya0j6wwz888sdsc4icc30gzn";
+    sha256 = "09d0j24x0cyc7wkgi7cnxqgfjk7kbdlm79zxpj8d356sa3rw2z24";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig docbook_xsl which makeWrapper docbook_xml_dtd_45 ];
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python iptables ];
+  nativeBuildInputs = [ pkg-config docbook_xsl which makeWrapper docbook_xml_dtd_45 python3 python3.pkgs.wrapPython perl ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet iptables ];
+  propagatedBuildInputs = with python3.pkgs; [ python python3.pkgs.protobuf ];
 
   postPatch = ''
-    substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
-    substituteInPlace ./Documentation/Makefile --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    substituteInPlace ./criu/Makefile --replace "-I/usr/include/libnl3" "-I${libnl.dev}/include/libnl3"
+    substituteInPlace ./Documentation/Makefile \
+      --replace "2>/dev/null" "" \
+      --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
     substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${version}.0"
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
@@ -39,13 +40,14 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/criu \
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
+    wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace checkpoint/restore for Linux";
     homepage    = "https://criu.org";
     license     = licenses.gpl2;
-    platforms   = [ "x86_64-linux" ];
+    platforms   = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = [ maintainers.thoughtpolice ];
   };
 }

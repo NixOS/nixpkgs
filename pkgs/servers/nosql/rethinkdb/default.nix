@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, m4
+{ lib, stdenv, fetchurl, which, m4
 , protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
 , python2Packages, makeWrapper
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "5f1786c94797a0f8973597796e22545849dc214805cf1962ef76969e0b7d495b";
   };
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' external/v8_3.30.33.16/build/gyp/pylib/gyp/xcode_emulation.py
 
     # very meta
@@ -24,18 +24,18 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
+  configureFlags = lib.optionals (!stdenv.isDarwin) [
     "--with-jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
 
   makeFlags = [ "rethinkdb" ];
 
-  buildInputs = [ protobuf boost zlib curl openssl icu makeWrapper ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) jemalloc
-    ++ stdenv.lib.optional stdenv.isDarwin libtool;
+  buildInputs = [ protobuf boost zlib curl openssl icu ]
+    ++ lib.optional (!stdenv.isDarwin) jemalloc
+    ++ lib.optional stdenv.isDarwin libtool;
 
-  nativeBuildInputs = [ which m4 python2Packages.python ];
+  nativeBuildInputs = [ which m4 python2Packages.python makeWrapper ];
 
   enableParallelBuilding = true;
 
@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
       joins and group by, and is easy to setup and learn.
     '';
     homepage    = "http://www.rethinkdb.com";
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice bluescreen303 ];
+    license     = lib.licenses.asl20;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thoughtpolice bluescreen303 ];
   };
 }

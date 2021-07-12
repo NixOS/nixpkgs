@@ -3,13 +3,15 @@
 
 buildDunePackage rec {
   pname = "mirage-runtime";
-  version = "3.9.0";
+  version = "3.10.3";
+
+  useDune2 = true;
 
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage/releases/download/v${version}/mirage-v${version}.tbz";
-    sha256 = "1hznh49v1jlkwww6xi9f2f4yjzlh9qfvdrrdzvddnwsh3g00flla";
+    sha256 = "7c8059ef9e330eaef1ed51c0d89afe17900310f8083a426cd8099602222c2281";
   };
 
   propagatedBuildInputs = [ ipaddr functoria-runtime fmt logs ocaml_lwt ];

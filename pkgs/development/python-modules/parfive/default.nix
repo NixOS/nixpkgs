@@ -4,7 +4,7 @@
 , tqdm
 , aiohttp
 , pytest
-, setuptools_scm
+, setuptools-scm
 , pytest-localserver
 , pytest-socket
 , pytest-asyncio
@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "parfive";
-  version = "1.1.1";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5793fdf9859a9a9fc93f033db9dc067a89626910355a14bbe425feb3956df6db";
+    sha256 = "c3067e6ca9d6fb88a10958338360bd9c47edfd8ab11098d4c601f7f2887edadd";
   };
 
   buildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

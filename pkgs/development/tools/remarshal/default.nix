@@ -1,4 +1,4 @@
-{ stdenv, python3Packages }:
+{ lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "remarshal";
@@ -10,10 +10,10 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    pyyaml cbor2 dateutil tomlkit u-msgpack-python
+    pyyaml cbor2 python-dateutil tomlkit u-msgpack-python
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert between TOML, YAML and JSON";
     license = licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";

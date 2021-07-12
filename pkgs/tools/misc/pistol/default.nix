@@ -1,21 +1,23 @@
-{ stdenv
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , file
+, installShellFiles
+, asciidoctor
 }:
 
 buildGoModule rec {
   pname = "pistol";
-  version = "0.1.4";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "doronbehar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1x9wb0gj5l71xz15ia0i2hrnhcpf457i21w41jzw2ink2fbdxp3b";
+    sha256 = "sha256-NUHk48P3kUx+e9BR9k9K/VaHnbZ6Do6RRf1S0974sO8=";
   };
 
-  vendorSha256 = "0dg4f9g6895nv3c6d74ijl6hzsyn620ndspbcq7ynvb1z0hsg6iz";
+  vendorSha256 = "sha256-n98cjXsgg2w3shbZPnk3g7mBbzV5Tc3jd9ZtiRk1KUM=";
 
   doCheck = false;
 
@@ -24,10 +26,18 @@ buildGoModule rec {
   buildInputs = [
     file
   ];
+  nativeBuildInputs = [
+    installShellFiles
+    asciidoctor
+  ];
+  postBuild = ''
+    asciidoctor -b manpage -d manpage README.adoc
+    installManPage pistol.1
+  '';
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "General purpose file previewer designed for Ranger, Lf to make scope.sh redundant";
     homepage = "https://github.com/doronbehar/pistol";
     license = licenses.mit;

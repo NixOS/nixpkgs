@@ -11,8 +11,7 @@ with haskellLib;
 
 self: super: {
 
-  # This compiler version needs llvm 6.x.
-  llvmPackages = pkgs.llvmPackages_6;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_10;
 
   # Disable GHC 8.7.x core libraries.
   array = null;

@@ -90,10 +90,10 @@ in
 
     package = mkOption {
       type = types.package;
-      default = pkgs.oauth2_proxy;
-      defaultText = "pkgs.oauth2_proxy";
+      default = pkgs.oauth2-proxy;
+      defaultText = "pkgs.oauth2-proxy";
       description = ''
-        The package that provides oauth2_proxy.
+        The package that provides oauth2-proxy.
       '';
     };
 
@@ -448,7 +448,7 @@ in
       default = false;
       description = ''
         In case when running behind a reverse proxy, controls whether headers
-	like <literal>X-Real-Ip</literal> are accepted. Usage behind a reverse
+        like <literal>X-Real-Ip</literal> are accepted. Usage behind a reverse
         proxy will require this flag to be set to avoid logging the reverse
         proxy IP address.
       '';
@@ -524,7 +524,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-      	Profile access endpoint.
+        Profile access endpoint.
       '';
     };
 
@@ -538,6 +538,7 @@ in
 
     extraConfig = mkOption {
       default = {};
+      type = types.attrsOf types.anything;
       description = ''
         Extra config to pass to oauth2-proxy.
       '';

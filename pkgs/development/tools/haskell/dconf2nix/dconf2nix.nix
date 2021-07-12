@@ -1,13 +1,13 @@
-{ mkDerivation, base, containers, fetchgit, hedgehog
-, optparse-applicative, parsec, stdenv, template-haskell, text
+{ mkDerivation, base, containers, fetchgit, hedgehog, lib
+, optparse-applicative, parsec, template-haskell, text
 }:
 mkDerivation {
   pname = "dconf2nix";
-  version = "0.0.6";
+  version = "0.0.8";
   src = fetchgit {
     url = "https://github.com/gvolpe/dconf2nix.git";
-    sha256 = "0ql3xrr05kg1xrfxq86mhzh5ky33sngx57sahzck3rb8fv2g6amv";
-    rev = "cf976e033c1a89f897924baa219c3b227fe68489";
+    sha256 = "19jk3p0ys3lbqk21lm37a7alkg2vhnmkvcffjqfxrw8p4737hxid";
+    rev = "6bf3d7d4ca9f553a9e1ba4a70a65640114d230b2";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -20,5 +20,5 @@ mkDerivation {
     base containers hedgehog parsec template-haskell text
   ];
   description = "Convert dconf files to Nix, as expected by Home Manager";
-  license = stdenv.lib.licenses.asl20;
+  license = lib.licenses.asl20;
 }

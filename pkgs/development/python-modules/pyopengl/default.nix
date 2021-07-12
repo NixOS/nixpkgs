@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   # Should run test suite from $out/${python.sitePackages}
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pyopengl.sourceforge.net/";
     description = "PyOpenGL, the Python OpenGL bindings";
     longDescription = ''

@@ -61,6 +61,12 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to open the firewall for the specified RDP port.";
+      };
+
       sslKey = mkOption {
         type = types.str;
         default = "/etc/xrdp/key.pem";
@@ -98,6 +104,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     # xrdp can run X11 program even if "services.xserver.enable = false"
     xdg = {

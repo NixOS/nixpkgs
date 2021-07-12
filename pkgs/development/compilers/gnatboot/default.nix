@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   pname = "gentoo-gnatboot";
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     langAda = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gentoo.org";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.lucus16 ];

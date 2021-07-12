@@ -5,7 +5,7 @@ with haskellLib;
 self: super: {
 
   # This compiler version needs llvm 7.x.
-  llvmPackages = pkgs.llvmPackages_7;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_7;
 
   # Disable GHC 8.8.x core libraries.
   array = null;
@@ -52,9 +52,15 @@ self: super: {
   haddock = self.haddock_2_23_1;
   haddock-api = self.haddock-api_2_23_1;
 
-  # These builds need Cabal 3.2.x.
+  # This build needs a newer version of Cabal.
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+
+  # cabal-install needs more recent versions of Cabal and random, but an older
+  # version of base16-bytestring.
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_4_0_0;
+    base16-bytestring = self.base16-bytestring_0_1_1_7;
+  });
 
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
@@ -69,7 +75,6 @@ self: super: {
   integer-logarithms = doJailbreak super.integer-logarithms;
   lucid = doJailbreak super.lucid;
   parallel = doJailbreak super.parallel;
-  quickcheck-instances = doJailbreak super.quickcheck-instances;
   setlocale = doJailbreak super.setlocale;
   split = doJailbreak super.split;
   system-fileio = doJailbreak super.system-fileio;
@@ -82,8 +87,8 @@ self: super: {
   snap-server = doJailbreak super.snap-server;
   exact-pi = doJailbreak super.exact-pi;
   time-compat = doJailbreak super.time-compat;
-  http-media = doJailbreak super.http-media;
-  servant-server = doJailbreak super.servant-server;
+  http-media = unmarkBroken (doJailbreak super.http-media);
+  servant-server = unmarkBroken (doJailbreak super.servant-server);
   foundation = dontCheck super.foundation;
   vault = dontHaddock super.vault;
 
@@ -96,17 +101,9 @@ self: super: {
   # https://github.com/kowainik/relude/issues/241
   relude = dontCheck super.relude;
 
-  # The tests for semver-range need to be updated for the MonadFail change in
-  # ghc-8.8:
-  # https://github.com/adnelson/semver-range/issues/15
-  semver-range = dontCheck super.semver-range;
-
   # The current version 2.14.2 does not compile with ghc-8.8.x or newer because
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
-
-  # Only 0.7 is compatible with ghc 8.7 https://hackage.haskell.org/package/apply-refact/changelog
-  apply-refact = super.apply-refact_0_7_0_0;
 
   # The package needs the latest Cabal version.
   cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
@@ -126,4 +123,20 @@ self: super: {
   liquid-vector = markBroken super.liquid-vector;
   liquidhaskell = markBroken super.liquidhaskell;
 
+  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
+  exceptions = super.exceptions_0_10_4;
+
+  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+
+  # Older compilers need the latest ghc-lib to build this package.
+  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
+
+  # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
+  vector = dontCheck super.vector;
+
+  # hackage-db 2.1.1 is incompatible with Cabal < 3.4
+  # See https://github.com/NixOS/cabal2nix/issues/501
+  hackage-db = super.hackage-db_2_1_0;
 }

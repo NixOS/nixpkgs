@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, fetchsvn,
   jansson, libedit, libxml2, libxslt, ncurses, openssl, sqlite,
-  utillinux, dmidecode, libuuid, newt,
+  util-linux, dmidecode, libuuid, newt,
   lua, speex,
-  srtp, wget, curl, iksemel, pkgconfig
+  srtp, wget, curl, iksemel, pkg-config
 }:
 
 let
@@ -14,7 +14,7 @@ let
                     dmidecode libuuid newt
                     lua speex
                     srtp wget curl iksemel ];
-    nativeBuildInputs = [ utillinux pkgconfig ];
+    nativeBuildInputs = [ util-linux pkg-config ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton
@@ -71,10 +71,10 @@ let
       ${lib.optionalString (lib.versionAtLeast version "17.0.0") "make install-headers"}
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Software implementation of a telephone private branch exchange (PBX)";
       homepage = "https://www.asterisk.org/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
     };
   };
@@ -98,15 +98,15 @@ in rec {
   # Series  Type       Rel. Date   Sec. Fixes  EOL
   # 13.x    LTS        2014-10-24  2020-10-24  2021-10-24
   # 16.x    LTS        2018-10-09  2022-10-09  2023-10-09
+  # 17.x    Standard   2019-10-28  2020-10-28  2021-10-28
   # 18.x    LTS        2020-10-20  2024-10-20  2025-10-20
   asterisk-lts = asterisk_18;
-  # 17.x    Standard   2019-10-28  2020-10-28  2021-10-28
   asterisk-stable = asterisk_18;
   asterisk = asterisk_18;
 
   asterisk_13 = common {
-    version = "13.37.1";
-    sha256 = "1zc3104zw4y7i8bhhgrgy3snq0zr1904p64ykfc3ldh4xyfy3ld6";
+    version = "13.38.2";
+    sha256 = "1v7wgsa9vf7qycg3xpvmn2bkandkfh3x15pr8ylg0w0gvfkkf5b9";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -114,8 +114,8 @@ in rec {
   };
 
   asterisk_16 = common {
-    version = "16.14.1";
-    sha256 = "1lhh3npyy8hvy29jwjgapnxfjv1ahp2qdi4iq1d6a61ffhd20vfs";
+    version = "16.17.0";
+    sha256 = "1bzlsk9k735qf8a693b6sa548my7m9ahavmdicwmc14px70wrvnw";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -123,8 +123,8 @@ in rec {
   };
 
   asterisk_17 = common {
-    version = "17.8.1";
-    sha256 = "0m7gw01kpvsc0f9lb1hiq5b4g1fdh4gdfyxlqxp6m37vgxh2a48p";
+    version = "17.9.3";
+    sha256 = "0nhk0izrxx24pz806fwnhidjmciwrkcrsvxvhrdvibiqyvfk8yk7";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -132,8 +132,8 @@ in rec {
   };
 
   asterisk_18 = common {
-    version = "18.0.1";
-    sha256 = "1kyly10pk7bpfqg3mjbvb8p795fnj9lvd29yp2xsxwgsqi1dn9p8";
+    version = "18.3.0";
+    sha256 = "1xb953i9ay82vcdv8izi5dd5xnspcsvg10ajiyph377jw2xnd5fb";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;

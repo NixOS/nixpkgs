@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommandNoCC, makeDesktopItem
-, xonotic-data
+, xonotic-data, copyDesktopItems
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl
 , # glx
-  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsaLib
+  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsa-lib
 , # sdl
   SDL2
 
@@ -38,14 +38,14 @@ let
       aims to become the best possible open-source FPS of its kind.
     '';
     homepage = "https://www.xonotic.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl zalakain petabyteboy ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ astsmtl zalakain petabyteboy ];
+    platforms = lib.platforms.linux;
   };
 
   desktopItem = makeDesktopItem {
     name = "xonotic";
-    exec = "$out/bin/xonotic";
+    exec = "xonotic";
     comment = meta.description;
     desktopName = "Xonotic";
     categories = "Game;Shooter;";
@@ -58,12 +58,13 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://dl.xonotic.org/${name}-source.zip";
+      url = "https://dl.xonotic.org/xonotic-${version}-source.zip";
       sha256 = "0axxw04fyz6jlfqd0kp7hdrqa0li31sx1pbipf2j5qp9wvqicsay";
     };
 
-    buildInputs = [ unzip libjpeg zlib libvorbis curl ]
-      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsaLib.dev ]
+    nativeBuildInputs = [ unzip ];
+    buildInputs = [ libjpeg zlib libvorbis curl ]
+      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
       ++ lib.optional withSDL [ SDL2.dev ];
 
     sourceRoot = "Xonotic/source/darkplaces";
@@ -118,8 +119,8 @@ let
 
 in rec {
   xonotic-data = fetchzip {
-    name = "xonotic-data-${version}";
-    url = "https://dl.xonotic.org/${name}.zip";
+    name = "xonotic-data";
+    url = "https://dl.xonotic.org/xonotic-${version}.zip";
     sha256 = "1ygkh0v68y4sd1w5vpk8dgb65h5jm599hwszdfgjp3ax4d3ml81x";
     extraPostFetch = ''
       cd $out
@@ -131,7 +132,8 @@ in rec {
 
   xonotic = runCommandNoCC "xonotic${variant}-${version}" {
     inherit xonotic-unwrapped;
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+    desktopItems = [ desktopItem ];
     passthru = {
       inherit version;
       meta = meta // {
@@ -151,7 +153,7 @@ in rec {
   '' + lib.optionalString (withSDL || withGLX) ''
     mkdir -p $out/share
     ln -s ${xonotic-unwrapped}/share/icons $out/share/icons
-    ${desktopItem.buildCommand}
+    copyDesktopItems
   '' + ''
     for binary in $out/bin/xonotic-*; do
       wrapProgram $binary --add-flags "-basedir ${xonotic-data}"

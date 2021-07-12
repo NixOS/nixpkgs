@@ -4,24 +4,26 @@
 , msrest
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerinstance";
-  version = "2.0.0";
+  version = "7.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "5ad247d186c3c040da7a1d40ad39c9881e99afc58271f673abb602abb0b6b85b";
+    sha256 = "9f624df0664ba80ba886bc96ffe5e468c620eb5b681bc3bc2a28ce26042fd465";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
+    azure-mgmt-core
   ] ++ lib.optionals (!isPy3k) [
     azure-mgmt-nspkg
   ];
@@ -33,6 +35,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Container Instance Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

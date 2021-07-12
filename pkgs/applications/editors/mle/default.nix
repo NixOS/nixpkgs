@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, termbox, pcre, uthash, lua5_3 }:
+{ lib, stdenv, fetchFromGitHub, termbox, pcre, uthash, lua5_3 }:
 
 stdenv.mkDerivation rec {
   pname = "mle";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small, flexible terminal-based text editor";
     homepage = "https://github.com/adsr/mle";
     license = licenses.asl20;

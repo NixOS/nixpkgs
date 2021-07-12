@@ -1,10 +1,10 @@
-{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA
+{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
 , tiles ? true, Cocoa
 , debug ? false
 , useXdgDir ? false
-, version ? "2019-11-22"
-, rev ? "a6c8ece992bffeae3788425dd4b3b5871e66a9cd"
-, sha256 ? "0ww2q5gykxm802z1kffmnrfahjlx123j1gfszklpsv0b1fccm1ab"
+, version ? "2021-07-03"
+, rev ? "9017808252e1e149446c8f8bd7a6582ce0f95285"
+, sha256 ? "0qrvkbyg098jb9hv69sg5093b1vj8f4n75p73v01jnmyxlz3ax28"
 }:
 
 let
@@ -26,11 +26,6 @@ let
       "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
     ];
 
-    passthru = common.passthru // {
-      pkgs = pkgs.override { build = self; };
-      withMods = wrapCDDA self;
-    };
-
     meta = common.meta // {
       maintainers = with lib.maintainers;
       common.meta.maintainers ++ [ rardiol ];
@@ -38,4 +33,4 @@ let
   });
 in
 
-self
+attachPkgs pkgs self

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python3, udev, systemd }:
+{ lib, stdenv, fetchurl, pkg-config, python3, udev, systemd }:
 
 let
   name = "media-player-info-24";
@@ -13,7 +13,7 @@ in
     };
 
     buildInputs = [ udev systemd ];
-    nativeBuildInputs = [ pkgconfig python3 ];
+    nativeBuildInputs = [ pkg-config python3 ];
 
     postPatch = ''
       patchShebangs ./tools
@@ -21,7 +21,7 @@ in
 
     configureFlags = [ "--with-udevdir=${placeholder "out"}/lib/udev" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A repository of data files describing media player capabilities";
       homepage = "https://www.freedesktop.org/wiki/Software/media-player-info/";
       license = licenses.bsd3;

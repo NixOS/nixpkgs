@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchPypi
 , buildPythonPackage
 , flask

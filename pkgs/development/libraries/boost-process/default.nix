@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "boost-process-0.5";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1v9y9pffb2b7p642kp9ic4z6kg42ziizmyvbgrqd1ci0i4gn0831";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
     mkdir $name
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cp -r boost $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.highscore.de/boost/process0.5/";
     description = "Library to manage system processes";
     license = licenses.boost;

@@ -1,15 +1,17 @@
-{lib, fetchPypi, buildPythonPackage, numpy, pyparsing}:
+{lib, fetchPypi, buildPythonPackage, numpy, pyparsing, pytestcov, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "periodictable";
-  version = "1.5.2";
+  version = "1.6.0";
 
   propagatedBuildInputs = [numpy pyparsing];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lx03xirh3hcrzkwrz91dmdzcj01bykq59hccd83ai901jzqmshz";
+    sha256 = "52e925220005c20e97601e7b04ad6cebc271680947ab9adcbb1a796ddbaa0f23";
   };
+
+  checkInputs = [ pytestcov pytestCheckHook ];
 
   meta = {
     homepage = "https://www.reflectometry.org/danse/software.html";

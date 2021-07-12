@@ -27,6 +27,7 @@ rec {
     xineramaSupport = true;
     xmlSupport = true;
     sdlSupport = true;
+    mingwSupport = true;
   };
 
   full = base.override {

@@ -1,12 +1,16 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools-scm
 , idna
 , sniffio
 , typing-extensions
 , curio
 , hypothesis
+, mock
+, pytest-mock
 , pytestCheckHook
 , trio
 , trustme
@@ -15,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "2.0.2";
+  version = "3.2.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -23,8 +27,16 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    sha256 = "06nazfrm2sclp3lpgsn9wl8vmqxvx36s3gr2gnqz3zhjpf3glkxv";
+    sha256 = "0fiqzsgr9c0yicsh1pwhyc6z4qyr2ng42dakyy4a81w9cff38had";
   };
+
+  preBuild = ''
+    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
+  '';
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     idna
@@ -36,15 +48,21 @@ buildPythonPackage rec {
   checkInputs = [
     curio
     hypothesis
+    pytest-mock
     pytestCheckHook
     trio
     trustme
     uvloop
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    mock
   ];
 
-  pytestFlagsArray = [
-    # lots of DNS lookups
-    "--ignore=tests/test_sockets.py"
+  disabledTestPaths = [
+     # lots of DNS lookups
+    "tests/test_sockets.py"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # darwin sandboxing limitations
+    "tests/streams/test_tls.py"
   ];
 
   pythonImportsCheck = [ "anyio" ];

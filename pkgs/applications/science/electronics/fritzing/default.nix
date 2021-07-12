@@ -1,86 +1,75 @@
-{ mkDerivation, stdenv, fetchpatch, fetchFromGitHub, qmake, pkgconfig
-, qtbase, qtsvg, qttools, qtserialport, boost, libgit2
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, qmake
+, pkg-config
+, qtbase
+, qtsvg
+, qttools
+, qtserialport
+, boost
+, libgit2
 }:
 
 let
   # build number corresponding to a release, has no further relation
   # see https://github.com/fritzing/fritzing-app/releases/tag/CD-498
-  fritzingBuild = "498";
+  # fritzingBuild = "498";
+  # version 0.9.6 is properly tagged, hope it continues
+
   # SHA256 of the fritzing-parts HEAD on the master branch,
   # which contains the latest stable parts definitions
-  partsSha = "e79a69765026f3fda8aab1b3e7a4952c28047a62";
+  partsSha = "6f04697be286768bc9e4d64f8707e8e40cbcafcb";
 in
 
 mkDerivation rec {
   pname = "fritzing";
-  version = "0.9.4-${fritzingBuild}";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
-    owner = "fritzing";
+    owner = pname;
     repo = "fritzing-app";
-    rev = "CD-${fritzingBuild}";
-    sha256 = "0aljj2wbmm1vd64nhj6lh9qy856pd5avlgydsznya2vylyz20p34";
+    rev = version;
+    sha256 = "083nz7vj7a334575smjry6257535h68gglh8a381xxa36dw96aqs";
   };
 
   parts = fetchFromGitHub {
-    owner = "fritzing";
+    owner = pname;
     repo = "fritzing-parts";
     name = "fritzing-parts";
     rev = partsSha;
-    sha256 = "0spka33a5qq34aq79j01arw1aly4vh0hzv7mahryhdlcdk22qqvc";
+    sha256 = "1f4w0hz44n4iw1rc5vhcgzvlji54rf4yr8bvzkqv99hn2xf5pjgs";
   };
 
   buildInputs = [ qtbase qtsvg qtserialport boost libgit2 ];
-
-  nativeBuildInputs = [ qmake pkgconfig qttools ];
-
-  patches = [(fetchpatch {
-    name = "fix-libgit2-version.patch";
-    url = "https://github.com/fritzing/fritzing-app/commit/472951243d70eeb40a53b1f7e16e6eab0588d079.patch";
-    sha256 = "0v1zi609cjnqac80xgnk23n54z08g1lia37hbzfl8jcq9sn9adak";
-  })];
+  nativeBuildInputs = [ qmake pkg-config qttools ];
 
   postPatch = ''
     substituteInPlace phoenix.pro \
       --replace 'LIBGIT_STATIC = true' 'LIBGIT_STATIC = false'
 
-    substituteInPlace tools/linux_release_script/release.sh \
-      --replace 'git status' 'echo >/dev/null' \
-      --replace 'git clean' 'echo >/dev/null' \
-      --replace 'git clone' 'echo >/dev/null' \
-      --replace 'release_folder="' 'release_folder="$out" #' \
-      --replace './Fritzing -db' '# run after fixup'
-
     substituteInPlace src/fapplication.cpp \
       --replace 'PartsChecker::getSha(dir.absolutePath());' '"${partsSha}";'
-  '';
 
-  buildPhase = ''
-    bash tools/linux_release_script/release.sh ${version}
-  '';
-
-  installPhase = ''
-    rm "$out/Fritzing" # remove script file
-    mkdir "$out/bin"
-    mv "$out/lib/Fritzing" "$out/bin/Fritzing"
-    mkdir --parents "$out/share/applications" "$out/share/metainfo"
-    mv --target-directory="$out/share/applications" "$out/org.fritzing.Fritzing.desktop"
-    mv --target-directory="$out/share/metainfo" "$out/org.fritzing.Fritzing.appdata.xml"
-    cp --recursive --no-target-directory "$parts" "$out/fritzing-parts"
+    mkdir parts
+    cp -a ${parts}/* parts/
   '';
 
   postFixup = ''
     # generate the parts.db file
-    QT_QPA_PLATFORM=offscreen "$out/bin/Fritzing" -db "$out/fritzing-parts/parts.db" -pp "$out/fritzing-parts" -folder "$out"
+    QT_QPA_PLATFORM=offscreen "$out/bin/Fritzing" \
+      -db "$out/share/fritzing/parts/parts.db" \
+      -pp "$out/fritzing/parts" \
+      -folder "$out/share/fritzing"
   '';
 
   qmakeFlags = [ "phoenix.pro" ];
 
-  meta = {
+  meta = with lib; {
     description = "An open source prototyping tool for Arduino-based projects";
     homepage = "https://fritzing.org/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.robberer ];
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ gpl3 cc-by-sa-30 ];
+    maintainers = with maintainers; [ robberer ];
+    platforms = platforms.linux;
   };
 }

@@ -6,6 +6,8 @@ buildDunePackage rec {
   pname = "irmin-watcher";
   version = "0.4.1";
 
+  useDune2 = true;
+
   src = fetchurl {
     url = "https://github.com/mirage/irmin-watcher/releases/download/${version}/irmin-watcher-${version}.tbz";
     sha256 = "00d4ph4jbsw6adp3zqdrwi099hfcf7p1xzi0685qr7bgcmandjfv";

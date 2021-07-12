@@ -1,34 +1,56 @@
-{ stdenv, fetchFromGitHub, pkgconfig, wrapGAppsHook
-, help2man, luafilesystem, luajit, sqlite
-, webkitgtk, gtk3, gst_all_1, glib-networking
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook
+, help2man
+, glib-networking
+, gst_all_1
+, gtk3
+, luafilesystem
+, luajit
+, sqlite
+, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
   pname = "luakit";
-  version = "2.2.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "luakit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-78B8vXkWsFMJIHA72Qrk2SWubrY6YuArqcM0UAPjpzc=";
+    hash = "sha256-5YeJkbWk1wHxWXqWOvhEDeScWPU/aRVhuOWRHLSHVZM=";
   };
 
   nativeBuildInputs = [
-    pkgconfig help2man wrapGAppsHook
+    pkg-config
+    help2man
+    wrapGAppsHook
   ];
-
   buildInputs = [
-    webkitgtk luafilesystem luajit sqlite gtk3
+    gtk3
     glib-networking # TLS support
-  ] ++ ( with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good
-                           gst-plugins-bad gst-plugins-ugly gst-libav ]);
+    luafilesystem
+    luajit
+    sqlite
+    webkitgtk
+  ] ++ ( with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
+
+  # build-utils/docgen/gen.lua:2: module 'lib.lousy.util' not found
+  # TODO: why is not this the default? The test runner adds
+  # ';./lib/?.lua;./lib/?/init.lua' to package.path, but the build-utils
+  # scripts don't add an equivalent
   preBuild = ''
-    # build-utils/docgen/gen.lua:2: module 'lib.lousy.util' not found
-    # TODO: why is not this the default? The test runner adds
-    # ';./lib/?.lua;./lib/?/init.lua' to package.path, but the build-utils
-    # scripts don't add an equivalent
     export LUA_PATH="$LUA_PATH;./?.lua;./?/init.lua"
   '';
 
@@ -51,7 +73,8 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://luakit.github.io/";
     description = "Fast, small, webkit-based browser framework extensible in Lua";
     longDescription = ''
       Luakit is a highly configurable browser framework based on the WebKit web
@@ -60,9 +83,8 @@ stdenv.mkDerivation rec {
       power users, developers and anyone who wants to have fine-grained control
       over their web browser’s behaviour and interface.
     '';
-    homepage    = "https://luakit.github.io/";
     license     = licenses.gpl3Only;
-    platforms   = platforms.unix;
     maintainers = [ maintainers.AndersonTorres ];
+    platforms   = platforms.unix;
   };
 }

@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "540789abc21872469e52c59ac3962c61259a8df557feadd6514eb23eb0a64ca7";
+    sha256 = "d45ace0a813ae65f202ce0356eb29c40a5e8fde071e4d6b5be0a89587ebaeab2";
   };
 
   disabled = pythonOlder "3.5";

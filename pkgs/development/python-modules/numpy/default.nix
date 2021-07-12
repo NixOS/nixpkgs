@@ -11,7 +11,8 @@
 , isPyPy
 , cython
 , setuptoolsBuildHook
- }:
+, pythonOlder
+}:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -39,17 +40,15 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.19.1";
+  version = "1.20.3";
   format = "pyproject.toml";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b8456987b637232602ceb4d663cb34106f7eb780e247d51a260b84760fd8f491";
+    sha256 = "e55185e51b18d788e49fe8305fd73ef4470596b33fc2c1ceb304566b99c71a69";
   };
-
-  nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
-  buildInputs = [ blas lapack ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -58,9 +57,16 @@ in buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
+  nativeBuildInputs = [ gfortran cython setuptoolsBuildHook ];
+  buildInputs = [ blas lapack ];
+
+  # we default openblas to build with 64 threads
+  # if a machine has more than 64 threads, it will segfault
+  # see https://github.com/xianyi/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
+    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
   preBuild = ''
@@ -69,9 +75,10 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
-
-  checkInputs = [ hypothesis ];
+  checkInputs = [
+    pytest
+    hypothesis
+  ];
 
   checkPhase = ''
     runHook preCheck
@@ -95,6 +102,7 @@ in buildPythonPackage rec {
   meta = {
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

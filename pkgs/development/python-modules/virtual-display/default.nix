@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "PyVirtualDisplay";
-  version = "1.3.2";
+  version = "2.2";
 
   propagatedBuildInputs = [ EasyProcess ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fa85a6e490e45eab64e6be19841e0ab15ec8054c97f162079a061da6a93eba0";
+    sha256 = "3ecda6b183b03ba65dcfdf0019809722480d7b7e10eea6e3a40bf1ba3146bab7";
   };
 
   # requires X server

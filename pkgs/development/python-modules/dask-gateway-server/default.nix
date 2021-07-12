@@ -12,12 +12,12 @@
 buildPythonPackage rec {
   pname = "dask-gateway-server";
   # update dask-gateway-server lock step with dask-gateway
-  version = "0.8.0";
+  version = "0.9.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "272134933b7e2068cd89a17a5012c76a29fbd9e40a78164345a2b15353d4b40a";
+    sha256 = "82bca8a98fc1dbda9f67c8eceac59cb92abe07db6227c120a1eb1d040ea40fda";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   preBuild = ''
     export HOME=$(mktemp -d)
+    export GO111MODULE=off
   '';
 
   # tests requires cluster for testing

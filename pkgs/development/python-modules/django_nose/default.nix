@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides all the goodness of nose in your Django tests";
     homepage = "https://github.com/django-nose/django-nose";
     license = licenses.bsd3;

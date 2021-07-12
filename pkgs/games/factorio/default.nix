@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem
-, alsaLib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
+, alsa-lib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , libSM, libICE, libXext, factorio-utils
 , releaseType
 , mods ? []
@@ -12,6 +12,8 @@ assert releaseType == "alpha"
     || releaseType == "demo";
 
 let
+
+  inherit (lib) importJSON;
 
   helpMsg = ''
 
@@ -40,7 +42,7 @@ let
 
       releaseType=alpha
       version=0.17.74
-      nix-prefetch-url file://$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
+      nix-prefetch-url file://\''$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
   '';
@@ -59,67 +61,54 @@ let
 
   # NB `experimental` directs us to take the latest build, regardless of its branch;
   # hence the (stable, experimental) pairs may sometimes refer to the same distributable.
-  binDists = {
-    x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
-      alpha = {
-        stable        = bdist { sha256 = "0zixscff0svpb0yg8nzczp2z4filqqxi1k0z0nrpzn2hhzhf1464"; version = "1.0.0"; withAuth = true; };
-        experimental  = bdist { sha256 = "0zixscff0svpb0yg8nzczp2z4filqqxi1k0z0nrpzn2hhzhf1464"; version = "1.0.0"; withAuth = true; };
-      };
-      headless = {
-        stable        = bdist { sha256 = "0r0lplns8nxna2viv8qyx9mp4cckdvx6k20w2g2fwnj3jjmf3nc1"; version = "1.0.0"; };
-        experimental  = bdist { sha256 = "0r0lplns8nxna2viv8qyx9mp4cckdvx6k20w2g2fwnj3jjmf3nc1"; version = "1.0.0"; };
-      };
-      demo = {
-        stable        = bdist { sha256 = "0h9cqbp143w47zcl4qg4skns4cngq0k40s5jwbk0wi5asjz8whqn"; version = "1.0.0"; };
-      };
-    };
-    i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
-      alpha = {
-        stable        = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; withAuth = true; nameMut = asGz; };
-      };
-    };
-  };
+  versions = importJSON ./versions.json;
+  binDists = makeBinDists versions;
 
   actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio ${releaseType}-${branch} binaries for ${stdenv.hostPlatform.system} are not available for download.");
 
-  bdistForArch = arch: { version
-                       , sha256
-                       , withAuth ? false
-                       , nameMut ? x: x
-                       }:
-    let
-      url = "https://factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
-      name = nameMut "factorio_${releaseType}_${arch.inTar}-${version}.tar.xz";
-    in {
-      inherit version arch;
-      src =
-        if withAuth then
-          (stdenv.lib.overrideDerivation
-            (fetchurl {
-              inherit name url sha256;
-              curlOpts = [
-                "--get"
-                "--data-urlencode" "username@username"
-                "--data-urlencode" "token@token"
-              ];
-            })
-            (_: { # This preHook hides the credentials from /proc
-                  preHook = ''
+  makeBinDists = versions:
+    let f = path: name: value:
+      if builtins.isAttrs value then
+        if value ? "name" then
+          makeBinDist value
+        else
+          builtins.mapAttrs (f (path ++ [ name ])) value
+      else
+        throw "expected attrset at ${toString path} - got ${toString value}";
+    in
+      builtins.mapAttrs (f []) versions;
+  makeBinDist = { name, version, tarDirectory, url, sha256, needsAuth }: {
+    inherit version tarDirectory;
+    src =
+      if !needsAuth then
+        fetchurl { inherit name url sha256; }
+      else
+        (lib.overrideDerivation
+          (fetchurl {
+            inherit name url sha256;
+            curlOpts = [
+              "--get"
+              "--data-urlencode" "username@username"
+              "--data-urlencode" "token@token"
+            ];
+          })
+          (_: { # This preHook hides the credentials from /proc
+                preHook =
+                  if username != "" && token != "" then ''
                     echo -n "${username}" >username
                     echo -n "${token}"    >token
+                  '' else ''
+                    # Deliberately failing since username/token was not provided, so we can't fetch.
+                    # We can't use builtins.throw since we want the result to be used if the tar is in the store already.
+                    exit 1
                   '';
-                  failureHook = ''
-                    cat <<EOF
-                    ${helpMsg}
-                    EOF
-                  '';
-            })
-          )
-        else
-          fetchurl { inherit name url sha256; };
-    };
-
-  asGz = builtins.replaceStrings [".xz"] [".gz"];
+                failureHook = ''
+                  cat <<EOF
+                  ${helpMsg}
+                  EOF
+                '';
+              }));
+  };
 
   configBaseCfg = ''
     use-system-read-write-data-directories=false
@@ -154,11 +143,15 @@ let
     installPhase = ''
       mkdir -p $out/{bin,share/factorio}
       cp -a data $out/share/factorio
-      cp -a bin/${arch.inTar}/factorio $out/bin/factorio
+      cp -a bin/${tarDirectory}/factorio $out/bin/factorio
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         $out/bin/factorio
     '';
+
+    passthru.updateScript = if (username != "" && token != "") then [
+      ./update.py "--username=${username}" "--token=${token}"
+    ] else null;
 
     meta = {
       description = "A game in which you build and maintain factories";
@@ -171,13 +164,13 @@ let
         ingenious structures, apply management skills to keep it working and
         finally protect it from the creatures who don't really like you.
 
-        Factorio has been in development since spring of 2012 and it is
-        currently in late alpha.
+        Factorio has been in development since spring of 2012, and reached
+        version 1.0 in mid 2020.
       '';
       homepage = "https://www.factorio.com/";
-      license = stdenv.lib.licenses.unfree;
-      maintainers = with stdenv.lib.maintainers; [ Baughn elitak erictapen priegger ];
-      platforms = [ "i686-linux" "x86_64-linux" ];
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
+      platforms = [ "x86_64-linux" ];
     };
   };
 
@@ -185,10 +178,11 @@ let
     headless = base;
     demo = base // {
 
-      buildInputs = [ makeWrapper libpulseaudio ];
+      nativeBuildInputs = [ makeWrapper ];
+      buildInputs = [ libpulseaudio ];
 
-      libPath = stdenv.lib.makeLibraryPath [
-        alsaLib
+      libPath = lib.makeLibraryPath [
+        alsa-lib
         libpulseaudio
         libX11
         libXcursor

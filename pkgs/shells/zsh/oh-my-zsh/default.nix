@@ -1,22 +1,24 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts, git
-, nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
+{ lib, stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts
+, git, nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
 
 stdenv.mkDerivation rec {
-  version = "2020-11-09";
+  version = "2021-04-26";
   pname = "oh-my-zsh";
-  rev = "eef04c62c2dfbd81f9fee6752e3b7e0b9c3bf617";
+  rev = "63a7422d8dd5eb93c849df0ab9e679e6f333818a";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    sha256 = "15gisyawg9g8xan5dawzj3jmqnwdiki95dxjgwyswfks2vcfakl6";
+    sha256 = "1spi6y5jmha0bf1s69mycpmksxjniqmcnvkvmza4rhji8v8b120w";
   };
 
   installPhase = ''
+    runHook preInstall
+
     outdir=$out/share/oh-my-zsh
     template=templates/zshrc.zsh-template
 
@@ -64,6 +66,8 @@ stdenv.mkDerivation rec {
         . ~/.zsh_aliases
     fi
     EOF
+
+    runHook postInstall
   '';
 
   passthru = {
@@ -73,7 +77,7 @@ stdenv.mkDerivation rec {
       #!${stdenv.shell}
       set -o errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           common-updater-scripts
           curl
           cacert
@@ -102,7 +106,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A framework for managing your zsh configuration";
     longDescription = ''
       Oh My Zsh is a framework for managing your zsh configuration.
@@ -115,6 +119,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ohmyz.sh/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ scolobb nequissimus ];
+    maintainers = with maintainers; [ nequissimus ];
   };
 }

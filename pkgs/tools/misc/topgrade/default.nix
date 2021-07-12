@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "5.8.1";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "r-darwish";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0m3kqk0ghlpzysyql777jlk5c0nb36z44vabw6r0484fh5vncwrh";
+    sha256 = "sha256-MGu0rQhNEaToPY4o9fz9E3RlvcLKjDq76Mqoq4UeL08=";
   };
 
-  cargoSha256 = "1h5cyiyhpagdin9a8gfsccbl4jahw33nbkg5m74axyp4qrfc1mkz";
+  cargoSha256 = "sha256-Nx0Mw+V8Hgtioi77sk7p/lq6KGJQ3zRXWMNEIzT4Xn8=";
 
   buildInputs = lib.optional stdenv.isDarwin Foundation;
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Upgrade all the things";
     homepage = "https://github.com/r-darwish/topgrade";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ filalex77 hugoreeves ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ Br1ght0ne hugoreeves SuperSandro2000 ];
   };
 }

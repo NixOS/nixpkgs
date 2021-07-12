@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m fdint.tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/scott-maddox/fdint";
     description = "A free, open-source python package for quickly and precisely approximating Fermi-Dirac integrals";
     license = licenses.mit;

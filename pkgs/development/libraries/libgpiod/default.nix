@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkgconfig, kmod
+{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config, kmod
 , enable-tools ? true
 , enablePython ? false, python3, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "1.6";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    sha256 = "0xcwrg4p4w925lijmz4ci4500z83kj5gs1n501q4vhi54bdzn2k5";
+    sha256 = "sha256-60RgcL4URP19MtMrvKU8Lzu7CiEZPbhhmM9gULeihEE=";
   };
 
   patches = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
   nativeBuildInputs = [
     autoconf-archive
-    pkgconfig
+    pkg-config
     autoreconfHook
   ];
 

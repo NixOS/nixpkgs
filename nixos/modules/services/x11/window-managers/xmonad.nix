@@ -5,25 +5,37 @@ let
   inherit (lib) mkOption mkIf optionals literalExample;
   cfg = config.services.xserver.windowManager.xmonad;
 
+  ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
+  packages = self: cfg.extraPackages self ++
+                   optionals cfg.enableContribAndExtras
+                   [ self.xmonad-contrib self.xmonad-extras ];
+
   xmonad-vanilla = pkgs.xmonad-with-packages.override {
-    ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
-    packages = self: cfg.extraPackages self ++
-                     optionals cfg.enableContribAndExtras
-                     [ self.xmonad-contrib self.xmonad-extras ];
+    inherit ghcWithPackages packages;
   };
 
-  xmonad-config = pkgs.writers.writeHaskellBin "xmonad" {
-    ghc = cfg.haskellPackages.ghc;
-    libraries = [ cfg.haskellPackages.xmonad ] ++
-                cfg.extraPackages cfg.haskellPackages ++
-                optionals cfg.enableContribAndExtras
-                (with cfg.haskellPackages; [ xmonad-contrib xmonad-extras ]);
-    inherit (cfg) ghcArgs;
-  } cfg.config;
+  xmonad-config =
+    let
+      xmonadAndPackages = self: [ self.xmonad ] ++ packages self;
+      xmonadEnv = ghcWithPackages xmonadAndPackages;
+      configured = pkgs.writers.writeHaskellBin "xmonad" {
+        ghc = cfg.haskellPackages.ghc;
+        libraries = xmonadAndPackages cfg.haskellPackages;
+        inherit (cfg) ghcArgs;
+      } cfg.config;
+    in
+      pkgs.runCommandLocal "xmonad" {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+      } ''
+        install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
+        makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
+          --set NIX_GHC "${xmonadEnv}/bin/ghc" \
+          --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
+      '';
 
   xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
 in {
-  meta.maintainers = with maintainers; [ lassulus xaverdh ];
+  meta.maintainers = with maintainers; [ lassulus xaverdh ivanbrennan ];
 
   options = {
     services.xserver.windowManager.xmonad = {
@@ -41,6 +53,7 @@ in {
       };
 
       extraPackages = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = self: [];
         defaultText = "self: []";
         example = literalExample ''
@@ -72,13 +85,13 @@ in {
           This setup is then analogous to other (non-NixOS) linux distributions.
 
           If you do set this option, you likely want to use "launch" as your
-          entry point for xmonad (as in the example), to avoid xmonads
+          entry point for xmonad (as in the example), to avoid xmonad's
           recompilation logic on startup. Doing so will render the default
           "mod+q" restart key binding dysfunctional though, because that attempts
           to call your binary with the "--restart" command line option, unless
           you implement that yourself. You way mant to bind "mod+q" to
           <literal>(restart "xmonad" True)</literal> instead, which will just restart
-          xmonad from PATH. This allows e.g. switching to the new xmonad binary,
+          xmonad from PATH. This allows e.g. switching to the new xmonad binary
           after rebuilding your system with nixos-rebuild.
 
           If you actually want to run xmonad with a config specified here, but
@@ -91,6 +104,7 @@ in {
         example = ''
           import XMonad
           import XMonad.Util.EZConfig (additionalKeys)
+          import Control.Monad (when)
           import Text.Printf (printf)
           import System.Posix.Process (executeFile)
           import System.Info (arch,os)
@@ -99,16 +113,21 @@ in {
 
           compiledConfig = printf "xmonad-%s-%s" arch os
 
-          compileRestart = whenX (recompile True) . catchIO $ do
-              dir  <- getXMonadDataDir
-              args <- getArgs
-              executeFile (dir </> compiledConfig) False args Nothing
+          compileRestart resume =
+            whenX (recompile True) $
+              when resume writeStateToFile
+                *> catchIO
+                  ( do
+                      dir <- getXMonadDataDir
+                      args <- getArgs
+                      executeFile (dir </> compiledConfig) False args Nothing
+                  )
 
           main = launch defaultConfig
               { modMask = mod4Mask -- Use Super instead of Alt
               , terminal = "urxvt" }
               `additionalKeys`
-              [ ( (mod4Mask,xK_r), compileRestart )
+              [ ( (mod4Mask,xK_r), compileRestart True)
               , ( (mod4Mask,xK_q), restart "xmonad" True ) ]
         '';
       };

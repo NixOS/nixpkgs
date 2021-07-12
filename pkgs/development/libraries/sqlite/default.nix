@@ -1,27 +1,34 @@
-{ stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
+{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null
+, python3Packages
+}:
 
 assert interactive -> readline != null && ncurses != null;
 
-with stdenv.lib;
+with lib;
 
 let
-  archiveVersion = import ./archive-version.nix stdenv.lib;
+  archiveVersion = import ./archive-version.nix lib;
 in
 
 stdenv.mkDerivation rec {
   pname = "sqlite";
-  version = "3.33.0";
+  version = "3.35.5";
 
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2020/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "05dvdfaxd552gj5p7k0i72sfam7lykaw1g2pfn52jnppqx42qshh";
+    url = "https://sqlite.org/2021/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    sha256 = "9StypcMZw+UW7XqS4SMTmm6Hrwii3EPXdXck9hMubbA=";
   };
 
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
   buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
+
+  # required for aarch64 but applied for all arches for simplicity
+  preConfigure = ''
+    patchShebangs configure
+  '';
 
   configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
 
@@ -72,6 +79,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # fails to link against tcl
+
+  passthru.tests = {
+    inherit (python3Packages) sqlalchemy;
+  };
 
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";

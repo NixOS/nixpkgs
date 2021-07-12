@@ -8,6 +8,7 @@ let
   wrappedPlugins = pkgs.runCommand "wrapped-plugins" { preferLocalBuild = true; } ''
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
+    ln -s /run/wrappers/bin/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
     ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
     ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
@@ -25,6 +26,10 @@ let
     web = {
       "web files owner" = "root";
       "web files group" = "root";
+    };
+    "plugin:cgroups" = {
+      "script to get cgroup network interfaces" = "${wrappedPlugins}/libexec/netdata/plugins.d/cgroup-network";
+      "use unified cgroups" = "yes";
     };
   };
   mkConfig = generators.toINI {} (recursiveUpdate localConfig cfg.config);
@@ -77,6 +82,7 @@ in {
           '';
         };
         extraPackages = mkOption {
+          type = types.functionTo (types.listOf types.package);
           default = ps: [];
           defaultText = "ps: []";
           example = literalExample ''
@@ -122,9 +128,20 @@ in {
             "error log" = "syslog";
           };
         '';
-        };
+      };
+
+      enableAnalyticsReporting = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable reporting of anonymous usage statistics to Netdata Inc. via either
+          Google Analytics (in versions prior to 1.29.4), or Netdata Inc.'s
+          self-hosted PostHog (in versions 1.29.4 and later).
+          See: <link xlink:href="https://learn.netdata.cloud/docs/agent/anonymous-statistics"/>
+        '';
       };
     };
+  };
 
   config = mkIf cfg.enable {
     assertions =
@@ -137,12 +154,17 @@ in {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk which ]) ++ lib.optional cfg.python.enable
-        (pkgs.python3.withPackages cfg.python.extraPackages);
+      path = (with pkgs; [ curl gawk iproute2 which ])
+        ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
+        ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
+      environment = {
+        PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
+      } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
+        DO_NOT_TRACK = "1";
+      };
       serviceConfig = {
-        Environment="PYTHONPATH=${cfg.package}/libexec/netdata/python.d/python_modules";
         ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
-        ExecReload = "${pkgs.utillinux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
+        ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         TimeoutStopSec = 60;
         Restart = "on-failure";
         # User and group
@@ -175,6 +197,8 @@ in {
           "CAP_SYS_PTRACE"        # is required for apps plugin
           "CAP_SYS_RESOURCE"      # is required for ebpf plugin
           "CAP_NET_RAW"           # is required for fping app
+          "CAP_SYS_CHROOT"        # is required for cgroups plugin
+          "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
         ];
         # Sandboxing
         ProtectSystem = "full";
@@ -192,7 +216,15 @@ in {
       capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rwx";
+      permissions = "u+rx,g+x,o-rwx";
+    };
+
+    security.wrappers."cgroup-network" = {
+      source = "${cfg.package}/libexec/netdata/plugins.d/cgroup-network.org";
+      capabilities = "cap_setuid+ep";
+      owner = cfg.user;
+      group = cfg.group;
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."freeipmi.plugin" = {
@@ -200,7 +232,7 @@ in {
       capabilities = "cap_dac_override,cap_fowner+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rwx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."perf.plugin" = {
@@ -208,7 +240,7 @@ in {
       capabilities = "cap_sys_admin+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."slabinfo.plugin" = {
@@ -216,7 +248,7 @@ in {
       capabilities = "cap_dac_override+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.pam.loginLimits = [

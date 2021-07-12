@@ -1,4 +1,4 @@
-{ busybox, stdenv}:
+{ busybox}:
 
 # Minimal shell for use as basic /bin/sh in sandbox builds
 busybox.override {
@@ -8,6 +8,7 @@ busybox.override {
     CONFIG_FEATURE_FANCY_ECHO y
     CONFIG_FEATURE_SH_MATH y
     CONFIG_FEATURE_SH_MATH_64 y
+    CONFIG_FEATURE_TEST_64 y
 
     CONFIG_ASH y
     CONFIG_ASH_OPTIMIZE_FOR_SIZE y

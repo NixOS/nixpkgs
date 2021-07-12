@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , makeWrapper
 , curl
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -m0755 -D src/somafm $out/bin/somafm
-    wrapProgram $out/bin/somafm --prefix PATH ":" "${stdenv.lib.makeBinPath [ curl jq mpv ]}";
+    wrapProgram $out/bin/somafm --prefix PATH ":" "${lib.makeBinPath [ curl jq mpv ]}";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Listen to SomaFM in your terminal via pure bash";
     homepage = "https://github.com/rockymadden/somafm-cli";
     license = licenses.mit;

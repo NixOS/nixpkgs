@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
+{ lib, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "pystache";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # https://github.com/defunkt/pystache/issues/181
   doCheck = !isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";
     homepage = "https://github.com/defunkt/pystache";
     license = licenses.mit;

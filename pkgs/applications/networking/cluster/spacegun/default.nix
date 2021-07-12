@@ -1,16 +1,21 @@
-{ pkgs, nodejs, stdenv, lib, ... }:
+{ pkgs, fetchFromGitHub, nodejs, stdenv, lib, ... }:
 
 let
-
-  packageName = with lib; concatStrings (map (entry: (concatStrings (mapAttrsToList (key: value: "${key}-${value}") entry))) (importJSON ./package.json));
+  src = fetchFromGitHub {
+    owner = "dvallin";
+    repo = "spacegun";
+    rev = "v0.3.3";
+    sha256 = "0cd9yzms44dj9ix8lrhbkby5zsyb8wambs24j6c3ibr67sggr6sq";
+  };
 
   nodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
 in
-nodePackages."${packageName}".override {
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+nodePackages.package.override {
+  inherit src;
+  nativeBuildInputs = [ pkgs.makeWrapper pkgs.nodePackages.node-gyp-build ];
 
   postInstall = ''
     # Patch shebangs in node_modules, otherwise the webpack build fails with interpreter problems
@@ -21,7 +26,7 @@ nodePackages."${packageName}".override {
 
   meta = with lib; {
     description = "Version controlled multi-cluster deployment manager for kubernetes";
-    maintainers = with maintainers; [ kampka ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
   };
 }

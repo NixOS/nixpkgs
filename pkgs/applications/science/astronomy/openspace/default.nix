@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper, cmake
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, cmake
 , curl, boost, gdal, glew, soil
 , libX11, libXi, libXxf86vm, libXcursor, libXrandr, libXinerama }:
 
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    makeWrapper cmake
     curl boost gdal glew soil
     libX11 libXi libXxf86vm libXcursor libXrandr libXinerama
   ];
@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
       WARNING: This build is not very usable for now.
     '';
     homepage  = "https://www.openspaceproject.com/";
-    license   = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license   = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     broken = true; # fails to build
   };
 }

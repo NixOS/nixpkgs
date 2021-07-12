@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nasm }:
+{ lib, stdenv, fetchurl, nasm }:
 
 let
   inherit (stdenv.hostPlatform.parsed.cpu) bits;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cp ${arch} $out/bin/bandwidth
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://zsmith.co/bandwidth.html";
     description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
     license = licenses.gpl2Plus;

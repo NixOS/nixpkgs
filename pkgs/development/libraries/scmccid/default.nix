@@ -1,4 +1,4 @@
-{stdenv, fetchurl, patchelf, libusb-compat-0_1}:
+{lib, stdenv, fetchurl, patchelf, libusb-compat-0_1}:
 
 assert stdenv ? cc && stdenv.cc.libc != null;
 
@@ -33,8 +33,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.scmmicro.com/support/pc-security-support/downloads.html";
     description = "PCSC drivers for linux, for the SCM SCR3310 v2.0 card and others";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

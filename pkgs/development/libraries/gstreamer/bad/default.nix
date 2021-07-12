@@ -1,18 +1,18 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , meson
 , ninja
 , gettext
-, config
-, pkgconfig
+, pkg-config
 , python3
 , gst-plugins-base
 , orc
 , gobject-introspection
 , enableZbar ? false
 , faacSupport ? false
-, faac ? null
+, faac
 , faad2
 , libass
 , libkate
@@ -36,7 +36,6 @@
 , bluez
 , chromaprint
 , curl
-, darwin
 , directfb
 , fdk_aac
 , flite
@@ -81,51 +80,59 @@
 , x265
 , libxml2
 , srt
+, vo-aacenc
+, VideoToolbox
+, AudioToolbox
+, AVFoundation
+, CoreMedia
+, CoreVideo
+, Foundation
+, MediaToolbox
 }:
 
-assert faacSupport -> faac != null;
-
-let
-  inherit (stdenv.lib) optional optionals;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.18.0";
+  version = "1.18.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0pqqq5bs9fjwcmbwgsgxs2dx6gznhxs7ii5pmjkslr6xmlfap0pk";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "06ildd4rl6cynirv3p00d2ddf5is9svj4i7mkahldzhq24pq5mca";
   };
 
   patches = [
+    # Use pkgconfig to inject the includedirs
     ./fix_pkgconfig_includedir.patch
-    # Fixes srt usage failing with
-    #     Failed to open SRT: failed to set SRTO_LINGER (reason: Operation not supported: Bad parameters)
-    # see https://github.com/Haivision/srt/issues/1374
-    # Remove when https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/84f8dbd932029220ee86154dd85b241911ea3891
-    # is shown as being in a release tag that nixpkgs uses.
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Fix “error: cannot initialize a parameter of type 'unsigned long *' with an rvalue of type 'typename std::remove_reference<decltype(*(&opencv_dilate_erode_type))>::type *' (aka 'volatile unsigned long *')” on Darwin.
     (fetchpatch {
-      name = "gstreamer-srtobject-typecast-SRTO_LINGER-to-linger.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/84f8dbd932029220ee86154dd85b241911ea3891.patch";
-      sha256 = "0596lvgi93sj3yn98grgmsrhnqhhq7fnjk91qi4xc6618fpqmp9x";
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/640a65bf966df065d41a511e2d76d1f26a2e770c.patch";
+      sha256 = "E5pig+qEfR58Jticr6ydFxZOhM3ZJ8zgrf5K4BdiB/Y=";
+      includes = [
+        "ext/opencv/gstcvdilateerode.cpp"
+      ];
     })
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
+    orc # for orcc
     python3
     gettext
     gobject-introspection
-  ] ++ optionals stdenv.isLinux [
-    wayland-protocols
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland # for wayland-scanner
   ];
 
   buildInputs = [
     gst-plugins-base
     orc
+    # gobject-introspection has to be in both nativeBuildInputs and
+    # buildInputs. The build tries to link against libgirepository-1.0.so
+    gobject-introspection
     faad2
     libass
     libkate
@@ -159,7 +166,6 @@ in stdenv.mkDerivation rec {
     soundtouch
     srtp
     fluidsynth
-    libva
     libvdpau
     libwebp
     xvidcore
@@ -172,14 +178,17 @@ in stdenv.mkDerivation rec {
     libxml2
     libintl
     srt
-  ] ++ optionals enableZbar [
+    vo-aacenc
+  ] ++ lib.optionals enableZbar [
     zbar
-  ] ++ optionals faacSupport [
+  ] ++ lib.optionals faacSupport [
     faac
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     bluez
+    libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
-  ] ++ optionals (!stdenv.isDarwin) [
+    wayland-protocols
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
     wildmidi
@@ -206,7 +215,7 @@ in stdenv.mkDerivation rec {
     serd
     sord
     sratom
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
     #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
@@ -217,7 +226,7 @@ in stdenv.mkDerivation rec {
     CoreVideo
     Foundation
     MediaToolbox
-  ]);
+  ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
@@ -248,7 +257,6 @@ in stdenv.mkDerivation rec {
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
-    "-Dvoaacenc=disabled" # required `vo-aacenc` library not packaged in nixpkgs as of writing
     "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
     "-Dvulkan=disabled" # Linux-only, and we haven't figured out yet which of the vulkan nixpkgs it needs
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
@@ -256,7 +264,10 @@ in stdenv.mkDerivation rec {
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
   ]
-  ++ optionals stdenv.isDarwin [
+  ++ lib.optionals (!stdenv.isLinux) [
+    "-Dva=disabled" # see comment on `libva` in `buildInputs`
+  ]
+  ++ lib.optionals stdenv.isDarwin [
     "-Dbluez=disabled"
     "-Dchromaprint=disabled"
     "-Ddirectfb=disabled"
@@ -269,18 +280,22 @@ in stdenv.mkDerivation rec {
     "-Ddvb=disabled"
     "-Dfbdev=disabled"
     "-Duvch264=disabled" # requires gudev
+    "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
     "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
-  ] ++ optionals (!gst-plugins-base.glEnabled) [
-    "-Dgl=disabled"]
-  ++ optionals (!gst-plugins-base.waylandEnabled) [
+  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
+    "-Dgl=disabled"
+  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
     "-Dwayland=disabled"
-  ] ++ optionals (!gst-plugins-base.glEnabled) [
+  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
   ];
+
+  # Argument list too long
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs \
@@ -293,7 +308,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GStreamer Bad Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''

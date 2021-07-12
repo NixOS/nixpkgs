@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "gshhg-gmt";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     cp -rv ./* $out/share/gshhg-gmt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.soest.hawaii.edu/pwessel/gshhg/";
     description = "High-resolution shoreline data set, for use with GMT";
     longDescription = ''

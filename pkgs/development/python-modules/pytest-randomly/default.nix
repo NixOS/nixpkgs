@@ -1,26 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, factory_boy, faker, numpy
-, pytest, pytest_xdist
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+, factory_boy, faker, numpy, backports-entry-points-selectable
+, pytestCheckHook, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "3.4.1";
+  version = "3.6.0";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0s9cx692cdchfrjqx7fgf9wnm3fdac211a4hjq1cx9qqnbpdpl2z";
+  # fetch from GitHub as pypi tarball doesn't include tests
+  src = fetchFromGitHub {
+    repo = pname;
+    owner = "pytest-dev";
+    rev = version;
+    sha256 = "17s7gx8b7sl7mp77f5dxzwbb32qliz9awrp6xz58bhjqp7pcsa5h";
   };
 
-  propagatedBuildInputs = [ numpy factory_boy faker ];
+  propagatedBuildInputs = [
+    backports-entry-points-selectable
+  ];
 
-  checkInputs = [ pytest pytest_xdist ];
-
-  # test warnings are fixed on an unreleased version:
-  # https://github.com/pytest-dev/pytest-randomly/pull/281
-  checkPhase = "pytest -p no:randomly";
+  checkInputs = [
+    pytestCheckHook
+    pytest_xdist
+    numpy
+    factory_boy
+    faker
+  ];
+  # needs special invocation, copied from tox.ini
+  pytestFlagsArray = [ "-p" "no:randomly" ];
 
   meta = with lib; {
     description = "Pytest plugin to randomly order tests and control random.seed";

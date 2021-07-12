@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
 , gtk3
 , breeze-icons
-, gnome3
+, gnome
 , pantheon
 , hicolor-icon-theme
 }:
@@ -28,14 +28,14 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     breeze-icons
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     pantheon.elementary-icon-theme
     hicolor-icon-theme
   ];
 
   dontDropIconThemeCache = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Icon theme for Pop!_OS with a semi-flat design and raised 3D motifs";
     homepage = "https://github.com/pop-os/icon-theme";
     license = with licenses; [ cc-by-sa-40 gpl3 ];

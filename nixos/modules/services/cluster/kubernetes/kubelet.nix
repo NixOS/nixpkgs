@@ -23,7 +23,7 @@ let
     name = "pause";
     tag = "latest";
     contents = top.package.pause;
-    config.Cmd = "/bin/pause";
+    config.Cmd = ["/bin/pause"];
   };
 
   kubeconfig = top.lib.mkKubeConfig "kubelet" cfg.kubeconfig;
@@ -125,12 +125,24 @@ in
       };
     };
 
+    containerRuntime = mkOption {
+      description = "Which container runtime type to use";
+      type = enum ["docker" "remote"];
+      default = "remote";
+    };
+
+    containerRuntimeEndpoint = mkOption {
+      description = "Endpoint at which to find the container runtime api interface/socket";
+      type = str;
+      default = "unix:///run/containerd/containerd.sock";
+    };
+
     enable = mkEnableOption "Kubernetes kubelet.";
 
     extraOpts = mkOption {
       description = "Kubernetes kubelet extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {
@@ -235,17 +247,39 @@ in
   ###### implementation
   config = mkMerge [
     (mkIf cfg.enable {
+
+      environment.etc."cni/net.d".source = cniConfig;
+
       services.kubernetes.kubelet.seedDockerImages = [infraContainer];
+
+      boot.kernel.sysctl = {
+        "net.bridge.bridge-nf-call-iptables"  = 1;
+        "net.ipv4.ip_forward"                 = 1;
+        "net.bridge.bridge-nf-call-ip6tables" = 1;
+      };
 
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "kubernetes.target" ];
-        after = [ "network.target" "docker.service" "kube-apiserver.service" ];
-        path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
+        after = [ "containerd.service" "network.target" "kube-apiserver.service" ];
+        path = with pkgs; [
+          gitMinimal
+          openssh
+          util-linux
+          iproute2
+          ethtool
+          thin-provisioning-tools
+          iptables
+          socat
+        ] ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package ++ top.path;
         preStart = ''
           ${concatMapStrings (img: ''
-            echo "Seeding docker image: ${img}"
-            docker load <${img}
+            echo "Seeding container image: ${img}"
+            ${if (lib.hasSuffix "gz" img) then
+              ''${pkgs.gzip}/bin/zcat "${img}" | ${pkgs.containerd}/bin/ctr -n k8s.io image import --all-platforms -''
+            else
+              ''${pkgs.coreutils}/bin/cat "${img}" | ${pkgs.containerd}/bin/ctr -n k8s.io image import --all-platforms -''
+            }
           '') cfg.seedDockerImages}
 
           rm /opt/cni/bin/* || true
@@ -296,6 +330,9 @@ in
             ${optionalString (cfg.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.tlsKeyFile}"} \
             ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
+            --container-runtime=${cfg.containerRuntime} \
+            --container-runtime-endpoint=${cfg.containerRuntimeEndpoint} \
+            --cgroup-driver=systemd \
             ${cfg.extraOpts}
           '';
           WorkingDirectory = top.dataDir;
@@ -305,7 +342,7 @@ in
       # Allways include cni plugins
       services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
 
-      boot.kernelModules = ["br_netfilter"];
+      boot.kernelModules = ["br_netfilter" "overlay"];
 
       services.kubernetes.kubelet.hostname = with config.networking;
         mkDefault (hostName + optionalString (domain != null) ".${domain}");

@@ -7,7 +7,7 @@ in
 
 {
   name = "mysql-replication";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco shlevy ];
   };
 
@@ -17,7 +17,7 @@ in
 
       {
         services.mysql.enable = true;
-        services.mysql.package = pkgs.mysql;
+        services.mysql.package = pkgs.mariadb;
         services.mysql.replication.role = "master";
         services.mysql.replication.slaveHost = "%";
         services.mysql.replication.masterUser = replicateUser;
@@ -31,7 +31,7 @@ in
 
       {
         services.mysql.enable = true;
-        services.mysql.package = pkgs.mysql;
+        services.mysql.package = pkgs.mariadb;
         services.mysql.replication.role = "slave";
         services.mysql.replication.serverId = 2;
         services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
@@ -44,7 +44,7 @@ in
 
       {
         services.mysql.enable = true;
-        services.mysql.package = pkgs.mysql;
+        services.mysql.package = pkgs.mariadb;
         services.mysql.replication.role = "slave";
         services.mysql.replication.serverId = 3;
         services.mysql.replication.masterHost = nodes.master.config.networking.hostName;

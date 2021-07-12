@@ -1,4 +1,4 @@
-{ stdenvNoCC, mercurial }:
+{ lib, stdenvNoCC, mercurial }:
 { name ? null
 , url
 , rev ? null
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
   builder = ./builder.sh;
   nativeBuildInputs = [mercurial];
 
-  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
   subrepoClause = if fetchSubrepos then "S" else "";
 

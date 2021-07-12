@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , substituteAll
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple formatter designed for elementary OS";
     homepage = "https://github.com/Djaler/Formatter";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, boost, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, boost, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "pamixer";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     install -Dm755 pamixer -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pulseaudio command line mixer";
     longDescription = ''
       Features:

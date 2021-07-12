@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , mock
@@ -34,10 +34,14 @@ buildPythonPackage rec {
       --replace 'pamqp>=2,<3' 'pamqp'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pure python, thread-safe, minimalistic and pythonic RabbitMQ client library";
     homepage = "https://pypi.python.org/pypi/rabbitpy";
     license = licenses.bsd3;
+
+    # broken by pamqp==3, tracked in
+    # https://github.com/gmr/rabbitpy/issues/125
+    broken = true;
   };
 
 }

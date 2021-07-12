@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gd, rrdtool }:
+{ lib, stdenv, fetchurl, perl, gd, rrdtool }:
 
 stdenv.mkDerivation rec {
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The Multi Router Traffic Grapher";
     homepage = "https://oss.oetiker.ch/mrtg/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.robberer ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.robberer ];
+    platforms = lib.platforms.unix;
   };
 }

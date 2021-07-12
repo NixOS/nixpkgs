@@ -1,15 +1,17 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
-
 , asdf
 , astropy
+, setuptools-scm
 , astropy-helpers
+, astropy-extension-helpers
 , beautifulsoup4
 , drms
 , glymur
+, h5netcdf
 , hypothesis
 , matplotlib
 , numpy
@@ -29,15 +31,18 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "1.0.6";
+  version = "3.0.1";
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = "sunpy";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0j2yfhfxgi95rig8cfp9lvszb7694gq90jvs0xrb472hwnzgh2sk";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-WpqkCAwDYb6L+W4VTC/1auGVbblnNYwBxbk+tZbAiBw=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+    astropy-extension-helpers
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -46,6 +51,7 @@ buildPythonPackage rec {
     pandas
     astropy
     astropy-helpers
+    h5netcdf
     parfive
     sqlalchemy
     scikitimage
@@ -66,16 +72,16 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-    export HOME=$(mktemp -d)
-  '';
-
   # darwin has write permission issues
   doCheck = stdenv.isLinux;
-  # ignore documentation tests
+
+  # ignore documentation tests and ignore tests with schema issues
   checkPhase = ''
-    pytest sunpy -k 'not rst'
+    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst' \
+    --deselect=sunpy/tests/tests/test_self_test.py::test_main_nonexisting_module \
+    --deselect=sunpy/tests/tests/test_self_test.py::test_main_stdlib_module \
+    --ignore=sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliocentric-1.0.0.yaml \
+    --ignore=sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/helioprojective-1.0.0.yaml
   '';
 
   meta = with lib; {

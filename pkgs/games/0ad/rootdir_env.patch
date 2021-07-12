@@ -1,7 +1,8 @@
-diff -ru3 0ad-0.0.20-alpha/source/ps/GameSetup/Paths.cpp 0ad-0.0.20-alpha-new/source/ps/GameSetup/Paths.cpp
---- 0ad-0.0.20-alpha/source/ps/GameSetup/Paths.cpp	2015-02-14 04:45:13.000000000 +0300
-+++ 0ad-0.0.20-alpha-new/source/ps/GameSetup/Paths.cpp	2016-11-03 16:23:47.241514876 +0300
-@@ -155,32 +155,8 @@
+diff --git a/source/ps/GameSetup/Paths.cpp b/source/ps/GameSetup/Paths.cpp
+index 474364e..bf084b4 100644
+--- a/source/ps/GameSetup/Paths.cpp
++++ b/source/ps/GameSetup/Paths.cpp
+@@ -155,32 +155,8 @@ Paths::Paths(const CmdLineArgs& args)
  
  /*static*/ OsPath Paths::Root(const OsPath& argv0)
  {
@@ -31,8 +32,8 @@ diff -ru3 0ad-0.0.20-alpha/source/ps/GameSetup/Paths.cpp 0ad-0.0.20-alpha-new/so
 -	return pathname;
 -
 -#endif
-+	UNUSED2(argv0);
-+	return getenv("ZEROAD_ROOTDIR");
++        UNUSED2(argv0);
++        return OsPath(getenv("ZEROAD_ROOTDIR"));
  }
  
  /*static*/ OsPath Paths::RootData(const OsPath& argv0)

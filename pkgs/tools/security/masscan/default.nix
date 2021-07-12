@@ -1,42 +1,49 @@
-{ stdenv, fetchFromGitHub, makeWrapper, libpcap }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, libpcap
+}:
 
 stdenv.mkDerivation rec {
   pname = "masscan";
-  version = "1.0.5";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
-    owner  = "robertdavidgraham";
-    repo   = "masscan";
-    rev    = version;
-    sha256 = "0q0c7bsf0pbl8napry1qyg0gl4pd8wn872h4mz9b56dx4rx90vqg";
+    owner = "robertdavidgraham";
+    repo = "masscan";
+    rev = version;
+    sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  makeFlags = [ "PREFIX=$(out)" "GITVER=${version}" "CC=cc" ];
+  makeFlags = [ "PREFIX=$(out)" "GITVER=${version}" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preInstall = ''
     mkdir -p $out/bin
   '';
 
   postInstall = ''
-    mkdir -p $out/share/man/man8
+    installManPage doc/masscan.8
+
     mkdir -p $out/share/{doc,licenses}/masscan
     mkdir -p $out/etc/masscan
 
     cp data/exclude.conf $out/etc/masscan
     cp -t $out/share/doc/masscan doc/algorithm.js doc/howto-afl.md doc/bot.html
-    cp doc/masscan.8 $out/share/man/man8/masscan.8
     cp LICENSE $out/share/licenses/masscan/LICENSE
 
     wrapProgram $out/bin/masscan --prefix LD_LIBRARY_PATH : "${libpcap}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast scan of the Internet";
-    homepage    = "https://github.com/robertdavidgraham/masscan";
-    license     = licenses.agpl3;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/robertdavidgraham/masscan";
+    changelog = "https://github.com/robertdavidgraham/masscan/releases/tag/${version}";
+    license = licenses.agpl3Only;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

@@ -1,37 +1,31 @@
-{ stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
-, ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, runtimeShell, sqlite, zlib
-, glibcLocales
-, fetchpatch
+{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, fetchpatch
+, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200925";
+  version = "20210205";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "1q931n9sijq1iin3swzk57rz7qmy485hvr1fahy5i2wd1xx9yhb2";
+    sha256 = "sha256-ADg/+gmndOiuQHsncOzS5K4chthXeUFz6RRJsrZNeZY=";
   };
 
-  buildInputs = [
-    cyrus_sasl gss gpgme kerberos libidn ncurses
-    notmuch openssl perl lmdb
-    mailcap sqlite
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-32055.patch";
+      url = "https://github.com/neomutt/neomutt/commit/fa1db5785e5cfd9d3cd27b7571b9fe268d2ec2dc.patch";
+      sha256 = "0bb7gisjynq3w7hhl6vxa469h609bcz6fkdi8vf740pqrwhk68yn";
+    })
   ];
 
-  patches = [
-    # To be removed on next release. Fixes two bugs in the sidebar behavior.
-    (fetchpatch {
-      url = "https://github.com/neomutt/neomutt/commit/96753674e70edb695c1dc7af73e3317956c1b259.patch";
-      sha256 = "0yjmgdfhn8ra7bc3d40c3c29imgpgbhzphjxp6575llh9kw5h53s";
-    })
-    (fetchpatch {
-      url = "https://github.com/neomutt/neomutt/commit/6078653c9233644ca76c24bdb64e49bd443dd714.patch";
-      sha256 = "1s1p86bqpc9xq9z5qfh0mxxh6syps8shq0dm7bbkg1bz7qya5phy";
-    })
+  buildInputs = [
+    cyrus_sasl gss gpgme libkrb5 libidn ncurses
+    notmuch openssl perl lmdb
+    mailcap sqlite
   ];
 
   nativeBuildInputs = [
@@ -106,7 +100,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   postCheck = "unset NEOMUTT_TEST_DIR";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small but very powerful text-based mail client";
     homepage    = "http://www.neomutt.org";
     license     = licenses.gpl2Plus;

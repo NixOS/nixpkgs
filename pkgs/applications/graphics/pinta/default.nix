@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp,
+{ lib, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp,
   gettext }:
 
 let
@@ -21,7 +21,7 @@ buildDotnetPackage rec {
   };
 
   # Remove version information from nodes <Reference Include="... Version=... ">
-  postPatch = with stdenv.lib; let
+  postPatch = with lib; let
     csprojFiles = [
       "Pinta/Pinta.csproj"
       "Pinta.Core/Pinta.Core.csproj"
@@ -56,9 +56,9 @@ buildDotnetPackage rec {
     '';
 
   makeWrapperArgs = [
-    ''--prefix MONO_GAC_PREFIX : ${gtksharp}''
-    ''--prefix LD_LIBRARY_PATH : ${gtksharp}/lib''
-    ''--prefix LD_LIBRARY_PATH : ${gtksharp.gtk.out}/lib''
+    "--prefix MONO_GAC_PREFIX : ${gtksharp}"
+    "--prefix LD_LIBRARY_PATH : ${gtksharp}/lib"
+    "--prefix LD_LIBRARY_PATH : ${gtksharp.gtk.out}/lib"
   ];
 
   postInstall = ''
@@ -76,8 +76,8 @@ buildDotnetPackage rec {
   meta = {
     homepage = "https://www.pinta-project.com/";
     description = "Drawing/editing program modeled after Paint.NET";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux;
   };
 }

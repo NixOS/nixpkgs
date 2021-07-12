@@ -64,13 +64,14 @@ in
       };
 
       extraPackages = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = p: [];
         description = ''
           Extra Python packages available to supybot plugins. The
           value must be a function which receives the attrset defined
           in <varname>python3Packages</varname> as the sole argument.
         '';
-        example = literalExample ''p: [ p.lxml p.requests ]'';
+        example = literalExample "p: [ p.lxml p.requests ]";
       };
 
     };

@@ -4,6 +4,7 @@
 , msrest
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 }:
 
@@ -21,6 +22,7 @@ buildPythonPackage rec {
     msrest
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 
@@ -31,6 +33,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure SignalR Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

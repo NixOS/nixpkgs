@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, libdbi
+{ lib, stdenv, fetchurl, libdbi
 , libmysqlclient ? null
 , sqlite ? null
 , postgresql ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "libdbi-drivers-0.9.0";
 

@@ -1,24 +1,22 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
-  pname = "lndmon-unstable";
-  version = "2020-01-09";
+  pname = "lndmon";
+  version = "unstable-2021-03-26";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndmon";
-    sha256 = "0d4z8yv2459wsi4c91qs5an13acn73fd8s321xya5vxxiyf51q24";
-    rev = "2c7c5ce0fcb4e7eef4df60efe8a644587a309f6c";
+    sha256 = "14lmmjq61p8yhc86swigs43risqi31vlmz7ri8j0n0fyp8lm2kxs";
+    rev = "3aa925aa4f633a6c4d132601922e78f173ae8ac1";
   };
 
-  vendorSha256 = "083h2ksnqmcr48958r5pag9a28xvljpc3prip6wn70ifp2wpjpin";
-
-  doCheck = false;
+  vendorSha256 = "06if387b9m02ciqgcissih1x06l33djp87vgspwzz589f77vczk8";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) lnd; };
 
-  meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+  meta = with lib; {
+    homepage = "https://github.com/lightninglabs/lndmon";
     description = "Prometheus exporter for lnd (Lightning Network Daemon)";
     license = licenses.mit;
     maintainers = with maintainers; [ mmilata ];

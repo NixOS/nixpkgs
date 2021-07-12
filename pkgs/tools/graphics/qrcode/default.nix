@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "qrcode-git";
@@ -13,16 +13,18 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/qrcode}
     cp qrcode "$out/bin"
     cp DOCUMENTATION LICENCE "$out/share/doc/qrcode"
   '';
 
-  meta = with stdenv.lib; {
-    description = ''A small QR-code tool'';
+  meta = with lib; {
+    description = "A small QR-code tool";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
   };
 }

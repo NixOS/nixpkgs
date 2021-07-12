@@ -1,4 +1,9 @@
-{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header }:
+{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header
+, bison ? null, flex ? null, python ? null, rsync ? null
+}:
+
+assert stdenvNoCC.hostPlatform.isAndroid ->
+  (flex != null && bison != null && python != null && rsync != null);
 
 let
   makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
@@ -7,13 +12,17 @@ let
     pname = "linux-headers";
     inherit version;
 
-    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or stdenvNoCC.hostPlatform.kernelArch;
+    ARCH = stdenvNoCC.hostPlatform.linuxArch;
 
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     # `elf-header` is null when libc provides `elf.h`.
-    nativeBuildInputs = [ perl elf-header ];
+    nativeBuildInputs = [
+      perl elf-header
+    ] ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
+      flex bison python rsync
+    ];
 
     extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
 
@@ -36,9 +45,12 @@ let
     # Skip clean on darwin, case-sensitivity issues.
     buildPhase = lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
       make mrproper $makeFlags
-    '' + ''
+    '' + (if stdenvNoCC.hostPlatform.isAndroid then ''
+      make defconfig
+      make headers_install
+    '' else ''
       make headers $makeFlags
-    '';
+    '');
 
     checkPhase = ''
       make headers_check $makeFlags
@@ -69,12 +81,12 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "5.5"; in
+  linuxHeaders = let version = "5.12"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-        sha256 = "0c131fi6s7vgvka1c0597vnvcmwn1pp968rci5kq64iwj3pd9yx6";
+        sha256 = "sha256-fQ328r8jhNaNC9jh/j4HHWQ2Tc3GAC57XIfJLUj6w2Y=";
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms

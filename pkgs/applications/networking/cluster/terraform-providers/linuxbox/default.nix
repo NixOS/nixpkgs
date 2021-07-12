@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terraform-provider-linuxbox";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   passthru.provider-source-address = "registry.terraform.io/numtide/linuxbox";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/numtide/terraform-provider-linuxbox";
     description = "Basic building block for Seed DevOps";
     license = licenses.bsd3;

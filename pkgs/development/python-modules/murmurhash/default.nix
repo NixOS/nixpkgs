@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "murmurhash";
-  version = "1.0.2";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7a646f6b07b033642b4f52ae2e45efd8b80780b3b90e8092a0cec935fbf81e2";
+    sha256 = "98ec9d727bd998a35385abd56b062cf0cca216725ea7ec5068604ab566f7e97f";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytest murmurhash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cython bindings for MurmurHash2";
     homepage = "https://github.com/explosion/murmurhash";
     license = licenses.mit;

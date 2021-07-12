@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, tokyocabinet, pkgconfig }:
+{ fetchurl, lib, stdenv, tokyocabinet, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "tokyotyrant-1.1.41";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "13xqcinhydqmh7231qlir6pymacjwcf98drybkhd9597kzxp1bs2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ tokyocabinet ];
 
   doCheck = false;                                # FIXME
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://fallabs.com/tokyotyrant/";
 
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
 
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;         # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;         # arbitrary choice
     maintainers = [ ];
   };
 }

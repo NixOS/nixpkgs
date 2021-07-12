@@ -22,7 +22,7 @@ let
                     nettools # for hostname
                     procps # for pidof
                     shadow # for useradd, usermod
-                    utillinux # for (u)mount, fdisk, sfdisk, mkswap
+                    util-linux # for (u)mount, fdisk, sfdisk, mkswap
                     parted
                   ];
     pythonPath = [ pythonPackages.pyasn1 ];
@@ -146,7 +146,7 @@ in
 
     services.logrotate = {
       enable = true;
-      config = ''
+      extraConfig = ''
         /var/log/waagent.log {
             compress
             monthly

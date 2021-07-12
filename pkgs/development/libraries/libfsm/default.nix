@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , bmake
 }:
 
@@ -22,13 +22,9 @@ stdenv.mkDerivation rec {
   # if we use stdenv vs clangStdenv, we don't know which, and CC=cc in all
   # cases.) it's unclear exactly what should be done if we want those flags,
   # but the defaults work fine.
-  buildPhase = "PREFIX=$out bmake -r -j$NIX_BUILD_CORES";
-  installPhase = ''
-    PREFIX=$out bmake -r install
-    runHook postInstall
-  '';
+  makeFlags = [ "-r" "PREFIX=$(out)" ];
 
-  # fix up multi-output install. we also have to fix the pkgconfig libdir
+  # fix up multi-output install. we also have to fix the pkg-config libdir
   # file; it uses prefix=$out; libdir=${prefix}/lib, which is wrong in
   # our case; libdir should really be set to the $lib output.
   postInstall = ''
@@ -47,7 +43,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DFA regular expression library & friends";
     homepage    = "https://github.com/katef/libfsm";
     license     = licenses.bsd2;

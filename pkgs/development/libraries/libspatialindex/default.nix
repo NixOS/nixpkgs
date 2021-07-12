@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let version = "1.8.5"; in
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Extensible spatial index library in C++";
     homepage = "http://libspatialindex.github.io/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

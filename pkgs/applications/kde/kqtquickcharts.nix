@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kqtquickcharts";
+  pname = "kqtquickcharts";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = [ lib.maintainers.ttuegel ];

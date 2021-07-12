@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, autoreconfHook, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fetchurl, autoreconfHook, makeWrapper
 , perlPackages, coreutils, gnused, gnugrep }:
 
 let
@@ -22,7 +22,7 @@ let
 
     nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
-    prePatch = with stdenv.lib; ''
+    prePatch = with lib; ''
       rm -rf GLPlugin
       ln -s ${glplugin} GLPlugin
       substituteInPlace plugins-scripts/Makefile.am \
@@ -42,7 +42,7 @@ let
       done
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage    = "https://labs.consol.de/";
       license     = licenses.gpl2;
       maintainers = with maintainers; [ peterhoeg ];

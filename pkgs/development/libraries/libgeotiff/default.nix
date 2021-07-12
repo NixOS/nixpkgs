@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libtiff, libjpeg, proj, zlib, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, libtiff, libjpeg, proj, zlib, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.5.1";
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
     homepage = "https://github.com/OSGeo/libgeotiff";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = [lib.maintainers.marcweber];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

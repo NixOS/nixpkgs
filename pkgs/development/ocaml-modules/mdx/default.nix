@@ -1,20 +1,21 @@
 { lib, fetchurl, buildDunePackage, opaline, ocaml
 , alcotest
-, astring, cmdliner, cppo, fmt, logs, ocaml-migrate-parsetree, ocaml-version, odoc, ocaml_lwt, pandoc, re }:
+, astring, cmdliner, cppo, fmt, logs, ocaml-version, odoc, ocaml_lwt, re, result, csexp
+, pandoc}:
 
 buildDunePackage rec {
   pname = "mdx";
-  version = "1.7.0";
+  version = "1.8.1";
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/realworldocaml/mdx/releases/download/${version}/mdx-${version}.tbz";
-    sha256 = "0vpc30sngl3vpychrfvjwyi93mk311x3f2azlkxasgcj69fq03i7";
+    sha256 = "1szik1lyg2vs8jrisnvjdc29n0ifls8mghimff4jcz6f48haa3cv";
   };
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ cmdliner ];
-  propagatedBuildInputs = [ astring fmt logs ocaml-migrate-parsetree ocaml-version odoc re ];
+  propagatedBuildInputs = [ astring fmt logs result csexp ocaml-version odoc re ];
   checkInputs = [ alcotest ocaml_lwt pandoc ];
 
   doCheck = true;

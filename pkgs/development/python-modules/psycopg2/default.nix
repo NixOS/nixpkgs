@@ -1,23 +1,40 @@
-{ stdenv, lib, buildPythonPackage, isPyPy, fetchPypi, postgresql, openssl }:
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, isPyPy
+, fetchPypi
+, postgresql
+, openssl
+}:
 
 buildPythonPackage rec {
   pname = "psycopg2";
-  version = "2.8.5";
+  version = "2.9.1";
 
-  disabled = isPyPy;
+  # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
+  # c.f. https://github.com/NixOS/nixpkgs/pull/104151#issuecomment-729750892
+  disabled = pythonOlder "3.6" || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f7d46240f7a1ae1dd95aab38bd74f7428d46531f69219954266d669da60c0818";
+    sha256 = "0z0v2d5gpgy0wf2ypqxv955c9k44yszd7r20km5s79yhy6k06lyy";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin openssl;
-  nativeBuildInputs = [ postgresql ];
+  nativeBuildInputs = [
+    postgresql
+  ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [
+    openssl
+  ];
+
+  # requires setting up a postgresql database
   doCheck = false;
 
   meta = with lib; {
     description = "PostgreSQL database adapter for the Python programming language";
-    license = with licenses; [ gpl2 zpl20 ];
+    homepage = "https://www.psycopg.org";
+    license = with licenses; [ lgpl3 zpl20 ];
   };
 }

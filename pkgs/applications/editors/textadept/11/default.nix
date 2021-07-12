@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchhg, fetchFromGitHub, fetchurl, gtk2, glib, pkgconfig, unzip, ncurses, zip }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, gtk2, glib, pkg-config, unzip, ncurses, zip }:
 
 stdenv.mkDerivation rec {
-  version = "11.0_beta";
+  version = "11.1";
   pname = "textadept11";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config unzip zip ];
   buildInputs = [
-    gtk2 ncurses glib unzip zip
+    gtk2 ncurses glib
   ];
 
   src = fetchFromGitHub {
     name = "textadept11";
     owner = "orbitalquark";
     repo = "textadept";
-    rev = "8da5f6b4a13f14b9dd3cb9dc23ad4f7bf41e91c1";
-    sha256 = "0v11v3x8g6v696m3l1bm52zy2g9xzz7hlmn912sn30nhcag3raxs";
+    rev = "1df99d561dd2055a01efa9183bb9e1b2ad43babc";
+    sha256 = "0g4bh5dp391vi32aa796vszpbxyl2dm5231v9dwc8l9v0b2786qn";
   };
 
   preConfigure =
@@ -40,10 +40,12 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "PREFIX=$(out) WGET=true PIXMAPS_DIR=$(out)/share/pixmaps"
+    "PREFIX=$(out)"
+    "WGET=true"
+    "PIXMAPS_DIR=$(out)/share/pixmaps"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extensible text editor based on Scintilla with Lua scripting. Version 11_beta";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;

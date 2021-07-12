@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , ipython
 , traitlets
 , glibcLocales
@@ -11,11 +12,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter_core";
-  version = "4.6.3";
+  version = "4.7.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "394fd5dd787e7c8861741880bdf8a00ce39f95de5d18e579c74b882522219e7e";
+    sha256 = "79025cb3225efcd36847d0840f3fc672c0abd7afd0de83ba8a1d3837619122b4";
   };
 
   checkInputs = [ pytest mock glibcLocales nose ];

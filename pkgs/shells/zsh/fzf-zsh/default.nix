@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fzf }:
+{ lib, stdenv, fetchFromGitHub, fzf }:
 
 stdenv.mkDerivation rec {
   pname = "fzf-zsh-unstable";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -Dm0644 fzf-zsh.plugin.zsh $out/share/zsh/plugins/fzf-zsh/fzf-zsh.plugin.zsh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/wyntau/fzf-zsh";
     description = "wrap fzf to use in oh-my-zsh";
     license = licenses.mit;

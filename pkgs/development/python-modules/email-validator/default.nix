@@ -1,20 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, dnspython, idna, ipaddress }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, dnspython
+, idna
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  pname = "email_validator";
-  version = "1.1.1";
+  pname = "email-validator";
+  version = "1.1.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "63094045c3e802c3d3d575b18b004a531c36243ca8d1cec785ff6bfcb04185bb";
+  src = fetchFromGitHub {
+    owner = "JoshData";
+    repo = "python-${pname}";
+    rev = "v${version}";
+    sha256 = "19n6p75m96kwg38bpfsa7ksj26aki02p5pr5f36q8wv3af84s61c";
   };
-
-  doCheck = false;
 
   propagatedBuildInputs = [
     dnspython
     idna
-  ] ++ (if isPy3k then [ ] else [ ipaddress ]);
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # fails with dns.resolver.NoResolverConfiguration due to network sandboxing
+    "test_deliverability_no_records"
+    "test_deliverability_found"
+    "test_deliverability_fails"
+    "test_deliverability_dns_timeout"
+    "test_main_single_good_input"
+    "test_main_multi_input"
+    "test_main_input_shim"
+    "test_validate_email__with_caching_resolver"
+    "test_validate_email__with_configured_resolver"
+  ];
+
+  pythonImportsCheck = [
+    "email_validator"
+  ];
 
   meta = with lib; {
     description = "A robust email syntax and deliverability validation library for Python 2.x/3.x.";

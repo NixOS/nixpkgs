@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchurl, pkgconfig, gtk2, libX11, libXtst, libXi, libxkbfile, xorgproto }:
+{ lib, buildPythonPackage, fetchurl, pkg-config, gtk2, libX11, libXtst, libXi, libxkbfile, xorgproto }:
 
 let
   majorVersion = "0.63";
@@ -12,7 +12,7 @@ in buildPythonPackage rec {
     sha256 = "0hd99hrxn6bh3rxcrdnad5cqjsphrn1s6fzx91q07d44k6cg6qcr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gtk2 libX11 libXtst libXi libxkbfile xorgproto ];
 

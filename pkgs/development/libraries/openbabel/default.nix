@@ -1,34 +1,45 @@
-{stdenv, fetchurl, fetchpatch, cmake, zlib, libxml2, eigen, python, cairo, pcre, pkgconfig }:
+{stdenv, lib, fetchurl, cmake, zlib, libxml2, eigen, python, cairo, pcre, pkg-config, swig, rapidjson }:
 
 stdenv.mkDerivation rec {
   pname = "openbabel";
-  version = "2.4.1";
+  version = "3.1.1";
 
   src = fetchurl {
-    url = "https://github.com/openbabel/openbabel/archive/openbabel-${stdenv.lib.replaceStrings ["."] ["-"] version}.tar.gz";
-    sha256 = "0xm7y859ivq2cp0q08mwshfxm0jq31xkyr4x8s0j6l7khf57yk2r";
+    url = "https://github.com/openbabel/openbabel/archive/openbabel-${lib.replaceStrings ["."] ["-"] version}.tar.gz";
+    sha256 = "c97023ac6300d26176c97d4ef39957f06e68848d64f1a04b0b284ccff2744f02";
   };
 
-  patches = [
-    # ARM / AArch64 fixes.
-    (fetchpatch {
-      url = "https://github.com/openbabel/openbabel/commit/ee11c98a655296550710db1207b294f00e168216.patch";
-      sha256 = "0wjqjrkr4pfirzzicdvlyr591vppydk572ix28jd2sagnfnf566g";
-    })
+
+  buildInputs = [ zlib libxml2 eigen python cairo pcre swig rapidjson ];
+
+  nativeBuildInputs = [ cmake pkg-config ];
+
+  pythonMajorMinor = "${python.sourceVersion.major}.${python.sourceVersion.minor}";
+
+  cmakeFlags = [
+    "-DRUN_SWIG=ON"
+    "-DPYTHON_BINDINGS=ON"
   ];
 
-  # TODO : perl & python bindings;
-  # TODO : wxGTK: I have no time to compile
-  # TODO : separate lib and apps
-  buildInputs = [ zlib libxml2 eigen python cairo pcre ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  postFixup = ''
+    cat <<EOF > $out/lib/python$pythonMajorMinor/site-packages/setup.py
+    from distutils.core import setup
 
-  meta = {
+    setup(
+        name = 'pyopenbabel',
+        version = '${version}',
+        packages = ['openbabel'],
+        package_data = {'openbabel' : ['_openbabel.so']}
+    )
+    EOF
+    '';
+
+  meta = with lib; {
     description = "A toolbox designed to speak the many languages of chemical data";
     homepage = "http://openbabel.org";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ ];
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ danielbarter ];
   };
 }

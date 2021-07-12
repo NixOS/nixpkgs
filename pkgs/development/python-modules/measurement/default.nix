@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPy3k
-, sympy, pytest, pytestrunner, sphinx, setuptools_scm }:
+, sympy, pytest, pytestrunner, sphinx, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "measurement";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytest pytestrunner ];
-  nativeBuildInputs = [ sphinx setuptools_scm ];
+  nativeBuildInputs = [ sphinx setuptools-scm ];
   propagatedBuildInputs = [ sympy ];
 
   meta = with lib; {

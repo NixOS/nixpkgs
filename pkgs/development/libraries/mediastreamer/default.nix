@@ -1,14 +1,14 @@
-{ alsaLib
+{ alsa-lib
 , bctoolbox
 , bzrtp
 , cmake
 , doxygen
 , fetchFromGitLab
-, fetchpatch
-, ffmpeg_3
+, ffmpeg
 , glew
 , gsm
 , intltool
+, lib
 , libGL
 , libGLU
 , libX11
@@ -23,8 +23,8 @@
 , libv4l
 , libvpx
 , ortp
-, pkgconfig
-, python
+, pkg-config
+, python3
 , SDL
 , speex
 , srtp
@@ -33,17 +33,15 @@
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
-  # Using master branch for linphone-desktop caused a chain reaction that many
-  # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-20";
+  version = "4.5.15";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = "c5eecb72cb44376d142949051dd0cb7c982608fb";
-    sha256 = "1vp260jxvjlmrmjdl4p23prg4cjln20a7z6zq8dqvfh4iq3ya033";
+    rev = version;
+    sha256 = "sha256-n/EuXEQ9nJKC32PMvWkfP1G+E6uQQuu1/A168n8/cIY=";
   };
 
   patches = [
@@ -59,15 +57,15 @@ stdenv.mkDerivation rec {
     cmake
     doxygen
     intltool
-    pkgconfig
-    python
+    pkg-config
+    python3
   ];
 
   propagatedBuildInputs = [
-    alsaLib
+    alsa-lib
     bctoolbox
     bzrtp
-    ffmpeg_3
+    ffmpeg
     glew
     gsm
     libGL
@@ -89,6 +87,8 @@ stdenv.mkDerivation rec {
     srtp
   ];
 
+  strictDeps = true;
+
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
@@ -101,10 +101,10 @@ stdenv.mkDerivation rec {
   ];
   NIX_LDFLAGS = "-lXext";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };

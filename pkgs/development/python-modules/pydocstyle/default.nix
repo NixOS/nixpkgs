@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k
 , mock
 , pytest
-, pytestpep8
 , snowballstemmer
 }:
 

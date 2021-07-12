@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, kernel, runtimeShell }:
+{ lib, stdenv, fetchurl, fetchpatch, kernel, runtimeShell }:
 
 let
   baseName = "bbswitch";
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/discrete_vga_poweroff $out/bin/discrete_vga_poweron
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A module for powering off hybrid GPUs";
     platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";

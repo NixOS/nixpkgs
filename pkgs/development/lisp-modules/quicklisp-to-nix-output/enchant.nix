@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''enchant'';
-  version = ''cl-20190521-git'';
+  baseName = "enchant";
+  version = "cl-20190521-git";
 
-  description = ''Programming interface for Enchant spell-checker library'';
+  description = "Programming interface for Enchant spell-checker library";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-enchant/2019-05-21/cl-enchant-20190521-git.tgz'';
-    sha256 = ''16ag48fr74m536an8fak5z0lfjdb265gv1ajai1lqg0vq2l5mr14'';
+    url = "http://beta.quicklisp.org/archive/cl-enchant/2019-05-21/cl-enchant-20190521-git.tgz";
+    sha256 = "16ag48fr74m536an8fak5z0lfjdb265gv1ajai1lqg0vq2l5mr14";
   };
 
   packageName = "enchant";

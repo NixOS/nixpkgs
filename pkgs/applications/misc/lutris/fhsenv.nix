@@ -5,7 +5,7 @@
 let
 
   qt5Deps = pkgs: with pkgs.qt5; [ qtbase qtmultimedia ];
-  gnome3Deps = pkgs: with pkgs; [ gnome3.zenity gtksourceview gnome3.gnome-desktop gnome3.libgnome-keyring webkitgtk ];
+  gnomeDeps = pkgs: with pkgs; [ gnome.zenity gtksourceview gnome.gnome-desktop gnome.libgnome-keyring webkitgtk ];
   xorgDeps = pkgs: with pkgs.xorg; [
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
@@ -28,7 +28,7 @@ in buildFHSUserEnv {
     # DGen // TODO: libarchive is broken
 
     # Dolphin
-    bluez ffmpeg_3 gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
+    bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
     wavpack orc nettle gmp pcre vulkan-loader
 
     # DOSBox
@@ -86,7 +86,7 @@ in buildFHSUserEnv {
     # ZDOOM
     soundfont-fluid bzip2 game-music-emu
   ] ++ qt5Deps pkgs
-    ++ gnome3Deps pkgs
+    ++ gnomeDeps pkgs
     ++ lib.optional steamSupport pkgs.steam;
 
   multiPkgs = pkgs: with pkgs; [
@@ -95,15 +95,15 @@ in buildFHSUserEnv {
     libao libevdev udev libgcrypt libxml2 libusb-compat-0_1 libpng libmpeg2 libv4l
     libjpeg libxkbcommon libass libcdio libjack2 libsamplerate libzip libmad libaio
     libcap libtiff libva libgphoto2 libxslt libsndfile giflib zlib glib
-    alsaLib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
+    alsa-lib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
     readline gcc SDL SDL2 curl graphite2 gtk2 gtk3 udev ncurses wayland libglvnd
-    vulkan-loader xdg_utils sqlite gnutls p11-kit libbsd harfbuzz
+    vulkan-loader xdg-utils sqlite gnutls p11-kit libbsd harfbuzz
 
     # PCSX2 // TODO: "libgobject-2.0.so.0: wrong ELF class: ELFCLASS64"
 
     # WINE
     cups lcms2 mpg123 cairo unixODBC samba4 sane-backends openldap
-    ocl-icd utillinux libkrb5
+    ocl-icd util-linux libkrb5
 
     # Proton
     libselinux

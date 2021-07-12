@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, ... }:
+{ lib, stdenv, fetchurl, perl, ... }:
 
 let
   version = "2.8.8";
@@ -17,11 +17,11 @@ in stdenv.mkDerivation rec {
     sha256 = "01ap9pr6zzzbp4ky0vy7i1983fwyqy27pl0ld55s30fdxka3ciih";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A text hyphenation library";
     homepage = "https://sourceforge.net/projects/hunspell/files/Hyphen/";
     platforms = platforms.all;
     license = with licenses; [ gpl2 lgpl21 mpl11 ];
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

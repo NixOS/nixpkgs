@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ocb-stubblr
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, ocb-stubblr
 , result, uucp, uuseg, uutf
 , lwt     ? null }:
 
-with stdenv.lib;
+with lib;
 
 if !versionAtLeast ocaml.version "4.05"
 then throw "notty is not available for OCaml ${ocaml.version}"

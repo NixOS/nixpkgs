@@ -57,7 +57,8 @@ in
 
     virtualisation.xen.bootParams =
       mkOption {
-        default = "";
+        default = [];
+        type = types.listOf types.str;
         description =
           ''
             Parameters passed to the Xen hypervisor at boot time.
@@ -68,6 +69,7 @@ in
       mkOption {
         default = 0;
         example = 512;
+        type = types.addCheck types.int (n: n >= 0);
         description =
           ''
             Amount of memory (in MiB) allocated to Domain 0 on boot.
@@ -78,6 +80,7 @@ in
     virtualisation.xen.bridge = {
         name = mkOption {
           default = "xenbr0";
+          type = types.str;
           description = ''
               Name of bridge the Xen domUs connect to.
             '';
@@ -158,9 +161,6 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    # Make sure Domain 0 gets the required configuration
-    #boot.kernelPackages = pkgs.boot.kernelPackages.override { features={xen_dom0=true;}; };
-
     boot.kernelModules =
       [ "xen-evtchn" "xen-gntdev" "xen-gntalloc" "xen-blkback" "xen-netback"
         "xen-pciback" "evtchn" "gntdev" "netbk" "blkbk" "xen-scsibk"
@@ -201,8 +201,8 @@ in
       ''
         if [ -d /proc/xen ]; then
             ${pkgs.kmod}/bin/modprobe xenfs 2> /dev/null
-            ${pkgs.utillinux}/bin/mountpoint -q /proc/xen || \
-                ${pkgs.utillinux}/bin/mount -t xenfs none /proc/xen
+            ${pkgs.util-linux}/bin/mountpoint -q /proc/xen || \
+                ${pkgs.util-linux}/bin/mount -t xenfs none /proc/xen
         fi
       '';
 
@@ -245,7 +245,7 @@ in
     # Xen provides udev rules.
     services.udev.packages = [ cfg.package ];
 
-    services.udev.path = [ pkgs.bridge-utils pkgs.iproute ];
+    services.udev.path = [ pkgs.bridge-utils pkgs.iproute2 ];
 
     systemd.services.xen-store = {
       description = "Xen Store Daemon";

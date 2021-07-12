@@ -1,5 +1,5 @@
-{ stdenv, makeWrapper, fetchFromBitbucket, fetchFromGitHub, pkgconfig
-, alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
+{ lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkg-config
+, alsa-lib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
 , libzip, rtaudio, rtmidi, speex, libsamplerate }:
 
 let
@@ -7,10 +7,8 @@ let
   # Others are downloaded with `make deps`. Due to previous issues with the
   # `glfw` submodule (see above) and because we can not access the network when
   # building in a sandbox, we fetch the dependency source manually.
-  pfft-source = fetchFromBitbucket {
-    owner = "jpommier";
-    repo = "pffft";
-    rev = "74d7261be17cf659d5930d4830609406bd7553e3";
+  pfft-source = fetchzip {
+    url = "https://vcvrack.com/downloads/dep/pffft.zip";
     sha256 = "084csgqa6f1a270bhybjayrh3mpyi2jimc87qkdgsqcp8ycsx1l1";
   };
   nanovg-source = fetchFromGitHub {
@@ -38,7 +36,7 @@ let
     sha256 = "17kd0lh2x3x12bxkyhq6z8sg6vxln8m9qirf0basvcsmylr6rb64";
   };
 in
-with stdenv.lib; stdenv.mkDerivation rec {
+with lib; stdenv.mkDerivation rec {
   pname = "VCV-Rack";
   version = "1.1.6";
 
@@ -76,8 +74,8 @@ with stdenv.lib; stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ alsaLib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [ alsa-lib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
 
   buildFlags = [ "Rack" ];
 
@@ -91,7 +89,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
     wrapProgram $out/bin/Rack --add-flags "-s $out/share/vcv-rack"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source virtual modular synthesizer";
     homepage = "https://vcvrack.com/";
     # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or under a

@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "urwid_readline";
-  version = "0.11";
+  version = "0.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "24e376d4b75940d19e8bc81c264be5d383f8d4da560f68f648dd16c85f6afdb5";
+    sha256 = "sha256-AYAgy8hku17Ye+F9wmsGnq4nVcsp86nFaarDve0e+vQ=";
   };
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libbsd }:
+{ lib, stdenv, fetchurl, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "rs";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -Dm 644 rs.1 -t $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reshape a data array from standard input";
     longDescription = ''
       rs reads the standard input, interpreting each line as a row of blank-

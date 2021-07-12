@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ip2location";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Look up locations of host names and IP addresses";
     longDescription = ''
       A command-line tool to find the country, region, city,coordinates,

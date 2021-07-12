@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , boost
@@ -50,8 +50,8 @@ let
     meta = {
       description = "Distributed just-in-time shared library building";
       homepage = "https://fenicsproject.org/";
-      platforms = stdenv.lib.platforms.all;
-      license = stdenv.lib.licenses.lgpl3;
+      platforms = lib.platforms.all;
+      license = lib.licenses.lgpl3;
     };
   };
 
@@ -80,8 +80,8 @@ let
     meta = {
       description = "Automatic generation of finite element basis functions";
       homepage = "https://fenicsproject.org/";
-      platforms = stdenv.lib.platforms.all;
-      license = stdenv.lib.licenses.lgpl3;
+      platforms = lib.platforms.all;
+      license = lib.licenses.lgpl3;
     };
   };
 
@@ -102,8 +102,8 @@ let
     meta = {
       description = "A domain-specific language for finite element variational forms";
       homepage = "https://fenicsproject.org/";
-      platforms = stdenv.lib.platforms.all;
-      license = stdenv.lib.licenses.lgpl3;
+      platforms = lib.platforms.all;
+      license = lib.licenses.lgpl3;
     };
   };
 
@@ -139,8 +139,8 @@ let
     meta = {
       description = "A compiler for finite element variational forms";
       homepage = "https://fenicsproject.org/";
-      platforms = stdenv.lib.platforms.all;
-      license = stdenv.lib.licenses.lgpl3;
+      platforms = lib.platforms.all;
+      license = lib.licenses.lgpl3;
     };
   };
   dolfin = stdenv.mkDerivation {
@@ -215,7 +215,7 @@ let
     meta = {
       description = "The FEniCS Problem Solving Environment in Python and C++";
       homepage = "https://fenicsproject.org/";
-      license = stdenv.lib.licenses.lgpl3;
+      license = lib.licenses.lgpl3;
     };
   };
   python-dolfin = pythonPackages.buildPythonPackage rec {
@@ -233,8 +233,8 @@ let
       export CMAKE_PREFIX_PATH=${pybind11}/share/cmake/pybind11:$CMAKE_PREFIX_PATH
       substituteInPlace setup.py --replace "pybind11==2.2.4" "pybind11"
       substituteInPlace dolfin/jit/jit.py \
-        --replace 'pkgconfig.exists("dolfin")' 'pkgconfig.exists("${dolfin}/lib/pkgconfig/dolfin.pc")' \
-        --replace 'pkgconfig.parse("dolfin")' 'pkgconfig.parse("${dolfin}/lib/pkgconfig/dolfin.pc")'
+        --replace 'pkg-config.exists("dolfin")' 'pkg-config.exists("${dolfin}/lib/pkgconfig/dolfin.pc")' \
+        --replace 'pkg-config.parse("dolfin")' 'pkg-config.parse("${dolfin}/lib/pkgconfig/dolfin.pc")'
     '';
     buildInputs = [
       dolfin
@@ -254,8 +254,8 @@ let
     meta = {
       description = "Python bindings for the DOLFIN FEM compiler";
       homepage = "https://fenicsproject.org/";
-      platforms = stdenv.lib.platforms.all;
-      license = stdenv.lib.licenses.lgpl3;
+      platforms = lib.platforms.all;
+      license = lib.licenses.lgpl3;
     };
   };
 in python-dolfin

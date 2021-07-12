@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, luajit, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, luajit, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "wrk2";
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Constant throughput, correct latency recording variant of wrk";
     homepage    = "https://github.com/giltene/wrk2";
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

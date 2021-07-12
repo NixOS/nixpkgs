@@ -1,23 +1,27 @@
-{ config, stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
+{ config, lib, substituteAll, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
 , gdk-pixbuf, xlibsWrapper, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
-, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups ? null
+, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , AppKit, Cocoa
 , fetchpatch
 }:
 
-assert xineramaSupport -> xorg.libXinerama != null;
-assert cupsSupport -> cups != null;
-
-with stdenv.lib;
+with lib;
 
 let
-  pname = "gtk+";
-  version = "2.24.32"; # remove passthru on next update
+
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
+    gtk_module_path = "gtk-2.0";
+    gtk_binary_version = "2.10.0";
+  };
+
 in
+
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "gtk+";
+  version = "2.24.32";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
@@ -30,11 +34,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   setupHooks =  [
-    ./hooks/gtk2-clean-immodules-cache.sh
     ./hooks/drop-icon-theme-cache.sh
+    gtkCleanImmodulesCache
   ];
 
-  nativeBuildInputs = setupHooks ++ [ perl pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = setupHooks ++ [ perl pkg-config gettext gobject-introspection ];
 
   patches = [
     ./patches/2.0-immodules.cache.patch
@@ -57,6 +61,10 @@ stdenv.mkDerivation rec {
     ++ optionals cupsSupport [ cups ]
     ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
 
+  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '' else null;
+
   configureFlags = [
     "--with-gdktarget=${gdktarget}"
     "--with-xinput=yes"
@@ -75,8 +83,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    # passthru to prevent rebuild but allow pname and version
-    inherit pname version;
     gtkExeEnvPostBuild = ''
       rm $out/lib/gtk-2.0/2.10.0/immodules.cache
       $out/bin/gtk-query-immodules-2.0 $out/lib/gtk-2.0/2.10.0/immodules/*.so > $out/lib/gtk-2.0/2.10.0/immodules.cache
@@ -101,5 +107,6 @@ stdenv.mkDerivation rec {
       proprietary software with GTK without any license fees or
       royalties.
     '';
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
 }

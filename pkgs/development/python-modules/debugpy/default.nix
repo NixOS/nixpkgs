@@ -2,9 +2,9 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , gdb
-, colorama
 , flask
 , psutil
 , pytest-timeout
@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f6a62hg82fn9ddrl6g11x2h27zng8jmrlfbnnra6q590i5v1ixr";
+    hash = "sha256-YGzc9mMIzPTmUgIXuZROLdYKjUm69x9SR+JtYRVpn24=";
   };
 
   patches = [
@@ -32,6 +32,12 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./hardcode-gdb.patch;
       inherit gdb;
+    })
+
+    # Use nixpkgs version instead of versioneer
+    (substituteAll {
+      src = ./hardcode-version.patch;
+      inherit version;
     })
 
     # Fix importing debugpy in:
@@ -43,14 +49,13 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
-  ];
 
-  postPatch = ''
-    # Use nixpkgs version instead of versioneer
-    substituteInPlace setup.py \
-      --replace "cmds = versioneer.get_cmdclass()" "cmds = {}" \
-      --replace "version=versioneer.get_version()" "version='${version}'"
-  '';
+    # Fix tests with flask>=2.0
+    (fetchpatch {
+      url = "https://github.com/microsoft/debugpy/commit/0a7f2cd67dda27ea4d38389b49a4e2a1899b834e.patch";
+      sha256 = "1g070fn07n7jj01jaf5s570zn70akf6klkamigs3ix11gh736rpn";
+    })
+  ];
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
   # Compile flags taken from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
@@ -67,7 +72,6 @@ buildPythonPackage rec {
   )'';
 
   checkInputs = [
-    colorama
     flask
     psutil
     pytest-timeout
@@ -91,11 +95,13 @@ buildPythonPackage rec {
     "gevent"
   ];
 
+  pythonImportsCheck = [ "debugpy" ];
+
   meta = with lib; {
     description = "An implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
     license = licenses.mit;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, SDL2, libogg, libvorbis, zlib, unzip }:
+{ lib, stdenv, fetchurl, pkg-config, SDL2, libogg, libvorbis, zlib, unzip }:
 
 let
 
@@ -12,17 +12,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "exult-1.6";
+  pname = "exult";
+  version = "1.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/exult/${name}.tar.gz";
+    url = "mirror://sourceforge/exult/exult-${version}.tar.gz";
     sha256 = "1dm27qkxj30567zb70q4acddsizn0xyi3z87hg7lysxdkyv49s3s";
   };
 
   configureFlags = [ "--disable-tools" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL2 libogg libvorbis zlib unzip ];
+  nativeBuildInputs = [ pkg-config unzip ];
+  buildInputs = [ SDL2 libogg libvorbis zlib ];
 
   enableParallelBuilding = true;
 
@@ -38,9 +39,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://exult.sourceforge.net/";
     description = "A reimplementation of the Ultima VII game engine";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.unix;
-    hydraPlatforms = stdenv.lib.platforms.linux; # darwin times out
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.unix;
+    hydraPlatforms = lib.platforms.linux; # darwin times out
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reusable Django application for allowing users to filter querysets dynamically";
     homepage = "https://pypi.org/project/django-filter/";
     license = licenses.bsd3;

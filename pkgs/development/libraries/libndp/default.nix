@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libndp-1.7";
@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1dlinhl39va00v55qygjc9ap77yqf7xvn4rwmvdr49xhzzxhlj1c";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libndp.org/";
     description = "Library for Neighbor Discovery Protocol";
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
     license = licenses.lgpl21;
   };
 

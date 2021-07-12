@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost
+# Darwin inputs
+, AudioToolbox, AudioUnit
 # Inputs
 , curl, libmms, libnfs, liburing, samba
 # Archive support
@@ -9,13 +11,13 @@
 # Filters
 , libsamplerate
 # Outputs
-, alsaLib, libjack2, libpulseaudio, libshout
+, alsa-lib, libjack2, libpulseaudio, libshout
 # Misc
 , icu, sqlite, avahi, dbus, pcre, libgcrypt, expat
 # Services
 , yajl
 # Client support
-, mpd_clientlib
+, libmpdclient
 # Tag support
 , libid3tag
 , nixosTests
@@ -28,7 +30,6 @@
 }:
 
 let
-  lib = stdenv.lib;
   concatAttrVals = nameList: set: lib.concatMap (x: set.${x} or []) nameList;
 
   featureDependencies = {
@@ -62,7 +63,7 @@ let
     # Filter plugins
     libsamplerate = [ libsamplerate ];
     # Output plugins
-    alsa          = [ alsaLib ];
+    alsa          = [ alsa-lib ];
     jack          = [ libjack2 ];
     pulse         = [ libpulseaudio ];
     shout         = [ libshout ];
@@ -71,7 +72,7 @@ let
     soundcloud    = [ curl yajl ];
     tidal         = [ curl yajl ];
     # Client support
-    libmpdclient  = [ mpd_clientlib ];
+    libmpdclient  = [ libmpdclient ];
     # Tag support
     id3tag        = [ libid3tag ];
     # Misc
@@ -115,13 +116,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22.2";
+      version = "0.22.9";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "1pg3h3bvrsp24pv53yvwl5kr4m2csaxffdbrj5rm3b7w6pbqpfix";
+        sha256 = "sha256-Qw7qJqxcBKxshT/qbVUegE1Tpt4QV5WbUHT2+qLbr9o=";
       };
 
       buildInputs = [
@@ -134,7 +135,7 @@ let
         gtest
       ]
         ++ concatAttrVals features_ featureDependencies
-        ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
+        ++ lib.optionals stdenv.isDarwin [ AudioToolbox AudioUnit ];
 
       nativeBuildInputs = [
         meson
@@ -149,8 +150,6 @@ let
       checkInputs = [ zip ];
 
       doCheck = true;
-
-      enableParallelBuilding = true;
 
       mesonAutoFeatures = "disabled";
 
@@ -171,10 +170,10 @@ let
 
       passthru.tests.nixos = nixosTests.mpd;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "A flexible, powerful daemon for playing music";
         homepage    = "https://www.musicpd.org/";
-        license     = licenses.gpl2;
+        license     = licenses.gpl2Only;
         maintainers = with maintainers; [ astsmtl ehmry fpletz tobim ];
         platforms   = platforms.unix;
 
@@ -190,7 +189,7 @@ in
   mpd = run { };
   mpd-small = run { features = [
     "webdav" "curl" "mms" "bzip2" "zzip"
-    "audiofile" "faad" "flac" "gme" "mad"
+    "audiofile" "faad" "flac" "gme"
     "mpg123" "opus" "vorbis" "vorbisenc"
     "lame" "libsamplerate" "shout"
     "libmpdclient" "id3tag" "expat" "pcre"

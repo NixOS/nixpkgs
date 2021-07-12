@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''fare-quasiquote-optima'';
-  version = ''fare-quasiquote-20200925-git'';
+  baseName = "fare-quasiquote-optima";
+  version = "fare-quasiquote-20200925-git";
 
-  description = ''fare-quasiquote extension for optima'';
+  description = "fare-quasiquote extension for optima";
 
   deps = [ args."alexandria" args."closer-mop" args."fare-quasiquote" args."fare-quasiquote-readtable" args."fare-utils" args."lisp-namespace" args."named-readtables" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_quasiquote" args."trivia_dot_trivial" args."trivial-cltl2" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fare-quasiquote/2020-09-25/fare-quasiquote-20200925-git.tgz'';
-    sha256 = ''0k25kx4gvr046bcnv5mqxbb4483v9p2lk7dvzjkgj2cxrvczmj8b'';
+    url = "http://beta.quicklisp.org/archive/fare-quasiquote/2020-09-25/fare-quasiquote-20200925-git.tgz";
+    sha256 = "0k25kx4gvr046bcnv5mqxbb4483v9p2lk7dvzjkgj2cxrvczmj8b";
   };
 
   packageName = "fare-quasiquote-optima";

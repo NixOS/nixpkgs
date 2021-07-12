@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27
 , future, python-language-server, mypy, configparser
-, pytestCheckHook, mock, isPy3k, pytestcov, coverage
+, pytestCheckHook, mock, pytestcov, coverage
 , fetchpatch
 }:
 
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tomv564/pyls-mypy";
     description = "Mypy plugin for the Python Language Server";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ ];
   };
 }

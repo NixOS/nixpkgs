@@ -11,6 +11,7 @@
 # Runtime dependencies
 , jedi
 , decorator
+, matplotlib-inline
 , pickleshare
 , traitlets
 , prompt_toolkit
@@ -22,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "7.17.0";
+  version = "7.24.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b70974aaa2674b05eb86a910c02ed09956a33f2dd6c71afc60f0b128a77e7f28";
+    sha256 = "9bc24a99f5d19721fb8a2d1408908e9c0520a17fff2233ffe82620847f17f1b6";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jedi
     decorator
+    matplotlib-inline
     pickleshare
     traitlets
     prompt_toolkit

@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 , go-md2man
 , installShellFiles
 , pkg-config
@@ -9,43 +9,49 @@
 , apparmor-parser
 , libseccomp
 , libselinux
+, makeWrapper
+, procps
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "runc";
-  version = "1.0.0-rc92";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "0r4zbxbs03xr639r7848282j1ybhibfdhnxyap9p76j5w8ixms94";
+    sha256 = "sha256-slNVSlyJLaqIFF4uJP/7u4M0AkJLQjqkHO5TeKFYgSA=";
   };
 
-  goPackagePath = "github.com/opencontainers/runc";
+  vendorSha256 = null;
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles pkg-config which ];
+  nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
 
-  buildInputs = [ libselinux libseccomp libapparmor apparmor-parser ];
+  buildInputs = [ libselinux libseccomp libapparmor ];
 
-  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" "BUILDTAGS+=selinux" ];
+  makeFlags = [ "BUILDTAGS+=seccomp" ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
+    runHook preBuild
     patchShebangs .
-    substituteInPlace libcontainer/apparmor/apparmor.go \
-      --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser
     make ${toString makeFlags} runc man
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 runc $out/bin/runc
     installManPage man/*/*.[1-9]
+    wrapProgram $out/bin/runc \
+      --prefix PATH : ${lib.makeBinPath [ procps ]} \
+      --prefix PATH : /run/current-system/systemd/bin
+    runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) cri-o podman; };
+  passthru.tests = { inherit (nixosTests) cri-o docker podman; };
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";

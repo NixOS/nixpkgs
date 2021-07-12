@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , pygments
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # both tests fail due to time issue that doesn't seem to matter in practice
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pyblosxom.github.io";
     description = "File-based blogging engine";
     license = licenses.mit;

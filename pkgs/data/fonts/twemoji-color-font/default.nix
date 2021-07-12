@@ -1,40 +1,27 @@
-{ stdenv, fetchFromGitHub, fetchpatch, inkscape, imagemagick, potrace, svgo, scfbuild }:
+{ lib
+, stdenv
+, fetchurl
+}:
 
 stdenv.mkDerivation rec {
   pname = "twemoji-color-font";
-  version = "12.0.1";
-  src = fetchFromGitHub {
-    owner = "eosrei";
-    repo = "twemoji-color-font";
-    rev = "v${version}";
-    sha256 = "00pbgqpkq21wl8fs0q1xp49xb10m48b9sz8cdc58flkd2vqfssw2";
+  version = "13.1.0";
+
+  # We fetch the prebuilt font because building it takes 1.5 hours on hydra.
+  # Relevant issue: https://github.com/NixOS/nixpkgs/issues/97871
+  src = fetchurl {
+    url = "https://github.com/eosrei/twemoji-color-font/releases/download/v${version}/TwitterColorEmoji-SVGinOT-Linux-${version}.tar.gz";
+    sha256 = "sha256-V8DWUUAK+HLDPcq3izPs174PfUnaSeLByDpZwhUIX5Q=";
   };
 
-  patches = [
-    # Fix build with Inkscape 1.0
-    # https://github.com/eosrei/twemoji-color-font/pull/82
-    (fetchpatch {
-      url = "https://github.com/eosrei/twemoji-color-font/commit/208ad63c2ceb38c528b5237abeb2b85ceedc1d37.patch";
-      sha256 = "TV8I++BEnVUQg7FNbnrEQ/MLV9n3drmspqjmDZgTGFI=";
-      postFetch = ''
-        substituteInPlace $out \
-          --replace "inkscape --without-gui" "inkscape --export-png"
-      '';
-    })
-  ];
-
-  nativeBuildInputs = [ inkscape imagemagick potrace svgo scfbuild ];
-  # silence inkscape errors about non-writable home
-  preBuild = "export HOME=\"$NIX_BUILD_ROOT\"";
-  makeFlags = [ "SCFBUILD=${scfbuild}/bin/scfbuild" ];
-  enableParallelBuilding = true;
+  dontBuild = true;
 
   installPhase = ''
-    install -Dm755 build/TwitterColorEmoji-SVGinOT.ttf $out/share/fonts/truetype/TwitterColorEmoji-SVGinOT.ttf
-    install -Dm644 linux/fontconfig/56-twemoji-color.conf $out/etc/fonts/conf.d/56-twemoji-color.conf
+    install -Dm755 TwitterColorEmoji-SVGinOT.ttf $out/share/fonts/truetype/TwitterColorEmoji-SVGinOT.ttf
+    install -Dm644 fontconfig/46-twemoji-color.conf $out/etc/fonts/conf.d/46-twemoji-color.conf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
     longDescription = ''
       A color and B&W emoji SVGinOT font built from the Twitter Emoji for

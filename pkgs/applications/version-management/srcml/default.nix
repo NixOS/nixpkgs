@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr,
+{ lib, stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr2,
   curl
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "0.9.5_beta";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ./gcc6.patch
   ];
 
-  nativeBuildInputs = [ cmake antlr ];
+  nativeBuildInputs = [ cmake antlr2 ];
   buildInputs = [ libxml2 libxslt boost libarchive python curl ];
 
   meta = {

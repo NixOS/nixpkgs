@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n502zj8igm583kbfvyv7zhd97vb71jac41ncb9jr2yz2v5ir8j9";
   };
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   checkPhase = ''
     pushd test
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/convbin $out/bin/convbin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts files to other formats";
     longDescription = ''
       This program is used to convert files to other formats,

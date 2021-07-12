@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, acl, libcap, Carbon, IOKit }:
+{ lib, stdenv, fetchurl, m4, acl, libcap, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "cdrtools";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false; # parallel building fails on some linux machines
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cdrtools.sourceforge.net/private/cdrecord.html";
     description = "Highly portable CD/DVD/BluRay command line recording software";
     license = with licenses; [ cddl gpl2 lgpl21 ];

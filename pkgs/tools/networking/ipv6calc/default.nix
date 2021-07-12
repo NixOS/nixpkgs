@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt, ip2location-c, openssl, perl
+{ lib, stdenv, fetchurl, getopt, ip2location-c, openssl, perl
 , libmaxminddb ? null, geolite-legacy ? null }:
 
 stdenv.mkDerivation rec {
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
     "--disable-bundled-md5"
     "--disable-dynamic-load"
     "--enable-shared"
-  ] ++ stdenv.lib.optional (libmaxminddb != null) "--enable-mmdb"
-    ++ stdenv.lib.optional (geolite-legacy != null) "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-    ++ stdenv.lib.optional (ip2location-c != null) "--enable-ip2location";
+  ] ++ lib.optional (libmaxminddb != null) "--enable-mmdb"
+    ++ lib.optional (geolite-legacy != null) "--with-geoip-db=${geolite-legacy}/share/GeoIP"
+    ++ lib.optional (ip2location-c != null) "--enable-ip2location";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculate/manipulate (not only) IPv6 addresses";
     longDescription = ''
       ipv6calc is a small utility to manipulate (not only) IPv6 addresses and

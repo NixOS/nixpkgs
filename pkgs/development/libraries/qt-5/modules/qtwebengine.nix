@@ -1,30 +1,34 @@
-{ qtModule, qtCompatVersion,
-  qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
+{ qtModule
+, qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 
-, bison, coreutils, flex, git, gperf, ninja, pkgconfig, python2, which
+, bison, coreutils, flex, git, gperf, ninja, pkg-config, python2, which
+, nodejs, qtbase, perl
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
-, alsaLib
+, alsa-lib
 , libcap
 , pciutils
 , systemd
+, pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
 , cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg_3 ? null
+, ffmpeg ? null
 , lib, stdenv, fetchpatch
+, version ? null
+, qtCompatVersion
 }:
 
-with stdenv.lib;
+with lib;
 
 qtModule {
-  name = "qtwebengine";
+  pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf ninja pkgconfig python2 which gn
+    bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
   ] ++ optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -38,29 +42,18 @@ qtModule {
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
 
-  patches = [
-    # Fix build with bison-3.7: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=1a53f599
-    (fetchpatch {
-      name = "qtwebengine-bison-3.7-build.patch";
-      url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=1a53f599";
-      sha256 = "1nqpyn5fq37q7i9nasag6i14lnz0d7sld5ikqhlm8qwq9d7gbmjy";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/";
-    })
-  ];
-
   postPatch =
-    # Patch Chromium build tools
     ''
-      ( cd src/3rdparty/chromium; patchShebangs . )
-    ''
-    # Patch Chromium build files
-    + optionalString (lib.versionOlder qtCompatVersion "5.12") ''
-      substituteInPlace ./src/3rdparty/chromium/build/common.gypi --replace /bin/echo ${coreutils}/bin/echo
-      substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/toolchain.gypi \
-        --replace /bin/echo ${coreutils}/bin/echo
-      substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/standalone.gypi \
-        --replace /bin/echo ${coreutils}/bin/echo
+      # Patch Chromium build tools
+      (
+        cd src/3rdparty/chromium;
+
+        # Manually fix unsupported shebangs
+        substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
+          --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
+
+        patchShebangs .
+      )
     ''
     # Prevent Chromium build script from making the path to `clang` relative to
     # the build directory.  `clang_base_path` is the value of `QMAKE_CLANG_DIR`
@@ -85,29 +78,35 @@ qtModule {
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
-    + optionalString stdenv.isDarwin (''
+    + optionalString stdenv.isDarwin (
+    (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
+      substituteInPlace src/buildtools/config/mac_osx.pri \
+        --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
+    '' else ''
       substituteInPlace src/core/config/mac_osx.pri \
         --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-    ''
+    '')
      # Following is required to prevent a build error:
      # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
-    + (optionalString (lib.versionAtLeast qtCompatVersion "5.11") ''
+    + ''
       substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
         --replace '$sysroot/usr' "${darwin.xnu}"
-    '')
-    + ''
+    ''
     # Apple has some secret stuff they don't share with OpenBSM
+    + (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
+    substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
+      --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
+    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
+      --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
+    '' else ''
     substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
       --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-
-    substituteInPlace src/3rdparty/chromium/sandbox/mac/BUILD.gn \
-      --replace 'libs = [ "sandbox" ]' 'libs = [ "/usr/lib/libsandbox.1.dylib" ]'
-    '');
+    ''));
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
     "-Wno-class-memaccess"
-  ] ++ lib.optionals (stdenv.hostPlatform.platform.gcc.arch or "" == "sandybridge") [
+  ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
     # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
     # TODO: investigate and fix properly
     "-march=westmere"
@@ -132,11 +131,11 @@ qtModule {
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
-   '';
+  '';
 
-  qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
-    then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
-    else optional enableProprietaryCodecs "-- -proprietary-codecs";
+  qmakeFlags = [ "--" "-system-ffmpeg" ]
+    ++ optional (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
+    ++ optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
     # Image formats
@@ -152,13 +151,12 @@ qtModule {
     harfbuzz icu
 
     libevent
-  ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
-    ffmpeg_3
+    ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
     # Audio formats
-    alsaLib
+    alsa-lib
 
     # Text rendering
     fontconfig freetype
@@ -169,6 +167,10 @@ qtModule {
     # X11 libs
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm
+
+  ] ++ optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
+    # Pipewire
+    pipewire_0_2
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
@@ -198,6 +200,7 @@ qtModule {
 
   buildInputs = optionals stdenv.isDarwin (with darwin; [
     cups
+    apple_sdk.libs.sandbox
 
     # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
     # to get some information about the host platform.
@@ -213,14 +216,7 @@ qtModule {
         shift
       done
     '')
-
-    # For sandbox.h include
-    (runCommand "MacOS_SDK_sandbox.h" {} ''
-      install -Dm444 "${lib.getDev darwin.apple_sdk.sdk}"/include/sandbox.h "$out"/include/sandbox.h
-    '')
   ]);
-
-  __impureHostDeps = optional stdenv.isDarwin "/usr/lib/libsandbox.1.dylib";
 
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
@@ -231,12 +227,19 @@ qtModule {
     [Paths]
     Prefix = ..
     EOF
+  '' + lib.optionalString (lib.versions.majorMinor qtCompatVersion == "5.15") ''
+    # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
+    sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
+    # This build takes a long time; particularly on slow architectures
+    timeout = 24 * 3600;
   };
 
 }

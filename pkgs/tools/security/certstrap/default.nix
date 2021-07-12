@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "certstrap";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "1ymchnn7c9g3pq7rw4lrwsd6z3wfjx90g7qgrw6r5hssl77mnscj";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Tools to bootstrap CAs, certificate requests, and signed certificates";
     license = licenses.asl20;

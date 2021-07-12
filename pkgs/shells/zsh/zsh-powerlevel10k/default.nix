@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, pkgs }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, pkgs }:
 
 # To make use of this derivation, use
 # `programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";`
@@ -6,26 +6,26 @@
 let
   # match gitstatus version with given `gitstatus_version`:
   # https://github.com/romkatv/powerlevel10k/blob/master/gitstatus/build.info
-  gitstatus = pkgs.gitAndTools.gitstatus.overrideAttrs (oldAtttrs: rec {
-    version = "1.2.0";
+  gitstatus = pkgs.gitstatus.overrideAttrs (oldAtttrs: rec {
+    version = "1.5.1";
 
     src = fetchFromGitHub {
       owner = "romkatv";
       repo = "gitstatus";
       rev = "v${version}";
-      sha256 = "0xi5ab0rsj6xs4vqgn2j5rih1nncghr83yn395mk1is1f4bsmp0s";
+      sha256 = "1ffgh5826985phc8amvzl9iydvsnij5brh4gczfh201vfmw9d4hh";
     };
   });
 in
 stdenv.mkDerivation rec {
   pname = "powerlevel10k";
-  version = "1.13.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
     rev = "v${version}";
-    sha256 = "0w5rv7z47nys3x113mdddpb2pf1d9pmz9myh4xjzrcy4hp4qv421";
+    sha256 = "1b3j2riainx3zz4irww72z0pb8l8ymnh1903zpsy5wmjgb0wkcwq";
   };
 
   patches = [
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A fast reimplementation of Powerlevel9k ZSH theme";
     homepage = "https://github.com/romkatv/powerlevel10k";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.hexa ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.hexa ];
   };
 }

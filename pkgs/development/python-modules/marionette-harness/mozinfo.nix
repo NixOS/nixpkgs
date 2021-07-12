@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mozfile ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System information utilities for Mozilla testing";
     homepage = "https://wiki.mozilla.org/Auto-tools/Projects/Mozbase";
     license = licenses.mpl20;

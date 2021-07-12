@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libatomic_ops
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
 }:
 
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libatomic_ops ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux;
 
-  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
     export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
   '';
 
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     license = "https://hboehm.info/gc/license.txt";
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

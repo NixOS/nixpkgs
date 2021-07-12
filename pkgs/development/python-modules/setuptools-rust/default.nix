@@ -1,31 +1,38 @@
-{ stdenv
+{ callPackage
+, lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , semantic-version
 , setuptools
-, setuptools_scm
+, setuptools-scm
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "0.11.4";
-
-  disabled = isPy27;
+  version = "0.12.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9714fcb94c78e6ab1864ddac7750049e105fd4f7c52103aecf40d408e94a722f";
+    sha256 = "647009e924f0ae439c7f3e0141a184a69ad247ecb9044c511dabde232d3d570e";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ semantic-version setuptools toml ];
 
-  meta = with stdenv.lib; {
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "setuptools_rust" ];
+
+  passthru.tests.pyo3 = callPackage ./pyo3-test {};
+
+  meta = with lib; {
     description = "Setuptools plugin for Rust support";
     homepage = "https://github.com/PyO3/setuptools-rust";
+    changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "modemmanager-exporter";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) modemmanager; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mdlayher/modemmanager_exporter";
     description = "Prometheus exporter for ModemManager and its devices";
     license = licenses.mit;

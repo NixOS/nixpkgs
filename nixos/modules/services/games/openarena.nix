@@ -19,7 +19,7 @@ in
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''Extra flags to pass to <command>oa_ded</command>'';
+        description = "Extra flags to pass to <command>oa_ded</command>";
         example = [
           "+set dedicated 2"
           "+set sv_hostname 'My NixOS OpenArena Server'"

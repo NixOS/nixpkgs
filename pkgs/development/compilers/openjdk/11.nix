@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
+{ stdenv, lib, fetchFromGitHub, bash, pkg-config, autoconf, cpio, file, which, unzip
+, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
 , libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
 , setJavaClassPath
@@ -11,21 +11,23 @@
 let
   major = "11";
   minor = "0";
-  update = "9";
-  build = "11";
+  update = "11";
+  build = "9";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
     version = "${major}.${minor}.${update}+${build}";
 
-    src = fetchurl {
-      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "fc2ee2ee5822f2440e66114c8fa76888fea7ddd351282940c222d34b5f871858";
+    src = fetchFromGitHub {
+      owner = "openjdk";
+      repo = "jdk${major}u";
+      rev = "jdk-${version}";
+      sha256 = "0jncsj424340xjfwv6sx5hy9sas80qa3ymkx0ng3by3z01y5rgfx";
     };
 
-    nativeBuildInputs = [ pkgconfig autoconf ];
+    nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
+      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk11-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
@@ -37,6 +39,7 @@ let
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap.patch
+      ./fix-library-path-jdk11.patch
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk10.patch
     ];
@@ -134,17 +137,12 @@ let
 
     disallowedReferences = [ openjdk11-bootstrap ];
 
-    meta = with stdenv.lib; {
-      homepage = "http://openjdk.java.net/";
-      license = licenses.gpl2;
-      description = "The open-source Java Development Kit";
-      maintainers = with maintainers; [ edwtjo asbachb ];
-      platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ];
-    };
+    meta = import ./meta.nix lib;
 
     passthru = {
       architecture = "";
       home = "${openjdk}/lib/openjdk";
+      inherit gtk3;
     };
   };
 in openjdk

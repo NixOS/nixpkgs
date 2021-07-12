@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , python3
 , glibcLocales
 , installShellFiles
@@ -6,19 +6,22 @@
 }:
 
 let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
+  inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1aq7f63bhs9dnwzp15nfr07f2ki6s3lnqfap3b09rhchn6lfznwb";
+    sha256 = "e7e5cab13ecce0562b1f13f46ab8cbc079caed4b462f2371929f8a4abff2bcbe";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     installShellFiles
+    setuptools-scm
   ];
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
@@ -60,7 +63,7 @@ buildPythonApplication rec {
     rm tests/test_cli.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''

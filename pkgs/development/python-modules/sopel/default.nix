@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy
+{ lib, buildPythonPackage, fetchPypi, isPyPy
 , dnspython
 , geoip2
 , ipython
@@ -6,7 +6,6 @@
 , pyenchant
 , pygeoip
 , pytestCheckHook
-, python
 , pytz
 , sqlalchemy
 , xmltodict
@@ -14,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "7.0.6";
+  version = "7.1.0";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e394d9797e221f90a95e5eb9987e8c1faf4f2488964f521e8ca1628798f0a38";
+    sha256 = "74057d4c86cff744b1f1062f3a9c4ae99eb4f1b17048ceb083293d5f4c7e989b";
   };
 
   propagatedBuildInputs = [
@@ -52,7 +51,9 @@ buildPythonPackage rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "sopel" ];
+
+  meta = with lib; {
     description = "Simple and extensible IRC bot";
     homepage = "http://sopel.chat";
     license = licenses.efl20;

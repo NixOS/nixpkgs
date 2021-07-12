@@ -223,6 +223,7 @@ in {
       };
 
       pythonPackages = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = pythonPackages: with pythonPackages; [ ];
         defaultText = "pythonPackages: with pythonPackages; [ ]";
         description = "Packages to add the to the PYTHONPATH of the buildbot process.";
@@ -282,5 +283,5 @@ in {
     '')
   ];
 
-  meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
+  meta.maintainers = with lib.maintainers; [ mic92 lopsided98 ];
 }

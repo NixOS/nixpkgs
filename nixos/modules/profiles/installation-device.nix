@@ -45,10 +45,10 @@ with lib;
     };
 
     # Automatically log in at the virtual consoles.
-    services.mingetty.autologinUser = "nixos";
+    services.getty.autologinUser = "nixos";
 
     # Some more help text.
-    services.mingetty.helpLine = ''
+    services.getty.helpLine = ''
       The "nixos" and "root" accounts have empty passwords.
 
       An ssh daemon is running. You then must set a password
@@ -99,5 +99,13 @@ with lib;
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
     networking.firewall.logRefusedConnections = mkDefault false;
+
+    # Prevent installation media from evacuating persistent storage, as their
+    # var directory is not persistent and it would thus result in deletion of
+    # those entries.
+    environment.etc."systemd/pstore.conf".text = ''
+      [PStore]
+      Unlink=no
+    '';
   };
 }

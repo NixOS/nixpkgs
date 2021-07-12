@@ -1,10 +1,11 @@
-{ fetchurl, stdenv, flex, bison }:
+{ fetchurl, lib, stdenv, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "unfs3-0.9.22";
+  pname = "unfs3";
+  version = "0.9.22";
 
   src = fetchurl {
-    url = "mirror://sourceforge/unfs3/${name}.tar.gz";
+    url = "mirror://sourceforge/unfs3/${pname}-${version}.tar.gz";
     sha256 = "076zkyqkn56q0a8n3h65n1a68fknk4hrrp6mbhajq5s1wp5248j8";
   };
 
@@ -26,8 +27,11 @@ stdenv.mkDerivation rec {
 
     homepage = "http://unfs3.sourceforge.net/";
 
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
+
+    # https://github.com/unfs3/unfs3/issues/13
+    broken = true;
   };
 }

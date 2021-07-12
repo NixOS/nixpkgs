@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy27 }:
+{ lib, fetchPypi, buildPythonPackage, isPy27 }:
 
 buildPythonPackage rec {
   pname = "whitenoise";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Radically simplified static file serving for WSGI applications";
     homepage = "http://whitenoise.evans.io/";
     license = licenses.mit;

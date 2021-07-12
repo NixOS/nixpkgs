@@ -1,16 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, isPy27 }:
 
 buildPythonPackage rec {
   pname = "uritools";
-  version = "3.0.0";
+  version = "3.0.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "405917a31ce58a57c8ccd0e4ea290f38baf2f4823819c3688f5331f1aee4ccb0";
+    sha256 = "28ffef82ce3b2793237d36e45aa7cde28dae6502f6a93fdbd05ede401520e279";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RFC 3986 compliant, Unicode-aware, scheme-agnostic replacement for urlparse";
     license = licenses.mit;
     maintainers = [ maintainers.rvolosatovs ];

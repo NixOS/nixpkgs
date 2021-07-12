@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11 }:
+{ lib, stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "xchainkeys-0.11";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://henning-bekel.de/xchainkeys/";
     description = "A standalone X11 program to create chained key bindings";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

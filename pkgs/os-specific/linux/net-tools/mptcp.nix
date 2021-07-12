@@ -1,4 +1,4 @@
-{ stdenv, nettools, fetchFromGitHub  }:
+{ lib, nettools, fetchFromGitHub  }:
 
 nettools.overrideAttrs(oa: rec {
   name = "net-tools-mptcp";
@@ -11,7 +11,7 @@ nettools.overrideAttrs(oa: rec {
     sha256 = "0i7gr1y699nc7j9qllsx8kicqkpkhw51x4chcmyl5xs06b2mdjri";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/multipath-tcp/net-tools";
     description = "A set of tools for controlling the network subsystem in Linux";
     license = licenses.gpl2Plus;

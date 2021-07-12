@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "aiolifx";
-  version = "0.6.8";
+  version = "0.6.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f9055bc2a9a72c5eab17e0ce5522edecd6de07e21cf347bf0cffabdabe5570e";
+    sha256 = "0c28e9c058ee504a07eec11cb333bc6496d233da100dcab9c33549e9eb4985c0";
   };
 
   # tests are not implemented

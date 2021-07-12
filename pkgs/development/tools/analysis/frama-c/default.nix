@@ -7,15 +7,22 @@
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
-    apron
+    apron.dev
     biniou
     camlzip
     easy-format
-    menhir
+    menhirLib
     mlgmpidl
     num
     ocamlgraph
+    stdlib-shims
     why3
+    re
+    seq
+    sexplib
+    sexplib0
+    parsexp
+    base
     yojson
     zarith
   ];
@@ -24,12 +31,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "21.1";
-  slang   = "Scandium";
+  version = "23.0";
+  slang   = "Vanadium";
 
   src = fetchurl {
-    url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "0qq0d08dzr0dmdjysiimdqmwlzgnn932vp5kf8lfn3nl45ai09dy";
+    url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    sha256 = "0pdm3y2nfyjhpnicv1pg9j48llq86dmb591d2imnafp4xfqani0s";
   };
 
   preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
@@ -37,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf wrapGAppsHook ];
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhir camlzip
+    ncurses ocaml findlib ltl2ba ocamlgraph ocamlgraph_gtk yojson menhirLib camlzip
     lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
     gdk-pixbuf
   ];
@@ -73,8 +80,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
     homepage    = "http://frama-c.com/";
-    license     = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice amiddelk ];
-    platforms   = stdenv.lib.platforms.unix;
+    license     = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];
+    platforms   = lib.platforms.unix;
   };
 }

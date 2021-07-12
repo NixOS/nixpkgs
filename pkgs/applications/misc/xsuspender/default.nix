@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
-, glib, libwnck3, procps }:
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkg-config
+, glib, libwnck, procps }:
 
 with lib;
 
@@ -16,10 +16,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
-  buildInputs = [ glib libwnck3 ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  buildInputs = [ glib libwnck ];
 
   postInstall = ''
     wrapProgram $out/bin/xsuspender \

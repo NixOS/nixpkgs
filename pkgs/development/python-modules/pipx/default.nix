@@ -5,12 +5,13 @@
 , userpath
 , argcomplete
 , packaging
+, importlib-metadata
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "0.15.5.1";
+  version = "0.16.3";
 
   disabled = pythonOlder "3.6";
 
@@ -19,10 +20,16 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = version;
-    sha256 = "0lq8dfkq4ji11r4k5csqzyv0757fbxiax6ixn94f9747zrikssf6";
+    sha256 = "1w5pzn5mgl9rr9zbmqza5is4mvjvcgjps1q9qa1mvbnyvakdkr4c";
   };
 
-  propagatedBuildInputs = [ userpath argcomplete packaging ];
+  propagatedBuildInputs = [
+    userpath
+    argcomplete
+    packaging
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   checkInputs = [ pytestCheckHook ];
 
@@ -30,16 +37,30 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  # disable tests, which require internet connection
+  pytestFlagsArray = [
+    "--ignore=tests/test_install_all_packages.py"
+    # start local pypi server and use in tests
+    "--net-pypiserver"
+  ];
   disabledTests = [
+    # disable tests which are difficult to emulate due to shell manipulations
+    "path_warning"
+    "script_from_internet"
+    "ensure_null_pythonpath"
+    # disable tests, which require internet connection
     "install"
     "inject"
     "ensure_null_pythonpath"
     "missing_interpreter"
     "cache"
     "internet"
+    "run"
     "runpip"
     "upgrade"
+    "suffix"
+    "legacy_venv"
+    "determination"
+    "json"
   ];
 
   meta = with lib; {

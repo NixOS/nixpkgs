@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, hepmc2, lhapdf, pythia, makeWrapper }:
+{ lib, stdenv, fetchurl, boost, hepmc2, lhapdf, pythia, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "sacrifice";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     substituteInPlace configure --replace HAVE_LCG=yes HAVE_LCG=no
   ''
-  + stdenv.lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace LIB_SUFFIX=\"so\" LIB_SUFFIX=\"dylib\"
   '';
 
@@ -40,9 +40,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A standalone contribution to AGILe for steering Pythia 8";
-    license     = stdenv.lib.licenses.gpl2;
+    license     = lib.licenses.gpl2;
     homepage    = "https://agile.hepforge.org/trac/wiki/Sacrifice";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

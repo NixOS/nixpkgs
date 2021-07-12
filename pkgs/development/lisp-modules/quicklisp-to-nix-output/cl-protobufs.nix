@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-protobufs'';
-  version = ''20200325-git'';
+  baseName = "cl-protobufs";
+  version = "20200325-git";
 
-  description = ''Protobufs for Common Lisp'';
+  description = "Protobufs for Common Lisp";
 
   deps = [ args."alexandria" args."babel" args."closer-mop" args."trivial-features" args."trivial-garbage" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-protobufs/2020-03-25/cl-protobufs-20200325-git.tgz'';
-    sha256 = ''1sgvp038bvd3mq2f0xh4wawf8h21jmw449yjyahidh1zfqdibpin'';
+    url = "http://beta.quicklisp.org/archive/cl-protobufs/2020-03-25/cl-protobufs-20200325-git.tgz";
+    sha256 = "1sgvp038bvd3mq2f0xh4wawf8h21jmw449yjyahidh1zfqdibpin";
   };
 
   packageName = "cl-protobufs";

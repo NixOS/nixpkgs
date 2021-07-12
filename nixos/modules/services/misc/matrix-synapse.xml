@@ -33,11 +33,11 @@
    <link xlink:href="https://github.com/matrix-org/synapse#synapse-installation">
    installation instructions of Synapse </link>.
 <programlisting>
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
   fqdn =
     let
-      join = hostName: domain: hostName + optionalString (domain != null) ".${domain}";
+      join = hostName: domain: hostName + lib.optionalString (domain != null) ".${domain}";
     in join config.networking.hostName config.networking.domain;
 in {
   networking = {
@@ -69,6 +69,9 @@ in {
       # i.e. to delegate from the host being accessible as ${config.networking.domain}
       # to another host actually running the Matrix homeserver.
       "${config.networking.domain}" = {
+        <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
+        <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
+
         <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.extraConfig">locations."= /.well-known/matrix/server".extraConfig</link> =
           let
             # use 443 instead of the default 8448 port to unite
@@ -129,7 +132,7 @@ in {
       }
     ];
   };
-};
+}
 </programlisting>
   </para>
 
@@ -203,7 +206,7 @@ Success!
     <link linkend="opt-services.nginx.virtualHosts._name_.root">root</link> = pkgs.element-web.override {
       conf = {
         default_server_config."m.homeserver" = {
-          "base_url" = "${config.networking.domain}";
+          "base_url" = "https://${fqdn}";
           "server_name" = "${fqdn}";
         };
       };

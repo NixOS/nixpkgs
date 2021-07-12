@@ -1,16 +1,16 @@
 { stdenv, lib, fetchurl, fetchpatch, buildPackages
-, pkgconfig, intltool, ninja, meson
-, file, flex, bison, expat, libdrm, xorg, wayland, wayland-protocols, openssl
+, meson, pkg-config, ninja
+, intltool, bison, flex, file, python3Packages
+, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, python3Packages
-, libglvnd
-, enableRadv ? true
+, libelf, libvdpau
+, libglvnd, libunwind
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , OpenGL, Xplugin
-, withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
+, withValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 }:
@@ -26,16 +26,15 @@
   - libOSMesa is in $osmesa (~4 MB)
 */
 
-with stdenv.lib;
+with lib;
 
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.2.1";
+  version = "21.1.4";
   branch  = versions.major version;
-in
 
-stdenv.mkDerivation {
+self = stdenv.mkDerivation {
   pname = "mesa";
   inherit version;
 
@@ -46,7 +45,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0ji4s1gwcvx3fbj9h0x5zbma6kw4b75vs0266zhc06r97yd6v96i";
+    sha256 = "02z9g6zpkg1p1sm8f84xdi7v2n7x534x9pn565bvcr411527y5qz";
   };
 
   prePatch = "patchShebangs .";
@@ -58,38 +57,24 @@ stdenv.mkDerivation {
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./opencl-install-dir.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      # Fix `-Werror=int-conversion` pthread warnings on musl.
-      # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
-      (fetchpatch {
-        name = "nine_debug-Make-tid-more-type-correct";
-        # Patch adjusted for version `20.1`, before the big mesa dirs change
-        # `gallium: rename 'state tracker' to 'frontend'`.
-        # Patch for versions after that change is at
-        #     https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e3b4745ef16d0e833300ad67044.patch
-        url = "https://gitlab.freedesktop.org/nh2/mesa/commit/3385c49684375f1153a52ed7ccda3f5135268a41.patch";
-        sha256 = "1ci694sqjll44c9g2md4krhk6qlvq51r7ad5rnnfdnf3l8ys0i50";
-      })
-    ]
-    # do not prefix user provided dri-drivers-path
-    ++ lib.optional (lib.versionOlder version "19.0.0") (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/commit/f6556ec7d126b31da37c08d7cb657250505e01a0.patch";
-      sha256 = "0z6phi8hbrbb32kkp1js7ggzviq7faz1ria36wi4jbc4in2392d9";
+    # Fix `-Werror=int-conversion` pthread warnings on musl.
+    # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
+    (fetchpatch {
+      name = "nine_debug-Make-tid-more-type-correct";
+      url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
+      sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
     })
-    ++ lib.optionals (lib.versionOlder version "19.1.0") [
-      # do not prefix user provided d3d-drivers-path
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/mesa/mesa/commit/dcc48664197c7e44684ccfb970a4ae083974d145.patch";
-        sha256 = "1nhs0xpx3hiy8zfb5gx1zd7j7xha6h0hr7yingm93130a5902lkb";
-      })
-
-      # don't build libGLES*.so with GLVND
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/mesa/mesa/commit/b01524fff05eef66e8cd24f1c5aacefed4209f03.patch";
-        sha256 = "1pszr6acx2xw469zq89n156p3bf3xf84qpbjw5fr1sj642lbyh7c";
-      })
-    ];
+    # For RISC-V support:
+    (fetchpatch {
+      name = "add-riscv-default-selections.patch";
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/9908da1b7a5eaf0156d458e0e24b694c070ba345.patch";
+      sha256 = "036gv95m5gzzs6qpgkydf5fwgdlm7kpbdfalg8vmayghd260rw1w";
+    })
+  ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
+    # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
+    ./aarch64-darwin.patch
+  ];
 
   postPatch = ''
     substituteInPlace meson.build --replace \
@@ -101,9 +86,15 @@ stdenv.mkDerivation {
       'DATADIR "/drirc.d"' '"${placeholder "out"}/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}'"
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace meson.build --replace \
+      "find_program('nm')" \
+      "find_program('${stdenv.cc.targetPrefix}nm')"
   '';
 
-  outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
+  outputs = [ "out" "dev" "drivers" ]
+    ++ lib.optional enableOSMesa "osmesa"
+    ++ lib.optional stdenv.isLinux "driversdev";
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
@@ -129,24 +120,26 @@ stdenv.mkDerivation {
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
     "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
-    "-Dosmesa=${if enableOSMesa then "gallium" else "none"}" # used by wine
+    "-Dosmesa=${boolToString enableOSMesa}" # used by wine
+    "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
   ];
 
   buildInputs = with xorg; [
-    expat llvmPackages.llvm libglvnd xorgproto
+    expat llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
+    ++ lib.optionals stdenv.isDarwin [ libunwind ]
     ++ lib.optional withValgrind valgrind-light;
 
-  depsBuildBuild = [ pkgconfig ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
-    pkgconfig meson ninja
+    meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
@@ -158,7 +151,6 @@ stdenv.mkDerivation {
   ] ++ optional stdenv.isLinux libdrm
     ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
-  enableParallelBuilding = true;
   doCheck = false;
 
   postInstall = ''
@@ -195,20 +187,22 @@ stdenv.mkDerivation {
     mv -t $osmesa/lib/ $out/lib/libOSMesa*
   '';
 
-  # TODO:
-  #  check $out doesn't depend on llvm: builder failures are ignored
-  #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
   postFixup = optionalString stdenv.isLinux ''
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
+    [ -f "$dev/lib/pkgconfig/d3d.pc" ] && substituteInPlace "$dev/lib/pkgconfig/d3d.pc" --replace "$drivers" "${libglvnd.driverLink}"
 
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
     rm -f $dev/lib/pkgconfig/{gl,egl}.pc
 
-    # Update search path used by pkg-config
-    for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do
-      if [ -f "$pc" ]; then
-        substituteInPlace "$pc" --replace $out $drivers
+    # Move development files for libraries in $drivers to $driversdev
+    mkdir -p $driversdev/include
+    mv $dev/include/xa_* $dev/include/d3d* -t $driversdev/include || true
+    mkdir -p $driversdev/lib/pkgconfig
+    for pc in lib/pkgconfig/{xatracker,d3d}.pc; do
+      if [ -f "$dev/$pc" ]; then
+        substituteInPlace "$dev/$pc" --replace $out $drivers
+        mv $dev/$pc $driversdev/$pc
       fi
     done
 
@@ -221,11 +215,19 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-fno-common";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-common";
 
   passthru = {
     inherit libdrm;
     inherit (libglvnd) driverLink;
+
+    tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
+      name = "mesa-dev-does-not-depend-on-llvm";
+      buildCommand = ''
+        echo ${self.dev} >>$out
+      '';
+      disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+    };
   };
 
   meta = {
@@ -245,4 +247,6 @@ stdenv.mkDerivation {
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
-}
+};
+
+in self

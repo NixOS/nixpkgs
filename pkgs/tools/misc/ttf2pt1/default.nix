@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, freetype }:
+{ lib, stdenv, fetchurl, perl, freetype }:
 
 stdenv.mkDerivation {
   name = "ttf2pt1-3.4.4";
@@ -20,13 +20,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ freetype ];
   nativeBuildInputs = [ perl ];
-  
+
   patches = ./gentoo-makefile.patch; # also contains the freetype patch
 
-  meta = { 
+  meta = {
     description = "True Type to Postscript Type 3 converter, fpdf";
     homepage = "http://ttf2pt1.sourceforge.net/index.html";
     license = "ttf2pt1";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

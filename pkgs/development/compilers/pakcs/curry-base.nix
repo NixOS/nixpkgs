@@ -1,5 +1,5 @@
 { mkDerivation, base, Cabal, containers, directory, extra, filepath
-, mtl, parsec, pretty, stdenv, time, transformers
+, mtl, parsec, pretty, lib, time, transformers
 }:
 mkDerivation {
   pname = "curry-base";
@@ -12,5 +12,5 @@ mkDerivation {
   testHaskellDepends = [ base Cabal filepath mtl ];
   homepage = "http://curry-language.org";
   description = "Functions for manipulating Curry programs";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }

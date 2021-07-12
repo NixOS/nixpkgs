@@ -1,14 +1,14 @@
-{ callPackage, stdenv, fetchFromGitHub, git, zsh, ...}:
+{ callPackage, lib, stdenv, fetchFromGitHub, git, zsh, ...}:
 
 stdenv.mkDerivation rec {
   pname = "gitstatus";
-  version = "1.3.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "gitstatus";
     rev = "v${version}";
-    sha256 = "03zaywncds7pjrl07rvdf3fh39gnp2zfvgsf0afqwv317sgmgpzf";
+    sha256 = "sha256-MQG4thW73gDqY68bKP2FO8z5uc2R/tED+/X9qas/GOA=";
   };
 
   buildInputs = [ (callPackage ./romkatv_libgit2.nix {}) ];
@@ -73,10 +73,10 @@ stdenv.mkDerivation rec {
     wait $!
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "10x faster implementation of `git status` command";
     homepage = "https://github.com/romkatv/gitstatus";
-    license = [ licenses.gpl3 ];
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ mmlb hexa ];
   };
 }

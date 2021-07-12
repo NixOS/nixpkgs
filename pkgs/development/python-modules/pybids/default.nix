@@ -1,7 +1,6 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, isPy27
 , click
 , num2words
 , numpy
@@ -11,17 +10,16 @@
 , patsy
 , bids-validator
 , sqlalchemy
-, pytest
-, pathlib
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "0.12.1";
+  version = "0.13.1";
   pname = "pybids";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08smd4frl8hf0n6bi20ayd5wcf51g3g488bpakjciz7ghdvky1h6";
+    sha256 = "sha256-ySDhVX4drotnFiXXDK+9woQ3uigistudpMJYenYl47o=";
   };
 
   propagatedBuildInputs = [
@@ -36,11 +34,8 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkInputs = [ pytest ] ++ lib.optionals isPy27 [ pathlib ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "bids" ];
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";

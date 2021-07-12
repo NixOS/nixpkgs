@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
+{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
 
 stdenv.mkDerivation rec {
   pname = "pg_repack";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reorganize tables in PostgreSQL databases with minimal locks";
     longDescription = ''
       pg_repack is a PostgreSQL extension which lets you remove bloat from tables and indexes, and optionally restore

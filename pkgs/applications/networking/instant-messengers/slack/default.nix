@@ -1,10 +1,11 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , dpkg
 , undmg
 , makeWrapper
 , nodePackages
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -19,18 +20,21 @@
 , glib
 , gnome2
 , gtk3
+, libGL
 , libappindicator-gtk3
 , libdrm
 , libnotify
 , libpulseaudio
 , libuuid
 , libxcb
+, libxkbcommon
+, libxshmfence
 , mesa
 , nspr
 , nss
 , pango
 , systemd
-, xdg_utils
+, xdg-utils
 , xorg
 }:
 
@@ -40,31 +44,33 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.10.3";
-  x86_64-darwin-sha256 = "0r77l57vr603xamich4h4gbdd5vdcj0sjs6yjpymfx9s0f98v8bb";
+  x86_64-darwin-version = "4.17.0";
+  x86_64-darwin-sha256 = "0r5cafxw73qnn14ljprn7w8bfn67zbkcniq60k9pf2zbqgb4cyj9";
 
-  x86_64-linux-version = "4.10.3";
-  x86_64-linux-sha256 = "1gnjj2iyk8cwjajg8h9qpmzx10j4qjxjzciq8csg45qfzwkr3drf";
+  x86_64-linux-version = "4.17.0";
+  x86_64-linux-sha256 = "07ccms58pq27ilkyhcf6cgwb7qrddwil5kgy8yv95ljikqzi5rxi";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
     x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
-  src = let
-    base = "https://downloads.slack-edge.com";
-  in {
-    x86_64-darwin = fetchurl {
-      url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = x86_64-darwin-sha256;
-    };
-    x86_64-linux = fetchurl {
-      url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
-      sha256 = x86_64-linux-sha256;
-    };
-  }.${system} or throwSystem;
+  src =
+    let
+      base = "https://downloads.slack-edge.com";
+    in
+      {
+        x86_64-darwin = fetchurl {
+          url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+          sha256 = x86_64-darwin-sha256;
+        };
+        x86_64-linux = fetchurl {
+          url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
+          sha256 = x86_64-linux-sha256;
+        };
+      }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
     license = licenses.unfree;
@@ -77,8 +83,8 @@ let
 
     passthru.updateScript = ./update.sh;
 
-    rpath = stdenv.lib.makeLibraryPath [
-      alsaLib
+    rpath = lib.makeLibraryPath [
+      alsa-lib
       at-spi2-atk
       at-spi2-core
       atk
@@ -93,12 +99,14 @@ let
       glib
       gnome2.GConf
       gtk3
+      libGL
       libappindicator-gtk3
       libdrm
       libnotify
       libpulseaudio
       libuuid
       libxcb
+      libxkbcommon
       mesa
       nspr
       nss
@@ -117,10 +125,11 @@ let
       xorg.libXrender
       xorg.libXtst
       xorg.libxkbfile
+      xorg.libxshmfence
     ] + ":${stdenv.cc.cc.lib}/lib64";
 
     buildInputs = [
-      gtk3  # needed for GSETTINGS_SCHEMAS_PATH
+      gtk3 # needed for GSETTINGS_SCHEMAS_PATH
     ];
 
     nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
@@ -149,7 +158,7 @@ let
       rm $out/bin/slack
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${xdg_utils}/bin
+        --prefix PATH : ${lib.makeBinPath [xdg-utils]}
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
@@ -173,6 +182,7 @@ let
       /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
     '';
   };
-in if stdenv.isDarwin
-  then darwin
-  else linux
+in
+if stdenv.isDarwin
+then darwin
+else linux

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.20.1";
+  version = "3.22.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "72c81f21b6adb907595fce8d883c0231301cbd8e9f6e5ce8e98bab927054daca";
+    sha256 = "sha256-5gJZx7UIZ7HLgXyvk4/MHtODcCQT320uGv5+oH9lrO4=";
   };
 
   propagatedBuildInputs = [ numpy scipy matplotlib flask pillow psycopg2 ];
@@ -28,6 +28,8 @@ buildPythonPackage rec {
 
   # tests just hang most likely due to something with subprocesses and cli
   doCheck = false;
+
+  pythonImportsCheck = [ "ase" ];
 
   meta = with lib; {
     description = "Atomic Simulation Environment";

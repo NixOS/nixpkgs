@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , python3
@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
   # this is what upstream calls the package, see:
   # https://github.com/ryukau/LV2Plugins#uhhyou-plugins-lv2
   pname = "uhhyou.lv2";
-  version = "unstable-2020-07-31";
+  version = "unstable-2021-02-08";
 
   src = fetchFromGitHub {
     owner = "ryukau";
     repo =  "LV2Plugins";
-    rev = "6189be67acaeb95452f8adab73a731d94a7b6f47";
+    rev = "df67460fc344f94db4306d4ee21e4207e657bbee";
     fetchSubmodules = true;
-    sha256 = "049gigx2s89z8vf17gscs00c150lmcdwya311nbrwa18fz4bx242";
+    sha256 = "1a23av35cw26zgq93yzmmw35084hsj29cb7sb04j2silv5qisila";
   };
 
   nativeBuildInputs = [ pkg-config python3 ];
@@ -31,16 +31,16 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   prePatch = ''
-    patchShebangs generate-ttl.sh
-    cp patch/NanoVG.cpp lib/DPF/dgl/src/NanoVG.cpp
+    patchShebangs generate-ttl.sh patch.sh patch/apply.sh
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Audio plugins for Linux";
     longDescription = ''
       Plugin List:
+      - CollidingCombSynth
       - CubicPadSynth
       - EnvelopedSine
       - EsPhaser

@@ -2,18 +2,24 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
+, pythonOlder
+, typing-extensions
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "JPype1";
-  version = "1.0.2";
+  version = "1.3.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c751436350c105f403e382574d34a6ad73e4a677cb0ff5bc9a87581cc07094e1";
+    sha256 = "4fc27dba89750cb0c9d692466341ce60c0fe86a16051091cb5347a37cf884151";
   };
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
   checkInputs = [
     pytest

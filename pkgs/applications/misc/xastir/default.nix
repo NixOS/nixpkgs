@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
 , curl, db, libgeotiff
 , libXpm, libXt, motif, pcre
 , perl, proj, rastermagick, shapelib
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical APRS client";
     homepage = "https://xastir.org";
     license = licenses.gpl2;

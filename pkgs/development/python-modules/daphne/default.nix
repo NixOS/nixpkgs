@@ -1,10 +1,10 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
 , asgiref, autobahn, twisted, pytestrunner
 , hypothesis, pytest, pytest-asyncio, service-identity, pyopenssl
 }:
 buildPythonPackage rec {
   pname = "daphne";
-  version = "2.5.0";
+  version = "3.0.2";
 
   disabled = !isPy3k;
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "0qkhmblj3a5s3z65cgz46xsvq1b6x4m3kr6aljjnxnv7hcwib02n";
+    sha256 = "sha256-KWkMV4L7bA2Eo/u4GGif6lmDNrZAzvYyDiyzyWt9LeI=";
   };
 
   nativeBuildInputs = [ pytestrunner ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Django ASGI (HTTP/WebSocket) server";
     license = licenses.bsd3;
     homepage = "https://github.com/django/daphne";

@@ -1,13 +1,13 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , glib
 , python3
 , sqlite
 , gdk-pixbuf
-, gnome3
+, gnome
 , gobject-introspection
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "py" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "17ca07hpg7dqxjn0jpqim3xqcmplk2a87wbwrrlq3dd3m8381l38";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -48,12 +48,13 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.isx86_64;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GObject to SQLite object mapper";
     homepage = "https://wiki.gnome.org/Projects/Gom";
     license = licenses.lgpl21Plus;

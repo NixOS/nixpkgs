@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, sqlite, makeWrapper }:
+{ lib, stdenv, fetchurl, libpcap, sqlite, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.4";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/wash   --run "[ -s ${confdir}/reaver/reaver.db ] || install -D $out/etc/reaver.db ${confdir}/reaver/reaver.db"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Brute force attack against Wifi Protected Setup";
     homepage = "https://code.google.com/archive/p/reaver-wps/";
     license = licenses.gpl2Plus;

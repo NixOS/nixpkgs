@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3
+{ lib, stdenv, fetchFromGitHub, python3
 , bdftopcf, mkfontscale
 , libfaketime, fonttosfnt
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     mkfontdir "$fontDir"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A nice bitmap font, readable even at small sizes";
     longDescription = ''
       Tewi is a bitmap font, readable even at very small font sizes. This is

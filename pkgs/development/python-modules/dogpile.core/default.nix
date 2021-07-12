@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "dogpile.core";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 'dogpile' lock, typically used as a component of a larger caching solution";
     homepage = "https://bitbucket.org/zzzeek/dogpile.core";
     license = licenses.bsd3;

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "batchspawner";
-  version = "1.0.0";
+  version = "1.1.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "batchspawner";
     rev = "v${version}";
-    sha256 = "0yn312sjfjpjjfciagbczfmqprk2fj4lbb3vsbzj17p948acq5w2";
+    sha256 = "0zv485b7fk5zlwgp5fyibanqzbpisdl2a0gz70fwdj4kl462axnw";
   };
 
   propagatedBuildInputs = [

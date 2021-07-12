@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "weechat-autosort";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     install -D autosort.py $out/share/autosort.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Autosort is a weechat script to automatically or manually keep your buffers sorted";
     homepage = "https://github.com/de-vri-es/weechat-autosort";
     license = licenses.gpl3;

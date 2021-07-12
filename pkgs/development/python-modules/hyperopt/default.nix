@@ -1,15 +1,15 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , cloudpickle, numpy, future, networkx
 , six, tqdm, scipy, pymongo
 }:
 
 buildPythonPackage rec {
   pname = "hyperopt";
-  version = "0.1.2";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "34xIpivBYUvcN/XMVwBkqTpLgaFlWWIduazuP2U2tlg=";
+    sha256 = "bc6047d50f956ae64eebcb34b1fd40f186a93e214957f20e87af2f10195295cc";
   };
 
   propagatedBuildInputs = [ future cloudpickle numpy networkx six tqdm scipy pymongo ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyperopt" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Distributed Asynchronous Hyperparameter Optimization";
     homepage    = "http://hyperopt.github.com/hyperopt/";
     license     = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, python3, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "pulsemixer";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       --replace "libpulse.so.0" "$libpulseaudio/lib/libpulse.so.0"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cli and curses mixer for pulseaudio";
     homepage = "https://github.com/GeorgeFilipkin/pulsemixer";
     license = licenses.mit;

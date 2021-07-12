@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "avro3k";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   doCheck = false;        # No such file or directory: './run_tests.py
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A serialization and RPC framework";
     homepage = "https://pypi.python.org/pypi/avro3k/";
   };

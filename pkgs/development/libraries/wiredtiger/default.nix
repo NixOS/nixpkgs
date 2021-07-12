@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool
 
 # Optional Dependencies
 , lz4 ? null, snappy ? null, zlib ? null, bzip2 ? null, db ? null
 , gperftools ? null, leveldb ? null
 }:
 
-with stdenv.lib;
+with lib;
 let
   mkFlag = trueStr: falseStr: cond: name: val: "--"
     + (if cond then trueStr else falseStr)
@@ -14,7 +14,7 @@ let
   mkEnable = mkFlag "enable-" "disable-";
   mkWith = mkFlag "with-" "without-";
 
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optLz4 = shouldUsePkg lz4;
   optSnappy = shouldUsePkg snappy;

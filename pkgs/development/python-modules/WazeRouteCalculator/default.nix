@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , requests }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # there are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculate actual route time and distance with Waze API";
     homepage = "https://github.com/kovacsbalu/WazeRouteCalculator";
     license = licenses.gpl3;

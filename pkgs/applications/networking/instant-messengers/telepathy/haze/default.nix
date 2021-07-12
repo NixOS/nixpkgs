@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pidgin, telepathy-glib, glib, dbus-glib, pkgconfig, libxslt }:
+{ lib, stdenv, fetchurl, fetchpatch, pidgin, telepathy-glib, python2, glib, dbus-glib, pkg-config, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-haze";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1jgrp32p6rllj089ynbsk3n9xrvsvzmwzhf0ql05kkgj0nf08xiy";
   };
 
-  buildInputs = [ glib telepathy-glib dbus-glib pidgin telepathy-glib.python ];
+  buildInputs = [ glib telepathy-glib dbus-glib pidgin python2 ];
 
-  nativeBuildInputs = [ pkgconfig libxslt ];
+  nativeBuildInputs = [ pkg-config libxslt ];
 
   patches = [
     # Patch from Gentoo that helps telepathy-haze build with more
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A Telepathy connection manager based on libpurple";
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # Random choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # Random choice
   };
 }

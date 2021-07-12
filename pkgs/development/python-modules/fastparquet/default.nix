@@ -1,29 +1,44 @@
-{ lib, buildPythonPackage, fetchFromGitHub, numba, numpy, pandas, pytestrunner,
-thrift, pytest, python-snappy, lz4, zstd }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, numba
+, numpy
+, pandas
+, pytestrunner
+, cramjam
+, fsspec
+, thrift
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.4.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "ViZRGEv227/RgCBYAQN8F3Z0m8WrNUT5KUdyFosjg9s=";
+    hash = "sha256-wSJ6PqW7c8DJCsGuPhXaVGM2s/1dZhLjG4C0JWPcjhY=";
   };
 
-  postPatch = ''
-    # FIXME: package zstandard
-    # removing the test dependency for now
-    substituteInPlace setup.py --replace "'zstandard'," ""
+  nativeBuildInputs = [ pytestrunner ];
+  propagatedBuildInputs = [ cramjam fsspec numba numpy pandas thrift ];
+  checkInputs = [ pytestCheckHook ];
 
-    # workaround for https://github.com/dask/fastparquet/issues/517
-    rm fastparquet/test/test_partition_filters_specialstrings.py
+  # Workaround https://github.com/NixOS/nixpkgs/issues/123561
+  preCheck = ''
+    mv fastparquet/test .
+    rm -rf fastparquet
+    fastparquet_test="$out"/${python.sitePackages}/fastparquet/test
+    ln -s `pwd`/test "$fastparquet_test"
+  '';
+  postCheck = ''
+    rm "$fastparquet_test"
   '';
 
-  nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ numba numpy pandas thrift ];
-  checkInputs = [ pytest python-snappy lz4 zstd ];
+  pythonImportsCheck = [ "fastparquet" ];
 
   meta = with lib; {
     description = "A python implementation of the parquet format";

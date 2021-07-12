@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, runCommand, yq-go }:
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "3.4.0";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
-    rev = version;
+    rev = "v${version}";
     repo = "yq";
-    sha256 = "1rvs27c5mz55zqq9c7yif0dms53bd30d8ylh45f3y3zgh82jihp8";
+    sha256 = "sha256-+qSGdskv8qUZRl7wYKn8WsgAcD8DYw1BwZnVKK6g/sI=";
   };
 
-  vendorSha256 = "0l5bhbp8dfq04hb4xcpx96ksfwx4xvk0pj5ma00rk3z913ikygcd";
+  vendorSha256 = "sha256-vpvIl1lfaziuoHs+oDEIztufH1somphiBAn6qTaQaZw=";
 
   doCheck = false;
 
@@ -19,10 +19,17 @@ buildGoModule rec {
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $out/bin/yq shell-completion --variation $shell > yq.$shell
+      $out/bin/yq shell-completion $shell > yq.$shell
       installShellCompletion yq.$shell
     done
   '';
+
+  passthru.tests = {
+    simple = runCommand "${pname}-test" {} ''
+      echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
+      [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
+    '';
+  };
 
   meta = with lib; {
     description = "Portable command-line YAML processor";

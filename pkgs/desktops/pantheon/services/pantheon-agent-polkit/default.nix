@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     polkit
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Polkit Agent for the Pantheon Desktop";
     homepage = "https://github.com/elementary/pantheon-agent-polkit";
     license = licenses.lgpl21Plus;

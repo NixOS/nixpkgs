@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, catch, cmake
+{ lib, stdenv, fetchFromGitHub, catch, cmake
 }:
 
 let
@@ -21,14 +21,15 @@ stdenv.mkDerivation rec {
   buildPhase = if nativeBuild then "make" else "true";
 
   # https://github.com/microsoft/GSL/issues/806
-  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-Wno-catch-value" ];
+  cmakeFlags = lib.optionals stdenv.cc.isGNU
+    [ "-DCMAKE_CXX_FLAGS=-Wno-catch-value" ];
 
   installPhase = ''
     mkdir -p $out/include
     mv ../include/ $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ Core Guideline support library";
     longDescription = ''
      The Guideline Support Library (GSL) contains functions and types that are suggested for

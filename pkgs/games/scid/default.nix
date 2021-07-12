@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper }:
+{ lib, fetchurl, tcl, tk, libX11, zlib, makeWrapper }:
 
-stdenv.mkDerivation {
+tcl.mkTclDerivation {
   pname = "scid";
   version = "4.3";
 
@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     sha256 = "0zb5qp04x8w4gn2kvfdfq2p44kmzfcqn7v167dixz6nlyxg41hrw";
   };
 
-  buildInputs = [ tcl tk libX11 zlib makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ tk libX11 zlib ];
 
   prePatch = ''
     sed -i -e '/^ *set headerPath *{/a ${tcl}/include ${tk}/include' \
@@ -30,6 +31,7 @@ stdenv.mkDerivation {
 
   dontPatchShebangs = true;
 
+  # TODO: can this use tclWrapperArgs?
   postFixup = ''
     for cmd in sc_addmove sc_eco sc_epgn scidpgn \
                sc_import sc_spell sc_tree spliteco
@@ -44,14 +46,14 @@ stdenv.mkDerivation {
     for cmd in $out/bin/*
     do
       wrapProgram "$cmd" \
-        --set TCLLIBPATH "${tcl}/${tcl.libdir}" \
         --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
     done
   '';
 
   meta = {
     description = "Chess database with play and training functionality";
+    maintainers = with lib.maintainers; [ agbrooks ];
     homepage = "http://scid.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

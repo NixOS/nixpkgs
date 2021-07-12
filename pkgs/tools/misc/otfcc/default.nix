@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, premake5 }:
+{ lib, stdenv, fetchFromGitHub, premake5 }:
 
 stdenv.mkDerivation rec {
   pname = "otfcc";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./move-makefiles.patch
   ];
 
-  buildFlags = stdenv.lib.optional stdenv.isAarch64 [ "config=release_arm" ];
+  buildFlags = lib.optional stdenv.isAarch64 [ "config=release_arm" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optimized OpenType builder and inspector";
     homepage = "https://github.com/caryll/otfcc";
     license = licenses.asl20;
-    platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ jfrankenau ttuegel ];
   };
 

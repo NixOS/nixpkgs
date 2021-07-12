@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, xorg, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python2, xorg, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "disper";
@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ python ];
+  strictDeps = true;
+
+  buildInputs = [ python2 ];
 
   preConfigure = ''
     export makeFlags="PREFIX=$out"
@@ -21,14 +23,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
       wrapProgram $out/bin/disper \
-        --prefix "LD_LIBRARY_PATH" : "${stdenv.lib.makeLibraryPath [ xorg.libXrandr xorg.libX11 ]}"
+        --prefix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath [ xorg.libXrandr xorg.libX11 ]}"
   '';
 
   meta = {
     description = "On-the-fly display switch utility";
-    homepage = "http://willem.engen.nl/projects/disper/";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl3;
+    homepage = "https://willem.engen.nl/projects/disper/";
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
   };
 
 }

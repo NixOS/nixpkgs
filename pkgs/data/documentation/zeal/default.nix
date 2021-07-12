@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig
+{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config
 , qtbase, qtimageformats, qtwebengine, qtx11extras, mkDerivation
 , libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
 
@@ -22,7 +22,7 @@ mkDerivation rec {
       -e 's@^project.*@project(Zeal VERSION ${version})@'
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   buildInputs = [
     qtbase qtimageformats qtwebengine qtx11extras
@@ -30,7 +30,7 @@ mkDerivation rec {
     libXdmcp libpthreadstubs xcbutilkeysyms
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple offline API documentation browser";
     longDescription = ''
       Zeal is a simple offline API documentation browser inspired by Dash (macOS

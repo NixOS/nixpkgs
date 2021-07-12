@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "corerad";
-  version = "0.2.8";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
     rev = "v${version}";
-    sha256 = "053rihi8lqai3z837ddi441yl41lsg1zj9gl62s9vbjmq5l11fjh";
+    sha256 = "1avbd0ldmzzkfay2pm6b88aln388cj8z7dzyw6i8m5k0lmmmmz9y";
   };
 
-  vendorSha256 = "1ra4yfplmgzxzs1nlbm0izg339fjnkfrw071y8w4m6q6wnzdhljb";
+  vendorSha256 = "0cd6h5d4yjn86q296qp6lgxcykci1233s4s2fp8m0l3ywss69fck";
 
   doCheck = false;
 
@@ -31,7 +31,7 @@ buildGoModule rec {
     inherit (nixosTests) corerad;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mdlayher/corerad";
     description = "Extensible and observable IPv6 NDP RA daemon";
     license = licenses.asl20;

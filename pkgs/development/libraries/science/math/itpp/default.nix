@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , gtest
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     "-DGTEST_DIR:PATH=${gtest.src}/googletest"
   ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
 
   checkPhase = ''
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
     ./gtests/itpp_gtests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "IT++ is a C++ library of mathematical, signal processing and communication classes and functions";
     homepage = http://itpp.sourceforge.net/;
     license = licenses.gpl3;

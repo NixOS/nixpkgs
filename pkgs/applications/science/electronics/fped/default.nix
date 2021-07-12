@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit
 , flex, bison, fig2dev, imagemagick, netpbm, gtk2
-, pkgconfig
+, pkg-config
 }:
 
 with lib;
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     flex
     bison
-    pkgconfig
+    pkg-config
     imagemagick
     fig2dev
     netpbm

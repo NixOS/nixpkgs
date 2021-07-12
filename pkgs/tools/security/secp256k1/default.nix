@@ -1,45 +1,40 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, jdk
-
-# Enable ECDSA pubkey recovery module
-, enableRecovery ? true
-
-# Enable ECDH shared secret computation (disabled by default because it is
-# experimental)
-, enableECDH ? false
-
-# Enable libsecp256k1_jni (disabled by default because it requires a jdk,
-# which is a large dependency)
-, enableJNI ? false
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
 }:
-
-let inherit (stdenv.lib) optionals; in
 
 stdenv.mkDerivation {
   pname = "secp256k1";
 
   # I can't find any version numbers, so we're just using the date of the
   # last commit.
-  version = "2017-12-18";
+  version = "unstable-2021-06-06";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    rev = "f54c6c5083307b18224c953cf5870ea7ffce070b";
-    sha256 = "0bxqmimm627g9klalg1vdbspmn52588v4a6cli3p8bn84ibsnzbm";
+    rev = "7973576f6e3ab27d036a09397152b124d747f4ae";
+    sha256 = "0vjk55dv0mkph4k6bqgkykmxn05ngzvhc4rzjnvn33xzi8dzlvah";
   };
-
-  buildInputs = optionals enableJNI [ jdk ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags =
-    [ "--enable-benchmark=no" "--enable-tests=no" "--enable-exhaustive-tests=no" ] ++
-    optionals enableECDH [ "--enable-module-ecdh" "--enable-experimental" ] ++
-    optionals enableRecovery [ "--enable-module-recovery" ] ++
-    optionals enableJNI [ "--enable-jni" ];
+  configureFlags = [
+    "--enable-benchmark=no"
+    "--enable-exhaustive-tests=no"
+    "--enable-experimental"
+    "--enable-module-ecdh"
+    "--enable-module-recovery"
+    "--enable-module-schnorrsig"
+    "--enable-tests=yes"
+  ];
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+
+  checkPhase = "./tests";
+
+  meta = with lib; {
     description = "Optimized C library for EC operations on curve secp256k1";
     longDescription = ''
       Optimized C library for EC operations on curve secp256k1. Part of
@@ -48,7 +43,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/bitcoin-core/secp256k1";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

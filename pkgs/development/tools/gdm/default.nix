@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gdm";
@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minimalist dependency manager for Go written in Go";
     homepage = "https://github.com/sparrc/gdm";
     license = licenses.unlicense;

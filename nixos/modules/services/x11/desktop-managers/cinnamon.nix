@@ -25,7 +25,8 @@ in
 
       sessionPath = mkOption {
         default = [];
-        example = literalExample "[ pkgs.gnome3.gpaste ]";
+        type = types.listOf types.package;
+        example = literalExample "[ pkgs.gnome.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -93,8 +94,8 @@ in
         xapps
       ];
       services.cinnamon.apps.enable = mkDefault true;
-      services.gnome3.glib-networking.enable = true;
-      services.gnome3.gnome-keyring.enable = true;
+      services.gnome.glib-networking.enable = true;
+      services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
@@ -109,7 +110,7 @@ in
       programs.dconf.enable = true;
 
       # Enable org.a11y.Bus
-      services.gnome3.at-spi2-core.enable = true;
+      services.gnome.at-spi2-core.enable = true;
 
       # Fix lockscreen
       security.pam.services = {
@@ -127,6 +128,7 @@ in
         cinnamon-session
         cinnamon-desktop
         cinnamon-menus
+        cinnamon-translations
 
         # utils needed by some scripts
         killall
@@ -134,19 +136,22 @@ in
         # session requirements
         cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
-        gnome3.networkmanagerapplet # session requirement - also nm-applet not needed
+        gnome.networkmanagerapplet # session requirement - also nm-applet not needed
+
+        # For a polkit authentication agent
+        polkit_gnome
 
         # packages
         nemo
         cinnamon-control-center
         cinnamon-settings-daemon
-        gnome3.libgnomekbd
+        gnome.libgnomekbd
         orca
 
         # theme
-        gnome3.adwaita-icon-theme
+        gnome.adwaita-icon-theme
         hicolor-icon-theme
-        gnome3.gnome-themes-extra
+        gnome.gnome-themes-extra
         gtk3.out
         mint-artwork
         mint-themes
@@ -191,8 +196,9 @@ in
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
-      environment.systemPackages = (with pkgs // pkgs.gnome3 // pkgs.cinnamon; pkgs.gnome3.removePackagesByName [
+      environment.systemPackages = (with pkgs // pkgs.gnome // pkgs.cinnamon; pkgs.gnome.removePackagesByName [
         # cinnamon team apps
+        bulky
         blueberry
         warpinator
 

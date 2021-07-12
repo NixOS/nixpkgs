@@ -40,7 +40,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5000;
         description = ''
           Port to bind OctoPrint to.
@@ -66,6 +66,7 @@ in
       };
 
       plugins = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = plugins: [];
         defaultText = "plugins: []";
         example = literalExample "plugins: with plugins; [ themeify stlviewer ]";
