@@ -152,3 +152,6 @@
 
 "8.has: module (update)":
   - nixos/modules/**/*
+  
+"9.needs: port to stable":
+  - pkgs/data/misc/cacert/default.nix
