@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, libowfat, zlib, nixosTests }:
 
 stdenv.mkDerivation {
-  name = "opentracker-2018-05-26";
+  pname = "opentracker";
+  version = "unstable-2018-05-26";
 
   src = fetchgit {
     url = "https://erdgeist.org/gitweb/opentracker";
