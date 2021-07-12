@@ -116,6 +116,8 @@ let
     # e.g. "bzImage"
     kernelTarget = stdenv.hostPlatform.linux-kernel.target;
 
+    makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags) stdenv.hostPlatform.linux-kernel.makeFlags;
+
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
       # generate-config.pl from the generic builder can answer them.
@@ -137,13 +139,15 @@ let
       make -C . O="$buildRoot" $kernelBaseConfig \
           ARCH=$kernelArch \
           HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
-          CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF
+          CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF \
+          $makeFlags
 
       # Create the config file.
       echo "generating kernel configuration..."
       ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
       DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
-           PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
+        PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
+        perl -w $generateConfig
     '';
 
     installPhase = "mv $buildRoot/.config $out";
