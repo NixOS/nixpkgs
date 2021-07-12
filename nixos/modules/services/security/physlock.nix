@@ -10,6 +10,8 @@ in
 
   ###### interface
 
+  meta.maintainers = with lib.maintainers; [ ghuntley ];
+
   options = {
 
     services.physlock = {
@@ -94,6 +96,14 @@ in
 
       };
 
+      muteKernelMessages = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to mute kernel messages on console while physlock is running.
+        '';
+      };
+
     };
 
   };
@@ -119,7 +129,7 @@ in
                 ++ cfg.lockOn.extraTargets;
         serviceConfig = {
           Type = "forking";
-          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
+          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}${optionalString cfg.muteKernelMessages "m"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
         };
       };
 
