@@ -1,0 +1,11 @@
+# Wooting One
+SUBSYSTEM=="usb", ENV{PRODUCT}=="3eb/ff01/*", ENV{INTERFACE}=="255/93/1", TAG+="systemd", ENV{SYSTEMD_WANTS}="wooting-xinput@ff01"
+
+# Wooting Two
+SUBSYSTEM=="usb", ENV{PRODUCT}=="3eb/ff02/*", ENV{INTERFACE}=="255/93/1", TAG+="systemd", ENV{SYSTEMD_WANTS}="wooting-xinput@ff02"
+
+# Wooting Two Lekker Edition
+SUBSYSTEM=="usb", ENV{PRODUCT}=="31e3/1210/*", ENV{INTERFACE}=="255/93/1", TAG+="systemd", ENV{SYSTEMD_WANTS}="wooting-xinput@31e3:1210"
+
+# Wooting Two HE
+SUBSYSTEM=="usb", ENV{PRODUCT}=="31e3/1220/*", ENV{INTERFACE}=="255/93/1", TAG+="systemd", ENV{SYSTEMD_WANTS}="wooting-xinput@31e3:1220"
