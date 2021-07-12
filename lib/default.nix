@@ -115,8 +115,8 @@ let
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
-      mkOptionDefault mkDefault mkForce mkVMOverride
-      mkOrder mkBefore mkAfter mkAliasDefinitions
+      mkOptionDefault mkDefault mkForce mkVMOverride mkStrict
+      mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
       mkAliasOptionModule doRename;
