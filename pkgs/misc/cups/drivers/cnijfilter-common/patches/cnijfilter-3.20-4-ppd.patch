@@ -1,0 +1,20 @@
+--- a/cngpijmon/src/bjcupsmon_cups.c	2012-06-01 14:45:32.054513422 +0200
++++ b/cngpijmon/src/bjcupsmon_cups.c	2012-06-01 14:46:28.921802482 +0200
+@@ -20,6 +20,7 @@
+ /*** Includes ***/
+ #include <cups/cups.h>
+ #include <cups/language.h>
++#include <cups/ppd.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <pwd.h>
+--- a/backend/src/cnij_backend_common.c	2012-06-01 14:45:19.251673478 +0200
++++ b/backend/src/cnij_backend_common.c	2012-06-01 14:46:13.486995445 +0200
+@@ -38,6 +38,7 @@
+ // CUPS Header
+ #include <cups/cups.h>
+ #include <cups/ipp.h>
++#include <cups/ppd.h>
+ 
+ // Header file for CANON
+ #include "cnij_backend_common.h"

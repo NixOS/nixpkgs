@@ -1,0 +1,69 @@
+diff --git a/cnijfilter/src/bjfilter.c b/cnijfilter/src/bjfilter.c
+index 926d745..68f3e57 100755
+--- a/cnijfilter/src/bjfilter.c
++++ b/cnijfilter/src/bjfilter.c
+@@ -26,6 +26,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include <ctype.h>
+ #include <popt.h>
+ #include <time.h>
+ #include <string.h>
+diff --git a/cnijfilter/src/bjfimage.c b/cnijfilter/src/bjfimage.c
+index 7c2feda..9231caf 100755
+--- a/cnijfilter/src/bjfimage.c
++++ b/cnijfilter/src/bjfimage.c
+@@ -26,6 +26,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <unistd.h>
+ #include <string.h>
+ 
+ #include "cpktypes.h"
+diff --git a/cnijfilter/src/bjfoption.c b/cnijfilter/src/bjfoption.c
+index 5465534..64a5187 100755
+--- a/cnijfilter/src/bjfoption.c
++++ b/cnijfilter/src/bjfoption.c
+@@ -26,6 +26,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <ctype.h>
+ #include <popt.h>
+ #include <string.h>
+ 
+diff --git a/cnijfilter/src/bjfpos.h b/cnijfilter/src/bjfpos.h
+index 64086da..aeb04f7 100755
+--- a/cnijfilter/src/bjfpos.h
++++ b/cnijfilter/src/bjfpos.h
+@@ -84,6 +84,7 @@ typedef struct BJF_MARGIN_INFO				/* borderless information  */
+ extern void bjf_pos_img_init( LPBJF_POS_IMGINFO lpimginfo );
+ extern void bjf_pos_prn_init( LPBJF_POS_PRNINFO lpprninfo );
+ extern void bjf_pos_init( LPBJF_POSINFO lpposinfo );
++extern void bjf_margin_init( LPBJF_MARGIN_INFO );
+ extern short bjf_pos_imageresolution( LPBJF_POS_IMGINFO, LPBJF_POS_PRNINFO, LPBJF_POSINFO );
+ extern short bjf_pos_imageresolution_fit( LPBJF_POS_IMGINFO, LPBJF_POS_PRNINFO, LPBJF_POSINFO );
+ extern short bjf_pos_imageresolution_center( LPBJF_POS_IMGINFO, LPBJF_POS_PRNINFO, LPBJF_POSINFO );
+@@ -120,6 +121,7 @@ extern short ImageScaling(LPBJF_POS_PRNINFO, LPBJF_POSINFO,short);
+ extern short ImageCenter( LPBJF_POS_IMGINFO, LPBJF_POS_PRNINFO, LPBJF_POSINFO, LPBJF_MARGIN_INFO );
+ extern short ImageCut( LPBJF_POS_IMGINFO, LPBJF_POS_PRNINFO, LPBJF_POSINFO, LPBJF_MARGIN_INFO );
+ extern short MarginInit(LPBJF_POS_PRNINFO, LPBJF_POSINFO, LPBJF_MARGIN_INFO);
++extern short SetExtLevel( LPBJF_MARGIN_INFO, short);
+ extern short SetExtMargin(LPBJF_POS_PRNINFO, LPBJF_POSINFO, LPBJF_MARGIN_INFO, LPBJFLTOVERMARGININFO);
+ extern short SetBbox(LPBJF_OPTINFO , LPBJF_POS_IMGINFO , LPBJF_POSINFO , LPBJF_MARGIN_INFO , int , int);
+ short bjf_pos_set_paperwidth( LPBJF_MARGIN_INFO , long );
+diff --git a/cnijfilter/src/getipc.c b/cnijfilter/src/getipc.c
+index e6973b0..ec7f8b5 100755
+--- a/cnijfilter/src/getipc.c
++++ b/cnijfilter/src/getipc.c
+@@ -43,7 +43,7 @@ short GetIPCData(LPIPCU pipc, char *sname)
+ 	struct sockaddr_un		sun;
+ 	int						s, c;
+ 	char					buf[128];
+-	size_t					adrlen;
++	socklen_t				adrlen;
+ 	short					ret = RET_ERROR;
+ 
+ 	if ((s = socket(PF_UNIX, SOCK_STREAM, 0)) < 0)

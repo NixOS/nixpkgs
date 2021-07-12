@@ -1,0 +1,10 @@
+--- a/backend/src/Makefile.am	2014-08-05 17:01:54.296802242 +0200
++++ b/backend/src/Makefile.am	2014-08-05 17:02:46.409801857 +0200
+@@ -1,6 +1,6 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-backend_bindir = /usr/lib/cups/backend
++backend_bindir = /usr/libexec/cups/backend
+ backend_bin_PROGRAMS = cnij_usb
+ transform = 
+ 

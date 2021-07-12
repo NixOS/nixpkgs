@@ -1,0 +1,20 @@
+--- a/cngpijmon/src/Makefile.am	2014-08-05 10:05:49.291986423 +0200
++++ b/cngpijmon/src/Makefile.am	2014-08-05 10:06:25.036986159 +0200
+@@ -19,5 +19,5 @@
+ 	interface.c interface.h support.c support.h 
+ 
+ 
+-cngpijmon_LDADD = @GTK_LIBS@ $(INTLLIBS) -lxml -lcups 
++cngpijmon_LDADD = @GTK_LIBS@ $(INTLLIBS) -lxml2 -lcups 
+ 
+--- a/printui/src/Makefile.am	2014-08-05 10:06:14.706986235 +0200
++++ b/printui/src/Makefile.am	2014-08-05 10:06:25.037986159 +0200
+@@ -41,7 +41,7 @@
+ #printui_CFLAGS = -O2 -Wall
+ printui_CFLAGS = -O2 -Wall @UI_DFLAGS@
+ 
+-printui_LDADD = @GTK_LIBS@ -lxml -lpopt \
++printui_LDADD = @GTK_LIBS@ -lxml2 -lpopt \
+   -lcnbpcnclui@CNCL_LIB_ID@ -lcnbpcmcm@CNCL_LIB_ID@
+ 
+ printui_LDFLAGS = -L../../@CNCL_LIB_ID@/libs_bin
