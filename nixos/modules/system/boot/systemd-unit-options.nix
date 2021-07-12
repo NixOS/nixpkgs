@@ -92,6 +92,15 @@ in rec {
       description = "The generated unit.";
     };
 
+    unitFileOverrides = mkOption {
+      description = "Overrides to apply to the derivation of the unit file";
+      type = types.listOf (types.functionTo types.attrs);
+      default = [];
+      internal = true;
+      example = [ (oA: {
+        patches = (oA.patches or []) ++ [ "$somepatch" ];
+      }) ];
+    };
   };
 
   commonUnitOptions = sharedOptions // {
