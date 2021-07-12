@@ -14483,6 +14483,38 @@ with pkgs;
   ran = callPackage ../servers/http/ran { };
 
   librw = callPackage ../development/libraries/librw { };
+  librw-wayland = librw.override {
+    glfw = glfw-wayland;
+  };
+
+  re3 = import ../games/re3 {
+    inherit (pkgs) callPackage fetchFromGitHub;
+  };
+  re3-wayland = re3.override {
+    waylandSupport = true;
+    librw = librw-wayland;
+    glfw = glfw-wayland;
+  };
+
+  revc = import ../games/re3 {
+    branch = "miami";
+    inherit (pkgs) callPackage fetchFromGitHub;
+  };
+  revc-wayland = revc.override {
+    waylandSupport = true;
+    librw = librw-wayland;
+    glfw = glfw-wayland;
+  };
+
+  relcs = import ../games/re3 {
+    branch = "lcs";
+    inherit (pkgs) callPackage fetchFromGitHub;
+  };
+  relcs-wayland = relcs.override {
+    waylandSupport = true;
+    librw = librw-wayland;
+    glfw = glfw-wayland;
+  };
 
   retry = callPackage ../tools/system/retry { };
 
