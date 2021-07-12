@@ -19,6 +19,8 @@ in {
   stdenv,
   # The kernel version
   version,
+  # Additional kernel make flags
+  extraMakeFlags ? [],
   # The version of the kernel module directory
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
@@ -173,7 +175,9 @@ let
         "KBUILD_BUILD_VERSION=1-NixOS"
         kernelConf.target
         "vmlinux"  # for "perf" and things like that
-      ] ++ optional isModular "modules";
+      ]
+      ++ optional isModular "modules"
+      ++ extraMakeFlags;
 
       installFlags = [
         "INSTALLKERNEL=${installkernel}"
@@ -325,7 +329,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
     "ARCH=${stdenv.hostPlatform.linuxArch}"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  ] ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
 })

@@ -21,6 +21,9 @@
 , # Legacy overrides to the intermediate kernel config, as string
   extraConfig ? ""
 
+  # Additional make flags passed to kbuild
+, extraMakeFlags ? []
+
 , # kernel intermediate config overrides, as a set
  structuredExtraConfig ? {}
 
@@ -97,7 +100,7 @@ let
     in lib.concatStringsSep "\n" ([baseConfigStr] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
-    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
+    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch extraMakeFlags;
     pname = "linux-config";
     inherit version;
 
@@ -116,7 +119,8 @@ let
     # e.g. "bzImage"
     kernelTarget = stdenv.hostPlatform.linux-kernel.target;
 
-    makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags) stdenv.hostPlatform.linux-kernel.makeFlags;
+    makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags) stdenv.hostPlatform.linux-kernel.makeFlags
+      ++ extraMakeFlags;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -136,7 +140,8 @@ let
       export HOSTLD=$LD_FOR_BUILD
 
       # Get a basic config file for later refinement with $generateConfig.
-      make -C . O="$buildRoot" $kernelBaseConfig \
+      make $makeFlags \
+          -C . O="$buildRoot" $kernelBaseConfig \
           ARCH=$kernelArch \
           HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
           CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF \
@@ -176,7 +181,7 @@ let
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix {}) {
-    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMeta configfile;
+    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
