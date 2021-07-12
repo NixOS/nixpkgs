@@ -45,12 +45,12 @@ in {
     [1] https://docs.nextcloud.com/server/18/admin_manual/release_schedule.html
   '';
 
-  # FIXME(@Ma27) remove on 21.05
   nextcloud19 = generic {
     version = "19.0.6";
     sha256 = "sha256-pqqIayE0OyTailtd2zeYi+G1APjv/YHqyO8jCpq7KJg=";
     extraVulnerabilities = [
       "Nextcloud 19 is still supported, but CVE-2020-8259 & CVE-2020-8152 are unfixed! Please note that both CVEs only affect the file encryption module which is turned off by default. Alternatively, `pkgs.nextcloud20` can be used."
+      "Nextcloud 19 is EOL!"
     ];
   };
 
