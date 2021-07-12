@@ -13,7 +13,7 @@ pushd $DIR
 pandoc_commonmark_enabled_extensions=+attributes+fenced_divs+footnotes+bracketed_spans+definition_lists+pipe_tables+raw_attribute
 pandoc_flags=(
   # media extraction and diagram-generator.lua not needed
-  "--lua-filter=$DIR/../../../doc/labelless-link-is-xref.lua"
+  "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/docbook-writer/labelless-link-is-xref.lua"
   -f "commonmark${pandoc_commonmark_enabled_extensions}+smart"
   -t docbook
 )
