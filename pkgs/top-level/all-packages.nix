@@ -11888,6 +11888,12 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvm_10 = llvmPackages_10.libllvm;
   };
+  # Needed so Firefox PGO profiles can be reused when building
+  # firefox.
+  rust_1_51 = callPackage ../development/compilers/rust/1_51.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    llvm_11 = llvmPackages_11.libllvm;
+  };
   rust_1_53 = callPackage ../development/compilers/rust/1_53.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvm_12 = llvmPackages_12.libllvm;
@@ -11899,6 +11905,7 @@ in
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
   rustPackages_1_45 = rust_1_45.packages.stable;
+  rustPackages_1_51 = rust_1_51.packages.stable;
   rustPackages_1_53 = rust_1_53.packages.stable;
   rustPackages = rustPackages_1_53;
 
