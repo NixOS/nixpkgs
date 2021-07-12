@@ -109,7 +109,7 @@ let
       pkgs =
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
-            # the fake derivations are used for filtering of hyphenation patterns
+            # the fake derivations are used for filtering of hyphenation patterns and formats
           else {
             inherit pname version;
             tlType = "run";
