@@ -7,6 +7,7 @@
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
   version = "9-2020-q2-update";
+  numVersion = "9.3.1";
   subdir = "9-2020q2";
 
   suffix = {
