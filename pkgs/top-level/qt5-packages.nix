@@ -88,6 +88,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
 
+  kimageannotator = callPackage ../development/libraries/kimageannotator { };
+
   kproperty = callPackage ../development/libraries/kproperty { };
 
   kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
