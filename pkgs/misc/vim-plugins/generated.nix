@@ -1508,6 +1508,18 @@ final: prev:
     meta.homepage = "https://github.com/konfekt/fastfold/";
   };
 
+  feline-nvim = buildVimPluginFrom2Nix {
+    pname = "feline-nvim";
+    version = "2021-07-11";
+    src = fetchFromGitHub {
+      owner = "famiu";
+      repo = "feline.nvim";
+      rev = "4c04c967691d028b4056f726735db329039cdff2";
+      sha256 = "18z9dl58mfmffysr8g5drd6iy79fwn463lagp629cdghrjxcq65c";
+    };
+    meta.homepage = "https://github.com/famiu/feline.nvim/";
+  };
+
   fennel-vim = buildVimPluginFrom2Nix {
     pname = "fennel-vim";
     version = "2020-11-15";
