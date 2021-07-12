@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   slang   = "Vanadium";
 
   src = fetchurl {
-    url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
     sha256 = "0pdm3y2nfyjhpnicv1pg9j48llq86dmb591d2imnafp4xfqani0s";
   };
 
