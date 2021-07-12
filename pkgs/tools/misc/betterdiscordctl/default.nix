@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "betterdiscordctl";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "bb010g";
     repo = "betterdiscordctl";
     rev = "v${version}";
-    sha256 = "1wys3wbcz5hq8275ia2887kr5fzz4b3gkcp56667j9k0p3k3zfac";
+    sha256 = "sha256-bAHO+2urgbL2LXiP0UZpvszX73PYtKbTOeLDyFwOYlw=";
   };
 
   postPatch = ''
