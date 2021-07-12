@@ -567,6 +567,11 @@ in
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
+  fetchComposer = callPackage ../build-support/composer/fetchcomposer.nix {
+    inherit (phpPackages) composer;
+  };
+  buildComposerPackage = callPackage ../build-support/composer { };
+
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
   fetchFromGitea = callPackage ../build-support/fetchgitea { };
@@ -3225,6 +3230,8 @@ in
   simplenes = callPackage ../misc/emulators/simplenes { };
 
   snipes = callPackage ../games/snipes { };
+
+  snipe-it = callPackage ../servers/web-apps/snipe-it { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
