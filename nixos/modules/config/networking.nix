@@ -170,17 +170,17 @@ in
       # resolves back to "localhost" (as some applications assume) instead of
       # the FQDN! By default "networking.hosts" also contains entries for the
       # FQDN so that e.g. "hostname -f" works correctly.
-      localhostHosts = pkgs.writeText "localhost-hosts" ''
-        127.0.0.1 localhost
-        ${optionalString cfg.enableIPv6 "::1 localhost"}
-      '';
+      hosts = foldAttrs (a: e: a ++ e) [] ([ { "127.0.0.1" = [ "localhost" ]; } ]
+        ++ optional cfg.enableIPv6 { "::1" = [ "localhost" ]; }
+        ++ [ cfg.hosts ]);
+
       stringHosts =
         let
           oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip} + "\n";
           allToString = set: concatMapStrings (oneToString set) (attrNames set);
-        in pkgs.writeText "string-hosts" (allToString (filterAttrs (_: v: v != []) cfg.hosts));
+        in pkgs.writeText "string-hosts" (allToString (filterAttrs (_: v: v != []) hosts));
       extraHosts = pkgs.writeText "extra-hosts" cfg.extraHosts;
-    in mkBefore [ localhostHosts stringHosts extraHosts ];
+    in mkBefore [ stringHosts extraHosts ];
 
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
