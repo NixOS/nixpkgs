@@ -170,7 +170,7 @@ buildStdenv.mkDerivation ({
     xorg.pixman yasm libGLU libGL
     xorg.xorgproto
     xorg.libXdamage
-    xorg.libXext makeWrapper
+    xorg.libXext
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
     nasm icu67 libvpx_1_8
@@ -224,6 +224,7 @@ buildStdenv.mkDerivation ({
       cargo
       gnused
       llvmPackages.llvm # llvm-objdump
+      makeWrapper
       nodejs
       perl
       pkg-config
