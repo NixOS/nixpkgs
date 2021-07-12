@@ -1,0 +1,155 @@
+{ config, lib, pkgs, ... }:
+
+with lib;
+let
+  cfg = config.services.matrix-appservices;
+  asOpts = import ./as-options.nix {
+    inherit lib pkgs;
+    systemConfig = config;
+  };
+  mkService = name: opts:
+    with opts;
+    let
+      settingsFormat = pkgs.formats.json { };
+      dataDir = "/var/lib/matrix-as-${name}";
+      registrationFile = "${dataDir}/${name}-registration.yaml";
+      # Replace all references to $DIR to the dat directory
+      settingsData = settingsFormat.generate "config.json" settings;
+      settingsFile = "${dataDir}/config.json";
+      serviceDeps = [ "network-online.target" ] ++ serviceDependencies;
+    in
+    {
+      description = "A matrix appservice for ${name}.";
+
+      wantedBy = [ "multi-user.target" ];
+      wants = serviceDeps;
+      after = serviceDeps;
+      # Appservices don't need synapse up, but synapse exists if registration files are missing
+      before = mkIf (cfg.homeserver != null) [ "${cfg.homeserver}.service" ];
+
+      path = [ pkgs.yq ];
+      environment = {
+        DIR = dataDir;
+        SETTINGS_FILE = settingsFile;
+        REGISTRATION_FILE = registrationFile;
+      };
+
+      preStart = ''
+        ${pkgs.envsubst}/bin/envsubst \
+          -i ${settingsData} \
+          -o ${settingsFile}
+        chmod 640 ${settingsFile}
+
+        ${optionalString (registerScript != "") ''
+          if [ ! -f ${registrationFile} ]; then
+            ${preStart}
+            ${registerScript}
+            chmod 640 ${registrationFile}
+          fi
+        ''}
+      '';
+
+      script = ''
+        ${preStart}
+        ${startupScript}
+      '';
+
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+
+        User = "matrix-appservice";
+        Group = cfg.homeserver;
+        PrivateTmp = true;
+        WorkingDirectory = dataDir;
+        StateDirectory = "${baseNameOf dataDir}";
+        UMask = 0027;
+      } // opts.serviceConfig;
+    };
+
+in
+{
+  options = {
+    services.matrix-appservices = {
+      services = mkOption {
+        type = types.attrsOf asOpts;
+        default = { };
+        example = literalExample ''
+          whatsapp = {
+            format = "mautrix";
+            package = pkgs.whatsapp;
+          };
+        '';
+        description = ''
+          Appservices to setup.
+          Each appservice will be started as a systemd service with the prefix matrix-as.
+          And its data will be stored in /var/lib/matrix-as-name.
+        '';
+      };
+
+      homeserver = mkOption {
+        type = types.enum [ "matrix-synapse" null ];
+        default = "matrix-synapse";
+        description = ''
+          The homeserver software the appservices connect to. This will ensure appservices
+          start after the homeserver and it will be used by the addRegistrationFiles option.
+        '';
+      };
+
+      homeserverURL = mkOption {
+        type = types.str;
+        default = "https://${cfg.homeserverDomain}";
+        description = ''
+          URL of the homeserver the apservices connect to
+        '';
+      };
+
+      homeserverDomain = mkOption {
+        type = types.str;
+        default = if config.networking.domain != null then config.networking.domain else "";
+        defaultText = "\${config.networking.domain}";
+        description = ''
+          Domain of the homeserver the appservices connect to
+        '';
+      };
+
+      addRegistrationFiles = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to add the application service registration files to the homeserver configuration.
+          It is recommended to verify appservice files, located in /var/lib/matrix-as-*, before adding them
+        '';
+      };
+    };
+  };
+
+  config = mkIf (cfg.services != { }) {
+
+    assertions = mapAttrsToList
+      (n: v: {
+        assertion = v.format == "other" || v.package != null;
+        message = "A package must be provided if a custom format is set";
+      })
+      cfg.services;
+
+    users.users.matrix-appservice = { };
+
+    systemd.services = mapAttrs' (n: v: nameValuePair "matrix-as-${n}" (mkService n v)) cfg.services;
+
+    services = mkIf cfg.addRegistrationFiles {
+      matrix-synapse.app_service_config_files = mkIf (cfg.homeserver == "matrix-synapse")
+        (mapAttrsToList (n: _: "/var/lib/matrix-as-${n}/${n}-registration.yaml")
+          (filterAttrs (_: v: v.registerScript != "") cfg.services));
+    };
+  };
+
+  meta.maintainers = with maintainers; [ pacman99 ];
+
+}
