@@ -7608,6 +7608,12 @@
       fingerprint = "B956 C6A4 22AF 86A0 8F77  A8CA DE3B ADFE CD31 A89D";
     }];
   };
+  nitsky = {
+    name = "nitsky";
+    email = "492793+nitsky@users.noreply.github.com";
+    github = "nitsky";
+    githubId = 492793;
+  };
   nkpvk = {
     email = "niko.pavlinek@gmail.com";
     github = "nkpvk";
