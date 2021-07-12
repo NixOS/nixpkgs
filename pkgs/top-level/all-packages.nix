@@ -79,6 +79,30 @@ in
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
+  stdenvUutilsCoreutils = let
+    uutils-coreutils = pkgs.uutils-coreutils-minimal;
+    bintools = wrapBintoolsWith {
+      bintools = stdenv.cc.bintools.bintools;
+      coreutils = uutils-coreutils;
+    };
+  in stdenv.override {
+    cc = stdenv.cc.override {
+      coreutils = uutils-coreutils;
+      inherit bintools;
+    };
+
+    initialPath = (lib.remove coreutils stdenv.initialPath) ++ [ uutils-coreutils ];
+    allowedRequisites = lib.mapNullable (rs: (lib.remove [
+      bintools
+      bintools.expand-response-params
+      coreutils
+    ] rs) ++ [
+      bintools
+      bintools.expand-response-params
+      uutils-coreutils
+    ]) (stdenv.allowedRequisites or null);
+  };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -3923,9 +3947,11 @@ in
 
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
-  coreutils = callPackage ../tools/misc/coreutils { };
-  coreutils-full = coreutils.override { minimal = false; };
-  coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
+  # By declaring coreutils explicitly we can overwrite it globally without causing infinite loops
+  coreutils = if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils else gnu-coreutils;
+  gnu-coreutils = callPackage ../tools/misc/coreutils { };
+  coreutils-full = gnu-coreutils.override { minimal = false; };
+  coreutils-prefixed = gnu-coreutils.override { withPrefix = true; singleBinary = false; };
 
   corkscrew = callPackage ../tools/networking/corkscrew { };
 
@@ -4434,6 +4460,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  uutils-coreutils-prefixed = pkgs.uutils-coreutils.override { withPrefix = true; };
+
+  uutils-coreutils-minimal = pkgs.uutils-coreutils.override { withDocs = false; };
+
   volctl = callPackage ../tools/audio/volctl { };
 
   volk = callPackage ../development/libraries/volk { };
@@ -4780,7 +4810,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  findutils = callPackage ../tools/misc/findutils { };
+  findutils = callPackage ../tools/misc/findutils {
+    coreutils = if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils-minimal else gnu-coreutils;
+  };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
 

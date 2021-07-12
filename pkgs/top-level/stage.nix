@@ -172,6 +172,19 @@ let
       };
     };
 
+    pkgsUutils = if stdenv.hostPlatform.isLinux then nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsUutils = super';
+        })
+      ] ++ overlays;
+      # due to the increased size of the stdenv we need to cheat a bit
+      crossSystem = stdenv.hostPlatform // {
+        useUutilsCoreutils = true;
+        config = "${stdenv.hostPlatform.linuxArch}-pc-linux-gnu";
+      };
+    } else throw "Musl libc only supports Linux systems.";
+
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported.

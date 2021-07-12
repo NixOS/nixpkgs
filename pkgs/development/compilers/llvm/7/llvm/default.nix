@@ -49,7 +49,7 @@ in stdenv.mkDerivation ({
 
   outputs = [ "out" "lib" "dev" "python" ];
 
-  nativeBuildInputs = [ cmake python3 ]
+  nativeBuildInputs = [ cmake python3 python3.pkgs.psutil ]
     ++ optional enableManpages python3.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ]

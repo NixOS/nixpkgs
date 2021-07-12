@@ -1,39 +1,47 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , rustPlatform
 , cargo
-, sphinx
 , Security
 , libiconv
-, prefix ? "uutils-"
+, withDocs ? true
+, sphinx
+, withPrefix ? false
 , buildMulticallBinary ? true
 }:
 
+let
+  prefix = "uutils-";
+in
 stdenv.mkDerivation rec {
   pname = "uutils-coreutils";
-  version = "0.0.6";
+  version = "unstable-2021-07-09";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
-    rev = version;
-    sha256 = "sha256-dnswE/DU2jCfxWW10Ctjw8woktwWZqyd3E9IuKkle1M=";
+    rev = "2177b8dc37d9c8705b3c59efe7c5e10a69dce182";
+    sha256 = "sha256-2eKvHzGY2gi3gC2LhhsgZu+NJwf0/JyRstNxcueFnTk=";
   };
 
+  # second replace can be removed when https://github.com/uutils/coreutils/pull/2491 is merged
   postPatch = ''
-    # can be removed after https://github.com/uutils/coreutils/pull/1815 is included
+    # don't enforce the building of the man page
     substituteInPlace GNUmakefile \
-      --replace uutils coreutils
+      --replace 'install: build' 'install:' \
+      --replace 'LLEES)), ln -fs' 'LLEES)), cd $(INSTALLDIR_BIN) && ln -fs'
   '';
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-92BHPSVIPZLn399AcaJJjRq2WkxzDm8knKN3FIdAxAA=";
+    hash = "sha256-FDds2kRR1SstHSzg0Tg/oQk8oHbhNqBsaOjzV7edKd0=";
   };
 
-  nativeBuildInputs = [ rustPlatform.cargoSetupHook sphinx ];
+  nativeBuildInputs = [ rustPlatform.cargoSetupHook ]
+    ++ lib.optional withDocs sphinx;
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
@@ -42,11 +50,21 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
     "PROFILE=release"
     "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
-  ] ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
-  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+  ] ++ lib.optionals withPrefix [ "PROG_PREFIX=${prefix}" ]
+  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ]
+  ++ lib.optionals (!withDocs) [ "build-coreutils" "build-pkgs" ];
+
+  # https://github.com/uutils/coreutils/pull/2490
+  preBuild = ''
+    mkdir -p $out/share/{zsh/site-functions,bash-completion/completions,fish/vendor_completions.d}
+  '';
 
   # too many impure/platform-dependent tests
   doCheck = false;
+
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/uutils/coreutils.git";
+  };
 
   meta = with lib; {
     description = "Cross-platform Rust rewrite of the GNU coreutils";
