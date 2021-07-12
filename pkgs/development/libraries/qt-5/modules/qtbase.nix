@@ -11,7 +11,7 @@
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
   xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
-  zlib,
+  zlib, at-spi2-core,
 
   # optional dependencies
   cups ? null, libmysqlclient ? null, postgresql ? null,
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     );
 
   buildInputs =
-    [ python3 ]
+    [ python3 at-spi2-core ]
     ++ lib.optionals (!stdenv.isDarwin)
     (
       [ libinput ]
