@@ -48,6 +48,10 @@ in stdenv.mkDerivation (rec {
 
   outputs = [ "out" "lib" "dev" "python" ];
 
+  "NIX_LDFLAGS_${pkgsBuildBuild.stdenv.cc.bintools.suffixSalt}" = [
+    "-L${lib.getLib pkgsBuildBuild.ncurses}/lib"
+  ];
+
   nativeBuildInputs = [ cmake python3 ]
     ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
@@ -58,6 +62,7 @@ in stdenv.mkDerivation (rec {
 
   patches = [
     ./gnu-install-dirs.patch
+    ./llvm-config-libtinfo-cross.patch
     # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
     (fetchpatch {
       name = "uops-CMOV16rm-noreg.diff";
