@@ -14482,6 +14482,8 @@ with pkgs;
 
   ran = callPackage ../servers/http/ran { };
 
+  librw = callPackage ../development/libraries/librw { };
+
   retry = callPackage ../tools/system/retry { };
 
   rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
