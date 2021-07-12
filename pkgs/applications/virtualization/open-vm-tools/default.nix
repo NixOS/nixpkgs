@@ -38,8 +38,11 @@ stdenv.mkDerivation rec {
      sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
   '';
 
-  configureFlags = [ "--without-kernel-modules" "--without-xmlsecurity" "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d" ]
-    ++ lib.optional (!withX) "--without-x";
+  configureFlags = [
+    "--without-kernel-modules"
+    "--without-xmlsecurity"
+    "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
+  ] ++ lib.optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
 
