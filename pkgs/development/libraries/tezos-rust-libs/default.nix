@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitLab, findlib, cargo, rustc, opaline }:
+{ lib, fetchFromGitLab, rustPlatform }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "tezos-rust-libs";
   version = "1.0";
 
@@ -11,20 +11,18 @@ stdenv.mkDerivation rec {
     sha256 = "1ffkzbvb0ls4wk9205g3xh2c26cmwnl68x43gh6dm9z4xsic94v5";
   };
 
-  buildInputs = [
-    findlib
-    cargo
-    rustc
-  ];
+  cargoSha256 = "0dgyqfr3dvvdwdi1wvpd7v9j21740jy4zwrwiwknw7csb4bq9wfx";
 
-  buildPhase = ''
+  preBuild = ''
     mkdir .cargo
     mv cargo-config .cargo/config
-    cargo build --target-dir target --release
   '';
 
-  installPhase = ''
-    ${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR/lib -name tezos-rust-libs
+  postInstall = ''
+    mkdir $out/lib/tezos-rust-libs
+    cp -r rustc-bls12-381/include $out/include
+    cp $out/lib/librustc_bls12_381.a $out/lib/tezos-rust-libs
+    cp $out/lib/librustzcash.a $out/lib/tezos-rust-libs
   '';
 
   doCheck = true;

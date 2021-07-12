@@ -24,7 +24,7 @@ buildDunePackage rec {
   ];
 
   # This is a hack to work around the hack used in the dune files
-  OPAM_SWITCH_PREFIX = "${tezos-rust-libs}/lib/ocaml/${ocaml.version}/site-lib";
+  OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
 
   doCheck = true;
 

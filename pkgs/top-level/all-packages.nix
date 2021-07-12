@@ -1974,6 +1974,8 @@ in
 
   tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
 
+  tezos-rust-libs = callPackage ../development/libraries/tezos-rust-libs { };
+
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
 
   bfetch = callPackage ../tools/misc/bfetch { };

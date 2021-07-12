@@ -1203,8 +1203,6 @@ let
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
-    tezos-rust-libs = callPackage ../development/ocaml-modules/tezos-rust-libs { };
-
     toml = callPackage ../development/ocaml-modules/toml { };
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
