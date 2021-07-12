@@ -69,7 +69,7 @@ in
         ExecStart = "${pkgs.nix-serve}/bin/nix-serve " +
           "--listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}";
         User = "nix-serve";
-        Group = "nogroup";
+        Group = "nix-serve";
       };
     };
 
@@ -77,5 +77,6 @@ in
       description = "Nix-serve user";
       uid = config.ids.uids.nix-serve;
     };
+    users.groups.nix-serve = {};
   };
 }

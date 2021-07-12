@@ -73,6 +73,7 @@ in {
         ExecReload="${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = "telegraf";
         User = "telegraf";
+        Group = "telegraf";
         Restart = "on-failure";
         # for ping probes
         AmbientCapabilities = [ "CAP_NET_RAW" ];
@@ -81,7 +82,10 @@ in {
 
     users.users.telegraf = {
       uid = config.ids.uids.telegraf;
+      group = "telegraf";
       description = "telegraf daemon user";
     };
+
+    users.groups.telegraf = {};
   };
 }

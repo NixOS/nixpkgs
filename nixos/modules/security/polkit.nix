@@ -96,8 +96,10 @@ in
     users.users.polkituser = {
       description = "PolKit daemon";
       uid = config.ids.uids.polkituser;
+      group = "polkituser";
     };
 
+    users.groups.polkituser = {};
   };
 
 }
