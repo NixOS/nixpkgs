@@ -210,7 +210,7 @@ rec {
       homepage = "https://www.docker.com/";
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline tailhook vdemeester periklis ];
+      maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem ];
       platforms = with platforms; linux ++ darwin;
     };
 
