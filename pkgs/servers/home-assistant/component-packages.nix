@@ -742,7 +742,7 @@
     "serial_pm" = ps: with ps; [ pmsensor ];
     "sesame" = ps: with ps; [ ]; # missing inputs: pysesame2
     "seven_segments" = ps: with ps; [ pillow ];
-    "seventeentrack" = ps: with ps; [ ]; # missing inputs: py17track
+    "seventeentrack" = ps: with ps; [ py17track ];
     "sharkiq" = ps: with ps; [ sharkiqpy ];
     "shell_command" = ps: with ps; [ ];
     "shelly" = ps: with ps; [ aioshelly ];

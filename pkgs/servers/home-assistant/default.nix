@@ -647,6 +647,7 @@ in with py.pkgs; buildPythonApplication rec {
     "sense"
     "sensor"
     "sentry"
+    "seventeentrack"
     "sharkiq"
     "shell_command"
     "shelly"
