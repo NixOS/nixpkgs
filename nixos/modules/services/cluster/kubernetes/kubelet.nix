@@ -79,6 +79,12 @@ in
       type = str;
     };
 
+    extraSANs = mkOption {
+      description = "Extra x509 Subject Alternative Names to be added to the kubelet tls cert.";
+      default = [];
+      type = listOf str;
+    };
+
     clientCaFile = mkOption {
       description = "Kubernetes apiserver CA file for client authentication.";
       default = top.caFile;
@@ -351,6 +357,7 @@ in
         kubelet = mkCert {
           name = "kubelet";
           CN = top.kubelet.hostname;
+          hosts = top.kubelet.extraSANs;
           action = "systemctl restart kubelet.service";
 
         };
