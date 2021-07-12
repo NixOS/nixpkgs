@@ -133,7 +133,6 @@ with lib.maintainers; {
 
   jitsi = {
     members = [
-      mmilata
       petabyteboy
       ryantm
       yuka
