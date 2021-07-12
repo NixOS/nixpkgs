@@ -36,7 +36,7 @@ let
 
   url = "https://www.segger.com/downloads/jlink/JLink_Linux_V${version}_${platform.name}.tgz";
 
-  throwLicense = throw ''
+  assert !acceptLicense -> throw ''
     Use of the "SEGGER JLink Software and Documentation pack" requires the
     acceptance of the following licenses:
 
@@ -63,7 +63,7 @@ in stdenv.mkDerivation {
   pname = "segger-jlink";
   inherit version;
 
-  src = assert !acceptLicense -> throwLicense; fetchurl {
+  src = fetchurl {
     inherit url;
     inherit (platform) sha256;
     curlOpts = "--data accept_license_agreement=accepted";
