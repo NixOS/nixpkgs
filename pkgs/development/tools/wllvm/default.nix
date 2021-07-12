@@ -1,14 +1,19 @@
-{ lib, python3Packages }:
+{ clang, lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.2.8";
+  version = "1.2.9";
   pname = "wllvm";
   name = "${pname}-${version}";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1d88fzg4ba4r3hwrinnv6agiyj3xxdy4yryb8wz2ml51nc6bi591";
+    sha256 = "sha256-gfP1MVE35gmW60M/prY79oFvPHGkmPU6G/KUg7EOWI0=";
   };
+
+  checkInputs = [ clang ];
+  installCheckPhase = ''
+    LLVM_COMPILER=clang $out/bin/wllvm --version
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/travitch/whole-program-llvm";
