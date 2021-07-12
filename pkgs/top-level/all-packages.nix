@@ -19563,6 +19563,9 @@ in
   };
 
   mattermost = callPackage ../servers/mattermost { };
+  mattermost-webapp = callPackage ../servers/mattermost/webapp { };
+  mattermost-server = callPackage ../servers/mattermost/server { };
+
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
 
