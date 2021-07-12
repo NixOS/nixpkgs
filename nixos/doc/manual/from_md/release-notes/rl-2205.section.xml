@@ -251,6 +251,17 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/rfjakob/systembus-notify">systembus-notify</link>,
+          allow system level notifications to reach the users. Available
+          as
+          <link xlink:href="opt-services.systembus-notify.enable">services.systembus-notify</link>.
+          Please keep in mind that this service should only be enabled
+          on machines with fully trusted users, as any local user is
+          able to DoS user sessions by spamming notifications.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/audreyt/ethercalc">ethercalc</link>,
           an online collaborative spreadsheet. Available as
           <link xlink:href="options.html#opt-services.ethercalc.enable">services.ethercalc</link>.
