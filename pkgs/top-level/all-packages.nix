@@ -14078,6 +14078,8 @@ in
     lua = lua5;
   } // (config.radare or {}));
 
+  librw = callPackage ../development/libraries/librw { };
+
   retry = callPackage ../tools/system/retry { };
 
   rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
