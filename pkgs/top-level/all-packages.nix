@@ -835,6 +835,8 @@ in
 
   agi = callPackage ../tools/graphics/agi { };
 
+  apt = callPackage ../tools/package-management/apt { };
+
   agrep = callPackage ../tools/text/agrep { };
 
   aha = callPackage ../tools/text/aha { };
