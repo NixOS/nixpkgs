@@ -1,0 +1,22 @@
+name: docs
+
+on: push
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v12
+        with:
+          install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20201221_9fab14a/install
+      - run: |
+          cd doc
+          nix-build minimal-manual.nix
+      - if: success()
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: doc/result/multi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

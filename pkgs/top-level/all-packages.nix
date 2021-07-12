@@ -22080,6 +22080,8 @@ in
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
+  mmdoc = callPackage ../tools/text/mmdoc { };
+
   documize-community = callPackage ../servers/documize-community { };
 
   doge = callPackage ../misc/doge { };
@@ -31190,9 +31192,12 @@ in
 
   nixos-install-tools = callPackage ../tools/nix/nixos-install-tools { };
 
+  nixpkgs-manual = callPackage ../../doc/minimal-manual.nix { };
+
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nixdoc = callPackage ../tools/nix/nixdoc {};
+  nixdoc-commonmark = callPackage ../tools/nix/nixdoc/nixdoc-commonmark.nix {};
 
   dnadd = callPackage ../tools/nix/dnadd { };
 

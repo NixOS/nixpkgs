@@ -1,4 +1,4 @@
-# Generates the documentation for library functons via nixdoc. To add
+# Generates the documentation for library functions via nixdoc. To add
 # another library function file to this list, the include list in the
 # file `doc/functions/library.xml` must also be updated.
 
