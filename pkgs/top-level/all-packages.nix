@@ -17747,6 +17747,9 @@ in
   osinfo-db = callPackage ../data/misc/osinfo-db { };
   osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
 
+  pacemaker = callPackage ../misc/logging/pacemaker { };
+  pacemakerForOCF = callPackage ../misc/logging/pacemaker { forOCF = true; };
+
   p11-kit = callPackage ../development/libraries/p11-kit { };
 
   paperkey = callPackage ../tools/security/paperkey { };
@@ -20508,7 +20511,8 @@ in
 
   dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
 
-  drbd = callPackage ../os-specific/linux/drbd { };
+  drbd-utils = callPackage ../os-specific/linux/drbd-utils { };
+  drbd-utilsForOCF = callPackage ../os-specific/linux/drbd-utils { forOCF = true; };
 
   dropwatch = callPackage ../os-specific/linux/dropwatch { };
 
@@ -21616,6 +21620,10 @@ in
   raspberrypi-armstubs = callPackage ../os-specific/linux/firmware/raspberrypi/armstubs.nix {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
+
+  resource-agents = callPackage ../os-specific/linux/resource-agents { };
+
+  ocf-resource-agents = callPackage ../os-specific/linux/ocf-resource-agents { };
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
