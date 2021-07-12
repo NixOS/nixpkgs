@@ -20432,6 +20432,8 @@ in
 
   bolt = callPackage ../os-specific/linux/bolt { };
 
+  bootlogd = callPackage ../tools/system/bootlogd { };
+
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
   busybox = callPackage ../os-specific/linux/busybox { };

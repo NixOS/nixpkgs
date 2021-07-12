@@ -137,6 +137,9 @@ let
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
 
+      # Copy bootlogd
+      copy_bin_and_libs ${pkgs.bootlogd}/bin/bootlogd
+
       # Copy secrets if needed.
       #
       # TODO: move out to a separate script; see #85000.
