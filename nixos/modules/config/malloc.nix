@@ -3,6 +3,7 @@ with lib;
 
 let
   cfg = config.environment.memoryAllocator;
+  arch = pkgs.stdenv.hostPlatform.uname.processor;
 
   # The set of alternative malloc(3) providers.
   providers = {
@@ -23,7 +24,7 @@ let
     };
 
     scudo = {
-      libPath = "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-x86_64.so";
+      libPath = "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-${arch}.so";
       description = ''
         A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
         which aims at providing additional mitigations against heap based
