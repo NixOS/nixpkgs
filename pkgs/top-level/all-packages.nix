@@ -29145,7 +29145,9 @@ in
 
   quake3hires = callPackage ../games/quake3/content/hires.nix { };
 
-  quakespasm = callPackage ../games/quakespasm { };
+  quakespasm = callPackage ../games/quakespasm {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio CoreFoundation IOKit OpenGL;
+  };
   vkquake = callPackage ../games/quakespasm/vulkan.nix { };
 
   ioquake3 = callPackage ../games/quake3/ioquake { };

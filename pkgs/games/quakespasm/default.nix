@@ -1,5 +1,16 @@
-{ lib, stdenv, SDL, fetchurl, gzip, libvorbis, libmad }:
+{ lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad
+, Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL
+, useSDL2 ? stdenv.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
+}@args:
 
+let
+  macFrameworkNames = [
+    "Cocoa" "CoreAudio" "IOKit" "OpenGL"
+  ] ++ lib.optionals useSDL2 [
+    "CoreFoundation"
+  ];
+  macFrameworks = map (f: args.${f}) macFrameworkNames;
+in
 stdenv.mkDerivation rec {
   pname = "quakespasm";
   majorVersion = "0.93";
@@ -13,10 +24,22 @@ stdenv.mkDerivation rec {
   sourceRoot = "${pname}-${version}/Quake";
 
   buildInputs = [
-    gzip SDL libvorbis libmad
-  ];
+    gzip libvorbis libmad (if useSDL2 then SDL2 else SDL)
+  ] ++ lib.optionals stdenv.isDarwin macFrameworks;
 
-  buildFlags = [ "DO_USERDIRS=1" ];
+  CFLAGS = lib.optionalString stdenv.isDarwin "-DGL_SILENCE_DEPRECATION";
+  buildFlags = [ "DO_USERDIRS=1" ]
+    ++ lib.optional useSDL2 "USE_SDL2=1";
+
+  # NOTE: for macOS, we're using generic Makefile instead of Makefile.darwin, since we are not going to build an app bundle.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "-lGL" "${lib.concatMapStringsSep " " (e: "-Wl,-framework,${e}") macFrameworkNames}"
+  '' + lib.optionalString (useSDL2 && stdenv.isDarwin) ''
+    # SDL 2.x does not replace main() and since we're not going to build an app bundle for macOS, then there is no launcher to call SDL_main.
+    substituteInPlace main_sdl.c --replace "#define main SDL_main" ""
+  '' + lib.optionalString useSDL2 ''
+    substituteInPlace Makefile --replace "sdl-config" "sdl2-config"
+  '';
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -37,7 +60,7 @@ stdenv.mkDerivation rec {
       and smoother mouse input - though no CD support.
     '';
 
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ m3tti ];
   };
 }
