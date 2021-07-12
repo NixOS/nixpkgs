@@ -27005,6 +27005,10 @@ in
 
   spotify = callPackage ../applications/audio/spotify/wrapper.nix { };
 
+  spotify-spicified = callPackage ../applications/audio/spotify-spicified { };
+
+  spicetify-themes = callPackage ../applications/misc/spicetify-themes { };
+
   libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
 
   sourcetrail = let
