@@ -23227,6 +23227,8 @@ in
 
   canto-daemon = callPackage ../applications/networking/feedreaders/canto-daemon { };
 
+  caprine-bin = callPackage ../applications/networking/instant-messengers/caprine-bin/default.nix { };
+
   carddav-util = callPackage ../tools/networking/carddav-util { };
 
   carla = libsForQt5.callPackage ../applications/audio/carla { };
