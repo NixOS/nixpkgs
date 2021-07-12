@@ -952,6 +952,8 @@ in
 
   lifecycled = callPackage ../tools/misc/lifecycled { };
 
+  lilo = callPackage ../tools/misc/lilo { };
+
   lilyterm = callPackage ../applications/terminal-emulators/lilyterm {
     inherit (gnome2) vte;
     gtk = gtk2;
