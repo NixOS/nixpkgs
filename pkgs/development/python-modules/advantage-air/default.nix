@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "advantage_air";
-  version = "0.2.2";
+  version = "0.2.5";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "04q2sjw9r50c00m4sfv98w9cwmmr970830c97m32p5j8ijb10j5x";
+    sha256 = "sha256-38csg1Cvpz4dkRCwlNc8+af7aJ5xDrZO1D8cCaBlePA=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
