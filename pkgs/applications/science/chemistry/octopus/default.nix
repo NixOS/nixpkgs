@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, symlinkJoin, gfortran, perl, procps
+{ lib, stdenv, fetchFromGitLab, gfortran, perl, procps
 , libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
 , python3
 }:
@@ -16,10 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "1bgdkmsp6pwq3b6nxxkimrdmz71wqr8qi25gdzwpcv9wmcf1q27v";
   };
 
-  nativeBuildInputs = [ perl procps autoreconfHook ];
+  nativeBuildInputs = [
+    perl
+    procps
+    autoreconfHook
+    gfortran
+  ];
+
   buildInputs = [
     libyaml
-    gfortran
     libxc
     blas
     lapack
