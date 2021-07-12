@@ -316,7 +316,6 @@ in
 
       # If gnome is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
-      
       # Appstream refresh so gnome picks up new or changed applications without having to restart gnome
       system.activationScripts = {
         appstream.text = "${pkgs.appstream}/bin/appstreamcli refresh-cache --force";
