@@ -26,6 +26,7 @@ gccStdenv.mkDerivation rec {
   bootstrap = gambit-support.gambit-bootstrap;
 
   nativeBuildInputs = [ git autoconf ];
+
   # TODO: if/when we can get all the library packages we depend on to have static versions,
   # we could use something like (makeStaticLibraries openssl) to enable creation
   # of statically linked binaries by gsc.
@@ -43,7 +44,9 @@ gccStdenv.mkDerivation rec {
     "--enable-shared"
     "--enable-absolute-shared-libs" # Yes, NixOS will want an absolute path, and fix it.
     "--enable-openssl"
+    "--enable-default-compile-options='(compactness 9)'" # Make life easier on the JS backend
     "--enable-default-runtime-options=${gambit-params.defaultRuntimeOptions}"
+    # "--enable-rtlib-debug" # used by Geiser, but only on recent-enough gambit, and messes js runtime
     # "--enable-debug" # Nope: enables plenty of good stuff, but also the costly console.log
     # "--enable-multiple-versions" # Nope, NixOS already does version multiplexing
     # "--enable-guide"
@@ -58,9 +61,9 @@ gccStdenv.mkDerivation rec {
     # "--enable-coverage"
     # "--enable-inline-jumps"
     # "--enable-char-size=1" # default is 4
-  ] ++
-    # due not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
-    lib.optional (!gccStdenv.isDarwin) "--enable-poll";
+  ] ++ gambit-params.extraOptions
+    # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
+    ++ lib.optional (!gccStdenv.isDarwin) "--enable-poll";
 
   configurePhase = ''
     export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
@@ -77,7 +80,8 @@ gccStdenv.mkDerivation rec {
 
     # OS-specific paths are hardcoded in ./configure
     substituteInPlace config.status \
-      --replace "/usr/local/opt/openssl@1.1" "${openssl.out}" \
+      ${lib.optionalString (gccStdenv.isDarwin && !gambit-params.stable)
+         ''--replace "/usr/local/opt/openssl@1.1" "${openssl.out}"''} \
       --replace "/usr/local/opt/openssl" "${openssl.out}"
 
     ./config.status
@@ -97,7 +101,7 @@ gccStdenv.mkDerivation rec {
 
     # Now use the bootstrap compiler to build the real thing!
     make -j$NIX_BUILD_CORES from-scratch
-    ${lib.optionalString gambit-params.modules "make -j$NIX_BUILD_CORES modules"}
+    ${lib.optionalString gambit-params.modules "make -j$NIX_BUILD_CORES -k modules || :"}
   '';
 
   postInstall = ''
