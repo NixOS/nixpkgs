@@ -80,6 +80,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   kde2-decoration = callPackage ../data/themes/kde2 { };
 
+  kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
+
   kdiagram = callPackage ../development/libraries/kdiagram { };
 
   kdsoap = callPackage ../development/libraries/kdsoap { };
