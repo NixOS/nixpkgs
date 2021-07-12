@@ -121,8 +121,9 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ ];
   configureFlags = [
-    "--with-gmp-libraries=${lib.getLib gmp}/lib"
     "--with-gmp-includes=${lib.getDev gmp}/include"
+    # Note `--with-gmp-libraries` does nothing for GHC bindists:
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
@@ -151,6 +152,15 @@ stdenv.mkDerivation rec {
       substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
     done
   '';
+
+  # In nixpkgs, musl based builds currently enable `pie` hardening by default
+  # (see `defaultHardeningFlags` in `make-derivation.nix`).
+  # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+  # See:
+  # * https://github.com/NixOS/nixpkgs/issues/129247
+  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
 
   doInstallCheck = true;
   installCheckPhase = ''

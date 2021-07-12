@@ -96,6 +96,8 @@ let
         writers = testPlatforms.writers;
       };
 
+      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler;
+
       # test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC
       # Use integer-simple to avoid GMP linking problems (LGPL)
@@ -307,6 +309,21 @@ let
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.aarch64-linux
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.x86_64-linux
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.aarch64-linux
+        ];
+      };
+      muslGHCs = pkgs.releaseTools.aggregate {
+        name = "haskell-pkgsMusl-ghcs";
+        meta = {
+          description = "GHCs built with musl";
+          maintainers = with lib.maintainers; [
+            nh2
+          ];
+        };
+        constituents = accumulateDerivations [
+          jobs.pkgsMusl.haskell.compiler.ghc8102Binary
+          jobs.pkgsMusl.haskell.compiler.ghc884
+          jobs.pkgsMusl.haskell.compiler.ghc8104
+          jobs.pkgsMusl.haskell.compiler.ghc901
         ];
       };
     }
