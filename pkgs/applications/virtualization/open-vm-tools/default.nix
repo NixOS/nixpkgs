@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       better management of, and seamless user interactions with, guests.
     '';
     license = licenses.gpl2;
-    platforms =  [ "x86_64-linux" "i686-linux" ];
+    platforms =  [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ joamaki ];
   };
 }
