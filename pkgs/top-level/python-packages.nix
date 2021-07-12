@@ -1670,6 +1670,8 @@ in {
 
   cram = callPackage ../development/python-modules/cram { };
 
+  cramjam = callPackage ../development/python-modules/cramjam { };
+
   crashtest = callPackage ../development/python-modules/crashtest { };
 
   crate = callPackage ../development/python-modules/crate { };

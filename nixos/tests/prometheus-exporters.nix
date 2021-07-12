@@ -454,15 +454,21 @@ let
         enable = true;
         lndTlsPath = "/var/lib/lnd/tls.cert";
         lndMacaroonDir = "/var/lib/lnd";
+        extraFlags = [ "--lnd.network=regtest" ];
       };
       metricProvider = {
-        systemd.services.prometheus-lnd-exporter.serviceConfig.DynamicUser = false;
-        services.bitcoind.main.enable = true;
-        services.bitcoind.main.extraConfig = ''
-          rpcauth=bitcoinrpc:e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7
-          bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332
-          bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333
-        '';
+        virtualisation.memorySize = 1024;
+        systemd.services.prometheus-lnd-exporter.serviceConfig.RestartSec = 15;
+        systemd.services.prometheus-lnd-exporter.after = [ "lnd.service" ];
+        services.bitcoind.regtest = {
+          enable = true;
+          extraConfig = ''
+            rpcauth=bitcoinrpc:e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7
+            zmqpubrawblock=tcp://127.0.0.1:28332
+            zmqpubrawtx=tcp://127.0.0.1:28333
+          '';
+          extraCmdlineOptions = [ "-regtest" ];
+        };
         systemd.services.lnd = {
           serviceConfig.ExecStart = ''
             ${pkgs.lnd}/bin/lnd \
@@ -471,7 +477,7 @@ let
               --tlskeypath=/var/lib/lnd/tls.key \
               --logdir=/var/log/lnd \
               --bitcoin.active \
-              --bitcoin.mainnet \
+              --bitcoin.regtest \
               --bitcoin.node=bitcoind \
               --bitcoind.rpcuser=bitcoinrpc \
               --bitcoind.rpcpass=hunter2 \
@@ -483,13 +489,31 @@ let
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
         };
+        # initialize wallet, creates macaroon needed by exporter
+        systemd.services.lnd.postStart = ''
+          ${pkgs.curl}/bin/curl \
+            --retry 20 \
+            --retry-delay 1 \
+            --retry-connrefused \
+            --cacert /var/lib/lnd/tls.cert \
+            -X GET \
+            https://localhost:8080/v1/genseed | ${pkgs.jq}/bin/jq -c '.cipher_seed_mnemonic' > /tmp/seed
+          ${pkgs.curl}/bin/curl \
+            --retry 20 \
+            --retry-delay 1 \
+            --retry-connrefused \
+            --cacert /var/lib/lnd/tls.cert \
+            -X POST \
+            -d "{\"wallet_password\": \"asdfasdfasdf\", \"cipher_seed_mnemonic\": $(cat /tmp/seed | tr -d '\n')}" \
+            https://localhost:8080/v1/initwallet
+        '';
       };
       exporterTest = ''
         wait_for_unit("lnd.service")
         wait_for_open_port(10009)
         wait_for_unit("prometheus-lnd-exporter.service")
         wait_for_open_port(9092)
-        succeed("curl -sSf localhost:9092/metrics | grep '^promhttp_metric_handler'")
+        succeed("curl -sSf localhost:9092/metrics | grep '^lnd_peer_count'")
       '';
     };
 

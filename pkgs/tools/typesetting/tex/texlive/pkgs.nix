@@ -12018,6 +12018,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "ed2a3c4d91ecc125ecc2179594e66b5bbe66bb806c1b232ae1b71fdd0d29152a2d28e3dc6dbb2e1724650b8b8cb67e8c8bdf5b7506357207ba61c636768fb8c5";
   sha512.doc = "e40955db986b94bb9bbbbf9daaf6a12d2898ae736741fb0a5626755b55908b056a2b4dbc1d87e9681201d7e45c99297393d6e1d2de17d135d8d74c732106897a";
   hasRunfiles = true;
@@ -18001,6 +18002,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "0f969847994b3b377c752c23f802e8c51b4076efc2d43ad2560a72b83cea3bf0a64d7df18a59afe4289a4547a9f23cf81b0c365a499be85a2467579941fa9700";
   hasRunfiles = true;
 };
@@ -18009,6 +18011,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "3f91560ecf78c5540fd4f5d9890f6aa7a57bcd3a41095985785505b82e40793b91a5da3a01bdc021b11c32db3dd7030a104686b34b496c9094acfb85509cd007";
   hasRunfiles = true;
 };
@@ -18017,6 +18020,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "85012062097dd4b624cb39c68b293169a25ab3c9cd15b4474c3a3ffbe4b8ab13d6856c6c70a580da45a2d210952df2d9760682da3917cfd24d17772dc2ccce7f";
 };
 "hyphen-armenian" = {
@@ -18024,6 +18028,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "59538414bf5a4701199100fbd9d5247999a36bc28c7c6ef2a28deb9024e01605d48839f00f345c848365853ac3a9f1aab7402f44860532d7a5c099d2f27ee189";
   sha512.source = "d25e6347545e00a809db1dc8e48ef3fe67678b9ec93a1f3619d2a5a3d786d6e411c2e9f905120e3c5d01d9489c0a83035ce8025836249c88ee768bf07b8e2ca7";
   hasRunfiles = true;
@@ -18039,6 +18044,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "b90680dc5692824d60ca603e8bdd2fcade7cc772c8c0f9538d579704fb16165db2baf0c466ccaff46d92491b4a678fa86a127c0d106dbef6d640dfd2f887663d";
   sha512.source = "75a20da77fa056c719ecc1f014bb09c67f62f1c4a3abe04b7cadf45c7a4e06e4492cb0d34a8025f19f3ee5e3330e488212885095335d4a7e97baa5b106576223";
   hasRunfiles = true;
@@ -18048,6 +18054,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "19b9bd10d2357d0cb6ecc9ddb5e46b65b3c0eec1b2917a78311f255c1609bbb86595ce617d331271a72de934ae4001597f4a04d61b3810e34f3b197b21cab193";
   hasRunfiles = true;
 };
@@ -18056,6 +18063,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "9763e6ece053594b01cd9255a8a3551eb6b86ab082f6f9283664e256c55d43b9513b624774a650d83215d656334751f569496030187c1c78e2fe80f2d10f2f1f";
   hasRunfiles = true;
 };
@@ -18064,6 +18072,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "37189e09ee902f2c5145f30180b51211091b07d7d04125c98f1b7c424ad27f6899424b78cd17c559509076eeeb957b4f268fb4130807e7fafb461174fed8200b";
   hasRunfiles = true;
 };
@@ -18072,6 +18081,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "a78b70095fcfe297e2d85a49108affd5d48451ff4740461eed46d395410a665011614c9a89dff37e9477ee3803de6ebaa68595ac39222f2968a4124355ea7fa7";
   hasRunfiles = true;
 };
@@ -18080,6 +18090,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "c44b3f5fec7b44958336dcfb1a43c5b71fd1715262278863f5fcd74d7ec0cc6f1d572b741256d791e6979f15e4b0fcda8058725e27f17e1deb6e5df5fdb007ab";
   hasRunfiles = true;
 };
@@ -18088,6 +18099,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "fe36adfe900e23f2b0c3e9c3a3d96b608c49bf597222537d355d6a68e2f87f587db78a1921ab1c9a80ea175529e353524c35e99b83ef7f5515ab7c0aacd2f680";
   hasRunfiles = true;
 };
@@ -18096,6 +18108,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "8355d0aa95bb2e72bfc45015f9ae9f6a138f94441387a4daadfec5be4060878f6e69d05eab15432d99c256c1a3f68c122d5c915164fe343459d658a4543ddf42";
   hasRunfiles = true;
 };
@@ -18104,6 +18117,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "f5c8b08c2db716dfa6d36fcf337b4e18372978d04e28ff2c8ed0a0b3866f4bb3efb7b498fedbfde5052fc504b8677ae553c2dce73701e219632d8c5460d7e826";
   hasRunfiles = true;
 };
@@ -18112,6 +18126,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "954543a3fb81ff00d9c58315ba59d7a5e3430217dda6c1453bcb7ffb0516025dea4b877eb9d66c9f80ccc69d3d4895bdc6ae1b611d8394435fa647b8b806559d";
   hasRunfiles = true;
 };
@@ -18120,6 +18135,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "111371e47ca29069a5a9144d694858dd899b19e2b38d0c793b1e4884c69ae2d62398aacb4cd89e23246fc025e42872875bc808c1f327ac1502fac88c962e6c14";
   hasRunfiles = true;
   version = "1.1";
@@ -18129,6 +18145,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "a305cf89138e4327844d43a7e21773e31ac97a4655e4d58ae9a46dc0df565e432330debf704c37b4ad552561357521eba0b676755544ceb9c4f21ace09d6dd2c";
   hasRunfiles = true;
 };
@@ -18137,6 +18154,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "ed2976e9fb3eec5d2f0759348b284129e43bf161db571dd21270335388b8aec57e1b8393bc9b246f8a6e9cde22f93a4cb3c1a03dcadd64fdda3d70b576789050";
   hasRunfiles = true;
 };
@@ -18145,6 +18163,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "0eb91153214aaca8c3b5816f5315f9afdeb7c19521c87c79ea2b35e82217bfb23c8bb774baf810206f4413fc663e441ebe6b4962880ca0dbcda9209d2acce3b8";
   hasRunfiles = true;
 };
@@ -18153,6 +18172,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "a1532603758e7f774acba7c13ee74f0046ff187598ca86b2e93b91da31317f03fdbab5d4d7c0814978fb2ac159bd6e5a48e6e734c19758da21ad0a031844f52b";
   sha512.source = "9d6c8c1b0ce5c40d388937328461336a97fcf1fe780fa6198e029f12ef118d9d98f6eec03ea217743851f0217217d6548298df9336fcf33e6c4c196bbdb9eef0";
   hasRunfiles = true;
@@ -18162,6 +18182,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "5b02582769a55bb07d81e748e83170c16aca1c33b0a240cf547fa9c2212f2be52223e258229c760ddc5dd730419bd9e761614cc4fb3b3ba8102841bb779af511";
 };
 "hyphen-finnish" = {
@@ -18169,6 +18190,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "6aa171d77952165cdcb1b667885f16dd382124ed70ed1db80a9a89553d972720d8ff5f0da1b36669e02c3030d9ff362ab77ba1fa2ba45cddfb460018f0c0191d";
   hasRunfiles = true;
 };
@@ -18177,6 +18199,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "b9d2d05311a90f4caa6c4e8aa8a2e80e9c15fc3552f03f0ac6ec70d386610612715deb6e778247248355a3a209fb2413d6d2aee12f18bc35d5a334870b612507";
   hasRunfiles = true;
 };
@@ -18185,6 +18208,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "d1775a9b6e6b7fa155e44c93271e2ccb41bd1ec143ea0cf624841ad48a123db924dd134e6e60b862a808ad2058ed5b86cb34d98e5728b9dccd3997ba2f06932e";
   hasRunfiles = true;
 };
@@ -18193,6 +18217,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "2d707542f80dc94ad20c0daa776df23b773a5e6ccb261e11db675e1e89f5f303a4f5cd50d97f491cc7ea8b0f3c0d3f6391707812a95d4e72cca3afa7815e566f";
   sha512.source = "b9925168b1f9ae5139ffc3bd34810cc05a27475cfae31e98fd0d7618575fc994ca95d7479506024abec2c33bb20121811244d69c490df18a29d6c93fe02174c6";
   hasRunfiles = true;
@@ -18202,6 +18227,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "edaf041a2f92b0f7dbf28042c81838e8fd781cf9c3ad529c314227c94917ce4e8728ca676f8bd42e2a81bae76b11aabc1e22896e3ef9cd38ca4b718bc58fa0cb";
   hasRunfiles = true;
 };
@@ -18211,6 +18237,7 @@ tl: { # no indentation
   deps."dehyph" = tl."dehyph";
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "bea7d4605b1a18d3e7845ccaa06951b62178b3abbdc13dc59d3cbece3fa95fc4fba7e4d60dd253cd9fc022f804975cae5c4996fb99d3037c29971ade9984abce";
   hasRunfiles = true;
 };
@@ -18219,6 +18246,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "3da84f41aaf7e5d4be0ce609e4d119e65c9189ff6662051cb7e879e9e373d990ef1c59ac7cfead1bdbc6e55b52d4b3ed28d157b22dbec43e5226f16872d5a7de";
   sha512.doc = "865aaf1f9f0fbe130f9006e41ef677713667832745fc24c28cffe805a540a19f7104a3f0fef3258ba0e16c1c456959904887899a4c584338c58de7fcc80c5419";
   hasRunfiles = true;
@@ -18229,6 +18257,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "868a4c3f4d0eda078054026bd1ec35e05c2f4013e093bf58147bfa2d861814242b55a900ce60384767558c9552ff9d41cf447e2a157bae83bd2877251012d96b";
   sha512.doc = "164180f0485e16a49ba83dcb4721902e8a29f399032d4f5a59d55e424b8178a25dedd9fb99919d9d772142342fb78fe0dbf7a5303382a0b7feae4a381b76f8bb";
   hasRunfiles = true;
@@ -18238,6 +18267,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "69add7ccde189e86810e2a82692a260de9a9fcc0ba011352881d202d4f4c94c4dbd84fe36dff40ef9b9ad3e8e990947cc61022307790f13cad56744f3ef5e41f";
   hasRunfiles = true;
 };
@@ -18246,6 +18276,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "765be1c13ef3445b056b61c24460cc2f18bad038c04541bf4773c7f61c6d26be25d3079b260a1b9623e2f01155ec52eb5bc87b0ea9234e50a5ca24dd8a7a5937";
   hasRunfiles = true;
 };
@@ -18254,6 +18285,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "3f04a63010c02d77cb229c90aec9f1079557493958573be9ce992ac5ae3c229f01f9abc0cac785d9340ff48aa169a01f8b327ecb2e255bef57f1fe85d04d1d2a";
   hasRunfiles = true;
 };
@@ -18262,6 +18294,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "dfed82ea70f25d452726b5cd03d8e060bddc23cbbc5deebab2ddad93ce6744c38d357327fbe570bf7a1444f62cee0cc422a6c7d066d6693a238d851b4fe46e32";
   hasRunfiles = true;
 };
@@ -18270,6 +18303,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "478a77c4ab8231a3041c3427075f16c072f58a394eced8ff0cd5da6544f3f2fd65722f33fd8344e18060c96f09bd18b90af71f8508639fc9c59d29d704d9e348";
   hasRunfiles = true;
 };
@@ -18278,6 +18312,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "4e79ee31893d6c948a3aac8588d4beb75d89f89df973b1e39cd63894e008af55f8dca774194d7eb105fb0aef692b17bb645d5bd85cca7debafd74aabf241bc30";
   hasRunfiles = true;
   version = "4.8g";
@@ -18287,6 +18322,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "e5114da178fc841b1079130c01f8729ac94f0e3592dbd479f44a978ea009fd75b410d6130d9badd6227d115d8f6dad3ed4b553dbfbf4f80be5d1c2adf108e2fa";
   hasRunfiles = true;
 };
@@ -18295,6 +18331,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "9d0db7fcad4ca764379957fa22f9daede79898bcacfbdb62abe54318a52dd82a66f8e39542c18008e3f6b6d0db284b1e9b891531d3c8f3c9cf22c764e83d57b3";
   hasRunfiles = true;
   version = "3.1";
@@ -18304,6 +18341,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "85aeadb0cb3c5de9ef48057132ccd958d17f014b07b56b9ebe2186a709c4e7646fad260e156718e43ec3eac88681654f88c9b53a6d71fb3eaee934dcb4439ed9";
   hasRunfiles = true;
 };
@@ -18312,6 +18350,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "7a691e3c55c768b9ea5ef13552dc42025ab613df0a0d5c0d54aad58b63da11a93e59bc53e6a8211d5e054cbea8500846da01e9619bbee723d648e2d369a49d55";
   hasRunfiles = true;
 };
@@ -18320,6 +18359,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "f88208291212874df493151581205d1b270b2d4278176c42e11edac9b344b73c2ee859f93b6947e4a6003a00abc4d3753024add9caf84f114c8a0cec72aa8c8d";
   hasRunfiles = true;
 };
@@ -18328,6 +18368,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "159562a8feb25918bc422e7dc78a46423c7fff2f3c61016a0162761411999a5555be3c6e36cf967d5034f65c12f4b0834ae0c0423c2f3ab17a65034b1803dc72";
   hasRunfiles = true;
 };
@@ -18336,6 +18377,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "8b02e90bfcdf3c6d4bd1966b21e0512069f1749c638d537e9553f68e61e0bc325db8d3b462f45650db4376c7a769c2cde3e0c0601d7de272898a23cd2251c064";
   hasRunfiles = true;
 };
@@ -18344,6 +18386,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "b0743d1f6083dac7a347e22aed19d0c5d76119582e4862557a55b817b17dddaa69a2150f14daf6b08689278dd61b27c1b6ed45df5601dd6327bf185a7a46a5c6";
   hasRunfiles = true;
 };
@@ -18352,6 +18395,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "fa7fc73edd582ba20b8236507385f0a30f477bb9c79e35fea56aa4020be966b9c4a16a327848dd051fa4cf6e6117ef8a51eb92ed6cb72f6993cb290fa5cd5ca3";
   hasRunfiles = true;
 };
@@ -18360,6 +18404,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "5580b3865ff8d20d475cb962b0257b909ff0e410b6776cb8153145fb0ee42b2f777069413bc6b3622c8c52318aba1ba836210e8972c5b6a47ef978c24fc8848a";
   hasRunfiles = true;
   version = "3.0b";
@@ -18369,6 +18414,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "9d9ab3e616522ab9837bb7c7509127f998c442e96f96ee6b6fc0fdc9ac53fd03319d0c0ce28e23a35f1ae0ebb840cdeb19e8ab6444549c33059b28e7b307486e";
   hasRunfiles = true;
 };
@@ -18377,6 +18423,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "124a93a633731dc1b3d6cbf2fc9b8489bf0737911a0c25ea44dbdfffa07c165ba5804dfd7e9cbe0be3b6eceb9fd6e95daefcae2356ee140f644416bbe1b13507";
   hasRunfiles = true;
 };
@@ -18385,6 +18432,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "a69d3881493c70cfd58e3d79ed76ce6f18bbcb43e1683f31270eafeb743b366a3c52c9945ff94db333e88ca18145263ba74002f5e78bb42d7aefa48c66af7955";
   hasRunfiles = true;
 };
@@ -18394,6 +18442,7 @@ tl: { # no indentation
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
   deps."ruhyphen" = tl."ruhyphen";
+  hasHyphens = true;
   sha512.run = "f17852dffbb8f5c337b8316b92c2b0a60a318df491231047d9c0930d55d8b2be3274ec94d0d87085d53e06e89c585d47250f046300bf3890ce751f6f2052d348";
   hasRunfiles = true;
 };
@@ -18402,6 +18451,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "e84b6ca93e922c9c6edf03f4dbec1fae9eef2462379ef2fd0f3508a5048b54819c5ba12e0d76bafe1336666ca74ba95e27f63224fa048068bc515f3bc41f6eba";
   sha512.doc = "95c6ae15687118ffc9019c8634347a602e6590b4a1d18bc060e57fe548a81f097070322975be1f62fa2685c5affff7f31b4854b0ec941bbcb9377ecf16986cea";
   hasRunfiles = true;
@@ -18411,6 +18461,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "390aa9c116b6db7b362fc57aa0758a4c489c5fe33c718fb37675b17a9772a463ce532a2ace3e1ef90275b4afef5ea8d6cff71a7abe625d84e3f461c115306452";
   hasRunfiles = true;
   version = "1.0a";
@@ -18420,6 +18471,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "a0786980e0cda7029a72075023520acdc998b83226e85deb0b8186ee4293560321517d507f74fbe68f1d68a16cd8af67aae68baead9176f9cc687bcc7d0a72e1";
   hasRunfiles = true;
 };
@@ -18428,6 +18480,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "a605c9149ae452df8b2c25aa0f6bcdde53150e4485147a065f1f56c9740c3544c5c7f9c6049aea913916a62aabaf40777cf6f0f76a858e485c0bd09826a6ef5b";
   hasRunfiles = true;
 };
@@ -18436,6 +18489,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "d6783537ff44a326b83c2004afd63f5bdbd162fa4865138c2e6d34c9e6a103ac41dd7b382454646b09c74970f8e0d5827a5f4af617936f74fd300b2054a096d4";
   sha512.doc = "263fd9480c5f225c7e36169b86e846baa64745b83c1072c9602e873f2e7cf8e63b07ab85b29e9d4263656faff58a39fe83e1eba34517b8ba34720f189c8e7f43";
   sha512.source = "b1ceb7602a46ecab68fb767ffb154f0dea9626d81bf6c46dd43be328204f72141842c81efda9d7d51997ed25356746e345f7cd9f9ed88ac2f99746794becb75d";
@@ -18447,6 +18501,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "5f993ae6b22eadb87b6a1839bfa7d78a0dccc1107c5afbec8c248ed001018da38bb179e29f2430cffa90283221b20c5475346a8d5566edf16152266257f2a37d";
   hasRunfiles = true;
 };
@@ -18455,6 +18510,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "8336eee03250859ab4328ad3c1fe437d2af688ef56b43be49c45838965ffe033befa84cdf600e9f48cdf60cbbfbff44450c830bd4c34556f680c5096ed3aecc4";
   hasRunfiles = true;
 };
@@ -18463,6 +18519,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "5c7023e01bf59af4d36bd451f51ae00c445711c7ecf109c9d835f1d689446d7b0b1b2627b7f9e84e4f4a8ceff52227ff280ac64481e1d29d538a30e093dace85";
   sha512.source = "2aa80889b9657b03b6beb6510b6790fba13811b97abbac186eaf4d3f40212b41db0dd2d21583429820faad558b0415a09aa8254d2edd96812cf6396fb18ccf5c";
   hasRunfiles = true;
@@ -18472,6 +18529,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "c984bb7f09c5816c36a7a790f16df1750ee90f36e2130994ecd1db63f26afb650245985699a80da9b4d7004ad67106771d8c7b79262438369aee3f52fd8374cf";
   sha512.source = "a496f681db0b4b85d82ec1dd60c057f63b6d1c1b52d391e7bee98d3d6e1fb596701c91f2ca400d0df13b96ec7a43d275646b7d2874fe1e4efc9d9b2b47f6cc5d";
   hasRunfiles = true;
@@ -18482,6 +18540,7 @@ tl: { # no indentation
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
   deps."ukrhyph" = tl."ukrhyph";
+  hasHyphens = true;
   sha512.run = "05a9111b358c659159c6edfd38b9ce3d78febd794cc82968dc3e2acdc3612786304721fbd07f00f0a8278f4c2e46a1bfad821b5da45e60546d6acb5bf9068d08";
   hasRunfiles = true;
 };
@@ -18490,6 +18549,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "b2cb1bcd953ffabbd3f5acd8c72e9c60415fd300004de56ee446fc77d381aac1db65d613a2f591d3d0e45f2a12ff5340457ae3061b4c77de502923932383bdcb";
   hasRunfiles = true;
 };
@@ -18498,6 +18558,7 @@ tl: { # no indentation
   stripPrefix = 0;
   deps."hyph-utf8" = tl."hyph-utf8";
   deps."hyphen-base" = tl."hyphen-base";
+  hasHyphens = true;
   sha512.run = "12a23e0b9d00eb4381e3c97ecbb449faf5a73b755a17fc0301f1cbad5d0babb370aeec16dcdd316cefb56e142873abaa685288b1a1d3c7dcb76a07a9ef127ac6";
   hasRunfiles = true;
 };

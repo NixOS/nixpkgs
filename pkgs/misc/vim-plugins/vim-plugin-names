@@ -2,6 +2,7 @@
 aca/completion-tabnine
 AckslD/nvim-whichkey-setup.lua@main
 ackyshake/Spacegray.vim@main
+ahmedkhalf/lsp-rooter.nvim@main
 airblade/vim-gitgutter
 airblade/vim-rooter
 ajmwagar/vim-deus
