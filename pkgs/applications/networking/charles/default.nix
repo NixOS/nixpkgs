@@ -51,7 +51,7 @@ let
         homepage = "https://www.charlesproxy.com/";
         maintainers = with maintainers; [ kalbasit ];
         license = licenses.unfree;
-        platforms = platforms.linux ++ platforms.darwin;
+        platforms = platforms.unix;
       };
     };
 
