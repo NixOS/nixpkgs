@@ -1,0 +1,14 @@
+[package]
+name = "nixos-generate-config"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+simple-error = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+tera = { version = "1", default-features = false }
+lazy_static = "1"
+
+[[bin]]
+name = "nixos-generate-config"
+path = "src/main.rs"
