@@ -51,10 +51,10 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
-  buildInputs = [ libxml2 libffi ]
+  buildInputs = [ libffi ]
     ++ optional enablePFM libpfm; # exegesis
 
-  propagatedBuildInputs = [ ncurses zlib ];
+  propagatedBuildInputs = [ ncurses zlib libxml2 ];
 
   patches = [
     ./gnu-install-dirs.patch
