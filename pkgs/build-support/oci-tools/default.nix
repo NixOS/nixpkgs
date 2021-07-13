@@ -68,7 +68,7 @@
       }) sysMounts;
     });
   in
-    runCommand "join" {} ''
+    runCommand "oci-image" {} ''
       set -o pipefail
       mkdir -p $out/rootfs/{dev,proc,sys}
       cp ${config} $out/config.json
