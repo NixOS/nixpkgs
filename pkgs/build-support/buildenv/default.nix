@@ -2,7 +2,7 @@
 # a fork of the buildEnv in the Nix distribution.  Most changes should
 # eventually be merged back into the Nix distribution.
 
-{ buildPackages, runCommand, lib, substituteAll }:
+{ buildPackages, runCommandLocal, lib, substituteAll }:
 
 lib.makeOverridable
 ({ name
@@ -51,7 +51,7 @@ let
   };
 in
 
-runCommand name
+runCommandLocal name
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
             meta pathsToLink extraPrefix postBuild
@@ -72,7 +72,6 @@ runCommand name
       priority = drv.meta.priority or 5;
     }) paths);
     preferLocalBuild = true;
-    allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary
     passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else [ ];
   }
