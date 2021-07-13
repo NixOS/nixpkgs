@@ -1,27 +1,37 @@
 { lib
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , pkg-config
-, libgit2_0_27
+, libgit2
+, patch
 }:
 
-buildGoPackage rec {
-  version = "0.2.3";
+buildGoModule rec {
+  version = "0.2.5";
   pname = "gitin";
-
-  goPackagePath = "github.com/isacikgoz/gitin";
 
   src = fetchFromGitHub {
     owner = "isacikgoz";
     repo = "gitin";
     rev = "v${version}";
-    sha256 = "00z6i0bjk3hdxbc0cy12ss75b41yvzyl5pm6rdrvsjhzavry2fa3";
+    sha256 = "0x509dwfymy7zh4mfy5s42lsq3m5fzgalx3sz3aikg867jdcbncq";
+    # gitin replaces git2go with a statically build local one and
+    # also depends on an older version of libgit2, so we need to
+    # update git2go. We need to these changes in postFetch since
+    # buildGoModule doesn't execute patchPhase for the vendoring
+    # step.
+    # https://github.com/isacikgoz/gitin/issues/71
+    extraPostFetch = ''
+      ${patch}/bin/patch -p1 -d$out < ${./git2go-v31.patch}
+    '';
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "08cvap7x138ccvmwn2cjh49k77p1q66lmdl1gy4x6kal332r27gj";
+
+  subPackages = [ "cmd/gitin" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libgit2_0_27 ];
+  buildInputs = [ libgit2 ];
 
   meta = with lib; {
     homepage = "https://github.com/isacikgoz/gitin";
