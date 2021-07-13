@@ -2283,6 +2283,8 @@ in
 
   corosync = callPackage ../servers/corosync { };
 
+  corsix-th = callPackage ../games/corsix-th { };
+
   cowsay = callPackage ../tools/misc/cowsay { };
 
   czkawka = callPackage ../tools/misc/czkawka { };

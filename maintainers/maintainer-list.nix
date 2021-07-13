@@ -414,6 +414,12 @@
     githubId = 173595;
     name = "Caleb Maclennan";
   };
+  alexandre-lavoie = {
+    email = "alexandre.lavoie00@gmail.com";
+    github = "alexandre-lavoie";
+    githubId = 36684879;
+    name = "Alexandre Lavoie";
+  };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";
     github = "alexarice";
