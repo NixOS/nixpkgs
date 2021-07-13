@@ -6,6 +6,8 @@
 , intltool
 , libpeas
 , libsoup
+, libsecret
+, libnotify
 , libdmapsharing
 , gnome
 , totem-pl-parser
@@ -17,8 +19,6 @@
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
 let
-  pname = "rhythmbox";
-  version = "3.4.4";
 
   # The API version of libdmapsharing required by rhythmbox 3.4.4 is 3.0.
 
@@ -39,10 +39,11 @@ let
   });
 
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "rhythmbox";
+  version = "3.4.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "142xcvw4l19jyr5i72nbnrihs953pvrrzcbijjn9dxmxszbv03pf";
   };
 
@@ -66,11 +67,21 @@ in stdenv.mkDerivation rec {
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
 
     libdmapsharing_3 # necessary for daap support
+    libsecret
+    libnotify
   ] ++ gst_plugins;
 
-  configureFlags = [ "--enable-daap" ];
+  configureFlags = [
+    "--enable-daap"
+    "--enable-libnotify"
+    "--with-libsecret"
+  ];
 
   enableParallelBuilding = true;
 
@@ -84,7 +95,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
     description = "A music playing application for GNOME";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];
   };
