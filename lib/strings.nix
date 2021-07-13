@@ -15,6 +15,7 @@ rec {
     filter
     fromJSON
     head
+    isFloat
     isInt
     isList
     isString
@@ -673,6 +674,25 @@ rec {
       && dirOf str == storeDir
     else
       false;
+
+  /* Parse a string as a float.
+
+     Type: string -> float
+
+     Example:
+       toFloat "1.2"
+       => 1.2
+       toFloat "-4.2"
+       => -4
+       toFloat "1"
+       => error: Could not convert 1 to float.
+  */
+  # Obviously, it is a bit hacky to use fromJSON this way.
+  toFloat = str:
+    let mayBeFloat = fromJSON str; in
+    if isFloat mayBeFloat
+    then mayBeFloat
+    else throw "Could not convert ${str} to float.";
 
   /* Parse a string as an int.
 
