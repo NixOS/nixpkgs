@@ -321,13 +321,13 @@ in
     };
   };
 
-  rtmp ={
+  rtmp = {
     src = fetchFromGitHub {
       name = "rtmp";
       owner = "arut";
       repo = "nginx-rtmp-module";
-      rev = "v1.2.1";
-      sha256 = "0na1aam176irz6w148hnvamqy1ilbn4abhdzkva0yrm35a3ksbzn";
+      rev = "v1.2.2";
+      sha256 = "0y45bswk213yhkc2v1xca2rnsxrhx8v6azxz9pvi71vvxcggqv6h";
     };
   };
 

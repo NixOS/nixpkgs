@@ -10,7 +10,7 @@ in
       maintainers = [ lschuermann ];
     };
 
-    machine =
+    nodes.machine =
       { lib, ... }:
       with lib;
       {
@@ -48,6 +48,19 @@ in
         };
       };
 
+    nodes.strict = { ... }: {
+      users.users = {
+        admin = { isNormalUser = true; extraGroups = [ "wheel" ]; };
+        noadmin = { isNormalUser = true; };
+      };
+
+      security.sudo = {
+        enable = true;
+        wheelNeedsPassword = false;
+        execWheelOnly = true;
+      };
+    };
+
     testScript =
       ''
         with subtest("users in wheel group should have passwordless sudo"):
@@ -79,5 +92,11 @@ in
 
         with subtest("users in group 'barfoo' should not be able to keep their environment"):
             machine.fail("sudo -u test3 sudo -n -E -u root true")
+
+        with subtest("users in wheel should be able to run sudo despite execWheelOnly"):
+            strict.succeed('su - admin -c "sudo -u root true"')
+
+        with subtest("non-wheel users should be unable to run sudo thanks to execWheelOnly"):
+            strict.fail('su - noadmin -c "sudo --help"')
       '';
   })

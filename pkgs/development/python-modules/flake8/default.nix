@@ -1,15 +1,15 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , mock, pytest, pytestrunner
-, configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing, importlib-metadata
+, configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing ? null, importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "3.8.4";
+  version = "3.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aadae8761ec651813c24be05c6f7b4680857ef6afaae4651a4eccaef97ce6c3b";
+    sha256 = "07528381786f2a6237b061f6e96610a4167b226cb926e2aa2b6b1d78057c576b";
   };
 
   checkInputs = [ pytest mock pytestrunner ];

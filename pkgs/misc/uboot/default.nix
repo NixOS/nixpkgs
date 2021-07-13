@@ -18,10 +18,10 @@
 }:
 
 let
-  defaultVersion = "2021.01";
+  defaultVersion = "2021.04";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "0m04glv9kn3bhs62sn675w60wkrl4m3a4hnbnnw67s3l198y21xl";
+    sha256 = "06p1vymf0dl6jc2xy5w7p42mpgppa46lmpm2ishmgsycnldqnhqd";
   };
   buildUBoot = {
     version ? null
@@ -87,6 +87,11 @@ let
 
       mkdir -p ${installDir}
       cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
+
+      mkdir -p "$out/nix-support"
+      ${lib.concatMapStrings (file: ''
+        echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
+      '') filesToInstall}
 
       runHook postInstall
     '';
@@ -396,6 +401,13 @@ in {
 
   ubootRockPro64 = buildUBoot {
     extraMakeFlags = [ "all" "u-boot.itb" ];
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/237654/mbox/";
+        sha256 = "0aiw9zk8w4msd3v8nndhkspjify0yq6a5f0zdy6mhzs0ilq896c3";
+      })
+    ];
     defconfig = "rockpro64-rk3399_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31="${armTrustedFirmwareRK3399}/bl31.elf";

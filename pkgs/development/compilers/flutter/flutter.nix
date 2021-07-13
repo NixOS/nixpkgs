@@ -14,7 +14,7 @@
 , stdenv
 , lib
 , fetchurl
-, alsaLib
+, alsa-lib
 , dbus
 , expat
 , libpulseaudio
@@ -107,7 +107,7 @@ let
         libGLU
 
         # for android emulator
-        alsaLib
+        alsa-lib
         dbus
         expat
         libpulseaudio

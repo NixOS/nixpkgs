@@ -1,4 +1,7 @@
-{ stdenvNoCC, lib, fetchurl, unzip
+{ stdenvNoCC
+, lib
+, fetchurl
+, unzip
 , dfVersion
 }:
 
@@ -47,11 +50,18 @@ let
       sha256 = "092dgp8fh1j4nqr9wbzn89ib1nhscclr8m91lfxsvg0mgn7j8xlv";
       prerelease = true;
     };
+    "0.47.05" = {
+      twbtRelease = "6.xx";
+      dfhackRelease = "0.47.05-beta1";
+      sha256 = "sha256-Y6G0qBMHvotp/oyiqANlzXZVklL270dhskd135PnE9Q=";
+      prerelease = true;
+    };
   };
 
-  release = if hasAttr dfVersion twbt-releases
-            then getAttr dfVersion twbt-releases
-            else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
+  release =
+    if hasAttr dfVersion twbt-releases
+    then getAttr dfVersion twbt-releases
+    else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
 in
 
 stdenvNoCC.mkDerivation rec {

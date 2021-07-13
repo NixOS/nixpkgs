@@ -6,7 +6,8 @@
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "10-2020-q4-major";
+  version = "10.2.1";
+  release = "10-2020-q4-major";
   subdir = "10-2020q4";
 
   suffix = {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-${suffix}.tar.bz2";
+    url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${release}-${suffix}.tar.bz2";
     sha256 = {
       aarch64-linux = "0spkbh7vnda1w0nvavk342nb24nqxn8kln3k9j85mzil560qqg9l";
       x86_64-darwin = "1h5xn0npwkilqxg7ifrymsl7kjpafr9r9gjqgcpb0kjxavijvldy";

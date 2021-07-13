@@ -175,6 +175,9 @@ checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-noshort
 ## submoduleWith should merge all modules in one swoop
 checkConfigOutput "true" config.submodule.inner ./declare-submoduleWith-modules.nix
 checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.nix
+# Should also be able to evaluate the type name (which evaluates freeformType,
+# which evaluates all the modules defined by the type)
+checkConfigOutput "submodule" options.submodule.type.description ./declare-submoduleWith-modules.nix
 
 ## Paths should be allowed as values and work as expected
 checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix

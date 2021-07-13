@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libconfig";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "https://hyperrealm.github.io/${pname}/dist/${pname}-${version}.tar.gz";
-    sha256 = "1ngs2qx3cx5cbwinc5mvadly0b5n7s86zsc68c404czzfff7lg3w";
+    sha256 = "sha256-VFFm1srAN3RDgdHpzFpUBQlOe/rRakEWmbz/QLuzHuc=";
   };
 
   doCheck = true;

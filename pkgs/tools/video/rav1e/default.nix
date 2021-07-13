@@ -1,6 +1,8 @@
-{ stdenv, rustPlatform, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
+{ stdenv, rustPlatform, rust, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
 
-rustPlatform.buildRustPackage rec {
+let
+  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
   version = "0.4.1";
 
@@ -26,16 +28,16 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "1j92prjyr86wyx58h10xq9c9z28ky86h291x65w7qrxpj658aiz1";
+  cargoSha256 = "0miq6iiywwbxm6k0alnqg6bnd14pwc8vl9d8fgg6c0vjlfy5zhlb";
   nativeBuildInputs = [ nasm cargo-c ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   postBuild = ''
-    cargo cbuild --release --frozen --prefix=${placeholder "out"}
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
-    cargo cinstall --release --frozen --prefix=${placeholder "out"}
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   meta = with lib; {
@@ -49,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/xiph/rav1e";
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.primeos ];
+    maintainers = [ ];
   };
 }

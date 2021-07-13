@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, substituteAll, stdenv,
   fetchPypi, numpy, cython, freetype-py, fontconfig, libGL,
-  setuptools_scm, setuptools-scm-git-archive
+  setuptools-scm, setuptools-scm-git-archive
   }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython setuptools_scm setuptools-scm-git-archive
+    cython setuptools-scm setuptools-scm-git-archive
   ];
 
   propagatedBuildInputs = [

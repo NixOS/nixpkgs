@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, apacheHttpd, apr, avahi }:
 
 stdenv.mkDerivation rec {
-  name = "mod_dnssd-0.6";
+  pname = "mod_dnssd";
+  version = "0.6";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/mod_dnssd/${name}.tar.gz";
+    url = "http://0pointer.de/lennart/projects/mod_dnssd/${pname}-${version}.tar.gz";
     sha256 = "2cd171d76eba398f03c1d5bcc468a1756f4801cd8ed5bd065086e4374997c5aa";
   };
 
@@ -28,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Provide Zeroconf support via DNS-SD using Avahi";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = with maintainers; [ ];
   };
 }

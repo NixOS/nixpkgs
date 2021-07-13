@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi,
-  m2r, setuptools_scm, six, attrs }:
+  m2r, setuptools-scm, six, attrs }:
 
 buildPythonPackage rec {
   version = "20.2.0";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "7979803c74610e11ef0c0d68a2942b152df52da55336e0c9d58daf1831cbdf33";
   };
 
-  buildInputs = [ m2r setuptools_scm ];
+  buildInputs = [ m2r setuptools-scm ];
   propagatedBuildInputs = [ six attrs ];
 
   # Some tests require twisetd, but twisted requires Automat to build.

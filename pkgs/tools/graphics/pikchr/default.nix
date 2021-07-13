@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace open "test -f"
   '';
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   installPhase = ''
     install -Dm755 pikchr $out/bin/pikchr
     install -Dm755 pikchr.out $out/lib/pikchr.o

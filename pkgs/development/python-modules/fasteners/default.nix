@@ -3,24 +3,36 @@
 , fetchPypi
 , six
 , monotonic
+, diskcache
+, more-itertools
 , testtools
 , isPy3k
 , nose
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
   pname = "fasteners";
-  version = "0.15";
+  version = "0.16.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a176da6b70df9bb88498e1a18a9e4a8579ed5b9141207762368a1017bf8f5ef";
+    sha256 = "b1ab4e5adfbc28681ce44b3024421c4f567e705cc3963c732bf1cba3348307de";
   };
 
-  propagatedBuildInputs = [ six monotonic ];
+  propagatedBuildInputs = [
+    six
+    monotonic
+  ];
 
-  checkInputs = [ testtools nose ] ++ lib.optionals (!isPy3k) [ futures ];
+  checkInputs = [
+    diskcache
+    more-itertools
+    testtools
+    nose
+  ] ++ lib.optionals (!isPy3k) [
+    futures
+  ];
 
   checkPhase = ''
     nosetests

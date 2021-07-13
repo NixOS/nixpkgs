@@ -4,12 +4,11 @@
 , buildDunePackage
 , ocaml
 , gen
-, ppx_tools_versioned
-, ocaml-migrate-parsetree
+, ppxlib
 , uchar
 }:
 
-if lib.versionOlder ocaml.version "4.02.3"
+if lib.versionOlder ocaml.version "4.08"
 then throw "sedlex is not available for OCaml ${ocaml.version}"
 else
 
@@ -32,7 +31,7 @@ let
 in
 buildDunePackage rec {
   pname = "sedlex";
-  version = "2.2";
+  version = "2.3";
 
   useDune2 = true;
 
@@ -40,11 +39,11 @@ buildDunePackage rec {
     owner = "ocaml-community";
     repo = "sedlex";
     rev = "v${version}";
-    sha256 = "18dwl2is5j26z6b1c47b81wvcpxw44fasppdadsrs9vsw63rwcm3";
+    sha256 = "0iw3phlaqr27jdf857hmj5v5hdl0vngbb2h37p2ll18sw991fxar";
   };
 
   propagatedBuildInputs = [
-    gen uchar ocaml-migrate-parsetree ppx_tools_versioned
+    gen uchar ppxlib
   ];
 
   preBuild = ''
@@ -60,6 +59,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/ocaml-community/sedlex";
+    changelog = "https://github.com/ocaml-community/sedlex/raw/v${version}/CHANGES";
     description = "An OCaml lexer generator for Unicode";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.marsam ];

@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, substituteAll, autoreconfHook, pkg-config, libusb1, hwdata , python3 }:
 
 stdenv.mkDerivation rec {
-  name = "usbutils-012";
+  name = "usbutils-013";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/usb/usbutils/${name}.tar.xz";
-    sha256 = "0iiy0q7fzikavmdsjsb0sl9kp3gfh701qwyjjccvqh0qz4jlcqw8";
+    sha256 = "0f0klk6d3hmbpf6p4dcwa1qjzblmkhbxs1wsw87aidvqri7lj8wy";
   };
 
   patches = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, gobject-introspection, libappindicator-gtk3, libindicator-gtk3, polkit }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, gobject-introspection, libappindicator-gtk3, libindicator-gtk3, polkit, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-polkit";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "Integrates polkit authentication for MATE desktop";

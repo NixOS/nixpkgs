@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zchunk";
-  version = "1.1.9";
+  version = "1.1.11";
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "zchunk";
     repo = pname;
     rev = version;
-    hash = "sha256-MqnHtqOjLl6R5GZ4f2UX1iLoO9FUT2IfZlSN58wW8JA=";
+    hash = "sha256-r+qWJOUnTyPJjM9eW44Q2DMKxx4HloyfNrQ6xWDO9vQ=";
   };
 
   nativeBuildInputs = [

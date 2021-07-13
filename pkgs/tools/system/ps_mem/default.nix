@@ -17,7 +17,7 @@ in pythonPackages.buildPythonApplication {
     description = "A utility to accurately report the in core memory usage for a program";
     homepage = "https://github.com/pixelb/ps_mem";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

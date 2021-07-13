@@ -20,7 +20,7 @@
 , exempi
 , giflib
 , glib
-, gnome3
+, gnome
 , gst_all_1
 , icu
 , json-glib
@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.0.4";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-E877xx1S93RvPTfQQdjFvBM2pA/13ZK1Nw6GUMJqiY4=";
+    sha256 = "sha256-5NNhNRsVbyhipSRBX76/BTnHgc2HxmKWYvAmW0gDuLg=";
   };
 
   nativeBuildInputs = [
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

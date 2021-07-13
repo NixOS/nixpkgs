@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchFromGitHub
 , cmake
 , cfitsio
 , libusb1
@@ -18,39 +17,54 @@
 , libdc1394
 , gpsd
 , ffmpeg
+, version
+, src
+, withFirmware ? false
+, firmware ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "indi-3rdparty";
-  version = "1.8.9";
 
-  src = fetchFromGitHub {
-    owner = "indilib";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0klvknhp7l6y2ab4vyv4jq7znk1gjl5b3709kyplm7dsh4b8bppy";
-  };
-
-  cmakeFlags = [
-    "-DINDI_DATA_DIR=\${CMAKE_INSTALL_PREFIX}/share/indi"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-    "-DRULES_INSTALL_DIR=lib/udev/rules.d"
-    "-DWITH_SX=off"
-    "-DWITH_SBIG=off"
-    "-DWITH_APOGEE=off"
-    "-DWITH_FISHCAMP=off"
-    "-DWITH_DSI=off"
-    "-DWITH_QHY=off"
-    "-DWITH_ARMADILLO=off"
-    "-DWITH_PENTAX=off"
-  ];
+  inherit version src;
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
     libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw
+  ] ++ lib.optionals withFirmware [
+    firmware
+  ];
+
+  postPatch = ''
+    for f in indi-qsi/CMakeLists.txt \
+             indi-dsi/CMakeLists.txt \
+             indi-armadillo-platypus/CMakeLists.txt
+    do
+      substituteInPlace $f \
+        --replace "/lib/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/etc/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/lib/firmware" "lib/firmware"
+    done
+  '';
+
+  cmakeFlags = [
+    "-DINDI_DATA_DIR=share/indi"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+    "-DRULES_INSTALL_DIR=lib/udev/rules.d"
+    # Pentax, Atik, and SX cmakelists are currently broken
+    "-DWITH_PENTAX=off"
+    "-DWITH_ATIK=off"
+    "-DWITH_SX=off"
+  ] ++ lib.optionals (!withFirmware) [
+    "-DWITH_APOGEE=off"
+    "-DWITH_DSI=off"
+    "-DWITH_QHY=off"
+    "-DWITH_ARMADILLO=off"
+    "-DWITH_FISHCAMP=off"
+    "-DWITH_SBIG=off"
   ];
 
   meta = with lib; {

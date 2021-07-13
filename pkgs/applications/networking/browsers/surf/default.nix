@@ -7,12 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "surf";
-  version = "unstable-2019-02-08";
+  version = "2.1";
 
+  # tarball is missing file common.h
   src = fetchgit {
     url = "git://git.suckless.org/surf";
-    rev = "d068a3878b6b9f2841a49cd7948cdf9d62b55585";
-    sha256 = "0pjsv2q8c74sdmqsalym8wa2lv55lj4pd36miam5wd12769xw68m";
+    rev = version;
+    sha256 = "1v926hiayddylq79n8l7dy51bm0dsa9n18nx9bkhg666cx973x4z";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];

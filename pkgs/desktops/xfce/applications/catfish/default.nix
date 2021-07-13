@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://archive.xfce.org/src/apps/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "0fg89946z6n8njxn4mv29jksw8yavg8vypsljn9031pjwl3fmh2q";
+    sha256 = "sha256-WMDqBuXyhgGSlVRfv9HbyiOup0xiV2K7tMiab0hK6Dk=";
   };
 
   nativeBuildInputs = [

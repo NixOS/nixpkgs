@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, yojson, ulex, pprint, fix, functory }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, menhirLib, yojson, ulex, pprint, fix, functory }:
 
 if lib.versionAtLeast ocaml.version "4.06"
 then throw "mezzo is not available for OCaml ${ocaml.version}"
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = "0yck5r6di0935s3iy2mm9538jkf77ssr789qb06ms7sivd7g3ip6";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild yojson menhir ulex pprint fix functory ];
+  buildInputs = [ ocaml findlib ocamlbuild yojson menhir menhirLib ulex pprint fix functory ];
 
   # Sets warning 3 as non-fatal
   prePatch = lib.optionalString (check-ocaml-version "4.02") ''

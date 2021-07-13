@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "drf-nested-routers";
-  version = "0.92.5";
+  version = "0.93.3";
 
   src = fetchFromGitHub {
     owner = "alanjds";
     repo = "drf-nested-routers";
     rev = "v${version}";
-    sha256 = "1l1jza8xz6xcm3gwxh1k6pc8fs95cq3v751gxj497y1a83d26j8i";
+    sha256 = "1gmw6gwiqzfysx8qn7aan7xgkizxy64db94z30pm3bvn6jxv08si";
   };
 
   propagatedBuildInputs = [ django djangorestframework setuptools ];

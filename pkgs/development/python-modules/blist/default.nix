@@ -22,6 +22,12 @@ buildPythonPackage rec {
       url = "https://github.com/DanielStutzbach/blist/commit/2dc1ec28ed68611fcec9ac1c68070c782d6b4b4e.patch";
       sha256 = "0ma0z6ga80w3wzh3sidwd8ckfbgx4j1y7cc29q6j9ddrvxpf276y";
     })
+
+    # Fixes compatibility for Python 3.9 https://github.com/DanielStutzbach/blist/pull/91
+    (fetchpatch {
+      url = "https://github.com/DanielStutzbach/blist/pull/91/commits/e63514f805e42dc6a5708e629e4153d91bc90bff.patch";
+      sha256 = "1prx8znk7008v4ky7q2lx0pi6hzqd4kxgfdwbsr4zylwbrdqvsga";
+    })
   ];
 
   meta = with lib; {

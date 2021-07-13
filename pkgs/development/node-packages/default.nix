@@ -1,4 +1,4 @@
-{ pkgs, nodejs, stdenv }:
+{ pkgs, nodejs, stdenv, fetchFromGitHub }:
 
 let
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
@@ -60,8 +60,9 @@ let
       };
     });
 
-    bitwarden-cli = pkgs.lib.overrideDerivation super."@bitwarden/cli" (drv: {
+    bitwarden-cli = super."@bitwarden/cli".override (drv: {
       name = "bitwarden-cli-${drv.version}";
+      meta.mainProgram = "bw";
     });
 
     fast-cli = super."fast-cli-1.x".override {
@@ -74,6 +75,7 @@ let
 
     flood = super.flood.override {
       buildInputs = [ self.node-pre-gyp ];
+      meta.mainProgram = "flood";
     };
 
     expo-cli = super."expo-cli".override (attrs: {
@@ -115,6 +117,10 @@ let
             else ""
         }
       '';
+    };
+
+    markdownlint-cli = super.markdownlint-cli.override {
+      meta.mainProgram = "markdownlint";
     };
 
     mirakurun = super.mirakurun.override rec {
@@ -208,6 +214,26 @@ let
       '';
     };
 
+    netlify-cli =
+      let
+        esbuild = pkgs.esbuild.overrideAttrs (old: rec {
+          version = "0.13.6";
+
+          src = fetchFromGitHub {
+            owner = "netlify";
+            repo = "esbuild";
+            rev = "v${version}";
+            sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
+          };
+
+        });
+      in
+      super.netlify-cli.override {
+        preRebuild = ''
+          export ESBUILD_BINARY_PATH="${esbuild}/bin/esbuild"
+        '';
+      };
+
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
       meta.broken = since "10";
@@ -285,6 +311,9 @@ let
         libsecret
         self.node-gyp-build
         self.node-pre-gyp
+      ] ++ lib.optionals stdenv.isDarwin [
+        darwin.apple_sdk.frameworks.AppKit
+        darwin.apple_sdk.frameworks.Security
       ];
     };
 
@@ -301,6 +330,17 @@ let
         wrapProgram "$out/bin/yaml-language-server" \
         --prefix NODE_PATH : ${self.prettier}/lib/node_modules
       '';
+    };
+
+    wavedrom-cli = super.wavedrom-cli.override {
+      nativeBuildInputs = [ pkgs.pkg-config self.node-pre-gyp ];
+      # These dependencies are required by
+      # https://github.com/Automattic/node-canvas.
+      buildInputs = with pkgs; [
+        pixman
+        cairo
+        pango
+      ];
     };
   };
 in self

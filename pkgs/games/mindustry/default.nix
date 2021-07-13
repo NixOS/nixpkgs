@@ -12,7 +12,7 @@
 , pkg-config
 , stb
 , ant
-, alsaLib
+, alsa-lib
 , glew
 
 # Make the build version easily overridable.
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals enableClient [
     SDL2
     glew
-    alsaLib
+    alsa-lib
   ];
   nativeBuildInputs = [
     pkg-config

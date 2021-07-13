@@ -12,7 +12,7 @@
 , pytestCheckHook
 , pythonOlder
 , toml
-, typing
+, typing ? null
 }:
 
 buildPythonPackage rec {

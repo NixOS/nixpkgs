@@ -1,7 +1,7 @@
 { qtModule, qtbase, qtdeclarative, pkg-config }:
 
 qtModule {
-  name = "qtgamepad";
+  pname = "qtgamepad";
   qtInputs = [ qtbase qtdeclarative ];
   buildInputs = [ ];
   nativeBuildInputs = [ pkg-config ];

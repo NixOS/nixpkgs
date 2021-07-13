@@ -7,7 +7,7 @@
 , beautifulsoup4
 , bottleneck
 , cython
-, dateutil
+, python-dateutil
 , html5lib
 , jinja2
 , lxml
@@ -33,11 +33,11 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "078b4nncn6778ymmqn80j2q6n7fcs4d6bbaraar5nypgbaw10vyz";
+    sha256 = "649ecab692fade3cbfcf967ff936496b0cfba0af00a55dfaacd82bdda5cb2279";
   };
 
   nativeBuildInputs = [ cython ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     beautifulsoup4
     bottleneck
-    dateutil
+    python-dateutil
     html5lib
     numexpr
     lxml
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
   postPatch = lib.optionalString stdenv.isDarwin ''
-    cpp_sdk="${libcxx}/include/c++/v1";
+    cpp_sdk="${lib.getDev libcxx}/include/c++/v1";
     echo "Adding $cpp_sdk to the setup.py common_include variable"
     substituteInPlace setup.py \
       --replace "['pandas/src/klib', 'pandas/src']" \

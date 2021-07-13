@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, systemd }:
+{ lib, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, nixosTests, systemd }:
 
 let beat = package : extraArgs : buildGoPackage (rec {
       name = "${package}-${version}";
@@ -22,10 +22,17 @@ let beat = package : extraArgs : buildGoPackage (rec {
         platforms = platforms.linux;
       };
     } // extraArgs);
-in {
+in rec {
   filebeat6   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
   heartbeat6  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
-  metricbeat6 = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
+  metricbeat6 = beat "metricbeat" {
+    meta.description = "Lightweight shipper for metrics";
+    passthru.tests =
+      assert metricbeat6.drvPath == nixosTests.elk.ELK-6.elkPackages.metricbeat.drvPath;
+      {
+        elk = nixosTests.elk.ELK-6;
+      };
+  };
   packetbeat6 = beat "packetbeat" {
     buildInputs = [ libpcap ];
     meta.broken = true;

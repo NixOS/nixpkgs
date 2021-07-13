@@ -6,19 +6,22 @@
 
 buildPythonPackage rec {
   pname = "python-velbus";
-  version = "2.1.2";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "thomasdelaet";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0dv7dsjp5li87ispdphaz7jd0a9xc328rxwawf2f58b1ii904xr4";
+    rev = version;
+    sha256 = "1z0a7fc9xfrcpwi9xiimxsgbzbp2iwyi1rij6vqd5z47mzi49fv9";
   };
 
-  propagatedBuildInputs = [ pyserial ];
+  propagatedBuildInputs = [
+    pyserial
+  ];
 
   # Project has not tests
   doCheck = false;
+
   pythonImportsCheck = [ "velbus" ];
 
   meta = with lib; {

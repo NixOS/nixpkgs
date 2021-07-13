@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pulsectl";
-  version = "21.3.4";
+  version = "21.5.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+qi5M2I3VlmQKY8ghw4T3RZ4pFhoR8paf/Kr8QdS81Y=";
+    sha256 = "0n448nkm2i4gnsq48vbj8sldmyx0b7c7rvzijg8h2pxdrmilbqql";
   };
 
   patches = [
@@ -17,9 +17,15 @@ buildPythonPackage rec {
     })
   ];
 
+  pythonImportsCheck = [
+    "pulsectl"
+  ];
+
   checkInputs = [ pulseaudio ];
+
   checkPhase = ''
-    ${python.interpreter} -m unittest pulsectl.tests.all
+    export HOME=$TMPDIR
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with lib; {

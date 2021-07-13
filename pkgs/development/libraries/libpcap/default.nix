@@ -4,11 +4,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-jRK0JiPu7+6HLxI70NyF1TWwDfTULoZfmTxA97/JKx4=";
+    sha256 = "sha256-7ShfSsyvBTRPkJdXV7Pb/ncrpB0cQBwmSLf6RbcRvdQ=";
   };
 
   nativeBuildInputs = [ flex bison ]

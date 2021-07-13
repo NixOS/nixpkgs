@@ -26,6 +26,7 @@
 , tdb
 , cmocka
 , rpcsvc-proto
+, python3Packages
 , nixosTests
 
 , enableLDAP ? false, openldap
@@ -44,11 +45,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.13.7";
+  version = "4.14.4";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "1ajvr5hzl9kmrf77hb9c71zvnm8j0xgy40nqfjz4f407cw470zaf";
+    sha256 = "1fc9ix91hb1f35j69sk7rsi9pky2p0vsmw47s973bx801cm0kbw9";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -58,8 +59,6 @@ stdenv.mkDerivation rec {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
-    # Backport, should be removed for version 4.14
-    ./0001-lib-util-Standardize-use-of-st_-acm-time-ns.patch
   ];
 
   nativeBuildInputs = [
@@ -93,10 +92,10 @@ stdenv.mkDerivation rec {
     libtasn1
     tdb
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
-    ++ optional enableLDAP openldap
+    ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
-    ++ optionals enableDomainController [ gpgme lmdb ]
+    ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]

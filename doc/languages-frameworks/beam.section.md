@@ -4,13 +4,19 @@
 
 In this document and related Nix expressions, we use the term, _BEAM_, to describe the environment. BEAM is the name of the Erlang Virtual Machine and, as far as we're concerned, from a packaging perspective, all languages that run on the BEAM are interchangeable. That which varies, like the build system, is transparent to users of any given BEAM package, so we make no distinction.
 
+## Available versions and deprecations schedule {#available-versions-and-deprecations-schedule}
+
+### Elixir {#elixir}
+
+nixpkgs follows the [official elixir deprecation schedule](https://hexdocs.pm/elixir/compatibility-and-deprecations.html) and keeps the last 5 released versions of Elixir available.
+
 ## Structure {#beam-structure}
 
 All BEAM-related expressions are available via the top-level `beam` attribute, which includes:
 
-- `interpreters`: a set of compilers running on the BEAM, including multiple Erlang/OTP versions (`beam.interpreters.erlangR19`, etc), Elixir (`beam.interpreters.elixir`) and LFE (Lisp Flavoured Erlang) (`beam.interpreters.lfe`).
+- `interpreters`: a set of compilers running on the BEAM, including multiple Erlang/OTP versions (`beam.interpreters.erlangR22`, etc), Elixir (`beam.interpreters.elixir`) and LFE (Lisp Flavoured Erlang) (`beam.interpreters.lfe`).
 
-- `packages`: a set of package builders (Mix and rebar3), each compiled with a specific Erlang/OTP version, e.g. `beam.packages.erlangR19`.
+- `packages`: a set of package builders (Mix and rebar3), each compiled with a specific Erlang/OTP version, e.g. `beam.packages.erlang22`.
 
 The default Erlang compiler, defined by `beam.interpreters.erlang`, is aliased as `erlang`. The default BEAM package set is defined by `beam.packages.erlang` and aliased at the top level as `beamPackages`.
 
@@ -24,11 +30,17 @@ Many Erlang/OTP distributions available in `beam.interpreters` have versions wit
 
 We provide a version of Rebar3, under `rebar3`. We also provide a helper to fetch Rebar3 dependencies from a lockfile under `fetchRebar3Deps`.
 
+We also provide a version on Rebar3 with plugins included, under `rebar3WithPlugins`. This package is a function which takes two arguments: `plugins`, a list of nix derivations to include as plugins (loaded only when specified in `rebar.config`), and `globalPlugins`, which should always be loaded by rebar3. Example: `rebar3WithPlugins { globalPlugins = [beamPackages.pc]; }`.
+
+When adding a new plugin it is important that the `packageName` attribute is the same as the atom used by rebar3 to refer to the plugin.
+
 ### Mix & Erlang.mk {#build-tools-other}
 
 Erlang.mk works exactly as expected. There is a bootstrap process that needs to be run, which is supported by the `buildErlangMk` derivation.
 
 For Elixir applications use `mixRelease` to make a release. See examples for more details.
+
+There is also a `buildMix` helper, whose behavior is closer to that of `buildErlangMk` and `buildRebar3`. The primary difference is that mixRelease makes a release, while buildMix only builds the package, making it useful for libraries and other dependencies.
 
 ## How to Install BEAM Packages {#how-to-install-beam-packages}
 
@@ -56,7 +68,7 @@ Erlang.mk functions similarly to Rebar3, except we use `buildErlangMk` instead o
 
 `mixRelease` is used to make a release in the mix sense. Dependencies will need to be fetched with `fetchMixDeps` and passed to it.
 
-#### mixRelease - Elixir Phoenix example
+#### mixRelease - Elixir Phoenix example {#mixrelease---elixir-phoenix-example}
 
 Here is how your `default.nix` file would look.
 
@@ -74,7 +86,7 @@ let
   version = "0.0.1";
   mixEnv = "prod";
 
-  mixDeps = packages.fetchMixDeps {
+  mixFodDeps = packages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src mixEnv version;
     # nix will complain and tell you the right value to replace this with
@@ -118,7 +130,7 @@ let
 
 
 in packages.mixRelease {
-  inherit src pname version mixEnv mixDeps;
+  inherit src pname version mixEnv mixFodDeps;
   # if you have build time environment variables add them here
   MY_ENV_VAR="my_value";
   preInstall = ''
@@ -136,7 +148,7 @@ Setup will require the following steps:
 - you can now `nix-build .`
 - To run the release, set the `RELEASE_TMP` environment variable to a directory that your program has write access to. It will be used to store the BEAM settings.
 
-#### Example of creating a service for an Elixir - Phoenix project
+#### Example of creating a service for an Elixir - Phoenix project {#example-of-creating-a-service-for-an-elixir---phoenix-project}
 
 In order to create a service with your release, you could add a `service.nix`
 in your project with the following
@@ -216,7 +228,7 @@ mkShell {
 }
 ```
 
-#### Elixir - Phoenix project
+#### Elixir - Phoenix project {#elixir---phoenix-project}
 
 Here is an example `shell.nix`.
 
@@ -229,7 +241,7 @@ let
     git
     # replace with beam.packages.erlang.elixir_1_11 if you need
     beam.packages.erlang.elixir
-    nodejs-15_x
+    nodejs
     postgresql_13
     # only used for frontend dependencies
     # you are free to use yarn2nix as well

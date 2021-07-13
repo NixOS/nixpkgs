@@ -7,6 +7,7 @@
 , click
 , enum-compat
 , hypothesis
+, inquirer
 , jmespath
 , mock
 , mypy-extensions
@@ -15,18 +16,18 @@
 , pyyaml
 , setuptools
 , six
-, typing
+, typing ? null
 , watchdog
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.21.9";
+  version = "1.23.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "312f88838c8ea4b4ac79dce0e5b4ba3125130ca66ea99a4694f535501dca95e3";
+    sha256 = "8e3b26f8ec15197d8c04cd1edb0d692a490cb5ec179560183a403de63f21c1d7";
   };
 
   checkInputs = [ watchdog pytest hypothesis mock ];
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     botocore
     click
     enum-compat
+    inquirer
     jmespath
     mypy-extensions
     pip

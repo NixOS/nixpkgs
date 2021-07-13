@@ -37,8 +37,8 @@ stdenv.mkDerivation (rec {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
-      --replace '/usr/bin/libtool' 'ar' \
-      --replace 'AR="libtool"' 'AR="ar"' \
+      --replace '/usr/bin/libtool' '${stdenv.cc.targetPrefix}ar' \
+      --replace 'AR="libtool"' 'AR="${stdenv.cc.targetPrefix}ar"' \
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation (rec {
   ''
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
-  + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
+  + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt" && shared) ''
     ln -s zlib1.dll $out/bin/libz.dll
   '';
 

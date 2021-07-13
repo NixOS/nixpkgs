@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, dateutil
+, python-dateutil
 , text-unidecode
 , freezegun
 , pytestCheckHook
@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "Faker";
-  version = "5.5.1";
+  version = "6.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bskhmiir1ajipj7j535j2mxgnp6s3mxbvlag4aryj9zbhgg1c19";
+    sha256 = "c2852cadc99a4ebdbf06934e4c15e30f2307d414ead21d15605759602645f152";
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     text-unidecode
   ];
 

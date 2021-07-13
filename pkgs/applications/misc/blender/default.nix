@@ -1,7 +1,7 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python3Packages
+, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python39Packages
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
@@ -12,12 +12,12 @@
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
 , potrace
 , openxr-loader
-, embree, gmp
+, embree, gmp, libharu
 }:
 
 with lib;
 let
-  python = python3Packages.python;
+  python = python39Packages.python;
   optix = fetchzip {
     url = "https://developer.download.nvidia.com/redist/optix/v7.0/OptiX-7.0.0-include.zip";
     sha256 = "1b3ccd3197anya2bj3psxdrvrpfgiwva5zfv2xmyrl73nb2dvfr7";
@@ -26,16 +26,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.92.0";
+  version = "2.93.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "15a5vffn18a920286x0avbc2rap56k6y531wgibq68r90g2cz4g7";
+    sha256 = "sha256-IdriOBw/DlpH6B0GKqC1nKnhTZwrIL8U9hkMS20BHNg=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake makeWrapper python3Packages.wrapPython ]
+  nativeBuildInputs = [ cmake makeWrapper python39Packages.wrapPython llvmPackages.llvm.dev ]
     ++ optionals cudaSupport [ addOpenGLRunpath ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
       gmp
       pugixml
       potrace
+      libharu
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     ++ optional cudaSupport cudatoolkit
     ++ optional colladaSupport opencollada
     ++ optional spaceNavSupport libspnav;
-  pythonPath = with python3Packages; [ numpy requests ];
+  pythonPath = with python39Packages; [ numpy requests ];
 
   postPatch = ''
     # allow usage of dynamically linked embree
@@ -78,16 +79,12 @@ stdenv.mkDerivation rec {
         --replace '${"$"}{LIBDIR}/openmp' \
                   '${llvmPackages.openmp}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
-        --replace 'set(PYTHON_VERSION 3.7)' \
-                  'set(PYTHON_VERSION ${python.pythonVersion})' \
-        --replace '${"$"}{PYTHON_VERSION}m' \
-                  '${"$"}{PYTHON_VERSION}' \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
         --replace '${"$"}{LIBDIR}/opencollada' \
                   '${opencollada}' \
         --replace '${"$"}{PYTHON_LIBPATH}/site-packages/numpy' \
-                  '${python3Packages.numpy}/${python.sitePackages}/numpy'
+                  '${python39Packages.numpy}/${python.sitePackages}/numpy'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '');
@@ -109,8 +106,8 @@ stdenv.mkDerivation rec {
       "-DPYTHON_VERSION=${python.pythonVersion}"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
-      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python.sitePackages}"
-      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy}/${python.sitePackages}/numpy/core/include"
+      "-DPYTHON_NUMPY_PATH=${python39Packages.numpy}/${python.sitePackages}"
+      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python39Packages.numpy}/${python.sitePackages}/numpy/core/include"
       "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
       "-DWITH_OPENVDB=ON"
       "-DWITH_TBB=ON"

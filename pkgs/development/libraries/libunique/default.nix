@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1fsgvmncd9caw552lyfg8swmsd6bh4ijjsph69bwacwfxwf09j75";
   };
 
+  # Don't make deprecated usages hard errors
+  prePatch = ''
+    substituteInPlace configure --replace "-Werror" "";
+  '';
+
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
@@ -22,9 +27,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 dbus-glib ];
-
-  # Don't make deprecated usages hard errors
-  preBuild = ''substituteInPlace unique/dbus/Makefile --replace -Werror ""'';
 
   doCheck = true;
 

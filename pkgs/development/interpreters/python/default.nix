@@ -44,6 +44,8 @@ with pkgs;
               toPythonModule toPythonApplication
               buildSetupcfg
 
+              condaInstallHook
+              condaUnpackHook
               eggUnpackHook
               eggBuildHook
               eggInstallHook
@@ -69,12 +71,18 @@ with pkgs;
               recursivePthLoader
             ;
           };
+          extra = _: {};
+          optionalExtensions = cond: as: if cond then as else [];
+          python2Extension = import ../../../top-level/python2-packages.nix;
+          extensions = lib.composeManyExtensions ((optionalExtensions (!self.isPy3k) [python2Extension]) ++ [ overrides ]);
+          aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ../../../top-level/python-aliases.nix lib self super);
         in lib.makeScopeWithSplicing
           pkgs.splicePackages
           pkgs.newScope
           otherSplices
           keep
-          (lib.extends overrides pythonPackagesFun))
+          extra
+          (lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun))
         {
           overrides = packageOverrides;
         };
@@ -114,10 +122,10 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "8";
-        patch = "8";
+        patch = "9";
         suffix = "";
       };
-      sha256 = "fGZCSf935EPW6g5M8OWH6ukYyjxI0IHRkV/iofG8xcw=";
+      sha256 = "XjkfPsRdopVEGcqwvq79i+OIlepc4zV3w+wUlAxLlXI=";
     };
   };
 
@@ -173,10 +181,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "9";
-      patch = "2";
+      patch = "4";
       suffix = "";
     };
-    sha256 = "PCA0xU+BFEj1FmaNzgnSQAigcWw6eU3YY5tTiMveJH0=";
+    sha256 = "Sw5mRKdvjfhkriSsUApRu/aL0Jj2oXPifTthzcqaoTQ=";
     inherit (darwin) configd;
     inherit passthruFun;
   };

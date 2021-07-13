@@ -8,23 +8,23 @@
 , mock
 , pytorch
 , pynvml
-, scikitlearn
+, scikit-learn
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.4.2";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00vcmhnp14s54g386izgaxzrdr2nqv3pz9nvpyiwrn33zawr308z";
+    sha256 = "057v8v5p2picmgiidr9lzjbh7nj54pv95m6lyya3y7dw4vzaamij";
   };
 
   checkInputs = [ pytestCheckHook matplotlib mock pytest_xdist ];
-  propagatedBuildInputs = [ pytorch scikitlearn tqdm pynvml ];
+  propagatedBuildInputs = [ pytorch scikit-learn tqdm pynvml ];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";

@@ -1,8 +1,8 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  karchive, ki18n, kio, perl, python3, php, qttools
-  , kdbusaddons
+  karchive, ki18n, kio, perl, python3, php, qttools,
+  kdbusaddons
 }:
 
 mkDerivation {

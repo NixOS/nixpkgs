@@ -37,6 +37,18 @@ stdenv.mkDerivation rec {
     sed -i -e "s@getopt@$(type -p getopt)@g" -e "s@sed@$(type -p sed)@g" ${pname}-${version}/scripts/fakeroot.in
   '';
 
+  postConfigure = let
+    # additional patch from brew, but needs to be applied to a generated file
+    patch-wraptmpf = fetchpatch {
+      name = "fakeroot-patch-wraptmpf-h.patch";
+      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=3;bug=766649;filename=fakeroot-patch-wraptmpf-h.patch;msg=20";
+      sha256 = "1jhsi4bv6nnnjb4vmmmbhndqg719ckg860hgw98bli8m05zwbx6a";
+    };
+  in lib.optional stdenv.isDarwin ''
+    make wraptmpf.h
+    patch -p1 < ${patch-wraptmpf}
+  '';
+
   meta = {
     homepage = "https://salsa.debian.org/clint/fakeroot";
     description = "Give a fake root environment through LD_PRELOAD";

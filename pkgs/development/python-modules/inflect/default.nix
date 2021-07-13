@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, setuptools_scm
+, setuptools-scm
 , toml
 , pytestCheckHook
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "41a23f6788962e9775e40e2ecfb1d6455d02de315022afeedd3c5dc070019d73";
   };
 
-  nativeBuildInputs = [ setuptools_scm toml ];
+  nativeBuildInputs = [ setuptools-scm toml ];
 
   checkInputs = [ pytestCheckHook ];
 
@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/inflect";
     changelog = "https://github.com/jaraco/inflect/blob/v${version}/CHANGES.rst";
     license = licenses.mit;
+    maintainers = teams.tts.members;
   };
 }

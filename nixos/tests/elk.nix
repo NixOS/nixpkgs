@@ -56,6 +56,24 @@ let
                 '');
               };
 
+              metricbeat = {
+                enable = true;
+                package = elk.metricbeat;
+                modules.system = {
+                  metricsets = ["cpu" "load" "memory" "network" "process" "process_summary" "uptime" "socket_summary"];
+                  enabled = true;
+                  period = "5s";
+                  processes = [".*"];
+                  cpu.metrics = ["percentages" "normalized_percentages"];
+                  core.metrics = ["percentages"];
+                };
+                settings = {
+                  output.elasticsearch = {
+                    hosts = ["127.0.0.1:9200"];
+                  };
+                };
+              };
+
               logstash = {
                 enable = true;
                 package = elk.logstash;
@@ -135,6 +153,16 @@ let
           )
 
 
+      def has_metricbeat():
+          dictionary = {"query": {"match": {"event.dataset": {"query": "system.cpu"}}}}
+          return (
+              "curl --silent --show-error '${esUrl}/_search' "
+              + "-H 'Content-Type: application/json' "
+              + "-d '{}' ".format(json.dumps(dictionary))
+              + "| jq '.hits.total > 0'"
+          )
+
+
       start_all()
 
       one.wait_for_unit("elasticsearch.service")
@@ -161,6 +189,12 @@ let
               "curl --silent --show-error 'http://localhost:5601/api/status' | jq .status.overall.state | grep green"
           )
 
+      with subtest("Metricbeat is running"):
+          one.wait_for_unit("metricbeat.service")
+
+      with subtest("Metricbeat metrics arrive in elasticsearch"):
+          one.wait_until_succeeds(has_metricbeat() + " | tee /dev/console | grep 'true'")
+
       with subtest("Logstash messages arive in elasticsearch"):
           one.wait_until_succeeds(total_hits("flowers") + " | grep -v 0")
           one.wait_until_succeeds(total_hits("dragons") + " | grep 0")
@@ -178,7 +212,7 @@ let
           one.systemctl("stop logstash")
           one.systemctl("start elasticsearch-curator")
           one.wait_until_succeeds(
-              '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep -q ^'
+              '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep ^'
           )
     '';
   }) {};
@@ -190,12 +224,14 @@ in pkgs.lib.mapAttrs mkElkTest {
       logstash      = pkgs.logstash6;
       kibana        = pkgs.kibana6;
       journalbeat   = pkgs.journalbeat6;
+      metricbeat    = pkgs.metricbeat6;
     }
     else {
       elasticsearch = pkgs.elasticsearch6-oss;
       logstash      = pkgs.logstash6-oss;
       kibana        = pkgs.kibana6-oss;
       journalbeat   = pkgs.journalbeat6;
+      metricbeat    = pkgs.metricbeat6;
     };
   ELK-7 =
     if enableUnfree
@@ -204,11 +240,13 @@ in pkgs.lib.mapAttrs mkElkTest {
       logstash      = pkgs.logstash7;
       kibana        = pkgs.kibana7;
       journalbeat   = pkgs.journalbeat7;
+      metricbeat    = pkgs.metricbeat7;
     }
     else {
       elasticsearch = pkgs.elasticsearch7-oss;
       logstash      = pkgs.logstash7-oss;
       kibana        = pkgs.kibana7-oss;
       journalbeat   = pkgs.journalbeat7;
+      metricbeat    = pkgs.metricbeat7;
     };
 }

@@ -45,7 +45,7 @@
 , enableVtk ? false
 , vtk
 , enableFfmpeg ? true
-, ffmpeg_3
+, ffmpeg
 , enableGStreamer ? true
 , gst_all_1
 , enableTesseract ? false
@@ -252,7 +252,7 @@ stdenv.mkDerivation {
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
     ++ lib.optionals enableEXR [ openexr ilmbase ]
-    ++ lib.optional enableFfmpeg ffmpeg_3
+    ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
       [ VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
@@ -301,7 +301,7 @@ stdenv.mkDerivation {
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
-    "-DNVIDIA_OPTICAL_FLOW_1_0_HEADERS_PATH=${nvidia-optical-flow-sdk}"
+    "-DNVIDIA_OPTICAL_FLOW_2_0_HEADERS_PATH=${nvidia-optical-flow-sdk}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"

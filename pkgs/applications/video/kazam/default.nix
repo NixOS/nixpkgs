@@ -1,5 +1,5 @@
 { lib, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobject-introspection
-, gtk3, libwnck3, keybinder3, intltool, libcanberra-gtk3, libappindicator-gtk3, libpulseaudio
+, gtk3, libwnck, keybinder3, intltool, libcanberra-gtk3, libappindicator-gtk3, libpulseaudio
 , fetchpatch }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ gobject-introspection python3.pkgs.distutils_extra intltool wrapGAppsHook ];
   buildInputs = [
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gtk3 libwnck3
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gtk3 libwnck
     keybinder3 libappindicator-gtk3
   ];
 

@@ -44,6 +44,7 @@ in
 , libraryFrameworkDepends ? [], executableFrameworkDepends ? []
 , homepage ? "https://hackage.haskell.org/package/${pname}"
 , platforms ? with lib.platforms; all # GHC can cross-compile
+, badPlatforms ? lib.platforms.none
 , hydraPlatforms ? null
 , hyperlinkSource ? true
 , isExecutable ? false, isLibrary ? !isExecutable
@@ -52,13 +53,14 @@ in
 , enableParallelBuilding ? true
 , maintainers ? null
 , changelog ? null
+, mainProgram ? null
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
 , passthru ? {}
 , pkg-configDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
 , benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? [], benchmarkFrameworkDepends ? []
-, testTarget ? ""
+, testTarget ? "", testFlags ? []
 , broken ? false
 , preCompileBuildDriver ? null, postCompileBuildDriver ? null
 , preUnpack ? null, postUnpack ? null
@@ -72,7 +74,7 @@ in
 , shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
-, hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
+, hardeningDisable ? null
 , enableSeparateBinOutput ? false
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
@@ -289,7 +291,7 @@ in lib.fix (drv:
 assert allPkgconfigDepends != [] -> pkg-config != null;
 
 stdenv.mkDerivation ({
-  name = "${pname}-${version}";
+  inherit pname version;
 
   outputs = [ "out" ]
          ++ (optional enableSeparateDataOutput "data")
@@ -417,6 +419,17 @@ stdenv.mkDerivation ({
   configurePlatforms = [];
   inherit configureFlags;
 
+  # Note: the options here must be always added, regardless of whether the
+  # package specifies `hardeningDisable`.
+  hardeningDisable = lib.optionals (args ? hardeningDisable) hardeningDisable
+    ++ lib.optional (ghc.isHaLVM or false) "all"
+    # Static libraries (ie. all of pkgsStatic.haskellPackages) fail to build
+    # because by default Nix adds `-pie` to the linker flags: this
+    # conflicts with the `-r` and `-no-pie` flags added by GHC (see
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/19580). hardeningDisable
+    # changes the default Nix behavior regarding adding "hardening" flags.
+    ++ lib.optional enableStaticLibraries "pie";
+
   configurePhase = ''
     runHook preConfigure
 
@@ -443,9 +456,13 @@ stdenv.mkDerivation ({
 
   inherit doCheck;
 
+  # Run test suite(s) and pass `checkFlags` as well as `checkFlagsArray`.
+  # `testFlags` are added to `checkFlagsArray` each prefixed with
+  # `--test-option`, so Cabal passes it to the underlying test suite binary.
   checkPhase = ''
     runHook preCheck
-    ${setupCommand} test ${testTarget}
+    checkFlagsArray+=(${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)})
+    ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
 
@@ -464,8 +481,13 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    ${if !isLibrary then "${setupCommand} install" else ''
-      ${setupCommand} copy
+    ${if !isLibrary && buildTarget == "" then "${setupCommand} install"
+      # ^^ if the project is not a library, and no build target is specified, we can just use "install".
+      else if !isLibrary then "${setupCommand} copy ${buildTarget}"
+      # ^^ if the project is not a library, and we have a build target, then use "copy" to install
+      # just the target specified; "install" will error here, since not all targets have been built.
+    else ''
+      ${setupCommand} copy ${buildTarget}
       local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
@@ -643,7 +665,9 @@ stdenv.mkDerivation ({
          // optionalAttrs (args ? description)    { inherit description; }
          // optionalAttrs (args ? maintainers)    { inherit maintainers; }
          // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
+         // optionalAttrs (args ? badPlatforms)   { inherit badPlatforms; }
          // optionalAttrs (args ? changelog)      { inherit changelog; }
+         // optionalAttrs (args ? mainProgram)    { inherit mainProgram; }
          ;
 
 }
@@ -669,7 +693,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? preFixup)               { inherit preFixup; }
 // optionalAttrs (args ? postFixup)              { inherit postFixup; }
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
-// optionalAttrs (args ? hardeningDisable)       { inherit hardeningDisable; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
 )

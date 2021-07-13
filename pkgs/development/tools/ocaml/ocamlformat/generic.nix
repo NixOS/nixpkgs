@@ -25,8 +25,10 @@ let src =
     }."${version}";
   };
   ocamlPackages =
-  if lib.versionAtLeast version "0.14.3"
+  if lib.versionAtLeast version "0.17.0"
   then ocaml-ng.ocamlPackages
+  else if lib.versionAtLeast version "0.14.3"
+  then ocaml-ng.ocamlPackages_4_10
   else ocaml-ng.ocamlPackages_4_07
 ; in
 
@@ -56,6 +58,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
       dune-build-info
       ocaml-version
       # Changed since 0.16.0:
@@ -73,11 +77,13 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
       dune-build-info
       ocaml-version
       # Changed since 0.16.0:
       (ppxlib.override { version = "0.22.0"; })
-      ocaml-migrate-parsetree-2-1
+      ocaml-migrate-parsetree-2
     ]
     else if lib.versionAtLeast version "0.15.1"
     then [
@@ -91,6 +97,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
       (ppxlib.override { version = "0.18.0"; })
       dune-build-info # lib.versionAtLeast version "0.16.0"
       ocaml-version # lib.versionAtLeast version "0.16.0"
@@ -108,6 +116,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
     ] else [
       base
       cmdliner

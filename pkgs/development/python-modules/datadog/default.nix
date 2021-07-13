@@ -4,7 +4,7 @@
 , pythonOlder
 , decorator
 , requests
-, typing
+, typing ? null
 , configparser
 , click
 , freezegun
@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.40.1";
+  version = "0.42.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Q4wd3lRi5oxceSt7Sh2HoN3ZcK89sxs88VmA7tDEQxE=";
+    sha256 = "sha256-em+sF6fQnxiDq5pFzk/3oWqhpes8xMbN2sf4xT59Hps=";
   };
 
   postPatch = ''

@@ -2,14 +2,17 @@
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "77e747c6ad10ce65479f5f9064ab036483bf307bf71fdd7d6235ef895fcc506e";
+    sha256 = "1ryxcll7601ki9rwlnryhhxpmwwnxs2qxq7kjm2b0xcqgzx1vv7r";
   };
 
-  patches = [ ./jq-py-setup.patch ];
+  patches = [
+    # Removes vendoring
+    ./jq-py-setup.patch
+  ];
 
   buildInputs = [ jq ];
 

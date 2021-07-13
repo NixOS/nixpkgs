@@ -16,13 +16,14 @@
 , python3
 , qrencode
 , libevent
+, nixosTests
 , withGui
 , withWallet ? true
 }:
 
 with lib;
 let
-  version = "0.21.0";
+  version = "0.21.1";
   majorMinorVersion = versions.majorMinor version;
   desktop = fetchurl {
     url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorMinorVersion}/debian/bitcoin-qt.desktop";
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
       "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
-    sha256 = "1a91202c62ee49fb64d57a52b8d6d01cd392fffcbef257b573800f9289655f37";
+    sha256 = "caff23449220cf45753f312cefede53a9eac64000bb300797916526236b6a1e0";
   };
 
   nativeBuildInputs =
@@ -80,6 +81,10 @@ stdenv.mkDerivation rec {
     ++ optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    smoke-test = nixosTests.bitcoind;
+  };
 
   meta = {
     description = "Peer-to-peer electronic cash system";

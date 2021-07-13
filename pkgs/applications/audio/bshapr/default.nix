@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "BShapr";
-  version = "0.12";
+  pname = "bshapr";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
-    repo = pname;
+    repo = "BShapr";
     rev = "v${version}";
-    sha256 = "sha256-2DySlD5ZTxeQ2U++Dr67bek5oVbAiOHCxM6S5rTTZN0=";
+    sha256 = "sha256-9I4DPRl6i/VL8Etw3qLGZkP45BGsbxFxNOvRy3B3I+M=";
   };
 
   nativeBuildInputs = [ pkg-config ];

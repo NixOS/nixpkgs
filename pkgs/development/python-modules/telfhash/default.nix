@@ -17,6 +17,8 @@ buildPythonPackage {
     sha256 = "jNu6qm8Q/UyJVaCqwFOPX02xAR5DwvCK3PaH6Fvmakk=";
   };
 
+  patches = [ ./telfhash-new-tlsh-hash.patch ];
+
   # The tlsh library's name is just "tlsh"
   postPatch = ''
     substituteInPlace requirements.txt --replace "python-tlsh" "tlsh"

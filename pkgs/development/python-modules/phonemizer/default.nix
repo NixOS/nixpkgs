@@ -65,6 +65,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/bootphon/phonemizer";
     description = "Simple text to phones converter for multiple languages";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

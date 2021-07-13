@@ -13,7 +13,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.12.5";
+  version = "1.12.7";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -21,10 +21,10 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06qc68q9px2g19iz23nbc4ay5dwqhgh99d1jj5l2dhb3mgknh19n";
+    sha256 = "08mzm03vhc8pqyl17y8dkrcpgy3ckmb84x84b6ap3cja3y8gmj5x";
   };
 
-  vendorSha256 = "1jir1lb60p86fmk5sh92ywchqva59c31g1badlq9pjgd7jip5vnl";
+  vendorSha256 = "0ym6f1h51bj3qlzxs936fz3p47l63nad4xckl16m13iy0k7z5flg";
 
   subPackages = [ "." ];
 
@@ -41,19 +41,18 @@ buildGoModule rec {
   );
 
   postInstall = ''
-    HOME=$TMPDIR
-    for shell in bash fish zsh; do
-      $out/bin/gopass completion $shell > gopass.$shell
-      installShellCompletion gopass.$shell
-    done
-    go run helpers/man/main.go > gopass.1
     installManPage gopass.1
+    installShellCompletion --zsh --name _gopass zsh.completion
+    installShellCompletion --bash --name gopass.bash bash.completion
+    installShellCompletion --fish --name gopass.fish fish.completion
   '' + lib.optionalString passAlias ''
     ln -s $out/bin/gopass $out/bin/pass
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/gopass --prefix PATH : "${wrapperPath}"
+    wrapProgram $out/bin/gopass \
+      --prefix PATH : "${wrapperPath}" \
+      --set GOPASS_NO_REMINDER true
   '';
 
   meta = with lib; {

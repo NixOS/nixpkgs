@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, fetchpatch, mock
-, future, six, setuptools_scm }:
+, future, six, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "sievelib";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ future six ];
   checkInputs = [ mock ];
 

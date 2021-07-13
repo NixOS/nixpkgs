@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openbazaar";
-  version = "0.14.3";
+  version = "0.14.6";
 
   suffix = {
     i686-linux    = "linux-386";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/OpenBazaar/openbazaar-go/releases/download/v${version}/${pname}-go-${suffix}";
     sha256 = {
-      i686-linux    = "098dgxpz9m4rfswc9yg77s3bvaifd4453s20n8kmh55g5ipgs2x1";
-      x86_64-darwin = "0q989m4zj7x9d6vimmpfkla78hmx2zr7bxm9yg61ir00w60l14jx";
-      x86_64-linux  = "093rwn4nfirknbxz58n16v0l0apj2h0yr63f64fqysmy78883al2";
+      i686-linux    = "1cmv3gyfd6q7y6yn6kigksy2abkq5b8mfgk51d04ky1ckgbriaqq";
+      x86_64-darwin = "0n32a0pyj1k2had3imimdyhdhyb285y1dj04f7g3jajmy5zndaxx";
+      x86_64-linux  = "105i5yl2yvhcvyh1wf35kqq1qyxgbl9j2kxs6yshsk14b2p02j5i";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 

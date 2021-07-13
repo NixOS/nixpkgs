@@ -76,8 +76,11 @@ let unwrapped = stdenv.mkDerivation rec {
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   # In particular, this detects missing python imports in some of the tools.
-  postInstallCheck = ''
-    for f in "''${!outputBin}"/bin/{purple-remote,pidgin}; do
+  postFixup = let
+    # TODO: python is a script, so it doesn't work as interpreter on darwin
+    binsToTest = lib.optionalString stdenv.isLinux "purple-remote," + "pidgin,finch";
+  in lib.optionalString doInstallCheck ''
+    for f in "''${!outputBin}"/bin/{${binsToTest}}; do
       echo "Testing: $f --help"
       "$f" --help
     done

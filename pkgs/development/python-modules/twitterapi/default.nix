@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "twitterapi";
-  version = "2.7.1";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "geduldig";
     repo = "TwitterAPI";
     rev = "v${version}";
-    sha256 = "sha256-fLexFlnoh58b9q4mo9atGQmMttKytTfAYmaPj6xmPj8=";
+    sha256 = "sha256-HDPRpM1LDTtUbldzfCrsdh/GpbzNCVVUVGwohyMe/YE=";
   };
 
   propagatedBuildInputs = [

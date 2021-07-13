@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
 , obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
-, gnome3, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
+, gnome, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
 
 let
@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.1.4";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1nk46s1s8yrlqv37sc7la05nnn7sdgqhkrcdm98qin34llwkv70x";
+    sha256 = "0whs1bqnn1fgzrq7y2w1d06ldvfafq6h2xzmcfncbwmyb4i0mhgw";
   };
 
   nativeBuildInputs = [
@@ -23,21 +23,9 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome3.adwaita-icon-theme iproute2 libappindicator networkmanager ]
+                  gnome.adwaita-icon-theme iproute2 libappindicator networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
-
-  patches = [
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://github.com/blueman-project/blueman/commit/ae2be5a70cdea1d1aa0e3ab1c85c1d3a0c4affc6.patch";
-      sha256 = "0nb6jzlxhgjvac52cjwi0pi40b8v4h6z6pwz5vkyfmaj86spygg3";
-      excludes = [
-        "meson.build"
-        "Dependencies.md"
-      ];
-    })
-  ];
 
   postPatch = lib.optionalString withPulseAudio ''
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py

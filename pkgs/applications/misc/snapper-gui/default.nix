@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, python3, python3Packages
-, gnome3, gtk3, wrapGAppsHook, gtksourceview3, snapper
+, gnome, gtk3, wrapGAppsHook, gtksourceview3, snapper
 , gobject-introspection
 }:
 
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     python3
     gobject-introspection
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   doCheck = false; # it doesn't have any tests

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, config, makeWrapper
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , atk
 , cairo
@@ -13,7 +13,7 @@
 , gdk-pixbuf
 , glib
 , glibc
-, gnome3
+, gnome
 , gnugrep
 , gnupg
 , gnused
@@ -41,6 +41,7 @@
 , pango
 , runtimeShell
 , writeScript
+, xdg-utils
 , xidel
 }:
 
@@ -78,7 +79,7 @@ stdenv.mkDerivation {
 
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib
+      alsa-lib
       at-spi2-atk
       atk
       cairo
@@ -115,7 +116,7 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -164,6 +165,7 @@ stdenv.mkDerivation {
         --set MOZ_LEGACY_PROFILES 1 \
         --set MOZ_ALLOW_DOWNGRADE 1 \
         --prefix PATH : "${lib.getBin gnupg}/bin" \
+        --prefix PATH : "${lib.getBin xdg-utils}/bin" \
         --prefix LD_LIBRARY_PATH : "${lib.getLib gpgme}/lib"
     '';
 

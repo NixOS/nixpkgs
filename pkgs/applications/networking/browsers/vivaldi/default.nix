@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsaLib, dbus, cups, libexif, ffmpeg_3, systemd
+, alsa-lib, dbus, cups, libexif, ffmpeg, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , libxml2
@@ -18,11 +18,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "3.7.2218.45-1";
+  version = "4.0.2312.38-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "11q3whw01nbwvzccgn55b4lkr7dzlql961406r6by8xqvf8zgmp4";
+    sha256 = "1sdg22snphjsrmxi3fvy41dnjsxpajbhni9bpidk8msa9xgxvzpx";
   };
 
   unpackPhase = ''
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg_3 systemd
+    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
     libxml2 pango cairo gnome2.GConf
     libdrm mesa
@@ -47,6 +47,7 @@ in stdenv.mkDerivation rec {
     + ":$out/opt/${vivaldiName}/lib";
 
   buildPhase = ''
+    runHook preBuild
     echo "Patching Vivaldi binaries"
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -56,12 +57,14 @@ in stdenv.mkDerivation rec {
     ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/${vivaldiName}/libffmpeg.so.''${version%\.*\.*}
   '' + ''
     echo "Finished patching Vivaldi binaries"
+    runHook postBuild
   '';
 
   dontPatchELF = true;
   dontStrip    = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out"
     cp -r opt "$out"
     mkdir "$out/bin"
@@ -84,6 +87,8 @@ in stdenv.mkDerivation rec {
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''
     ln -sf ${vivaldi-widevine}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
+  '' + ''
+    runHook postInstall
   '';
 
   meta = with lib; {

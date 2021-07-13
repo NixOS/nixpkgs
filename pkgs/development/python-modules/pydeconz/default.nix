@@ -3,21 +3,21 @@
 , aioresponses
 , buildPythonPackage
 , fetchFromGitHub
-, pytest-asyncio
+, pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pydeconz";
-  version = "78";
+  version = "79";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "deconz";
     rev = "v${version}";
-    sha256 = "sha256-uIRuLNGFX7gq59/ntfks9pECiGkX7jjKh2jmjxFRcv4=";
+    sha256 = "sha256-I29UIyHjsIymZxcE084hQoyaEMTXIIQPFcB8lsxY+UI=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     aioresponses
-    pytest-asyncio
+    pytest-aiohttp
     pytestCheckHook
   ];
 

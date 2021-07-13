@@ -54,6 +54,10 @@ self: super:
       '';
   });
 
+  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
+    meta = attrs.meta // { license = lib.licenses.mit; };
+  });
+
   imake = super.imake.overrideAttrs (attrs: {
     inherit (self) xorgcffiles;
     x11BuildHook = ./imake.sh;
@@ -433,7 +437,7 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa llvm ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ mesa mesa.driversdev llvm ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
@@ -664,7 +668,7 @@ self: super:
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
             cd "$dev"
             for f in include/xorg/*.h; do
-              sed "1i#line 1 \"${attrs.name}/$f\"" -i "$f"
+              sed "1i#line 1 \"${attrs.pname}-${attrs.version}/$f\"" -i "$f"
             done
           )
         '';
@@ -833,6 +837,12 @@ self: super:
     '';
   });
 
+  xorgdocs = super.xorgdocs.overrideAttrs (attrs: {
+    # This makes the man pages discoverable by the default man,
+    # since it looks for packages in $PATH
+    postInstall = "mkdir $out/bin";
+  });
+
   xwd = super.xwd.overrideAttrs (attrs: {
     buildInputs = with self; attrs.buildInputs ++ [libXt];
   });
@@ -897,13 +907,16 @@ self: super:
       "fontbhttf"
       "fontbh100dpi"
       "fontbh75dpi"
+
+      # Bigelow & Holmes fonts
+      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
+      "fontbhlucidatypewriter100dpi"
+      "fontbhlucidatypewriter75dpi"
     ];
 
     # unfree, possibly not redistributable
     unfree = [
       # no license, just a copyright notice
-      "fontbhlucidatypewriter100dpi"
-      "fontbhlucidatypewriter75dpi"
       "fontdaewoomisc"
 
       # unclear license, "permission to use"?

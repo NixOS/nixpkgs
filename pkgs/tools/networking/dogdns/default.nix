@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "08scc6vh703245rg3xkffhalrk5pisd0wg54fd49d7gdbyjivgi6";
+  cargoSha256 = "0zgzaq303zy8lymhldm6dpm5hwsxi2ph42zw5brvsdjmgm9ga0rb";
 
   postInstall = ''
     installShellCompletion completions/dog.{bash,fish,zsh}

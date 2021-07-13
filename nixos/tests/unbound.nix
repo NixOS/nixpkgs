@@ -61,13 +61,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
         services.unbound = {
           enable = true;
-          interfaces = [ "192.168.0.1" "fd21::1" "::1" "127.0.0.1" ];
-          allowedAccess = [ "192.168.0.0/24" "fd21::/64" "::1" "127.0.0.0/8" ];
-          extraConfig = ''
-            server:
-              local-data: "example.local. IN A 1.2.3.4"
-              local-data: "example.local. IN AAAA abcd::eeff"
-          '';
+          settings = {
+            server = {
+              interface = [ "192.168.0.1" "fd21::1" "::1" "127.0.0.1" ];
+              access-control = [ "192.168.0.0/24 allow" "fd21::/64 allow" "::1 allow" "127.0.0.0/8 allow" ];
+              local-data = [
+                ''"example.local. IN A 1.2.3.4"''
+                ''"example.local. IN AAAA abcd::eeff"''
+              ];
+            };
+          };
         };
       };
 
@@ -90,19 +93,25 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
         services.unbound = {
           enable = true;
-          allowedAccess = [ "192.168.0.0/24" "fd21::/64" "::1" "127.0.0.0/8" ];
-          interfaces = [ "::1" "127.0.0.1" "192.168.0.2" "fd21::2"
-                         "192.168.0.2@853" "fd21::2@853" "::1@853" "127.0.0.1@853"
-                         "192.168.0.2@443" "fd21::2@443" "::1@443" "127.0.0.1@443" ];
-          forwardAddresses = [
-            (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv6.addresses).address
-            (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv4.addresses).address
-          ];
-          extraConfig = ''
-            server:
-              tls-service-pem: ${cert}/cert.pem
-              tls-service-key: ${cert}/key.pem
-          '';
+          settings = {
+            server = {
+              interface = [ "::1" "127.0.0.1" "192.168.0.2" "fd21::2"
+                            "192.168.0.2@853" "fd21::2@853" "::1@853" "127.0.0.1@853"
+                            "192.168.0.2@443" "fd21::2@443" "::1@443" "127.0.0.1@443" ];
+              access-control = [ "192.168.0.0/24 allow" "fd21::/64 allow" "::1 allow" "127.0.0.0/8 allow" ];
+              tls-service-pem = "${cert}/cert.pem";
+              tls-service-key = "${cert}/key.pem";
+            };
+            forward-zone = [
+              {
+                name = ".";
+                forward-addr = [
+                  (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv6.addresses).address
+                  (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv4.addresses).address
+                ];
+              }
+            ];
+          };
         };
       };
 
@@ -122,12 +131,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
         services.unbound = {
           enable = true;
-          allowedAccess = [ "::1" "127.0.0.0/8" ];
-          interfaces = [ "::1" "127.0.0.1" ];
+          settings = {
+            server = {
+              interface = [ "::1" "127.0.0.1" ];
+              access-control = [ "::1 allow" "127.0.0.0/8 allow" ];
+            };
+            include = "/etc/unbound/extra*.conf";
+          };
           localControlSocketPath = "/run/unbound/unbound.ctl";
-          extraConfig = ''
-            include: "/etc/unbound/extra*.conf"
-          '';
         };
 
         users.users = {
@@ -143,12 +154,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           unauthorizeduser = { isSystemUser = true; };
         };
 
+        # Used for testing configuration reloading
         environment.etc = {
           "unbound-extra1.conf".text = ''
             forward-zone:
-              name: "example.local."
-              forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv6.addresses).address}
-              forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv4.addresses).address}
+            name: "example.local."
+            forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv6.addresses).address}
+            forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv4.addresses).address}
           '';
           "unbound-extra2.conf".text = ''
             auth-zone:
@@ -180,7 +192,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     testScript = { nodes, ... }: ''
       import typing
-      import json
 
       zone = "example.local."
       records = [("AAAA", "abcd::eeff"), ("A", "1.2.3.4")]

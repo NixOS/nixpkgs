@@ -5,22 +5,22 @@
 , copyDesktopItems
 , pkg-config
 , gtk3
-, alsaLib
+, alsa-lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "free42";
-  version = "3.0.2";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dU8c+tpt+4nCWQj3P2rl6CJNtWFcXaYb3ZESg8hAllQ=";
+    sha256 = "sha256-ytRPIBE8KcuM+pyfdKt/b+Vi03x8nowdgZjSt8EddSc=";
   };
 
   nativeBuildInputs = [ copyDesktopItems pkg-config ];
-  buildInputs = [ gtk3 alsaLib ];
+  buildInputs = [ gtk3 alsa-lib ];
 
   postPatch = ''
     sed -i -e "s|/bin/ls|ls|" gtk/Makefile

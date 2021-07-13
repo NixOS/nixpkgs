@@ -42,6 +42,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mono/gtk-sharp/commit/401df51bc461de93c1a78b6a7a0d5adc63cf186c.patch";
       sha256 = "0hrkcr5a7wkixnyp60v4d6j3arsb63h54rd30lc5ajfjb3p92kcf";
     })
+    # @see https://github.com/mono/gtk-sharp/pull/263
+    (fetchpatch {
+      name = "disambiguate_Gtk.Range.patch";
+      url = "https://github.com/mono/gtk-sharp/commit/a00552ad68ae349e89e440dca21b86dbd6bccd30.patch";
+      sha256 = "1ylplr9g9x7ybsgrydsgr6p3g7w6i46yng1hnl3afgn4vj45rag2";
+    })
   ];
 
   dontStrip = true;

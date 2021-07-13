@@ -8,11 +8,29 @@ Programs in the GNOME universe are written in various languages but they all use
 
 [GSettings](https://developer.gnome.org/gio/stable/GSettings.html) API is often used for storing settings. GSettings schemas are required, to know the type and other metadata of the stored values. GLib looks for `glib-2.0/schemas/gschemas.compiled` files inside the directories of `XDG_DATA_DIRS`.
 
-On Linux, GSettings API is implemented using [dconf](https://wiki.gnome.org/Projects/dconf) backend. You will need to add `dconf` GIO module to `GIO_EXTRA_MODULES` variable, otherwise the `memory` backend will be used and the saved settings will not be persistent.
+On Linux, GSettings API is implemented using [dconf](https://wiki.gnome.org/Projects/dconf) backend. You will need to add `dconf` [GIO module](#ssec-gnome-gio-modules) to `GIO_EXTRA_MODULES` variable, otherwise the `memory` backend will be used and the saved settings will not be persistent.
 
 Last you will need the dconf database D-Bus service itself. You can enable it using `programs.dconf.enable`.
 
 Some applications will also require `gsettings-desktop-schemas` for things like reading proxy configuration or user interface customization. This dependency is often not mentioned by upstream, you should grep for `org.gnome.desktop` and `org.gnome.system` to see if the schemas are needed.
+
+### GIO modules {#ssec-gnome-gio-modules}
+
+GLib’s [GIO](https://developer.gnome.org/gio/stable/ch01.html) library supports several [extension points](https://developer.gnome.org/gio/stable/extending-gio.html). Notably, they allow:
+
+* implementing settings backends (already [mentioned](#ssec-gnome-settings))
+* adding TLS support
+* proxy settings
+* virtual file systems
+
+The modules are typically installed to `lib/gio/modules/` directory of a package and you need to add them to `GIO_EXTRA_MODULES` if you need any of those features.
+
+In particular, we recommend:
+
+* adding `dconf.lib` for any software on Linux that reads [GSettings](#ssec-gnome-settings) (even transitivily through e.g. GTK’s file manager)
+* adding `glib-networking` for any software that accesses network using GIO or libsoup – glib-networking contains a module that implements TLS support and loads system-wide proxy settings
+
+To allow software to use various virtual file systems, `gvfs` package can be also added. But that is usually an optional feature so we typically use `gvfs` from the system (e.g. installed globally using NixOS module).
 
 ### GdkPixbuf loaders {#ssec-gnome-gdk-pixbuf-loaders}
 
@@ -68,7 +86,7 @@ preFixup = ''
 
 Fortunately, there is [`wrapGAppsHook`]{#ssec-gnome-hooks-wrapgappshook}. It works in conjunction with other setup hooks that populate environment variables, and it will then wrap all executables in `bin` and `libexec` directories using said variables.
 
-For convenience, it also adds `dconf.lib` for a GIO module implementing a GSettings backend using `dconf`, `gtk3` for GSettings schemas, and `librsvg` for GdkPixbuf loader to the closure. In case you are packaging a program without a graphical interface, you might want to use [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook}, which runs the same script as `wrapGAppsHook` but does not bring `gtk3` and `librsvg` into the closure.
+For convenience, it also adds `dconf.lib` for a GIO module implementing a GSettings backend using `dconf`, `gtk3` for GSettings schemas, and `librsvg` for GdkPixbuf loader to the closure. There is also [`wrapGAppsHook4`]{#ssec-gnome-hooks-wrapgappshook4}, which replaces GTK 3 with GTK 4. And in case you are packaging a program without a graphical interface, you might want to use [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook}, which runs the same script as `wrapGAppsHook` but does not bring `gtk3` and `librsvg` into the closure.
 
 - `wrapGAppsHook` itself will add the package’s `share` directory to `XDG_DATA_DIRS`.
 
@@ -84,11 +102,11 @@ For convenience, it also adds `dconf.lib` for a GIO module implementing a GSetti
 
 - []{#ssec-gnome-hooks-gobject-introspection} `gobject-introspection` setup hook populates `GI_TYPELIB_PATH` variable with `lib/girepository-1.0` directories of dependencies, which is then added to wrapper by `wrapGAppsHook`. It also adds `share` directories of dependencies to `XDG_DATA_DIRS`, which is intended to promote GIR files but it also [pollutes the closures](https://github.com/NixOS/nixpkgs/issues/32790) of packages using `wrapGAppsHook`.
 
-  ::: warning
+  ::: {.warning}
   The setup hook [currently](https://github.com/NixOS/nixpkgs/issues/56943) does not work in expressions with `strictDeps` enabled, like Python packages. In those cases, you will need to disable it with `strictDeps = false;`.
   :::
 
-- []{#ssec-gnome-hooks-gst-grl-plugins} Setup hooks of `gst_all_1.gstreamer` and `gnome3.grilo` will populate the `GST_PLUGIN_SYSTEM_PATH_1_0` and `GRL_PLUGIN_PATH` variables, respectively, which will then be added to the wrapper by `wrapGAppsHook`.
+- []{#ssec-gnome-hooks-gst-grl-plugins} Setup hooks of `gst_all_1.gstreamer` and `grilo` will populate the `GST_PLUGIN_SYSTEM_PATH_1_0` and `GRL_PLUGIN_PATH` variables, respectively, which will then be added to the wrapper by `wrapGAppsHook`.
 
 You can also pass additional arguments to `makeWrapper` using `gappsWrapperArgs` in `preFixup` hook:
 
@@ -105,7 +123,7 @@ preFixup = ''
 
 ## Updating GNOME packages {#ssec-gnome-updating}
 
-Most GNOME package offer [`updateScript`](#var-passthru-updateScript), it is therefore possible to update to latest source tarball by running `nix-shell maintainers/scripts/update.nix --argstr package gnome3.nautilus` or even en masse with `nix-shell maintainers/scripts/update.nix --argstr path gnome3`. Read the package’s `NEWS` file to see what changed.
+Most GNOME package offer [`updateScript`](#var-passthru-updateScript), it is therefore possible to update to latest source tarball by running `nix-shell maintainers/scripts/update.nix --argstr package gnome.nautilus` or even en masse with `nix-shell maintainers/scripts/update.nix --argstr path gnome`. Read the package’s `NEWS` file to see what changed.
 
 ## Frequently encountered issues {#ssec-gnome-common-issues}
 

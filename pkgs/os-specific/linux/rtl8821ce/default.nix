@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel, bc }:
 
 stdenv.mkDerivation rec {
-  pname = "rtl8821ce-${kernel.version}";
-  version = "unstable-2021-03-21";
+  pname = "rtl8821ce";
+  version = "${kernel.version}-unstable-2021-05-28";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "897e7c4c15dd5a0a569745dc223d969a26ff5bfc";
-    sha256 = "0935dzz0njxh78wfd17yqah1dxn6b3kaszvzclwwrwwhwcrdp80j";
+    rev = "f93db734666f75ebf65e44ceb943c19b598b1647";
+    sha256 = "sha256-cqXV52U+6Jl9Jje1nEOYDvmH4rgA1QdrwNCfYeul3hU=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tomaspinho/rtl8821ce";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
+    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ hhm ];
   };
 }

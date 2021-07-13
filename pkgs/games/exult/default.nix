@@ -12,10 +12,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "exult-1.6";
+  pname = "exult";
+  version = "1.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/exult/${name}.tar.gz";
+    url = "mirror://sourceforge/exult/exult-${version}.tar.gz";
     sha256 = "1dm27qkxj30567zb70q4acddsizn0xyi3z87hg7lysxdkyv49s3s";
   };
 

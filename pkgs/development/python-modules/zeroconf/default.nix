@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.29.0";
+  version = "0.31.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eu+7ZYtFKx/X5REkNk+TjG9eQtbqiT+iVXvqjAbFQK8=";
+    sha256 = "sha256-U6GAJIRxxvgb0f/8vOA+2T19jq8QkFyRIaweqZbRmEQ=";
   };
 
   propagatedBuildInputs = [ ifaddr ];
@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # disable tests that expect some sort of networking in the build container
+    "test_close_multiple_times"
     "test_launch_and_close"
     "test_launch_and_close_v4_v6"
     "test_launch_and_close_v6_only"

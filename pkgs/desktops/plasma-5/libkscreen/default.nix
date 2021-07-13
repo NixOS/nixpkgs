@@ -6,9 +6,6 @@
 
 mkDerivation {
   name = "libkscreen";
-  meta = {
-    broken = lib.versionOlder qtbase.version "5.15.0";
-  };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kwayland libXrandr qtx11extras ];
   outputs = [ "out" "dev" ];

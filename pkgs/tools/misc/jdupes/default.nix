@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jdupes";
-  version = "1.19.2";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "jbruchon";
     repo  = "jdupes";
     rev   = "v${version}";
-    sha256 = "sha256-3lWrSybYp3RrUnydosgsNkGQjrk7JvxuxjMslN4cGfk=";
+    sha256 = "sha256-G6ixqSIdDoM/OVlPfv2bI4MA/k0x3Jic/kFo5XEsN/M=";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
     # directories have such files and will be removed.

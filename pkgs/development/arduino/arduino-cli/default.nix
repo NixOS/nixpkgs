@@ -4,18 +4,18 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "0.12.1";
+    version = "0.18.1";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = pname;
       rev = version;
-      sha256 = "1jlxs4szss2250zp8rz4bislgnzvqhxyp6z48dhx7zaam03hyf0w";
+      sha256 = "sha256-EtkONrP/uaetsdC47WsyQOE71Gsz0wKUiTiYThj8Kq8=";
     };
 
     subPackages = [ "." ];
 
-    vendorSha256 = "03yj2iar63qm10fw3jh9fvz57c2sqcmngb0mj5jkhbnwf8nl7mhc";
+    vendorSha256 = "sha256-kPIhG6lsH+0IrYfdlzdv/X/cUQb22Xza9Q6ywjKae/4=";
 
     doCheck = false;
 
@@ -32,15 +32,24 @@ let
 
   };
 
+in
+if stdenv.isLinux then
 # buildFHSUserEnv is needed because the arduino-cli downloads compiler
 # toolchains from the internet that have their interpreters pointed at
 # /lib64/ld-linux-x86-64.so.2
-in buildFHSUserEnv {
-  inherit (pkg) name meta;
+  buildFHSUserEnv
+  {
+    inherit (pkg) name meta;
 
-  runScript = "${pkg.outPath}/bin/arduino-cli";
+    runScript = "${pkg.outPath}/bin/arduino-cli";
 
-  extraInstallCommands = ''
-    mv $out/bin/$name $out/bin/arduino-cli
-  '';
-}
+    extraInstallCommands = ''
+      mv $out/bin/$name $out/bin/arduino-cli
+    '';
+
+    targetPkgs = pkgs: with pkgs; [
+      zlib
+    ];
+  }
+else
+  pkg

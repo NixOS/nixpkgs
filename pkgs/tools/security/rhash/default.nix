@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, which }:
+{ lib, stdenv, fetchFromGitHub, which
+, enableStatic ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   version = "1.4.1";
@@ -14,13 +16,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
 
   # configure script is not autotools-based, doesn't support these options
+  dontAddStaticConfigureFlags = true;
   configurePlatforms = [ ];
+  configureFlags = [
+    "--ar=${stdenv.cc.targetPrefix}ar"
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableStatic "lib-static")
+  ];
 
   doCheck = true;
 
   checkTarget = "test-full";
 
-  installTargets = [ "install" "install-lib-shared" "install-lib-so-link" "install-lib-headers" ];
+  installTargets = [ "install" "install-lib-headers" ]
+    ++ lib.optional (!enableStatic) "install-lib-so-link";
 
   meta = with lib; {
     homepage = "http://rhash.sourceforge.net/";

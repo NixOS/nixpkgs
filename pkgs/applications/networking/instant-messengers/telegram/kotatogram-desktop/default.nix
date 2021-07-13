@@ -1,8 +1,8 @@
 { mkDerivation, lib, fetchFromGitHub, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
-, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm
+, ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
+, tl-expected, hunspell, glibmm, webkitgtk
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
@@ -11,16 +11,16 @@
 with lib;
 
 let
-  tg_owt = callPackage ../tdesktop/tg_owt.nix {};
+  tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "kotatogram-desktop";
-  version = "1.4";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "kotatogram";
     repo = "kotatogram-desktop";
     rev = "k${version}";
-    sha256 = "0nhyjqxrbqiik4sgzplmpgx8msf8rykjiik0c2zr61rjm4fngkb3";
+    sha256 = "07z56gz3sk45n5j0gw9p9mxrbwixxsmp7lvqc6lqnxmglz6knc1d";
     fetchSubmodules = true;
   };
 
@@ -37,8 +37,8 @@ in mkDerivation rec {
 
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
-    ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
-    tl-expected hunspell glibmm
+    ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
+    tl-expected hunspell glibmm webkitgtk
     tg_owt
     # Transitive dependencies:
     pcre xorg.libXdmcp util-linux libselinux libsepol epoxy

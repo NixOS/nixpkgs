@@ -1,21 +1,19 @@
 { lib
 , buildPythonPackage
-, chardet
 , fetchFromGitHub
 , karton-core
 , mwdblib
-, python
 }:
 
 buildPythonPackage rec {
   pname = "karton-mwdb-reporter";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ks8jrc4v87q6zhwqg40w6xv2wfkzslmnfmsmmkfjj8mak8nk70f";
+    sha256 = "0jrn5c83nhcjny4bc879wrsgcr7mbazm51jzdkxmxyqf543cc841";
   };
 
   propagatedBuildInputs = [
@@ -25,8 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "karton-core==4.0.4" "karton-core" \
-      --replace "mwdblib==3.3.1" "mwdblib"
+      --replace "mwdblib==3.4.0" "mwdblib"
   '';
 
   # Project has no tests

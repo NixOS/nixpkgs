@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, alsaLib, AudioUnit, CoreServices }:
+{ stdenv, lib, fetchurl, fetchpatch, alsa-lib, AudioUnit, CoreServices }:
 
 let
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     lib.optionals stdenv.isLinux [
-      alsaLib
+      alsa-lib
     ] ++ lib.optionals stdenv.isDarwin [
       CoreServices AudioUnit
     ];

@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, alsaLib
+, alsa-lib
 , boost
 , chromaprint
 , fftw
@@ -45,7 +45,7 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     boost
     chromaprint
     fftw
@@ -80,10 +80,6 @@ mkDerivation rec {
     cmake ninja pkg-config qttools
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
-  ];
-
-  cmakeFlags = [
-    "-DUSE_SYSTEM_TAGLIB=ON"
   ];
 
   postInstall = ''

@@ -1,19 +1,15 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, glib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tiramisu";
-  version = "1.0";
+  version = "unstable-2021-05-20";
 
   src = fetchFromGitHub {
     owner = "Sweets";
-    repo = pname;
-    rev = version;
-    sha256 = "0aw17riwgrhsmcndzh7sw2zw8xvn3d203c2gcrqi9nk5pa7fwp9m";
+    repo = "tiramisu";
+    rev = "e53833d0b5b0ae41ceb7dc434d8e25818fe62291";
+    sha256 = "sha256-F4oaTOAQQfOkEXeBVbGH+0CHc9v9Ac08GyzHliOdAfc=";
   };
-
-  postPatch = ''
-    sed -i 's/printf(element_delimiter)/printf("%s", element_delimiter)/' src/output.c
-  '';
 
   buildInputs = [ glib ];
 
@@ -24,13 +20,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Desktop notifications, the UNIX way";
     longDescription = ''
-    tiramisu is a notification daemon based on dunst that outputs notifications
-    to STDOUT in order to allow the user to process notifications any way they
-    prefer.
+      tiramisu is a notification daemon based on dunst that outputs notifications
+      to STDOUT in order to allow the user to process notifications any way they
+      prefer.
     '';
     homepage = "https://github.com/Sweets/tiramisu";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wishfort36 ];
+    maintainers = with maintainers; [ wishfort36 fortuneteller2k ];
   };
 }

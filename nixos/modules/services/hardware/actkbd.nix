@@ -75,7 +75,7 @@ in
         type = types.listOf (types.submodule bindingCfg);
         default = [];
         example = lib.literalExample ''
-          [ { keys = [ 113 ]; events = [ "key" ]; command = "''${pkgs.alsaUtils}/bin/amixer -q set Master toggle"; }
+          [ { keys = [ 113 ]; events = [ "key" ]; command = "''${pkgs.alsa-utils}/bin/amixer -q set Master toggle"; }
           ]
         '';
         description = ''

@@ -35,10 +35,16 @@ in buildPythonPackage rec {
     export BOOST_PYTHON_LIB="boost_python${pythonVersion}"
     export BOOST_THREAD_LIB="boost_thread"
     export BOOST_SYSTEM_LIB="boost_system"
+    export PYCAIRO=true
   '';
 
   nativeBuildInputs = [
     mapnik # for mapnik_config
+    pkgs.pkgconfig
+  ];
+
+  patches = [
+    ./find-pycairo-with-pkg-config.patch
   ];
 
   buildInputs = [
@@ -56,6 +62,8 @@ in buildPythonPackage rec {
     zlib
   ]);
   propagatedBuildInputs = [ pillow pycairo ];
+
+  pythonImportsCheck = [ "mapnik" ] ;
 
   meta = with lib; {
     description = "Python bindings for Mapnik";

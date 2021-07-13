@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , cairo
 , harfbuzz
@@ -10,7 +9,7 @@
 , gobject-introspection
 , darwin
 , fribidi
-, gnome3
+, gnome
 , gi-docgen
 , makeFontsConf
 , freefont_ttf
@@ -20,24 +19,20 @@
 , x11Support? !stdenv.isDarwin, libXft
 }:
 
+let
+  withDocs = stdenv.buildPlatform == stdenv.hostPlatform;
+in
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.48.3";
+  version = "1.48.5";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ]
+    ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ijbkcs6217ygzphlpi0vajxkccifdbsl0jdjpy8wz11h9f19sin";
+    sha256 = "0aivpd6l5687lj5293j859zd7vq97yxpzvad0b6jvh3kc54p87jh";
   };
-
-  patches = [
-    # Install developer documentation.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/pango/commit/a2f35860115e8cd44f07d5158e2df059e8163a08.patch";
-      sha256 = "hN7O4DBk4A+TmBl6DGx6RHni5qRBg6akdjv9o3iWKDQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson ninja
@@ -67,9 +62,11 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=${lib.boolToString withDocs}"
   ] ++ lib.optionals (!x11Support) [
     "-Dxft=disabled" # only works with x11
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -79,7 +76,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # test-font: FAIL
 
-  postInstall = ''
+  postInstall = lib.optionalString withDocs ''
     # So that devhelp can find this.
     # https://gitlab.gnome.org/GNOME/pango/merge_requests/293/diffs#note_1058448
     mkdir -p "$devdoc/share/devhelp"
@@ -88,8 +85,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

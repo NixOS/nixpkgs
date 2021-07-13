@@ -1,41 +1,54 @@
-{ lib, stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
-, libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11, libXcomposite
-, libxcb, sqlite, zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus, makeWrapper }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchurl
+, ffmpeg_3
+, freetype
+, gdal_2
+, glib
+, libGL
+, libGLU
+, libICE
+, libSM
+, libXi
+, libXv
+, libav_12
 
+, libXrender
+, libXrandr
+, libXfixes
+, libXcursor
+, libXinerama
+, libXext
+, libX11
+, libXcomposite
+
+, libxcb
+, sqlite
+, zlib
+, fontconfig
+, dpkg
+, libproxy
+, libxml2
+, gst_all_1
+, dbus
+, makeWrapper
+
+, qtlocation
+, qtwebkit
+, qtx11extras
+, qtsensors
+, qtscript
+
+, xkeyboardconfig
+, autoPatchelfHook
+}:
 let
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
     else throw "Unsupported system ${stdenv.hostPlatform.system} ";
-  fullPath = lib.makeLibraryPath [
-    glibc
-    glib
-    stdenv.cc.cc
-    libSM
-    libICE
-    libXi
-    libXv
-    libGLU libGL
-    libXrender
-    libXrandr
-    libXfixes
-    libXcursor
-    libXinerama
-    libXcomposite
-    freetype
-    libXext
-    libX11
-    libxcb
-    sqlite
-    zlib
-    fontconfig
-    libproxy
-    libxml2
-    dbus
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-  ];
 in
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "googleearth-pro";
   version = "7.3.3.7786";
 
@@ -44,13 +57,47 @@ stdenv.mkDerivation rec {
     sha256 = "1s3cakwrgf702g33rh8qs657d8bl68wgg8k89rksgvswwpd2zbb3";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
+  propagatedBuildInputs = [ xkeyboardconfig ];
+  buildInputs = [
+    dbus
+    ffmpeg_3
+    fontconfig
+    freetype
+    gdal_2
+    glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libGL
+    libGLU
+    libICE
+    libSM
+    libX11
+    libXcomposite
+    libXcursor
+    libXext
+    libXfixes
+    libXi
+    libXinerama
+    libXrandr
+    libXrender
+    libXv
+    libav_12
+    libproxy
+    libxcb
+    libxml2
+    qtlocation
+    qtscript
+    qtsensors
+    qtwebkit
+    qtx11extras
+    sqlite
+    zlib
+  ];
 
   doInstallCheck = true;
 
   dontBuild = true;
-
-  dontPatchELF = true;
 
   unpackPhase = ''
     # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
@@ -58,6 +105,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase =''
+    runHook preInstall
+
     mkdir $out
     mv usr/* $out/
     rmdir usr
@@ -66,20 +115,9 @@ stdenv.mkDerivation rec {
 
     # patch and link googleearth binary
     ln -s $out/opt/google/earth/pro/googleearth-bin $out/bin/googleearth-pro
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${fullPath}:\$ORIGIN" \
-      $out/opt/google/earth/pro/googleearth-bin
 
     # patch and link gpsbabel binary
     ln -s $out/opt/google/earth/pro/gpsbabel $out/bin/gpsbabel
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${fullPath}:\$ORIGIN" \
-      $out/opt/google/earth/pro/gpsbabel
-
-    # patch libraries
-    for a in $out/opt/google/earth/pro/*.so* ; do
-      patchelf --set-rpath "${fullPath}:\$ORIGIN" $a
-    done
 
     # Add desktop config file and icons
     mkdir -p $out/share/{applications,icons/hicolor/{16x16,22x22,24x24,32x32,48x48,64x64,128x128,256x256}/apps,pixmaps}
@@ -89,23 +127,37 @@ stdenv.mkDerivation rec {
       ln -s $out/opt/google/earth/pro/product_logo_"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/google-earth-pro.png
     done
     ln -s $out/opt/google/earth/pro/product_logo_256.png $out/share/pixmaps/google-earth-pro.png
+
+    runHook postInstall
   '';
+
+  postInstall = ''
+    find "$out/opt/google/earth/pro" -name "*.so.*" | \
+      egrep -v 'libssl*|libcrypto*|libicu*' | \
+      xargs rm
+    find "$out/opt/google/earth/pro" -name "*.so" | \
+      egrep -v 'libgoogle*|libauth*|libbase*|libcommon*|libcommon_gui*|libcommon_platform*|libcommon_webbrowser*|libcomponentframework*|libgeobase*|libgeobaseutils*|libge_net*|libgdata*|libgoogleapi*|libmath*|libmoduleframework*|libmaps*|libport*|libprintmodule*|libprofile*|librender*|libreporting*|libsgutil*|libspatial*|libxsltransform*|libbase*|libport*|libport*|libbase*|libcomponentframework*|libIGCore*|libIGUtils*|libaction*|libapiloader*|libapiloader*|libIGCore*|libIGUtils*|libIGMath*|libfusioncommon*|libge_exif*|libaction*|libfusioncommon*|libapiloader*|liblayer*|libapiloader*|libIGAttrs*|libIGCore*|libIGGfx*|libIGMath*|libIGSg*|libIGUtils*|libwmsbase*|libwebbrowser*|libevllpro*|libalchemyext*|libge_cache*|libflightsim*|libnpgeinprocessplugin*|libmeasure*|libviewsync*|libcapture*|libtheme*|libgps*|libgisingest*|libsearchmodule*|libinput_plugin*|libnavigate*|libspnav*|libsearch*|libLeap*' | \
+      xargs rm
+  '';
+
+  autoPatchelfIgnoreMissingDeps=true;
 
   installCheckPhase = ''
     $out/bin/gpsbabel -V > /dev/null
   '';
 
   # wayland is not supported by Qt included in binary package, so make sure it uses xcb
-  fixupPhase = ''
-    wrapProgram $out/bin/googleearth-pro --set QT_QPA_PLATFORM xcb
+  postFixup = ''
+    wrapProgram $out/bin/googleearth-pro \
+      --set QT_QPA_PLATFORM xcb \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
   '';
-
 
   meta = with lib; {
     description = "A world sphere viewer";
-    homepage = "https://earth.google.com";
+    homepage = "https://www.google.com/earth/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ friedelino ];
+    maintainers = with maintainers; [ friedelino shamilton ];
     platforms = platforms.linux;
   };
 }

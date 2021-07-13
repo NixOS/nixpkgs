@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     description = "A free, open-source game of ancient warfare -- data files";
     homepage = "https://play0ad.com/";
     license = licenses.cc-by-sa-30;
+    maintainers = with maintainers; [ chvp ];
     platforms = platforms.linux;
     hydraPlatforms = [];
   };

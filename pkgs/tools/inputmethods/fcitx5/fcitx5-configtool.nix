@@ -19,13 +19,13 @@
 
 mkDerivation rec {
   pname = "fcitx5-configtool";
-  version = "5.0.2";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = "fcitx5-configtool";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-kw0KIbS5SVMf6kR/9xsYiChHXQBM0enSVXyh0QfiiPY=";
+    sha256 = "0w6cgg57ldk02j3fs7mm8pn5inblcjyr20d3xl5qbyawwccjsn2m";
   };
 
   cmakeFlags = [

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
@@ -56,7 +57,7 @@ in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.17.0";
+  version = "0.17.4";
 
   disabled = pythonOlder "3.6";
 
@@ -64,7 +65,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    hash = "sha256-LbNbaHAWAVG5YLc9juuwcOlrREBW6OjEl7VPtACfl3I=";
+    hash = "sha256-JyNuke+XPqjLVZbvPud9Y7k0+EmvETVKcOYcDldBiVo=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -106,11 +107,17 @@ buildPythonPackage rec {
     "test/python/classical_function_compiler/"
   ];
   disabledTests = [
+    # Not working on matplotlib >= 3.4.0, checks images match.
+    "test_plot_circuit_layout"
+
     # Flaky tests
     "test_cx_equivalence"
     "test_pulse_limits"
+    "test_1q_random"
   ] ++ lib.optionals (!withClassicalFunctionCompiler) [
     "TestPhaseOracle"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "test_circuit_init" # failed on aarch64, https://gist.github.com/r-rmcgibbo/c2e173d43ced4f6954811004f6b5b842
   ]
   # Disabling slow tests for build constraints
   ++ [
@@ -155,8 +162,8 @@ buildPythonPackage rec {
     pushd $PACKAGEDIR
   '';
   postCheck = ''
-    rm -rf test
-    rm -rf examples
+    rm -r test
+    rm -r examples
     popd
   '';
 

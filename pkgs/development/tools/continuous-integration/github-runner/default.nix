@@ -20,7 +20,7 @@
 }:
 let
   pname = "github-actions-runner";
-  version = "2.277.1";
+  version = "2.278.0";
 
   deps = (import ./deps.nix { inherit fetchurl; });
   nugetPackages = map
@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
-    rev = "183a3dd9a0d4d51feddc5fe9fa6c3b5f8b08343d"; # v${version}
-    sha256 = "sha256-fQH4QwdR8E76ckUjMCaKOsDjNoVBIWAw2YcFRrVucX8=";
+    rev = "62d926efce35d3ea16d7624a25aaa5b300737def"; # v${version}
+    sha256 = "sha256-KAb14739DYnuNIf7ZNZk5CShye6XFGn8aLu8BAcuT/c=";
   };
 
   nativeBuildInputs = [

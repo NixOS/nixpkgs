@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, libtool
-, fftw, fftwSinglePrec, alsaLib, libsndfile, libpulseaudio
+, fftw, fftwSinglePrec, alsa-lib, libsndfile, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoconf automake libtool ];
-  buildInputs = [ fftw fftwSinglePrec alsaLib libsndfile libpulseaudio ];
+  buildInputs = [ fftw fftwSinglePrec alsa-lib libsndfile libpulseaudio ];
 
   preConfigure = ''
     aclocal \

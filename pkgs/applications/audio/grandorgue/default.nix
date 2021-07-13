@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchsvn, cmake, gcc, pkg-config, fftwFloat, alsaLib
+{ lib, stdenv, fetchsvn, cmake, gcc, pkg-config, fftwFloat, alsa-lib
 , zlib, wavpack, wxGTK31, udev, jackaudioSupport ? false, libjack2
 , includeDemo ? true }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ pkg-config fftwFloat alsaLib zlib wavpack wxGTK31 udev ]
+  buildInputs = [ pkg-config fftwFloat alsa-lib zlib wavpack wxGTK31 udev ]
     ++ lib.optional jackaudioSupport libjack2;
 
   cmakeFlags = lib.optional (!jackaudioSupport) [

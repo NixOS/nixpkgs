@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuigreet";
-  version = "0.2.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "apognu";
     repo = pname;
     rev = version;
-    sha256 = "1fk8ppxr3a8vdp7g18pp3sgr8b8s11j30mcqpdap4ai14v19idh8";
+    sha256 = "sha256-Ip/GhpHgTgWFyCdujcCni1CLFDDirUbJuzCj8QiUsFc=";
   };
 
-  cargoSha256 = "0qpambizjy6z44spnjnh2kd8nay5953mf1ga2iff2mjlv97zpq22";
+  cargoSha256 = "sha256-G/E/2wjeSY57bQJgrZYUA1sWUwtk5mRavmLwy1EgHRM=";
 
   meta = with lib; {
     description = "Graphical console greter for greetd";

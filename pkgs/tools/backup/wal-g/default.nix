@@ -1,24 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, brotli }:
+{ lib, buildGoModule, fetchFromGitHub, brotli, libsodium }:
 
 buildGoModule rec {
   pname = "wal-g";
-  version = "0.2.21";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "wal-g";
     repo = "wal-g";
     rev = "v${version}";
-    sha256 = "0pinvi2b3vi6lvw3im8w6vcjm1qg2kbf6ydf1h72xjz5933yrjy4";
+    sha256 = "0al8xg57fh3zqwgmm6lkcnpnisividhqld9jry3sqk2k45856y8j";
   };
 
-  vendorSha256 = "0qzw0lr0x6kqlpa4kghrfl2271752sr7idk6n4hkhk6q0kghcsnk";
+  vendorSha256 = "0n0ymgcgkjlp0indih8h55jjj6372rdfcq717kwln6sxm4r9mb17";
 
-  buildInputs = [ brotli ];
+  buildInputs = [ brotli libsodium ];
 
   subPackages = [ "main/pg" ];
 
   buildFlagsArray = [
-    "-tags=brotli"
+    "-tags=brotli libsodium"
     "-ldflags=-s -w -X github.com/wal-g/wal-g/cmd/pg.WalgVersion=${version} -X github.com/wal-g/wal-g/cmd/pg.GitRevision=${src.rev}"
   ];
 

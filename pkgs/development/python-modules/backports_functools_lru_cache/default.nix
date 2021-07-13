@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , isPy3k
 , pytest
 , pytest-black
@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "backports.functools_lru_cache";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fde5f188da2d593bd5bc0be98d9abc46c95bb8a9dde93429570192ee6cc2d4a";
+    sha256 = "d5ed2169378b67d3c545e5600d363a923b09c456dab1593914935a68ad478271";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [ pytest pytest-flake8 pytest-black pytestcov ];
   # ironically, they fail a linting test, and pytest.ini forces that test suite

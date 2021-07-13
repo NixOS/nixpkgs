@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "opentx";
-  version = "2.3.11";
+  version = "2.3.13";
 
   src = fetchFromGitHub {
     owner = "opentx";
     repo = "opentx";
     rev = "release/${version}";
-    sha256 = "sha256-0B41TkTs4sNGYzpMGbsgCLT2ThkP6foeuwLUIzKKGkU=";
+    sha256 = "sha256-Bi/Cz2T2NdtnJZHav8qvo+gErPsR8Ym7K3KcD5APt6Y=";
   };
 
   nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];

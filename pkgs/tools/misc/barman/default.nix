@@ -1,5 +1,5 @@
 { buildPythonApplication, fetchurl, lib
-, dateutil, argcomplete, argh, psycopg2, boto3
+, python-dateutil, argcomplete, argh, psycopg2, boto3
 }:
 
 buildPythonApplication rec {
@@ -12,7 +12,7 @@ buildPythonApplication rec {
     sha256 = "Ts8I6tlP2GRp90OIIKXy+cRWWvUO3Sm86zq2dtVP5YE=";
   };
 
-  propagatedBuildInputs = [ dateutil argh psycopg2 boto3 argcomplete ];
+  propagatedBuildInputs = [ python-dateutil argh psycopg2 boto3 argcomplete ];
 
   # Tests are not present in tarball
   checkPhase = ''

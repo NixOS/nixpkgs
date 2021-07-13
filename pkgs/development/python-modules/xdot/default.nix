@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python3, xvfb_run
+{ lib, buildPythonPackage, fetchPypi, isPy3k, python3, xvfb-run
 , wrapGAppsHook, gobject-introspection, pygobject3, graphviz, gtk3, numpy }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
   nativeBuildInputs = [ wrapGAppsHook ];
   propagatedBuildInputs = [ gobject-introspection pygobject3 graphviz gtk3 numpy ];
-  checkInputs = [ xvfb_run ];
+  checkInputs = [ xvfb-run ];
 
   checkPhase = ''
     xvfb-run -s '-screen 0 800x600x24' ${python3.interpreter} nix_run_setup test

@@ -23,7 +23,8 @@ in
   config.services.oauth2_proxy = mkIf (cfg.virtualHosts != [] && (hasPrefix "127.0.0.1:" cfg.proxy)) {
     enable = true;
   };
-  config.services.nginx = mkMerge ((optional (cfg.virtualHosts != []) {
+  config.services.nginx = mkIf config.services.oauth2_proxy.enable (mkMerge
+  ((optional (cfg.virtualHosts != []) {
     recommendedProxySettings = true; # needed because duplicate headers
   }) ++ (map (vhost: {
     virtualHosts.${vhost} = {
@@ -60,5 +61,5 @@ in
       '';
 
     };
-  }) cfg.virtualHosts));
+  }) cfg.virtualHosts)));
 }

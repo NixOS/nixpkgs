@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "belcard";
-  version = "4.5.1";
+  version = "4.5.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "14hkgwr2a9zw44v1s8xscqxa2mwin06jsxpwb3hflh9mp16ymfzv";
+    sha256 = "sha256-+7vqTbg1QergWPx2LQ2wkVehOma6Ix02IfwnJTJ/E5I=";
   };
 
   buildInputs = [ bctoolbox belr ];

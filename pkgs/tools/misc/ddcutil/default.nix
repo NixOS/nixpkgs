@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner  = "rockowitz";
     repo   = "ddcutil";
     rev    = "v${version}";
-    sha256 = "sha256-F/tKW81bAyYtwpxhl5XC8YyMB+6S0XmqqigwJY2WFDU=";
+    sha256 = "0wv8a8zjahzmi4qx0lc24mwyi3jklj1yxqq26fwklmfh5dv1y8yc";
   };
 
   patches = [

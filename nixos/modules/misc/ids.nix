@@ -252,7 +252,7 @@ in
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
-      gale = 223;
+      # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22
@@ -300,7 +300,7 @@ in
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
-      geoip = 272;
+      #geoip = 272; # new module uses DynamicUser
       fcron = 273;
       sonarr = 274;
       radarr = 275;
@@ -315,7 +315,7 @@ in
       restya-board = 284;
       mighttpd2 = 285;
       hass = 286;
-      monero = 287;
+      #monero = 287; # dynamically allocated as of 2021-05-08
       ceph = 288;
       duplicati = 289;
       monetdb = 290;
@@ -562,7 +562,7 @@ in
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
-      gale = 223;
+      # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22
@@ -617,7 +617,7 @@ in
       restya-board = 284;
       mighttpd2 = 285;
       hass = 286;
-      monero = 287;
+      # monero = 287; # dynamically allocated as of 2021-05-08
       ceph = 288;
       duplicati = 289;
       monetdb = 290;

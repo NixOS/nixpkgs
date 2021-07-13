@@ -1,12 +1,13 @@
 { lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
-, libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
+, dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
 , installShellFiles
 , nftablesSupport ? false
+, nixosTests
 }:
 
 let
@@ -18,13 +19,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.13";
+  version = "4.15";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0w2r80wf86jijgfxbkv06lgfhz4p2aaidsqd96bx3q1382nrbzcf";
+    url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
+    sha256 = "sha256-UXipGNWclBKgr0r0wav85Gnhp2SXkTvDFr9gKJWismU=";
   };
 
   postPatch = ''
@@ -38,9 +39,9 @@ buildGoPackage rec {
     rm _dist/src/github.com/lxc/lxd
     cp -r _dist/src/* ../../..
     popd
-  '';
 
-  buildFlags = [ "-tags libsqlite3" ];
+    makeFlagsArray+=("-tags libsqlite3")
+  '';
 
   postInstall = ''
     # test binaries, code generation
@@ -58,9 +59,11 @@ buildGoPackage rec {
     installShellCompletion --bash --name lxd go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
 
+  passthru.tests.lxd = nixosTests.lxd;
+
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
-  buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
-                  raft-canonical.dev sqlite-replication udev.dev ];
+  buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
+                  sqlite-replication udev.dev ];
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";

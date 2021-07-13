@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchgit, wrapGAppsHook, autoreconfHook, bison, flex
+{ stdenv, lib, fetchgit, fetchpatch, wrapGAppsHook, autoreconfHook, bison, flex
 , curl, gtk2, gtk3, pkg-config, python2, python3, shared-mime-info
 , glib-networking, gsettings-desktop-schemas
 
-# Use the experimental gtk3 branch.
-, useGtk3 ? false
+# Selector between the GTK+ 3 and GTK+ 2 releases.
+, useGtk3
 
 # Package compatibility: old parameters whose name were not directly derived
 , enablePgp ? true
@@ -21,7 +21,7 @@
 , enableLdap ? true, openldap
 , enableNetworkManager ? true, networkmanager
 , enableLibetpan ? true, libetpan
-, enableValgrind ? true, valgrind
+, enableValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind, valgrind
 , enableSvg ? true, librsvg
 
 # Configure claws-mail's plugins
@@ -57,16 +57,15 @@
 with lib;
 
 let
-  version = if useGtk3 then "3.99.0" else "3.17.8";
+  # Last release and hash for both the GTK+ 3 and GTK+ 2 version.
+  version = if useGtk3 then "4.0.0" else "3.18.0";
 
-  # The official release uses gtk2 and contains the version tag.
   gtk2src = {
-    sha256 = "0l4f8q11iyj8pi120lrapgq51k5j64xf0jlczkzbm99rym752ch5";
+    sha256 = "1vsiy3xsppw4d8ylsz70wsyrvmgy88lp2hj7vrc353ckny80r9lh";
   };
 
-  # The corresponding commit in the gtk3 branch.
   gtk3src = {
-    sha256 = "176h1swh1zx6dqyzfz470x4a1xicnv0zhy8ir47k7p23g6y17i2k";
+    sha256 = "0mwnjiqg2sj61va0y9yi3v52iyr5kzmbnvsqxav3a48m2f8p27qn";
   };
 
   python = if useGtk3 then python3 else python2;
@@ -125,7 +124,19 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  patches = [ ./mime.patch ];
+  patches = [
+    ./mime.patch
+
+    # Fixes a bug with the automatic authentication method, resulting in errors
+    # with certain mail providers.
+    # <https://www.thewildbeast.co.uk/claws-mail/bugzilla/show_bug.cgi?id=4497>
+    # This MUST be removed for the next release.
+    (fetchpatch {
+      name = "fix-automatic-auth.patch";
+      url = "https://git.claws-mail.org/?p=claws.git;a=patch;h=9c2585c58b49815a0eab8d683f0a94f75cbbe64e";
+      sha256 = "0v8v5q2p4h93lp7yq3gnlvarsrcssv96aks1wqy3187vsr4kdw7a";
+    })
+  ];
 
   preConfigure = ''
     # autotools check tries to dlopen libpython as a requirement for the python plugin

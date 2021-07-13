@@ -4,7 +4,7 @@
 , intltool
 , gtk3
 , wrapGAppsHook
-, alsaLib
+, alsa-lib
 , libjack2
 , libpulseaudio
 , fftw
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    alsaLib
+    alsa-lib
     libpulseaudio
     fftw
   ] ++ lib.optional jackSupport libjack2;

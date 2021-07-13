@@ -25,21 +25,21 @@
 
 let
 
-  mkElpaPackages = { pkgs, lib }: import ../applications/editors/emacs-modes/elpa-packages.nix {
+  mkElpaPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/elpa-packages.nix {
     inherit (pkgs) stdenv texinfo writeText;
     inherit lib;
   };
 
   # Contains both melpa stable & unstable
-  melpaGeneric = { pkgs, lib }: import ../applications/editors/emacs-modes/melpa-packages.nix {
+  melpaGeneric = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/melpa-packages.nix {
     inherit lib pkgs;
   };
 
-  mkOrgPackages = { lib }: import ../applications/editors/emacs-modes/org-packages.nix {
+  mkOrgPackages = { lib }: import ../applications/editors/emacs/elisp-packages/org-packages.nix {
     inherit lib;
   };
 
-  mkManualPackages = { pkgs, lib }: import ../applications/editors/emacs-modes/manual-packages.nix {
+  mkManualPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/manual-packages.nix {
     inherit lib pkgs;
   };
 

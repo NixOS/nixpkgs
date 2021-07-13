@@ -23,6 +23,7 @@ let
     isAttrs
     isBool
     isFunction
+    isList
     isString
     length
     mapAttrs
@@ -37,7 +38,7 @@ let
     setAttrByPath
     toList
     types
-    warn
+    warnIf
     ;
   inherit (lib.options)
     isOption
@@ -127,7 +128,7 @@ rec {
         let collected = collectModules
           (specialArgs.modulesPath or "")
           (modules ++ [ internalModule ])
-          ({ inherit lib options config; } // specialArgs);
+          ({ inherit lib options config specialArgs; } // specialArgs);
         in mergeModules prefix (reverseList collected);
 
       options = merged.matchedOptions;
@@ -188,6 +189,9 @@ rec {
       loadModule = args: fallbackFile: fallbackKey: m:
         if isFunction m || isAttrs m then
           unifyModuleSyntax fallbackFile fallbackKey (applyIfFunction fallbackKey m args)
+        else if isList m then
+          let defs = [{ file = fallbackFile; value = m; }]; in
+          throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
         else unifyModuleSyntax (toString m) (toString m) (applyIfFunction (toString m) (import m) args);
 
       /*
@@ -295,13 +299,11 @@ rec {
       # a module will resolve strictly the attributes used as argument but
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
-      requiredArgs = builtins.attrNames (lib.functionArgs f);
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
-      extraArgs = builtins.listToAttrs (map (name: {
-        inherit name;
-        value = builtins.addErrorContext (context name)
-          (args.${name} or config._module.args.${name});
-      }) requiredArgs);
+      extraArgs = builtins.mapAttrs (name: _:
+        builtins.addErrorContext (context name)
+          (args.${name} or config._module.args.${name})
+      ) (lib.functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
       # context on the explicited arguments of "args" too. This update
@@ -516,8 +518,8 @@ rec {
       value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
       warnDeprecation =
-        if opt.type.deprecationMessage == null then id
-        else warn "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
+        warnIf (opt.type.deprecationMessage != null)
+          "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
 
     in warnDeprecation opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
@@ -711,9 +713,7 @@ rec {
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
 
-  mkStrict = builtins.trace "`mkStrict' is obsolete; use `mkOverride 0' instead." (mkOverride 0);
-
-  mkFixStrictness = id; # obsolete, no-op
+  mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
   mkOrder = priority: content:
     { _type = "order";

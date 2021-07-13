@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, mono6
+, mono
 , msbuild
 , dotnet-sdk
 , makeWrapper
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w $out/src
     mv $out/src/.msbuild/Current/{bin,Bin}
 
-    makeWrapper ${mono6}/bin/mono $out/bin/omnisharp \
+    makeWrapper ${mono}/bin/mono $out/bin/omnisharp \
     --add-flags "$out/src/OmniSharp.exe"
   '';
 

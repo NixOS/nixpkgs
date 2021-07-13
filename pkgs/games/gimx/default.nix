@@ -51,15 +51,19 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share
     cp -r ./loader/firmware $out/share/firmware
     cp -r ${gimx-config}/Linux $out/share/config
-    patch ${gimx-config}/Linux/Dualshock4.xml ${./noff.patch} -o $out/share/ds4.xml
 
     makeWrapper $out/bin/gimx $out/bin/gimx-with-confs \
       --set GIMXCONF $out/share/config
 
     makeWrapper $out/bin/gimx $out/bin/gimx-test-ds4 \
-      --set GIMXCONF $out/share \
+      --set GIMXCONF $out/share/config \
       --add-flags "--nograb" --add-flags "--curses" \
-      --add-flags "-p /dev/ttyUSB0" --add-flags "-c ds4.xml"
+      --add-flags "-p /dev/ttyUSB0" --add-flags "-c Dualshock4.xml"
+
+    makeWrapper $out/bin/gimx $out/bin/gimx-test-xone \
+      --set GIMXCONF $out/share/config \
+      --add-flags "--nograb" --add-flags "--curses" \
+      --add-flags "-p /dev/ttyUSB0" --add-flags "-c XOnePadUsb.xml"
   '';
 
   meta = with lib; {

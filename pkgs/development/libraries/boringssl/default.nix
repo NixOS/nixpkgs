@@ -52,7 +52,6 @@ buildGoModule {
   meta = with lib; {
     description = "Free TLS/SSL implementation";
     homepage    = "https://boringssl.googlesource.com";
-    platforms   = platforms.all;
     maintainers = [ maintainers.thoughtpolice ];
     license = with licenses; [ openssl isc mit bsd3 ];
   };

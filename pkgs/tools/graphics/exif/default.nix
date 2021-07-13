@@ -1,20 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, libexif, popt, libintl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libexif, popt, libintl }:
 
 stdenv.mkDerivation rec {
-  name = "exif-0.6.21";
+  pname = "exif";
+  version = "0.6.22";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libexif/${name}.tar.bz2";
-    sha256 = "1zb9hwdl783d4vd2s2rw642hg8hd6n0mfp6lrbiqmp9jmhlq5rsr";
+  src = fetchFromGitHub {
+    owner = "libexif";
+    repo = pname;
+    rev = "${pname}-${builtins.replaceStrings ["."] ["_"] version}-release";
+    sha256 = "1xlb1gdwxm3rmw7vlrynhvjp9dkwmvw23mxisdbdmma7ah2nda3i";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libexif popt libintl ];
 
   meta = with lib; {
     homepage = "https://libexif.github.io";
     description = "A utility to read and manipulate EXIF data in digital photographs";
     platforms = platforms.unix;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
   };
 }

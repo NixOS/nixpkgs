@@ -81,11 +81,14 @@ in
     # supporting it, or their bundled containerd
     systemd.enableUnifiedCgroupHierarchy = false;
 
+    environment.systemPackages = [ config.services.k3s.package ];
+
     systemd.services.k3s = {
       description = "k3s service";
       after = [ "network.service" "firewall.service" ] ++ (optional cfg.docker "docker.service");
       wants = [ "network.service" "firewall.service" ];
       wantedBy = [ "multi-user.target" ];
+      path = optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {
         # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
         Type = if cfg.role == "agent" then "exec" else "notify";

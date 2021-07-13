@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1jim5bgq3fc33391qpa1q1csbzqf4hk1qyfzwxpcs5pb4ixb6vgk";
   };
 
-  cargoSha256 = "181gcmaw2w5a6ah8a2ahsnc1zkadpmx1azkwh2a6x8myhzw2dxsj";
+  cargoSha256 = "1c2zryxn1bbg3ksp8azk9xmwfgwr6663hlmdv9c358hzqdfp9hli";
 
   # The tests need a GitHub API token.
   doCheck = false;

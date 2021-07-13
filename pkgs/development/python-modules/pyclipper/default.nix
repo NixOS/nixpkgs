@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, setuptools_scm
+, setuptools-scm
 , cython
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
     cython
   ];
 

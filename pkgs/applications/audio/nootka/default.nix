@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, cmake
-, alsaLib, fftwSinglePrec, libjack2, libpulseaudio, libvorbis, soundtouch, qtbase
+, alsa-lib, fftwSinglePrec, libjack2, libpulseaudio, libvorbis, soundtouch, qtbase
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    alsaLib fftwSinglePrec libjack2 libpulseaudio libvorbis soundtouch qtbase
+    alsa-lib fftwSinglePrec libjack2 libpulseaudio libvorbis soundtouch qtbase
   ];
 
   cmakeFlags = [

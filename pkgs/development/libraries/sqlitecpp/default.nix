@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, sqlite, cppcheck, gtest }:
 
 stdenv.mkDerivation rec {
-  pname = "SQLiteCpp";
+  pname = "sqlitecpp";
   version = "3.1.1";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://srombauts.github.com/SQLiteCpp";
+    homepage = "https://srombauts.github.io/SQLiteCpp/";
     description = "C++ SQLite3 wrapper";
     license = licenses.mit;
     platforms = platforms.unix;

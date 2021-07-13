@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   # http://deb.debian.org/debian/pool/main/r/rig/rig_1.11-1.diff.gz
   patches = [ ./rig_1.11-1.diff ];
 
+  makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
+
   meta = {
     homepage = "http://rig.sourceforge.net/";
     description = "Random identity generator";

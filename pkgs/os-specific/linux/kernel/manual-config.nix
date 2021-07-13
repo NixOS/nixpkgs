@@ -37,7 +37,6 @@ in {
   extraMeta ? {},
 
   # for module compatibility
-  isXen      ? features.xen_dom0 or false,
   isZen      ? false,
   isLibre    ? false,
   isHardened ? false,
@@ -94,7 +93,8 @@ let
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
-        inherit isXen isZen isHardened isLibre;
+        inherit isZen isHardened isLibre;
+        isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
         kernelOlder = lib.versionOlder version;
         kernelAtLeast = lib.versionAtLeast version;
       };
@@ -119,7 +119,7 @@ let
         # This way kernels can be bit-by-bit reproducible depending on settings
         # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
         # See also https://kernelnewbies.org/BuildId
-        sed -i Makefile -e 's|--build-id|--build-id=none|'
+        sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
         patchShebangs scripts/ld-version.sh
       '';
@@ -285,7 +285,7 @@ let
             " (with patches: "
             + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
             + ")");
-        license = lib.licenses.gpl2;
+        license = lib.licenses.gpl2Only;
         homepage = "https://www.kernel.org/";
         repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
         maintainers = [

@@ -14,6 +14,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ atpublic psutil ];
   checkInputs = [ pytestCheckHook pytestcov sybil ];
 
+  # disable code coverage checks for all OS. Upstream does not enforce these
+  # checks on Darwin, and code coverage cannot be improved downstream nor is it
+  # relevant to the user.
+  pytestFlagsArray = [ "--no-cov" ];
+
   meta = with lib; {
     homepage = "https://flufllock.readthedocs.io/";
     description = "NFS-safe file locking with timeouts for POSIX and Windows";

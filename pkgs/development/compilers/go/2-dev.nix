@@ -1,19 +1,29 @@
-{ pkgs, lib, stdenv, fetchurl, fetchgit, tzdata, iana-etc, runCommand
-, perl, which, pkg-config, patch, procps, pcre, cacert, Security, Foundation
-, mailcap, runtimeShell
+{ lib
+, stdenv
+, fetchgit
+, tzdata
+, iana-etc
+, runCommand
+, perl
+, which
+, pkg-config
+, patch
+, procps
+, pcre
+, cacert
+, Security
+, Foundation
+, mailcap
+, runtimeShell
 , buildPackages
 , pkgsBuildTarget
-, fetchpatch
 , callPackage
 }:
 
 let
-
-  inherit (lib) optionals optionalString;
-
   go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
-  goBootstrap = runCommand "go-bootstrap" {} ''
+  goBootstrap = runCommand "go-bootstrap" { } ''
     mkdir $out
     cp -rf ${go_bootstrap}/* $out/
     chmod -R u+w $out
@@ -39,21 +49,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go2-unstable";
-  version = "2021-03-22";
+  version = "2021-04-13";
 
   src = fetchgit {
-    url = https://go.googlesource.com/go;
-    rev = "a4b4db4cdeefb7b4ea5adb09073dd123846b3588";
-    sha256 = "sha256:1wqqnywcrfazydi5wcg04s6zgsfh4m879vxfgacgrnigd23ynhvr";
+    url = "https://go.googlesource.com/go";
+    rev = "9cd52cf2a93a958e8e001aea36886e7846c91f2f";
+    sha256 = "sha256:0hybm93y4i4j7bs86y7h73nc1wqnspkq75if7n1032zf9bs8sm96";
   };
 
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkg-config patch procps ];
   buildInputs = [ cacert pcre ]
-    ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
-    ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+    ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  depsTargetTargetPropagated = optionals stdenv.isDarwin [ Security Foundation ];
+  depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Security Foundation ];
 
   hardeningDisable = [ "all" ];
 
@@ -114,14 +124,14 @@ stdenv.mkDerivation rec {
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
 
-  '' + optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
     # that run outside a nix server
     sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
 
-  '' + optionalString stdenv.isAarch32 ''
+  '' + lib.optionalString stdenv.isAarch32 ''
     echo '#!${runtimeShell}' > misc/cgo/testplugin/test.bash
-  '' + optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
     sed -i 's,strings.Contains(.*sysctl.*,true {,' src/cmd/dist/util.go
@@ -178,16 +188,18 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+  CC_FOR_TARGET =
+    if (stdenv.buildPlatform != stdenv.targetPlatform) then
       "${targetCC}/bin/${targetCC.targetPrefix}cc"
     else
       null;
-  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+  CXX_FOR_TARGET =
+    if (stdenv.buildPlatform != stdenv.targetPlatform) then
       "${targetCC}/bin/${targetCC.targetPrefix}c++"
     else
       null;
 
-  GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+  GOARM = toString (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   # Hopefully avoids test timeouts on Hydra
@@ -197,7 +209,7 @@ stdenv.mkDerivation rec {
   # Some tests assume things like home directories and users exists
   GO_BUILDER_NAME = "nix";
 
-  GOROOT_BOOTSTRAP="${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   postConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -206,7 +218,7 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
-    ${optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
+    ${lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
     # Independent from host/target, CC should produce code for the building system.
     # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc
@@ -234,12 +246,12 @@ stdenv.mkDerivation rec {
   '' + (if (stdenv.buildPlatform != stdenv.hostPlatform) then ''
     mv bin/*_*/* bin
     rmdir bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
     ''}
   '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
     rm -rf bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
     ''}
   '' else "");

@@ -7,27 +7,27 @@ let
     x86_64-linux = "linux-x64";
     x86_64-darwin = "darwin";
     aarch64-linux = "linux-arm64";
+    aarch64-darwin = "darwin-arm64";
     armv7l-linux = "linux-armhf";
   }.${system};
 
-  archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
+  archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "08151qdhf4chg9gfbs0dl0v0k5vla2gz5dfy439jzdg1d022d5rw";
-    x86_64-darwin = "1vlxxkv3wvds3xl3ir93l5q5yq2d7mcragsicfayj9x9r49ilqn3";
-    aarch64-linux = "0rxw1wsi555z41ak817sxqyyan0rm7hma640zsh8dz0yvhzdv1h8";
-    armv7l-linux = "1ijvd7r2fxxlw4zv3zx5h70b3d0b4gcq3aljsi02v1lr2zm8f8gb";
+    x86_64-linux = "06as63444m2036vk4180dfpavmp9l07qc1jfc4gg86j0apdxr6sh";
+    x86_64-darwin = "0dxchqwk3flv2cr542y1l7c06lak9zzj09f2kljsan6gs6zbls2b";
+    aarch64-linux = "0pdbganyc59mll3232b26cc6fi8a8kpvjm5qky4qr4pk4jsj2r6q";
+    aarch64-darwin = "00pax1hakj5l21j7fm1b05s8kkfnbvgfs9h7f27ad379n6482gxl";
+    armv7l-linux = "1g63xh3k1nm8kls674qavmyl7csb3m4d7ywc0512far76lw39rvr";
   }.${system};
 in
   callPackage ./generic.nix rec {
-    # The update script doesn't correctly change the hash for darwin, so please:
-    # nixpkgs-update: no auto update
-
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.55.2";
+    version = "1.58.0";
     pname = "vscode";
 
+    sourceExecutableName = "code";
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
@@ -40,11 +40,14 @@ in
 
     sourceRoot = "";
 
+    updateScript = ./update-vscodium.sh;
+
     meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS
       '';
+      mainProgram = "code";
       longDescription = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS. It includes support for debugging, embedded Git
@@ -56,6 +59,6 @@ in
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
       maintainers = with maintainers; [ eadwu synthetica ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

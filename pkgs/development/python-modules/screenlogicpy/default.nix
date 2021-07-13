@@ -1,22 +1,32 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.3.0";
+  version = "0.4.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0gn2mf2n2g1ffdbijrydgb7dgd60lkvckblx6s86kxlkrp1wqgrq";
+  src = fetchFromGitHub {
+    owner = "dieselrabbit";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "158y34d140bh93l143plq53l7n7mcnmqi5mj7hj0j1ljccxpjcnj";
   };
 
-  # Project doesn't publish tests
-  # https://github.com/dieselrabbit/screenlogicpy/issues/8
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_gateway_discovery"
+    "test_asyncio_gateway_discovery"
+  ];
+
   pythonImportsCheck = [ "screenlogicpy" ];
 
   meta = with lib; {

@@ -37,6 +37,10 @@
 
 let
 
+  inherit (lib)
+    optionals
+    ;
+
   mkDbExtraCommand = contents: let
     contentsList = if builtins.isList contents then contents else [ contents ];
   in ''
@@ -86,6 +90,8 @@ rec {
     , finalImageName ? imageName
       # This used to set a tag to the pulled image
     , finalImageTag ? "latest"
+      # This is used to disable TLS certificate verification, allowing access to http registries on (hopefully) trusted networks
+    , tlsVerify ? true
 
     , name ? fixName "docker-image-${finalImageName}-${finalImageTag}.tar"
     }:
@@ -105,7 +111,14 @@ rec {
       sourceURL = "docker://${imageName}@${imageDigest}";
       destNameTag = "${finalImageName}:${finalImageTag}";
     } ''
-      skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
+      skopeo \
+        --src-tls-verify=${lib.boolToString tlsVerify} \
+        --insecure-policy \
+        --tmpdir=$TMPDIR \
+        --override-os ${os} \
+        --override-arch ${arch} \
+        copy "$sourceURL" "docker-archive://$out:$destNameTag" \
+        | cat  # pipe through cat to force-disable progress bar
     '';
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
@@ -119,6 +132,7 @@ rec {
     cp ${./tarsum.go} tarsum.go
     export GOPATH=$(pwd)
     export GOCACHE="$TMPDIR/go-cache"
+    export GO111MODULE=off
     mkdir -p src/github.com/docker/docker/pkg
     ln -sT ${docker.moby-src}/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
     go build
@@ -532,7 +546,7 @@ rec {
         passthru.layer = layer;
         passthru.imageTag =
           if tag != null
-            then lib.toLower tag
+            then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
         # Docker can't be made to run darwin binaries
@@ -786,7 +800,11 @@ rec {
     fakeRootCommands ? "",
     # We pick 100 to ensure there is plenty of room for extension. I
     # believe the actual maximum is 128.
-    maxLayers ? 100
+    maxLayers ? 100,
+    # Whether to include store paths in the image. You generally want to leave
+    # this on, but tooling may disable this to insert the store paths more
+    # efficiently via other means, such as bind mounting the host store.
+    includeStorePaths ? true,
   }:
     assert
       (lib.assertMsg (maxLayers > 1)
@@ -834,7 +852,9 @@ rec {
         '';
       };
 
-      closureRoots = [ baseJson ] ++ contentsList;
+      closureRoots = optionals includeStorePaths /* normally true */ (
+        [ baseJson ] ++ contentsList
+      );
       overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);
 
       # These derivations are only created as implementation details of docker-tools,

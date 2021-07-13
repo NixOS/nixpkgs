@@ -2,11 +2,12 @@
 , fetchFromGitHub
 , boost
 , cmake
+, giflib
 , ilmbase
 , libjpeg
 , libpng
 , libtiff
-, opencolorio
+, opencolorio_1
 , openexr
 , robin-map
 , unzip
@@ -33,11 +34,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
+    giflib
     ilmbase
     libjpeg
     libpng
     libtiff
-    opencolorio
+    opencolorio_1
     openexr
     robin-map
     fmt

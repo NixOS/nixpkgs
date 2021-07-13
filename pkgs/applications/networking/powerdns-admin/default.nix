@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, mkYarnPackage, writeText, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, mkYarnPackage, writeText, python3 }:
 
 let
   version = "0.2.3";
@@ -9,10 +9,22 @@ let
     sha256 = "16faz57d77mxkflkvwyi8gb9wvnq2vhw79b84v1fmqvxri1yaphw";
   };
 
-  pythonDeps = with python3Packages; [
+  python = python3.override {
+    packageOverrides = self: super: {
+      dnspython = super.dnspython.overridePythonAttrs (oldAttrs: rec {
+        version = "1.16.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
+        };
+      });
+    };
+  };
+
+  pythonDeps = with python.pkgs; [
     flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-sslify
     mysqlclient sqlalchemy
-    configobj bcrypt requests ldap pyotp qrcode dnspython_1
+    configobj bcrypt requests ldap pyotp qrcode dnspython
     gunicorn python3-saml pyopenssl pytz cssmin jsmin authlib bravado-core
     lima pytimeparse pyyaml
   ];
@@ -64,7 +76,7 @@ in stdenv.mkDerivation rec {
 
   inherit src version;
 
-  nativeBuildInputs = [ python3Packages.wrapPython ];
+  nativeBuildInputs = [ python.pkgs.wrapPython ];
 
   pythonPath = pythonDeps;
 
@@ -96,7 +108,7 @@ in stdenv.mkDerivation rec {
     echo "$gunicornScript" > $out/bin/powerdns-admin
     chmod +x $out/bin/powerdns-admin
     wrapProgram $out/bin/powerdns-admin \
-      --set PATH ${python3Packages.python}/bin \
+      --set PATH ${python.pkgs.python}/bin \
       --set PYTHONPATH $out/share:$program_PYTHONPATH
 
     runHook postInstall

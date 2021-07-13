@@ -15,7 +15,7 @@
 , pango
 , cairo
 , expat
-, alsaLib
+, alsa-lib
 , cups
 , dbus
 , atk
@@ -45,13 +45,13 @@ let
     curl
     libpulseaudio
     systemd
-    alsaLib # needed for narrator
+    alsa-lib # needed for narrator
     flite # needed for narrator
     libXxf86vm # needed only for versions <1.13
   ];
 
   libPath = lib.makeLibraryPath ([
-    alsaLib
+    alsa-lib
     atk
     cairo
     cups
@@ -88,11 +88,11 @@ in
 stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
-  version = "2.2.741";
+  version = "2.2.1441";
 
   src = fetchurl {
     url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "0bm78ybn91ihibxgmlpk7dl2zxy4a57k86qmb08cif3ifbflzkvw";
+    sha256 = "03q579hvxnsh7d00j6lmfh53rixdpf33xb5zlz7659pvb9j5w0cm";
   };
 
   icon = fetchurl {

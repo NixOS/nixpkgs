@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "geos";
@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-
-  buildInputs = [ python ];
 
   # https://trac.osgeo.org/geos/ticket/993
   configureFlags = lib.optional stdenv.isAarch32 "--disable-inline";

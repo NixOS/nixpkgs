@@ -822,45 +822,6 @@ rec {
   /* The set of supported Dpkg-based distributions. */
 
   debDistros = {
-
-    # Interestingly, the SHA-256 hashes provided by Ubuntu in
-    # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
-    # wrong, but the SHA-1 and MD5 hashes are correct.  Intrepid is fine.
-
-    ubuntu1204i386 = {
-      name = "ubuntu-12.04-precise-i386";
-      fullName = "Ubuntu 12.04 Precise (i386)";
-      packagesLists =
-        [ (fetchurl {
-            url = "mirror://ubuntu/dists/precise/main/binary-i386/Packages.bz2";
-            sha256 = "18ns9h4qhvjfcip9z55grzi371racxavgqkp6b5kfkdq2wwwax2d";
-          })
-          (fetchurl {
-            url = "mirror://ubuntu/dists/precise/universe/binary-i386/Packages.bz2";
-            sha256 = "085lkzbnzkc74kfdmwdc32sfqyfz8dr0rbiifk8kx9jih3xjw2jk";
-          })
-        ];
-      urlPrefix = "mirror://ubuntu";
-      packages = commonDebPackages ++ [ "diffutils" ];
-    };
-
-    ubuntu1204x86_64 = {
-      name = "ubuntu-12.04-precise-amd64";
-      fullName = "Ubuntu 12.04 Precise (amd64)";
-      packagesLists =
-        [ (fetchurl {
-            url = "mirror://ubuntu/dists/precise/main/binary-amd64/Packages.bz2";
-            sha256 = "1aabpn0hdih6cbabyn87yvhccqj44q9k03mqmjsb920iqlckl3fc";
-          })
-          (fetchurl {
-            url = "mirror://ubuntu/dists/precise/universe/binary-amd64/Packages.bz2";
-            sha256 = "0x4hz5aplximgb7gnpvrhkw8m7a40s80rkm5b8hil0afblwlg4vr";
-          })
-        ];
-      urlPrefix = "mirror://ubuntu";
-      packages = commonDebPackages ++ [ "diffutils" ];
-    };
-
     ubuntu1404i386 = {
       name = "ubuntu-14.04-trusty-i386";
       fullName = "Ubuntu 14.04 Trusty (i386)";
@@ -929,40 +890,6 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    ubuntu1710i386 = {
-      name = "ubuntu-17.10-artful-i386";
-      fullName = "Ubuntu 17.10 Artful (i386)";
-      packagesLists =
-        [ (fetchurl {
-            url = "mirror://ubuntu/dists/artful/main/binary-i386/Packages.xz";
-            sha256 = "18yrj4kqdzm39q0527m97h5ing58hkm9yq9iyj636zh2rclym3c8";
-          })
-          (fetchurl {
-            url = "mirror://ubuntu/dists/artful/universe/binary-i386/Packages.xz";
-            sha256 = "1v0njw2w80xfmxi7by76cs8hyxlla5h3gqajlpdw5srjgx2qrm2g";
-          })
-        ];
-      urlPrefix = "mirror://ubuntu";
-      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
-    };
-
-    ubuntu1710x86_64 = {
-      name = "ubuntu-17.10-artful-amd64";
-      fullName = "Ubuntu 17.10 Artful (amd64)";
-      packagesLists =
-        [ (fetchurl {
-            url = "mirror://ubuntu/dists/artful/main/binary-amd64/Packages.xz";
-            sha256 = "104g57j1l3vi8wb5f7rgjvjhf82ccs0vwhc59jfc4ynd51z7fqjk";
-          })
-          (fetchurl {
-            url = "mirror://ubuntu/dists/artful/universe/binary-amd64/Packages.xz";
-            sha256 = "1qzs95wfy9inaskfx9cf1l5yd3aaqwzy72zzi9xyvkxi75k5gcn4";
-          })
-        ];
-      urlPrefix = "mirror://ubuntu";
-      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
-    };
-
     ubuntu1804i386 = {
       name = "ubuntu-18.04-bionic-i386";
       fullName = "Ubuntu 18.04 Bionic (i386)";
@@ -997,51 +924,83 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    debian8i386 = {
-      name = "debian-8.11-jessie-i386";
-      fullName = "Debian 8.11 Jessie (i386)";
-      packagesList = fetchurl {
-        url = "mirror://debian/dists/jessie/main/binary-i386/Packages.xz";
-        sha256 = "0adblarhx50yga900il6m25ng0csa81i3wid1dxxmydbdmri7v7d";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
+    ubuntu2004i386 = {
+      name = "ubuntu-20.04-focal-i386";
+      fullName = "Ubuntu 20.04 Focal (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/focal/main/binary-i386/Packages.xz";
+            sha256 = "sha256-7RAYURoN3RKYQAHpwBS9TIV6vCmpURpphyMJQmV4wLc=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/focal/universe/binary-i386/Packages.xz";
+            sha256 = "sha256-oA551xVE80volUPgkMyvzpQ1d+GhuZd4DAe7dXZnULM=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    debian8x86_64 = {
-      name = "debian-8.11-jessie-amd64";
-      fullName = "Debian 8.11 Jessie (amd64)";
-      packagesList = fetchurl {
-        url = "mirror://debian/dists/jessie/main/binary-amd64/Packages.xz";
-        sha256 = "09y1mv4kqllhxpk1ibjsyl5jig5bp0qxw6pp4sn56rglrpygmn5x";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
+    ubuntu2004x86_64 = {
+      name = "ubuntu-20.04-focal-amd64";
+      fullName = "Ubuntu 20.04 Focal (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/focal/main/binary-amd64/Packages.xz";
+            sha256 = "sha256-d1eSH/j+7Zw5NKDJk21EG6SiOL7j6myMHfXLzUP8mGE=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/focal/universe/binary-amd64/Packages.xz";
+            sha256 = "sha256-RqdG2seJvZU3rKVNsWgLnf9RwkgVMRE1A4IZnX2WudE=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
     debian9i386 = {
-      name = "debian-9.8-stretch-i386";
-      fullName = "Debian 9.8 Stretch (i386)";
+      name = "debian-9.13-stretch-i386";
+      fullName = "Debian 9.13 Stretch (i386)";
       packagesList = fetchurl {
-        url = "http://snapshot.debian.org/archive/debian/20200301T030401Z/dists/stretch/main/binary-i386/Packages.xz";
-        sha256 = "1jglr1d1jys3xddp8f7w9j05db39fah8xy4gfkpqbd1b5d2caslz";
+        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-i386/Packages.xz";
+        sha256 = "sha256-fFRumd20wuVaYxzw0VPkAw5mQo8kIg+eXII15VSz9wA=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
     debian9x86_64 = {
-      name = "debian-9.8-stretch-amd64";
-      fullName = "Debian 9.8 Stretch (amd64)";
+      name = "debian-9.13-stretch-amd64";
+      fullName = "Debian 9.13 Stretch (amd64)";
       packagesList = fetchurl {
-        url = "http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-amd64/Packages.xz";
-        sha256 = "01q00nl47p12n7wx0xclx59wf3zlkzrgj3zxpshyvb91xdnw5sh6";
+        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-amd64/Packages.xz";
+        sha256 = "sha256-1p4DEVpTGlBE3PtbQ90kYw4QNHkW0F4rna/Xz+ncMhw=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
+    debian10i386 = {
+      name = "debian-10.9-buster-i386";
+      fullName = "Debian 10.9 Buster (i386)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-i386/Packages.xz";
+        sha256 = "sha256-zlkbKV+IGBCyWKD4v4LFM/EUA4TYS9fkLBPuF6MgUDo=";
+      };
+      urlPrefix = "mirror://debian";
+      packages = commonDebianPackages;
+    };
 
+    debian10x86_64 = {
+      name = "debian-10.9-buster-amd64";
+      fullName = "Debian 10.9 Buster (amd64)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-amd64/Packages.xz";
+        sha256 = "sha256-k13toY1b3CX7GBPQ7Jm24OMqCEsgPlGK8M99x57o69o=";
+      };
+      urlPrefix = "mirror://debian";
+      packages = commonDebianPackages;
+    };
   };
 
 
@@ -1168,7 +1127,7 @@ rec {
     "passwd"
   ];
 
-  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" "mktemp" ];
+  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" ];
 
 
   /* A set of functions that build the Linux distributions specified

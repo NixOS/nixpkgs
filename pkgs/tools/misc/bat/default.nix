@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nixosTests
 , rustPlatform
 , fetchFromGitHub
@@ -12,16 +13,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.18.0";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "113i11sgna82i4c4zk66qmbypmnmzh0lzp4kkgqnxxcdvyj00rb8";
+    sha256 = "sha256-Y8CmVOIDPQ9kpggOlKnxLV0oOyNRow0r/nvxNpCtYNU=";
   };
-
-  cargoSha256 = "12z7y303fmga91daf2w356qiqdqa7b8dz6nrrpnjdf0slyz0w3x4";
+  cargoSha256 = "sha256-MdfBldImyW8QV0P3zPrYT2Vi9zChvXePI2T8tRsrlcQ=";
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
-    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{fish,zsh}
+    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{bash,fish,zsh}
   '';
 
   # Insert Nix-built `less` into PATH because the system-provided one may be too old to behave as

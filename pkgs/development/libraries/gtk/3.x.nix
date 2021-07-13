@@ -29,26 +29,24 @@
 , libxkbcommon
 , libxml2
 , gmp
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , sassc
 , trackerSupport ? stdenv.isLinux
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
-, mesa
+, libGL
 , wayland
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , withGtkDoc ? stdenv.isLinux
-, cups ? null
+, cups
 , AppKit
 , Cocoa
 , broadwaySupport ? true
 }:
-
-assert cupsSupport -> cups != null;
 
 let
 
@@ -143,7 +141,7 @@ stdenv.mkDerivation rec {
     # explicitly propagated, always needed
     Cocoa
   ] ++ lib.optionals waylandSupport [
-    mesa
+    libGL
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [
@@ -208,7 +206,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtk+";
       attrPath = "gtk3";
     };

@@ -37,6 +37,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "json5==0.9.5" "json5>=0.9.5"
+  '';
+
   pythonImportsCheck = [ "graphtage" ];
 
   meta = with lib; {

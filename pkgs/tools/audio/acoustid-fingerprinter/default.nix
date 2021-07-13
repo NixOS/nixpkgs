@@ -17,10 +17,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
+      name = "fix-build-with-libav-10.patch";
+      url = "https://bitbucket.org/acoustid/acoustid-fingerprinter/commits/2c778334a9fc2f0ccf9b1d7635c116bce6509748/raw";
+      sha256 = "1smyp3x5n6jwxpgw60xsijq2fn6g1gl759h1lm5agaxhcyyqn0i0";
+    })
+    (fetchpatch {
+      name = "fix-build-failure-on-gcc-6.patch";
       url = "https://bitbucket.org/acoustid/acoustid-fingerprinter/commits/632e87969c3a5562a5d4842b03613267ba6236b2/raw";
       sha256 = "15hm9knrpqn3yqrwyjz4zh2aypwbcycd0c5svrsy1fb2h2rh05jk";
     })
-    ./ffmpeg.patch
   ];
 
   meta = with lib; {

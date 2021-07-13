@@ -5,6 +5,7 @@
 , cargo
 , sphinx
 , Security
+, libiconv
 , prefix ? "uutils-"
 , buildMulticallBinary ? true
 }:
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook sphinx ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   makeFlags = [
     "CARGO=${cargo}/bin/cargo"

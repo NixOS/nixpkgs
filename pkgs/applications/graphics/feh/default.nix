@@ -7,11 +7,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "feh";
-  version = "3.6.3";
+  version = "3.7";
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Q3Qg838RYU4AjQZuKjve/Px4FEyCEpmLK6zdXSHqI7Q=";
+    sha256 = "0hdvlrlpjxvmhnjvr32nxgpsw0366higg0gh9h37fxrvdh3v3k87";
   };
 
   outputs = [ "out" "man" "doc" ];

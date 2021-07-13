@@ -40,7 +40,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5000;
         description = ''
           Port to bind OctoPrint to.

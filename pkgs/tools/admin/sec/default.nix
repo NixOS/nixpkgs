@@ -1,12 +1,13 @@
 { fetchFromGitHub, perl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "sec-${meta.version}";
+  pname = "sec";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "simple-evcorr";
     repo = "sec";
-    rev = meta.version;
+    rev = version;
     sha256 = "0ryic5ilj1i5l41440i0ss6j3yv796fz3gr0qij5pqyd1z21md83";
   };
 
@@ -27,6 +28,5 @@ stdenv.mkDerivation rec {
     description = "Simple Event Correlator";
     maintainers = [ lib.maintainers.tv ];
     platforms = lib.platforms.all;
-    version = "2.8.3";
   };
 }

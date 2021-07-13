@@ -35,5 +35,7 @@ in stdenv.mkDerivation rec {
     # TODO: gpl3Only or gpl3Plus (ask upstream)?
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos berbiche ];
+    broken = true; # Unmaintained and fails to run (Wayland protocol error)
+    # TODO (@primeos): Remove this package after the NixOS 21.11 branch-off
   };
 }

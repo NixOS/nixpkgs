@@ -51,15 +51,15 @@ in
     environment.systemPackages =
       pkgs.lxqt.preRequisitePackages ++
       pkgs.lxqt.corePackages ++
-      (pkgs.gnome3.removePackagesByName
+      (pkgs.gnome.removePackagesByName
         pkgs.lxqt.optionalPackages
         config.environment.lxqt.excludePackages);
 
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
 
+    # virtual file systems support for PCManFM-QT
     services.gvfs.enable = true;
-    services.gvfs.package = pkgs.gvfs;
 
     services.upower.enable = config.powerManagement.enable;
   };

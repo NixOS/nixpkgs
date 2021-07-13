@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "ROCm fork of the clang C/C++/Objective-C/Objective-C++ LLVM compiler frontend";
     homepage = "https://llvm.org/";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -7,6 +7,7 @@
 , cargoInstallHook
 , cargoSetupHook
 , fetchCargoTarball
+, importCargoLock
 , runCommandNoCC
 , rustPlatform
 , callPackage
@@ -14,6 +15,7 @@
 , git
 , rust
 , rustc
+, libiconv
 , windows
 }:
 
@@ -41,6 +43,7 @@
 , cargoDepsHook ? ""
 , buildType ? "release"
 , meta ? {}
+, cargoLock ? null
 , cargoVendorDir ? null
 , checkType ? buildType
 , depsExtraArgs ? {}
@@ -55,19 +58,22 @@
 , buildAndTestSubdir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null -> !(cargoSha256 == "" && cargoHash == "");
+assert cargoVendorDir == null && cargoLock == null -> cargoSha256 == "" && cargoHash == ""
+  -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
 assert buildType == "release" || buildType == "debug";
 
 let
 
-  cargoDeps = if cargoVendorDir == null
-    then fetchCargoTarball ({
-        inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
-        name = cargoDepsName;
-        hash = cargoHash;
-        patches = cargoPatches;
-        sha256 = cargoSha256;
-      } // depsExtraArgs)
+  cargoDeps =
+    if cargoVendorDir == null
+    then if cargoLock != null then importCargoLock cargoLock
+    else fetchCargoTarball ({
+      inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
+      name = cargoDepsName;
+      hash = cargoHash;
+      patches = cargoPatches;
+      sha256 = cargoSha256;
+    } // depsExtraArgs)
     else null;
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
@@ -96,7 +102,7 @@ in
 # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
-stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs useSysroot {
+stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoLock" ]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // {
   inherit buildAndTestSubdir cargoDeps;
@@ -117,7 +123,9 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
     rustc
   ];
 
-  buildInputs = buildInputs ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
+  buildInputs = buildInputs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
   patches = cargoPatches ++ patches;
 

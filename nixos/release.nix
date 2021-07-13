@@ -138,7 +138,7 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
-  netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+  netboot = forMatchingSystems supportedSystems (system: makeNetboot {
     module = ./modules/installer/netboot/netboot-minimal.nix;
     inherit system;
   });
@@ -186,11 +186,6 @@ in rec {
     inherit system;
   });
 
-  sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
-    module = ./modules/installer/sd-card/sd-image-raspberrypi4-installer.nix;
-    inherit system;
-  });
-
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
@@ -218,6 +213,25 @@ in rec {
         [ configuration
           versionModule
           ./maintainers/scripts/ec2/amazon-image.nix
+        ];
+    }).config.system.build.amazonImage)
+
+  );
+
+
+  # Test job for https://github.com/NixOS/nixpkgs/issues/121354 to test
+  # automatic sizing without blocking the channel.
+  amazonImageAutomaticSize = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image.nix
+          ({ ... }: { amazonImage.sizeMB = "auto"; })
         ];
     }).config.system.build.amazonImage)
 
@@ -304,10 +318,10 @@ in rec {
         services.xserver.desktopManager.xfce.enable = true;
       });
 
-    gnome3 = makeClosure ({ ... }:
+    gnome = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.displayManager.gdm.enable = true;
-        services.xserver.desktopManager.gnome3.enable = true;
+        services.xserver.desktopManager.gnome.enable = true;
       });
 
     pantheon = makeClosure ({ ... }:

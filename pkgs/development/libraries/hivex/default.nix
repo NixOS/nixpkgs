@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hivex";
-  version = "1.3.19";
+  version = "1.3.20";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/hivex/${pname}-${version}.tar.gz";
-    sha256 = "0qppahpf7jq950nf8ial47h90nyqgnsffsj3zgdjjwkn958wq0ji";
+    sha256 = "sha256-9SPDe7BkpLq321IkkCw07uT5+rLZuBz2FbMsC4UJ0y0=";
   };
 
   patches = [ ./hivex-syms.patch ];

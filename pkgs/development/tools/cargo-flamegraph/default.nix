@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-IpmvFUWNaFQ1ls7u625vvj1TnRYXR+X1mAGdBcwRFLk=";
   };
 
-  cargoSha256 = "sha256-2YHkEQZqjKEvg4h9kIVhqmgq+SMF1c3r8UbSQivZh7w=";
+  cargoSha256 = "sha256-ccy5ZFS2Gp4Dwo8gsS6vzHHO1siicOp7uZTsCh6SKsM=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isDarwin [

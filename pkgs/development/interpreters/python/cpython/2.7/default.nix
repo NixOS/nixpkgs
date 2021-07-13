@@ -123,6 +123,8 @@ let
 
       ./CVE-2021-3177.patch
 
+      ./CVE-2021-23336.patch
+
       # The workaround is for unittests on Win64, which we don't support.
       # It does break aarch64-darwin, which we do support. See:
       # * https://bugs.python.org/issue35523
@@ -256,7 +258,7 @@ in with passthru; stdenv.mkDerivation ({
     LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
-    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
+    NIX_CFLAGS_COMPILE = optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
       + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 

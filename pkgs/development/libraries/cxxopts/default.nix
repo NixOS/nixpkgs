@@ -12,10 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = lib.optional enableUnicodeHelp [ icu.dev ];
-  cmakeFlags = lib.optional enableUnicodeHelp [ "-DCXXOPTS_USE_UNICODE_HELP=TRUE" ];
+  cmakeFlags = [ "-DCXXOPTS_BUILD_EXAMPLES=OFF" ]
+    ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE"
+    # Due to -Wsuggest-override, remove when cxxopts is updated
+    ++ lib.optional stdenv.isDarwin "-DCXXOPTS_ENABLE_WARNINGS=OFF";
   nativeBuildInputs = [ cmake ] ++ lib.optional enableUnicodeHelp [ pkg-config ];
 
   doCheck = true;
+
+  # Conflict on case-insensitive filesystems.
+  dontUseCmakeBuildDir = true;
 
   meta = with lib; {
     homepage = "https://github.com/jarro2783/cxxopts";

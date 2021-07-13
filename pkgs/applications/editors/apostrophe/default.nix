@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitLab, meson, ninja, cmake
 , wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
-, gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
-, shared-mime-info, libhandy
+, gtk3, webkitgtk, glib-networking, gnome, gspell, texlive
+, shared-mime-info, libhandy, fira
 }:
 
 let
@@ -27,10 +27,16 @@ in stdenv.mkDerivation rec {
     appstream-glib wrapGAppsHook ];
 
   buildInputs = [ glib pythonEnv gobject-introspection gtk3
-    gnome3.adwaita-icon-theme webkitgtk gspell texlive
+    gnome.adwaita-icon-theme webkitgtk gspell texlive
     glib-networking libhandy ];
 
   postPatch = ''
+    substituteInPlace data/media/css/web/base.css                                        \
+      --replace 'url("/app/share/fonts/FiraSans-Regular.ttf") format("ttf")'             \
+                'url("${fira}/share/fonts/opentype/FiraSans-Regular.otf") format("otf")' \
+      --replace 'url("/app/share/fonts/FiraMono-Regular.ttf") format("ttf")'             \
+                'url("${fira}/share/fonts/opentype/FiraMono-Regular.otf") format("otf")'
+
     patchShebangs --build build-aux/meson_post_install.py
   '';
 

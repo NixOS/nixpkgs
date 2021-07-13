@@ -7,12 +7,12 @@ let
   self = stdenv.mkDerivation rec {
     outputs = [ "out" "icons" ];
     pname = "alephone";
-    version = "1.3.1";
+    version = "1.4";
 
     src = fetchurl {
-      url = let date = "20200904";
+      url = let date = "20210408";
       in "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-      sha256 = "13ck3mp9qd5pkiq6zwvr744bwvmnqkgj5vpf325sz1mcvnv7l8lh";
+      sha256 = "sha256-tMwATUhUpo8W2oSWxGSZcAHVkj1PWEvUR/rpMZwWCWA=";
     };
 
     nativeBuildInputs = [ pkg-config icoutils ];

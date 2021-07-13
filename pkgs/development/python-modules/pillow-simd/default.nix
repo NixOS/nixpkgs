@@ -1,12 +1,14 @@
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, isPyPy, isPy3k
 , olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2
-, tk, libX11, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+, libxcb, tk, libX11, openjpeg, libimagequant, pyroma, numpy
+, pytestCheckHook
 }@args:
 
 import ../pillow/generic.nix (rec {
   pname = "Pillow-SIMD";
+  # check for release version on https://pypi.org/project/Pillow-SIMD/#history
+  # does not match the latest pillow release version!
   version = "7.0.0.post3";
-
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

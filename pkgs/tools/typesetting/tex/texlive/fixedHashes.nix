@@ -729,7 +729,7 @@
 "texdiff.doc-0.4"="r9wsmivjyiwdnav7qc35kydk9b8pbcz8";
 "texdirflatten-1.3"="135358h2mb608wg3ni93rrsvvqgxm4ya";
 "texdirflatten.doc-1.3"="n9jxdwjiylvwy6n55vgci9a32qi10xhl";
-"texdoc-3.3"="3sjc6kp2l1p97qnhqqby5qcahcfj8irf";
+"texdoc-3.3"="zybis3ds27vzr62qsvkmph787jb12msz";
 "texdoc.doc-3.3"="ri2jcsh0ja8wmjs9y9692m0zc0z8gxvi";
 "texdoctk-0.6.0"="p6c2lakbnbg1wdc7i4iavscn9k0xamw5";
 "texdoctk.doc-0.6.0"="xfl4g9m6d9nbn4f9hgxj58jg9g4laa7l";

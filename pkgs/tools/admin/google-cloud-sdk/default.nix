@@ -21,18 +21,23 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "0fb0bw16idj810si32fxqx1nl057bdsjk3pvkgzpf7j96v2lkw71";
+      sha256 = "0viiwimnk26jfi4ypkvclqqxw8anlmch10zscjw69d8x1pyqczcd";
+    };
+
+    aarch64-darwin = {
+      url = "${baseUrl}/${name}-darwin-arm.tar.gz";
+      sha256 = "sha256-EZbJgMzEZScvaqSKay5aDuayVaIK1zZUzqAHgT0czZk=";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "0gnnp8whcx6ada8a4xs8kxrbza97zivk57r9qzv0q5arg4xslagr";
+      sha256 = "11113l8pyhq6vbsh79m5anh6ljss94zhnp33ghds9rn1gxa83hnb";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "336.0.0";
+  version = "347.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -109,6 +114,6 @@ in stdenv.mkDerivation rec {
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

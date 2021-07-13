@@ -25,6 +25,7 @@ let
     machine = {
       services.rspamd.enable = true;
       networking.enableIPv6 = enableIPv6;
+      virtualisation.memorySize = 1024;
     };
     testScript = ''
       start_all()
@@ -68,6 +69,7 @@ in
           group = "rspamd";
         }];
       };
+      virtualisation.memorySize = 1024;
     };
 
     testScript = ''
@@ -116,6 +118,7 @@ in
           '';
         };
       };
+      virtualisation.memorySize = 1024;
     };
 
     testScript = ''
@@ -221,6 +224,7 @@ in
           rspamd_logger.infox(rspamd_config, 'Work dammit!!!')
         '';
       };
+      virtualisation.memorySize = 1024;
     };
     testScript = ''
       ${initMachine}
@@ -287,6 +291,7 @@ in
         postfix.enable = true;
         workers.rspamd_proxy.type = "rspamd_proxy";
       };
+      virtualisation.memorySize = 1024;
     };
     testScript = ''
       ${initMachine}

@@ -154,9 +154,9 @@ let
 
       ${optionalString (cfg.recommendedProxySettings) ''
         proxy_redirect          off;
-        proxy_connect_timeout   60;
-        proxy_send_timeout      60;
-        proxy_read_timeout      60;
+        proxy_connect_timeout   ${cfg.proxyTimeout};
+        proxy_send_timeout      ${cfg.proxyTimeout};
+        proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
         include ${recommendedProxyConfig};
       ''}
@@ -230,13 +230,13 @@ let
 
         defaultListen =
           if vhost.listen != [] then vhost.listen
-          else ((optionals hasSSL (
-            singleton                    { addr = "0.0.0.0"; port = 443; ssl = true; }
-            ++ optional enableIPv6 { addr = "[::]";    port = 443; ssl = true; }
-          )) ++ optionals (!onlySSL) (
-            singleton                    { addr = "0.0.0.0"; port = 80;  ssl = false; }
-            ++ optional enableIPv6 { addr = "[::]";    port = 80;  ssl = false; }
-          ));
+          else optionals (hasSSL || vhost.rejectSSL) (
+            singleton { addr = "0.0.0.0"; port = 443; ssl = true; }
+            ++ optional enableIPv6 { addr = "[::]"; port = 443; ssl = true; }
+          ) ++ optionals (!onlySSL) (
+            singleton { addr = "0.0.0.0"; port = 80; ssl = false; }
+            ++ optional enableIPv6 { addr = "[::]"; port = 80; ssl = false; }
+          );
 
         hostListen =
           if vhost.forceSSL
@@ -302,6 +302,9 @@ let
           ''}
           ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
+          ''}
+          ${optionalString vhost.rejectSSL ''
+            ssl_reject_handshake on;
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -398,6 +401,15 @@ in
         type = types.bool;
         description = "
           Enable recommended proxy settings.
+        ";
+      };
+
+      proxyTimeout = mkOption {
+        type = types.str;
+        default = "60s";
+        example = "20s";
+        description = "
+          Change the proxy related timeouts in recommendedProxySettings.
         ";
       };
 
@@ -762,20 +774,27 @@ in
       }
 
       {
-        assertion = all (conf: with conf;
-          !(addSSL && (onlySSL || enableSSL)) &&
-          !(forceSSL && (onlySSL || enableSSL)) &&
-          !(addSSL && forceSSL)
+        assertion = all (host: with host;
+          count id [ addSSL (onlySSL || enableSSL) forceSSL rejectSSL ] <= 1
         ) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.addSSL,
-          services.nginx.virtualHosts.<name>.onlySSL and services.nginx.virtualHosts.<name>.forceSSL
-          are mutually exclusive.
+          services.nginx.virtualHosts.<name>.onlySSL,
+          services.nginx.virtualHosts.<name>.forceSSL and
+          services.nginx.virtualHosts.<name>.rejectSSL are mutually exclusive.
         '';
       }
 
       {
-        assertion = all (conf: !(conf.enableACME && conf.useACMEHost != null)) (attrValues virtualHosts);
+        assertion = any (host: host.rejectSSL) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.19.4";
+        message = ''
+          services.nginx.virtualHosts.<name>.rejectSSL requires nginx version
+          1.19.4 or above; see the documentation for services.nginx.package.
+        '';
+      }
+
+      {
+        assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
@@ -819,28 +838,38 @@ in
         # Logs directory and mode
         LogsDirectory = "nginx";
         LogsDirectoryMode = "0750";
+        # Proc filesystem
+        ProcSubset = "pid";
+        ProtectProc = "invisible";
+        # New file permissions
+        UMask = "0027"; # 0640 / 0750
         # Capabilities
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
         # Security
         NoNewPrivileges = true;
-        # Sandboxing
+        # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
         ProtectSystem = "strict";
         ProtectHome = mkDefault true;
         PrivateTmp = true;
         PrivateDevices = true;
         ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
+        ProtectKernelLogs = true;
         ProtectControlGroups = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules);
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        RemoveIPC = true;
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
+        SystemCallFilter = "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
       };
     };
 
@@ -848,8 +877,9 @@ in
       source = configFile;
     };
 
-    # postRun hooks on cert renew can't be used to restart Nginx since renewal
-    # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
+    # This service waits for all certificates to be available
+    # before reloading nginx configuration.
+    # sslTargets are added to wantedBy + before
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.nginx-config-reload = let
@@ -887,6 +917,7 @@ in
     users.users = optionalAttrs (cfg.user == "nginx") {
       nginx = {
         group = cfg.group;
+        isSystemUser = true;
         uid = config.ids.uids.nginx;
       };
     };

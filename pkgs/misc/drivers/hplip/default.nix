@@ -36,13 +36,13 @@ let
     x86_64-linux = "x86_64";
     armv6l-linux = "arm32";
     armv7l-linux = "arm32";
-    aarch64-linux = "aarch64";
+    aarch64-linux = "arm64";
   };
 
   hplipArch = hplipPlatforms.${stdenv.hostPlatform.system}
     or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
-  pluginArches = [ "x86_32" "x86_64" "arm32" "aarch64" ];
+  pluginArches = [ "x86_32" "x86_64" "arm32" "arm64" ];
 
 in
 
@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication {
     pygobject3
     reportlab
     usbutils
-    sip
+    sip_4
     dbus-python
   ] ++ lib.optionals withQt5 [
     pyqt5
@@ -101,7 +101,12 @@ python3Packages.buildPythonApplication {
     ./hplip-3.20.11-nixos-cups-ppd-search-path.patch
   ];
 
-  prePatch = ''
+  postPatch = ''
+    # https://github.com/NixOS/nixpkgs/issues/44230
+    substituteInPlace createPPD.sh \
+      --replace ppdc "${cups}/bin/ppdc" \
+      --replace "gzip -c" "gzip -cn"
+
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
       -e s,/etc/hp,$out/etc/hp,g \
@@ -147,6 +152,12 @@ python3Packages.buildPythonApplication {
     # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
     # Could not find how to fix the problem in 'ppdc' so this is a workaround.
     export CUPS_DATADIR="${cups}/share/cups"
+  '';
+
+  postConfigure = ''
+    # don't save timestamp, in order to improve reproducibility
+    substituteInPlace Makefile \
+      --replace "GZIP_ENV = --best" "GZIP_ENV = --best -n"
   '';
 
   enableParallelBuilding = true;

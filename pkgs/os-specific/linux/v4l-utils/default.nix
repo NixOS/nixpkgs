@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, pkg-config, perl
 , libjpeg, udev
 , withUtils ? true
-, withGUI ? true, alsaLib, libX11, qtbase, libGLU, wrapQtAppsHook
+, withGUI ? true, alsa-lib, libX11, qtbase, libGLU, wrapQtAppsHook
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config perl ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [ udev ] ++ lib.optionals withQt [ alsaLib libX11 qtbase libGLU ];
+  buildInputs = [ udev ] ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
 
   propagatedBuildInputs = [ libjpeg ];
 

@@ -14,15 +14,21 @@ let
 
       requires = [ "postgresql.service" ];
 
+      path = [ pkgs.coreutils pkgs.gzip config.services.postgresql.package ];
+
       script = ''
+        set -e -o pipefail
+
         umask 0077 # ensure backup is only readable by postgres user
 
         if [ -e ${cfg.location}/${db}.sql.gz ]; then
-          ${pkgs.coreutils}/bin/mv ${cfg.location}/${db}.sql.gz ${cfg.location}/${db}.prev.sql.gz
+          mv ${cfg.location}/${db}.sql.gz ${cfg.location}/${db}.prev.sql.gz
         fi
 
         ${dumpCmd} | \
-          ${pkgs.gzip}/bin/gzip -c > ${cfg.location}/${db}.sql.gz
+          gzip -c > ${cfg.location}/${db}.in-progress.sql.gz
+
+        mv ${cfg.location}/${db}.in-progress.sql.gz ${cfg.location}/${db}.sql.gz
       '';
 
       serviceConfig = {
@@ -48,7 +54,7 @@ in {
 
       startAt = mkOption {
         default = "*-*-* 01:15:00";
-        type = types.str;
+        type = with types; either (listOf str) str;
         description = ''
           This option defines (see <literal>systemd.time</literal> for format) when the
           databases should be dumped.
@@ -113,12 +119,12 @@ in {
     })
     (mkIf (cfg.enable && cfg.backupAll) {
       systemd.services.postgresqlBackup =
-        postgresqlBackupService "all" "${config.services.postgresql.package}/bin/pg_dumpall";
+        postgresqlBackupService "all" "pg_dumpall";
     })
     (mkIf (cfg.enable && !cfg.backupAll) {
       systemd.services = listToAttrs (map (db:
         let
-          cmd = "${config.services.postgresql.package}/bin/pg_dump ${cfg.pgdumpOptions} ${db}";
+          cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
         in {
           name = "postgresqlBackup-${db}";
           value = postgresqlBackupService db cmd;

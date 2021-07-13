@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     in
     lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   meta = with lib; {
     homepage = "https://dwm.suckless.org/";
     description = "An extremely fast, small, and dynamic window manager for X";
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
       tags.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ viric neonfuz ];
     platforms = platforms.all;
   };
 }

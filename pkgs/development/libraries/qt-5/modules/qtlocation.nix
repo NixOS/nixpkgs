@@ -1,7 +1,7 @@
 { lib, stdenv, qtModule, qtbase, qtmultimedia }:
 
 qtModule {
-  name = "qtlocation";
+  pname = "qtlocation";
   qtInputs = [ qtbase qtmultimedia ];
   outputs = [ "bin" "out" "dev" ];
   qmakeFlags = lib.optional stdenv.isDarwin [
