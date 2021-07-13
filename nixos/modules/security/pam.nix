@@ -207,6 +207,14 @@ let
         '';
       };
 
+      enableFscrypt = mkOption {
+        default = config.security.pam.enableFscrypt;
+        type = types.bool;
+          description = ''
+          Unlocks fscrypt-encrypted filesystems on login via PAM
+          '';
+      };
+
       pamMount = mkOption {
         default = config.security.pam.mount.enable;
         type = types.bool;
@@ -418,6 +426,7 @@ let
           # We use try_first_pass the second time to avoid prompting password twice
           (optionalString (cfg.unixAuth &&
           (config.security.pam.enableEcryptfs
+            || cfg.enableFscrypt
             || cfg.pamMount
             || cfg.enableKwallet
             || cfg.enableGnomeKeyring
@@ -429,6 +438,8 @@ let
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
               ${optionalString cfg.pamMount
                 "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
+              ${optionalString cfg.enableFscrypt
+                "auth optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so"}
               ${optionalString cfg.enableKwallet
                 ("auth optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so" +
                  " kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5")}
@@ -462,6 +473,8 @@ let
           password sufficient pam_unix.so nullok sha512
           ${optionalString config.security.pam.enableEcryptfs
               "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
+          ${optionalString cfg.enableFscrypt
+              "password optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so"}
           ${optionalString cfg.pamMount
               "password optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString use_ldap
@@ -488,6 +501,8 @@ let
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.security.pam.enableEcryptfs
               "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
+          ${optionalString cfg.enableFscrypt
+              "session optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so drop_caches lock_policies"}
           ${optionalString cfg.pamMount
               "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString use_ldap
@@ -621,6 +636,8 @@ in
     };
 
     security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
+
+    security.pam.enableFscrypt = mkEnableOption "fscrypt filesystem encryption PAM module";
 
     security.pam.p11 = {
       enable = mkOption {
@@ -851,6 +868,7 @@ in
       ++ optional config.services.sssd.enable pkgs.sssd
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
+      ++ optionals config.security.pam.enableFscrypt [pkgs.fscrypt-experimental]
       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
       ++ optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
       ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
@@ -886,6 +904,7 @@ in
         vlock = {};
         xlock = {};
         xscreensaver = {};
+        fscrypt = {};
 
         runuser = { rootOK = true; unixAuth = false; setEnvironment = false; };
 
