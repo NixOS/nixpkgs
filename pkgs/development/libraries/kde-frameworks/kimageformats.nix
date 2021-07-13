@@ -28,6 +28,6 @@ mkDerivation {
   CXXFLAGS = "-I${getDev ilmbase}/include/OpenEXR";
 
   meta = with lib; {
-    broken = lib.versionOlder qtbase.version "5.14";
+    broken = versionOlder qtbase.version "5.14";
   };
 }
