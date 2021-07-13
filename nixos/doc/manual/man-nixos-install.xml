@@ -81,6 +81,12 @@
    </arg>
 
    <arg>
+    <arg choice='plain'>
+     <option>--no-local-copy</option>
+    </arg>
+   </arg>
+
+   <arg>
     <group choice='req'>
     <arg choice='plain'>
      <option>--max-jobs</option>
@@ -293,6 +299,17 @@
      <para>
       Set the Nix configuration option <replaceable>name</replaceable> to
       <replaceable>value</replaceable>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--no-local-copy</option>
+    </term>
+    <listitem>
+     <para>
+      Does <emphasis>not</emphasis> add the installation medium's store as an extra
+      substituter during installation.
      </para>
     </listitem>
    </varlistentry>
