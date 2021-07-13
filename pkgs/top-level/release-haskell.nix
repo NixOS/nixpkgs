@@ -89,12 +89,7 @@ let
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
 
-      tests = let
-        testPlatforms = packagePlatforms pkgs.tests;
-      in {
-        haskell = testPlatforms.haskell;
-        writers = testPlatforms.writers;
-      };
+      tests.haskell = packagePlatforms pkgs.tests.haskell;
 
       pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
         # remove musl ghc865Binary since it is known to be broken and
@@ -255,10 +250,6 @@ let
         constituents = accumulateDerivations [
           # haskell specific tests
           jobs.tests.haskell
-          # writeHaskell and writeHaskellBin
-          # TODO: writeHaskell currently fails on darwin
-          jobs.tests.writers.x86_64-linux
-          jobs.tests.writers.aarch64-linux
           # important top-level packages
           jobs.cabal-install
           jobs.cabal2nix
