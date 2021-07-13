@@ -1,5 +1,5 @@
-{ lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, gawk
+{ lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, python3, rsync, gmp, libmpc, mpfr, openssl
+, libelf, cpio, elfutils, zstd, gawk, zlib, pahole
 , writeTextFile
 }:
 
@@ -122,6 +122,8 @@ let
         sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
         patchShebangs scripts/ld-version.sh
+      '' + optionalString (lib.versionAtLeast version "5.2") ''
+        patchShebangs scripts/bpf_helpers_doc.py
       '';
 
       postPatch = ''
@@ -312,7 +314,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
       ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optional  (lib.versionAtLeast version "5.2")  cpio
+      ++ optional  (lib.versionAtLeast version "5.2")  [ cpio python3 zlib.dev pahole ]
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils
       ;
 
