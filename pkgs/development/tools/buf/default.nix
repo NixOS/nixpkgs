@@ -19,6 +19,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-g0wrHPeHFOL6KB0SUgBy2WK54Kttiks4cuYg8jf3N9g=";
 
   patches = [
+    # Skip a test that requires networking to be available to work.
     ./skip_test_requiring_network.patch
   ];
 
