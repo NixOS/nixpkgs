@@ -27,7 +27,9 @@ llvmPackages_12.stdenv.mkDerivation rec {
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
   ];
   # also make `llvm-spirv`
-  postBuild = "make llvm-spirv";
+  postBuild = ''
+    make llvm-spirv
+  '';
 
   doCheck = true;
 
