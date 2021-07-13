@@ -7,10 +7,15 @@ let
 
   # FIXME consider using LoadCredential as soon as it actually works.
   envSecrets = ''
-    export ADMIN_USER_PWD="$(<${cfg.adminUser.passwordFile})"
-    export SECRET_KEY_BASE="$(<${cfg.server.secretKeybaseFile})"
+    ADMIN_USER_PWD="$(<${cfg.adminUser.passwordFile})"
+    export ADMIN_USER_PWD # separate export to make `set -e` work
+
+    SECRET_KEY_BASE="$(<${cfg.server.secretKeybaseFile})"
+    export SECRET_KEY_BASE # separate export to make `set -e` work
+
     ${optionalString (cfg.mail.smtp.passwordFile != null) ''
-      export SMTP_USER_PWD="$(<${cfg.mail.smtp.passwordFile})"
+      SMTP_USER_PWD="$(<${cfg.mail.smtp.passwordFile})"
+      export SMTP_USER_PWD # separate export to make `set -e` work
     ''}
   '';
 in {
@@ -228,6 +233,7 @@ in {
             WorkingDirectory = "/var/lib/plausible";
             StateDirectory = "plausible";
             ExecStartPre = "@${pkgs.writeShellScript "plausible-setup" ''
+              set -eu -o pipefail
               ${envSecrets}
               ${pkgs.plausible}/createdb.sh
               ${pkgs.plausible}/migrate.sh
@@ -238,6 +244,7 @@ in {
               ''}
             ''} plausible-setup";
             ExecStart = "@${pkgs.writeShellScript "plausible" ''
+              set -eu -o pipefail
               ${envSecrets}
               plausible start
             ''} plausible";
