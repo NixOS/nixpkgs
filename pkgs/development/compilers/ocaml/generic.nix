@@ -1,4 +1,4 @@
-{ minor_version, major_version, patch_version
+{ minor_version, major_version, patch_version, meta ? {}
 , ...}@args:
 let
   versionNoPatch = "${toString major_version}.${toString minor_version}";
@@ -110,7 +110,7 @@ stdenv.mkDerivation (args // {
 
     platforms = with platforms; linux ++ darwin;
     broken = stdenv.isAarch64 && !lib.versionAtLeast version "4.06";
-  };
+  } // meta;
 
 })
 
