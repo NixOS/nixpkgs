@@ -25,7 +25,10 @@ in {
 
       services.sanoid = {
         enable = true;
+        interval = "*:0/15";
         templates.test = {
+          frequently = 4;
+          frequent_period = 15;
           hourly = 12;
           daily = 1;
           monthly = 1;

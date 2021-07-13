@@ -10,7 +10,22 @@ let
       description = "dataset/template options";
     };
 
-  commonOptions = {
+  commonOptions = rec {
+    frequently = mkOption {
+      description = "Number of frequent snapshots. The interval is defined by <option>frequent_period</option>.";
+      type = with types; nullOr ints.unsigned;
+      default = null;
+    };
+
+    frequent_period = mkOption {
+      description = ''
+        Interval for frequent snapshots. Remember to also change <option>services.sanoid.interval</option> if needed.
+        See <link xlink:href="https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.defaults.conf"/> for examples.
+      '';
+      type = with types; nullOr ints.unsigned;
+      default = null;
+    };
+
     hourly = mkOption {
       description = "Number of hourly snapshots.";
       type = with types; nullOr ints.unsigned;
