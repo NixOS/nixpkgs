@@ -7,6 +7,7 @@
     , os ? "linux"
     , arch ? "x86_64"
     , readonly ? false
+    , extraOciConfig ? {}
     }:
   let
     sysMounts = {
@@ -45,7 +46,7 @@
         options = [ "nosuid" "noexec" "nodev" "relatime" "ro" ];
       };
     };
-    config = writeText "config.json" (builtins.toJSON {
+    merged = lib.recursiveUpdate {
       ociVersion = "1.0.0";
       platform = {
         inherit os arch;
@@ -66,7 +67,8 @@
       mounts = lib.mapAttrsToList (destination: { type, source, options ? null }: {
         inherit destination type source options;
       }) sysMounts;
-    });
+    } extraOciConfig;
+    config = writeText "config.json" (builtins.toJSON merged);
   in
     runCommand "oci-image" {} ''
       set -o pipefail
