@@ -7530,6 +7530,12 @@
     githubId = 1665818;
     name = "Philipp Eder";
   };
+  nickcao = {
+    name = "Nick Cao";
+    email = "nickcao@nichi.co";
+    github = "NickCao";
+    githubId = 15247171;
+  };
   nickhu = {
     email = "me@nickhu.co.uk";
     github = "nickhu";
