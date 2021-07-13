@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jrsonnet";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "CertainLach";
     repo = "jrsonnet";
-    sha256 = "sha256-vDZpb5Z8XOVc6EJ1Nul07kC8ppqcGzKPb4DEarqq2yg=";
+    sha256 = "sha256-OX+iJJ3vdCsWWr8x31psV9Vne6xWDZnJc83NbJqMK1A=";
   };
 
   postInstall = ''
     ln -s $out/bin/jrsonnet $out/bin/jsonnet
   '';
 
-  cargoSha256 = "sha256-SR3m2meW8mTaxiYgeY/m7HFPrHGVtium/VRU6vWKxys=";
+  cargoSha256 = "sha256-eFfAU9Q3nYAJK+kKP1Y6ONjOIfkuYTlelrFrEW9IJ8c=";
 
   meta = {
     description = "Purely-functional configuration language that helps you define JSON data";
