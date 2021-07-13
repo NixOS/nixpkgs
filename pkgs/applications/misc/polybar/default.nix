@@ -1,4 +1,5 @@
-{ cairo
+{ config
+, cairo
 , cmake
 , fetchFromGitHub
 , libXdmcp
@@ -33,7 +34,7 @@
 , alsaSupport   ? true
 , githubSupport ? false
 , mpdSupport    ? false
-, pulseSupport  ? false
+, pulseSupport  ? config.pulseaudio or false
 , iwSupport     ? false
 , nlSupport     ? true
 , i3Support     ? false
