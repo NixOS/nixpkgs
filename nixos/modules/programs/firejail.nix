@@ -78,10 +78,19 @@ in {
         not wrapped if they specify the absolute path to the binary.
       '';
     };
+    package = mkOption {
+      type = types.package;
+      description = ''
+        Generated package containing wrapped binaries. This option is readonly.
+      '';
+      readOnly = true;
+    };
   };
 
   config = mkIf cfg.enable {
     security.wrappers.firejail.source = "${lib.getBin pkgs.firejail}/bin/firejail";
+
+    programs.firejail.package = wrappedBins;
 
     environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
   };
