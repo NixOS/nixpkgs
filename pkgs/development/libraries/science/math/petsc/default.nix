@@ -28,10 +28,12 @@ stdenv.mkDerivation rec {
   mpiSupport = !withp4est || p4est.mpiSupport;
   withp4est = petsc-withp4est;
 
-  nativeBuildInputs = [ python3 gfortran ];
-  buildInputs = [ blas lapack ]
+  strictDeps = true;
+  nativeBuildInputs = [ python3 gfortran ]
     ++ lib.optional mpiSupport mpi
     ++ lib.optional (mpiSupport && mpi.pname == "openmpi") openssh
+  ;
+  buildInputs = [ blas lapack ]
     ++ lib.optional withp4est p4est
   ;
 
