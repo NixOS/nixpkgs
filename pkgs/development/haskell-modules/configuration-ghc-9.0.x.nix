@@ -80,10 +80,6 @@ self: super: {
     sha256 = "1rzs764a0nhx002v4fadbys98s6qblw4kx4g46galzjf5f7n2dn4";
   });
   doctest = dontCheck (doJailbreak super.doctest_0_18_1);
-  generic-deriving = appendPatch (doJailbreak super.generic-deriving) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/generic-deriving-1.13.1.patch";
-    sha256 = "0z85kiwhi5p2wiqwyym0y8q8qrcifp125x5vm0n4482lz41kmqds";
-  });
   language-haskell-extract = appendPatch (doJailbreak super.language-haskell-extract) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
@@ -95,10 +91,25 @@ self: super: {
   # The test suite seems pretty broken.
   base64-bytestring = dontCheck super.base64-bytestring;
 
-  # 5.6 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
-  profunctors = super.profunctors_5_6_2;
-
   # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
   lens = super.lens_5_0_1;
 
+  # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
+  memory = super.memory_0_16_0;
+
+  # GHC 9.0.x doesn't like `import Spec (main)` in Main.hs
+  # https://github.com/snoyberg/mono-traversable/issues/192
+  mono-traversable = dontCheck super.mono-traversable;
+
+  # Disable tests pending resolution of
+  # https://github.com/Soostone/retry/issues/71
+  retry = dontCheck super.retry;
+
+  # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
+  hlint = super.hlint_3_3_0.overrideScope (self: super: {
+    ghc-lib-parser = overrideCabal self.ghc-lib-parser_9_0_1_20210324 {
+      doHaddock = false;
+    };
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
+  });
 }

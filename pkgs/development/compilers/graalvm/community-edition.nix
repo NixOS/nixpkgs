@@ -180,7 +180,10 @@ let
             rm $out/jre/lib/jvmci/parentClassLoader.classpath
           '';
           "11-darwin-amd64" = ''
-            echo ""
+            # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
+            substituteInPlace $out/conf/security/java.security \
+              --replace file:/dev/random    file:/dev/./urandom \
+              --replace NativePRNGBlocking  SHA1PRNG
           '';
         }.${javaVersionPlatform};
 
@@ -259,7 +262,8 @@ let
           ''}
 
           echo '1 + 1' | $out/bin/node -i
-        ${lib.optionalString (javaVersion == "11") ''
+        ${lib.optionalString (javaVersion == "11" && stdenv.isLinux) ''
+          # Doesn't work on MacOS, we have this error: "Launching JShell execution engine threw: Operation not permitted (Bind failed)"
           echo '1 + 1' | $out/bin/jshell
         ''}'';
 
@@ -269,7 +273,7 @@ let
           homepage = "https://www.graalvm.org/";
           description = "High-Performance Polyglot VM";
           license = with licenses; [ upl gpl2Classpath bsd3 ];
-          maintainers = with maintainers; [ bandresen volth hlolli glittershark ];
+          maintainers = with maintainers; [ bandresen volth hlolli glittershark babariviere ];
           platforms = [ "x86_64-linux" "x86_64-darwin" ];
         };
       };

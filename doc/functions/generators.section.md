@@ -49,7 +49,7 @@ str\:ange:"very::strange"
 merge:"diff3"
 ```
 
-::: note
+::: {.note}
 Nix store paths can be converted to strings by enclosing a derivation attribute like so: `"${drv}"`.
 :::
 

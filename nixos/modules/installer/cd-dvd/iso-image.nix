@@ -428,7 +428,8 @@ let
       # Rewrite dates for everything in the FS
       find . -exec touch --date=2000-01-01 {} +
 
-      usage_size=$(du -sb --apparent-size . | tr -cd '[:digit:]')
+      # Round up to the nearest multiple of 1MB, for more deterministic du output
+      usage_size=$(( $(du -s --block-size=1M --apparent-size . | tr -cd '[:digit:]') * 1024 * 1024 ))
       # Make the image 110% as big as the files need to make up for FAT overhead
       image_size=$(( ($usage_size * 110) / 100 ))
       # Make the image fit blocks of 1M
@@ -438,7 +439,16 @@ let
       echo "Image size: $image_size"
       truncate --size=$image_size "$out"
       faketime "2000-01-01 00:00:00" mkfs.vfat -i 12345678 -n EFIBOOT "$out"
-      mcopy -psvm -i "$out" ./EFI ./boot ::
+
+      # Force a fixed order in mcopy for better determinism, and avoid file globbing
+      for d in $(find EFI boot -type d | sort); do
+        faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
+      done
+
+      for f in $(find EFI boot -type f | sort); do
+        mcopy -pvm -i "$out" "$f" "::/$f"
+      done
+
       # Verify the FAT partition.
       fsck.vfat -vn "$out"
     ''; # */
@@ -679,6 +689,12 @@ in
           "lowerdir=/nix/.ro-store"
           "upperdir=/nix/.rw-store/store"
           "workdir=/nix/.rw-store/work"
+        ];
+
+        depends = [
+          "/nix/.ro-store"
+          "/nix/.rw-store/store"
+          "/nix/.rw-store/work"
         ];
       };
 

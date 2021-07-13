@@ -35,6 +35,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   thunar-dropbox-plugin = callPackage ./thunar-plugins/dropbox { };
 
+  thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
+
   tumbler = callPackage ./core/tumbler { };
 
   xfce4-panel = callPackage ./core/xfce4-panel { };
@@ -90,6 +92,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4-notifyd = callPackage ./applications/xfce4-notifyd { };
 
   xfburn = callPackage ./applications/xfburn { };
+
+  xfce4-panel-profiles = callPackage ./applications/xfce4-panel-profiles { };
 
   #### ART
 

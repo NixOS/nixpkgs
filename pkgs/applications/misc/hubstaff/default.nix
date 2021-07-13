@@ -1,13 +1,12 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
 , libXext , freetype, libXrender, fontconfig, libXft, libXinerama
 , libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
-, curl }:
+, curl, writeShellScript, common-updater-scripts }:
 
 let
-
-  data = builtins.fromJSON (builtins.readFile ./revision.json);
-
-  inherit (data) version url sha256;
+  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.5.19-9e79d1da/Hubstaff-1.5.19-9e79d1da.sh";
+  version = "1.5.19-9e79d1da";
+  sha256 = "1l4sq8cblpl1kclkx5pgy0ldfmqa3n8bvdl5qml0n78r0lpk382j";
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
@@ -54,6 +53,18 @@ stdenv.mkDerivation {
 
     # Why is this needed? SEGV otherwise.
     ln -s $opt/data/resources $opt/x86_64/resources
+  '';
+
+  updateScript = writeShellScript "hubstaff-updater" ''
+    set -eu -o pipefail
+
+    installation_script_url=$(curl --fail --head --location --silent --output /dev/null --write-out %{url_effective} https://app.hubstaff.com/download/linux)
+
+    version=$(echo "$installation_script_url" | sed -r 's/^https:\/\/hubstaff\-production\.s3\.amazonaws\.com\/downloads\/HubstaffClient\/Builds\/Release\/([^\/]+)\/Hubstaff.+$/\1/')
+
+    sha256=$(nix-prefetch-url "$installation_script_url")
+
+    ${common-updater-scripts}/bin/update-source-version hubstaff "$version" "$sha256" "$installation_script_url"
   '';
 
   meta = with lib; {

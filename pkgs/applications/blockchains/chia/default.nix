@@ -6,18 +6,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.1.7";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
-    sha256 = "05hcckkv3vhz172w9kp5lh4srakizx1l383dijs50vgx2bj30m8v";
+    sha256 = "sha256-P5oWOQgyj+/Ia21R4PB6ID/iUPKBnW9/X5EF6RZjzS8=";
   };
 
   patches = [
-    # tweak version requirements to what's available in Nixpkgs
-    ./dependencies.patch
     # Allow later websockets release, https://github.com/Chia-Network/chia-blockchain/pull/6304
     (fetchpatch {
       name = "later-websockets.patch";
@@ -65,6 +63,16 @@ python3Packages.buildPythonApplication rec {
     "test_spend_through_n"
     "test_spend_zero_coin"
   ];
+
+  postPatch = ''
+    # tweak version requirements to what's available in Nixpkgs
+    substituteInPlace setup.py \
+      --replace "aiohttp==3.7.4" "aiohttp>=3.7.4" \
+      --replace "sortedcontainers==2.3.0" "sortedcontainers>=2.3.0" \
+      --replace "click==7.1.2" "click>=7.1.2" \
+      --replace "clvm_rs==0.1.8" "clvm_rs>=0.1.8" \
+      --replace "clvm==0.9.7" "clvm>=0.9.7" \
+  '';
 
   preCheck = ''
     export HOME=`mktemp -d`

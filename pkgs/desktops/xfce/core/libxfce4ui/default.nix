@@ -6,7 +6,7 @@ mkXfceDerivation {
   pname = "libxfce4ui";
   version = "4.16.0";
 
-  sha256 = "0a9wfdpsv83giwv6kcidvpd6c665aa7sv6f2l1q6qcq214vb0rk2";
+  sha256 = "sha256-YmawNgkCM2xwoMKZrY9SxRhm2t0tsmk2j2+grW9zPCk=";
 
   nativeBuildInputs = [ gobject-introspection vala ];
   buildInputs =  [ gtk3 libstartup_notification libgtop epoxy xfconf ];

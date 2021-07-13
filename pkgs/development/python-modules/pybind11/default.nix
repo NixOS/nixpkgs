@@ -3,12 +3,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, python
-, pytest
 , cmake
+, eigen
+, python
 , catch
 , numpy
-, eigen
+, pytest
 , scipy
 }:
 
@@ -33,37 +33,40 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ catch ];
+  dontUseCmakeBuildDir = true;
 
   cmakeFlags = [
     "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
+    "-DBUILD_TESTING=on"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
-  # Enable some tests only on Python 3. The "test_string_view" test
-  # 'testTypeError: string_view16_chars(): incompatible function arguments'
-  # fails on Python 2.
-    "-DPYBIND11_CPP_STANDARD=-std=c++17"
+    "-DPYBIND11_CXX_STANDARD=-std=c++17"
   ];
 
-  dontUseSetuptoolsBuild = true;
-  dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
+  postBuild = ''
+    # build tests
+    make
+  '';
 
-  preFixup = ''
-    pushd ..
-    export PYBIND11_USE_CMAKE=1
-    setuptoolsBuildPhase
-    pipInstallPhase
+  postInstall = ''
+    make install
     # Symlink the CMake-installed headers to the location expected by setuptools
     mkdir -p $out/include/${python.libPrefix}
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
-    popd
   '';
 
   checkInputs = [
-    pytest
+    catch
     numpy
-    scipy
+    pytest
   ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    make check
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";
@@ -74,6 +77,6 @@ buildPythonPackage rec {
       bindings of existing C++ code.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers;[ yuriaisaka ];
+    maintainers = with maintainers; [ yuriaisaka dotlambda ];
   };
 }

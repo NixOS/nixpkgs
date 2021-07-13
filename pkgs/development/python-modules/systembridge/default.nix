@@ -1,5 +1,6 @@
 { lib
 , aiohttp
+, websockets
 , buildPythonPackage
 , fetchFromGitHub
 }:
@@ -17,6 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    websockets
   ];
 
   # Project has no tests

@@ -52,6 +52,12 @@ stdenv.mkDerivation rec {
     sha256 = "1scmfrp0c27pkd7yva9k50miprjpsyfbb33apx72qc9igm6ii3ks";
   };
 
+  patches = [
+    ./CVE-2021-22897.patch
+    ./CVE-2021-22898.patch
+    ./CVE-2021-22901.patch
+  ];
+
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
 

@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "8.0.0";
+  version = "8.0.5";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -10,15 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-HtubiSx4Orf9knZcuYy4eF2qwclX/JVd2Ba9L33tM74=";
+    sha256 = "sha256-tehqb86Mkg1dD4x34zHwLD9uV/PssslLDIs9bl28ap0=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-bwBpkPy4kwfnkRsLOktUgQx+Sm8WJA2d65efMBCnGp4=";
+    sha256 = "sha256-aVZpTQ4ERrJV3YN4U0v/tJoYkTg7vlQVe6sIIK2NE0k=";
   };
 
-  vendorSha256 = "sha256-Hon5WrhXUvZUtMRxx3XcBDQe3rkRkfqbnXjY3xCzuuM=";
+  vendorSha256 = "sha256-INvFZ9hNbtpaDXuhBPaSaqBZyi7QJ18tMk+AZjJtYjg=";
 
   preBuild = ''
     # The testcase makes an API call against grafana.com:
@@ -32,10 +32,19 @@ buildGoModule rec {
     # + (string) (len=5) "error": (string) (len=171) "Failed to send request: Get \"https://grafana.com/api/plugins/repo/test\": dial tcp: lookup grafana.com on [::1]:53: read udp [::1]:48019->[::1]:53: read: connection refused",
     # + (string) (len=7) "message": (string) (len=24) "Failed to install plugin"
     #  }
-    sed -ie '/func TestPluginInstallAccess/a t.Skip();' pkg/tests/api/plugins/api_install_test.go
+    sed -i -e '/func TestPluginInstallAccess/a t.Skip();' pkg/tests/api/plugins/api_install_test.go
+
+    # Skip a flaky test (https://github.com/NixOS/nixpkgs/pull/126928#issuecomment-861424128)
+    sed -i -e '/it should change folder successfully and return correct result/{N;s/$/\nt.Skip();/}'\
+      pkg/services/libraryelements/libraryelements_patch_test.go
+
 
     # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
     rm -r scripts/go
+  '';
+
+  buildFlagsArray = ''
+    -ldflags=-s -w -X main.version=${version}
   '';
 
   postInstall = ''

@@ -11,7 +11,7 @@
 with lib;
 
 let
-  tg_owt = callPackage ../tdesktop/tg_owt.nix {};
+  tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "kotatogram-desktop";
   version = "1.4.1";

@@ -8,7 +8,7 @@
 , python3
 , wrapGAppsHook
 , gnome
-, libwnck3
+, libwnck
 , gobject-introspection
 , gettext
 , itstool
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     glib
     gnome.adwaita-icon-theme
     gtk3
-    libwnck3
+    libwnck
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

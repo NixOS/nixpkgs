@@ -22,6 +22,8 @@ self: super: {
   # https://github.com/spacchetti/spago/issues/512
   spago = self.callPackage ../tools/purescript/spago/spago.nix { };
 
+  nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
+
   nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
 
   # cabal2nix --revision <rev> https://github.com/hasura/ci-info-hs.git

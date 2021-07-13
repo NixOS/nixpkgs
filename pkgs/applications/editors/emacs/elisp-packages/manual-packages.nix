@@ -199,6 +199,8 @@
 
   # Packages made the classical callPackage way
 
+  ebuild-mode = callPackage ./ebuild-mode { };
+
   emacspeak = callPackage ./emacspeak { };
 
   ess-R-object-popup = callPackage ./ess-R-object-popup { };

@@ -9,64 +9,58 @@
 , expat
 , openssl
 , SDL2
-, vulkan-loader
 , fontconfig
 , ninja
 , gn
 , llvmPackages
 , makeFontsConf
+, libglvnd
+, libxkbcommon
+, wayland
+, xorg
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "20210515";
+  version = "unstable-2021-06-21";
 
-  src =
-    let
-      repo = fetchFromGitHub {
-        owner = "Kethku";
-        repo = "neovide";
-        rev = "0b976c3d28bbd24e6c83a2efc077aa96dde1e9eb";
-        sha256 = "sha256-asaOxcAenKdy/yJvch3HFfgnrBnQagL02UpWYnz7sa8=";
-      };
-    in
-    runCommand "source" { } ''
-      cp -R ${repo} $out
-      chmod -R +w $out
-      # Reasons for patching Cargo.toml:
-      # - I got neovide built with latest compatible skia-save version 0.35.1
-      #   and I did not try to get it with 0.32.1 working. Changing the skia
-      #   version is time consuming, because of manual dependecy tracking and
-      #   long compilation runs.
-      sed -i $out/Cargo.toml \
-        -e '/skia-safe/s;0.32.1;0.35.1;'
-      cp ${./Cargo.lock} $out/Cargo.lock
-    '';
+  src = fetchFromGitHub {
+    owner = "Kethku";
+    repo = "neovide";
+    rev = "4159c47ff4f30073b92b9d63fc6ab70e07b74b6d";
+    sha256 = "sha256-XwirJGXMGxc/NkpSeHBUc16ppvJ+H4ECnrOVu030Qfg=";
+  };
 
-  cargoSha256 = "sha256-XMPRM3BAfCleS0LXQv03A3lQhlUhAP8/9PdVbAUnfG0=";
+  cargoSha256 = "sha256-WCk9kt81DtBwpEEdKH9gKQSVxAvH+vkyP2y24tU+vzY=";
 
-  SKIA_OFFLINE_SOURCE_DIR =
+  SKIA_SOURCE_DIR =
     let
       repo = fetchFromGitHub {
         owner = "rust-skia";
         repo = "skia";
-        # see rust-skia/Cargo.toml#package.metadata skia
-        rev = "m86-0.35.0";
-        sha256 = "sha256-uTSgtiEkbE9e08zYOkRZyiHkwOLr/FbBYkr2d+NZ8J0=";
+        # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+        rev = "m90-0.38.3";
+        sha256 = "sha256-l8c4vfO1PELAT8bDyr/yQGZetZsaufAlJ6bBOXz7E1w=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = lib.mapAttrs (n: v: fetchgit v) (lib.importJSON ./skia-externals.json);
     in
-    runCommand "source" { } (''
-      cp -R ${repo} $out
-      chmod -R +w $out
+      runCommand "source" {} (
+        ''
+          cp -R ${repo} $out
+          chmod -R +w $out
 
-      mkdir -p $out/third_party/externals
-      cd $out/third_party/externals
-    '' + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals)));
+          mkdir -p $out/third_party/externals
+          cd $out/third_party/externals
+        '' + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals))
+      );
 
-  SKIA_OFFLINE_NINJA_COMMAND = "${ninja}/bin/ninja";
-  SKIA_OFFLINE_GN_COMMAND = "${gn}/bin/gn";
+  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
+  SKIA_GN_COMMAND = "${gn}/bin/gn";
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  preConfigure = ''
+    unset CC CXX
+  '';
 
   # test needs a valid fontconfig file
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
@@ -92,9 +86,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/neovide \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-  '';
+      wrapProgram $out/bin/neovide \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd libxkbcommon wayland xorg.libXcursor xorg.libXext xorg.libXrandr xorg.libXi ]}
+    '';
 
   postInstall = ''
     for n in 16x16 32x32 48x48 256x256; do

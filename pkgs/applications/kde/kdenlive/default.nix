@@ -102,5 +102,6 @@ mkDerivation {
 
   meta = {
     license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ turion ];
   };
 }

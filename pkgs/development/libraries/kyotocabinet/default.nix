@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "kyotocabinet-1.2.76";
+  pname = "kyotocabinet";
+  version = "1.2.79";
 
   src = fetchurl {
-    url = "http://fallabs.com/kyotocabinet/pkg/${name}.tar.gz";
-    sha256 = "0g6js20x7vnpq4p8ghbw3mh9wpqksya9vwhzdx6dnlf354zjsal1";
+    url = "https://dbmx.net/kyotocabinet/pkg/kyotocabinet-${version}.tar.gz";
+    sha256 = "079ymsahlrijswgwfr2la9yw5h57l752cprhp5dz31iamsj1vyv7";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -24,18 +25,12 @@ stdenv.mkDerivation rec {
         --replace stdc++ c++
   '';
 
-  patches = [(fetchurl {
-    name = "gcc6.patch";
-    url = "https://src.fedoraproject.org/rpms/kyotocabinet/raw/master/f/kyotocabinet-1.2.76-gcc6.patch";
-    sha256 = "1h5k38mkiq7lz8nd2gbn7yvimcz49g3z7phn1cr560bzjih8rz23";
-  })];
-
   buildInputs = [ zlib ];
 
   meta = with lib; {
-    homepage = "http://fallabs.com/kyotocabinet";
+    homepage = "https://dbmx.net/kyotocabinet";
     description = "A library of routines for managing a database";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
   };
 }

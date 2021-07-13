@@ -3,7 +3,7 @@
 , buildPythonPackage
 , certifi
 , cryptography
-, dateutil
+, python-dateutil
 , fetchpatch
 , fetchPypi
 , idna
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    dateutil
+    python-dateutil
     mock
     pytest-freezegun
     pytest-timeout

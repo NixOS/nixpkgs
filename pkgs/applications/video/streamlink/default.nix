@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     iso-639
     iso3166
-    websocket_client
+    websocket-client
     isodate
   ]) ++ [
     rtmpdump

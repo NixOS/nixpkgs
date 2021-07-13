@@ -4,7 +4,7 @@
   "dependencies": {
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.1",
-    "vscode-languageclient": "^7.1.0-next.4",
+    "vscode-languageclient": "^7.1.0-next.5",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@types/glob": "^7.1.3",
@@ -21,7 +21,7 @@
     "tslib": "^2.0.3",
     "typescript": "^4.1.2",
     "typescript-formatter": "^7.2.2",
-    "vsce": "^1.85.0",
+    "vsce": "=1.88.0",
     "vscode-test": "^1.5.1"
   }
 }

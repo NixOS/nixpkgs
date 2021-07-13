@@ -5,6 +5,8 @@
 , makeWrapper
 , bc
 , jq
+, coreutils
+, util-linux
 , wimlib
 , file
 , syslinux
@@ -26,15 +28,12 @@ stdenvNoCC.mkDerivation rec {
   strictDeps = true;
   buildInputs = [ bash ];
   nativeBuildInputs = [ makeWrapper ];
-  postPatch = ''
-    patchShebangs --host bootiso
-  '';
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/bootiso \
-      --prefix PATH : ${lib.makeBinPath [ bc jq wimlib file syslinux gnugrep busybox ]} \
+      --prefix PATH : ${lib.makeBinPath [ bc jq coreutils util-linux wimlib file syslinux gnugrep busybox ]} \
       --prefix BOOTISO_SYSLINUX_LIB_ROOT : ${syslinux}/share/syslinux
   '';
 

@@ -16,7 +16,12 @@ let
   fetchSageDiff = { base, name, rev, sha256, ...}@args: (
     fetchpatch ({
       inherit name sha256;
-      url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
+
+      # We used to use
+      # "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}"
+      # but the former way does not squash multiple patches together.
+      url = "https://github.com/sagemath/sage/compare/${base}...${rev}.diff";
+
       # We don't care about sage's own build system (which builds all its dependencies).
       # Exclude build system changes to avoid conflicts.
       excludes = [ "build/*" ];
@@ -79,13 +84,6 @@ stdenv.mkDerivation rec {
     # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
     ./patches/ignore-cmp-deprecation.patch
 
-    # sphinx 3.5 pretty-prints code slightly differently than sphinx
-    # 3.1--3.3. a similar patch is available at the sphinx 4 ticket
-    # (https://trac.sagemath.org/ticket/31696), but sphinx 3.5 uses
-    # <code> tags while sphinx 4 uses <span> tags so we cannot just
-    # import the patch from trac.
-    ./patches/sphinx-3.5-code-output.patch
-
     # remove use of matplotlib function deprecated in 3.4
     # https://trac.sagemath.org/ticket/31827
     (fetchSageDiff {
@@ -95,16 +93,47 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-SXcUGBMOoE9HpuBzgKC3P6cUmM5MiktXbe/7dVdrfWo=";
     })
 
-    # https://trac.sagemath.org/ticket/30801. this patch has
-    # positive_review but has not been merged upstream yet, so we
-    # don't use fetchSageDiff because it returns a file that contains
-    # each commit as a separate patch instead of a single diff, and
-    # some commits from the pari update branch are already in 9.3.rc5
-    # (auto-resolvable merge conflicts).
-    (fetchpatch {
+    # pari 2.13 update
+    # https://trac.sagemath.org/ticket/30801
+    #
+    # the last commit in that ticket is
+    # c78b1470fccd915e2fa93f95f2fefba6220fb1f7, but commits after
+    # 10a4531721d2700fd717e2b3a1364508ffd971c3 only deal with 32-bit
+    # and post-26635 breakage, none of which is relevant to us. since
+    # there are post-9.4.beta0 rebases after that, we just skip later
+    # commits.
+    (fetchSageDiff {
+      base = "9.3";
       name = "pari-2.13.1.patch";
-      url = "https://github.com/sagemath/sagetrac-mirror/compare/d6c5cd9be78cc448ee4c54bac93385b1244a234c...10a4531721d2700fd717e2b3a1364508ffd971c3.diff";
-      sha256 = "sha256-zMjRMEReoiTvmt+vvV0Ij1jtyLSLwSXBEVXqgvmq1D4=";
+      rev = "10a4531721d2700fd717e2b3a1364508ffd971c3";
+      sha256 = "sha256-gffWKK9CMREaNOb5zb63iZUgON4FvsPrMQNqe+5ZU9E=";
+    })
+
+    # sympy 1.8 update
+    # https://trac.sagemath.org/ticket/31647
+    (fetchSageDiff {
+      base = "9.4.beta0";
+      name = "sympy-1.8.patch";
+      rev = "fa864b36e15696450c36d54215b1e68183b29d25";
+      sha256 = "sha256-fj/9QEZlVF0fw9NpWflkTuBSKpGjCE6b96ECBgdn77o=";
+    })
+
+    # sphinx 4 update
+    # https://trac.sagemath.org/ticket/31696
+    (fetchSageDiff {
+      base = "9.4.beta3";
+      name = "sphinx-4.patch";
+      rev = "bc84af8c795b7da433d2000afc3626ee65ba28b8";
+      sha256 = "sha256-5Kvs9jarC8xRIU1rdmvIWxQLC25ehiTLJpg5skh8WNM=";
+    })
+
+    # eclib 20210625 update
+    # https://trac.sagemath.org/ticket/31443
+    (fetchSageDiff {
+      base = "9.4.beta3";
+      name = "eclib-20210625.patch";
+      rev = "789550ca04c94acfb1e803251538996a34962038";
+      sha256 = "sha256-VlyEn5hg3joG8t/GwiRfq9TzJ54AoHxLolsNQ3shc2c=";
     })
   ];
 

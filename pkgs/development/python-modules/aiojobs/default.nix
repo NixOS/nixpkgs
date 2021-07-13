@@ -1,22 +1,22 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , aiohttp
-, pytest
+, pytestCheckHook
 , pytest-aiohttp
 , pygments
-, lib
 }:
 
 buildPythonPackage rec {
   pname = "aiojobs";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "flit";
-  disabled = isPy27;
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01a0msjh4w58fd7jplmblh0hwgpzwjs5xkgqz3d0p5yv3cykwjwf";
+    sha256 = "sha256-9mMdQtxDCPfYg6u9cNTpdvP8w1o7oejq5dSvSUCh4MM=";
   };
 
   nativeBuildInputs = [
@@ -28,13 +28,11 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytest-aiohttp
   ];
 
-  checkPhase = ''
-    pytest tests
-  '';
+  pythonImportsCheck = [ "aiojobs" ];
 
   meta = with lib; {
     homepage = "https://github.com/aio-libs/aiojobs";

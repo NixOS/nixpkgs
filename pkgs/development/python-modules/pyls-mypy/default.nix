@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tomv564/pyls-mypy";
     description = "Mypy plugin for the Python Language Server";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ ];
   };
 }

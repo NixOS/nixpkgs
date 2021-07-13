@@ -254,6 +254,8 @@ in rec {
     '';
   };
 
+  bootstrapLlvmVersion = llvmPackages.llvm.version;
+
   bootstrapFiles = {
     sh      = "${build}/on-server/sh";
     bzip2   = "${build}/on-server/bzip2";
@@ -408,7 +410,7 @@ in rec {
     system = if crossSystem != null then crossSystem else system;
 
     stdenvStages = args: let
-        args' = args // { inherit bootstrapFiles; };
+        args' = args // { inherit bootstrapLlvmVersion bootstrapFiles; };
       in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
   };
 }

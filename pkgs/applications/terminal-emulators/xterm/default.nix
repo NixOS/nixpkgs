@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
     sha256 = "07y51l06n344pjyxdddq6sdvxw25nl10irl4avynkqjnqyqsiw97";
   };
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    fontconfig
+  ];
+
   buildInputs = [
     xorg.libXaw
     xorg.xorgproto
@@ -24,11 +32,8 @@ stdenv.mkDerivation rec {
     xorg.libICE
     ncurses
     freetype
-    fontconfig
-    pkg-config
     xorg.libXft
     xorg.luit
-    makeWrapper
   ];
 
   patches = [ ./sixel-256.support.patch ]

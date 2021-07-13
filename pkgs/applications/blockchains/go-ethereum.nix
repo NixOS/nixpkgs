@@ -4,21 +4,22 @@ let
   # A list of binaries to put into separate outputs
   bins = [
     "geth"
+    "clef"
   ];
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.10.3";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-85aUR7MvaPeRilC+4oj6XW2IEUvxRUsVz63tQ/Jc7xw=";
+    sha256 = "sha256-DRlIiO3iXUsQnmOf5T9uk3560tVbS+Hrs8QtVkmllAI=";
   };
 
   runVend = true;
-  vendorSha256 = "sha256-8zhVQ8FUdzog7h9RBfuq8uBp0zjulXbDOLAPljp4deA=";
+  vendorSha256 = "sha256-a/vY9iyqSM9QPs7lGFF6E7e2cMjIerVkNf5KwiWdyr0=";
 
   doCheck = false;
 

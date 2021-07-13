@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.4.3";
+  version = "1.4.6";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "v${version}";
-    sha256 = "sha256-3GleQNkJrGIkFqOL2Dq0jTpgw7ts9ecpovKbyh3OrEI=";
+    sha256 = "sha256-kaRcM8Z0xeDp3JYputKZmzTfYYq2oKpF7AM6ciFF7I4=";
   };
 
   propagatedBuildInputs = [
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
-    inherit (src.meta) homepage;
+    homepage = "https://maestral.app";
   };
 }

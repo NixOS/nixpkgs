@@ -97,8 +97,9 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "NetworkManager";
       attrPath = "networkmanager";
+      versionPolicy = "odd-unstable";
     };
   };
 

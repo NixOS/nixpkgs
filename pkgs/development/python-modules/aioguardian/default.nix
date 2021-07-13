@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "aioguardian";
   version = "1.0.7";
-  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";

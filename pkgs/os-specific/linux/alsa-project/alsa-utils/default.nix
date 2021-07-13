@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-utils";
-  version = "1.2.4";
+  version = "1.2.5.1";
 
   src = fetchurl {
     url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
-    sha256 = "09m4dnn4kplawprd2bl15nwa0b4r1brab3x44ga7f1fyk7aw5zwq";
+    sha256 = "sha256-nBaa43pJKV+bl7kqzncoA9r2tlEKGVdOC3j4flYhGNA=";
   };
 
   nativeBuildInputs = [ gettext makeWrapper ];
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
   postFixup = ''
-    wrapProgram $out/bin/alsa-info.sh --prefix PATH : "${lib.makeBinPath [ which pciutils ]}"
+    mv $out/bin/alsa-info.sh $out/bin/alsa-info
+    wrapProgram $out/bin/alsa-info --prefix PATH : "${lib.makeBinPath [ which pciutils ]}"
   '';
 
   meta = with lib; {

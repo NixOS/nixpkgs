@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, libX11, libXcursor, libxcb, python3 }:
+{ lib, rustPlatform, fetchFromGitHub, fetchpatch, pkg-config, libX11, libXcursor, libxcb, python3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xcolor";
@@ -11,7 +11,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-rHqK05dN5lrvDNbRCWGghI7KJwWzNCuRDEThEeMzmio=";
   };
 
-  cargoSha256 = "sha256-lHOT/P1Sh1b53EkPIQM3l9Tozdqh60qlUDdjthj32jM=";
+  cargoPatches = [
+    # Update Cargo.lock, lexical_core doesn't build on Rust 1.52.1
+    (fetchpatch {
+      url = "https://github.com/Soft/xcolor/commit/324d80a18a39a11f2f7141b226f492e2a862d2ce.patch";
+      sha256 = "sha256-5VzXitpl/gMef40UQBh1EoHezXPyB08aflqp0mSMAVI=";
+    })
+  ];
+
+  cargoSha256 = "sha256-yD4pX+dCJvbDecsdB8tNt1VsEcyAJxNrB5WsZUhPGII=";
 
   nativeBuildInputs = [ pkg-config python3 ];
 

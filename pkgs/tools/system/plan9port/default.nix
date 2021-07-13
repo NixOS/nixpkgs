@@ -11,19 +11,14 @@
 
 stdenv.mkDerivation {
   pname = "plan9port";
-  version = "2020-01-08";
+  version = "2021-04-22";
 
   src =  fetchFromGitHub {
     owner = "9fans";
     repo = "plan9port";
-    rev = "cc3d97d52a72d7eaceb5b636bcdf81c3e19f7a2e";
-    sha256 = "0gb55kj0gzx1kdhiwcrbr7xcgz1im21dyxgxhfhh6d0q9rw0c17g";
+    rev = "70cc6e5ba7798b315c3fb3aae19620a01604a459";
+    hash = "sha256-HCn8R9YSocHrpw/xK5n8gsCLSAbAQgw0NtjO9vYIbKo=";
   };
-
-  patches = [
-    ./darwin-sw_vers.patch
-    ./darwin-cfframework.patch
-  ];
 
   postPatch = ''
     #hardcoded path
@@ -86,10 +81,16 @@ stdenv.mkDerivation {
       Plan 9 from User Space (aka plan9port) is a port of many Plan 9 programs
       from their native Plan 9 environment to Unix-like operating systems.
     '';
-    license = licenses.lpl-102;
-    maintainers = with maintainers; [ AndersonTorres bbarker
-                                      ftrvxmtrx kovirobi ];
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      AndersonTorres
+      bbarker
+      ehmry
+      ftrvxmtrx
+      kovirobi
+    ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
 # TODO: investigate the mouse chording support patch

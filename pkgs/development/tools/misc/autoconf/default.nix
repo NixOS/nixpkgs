@@ -6,10 +6,11 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "autoconf-2.71";
+  pname = "autoconf";
+  version = "2.71";
 
   src = fetchurl {
-    url = "mirror://gnu/autoconf/${name}.tar.xz";
+    url = "mirror://gnu/autoconf/autoconf-${version}.tar.xz";
     sha256 = "197sl23irn6s9pd54rxj5vcp5y8dv65jb9yfqgr2g56cxg7q6k7i";
   };
 

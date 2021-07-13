@@ -70,6 +70,7 @@ mapAliases ({
   aucdtect = throw "aucdtect: Upstream no longer provides download urls."; # added 2020-12-26
   avldrums-lv2 = x42-avldrums; # added 2020-03-29
   avxsynth = throw "avxsynth was removed because it was broken"; # added 2021-05-18
+  badtouch = authoscope; # Project was renamed, added 20210626
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
@@ -87,6 +88,14 @@ mapAliases ({
   bittorrentSync = throw "bittorrentSync has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
+
+  # bitwarden_rs renamed to vaultwarden with release 1.21.0 (2021-04-30)
+  bitwarden_rs = vaultwarden;
+  bitwarden_rs-sqlite = vaultwarden-sqlite;
+  bitwarden_rs-mysql = vaultwarden-mysql;
+  bitwarden_rs-postgresql = vaultwarden-postgresql;
+  bitwarden_rs-vault = vaultwarden-vault;
+
   bs1770gain = throw "bs1770gain has been removed from nixpkgs, as it had no maintainer or reverse dependencies."; # added 2021-01-02
   btc1 = throw "btc1 has been removed, it was abandoned by upstream"; # added 2020-11-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
@@ -117,8 +126,10 @@ mapAliases ({
   clang9Stdenv = lowPrio llvmPackages_9.stdenv;
   clang10Stdenv = lowPrio llvmPackages_10.stdenv;
   clang11Stdenv = lowPrio llvmPackages_11.stdenv;
+  clang12Stdenv = lowPrio llvmPackages_12.stdenv;
 
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
+  claws-mail-gtk3 = claws-mail; # added 2021-07-10
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
   cmakeWithQt4Gui = throw "cmakeWithQt4Gui has been removed in favor of cmakeWithGui (Qt 5)"; # added 2021-05
@@ -408,6 +419,7 @@ mapAliases ({
   libqrencode = qrencode;  # added 2019-01-01
   librdf = lrdf; # added 2020-03-22
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
+  libseat = seatd; # added 2021-06-24
   libsysfs = sysfsutils; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
   libtxc_dxtn = throw "libtxc_dxtn was removed 2020-03-16, now integrated in Mesa";
@@ -418,6 +430,7 @@ mapAliases ({
   libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
   libstdcxxHook = throw "libstdcxx hook has been removed because cc-wrapper is now directly aware of the c++ standard library intended to be used."; # 2020-06-22
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
+  libwnck3 = libwnck;
   lilypond-unstable = lilypond; # added 2021-03-11
   links = links2; # added 2016-01-31
   linux_rpi0 = linux_rpi1;
@@ -641,7 +654,8 @@ mapAliases ({
   pyo3-pack = maturin;
   pmenu = throw "pmenu has been removed from nixpkgs, as its maintainer is no longer interested in the package."; # added 2019-12-10
   pulseaudioLight = pulseaudio; # added 2018-04-25
-  pulseeffects = throw "Use pulseeffects-legacy if you use PulseAudio and pulseeffects-pw if you use PipeWire."; # added 2021-02-13, move back once we default to PipeWire audio server.
+  pulseeffects = throw "Use pulseeffects-legacy if you use PulseAudio and easyeffects if you use PipeWire."; # added 2021-02-13
+  pulseeffects-pw = easyeffects; # added 2021-07-07
   phonon-backend-gstreamer = throw "phonon-backend-gstreamer: Please use libsForQt5.phonon-backend-gstreamer, as Qt4 support in this package has been removed."; # added 2019-11-22
   phonon-backend-vlc = throw "phonon-backend-vlc: Please use libsForQt5.phonon-backend-vlc, as Qt4 support in this package has been removed."; # added 2019-11-22
   phonon = throw "phonon: Please use libsForQt5.phonon, as Qt4 support in this package has been removed."; # added 2019-11-22
@@ -817,6 +831,7 @@ mapAliases ({
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
+  terraform_1_0_0 = terraform_1_0; # added 2021-06-15
   terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28
   terraform-provider-libvirt = terraform-providers.libvirt; # added 2018-09-28
   terraform-provider-lxd = terraform-providers.lxd; # added 2020-03-16
@@ -829,7 +844,9 @@ mapAliases ({
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
   timescale-prometheus = promscale; # added 2020-09-29
-  tomcat85 = tomcat8; # added 2020-03-11
+  tomcat7 = throw "tomcat7 has been removed from nixpkgs as it has reached end of life."; # added 2022-06-16
+  tomcat8 = throw "tomcat8 has been removed from nixpkgs as it has reached end of life."; # added 2022-06-16
+  tomcat85 = throw "tomcat85 has been removed from nixpkgs as it has reached end of life."; # added 2020-03-11
   torbrowser = tor-browser-bundle-bin; # added 2017-04-05
   torch = throw "torch has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   torch-hdf5 = throw "torch-hdf5 has been removed, as the upstream project has been abandoned"; # added 2020-03-28
@@ -1003,6 +1020,8 @@ mapAliases ({
   /* Added 2021-01-02 */
   ttyrec = ovh-ttyrec;
 
+  tt-rss-plugin-tumblr-gdpr = throw "tt-rss-plugin-tumblr-gdpr was removed because tumblr does not require gdpr acceptance to fetch rss feeds anymore"; # added 2012-06-12
+
   zplugin = zinit; # Added 2021-01-30
 
   posix_man_pages = man-pages-posix; # Added 2021-04-15
@@ -1011,6 +1030,38 @@ mapAliases ({
   avian = throw ''
     The package doesn't compile anymore on NixOS and both development
     & maintenance is abandoned by upstream.
+  '';
+
+  # Added 2021-06-01
+  obs-gstreamer = throw ''
+    obs-gstreamer has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-gstreamer.
+  '';
+
+  # Added 2021-06-01
+  obs-move-transition = throw ''
+    obs-move-transition has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-move-transition.
+  '';
+
+  # Added 2021-06-01
+  obs-multi-rtmp = throw ''
+    obs-multi-rtmp has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-multi-rtmp.
+  '';
+
+  # Added 2021-06-01
+  obs-ndi = throw ''
+    obs-ndi has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-ndi.
+  '';
+
+  obs-v4l2sink = throw "obs-v4l2sink is integrated into upstream OBS since version 26.1";  # Added 2021-06-01
+
+  # Added 2021-06-01
+  obs-wlrobs = throw ''
+    wlrobs has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.wlrobs.
   '';
 
   /* If these are in the scope of all-packages.nix, they cause collisions

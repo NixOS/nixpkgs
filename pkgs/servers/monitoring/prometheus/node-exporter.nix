@@ -23,8 +23,12 @@ buildGoModule rec {
     goPackagePath = "github.com/prometheus/node_exporter";
   in ''
     -ldflags=
-        -X ${goPackagePath}/vendor/github.com/prometheus/common/version.Version=${version}
-        -X ${goPackagePath}/vendor/github.com/prometheus/common/version.Revision=${rev}
+        -s -w
+        -X github.com/prometheus/common/version.Version=${version}
+        -X github.com/prometheus/common/version.Revision=${rev}
+        -X github.com/prometheus/common/version.Branch=unknown
+        -X github.com/prometheus/common/version.BuildUser=nix@nixpkgs
+        -X github.com/prometheus/common/version.BuildDate=unknown
   '';
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };

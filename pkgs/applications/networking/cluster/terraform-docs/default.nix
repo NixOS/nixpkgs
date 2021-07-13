@@ -1,22 +1,18 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "terraform-docs";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lx+yp0ybgZfmxvPM2BY2yq39qA6XebcKGrFd0AJa4yg=";
+    sha256 = "sha256-Jm0ySxn4GFW4iAH3tOIvclcDGJMKzH7m7fhWnAf4+gs=";
   };
 
-  vendorSha256 = "sha256-qoZUgSSr7jsDVVPBUyfN5Uw4CnH9EnD/4tX+TCSNV0Q=";
+  vendorSha256 = "sha256-IzmAlthE6SVvGHj72wrY1/KLehOv8Ck9VaTv5jMpt48=";
 
   subPackages = [ "." ];
-
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-X main.version=${version}")
-  '';
 
   meta = with lib; {
     description = "A utility to generate documentation from Terraform modules in various output formats";

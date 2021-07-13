@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "89.0";
+    ffversion = "90.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "5089720feda15d054d0aa4c3bdeb84760314dadd6381d7360e688d8e396154868220c6315add650d8d2a42652cb8a9bfeb833885812ef0bd70a74ee58ad18aa3";
+      sha512 = "233ad59e4ab2f08d2253b49235b51b26fa32fb7c285928110573ccbe67c79965d9401a6c58a3af2ad22b8a58ca5d9b3154e3e8c9d29b153acd16152d9b75442c";
     };
 
     meta = {
@@ -51,6 +51,7 @@ rec {
     tests = [ nixosTests.firefox-esr ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-78-unwrapped";
+      versionSuffix = "esr";
       versionKey = "ffversion";
     };
   };

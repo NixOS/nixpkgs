@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "yara-python";
-  version = "4.0.5";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-python";
     rev = "v${version}";
-    sha256 = "1qd0aw5p48ay77hgj0hgzpvbmq1933mknk134aqdb32036rlc5sq";
+    sha256 = "1w48skmjbb5529g8fyzdjj9jkmavqiq6wh1dr004xdp3nhlqn9y7";
   };
 
   buildInputs = [

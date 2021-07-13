@@ -151,6 +151,9 @@ in rec {
     # This framework doesn't exist in newer SDKs (somewhere around 10.13), but
     # there are references to it in nixpkgs.
     QuickTime = throw "QuickTime framework not available";
+
+    # Seems to be appropriate given https://developer.apple.com/forums/thread/666686
+    JavaVM = super.JavaNativeFoundation;
   };
 
   bareFrameworks = (

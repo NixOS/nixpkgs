@@ -8,6 +8,7 @@
 , libprom
 , libpromhttp
 , libmicrohttpd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +34,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./pure-configure.patch
   ];
+
+  passthru.tests.coturn = nixosTests.coturn;
 
   meta = with lib; {
     homepage = "https://coturn.net/";

@@ -31,12 +31,12 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "2.1.2";
+  version = "3.0.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8bbc440e606a4f3fcbd1441150d81da6f0208adace9dc06f6afd2c9cb7c08908";
+    sha256 = "sha256-WpqkCAwDYb6L+W4VTC/1auGVbblnNYwBxbk+tZbAiBw=";
   };
 
   nativeBuildInputs = [
@@ -74,9 +74,14 @@ buildPythonPackage rec {
 
   # darwin has write permission issues
   doCheck = stdenv.isLinux;
-  # ignore documentation tests
+
+  # ignore documentation tests and ignore tests with schema issues
   checkPhase = ''
-    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst'
+    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst' \
+    --deselect=sunpy/tests/tests/test_self_test.py::test_main_nonexisting_module \
+    --deselect=sunpy/tests/tests/test_self_test.py::test_main_stdlib_module \
+    --ignore=sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliocentric-1.0.0.yaml \
+    --ignore=sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/helioprojective-1.0.0.yaml
   '';
 
   meta = with lib; {

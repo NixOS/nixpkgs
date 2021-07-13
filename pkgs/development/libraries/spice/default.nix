@@ -26,17 +26,12 @@
 
 stdenv.mkDerivation rec {
   pname = "spice";
-  version = "0.14.2";
+  version = "0.15.0";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
-    sha256 = "19r999py9v9c7md2bb8ysj809ag1hh6djl1ik8jcgx065s4b60xj";
+    url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
+    sha256 = "1xd0xffw0g5vvwbq4ksmm3jjfq45f9dw20xpmi82g1fj9f7wy85k";
   };
-
-  patches = [
-    # submitted https://gitlab.freedesktop.org/spice/spice/merge_requests/4
-    ./correct-meson.patch
-  ];
 
   postPatch = ''
     patchShebangs build-aux

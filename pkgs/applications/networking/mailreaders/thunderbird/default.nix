@@ -50,6 +50,7 @@
 , unzip
 , which
 , writeScript
+, xdg-utils
 , xidel
 , xorg
 , yasm
@@ -311,6 +312,7 @@ stdenv.mkDerivation rec {
       --set MOZ_LEGACY_PROFILES 1
       --set MOZ_ALLOW_DOWNGRADE 1
       --prefix PATH : "${lib.getBin gnupg}/bin"
+      --prefix PATH : "${lib.getBin xdg-utils}/bin"
       --prefix LD_LIBRARY_PATH : "${lib.getLib gpgme}/lib"
     )
   '';
@@ -335,7 +337,7 @@ stdenv.mkDerivation rec {
     attrPath = "thunderbird-78";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
     inherit writeScript lib common-updater-scripts xidel coreutils gnused
-      gnugrep curl runtimeShell;
+      gnugrep gnupg curl runtimeShell;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

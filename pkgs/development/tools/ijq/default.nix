@@ -1,18 +1,26 @@
-{ buildGoModule, fetchgit, lib, jq, makeWrapper }:
+{ buildGoModule, fetchFromSourcehut, lib, jq, installShellFiles, makeWrapper, scdoc }:
 
 buildGoModule rec {
   pname = "ijq";
-  version = "0.3.4";
+  version = "0.3.5";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~gpanders/ijq";
+  src = fetchFromSourcehut {
+    owner = "~gpanders";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "ZKxEK6SPxEC0S5yXSzITPn0HhpJa4Bcf9X8/N+ZZAeA=";
+    sha256 = "sha256-0xLmjidPxjSkYmLI4lWieT2rswZsWBY/IUXFOrUFAMo=";
   };
 
-  vendorSha256 = "04KlXE2I8ZVDbyo9tBnFskLB6fo5W5/lPzSpo8KGqUU=";
+  vendorSha256 = "sha256-7UuQXnQdlUMC0ZIgHydQ5bZMB5XrE7dhx5+1NI+zFkM=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper scdoc ];
+
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+
+  postBuild = ''
+    scdoc < ijq.1.scd > ijq.1
+    installManPage ijq.1
+  '';
 
   postInstall = ''
     wrapProgram "$out/bin/ijq" \

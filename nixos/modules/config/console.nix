@@ -43,13 +43,14 @@ in
 
   options.console  = {
     font = mkOption {
-      type = types.str;
+      type = with types; either str path;
       default = "Lat2-Terminus16";
       example = "LatArCyrHeb-16";
       description = ''
         The font used for the virtual consoles.  Leave empty to use
         whatever the <command>setfont</command> program considers the
         default font.
+        Can be either a font name or a path to a PSF font file.
       '';
     };
 

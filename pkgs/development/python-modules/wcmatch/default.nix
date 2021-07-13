@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "wcmatch";
-  version = "8.1.2";
+  version = "8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "efda751de15201b395b6d6e64e6ae3b6b03dc502a64c3c908aa5cad14c27eee5";
+    sha256 = "4d54ddb506c90b5a5bba3a96a1cfb0bb07127909e19046a71d689ddfb18c3617";
   };
 
   propagatedBuildInputs = [ bracex ];

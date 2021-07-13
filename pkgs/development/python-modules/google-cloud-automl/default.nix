@@ -14,14 +14,18 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "874defad583e90e55a3e83aff27eb5fe108d9197d839cd45f3eacf2395881806";
+    sha256 = "523633496b4fe1ca74a7b22cdaa206581804863813bf461e2f437d0fb7ad21b6";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    libcst
+    proto-plus
+  ];
 
   checkInputs = [
     google-cloud-storage
@@ -35,9 +39,12 @@ buildPythonPackage rec {
   preCheck = ''
     # do not shadow imports
     rm -r google
-    # requires credentials
-    rm tests/system/gapic/v1beta1/test_system_tables_client_v1.py
   '';
+
+  disabledTestPaths = [
+    # requires credentials
+    "tests/system/gapic/v1beta1/test_system_tables_client_v1.py"
+  ];
 
   disabledTests = [
     # requires credentials

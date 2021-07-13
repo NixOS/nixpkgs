@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mtools";
-  version = "4.0.27";
+  version = "4.0.31";
 
   src = fetchurl {
     url = "mirror://gnu/mtools/${pname}-${version}.tar.bz2";
-    sha256 = "1crqi10adwfahj8xyw60lx70hkpcc5g00b5r8277cm2f4kcwi24w";
+    sha256 = "11nm5mhsq700f3dzvzjpcik89cfcn38mb249yc0sjbwggwkrk2ak";
   };
 
   patches = lib.optional stdenv.isDarwin ./UNUSED-darwin.patch;

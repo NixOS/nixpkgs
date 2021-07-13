@@ -16,8 +16,8 @@
   },
   "zlib": {
     "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
-    "rev": "eaf99a4e2009b0e5759e6070ad1760ac1dd75461",
-    "sha256": "sha256-B4PgeSVBU/MSkPkXTu9jPIa37dNJPm2HpmiVf6XuOGE="
+    "rev": "c876c8f87101c5a75f6014b0f832499afeb65b73",
+    "sha256": "sha256-mwozVo8ymyrYN4tw+/ZnSI+xogSTZQ6PUBba/jQqRkE="
   },
   "harfbuzz": {
     "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
@@ -31,7 +31,7 @@
   },
   "libgifcodec": {
     "url": "https://skia.googlesource.com/libgifcodec",
-    "rev": "d06d2a6d42baf6c0c91cacc28df2542a911d05fe",
-    "sha256": "sha256-ke1X5iyj2ah2NqGVdFv8GuoRAzXg1aCeTdZwUM8wvCI="
+    "rev": "fd59fa92a0c86788dcdd84d091e1ce81eda06a77",
+    "sha256": "sha256-spyZU4QhV2xrHcBRoYqYgCR0wEM5lgfhGh8pqJE5yXM="
   }
 }

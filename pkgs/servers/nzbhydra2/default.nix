@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";
-  version = "3.14.1";
+  version = "3.14.2";
 
   src = fetchzip {
     url = "https://github.com/theotherp/${pname}/releases/download/v${version}/${pname}-${version}-linux.zip";
-    sha512 = "2mfrqqwrfjvr48vm4r0spda3vlg1h511r6hrlv7k9233ps97bjjir6hms82lgqnlirsixayxs47cldjy8amdn3vc6kxsifmbd6a924p";
+    sha512 = "sha512-wC2GhCjkRt/rmLAhe6nDCdF4PsfBpOo0T4BOSdw4wlBr7eCfo4Cibt9VvK6DNLuDk7EGkUfxvw9HI9sbRJlpCw==";
     stripRoot = false;
   };
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, coreutils, ncurses }:
+{ lib, stdenv, fetchurl, coreutils, ncurses, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "entr";
@@ -8,6 +8,16 @@ stdenv.mkDerivation rec {
     url = "https://eradman.com/entrproject/code/${pname}-${version}.tar.gz";
     sha256 = "sha256-4lak0vvkb2EyRggzukR+ZdfzW6nQsmXnxBUDl8xEBaI=";
   };
+
+  patches = lib.optionals stdenv.isDarwin [
+    # Fix v4.9 segfault on Darwin. remove with the next update
+    # https://github.com/eradman/entr/issues/74
+    (fetchpatch {
+      url = "https://github.com/eradman/entr/commit/468d77d45925abba826bb1dcda01487dbe37eb33.patch";
+      sha256 = "17kkcrsnac0pb930sf2kix71h4c7krzsrvz8pskx0vm39n1c9xfi";
+      includes = [ "entr.c" ];
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile.bsd --replace /bin/echo echo

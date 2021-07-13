@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "token-bucket";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "falconry";
     repo = pname;
     rev = version;
-    sha256 = "0kv8j2ab4knvzik2di66bgjwjxdslm2i0hjy35kn9z0dazni585s";
+    sha256 = "0a703y2d09kvv2l9vq7vc97l4pi2wwq1f2hq783mbw2238jymb3m";
   };
 
   nativeBuildInputs = [

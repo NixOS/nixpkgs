@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.libmysqlclient; });
+  mysql = dontCheck super.mysql;
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
@@ -243,7 +243,7 @@ self: super: builtins.intersectAttrs super {
   llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
 
   # Needs help finding LLVM.
-  spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
+  spaceprobe = addBuildTool super.spaceprobe self.buildHaskellPackages.llvmPackages.llvm;
 
   # Tries to run GUI in tests
   leksah = dontCheck (overrideCabal super.leksah (drv: {
@@ -336,7 +336,7 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/deech/fltkhs/issues/16
   fltkhs = overrideCabal super.fltkhs (drv: {
-    libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.autoconf];
+    libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.buildPackages.autoconf];
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.fltk13 pkgs.libGL pkgs.libjpeg];
   });
 
@@ -495,8 +495,8 @@ self: super: builtins.intersectAttrs super {
   Frames-beam = dontCheck super.Frames-beam;
 
   # Compile manpages (which are in RST and are compiled with Sphinx).
-  futhark = with pkgs;
-    overrideCabal (addBuildTools super.futhark [makeWrapper python3Packages.sphinx])
+  futhark =
+    overrideCabal (addBuildTools super.futhark (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]))
       (_drv: {
         postBuild = (_drv.postBuild or "") + ''
         make -C docs man
@@ -511,7 +511,7 @@ self: super: builtins.intersectAttrs super {
   git-annex = with pkgs;
     if (!stdenv.isLinux) then
       let path = lib.makeBinPath [ coreutils ];
-      in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
+      in overrideCabal (addBuildTool super.git-annex buildPackages.makeWrapper) (_drv: {
         # This is an instance of https://github.com/NixOS/nix/pull/1085
         # Fails with:
         #   gpg: can't connect to the agent: File name too long
@@ -577,7 +577,22 @@ self: super: builtins.intersectAttrs super {
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
 
-      spagoDocs = overrideCabal super.spago (drv: {
+      spagoWithPatches = appendPatch super.spago (
+        # Spago needs a small patch to work with versions-5.0.0:
+        # https://github.com/purescript/spago/pull/798
+        # This can probably be removed with >spago-0.20.3.
+        pkgs.fetchpatch {
+          url = "https://github.com/purescript/spago/commit/dd4bf4413d9675c1c8065d24d0ed7b345c7fa5dd.patch";
+          sha256 = "1i1r3f4n9mlkckx15bfrdy5m7gjf0zx7ycwyqra6qn34zpcbzpmf";
+        }
+      );
+
+      spagoWithOverrides = spagoWithPatches.override {
+        # spago has not yet been updated for the latest dhall.
+        dhall = self.dhall_1_38_1;
+      };
+
+      spagoDocs = overrideCabal spagoWithOverrides (drv: {
         postUnpack = (drv.postUnpack or "") + ''
           # Spago includes the following two files directly into the binary
           # with Template Haskell.  They are fetched at build-time from the
@@ -616,7 +631,7 @@ self: super: builtins.intersectAttrs super {
   # mplayer-spot uses mplayer at runtime.
   mplayer-spot =
     let path = pkgs.lib.makeBinPath [ pkgs.mplayer ];
-    in overrideCabal (addBuildTool super.mplayer-spot pkgs.makeWrapper) (oldAttrs: {
+    in overrideCabal (addBuildTool super.mplayer-spot pkgs.buildPackages.makeWrapper) (oldAttrs: {
       postInstall = ''
         wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
       '';
@@ -628,7 +643,7 @@ self: super: builtins.intersectAttrs super {
 
   cut-the-crap =
     let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
-    in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
+    in overrideCabal (addBuildTool super.cut-the-crap pkgs.buildPackages.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
           --prefix PATH : "${path}"
@@ -645,7 +660,7 @@ self: super: builtins.intersectAttrs super {
 
   neuron = overrideCabal (super.neuron) (drv: {
     # neuron expects the neuron-search script to be in PATH at built-time.
-    buildTools = [ pkgs.makeWrapper ];
+    buildTools = [ pkgs.buildPackages.makeWrapper ];
     preConfigure = ''
       mkdir -p $out/bin
       cp src-bash/neuron-search $out/bin/neuron-search
@@ -785,6 +800,42 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   });
+  hls-ormolu-plugin = overrideCabal super.hls-ormolu-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-fourmolu-plugin = overrideCabal super.hls-fourmolu-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-module-name-plugin = overrideCabal super.hls-module-name-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-splice-plugin = overrideCabal super.hls-splice-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-floskell-plugin = overrideCabal super.hls-floskell-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-pragmas-plugin = overrideCabal super.hls-pragmas-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
   hls-haddock-comments-plugin = overrideCabal super.hls-haddock-comments-plugin (drv: {
@@ -794,6 +845,7 @@ self: super: builtins.intersectAttrs super {
     '';
   });
   hls-eval-plugin = overrideCabal super.hls-eval-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
     preCheck = ''
       export HOME=$TMPDIR/home
     '';
@@ -821,8 +873,21 @@ self: super: builtins.intersectAttrs super {
   random = dontCheck super.random;
 
   # Since this package is primarily used by nixpkgs maintainers and is probably
-  # not used to link against by anyone, we can make it’s closure smaller.
-  cabal2nix-unstable = justStaticExecutables super.cabal2nix-unstable;
+  # not used to link against by anyone, we can make it’s closure smaller and
+  # add its runtime dependencies in `haskellPackages` (as opposed to cabal2nix).
+  cabal2nix-unstable = overrideCabal
+    (justStaticExecutables super.cabal2nix-unstable)
+    (drv: {
+      buildTools = (drv.buildTools or []) ++ [
+        pkgs.buildPackages.makeWrapper
+      ];
+      postInstall = ''
+        wrapProgram $out/bin/cabal2nix \
+          --prefix PATH ":" "${
+            pkgs.lib.makeBinPath [ pkgs.nix pkgs.nix-prefetch-scripts ]
+          }"
+      '';
+    });
 
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
@@ -833,4 +898,20 @@ self: super: builtins.intersectAttrs super {
       sed -i 's|"tophat"|"./dist/build/tophat/tophat"|' app-test-bin/*.hs
     '' + (drv.postPatch or "");
   });
+
+  # Runtime dependencies and CLI completion
+  nvfetcher = generateOptparseApplicativeCompletion "nvfetcher" (overrideCabal
+    super.nvfetcher (drv: {
+      buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
+      postInstall = drv.postInstall or "" + ''
+        wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
+          pkgs.lib.makeBinPath [ pkgs.nvchecker pkgs.nix-prefetch-git ]
+        }"
+      '';
+    }));
+
+  rel8 = addTestToolDepend super.rel8 pkgs.postgresql;
+
+  cachix = generateOptparseApplicativeCompletion "cachix" super.cachix;
+
 }

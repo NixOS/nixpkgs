@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "megapixels";
     rev = version;
-    sha256 = "0k9a5dpr5z0g7ngbhk4j22sbs1ffxiwg8wmbzgggdc9xvwmkgppr";
+    sha256 = "0y56c6vchlzidfmp3a3bdc228vbhy7zaxvmhkyxchfb752yzr0n3";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];

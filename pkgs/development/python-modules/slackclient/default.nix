@@ -14,7 +14,7 @@
 , requests
 , responses
 , six
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    websocket_client
+    websocket-client
     requests
     six
   ];

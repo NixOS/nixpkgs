@@ -1,26 +1,26 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, gawk, glibc }:
 
 let
-  version = "1.7.2";
+  version = "1.7.3";
 
   sources = let
     base = "https://releases.hashicorp.com/vault/${version}";
   in {
     x86_64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_amd64.zip";
-      sha256 = "1g37pgj7hbi6vfpwq9rrh6is980lfwbq5jb4736jfp5m360vprjy";
+      sha256 = "sha256-hFMTKpO3VcCondSy8amb1K8G+BZ7gZF/EXCAg5Ax4D8=";
     };
     i686-linux = fetchurl {
       url = "${base}/vault_${version}_linux_386.zip";
-      sha256 = "0777xkkfiy0s3nyygcfpw0nbfsm6yz1n5hxcvfafhzcdyr58fpb7";
+      sha256 = "02wbbzffb2m7y3476l5qa5dhi0v30f3sfif0svqhhzh927kg4s5w";
     };
     x86_64-darwin = fetchurl {
       url = "${base}/vault_${version}_darwin_amd64.zip";
-      sha256 = "0wzmah542bhyvrm9brhrx7drjyzan8vxhqnm0gjak5wlrcnf2dvx";
+      sha256 = "0sw56dhjbasdnlwg668swhyxrn5gy7h9gysdg96za4dhq3iimkrn";
     };
     aarch64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_arm64.zip";
-      sha256 = "0cs56ircad2z2msqgb0l5h53cwmwybi5rs4y2jigz4rq4ndx9f9b";
+      sha256 = "0c2w0684adaqildwviajp6pi8vp76g4zwwgc1k2bb5mwv1h2y293";
     };
   };
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   sourceRoot = ".";
 
@@ -40,7 +40,10 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin $out/share/bash-completion/completions
     mv vault $out/bin
     echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
-
+  '' + lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
+  '' + ''
     runHook postInstall
   '';
 

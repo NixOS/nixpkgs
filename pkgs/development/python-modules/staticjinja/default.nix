@@ -8,11 +8,13 @@
 , pytestCheckHook
 , pytest-check
 , markdown
+, testVersion
+, staticjinja
 }:
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "2.0.1";
+  version = "3.0.1";
   format = "pyproject";
 
   # No tests in pypi
@@ -20,7 +22,7 @@ buildPythonPackage rec {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "sha256-sGon3+So4EuVRTUqcP9omfJ91wBzJSm7CSkuefX3S+8=";
+    sha256 = "sha256-W4q0vG8Kl2gCmA8UnUbdiGRtghhdnWxIJXFIIa6BogA=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +45,10 @@ buildPythonPackage rec {
   preCheck = ''
     export PATH="$PATH:$out/bin";
   '';
+
+  passthru.tests.version = testVersion {
+    package = staticjinja;
+  };
 
   meta = with lib; {
     description = "A library and cli tool that makes it easy to build static sites using Jinja2";

@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ llvm ];
 
+  cmakeFlags = [
+    "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL currently fails
+  ];
+
   meta = llvm_meta // {
     homepage = "https://openmp.llvm.org/";
     description = "Support for the OpenMP language";

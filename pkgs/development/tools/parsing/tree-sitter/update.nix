@@ -75,7 +75,7 @@ let
       repo = "tree-sitter-nix";
     };
     "tree-sitter-lua" = {
-      orga = "Azganoth";
+      orga = "nvim-treesitter";
       repo = "tree-sitter-lua";
     };
     "tree-sitter-fennel" = {

@@ -40,8 +40,6 @@ stdenv.mkDerivation {
   preInstall = "mkdir -p $OCAMLFIND_DESTDIR";
   installFlags = "BINDIR=$(out)/bin";
 
-  # passthru.tests = { inherit dose3; }; # To-Do: To be enabled when Dose3 PR is accepted.
-
   meta = with lib; {
     description = "A library for CUDF format";
     homepage = "http://www.mancoosi.org/cudf/";

@@ -248,7 +248,7 @@ let
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
       DRM_GMA500             = whenAtLeast "5.12" module;
-      DRM_GMA600             = yes;
+      DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
       DRM_VMWGFX_FBCON       = yes;
       # necessary for amdgpu polaris support
@@ -443,7 +443,7 @@ let
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
-      DEVKMEM                          = no; # Disable /dev/kmem
+      DEVKMEM                          = whenOlder "5.13" no; # Disable /dev/kmem
 
       USER_NS                          = yes; # Support for user namespaces
 
@@ -698,7 +698,7 @@ let
       THRUSTMASTER_FF    = yes;
       ZEROPLUS_FF        = yes;
 
-      MODULE_COMPRESS    = yes;
+      MODULE_COMPRESS    = whenOlder "5.13" yes;
       MODULE_COMPRESS_XZ = yes;
 
       SYSVIPC            = yes;  # System-V IPC
@@ -844,6 +844,7 @@ let
       PREEMPT_VOLUNTARY = yes;
 
       X86_AMD_PLATFORM_DEVICE = yes;
+      X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-system-monitor";
-  version = "unstable-2021-05-04";
+  version = "unstable-2021-06-19";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = "bc38ccf49ac0ffae0fc0436f3c2579fc86949f10";
-    sha256 = "0yb5sb2xv4m18a24h4daahnxgnlmbfa0rfzic0zs082qv1kfi5h8";
+    rev = "bece7be22352b81d3d81e64e18a385812851b8de";
+    sha256 = "08nnsg7z3cqk25hfgy4wm02hd2wpz13kig498kn4mf5f1q4hslmx";
   };
 
   buildInputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./paths_and_nonexisting_dirs.patch;
-      clutter_path = gnome.mutter.libdir; # this should not be used in settings but 🤷‍♀️
+      clutter_path = gnome.mutter.libdir; # only needed for GNOME < 40.
       gtop_path = "${libgtop}/lib/girepository-1.0";
       glib_net_path = "${glib-networking}/lib/girepository-1.0";
     })

@@ -11,7 +11,7 @@
 , at-spi2-core
 , dbus
 , gettext
-, libwnck3
+, libwnck
 , adwaita-icon-theme
 }:
 
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     adwaita-icon-theme
     at-spi2-core
     gtk3
-    libwnck3
+    libwnck
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

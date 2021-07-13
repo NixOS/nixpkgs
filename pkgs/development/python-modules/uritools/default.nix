@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "uritools";
-  version = "3.0.1";
+  version = "3.0.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a3e9c794d44fdbd54642dcb7d6ef3ba9866d953eb34f65aeca3754b7ad5c1ea0";
+    sha256 = "28ffef82ce3b2793237d36e45aa7cde28dae6502f6a93fdbd05ede401520e279";
   };
 
   meta = with lib; {

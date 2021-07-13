@@ -62,7 +62,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 2947;
         description = ''
           The port where to listen for TCP connections.

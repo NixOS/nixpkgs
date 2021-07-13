@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.0.1";
-  commit = "33eaf11e3abd8c761c726e815cbb4b6af7dcb030";
+  version = "2.0.4";
+  commit = "0842d448107eb1397b251e63ec4d4bc1b4efdd6e";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = tag;
-    sha256 = "sha256-j/RdiMeaYxlmEvo5CKrGvkp25MrFsSYh+XNYWNcs0PE=";
+    sha256 = "sha256-SKSAJtp20f6A+CvrsBEmbcNJAKI5b4Wm4K0cr/lGo64=";
   };
 
-  vendorSha256 = "sha256-8j5v99wOHM/SndJwpmGWiCFEyw4K513HEEbkPrD8C90=";
+  vendorSha256 = "sha256-RbEqivzTpXVQp4zl0zZWAh6qCr2KZSJ6Bj2pZaClQaQ=";
 
   nativeBuildInputs = [ packr makeWrapper installShellFiles ];
 
@@ -66,8 +66,9 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes";
-    homepage = "https://github.com/argoproj/argo";
+    description = "Declarative continuous deployment for Kubernetes";
+    downloadPage = "https://github.com/argoproj/argo-cd";
+    homepage = "https://argoproj.github.io/projects/argo-cd";
     license = licenses.asl20;
     maintainers = with maintainers; [ shahrukh330 superherointj ];
   };

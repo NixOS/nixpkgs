@@ -1,12 +1,13 @@
 { lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "FlexGet";
-  version = "3.1.127";
+  pname = "flexget";
+  version = "3.1.131";
 
   src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "25a973eb54f2f9ccd422d536b29038c570de3584b8174d993119e3c6b434cc54";
+    pname = "FlexGet";
+    inherit version;
+    sha256 = "sha256-wjMtCrffRhk7NL+Z0PeljuDc3WjVWSMsjWLbqo8qUjU=";
   };
 
   postPatch = ''
@@ -46,7 +47,7 @@ python3Packages.buildPythonApplication rec {
     pynzb
     pyparsing
     PyRSS2Gen
-    dateutil
+    python-dateutil
     pyyaml
     rebulk
     requests
@@ -61,9 +62,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage    = "https://flexget.com/";
+    homepage = "https://flexget.com/";
     description = "Multipurpose automation tool for all of your media";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };
 }

@@ -2,7 +2,7 @@
 
 { lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, cairo, expat, flex
 , fontconfig, gd, gettext, gts, libdevil, libjpeg, libpng, libtool, pango
-, bison, fetchpatch, xorg ? null, ApplicationServices }:
+, bison, fetchpatch, xorg, ApplicationServices, python3 }:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -21,7 +21,14 @@ let
     buildCommand = "sed s/dot_root/agroot/g ${raw_patch} > $out";
   };
   # 2.42 has the patch included
-  patches = optional (lib.versionOlder version "2.42") patchToUse;
+  patches = optional (lib.versionOlder version "2.42") patchToUse
+  ++ optionals (lib.versionOlder version "2.46.0") [
+    (fetchpatch {
+      name = "CVE-2020-18032.patch";
+      url = "https://gitlab.com/graphviz/graphviz/-/commit/784411ca3655c80da0f6025ab20634b2a6ff696b.patch";
+      sha256 = "1nkw9ism8lkfvxsp5fh95i2l5s5cbjsidbb3g1kjfv10rxkyb41m";
+    })
+  ];
 in
 
 stdenv.mkDerivation {
@@ -34,7 +41,7 @@ stdenv.mkDerivation {
     inherit sha256 rev;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
 
   buildInputs = [
     libpng libjpeg expat bison libtool fontconfig gd gts libdevil flex pango

@@ -49,7 +49,7 @@ buildPythonPackage rec {
   '';
 
   passthru.tests = {
-    testing-bitwarden = nixosTests.bitwarden;
+    testing-vaultwarden = nixosTests.vaultwarden;
   };
 
   meta = with lib; {

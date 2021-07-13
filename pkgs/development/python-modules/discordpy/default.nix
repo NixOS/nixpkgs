@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "discord.py";
-  version = "1.7.2";
+  version = "1.7.3";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Rapptz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NY1/RKp8w9gAqGYXnCNhNZqR/inGMvUvxjJ1MMs62B8=";
+    sha256 = "sha256-eKXCzGFSzxpdZed4/4G6uJ96s5yCm6ci8K8XYR1zQlE=";
   };
 
   propagatedBuildInputs = [

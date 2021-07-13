@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
+    FPCDIR=${fpc}/lib/fpc/${fpc.version} fpcmake -w
     lazbuild -B transgui.lpr --lazarusdir=${lazarus}/share/lazarus
   '';
 

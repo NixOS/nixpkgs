@@ -1,5 +1,5 @@
 { lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
-, which, cycler, dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
+, which, cycler, python-dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
 , enableGhostscript ? true, ghostscript, gtk3
@@ -17,14 +17,14 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.4.1";
+  version = "3.4.2";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84d4c4f650f356678a5d658a43ca21a41fca13f9b8b00169c0b76e6a6a948908";
+    sha256 = "d8d994cefdff9aaba45166eb3de4f5211adb4accac85cbf97137e98f26ea0219";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler dateutil numpy pyparsing tornado freetype qhull
+    [ cycler python-dateutil numpy pyparsing tornado freetype qhull
       kiwisolver certifi libpng mock pytz pillow ]
     ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]

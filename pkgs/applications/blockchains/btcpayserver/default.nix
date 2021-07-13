@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "btcpayserver";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cCm4CZdVtjO2nj69CgRCrcwO0lAbiQVD6KocOj4CSdY=";
+    sha256 = "sha256-A9XIKCw1dL4vUQYSu6WdmpR82dAbtKVTyjllquyRGgs=";
   };
 
   nativeBuildInputs = [ dotnetSdk dotnetPackages.Nuget makeWrapper ];

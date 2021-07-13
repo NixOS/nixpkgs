@@ -2,11 +2,11 @@
 buildKodiAddon rec {
   pname = "requests";
   namespace = "script.module.requests";
-  version = "2.22.0+matrix.1";
+  version = "2.25.1+matrix.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "09576galkyzhw8fhy2h4aablm5rm2v08g0mdmg9nn55dlxhkkljq";
+    sha256 = "00qhykizvspzfwgl7qz9cyxrazs54jgin40g49v5nzmjq3qf62hb";
   };
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
+{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
 , curl, libcap, libuuid, lm_sensors, zlib
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
   buildInputs = [ curl.dev zlib.dev ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
@@ -42,6 +42,11 @@ in stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
+    # The current IPC location is unsafe as it writes
+    # a fixed path in /tmp, which is world-writable.
+    # Therefore we put it into `/run/netdata`, which is owned
+    # by netdata only.
+    ./ipc-socket-in-run.patch
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
@@ -79,7 +84,7 @@ in stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    rm -r $out/sbin
+    wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
 
   passthru.tests.netdata = nixosTests.netdata;

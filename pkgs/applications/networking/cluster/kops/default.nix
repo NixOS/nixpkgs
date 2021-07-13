@@ -53,11 +53,6 @@ rec {
 
   mkKops = generic;
 
-  kops_1_18 = mkKops {
-    version = "1.18.2";
-    sha256 = "17na83j6sfhk69w9ssvicc0xd1904z952ad3zzbpha50lcy6nlhp";
-  };
-
   kops_1_19 = mkKops rec {
     version = "1.19.2";
     sha256 = "15csxih1xy8myky37n5dyzp5mc31pc4bq9asaw6zz51mgw8ad5r9";
@@ -65,8 +60,14 @@ rec {
   };
 
   kops_1_20 = mkKops rec {
-    version = "1.20.1";
-    sha256 = "sha256-k6ODXbh7Bh+rBw6bjSNLxLY0fz7JLnrmJibnXz5qnSc=";
+    version = "1.20.2";
+    sha256 = "011ib3xkj6nn7qax8d0ns8y4jhkwwmry1qnzxklvzssaxhmzs557";
+    rev = "v${version}";
+  };
+
+  kops_1_21 = mkKops rec {
+    version = "1.21.0";
+    sha256 = "sha256-T2i3qpg3GC7yaYCGrN1V5XXrUyT+Ce9Q4aV00gQJ7gM=";
     rev = "v${version}";
   };
 }

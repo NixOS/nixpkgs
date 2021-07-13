@@ -169,7 +169,7 @@ with lib;
       description = ''
         Whether to enable HTTP 3.
         This requires using <literal>pkgs.nginxQuic</literal> package
-        which can be achived by setting <literal>services.nginx.package = pkgs.nginxQuic;</literal>.
+        which can be achieved by setting <literal>services.nginx.package = pkgs.nginxQuic;</literal>.
         Note that HTTP 3 support is experimental and
         *not* yet recommended for production.
         Read more at https://quic.nginx.org/

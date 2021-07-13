@@ -76,6 +76,21 @@ stdenv.mkDerivation rec {
     sha256 = "1jdw2i1rq06zqd6aabh7bbm0avsg4pygnfmd7gviv0blhih9054l";
   };
 
+  patches = [
+    # TODO: remove on the next version bump
+    (fetchpatch {
+      name = "include-schema-conversion-utils-source.patch";
+      url = "https://github.com/tensorflow/tensorflow/commit/f3c4f4733692150fd6174f2cd16438cfaba2e5ab.patch";
+      sha256 = "0zx4hbz679kn79f30159rl1mq74dg45cvaawii0cyv48z472yy4k";
+    })
+    # TODO: remove on the next version bump
+    (fetchpatch {
+      name = "cxxstandard-var.patch";
+      url = "https://github.com/tensorflow/tensorflow/commit/9b128ae4200e10b4752f903492d1e7d11957ed5c.patch";
+      sha256 = "1q0izdwdji5fbyqll6k4dmkzfykyvvz5cvc6hysdj285nkn2wy6h";
+    })
+  ];
+
   buildInputs = [ zlib flatbuffers ];
 
   dontConfigure = true;
@@ -131,7 +146,14 @@ stdenv.mkDerivation rec {
       # tensorflow lite expects to compile abseil into `libtensorflow-lite.a`
       ln -s ${abseil-cpp.src} "$prefix/absl"
 
-      buildFlagsArray+=(INCLUDES="-I $PWD ${includes}" TARGET_TOOLCHAIN_PREFIX="" -j$NIX_BUILD_CORES all)
+      # set CXXSTANDARD=c++17 here because abseil-cpp in nixpkgs is set as
+      # such and would be used in dependents like libedgetpu
+      buildFlagsArray+=(
+        INCLUDES="-I $PWD ${includes}"
+        CXXSTANDARD="-std=c++17"
+        TARGET_TOOLCHAIN_PREFIX=""
+        -j$NIX_BUILD_CORES
+        all)
     '';
 
   installPhase = ''

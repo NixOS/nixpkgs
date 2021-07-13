@@ -46,9 +46,9 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 20.09 release](https://hydra.nixos.org/jobset/nixos/release-20.09)
+* [Continuous package builds for the NixOS 21.05 release](https://hydra.nixos.org/jobset/nixos/release-21.05)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 20.09 release](https://hydra.nixos.org/job/nixos/release-20.09/tested#tabs-constituents)
+* [Tests for the NixOS 21.05 release](https://hydra.nixos.org/job/nixos/release-21.05/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
@@ -87,7 +87,7 @@ Most contributions are based on and merged into these branches:
   deemed of sufficiently high quality
 
 For more information about contributing to the project, please visit
-the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
+the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
 
 # Donations
 

@@ -4,18 +4,18 @@
 , fetchFromGitHub
 , ConfigArgParse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
 , dialog, gnureadline
-, pytest_xdist, pytestCheckHook, dateutil
+, pytest_xdist, pytestCheckHook, python-dateutil
 }:
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z5ZIA0ib+N7La6Z0Taf6DovCF6fXnEDppPQt6Vgwl0c=";
+    sha256 = "0jdq6pvq7af2x483857qyp1qvqs4yb4nqcv66qi70glmbanhlxd4";
   };
 
   sourceRoot = "source/${pname}";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   buildInputs = [ dialog gnureadline ];
 
   checkInputs = [
-    dateutil
+    python-dateutil
     pytestCheckHook
     pytest_xdist
   ];

@@ -82,7 +82,7 @@ let
   recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate {};
 
   staticHaskellPackagesPlatforms =
-    packagePlatforms pkgs.pkgsStatic.haskellPackages;
+    packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8104;
 
   jobs = recursiveUpdateMany [
     (mapTestOn {
@@ -98,7 +98,8 @@ let
 
       # test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC
-      pkgsStatic.haskellPackages = {
+      # Use integer-simple to avoid GMP linking problems (LGPL)
+      pkgsStatic.haskell.packages.integer-simple.ghc8104 = {
         inherit (staticHaskellPackagesPlatforms)
           hello
           random
@@ -222,6 +223,7 @@ let
       # working as expected.
       cabal-install = all;
       Cabal_3_4_0_0 = with compilerNames; [ ghc884 ghc8104 ];
+      cabal2nix-unstable = all;
       funcmp = all;
       # Doesn't currently work on ghc-9.0:
       # https://github.com/haskell/haskell-language-server/issues/297
@@ -299,12 +301,12 @@ let
         };
         constituents = [
           # TODO: reenable darwin builds if static libiconv works
-          jobs.pkgsStatic.haskellPackages.hello.x86_64-linux
-          jobs.pkgsStatic.haskellPackages.hello.aarch64-linux
-          jobs.pkgsStatic.haskellPackages.lens.x86_64-linux
-          jobs.pkgsStatic.haskellPackages.lens.aarch64-linux
-          jobs.pkgsStatic.haskellPackages.random.x86_64-linux
-          jobs.pkgsStatic.haskellPackages.random.aarch64-linux
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.x86_64-linux
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.aarch64-linux
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.x86_64-linux
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.aarch64-linux
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.x86_64-linux
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.aarch64-linux
         ];
       };
     }

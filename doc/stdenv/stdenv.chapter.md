@@ -463,6 +463,12 @@ The prefix under which the package must be installed, passed via the `--prefix` 
 
 The key to use when specifying the prefix. By default, this is set to `--prefix=` as that is used by the majority of packages.
 
+##### `dontAddStaticConfigureFlags`
+
+By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
+
+If this is undesirable, set this variable to true.
+
 ##### `dontAddDisableDepTrack` {#var-stdenv-dontAddDisableDepTrack}
 
 By default, the flag `--disable-dependency-tracking` is added to the configure flags to speed up Automake-based builds. If this is undesirable, set this variable to true.
@@ -475,7 +481,7 @@ By default, the configure phase applies some special hackery to all files called
 
 By default, when the configure script has `--enable-static`, the option `--disable-static` is added to the configure flags.
 
-If this is undesirable, set this variable to true.
+If this is undesirable, set this variable to true.  It is automatically set to true when building statically, for example through `pkgsStatic`.
 
 ##### `configurePlatforms` {#var-stdenv-configurePlatforms}
 
@@ -1119,9 +1125,13 @@ There are flags available to harden packages at compile or link-time. These can 
 
 Both parameters take a list of flags as strings. The special `"all"` flag can be passed to `hardeningDisable` to turn off all hardening. These flags can also be used as environment variables for testing or development purposes.
 
+For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/title/Security).
+
+### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
+
 The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to package is incompatible.
 
-### `format` {#format}
+#### `format` {#format}
 
 Adds the `-Wformat -Wformat-security -Werror=format-security` compiler options. At present, this warns about calls to `printf` and `scanf` functions where the format string is not a string literal and there are no format arguments, as in `printf(foo);`. This may be a security hole if the format string came from untrusted input and contains `%n`.
 
@@ -1134,7 +1144,7 @@ This needs to be turned off or fixed for errors similar to:
 cc1plus: some warnings being treated as errors
 ```
 
-### `stackprotector` {#stackprotector}
+#### `stackprotector` {#stackprotector}
 
 Adds the `-fstack-protector-strong --param ssp-buffer-size=4` compiler options. This adds safety checks against stack overwrites rendering many potential code injection attacks into aborting situations. In the best case this turns code injection vulnerabilities into denial of service or into non-issues (depending on the application).
 
@@ -1145,7 +1155,7 @@ bin/blib.a(bios_console.o): In function `bios_handle_cup':
 /tmp/nix-build-ipxe-20141124-5cbdc41.drv-0/ipxe-5cbdc41/src/arch/i386/firmware/pcbios/bios_console.c:86: undefined reference to `__stack_chk_fail'
 ```
 
-### `fortify` {#fortify}
+#### `fortify` {#fortify}
 
 Adds the `-O2 -D_FORTIFY_SOURCE=2` compiler options. During code generation the compiler knows a great deal of information about buffer sizes (where possible), and attempts to replace insecure unlimited length buffer function calls with length-limited ones. This is especially useful for old, crufty code. Additionally, format strings in writable memory that contain `%n` are blocked. If an application depends on such a format string, it will need to be worked around.
 
@@ -1166,7 +1176,7 @@ installwatch.c:3751:5: error: conflicting types for '__open_2'
 fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
 ```
 
-### `pic` {#pic}
+#### `pic` {#pic}
 
 Adds the `-fPIC` compiler options. This options adds support for position independent code in shared libraries and thus making ASLR possible.
 
@@ -1179,19 +1189,19 @@ ccbLfRgg.s: Assembler messages:
 ccbLfRgg.s:33: Error: missing or invalid displacement expression `private_key_len@GOTOFF'
 ```
 
-### `strictoverflow` {#strictoverflow}
+#### `strictoverflow` {#strictoverflow}
 
 Signed integer overflow is undefined behaviour according to the C standard. If it happens, it is an error in the program as it should check for overflow before it can happen, not afterwards. GCC provides built-in functions to perform arithmetic with overflow checking, which are correct and faster than any custom implementation. As a workaround, the option `-fno-strict-overflow` makes gcc behave as if signed integer overflows were defined.
 
 This flag should not trigger any build or runtime errors.
 
-### `relro` {#relro}
+#### `relro` {#relro}
 
 Adds the `-z relro` linker option. During program load, several ELF memory sections need to be written to by the linker, but can be turned read-only before turning over control to the program. This prevents some GOT (and .dtors) overwrite attacks, but at least the part of the GOT used by the dynamic linker (.got.plt) is still vulnerable.
 
 This flag can break dynamic shared object loading. For instance, the module systems of Xorg and OpenCV are incompatible with this flag. In almost all cases the `bindnow` flag must also be disabled and incompatible programs typically fail with similar errors at runtime.
 
-### `bindnow` {#bindnow}
+#### `bindnow` {#bindnow}
 
 Adds the `-z bindnow` linker option. During program load, all dynamic symbols are resolved, allowing for the complete GOT to be marked read-only (due to `relro`). This prevents GOT overwrite attacks. For very large applications, this can incur some performance loss during initial load while symbols are resolved, but this shouldn’t be an issue for daemons.
 
@@ -1201,13 +1211,18 @@ This flag can break dynamic shared object loading. For instance, the module syst
 intel_drv.so: undefined symbol: vgaHWFreeHWRec
 ```
 
+### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
+
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
 
-### `pie` {#pie}
+#### `pie` {#pie}
+
+This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for `musl` based package builds.
 
 Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Executables are needed to take advantage of Address Space Layout Randomization, supported by modern kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this with the `pic` flag, so they gain ASLR automatically, but binary .text regions need to be build with `pie` to gain ASLR. When this happens, ROP attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
 
-For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/index.php/DeveloperWiki:Security).
+Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
+If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
 [^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
 [^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.
