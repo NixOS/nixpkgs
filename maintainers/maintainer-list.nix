@@ -10074,6 +10074,12 @@
     githubId = 1829294;
     name = "Steve Chávez";
   };
+  stevebob = {
+    email = "stephen@sherra.tt";
+    github = "stevebob";
+    githubId = 417118;
+    name = "Stephen Sherratt";
+  };
   steveej = {
     email = "mail@stefanjunker.de";
     github = "steveej";
