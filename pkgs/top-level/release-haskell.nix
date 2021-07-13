@@ -96,7 +96,12 @@ let
         writers = testPlatforms.writers;
       };
 
-      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler;
+      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
+        # remove musl ghc865Binary since it is known to be broken and
+        # causes an evaluation error on darwin.
+        # TODO: remove ghc865Binary altogether and use ghc8102Binary
+        ghc865Binary = {};
+      };
 
       # test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC
