@@ -105,9 +105,9 @@ in import ./make-test-python.nix ({ lib, ... }: {
         security.acme.certs."a.example.test".keyType = "ec384";
         security.acme.certs."a.example.test".postRun = ''
           set -euo pipefail
-          touch test
-          chown root:root test
-          echo testing > test
+          touch /home/test
+          chown root:root /home/test
+          echo testing > /home/test
         '';
       };
 
@@ -383,7 +383,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
           switch_to(webserver, "cert-change")
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_connection_key_bits(client, "a.example.test", "384")
-          webserver.succeed("grep testing /var/lib/acme/a.example.test/test")
+          webserver.succeed("grep testing /home/test")
           # Clean to remove the testing file (and anything else messy we did)
           webserver.succeed("systemctl clean acme-a.example.test.service --what=state")
 
