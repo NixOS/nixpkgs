@@ -13,9 +13,10 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-jbQPhGfZPPxjYTSJ9wMLzQIOhAwxJZypRzqwL421RfM=";
 
-  doCheck = false; # Errors:
-                   #  > === RUN   TestNamespaceHandlerGlobalNamespaceDisabledSuite
-                   # gocql: unable to dial control conn 127.0.0.1:9042: dial tcp 127.0.0.1:9042: connect: connection refused
+  # Errors:
+  #  > === RUN   TestNamespaceHandlerGlobalNamespaceDisabledSuite
+  # gocql: unable to dial control conn 127.0.0.1:9042: dial tcp 127.0.0.1:9042: connect: connection refused
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
