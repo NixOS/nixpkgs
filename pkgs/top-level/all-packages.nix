@@ -3875,6 +3875,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  clamav-unofficial-sigs = callPackage ../tools/security/clamav-unofficial-sigs.nix {};
+
   clex = callPackage ../tools/misc/clex { };
 
   client-ip-echo = callPackage ../servers/misc/client-ip-echo { };
