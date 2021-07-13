@@ -30,7 +30,9 @@ llvmPackages_12.stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = "install -Dm755 tools/llvm-spirv/llvm-spirv -t ${placeholder "out"}/bin";
+  postInstall = ''
+    install -Dm755 tools/llvm-spirv/llvm-spirv -t ${placeholder "out"}/bin
+  '';
 
   meta = with lib; {
     homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
