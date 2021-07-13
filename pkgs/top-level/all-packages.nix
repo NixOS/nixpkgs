@@ -27659,7 +27659,10 @@ with pkgs;
   });
 
   thunderbird-unwrapped = thunderbirdPackages.thunderbird;
+  thunderbird-78-unwrapped = thunderbirdPackages.thunderbird-78;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
+  thunderbird-78 = wrapThunderbird thunderbird-78-unwrapped { };
+  thunderbird-wayland = wrapThunderbird thunderbird-unwrapped { forceWayland = true; };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
