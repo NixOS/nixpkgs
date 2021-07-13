@@ -8,7 +8,7 @@
 , kcontacts, akonadi, akonadi-calendar, akonadi-contacts
 , eigen, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen
 , librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg, phonon
-, poppler, pstoedit, qca-qt5, vc
+, poppler, pstoedit, qca-qt5, vc, fontconfig
 # TODO: package Spnav, m2mml LibEtonyek, Libqgit2
 }:
 
@@ -32,6 +32,7 @@ mkDerivation rec {
     kcontacts akonadi akonadi-calendar akonadi-contacts
     eigen git gsl ilmbase kproperty kreport lcms2 marble pcre libgit2 libodfgen librevenge
     libvisio libwpd libwpg libwps okular openexr openjpeg phonon poppler qca-qt5 vc
+    fontconfig
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];

@@ -5,13 +5,13 @@ Subject: [PATCH 3/3] plugins/qpa: allow using nixos wrapper
 
 Signed-off-by: Yaroslav  Bolyukin <iam@lach.pw>
 ---
- plugins/qpa/main.cpp | 2 +-
+ src/plugins/qpa/main.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/plugins/qpa/main.cpp b/plugins/qpa/main.cpp
+diff --git a/src/plugins/qpa/main.cpp b/src/plugins/qpa/main.cpp
 index efd236b..a69c046 100644
---- a/plugins/qpa/main.cpp
-+++ b/plugins/qpa/main.cpp
+--- a/src/plugins/qpa/main.cpp
++++ b/src/plugins/qpa/main.cpp
 @@ -23,7 +23,7 @@ public:
  QPlatformIntegration *KWinIntegrationPlugin::create(const QString &system, const QStringList &paramList)
  {
