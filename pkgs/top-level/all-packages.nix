@@ -5546,7 +5546,17 @@ in
 
   grub2 = grub2_full;
 
-  grub2_full = callPackage ../tools/misc/grub/2.0x.nix { };
+  grub2_full = callPackage ../tools/misc/grub/2.0x.nix {
+    # update breaks grub2
+    gnulib = pkgs.gnulib.overrideAttrs (oldAttrs: rec {
+      version = "20200223";
+      src = fetchgit {
+        url = "https://git.savannah.gnu.org/r/gnulib.git";
+        rev = "292fd5d6ff5ecce81ec3c648f353732a9ece83c0";
+        sha256 = "0hkg3nql8nsll0vrqk4ifda0v4kpi67xz42r8daqsql6c4rciqnw";
+      };
+    });
+  };
 
   grub2_efi = grub2.override {
     efiSupport = true;
