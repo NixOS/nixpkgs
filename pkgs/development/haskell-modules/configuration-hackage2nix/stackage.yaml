@@ -147,7 +147,7 @@ default-package-overrides:
   - apecs-physics ==0.4.5
   - api-field-json-th ==0.1.0.2
   - api-maker ==0.1.0.0
-  - ap-normalize ==0.1.0.0
+  - ap-normalize ==0.1.0.1
   - appar ==0.1.8
   - appendmap ==0.1.5
   - apply-refact ==0.9.2.0
