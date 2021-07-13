@@ -10964,12 +10964,6 @@
     github = "deviant";
     githubId = 68829907;
   };
-  va1entin = {
-    email = "github@valentinsblog.com";
-    github = "va1entin";
-    githubId = 31535155;
-    name = "Valentin Heidelberger";
-  };
   vaibhavsagar = {
     email = "vaibhavsagar@gmail.com";
     github = "vaibhavsagar";
