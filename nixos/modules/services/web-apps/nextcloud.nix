@@ -92,7 +92,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud19" "nextcloud20" "nextcloud21" ];
+      relatedPackages = [ "nextcloud19" "nextcloud20" "nextcloud21" "nextcloud22" ];
     };
 
     maxUploadSize = mkOption {
@@ -385,7 +385,7 @@ in {
       ];
 
       warnings = let
-        latest = 21;
+        latest = 22;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
