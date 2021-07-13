@@ -197,6 +197,7 @@ in {
         home = "/var/lib/jupyter";
         createHome = true;
         useDefaultShell = true; # needed so that the user can start a terminal.
+        isSystemUser = true;
       };
     })
   ];
