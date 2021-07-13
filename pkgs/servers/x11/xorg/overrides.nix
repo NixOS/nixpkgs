@@ -659,6 +659,7 @@ self: super:
           "--with-xkb-output=$out/share/X11/xkb/compiled"
           "--with-log-dir=/var/log"
           "--enable-glamor"
+          "--with-os-name=Nix" # r13y, embeds the build machine's kernel version otherwise
         ] ++ lib.optionals stdenv.hostPlatform.isMusl [
           "--disable-tls"
         ];
