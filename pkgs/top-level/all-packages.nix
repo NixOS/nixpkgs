@@ -20607,6 +20607,8 @@ in
 
   hostapd = callPackage ../os-specific/linux/hostapd { };
 
+  hp-ams = callPackage ../os-specific/linux/hp-ams { };
+
   htop = callPackage ../tools/system/htop {
     inherit (darwin) IOKit;
   };
