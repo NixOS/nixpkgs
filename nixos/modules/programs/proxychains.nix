@@ -159,7 +159,12 @@ in {
       };
 
     environment.etc."proxychains.conf".text = configFile;
-    environment.systemPackages = [ pkgs.proxychains ];
+    environment.systemPackages =
+      [
+        pkgs.proxychains.override {
+          copyConfig = false;
+        }
+      ];
   };
 
 }
