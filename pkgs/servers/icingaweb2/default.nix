@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icingaweb2";
-  version = "2.8.2";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
     rev = "v${version}";
-    sha256 = "1zrni1hzblaangiqm7iqbvg2h9rdc2l3pzzymz52r7mri4qnr4s8";
+    sha256 = "sha256-wk6rTEYRS0q0HpQRbFAmfeYVrF/xLP/HchEXNqqNpYg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
