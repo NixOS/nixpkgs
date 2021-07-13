@@ -523,6 +523,14 @@
           <literal>rxvt-unicode</literal> explicitly.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>claws-mail</literal> package now references the
+          new GTK+ 3 release branch, major version 4. To use the GTK+ 2
+          releases, one can install the
+          <literal>claws-mail-gtk2</literal> package.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

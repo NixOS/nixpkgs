@@ -242,6 +242,8 @@ let
 
     dap =  callPackage ../development/ocaml-modules/dap { };
 
+    data-encoding = callPackage ../development/ocaml-modules/data-encoding { };
+
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
     diet =  callPackage ../development/ocaml-modules/diet { };
@@ -547,6 +549,10 @@ let
     js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
+
+    json-data-encoding = callPackage ../development/ocaml-modules/json-data-encoding { };
+
+    json-data-encoding-bson = callPackage ../development/ocaml-modules/json-data-encoding/bson.nix { };
 
     junit = callPackage ../development/ocaml-modules/junit { };
     junit_ounit = callPackage ../development/ocaml-modules/junit/ounit.nix { };

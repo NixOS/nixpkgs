@@ -713,6 +713,8 @@ rec {
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
 
+  mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
+
   mkOrder = priority: content:
     { _type = "order";
       inherit priority content;

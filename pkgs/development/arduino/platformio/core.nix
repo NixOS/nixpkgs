@@ -1,30 +1,74 @@
-{ stdenv, lib, buildPythonApplication
-, ajsonrpc
-, bottle
-, click
-, click-completion
-, colorama
+{ stdenv, lib, python3
+, fetchFromGitHub
 , git
-, jsondiff
-, lockfile
-, marshmallow
-, pyelftools
-, pyserial
-, pytest
-, requests
-, semantic-version
 , spdx-license-list-data
-, starlette
-, tabulate
-, tox
-, uvicorn
-, wsproto
-, zeroconf
 , version, src
 }:
 
 let
-  args = lib.concatStringsSep " " ((map (e: "--deselect tests/${e}") [
+  python = python3.override {
+    packageOverrides = self: super: {
+      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "e0281b157d3d5d59d803e3f4557dcc9a3dff28a4dd4829a9ff478adae50ca092";
+        };
+      });
+
+      click = super.click.overridePythonAttrs (oldAttrs: rec {
+        version = "7.1.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "06kbzd6sjfkqan3miwj9wqyddfxc2b6hi7p5s4dvqjb3gif2bdfj";
+        };
+      });
+
+      uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
+        version = "0.13.2";
+        src = fetchFromGitHub {
+          owner = "encode";
+          repo = "uvicorn";
+          rev = version;
+          sha256 = "04zgmp9z46k72ay6cz7plga6d3w3a6x41anabm7ramp7jdqf6na9";
+        };
+      });
+    };
+  };
+in
+with python.pkgs; buildPythonApplication rec {
+  pname = "platformio";
+  inherit version src;
+
+  propagatedBuildInputs = [
+    ajsonrpc
+    bottle
+    click
+    click-completion
+    colorama
+    git
+    lockfile
+    marshmallow
+    pyelftools
+    pyserial
+    requests
+    semantic-version
+    starlette
+    tabulate
+    uvicorn
+    wsproto
+    zeroconf
+  ];
+
+  HOME = "/tmp";
+
+  checkInputs = [
+    jsondiff
+    pytestCheckHook
+    tox
+  ];
+
+  pytestFlagsArray = (map (e: "--deselect tests/${e}") [
     "commands/test_ci.py::test_ci_boards"
     "commands/test_ci.py::test_ci_build_dir"
     "commands/test_ci.py::test_ci_keep_build_dir"
@@ -88,43 +132,9 @@ let
     "commands/test_update.py"
     "test_maintenance.py"
     "test_ino2cpp.py"
-  ]));
-
-in buildPythonApplication rec {
-  pname = "platformio";
-  inherit version src;
-
-  propagatedBuildInputs = [
-    ajsonrpc
-    bottle
-    click
-    click-completion
-    colorama
-    git
-    lockfile
-    marshmallow
-    pyelftools
-    pyserial
-    requests
-    semantic-version
-    starlette
-    tabulate
-    uvicorn
-    wsproto
-    zeroconf
+  ]) ++ [
+    "tests"
   ];
-
-  HOME = "/tmp";
-
-  checkInputs = [ pytest tox jsondiff ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    py.test -v tests ${args}
-
-    runHook postCheck
-  '';
 
   patches = [
     ./fix-searchpath.patch
