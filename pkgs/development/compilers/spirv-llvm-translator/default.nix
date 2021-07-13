@@ -22,9 +22,10 @@ llvmPackages_12.stdenv.mkDerivation rec {
 
   checkInputs = [ lit ];
 
-  cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=ON"
-                 "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
-               ];
+  cmakeFlags = [
+    "-DLLVM_INCLUDE_TESTS=ON"
+    "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
+  ];
   # also make `llvm-spirv`
   postBuild = "make llvm-spirv";
 
