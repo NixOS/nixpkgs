@@ -9579,6 +9579,10 @@ in
 
   uriparser = callPackage ../development/libraries/uriparser {};
 
+  url-bot-rs = callPackage ../applications/networking/irc/url-bot-rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   urlscan = callPackage ../applications/misc/urlscan { };
 
   urlview = callPackage ../applications/misc/urlview {};
