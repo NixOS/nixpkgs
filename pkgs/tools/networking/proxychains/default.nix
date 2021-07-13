@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, copyConfig ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +20,9 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-Werror" "-Werror -Wno-stringop-truncation"
   '';
 
-  postInstall = ''
+  postInstall = if copyConfig then ''
     cp src/proxychains.conf $out/etc
-  '';
+  '' else ":";
 
   meta = with lib; {
     description = "Proxifier for SOCKS proxies";
