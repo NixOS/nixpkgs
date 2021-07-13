@@ -255,7 +255,7 @@ jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 josa42/coc-lua
 josa42/vim-lightline-coc
-joshdick/onedark.vim
+joshdick/onedark.vim@main
 jpalardy/vim-slime@main
 jparise/vim-graphql
 jparise/vim-phabricator
