@@ -1,12 +1,12 @@
-# QEMU flags shared between various Nix expressions.
-{ pkgs }:
+# QEMU-related utilities shared between various Nix expressions.
+{ lib, pkgs }:
 
 let
   zeroPad = n:
-    pkgs.lib.optionalString (n < 16) "0" +
+    lib.optionalString (n < 16) "0" +
       (if n > 255
        then throw "Can't have more than 255 nets or nodes!"
-       else pkgs.lib.toHexString n);
+       else lib.toHexString n);
 in
 
 rec {
@@ -14,7 +14,7 @@ rec {
 
   qemuNICFlags = nic: net: machine:
     [ "-device virtio-net-pci,netdev=vlan${toString nic},mac=${qemuNicMac net machine}"
-      "-netdev vde,id=vlan${toString nic},sock=$QEMU_VDE_SOCKET_${toString net}"
+      ''-netdev vde,id=vlan${toString nic},sock="$QEMU_VDE_SOCKET_${toString net}"''
     ];
 
   qemuSerialDevice = if pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64 then "ttyS0"
