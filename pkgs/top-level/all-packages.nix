@@ -19911,7 +19911,9 @@ in
 
   check_systemd = callPackage ../servers/monitoring/nagios/plugins/check_systemd.nix { };
 
-  neo4j = callPackage ../servers/nosql/neo4j { };
+  neo4j = callPackage ../servers/nosql/neo4j {
+    jre = jre8;
+  };
 
   neo4j-desktop = callPackage ../applications/misc/neo4j-desktop { };
 
