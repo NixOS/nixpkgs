@@ -479,12 +479,20 @@
         </itemizedlist>
       </listitem>
     </itemizedlist>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <literal>yggdrasil</literal> was upgraded to a new major
           release with breaking changes, see
           <link xlink:href="https://github.com/yggdrasil-network/yggdrasil-go/releases/tag/v0.4.0">upstream
+          changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>icingaweb2</literal> was upgraded to a new release
+          which requires a manual database upgrade, see
+          <link xlink:href="https://github.com/Icinga/icingaweb2/releases/tag/v2.9.0">upstream
           changelog</link>.
         </para>
       </listitem>
