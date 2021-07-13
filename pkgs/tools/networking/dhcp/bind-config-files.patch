@@ -1,0 +1,13 @@
+diff --git a/bind/Makefile.in b/bind/Makefile.in
+index 8fe8883f..29d81a94 100644
+--- a/bind/Makefile.in
++++ b/bind/Makefile.in
+@@ -42,6 +42,8 @@ bind1:
+ 		echo ${bindsrcdir} already unpacked... ;  \
+ 	else                                              \
+ 		gunzip -c bind.tar.gz | tar xf - ;        \
++		cp ../config.guess bind*/config.guess; \
++		cp ../config.sub bind*/config.sub; \
+ 	fi
+ 
+ # Configure the libraries

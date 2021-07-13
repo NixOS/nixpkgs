@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
       # patch, the hostname doesn't get set properly if the old
       # hostname (i.e. before reboot) is equal to the new hostname.
       ./set-hostname.patch
+
+      # Update config.guess in bundled BIND
+      ./bind-config-files.patch
     ];
 
   nativeBuildInputs = [ perl makeWrapper ];
