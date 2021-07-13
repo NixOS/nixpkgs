@@ -1,11 +1,16 @@
 { lib, writeText, runCommand, writeReferencesToFile }:
 
+let
+  currentSystemSplit = lib.splitString "-" builtins.currentSystem;
+  currentOS = lib.last currentSystemSplit;
+  currentArch = lib.head currentSystemSplit;
+in
 {
   buildContainer =
     { args
     , mounts ? {}
-    , os ? "linux"
-    , arch ? "x86_64"
+    , os ? currentOS
+    , arch ? currentArch
     , readonly ? false
     , extraOciConfig ? {}
     }:
