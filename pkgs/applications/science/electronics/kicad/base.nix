@@ -62,6 +62,7 @@ assert lib.assertMsg (!(stable && (sanitizeAddress || sanitizeThreads)))
   "Only kicad-unstable(-small) supports address/thread sanitation";
 assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
   "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
+
 let
   inherit (lib) optional optionals;
 in
@@ -81,14 +82,16 @@ stdenv.mkDerivation rec {
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
-  cmakeFlags = optionals (withScripting) [
+  cmakeFlags = optionals (stable && withScripting) [
     "-DKICAD_SCRIPTING=ON"
     "-DKICAD_SCRIPTING_MODULES=ON"
     "-DKICAD_SCRIPTING_PYTHON3=ON"
     "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
   ]
-  ++ optional (!withScripting)
+  ++ optionals (!withScripting) [
     "-DKICAD_SCRIPTING=OFF"
+    "-DKICAD_SCRIPTING_WXPYTHON=OFF"
+  ]
   ++ optional (withNgspice) "-DKICAD_SPICE=ON"
   ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
   ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
@@ -152,7 +155,10 @@ stdenv.mkDerivation rec {
     openssl
     boost
   ]
-  ++ optionals (withScripting) [ swig python wxPython ]
+  # unstable requires swig and python
+  # wxPython still optional
+  ++ optionals (withScripting || (!stable)) [ swig python ]
+  ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice
   ++ optional (withOCE) opencascade
   ++ optional (withOCC) opencascade-occt
