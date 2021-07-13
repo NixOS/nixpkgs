@@ -19,6 +19,7 @@ Options:
   --no-patch          Don't patch the lockfile if hashes are missing
   --lockfile=FILE     Specify path to the lockfile [default: ./yarn.lock].
   --builtin-fetchgit  Use builtin fetchGit for git dependencies to support on-the-fly generation of yarn.nix without an internet connection
+  --offline           Don't attempt to use the network e.g to fetch sha1
 `
 
 const options = docopt(USAGE)
@@ -61,7 +62,9 @@ const pkgs = R.pipe(
   R.uniqBy(R.prop('resolved')),
 )(json.object)
 
-const fixedPkgsPromises = R.map(fixPkgAddMissingSha1, pkgs)
+const offline = options["--offline"]
+
+const fixedPkgsPromises = offline ? pkgs: R.map(fixPkgAddMissingSha1, pkgs)
 
 ;(async () => {
   const fixedPkgs = await Promise.all(fixedPkgsPromises)

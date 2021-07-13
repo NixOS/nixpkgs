@@ -90,14 +90,21 @@ function fetchLockedDep(builtinFetchGit) {
       return fetchgit(fileName, urlForGit, rev, branch || 'master', builtinFetchGit)
     }
 
-    const sha = sha1OrRev
+    var sha = sha1OrRev
+
+    var algo = "sha1"
+
+    if (pkg.integrity) {
+      algo = pkg.integrity.split("-", 1)
+      sha = pkg.integrity
+    }
 
     return `    {
       name = "${fileName}";
       path = fetchurl {
         name = "${fileName}";
         url  = "${url}";
-        sha1 = "${sha}";
+        ${algo} = "${sha}";
       };
     }`
   }
