@@ -160,7 +160,6 @@ let
     enableParallelBuilding = true;
 
     passthru = rec {
-
       module = import ../../../../nixos/modules/system/boot/kernel_config.nix;
       # used also in apache
       # { modules = [ { options = res.options; config = svc.config or svc; } ];
@@ -188,7 +187,7 @@ let
 
   passthru = {
     features = kernelFeatures;
-    inherit commonStructuredConfig isZen isHardened isLibre modDirVersion;
+    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre modDirVersion;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
     kernelOlder = lib.versionOlder version;
     kernelAtLeast = lib.versionAtLeast version;
