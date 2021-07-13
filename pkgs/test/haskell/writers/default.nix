@@ -14,7 +14,11 @@ let
     ;
 in
 
-runCommand "test-haskell-writers" {} ''
+runCommand "test-haskell-writers" {
+  meta = {
+    inherit (tests.writers.meta) platforms;
+  };
+} ''
   ${writeTest "success" "test-haskell-bin-writer" "${bin.haskell}/bin/${bin.haskell.name}"}
   ${writeTest "success" "test-haskell-simple-writer" simple.haskell}
   ${writeTest "success" "test-haskell-path-writer" path.haskell}
