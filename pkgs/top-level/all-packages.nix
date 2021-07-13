@@ -13728,6 +13728,8 @@ in
 
   augustus = callPackage ../games/augustus { };
 
+  k0sctl = callPackage ../applications/networking/cluster/k0sctl { };
+
   k2tf = callPackage ../development/tools/misc/k2tf { };
 
   kafkacat = callPackage ../development/tools/kafkacat { };
