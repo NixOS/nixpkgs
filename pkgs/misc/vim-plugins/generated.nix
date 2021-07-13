@@ -5188,6 +5188,18 @@ final: prev:
     meta.homepage = "https://github.com/freitass/todo.txt-vim/";
   };
 
+  tokyonight-nvim = buildVimPluginFrom2Nix {
+    pname = "tokyonight-nvim";
+    version = "2021-07-09";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "tokyonight.nvim";
+      rev = "e3ad6032a7e2c54dd7500335b43c7d353a19ede9";
+      sha256 = "1slb67kirb0jfgjsw09dhimmxagsk2aii6w461y1w8nj3fkl6p28";
+    };
+    meta.homepage = "https://github.com/folke/tokyonight.nvim/";
+  };
+
   traces-vim = buildVimPluginFrom2Nix {
     pname = "traces-vim";
     version = "2021-06-16";
