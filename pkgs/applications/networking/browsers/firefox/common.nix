@@ -4,7 +4,7 @@
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss, nss_3_53
+, freetype, fontconfig, file, nspr, nss_3_53
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx_1_8
@@ -19,6 +19,7 @@
 
 ## backported libraries
 
+, nss_latest
 , rust-cbindgen_latest
 
 ## optional libraries
@@ -124,7 +125,7 @@ let
 
   # Disable p11-kit support in nss until our cacert packages has caught up exposing CKA_NSS_MOZILLA_CA_POLICY
   # https://github.com/NixOS/nixpkgs/issues/126065
-  nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss.override { useP11kit = false; };
+  nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss_latest.override { useP11kit = false; };
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
   # RAM and the 32-bit memory space cannot handle that linking
