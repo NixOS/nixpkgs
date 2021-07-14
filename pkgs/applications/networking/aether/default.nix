@@ -6,12 +6,9 @@
 , mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
 , fetchurl
 }:
-
 stdenv.mkDerivation rec {
   pname = "aether";
   version = "2.0.0-dev15";
-  binaryName = "AetherP2P";
-  desktopName = "Aether";
 
   src = fetchurl {
     url = "https://static.getaether.net/Releases/Aether-${version}/2011262249.19338c93/linux/Aether-${version}%2B2011262249.19338c93.tar.gz";
@@ -47,7 +44,20 @@ stdenv.mkDerivation rec {
     libappindicator-gtk3 libdbusmenu
   ];
 
-  installPhase = ''
+  installPhase =
+  let
+    binaryName = "AetherP2P";
+    desktopItem = makeDesktopItem {
+      name = pname;
+      exec = binaryName;
+      icon = pname;
+      desktopName = "Aether";
+      genericName = meta.description;
+      categories = "Network;";
+      mimeType = "x-scheme-handler/aether";
+    };
+  in
+  ''
     mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}
     mv * $out/opt/${binaryName}
 
@@ -67,16 +77,6 @@ stdenv.mkDerivation rec {
 
     ln -s "${desktopItem}/share/applications" $out/share/
   '';
-
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = binaryName;
-    icon = pname;
-    inherit desktopName;
-    genericName = meta.description;
-    categories = "Network;";
-    mimeType = "x-scheme-handler/aether";
-  };
 
   meta = with lib; {
     description = "Peer-to-peer ephemeral public communities";
