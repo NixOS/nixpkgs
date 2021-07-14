@@ -6105,6 +6105,8 @@ in
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
+  jsvc = callPackage ../tools/system/jsvc { };
+
   jumpnbump = callPackage ../games/jumpnbump { };
 
   junkie = callPackage ../tools/networking/junkie { };
@@ -19031,6 +19033,8 @@ in
 
   commonsCompress = callPackage ../development/libraries/java/commons/compress { };
 
+  commonsDaemon = callPackage ../development/libraries/java/commons/daemon { };
+
   commonsFileUpload = callPackage ../development/libraries/java/commons/fileupload { };
 
   commonsLang = callPackage ../development/libraries/java/commons/lang { };
@@ -20273,6 +20277,8 @@ in
     unifi5
     unifi6;
   unifi = unifi6;
+
+  unifi-video = callPackage ../servers/unifi-video { };
 
   unpackerr = callPackage ../servers/unpackerr {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
