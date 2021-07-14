@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   desktopName = "Aether";
 
   src = fetchurl {
-    url = "https://static.getaether.net/Releases/Aether-2.0.0-dev.15/2011262249.19338c93/linux/Aether-2.0.0-dev.15%2B2011262249.19338c93.tar.gz";
+    url = "https://static.getaether.net/Releases/Aether-${version}/2011262249.19338c93/linux/Aether-${version}%2B2011262249.19338c93.tar.gz";
     sha256 = "1hi8w83zal3ciyzg2m62shkbyh6hj7gwsidg3dn88mhfy68himf7";
     name = "aether-tarball.tar.gz";
   };
