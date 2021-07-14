@@ -35,15 +35,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  libPath = lib.makeLibraryPath [
-    libcxx systemd libpulseaudio libdrm mesa
-    stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
-    gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
-    libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango systemd libXScrnSaver
-    libappindicator-gtk3 libdbusmenu
-  ];
-
   installPhase =
   let
     binaryName = "AetherP2P";
@@ -56,6 +47,14 @@ stdenv.mkDerivation rec {
       categories = "Network;";
       mimeType = "x-scheme-handler/aether";
     };
+    libPath = lib.makeLibraryPath [
+      libcxx systemd libpulseaudio libdrm mesa
+      stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
+      gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
+      libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
+      libXtst nspr nss libxcb pango systemd libXScrnSaver
+      libappindicator-gtk3 libdbusmenu
+    ];
   in
   ''
     mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}
