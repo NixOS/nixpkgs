@@ -65,6 +65,7 @@ let
       calindori = callPackage ./calindori.nix {};
       kalk = callPackage ./kalk.nix {};
       kclock = callPackage ./kclock.nix {};
+      koko = callPackage ./koko.nix {};
       krecorder = callPackage ./krecorder.nix {};
       plasma-dialer = callPackage ./plasma-dialer.nix {};
       plasma-phonebook = callPackage ./plasma-phonebook.nix {};
