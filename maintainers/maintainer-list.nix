@@ -4793,6 +4793,12 @@
     githubId = 1383440;
     name = "Jason Gilliland";
   };
+  jdahm = {
+    email = "johann.dahm@gmail.com";
+    github = "jdahm";
+    githubId = 68032;
+    name = "Johann Dahm";
+  };
   jdanek = {
     email = "jdanek@redhat.com";
     github = "jdanekrh";
