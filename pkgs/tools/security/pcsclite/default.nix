@@ -30,7 +30,12 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-confdir=/etc"
+    # Despite what `./configure --help` says, the value below is not
+    # the default, because the default is located under $sysconfdir,
+    # which in turn is under $prefix, effectively putting the confdir
+    # in the Nix store.  We obviously don't want this, since non-NixOS
+    # users may want to put things in that directory.
+    "--enable-confdir=/etc/reader.conf.d"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
   ]
