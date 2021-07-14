@@ -337,8 +337,11 @@ stdenv.mkDerivation {
 
   stripDebugList = [ "lib" "libexec" "bin" "share/git/contrib/credential/libsecret" ];
 
-  passthru.tests = {
-    buildbot-integration = nixosTests.buildbot;
+  passthru = {
+    shellPath = "/bin/git-shell";
+    tests = {
+      buildbot-integration = nixosTests.buildbot;
+    };
   };
 
   meta = {

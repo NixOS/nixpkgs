@@ -21,16 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "fwup";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "sha256-ayfcnIZ7MuBsCy1giwmY2D2C6AukwS+fevmXqGa4c1w=";
+    sha256 = "sha256-NaSA3mFWf3C03SAGssMqLT0vr5KMfxD5y/iragGNKjw=";
   };
-
-  patches = [ ./fix-testrunner-darwin.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -44,8 +42,7 @@ stdenv.mkDerivation rec {
     libsodium
     xz
     zlib
-  ]
-    ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     DiskArbitration
   ];
 

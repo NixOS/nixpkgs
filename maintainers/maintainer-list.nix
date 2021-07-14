@@ -7530,6 +7530,12 @@
     githubId = 1665818;
     name = "Philipp Eder";
   };
+  nickcao = {
+    name = "Nick Cao";
+    email = "nickcao@nichi.co";
+    github = "NickCao";
+    githubId = 15247171;
+  };
   nickhu = {
     email = "me@nickhu.co.uk";
     github = "nickhu";
@@ -9151,6 +9157,12 @@
     github = "rszibele";
     githubId = 1387224;
     name = "Richard Szibele";
+  };
+  rsynnest = {
+    email = "contact@rsynnest.com";
+    github = "rsynnest";
+    githubId = 4392850;
+    name = "Roland Synnestvedt";
   };
   rtburns-jpl = {
     email = "rtburns@jpl.nasa.gov";
@@ -10963,12 +10975,6 @@
     email = "v@anomalous.eu";
     github = "deviant";
     githubId = 68829907;
-  };
-  va1entin = {
-    email = "github@valentinsblog.com";
-    github = "va1entin";
-    githubId = 31535155;
-    name = "Valentin Heidelberger";
   };
   vaibhavsagar = {
     email = "vaibhavsagar@gmail.com";

@@ -23,12 +23,12 @@ stdenv.mkDerivation {
       sha256 = "06ifgzbpjj4picpj17zgprsfi501zf4pp85qjjgn29i5rs291zni";
     })
     (fetchurl {
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/0005-gnu-efi-version-compatibility.patch?id=821c3da473d1399d930d5b4a086e46a4179eaa45";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0005-gnu-efi-version-compatibility.patch";
       name = "0005-gnu-efi-version-compatibility.patch";
       sha256 = "1mz2idg8cwn0mvd3jixxynhkn7rhmi5fp8cc8zznh5f0ysfra446";
     })
     (fetchurl {
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/0025-reproducible-build.patch?id=821c3da473d1399d930d5b4a086e46a4179eaa45";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0025-reproducible-build.patch";
       name = "0025-reproducible-build.patch";
       sha256 = "0qk6wc6z3648828y3961pn4pi7xhd20a6fqn6z1mnj22bbvzcxls";
     })
