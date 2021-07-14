@@ -2819,6 +2819,8 @@ in
 
   gping = callPackage ../tools/networking/gping { };
 
+  gpu-burn = callPackage ../applications/misc/gpu-burn { };
+
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
   };
