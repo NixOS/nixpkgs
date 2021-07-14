@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, buildDunePackage, ff, zarith, ctypes, tezos-rust-libs, ocaml, alcotest }:
+{ lib, fetchFromGitLab, buildDunePackage, ff, zarith, ctypes, tezos-rust-libs, alcotest }:
 
 buildDunePackage rec {
   pname = "bls12-381";
