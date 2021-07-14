@@ -1,8 +1,39 @@
-{ stdenv, lib, fetchurl, makeWrapper, cmake, git, ftgl, gl2ps, glew, gsl
-, libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, lz4, xz, pcre, nlohmann_json
-, pkg-config, python, xxHash, zlib, zstd
-, libAfterImage, giflib, libjpeg, libtiff, libpng
-, Cocoa, CoreSymbolication, OpenGL, noSplash ? false }:
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, cmake
+, git
+, ftgl
+, gl2ps
+, glew
+, gsl
+, libX11
+, libXpm
+, libXft
+, libXext
+, libGLU
+, libGL
+, libxml2
+, lz4
+, xz
+, pcre
+, nlohmann_json
+, pkg-config
+, python
+, xxHash
+, zlib
+, zstd
+, libAfterImage
+, giflib
+, libjpeg
+, libtiff
+, libpng
+, Cocoa
+, CoreSymbolication
+, OpenGL
+, noSplash ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "root";
@@ -14,10 +45,29 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
-  buildInputs = [ ftgl gl2ps glew pcre zlib zstd libxml2 lz4 xz gsl xxHash libAfterImage giflib libjpeg libtiff libpng nlohmann_json python.pkgs.numpy ]
-    ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-    ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
-    ;
+  buildInputs = [
+    ftgl
+    gl2ps
+    glew
+    pcre
+    zlib
+    zstd
+    libxml2
+    lz4
+    xz
+    gsl
+    xxHash
+    libAfterImage
+    giflib
+    libjpeg
+    libtiff
+    libpng
+    nlohmann_json
+    python.pkgs.numpy
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
+  ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
+  ;
 
   patches = [
     ./sw_vers.patch
