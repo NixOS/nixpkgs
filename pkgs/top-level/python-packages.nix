@@ -5647,6 +5647,8 @@ in {
 
   purl = callPackage ../development/python-modules/purl { };
 
+  push-receiver = callPackage ../development/python-modules/push-receiver { };
+
   pushbullet = callPackage ../development/python-modules/pushbullet { };
 
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
@@ -7429,6 +7431,8 @@ in {
   rasterio = callPackage ../development/python-modules/rasterio {
     gdal = pkgs.gdal_2;
   };
+
+  ratelim = callPackage ../development/python-modules/ratelim { };
 
   ratelimit = callPackage ../development/python-modules/ratelimit { };
 

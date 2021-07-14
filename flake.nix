@@ -47,8 +47,20 @@
                       })
                     ];
                   })).config;
+
+                moduleDeclarationFile =
+                  (builtins.unsafeGetAttrPos "modules" args).file;
+
+                # Add the invoking file as error message location for modules
+                # that don't have their own locations; presumably inline modules.
+                addModuleDeclarationFile =
+                  m: {
+                    _file = moduleDeclarationFile;
+                    imports = [ m ];
+                  };
+
               in
-              modules ++ [
+              map addModuleDeclarationFile modules ++ [
                 {
                   system.nixos.versionSuffix =
                     ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";

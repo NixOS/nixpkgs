@@ -50,7 +50,8 @@ in (buildEnv {
     "/tex/generic/config" # make it a real directory for scheme-infraonly
   ];
 
-  buildInputs = [ makeWrapper ] ++ pkgList.extraInputs;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = pkgList.extraInputs;
 
   # This is set primarily to help find-tarballs.nix to do its job
   passthru.packages = pkgList.all;

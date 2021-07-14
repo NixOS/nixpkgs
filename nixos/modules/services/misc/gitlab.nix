@@ -911,7 +911,7 @@ in {
       }
       {
         assertion = versionAtLeast postgresqlPackage.version "12.0.0";
-        message = "PostgreSQL >=12 is required to run GitLab 14.";
+        message = "PostgreSQL >=12 is required to run GitLab 14. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
       }
     ];
 

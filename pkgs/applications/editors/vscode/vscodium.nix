@@ -13,10 +13,10 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "16s3hznyrz9w0cns8fk3pzk9ai5dj9y5p4n1rf3hrpg5hi9yxi5j";
-    x86_64-darwin = "133p032c8gv3hx4x7kxdfhz4xvkpjmjnvy02sf05dxqv5nly4xx4";
-    aarch64-linux = "183f674qyrlz0wqx6x48z6jhl8z30zmwsj8021hqi8px5ny99l1f";
-    armv7l-linux = "0rf3ybha861r5pfp6rvh21abfagaiwqlsbxm7fhphrc5382lmxbs";
+    x86_64-linux = "16hzhmsh9nv2brpzx8wnz08sanf0v6f3ln5hqgzxck0pafbzqyl5";
+    x86_64-darwin = "1a44fm5fx0zqlfr344mvc0m9hbd0vxd6s489pmh8x7m7q3sadi7j";
+    aarch64-linux = "082gjmnlvk12vkcxbpsd4xfgs38qbxkfawq9kyl3p7i8y6anrd4i";
+    armv7l-linux = "0zs66qmlq65166s34qjr6gppxvl5hyz1mjwxc97mki2c6y61fp28";
   }.${system};
 
   sourceRoot = {
@@ -31,7 +31,7 @@ in
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.57.1";
+    version = "1.58.1";
     pname = "vscodium";
 
     executableName = "codium";

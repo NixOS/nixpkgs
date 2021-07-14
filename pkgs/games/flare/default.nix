@@ -8,7 +8,7 @@ buildEnv {
     (callPackage ./game.nix {})
   ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
     mkdir -p $out/bin
     makeWrapper $out/games/flare $out/bin/flare --run "cd $out/share/games/flare"
