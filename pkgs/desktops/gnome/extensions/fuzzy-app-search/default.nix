@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "127n3jc5d6cl0yrpjf8acdj76br97knks1wx4f6jcswkx9x47w0a";
   };
 
-  uuid = "gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com";
+  passthru.extensionUuid = "gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com";
 
   nativeBuildInputs = [ glib ];
 
