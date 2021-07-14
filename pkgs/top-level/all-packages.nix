@@ -14634,7 +14634,7 @@ in
   boost174 = callPackage ../development/libraries/boost/1.74.nix { };
   boost175 = callPackage ../development/libraries/boost/1.75.nix { };
   boost17x = boost175;
-  boost = boost16x;
+  boost = boost17x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
@@ -20088,13 +20088,9 @@ in
   };
 
   # Fails to compile with boost >= 1.72
-  rippled = callPackage ../servers/rippled {
-    boost = boost17x;
-  };
+  rippled = callPackage ../servers/rippled { };
 
-  rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix {
-    boost = boost17x;
-  };
+  rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix { };
 
   roon-bridge = callPackage ../servers/roon-bridge { };
 
@@ -26500,9 +26496,7 @@ in
 
   qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
-  qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview {
-    boost = boost17x;
-  };
+  qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
   qmplay2 = libsForQt5.callPackage ../applications/video/qmplay2 { };
 
@@ -28447,12 +28441,9 @@ in
 
   monero = callPackage ../applications/blockchains/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
-    boost = boost17x;
   };
 
-  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
-    boost = boost17x;
-  };
+  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
 
   masari = callPackage ../applications/blockchains/masari.nix { boost = boost165; };
 
