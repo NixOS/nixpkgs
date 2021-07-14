@@ -30,8 +30,6 @@
 
 , enablePsiMedia ? false
 , pkg-config
-
-, extraCmakeFlags ? [ ] # In addition to existing ones
 }:
 
 assert builtins.elem (lib.toLower chatType) [
