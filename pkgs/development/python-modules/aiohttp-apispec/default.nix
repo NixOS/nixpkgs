@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "aiohttp-apispec";
   version = "2.2.1";
-  disabled = pythonOlder "3.0";
 
   src = fetchPypi {
     inherit pname version;
