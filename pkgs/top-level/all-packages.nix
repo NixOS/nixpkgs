@@ -4814,6 +4814,8 @@ in
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
+  frr = callPackage ../servers/frr { };
+
   hmetis = pkgsi686Linux.callPackage ../applications/science/math/hmetis { };
 
   libbsd = callPackage ../development/libraries/libbsd { };
@@ -17277,6 +17279,8 @@ in
       sha256 = "12aszqw6svwlnb6nzhsbqhz3c7vnd5ahd0k6xlj05w8lm83hx3db";
       };
   });
+
+  libyang = callPackage ../development/libraries/libyang { };
 
   libykclient = callPackage ../development/libraries/libykclient { };
 
