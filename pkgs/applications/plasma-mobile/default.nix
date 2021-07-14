@@ -67,6 +67,7 @@ let
       kclock = callPackage ./kclock.nix {};
       koko = callPackage ./koko.nix {};
       krecorder = callPackage ./krecorder.nix {};
+      ktrip = callPackage ./ktrip.nix {};
       plasma-dialer = callPackage ./plasma-dialer.nix {};
       plasma-phonebook = callPackage ./plasma-phonebook.nix {};
       spacebar = callPackage ./spacebar.nix {};
