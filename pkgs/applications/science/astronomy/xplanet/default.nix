@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "giflib6.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/giflib6.patch?h=packages/xplanet&id=ce6f25eb369dc011161613894f01fd0a6ae85a09";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/ce6f25eb369dc011161613894f01fd0a6ae85a09/trunk/giflib6.patch";
       sha256 = "173l0xkqq0v2bpaff7hhwc7y2aw5cclqw8988k1nalhyfbrjb8bl";
     })
     (fetchpatch {
       name = "xplanet-c++11.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/xplanet-c++11.patch?h=packages/xplanet&id=ce6f25eb369dc011161613894f01fd0a6ae85a09";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/ce6f25eb369dc011161613894f01fd0a6ae85a09/trunk/xplanet-c++11.patch";
       sha256 = "0vldai78ixw49bxch774pps6pq4sp0p33qvkvxywcz7p8kzpg8q2";
     })
   ];
