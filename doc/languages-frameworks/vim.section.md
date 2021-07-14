@@ -154,6 +154,22 @@ in
 }
 ```
 
+You can use the updater script to generate basic packages out of a custom vim
+plugin list:
+```
+pkgs/misc/vim-plugins/update.py -i vim-plugin-names -o generated.nix --no-commit
+```
+with the content of vim-plugin-names be like:
+```
+pwntester/octo.nvim
+```
+You can reference the generated vim plugins by:
+```nix
+myVimPlugins = pkgs.vimPlugins.extend (
+  (pkgs.callPackage generated.nix {})
+);
+```
+
 ## Managing plugins with vim-plug {#managing-plugins-with-vim-plug}
 
 To use [vim-plug](https://github.com/junegunn/vim-plug) to manage your Vim
