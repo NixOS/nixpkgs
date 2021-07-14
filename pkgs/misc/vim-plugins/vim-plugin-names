@@ -152,6 +152,7 @@ folke/lsp-colors.nvim@main
 folke/todo-comments.nvim@main
 folke/tokyonight.nvim@main
 folke/trouble.nvim@main
+folke/twilight.nvim@main
 folke/which-key.nvim@main
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
