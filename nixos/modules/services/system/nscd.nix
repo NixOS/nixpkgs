@@ -50,9 +50,19 @@ in
     systemd.services.nscd =
       { description = "Name Service Cache Daemon";
 
-        wantedBy = [ "nss-lookup.target" "nss-user-lookup.target" ];
-
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
+
+        # We need system users to be resolveable in late-boot.  nscd is the proxy between
+        # nss-modules in NixOS and thus if you have nss-modules providing system users
+        # (e.g. when using DynamicUser) then nscd needs to be available before late-boot is ready
+        # We add a dependency of sysinit.target to nscd to ensure
+        # these units are started after nscd is fully started.
+        unitConfig.DefaultDependencies = false;
+        wantedBy = [ "sysinit.target" ];
+        before = [ "sysinit.target" "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
+        wants = [ "local-fs.target" ];
+        after = [ "local-fs.target" ];
 
         restartTriggers = [
           config.environment.etc.hosts.source
@@ -66,20 +76,19 @@ in
         # privileges after all the NSS modules have read their configuration
         # files. So prefix the ExecStart command with "!" to prevent systemd
         # from dropping privileges early. See ExecStart in systemd.service(5).
-        serviceConfig =
-          { ExecStart = "!@${nscd}/sbin/nscd nscd";
-            Type = "forking";
-            DynamicUser = true;
-            RuntimeDirectory = "nscd";
-            PIDFile = "/run/nscd/nscd.pid";
-            Restart = "always";
-            ExecReload =
-              [ "${nscd}/sbin/nscd --invalidate passwd"
-                "${nscd}/sbin/nscd --invalidate group"
-                "${nscd}/sbin/nscd --invalidate hosts"
-              ];
-          };
+        serviceConfig = {
+          ExecStart = "!@${nscd}/sbin/nscd nscd";
+          Type = "forking";
+          DynamicUser = true;
+          RuntimeDirectory = "nscd";
+          PIDFile = "/run/nscd/nscd.pid";
+          Restart = "always";
+          ExecReload = [
+            "${nscd}/sbin/nscd --invalidate passwd"
+            "${nscd}/sbin/nscd --invalidate group"
+            "${nscd}/sbin/nscd --invalidate hosts"
+          ];
+        };
       };
-
   };
 }
