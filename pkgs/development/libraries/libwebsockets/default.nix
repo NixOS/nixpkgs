@@ -20,6 +20,8 @@ let
       "-DLWS_WITH_PLUGINS=ON"
       "-DLWS_WITH_IPV6=ON"
       "-DLWS_WITH_SOCKS5=ON"
+      # Required since v4.2.0
+      "-DLWS_BUILD_HASH=no_hash"
     ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON";
 
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
@@ -52,13 +54,8 @@ rec {
     sha256 = "0m1kn4p167jv63zvwhsvmdn8azx3q7fkk8qc0fclwyps2scz6dna";
   };
 
-  libwebsockets_4_0 = generic {
-    version = "4.0.21";
-    sha256 = "01k05x4711ngin598jr9dag4ml3m7hi6pkgr4dsb02ryh1kc6146";
-  };
-
-  libwebsockets_4_1 = generic {
-    version = "4.1.6";
-    sha256 = "0x56v4hsx92vm1zibfmnqb5g3v23kzciffn3fjlsc3sly2pknhsg";
+  libwebsockets_4_2 = generic {
+    version = "4.2.0";
+    sha256 = "glnLGXniero/5CW/1TBPZngdOM6gww8DnT5wiX66sW0=";
   };
 }
