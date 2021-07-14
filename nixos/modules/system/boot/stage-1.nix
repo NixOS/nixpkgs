@@ -326,6 +326,15 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
+        { object = pkgs.runCommand "initrd-kmod-nixos" {
+              src = config.environment.etc."modprobe.d/nixos.conf".source;
+              preferLocalBuild = true;
+            } ''
+              target=$out
+              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/options firmware_class(.+?)\n//s;' $src > $out
+            '';
+	        symlink = "/etc/modprobe.d/nixos.conf";
+	      }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
               preferLocalBuild = true;
