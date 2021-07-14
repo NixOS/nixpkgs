@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   outputs = ["out" "hook"];
 
   buildPhase = ''
+    runHook preBuild
+
     $CC -Wall -std=c99 -O3 -fPIC -ldl -shared \
       ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/$libName"} \
       -o "$libName" \
@@ -21,9 +23,18 @@ stdenv.mkDerivation {
     if [ -n "$doInstallCheck" ]; then
       $CC -Wall -std=c99 -O3 test.c -o test
     fi
+
+    runHook postBuild
   '';
 
+  # We want to retain debugging info to be able to use GDB on libredirect.so
+  # to more easily investigate which function overrides are missing or why
+  # existing ones do not have the intended effect.
+  dontStrip = true;
+
   installPhase = ''
+    runHook preInstall
+
     install -vD "$libName" "$out/lib/$libName"
 
     mkdir -p "$hook/nix-support"
@@ -35,6 +46,8 @@ stdenv.mkDerivation {
     export LD_PRELOAD="$out/lib/$libName"
     ''}
     SETUP_HOOK
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
