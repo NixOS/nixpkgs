@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, lib, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, libsecret, qtmultimedia, qttools, yajl, libzip, hunspell
+{ fetchFromGitHub, lib, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, libsecret, qtmultimedia, qttools, yajl, libzip, hunspell
 , boost, libGLU, lua, cmake,  which, pkg-config, }:
 
 let
