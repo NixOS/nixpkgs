@@ -276,6 +276,11 @@ let
           --prefix NODE_PATH : ${self.postcss}/lib/node_modules \
           --prefix NODE_PATH : ${self.autoprefixer}/lib/node_modules
       '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/postcss-cli.nix {
+          inherit (self) postcss-cli;
+        };
+      };
       meta.mainProgram = "postcss";
     };
 
