@@ -6235,6 +6235,8 @@ in
 
   keystore-explorer = callPackage ../applications/misc/keystore-explorer { };
 
+  kfctl = callPackage ../applications/networking/cluster/kfctl { };
+
   kibana6 = callPackage ../development/tools/misc/kibana/6.x.nix { };
   kibana6-oss = callPackage ../development/tools/misc/kibana/6.x.nix {
     enableUnfree = false;
