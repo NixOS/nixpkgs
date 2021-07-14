@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qogir-icon-theme";
-  version = "2020-11-22";
+  version = "2021-07-14";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "04rkpsiz8jg9i55mslsh7a6wgyp30ja3xss7qacqimdab236300d";
+    sha256 = "0anma2ss3yqr9njx4ay2nyxjkgnj7ky17c93ipwgrvgsv8jk5nn2";
   };
 
   nativeBuildInputs = [ gtk3 ];
