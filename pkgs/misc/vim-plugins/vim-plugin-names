@@ -150,6 +150,7 @@ flazz/vim-colorschemes
 floobits/floobits-neovim
 folke/lsp-colors.nvim@main
 folke/todo-comments.nvim@main
+folke/tokyonight.nvim@main
 folke/trouble.nvim@main
 folke/which-key.nvim@main
 freitass/todo.txt-vim
@@ -255,7 +256,7 @@ jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 josa42/coc-lua
 josa42/vim-lightline-coc
-joshdick/onedark.vim
+joshdick/onedark.vim@main
 jpalardy/vim-slime@main
 jparise/vim-graphql
 jparise/vim-phabricator

@@ -12,6 +12,7 @@
 , autoconf213, which, gnused, rustPackages, rustPackages_1_45
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
+, gtk2, gtk3, wrapGAppsHook
 , debugBuild ? false
 
 ### optionals
@@ -21,7 +22,6 @@
 , alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , ffmpegSupport ? true
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon, libdrm
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
 , gssSupport ? true, libkrb5
@@ -79,7 +79,7 @@ let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
   default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
-                    else "cairo-gtk${if gtk3Support then "3${lib.optionalString waylandSupport "-wayland"}" else "2"}";
+                    else "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
 
   binaryName = "firefox";
   binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
@@ -139,7 +139,7 @@ buildStdenv.mkDerivation ({
   lib.optional (lib.versionOlder ffversion "86") ./env_var_for_system_dir-ff85.patch ++
   lib.optional (lib.versionAtLeast ffversion "86") ./env_var_for_system_dir-ff86.patch ++
   lib.optional (lib.versionOlder ffversion "83") ./no-buildconfig-ffx76.patch ++
-  lib.optional (lib.versionAtLeast ffversion "84") ./no-buildconfig-ffx84.patch ++
+  lib.optional (lib.versionAtLeast ffversion "90") ./no-buildconfig-ffx90.patch ++
   lib.optional (ltoSupport && lib.versionOlder ffversion "84") ./lto-dependentlibs-generation-ffx83.patch ++
   lib.optional (ltoSupport && lib.versionAtLeast ffversion "84" && lib.versionOlder ffversion "86")
     (fetchpatch {
@@ -164,13 +164,13 @@ buildStdenv.mkDerivation ({
   patchFlags = [ "-p1" "-l" ];
 
   buildInputs = [
-    gtk2 perl zip libjpeg zlib bzip2
+    gtk3 perl zip libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     xorg.pixman yasm libGLU libGL
     xorg.xorgproto
     xorg.libXdamage
-    xorg.libXext makeWrapper
+    xorg.libXext
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
     nasm icu67 libvpx_1_8
@@ -182,14 +182,14 @@ buildStdenv.mkDerivation ({
   ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  pipewireSupport pipewire
   ++ lib.optional  (lib.versionAtLeast ffversion "82") gnum4
   ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                           AVFoundation MediaToolbox CoreLocation
-                                          Foundation libobjc AddressBook cups ];
+                                          Foundation libobjc AddressBook cups ]
+  ++ lib.optional  (lib.versionOlder ffversion "90") gtk2;
 
   NIX_LDFLAGS = lib.optionalString ltoSupport ''
     -rpath ${llvmPackages.libunwind.out}/lib
@@ -224,6 +224,7 @@ buildStdenv.mkDerivation ({
       cargo
       gnused
       llvmPackages.llvm # llvm-objdump
+      makeWrapper
       nodejs
       perl
       pkg-config
@@ -232,8 +233,8 @@ buildStdenv.mkDerivation ({
       rustc
       which
       unzip
+      wrapGAppsHook
     ]
-    ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]
     ++ extraNativeBuildInputs;
 
@@ -362,8 +363,6 @@ buildStdenv.mkDerivation ({
   passthru = {
     inherit updateScript;
     version = ffversion;
-    isFirefox3Like = true;
-    gtk = gtk2;
     inherit alsaSupport;
     inherit pipewireSupport;
     inherit nspr;
@@ -372,7 +371,8 @@ buildStdenv.mkDerivation ({
     inherit execdir;
     inherit browserName;
     inherit tests;
-  } // lib.optionalAttrs gtk3Support { inherit gtk3; };
+    inherit gtk3;
+  };
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
 

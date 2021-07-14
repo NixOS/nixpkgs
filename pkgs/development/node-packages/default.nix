@@ -202,6 +202,15 @@ let
       '';
     };
 
+    postcss-cli = super.postcss-cli.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/postcss" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+      '';
+      meta.mainProgram = "postcss";
+    };
+
     pulp = super.pulp.override {
       # tries to install purescript
       npmFlags = "--ignore-scripts";

@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake ];
 
   preConfigure = ''
+    substituteInPlace configure.ac --replace 'AC_PREREQ([2.63])' 'AC_PREREQ(2.64)'
     ./build-aux/autogen.sh
   '';
 
