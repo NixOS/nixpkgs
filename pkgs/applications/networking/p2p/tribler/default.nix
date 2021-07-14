@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python3Packages, makeWrapper
-, libtorrent-rasterbar-1_2_x
-, enablePlayer ? true, qt5, lib }:
+{ stdenv, lib, fetchurl, python3Packages, makeWrapper
+, libtorrent-rasterbar-1_2_x, qt5
+}:
 
 let
   python = python3Packages.python;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
-    sha256 = "03pav0fi8rxmbwgn2ywd281wx5dwja1w0ds3wgzagpd7nk8iw6pk";
+    sha256 = "1x45z23d1cqf0lai7wg5ki7gi2vba5hqk0swhggzplcjwma4wmh9";
   };
 
   nativeBuildInputs = [
