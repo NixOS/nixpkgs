@@ -232,6 +232,7 @@ mapAliases ({
   flashplayer = throw "flashplayer has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
   flashplayer-standalone = throw "flashplayer-standalone has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
   flashplayer-standalone-debugger = throw "flashplayer-standalone-debugger has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
+  flashtool = throw "flashtool was removed from nixpkgs, because the download is down for copyright reasons and the site looks very fishy"; # added 2021-06-31
   flink_1_5 = throw "flink_1_5 was removed, use flink instead"; # added 2021-01-25
   flutter-beta = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions."; # added 2020-01-15
   flutter-dev = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions."; # added 2020-01-15
@@ -646,6 +647,7 @@ mapAliases ({
   privateer = throw "privateer was removed because it was broken"; # added 2021-05-18
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
+  proglodyte-wasm = throw "proglodyte-wasm has been removed from nixpkgs, because it is unmaintained since 5 years with zero github stars"; # added 2021-06-30
   proj_5 = throw "Proj-5 has been removed from nixpkgs, use proj instead."; # added 2021-04-12
   prometheus-cups-exporter = throw "outdated and broken by design; removed by developer."; # added 2021-03-16
   pygmentex = texlive.bin.pygmentex; # added 2019-12-15
