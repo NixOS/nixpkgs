@@ -64,6 +64,7 @@ let
       alligator = callPackage ./alligator.nix {};
       calindori = callPackage ./calindori.nix {};
       kalk = callPackage ./kalk.nix {};
+      kasts = callPackage ./kasts.nix {};
       kclock = callPackage ./kclock.nix {};
       koko = callPackage ./koko.nix {};
       krecorder = callPackage ./krecorder.nix {};
