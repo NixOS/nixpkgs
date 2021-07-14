@@ -305,6 +305,58 @@ The script will be usually run from the root of the Nixpkgs repository but you s
 
 For information about how to run the updates, execute `nix-shell maintainers/scripts/update.nix`.
 
+### Recursive attributes in `mkDerivation`
+
+If you pass a function to `mkDerivation`, it will receive as its argument the final output of the same `mkDerivation` call. For example:
+
+```nix
+mkDerivation (self: {
+  pname = "hello";
+  withFeature = true;
+  configureFlags =
+    lib.optionals self.withFeature ["--with-feature"];
+})
+```
+
+Note that this does not use the `rec` keyword to reuse `withFeature` in `configureFlags`.
+Instead, the definition references `self`, allowing users to change `withFeature`
+consistently with `overrideAttrs`.
+
+Let's look at a more elaborate example to understand the differences between
+various bindings:
+
+```nix
+# `pkg` is the _original_ definition (for illustration purposes)
+let pkg =
+  mkDerivation (self: {   # self is the final package
+    # ...
+
+    # An example attribute
+    packages = [];
+
+    # `passthru.tests` is a commonly defined attribute.
+    passthru.tests.simple = f self;
+
+    # An example of an attribute containing a function
+    passthru.appendPackages = packages':
+      self.overrideAttrs (newSelf: super: {
+        packages = super.packages ++ packages';
+      });
+
+    # For illustration purposes; referenced as
+    # `(pkg.overrideAttrs(x)).self` etc in the text below.
+    passthru.self = self;
+    passthru.original = pkg;
+  });
+in pkg
+```
+
+Unlike the `pkg` binding in the above example, the `self` parameter always references the final package. For instance `(pkg.overrideAttrs(x)).self` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as `pkg`.
+
+This is also different from `mkDerivation rec { ..... }`, which binds the recursive references immediately, so it allows you to reference original _inputs_ only.
+
+See also the section about [`passthru.tests`](#var-meta-tests).
+
 ## Phases {#sec-stdenv-phases}
 
 The generic builder has a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries). Furthermore, it allows a nicer presentation of build logs in the Nix build farm.

@@ -1,11 +1,13 @@
-{ lib
+{ callPackage
+, lib
+, runCommand
 , stdenv
 , fetchurl
 , testVersion
 , hello
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: rec {
   pname = "hello";
   version = "2.10";
 
@@ -19,6 +21,13 @@ stdenv.mkDerivation rec {
   passthru.tests.version =
     testVersion { package = hello; };
 
+  passthru.tests.run = runCommand "hello-test-run" {
+    nativeBuildInputs = [ self ];
+  } ''
+    diff -U3 --color=auto <(hello) <(echo 'Hello, world!')
+    touch $out
+  '';
+
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";
     longDescription = ''
@@ -31,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };
-}
+})
