@@ -236,9 +236,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "5";
     };
-    sha256 = "0di3dr5ry4r0hwxh4fbqjhyl5im948wdby0bhijzsxx83c2qhd7n";
+    sha256 = "sha256-wERP2YcwWMHA2Z4TqTTpIoXLBZksmWi/Ujwyv5vsCp0=";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
@@ -252,9 +252,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "5";
     };
-    sha256 = "sha256-9slkAfdjMeR0zKLRRDfrOy9ooPJyIKbcvFN0Rf6dW3g=";
+    sha256 = "sha256-2SD+QJqeytnQdKqFaMpfPtNYG+ZvZuXYmIt+xm5tmaI=";
     pythonVersion = "3.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;

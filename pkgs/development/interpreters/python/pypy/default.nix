@@ -83,6 +83,11 @@ in with passthru; stdenv.mkDerivation rec {
       tk_libprefix = tk.libPrefix;
       tcl_libprefix = tcl.libPrefix;
     })
+
+    (substituteAll {
+      src = ./sqlite_paths.patch;
+      inherit (sqlite) out dev;
+    })
   ];
 
   postPatch = ''
@@ -90,8 +95,6 @@ in with passthru; stdenv.mkDerivation rec {
       --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
 
     substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
-
-    sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite.dev}/include'], library_dirs=['${sqlite.out}/lib']@" lib_pypy/_sqlite3_build.py
   '';
 
   buildPhase = ''
