@@ -5372,6 +5372,10 @@ in
     guiSupport = stdenv.isDarwin;
     pinentry = if stdenv.isDarwin then pinentry_mac else pinentry-gtk2;
   };
+  gnupg23 = callPackage ../tools/security/gnupg/23.nix {
+    guiSupport = stdenv.isDarwin;
+    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry-gtk2;
+  };
   gnupg = gnupg22;
 
   gnupg-pkcs11-scd = callPackage ../tools/security/gnupg-pkcs11-scd { };
