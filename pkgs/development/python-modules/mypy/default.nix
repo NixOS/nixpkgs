@@ -1,18 +1,31 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, typed-ast, psutil, isPy3k
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, typed-ast
+, isPy3k
 , mypy-extensions
 , typing-extensions
+, toml
+, types-toml
+, types-typed-ast
 }:
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.812";
+  version = "0.910";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "069i9qnfanp7dn8df1vspnqb0flvsszzn22v00vj08nzlnd061yd";
+    sha256 = "sha256-cECYMCRzyzGiGPF3Woc7N2swtMGCKUIenp3IkW/RYVA=";
   };
 
-  propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];
+  nativeBuildInputs = [
+    types-toml
+    types-typed-ast
+  ];
+
+  propagatedBuildInputs = [ typed-ast mypy-extensions typing-extensions toml ];
 
   # Tests not included in pip package.
   doCheck = false;
@@ -34,8 +47,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Optional static typing for Python";
-    homepage    = "http://www.mypy-lang.org";
-    license     = licenses.mit;
+    homepage = "http://www.mypy-lang.org";
+    license = licenses.mit;
     maintainers = with maintainers; [ martingms lnl7 ];
   };
 }
