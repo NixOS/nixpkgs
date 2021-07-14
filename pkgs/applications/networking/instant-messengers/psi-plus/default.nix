@@ -40,9 +40,6 @@ assert builtins.elem (lib.toLower chatType) [
   "webengine" # QtWebEngine (see https://wiki.qt.io/QtWebEngine)
 ];
 
-assert builtins.isBool voiceMessagesSupport;
-assert builtins.isBool enablePlugins;
-assert builtins.isBool enablePsiMedia;
 assert enablePsiMedia -> enablePlugins;
 
 mkDerivation rec {
@@ -60,9 +57,7 @@ mkDerivation rec {
     "-DCHAT_TYPE=${chatType}"
     "-DENABLE_PLUGINS=${if enablePlugins then "ON" else "OFF"}"
     "-DBUILD_PSIMEDIA=${if enablePsiMedia then "ON" else "OFF"}"
-  ] ++ (
-    assert builtins.all builtins.isString extraCmakeFlags; extraCmakeFlags
-  );
+  ];
 
   nativeBuildInputs = [
     cmake
