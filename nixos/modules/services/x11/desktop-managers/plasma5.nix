@@ -493,6 +493,8 @@ in
         [
           plasma-phone-components
           plasma-nano
+          pkgs.maliit-framework
+          pkgs.maliit-keyboard
         ];
 
       # The following services are needed or the UI is broken.
