@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
+  datadir = if cfg.datadir == null then "${cfg.home}" else "${cfg.datadir}";
 
   phpPackage = pkgs.php74.buildEnv {
     extensions = { enabled, all }:
@@ -40,7 +41,7 @@ let
     if [[ "$USER" != nextcloud ]]; then
       sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR --preserve-env=OC_PASS'
     fi
-    export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
+    export NEXTCLOUD_CONFIG_DIR="${datadir}/config"
     $sudo \
       ${phpPackage}/bin/php \
       occ "$@"
@@ -78,6 +79,17 @@ in {
       type = types.str;
       default = "/var/lib/nextcloud";
       description = "Storage path of nextcloud.";
+    };
+    datadir = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Data storage path of nextcloud. Will be services.nextcloud.home by default. This folder will be populated with a config and data folder which contain the state of the instance (excl the database).";
+      example = "/mnt/nextcloud-files";
+    };
+    extraApps = mkOption {
+      type = types.attrsOf types.package;
+      default = { };
+      description = "Extra apps to install. Should point to packages that have appinfo/info.xml in their root.";
     };
     logLevel = mkOption {
       type = types.ints.between 0 4;
@@ -462,8 +474,9 @@ in {
               'apps_paths' => [
                 [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
                 [ 'path' => '${cfg.home}/store-apps', 'url' => '/store-apps', 'writable' => true ],
+                ${optionalString (cfg.extraApps != { }) "[ 'path' => '${cfg.home}/nix-apps', 'url' => '/nix-apps', 'writable' => false ],"}
               ],
-              'datadirectory' => '${cfg.home}/data',
+              'datadirectory' => '${datadir}/data',
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
@@ -506,7 +519,7 @@ in {
                 then "--database-table-prefix" else null} = ''"${toString c.dbtableprefix}"'';
               "--admin-user" = ''"${c.adminuser}"'';
               "--admin-pass" = adminpass;
-              "--data-dir" = ''"${cfg.home}/data"'';
+              "--data-dir" = ''"${datadir}/data"'';
             });
           in ''
             ${occ}/bin/nextcloud-occ maintenance:install \
@@ -547,10 +560,21 @@ in {
             ''}
 
             ln -sf ${cfg.package}/apps ${cfg.home}/
+            rm -rf ${cfg.home}/nix-apps
+            mkdir -p ${cfg.home}/nix-apps
+
+            #Install extra apps
+            '' +
+            builtins.concatStringsSep "\n" (
+              lib.mapAttrsToList
+                (name: target:
+                  "ln -sf   ${target} ${cfg.home}/nix-apps/${name}")
+                cfg.extraApps) +
+            ''
 
             # create nextcloud directories.
             # if the directories exist already with wrong permissions, we fix that
-            for dir in ${cfg.home}/config ${cfg.home}/data ${cfg.home}/store-apps; do
+            for dir in ${datadir}/config ${datadir}/data ${cfg.home}/store-apps ${cfg.home}/nix-apps; do
               if [ ! -e $dir ]; then
                 install -o nextcloud -g nextcloud -d $dir
               elif [ $(stat -c "%G" $dir) != "nextcloud" ]; then
@@ -558,10 +582,10 @@ in {
               fi
             done
 
-            ln -sf ${overrideConfig} ${cfg.home}/config/override.config.php
+            ln -sf ${overrideConfig} ${datadir}/config/override.config.php
 
             # Do not install if already installed
-            if [[ ! -e ${cfg.home}/config/config.php ]]; then
+            if [[ ! -e ${datadir}/config/config.php ]]; then
               ${occInstallCmd}
             fi
 
@@ -574,7 +598,7 @@ in {
           serviceConfig.User = "nextcloud";
         };
         nextcloud-cron = {
-          environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
+          environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
           serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
@@ -593,7 +617,7 @@ in {
           group = "nextcloud";
           phpPackage = phpPackage;
           phpEnv = {
-            NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
+            NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
             PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
           };
           settings = mapAttrs (name: mkDefault) {
@@ -640,6 +664,10 @@ in {
             extraConfig = "rewrite ^ /index.php;";
           };
           "~ ^/store-apps" = {
+            priority = 201;
+            extraConfig = "root ${cfg.home};";
+          };
+          "~ ^/nix-apps" = {
             priority = 201;
             extraConfig = "root ${cfg.home};";
           };

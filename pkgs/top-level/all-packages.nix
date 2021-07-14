@@ -502,6 +502,8 @@ in
 
   fetchFirefoxAddon = callPackage ../build-support/fetchfirefoxaddon {};
 
+  fetchNextcloudApp = callPackage ../build-support/fetchnextcloudapp {};
+
   # `fetchurl' downloads a file from the network.
   fetchurl = if stdenv.buildPlatform != stdenv.hostPlatform
     then buildPackages.fetchurl # No need to do special overrides twice,
