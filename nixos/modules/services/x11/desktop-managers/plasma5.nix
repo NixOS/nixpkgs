@@ -4,6 +4,28 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
+  # Use only for **internal** options.
+  # This is not exactly user-friendly.
+  kdeConfigurationType = with types;
+    let
+      valueTypes = (oneOf [
+        bool
+        float
+        int
+        str
+      ]) // {
+        description = "KDE Configuration value";
+        emptyValue.value = "";
+      };
+      set = (nullOr (lazyAttrsOf valueTypes)) // {
+        description = "KDE Configuration set";
+        emptyValue.value = {};
+      };
+    in (lazyAttrsOf set) // {
+        description = "KDE Configuration file";
+        emptyValue.value = {};
+      };
+
   libsForQt5 = pkgs.plasma5Packages;
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (pkgs) writeText;
@@ -168,6 +190,20 @@ in
       description = "Use systemd to manage the Plasma session";
       type = types.bool;
       default = false;
+    };
+
+    # Internally allows configuring kdeglobals globally
+    kdeglobals = mkOption {
+      internal = true;
+      default = {};
+      type = kdeConfigurationType;
+    };
+
+    # Internally allows configuring kwin globally
+    kwinrc = mkOption {
+      internal = true;
+      default = {};
+      type = kdeConfigurationType;
     };
   };
 
@@ -418,6 +454,11 @@ in
       services.xserver.displayManager.setupCommands = startplasma;
 
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
+
+      environment.etc = {
+        "xdg/kwinrc".text     = lib.generators.toINI {} cfg.kwinrc;
+        "xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
+      };
     })
   ];
 }
