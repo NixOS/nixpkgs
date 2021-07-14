@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Flat colorful design icon theme";
     homepage = "https://github.com/vinceliuice/Qogir-icon-theme";
-    license = with licenses; [ gpl3 ];
+    license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
