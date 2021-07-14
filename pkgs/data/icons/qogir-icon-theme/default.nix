@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   installPhase = ''
+    runHook preInstall
     patchShebangs install.sh
     mkdir -p $out/share/icons
     name= ./install.sh -d $out/share/icons
+    runHook postInstall
   '';
 
   meta = with lib; {
