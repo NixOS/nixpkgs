@@ -43,9 +43,17 @@ let
     };
   in (lib.makeOverridable mkGear attrs);
 
-in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
+  plasmaMobileGear = let
+    mkPlamoGear = import ../applications/plasma-mobile;
+    attrs = {
+      inherit libsForQt5;
+      inherit (pkgs) lib fetchurl;
+    };
+  in (lib.makeOverridable mkPlamoGear attrs);
 
-  inherit kdeFrameworks plasma5 kdeGear qt5;
+in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
+
+  inherit kdeFrameworks plasmaMobileGear plasma5 kdeGear qt5;
 
   # Alias for backwards compatibility. Added 2021-05-07.
   kdeApplications = kdeGear;
