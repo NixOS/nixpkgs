@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/storaged-project/libblockdev/commit/5528baef6ccc835a06c45f9db34a2c9c3f2dd940.patch";
       sha256 = "jxq4BLeyTMeNvBvY8k8QXIvYSJ2Gah0J75pq6FpG7PM=";
     })
+
+    # fix build with glib 2.69 (g_spawn_check_exit_status -> g_spawn_check_wait_status)
+    # https://github.com/storaged-project/libblockdev/pull/641
+    # Modified to apply on 2.25
+    ./exec-Fix-deprecated-glib-function-call.patch
   ];
 
   postPatch = ''

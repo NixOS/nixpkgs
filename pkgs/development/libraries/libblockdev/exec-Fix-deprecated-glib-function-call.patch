@@ -1,0 +1,16 @@
+--- a/src/utils/exec.c
++++ b/src/utils/exec.c
+@@ -229,7 +229,12 @@ gboolean bd_utils_exec_and_report_status_error (const gchar **argv, const BDExtr
+     /* g_spawn_sync set the status in the same way waitpid() does, we need
+        to get the process exit code manually (this is similar to calling
+        WEXITSTATUS but also sets the error for terminated processes */
+-    if (!g_spawn_check_exit_status (exit_status, error)) {
++
++    #if !GLIB_CHECK_VERSION(2, 69, 0)
++    #define g_spawn_check_wait_status(x,y) (g_spawn_check_exit_status (x,y))
++    #endif
++
++    if (!g_spawn_check_wait_status (exit_status, error)) {
+         if (g_error_matches (*error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED)) {
+             /* process was terminated abnormally (e.g. using a signal) */
+             g_free (stdout_data);
