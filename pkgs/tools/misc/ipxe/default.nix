@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
   buildFlags = lib.attrNames targets;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     ${lib.concatStringsSep "\n" (lib.mapAttrsToList (from: to:
       if to == null
@@ -81,6 +83,8 @@ stdenv.mkDerivation rec {
     # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
     # let's provide it as a symlink to be compatible in this case.
     ln -s undionly.kpxe $out/undionly.kpxe.0
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
@@ -88,7 +92,7 @@ stdenv.mkDerivation rec {
   meta = with lib;
     { description = "Network boot firmware";
       homepage = "https://ipxe.org/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       maintainers = with maintainers; [ ehmry ];
       platforms = platforms.linux;
     };
