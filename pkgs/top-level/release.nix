@@ -203,7 +203,6 @@ let
 
       #emacsPackages = packagePlatforms pkgs.emacsPackages;
       #rPackages = packagePlatforms pkgs.rPackages;
-      ocamlPackages = { };
       perlPackages = { };
 
       darwin = packagePlatforms pkgs.darwin // {
