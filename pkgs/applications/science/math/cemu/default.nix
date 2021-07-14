@@ -1,18 +1,19 @@
-{ fetchFromGitHub
+{ stdenv
+, fetchFromGitHub
 , lib
-, mkDerivation
 , SDL2
 , libGL
 , libarchive
 , libusb-compat-0_1
 , qtbase
 , qmake
+, wrapQtAppsHook
 , git
 , libpng_apng
 , pkg-config
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "CEmu";
   version = "1.3";
   src = fetchFromGitHub {
@@ -25,6 +26,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
+    wrapQtAppsHook
     git
     pkg-config
   ];
@@ -40,6 +42,7 @@ mkDerivation rec {
 
   qmakeFlags = [
     "gui/qt"
+    "CONFIG+=ltcg" # https://github.com/CE-Programming/CEmu/issues/366
   ];
 
   meta = with lib; {
