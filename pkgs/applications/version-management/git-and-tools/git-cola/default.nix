@@ -20,10 +20,8 @@ in buildPythonApplication rec {
 
   doCheck = false;
 
-  postFixup = ''
-    wrapQtApp $out/bin/git-cola
-    wrapQtApp $out/bin/git-dag
-
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {

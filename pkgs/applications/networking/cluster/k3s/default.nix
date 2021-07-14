@@ -44,8 +44,8 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.21.0+k3s1";     # k3s git tag
-  k3sCommit = "2705431d9645d128441c578309574cd262285ae6"; # k3s git commit at the above version
+  k3sVersion = "1.21.2+k3s1";     # k3s git tag
+  k3sCommit = "5a67e8dc473f8945e8e181f6f0b0dbbc387f6fca"; # k3s git commit at the above version
 
   traefikChartVersion = "9.18.2"; # taken from ./scripts/download at TRAEFIK_VERSION
   k3sRootVersion = "0.8.1";       # taken from ./scripts/download at ROOT_VERSION
@@ -97,7 +97,7 @@ let
   k3sRepo = fetchgit {
     url = "https://github.com/k3s-io/k3s";
     rev = "v${k3sVersion}";
-    sha256 = "sha256-xsXxf2ZYrkpOHlSFqTsHwWF3kChUjxWRjyDR3Dhg2ho=";
+    sha256 = "sha256-ZRkdHQ4RJ6XqE+DKE6wwpxetuKDG3k/4HaHyFxHev1U=";
   };
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.

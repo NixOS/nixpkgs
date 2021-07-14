@@ -1,21 +1,22 @@
 { gsmakeDerivation
 , cairo
-, fetchurl
+, fetchzip
 , base, gui
 , xlibsWrapper
 , freetype
 , pkg-config
 , libXmu
 }:
-let
+
+gsmakeDerivation rec {
+  pname = "gnustep-back";
   version = "0.28.0";
-in
-gsmakeDerivation {
-  name = "gnustep-back-${version}";
-  src = fetchurl {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-back-${version}.tar.gz";
-    sha256 = "1ynd27zwga17mp2qlym90k2xsypdvz24w6gyy2rfvmv0gkvlgrjr";
+
+  src = fetchzip {
+    url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
+    sha256 = "1nkmk7qli2ld6gw9h4kqa199i8q2m9x9d46idxh1k0rb41kf3i2c";
   };
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo base gui freetype xlibsWrapper libXmu ];
   meta = {

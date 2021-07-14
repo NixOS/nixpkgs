@@ -12,12 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "7.15.1";
+  version = "7.16.0";
 
   src = fetchurl {
-    # Termius switched to using non-versioned downloads https://s3.amazonaws.com/termius.desktop.autoupdate/linux/Termius.deb
-    url = "https://web.archive.org/web/20210710174019/https://s3.amazonaws.com/termius.desktop.autoupdate/linux/Termius.deb";
-    sha256 = "16zc7ywz3hl1awkc4wk0rd94nsy55l98j2yzfdxcjiixky4gk8wn";
+    # find the latest version by
+    # curl https://deb.termius.com/dists/squeeze/main/binary-amd64/Packages
+    url = "https://deb.termius.com/pool/main/t/termius-app/termius-app_${version}_amd64.deb";
+    sha256 = "013nli61bk4x4hkhr6gcpzm1y8ycmqk3vr7q0w2dn2bfdwjg559v";
   };
 
   desktopItem = makeDesktopItem {
