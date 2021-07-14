@@ -1,9 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
-  bash, fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto,
-  libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which,
-  libdrm, udev,
-  withX ? true }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook
+, bash, fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
+, libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst
+, pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
+, libdrm, udev
+, withX ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
