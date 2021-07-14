@@ -46,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     cython
     llfuse
     packaging
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     pyfuse3
   ];
 
