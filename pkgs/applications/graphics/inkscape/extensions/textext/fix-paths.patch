@@ -1,0 +1,15 @@
+--- a/textext/base.py
++++ b/textext/base.py
+@@ -125,6 +125,12 @@ class TexText(inkex.EffectExtension):
+     def __init__(self):
+ 
+         self.config = Settings("config.json")
++        # config.json is stored in ~/.config/inkscape/extensions/textext for
++        # the next invocation, but since that next invocation could be using
++        # a different latex derivation, make sure we overwrite the executable
++        # paths with updated ones:
++        self.config["pdflatex-executable"] = "@pdflatex@/bin/pdflatex";
++        self.config["lualatex-executable"] = "@lualatex@/bin/lualatex";
+         self.cache = Cache()
+         previous_exit_code = self.cache.get("previous_exit_code", None)
+ 
