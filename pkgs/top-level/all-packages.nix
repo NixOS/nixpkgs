@@ -15930,6 +15930,8 @@ in
 
   json2hcl = callPackage ../development/tools/json2hcl { };
 
+  json2yaml = haskell.lib.justStaticExecutables haskellPackages.json2yaml;
+
   json-glib = callPackage ../development/libraries/json-glib { };
 
   json_c = callPackage ../development/libraries/json-c { };
