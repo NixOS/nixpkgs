@@ -22,10 +22,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ agate sqlalchemy ];
 
-  # crate is broken with SQLAlchemy > 1.3
-  # These tests rely on crate, and make the whole build fail
-  #checkInputs = [ crate nose geojson ];
+  # crate is broken in nixpkgs, with SQLAlchemy > 1.3
+  # Skip tests for now as they rely on it.
   doCheck = false;
+
+  checkInputs = [ crate nose geojson ];
 
   checkPhase = ''
     nosetests
