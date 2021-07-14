@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
         --prefix LD_LIBRARY_PATH : ${libPath}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
