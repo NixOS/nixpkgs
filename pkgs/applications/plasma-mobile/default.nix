@@ -66,6 +66,7 @@ let
       kalk = callPackage ./kalk.nix {};
       kasts = callPackage ./kasts.nix {};
       kclock = callPackage ./kclock.nix {};
+      keysmith = callPackage ./keysmith.nix {};
       koko = callPackage ./koko.nix {};
       krecorder = callPackage ./krecorder.nix {};
       ktrip = callPackage ./ktrip.nix {};
