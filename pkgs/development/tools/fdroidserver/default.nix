@@ -53,6 +53,8 @@ python.pkgs.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "fdroidserver" ];
+
   meta = with lib; {
     homepage = "https://f-droid.org";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
