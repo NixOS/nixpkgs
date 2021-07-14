@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  postPatch = "patchShebangs install.sh";
+  postPatch = ''
+    patchShebangs install.sh
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes
