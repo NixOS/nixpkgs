@@ -3,56 +3,58 @@
 , fetchFromGitLab
 , pkg-config
 , cmake
-, qtquickcontrols2
-, qtmultimedia
-, qtgraphicaleffects
-, qtkeychain
-, libpulseaudio
-, olm
-, libsecret
 , cmark
 , extra-cmake-modules
+, kconfig
+, kdbusaddons
+, ki18n
 , kirigami2
 , kitemmodels
-, ki18n
 , knotifications
-, kdbusaddons
-, kconfig
-, libquotient
 , kquickimageedit
+, libpulseaudio
+, libquotient
+, libsecret
+, olm
+, qqc2-desktop-style
+, qtgraphicaleffects
+, qtkeychain
+, qtmultimedia
+, qtquickcontrols2
 }:
 
 mkDerivation rec {
   pname = "neochat";
-  version = "1.1.1";
+  version = "1.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HvLPsU+fxlyPDP7i9OSnZ/C1RjouOQCp+4WCl6FlFJo=";
+    sha256 = "sha256-Kpv7BY/qS0A3xFlYFhz1RRNwQVsyhOTHHGDbWRTTv1I=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   buildInputs = [
-    qtkeychain
-    qtquickcontrols2
-    qtmultimedia
-    qtgraphicaleffects
-    olm
-    libsecret
     cmark
+    kconfig
+    kdbusaddons
+    ki18n
     kirigami2
     kitemmodels
-    ki18n
     knotifications
-    kdbusaddons
-    kconfig
-    libquotient
     kquickimageedit
     libpulseaudio
+    libquotient
+    libsecret
+    olm
+    qtgraphicaleffects
+    qtkeychain
+    qtmultimedia
+    qtquickcontrols2
+    qqc2-desktop-style
   ];
 
   meta = with lib; {
