@@ -30,6 +30,23 @@ let
       '') cfg.wrappedBinaries)}
     '';
 
+  wrappedPkgs = map (pkg:
+    pkgs.symlinkJoin {
+      name = "firejail-" + pkg.name;
+      paths = [ pkg ];
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        [[ -d "$out/share/applications" ]] && grep -q -R Exec=/ "$out/share/applications" && \
+          >&2 echo -e "\033[1mERROR: ${pkg.name} desktop file cannot be firejailed because it specifies an absolute path to the unwrapped binary. Please use wrappedBinaries or better yet fix the ${pkg.name} desktop file in nixpkgs and/or upstream.\033[0m" && exit 1
+        rm -rf $out/bin
+        for bin in $(find -H "${pkg}/bin" -type l,f -executable); do
+          makeWrapper "$bin" "$out/bin/$(basename $bin)" \
+            --argv0 /run/wrappers/bin/firejail
+        done
+      '';
+    }
+  ) cfg.wrappedPackages;
+
 in {
   options.programs.firejail = {
     enable = mkEnableOption "firejail";
@@ -78,12 +95,28 @@ in {
         not wrapped if they specify the absolute path to the binary.
       '';
     };
+
+    wrappedPackages = mkOption {
+      type = with types; listOf package;
+      default = [ ];
+      example = literalExample ''
+        [ pkgs.mpv ]
+      '';
+      description = ''
+        Put a package into <option>systemPackages</option>,
+        but wrap its binaries with firejail.
+        Compared to <option>wrappedBinaries</option>,
+        this e.g. has the advantage of providing desktop entries and icons.
+        However, you should be careful about using these packages'
+        libraries as they will not be wrapped.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     security.wrappers.firejail.source = "${lib.getBin pkgs.firejail}/bin/firejail";
 
-    environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
+    environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ] ++ wrappedPkgs;
   };
 
   meta.maintainers = with maintainers; [ peterhoeg ];
