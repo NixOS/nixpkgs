@@ -839,8 +839,6 @@ let
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
     ocamlgraph_gtk = callPackage ../development/ocaml-modules/ocamlgraph/gtk.nix { };
 
-    ocaml_http = callPackage ../development/ocaml-modules/http { };
-
     ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
