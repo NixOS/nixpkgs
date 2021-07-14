@@ -29431,6 +29431,8 @@ in
 
   trigger = callPackage ../games/trigger { };
 
+  typedb = callPackage ../servers/typedb { };
+
   typespeed = callPackage ../games/typespeed { };
 
   uchess = callPackage ../games/uchess {

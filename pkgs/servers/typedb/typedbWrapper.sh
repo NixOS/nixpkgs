@@ -1,0 +1,12 @@
+if [ -z "$TYPEDB_SERVER_DATA" ]; then
+  TYPEDB_SERVER_DATA="__SERVER_DATA__"
+  mkdir $TYPEDB_SERVER_DATA
+fi;
+if [ -z "$TYPEDB_SERVER_LOGS" ]; then
+  TYPEDB_SERVER_LOGS="__SERVER_LOGS__"
+  mkdir $TYPEDB_SERVER_LOGS
+fi;
+if [ -z "$TYPEDB_SERVER_PORT" ]; then
+  TYPEDB_SERVER_PORT="__SERVER_PORT__"
+fi;
+
