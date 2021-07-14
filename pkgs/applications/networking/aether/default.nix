@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://getaether.net/download/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ maxhille ];
+    # other platforms could be supported by building from source
     platforms = [ "x86_64-linux" ];
   };
 }
