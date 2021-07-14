@@ -91,7 +91,10 @@ in
       "abstractions/base" = ''
         r /etc/ld-nix.so.preload,
         r ${config.environment.etc."ld-nix.so.preload".source},
-        mr ${providerLibPath},
+        include "${pkgs.apparmorRulesFromClosure {
+            name = "mallocLib";
+            baseRules = ["mr $path/lib/**.so*"];
+          } [ mallocLib ] }"
       '';
     };
   };
