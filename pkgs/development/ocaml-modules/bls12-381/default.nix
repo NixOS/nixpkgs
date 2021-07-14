@@ -12,6 +12,7 @@ buildDunePackage rec {
   };
   useDune2 = true;
 
+  minimalOCamlVersion = "4.08";
   propagatedBuildInputs = [
     ff
     zarith
