@@ -25847,6 +25847,8 @@ in
 
   nwg-panel = callPackage ../applications/misc/nwg-panel { };
 
+  nwg-wrapper = callPackage ../applications/misc/nwg-wrapper { };
+
   ocenaudio = callPackage ../applications/audio/ocenaudio { };
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
