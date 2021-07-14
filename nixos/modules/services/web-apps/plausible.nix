@@ -107,6 +107,11 @@ in {
         type = types.str;
         description = ''
           Public URL where plausible is available.
+
+          Note that <literal>/path</literal> components are currently ignored:
+          <link xlink:href="https://github.com/plausible/analytics/issues/1182">
+            https://github.com/plausible/analytics/issues/1182
+          </link>.
         '';
       };
     };
