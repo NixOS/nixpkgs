@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     # Fix build with openssl 1.1.0
     (fetchpatch {
       name = "vde_cryptcab-compile-against-openssl-1.1.0.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/vde_cryptcab-compile-against-openssl-1.1.0.patch?h=packages/vde2&id=15b11be49997fa94b603e366064690b7cc6bce61";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/15b11be49997fa94b603e366064690b7cc6bce61/trunk/vde_cryptcab-compile-against-openssl-1.1.0.patch";
       sha256 = "07z1yabwigq35mkwzqa934n7vjnjlqz5xfzq8cfj87lgyjjp00qi";
     })
   ] ++ lib.optional stdenv.hostPlatform.isMusl [
