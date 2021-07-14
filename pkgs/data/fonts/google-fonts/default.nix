@@ -1,17 +1,21 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub }:
 
-stdenvNoCC.mkDerivation {
+stdenv.mkDerivation {
   pname = "google-fonts";
-  version = "unstable-2021-06-12";
+  version = "unstable-2021-01-19";
 
   outputs = [ "out" "adobeBlank" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "370c795d7e5f9b02db9a793c2779e2c8f94c6adc";
-    sha256 = "sha256-XKjxmupY2KuefCtKZMXWaba1TnNwdYM/P0xGXOtBGmM=";
+    rev = "a3a831f0fe44cd58465c6937ea06873728f2ba0d";
+    sha256 = "19abx2bj7mkysv2ihr43m3kpyf6kv6v2qjlm1skxc82rb72xqhix";
   };
+
+  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
   patchPhase = ''
     # These directories need to be removed because they contain
@@ -28,8 +32,6 @@ stdenvNoCC.mkDerivation {
       exit 1
     fi
   '';
-
-  dontBuild = true;
 
   installPhase = ''
     adobeBlankDest=$adobeBlank/share/fonts/truetype
