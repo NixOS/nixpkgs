@@ -22310,6 +22310,8 @@ in
 
   kreative-square-fonts = callPackage ../data/fonts/kreative-square-fonts { };
 
+  layan-gtk-theme = callPackage ../data/themes/layan-gtk-theme { };
+
   lato = callPackage ../data/fonts/lato {};
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
