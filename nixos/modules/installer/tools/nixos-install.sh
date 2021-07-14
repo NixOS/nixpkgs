@@ -200,7 +200,30 @@ fi
 # Ask the user to set a root password, but only if the passwd command
 # exists (i.e. when mutable user accounts are enabled).
 if [[ -z $noRootPasswd ]] && [ -t 0 ]; then
-    if nixos-enter --root "$mountPoint" -c 'test -e /nix/var/nix/profiles/system/sw/bin/passwd'; then
+    should_set_password() (
+        if [[ ! -L "$system/sw/bin/passwd" ]]; then
+            # 16.03-era nixpkgs didn't have passwd if users were
+            # not mutable. The check seems valid still, in case
+            # we stop providing passwd.
+            return 1
+        fi
+
+        # nixos-install is not guaranteed to be run against
+        # the same version of nixpkgs it comes from. If
+        # the users-groups.json doesn't exist but passwd
+        # exists, we have to assume they need a root password
+        # even though they may have mutableUsers = false.
+        if [[ -e "$system/users-groups.json" ]] \
+                && jq -e '.mutableUsers == false' \
+                   "$system/users-groups.json" > /dev/null; then
+            return 1
+        fi
+
+        # we can't prove we shoudn't, so I suppose we should.
+        return 0
+    )
+
+    if should_set_password; then
         set +e
         nixos-enter --root "$mountPoint" -c 'echo "setting root password..." && /nix/var/nix/profiles/system/sw/bin/passwd'
         exit_code=$?
