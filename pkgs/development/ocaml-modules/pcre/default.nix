@@ -1,26 +1,26 @@
-{ lib, stdenv, fetchurl, pcre, ocaml, findlib, ocamlbuild }:
+{ lib, buildDunePackage, fetchurl, pcre, dune-configurator }:
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-pcre-${version}";
-  version = "7.2.3";
+buildDunePackage rec {
+  pname = "pcre";
+  version = "7.4.6";
+
+  useDune2 = true;
+
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mmottl/pcre-ocaml/releases/download/v${version}/pcre-ocaml-${version}.tar.gz";
-    sha256 = "0rj6dw79px4sj2kq0iss2nzq3rnsn9wivvc0f44wa1mppr6njfb3";
+    url = "https://github.com/mmottl/pcre-ocaml/releases/download/${version}/pcre-${version}.tbz";
+    sha256 = "17ajl0ra5xkxn5pf0m0zalylp44wsfy6mvcq213djh2pwznh4gya";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-  propagatedBuildInputs = [pcre];
+  buildInputs = [ dune-configurator ];
 
-  createFindlibDestdir = true;
-
-  dontConfigure = true;	# Skip configure phase
+  propagatedBuildInputs = [ pcre ];
 
   meta = with lib; {
-    homepage = "https://bitbucket.org/mmottl/pcre-ocaml";
+    homepage = "https://mmottl.github.io/pcre-ocaml";
     description = "An efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
-    license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ maggesi vbmithr ];
   };
 }
