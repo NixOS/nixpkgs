@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
 
   src = notmuch.src;
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     ${coreutils}/bin/install -Dm755 \
@@ -36,7 +37,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "Mutt support for notmuch";
     homepage    = "https://notmuchmail.org/";
     license     = with licenses; gpl3;
