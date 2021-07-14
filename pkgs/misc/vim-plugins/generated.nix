@@ -5272,6 +5272,18 @@ final: prev:
     meta.homepage = "https://github.com/Quramy/tsuquyomi/";
   };
 
+  twilight-nvim = buildVimPluginFrom2Nix {
+    pname = "twilight-nvim";
+    version = "2021-07-13";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "twilight.nvim";
+      rev = "f5718ddbd9bba3184493a4fc11cd38342966904f";
+      sha256 = "1j532h0imw782rvhg75ryqmy5lm0clg32fs3a1cm84srx97l05fp";
+    };
+    meta.homepage = "https://github.com/folke/twilight.nvim/";
+  };
+
   typescript-vim = buildVimPluginFrom2Nix {
     pname = "typescript-vim";
     version = "2020-12-08";
