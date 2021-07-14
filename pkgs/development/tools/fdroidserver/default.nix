@@ -16,7 +16,7 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace fdroidserver/common.py --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
-    substituteInPlace setup.py --replace "pyasn1-modules == 0.2.1" "pyasn1-modules"
+    substituteInPlace setup.py --replace "pyasn1-modules >= 0.2.1, < 0.3" "pyasn1-modules"
   '';
 
   preConfigure = ''
