@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes }:
 
 stdenv.mkDerivation rec {
   pname = "qogir-icon-theme";
@@ -11,17 +11,22 @@ stdenv.mkDerivation rec {
     sha256 = "0anma2ss3yqr9njx4ay2nyxjkgnj7ky17c93ipwgrvgsv8jk5nn2";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [ gtk3 jdupes ];
 
   propagatedBuildInputs = [ hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
+
+  # These fixup steps are slow and unnecessary.
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
 
   installPhase = ''
     runHook preInstall
     patchShebangs install.sh
     mkdir -p $out/share/icons
     name= ./install.sh -d $out/share/icons
+    jdupes -l -r $out/share/icons
     runHook postInstall
   '';
 
