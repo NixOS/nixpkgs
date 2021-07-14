@@ -17157,6 +17157,9 @@ in
   # required for stable thunderbird and firefox-esr-78
   nss_3_53 = lowPrio (callPackage ../development/libraries/nss/3.53.nix { });
 
+  # required for the latest firefox version
+  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { });
+
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
 
   nsss = skawarePackages.nsss;
