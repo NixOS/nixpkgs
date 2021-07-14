@@ -30309,6 +30309,8 @@ in
 
   logisim = callPackage ../applications/science/logic/logisim {};
 
+  ls4 = callPackage ../applications/science/logic/ls4 { };
+
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
 
   metis-prover = callPackage ../applications/science/logic/metis-prover { };
