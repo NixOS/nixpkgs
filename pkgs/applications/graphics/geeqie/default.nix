@@ -1,15 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config, autoconf, automake, gettext, intltool
-, gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
-, wrapGAppsHook, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoconf
+, automake
+, gettext
+, intltool
+, gtk3
+, lcms2
+, exiv2
+, libchamplain
+, clutter-gtk
+, ffmpegthumbnailer
+, fbida
+, wrapGAppsHook
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.5.1";
+  version = "1.6";
 
-  src = fetchurl {
-    url = "http://geeqie.org/${pname}-${version}.tar.xz";
-    sha256 = "02m1vqaasin249xx792cdj11xyag8lnanwzxd108y7y34g9xam28";
+  src = fetchFromGitHub {
+    owner = "BestImageViewer";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1i9yd8lddp6b9s9vjjjzbpqj4bvwidxc6kiba6vdrk7dda5akyky";
   };
 
   patches = [
@@ -23,12 +39,23 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs = [ pkg-config autoconf automake gettext intltool
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+    gettext
+    intltool
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida
+    gtk3
+    lcms2
+    exiv2
+    libchamplain
+    clutter-gtk
+    ffmpegthumbnailer
+    fbida
   ];
 
   postInstall = ''
@@ -42,7 +69,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight GTK based image viewer";
-
     longDescription =
       ''
         Geeqie is a lightweight GTK based image viewer for Unix like
@@ -53,11 +79,8 @@ stdenv.mkDerivation rec {
         image comparison, sorting and managing photo collection.  Geeqie was
         initially based on GQview.
       '';
-
     license = licenses.gpl2Plus;
-
-    homepage = "http://geeqie.sourceforge.net";
-
+    homepage = "https://github.com/BestImageViewer/geeqie";
     maintainers = with maintainers; [ jfrankenau pSub markus1189 ];
     platforms = platforms.gnu ++ platforms.linux;
   };
