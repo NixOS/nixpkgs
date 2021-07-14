@@ -22279,6 +22279,8 @@ in
 
   iwona = callPackage ../data/fonts/iwona { };
 
+  jdt-ls = callPackage ../development/tools/jdt-ls { };
+
   jetbrains-mono = callPackage ../data/fonts/jetbrains-mono { };
 
   jost = callPackage ../data/fonts/jost { };
