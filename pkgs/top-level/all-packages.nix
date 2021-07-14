@@ -24812,6 +24812,8 @@ in
 
   icewm = callPackage ../applications/window-managers/icewm {};
 
+  icecat-bin = callPackage ../applications/networking/browsers/icecat-bin { };
+
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
   ideamaker = libsForQt5.callPackage ../applications/misc/ideamaker { };
