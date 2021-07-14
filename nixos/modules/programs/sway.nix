@@ -28,6 +28,7 @@ let
 
   swayPackage = pkgs.sway.override {
     extraSessionCommands = cfg.extraSessionCommands;
+    postSessionCommands = cfg.postSessionCommands;
     extraOptions = cfg.extraOptions;
     withBaseWrapper = cfg.wrapperFeatures.base;
     withGtkWrapper = cfg.wrapperFeatures.gtk;
@@ -69,6 +70,17 @@ in {
         <link xlink:href="https://github.com/swaywm/sway/wiki/Running-programs-natively-under-wayland" />
         and <link xlink:href="https://github.com/swaywm/wlroots/blob/master/docs/env_vars.md" />
         for some useful environment variables.
+      '';
+    };
+
+    postSessionCommands = mkOption {
+      type = types.lines;
+      default = "";
+      example = ''
+        systemctl --user stop graphical-session.target
+      '';
+      description = ''
+        Shell commands executed after Sway is exited.
       '';
     };
 
