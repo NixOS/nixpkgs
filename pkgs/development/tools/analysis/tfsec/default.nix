@@ -1,17 +1,20 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoPackage
+, fetchFromGitHub
+}:
 
 buildGoPackage rec {
   pname = "tfsec";
-  version = "0.45.3";
+  version = "0.48.2";
 
   src = fetchFromGitHub {
-    owner = "tfsec";
+    owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I0TOddYO++tw26gS/h15FSATqCjdQfQXVYSTkV+r5HM=";
+    sha256 = "sha256-ZJHm+shCbyM2cyLW5ZgrqLMwnnvp7IOHI5+Ta2gdaNQ=";
   };
 
-  goPackagePath = "github.com/tfsec/tfsec";
+  goPackagePath = "github.com/aquasecurity/tfsec";
 
   ldflags = [
     "-w"
@@ -20,9 +23,9 @@ buildGoPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/tfsec/tfsec";
-    description = "Static analysis powered security scanner for your terraform code";
+    description = "Static analysis powered security scanner for terraform code";
+    homepage = "https://github.com/aquasecurity/tfsec";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ fab marsam ];
   };
 }
