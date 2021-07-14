@@ -31941,6 +31941,8 @@ in
 
   yamdi = callPackage ../tools/video/yamdi { };
 
+  yandex-browser = callPackage ../applications/networking/browsers/yandex-browser { };
+
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   yara = callPackage ../tools/security/yara { };
