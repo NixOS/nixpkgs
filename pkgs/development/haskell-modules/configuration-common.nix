@@ -1963,4 +1963,12 @@ EOT
   # https://github.com/kcsongor/generic-lens/issues/133
   generic-optics = dontCheck super.generic-optics;
 
+  # Upgrade hackage-db as a fix for this issue:
+  # https://github.com/NixOS/cabal2nix/issues/501
+  hackage-db = overrideCabal super.hackage-db {
+    version = "2.1.2";
+    sha256 = "1aj82n2ay16zman829gq7s9dkg3qyyavca8hhjfibx8hzg6pmnap";
+    editedCabalFile = null;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
