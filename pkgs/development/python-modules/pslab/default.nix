@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0iifjz7j6g982sc1id91d2krrv6zr42v2fzln9kw7nwjzg1j2j3a";
   };
 
-  # Testing requires Pil, some patches...
+  # Tests not included in the pypi archive
   doCheck = false;
 
   propagatedBuildInputs = [ numpy pyserial scipy ];
