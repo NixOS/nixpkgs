@@ -3161,6 +3161,8 @@ in
 
   piglit = callPackage ../tools/graphics/piglit { };
 
+  pihole-ftl = callPackage ../tools/networking/pihole-ftl { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   pn = callPackage ../tools/text/pn { };
