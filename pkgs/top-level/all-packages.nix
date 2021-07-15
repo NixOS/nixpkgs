@@ -1325,6 +1325,8 @@ in
 
   inherit (nodePackages) bitwarden-cli;
 
+  inherit (nodePackages) hyperspace-cli;
+
   bkyml = callPackage ../tools/misc/bkyml { };
 
   blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
