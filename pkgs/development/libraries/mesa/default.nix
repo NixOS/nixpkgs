@@ -31,7 +31,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.1.5";
+  version = "21.2.0-rc1";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -45,7 +45,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0vbn40azh7izrxvb15c51z3lfcb9zas2v1wc4z9cxvja0y9p4b02";
+    sha256 = "0rr6zh1miaaipvhf04ma9974k93c4fpk0ai168pkbzg7cycaf0qv";
   };
 
   prePatch = "patchShebangs .";
@@ -63,12 +63,6 @@ self = stdenv.mkDerivation {
       name = "nine_debug-Make-tid-more-type-correct";
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
-    })
-    # For RISC-V support:
-    (fetchpatch {
-      name = "add-riscv-default-selections.patch";
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/9908da1b7a5eaf0156d458e0e24b694c070ba345.patch";
-      sha256 = "036gv95m5gzzs6qpgkydf5fwgdlm7kpbdfalg8vmayghd260rw1w";
     })
   ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
