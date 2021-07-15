@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
-, aiohttp, webargs, apispec3, jinja2
+, aiohttp, webargs5, apispec3, jinja2
 }:
 
 buildPythonPackage rec {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0hhlmh3mc3xg68znsxyhypb5k12vg59yf72qkyw6ahg8zy3qfz2m";
   };
 
-  propagatedBuildInputs = [ aiohttp webargs apispec3 jinja2 ];
+  propagatedBuildInputs = [ aiohttp webargs5 apispec3 jinja2 ];
 
   # The tests are not included in the archive from pypi
   doCheck = false;

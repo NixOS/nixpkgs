@@ -285,9 +285,7 @@ in {
     pytestCheckHook = self.pytestCheckHook_6_1;
   };
 
-  aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec {
-    webargs = self.webargs5;
-  };
+  aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
