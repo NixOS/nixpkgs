@@ -1,8 +1,8 @@
 { buildDunePackage
 , resto
+, resto-directory
 , resto-cohttp
 , uri
-, cohttp-lwt
 , lwt
 }:
 
@@ -11,9 +11,10 @@ buildDunePackage {
   inherit (resto) src version meta useDune2 doCheck;
 
   propagatedBuildInputs = [
-    uri
+    resto
+    resto-directory
     resto-cohttp
-    cohttp-lwt
+    uri
     lwt
   ];
 }

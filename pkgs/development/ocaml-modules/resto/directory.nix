@@ -6,7 +6,6 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     resto
-    resto-json
     lwt
   ];
 }

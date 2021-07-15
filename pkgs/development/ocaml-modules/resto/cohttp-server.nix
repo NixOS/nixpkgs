@@ -1,8 +1,8 @@
 { lib
 , buildDunePackage
 , resto
-, resto-acl
 , resto-directory
+, resto-acl
 , resto-cohttp
 , cohttp-lwt-unix
 , conduit-lwt-unix
@@ -14,9 +14,10 @@ buildDunePackage {
   inherit (resto) src version meta useDune2 doCheck;
 
   propagatedBuildInputs = [
+    resto
     resto-directory
-    resto-cohttp
     resto-acl
+    resto-cohttp
     cohttp-lwt-unix
     conduit-lwt-unix
     lwt
