@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple pure-python AVM meta-data handling";
-    homepage = "http://astrofrog.github.io/pyavm/";
+    homepage = "https://astrofrog.github.io/pyavm/";
     license = licenses.mit;
     maintainers = with maintainers; [ smaret ];
   };
