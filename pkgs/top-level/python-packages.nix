@@ -2355,6 +2355,8 @@ in {
 
   et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
 
+  ev3dev2 = callPackage ../development/python-modules/ev3dev2 { };
+
   evdev = callPackage ../development/python-modules/evdev { };
 
   eve = callPackage ../development/python-modules/eve { };
