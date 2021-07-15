@@ -27,6 +27,7 @@ let
     "bird"
     "bitcoin"
     "blackbox"
+    "buildkite-agent"
     "collectd"
     "dnsmasq"
     "domain"
