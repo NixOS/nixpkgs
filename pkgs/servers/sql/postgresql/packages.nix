@@ -4,6 +4,8 @@ self: super: {
       bison = self.bison_3_5;
     };
 
+    citus = super.callPackage ./ext/citus.nix { };
+
     periods = super.callPackage ./ext/periods.nix { };
 
     postgis = super.callPackage ./ext/postgis.nix { };
