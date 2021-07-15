@@ -39,7 +39,7 @@ let
   canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
   inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.06-rc1";
+  version = "2.06";
 
 in (
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.savannah.gnu.org/grub.git";
     rev = "${pname}-${version}";
-    sha256 = "1ngc960g4w91rg13l724v6nlj6fq1adxp6is2mrq4bnp7sm9mysa";
+    sha256 = "1vkxr6b4p7h259vayjw8bfgqj57x68byy939y4bmyaz6g7fgrv0f";
   };
 
   patches = [
