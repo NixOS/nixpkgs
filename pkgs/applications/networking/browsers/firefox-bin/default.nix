@@ -183,6 +183,8 @@ stdenv.mkDerivation {
       ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
     '';
 
+  passthru.browserName = "firefox";
+  passthru.firefoxLibName = "firefox-bin-${version}";
   passthru.execdir = "/bin";
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;

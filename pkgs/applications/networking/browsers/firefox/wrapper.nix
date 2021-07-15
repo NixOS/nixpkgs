@@ -40,7 +40,7 @@ let
     # For more information about policies visit
     # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
     , extraPolicies ? {}
-    , firefoxLibName ? "firefox" # Important for tor package or the like
+    , firefoxLibName ? browser.firefoxLibName or "firefox" # Important for tor package or the like
     , nixExtensions ? null
     }:
 
@@ -208,8 +208,8 @@ let
 
         find . -type f \( -not -name "${browserName}" \) -exec ln -sT "${browser}"/{} "$out"/{} \;
 
-        find . -type f -name "${browserName}" -print0 | while read -d $'\0' f; do
-          cp -P --no-preserve=mode,ownership "${browser}/$f" "$out/$f"
+        find . -type f \( -name "${browserName}" -o -name "${browserName}-bin" \) -print0 | while read -d $'\0' f; do
+          cp -P --no-preserve=mode,ownership --remove-destination "${browser}/$f" "$out/$f"
           chmod a+rwx "$out/$f"
         done
 
