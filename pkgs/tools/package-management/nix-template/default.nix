@@ -1,17 +1,33 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub
+, makeWrapper
+, nix
+, openssl
+, pkg-config
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-template";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "jonringer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h6xdvhzg7nb0s82b3r5bsh8bfdb1l5sm7fa24lfwd396xp9yyig";
+    sha256 = "sha256-A1b/fgSr27sfMDnTi4R3PUZfhAdLA5wUOd4yh9/4Bnk=";
   };
 
-  cargoSha256 = "0hp31b5q4s6grkha2jz55945cbjkqdpvx1l8m49zv5prczhd7mz5";
+  cargoSha256 = "sha256-resyY/moqLo4KWOKUvFJiOWealCmcEsLFgkN12slKN0=";
+
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [ openssl ]
+    ++ lib.optional stdenv.isDarwin Security;
+
+  # needed for nix-prefetch-url
+  postInstall = ''
+    wrapProgram $out/bin/nix-template \
+      --prefix PATH : ${lib.makeBinPath [ nix ]}
+  '';
 
   meta = with lib; {
     description = "Make creating nix expressions easy";
