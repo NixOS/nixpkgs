@@ -139,6 +139,7 @@
 , "json-refs"
 , "json-server"
 , "jsonlint"
+, "jsonplaceholder"
 , "kaput-cli"
 , "katex"
 , "karma"
