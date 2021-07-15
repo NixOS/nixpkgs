@@ -5,7 +5,11 @@ with lib;
 let
 
   cfg = config.virtualisation.anbox;
-  kernelPackages = config.boot.kernelPackages;
+  inherit (config.boot) kernelPackages;
+  inherit (kernelPackages) kernel;
+
+  # Inverted condition from `meta.broken` on `kernelPackages.anbox`.
+  useAnboxModules = kernel.kernelAtLeast "4.4" && kernel.kernelOlder "5.5";
   addrOpts = v: addr: pref: name: {
     address = mkOption {
       default = addr;
@@ -25,6 +29,28 @@ let
     };
   };
 
+  finalImage = if cfg.imageModifications == "" then cfg.image else ( pkgs.callPackage (
+    { runCommandNoCC, squashfsTools }:
+
+    runCommandNoCC "${cfg.image.name}-modified.img" {
+      nativeBuildInputs = [
+        squashfsTools
+      ];
+    } ''
+      echo "→ Extracting Anbox root image..."
+      unsquashfs -dest rootfs ${cfg.image}
+
+      echo "→ Modifying Anbox root image..."
+      (
+      cd rootfs
+      ${cfg.imageModifications}
+      )
+
+      echo "→ Packing modified Anbox root image..."
+      mksquashfs rootfs $out -comp xz -no-xattrs -all-root
+    ''
+  ) { });
+
 in
 
 {
@@ -39,6 +65,18 @@ in
       type = types.package;
       description = ''
         Base android image for Anbox.
+      '';
+    };
+
+    imageModifications = mkOption {
+      default = "";
+      type = types.lines;
+      description = ''
+        Commands to edit the image filesystem.
+
+        This can be used to e.g. bundle a privileged F-Droid.
+
+        Commands are ran with PWD being at the root of the filesystem.
       '';
     };
 
@@ -67,19 +105,34 @@ in
   config = mkIf cfg.enable {
 
     assertions = singleton {
-      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
+      assertion = kernelPackages.kernelAtLeast "4.18";
       message = "Anbox needs user namespace support to work properly";
     };
 
     environment.systemPackages = with pkgs; [ anbox ];
 
-    boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
-    boot.extraModulePackages = [ kernelPackages.anbox ];
+    # Mainline ashmem/binder drivers not available as modules
+    boot.kernelModules = optionals useAnboxModules [ "ashmem_linux" "binder_linux" ];
+    boot.extraModulePackages = optional useAnboxModules kernelPackages.anbox;
 
-    services.udev.extraRules = ''
-      KERNEL=="ashmem", NAME="%k", MODE="0666"
-      KERNEL=="binder*", NAME="%k", MODE="0666"
-    '';
+    system.requiredKernelConfig = with config.lib.kernelConfig; mkIf (kernel.kernelOlder "5.5") [
+      (isEnabled "ASHMEM")
+      (isEnabled "ANDROID")
+      (isEnabled "ANDROID_BINDER_IPC")
+      (isEnabled "ANDROID_BINDERFS")
+      # It is currently impossible to check for this with `lib.kernelConfig`.
+      # Though the default is fine:
+      # https://github.com/torvalds/linux/blob/f88cd3fb9df228e5ce4e13ec3dbad671ddb2146e/drivers/android/Kconfig#L35-L45
+      # ANDROID_BINDER_DEVICES binder,hwbinder,vndbinder
+    ];
+
+    systemd.mounts = optional (!useAnboxModules) {
+      requiredBy = [ "anbox-container-manager.service" ];
+      description = "Anbox Binder File System";
+      what = "binder";
+      where = "/dev/binderfs";
+      type = "binder";
+    };
 
     virtualisation.lxc.enable = true;
     networking.bridges.anbox0.interfaces = [];
@@ -89,6 +142,11 @@ in
       enable = true;
       internalInterfaces = [ "anbox0" ];
     };
+
+    # Ensures NetworkManager doesn't touch anbox0
+    networking.networkmanager.unmanaged = [
+      "anbox0"
+    ];
 
     systemd.services.anbox-container-manager = let
       anboxloc = "/var/lib/anbox";
@@ -124,12 +182,13 @@ in
         ExecStart = ''
           ${pkgs.anbox}/bin/anbox container-manager \
             --data-path=${anboxloc} \
-            --android-image=${cfg.image} \
+            --android-image=${finalImage} \
             --container-network-address=${cfg.ipv4.container.address} \
             --container-network-gateway=${cfg.ipv4.gateway.address} \
             --container-network-dns-servers=${cfg.ipv4.dns} \
             --use-rootfs-overlay \
-            --privileged
+            --privileged \
+            --daemon
         '';
       };
     };

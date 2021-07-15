@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl
+, fetchpatch
 , cmake, pkg-config, dbus, makeWrapper
 , boost
 , elfutils # for libdw
@@ -22,7 +23,7 @@
 , SDL2_image
 , systemd
 , writeText
-, writeScript
+, writeShellScript
 }:
 
 let
@@ -33,29 +34,22 @@ let
     Exec=@out@/libexec/anbox-session-manager
   '';
 
-  anbox-application-manager = writeScript "anbox-application-manager" ''
-    #!${runtimeShell}
-
-    ${systemd}/bin/busctl --user call \
-        org.freedesktop.DBus \
-        /org/freedesktop/DBus \
-        org.freedesktop.DBus \
-        StartServiceByName "su" org.anbox 0
-
-    @out@/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
+  anbox-application-manager = writeShellScript "anbox-application-manager" ''
+    exec @out@/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
   '';
 
 in
 
 stdenv.mkDerivation rec {
   pname = "anbox";
-  version = "unstable-2020-11-29";
+  version = "unstable-2021-05-26";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "6c10125a7f13908d2cbe56d2d9ab09872755f265";
-    sha256 = "00bqssh4zcs0jj6w07b91719xkrpdw75vpcplwrvlhwsvl55f901";
+    rev = "ad377ff25354d68b76e2b8da24a404850f8514c6";
+    sha256 = "1bj07ixwbkli4ycjh41mnqdbsjz9haiwg2nhf9anbi29z1d0819w";
+
     fetchSubmodules = true;
   };
 
@@ -85,7 +79,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  patchPhase = ''
+  prePatch = ''
     patchShebangs scripts
 
     cat >cmake/FindGMock.cmake <<'EOF'
@@ -113,8 +107,30 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  patches = [
+    # Fixes compatibility with lxc 4
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/anbox/lxc4.patch?id=64243590a16aee8d4e72061886fc1b15256492c3";
+      sha256 = "1da5xyzyjza1g2q9nbxb4p3njj2sf3q71vkpvmmdphia5qnb0gk5";
+    })
+    # Wait 10× more time when starting
+    # Not *strictly* needed, but helps a lot on slower hardware
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/anbox/give-more-time-to-start.patch?id=058b56d4b332ef3379551b343bf31e0f2004321a";
+      sha256 = "0iiz3c7fgfgl0dvx8sf5hv7a961xqnihwpz6j8r0ib9v8piwxh9a";
+    })
+    # Ensures generated desktop files work on store path change
+    ./0001-NixOS-Use-anbox-from-PATH-in-desktop-files.patch
+    # Provide window icons
+    (fetchpatch {
+      url = "https://github.com/samueldr/anbox/commit/2387f4fcffc0e19e52e58fb6f8264fbe87aafe4d.patch";
+      sha256 = "12lmr0kxw1n68g3abh1ak5awmpczfh75c26f53jc8qpvdvv1ywha";
+    })
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/anbox \
+      --set SDL_VIDEO_X11_WMCLASS "anbox" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libGL libglvnd]} \
       --prefix PATH : ${git}/bin
 
@@ -128,6 +144,7 @@ stdenv.mkDerivation rec {
 
     substitute ${anbox-application-manager} $out/bin/anbox-application-manager \
       --subst-var out
+    chmod +x $out/bin/anbox-application-manager
   '';
 
   passthru.image = let
@@ -152,7 +169,7 @@ stdenv.mkDerivation rec {
     homepage = "https://anbox.io";
     description = "Android in a box";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [ edwtjo samueldr ];
     platforms = [ "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
   };
 

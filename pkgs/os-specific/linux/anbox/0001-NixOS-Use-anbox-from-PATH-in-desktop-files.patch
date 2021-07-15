@@ -1,0 +1,34 @@
+From cb61e856c4357d9787f7a2313bacb1c3b2133d36 Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Fri, 4 Jun 2021 19:05:53 -0400
+Subject: [PATCH] [NixOS] Use `anbox` from PATH in desktop files
+
+---
+ src/anbox/application/launcher_storage.cpp | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/src/anbox/application/launcher_storage.cpp b/src/anbox/application/launcher_storage.cpp
+index d5053cf..a4be719 100644
+--- a/src/anbox/application/launcher_storage.cpp
++++ b/src/anbox/application/launcher_storage.cpp
+@@ -69,9 +69,7 @@ void LauncherStorage::add_or_update(const Database::Item &item) {
+   auto package_name = item.package;
+   std::replace(package_name.begin(), package_name.end(), '.', '-');
+ 
+-  auto exe_path = utils::process_get_exe_path(getpid());
+-  if (utils::get_env_value("SNAP").length() > 0)
+-    exe_path = snap_exe_path;
++  auto exe_path = "anbox";
+ 
+   std::string exec = utils::string_format("%s launch ", exe_path);
+ 
+@@ -121,4 +119,4 @@ void LauncherStorage::remove(const Database::Item &item) {
+     fs::remove(item_icon_path);
+ }
+ 
+-}
+\ No newline at end of file
++}
+-- 
+2.29.2
+
