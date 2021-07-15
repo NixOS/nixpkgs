@@ -9,7 +9,6 @@
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
   "emoji-selector@maestroschan.fr" = callPackage ./emoji-selector { };
   "freon@UshakovVasilii_Github.yahoo.com" = callPackage ./freon { };
-  "gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com" = callPackage ./fuzzy-app-search { };
   "gsconnect@andyholmes.github.io" = callPackage ./gsconnect { };
   "icon-hider@kalnitsky.org" = callPackage ./icon-hider { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
