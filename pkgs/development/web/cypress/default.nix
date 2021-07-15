@@ -1,19 +1,18 @@
-{
-  alsa-lib,
-  autoPatchelfHook,
-  callPackage,
-  fetchzip,
-  gnome2,
-  gtk2,
-  gtk3,
-  lib,
-  mesa,
-  nss,
-  stdenv,
-  udev,
-  unzip,
-  wrapGAppsHook,
-  xorg,
+{ alsa-lib
+, autoPatchelfHook
+, callPackage
+, fetchzip
+, gnome2
+, gtk2
+, gtk3
+, lib
+, mesa
+, nss
+, stdenv
+, udev
+, unzip
+, wrapGAppsHook
+, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -31,9 +30,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
 
   buildInputs = with xorg; [
-    libXScrnSaver libXdamage libXtst libxshmfence
+    libXScrnSaver
+    libXdamage
+    libXtst
+    libxshmfence
   ] ++ [
-    nss gtk2 alsa-lib gnome2.GConf gtk3
+    nss
+    gtk2
+    alsa-lib
+    gnome2.GConf
+    gtk3
     mesa # for libgbm
   ];
 
@@ -59,7 +65,7 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
 
     tests = {
-      example = callPackage ./cypress-example-kitchensink {};
+      example = callPackage ./cypress-example-kitchensink { };
     };
   };
 
@@ -67,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     license = licenses.mit;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ tweber mmahut ];
   };
 }
