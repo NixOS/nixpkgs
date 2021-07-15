@@ -11314,6 +11314,12 @@
     githubId = 19174984;
     name = "Alex Whitt";
   };
+  whonore = {
+    email = "wolfhonore@gmail.com";
+    github = "whonore";
+    githubId = 7121530;
+    name = "Wolf Honoré";
+  };
   wildsebastian = {
     name = "Sebastian Wild";
     email = "sebastian@wild-siena.com";
