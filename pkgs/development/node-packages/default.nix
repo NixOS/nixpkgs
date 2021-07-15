@@ -308,7 +308,7 @@ let
     };
 
     teck-programmer = super.teck-programmer.override {
-      buildInputs = [ pkgs.libusb ];
+      buildInputs = [ pkgs.libusb1 ];
     };
 
     vega-cli = super.vega-cli.override {
