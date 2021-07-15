@@ -1,12 +1,18 @@
 { lib, writeText, runCommand, writeReferencesToFile }:
 
+let
+  currentSystemSplit = lib.splitString "-" builtins.currentSystem;
+  currentOS = lib.last currentSystemSplit;
+  currentArch = lib.head currentSystemSplit;
+in
 {
   buildContainer =
     { args
     , mounts ? {}
-    , os ? "linux"
-    , arch ? "x86_64"
+    , os ? currentOS
+    , arch ? currentArch
     , readonly ? false
+    , extraOciConfig ? {}
     }:
   let
     sysMounts = {
@@ -42,10 +48,10 @@
       "/sys/fs/cgroup" = {
         type = "cgroup";
         source = "cgroup";
-        options = [ "nosuid" "noexec" "nodev" "realatime" "ro" ];
+        options = [ "nosuid" "noexec" "nodev" "relatime" "ro" ];
       };
     };
-    config = writeText "config.json" (builtins.toJSON {
+    merged = lib.recursiveUpdate {
       ociVersion = "1.0.0";
       platform = {
         inherit os arch;
@@ -66,9 +72,10 @@
       mounts = lib.mapAttrsToList (destination: { type, source, options ? null }: {
         inherit destination type source options;
       }) sysMounts;
-    });
+    } extraOciConfig;
+    config = writeText "config.json" (builtins.toJSON merged);
   in
-    runCommand "join" {} ''
+    runCommand "oci-image" {} ''
       set -o pipefail
       mkdir -p $out/rootfs/{dev,proc,sys}
       cp ${config} $out/config.json
