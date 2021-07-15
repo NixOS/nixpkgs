@@ -7,13 +7,34 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
+  # Use only for **internal** options.
+  # This is not exactly user-friendly.
+  kdeConfigurationType = with types;
+    let
+      valueTypes = (oneOf [
+        bool
+        float
+        int
+        str
+      ]) // {
+        description = "KDE Configuration value";
+        emptyValue.value = "";
+      };
+      set = (nullOr (lazyAttrsOf valueTypes)) // {
+        description = "KDE Configuration set";
+        emptyValue.value = {};
+      };
+    in (lazyAttrsOf set) // {
+        description = "KDE Configuration file";
+        emptyValue.value = {};
+      };
+
   libsForQt5 = pkgs.plasma5Packages;
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;
   pactl = "${getBin pulseaudio.package}/bin/pactl";
-  startplasma-x11 = "${getBin plasma5.plasma-workspace}/bin/startplasma-x11";
   sed = "${getBin pkgs.gnused}/bin/sed";
 
   gtkrc2 = writeText "gtkrc-2.0" ''
@@ -136,9 +157,6 @@ let
           fi
       fi
 
-    ''
-    + ''
-      exec "${startplasma-x11}"
     '';
 
 in
@@ -172,6 +190,37 @@ in
           disabled by default.
         '';
       };
+
+      # Internally allows configuring kdeglobals globally
+      kdeglobals = mkOption {
+        internal = true;
+        default = {};
+        type = kdeConfigurationType;
+      };
+
+      # Internally allows configuring kwin globally
+      kwinrc = mkOption {
+        internal = true;
+        default = {};
+        type = kdeConfigurationType;
+      };
+
+      mobile.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable support for running the Plasma Mobile shell.
+        '';
+      };
+
+      mobile.installRecommendedSoftware = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Installs software recommended for use with Plasma Mobile, but which
+          is not strictly required for Plasma Mobile to run.
+        '';
+      };
     };
 
   };
@@ -183,6 +232,7 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+
       # Seed our configuration into nixos-generate-config
       system.nixos-generate-config.desktopConfiguration = [''
         # Enable the Plasma 5 Desktop Environment.
@@ -190,11 +240,7 @@ in
         services.xserver.desktopManager.plasma5.enable = true;
       ''];
 
-      services.xserver.desktopManager.session = singleton {
-        name = "plasma5";
-        bgSupport = true;
-        start = startplasma;
-      };
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
 
       security.wrappers = {
         kcheckpass.source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
@@ -371,8 +417,90 @@ in
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
+      services.xserver.displayManager.setupCommands = startplasma;
 
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
+
+      environment.etc = {
+        "xdg/kwinrc".text     = lib.generators.toINI {} cfg.kwinrc;
+        "xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
+      };
+    })
+    (mkIf cfg.mobile.enable {
+      assertions = [
+        {
+          # The user interface breaks without NetworkManager
+          assertion = config.networking.networkmanager.enable;
+          message = "Plasma Mobile requires NetworkManager.";
+        }
+        {
+          # The user interface breaks without bluetooth
+          assertion = config.hardware.bluetooth.enable;
+          message = "Plasma Mobile requires Bluetooth.";
+        }
+        {
+          # The user interface breaks without pulse
+          assertion = config.hardware.pulseaudio.enable;
+          message = "Plasma Mobile requires pulseaudio.";
+        }
+      ];
+
+      environment.systemPackages =
+        with libsForQt5;
+        with plasma5; with kdeApplications; with kdeFrameworks;
+        [
+          # Basic packages without which Plasma Mobile fails to work properly.
+          plasma-phone-components
+          plasma-nano
+          pkgs.maliit-framework
+          pkgs.maliit-keyboard
+        ]
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with libsForQt5.plasmaMobileGear;[
+          # Additional software made for Plasma Mobile.
+          pkgs.angelfish # Part of Plasma Mobile Gear 21.06 update in Nixpkgs
+          alligator
+          calindori
+          kalk
+          kclock
+          koko
+          krecorder
+          ktrip
+          plasma-dialer
+          plasma-phonebook
+          plasma-settings
+          spacebar
+        ])
+      ;
+
+      # The following services are needed or the UI is broken.
+      hardware.bluetooth.enable = true;
+      hardware.pulseaudio.enable = true;
+      networking.networkmanager.enable = true;
+
+      # Recommendations can be found here:
+      #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg
+      # This configuration is the minimum required for Plasma Mobile to *work*.
+      services.xserver.desktopManager.plasma5 = {
+        kdeglobals = {
+          KDE = {
+            # This forces a numeric PIN for the lockscreen, which is the
+            # recommendation from upstream.
+            LookAndFeelPackage = lib.mkDefault "org.kde.plasma.phone";
+          };
+        };
+        kwinrc = {
+          Windows = {
+            # Forces windows to be maximized
+            Placement = lib.mkDefault "Maximizing";
+          };
+          "org.kde.kdecoration2" = {
+            # No decorations (title bar)
+            NoPlugin = lib.mkDefault "true";
+          };
+        };
+      };
+
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-phone-components ];
     })
   ];
 
