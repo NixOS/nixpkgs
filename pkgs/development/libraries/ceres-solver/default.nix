@@ -20,9 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen ]
-    ++ lib.optional runTests gflags;
-  propagatedBuildInputs = [ glog ];
+  buildInputs = lib.optional runTests gflags;
+  propagatedBuildInputs = [ eigen glog ];
 
   # The Basel BUILD file conflicts with the cmake build directory on
   # case-insensitive filesystems, eg. darwin.
