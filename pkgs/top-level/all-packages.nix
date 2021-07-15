@@ -12924,6 +12924,8 @@ in
 
   abi-dumper = callPackage ../development/tools/misc/abi-dumper { };
 
+  allure = callPackage ../development/tools/allure { };
+
   adtool = callPackage ../tools/admin/adtool { };
 
   inherit (callPackage ../development/tools/alloy {
