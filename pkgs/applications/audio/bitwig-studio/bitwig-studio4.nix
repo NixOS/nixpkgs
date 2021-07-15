@@ -27,12 +27,6 @@ stdenv.mkDerivation rec {
     alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pulseaudio libjack2 libX11 libglvnd libXcursor stdenv.cc.cc.lib
   ];
 
-  binPath = lib.makeBinPath [
-    xdg-utils ffmpeg
-  ];
-
-  ldLibraryPath = lib.strings.makeLibraryPath buildInputs;
-
   installPhase = ''
     runHook preInstall
 
@@ -60,8 +54,8 @@ stdenv.mkDerivation rec {
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
       wrapProgram $f \
         "''${gappsWrapperArgs[@]}" \
-        --prefix PATH : "${binPath}" \
-        --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
+        --prefix PATH : "${lib.makeBinPath [ xdg-utils ffmpeg ]}" \
+        --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath buildInputs}"
     done
 
   '';
