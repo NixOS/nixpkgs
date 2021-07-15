@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  configureFlags = lib.optional stdenv.targetPlatform.isWindows "--disable-examples";
+  configureFlags = lib.optional
+    (stdenv.targetPlatform.isWindows || stdenv.hostPlatform.isStatic)
+    "--disable-examples";
 
   meta = with lib; {
     homepage = "http://www.hyperrealm.com/libconfig";
