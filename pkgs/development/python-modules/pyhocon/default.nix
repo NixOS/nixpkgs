@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/chimpler/pyhocon/";
     description = "HOCON parser for Python";
+    # taken from https://pypi.org/project/pyhocon/
     longDescription = ''
       A HOCON parser for Python. It additionally provides a tool
       (pyhocon) to convert any HOCON content into json, yaml and properties
