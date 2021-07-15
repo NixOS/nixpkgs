@@ -184,6 +184,8 @@ in
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  arcan = callPackage ../development/libraries/arcan { };
+
   atuin = callPackage ../tools/misc/atuin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -7978,6 +7980,8 @@ in
   pinnwand = callPackage ../servers/pinnwand { };
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
+
+  pipeworld = callPackage ../applications/window-managers/pipeworld { };
 
   pipr = callPackage ../applications/misc/pipr { };
 
@@ -20362,6 +20366,8 @@ in
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
 
+  xarcan = callPackage ../servers/x11/xarcan { };
+
   # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
   # so as not to have the newly bound xorg items already in scope,  which would
   # have created a cycle.
@@ -28783,6 +28789,8 @@ in
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
+
+  durden = callPackage ../desktops/durden { };
 
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
