@@ -2487,6 +2487,10 @@ in
 
   discourse = callPackage ../servers/web-apps/discourse { };
 
+  discourseAllPlugins = discourse.override {
+    plugins = lib.filter (p: p ? pluginName) (builtins.attrValues discourse.plugins);
+  };
+
   discourse-mail-receiver = callPackage ../servers/web-apps/discourse/mail_receiver { };
 
   discocss = callPackage ../tools/misc/discocss { };
@@ -19518,6 +19522,8 @@ in
 
   icecream = callPackage ../servers/icecream { };
 
+  icingaweb2-ipl = callPackage ../servers/icingaweb2/ipl.nix { };
+  icingaweb2-thirdparty = callPackage ../servers/icingaweb2/thirdparty.nix { };
   icingaweb2 = callPackage ../servers/icingaweb2 { };
   icingaweb2Modules = {
     theme-april = callPackage ../servers/icingaweb2/theme-april { };
@@ -19536,6 +19542,8 @@ in
   ircdog = callPackage ../applications/networking/irc/ircdog { };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
+
+  janus-gateway = callPackage ../servers/janus-gateway { };
 
   jboss = callPackage ../servers/http/jboss { };
 
@@ -22293,6 +22301,8 @@ in
   julia-mono = callPackage ../data/fonts/julia-mono { };
 
   juno-theme = callPackage ../data/themes/juno { };
+
+  kanit-font = callPackage ../data/fonts/kanit { };
 
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
 

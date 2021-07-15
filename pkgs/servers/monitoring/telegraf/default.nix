@@ -27,6 +27,6 @@ buildGoModule rec {
     description = "The plugin-driven server agent for collecting & reporting metrics";
     license = licenses.mit;
     homepage = "https://www.influxdata.com/time-series-platform/telegraf/";
-    maintainers = with maintainers; [ mic92 roblabla timstott foxit64 ];
+    maintainers = with maintainers; [ mic92 roblabla timstott ];
   };
 }
