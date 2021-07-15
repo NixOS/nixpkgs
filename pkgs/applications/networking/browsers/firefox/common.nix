@@ -9,7 +9,7 @@
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx_1_8
-, icu67, libpng, jemalloc, glib, pciutils
+, icu67, icu69, libpng, jemalloc, glib, pciutils
 , autoconf213, which, gnused, rustPackages, rustPackages_1_45
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
@@ -173,13 +173,15 @@ buildStdenv.mkDerivation ({
     xorg.libXext
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
-    nasm icu67 libvpx_1_8
+    nasm libvpx_1_8
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
     nspr nss_pkg
   ]
+  ++ lib.optional  (lib.versionOlder version "91") icu67
+  ++ lib.optional  (lib.versionAtLeast version "91") icu69
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gssSupport libkrb5
