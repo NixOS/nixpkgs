@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.5.2";
+  version = "1.5.3";
 
   outputs = [ "out" "man" ];
 
@@ -18,7 +18,7 @@ buildGoModule rec {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-RDLAmPBjDHCx9al+gstUTrvKc/L0vAm8IEd/mvX5Als=";
+    sha256 = "sha256-9ruvpH9jWScHDvTB8UKvPVy2lSIxYKODJfZFIK2hpiU=";
   };
 
   vendorSha256 = null;
