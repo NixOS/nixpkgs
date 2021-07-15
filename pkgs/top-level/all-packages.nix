@@ -29724,6 +29724,8 @@ in
 
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
+  pyfda = libsForQt5.callPackage ../applications/science/misc/pyfda { };
+
   pymol = callPackage ../applications/science/chemistry/pymol { };
 
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso { };

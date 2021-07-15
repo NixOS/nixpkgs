@@ -1,0 +1,111 @@
+diff --git a/pyfda/fixpoint_widgets/delay1.py b/pyfda/fixpoint_widgets/delay1.py
+index cdd961b7..d8324edb 100644
+--- a/pyfda/fixpoint_widgets/delay1.py
++++ b/pyfda/fixpoint_widgets/delay1.py
+@@ -21,8 +21,8 @@ from .fixpoint_helpers import rescale
+ 
+ from math import cos, pi
+ 
+-from migen import Signal, Module, run_simulation
+-from migen.fhdl import verilog
++from nmigen.compat import Signal, Module, run_simulation
++from nmigen.compat.fhdl import verilog
+ ################################
+ 
+ 
+diff --git a/pyfda/fixpoint_widgets/fir_df.py b/pyfda/fixpoint_widgets/fir_df.py
+index a25be252..319a3126 100644
+--- a/pyfda/fixpoint_widgets/fir_df.py
++++ b/pyfda/fixpoint_widgets/fir_df.py
+@@ -27,8 +27,8 @@ from .fixpoint_helpers import UI_W, UI_Q, rescale
+ from functools import reduce
+ from operator import add
+ 
+-from migen import Signal, Module, run_simulation
+-from migen.fhdl import verilog
++from nmigen.compat import Signal, Module, run_simulation
++from nmigen.compat.fhdl import verilog
+ ################################
+ 
+ classes = {'FIR_DF_wdg':'FIR_DF'} #: Dict containing widget class name : display name
+diff --git a/pyfda/fixpoint_widgets/fixpoint_helpers.py b/pyfda/fixpoint_widgets/fixpoint_helpers.py
+index 1a776884..984b7693 100644
+--- a/pyfda/fixpoint_widgets/fixpoint_helpers.py
++++ b/pyfda/fixpoint_widgets/fixpoint_helpers.py
+@@ -20,7 +20,7 @@ from ..compat import (QWidget, QLabel, QLineEdit, QComboBox, QPushButton, QIcon,
+                       QVBoxLayout, QHBoxLayout, QFrame,
+                       pyqtSignal)
+ 
+-from migen import Cat, If, Replicate, Signal
++from nmigen.compat import Cat, If, Replicate, Signal
+ 
+ from pyfda.pyfda_qt_lib import qget_cmb_box, qset_cmb_box
+ from pyfda.pyfda_rc import params
+diff --git a/pyfda/input_widgets/input_fixpoint_specs.py b/pyfda/input_widgets/input_fixpoint_specs.py
+index 630609ce..890766b5 100644
+--- a/pyfda/input_widgets/input_fixpoint_specs.py
++++ b/pyfda/input_widgets/input_fixpoint_specs.py
+@@ -29,12 +29,7 @@ from pyfda.pyfda_qt_lib import qget_cmb_box, qset_cmb_box, qstyle_widget
+ from pyfda.fixpoint_widgets.fixpoint_helpers import UI_W, UI_Q
+ from pyfda.pyfda_rc import params
+ 
+-# when migen is present, instantiate the fixpoint widget
+-if cmp_version("migen", "0.1") >= -1: # currently, version cannot be determined
+-    import migen
+-    HAS_MIGEN = True
+-else:
+-    HAS_MIGEN = False
++HAS_MIGEN = True
+ 
+ # when deltasigma module is present, add a corresponding entry to the combobox
+ try:
+diff --git a/pyfda/pyfda_lib.py b/pyfda/pyfda_lib.py
+index 5324da24..a659b60d 100644
+--- a/pyfda/pyfda_lib.py
++++ b/pyfda/pyfda_lib.py
+@@ -64,11 +64,7 @@ try:
+ except ImportError:
+     pass
+ 
+-try:
+-    import migen
+-    VERSION_MIGEN = "installed"
+-except (ImportError,SyntaxError):
+-    VERSION_MIGEN = None
++VERSION_MIGEN = "installed"
+ VERSION.update({'migen': VERSION_MIGEN})
+ 
+ try:
+diff --git a/pyfda/tests/test_fixpoint_helpers.py b/pyfda/tests/test_fixpoint_helpers.py
+index eed48d06..9ef7249c 100644
+--- a/pyfda/tests/test_fixpoint_helpers.py
++++ b/pyfda/tests/test_fixpoint_helpers.py
+@@ -14,12 +14,9 @@ import unittest
+ import numpy as np
+ from numpy.testing import assert_array_equal
+ from pyfda import pyfda_fix_lib as fix_lib
+-try:
+-    from migen import Cat, If, Replicate, Signal, Module, run_simulation
+-    from pyfda.fixpoint_widgets.fixpoint_helpers import rescale
+-    HAS_MIGEN = True
+-except ImportError:
+-    HAS_MIGEN = False
++from nmigen.compat import Cat, If, Replicate, Signal, Module, run_simulation
++from pyfda.fixpoint_widgets.fixpoint_helpers import rescale
++HAS_MIGEN = True
+ 
+ 
+ class TestSequenceFunctions(unittest.TestCase):
+diff --git a/setup.py b/setup.py
+index 4095c66b..43cf21af 100644
+--- a/setup.py
++++ b/setup.py
+@@ -74,7 +74,7 @@ setup(
+         'matplotlib',
+         'pyqt5',
+         'docutils',
+-        'migen'
++        'nmigen'
+         ],
+ 
+     # link the executable pyfdax to running the python function main() in the
