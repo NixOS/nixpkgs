@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "1.20.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-7Ishq/TonJsteHBGDTNjImIwGPdeRgPS1g60d8bhTYg=";
+    sha256 = "168n0f19glhdw955vrhz6h38ipydkbai5wv5qqaiaw2x7ajzh69y";
     fetchSubmodules = true;
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   ninjaFlags = [
-    "-fninja/linux.ninja"
+    "-fcompile/ninja/linux.ninja"
   ];
 
   postBuild = ''
