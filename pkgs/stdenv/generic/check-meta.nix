@@ -133,6 +133,11 @@ let
       c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
         { allow${allow_attr} = true; }
       to ~/.config/nixpkgs/config.nix.
+
+      d) If you are using the unstable `nix` commands (e.g., `nix run`, `nix
+      build`, `nix shell`, etc.), then nix will evaluate in "restrict-eval" mode which
+      denies it the ability to read a user's local configuration. Add `--impure`
+      to enable reading from the user's nix config directory.
     '';
 
   remediate_insecure = attrs:
