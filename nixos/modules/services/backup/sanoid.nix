@@ -108,8 +108,8 @@ in {
         type = types.attrsOf (types.submodule ({config, options, ...}: {
           freeformType = datasetSettingsType;
           options = commonOptions // datasetOptions;
-          config.use_template = mkAliasDefinitions (options.useTemplate or {});
-          config.process_children_only = mkAliasDefinitions (options.processChildrenOnly or {});
+          config.use_template = mkAliasDefinitions (mkDefault options.useTemplate or {});
+          config.process_children_only = mkAliasDefinitions (mkDefault options.processChildrenOnly or {});
         }));
         default = {};
         description = "Datasets to snapshot.";
