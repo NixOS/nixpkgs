@@ -16,7 +16,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2021.707.0-lazer";
+  version = "2021.707.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
