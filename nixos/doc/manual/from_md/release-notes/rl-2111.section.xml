@@ -78,6 +78,13 @@
           <link linkend="opt-services.vikunja.enable">services.vikunja</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.snapraid.it/">snapraid</link>, a
+          backup program for disk arrays. Available as
+          <link linkend="opt-snapraid.enable">snapraid</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">

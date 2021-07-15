@@ -10,9 +10,7 @@
 , lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; }
 }:
 
-with pkgs;
-
-releaseTools.sourceTarball {
+pkgs.releaseTools.sourceTarball {
   name = "nixpkgs-tarball";
   src = nixpkgs;
 
@@ -23,7 +21,7 @@ releaseTools.sourceTarball {
     then builtins.substring 0 8 (nixpkgs.lastModifiedDate or nixpkgs.lastModified)
     else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
 
-  buildInputs = [ nix.out jq lib-tests pkgs.brotli ];
+  buildInputs = with pkgs; [ nix.out jq lib-tests brotli ];
 
   configurePhase = ''
     eval "$preConfigure"
@@ -33,6 +31,9 @@ releaseTools.sourceTarball {
     echo "release name is $releaseName"
     echo "git-revision is $(cat .git-revision)"
   '';
+
+  nixpkgs-basic-release-checks = import ./nixpkgs-basic-release-checks.nix
+   { inherit nix pkgs nixpkgs supportedSystems; };
 
   dontBuild = false;
 
@@ -45,47 +46,6 @@ releaseTools.sourceTarball {
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
     opts=(--option build-users-group "")
     nix-store --init
-
-    echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
-
-    # Make sure that Nixpkgs does not use <nixpkgs>.
-    badFiles=$(find pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs\/' || true)
-    if [[ -n $badFiles ]]; then
-        echo "Nixpkgs is not allowed to use <nixpkgs> to refer to itself."
-        echo "The offending files: $badFiles"
-        exit 1
-    fi
-
-    # Make sure that derivation paths do not depend on the Nixpkgs path.
-    mkdir $TMPDIR/foo
-    ln -s $(readlink -f .) $TMPDIR/foo/bar
-    p1=$(nix-instantiate ./. --dry-run -A firefox --show-trace)
-    p2=$(nix-instantiate $TMPDIR/foo/bar --dry-run -A firefox --show-trace)
-    if [ "$p1" != "$p2" ]; then
-        echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
-        exit 1
-    fi
-
-    # Check that all-packages.nix evaluates on a number of platforms without any warnings.
-    for platform in ${pkgs.lib.concatStringsSep " " supportedSystems}; do
-        header "checking Nixpkgs on $platform"
-
-        nix-env -f . \
-            --show-trace --argstr system "$platform" \
-            -qa --drv-path --system-filter \* --system \
-            "''${opts[@]}" 2>&1 >/dev/null | tee eval-warnings.log
-
-        if [ -s eval-warnings.log ]; then
-            echo "Nixpkgs on $platform evaluated with warnings, aborting"
-            exit 1
-        fi
-        rm eval-warnings.log
-
-        nix-env -f . \
-            --show-trace --argstr system "$platform" \
-            -qa --drv-path --system-filter \* --system --meta --xml \
-            "''${opts[@]}" > /dev/null
-    done
 
     header "checking eval-release.nix"
     nix-instantiate --eval --strict --show-trace ./maintainers/scripts/eval-release.nix > /dev/null
@@ -104,7 +64,7 @@ releaseTools.sourceTarball {
     header "generating packages.json"
     mkdir -p $out/nix-support
     echo -n '{"version":2,"packages":' > tmp
-    nix-env -f . -I nixpkgs=${src} -qa --json --arg config 'import ${./packages-config.nix}' "''${opts[@]}" >> tmp
+    nix-env -f . -I nixpkgs=$src -qa --json --arg config 'import ${./packages-config.nix}' "''${opts[@]}" >> tmp
     echo -n '}' >> tmp
     packages=$out/packages.json.br
     < tmp sed "s|$(pwd)/||g" | jq -c | brotli -9 > $packages
@@ -121,6 +81,6 @@ releaseTools.sourceTarball {
   '';
 
   meta = {
-    maintainers = [ lib.maintainers.all ];
+    maintainers = [ pkgs.lib.maintainers.all ];
   };
 }

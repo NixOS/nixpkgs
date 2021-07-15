@@ -9158,6 +9158,12 @@
     githubId = 1387224;
     name = "Richard Szibele";
   };
+  rsynnest = {
+    email = "contact@rsynnest.com";
+    github = "rsynnest";
+    githubId = 4392850;
+    name = "Roland Synnestvedt";
+  };
   rtburns-jpl = {
     email = "rtburns@jpl.nasa.gov";
     github = "rtburns-jpl";
