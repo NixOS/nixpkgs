@@ -28632,6 +28632,8 @@ in
 
   cdogs-sdl = callPackage ../games/cdogs-sdl { };
 
+  cgoban = callPackage ../games/cgoban { };
+
   chessdb = callPackage ../games/chessdb { };
 
   chessx = libsForQt5.callPackage ../games/chessx { };
