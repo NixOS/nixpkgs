@@ -808,6 +808,8 @@ in
 
   afew = callPackage ../applications/networking/mailreaders/afew { };
 
+  afetch = callPackage ../tools/misc/afetch { };
+
   afio = callPackage ../tools/archivers/afio { };
 
   afl = callPackage ../tools/security/afl {
