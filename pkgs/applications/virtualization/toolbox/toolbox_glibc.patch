@@ -1,0 +1,21 @@
+diff --git a/src/cmd/create.go b/src/cmd/create.go
+index 74e90b1..113ef80 100644
+--- a/src/cmd/create.go
++++ b/src/cmd/create.go
+@@ -207,6 +207,8 @@ func createContainer(container, image, release string, showCommandToEnter bool)
+ 	toolboxPathEnvArg := "TOOLBOX_PATH=" + toolboxPath
+ 	toolboxPathMountArg := toolboxPath + ":/usr/bin/toolbox:ro"
+ 
++	glibcMountArg := "@glibc@:@glibc@:ro"
++
+ 	var runtimeDirectory string
+ 	var xdgRuntimeDirEnv []string
+ 
+@@ -423,6 +425,7 @@ func createContainer(container, image, release string, showCommandToEnter bool)
+ 		"--volume", toolboxPathMountArg,
+ 		"--volume", usrMountArg,
+ 		"--volume", runtimeDirectoryMountArg,
++		"--volume", glibcMountArg,
+ 	}...)
+ 
+ 	createArgs = append(createArgs, avahiSocketMount...)
