@@ -1,38 +1,30 @@
-{ lib, which, stdenv, fetchFromGitHub, ocaml, findlib, hacl-star, ctypes, cppo }:
+{ lib, which, stdenv, fetchzip, ocaml, findlib, hacl-star, ctypes, cppo }:
 
 stdenv.mkDerivation rec {
-  pname = "hacl-star-raw";
+  pname = "ocaml${ocaml.version}-hacl-star-raw";
   version = "0.3.2";
 
-  /*
-    I can't get this to work since they publish a built, tarball
-    src = fetchFromGitHub {
-    owner = "project-everest";
-    repo = "hacl-star";
-    rev = "ocaml-v${version}";
-    sha256 = "1pg7fyvjx6gyf4819kxspc1f0w530c5mqmlp1jy2h80bl8aaa83s";
-    };
-  */
-
-  src = builtins.fetchurl {
+  src = fetchzip {
     url = "https://github.com/project-everest/hacl-star/releases/download/ocaml-v${version}/hacl-star.${version}.tar.gz";
-    sha256 = "0iybh7nnxyf4r97px2154a2p534cxvlwxgrzi5lq7hh5mpvx6ykb";
+    sha256 = "1wp27vf0g43ggs7cv85hpa62jjvzkwzzg5rfznbwac6j6yr17zc7";
+    stripRoot = false;
   };
-  sourceRoot = ".";
+
+  sourceRoot = "./source/raw";
+
+  minimalOCamlVersion = "4.05";
 
   postPatch = ''
-    patchShebangs ./raw
+    patchShebangs ./
   '';
 
-  configurePhase = ''
-    cd raw
-    ./configure
-    cd ..
+  preInstall = ''
+    mkdir -p $OCAMLFIND_DESTDIR/stublibs
   '';
 
-  buildPhase = ''
-    make -C raw
-  '';
+  installTargets = "install-hacl-star-raw";
+
+  dontAddPrefix = true;
 
   buildInputs = [
     which
@@ -50,15 +42,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  installPhase = ''
-    make -C raw install-hacl-star-raw
-  '';
-
-  createFindlibDestdir = true;
-
   meta = {
     description = "Auto-generated low-level OCaml bindings for EverCrypt/HACL*";
     license = lib.licenses.asl20;
-    maintainers = lib.maintaners.ulrikstrid;
+    maintainers = [ lib.maintainers.ulrikstrid ];
+    platforms = ocaml.meta.platforms;
   };
 }

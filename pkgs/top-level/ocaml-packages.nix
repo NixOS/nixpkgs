@@ -417,6 +417,7 @@ let
 
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
+    hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
     hacl-star-raw = callPackage ../development/ocaml-modules/hacl-star/raw.nix { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
