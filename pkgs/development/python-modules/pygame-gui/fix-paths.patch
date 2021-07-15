@@ -1,0 +1,18 @@
+diff --git a/pygame_gui/core/utility.py b/pygame_gui/core/utility.py
+index 0746321..11984f9 100644
+--- a/pygame_gui/core/utility.py
++++ b/pygame_gui/core/utility.py
+@@ -159,11 +159,11 @@ if PLATFORM == 'WINDOWS':
+ elif PLATFORM == 'LINUX':
+ 
+     def __linux_copy(data: str):
+-        process = subprocess.Popen(['xsel', '-b', '-i'], stdin=subprocess.PIPE, close_fds=True)
++        process = subprocess.Popen(['@xsel@', '-b', '-i'], stdin=subprocess.PIPE, close_fds=True)
+         process.communicate(input=data.encode('utf-8'))
+ 
+     def __linux_paste():
+-        process = subprocess.Popen(['xsel', '-b', '-o'], stdout=subprocess.PIPE, close_fds=True)
++        process = subprocess.Popen(['@xsel@', '-b', '-o'], stdout=subprocess.PIPE, close_fds=True)
+         stdout, _ = process.communicate()
+         return stdout.decode('utf-8')
+ 
