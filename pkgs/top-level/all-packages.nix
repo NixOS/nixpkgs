@@ -19234,6 +19234,16 @@ in
     packages = [];
   };
 
+  rstudioServerWrapper = libsForQt5.callPackage ../development/r-modules/wrapper-rstudio-server.nix {
+    recommendedPackages = with rPackages; [
+      boot class cluster codetools foreign KernSmooth lattice MASS
+      Matrix mgcv nlme nnet rpart spatial survival
+    ];
+    # Override this attribute to register additional libraries.
+    packages = [];
+  };
+
+
   rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
   });
@@ -26773,6 +26783,11 @@ in
     boost = boost166;
     llvmPackages = llvmPackages_7;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
+
+  rstudio-server = libsForQt5.callPackage ../applications/editors/rstudio/server.nix {
+    boost = boost166;
+    llvmPackages = llvmPackages_7;
   };
 
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or {});
