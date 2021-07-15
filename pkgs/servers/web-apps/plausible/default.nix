@@ -69,6 +69,14 @@ beamPackages.mixRelease {
     # Ensure that `tzdata` doesn't write into its store-path
     # https://github.com/plausible/analytics/pull/1096, but rebased onto 1.3.0
     ./tzdata-rebased.patch
+
+    # Allow user to specify listen interface via LISTEN_IP.
+    # https://github.com/plausible/analytics/pull/1190, but rebased onto 1.3.0
+    (fetchpatch {
+      name = "plausible-Allow-user-to-specify-listen-interface-via-LISTEN_IP.patch";
+      url = "https://github.com/nh2/analytics/commit/63aa7f5206ba2459ff7d04a842fe3ed6663975bc.patch";
+      sha256 = "1lhlhipnsisb9cz5m28i120c0ffwcfjjrypvmjxivlh32lx8mhbx";
+    })
   ];
 
   passthru = {
