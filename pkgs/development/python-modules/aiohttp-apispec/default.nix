@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp webargs apispec3 jinja2 ];
 
-  # No idea how to run the tests
+  # The tests are not included in the archive from pypi
   doCheck = false;
 
   pythonImportsCheck = [

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ marshmallow ];
 
-  # No idea how to run its tests
+  # The tests are not included in the archive from pypi
   doCheck = false;
 
   pythonImportsCheck = [
