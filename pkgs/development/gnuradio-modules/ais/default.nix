@@ -8,18 +8,22 @@
 , cppunit
 , log4cpp
 , osmosdr
+, gmp
+, mpir
+, fftwFloat
+, icu
 }:
 
 mkDerivation rec {
   pname = "gr-ais";
-  version = "2015-12-20";
+  version = "2020-08-13";
   src = fetchFromGitHub {
     owner = "bistromath";
     repo = "gr-ais";
-    rev = "cdc1f52745853f9c739c718251830eb69704b26e";
-    sha256 = "1vl3kk8xr2mh5lf31zdld7yzmwywqffffah8iblxdzblgsdwxfl6";
+    rev = "2162103226f3dae43c8c2ab23b79483b84346665";
+    sha256 = "1vackka34722d8pcspfwj0j6gc9ic7dqq64sgkrpjm94sh3bmb0b";
   };
-  disabledForGRafter = "3.8";
+  disabledForGRafter = "3.9";
 
   nativeBuildInputs = [
     cmake
@@ -32,6 +36,10 @@ mkDerivation rec {
     osmosdr
     boost
     log4cpp
+    gmp
+    mpir
+    fftwFloat
+    icu
   ];
 
   meta = with lib; {
