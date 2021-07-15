@@ -16,20 +16,15 @@
 , qtquickcontrols2
 , qtwebengine
 , rustPlatform
+, srcs
 }:
 
 mkDerivation rec {
   pname = "angelfish";
-  version = "21.06";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/plasma-mobile/${version}/angelfish-${version}.tar.xz";
-    sha256 = "sha256-iHgmG/DeaUPnRXlVIU8P/oUcYINienYmR2zI9Q4Yd3s=";
-  };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
+    src = srcs.angelfish.src;
+    name = "${pname}-${srcs.angelfish.version}";
     sha256 = "0zh0kli7kav18v9znq2f5jklhf3m1kyb41jzmivjx70g9xyfzlwk";
   };
 

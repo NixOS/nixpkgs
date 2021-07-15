@@ -6617,8 +6617,6 @@ in
 
   kea = callPackage ../tools/networking/kea { };
 
-  keysmith = libsForQt5.callPackage ../tools/security/keysmith { };
-
   ispell = callPackage ../tools/text/ispell {};
 
   iodash = callPackage ../development/libraries/iodash { };
@@ -22958,8 +22956,6 @@ in
       buildFHSUserEnv = buildFHSUserEnvBubblewrap;
     });
   android-studio = androidStudioPackages.stable;
-
-  angelfish = libsForQt5.callPackage ../applications/networking/browsers/angelfish { };
 
   animbar = callPackage ../applications/graphics/animbar { };
 
