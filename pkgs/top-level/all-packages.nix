@@ -1239,6 +1239,8 @@ in
 
   azure-cli = callPackage ../tools/admin/azure-cli { };
 
+  azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
+
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
