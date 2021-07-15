@@ -1029,6 +1029,8 @@ let
       inherit (pkgs) secp256k1;
     };
 
+    secp256k1-internal = callPackage ../development/ocaml-modules/secp256k1-internal { };
+
     seq = callPackage ../development/ocaml-modules/seq { };
 
     sosa = callPackage ../development/ocaml-modules/sosa { };
