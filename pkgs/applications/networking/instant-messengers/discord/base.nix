@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     url=$(curl -sI "https://discordapp.com/api/download/${builtins.replaceStrings ["discord-" "discord"] ["" "stable"] pname}?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
     version=''${url##https://dl*.discordapp.net/apps/linux/}
     version=''${version%%/*.tar.gz}
-    ${common-updater-scripts}/bin/update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix
+    update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix
   '';
 
   meta = with lib; {
