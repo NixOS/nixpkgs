@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.speedtest.net/apps/cli";
     license = licenses.unfree;
     maintainers = with maintainers; [ kranzes ];
-    platforms = builtins.attrNames srcs;
+    platforms = lib.attrNames srcs;
   };
 }
