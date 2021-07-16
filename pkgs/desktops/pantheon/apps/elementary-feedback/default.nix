@@ -11,15 +11,17 @@
 , glib
 , granite
 , libgee
+, libhandy
 , elementary-icon-theme
 , elementary-gtk-theme
 , gettext
 , wrapGAppsHook
+, appstream
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-feedback";
-  version = "1.0";
+  version = "6.0.0";
 
   repoName = "feedback";
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-GkVnowqGXwnEgplT34Po/BKzC2F/IQE2kIw0SLSLhGU=";
+    sha256 = "1fh9a0nfvbrxamki9avm9by760csj2nqy4ya7wzbnqbrrvjwd3fv";
   };
 
   passthru = {
@@ -47,11 +49,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    appstream
     elementary-icon-theme
     granite
     gtk3
     elementary-gtk-theme
     libgee
+    libhandy
     glib
   ];
 
