@@ -1,34 +1,34 @@
 { fetchurl }: [
   {
     name = "cake.scripting.abstractions";
-    version = "0.3.0";
+    version = "0.6.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/cake.scripting.abstractions/0.3.0/cake.scripting.abstractions.0.3.0.nupkg";
-      sha256 = "009yca6zskcwx9hg3gpgapvzl5mvisl8ni737plbznx033bhw8s8";
+      url = "https://api.nuget.org/v3-flatcontainer/cake.scripting.abstractions/0.6.4/cake.scripting.abstractions.0.6.4.nupkg";
+      sha256 = "14fcixlj2xazf6cb46gw8jgbsz89c6s8fnhvppxs8q12pygmkx0l";
     };
   }
   {
     name = "cake.scripting.transport";
-    version = "0.3.0";
+    version = "0.6.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/cake.scripting.transport/0.3.0/cake.scripting.transport.0.3.0.nupkg";
-      sha256 = "0sc7rlnrqq30753h5cg3fndrlmix4vp2sxqb4sl044296mzcszl4";
+      url = "https://api.nuget.org/v3-flatcontainer/cake.scripting.transport/0.6.4/cake.scripting.transport.0.6.4.nupkg";
+      sha256 = "08cwj572mvmlagj5jry11j2l2fqc6yl4sw0szvql4ard9cx7j51n";
     };
   }
   {
     name = "dotnet.script.dependencymodel";
-    version = "1.0.2";
+    version = "1.1.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/dotnet.script.dependencymodel/1.0.2/dotnet.script.dependencymodel.1.0.2.nupkg";
-      sha256 = "0nqqplwykgbkpyidvkls9nrwxkpl1w1zrv8l7smjm62s18z5mqxb";
+      url = "https://api.nuget.org/v3-flatcontainer/dotnet.script.dependencymodel/1.1.0/dotnet.script.dependencymodel.1.1.0.nupkg";
+      sha256 = "0ly1jwvzndrhgvrwy7kagabyca40j8w9p5jvvfj4wlpffvxq44xl";
     };
   }
   {
     name = "dotnet.script.dependencymodel.nuget";
-    version = "1.0.1";
+    version = "1.1.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/dotnet.script.dependencymodel.nuget/1.0.1/dotnet.script.dependencymodel.nuget.1.0.1.nupkg";
-      sha256 = "1ja9wsc73l5bqx0nv8lzyj2l65h1i7sk77wc7biplb80wm1rvsj4";
+      url = "https://api.nuget.org/v3-flatcontainer/dotnet.script.dependencymodel.nuget/1.1.0/dotnet.script.dependencymodel.nuget.1.1.0.nupkg";
+      sha256 = "1kvjrm28jlfmcsy5fna8hy814chbcsc39ka12h8mgpdvjkr93njr";
     };
   }
   {
@@ -41,10 +41,10 @@
   }
   {
     name = "icsharpcode.decompiler";
-    version = "7.0.0.6372-preview3";
+    version = "7.1.0.6543";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/icsharpcode.decompiler/7.0.0.6372-preview3/icsharpcode.decompiler.7.0.0.6372-preview3.nupkg";
-      sha256 = "0g7ki0ia1qcp9z9hgs2f63yffx66y8zi43k7nrf2n122ll1f0hsg";
+      url = "https://api.nuget.org/v3-flatcontainer/icsharpcode.decompiler/7.1.0.6543/icsharpcode.decompiler.7.1.0.6543.nupkg";
+      sha256 = "1xrajs5dcd7aqsg9ibhdcy39yrd8737kknkmqf907n7fqs2jxr46";
     };
   }
   {
@@ -113,26 +113,34 @@
   }
   {
     name = "microsoft.build";
-    version = "16.9.0";
+    version = "16.10.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.build/16.9.0/microsoft.build.16.9.0.nupkg";
-      sha256 = "0kgfx3iqmc58f3a59ggc1wi486fjrqnzgayxldhpr2w7q5600w5p";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.build/16.10.0/microsoft.build.16.10.0.nupkg";
+      sha256 = "1ran3fp016wvj8d2ahv0cmwhm6hjjh64w82s7cy52s7qffrgjk46";
     };
   }
   {
     name = "microsoft.build.framework";
-    version = "16.9.0";
+    version = "16.10.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.framework/16.9.0/microsoft.build.framework.16.9.0.nupkg";
-      sha256 = "1yddq21q82p28k6cdq3hzic20l6dcma2fzfbm35zanfljxdsb4cf";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.framework/16.10.0/microsoft.build.framework.16.10.0.nupkg";
+      sha256 = "17a8qxgq0jzxpjannhxkcg0941b64yb7z0yq75gz6hsq9ln3agja";
+    };
+  }
+  {
+    name = "microsoft.build.locator";
+    version = "1.4.1";
+    src = fetchurl {
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.locator/1.4.1/microsoft.build.locator.1.4.1.nupkg";
+      sha256 = "0j119rri7a401rca67cxdyrn3rprzdl1b2wrblqc23xsff1xvlrx";
     };
   }
   {
     name = "microsoft.build.tasks.core";
-    version = "16.9.0";
+    version = "16.10.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.tasks.core/16.9.0/microsoft.build.tasks.core.16.9.0.nupkg";
-      sha256 = "1gpra00srwvwzi0a3d5nkjik9y8glh6qn0qdba4f5wiza1l2bdzw";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.tasks.core/16.10.0/microsoft.build.tasks.core.16.10.0.nupkg";
+      sha256 = "0yc3p4bksxmbq1n8wfqgn6b6x9ccyzq229f0mn08z4jfima3cnxg";
     };
   }
   {
@@ -145,18 +153,18 @@
   }
   {
     name = "microsoft.build.utilities.core";
-    version = "16.9.0";
+    version = "16.10.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.utilities.core/16.9.0/microsoft.build.utilities.core.16.9.0.nupkg";
-      sha256 = "0g05hmpzj33bknigdz5samw5pqss1q0sscv34sr53w2aiki5nx2c";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.utilities.core/16.10.0/microsoft.build.utilities.core.16.10.0.nupkg";
+      sha256 = "1rh3gzrz8mmzilvs33cxngv0a805nb47s615rvj4xk5igm384w14";
     };
   }
   {
     name = "microsoft.codeanalysis.analyzers";
-    version = "3.0.0";
+    version = "3.3.2";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.codeanalysis.analyzers/3.0.0/microsoft.codeanalysis.analyzers.3.0.0.nupkg";
-      sha256 = "0bbl0jpqywqmzz2gagld1p2gvdfldjfjmm25hil9wj2nq1zc4di8";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.codeanalysis.analyzers/3.3.2/microsoft.codeanalysis.analyzers.3.3.2.nupkg";
+      sha256 = "162vb5894zxps0cf5n9gc08an7gwybzz87allx3lsszvllr9ldx4";
     };
   }
   {
@@ -169,66 +177,82 @@
   }
   {
     name = "microsoft.codeanalysis.common";
-    version = "3.10.0-1.21125.6";
+    version = "4.0.0-2.21322.50";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.common/3.10.0-1.21125.6/microsoft.codeanalysis.common.3.10.0-1.21125.6.nupkg";
-      sha256 = "0rj7210v3i16pwjswa6fz3ksg19ncn8g7nm8qp8ly3xf9v5j25kn";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.common/4.0.0-2.21322.50/microsoft.codeanalysis.common.4.0.0-2.21322.50.nupkg";
+      sha256 = "1j9yl7m0lr03fjklzjyiac1lrgs8541frqmi4xlldn8a2sx3h97x";
     };
   }
   {
     name = "microsoft.codeanalysis.csharp";
-    version = "3.10.0-1.21125.6";
+    version = "4.0.0-2.21322.50";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp/3.10.0-1.21125.6/microsoft.codeanalysis.csharp.3.10.0-1.21125.6.nupkg";
-      sha256 = "194h2r33f2w2ssbnrp21ly3m7md9mizhhanmccqbkqg3pbjd2lik";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp/4.0.0-2.21322.50/microsoft.codeanalysis.csharp.4.0.0-2.21322.50.nupkg";
+      sha256 = "1mmcl4rj3n1q7zh1n9b9ph3lvm8i51sdm87q3sgiczv2pxrihzs6";
     };
   }
   {
     name = "microsoft.codeanalysis.csharp.features";
-    version = "3.10.0-1.21125.6";
+    version = "4.0.0-2.21322.50";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.features/3.10.0-1.21125.6/microsoft.codeanalysis.csharp.features.3.10.0-1.21125.6.nupkg";
-      sha256 = "027njgyzc4w136sa9f68n8fx62qpzb4nigx50knljgk622k3acjl";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.features/4.0.0-2.21322.50/microsoft.codeanalysis.csharp.features.4.0.0-2.21322.50.nupkg";
+      sha256 = "11pzbswlznz71m248c1p4fi4i3zzvpc4a71px9j2lhnm57zy2lvy";
     };
   }
   {
     name = "microsoft.codeanalysis.csharp.scripting";
-    version = "3.10.0-1.21125.6";
+    version = "4.0.0-2.21322.50";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.scripting/3.10.0-1.21125.6/microsoft.codeanalysis.csharp.scripting.3.10.0-1.21125.6.nupkg";
-      sha256 = "1378ad9cfv5zlzix96q0viqylqzhgcb52zb8bc5y9k8rvnjqgppk";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.scripting/4.0.0-2.21322.50/microsoft.codeanalysis.csharp.scripting.4.0.0-2.21322.50.nupkg";
+      sha256 = "0piiyg1l27cy6s4ii80phrdsyhl8zvwbj9aljqkg53gki520x19p";
     };
   }
   {
     name = "microsoft.codeanalysis.csharp.workspaces";
-    version = "3.10.0-1.21125.6";
+    version = "4.0.0-2.21322.50";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.workspaces/3.10.0-1.21125.6/microsoft.codeanalysis.csharp.workspaces.3.10.0-1.21125.6.nupkg";
-      sha256 = "1yhcm1qm7jjmp1fkpkkzq136frjqc558w49ygdiknyk253llqvm7";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.workspaces/4.0.0-2.21322.50/microsoft.codeanalysis.csharp.workspaces.4.0.0-2.21322.50.nupkg";
+      sha256 = "0q6jkgjh1dylmjx8a79ighgbai1jr2fhls9m7khi87anzc3wdcl2";
+    };
+  }
+  {
+    name = "microsoft.codeanalysis.externalaccess.omnisharp";
+    version = "4.0.0-2.21322.50";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.externalaccess.omnisharp/4.0.0-2.21322.50/microsoft.codeanalysis.externalaccess.omnisharp.4.0.0-2.21322.50.nupkg";
+      sha256 = "1rv5qsj8lsfqxdzd6zazrzwzaxwmj6szd9hv2ckbb4lypkn8ifs8";
+    };
+  }
+  {
+    name = "microsoft.codeanalysis.externalaccess.omnisharp.csharp";
+    version = "4.0.0-2.21322.50";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.externalaccess.omnisharp.csharp/4.0.0-2.21322.50/microsoft.codeanalysis.externalaccess.omnisharp.csharp.4.0.0-2.21322.50.nupkg";
+      sha256 = "0ygp7hnm6mn9khh6z573avhvbcx5459fmyz4z657dx9p2v1f0fs0";
     };
   }
   {
     name = "microsoft.codeanalysis.features";
-    version = "3.10.0-1.21125.6";
+    version = "4.0.0-2.21322.50";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.features/3.10.0-1.21125.6/microsoft.codeanalysis.features.3.10.0-1.21125.6.nupkg";
-      sha256 = "1ydzx96a925a98zdxd6l9kgkl7b67sfbnkam61y0hkvgfdg1xg1a";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.features/4.0.0-2.21322.50/microsoft.codeanalysis.features.4.0.0-2.21322.50.nupkg";
+      sha256 = "1grkql2wcqsqlmqnfchw6wxynwpz4x9wgqd00zpc1g04z9lqimq6";
     };
   }
   {
     name = "microsoft.codeanalysis.scripting.common";
-    version = "3.10.0-1.21125.6";
+    version = "4.0.0-2.21322.50";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.scripting.common/3.10.0-1.21125.6/microsoft.codeanalysis.scripting.common.3.10.0-1.21125.6.nupkg";
-      sha256 = "1blr101n2l7k0bmc248blh36a7nxbbjw3kirsn154zrbmc8s8m1m";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.scripting.common/4.0.0-2.21322.50/microsoft.codeanalysis.scripting.common.4.0.0-2.21322.50.nupkg";
+      sha256 = "1c14bg99ywxdvlp5zc08ijc030rxmpb3171kz2z6f5kr02vf296x";
     };
   }
   {
     name = "microsoft.codeanalysis.workspaces.common";
-    version = "3.10.0-1.21125.6";
+    version = "4.0.0-2.21322.50";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.workspaces.common/3.10.0-1.21125.6/microsoft.codeanalysis.workspaces.common.3.10.0-1.21125.6.nupkg";
-      sha256 = "029scic0mdbmw8gm6wmg5wsnjfx0s4wbfw5lbvyrpbfvdcagvyb2";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.workspaces.common/4.0.0-2.21322.50/microsoft.codeanalysis.workspaces.common.4.0.0-2.21322.50.nupkg";
+      sha256 = "1c0m5pg156x8zh50x7rp25p8cn09gbv50wpbz2p1nc5ff5dyavf5";
     };
   }
   {
@@ -257,18 +281,18 @@
   }
   {
     name = "microsoft.extensions.caching.abstractions";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.caching.abstractions/3.1.12/microsoft.extensions.caching.abstractions.3.1.12.nupkg";
-      sha256 = "1p65fs9rjrygviwbqdd214p9y7acpln6zhbd6b741slvp2jwjmyg";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.caching.abstractions/5.0.0/microsoft.extensions.caching.abstractions.5.0.0.nupkg";
+      sha256 = "0j83zapqhgqb4v5f6kn891km095pfhvsqha357a86ccclmv2czvb";
     };
   }
   {
     name = "microsoft.extensions.caching.memory";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.caching.memory/3.1.12/microsoft.extensions.caching.memory.3.1.12.nupkg";
-      sha256 = "0ydrnqwnph5npf3rwzw1kzq0g3c2kajicdk251fdnjkx6yiw1vsp";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.caching.memory/5.0.0/microsoft.extensions.caching.memory.5.0.0.nupkg";
+      sha256 = "0l8spndl3kvccjlay202msm31iy5iig0i9ddbsdy92wbcjr97lca";
     };
   }
   {
@@ -281,10 +305,10 @@
   }
   {
     name = "microsoft.extensions.configuration";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration/3.1.12/microsoft.extensions.configuration.3.1.12.nupkg";
-      sha256 = "02bp53ahr98q3h8fzjl9rrxi48zja966dalrkbsqxqk1c5g1kl48";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration/5.0.0/microsoft.extensions.configuration.5.0.0.nupkg";
+      sha256 = "01m9vzlq0vg0lhckj2dimwq42niwny8g3lm13c9a401hlyg90z1p";
     };
   }
   {
@@ -297,10 +321,10 @@
   }
   {
     name = "microsoft.extensions.configuration.abstractions";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.abstractions/3.1.12/microsoft.extensions.configuration.abstractions.3.1.12.nupkg";
-      sha256 = "0g35m4q03aag60pi3i5xi3p9q398w4jlq18n0n5qzq0xrlmny6k9";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.abstractions/5.0.0/microsoft.extensions.configuration.abstractions.5.0.0.nupkg";
+      sha256 = "0fqxkc9pjxkqylsdf26s9q21ciyk56h1w33pz3v1v4wcv8yv1v6k";
     };
   }
   {
@@ -313,42 +337,42 @@
   }
   {
     name = "microsoft.extensions.configuration.binder";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.binder/3.1.12/microsoft.extensions.configuration.binder.3.1.12.nupkg";
-      sha256 = "18xizhcjwknwvj0fwdm91pssrpwndz7gzdlx48hph53z8cqqvkbv";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.binder/5.0.0/microsoft.extensions.configuration.binder.5.0.0.nupkg";
+      sha256 = "0sld0bh2k5kss32i3nf8mwqkjagmw0d1cdfmxm87ckiicwm413a0";
     };
   }
   {
     name = "microsoft.extensions.configuration.commandline";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.commandline/3.1.12/microsoft.extensions.configuration.commandline.3.1.12.nupkg";
-      sha256 = "1c2qldblfp5m376a2nc82ljxjk0ljzrj48iwcvl6j48sjwcn3jl4";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.commandline/5.0.0/microsoft.extensions.configuration.commandline.5.0.0.nupkg";
+      sha256 = "084hnz5l0vr15ay23rksqipslqnz3pp30w9hsirpx1iqdm5688mc";
     };
   }
   {
     name = "microsoft.extensions.configuration.environmentvariables";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.environmentvariables/3.1.12/microsoft.extensions.configuration.environmentvariables.3.1.12.nupkg";
-      sha256 = "08wb14rp6pgsqwakvn0491mmarqhwbihq8gnri7bnf6chaaqbxml";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.environmentvariables/5.0.0/microsoft.extensions.configuration.environmentvariables.5.0.0.nupkg";
+      sha256 = "03gvckj10ljk1mir9g8cf3cajsnihhvmh8z8341gkr9h5653qkv0";
     };
   }
   {
     name = "microsoft.extensions.configuration.fileextensions";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.fileextensions/3.1.12/microsoft.extensions.configuration.fileextensions.3.1.12.nupkg";
-      sha256 = "03qg5mjs2f6ihs5dp6d7gbv5bxd98xdvmpwzxp8qyqifjgpkprkj";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.fileextensions/5.0.0/microsoft.extensions.configuration.fileextensions.5.0.0.nupkg";
+      sha256 = "1wq229r3xcmm9wh9sqdpvmfv4qpbp2zms9x6xk7g7sbb8h32hnz3";
     };
   }
   {
     name = "microsoft.extensions.configuration.json";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.json/3.1.12/microsoft.extensions.configuration.json.3.1.12.nupkg";
-      sha256 = "0mhq8d6iijhjyk9jv2k3fnqr6gpbxlzarb5m6y48dx5amnf89k42";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.json/5.0.0/microsoft.extensions.configuration.json.5.0.0.nupkg";
+      sha256 = "0hq5i483bjbvprp1la9l3si82x1ydxbvkpfc7r3s7zgxg957fyp9";
     };
   }
   {
@@ -361,10 +385,10 @@
   }
   {
     name = "microsoft.extensions.dependencyinjection";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection/3.1.12/microsoft.extensions.dependencyinjection.3.1.12.nupkg";
-      sha256 = "0fkcyxayj1mzdj124mabzvhl1p5irwab02rxnwf8bnvszkwgam8l";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection/5.0.0/microsoft.extensions.dependencyinjection.5.0.0.nupkg";
+      sha256 = "15sdwcyzz0qlybwbdq854bn3jk6kx7awx28gs864c4shhbqkppj4";
     };
   }
   {
@@ -377,42 +401,42 @@
   }
   {
     name = "microsoft.extensions.dependencyinjection.abstractions";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection.abstractions/3.1.12/microsoft.extensions.dependencyinjection.abstractions.3.1.12.nupkg";
-      sha256 = "0flixm1physp9gxqzrrplzqkpfz4lljiak7fw87g65av0cksval2";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection.abstractions/5.0.0/microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg";
+      sha256 = "17cz6s80va0ch0a6nqa1wbbbp3p8sqxb96lj4qcw67ivkp2yxiyj";
     };
   }
   {
     name = "microsoft.extensions.dependencymodel";
-    version = "3.1.6";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencymodel/3.1.6/microsoft.extensions.dependencymodel.3.1.6.nupkg";
-      sha256 = "13m2na8a5mglbbjjp0dxb8ifkf23grkyk1g8585mr7v6cbj098ac";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencymodel/5.0.0/microsoft.extensions.dependencymodel.5.0.0.nupkg";
+      sha256 = "1mma1zxi0b40972cwfvkj9y0w9r7vjbi74784jzcb22pric00k5x";
     };
   }
   {
     name = "microsoft.extensions.fileproviders.abstractions";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.fileproviders.abstractions/3.1.12/microsoft.extensions.fileproviders.abstractions.3.1.12.nupkg";
-      sha256 = "11plp1izss3sz03a76gpicwfs0l3jqad0yhz0dam6iirdniharvx";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.fileproviders.abstractions/5.0.0/microsoft.extensions.fileproviders.abstractions.5.0.0.nupkg";
+      sha256 = "01ahgd0b2z2zycrr2lcsq2cl59fn04bh51hdwdp9dcsdkpvnasj1";
     };
   }
   {
     name = "microsoft.extensions.fileproviders.physical";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.fileproviders.physical/3.1.12/microsoft.extensions.fileproviders.physical.3.1.12.nupkg";
-      sha256 = "1lgqvpbqhq2izgq2cka9ls5l99gymhx1ynh1887rjb890cb9hg42";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.fileproviders.physical/5.0.0/microsoft.extensions.fileproviders.physical.5.0.0.nupkg";
+      sha256 = "00vii8148a6pk12l9jl0rhjp7apil5q5qcy7v1smnv17lj4p8szd";
     };
   }
   {
     name = "microsoft.extensions.filesystemglobbing";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/3.1.12/microsoft.extensions.filesystemglobbing.3.1.12.nupkg";
-      sha256 = "16binlxq56n6a3vkmxhlrhiyl01fb2zvyzfh00hwa4ixxfl1is8n";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/5.0.0/microsoft.extensions.filesystemglobbing.5.0.0.nupkg";
+      sha256 = "0lm6n9vbyjh0l17qcc2y9qwn1cns3dyjmkvbxjp0g9sll32kjpmb";
     };
   }
   {
@@ -425,18 +449,10 @@
   }
   {
     name = "microsoft.extensions.logging";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging/3.1.12/microsoft.extensions.logging.3.1.12.nupkg";
-      sha256 = "12i0kvv4fl2y15dgzqzhqhj7fxy4qapqd78xwi1wsvrlbn9pp9h0";
-    };
-  }
-  {
-    name = "microsoft.extensions.logging.abstractions";
-    version = "1.1.0";
-    src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.abstractions/1.1.0/microsoft.extensions.logging.abstractions.1.1.0.nupkg";
-      sha256 = "0vgp0jqi7rik4p5i86ib1lzhwldc3kyf4w38a1pd3086gfz021ab";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging/5.0.0/microsoft.extensions.logging.5.0.0.nupkg";
+      sha256 = "1qa1l18q2jh9azya8gv1p8anzcdirjzd9dxxisb4911i9m1648i3";
     };
   }
   {
@@ -449,26 +465,34 @@
   }
   {
     name = "microsoft.extensions.logging.abstractions";
-    version = "3.1.12";
+    version = "2.1.1";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.abstractions/3.1.12/microsoft.extensions.logging.abstractions.3.1.12.nupkg";
-      sha256 = "0yv681ddcrsn8cf0fnfi3jgcrmganf05r8lsw82d8rk0ljbjivz5";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.abstractions/2.1.1/microsoft.extensions.logging.abstractions.2.1.1.nupkg";
+      sha256 = "1sgpwj0sa0ac7m5fnkb482mnch8fsv8hfbvk53c6lyh47s1xhdjg";
+    };
+  }
+  {
+    name = "microsoft.extensions.logging.abstractions";
+    version = "5.0.0";
+    src = fetchurl {
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.abstractions/5.0.0/microsoft.extensions.logging.abstractions.5.0.0.nupkg";
+      sha256 = "1yza38675dbv1qqnnhqm23alv2bbaqxp0pb7zinjmw8j2mr5r6wc";
     };
   }
   {
     name = "microsoft.extensions.logging.configuration";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.configuration/3.1.12/microsoft.extensions.logging.configuration.3.1.12.nupkg";
-      sha256 = "0nrijpk4azaw5xk4473yb9sc1aal7phjrbswdg7dr6yrfibpb3fn";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.configuration/5.0.0/microsoft.extensions.logging.configuration.5.0.0.nupkg";
+      sha256 = "1kmjax24w0ph362jr64rr6f8pyn6ayq39k502q9yrgr7zgrv65pa";
     };
   }
   {
     name = "microsoft.extensions.logging.console";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.console/3.1.12/microsoft.extensions.logging.console.3.1.12.nupkg";
-      sha256 = "0vr65vcw15kycbpxk5z04nwcxlkcq0ljsnb4njcbzdcj4p87bcmr";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.console/5.0.0/microsoft.extensions.logging.console.5.0.0.nupkg";
+      sha256 = "162akclrhk5r62fza8yr30p5824inwmrpq2s510c3a64v76v9cqz";
     };
   }
   {
@@ -481,10 +505,10 @@
   }
   {
     name = "microsoft.extensions.options";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.options/3.1.12/microsoft.extensions.options.3.1.12.nupkg";
-      sha256 = "0phxp1m5p2sfn7mgdb4dzb2rscda8wwzgr0hqqyh19faf0kg2msm";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.options/5.0.0/microsoft.extensions.options.5.0.0.nupkg";
+      sha256 = "1rdmgpg770x8qwaaa6ryc27zh93p697fcyvn5vkxp0wimlhqkbay";
     };
   }
   {
@@ -497,10 +521,10 @@
   }
   {
     name = "microsoft.extensions.options.configurationextensions";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.options.configurationextensions/3.1.12/microsoft.extensions.options.configurationextensions.3.1.12.nupkg";
-      sha256 = "1vvxhy31mf3z7al8gh9pvzn4z67ma6zc7wwc6f7bvbg6k235wz2v";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.options.configurationextensions/5.0.0/microsoft.extensions.options.configurationextensions.5.0.0.nupkg";
+      sha256 = "1085yrfgc70am43v8i5rxh14kal3bhdd5q85vgny5qp7y1rw0xyw";
     };
   }
   {
@@ -513,10 +537,10 @@
   }
   {
     name = "microsoft.extensions.primitives";
-    version = "3.1.12";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.primitives/3.1.12/microsoft.extensions.primitives.3.1.12.nupkg";
-      sha256 = "0ns4dsrfglas2qdn6qdyg004yjsk578fgfq76rs16hjr3iw9dkks";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.primitives/5.0.0/microsoft.extensions.primitives.5.0.0.nupkg";
+      sha256 = "0swqcknyh87ns82w539z1mvy804pfwhgzs97cr3nwqk6g5s42gd6";
     };
   }
   {
@@ -640,6 +664,14 @@
     };
   }
   {
+    name = "microsoft.net.stringtools";
+    version = "1.0.0";
+    src = fetchurl {
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.net.stringtools/1.0.0/microsoft.net.stringtools.1.0.0.nupkg";
+      sha256 = "06yakiyzgss399giivfx6xdrnfxqfsvy5fzm90scjanvandv0sdj";
+    };
+  }
+  {
     name = "microsoft.sourcelink.common";
     version = "1.0.0";
     src = fetchurl {
@@ -657,26 +689,26 @@
   }
   {
     name = "microsoft.testplatform.objectmodel";
-    version = "16.6.1";
+    version = "16.9.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.testplatform.objectmodel/16.6.1/microsoft.testplatform.objectmodel.16.6.1.nupkg";
-      sha256 = "0q98q1nw6jl4bajm66z4a9vvh928w8ffsd3k6fpsps23ykpsky7h";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.testplatform.objectmodel/16.9.4/microsoft.testplatform.objectmodel.16.9.4.nupkg";
+      sha256 = "1jizkbrnm4pv60zch29ki7gj8m7j5whk141x9cwx4kwsd6cfzwi6";
     };
   }
   {
     name = "microsoft.testplatform.translationlayer";
-    version = "16.6.1";
+    version = "16.9.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.testplatform.translationlayer/16.6.1/microsoft.testplatform.translationlayer.16.6.1.nupkg";
-      sha256 = "1j5pg3qdgqxila90x5h1hvq8wk53s4zf225x5zddmx6q26r9zq83";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.testplatform.translationlayer/16.9.4/microsoft.testplatform.translationlayer.16.9.4.nupkg";
+      sha256 = "0y5w2zflvq06jim2i6d49qi45ix0b8vlyf024w29n5g1lb570qf0";
     };
   }
   {
     name = "microsoft.visualstudio.debugger.contracts";
-    version = "16.9.0-beta.20604.1";
+    version = "17.2.0-beta.21262.1";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.visualstudio.debugger.contracts/16.9.0-beta.20604.1/microsoft.visualstudio.debugger.contracts.16.9.0-beta.20604.1.nupkg";
-      sha256 = "0sy1ahy1xv39mkk5inhb63lmfnmkcc6vjljhljx0l2lkrrc33k0h";
+      url = "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/78665e4c-b767-412b-9804-2b1ef7a48b8a/nuget/v3/flat2/microsoft.visualstudio.debugger.contracts/17.2.0-beta.21262.1/microsoft.visualstudio.debugger.contracts.17.2.0-beta.21262.1.nupkg";
+      sha256 = "10fi1jdxnxvww1qzfhqi53fn0a411gvpvcsb0pvwvj7qk0lzs7c9";
     };
   }
   {
@@ -1192,22 +1224,6 @@
     };
   }
   {
-    name = "system.componentmodel.annotations";
-    version = "4.4.1";
-    src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.componentmodel.annotations/4.4.1/system.componentmodel.annotations.4.4.1.nupkg";
-      sha256 = "1d46yx6h36bssqyshq44qxx0fsx43bjf09zrlbvqfigacfsp9mph";
-    };
-  }
-  {
-    name = "system.componentmodel.annotations";
-    version = "4.7.0";
-    src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.componentmodel.annotations/4.7.0/system.componentmodel.annotations.4.7.0.nupkg";
-      sha256 = "06x1m46ddxj0ng28d7gry9gjkqdg2kp89jyf480g5gznyybbs49z";
-    };
-  }
-  {
     name = "system.componentmodel.composition";
     version = "4.5.0";
     src = fetchurl {
@@ -1264,6 +1280,14 @@
     };
   }
   {
+    name = "system.configuration.configurationmanager";
+    version = "4.7.0";
+    src = fetchurl {
+      url = "https://api.nuget.org/v3-flatcontainer/system.configuration.configurationmanager/4.7.0/system.configuration.configurationmanager.4.7.0.nupkg";
+      sha256 = "0pav0n21ghf2ax6fiwjbng29f27wkb4a2ddma0cqx04s97yyk25d";
+    };
+  }
+  {
     name = "system.console";
     version = "4.3.0";
     src = fetchurl {
@@ -1285,6 +1309,14 @@
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.diagnostics.diagnosticsource/4.3.0/system.diagnostics.diagnosticsource.4.3.0.nupkg";
       sha256 = "0z6m3pbiy0qw6rn3n209rrzf9x1k4002zh90vwcrsym09ipm2liq";
+    };
+  }
+  {
+    name = "system.diagnostics.diagnosticsource";
+    version = "5.0.0";
+    src = fetchurl {
+      url = "https://api.nuget.org/v3-flatcontainer/system.diagnostics.diagnosticsource/5.0.0/system.diagnostics.diagnosticsource.5.0.0.nupkg";
+      sha256 = "0phd2qizshjvglhzws1jd0cq4m54gscz4ychzr3x6wbgl4vvfrga";
     };
   }
   {
@@ -1409,10 +1441,10 @@
   }
   {
     name = "system.io.pipelines";
-    version = "5.0.0";
+    version = "5.0.1";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.io.pipelines/5.0.0/system.io.pipelines.5.0.0.nupkg";
-      sha256 = "1kdvbzr98sdddm18r3gbsbcxpv58gm1yy3iig8zg9dvp7mli7453";
+      url = "https://api.nuget.org/v3-flatcontainer/system.io.pipelines/5.0.1/system.io.pipelines.5.0.1.nupkg";
+      sha256 = "1zvfcd2l1d5qxifsqd0cjyv57nr61a9ac2ca5jinyqmj32wgjd6v";
     };
   }
   {
@@ -1429,14 +1461,6 @@
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.linq.expressions/4.3.0/system.linq.expressions.4.3.0.nupkg";
       sha256 = "0ky2nrcvh70rqq88m9a5yqabsl4fyd17bpr63iy2mbivjs2nyypv";
-    };
-  }
-  {
-    name = "system.memory";
-    version = "4.5.2";
-    src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.memory/4.5.2/system.memory.4.5.2.nupkg";
-      sha256 = "1g24dwqfcmf4gpbgbhaw1j49xmpsz389l6bw2xxbsmnzvsf860ld";
     };
   }
   {
@@ -1629,14 +1653,6 @@
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.primitives/4.3.0/system.reflection.primitives.4.3.0.nupkg";
       sha256 = "04xqa33bld78yv5r93a8n76shvc8wwcdgr1qvvjh959g3rc31276";
-    };
-  }
-  {
-    name = "system.reflection.typeextensions";
-    version = "4.1.0";
-    src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.reflection.typeextensions/4.1.0/system.reflection.typeextensions.4.1.0.nupkg";
-      sha256 = "1bjli8a7sc7jlxqgcagl9nh8axzfl11f4ld3rjqsyxc516iijij7";
     };
   }
   {
@@ -1848,6 +1864,14 @@
     };
   }
   {
+    name = "system.security.cryptography.algorithms";
+    version = "4.3.1";
+    src = fetchurl {
+      url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.algorithms/4.3.1/system.security.cryptography.algorithms.4.3.1.nupkg";
+      sha256 = "1m2wnzg3m3c0s11jg4lshcl2a47d78zri8khc21yrz34jjkbyls2";
+    };
+  }
+  {
     name = "system.security.cryptography.cng";
     version = "4.3.0";
     src = fetchurl {
@@ -1909,6 +1933,14 @@
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/4.3.0/system.security.cryptography.protecteddata.4.3.0.nupkg";
       sha256 = "1kg264xmqabyz8gfg8ymp6qp6aw43vawfp0znf0909d7b5jd3dq9";
+    };
+  }
+  {
+    name = "system.security.cryptography.protecteddata";
+    version = "4.7.0";
+    src = fetchurl {
+      url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/4.7.0/system.security.cryptography.protecteddata.4.7.0.nupkg";
+      sha256 = "1s1sh8k10s0apa09c5m2lkavi3ys90y657whg2smb3y8mpkfr5vm";
     };
   }
   {
@@ -2017,10 +2049,10 @@
   }
   {
     name = "system.text.encodings.web";
-    version = "4.7.1";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/4.7.1/system.text.encodings.web.4.7.1.nupkg";
-      sha256 = "1wj7r07mjwbf9a79kapy2l9m8mcq8b3nbhg0zaprlsav09k85fmb";
+      url = "https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/5.0.0/system.text.encodings.web.5.0.0.nupkg";
+      sha256 = "144pgy65jc3bkar7d4fg1c0rq6qmkx68gj9k1ldk97558w22v1r1";
     };
   }
   {
@@ -2033,10 +2065,10 @@
   }
   {
     name = "system.text.json";
-    version = "4.7.2";
+    version = "5.0.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.text.json/4.7.2/system.text.json.4.7.2.nupkg";
-      sha256 = "10xj1pw2dgd42anikvj9qm23ccssrcp7dpznpj4j7xjp1ikhy3y4";
+      url = "https://api.nuget.org/v3-flatcontainer/system.text.json/5.0.0/system.text.json.5.0.0.nupkg";
+      sha256 = "1gpgl18z6qrgmqrikgh99xkjwzb1didrjp77bch7nrlra21gr4ks";
     };
   }
   {

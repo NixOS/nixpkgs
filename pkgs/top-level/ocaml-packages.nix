@@ -78,6 +78,8 @@ let
 
     bitv = callPackage ../development/ocaml-modules/bitv { };
 
+    bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     bos = callPackage ../development/ocaml-modules/bos { };
@@ -371,6 +373,8 @@ let
 
     fdkaac = callPackage ../development/ocaml-modules/fdkaac { };
 
+    ff = callPackage ../development/ocaml-modules/ff { };
+
     fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
 
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
@@ -625,6 +629,8 @@ let
     lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
 
     lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
+
+    lwt-watcher = callPackage ../development/ocaml-modules/lwt-watcher { };
 
     lwt_log = callPackage ../development/ocaml-modules/lwt_log { };
 
@@ -1158,6 +1164,18 @@ let
     reason = callPackage ../development/compilers/reason { };
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
+
+    ezresto = callPackage ../development/ocaml-modules/resto/ezresto.nix { };
+    ezresto-directory = callPackage ../development/ocaml-modules/resto/ezresto-directory.nix { };
+
+    resto = callPackage ../development/ocaml-modules/resto { };
+    resto-acl = callPackage ../development/ocaml-modules/resto/acl.nix { };
+    resto-cohttp = callPackage ../development/ocaml-modules/resto/cohttp.nix { };
+    resto-cohttp-client = callPackage ../development/ocaml-modules/resto/cohttp-client.nix { };
+    resto-cohttp-self-serving-client = callPackage ../development/ocaml-modules/resto/cohttp-self-serving-client.nix { };
+    resto-cohttp-server = callPackage ../development/ocaml-modules/resto/cohttp-server.nix { };
+    resto-directory = callPackage ../development/ocaml-modules/resto/directory.nix { };
+    resto-json = callPackage ../development/ocaml-modules/resto/json.nix { };
 
     rope = callPackage ../development/ocaml-modules/rope { };
 

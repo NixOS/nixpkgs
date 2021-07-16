@@ -35,6 +35,24 @@ let
       '';
     };
 
+    hyperspace-cli = super."@hyperspace/cli".override {
+      nativeBuildInputs = with pkgs; [
+        makeWrapper
+        libtool
+        autoconf
+        automake
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodejs
+      ];
+      postInstall = ''
+        wrapProgram "$out/bin/hyp" --prefix PATH : ${
+          pkgs.lib.makeBinPath [ pkgs.nodejs ]
+        }
+      '';
+    };
+
     coc-imselect = super.coc-imselect.override {
       meta.broken = since "10";
     };
@@ -105,6 +123,19 @@ let
 
     insect = super.insect.override (drv: {
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
+    });
+
+    jsonplaceholder = super.jsonplaceholder.override (drv: {
+      buildInputs = [ nodejs ];
+      postInstall = ''
+        exe=$out/bin/jsonplaceholder
+        mkdir -p $out/bin
+        cat >$exe <<EOF
+        #!${pkgs.runtimeShell}
+        exec -a jsonplaceholder ${nodejs}/bin/node $out/lib/node_modules/jsonplaceholder/index.js
+        EOF
+        chmod a+x $exe
+      '';
     });
 
     makam =  super.makam.override {
@@ -277,7 +308,7 @@ let
     };
 
     teck-programmer = super.teck-programmer.override {
-      buildInputs = [ pkgs.libusb ];
+      buildInputs = [ pkgs.libusb1 ];
     };
 
     vega-cli = super.vega-cli.override {

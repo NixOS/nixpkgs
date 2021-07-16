@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, PCSC }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, PCSC, pivKeySupport ? true }:
 
 buildGoModule rec {
   pname = "cosign";
@@ -12,8 +12,8 @@ buildGoModule rec {
   };
 
   buildInputs =
-    lib.optional stdenv.isLinux (lib.getDev pcsclite)
-    ++ lib.optionals stdenv.isDarwin [ PCSC ];
+    lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
+    ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -21,6 +21,9 @@ buildGoModule rec {
 
   subPackages = [ "cmd/cosign" ];
 
+  preBuild = ''
+    buildFlagsArray+=(${lib.optionalString pivKeySupport "-tags=pivkey"})
+  '';
   ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/cmd/cosign/cli.gitVersion=v${version}"];
 
   meta = with lib; {

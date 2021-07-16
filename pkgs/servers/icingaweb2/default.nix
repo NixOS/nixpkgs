@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, php }:
+{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, php }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";
-  version = "2.8.3";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
     rev = "v${version}";
-    sha256 = "sha256-wk6rTEYRS0q0HpQRbFAmfeYVrF/xLP/HchEXNqqNpYg=";
+    sha256 = "1vp2gdvgvw960178yaqql6iza0rg2h8japsnass3kkrwrmb2liq5";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       Analyse problems and act on them.
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ das_j ];
   };

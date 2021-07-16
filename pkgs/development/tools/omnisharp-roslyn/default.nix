@@ -66,13 +66,13 @@ let
 in stdenv.mkDerivation rec {
 
   pname = "omnisharp-roslyn";
-  version = "1.37.8";
+  version = "1.37.12";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zi31m6ngk4rm7444n6q7mim096w5h4j2biwmvwmcf5yvig845za";
+    sha256 = "0gyy49v3pslr0l0q6h8hzah4s0iwkhkyckyrj3g2cg08w20b10gw";
   };
 
   nativeBuildInputs = [ makeWrapper msbuild ];
