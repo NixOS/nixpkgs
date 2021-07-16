@@ -36,7 +36,7 @@ appimageTools.wrapType2 {
     git
     glib
     glibc
-    gnome.gdk_pixbuf
+    gnome.gdk-pixbuf
     gnome.gtk
     gnome.gtk.dev
     gnome.zenity
