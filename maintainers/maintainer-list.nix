@@ -4017,6 +4017,12 @@
     githubId = 7385287;
     name = "Lana Black";
   };
+  greymd = {
+    email = "yamadagrep@gamil.com";
+    github = "greymd";
+    githubId = 3874767;
+    name = "Yasuhiro Yamada";
+  };
   gridaphobe = {
     email = "eric@seidel.io";
     github = "gridaphobe";
