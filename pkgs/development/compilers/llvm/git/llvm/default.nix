@@ -54,7 +54,15 @@ in stdenv.mkDerivation (rec {
     ./gnu-install-dirs.patch
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
-  postPatch = optionalString stdenv.isDarwin ''
+  postPatch = ''
+    # https://bugs.llvm.org/show_bug.cgi?id=50611
+    tee -a lib/CodeGen/AsmPrinter/CMakeLists.txt << END
+      if (CMAKE_COMPILER_IS_GNUCXX)
+        set_source_files_properties(DwarfCompileUnit.cpp PROPERTIES
+                                    COMPILE_FLAGS -fno-strict-aliasing)
+      endif()
+    END
+  '' + optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}''${LLVM_LIBDIR_SUFFIX}" ''${extra_libdir})' ""

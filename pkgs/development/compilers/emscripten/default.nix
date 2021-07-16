@@ -1,17 +1,17 @@
 { lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
 , jre, binaryen
-, llvmPackages_11
+, llvmPackages_git
 , symlinkJoin, makeWrapper
 , mkYarnModules
 }:
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "2.0.1";
+  version = "2.0.25";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
-    paths = with llvmPackages_11; [ clang-unwrapped lld llvm ];
+    paths = with llvmPackages_git; [ clang-unwrapped clang-unwrapped.lib lld llvm ];
   };
 
   nodeModules = mkYarnModules {
@@ -26,21 +26,40 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "06dsd819qjv4n2ihrz1mpn5aigmbv0gpkm7iw06wrqx30nzphnpk";
+    sha256 = "0kmfvd6h0p7a95z6j941vx7bcspfbxfja5ab0qihhzizfzn6719b";
     rev = version;
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ nodejs python3 ];
 
+  resourceDir = "${llvmEnv}/lib/clang/13.0.0/";
+
   buildPhase = ''
     patchShebangs .
 
-    # fixes cmake support
-    sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
+    # Clang provided by nix patches out logic that appends 'sysroot + /include'
+    # to the include path as well as automatic inclusion of libcxx includes (/include/c++/v1).
+    # The patch below adds that logic back by introducing cflags emulating this behavior to emcc
+    # invocations directly.
+    #
+    # Important note: with non-nix clang, sysroot/include dir ends up being the last
+    # in the include search order, right after the resource root.
+    # Hence usage of -idirafter. Clang also documents an -isystem-after flag
+    # but it doesn't appear to work
+    substituteInPlace emcc.py \
+      --replace \
+        "['--sysroot=' + shared.Cache.get_sysroot(absolute=True)]" \
+        "['--sysroot=' + shared.Cache.get_sysroot(absolute=True), '-resource-dir=${resourceDir}', '-idirafter' + shared.Cache.get_sysroot(absolute=True) + os.path.join('/include'), '-iwithsysroot' + os.path.join('/include','c++','v1')]"
+
+    # https://github.com/emscripten-core/emscripten/issues/14689
+    substituteInPlace emcc.py \
+      --replace \
+        "libname = strip_prefix(unsuffixed_basename(arg), 'lib')" \
+        "libname = strip_prefix(arg[:arg.rfind(file_suffix)], 'lib')"
 
     # disables cache in user home, use installation directory instead
-    sed -i '/^def/!s/root_is_writable()/True/' tools/shared.py
+    sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
 
     # required for wasm2c
@@ -61,10 +80,6 @@ stdenv.mkDerivation rec {
     sed -i "s|^EMXX =.*|EMXX='$out/bin/em++'|" tools/shared.py
     sed -i "s|^EMAR =.*|EMAR='$out/bin/emar'|" tools/shared.py
     sed -i "s|^EMRANLIB =.*|EMRANLIB='$out/bin/emranlib'|" tools/shared.py
-
-    # The tests use the C compiler to compile generated C code,
-    # use the wrapped compiler
-    sed -i 's/shared.CLANG_CC/"cc"/' tests/runner.py
   '';
 
   installPhase = ''
@@ -74,7 +89,7 @@ stdenv.mkDerivation rec {
     chmod -R +w $appdir
 
     mkdir -p $out/bin
-    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emlink.py emmake emranlib emrun emscons; do
+    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
       makeWrapper $appdir/$b $out/bin/$b \
         --set NODE_PATH ${nodeModules}/node_modules \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
