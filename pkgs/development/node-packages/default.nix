@@ -35,6 +35,24 @@ let
       '';
     };
 
+    hyperspace-cli = super."@hyperspace/cli".override {
+      nativeBuildInputs = with pkgs; [
+        makeWrapper
+        libtool
+        autoconf
+        automake
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodejs
+      ];
+      postInstall = ''
+        wrapProgram "$out/bin/hyp" --prefix PATH : ${
+          pkgs.lib.makeBinPath [ pkgs.nodejs ]
+        }
+      '';
+    };
+
     coc-imselect = super.coc-imselect.override {
       meta.broken = since "10";
     };
@@ -290,7 +308,7 @@ let
     };
 
     teck-programmer = super.teck-programmer.override {
-      buildInputs = [ pkgs.libusb ];
+      buildInputs = [ pkgs.libusb1 ];
     };
 
     vega-cli = super.vega-cli.override {
