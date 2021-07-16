@@ -9,6 +9,7 @@
 , vala
 , gtk3
 , libgee
+, libhandy
 , granite
 , gettext
 , clutter-gtk
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "2.4.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-N3WZysLIah40kcyIyhryZpm2FxCmlvp0EB1krZ/IsYs=";
+    sha256 = "02dfsrfmr297cxpyd5m3746ihcgjyfnb3d42ng9m4ljdvh0dxgim";
   };
 
   passthru = {
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
   ];
 
   patches = [
