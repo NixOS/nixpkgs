@@ -16,7 +16,7 @@ in
   ];
 
   meta = {
-    maintainers = lib.teams.podman.members;
+    maintainers = teams.podman.members;
   };
 
   options.virtualisation.cri-o = {
@@ -58,7 +58,7 @@ in
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
-      example = lib.literalExample ''
+      example = literalExample ''
         [
           pkgs.gvisor
         ]
@@ -68,7 +68,7 @@ in
       '';
     };
 
-    package = lib.mkOption {
+    package = mkOption {
       type = types.package;
       default = crioPackage;
       internal = true;
@@ -84,7 +84,7 @@ in
       internal = true;
     };
 
-    settings = lib.mkOption {
+    settings = mkOption {
       type = format.type;
       default = { };
       description = ''
@@ -103,13 +103,13 @@ in
       storage_driver = cfg.storageDriver;
 
       image = {
-        pause_image = lib.mkIf (cfg.pauseImage != null) cfg.pauseImage;
-        pause_command = lib.mkIf (cfg.pauseCommand != null) cfg.pauseCommand;
+        pause_image = mkIf (cfg.pauseImage != null) cfg.pauseImage;
+        pause_command = mkIf (cfg.pauseCommand != null) cfg.pauseCommand;
       };
 
       network = {
         plugin_dirs = [ "${pkgs.cni-plugins}/bin" ];
-        network_dir = lib.mkIf (cfg.networkDir != null) cfg.networkDir;
+        network_dir = mkIf (cfg.networkDir != null) cfg.networkDir;
       };
 
       runtime = {
@@ -121,8 +121,8 @@ in
           optional (config.virtualisation.containers.ociSeccompBpfHook.enable)
             config.boot.kernelPackages.oci-seccomp-bpf-hook;
 
-        default_runtime = lib.mkIf (cfg.runtime != null) cfg.runtime;
-        runtimes = lib.mkIf (cfg.runtime != null) {
+        default_runtime = mkIf (cfg.runtime != null) cfg.runtime;
+        runtimes = mkIf (cfg.runtime != null) {
           "${cfg.runtime}" = { };
         };
       };
