@@ -1198,8 +1198,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "105.0.0";
-          sha256 = "sha256-my3RzwUW5MnajAbEnqxtrIR701XH+AKYLbnKD7ivASE=";
+          version = "105.3.0";
+          sha256 = "11plqsj3c4dv0xg2d76pxrcn382qr9wbh1lhln2x8mzv840icvwr";
         };
         meta = {
           license = lib.licenses.mit;
