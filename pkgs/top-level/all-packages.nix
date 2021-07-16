@@ -5361,6 +5361,8 @@ in
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos { };
 
+  gnome-subtitles = callPackage ../applications/video/gnome-subtitles { };
+
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
