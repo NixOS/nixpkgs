@@ -861,6 +861,7 @@ in
       unix_chkpwd = {
         source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
         owner = "root";
+        group = "nogroup";
         setuid = true;
       };
     };

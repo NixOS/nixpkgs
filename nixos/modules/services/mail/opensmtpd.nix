@@ -103,7 +103,9 @@ in {
     };
 
     security.wrappers.smtpctl = {
+      owner = "nobody";
       group = "smtpq";
+      setuid = false;
       setgid = true;
       source = "${cfg.package}/bin/smtpctl";
     };

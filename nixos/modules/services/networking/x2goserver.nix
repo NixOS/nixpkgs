@@ -88,12 +88,14 @@ in {
       source = "${pkgs.x2goserver}/lib/x2go/libx2go-server-db-sqlite3-wrapper.pl";
       owner = "x2go";
       group = "x2go";
+      setuid = false;
       setgid = true;
     };
     security.wrappers.x2goprintWrapper = {
       source = "${pkgs.x2goserver}/bin/x2goprint";
       owner = "x2go";
       group = "x2go";
+      setuid = false;
       setgid = true;
     };
 
