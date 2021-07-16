@@ -22,6 +22,8 @@ buildPythonPackage rec {
   pname = "wfuzz";
   version = "3.1.0";
 
+  outputs = [ "out" "wordlists" ];
+
   src = fetchFromGitHub {
     owner = "xmendez";
     repo = pname;
@@ -54,6 +56,11 @@ buildPythonPackage rec {
   # The skipped tests are requiring a local web server
   pytestFlagsArray = [ "tests/test_{moduleman,filterintro,reqresp,api,clparser}.py" ];
   pythonImportsCheck = [ "wfuzz" ];
+
+  postInstall = ''
+    mkdir -p $wordlists/share
+    cp -R -T "$src/wordlist" "$wordlists/share/wfuzz"
+  '';
 
   meta = with lib; {
     description = "Web content fuzzer to facilitate web applications assessments";

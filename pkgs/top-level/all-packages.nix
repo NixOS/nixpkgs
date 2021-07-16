@@ -31681,6 +31681,8 @@ in
 
   prow = callPackage ../applications/networking/cluster/prow { };
 
+  security-wordlists = callPackage ../tools/security/wordlists { };
+
   tagref = callPackage ../tools/misc/tagref { };
 
   tellico = libsForQt5.callPackage ../applications/misc/tellico { };
