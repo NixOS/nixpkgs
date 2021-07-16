@@ -7229,6 +7229,10 @@ in
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
+  nerdfonts-patcher-unwrapped = callPackage ../data/fonts/nerdfonts-patcher { };
+
+  nerdfonts-patcher = callPackage ../data/fonts/nerdfonts-patcher/wrapper.nix { };
+
   nestopia = callPackage ../misc/emulators/nestopia { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
