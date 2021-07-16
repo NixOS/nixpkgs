@@ -87,6 +87,10 @@ in
     settings = mkOption {
       type = format.type;
       default = { };
+      description = ''
+        Configuration for cri-o, see
+        <link xlink:href="https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md"/>.
+      '';
     };
   };
 
