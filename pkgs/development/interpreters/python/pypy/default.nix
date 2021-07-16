@@ -84,6 +84,9 @@ in with passthru; stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace lib_pypy/pypy_tools/build_cffi_imports.py \
+      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
+
     substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
 
     sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite.dev}/include'], library_dirs=['${sqlite.out}/lib']@" lib_pypy/_sqlite3_build.py
