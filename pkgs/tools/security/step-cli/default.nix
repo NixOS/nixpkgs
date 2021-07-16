@@ -14,10 +14,17 @@ buildGoModule rec {
     sha256 = "sha256-gMXvHPqWvaZmzWiWrxlknaMkUraS64yrKl+RzAF7c4I=";
   };
 
+  ldflags = [
+    "-w"
+    "-s"
+    "-X main.Version=${version}"
+  ];
+
   preCheck = ''
     # Tries to connect to smallstep.com
     rm command/certificate/remote_test.go
   '';
+
   vendorSha256 = "sha256-WF2UD0LwzCMkoW1EfcjV+9ZboPp1oWhmsSEryj13Kg0=";
 
   meta = with lib; {
