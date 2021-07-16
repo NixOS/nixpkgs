@@ -630,6 +630,8 @@ let
 
     lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
 
+    lwt-watcher = callPackage ../development/ocaml-modules/lwt-watcher { };
+
     lwt_log = callPackage ../development/ocaml-modules/lwt_log { };
 
     lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix { };

@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, gnugrep, gnused, makeWrapper, git
-}:
+{ lib, stdenv, fetchFromGitHub, coreutils, git, gnugrep, gnused, makeWrapper, inotify-tools }:
 
 stdenv.mkDerivation rec {
   pname = "git-sync";
-  version = "20151024";
+  version = "unstable-2021-07-14";
 
   src = fetchFromGitHub {
     owner = "simonthum";
     repo = "git-sync";
-    rev = "eb9adaf2b5fd65aac1e83d6544b9076aae6af5b7";
-    sha256 = "01if8y93wa0mwbkzkzx2v1vqh47zlz4k1dysl6yh5rmppd1psknz";
+    rev = "7d3d34bf3ee2483fba00948f5b97f964b849a590";
+    sha256 = "sha256-PuYREW5NBkYF1tlcLTbOI8570nvHn5ifN8OIInfNNxI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -18,10 +17,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -a git-sync $out/bin/git-sync
+    cp -a git-* $out/bin/
   '';
 
   wrapperPath = with lib; makeBinPath [
+    inotify-tools
     coreutils
     git
     gnugrep
