@@ -592,6 +592,7 @@ sakhnik/nvim-gdb
 saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
+sdiehl/vim-ormolu
 sebastianmarkow/deoplete-rust
 SevereOverfl0w/deoplete-github
 shaunsingh/moonlight.nvim@pure-lua
