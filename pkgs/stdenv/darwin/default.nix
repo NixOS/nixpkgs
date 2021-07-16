@@ -23,8 +23,7 @@
   else
     let
       fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-        url = "https://github.com/vcunat/patch-mirror/raw/stdenv/stdenv-darwin/x86_64/05ef940b94fe76e7ac06ea45a625adc8e4be96f9/${file}"; # FIXME: upload below
-        #url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/05ef940b94fe76e7ac06ea45a625adc8e4be96f9/${file}";
+        url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/05ef940b94fe76e7ac06ea45a625adc8e4be96f9/${file}";
         inherit (localSystem) system;
         inherit sha256 executable;
       }; in
