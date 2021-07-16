@@ -13,6 +13,7 @@
 , gtk3
 , glib
 , libgee
+, libhandy
 , granite
 , libnotify
 , libunity
@@ -27,11 +28,12 @@
 , libcloudproviders
 , libgit2-glib
 , wrapGAppsHook
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.5.0";
+  version = "6.0.0";
 
   repoName = "files";
 
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-wtQW1poX791DAlSFdVV9psnCfBDeVXI2fDZ2GcvvNn8=";
+    sha256 = "05kgw8x3w1wics7jngs4a2wvw98zsijsq18k0cjl7q6cm0r3pgih";
   };
 
   passthru = {
@@ -73,22 +75,23 @@ stdenv.mkDerivation rec {
     libdbusmenu-gtk3
     libgee
     libgit2-glib
+    libhandy
     libnotify
-    libunity
     pango
     sqlite
+    systemd
     zeitgeist
   ];
 
   patches = [
-    ./0001-filechooser-module-hardcode-gsettings-for-nixos.patch
+    ./0001-filechooser-portal-hardcode-gsettings-for-nixos.patch
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
 
-    substituteInPlace filechooser-module/FileChooserDialog.vala \
+    substituteInPlace filechooser-portal/LegacyFileChooserDialog.vala \
       --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
