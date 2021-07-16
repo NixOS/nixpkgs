@@ -7014,6 +7014,8 @@ in {
 
   python-louvain = callPackage ../development/python-modules/python-louvain { };
 
+  python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
+
   python-lsp-jsonrpc = callPackage ../development/python-modules/python-lsp-jsonrpc { };
 
   python-lsp-server = callPackage ../development/python-modules/python-lsp-server { };

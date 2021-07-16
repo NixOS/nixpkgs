@@ -12058,6 +12058,12 @@
       fingerprint = "FD0A C425 9EF5 4084 F99F 9B47 2ACC 9749 7C68 FAD4";
     }];
   };
+  yourfavouriteuncle = {
+    name = "yourfavouriteuncle";
+    email = "facata@cock.li";
+    github = "yourfavouriteuncle";
+    githubId = 75366929;
+  };
   zane = {
     name = "Zane van Iperen";
     email = "zane@zanevaniperen.com";
