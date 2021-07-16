@@ -1,8 +1,8 @@
 { lib, stdenv
 , fetchurl
 
+, autoreconfHook
 , pkg-config
-, cmake
 
 , libdeflate
 , libjpeg
@@ -12,16 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libtiff";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1jrkjv0xya9radddn8idxvs2gqzp3l2b1s8knlizmn7ad3jq817b";
+    sha256 = "1j3snghqjbhwmnm5vz3dr1zm68dj15mgbx1wqld7vkl7n2nfaihf";
   };
-
-  cmakeFlags = if stdenv.isDarwin then [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-  ] else null;
 
   # FreeImage needs this patch
   patches = [ ./headers.patch ];
@@ -34,7 +30,9 @@ stdenv.mkDerivation rec {
     moveToOutput include/tiffiop.h $dev_private
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  # If you want to change to a different build system, please make
+  # sure cross-compilation works first!
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
 
@@ -42,12 +40,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doInstallCheck = true;
-  installCheckTarget = "test";
+  doCheck = true;
 
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
-    homepage = "http://download.osgeo.org/libtiff";
+    homepage = "https://libtiff.gitlab.io/libtiff";
+    changelog = "https://libtiff.gitlab.io/libtiff/v${version}.html";
+    maintainers = with maintainers; [ qyliss ];
     license = licenses.libtiff;
     platforms = platforms.unix;
   };
