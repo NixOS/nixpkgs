@@ -365,7 +365,6 @@ let
       preferLocalBuild = true;
     }
     ''
-      cat ${php}/etc/php.ini > $out
       cat ${php.phpIni} > $out
       echo "$options" >> $out
     '';
