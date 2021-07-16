@@ -9,6 +9,7 @@ let
     BaseDir "${cfg.dataDir}"
     AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
     Hostname "${config.networking.hostName}"
+    Interval ${toString cfg.interval}
 
     LoadPlugin syslog
     <Plugin "syslog">
@@ -74,6 +75,14 @@ in {
         Data directory for collectd agent.
       '';
       type = path;
+    };
+
+    interval = mkOption {
+      default = 10;
+      description = ''
+        Controls how often registered read functions are called and with that the resolution of the collected data.
+      '';
+      type = int;
     };
 
     autoLoadPlugin = mkOption {
