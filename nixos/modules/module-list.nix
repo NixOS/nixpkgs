@@ -159,6 +159,7 @@
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
+  ./programs/looking-glass.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
   ./programs/msmtp.nix
