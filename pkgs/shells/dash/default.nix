@@ -1,4 +1,6 @@
-{ lib, stdenv, buildPackages, autoreconfHook, fetchurl, libedit }:
+{ lib, stdenv, buildPackages, autoreconfHook, fetchurl, libedit
+, enableMinimal ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "dash";
@@ -25,9 +27,11 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
-  buildInputs = [ libedit ];
+  buildInputs = lib.optionals (!enableMinimal) [ libedit ];
 
-  configureFlags = [ "--with-libedit" ];
+  configureFlags = lib.optionals (!enableMinimal) [ "--with-libedit" ];
+
+  postInstall = lib.optionalString enableMinimal ''rm -r "$out/share"'';
 
   enableParallelBuilding = true;
 
