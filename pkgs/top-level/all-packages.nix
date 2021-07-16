@@ -929,10 +929,7 @@ in
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
-  coreterminal = callPackage ../applications/terminal-emulators/coreterminal {
-    qtermwidget = callPackage ../applications/terminal-emulators/coreterminal/qtermwidget { };
-    libcprime = callPackage ../applications/terminal-emulators/coreterminal/libcprime { };
-  };
+  coreterminal = callPackage ../applications/terminal-emulators/coreterminal { };
 
   eterm = callPackage ../applications/terminal-emulators/eterm { };
 

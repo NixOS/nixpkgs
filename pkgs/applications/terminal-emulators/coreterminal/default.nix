@@ -1,9 +1,15 @@
 { qt5
 , lib
 , fetchzip
+, callPackage
 , cmake
 , ninja
 }:
+
+let
+  qtermwidget = callPackage ./qtermwidget/default.nix {};
+  libcprime = callPackage ./libcprime/default.nix {};
+in
 
 qt5.mkDerivation rec {
   pname = "coreterminal";
