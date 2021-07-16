@@ -9,9 +9,9 @@ let
     inherit buildFHSUserEnv;
   };
   stableVersion = {
-    version = "4.2.1.0"; # "Android Studio 4.2.1"
-    build = "202.7351085";
-    sha256Hash = "074y6i0h8zamjgvvs882im44clds3g6aq8rssl7sq1wx6hrn5q36";
+    version = "4.2.2.0"; # "Android Studio 4.2.2"
+    build = "202.7486908";
+    sha256Hash = "18zc9xr2xmphj6m6a1ilwripmvqzplp2583afq1pzzz3cv5h8fvk";
   };
   betaVersion = {
     version = "2020.3.1.20"; # "Android Studio Arctic Fox (2020.3.1) Beta 5"
