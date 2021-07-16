@@ -3406,6 +3406,18 @@ final: prev:
     meta.homepage = "https://github.com/chrisbra/NrrwRgn/";
   };
 
+  nterm-nvim = buildVimPluginFrom2Nix {
+    pname = "nterm-nvim";
+    version = "2021-07-16";
+    src = fetchFromGitHub {
+      owner = "jlesquembre";
+      repo = "nterm.nvim";
+      rev = "8076f2960512d50a93ffd3d9b04499f9d4fbe793";
+      sha256 = "0z2d9jvw7yf415mpvqlx5vc8k9n02vc28v4p1fimvz7axcv67361";
+    };
+    meta.homepage = "https://github.com/jlesquembre/nterm.nvim/";
+  };
+
   numb-nvim = buildVimPluginFrom2Nix {
     pname = "numb-nvim";
     version = "2021-07-12";
