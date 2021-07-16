@@ -7,7 +7,7 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "phonon-backend-vlc";
-  version = "0.11.1";
+  version = "0.11.2";
 
   meta = with lib; {
     homepage = "https://phonon.kde.org/";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1vp52i5996khpxs233an7mlrzdji50gcs58ig8nrwfwlgyb1xnfc";
+    sha256 = "sha256-xsM7/GjRN/DlegKeS3mMu5D1Svb3Ma9JZ3hXeRzNU6U=";
   };
 
   buildInputs = [
