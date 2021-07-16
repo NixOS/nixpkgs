@@ -111,7 +111,7 @@ in
       # "console=ttyS0,115200n8"  # serial console
     ];
 
-  boot.kernelPackages = pkgs.linuxPackages_3_4;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_4;
 
   boot.supportedFilesystems = [ "reiserfs" ];
 
