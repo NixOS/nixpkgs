@@ -291,8 +291,23 @@ in {
                   '';
                 };
               in
+                # Note that setting `RELEASE_VM_ARGS` replaces the use of
+                # the `vm.args` file provided by the package.
+                # See: https://github.com/NixOS/nixpkgs/pull/130297#issuecomment-881128718
+                # As of writing, Plausible does not provide a `vm.args` file.
+                # In this script we also add an assertion about the absence
+                # of that file, so we notice when it changes.
                 pkgs.runCommand "plausible-vm-args" {} ''
                   set -eu -o pipefail
+
+                  # grep to print all lines that aren't comments, empty, or whitespace.
+                  FOUND_VM_ARG=0
+                  grep -v -E '^(#|$|[[:space:]]+)' "${pkgs.plausible}"/releases/*/vm.args || FOUND_VM_ARG=1
+                  if [ "$FOUND_VM_ARG" -eq 0 ]; then
+                    echo >&2 "Custom vm.args config found, nixpkgs needs to reconsider merging with RELEASE_VM_ARGS!"
+                    exit 1
+                  fi
+
                   IP=$(${erlangAddressTupleCommand})
                   echo "-kernel inet_dist_use_interface \"$IP\"" > "$out"
                 '';
