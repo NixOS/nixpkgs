@@ -3230,7 +3230,7 @@ in {
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
 
-  hcloud = callPackage ../development/python-modules/hcloud { };
+  hcloud = disabledIf isPy27 (callPackage ../development/python-modules/hcloud { });
 
   hcs_utils = callPackage ../development/python-modules/hcs_utils { };
 
