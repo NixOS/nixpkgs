@@ -1,4 +1,5 @@
 { lib
+, appdirs
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
@@ -17,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     rev = version;
-    sha256 = "sha256-9qkNQ3+yDplPHIXDwlghpJP1f+UoDYObWpPhl6UVtHU=";
+    sha256 = "sha256-S39rl8bJsxYAmTcaZk9+s9G45lOvREjlGVBk1m30tJo=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    appdirs
     defusedxml
     marshmallow
     python-box

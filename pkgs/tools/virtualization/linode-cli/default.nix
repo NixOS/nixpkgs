@@ -11,17 +11,17 @@
 }:
 
 let
-  specVersion = "4.96.0"; # Version taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
+  specVersion = "4.98.0"; # Version taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
   spec = fetchurl {
     url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
-    sha256 = "sha256-4+j5BBTOFLLiA+n0YEUH/ICK4Iuxr6nNB7ZRrYACW2I=";
+    sha256 = "sha256-3SweDMfgq2+QQIdeb6EjL7A2Grd/7KQzsbMNZKPtXts=";
   };
 
 in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "5.4.3";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "linode";
