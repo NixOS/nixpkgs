@@ -1,3 +1,13 @@
+--[[
+Converts Link AST nodes with empty label to DocBook xref elements.
+
+This is a temporary script to be able use cross-references conveniently
+using syntax taken from MyST, while we still use docbook-xsl
+for generating the documentation.
+
+Reference: https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing
+]]
+
 local function starts_with(start, str)
   return str:sub(1, #start) == start
 end

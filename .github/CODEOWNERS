@@ -42,6 +42,12 @@
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
 
+# Nixpkgs documentation
+/maintainers/scripts/db-to-md.sh @jtojnar @ryantm
+/maintainers/scripts/doc @jtojnar @ryantm
+/doc/build-aux/pandoc-filters @jtojnar
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
+
 # NixOS Internals
 /nixos/default.nix          @nbp @infinisil
 /nixos/lib/from-env.nix     @nbp @infinisil
