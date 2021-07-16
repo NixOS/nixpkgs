@@ -6278,7 +6278,9 @@ in {
 
   pynanoleaf = callPackage ../development/python-modules/pynanoleaf { };
 
-  pync = callPackage ../development/python-modules/pync { };
+  pync = callPackage ../development/python-modules/pync {
+    inherit (pkgs) coreutils which;
+  };
 
   pynest2d = callPackage ../development/python-modules/pynest2d { };
 
