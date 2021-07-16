@@ -5,8 +5,8 @@ let
   googletest = fetchFromGitHub {
     owner  = "google";
     repo   = "googletest";
-    rev    = "43359642a1c16ad3f4fc575c7edd0cb935810815";
-    sha256 = "0y4xaah62fjr3isaryc3vfz3mn9xflr00vchdimj8785milxga4q";
+    rev    = "a2b8a8e07628e5fd60644b6dd99c1b5e7d7f1f47";
+    sha256 = "1jhxgx8vcf9nfrj82336q773x44hd8vmgkx0l6mcrqymxdwqv00w";
   };
 
   linenoise = fetchFromGitHub {
@@ -18,16 +18,14 @@ let
 in stdenv.mkDerivation {
   pname = "xcbuild";
 
-  # Once a version is released that includes
-  # https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,
-  # we can stop doing this -pre thing.
-  version = "0.1.2-pre";
+  # The project has been archived on github, we build the last available revision
+  version = "archived";
 
   src = fetchFromGitHub {
     owner  = "facebook";
     repo   = "xcbuild";
-    rev    = "32b9fbeb69bfa2682bd0351ec2f14548aaedd554";
-    sha256 = "1xxwg2849jizxv0g1hy0b1m3i7iivp9bmc4f5pi76swsn423d41m";
+    rev    = "dbaee552d2f13640773eb1ad3c79c0d2aca7229c";
+    sha256 = "05ypbvrxrda2k1jhhwf4jg69510pglp9qrhp43jz4lwn22wx4szf";
   };
 
   prePatch = ''
@@ -35,6 +33,12 @@ in stdenv.mkDerivation {
     cp -r --no-preserve=all ${googletest} ThirdParty/googletest
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
+
+  patches = [
+    # add a missing `<cstdlib>` import
+    # Failure: https://hydra.nixos.org/build/142008015/nixlog/2
+    ./add-missing-import.patch
+  ];
 
   postPatch = lib.optionalString (!stdenv.isDarwin) ''
     # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
