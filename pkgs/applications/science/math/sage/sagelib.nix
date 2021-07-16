@@ -27,6 +27,7 @@
 , linbox
 , m4ri
 , m4rie
+, memory_allocator
 , libmpc
 , mpfi
 , ntl
@@ -107,6 +108,7 @@ buildPythonPackage rec {
     lrcalc
     m4ri
     m4rie
+    memory_allocator
     mpfi
     ntl
     blas
