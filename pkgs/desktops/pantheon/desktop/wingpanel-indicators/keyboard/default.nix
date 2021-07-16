@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-keyboard";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/sTx0qT7gNj1waQg9OKqHY6MtL+p0NljiIAXKA3DYmA=";
+    sha256 = "sha256-eHylxPkrHwYwHWb2Xls394o5g+wkPvWKxzpj34OK+GE=";
   };
 
   passthru = {
