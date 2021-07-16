@@ -81,17 +81,26 @@ in
         '';
       };
 
-      initstepslew = mkOption {
-        type = types.attrsOf (types.either types.bool types.int);
-        default = {
-          enabled = true;
-          threshold = 1000; # by default, same threshold as 'ntpd -g' (1000s)
+      initstepslew = {
+        enabled = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Allow chronyd to make a rapid measurement of the system clock error
+            at boot time, and to correct the system clock by stepping before
+            normal operation begins.
+          '';
         };
-        description = ''
-          Allow chronyd to make a rapid measurement of the system clock error at
-          boot time, and to correct the system clock by stepping before normal
-          operation begins.
-        '';
+
+        threshold = mkOption {
+          type = types.either types.float types.int;
+          default = 1000; # by default, same threshold as 'ntpd -g' (1000s)
+          description = ''
+            The threshold of system clock error (in seconds) above which the
+            clock will be stepped. If the correction required is less than the
+            threshold, a slew is used instead.
+          '';
+        };
       };
 
       directory = mkOption {
