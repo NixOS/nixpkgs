@@ -290,6 +290,12 @@ stdenv.mkDerivation rec {
     # --replace "python3 -m asciidoc.a2x" "python3 -m asciidoc.a2x -a revdate=01/01/1980"
     substituteInPlace Makefile.in \
       --replace "python3 a2x.py" "python3 a2x.py -a revdate=01/01/1980"
+
+    # Fix tests
+    for f in $(grep -R --files-with-matches "2002-11-25") ; do
+      substituteInPlace $f --replace "2002-11-25" "1970-01-01"
+      substituteInPlace $f --replace "00:37:42" "00:00:01"
+    done
   '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     # We want to use asciidoc from the build platform to build the documentation.
     substituteInPlace Makefile.in \
@@ -298,6 +304,9 @@ stdenv.mkDerivation rec {
 
   preInstall = "mkdir -p $out/etc/vim";
   makeFlags = lib.optional stdenv.isCygwin "DESTDIR=/.";
+
+  checkInputs = [ sourceHighlight ];
+  doCheck = true;
 
   meta = with lib; {
     description = "Text-based document generation system";
