@@ -4469,6 +4469,8 @@ in {
 
   memcached = callPackage ../development/python-modules/memcached { };
 
+  memory-allocator = callPackage ../development/python-modules/memory-allocator { };
+
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
   mercantile = callPackage ../development/python-modules/mercantile { };
