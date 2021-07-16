@@ -13905,6 +13905,8 @@ in
 
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
 
+  mmtf-cpp = callPackage ../development/libraries/science/chemistry/mmtf-cpp { };
+
   mockgen = callPackage ../development/tools/mockgen { };
 
   modd = callPackage ../development/tools/modd { };
