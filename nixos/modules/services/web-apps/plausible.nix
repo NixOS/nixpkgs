@@ -128,6 +128,13 @@ in {
     };
 
     erlang = {
+      enableDistribution = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable Erlang's distributed multi-machine features.
+        '';
+      };
       vmListenAddress = mkOption {
         default = "127.0.0.1";
         type = types.str;
@@ -140,6 +147,10 @@ in {
 
           The value given here is a normal IP address; it is translated
           to an Erlang IP address tuple by this module.
+
+          This setting has no effect if
+          <xref linkend="opt-services.plausible.erlang.enableDistribution" />
+          is <literal>false</literal>.
         '';
       };
       epmdListenAddress = mkOption {
@@ -151,6 +162,11 @@ in {
           <link xlink:href="https://erlang.org/doc/man/epmd.html#environment-variables">
             <literal>ERL_EPMD_ADDRESS</literal>
           </link>.
+          is <literal>false</literal>.
+
+          This setting has no effect if
+          <xref linkend="opt-services.plausible.erlang.enableDistribution" />
+          is <literal>false</literal>.
         '';
       };
     };
@@ -302,7 +318,9 @@ in {
             SMTP_HOST_SSL_ENABLED = boolToString cfg.mail.smtp.enableSSL;
 
             SELFHOST = "true";
-          } // (optionalAttrs (cfg.mail.smtp.user != null) {
+          } // (optionalAttrs (!cfg.erlang.enableDistribution) {
+            RELEASE_DISTRIBUTION = "none";
+          }) // (optionalAttrs (cfg.mail.smtp.user != null) {
             SMTP_USER_NAME = cfg.mail.smtp.user;
           });
 
