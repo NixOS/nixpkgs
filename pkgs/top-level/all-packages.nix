@@ -1640,6 +1640,8 @@ in
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
+  lektor = with python3Packages; toPythonApplication lektor;
+
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
   mpdevil = callPackage ../applications/audio/mpdevil { };
