@@ -73,6 +73,8 @@ in with passthru; stdenv.mkDerivation rec {
   LD_LIBRARY_PATH = makeLibraryPath (filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
 
   patches = [
+    ./dont_fetch_vendored_deps.patch
+
     (substituteAll {
       src = ./tk_tcl_paths.patch;
       inherit tk tcl;
