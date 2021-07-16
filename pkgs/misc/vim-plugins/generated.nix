@@ -3238,6 +3238,18 @@ final: prev:
     meta.homepage = "https://github.com/kassio/neoterm/";
   };
 
+  neovim-ayu = buildVimPluginFrom2Nix {
+    pname = "neovim-ayu";
+    version = "2021-07-13";
+    src = fetchFromGitHub {
+      owner = "Shatur";
+      repo = "neovim-ayu";
+      rev = "12ed2ff8f341a53cab8a24b35d7a419a6cc5c5e1";
+      sha256 = "1hb2hkzlbakhq55rrikanl8r2k4q6fmm7k4jn54p4v2kr9s8rhr6";
+    };
+    meta.homepage = "https://github.com/Shatur/neovim-ayu/";
+  };
+
   neovim-fuzzy = buildVimPluginFrom2Nix {
     pname = "neovim-fuzzy";
     version = "2021-07-02";
