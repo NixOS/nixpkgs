@@ -7361,6 +7361,12 @@
     githubId = 43796009;
     name = "Max Wilson";
   };
+  myme = {
+    email = "myrseth@gmail.com";
+    github = "myme";
+    githubId = 148158;
+    name = "Martin Myrseth";
+  };
   myrl = {
     email = "myrl.0xf@gmail.com";
     github = "myrl";
