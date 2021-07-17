@@ -1,0 +1,105 @@
+diff --git a/source/views/view_information.cpp b/source/views/view_information.cpp
+index bf9439d..a6792de 100644
+--- a/source/views/view_information.cpp
++++ b/source/views/view_information.cpp
+@@ -83,41 +83,27 @@ namespace hex {
+                         this->m_fileDescription.clear();
+                         this->m_mimeType.clear();
+ 
+-                        std::string magicFiles;
+-
+-                        std::error_code error;
+-                        for (const auto &entry : std::filesystem::directory_iterator("magic", error)) {
+-                            if (entry.is_regular_file() && entry.path().extension() == ".mgc")
+-                                magicFiles += entry.path().string() + MAGIC_PATH_SEPARATOR;
++                        {
++                            magic_t cookie = magic_open(MAGIC_NONE);
++                            if (magic_load(cookie, nullptr) != -1)
++                                this->m_fileDescription = magic_buffer(cookie, buffer.data(), buffer.size());
++                            else
++                                this->m_fileDescription = "";
++
++                            magic_close(cookie);
+                         }
+ 
+-                        if (!error) {
+-                            magicFiles.pop_back();
+-
+-                            {
+-                                magic_t cookie = magic_open(MAGIC_NONE);
+-                                if (magic_load(cookie, magicFiles.c_str()) != -1)
+-                                    this->m_fileDescription = magic_buffer(cookie, buffer.data(), buffer.size());
+-                                else
+-                                    this->m_fileDescription = "";
+-
+-                                magic_close(cookie);
+-                            }
+-
+-
+-                            {
+-                                magic_t cookie = magic_open(MAGIC_MIME);
+-                                if (magic_load(cookie, magicFiles.c_str()) != -1)
+-                                    this->m_mimeType = magic_buffer(cookie, buffer.data(), buffer.size());
+-                                else
+-                                    this->m_mimeType = "";
+ 
+-                                magic_close(cookie);
+-                            }
++                        {
++                            magic_t cookie = magic_open(MAGIC_MIME);
++                            if (magic_load(cookie, nullptr) != -1)
++                                this->m_mimeType = magic_buffer(cookie, buffer.data(), buffer.size());
++                            else
++                                this->m_mimeType = "";
+ 
++                            magic_close(cookie);
+                         }
+ 
+-
+                         this->m_shouldInvalidate = false;
+                         this->m_dataValid = true;
+                     }
+@@ -192,4 +178,4 @@ namespace hex {
+ 
+     }
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/source/views/view_pattern.cpp b/source/views/view_pattern.cpp
+index 87e1db6..87be968 100644
+--- a/source/views/view_pattern.cpp
++++ b/source/views/view_pattern.cpp
+@@ -99,24 +99,13 @@ namespace hex {
+                 return;
+ 
+             lang::Preprocessor preprocessor;
+-            std::string magicFiles;
+-
+-            std::error_code error;
+-            for (const auto &entry : std::filesystem::directory_iterator("magic", error)) {
+-                if (entry.is_regular_file() && entry.path().extension() == ".mgc")
+-                    magicFiles += entry.path().string() + MAGIC_PATH_SEPARATOR;
+-            }
+-
+-            if (error)
+-                return;
+-
+             std::vector<u8> buffer(std::min(this->m_dataProvider->getSize(), size_t(0xFFFF)), 0x00);
+             this->m_dataProvider->read(0, buffer.data(), buffer.size());
+ 
+             std::string mimeType;
+ 
+             magic_t cookie = magic_open(MAGIC_MIME_TYPE);
+-            if (magic_load(cookie, magicFiles.c_str()) != -1)
++            if (magic_load(cookie, nullptr) != -1)
+                 mimeType = magic_buffer(cookie, buffer.data(), buffer.size());
+ 
+             magic_close(cookie);
+@@ -320,4 +309,4 @@ namespace hex {
+         this->postEvent(Events::PatternChanged);
+     }
+ 
+-}
+\ No newline at end of file
++}

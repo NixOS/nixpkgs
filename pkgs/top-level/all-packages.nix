@@ -1632,6 +1632,8 @@ in
 
   imageworsener = callPackage ../tools/graphics/imageworsener { };
 
+  imhex = callPackage ../applications/editors/imhex { };
+
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   imgcrypt = callPackage ../applications/virtualization/imgcrypt { };
