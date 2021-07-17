@@ -9,11 +9,11 @@
 callPackage ../nginx/generic.nix args rec {
   pname = "openresty";
   nginxVersion = "1.19.3";
-  version = "${nginxVersion}.1";
+  version = "${nginxVersion}.2";
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "0p9xn0xgbk6nmjfb25a3d6bwxm8q23igkixqma5fpygla6fcsvzk";
+    sha256 = "1fav3qykckqcyw9ksi8s61prpwab44zbcvj95rwfpfqgk5jffh6f";
   };
 
   # generic.nix applies fixPatch on top of every patch defined there.  This
@@ -44,7 +44,7 @@ callPackage ../nginx/generic.nix args rec {
 
   meta = {
     description = "A fast web application server built on Nginx";
-    homepage = "http://openresty.org";
+    homepage = "https://openresty.org";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice lblasc emily ];
