@@ -1,6 +1,18 @@
 { lib, stdenv, fetchurl, jdk, makeWrapper, autoPatchelfHook, makeDesktopItem, glib, libsecret }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "apache-directory-studio";
+  version = "2.0.0-M15";
+  versionWithDate = "2.0.0.v20200411-M15";
+
+  src =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      fetchurl {
+        url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
+        sha256 = "1rkyb0qcsl9hk2qcwp5mwaab69q3sn77v5xyn9mbvi5wg9icbc37";
+      }
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+
   desktopItem = makeDesktopItem {
     name = "apache-directory-studio";
     exec = "ApacheDirectoryStudio";
@@ -10,20 +22,6 @@ let
     genericName = "Apache Directory Studio";
     categories = "Java;Network";
   };
-  version = "2.0.0-M15";
-  versionWithDate = "2.0.0.v20200411-M15";
-in
-stdenv.mkDerivation rec {
-  pname = "apache-directory-studio";
-  inherit version;
-
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
-        sha256 = "1rkyb0qcsl9hk2qcwp5mwaab69q3sn77v5xyn9mbvi5wg9icbc37";
-      }
-    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   buildInputs = [ glib libsecret ];
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
