@@ -215,6 +215,7 @@
   ./rename.nix
   ./security/acme.nix
   ./security/apparmor.nix
+  ./security/vault/keys.nix
   ./security/audit.nix
   ./security/auditd.nix
   ./security/ca.nix
@@ -902,6 +903,7 @@
   ./services/security/torsocks.nix
   ./services/security/usbguard.nix
   ./services/security/vault.nix
+  ./services/security/vault-agent.nix
   ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
   ./services/system/cloud-init.nix
