@@ -96,9 +96,9 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done
 
-      # I'm adding udev to the LD_LIBRARY_PATH. Electron is trying to open it
-      # via dlopen(), and for some reason that doesn't seem to be impacted from the
-      # rpath.
+      # Electron is trying to open udev via dlopen()
+      # and for some reason that doesn't seem to be impacted from the rpath.
+      # Adding udev to LD_LIBRARY_PATH fixes that.
       makeWrapper $out/share/1password/1password $out/bin/1password \
         --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
