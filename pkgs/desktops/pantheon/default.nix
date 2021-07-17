@@ -107,8 +107,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-capnet-assist = callPackage ./services/elementary-capnet-assist { };
 
-  elementary-dpms-helper = callPackage ./services/elementary-dpms-helper { };
-
   elementary-notifications = callPackage ./services/elementary-notifications { };
 
   # We're using ubuntu and elementary's patchset due to reasons

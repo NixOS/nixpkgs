@@ -207,7 +207,6 @@ in
 
         # Services
         elementary-capnet-assist
-        elementary-dpms-helper
         elementary-notifications
         elementary-settings-daemon
         pantheon-agent-geoclue2
