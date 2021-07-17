@@ -12,7 +12,7 @@
 , Security
 , nghttp2
 , libgit2
-, withStableFeatures ? true
+, withExtraFeatures ? true
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,14 +29,14 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-Ly59mdUzSI2pIPbckWn1WBz/o2zVzpAzaCDROLdjG7Y=";
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
+    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ];
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
-    ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
-  cargoBuildFlags = lib.optional withStableFeatures "--features stable";
+  cargoBuildFlags = lib.optional withExtraFeatures "--features=extra";
 
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
