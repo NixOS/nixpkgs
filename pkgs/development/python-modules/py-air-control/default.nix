@@ -1,26 +1,45 @@
-{ buildPythonPackage, coapthon3, fetchFromGitHub, isPy27, lib, pycryptodomex }:
+{ lib
+, buildPythonPackage
+, coapthon3
+, fetchFromGitHub
+, pycryptodomex
+, pytestCheckHook
+, pythonOlder
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "py-air-control";
-  version = "2.1.0";
-  disabled = isPy27;
+  version = "2.2.0";
+  disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "rgerganov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mkggl5hwmj90djxbbz4svim6iv7xl8k324cb4rlc75p5rgcdwmh";
+    sha256 = "sha256-woDLol1JbBE3I17p/mXlMOvLhuqJinEpZEvaPu3T/sc=";
   };
 
-  propagatedBuildInputs = [ pycryptodomex coapthon3 ];
+  propagatedBuildInputs = [
+    coapthon3
+    pycryptodomex
+  ];
 
-  # tests sometimes hang forever on tear-down
-  doCheck = false;
+  checkInputs = [
+    requests
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Tests have issues in the sandbox
+    "testing/test_http.py"
+  ];
+
   pythonImportsCheck = [ "pyairctrl" ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
-    description = "Command Line App for Controlling Philips Air Purifiers.";
+    description = "Command line tool for controlling Philips air purifiers";
+    homepage = "https://github.com/rgerganov/py-air-control";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];
   };
