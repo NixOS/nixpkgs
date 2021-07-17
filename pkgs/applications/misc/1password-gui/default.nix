@@ -28,15 +28,19 @@
 , nss
 , pango
 , systemd
+, udev
 , xdg-utils
+, ver ? "8.1.1"
+, hash ? "0y39sfhj9xrgprh01i9apzfkqzm6pdhjc8x59x5p5djjjvxbcwmy"
+, channel ? "stable"
 }:
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.0.34";
+  version = ver;
 
   src = fetchurl {
-    url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "0mp119v5vgsva7pnxpsbq4xhh4vbhwv7ga9b5b7f6slx3biy1wmh";
+    url = "https://downloads.1password.com/linux/tar/${channel}/x86_64/1password-${version}.x64.tar.gz";
+    hash = "sha256:${hash}";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -95,19 +99,23 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done
 
+      # I'm adding udev to the LD_LIBRARY_PATH. Electron is trying to open it
+      # via dlopen(), and for some reason that doesn't seem to be impacted from the
+      # rpath.
       makeWrapper $out/share/1password/1password $out/bin/1password \
-        --prefix PATH : ${xdg-utils}/bin
+        --prefix PATH : ${xdg-utils}/bin \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
 
       runHook postInstall
     '';
 
-  passthru.updateScript = ./update.sh;
+    passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
-    description = "Multi-platform password manager";
-    homepage = "https://1password.com/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ timstott savannidgerinel ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "Multi-platform password manager";
+      homepage = "https://1password.com/";
+      license = licenses.unfree;
+      maintainers = with maintainers; [ timstott savannidgerinel ];
+      platforms = [ "x86_64-linux" ];
+    };
+  }
