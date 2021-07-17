@@ -196,15 +196,18 @@ in {
                  c.source c.target
                ])) (attrValues cfg.commands);
         after = [ "zfs.target" ];
-        serviceConfig = {
-          ExecStartPre = let
+        serviceConfig = let
+          zfsPermissions = permAction: let
             allowCmd = permissions: pool: lib.escapeShellArgs [
-              "+/run/booted-system/sw/bin/zfs" "allow"
+              "+/run/booted-system/sw/bin/zfs" permAction
               cfg.user (concatStringsSep "," permissions) pool
             ];
           in
             (map (allowCmd [ "hold" "send" "snapshot" "destroy" ]) (getPools "source")) ++
             (map (allowCmd [ "create" "mount" "receive" "rollback" ]) (getPools "target"));
+        in {
+          ExecStartPre = zfsPermissions "allow";
+          ExecStopPost = zfsPermissions "unallow";
           User = cfg.user;
           Group = cfg.group;
         };
