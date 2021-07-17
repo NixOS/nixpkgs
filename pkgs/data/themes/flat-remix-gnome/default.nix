@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flat-remix-gnome";
-  version = "20210623";
+  version = "20210715";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = pname;
     rev = version;
-    hash = "sha256-FKsbAvjhXb2ipe3XqACM6OwGYwbBbzvDjsUQYCIQ8NM=";
+    hash = "sha256-e7sXzmhfBfcp+KqIc9yuqqXLfYzVlQVn9TNYoa2lZcA=";
   };
 
   nativeBuildInputs = [ glib ];
