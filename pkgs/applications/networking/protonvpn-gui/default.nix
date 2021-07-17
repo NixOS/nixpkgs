@@ -11,8 +11,8 @@ in python3Packages.buildPythonApplication rec {
   version = "2.1.1";
 
   src = fetchFromGitHub {
-    owner = "protonvpn";
-    repo = "linux-gui";
+    owner = "calexandru2018";
+    repo = "linux-gui-legacy";
     rev = "v${version}";
     sha256 = "avo5/2eq53HSHCnnjtxrsmpURtHvxmLZn2BxActImGY=";
   };
@@ -81,9 +81,9 @@ in python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Linux GUI for ProtonVPN, written in Python";
-    homepage = "https://github.com/ProtonVPN/linux-gui";
+    homepage = "https://github.com/calexandru2018/linux-gui-legacy";
     maintainers = with maintainers; [ offline ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }
