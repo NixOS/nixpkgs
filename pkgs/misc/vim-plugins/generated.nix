@@ -39,6 +39,18 @@ final: prev:
     meta.homepage = "https://github.com/eikenb/acp/";
   };
 
+  aerial-nvim = buildVimPluginFrom2Nix {
+    pname = "aerial-nvim";
+    version = "2021-07-17";
+    src = fetchFromGitHub {
+      owner = "stevearc";
+      repo = "aerial.nvim";
+      rev = "e641878818c5545afd09b093a368f2d03f169273";
+      sha256 = "1zykpbd42nwvpkgbq0hh52micyybxyvia6558fp6nlcs56bdmqf4";
+    };
+    meta.homepage = "https://github.com/stevearc/aerial.nvim/";
+  };
+
   agda-vim = buildVimPluginFrom2Nix {
     pname = "agda-vim";
     version = "2020-11-23";

@@ -639,6 +639,7 @@ steelsojka/completion-buffers
 steelsojka/pears.nvim
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
+stevearc/aerial.nvim
 sunaku/vim-dasht
 sunjon/Shade.nvim
 svermeulen/vim-subversive
