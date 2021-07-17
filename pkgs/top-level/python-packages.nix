@@ -4728,6 +4728,8 @@ in {
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
+  nengo-gui = callPackage ../development/python-modules/nengo-gui { };
+
   neo = callPackage ../development/python-modules/neo { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
