@@ -479,6 +479,12 @@ self: super: {
     dependencies = with self; [ telescope-nvim ];
   });
 
+  telescope-fzf-native-nvim = super.telescope-fzf-native-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+    buildPhase = "make";
+    meta.platforms = lib.platforms.all;
+  });
+
   telescope-fzy-native-nvim = super.telescope-fzy-native-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim ];
     preFixup =
