@@ -584,6 +584,7 @@ tl: { # no indentation
   deps."lambda" = tl."lambda";
   deps."latex" = tl."latex";
   deps."plain" = tl."plain";
+  hasFormats = true;
   sha512.run = "7d9241eab3e1e34f8c1aef85c4f2278680cd147cc4f188194c8c27147df3b9bf2a3bee7c651227aac79996e0745124990950ddc010a4f6662fda4a2f72575211";
   sha512.doc = "87de188abf9880f2e680d6582cfb20d8166eb0c3ed2d3a85971eeac6ba8abea2d7f46b8037c26b719c1289f778d4e94ae1813598e73f8f56f6224e3299852cf6";
 };
@@ -862,6 +863,7 @@ tl: { # no indentation
   deps."knuth-lib" = tl."knuth-lib";
   deps."plain" = tl."plain";
   deps."tex" = tl."tex";
+  hasFormats = true;
   sha512.run = "d52e4a817f839c95b7718c65b6cba571443f9f25533a9c7412a69b3f15c89e995494ed812ead2ddac9f0952e0e842216a7fd443ecf2360f50a36107241397c19";
   sha512.doc = "ed91ca4af98a72f081aa021b598ed58888150a73346d5d8da9ef7171f7d757c6d690169e1eb4b3e409ed8b988b8ffff9475f35ca7a443074080c1c9568ebaa0d";
   hasRunfiles = true;
@@ -10423,6 +10425,7 @@ tl: { # no indentation
   deps."pdftex" = tl."pdftex";
   deps."stmaryrd" = tl."stmaryrd";
   deps."xetex" = tl."xetex";
+  hasFormats = true;
   sha512.run = "61fcc778837ecff88bb0e80e39e2acb3ee64e2c26e4069f7634e5dc6c74dc93caab78e4b0088ed58f494d6dcd3a5084bc55cd471baaeb292dc208cf2a241bf69";
   sha512.doc = "ee4458cd6d45a41652ae24b3b82bea5cfa2d8b9c14cf4ba1357f9f07d6572f8ba83e350b74659c471ebf5068f33f5c5762a11669ab2a4f5adb3db41f392956dd";
   hasRunfiles = true;
@@ -11077,6 +11080,7 @@ tl: { # no indentation
   deps."latex-fonts" = tl."latex-fonts";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
+  hasFormats = true;
   sha512.run = "dd6b98eb22786f39c830a4c012396507dca694d727f1a7eb147a1c8c2d4442d8120e016de4c08c038239dfac866f828bc7686d8fd124d1af63edd0994db80f9f";
   sha512.doc = "8ec3527c25c07641788b809cca4f4cc8bb034f63f1100b74270041b503dbc8926a410429a370692502596bd6ffec69a970a19b1c32178e4722f81acdbf0ea934";
   sha512.source = "0563f453bf7e34b4948a29d832207f8148082c5186a6915a6bdc1c41d0c08399505491ccdea0b45e8bf326a8e8459d37eeaca546143d9f622ce4dacba11cac7f";
@@ -11094,6 +11098,7 @@ tl: { # no indentation
   deps."plain" = tl."plain";
   deps."tex" = tl."tex";
   deps."tex-ini-files" = tl."tex-ini-files";
+  hasFormats = true;
   sha512.run = "27fc3fbb1aa29693fcd1d39abf92e3248fa769b8c4e0171948c2a7957e52dad2e08759050321401f7cb900285de62246bc0013d22141281111a82681c11802e4";
   hasRunfiles = true;
   version = "Mar._2021";
@@ -13810,6 +13815,7 @@ tl: { # no indentation
   deps."plain" = tl."plain";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
+  hasFormats = true;
   sha512.run = "a5b93a081e9b2201a65bf7e7fb01381480f5c1f31aafaa78c5785981d895a384f1f8db1d474db845c06cd0850cf70ec4bec0e3935b67fe506b8b07512ee97479";
   sha512.doc = "44d804287cdd427043f766ea9f5f352d93d65f941b3e18727dfc9276fc381f51fccb3a025707f24dca5efd59cccd1a340e5de0d452d928ec0296b4faa46abf67";
   sha512.source = "8edb47575e32de1d7947bc2b7e1e354eeafe287cce6b4c7bafa1266d9d7c1bd4c8df363ecb4c17da9eb35cfc1e3393e2297ae6d90f9f4aa8147b4467e2ae1c89";
@@ -19379,6 +19385,7 @@ tl: { # no indentation
   deps."url" = tl."url";
   deps."wasysym" = tl."wasysym";
   deps."zapfding" = tl."zapfding";
+  hasFormats = true;
   sha512.run = "985e1ed14e5db0a23e9be510e5a52456fdf07ff8c8746add0d1123fa8b8684b3a0c5d9e99e06aa193c667ffa2dd648419d4359a75685d6514e81b9ef0d92ff22";
   sha512.doc = "bf83fb4dc700f10050d34905197a630f8de75a6a27146188efc254b831ad0d68cc873b610f7457a3dc1140a10793aa05c567749efc38225089014df99fc2c895";
   sha512.source = "63bf7f94983a971833e1e1b7d33afdf684d83117e4ce846334952176641b45acfe0c18b2fe983c2f24d98e68e91469560c2c10582d53015d069802a38066280f";
@@ -20306,6 +20313,7 @@ tl: { # no indentation
   deps."pdftex" = tl."pdftex";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
+  hasFormats = true;
   sha512.run = "b349e8fad2765c4a87b471532dcfafedc0a9711237c6e967011727da7bad3a5ed27a89eca81af324aa84958872d0b78c68e6d9490fced44eb7636b2fbf36611f";
   sha512.doc = "7cfb465f4db5089e7fa41762a0437f5f51445efdb9aba5d676dc5933e0fbcfbe0fda31baf83e20f2d16e6a7a0019c71752af8744d02ad12636adb9afb8cb3041";
 };
@@ -20336,6 +20344,7 @@ tl: { # no indentation
   deps."pdftex" = tl."pdftex";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
+  hasFormats = true;
   sha512.run = "31c364be709db593c1a1d4e5250a7d8899fe0f5eb534c61c5f67d1a032b4afca9a91c5d2d1a541e96045d294c87d7ca1758a6a59bce8a3e94bf5511e20cf8854";
   sha512.doc = "94474a52fb6a2bb801405c83562d6dd69038cca8d73705f382c2acc6c63d57e057a6b6c1b93556e41f5d0d9f9adfa269f0857c35e6523108eb230985752c3261";
 };
@@ -21427,6 +21436,7 @@ tl: { # no indentation
   revision = 45678;
   deps."cm" = tl."cm";
   deps."hyphen-base" = tl."hyphen-base";
+  hasFormats = true;
   sha512.run = "81557b83acfa4ad42dfa6fb1a65ea42bc33885da444ee23bc3c67a899df7b3ac2c19a1607305b5ec10b503980365c5d29ac3598339fc186a05417ea5bca60a78";
   sha512.doc = "206dee2be733e3ac04b5b259862b60fb3641fc44ea182da601ca54a010ff8e42f254dd01c03be7bcdd2a6258110c567a596ee82b4eb74d04ca8ed70e50cd6a86";
   hasRunfiles = true;
@@ -21924,6 +21934,7 @@ tl: { # no indentation
   deps."plain" = tl."plain";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
+  hasFormats = true;
   sha512.run = "bb198606ca33912f75327b0799061a81aeb9e2315182001710929d5a7c786fc11b58a5eadcc186f2db21df01777904ada31058c0a03376c04020b213d9f7c519";
   sha512.doc = "9b7c72ad24d459b345552ee8ae05c047c61cf3e0b6eabb927e2a02bf62558f143e937463574bdb0cc60a0a4c8b2da3f86b1d9361275142519044051039275f1c";
 };
@@ -21979,6 +21990,7 @@ tl: { # no indentation
   deps."plain" = tl."plain";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
+  hasFormats = true;
   sha512.run = "01777af9a468b6216417c5158034c3dea3cfb1c3ca7d28f1c4ca2b239fe569fbde410d17662bf9a10f5fddfd1bb6541c505d772e705832b52a1c2d6225d0fc6f";
   sha512.doc = "a6a17f70a44655e1aba11ac1353cc13b36bee762083be76a31c04d90ae73d021659219a3a741b70f0b43888d6b6a6ab356f378fa5850a23ce7423b28a721e924";
 };
@@ -22104,6 +22116,7 @@ tl: { # no indentation
   deps."plain" = tl."plain";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
+  hasFormats = true;
   sha512.run = "c16a8cfa5ce0991d4b667471dd32f692c4e340d1856a36fd684811d40322f912b94125ae101ba095ca6c54b2afa3a37f1ab9af83e4a10328f8c1a1906a02a44b";
   sha512.doc = "0d2492075eb2bb6b9cc8a67b0ed53cf5a8c4c700797d8bce8061a4cf938db5cf19fa4ed6f7adb59b1da0701ff365504e813289dea3c245ad717c82bc58df9128";
   hasRunfiles = true;
@@ -22996,6 +23009,7 @@ tl: { # no indentation
   revision = 57972;
   deps."kpathsea" = tl."kpathsea";
   deps."modes" = tl."modes";
+  hasFormats = true;
   sha512.run = "7ea3271c2a9682ae5ee29a05a95e794f4a6dc5a6244a6c243e856aaa857310127d5593b0643d4ca53eae7feb9c205574f5ea216b7c3c0b731e7f98be99bf1588";
   sha512.doc = "95e7221ac9e3438d4cae336296e7db855df9a7e49ebaaec5dfea294565824938f3d6544459cee9ecbf17312daad4e44c92a7a9a65269feebd2b819f226f305bc";
   hasRunfiles = true;
@@ -23149,6 +23163,7 @@ tl: { # no indentation
   deps."tex" = tl."tex";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."utf8mex" = tl."utf8mex";
+  hasFormats = true;
   sha512.run = "a79d6a1ecb15f7962826773d7eab4b1ffd86a5c15f8076f096fecf63df1bd661449eb7d14251a57a1eb2bede030ddf93aac170fc3c59ae0a124da6cef69e55be";
   sha512.doc = "091f2825376718d8c2190555af7ef54d0ae5202425d57b986fba861df2f8604301df5a121ccfcfcdc91032d07dcda8289fb8de5d81c487b93b0e202a2a5a658e";
   sha512.source = "6f20a7e4f80670f7dfe5b2cfe3357a5d16b0f627b5e9e95c2d7d46598e00b989d5ae8c797589c56c594b7d3610f5f79cad42f3bb64a628be968e4e9e5d541e98";
@@ -23192,6 +23207,7 @@ tl: { # no indentation
   revision = 54074;
   deps."luatex" = tl."luatex";
   deps."metafont" = tl."metafont";
+  hasFormats = true;
   sha512.run = "ec89212e9a1518f5502f93114377f07e88af787f15c64fc61f40f22a679384f8825384c694dd365d5a74bc5d9417dcf3932c634279550603374bb43df1a7a0e6";
   hasRunfiles = true;
 };
@@ -23549,6 +23565,7 @@ tl: { # no indentation
   deps."plain" = tl."plain";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
+  hasFormats = true;
   sha512.run = "0b3fe440055cc4c943fe8cdee93997718a3625782c5b2962cb514011f2038ad14518f7cffc55dee41f0a57f7401b8f2f493631a2b9cbeb806ae75ae80269f3b5";
   sha512.doc = "a3b962871878f3f34c2d419fa9ae1c27518f3901212796d32649b5524f49fa103a71f46403726b9568ac358ab98afe7b23356a0f2d2d8592c0b84cfc186d5f53";
   hasRunfiles = true;
@@ -23877,6 +23894,7 @@ tl: { # no indentation
 "mptopdf" = {
   revision = 57347;
   deps."plain" = tl."plain";
+  hasFormats = true;
   sha512.run = "69181f1facef413b4e2317180f8dba551fe40bb06e6af8d9378319d8cd3fdec985241e632f19888f32b70f16a40d11c66581f7e3c409bc38b7cfad3733cba2fd";
   sha512.doc = "f0cbd95500324a6b5ca835d62065c83028241e0ce5fa35a313458dc30e6726a21a6d1c267669627061d23f2dd7d7397f471581021e03c817c281cb6efa1d2769";
   hasRunfiles = true;
@@ -25321,6 +25339,7 @@ tl: { # no indentation
   deps."lm" = tl."lm";
   deps."luatex" = tl."luatex";
   deps."rsfs" = tl."rsfs";
+  hasFormats = true;
   sha512.run = "d734139205c47599f3490dfbf13e6f71532ed7c311c3c76b6e444e539f1be6dd1bfffc612f8d019c38923d46ea7c98be72b28cf83c2b00885d787f6f526b0f0a";
   sha512.doc = "285d74614c05d3776a41269da1156930024359eef282b3d5479a5397bdb928357ff3020d3fcf47bc92d8ce4ae37a9c4fd68c9e601d7083911145a2bed2bad4f9";
   hasRunfiles = true;
@@ -26068,6 +26087,7 @@ tl: { # no indentation
   deps."kpathsea" = tl."kpathsea";
   deps."plain" = tl."plain";
   deps."tex-ini-files" = tl."tex-ini-files";
+  hasFormats = true;
   sha512.run = "17c2b07af5e14f9f581d1094f4a3657ec1fe2b19fa96d952d1e4859265dc26e42743dc1fd7e8d6a7de56867be1b50a7071524d0580a8a680c605146893e7ff1b";
   sha512.doc = "8422210dceae381676a4c03784ab2c9b0e9233913eca6d25a9a7d5c5675f9ecb32f0a93dd624dbcc715f20d7e386a7844ea00e6e85473c1af14f8e384cd3f61e";
   hasRunfiles = true;
@@ -26781,6 +26801,7 @@ tl: { # no indentation
   deps."ptex-fonts" = tl."ptex-fonts";
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
+  hasFormats = true;
   sha512.run = "787554d26ec4acb3811efbe96349a51b517e5b3b4677754d94dfe1d0ce61088d016f21995e5e9f49e1ace76a1e1f2c057c126981a9e340a9e047597f637aae3e";
   sha512.doc = "f0085548bc20f0389d475a9abf294a8713d36184aef1c65e12d5a7621a4f60e26cf8b63f6a1d558afe964f633455fffd9f492e749938c290b91c10e02c6cb4d7";
   sha512.source = "50afb0b5a1b766f89d7f3dda64b74f080a06d25d66618a4466018209fe4e3245f8deb274b22e30b45fac0a8a9f903ae70ec0301bfb72a394ebc3759e065205fd";
@@ -28314,6 +28335,7 @@ tl: { # no indentation
   deps."plain" = tl."plain";
   deps."ptex-base" = tl."ptex-base";
   deps."ptex-fonts" = tl."ptex-fonts";
+  hasFormats = true;
   sha512.run = "d59108f06a06b7ac46195ef05c0ba6fb4873a88d327839a6143e94392faf3df73ae7b128548ae1ab69915f9883bad554f0e2dbd8d36b8f8c959897210895fba0";
   sha512.doc = "4f863d89fca4c137a84fe75365f600da96f3901d29dd98e9d5733523648b746861a22284707c6e9df90a9939c83adc7bcdf21b310785b8d403459d65294d1133";
 };
@@ -32455,6 +32477,7 @@ tl: { # no indentation
   deps."knuth-lib" = tl."knuth-lib";
   deps."kpathsea" = tl."kpathsea";
   deps."plain" = tl."plain";
+  hasFormats = true;
   sha512.run = "e38f62fcc5ccee22a909eae5ea196e055eae59eedc652ce9788a3b4520995e97f64c683f1ba940853a06030a7ea6f1d749ed4dda1cb30433f87f5f9cdce5a9a7";
   sha512.doc = "3056263569276ca7a62ccb03542eac99b648d36c398ded17204a2624f06920c506985aedd1a639a48bc60af6394d091cdfd9ec44000730bd8e8c83c2234bb569";
   version = "3.141592653";
@@ -32862,6 +32885,7 @@ tl: { # no indentation
   deps."knuth-lib" = tl."knuth-lib";
   deps."plain" = tl."plain";
   deps."tex" = tl."tex";
+  hasFormats = true;
   sha512.run = "7309726b33eadf8290e596aab50bb1af95600a067338b352c1ac092643a8c6d4142180d0146abbbb828a38fb08fdd9ae03da6572e6c221afcd151a51430a423e";
   sha512.doc = "2a4979a10514ccd589b331ff34a677a4e22adbeea73d6112c9a14392b3ee75a8cdb292b008b160792b3d00b812834afa7e0211db860c41f1beb69bbc900fdb90";
   hasRunfiles = true;
@@ -34981,6 +35005,7 @@ tl: { # no indentation
   deps."unicode-data" = tl."unicode-data";
   deps."uptex" = tl."uptex";
   deps."uptex-fonts" = tl."uptex-fonts";
+  hasFormats = true;
   sha512.run = "8acef423a0359136795301e1deaba156c702ee360f309d1884a90b3ed89842389bcc015e70c1461611ebb4a21fb9d5853db5ef40226ce0f61eb11f2a424a70f4";
   sha512.doc = "7cbc40c770c1e04114add004fc4920e3c7dea62f959d06fcbfe54b9fdc45893214ef3e960ac685cce258b07fab424aa7a242da368aa1ee0015ddf8579d582820";
   sha512.source = "9c1c1d0fec518410938e6642123f64242a6ff0bbb6425945897c10754e436fbd82d6739d31717152d183da385800a569d9209f37dd38c8eb77767842e0822a67";
@@ -35021,6 +35046,7 @@ tl: { # no indentation
   deps."ptex-base" = tl."ptex-base";
   deps."uptex-base" = tl."uptex-base";
   deps."uptex-fonts" = tl."uptex-fonts";
+  hasFormats = true;
   sha512.run = "1ee2679e7531fe4406fea72f7efc482f7900da50cb74045a62c0b5e5596862011509c3d966a795bc13538170afd7db26e8cf4f406391a746e45804414f26cff0";
   sha512.doc = "06a3459702bc9838f2246aad7af99c427413a43356d88165e68a132bf8b926d9ab668e6dc10127c27eaac6526085c3fa069bb9709833cef241c94d0f4fb3e02a";
 };
@@ -35954,6 +35980,7 @@ tl: { # no indentation
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
   deps."xetex" = tl."xetex";
+  hasFormats = true;
   sha512.run = "93df696d59d088bf5808b5dfe0ad6a834b65252dfe1f06cdc0d2f446a57b97751c08464e58be40ac042cc508d5f846696561d6524bbb84234af11fd3b7c61d00";
 };
 "xellipsis" = {
@@ -36021,6 +36048,7 @@ tl: { # no indentation
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
   deps."xetexconfig" = tl."xetexconfig";
+  hasFormats = true;
   sha512.run = "dd788efc6e03e11e2dd88d8e63ca2153e936194391d49ce422a757ba1937986cb80faafa71860bf55ef5cbab51b53cd0c85c60dadddd92940802ede301cdefd6";
   sha512.doc = "544a36d94bf2094403806d934a7e0d92062c1b5b1d0efbf4316d9319a1ff95a1d8f7a4a961c63e4a3eb66c9c4a24789e239f958132e5a4f08c3764f44772c8aa";
   hasRunfiles = true;
@@ -36247,6 +36275,7 @@ tl: { # no indentation
   deps."tex-ini-files" = tl."tex-ini-files";
   deps."unicode-data" = tl."unicode-data";
   deps."xmltexconfig" = tl."xmltexconfig";
+  hasFormats = true;
   sha512.run = "e98a3ab9986d63d2605c87463bb32835d8ffcdd93f577b642da8e8f2447b6a74363c3a5799808c35f2e4b099af2789698ea471e04457a31ba8753ec4762e0ead";
   sha512.doc = "340859a95a102759494222e0cbf19b7f851c44d4cfeac77cee178b69f576151021de53c32ffb8dcb8ed911dae2eecaac943941481b5cccdfb5302bb8291724fb";
   hasRunfiles = true;
