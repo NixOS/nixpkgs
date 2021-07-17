@@ -1179,6 +1179,9 @@ let
     resto-directory = callPackage ../development/ocaml-modules/resto/directory.nix { };
     resto-json = callPackage ../development/ocaml-modules/resto/json.nix { };
 
+    ringo = callPackage ../development/ocaml-modules/ringo { };
+    ringo-lwt = callPackage ../development/ocaml-modules/ringo/lwt.nix { };
+
     rope = callPackage ../development/ocaml-modules/rope { };
 
     routes = callPackage ../development/ocaml-modules/routes { };
