@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, factory_boy, faker, numpy, backports-entry-points-selectable
+, factory_boy, faker, numpy, importlib-metadata
 , pytestCheckHook, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "3.6.0";
+  version = "3.8.0";
 
   disabled = pythonOlder "3.6";
 
@@ -14,11 +14,11 @@ buildPythonPackage rec {
     repo = pname;
     owner = "pytest-dev";
     rev = version;
-    sha256 = "17s7gx8b7sl7mp77f5dxzwbb32qliz9awrp6xz58bhjqp7pcsa5h";
+    sha256 = "1v87vpn0whx468gvmv3iqk89g4wpvpl0qnydm85v7hc3zy6n2f9m";
   };
 
-  propagatedBuildInputs = [
-    backports-entry-points-selectable
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   checkInputs = [
