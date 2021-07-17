@@ -7,9 +7,6 @@ let
     sha256 = "sha256-Tn0vba129LPlX+MRcCBA9qp2MU1ek1jYzVCqoNxCL/w=";
     rev = "v4.0.0.rc2";
   };
-  meta = with lib; {
-   license = licenses.mit;
-  };
 
 in stdenv.mkDerivation rec {
   pname = "wofi-emoji";
