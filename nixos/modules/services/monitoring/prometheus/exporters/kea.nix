@@ -26,6 +26,7 @@ in {
   };
   serviceOpts = {
     serviceConfig = {
+      User = "kea";
       ExecStart = ''
         ${pkgs.prometheus-kea-exporter}/bin/kea-exporter \
           --address ${cfg.listenAddress} \
