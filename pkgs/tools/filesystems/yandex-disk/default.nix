@@ -15,7 +15,7 @@ in
 stdenv.mkDerivation rec {
 
   pname = "yandex-disk";
-  version = "0.1.6.1074-1";
+  version = "0.1.6.1074";
 
   src = fetchurl {
     url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm";
