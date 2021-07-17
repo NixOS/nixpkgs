@@ -32,5 +32,8 @@ pkgs.runCommandNoCC "nixpkgs-lib-tests" {
     echo "Running lib/tests/sources.sh"
     TEST_LIB=$PWD/lib bash lib/tests/sources.sh
 
+    echo "Running lib/tests/filesystem.sh"
+    bash lib/tests/filesystem.sh
+
     touch $out
 ''

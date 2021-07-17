@@ -10,14 +10,31 @@ let
     split
     storeDir
     tryEval
+    typeOf
     ;
   inherit (lib)
+    attrByPath
     boolToString
+    concatMapStrings
+    concatStringsSep
     filter
     getAttr
+    head
     isString
+    mapAttrs
     pathExists
     readFile
+    tail
+    ;
+  inherit (lib.strings)
+    sanitizeDerivationName
+    ;
+  inherit (lib.filesystem)
+    commonPath
+    memoizePathFunction
+    pathHasPrefix
+    pathIntersects
+    absolutePathComponentsBetween
     ;
 
   # Returns the type of a path: regular (for file), symlink, or directory
@@ -76,6 +93,9 @@ let
   #             Optional with default value: constant true (include everything)
   #             The function will be combined with the && operator such
   #             that src.filter is called lazily.
+  #             The entire store path is filtered, including the files that are
+  #             accessible via relative path from the subpath focused on by
+  #             `focusAt` or `union`.
   #             For implementing a filter, see
   #             https://nixos.org/nix/manual/#builtin-filterSource
   #
@@ -89,7 +109,212 @@ let
       inherit (orig) origSrc;
       filter = path: type: filter path type && orig.filter path type;
       name = if name != null then name else orig.name;
+      subpath = orig.subpath;
     };
+  _filter = fn: src: cleanSourceWith { filter = fn; inherit src; };
+
+  /*
+    Produce a source that contains all the files in `base` and `extras` and
+    points at the location of `base`. The returned source will be a reference
+    to a subpath of a store path when it is necessary to accomodate for the
+    relative locations of `extras`.
+
+    When used in the `stdenv` `src` parameter, the whole source will be copied
+    and the build script will `cd` into the path that corresponds to `base`.
+
+    The result will match the first argument with respect to the name and
+    original location of the subpath (see `sources.focusAt`).
+
+    Type:
+      extend : SourceLike -> [SourceLike] -> Source
+  */
+  extend =
+    # Source-like object that serves as the starting point. The path `"${extend base extras}"` points to the same file as `"${base}"`
+    baseRaw:
+    # List of sources that will also be included in the store path.
+    extrasRaw:
+    let
+      baseAttrs = toSourceAttributes baseRaw;
+      extrasAttrs = map toSourceAttributes extrasRaw;
+      root = lib.foldl' (a: b: commonPath a b.origSrc) baseAttrs.origSrc extrasAttrs;
+      sourcesIncludingPath =
+        memoizePathFunction
+          (path: type:
+            if path == root
+            then [ baseAttrs ] ++ extrasAttrs
+            else filter
+                  (attr: pathHasPrefix path attr.origSrc # path leads up to origSrc
+                    || (pathHasPrefix attr.origSrc path && attr.filter path type))
+                  (sourcesIncludingPath (dirOf path))
+          )
+          (path: throw "sources.extend: path does not exist: ${toString path}")
+          root;
+    in
+      fromSourceAttributes {
+        origSrc = root;
+        filter = path: type: sourcesIncludingPath path != [];
+        name = baseAttrs.name;
+        subpath = absolutePathComponentsBetween root baseAttrs.origSrc ++ baseAttrs.subpath;
+      };
+
+  /*
+    Almost the identity of sources.extend when it comes to the filter function;
+    `extend` will always include the nodes that lead up to `path`.
+
+    Type:
+      empty :: Path -> Source
+  */
+  empty = path: cleanSourceWith { src = path; filter = _: _: false; };
+
+  /*
+    Produce a new source identical to `source` except its string interpolation
+    (or `outPath`) resolves to a subpath that corresponds to `path`.
+
+    When used in the `stdenv` `src` parameter, the whole of `source` will be
+    copied and the build script will `cd` into the path that corresponds to `path`.
+
+    Type:
+      focusAt :: Path -> Source -> Source
+
+    Example:
+      # suppose we have files ./foo.json and ./bar/default.json
+      src = sources.filter (path: type: type == "directory" || hasSuffix ".json" path) ./.
+      "${src}/bar/default.json"
+      => "/nix/store/pjn...-source/bar/default.json"
+      #  ^ exists
+
+      "${sources.focusAt ./bar src}/../foo.json"
+      => "/nix/store/pjn...-source/bar/../foo.json"
+      #  ^ exists; notice the store hash is the same
+
+      # contrast with cutAt
+      "${sources.cutAt ./bar src}/../foo.json"
+      => "/nix/store/ls9...-source/../foo.json"
+      #  ^ does not exist (resolves to /nix/store/foo.json)
+  */
+  focusAt = path: srcRaw:
+    assert typeOf path == "path";
+    let
+      orig = toSourceAttributes srcRaw;
+      valid =
+        if ! pathHasPrefix orig.origSrc path
+        then throw "sources.focusAt: new path is must be a subpath (or self) of the original source directory. But ${toString path} is not a subpath (or self) of ${toString orig.origSrc}"
+        else if ! pathExists path
+        then
+          # We could provide a function that allows this, but it seems to be a
+          # bad idea unless we encounter a _good_ use case.
+          throw "sources.focusAt: new path ${toString path} does not exist on the filesystem and would point to a file that doesn't exist in the store. This is usually a mistake."
+        else if ! orig.filter path (pathType path)
+        then
+          throw "sources.focusAt: new path ${toString path} is not actually included in the source. Potential causes include an incorrect path, incorrect filter function or a forgotten sources.extend call."
+        else x: x;
+    in
+      valid (fromSourceAttributes (orig // {
+        subpath = absolutePathComponentsBetween orig.origSrc path;
+       }));
+
+  /*
+    Returns the original path that is copied and returned by `"${src}"`.
+    This may be a subpath of a store path, for example when `src` was created
+    with `focusAt` or `extend`.
+
+    Type: sourceLike -> Path
+
+    Example:
+
+      getOriginalFocusPath
+        (extend
+          (cleanSource ./src)
+          [ ./README.md ]
+        )
+      == ./src
+   */
+  getOriginalFocusPath = srcRaw:
+    let
+      srcAttrs = toSourceAttributes srcRaw;
+    in srcAttrs.origSrc + "${concatMapStrings (x: "/${x}") srcAttrs.subpath}";
+
+  /*
+    Returns the part of the path of `"${src}"` that is inside the store path
+    that is created for it.
+    This returns the empty string when `src` does not include any files or
+    directories outside of itself.
+
+    Type: sourceLike -> Path
+
+    Example:
+
+      getSubpath
+        (extend
+          (cleanSource ./css)
+          [ ../common.mk ]
+        )
+      == "resources/css"
+      #   ^ assuming the directory containing
+      # this expression is named `resources`.
+   */
+  getSubpath = srcRaw:
+    let
+      srcAttrs = toSourceAttributes srcRaw;
+    in
+      lib.concatStringsSep "/" srcAttrs.subpath;
+  /*
+    Produces a source that starts at `path` and only contains nodes that are in `src`.
+
+    Type:
+      cutAt :: Path -> SourceLike -> Source
+
+    Example:
+      # suppose we have files ./foo.json and ./bar/default.json
+      src = sources.filter (path: type: type == "directory" || hasSuffix ".json" path) ./.
+      "${src}/bar/default.json"
+      => "/nix/store/pjn...-source/bar/default.json"
+      #  ^ exists
+
+      "${sources.cutAt ./bar src}/default.json"
+      => "/nix/store/ls9...-source/default.json"
+      #  ^ exists, hash is not sensitive to foo.json
+
+      # contrast with focusAt
+      "${sources.focusAt ./bar src}/../foo.json"
+      => "/nix/store/pjn...-source/bar/../foo.json"
+      #  ^ exists, hash is sensitive to both file hashes
+  */
+  cutAt =
+    # The path that will form the new root of the source
+    path:
+    # A sourcelike that determines which nodes will be included, starting at `path`
+    srcRaw:
+    assert typeOf path == "path";
+    let
+      orig = toSourceAttributes srcRaw;
+      valid =
+        if ! pathHasPrefix orig.origSrc path
+        then throw "sources.cutAt: new source root must be a subpath (or self) of the original source directory. But ${toString path} is not a subpath (or self) of ${toString orig.origSrc}"
+        else if ! pathExists path
+        then
+          throw "sources.cutAt: new source root ${toString path} does not exist."
+        else if ! orig.filter path (pathType path)
+        then
+          throw "sources.cutAt: new path ${toString path} is not actually included in the source. Potential causes include an incorrect path, incorrect filter function or a forgotten sources.extend call."
+        else x: x;
+    in
+      valid (
+        fromSourceAttributes (orig // {
+          origSrc = path;
+          subpath = [];
+        })
+      );
+
+  /*
+    Change source such that the root is at the `parent` directory, but include
+    nothing except source and the path leading up to it.
+
+    Type:
+      sources.reparent :: Path -> SourceLike -> Source
+
+  */
+  reparent = path: source: extend (empty path) [source];
 
   /*
     Add logging to a source, for troubleshooting the filtering behavior.
@@ -110,9 +335,34 @@ let
             in
               builtins.trace "${attrs.name}.filter ${path} = ${boolToString r}" r;
         }
-      ) // {
-        satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
-      };
+      );
+
+  /*
+    Change the name of a source; the part after the hash in the store path.
+
+    NOTE: `lib.sources` defaults to `source`. It is tempting to name it after the
+    last path component, but this was a bad default that led to unreproducable
+    store paths when the same directory contents were read from a different
+    location.
+
+    Type: sources.setName :: String -> SourceLike -> Source
+
+    Example:
+      src = with sources; setName "fizzbuzz"
+              (filter (path: type: !lib.hasSuffix ".nix" path) ./.);
+      "${src}"
+      => "/nix/store/cafri8rrc2bc1yvrsbmg5w6ci8rbqvzs-fizzbuzz""${src}"
+
+      src2 = sources.setName "easypeasy" ./.;
+      "${src2}"
+      => "/nix/store/crvhqahzla2nxxyilzigwki5bkf7nfpc-easypeasy"
+    */
+  setName =
+    # A string that will be the new name. It will be passed to `lib.sanitizeDerivationName`
+    name:
+    # A source-like value
+    src:
+    cleanSourceWith { name = sanitizeDerivationName name; inherit src; };
 
   # Filter sources by a list of regular expressions.
   #
@@ -212,7 +462,7 @@ let
   # Internal functions
   #
 
-  # toSourceAttributes : sourceLike -> SourceAttrs
+  # (private) toSourceAttributes : sourceLike -> SourceAttrs
   #
   # Convert any source-like object into a simple, singular representation.
   # We don't expose this representation in order to avoid having a fifth path-
@@ -220,24 +470,48 @@ let
   # (Existing ones being: paths, strings, sources and x//{outPath})
   # So instead of exposing internals, we build a library of combinator functions.
   toSourceAttributes = src:
-    let
-      isFiltered = src ? _isLibCleanSourceWith;
-    in
-    {
-      # The original path
-      origSrc = if isFiltered then src.origSrc else src;
-      filter = if isFiltered then src.filter else _: _: true;
-      name = if isFiltered then src.name else "source";
-    };
+    if src ? _isLibCleanSourceWith
+    then {
+      inherit (src) origSrc filter name subpath;
+    }
+    else if typeOf src == "path" then
+      if builtins.pathExists src
+      then {
+        origSrc = src;
+        filter = _: _: true;
+        name = "source";
+        subpath = [];
+      }
+      else throw ''
+        Path does not exist while attempting to construct a source.
+        path: ${toString src}''
+    else if typeOf src == "string" then
+      if pathHasContext src then
+        throw ''
+          Path may require a build while attempting to construct a source.
+          Using a build output like this is usually a bad idea because it blocks
+          the evaluation process for the duration of the build. It's often better
+          to filter built "sources" in a derivation than in an expression.
+          path string: ${src}''
+      else
+        toSourceAttributes (/. + src)
+    else if src ? outPath && typeOf src.outPath == "path" then
+      # Sometimes, path-like attrsets are constructed to augment a path with
+      # a bit of metadata.
+      toSourceAttributes src.outPath
+    else
+      throw "A value of type ${typeOf src} can not be automatically converted to a source.";
 
-  # fromSourceAttributes : SourceAttrs -> Source
+  # (private) fromSourceAttributes : SourceAttrs -> Source
   #
   # Inverse of toSourceAttributes for Source objects.
-  fromSourceAttributes = { origSrc, filter, name }:
-    {
+  fromSourceAttributes = { origSrc, filter, name, subpath }:
+    let
+      root = builtins.path { inherit filter name; path = origSrc; };
+    in {
       _isLibCleanSourceWith = true;
-      inherit origSrc filter name;
-      outPath = builtins.path { inherit filter name; path = origSrc; };
+      inherit origSrc filter name subpath root;
+      outPath = root + "${concatMapStrings (x: "/${x}") subpath}";
     };
 
 in {
@@ -257,7 +531,49 @@ in {
 
     sourceByRegex
     sourceFilesBySuffices
-
-    trace
     ;
+
+  # part of the interface meant to be referenced as source.* or localized
+  # let inherit.
+  inherit
+    # combinators
+    cutAt
+    empty
+    extend
+    focusAt
+    reparent
+    setName
+    trace
+
+    # getters
+    getOriginalFocusPath
+    getSubpath
+    ;
+
+  /*
+    Use a function to remove files, directories, etc from a source.
+
+    By reducing the number of files that are available to a derivation, more
+    evaluations will result in the same hash and therefore do not need to be
+    rebuilt.
+
+    This function is similar to `builtins.filterSource`, but more useful
+    because it returns a `Source` object that can be used by the other functions
+    in `lib.sources`.
+
+    When nesting `sources.filter` calls, the inner call's predicate is respected
+    by combining it with the && operator. If you want the opposite effect, the
+    `sources.extend` function may be of interest.
+
+    Type: sources.filter :: (Path -> TypeString -> Bool) -> SourceLike -> Source
+
+    Example:
+      src = lib.sources.filter (path: type: !lib.hasSuffix ".nix" path) ./.;
+      "${src}"
+      => "/nix/store/cdklw7jpc3ffjxhvpzwl5aaysay07z0y-source"
+      src2 = lib.sources.filter (path: type: type == "directory" || lib.hasSuffix ".json" path)
+      "${src2}"
+      => "/nix/store/j7l6s884ngkdzzsnw8k3zxflsi6ax492-source"
+  */
+  filter = _filter;
 }
