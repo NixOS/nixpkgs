@@ -1376,6 +1376,12 @@
     github = "bloomvdomino";
     githubId = 33204710;
   };
+  blueprint-freespeech = {
+    email = "ricochet@blueprintforfreespeech.net";
+    github = "blueprint-freespeech";
+    githubId = 51510763;
+    name = "Blueprint for Free Speech";
+  };
   bluescreen303 = {
     email = "mathijs@bluescreen303.nl";
     github = "bluescreen303";
