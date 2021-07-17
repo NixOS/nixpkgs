@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, vala_0_52
+, vala
 , libgee
 , granite
 , gtk3
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    vala_0_52
+    vala
   ];
 
   buildInputs = [
