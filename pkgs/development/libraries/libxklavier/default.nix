@@ -1,12 +1,9 @@
 { lib, stdenv, fetchgit, autoreconfHook, pkg-config, gtk-doc, xkeyboard_config, libxml2, xorg, docbook_xsl
 , glib, isocodes, gobject-introspection }:
 
-let
-  version = "5.4";
-in
 stdenv.mkDerivation rec {
   pname = "libxklavier";
-  inherit version;
+  version = "5.4";
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/git/libxklavier";
