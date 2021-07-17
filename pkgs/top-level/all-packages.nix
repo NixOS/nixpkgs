@@ -31570,6 +31570,10 @@ in
   mfcj470dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj470dwcupswrapper { };
   mfcj470dwlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcj470dwlpr { };
 
+  # Brother MFC-J430W
+  mfcj430w-cupswrapper = callPackage ../misc/cups/drivers/mfcj430wcupswrapper { };
+  mfcj430wlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcj430wlpr { };
+
   mfcj6510dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj6510dwcupswrapper { };
   mfcj6510dwlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcj6510dwlpr { };
 
