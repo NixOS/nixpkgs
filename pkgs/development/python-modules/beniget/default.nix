@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "beniget";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "062c893be9cdf87c3144fb15041cce4d81c67107c1591952cd45fdce789a0ff1";
+    sha256 = "72bbd47b1ae93690f5fb2ad3902ce1ae61dcd868ce6cfbf33e9bad71f9ed8749";
   };
 
   propagatedBuildInputs = [
