@@ -5829,6 +5829,8 @@ in
 
   hockeypuck = callPackage ../servers/hockeypuck/server.nix { };
 
+  hockeypuck-web = callPackage ../servers/hockeypuck/web.nix { };
+
   holochain-go = callPackage ../servers/holochain-go { };
 
   homesick = callPackage ../tools/misc/homesick { };
