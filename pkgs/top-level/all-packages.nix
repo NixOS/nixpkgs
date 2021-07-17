@@ -27934,6 +27934,8 @@ in
 
   wofi = callPackage ../applications/misc/wofi { };
 
+  wofi-emoji = callPackage ../applications/misc/wofi-emoji { };
+
   wordnet = callPackage ../applications/misc/wordnet {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
