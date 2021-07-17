@@ -13,7 +13,6 @@
 , granite
 , gtk3
 , switchboard
-, pciutils
 , elementary-feedback
 , fwupd
 , appstream
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit pciutils;
       elementary_feedback = elementary-feedback;
     })
   ];
