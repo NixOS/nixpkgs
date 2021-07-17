@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "editables" ];
 
-  meta = {
+  meta = with lib; {
     description = "Editable installations";
     maintainers = with maintainers; [ ];
     homepage = "https://github.com/pfmoore/editables";
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }
