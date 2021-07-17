@@ -25,7 +25,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   maintainers = with pkgs.lib.maintainers; [ ];
 
-  mutter = pkgs.gnome.mutter334;
+  mutter = pkgs.gnome.mutter336;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
@@ -102,8 +102,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   contractor = callPackage ./services/contractor { };
 
   elementary-capnet-assist = callPackage ./services/elementary-capnet-assist { };
-
-  elementary-dpms-helper = callPackage ./services/elementary-dpms-helper { };
 
   elementary-notifications = callPackage ./services/elementary-notifications { };
 

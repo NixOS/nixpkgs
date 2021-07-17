@@ -7,6 +7,7 @@
 , pkg-config
 , vala
 , libgee
+, libxml2
 , granite
 , gtk3
 , switchboard
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "2.4.2";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WJ/GRhZsSwC31HEIjHHWBy9/Skqbwor0tNVTedue3kk=";
+    sha256 = "19kiwrdpan8hr5r79y591591qjx7pm3x814xfkg9vi11ndbcrznr";
   };
 
   passthru = {
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libxml2
     elementary-settings-daemon
     switchboard
   ];

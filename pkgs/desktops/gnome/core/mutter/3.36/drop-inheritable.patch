@@ -1,16 +1,12 @@
-From 14cee101882e65a57dcd66ea0f8399477b23ce7e Mon Sep 17 00:00:00 2001
-Message-Id: <14cee101882e65a57dcd66ea0f8399477b23ce7e.1601082838.git-series.worldofpeace@protonmail.ch>
-In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
-References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
-From: WORLDofPEACE <worldofpeace@protonmail.ch>
-Date: Sat, 19 Oct 2019 13:26:05 +0200
-Subject: [PATCH 2/7] drop inheritable
-
-From: Tor Hedin Brønner <torhedinbronner@gmail.com>
+From 61813252c4173afa3430f3d15523a5df3e3220ba Mon Sep 17 00:00:00 2001
+From: Bobby Rong <rjl931189261@126.com>
+Date: Sat, 17 Jul 2021 17:43:31 +0800
+Subject: [PATCH] drop inheritable
 
 Adapted from https://gitlab.gnome.org/GNOME/mutter/commit/c53c47ae123b03cc66044d2b846342123ecb3a01
 
 We only want to drop inheritable though, to prevent the ambient set leaking further than gnome-shell.
+
 ---
  config.h.meson    |  3 +++
  meson.build       |  5 +++++
@@ -20,7 +16,7 @@ We only want to drop inheritable though, to prevent the ambient set leaking furt
  5 files changed, 25 insertions(+)
 
 diff --git a/config.h.meson b/config.h.meson
-index 0bab718..202fb7e 100644
+index 0edff4d57..a9cc3081a 100644
 --- a/config.h.meson
 +++ b/config.h.meson
 @@ -58,6 +58,9 @@
@@ -34,10 +30,10 @@ index 0bab718..202fb7e 100644
  #mesondefine XKB_BASE
  
 diff --git a/meson.build b/meson.build
-index 29d495b..86970df 100644
+index 637173a94..1000066fb 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -35,6 +35,7 @@ libstartup_notification_req = '>= 0.7'
+@@ -36,6 +36,7 @@ libstartup_notification_req = '>= 0.7'
  libcanberra_req = '>= 0.26'
  libwacom_req = '>= 0.13'
  atk_req = '>= 2.5.3'
@@ -45,15 +41,15 @@ index 29d495b..86970df 100644
  
  # optional version requirements
  udev_req = '>= 228'
-@@ -125,6 +126,7 @@ xau_dep = dependency('xau')
- ice_dep = dependency('ice')
+@@ -131,6 +132,7 @@ ice_dep = dependency('ice')
  atk_dep = dependency('atk', version: atk_req)
  libcanberra_dep = dependency('libcanberra', version: libcanberra_req)
+ dbus_dep = dependency('dbus-1')
 +libcapng_dep = dependency('libcap-ng', required: get_option('libcapng'))
  
  # For now always require X11 support
  have_x11 = true
-@@ -256,6 +258,7 @@ have_core_tests = false
+@@ -263,6 +265,7 @@ have_core_tests = false
  have_cogl_tests = false
  have_clutter_tests = false
  have_installed_tests = false
@@ -61,7 +57,7 @@ index 29d495b..86970df 100644
  
  if have_tests
    have_core_tests = get_option('core_tests')
-@@ -361,6 +364,7 @@ cdata.set('HAVE_LIBWACOM', have_libwacom)
+@@ -368,6 +371,7 @@ cdata.set('HAVE_LIBWACOM', have_libwacom)
  cdata.set('HAVE_SM', have_sm)
  cdata.set('HAVE_STARTUP_NOTIFICATION', have_startup_notification)
  cdata.set('HAVE_INTROSPECTION', have_introspection)
@@ -69,30 +65,33 @@ index 29d495b..86970df 100644
  cdata.set('HAVE_PROFILER', have_profiler)
  
  xkb_base = xkeyboard_config_dep.get_pkgconfig_variable('xkb_base')
-@@ -443,6 +447,7 @@ output = [
+@@ -464,6 +468,7 @@ output = [
    '        Startup notification..... ' + have_startup_notification.to_string(),
    '        Introspection............ ' + have_introspection.to_string(),
    '        Profiler................. ' + have_profiler.to_string(),
 +  '        libcap-ng................ ' + have_libcapng.to_string(),
+   '        Xwayland initfd.......... ' + have_xwayland_initfd.to_string(),
    '',
    '    Tests:',
-   '',
 diff --git a/meson_options.txt b/meson_options.txt
-index 73aa7ad..8bfaacd 100644
+index 655ef433f..893a22fc9 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -152,3 +152,9 @@ option('xwayland_grab_default_access_rules',
-   value: 'gnome-boxes,remote-viewer,virt-viewer,virt-manager,vinagre,vncviewer,Xephyr',
+@@ -153,6 +153,12 @@ option('xwayland_grab_default_access_rules',
    description: 'Comma delimited list of applications ressources or class allowed to issue X11 grabs in Xwayland'
  )
-+
+ 
 +option('libcapng',
 +  type: 'feature',
 +  value: 'auto',
 +  description: 'Enable libcap-ng support'
 +)
++
+ option('xwayland_initfd',
+   type: 'feature',
+   value: 'auto',
 diff --git a/src/core/main.c b/src/core/main.c
-index 3935f35..ecf3cb2 100644
+index 16ab6e81f..b9eeb6466 100644
 --- a/src/core/main.c
 +++ b/src/core/main.c
 @@ -66,6 +66,10 @@
@@ -106,7 +105,7 @@ index 3935f35..ecf3cb2 100644
  #if defined(HAVE_NATIVE_BACKEND) && defined(HAVE_WAYLAND)
  #include <systemd/sd-login.h>
  #endif /* HAVE_WAYLAND && HAVE_NATIVE_BACKEND */
-@@ -673,6 +677,12 @@ meta_run (void)
+@@ -660,6 +664,12 @@ meta_run (void)
    if (!meta_display_open ())
      meta_exit (META_EXIT_ERROR);
  
@@ -120,7 +119,7 @@ index 3935f35..ecf3cb2 100644
  
    meta_finalize ();
 diff --git a/src/meson.build b/src/meson.build
-index 90d8073..a9fffa2 100644
+index 3e6df2f71..25632bece 100644
 --- a/src/meson.build
 +++ b/src/meson.build
 @@ -18,6 +18,7 @@ mutter_pkg_deps = [
@@ -132,4 +131,5 @@ index 90d8073..a9fffa2 100644
  ]
  
 -- 
-git-series 0.9.1
+2.32.0
+

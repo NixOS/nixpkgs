@@ -11,6 +11,7 @@
 , libgee
 , granite
 , gtk3
+, libhandy
 , libxml2
 , libgnomekbd
 , libxklavier
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-iuv5NZ7v+rXyFsKB/PvGa/7hm9MIV8E6JnTzEGROlhM=";
+    sha256 = "1nsy9fh6qj5kyg22bs1hm6kpsvarwc63q0hl0nbwymvnhfjf6swp";
   };
 
   patches = [
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     ibus
     libgee
     libgnomekbd
+    libhandy
     libxklavier
     switchboard
   ];

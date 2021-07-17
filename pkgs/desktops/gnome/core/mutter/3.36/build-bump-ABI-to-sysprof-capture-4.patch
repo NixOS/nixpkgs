@@ -1,0 +1,55 @@
+From d84a14dbed53f57c9e1289da4fc33987117530aa Mon Sep 17 00:00:00 2001
+From: Bobby Rong <rjl931189261@126.com>
+Date: Sat, 17 Jul 2021 17:52:52 +0800
+Subject: [PATCH] build: bump ABI to sysprof-capture-4
+
+---
+ meson.build | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 1000066fb..247e6b580 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,6 +1,6 @@
+ project('mutter', 'c',
+   version: '3.36.9',
+-  meson_version: '>= 0.50.0',
++  meson_version: '>= 0.51.0',
+   license: 'GPLv2+'
+ )
+ 
+@@ -54,7 +54,7 @@ gbm_req = '>= 10.3'
+ libpipewire_req = '>= 0.3.0'
+ 
+ # profiler requirements
+-sysprof_req = '>= 3.35.2'
++sysprof_req = '>= 3.37.2'
+ 
+ gnome = import('gnome')
+ pkg = import('pkgconfig')
+@@ -282,7 +282,20 @@ endif
+ 
+ have_profiler = get_option('profiler')
+ if have_profiler
+-  sysprof_dep = dependency('sysprof-capture-3', version: sysprof_req)
++  # libsysprof-capture support
++  sysprof_dep = dependency('sysprof-capture-4',
++    required: true,
++    default_options: [
++      'enable_examples=false',
++      'enable_gtk=false',
++      'enable_tests=false',
++      'enable_tools=false',
++      'libsysprof=false',
++      'with_sysprofd=none',
++      'help=false',
++    ],
++    fallback: ['sysprof', 'libsysprof_capture_dep'],
++  )
+ endif
+ 
+ required_functions = [
+-- 
+2.32.0
+
