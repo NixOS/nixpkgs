@@ -3089,6 +3089,8 @@ in {
 
   graphene = callPackage ../development/python-modules/graphene { };
 
+  graphqlclient= callPackage ../development/python-modules/graphqlclient { };
+
   graphql-core = callPackage ../development/python-modules/graphql-core { };
 
   graphql-relay = callPackage ../development/python-modules/graphql-relay { };
