@@ -89,11 +89,13 @@ let
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
 
-      tests = let
-        testPlatforms = packagePlatforms pkgs.tests;
-      in {
-        haskell = testPlatforms.haskell;
-        writers = testPlatforms.writers;
+      tests.haskell = packagePlatforms pkgs.tests.haskell;
+
+      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
+        # remove musl ghc865Binary since it is known to be broken and
+        # causes an evaluation error on darwin.
+        # TODO: remove ghc865Binary altogether and use ghc8102Binary
+        ghc865Binary = {};
       };
 
       # test some statically linked packages to catch regressions
@@ -247,11 +249,10 @@ let
         };
         constituents = accumulateDerivations [
           # haskell specific tests
-          jobs.tests.haskell
-          # writeHaskell and writeHaskellBin
-          # TODO: writeHaskell currently fails on darwin
-          jobs.tests.writers.x86_64-linux
-          jobs.tests.writers.aarch64-linux
+          #
+          # TODO: The writers test appears to be failing on darwin for unknown
+          # reasons.  See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881307871.
+          (lib.recursiveUpdate jobs.tests.haskell { writers.x86_64-darwin = null; })
           # important top-level packages
           jobs.cabal-install
           jobs.cabal2nix
@@ -307,6 +308,21 @@ let
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.aarch64-linux
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.x86_64-linux
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.aarch64-linux
+        ];
+      };
+      muslGHCs = pkgs.releaseTools.aggregate {
+        name = "haskell-pkgsMusl-ghcs";
+        meta = {
+          description = "GHCs built with musl";
+          maintainers = with lib.maintainers; [
+            nh2
+          ];
+        };
+        constituents = accumulateDerivations [
+          jobs.pkgsMusl.haskell.compiler.ghc8102Binary
+          jobs.pkgsMusl.haskell.compiler.ghc884
+          jobs.pkgsMusl.haskell.compiler.ghc8104
+          jobs.pkgsMusl.haskell.compiler.ghc901
         ];
       };
     }

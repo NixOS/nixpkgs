@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "eventlog";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     rev = "a5c19163ba131f79452c6dfe4e31c2b4ce4be741";
     sha256 = "0a2za3hs7wzy14z7mfgldy1r9xdlqv97yli9wlm8xldr0amsx869";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
     description = "Syslog event logger library";

@@ -115,6 +115,7 @@ extra-packages:
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
   - hackage-db < 2.1.1                  # 2021-06-10: Need older hackage-db as long as Cabal < 3.4, see https://github.com/NixOS/cabal2nix/issues/501
+  - opaleye < 0.7.3.0                   # 2021-07-11: for rel8 <= 1.0.0.1, see https://github.com/circuithub/rel8/issues/95#issuecomment-877616118
 
 package-maintainers:
   abbradar:
