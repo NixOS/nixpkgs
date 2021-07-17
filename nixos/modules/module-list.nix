@@ -63,6 +63,7 @@
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/openrazer.nix
+  ./hardware/openrgb.nix
   ./hardware/pcmcia.nix
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
