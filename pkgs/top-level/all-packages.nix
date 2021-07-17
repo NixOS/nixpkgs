@@ -17437,6 +17437,8 @@ in
 
   microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
 
+  microsoft-edge-beta = callPackage ../applications/networking/browsers/microsoft-edge { gconf = gnome2.GConf; };
+
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
