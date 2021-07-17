@@ -1,21 +1,22 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, pkg-config
 , autoreconfHook
+, pkg-config
+, util-linux
+, hexdump
+, wrapQtAppsHook ? null
+, boost
+, libevent
+, miniupnpc
+, zeromq
+, zlib
 , db48
 , sqlite
-, boost
-, zeromq
-, hexdump
-, zlib
-, miniupnpc
+, qrencode
 , qtbase ? null
 , qttools ? null
-, wrapQtAppsHook ? null
-, util-linux
 , python3
-, qrencode
-, libevent
 , nixosTests
 , withGui
 , withWallet ? true
@@ -43,13 +44,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ pkg-config autoreconfHook ]
-    ++ optional stdenv.isDarwin hexdump
-    ++ optional withGui wrapQtAppsHook;
-  buildInputs = [ boost zlib zeromq miniupnpc libevent ]
+    [ autoreconfHook pkg-config ]
     ++ optionals stdenv.isLinux [ util-linux ]
+    ++ optionals stdenv.isDarwin [ hexdump ]
+    ++ optionals withGui [ wrapQtAppsHook ];
+
+  buildInputs = [ boost libevent miniupnpc zeromq zlib ]
     ++ optionals withWallet [ db48 sqlite ]
-    ++ optionals withGui [ qtbase qttools qrencode ];
+    ++ optionals withGui [ qrencode qtbase qttools ];
 
   postInstall = optional withGui ''
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop

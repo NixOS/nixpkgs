@@ -368,13 +368,16 @@ findInputs() {
     local var="${!varRef}"
     unset -v varVar varRef
 
-    # var is a reference to an array and can sometimes be undefined
-    # so checking the array with "${!var}[@]" does not work
-    # check if $pkgs is in the var ref array
-    # TODO(@Ericson2314): Restore using associative array
-    if [[ "${var}[*]" = *" $pkg "* ]]; then
-        return 0
-    fi
+    # TODO(@Ericson2314): Restore using associative array once Darwin
+    # nix-shell doesn't use impure bash. This should replace the O(n)
+    # case with an O(1) hash map lookup, assuming bash is implemented
+    # well :D.
+    local varSlice="${var}[*]"
+    # ${..-} to hack around old bash empty array problem
+    case "${!varSlice-}" in
+        *" $pkg "*) return 0 ;;
+    esac
+    unset -v varSlice
 
     eval "$var"'+=("$pkg")'
 

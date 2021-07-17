@@ -2313,6 +2313,8 @@ in
 
   swaycwd = callPackage ../tools/wayland/swaycwd { };
 
+  swayr = callPackage ../tools/wayland/swayr { };
+
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
   wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl { };
@@ -8481,9 +8483,7 @@ in
 
   routino = callPackage ../tools/misc/routino { };
 
-  rq = callPackage ../development/tools/rq {
-    inherit (darwin) libiconv;
-  };
+  rq = callPackage ../development/tools/rq { };
 
   rs-git-fsmonitor = callPackage ../applications/version-management/git-and-tools/rs-git-fsmonitor { };
 
@@ -16532,6 +16532,8 @@ in
 
   libgksu = callPackage ../development/libraries/libgksu { };
 
+  libgnt = callPackage ../development/libraries/libgnt { };
+
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
   # https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=README;h=fd6e1a83f55696c1f7a08f6dfca08b2d6b7617ec;hb=70058cd9f944d620764e57c838209afae8a58c78#l118
@@ -17673,6 +17675,8 @@ in
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
   oobicpl = callPackage ../development/libraries/science/biology/oobicpl { };
+
+  ookla-speedtest = callPackage ../tools/networking/ookla-speedtest { };
 
   openalSoft = callPackage ../development/libraries/openal-soft {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
@@ -28497,6 +28501,9 @@ in
   dogecoind = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = false; };
 
   electrs = callPackage ../applications/blockchains/electrs.nix { };
+
+  elements  = libsForQt5.callPackage ../applications/blockchains/elements.nix { miniupnpc = miniupnpc_2; withGui = true; };
+  elementsd = callPackage ../applications/blockchains/elements.nix { miniupnpc = miniupnpc_2; withGui = false; };
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
