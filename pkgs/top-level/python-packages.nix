@@ -2247,6 +2247,8 @@ in {
 
   ed25519 = callPackage ../development/python-modules/ed25519 { };
 
+  editables = callPackage ../development/python-modules/editables { };
+
   editdistance = callPackage ../development/python-modules/editdistance { };
 
   editdistance-s = callPackage ../development/python-modules/editdistance-s { };
@@ -6278,7 +6280,9 @@ in {
 
   pynanoleaf = callPackage ../development/python-modules/pynanoleaf { };
 
-  pync = callPackage ../development/python-modules/pync { };
+  pync = callPackage ../development/python-modules/pync {
+    inherit (pkgs) coreutils which;
+  };
 
   pynest2d = callPackage ../development/python-modules/pynest2d { };
 
