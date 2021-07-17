@@ -28,11 +28,5 @@ in {
       QT_IM_MODULE = "fcitx";
       XMODIFIERS = "@im=fcitx";
     };
-
-    systemd.user.services.fcitx5-daemon = {
-      enable = true;
-      script = "${fcitx5Package}/bin/fcitx5";
-      wantedBy = [ "graphical-session.target" ];
-    };
   };
 }
