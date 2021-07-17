@@ -1941,6 +1941,8 @@ in
 
   blink = libsForQt5.callPackage ../applications/networking/instant-messengers/blink { };
 
+  blitz = callPackage ../development/libraries/blitz { };
+
   blockbook = callPackage ../servers/blockbook { };
 
   blockhash = callPackage ../tools/graphics/blockhash { };
@@ -28776,6 +28778,11 @@ in
 
   crawl = callPackage ../games/crawl { };
 
+  inherit (import ../games/crossfire pkgs)
+    crossfire-server-stable crossfire-arch-stable crossfire-maps-stable
+    crossfire-server-latest crossfire-arch-latest crossfire-maps-latest
+    crossfire-client;
+
   crrcsim = callPackage ../games/crrcsim {};
 
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
@@ -28784,6 +28791,9 @@ in
   cutemaze = libsForQt5.callPackage ../games/cutemaze {};
 
   cuyo = callPackage ../games/cuyo { };
+
+  inherit (import ../games/deliantra pkgs)
+    deliantra-server deliantra-arch deliantra-maps deliantra-data;
 
   devilutionx = callPackage ../games/devilutionx {};
 
