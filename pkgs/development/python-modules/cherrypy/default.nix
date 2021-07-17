@@ -60,7 +60,7 @@ buildPythonPackage rec {
       --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes \
       --deselect=cherrypy/test/test_tools.py::ToolTests::testCombinedTools \
       ${lib.optionalString stdenv.isDarwin
-        "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
+        "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block --deselect=cherrypy/test/test_config_server.py"}
   '';
 
   __darwinAllowLocalNetworking = true;
