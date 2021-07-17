@@ -5,6 +5,12 @@ with lib;
 
 let
 
+  # From modules/tasks/filesystems.nix
+  addCheckDesc = desc: elemType: check: types.addCheck elemType check
+  // { description = "${elemType.description} (with check: ${desc})"; };
+  isNonEmpty = s: (builtins.match "[ \t\n]*" s) == null;
+  nonEmptyStr = addCheckDesc "non-empty" types.str isNonEmpty;
+
   randomEncryptionCoerce = enable: { inherit enable; };
 
   randomEncryptionOpts = { ... }: {
@@ -124,6 +130,15 @@ let
           asynchronous discard on freed pages is performed, before returning to
           the available pages pool. With "both", both policies are activated.
           See swapon(8) for more information.
+        '';
+      };
+
+      options = mkOption {
+        default = [ "defaults" ];
+        example = [ "nofail" ];
+        type = types.listOf nonEmptyStr;
+        description = ''
+          Options used to mount the swap.
         '';
       };
 
