@@ -32,6 +32,7 @@ in stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path due to module path construction at runtime
   ] ++ lib.optional usePython "-DUSE_PYTHON_CONFIG=ON";
 
   postFixup = lib.optionalString (lib.length extraPackages != 0) ''
