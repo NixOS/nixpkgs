@@ -226,6 +226,10 @@ in
       environment.sessionVariables.GTK_CSD = "1";
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
 
+      xdg.portal.extraPortals = [
+        pkgs.pantheon.elementary-files
+      ];
+
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
