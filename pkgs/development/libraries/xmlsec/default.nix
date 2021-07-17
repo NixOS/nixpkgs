@@ -4,12 +4,9 @@
 , openssl, nss_3_53, lib, runCommandCC, writeText }:
 
 lib.fix (self:
-let
-  version = "1.2.31";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xmlsec";
-  inherit version;
+  version = "1.2.31";
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
