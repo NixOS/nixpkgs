@@ -4,12 +4,12 @@ let
   p = if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc.lib}/lib64";
-      sha256 = "d61bf5c9bd285246f0e47fa529049e21cc187eb3";
+      sha256 = "e4f579963199f05476657f0066beaa32d1261aef2203382f3919e1ed4bc4594e";
     }
     else {
       arch = "i386";
       gcclib = "${stdenv.cc.cc.lib}/lib";
-      sha256 = "929f530a7b31f95a7ae3e6a2a40c60f2f4f16fee";
+      sha256 = "69113bf33ba0c57a363305b76361f2866c3b8394b173eed0f49db1f50bfe0373";
     };
 in
 stdenv.mkDerivation rec {
