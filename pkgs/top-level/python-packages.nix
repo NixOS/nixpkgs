@@ -5409,6 +5409,8 @@ in {
 
   python-tado = callPackage ../development/python-modules/python-tado { };
 
+  pyutil = callPackage ../development/python-modules/pyutil { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
