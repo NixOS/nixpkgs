@@ -25,7 +25,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   maintainers = with pkgs.lib.maintainers; [ ];
 
-  mutter = pkgs.gnome.mutter334;
+  mutter = pkgs.gnome.mutter336;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
