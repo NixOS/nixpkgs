@@ -2,9 +2,7 @@ diff --git a/lib/builtins/CMakeLists.txt b/lib/builtins/CMakeLists.txt
 index 3a66dd9c3fb..7efc85d9f9f 100644
 --- a/lib/builtins/CMakeLists.txt
 +++ b/lib/builtins/CMakeLists.txt
-@@ -301,6 +301,10 @@ if (NOT MSVC)
-     i386/umoddi3.S
-   )
+@@ -345,4 +345,8 @@ if (NOT MSVC)
  
 +  set(i486_SOURCES ${i386_SOURCES})
 +  set(i586_SOURCES ${i386_SOURCES})
