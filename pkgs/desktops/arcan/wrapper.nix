@@ -21,7 +21,7 @@ symlinkJoin rec {
         --set ARCAN_LIBPATH "${placeholder "out"}/lib/" \
         --set ARCAN_RESOURCEPATH "${placeholder "out"}/share/arcan/resources/" \
         --set ARCAN_SCRIPTPATH "${placeholder "out"}/share/arcan/scripts/" \
-        --set ARCAN_STATEBASEPATH "$HOME/.arcan/resources/savestates/"
+        --set ARCAN_STATEBASEPATH "\$HOME/.arcan/resources/savestates/"
     done
   '';
 }

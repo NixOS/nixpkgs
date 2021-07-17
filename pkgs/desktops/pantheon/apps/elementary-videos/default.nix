@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.7.2";
+  version = "2.7.3";
 
   repoName = "videos";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-MSyhCXsziQ0MD4lGp9X/9odidjT/L+2Aihwd1qCGvB0=";
+    sha256 = "04nl9kn33dysvsg0n5qx1z8qgrifkgfwsm7gh1l308v3n8c69lh7";
   };
 
   passthru = {

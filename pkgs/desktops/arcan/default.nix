@@ -37,6 +37,6 @@ rec {
 
   everyone-wrapped = callPackage ./wrapper.nix {
     name = "everyone-wrapped";
-    appls = [ durden pipeworld prio ];
+    appls = [ durden pipeworld ];
   };
 }

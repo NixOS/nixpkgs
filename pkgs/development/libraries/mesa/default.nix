@@ -220,6 +220,7 @@ self = stdenv.mkDerivation {
   passthru = {
     inherit libdrm;
     inherit (libglvnd) driverLink;
+    inherit llvmPackages;
 
     tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
       name = "mesa-dev-does-not-depend-on-llvm";
