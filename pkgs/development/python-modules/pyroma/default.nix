@@ -1,26 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi
-, docutils, pygments, setuptools
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, docutils
+, pygments
+, setuptools
+, requests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyroma";
-  version = "3.1";
+  version = "3.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "45ad8201da9a813b5597bb85c80bbece93af9ec89170fc2be5ad85fa9463cef1";
+  src = fetchFromGitHub {
+    owner = "regebro";
+    repo = pname;
+    rev = version;
+    sha256 = "0ln9w984n48nyxwzd1y48l6b18lnv52radcyizaw56lapcgxrzdr";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pygments < 2.6" "pygments"
-  '';
+  propagatedBuildInputs = [
+    docutils
+    pygments
+    setuptools
+    requests
+  ];
 
-  propagatedBuildInputs = [ docutils pygments setuptools ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "pyroma/tests.py" ];
+
+  disabledTests = [
+    # PyPI tests require network access
+    "PyPITest"
+  ];
+
+  pythonImportsCheck = [ "pyroma" ];
 
   meta = with lib; {
     description = "Test your project's packaging friendliness";
     homepage = "https://github.com/regebro/pyroma";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
