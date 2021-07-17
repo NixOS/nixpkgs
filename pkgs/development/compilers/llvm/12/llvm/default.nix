@@ -19,6 +19,7 @@
 , enablePFM ? !(stdenv.isDarwin
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
   || stdenv.isAarch32 # broken for the armv7l builder
+  || stdenv.isx86_64 # broken for AMD Zen2: https://bugs.llvm.org/show_bug.cgi?id=48918
 )
 , enablePolly ? false
 }:
