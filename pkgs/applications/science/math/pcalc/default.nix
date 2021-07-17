@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with lib.maintainers; [ ftrvxmtrx ];
     platforms = lib.platforms.linux;
-    inherit version;
   };
 }

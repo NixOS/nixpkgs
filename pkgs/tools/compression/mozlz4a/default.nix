@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 python3.pkgs.python-lz4 ];
 
   meta = {
-    inherit version;
     description = "A script to handle Mozilla's mozlz4 files";
     license = lib.licenses.bsd2;
     maintainers = [lib.maintainers.raskin];
