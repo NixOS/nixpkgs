@@ -88,13 +88,13 @@ let
   '';
 
   set_XDG_CONFIG_HOME = ''
-      # Set the default XDG_CONFIG_HOME if it is unset.
-      # Per the XDG Base Directory Specification:
-      # https://specifications.freedesktop.org/basedir-spec/latest
-      # 1. Never export this variable! If it is unset, then child processes are
-      # expected to set the default themselves.
-      # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
-      XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
+    # Set the default XDG_CONFIG_HOME if it is unset.
+    # Per the XDG Base Directory Specification:
+    # https://specifications.freedesktop.org/basedir-spec/latest
+    # 1. Never export this variable! If it is unset, then child processes are
+    # expected to set the default themselves.
+    # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
+    XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
   '';
 
   startplasma =
@@ -172,8 +172,13 @@ in
           disabled by default.
         '';
       };
-    };
 
+      runUsingSystemd = mkOption {
+        description = "Use systemd to manage the Plasma session";
+        type = types.bool;
+        default = false;
+      };
+    };
   };
 
   imports = [
@@ -184,11 +189,13 @@ in
   config = mkMerge [
     (mkIf cfg.enable {
       # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = [''
-        # Enable the Plasma 5 Desktop Environment.
-        services.xserver.displayManager.sddm.enable = true;
-        services.xserver.desktopManager.plasma5.enable = true;
-      ''];
+      system.nixos-generate-config.desktopConfiguration = [
+        ''
+          # Enable the Plasma 5 Desktop Environment.
+          services.xserver.displayManager.sddm.enable = true;
+          services.xserver.desktopManager.plasma5.enable = true;
+        ''
+      ];
 
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
@@ -236,7 +243,7 @@ in
           kidletime
           kimageformats
           kinit
-          kirigami2  # In system profile for SDDM theme. TODO: wrapper.
+          kirigami2 # In system profile for SDDM theme. TODO: wrapper.
           kio
           kjobwidgets
           knewstuff
@@ -280,6 +287,7 @@ in
           milou
           plasma-browser-integration
           plasma-integration
+          plasma-systemmonitor # will replace ksysguard
           polkit-kde-agent
           spectacle
           systemsettings
@@ -301,7 +309,8 @@ in
           breeze-icons
           pkgs.hicolor-icon-theme
 
-          kde-gtk-config breeze-gtk
+          kde-gtk-config
+          breeze-gtk
 
           qtvirtualkeyboard
 
@@ -319,6 +328,7 @@ in
         ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
+        ++ lib.optional config.services.hardware.bolt.enable pkgs.plasma-thunderbolt
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
         ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
@@ -365,6 +375,27 @@ in
       security.pam.services.kdm.enableKwallet = true;
       security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
+
+      systemd.user.services = {
+        plasma-early-setup = mkIf cfg.runUsingSystemd {
+          description = "Early Plasma setup";
+          wantedBy = [ "graphical-session-pre.target" ];
+          serviceConfig.Type = "oneshot";
+          script = activationScript;
+        };
+
+        plasma-run-with-systemd = {
+          description = "Run KDE Plasma via systemd";
+          wantedBy = [ "basic.target" ];
+          serviceConfig.Type = "oneshot";
+          script = ''
+            ${set_XDG_CONFIG_HOME}
+
+            ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
+              --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
+          '';
+        };
+      };
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
