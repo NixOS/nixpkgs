@@ -6524,6 +6524,8 @@ in
 
   ministat = callPackage ../tools/misc/ministat { };
 
+  mjolnir = callPackage ../servers/mjolnir { };
+
   mmv = callPackage ../tools/misc/mmv { };
 
   mmv-go = callPackage ../tools/misc/mmv-go { };
@@ -26286,6 +26288,10 @@ in
   paprefs = callPackage ../applications/audio/paprefs { };
 
   pantalaimon = python3Packages.callPackage ../applications/networking/instant-messengers/pantalaimon { };
+
+  pantalaimon-headless = python3Packages.callPackage ../applications/networking/instant-messengers/pantalaimon {
+    enableDbusUi = false;
+  };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 

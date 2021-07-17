@@ -250,6 +250,7 @@ in
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   misc = handleTest ./misc.nix {};
+  mjolnir = handleTest ./matrix/mjolnir.nix {};
   moinmoin = handleTest ./moinmoin.nix {};
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
@@ -320,6 +321,7 @@ in
   packagekit = handleTest ./packagekit.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
   pam-u2f = handleTest ./pam-u2f.nix {};
+  pantalaimon = handleTest ./matrix/pantalaimon.nix {};
   pantheon = handleTest ./pantheon.nix {};
   paperless = handleTest ./paperless.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};

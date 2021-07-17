@@ -1,7 +1,7 @@
 { lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
   attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
   prompt_toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
-  setuptools, fetchpatch, installShellFiles,
+  setuptools, fetchpatch, installShellFiles, nixosTests,
 
   pytest, faker, pytest-aiohttp, aioresponses,
 
@@ -70,6 +70,10 @@ buildPythonApplication rec {
   postInstall = ''
     installManPage docs/man/*.[1-9]
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) pantalaimon;
+  };
 
   meta = with lib; {
     description = "An end-to-end encryption aware Matrix reverse proxy daemon";
