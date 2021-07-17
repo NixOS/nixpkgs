@@ -4081,6 +4081,8 @@ in
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
+  debugedit-unstable = callPackage ../development/tools/misc/debugedit { };
+
   deer = callPackage ../shells/zsh/zsh-deer { };
 
   delta = callPackage ../applications/version-management/git-and-tools/delta {
