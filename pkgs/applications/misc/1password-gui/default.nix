@@ -106,13 +106,13 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-    passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.sh;
 
-    meta = with lib; {
-      description = "Multi-platform password manager";
-      homepage = "https://1password.com/";
-      license = licenses.unfree;
-      maintainers = with maintainers; [ timstott savannidgerinel ];
-      platforms = [ "x86_64-linux" ];
-    };
-  }
+  meta = with lib; {
+    description = "Multi-platform password manager";
+    homepage = "https://1password.com/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ timstott savannidgerinel ];
+    platforms = [ "x86_64-linux" ];
+  };
+}
