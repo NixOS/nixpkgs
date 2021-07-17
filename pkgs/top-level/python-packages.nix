@@ -1141,6 +1141,8 @@ in {
 
   block-io = callPackage ../development/python-modules/block-io { };
 
+  blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
+
   blspy = callPackage ../development/python-modules/blspy { };
 
   bluepy = callPackage ../development/python-modules/bluepy { };
@@ -5409,6 +5411,8 @@ in {
 
   python-tado = callPackage ../development/python-modules/python-tado { };
 
+  pyutil = callPackage ../development/python-modules/pyutil { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
@@ -9467,6 +9471,8 @@ in {
   zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zetup = callPackage ../development/python-modules/zetup { };
+
+  zfec = callPackage ../development/python-modules/zfec { };
 
   zha-quirks = callPackage ../development/python-modules/zha-quirks { };
 
