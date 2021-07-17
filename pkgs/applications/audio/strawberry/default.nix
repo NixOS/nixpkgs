@@ -35,13 +35,13 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "sha256:0d9asg21j9ai23sb35cimws8bd8fsnpha777rgscraa7i09q0rx2";
+    sha256 = "sha256-OOdHsii6O4okVHDhrqCNJ7WVB0VKPs8q0AhEY+IvflE=";
   };
 
   buildInputs = [
@@ -77,7 +77,10 @@ mkDerivation rec {
   ++ lib.optional withVlc libvlc;
 
   nativeBuildInputs = [
-    cmake ninja pkg-config qttools
+    cmake
+    ninja
+    pkg-config
+    qttools
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
   ];
