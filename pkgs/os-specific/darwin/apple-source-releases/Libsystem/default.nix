@@ -69,7 +69,13 @@ appleDerivation' stdenv {
     #define TARGET_OS_UNIX          0
     #define TARGET_OS_EMBEDDED      0
     #define TARGET_OS_IPHONE        0
+    #define TARGET_OS_IOS           0
+    #define TARGET_OS_WATCH         0
+    #define TARGET_OS_BRIDGE        0
+    #define TARGET_OS_TV            0
+    #define TARGET_OS_SIMULATOR     0
     #define TARGET_IPHONE_SIMULATOR 0
+    #define TARGET_OS_NANO          0
     #define TARGET_OS_LINUX         0
 
     #define TARGET_CPU_PPC          0
