@@ -287,3 +287,26 @@ Here are some additional tips that didn't fit in above.
 
 -   The Haskell team members generally hang out in the Matrix room
     [#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org).
+
+-   This is a checklist for things that need to happen when a new
+    member is added to the Nixpkgs Haskell team.
+
+    1.  Add the person to the
+        [@NixOS/haskell](https://github.com/orgs/NixOS/teams/haskell)
+        team.  You may need to ask someone in the NixOS organization
+        to do this, like [@domenkozar](https://github.com/domenkozar).
+        This gives the new member access to repos like
+        [cabal2nix](https://github.com/NixOS/cabal2nix).
+
+    1.  Add the person to the `haskell` team in
+        [`maintainers/team-list.nix`](../../../maintainers/team-list.nix).
+        This team is responsible for some important packages in
+        [release-haskell.nix](../../top-level/release-haskell.nix).
+
+    1.  Update the
+        [Nextcloud Calendar](https://cloud.maralorn.de/apps/calendar/p/Mw5WLnzsP7fC4Zky)
+        and work the new member into the `haskell-updates` rotation.
+
+    1.  Optionally, have the new member add themselves to the Haskell
+        section in [`CODEOWNERS`](../../../.github/CODEOWNERS).  This
+        will cause them to get pinged on most Haskell-related PRs.
