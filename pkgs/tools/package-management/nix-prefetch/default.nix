@@ -1,32 +1,24 @@
 { lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
 , docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
-, gnugrep, gnused, jq, nix, fetchpatch }:
+, gnugrep, gnused, jq, nix }:
 
 let
   binPath = lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
 
 in stdenv.mkDerivation rec {
   pname = "nix-prefetch";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "msteen";
     repo = "nix-prefetch";
     rev = version;
-    sha256 = "11792677zyi06jw641xi9aywwgh9002b8406w6qids212c14va6n";
+    sha256 = "sha256-y0ROoKpTpc4zPjMqGvXIsfFX8EEhJ9qs3A3V6TGQtzU=";
     # the stat call has to be in a subshell or we get the current date
     extraPostFetch = ''
       echo $(stat -c %Y $out) > $out/.timestamp
     '';
   };
-
-  patches = [
-    # Fix input_type regex for macOS systems: https://github.com/msteen/nix-prefetch/pull/24
-    (fetchpatch {
-      url = "https://github.com/msteen/nix-prefetch/commit/08282891bdb108e886eaf39be2030ba1feda1cb1.patch";
-      sha256 = "1v6ask54ind6f3784pbncv0dfg6draaaicg0q46jfvp0lafms70x";
-    })
-  ];
 
   postPatch = ''
     lib=$out/lib/${pname}
