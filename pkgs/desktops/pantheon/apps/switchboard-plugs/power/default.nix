@@ -8,7 +8,6 @@
 , pkg-config
 , vala
 , libgee
-, elementary-dpms-helper
 , elementary-settings-daemon
 , granite
 , gtk3
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
-    elementary-dpms-helper
     elementary-settings-daemon
     glib
     granite
