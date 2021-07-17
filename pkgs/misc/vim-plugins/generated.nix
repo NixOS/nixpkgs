@@ -3418,6 +3418,18 @@ final: prev:
     meta.homepage = "https://github.com/jlesquembre/nterm.nvim/";
   };
 
+  null-ls-nvim = buildVimPluginFrom2Nix {
+    pname = "null-ls-nvim";
+    version = "2021-07-14";
+    src = fetchFromGitHub {
+      owner = "jose-elias-alvarez";
+      repo = "null-ls.nvim";
+      rev = "56d4b76203d2b442353e25c247f49fa5ca70f42e";
+      sha256 = "0kmgln5ra2lpdvj9866a11l9h04zc1dmvxcw8gbra6f72ars3jwr";
+    };
+    meta.homepage = "https://github.com/jose-elias-alvarez/null-ls.nvim/";
+  };
+
   numb-nvim = buildVimPluginFrom2Nix {
     pname = "numb-nvim";
     version = "2021-07-12";
