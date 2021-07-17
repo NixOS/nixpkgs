@@ -106,10 +106,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   mutter = callPackage ./core/mutter { };
 
-  # Needed for elementary's gala and greeter until 3.36 support has more bugfixes
-  # https://github.com/elementary/gala/issues/763
-  mutter334 = callPackage ./core/mutter/3.34 { };
-
   # Needed for elementary's gala and greeter until support for higher versions is provided
   mutter336 = callPackage ./core/mutter/3.36 { };
 
@@ -359,6 +355,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   maintainers = lib.teams.gnome.members;
 
   mutter328 = throw "Removed as Pantheon is upgraded to mutter336.";
+
+  mutter334 = throw "Removed as Pantheon is upgraded to mutter336.";
 
   gnome-getting-started-docs = throw "Removed in favour of gnome-tour.";
 
