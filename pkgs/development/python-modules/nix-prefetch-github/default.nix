@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "4.0.3";
+  version = "4.0.4";
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "seppeljordan";
     repo = "nix-prefetch-github";
     rev = "v${version}";
-    sha256 = "CLcmwobPrL6NiI/nw+/Dwho/r15owV16Jmt5OcfFqvo=";
+    sha256 = "g5G818Gq5EGyRIyg/ZW7guxMS0IyJ4nYaRjG/CtGhuc=";
   };
 
   propagatedBuildInputs = [
