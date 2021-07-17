@@ -519,7 +519,7 @@ if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = d
 fi
 
 
-if [ "$action" = build-vm ]; then
+if [ "$action" = build-vm -o "$action" = build-vm-with-bootloader ]; then
     cat >&2 <<EOF
 
 Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm)
