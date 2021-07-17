@@ -3240,12 +3240,12 @@ final: prev:
 
   neovim-ayu = buildVimPluginFrom2Nix {
     pname = "neovim-ayu";
-    version = "2021-07-13";
+    version = "2021-07-17";
     src = fetchFromGitHub {
       owner = "Shatur";
       repo = "neovim-ayu";
-      rev = "12ed2ff8f341a53cab8a24b35d7a419a6cc5c5e1";
-      sha256 = "1hb2hkzlbakhq55rrikanl8r2k4q6fmm7k4jn54p4v2kr9s8rhr6";
+      rev = "755b4a379ef4812f9656fb3f59220cf3a45c2070";
+      sha256 = "0irjjpfrl6i7hfvay6b187i7dkkjq40fdcrx53xxfk9qq47l1z13";
     };
     meta.homepage = "https://github.com/Shatur/neovim-ayu/";
   };
@@ -3516,12 +3516,12 @@ final: prev:
 
   nvim-bufferline-lua = buildVimPluginFrom2Nix {
     pname = "nvim-bufferline-lua";
-    version = "2021-07-15";
+    version = "2021-07-17";
     src = fetchFromGitHub {
       owner = "akinsho";
       repo = "nvim-bufferline.lua";
-      rev = "cebafb95622205a414a6c10bf0e40d197cc652b1";
-      sha256 = "1qd8gaigkyhkz5nrizc3jhwa69v4fcymd2446l0s24pv3kxc2an3";
+      rev = "b90cbdef2d7eab5fa8b3693bb321305e4455f329";
+      sha256 = "16n168z9gdy0p0yljpx3lv958ix1369qgqc65pjs9ib5sij03q2s";
     };
     meta.homepage = "https://github.com/akinsho/nvim-bufferline.lua/";
   };
@@ -3688,8 +3688,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      rev = "8b4adace68ec09a44e2f64add8ae6dff4b2ba949";
-      sha256 = "1mx49da4sq8i2glg5awblyv2dbyk56iabp3la2ajv55svgzi1q5x";
+      rev = "1729b502fa00df2fdcbfa118b404b8b8a8a2d6a3";
+      sha256 = "1r4ajaxvf9kpfq42b81c08ixfqakiq8fibn89qar7sd4a7634dsg";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };
@@ -3996,12 +3996,12 @@ final: prev:
 
   packer-nvim = buildVimPluginFrom2Nix {
     pname = "packer-nvim";
-    version = "2021-07-16";
+    version = "2021-07-17";
     src = fetchFromGitHub {
       owner = "wbthomason";
       repo = "packer.nvim";
-      rev = "959d4bdce288eea7e112ec193d257c30b87d5d91";
-      sha256 = "0h18hvkx8z4g8b4y81xbfhzzkjxfls154my8l3gv8v27i29b70a1";
+      rev = "b6a904b341c56c5386bdd5c991439a834d061874";
+      sha256 = "1ja6k5cw6v5nhi91s643r6c38a15rgi4n8cb0k5pc5q252q8km04";
     };
     meta.homepage = "https://github.com/wbthomason/packer.nvim/";
   };
@@ -4441,12 +4441,12 @@ final: prev:
 
   rust-tools-nvim = buildVimPluginFrom2Nix {
     pname = "rust-tools-nvim";
-    version = "2021-07-14";
+    version = "2021-07-17";
     src = fetchFromGitHub {
       owner = "simrat39";
       repo = "rust-tools.nvim";
-      rev = "da8fb66af44fe2472b58fbf0b83ad4fe2243aaea";
-      sha256 = "0mkjb42ff0w80kbik6hwdx1hvhxlihq17fqypdagmxk58wn71z9y";
+      rev = "a22eec84aaa5b31b5c708eed24a5c09f21ca46c0";
+      sha256 = "14lwhdbpjrq2xyy9kfihjasvqg83bb13fl0r7aw95hngayx69l7k";
     };
     meta.homepage = "https://github.com/simrat39/rust-tools.nvim/";
   };
