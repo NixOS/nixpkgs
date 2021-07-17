@@ -5603,6 +5603,8 @@ in {
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
+  pslab = callPackage ../development/python-modules/pslab { };
+
   psutil = callPackage ../development/python-modules/psutil { };
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 { };
