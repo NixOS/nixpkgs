@@ -114,8 +114,9 @@ with lib.maintainers; {
 
   haskell = {
     members = [
-      maralorn
       cdepillabout
+      expipiplus1
+      maralorn
       sternenseemann
     ];
     scope = "Maintain Haskell packages and infrastructure.";
