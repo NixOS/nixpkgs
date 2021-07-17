@@ -8483,9 +8483,7 @@ in
 
   routino = callPackage ../tools/misc/routino { };
 
-  rq = callPackage ../development/tools/rq {
-    inherit (darwin) libiconv;
-  };
+  rq = callPackage ../development/tools/rq { };
 
   rs-git-fsmonitor = callPackage ../applications/version-management/git-and-tools/rs-git-fsmonitor { };
 
@@ -16533,6 +16531,8 @@ in
   };
 
   libgksu = callPackage ../development/libraries/libgksu { };
+
+  libgnt = callPackage ../development/libraries/libgnt { };
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
