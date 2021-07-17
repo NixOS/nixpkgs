@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rui314/mold";
     license = lib.licenses.agpl3Plus;
     maintainers = with maintainers; [ nitsky ];
+    broken = stdenv.isAarch64;
   };
 }
