@@ -1135,10 +1135,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0xg1x4708a4pn2wk8qs2d8kfzzdyv9kjjachg2f1phsx62ap2rx2";
+      sha256 = "1ad0mli9rc0f17zw4ibp24dbj1y39zkykijsjmnzl4gwpg5s0j6k";
       type = "gem";
     };
-    version = "2.5.1";
+    version = "2.5.3";
   };
   mini_racer = {
     dependencies = ["libv8-node"];
@@ -1284,10 +1284,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1i80ny61maqzqr1fq5wgpkijmh5j8abisrmhn16kv7mzmxqg5w0m";
+      sha256 = "1vrn31385ix5k9b0yalnlzv360isv6dincbcvi8psllnwz4sjxj9";
       type = "gem";
     };
-    version = "1.11.5";
+    version = "1.11.7";
   };
   nokogumbo = {
     dependencies = ["nokogiri"];
@@ -1414,10 +1414,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0a76xmwikcg2lv8k2cawzhmi2hx7j145v12mbpriby6zff797z4g";
+      sha256 = "1swlysqwfc6mb7smv52yv12sd79dchjf2f6r738wrag0wp5hazqy";
       type = "gem";
     };
-    version = "2.2.15";
+    version = "2.2.17";
   };
   openssl = {
     groups = ["default"];
