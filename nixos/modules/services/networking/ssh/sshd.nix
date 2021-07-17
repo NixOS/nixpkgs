@@ -24,8 +24,6 @@ let
   cfg  = config.services.openssh;
   cfgc = config.programs.ssh;
 
-  nssModulesPath = config.system.nssModules.path;
-
   userOptions = {
 
     options.openssh.authorizedKeys = {
@@ -425,7 +423,6 @@ in
             after = [ "network.target" ];
             stopIfChanged = false;
             path = [ cfgc.package pkgs.gawk ];
-            environment.LD_LIBRARY_PATH = nssModulesPath;
 
             restartTriggers = optionals (!cfg.startWhenNeeded) [
               config.environment.etc."ssh/sshd_config".source

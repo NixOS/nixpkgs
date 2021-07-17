@@ -137,10 +137,6 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      environment = {
-        LD_LIBRARY_PATH = config.system.nssModules.path;
-      };
-
       preStart = ''
         test -d /etc/lsh || mkdir -m 0755 -p /etc/lsh
         test -d /var/spool/lsh || mkdir -m 0755 -p /var/spool/lsh

@@ -139,7 +139,6 @@ in
 
     users.users.systemd-resolve.group = "systemd-resolve";
 
-    # add resolve to nss hosts database if enabled and nscd enabled
     # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
     # added with order 501 to allow modules to go before with mkBefore
     system.nssDatabases.hosts = (mkOrder 501 ["resolve [!UNAVAIL=return]"]);

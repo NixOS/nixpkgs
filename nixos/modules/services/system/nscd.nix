@@ -4,7 +4,6 @@ with lib;
 
 let
 
-  nssModulesPath = config.system.nssModules.path;
   cfg = config.services.nscd;
 
   nscd = if pkgs.stdenv.hostPlatform.libc == "glibc"
@@ -26,8 +25,10 @@ in
         default = true;
         description = ''
           Whether to enable the Name Service Cache Daemon.
-          Disabling this is strongly discouraged, as this effectively disables NSS Lookups
-          from all non-glibc NSS modules, including the ones provided by systemd.
+
+          When this option is disabled, NSS lookups from non-glibc NSS modules are disabled for:
+          - binaries that use a glibc version different from the system glibc
+          - 32-bit binaries on 64-bit hosts.
         '';
       };
 
@@ -54,8 +55,6 @@ in
         before = [ "nss-lookup.target" "nss-user-lookup.target" ];
         wants = [ "nss-lookup.target" "nss-user-lookup.target" ];
         wantedBy = [ "multi-user.target" ];
-
-        environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
         restartTriggers = [
           config.environment.etc.hosts.source

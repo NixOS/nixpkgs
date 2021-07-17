@@ -125,6 +125,8 @@ stdenv.mkDerivation ({
 
       /* https://github.com/NixOS/nixpkgs/pull/137601 */
       ./nix-nss-open-files.patch
+
+      ./add-extra-module-load-path.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;

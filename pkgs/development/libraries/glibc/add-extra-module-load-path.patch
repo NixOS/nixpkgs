@@ -1,0 +1,47 @@
+Add NSS module load path /run/nss-modules-${word_size}-${glibc_version}/lib
+as a fallback. Previously, glibc only looked for NSS modules in ${glibc.out}/lib and
+LD_LIBRARY_PATH.
+
+On NixOS, this removes the dependency on nscd for enabling NSS functionality in
+glibc clients.
+nscd has caching bugs and leaks DNS requests across network namespaces.
+
+The module load path is only used by binaries that use the same glibc
+version and word size as the NSS modules. This avoids failures due to ABI
+incompatibilities. Incompatible binaries can still be served by nscd.
+
+On non-NixOS systems, this patch doesn't change behaviour, as the path
+doesn't exist there.
+
+diff --git a/nss/nss_module.c b/nss/nss_module.c
+index 6c5f341f..80b6eac0 100644
+--- a/nss/nss_module.c
++++ b/nss/nss_module.c
+@@ -133,5 +133,27 @@ module_load (struct nss_module *module)
+       return false;
+ 
+     handle = __libc_dlopen (shlib_name);
++
++    /* After loading from the default locations, try loading from
++       the NixOS module load path. */
++    if (handle == NULL) {
++
++      #define STR_(x) #x
++      #define STR(x) STR_(x)
++
++      const char nix_nss_path[] = "/run/nss-modules-" STR(__WORDSIZE) "-"
++        STR(__GLIBC__) "." STR(__GLIBC_MINOR__) "/lib/";
++      char shlib_path[1024];
++      size_t nix_nss_path_len = sizeof(nix_nss_path) - 1;
++      size_t shlib_name_len = strlen(shlib_name);
++      size_t shlib_path_len = nix_nss_path_len + shlib_name_len;
++
++      if (shlib_path_len < sizeof(shlib_path)) {
++        memcpy(&shlib_path[0], nix_nss_path, nix_nss_path_len);
++        memcpy(&shlib_path[nix_nss_path_len], shlib_name, shlib_name_len + 1);
++        handle = __libc_dlopen(shlib_path);
++      }
++    }
++
+     free (shlib_name);
+   }
