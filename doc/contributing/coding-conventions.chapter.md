@@ -568,7 +568,7 @@ let
   inherit (phoronix-test-suite) pname version;
 in
 
-runCommand "${pname}-tests" { meta.timeout = 3; }
+runCommand "${pname}-tests" { meta.timeout = 60; }
   ''
     # automatic initial setup to prevent interactive questions
     ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
