@@ -5042,6 +5042,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope-frecency.nvim/";
   };
 
+  telescope-fzf-native-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-fzf-native-nvim";
+    version = "2021-07-06";
+    src = fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-fzf-native.nvim";
+      rev = "fe8c8d8cf7ff215ac83e1119cba87c016070b27e";
+      sha256 = "0kzxf3kzw45mlccp8z5zl3cfda4n5afymmdyir3kd248ll904jy1";
+    };
+    meta.homepage = "https://github.com/nvim-telescope/telescope-fzf-native.nvim/";
+  };
+
   telescope-fzf-writer-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-fzf-writer-nvim";
     version = "2021-04-16";
