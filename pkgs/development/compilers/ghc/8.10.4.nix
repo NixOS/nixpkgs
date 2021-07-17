@@ -309,6 +309,14 @@ stdenv.mkDerivation (rec {
     maintainers = with lib.maintainers; [ marcweber andres peti ];
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
+
+    # integer-simple builds broken when compiling with musl.
+    # See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881323743.
+    broken = enableIntegerSimple && targetPlatform.isMusl;
+    hydraPlatforms =
+      if enableIntegerSimple && targetPlatform.isMusl
+      then lib.platforms.none
+      else ghc.meta.platforms;
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
