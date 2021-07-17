@@ -1,7 +1,8 @@
 { stdenv, apulse, libpulseaudio, pkg-config, intltool, autoreconfHook }:
 
 stdenv.mkDerivation {
-  name = "libpressureaudio-${apulse.version}";
+  pname = "libpressureaudio";
+  version = apulse.version;
 
   src = libpulseaudio.src;
 
