@@ -3,6 +3,10 @@ From: Bobby Rong <rjl931189261@126.com>
 Date: Fri, 16 Jul 2021 23:28:56 +0800
 Subject: [PATCH] Remove Install Unlisted Engines function
 
+https://github.com/elementary/switchboard-plug-keyboard/issues/324
+
+Co-Authored-By: WORLDofPEACE <worldofpeace@protonmail.ch>
+
 ---
  src/Dialogs/InstallEngineDialog.vala          | 140 -----------------
  src/Dialogs/ProgressDialog.vala               |  82 ----------
