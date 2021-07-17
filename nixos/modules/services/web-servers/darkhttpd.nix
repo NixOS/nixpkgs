@@ -10,6 +10,7 @@ let
     "--port ${toString cfg.port}"
     "--addr ${cfg.address}"
   ] ++ cfg.extraArgs
+    ++ optional cfg.chrootServer             "--chroot"
     ++ optional cfg.hideServerId             "--no-server-id"
     ++ optional config.networking.enableIPv6 "--ipv6");
 
@@ -47,6 +48,14 @@ in {
       default = true;
       description = ''
         Don't identify the server type in headers or directory listings.
+      '';
+    };
+
+    chrootServer = mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Lock server into its root directory for added security.
       '';
     };
 
