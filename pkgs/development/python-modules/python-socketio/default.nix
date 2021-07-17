@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.0.4";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "v${version}";
-    sha256 = "0mpqr53mrdzk9ki24y1inpsfvjlvm7pvxf8q4d52m80i5pcd5v5q";
+    sha256 = "sha256-jyTTWxShLDDnbT+MYIJIjwpn3xfIB04je78doIOG+FQ=";
   };
 
   propagatedBuildInputs = [
