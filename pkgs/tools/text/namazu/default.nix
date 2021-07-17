@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-      wrapProgram $out/bin/mknmz --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.FileMMagic ]}
+    wrapProgram $out/bin/mknmz --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.FileMMagic ]}
   '';
 
   meta = {
