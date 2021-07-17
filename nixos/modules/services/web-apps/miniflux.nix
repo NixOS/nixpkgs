@@ -4,11 +4,6 @@ with lib;
 let
   cfg = config.services.miniflux;
 
-  dbUser = "miniflux";
-  dbPassword = "miniflux";
-  dbHost = "localhost";
-  dbName = "miniflux";
-
   defaultCredentials = pkgs.writeText "miniflux-admin-credentials" ''
     ADMIN_USERNAME=admin
     ADMIN_PASSWORD=password
@@ -20,10 +15,10 @@ let
     db_exists() {
       [ "$(${pgbin}/psql -Atc "select 1 from pg_database where datname='$1'")" == "1" ]
     }
-    if ! db_exists "${dbName}"; then
-      ${pgbin}/psql postgres -c "CREATE ROLE ${dbUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${dbPassword}'"
-      ${pgbin}/createdb --owner "${dbUser}" "${dbName}"
-      ${pgbin}/psql "${dbName}" -c "CREATE EXTENSION IF NOT EXISTS hstore"
+    if ! db_exists "${cfg.database.name}"; then
+      ${pgbin}/psql postgres -c "CREATE ROLE \"${cfg.database.user}\" WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.database.password}'"
+      ${pgbin}/createdb --owner "${cfg.database.user}" "${cfg.database.name}"
+      ${pgbin}/psql "${cfg.database.name}" -c "CREATE EXTENSION IF NOT EXISTS hstore"
     fi
   '';
 in
@@ -32,6 +27,47 @@ in
   options = {
     services.miniflux = {
       enable = mkEnableOption "miniflux";
+
+      database = {
+        host = mkOption {
+          type = types.str;
+          default = "localhost";
+          description = "Database host address.";
+        };
+
+        port = mkOption {
+          type = types.port;
+          default = 5432;
+          description = "Database host port.";
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "miniflux";
+          description = "Database name.";
+        };
+
+        user = mkOption {
+          type = types.str;
+          default = "miniflux";
+          description = "Database user.";
+        };
+
+        password = mkOption {
+          type = types.str;
+          default = "miniflux";
+          description = ''
+            The password corresponding to <option>database.user</option>.
+            Warning: this is stored in cleartext in the Nix store!
+          '';
+        };
+
+        createLocally = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Create the database and database user locally.";
+        };
+      };
 
       config = mkOption {
         type = types.attrsOf types.str;
@@ -65,12 +101,14 @@ in
 
     services.miniflux.config =  {
       LISTEN_ADDR = mkDefault "localhost:8080";
-      DATABASE_URL = "postgresql://${dbUser}:${dbPassword}@${dbHost}/${dbName}?sslmode=disable";
+      DATABASE_URL = "postgresql://${cfg.database.user}:${cfg.database.password}@${cfg.database.host}:${toString cfg.database.port}/${cfg.database.name}?sslmode=disable";
       RUN_MIGRATIONS = "1";
       CREATE_ADMIN = "1";
     };
 
-    services.postgresql.enable = true;
+    services.postgresql = optionalAttrs cfg.database.createLocally {
+      enable = true;
+    };
 
     systemd.services.miniflux-dbsetup = {
       description = "Miniflux database setup";
@@ -87,8 +125,8 @@ in
     systemd.services.miniflux = {
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "postgresql.service" ];
-      after = [ "network.target" "postgresql.service" "miniflux-dbsetup.service" ];
+      requires = optionals cfg.database.createLocally [ "postgresql.service" ];
+      after = [ "network.target" ] ++ optionals cfg.database.createLocally [ "postgresql.service" "miniflux-dbsetup.service" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.miniflux}/bin/miniflux";
