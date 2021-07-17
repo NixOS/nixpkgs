@@ -13,6 +13,15 @@
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
 
+  "Hide_Activities@shay.shayel.org" = "hide-activities-button";
+  "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-nmingori";
+
+  "ShutdownTimer@neumann" = "shutdowntimer";
+  "shutdown-timer-gnome-shell-extension" = "shutdowntimer-mkrajnak";
+
+  "extension-list@tu.berry" = "extension-list";
+  "screen-lock@garciabaameiro.com" = "screen-lock";
+
 
 
   # ############################################################################
