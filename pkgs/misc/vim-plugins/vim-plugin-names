@@ -251,6 +251,7 @@ jiangmiao/auto-pairs
 jistr/vim-nerdtree-tabs
 jjo/vim-cue
 jlanzarotta/bufexplorer
+jlesquembre/nterm.nvim
 jnurmine/zenburn
 jonbri/vim-colorstepper
 jonsmithers/vim-html-template-literals

@@ -4989,6 +4989,8 @@ in {
 
   openshift = callPackage ../development/python-modules/openshift { };
 
+  opensimplex = callPackage ../development/python-modules/opensimplex { };
+
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
   opentracing = callPackage ../development/python-modules/opentracing { };
