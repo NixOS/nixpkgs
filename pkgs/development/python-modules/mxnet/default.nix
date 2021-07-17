@@ -32,4 +32,5 @@ buildPythonPackage {
     ln -s ${pkgs.mxnet}/lib/libmxnet.so $out/${python.sitePackages}/mxnet
   '';
 
+  pythonImportsCheck = [ "mxnet" ];
 }
