@@ -1,0 +1,11 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index e8ee231..b243bd9 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -33,5 +33,5 @@ module =["aiofiles.*", "blinker.*", "dotenv.*", "hypothesis.*", "py.*", "_pytest
+ ignore_missing_imports = true
+ 
+ [tool.pytest.ini_options]
+-addopts = "--no-cov-on-fail --showlocals --strict"
++addopts = "--showlocals --strict"
+ testpaths = ["tests"]
