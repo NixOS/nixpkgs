@@ -33,6 +33,8 @@ let
       inherit sha256;
     };
 
+    hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
+
     outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 

@@ -5,6 +5,7 @@
 , pyyaml
 , matplotlib
 , h5py
+, scipy
 , spglib
 , pytestCheckHook
 }:
@@ -18,9 +19,18 @@ buildPythonPackage rec {
     sha256 = "58485042ab7d88fc8b83744d18b2aefd677adb071c8a717ac3710458192743d7";
   };
 
-  propagatedBuildInputs = [ numpy pyyaml matplotlib h5py spglib ];
+  propagatedBuildInputs = [
+    h5py
+    matplotlib
+    numpy
+    pyyaml
+    scipy
+    spglib
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # prevent pytest from importing local directory
   preCheck = ''

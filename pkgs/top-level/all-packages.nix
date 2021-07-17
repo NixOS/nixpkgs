@@ -4315,9 +4315,7 @@ in
 
   duplicati = callPackage ../tools/backup/duplicati { };
 
-  duplicity = callPackage ../tools/backup/duplicity {
-    pythonPackages = python3Packages;
-  };
+  duplicity = callPackage ../tools/backup/duplicity { };
 
   duply = callPackage ../tools/backup/duply { };
 
@@ -4814,10 +4812,6 @@ in
   firebird-emu = libsForQt5.callPackage ../misc/emulators/firebird-emu { };
 
   flamerobin = callPackage ../applications/misc/flamerobin { };
-
-  flashtool = pkgsi686Linux.callPackage ../development/mobile/flashtool {
-    inherit (androidenv.androidPkgs_9_0) platform-tools;
-  };
 
   flashrom = callPackage ../tools/misc/flashrom { };
 
@@ -9572,7 +9566,7 @@ in
 
   unrtf = callPackage ../tools/text/unrtf { };
 
-  unrpa = with python3Packages; toPythonApplication unrpa;
+  unrpa = with python38Packages; toPythonApplication unrpa;
 
   untex = callPackage ../tools/text/untex { };
 
@@ -12577,7 +12571,7 @@ in
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python = python2;
   python2 = python27;
-  python3 = python38;
+  python3 = python39;
   pypy = pypy2;
   pypy2 = pypy27;
   pypy3 = pypy37;
@@ -12800,8 +12794,6 @@ in
   wasm = ocamlPackages.wasm;
 
   wasm3 = callPackage ../development/interpreters/wasm3 { };
-
-  proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm { };
 
 
   ### DEVELOPMENT / MISC
@@ -19210,14 +19202,14 @@ in
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = callPackages ../development/interpreters/perl {};
-  inherit (perlInterpreters) perl530 perl532 perldevel;
+  inherit (perlInterpreters) perl532 perl534 perldevel;
 
-  perl530Packages = recurseIntoAttrs perl530.pkgs;
   perl532Packages = recurseIntoAttrs perl532.pkgs;
+  perl534Packages = recurseIntoAttrs perl534.pkgs;
   perldevelPackages = perldevel.pkgs;
 
-  perl = perl532;
-  perlPackages = perl532Packages;
+  perl = perl534;
+  perlPackages = perl534Packages;
 
   ack = perlPackages.ack;
 

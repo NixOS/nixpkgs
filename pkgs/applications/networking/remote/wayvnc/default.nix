@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc, wayland-scanner
 , pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml, pam
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q48fgh6gf3jicy4bk3kq18h9lhqfq9qz32ri6j9ffvbb8mcw64s";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja scdoc wayland ];
+  nativeBuildInputs = [ meson pkg-config ninja scdoc wayland-scanner ];
   buildInputs = [ pixman libxkbcommon wayland neatvnc libdrm libX11 aml pam ];
 
   meta = with lib; {

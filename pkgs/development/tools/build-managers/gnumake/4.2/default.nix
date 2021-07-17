@@ -23,6 +23,7 @@ stdenv.mkDerivation {
     ./pselect.patch
     # Fix support for glibc 2.27's glob, inspired by http://www.linuxfromscratch.org/lfs/view/8.2/chapter05/make.html
     ./glibc-2.27-glob.patch
+    ./glibc-2.33-glob.patch
   ];
 
   nativeBuildInputs = lib.optionals guileSupport [ pkg-config ];

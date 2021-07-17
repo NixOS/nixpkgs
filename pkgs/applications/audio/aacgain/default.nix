@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitLab, fetchpatch }:
 
-stdenv.mkDerivation {
-  name = "aacgain-1.9.0";
+stdenv.mkDerivation rec {
+  pname = "aacgain";
+  version = "1.9.0";
 
   src = fetchFromGitLab {
     owner = "mulx";

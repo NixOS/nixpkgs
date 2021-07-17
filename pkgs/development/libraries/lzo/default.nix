@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "lzo-2.10";
+  pname = "lzo";
+  version = "2.10";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/${name}.tar.gz";
+    url = "https://www.oberhumer.com/opensource/lzo/download/${pname}-${version}.tar.gz";
     sha256 = "0wm04519pd3g8hqpjqhfr72q8qmbiwqaxcs3cndny9h86aa95y60";
   };
 

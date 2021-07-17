@@ -2,11 +2,12 @@
 
 { lib, stdenv, fetchurl, python, tcl, tk, vorbis-tools, pkg-config, xlibsWrapper }:
 
-stdenv.mkDerivation {
-  name = "snack-2.2.10";
+stdenv.mkDerivation rec {
+  pname = "snack";
+  version = "2.2.10";
 
   src = fetchurl {
-    url = "https://www.speech.kth.se/snack/dist/snack2.2.10.tar.gz";
+    url = "https://www.speech.kth.se/snack/dist/${pname}${version}.tar.gz";
     sha256 = "07p89jv9qnjqkszws9sssq93ayvwpdnkcxrvyicbm4mb8x2pdzjb";
   };
 

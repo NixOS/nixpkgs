@@ -13,11 +13,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    sha256 = "1bg13l5s8x9p1v0jyv29n84bay27pflindpzjsc9gj7i4wdkrg7f";
+    sha256 = "1l4yw9fqc1blvx1sq1jnfvp1jijla3ca2jw90p4x9m8hvfpc933c";
   };
 
   patches = [
@@ -85,6 +85,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl21Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

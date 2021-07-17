@@ -1,6 +1,7 @@
 {lib, stdenv, qtdeclarative, fetchFromGitHub, qmake }:
 stdenv.mkDerivation {
-  name = "qml-box2d-2018-04-06";
+  pname = "qml-box2d";
+  version = "unstable-2018-04-06";
   src = fetchFromGitHub {
     owner = "qml-box2d";
     repo = "qml-box2d";

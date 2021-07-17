@@ -14,8 +14,7 @@
 buildPythonPackage rec {
   version = "0.53.1";
   pname = "numba";
-  # uses f-strings, python 3.9 is not yet supported
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.9";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.10";
 
   src = fetchPypi {
     inherit pname version;

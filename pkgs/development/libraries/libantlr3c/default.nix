@@ -1,9 +1,10 @@
 {lib, stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "libantlr3c-3.4";
+stdenv.mkDerivation rec {
+  pname = "libantlr3c";
+  version = "3.4";
   src = fetchurl {
-    url = "https://www.antlr3.org/download/C/libantlr3c-3.4.tar.gz";
+    url = "https://www.antlr3.org/download/C/libantlr3c-${version}.tar.gz";
     sha256 ="0lpbnb4dq4azmsvlhp6khq1gy42kyqyjv8gww74g5lm2y6blm4fa";
   };
 

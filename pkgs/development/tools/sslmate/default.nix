@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, perlPackages, makeWrapper, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "sslmate-1.7.1";
+  pname = "sslmate";
+  version = "1.7.1";
 
   src = fetchurl {
-    url = "https://packages.sslmate.com/other/${name}.tar.gz";
+    url = "https://packages.sslmate.com/other/${pname}-${version}.tar.gz";
     sha256 = "1i56za41cfqlml9g787xqqs0r8jifd3y7ks9nf4k2dhhi4rijkj5";
   };
 

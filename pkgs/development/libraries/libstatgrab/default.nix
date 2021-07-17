@@ -5,10 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libstatgrab-0.92";
+  pname = "libstatgrab";
+  version = "0.92";
 
   src = fetchurl {
-    url = "https://ftp.i-scream.org/pub/i-scream/libstatgrab/${name}.tar.gz";
+    url = "https://ftp.i-scream.org/pub/i-scream/libstatgrab/${pname}-${version}.tar.gz";
     sha256 = "15m1sl990l85ijf8pnc6hdfha6fqyiq74mijrzm3xz4zzxm91wav";
   };
 

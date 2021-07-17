@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "findbugs-3.0.1";
+  pname = "findbugs";
+  version = "3.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/findbugs/${name}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "06b46fz4nid7qvm36r66zw01fr87y4jyz21ixw27b8hkqah0s3p8";
   };
 

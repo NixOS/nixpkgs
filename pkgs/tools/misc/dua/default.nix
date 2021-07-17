@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dua";
-  version = "2.13.1";
+  version = "2.14.1";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Byron";
     repo = "dua-cli";
     rev = "v${version}";
-    sha256 = "sha256-6xSRsLM1DD1xMjOGzHMDVLibrJlu9lN9OoSV7B/WMT0=";
+    sha256 = "sha256-46azJ7q0Ix/8wdg01hYQ2V2E4tBD/NDdHpexnFBD5so=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "sha256-udz1EtPchEHxkvvVFnkwSOpFz4XEBGOXRz8qWREyzvc=";
+  cargoSha256 = "sha256-hCf6Ih2bJrMX2ntWbIrX3Dk8wI5tio+OcN4WNWuU7j4=";
 
   doCheck = false;
 

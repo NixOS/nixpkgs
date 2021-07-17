@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, substituteAll, swaybg
-, meson, ninja, pkg-config, wayland, scdoc
-, libxkbcommon, pcre, json_c, dbus, libevdev
+, meson, ninja, pkg-config, wayland-scanner, scdoc
+, wayland, libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
 , wlroots, wayland-protocols, libdrm
 , nixosTests
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    meson ninja pkg-config wayland scdoc
+    meson ninja pkg-config wayland-scanner scdoc
   ];
 
   buildInputs = [

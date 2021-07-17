@@ -1,7 +1,8 @@
 { lib, stdenv, icoutils }:
 
 stdenv.mkDerivation {
-  name = "icon-conv-tools-0.0.0";
+  pname = "icon-conv-tools";
+  version = "0.0.0";
 
   src = ./bin;
 

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, unzip, cmake }:
 
-stdenv.mkDerivation {
-  name = "metis-5.1.0";
+stdenv.mkDerivation rec {
+  name = "metis";
+  version = "5.1.0";
 
   src = fetchurl {
-    url = "http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.1.0.tar.gz";
+    url = "http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-${version}.tar.gz";
     sha256 = "1cjxgh41r8k6j029yxs8msp3z6lcnpm16g5pvckk35kc7zhfpykn";
   };
 

@@ -1,5 +1,6 @@
 { lib, fetchFromGitHub, python3
 , libsepol, libselinux, checkpolicy
+, fetchpatch
 , withGraphics ? false
 }:
 
@@ -16,6 +17,13 @@ buildPythonApplication rec {
     rev = version;
     sha256 = "0vr20bi8w147z5lclqz1l0j1b34137zg2r04pkafkgqqk7qbyjk6";
   };
+
+  patches = [
+    (fetchpatch { # included in 4.4.0
+      url = "https://github.com/SELinuxProject/setools/commit/f1b4a5d375be05fbccedb258c940d771bff8e524.diff";
+      sha256 = "1r38s6i4i6bdr2zdp5wcg1yifpf3pd018c73a511mgynyg7d11xy";
+    })
+  ];
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ libsepol ];

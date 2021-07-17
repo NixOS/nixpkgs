@@ -1,5 +1,4 @@
 { lib, stdenv
-, fetchpatch
 , substituteAll
 , fetchurl
 , pkg-config
@@ -15,20 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "fontconfig";
-  version = "2.13.93";
+  version = "2.13.94";
 
   src = fetchurl {
-    url = "http://fontconfig.org/release/${pname}-${version}.tar.xz";
-    sha256 = "1850q4k80yxma5g3yxkvyv8i5a3xqzswwml8gjy3jmywx8qqd5pa";
+    url = "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
+    sha256 = "0g004r0bkkqz00mpm3svnnxn7d83158q0yb9ggxryizxfg5m5w55";
   };
-
-  patches = [
-    # Fix build with no docbook2html.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/60ce9b695ee9d1ac514a61f562e210d3278ba605.patch";
-      sha256 = "0hfd2jdvsgackdp29dyzf5b1277pnbacihxqh9vdn63rr932ipra";
-    })
-  ];
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 

@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, pkg-config, libxml2, llvm }:
 
 stdenv.mkDerivation rec {
-  name = "sparse-0.5.0";
+  pname = "sparse";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = "mirror://kernel/software/devel/sparse/dist/${name}.tar.xz";
+    url = "mirror://kernel/software/devel/sparse/dist/${pname}-${version}.tar.xz";
     sha256 = "1mc86jc5xdrdmv17nqj2cam2yqygnj6ar1iqkwsx2y37ij8wy7wj";
   };
 

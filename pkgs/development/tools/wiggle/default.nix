@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ncurses, groff }:
 
 stdenv.mkDerivation rec {
-  name = "wiggle";
+  pname = "wiggle";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "neilbrown";
     repo = "wiggle";
     rev = "v${version}";
-    sha256 = "sha256-rlHhYzP81lfblZvtZ1lhiq4iQ6WRpBYukoGqpVP+NKI=";
+    sha256 = "18ilzr9sbal1j8p1d94ilm1j5blac5cngvcvjpdmgmpw6diy2ldf";
   };
 
   buildInputs = [ ncurses groff ];

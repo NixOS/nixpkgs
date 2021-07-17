@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mtdev-1.1.6";
+  pname = "mtdev";
+  version = "1.1.6";
 
   src = fetchurl {
-    url = "http://bitmath.org/code/mtdev/${name}.tar.bz2";
+    url = "https://bitmath.org/code/mtdev/${pname}-${version}.tar.bz2";
     sha256 = "1q700h9dqcm3zl6c3gj0qxxjcx6ibw2c51wjijydhwdcm26v5mqm";
   };
 

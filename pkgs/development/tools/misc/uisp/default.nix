@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "uisp-20050207";
+stdenv.mkDerivation rec {
+  pname = "uisp";
+  version = "20050207";
 
   src = fetchurl {
-    url = "http://mirror.switch.ch/mirror/gentoo/distfiles/uisp-20050207.tar.gz";
+    url = "https://savannah.nongnu.org/download/uisp/uisp-${version}.tar.gz";
     sha256 = "1bncxp5yxh9r1yrp04vvhfiva8livi1pwic7v8xj99q09zrwahvw";
   };
 
