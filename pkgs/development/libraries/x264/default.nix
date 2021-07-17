@@ -1,14 +1,17 @@
-{ stdenv, lib, fetchurl, nasm
+{ stdenv, lib, fetchFromGitLab, nasm
 , enableShared ? !stdenv.hostPlatform.isStatic
  }:
 
 stdenv.mkDerivation rec {
   pname = "x264";
-  version = "20191217-2245";
+  version = "unstable-2021-04-12";
 
-  src = fetchurl {
-    url = "https://download.videolan.org/x264/snapshots/x264-snapshot-${version}-stable.tar.bz2";
-    sha256 = "0q214q4rhbhigyx3dfhp6d5v5gzln01cxccl153ps5ih567mqjdj";
+  src = fetchFromGitLab {
+    domain = "code.videolan.org";
+    owner = "videolan";
+    repo = pname;
+    rev = "55d517bc4569272a2c9a367a4106c234aba2ffbc";
+    sha256 = "1nk774zwr742vhwmjnnhkrxqn5p1jdbaxjrrp131hdbgjpamcdl6";
   };
 
   # Upstream ./configure greps for (-mcpu|-march|-mfpu) in CFLAGS, which in nix
