@@ -17,14 +17,14 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.4.1";
+  version = "3.4.2";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84d4c4f650f356678a5d658a43ca21a41fca13f9b8b00169c0b76e6a6a948908";
+    sha256 = "d8d994cefdff9aaba45166eb3de4f5211adb4accac85cbf97137e98f26ea0219";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
