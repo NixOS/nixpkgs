@@ -148,11 +148,6 @@ let self = stdenv.mkDerivation rec {
         touch $out
       '';
     };
-
-    updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
-    };
   };
 
   meta = with lib; {
