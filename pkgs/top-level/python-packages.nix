@@ -9470,6 +9470,8 @@ in {
 
   zetup = callPackage ../development/python-modules/zetup { };
 
+  zfec = callPackage ../development/python-modules/zfec { };
+
   zha-quirks = callPackage ../development/python-modules/zha-quirks { };
 
   zict = callPackage ../development/python-modules/zict { };
