@@ -23,6 +23,11 @@ stdenv.mkDerivation {
     fi
   '';
 
+  # We want to retain debugging info to be able to use GDB on libredirect.so
+  # to more easily investigate which function overrides are missing or why
+  # existing ones do not have the intended effect.
+  dontStrip = true;
+
   installPhase = ''
     install -vD "$libName" "$out/lib/$libName"
 
