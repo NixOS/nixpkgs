@@ -1911,6 +1911,8 @@ in {
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
 
+  devtools = callPackage ../development/python-modules/devtools { };
+
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
