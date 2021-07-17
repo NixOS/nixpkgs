@@ -33,7 +33,11 @@ stdenv.mkDerivation {
 
   patchFlags = lib.optional stdenv.hostPlatform.isDarwin "-p0";
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isLinux "export CFLAGS='-fgnu89-inline'";
+  # For currently unknown reason, `-fPIC` has to be passed explicitly, otherwise
+  # downstream software like `elfutils` will get `recompile errors like:
+  #     libargp.a(argp-help.o): relocation R_X86_64_PC32 against symbol `program_invocation_short_name' can not be used when making a shared object; recompile with -fPIC
+  # It seems that nixpkgs's on-by-default `-fPIC` is not in effect here.
+  preConfigure = lib.optionalString stdenv.hostPlatform.isLinux "export CFLAGS='-fgnu89-inline -fPIC'";
 
   postInstall = ''
     mkdir -p $out/lib $out/include
