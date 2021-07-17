@@ -649,6 +649,7 @@ in
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
       shadow = 318;
+      litestream = 319;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
