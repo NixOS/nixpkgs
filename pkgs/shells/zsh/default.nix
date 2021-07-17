@@ -1,17 +1,21 @@
 { lib, stdenv, fetchurl, ncurses, pcre, buildPackages }:
 
-stdenv.mkDerivation rec {
-  pname = "zsh";
+let
   version = "5.8";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
-    sha256 = "09yyaadq738zlrnlh1hd3ycj1mv3q5hh4xl1ank70mjnqm6bbi6w";
-  };
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.xz";
     sha256 = "1i6wdzq6rfjx5yjrpzan1jf50hk2pfzy5qib9mb7cnnbjfar6klv";
+  };
+in
+
+stdenv.mkDerivation {
+  pname = "zsh";
+  inherit version;
+
+  src = fetchurl {
+    url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
+    sha256 = "09yyaadq738zlrnlh1hd3ycj1mv3q5hh4xl1ank70mjnqm6bbi6w";
   };
 
   buildInputs = [ ncurses pcre ];
