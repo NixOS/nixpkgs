@@ -15,7 +15,7 @@ let this = stdenv.mkDerivation rec {
     sha256 = "06dvy4pwgpyf209n0b27qwkjj7zlgadg2czwxapy94fd1wpq9yb2";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
