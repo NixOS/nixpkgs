@@ -174,6 +174,13 @@ in
       };
     };
 
+    environment.plasma5.excludePackages = mkOption {
+      default = [ ];
+      example = literalExample "[ pkgs.plasma5Packages.konsole ]";
+      type = types.listOf types.package;
+      description = "Which packages Plasma 5 (KDE 5) should exclude from the default environment";
+    };
+
   };
 
   imports = [
@@ -212,115 +219,117 @@ in
       '';
 
       environment.systemPackages =
-        with libsForQt5;
-        with plasma5; with kdeGear; with kdeFrameworks;
-        [
-          frameworkintegration
-          kactivities
-          kauth
-          kcmutils
-          kconfig
-          kconfigwidgets
-          kcoreaddons
-          kdoctools
-          kdbusaddons
-          kdeclarative
-          kded
-          kdesu
-          kdnssd
-          kemoticons
-          kfilemetadata
-          kglobalaccel
-          kguiaddons
-          kiconthemes
-          kidletime
-          kimageformats
-          kinit
-          kirigami2  # In system profile for SDDM theme. TODO: wrapper.
-          kio
-          kjobwidgets
-          knewstuff
-          knotifications
-          knotifyconfig
-          kpackage
-          kparts
-          kpeople
-          krunner
-          kservice
-          ktextwidgets
-          kwallet
-          kwallet-pam
-          kwalletmanager
-          kwayland
-          kwidgetsaddons
-          kxmlgui
-          kxmlrpcclient
-          plasma-framework
-          solid
-          sonnet
-          threadweaver
+        pkgs.gnome.removePackagesByName
+          (with libsForQt5;
+          with plasma5; with kdeGear; with kdeFrameworks;
+          [
+            frameworkintegration
+            kactivities
+            kauth
+            kcmutils
+            kconfig
+            kconfigwidgets
+            kcoreaddons
+            kdoctools
+            kdbusaddons
+            kdeclarative
+            kded
+            kdesu
+            kdnssd
+            kemoticons
+            kfilemetadata
+            kglobalaccel
+            kguiaddons
+            kiconthemes
+            kidletime
+            kimageformats
+            kinit
+            kirigami2  # In system profile for SDDM theme. TODO: wrapper.
+            kio
+            kjobwidgets
+            knewstuff
+            knotifications
+            knotifyconfig
+            kpackage
+            kparts
+            kpeople
+            krunner
+            kservice
+            ktextwidgets
+            kwallet
+            kwallet-pam
+            kwalletmanager
+            kwayland
+            kwidgetsaddons
+            kxmlgui
+            kxmlrpcclient
+            plasma-framework
+            solid
+            sonnet
+            threadweaver
 
-          breeze-qt5
-          kactivitymanagerd
-          kde-cli-tools
-          kdecoration
-          kdeplasma-addons
-          kgamma5
-          khotkeys
-          kinfocenter
-          kmenuedit
-          kscreen
-          kscreenlocker
-          ksysguard
-          kwayland
-          kwin
-          kwrited
-          libkscreen
-          libksysguard
-          milou
-          plasma-browser-integration
-          plasma-integration
-          polkit-kde-agent
-          spectacle
-          systemsettings
+            breeze-qt5
+            kactivitymanagerd
+            kde-cli-tools
+            kdecoration
+            kdeplasma-addons
+            kgamma5
+            khotkeys
+            kinfocenter
+            kmenuedit
+            kscreen
+            kscreenlocker
+            ksysguard
+            kwayland
+            kwin
+            kwrited
+            libkscreen
+            libksysguard
+            milou
+            plasma-browser-integration
+            plasma-integration
+            polkit-kde-agent
+            spectacle
+            systemsettings
 
-          plasma-desktop
-          plasma-workspace
-          plasma-workspace-wallpapers
+            plasma-desktop
+            plasma-workspace
+            plasma-workspace-wallpapers
 
-          dolphin
-          dolphin-plugins
-          ffmpegthumbs
-          kdegraphics-thumbnailers
-          khelpcenter
-          kio-extras
-          konsole
-          oxygen
-          print-manager
+            dolphin
+            dolphin-plugins
+            ffmpegthumbs
+            kdegraphics-thumbnailers
+            khelpcenter
+            kio-extras
+            konsole
+            oxygen
+            print-manager
 
-          breeze-icons
-          pkgs.hicolor-icon-theme
+            breeze-icons
+            pkgs.hicolor-icon-theme
 
-          kde-gtk-config breeze-gtk
+            kde-gtk-config breeze-gtk
 
-          qtvirtualkeyboard
+            qtvirtualkeyboard
 
-          pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-        ]
+            pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+          ]
 
-        # Phonon audio backend
-        ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
-        ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
+          # Phonon audio backend
+          ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
+          ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
 
-        # Optional hardware support features
-        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
-        ++ lib.optional config.networking.networkmanager.enable plasma-nm
-        ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
-        ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
-        ++ lib.optional config.powerManagement.enable powerdevil
-        ++ lib.optional config.services.colord.enable pkgs.colord-kde
-        ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
-        ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
+          # Optional hardware support features
+          ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
+          ++ lib.optional config.networking.networkmanager.enable plasma-nm
+          ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
+          ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
+          ++ lib.optional config.powerManagement.enable powerdevil
+          ++ lib.optional config.services.colord.enable pkgs.colord-kde
+          ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
+          ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet)
+          config.environment.plasma5.excludePackages;
 
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
