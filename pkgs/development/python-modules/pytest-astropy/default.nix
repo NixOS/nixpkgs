@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   # pytest-astropy is a meta package and has no tests
-  checkPhase = ":";
+  doCheck = false;
 
   meta = with lib; {
     description = "Meta-package containing dependencies for testing";
