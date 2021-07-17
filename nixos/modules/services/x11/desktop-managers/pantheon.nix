@@ -224,7 +224,6 @@ in
 
       # Settings from elementary-default-settings
       environment.sessionVariables.GTK_CSD = "1";
-      environment.sessionVariables.GTK3_MODULES = [ "pantheon-filechooser-module" ];
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
 
       # Override GSettings schemas
