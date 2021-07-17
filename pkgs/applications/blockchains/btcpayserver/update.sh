@@ -8,4 +8,5 @@ echo "Updating nbxplorer"
 ../nbxplorer/update.sh
 echo
 echo "Updating btcpayserver"
-../nbxplorer/util/update-common.sh btcpayserver deps.nix
+# Include Razor SDK packages in deps.nix
+../nbxplorer/util/update-common.sh btcpayserver deps.nix '"/p:Configuration="Altcoins-Release" /p:RazorCompileOnBuild=false'
