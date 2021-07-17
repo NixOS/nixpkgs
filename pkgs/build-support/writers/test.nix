@@ -193,7 +193,7 @@ let
     '';
 
 in runCommand "test-writers" {
-  passthru = { inherit writeTest bin simple; };
+  passthru = { inherit writeTest bin simple path; };
   meta.platforms = lib.platforms.all;
 } ''
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name "${test}/bin/${test.name}") (lib.attrValues bin)}

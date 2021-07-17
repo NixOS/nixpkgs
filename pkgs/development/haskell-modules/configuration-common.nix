@@ -1828,22 +1828,30 @@ EOT
 
   # 2021-05-09: compilation requires patches from master,
   # remove at next release (current is 0.1.0.4).
-  large-hashable = appendPatches super.large-hashable [
-    # Fix compilation of TH code for GHC >= 8.8
-    (pkgs.fetchpatch {
-      url = "https://github.com/factisresearch/large-hashable/commit/ee7afe4bd181cf15a324c7f4823f7a348e4a0e6b.patch";
-      sha256 = "1ha77v0bc6prxacxhpdfgcsgw8348gvhl9y81smigifgjbinphxv";
-      excludes = [
-        ".travis.yml"
-        "stack**"
-      ];
-    })
-    # Fix cpp invocation
-    (pkgs.fetchpatch {
-      url = "https://github.com/factisresearch/large-hashable/commit/7b7c2ed6ac6e096478e8ee00160fa9d220df853a.patch";
-      sha256 = "1sf9h3k8jbbgfshzrclaawlwx7k2frb09z2a64f93jhvk6ci6vgx";
-    })
-  ];
+  large-hashable = overrideCabal super.large-hashable (drv: {
+    # fix line endings which are an issue all of a sudden for an unknown reason
+    prePatch = ''
+      find . -type f -print0 | xargs -0 ${pkgs.buildPackages.dos2unix}/bin/dos2unix
+    '' + (drv.prePatch or "");
+    # allow newer template haskell
+    jailbreak = true;
+    patches = [
+      # Fix compilation of TH code for GHC >= 8.8
+      (pkgs.fetchpatch {
+        url = "https://github.com/factisresearch/large-hashable/commit/ee7afe4bd181cf15a324c7f4823f7a348e4a0e6b.patch";
+        sha256 = "1ha77v0bc6prxacxhpdfgcsgw8348gvhl9y81smigifgjbinphxv";
+        excludes = [
+          ".travis.yml"
+          "stack**"
+        ];
+      })
+      # Fix cpp invocation
+      (pkgs.fetchpatch {
+        url = "https://github.com/factisresearch/large-hashable/commit/7b7c2ed6ac6e096478e8ee00160fa9d220df853a.patch";
+        sha256 = "1sf9h3k8jbbgfshzrclaawlwx7k2frb09z2a64f93jhvk6ci6vgx";
+      })
+    ];
+  });
 
   # BSON defaults to requiring network instead of network-bsd which is
   # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
@@ -1938,6 +1946,14 @@ EOT
 
   # Flakey tests
   # upstream https://github.com/circuithub/rel8/issues/86
-  rel8 = dontCheck super.rel8;
+  rel8 = dontCheck (super.rel8.override {
+    opaleye = dontCheck super.opaleye_0_7_2_0;
+  });
+
+  # Release 1.0.0.0 added version bounds (was unrestricted before),
+  # but with too strict lower bounds for our lts-18.
+  graphql = assert pkgs.lib.versionOlder self.parser-combinators.version "1.3.0";
+    assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
+    doJailbreak super.graphql;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
