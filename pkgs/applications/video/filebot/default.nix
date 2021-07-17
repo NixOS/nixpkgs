@@ -4,7 +4,7 @@
 
 let
   # FileBot requires libcurl-gnutls.so to build
-  curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
+  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 
 in
 

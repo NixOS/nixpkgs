@@ -3,7 +3,7 @@
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? true, zlib ? null
-, sslSupport ? zlibSupport, openssl ? null
+, opensslSupport ? zlibSupport, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
@@ -29,10 +29,10 @@ assert http2Support -> nghttp2 != null;
 assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
-assert !(gnutlsSupport && sslSupport);
+assert opensslSupport -> openssl != null;
+assert !(gnutlsSupport && opensslSupport);
 assert !(gnutlsSupport && wolfsslSupport);
-assert !(sslSupport && wolfsslSupport);
+assert !(opensslSupport && wolfsslSupport);
 assert gnutlsSupport -> gnutls != null;
 assert wolfsslSupport -> wolfssl != null;
 assert scpSupport -> libssh2 != null;
@@ -42,14 +42,14 @@ assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.76.1";
+  version = "7.77.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "1scmfrp0c27pkd7yva9k50miprjpsyfbb33apx72qc9igm6ii3ks";
+    sha256 = "1spqbn2wyfh2dfsz2p60ap4194vnvf7rqfy4ky2r69dqij32h33c";
   };
 
   patches = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional gssSupport libkrb5 ++
     optional c-aresSupport c-ares ++
-    optional sslSupport openssl ++
+    optional opensslSupport openssl ++
     optional gnutlsSupport gnutls ++
     optional wolfsslSupport wolfssl ++
     optional scpSupport libssh2 ++
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
       # The build fails when using wolfssl with --with-ca-fallback
       ( if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
       "--disable-manual"
-      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
+      ( if opensslSupport then "--with-openssl=${openssl.dev}" else "--without-openssl" )
       ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
       ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit sslSupport openssl;
+    inherit opensslSupport openssl;
   };
 
   meta = with lib; {
