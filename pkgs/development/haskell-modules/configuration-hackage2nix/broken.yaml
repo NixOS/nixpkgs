@@ -1092,6 +1092,7 @@ broken-packages:
   - doctest-prop
   - docusign-example
   - docvim
+  - dominion
   - domplate
   - do-spaces
   - dotfs
@@ -2208,6 +2209,7 @@ broken-packages:
   - Hricket
   - hs2bf
   - hs2ps
+  - hsakamai
   - hsaml2
   - hsay
   - hsbc
@@ -4758,6 +4760,7 @@ broken-packages:
   - thrift
   - Thrift
   - throttled-io-loop
+  - throwable-exceptions
   - th-sccs
   - th-tc
   - th-to-exp
@@ -4802,6 +4805,7 @@ broken-packages:
   - Titim
   - tkhs
   - tkyprof
+  - tmp-postgres
   - todo
   - tofromxml
   - to-haskell
