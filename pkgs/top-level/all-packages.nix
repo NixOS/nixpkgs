@@ -32396,4 +32396,6 @@ in
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  nat = callPackage ../tools/misc/nat { };
 }
