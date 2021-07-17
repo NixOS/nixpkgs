@@ -29,7 +29,6 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    inherit version;
     description = "Strip output from Jupyter and IPython notebooks";
     homepage = "https://github.com/kynan/nbstripout";
     license = lib.licenses.mit;

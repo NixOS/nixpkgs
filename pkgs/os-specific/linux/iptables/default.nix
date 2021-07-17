@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
     updateWalker = true;
-    inherit version;
   };
 }

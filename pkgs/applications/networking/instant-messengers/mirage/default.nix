@@ -54,6 +54,5 @@ mkDerivation rec {
     maintainers = with maintainers; [ colemickens ];
     broken = stdenv.isDarwin;
     inherit (qtbase.meta) platforms;
-    inherit version;
   };
 }
