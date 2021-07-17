@@ -91,6 +91,9 @@ let
 
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
+      nixosTests.agda = (packagePlatforms pkgs.nixosTests).agda;
+      agdaPackages = packagePlatforms pkgs.agdaPackages;
+
       pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
         # remove musl ghc865Binary since it is known to be broken and
         # causes an evaluation error on darwin.
@@ -278,6 +281,8 @@ let
           jobs.haskellPackages.hopenssl
           jobs.haskellPackages.hsemail
           jobs.haskellPackages.hsyslog
+          # simple regression test for agda which is updated via haskellPackages
+          jobs.nixosTests.agda
         ];
       };
       maintained = pkgs.releaseTools.aggregate {
