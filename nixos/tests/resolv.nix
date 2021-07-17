@@ -29,7 +29,6 @@ import ./make-test-python.nix ({ pkgs, ... } : {
 
 
     start_all()
-    resolv.wait_for_unit("nscd")
 
     ipv4 = ["192.0.2.1", "192.0.2.2"]
     ipv6 = ["2001:db8::2:1", "2001:db8::2:2"]

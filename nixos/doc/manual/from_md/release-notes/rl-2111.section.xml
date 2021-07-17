@@ -1057,6 +1057,36 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          NSS modules are now globally provided (by a
+          <literal>/run/nss-modules</literal> symlink), similar to how
+          we handle OpenGL drivers.
+        </para>
+        <para>
+          This removes the need for nscd as a proxy for all NSS
+          requests, and avoids DNS requests leaking across network
+          namespaces.
+        </para>
+        <para>
+          While doing this upgrade, existing applications need to be
+          restarted, so they know how to pick up NSS modules from
+          <literal>/run/nss-modules/lib</literal>.
+        </para>
+        <para>
+          If you want to defer application restart to a later time,
+          explicitly enable <literal>nscd</literal> via
+          <literal>services.nscd.enable</literal> until the application
+          restarts.
+        </para>
+        <para>
+          We can mix NSS modules from any version of glibc according to
+          https://sourceware.org/legacy-ml/libc-help/2016-12/msg00008.html,
+          so future glibc upgrades shouldn’t break old userland loading
+          more recent NSS modules (and most likely, NSS modules are
+          already loaded)
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The
           <link xlink:href="options.html#opt-networking.wireless.iwd.enable">networking.wireless.iwd</link>
           module has a new

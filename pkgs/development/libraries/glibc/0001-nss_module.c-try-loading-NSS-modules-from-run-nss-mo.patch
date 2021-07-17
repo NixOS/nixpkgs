@@ -1,0 +1,51 @@
+From 65a211ee3604733dceba13062f956256a573f27c Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Sun, 19 Sep 2021 13:26:33 +0200
+Subject: [PATCH] nss_module.c: try loading NSS modules from /run/nss-modules
+ as a fallback
+
+Previously, glibc only looked for NSS modules in ${glibc.out}/lib
+and LD_LIBRARY_PATH.
+
+LD_LIBRARY_PATH is very invasive, so we don't want to set that globally
+on NixOS. We previously worked around this by running nscd with
+LD_LIBRARY_PATH set, but nscd has some caching issues, and leaks DNS
+requests across network namespaces, so it's cleaner to have glibc look
+for NSS modules in an additional path that's provided by NixOS.
+
+On non-NixOS distributions, this shouldn't change behaviour, as the path
+doesn't exist there.
+---
+ nss/nss_module.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/nss/nss_module.c b/nss/nss_module.c
+index 6c5f341f..44cfc2a4 100644
+--- a/nss/nss_module.c
++++ b/nss/nss_module.c
+@@ -133,6 +133,22 @@ module_load (struct nss_module *module)
+       return false;
+ 
+     handle = __libc_dlopen (shlib_name);
++
++    /* After loading from the default locations, try loading from
++       /run/nss-modules, to allow loading NixOS-provided NSS modules. */
++    if(handle == NULL)
++      {
++        const char *nix_glibc_nss_path = "/run/nss-modules/lib/";
++        char shlib_path[1024];
++        size_t shlib_pathlen = strlen(nix_glibc_nss_path) + strlen(shlib_name);
++
++        if (shlib_pathlen < sizeof (shlib_path))
++          {
++            __stpcpy (__stpcpy (&shlib_path[0], nix_glibc_nss_path), shlib_name);
++            handle = __libc_dlopen (shlib_path);
++          }
++      }
++
+     free (shlib_name);
+   }
+ 
+-- 
+2.32.0
+

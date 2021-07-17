@@ -4,7 +4,6 @@ with lib;
 
 let
 
-  nssModulesPath = config.system.nssModules.path;
   cfg = config.services.nscd;
 
   nscd = if pkgs.stdenv.hostPlatform.libc == "glibc"
@@ -23,11 +22,9 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to enable the Name Service Cache Daemon.
-          Disabling this is strongly discouraged, as this effectively disables NSS Lookups
-          from all non-glibc NSS modules, including the ones provided by systemd.
         '';
       };
 
@@ -48,11 +45,10 @@ in
     environment.etc."nscd.conf".text = cfg.config;
 
     systemd.services.nscd =
-      { description = "Name Service Cache Daemon";
+      {
+        description = "Name Service Cache Daemon";
 
         wantedBy = [ "nss-lookup.target" "nss-user-lookup.target" ];
-
-        environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
         restartTriggers = [
           config.environment.etc.hosts.source
@@ -67,14 +63,16 @@ in
         # files. So prefix the ExecStart command with "!" to prevent systemd
         # from dropping privileges early. See ExecStart in systemd.service(5).
         serviceConfig =
-          { ExecStart = "!@${nscd}/sbin/nscd nscd";
+          {
+            ExecStart = "!@${nscd}/sbin/nscd nscd";
             Type = "forking";
             DynamicUser = true;
             RuntimeDirectory = "nscd";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
             ExecReload =
-              [ "${nscd}/sbin/nscd --invalidate passwd"
+              [
+                "${nscd}/sbin/nscd --invalidate passwd"
                 "${nscd}/sbin/nscd --invalidate group"
                 "${nscd}/sbin/nscd --invalidate hosts"
               ];

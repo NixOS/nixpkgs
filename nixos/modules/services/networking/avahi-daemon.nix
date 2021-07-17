@@ -264,10 +264,6 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = [ "avahi-daemon.socket" ];
 
-      # Make NSS modules visible so that `avahi_nss_support ()' can
-      # return a sensible value.
-      environment.LD_LIBRARY_PATH = config.system.nssModules.path;
-
       path = [ pkgs.coreutils pkgs.avahi ];
 
       serviceConfig = {
