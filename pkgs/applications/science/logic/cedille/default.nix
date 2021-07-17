@@ -52,5 +52,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ marsam mpickering ];
     platforms = platforms.unix;
+
+    # Broken due to Agda update.  See
+    # https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881107449.
+    broken = true;
   };
 }
