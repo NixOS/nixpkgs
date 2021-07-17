@@ -399,6 +399,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
+    path = "null-ls.nvim";
+  });
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with self; [ popfix ];
   });
