@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.74";
+  version = "0.75";
   pname = "putty";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    sha256 = "0zc43g8ycyf712cdrja4k8ih5s3agw1k0nq0jkifdn8xwn4d7mfx";
+    sha256 = "1xgrr1fbirw79zafspg2b6crzfmlfw910y79md4r7gnxgq1kn5yk";
   };
 
   # glib-2.62 deprecations
