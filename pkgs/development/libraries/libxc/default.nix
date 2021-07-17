@@ -1,11 +1,8 @@
 { lib, stdenv, fetchFromGitLab, cmake, gfortran, perl }:
 
-let
-  version = "5.1.5";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libxc";
-  inherit version;
+  version = "5.1.5";
 
   src = fetchFromGitLab {
     owner = "libxc";

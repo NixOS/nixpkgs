@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   meta = {
-    inherit version;
     description = "Fast Library for Number Theory";
     license = lib.licenses.gpl2Plus;
     maintainers = lib.teams.sage.members;
