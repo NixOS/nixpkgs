@@ -7,10 +7,15 @@ let
 
   # FIXME consider using LoadCredential as soon as it actually works.
   envSecrets = ''
-    export ADMIN_USER_PWD="$(<${cfg.adminUser.passwordFile})"
-    export SECRET_KEY_BASE="$(<${cfg.server.secretKeybaseFile})"
+    ADMIN_USER_PWD="$(<${cfg.adminUser.passwordFile})"
+    export ADMIN_USER_PWD # separate export to make `set -e` work
+
+    SECRET_KEY_BASE="$(<${cfg.server.secretKeybaseFile})"
+    export SECRET_KEY_BASE # separate export to make `set -e` work
+
     ${optionalString (cfg.mail.smtp.passwordFile != null) ''
-      export SMTP_USER_PWD="$(<${cfg.mail.smtp.passwordFile})"
+      SMTP_USER_PWD="$(<${cfg.mail.smtp.passwordFile})"
+      export SMTP_USER_PWD # separate export to make `set -e` work
     ''}
   '';
 in {
@@ -91,6 +96,17 @@ in {
           framework docs</link>.
         '';
       };
+      listenAddress = mkOption {
+        default = "127.0.0.1";
+        type = types.str;
+        description = ''
+          The IP address on which the server is listening.
+
+          When changing listen IPs, also consider
+          <option>services.plausible.erlang.vmListenAddress</option> and
+          <option>services.plausible.erlang.epmdListenAddress</option>.
+        '';
+      };
       port = mkOption {
         default = 8000;
         type = types.port;
@@ -102,6 +118,55 @@ in {
         type = types.str;
         description = ''
           Public URL where plausible is available.
+
+          Note that <literal>/path</literal> components are currently ignored:
+          <link xlink:href="https://github.com/plausible/analytics/issues/1182">
+            https://github.com/plausible/analytics/issues/1182
+          </link>.
+        '';
+      };
+    };
+
+    erlang = {
+      enableDistribution = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable Erlang's distributed multi-machine features.
+        '';
+      };
+      vmListenAddress = mkOption {
+        default = "127.0.0.1";
+        type = types.str;
+        description = ''
+          The IP address on which Beam (Erlang VM) is listening for
+          inter-node communication. See
+          <link xlink:href="https://erlang.org/doc/man/kernel_app.html#configuration">
+            <literal>inet_dist_use_interface</literal>
+          </link>.
+
+          The value given here is a normal IP address; it is translated
+          to an Erlang IP address tuple by this module.
+
+          This setting has no effect if
+          <option>services.plausible.erlang.enableDistribution</option>
+          is <literal>false</literal>.
+        '';
+      };
+      epmdListenAddress = mkOption {
+        default = "127.0.0.1";
+        type = types.str;
+        description = ''
+          The IP address on which the Erlang Port Mapper Daemon
+          spawned by Plausible is listening on. See
+          <link xlink:href="https://erlang.org/doc/man/epmd.html#environment-variables">
+            <literal>ERL_EPMD_ADDRESS</literal>
+          </link>.
+          is <literal>false</literal>.
+
+          This setting has no effect if
+          <option>services.plausible.erlang.enableDistribution</option>
+          is <literal>false</literal>.
         '';
       };
     };
@@ -195,6 +260,59 @@ in {
             # Configuration options from
             # https://plausible.io/docs/self-hosting-configuration
             PORT = toString cfg.server.port;
+            LISTEN_IP = cfg.server.listenAddress;
+            # Elixir spwans the Erlang VM, which will listen by default on all
+            # interfaces for messages between Erlang nodes (capable of)
+            # remote code execution; it can be protected by a cookie; see
+            # https://erlang.org/doc/reference_manual/distributed.html#security).
+            # To restrict this to an interface of our choice (e.g. localhost
+            # or a VPN IP) we need to set `inet_dist_use_interface`,
+            # which accepts the IP address as an Erlang tuple.
+            RELEASE_VM_ARGS =
+              let
+                ip = cfg.erlang.vmListenAddress;
+                # Elixir script that turns an IP address into an Erlang address tuple,
+                # printing it to stdout, and failing on invalid parse.
+                # Also works on IPv6.
+                # Example: `127.0.0.1` -> `{127,0,0,1}`.
+                erlangAddressTupleCommand = pkgs.writeTextFile {
+                  executable = true;
+                  name = "ip-to-erlang-address-tuple.exs";
+                  text = ''
+                    #! ${pkgs.elixir}/bin/elixir
+                    case :inet.parse_address('${ip}') do
+                      {:ok, ip_addr} ->
+                        IO.write(inspect(ip_addr))
+
+                      {:error, reason} ->
+                        IO.puts(:stderr, "Invalid IP address '#{'${ip}'}'; error: #{inspect(reason)}")
+                        System.halt(1) # `halt()` terminates ~1 second faster than `stop()`
+                    end
+                  '';
+                };
+              in
+                # Note that setting `RELEASE_VM_ARGS` replaces the use of
+                # the `vm.args` file provided by the package.
+                # See: https://github.com/NixOS/nixpkgs/pull/130297#issuecomment-881128718
+                # As of writing, Plausible does not provide a `vm.args` file.
+                # In this script we also add an assertion about the absence
+                # of that file, so we notice when it changes.
+                pkgs.runCommand "plausible-vm-args" {} ''
+                  set -eu -o pipefail
+
+                  # grep to print all lines that aren't comments, empty, or whitespace.
+                  FOUND_VM_ARG=0
+                  grep -v -E '^(#|$|[[:space:]]+)' "${pkgs.plausible}"/releases/*/vm.args || FOUND_VM_ARG=1
+                  if [ "$FOUND_VM_ARG" -eq 0 ]; then
+                    echo >&2 "Custom vm.args config found, nixpkgs needs to reconsider merging with RELEASE_VM_ARGS!"
+                    exit 1
+                  fi
+
+                  IP=$(${erlangAddressTupleCommand})
+                  echo "-kernel inet_dist_use_interface \"$IP\"" > "$out"
+                '';
+            # Elixir also spawns EPMD; set its listen address.
+            ERL_EPMD_ADDRESS = cfg.erlang.epmdListenAddress;
             DISABLE_REGISTRATION = boolToString cfg.server.disableRegistration;
 
             RELEASE_TMP = "/var/lib/plausible/tmp";
@@ -215,7 +333,9 @@ in {
             SMTP_HOST_SSL_ENABLED = boolToString cfg.mail.smtp.enableSSL;
 
             SELFHOST = "true";
-          } // (optionalAttrs (cfg.mail.smtp.user != null) {
+          } // (optionalAttrs (!cfg.erlang.enableDistribution) {
+            RELEASE_DISTRIBUTION = "none";
+          }) // (optionalAttrs (cfg.mail.smtp.user != null) {
             SMTP_USER_NAME = cfg.mail.smtp.user;
           });
 
@@ -228,6 +348,7 @@ in {
             WorkingDirectory = "/var/lib/plausible";
             StateDirectory = "plausible";
             ExecStartPre = "@${pkgs.writeShellScript "plausible-setup" ''
+              set -eu -o pipefail
               ${envSecrets}
               ${pkgs.plausible}/createdb.sh
               ${pkgs.plausible}/migrate.sh
@@ -238,6 +359,7 @@ in {
               ''}
             ''} plausible-setup";
             ExecStart = "@${pkgs.writeShellScript "plausible" ''
+              set -eu -o pipefail
               ${envSecrets}
               plausible start
             ''} plausible";
