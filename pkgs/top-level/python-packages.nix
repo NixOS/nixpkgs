@@ -1141,6 +1141,8 @@ in {
 
   block-io = callPackage ../development/python-modules/block-io { };
 
+  blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
+
   blspy = callPackage ../development/python-modules/blspy { };
 
   bluepy = callPackage ../development/python-modules/bluepy { };
