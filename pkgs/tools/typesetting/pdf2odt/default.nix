@@ -44,6 +44,5 @@ in stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.all;
     maintainers = with maintainers; [ peterhoeg ];
-    inherit version;
   };
 }

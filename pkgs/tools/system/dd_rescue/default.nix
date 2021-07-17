@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "http://www.garloff.de/kurt/linux/ddrescue/";
     license = licenses.gpl2Plus;
-    inherit version;
     updateWalker = true;
   };
 }

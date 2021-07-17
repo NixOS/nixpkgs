@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.ipl10;
-    inherit version;
   };
 }
