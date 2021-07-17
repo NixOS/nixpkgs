@@ -84,7 +84,7 @@ in {
 
   markad = stdenv.mkDerivation rec {
     pname = "vdr-markad";
-    verison = "unstable-2017-03-13";
+    version = "unstable-2017-03-13";
 
     src = fetchgit {
       url = "git://projects.vdr-developer.org/vdr-plugin-markad.git";
