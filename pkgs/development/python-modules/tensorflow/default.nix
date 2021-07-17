@@ -118,6 +118,8 @@ let
       ./relax-dependencies.patch
       # Add missing `io_bazel_rules_docker` dependency.
       ./workspace.patch
+      # Issue: https://github.com/NixOS/nixpkgs/issues/128829
+      ./support-numpy-1.20.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
@@ -333,9 +335,9 @@ let
 
     meta = with lib; {
       description = "Computation using data flow graphs for scalable machine learning";
-      homepage = "http://tensorflow.org";
+      homepage = "https://tensorflow.org";
       license = licenses.asl20;
-      maintainers = with maintainers; [ jyp abbradar ];
+      maintainers = with maintainers; [ jyp abbradar bergkvist ];
       platforms = with platforms; linux ++ darwin;
       broken = !(xlaSupport -> cudaSupport);
     };
