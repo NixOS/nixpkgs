@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildLinux, linux_zen, ... } @ args:
 
 let
-  version = "5.12.14";
+  version = "5.12.17";
   suffix = "lqx2";
 in
 
@@ -14,7 +14,7 @@ buildLinux (args // {
     owner = "zen-kernel";
     repo = "zen-kernel";
     rev = "v${version}-${suffix}";
-    sha256 = "sha256-pj5sSW4ggZEx2n7bVU2sfK3JOXG5n4Rsp3S66/+/wVU=";
+    sha256 = "sha256-i0Ha9H1VVRKlmomWz1+UmKBH9CSlmHAZm0kwz0Kamqg=";
   };
 
   extraMeta = {
