@@ -48,7 +48,7 @@ EOF
 if [ $# -ne 0 ]; then
     CODE=$1
 else
-    CODE=$(command -v code)
+    CODE=$(command -v code || command -v codium)
 fi
 
 if [ -z "$CODE" ]; then
