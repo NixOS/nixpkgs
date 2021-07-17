@@ -25,15 +25,15 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "unstable-2021-06-21";
+  version = "6.0.0";
 
   repoName = "mail";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "c64c87fabb31dea8dc388152d5a835401993acf4";
-    sha256 = "yEUg1IbYbzOJiklnqR23X+aGVE9j4F9iH8FkmlB15x4=";
+    rev = version;
+    sha256 = "07iiipl0nsp63g5bn1y2hg6bmgj6i9cxqcfpd7q3vmldnkijvaxs";
   };
 
   passthru = {
