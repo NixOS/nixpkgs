@@ -8,42 +8,29 @@
 , openjdk11
 , dpkg
 , writeScript
-, coreutils
 , bash
 , tor
-, psmisc
+, gnutar
+, zip
+, xz
 }:
 
 let
   bisq-launcher = writeScript "bisq-launcher" ''
     #! ${bash}/bin/bash
 
-    # Setup a temporary Tor instance
-    TMPDIR=$(${coreutils}/bin/mktemp -d)
-    CONTROLPORT=$(${coreutils}/bin/shuf -i 9100-9499 -n 1)
-    SOCKSPORT=$(${coreutils}/bin/shuf -i 9500-9999 -n 1)
-    ${coreutils}/bin/head -c 1024 < /dev/urandom > $TMPDIR/cookie
+    # This is just a comment to convince Nix that Tor is a
+    # runtime dependency; The Tor binary is in a *.jar file,
+    # whereas Nix only scans for hashes in uncompressed text.
+    # ${bisq-tor}
 
-    ${tor}/bin/tor --SocksPort $SOCKSPORT --ControlPort $CONTROLPORT \
-      --ControlPortWriteToFile $TMPDIR/port --CookieAuthFile $TMPDIR/cookie \
-      --CookieAuthentication 1 >$TMPDIR/tor.log --RunAsDaemon 1
+    JAVA_TOOL_OPTIONS="-XX:MaxRAM=4g" bisq-desktop-wrapped "$@"
+  '';
 
-    torpid=$(${psmisc}/bin/fuser $CONTROLPORT/tcp)
+  bisq-tor = writeScript "bisq-tor" ''
+    #! ${bash}/bin/bash
 
-    echo Temp directory: $TMPDIR
-    echo Tor PID: $torpid
-    echo Tor control port: $CONTROLPORT
-    echo Tor SOCKS port: $SOCKSPORT
-    echo Tor log: $TMPDIR/tor.log
-    echo Bisq log file: $TMPDIR/bisq.log
-
-    JAVA_TOOL_OPTIONS="-XX:MaxRAM=4g" bisq-desktop-wrapped \
-      --torControlCookieFile=$TMPDIR/cookie \
-      --torControlUseSafeCookieAuth \
-      --torControlPort $CONTROLPORT "$@" > $TMPDIR/bisq.log
-
-    echo Bisq exited. Killing Tor...
-    kill $torpid
+    exec ${tor}/bin/tor "$@"
   '';
 in
 stdenv.mkDerivation rec {
@@ -55,7 +42,7 @@ stdenv.mkDerivation rec {
     sha256 = "0crry5k7crmrqn14wxiyrnhk09ac8a9ksqrwwky7jsnyah0bx5k4";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems dpkg ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg gnutar zip xz ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -72,6 +59,16 @@ stdenv.mkDerivation rec {
     dpkg -x $src .
   '';
 
+  buildPhase = ''
+    # Replace the embedded Tor binary (which is in a Tar archive)
+    # with one from Nixpkgs.
+
+    mkdir -p native/linux/x64/
+    cp ${bisq-tor} ./tor
+    tar -cJf native/linux/x64/tor.tar.xz tor
+    zip -r opt/bisq/lib/app/desktop-${version}-all.jar native
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -86,7 +83,7 @@ stdenv.mkDerivation rec {
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
-      ${imagemagick}/bin/convert opt/bisq/lib/Bisq.png -resize $size bisq.png
+      convert opt/bisq/lib/Bisq.png -resize $size bisq.png
       install -Dm644 -t $out/share/icons/hicolor/$size/apps bisq.png
     done;
 
