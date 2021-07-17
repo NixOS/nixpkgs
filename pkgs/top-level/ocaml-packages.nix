@@ -618,9 +618,7 @@ let
       inherit (pkgs) file;
     };
 
-    lwt = callPackage ../development/ocaml-modules/lwt {
-      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2;
-    };
+    lwt = callPackage ../development/ocaml-modules/lwt { };
 
     lwt-canceler = callPackage ../development/ocaml-modules/lwt-canceler { };
 
