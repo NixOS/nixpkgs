@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Fixes build with exiv2 0.27.1
     (fetchpatch {
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/hugin-exiv2-0.27.1.patch?h=packages/hugin";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/0467d8ba362b9c196e4c1dc4be7de0c1b336335b/hugin/trunk/hugin-exiv2-0.27.1.patch";
       sha256 = "1yxvlpvrhyrfd2w6kwx1w3mncsvlzdhp0w7xchy8q6kc2kd5nf7r";
     })
   ];
