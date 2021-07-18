@@ -8,6 +8,7 @@
 , Security
 , ansi2html
 , installShellFiles
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,6 +21,14 @@ rustPlatform.buildRustPackage rec {
     rev = "mdcat-${version}";
     sha256 = "sha256-aJ7rL+EKa5zWmCmekVuRmdeOwTmVo0IQ+GJ8Ga4iTI0=";
   };
+
+  patches = [
+    # detect wezterm through TERM again which was removed in 0.23.1
+    (fetchpatch {
+      url = "https://github.com/lunaryorn/mdcat/commit/a897b223904748a47c277f7c9a07d59e7d5c916b.patch";
+      sha256 = "sha256-tSeNyrlqoGvlfQ3xMRkvqZ7HajMvPCIk7kyt/sVjmTo=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]

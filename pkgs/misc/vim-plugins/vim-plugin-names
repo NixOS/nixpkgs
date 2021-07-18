@@ -484,6 +484,7 @@ nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
 nvim-telescope/telescope-dap.nvim
 nvim-telescope/telescope-frecency.nvim
+nvim-telescope/telescope-fzf-native.nvim@main
 nvim-telescope/telescope-fzf-writer.nvim
 nvim-telescope/telescope-fzy-native.nvim
 nvim-telescope/telescope-symbols.nvim
@@ -595,6 +596,7 @@ samoshkin/vim-mergetool
 sbdchd/neoformat
 sebastianmarkow/deoplete-rust
 SevereOverfl0w/deoplete-github
+Shatur/neovim-ayu
 shaunsingh/moonlight.nvim@pure-lua
 shaunsingh/nord.nvim
 sheerun/vim-polyglot
@@ -637,6 +639,7 @@ steelsojka/completion-buffers
 steelsojka/pears.nvim
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
+stevearc/aerial.nvim
 sunaku/vim-dasht
 sunjon/Shade.nvim
 svermeulen/vim-subversive

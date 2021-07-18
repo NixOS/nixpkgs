@@ -90,7 +90,6 @@ let
     passthru.tests = {};
 
     meta = with lib; {
-      inherit version;
       description = "A fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";

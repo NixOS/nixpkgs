@@ -154,7 +154,6 @@ in
     '';
 
     meta = with lib; {
-      inherit version;
       description = "Color and Black-and-White emoji fonts";
       homepage = "https://github.com/googlefonts/noto-emoji";
       license = with licenses; [ ofl asl20 ];
