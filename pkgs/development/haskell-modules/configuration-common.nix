@@ -178,48 +178,13 @@ self: super: {
   digit = doJailbreak super.digit;
 
   hnix = generateOptparseApplicativeCompletion "hnix"
-    (overrideCabal super.hnix (drv: {
+    (overrideCabal (super.hnix.override {
+      # needs newer version of relude and semialign than stackage has
+      relude = self.relude_1_0_0_1;
+      semialign = self.semialign_1_2;
+    }) (drv: {
       # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
       doCheck = false;
-      # 2021-05-12: Revert a few dependency cleanups which depend on release
-      # that are not in stackage yet:
-      # * Depend on semialign-indexed for Data.Semialign.Indexed
-      #   (remove when semialign >= 1.2 in stackage)
-      # * Readd dependencies to text and unordered-containers.
-      #   (remove when relude >= 1.0.0.0 is in stackage, see
-      #   https://github.com/haskell-nix/hnix/issues/933)
-      libraryHaskellDepends = [
-        self.semialign-indexed
-      ] ++ drv.libraryHaskellDepends;
-      patches = [
-        # depend on semialign-indexed again
-        (pkgs.fetchpatch {
-          url = "https://github.com/haskell-nix/hnix/commit/16fc342a4f2974f855968472252cd9274609f177.patch";
-          sha256 = "0gm4gy3jpn4dqnrhnqlsavfpw9c1j1xa8002v54knnlw6vpk9niy";
-          revert = true;
-        })
-        # depend on text again
-        (pkgs.fetchpatch {
-          url = "https://github.com/haskell-nix/hnix/commit/73057618576e86bb87dfd42f62b855d24bbdf469.patch";
-          sha256 = "03cyk96d5ad362i1pnz9bs8ifr84kpv8phnr628gys4j6a0bqwzc";
-          revert = true;
-        })
-        # depend on unordered-containers again
-        (pkgs.fetchpatch {
-          url = "https://github.com/haskell-nix/hnix/commit/70643481883ed448b51221a030a76026fb5eb731.patch";
-          sha256 = "0pqmijfkysjixg3gb4kmrqdif7s2saz8qi6k337jf15i0npzln8d";
-          revert = true;
-        })
-        # allow relude < 1.0 again
-        (pkgs.fetchpatch {
-          url = "https://github.com/haskell-nix/hnix/commit/f4ea5dcb344369916586498ba33c00d0fc605a79.patch";
-          sha256 = "1ajl7d49d658xhalgf3pc5svmbq73dsysy6z434n75vb1357mx86";
-          revert = true;
-        })
-      ] ++ (drv.patches or []);
-      # make sure patches are not broken by cabal file revisions
-      revision = null;
-      editedCabalFile = null;
     }));
 
   # Fails for non-obvious reasons while attempting to use doctest.
@@ -1949,5 +1914,9 @@ EOT
   graphql = assert pkgs.lib.versionOlder self.parser-combinators.version "1.3.0";
     assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
     doJailbreak super.graphql;
+
+  # Too strict bounds on hnix
+  # https://github.com/Synthetica9/nix-linter/issues/56
+  nix-linter = doJailbreak super.nix-linter;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

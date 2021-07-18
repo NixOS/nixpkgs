@@ -20,8 +20,8 @@
 }:
 
 mkDerivation rec {
-  pname = "nix-linter-unstable";
-  version = "2021-06-16";
+  pname = "nix-linter";
+  version = "unstable-2021-06-16";
 
   src = fetchFromGitHub {
     owner = "Synthetica9";
