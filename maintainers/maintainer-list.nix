@@ -5490,6 +5490,12 @@
     githubId = 25607;
     name = "Raimon Grau";
   };
+  kidonng = {
+    email = "hi@xuann.wang";
+    github = "kidonng";
+    githubId = 44045911;
+    name = "Kid";
+  };
   kierdavis = {
     email = "kierdavis@gmail.com";
     github = "kierdavis";
