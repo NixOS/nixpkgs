@@ -1,4 +1,5 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub
+, installShellFiles
 , makeWrapper
 , nix
 , openssl
@@ -8,18 +9,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-template";
-  version = "0.1.1";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
+    name = "${pname}-${version}-src";
     owner = "jonringer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A1b/fgSr27sfMDnTi4R3PUZfhAdLA5wUOd4yh9/4Bnk=";
+    sha256 = "sha256-kNFhSfHUYBUOCXoD6m7thMho4tOIpRHfHGcsW8FTgkc=";
   };
 
-  cargoSha256 = "sha256-resyY/moqLo4KWOKUvFJiOWealCmcEsLFgkN12slKN0=";
+  cargoSha256 = "sha256-7PthFLCEt+E/Gx5//aulHYYBKZqapNEWKtKfRlDr3Pw=";
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pkg-config
+  ];
+
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isDarwin Security;
 
@@ -27,6 +34,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/nix-template \
       --prefix PATH : ${lib.makeBinPath [ nix ]}
+
+    installShellCompletion --bash --cmd nix-template <($out/bin/nix-template completions bash)
+    installShellCompletion --zsh --cmd nix-template <($out/bin/nix-template completions zsh)
+    installShellCompletion --fish --cmd nix-template <($out/bin/nix-template completions fish)
   '';
 
   meta = with lib; {
