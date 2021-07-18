@@ -81,8 +81,16 @@ let
 
   recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate {};
 
-  staticHaskellPackagesPlatforms =
-    packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8104;
+  removeMany = itemsToRemove: list: lib.foldr lib.remove list itemsToRemove;
+
+  removePlatforms = platformsToRemove: packageSet:
+    lib.mapAttrsRecursive
+      (_: val:
+        if lib.isList val
+          then removeMany platformsToRemove val
+          else val
+      )
+      packageSet;
 
   jobs = recursiveUpdateMany [
     (mapTestOn {
@@ -212,6 +220,21 @@ let
         # musl and non-static-linking.
         integer-simple = {};
       };
+
+      # Get some cache going for MUSL-enabled GHC.
+      pkgsMusl.haskellPackages =
+        removePlatforms
+          [
+            "aarch64-linux" # aarch64 does not appear to be supported
+            "x86_64-darwin" # musl only supports linux
+          ]
+          {
+            inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
+              hello
+              lens
+              random
+              ;
+          };
 
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
