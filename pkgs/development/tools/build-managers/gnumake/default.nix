@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config ? null , guile ? null }:
-
-assert guileSupport -> ( pkg-config != null && guile != null );
+{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config, guile }:
 
 let
   version = "4.3";

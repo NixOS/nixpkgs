@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 # The base package for automatic multiple-output splitting. Used in stdenv as well.
 preConfigureHooks+=(_multioutConfig)
 preFixupHooks+=(_multioutDocs)
@@ -48,25 +47,22 @@ _overrideFirst outputInfo "info" "$outputBin"
 
 # Add standard flags to put files into the desired outputs.
 _multioutConfig() {
-    if [[ "$outputs" = "out" || -z "${setOutputFlags-1}" ]]; then
-        return
-    fi
+    if [ "$outputs" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
 
     # try to detect share/doc/${shareDocName}
     # Note: sadly, $configureScript detection comes later in configurePhase,
     #   and reordering would cause more trouble than worth.
     if [ -z "$shareDocName" ]; then
         local confScript="$configureScript"
-        if [[ -z "$confScript" && -x ./configure ]]; then
+        if [ -z "$confScript" ] && [ -x ./configure ]; then
             confScript=./configure
         fi
         if [ -f "$confScript" ]; then
             local shareDocName="$(sed -n "s/^PACKAGE_TARNAME='\(.*\)'$/\1/p" < "$confScript")"
-            # PACKAGE_TARNAME sometimes contains garbage.
-            # verify that shareDocName contains only valid characters
-            if ! [[ $shareDocName =~ ^[a-zA-Z0f9_-]+$ ]]; then
-                shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
-            fi
+        fi
+                                    # PACKAGE_TARNAME sometimes contains garbage.
+        if [ -z "$shareDocName" ] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_-]'; then
+            shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
         fi
     fi
 

@@ -25,7 +25,6 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    inherit version;
     description = "A minimal ftp server";
     downloadPage = "http://bftpd.sf.net/download.html";
     homepage = "http://bftpd.sf.net/";

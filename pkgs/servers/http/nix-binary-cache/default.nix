@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [lib.maintainers.raskin];
     license = lib.licenses.gpl2Plus;
-    inherit version;
     platforms = lib.platforms.all;
     hydraPlatforms = [];
   };

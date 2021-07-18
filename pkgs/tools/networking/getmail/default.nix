@@ -23,7 +23,6 @@ python2Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
 
     homepage = "http://pyropus.ca/software/getmail/";
-    inherit version;
     updateWalker = true;
     license = lib.licenses.gpl2Plus;
   };

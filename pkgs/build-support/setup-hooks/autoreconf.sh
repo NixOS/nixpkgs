@@ -1,5 +1,4 @@
-# shellcheck shell=bash
-preConfigurePhases="${preConfigurePhases:-} autoreconfPhase"
+preConfigurePhases+=" autoreconfPhase"
 
 autoreconfPhase() {
     runHook preAutoreconf

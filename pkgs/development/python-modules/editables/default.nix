@@ -20,9 +20,12 @@ buildPythonPackage rec {
   # Tests not included in archive.
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "editables" ];
+
+  meta = with lib; {
     description = "Editable installations";
-    homepage = https://github.com/pfmoore/editables;
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/pfmoore/editables";
+    license = licenses.mit;
   };
 }

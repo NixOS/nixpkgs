@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 # Binutils Wrapper hygiene
 #
 # See comments in cc-wrapper's setup hook. This works exactly the same way.
@@ -15,9 +14,7 @@ bintoolsWrapper_addLDVars () {
     getHostRoleEnvHook
 
     if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
-        varName=NIX_LDFLAGS${role_post}
-        eval "$varName=\"${!varName:-} -L$1/lib64\""
-        export "${varName?}"
+        export NIX_LDFLAGS${role_post}+=" -L$1/lib64"
     fi
 
     if [[ -d "$1/lib" ]]; then
@@ -27,9 +24,7 @@ bintoolsWrapper_addLDVars () {
         # directories and bloats the size of the environment variable space.
         local -a glob=( $1/lib/lib* )
         if [ "${#glob[*]}" -gt 0 ]; then
-            varName=NIX_LDFLAGS${role_post}
-            eval "$varName=\"${!varName:-} -L$1/lib\""
-            export "${varName?}"
+            export NIX_LDFLAGS${role_post}+=" -L$1/lib"
         fi
     fi
 }

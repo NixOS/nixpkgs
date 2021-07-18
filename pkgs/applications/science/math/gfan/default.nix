@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp mpir cddlib ];
 
   meta = {
-    inherit version;
     description = "A software package for computing Gröbner fans and tropical varieties";
     license = lib.licenses.gpl2 ;
     maintainers = [lib.maintainers.raskin];

@@ -6,7 +6,7 @@ preFixupHooks+=(_moveToShare)
 
 _moveToShare() {
     forceShare=${forceShare:=man doc info}
-    if [[ -z $forceShare || -z $out ]]; then return; fi
+    if [ -z "$forceShare" -o -z "$out" ]; then return; fi
 
     for d in $forceShare; do
         if [ -d "$out/$d" ]; then
@@ -14,9 +14,10 @@ _moveToShare() {
                 echo "both $d/ and share/$d/ exist!"
             else
                 echo "moving $out/$d to $out/share/$d"
-                mkdir -p "$out/share"
-                mv "$out/$d" "$out/share/"
+                mkdir -p $out/share
+                mv $out/$d $out/share/
             fi
         fi
     done
 }
+
