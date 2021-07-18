@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, nixosTests }:
 
 let
   sources = (import ./sources.nix) { inherit fetchFromGitHub; };
@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     cp -vr contrib/webroot $out/share/
     cp -vr contrib/templates $out/share/
   '';
+
+  passthru.tests = nixosTests.hockeypuck;
 
   meta = with lib; {
     description = "OpenPGP Key Server web resources";

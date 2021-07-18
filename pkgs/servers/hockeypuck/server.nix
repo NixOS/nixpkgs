@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 let
   sources = (import ./sources.nix) { inherit fetchFromGitHub; };
@@ -9,6 +9,8 @@ buildGoModule {
   modRoot = "src/hockeypuck/";
   vendorSha256 = null;
   doCheck = false; # Uses networking for tests
+
+  passthru.tests = nixosTests.hockeypuck;
 
   meta = with lib; {
     description = "OpenPGP Key Server";
