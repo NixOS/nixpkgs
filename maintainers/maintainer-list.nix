@@ -8608,6 +8608,12 @@
     githubId = 5636;
     name = "Steve Purcell";
   };
+  putchar = {
+    email = "slim.cadoux@gmail.com";
+    github = "putchar";
+    githubId = 8208767;
+    name = "Slim Cadoux";
+  };
   puzzlewolf = {
     email = "nixos@nora.pink";
     github = "puzzlewolf";
