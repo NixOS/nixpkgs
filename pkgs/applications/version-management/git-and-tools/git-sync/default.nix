@@ -31,8 +31,13 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     patchShebangs $out/bin
 
+    wrap_path="${wrapperPath}":$out/bin
+
     wrapProgram $out/bin/git-sync \
-      --prefix PATH : "${wrapperPath}"
+      --prefix PATH : $wrap_path
+
+    wrapProgram $out/bin/git-sync-on-inotify \
+      --prefix PATH : $wrap_path
   '';
 
   meta = {
