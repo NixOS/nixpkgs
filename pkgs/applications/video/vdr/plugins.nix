@@ -226,7 +226,7 @@ in {
       mkdir -p $out/lib/vdr
     '';
 
-    installPhase = ":";
+    dontInstall = true;
 
     meta = with lib; {
       homepage = "https://projects.vdr-developer.org/projects/plg-text2skin";

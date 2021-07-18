@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ emacs ];
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase = ''
     install -d $out/share/emacs/site-lisp

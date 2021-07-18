@@ -17,7 +17,7 @@ mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase = ''
     python build.py install --verbose --prefix="$out"
