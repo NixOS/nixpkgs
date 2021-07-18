@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "zsh-autoenv";
-  version = "2017-12-16";
+  version = "unstable-2017-12-16";
 
   src = fetchFromGitHub {
     owner = "Tarrasch";

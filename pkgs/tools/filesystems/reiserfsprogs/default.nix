@@ -1,9 +1,8 @@
 { lib, stdenv, fetchurl, libuuid, autoreconfHook }:
 
-let version = "3.6.24"; in
 stdenv.mkDerivation rec {
   pname = "reiserfsprogs";
-  inherit version;
+  version = "3.6.24";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/linux/kernel/people/jeffm/reiserfsprogs/v${version}/${pname}-${version}.tar.xz";

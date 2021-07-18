@@ -66,6 +66,5 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ darwin;
     downloadPage = "http://stedolan.github.io/jq/download/";
     updateWalker = true;
-    inherit version;
   };
 }

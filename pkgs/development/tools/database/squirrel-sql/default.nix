@@ -4,11 +4,9 @@
 , jre
 , drivers ? []
 }:
-let
-  version = "4.1.0";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "squirrel-sql";
-  inherit version;
+  version = "4.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
