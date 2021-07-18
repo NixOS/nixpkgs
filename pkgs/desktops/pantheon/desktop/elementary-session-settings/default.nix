@@ -124,7 +124,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # our mimeapps patched from upstream to exclude:
-    # * pantheon-mail -> geary
     # * evince.desktop -> org.gnome.Evince.desktop
     mkdir -p $out/share/applications
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list

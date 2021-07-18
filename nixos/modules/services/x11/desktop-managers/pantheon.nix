@@ -212,7 +212,6 @@ in
         pantheon-agent-geoclue2
         pantheon-agent-polkit
       ]) ++ (gnome.removePackagesByName [
-        gnome.geary
         gnome.epiphany
         gnome.gnome-font-viewer
         gnome.gnome-settings-daemon338
@@ -275,6 +274,7 @@ in
         elementary-camera
         elementary-code
         elementary-files
+        elementary-mail
         elementary-music
         elementary-photos
         elementary-screenshot
