@@ -101,17 +101,6 @@ let
         ghc865Binary = {};
       };
 
-      # test some statically linked packages to catch regressions
-      # and get some cache going for static compilation with GHC
-      # Use integer-simple to avoid GMP linking problems (LGPL)
-      pkgsStatic.haskell.packages.integer-simple.ghc8104 = {
-        inherit (staticHaskellPackagesPlatforms)
-          hello
-          random
-          lens
-          ;
-      };
-
       # top-level packages that depend on haskellPackages
       inherit (pkgsPlatforms)
         agda
@@ -218,6 +207,23 @@ let
         ;
 
       elmPackages.elm = pkgsPlatforms.elmPackages.elm;
+
+      # Test some statically linked packages to catch regressions
+      # and get some cache going for static compilation with GHC.
+      # Use integer-simple to avoid GMP linking problems (LGPL)
+      pkgsStatic.haskell.packages.integer-simple.ghc8104 =
+        removePlatforms
+          [
+            "aarch64-linux" # times out on Hydra
+            "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
+          ]
+          {
+            inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8104)
+              hello
+              lens
+              random
+              ;
+          };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
