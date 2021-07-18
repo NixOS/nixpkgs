@@ -510,6 +510,12 @@
           changelog</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>isabelle</literal> package has been upgraded from
+          2020 to 2021
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
