@@ -1944,12 +1944,6 @@ EOT
   # Fixed on upstream: https://github.com/softwarefactory-project/matrix-client-haskell/commit/4ca4963cfd06379d9bdce49742af854aed6a0d37
   matrix-client = dontCheck super.matrix-client;
 
-  # Flakey tests
-  # upstream https://github.com/circuithub/rel8/issues/86
-  rel8 = dontCheck (super.rel8.override {
-    opaleye = dontCheck super.opaleye_0_7_2_0;
-  });
-
   # Release 1.0.0.0 added version bounds (was unrestricted before),
   # but with too strict lower bounds for our lts-18.
   graphql = assert pkgs.lib.versionOlder self.parser-combinators.version "1.3.0";
