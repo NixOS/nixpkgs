@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     description = "A fast static site generator with everything built-in";
     homepage = "https://www.getzola.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dywedir _0x4A6F ];
+    maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
     # set because of unstable-* version
     mainProgram = "zola";
   };
