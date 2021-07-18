@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "unstable-2021-07-10";
+  version = "unstable-2021-07-14";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = pname;
     # unstable because the latest release fails to build
-    rev = "8c3ce7d7fbc0d585d4cbf27598ac7dfe5acd96f1";
-    sha256 = "sha256-Tw3u96ZPb0yUXvtJ+rna6nnb0a+KfTEiR/PPEadFxDA=";
+    rev = "312ffcb04c06c5f157b9fd2b944b858703238592";
+    sha256 = "0i5zqs1gwxhvsynb540c3azfi4357igr4i5p0bi3h7ras2asas8w";
   };
 
-  cargoSha256 = "sha256-mOO39LK7lQ5IxwMgfJpNwX/H5MZ3qKqfeDmnY8zXOx4=";
+  cargoSha256 = "0g5z0s837cfwzral2zz0avp0xywyaa3l1adxg520qrnga7z0kbh8";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles];
   buildInputs = [ openssl oniguruma ]
