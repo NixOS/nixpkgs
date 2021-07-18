@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, substituteAll
+{ stdenv, lib, fetchFromGitHub, substituteAll, nix-update-script
 , pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
 , tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python37, glibc, libyaml
 , abrmdSupport ? true, tpm2-abrmd ? null
@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-pkcs11";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "0sm73a762c7qd6x3f052m00d7daprifimsfa17dfdf4jvy9fqy56";
+    sha256 = "sha256-UA0V2jwDDk60iwr+M//4gX1RQeXu1jhMV7PpxM0wfqQ=";
   };
 
   patches = lib.singleton (
@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
     makeWrapper $bin/share/tpm2_pkcs11/tpm2_ptool.py $bin/bin/tpm2_ptool \
       --prefix PATH : ${lib.makeBinPath [ tpm2-tools ]}
   '';
+
+  passthru.updateScript = nix-update-script { attrPath = pname; };
 
   meta = with lib; {
     description = "A PKCS#11 interface for TPM2 hardware";
