@@ -12,7 +12,7 @@ let
      inherit src;
      locale = _locale;
      dbName = _name;
-     buildPhase = ":";
+     dontBuild = true;
      unpackPhase = ''
        tar xf  ${src}
      '';
