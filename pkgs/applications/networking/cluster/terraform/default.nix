@@ -62,6 +62,7 @@ let
           marsam
           timstott
           zimbatm
+          maxeaubrey
         ];
       };
     } // attrs');
