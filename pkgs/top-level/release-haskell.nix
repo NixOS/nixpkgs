@@ -321,13 +321,24 @@ let
           ];
         };
         constituents = [
+          # aarch64-linux
+          #
+          # TODO: Times out on Hydra
+          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.aarch64-linux
+          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.aarch64-linux
+          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.aarch64-linux
+
+          # x86_64-darwin
+          #
           # TODO: reenable darwin builds if static libiconv works
+          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.x86_64-darwin
+          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.x86_64-darwin
+          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.x86_64-darwin
+
+          # x86_64-linux
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.x86_64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.aarch64-linux
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.x86_64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.aarch64-linux
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.x86_64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.aarch64-linux
         ];
       };
     }
