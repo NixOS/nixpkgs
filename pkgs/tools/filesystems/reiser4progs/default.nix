@@ -1,9 +1,8 @@
 {lib, stdenv, fetchurl, libaal}:
 
-let version = "2.0.4"; in
 stdenv.mkDerivation rec {
   pname = "reiser4progs";
-  inherit version;
+  version = "2.0.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/reiser4/reiser4-utils/${pname}-${version}.tar.gz";
