@@ -29923,6 +29923,8 @@ in
 
   ### SCIENCE/MACHINE LEARNING
 
+  nengo-gui = callPackage ../applications/science/machine-learning/nengo-gui { };
+
   sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless { };
 
   ### SCIENCE/MATH
