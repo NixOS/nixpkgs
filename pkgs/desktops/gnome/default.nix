@@ -88,6 +88,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
+  # Using 3.38 to match Mutter used in Pantheon
+  gnome-settings-daemon338 = callPackage ./core/gnome-settings-daemon/3.38 { };
+
   gnome-software = callPackage ./core/gnome-software { };
 
   gnome-system-monitor = callPackage ./core/gnome-system-monitor { };

@@ -28,6 +28,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   mutter = pkgs.gnome.mutter338;
 
+  # Using 3.38 to match Mutter used in Pantheon
+  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon338;
+
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
   notes-up = pkgs.notes-up.override { withPantheon = true; };

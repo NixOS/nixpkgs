@@ -162,12 +162,11 @@ in
         isAllowed = true;
         isSystem = true;
       };
-      # Use gnome-settings-daemon fork
       services.udev.packages = [
-        pkgs.pantheon.elementary-settings-daemon
+        pkgs.gnome.gnome-settings-daemon338
       ];
       systemd.packages = [
-        pkgs.pantheon.elementary-settings-daemon
+        pkgs.gnome.gnome-settings-daemon338
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
@@ -217,6 +216,7 @@ in
         gnome.geary
         gnome.epiphany
         gnome.gnome-font-viewer
+        gnome.gnome-settings-daemon338
       ] config.environment.pantheon.excludePackages);
 
       programs.evince.enable = mkDefault true;
