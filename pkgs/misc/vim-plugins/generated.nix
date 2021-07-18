@@ -8035,6 +8035,18 @@ final: prev:
     meta.homepage = "https://github.com/jceb/vim-orgmode/";
   };
 
+  vim-ormolu = buildVimPluginFrom2Nix {
+    pname = "vim-ormolu";
+    version = "2020-11-25";
+    src = fetchFromGitHub {
+      owner = "sdiehl";
+      repo = "vim-ormolu";
+      rev = "edbeb0135692345b088182963e9b229fe2235ac0";
+      sha256 = "03srdix06dhz4b8g9akx448dw2rjbwj840xg7p9c5bq8kbmsjy8x";
+    };
+    meta.homepage = "https://github.com/sdiehl/vim-ormolu/";
+  };
+
   vim-osc52 = buildVimPluginFrom2Nix {
     pname = "vim-osc52";
     version = "2020-09-19";
