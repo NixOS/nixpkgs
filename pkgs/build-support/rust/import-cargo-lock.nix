@@ -63,11 +63,19 @@ let
 
   # We can't use the existing fetchCrate function, since it uses a
   # recursive hash of the unpacked crate.
-  fetchCrate = pkg: fetchurl {
-    name = "crate-${pkg.name}-${pkg.version}.tar.gz";
-    url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
-    sha256 = pkg.checksum;
-  };
+  fetchCrate = pkg:
+    assert lib.assertMsg (pkg ? checksum) ''
+      Package ${pkg.name} does not have a checksum.
+      Please note that the Cargo.lock format where checksums used to be listed
+      under [metadata] is not supported.
+      If that is the case, running `cargo update` with a recent toolchain will
+      automatically update the format along with the crate's depenendencies.
+    '';
+    fetchurl {
+      name = "crate-${pkg.name}-${pkg.version}.tar.gz";
+      url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
+      sha256 = pkg.checksum;
+    };
 
   # Fetch and unpack a crate.
   mkCrate = pkg:
