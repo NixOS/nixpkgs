@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # default and this patch can be removed.
     # https://github.com/NixOS/nixpkgs/issues/38506
     (fetchurl {
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/enchant-2.1.patch?h=packages/abiword";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/d3ff951d3c7249927e7113b3de1653031db24596/abiword/trunk/enchant-2.1.patch";
       sha256 = "444dc2aadea3c80310a509b690097541573f6d2652c573d04da66a0f385fcfb2";
     })
   ];

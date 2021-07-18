@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
     "-Dtests=disabled"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
+    "-Dvapi=disabled"
   ];
 
   passthru = {
