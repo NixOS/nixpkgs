@@ -61,7 +61,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "extra" ];
 
   meta = {
-    inherit version;
     description = "Bitmapped character-art-friendly Unicode fonts";
     # Basically GPL2+ with font exception — because of the Unifont-augmented
     # version. The reduced version is public domain.

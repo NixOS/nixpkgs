@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , python3Packages
 , makeWrapper
 , coreutils
@@ -19,15 +20,18 @@ python3Packages.buildPythonApplication rec {
 
   patches = [ ./sudo.patch ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace '--cov=sshuttle --cov-branch --cov-report=term-missing' ""
+  '';
+
   nativeBuildInputs = [ makeWrapper python3Packages.setuptools-scm ];
 
-  checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
-
-  runtimeDeps = [ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ];
+  checkInputs = with python3Packages; [ mock pytestCheckHook flake8 ];
 
   postInstall = ''
     wrapProgram $out/bin/sshuttle \
-      --prefix PATH : "${lib.makeBinPath runtimeDeps}" \
+      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ])}" \
   '';
 
   meta = with lib; {
@@ -40,6 +44,5 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2;
     maintainers = with maintainers; [ domenkozar carlosdagos ];
-    platforms = platforms.unix;
   };
 }

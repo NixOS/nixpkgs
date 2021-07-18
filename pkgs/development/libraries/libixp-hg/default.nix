@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
     description = "Portable, simple C-language 9P client and server libary";
     maintainers = with lib.maintainers; [ kovirobi ];
     license = lib.licenses.mit;
-    inherit version;
     platforms = with lib.platforms; unix;
   };
 }

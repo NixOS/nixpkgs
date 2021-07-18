@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    inherit version;
     description = "Ncurses-based monitoring application for wireless network devices";
     homepage = "https://github.com/uoaerg/wavemon";
     license = licenses.gpl3Plus;

@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   makeFlags = ["PREFIX=$(out)"];
 
   meta = {
-    inherit version;
     description = "";
     # Code cannot be used in commercial programs
     # Looks like the definition hinges on the price, not license

@@ -109,10 +109,11 @@ let
       pkgs =
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
-            # the fake derivations are used for filtering of hyphenation patterns
+            # the fake derivations are used for filtering of hyphenation patterns and formats
           else {
             inherit pname version;
             tlType = "run";
+            hasFormats = attrs.hasFormats or false;
             hasHyphens = attrs.hasHyphens or false;
           }
         )]
@@ -171,6 +172,7 @@ let
           # metadata for texlive.combine
           passthru = {
             inherit pname tlType version;
+            hasFormats = args.hasFormats or false;
             hasHyphens = args.hasHyphens or false;
           };
         } // lib.optionalAttrs (fixedHash != null) {

@@ -61,7 +61,7 @@ let
         blackhole { badnetworks; };
         forward first;
         forwarders { ${concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
-        directory "/run/named";
+        directory "${cfg.directory}";
         pid-file "/run/named/named.pid";
         ${cfg.extraOptions}
       };
@@ -166,6 +166,12 @@ in
         ";
       };
 
+      directory = mkOption {
+        type = types.str;
+        default = "/run/named";
+        description = "Working directory of BIND.";
+      };
+
       zones = mkOption {
         default = [ ];
         type = with types; coercedTo (listOf attrs) bindZoneCoerce (attrsOf (types.submodule bindZoneOptions));
@@ -240,6 +246,9 @@ in
 
         ${pkgs.coreutils}/bin/mkdir -p /run/named
         chown ${bindUser} /run/named
+
+        ${pkgs.coreutils}/bin/mkdir -p ${cfg.directory}
+        chown ${bindUser} ${cfg.directory}
       '';
 
       serviceConfig = {
