@@ -294,6 +294,23 @@ let
             (name: jobs.haskellPackages."${name}")
             (maintainedPkgNames pkgs.haskellPackages));
       };
+
+      muslGHCs = pkgs.releaseTools.aggregate {
+        name = "haskell-pkgsMusl-ghcs";
+        meta = {
+          description = "GHCs built with musl";
+          maintainers = with lib.maintainers; [
+            nh2
+          ];
+        };
+        constituents = accumulateDerivations [
+          jobs.pkgsMusl.haskell.compiler.ghc8102Binary
+          jobs.pkgsMusl.haskell.compiler.ghc884
+          jobs.pkgsMusl.haskell.compiler.ghc8104
+          jobs.pkgsMusl.haskell.compiler.ghc901
+        ];
+      };
+
       staticHaskellPackages = pkgs.releaseTools.aggregate {
         name = "static-haskell-packages";
         meta = {
@@ -311,21 +328,6 @@ let
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.aarch64-linux
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.x86_64-linux
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.aarch64-linux
-        ];
-      };
-      muslGHCs = pkgs.releaseTools.aggregate {
-        name = "haskell-pkgsMusl-ghcs";
-        meta = {
-          description = "GHCs built with musl";
-          maintainers = with lib.maintainers; [
-            nh2
-          ];
-        };
-        constituents = accumulateDerivations [
-          jobs.pkgsMusl.haskell.compiler.ghc8102Binary
-          jobs.pkgsMusl.haskell.compiler.ghc884
-          jobs.pkgsMusl.haskell.compiler.ghc8104
-          jobs.pkgsMusl.haskell.compiler.ghc901
         ];
       };
     }
