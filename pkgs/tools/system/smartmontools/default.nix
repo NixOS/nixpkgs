@@ -38,5 +38,6 @@ in stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ peti Frostman ];
     platforms   = with platforms; linux ++ darwin;
+    mainProgram = "smartctl";
   };
 }
