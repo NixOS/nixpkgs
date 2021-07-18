@@ -1644,6 +1644,8 @@ in
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
+  lsix = callPackage ../tools/graphics/lsix { };
+
   mpdevil = callPackage ../applications/audio/mpdevil { };
 
   pacparser = callPackage ../tools/networking/pacparser { };
