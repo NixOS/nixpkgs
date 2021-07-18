@@ -2,7 +2,7 @@
 
 mkDerivation {
   pname = "citra";
-  version = "2021-07-01";
+  version = "unstable-2021-07-01";
 
   src = fetchFromGitHub {
     owner = "citra-emu";
