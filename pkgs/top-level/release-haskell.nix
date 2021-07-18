@@ -94,13 +94,6 @@ let
       nixosTests.agda = (packagePlatforms pkgs.nixosTests).agda;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
-      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
-        # remove musl ghc865Binary since it is known to be broken and
-        # causes an evaluation error on darwin.
-        # TODO: remove ghc865Binary altogether and use ghc8102Binary
-        ghc865Binary = {};
-      };
-
       # top-level packages that depend on haskellPackages
       inherit (pkgsPlatforms)
         agda
@@ -207,6 +200,18 @@ let
         ;
 
       elmPackages.elm = pkgsPlatforms.elmPackages.elm;
+
+      # GHCs linked to musl.
+      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
+        # remove musl ghc865Binary since it is known to be broken and
+        # causes an evaluation error on darwin.
+        # TODO: remove ghc865Binary altogether and use ghc8102Binary
+        ghc865Binary = {};
+
+        # remove integer-simple because it appears to be broken with
+        # musl and non-static-linking.
+        integer-simple = {};
+      };
 
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
