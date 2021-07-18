@@ -9725,6 +9725,8 @@ in
 
   void = callPackage ../tools/misc/void { };
 
+  volta = callPackage ../development/tools/volta/default.nix { };
+
   volume_key = callPackage ../development/libraries/volume-key { };
 
   vorbisgain = callPackage ../tools/misc/vorbisgain { };
