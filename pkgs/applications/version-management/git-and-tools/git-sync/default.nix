@@ -28,9 +28,7 @@ stdenv.mkDerivation rec {
     gnused
   ];
 
-  fixupPhase = ''
-    patchShebangs $out/bin
-
+  postFixup = ''
     wrap_path="${wrapperPath}":$out/bin
 
     wrapProgram $out/bin/git-sync \
