@@ -14,6 +14,14 @@ let
 
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
+
+  fixKernel5_14 = lib.optional (lib.versionAtLeast (kernel.version or "0") "5.14")
+    (fetchpatch {
+      url = "https://gist.github.com/joanbm/144a965c36fc1dc0d1f1b9be3438a368/raw/73c41bc2910e1df24fcc34c6ebb9945ba7677fee/nvidia-fix-linux-5.14.patch";
+      sha256 = "042zyspddka1acmli9l4h4cbzpfgq8a9lcdwjgwjr0npdgqk3j3f";
+      stripLen = 1;
+      extraPrefix = "kernel/";
+    });
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
@@ -31,6 +39,8 @@ rec {
     sha256_64bit = "04w9nmi3vyww07pmgbd2r1x37s5p6xiy4qg9s06a1kjwzpm59xfd";
     settingsSha256 = "Ohbkm7j0/V0kzcxfsHujBkrdnaefneoLutf2Rju2hIQ=";
     persistencedSha256 = "1gfj4ffkidbhgjzdi6sv2sngdcb27w7b0rvfnj129rs36mcxy02j";
+
+    patches = fixKernel5_14;
   };
 
   # Vulkan developer beta driver
