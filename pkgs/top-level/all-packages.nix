@@ -1463,6 +1463,10 @@ with pkgs;
 
   deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
 
+  deltachat-desktop = callPackage ../applications/networking/instant-messengers/deltachat-desktop {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   deltachat-electron = callPackage
     ../applications/networking/instant-messengers/deltachat-electron { };
 
