@@ -56,6 +56,12 @@ in
       default = false;
       description = "Only run the server. This option only makes sense for a server.";
     };
+
+    configPath = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
+    };
   };
 
   # implementation
@@ -63,12 +69,17 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.role == "agent" -> cfg.serverAddr != "";
-        message = "serverAddr should be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> (cfg.configPath != null || cfg.serverAddr != "");
+        message = "serverAddr or configPath (with 'server' key) should be set if role is 'agent'";
       }
       {
+<<<<<<< HEAD
         assertion = cfg.role == "agent" -> cfg.token != "";
         message = "token should be set if role is 'agent'";
+=======
+        assertion = cfg.role == "agent" -> cfg.configPath != null || cfg.tokenFile != null || cfg.token != "";
+        message = "token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'";
+>>>>>>> efbd199ffbb (nixos/k3s: add configPath option)
       }
     ];
 
@@ -92,7 +103,14 @@ in
             "${cfg.package}/bin/k3s ${cfg.role}"
           ] ++ (optional cfg.docker "--docker")
           ++ (optional cfg.disableAgent "--disable-agent")
+<<<<<<< HEAD
           ++ (optional (cfg.role == "agent") "--server ${cfg.serverAddr} --token ${cfg.token}")
+=======
+          ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
+          ++ (optional (cfg.token != "") "--token ${cfg.token}")
+          ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
+          ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
+>>>>>>> efbd199ffbb (nixos/k3s: add configPath option)
           ++ [ cfg.extraFlags ]
         );
       };
