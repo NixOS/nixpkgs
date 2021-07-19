@@ -7,13 +7,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libtgvoip";
-  version = "unstable-2021-01-01";
+  version = "unstable-2021-07-13";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "libtgvoip";
-    rev = "13a5fcb16b04472d808ce122abd695dbf5d206cd";
-    sha256 = "12p6s7vxkf1gh1spdckkdxrx7bjzw881ds9bky7l5fw751cwb3xd";
+    rev = "f321e7c8cc086bac6ae06fa0934aac7d9833a310";
+    sha256 = "1gk5nsqhbnn1cdh83b70qr3d3v2c1bncylvgn77vvj8vnyjlmnfq";
   };
 
   # To fix the build without external webrtc:
