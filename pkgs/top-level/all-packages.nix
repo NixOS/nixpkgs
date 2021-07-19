@@ -4256,7 +4256,7 @@ with pkgs;
   };
 
   diffoscope = diffoscopeMinimal.override {
-    enableBloat = true;
+    enableBloat = !stdenv.isDarwin;
   };
 
   diffr = callPackage ../tools/text/diffr {
