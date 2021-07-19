@@ -1,4 +1,4 @@
-{ mkDiscoursePlugin, fetchFromGitHub }:
+{ lib, mkDiscoursePlugin, fetchFromGitHub }:
 
 mkDiscoursePlugin {
   name = "discourse-github";
@@ -6,7 +6,14 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-github";
-    rev = "151e353a5a1971157c70c2e2b0f56387f212a81f";
-    sha256 = "00kra6zd2k1f2vwcdvxnxnammzh72f5qxcqbb94m0z6maj598wdy";
+    rev = "154fd5ea597640c2259ce489b4ce75b48ac1973c";
+    sha256 = "0wb5p219z42rc035rnh2iwrbsj000nxa9shbmc325rzcg6xlhdhw";
   };
+  meta = with lib; {
+    homepage = "https://github.com/discourse/discourse-github";
+    maintainers = with maintainers; [ talyz ];
+    license = licenses.mit;
+    description = "Adds GitHub badges and linkback functionality";
+  };
+
 }
