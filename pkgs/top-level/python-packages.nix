@@ -8689,6 +8689,8 @@ in {
 
   toml = callPackage ../development/python-modules/toml { };
 
+  tomli = callPackage ../development/python-modules/tomli { };
+
   tomlkit = callPackage ../development/python-modules/tomlkit { };
 
   toolz = callPackage ../development/python-modules/toolz { };
