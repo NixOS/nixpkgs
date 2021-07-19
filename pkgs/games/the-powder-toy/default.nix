@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "the-powder-toy";
-  version = "96.0.348";
+  version = "96.1.349";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
     rev = "v${version}";
-    sha256 = "sha256-PAnjNeqGJPW7TeoIsaOnuOb1loyKs8pjBseKoD0CvQU=";
+    sha256 = "sha256-MSN81kPaH8cWZO+QEOlMUQQghs1kn8CpsKA5SUC/RX8=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config python3 ];
