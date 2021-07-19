@@ -12,10 +12,13 @@ python3Packages.buildPythonApplication rec {
     docutils
     filelock
     GitPython
+    jinja2
     jsonschema
     nbformat
+    networkx
     psutil
     pulp
+    pygraphviz
     pyyaml
     ratelimiter
     requests
