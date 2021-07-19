@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper, nettools, java, polyml, z3, rlwrap }:
+{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper, nettools, java, polyml, z3, rlwrap, makeDesktopItem }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -68,8 +68,25 @@ stdenv.mkDerivation rec {
     cd $out/$dirname
     bin/isabelle install $out/bin
 
+    # icon
+    mkdir -p "$out/share/icons/hicolor/isabelle/apps"
+    cp "$out/Isabelle${version}/lib/icons/isabelle.xpm" "$out/share/icons/hicolor/isabelle/apps/"
+
+    # desktop item
+    mkdir -p "$out/share"
+    cp -r "${desktopItem}/share/applications" "$out/share/applications"
+
     wrapProgram $out/$dirname/src/HOL/Tools/ATP/scripts/remote_atp --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.LWP ]}
   '';
+
+  desktopItem = makeDesktopItem {
+    name = "isabelle";
+    exec = "isabelle jedit";
+    icon = "isabelle";
+    desktopName = "Isabelle";
+    comment = meta.description;
+    categories = "Education;Science;Math;";
+  };
 
   meta = with lib; {
     description = "A generic proof assistant";
