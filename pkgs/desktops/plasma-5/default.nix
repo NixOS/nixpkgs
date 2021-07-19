@@ -158,6 +158,7 @@ let
         kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
         kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
+        krunner-symbols = callPackage ./3rdparty/addons/krunner-symbols.nix { };
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
 
