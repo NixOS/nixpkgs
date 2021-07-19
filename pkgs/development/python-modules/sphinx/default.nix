@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -82,6 +83,9 @@ buildPythonPackage rec {
     # requires imagemagick (increases build closure size), doesn't
     # test anything substantial
     "test_ext_imgconverter"
+  ] ++ lib.optional stdenv.isDarwin [
+    # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
+    "test_inspect_main_url"
   ];
 
   meta = with lib; {
