@@ -30447,6 +30447,8 @@ in
 
   boolector = callPackage ../applications/science/logic/boolector {};
 
+  bitwuzla = callPackage ../applications/science/logic/bitwuzla {};
+
   symbiyosys = callPackage ../applications/science/logic/symbiyosys {};
 
   mcy = callPackage ../applications/science/logic/mcy {};
