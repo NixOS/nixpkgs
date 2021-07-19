@@ -120,15 +120,15 @@ exitHandler() {
     exitCode="$?"
     set +e
 
-    if [ -n "${showBuildStats:-}" ]; then
-        times > "$NIX_BUILD_TOP/.times"
-        local -a times=($(cat "$NIX_BUILD_TOP/.times"))
+    if [[ -n "${showBuildStats:-}" ]]; then
+        local -a buildTimesArray
+        IFS=" " read -r -a buildTimesArray < "$NIX_BUILD_TOP/.times"
         # Print the following statistics:
         # - user time for the shell
         # - system time for the shell
         # - user time for all child processes
         # - system time for all child processes
-        echo "build time elapsed: " "${times[@]}"
+        echo "build time elapsed: " "${buildTimesArray[@]}"
     fi
 
     if (( "$exitCode" != 0 )); then
