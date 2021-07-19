@@ -353,23 +353,24 @@ findInputs() {
     # Sanity check
     (( "$hostOffset" <= "$targetOffset" )) || exit -1
 
+    # shellcheck disable=SC2034
+    local emptyArray=()
     local varVar="${pkgAccumVarVars[$hostOffset + 1]}"
     local varRef="$varVar[\$targetOffset - \$hostOffset]"
-    local var="${!varRef}"
+    local -n arrayRef="${!varRef:emptyArray}"
     unset -v varVar varRef
 
     # TODO(@Ericson2314): Restore using associative array once Darwin
     # nix-shell doesn't use impure bash. This should replace the O(n)
     # case with an O(1) hash map lookup, assuming bash is implemented
     # well :D.
-    local varSlice="$var[*]"
-    # ${..-} to hack around old bash empty array problem
-    case "${!varSlice-}" in
-        *" $pkg "*) return 0 ;;
-    esac
-    unset -v varSlice
+    for el in "${arrayRef[@]}"; do
+        if [[ "$el" = "$pkg" ]]; then
+            return 0
+        fi
+    done
 
-    eval "$var"'+=("$pkg")'
+    arrayRef+=("$pkg")
 
     if ! [ -e "$pkg" ]; then
         echo "build input $pkg does not exist" >&2
