@@ -2,7 +2,6 @@
 with lib;
 let
   cfg = config.services.klipper;
-  package = pkgs.klipper;
   format = pkgs.formats.ini { mkKeyValue = generators.mkKeyValueDefault {} ":"; };
 in
 {
@@ -10,6 +9,12 @@ in
   options = {
     services.klipper = {
       enable = mkEnableOption "Klipper, the 3D printer firmware";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.klipper;
+        description = "The Klipper package.";
+      };
 
       octoprintIntegration = mkOption {
         type = types.bool;
@@ -74,10 +79,10 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${package}/lib/klipper/klippy.py --input-tty=/run/klipper/tty /etc/klipper.cfg";
+        ExecStart = "${cfg.package}/lib/klipper/klippy.py --input-tty=/run/klipper/tty /etc/klipper.cfg";
         RuntimeDirectory = "klipper";
         SupplementaryGroups = [ "dialout" ];
-        WorkingDirectory = "${package}/lib";
+        WorkingDirectory = "${cfg.package}/lib";
       } // (if cfg.user != null then {
         Group = cfg.group;
         User = cfg.user;
