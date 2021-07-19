@@ -475,21 +475,16 @@ in
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [];
-        example = ''
-          [
-            (pkgs.fetchFromGitHub {
-              owner = "discourse";
-              repo = "discourse-spoiler-alert";
-              rev = "e200cfa571d252cab63f3d30d619b370986e4cee";
-              sha256 = "0ya69ix5g77wz4c9x9gmng6l25ghb5xxlx3icr6jam16q14dzc33";
-            })
+        example = lib.literalExample ''
+          with config.services.discourse.package.plugins; [
+            discourse-canned-replies
+            discourse-github
           ];
         '';
         description = ''
-          <productname>Discourse</productname> plugins to install as a
-          list of derivations. As long as a plugin supports the
-          standard install method, packaging it should only require
-          fetching its source with an appropriate fetcher.
+          Plugins to install as part of
+          <productname>Discourse</productname>, expressed as a list of
+          derivations.
         '';
       };
 
