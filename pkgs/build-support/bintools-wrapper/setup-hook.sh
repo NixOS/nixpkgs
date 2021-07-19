@@ -12,9 +12,11 @@ bintoolsWrapper_addLDVars () {
     # See ../setup-hooks/role.bash
     local role_post
     getHostRoleEnvHook
+    local var_name=NIX_LDFLAGS${role_post}
 
     if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
-        export NIX_LDFLAGS${role_post}+=" -L$1/lib64"
+        eval "$var_name=\"${!var_name:-} -L$1/lib64\""
+        export "${var_name?}"
     fi
 
     if [[ -d "$1/lib" ]]; then
@@ -24,7 +26,8 @@ bintoolsWrapper_addLDVars () {
         # directories and bloats the size of the environment variable space.
         local -a glob=( $1/lib/lib* )
         if [ "${#glob[*]}" -gt 0 ]; then
-            export NIX_LDFLAGS${role_post}+=" -L$1/lib"
+            eval "$var_name=\"${!var_name:-} -L$1/lib\""
+            export "${var_name?}"
         fi
     fi
 }
