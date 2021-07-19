@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, libxml2, gobject-introspection, gnome }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, libxml2, gobject-introspection, gnome, glib }:
 
 stdenv.mkDerivation rec {
   pname = "totem-pl-parser";
@@ -16,8 +16,14 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext gobject-introspection ];
-  buildInputs = [ libxml2 ];
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext glib gobject-introspection ];
+  buildInputs = [ libxml2 glib ];
+
+  mesonFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=false"
+  ];
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Videos";
