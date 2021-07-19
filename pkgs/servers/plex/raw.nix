@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
       lnl7
       pjones
       thoughtpolice
+      maxeaubrey
     ];
     description = "Media library streaming server";
     longDescription = ''

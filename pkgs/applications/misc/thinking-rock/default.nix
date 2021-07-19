@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/thinkingrock
   '';
 
-  installPhase = ":";
+  dontInstall = true;
 
   meta = with lib; {
     description = "Task management system";
