@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
+  patches = [
+    ./search-paths.patch
+  ];
+
   postPatch =
     ''
       # Renaming keymaps with name clashes, because loadkeys just picks
