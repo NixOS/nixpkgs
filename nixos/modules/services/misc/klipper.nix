@@ -16,6 +16,19 @@ in
         description = "The Klipper package.";
       };
 
+      inputTTY = mkOption {
+        type = types.path;
+        default = "/run/klipper/tty";
+        description = "Path of the virtual printer symlink to create.";
+      };
+
+      apiSocket = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/klipper/api";
+        description = "Path of the API socket to create.";
+      };
+
       octoprintIntegration = mkOption {
         type = types.bool;
         default = false;
@@ -73,13 +86,16 @@ in
       group = config.services.octoprint.group;
     };
 
-    systemd.services.klipper = {
+    systemd.services.klipper = let
+      klippyArgs = "--input-tty=${cfg.inputTTY}"
+        + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
+    in {
       description = "Klipper 3D Printer Firmware";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/lib/klipper/klippy.py --input-tty=/run/klipper/tty /etc/klipper.cfg";
+        ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} /etc/klipper.cfg";
         RuntimeDirectory = "klipper";
         SupplementaryGroups = [ "dialout" ];
         WorkingDirectory = "${cfg.package}/lib";
