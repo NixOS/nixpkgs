@@ -595,6 +595,7 @@ sakhnik/nvim-gdb
 saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
+sdiehl/vim-ormolu
 sebastianmarkow/deoplete-rust
 SevereOverfl0w/deoplete-github
 Shatur/neovim-ayu
