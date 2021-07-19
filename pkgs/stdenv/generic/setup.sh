@@ -555,12 +555,12 @@ _addToEnv() {
                 #
                 # TODO(@Ericson2314): Don't special-case native compilation
                 for pkg in \
-                    ${pkgsBuildBuild+"${pkgsBuildBuild[@]}"} \
-                    ${pkgsBuildHost+"${pkgsBuildHost[@]}"} \
-                    ${pkgsBuildTarget+"${pkgsBuildTarget[@]}"} \
-                    ${pkgsHostHost+"${pkgsHostHost[@]}"} \
-                    ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
-                    ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
+                    "${pkgsBuildBuild[@]}" \
+                    "${pkgsBuildHost[@]}" \
+                    "${pkgsBuildTarget[@]}" \
+                    "${pkgsHostHost[@]}" \
+                    "${pkgsHostTarget[@]}" \
+                    "${pkgsTargetTarget[@]}"
                 do
                     if [[ "$visitedPkgs" = *"$pkg"* ]]; then
                         continue
@@ -1004,7 +1004,7 @@ configurePhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            $configureFlags ${configureFlagsArray+"${configureFlagsArray[@]}"}
+            $configureFlags "${configureFlagsArray[@]}"
         )
         echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
@@ -1034,8 +1034,8 @@ buildPhase() {
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
+            $makeFlags "${makeFlagsArray[@]}"
+            $buildFlags "${buildFlagsArray[@]}"
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
@@ -1073,8 +1073,8 @@ checkPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
+            $makeFlags "${makeFlagsArray[@]}"
+            ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}"
             ${checkTarget}
         )
 
@@ -1099,8 +1099,8 @@ installPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         SHELL=$SHELL
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
+        $makeFlags "${makeFlagsArray[@]}"
+        $installFlags "${installFlagsArray[@]}"
         ${installTargets:-install}
     )
 
@@ -1207,8 +1207,8 @@ installCheckPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
+            $makeFlags "${makeFlagsArray[@]}"
+            $installCheckFlags "${installCheckFlagsArray[@]}"
             ${installCheckTarget:-installcheck}
         )
 
@@ -1227,7 +1227,7 @@ distPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
-        $distFlags ${distFlagsArray+"${distFlagsArray[@]}"} ${distTarget:-dist}
+        $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
     )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
