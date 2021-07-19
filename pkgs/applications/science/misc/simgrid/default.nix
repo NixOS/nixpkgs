@@ -18,14 +18,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.27";
+  version = "3.28";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "13nwsyk030fhl3srhpc28j5s6594z0m38606f4ygc4qhv9wxw011";
+    sha256 = "0vylwgd4i89bvhbgfay0wq953324dwfmmr8jp9b4vvlc9m0017r9";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
