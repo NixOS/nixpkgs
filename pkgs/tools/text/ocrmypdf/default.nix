@@ -31,7 +31,6 @@ in
 buildPythonApplication rec {
   pname = "ocrmypdf";
   version = "12.3.0";
-  disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
