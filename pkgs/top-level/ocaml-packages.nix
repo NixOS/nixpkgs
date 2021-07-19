@@ -417,6 +417,9 @@ let
 
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
+    hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
+    hacl-star-raw = callPackage ../development/ocaml-modules/hacl-star/raw.nix { };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
@@ -1178,6 +1181,9 @@ let
     resto-cohttp-server = callPackage ../development/ocaml-modules/resto/cohttp-server.nix { };
     resto-directory = callPackage ../development/ocaml-modules/resto/directory.nix { };
     resto-json = callPackage ../development/ocaml-modules/resto/json.nix { };
+
+    ringo = callPackage ../development/ocaml-modules/ringo { };
+    ringo-lwt = callPackage ../development/ocaml-modules/ringo/lwt.nix { };
 
     rope = callPackage ../development/ocaml-modules/rope { };
 
