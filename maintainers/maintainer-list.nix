@@ -4337,6 +4337,12 @@
     github = "HolgerPeters";
     githubId = 4097049;
   };
+  hqurve = {
+    email = "hqurve@outlook.com";
+    github = "hqurve";
+    githubId = 53281855;
+    name = "hqurve";
+  };
   hrdinka = {
     email = "c.nix@hrdinka.at";
     github = "hrdinka";
