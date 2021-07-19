@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "2.0.1";
+  version = "2.0.25";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "06dsd819qjv4n2ihrz1mpn5aigmbv0gpkm7iw06wrqx30nzphnpk";
+    sha256 = "0kmfvd6h0p7a95z6j941vx7bcspfbxfja5ab0qihhzizfzn6719b";
     rev = version;
   };
 
@@ -36,11 +36,8 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchShebangs .
 
-    # fixes cmake support
-    sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
-
     # disables cache in user home, use installation directory instead
-    sed -i '/^def/!s/root_is_writable()/True/' tools/shared.py
+    sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
 
     # required for wasm2c
@@ -74,7 +71,7 @@ stdenv.mkDerivation rec {
     chmod -R +w $appdir
 
     mkdir -p $out/bin
-    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emlink.py emmake emranlib emrun emscons; do
+    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons; do
       makeWrapper $appdir/$b $out/bin/$b \
         --set NODE_PATH ${nodeModules}/node_modules \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
