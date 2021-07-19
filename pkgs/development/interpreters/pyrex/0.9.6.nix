@@ -1,10 +1,8 @@
 { lib, fetchurl, python2Packages }:
 
-let version = "0.9.6.4"; in
-
-python2Packages.buildPythonPackage {
+python2Packages.buildPythonPackage rec {
   pname = "pyrex";
-  inherit version;
+  version = "0.9.6.4";
 
   src = fetchurl {
     url = "https://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/oldtar/Pyrex-${version}.tar.gz";

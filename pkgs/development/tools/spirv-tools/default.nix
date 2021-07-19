@@ -1,12 +1,9 @@
 { lib, stdenv, fetchFromGitHub, cmake, python3, spirv-headers }:
-let
-  # Update spirv-headers rev in lockstep according to DEPs file
-  version = "2020.2";
-in
 
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
-  inherit version;
+  # Update spirv-headers rev in lockstep according to DEPs file
+  version = "2020.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";

@@ -1,12 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, sfml }:
 
-let
-  version = "2.5";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "csfml";
-  inherit version;
+  version = "2.5";
   src = fetchFromGitHub {
     owner = "SFML";
     repo  = "CSFML";

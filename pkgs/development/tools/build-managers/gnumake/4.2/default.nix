@@ -2,12 +2,9 @@
 
 assert guileSupport -> ( pkg-config != null && guile != null );
 
-let
-  version = "4.2.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnumake";
-  inherit version;
+  version = "4.2.1";
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.bz2";

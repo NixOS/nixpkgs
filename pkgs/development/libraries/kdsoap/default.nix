@@ -3,13 +3,9 @@
 , qtbase
 }:
 
-let
-  version = "1.10.0";
-in
-
-mkDerivation {
+mkDerivation rec {
   pname = "kdsoap";
-  inherit version;
+  version = "1.10.0";
   meta = {
     description = "A Qt-based client-side and server-side SOAP component";
     longDescription = ''

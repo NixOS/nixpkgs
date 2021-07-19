@@ -1,10 +1,8 @@
 { fetchurl, lib, stdenv, coreutils, makeWrapper }:
 
-let version = "1.9.16"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ant";
-  inherit version;
+  version = "1.9.16";
 
   nativeBuildInputs = [ makeWrapper ];
 

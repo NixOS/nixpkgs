@@ -1,10 +1,7 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib }:
-let
-  version = "0.14.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ocamlbuild-${version}";
-  inherit version;
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "ocaml";

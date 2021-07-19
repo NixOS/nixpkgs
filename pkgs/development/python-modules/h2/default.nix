@@ -39,7 +39,7 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "h2.connection"
     "h2.config"
   ];

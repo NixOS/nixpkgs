@@ -14,6 +14,17 @@ let
       '';
     };
 
+    autoprefixer = super.autoprefixer.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/autoprefixer" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/autoprefixer.nix { inherit (self) autoprefixer; };
+      };
+    };
+
     aws-azure-login = super.aws-azure-login.override {
       meta.platforms = pkgs.lib.platforms.linux;
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -262,8 +273,14 @@ let
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/postcss" \
-          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules \
+          --prefix NODE_PATH : ${self.autoprefixer}/lib/node_modules
       '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/postcss-cli.nix {
+          inherit (self) postcss-cli;
+        };
+      };
       meta.mainProgram = "postcss";
     };
 
