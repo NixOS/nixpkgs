@@ -123,7 +123,9 @@ let
       group = mkOption {
         type = types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
-        default = "nogroup";
+        # not defaulting to "nogroup" to prevent accidentally sharing files
+        # across users
+        #default = "nogroup";
         description = "The user's primary group.";
       };
 
