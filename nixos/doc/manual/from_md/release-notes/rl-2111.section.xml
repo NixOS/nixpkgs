@@ -98,6 +98,13 @@
           <link linkend="opt-snapraid.enable">snapraid</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/hockeypuck/hockeypuck">Hockeypuck</link>,
+          a OpenPGP Key Server. Available as
+          <link linkend="opt-services.hockeypuck.enable">services.hockeypuck</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">

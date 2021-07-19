@@ -179,7 +179,7 @@ let
     };
   }; # end of configfile derivation
 
-  kernel = (callPackage ./manual-config.nix {}) {
+  kernel = (callPackage ./manual-config.nix { inherit buildPackages;  }) {
     inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
