@@ -27,7 +27,7 @@ rec {
     });
 
   buildKakounePluginFrom2Nix = attrs: buildKakounePlugin ({
-    buildPhase = ":";
-    configurePhase = ":";
+    dontBuild = true;
+    dontConfigure = true;
   } // attrs);
 }
