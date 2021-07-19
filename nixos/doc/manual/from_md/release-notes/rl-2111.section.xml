@@ -646,6 +646,20 @@
           to use wildcards in the <literal>source</literal> argument.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>openrazer</literal> and
+          <literal>openrazer-daemon</literal> packages as well as the
+          <literal>hardware.openrazer</literal> module now require users
+          to be members of the <literal>openrazer</literal> group
+          instead of <literal>plugdev</literal>. With this change, users
+          no longer need be granted the entire set of
+          <literal>plugdev</literal> group permissions, which can
+          include permissions other than those required by
+          <literal>openrazer</literal>. This can be desirable from a
+          security point of view.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
