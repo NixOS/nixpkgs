@@ -54,15 +54,16 @@ _multioutConfig() {
     #   and reordering would cause more trouble than worth.
     if [ -z "$shareDocName" ]; then
         local confScript="$configureScript"
-        if [ -z "$confScript" ] && [ -x ./configure ]; then
+        if [[ -z "$confScript" && -x ./configure ]]; then
             confScript=./configure
         fi
-        if [ -f "$confScript" ]; then
-            local shareDocName="$(sed -n "s/^PACKAGE_TARNAME='\(.*\)'$/\1/p" < "$confScript")"
+        if [[ -f "$confScript" ]]; then
+            local shareDocName
+            shareDocName="$(sed -n "s/^PACKAGE_TARNAME='\(.*\)'$/\1/p" < "$confScript")"
         fi
-                                    # PACKAGE_TARNAME sometimes contains garbage.
-        if [ -z "$shareDocName" ] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_-]'; then
-            shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
+        # PACKAGE_TARNAME sometimes contains garbage.
+        if [[ -z "$shareDocName" || ! $shareDocName =~ ^[a-zA-Z0-9_-]+$ ]]; then
+            shareDocName="${name//-[^a-zA-Z].*/}"
         fi
     fi
 
