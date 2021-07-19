@@ -4958,6 +4958,18 @@ final: prev:
     meta.homepage = "https://github.com/codota/tabnine-vim/";
   };
 
+  taboo-vim = buildVimPluginFrom2Nix {
+    pname = "taboo-vim";
+    version = "2019-08-27";
+    src = fetchFromGitHub {
+      owner = "gcmt";
+      repo = "taboo.vim";
+      rev = "caf948187694d3f1374913d36f947b3f9fa1c22f";
+      sha256 = "06pizdnb3gr4pf5hrm3yfzkz99y9bi2vwqm85xknzgdvl1lisj99";
+    };
+    meta.homepage = "https://github.com/gcmt/taboo.vim/";
+  };
+
   tabpagebuffer-vim = buildVimPluginFrom2Nix {
     pname = "tabpagebuffer-vim";
     version = "2014-09-30";

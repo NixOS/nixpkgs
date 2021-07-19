@@ -161,6 +161,7 @@ fruit-in/vim-nong-theme
 fsharp/vim-fsharp
 fszymanski/deoplete-emoji
 garbas/vim-snipmate
+gcmt/taboo.vim
 gcmt/wildfire.vim
 gennaro-tedesco/nvim-peekup
 gentoo/gentoo-syntax
