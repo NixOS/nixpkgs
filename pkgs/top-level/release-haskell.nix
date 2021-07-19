@@ -18,18 +18,22 @@ let
   };
 
   inherit (releaseLib)
-    pkgs
-    packagePlatforms
+    lib
     mapTestOn
-    aggregate
+    packagePlatforms
+    pkgs
     ;
 
-  inherit (pkgs) lib;
-
-  # helper function which traverses a (nested) set
+  # Helper function which traverses a (nested) set
   # of derivations produced by mapTestOn and flattens
   # it to a list of derivations suitable to be passed
   # to `releaseTools.aggregate` as constituents.
+  # Removes all non derivations from the input jobList.
+  #
+  # accumulateDerivations :: [ Either Derivation AttrSet ] -> [ Derivation ]
+  #
+  # > accumulateDerivations [ drv1 "string" { foo = drv2; bar = { baz = drv3; }; } ]
+  # [ drv1 drv2 drv3 ]
   accumulateDerivations = jobList:
     lib.concatMap (
       attrs:
@@ -383,25 +387,10 @@ let
             lib.maintainers.rnhmjoj
           ];
         };
-        constituents = [
-          # aarch64-linux
-          #
-          # TODO: Times out on Hydra
-          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.aarch64-linux
-          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.aarch64-linux
-          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.aarch64-linux
-
-          # x86_64-darwin
-          #
-          # TODO: reenable darwin builds if static libiconv works
-          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.x86_64-darwin
-          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.x86_64-darwin
-          # jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.x86_64-darwin
-
-          # x86_64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.x86_64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.x86_64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.x86_64-linux
+        constituents = accumulateDerivations [
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random
         ];
       };
     }
