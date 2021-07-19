@@ -329,6 +329,10 @@ declare -a pkgTargetHookVars=(envTargetTargetHook)
 
 declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
 
+# those variables are declared here, since where and if they are used varies
+# shellcheck disable=SC2034
+declare -a preFixupHooks fixupOutputHooks preConfigureHooks postFixupHooks postUnpackHooks unpackCmdHooks
+
 # Add env hooks for all sorts of deps with the specified host offset.
 addEnvHooks() {
     local depHostOffset="$1"
