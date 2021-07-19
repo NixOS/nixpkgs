@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elfcat";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "ruslashev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-s56FyRoD2IhgdwEV63jMaB265CodHUlvmrWzmXAmonY=";
+    sha256 = "sha256-gh5JO3vO2FpHiZfaHOODPhRSB9HqZe1ir4g7UEkSUHY=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
