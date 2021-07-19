@@ -1,8 +1,8 @@
-{ mkDerivation, lib, fetchFromGitHub, callPackage
+{ mkDerivation, lib, fetchFromGitHub, callPackage, fetchpatch
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk
+, tl-expected, hunspell, glibmm, webkitgtk, jemalloc
 , libtgvoip, rnnoise, abseil-cpp, extra-cmake-modules
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
@@ -23,7 +23,7 @@ let
   tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.8.4";
+  version = "2.8.11";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -32,8 +32,16 @@ in mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-IN3GQgdNM66/GxKa5EGKB/LIkgBxS8Y4mkPBaSEphmw=";
+    sha256 = "020ycgb77vx7rza590i3csrvq1zgm15rvpxqqcp0xkb4yh71i3hb";
   };
+
+  patches = [(fetchpatch {
+    # ref: https://github.com/desktop-app/lib_webview/pull/9
+    url = "https://github.com/desktop-app/lib_webview/commit/75e924934eee8624020befbef1f3cb5b865d3b86.patch";
+    sha256 = "sha256-rN4FVK4KT+xNf9IVdcpbxMqT0+t3SINJPRRQPyMiDP0=";
+    stripLen = 1;
+    extraPrefix = "Telegram/lib_webview/";
+  })];
 
   postPatch = ''
     substituteInPlace Telegram/CMakeLists.txt \
@@ -49,7 +57,7 @@ in mkDerivation rec {
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
     ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
-    tl-expected hunspell glibmm webkitgtk
+    tl-expected hunspell glibmm webkitgtk jemalloc
     libtgvoip rnnoise abseil-cpp extra-cmake-modules
     tg_owt
     # Transitive dependencies:
