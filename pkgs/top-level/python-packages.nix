@@ -397,6 +397,8 @@ in {
 
   alarmdecoder = callPackage ../development/python-modules/alarmdecoder { };
 
+  alectryon = callPackage ../development/python-modules/alectryon { };
+
   alembic = callPackage ../development/python-modules/alembic { };
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
