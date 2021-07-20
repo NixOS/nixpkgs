@@ -15,7 +15,6 @@ stdenv.mkDerivation {
     (haskellPackages.ghcWithPackages (hs: with hs; [ posix-escape ]))
   ];
 
-  #phases = [ "buildPhase" "installPhase" "fixupPhase" ];
   buildPhase = ''
     runHook preBuild
 
