@@ -6182,6 +6182,8 @@ in {
 
   pyls-spyder = callPackage ../development/python-modules/pyls-spyder { };
 
+  pylsp-mypy = callPackage ../development/python-modules/pylsp-mypy { };
+
   PyLTI = callPackage ../development/python-modules/pylti { };
 
   pylutron = callPackage ../development/python-modules/pylutron { };

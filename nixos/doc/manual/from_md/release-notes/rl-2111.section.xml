@@ -105,6 +105,14 @@
           <link linkend="opt-services.hockeypuck.enable">services.hockeypuck</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/buildkite/buildkite-agent-metrics">buildkite-agent-metrics</link>,
+          a command-line tool for collecting Buildkite agent metrics,
+          now has a Prometheus exporter available as
+          <link linkend="opt-services.prometheus.exporters.buildkite-agent.enable">services.prometheus.exporters.buildkite-agent</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">

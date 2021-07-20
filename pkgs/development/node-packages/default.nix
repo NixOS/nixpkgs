@@ -46,6 +46,17 @@ let
       '';
     };
 
+    fast-cli = super.fast-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/fast \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
+
     hyperspace-cli = super."@hyperspace/cli".override {
       nativeBuildInputs = with pkgs; [
         makeWrapper
@@ -65,10 +76,6 @@ let
     };
 
     coc-imselect = super.coc-imselect.override {
-      meta.broken = since "10";
-    };
-
-    "fast-cli-1.x" = super."fast-cli-1.x".override {
       meta.broken = since "10";
     };
 
@@ -93,14 +100,6 @@ let
       name = "bitwarden-cli-${drv.version}";
       meta.mainProgram = "bw";
     });
-
-    fast-cli = super."fast-cli-1.x".override {
-      preRebuild = ''
-        # Simply ignore the phantomjs --version check. It seems to need a display but it is safe to ignore
-        sed -i -e "s|console.error('Error verifying phantomjs, continuing', err)|console.error('Error verifying phantomjs, continuing', err); return true;|" node_modules/phantomjs-prebuilt/lib/util.js
-      '';
-      buildInputs = [ pkgs.phantomjs2 ];
-    };
 
     flood = super.flood.override {
       buildInputs = [ self.node-pre-gyp ];
