@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "powerline-go";
-  version = "2021-07-15";
+  version = "unstable-2021-07-15";
 
   src = fetchFromGitHub {
     owner = "justjanne";
