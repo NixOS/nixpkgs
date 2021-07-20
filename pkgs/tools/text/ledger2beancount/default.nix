@@ -26,11 +26,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0kimp8l9ax37grfv5r5iw0g0xnrpkak022fl10y3i7kc4nyi1s99";
   };
 
-  phases = [
-    "unpackPhase"
-    "installPhase"
-    "fixupPhase"
-  ];
+  dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perlPackages.perl beancount ] ++ perlDeps;
