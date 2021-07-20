@@ -7,7 +7,8 @@ let
     gemdir = ./.;
   };
 in stdenv.mkDerivation {
-  name = "maphosts-${env.gems.maphosts.version}";
+  pname = "maphosts";
+  version = env.gems.maphosts.version;
 
   dontUnpack = true;
 
