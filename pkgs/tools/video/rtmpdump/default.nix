@@ -32,7 +32,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  makeFlags = [ "prefix=$(out)" ]
+  makeFlags = [
+    "prefix=$(out)"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ]
     ++ optional gnutlsSupport "CRYPTO=GNUTLS"
     ++ optional opensslSupport "CRYPTO=OPENSSL"
     ++ optional stdenv.isDarwin "SYS=darwin"
