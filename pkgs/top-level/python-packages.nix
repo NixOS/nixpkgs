@@ -1607,7 +1607,6 @@ in {
 
   conda = callPackage ../development/python-modules/conda { };
 
-  ConfigArgParse = self.configargparse; # added 2021-03-18
   configargparse = callPackage ../development/python-modules/configargparse { };
 
   configobj = callPackage ../development/python-modules/configobj { };

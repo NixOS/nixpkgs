@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    attrs ConfigArgParse ffmpeg future lxml requests
+    attrs configargparse ffmpeg future lxml requests
   ];
   pythonPath = [ rtmpdump php wget ];
 
