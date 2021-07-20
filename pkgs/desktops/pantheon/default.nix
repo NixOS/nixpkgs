@@ -61,6 +61,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-screenshot-tool = callPackage ./apps/elementary-screenshot-tool { };
 
+  elementary-tasks = callPackage ./apps/elementary-tasks { };
+
   elementary-terminal = callPackage ./apps/elementary-terminal { };
 
   elementary-videos = callPackage ./apps/elementary-videos { };
