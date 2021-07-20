@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "captive-browser";
+  pname = "captive-browser";
   version = "2019-04-16";
-  goPackagePath = name;
+  goPackagePath = pname;
 
   src = fetchFromGitHub {
     owner  = "FiloSottile";

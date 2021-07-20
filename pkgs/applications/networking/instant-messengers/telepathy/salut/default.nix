@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   pname = "telepathy-salut";
-  name = "${pname}-0.8.1";
+  version = "0.8.1";
 
   src = fetchurl {
-    url = "https://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/telepathy-salut/telepathy-salut-${version}.tar.gz";
     sha256 = "13k112vrr3zghzr03pnbqc1id65qvpj0sn0virlbf4dmr2511fbh";
   };
 

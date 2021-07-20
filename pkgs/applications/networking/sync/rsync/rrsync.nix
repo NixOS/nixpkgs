@@ -4,7 +4,8 @@ let
   base = import ./base.nix { inherit lib fetchurl; };
 in
 stdenv.mkDerivation {
-  name = "rrsync-${base.version}";
+  pname = "rrsync";
+  version = base.version;
 
   src = base.src;
 

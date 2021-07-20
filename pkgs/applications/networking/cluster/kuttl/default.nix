@@ -1,7 +1,6 @@
 { lib, buildGoModule, fetchFromGitHub}:
 
 buildGoModule rec {
-  name = "kuttl";
   pname = "kuttl";
   version = "0.9.0";
   cli = "kubectl-kuttl";

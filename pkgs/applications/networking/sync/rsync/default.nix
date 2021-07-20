@@ -18,7 +18,8 @@ let
   base = import ./base.nix { inherit lib fetchurl; };
 in
 stdenv.mkDerivation rec {
-  name = "rsync-${base.version}";
+  pname = "rsync";
+  version = base.version;
 
   mainSrc = base.src;
 
