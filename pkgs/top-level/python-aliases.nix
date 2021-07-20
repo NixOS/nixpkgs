@@ -42,6 +42,7 @@ mapAliases ({
   dftfit = throw "it's dependency lammps-cython no longer builds";
   diff_cover = diff-cover; # added 2021-07-02
   discogs_client = discogs-client; # added 2021-07-02
+  djangorestframework-jwt = drf-jwt;
   dns = dnspython; # Alias for compatibility, 2017-12-10
   faulthandler = throw "faulthandler is built into ${python.executable}";
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
