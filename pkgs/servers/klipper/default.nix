@@ -5,14 +5,14 @@
 , unstableGitUpdater
 }:
 stdenv.mkDerivation rec {
-  name = "klipper";
-  version = "unstable-2021-01-31";
+  pname = "klipper";
+  version = "unstable-2021-07-15";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "ef4d9c3abd30ae8a485020fd9ff2fb4529a143b3";
-    sha256 = "sha256-puAkSGL0DD0JUWejPdzr7zKIW2UP2soBBtgm2msUKzA=";
+    rev = "dafb74e3aba707db364ed773bb2135084ac0fffa";
+    sha256 = "sha256-wF5I8Mo89ohhysBRDMtkCDbCW9SKWrdYdbifmxCPJBc=";
   };
 
   # We have no LTO on i686 since commit 22284b0
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Klipper 3D printer firmware";
     homepage = "https://github.com/KevinOConnor/klipper";
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault zhaofengli ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };
