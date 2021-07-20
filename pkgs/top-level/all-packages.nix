@@ -16379,6 +16379,8 @@ in
 
   libelfin = callPackage ../development/libraries/libelfin { };
 
+  libetebase = callPackage ../development/libraries/libetebase { };
+
   libetpan = callPackage ../development/libraries/libetpan { };
 
   libexecinfo = callPackage ../development/libraries/libexecinfo { };
