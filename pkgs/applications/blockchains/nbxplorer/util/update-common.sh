@@ -8,6 +8,7 @@ set -euo pipefail
 
 pkgName=$1
 depsFile=$2
+customFlags=$3
 
 : ${getVersionFromTags:=}
 : ${refetch:=}
@@ -71,4 +72,4 @@ echo
 
 # Create deps file
 storeSrc="$(nix-build "$nixpkgs" -A $pkgName.src --no-out-link)"
-. "$scriptDir"/create-deps.sh "$storeSrc" "$depsFile"
+. "$scriptDir"/create-deps.sh "$storeSrc" "$depsFile" "$customFlags"

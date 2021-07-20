@@ -218,12 +218,12 @@ let
           # remove node_ name prefix
           (fetchpatch {
             url = "https://github.com/svanderburg/node2nix/commit/b54d45207427ff46e90f16f2f32771fdc8bff5a4.patch";
-            sha256 = "03cg2xwryvdlvg299dg91qxicrw2r43grja80an9zkb875ps8jxh";
+            sha256 = "sha256-ubUdF0q3l4xxqZ7f9EiQEUQzyqxi9Q6zsRPETHlfzh8=";
           })
           # set meta platform
           (fetchpatch {
             url = "https://github.com/svanderburg/node2nix/commit/58736093161f2d237c17e75a96529b018cd0ac64.patch";
-            sha256 = "1c91qfqa6p4hzyafv5pq6rpgnny2805n007b1443gbqwrz5awz6n";
+            sha256 = "0sif7803c9g6gjmmdniw5qxrq5igiz9nqdmdrcf1hxfi5x43a32h";
           })
         ];
       };

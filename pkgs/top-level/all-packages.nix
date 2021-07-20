@@ -1253,6 +1253,8 @@ in
 
   betterdiscord-installer = callPackage ../tools/misc/betterdiscord-installer { };
 
+  bitwise = callPackage ../tools/misc/bitwise { };
+
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
   brewtarget = libsForQt514.callPackage ../applications/misc/brewtarget { } ;
@@ -3217,6 +3219,8 @@ in
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
   rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
+
+  rm-improved = callPackage ../applications/misc/rm-improved { };
 
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
@@ -13783,6 +13787,8 @@ in
 
   khronos-ocl-icd-loader = callPackage ../development/libraries/khronos-ocl-icd-loader {  };
 
+  ko = callPackage ../development/tools/ko { };
+
   krankerl = callPackage ../development/tools/krankerl { };
 
   krew = callPackage ../development/tools/krew { };
@@ -18094,6 +18100,10 @@ in
 
   quicksynergy = callPackage ../applications/misc/quicksynergy { };
 
+  quill = callPackage ../tools/security/quill {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   qv2ray = libsForQt5.callPackage ../applications/networking/qv2ray {};
 
   qwt = callPackage ../development/libraries/qwt {};
@@ -21935,6 +21945,8 @@ in
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
 
+  userhosts = callPackage ../tools/networking/userhosts { };
+
   usermount = callPackage ../os-specific/linux/usermount { };
 
   util-linux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
@@ -24833,6 +24845,8 @@ in
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
     cairo = cairo.override { xcbSupport = true; };
   };
+
+  i3lock-blur = callPackage ../applications/window-managers/i3/lock-blur.nix { };
 
   i3lock-color = callPackage ../applications/window-managers/i3/lock-color.nix { };
 
