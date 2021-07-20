@@ -203,10 +203,10 @@ in rec {
 
   nixStable = callPackage common (rec {
     pname = "nix";
-    version = "2.3.12";
+    version = "2.3.14";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-ITp9ScRhB5syNh5NAI0kjX9o400syTR/Oo/5Ap+a+10=";
+      sha256 = "sha256-cToMnZU3+UpjeiiXnG3clz9zn8Xk+TbB7UbqmLMrlFk=";
     };
 
     inherit storeDir stateDir confDir boehmgc;
