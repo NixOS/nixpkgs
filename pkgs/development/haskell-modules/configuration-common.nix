@@ -1915,8 +1915,4 @@ EOT
     assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
     doJailbreak super.graphql;
 
-  # Too strict bounds on hnix
-  # https://github.com/Synthetica9/nix-linter/issues/56
-  nix-linter = doJailbreak super.nix-linter;
-
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
