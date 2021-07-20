@@ -108,8 +108,11 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
 
-      mv $out/share/1password/1Password-KeyringHelper $out/share/1password/1Password-KeyringHelper2
+      mv $out/share/1password/1Password-KeyringHelper $out/share/1password/1Password-KeyringHelper-Real
       ln -sf /run/wrappers/bin/_1password-keyring-helper $out/share/1password/1Password-KeyringHelper
+
+      mv $out/share/1password/1Password-BrowserSupport $out/share/1password/1Password-BrowserSupport-Real
+      ln -sf /run/wrappers/bin/_1password-browser-support $out/share/1password/1Password-BrowserSupport
 
       install -D -m0644 com.1password.1Password.policy \
         $out/share/polkit-1/actions/com.1password.1Password.policy

@@ -33,12 +33,23 @@ in
         };*/
 
         _1password-keyring-helper = {
-          #source = "${pkgs._1password-gui.out}/share/1password/1Password-KeyringHelper";
-          source = "${pkgs._1password-gui.out}/share/1password/1Password-KeyringHelper2";
+          # source = "${pkgs._1password-gui.out}/share/1password/1Password-KeyringHelper";
+          source = "${pkgs._1password-gui.out}/share/1password/1Password-KeyringHelper-Real";
           owner = "root";
           group = "onepassword";
-          permissions = "u+rxs,g+rxs,o+rx";
-          capabilities = "cap_setpcap+ep";
+          # permissions = "u+rxs,g+rxs,o+rx";
+          # capabilities = "cap_setpcap+ep";
+          setuid = true;
+        };
+
+        _1password-browser-support = {
+          # source = "${pkgs._1password-gui.out}/share/1password/1Password-BrowserSupport";
+          source = "${pkgs._1password-gui.out}/share/1password/1Password-BrowserSupport-Real";
+          owner = "root";
+          group = "onepassword";
+          # permissions = "u+rxs,g+rxs,o+rx";
+          # capabilities = "cap_setpcap+ep";
+          setuid = true;
         };
       };
     };
