@@ -25812,6 +25812,8 @@ with pkgs;
 
   etesync-dav = callPackage ../applications/misc/etesync-dav {};
 
+  etesync-web = callPackage ../servers/web-apps/etesync-web { };
+
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
