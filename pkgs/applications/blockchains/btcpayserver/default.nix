@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, linkFarmFromDrvs, makeWrapper,
-  dotnetPackages, dotnetCorePackages
+  dotnetPackages, dotnetCorePackages, altcoinSupport ? false
 }:
 
 let
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     nuget sources Add -Name tmpsrc -Source $TMP/nuget
     nuget init ${linkFarmFromDrvs "deps" deps} $TMP/nuget
 
-    dotnet restore --source $TMP/nuget BTCPayServer/BTCPayServer.csproj
-    dotnet publish --no-restore --output $out/share/$pname -c Release BTCPayServer/BTCPayServer.csproj
+    dotnet restore --source $TMP/nuget ${lib.optionalString altcoinSupport ''/p:Configuration="Altcoins-Release"''} BTCPayServer/BTCPayServer.csproj
+    dotnet publish --no-restore --output $out/share/$pname ${lib.optionalString altcoinSupport "-c Altcoins-Release"} BTCPayServer/BTCPayServer.csproj
   '';
 
   # btcpayserver requires the publish directory as its working dir

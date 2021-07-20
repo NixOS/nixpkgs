@@ -26,8 +26,12 @@ let
 
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 
-    postInstall = "rm -rf ${placeholder "out"}/share/libwebsockets-test-server";
-    disallowedReferences = [ stdenv.cc.cc ];  # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o
+    postInstall = ''
+      rm -r ${placeholder "out"}/share/libwebsockets-test-server
+    '';
+
+    # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o
+    disallowedReferences = [ stdenv.cc.cc ];
 
     meta = with lib; {
       description = "Light, portable C library for websockets";
