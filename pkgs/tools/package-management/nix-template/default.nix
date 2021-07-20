@@ -35,9 +35,10 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/nix-template \
       --prefix PATH : ${lib.makeBinPath [ nix ]}
 
-    installShellCompletion --bash --cmd nix-template <($out/bin/nix-template completions bash)
-    installShellCompletion --zsh --cmd nix-template <($out/bin/nix-template completions zsh)
-    installShellCompletion --fish --cmd nix-template <($out/bin/nix-template completions fish)
+    installShellCompletion --cmd nix-template \
+      --bash <($out/bin/nix-template completions bash) \
+      --fish <($out/bin/nix-template completions fish) \
+      --zsh <($out/bin/nix-template completions zsh)
   '';
 
   meta = with lib; {
