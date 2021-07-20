@@ -2,10 +2,7 @@
 , docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
 , gnugrep, gnused, jq, nix }:
 
-let
-  binPath = lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nix-prefetch";
   version = "0.4.1";
 
@@ -55,7 +52,7 @@ in stdenv.mkDerivation rec {
     install -Dm555 -t $lib src/*.sh
     install -Dm444 -t $lib lib/*
     makeWrapper $lib/main.sh $out/bin/${pname} \
-      --prefix PATH : ${binPath}
+      --prefix PATH : ${lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ]}
 
     installManPage doc/nix-prefetch.?
 
@@ -69,7 +66,7 @@ in stdenv.mkDerivation rec {
     description = "Prefetch any fetcher function call, e.g. package sources";
     license = licenses.mit;
     maintainers = with maintainers; [ msteen ];
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/msteen/nix-prefetch";
     platforms = platforms.all;
   };
 }
