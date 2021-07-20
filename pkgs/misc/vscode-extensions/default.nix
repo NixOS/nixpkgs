@@ -921,10 +921,10 @@ let
 
       ms-vscode.cpptools = callPackage ./cpptools { };
 
-      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
+      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
 
       ms-python.python = callPackage ./python {
-        extractNuGet = callPackage ./python/extract-nuget.nix {};
+        extractNuGet = callPackage ./python/extract-nuget.nix { };
       };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
@@ -1013,7 +1013,7 @@ let
         };
       };
 
-      matklad.rust-analyzer = callPackage ./rust-analyzer {};
+      matklad.rust-analyzer = callPackage ./rust-analyzer { };
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = with lib; {
@@ -1303,7 +1303,7 @@ let
         };
       };
 
-      vadimcn.vscode-lldb = callPackage ./vscode-lldb {};
+      vadimcn.vscode-lldb = callPackage ./vscode-lldb { };
 
       vincaslt.highlight-matching-tag = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1317,7 +1317,7 @@ let
         };
       };
 
-      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare {};
+      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare { };
 
       vscodevim.vim = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1418,7 +1418,7 @@ let
 
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
-      WakaTime.vscode-wakatime = callPackage ./wakatime {};
+      WakaTime.vscode-wakatime = callPackage ./wakatime { };
 
       wholroyd.jinja = buildVscodeMarketplaceExtension {
         mktplcRef = {
