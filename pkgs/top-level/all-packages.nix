@@ -23455,6 +23455,8 @@ in
 
   corrscope = libsForQt5.callPackage ../applications/video/corrscope { };
 
+  coreimage = libsForQt5.callPackage ../applications/graphics/coreimage { };
+
   csa = callPackage ../applications/audio/csa { };
 
   csound = callPackage ../applications/audio/csound {
