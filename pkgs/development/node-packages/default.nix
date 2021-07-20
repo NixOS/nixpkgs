@@ -46,17 +46,16 @@ let
       '';
     };
 
-    fast-cli = super.fast-cli.override (
-      {
-        nativeBuildInputs = [ pkgs.makeWrapper ];
-        prePatch = ''
-          export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-        '';
-        postInstall = ''
-          wrapProgram $out/bin/fast \
-            --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-        '';
-      });
+    fast-cli = super.fast-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/fast \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
 
     hyperspace-cli = super."@hyperspace/cli".override {
       nativeBuildInputs = with pkgs; [
