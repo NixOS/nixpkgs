@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  patches = lib.optional stdenv.isDarwin ./0001-TargetConditionals.patch;
+  patches = [ ./0001-TargetConditionals.patch ];
 
   postPatch = ''
     substituteInPlace cups/testfile.c \
