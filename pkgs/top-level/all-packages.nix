@@ -6363,6 +6363,8 @@ in
 
   libscrypt = callPackage ../development/libraries/libscrypt { };
 
+  libcprime = libsForQt5.callPackage ../development/libraries/libcprime { };
+
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
   libcoap = callPackage ../applications/networking/libcoap {
