@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, writeText, asttokens
-, pycryptodome, pytest_xdist, pytest-cov, recommonmark, semantic-version, sphinx
+, pycryptodome, pytest-xdist, pytest-cov, recommonmark, semantic-version, sphinx
 , sphinx_rtd_theme, pytest-runner }:
 
 let

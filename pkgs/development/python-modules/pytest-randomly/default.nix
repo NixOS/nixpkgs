@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , factory_boy, faker, numpy, backports-entry-points-selectable
-, pytestCheckHook, pytest_xdist
+, pytestCheckHook, pytest-xdist
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytest_xdist
+    pytest-xdist
     numpy
     factory_boy
     faker

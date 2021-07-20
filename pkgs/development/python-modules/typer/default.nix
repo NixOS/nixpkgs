@@ -5,7 +5,7 @@
 , pytestCheckHook
 , shellingham
 , pytest-cov
-, pytest_xdist
+, pytest-xdist
 , pytest-sugar
 , coverage
 , mypy
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-cov
-    pytest_xdist
+    pytest-xdist
     pytest-sugar
     shellingham
     coverage

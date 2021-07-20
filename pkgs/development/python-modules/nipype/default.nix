@@ -19,7 +19,7 @@
 , pybids
 , pydot
 , pytest
-, pytest_xdist
+, pytest-xdist
 , pytest-forked
 , rdflib
 , scipy
@@ -93,7 +93,7 @@ buildPythonPackage rec {
     mock
     pytest
     pytest-forked
-    pytest_xdist
+    pytest-xdist
     pytest-cov
     which
   ];

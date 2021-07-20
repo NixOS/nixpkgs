@@ -64,7 +64,7 @@ buildPythonApplication rec {
     pypdf2
     pytest
     pytest-helpers-namespace
-    pytest_xdist
+    pytest-xdist
     pytest-cov
     python-xmp-toolkit
     pytestCheckHook

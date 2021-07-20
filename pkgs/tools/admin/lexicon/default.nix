@@ -66,7 +66,7 @@ buildPythonApplication rec {
     mock
     pytest
     pytest-cov
-    pytest_xdist
+    pytest-xdist
     vcrpy
   ];
 

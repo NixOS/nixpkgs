@@ -480,7 +480,6 @@ with self; with super; {
 
   pytest-runner = callPackage ../development/python-modules/pytest-runner/2.nix { };
 
-  pytest_xdist = self.pytest-xdist; # added 2021-01-04
   pytest-xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
 
   python-otr = callPackage ../development/python-modules/python-otr { };
