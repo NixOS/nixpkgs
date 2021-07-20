@@ -86,6 +86,24 @@ buildPythonPackage rec {
   ] ++ lib.optional stdenv.isDarwin [
     # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
     "test_inspect_main_url"
+    "test_auth_header_uses_first_match"
+    "test_linkcheck_request_headers"
+    "test_linkcheck_request_headers_no_slash"
+    "test_follows_redirects_on_HEAD"
+    "test_invalid_ssl"
+    "test_connect_to_selfsigned_with_tls_verify_false"
+    "test_connect_to_selfsigned_with_tls_cacerts"
+    "test_connect_to_selfsigned_with_requests_env_var"
+    "test_connect_to_selfsigned_nonexistent_cert_file"
+    "test_TooManyRedirects_on_HEAD"
+    "test_too_many_requests_retry_after_int_del"
+    "test_too_many_requests_retry_after_HTTP_date"
+    "test_too_many_requests_retry_after_without_header"
+    "test_too_many_requests_user_timeout"
+    "test_raises_for_invalid_status"
+    "test_auth_header_no_match"
+    "test_follows_redirects_on_GET"
+    "test_connect_to_selfsigned_fails"
   ];
 
   meta = with lib; {
