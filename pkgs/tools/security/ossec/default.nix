@@ -11,8 +11,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ which ];
 
-  phases = [ "unpackPhase" "patchPhase" "buildPhase" ];
-
   patches = [ ./no-root.patch ];
 
   buildPhase = ''
