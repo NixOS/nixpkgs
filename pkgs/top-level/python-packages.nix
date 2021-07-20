@@ -7124,7 +7124,6 @@ in {
   python-sat = callPackage ../development/python-modules/python-sat { };
 
   python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat { };
-  python_simple_hipchat = self.python-simple-hipchat;
 
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
