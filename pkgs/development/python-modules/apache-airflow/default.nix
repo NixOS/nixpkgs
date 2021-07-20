@@ -65,13 +65,13 @@
 }:
 let
 
-  version = "2.1.1rc1";
+  version = "2.1.2";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
     rev = version;
-    sha256 = "1vzzmcfgqni9rkf7ggh8mswnm3ffwaishcz1ysrwx0a96ilhm9q2";
+    sha256 = "sha256-Q0l2c1tuxcoE65zgdxnv/j1TIoQzaNoEFCYHvqN+Bzk=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
