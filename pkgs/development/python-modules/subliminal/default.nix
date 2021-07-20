@@ -20,7 +20,7 @@
 , pytest
 , pytest-flakes
 , pytest-cov
-, pytestrunner
+, pytest-runner
 }:
 
 buildPythonPackage rec {
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     sympy vcrpy pytest pytest-flakes
-    pytest-cov pytestrunner
+    pytest-cov pytest-runner
   ];
 
   # https://github.com/Diaoul/subliminal/pull/963

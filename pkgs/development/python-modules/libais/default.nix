@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi,
-  six, pytest, pytestrunner, pytest-cov, coverage
+  six, pytest, pytest-runner, pytest-cov, coverage
 }:
 buildPythonPackage rec {
   pname = "libais";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # data files missing
   doCheck = false;
 
-  checkInputs = [ pytest pytestrunner pytest-cov coverage ];
+  checkInputs = [ pytest pytest-runner pytest-cov coverage ];
   propagatedBuildInputs = [ six ];
 
   meta = with lib; {

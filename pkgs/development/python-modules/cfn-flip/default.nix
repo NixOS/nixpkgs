@@ -6,7 +6,7 @@
 , click
 , pytest
 , pytest-cov
-, pytestrunner
+, pytest-runner
 , pyyaml
 , six
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     pytest-cov
-    pytestrunner
+    pytest-runner
   ];
 
   checkPhase = ''

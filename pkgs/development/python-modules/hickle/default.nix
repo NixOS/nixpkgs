@@ -10,7 +10,7 @@
 , codecov
 , pytest
 , pytest-cov
-, pytestrunner
+, pytest-runner
 , coveralls
 , twine
 , check-manifest
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   doCheck = false; # incompatible with latest astropy
   checkInputs = [
-    pytest pytest-cov pytestrunner coveralls scipy pandas astropy twine check-manifest codecov
+    pytest pytest-cov pytest-runner coveralls scipy pandas astropy twine check-manifest codecov
   ];
 
   pythonImportsCheck = [ "hickle" ];

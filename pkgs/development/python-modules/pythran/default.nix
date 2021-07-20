@@ -2,7 +2,7 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
-, pytestrunner
+, pytest-runner
 , ply
 , networkx
 , decorator
@@ -39,7 +39,7 @@ in buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = [

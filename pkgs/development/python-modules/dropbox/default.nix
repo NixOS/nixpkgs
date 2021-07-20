@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pytestrunner, requests, urllib3, mock, setuptools, stone }:
+, pytest-runner, requests, urllib3, mock, setuptools, stone }:
 
 buildPythonPackage rec {
   pname = "dropbox";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # Set DROPBOX_TOKEN environment variable to a valid token.
   doCheck = false;
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ requests urllib3 mock setuptools stone ];
 
   meta = with lib; {

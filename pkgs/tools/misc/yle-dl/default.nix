@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   pythonPath = [ rtmpdump php wget ];
 
   doCheck = false; # tests require network access
-  checkInputs = with python3Packages; [ ffmpeg pytest pytestrunner ];
+  checkInputs = with python3Packages; [ ffmpeg pytest pytest-runner ];
 
   meta = with lib; {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";

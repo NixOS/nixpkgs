@@ -1,12 +1,12 @@
 { buildPythonPackage, lib, fetchPypi, numpy
-, pydantic, pint,  networkx, pytestrunner, pytest-cov, pytest
+, pydantic, pint,  networkx, pytest-runner, pytest-cov, pytest
 } :
 
 buildPythonPackage rec {
   pname = "qcelemental";
   version = "0.21.0";
 
-  checkInputs = [ pytestrunner pytest-cov pytest ];
+  checkInputs = [ pytest-runner pytest-cov pytest ];
   propagatedBuildInputs = [ numpy pydantic pint networkx ];
 
   src = fetchPypi {

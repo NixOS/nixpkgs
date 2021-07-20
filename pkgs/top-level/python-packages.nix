@@ -6883,8 +6883,7 @@ in {
 
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
-  pytest-runner = self.pytestrunner; # added 2021-01-04
-  pytestrunner = callPackage ../development/python-modules/pytestrunner { };
+  pytest-runner = callPackage ../development/python-modules/pytest-runner { };
 
   pytest-sanic = callPackage ../development/python-modules/pytest-sanic {
     sanic = self.sanic.override { doCheck = false; };

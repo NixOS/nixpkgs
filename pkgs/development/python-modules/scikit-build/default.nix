@@ -17,7 +17,7 @@
 , pytest
 , pytest-cov
 , pytest-mock
-, pytestrunner
+, pytest-runner
 , pytest-virtualenv
 , requests
 , six
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytest
     pytest-cov
     pytest-mock
-    pytestrunner
+    pytest-runner
     pytest-virtualenv
     requests
     six

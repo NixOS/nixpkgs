@@ -7,7 +7,7 @@
 , psutil
 , pytest
 , pytest-cov
-, pytestrunner
+, pytest-runner
 , setuptools-scm
 }:
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "009c4rbyj4cjb8fznccfpr5wrzdmi56wq990yjh22n0z2qqylmkf";
   };
 
-  nativeBuildInputs = [ setuptools-scm pkgconfig pytestrunner ];
+  nativeBuildInputs = [ setuptools-scm pkgconfig pytest-runner ];
   checkInputs = [ pytest pytest-cov psutil ];
   propagatedBuildInputs = lib.optionals (!isPy3k) [ future ];
 

@@ -25540,7 +25540,7 @@ in
 
   matrixcli = callPackage ../applications/networking/instant-messengers/matrixcli {
     inherit (python3Packages) buildPythonApplication buildPythonPackage
-      pygobject3 pytestrunner requests responses pytest python-olm
+      pygobject3 pytest-runner requests responses pytest python-olm
       canonicaljson;
   };
 

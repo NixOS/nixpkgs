@@ -1,5 +1,5 @@
 { buildPythonPackage, lib, fetchPypi, pyyaml, qcelemental, pydantic
-, py-cpuinfo, psutil, pytestrunner, pytest, pytest-cov
+, py-cpuinfo, psutil, pytest-runner, pytest, pytest-cov
 } :
 
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "0.19.0";
 
   checkInputs = [
-    pytestrunner
+    pytest-runner
     pytest-cov
     pytest
   ];
