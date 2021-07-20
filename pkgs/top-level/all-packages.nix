@@ -13210,6 +13210,8 @@ in
   buildkite-agent2 = throw "pkgs.buildkite-agent2 has been discontinued. Please use pkgs.buildkite-agent (v3.x)";
   buildkite-agent3 = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
+  buildkite-agent-metrics = callPackage ../servers/monitoring/buildkite-agent-metrics { };
+
   buildkite-cli = callPackage ../development/tools/continuous-integration/buildkite-cli { };
 
   bump = callPackage ../development/tools/github/bump { };
