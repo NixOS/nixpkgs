@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "0zlkr0r06w3y34nx174wyfwk69i2q0bcq88kfvb0j3d28fdh5p31";
   };
 
-  vendorSha256 = "sha256-LOnnvidUdDDhNPWM+o0Ef4NqRboi89s0DzDwuxi0nl8=";
+  vendorSha256 = "065n1vhj5003ay4pflp418w32s84jvza52lghj6cpcdzs0rwgc45";
 
   outputs = [ "out" "wordlists" ];
 
