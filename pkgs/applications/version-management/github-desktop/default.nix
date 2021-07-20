@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , wrapGAppsHook
-, gnome3
+, gnome
 , libsecret
 , git
 , curl
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.gnome-keyring
+    gnome.gnome-keyring
     xlibs.libXdamage
     xlibs.libX11
     libsecret
