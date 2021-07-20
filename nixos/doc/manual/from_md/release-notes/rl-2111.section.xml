@@ -523,6 +523,12 @@
           2020 to 2021
         </para>
       </listitem>
+      <listitem>
+        <para>
+          the <literal>mingw-64</literal> package has been upgraded from
+          6.0.0 to 9.0.0
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
