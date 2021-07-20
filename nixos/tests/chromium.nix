@@ -81,7 +81,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         # Add optional CLI options:
         options = []
         major_version = "${versions.major (getVersion chromiumPkg.name)}"
-        if major_version > "91":
+        if major_version > "91" and pname.startswith("google-chrome"):
             # To avoid a GPU crash:
             options += ["--use-gl=angle", "--use-angle=swiftshader"]
         options.append("file://${startupHTML}")
