@@ -5,7 +5,7 @@
 , mypy
 , pytestCheckHook
 , python-lsp-server
-, pythonAtLeast
+, pythonOlder
 }:
 
 buildPythonPackage rec {
