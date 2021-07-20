@@ -9,7 +9,7 @@ let
 in stdenv.mkDerivation {
   name = "maphosts-${env.gems.maphosts.version}";
 
-  phases = ["installPhase"];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
