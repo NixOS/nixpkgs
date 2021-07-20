@@ -23445,6 +23445,8 @@ in
 
   copyq = libsForQt514.callPackage ../applications/misc/copyq { };
 
+  coreaction = libsForQt5.callPackage ../applications/misc/coreaction { };
+
   corectrl = libsForQt5.callPackage ../applications/misc/corectrl { };
 
   coriander = callPackage ../applications/video/coriander {
