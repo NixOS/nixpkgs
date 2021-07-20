@@ -1,6 +1,6 @@
 { buildPythonPackage
 , callPackage
-, pytestcov
+, pytest-cov
 , fetchPypi
 , lib
 , pytest
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # and shouldn't be used in production code
   propagatedBuildInputs = [ (callPackage ./infix.nix { }) ];
 
-  checkInputs = [ pytest pytestcov ];
+  checkInputs = [ pytest pytest-cov ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/danielhones/pycategories";

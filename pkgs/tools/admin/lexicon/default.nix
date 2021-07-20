@@ -65,7 +65,7 @@ buildPythonApplication rec {
   checkInputs = [
     mock
     pytest
-    pytestcov
+    pytest-cov
     pytest_xdist
     vcrpy
   ];

@@ -6,7 +6,7 @@
 , pkgconfig
 , psutil
 , pytest
-, pytestcov
+, pytest-cov
 , pytestrunner
 , setuptools-scm
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm pkgconfig pytestrunner ];
-  checkInputs = [ pytest pytestcov psutil ];
+  checkInputs = [ pytest pytest-cov psutil ];
   propagatedBuildInputs = lib.optionals (!isPy3k) [ future ];
 
   # give a hint to setuptools-scm on package version

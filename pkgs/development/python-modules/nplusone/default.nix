@@ -1,5 +1,5 @@
 { blinker, buildPythonPackage, fetchFromGitHub, lib, isPy27, six, mock, pytest
-, webtest, pytestcov, pytest-django, pytest-pythonpath, flake8, sqlalchemy
+, webtest, pytest-cov, pytest-django, pytest-pythonpath, flake8, sqlalchemy
 , flask_sqlalchemy, peewee }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     mock
     pytest
     webtest
-    pytestcov
+    pytest-cov
     pytest-django
     pytest-pythonpath
     flake8

@@ -45,7 +45,7 @@ buildPythonApplication rec {
     hypothesis
     pytest
     pytestrunner
-    pytestcov
+    pytest-cov
     glibcLocales
   ];
 

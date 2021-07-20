@@ -26,7 +26,7 @@
 , simplejson
 , traits
 , xvfbwrapper
-, pytestcov
+, pytest-cov
 , codecov
 , sphinx
 # other dependencies
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     pytest
     pytest-forked
     pytest_xdist
-    pytestcov
+    pytest-cov
     which
   ];
 

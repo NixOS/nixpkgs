@@ -7,7 +7,7 @@
 , six
 , semver
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pytestrunner
 , openapi-spec-validator
 }:
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
     openapi-spec-validator
   ];
 

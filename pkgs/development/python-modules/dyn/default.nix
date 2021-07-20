@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestcov, mock
+{ lib, buildPythonPackage, fetchPypi, pytest, pytest-cov, mock
 , pytest_xdist, covCore, glibcLocales }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
     mock
     pytest_xdist
     covCore

@@ -20,7 +20,7 @@
 , wget
 , deepdiff
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , websocket-client
 }:
 
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   checkInputs = [
     deepdiff
     pytestCheckHook
-    pytestcov
+    pytest-cov
     websocket-client
   ];
 

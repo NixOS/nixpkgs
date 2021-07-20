@@ -15,7 +15,7 @@
 , ninja
 , pathpy
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-mock
 , pytestrunner
 , pytest-virtualenv
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     ninja
     pathpy
     pytest
-    pytestcov
+    pytest-cov
     pytest-mock
     pytestrunner
     pytest-virtualenv

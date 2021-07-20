@@ -7,7 +7,7 @@
 # Check inputs
 , pytest
 , pytestrunner
-, pytestcov
+, pytest-cov
 , pytest-flake8
 , pytest-isort
 }:
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ webencodings ];
 
-  checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort ];
+  checkInputs = [ pytest pytestrunner pytest-cov pytest-flake8 pytest-isort ];
 
   # https://github.com/PyCQA/pycodestyle/issues/598
   preCheck = ''

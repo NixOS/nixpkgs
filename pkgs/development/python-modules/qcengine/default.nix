@@ -1,5 +1,5 @@
 { buildPythonPackage, lib, fetchPypi, pyyaml, qcelemental, pydantic
-, py-cpuinfo, psutil, pytestrunner, pytest, pytestcov
+, py-cpuinfo, psutil, pytestrunner, pytest, pytest-cov
 } :
 
 buildPythonPackage rec {
@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestrunner
-    pytestcov
+    pytest-cov
     pytest
   ];
 

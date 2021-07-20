@@ -22,7 +22,7 @@ buildPythonApplication rec {
     asynctest
     unittest-data-provider
     pytest
-    pytestcov
+    pytest-cov
     pytest-aiohttp
   ];
 

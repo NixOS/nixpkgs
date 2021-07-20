@@ -5,7 +5,7 @@
 # pythonPackages
 , click
 , pytest
-, pytestcov
+, pytest-cov
 , pytestrunner
 , pyyaml
 , six
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
     pytestrunner
   ];
 

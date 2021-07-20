@@ -2,7 +2,7 @@
 , fonttools
 , lxml, fs # for fonttools extras
 , setuptools-scm
-, pytestCheckHook, pytestcov, pytest_xdist
+, pytestCheckHook, pytest-cov, pytest_xdist
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
     pytest_xdist
   ];
   disabledTests = [

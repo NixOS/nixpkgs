@@ -9,7 +9,7 @@
 , pygments
 , urllib3
 , pytest
-, pytestcov
+, pytest-cov
 , mock
 , sphinx
 , testtools
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ptable click requests prompt_toolkit pygments urllib3 ];
 
-  checkInputs = [ pytest pytestcov mock sphinx testtools ptable click requests prompt_toolkit pygments urllib3 ];
+  checkInputs = [ pytest pytest-cov mock sphinx testtools ptable click requests prompt_toolkit pygments urllib3 ];
 
   checkPhase = ''
     pytest

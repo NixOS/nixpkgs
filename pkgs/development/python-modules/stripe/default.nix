@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, requests, pytest, pytestcov, pytest-mock, pytest_xdist }:
+{ lib, buildPythonPackage, fetchPypi, requests, pytest, pytest-cov, pytest-mock, pytest_xdist }:
 
 buildPythonPackage rec {
   pname = "stripe";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ pytest pytestcov pytest-mock pytest_xdist ];
+  checkInputs = [ pytest pytest-cov pytest-mock pytest_xdist ];
 
   meta = with lib; {
     description = "Stripe Python bindings";
