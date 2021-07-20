@@ -6862,8 +6862,7 @@ in {
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
 
-  pytest-quickcheck = self.pytestquickcheck;
-  pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
+  pytest-quickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
   pytest-raises = callPackage ../development/python-modules/pytest-raises { };
 
