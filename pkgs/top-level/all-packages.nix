@@ -9888,9 +9888,7 @@ in
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
 
-  tigervnc = callPackage ../tools/admin/tigervnc {
-    fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc xorg.fontbhlucidatypewriter75dpi ];
-  };
+  tigervnc = callPackage ../tools/admin/tigervnc {};
 
   tightvnc = callPackage ../tools/admin/tightvnc {
     fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
