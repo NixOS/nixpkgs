@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, meson, pkg-config, ninja, wayland
+{ stdenv, lib, fetchFromGitHub, meson, pkg-config, ninja, wayland-scanner
 , libdrm
 , minimal ? false, libva-minimal
-, libX11, libXext, libXfixes, libffi, libGL
+, libX11, libXext, libXfixes, wayland, libffi, libGL
 , mesa
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland ];
+  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
 
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];

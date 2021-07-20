@@ -1,4 +1,4 @@
-{ lib, stdenv, wlroots, pkg-config
+{ lib, stdenv, wlroots, pkg-config, wayland-scanner
 , libxkbcommon, pixman, udev, wayland, wayland-protocols
 }:
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   sourceRoot = "source/tinywl";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wayland-scanner ];
   buildInputs = [ libxkbcommon pixman udev wayland wayland-protocols wlroots ];
 
   installPhase = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/swaywm/wlroots/tree/master/tinywl";
-    description = ''"minimum viable product" Wayland compositor based on wlroots.'';
+    description = ''A "minimum viable product" Wayland compositor based on wlroots'';
     maintainers = with maintainers; [ qyliss ];
     license = licenses.cc0;
     inherit (wlroots.meta) platforms;

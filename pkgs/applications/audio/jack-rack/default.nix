@@ -1,8 +1,9 @@
 { lib, stdenv, fetchurl, pkg-config, libjack2, ladspaH, gtk2, alsa-lib, libxml2, lrdf }:
 stdenv.mkDerivation rec {
-  name = "jack-rack-1.4.7";
+  pname = "jack-rack";
+  version = "1.4.7";
   src = fetchurl {
-    url = "mirror://sourceforge/jack-rack/${name}.tar.bz2";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "1lmibx9gicagcpcisacj6qhq6i08lkl5x8szysjqvbgpxl9qg045";
   };
   nativeBuildInputs = [ pkg-config ];

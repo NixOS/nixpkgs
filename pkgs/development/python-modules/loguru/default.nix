@@ -6,15 +6,14 @@
 , isPy27
 , colorama
 , pytestCheckHook
-, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "loguru";
   version = "0.5.3";
 
-  # python3.9 compatibility should be in the next release after 0.5.3
-  disabled = isPy27 || pythonAtLeast "3.9";
+  disabled = isPy27;
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "b28e72ac7a98be3d28ad28570299a393dfcd32e5e3f6a353dec94675767b6319";
@@ -25,6 +24,11 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/Delgan/loguru/commit/31cf758ee9d22dbfa125f38153782fe20ac9dce5.patch";
       sha256 = "1lzbs8akg1s7s6xjl3samf4c4bpssqvwg5fn3mwlm4ysr7jd5y67";
+    })
+    # fix tests with Python 3.9
+    (fetchpatch {
+      url = "https://github.com/Delgan/loguru/commit/19f518c5f1f355703ffc4ee62f0e1e397605863e.patch";
+      sha256 = "0yn6smik58wdffr4svqsy2n212fwdlcfcwpgqhl9hq2zlivmsdc6";
     })
   ];
 

@@ -31,7 +31,8 @@ buildPythonPackage rec {
     "test_custom_metadata"
   ];
 
-  propagatedBuildInputs = [ olefile ];
+  propagatedBuildInputs = [ olefile ]
+    ++ lib.optionals (lib.versionAtLeast version "8.2.0") [ defusedxml ];
 
   checkInputs = [ pytestCheckHook pyroma numpy ];
 

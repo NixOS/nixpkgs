@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "tidyp-1.04";
+  pname = "tidyp";
+  version = "1.04";
 
-  src = fetchurl {
-    url = "https://github.com/downloads/petdance/tidyp/${name}.tar.gz";
-    sha256 = "0f5ky0ih4vap9c6j312jn73vn8m2bj69pl2yd3a5nmv35k9zmc10";
+  src = fetchFromGitHub {
+    owner = "petdance";
+    repo = "tidyp";
+    rev = version;
+    sha256 = "0jslskziwzk4hb6i640fvpnbv2zxrvim6pdx2gwx5wyc64aviskc";
   };
 
   hardeningDisable = [ "format" ];

@@ -5,10 +5,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "glew-2.2.0";
+  pname = "glew";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${name}.tgz";
+    url = "mirror://sourceforge/glew/${pname}-${version}.tgz";
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 

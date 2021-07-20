@@ -1,7 +1,6 @@
 { lib
-, python3Packages
+, python38
 , fetchFromGitHub
-, python3
 , fetchpatch
 }:
 
@@ -17,9 +16,14 @@
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
-python3Packages.buildPythonApplication rec {
+let
+  python3 = python38;
+in python3.pkgs.buildPythonApplication rec {
   pname = "tts";
   version = "0.1.2";
+
+  # https://github.com/coqui-ai/TTS/issues/570
+  disabled = python3.pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
@@ -35,11 +39,11 @@ python3Packages.buildPythonApplication rec {
     sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt
   '';
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
     cython
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     anyascii
     coqpit
     flask
@@ -69,11 +73,11 @@ python3Packages.buildPythonApplication rec {
     # cython modules are not installed for some reasons
     (
       cd TTS/tts/layers/glow_tts/monotonic_align
-      ${python3Packages.python.interpreter} setup.py install --prefix=$out
+      ${python3.interpreter} setup.py install --prefix=$out
     )
   '';
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python3.pkgs; [
     pytest-sugar
     pytestCheckHook
   ];
