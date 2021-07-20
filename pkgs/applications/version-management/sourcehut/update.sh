@@ -1,8 +1,11 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p git mercurial common-updater-scripts
+set -x
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
 root=../../../..
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
 
 default() {
   (cd "$root" && nix-instantiate --eval --strict -A "sourcehut.python.pkgs.$1.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
@@ -13,19 +16,18 @@ version() {
 }
 
 src_url() {
-  (cd "$root" && nix-instantiate --eval --strict -A "sourcehut.python.pkgs.$1.src.drvAttrs.url" | tr -d '"')
+  nix-instantiate --eval --strict --expr " with import $root {}; let src = sourcehut.python.pkgs.$1.drvAttrs.src; in src.url or src.meta.homepage" | tr -d '"'
 }
 
 get_latest_version() {
   src="$(src_url "$1")"
-  tmp=$(mktemp -d)
-
+  rm -rf "$tmp"
   if [ "$1" = "hgsrht" ]; then
-    hg clone "$src" "$tmp" &> /dev/null
+    hg clone "$src" "$tmp" >/dev/null
     printf "%s" "$(cd "$tmp" && hg log --limit 1 --template '{latesttag}')"
   else
-    git clone "$src" "$tmp"
-    printf "%s" "$(cd "$tmp" && git describe $(git rev-list --tags --max-count=1))"
+    git clone "$src" "$tmp" >/dev/null
+    printf "%s" "$(cd "$tmp" && git describe "$(git rev-list --tags --max-count=1)")"
   fi
 }
 
@@ -36,19 +38,33 @@ update_version() {
 
   (cd "$root" && update-source-version "sourcehut.python.pkgs.$1" "$version")
 
+  # Update vendorSha256 of Go modules
+  nixFile="${1%srht}".nix
+  nixFile="${nixFile/build/builds}"
+  retry=true
+  while "$retry"; do
+    retry=false;
+    exec < <(exec nix -L build -f "$root" sourcehut.python.pkgs."$1" 2>&1)
+    while IFS=' :' read -r origin hash; do
+      case "$origin" in
+        (expected|specified) oldHash="$hash";;
+        (got) sed -i "s|$oldHash|$(nix hash to-sri --type sha256 "$hash")|" "$nixFile"; retry=true; break;;
+        (*) printf >&2 "%s\n" "$origin${hash:+:$hash}"
+      esac
+    done
+  done
+
   git add "$default_nix"
-  git commit -m "$1: $version_old -> $version"
+  git commit -m "sourcehut.$1: $version_old -> $version"
 }
 
-services=( "srht" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
-           "metasrht" "pastesrht" "todosrht" "scmsrht" )
-
-# Whether or not a specific service is requested
-if [ -n "$1" ]; then
-  version="$(get_latest_version "$1")"
-  (cd "$root" && update-source-version "sourcehut.python.pkgs.$1" "$version")
+if [ $# -gt 0 ]; then
+  services=("$@")
 else
-  for service in "${services[@]}"; do
-    update_version "$service"
-  done
+  services=( "srht" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
+             "metasrht" "pastesrht" "todosrht" "scmsrht" )
 fi
+
+for service in "${services[@]}"; do
+  update_version "$service"
+done
