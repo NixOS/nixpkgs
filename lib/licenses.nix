@@ -749,6 +749,10 @@ in mkLicense lset) ({
     fullName = "Server Side Public License";
     url = "https://www.mongodb.com/licensing/server-side-public-license";
     free = false;
+    # NOTE Debatable.
+    # The license a slightly modified AGPL but still considered unfree by the
+    # OSI for what seem like political reasons
+    redistributable = true; # Definitely redistributable though, it's an AGPL derivative
   };
 
   stk = {
@@ -775,10 +779,12 @@ in mkLicense lset) ({
   unfreeRedistributable = {
     fullName = "Unfree redistributable";
     free = false;
+    redistributable = true;
   };
 
   unfreeRedistributableFirmware = {
     fullName = "Unfree redistributable firmware";
+    redistributable = true;
     # Note: we currently consider these "free" for inclusion in the
     # channel and NixOS images.
   };
