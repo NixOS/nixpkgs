@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, jre }:
 
-stdenv.mkDerivation rec rec {
+stdenv.mkDerivation rec {
   pname = "ditaa";
   version = "0.11.0";
 
