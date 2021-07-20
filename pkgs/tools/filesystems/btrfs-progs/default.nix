@@ -1,19 +1,46 @@
-{ lib, stdenv, fetchurl, pkg-config, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkg-config
+, attr
+, acl
+, zlib
+, libuuid
+, e2fsprogs
+, lzo
+, asciidoc
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxslt
+, zstd
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
   version = "5.12.1";
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-lQhG/qRU+0scOfD6RUmDZEVy35HfXAYEezNb8tVHN1k=";
+  src = fetchFromGitHub {
+    owner = "kdave";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-rC9X4XzmT6PUDCajLkhuG85nRjJTqQ4mvevF4HWgHNE=";
   };
 
   nativeBuildInputs = [
-    pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
-    python3 python3.pkgs.setuptools
+    autoconf
+    automake
+    pkg-config
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
+    python3
+    python3.pkgs.setuptools
   ];
 
   buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd python3 ];
@@ -21,9 +48,9 @@ stdenv.mkDerivation rec {
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
 
-  # gcc bug with -O1 on ARM with gcc 4.8
-  # This should be fine on all platforms so apply universally
-  postPatch = "sed -i s/-O1/-O2/ configure";
+  preConfigure = ''
+    sh autogen.sh
+  '';
 
   postInstall = ''
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
