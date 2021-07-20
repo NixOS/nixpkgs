@@ -3,7 +3,7 @@
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk, jemalloc
-, libtgvoip, rnnoise, abseil-cpp, extra-cmake-modules
+, rnnoise, extra-cmake-modules
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
@@ -58,7 +58,7 @@ in mkDerivation rec {
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
     ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
     tl-expected hunspell glibmm webkitgtk jemalloc
-    libtgvoip rnnoise abseil-cpp extra-cmake-modules
+    rnnoise extra-cmake-modules
     tg_owt
     # Transitive dependencies:
     pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
@@ -70,7 +70,6 @@ in mkDerivation rec {
     # We're allowed to used the API ID of the Snap package:
     "-DTDESKTOP_API_ID=611335"
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
-    #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
     "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
   ];
 
@@ -116,7 +115,7 @@ in mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
-    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v{version}";
-    maintainers = with maintainers; [ primeos abbradar ];
+    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
+    maintainers = with maintainers; [ primeos abbradar oxalica ];
   };
 }
