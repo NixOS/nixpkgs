@@ -1,21 +1,21 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, tags ? [ "autopilotrpc" "signrpc" "walletrpc" "chainrpc" "invoicesrpc" "watchtowerrpc" "routerrpc" ]
+, tags ? [ "autopilotrpc" "signrpc" "walletrpc" "chainrpc" "invoicesrpc" "watchtowerrpc" "routerrpc" "monitoring" ]
 }:
 
 buildGoModule rec {
   pname = "lnd";
-  version = "0.13.0-beta";
+  version = "0.13.1-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
     rev = "v${version}";
-    sha256 = "0fwidjkfzzd7k891x5z7jrx2arl0kwj6vm9z2acsyy7riv4zfjbq";
+    sha256 = "07cs9yq83laajmfwfv42xfkfai3q873wg4qg7bfzw18w5fllivkg";
   };
 
-  vendorSha256 = "19myr9f5zh05y6lagd9pra60y8df7pz837310cbpq9a6zzwpdxk2";
+  vendorSha256 = "1hk67x8nlc0wm1pg8k8hywih623p4c0klfhfyy26b7mqq62lazia";
 
   subPackages = ["cmd/lncli" "cmd/lnd"];
 
