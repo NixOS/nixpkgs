@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "6.000";
+  version = "6.001";
 in
   fetchzip rec {
     name = "andika-${version}";
@@ -14,7 +14,7 @@ in
       unzip -j $downloadedFile \*OFL.txt \*OFL-FAQ.txt \*README.txt \*FONTLOG.txt -d "$out/share/doc/${name}"
     '';
 
-    sha256 = "sha256-5ymTBFssoEhmc2Z+JyEcMqw2p91i9/R44GRzEzUzK9Q=";
+    sha256 = "sha256-ukPFBLjHQbOosQ1h0ImVlz8HhNNMp0e41SjzUhQaZtc=";
 
     meta = with lib; {
       homepage = "https://software.sil.org/andika";
