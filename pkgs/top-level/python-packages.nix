@@ -7804,8 +7804,6 @@ in {
     inherit (pkgs) gfortran glibcLocales;
   };
 
-  scikitlearn = self.scikit-learn;
-
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
