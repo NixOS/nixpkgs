@@ -3,7 +3,7 @@
 with lib;
 
 buildLinux (args // rec {
-  version = "5.10.51";
+  version = "5.10.52";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
   modDirVersion = if (modDirVersionArg == null) then concatStringsSep "." (take 3 (splitVersion "${version}.0")) else modDirVersionArg;
@@ -13,7 +13,7 @@ buildLinux (args // rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-    sha256 = "1qkssvqk29svn10ws3lrnzfbmlvzrixkf7r7lslc7k3lqa9yiflm";
+    sha256 = "0ydf09wsg0pkjm9dk8y730ksg15p5rlbhq445zx8k191zah5g7kn";
   };
 
   kernelTests = args.kernelTests or [ nixosTests.kernel-generic.linux_5_10 ];
