@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pylsp-mypy";
   version = "0.5.1";
-  disabled = !(pythonAtLeast "3.6");
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Richardk2n";
