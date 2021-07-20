@@ -124,7 +124,7 @@ let lispPackages = rec {
   };
   nyxt = pkgs.lispPackages.buildLispPackage rec {
     baseName = "nyxt";
-    version = "2.0.0";
+    version = "2.1.1";
 
     description = "Browser";
 
@@ -194,7 +194,7 @@ let lispPackages = rec {
       owner = "atlas-engineer";
       repo = "nyxt";
       rev = "${version}";
-      sha256 = "sha256-eSRNfzkAzGTorLjdHo1LQEKLx4ASdv3RGXIFZ5WFIXk=";
+      sha256 = "sha256:0kzm05swhyb197cjfd3iglf60b997sx7v95yxzyq483jxqbcxm0r";
     };
 
     packageName = "nyxt";

@@ -1,6 +1,6 @@
-{stdenv, lib, fetchurl, pkgs, clwrapper}:
+{stdenv, lib, fetchurl, fetchFromGitHub, pkgs, clwrapper}:
 let quicklisp-to-nix-packages = rec {
-  inherit stdenv lib fetchurl clwrapper pkgs quicklisp-to-nix-packages;
+  inherit stdenv lib fetchurl fetchFromGitHub clwrapper pkgs quicklisp-to-nix-packages;
 
   callPackage = pkgs.lib.callPackageWith quicklisp-to-nix-packages;
   buildLispPackage = callPackage ./define-package.nix;
@@ -3082,7 +3082,7 @@ let quicklisp-to-nix-packages = rec {
     ((f: x: (x // (f x)))
        (qlOverrides."cl-webkit2" or (x: {}))
        (import ./quicklisp-to-nix-output/cl-webkit2.nix {
-         inherit fetchurl;
+         inherit fetchFromGitHub;
            "alexandria" = quicklisp-to-nix-packages."alexandria";
            "babel" = quicklisp-to-nix-packages."babel";
            "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";

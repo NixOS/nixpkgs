@@ -1,5 +1,5 @@
 /* Generated file. */
-args @ { fetchurl, ... }:
+args @ { fetchFromGitHub, ... }:
 rec {
   baseName = "cl-webkit2";
   version = "cl-webkit-20210411-git";
@@ -8,9 +8,11 @@ rec {
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-cffi-gtk" args."cl-cffi-gtk-cairo" args."cl-cffi-gtk-gdk" args."cl-cffi-gtk-gdk-pixbuf" args."cl-cffi-gtk-gio" args."cl-cffi-gtk-glib" args."cl-cffi-gtk-gobject" args."cl-cffi-gtk-pango" args."closer-mop" args."iterate" args."trivial-features" args."trivial-garbage" ];
 
-  src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-webkit/2021-04-11/cl-webkit-20210411-git.tgz";
-    sha256 = "10cky5v67s9mx2j96k0z01qbqfyc8w6a8byaamm7al5qkw997brh";
+  src = fetchFromGitHub {
+    owner = "joachifm";
+    repo = "cl-webkit";
+    rev = "90b1469713265096768fd865e64a0a70292c733d";
+    sha256 = "sha256:0lxws342nh553xlk4h5lb78q4ibiwbm2hljd7f55w3csk6z7bi06";
   };
 
   packageName = "cl-webkit2";
