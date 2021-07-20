@@ -60,6 +60,7 @@ mapAliases ({
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
+  requests_toolbelt = requests-toolbelt; # added 2017-09-26
   rotate-backups = throw "pythonPackages.rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # Added 2021-06-10
   setuptools_scm = setuptools-scm; # added 2021-06-03

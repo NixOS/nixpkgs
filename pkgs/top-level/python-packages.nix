@@ -7551,8 +7551,6 @@ in {
 
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 
-  requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
-
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
 
   requirements-detector = callPackage ../development/python-modules/requirements-detector { };

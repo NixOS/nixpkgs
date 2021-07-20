@@ -15,7 +15,7 @@
 , pyopenssl
 , pyyaml
 , requests
-, requests_toolbelt
+, requests-toolbelt
 , terminaltables
 , websocket-client
 }:
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pyopenssl
     pyyaml
     requests
-    requests_toolbelt
+    requests-toolbelt
     terminaltables
     websocket-client
   ];

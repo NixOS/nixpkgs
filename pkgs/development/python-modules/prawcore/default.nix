@@ -4,7 +4,7 @@
 , requests
 , testfixtures
 , mock
-, requests_toolbelt
+, requests-toolbelt
 , betamax
 , betamax-serializers
 , betamax-matchers
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     betamax
     betamax-serializers
     betamax-matchers
-    requests_toolbelt
+    requests-toolbelt
     pytestCheckHook
   ];
 

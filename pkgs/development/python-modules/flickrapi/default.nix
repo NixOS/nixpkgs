@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , requests
-, requests_toolbelt
+, requests-toolbelt
 , requests_oauthlib
 , pytest
 , pytest-runner
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "03g2z21k6nhxgwysjrgnxj9m1yg25mnnkr10gpyfhfkd9w77pcpz";
   };
 
-  propagatedBuildInputs = [ requests requests_toolbelt requests_oauthlib ];
+  propagatedBuildInputs = [ requests requests-toolbelt requests_oauthlib ];
 
   checkInputs = [ pytest pytest-runner pytest-cov responses ];
   doCheck = false; # Otherwise:

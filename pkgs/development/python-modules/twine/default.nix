@@ -5,7 +5,7 @@
 , pyblake2
 , readme_renderer
 , requests
-, requests_toolbelt
+, requests-toolbelt
 , setuptools-scm
 , tqdm
 , colorama
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pyblake2
     readme_renderer
     requests
-    requests_toolbelt
+    requests-toolbelt
     tqdm
     colorama
     rfc3986

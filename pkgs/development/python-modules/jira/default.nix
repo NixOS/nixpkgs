@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
 , pytest, pytest-runner, pbr, glibcLocales , pytest-cov
-, requests, requests_oauthlib, requests_toolbelt, defusedxml
+, requests, requests_oauthlib, requests-toolbelt, defusedxml
 , ipython
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ glibcLocales pytest pytest-cov pytest-runner pbr ];
-  propagatedBuildInputs = [ requests requests_oauthlib requests_toolbelt defusedxml pbr ipython ];
+  propagatedBuildInputs = [ requests requests_oauthlib requests-toolbelt defusedxml pbr ipython ];
 
   # impure tests because of connectivity attempts to jira servers
   doCheck = false;
