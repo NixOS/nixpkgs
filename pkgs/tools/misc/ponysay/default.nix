@@ -13,8 +13,6 @@ stdenv.mkDerivation {
 
   inherit python3;
 
-  phases = "unpackPhase installPhase fixupPhase";
-
   installPhase = ''
     find -type f -name "*.py" | xargs sed -i "s@/usr/bin/env python3@$python3/bin/python3@g"
     substituteInPlace setup.py --replace \
