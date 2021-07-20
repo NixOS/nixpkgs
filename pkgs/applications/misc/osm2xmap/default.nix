@@ -29,7 +29,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.mpickering ];
     platforms = with lib.platforms; linux;
-    # it probably needs https://proj.org/development/migration.html
-    broken = true;
   };
 }
