@@ -905,7 +905,7 @@ let
         };
       };
 
-      ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp {};
+      ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
 
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
