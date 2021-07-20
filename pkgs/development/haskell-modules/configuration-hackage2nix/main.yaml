@@ -85,6 +85,8 @@ default-package-overrides:
   - dual-tree < 0.2.3.0
   - diagrams-core < 1.5.0
   - diagrams-lib < 1.4.4
+  # streamly-bytestring 0.1.3 needs streamly 0.8.0 which is not included in our stackage snapshot
+  - streamly-bytestring == 0.1.2
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
