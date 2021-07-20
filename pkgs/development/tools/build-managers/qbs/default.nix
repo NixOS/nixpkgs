@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtscript ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "A tool that helps simplify the build process for developing projects across multiple platforms";
     homepage = "https://wiki.qt.io/Qbs";

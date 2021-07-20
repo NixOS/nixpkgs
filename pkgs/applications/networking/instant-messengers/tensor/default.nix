@@ -15,8 +15,6 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
-
   buildInputs = [ qtbase qtquickcontrols ];
   nativeBuildInputs = [ qmake ];
 
