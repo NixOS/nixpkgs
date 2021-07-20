@@ -1,5 +1,10 @@
 { lib
 , python3
+, pkgsCross
+, avrdude
+, dfu-programmer
+, dfu-util
+, gcc-arm-embedded
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -30,6 +35,14 @@ python3.pkgs.buildPythonApplication rec {
     milc
     pygments
     pyusb
+  ] ++ [ # Binaries need to be in the path so this is in propagatedBuildInputs
+    avrdude
+    dfu-programmer
+    dfu-util
+    gcc-arm-embedded
+    pkgsCross.avr.buildPackages.binutils
+    pkgsCross.avr.buildPackages.gcc8
+    pkgsCross.avr.libcCross
   ];
 
   # buildPythonApplication requires setup.py; the setup.py file crafted below
@@ -61,6 +74,6 @@ python3.pkgs.buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple babariviere ];
+    maintainers = with maintainers; [ bhipple babariviere ekleog ];
   };
 }
