@@ -13,9 +13,11 @@ lib.mapAttrs (lname: lset: let
       if license ? spdxId
       then license // { url = "https://spdx.org/licenses/${license.spdxId}.html"; }
       else license;
+    applyRedistributable = license: { redistributable = license.free; } // license;
   in lib.pipe licenseDeclaration [
     applyDefaults
     applySpdx
+    applyRedistributable
   ];
 in mkLicense lset) ({
   /* License identifiers from spdx.org where possible.
