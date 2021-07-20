@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rnix-lsp";
-  version = "0.1.0";
+  version = "unstable-2021-07-18";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "rnix-lsp";
-    rev = "v${version}";
+    rev = "1fdd7cf9bf56b8ad2dddcfd27354dae8aef2b453";
 
-    sha256 = "0fy620c34kxl27sd62x9mj0555bcdmnmbsxavmyiwb497z1m9wnn";
+    sha256 = "sha256-w0hpyFXxltmOpbBKNQ2tfKRWELQzStc/ho1EcNyYaWc=";
   };
 
-  cargoSha256 = "1akapxrh38g44531r25dgik8y5qyy9y6zb031hg8v61px2ajs39s";
+  cargoSha256 = "sha256-X6eCwi2zxEUZA54SIHiqjLOXGIfxwoAVe7VdCnBe7TE=";
 
   meta = with lib; {
     description = "A work-in-progress language server for Nix, with syntax checking and basic completion";
