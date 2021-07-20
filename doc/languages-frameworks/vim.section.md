@@ -120,7 +120,7 @@ After that you can install your special grafted `myVim` or `myNeovim` packages.
 
 If one of your favourite plugins isn't packaged, you can package it yourself:
 
-```
+```nix
 { config, pkgs, ... }:
 
 let
@@ -153,6 +153,33 @@ in
   ];
 }
 ```
+
+### Specificities for some plugins
+#### Tree sitter
+
+By default `nvim-treesitter` encourages you to download, compile and install
+the required tree-sitter grammars at run time with `:TSInstall`. This works
+poorly on NixOS.  Instead, to install the `nvim-treesitter` plugins with a set
+of precompiled grammars, you can use `nvim-treesitter.withPlugins` function:
+
+```nix
+(pkgs.neovim.override {
+  configure = {
+    packages.myPlugins = with pkgs.vimPlugins; {
+      start = [
+        (nvim-treesitter.withPlugins (
+          plugins: with plugins; [
+            tree-sitter-nix
+            tree-sitter-python
+          ]
+        ))
+      ];
+    };
+  };
+})
+```
+
+To enable all grammars packaged in nixpkgs, use `(pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))`.
 
 ## Managing plugins with vim-plug {#managing-plugins-with-vim-plug}
 
