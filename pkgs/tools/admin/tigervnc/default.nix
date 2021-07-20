@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , xorg, xkeyboard_config, zlib
 , libjpeg_turbo, pixman, fltk
-, fontDirectories
 , cmake, gettext, libtool
 , libGLU
 , gnutls, pam, nettle
@@ -23,17 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IX39oEhTyk7NV+9dD9mFtes22fBdMTAVIv5XkqFK560=";
   };
 
-  inherit fontDirectories;
 
   postPatch = ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
     fontPath=
-    for i in $fontDirectories; do
-      for j in $(find $i -name fonts.dir); do
-        addToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
-      done
-    done
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver/vncserver.in
     substituteInPlace vncviewer/vncviewer.cxx \
        --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
   '';
