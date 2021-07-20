@@ -9,7 +9,7 @@
 , curl
 , nss
 , nspr
-, xlibs
+, xorg
 , libdrm
 , alsa-lib
 , cups
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnome.gnome-keyring
-    xlibs.libXdamage
-    xlibs.libX11
+    xorg.libXdamage
+    xorg.libX11
     libsecret
     git
     curl
