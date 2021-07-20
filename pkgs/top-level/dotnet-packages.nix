@@ -296,7 +296,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       sha256 = "07r63xam6icm17pf6amh1qkmna13nxa3ncdan7a3ql307i5isriz";
     };
 
-    phases = [ "unpackPhase" "installPhase" ];
+    dontBuild = true;
 
     outputFiles = [ "*" ];
     dllFiles = [ "NuGet*.dll" ];
