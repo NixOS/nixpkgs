@@ -9447,9 +9447,7 @@ in {
 
   zarr = callPackage ../development/python-modules/zarr { };
 
-  zc_buildout221 = callPackage ../development/python-modules/buildout { };
-
-  zc_buildout = self.zc_buildout221; # A patched version of buildout, useful for buildout based development on Nix
+  zc_buildout = callPackage ../development/python-modules/buildout { };
 
   zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
