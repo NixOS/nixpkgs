@@ -1,5 +1,4 @@
 { lib, stdenv, coqPackages, coq, fetchzip }@args:
-let lib = import ./extra-lib.nix {inherit (args) lib;}; in
 with builtins; with lib;
 let
   isGitHubDomain = d: match "^github.*" d != null;
@@ -74,7 +73,7 @@ stdenv.mkDerivation (removeAttrs ({
 
   meta = ({ platforms = coq.meta.platforms; } //
     (switch domain [{
-        case = pred.union isGitHubDomain isGitLabDomain;
+        case = preds.union isGitHubDomain isGitLabDomain;
         out = { homepage = "https://${domain}/${owner}/${repo}"; };
       }] {}) //
     optionalAttrs (fetched.broken or false) { coqFilter = true; broken = true; }) //

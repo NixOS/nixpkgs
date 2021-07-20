@@ -200,6 +200,46 @@ rec {
     let found = filter pred list;
     in if found == [] then default else head found;
 
+  /* Takes a predicate and a list as input and
+     returns a list of lists, separated by elements that match the predicate.
+
+     This is analoguous to `builtins.split separator string`,
+     with a predicate instead of a separator
+     and a list instead of a string.
+
+     Type: splitList :: (a -> bool) -> [a] -> [ (a | [a]) ]
+
+     The returned list always has the form `[ [...] sep [...] ... sep [...] ]`
+     i.e. begins with a list, alternates with separators and ends with a list,
+     so that the following is true for `res = splitList pred l`:
+     - `res` has length `2 * k + 1`,
+       where `k` is the number of elements of `l` that
+       match `pred`. (ie `splitList pred l`)
+     - `elemAt res (2 * n)` is always a list,
+       which contains no element matching `pred`.
+     - `elemAt res (2 * n + 1)` is always a single element that matches `pred`.
+
+     Ie, for all `pred` and `l`, let `k = length (filter pred l)`, we have:
+     - `length (splitList pred l) = 2 * k + 1`,
+     - `isList (elemAt (splitList pred l) (2 * n))`, for all `n <= k`,
+     - `pred (elemAt (splitList pred l) (2 * n + 1))`, for all `n < k`,
+     - `flatten (map (pick (splitList pred l)) (range 0 (2 * k))) == l`, where
+       `pick = r: n: (if mod n 2 == 1 then singleton else id) (elemAt r n)`
+
+     Examples:
+     - splitList (x: x == "x") [ "y" "x" "z" "t" ]
+       => [ [ "y" ] "x" [ "z" "t" ] ]
+     - splitList (x: false) l == [ l ]
+     - splitList (x: x < 2) [ 2 1 3 4 0 1 3 1 ]
+       => [ [ 2 ] 1 [ 3 4 ] 0 [ ] 1 [ 3 ] 1 [ ] ]
+
+  */
+  splitList = pred: l:
+    let loop = (vv: v: l: if l == [] then vv ++ [v]
+      else let hd = head l; tl = tail l; in
+      if pred hd then loop (vv ++ [ v hd ]) [] tl else loop vv (v ++ [hd]) tl);
+    in loop [] [] l;
+
   /* Return true if function `pred` returns true for at least one
      element of `list`.
 
