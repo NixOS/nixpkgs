@@ -919,7 +919,7 @@ let
         };
       };
 
-      ms-vscode.cpptools = callPackage ./cpptools {};
+      ms-vscode.cpptools = callPackage ./cpptools { };
 
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
 
