@@ -10927,6 +10927,10 @@ in
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
 
+  fnm = callPackage ../development/tools/fnm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   fnlfmt = callPackage ../development/tools/fnlfmt { };
 
   fpc = callPackage ../development/compilers/fpc { };
