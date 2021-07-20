@@ -23850,6 +23850,7 @@ in
   inherit (gnome) evince;
   evolution-data-server = gnome.evolution-data-server;
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
+  evolution-etesync = callPackage ../applications/networking/mailreaders/evolution/evolution-etesync { };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
   evolutionWithPlugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { plugins = [ evolution evolution-ews ]; };
 
