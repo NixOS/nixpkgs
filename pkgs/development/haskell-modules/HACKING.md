@@ -295,8 +295,16 @@ Here are some additional tips that didn't fit in above.
         [@NixOS/haskell](https://github.com/orgs/NixOS/teams/haskell)
         team.  You may need to ask someone in the NixOS organization
         to do this, like [@domenkozar](https://github.com/domenkozar).
-        This gives the new member access to repos like
+        This gives the new member access to the GitHub repos like
         [cabal2nix](https://github.com/NixOS/cabal2nix).
+
+    1.  Add the person as a maintainer for the following packages
+        on Hackage:
+        - https://hackage.haskell.org/package/cabal2nix
+        - https://hackage.haskell.org/package/distribution-nixpkgs
+        - https://hackage.haskell.org/package/hackage-db
+        - https://hackage.haskell.org/package/jailbreak-cabal
+        - https://hackage.haskell.org/package/language-nix
 
     1.  Add the person to the `haskell` team in
         [`maintainers/team-list.nix`](../../../maintainers/team-list.nix).
