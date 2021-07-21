@@ -2691,6 +2691,12 @@
     githubId = 997543;
     name = "Dmitry Malikov";
   };
+  dminuoso = {
+    email = "Victor.Nawothnig+nix@icloud.com";
+    github = "dminuoso";
+    githubId = 20192137;
+    name = "Victor Nawothnig";
+  };
   DmitryTsygankov = {
     email = "dmitry.tsygankov@gmail.com";
     github = "DmitryTsygankov";

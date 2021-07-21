@@ -5,82 +5,148 @@ with lib;
 let
 
   cfg = config.services.stunnel;
-  yesNo = val: if val then "yes" else "no";
 
-  verifyChainPathAssert = n: c: {
-    assertion = c.verifyHostname == null || (c.verifyChain || c.verifyPeer);
-    message =  "stunnel: \"${n}\" client configuration - hostname verification " +
-      "is not possible without either verifyChain or verifyPeer enabled";
-  };
+  # lines :: [String] -> String
+  # Intersperse with newlines and concatenate
+  lines = concatStringsSep "\n";
+
+  # noNullOrEmpty :: AttrSet -> AttrSet
+  # Remove all null or empty list attributes from an attribute set.
+  noNullOrEmpty = filterAttrs (_: v: v != null && v != []);
+
+  # mapKeys :: (String -> String) -> AttrSet -> AttrSet
+  # Map over just the keys of an attribute set with a function.
+  # If the function is not injective, the attrset might lose values.
+  mapKeys = f: as: mapAttrs' (n: v: nameValuePair (f n) v);
+
+  # renameKeys :: AttrSet -> AttrSet -> AttrSet
+  # Given an AttrSet of Strings, rename all keys of the second attribute set with
+  # the matching value of the first attribute set. If the attribute is not found,
+  # it is kept
+  renameKeys = r: as: mapKeys (k: as.${k} or k) as;
+
+  # Rename the service keys from nixos-style naming to stunnel names.
+  renameServiceCfg = n: v:
+    let rename = renameKeys { verifyHostName = "checkHost"; certMode = "OCSPaia"; };
+    in nameValuePair n (rename v);
+
+  # mkEntry :: String -> a -> String
+  # Make a single stunnel-style config entry by converting bools to "yes" or "no"
+  # and everything else to string via toString.
+  mkEntry = name: value:
+    let
+      val = if value == true then "yes"
+            else if value == false then "no"
+            else if (builtins.isList value) then (lines (map (mkEntry name) value))
+            else toString value;
+    in "${name} = ${val}";
+
+  # Make an stunnel service config section fom a client or server.
+  mkService = n: v: lines (["[${n}]"] ++ mapAttrsToList mkEntry (noNullOrEmpty v));
+
+  # The full and final text of the stunnel config.
+  configText = lines [ (lines (mapAttrsToList mkEntry (noNullOrEmpty cfg.globalConfig)))
+                       "; ----- SERVER CONFIGURATIONS -----"
+                       (lines (mapAttrsToList mkService cfg.servers))
+                       "; ----- CLIENT CONFIGURATIONS -----"
+                       (lines (mapAttrsToList mkService cfg.clients))
+                     ];
 
   serverConfig = {
-    options = {
-      accept = mkOption {
-        type = types.either types.str types.int;
-        description = ''
-          On which [host:]port stunnel should listen for incoming TLS connections.
-          Note that unlike other softwares stunnel ipv6 address need no brackets,
-          so to listen on all IPv6 addresses on port 1234 one would use ':::1234'.
-        '';
-      };
+    freeformType = types.attrsOf (types.nullOr (types.oneOf
+      [ types.str
+        types.path
+        types.bool
+        types.int
+        (types.listOf types.str)
+      ]));
 
-      connect = mkOption {
-        type = types.int;
-        description = "To which port the decrypted connection should be forwarded.";
-      };
+    options.client = mkOption {
+      type = types.bool;
+      default = false;
+      readOnly = true;
+      description = "Set this service to run in server mode";
+    };
 
-      cert = mkOption {
-        type = types.path;
-        description = "File containing both the private and public keys.";
-      };
+    options.accept = mkOption {
+      type = types.oneOf [types.str types.int];
+      description = ''
+        Listen address '[host:]port' or unix domain socket, where the tunnel for the local service is exposed at.
+        Note: If no host is specified, this will bind on all IP addresses.
+      '';
+      example = "localhost:1234";
+    };
+
+    options.connect = mkOption {
+      type = types.oneOf [types.str types.int];
+      description = ''
+        Destination address '[host:]port' or unix domain socket a local service listens on.
+        Note: If no host is specified, localhost is assumed.
+      '';
+      example = "localhost:1234";
+    };
+
+    options.options = mkOption {
+      type = types.listOf types.str;
+      default = if cfg.enableInsecureSSLv3 then ["-NO_SSLv3"] else [];
+      description = "SSL options for stunnel";
     };
   };
 
   clientConfig = {
-    options = {
-      accept = mkOption {
-        type = types.str;
-        description = "IP:Port on which connections should be accepted.";
-      };
+    freeformType = types.attrsOf (types.nullOr (types.oneOf
+      [ types.str
+        types.path
+        types.bool
+        types.int
+        (types.listOf types.str)
+      ]));
 
-      connect = mkOption {
-        type = types.str;
-        description = "IP:Port destination to connect to.";
-      };
+    options.client = mkOption {
+      type = types.bool;
+      default = true;
+      readOnly = true;
+      description = "Set this service to run in client mode";
+    };
 
-      verifyChain = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Check if the provided certificate has a valid certificate chain (against CAPath).";
-      };
+    options.accept = mkOption {
+      type = types.oneOf [types.str types.int];
+      description = ''
+        Listen address '[host:]port' or unix domain socket, for a local client to connect to.
+        Note: If no host is specified, this will bind on all IP addresses.
+      '';
+      example = "localhost:1234";
+    };
 
-      verifyPeer = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Check if the provided certificate is contained in CAPath.";
-      };
+    options.connect = mkOption {
+      type = types.oneOf [types.str types.int];
+      description = ''
+        Listen address '[host:]port' or unix domain socket of the remote stunnel server.
+        Note: If no host is specified, localhost is assumed.
+      '';
+      example = "localhost:1234";
+    };
 
-      CAPath = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        description = "Path to a directory containing certificates to validate against.";
-      };
-
-      CAFile = mkOption {
-        type = types.nullOr types.path;
-        default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        description = "Path to a file containing certificates to validate against.";
-      };
-
-      verifyHostname = mkOption {
-        type = with types; nullOr str;
-        default = null;
-        description = "If set, stunnel checks if the provided certificate is valid for the given hostname.";
-      };
+    options.options = mkOption {
+      type = types.listOf types.str;
+      default = if cfg.enableInsecureSSLv3 then ["-NO_SSLv3"] else [];
+      description = "SSL options for stunnel";
     };
   };
 
-
+  globalConfig = {
+    freeformType = types.attrsOf (types.nullOr (types.oneOf
+      [ types.str
+        types.path
+        types.bool
+        types.int
+        (types.listOf types.str)
+      ]));
+    options.setuid = mkOption { type = types.nullOr types.str; default = cfg.user; };
+    options.setgid = mkOption { type = types.nullOr types.str; default = cfg.group; };
+    options.debug = mkOption { type = types.nullOr types.str; default = cfg.logLevel; };
+    options.fips = mkOption { type = types.nullOr types.bool; default = cfg.fipsMode; };
+  };
 in
 
 {
@@ -90,6 +156,13 @@ in
   options = {
 
     services.stunnel = {
+      globalConfig = mkOption {
+        type = types.submodule globalConfig;
+        default = {};
+        description = ''
+          Contents of stunnel config file.
+        '';
+      };
 
       enable = mkOption {
         type = types.bool;
@@ -111,7 +184,7 @@ in
 
       logLevel = mkOption {
         type = types.enum [ "emerg" "alert" "crit" "err" "warning" "notice" "info" "debug" ];
-        default = "info";
+        default = "notice";
         description = "Verbosity of stunnel output.";
       };
 
@@ -126,7 +199,6 @@ in
         default = false;
         description = "Enable support for the insecure SSLv3 protocol.";
       };
-
 
       servers = mkOption {
         description = "Define the server configuations.";
@@ -163,56 +235,15 @@ in
 
     assertions = concatLists [
       (singleton {
-        assertion = (length (attrValues cfg.servers) != 0) || ((length (attrValues cfg.clients)) != 0);
+        assertion = length (attrValues cfg.servers) != 0
+                 || length (attrValues cfg.clients) != 0;
         message = "stunnel: At least one server- or client-configuration has to be present.";
       })
-
-      (mapAttrsToList verifyChainPathAssert cfg.clients)
     ];
 
     environment.systemPackages = [ pkgs.stunnel ];
 
-    environment.etc."stunnel.cfg".text = ''
-      ${ if cfg.user != null then "setuid = ${cfg.user}" else "" }
-      ${ if cfg.group != null then "setgid = ${cfg.group}" else "" }
-
-      debug = ${cfg.logLevel}
-
-      ${ optionalString cfg.fipsMode "fips = yes" }
-      ${ optionalString cfg.enableInsecureSSLv3 "options = -NO_SSLv3" }
-
-      ; ----- SERVER CONFIGURATIONS -----
-      ${ lib.concatStringsSep "\n"
-           (lib.mapAttrsToList
-             (n: v: ''
-               [${n}]
-               accept = ${toString v.accept}
-               connect = ${toString v.connect}
-               cert = ${v.cert}
-
-             '')
-           cfg.servers)
-      }
-
-      ; ----- CLIENT CONFIGURATIONS -----
-      ${ lib.concatStringsSep "\n"
-           (lib.mapAttrsToList
-             (n: v: ''
-               [${n}]
-               client = yes
-               accept = ${v.accept}
-               connect = ${v.connect}
-               verifyChain = ${yesNo v.verifyChain}
-               verifyPeer = ${yesNo v.verifyPeer}
-               ${optionalString (v.CAPath != null) "CApath = ${v.CAPath}"}
-               ${optionalString (v.CAFile != null) "CAFile = ${v.CAFile}"}
-               ${optionalString (v.verifyHostname != null) "checkHost = ${v.verifyHostname}"}
-               OCSPaia = yes
-
-             '')
-           cfg.clients)
-      }
-    '';
+    environment.etc."stunnel.cfg".text = configText;
 
     systemd.services.stunnel = {
       description = "stunnel TLS tunneling service";
@@ -227,11 +258,7 @@ in
     };
 
     meta.maintainers = with maintainers; [
-      # Server side
-      lschuermann
-      # Client side
-      das_j
+      dminuoso
     ];
   };
-
 }
