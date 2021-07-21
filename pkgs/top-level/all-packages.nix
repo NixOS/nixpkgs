@@ -14351,6 +14351,8 @@ in
 
   todoist-electron = callPackage ../applications/misc/todoist-electron { };
 
+  toil = callPackage ../applications/science/misc/toil { };
+
   travis = callPackage ../development/tools/misc/travis { };
 
   tree-sitter = callPackage ../development/tools/parsing/tree-sitter {
