@@ -226,6 +226,7 @@
 , "stf"
 , "stylelint"
 , "svelte-language-server"
+, "svelte-check"
 , "svgo"
 , "swagger"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
