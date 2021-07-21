@@ -85,6 +85,23 @@ let
         };
       };
 
+      angular.ng-template = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ng-template";
+          publisher = "Angular";
+          version = "12.1.2";
+          sha256 = "sha256-fIHh1eRmu4zSgrtZr0XwLB+1Ad6a/0ABC55akGr0DOA=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
+          description = "Editor services for Angular templates";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Angular.ng-template";
+          homepage = "https://github.com/angular/vscode-ng-language-service";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+      };
+
       antfu.icons-carbon = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "icons-carbon";
