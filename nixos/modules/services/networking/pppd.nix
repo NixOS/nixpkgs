@@ -82,13 +82,21 @@ in
           LD_PRELOAD = "${pkgs.libredirect}/lib/libredirect.so";
           NIX_REDIRECTS = "/var/run=/run/pppd";
         };
-        serviceConfig = {
+        serviceConfig = let
+          capabilities = [
+            "CAP_BPF"
+            "CAP_SYS_TTY_CONFIG"
+            "CAP_NET_ADMIN"
+            "CAP_NET_RAW"
+          ];
+        in
+        {
           ExecStart = "${getBin cfg.package}/sbin/pppd call ${peerCfg.name} nodetach nolog";
           Restart = "always";
           RestartSec = 5;
 
-          AmbientCapabilities = "CAP_SYS_TTY_CONFIG CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN";
-          CapabilityBoundingSet = "CAP_SYS_TTY_CONFIG CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN";
+          AmbientCapabilities = capabilities;
+          CapabilityBoundingSet = capabilities;
           KeyringMode = "private";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
