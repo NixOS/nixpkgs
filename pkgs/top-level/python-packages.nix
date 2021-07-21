@@ -5546,6 +5546,8 @@ in {
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
 
+  prefixed = callPackage ../development/python-modules/prefixed { };
+
   pre-commit = callPackage ../development/python-modules/pre-commit { };
 
   pre-commit-hooks = callPackage ../development/python-modules/pre-commit-hooks { };
