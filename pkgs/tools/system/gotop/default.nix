@@ -14,7 +14,7 @@ buildGoModule rec {
   runVend = true;
   vendorSha256 = "06hl1npwmy9dvpf4kljvw8lwwiigm52wf106lmf9k6k2gi5ikprz";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -28,6 +28,5 @@ buildGoModule rec {
     changelog = "https://github.com/xxxserxxx/gotop/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
   };
 }
