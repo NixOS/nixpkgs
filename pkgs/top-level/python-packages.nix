@@ -199,6 +199,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  addict = callPackage ../development/python-modules/addict { };
+
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
   adext = callPackage ../development/python-modules/adext { };
