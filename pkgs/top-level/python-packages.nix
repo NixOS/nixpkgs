@@ -7793,6 +7793,8 @@ in {
 
   schema = callPackage ../development/python-modules/schema { };
 
+  schema-salad = callPackage ../development/python-modules/schema-salad { };
+
   schiene = callPackage ../development/python-modules/schiene { };
 
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
