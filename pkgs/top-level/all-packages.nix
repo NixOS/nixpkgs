@@ -31584,7 +31584,9 @@ in
 
   go-swagger = callPackage ../development/tools/go-swagger { };
 
-  jx = callPackage ../applications/networking/cluster/jx {};
+  jx_2 = callPackage ../applications/networking/cluster/jx/v2.nix {};
+  jx_3 = callPackage ../applications/networking/cluster/jx/v3.nix {};
+  jx = jx_3;
 
   prow = callPackage ../applications/networking/cluster/prow { };
 
