@@ -802,6 +802,12 @@
     githubId = 13426784;
     name = "arcnmx";
   };
+  arcticlimer = {
+    email = "vinigm.nho@gmail.com";
+    github = "arcticlimer";
+    githubId = 59743220;
+    name = "Vinícius Müller";
+  };
   ardumont = {
     email = "eniotna.t@gmail.com";
     github = "ardumont";
