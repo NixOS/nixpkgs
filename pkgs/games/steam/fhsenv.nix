@@ -282,7 +282,23 @@ in buildFHSUserEnv rec {
 
     export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
 
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json:/usr/share/vulkan/icd.d/intel_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json:/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/nvidia_icd.json:/usr/share/vulkan/icd.d/nvidia_icd32.json:/usr/share/vulkan/icd.d/radeon_icd.x86_64.json:/usr/share/vulkan/icd.d/radeon_icd.i686.json
+    # attempt to order ICD files in order of likely desirability
+    vk_prefixes=(
+      nvidia
+      radeon
+      intel
+      lvp
+    )
+
+    export VK_ICD_FILENAMES=
+    for prefix in "''${vk_prefixes[@]}"; do
+      for icd_filename in "$prefix"_icd.{x86_64,i686}.json; do
+        icd_filepath=/usr/share/vulkan/icd.d/''${arch_icd}
+        if [ -e "$icd_filepath" ]; then
+          export VK_ICD_FILENAMES=''${VK_ICD_FILENAMES}''${VK_ICD_FILENAMES:+:}"$icd_filepath"
+        fi
+      done
+    done
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
