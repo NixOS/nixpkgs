@@ -94,8 +94,8 @@ let
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "16zk7d0sxm2j00vb002mjj38wxcxxlahnfdb9lmkmkfms9p9xfkb";
+      url = "https://www.torproject.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
+      sha256 = "6bba9e6ed2d5cd3a2b4dab390b15ed9d758e86945500b0360052d4ae413bf39b";
     };
 
     i686-linux = fetchurl {
