@@ -497,6 +497,12 @@ let
       };
 
       foam.foam-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "foam-vscode";
+          publisher = "foam";
+          version = "0.14.1";
+          sha256 = "sha256-w9xGkezS3A9z6sTk8WWgW7g8qYX6mJFfRV0lv5cu160=";
+        };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
           description = "A personal knowledge management and sharing system for VSCode ";
@@ -504,12 +510,6 @@ let
           homepage = "https://foambubble.github.io/";
           license = licenses.mit;
           maintainers = with maintainers; [ ratsclub ];
-        };
-        mktplcRef = {
-          name = "foam-vscode";
-          publisher = "foam";
-          version = "0.13.7";
-          sha256 = "Y2pcd4iXPiuhJdD/9d+tbTJN18O4+kRMqUdOtbx8xy8=";
         };
       };
 
@@ -671,7 +671,7 @@ let
         };
       };
 
-      hashicorp.terraform = callPackage ./terraform { };
+      hashicorp.terraform = callPackage ./terraform {};
 
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -905,7 +905,7 @@ let
         };
       };
 
-      ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
+      ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp {};
 
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -919,12 +919,12 @@ let
         };
       };
 
-      ms-vscode.cpptools = callPackage ./cpptools { };
+      ms-vscode.cpptools = callPackage ./cpptools {};
 
-      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
+      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
 
       ms-python.python = callPackage ./python {
-        extractNuGet = callPackage ./python/extract-nuget.nix { };
+        extractNuGet = callPackage ./python/extract-nuget.nix {};
       };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
@@ -1013,7 +1013,7 @@ let
         };
       };
 
-      matklad.rust-analyzer = callPackage ./rust-analyzer { };
+      matklad.rust-analyzer = callPackage ./rust-analyzer {};
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = with lib; {
@@ -1303,7 +1303,7 @@ let
         };
       };
 
-      vadimcn.vscode-lldb = callPackage ./vscode-lldb { };
+      vadimcn.vscode-lldb = callPackage ./vscode-lldb {};
 
       vincaslt.highlight-matching-tag = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1317,7 +1317,7 @@ let
         };
       };
 
-      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare { };
+      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare {};
 
       vscodevim.vim = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1418,7 +1418,7 @@ let
 
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
-      WakaTime.vscode-wakatime = callPackage ./wakatime { };
+      WakaTime.vscode-wakatime = callPackage ./wakatime {};
 
       wholroyd.jinja = buildVscodeMarketplaceExtension {
         mktplcRef = {
