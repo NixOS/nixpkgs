@@ -11,14 +11,15 @@
 , gtk3
 , granite
 , libgee
+, libhandy
 , libcanberra
 , elementary-icon-theme
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  pname = "elementary-screenshot-tool"; # This will be renamed to "screenshot" soon. See -> https://github.com/elementary/screenshot/pull/93
-  version = "1.7.1";
+  pname = "elementary-screenshot";
+  version = "6.0.0";
 
   repoName = "screenshot";
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-qo55fzp0ieYF5I5uxnCQY066mege06InHL3B3ahYMZ0=";
+    sha256 = "1fvsl9zdkv7bgx3jpy7pr9lflm4ckr3swdby379mdxn2x6kxji0x";
   };
 
   passthru = {
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra
     libgee
+    libhandy
   ];
 
   postPatch = ''

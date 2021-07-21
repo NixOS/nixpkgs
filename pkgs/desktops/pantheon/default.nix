@@ -59,7 +59,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-photos = callPackage ./apps/elementary-photos { };
 
-  elementary-screenshot-tool = callPackage ./apps/elementary-screenshot-tool { };
+  elementary-screenshot = callPackage ./apps/elementary-screenshot { };
 
   elementary-tasks = callPackage ./apps/elementary-tasks { };
 
@@ -206,5 +206,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) vala; # added 2019-10-10
 
   cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1.";
+
+  elementary-screenshot-tool = elementary-screenshot; # added 2021-07-21
 
 })
