@@ -251,6 +251,14 @@ self: super: {
       '';
     });
 
+  fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs (old: {
+    # The plugin has a makefile which tries to run tests in a docker container.
+    # This prevents it.
+    prePatch = ''
+      rm Makefile
+    '';
+  });
+
   fzf-vim = super.fzf-vim.overrideAttrs (old: {
     dependencies = with self; [ fzfWrapper ];
   });
