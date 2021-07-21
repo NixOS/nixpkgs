@@ -25672,6 +25672,8 @@ in
 
   mmtc = callPackage ../applications/audio/mmtc { };
 
+  mnamer = callPackage ../applications/misc/mnamer { };
+
   moc = callPackage ../applications/audio/moc { };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
