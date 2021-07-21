@@ -13403,6 +13403,8 @@ in
     inherit (llvmPackages_11) llvm libclang;
   };
 
+  cwltool = callPackage ../applications/science/misc/cwltool { };
+
   dprint = callPackage ../development/tools/dprint { };
 
   libcxx = llvmPackages.libcxx;
