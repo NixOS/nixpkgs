@@ -9550,6 +9550,8 @@ in {
 
   zipstream = callPackage ../development/python-modules/zipstream { };
 
+  zipstream-new = callPackage ../development/python-modules/zipstream-new { };
+
   zm-py = callPackage ../development/python-modules/zm-py { };
 
   zodb = callPackage ../development/python-modules/zodb { };
