@@ -8402,6 +8402,8 @@ in {
 
   stravalib = callPackage ../development/python-modules/stravalib { };
 
+  streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
+
   streamz = callPackage ../development/python-modules/streamz { };
 
   strict-rfc3339 = callPackage ../development/python-modules/strict-rfc3339 { };
