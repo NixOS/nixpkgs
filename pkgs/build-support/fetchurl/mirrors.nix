@@ -19,9 +19,9 @@
   sourceforge = [
     "https://downloads.sourceforge.net/"
     "https://prdownloads.sourceforge.net/"
-    "https://heanet.dl.sourceforge.net/sourceforge/"
-    "https://surfnet.dl.sourceforge.net/sourceforge/"
-    "https://dfn.dl.sourceforge.net/sourceforge/"
+    "https://netcologne.dl.sourceforge.net/sourceforge/"
+    "https://versaweb.dl.sourceforge.net/sourceforge/"
+    "https://freefr.dl.sourceforge.net/sourceforge/"
     "https://osdn.dl.sourceforge.net/sourceforge/"
     "https://kent.dl.sourceforge.net/sourceforge/"
   ];

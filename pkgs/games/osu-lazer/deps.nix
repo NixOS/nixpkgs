@@ -26,8 +26,8 @@
   })
   (fetchNuGet {
     name = "Fody";
-    version = "6.5.1";
-    sha256 = "08zpyrniajjba5isjb09spggfh0af2z6x4h2zy5ilk3y5bb9vdch";
+    version = "6.5.2";
+    sha256 = "0vq97mkfk5ijinwnhpkm212y69ik6cd5x0n61ssyxmz50q1vp84f";
   })
   (fetchNuGet {
     name = "HidSharpCore";
@@ -781,13 +781,13 @@
   })
   (fetchNuGet {
     name = "ppy.LocalisationAnalyser";
-    version = "2021.706.0";
-    sha256 = "087x61vi1rv1slzr8hhcslngdd41p2d5r8yhpqm1kmls24csv556";
+    version = "2021.716.0";
+    sha256 = "0w45af0mlh4bkjxxhk5p4kb6z0na8fmm6xz10dfzs3b4i61h5x3z";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2021.707.0";
-    sha256 = "1ai8yam6v67y9z8yipqjn578bk2qzqm05ncyqfgig3in6baxwpna";
+    version = "2021.714.0";
+    sha256 = "175i0hcbl01xy633zvij8185nj4g7ja1rsv2lmfz8qdykqj6g9kl";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";
@@ -816,13 +816,13 @@
   })
   (fetchNuGet {
     name = "Realm";
-    version = "10.2.1";
-    sha256 = "14pi7vz7nl8ag0bmlbyds52z5nx9wbg154qkm6jai10rm02ws86l";
+    version = "10.3.0";
+    sha256 = "12zmp43cf2kilzq1yi9x2hy1jdh51c0kbnddw5s960k1kvyx2s2v";
   })
   (fetchNuGet {
     name = "Realm.Fody";
-    version = "10.2.1";
-    sha256 = "1zv57wb7zcgyigsxqikf2yq2h7an4c3dbydl9la5xdpa76dgmxdi";
+    version = "10.3.0";
+    sha256 = "0mhjkahi2ldxcizv08i70mrpwgrvljxdjlr81x3dmwgpxxfji18d";
   })
   (fetchNuGet {
     name = "Remotion.Linq";
