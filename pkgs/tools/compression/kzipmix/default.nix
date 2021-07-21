@@ -1,10 +1,11 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "kzipmix-20091108";
+stdenv.mkDerivation rec {
+  pname = "kzipmix";
+  version = "20091108";
 
   src = fetchurl {
-    url = "http://static.jonof.id.au/dl/kenutils/kzipmix-20091108-linux.tar.gz";
+    url = "http://static.jonof.id.au/dl/kenutils/kzipmix-${version}-linux.tar.gz";
     sha256 = "19gyn8pblffdz1bf3xkbpzx8a8wn3xb0v411pqzmz5g5l6pm5gph";
   };
 
@@ -16,10 +17,10 @@ stdenv.mkDerivation {
     patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/bin/zipmix
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A tool that aggressively optimizes the sizes of Zip archives";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     homepage = "http://advsys.net/ken/utils.htm";
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ maintainers.sander ];
   };
 }
