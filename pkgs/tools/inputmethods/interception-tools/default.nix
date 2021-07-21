@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "interception-tools";
-  version = "0.6.6";
+  version = "0.6.7";
   src = fetchFromGitLab {
     owner = "interception/linux";
     repo = "tools";
     rev = "v${version}";
-    sha256 = "0k9h14a9d65nwvv7pj0kigjgzfv453mm3r4svnxfg1h5lccmy8jj";
+    sha256 = "sha256-ZvxiCqcZzHx6sKwIdkFy8BavmkCHbbT4GEskcNS9lXE=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
