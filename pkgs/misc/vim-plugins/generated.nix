@@ -9729,6 +9729,18 @@ final: prev:
     meta.homepage = "https://github.com/preservim/vimux/";
   };
 
+  vimway-lsp-diag-nvim = buildVimPluginFrom2Nix {
+    pname = "vimway-lsp-diag-nvim";
+    version = "2021-07-21";
+    src = fetchFromGitHub {
+      owner = "onsails";
+      repo = "vimway-lsp-diag.nvim";
+      rev = "dee2f59a45f72fb2ba0dd29cb06ed5357097ee07";
+      sha256 = "16da94g367sb07d1xn55cvyi48zjgjv2c1p7mzabpidm9c7r99pm";
+    };
+    meta.homepage = "https://github.com/onsails/vimway-lsp-diag.nvim/";
+  };
+
   vimwiki = buildVimPluginFrom2Nix {
     pname = "vimwiki";
     version = "2020-05-26";
