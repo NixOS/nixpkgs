@@ -8299,6 +8299,18 @@ final: prev:
     meta.homepage = "https://github.com/haya14busa/vim-poweryank/";
   };
 
+  vim-prettier = buildVimPluginFrom2Nix {
+    pname = "vim-prettier";
+    version = "2021-07-21";
+    src = fetchFromGitHub {
+      owner = "prettier";
+      repo = "vim-prettier";
+      rev = "0e61e4a5b55d2740aa118db91a6671dcb11307e8";
+      sha256 = "0d83lx6kfpsi3d4q9wz8zwsgdn0vn16psqyngml6wspjyibh6pnf";
+    };
+    meta.homepage = "https://github.com/prettier/vim-prettier";
+  };
+
   vim-prettyprint = buildVimPluginFrom2Nix {
     pname = "vim-prettyprint";
     version = "2016-07-16";
