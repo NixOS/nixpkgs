@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "kzipmix";
-  version = "20091108";
+  version = "20200115";
 
   src = fetchurl {
     url = "http://static.jonof.id.au/dl/kenutils/kzipmix-${version}-linux.tar.gz";
-    sha256 = "19gyn8pblffdz1bf3xkbpzx8a8wn3xb0v411pqzmz5g5l6pm5gph";
+    sha256 = "sha256-ePgye0D6/ED53zx6xffLnYhkjed7SPU4BLOZQr9E3yA=";
   };
 
   installPhase = ''
     mkdir -p $out/bin
-    cp kzip zipmix $out/bin
+    cp amd64/{kzip,zipmix} $out/bin
 
     patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/bin/kzip
     patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/bin/zipmix
