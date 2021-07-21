@@ -111,7 +111,17 @@ in
           ProtectKernelTunables = false;
           ProtectSystem = "strict";
           RemoveIPC = true;
-          RestrictAddressFamilies = "AF_PACKET AF_UNIX AF_PPPOX AF_ATMPVC AF_ATMSVC AF_INET AF_INET6 AF_IPX";
+          RestrictAddressFamilies = [
+            "AF_ATMPVC"
+            "AF_ATMSVC"
+            "AF_INET"
+            "AF_INET6"
+            "AF_IPX"
+            "AF_NETLINK"
+            "AF_PACKET"
+            "AF_PPPOX"
+            "AF_UNIX"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
