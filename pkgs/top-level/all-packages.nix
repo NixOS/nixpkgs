@@ -3599,6 +3599,8 @@ in
 
   cdimgtools = callPackage ../tools/cd-dvd/cdimgtools { };
 
+  cdpr = callPackage ../tools/networking/cdpr { };
+
   cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
