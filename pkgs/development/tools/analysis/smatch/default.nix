@@ -4,12 +4,12 @@
 , llvm, libxml2
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "smatch";
   version = "20120924";
 
   src = fetchgit {
-    url = "git://repo.or.cz/smatch.git";
+    url = "git://repo.or.cz/${pname}.git";
     rev = "23656e3e578b700cbf96d043f039e6341a3ba5b9";
     sha256 = "0r43qi6vryqg450fj73yjwbb7gzcgx64rhrhb3r1m6a252srijiy";
   };

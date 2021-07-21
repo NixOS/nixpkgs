@@ -11,11 +11,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0fff1c88669a20bb6a4e7331960673a3a02a2e04ff163e4c9299496646edcf61";
+    sha256 = "fd8c691aac2cb80933aae7f94d9d9e271a820efc5c48e73408f1a90da426a1bd";
   };
 
   patches = [ ./sudo.patch ];
@@ -26,6 +26,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [ makeWrapper python3Packages.setuptools-scm ];
+
+  propagatedBuildInputs = [ python3Packages.psutil ];
 
   checkInputs = with python3Packages; [ mock pytestCheckHook flake8 ];
 
@@ -42,7 +44,7 @@ python3Packages.buildPythonApplication rec {
       target network (though it does require Python 2.7, Python 3.5 or later at both ends).
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
-    license = licenses.gpl2;
+    license = licenses.lgpl21;
     maintainers = with maintainers; [ domenkozar carlosdagos ];
   };
 }

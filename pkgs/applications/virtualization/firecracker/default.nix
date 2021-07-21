@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     aarch64-linux = "0m7xs12g97z1ipzaf7dgknf3azlah0p6bdr9i454azvzg955238b";
   };
 
-  configurePhase = ":";
+  dontConfigure = true;
 
   buildPhase     = ''
     mv firecracker-* firecracker

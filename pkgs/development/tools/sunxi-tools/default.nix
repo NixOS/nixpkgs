@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libusb1, zlib }:
 
-stdenv.mkDerivation {
-  name = "sunxi-tools-20181113";
+stdenv.mkDerivation rec {
+  pname = "sunxi-tools";
+  version = "unstable-2018-11-13";
 
   src = fetchFromGitHub {
     owner = "linux-sunxi";

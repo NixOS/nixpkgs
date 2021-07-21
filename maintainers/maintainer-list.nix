@@ -2469,6 +2469,12 @@
     githubId = 452652;
     name = "Kosyrev Serge";
   };
+  DeeUnderscore = {
+    email = "d.anzorge@gmail.com";
+    github = "DeeUnderscore";
+    githubId = 156239;
+    name = "D Anzorge";
+  };
   delan = {
     name = "Delan Azabani";
     email = "delan@azabani.com";
@@ -4213,6 +4219,12 @@
     githubId = 6430643;
     name = "Henry Till";
   };
+  heph2 = {
+    email = "srht@mrkeebs.eu";
+    github = "heph2";
+    githubId = 87579883;
+    name = "Marco";
+  };
   herberteuler = {
     email = "herberteuler@gmail.com";
     github = "herberteuler";
@@ -5489,6 +5501,12 @@
     github = "kidd";
     githubId = 25607;
     name = "Raimon Grau";
+  };
+  kidonng = {
+    email = "hi@xuann.wang";
+    github = "kidonng";
+    githubId = 44045911;
+    name = "Kid";
   };
   kierdavis = {
     email = "kierdavis@gmail.com";
@@ -7581,6 +7599,12 @@
     github = "NilsIrl";
     githubId = 26231126;
     name = "Nils ANDRÉ-CHANG";
+  };
+  nils-degroot = {
+    email = "nils@peeko.nl";
+    github = "nils-degroot";
+    githubId = 53556985;
+    name = "Nils de Groot";
   };
   ninjatrappeur = {
     email = "felix@alternativebit.fr";
@@ -11325,6 +11349,12 @@
     github = "WhittlesJr";
     githubId = 19174984;
     name = "Alex Whitt";
+  };
+  whonore = {
+    email = "wolfhonore@gmail.com";
+    github = "whonore";
+    githubId = 7121530;
+    name = "Wolf Honoré";
   };
   wildsebastian = {
     name = "Sebastian Wild";

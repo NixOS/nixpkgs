@@ -2,10 +2,11 @@
 
 
 stdenv.mkDerivation rec {
-  name = "liboauth-1.0.3";
+  pname = "liboauth";
+  version = "1.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/liboauth/${name}.tar.gz";
+    url = "mirror://sourceforge/liboauth/${pname}-${version}.tar.gz";
     sha256 = "07w1aq8y8wld43wmbk2q8134p3bfkp2vma78mmsfgw2jn1bh3xhd";
   };
 

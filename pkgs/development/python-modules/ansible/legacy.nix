@@ -1,5 +1,5 @@
 { lib
-, fetchFromGitHub
+, fetchPypi
 , buildPythonPackage
 , pycrypto
 , paramiko
@@ -18,13 +18,11 @@
 
 buildPythonPackage rec {
   pname = "ansible";
-  version = "2.9.23";
+  version = "2.9.24";
 
-  src = fetchFromGitHub {
-    owner = "ansible";
-    repo = "ansible";
-    rev = "v${version}";
-    sha256 = "0mikykpzyqpmaiczz53f71mcyc4qvahi9ckn7wgfx7sw7s2z3skk";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-DC9Tt75z3cNCPZZY/NGQeYl9Wx/FM8StVQ21ixea64o=";
   };
 
   prePatch = ''

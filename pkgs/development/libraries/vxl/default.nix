@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, unzip, cmake, libtiff, expat, zlib, libpng, libjpeg }:
 stdenv.mkDerivation {
-  name = "vxl-1.17.0-nix1";
+  pname = "vxl";
+  version = "1.17.0-nix1";
 
   src = fetchFromGitHub {
     owner = "vxl";

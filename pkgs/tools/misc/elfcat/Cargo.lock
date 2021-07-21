@@ -4,4 +4,4 @@ version = 3
 
 [[package]]
 name = "elfcat"
-version = "0.1.3"
+version = "0.1.4"

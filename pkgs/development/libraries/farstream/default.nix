@@ -14,12 +14,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "farstream-0.2.8";
+  pname = "farstream";
+  version = "0.2.8";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/farstream/releases/farstream/${name}.tar.gz";
+    url = "https://www.freedesktop.org/software/farstream/releases/farstream/${pname}-${version}.tar.gz";
     sha256 = "0249ncd20x5mf884fd8bw75c3118b9fdml837v4fib349xmrqfrb";
   };
 
