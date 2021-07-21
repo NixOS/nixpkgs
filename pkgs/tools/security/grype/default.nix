@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fYeZFNtftG46/QHdV5UhCNCdP7ErOgwWfEB4V14ei5k=";
+    sha256 = "sha256-xiUDyuVNVkVT+kxOEFOq4RKxMc5nNjsom/ZTKzfkOhU=";
   };
 
   vendorSha256 = "sha256-mW3e4WFa9pKSpyTZYmPA2j8nZz+94G2PqdqI0BDo3wc=";

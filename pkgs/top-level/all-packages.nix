@@ -6083,6 +6083,8 @@ in
 
   itm-tools = callPackage ../development/tools/misc/itm-tools { };
 
+  iwgtk = callPackage ../tools/networking/iwgtk { };
+
   ix = callPackage ../tools/misc/ix { };
 
   jaaa = callPackage ../applications/audio/jaaa { };
