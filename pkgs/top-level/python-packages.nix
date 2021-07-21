@@ -991,6 +991,8 @@ in {
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
+  bagit = callPackage ../development/python-modules/bagit { };
+
   banal = callPackage ../development/python-modules/banal { };
 
   bandit = callPackage ../development/python-modules/bandit { };
