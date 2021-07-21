@@ -41,6 +41,7 @@ let
     "armv6l" = "arm";
     "armv7l" = "arm";
     "powerpc64le" = "ppc64le";
+    "mips" = "mips";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
   # We need a target compiler which is still runnable at build time,
