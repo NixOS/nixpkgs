@@ -7055,6 +7055,8 @@ in
 
   minio-client = callPackage ../tools/networking/minio-client { };
 
+  minio-certgen = callPackage ../tools/security/minio-certgen { };
+
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
   inherit (callPackage ../tools/networking/miniupnpc
