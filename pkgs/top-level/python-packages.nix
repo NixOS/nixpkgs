@@ -7938,6 +7938,8 @@ in {
 
   sh = callPackage ../development/python-modules/sh { };
 
+  shellescape = callPackage ../development/python-modules/shellescape { };
+
   shellingham = callPackage ../development/python-modules/shellingham { };
 
   shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
