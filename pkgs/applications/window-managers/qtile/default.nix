@@ -55,8 +55,9 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace libqtile/core/manager.py --subst-var-by out $out
-    substituteInPlace libqtile/pangocffi.py --subst-var-by glib ${glib.out}
-    substituteInPlace libqtile/pangocffi.py --subst-var-by pango ${pango.out}
+    substituteInPlace libqtile/pangocffi.py \
+      --subst-var-by glib ${glib.out} \
+      --subst-var-by pango ${pango.out}
     substituteInPlace libqtile/backend/x11/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor}
     patchShebangs ./scripts/xephyr
   '';
