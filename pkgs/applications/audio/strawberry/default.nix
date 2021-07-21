@@ -28,6 +28,7 @@
 , qtx11extras
 , qttools
 , withGstreamer ? true
+, glib-networking
 , gst_all_1 ? null
 , withVlc ? true
 , libvlc ? null
@@ -69,6 +70,7 @@ mkDerivation rec {
     p11-kit
   ]
   ++ lib.optionals withGstreamer (with gst_all_1; [
+    glib-networking
     gstreamer
     gst-plugins-base
     gst-plugins-good
@@ -82,8 +84,11 @@ mkDerivation rec {
     util-linux
   ];
 
-  postInstall = ''
-    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  postInstall = lib.optionalString withGstreamer ''
+    qtWrapperArgs+=(
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules"
+    )
   '';
 
   meta = with lib; {
