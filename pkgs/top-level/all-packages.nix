@@ -3100,6 +3100,8 @@ in
 
   moodle-dl = callPackage ../tools/networking/moodle-dl { };
 
+  moonraker = callPackage ../servers/moonraker { };
+
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (pkgs.xorg) libX11 libXtst libXfixes;
   };
