@@ -11,6 +11,8 @@ buildPythonPackage rec {
   pname = "pybtex";
 
   doCheck = false;
+  pythonImportsCheck = [ "pybtex" ];
+
   propagatedBuildInputs = [
     latexcodec
     pyyaml
