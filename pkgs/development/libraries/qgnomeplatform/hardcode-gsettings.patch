@@ -1,13 +1,37 @@
-diff --git a/common/gnomehintssettings.cpp b/common/gnomehintssettings.cpp
-index 9860e57..40fa6ec 100644
---- a/common/gnomehintssettings.cpp
-+++ b/common/gnomehintssettings.cpp
-@@ -80,9 +80,17 @@ void gtkMessageHandler(const gchar *log_domain,
- GnomeHintsSettings::GnomeHintsSettings()
-     : QObject(0)
+diff --git i/cmake/modules/FindGSettingSchemas.cmake w/cmake/modules/FindGSettingSchemas.cmake
+index 6d70a2e..311b63f 100644
+--- i/cmake/modules/FindGSettingSchemas.cmake
++++ w/cmake/modules/FindGSettingSchemas.cmake
+@@ -1,16 +1,7 @@
+ find_package(PkgConfig)
+ 
+-pkg_check_modules(PC_GLIB2 REQUIRED glib-2.0)
+-
+-find_path(GLIB_SCHEMAS_DIR org.gnome.desktop.interface.gschema.xml
+-    HINTS ${PC_GLIB2_PREFIX}/share
+-    PATH_SUFFIXES glib-2.0/schemas)
+-
+-if (GLIB_SCHEMAS_DIR)
+-    set(GSettingSchemas_FOUND true)
+-else()
+-    set(GSettingSchemas_FOUND false)
+-endif()
++set(GLIB_SCHEMAS_DIR, "@gds_gsettings_path@")
++set(GSettingSchemas_FOUND true)
+ 
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(GSettingSchemas
+diff --git i/src/common/gnomesettings.cpp w/src/common/gnomesettings.cpp
+index e35fb85..2bcfb3a 100644
+--- i/src/common/gnomesettings.cpp
++++ w/src/common/gnomesettings.cpp
+@@ -145,10 +145,18 @@ GnomeSettingsPrivate::GnomeSettingsPrivate(QObject *parent)
+     : GnomeSettings(parent)
      , m_usePortal(checkUsePortalSupport())
+     , m_canUseFileChooserPortal(!m_usePortal)
 -    , m_gnomeDesktopSettings(g_settings_new("org.gnome.desktop.wm.preferences"))
 -    , m_settings(g_settings_new("org.gnome.desktop.interface"))
+     , m_fallbackFont(new QFont(QLatin1String("Sans"), 10))
  {
 +    g_autoptr(GSettingsSchemaSource) schemaSource = nullptr;
 +    g_autoptr(GSettingsSchema) gnomeDesktopSchema = nullptr;
