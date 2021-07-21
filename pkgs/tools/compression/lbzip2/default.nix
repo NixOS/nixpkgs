@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, gnulib, perl, autoconf, automake }:
 
 stdenv.mkDerivation rec {
+  pname = "lbzip2";
   version = "2.5";
-  name = "lbzip2-${version}";
 
   src = fetchFromGitHub {
     owner = "kjn";
     repo = "lbzip2";
-    sha256 = "1h321wva6fp6khz6x0i6rqb76xh327nw6v5jhgjpcckwdarj5jv8";
     rev = "v${version}";
+    sha256 = "1h321wva6fp6khz6x0i6rqb76xh327nw6v5jhgjpcckwdarj5jv8";
   };
 
   buildInputs = [ gnulib perl ];
