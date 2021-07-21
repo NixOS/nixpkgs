@@ -3513,6 +3513,8 @@ in {
 
   immutables = callPackage ../development/python-modules/immutables { };
 
+  immutabledict = callPackage ../development/python-modules/immutabledict { };
+
   impacket = callPackage ../development/python-modules/impacket { };
 
   importlib-metadata = callPackage ../development/python-modules/importlib-metadata { };
