@@ -26,29 +26,8 @@ let
       [
         # the following dependencies are non trivial to update since later versions introduce backwards incompatible
         # changes that might affect plugins, or due to other observed problems
-        (mkOverride "flask-babel" "1.0.0" "0gmb165vkwv5v7dxsxa2i3zhafns0fh938m2zdcrv4d8z5l099yn")
-        (mkOverride "rsa" "4.0" "1a836406405730121ae9823e19c6e806c62bbad73f890574fff50efa4122c487")
-        (mkOverride "markdown" "3.1.1" "2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a")
-        (mkOverride "tornado" "5.1.1" "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409")
         (mkOverride "unidecode" "0.04.21" "280a6ab88e1f2eb5af79edff450021a0d3f0448952847cd79677e55e58bad051")
         (mkOverride "sarge" "0.1.5.post0" "1c1ll7pys9vra5cfi8jxlgrgaql6c27l6inpy15aprgqhc4ck36s")
-
-        # Requires websocket-client <1.0, >=0.57. Cannot do mkOverride b/c differing underscore/hyphen in pypi source name
-        (
-          self: super: {
-            websocket-client = super.websocket-client.overridePythonAttrs (
-              oldAttrs: rec {
-                version = "0.58.0";
-                src = oldAttrs.src.override {
-                  pname = "websocket_client";
-                  inherit version;
-                  sha256 = "63509b41d158ae5b7f67eb4ad20fecbb4eee99434e73e140354dc3ff8e09716f";
-                };
-                propagatedBuildInputs = [ self.six ];
-              }
-            );
-          }
-        )
 
         # Octoprint needs zeroconf >=0.24 <0.25. This can't be done via mkOverride, because in zeroconf 0.32
         # the super package was migrated to fetchFromGitHub.
@@ -78,13 +57,13 @@ let
           self: super: {
             octoprint-filecheck = self.buildPythonPackage rec {
               pname = "OctoPrint-FileCheck";
-              version = "2020.08.07";
+              version = "2021.2.23";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-FileCheck";
                 rev = version;
-                sha256 = "05ys05l5x7d2bkg3yqrga6m65v3g5fcnnzbfab7j9w2pzjdapx5b";
+                sha256 = "0qjn3m38pqs4ig7f9ja854qd5xl97abxssmnfv79iymx2q80dx3v";
               };
               doCheck = false;
             };
@@ -96,13 +75,31 @@ let
           self: super: {
             octoprint-firmwarecheck = self.buildPythonPackage rec {
               pname = "OctoPrint-FirmwareCheck";
-              version = "2020.09.23";
+              version = "2021.5.31";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-FirmwareCheck";
                 rev = version;
-                sha256 = "1l1ajhnsc39prgk59mp93h90dgl9gh660cci00z5b5gj2h6dv1d1";
+                sha256 = "00yfjp3hh3dp61yhg28ljxy9k030lprhag4y8ww08c8q9md0771c";
+              };
+              doCheck = false;
+            };
+          }
+        )
+
+        # Built-in dependency
+        (
+          self: super: {
+            octoprint-pisupport = self.buildPythonPackage rec {
+              pname = "OctoPrint-PiSupport";
+              version = "2021.6.14";
+
+              src = fetchFromGitHub {
+                owner = "OctoPrint";
+                repo = "OctoPrint-PiSupport";
+                rev = version;
+                sha256 = "0jmhgd6x0z42x500if2lcns4lkfb0xg059lhjr000iqgl6lh0n3q";
               };
               doCheck = false;
             };
@@ -113,13 +110,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.5.3";
+              version = "1.6.1";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                sha256 = "sha256-ZL/P/YIHynPmP8ssZZUKZDJscBsSsCq3UtOHrTVLpec=";
+                sha256 = "04rwm2s6x2c4b320ylqvx0cd5n8089xabzzxzigjmx873zvf9gfx";
               };
 
               propagatedBuildInputs = with super; [
@@ -133,8 +130,8 @@ let
                 flask-babel
                 flask_assets
                 flask_login
-                frozendict
                 future
+                immutabledict
                 itsdangerous
                 jinja2
                 markdown
@@ -143,6 +140,7 @@ let
                 netifaces
                 octoprint-filecheck
                 octoprint-firmwarecheck
+                octoprint-pisupport
                 pkginfo
                 psutil
                 pylru
@@ -154,6 +152,7 @@ let
                 sarge
                 semantic-version
                 sentry-sdk
+                setuptools
                 tornado
                 unidecode
                 watchdog
@@ -161,15 +160,27 @@ let
                 werkzeug
                 wrapt
                 zeroconf
+                zipstream-new
               ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
 
               checkInputs = with super; [ pytestCheckHook mock ddt ];
 
               postPatch = let
                 ignoreVersionConstraints = [
+                  "Click"
                   "emoji"
+                  "flask"
+                  "Flask-Babel"
+                  "immutabledict"
+                  "itsdangerous"
+                  "Jinja2"
+                  "markdown"
+                  "markupsafe"
                   "sentry-sdk"
+                  "tornado"
                   "watchdog"
+                  "websocket-client"
+                  "werkzeug"
                 ];
               in
                 ''
@@ -177,7 +188,7 @@ let
                     ${lib.concatStringsSep "\n" (
                   map (
                     e:
-                      ''-e 's@${e}[<>=]+.*@${e}",@g' \''
+                      ''-e 's@"${e}[<>=]+.*"@"${e}"@g' \''
                   ) ignoreVersionConstraints
                 )}
                     setup.py
