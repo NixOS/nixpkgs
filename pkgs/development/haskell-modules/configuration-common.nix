@@ -188,6 +188,7 @@ self: super: {
     }));
 
   # Fails for non-obvious reasons while attempting to use doctest.
+  focuslist = dontCheck super.focuslist;
   search = dontCheck super.search;
 
   # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
