@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg ];
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" "distPhase" ];
-
   unpackPhase = ''
     dpkg-deb -R $src .
   '';
