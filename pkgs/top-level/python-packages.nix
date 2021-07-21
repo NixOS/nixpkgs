@@ -4861,6 +4861,8 @@ in {
 
   noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
 
+  norbert = callPackage ../development/python-modules/norbert { };
+
   normality = callPackage ../development/python-modules/normality { };
 
   nose2 = callPackage ../development/python-modules/nose2 { };
