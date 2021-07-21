@@ -383,6 +383,7 @@
   ./services/hardware/bluetooth.nix
   ./services/hardware/bolt.nix
   ./services/hardware/brltty.nix
+  ./services/hardware/ddccontrol.nix
   ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
   ./services/hardware/fwupd.nix
