@@ -629,6 +629,7 @@ sickill/vim-pasta
 SidOfc/mkdx
 simnalamburt/vim-mundo
 simrat39/rust-tools.nvim
+simrat39/symbols-outline.nvim
 sindrets/diffview.nvim@main
 SirVer/ultisnips
 sjl/gundo.vim

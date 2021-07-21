@@ -4921,6 +4921,18 @@ final: prev:
     meta.homepage = "https://github.com/keith/swift.vim/";
   };
 
+  symbols-outline-nvim = buildVimPluginFrom2Nix {
+    pname = "symbols-outline-nvim";
+    version = "2021-07-21";
+    src = fetchFromGitHub {
+      owner = "simrat39";
+      repo = "symbols-outline.nvim";
+      rev = "7414f30365a342e1d89072d474a35913643b6eec";
+      sha256 = "19c9dv8dc72nnb1dx7wdraihpzf5b42wwq3c9vn0na8k1xy26h8y";
+    };
+    meta.homepage = "https://github.com/simrat39/symbols-outline.nvim";
+  };
+
   syntastic = buildVimPluginFrom2Nix {
     pname = "syntastic";
     version = "2021-07-19";
