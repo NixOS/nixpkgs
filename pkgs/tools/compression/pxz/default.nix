@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xz ];
 
-  patches = [ ./_SC_ARG_MAX.patch ];
-
   buildPhase = ''
     gcc -o pxz pxz.c -llzma \
         -fopenmp -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -O2 \
