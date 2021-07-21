@@ -199,6 +199,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  addict = callPackage ../development/python-modules/addict { };
+
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
   adext = callPackage ../development/python-modules/adext { };
@@ -2296,6 +2298,8 @@ in {
   enaml = callPackage ../development/python-modules/enaml { };
 
   enamlx = callPackage ../development/python-modules/enamlx { };
+
+  enlighten = callPackage ../development/python-modules/enlighten { };
 
   enocean = callPackage ../development/python-modules/enocean { };
 
@@ -5544,6 +5548,8 @@ in {
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
 
+  prefixed = callPackage ../development/python-modules/prefixed { };
+
   pre-commit = callPackage ../development/python-modules/pre-commit { };
 
   pre-commit-hooks = callPackage ../development/python-modules/pre-commit-hooks { };
@@ -7541,6 +7547,8 @@ in {
   requestsexceptions = callPackage ../development/python-modules/requestsexceptions { };
 
   requests-file = callPackage ../development/python-modules/requests-file { };
+
+  requests-futures = callPackage ../development/python-modules/requests-futures { };
 
   requests-http-signature = callPackage ../development/python-modules/requests-http-signature { };
 
