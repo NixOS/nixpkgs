@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "toil" ];
 
   meta = with lib; {
-    homepage = "http://toil.ucsc-cgl.org";
+    homepage = "https://toil.ucsc-cgl.org/";
     license = with licenses; [ asl20 ];
     description = "Workflow engine written in pure Python";
     maintainers = with maintainers; [ veprbl ];
