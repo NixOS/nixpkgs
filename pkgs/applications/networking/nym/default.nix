@@ -10,22 +10,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nym";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym";
     rev = "v${version}";
-    sha256 = "sha256-7x+B+6T0cnEOjXevA5n1k/SY1Q2tcu0bbZ9gIGoljw0=";
+    sha256 = "sha256-bZXbteryXkOxft63zUMWdpBgbDSvrBHQY3f70/+mBtI=";
   };
 
-  cargoSha256 = "0a7yja0ihjc66fqlshlaxpnpcpdy7h7gbv6120w2cr605qdnqvkx";
+  cargoSha256 = "0xwa114fs4h6y2a3nrl2dp0rv0k336xy9y330g9yix4g34qmrynq";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  patches = [ ./ignore-networking-tests.patch ];
+  patches = [ ./ignore-networking-tests.patch ./ignore-upgrade-tests.patch ];
   checkType = "debug";
 
   passthru.updateScript = ./update.sh;

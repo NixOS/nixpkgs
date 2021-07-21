@@ -1,0 +1,20 @@
+diff --git a/mixnode/src/commands/upgrade.rs b/mixnode/src/commands/upgrade.rs
+index 98e00525..864609de 100644
+--- a/mixnode/src/commands/upgrade.rs
++++ b/mixnode/src/commands/upgrade.rs
+@@ -448,6 +448,7 @@ mod upgrade_tests {
+     use serial_test::serial;
+ 
+     #[test]
++    #[ignore]
+     #[serial]
+     fn test_0_10_2_upgrade() {
+         let config = Config::default()
+@@ -462,6 +463,7 @@ mod upgrade_tests {
+     }
+ 
+     #[test]
++    #[ignore]
+     #[serial]
+     fn test_0_10_2_upgrade_error() {
+         let config = Config::default()
