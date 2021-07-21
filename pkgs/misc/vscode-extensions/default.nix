@@ -1244,8 +1244,8 @@ let
         mktplcRef = {
           name = "markdown-memo";
           publisher = "svsool";
-          version = "0.3.8";
-          sha256 = "eFiCCXxrOnXwJK1AOMfIDsPGsFG3ArLD1X/uAEH5lRY=";
+          version = "0.3.9";
+          sha256 = "sha256-BsKFHR3wkSRHS8QOi63vLwGj3T2CPzvqXhgtEOq6gJM=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/svsool.markdown-memo/changelog";
