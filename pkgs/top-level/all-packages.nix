@@ -27707,8 +27707,6 @@ in
     qtermwidget = lxqt.qtermwidget;
   };
 
-  virtinst = callPackage ../applications/virtualization/virtinst {};
-
   virtscreen = callPackage ../tools/admin/virtscreen {};
 
   virtual-ans = callPackage ../applications/audio/virtual-ans {};
