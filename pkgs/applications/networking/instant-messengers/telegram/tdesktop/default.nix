@@ -1,11 +1,11 @@
 { mkDerivation, lib, fetchFromGitHub, callPackage, fetchpatch
-, pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
+, pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk, jemalloc
 , rnnoise, extra-cmake-modules
 # Transitive dependencies:
-, pcre, xorg, util-linux, libselinux, libsepol, epoxy
+, pcre, xorg, util-linuxMinimal, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
 , xdg-utils, libsysprof-capture, libpsl, brotli
 }:
@@ -52,16 +52,20 @@ in mkDerivation rec {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook removeReferencesTo ];
+  nativeBuildInputs = [
+    pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook
+    extra-cmake-modules
+  ];
 
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
     ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
     tl-expected hunspell glibmm webkitgtk jemalloc
-    rnnoise extra-cmake-modules
+    rnnoise
     tg_owt
     # Transitive dependencies:
-    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
+    util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
+    pcre xorg.libpthreadstubs xorg.libXdmcp libselinux libsepol epoxy
     at-spi2-core libXtst libthai libdatrie libsysprof-capture libpsl brotli
   ];
 
@@ -70,18 +74,15 @@ in mkDerivation rec {
     # We're allowed to used the API ID of the Snap package:
     "-DTDESKTOP_API_ID=611335"
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
-    "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
   ];
 
   # Note: The following packages could be packaged system-wide, but it's
   # probably best to use the bundled ones from tdesktop (Arch does this too):
   # rlottie:
-  # - CMake flag: "-DTDESKTOP_USE_PACKAGED_TGVOIP=ON"
   # - Sources (problem: there are no stable releases!):
   #   - desktop-app (tdesktop): https://github.com/desktop-app/rlottie
   #   - upstream: https://github.com/Samsung/rlottie
   # libtgvoip:
-  # - CMake flag: "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=ON"
   # - Sources  (problem: the stable releases might be too old!):
   #   - tdesktop: https://github.com/telegramdesktop/libtgvoip
   #   - upstream: https://github.com/grishka/libtgvoip
@@ -112,7 +113,7 @@ in mkDerivation rec {
       Desktop client for the Telegram messenger, based on the Telegram API and
       the MTProto secure protocol.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
