@@ -121,7 +121,7 @@ let
       # to avoid cyclic dependencies between Qt modules.
       mkDerivation =
         import ../mkDerivation.nix
-        { inherit lib; inherit debug; wrapQtAppsHook = null; }
+        { inherit stdenv; inherit lib; inherit debug; wrapQtAppsHook = null; }
         stdenvActual.mkDerivation;
     }
     { inherit self srcs patches; };
@@ -133,7 +133,7 @@ let
 
       mkDerivationWith =
         import ../mkDerivation.nix
-        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
+        { inherit stdenv; inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
 
       mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
 
@@ -204,6 +204,8 @@ let
           [ self.qtbase.dev makeWrapper ]
           ++ optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
+
+      qtWrapAllExecutables = 1;
     };
 
    self = makeScope newScope addPackages;

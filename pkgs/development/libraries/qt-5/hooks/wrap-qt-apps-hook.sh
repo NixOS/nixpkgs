@@ -85,7 +85,7 @@ wrapQtAppsHook() {
 
         find "$targetDir" ! -type d -executable -print0 | while IFS= read -r -d '' file
         do
-            patchelf --print-interpreter "$file" >/dev/null 2>&1 || continue
+            [ -x "$file" ] && [ ! -z "${qtWrapAllExecutables-}" ] || patchelf --print-interpreter "$file" >/dev/null 2>&1 || continue
 
             if [ -f "$file" ]
             then
