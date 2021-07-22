@@ -32,6 +32,11 @@
           from Python 3.8.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          PostgreSQL now defaults to major version 13.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">
