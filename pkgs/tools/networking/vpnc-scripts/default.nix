@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit
 , makeWrapper
-, nettools, gawk, systemd, openresolv, coreutils, gnugrep
+, nettools, gawk, systemd, openresolv, coreutils, gnugrep, iproute2
 }:
 
 stdenv.mkDerivation {
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       --replace "/usr/bin/resolvectl" "${systemd}/bin/resolvectl"
   '' + ''
     wrapProgram $out/bin/vpnc-script \
-      --prefix PATH : "${lib.makeBinPath ([ nettools gawk coreutils gnugrep ] ++ lib.optionals stdenv.isLinux [ openresolv ])}"
+      --prefix PATH : "${lib.makeBinPath ([ nettools gawk coreutils gnugrep ] ++ lib.optionals stdenv.isLinux [ openresolv iproute2 ])}"
   '';
 
   meta = with lib; {
