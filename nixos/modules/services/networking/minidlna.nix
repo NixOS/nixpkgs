@@ -97,7 +97,8 @@ in
 
     services.minidlna.announceInterval = mkOption {
       type = types.int;
-      default = 895;
+      default = 90000;
+      example = 895;
       description =
         ''
           The interval between announces (in seconds).
@@ -108,6 +109,43 @@ in
           Many people prefer shorter announce intervals (e.g. 60 seconds)
           on their home networks, especially when DLNA clients are
           started on demand.
+
+          Instead of waiting on announces, one can open the port UDP 1900
+          to use SSDP discovery. Setting openFirewall option does this
+          automatically. Furthermore announce interval has been set to
+          90000 to prevent disconnects with certain clients. The default
+          value of 895 can be used if one does not want to utilize SSDP.
+
+          Some relevant information can be found here:
+          https://sourceforge.net/p/minidlna/discussion/879957/thread/1389d197/
+        '';
+    };
+
+    services.minidlna.openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open both HTTP (TCP) and SSDP (UDP) ports in the firewall.
+        '';
+      };
+
+    services.minidlna.inotify = mkOption {
+      type = types.enum [ "yes" "no" ];
+      default = "no";
+      example = "yes";
+      description =
+        ''
+          Whether to enable inotify monitoring to automatically discover new files.
+        '';
+    };
+
+    services.minidlna.databaseDir = mkOption {
+      type = types.str;
+      default = "/var/cache/minidlna";
+      example = "/tmp/minidlna";
+      description =
+        ''
+          Specify the directory where you want MiniDLNA to store its database and album art cache.
         '';
     };
 
@@ -149,13 +187,16 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ port ];
+    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 1900 ];
+
     services.minidlna.config =
       ''
         port=${toString port}
         friendly_name=${cfg.friendlyName}
-        db_dir=/var/cache/minidlna
+        db_dir=${cfg.databaseDir}
         log_level=${cfg.loglevel}
-        inotify=yes
+        inotify=${cfg.inotify}
         root_container=${cfg.rootContainer}
         ${concatMapStrings (dir: ''
           media_dir=${dir}
