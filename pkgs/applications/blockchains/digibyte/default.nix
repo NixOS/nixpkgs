@@ -1,40 +1,24 @@
-{ lib, stdenv
-, fetchFromGitHub
-, openssl
-, boost
-, libevent
-, autoreconfHook
-, db4
-, pkg-config
-, protobuf
-, hexdump
-, zeromq
-, withGui
-, qtbase ? null
-, qttools ? null
-, wrapQtAppsHook ? null
+{ lib, stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook
+, db4, pkg-config, protobuf, hexdump, zeromq, withGui ? true, qtbase
+, qttools, wrapQtAppsHook
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
-  pname = "digibyte";
-  version = "7.17.2";
-
-  name = pname + toString (optional (!withGui) "d") + "-" + version;
+  name = "digibyte${lib.optionalString (!withGui) "d"}";
+  version = "7.17.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "DigiByte-Core";
+    repo = "digibyte";
     rev = "v${version}";
-    sha256 = "04czj7mx3wpbx4832npk686p9pg5zb6qwlcvnmvqf31hm5qylbxj";
+    sha256 = "0hzsjf70ksbh3f9gp1fpg7b98liymiyf51n6sv0cgnwxd85jgz6c";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     hexdump
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
     wrapQtAppsHook
   ];
 
@@ -44,7 +28,7 @@ stdenv.mkDerivation rec {
     libevent
     db4
     zeromq
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
     qtbase
     qttools
     protobuf
@@ -54,12 +38,21 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
       "--with-boost-libdir=${boost.out}/lib"
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
       "--with-gui=qt5"
       "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
-  meta = {
+  postInstall = ''
+    rm $out/bin/test_* $out/bin/bench_*
+  '';
+
+  dontWrapQtApps = withGui;
+  preFixup = lib.optionalString withGui ''
+    wrapQtApp $out/bin/digibyte-qt
+  '';
+
+  meta = with lib; {
     description = "DigiByte (DGB) is a rapidly growing decentralized, global blockchain";
     homepage = "https://digibyte.io/";
     license = licenses.mit;

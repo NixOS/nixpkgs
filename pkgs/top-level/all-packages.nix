@@ -28858,7 +28858,6 @@ with pkgs;
   dero = callPackage ../applications/blockchains/dero { boost = boost165; };
 
   digibyte = libsForQt514.callPackage ../applications/blockchains/digibyte { withGui = true; };
-  digibyted = callPackage ../applications/blockchains/digibyte { withGui = false; };
 
   dogecoin  = callPackage ../applications/blockchains/dogecoin {
     boost = boost165;
