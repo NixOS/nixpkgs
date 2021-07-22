@@ -6371,6 +6371,8 @@ in
 
   libscrypt = callPackage ../development/libraries/libscrypt { };
 
+  libcsys = libsForQt5.callPackage ../development/libraries/libcsys { };
+
   libcprime = libsForQt5.callPackage ../development/libraries/libcprime { };
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
@@ -23468,6 +23470,8 @@ in
   confclerk = callPackage ../applications/misc/confclerk { };
 
   copyq = libsForQt5.callPackage ../applications/misc/copyq { };
+
+  coreaction = libsForQt5.callPackage ../applications/misc/coreaction { };
 
   corectrl = libsForQt5.callPackage ../applications/misc/corectrl { };
 
