@@ -5414,6 +5414,8 @@ in {
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
 
+  python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
+
   python-openems = callPackage ../development/python-modules/python-openems { };
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
