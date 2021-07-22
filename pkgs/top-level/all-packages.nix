@@ -6127,6 +6127,8 @@ in
 
   lf = callPackage ../tools/misc/lf {};
 
+  lha = callPackage ../tools/archivers/lha { };
+
   lhasa = callPackage ../tools/compression/lhasa {};
 
   libcpuid = callPackage ../tools/misc/libcpuid { };
