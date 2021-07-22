@@ -16,12 +16,14 @@ let
     preferLocalBuild = true;
     allowSubstitutes = false;
 
-    /* !!! Use toXML. */
-    sources = map (x: x.source) etc';
-    targets = map (x: x.target) etc';
-    modes = map (x: x.mode) etc';
-    users  = map (x: x.user) etc';
-    groups  = map (x: x.group) etc';
+    nativeBuildInputs = [ pkgs.jq ];
+
+    # Filter etc' down to the attributes we need
+    entries = builtins.toJSON (map (x: { inherit (x) source target mode user group; }) etc');
+    passAsFile = [ "entries" ];
+
+    # This is needed for the systemd module
+    passthru.targets = map (x: x.target) etc';
   };
 
 in
