@@ -1,29 +1,17 @@
 { lib, python3, fetchFromGitHub }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.18";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "32daf7a7dcf5d4013b37321df7b319f36523f38884ccc3e2e965917d0a5c73c1";
-        };
-      });
-    };
-  };
-in python.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "0.1.1";
+  version = "unstable-2021-07-01";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = "mautrix-signal";
-    rev = "v${version}";
-    sha256 = "11snsl7i407855h39g1fgk26hinnq0inr8sjrgd319li0d3jwzxl";
+    rev = "56eb24412fcafb4836f29375fba9cc6db1715d6f";
+    sha256 = "10nbfl48yb7h23znkxvkqh1dgp2xgldvxsigwfmwa1qbq0l4dljl";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     CommonMark
     aiohttp
     asyncpg
@@ -53,7 +41,7 @@ in python.pkgs.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python}/bin \
+      --set PATH ${python3}/bin \
       --set PYTHONPATH "$PYTHONPATH"
   '';
 

@@ -48,6 +48,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/xrelkd/clipcat/">clipcat</link>,
+          an X11 clipboard manager written in Rust. Available at
+          [services.clipcat](options.html#o pt-services.clipcat.enable).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
           a GeoIP database updater from MaxMind. Available as
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
@@ -535,6 +542,12 @@
         <para>
           The <literal>isabelle</literal> package has been upgraded from
           2020 to 2021
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          the <literal>mingw-64</literal> package has been upgraded from
+          6.0.0 to 9.0.0
         </para>
       </listitem>
     </itemizedlist>

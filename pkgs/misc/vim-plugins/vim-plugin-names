@@ -506,6 +506,7 @@ Olical/aniseed
 Olical/conjure
 olimorris/onedark.nvim
 onsails/lspkind-nvim
+onsails/vimway-lsp-diag.nvim
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
@@ -537,6 +538,7 @@ preservim/tagbar
 preservim/vim-pencil
 preservim/vim-wordy
 preservim/vimux
+prettier/vim-prettier
 psliwka/vim-smoothie
 ptzz/lf.vim
 puremourning/vimspector
@@ -628,6 +630,7 @@ sickill/vim-pasta
 SidOfc/mkdx
 simnalamburt/vim-mundo
 simrat39/rust-tools.nvim
+simrat39/symbols-outline.nvim
 sindrets/diffview.nvim@main
 SirVer/ultisnips
 sjl/gundo.vim

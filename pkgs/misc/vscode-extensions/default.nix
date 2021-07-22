@@ -335,6 +335,23 @@ let
         meta = { license = lib.licenses.mit; };
       };
 
+      divyanshuagrawal.competitive-programming-helper = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "competitive-programming-helper";
+          publisher = "DivyanshuAgrawal";
+          version = "5.8.5";
+          sha256 = "25v2tdAX7fVl2B5nvOIKN9vP1G5rA0G67CiDQn9n9Uc=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/DivyanshuAgrawal.competitive-programming-helper/changelog";
+          description = "Makes judging, compiling, and downloading problems for competitve programming easy. Also supports auto-submit for a few sites.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DivyanshuAgrawal.competitive-programming-helper";
+          homepage = "https://github.com/agrawal-d/cph";
+          license = licenses.gpl3;
+          maintainers = with maintainers; [ arcticlimer ];
+        };
+      };
+
       donjayamanne.githistory = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/donjayamanne.githistory/changelog";
@@ -386,8 +403,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "11.5.1";
-          sha256 = "sha256-Ic7eT8WX2GDYIj/aTu1d4m+fgPtXe4YQx04G0awbwnM=";
+          version = "11.6.0";
+          sha256 = "sha256-JxCNE/IL/v94xWmhebsRZo1Gw+nSSpDgZ41ZGongGVI=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";

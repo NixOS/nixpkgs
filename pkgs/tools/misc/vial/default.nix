@@ -1,12 +1,12 @@
 { lib, fetchurl, appimageTools }:
 let
   name = "vial-${version}";
-  version = "0.3";
+  version = "0.4";
   pname = "Vial";
 
   src = fetchurl {
     url = "https://github.com/vial-kb/vial-gui/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
-    sha256 = "sha256-hUwVp2tpKelbISQU/Q30yUeQfWp56dtgtfF/rpq1h5M=";
+    sha256 = "sha256-4EDEVSqjQ6Ybqx4BoNwE4pT5yFLYM05FBHc5deQU9f8=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit name src; };
