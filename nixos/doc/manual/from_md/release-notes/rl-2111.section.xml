@@ -656,8 +656,11 @@
           no longer need be granted the entire set of
           <literal>plugdev</literal> group permissions, which can
           include permissions other than those required by
-          <literal>openrazer</literal>. This can be desirable from a
-          security point of view.
+          <literal>openrazer</literal>. This is desirable from a
+          security point of view. The setting
+          <link xlink:href="options.html#opt-services.hardware.openrazer.users"><literal>harware.openrazer.users</literal></link>
+          can be used to add users to the <literal>openrazer</literal>
+          group.
         </para>
       </listitem>
     </itemizedlist>

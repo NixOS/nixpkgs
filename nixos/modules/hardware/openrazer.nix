@@ -51,8 +51,6 @@ in
     hardware.openrazer = {
       enable = mkEnableOption ''
         OpenRazer drivers and userspace daemon.
-        Any users that wish to make use of the daemon need to be
-        members of the "openrazer" group.
       '';
 
       verboseLogging = mkOption {
@@ -96,6 +94,15 @@ in
           generate a heatmap.
         '';
       };
+
+      users = mkOption {
+        type = with types; listOf str;
+        default = [];
+        description = ''
+          Usernames to be added to the "openrazer" group, so that they
+          can start and interact with the OpenRazer userspace daemon.
+        '';
+      };
     };
   };
 
@@ -113,7 +120,9 @@ in
     # A user must be a member of the openrazer group in order to start
     # the openrazer-daemon. Therefore we make sure that the group
     # exists.
-    users.groups.openrazer = {};
+    users.groups.openrazer = {
+      members = cfg.users;
+    };
 
     systemd.user.services.openrazer-daemon = {
       description = "Daemon to manage razer devices in userspace";
