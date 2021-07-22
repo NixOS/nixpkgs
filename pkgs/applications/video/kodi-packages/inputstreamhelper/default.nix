@@ -9,8 +9,11 @@ buildKodiAddon rec {
     sha256 = "0y4xn3ygwv1kb7gya7iwdga0g9sa89snpnram0wwqzqn8wn2lyb4";
   };
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.inputstreamhelper";
+  passthru = {
+    pythonPath = "lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.inputstreamhelper";
+    };
   };
 
   meta = with lib; {
