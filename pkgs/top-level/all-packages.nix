@@ -19095,6 +19095,7 @@ in
     inherit (haskellPackages) Agda;
   };
   agda = agdaPackages.agda;
+  agda-all = agda.withPackages(p: with p; [ standard-library cubical ]);
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 

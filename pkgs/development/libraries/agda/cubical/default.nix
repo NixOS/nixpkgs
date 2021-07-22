@@ -4,16 +4,18 @@ mkDerivation rec {
 
   # Version 0.2 is meant to be used with the Agda 2.6.1 compiler.
   pname = "cubical";
-  version = "0.2";
+  version = "unstable";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "agda";
-    rev = "v${version}";
-    sha256 = "07qlp2f189jvzbn3aqvpqk2zxpkmkxhhkjsn62iq436kxqj3z6c2";
+    rev = "d5030a9c89070255fc575add4e9f37b97e6a0c0c";
+    sha256 = "8WIrgAyA0bwFgtEjmwlvKQ7rZB91/Ppi8zOSq/qCTKE=";
   };
 
   LC_ALL = "en_US.UTF-8";
+
+  preConfigure = ''export AGDA_EXEC=agda'';
 
   # The cubical library has several `Everything.agda` files, which are
   # compiled through the make file they provide.
