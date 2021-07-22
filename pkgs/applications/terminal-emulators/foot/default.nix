@@ -2,6 +2,7 @@
 , lib
 , fetchzip
 , fetchurl
+, fetchpatch
 , runCommandNoCC
 , fcft
 , freetype
@@ -97,6 +98,15 @@ stdenv.mkDerivation rec {
     url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
     sha256 = "1k0alz991cslls4926c5gq02pdq0vfw9jfpprh2a1vb59xgikv7h";
   };
+
+  patches = [
+    # Fixes PGO builds with clang
+    (fetchpatch {
+      url = "https://codeberg.org/dnkl/foot/commit/2acd4b34c57659d86dca76c58e4363de9b0a1f17.patch";
+      sha256 = "13xi9ppaqx2p88cxbh6801ry9ral70ylh40agn6ij7pklybs4d7s";
+      includes = [ "pgo/pgo.c" ];
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
