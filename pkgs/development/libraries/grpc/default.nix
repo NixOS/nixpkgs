@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.38.1"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.39.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "0hjp946x5695srmc6bg2m7iih81jdmhpxn4bjcl80f09v4qsb0nl";
+    sha256 = "1wa7n7mf20fnvxqw093kr7a4c7vilcmx9yl3hicnyfcd663jgqvd";
     fetchSubmodules = true;
   };
   patches = [
