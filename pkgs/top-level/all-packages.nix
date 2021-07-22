@@ -11149,7 +11149,7 @@ in
     langCC = false;
     langAda = true;
     profiledCompiler = false;
-    inherit gnatboot;
+    inherit (buildPackages) gnatboot;
   });
 
   gnat9 = wrapCC (gcc9.cc.override {
@@ -11158,7 +11158,7 @@ in
     langCC = false;
     langAda = true;
     profiledCompiler = false;
-    gnatboot = gnat6;
+    gnatboot = buildPackages.gnat6;
   });
 
   gnat10 = wrapCC (gcc10.cc.override {
@@ -11167,7 +11167,7 @@ in
     langCC = false;
     langAda = true;
     profiledCompiler = false;
-    gnatboot = gnat6;
+    gnatboot = buildPackages.gnat6;
   });
 
   gnat11 = wrapCC (gcc11.cc.override {
@@ -11176,7 +11176,7 @@ in
     langCC = false;
     langAda = true;
     profiledCompiler = false;
-    gnatboot = gnat6;
+    gnatboot = buildPackages.gnat6;
   });
 
   gnatboot = wrapCC (callPackage ../development/compilers/gnatboot { });
