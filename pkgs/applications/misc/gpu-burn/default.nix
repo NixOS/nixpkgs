@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gpu-burn";
-  version = "2021-04-29";
+  version = "unstable-2021-04-29";
 
   src = fetchFromGitHub {
     owner = "wilicc";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-x+kta81Z08PsBgbf+fzRTXhNXUPBd5w8bST/T5nNiQA=";
   };
 
-  patchPhase = ''
+  postPhase = ''
     substituteInPlace gpu_burn-drv.cpp \
       --replace "const char *kernelFile = \"compare.ptx\";" \
                 "const char *kernelFile = \"$out/share/compare.ptx\";"
