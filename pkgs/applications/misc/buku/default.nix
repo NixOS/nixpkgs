@@ -21,20 +21,21 @@ let
   };
 in
 with python3'.pkgs; buildPythonApplication rec {
-  version = "4.5";
+  version = "4.6";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1lcq5fk8d5j2kfhn9m5l2hk46v7nj4vfa22m1psz35c9zpw4px8q";
+    sha256 = "sha256-hr9qiP7SbloigDcs+6KVWu0SOlggMaBr7CCfY8zoJG0=";
   };
 
   checkInputs = [
     pytestcov
     hypothesis
     pytest
+    pytest-vcr
     pylint
     flake8
     pyyaml
@@ -75,8 +76,8 @@ with python3'.pkgs; buildPythonApplication rec {
     # Disables a test which requires internet
     substituteInPlace tests/test_bukuDb.py \
       --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
-      --replace "self.assertEqual(shorturl, 'http://tny.im/yt')" "" \
-      --replace "self.assertEqual(url, 'https://www.google.com')" ""
+      --replace "self.assertEqual(shorturl, \"http://tny.im/yt\")" "" \
+      --replace "self.assertEqual(url, \"https://www.google.com\")" ""
     substituteInPlace setup.py \
       --replace mypy-extensions==0.4.1 mypy-extensions>=0.4.1
   '';
@@ -95,7 +96,7 @@ with python3'.pkgs; buildPythonApplication rec {
     homepage = "https://github.com/jarun/Buku";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ matthiasbeyer infinisil ];
+    maintainers = with maintainers; [ matthiasbeyer infinisil ma27 ];
   };
 }
 
