@@ -2,9 +2,9 @@
 , buildPythonPackage
 , python, runCommand
 , fetchFromGitHub
-, ConfigArgParse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
+, configargparse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
 , dialog, gnureadline
-, pytest_xdist, pytestCheckHook, python-dateutil
+, pytest-xdist, pytestCheckHook, python-dateutil
 }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   sourceRoot = "source/${pname}";
 
   propagatedBuildInputs = [
-    ConfigArgParse
+    configargparse
     acme
     configobj
     cryptography
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   checkInputs = [
     python-dateutil
     pytestCheckHook
-    pytest_xdist
+    pytest-xdist
   ];
 
   pytestFlagsArray = [

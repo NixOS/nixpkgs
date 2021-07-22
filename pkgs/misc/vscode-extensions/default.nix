@@ -85,6 +85,23 @@ let
         };
       };
 
+      angular.ng-template = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ng-template";
+          publisher = "Angular";
+          version = "12.1.2";
+          sha256 = "sha256-fIHh1eRmu4zSgrtZr0XwLB+1Ad6a/0ABC55akGr0DOA=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
+          description = "Editor services for Angular templates";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Angular.ng-template";
+          homepage = "https://github.com/angular/vscode-ng-language-service";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+      };
+
       antfu.icons-carbon = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "icons-carbon";
@@ -403,8 +420,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "11.5.1";
-          sha256 = "sha256-Ic7eT8WX2GDYIj/aTu1d4m+fgPtXe4YQx04G0awbwnM=";
+          version = "11.6.0";
+          sha256 = "sha256-JxCNE/IL/v94xWmhebsRZo1Gw+nSSpDgZ41ZGongGVI=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -514,6 +531,12 @@ let
       };
 
       foam.foam-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "foam-vscode";
+          publisher = "foam";
+          version = "0.14.1";
+          sha256 = "sha256-w9xGkezS3A9z6sTk8WWgW7g8qYX6mJFfRV0lv5cu160=";
+        };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
           description = "A personal knowledge management and sharing system for VSCode ";
@@ -521,12 +544,6 @@ let
           homepage = "https://foambubble.github.io/";
           license = licenses.mit;
           maintainers = with maintainers; [ ratsclub ];
-        };
-        mktplcRef = {
-          name = "foam-vscode";
-          publisher = "foam";
-          version = "0.13.7";
-          sha256 = "Y2pcd4iXPiuhJdD/9d+tbTJN18O4+kRMqUdOtbx8xy8=";
         };
       };
 
@@ -1227,8 +1244,8 @@ let
         mktplcRef = {
           name = "markdown-memo";
           publisher = "svsool";
-          version = "0.3.8";
-          sha256 = "eFiCCXxrOnXwJK1AOMfIDsPGsFG3ArLD1X/uAEH5lRY=";
+          version = "0.3.9";
+          sha256 = "sha256-BsKFHR3wkSRHS8QOi63vLwGj3T2CPzvqXhgtEOq6gJM=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/svsool.markdown-memo/changelog";

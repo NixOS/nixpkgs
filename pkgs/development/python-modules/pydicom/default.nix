@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 , numpy
 , pillow
@@ -36,7 +36,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ numpy pillow ];
 
-  checkInputs = [ pytestrunner pytestCheckHook ];
+  checkInputs = [ pytest-runner pytestCheckHook ];
 
   # Setting $HOME to prevent pytest to try to create a folder inside
   # /homeless-shelter which is read-only.

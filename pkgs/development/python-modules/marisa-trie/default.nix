@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , cython
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 , hypothesis
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
-    pytestrunner
+    pytest-runner
   ];
 
   preBuild = ''

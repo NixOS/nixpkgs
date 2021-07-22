@@ -478,9 +478,8 @@ with self; with super; {
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock/2.nix { };
 
-  pytestrunner = callPackage ../development/python-modules/pytestrunner/2.nix { };
+  pytest-runner = callPackage ../development/python-modules/pytest-runner/2.nix { };
 
-  pytest_xdist = self.pytest-xdist; # added 2021-01-04
   pytest-xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
 
   python-otr = callPackage ../development/python-modules/python-otr { };

@@ -10,7 +10,7 @@
 , jupyter_server
 , openapi-core
 , pytest-tornasync
-, pytestcov
+, pytest-cov
 , ruamel-yaml
 , strict-rfc3339
 }:

@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , nose, chai, simplejson, backports_functools_lru_cache
-, python-dateutil, pytz, pytest-mock, sphinx, dateparser, pytestcov
+, python-dateutil, pytz, pytest-mock, sphinx, dateparser, pytest-cov
 , pytestCheckHook
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   checkInputs = [
     dateparser
     pytestCheckHook
-    pytestcov
+    pytest-cov
     pytest-mock
     pytz
     simplejson
