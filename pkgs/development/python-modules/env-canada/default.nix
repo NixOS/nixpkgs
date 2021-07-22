@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
     rev = "v${version}";
-    sha256 = "0y4yjzmg6ns7a13j1cxqvrff4fd6k97cpc1xjwqrwp7gq49rzhy7";
+    sha256 = "0v1wmjvi05i6mjh6yxqigbf2spf7842198yp98f7h0nyfjmz96hn";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
     "test_get_latest_frame"
     "test_get_loop"
     "test_get_ec_sites"
+    "test_ecradar"
   ];
 
   pythonImportsCheck = [ "env_canada" ];

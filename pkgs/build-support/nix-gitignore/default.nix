@@ -41,6 +41,9 @@ in rec {
         let split = match "^(!?)(.*)" l;
         in [(elemAt split 1) (head split == "!")];
 
+      # regex -> regex
+      handleHashesBangs = replaceStrings ["\\#" "\\!"] ["#" "!"];
+
       # ignore -> regex
       substWildcards =
         let
@@ -86,7 +89,7 @@ in rec {
       mapPat = f: l: [(f (head l)) (last l)];
     in
       map (l: # `l' for "line"
-        mapPat (l: handleSlashSuffix (handleSlashPrefix (mapAroundCharclass substWildcards l)))
+        mapPat (l: handleSlashSuffix (handleSlashPrefix (handleHashesBangs (mapAroundCharclass substWildcards l))))
         (computeNegation l))
       (filter (l: !isList l && !isComment l)
       (split "\n" gitignore));
