@@ -167,6 +167,19 @@ let
       # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
       ./patches/fix-missing-atspi2-dependency.patch
       ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
+    ] ++ lib.optionals (versionRange "91" "94.0.4583.0") [
+      # Required as dependency for the next patch:
+      (githubPatch {
+        # Reland "Reland "Linux sandbox syscall broker: use struct kernel_stat""
+        commit = "4b438323d68840453b5ef826c3997568e2e0e8c7";
+        sha256 = "1lf6yilx2ffd3r0840ilihp4px35w7jvr19ll56bncqmz4r5fd82";
+      })
+      # To fix the text rendering, see #131074:
+      (githubPatch {
+        # Linux sandbox: fix fstatat() crash
+        commit = "60d5e803ef2a4874d29799b638754152285e0ed9";
+        sha256 = "0apmsqqlfxprmdmi3qzp3kr9jc52mcc4xzps206kwr8kzwv48b70";
+      })
     ] ++ lib.optionals (chromiumVersionAtLeast "93") [
       # We need to revert this patch to build M93 with LLVM 12.
       (githubPatch {
