@@ -4,19 +4,18 @@
 , lib }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.1.9";
+  version = "2.0.3";
   pname = "fdroidserver";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = version;
-    sha256 = "098dcg8jdi4q1prfjmd2lbhcyzb8fmmfhbxhid4kqx8vcv7r0iql";
+    sha256 = "1z9d56fmc6lnsgmapgl80690wfin5adj8m8zzms6gcf3vzkgimgy";
   };
 
   patchPhase = ''
     substituteInPlace fdroidserver/common.py --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
-    substituteInPlace setup.py --replace "pyasn1-modules == 0.2.1" "pyasn1-modules"
   '';
 
   preConfigure = ''
@@ -33,8 +32,6 @@ python.pkgs.buildPythonApplication rec {
     androguard
     clint
     defusedxml
-    docker
-    docker-py
     GitPython
     libcloud
     mwclient
@@ -47,6 +44,7 @@ python.pkgs.buildPythonApplication rec {
     qrcode
     requests
     ruamel_yaml
+    yamllint
   ];
 
   # no tests
@@ -56,7 +54,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://f-droid.org";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3;
-    maintainers = [ lib.maintainers.pmiddend ];
+    maintainers = [ lib.maintainers.obfusk ];
   };
 
 }
