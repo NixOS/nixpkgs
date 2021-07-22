@@ -81,6 +81,8 @@ in mkDerivation rec {
     # We're allowed to used the API ID of the Snap package:
     "-DTDESKTOP_API_ID=611335"
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
+    # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
+    "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
   ];
 
   # Note: The following packages could be packaged system-wide, but it's
