@@ -2565,7 +2565,9 @@ in
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
-  dua = callPackage ../tools/misc/dua { };
+  dua = callPackage ../tools/misc/dua {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   duf = callPackage ../tools/misc/duf { };
 
