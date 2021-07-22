@@ -46,6 +46,13 @@ in mkDerivation rec {
   postPatch = ''
     substituteInPlace Telegram/CMakeLists.txt \
       --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
+
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
+      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
+      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
+      --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
