@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ adoptopenjdk-jre-bin makeWrapper ];
 
   src = fetchurl {
-    url = "http://web.archive.org/web/20210717230228/https://files.gokgs.com/javaBin/cgoban.jar";
+    url = "https://web.archive.org/web/20210116034119/https://files.gokgs.com/javaBin/cgoban.jar"";
     sha256 = "0srw1hqr9prgr9dagfbh2j6p9ivaj40kdpyhs6zjkg7lhnnrrrcv";
   };
 
