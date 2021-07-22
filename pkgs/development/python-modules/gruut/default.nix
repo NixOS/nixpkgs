@@ -7,6 +7,7 @@
 , gruut-ipa
 , jsonlines
 , num2words
+, numpy
 , python-crfsuite
 , dataclasses
 , python
@@ -14,9 +15,11 @@
 
 let
   langPkgs = [
+    "ar"
     "cs"
     "de"
     "es"
+    "fa"
     "fr"
     "it"
     "nl"
@@ -28,14 +31,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gruut";
-  version = "1.2.3";
+  version = "1.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qY4xsoVk1hyY9dYmVXaqDRjcShUQmp8VZOzAQNiC6EM=";
+    sha256 = "sha256-pJ7HwFOyEsKR/IlntOUomK2WXuD7B8kJ63dcSwvzBb4=";
   };
 
   postPatch = ''
@@ -48,6 +51,7 @@ buildPythonPackage rec {
     gruut-ipa
     jsonlines
     num2words
+    numpy
     python-crfsuite
   ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses
