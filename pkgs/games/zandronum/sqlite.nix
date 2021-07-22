@@ -9,8 +9,6 @@ stdenv.mkDerivation {
     sha256 = "0p5cx7nbjxk7glcm277ypi5w4gv144qazw79ql47svlpccj62mrp";
   };
 
-  phases = [ "unpackPhase" "buildPhase" ];
-
   buildPhase = ''
     mkdir -p $out
     cp sqlite3.c $out/
