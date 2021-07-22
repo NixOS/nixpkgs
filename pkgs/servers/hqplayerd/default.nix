@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
     cp ./usr/share/doc/hqplayerd/* $out/share/doc/hqplayerd
 
     # misc service support files
-    mkdir -p $out/var/lib/hqplayerd
-    cp -r ./var/lib/hqplayer/web $out/var/lib/hqplayer
+    mkdir -p $out/var/lib/hqplayer
+    cp -r ./var/lib/hqplayer/web $out/var/lib/hqplayer/web
 
     runHook postInstall
   '';
