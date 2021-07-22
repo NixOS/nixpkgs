@@ -16139,6 +16139,8 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  libarchive-qt = libsForQt5.callPackage ../development/libraries/libarchive-qt { };
+
   libasr = callPackage ../development/libraries/libasr { };
 
   libass = callPackage ../development/libraries/libass { };
