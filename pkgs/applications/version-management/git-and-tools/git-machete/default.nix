@@ -2,6 +2,7 @@
 , installShellFiles, pbr
 , flake8, mock, pycodestyle, pylint, tox
 , nix-update-script
+, testVersion, git-machete
 }:
 
 buildPythonApplication rec {
@@ -28,6 +29,12 @@ buildPythonApplication rec {
   passthru = {
     updateScript = nix-update-script {
       attrPath = pname;
+    };
+
+    tests = {
+      version = testVersion {
+        package = git-machete;
+      };
     };
   };
 
