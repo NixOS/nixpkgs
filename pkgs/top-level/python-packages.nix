@@ -8246,6 +8246,8 @@ in {
 
   sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
 
+  sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
+
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx-markdown-parser = callPackage ../development/python-modules/sphinx-markdown-parser { };
