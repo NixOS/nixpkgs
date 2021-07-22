@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, swt, jdk, makeWrapper, alsa-lib, jack2, fluidsynth, libpulseaudio }:
+{ lib, stdenv, fetchurl, swt, jre, makeWrapper, alsa-lib, jack2, fluidsynth, libpulseaudio }:
 
 let metadata = assert stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux";
   if stdenv.hostPlatform.system == "i686-linux" then
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/share $out/bin/share
 
     wrapProgram $out/bin/tuxguitar \
-      --set JAVA "${jdk}/bin/java" \
+      --set JAVA "${jre}/bin/java" \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt alsa-lib jack2 fluidsynth libpulseaudio ]}" \
       --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
   '';
