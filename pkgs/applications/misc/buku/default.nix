@@ -12,7 +12,7 @@ with python3.pkgs; buildPythonApplication rec {
   };
 
   checkInputs = [
-    pytestcov
+    pytest-cov
     hypothesis
     pytest
     pylint

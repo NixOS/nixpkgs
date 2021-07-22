@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi
 , setuptools-scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
 , six, pytz, jaraco_functools, pythonOlder
-, pytest-flake8, pytestcov, pytest-black, pytest-mypy
+, pytest-flake8, pytest-cov, pytest-black, pytest-mypy
 }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest-freezegun pytest freezegun backports_unittest-mock
-    pytest-flake8 pytestcov pytest-black pytest-mypy
+    pytest-flake8 pytest-cov pytest-black pytest-mypy
   ];
 
   checkPhase = ''

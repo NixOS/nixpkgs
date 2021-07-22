@@ -5,7 +5,7 @@
 , numba
 , numpy
 , pandas
-, pytestrunner
+, pytest-runner
 , cramjam
 , fsspec
 , thrift
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-wSJ6PqW7c8DJCsGuPhXaVGM2s/1dZhLjG4C0JWPcjhY=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ cramjam fsspec numba numpy pandas thrift ];
   checkInputs = [ pytestCheckHook ];
 

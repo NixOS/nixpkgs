@@ -5,7 +5,7 @@
 , attrs
 , py
 , setuptools
-, pytestcov
+, pytest-cov
 , pytest-timeout
 , pytest-tornado
 , mock
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     hypothesis
-    pytestcov
+    pytest-cov
     pytest-timeout
     pytest-tornado
     jsonschema

@@ -1,6 +1,6 @@
 { lib, isPy3k, pythonOlder, fetchPypi, buildPythonPackage
 , pytest
-, pytestcov
+, pytest-cov
 , sybil
 , typing-extensions
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest pytestcov sybil
+    pytest pytest-cov sybil
   ];
 
   checkPhase = ''

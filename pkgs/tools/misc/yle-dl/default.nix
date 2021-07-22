@@ -12,12 +12,12 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    attrs ConfigArgParse ffmpeg future lxml requests
+    attrs configargparse ffmpeg future lxml requests
   ];
   pythonPath = [ rtmpdump php wget ];
 
   doCheck = false; # tests require network access
-  checkInputs = with python3Packages; [ ffmpeg pytest pytestrunner ];
+  checkInputs = with python3Packages; [ ffmpeg pytest pytest-runner ];
 
   meta = with lib; {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";

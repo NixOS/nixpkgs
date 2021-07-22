@@ -13,7 +13,7 @@
 , pkginfo
 , poetry-core
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pytest-mock
 , requests
 , requests-toolbelt
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     "$out/bin/poetry" completions fish > "$out/share/fish/vendor_completions.d/poetry.fish"
   '';
 
-  checkInputs = [ pytestCheckHook httpretty pytest-mock pytestcov ];
+  checkInputs = [ pytestCheckHook httpretty pytest-mock pytest-cov ];
   preCheck = "export HOME=$TMPDIR";
   disabledTests = [
     # touches network

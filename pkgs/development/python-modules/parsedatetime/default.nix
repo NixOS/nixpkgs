@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy27
 , pytest
-, pytestrunner
+, pytest-runner
 , future
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "4cb368fbb18a0b7231f4d76119165451c8d2e35951455dfee97c62a87b04d455";
   };
 
-  buildInputs = [ pytest pytestrunner ];
+  buildInputs = [ pytest pytest-runner ];
   propagatedBuildInputs = [ future ];
 
   meta = with lib; {

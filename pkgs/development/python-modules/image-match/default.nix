@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestrunner, scikitimage }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, scikitimage }:
 
 buildPythonPackage {
   pname = "image-match";
@@ -11,7 +11,7 @@ buildPythonPackage {
     sha256 = "0vlmpidmhkpgdzw2k03x5layhijcrjpmyfd93yv2ls77ihz00ix5";
   };
 
-  buildInputs = [ pytestrunner ];
+  buildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [
     scikitimage
