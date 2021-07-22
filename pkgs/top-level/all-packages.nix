@@ -13739,6 +13739,10 @@ in
 
   gotty = callPackage ../servers/gotty { };
 
+  gprbuild-boot = callPackage ../development/tools/build-managers/gprbuild/boot.nix { };
+
+  gprbuild = callPackage ../development/tools/build-managers/gprbuild { };
+
   gputils = callPackage ../development/tools/misc/gputils { };
 
   gpuvis = callPackage ../development/tools/misc/gpuvis { };
@@ -19048,6 +19052,8 @@ in
       xorg.libXft xorg.libXext xorg.libSM xorg.libICE
     ];
   };
+
+  xmlada = callPackage ../development/libraries/ada/xmlada { };
 
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
 
