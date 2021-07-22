@@ -3228,6 +3228,8 @@ in
 
   rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
 
+  rm-improved = callPackage ../applications/misc/rm-improved { };
+
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
   restream = callPackage ../applications/misc/remarkable/restream { };
@@ -23467,9 +23469,9 @@ in
 
   confclerk = callPackage ../applications/misc/confclerk { };
 
-  copyq = libsForQt5.callPackage ../applications/misc/copyq { };
-
   coreaction = libsForQt5.callPackage ../applications/misc/coreaction { };
+
+  copyq = libsForQt5.callPackage ../applications/misc/copyq { };
 
   corectrl = libsForQt5.callPackage ../applications/misc/corectrl { };
 
