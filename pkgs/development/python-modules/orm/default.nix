@@ -5,7 +5,7 @@
 , typesystem
 , aiosqlite
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , typing-extensions
 }:
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   checkInputs = [
     aiosqlite
     pytestCheckHook
-    pytestcov
+    pytest-cov
     typing-extensions
   ];
 

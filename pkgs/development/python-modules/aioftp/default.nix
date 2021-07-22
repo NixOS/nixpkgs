@@ -4,7 +4,7 @@
 , isPy27
 , pytest
 , pytest-asyncio
-, pytestcov
+, pytest-cov
 , trustme
 , async-timeout
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     pytest-asyncio
-    pytestcov
+    pytest-cov
     trustme
     async-timeout
   ];

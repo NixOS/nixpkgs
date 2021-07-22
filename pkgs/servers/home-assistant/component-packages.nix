@@ -176,7 +176,7 @@
     "digital_ocean" = ps: with ps; [ digital-ocean ];
     "digitalloggers" = ps: with ps; [ ]; # missing inputs: dlipower
     "directv" = ps: with ps; [ directv ];
-    "discogs" = ps: with ps; [ discogs_client ];
+    "discogs" = ps: with ps; [ discogs-client ];
     "discord" = ps: with ps; [ discordpy ];
     "discovery" = ps: with ps; [ aiohttp-cors ifaddr netdisco zeroconf ];
     "dlib_face_detect" = ps: with ps; [ face_recognition ];

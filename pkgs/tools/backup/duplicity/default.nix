@@ -100,7 +100,7 @@ pythonPackages.buildPythonApplication rec {
     mock
     pexpect
     pytest
-    pytestrunner
+    pytest-runner
   ]);
 
   postInstall = ''

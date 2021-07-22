@@ -2,7 +2,7 @@
 , fetchPypi
 , lib
 , vcversioner
-, pytestrunner
+, pytest-runner
 , mock
 , pytest
 , pytest-asyncio
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pytest
     pytest-asyncio
     pytest-trio
-    pytestrunner
+    pytest-runner
     twisted
   ] ++ lib.optional isPy27 [
     attrs

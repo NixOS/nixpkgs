@@ -889,6 +889,7 @@ mapAliases ({
   virtviewer = virt-viewer; # added 2015-12-24
   virtmanager = virt-manager; # added 2019-10-29
   virtmanager-qt = virt-manager-qt; # added 2019-10-29
+  virtinst = throw "virtinst has been removed, as it's included in virt-manager"; # added 2021-07-21
   vorbisTools = vorbis-tools; # added 2016-01-26
   webkit = webkitgtk; # added 2019-03-05
   webkitgtk24x-gtk3 = throw "webkitgtk24x-gtk3 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05

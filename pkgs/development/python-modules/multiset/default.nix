@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
-, pytestrunner
+, pytest-runner
 , pytest
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "4801569c08bfcecfe7b0927b17f079c90f8607aca8fecaf42ded92b737162bc7";
   };
 
-  buildInputs = [ setuptools-scm pytestrunner ];
+  buildInputs = [ setuptools-scm pytest-runner ];
   checkInputs = [ pytest ];
 
   meta = with lib; {

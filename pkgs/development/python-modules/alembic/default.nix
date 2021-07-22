@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, coverage, setuptools
+, pytest, pytest-cov, mock, coverage, setuptools
 , Mako, sqlalchemy, python-editor, python-dateutil
 }:
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "a21fedebb3fb8f6bbbba51a11114f08c78709377051384c9c5ead5705ee93a51";
   };
 
-  buildInputs = [ pytest pytestcov mock coverage ];
+  buildInputs = [ pytest pytest-cov mock coverage ];
   propagatedBuildInputs = [ Mako sqlalchemy python-editor python-dateutil setuptools ];
 
   # no traditional test suite

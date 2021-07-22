@@ -41,7 +41,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     pytest
     pytest-xvfb
     pytest-mock
-    pytestcov
+    pytest-cov
     pytest-repeat
     pytest-qt
   ];

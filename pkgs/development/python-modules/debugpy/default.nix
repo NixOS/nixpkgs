@@ -8,7 +8,7 @@
 , flask
 , psutil
 , pytest-timeout
-, pytest_xdist
+, pytest-xdist
 , pytestCheckHook
 , requests
 , isPy27
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     flask
     psutil
     pytest-timeout
-    pytest_xdist
+    pytest-xdist
     pytestCheckHook
     requests
   ] ++ lib.optionals (!isPy27) [

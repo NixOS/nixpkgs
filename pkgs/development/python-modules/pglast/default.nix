@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , isPy3k
 , setuptools
-, pytestcov
+, pytest-cov
 , pytest
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytest pytestcov ];
+  checkInputs = [ pytest pytest-cov ];
 
   pythonImportsCheck = [ "pglast" ];
 

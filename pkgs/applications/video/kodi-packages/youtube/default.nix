@@ -16,8 +16,11 @@ buildKodiAddon rec {
     inputstreamhelper
   ];
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.youtube";
+  passthru = {
+    pythonPath = "resources/lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.youtube";
+    };
   };
 
   meta = with lib; {

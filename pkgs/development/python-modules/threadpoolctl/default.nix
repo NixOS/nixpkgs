@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , flit
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , numpy
 , scipy
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "0sl6mp3b2gb0dvqkhnkmrp2g3r5c7clyyyxzq44xih6sw1pgx9df";
   };
 
-  checkInputs = [ pytestCheckHook pytestcov numpy scipy ];
+  checkInputs = [ pytestCheckHook pytest-cov numpy scipy ];
 
   meta = with lib; {
     homepage = "https://github.com/joblib/threadpoolctl";
