@@ -77,7 +77,7 @@ buildPythonApplication rec {
     pygobject3
     pyxdg
     setuptools
-    setuptools_scm
+    setuptools-scm
     xcffib
   ];
 
