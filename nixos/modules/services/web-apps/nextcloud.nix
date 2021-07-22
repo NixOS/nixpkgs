@@ -46,6 +46,15 @@ let
       occ "$@"
   '';
 
+  phpfpmDefaults = {
+    "pm" = "dynamic";
+    "pm.max_children" = "32";
+    "pm.start_servers" = "2";
+    "pm.min_spare_servers" = "2";
+    "pm.max_spare_servers" = "4";
+    "pm.max_requests" = "500";
+  };
+
   inherit (config.system) stateVersion;
 
 in {
@@ -161,16 +170,12 @@ in {
 
     poolSettings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool ]);
-      default = {
-        "pm" = "dynamic";
-        "pm.max_children" = "32";
-        "pm.start_servers" = "2";
-        "pm.min_spare_servers" = "2";
-        "pm.max_spare_servers" = "4";
-        "pm.max_requests" = "500";
-      };
+      defaultText = generators.toPretty {} phpfpmDefaults;
+      default = {};
       description = ''
         Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+
+        Additional settings will be merged together with the default-values.
       '';
     };
 
@@ -587,6 +592,12 @@ in {
         };
       };
 
+      services.nextcloud.poolSettings = mapAttrs (const mkDefault)
+        (phpfpmDefaults // {
+          "listen.owner" = config.services.nginx.user;
+          "listen.group" = config.services.nginx.group;
+        });
+
       services.phpfpm = {
         pools.nextcloud = {
           user = "nextcloud";
@@ -596,10 +607,7 @@ in {
             NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
             PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
           };
-          settings = mapAttrs (name: mkDefault) {
-            "listen.owner" = config.services.nginx.user;
-            "listen.group" = config.services.nginx.group;
-          } // cfg.poolSettings;
+          settings = cfg.poolSettings;
           extraConfig = cfg.poolConfig;
         };
       };
