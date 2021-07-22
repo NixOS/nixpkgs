@@ -1914,6 +1914,8 @@ in {
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
 
+  devtools = callPackage ../development/python-modules/devtools { };
+
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
@@ -4735,6 +4737,8 @@ in {
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
+  nengo = callPackage ../development/python-modules/nengo { };
+
   neo = callPackage ../development/python-modules/neo { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
@@ -6006,6 +6010,8 @@ in {
   pygame = callPackage ../development/python-modules/pygame { };
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
+
+  pygame-gui = callPackage ../development/python-modules/pygame-gui { };
 
   pygatt = callPackage ../development/python-modules/pygatt { };
 

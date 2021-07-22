@@ -4,19 +4,19 @@
 , lib }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.1.9";
+  version = "2.0.3";
   pname = "fdroidserver";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = version;
-    sha256 = "098dcg8jdi4q1prfjmd2lbhcyzb8fmmfhbxhid4kqx8vcv7r0iql";
+    sha256 = "sha256-/tX45t/DsWd0/R9VJJsqNjoOkgGIvqvq05YaVp0pLf0=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace fdroidserver/common.py --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
-    substituteInPlace setup.py --replace "pyasn1-modules == 0.2.1" "pyasn1-modules"
+    substituteInPlace setup.py --replace "pyasn1-modules >= 0.2.1, < 0.3" "pyasn1-modules"
   '';
 
   preConfigure = ''
@@ -47,10 +47,13 @@ python.pkgs.buildPythonApplication rec {
     qrcode
     requests
     ruamel_yaml
+    yamllint
   ];
 
   # no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "fdroidserver" ];
 
   meta = with lib; {
     homepage = "https://f-droid.org";

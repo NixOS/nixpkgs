@@ -1138,6 +1138,7 @@ mapAliases ({
     kwin-dynamic-workspaces
     kwin-tiling
     krohnkite
+    krunner-symbols
   ;
   inherit (libsForQt5)
     sddm

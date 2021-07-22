@@ -1562,6 +1562,8 @@ in
 
   github-commenter = callPackage ../development/tools/github-commenter { };
 
+  github-desktop = callPackage ../applications/version-management/github-desktop { };
+
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
   gitless = callPackage ../applications/version-management/gitless { python = python3; };
@@ -2565,7 +2567,9 @@ in
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
-  dua = callPackage ../tools/misc/dua { };
+  dua = callPackage ../tools/misc/dua {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   duf = callPackage ../tools/misc/duf { };
 
@@ -25233,6 +25237,8 @@ in
   ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
 
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
+
+  kubedb-cli = callPackage ../applications/networking/cluster/kubedb-cli { };
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 

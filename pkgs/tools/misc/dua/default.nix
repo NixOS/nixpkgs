@@ -1,10 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, Foundation }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dua";
   version = "2.14.2";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
 
   src = fetchFromGitHub {
     owner = "Byron";

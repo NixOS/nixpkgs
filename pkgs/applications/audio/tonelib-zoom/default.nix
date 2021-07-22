@@ -6,6 +6,7 @@
 , webkitgtk
 , libjack2
 , alsa-lib
+, curl
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,10 @@ stdenv.mkDerivation rec {
     cp -R $TMP/usr/* $out/
     mv $out/bin/ToneLib-Zoom $out/bin/tonelib-zoom
   '';
+
+  runtimeDependencies = [
+    (lib.getLib curl)
+  ];
 
   meta = with lib; {
     description = "ToneLib Zoom – change and save all the settings in your Zoom(r) guitar pedal";
