@@ -931,6 +931,10 @@ in
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
+  coreterminal = libsForQt5.callPackage ../applications/terminal-emulators/coreterminal {
+    inherit (lxqt) qtermwidget;
+  };
+
   eterm = callPackage ../applications/terminal-emulators/eterm { };
 
   evilvte = callPackage ../applications/terminal-emulators/evilvte (config.evilvte or {});
@@ -6366,6 +6370,8 @@ in
   libcsptr = callPackage ../development/libraries/libcsptr { };
 
   libscrypt = callPackage ../development/libraries/libscrypt { };
+
+  libcprime = libsForQt5.callPackage ../development/libraries/libcprime { };
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
