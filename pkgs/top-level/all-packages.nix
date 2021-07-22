@@ -23108,6 +23108,8 @@ in
   aseprite = callPackage ../applications/editors/aseprite { };
   aseprite-unfree = aseprite.override { unfree = true; };
 
+  assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
+
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
