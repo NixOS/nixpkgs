@@ -4,6 +4,7 @@
 , cairo
 , fetchurl
 , flac
+, gcc11
 , gnome
 , gssdp
 , gupnp
@@ -16,13 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.24.1-62";
+  version = "4.24.2-63";
 
   src = fetchurl {
-    # FIXME: use the fc34 sources when we get glibc 2.33 in nixpkgs
-    # c.f. https://github.com/NixOS/nixpkgs/pull/111616
-    url = "https://www.signalyst.eu/bins/${pname}/fc33/${pname}-${version}.fc33.x86_64.rpm";
-    sha256 = "sha256-lnejPkw6X3wRtjXTsdipEy6yZCEsDARhLPnySIltHXs=";
+    url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}.fc34.x86_64.rpm";
+    sha256 = "sha256-6JUgHDO+S73n/IVQhkmC0Nw4GQVzTLtiBbz/wZiflRg=";
   };
 
   unpackPhase = ''
@@ -35,6 +34,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     cairo
     flac
+    gcc11.cc.lib
     gnome.rygel
     gssdp
     gupnp
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
     # misc service support files
     mkdir -p $out/var/lib/hqplayerd
-    cp -r ./var/hqplayer/web $out/var/lib/hqplayerd
+    cp -r ./var/lib/hqplayer/web $out/var/lib/hqplayer
 
     runHook postInstall
   '';
