@@ -5863,6 +5863,8 @@ in
 
   httpx = callPackage ../tools/security/httpx { };
 
+  hurl = callPackage ../tools/networking/hurl { };
+
   hub = callPackage ../applications/version-management/git-and-tools/hub { };
 
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
