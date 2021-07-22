@@ -12,6 +12,8 @@ let
           sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
         };
       });
+      werkzeug = self.callPackage ../../../development/python-modules/werkzeug/1.nix { };
+      flask = self.callPackage ../../../development/python-modules/flask/1.nix { };
     };
   };
 in
