@@ -20,7 +20,7 @@ with python3.pkgs; buildPythonApplication rec {
     pkgs.vdirsyncer
     pytz
     pyxdg
-    requests_toolbelt
+    requests-toolbelt
     tzlocal
     urwid
     pkginfo

@@ -6,7 +6,7 @@
 , effect
 , git
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pythonOlder
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     effect
   ];
 
-  checkInputs = [ pytestCheckHook pytestcov git ];
+  checkInputs = [ pytestCheckHook pytest-cov git ];
 
   # ignore tests which are impure
   disabledTests = [ "network" "requires_nix_build" ];

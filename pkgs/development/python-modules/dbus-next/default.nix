@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, dbus, dbus-python, pytest, pytestcov, pytest-asyncio, pytest-timeout
+, dbus, dbus-python, pytest, pytest-cov, pytest-asyncio, pytest-timeout
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     dbus
     dbus-python
     pytest
-    pytestcov
+    pytest-cov
     pytest-asyncio
     pytest-timeout
   ];

@@ -5,7 +5,7 @@
 , numpy
 , scipy
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pytest-timeout
 , h5py
 , matplotlib
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   doCheck = false;
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
     pytest-timeout
     h5py
     matplotlib

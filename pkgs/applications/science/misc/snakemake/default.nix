@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
-    ConfigArgParse
+    configargparse
     connection-pool
     datrie
     docutils

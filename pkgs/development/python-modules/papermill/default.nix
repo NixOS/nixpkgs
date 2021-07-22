@@ -19,7 +19,7 @@
 , backports_tempfile
 , isPy27
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-mock
 }:
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
     pytest-mock
   ];
 

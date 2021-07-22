@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, humanfriendly, pytestCheckHook, pytestcov }:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, humanfriendly, pytestCheckHook, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "capturer";

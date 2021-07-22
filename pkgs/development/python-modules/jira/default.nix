@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
-, pytest, pytestrunner, pbr, glibcLocales , pytestcov
-, requests, requests_oauthlib, requests_toolbelt, defusedxml
+, pytest, pytest-runner, pbr, glibcLocales , pytest-cov
+, requests, requests_oauthlib, requests-toolbelt, defusedxml
 , ipython
 }:
 
@@ -15,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "e2a94adff98e45b29ded030adc76103eab34fa7d4d57303f211f572bedba0e93";
   };
 
-  buildInputs = [ glibcLocales pytest pytestcov pytestrunner pbr ];
-  propagatedBuildInputs = [ requests requests_oauthlib requests_toolbelt defusedxml pbr ipython ];
+  buildInputs = [ glibcLocales pytest pytest-cov pytest-runner pbr ];
+  propagatedBuildInputs = [ requests requests_oauthlib requests-toolbelt defusedxml pbr ipython ];
 
   # impure tests because of connectivity attempts to jira servers
   doCheck = false;

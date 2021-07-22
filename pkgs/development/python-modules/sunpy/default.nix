@@ -19,7 +19,7 @@
 , parfive
 , pytest-astropy
 , pytest-mock
-, pytestcov
+, pytest-cov
 , python-dateutil
 , scikitimage
 , scipy
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   checkInputs = [
     hypothesis
     pytest-astropy
-    pytestcov
+    pytest-cov
     pytest-mock
   ];
 

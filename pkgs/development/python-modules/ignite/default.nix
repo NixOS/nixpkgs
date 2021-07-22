@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, pytest_xdist
+, pytest-xdist
 , pythonOlder
 , matplotlib
 , mock
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "057v8v5p2picmgiidr9lzjbh7nj54pv95m6lyya3y7dw4vzaamij";
   };
 
-  checkInputs = [ pytestCheckHook matplotlib mock pytest_xdist ];
+  checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist ];
   propagatedBuildInputs = [ pytorch scikit-learn tqdm pynvml ];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.

@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytestCheckHook, mock, pytestcov, coverage
+, pytestCheckHook, mock, pytest-cov, coverage
 , future, futures ? null, ujson, isPy38
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
-    pytestCheckHook mock pytestcov coverage
+    pytestCheckHook mock pytest-cov coverage
   ];
 
   propagatedBuildInputs = [ future ujson ]

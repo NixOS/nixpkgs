@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, writeText, asttokens
-, pycryptodome, pytest_xdist, pytestcov, recommonmark, semantic-version, sphinx
-, sphinx_rtd_theme, pytestrunner }:
+, pycryptodome, pytest-xdist, pytest-cov, recommonmark, semantic-version, sphinx
+, sphinx_rtd_theme, pytest-runner }:
 
 let
   sample-contract = writeText "example.vy" ''
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "e763561a161c35c03b92a0c176096dd9b4c78ab003c2f08324d443f459b3de84";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
 
   postPatch = ''
     substituteInPlace setup.py \

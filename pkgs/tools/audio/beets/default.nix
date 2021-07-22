@@ -133,7 +133,7 @@ in pythonPackages.buildPythonApplication rec {
     ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
     ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
     ++ lib.optional enableConvert          ffmpeg
-    ++ lib.optional enableDiscogs          pythonPackages.discogs_client
+    ++ lib.optional enableDiscogs          pythonPackages.discogs-client
     ++ lib.optional (enableFetchart
                   || enableDeezer
                   || enableEmbyupdate
@@ -175,7 +175,7 @@ in pythonPackages.buildPythonApplication rec {
     # https://github.com/beetbox/beets/blob/v1.4.9/setup.py
     pylast
     mpd2
-    discogs_client
+    discogs-client
     pyxdg
   ];
 

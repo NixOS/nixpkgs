@@ -148,7 +148,7 @@ let
     pytest
     pytest-django
     pytest-env
-    pytest_xdist
+    pytest-xdist
   ];
 
   pyocrWithUserTesseract = pyPkgs:

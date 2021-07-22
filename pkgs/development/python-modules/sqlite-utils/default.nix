@@ -7,7 +7,7 @@
 , sqlite-fts4
 , tabulate
 , pytestCheckHook
-, pytestrunner
+, pytest-runner
 , black
 , hypothesis
 , sqlite
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestrunner
+    pytest-runner
     black
     hypothesis
   ];

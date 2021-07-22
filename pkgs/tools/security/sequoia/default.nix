@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   checkInputs = lib.optionals pythonSupport [
     pythonPackages.pytest
-    pythonPackages.pytestrunner
+    pythonPackages.pytest-runner
   ];
 
   buildInputs = [
