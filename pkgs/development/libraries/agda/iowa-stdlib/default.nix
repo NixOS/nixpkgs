@@ -26,8 +26,6 @@ mkDerivation (rec {
     platforms = lib.platforms.unix;
     # broken since Agda 2.6.1
     broken = true;
-    # remove once unbroken
-    hydraPlatforms = lib.platforms.none;
     maintainers = with lib.maintainers; [ alexarice turion ];
   };
 })
