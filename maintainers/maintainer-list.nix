@@ -1060,6 +1060,12 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  arjix = {
+    email = "arjix@protonmail.com";
+    github = "arjix";
+    githubId = 62168569;
+    name = "arjix";
+  };
   artturin = {
     email = "artturin@artturin.com";
     github = "artturin";
