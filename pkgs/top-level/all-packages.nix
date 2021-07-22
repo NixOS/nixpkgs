@@ -13699,6 +13699,14 @@ in
 
   global = callPackage ../development/tools/misc/global { };
 
+  gnatcoll-db2ada = callPackage ../development/libraries/ada/gnatcoll/db.nix {
+    component = "gnatcoll_db2ada";
+  };
+
+  gnatinspect = callPackage ../development/libraries/ada/gnatcoll/db.nix {
+    component = "gnatinspect";
+  };
+
   gnome-doc-utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
 
   gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing {};
@@ -15576,6 +15584,12 @@ in
   gnatcoll-readline = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "readline"; };
   gnatcoll-syslog = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "syslog"; };
   gnatcoll-zlib = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "zlib"; };
+
+  # gnatcoll-db repository
+  gnatcoll-postgres = callPackage ../development/libraries/ada/gnatcoll/db.nix { component = "postgres"; };
+  gnatcoll-sql = callPackage ../development/libraries/ada/gnatcoll/db.nix { component = "sql"; };
+  gnatcoll-sqlite = callPackage ../development/libraries/ada/gnatcoll/db.nix { component = "sqlite"; };
+  gnatcoll-xref = callPackage ../development/libraries/ada/gnatcoll/db.nix { component = "xref"; };
 
   gns3Packages = dontRecurseIntoAttrs (callPackage ../applications/networking/gns3 { });
   gns3-gui = gns3Packages.guiStable;
