@@ -6658,6 +6658,12 @@
     githubId = 1191859;
     name = "Maxim Krivchikov";
   };
+  MayNiklas = {
+    email = "info@niklas-steffen.de";
+    github = "MayNiklas";
+    githubId = 44636701;
+    name = "Niklas Steffen";
+  };
   mazurel = {
     email = "mateusz.mazur@yahoo.com";
     github = "Mazurel";
