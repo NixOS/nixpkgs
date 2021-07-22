@@ -1,10 +1,10 @@
-{ lib, fetchzip, version ? "3.100" }:
+{ lib, fetchzip, version ? "3.200" }:
 
 let
   new = lib.versionAtLeast version "3.000";
   sha256 = {
     "2.100" = "1g5f5f9gzamkq3kqyf7vbzvl4rdj3wmjf6chdrbxksrm3rnb926z";
-    "3.100" = "0svnc7l3z3vvm27zx6msyx56n2fpv6ywb5lm75bym48slkccypn7";
+    "3.200" = "0qvmpsn6ja3g2hlvq0vb9pjsyk6ibna7s3w3n6q7lnhk0rhjg8bv";
   }."${version}";
 
 in fetchzip rec {
