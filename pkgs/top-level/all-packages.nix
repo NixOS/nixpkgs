@@ -6371,6 +6371,8 @@ in
 
   libscrypt = callPackage ../development/libraries/libscrypt { };
 
+  libcsys = libsForQt5.callPackage ../development/libraries/libcsys { };
+
   libcprime = libsForQt5.callPackage ../development/libraries/libcprime { };
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
