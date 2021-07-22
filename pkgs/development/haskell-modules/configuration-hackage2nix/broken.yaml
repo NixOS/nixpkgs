@@ -2023,7 +2023,6 @@ broken-packages:
   - heterogeneous-list-literals
   - hetris
   - heukarya
-  - hevm
   - HExcel
   - hexchat
   - hexif
