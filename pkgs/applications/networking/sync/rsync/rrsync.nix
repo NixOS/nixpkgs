@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, perl, rsync }:
+{ lib, stdenv, fetchurl, perl, rsync, fetchpatch }:
 
 let
-  base = import ./base.nix { inherit lib fetchurl; };
+  base = import ./base.nix { inherit lib fetchurl fetchpatch; };
 in
 stdenv.mkDerivation {
   pname = "rrsync";
@@ -15,6 +15,8 @@ stdenv.mkDerivation {
   # We just want something from the support directory
   dontConfigure = true;
   dontBuild = true;
+
+  patches = base.extraPatches;
 
   postPatch = ''
     substituteInPlace support/rrsync --replace /usr/bin/rsync ${rsync}/bin/rsync

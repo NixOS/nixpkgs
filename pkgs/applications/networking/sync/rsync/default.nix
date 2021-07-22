@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, libiconv, zlib, popt
+{ lib, stdenv, fetchurl, fetchpatch, perl, libiconv, zlib, popt
 , enableACLs ? lib.meta.availableOn stdenv.hostPlatform acl, acl ? null
 , enableLZ4 ? true, lz4 ? null
 , enableOpenSSL ? true, openssl ? null
@@ -15,7 +15,7 @@ assert enableXXHash -> xxHash != null;
 assert enableZstd -> zstd != null;
 
 let
-  base = import ./base.nix { inherit lib fetchurl; };
+  base = import ./base.nix { inherit lib fetchurl fetchpatch; };
 in
 stdenv.mkDerivation rec {
   pname = "rsync";
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   patchesSrc = base.upstreamPatchTarball;
 
   srcs = [mainSrc] ++ lib.optional enableCopyDevicesPatch patchesSrc;
-  patches = lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
+  patches = lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff"
+    ++ base.extraPatches;
 
   buildInputs = [libiconv zlib popt]
                 ++ lib.optional enableACLs acl
