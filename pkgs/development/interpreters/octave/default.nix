@@ -187,6 +187,11 @@ let
     # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
     NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";
 
+    # Avoid Qt 5.12 problem on Big Sur: https://bugreports.qt.io/browse/QTBUG-87014
+    qtWrapperArgs = lib.optionals stdenv.isDarwin [
+      "--set QT_MAC_WANTS_LAYER 1"
+    ];
+
     # See https://savannah.gnu.org/bugs/?50339
     F77_INTEGER_8_FLAG = if use64BitIdx then "-fdefault-integer-8" else "";
 
