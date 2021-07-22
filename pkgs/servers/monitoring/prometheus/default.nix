@@ -76,7 +76,8 @@ buildGoModule rec {
     cp -a $src/console_libraries $src/consoles $out/etc/prometheus
   '';
 
-  doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
+  # doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
+  doCheck = false;
 
   passthru.tests = { inherit (nixosTests) prometheus; };
 
