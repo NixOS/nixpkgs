@@ -6273,6 +6273,8 @@ in {
 
   pymumble = callPackage ../development/python-modules/pymumble { };
 
+  pymunk = callPackage ../development/python-modules/pymunk { };
+
   pymupdf = callPackage ../development/python-modules/pymupdf { };
 
   PyMVGLive = callPackage ../development/python-modules/pymvglive { };
