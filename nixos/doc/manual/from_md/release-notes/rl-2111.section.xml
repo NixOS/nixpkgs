@@ -62,6 +62,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/">iio-sensor-proxy</link>,
+          proxies sensor devices (accelerometers, light sensors,
+          compass) to applications through D-Bus. Available as
+          <link xlink:href="options.html#opt-services.iio-sensor-proxy.enable">services.iio-sensor-proxy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.isc.org/kea/">Kea</link>, ISCs
           2nd generation DHCP and DDNS server suite. Available at
           <link xlink:href="options.html#opt-services.kea">services.kea</link>.
