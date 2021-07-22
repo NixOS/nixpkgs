@@ -29,9 +29,12 @@ buildGoModule rec {
 
   postInstall = ''
     install --mode=444 -D misc/systemd/ipfs.service $out/etc/systemd/system/ipfs.service
+    install --mode=444 -D misc/systemd/ipfs-hardened.service $out/etc/systemd/system/ipfs-hardened.service
     install --mode=444 -D misc/systemd/ipfs-api.socket $out/etc/systemd/system/ipfs-api.socket
     install --mode=444 -D misc/systemd/ipfs-gateway.socket $out/etc/systemd/system/ipfs-gateway.socket
     substituteInPlace $out/etc/systemd/system/ipfs.service \
+      --replace /usr/bin/ipfs $out/bin/ipfs
+    substituteInPlace $out/etc/systemd/system/ipfs-hardened.service \
       --replace /usr/bin/ipfs $out/bin/ipfs
   '';
 
