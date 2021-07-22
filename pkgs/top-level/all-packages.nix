@@ -1399,6 +1399,8 @@ in
 
   codeql = callPackage ../development/tools/analysis/codeql { };
 
+  corearchiver = libsForQt5.callPackage ../tools/archivers/corearchiver { };
+
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
