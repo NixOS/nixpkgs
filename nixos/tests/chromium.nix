@@ -239,7 +239,8 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
 
     with test_new_win("gpu_info", "chrome://gpu", "chrome://gpu"):
-        pass
+        # To check the text rendering (catches regressions like #131074):
+        machine.wait_for_text("Graphics Feature Status")
 
 
     machine.shutdown()
