@@ -387,7 +387,7 @@ mapAliases ({
   kino = throw "kino has been removed because it was broken and abandoned"; # added 2021-04-25
   krename-qt5 = krename; # added 2017-02-18
   kerberos = libkrb5; # moved from top-level 2021-03-14
-  keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived."; # 2019-12-10
+  keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived."; # added 2019-12-10
   kramdown-rfc2629 = rubyPackages.kramdown-rfc2629; # added 2021-03-23
   kvm = qemu_kvm; # added 2018-04-25
   latinmodern-math = lmmath;
@@ -974,12 +974,9 @@ mapAliases ({
     ocamlPackages_4_03
     ocamlPackages_latest;
 
-  # added 2019-08-01
-  mumble_git = pkgs.mumble;
-  murmur_git = pkgs.murmur;
-
-  # added 2020-08-17
-  zabbix44 = throw "zabbix44: Zabbix 4.4 is end of life, see https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500 for details on upgrading to Zabbix 5.0.";
+  mumble_git = pkgs.mumble; # added 2019-08-01
+  murmur_git = pkgs.murmur; # added 2019-08-01
+  zabbix44 = throw "zabbix44: Zabbix 4.4 is end of life, see https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500 for details on upgrading to Zabbix 5.0."; # added 2020-08-17
 
   # added 2019-09-06
   zeroc_ice = pkgs.zeroc-ice;
@@ -994,16 +991,10 @@ mapAliases ({
   ocaml_4_03   = ocamlPackages_4_03.ocaml;
 }) // {
 
-  # added 2019-10-28
-  gnatsd = nats-server;
-
-  # added 2020-01-10
-  tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
-  # added 2020-01-10
-  tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
-
-  # added 2020-02-09
-  dina-font-pcf = dina-font;
+  gnatsd = nats-server; # added 2019-10-28
+  tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452."; # added 2020-01-10
+  tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452."; # added 2020-01-10
+  dina-font-pcf = dina-font; # added 2020-02-09
 
   # added 2019-04-13
   # *-polly pointed to llvmPackages_latest
@@ -1019,9 +1010,7 @@ mapAliases ({
 
   dnscrypt-proxy = throw "dnscrypt-proxy has been removed. Please use dnscrypt-proxy2."; # added 2020-02-02
   sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # added 2020-02-04
-
   gcc-snapshot = throw "gcc-snapshot: Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
-
   todolist = throw "todolist is now ultralist."; # added 2020-12-27
 
   /* Cleanup before 21.05 */
