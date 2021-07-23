@@ -1,0 +1,22 @@
+name: Upgrade nixpkgs fork
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  schedule:
+    - cron:  '51 2 * * 0'
+jobs:
+  rebase-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+      - name: Git rebase
+        run: |
+          git fetch https://github.com/NixOS/nixpkgs nixos-unstable:nixos-unstable
+          git config --global user.email "github@pablo.tools"
+          git config --global user.name "Pablo Ovelleiro Corral"
+          git rebase nixos-unstable
+          git push --force origin master
