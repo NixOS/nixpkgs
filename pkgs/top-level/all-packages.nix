@@ -2919,6 +2919,8 @@ in
 
   inklecate = callPackage ../development/compilers/inklecate {};
 
+  interactsh = callPackage ../tools/misc/interactsh { };
+
   interlock = callPackage ../servers/interlock {};
 
   iotools = callPackage ../tools/misc/iotools { };
