@@ -44,12 +44,21 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.21.2+k3s1";     # k3s git tag
-  k3sCommit = "5a67e8dc473f8945e8e181f6f0b0dbbc387f6fca"; # k3s git commit at the above version
+  k3sVersion = "1.21.3+k3s1";     # k3s git tag
+  k3sCommit = "1d1f220fbee9cdeb5416b76b707dde8c231121f2"; # k3s git commit at the above version
 
   traefikChartVersion = "9.18.2"; # taken from ./scripts/download at TRAEFIK_VERSION
-  k3sRootVersion = "0.8.1";       # taken from ./scripts/download at ROOT_VERSION
+  k3sRootVersion = "0.9.1";       # taken from ./scripts/download at ROOT_VERSION
   k3sCNIVersion = "0.8.6-k3s1";   # taken from ./scripts/version.sh at VERSION_CNIPLUGINS
+
+  baseMeta = {
+    description = "A lightweight Kubernetes distribution";
+    license = licenses.asl20;
+    homepage = "https://k3s.io";
+    maintainers = with maintainers; [ euank superherointj ];
+    platforms = platforms.linux;
+  };
+
   # bundled into the k3s binary
   traefikChart = fetchurl {
     url = "https://helm.traefik.io/traefik/traefik-${traefikChartVersion}.tgz";
@@ -67,7 +76,7 @@ let
   k3sRoot = fetchzip {
     # Note: marked as apache 2.0 license
     url = "https://github.com/k3s-io/k3s-root/releases/download/v${k3sRootVersion}/k3s-root-amd64.tar";
-    sha256 = "sha256-r3Nkzl9ccry7cgD3YWlHvEWOsWnnFGIkyRH9sx12gks=";
+    sha256 = "sha256-qI84KYJKY/T6pqWZW9lOTq5NzZiu//v1zrMzUCiRTGQ=";
     stripRoot = false;
   };
   k3sPlugins = buildGoPackage rec {
@@ -84,12 +93,8 @@ let
       sha256 = "sha256-uAy17eRRAXPCcnh481KxFMvFQecnnBs24jn5YnVNfY4=";
     };
 
-    meta = {
+    meta = baseMeta // {
       description = "CNI plugins, as patched by rancher for k3s";
-      license = licenses.asl20;
-      homepage = "https://k3s.io";
-      maintainers = [ maintainers.euank ];
-      platforms = platforms.linux;
     };
   };
   # Grab this separately from a build because it's used by both stages of the
@@ -97,7 +102,7 @@ let
   k3sRepo = fetchgit {
     url = "https://github.com/k3s-io/k3s";
     rev = "v${k3sVersion}";
-    sha256 = "sha256-ZRkdHQ4RJ6XqE+DKE6wwpxetuKDG3k/4HaHyFxHev1U=";
+    sha256 = "sha256-K4HVXFp5cpByEO4dUwmpzOuhsGh1k7X6k5aShCorTjg=";
   };
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.
@@ -161,12 +166,8 @@ let
       popd
     '';
 
-    meta = {
+    meta = baseMeta // {
       description = "The various binaries that get packaged into the final k3s binary";
-      license = licenses.asl20;
-      homepage = "https://k3s.io";
-      maintainers = [ maintainers.euank ];
-      platforms = platforms.linux;
     };
   };
   k3sBin = buildGoPackage rec {
@@ -228,12 +229,8 @@ let
       popd
     '';
 
-    meta = {
+    meta = baseMeta // {
       description = "The k3s go binary which is used by the final wrapped output below";
-      license = licenses.asl20;
-      homepage = "https://k3s.io";
-      maintainers = [ maintainers.euank ];
-      platforms = platforms.linux;
     };
   };
 in
@@ -241,7 +238,7 @@ stdenv.mkDerivation rec {
   pname = "k3s";
   version = k3sVersion;
 
-  # Important utilities used by  the kubelet, see
+  # Important utilities used by the kubelet, see
   # https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-237202494
   # Note the list in that issue is stale and some aren't relevant for k3s.
   k3sRuntimeDeps = [
@@ -279,11 +276,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
-    description = "A lightweight Kubernetes distribution";
-    license = licenses.asl20;
-    homepage = "https://k3s.io";
-    maintainers = [ maintainers.euank ];
-    platforms = platforms.linux;
-  };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/k3s --version | grep v${k3sVersion} > /dev/null
+  '';
+
+  meta = baseMeta;
 }
