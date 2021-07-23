@@ -179,6 +179,7 @@ let
           snapshotting, cloning, block devices, deduplication, and more.
         '';
         homepage = "https://github.com/openzfs/zfs";
+        changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
@@ -203,12 +204,12 @@ in {
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.13";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.14";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.1.0-rc5";
+    version = "2.1.0";
 
-    sha256 = "sha256-cj0P2bw6sTO+Y74pYn/WEpBuVGMMYCreJQjUdC3DMTE=";
+    sha256 = "sha256-YdY4SStXZGBBdAHdM3R/unco7ztxI3s0/buPSNSeh5o=";
 
     isUnstable = true;
   };
