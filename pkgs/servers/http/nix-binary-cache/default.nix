@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2014-06-29-1";
   pname = "nix-binary-cache";
 
-  phases = ["installPhase"];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"

@@ -50,19 +50,25 @@ let
           }
         )
 
-        # Octoprint needs zeroconf >=0.24 <0.25. While this should be done in
-        # the mkOverride aboves, this package also has broken tests, so we need
-        # a proper override.
+        # Octoprint needs zeroconf >=0.24 <0.25. This can't be done via mkOverride, because in zeroconf 0.32
+        # the super package was migrated to fetchFromGitHub.
         (
           self: super: {
             zeroconf = super.zeroconf.overrideAttrs (oldAttrs: rec {
               version = "0.24.5";
-              src = oldAttrs.src.override {
+              src = super.fetchPypi {
+                inherit (oldAttrs) pname;
                 inherit version;
                 sha256 = "0jpgd0rk91si93857mjrizan5gc42kj1q4fi4160qgk68la88fl9";
               };
-              buildInputs = [ self.nose ];
-              checkPhase = "nosetests";
+              pythonImportsCheck = [
+                "zeroconf"
+              ];
+              buildInputs = with self; [
+                pytestCheckHook
+                nose
+              ];
+              pytestFlagsArray = [ "zeroconf/test.py" ];
             });
           }
         )
