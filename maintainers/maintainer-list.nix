@@ -5918,6 +5918,12 @@
     githubId = 1104419;
     name = "Lucas Hoffmann";
   };
+  lde = {
+    email = "lilian.deloche@puck.fr";
+    github = "lde";
+    githubId = 1447020;
+    name = "Lilian Deloche";
+  };
   ldelelis = {
     email = "ldelelis@est.frba.utn.edu.ar";
     github = "ldelelis";
