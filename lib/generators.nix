@@ -205,13 +205,23 @@ rec {
        (This means fn is type Val -> String.) */
     allowPrettyValues ? false,
     /* If this option is true, the output is indented with newlines for attribute sets and lists */
-    multiline ? true
-  }@args: let
-    go = indent: v: with builtins;
+    multiline ? true,
+    /* If this option is not null, `toPretty` will stop evaluating at a certain depth */
+    depthLimit ? null,
+    /* If this option is true, an error will be thrown, if a certain given depth is exceeded */
+    throwOnDepthLimit ? false
+  }@args:
+    assert depthLimit != null -> builtins.isInt depthLimit;
+    assert throwOnDepthLimit -> depthLimit != null;
+    let
+    go = depth: indent: v: with builtins;
     let     isPath   = v: typeOf v == "path";
             introSpace = if multiline then "\n${indent}  " else " ";
             outroSpace = if multiline then "\n${indent}" else " ";
-    in if   isInt      v then toString v
+    in if depthLimit != null && depth > depthLimit then
+      if throwOnDepthLimit then throw "Exceeded maximum eval-depth limit of ${toString depthLimit} while trying to pretty-print with `generators.toPretty'!"
+      else "<unevaluated>"
+    else if   isInt      v then toString v
     else if isFloat    v then "~${toString v}"
     else if isString   v then
       let
@@ -233,7 +243,7 @@ rec {
     else if isList     v then
       if v == [] then "[ ]"
       else "[" + introSpace
-        + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
+        + libStr.concatMapStringsSep introSpace (go (depth + 1) (indent + "  ")) v
         + outroSpace + "]"
     else if isFunction v then
       let fna = lib.functionArgs v;
@@ -252,10 +262,10 @@ rec {
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
-                "${libStr.escapeNixIdentifier name} = ${go (indent + "  ") value};") v)
+                "${libStr.escapeNixIdentifier name} = ${go (depth + 1) (indent + "  ") value};") v)
         + outroSpace + "}"
     else abort "generators.toPretty: should never happen (v = ${v})";
-  in go "";
+  in go 0 "";
 
   # PLIST handling
   toPlist = {}: v: let
