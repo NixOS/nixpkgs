@@ -1,6 +1,9 @@
 { lib, buildPythonApplication, fetchPypi
 , installShellFiles, pbr
-, flake8, mock, pycodestyle, pylint, tox }:
+, flake8, mock, pycodestyle, pylint, tox
+, nix-update-script
+, testVersion, git-machete
+}:
 
 buildPythonApplication rec {
   pname = "git-machete";
@@ -22,6 +25,18 @@ buildPythonApplication rec {
       installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
       installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+
+    tests = {
+      version = testVersion {
+        package = git-machete;
+      };
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/VirtusLab/git-machete";

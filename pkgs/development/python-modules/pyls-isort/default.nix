@@ -16,6 +16,8 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "pyls_isort" ];
+
   propagatedBuildInputs = [
     isort python-lsp-server
   ];

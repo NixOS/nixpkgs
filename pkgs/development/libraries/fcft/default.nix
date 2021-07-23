@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/fcft/archive/${version}.tar.gz";
-    sha256 = "0hxvd6xbvgq1rk8851gswffmvh3fv41lyvz4fhwzln7m12759yw8";
+    sha256 = "0ycc2xy9jhxcxwbfk9d4jdxgf2zsc664phbf859kshb822m3jf57";
   };
 
   depsBuildBuild = [ pkg-config ];

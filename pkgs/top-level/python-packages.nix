@@ -3102,6 +3102,8 @@ in {
 
   graphene = callPackage ../development/python-modules/graphene { };
 
+  graphqlclient= callPackage ../development/python-modules/graphqlclient { };
+
   graphql-core = callPackage ../development/python-modules/graphql-core { };
 
   graphql-relay = callPackage ../development/python-modules/graphql-relay { };
@@ -3978,6 +3980,8 @@ in {
   ldaptor = callPackage ../development/python-modules/ldaptor { };
 
   leather = callPackage ../development/python-modules/leather { };
+
+  leb128 = callPackage ../development/python-modules/leb128 { };
 
   ledger_agent = callPackage ../development/python-modules/ledger_agent { };
 

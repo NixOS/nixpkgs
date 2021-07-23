@@ -441,6 +441,7 @@ in
   txredisapi = handleTest ./txredisapi.nix {};
   tuptime = handleTest ./tuptime.nix {};
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
+  tuxguitar = handleTest ./tuxguitar.nix {};
   ucarp = handleTest ./ucarp.nix {};
   ucg = handleTest ./ucg.nix {};
   udisks2 = handleTest ./udisks2.nix {};
