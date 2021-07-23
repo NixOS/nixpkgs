@@ -23,6 +23,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
+    # Remove if a version compatible with agda 2.6.2 is made
+    broken = true;
     description =
       "A cubical type theory library for use with the Agda compiler";
     homepage = src.meta.homepage;
