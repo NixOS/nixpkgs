@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "1xk5fi2wzq3jspvbdm5hvs78501i14jy3v7x6fjnh5fnpqdacpd4";
   };
 
-  phases = [ "installPhase" ];
-
   installPhase = ''
     install -m444 -D ${src}/share/java/*${pname}-${version}.jar "$out/share/java/${pname}-${version}.jar"
   '';
