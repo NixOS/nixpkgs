@@ -28,11 +28,14 @@ stdenv.mkDerivation rec {
     gnused
   ];
 
-  fixupPhase = ''
-    patchShebangs $out/bin
+  postFixup = ''
+    wrap_path="${wrapperPath}":$out/bin
 
     wrapProgram $out/bin/git-sync \
-      --prefix PATH : "${wrapperPath}"
+      --prefix PATH : $wrap_path
+
+    wrapProgram $out/bin/git-sync-on-inotify \
+      --prefix PATH : $wrap_path
   '';
 
   meta = {
