@@ -255,7 +255,7 @@ in
         # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
         escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
         swapOptions = sw: concatStringsSep "," (
-          [ "defaults" ]
+          sw.options
           ++ optional (sw.priority != null) "pri=${toString sw.priority}"
           ++ optional (sw.discardPolicy != null) "discard${optionalString (sw.discardPolicy != "both") "=${toString sw.discardPolicy}"}"
         );

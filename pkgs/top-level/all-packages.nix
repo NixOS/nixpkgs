@@ -1747,7 +1747,7 @@ in
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   gomobile = callPackage ../development/mobile/gomobile {
-    buildGoModule = buildGo115Module;
+    buildGoModule = buildGo116Module;
   };
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
@@ -7943,9 +7943,7 @@ in
 
   pdfarranger = callPackage ../applications/misc/pdfarranger { };
 
-  pdfread = callPackage ../tools/graphics/pdfread {
-    inherit (pythonPackages) pillow;
-  };
+  pdfread = throw "pdfread has been remove from nixpkgs, because it is unmaintained for years and the sources are no longer available";
 
   briss = callPackage ../tools/graphics/briss { };
 
@@ -10755,6 +10753,8 @@ in
   cmdstan = callPackage ../development/compilers/cmdstan { };
 
   cmucl_binary = pkgsi686Linux.callPackage ../development/compilers/cmucl/binary.nix { };
+
+  comby = callPackage ../development/tools/comby { };
 
   compcert = coqPackages.compcert.override { version = "3.9"; };
 
@@ -17155,8 +17155,6 @@ in
   libtpms = callPackage ../tools/security/libtpms { };
 
   libtap = callPackage ../development/libraries/libtap { };
-
-  libtgvoip = callPackage ../development/libraries/libtgvoip { };
 
   libtsm = callPackage ../development/libraries/libtsm { };
 
@@ -28788,6 +28786,8 @@ in
   cbonsai = callPackage ../games/cbonsai { };
 
   cdogs-sdl = callPackage ../games/cdogs-sdl { };
+
+  cgoban = callPackage ../games/cgoban { };
 
   chessdb = callPackage ../games/chessdb { };
 

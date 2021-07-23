@@ -287,6 +287,13 @@ rec {
       merge = mergeEqualOption;
     };
 
+    nonEmptyStr = mkOptionType {
+      name = "nonEmptyStr";
+      description = "non-empty string";
+      check = x: str.check x && builtins.match "[ \t\n]*" x == null;
+      inherit (str) merge;
+    };
+
     strMatching = pattern: mkOptionType {
       name = "strMatching ${escapeNixString pattern}";
       description = "string matching the pattern ${pattern}";
