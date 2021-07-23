@@ -66,14 +66,19 @@
 ccWrapper_addCVars () {
     # See ../setup-hooks/role.bash
     local role_post
+    local varName
     getHostRoleEnvHook
 
     if [ -d "$1/include" ]; then
-        export NIX_CFLAGS_COMPILE${role_post}+=" -isystem $1/include"
+        varName=NIX_CFLAGS_COMPILE${role_post}
+        eval "$varName=\"${!varName:-} -isystem $1/include\""
+        export "${varName?}"
     fi
 
     if [ -d "$1/Library/Frameworks" ]; then
-        export NIX_CFLAGS_COMPILE${role_post}+=" -iframework $1/Library/Frameworks"
+        varName=NIX_CFLAGS_COMPILE${role_post}
+        eval "$varName=\"${!varName:-} -iframework $1/Library/Frameworks\""
+        export "${varName?}"
     fi
 }
 
