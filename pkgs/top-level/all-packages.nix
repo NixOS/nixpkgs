@@ -2463,7 +2463,9 @@ with pkgs;
     gflags = null; # only required for examples/tests
   };
 
-  craftos-pc = callPackage ../misc/emulators/craftos-pc { };
+  craftos-pc = callPackage ../misc/emulators/craftos-pc {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
+  };
 
   gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
 

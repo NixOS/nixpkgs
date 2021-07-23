@@ -1,31 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, poco, openssl, SDL2, SDL2_mixer }:
-
-let
-  craftos2-lua = fetchFromGitHub {
-    owner = "MCJack123";
-    repo = "craftos2-lua";
-    rev = "v2.4.4";
-    sha256 = "1q63ki4sxx8bxaa6ag3xj153p7a8a12ivm0k33k935p41k6y2k64";
-  };
-in
+{ lib, stdenv, fetchFromGitHub, poco, openssl, SDL2, SDL2_mixer, ncurses, libpng
+, libharu, ApplicationServices, pngpp, libX11, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "craftos-pc";
-  version = "2.4.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "MCJack123";
     repo = "craftos2";
     rev = "v${version}";
-    sha256 = "00a4p365krbdprlv4979d13mm3alhxgzzj3vqz2g67795plf64j4";
+    sha256 = "sha256-ml3RkZb4YGNGyJJkHW3wLRp1Rzpeb0tEJ0jS1Rmmzns=";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ poco openssl SDL2 SDL2_mixer ];
+  buildInputs = [ poco openssl SDL2 SDL2_mixer ncurses libpng libharu pngpp libX11 ]
+     ++ lib.optionals stdenv.isDarwin [ ApplicationServices Cocoa ];
 
   preBuild = ''
-    cp -R ${craftos2-lua}/* ./craftos2-lua/
-    chmod -R u+w ./craftos2-lua
-    make -C craftos2-lua linux
+    make -C craftos2-lua ${if stdenv.isLinux then "linux" else "macosx"}
   '';
 
   installPhase = ''
@@ -37,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "An implementation of the CraftOS-PC API written in C++ using SDL";
     homepage = "https://www.craftos-pc.cc";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.siraben ];
   };
 }
