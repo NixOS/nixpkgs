@@ -26,6 +26,7 @@ rec {
     isAvr          = { cpu = { family = "avr"; }; };
     isAlpha        = { cpu = { family = "alpha"; }; };
     isOr1k         = { cpu = { family = "or1k"; }; };
+    isPdp11        = { cpu = { family = "pdp11"; }; };
     isJavaScript   = { cpu = cpuTypes.js; };
 
     is32bit        = { cpu = { bits = 32; }; };

@@ -6,6 +6,9 @@ let
   inherit (lib.attrsets) matchAttrs;
 
   all = [
+    # a.out
+    "pdp11-aout"
+
     # Cygwin
     "i686-cygwin" "x86_64-cygwin"
 
@@ -74,6 +77,7 @@ in {
   riscv         = filterDoubles predicates.isRiscV;
   vc4           = filterDoubles predicates.isVc4;
   or1k          = filterDoubles predicates.isOr1k;
+  pdp11         = filterDoubles predicates.isPdp11;
   js            = filterDoubles predicates.isJavaScript;
 
   bigEndian     = filterDoubles predicates.isBigEndian;

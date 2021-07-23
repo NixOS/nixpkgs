@@ -95,6 +95,8 @@ rec {
 
     mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
 
+    pdp11    = { bits = 16; significantByte = littleEndian; family = "pdp11"; };
+
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
     powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
@@ -226,6 +228,7 @@ rec {
 
   vendors = setTypes types.openVendor {
     apple = {};
+    dec = {};
     pc = {};
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
@@ -299,6 +302,7 @@ rec {
     ghcjs    = { execFormat = unknown; families = { }; };
     genode   = { execFormat = elf;     families = { }; };
     mmixware = { execFormat = unknown; families = { }; };
+    aout     = { execFormat = aout;    families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;
@@ -318,6 +322,7 @@ rec {
   types.abi = enum (attrValues abis);
 
   abis = setTypes types.openAbi {
+    aout         = {};
     cygnus       = {};
     msvc         = {};
 
@@ -386,7 +391,9 @@ rec {
 
   mkSkeletonFromList = l: {
     "1" = if elemAt l 0 == "avr"
-      then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
+        then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
+      else if elemAt l 0 == "pdp11"
+        then { cpu = elemAt l 0; kernel = "none"; abi = "aout"; }
       else throw "Target specification with 1 components is ambiguous";
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
@@ -413,6 +420,8 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "redox";                      }
       else if (elemAt l 2 == "mmixware")
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "mmixware";                   }
+      else if (elemAt l 2 == "aout")
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "aout";                       }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
@@ -445,6 +454,7 @@ rec {
       vendor =
         /**/ if args ? vendor    then getVendor args.vendor
         else if isDarwin  parsed then vendors.apple
+        else if isPdp11   parsed then vendors.dec
         else if isWindows parsed then vendors.pc
         else                     vendors.unknown;
       kernel = if hasPrefix "darwin" args.kernel      then getKernel "darwin"
