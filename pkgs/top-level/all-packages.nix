@@ -7943,9 +7943,7 @@ in
 
   pdfarranger = callPackage ../applications/misc/pdfarranger { };
 
-  pdfread = callPackage ../tools/graphics/pdfread {
-    inherit (pythonPackages) pillow;
-  };
+  pdfread = throw "pdfread has been remove from nixpkgs, because it is unmaintained for years and the sources are no longer available";
 
   briss = callPackage ../tools/graphics/briss { };
 
