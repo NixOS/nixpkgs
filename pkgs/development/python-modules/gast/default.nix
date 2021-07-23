@@ -26,6 +26,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ astunparse ];
+
   meta = with lib; {
     description = "GAST provides a compatibility layer between the AST of various Python versions, as produced by ast.parse from the standard ast module.";
     homepage = "https://github.com/serge-sans-paille/gast/";
