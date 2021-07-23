@@ -32133,6 +32133,11 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
   };
 
+  bsnes-hd = callPackage ../misc/emulators/bsnes-hd {
+    inherit (gnome2) gtksourceview;
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
+  };
+
   yapesdl = callPackage ../misc/emulators/yapesdl { };
 
   x16-emulator = callPackage ../misc/emulators/commanderx16/emulator.nix { };
