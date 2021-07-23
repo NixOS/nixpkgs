@@ -23520,7 +23520,9 @@ in
     inherit (pkgs.gnome2) libart_lgpl libgnomeui;
   };
 
-  direwolf = callPackage ../applications/radio/direwolf { };
+  direwolf = callPackage ../applications/radio/direwolf {
+    hamlib = hamlib_4;
+  };
 
   dirt = callPackage ../applications/audio/dirt {};
 
