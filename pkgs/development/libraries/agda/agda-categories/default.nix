@@ -14,6 +14,8 @@ mkDerivation rec {
   buildInputs = [ standard-library ];
 
   meta = with lib; {
+    # Remove if a version compatible with agda 2.6.2 is made
+    broken = true;
     inherit (src.meta) homepage;
     description = "A new Categories library";
     license = licenses.bsd3;
