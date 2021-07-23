@@ -699,7 +699,6 @@ in {
         };
         extraConfig = ''
           index index.php index.html /index.php$request_uri;
-          expires 1m;
           add_header X-Content-Type-Options nosniff;
           add_header X-XSS-Protection "1; mode=block";
           add_header X-Robots-Tag none;

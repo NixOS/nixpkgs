@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "fritzprofiles";
-  version = "0.6.1";
+  version = "0.7.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bd4sa3i1ldkg6lnsvg004csgqklvi5xk71y971qyjvsbdbwgbn3";
+    sha256 = "sha256-VoKgLJWF9x8dW8A6CNwLtK+AmehtgZP41nUGQO819es=";
   };
 
   propagatedBuildInputs = [
