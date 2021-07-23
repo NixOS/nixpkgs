@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-x+kta81Z08PsBgbf+fzRTXhNXUPBd5w8bST/T5nNiQA=";
   };
 
-  postPhase = ''
+  postPatch = ''
     substituteInPlace gpu_burn-drv.cpp \
       --replace "const char *kernelFile = \"compare.ptx\";" \
                 "const char *kernelFile = \"$out/share/compare.ptx\";"
