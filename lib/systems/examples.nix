@@ -137,6 +137,7 @@ rec {
   cr16 = {
     config = "cr16-elf";
     libc = "newlib";
+    platform = {};
   };
 
   vc4 = {
