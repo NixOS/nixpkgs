@@ -5791,6 +5791,12 @@
     githubId = 278013;
     name = "Tomasz Kontusz";
   };
+  kurnevsky = {
+    email = "kurnevsky@gmail.com";
+    github = "kurnevsky";
+    githubId = 2943605;
+    name = "Evgeny Kurnevsky";
+  };
   kuznero = {
     email = "roman@kuznero.com";
     github = "kuznero";
