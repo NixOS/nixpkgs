@@ -3981,6 +3981,8 @@ in {
 
   leather = callPackage ../development/python-modules/leather { };
 
+  leb128 = callPackage ../development/python-modules/leb128 { };
+
   ledger_agent = callPackage ../development/python-modules/ledger_agent { };
 
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
