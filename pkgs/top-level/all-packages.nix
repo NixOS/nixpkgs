@@ -29005,6 +29005,8 @@ in
 
   gmad = callPackage ../games/gmad { };
 
+  gnonograms = callPackage ../games/gnonograms { };
+
   gnubg = callPackage ../games/gnubg { };
 
   gnuchess = callPackage ../games/gnuchess { };
