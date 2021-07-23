@@ -29,6 +29,8 @@ in mkYarnPackage rec {
     export HOME=$(mktemp -d)
     pushd deps/element-desktop/
     npx tsc
+    yarn run i18n
+    node ./scripts/copy-res.js
     popd
     runHook postBuild
   '';
@@ -41,6 +43,7 @@ in mkYarnPackage rec {
     cp -r './deps/element-desktop/res/img' "$out/share/element"
     rm "$out/share/element/electron/node_modules"
     cp -r './node_modules' "$out/share/element/electron"
+    cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
 
     # icons
     for icon in $out/share/element/electron/build/icons/*.png; do
