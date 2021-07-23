@@ -8,12 +8,12 @@
 
 let
   executableName = "element-desktop";
-  version = "1.7.31";
+  version = "1.7.33";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "14vyqzf69g4n3i7qjm1pgq2kwym6cira0jwvirzdrwxkfsl0dsq6";
+    sha256 = "sha256-1JmuKyJt6Q80lLXXrFw+h6/0JzWcr0qMIU9mTO+K56I=";
   };
 in mkYarnPackage rec {
   name = "element-desktop-${version}";
@@ -23,6 +23,15 @@ in mkYarnPackage rec {
   yarnNix = ./element-desktop-yarndeps.nix;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  buildPhase = ''
+    runHook preBuild
+    export HOME=$(mktemp -d)
+    pushd deps/element-desktop/
+    npx tsc
+    popd
+    runHook postBuild
+  '';
 
   installPhase = ''
     # resources
