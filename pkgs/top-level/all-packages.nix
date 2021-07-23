@@ -22447,8 +22447,6 @@ in
 
   lmodern = callPackage ../data/fonts/lmodern { };
 
-  lobster-two = callPackage ../data/fonts/lobster-two {};
-
   logitech-udev-rules = callPackage ../os-specific/linux/logitech-udev-rules {};
 
   # lohit-fonts.assamese lohit-fonts.bengali lohit-fonts.devanagari lohit-fonts.gujarati lohit-fonts.gurmukhi
@@ -23979,6 +23977,8 @@ in
   freewheeling = callPackage ../applications/audio/freewheeling { };
 
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
+
+  fritzprofiles = with python3.pkgs; toPythonApplication fritzprofiles;
 
   fsv = callPackage ../applications/misc/fsv {
     autoreconfHook = buildPackages.autoreconfHook269;

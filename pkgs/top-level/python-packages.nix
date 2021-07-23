@@ -1770,6 +1770,8 @@ in {
 
   d2to1 = callPackage ../development/python-modules/d2to1 { };
 
+  dacite = callPackage ../development/python-modules/dacite { };
+
   daemonize = callPackage ../development/python-modules/daemonize { };
 
   daemonocle = callPackage ../development/python-modules/daemonocle { };
@@ -2733,6 +2735,8 @@ in {
   freezegun = callPackage ../development/python-modules/freezegun { };
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
+
+  fritzprofiles = callPackage ../development/python-modules/fritzprofiles { };
 
   frozendict = callPackage ../development/python-modules/frozendict { };
 
@@ -5691,6 +5695,8 @@ in {
   py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
+
+  py17track = callPackage ../development/python-modules/py17track { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
 

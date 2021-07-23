@@ -125,6 +125,12 @@ let
         url = "https://github.com/qt/qtwebengine/commit/199ea00a9eea13315a652c62778738629185b059.patch";
         sha256 = "1b5k2g1v8913cvsgvp6ja4mcprjlk5vcwqzi0p1qq7b1wyi4f0g2";
       })
+      # Fix invisible fonts with glibc 2.33: https://github.com/NixOS/nixpkgs/issues/131074
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/d122c011631137b79455850c363676c655cf9e09/f/qtwebengine-everywhere-src-5.15.5-%231904652.patch";
+        name = "qtwebengine-everywhere-src-5.15.5-_1904652.patch";
+        sha256 = "01q7hagq0ysii1jnrh5adm97vdm9cis592xr6im7accyw6hgcn7b";
+      })
     ] ++ optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
