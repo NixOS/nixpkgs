@@ -1,11 +1,13 @@
 { mkDerivation, lib, fetchFromGitHub, callPackage, fetchpatch
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
+, extra-cmake-modules
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk, jemalloc
-, rnnoise, extra-cmake-modules
+, rnnoise
 # Transitive dependencies:
-, pcre, xorg, util-linuxMinimal, libselinux, libsepol, epoxy
+, util-linuxMinimal
+, pcre, libpthreadstubs, libXdmcp, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
 , xdg-utils, libsysprof-capture, libpsl, brotli
 }:
@@ -72,7 +74,7 @@ in mkDerivation rec {
     tg_owt
     # Transitive dependencies:
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
-    pcre xorg.libpthreadstubs xorg.libXdmcp libselinux libsepol epoxy
+    pcre libpthreadstubs libXdmcp libselinux libsepol epoxy
     at-spi2-core libXtst libthai libdatrie libsysprof-capture libpsl brotli
   ];
 
@@ -84,20 +86,6 @@ in mkDerivation rec {
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
   ];
-
-  # Note: The following packages could be packaged system-wide, but it's
-  # probably best to use the bundled ones from tdesktop (Arch does this too):
-  # rlottie:
-  # - Sources (problem: there are no stable releases!):
-  #   - desktop-app (tdesktop): https://github.com/desktop-app/rlottie
-  #   - upstream: https://github.com/Samsung/rlottie
-  # libtgvoip:
-  # - Sources  (problem: the stable releases might be too old!):
-  #   - tdesktop: https://github.com/telegramdesktop/libtgvoip
-  #   - upstream: https://github.com/grishka/libtgvoip
-  # Both of these packages are included in this PR (kotatogram-desktop):
-  # https://github.com/NixOS/nixpkgs/pull/75210
-  # TODO: Package mapbox-variant
 
   postFixup = ''
     # This is necessary to run Telegram in a pure environment.

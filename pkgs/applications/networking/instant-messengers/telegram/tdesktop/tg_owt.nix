@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , pkg-config, cmake, ninja, yasm
 , libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
 , openh264, usrsctp, libevent, libvpx
+, libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
-, xorg, libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 }:
 
 stdenv.mkDerivation {

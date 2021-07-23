@@ -27340,7 +27340,9 @@ in
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
+  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
+    inherit (xorg) libpthreadstubs libXdmcp;
+  };
 
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
 
