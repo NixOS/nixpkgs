@@ -851,7 +851,10 @@ _defaultUnpack() {
 unpackFile() {
     curSrc="$1"
     header "unpacking source archive $curSrc" 3
-    if ! runOneHook unpackCmd "$curSrc"; then
+    local status
+    runOneHook unpackCmd "$curSrc"
+    status=$?
+    if (( status != 0)); then
         echo "do not know how to unpack source archive $curSrc"
         exit 1
     fi
