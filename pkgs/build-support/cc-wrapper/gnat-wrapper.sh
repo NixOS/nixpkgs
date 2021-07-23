@@ -37,7 +37,8 @@ dontLink=0
 nonFlagArgs=0
 # shellcheck disable=SC2193
 
-expandResponseParams "$@"
+declare -a params=( "$@" )
+expandResponseParams params
 declare -i n=0
 nParams=${#params[@]}
 while (( "$n" < "$nParams" )); do

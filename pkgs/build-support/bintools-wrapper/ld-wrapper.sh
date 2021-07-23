@@ -22,7 +22,8 @@ fi
 
 
 # Optionally filter out paths not refering to the store.
-expandResponseParams "$@"
+declare -a params=( "$@" )
+expandResponseParams params
 
 # NIX_LINK_TYPE is set if ld has been called through our cc wrapper. We take
 # advantage of this to avoid both recalculating it, and also repeating other

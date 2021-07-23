@@ -114,16 +114,13 @@ badPath() {
 }
 
 expandResponseParams() {
-    declare -ga params=("$@")
+    declare -n paramsRef=$1
     local arg
-    for arg in "$@"; do
+    for arg in "${paramsRef[@]}"; do
         if [[ "$arg" == @* ]]; then
             # phase separation makes this look useless
-            # shellcheck disable=SC2157
-            if [ -x "@expandResponseParams@" ]; then
-                # params is used by caller
-                #shellcheck disable=SC2034
-                readarray -d '' params < <("@expandResponseParams@" "$@")
+            if [[ -x "@expandResponseParams@" ]]; then
+                paramsRef+=( "@expandResponseParams@" )
                 return 0
             fi
         fi

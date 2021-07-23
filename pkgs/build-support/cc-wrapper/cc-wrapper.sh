@@ -30,7 +30,8 @@ cxxInclude=1
 cxxLibrary=1
 cInclude=1
 
-expandResponseParams "$@"
+declare -a params=( "$@" )
+expandResponseParams params
 linkType=$(checkLinkType "$@")
 
 declare -i n=0
