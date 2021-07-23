@@ -72,6 +72,7 @@ python3Packages.buildPythonApplication rec {
     "test_sbin_added_to_path"
     "test_diff_meta"
     "test_diff_meta2"
+    "test_obj_no_differences"
   ];
 
   meta = with lib; {

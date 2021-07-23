@@ -9,7 +9,7 @@ buildPythonApplication rec {
   # application, it would mess up the Python environment. Thus, don't add it
   # here, instead add it to PATH when running unit tests
   checkInputs = [ pytest pytest-flake8 git ];
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ ipython nbformat ];
 
   src = fetchPypi {

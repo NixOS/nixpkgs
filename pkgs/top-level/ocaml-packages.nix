@@ -848,8 +848,6 @@ let
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
     ocamlgraph_gtk = callPackage ../development/ocaml-modules/ocamlgraph/gtk.nix { };
 
-    ocaml_http = callPackage ../development/ocaml-modules/http { };
-
     ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
@@ -866,9 +864,7 @@ let
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
-    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic {
-      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2;
-    };
+    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 

@@ -1060,6 +1060,12 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  arjix = {
+    email = "arjix@protonmail.com";
+    github = "arjix";
+    githubId = 62168569;
+    name = "arjix";
+  };
   artturin = {
     email = "artturin@artturin.com";
     github = "artturin";
@@ -4355,6 +4361,12 @@
     github = "HolgerPeters";
     githubId = 4097049;
   };
+  hqurve = {
+    email = "hqurve@outlook.com";
+    github = "hqurve";
+    githubId = 53281855;
+    name = "hqurve";
+  };
   hrdinka = {
     email = "c.nix@hrdinka.at";
     github = "hrdinka";
@@ -4810,6 +4822,12 @@
     github = "jdagilliland";
     githubId = 1383440;
     name = "Jason Gilliland";
+  };
+  jdahm = {
+    email = "johann.dahm@gmail.com";
+    github = "jdahm";
+    githubId = 68032;
+    name = "Johann Dahm";
   };
   jdanek = {
     email = "jdanek@redhat.com";
@@ -6639,6 +6657,12 @@
     github = "maxxk";
     githubId = 1191859;
     name = "Maxim Krivchikov";
+  };
+  MayNiklas = {
+    email = "info@niklas-steffen.de";
+    github = "MayNiklas";
+    githubId = 44636701;
+    name = "Niklas Steffen";
   };
   mazurel = {
     email = "mateusz.mazur@yahoo.com";

@@ -3,7 +3,7 @@
 , six
 , hypothesis
 , pytest
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "114cyff00j9r7qm2ld4w1a4kklr5gx570vk67p56gpr2553dkmly";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ arrow six ];
 
   checkInputs = [ pytest hypothesis ];

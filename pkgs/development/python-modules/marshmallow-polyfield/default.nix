@@ -4,7 +4,7 @@
 , marshmallow
   # Check Inputs
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   # setuptools check can run, but won't find tests
-  checkInputs = [ pytestCheckHook pytestcov ];
+  checkInputs = [ pytestCheckHook pytest-cov ];
 
   meta = with lib; {
     description = "An unofficial extension to Marshmallow to allow for polymorphic fields";

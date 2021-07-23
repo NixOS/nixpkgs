@@ -9,7 +9,6 @@
 , mock
 , pysqlite ? null
 , pytestCheckHook
-, pytest_xdist
 }:
 
 buildPythonPackage rec {

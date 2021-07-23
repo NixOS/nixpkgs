@@ -448,6 +448,7 @@ mapAliases ({
 
   linux-steam-integration = throw "linux-steam-integration has been removed, as the upstream project has been abandoned"; # added 2020-05-22
   loadcaffe = throw "loadcaffe has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  lobster-two = google-fonts; # added 2021-07-22
   lprof = throw "lprof has been removed as it's unmaintained upstream and broken in nixpkgs since a while ago"; # added 2021-02-15
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
@@ -886,6 +887,7 @@ mapAliases ({
   virtviewer = virt-viewer; # added 2015-12-24
   virtmanager = virt-manager; # added 2019-10-29
   virtmanager-qt = virt-manager-qt; # added 2019-10-29
+  virtinst = throw "virtinst has been removed, as it's included in virt-manager"; # added 2021-07-21
   vorbisTools = vorbis-tools; # added 2016-01-26
   webkit = webkitgtk; # added 2019-03-05
   webkitgtk24x-gtk3 = throw "webkitgtk24x-gtk3 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
@@ -1134,6 +1136,7 @@ mapAliases ({
     kwin-dynamic-workspaces
     kwin-tiling
     krohnkite
+    krunner-symbols
   ;
   inherit (libsForQt5)
     sddm

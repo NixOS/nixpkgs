@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , requests, six
-, backports_unittest-mock, pytestCheckHook, pytestrunner }:
+, backports_unittest-mock, pytestCheckHook, pytest-runner }:
 
 buildPythonPackage rec {
   pname = "sseclient";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   # some tests use python3 strings
   doCheck = !isPy27;
-  checkInputs = [ backports_unittest-mock pytestCheckHook pytestrunner ];
+  checkInputs = [ backports_unittest-mock pytestCheckHook pytest-runner ];
 
   # tries to open connection to wikipedia
   disabledTests = [ "event_stream" ];

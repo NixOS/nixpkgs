@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.6.6";
+  version = "2021.7.0";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -27,6 +27,7 @@
     "almond" = ps: with ps; [ aiohttp-cors pyalmond ];
     "alpha_vantage" = ps: with ps; [ alpha-vantage ];
     "amazon_polly" = ps: with ps; [ boto3 ];
+    "ambee" = ps: with ps; [ ambee ];
     "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
     "ambient_station" = ps: with ps; [ aioambient ];
     "amcrest" = ps: with ps; [ amcrest ha-ffmpeg ];
@@ -90,7 +91,7 @@
     "blueprint" = ps: with ps; [ ];
     "bluesound" = ps: with ps; [ xmltodict ];
     "bluetooth_le_tracker" = ps: with ps; [ pygatt ];
-    "bluetooth_tracker" = ps: with ps; [ bt_proximity pybluez ];
+    "bluetooth_tracker" = ps: with ps; [ bt-proximity pybluez ];
     "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
@@ -157,7 +158,7 @@
     "deconz" = ps: with ps; [ pydeconz ];
     "decora" = ps: with ps; [ bluepy ]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
-    "default_config" = ps: with ps; [ pynacl aiodiscover aiohttp-cors async-upnp-client defusedxml distro emoji hass-nabucasa home-assistant-frontend ifaddr netdisco pillow scapy sqlalchemy zeroconf ];
+    "default_config" = ps: with ps; [ pynacl aiodiscover aiohttp-cors async-upnp-client defusedxml distro emoji hass-nabucasa home-assistant-frontend ifaddr pillow scapy sqlalchemy zeroconf ];
     "delijn" = ps: with ps; [ pydelijn ];
     "deluge" = ps: with ps; [ deluge-client ];
     "demo" = ps: with ps; [ aiohttp-cors ];
@@ -176,7 +177,7 @@
     "digital_ocean" = ps: with ps; [ digital-ocean ];
     "digitalloggers" = ps: with ps; [ ]; # missing inputs: dlipower
     "directv" = ps: with ps; [ directv ];
-    "discogs" = ps: with ps; [ discogs_client ];
+    "discogs" = ps: with ps; [ discogs-client ];
     "discord" = ps: with ps; [ discordpy ];
     "discovery" = ps: with ps; [ aiohttp-cors ifaddr netdisco zeroconf ];
     "dlib_face_detect" = ps: with ps; [ face_recognition ];
@@ -276,6 +277,7 @@
     "folder" = ps: with ps; [ ];
     "folder_watcher" = ps: with ps; [ watchdog ];
     "foobot" = ps: with ps; [ foobot-async ];
+    "forecast_solar" = ps: with ps; [ forecast-solar ];
     "forked_daapd" = ps: with ps; [ ]; # missing inputs: pyforked-daapd pylibrespot-java
     "fortios" = ps: with ps; [ fortiosapi ];
     "foscam" = ps: with ps; [ libpyfoscam ];
@@ -283,7 +285,8 @@
     "free_mobile" = ps: with ps; [ ]; # missing inputs: freesms
     "freebox" = ps: with ps; [ freebox-api ];
     "freedns" = ps: with ps; [ ];
-    "fritz" = ps: with ps; [ fritzconnection ];
+    "freedompro" = ps: with ps; [ pyfreedompro ];
+    "fritz" = ps: with ps; [ aiohttp-cors fritzconnection fritzprofiles ifaddr xmltodict ];
     "fritzbox" = ps: with ps; [ pyfritzhome ];
     "fritzbox_callmonitor" = ps: with ps; [ fritzconnection ];
     "fritzbox_netmonitor" = ps: with ps; [ fritzconnection ];
@@ -520,6 +523,7 @@
     "mochad" = ps: with ps; [ ]; # missing inputs: pymochad
     "modbus" = ps: with ps; [ pymodbus ];
     "modem_callerid" = ps: with ps; [ ]; # missing inputs: basicmodem
+    "modern_forms" = ps: with ps; [ aiomodernforms ];
     "mold_indicator" = ps: with ps; [ ];
     "monoprice" = ps: with ps; [ ]; # missing inputs: pymonoprice
     "moon" = ps: with ps; [ ];
@@ -732,6 +736,7 @@
     "scsgate" = ps: with ps; [ ]; # missing inputs: scsgate
     "search" = ps: with ps; [ aiohttp-cors ];
     "season" = ps: with ps; [ ephem ];
+    "select" = ps: with ps; [ ];
     "sendgrid" = ps: with ps; [ sendgrid ];
     "sense" = ps: with ps; [ sense-energy ];
     "sensehat" = ps: with ps; [ ]; # missing inputs: sense-hat
@@ -742,7 +747,7 @@
     "serial_pm" = ps: with ps; [ pmsensor ];
     "sesame" = ps: with ps; [ ]; # missing inputs: pysesame2
     "seven_segments" = ps: with ps; [ pillow ];
-    "seventeentrack" = ps: with ps; [ ]; # missing inputs: py17track
+    "seventeentrack" = ps: with ps; [ py17track ];
     "sharkiq" = ps: with ps; [ sharkiqpy ];
     "shell_command" = ps: with ps; [ ];
     "shelly" = ps: with ps; [ aioshelly ];
@@ -788,7 +793,7 @@
     "somfy_mylink" = ps: with ps; [ somfy-mylink-synergy ];
     "sonarr" = ps: with ps; [ sonarr ];
     "songpal" = ps: with ps; [ python-songpal ];
-    "sonos" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket pysonos ];
+    "sonos" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr plexapi plexauth plexwebsocket pysonos zeroconf ];
     "sony_projector" = ps: with ps; [ ]; # missing inputs: pysdcp
     "soundtouch" = ps: with ps; [ aiohttp-cors ifaddr libsoundtouch zeroconf ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
@@ -800,7 +805,7 @@
     "sql" = ps: with ps; [ sqlalchemy ];
     "squeezebox" = ps: with ps; [ pysqueezebox ];
     "srp_energy" = ps: with ps; [ srpenergy ];
-    "ssdp" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr netdisco zeroconf ];
+    "ssdp" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr zeroconf ];
     "starline" = ps: with ps; [ starline ];
     "starlingbank" = ps: with ps; [ ]; # missing inputs: starlingbank
     "startca" = ps: with ps; [ xmltodict ];
@@ -907,7 +912,7 @@
     "upc_connect" = ps: with ps; [ connect-box ];
     "upcloud" = ps: with ps; [ upcloud-api ];
     "updater" = ps: with ps; [ distro ];
-    "upnp" = ps: with ps; [ async-upnp-client ];
+    "upnp" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr zeroconf ];
     "uptime" = ps: with ps; [ ];
     "uptimerobot" = ps: with ps; [ ]; # missing inputs: pyuptimerobot
     "uscis" = ps: with ps; [ ]; # missing inputs: uscisstatus
@@ -972,13 +977,13 @@
     "xeoma" = ps: with ps; [ pyxeoma ];
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
     "xiaomi_aqara" = ps: with ps; [ pyxiaomigateway aiohttp-cors ifaddr netdisco zeroconf ];
-    "xiaomi_miio" = ps: with ps; [ construct python-miio ];
+    "xiaomi_miio" = ps: with ps; [ construct micloud python-miio ];
     "xiaomi_tv" = ps: with ps; [ pymitv ];
     "xmpp" = ps: with ps; [ slixmpp ];
     "xs1" = ps: with ps; [ ]; # missing inputs: xs1-api-client
     "yale_smart_alarm" = ps: with ps; [ yalesmartalarmclient ];
     "yamaha" = ps: with ps; [ rxv ];
-    "yamaha_musiccast" = ps: with ps; [ ]; # missing inputs: pymusiccast
+    "yamaha_musiccast" = ps: with ps; [ aiomusiccast ];
     "yandex_transport" = ps: with ps; [ aioymaps ];
     "yandextts" = ps: with ps; [ ];
     "yeelight" = ps: with ps; [ yeelight ];

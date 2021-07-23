@@ -1,7 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
 , pytestCheckHook
-, pytestcov
-, pytest-flake8
 , pytest-mypy
 , redis
 }:

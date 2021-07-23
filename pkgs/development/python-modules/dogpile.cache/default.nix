@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , pytest
-, pytestcov
+, pytest-cov
 , mock
 , Mako
 , decorator
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  checkInputs = [ pytest pytestcov mock Mako ];
+  checkInputs = [ pytest pytest-cov mock Mako ];
 
   propagatedBuildInputs = [ decorator stevedore ];
 

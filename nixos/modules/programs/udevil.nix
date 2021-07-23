@@ -10,5 +10,8 @@ in {
 
   config = mkIf cfg.enable {
     security.wrappers.udevil.source = "${lib.getBin pkgs.udevil}/bin/udevil";
+
+    systemd.packages = [ pkgs.udevil ];
+    systemd.services."devmon@".wantedBy = [ "multi-user.target" ];
   };
 }

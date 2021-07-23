@@ -4,7 +4,7 @@
 , isPy27
 , mock
 , pytest
-, pytestrunner
+, pytest-runner
 , sh
 , coverage
 , docopt
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   postPatch = ''
