@@ -4,6 +4,7 @@
 , pkg-config, meson, ninja
 , libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap
 , doxygen, python3
+, withExamples ? []
 , shared ? false }:
 
 let
@@ -51,7 +52,8 @@ in stdenv.mkDerivation rec {
   ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
   ++ lib.optional (!shared) "-Ddefault_library=static"
   ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
-  ++ lib.optional mod "-Dkernel_dir=${placeholder "kmod"}/lib/modules/${kernel.modDirVersion}";
+  ++ lib.optional mod "-Dkernel_dir=${placeholder "kmod"}/lib/modules/${kernel.modDirVersion}"
+  ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
   # dpdk meson script does not support separate kernel source and installion
   # dirs (except via destdir), so we temporarily link the former into the latter.
@@ -65,6 +67,10 @@ in stdenv.mkDerivation rec {
     rm -f $kmod/lib/modules/${kernel.modDirVersion}/build
   '';
 
+  postInstall = lib.optionalString (withExamples != []) ''
+    find examples -type f -executable -exec install {} $out/bin \;
+  '';
+
   outputs = [ "out" ] ++ lib.optional mod "kmod";
 
   meta = with lib; {
@@ -72,6 +78,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://dpdk.org/";
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
     platforms =  platforms.linux;
-    maintainers = with maintainers; [ magenbluten orivej mic92 ];
+    maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
   };
 }
