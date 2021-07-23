@@ -68,9 +68,10 @@ _callImplicitHook() {
     local hookName="$2"
     if declare -F "$hookName" > /dev/null; then
         "$hookName"
-    elif type -p "$hookName" > /dev/null; then
+    elif [[ -e "$hookName" ]]; then
+        # shellcheck disable=SC1090
         source "$hookName"
-    elif [ -n "${!hookName:-}" ]; then
+    elif [[ -n "${!hookName:-}" ]]; then
         eval "${!hookName}"
     else
         return "$def"
