@@ -3,7 +3,7 @@
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk, jemalloc
-, libtgvoip, rnnoise, abseil-cpp, extra-cmake-modules
+, rnnoise, abseil-cpp, extra-cmake-modules
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
@@ -58,7 +58,7 @@ in mkDerivation rec {
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
     ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
     tl-expected hunspell glibmm webkitgtk jemalloc
-    libtgvoip rnnoise abseil-cpp extra-cmake-modules
+    rnnoise abseil-cpp extra-cmake-modules
     tg_owt
     # Transitive dependencies:
     pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
@@ -117,6 +117,6 @@ in mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v{version}";
-    maintainers = with maintainers; [ primeos abbradar ];
+    maintainers = with maintainers; [ primeos abbradar nickcao ];
   };
 }
