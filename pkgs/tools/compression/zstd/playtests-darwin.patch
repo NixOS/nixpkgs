@@ -1,14 +1,14 @@
 --- a/tests/playTests.sh
 +++ b/tests/playTests.sh
-@@ -112,22 +112,12 @@ case "$OS" in
+@@ -112,7 +112,6 @@ case "$OS" in
  esac
  
  case "$UNAME" in
 -  Darwin) MD5SUM="md5 -r" ;;
--  FreeBSD) MD5SUM="gmd5sum" ;;
--  NetBSD) MD5SUM="md5 -n" ;;
--  OpenBSD) MD5SUM="md5" ;;
-   *) MD5SUM="md5sum" ;;
+   FreeBSD) MD5SUM="gmd5sum" ;;
+   NetBSD) MD5SUM="md5 -n" ;;
+   OpenBSD) MD5SUM="md5" ;;
+@@ -120,14 +119,8 @@ case "$UNAME" in
  esac
  
  MTIME="stat -c %Y"
@@ -23,7 +23,7 @@
  
  assertFilePermissions() {
      STAT1=$($GET_PERMS "$1")
-@@ -967,7 +957,6 @@ $MD5SUM dirTestDict/* > tmph1
+@@ -967,7 +960,6 @@ $MD5SUM dirTestDict/* > tmph1
  zstd -f --rm dirTestDict/* -D tmpDictC
  zstd -d --rm dirTestDict/*.zst -D tmpDictC  # note : use internal checksum by default
  case "$UNAME" in
