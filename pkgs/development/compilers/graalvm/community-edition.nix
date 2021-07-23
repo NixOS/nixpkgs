@@ -163,6 +163,10 @@ let
 
             # allow using external truffle-api.jar and languages not included in the distrubution
             rm $out/jre/lib/jvmci/parentClassLoader.classpath
+
+            rm -rf $out/sample
+            # Remove some broken manpages.
+            rm -rf $out/man/ja*
           '';
           "11-linux-amd64" = ''
             # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
