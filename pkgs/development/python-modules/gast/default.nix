@@ -17,15 +17,18 @@ buildPythonPackage rec {
       sha256 = "0ylpn0x0a4y6139vd048blsh77yd08npjcn4b5ydf89xnji5mlm1";
     })
   ];
+
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "gast";
     rev = version;
     sha256 = "0qsg36knv0k2ppzbr5m4w6spxxw7a77lw88y8vjx7m176bajnsbw";
   };
+
   checkInputs = [ astunparse ];
   meta = with lib; {
     description = "GAST provides a compatibility layer between the AST of various Python versions, as produced by ast.parse from the standard ast module.";
+    homepage = "https://github.com/serge-sans-paille/gast/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jyp cpcloud ];
   };
