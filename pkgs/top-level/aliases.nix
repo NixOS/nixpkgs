@@ -101,6 +101,8 @@ mapAliases ({
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
   buildGo112Module = throw "buildGo112Module has been removed"; # added 2020-04-26
+  buildkite-agent2 = throw "buildkite-agent2 has been discontinued. Please use buildkite-agent (v3.x)"; # added 2018-09-26
+  buildkite-agent3 = buildkite-agent; # added 2018-09-26
   bundler_HEAD = bundler; # added 2015-11-15
   calibre-py2 = throw "calibre-py2 has been removed from nixpkgs, as calibre has upgraded to python 3. Please use calibre as replacement."; # added 2021-01-13
   calibre-py3 = throw "calibre-py3 has been removed from nixpkgs, as calibre's default python version is now 3. Please use calibre as replacement."; # added 2021-01-13
@@ -339,6 +341,7 @@ mapAliases ({
   hicolor_icon_theme = hicolor-icon-theme; # added 2018-02-25
   ht-rust = xh; # added 2021-02-13
   htmlTidy = html-tidy;  # added 2014-12-06
+  hydra-flakes = throw "hydra-flakes: Flakes support has been merged into Hydra's master. Please use `hydra-unstable` now."; # added 2020-04-06
   iana_etc = iana-etc;  # added 2017-03-08
   icedtea8_web = adoptopenjdk-icedtea-web; # added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # added 2019-08-21
@@ -389,6 +392,7 @@ mapAliases ({
   kvm = qemu_kvm; # added 2018-04-25
   latinmodern-math = lmmath;
   letsencrypt = certbot; # added 2016-05-16
+  leksah = throw "To use leksah, refer to the instructions in https://github.com/leksah/leksah."; # added 2019-04-28
   libaudit = audit; # added 2018-04-25
   libcanberra_gtk2 = libcanberra-gtk2; # added 2018-02-25
   libcanberra_gtk3 = libcanberra-gtk3; # added 2018-02-25
@@ -528,6 +532,7 @@ mapAliases ({
   oauth2_proxy = oauth2-proxy; # added 2021-04-18
   opencascade_oce = opencascade; # added 2018-04-25
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
+  octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set."; # added 2021-01-24
   ofp = throw "ofp is not compatible with odp-dpdk";
   opencl-icd = ocl-icd; # added 2017-01-20
   openconnect_pa = throw "openconnect_pa fork has been discontinued, support for GlobalProtect is now available in openconnect"; # added 2021-05-21
@@ -548,6 +553,7 @@ mapAliases ({
   parity = openethereum; # added 2020-08-01
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
+  pdfread = throw "pdfread has been remove because it is unmaintained for years and the sources are no longer available"; # added 2021-07-22
   pdf2htmlEx = throw "pdf2htmlEx has been removed from nixpkgs, as it was unmaintained"; # added 2020-11-03
   perlXMLParser = perlPackages.XMLParser; # added 2018-10-12
   perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
@@ -890,13 +896,16 @@ mapAliases ({
   virtmanager-qt = virt-manager-qt; # added 2019-10-29
   virtinst = throw "virtinst has been removed, as it's included in virt-manager"; # added 2021-07-21
   vorbisTools = vorbis-tools; # added 2016-01-26
+  way-cooler = throw "way-cooler is abandoned by its author: https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"; # added 2020-01-13
   webkit = webkitgtk; # added 2019-03-05
   webkitgtk24x-gtk3 = throw "webkitgtk24x-gtk3 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
   webkitgtk24x-gtk2 = throw "webkitgtk24x-gtk2 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
   weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
   wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
+  winstone = throw "winstone is not supported anymore. Alternatives are Jetty or Tomcat."; # added 2019-05-14
   winswitch = throw "winswitch has been removed from nixpkgs."; # added 2019-12-10
+  wireshark-gtk = throw "wireshark-gtk is not supported anymore. Use wireshark-qt or wireshark-cli instead."; # added 2019-11-18
   wireguard = wireguard-tools; # added 2018-05-19
   morituri = whipper; # added 2018-09-13
   xp-pen-g430 = pentablet-driver; # added 2020-05-03
