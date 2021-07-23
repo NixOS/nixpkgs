@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "jeepney";
-  version = "0.6.0";
+  version = "0.7.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d59b6622675ca9e993a6bd38de845051d315f8b0c72cca3aef733a20b648657";
+    sha256 = "1237cd64c8f7ac3aa4b3f332c4d0fb4a8216f39eaa662ec904302d4d77de5a54";
   };
 
   checkInputs = [
