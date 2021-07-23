@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitLab
 , fetchpatch
-, python38
+, python3
 , librsync
 , ncftp
 , gnupg
@@ -13,7 +13,7 @@
 , gettext
 }:
 let
-  pythonPackages = python38.pkgs;
+  pythonPackages = python3.pkgs;
   inherit (lib.versions) majorMinor splitVersion;
   majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
 in

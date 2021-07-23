@@ -1713,6 +1713,18 @@ final: prev:
     meta.homepage = "https://github.com/rktjmp/fwatch.nvim/";
   };
 
+  fzf-checkout-vim = buildVimPluginFrom2Nix {
+    name = "fzf-checkout.vim";
+    version = "2021-07-21";
+    src = fetchFromGitHub {
+      owner = "stsewd";
+      repo = "fzf-checkout.vim";
+      rev = "4d5ecae74460de8fed4f743f6bd53c4c31d32797";
+      sha256 = "0mia7p2z8l3lrid0v8ml4i8y190gh4ll9898yyg4gcghhxp83zpm";
+    };
+    meta.homepage = "https://github.com/stsewd/fzf-checkout.vim";
+  };
+
   fzf-lsp-nvim = buildVimPluginFrom2Nix {
     pname = "fzf-lsp-nvim";
     version = "2021-06-20";

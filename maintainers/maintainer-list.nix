@@ -1060,6 +1060,12 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  arjix = {
+    email = "arjix@protonmail.com";
+    github = "arjix";
+    githubId = 62168569;
+    name = "arjix";
+  };
   artturin = {
     email = "artturin@artturin.com";
     github = "artturin";
@@ -4355,6 +4361,12 @@
     github = "HolgerPeters";
     githubId = 4097049;
   };
+  hqurve = {
+    email = "hqurve@outlook.com";
+    github = "hqurve";
+    githubId = 53281855;
+    name = "hqurve";
+  };
   hrdinka = {
     email = "c.nix@hrdinka.at";
     github = "hrdinka";
@@ -4810,6 +4822,12 @@
     github = "jdagilliland";
     githubId = 1383440;
     name = "Jason Gilliland";
+  };
+  jdahm = {
+    email = "johann.dahm@gmail.com";
+    github = "jdahm";
+    githubId = 68032;
+    name = "Johann Dahm";
   };
   jdanek = {
     email = "jdanek@redhat.com";
@@ -5773,6 +5791,12 @@
     githubId = 278013;
     name = "Tomasz Kontusz";
   };
+  kurnevsky = {
+    email = "kurnevsky@gmail.com";
+    github = "kurnevsky";
+    githubId = 2943605;
+    name = "Evgeny Kurnevsky";
+  };
   kuznero = {
     email = "roman@kuznero.com";
     github = "kuznero";
@@ -5899,6 +5923,12 @@
     github = "lucc";
     githubId = 1104419;
     name = "Lucas Hoffmann";
+  };
+  lde = {
+    email = "lilian.deloche@puck.fr";
+    github = "lde";
+    githubId = 1447020;
+    name = "Lilian Deloche";
   };
   ldelelis = {
     email = "ldelelis@est.frba.utn.edu.ar";
@@ -6639,6 +6669,12 @@
     github = "maxxk";
     githubId = 1191859;
     name = "Maxim Krivchikov";
+  };
+  MayNiklas = {
+    email = "info@niklas-steffen.de";
+    github = "MayNiklas";
+    githubId = 44636701;
+    name = "Niklas Steffen";
   };
   mazurel = {
     email = "mateusz.mazur@yahoo.com";
@@ -10103,6 +10139,12 @@
     github = "steve-chavez";
     githubId = 1829294;
     name = "Steve Chávez";
+  };
+  stevebob = {
+    email = "stephen@sherra.tt";
+    github = "stevebob";
+    githubId = 417118;
+    name = "Stephen Sherratt";
   };
   steveej = {
     email = "mail@stefanjunker.de";

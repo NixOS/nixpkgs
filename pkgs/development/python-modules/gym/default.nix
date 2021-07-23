@@ -29,6 +29,11 @@ buildPythonPackage rec {
     scipy
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "Pillow<=8.2.0" "Pillow"
+  '';
+
   # The test needs MuJoCo that is not free library.
   doCheck = false;
 

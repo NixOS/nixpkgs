@@ -1770,6 +1770,8 @@ in {
 
   d2to1 = callPackage ../development/python-modules/d2to1 { };
 
+  dacite = callPackage ../development/python-modules/dacite { };
+
   daemonize = callPackage ../development/python-modules/daemonize { };
 
   daemonocle = callPackage ../development/python-modules/daemonocle { };
@@ -1913,6 +1915,8 @@ in {
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
+
+  devtools = callPackage ../development/python-modules/devtools { };
 
   diagrams = callPackage ../development/python-modules/diagrams { };
 
@@ -2732,6 +2736,8 @@ in {
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
+  fritzprofiles = callPackage ../development/python-modules/fritzprofiles { };
+
   frozendict = callPackage ../development/python-modules/frozendict { };
 
   frozenlist = callPackage ../development/python-modules/frozenlist { };
@@ -3095,6 +3101,8 @@ in {
   graph_nets = callPackage ../development/python-modules/graph_nets { };
 
   graphene = callPackage ../development/python-modules/graphene { };
+
+  graphqlclient= callPackage ../development/python-modules/graphqlclient { };
 
   graphql-core = callPackage ../development/python-modules/graphql-core { };
 
@@ -3973,6 +3981,8 @@ in {
 
   leather = callPackage ../development/python-modules/leather { };
 
+  leb128 = callPackage ../development/python-modules/leb128 { };
+
   ledger_agent = callPackage ../development/python-modules/ledger_agent { };
 
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
@@ -4735,6 +4745,8 @@ in {
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
+  nengo = callPackage ../development/python-modules/nengo { };
+
   neo = callPackage ../development/python-modules/neo { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
@@ -5410,6 +5422,8 @@ in {
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
 
+  python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
+
   python-openems = callPackage ../development/python-modules/python-openems { };
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
@@ -5685,6 +5699,8 @@ in {
   py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
+
+  py17track = callPackage ../development/python-modules/py17track { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
 
@@ -6007,6 +6023,8 @@ in {
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
+  pygame-gui = callPackage ../development/python-modules/pygame-gui { };
+
   pygatt = callPackage ../development/python-modules/pygatt { };
 
   pygbm = callPackage ../development/python-modules/pygbm { };
@@ -6179,6 +6197,8 @@ in {
 
   pyls-black = callPackage ../development/python-modules/pyls-black { };
 
+  pyls-flake8 = callPackage ../development/python-modules/pyls-flake8 { };
+
   pyls-isort = callPackage ../development/python-modules/pyls-isort { };
 
   pyls-mypy = callPackage ../development/python-modules/pyls-mypy { };
@@ -6266,6 +6286,8 @@ in {
   py-multihash = callPackage ../development/python-modules/py-multihash { };
 
   pymumble = callPackage ../development/python-modules/pymumble { };
+
+  pymunk = callPackage ../development/python-modules/pymunk { };
 
   pymupdf = callPackage ../development/python-modules/pymupdf { };
 
@@ -8233,6 +8255,8 @@ in {
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
 
   sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
+
+  sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 

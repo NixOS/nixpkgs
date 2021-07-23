@@ -925,9 +925,8 @@ in
     system.nssModules = [ systemd.out ];
     system.nssDatabases = {
       hosts = (mkMerge [
-        [ "mymachines" ]
-        (mkOrder 1600 [ "myhostname" ] # 1600 to ensure it's always the last
-      )
+        (mkOrder 400 ["mymachines"]) # 400 to ensure it comes before resolve (which is mkBefore'd)
+        (mkOrder 999 ["myhostname"]) # after files (which is 998), but before regular nss modules
       ]);
       passwd = (mkMerge [
         (mkAfter [ "systemd" ])
