@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ptable click requests prompt-toolkit pygments urllib3 ];
 
-  checkInputs = [ pytest pytest-cov mock sphinx testtools ptable click requests prompt-toolkit pygments urllib3 ];
+  checkInputs = [ pytest pytest-cov mock sphinx testtools ];
 
   checkPhase = ''
     pytest
