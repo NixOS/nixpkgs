@@ -108,6 +108,6 @@ pythonPackages.buildPythonPackage rec {
     description = "Danbooru-like image tagging and searching system for the desktop";
     license = licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
-    maintainers = [ maintainers.evanjs ];
+    maintainers = with maintainers; [ dandellion evanjs ];
   };
 }
