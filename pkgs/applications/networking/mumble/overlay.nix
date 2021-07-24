@@ -8,8 +8,6 @@ in stdenv.mkDerivation {
 
   inherit (mumble) src;
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   installPhase = ''
     mkdir -p $out/lib
     ln -s ${mumble}/lib/libmumble.so.1 $out/lib/
