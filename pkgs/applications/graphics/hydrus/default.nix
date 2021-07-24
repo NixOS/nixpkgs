@@ -34,6 +34,7 @@ pythonPackages.buildPythonPackage rec {
     psutil
     pyopenssl
     pyyaml
+    pylzma
     requests
     send2trash
     service-identity
