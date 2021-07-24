@@ -9,14 +9,15 @@ stdenv.mkDerivation rec {
   version = "20181205";
 
   src = fetchurl {
-    url = "http://www.t3x.org/s9fes/s9fes-${version}.tgz";
+    url = "https://www.t3x.org/s9fes/s9fes-${version}.tgz";
     sha256 = "sha256-Lp/akaDy3q4FmIE6x0fj9ae/SOD7tdsmzy2xdcCh13o=";
   };
 
   # Fix cross-compilation
   postPatch = ''
-    substituteInPlace Makefile --replace 'ar q' '${stdenv.cc.targetPrefix}ar q'
-    substituteInPlace Makefile --replace 'strip' '${stdenv.cc.targetPrefix}strip'
+    substituteInPlace Makefile \
+      --replace 'ar q' '${stdenv.cc.targetPrefix}ar q' \
+      --replace 'strip' '${stdenv.cc.targetPrefix}strip'
     ${lib.optionalString isCrossCompiling "substituteInPlace Makefile --replace ./s9 '${buildPackages.s9fes}/bin/s9'"}
   '';
 
