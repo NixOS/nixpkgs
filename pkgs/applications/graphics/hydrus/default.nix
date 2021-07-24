@@ -1,14 +1,14 @@
 { lib
 , fetchFromGitHub
-, xz
 , wrapQtAppsHook
 , miniupnpc_2
+, ffmpeg
 , enableSwftools ? false
 , swftools
-, pythonPackages
+, python3Packages
 }:
 
-pythonPackages.buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "hydrus";
   version = "447";
   format = "other";
@@ -24,31 +24,33 @@ pythonPackages.buildPythonPackage rec {
     wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
+    chardet
+    cloudscraper
     html5lib
     lxml
+    lz4
+    nose
     numpy
     opencv4
     pillow
     psutil
-    pyopenssl
-    pyyaml
     pylzma
+    pyopenssl
+    pyside2
+    pysocks
+    pythonPackages.mpv
+    pyyaml
+    qtpy
     requests
     send2trash
     service-identity
+    six
     twisted
-    lz4
-    xz
-    pysocks
-    matplotlib
-    qtpy
-    pyside2
-    mpv
   ];
 
-  checkInputs = with pythonPackages; [ nose httmock ];
+  checkInputs = with python3Packages; [ nose mock httmock ];
 
   # most tests are failing, presumably because we are not using test.py
   checkPhase = ''
@@ -78,31 +80,28 @@ pythonPackages.buildPythonPackage rec {
 
   outputs = [ "out" "doc" ];
 
-  postPatch = ''
-    sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${miniupnpc_2}/bin/upnpc";' \
-      -i ./hydrus/core/networking/HydrusNATPunch.py
-  '' + lib.optionalString enableSwftools ''
-    sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${swftools}/bin/swfrender";' \
-      -i ./hydrus/core/HydrusFlashHandling.py
-  '';
-
-  #doCheck = true;
-
   installPhase = ''
     # Move the hydrus module and related directories
-    mkdir -p $out/${pythonPackages.python.sitePackages}
-    mv {hydrus,static} $out/${pythonPackages.python.sitePackages}
+    mkdir -p $out/${python3Packages.python.sitePackages}
+    mv {hydrus,static} $out/${python3Packages.python.sitePackages}
     mv help $out/doc/
 
     # install the hydrus binaries
     mkdir -p $out/bin
     install -m0755 server.py $out/bin/hydrus-server
     install -m0755 client.py $out/bin/hydrus-client
+  '' + lib.optionalString enableSwftools ''
+    mkdir -p $out/${python3Packages.python.sitePackages}/bin
+    # swfrender seems to have to be called sfwrender_linux
+    # not sure if it can be loaded through PATH, but this is simpler
+    # $out/python3Packages.python.sitePackages/bin is correct NOT .../hydrus/bin
+    ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
   '';
 
   dontWrapQtApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc_2 ]})
   '';
 
   meta = with lib; {
