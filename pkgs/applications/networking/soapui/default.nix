@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, writeText, jdk, maven, makeWrapper }:
+{ fetchurl, lib, stdenv, writeText, jdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "soapui";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk maven ];
+  buildInputs = [ jdk ];
 
   installPhase = ''
     mkdir -p $out/share/java
