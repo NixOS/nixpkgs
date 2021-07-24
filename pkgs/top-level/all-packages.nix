@@ -26383,6 +26383,8 @@ in
     inherit (gnome2) libgnomecanvas;
   };
 
+  pdfchain = callPackage ../tools/typesetting/pdfchain { };
+
   pdfcpu = callPackage ../applications/graphics/pdfcpu { };
   pdftk = callPackage ../tools/typesetting/pdftk {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
