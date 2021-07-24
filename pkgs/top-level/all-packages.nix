@@ -6977,6 +6977,8 @@ in
 
   marktext = callPackage ../applications/misc/marktext { };
 
+  mars-mips = callPackage ../development/tools/mars-mips { };
+
   mawk = callPackage ../tools/text/mawk { };
 
   mb2md = callPackage ../tools/text/mb2md { };
