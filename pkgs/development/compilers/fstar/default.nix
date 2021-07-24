@@ -2,21 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "0.9.6.0";
+  version = "2021.07.24";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "0wix7l229afkn6c6sk4nwkfq0nznsiqdkds4ixi2yyf72immwmmb";
+    sha256 = "0h7q2zji1hpfg28d61lmv9jlhrcwn59asg3h78y7yagv7ky2rlwf";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   buildInputs = with ocamlPackages; [
     z3 ocaml findlib batteries menhir menhirLib stdint
-    zarith camlp4 yojson pprint
-    ulex ocaml-migrate-parsetree process ppx_deriving ppx_deriving_yojson ocamlbuild
+    zarith sedlex_2 ppxlib yojson pprint fileutils process ppx_deriving ppx_deriving_yojson ocamlbuild
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -24,13 +23,16 @@ stdenv.mkDerivation rec {
   preBuild = ''
     patchShebangs src/tools
     patchShebangs bin
+    substituteInPlace src/ocaml-output/Makefile \
+      --replace '$(shell ../tools/get_commit)' '${src.rev}'
   '';
-  buildFlags = [ "-C" "src/ocaml-output" ];
+
+  enableParallelBuilding = true;
 
   preInstall = ''
     mkdir -p $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstarlib
   '';
-  installFlags = [ "-C" "src/ocaml-output" ];
+
   postInstall = ''
     wrapProgram $out/bin/fstar.exe --prefix PATH ":" "${z3}/bin"
     installShellCompletion --bash .completion/bash/fstar.exe.bash
