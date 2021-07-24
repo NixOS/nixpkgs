@@ -2734,6 +2734,8 @@ in {
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
+  frilouz = callPackage ../development/python-modules/frilouz { };
+
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
   fritzprofiles = callPackage ../development/python-modules/fritzprofiles { };
