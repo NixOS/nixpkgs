@@ -26970,6 +26970,8 @@ in
 
   sniproxy = callPackage ../applications/networking/sniproxy { };
 
+  snixembed = callPackage ../applications/misc/snixembed { };
+
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
 
   sops = callPackage ../tools/security/sops { };
