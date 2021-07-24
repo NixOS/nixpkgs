@@ -1,9 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, librsync }:
 
 stdenv.mkDerivation rec {
-  name = "btar-1.1.1";
+  pname = "btar";
+  version = "1.1.1";
+
   src = fetchurl {
-    url = "http://vicerveza.homeunix.net/~viric/soft/btar/${name}.tar.gz";
+    url = "https://vicerveza.homeunix.net/~viric/soft/btar/btar-${version}.tar.gz";
     sha256 = "0miklk4bqblpyzh1bni4x6lqn88fa8fjn15x1k1n8bxkx60nlymd";
   };
 
@@ -16,13 +18,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ librsync ];
 
-  installPhase = "make install PREFIX=$out";
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tar-compatible block-based archiver";
     license = lib.licenses.gpl3Plus;
-    homepage = "http://viric.name/cgi-bin/btar";
-    platforms = with lib.platforms; all;
-    maintainers = with lib.maintainers; [viric];
+    homepage = "https://viric.name/cgi-bin/btar";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ viric ];
   };
 }
