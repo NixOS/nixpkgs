@@ -1,6 +1,6 @@
-{ lib, buildGoModule, fetchFromGitHub
+{ lib, stdenv, buildGoModule, fetchFromGitHub
 , pkg-config, taglib, alsa-lib
-, zlib
+, zlib, AudioToolbox, AppKit
 
 # Disable on-the-fly transcoding,
 # removing the dependency on ffmpeg.
@@ -21,7 +21,9 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ taglib alsa-lib zlib ];
+  buildInputs = [ taglib zlib ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.isDarwin [ AudioToolbox AppKit ];
   vendorSha256 = "0inxlqxnkglz4j14jav8080718a80nqdcl866lkql8r6zcxb4fm9";
 
   # TODO(Profpatsch): write a test for transcoding support,

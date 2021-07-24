@@ -24581,7 +24581,9 @@ in
 
   gollum = callPackage ../applications/misc/gollum { };
 
-  gonic = callPackage ../servers/gonic { };
+  gonic = callPackage ../servers/gonic {
+    inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox;
+  };
 
   googleearth = callPackage ../applications/misc/googleearth { };
 
