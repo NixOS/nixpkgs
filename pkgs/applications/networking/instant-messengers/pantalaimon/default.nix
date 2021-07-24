@@ -1,6 +1,6 @@
 { lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
   attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
-  prompt_toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
+  prompt-toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
   setuptools, fetchpatch, installShellFiles,
 
   pytest, faker, pytest-aiohttp, aioresponses,
@@ -40,7 +40,7 @@ buildPythonApplication rec {
     Logbook
     matrix-nio
     peewee
-    prompt_toolkit
+    prompt-toolkit
     setuptools
   ] ++ lib.optional enableDbusUi [
       dbus-python
