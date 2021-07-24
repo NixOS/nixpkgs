@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PYTHON=python" ];
   installFlags = [ "INSTALL=install" "PREFIX=$(out)" "SETUP_PREFIX=$(out)" ];
 
-  doCheck = true;
+  # Checks are broken on aarch64 darwin
+  # https://github.com/NixOS/nixpkgs/pull/118700#issuecomment-885892436
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Device Tree Compiler";
