@@ -5509,7 +5509,9 @@ in
 
   gpp = callPackage ../development/tools/gpp { };
 
-  gpredict = callPackage ../applications/science/astronomy/gpredict { };
+  gpredict = callPackage ../applications/science/astronomy/gpredict {
+    hamlib = hamlib_4;
+  };
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
@@ -15762,7 +15764,9 @@ in
 
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
 
-  hamlib = callPackage ../development/libraries/hamlib { };
+  hamlib = hamlib_3;
+  hamlib_3 = callPackage ../development/libraries/hamlib { };
+  hamlib_4 = callPackage ../development/libraries/hamlib/4.nix { };
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
@@ -23517,7 +23521,9 @@ in
     python3Packages = python37Packages;
   };
 
-  cqrlog = callPackage ../applications/radio/cqrlog { };
+  cqrlog = callPackage ../applications/radio/cqrlog {
+    hamlib = hamlib_4;
+  };
 
   crun = callPackage ../applications/virtualization/crun {};
 
@@ -23596,7 +23602,9 @@ in
     inherit (pkgs.gnome2) libart_lgpl libgnomeui;
   };
 
-  direwolf = callPackage ../applications/radio/direwolf { };
+  direwolf = callPackage ../applications/radio/direwolf {
+    hamlib = hamlib_4;
+  };
 
   dirt = callPackage ../applications/audio/dirt {};
 
@@ -23928,7 +23936,9 @@ in
 
   flexget = callPackage ../applications/networking/flexget { };
 
-  fldigi = callPackage ../applications/radio/fldigi { };
+  fldigi = callPackage ../applications/radio/fldigi {
+    hamlib = hamlib_4;
+  };
 
   flink = callPackage ../applications/networking/cluster/flink { };
 
