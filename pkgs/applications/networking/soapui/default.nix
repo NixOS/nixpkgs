@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "soapui";
-  version = "5.5.0";
+  version = "5.6.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/downloads.eviware/soapuios/${version}/SoapUI-${version}-linux-bin.tar.gz";
-    sha256 = "0v1wiy61jgvlxjk8qdvcnyn1gh2ysxf266zln7r4wpzwd5gc3dpw";
+    sha256 = "0vmj11fswja0ddnbc4vb7gj1al8km7ilma9bv1waaj8h5c8qpayi";
   };
 
   nativeBuildInputs = [ makeWrapper ];
