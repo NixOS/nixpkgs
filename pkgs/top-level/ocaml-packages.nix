@@ -611,6 +611,10 @@ let
 
     letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
 
+    letsencrypt-app = callPackage ../development/ocaml-modules/letsencrypt/app.nix { };
+
+    letsencrypt-dns = callPackage ../development/ocaml-modules/letsencrypt/dns.nix { };
+
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
