@@ -2722,6 +2722,18 @@ final: prev:
     meta.homepage = "https://github.com/glepnir/lspsaga.nvim/";
   };
 
+  lualine-lsp-progress = buildVimPluginFrom2Nix {
+    pname = "lualine-lsp-progress";
+    version = "2021-07-10";
+    src = fetchFromGitHub {
+      owner = "arkav";
+      repo = "lualine-lsp-progress";
+      rev = "7c024f40a3b26c8f7925745cdd2fe7acc96939c4";
+      sha256 = "0flmd69d7kjzcnzclx6k2yxjfy9nmkwxjlrgl3sszw5qpffxjlk1";
+    };
+    meta.homepage = "https://github.com/arkav/lualine-lsp-progress/";
+  };
+
   lualine-nvim = buildVimPluginFrom2Nix {
     pname = "lualine-nvim";
     version = "2021-05-27";
