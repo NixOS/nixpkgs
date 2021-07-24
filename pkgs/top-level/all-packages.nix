@@ -4429,6 +4429,8 @@ in
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
 
+  s9fes = callPackage ../development/interpreters/s9fes { };
+
   s-tar = callPackage ../tools/archivers/s-tar {};
 
   sonota = callPackage ../tools/misc/sonota { };
