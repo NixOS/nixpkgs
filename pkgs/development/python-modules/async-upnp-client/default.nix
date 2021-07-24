@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.19.0";
+  version = "0.19.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     rev = version;
-    sha256 = "0xj3j54nasl59gs1k84h3fixjsaqn7whg33h6wi99l5yfbwfqv8p";
+    sha256 = "sha256-qxEn9UrQuwRaP7sZlu3854gDI7Gqku055DF8KvsU6p4=";
   };
 
   propagatedBuildInputs = [

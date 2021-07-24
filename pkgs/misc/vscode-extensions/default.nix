@@ -1,4 +1,4 @@
-{ config, lib, buildEnv, callPackage, vscode-utils, asciidoctor, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq, shellcheck }:
+{ config, lib, buildEnv, callPackage, vscode-utils, asciidoctor, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq, shellcheck, moreutils, racket-minimal }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -511,6 +511,28 @@ let
           version = "8.0.1";
           sha256 = "017lqpmzjxq5f1zr49akcm9gfki0qq8v7pj7gks6a3szjdx16mnl";
         };
+      };
+
+      eugleo.magic-racket = buildVscodeMarketplaceExtension {
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/evzen-wybitul.magic-racket/changelog";
+          description = "The best coding experience for Racket in VS Code ";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket";
+          homepage = "https://github.com/Eugleo/magic-raket";
+          license = licenses.agpl3Only;
+
+        };
+        mktplcRef = {
+          name = "magic-racket";
+          publisher = "evzen-wybitul";
+          version = "0.5.7";
+          sha256 = "sha256-34/H0WgM73yzuOGU2w6Ipq7KuEBuN1bykcLGuvzY3mU=";
+        };
+        nativeBuildInputs = [ jq moreutils ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."magic-racket.general.racketPath".default = "${racket-minimal}/bin/racket"' package.json | sponge package.json
+        '';
       };
 
       file-icons.file-icons = buildVscodeMarketplaceExtension {

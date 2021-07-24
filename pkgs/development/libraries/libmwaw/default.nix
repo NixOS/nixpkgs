@@ -21,6 +21,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  enableParallelBuilding = true;
   meta = {
     inherit (s) version;
     description = "Import library for some old mac text documents";
