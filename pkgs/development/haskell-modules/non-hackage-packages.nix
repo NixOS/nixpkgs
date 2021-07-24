@@ -47,5 +47,7 @@ self: super: {
   # Generated with:
   # nix-shell -I nixpkgs=$PWD -p cabal-install -p cabal2nix --run 'cabal update; cabal2nix cabal://arion-compose > pkgs/applications/virtualization/arion/arion-compose.nix'
   arion-compose = self.callPackage ../../applications/virtualization/arion/arion-compose.nix {};
+  # cabal2nix cabal://ap-normalize-0.1.0.1
+  ap-normalize = self.callPackage ../misc/haskell/ap-normalize {};
 
 }
