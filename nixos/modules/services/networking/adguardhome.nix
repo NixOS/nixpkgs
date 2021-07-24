@@ -9,7 +9,7 @@ let
     "--no-check-update"
     "--pidfile /run/AdGuardHome/AdGuardHome.pid"
     "--work-dir /var/lib/AdGuardHome/"
-    "--config /var/lib/AdGuardHome/AdGuardHome.yaml"
+    "--config ${cfg.configPath}"
     "--host ${cfg.host}"
     "--port ${toString cfg.port}"
   ] ++ cfg.extraArgs);
@@ -32,6 +32,14 @@ in
       type = port;
       description = ''
         Port to serve HTTP pages on.
+      '';
+    };
+
+    configPath = mkOption {
+      type = path;
+      default = "/var/lib/AdGuardHome/AdGuardHome.yaml";
+      description = ''
+        Location of config file for AdGuardHome.
       '';
     };
 
