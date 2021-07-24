@@ -11615,6 +11615,8 @@ in
 
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
+  regenkfs = callPackage ../development/tools/knightos/regenkfs { };
+
   knightos-kcc = callPackage ../development/tools/knightos/kcc { };
 
   knightos-kimg = callPackage ../development/tools/knightos/kimg { };
