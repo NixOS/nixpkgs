@@ -58,19 +58,6 @@ let
     (mkOverride "ring-doorbell" "0.6.2"
       "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
 
-    # Pinned due to API changes in pyatv>=0.8.0
-    (self: super: {
-      pyatv = super.pyatv.overridePythonAttrs (olAttrs: rec {
-        version = "0.7.7";
-        src = fetchFromGitHub {
-          owner = "postlund";
-          repo = "pyatv";
-          rev = "v${version}";
-          sha256 = "sha256-dPnh8XZN7ZVR2rYNnj7GSYXW5I2GNQwD/KRDTgs2AtI=";
-        };
-      });
-    })
-
     # Pinned due to API changes in pyflunearyou>=2.0
     (self: super: {
       pyflunearyou = super.pyflunearyou.overridePythonAttrs (oldAttrs: rec {
@@ -170,7 +157,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.7.0";
+  hassVersion = "2021.7.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -187,7 +174,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1dx1pmi0w265pyajmmvd7k6vb5z7s77a7b161zd0n4zsb989dil6";
+    sha256 = "1y6p3hg487ishar1r8vir5cxfbaw4c86s5w3zn9bmbf6jbd51pyk";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
