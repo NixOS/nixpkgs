@@ -1,4 +1,6 @@
-{ config, lib, buildEnv, callPackage, vscode-utils, asciidoctor, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq, shellcheck, moreutils, racket-minimal, clojure-lsp }:
+{ config, lib, buildEnv, callPackage, vscode-utils, asciidoctor, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq
+, shellcheck, moreutils, racket-minimal, clojure-lsp
+}:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
