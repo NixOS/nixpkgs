@@ -3,14 +3,18 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.2.176.0";
+  version = "1.2.182.0";
 
-  src = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "Vulkan-Tools";
-    rev = "sdk-${version}";
-    sha256 = "15jkjn3ildam4ad2x0d8ysm3i2l6nrvqv0h44spkipf13bqiq5wg";
-  };
+  # It's not strictly necessary to have matching versions here, however
+  # since we're using the SDK version we may as well be consistent with
+  # the rest of nixpkgs.
+  src = (assert version == vulkan-headers.version;
+    fetchFromGitHub {
+      owner = "KhronosGroup";
+      repo = "Vulkan-Tools";
+      rev = "sdk-${version}";
+      sha256 = "028l2l7jx4443k8207q8jmjq1mnnm9kgyl2417jrkrvylcbv8ji9";
+    });
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ glslang libX11 libxcb libXrandr vulkan-headers vulkan-loader wayland ];

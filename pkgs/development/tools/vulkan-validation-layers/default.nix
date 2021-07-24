@@ -18,12 +18,13 @@ let
   #
   # The git hashes required for all of these deps is documented upstream here:
   # https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/master/scripts/known_good.json
+  # and https://github.com/KhronosGroup/glslang/blob/master/known_good.json
   localSpirvHeaders = spirv-headers.overrideAttrs (_: {
     src = fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "SPIRV-Headers";
-      rev = "75b30a659c8a4979104986652c54cc421fc51129";
-      sha256 = "1yzdp3m50zxabkg93j1lmazs45wjp20szvxiv8ifgcdjxmyzi5ji";
+      rev = "dafead1765f6c1a5f9f8a76387dcb2abe4e54acd"; # pin
+      sha256 = "1kj6wcx9y7r1xyg8n7ai2pzrg9ira7hbakr45wh5p4zyxh0m45n8";
     };
   });
   localGlslang = (glslang.override {
@@ -31,8 +32,8 @@ let
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Tools";
-        rev = "c79edd260c2b503f0eca57310057b4a100999cc5";
-        sha256 = "01qq5g2a8c5ljn1j6yqh3v90kbhavibh45dcnasixvpf5q7k2ary";
+        rev = "dc72924cb31cd9f3dbc3eb47e9d926cf641e3a07"; # pin
+        sha256 = "0pxgbq6xapw9hgrzb3rk5cylzgg1y1bkqz5wxzwqls63pwga5912";
       };
     });
     argSpirv-headers = localSpirvHeaders;
@@ -40,32 +41,33 @@ let
     src = fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "glslang";
-      rev = "e56beaee736863ce48455955158f1839e6e4c1a1";
-      sha256 = "062v3zq88dvgpy3xlb86lj4skk9472jh7hv835d8gs8zbyy0s3aw";
+      rev = "18eef33bd7a4bf5ad8c69f99cb72022608cf6e73"; # pin
+      sha256 = "0wwj7q509pkp8wj7120g1n2ddl4x2r03ljf5czd9794ji6yraidn";
     };
   });
   robin-hood-hashing = fetchFromGitHub {
     owner = "martinus";
     repo = "robin-hood-hashing";
-    rev = "eee46f9985c3c65a05b35660c6866f8f8f1a3ba3";
-    sha256 = "0h2ljqxnc1gr3p3iqk627n65c7pixpzxhd9vaybr24f90f069lmw";
+    rev = "3.11.2"; # pin
+    sha256 = "0103mnqpmka1smy0arnrbihlvi7i8xr5im0px8wn4faw4flikkcm";
   };
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.2.176.0";
+  version = "1.2.182.0";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
   outputs = ["out" "headers"];
   outputInclude = "headers";
 
-  src = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "Vulkan-ValidationLayers";
-    rev = "sdk-${version}";
-    sha256 = "1mp110a686lwl6wfplg79vwnlrvbz2pd5mjkgyg9i3jyfs65lr33";
-  };
+  src = (assert version == vulkan-headers.version;
+    fetchFromGitHub {
+      owner = "KhronosGroup";
+      repo = "Vulkan-ValidationLayers";
+      rev = "sdk-${version}";
+      sha256 = "1fnmb7vbm7y1x67bf1xiwdrpj9j4lkvhk9xhb6hp6x2aryvcyrnc";
+    });
 
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.
