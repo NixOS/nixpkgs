@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-wSJ6PqW7c8DJCsGuPhXaVGM2s/1dZhLjG4C0JWPcjhY=";
+    hash = "sha256-08hanzRnt6WuMriNNtOd+ZHycr2XBeIRav+5sgvT7Do=";
   };
 
   nativeBuildInputs = [ pytest-runner ];
