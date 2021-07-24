@@ -258,8 +258,7 @@ in
 
       environment.systemPackages = []
         ++ optional cfg.man.enable manual.manpages
-        ++ optionals cfg.doc.enable ([ manual.manualHTML nixos-help ]
-           ++ optionals config.services.xserver.enable [ pkgs.nixos-icons ]);
+        ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
 
       services.getty.helpLine = mkIf cfg.doc.enable (
           "\nRun 'nixos-help' for the NixOS manual."
