@@ -134,6 +134,7 @@ in
       services.accounts-daemon.enable = true;
       services.bamf.enable = true;
       services.colord.enable = mkDefault true;
+      services.fwupd.enable = mkDefault true;
       services.tumbler.enable = mkDefault true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs.pantheon; [
