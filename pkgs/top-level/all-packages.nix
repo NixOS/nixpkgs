@@ -3543,9 +3543,7 @@ in
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
 
-  btar = callPackage ../tools/backup/btar {
-    librsync = librsync_0_9;
-  };
+  btar = callPackage ../tools/backup/btar { };
 
   bud = callPackage ../tools/networking/bud { };
 
@@ -17048,8 +17046,6 @@ in
   };
 
   librsync = callPackage ../development/libraries/librsync { };
-
-  librsync_0_9 = callPackage ../development/libraries/librsync/0.9.nix { };
 
   librttopo = callPackage ../development/libraries/librttopo { };
 
