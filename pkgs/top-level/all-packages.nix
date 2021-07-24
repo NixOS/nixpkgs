@@ -11625,6 +11625,8 @@ in
 
   knightos-mkrom = callPackage ../development/tools/knightos/mkrom { };
 
+  remkrom = callPackage ../development/tools/knightos/remkrom { };
+
   knightos-patchrom = callPackage ../development/tools/knightos/patchrom { };
 
   knightos-mktiupgrade = callPackage ../development/tools/knightos/mktiupgrade { };
