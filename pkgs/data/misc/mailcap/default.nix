@@ -1,13 +1,13 @@
 { lib, fetchzip }:
 
 let
-  version = "2.1.52";
+  version = "2.1.53";
 
 in fetchzip {
   name = "mailcap-${version}";
 
   url = "https://releases.pagure.org/mailcap/mailcap-${version}.tar.xz";
-  sha256 = "sha256-2GRNg3zoMPMaOk2zoAx5sVIzjbQhnYJuaO8nrzWujVc=";
+  sha256 = "sha256-6JPj2tZgoTEZ8hNEi9ZZhElBNm9SRTSXifMmCicwiLo=";
 
   postFetch = ''
     tar -xavf $downloadedFile --strip-components=1

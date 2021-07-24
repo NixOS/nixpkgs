@@ -5,7 +5,7 @@
 , ptable
 , click
 , requests
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 , urllib3
 , pytest
@@ -20,9 +20,9 @@ buildPythonPackage rec {
   version = "5.8.4";
   disabled = isPy27;
 
-  propagatedBuildInputs = [ ptable click requests prompt_toolkit pygments urllib3 ];
+  propagatedBuildInputs = [ ptable click requests prompt-toolkit pygments urllib3 ];
 
-  checkInputs = [ pytest pytest-cov mock sphinx testtools ptable click requests prompt_toolkit pygments urllib3 ];
+  checkInputs = [ pytest pytest-cov mock sphinx testtools ];
 
   checkPhase = ''
     pytest

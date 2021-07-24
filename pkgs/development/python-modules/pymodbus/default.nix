@@ -5,7 +5,7 @@
 , click
 , fetchFromGitHub
 , mock
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 , pyserial
 , pyserial-asyncio
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     click
-    prompt_toolkit
+    prompt-toolkit
     pygments
     pyserial
     pyserial-asyncio

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "glu";
-  version = "9.0.1";
+  version = "9.0.2";
 
   src = fetchurl {
     url = "https://mesa.freedesktop.org/archive/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1g2m634p73mixkzv1qz1d0flwm390ydi41bwmchiqvdssqnlqnpv";
+    sha256 = "sha256-bnKA/1hcah2d/N8vykiSUWNLM3e/wzwp5AAkZqONAtQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];

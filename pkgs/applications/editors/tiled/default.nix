@@ -15,8 +15,6 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [ python qtbase qttools ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Free, easy to use and flexible tile map editor";
     homepage = "https://www.mapeditor.org/";

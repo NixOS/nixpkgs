@@ -1,27 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
 , six
 , wcwidth
 }:
 
 buildPythonPackage rec {
-  pname = "prompt_toolkit";
+  pname = "prompt-toolkit";
   version = "3.0.19";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "prompt_toolkit";
+    inherit version;
     sha256 = "08360ee3a3148bdb5163621709ee322ec34fc4375099afa4bbf751e9b7b7fa4f";
   };
-  checkPhase = ''
-    py.test -k 'not test_pathcompleter_can_expanduser'
-  '';
 
-  checkInputs = [ pytest ];
   propagatedBuildInputs = [ six wcwidth ];
 
-  meta = {
+  checkInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    "test_pathcompleter_can_expanduser"
+  ];
+
+  meta = with lib; {
     description = "Python library for building powerful interactive command lines";
     longDescription = ''
       prompt_toolkit could be a replacement for readline, but it can be
@@ -30,6 +33,7 @@ buildPythonPackage rec {
       with a nice interactive Python shell (called ptpython) built on top.
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
-    license = lib.licenses.bsd3;
+    maintainers = with maintainers; [ ];
+    license = licenses.bsd3;
   };
 }
