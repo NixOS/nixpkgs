@@ -2,8 +2,8 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-directory-studio";
-  version = "2.0.0-M15";
-  versionWithDate = "2.0.0.v20200411-M15";
+  version = "2.0.0-M17";
+  versionWithDate = "2.0.0.v20210717-M17";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
