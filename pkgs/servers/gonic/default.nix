@@ -12,12 +12,12 @@
 
 buildGoModule rec {
   pname = "gonic";
-  version = "0.12.2";
+  version = "0.13.1";
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = pname;
-    rev = "7d420f61a90739cd82a81c2740274c538405d950";
-    sha256 = "0ix33cbhik1580h1jgv6n512dcgip436wmljpiw53c9v438k0ps5";
+    rev = "v${version}";
+    sha256 = "08zr5cbmn25wfi1sjfsb311ycn1855x57ypyn5165zcz49pcfzxn";
   };
 
   nativeBuildInputs = [ pkg-config ];
