@@ -6215,6 +6215,8 @@ in {
 
   pylxd = callPackage ../development/python-modules/pylxd { };
 
+  pylzma = callPackage ../development/python-modules/pylzma { };
+
   pymacaroons = callPackage ../development/python-modules/pymacaroons { };
 
   pymaging = callPackage ../development/python-modules/pymaging { };
