@@ -26446,6 +26446,8 @@ in
     plugins = [];
   };
 
+  pidgin-indicator = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-indicator { };
+
   pidgin-latex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
     texLive = texlive.combined.scheme-basic;
   };
