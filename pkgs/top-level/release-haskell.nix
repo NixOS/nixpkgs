@@ -258,8 +258,14 @@ let
       pkgsMusl.haskellPackages =
         removePlatforms
           [
-            "aarch64-linux" # aarch64 does not appear to be supported
-            "x86_64-darwin" # musl only supports linux
+            # pkgsMusl is compiled natively with musl.  It is not
+            # cross-compiled (unlike pkgsStatic).  We can only
+            # natively bootstrap GHC with musl on x86_64-linux because
+            # upstream doesn't provide a musl bindist for aarch64.
+            "aarch64-linux"
+
+            # musl only supports linux, not darwin.
+            "x86_64-darwin"
           ]
           {
             inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
