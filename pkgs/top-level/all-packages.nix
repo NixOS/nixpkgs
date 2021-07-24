@@ -8321,6 +8321,8 @@ in
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
+  qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
+
   quadrafuzz = callPackage ../applications/audio/quadrafuzz { };
 
   quickfix = callPackage ../development/libraries/quickfix { };
