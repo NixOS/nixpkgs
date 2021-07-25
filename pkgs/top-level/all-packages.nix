@@ -14488,6 +14488,8 @@ in
 
   xxdiff-tip = xxdiff;
 
+  xxgdb = callPackage ../development/tools/misc/xxgdb { };
+
   yaml2json = callPackage ../development/tools/yaml2json { };
 
   yams = callPackage ../applications/audio/yams { };
