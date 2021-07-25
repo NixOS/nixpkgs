@@ -8565,6 +8565,8 @@ in
 
   rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
+  rsmixer = callPackage ../applications/audio/rsmixer { };
+
   rss-bridge-cli = callPackage ../applications/misc/rss-bridge-cli { };
 
   rss2email = callPackage ../applications/networking/feedreaders/rss2email {
