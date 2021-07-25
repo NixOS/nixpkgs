@@ -5,14 +5,15 @@ with lib;
 let
   cfg = config.services.syncoid;
 
-  # Extract pool names of local datasets (ones that don't contain "@") that
-  # have the specified type (either "source" or "target")
-  getPools = type: unique (map (d: head (builtins.match "([^/]+).*" d)) (
-    # Filter local datasets
-    filter (d: !hasInfix "@" d)
-    # Get datasets of the specified type
-    (catAttrs type (attrValues cfg.commands))
-  ));
+  # Extract the pool name of a local dataset (any dataset not containing "@")
+  localPoolName = d: optionals (d != null) (
+    let m = builtins.match "([^/@]+)[^@]*" d; in
+    optionals (m != null) m);
+
+  # Escape as required by: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
+  escapeUnitName = name:
+    lib.concatMapStrings (s: if lib.isList s then "-" else s)
+    (builtins.split "[^a-zA-Z0-9_.\\-]+" name);
 in {
 
     # Interface
@@ -77,6 +78,14 @@ in {
         '';
       };
 
+      service = mkOption {
+        type = types.attrs;
+        default = {};
+        description = ''
+          Systemd configuration common to all syncoid services.
+        '';
+      };
+
       commands = mkOption {
         type = types.attrsOf (types.submodule ({ name, ... }: {
           options = {
@@ -99,13 +108,7 @@ in {
               '';
             };
 
-            recursive = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Whether to also transfer child datasets.
-              '';
-            };
+            recursive = mkEnableOption ''the transfer of child datasets'';
 
             sshKey = mkOption {
               type = types.nullOr types.path;
@@ -145,6 +148,14 @@ in {
               '';
             };
 
+            service = mkOption {
+              type = types.attrs;
+              default = {};
+              description = ''
+                Systemd configuration specific to this syncoid service.
+              '';
+            };
+
             extraArgs = mkOption {
               type = types.listOf types.str;
               default = [];
@@ -170,11 +181,15 @@ in {
     # Implementation
 
     config = mkIf cfg.enable {
-      users =  {
+      users = {
         users = mkIf (cfg.user == "syncoid") {
           syncoid = {
             group = cfg.group;
             isSystemUser = true;
+            # For syncoid to be able to create /var/lib/syncoid/.ssh/
+            # and to use custom ssh_config or known_hosts.
+            home = "/var/lib/syncoid";
+            createHome = false;
           };
         };
         groups = mkIf (cfg.group == "syncoid") {
@@ -182,35 +197,99 @@ in {
         };
       };
 
-      systemd.services.syncoid = {
-        description = "Syncoid ZFS synchronization service";
-        script = concatMapStringsSep "\n" (c: lib.escapeShellArgs
-          ([ "${pkgs.sanoid}/bin/syncoid" ]
-            ++ (optionals c.useCommonArgs cfg.commonArgs)
-            ++ (optional c.recursive "-r")
-            ++ (optionals (c.sshKey != null) [ "--sshkey" c.sshKey ])
-            ++ c.extraArgs
-            ++ [ "--sendoptions" c.sendOptions
-                 "--recvoptions" c.recvOptions
-                 "--no-privilege-elevation"
-                 c.source c.target
-               ])) (attrValues cfg.commands);
-        after = [ "zfs.target" ];
-        serviceConfig = {
-          ExecStartPre = let
-            allowCmd = permissions: pool: lib.escapeShellArgs [
-              "+/run/booted-system/sw/bin/zfs" "allow"
-              cfg.user (concatStringsSep "," permissions) pool
-            ];
-          in
-            (map (allowCmd [ "hold" "send" "snapshot" "destroy" ]) (getPools "source")) ++
-            (map (allowCmd [ "create" "mount" "receive" "rollback" ]) (getPools "target"));
-          User = cfg.user;
-          Group = cfg.group;
-        };
-        startAt = cfg.interval;
-      };
+      systemd.services = mapAttrs' (name: c:
+        nameValuePair "syncoid-${escapeUnitName name}" (mkMerge [
+          { description = "Syncoid ZFS synchronization from ${c.source} to ${c.target}";
+            after = [ "zfs.target" ];
+            startAt = cfg.interval;
+            # syncoid may need zpool to get feature@extensible_dataset
+            path = [ "/run/booted-system/sw/bin/" ];
+            serviceConfig = {
+              ExecStartPre =
+                map (pool: lib.escapeShellArgs [
+                  "+/run/booted-system/sw/bin/zfs" "allow"
+                  cfg.user "bookmark,hold,send,snapshot,destroy" pool
+                  # Permissions snapshot and destroy are in case --no-sync-snap is not used
+                ]) (localPoolName c.source) ++
+                map (pool: lib.escapeShellArgs [
+                  "+/run/booted-system/sw/bin/zfs" "allow"
+                  cfg.user "create,mount,receive,rollback" pool
+                ]) (localPoolName c.target);
+              ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
+                ++ optionals c.useCommonArgs cfg.commonArgs
+                ++ optional c.recursive "-r"
+                ++ optionals (c.sshKey != null) [ "--sshkey" c.sshKey ]
+                ++ c.extraArgs
+                ++ [ "--sendoptions" c.sendOptions
+                     "--recvoptions" c.recvOptions
+                     "--no-privilege-elevation"
+                     c.source c.target
+                   ]);
+              User = cfg.user;
+              Group = cfg.group;
+              StateDirectory = [ "syncoid" ];
+              StateDirectoryMode = "700";
+              # Prevent SSH control sockets of different syncoid services from interfering
+              PrivateTmp = true;
+              # Permissive access to /proc because syncoid
+              # calls ps(1) to detect ongoing `zfs receive`.
+              ProcSubset = "all";
+              ProtectProc = "default";
+
+              # The following options are only for optimizing:
+              # systemd-analyze security | grep syncoid-'*'
+              AmbientCapabilities = "";
+              CapabilityBoundingSet = "";
+              DeviceAllow = ["/dev/zfs"];
+              LockPersonality = true;
+              MemoryDenyWriteExecute = true;
+              NoNewPrivileges = true;
+              PrivateDevices = true;
+              PrivateMounts = true;
+              PrivateNetwork = mkDefault false;
+              PrivateUsers = true;
+              ProtectClock = true;
+              ProtectControlGroups = true;
+              ProtectHome = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectSystem = "strict";
+              RemoveIPC = true;
+              RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+              RestrictNamespaces = true;
+              RestrictRealtime = true;
+              RestrictSUIDSGID = true;
+              RootDirectory = "/run/syncoid/${escapeUnitName name}";
+              RootDirectoryStartOnly = true;
+              BindPaths = [ "/dev/zfs" ];
+              BindReadOnlyPaths = [ builtins.storeDir "/etc" "/run" "/bin/sh" ];
+              # Avoid useless mounting of RootDirectory= in the own RootDirectory= of ExecStart='s mount namespace.
+              InaccessiblePaths = ["-+/run/syncoid/${escapeUnitName name}"];
+              MountAPIVFS = true;
+              # Create RootDirectory= in the host's mount namespace.
+              RuntimeDirectory = [ "syncoid/${escapeUnitName name}" ];
+              RuntimeDirectoryMode = "700";
+              SystemCallFilter = [
+                "@system-service"
+                # Groups in @system-service which do not contain a syscall listed by:
+                # perf stat -x, 2>perf.log -e 'syscalls:sys_enter_*' syncoid …
+                # awk >perf.syscalls -F "," '$1 > 0 {sub("syscalls:sys_enter_","",$3); print $3}' perf.log
+                # systemd-analyze syscall-filter | grep -v -e '#' | sed -e ':loop; /^[^ ]/N; s/\n //; t loop' | grep $(printf ' -e \\<%s\\>' $(cat perf.syscalls)) | cut -f 1 -d ' '
+                "~@aio" "~@chown" "~@keyring" "~@memlock" "~@privileged"
+                "~@resources" "~@setuid" "~@sync" "~@timer"
+              ];
+              SystemCallArchitectures = "native";
+              # This is for BindPaths= and BindReadOnlyPaths=
+              # to allow traversal of directories they create in RootDirectory=.
+              UMask = "0066";
+            };
+          }
+          cfg.service
+          c.service
+        ])) cfg.commands;
     };
 
-    meta.maintainers = with maintainers; [ lopsided98 ];
+    meta.maintainers = with maintainers; [ julm lopsided98 ];
   }

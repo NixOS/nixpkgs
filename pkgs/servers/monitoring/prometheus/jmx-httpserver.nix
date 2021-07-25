@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/libexec

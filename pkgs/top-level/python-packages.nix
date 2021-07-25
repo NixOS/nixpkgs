@@ -2734,6 +2734,8 @@ in {
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
+  frilouz = callPackage ../development/python-modules/frilouz { };
+
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
   fritzprofiles = callPackage ../development/python-modules/fritzprofiles { };
@@ -6215,6 +6217,8 @@ in {
 
   pylxd = callPackage ../development/python-modules/pylxd { };
 
+  pylzma = callPackage ../development/python-modules/pylzma { };
+
   pymacaroons = callPackage ../development/python-modules/pymacaroons { };
 
   pymaging = callPackage ../development/python-modules/pymaging { };
@@ -8457,6 +8461,8 @@ in {
   sympy = callPackage ../development/python-modules/sympy { };
 
   syncer = callPackage ../development/python-modules/syncer { };
+
+  synergy = callPackage ../development/python-modules/synergy { };
 
   synologydsm-api = callPackage ../development/python-modules/synologydsm-api { };
 
