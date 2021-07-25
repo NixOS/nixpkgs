@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, autoreconfHook, pkg-config, systemd, glib, dbus, libnl, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "neard-0.16";
+  pname = "neard";
+  version = "0.16";
 
   src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/network/nfc/neard.git/snapshot/${name}.tar.gz";
+    url = "https://git.kernel.org/pub/scm/network/nfc/neard.git/snapshot/neard-${version}.tar.gz";
     sha256 = "0bpdmyxvd3z54p95apz4bjb5jp8hbc04sicjapcryjwa8mh6pbil";
   };
 
