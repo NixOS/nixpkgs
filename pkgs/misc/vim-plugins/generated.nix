@@ -1941,6 +1941,18 @@ final: prev:
     meta.homepage = "https://github.com/buoto/gotests-vim/";
   };
 
+  goto-preview = buildVimPluginFrom2Nix {
+    pname = "goto-preview";
+    version = "2021-06-20";
+    src = fetchFromGitHub {
+      owner = "rmagatti";
+      repo = "goto-preview";
+      rev = "39aa1e0334b577c59c4f7177ef36624bdd83f100";
+      sha256 = "0rr22r1yp7s3hqfdqf48wlv2bqw9j5izwgm3np7x1ygp85xizcbg";
+    };
+    meta.homepage = "https://github.com/rmagatti/goto-preview/";
+  };
+
   goyo-vim = buildVimPluginFrom2Nix {
     pname = "goyo-vim";
     version = "2020-08-29";
