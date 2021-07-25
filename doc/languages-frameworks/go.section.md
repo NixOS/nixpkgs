@@ -13,6 +13,7 @@ In the following is an example expression using `buildGoModule`, the following a
 
 - `vendorSha256`: is the hash of the output of the intermediate fetcher derivation. `vendorSha256` can also take `null` as an input. When `null` is used as a value, rather than fetching the dependencies and vendoring them, we use the vendoring included within the source repo. If you'd like to not have to update this field on dependency changes, run `go mod vendor` in your source repo and set `vendorSha256 = null;`
 - `runVend`: runs the vend command to generate the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build.
+- `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if any dependency has case-insensitive conflicts which will produce platform dependant `vendorSha256` checksums.
 
 ```nix
 pet = buildGoModule rec {
