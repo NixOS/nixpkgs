@@ -62,7 +62,7 @@ mkChromiumDerivation (base: rec {
       -e '/\[Desktop Entry\]/a\' \
       -e 'StartupWMClass=chromium-browser' \
       $out/share/applications/chromium-browser.desktop
-  '' + lib.optionalString (channel == "dev") ''
+  '' + lib.optionalString (channel != "stable") ''
     cp -v "$buildPath/crashpad_handler" "$libExecPath/"
   '';
 
@@ -84,7 +84,7 @@ mkChromiumDerivation (base: rec {
       else "https://www.chromium.org/";
     maintainers = with maintainers; if ungoogled
       then [ squalus primeos ]
-      else [ primeos thefloweringash bendlas ];
+      else [ primeos thefloweringash ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
     mainProgram = "chromium";
