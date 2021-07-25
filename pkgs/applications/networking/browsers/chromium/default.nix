@@ -149,9 +149,11 @@ in stdenv.mkDerivation {
     + "chromium${suffix}-${version}";
   inherit version;
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper ed
+  ];
 
+  buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
     gsettings-desktop-schemas glib gtk3
 
