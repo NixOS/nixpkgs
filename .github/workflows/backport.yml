@@ -21,7 +21,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           github_workspace: ${{ github.workspace }}
           # should be kept in sync with `uses`
-          version: 0.0.5
+          version: v0.0.5
           pull_description: |-
             Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
 
