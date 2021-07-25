@@ -73,6 +73,17 @@ let
   # Extract unique dataset names
   datasets = unique (attrNames cfg.datasets);
 
+  # Function to build "zfs allow" and "zfs unallow" commands for the
+  # filesystems we've delegated permissions to.
+  buildAllowCommand = zfsAction: permissions: dataset: lib.escapeShellArgs [
+    # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+    "-+/run/booted-system/sw/bin/zfs"
+    zfsAction
+    "sanoid"
+    (concatStringsSep "," permissions)
+    dataset
+  ];
+
   configFile = let
     mkValueString = v:
       if builtins.isList v then concatStringsSep "," v
@@ -156,18 +167,13 @@ in {
       systemd.services.sanoid = {
         description = "Sanoid snapshot service";
         serviceConfig = {
-          ExecStartPre = map (dataset: lib.escapeShellArgs [
-            "+/run/booted-system/sw/bin/zfs" "allow"
-            "sanoid" "snapshot,mount,destroy" dataset
-          ]) datasets;
+          ExecStartPre = (map (buildAllowCommand "allow" [ "snapshot" "mount" "destroy" ]) datasets);
+          ExecStopPost = (map (buildAllowCommand "unallow" [ "snapshot" "mount" "destroy" ]) datasets);
           ExecStart = lib.escapeShellArgs ([
             "${pkgs.sanoid}/bin/sanoid"
             "--cron"
             "--configdir" (pkgs.writeTextDir "sanoid.conf" configFile)
           ] ++ cfg.extraArgs);
-          ExecStopPost = map (dataset: lib.escapeShellArgs [
-            "+/run/booted-system/sw/bin/zfs" "unallow" "sanoid" dataset
-          ]) datasets;
           User = "sanoid";
           Group = "sanoid";
           DynamicUser = true;
