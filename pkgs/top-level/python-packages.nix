@@ -8945,6 +8945,8 @@ in {
 
   userpath = callPackage ../development/python-modules/userpath { };
 
+  ush = callPackage ../development/python-modules/ush { };
+
   utils = callPackage ../development/python-modules/utils { };
 
   uuid = callPackage ../development/python-modules/uuid { };
