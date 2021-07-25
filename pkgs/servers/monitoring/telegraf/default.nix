@@ -15,7 +15,8 @@ buildGoModule rec {
     sha256 = "sha256-8shyNKwSg3pUxfQsIHBNnIaks/86vHuHN/SroDE3QFU=";
   };
 
-  vendorSha256 = "sha256-jP6P2NShzlFCptCQ04XY4cIrONNArwthiEONEo32Btw=";
+  vendorSha256 = "sha256-GMNyeWa2dz+q4RYS+DDkpj9sx1PlPvSuWYcHSM2umRE=";
+  proxyVendor = true;
 
   preBuild = ''
     buildFlagsArray+=("-ldflags=-w -s -X main.version=${version}")
