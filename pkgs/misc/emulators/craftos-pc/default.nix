@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, poco, openssl, SDL2, SDL2_mixer, ncurses, libpng
-, libharu, ApplicationServices, pngpp, libX11, Cocoa }:
+, libharu, ApplicationServices, pngpp, libX11, Cocoa, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "craftos-pc";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ poco openssl SDL2 SDL2_mixer ncurses libpng libharu pngpp libX11 ]
+  buildInputs = [ poco openssl SDL2 SDL2_mixer ncurses libpng libharu pngpp libX11 xlibsWrapper ]
      ++ lib.optionals stdenv.isDarwin [ ApplicationServices Cocoa ];
 
   preBuild = ''
