@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libffi";
-  version = "3.3";
+  version = "3.4.2";
 
   src = fetchurl {
-    url = "https://sourceware.org/pub/libffi/${pname}-${version}.tar.gz";
-    sha256 = "0mi0cpf8aa40ljjmzxb7im6dbj45bb0kllcd09xgmp834y9agyvj";
+    url = "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "081nx7wpzds168jbr59m34n6s3lyiq6r8zggvqxvlslsc4hvf3sl";
   };
 
   patches = [];
