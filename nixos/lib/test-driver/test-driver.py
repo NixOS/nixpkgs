@@ -931,7 +931,7 @@ def join_all() -> None:
 
 
 def test_script() -> None:
-    exec(os.environ["testScript"])
+    exec(os.environ["testScript"], globals())
 
 
 def run_tests() -> None:
@@ -946,7 +946,8 @@ def run_tests() -> None:
                 traceback.print_exc()
                 sys.exit(1)
     else:
-        ptpython.repl.embed(locals(), globals())
+        # Don't use locals(); see https://github.com/NixOS/nixpkgs/pull/111486.
+        ptpython.repl.embed(globals())
 
     # TODO: Collect coverage data
 
