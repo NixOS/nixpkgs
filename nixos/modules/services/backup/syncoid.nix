@@ -14,6 +14,14 @@ let
   escapeUnitName = name:
     lib.concatMapStrings (s: if lib.isList s then "-" else s)
     (builtins.split "[^a-zA-Z0-9_.\\-]+" name);
+
+  # Function to build "zfs allow" and "zfs unallow" commands for the
+  # filesystems we've delegated permissions to.
+  buildAllowCommand = zfsAction: permissions: dataset: lib.escapeShellArgs [
+    # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+    "-+/run/booted-system/sw/bin/zfs" zfsAction
+    cfg.user (concatStringsSep "," permissions) dataset
+  ];
 in {
 
     # Interface
@@ -206,15 +214,13 @@ in {
             path = [ "/run/booted-system/sw/bin/" ];
             serviceConfig = {
               ExecStartPre =
-                map (dataset: lib.escapeShellArgs [
-                  "+/run/booted-system/sw/bin/zfs" "allow"
-                  cfg.user "bookmark,hold,send,snapshot,destroy" dataset
-                  # Permissions snapshot and destroy are in case --no-sync-snap is not used
-                ]) (localDatasetName c.source) ++
-                map (dataset: lib.escapeShellArgs [
-                  "+/run/booted-system/sw/bin/zfs" "allow"
-                  cfg.user "create,mount,receive,rollback" dataset
-                ]) (localDatasetName c.target);
+                # Permissions snapshot and destroy are in case --no-sync-snap is not used
+                (map (buildAllowCommand "allow" [ "bookmark" "hold" "send" "snapshot" "destroy" ]) (localDatasetName c.source)) ++
+                (map (buildAllowCommand "allow" [ "create" "mount" "receive" "rollback" ]) (localDatasetName c.target));
+              ExecStopPost =
+                # Permissions snapshot and destroy are in case --no-sync-snap is not used
+                (map (buildAllowCommand "unallow" [ "bookmark" "hold" "send" "snapshot" "destroy" ]) (localDatasetName c.source)) ++
+                (map (buildAllowCommand "unallow" [ "create" "mount" "receive" "rollback" ]) (localDatasetName c.target));
               ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"
