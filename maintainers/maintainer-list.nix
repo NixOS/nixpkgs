@@ -1933,6 +1933,16 @@
     githubId = 25088352;
     name = "Christian Kögler";
   };
+  ckie = {
+    email = "nixpkgs-0efe364@ckie.dev";
+    github = "ckiee";
+    githubId = 2526321;
+    keys = [{
+      longkeyid = "rsa4096/0x13E79449C0525215";
+      fingerprint = "539F 0655 4D35 38A5 429A  E253 13E7 9449 C052 5215";
+    }];
+    name = "ckie";
+  };
   clkamp = {
     email = "c@lkamp.de";
     github = "clkamp";
@@ -9007,16 +9017,6 @@
     github = "rongcuid";
     githubId = 1312525;
     name = "Rongcui Dong";
-  };
-  ronthecookie = {
-    name = "Ron B";
-    email = "me@ronthecookie.me";
-    github = "ronthecookie";
-    githubId = 2526321;
-    keys = [{
-      longkeyid = "rsa2048/0x6F5B32DE5E5FA80C";
-      fingerprint = "4B2C DDA5 FA35 642D 956D  7294 6F5B 32DE 5E5F A80C";
-    }];
   };
   roosemberth = {
     email = "roosembert.palacios+nixpkgs@posteo.ch";
