@@ -3817,6 +3817,8 @@ in {
 
   Kajiki = callPackage ../development/python-modules/kajiki { };
 
+  kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
+
   kaptan = callPackage ../development/python-modules/kaptan { };
 
   karton-asciimagic = callPackage ../development/python-modules/karton-asciimagic { };
