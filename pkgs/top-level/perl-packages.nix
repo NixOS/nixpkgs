@@ -18807,6 +18807,18 @@ let
     };
     buildInputs = [ FileShareDirInstall JSONMaybeXS TestDifferences TestException XMLWriter YAML ];
     propagatedBuildInputs = [ CarpClan DBI FileShareDir Moo PackageVariant ParseRecDescent TryTiny ];
+
+    postPatch = ''
+      patchShebangs script
+    '';
+
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      for file in $out/bin/*; do
+        shortenPerlShebang $file
+      done
+    '';
+
     meta = {
       description = "SQL DDL transformations and more";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
