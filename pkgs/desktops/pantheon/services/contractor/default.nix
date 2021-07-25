@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "contractor";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FHLecRxTE8v3M7cV6rkQKNhPhKFhuhvkzB5C+u7Z+Ms=";
+    sha256 = "sha256-S6HFX4pyWasrxPkplVh2FJ0XoAqiDc7lNQjQT//hHOs=";
   };
 
   passthru = {
