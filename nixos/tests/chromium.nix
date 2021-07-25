@@ -80,12 +80,8 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
             binary = pname
         # Add optional CLI options:
         options = []
-        major_version = "${versions.major (getVersion chromiumPkg.name)}"
-        if major_version > "91" and pname.startswith("google-chrome"):
-            # To avoid a GPU crash:
-            options += ["--use-gl=angle", "--use-angle=swiftshader"]
-        options.append("file://${startupHTML}")
         # Launch the process:
+        options.append("file://${startupHTML}")
         machine.succeed(ru(f'ulimit -c unlimited; {binary} {shlex.join(options)} & disown'))
         if binary.startswith("google-chrome"):
             # Need to click away the first window:
