@@ -3902,6 +3902,8 @@ in
 
   c14 = callPackage ../applications/networking/c14 { };
 
+  corehunt = libsForQt5.callPackage ../applications/misc/corehunt { };
+
   certstrap = callPackage ../tools/security/certstrap { };
 
   cfssl = callPackage ../tools/security/cfssl { };
