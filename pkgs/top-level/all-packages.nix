@@ -26734,6 +26734,8 @@ in
     tag = "-daemon-qt5";
   };
 
+  quill-qr = callPackage ../tools/security/quill-qr { };
+
   quirc = callPackage ../tools/graphics/quirc {};
 
   quilter = callPackage ../applications/editors/quilter { };
