@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
-  phases = ["unpackPhase" "installPhase"];
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out

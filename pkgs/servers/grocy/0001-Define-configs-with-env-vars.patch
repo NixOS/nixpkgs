@@ -1,7 +1,7 @@
-From 7ed6c641cc501246931721700b73f40dce7e8f4b Mon Sep 17 00:00:00 2001
+From 035709eeac697945a26276cc17b996c1a0678ddc Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
 Date: Tue, 22 Dec 2020 15:38:56 +0100
-Subject: [PATCH 1/2] Define configs with env vars
+Subject: [PATCH] Define configs with env vars
 
 ---
  app.php                      | 4 ++--
@@ -11,32 +11,32 @@ Subject: [PATCH 1/2] Define configs with env vars
  4 files changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/app.php b/app.php
-index 8176ebe..04432ba 100644
+index 17ba6a99..89f48089 100644
 --- a/app.php
 +++ b/app.php
-@@ -10,7 +10,7 @@ use Slim\Factory\AppFactory;
+@@ -11,7 +11,7 @@ use Slim\Views\Blade;
  require_once __DIR__ . '/vendor/autoload.php';
  
  // Load config files
 -require_once GROCY_DATAPATH . '/config.php';
 +require_once getenv('GROCY_CONFIG_FILE');
  require_once __DIR__ . '/config-dist.php'; // For not in own config defined values we use the default ones
+ require_once __DIR__ . '/helpers/ConfigurationValidator.php';
  
- // Definitions for dev/demo/prerelease mode
-@@ -37,7 +37,7 @@ $app = AppFactory::create();
+@@ -62,7 +62,7 @@ $app = AppFactory::create();
  
  $container = $app->getContainer();
  $container->set('view', function (Container $container) {
--	return new Slim\Views\Blade(__DIR__ . '/views', GROCY_DATAPATH . '/viewcache');
-+	return new Slim\Views\Blade(__DIR__ . '/views', getenv('GROCY_CACHE_DIR'));
+-	return new Blade(__DIR__ . '/views', GROCY_DATAPATH . '/viewcache');
++	return new Blade(__DIR__ . '/views', getenv('GROCY_CACHE_DIR'));
  });
+ 
  $container->set('UrlManager', function (Container $container) {
- 	return new UrlManager(GROCY_BASE_URL);
 diff --git a/services/DatabaseService.php b/services/DatabaseService.php
-index d1080b0..8bc4ee1 100644
+index dfcd5d4b..bc8d1a1d 100644
 --- a/services/DatabaseService.php
 +++ b/services/DatabaseService.php
-@@ -105,6 +105,6 @@ class DatabaseService
+@@ -107,6 +107,6 @@ class DatabaseService
  			return GROCY_DATAPATH . '/grocy_' . $dbSuffix . '.db';
  		}
  
@@ -45,23 +45,23 @@ index d1080b0..8bc4ee1 100644
  	}
  }
 diff --git a/services/FilesService.php b/services/FilesService.php
-index 8c1483e..8f74b4b 100644
+index 7d070350..fba2e923 100644
 --- a/services/FilesService.php
 +++ b/services/FilesService.php
-@@ -70,7 +70,7 @@ class FilesService extends BaseService
- 	{
- 		parent::__construct();
+@@ -103,7 +103,7 @@ class FilesService extends BaseService
  
--		$this->StoragePath = GROCY_DATAPATH . '/storage';
+ 	public function GetFilePath($group, $fileName)
+ 	{
+-		$groupFolderPath = $this->StoragePath . '/' . $group;
 +		$this->StoragePath = getenv('GROCY_STORAGE_DIR');
  
- 		if (!file_exists($this->StoragePath))
+ 		if (!file_exists($groupFolderPath))
  		{
 diff --git a/services/StockService.php b/services/StockService.php
-index 4741b4b..6d4e748 100644
+index f73ac5bd..6b6e693a 100644
 --- a/services/StockService.php
 +++ b/services/StockService.php
-@@ -1374,8 +1374,7 @@ class StockService extends BaseService
+@@ -1589,8 +1589,7 @@ class StockService extends BaseService
  			throw new \Exception('No barcode lookup plugin defined');
  		}
  
@@ -72,5 +72,5 @@ index 4741b4b..6d4e748 100644
  		{
  			require_once $path;
 -- 
-2.29.2
+2.31.1
 

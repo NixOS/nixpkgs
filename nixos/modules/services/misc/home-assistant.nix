@@ -313,6 +313,7 @@ in {
           "w800rf32"
           "xbee"
           "zha"
+          "zwave"
         ];
       in {
         ExecStart = "${package}/bin/hass --runner --config '${cfg.configDir}'";

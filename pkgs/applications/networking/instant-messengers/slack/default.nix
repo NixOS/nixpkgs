@@ -50,8 +50,12 @@ let
   x86_64-linux-version = "4.17.0";
   x86_64-linux-sha256 = "07ccms58pq27ilkyhcf6cgwb7qrddwil5kgy8yv95ljikqzi5rxi";
 
+  aarch64-darwin-version = "4.17.0";
+  aarch64-darwin-sha256 = "1a5crmnbz8ng3z2pk5zw17dds9d5fyir4rkvv611fn858kq5fv46";
+
   version = {
     x86_64-darwin = x86_64-darwin-version;
+    aarch64-darwin = aarch64-darwin-version;
     x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
@@ -64,6 +68,10 @@ let
           url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
           sha256 = x86_64-darwin-sha256;
         };
+        aarch64-darwin = fetchurl {
+          url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+          sha256 = aarch64-darwin-sha256;
+        };
         x86_64-linux = fetchurl {
           url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
           sha256 = x86_64-linux-sha256;
@@ -75,7 +83,7 @@ let
     homepage = "https://slack.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin"];
   };
 
   linux = stdenv.mkDerivation rec {
