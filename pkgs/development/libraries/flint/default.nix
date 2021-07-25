@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , gmp
 , mpir
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "2.8.0";
 
   src = fetchurl {
-    url = "http://www.flintlib.org/flint-${version}.tar.gz";
+    url = "https://www.flintlib.org/flint-${version}.tar.gz";
     sha256 = "sha256-WEI1zcOdd52ZIOrvFv4ITzwm/+7qADo//2SiCg8zRJ4=";
   };
 
@@ -27,9 +28,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withBlas [
     openblas
   ];
+
   propagatedBuildInputs = [
     mpfr # flint.h includes mpfr.h
   ];
+
   configureFlags = [
     "--with-gmp=${gmp}"
     "--with-mpir=${mpir}"
@@ -40,13 +43,14 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  meta = {
+
+  meta = with lib; {
     description = "Fast Library for Number Theory";
-    license = lib.licenses.gpl2Plus;
-    maintainers = lib.teams.sage.members;
-    platforms = lib.platforms.unix;
-    homepage = "http://www.flintlib.org/";
-    downloadPage = "http://www.flintlib.org/downloads.html";
+    license = licenses.gpl2Plus;
+    maintainers = teams.sage.members;
+    platforms = platforms.unix;
+    homepage = "https://www.flintlib.org/";
+    downloadPage = "https://www.flintlib.org/downloads.html";
     updateWalker = true;
   };
 }
