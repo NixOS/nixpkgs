@@ -8,7 +8,6 @@
 , typed-ast
 , pytestCheckHook
 , setuptools-scm
-, setuptools-scm-git-archive
 , pylint
 }:
 
@@ -29,7 +28,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
-    setuptools-scm-git-archive
   ];
 
   # From astroid/__pkginfo__.py
