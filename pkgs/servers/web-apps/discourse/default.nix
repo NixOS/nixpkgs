@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "2.7.4";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-3cvrdWBXRM5F8qFEqbe8ru1U0wBqCkRxK7GAV0beJNk=";
+    sha256 = "sha256-OykWaiBAHcZy41i+aRzBHCRgwnfQUBijHjb+ofIk25M=";
   };
 
   runtimeDeps = [
@@ -64,7 +64,6 @@ let
       });
     in
       stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
-        inherit name pname version src meta;
         pluginName = if name != null then name else "${pname}-${version}";
         phases = [ "unpackPhase" "installPhase" ];
         installPhase = ''
@@ -151,6 +150,7 @@ let
       brotli
       procps
       nodePackages.uglify-js
+      nodePackages.terser
     ];
 
     patches = [

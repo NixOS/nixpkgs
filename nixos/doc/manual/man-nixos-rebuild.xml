@@ -108,7 +108,23 @@
     </arg>
      </group> <replaceable>name</replaceable>
    </arg>
+
    <sbr />
+
+   <arg>
+    <option>--build-host</option> <replaceable>host</replaceable>
+   </arg>
+
+   <arg>
+    <option>--target-host</option> <replaceable>host</replaceable>
+   </arg>
+
+   <arg>
+    <option>--use-remote-sudo</option>
+   </arg>
+
+   <sbr />
+
    <arg>
     <option>--show-trace</option>
    </arg>

@@ -67,8 +67,7 @@ in {
         lib.nameValuePair ename (
           self.callPackage ({ melpaBuild, fetchurl, ... }@pkgargs:
           melpaBuild {
-            inherit pname;
-            ename = ename;
+            inherit pname ename commit;
             version = if isNull version then "" else
               lib.concatStringsSep "." (map toString version);
             # TODO: Broken should not result in src being null (hack to avoid eval errors)

@@ -21,7 +21,6 @@ python3Packages.buildPythonApplication rec {
     blinker
     natsort
     # extras_require
-    boto
     brotli
     feedgenerator
     zopfli

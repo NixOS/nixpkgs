@@ -19,7 +19,7 @@
 , pythonOlder
 , pytz
 , requests
-, requests_toolbelt
+, requests-toolbelt
 , requests-file
 , requests-mock
 , xmlsec
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     lxml
     pytz
     requests
-    requests_toolbelt
+    requests-toolbelt
     requests-file
     xmlsec
   ];

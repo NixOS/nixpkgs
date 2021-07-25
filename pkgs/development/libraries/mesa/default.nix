@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch, buildPackages
 , meson, pkg-config, ninja
-, intltool, bison, flex, file, python3Packages
+, intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
@@ -31,7 +31,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.1.4";
+  version = "21.1.5";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -45,7 +45,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "02z9g6zpkg1p1sm8f84xdi7v2n7x534x9pn565bvcr411527y5qz";
+    sha256 = "0vbn40azh7izrxvb15c51z3lfcb9zas2v1wc4z9cxvja0y9p4b02";
   };
 
   prePatch = "patchShebangs .";
@@ -143,7 +143,7 @@ self = stdenv.mkDerivation {
     intltool bison flex file
     python3Packages.python python3Packages.Mako
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
-    wayland # For wayland-scanner during the build
+    wayland-scanner
   ];
 
   propagatedBuildInputs = with xorg; [
@@ -220,6 +220,7 @@ self = stdenv.mkDerivation {
   passthru = {
     inherit libdrm;
     inherit (libglvnd) driverLink;
+    inherit llvmPackages;
 
     tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
       name = "mesa-dev-does-not-depend-on-llvm";

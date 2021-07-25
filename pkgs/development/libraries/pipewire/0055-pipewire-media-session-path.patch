@@ -2,16 +2,13 @@ diff --git a/meson_options.txt b/meson_options.txt
 index 93b5e2a9..1b915ac3 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -13,6 +13,9 @@ option('media-session',
-        description: 'Build and install pipewire-media-session',
+@@ -200,3 +200,6 @@ option('media-session',
         type: 'feature',
         value: 'auto')
 +option('media-session-prefix',
 +       description: 'Install directory for pipewire-media-session and its support files',
 +       type: 'string')
- option('man',
-        description: 'Build manpages',
-        type: 'feature',
+ option('session-managers',
 diff --git a/src/daemon/systemd/user/meson.build b/src/daemon/systemd/user/meson.build
 index 1edebb2d..251270eb 100644
 --- a/src/daemon/systemd/user/meson.build

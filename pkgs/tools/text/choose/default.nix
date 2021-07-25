@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "choose";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "theryangeary";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j3861pxqw0lnamb201c7h5w7npzyiwwb6c1xzxjv72m2ccvz76j";
+    sha256 = "sha256-QX0tAo1cGPpRhggiAPxsVhKXg6TgaVl1lcp3na7jUNw=";
   };
 
-  cargoSha256 = "1fdcz7vnmrw92y7bx49napi7j2jjc41liz5k63kbijfwqnaaiswy";
+  cargoSha256 = "sha256-3pK7y/zC5iZkto5p5Xerlpu3yfN6sB2kjLF2fURlUj0=";
 
   meta = with lib; {
     description = "A human-friendly and fast alternative to cut and (sometimes) awk";

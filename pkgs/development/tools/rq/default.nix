@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, libiconv, llvmPackages, v8 }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rq";
@@ -13,19 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0071q08f75qrxdkbx1b9phqpbj15r79jbh391y32acifi7hr35hj";
 
-  buildInputs = [ llvmPackages.libclang v8 ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
-
   postPatch = ''
     # Remove #[deny(warnings)] which is equivalent to -Werror in C.
     # Prevents build failures when upgrading rustc, which may give more warnings.
     substituteInPlace src/lib.rs \
       --replace "#![deny(warnings)]" ""
-  '';
-
-  configurePhase = ''
-    export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
-    export V8_SOURCE="${v8}"
   '';
 
   meta = with lib; {

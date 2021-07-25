@@ -18,6 +18,8 @@
         Additional commands to be executed for finalizing the derivation with runner script.
 - `runScript`
         A command that would be executed inside the sandbox and passed all the command line arguments. It defaults to `bash`.
+- `profile`
+        Optional script for `/etc/profile` within the sandbox.
 
 One can create a simple environment using a `shell.nix` like that:
 

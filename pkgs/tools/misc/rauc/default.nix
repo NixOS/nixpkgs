@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-dbusinterfacesdir=${placeholder "out"}/share/dbus-1/interfaces"
-    "--with-dbuspolicydir=${placeholder "out"}/share/dbus-1/systemd.d"
+    "--with-dbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-dbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
   ];
 

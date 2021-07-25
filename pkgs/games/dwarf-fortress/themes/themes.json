@@ -1,8 +1,8 @@
 [
   {
     "name": "afro-graphics",
-    "version": "47.04",
-    "sha256": "1x1ir0qi3g8wgzwm1pnrkrqb6lhnjq87vs30l8kva6y5wr4sz7q0"
+    "version": "47.05",
+    "sha256": "0gqrxb4bbx1h93xjz4ygd7yp8g5barj2zc6y7xvr94ww8b9a2r28"
   },
   {
     "name": "autoreiv",
@@ -21,13 +21,13 @@
   },
   {
     "name": "gemset",
-    "version": "47.04",
-    "sha256": "015nkkdnpykhz6a1n8qi3wgap19a4wavz4n2xbvfa4g770lcjd92"
+    "version": "47.05",
+    "sha256": "1ivsbj71w3zwxnaz0405xhqhn4yzdfziijc0s0vmbmcphhhqnjaj"
   },
   {
     "name": "ironhand",
-    "version": "47.04",
-    "sha256": "0x3hi1isgc2cv7c3qz87rm7ik0kbd748djpnghvjdqpj3a0n1ih2"
+    "version": "47.05",
+    "sha256": "003yrwishkzf6nvr6xlldbnd3x7rf5ds7l91mc0npdq1lcl0br9w"
   },
   {
     "name": "jolly-bastion",
@@ -36,33 +36,33 @@
   },
   {
     "name": "mayday",
-    "version": "47.04a",
-    "sha256": "1hpj40762n81grsddg3nc5jxc0bqmy2xamxvsgxzb2bx0b7akz0w"
+    "version": "47.05",
+    "sha256": "17sdvr9a98xx5r2nrr3m4jlddvlb4h6qlch8r23g9g4mj0hsifnj"
   },
   {
     "name": "meph",
-    "version": "47.04_v5.5.0_V1.1.2",
-    "sha256": "0q8hfm66rag61qd2hab7lsr4nyg52bn1hvy6bl7z6kv4yj5cra50"
+    "version": "47.05_v5.5.1-V",
+    "sha256": "1kiqxiqw686dii5x7zav2nsw15csg0grv4h8hrb764rl4fw6x9nl"
   },
   {
     "name": "obsidian",
-    "version": "47.04a",
-    "sha256": "0y5kmj362i9y8w1n5d1nx80yq88c0xqps9i02gvnls6r421a4nms"
+    "version": "47.05",
+    "sha256": "1dkwdwm52fsj4gqqqr5vppbsk8a4kd3i7d3qawawgl0qn6q139xs"
   },
   {
     "name": "phoebus",
-    "version": "47.04a",
-    "sha256": "1ihbqs5a3b8pydbcynblvgw2bxkgr9hhpmgjlji7a7zvz8m6h6pw"
+    "version": "47.05",
+    "sha256": "18pn3dqyk9hp82gva92c6y3vk52s366rrx74rdnvahswdr5dmq4d"
   },
   {
     "name": "rally-ho",
-    "version": "47.04",
-    "sha256": "0pmvpfbj07ll674lw7mjgkb4kgjk4mxr82fjq4ppvwrnzx6vi2g0"
+    "version": "47.05",
+    "sha256": "1h3jqq0yq2rbzbl70sq85lgdpwswczpay16kqfwq1n8zdisl4gqn"
   },
   {
     "name": "spacefox",
-    "version": "47.04",
-    "sha256": "0sk3k5bcpfl2xind4vfrgzbcqqbw0mg47pm3d3h44vi6hl3bdaqj"
+    "version": "47.05a",
+    "sha256": "1y1rbsxr1m0mb2k02q6gh24c4nyqc9lw98dvfckp2bzc5f9cx3ks"
   },
   {
     "name": "taffer",
@@ -76,8 +76,8 @@
   },
   {
     "name": "vettlingr",
-    "version": "1.4a",
-    "sha256": "1p4y0dm52rb49dnmcnivddlsd94m4gr1pxn04fpjbrvck22klgpj"
+    "version": "47.05",
+    "sha256": "0s1vy3ssp1hk8f6wlkz09xy5v747dpbsgw5vi6i1mq3lnlcy68vq"
   },
   {
     "name": "wanderlust",

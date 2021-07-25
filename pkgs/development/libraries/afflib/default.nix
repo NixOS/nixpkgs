@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsdOriginal;
     maintainers = [ lib.maintainers.raskin ];
-    inherit version;
     downloadPage = "https://github.com/sshock/AFFLIBv3/tags";
   };
 }

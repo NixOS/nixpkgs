@@ -1,6 +1,7 @@
 { lib
 , attrs
 , bson
+, pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
 , hypothesis
@@ -17,6 +18,10 @@ buildPythonPackage rec {
   pname = "cattrs";
   version = "1.7.0";
   format = "pyproject";
+
+  # https://cattrs.readthedocs.io/en/latest/history.html#id33:
+  # "Python 2, 3.5 and 3.6 support removal. If you need it, use a version below 1.1.0."
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Tinche";

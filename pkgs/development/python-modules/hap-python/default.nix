@@ -4,7 +4,6 @@
 , cryptography
 , curve25519-donna
 , ecdsa
-, ed25519
 , fetchFromGitHub
 , h11
 , pyqrcode
@@ -17,15 +16,14 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "3.5.0";
-  disabled = pythonOlder "3.5";
+  version = "3.5.2";
+  disabled = pythonOlder "3.6";
 
-  # pypi package does not include tests
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
     rev = "v${version}";
-    sha256 = "1vzlfx0gpidl0rzv4z94pziwm6rj4lrilly5pykgq984y708pcqf";
+    sha256 = "1irf4dcq9fcqvvjbijkymm63n2s7a19igs1zsbv7y8fa5a2yprhd";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +31,6 @@ buildPythonPackage rec {
     cryptography
     curve25519-donna
     ecdsa
-    ed25519
     h11
     pyqrcode
     zeroconf

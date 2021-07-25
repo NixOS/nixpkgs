@@ -30,7 +30,12 @@ let
          fi
      '';
 
-in pkgs.runCommand "test haskell.lib.setBuildTarget" {} ''
+in
+pkgs.runCommand "test haskell.lib.setBuildTarget" {
+  meta = {
+    inherit (drv.meta) platforms;
+  };
+} ''
   ${test "foo" "bar"}
   ${test "bar" "foo"}
   touch "$out"

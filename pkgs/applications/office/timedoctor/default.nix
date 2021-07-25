@@ -36,9 +36,9 @@ appimageTools.wrapType2 {
     git
     glib
     glibc
-    gnome.gdk_pixbuf
-    gnome.gtk
-    gnome.gtk.dev
+    gdk-pixbuf
+    gtk3
+    gtk3.dev
     gnome.zenity
     gnome2.GConf
     gnumake
@@ -48,7 +48,7 @@ appimageTools.wrapType2 {
     gtk3.dev
     gtk3-x11
     gtk3-x11.dev
-    kdialog
+    plasma5Packages.kdialog
     libappindicator-gtk2.out
     libexif
     (libjpeg.override { enableJpeg8 = true; }).out
@@ -70,12 +70,12 @@ appimageTools.wrapType2 {
     sqlite.dev
     udev
     unzip
-    utillinux
+    util-linux
     watch
     wget
     which
     wrapGAppsHook
-    xdg_utils
+    xdg-utils
     xorg.libX11
     xorg.libXau
     xorg.libXaw

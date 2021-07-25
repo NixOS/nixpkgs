@@ -98,7 +98,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  uuid = "gsconnect@andyholmes.github.io";
+  passthru = {
+    extensionUuid = "gsconnect@andyholmes.github.io";
+    extensionPortalSlug = "gsconnect";
+  };
 
   passthru = {
     tests = {

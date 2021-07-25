@@ -86,8 +86,7 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version src;
 
-  buildInputs = [ makeWrapper ];
-  nativeBuildInputs = [ jdk11 gradle_5 ];
+  nativeBuildInputs = [ makeWrapper jdk11 gradle_5 ];
 
   buildPhase = ''
     mkdir -p -- ./freeplane/build/emoji/{txt,resources/images}

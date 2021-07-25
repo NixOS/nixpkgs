@@ -1,37 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pkg-config, openssl, oniguruma, CoreServices }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pkg-config, openssl, oniguruma, CoreServices, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.13.0";
+  version = "unstable-2021-07-14";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-yTvFQWmNxoB+CNZLHGmzJq7mKuOUxUqV4g8PWlOlRbM=";
+    # unstable because the latest release fails to build
+    rev = "312ffcb04c06c5f157b9fd2b944b858703238592";
+    sha256 = "0i5zqs1gwxhvsynb540c3azfi4357igr4i5p0bi3h7ras2asas8w";
   };
 
-  cargoSha256 = "sha256:19vijhcs1i02jhz68acil7psv3pcn0jzi1i4y2l05i4m3ayxivjf";
+  cargoSha256 = "0g5z0s837cfwzral2zz0avp0xywyaa3l1adxg520qrnga7z0kbh8";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config installShellFiles];
   buildInputs = [ openssl oniguruma ]
     ++ lib.optional stdenv.isDarwin CoreServices;
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
   postInstall = ''
-    install -D -m 444 completions/zola.bash \
-      -t $out/share/bash-completion/completions
-    install -D -m 444 completions/_zola \
-      -t $out/share/zsh/site-functions
-    install -D -m 444 completions/zola.fish \
-      -t $out/share/fish/vendor_completions.d
+    installShellCompletion --cmd zola \
+      --fish completions/zola.fish \
+      --zsh completions/_zola \
+      --bash completions/zola.bash
   '';
 
   meta = with lib; {
     description = "A fast static site generator with everything built-in";
     homepage = "https://www.getzola.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dywedir _0x4A6F ];
+    maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
+    # set because of unstable-* version
+    mainProgram = "zola";
   };
 }

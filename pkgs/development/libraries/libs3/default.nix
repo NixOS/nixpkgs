@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, curl, libxml2 }:
 
 stdenv.mkDerivation {
-  name = "libs3-2018-12-03";
+  pname = "libs3";
+  version = "unstable-2018-12-03";
 
   src = fetchFromGitHub {
     owner = "bji";

@@ -53,14 +53,14 @@ stdenv.mkDerivation rec {
     homepage = "https://theunarchiver.com";
     description = "An archive unpacker program";
     longDescription = ''
-      The Unarchiver is an archive unpacker program with support for the popular \
-      zip, RAR, 7z, tar, gzip, bzip2, LZMA, XZ, CAB, MSI, NSIS, EXE, ISO, BIN, \
-      and split file formats, as well as the old Stuffit, Stuffit X, DiskDouble, \
-      Compact Pro, Packit, cpio, compress (.Z), ARJ, ARC, PAK, ACE, ZOO, LZH, \
+      The Unarchiver is an archive unpacker program with support for the popular
+      zip, RAR, 7z, tar, gzip, bzip2, LZMA, XZ, CAB, MSI, NSIS, EXE, ISO, BIN,
+      and split file formats, as well as the old Stuffit, Stuffit X, DiskDouble,
+      Compact Pro, Packit, cpio, compress (.Z), ARJ, ARC, PAK, ACE, ZOO, LZH,
       ADF, DMS, LZX, PowerPacker, LBR, Squeeze, Crunch, and other old formats.
     '';
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

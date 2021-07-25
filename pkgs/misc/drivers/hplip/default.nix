@@ -101,7 +101,12 @@ python3Packages.buildPythonApplication {
     ./hplip-3.20.11-nixos-cups-ppd-search-path.patch
   ];
 
-  prePatch = ''
+  postPatch = ''
+    # https://github.com/NixOS/nixpkgs/issues/44230
+    substituteInPlace createPPD.sh \
+      --replace ppdc "${cups}/bin/ppdc" \
+      --replace "gzip -c" "gzip -cn"
+
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
       -e s,/etc/hp,$out/etc/hp,g \
@@ -118,35 +123,40 @@ python3Packages.buildPythonApplication {
       {} +
   '';
 
-  preConfigure = ''
-    export configureFlags="$configureFlags
-      --with-hpppddir=$out/share/cups/model/HP
-      --with-cupsfilterdir=$out/lib/cups/filter
-      --with-cupsbackenddir=$out/lib/cups/backend
-      --with-icondir=$out/share/applications
-      --with-systraydir=$out/xdg/autostart
-      --with-mimedir=$out/etc/cups
-      --enable-policykit
-      ${lib.optionalString withStaticPPDInstall "--enable-cups-ppd-install"}
-      --disable-qt4
-      ${lib.optionalString withQt5 "--enable-qt5"}
-    "
+  configureFlags = let out = placeholder "out"; in [
+    "--with-hpppddir=${out}/share/cups/model/HP"
+    "--with-cupsfilterdir=${out}/lib/cups/filter"
+    "--with-cupsbackenddir=${out}/lib/cups/backend"
+    "--with-icondir=${out}/share/applications"
+    "--with-systraydir=${out}/xdg/autostart"
+    "--with-mimedir=${out}/etc/cups"
+    "--enable-policykit"
+    "--disable-qt4"
+  ]
+    ++ lib.optional withStaticPPDInstall "--enable-cups-ppd-install"
+    ++ lib.optional withQt5 "--enable-qt5"
+    ;
 
-    export makeFlags="
-      halpredir=$out/share/hal/fdi/preprobe/10osvendor
-      rulesdir=$out/etc/udev/rules.d
-      policykit_dir=$out/share/polkit-1/actions
-      policykit_dbus_etcdir=$out/etc/dbus-1/system.d
-      policykit_dbus_sharedir=$out/share/dbus-1/system-services
-      hplip_confdir=$out/etc/hp
-      hplip_statedir=$out/var/lib/hp
-    "
+  # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
+  # generation of '*.ppd' files.
+  # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
+  # Could not find how to fix the problem in 'ppdc' so this is a workaround.
+  CUPS_DATADIR = "${cups}/share/cups";
 
-    # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
-    # generation of '*.ppd' files.
-    # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
-    # Could not find how to fix the problem in 'ppdc' so this is a workaround.
-    export CUPS_DATADIR="${cups}/share/cups"
+  makeFlags = let out = placeholder "out"; in [
+    "halpredir=${out}/share/hal/fdi/preprobe/10osvendor"
+    "rulesdir=${out}/etc/udev/rules.d"
+    "policykit_dir=${out}/share/polkit-1/actions"
+    "policykit_dbus_etcdir=${out}/etc/dbus-1/system.d"
+    "policykit_dbus_sharedir=${out}/share/dbus-1/system-services"
+    "hplip_confdir=${out}/etc/hp"
+    "hplip_statedir=${out}/var/lib/hp"
+  ];
+
+  postConfigure = ''
+    # don't save timestamp, in order to improve reproducibility
+    substituteInPlace Makefile \
+      --replace "GZIP_ENV = --best" "GZIP_ENV = --best -n"
   '';
 
   enableParallelBuilding = true;

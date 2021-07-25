@@ -480,6 +480,7 @@ dont-distribute-packages:
  - avers-api
  - avers-api-docs
  - avers-server
+ - aviation-navigation
  - avro-piper
  - awesomium
  - awesomium-glut
@@ -564,6 +565,7 @@ dont-distribute-packages:
  - bip32
  - birch-beer
  - bird
+ - biscuit-servant
  - bit-array
  - bitcoin-address
  - bitcoin-api
@@ -807,7 +809,6 @@ dont-distribute-packages:
  - convertible-text
  - coordinate
  - copilot
- - copilot-c99
  - copilot-cbmc
  - copilot-language
  - copilot-libraries
@@ -1443,6 +1444,7 @@ dont-distribute-packages:
  - hasql-cursor-query
  - hasql-postgres
  - hasql-postgres-options
+ - hasql-queue
  - hasql-th
  - hastache-aeson
  - haste-app
@@ -1832,6 +1834,11 @@ dont-distribute-packages:
  - keera-hails-reactive-yampa
  - keera-hails-reactivelenses
  - keera-posture
+ - keid-core
+ - keid-geometry
+ - keid-render-basic
+ - keid-resource-gltf
+ - keid-ui-dearimgui
  - kevin
  - keysafe
  - keyvaluehash
@@ -2333,6 +2340,7 @@ dont-distribute-packages:
  - polysemy-fs
  - polysemy-fskvstore
  - polysemy-http
+ - polysemy-keyed-state
  - polysemy-kvstore-jsonfile
  - polysemy-log
  - polysemy-log-co
@@ -2344,6 +2352,7 @@ dont-distribute-packages:
  - polysemy-path
  - polysemy-plugin
  - polysemy-readline
+ - polysemy-req
  - polysemy-resume
  - polysemy-test
  - polysemy-time
@@ -2884,6 +2893,7 @@ dont-distribute-packages:
  - swearjure
  - sweet-egison
  - switch
+ - sydtest-persistent-postgresql
  - sylvia
  - sym-plot
  - symantic-atom

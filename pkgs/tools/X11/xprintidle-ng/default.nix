@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace "AC_PREREQ([2.62])" "AC_PREREQ([2.63])"
+      --replace "AC_PREREQ([2.62])" "AC_PREREQ([2.64])"
   '';
 
   nativeBuildInputs = [

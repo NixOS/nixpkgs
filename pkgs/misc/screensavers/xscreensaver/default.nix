@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix; # Once had cygwin problems
-    inherit version;
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
     updateWalker = true;
   };

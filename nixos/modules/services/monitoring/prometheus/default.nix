@@ -323,15 +323,13 @@ let
               HTTP username
             '';
           };
-          password = mkOption {
-            type = types.str;
-            description = ''
-              HTTP password
-            '';
-          };
+          password = mkOpt types.str "HTTP password";
+          password_file = mkOpt types.str "HTTP password file";
         };
       }) ''
-        Optional http login credentials for metrics scraping.
+        Sets the `Authorization` header on every scrape request with the
+        configured username and password.
+        password and password_file are mutually exclusive.
       '';
 
       bearer_token = mkOpt types.str ''

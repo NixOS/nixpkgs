@@ -21,12 +21,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/gnome-shell/extensions/${uuid}
-    cp -r * $out/share/gnome-shell/extensions/${uuid}/
+    mkdir -p "$out/share/gnome-shell/extensions/tilingnome@rliang.github.com"
+    cp -r * "$out/share/gnome-shell/extensions/tilingnome@rliang.github.com/"
     runHook postInstall
   '';
 
-  uuid = "tilingnome@rliang.github.com";
+  passthru = {
+    extensionUuid = "tilingnome@rliang.github.com";
+    extensionPortalSlug = "tilingnome";
+  };
 
   meta = with lib; {
     description = "Tiling window management for GNOME Shell";

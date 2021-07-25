@@ -2,12 +2,9 @@
 , blas, gfortran, openssh, mpi
 } :
 
-let
-  version = "5.8";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "globalarrays";
-  inherit version;
+  version = "5.8";
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";

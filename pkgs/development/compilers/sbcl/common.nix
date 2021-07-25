@@ -110,7 +110,6 @@ stdenv.mkDerivation rec {
   '');
 
   meta = sbclBootstrap.meta // {
-    inherit version;
     updateWalker = true;
   };
 }

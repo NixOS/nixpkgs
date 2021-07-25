@@ -11,7 +11,7 @@ let
 
       server = mkOption {
         type = types.str;
-        example = "chat.freenode.net";
+        example = "irc.libera.chat";
         description = ''
           IRC server address.
         '';
@@ -150,8 +150,8 @@ in
           '';
           example = literalExample ''
             {
-              "freenode" = {
-                server = "chat.freenode.net";
+              "libera" = {
+                server = "irc.libera.chat";
                 port = 6697;
                 useSSL = true;
                 modules = [ "simple_away" ];

@@ -33,6 +33,5 @@ buildPythonApplication rec {
     homepage = "https://github.com/insanum/gcalcli";
     license = licenses.mit;
     maintainers = with maintainers; [ nocoolnametom ];
-    inherit version;
   };
 }

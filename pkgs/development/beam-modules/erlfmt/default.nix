@@ -1,7 +1,7 @@
 { fetchFromGitHub, rebar3Relx, lib }:
 
 rebar3Relx rec {
-  name = "erlfmt";
+  pname = "erlfmt";
   version = "1.0.0";
   releaseType = "escript";
   src = fetchFromGitHub {

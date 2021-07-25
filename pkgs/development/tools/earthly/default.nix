@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.5.17";
+  version = "0.5.20";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    sha256 = "sha256-SuHHeO2KFjB3HbLv1ODBGaXzNaDi/FNPOGg/lX8JLJE=";
+    sha256 = "sha256-wPtL5fH6s4qlG82udeg9Gv4iNBjDEeKNTDFHPsW4V/A=";
   };
 
-  vendorSha256 = "sha256-D62fG+T3G1W7xteSGlTtEkXbQfGAmBTYJeATH2CVtwY=";
+  vendorSha256 = "sha256-gydhh/EMSuE/beo+A2CRDdDnQGT6DMjMwthylT339I4=";
 
   buildFlagsArray = ''
     -ldflags=
@@ -35,7 +35,7 @@ buildGoModule rec {
     description = "Build automation for the container era";
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
-    license = licenses.mpl20;
+    license = licenses.bsl11;
     maintainers = with maintainers; [ mdsp ];
   };
 }

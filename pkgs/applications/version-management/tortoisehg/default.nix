@@ -1,20 +1,18 @@
 { lib, fetchurl, python3Packages
 , mercurial, qt5
 }:
-let
-  tortoisehgSrc = fetchurl rec {
-    meta.name = "tortoisehg-${meta.version}";
-    meta.version = "5.8";
-    url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${meta.version}.tar.gz";
-    sha256 = "154q7kyrdk045wx7rsblzx41k3wbvp2f40kzkxmiiaa5n35srsm3";
-  };
 
-  # Extension point for when thg's mercurial is lagging behind mainline.
-  tortoiseMercurial = mercurial;
+python3Packages.buildPythonApplication rec {
+    pname = "tortoisehg";
+    version = "5.8";
 
-in python3Packages.buildPythonApplication {
-    inherit (tortoisehgSrc.meta) name version;
-    src = tortoisehgSrc;
+    src = fetchurl {
+      url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";
+      sha256 = "154q7kyrdk045wx7rsblzx41k3wbvp2f40kzkxmiiaa5n35srsm3";
+    };
+
+    # Extension point for when thg's mercurial is lagging behind mainline.
+    tortoiseMercurial = mercurial;
 
     propagatedBuildInputs = with python3Packages; [
       tortoiseMercurial qscintilla-qt5 iniparse

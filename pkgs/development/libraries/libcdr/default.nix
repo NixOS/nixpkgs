@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit }:
 
 stdenv.mkDerivation rec {
-  name = "libcdr-0.1.6";
+  pname = "libcdr";
+  version = "0.1.6";
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/${name}.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/${pname}-${version}.tar.xz";
     sha256 = "0qgqlw6i25zfq1gf7f6r5hrhawlrgh92sg238kjpf2839aq01k81";
   };
 

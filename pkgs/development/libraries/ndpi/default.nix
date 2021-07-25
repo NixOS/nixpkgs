@@ -1,11 +1,9 @@
 { lib, stdenv, fetchFromGitHub, which, autoconf, automake, libtool, libpcap
 , pkg-config }:
 
-let version = "3.4"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ndpi";
-  inherit version;
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "ntop";

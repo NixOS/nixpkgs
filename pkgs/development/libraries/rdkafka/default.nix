@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, zlib, pkg-config, python3, openssl }:
+{ lib, stdenv, fetchFromGitHub, zlib, zstd, pkg-config, python3, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "rdkafka";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config python3 ];
 
-  buildInputs = [ zlib openssl ];
+  buildInputs = [ zlib zstd openssl ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
 

@@ -41,6 +41,7 @@
 , pango
 , runtimeShell
 , writeScript
+, xdg-utils
 , xidel
 }:
 
@@ -164,6 +165,7 @@ stdenv.mkDerivation {
         --set MOZ_LEGACY_PROFILES 1 \
         --set MOZ_ALLOW_DOWNGRADE 1 \
         --prefix PATH : "${lib.getBin gnupg}/bin" \
+        --prefix PATH : "${lib.getBin xdg-utils}/bin" \
         --prefix LD_LIBRARY_PATH : "${lib.getLib gpgme}/lib"
     '';
 

@@ -71,6 +71,13 @@ let
       xmlRev = "036b662a1bbc96b4911f3cbe74dfa1243b6459bc";
       prerelease = false;
     };
+    "0.47.05" = {
+      dfHackRelease = "0.47.05-r1";
+      sha256 = "sha256-B0iv7fpIcnaO8sx9wPqI7/WuyLK15p8UYlYIcF5F5bw=";
+      xmlRev = "11c379ffd31255f2a1415d98106114a46245e1c3";
+      prerelease = false;
+    };
+
   };
 
   release =

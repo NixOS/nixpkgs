@@ -1,13 +1,9 @@
 { lib, stdenv, fetchurl, autoconf, automake, libtool, dos2unix, libpgf, freeimage, doxygen }:
 
 with lib;
-
-let
-  version = "6.14.12";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pgf";
-  inherit version;
+  version = "6.14.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpgf/pgf-console-src-${version}.tar.gz";

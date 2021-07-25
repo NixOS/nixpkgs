@@ -1,7 +1,6 @@
 { lib
-, python3Packages
+, python38
 , fetchFromGitHub
-, python3
 , fetchpatch
 }:
 
@@ -12,38 +11,43 @@
 #
 # If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
 # Also note that your tts version might not support all available models so check:
-#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.15.1
+#   https://github.com/coqui-ai/TTS/releases/tag/v0.1.2
 #
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
-python3Packages.buildPythonApplication rec {
+let
+  python3 = python38;
+in python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.0.15.1";
+  version = "0.1.2";
+
+  # https://github.com/coqui-ai/TTS/issues/570
+  disabled = python3.pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "0z6sbzspgmw5ja8r2zysyhdk4jzlv88a0ihkvxvvwxslkyncdb89";
+    sha256 = "1qgiaqn7iqxyf54qgnpmli69nw9s3gmi9qv874jsgycykc10hjg4";
   };
 
   postPatch = ''
     sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt
-    sed -i -e 's!unidecode==[^"]*!unidecode!' requirements.txt
     sed -i -e 's!numba==[^"]*!numba!' requirements.txt
     sed -i -e 's!numpy==[^"]*!numpy!' requirements.txt
     sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt
   '';
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
     cython
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     anyascii
     coqpit
     flask
+    gruut
     gdown
     inflect
     jieba
@@ -69,11 +73,11 @@ python3Packages.buildPythonApplication rec {
     # cython modules are not installed for some reasons
     (
       cd TTS/tts/layers/glow_tts/monotonic_align
-      ${python3Packages.python.interpreter} setup.py install --prefix=$out
+      ${python3.interpreter} setup.py install --prefix=$out
     )
   '';
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python3.pkgs; [
     pytest-sugar
     pytestCheckHook
   ];

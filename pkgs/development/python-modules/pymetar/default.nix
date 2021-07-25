@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pymetar";
-  version = "1.2";
+  version = "1.3";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f9a8caa21eff5367427da55a469ef396293ae4cc93797ab2f1a66a2924fbdc68";
+    sha256 = "sha256-zhuXOZIIzh5p0CDOsiUNTqeXDoHFcf1BPg868fc7CIg=";
   };
 
   checkPhase = ''
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A command-line tool to show the weather report by a given station ID";
-    homepage = "http://www.schwarzvogel.de/software/pymetar.html";
+    homepage = "https://github.com/klausman/pymetar";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ erosennin ];
   };

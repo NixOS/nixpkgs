@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
     platforms = with lib.platforms; linux;
-    inherit version;
   };
 }

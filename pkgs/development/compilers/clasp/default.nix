@@ -118,7 +118,6 @@ stdenv.mkDerivation rec {
   CLASP_SRC_DONTTOUCH = "true";
 
   meta = {
-    inherit version;
     description = "A Common Lisp implementation based on LLVM with C++ integration";
     license = lib.licenses.lgpl21Plus ;
     maintainers = [lib.maintainers.raskin];

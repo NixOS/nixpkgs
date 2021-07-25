@@ -1,16 +1,16 @@
 { lib, fetchurl, buildDunePackage
 , repr, ppx_repr, fmt, logs, mtime, stdlib-shims
-, cmdliner, progress, semaphore-compat
+, cmdliner, progress, semaphore-compat, optint
 , alcotest, crowbar, re
 }:
 
 buildDunePackage rec {
   pname = "index";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
-    sha256 = "sha256-ycZi/TFLoGRloSpjYqH5FCHWP3eyiTCIDLESEn5inuI=";
+    sha256 = "13xd858c50fs651p1y8x70323ff0gzbf6zgc0a25f6xh3rsmkn4c";
   };
 
   minimumOCamlVersion = "4.08";
@@ -28,6 +28,7 @@ buildDunePackage rec {
     progress
     repr
     semaphore-compat
+    optint
   ];
 
   checkInputs = [

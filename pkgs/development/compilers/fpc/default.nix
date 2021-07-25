@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
-    inherit version;
   };
 }

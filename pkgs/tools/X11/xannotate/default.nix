@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   meta = {
-    inherit version;
     description = "A tool to scribble over X windows";
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];

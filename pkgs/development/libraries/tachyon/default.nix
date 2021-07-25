@@ -72,7 +72,6 @@ stdenv.mkDerivation rec {
     cp -r scenes "$out/share/tachyon/scenes"
   '';
   meta = {
-    inherit version;
     description = "A Parallel / Multiprocessor Ray Tracing System";
     license = lib.licenses.bsd3;
     maintainers = [lib.maintainers.raskin];

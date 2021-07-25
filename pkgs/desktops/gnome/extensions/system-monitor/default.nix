@@ -28,18 +28,21 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    glib-compile-schemas --targetdir=${uuid}/schemas ${uuid}/schemas
+    glib-compile-schemas --targetdir="system-monitor@paradoxxx.zero.gmail.com/schemas" "system-monitor@paradoxxx.zero.gmail.com/schemas"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "system-monitor@paradoxxx.zero.gmail.com" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 
-  uuid = "system-monitor@paradoxxx.zero.gmail.com";
+  passthru = {
+    extensionUuid = "system-monitor@paradoxxx.zero.gmail.com";
+    extensionPortalSlug = "system-monitor";
+  };
 
   meta = with lib; {
     description = "Display system informations in gnome shell status bar";

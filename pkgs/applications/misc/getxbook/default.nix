@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     license     = licenses.isc;
     maintainers = with maintainers; [ obadz ];
     platforms   = platforms.all;
-    inherit version;
   };
 }

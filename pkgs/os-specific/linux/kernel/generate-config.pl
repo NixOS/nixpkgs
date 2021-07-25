@@ -19,6 +19,7 @@ my $autoModules = $ENV{'AUTO_MODULES'};
 my $preferBuiltin = $ENV{'PREFER_BUILTIN'};
 my $ignoreConfigErrors = $ENV{'ignoreConfigErrors'};
 my $buildRoot = $ENV{'BUILD_ROOT'};
+my $makeFlags = $ENV{'MAKE_FLAGS'};
 $SIG{PIPE} = 'IGNORE';
 
 # Read the answers.
@@ -40,7 +41,7 @@ close ANSWERS;
 sub runConfig {
 
     # Run `make config'.
-    my $pid = open2(\*IN, \*OUT, "make -C $ENV{SRC} O=$buildRoot config SHELL=bash ARCH=$ENV{ARCH} CC=$ENV{CC} HOSTCC=$ENV{HOSTCC} HOSTCXX=$ENV{HOSTCXX}");
+    my $pid = open2(\*IN, \*OUT, "make -C $ENV{SRC} O=$buildRoot config SHELL=bash ARCH=$ENV{ARCH} CC=$ENV{CC} HOSTCC=$ENV{HOSTCC} HOSTCXX=$ENV{HOSTCXX} $makeFlags");
 
     # Parse the output, look for questions and then send an
     # appropriate answer.

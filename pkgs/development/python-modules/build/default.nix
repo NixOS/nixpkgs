@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , filelock
 , flit-core
 , importlib-metadata
@@ -8,6 +8,7 @@
 , packaging
 , pep517
 , pytest-mock
+, pytest-rerunfailures
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
@@ -17,13 +18,14 @@
 
 buildPythonPackage rec {
   pname = "build";
-  version = "0.3.0";
-
+  version = "0.5.1";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-DrlbLI13DXxMm5LGjCJ8NQu/ZfPsg1UazpCXwYzBX90=";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = pname;
+    rev = version;
+    sha256 = "15hc9mbxsngfc9n805x8rk7yqbxnw12mpk6hfwcsldnfii1vg2ph";
   };
 
   nativeBuildInputs = [
@@ -42,20 +44,18 @@ buildPythonPackage rec {
 
   checkInputs = [
     filelock
-    pytestCheckHook
     pytest-mock
+    pytest-rerunfailures
     pytest-xdist
+    pytestCheckHook
   ];
 
   disabledTests = [
     "test_isolation"
     "test_isolated_environment_install"
     "test_default_pip_is_never_too_old"
-    "test_build_isolated - StopIteration"
-    "test_build_raises_build_exception"
-    "test_build_raises_build_backend_exception"
-    "test_projectbuilder.py"
-    "test_projectbuilder.py"
+    "test_build"
+    "test_init"
   ];
 
   pythonImportsCheck = [ "build" ];

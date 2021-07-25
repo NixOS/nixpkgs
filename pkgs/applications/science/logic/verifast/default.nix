@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     sha256 = "169kshjq4cf4i9v92azv0xaflrnik5686w7fwcgdhd6qkbzflzl6";
   };
 
+  dontConfigure = true;
   dontStrip = true;
-  phases = "unpackPhase installPhase";
   installPhase = ''
     mkdir -p $out/bin
     cp -R bin $out/libexec

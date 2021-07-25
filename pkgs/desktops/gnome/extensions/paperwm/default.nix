@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1jq15qrq3khqpjsjbcc17amdr1k53jkvambdacdf56xbqkycvlgs";
   };
 
-  uuid = "paperwm@hedning:matrix.org";
+  passthru.extensionUuid = "paperwm@hedning:matrix.org";
 
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/gnome-shell/extensions/${uuid}
-    cp -r . $out/share/gnome-shell/extensions/${uuid}
+    mkdir -p "$out/share/gnome-shell/extensions/paperwm@hedning:matrix.org"
+    cp -r . "$out/share/gnome-shell/extensions/paperwm@hedning:matrix.org"
     runHook postInstall
   '';
 

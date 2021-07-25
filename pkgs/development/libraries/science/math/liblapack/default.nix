@@ -7,12 +7,11 @@
 }:
 let
   inherit (lib) optional;
-  version = "3.9.1";
 in
 
 stdenv.mkDerivation rec {
   pname = "liblapack";
-  inherit version;
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "Reference-LAPACK";
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
     license = licenses.bsd3;

@@ -40,7 +40,7 @@ let
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
   # this.
-  latestVersion = "0.47.04";
+  latestVersion = "0.47.05";
 
   # Converts a version to a package name.
   versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";

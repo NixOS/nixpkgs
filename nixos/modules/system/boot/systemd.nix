@@ -755,7 +755,7 @@ in
       default = [];
       example = [ "d /tmp 1777 root root 10d" ];
       description = ''
-        Rules for creating and cleaning up temporary files
+        Rules for creation, deletion and cleaning of volatile and temporary files
         automatically. See
         <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
         for the exact format.
@@ -925,9 +925,8 @@ in
     system.nssModules = [ systemd.out ];
     system.nssDatabases = {
       hosts = (mkMerge [
-        [ "mymachines" ]
-        (mkOrder 1600 [ "myhostname" ] # 1600 to ensure it's always the last
-      )
+        (mkOrder 400 ["mymachines"]) # 400 to ensure it comes before resolve (which is mkBefore'd)
+        (mkOrder 999 ["myhostname"]) # after files (which is 998), but before regular nss modules
       ]);
       passwd = (mkMerge [
         (mkAfter [ "systemd" ])

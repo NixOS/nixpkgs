@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ ncurses libconfuse libnl ];
+  buildInputs = [ ncurses libconfuse ] ++ lib.optional stdenv.isLinux libnl;
 
   preConfigure = ''
     # Must be an absolute path
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.BSD
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.MIT
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor pSub ];
   };
 }

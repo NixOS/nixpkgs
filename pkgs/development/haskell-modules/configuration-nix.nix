@@ -914,4 +914,9 @@ self: super: builtins.intersectAttrs super {
 
   cachix = generateOptparseApplicativeCompletion "cachix" super.cachix;
 
+  # Enable extra optimisations which increase build time, but also
+  # later compiler performance, so we should do this for user's benefit.
+  # Flag added in Agda 2.6.2
+  Agda = appendConfigureFlag super.Agda "-foptimise-heavily";
+
 }

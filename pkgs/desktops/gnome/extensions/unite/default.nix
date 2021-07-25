@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ys2kWPj/FugW/LkvLAZdbj7Ufg/KShC+EX6QrjKNVH8=";
   };
 
-  uuid = "unite@hardpixel.eu";
+  passthru = {
+    extensionUuid = "unite@hardpixel.eu";
+    extensionPortalSlug = "unite";
+  };
 
   nativeBuildInputs = [ glib ];
 
@@ -19,14 +22,14 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    glib-compile-schemas --strict --targetdir=${uuid}/schemas/ ${uuid}/schemas
+    glib-compile-schemas --strict --targetdir="unite@hardpixel.eu/schemas/" "unite@hardpixel.eu/schemas"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "unite@hardpixel.eu" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 

@@ -26,9 +26,9 @@ buildPythonApplication rec {
     sha256 = "sha256-6dLz4KXavXwnk5GizBH46d2EHMHPjRo0WnnUuVMtI1M=";
   };
 
-  nativeBuildInputs = [ intltool wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper intltool wrapGAppsHook ];
 
-  buildInputs = [ makeWrapper distutils_extra ];
+  buildInputs = [ distutils_extra ];
 
   doCheck = false;
 

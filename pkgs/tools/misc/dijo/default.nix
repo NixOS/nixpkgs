@@ -1,8 +1,8 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub, ncurses, CoreServices }:
-let version = "0.2.7"; in
-rustPlatform.buildRustPackage {
+
+rustPlatform.buildRustPackage rec {
   pname = "dijo";
-  inherit version;
+  version = "0.2.7";
   buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin CoreServices;
   src = fetchFromGitHub {
     owner = "NerdyPepper";

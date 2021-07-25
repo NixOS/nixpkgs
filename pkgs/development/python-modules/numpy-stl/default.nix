@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, cython, numpy, nine, pytest, pytestrunner, python-utils, enum34 }:
+{ lib, buildPythonPackage, fetchPypi, cython, numpy, nine, pytest, pytest-runner, python-utils, enum34 }:
 
 buildPythonPackage rec {
   pname = "numpy-stl";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "411c633d2a03c295d98fb26023a6e7f574ceead04015d06e80cdab20b630a742";
   };
 
-  checkInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytest pytest-runner ];
 
   checkPhase = "py.test";
 

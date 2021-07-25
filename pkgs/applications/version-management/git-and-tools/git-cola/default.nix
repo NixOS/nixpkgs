@@ -5,13 +5,13 @@ let
 
 in buildPythonApplication rec {
   pname = "git-cola";
-  version = "3.9";
+  version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    sha256 = "11186pdgaw5p4iv10dqcnynf5pws2v9nhqqqca7z5b7m20fpfjl7";
+    sha256 = "120hds7v29v70qxz20ppxf2glmgbah16v7jyy9i6hb6cfqp68vr8";
   };
 
   buildInputs = [ git gettext ];
@@ -20,10 +20,8 @@ in buildPythonApplication rec {
 
   doCheck = false;
 
-  postFixup = ''
-    wrapQtApp $out/bin/git-cola
-    wrapQtApp $out/bin/git-dag
-
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {

@@ -21,7 +21,7 @@ formats commits for you.
 
 */
 
-{ lib, stdenv, texinfo, writeText }:
+{ lib, stdenv, texinfo, writeText, gcc }:
 
 self: let
 
@@ -32,7 +32,7 @@ self: let
   };
 
   elpaBuild = import ../../../../build-support/emacs/elpa.nix {
-    inherit lib stdenv texinfo writeText;
+    inherit lib stdenv texinfo writeText gcc;
     inherit (self) emacs;
   };
 

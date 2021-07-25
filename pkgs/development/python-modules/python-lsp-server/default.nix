@@ -19,6 +19,7 @@
 , python-lsp-jsonrpc
 , pythonOlder
 , rope
+, setuptools
 , ujson
 , yapf
 }:
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     pylint
     python-lsp-jsonrpc
     rope
+    setuptools
     ujson
     yapf
   ];

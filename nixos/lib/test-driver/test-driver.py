@@ -292,7 +292,12 @@ class Machine:
             net_frontend += "," + args["netFrontendArgs"]
 
         start_command = (
-            "qemu-kvm -m 384 " + net_backend + " " + net_frontend + " $QEMU_OPTS "
+            args.get("qemuBinary", "qemu-kvm")
+            + " -m 384 "
+            + net_backend
+            + " "
+            + net_frontend
+            + " $QEMU_OPTS "
         )
 
         if "hda" in args:
@@ -494,7 +499,7 @@ class Machine:
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
         """Wait until a command returns success and return its output.
         Throws an exception on timeout.
         """
@@ -506,7 +511,7 @@ class Machine:
             return status == 0
 
         with self.nested("waiting for success: {}".format(command)):
-            retry(check_success)
+            retry(check_success, timeout)
             return output
 
     def wait_until_fails(self, command: str) -> str:

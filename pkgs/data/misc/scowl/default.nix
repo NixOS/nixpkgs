@@ -102,7 +102,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "Spell checker oriented word lists";
     license = lib.licenses.mit;
     maintainers = [lib.maintainers.raskin];

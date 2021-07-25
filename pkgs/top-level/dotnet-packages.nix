@@ -285,21 +285,24 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "*" ];
   };
 
-  Nuget = buildDotnetPackage {
+  Nuget = buildDotnetPackage rec {
     baseName = "Nuget";
-    version = "4.9.1";
+    version = "5.6.0.6489";
 
     src = fetchFromGitHub {
       owner = "mono";
-      repo = "nuget-binary";
-      rev = "7871fa26914593fdb2f2500df1196df7b8aecb1c";
-      sha256 = "07r63xam6icm17pf6amh1qkmna13nxa3ncdan7a3ql307i5isriz";
+      repo = "linux-packaging-nuget";
+      rev = "upstream/${version}.bin";
+      sha256 = "sha256-71vjM7a+F0DNTY+dML3UBSkrVyXv/k5rdl7iXBKSpNM=";
     };
 
-    phases = [ "unpackPhase" "installPhase" ];
+    # configurePhase breaks the binary and results in
+    # `File does not contain a valid CIL image.`
+    dontConfigure = true;
+    dontBuild = true;
+    dontPlacateNuget = true;
 
     outputFiles = [ "*" ];
-    dllFiles = [ "NuGet*.dll" ];
     exeFiles = [ "nuget.exe" ];
   };
 

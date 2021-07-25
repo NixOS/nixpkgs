@@ -43,6 +43,14 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
     exec ${unpacked}/bin/anki
   '';
 
+  extraInstallCommands = ''
+    mkdir -p $out/share
+    cp -R ${unpacked}/share/applications \
+      ${unpacked}/share/man \
+      ${unpacked}/share/pixmaps \
+      $out/share/
+  '';
+
   inherit meta;
 }) else stdenv.mkDerivation {
   inherit pname version;

@@ -2,14 +2,27 @@
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "unstable-20210401";
+  version = "unstable-2021-06-11";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
-    rev = "b0b3d131b26df62664ca33775679eea7b70c47b1";
-    sha256 = "09apbvdc78bbqzja9z3b1wrwmqkv3k7cn3lll5gsskxjnqbhxk9y";
+    rev = "65e12fca334f2f42396f4e8d16592d53cab34dd6";
+    sha256 = "sha256-81IfdYKadKT7vRdkmxzfGo4KHa4UJ8uJ0K6djQCr22U=";
   };
+
+  # Linux 5.13 support
+  # The patches break compilation for older kernels
+  patches = lib.optional (kernel.kernelAtLeast "5.13") [
+    (fetchpatch {
+      url = "https://github.com/DisplayLink/evdi/commit/c5f5441d0a115d2cfc8125b8bafaa05b2edc7938.patch";
+      sha256 = "sha256-tWYgBrRh3mXPebhUygOvJ07V87g9JU66hREriACfEVI=";
+    })
+    (fetchpatch {
+      url = "https://github.com/DisplayLink/evdi/commit/5f04d2e2df4cfd21dc15d31f1152c6a66fa48a78.patch";
+      sha256 = "sha256-690/eUiEVWvnT/YAVgKcLo86dgolF9giWRuPxXpL+eQ=";
+    })
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -31,8 +44,8 @@ stdenv.mkDerivation rec {
     description = "Extensible Virtual Display Interface";
     maintainers = with maintainers; [ eyjhb ];
     platforms = platforms.linux;
-    license = with licenses; [ lgpl21 gpl2 ];
+    license = with licenses; [ lgpl21Only gpl2Only ];
     homepage = "https://www.displaylink.com/";
-    broken = versionOlder kernel.version "4.19" || stdenv.isAarch64;
+    broken = kernel.kernelOlder "4.19" || stdenv.isAarch64;
   };
 }

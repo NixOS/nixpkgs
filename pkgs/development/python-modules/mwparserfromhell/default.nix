@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, pytestrunner
+, pytest-runner
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestrunner
+    pytest-runner
   ];
 
   meta = with lib; {

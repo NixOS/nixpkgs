@@ -12,8 +12,9 @@ let
       });
     });
   };
-in rebar3Relx {
-  name = "erlang-ls";
+in
+rebar3Relx {
+  pname = "erlang-ls";
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;

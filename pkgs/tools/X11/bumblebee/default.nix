@@ -33,8 +33,6 @@
 }:
 
 let
-  version = "3.2.1";
-
   nvidia_x11s = [ nvidia_x11 ]
                 ++ lib.optional nvidia_x11.useGLVND libglvnd
                 ++ lib.optionals (nvidia_x11_i686 != null)
@@ -57,7 +55,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "bumblebee";
-  inherit version;
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://bumblebee-project.org/${pname}-${version}.tar.gz";

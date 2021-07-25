@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     description = "A small window manager controlled by a 9P filesystem";
     maintainers = with lib.maintainers; [ kovirobi ];
     license = lib.licenses.mit;
-    inherit version;
     platforms = with lib.platforms; linux;
   };
 }

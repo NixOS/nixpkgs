@@ -55,11 +55,11 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "7.2.0";
+  version = "7.3.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zYfs4UOu+gLmkqSvXDw8wQe5pNYYBNefp33S40R5ihc=";
+    sha256 = "sha256-la6pO+HP05u1IzO4Kz5Xv2gIDH0TGddU0WeiD22+RVE=";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];

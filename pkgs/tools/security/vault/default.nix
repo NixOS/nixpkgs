@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests
+{ stdenv, lib, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests
 , makeWrapper
 , gawk
 , glibc
@@ -26,7 +26,7 @@ buildGoPackage rec {
   postInstall = ''
     echo "complete -C $out/bin/vault vault" > vault.bash
     installShellCompletion vault.bash
-
+  '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/vault \
       --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';

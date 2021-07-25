@@ -14,12 +14,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
   buildInputs = [ glib gnome.gnome-shell ];
 
-  uuid = "nightthemeswitcher@romainvigier.fr";
+  passthru = {
+    extensionUuid = "nightthemeswitcher@romainvigier.fr";
+    extensionPortalSlug = "night-theme-switcher";
+  };
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/
-    unzip build/${uuid}.shell-extension.zip -d $out/share/gnome-shell/extensions/${uuid}
+    unzip "build/nightthemeswitcher@romainvigier.fr.shell-extension.zip" -d "$out/share/gnome-shell/extensions/nightthemeswitcher@romainvigier.fr"
     runHook postInstall
   '';
 

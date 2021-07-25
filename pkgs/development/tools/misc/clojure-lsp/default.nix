@@ -1,28 +1,26 @@
-{ lib, stdenv, graalvm11-ce, babashka, fetchurl, fetchFromGitHub }:
+{ lib, stdenv, graalvm11-ce, babashka, fetchurl, fetchFromGitHub, clojure }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "2021.06.01-16.19.44";
+  version = "2021.07.12-12.30.59";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-dACvjm+uEVWotoeYhA4gCenKeprpF2dI0PGNRAVALao=";
+    sha256 = "0iky3yh548xn28285x8gnjzc00f3i2b415wb2dhd9p9y2bgzhkld";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
-    sha256 = "sha256-V12rSYv/Yu12ZpLSROd+4pyGiEGRfJ7lmRqCeikcQ5Q=";
+    sha256 = "02k1k0slh1lm7k43d52jvgl0fdyp9gcr8csbr6yi71qbhy0axrmp";
   };
 
   GRAALVM_HOME = graalvm11-ce;
   CLOJURE_LSP_JAR = jar;
   CLOJURE_LSP_XMX = "-J-Xmx4g";
 
-  patches = lib.optionals stdenv.isDarwin [ ./disable-check-toolchain.patch ];
-
-  buildInputs = [ graalvm11-ce ];
+  buildInputs = [ graalvm11-ce clojure ];
 
   buildPhase = with lib; ''
     runHook preBuild

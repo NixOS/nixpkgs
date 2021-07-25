@@ -193,9 +193,24 @@ common =
 
           preBuild = "unset NIX_INDENT_MAKE";
         });
+        inherit boehmgc;
       };
     };
   in nix;
+
+  boehmgc_nix = boehmgc.override {
+    enableLargeConfig = true;
+  };
+
+  boehmgc_nixUnstable = boehmgc_nix.overrideAttrs (drv: {
+    patches = (drv.patches or []) ++ [
+      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+      (fetchpatch {
+        url = https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff;
+        sha256 = "sha256-JvnWVTlkltmQUs/0qApv/LPZ690UX1/2hEP+LYRwKbI=";
+      })
+    ];
+  });
 
 in rec {
 
@@ -203,28 +218,32 @@ in rec {
 
   nixStable = callPackage common (rec {
     pname = "nix";
-    version = "2.3.12";
+    version = "2.3.14";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-ITp9ScRhB5syNh5NAI0kjX9o400syTR/Oo/5Ap+a+10=";
+      sha256 = "sha256-cToMnZU3+UpjeiiXnG3clz9zn8Xk+TbB7UbqmLMrlFk=";
     };
 
-    inherit storeDir stateDir confDir boehmgc;
+    boehmgc = boehmgc_nix;
+
+    inherit storeDir stateDir confDir;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     pname = "nix";
     version = "2.4${suffix}";
-    suffix = "pre20210601_5985b8b";
+    suffix = "pre20210707_02dd6bb";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "5985b8b5275605ddd5e92e2f0a7a9f494ac6e35d";
-      sha256 = "sha256-2So7ZsD8QJlOXCYqdoj8naNgBw6O4Vw1MM2ORsaqlXc=";
+      rev = "02dd6bb610e55a009cd7a4c83639698d3a7acaa2";
+      sha256 = "sha256-ARRiLrDOK+JQtvVXsYegspENYimQzilvdTfO7eiBuaA=";
     };
 
-    inherit storeDir stateDir confDir boehmgc;
+    boehmgc = boehmgc_nixUnstable;
+
+    inherit storeDir stateDir confDir;
 
   });
 

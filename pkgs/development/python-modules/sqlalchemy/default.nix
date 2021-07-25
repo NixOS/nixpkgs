@@ -9,16 +9,15 @@
 , mock
 , pysqlite ? null
 , pytestCheckHook
-, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.4.18";
+  version = "1.4.20";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k3yfarfa0hcc0bza6nccy685gnmq6gikynqayrvddx6y7si0lnj";
+    sha256 = "1l5miq1nzvg51yqw3pnaq17dgibhgx2m0il2ha79gwpyd8k3mviq";
   };
 
   propagatedBuildInputs = [
@@ -35,8 +34,6 @@ buildPythonPackage rec {
   postInstall = ''
     sed -e 's:--max-worker-restart=5::g' -i setup.cfg
   '';
-
-  dontUseSetuptoolsCheck = true;
 
   # disable mem-usage tests on mac, has trouble serializing pickle files
   disabledTests = lib.optionals stdenv.isDarwin [

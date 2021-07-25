@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [autoconf automake libtool gmpxx];
   meta = {
-    inherit version;
     description = "A C++ library for arithmetic and algebraic computations";
     license = lib.licenses.cecill-b;
     maintainers = [lib.maintainers.raskin];

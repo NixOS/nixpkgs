@@ -39,6 +39,14 @@ let
       HOME=. escript bootstrap
     '';
 
+
+    patches = []
+      # Skips test that can write outside the designated tmp directory, potentially resulting in build failures
+      # due to file ownership issues if ran without sandbox (eg. Mac M1 default). This patch can be Removed when
+      # rebar3 releases with the following commit:
+      # https://github.com/erlang/rebar3/commit/11055384dbd5bf7d181bca83a33b0e100275ff21
+      ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ ./tmp-tests-skip.patch ];
+
     checkPhase = ''
       HOME=. escript ./rebar3 ct
     '';

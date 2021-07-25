@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-D1gtKaDZ7/SyySYWmDa3eDHbh2f5B3q1VEYKgl1pXCE=";
+    sha256 = "sha256-P8/4jehfcjM+r/pwW6fxrwquMVUqXxvvTur7Tesjmnc=";
   };
 
   vendorSha256 = null;
@@ -64,11 +64,9 @@ buildGoModule rec {
     installShellCompletion --fish completions/fish/*
     installShellCompletion --zsh completions/zsh/*
     MANDIR=$man/share/man make install.man-nobuild
-  '' + lib.optionalString stdenv.isLinux ''
     install -Dm644 cni/87-podman-bridge.conflist -t $out/etc/cni/net.d
     install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
     install -Dm644 contrib/systemd/system/podman.{socket,service} -t $out/lib/systemd/system
-  '' + ''
     runHook postInstall
   '';
 

@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.15.2";
+  version = "0.15.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "08nirjax4m4g4ljr8ksq16wzmrvzq6myqh5rm0dw6pnijqk7nxzg";
+    sha256 = "Idc3+vCT9L4GVHPucMogiFuaLDaFlB26JMIjn9PFRKU=";
   };
 
   nativeBuildInputs = [

@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, ppl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "cloog-ppl-0.15.11";
+  pname = "cloog-ppl";
+  version = "0.15.11";
 
   src = fetchurl {
-    url = "mirror://gcc/infrastructure/${name}.tar.gz";
+    url = "mirror://gcc/infrastructure/${pname}-${version}.tar.gz";
     sha256 = "0psdm0bn5gx60glfh955x5b3b23zqrd92idmjr0b00dlnb839mkw";
   };
 

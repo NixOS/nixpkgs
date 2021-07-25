@@ -8,17 +8,21 @@
 }:
 
 let
-  esphome-dashboard = pkgs.callPackage ./dashboard.nix {};
+  python = python3.override {
+    packageOverrides = self: super: {
+      esphome-dashboard = pkgs.callPackage ./dashboard.nix {};
+    };
+  };
 in
-python3.pkgs.buildPythonApplication rec {
+with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "1.19.4";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "029ykjk24h21b0s0gha6kv9pvgallin6marzkb2vfbvr3icsmbz2";
+    sha256 = "sha256-saLcTiWqpxnE+li9ojfrEAh/vjB1c3K4kQzkrBJW3t4=";
   };
 
   patches = [
@@ -32,12 +36,6 @@ python3.pkgs.buildPythonApplication rec {
 
     # drop coverage testing
     sed -i '/--cov/d' pytest.ini
-
-    # migrate use of hypothesis internals to be compatible with hypothesis>=5.32.1
-    # https://github.com/esphome/issues/issues/2021
-    substituteInPlace tests/unit_tests/strategies.py --replace \
-      "@st.defines_strategy_with_reusable_values" \
-      "@st.defines_strategy(force_reusable_values=True)"
   '';
 
   # Remove esptool and platformio from requirements
@@ -49,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   # They have validation functions like:
   # - validate_cryptography_installed
   # - validate_pillow_installed
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     click
     colorama
     cryptography
@@ -73,13 +71,20 @@ python3.pkgs.buildPythonApplication rec {
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = [
     hypothesis
     mock
     pytest-asyncio
     pytest-mock
     pytest-sugar
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # requires hypothesis 5.49, we have 6.x
+    # ImportError: cannot import name 'ip_addresses' from 'hypothesis.provisional'
+    "tests/unit_tests/test_core.py"
+    "tests/unit_tests/test_helpers.py"
   ];
 
   postCheck = ''

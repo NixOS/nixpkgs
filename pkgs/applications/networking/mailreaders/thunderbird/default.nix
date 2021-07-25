@@ -50,6 +50,7 @@
 , unzip
 , which
 , writeScript
+, xdg-utils
 , xidel
 , xorg
 , yasm
@@ -73,13 +74,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.11.0";
+  version = "78.12.0";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "1m12kx830pfzvby8j9i5nb9c5v71vlg4wr0qrjgg3pw5ml9j5x7myrqyfd49l2qppm3xjn08srvmf45avnwq0lrys4sb83iwsd46sf6";
+      "8a9275f6a454b16215e9440d8b68926e56221dbb416f77ea0cd0a42853bdd26f35514e792564879c387271bd43d8ee966577f133f8ae7781f43e8bec9ab78696";
   };
 
   nativeBuildInputs = [
@@ -311,6 +312,7 @@ stdenv.mkDerivation rec {
       --set MOZ_LEGACY_PROFILES 1
       --set MOZ_ALLOW_DOWNGRADE 1
       --prefix PATH : "${lib.getBin gnupg}/bin"
+      --prefix PATH : "${lib.getBin xdg-utils}/bin"
       --prefix LD_LIBRARY_PATH : "${lib.getLib gpgme}/lib"
     )
   '';

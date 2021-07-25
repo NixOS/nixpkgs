@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01zmv6vk5kh5xmd563xws8a1qnxjb6b6kv59yzz9r3rrghxhd6c5";
   };
 
-  buildInputs = [ net-snmp ];
+  buildInputs = lib.optional stdenv.isLinux net-snmp;
 
   nativeBuildInputs = [ autoreconfHook ];
 

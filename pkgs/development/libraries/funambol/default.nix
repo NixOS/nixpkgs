@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, zlib, curl, autoreconfHook, unzip }:
 
-stdenv.mkDerivation {
-  name = "funambol-client-cpp-9.0.0";
+stdenv.mkDerivation rec {
+  pname = "funambol-client-cpp";
+  version = "9.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/funambol/funambol-client-sdk-9.0.0.zip";
+    url = "mirror://sourceforge/funambol/funambol-client-sdk-${version}.zip";
     sha256 = "1667gahz30i5r8kbv7w415z0hbgm6f6pln1137l5skapi1if6r73";
   };
 

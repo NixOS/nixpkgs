@@ -26,7 +26,11 @@
 let
 
   mkElpaPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/elpa-packages.nix {
-    inherit (pkgs) stdenv texinfo writeText;
+    inherit (pkgs) stdenv texinfo writeText gcc;
+    inherit lib;
+  };
+
+  mkNongnuPackages = { lib }: import ../applications/editors/emacs/elisp-packages/nongnu-packages.nix {
     inherit lib;
   };
 
@@ -44,7 +48,7 @@ let
   };
 
   emacsWithPackages = { pkgs, lib }: import ../build-support/emacs/wrapper.nix {
-    inherit (pkgs) makeWrapper runCommand;
+    inherit (pkgs) makeWrapper runCommand gcc;
     inherit (pkgs.xorg) lndir;
     inherit lib;
   };
@@ -53,12 +57,14 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
   pkgs ? pkgs'
   , lib ? pkgs.lib
   , elpaPackages ? mkElpaPackages { inherit pkgs lib; } self
+  , nongnuPackages ? mkNongnuPackages { inherit lib; } self
   , melpaStablePackages ? melpaGeneric { inherit pkgs lib; } "stable" self
   , melpaPackages ? melpaGeneric { inherit pkgs lib; } "unstable" self
   , orgPackages ? mkOrgPackages { inherit lib; } self
   , manualPackages ? mkManualPackages { inherit pkgs lib; } self
 }: ({}
   // elpaPackages // { inherit elpaPackages; }
+  // nongnuPackages // { inherit nongnuPackages; }
   // melpaStablePackages // { inherit melpaStablePackages; }
   // melpaPackages // { inherit melpaPackages; }
   // orgPackages // { inherit orgPackages; }

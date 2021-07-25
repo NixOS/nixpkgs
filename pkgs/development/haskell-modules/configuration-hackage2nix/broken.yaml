@@ -74,6 +74,7 @@ broken-packages:
   - aeson-filthy
   - aeson-flowtyped
   - aeson-match-qq
+  - aeson-modern-tojson
   - aeson-options
   - aeson-prefix
   - aeson-schema
@@ -90,6 +91,7 @@ broken-packages:
   - Agata
   - agda-language-server
   - agda-snippets
+  - agda-unused
   - AGI
   - ag-pictgen
   - AhoCorasick
@@ -261,6 +263,7 @@ broken-packages:
   - aws-route53
   - aws-sdk-text-converter
   - aws-simple
+  - aws-xray-client-persistent
   - axel
   - azubi
   - azure-acs
@@ -659,6 +662,7 @@ broken-packages:
   - clock-extras
   - clogparse
   - clone-all
+  - closed-intervals
   - closure
   - cloudfront-signer
   - clr-inline
@@ -1088,6 +1092,7 @@ broken-packages:
   - doctest-prop
   - docusign-example
   - docvim
+  - dominion
   - domplate
   - do-spaces
   - dotfs
@@ -1776,6 +1781,7 @@ broken-packages:
   - hakismet
   - hakka
   - hako
+  - hakyll-agda
   - hakyll-blaze-templates
   - hakyll-contrib
   - hakyll-contrib-csv
@@ -1904,6 +1910,7 @@ broken-packages:
   - haskell-src-match
   - haskell-src-meta-mwotton
   - haskell-stack-trace-plugin
+  - haskell-to-elm
   - HaskellTorrent
   - HaskellTutorials
   - haskell-type-exts
@@ -2202,6 +2209,7 @@ broken-packages:
   - Hricket
   - hs2bf
   - hs2ps
+  - hsakamai
   - hsaml2
   - hsay
   - hsbc
@@ -2379,6 +2387,7 @@ broken-packages:
   - hw-json-simd
   - hw-mquery
   - hworker
+  - hw-prim-bits
   - hw-simd
   - hwsl2
   - hx
@@ -2755,6 +2764,7 @@ broken-packages:
   - linear-maps
   - linear-opengl
   - linearscan
+  - linear-smc
   - linear-vect
   - line-drawing
   - lines-of-action
@@ -3104,6 +3114,7 @@ broken-packages:
   - MuCheck
   - mud
   - muesli
+  - mu-graphql
   - mulang
   - multext-east-msd
   - multiaddr
@@ -3183,6 +3194,7 @@ broken-packages:
   - nested-sequence
   - netclock
   - netease-fm
+  - net-mqtt-rpc
   - netrium
   - NetSNMP
   - netspec
@@ -3261,6 +3273,8 @@ broken-packages:
   - np-extras
   - np-linear
   - nptools
+  - nri-kafka
+  - nri-postgresql
   - ntp-control
   - ntrip-client
   - n-tuple
@@ -4503,6 +4517,7 @@ broken-packages:
   - streamdeck
   - streamed
   - stream-fusion
+  - streaming-benchmarks
   - streaming-conduit
   - streaming-events
   - streaming-lzma
@@ -4511,6 +4526,7 @@ broken-packages:
   - streaming-png
   - streaming-utils
   - streaming-with
+  - streamly-examples
   - streamly-fsnotify
   - stream-monad
   - streamproc
@@ -4529,6 +4545,7 @@ broken-packages:
   - stripe-http-streams
   - stripe-signature
   - stripe-tests
+  - strong-path
   - strongswan-sql
   - structural-traversal
   - structures
@@ -4743,6 +4760,7 @@ broken-packages:
   - thrift
   - Thrift
   - throttled-io-loop
+  - throwable-exceptions
   - th-sccs
   - th-tc
   - th-to-exp
@@ -4787,6 +4805,7 @@ broken-packages:
   - Titim
   - tkhs
   - tkyprof
+  - tmp-postgres
   - todo
   - tofromxml
   - to-haskell

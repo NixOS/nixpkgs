@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [pkg-config];
   buildInputs = [xorgproto];
   meta = {
-    inherit version;
     description = "X11 colorname to RGB mapping database";
     license = lib.licenses.mit;
     maintainers = [lib.maintainers.raskin];

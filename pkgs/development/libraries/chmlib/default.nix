@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "chmlib-0.40a";
+  pname = "chmlib";
+  version = "0.40a";
 
   src = fetchFromGitHub {
     owner = "jedwing";

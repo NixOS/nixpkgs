@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  phases = [ "unpackPhase" ];
+  dontInstall = true;
 
   unpackPhase = ''
     mkdir -p $out/share/fonts

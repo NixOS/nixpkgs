@@ -57,7 +57,8 @@ in {
 
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
       # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      bootPkgs = if stdenv.isAarch64 then
+      # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
+      bootPkgs = if stdenv.isAarch64 || stdenv.targetPlatform.isMusl then
           packages.ghc8102BinaryMinimal
         else
           packages.ghc865Binary;
@@ -67,7 +68,8 @@ in {
     };
     ghc8104 = callPackage ../development/compilers/ghc/8.10.4.nix {
       # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
+      # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
+      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
           packages.ghc8102BinaryMinimal
         else
           packages.ghc865Binary;

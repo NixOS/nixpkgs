@@ -8,7 +8,7 @@ rec {
       , moby-src
       , runcRev, runcSha256
       , containerdRev, containerdSha256
-      , tiniRev, tiniSha256, buildxSupport ? false
+      , tiniRev, tiniSha256, buildxSupport ? true
       # package dependencies
       , stdenv, fetchFromGitHub, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
@@ -77,6 +77,10 @@ rec {
 
       extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
+      postPatch = ''
+        patchShebangs hack/make.sh hack/make/
+      '';
+
       buildPhase = ''
         export GOCACHE="$TMPDIR/go-cache"
         # build engine
@@ -86,11 +90,6 @@ rec {
         export VERSION="${version}"
         ./hack/make.sh dynbinary
         cd -
-      '';
-
-      postPatch = ''
-        patchShebangs .
-        substituteInPlace ./hack/make.sh --replace libsystemd-journal libsystemd
       '';
 
       installPhase = ''
@@ -144,6 +143,14 @@ rec {
       sqlite lvm2 btrfs-progs systemd libseccomp
     ] ++ optionals (buildxSupport) [ docker-buildx ];
 
+    postPatch = ''
+      patchShebangs man scripts/build/
+      substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
+    '' + optionalString buildxSupport ''
+      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
+          ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
+    '';
+
     # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables
     buildPhase = ''
       export GOCACHE="$TMPDIR/go-cache"
@@ -160,14 +167,6 @@ rec {
       export CGO_ENABLED=1
       go build -tags pkcs11 --ldflags "$LDFLAGS" github.com/docker/cli/cmd/docker
       cd -
-    '';
-
-    postPatch = ''
-      patchShebangs .
-      substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
-    '' + optionalString buildxSupport ''
-      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
-          ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
     '';
 
     outputs = ["out" "man"];
@@ -211,7 +210,7 @@ rec {
       homepage = "https://www.docker.com/";
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline tailhook vdemeester periklis ];
+      maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem ];
       platforms = with platforms; linux ++ darwin;
     };
 
@@ -222,14 +221,14 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.6";
+    version = "20.10.7";
     rev = "v${version}";
-    sha256 = "15kknb26vyzjgqmn8r81a1sy1i5br6bvngqd5xljihppnxvp2gvl";
+    sha256 = "1r854jrjph4v1n5lr82z0cl0241ycili4qr3qh3k3bmqx790cds3";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "1l4ra9bsvydaxd2fy7dgxp7ynpp0mrlwvcdhxiafw596559ab6qk";
+      sha256 = "0xhn11kgcbzda4z9j0rflvq0nfivizh3jrzhanwn5vnghafy4zqw";
     };
     runcRev = "b9ee9c6314599f1b4a7f497e1f1f856fe433d3b7"; # v1.0.0-rc95
     runcSha256 = "18sbvmlvb6kird4w3rqsfrjdj7n25firabvdxsl0rxjfy9r1g2xb";

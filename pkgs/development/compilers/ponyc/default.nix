@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
-  version = "0.41.1";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "02wx070cy1193xzv58vh79yzwgpqiayqlwd3i285698fppbcg69a";
+    sha256 = "1s8glmzz0g5lj1fjwwy4m3n660smiq5wl9r1lg686wqh42hcgnsy";
 
 # Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
 # LLVM.  (The submodule is a specific tag in the LLVM source tree).

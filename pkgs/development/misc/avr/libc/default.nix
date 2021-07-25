@@ -1,11 +1,8 @@
 { lib, stdenv, fetchurl, automake, autoconf }:
 
-let
-  version = "2.0.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "avr-libc";
-  inherit version;
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2";

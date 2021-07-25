@@ -95,6 +95,8 @@ rec {
 
     mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
 
+    m68k     = { bits = 32; significantByte = bigEndian; family = "m68k"; };
+
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
     powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
@@ -102,6 +104,8 @@ rec {
 
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
+
+    s390     = { bits = 32; significantByte = bigEndian; family = "s390"; };
 
     sparc    = { bits = 32; significantByte = bigEndian;    family = "sparc"; };
     sparc64  = { bits = 64; significantByte = bigEndian;    family = "sparc"; };

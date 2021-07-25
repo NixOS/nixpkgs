@@ -5,10 +5,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1csxddyhl6k773ycxjvmyshyr4g9jb1icbs3pnm7crnavqs4h1yr";
+      sha256 = "0kqgywy4cj3h5142dh7pl0xx5nybp25jn0ykk0znziivzks68xdk";
       type = "gem";
     };
-    version = "6.1.3.2";
+    version = "6.1.4";
   };
   addressable = {
     dependencies = ["public_suffix"];
@@ -27,20 +27,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1xzkbk6a93sdhshzlkx1dcpln3fcw2apccb7g6jha0g1im7yhgcj";
+      sha256 = "15qh28drxkyv294l1qcpsghfa875p71q0vkmmv5l6fbmpapmllrk";
       type = "gem";
     };
-    version = "0.13.4";
+    version = "0.13.5";
   };
   concurrent-ruby = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mr23wq0szj52xnj0zcn1k0c7j4v79wlwbijkpfcscqww3l6jlg3";
+      sha256 = "0nwad3211p7yv9sda31jmbyw6sdafzmdi2i2niaz6f0wk5nq9h0f";
       type = "gem";
     };
-    version = "1.1.8";
+    version = "1.1.9";
   };
   ethon = {
     dependencies = ["ffi"];
@@ -58,10 +58,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "15nn2v70rql15vb0pm9cg0f3xsaslwjkv6xgz0k5jh48idmfw9fi";
+      sha256 = "1wgvaclp4h9y8zkrgz8p2hqkrgr4j7kz0366mik0970w532cbmcq";
       type = "gem";
     };
-    version = "1.15.1";
+    version = "1.15.3";
   };
   get_process_mem = {
     dependencies = ["ffi"];
@@ -111,10 +111,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1z4x366icbl9w13pk50vxx5kywlksvhxqxrpv8f5xpjxfl3jl64z";
+      sha256 = "1vrn31385ix5k9b0yalnlzv360isv6dincbcvi8psllnwz4sjxj9";
       type = "gem";
     };
-    version = "1.11.6";
+    version = "1.11.7";
   };
   opt_parse_validator = {
     dependencies = ["activesupport" "addressable"];
@@ -206,10 +206,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0jdn2v5cmxlzq9nkzh5lqnqr0mbiyn87g6bfc0074m19m38g19r9";
+      sha256 = "01ig3fbxxm0gnvqkzmsc4zcipijprrw5xs84rnwp50w0crww842c";
       type = "gem";
     };
-    version = "3.8.17";
+    version = "3.8.18";
   };
   xmlrpc = {
     dependencies = ["webrick"];

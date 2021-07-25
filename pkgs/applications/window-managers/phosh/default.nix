@@ -37,14 +37,14 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "104qib4blh32s7bg6j3xza3s9syrxrvyh2wpyh5yx7v5wqarr20x";
+    sha256 = "1s0lgq04qz562iri535wpwvfkmmngdpclyl329cf7rc9ihy1kjvs";
   };
 
   nativeBuildInputs = [

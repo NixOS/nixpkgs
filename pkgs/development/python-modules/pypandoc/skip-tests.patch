@@ -10,11 +10,3 @@ index deb50e0..aede281 100755
      def test_basic_conversion_from_http_url(self):
          url = 'https://raw.githubusercontent.com/bebraw/pypandoc/master/README.md'
          received = pypandoc.convert_file(url, 'html')
-@@ -247,6 +248,7 @@ class TestPypandoc(unittest.TestCase):
- 
-         self.assertRaises(RuntimeError, f)
- 
-+    @unittest.skip("pandoc-citeproc has been deprecated")
-     def test_conversion_with_citeproc_filter(self):
-         # we just want to get a temp file name, where we can write to
-         filters = ['pandoc-citeproc']

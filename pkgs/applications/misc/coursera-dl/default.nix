@@ -18,7 +18,7 @@ in pythonPackages.buildPythonApplication rec {
 
   buildInputs = with pythonPackages; [ glibcLocales ];
 
-  propagatedBuildInputs = with pythonPackages; [ attrs beautifulsoup4 ConfigArgParse keyring pyasn1 requests six urllib3 ];
+  propagatedBuildInputs = with pythonPackages; [ attrs beautifulsoup4 configargparse keyring pyasn1 requests six urllib3 ];
 
   checkInputs = with pythonPackages; [ pytest mock ];
 

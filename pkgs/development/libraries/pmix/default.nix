@@ -2,12 +2,9 @@
 , libtool, flex, libevent, hwloc, munge, zlib, pandoc
 } :
 
-let
-  version = "3.2.3";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pmix";
-  inherit version;
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     repo = "openpmix";

@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "Software for research in polyhedral geometry";
     license = lib.licenses.gpl2 ;
     maintainers = [lib.maintainers.raskin];

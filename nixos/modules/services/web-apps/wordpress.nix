@@ -3,12 +3,17 @@
 let
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) any attrValues concatMapStringsSep flatten literalExample;
-  inherit (lib) mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+  inherit (lib) filterAttrs mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
 
-  eachSite = config.services.wordpress;
+  cfg = migrateOldAttrs config.services.wordpress;
+  eachSite = cfg.sites;
   user = "wordpress";
-  group = config.services.httpd.group;
+  webserver = config.services.${cfg.webserver};
   stateDir = hostName: "/var/lib/wordpress/${hostName}";
+
+  # Migrate config.services.wordpress.<hostName> to config.services.wordpress.sites.<hostName>
+  oldSites = filterAttrs (o: _: o != "sites" && o != "webserver");
+  migrateOldAttrs = cfg: cfg // { sites = cfg.sites // oldSites cfg; };
 
   pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
     pname = "wordpress-${hostName}";
@@ -261,20 +266,47 @@ in
   # interface
   options = {
     services.wordpress = mkOption {
-      type = types.attrsOf (types.submodule siteOpts);
+      type = types.submodule {
+        # Used to support old interface
+        freeformType = types.attrsOf (types.submodule siteOpts);
+
+        # New interface
+        options.sites = mkOption {
+          type = types.attrsOf (types.submodule siteOpts);
+          default = {};
+          description = "Specification of one or more WordPress sites to serve";
+        };
+
+        options.webserver = mkOption {
+          type = types.enum [ "httpd" "nginx" ];
+          default = "httpd";
+          description = ''
+            Whether to use apache2 or nginx for virtual host management.
+
+            Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+            See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+
+            Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
+            See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+          '';
+        };
+      };
       default = {};
-      description = "Specification of one or more WordPress sites to serve via Apache.";
+      description = "Wordpress configuration";
     };
+
   };
 
   # implementation
-  config = mkIf (eachSite != {}) {
+  config = mkIf (eachSite != {}) (mkMerge [{
 
     assertions = mapAttrsToList (hostName: cfg:
       { assertion = cfg.database.createLocally -> cfg.database.user == user;
-        message = "services.wordpress.${hostName}.database.user must be ${user} if the database is to be automatically provisioned";
+        message = ''services.wordpress.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
       }
     ) eachSite;
+
+    warnings = mapAttrsToList (hostName: _: ''services.wordpress."${hostName}" is deprecated use services.wordpress.sites."${hostName}"'') (oldSites cfg);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
@@ -289,14 +321,18 @@ in
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "wordpress-${hostName}" {
-        inherit user group;
+        inherit user;
+        group = webserver.group;
         settings = {
-          "listen.owner" = config.services.httpd.user;
-          "listen.group" = config.services.httpd.group;
+          "listen.owner" = webserver.user;
+          "listen.group" = webserver.group;
         } // cfg.poolConfig;
       }
     )) eachSite;
 
+  }
+
+  (mkIf (cfg.webserver == "httpd") {
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
@@ -332,11 +368,13 @@ in
         '';
       } ]) eachSite;
     };
+  })
 
+  {
     systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
-      "d '${stateDir hostName}' 0750 ${user} ${group} - -"
-      "d '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
-      "Z '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
+      "d '${stateDir hostName}' 0750 ${user} ${webserver.group} - -"
+      "d '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
+      "Z '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
     ]) eachSite);
 
     systemd.services = mkMerge [
@@ -350,7 +388,7 @@ in
           serviceConfig = {
             Type = "oneshot";
             User = user;
-            Group = group;
+            Group = webserver.group;
           };
       })) eachSite)
 
@@ -360,9 +398,65 @@ in
     ];
 
     users.users.${user} = {
-      group = group;
+      group = webserver.group;
       isSystemUser = true;
     };
+  }
 
-  };
+  (mkIf (cfg.webserver == "nginx") {
+    services.nginx = {
+      enable = true;
+      virtualHosts = mapAttrs (hostName: cfg: {
+        serverName = mkDefault hostName;
+        root = "${pkg hostName cfg}/share/wordpress";
+        extraConfig = ''
+          index index.php;
+        '';
+        locations = {
+          "/" = {
+            priority = 200;
+            extraConfig = ''
+              try_files $uri $uri/ /index.php$is_args$args;
+            '';
+          };
+          "~ \\.php$" = {
+            priority = 500;
+            extraConfig = ''
+              fastcgi_split_path_info ^(.+\.php)(/.+)$;
+              fastcgi_pass unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket};
+              fastcgi_index index.php;
+              include "${config.services.nginx.package}/conf/fastcgi.conf";
+              fastcgi_param PATH_INFO $fastcgi_path_info;
+              fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+              # Mitigate https://httpoxy.org/ vulnerabilities
+              fastcgi_param HTTP_PROXY "";
+              fastcgi_intercept_errors off;
+              fastcgi_buffer_size 16k;
+              fastcgi_buffers 4 16k;
+              fastcgi_connect_timeout 300;
+              fastcgi_send_timeout 300;
+              fastcgi_read_timeout 300;
+            '';
+          };
+          "~ /\\." = {
+            priority = 800;
+            extraConfig = "deny all;";
+          };
+          "~* /(?:uploads|files)/.*\\.php$" = {
+            priority = 900;
+            extraConfig = "deny all;";
+          };
+          "~* \\.(js|css|png|jpg|jpeg|gif|ico)$" = {
+            priority = 1000;
+            extraConfig = ''
+              expires max;
+              log_not_found off;
+            '';
+          };
+        };
+      }) eachSite;
+    };
+  })
+
+  ]);
 }

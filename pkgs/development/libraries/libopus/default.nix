@@ -1,12 +1,9 @@
 { lib, stdenv, fetchurl
 , fixedPoint ? false, withCustomModes ? true }:
 
-let
-  version = "1.3.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libopus";
-  inherit version;
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://archive.mozilla.org/pub/opus/opus-${version}.tar.gz";

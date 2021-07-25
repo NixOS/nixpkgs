@@ -131,7 +131,6 @@ let
       hydraPlatforms = [];
       # prefer wrapper over the package
       priority = (neovim.meta.priority or 0) - 1;
-      mainProgram = "nvim";
     };
   };
 in

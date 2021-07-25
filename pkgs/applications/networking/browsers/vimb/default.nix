@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook pkg-config ];
   buildInputs = [ gtk3 libsoup webkitgtk glib-networking gsettings-desktop-schemas ];
 
+  passthru = {
+    inherit gtk3;
+  };
+
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {

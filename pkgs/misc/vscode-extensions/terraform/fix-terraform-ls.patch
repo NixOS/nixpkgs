@@ -1,17 +1,30 @@
+diff --git a/out/clientHandler.js b/out/clientHandler.js
+index 7f9716d..a543d60 100644
+--- a/out/clientHandler.js
++++ b/out/clientHandler.js
+@@ -33,8 +33,7 @@ class ClientHandler {
+             this.reporter.sendTelemetryEvent('usePathToBinary');
+         }
+         else {
+-            const installPath = path.join(context.extensionPath, 'lsp');
+-            this.pathToBinary = path.join(installPath, 'terraform-ls');
++            this.pathToBinary = 'TERRAFORM-LS-PATH';
+         }
+     }
+     startClients(folders) {
 diff --git a/out/extension.js b/out/extension.js
-index e932d27..099126b 100644
+index 7a271fc..726bbf8 100644
 --- a/out/extension.js
 +++ b/out/extension.js
-@@ -143,25 +143,6 @@ function updateLanguageServer() {
-     return __awaiter(this, void 0, void 0, function* () {
-         const delay = 1000 * 60 * 60 * 24;
-         languageServerUpdater.timeout(updateLanguageServer, delay); // check for new updates every 24hrs
--        // skip install if a language server binary path is set
+@@ -149,24 +149,6 @@ function updateLanguageServer(clientHandler, installPath) {
+             updateLanguageServer(clientHandler, installPath);
+         }, 24 * hour);
+         // skip install if a language server binary path is set
 -        if (!vscodeUtils_1.config('terraform').get('languageServer.pathToBinary')) {
 -            const installer = new languageServerInstaller_1.LanguageServerInstaller(installPath, reporter);
 -            const install = yield installer.needsInstall();
 -            if (install) {
--                yield stopClients();
+-                yield clientHandler.stopClients();
 -                try {
 -                    yield installer.install();
 -                }
@@ -25,15 +38,6 @@ index e932d27..099126b 100644
 -                }
 -            }
 -        }
-         return startClients(); // on repeat runs with no install, this will be a no-op
+         return clientHandler.startClients(vscodeUtils_1.prunedFolderNames()); // on repeat runs with no install, this will be a no-op
      });
  }
-@@ -259,7 +240,7 @@ function pathToBinary() {
-                 reporter.sendTelemetryEvent('usePathToBinary');
-             }
-             else {
--                command = path.join(installPath, 'terraform-ls');
-+                command = 'TERRAFORM-LS-PATH';
-             }
-             _pathToBinaryPromise = Promise.resolve(command);
-         }

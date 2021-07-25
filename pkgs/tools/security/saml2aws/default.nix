@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, AppKit }:
 
 buildGoModule rec {
   pname = "saml2aws";
@@ -13,6 +13,8 @@ buildGoModule rec {
 
   runVend = true;
   vendorSha256 = "sha256-TieQVPSWtIteU0wTqX7si6GrPdYd4WD2eK4ZlLz0VJ8=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
 
   doCheck = false;
 

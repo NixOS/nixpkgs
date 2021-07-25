@@ -126,6 +126,7 @@ source 'https://rubygems.org' do
   gem 'semian'
   gem 'sequel'
   gem 'sequel_pg'
+  gem 'solargraph'
   gem 'simplecov'
   gem 'sinatra'
   gem 'slop'

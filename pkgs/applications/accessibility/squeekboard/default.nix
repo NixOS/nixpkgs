@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xyd6ickbaqvrr8a7ak6j1ziqjk05jlnganjrdv43p74nnjyqr8y";
+    sha256 = "1ayap40pgzcpmfydk5pbf3gwhh26m3cmbk6lyly4jihr9qw7dgb0";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       cat Cargo.toml.in Cargo.deps > Cargo.toml
     '';
     name = "${pname}-${version}";
-    sha256 = "096skk7vmr93axcf0qj7kyr8hm1faj0nkmd349g8mnzwd68a9npz";
+    sha256 = "0148ynzmapxfrlccikf20ikmi0ssbkn9fl5wi6nh6azflv50pzzn";
   };
 
   nativeBuildInputs = [

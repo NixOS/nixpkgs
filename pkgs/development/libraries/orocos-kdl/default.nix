@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/orocos_kdl";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen ];
+  propagatedBuildInputs = [ eigen ];
 
   meta = with lib; {
     description = "Kinematics and Dynamics Library";

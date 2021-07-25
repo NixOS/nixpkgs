@@ -73,8 +73,30 @@ let
           machine.succeed(
               "systemctl start ${backupService}.service",
               "zcat /var/backup/postgresql/${backupName}.sql.gz | grep '<test>ok</test>'",
+              "ls -hal /var/backup/postgresql/ >/dev/console",
               "stat -c '%a' /var/backup/postgresql/${backupName}.sql.gz | grep 600",
           )
+      with subtest("Backup service fails gracefully"):
+          # Sabotage the backup process
+          machine.succeed("rm /run/postgresql/.s.PGSQL.5432")
+          machine.fail(
+              "systemctl start ${backupService}.service",
+          )
+          machine.succeed(
+              "ls -hal /var/backup/postgresql/ >/dev/console",
+              "zcat /var/backup/postgresql/${backupName}.prev.sql.gz | grep '<test>ok</test>'",
+              "stat /var/backup/postgresql/${backupName}.in-progress.sql.gz",
+          )
+          # In a previous version, the second run would overwrite prev.sql.gz,
+          # so we test a second run as well.
+          machine.fail(
+              "systemctl start ${backupService}.service",
+          )
+          machine.succeed(
+              "stat /var/backup/postgresql/${backupName}.in-progress.sql.gz",
+              "zcat /var/backup/postgresql/${backupName}.prev.sql.gz | grep '<test>ok</test>'",
+          )
+
 
       with subtest("Initdb works"):
           machine.succeed("sudo -u postgres initdb -D /tmp/testpostgres2")

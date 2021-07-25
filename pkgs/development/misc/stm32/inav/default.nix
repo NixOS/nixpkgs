@@ -2,14 +2,10 @@
 , gcc-arm-embedded, binutils-arm-embedded, ruby
 }:
 
-let
-
-  version = "2.0.0-rc2";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
 
   pname = "inav";
-  inherit version;
+  version = "2.0.0-rc2";
 
   src = fetchFromGitHub {
     owner = "iNavFlight";

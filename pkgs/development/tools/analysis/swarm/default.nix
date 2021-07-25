@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "swarm-2019-03-11";
+stdenv.mkDerivation rec {
+  pname = "swarm";
+  version = "unstable-2019-03-11";
 
   src = fetchFromGitHub {
     owner = "nimble-code";

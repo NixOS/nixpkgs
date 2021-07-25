@@ -3,13 +3,9 @@
 , IOKit, Foundation, AppKit, OpenAL
 }:
 
-let
-  version = "2.5.1";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "sfml";
-  inherit version;
+  version = "2.5.1";
 
   src = fetchzip {
     url = "https://github.com/SFML/SFML/archive/${version}.tar.gz";

@@ -1,9 +1,10 @@
 {lib, stdenv, fetchurl, python3}:
 
-stdenv.mkDerivation {
-  name = "doclifter-2.19";
+stdenv.mkDerivation rec {
+  pname = "doclifter";
+  version = "2.19";
   src = fetchurl {
-    url = "http://www.catb.org/~esr/doclifter/doclifter-2.19.tar.gz";
+    url = "http://www.catb.org/~esr/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1as6z7mdjrrkw2kism41q5ybvyzvwcmj9qzla2fz98v9f4jbj2s2";
   };
   buildInputs = [ python3 ];
