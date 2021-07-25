@@ -70,8 +70,8 @@ let
     processChildrenOnly = process_children_only;
   };
 
-  # Extract pool names from configured datasets
-  pools = unique (map (d: head (builtins.match "([^/]+).*" d)) (attrNames cfg.datasets));
+  # Extract unique dataset names
+  datasets = unique (attrNames cfg.datasets);
 
   configFile = let
     mkValueString = v:
@@ -156,18 +156,18 @@ in {
       systemd.services.sanoid = {
         description = "Sanoid snapshot service";
         serviceConfig = {
-          ExecStartPre = map (pool: lib.escapeShellArgs [
+          ExecStartPre = map (dataset: lib.escapeShellArgs [
             "+/run/booted-system/sw/bin/zfs" "allow"
-            "sanoid" "snapshot,mount,destroy" pool
-          ]) pools;
+            "sanoid" "snapshot,mount,destroy" dataset
+          ]) datasets;
           ExecStart = lib.escapeShellArgs ([
             "${pkgs.sanoid}/bin/sanoid"
             "--cron"
             "--configdir" (pkgs.writeTextDir "sanoid.conf" configFile)
           ] ++ cfg.extraArgs);
-          ExecStopPost = map (pool: lib.escapeShellArgs [
-            "+/run/booted-system/sw/bin/zfs" "unallow" "sanoid" pool
-          ]) pools;
+          ExecStopPost = map (dataset: lib.escapeShellArgs [
+            "+/run/booted-system/sw/bin/zfs" "unallow" "sanoid" dataset
+          ]) datasets;
           User = "sanoid";
           Group = "sanoid";
           DynamicUser = true;
