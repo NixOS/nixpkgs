@@ -26547,9 +26547,7 @@ in
 
   polylith = callPackage ../development/tools/misc/polylith { };
 
-  polymake = callPackage ../applications/science/math/polymake {
-    openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  polymake = callPackage ../applications/science/math/polymake { };
 
   pond = callPackage ../applications/networking/instant-messengers/pond { };
 
