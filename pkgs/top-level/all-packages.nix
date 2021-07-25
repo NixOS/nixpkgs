@@ -6452,6 +6452,8 @@ with pkgs;
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
 
+  evcc = callPackage ../servers/home-automation/evcc { };
+
   eventstat = callPackage ../os-specific/linux/eventstat { };
 
   evillimiter = python3Packages.callPackage ../tools/networking/evillimiter { };
