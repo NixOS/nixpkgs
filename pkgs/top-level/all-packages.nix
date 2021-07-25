@@ -19599,6 +19599,8 @@ in
 
   hyprspace = callPackage ../applications/networking/hyprspace { inherit (darwin) iproute2mac; };
 
+  ic-keysmith = callPackage ../tools/security/ic-keysmith { };
+
   icecream = callPackage ../servers/icecream { };
 
   icingaweb2-ipl = callPackage ../servers/icingaweb2/ipl.nix { };
