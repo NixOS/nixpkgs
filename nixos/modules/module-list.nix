@@ -208,6 +208,7 @@
   ./programs/yabar.nix
   ./programs/zmap.nix
   ./programs/zsh/oh-my-zsh.nix
+  ./programs/zsh/spaceship-prompt.nix
   ./programs/zsh/zsh.nix
   ./programs/zsh/zsh-autoenv.nix
   ./programs/zsh/zsh-autosuggestions.nix
