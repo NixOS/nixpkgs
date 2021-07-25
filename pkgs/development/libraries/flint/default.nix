@@ -12,11 +12,11 @@ assert withBlas -> openblas != null && blas.implementation == "openblas" && lapa
 
 stdenv.mkDerivation rec {
   pname = "flint";
-  version = "2.7.1";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "http://www.flintlib.org/flint-${version}.tar.gz";
-    sha256 = "07j8r96kdzp19cy3a5yvpjxf90mkd6103yr2n42qmpv7mgcjyvhq";
+    sha256 = "sha256-WEI1zcOdd52ZIOrvFv4ITzwm/+7qADo//2SiCg8zRJ4=";
   };
 
   buildInputs = [
