@@ -15,9 +15,8 @@ buildGoModule rec {
     sha256 = "03713b4bkhcz61maz0r5mkd36kv3rq8rji3qcpi9zf5bkkjs1yzb";
   };
 
-  vendorSha256 = if stdenv.isDarwin
-    then "0anw3l6pq8yys2g2607ndhklb9m1i9krgjrw4wb99igavjzp3wpj"
-    else "04h463d2d7g6wqp5mzkqlszwzdbq0pix6j7n2s9s80lwg7nh8k3h";
+  vendorSha256 = "sha256-sNI2OoDsSNtcQP8rNO4OCboFqSC7v6g4xEPNRKjv3sQ=";
+  proxyVendor = true;
 
   subPackages = [ "cmd/otelcontribcol" ];
 
