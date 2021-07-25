@@ -5,7 +5,7 @@
 
 mkDerivation rec {
   pname = "kdsoap";
-  version = "1.10.0";
+  version = "2.0.0";
   meta = {
     description = "A Qt-based client-side and server-side SOAP component";
     longDescription = ''
@@ -20,7 +20,7 @@ mkDerivation rec {
   };
   src = fetchurl {
     url = "https://github.com/KDAB/KDSoap/releases/download/kdsoap-${version}/kdsoap-${version}.tar.gz";
-    sha256 = "sha256-DGBuzENEZtutsoKYIMoWOvYMx8oib1U7XUAyGWc3M48=";
+    sha256 = "sha256-0YljEE+m99ArBEYxzdvnjxj3DgbGB69oDHrOBNbPBO4=";
   };
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ cmake ];
