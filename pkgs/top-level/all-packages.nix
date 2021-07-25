@@ -10086,6 +10086,8 @@ in
 
   vncdo = with python3Packages; toPythonApplication vncdo;
 
+  vncviewer = callPackage ../tools/admin/vncviewer/default.nix { };
+
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
   waf = callPackage ../development/tools/build-managers/waf { python = python3; };
