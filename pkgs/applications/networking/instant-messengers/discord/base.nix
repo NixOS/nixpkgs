@@ -5,6 +5,7 @@
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
 , mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
+, writeScript, common-updater-scripts
 }:
 
 let
@@ -71,7 +72,15 @@ in stdenv.mkDerivation rec {
     mimeType = "x-scheme-handler/discord";
   };
 
-  passthru.updateScript = ./update-discord.sh;
+  passthru.updateScript = writeScript "discord-update-script" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl gnugrep common-updater-scripts
+    set -eou pipefail;
+    url=$(curl -sI "https://discordapp.com/api/download/${builtins.replaceStrings ["discord-" "discord"] ["" "stable"] pname}?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
+    version=''${url##https://dl*.discordapp.net/apps/linux/}
+    version=''${version%%/*.tar.gz}
+    update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix
+  '';
 
   meta = with lib; {
     description = "All-in-one cross-platform voice and text chat for gamers";
