@@ -94,7 +94,7 @@ mkDerivation rec {
       python
       regex
       sip
-      zeroconf
+      (callPackage ./zeroconf.nix { })
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optional (unrarSupport) unrardll
