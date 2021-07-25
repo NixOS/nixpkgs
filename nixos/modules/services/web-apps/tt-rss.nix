@@ -566,9 +566,14 @@ let
       "Z '${cfg.root}' 0755 ${cfg.user} tt_rss - -"
     ];
 
-    systemd.services.tt-rss =
-      {
+    systemd.services = {
+      phpfpm-tt-rss = mkIf (cfg.pool == "${poolName}") {
+        restartTriggers = [
+          cfg.root
+        ];
+      };
 
+      tt-rss = {
         description = "Tiny Tiny RSS feeds update daemon";
 
         preStart = let
@@ -645,6 +650,7 @@ let
         wantedBy = [ "multi-user.target" ];
         requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
         after = [ "network.target" ] ++ optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      };
     };
 
     services.mysql = mkIf mysqlLocal {

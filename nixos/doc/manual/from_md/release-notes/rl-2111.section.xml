@@ -459,13 +459,21 @@
         </itemizedlist>
       </listitem>
     </itemizedlist>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <literal>yggdrasil</literal> was upgraded to a new major
           release with breaking changes, see
           <link xlink:href="https://github.com/yggdrasil-network/yggdrasil-go/releases/tag/v0.4.0">upstream
           changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>tt-rss</literal> was upgraded to the commit on
+          2021-06-21, which has breaking changes, see
+          <link xlink:href="https://community.tt-rss.org/t/rip-config-php-hello-classes-config-php/4337">this
+          thread</link> in the tt-rss forums for details.
         </para>
       </listitem>
     </itemizedlist>

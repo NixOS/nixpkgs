@@ -2,7 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "tt-rss";
-  version = "2021-06-21";
+  year = "21";
+  month = "06";
+  day = "21";
+  version = "20${year}-${month}-${day}";
   rev = "cd26dbe64c9b14418f0b2d826a38a35c6bf8a270";
 
   src = fetchurl {
@@ -11,8 +14,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -ra * $out/
+
+    # see the code of Config::get_version(). you can check that the version in
+    # the footer of the preferences pages is not UNKNOWN
+    echo "${year}.${month}" > $out/version_static.txt
+
+    runHook postInstall
   '';
 
   meta = with lib; {
