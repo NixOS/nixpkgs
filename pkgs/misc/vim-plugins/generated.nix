@@ -425,12 +425,12 @@ final: prev:
 
   chadtree = buildVimPluginFrom2Nix {
     pname = "chadtree";
-    version = "2021-07-24";
+    version = "2021-07-25";
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "chadtree";
-      rev = "139ca9bb8685a2d9b807d869a49a85fcd42811f7";
-      sha256 = "1739vvb9rzlkyrq63lgadhf2azaszy2xhy52hw91rczg8xw7zfc5";
+      rev = "393fbc24cab3fdfaffca85e286e01c84bcf748c9";
+      sha256 = "08pcp6dh6kibppndf97nzj90iw1qv51s4zk3vq59z16w32zwkzda";
     };
     meta.homepage = "https://github.com/ms-jpq/chadtree/";
   };
@@ -1667,12 +1667,12 @@ final: prev:
 
   friendly-snippets = buildVimPluginFrom2Nix {
     pname = "friendly-snippets";
-    version = "2021-07-08";
+    version = "2021-07-24";
     src = fetchFromGitHub {
       owner = "rafamadriz";
       repo = "friendly-snippets";
-      rev = "f3ca66b6a2a42eb01ffc255ac03039177b888951";
-      sha256 = "08wzq5i86wxdyhl2yrl9ggfhng92pfx5d7rhmxfcm4abnnl9sj07";
+      rev = "d5bf63e50c1c7923f1de2d10d8d822f6eb8c872e";
+      sha256 = "14h8kd01674i82npc2b58ivhj2d80nb1x8v0j7ag5c5n24p1nphf";
     };
     meta.homepage = "https://github.com/rafamadriz/friendly-snippets/";
   };
@@ -2748,12 +2748,12 @@ final: prev:
 
   luasnip = buildVimPluginFrom2Nix {
     pname = "luasnip";
-    version = "2021-07-23";
+    version = "2021-07-24";
     src = fetchFromGitHub {
       owner = "l3mon4d3";
       repo = "luasnip";
-      rev = "726aac6f8f05c94418cd3e9d6c05705e8b1ae743";
-      sha256 = "0v5lpcbmlghyfifwys51acihbhawg87bmapjay52g591cjzcd9ak";
+      rev = "e9f4d03aaacc8af6ebd17833dfb5804a6abbd021";
+      sha256 = "0k86j2rq5ykav8i6gna91v893j4panyr7l2cyp6vrrkj441bx5ww";
     };
     meta.homepage = "https://github.com/l3mon4d3/luasnip/";
   };
@@ -3432,12 +3432,12 @@ final: prev:
 
   nord-nvim = buildVimPluginFrom2Nix {
     pname = "nord-nvim";
-    version = "2021-07-23";
+    version = "2021-07-24";
     src = fetchFromGitHub {
       owner = "shaunsingh";
       repo = "nord.nvim";
-      rev = "b7209e7657dcc786b844a920894a517571da1317";
-      sha256 = "1iaslrhq18myxwla41n3kllvwcn3hb5zcgfl3h6zw4ar8n9pvwdr";
+      rev = "f58f77dee66babac1a859c2b552797d8128e1f86";
+      sha256 = "12jway928hhm8s9sbwaqzjjzdgrpvz1gr09q4q5wxicfqaln4cd1";
     };
     meta.homepage = "https://github.com/shaunsingh/nord.nvim/";
   };
@@ -3828,12 +3828,12 @@ final: prev:
 
   nvim-treesitter = buildVimPluginFrom2Nix {
     pname = "nvim-treesitter";
-    version = "2021-07-23";
+    version = "2021-07-24";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
-      rev = "65a059b34d5bc77db01372c589f582b17524a2f9";
-      sha256 = "1f0iig48frgd75ccan8yqlxh5j84ywb6im1qsmq17gyfjs4vbqbx";
+      rev = "296fe9b8611061a1054c05922dbaa134f2b712b2";
+      sha256 = "0qxdd3z4696xf3nnaxmww3gs0ijfi2bw5aq9ywnqxpb3n734iapd";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
@@ -4044,12 +4044,12 @@ final: prev:
 
   packer-nvim = buildVimPluginFrom2Nix {
     pname = "packer-nvim";
-    version = "2021-07-22";
+    version = "2021-07-25";
     src = fetchFromGitHub {
       owner = "wbthomason";
       repo = "packer.nvim";
-      rev = "fdf005f5697742da121391d31ad42a47842264f9";
-      sha256 = "15amdgzdiaf0srzzwy2pgk7d44bwls5pzj2088xf1206754znsas";
+      rev = "92dcbe5b1052c2cec1b5455a624710dd1e899777";
+      sha256 = "0mh3ghbz38inwlcv4sqrpmyzwxr62j10d4873p9d5zb6j68ajxn9";
     };
     meta.homepage = "https://github.com/wbthomason/packer.nvim/";
   };
@@ -4489,12 +4489,12 @@ final: prev:
 
   rust-tools-nvim = buildVimPluginFrom2Nix {
     pname = "rust-tools-nvim";
-    version = "2021-07-23";
+    version = "2021-07-24";
     src = fetchFromGitHub {
       owner = "simrat39";
       repo = "rust-tools.nvim";
-      rev = "160aeb66e46e863802c2e4c5a772c3858bc02fd0";
-      sha256 = "108nxkbybl1fvyawgq0mzbi2c5fadycxj0pnnnsw8alycyjln13f";
+      rev = "27e1555146331f42ebb07fb7ba0a196b75e03dde";
+      sha256 = "13dr30nifxrkjj7rf8dyv9p942dinjcpiy24sbfwni2ibmyf2p52";
     };
     meta.homepage = "https://github.com/simrat39/rust-tools.nvim/";
   };
@@ -9755,12 +9755,12 @@ final: prev:
 
   vimtex = buildVimPluginFrom2Nix {
     pname = "vimtex";
-    version = "2021-07-18";
+    version = "2021-07-24";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "830659752b8914f6b4567a00448901246e4d1841";
-      sha256 = "1zdi1kblk03gwifpg1nanq4ppn9xw6af92l3li86ziw89bv3bad9";
+      rev = "d1439f47a481b8665fbfa8511c6ae4e7514bdfc7";
+      sha256 = "0brs97yhnfbkyyz6fzhs7s7kjwgwrw6kkinyycq51idxqdqvk4s8";
     };
     meta.homepage = "https://github.com/lervag/vimtex/";
   };
