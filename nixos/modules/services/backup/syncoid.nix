@@ -5,9 +5,9 @@ with lib;
 let
   cfg = config.services.syncoid;
 
-  # Extract the pool name of a local dataset (any dataset not containing "@")
-  localPoolName = d: optionals (d != null) (
-    let m = builtins.match "([^/@]+)[^@]*" d; in
+  # Extract local dasaset names (so no datasets containing "@")
+  localDatasetName = d: optionals (d != null) (
+    let m = builtins.match "([^/@]+[^@]*)" d; in
     optionals (m != null) m);
 
   # Escape as required by: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
@@ -206,15 +206,15 @@ in {
             path = [ "/run/booted-system/sw/bin/" ];
             serviceConfig = {
               ExecStartPre =
-                map (pool: lib.escapeShellArgs [
+                map (dataset: lib.escapeShellArgs [
                   "+/run/booted-system/sw/bin/zfs" "allow"
-                  cfg.user "bookmark,hold,send,snapshot,destroy" pool
+                  cfg.user "bookmark,hold,send,snapshot,destroy" dataset
                   # Permissions snapshot and destroy are in case --no-sync-snap is not used
-                ]) (localPoolName c.source) ++
-                map (pool: lib.escapeShellArgs [
+                ]) (localDatasetName c.source) ++
+                map (dataset: lib.escapeShellArgs [
                   "+/run/booted-system/sw/bin/zfs" "allow"
-                  cfg.user "create,mount,receive,rollback" pool
-                ]) (localPoolName c.target);
+                  cfg.user "create,mount,receive,rollback" dataset
+                ]) (localDatasetName c.target);
               ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"
