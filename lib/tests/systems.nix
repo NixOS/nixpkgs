@@ -28,7 +28,7 @@ with lib.systems.doubles; lib.runTests {
   testredox = mseteq redox [ "x86_64-redox" ];
   testgnu = mseteq gnu (linux /* ++ kfreebsd ++ ... */);
   testillumos = mseteq illumos [ "x86_64-solaris" ];
-  testlinux = mseteq linux [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-linux" "mipsel-linux" "riscv32-linux" "riscv64-linux" "x86_64-linux" "powerpc64-linux" "powerpc64le-linux" ];
+  testlinux = mseteq linux [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-linux" "mipsel-linux" "riscv32-linux" "riscv64-linux" "x86_64-linux" "powerpc64-linux" "powerpc64le-linux" "m68k-linux" ];
   testnetbsd = mseteq netbsd [ "aarch64-netbsd" "armv6l-netbsd" "armv7a-netbsd" "armv7l-netbsd" "i686-netbsd" "mipsel-netbsd" "powerpc-netbsd" "riscv32-netbsd" "riscv64-netbsd" "x86_64-netbsd" ];
   testopenbsd = mseteq openbsd [ "i686-openbsd" "x86_64-openbsd" ];
   testwindows = mseteq windows [ "i686-cygwin" "x86_64-cygwin" "i686-windows" "x86_64-windows" ];

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, openssl, lib
-# miscellaneous
-, brotli, c-ares
-# databases
+{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, lib
+# optional but of negligible size
+, openssl, brotli, c-ares
+# optional databases
 , sqliteSupport ? true, sqlite
 , postgresSupport ? false, postgresql
 , redisSupport ? false, hiredis
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.7.1";
 
   src = fetchFromGitHub {
-    owner = "an-tao";
+    owner = "drogonframework";
     repo = "drogon";
     rev = "v${version}";
     sha256 = "0rhwbz3m5x3vy5zllfs8r347wqprg29pff5q7i53f25bh8y0n49i";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional sqliteSupport sqlite
     ++ lib.optional postgresSupport postgresql
     ++ lib.optional redisSupport hiredis
-    # drogon uses mariadb for mysql (see https://github.com/an-tao/drogon/wiki/ENG-02-Installation#Library-Dependencies)
+    # drogon uses mariadb for mysql (see https://github.com/drogonframework/drogon/wiki/ENG-02-Installation#Library-Dependencies)
     ++ lib.optional mysqlSupport [ libmysqlclient mariadb ];
 
   patches = [
@@ -48,17 +48,16 @@ stdenv.mkDerivation rec {
   # modifying PATH here makes drogon_ctl visible to the test
   installCheckPhase = ''
     cd ..
-    patchShebangs test.sh
-    PATH=$PATH:$out/bin ./test.sh
+    PATH=$PATH:$out/bin bash test.sh
   '';
 
   doInstallCheck = true;
 
   meta = with lib; {
-    homepage = "https://github.com/an-tao/drogon";
+    homepage = "https://github.com/drogonframework/drogon";
     description = "C++14/17 based HTTP web application framework";
     license = licenses.mit;
-    maintainers = [ maintainers.urlordjames ];
+    maintainers = with maintainers; [ urlordjames ];
     platforms = platforms.all;
   };
 }
