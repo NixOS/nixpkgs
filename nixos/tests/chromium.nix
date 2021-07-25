@@ -243,6 +243,16 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         machine.wait_for_text("Graphics Feature Status")
 
 
+    with test_new_win("version_info", "chrome://version", "About Version") as clipboard:
+        filters = [
+            r"${chromiumPkg.version} \(Official Build",
+        ]
+        if not all(
+            re.search(filter, clipboard) for filter in filters
+        ):
+            assert False, "Version info not correct."
+
+
     machine.shutdown()
   '';
 }) channelMap
