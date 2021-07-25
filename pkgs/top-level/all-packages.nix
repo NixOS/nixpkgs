@@ -8992,6 +8992,8 @@ in
 
   socat2pre = lowPrio (callPackage ../tools/networking/socat/2.x.nix { });
 
+  sockperf = callPackage ../tools/networking/sockperf { };
+
   solaar = callPackage ../applications/misc/solaar {};
 
   solanum = callPackage ../servers/irc/solanum {
