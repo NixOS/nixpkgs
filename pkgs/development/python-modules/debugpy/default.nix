@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , gdb
 , flask
@@ -18,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YGzc9mMIzPTmUgIXuZROLdYKjUm69x9SR+JtYRVpn24=";
+    hash = "sha256-W51Y9tZB1Uyp175+hWCpXChwL+MBpDWjudF87F1MRso=";
   };
 
   patches = [
@@ -49,12 +48,6 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
-
-    # Fix tests with flask>=2.0
-    (fetchpatch {
-      url = "https://github.com/microsoft/debugpy/commit/0a7f2cd67dda27ea4d38389b49a4e2a1899b834e.patch";
-      sha256 = "1g070fn07n7jj01jaf5s570zn70akf6klkamigs3ix11gh736rpn";
-    })
   ];
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
