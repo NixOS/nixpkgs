@@ -19,7 +19,7 @@ buildGoModule rec {
 
   vendorSha256 = "0f3al6ds0kqyv2fapgdg9i38rfx6h169pmj6az0sfnkh2psq73ia";
 
-  subPackages = [ "cmd/cosign" ];
+  excludedPackages = "\\(copasetic\\)";
 
   preBuild = ''
     buildFlagsArray+=(${lib.optionalString pivKeySupport "-tags=pivkey"})

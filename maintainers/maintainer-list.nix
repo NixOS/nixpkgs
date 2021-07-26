@@ -4255,6 +4255,12 @@
     githubId = 131599;
     name = "Martin Weinelt";
   };
+  hexagonal-sun = {
+    email = "dev@mattleach.net";
+    github = "hexagonal-sun";
+    githubId = 222664;
+    name = "Matthew Leach";
+  };
   hh = {
     email = "hh@m-labs.hk";
     github = "HarryMakes";
