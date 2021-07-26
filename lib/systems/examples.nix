@@ -148,6 +148,10 @@ rec {
     config = "m68k-unknown-linux-gnu";
   };
 
+  s390 = {
+    config = "s390-unknown-linux-gnu";
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";

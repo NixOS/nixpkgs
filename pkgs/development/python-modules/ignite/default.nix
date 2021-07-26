@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "057v8v5p2picmgiidr9lzjbh7nj54pv95m6lyya3y7dw4vzaamij";
+    sha256 = "sha256-FGFpaqq7InwRqFmQTmXGpJEjRUB69ZN/l20l42L2BAA=";
   };
 
   checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist ];
@@ -33,8 +33,13 @@ buildPythonPackage rec {
   # models, which doesn't work in the sandbox.
   # avoid tests which need special packages
   pytestFlagsArray = [
+    "--ignore=tests/ignite/contrib/handlers/test_clearml_logger.py"
+    "--ignore=tests/ignite/contrib/handlers/test_lr_finder.py"
     "--ignore=tests/ignite/contrib/handlers/test_trains_logger.py"
+    "--ignore=tests/ignite/metrics/nlp/test_bleu.py"
+    "--ignore=tests/ignite/metrics/nlp/test_rouge.py"
     "--ignore=tests/ignite/metrics/test_dill.py"
+    "--ignore=tests/ignite/metrics/test_psnr.py"
     "--ignore=tests/ignite/metrics/test_ssim.py"
     "tests/"
   ];
@@ -42,16 +47,17 @@ buildPythonPackage rec {
   # disable tests which need specific packages
   disabledTests = [
     "idist"
-    "tensorboard"
     "mlflow"
+    "tensorboard"
+    "test_integration"
+    "test_output_handler" # needs mlflow
+    "test_pbar" # slight output differences
+    "test_setup_clearml_logging"
+    "test_setup_neptune"
+    "test_setup_plx"
+    "test_write_results"
     "trains"
     "visdom"
-    "test_setup_neptune"
-    "test_output_handler" # needs mlflow
-    "test_integration"
-    "test_pbar" # slight output differences
-    "test_write_results"
-    "test_setup_plx"
   ];
 
   meta = with lib; {

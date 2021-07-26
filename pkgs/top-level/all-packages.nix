@@ -1153,6 +1153,8 @@ in
 
   arduino-mk = callPackage ../development/arduino/arduino-mk {};
 
+  apio = python3Packages.callPackage ../development/tools/misc/apio { };
+
   apitrace = libsForQt514.callPackage ../applications/graphics/apitrace {};
 
   argtable = callPackage ../development/libraries/argtable { };
@@ -3901,6 +3903,8 @@ in
                                                                       };
 
   c14 = callPackage ../applications/networking/c14 { };
+
+  corehunt = libsForQt5.callPackage ../applications/misc/corehunt { };
 
   certstrap = callPackage ../tools/security/certstrap { };
 
@@ -8276,9 +8280,7 @@ in
 
   ucx = callPackage ../development/libraries/ucx {};
 
-  openmodelica = callPackage ../applications/science/misc/openmodelica {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
@@ -9550,6 +9552,8 @@ in
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
   twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
+
+  twurl = callPackage ../tools/misc/twurl { };
 
   txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
 
@@ -19595,6 +19599,8 @@ in
 
   hyprspace = callPackage ../applications/networking/hyprspace { inherit (darwin) iproute2mac; };
 
+  ic-keysmith = callPackage ../tools/security/ic-keysmith { };
+
   icecream = callPackage ../servers/icecream { };
 
   icingaweb2-ipl = callPackage ../servers/icingaweb2/ipl.nix { };
@@ -25556,6 +25562,8 @@ in
 
   mark = callPackage ../tools/text/mark { };
 
+  markets = callPackage ../applications/misc/markets { };
+
   marp = callPackage ../applications/office/marp { };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
@@ -26726,6 +26734,8 @@ in
     tag = "-daemon-qt5";
   };
 
+  quill-qr = callPackage ../tools/security/quill-qr { };
+
   quirc = callPackage ../tools/graphics/quirc {};
 
   quilter = callPackage ../applications/editors/quilter { };
@@ -27336,7 +27346,9 @@ in
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
+  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
+    inherit (xorg) libpthreadstubs libXdmcp;
+  };
 
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
 

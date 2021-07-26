@@ -10,23 +10,19 @@
 
 stdenv.mkDerivation rec {
   pname = "squashfs";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
     rev = version;
-    sha256 = "0697fv8n6739mcyn57jclzwwbbqwpvjdfkv1qh9s56lvyqnplwaw";
+    sha256 = "1nanwz5qvsakxfm37md5i7xqagv69nfik9hpj8qlp6ymw266vgxr";
   };
 
   patches = [
     # This patch adds an option to pad filesystems (increasing size) in
     # exchange for better chunking / binary diff calculation.
     ./4k-align.patch
-    # Add -no-hardlinks option. This is a rebased version of
-    # c37bb4da4a5fa8c1cf114237ba364692dd522262, can be removed
-    # when upgrading to the next version after 4.4
-    ./0001-Mksquashfs-add-no-hardlinks-option.patch
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   buildInputs = [ zlib xz zstd lz4 lzo ];
