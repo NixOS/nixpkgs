@@ -8,12 +8,12 @@
 
 let
   executableName = "element-desktop";
-  version = "1.7.31";
+  version = "1.7.33";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "14vyqzf69g4n3i7qjm1pgq2kwym6cira0jwvirzdrwxkfsl0dsq6";
+    sha256 = "sha256-1JmuKyJt6Q80lLXXrFw+h6/0JzWcr0qMIU9mTO+K56I=";
   };
 in mkYarnPackage rec {
   name = "element-desktop-${version}";
@@ -24,6 +24,17 @@ in mkYarnPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  buildPhase = ''
+    runHook preBuild
+    export HOME=$(mktemp -d)
+    pushd deps/element-desktop/
+    npx tsc
+    yarn run i18n
+    node ./scripts/copy-res.js
+    popd
+    runHook postBuild
+  '';
+
   installPhase = ''
     # resources
     mkdir -p "$out/share/element"
@@ -32,6 +43,7 @@ in mkYarnPackage rec {
     cp -r './deps/element-desktop/res/img' "$out/share/element"
     rm "$out/share/element/electron/node_modules"
     cp -r './node_modules' "$out/share/element/electron"
+    cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
 
     # icons
     for icon in $out/share/element/electron/build/icons/*.png; do

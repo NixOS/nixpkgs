@@ -4,7 +4,7 @@
 }:
 
 buildDunePackage rec {
-  version = "1.4.0";
+  version = "1.4.1";
   pname = "decompress";
 
   minimumOCamlVersion = "4.07";
@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-v${version}.tbz";
-    sha256 = "d1669e07446d73dd5e16f020d4a1682abcbb1b7a1e3bf19b805429636c26a19b";
+    sha256 = "0130ea6acb61b0a25393fa23148e116d7a17c77558196f7abddaee9e05a1d7a8";
   };
 
   buildInputs = [ cmdliner ];
