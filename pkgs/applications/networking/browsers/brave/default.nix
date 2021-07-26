@@ -124,9 +124,11 @@ stdenv.mkDerivation rec {
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
+      for exe in $out/opt/brave.com/brave/{brave,crashpad_handler}; do
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${rpath}" $out/opt/brave.com/brave/brave
+          --set-rpath "${rpath}" $exe
+      done
 
       # Fix paths
       substituteInPlace $out/share/applications/brave-browser.desktop \
