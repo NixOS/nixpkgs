@@ -44,12 +44,4 @@ in
     version = "6.0.7";
     sha256 = "0njs6xpc30nc4chjdm4d4g63bigbxhi4dc46f4az3qcz51r8zl2a";
   };
-  varnish62 = common {
-    version = "6.2.3";
-    sha256 = "02b6pqh5j1d4n362n42q42bfjzjrngd6x49b13q7wzsy6igd1jsy";
-  };
-  varnish63 = common {
-    version = "6.3.2";
-    sha256 = "1f5ahzdh3am6fij5jhiybv3knwl11rhc5r3ig1ybzw55ai7788q8";
-  };
 }

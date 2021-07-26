@@ -894,6 +894,8 @@ mapAliases ({
   v8_3_16_14 = throw "v8_3_16_14 was removed in 2019-11-01: no longer referenced by other packages";
   valadoc = throw "valadoc was deprecated on 2019-10-10: valadoc was merged into vala 0.38";
   vamp = { vampSDK = vamp-plugin-sdk; }; # added 2020-03-26
+  varnish62 = throw "varnish62 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26
+  varnish63 = throw "varnish63 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26
   venus = throw "venus has been removed from nixpkgs, as it's unmaintained"; # added 2021-02-05
   vdirsyncerStable  = vdirsyncer; # added 2020-11-08, see https://github.com/NixOS/nixpkgs/issues/103026#issuecomment-723428168
   vimbWrapper = vimb; # added 2015-01
