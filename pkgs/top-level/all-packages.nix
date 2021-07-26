@@ -1153,6 +1153,8 @@ in
 
   arduino-mk = callPackage ../development/arduino/arduino-mk {};
 
+  apio = python3Packages.callPackage ../development/tools/misc/apio { };
+
   apitrace = libsForQt514.callPackage ../applications/graphics/apitrace {};
 
   argtable = callPackage ../development/libraries/argtable { };
@@ -1335,6 +1337,8 @@ in
 
   bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
 
+  bic = callPackage ../development/interpreters/bic { };
+
   bit = callPackage ../applications/version-management/git-and-tools/bit { };
 
   bitwarden = callPackage ../tools/security/bitwarden { };
@@ -1404,6 +1408,8 @@ in
   cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
 
   codeql = callPackage ../development/tools/analysis/codeql { };
+
+  corearchiver = libsForQt5.callPackage ../tools/archivers/corearchiver { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
@@ -3901,6 +3907,8 @@ in
                                                                       };
 
   c14 = callPackage ../applications/networking/c14 { };
+
+  corehunt = libsForQt5.callPackage ../applications/misc/corehunt { };
 
   certstrap = callPackage ../tools/security/certstrap { };
 
@@ -9548,6 +9556,8 @@ in
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
   twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
+
+  twurl = callPackage ../tools/misc/twurl { };
 
   txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
 
@@ -16147,6 +16157,8 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  libarchive-qt = libsForQt5.callPackage ../development/libraries/libarchive-qt { };
+
   libasr = callPackage ../development/libraries/libasr { };
 
   libass = callPackage ../development/libraries/libass { };
@@ -19592,6 +19604,8 @@ in
   hydron = callPackage ../servers/hydron { };
 
   hyprspace = callPackage ../applications/networking/hyprspace { inherit (darwin) iproute2mac; };
+
+  ic-keysmith = callPackage ../tools/security/ic-keysmith { };
 
   icecream = callPackage ../servers/icecream { };
 
@@ -23099,6 +23113,8 @@ in
   aseprite = callPackage ../applications/editors/aseprite { };
   aseprite-unfree = aseprite.override { unfree = true; };
 
+  assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
+
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
@@ -25554,6 +25570,8 @@ in
 
   mark = callPackage ../tools/text/mark { };
 
+  markets = callPackage ../applications/misc/markets { };
+
   marp = callPackage ../applications/office/marp { };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
@@ -26724,6 +26742,8 @@ in
     tag = "-daemon-qt5";
   };
 
+  quill-qr = callPackage ../tools/security/quill-qr { };
+
   quirc = callPackage ../tools/graphics/quirc {};
 
   quilter = callPackage ../applications/editors/quilter { };
@@ -27334,7 +27354,9 @@ in
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
+  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
+    inherit (xorg) libpthreadstubs libXdmcp;
+  };
 
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
 

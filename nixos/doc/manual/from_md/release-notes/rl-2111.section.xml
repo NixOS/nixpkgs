@@ -702,6 +702,19 @@
           option.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-services.syncoid.enable">services.syncoid.enable</link>
+          module now properly drops ZFS permissions after usage. Before
+          it delegated permissions to whole pools instead of datasets
+          and didn’t clean up after execution. You can manually look
+          this up for your pools by running
+          <literal>zfs allow your-pool-name</literal> and use
+          <literal>zfs unallow syncoid your-pool-name</literal> to clean
+          this up.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

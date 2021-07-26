@@ -1530,6 +1530,12 @@
     githubId = 1111035;
     name = "Break Yang";
   };
+  brecht = {
+    email = "brecht.savelkoul@alumni.lse.ac.uk";
+    github = "brechtcs";
+    githubId = 6107054;
+    name = "Brecht Savelkoul";
+  };
   brettlyons = {
     email = "blyons@fastmail.com";
     github = "brettlyons";
@@ -4248,6 +4254,12 @@
     github = "mweinelt";
     githubId = 131599;
     name = "Martin Weinelt";
+  };
+  hexagonal-sun = {
+    email = "dev@mattleach.net";
+    github = "hexagonal-sun";
+    githubId = 222664;
+    name = "Matthew Leach";
   };
   hh = {
     email = "hh@m-labs.hk";

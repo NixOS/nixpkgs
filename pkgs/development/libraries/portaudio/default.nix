@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=deprecated-declarations -Wno-error=implicit-const-int-float-conversion -Wno-error=nullability-completeness-on-arrays";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=deprecated-declarations -Wno-error=nullability-completeness-on-arrays";
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
 
