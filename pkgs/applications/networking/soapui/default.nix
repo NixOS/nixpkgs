@@ -13,10 +13,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ jdk ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp -R bin lib $out/share/java
 
     makeWrapper $out/share/java/bin/soapui.sh $out/bin/soapui --set SOAPUI_HOME $out/share/java
+
+    runHook postInstall
   '';
 
   patches = [
