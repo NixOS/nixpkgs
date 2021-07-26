@@ -156,6 +156,14 @@
           <link linkend="opt-services.moonraker.enable">moonraker</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/influxdata/influxdb">influxdb2</link>,
+          a Scalable datastore for metrics, events, and real-time
+          analytics. Available as
+          <link linkend="opt-services.influxdb2.enable">services.influxdb2</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
