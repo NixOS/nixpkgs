@@ -2,7 +2,7 @@
 , buildHaskellPackages
 , compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
-, overrides ? (self: super: {})
+, overrides
 , initialPackages ? import ./initial-packages.nix
 , nonHackagePackages ? import ./non-hackage-packages.nix
 , configurationCommon ? import ./configuration-common.nix

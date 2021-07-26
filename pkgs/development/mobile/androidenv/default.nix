@@ -1,5 +1,5 @@
-{ config, pkgs ? import <nixpkgs> {}, pkgsHostHost ? pkgs.pkgsHostHost
-, pkgs_i686 ? import <nixpkgs> { system = "i686-linux"; }
+{ config, pkgs, pkgsHostHost ? pkgs.pkgsHostHost
+, pkgs_i686
 , licenseAccepted ? config.android_sdk.accept_license or false
 }:
 

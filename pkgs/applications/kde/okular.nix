@@ -1,7 +1,7 @@
 {
   stdenv, mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  breeze-icons, chmlib ? null, discount, djvulibre, ebook_tools, kactivities,
+  breeze-icons, chmlib, discount, djvulibre, ebook_tools, kactivities,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, kdegraphics-mobipocket, kiconthemes, kjs, khtml, kio, kparts,
   kpty, kpurpose, kwallet, kwindowsystem, libkexiv2, libspectre, libzip, phonon, poppler,

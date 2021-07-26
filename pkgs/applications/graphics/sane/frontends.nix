@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, sane-backends, libX11, gtk2, pkg-config, libusb-compat-0_1 ? null }:
+{ lib, stdenv, fetchurl, sane-backends, libX11, gtk2, pkg-config, libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
   pname = "sane-frontends";

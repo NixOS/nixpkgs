@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake
 , mbelib, libsndfile, itpp
-, portaudioSupport ? true, portaudio ? null
+, portaudioSupport ? true, portaudio
 }:
 
 assert portaudioSupport -> portaudio != null;

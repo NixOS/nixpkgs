@@ -7,7 +7,7 @@
 , thin-provisioning-tools, libaio
 , enableCmdlib ? false
 , enableDmeventd ? false
-, udev ? null
+, udev
 , nixosTests
 }:
 

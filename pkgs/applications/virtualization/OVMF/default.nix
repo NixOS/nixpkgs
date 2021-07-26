@@ -1,5 +1,5 @@
 { stdenv, lib, edk2, util-linux, nasm, iasl
-, csmSupport ? false, seabios ? null
+, csmSupport ? false, seabios
 , secureBoot ? false
 , httpSupport ? false
 }:

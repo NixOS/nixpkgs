@@ -16,13 +16,14 @@
 , pkg-config
 , zlib
 , withData ? true, poppler_data
-, qt5Support ? false, qtbase ? null
+, qt5Support ? false, libsForQt5
 , introspectionSupport ? false, gobject-introspection ? null
 , utils ? false
 , minimal ? false, suffix ? "glib"
 }:
 
 let
+  inherit (libsForQt5) qtbase;
   version = "0.61.1";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in

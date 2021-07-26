@@ -8,7 +8,7 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
+, tcl, tk, tix, xlibsWrapper, libX11, x11Support ? false
 , zlib
 , self
 , configd, coreutils

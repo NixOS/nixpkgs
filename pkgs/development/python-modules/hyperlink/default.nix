@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy27
 , idna
-, typing ? null
+, typing
 }:
 
 buildPythonPackage rec {

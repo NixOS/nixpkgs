@@ -9,7 +9,7 @@
 , withPerldevel ? false, perldevel
 , withRuby_2_6 ? true, ruby_2_6
 , withRuby_2_7 ? false, ruby_2_7
-, withSSL ? true, openssl ? null
+, withSSL ? true, openssl
 , withIPv6 ? true
 , withDebug ? false
 }:

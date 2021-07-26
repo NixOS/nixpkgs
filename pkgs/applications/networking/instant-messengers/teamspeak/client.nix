@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
 , xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
-, alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
+, alsa-lib, libpulseaudio, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
 }:
 
 let

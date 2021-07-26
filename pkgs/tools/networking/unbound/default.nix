@@ -18,7 +18,7 @@
   # For the daemon use-case, that needs to notify systemd, use `unbound-with-systemd`.
   #
 , withSystemd ? false
-, systemd ? null
+, systemd
   # optionally support DNS-over-HTTPS as a server
 , withDoH ? false
 , libnghttp2

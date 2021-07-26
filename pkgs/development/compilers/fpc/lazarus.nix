@@ -2,7 +2,7 @@
 , fpc, gtk2, glib, pango, atk, gdk-pixbuf
 , libXi, xorgproto, libX11, libXext
 , gdb, gnumake, binutils
-, withQt ? false, qtbase ? null, libqt5pas ? null, wrapQtAppsHook ? null
+, withQt ? false, qtbase, libqt5pas, wrapQtAppsHook
 }:
 
 # TODO:

@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl, pkg-config, perl
 , http2Support ? true, nghttp2
-, idnSupport ? false, libidn ? null
-, ldapSupport ? false, openldap ? null
-, zlibSupport ? true, zlib ? null
-, sslSupport ? zlibSupport, openssl ? null
-, gnutlsSupport ? false, gnutls ? null
-, wolfsslSupport ? false, wolfssl ? null
-, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
+, idnSupport ? false, libidn
+, ldapSupport ? false, openldap
+, zlibSupport ? true, zlib
+, sslSupport ? zlibSupport, openssl
+, gnutlsSupport ? false, gnutls
+, wolfsslSupport ? false, wolfssl
+, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2
 , gssSupport ? with stdenv.hostPlatform; !(
     !isWindows &&
     # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
@@ -15,9 +15,9 @@
     # fixed in mig, but losing gss support on cross compilation to darwin is
     # not worth the effort.
     !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
-  ), libkrb5 ? null
-, c-aresSupport ? false, c-ares ? null
-, brotliSupport ? false, brotli ? null
+  ), libkrb5
+, c-aresSupport ? false, c-ares
+, brotliSupport ? false, brotli
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

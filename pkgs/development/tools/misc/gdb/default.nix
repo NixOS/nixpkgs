@@ -6,8 +6,8 @@
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
 
-, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
-, guile ? null
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3
+, guile
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"

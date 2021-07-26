@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, getopt, ip2location-c, openssl, perl
-, libmaxminddb ? null, geolite-legacy ? null }:
+, libmaxminddb, geolite-legacy }:
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";

@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, perl, libiconv, zlib, popt
-, enableACLs ? lib.meta.availableOn stdenv.hostPlatform acl, acl ? null
-, enableLZ4 ? true, lz4 ? null
-, enableOpenSSL ? true, openssl ? null
-, enableXXHash ? true, xxHash ? null
-, enableZstd ? true, zstd ? null
+, enableACLs ? lib.meta.availableOn stdenv.hostPlatform acl, acl
+, enableLZ4 ? true, lz4
+, enableOpenSSL ? true, openssl
+, enableXXHash ? true, xxHash
+, enableZstd ? true, zstd
 , enableCopyDevicesPatch ? false
 , nixosTests
 }:

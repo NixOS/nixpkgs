@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, ncurses, zlib
-, openssl ? null
+, openssl
 , sslSupport ? true
 }:
 

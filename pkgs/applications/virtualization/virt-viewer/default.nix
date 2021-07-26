@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, shared-mime-info, wrapGAppsHook
 , glib, gsettings-desktop-schemas, gtk-vnc, gtk3, libvirt, libvirt-glib, libxml2, vte
 , spiceSupport ? true
-, spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
+, spice-gtk, spice-protocol, libcap, gdbm
 }:
 
 assert spiceSupport ->

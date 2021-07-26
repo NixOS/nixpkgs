@@ -1,7 +1,7 @@
 { lib, haskellLib, makeWrapper, haskellPackages
 , mueval
 , withDjinn ? true
-, aspell ? null
+, aspell
 , packages ? (pkgs: [])
 , modules ? "oldDefaultModules"
 , configuration ? "[]"

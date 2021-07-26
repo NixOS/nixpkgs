@@ -117,7 +117,30 @@ rec {
   callPackageWith = autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
+      funArgs = lib.functionArgs f;
+      auto = lib.mapAttrs (name: value:
+        if funArgs.${name}
+        then
+          # These definitions are nested under this conditional so that no
+          # thunks are allocated if no warning/error is thrown
+          let
+            file = if builtins.pathExists (fn + "/default.nix") then fn + "/default.nix" else fn;
+            location = if lib.isFunction fn then "a function (run with `--show-trace` to get hints as to which one)" else toString file;
+            message =
+              "In ${location}, the argument \"${name}\" has a default value (`${name} ? <default>`) which is not allowed "
+              + "because the attribute \"${name}\" exists in the call scope, therefore overriding the default value. "
+              + "If \"${name}\" should be a package configuration, changeable via `.override { ${name} = <value>; }`, "
+              + "rename the argument to something that doesn't already exist. "
+              + "If \"${name}\" should be optional dependency (commonly done with `${name} ? null`), remove the default value "
+              + "and use an argument like `enableFeature ? true` to decide when to include \"${name}\" as a dependency.";
+          in
+          # We can't know the location of direct functions from within this
+          # call. Because this is very rare, we allow ourselves to throw an error,
+          # so that the backtrace can be used to figure out the location of it
+          if lib.isFunction fn then throw message
+          else lib.warn message value
+        else value
+      ) (builtins.intersectAttrs funArgs autoArgs);
     in makeOverridable f (auto // args);
 
 

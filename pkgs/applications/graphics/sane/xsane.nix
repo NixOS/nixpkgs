@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, sane-backends, sane-frontends, libX11, gtk2, pkg-config, libpng
-, libusb-compat-0_1 ? null
-, gimpSupport ? false, gimp ? null
+, libusb-compat-0_1
+, gimpSupport ? false, gimp
 }:
 
 assert gimpSupport -> gimp != null;

@@ -1,7 +1,7 @@
 { gui ? true,
   buildPythonPackage, fetchFromGitHub, lib,
   sphinx, lxml, isodate, numpy, openpyxl,
-  tkinter ? null, py3to2, isPy3k, python,
+  tkinter, py3to2, isPy3k, python,
   ... }:
 
 buildPythonPackage rec {

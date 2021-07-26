@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, gettext, libintl, ncurses, openssl
-, fftw ? null }:
+, fftw }:
 
 stdenv.mkDerivation rec {
   pname = "httping";

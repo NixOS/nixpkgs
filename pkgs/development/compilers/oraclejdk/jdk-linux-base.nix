@@ -11,7 +11,7 @@
 , makeWrapper
 , unzip
 , file
-, xorg ? null
+, xorg
 , installjdk ? true
 , pluginSupport ? true
 , installjce ? false

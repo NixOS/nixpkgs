@@ -14,8 +14,8 @@
   zlib,
 
   # optional dependencies
-  cups ? null, libmysqlclient ? null, postgresql ? null,
-  withGtk3 ? false, dconf ? null, gtk3 ? null,
+  cups, libmysqlclient, postgresql,
+  withGtk3 ? false, dconf, gtk3,
 
   # options
   libGLSupported ? !stdenv.isDarwin,

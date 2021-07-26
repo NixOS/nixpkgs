@@ -3418,7 +3418,7 @@ in
   arpoison = callPackage ../tools/networking/arpoison { };
 
   asciidoc = callPackage ../tools/typesetting/asciidoc {
-    inherit (python3.pkgs) matplotlib numpy aafigure recursivePthLoader;
+    inherit (python3.pkgs) matplotlib numpy aafigure recursivePthLoader pygments;
     enableStandardFeatures = false;
   };
 
@@ -3904,6 +3904,7 @@ in
                                                                                 };
   code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk = true;
                                                                         qtbase = qt5.qtbase;
+                                                                        wrapQtAppsHook = null;
                                                                       };
 
   c14 = callPackage ../applications/networking/c14 { };
@@ -11662,8 +11663,8 @@ in
 
   kotlin = callPackage ../development/compilers/kotlin { };
 
-  lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
-    fpc = fpc;
+  lazarus = lazarus-qt.override {
+    withQt = false;
   };
 
   lazarus-qt = libsForQt5.callPackage ../development/compilers/fpc/lazarus.nix {
@@ -11874,11 +11875,12 @@ in
 
   neko = callPackage ../development/compilers/neko { };
 
-  nextpnr = callPackage ../development/compilers/nextpnr { };
-
-  nextpnrWithGui = libsForQt5.callPackage ../development/compilers/nextpnr {
-    enableGui = true;
+  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr {
     inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
+
+  nextpnrWithGui = nextpnr.override {
+    enableGui = true;
   };
 
   acme = callPackage ../development/compilers/acme { };
@@ -12565,10 +12567,18 @@ in
   octave = callPackage ../development/interpreters/octave {
     python = python3;
     mkDerivation = stdenv.mkDerivation;
+    qtbase = null;
+    qtsvg = null;
+    qtscript = null;
+    qttools = null;
   };
   octave-jit = callPackage ../development/interpreters/octave {
     python = python3;
     enableJIT = true;
+    qtbase = null;
+    qtsvg = null;
+    qtscript = null;
+    qttools = null;
     mkDerivation = stdenv.mkDerivation;
   };
   octaveFull = libsForQt5.callPackage ../development/interpreters/octave {
@@ -12729,7 +12739,7 @@ in
     python = python3;
   };
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
-    inherit pkgs lib;
+    inherit pkgs lib poetry;
   };
 
   pipenv = callPackage ../development/tools/pipenv {};
@@ -15585,7 +15595,9 @@ in
 
   gpac = callPackage ../applications/video/gpac { };
 
-  gpgme = callPackage ../development/libraries/gpgme { };
+  gpgme = callPackage ../development/libraries/gpgme {
+    qtbase = null;
+  };
 
   pgpdump = callPackage ../tools/security/pgpdump { };
 
@@ -17504,7 +17516,7 @@ in
 
   mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix { };
 
-  mkvtoolnix-cli = callPackage ../applications/video/mkvtoolnix {
+  mkvtoolnix-cli = mkvtoolnix.override {
     withGUI = false;
   };
 
@@ -25409,6 +25421,15 @@ in
     libreoffice = callPackage ../applications/office/libreoffice
       (libreoffice-args // {
         variant = "fresh";
+        mkDerivation = stdenv.mkDerivation;
+        qtbase = null;
+        qtx11extras = null;
+        ki18n = null;
+        kconfig = null;
+        kcoreaddons = null;
+        kio = null;
+        kwindowsystem = null;
+        wrapQtAppsHook = null;
       });
   });
   libreoffice-fresh-unwrapped = libreoffice-fresh.libreoffice;
@@ -25417,6 +25438,15 @@ in
     libreoffice = callPackage ../applications/office/libreoffice
       (libreoffice-args // {
         variant = "still";
+        mkDerivation = stdenv.mkDerivation;
+        qtbase = null;
+        qtx11extras = null;
+        ki18n = null;
+        kconfig = null;
+        kcoreaddons = null;
+        kio = null;
+        kwindowsystem = null;
+        wrapQtAppsHook = null;
       });
   });
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
@@ -28540,7 +28570,7 @@ in
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
-  bitcoind = callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
+  bitcoind = bitcoin.override { withGui = false; };
 
   bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots.nix { miniupnpc = miniupnpc_2; };
 
@@ -28551,8 +28581,7 @@ in
   clightning = callPackage ../applications/blockchains/clightning.nix { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc.nix { boost = boost165; withGui = true; };
-  bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc.nix {
-    boost = boost165;
+  bitcoind-abc = bitcoin-abc.override {
     mkDerivation = stdenv.mkDerivation;
     withGui = false;
   };
@@ -28561,16 +28590,15 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
     withGui = true;
   };
-  bitcoind-unlimited = callPackage ../applications/blockchains/bitcoin-unlimited.nix {
-    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+  bitcoind-unlimited = bitcoin-unlimited.override {
     withGui = false;
   };
 
   bitcoin-classic  = libsForQt514.callPackage ../applications/blockchains/bitcoin-classic.nix { boost = boost165; withGui = true; };
-  bitcoind-classic = callPackage ../applications/blockchains/bitcoin-classic.nix { boost = boost165; withGui = false; };
+  bitcoind-classic = bitcoin-classic.override { withGui = false; };
 
   bitcoin-gold = libsForQt514.callPackage ../applications/blockchains/bitcoin-gold.nix { boost = boost165; withGui = true; };
-  bitcoind-gold = callPackage ../applications/blockchains/bitcoin-gold.nix { boost = boost165; withGui = false; };
+  bitcoind-gold = bitcoin-gold.override { withGui = false; };
 
   btcpayserver = callPackage ../applications/blockchains/btcpayserver { };
 
@@ -28586,7 +28614,7 @@ in
   dero = callPackage ../applications/blockchains/dero.nix { boost = boost165; };
 
   digibyte = libsForQt514.callPackage ../applications/blockchains/digibyte.nix { withGui = true; };
-  digibyted = callPackage ../applications/blockchains/digibyte.nix { withGui = false; };
+  digibyted = digibyte.override { withGui = false; };
 
   dogecoin  = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = true; };
   dogecoind = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = false; };
@@ -28596,7 +28624,7 @@ in
   electrs = callPackage ../applications/blockchains/electrs.nix { };
 
   elements  = libsForQt5.callPackage ../applications/blockchains/elements.nix { miniupnpc = miniupnpc_2; withGui = true; };
-  elementsd = callPackage ../applications/blockchains/elements.nix { miniupnpc = miniupnpc_2; withGui = false; };
+  elementsd = elements.override { withGui = false; };
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
@@ -28653,7 +28681,7 @@ in
   nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
 
   pivx = libsForQt5.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
-  pivxd = callPackage ../applications/blockchains/pivx.nix {
+  pivxd = pivx.override {
     withGui = false;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
@@ -28671,7 +28699,7 @@ in
   turbo-geth = callPackage ../applications/blockchains/turbo-geth.nix { };
 
   vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = true; };
-  vertcoind = callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = false; };
+  vertcoind = vertcoin.override { withGui = false; };
 
   wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
 

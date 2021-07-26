@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
 , common-updater-scripts, git, nix, nixfmt, coreutils, gnused, nixosTests
-, gettext ? null, enableNls ? true, enableTiny ? false }:
+, gettext, enableNls ? true, enableTiny ? false }:
 
 assert enableNls -> (gettext != null);
 

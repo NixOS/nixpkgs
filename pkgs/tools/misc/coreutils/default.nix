@@ -1,11 +1,11 @@
 { stdenv, lib, buildPackages
-, autoreconfHook, bison, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
-, aclSupport ? stdenv.isLinux, acl ? null
-, attrSupport ? stdenv.isLinux, attr ? null
-, selinuxSupport? false, libselinux ? null, libsepol ? null
+, autoreconfHook, bison, texinfo, fetchurl, perl, xz, libiconv, gmp
+, aclSupport ? stdenv.isLinux, acl
+, attrSupport ? stdenv.isLinux, attr
+, selinuxSupport? false, libselinux, libsepol
 # No openssl in default version, so openssl-induced rebuilds aren't too big.
 # It makes *sum functions significantly faster.
-, minimal ? true, withOpenssl ? !minimal, openssl ? null
+, minimal ? true, withOpenssl ? !minimal, openssl
 , withPrefix ? false
 , singleBinary ? "symlinks" # you can also pass "shebangs" or false
 }:

@@ -15,11 +15,11 @@
 , withQcsxcad ? true
 , withMPI ? false
 , withHyp2mat ? true
-, qcsxcad ? null
-, hyp2mat ? null
+, libsForQt5
+, hyp2mat
 }:
 
-assert withQcsxcad -> qcsxcad != null;
+assert withQcsxcad -> libsForQt5.qcsxcad != null;
 assert withHyp2mat -> hyp2mat != null;
 
 stdenv.mkDerivation {
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     zlib
     csxcad
     (octave.override { inherit hdf5; }) ]
-    ++ lib.optionals withQcsxcad [ qcsxcad ]
+    ++ lib.optionals withQcsxcad [ libsForQt5.qcsxcad ]
     ++ lib.optionals withMPI [ mpi ]
     ++ lib.optionals withHyp2mat [ hyp2mat ];
 

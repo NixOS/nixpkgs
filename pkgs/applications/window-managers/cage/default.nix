@@ -2,7 +2,7 @@
 , meson, ninja, pkg-config, wayland-scanner, scdoc, makeWrapper
 , wlroots, wayland, wayland-protocols, pixman, libxkbcommon
 , systemd, libGL, libX11, mesa
-, xwayland ? null
+, xwayland
 , nixosTests
 }:
 

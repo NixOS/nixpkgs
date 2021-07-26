@@ -1,18 +1,18 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast, pythonOlder, isPy27
-, backports_functools_lru_cache ? null, configparser ? null, futures ? null, future, jedi, pluggy, python-jsonrpc-server, flake8
+, backports_functools_lru_cache, configparser, futures, future, jedi, pluggy, python-jsonrpc-server, flake8
 , pytestCheckHook, mock, pytest-cov, coverage, setuptools, ujson, flaky
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
   # The following packages are optional and
   # can be overwritten with null as your liking.
-, autopep8 ? null
-, mccabe ? null
-, pycodestyle ? null
-, pydocstyle ? null
-, pyflakes ? null
-, pylint ? null
-, rope ? null
-, yapf ? null
+, autopep8
+, mccabe
+, pycodestyle
+, pydocstyle
+, pyflakes
+, pylint
+, rope
+, yapf
 }:
 
 let

@@ -9,7 +9,7 @@
     || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
     || stdenv.isFreeBSD
 */
-, doCheck ? (interactive && stdenv.isLinux), glibcLocales ? null
+, doCheck ? (interactive && stdenv.isLinux), glibcLocales
 , locale ? null
 }:
 

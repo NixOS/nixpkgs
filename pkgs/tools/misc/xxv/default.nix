@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform
-, ncurses ? null
-, darwin ? null }:
+, ncurses
+, darwin }:
 
 let useNcurses = !stdenv.hostPlatform.isWindows; in
 

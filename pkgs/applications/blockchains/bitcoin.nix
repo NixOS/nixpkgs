@@ -5,7 +5,7 @@
 , pkg-config
 , util-linux
 , hexdump
-, wrapQtAppsHook ? null
+, wrapQtAppsHook
 , boost
 , libevent
 , miniupnpc
@@ -14,8 +14,8 @@
 , db48
 , sqlite
 , qrencode
-, qtbase ? null
-, qttools ? null
+, qtbase
+, qttools
 , python3
 , nixosTests
 , withGui

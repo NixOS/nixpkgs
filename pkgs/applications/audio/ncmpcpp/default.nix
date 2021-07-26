@@ -10,9 +10,9 @@
 , icu
 , curl
 , outputsSupport ? true # outputs screen
-, visualizerSupport ? false, fftw ? null # visualizer screen
+, visualizerSupport ? false, fftw # visualizer screen
 , clockSupport ? true # clock screen
-, taglibSupport ? true, taglib ? null # tag editor
+, taglibSupport ? true, taglib # tag editor
 }:
 
 assert visualizerSupport -> (fftw != null);

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, llvmPackages ? null, precision ? "double", perl }:
+{ fetchurl, stdenv, lib, llvmPackages, precision ? "double", perl }:
 
 with lib;
 

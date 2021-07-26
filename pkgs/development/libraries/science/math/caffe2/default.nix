@@ -5,15 +5,15 @@
 , python, future, six, python-protobuf, numpy, pydot
 , eigen
 , doxygen
-, useCuda ? (config.cudaSupport or false), cudatoolkit ? null
-, useCudnn ? (config.cudnnSupport or false), cudnn ? null
+, useCuda ? (config.cudaSupport or false), cudatoolkit
+, useCudnn ? (config.cudnnSupport or false), cudnn
 , useOpenmp ? false, openmp ? null
-, useOpencv3 ? true, opencv3 ? null
-, useLeveldb ? false, leveldb ? null
-, useLmdb ? true, lmdb ? null
-, useRocksdb ? false, rocksdb ? null
-, useZeromq ? false, zeromq ? null
-, useMpi ? false, mpi ? null
+, useOpencv3 ? true, opencv3
+, useLeveldb ? false, leveldb
+, useLmdb ? true, lmdb
+, useRocksdb ? false, rocksdb
+, useZeromq ? false, zeromq
+, useMpi ? false, mpi
 # TODO: distributed computations
 #, useGloo ? false
 #, useNccl ? false

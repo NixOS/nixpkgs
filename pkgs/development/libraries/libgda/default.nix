@@ -19,9 +19,9 @@
 , autoconf-archive
 , yelp-tools
 , mysqlSupport ? false
-, libmysqlclient ? null
+, libmysqlclient
 , postgresSupport ? false
-, postgresql ? null
+, postgresql
 }:
 
 assert mysqlSupport -> libmysqlclient != null;

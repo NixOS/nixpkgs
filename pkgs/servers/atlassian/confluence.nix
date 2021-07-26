@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, fetchurl, mysql_jdbc ? null
+{ stdenvNoCC, lib, fetchurl, mysql_jdbc
 , enableSSO ? false
 , crowdProperties ? null
 , withMysql ? true

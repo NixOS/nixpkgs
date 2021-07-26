@@ -11,7 +11,7 @@
 , ncurses
 , readline
 , withGui ? false
-, gtk3 ? null
+, gtk3
 , wrapGAppsHook
 , withTeensyduino ? false
   /* Packages needed for Teensyduino */

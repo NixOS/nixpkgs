@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkg-config, texinfo
 , netcat-gnu, gnutls, gsasl, libidn2, Security
-, withKeyring ? true, libsecret ? null
-, systemd ? null }:
+, withKeyring ? true, libsecret
+, systemd }:
 
 let
   tester = "n"; # {x| |p|P|n|s}

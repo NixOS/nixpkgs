@@ -47,95 +47,95 @@
 /*
  *  External libraries options
  */
-, alsa-lib ? null # Alsa in/output support
-#, avisynth ? null # Support for reading AviSynth scripts
-, bzip2 ? null
-, celt ? null # CELT decoder
-#, crystalhd ? null # Broadcom CrystalHD hardware acceleration
-, dav1d ? null # AV1 decoder (focused on speed and correctness)
-#, decklinkExtlib ? false, blackmagic-design-desktop-video ? null # Blackmagic Design DeckLink I/O support
-, fdkaacExtlib ? false, fdk_aac ? null # Fraunhofer FDK AAC de/encoder
-#, flite ? null # Flite (voice synthesis) support
-, fontconfig ? null # Needed for drawtext filter
-, freetype ? null # Needed for drawtext filter
-, frei0r ? null # frei0r video filtering
-, fribidi ? null # Needed for drawtext filter
-, game-music-emu ? null # Game Music Emulator
-, gnutls ? null
-, gsm ? null # GSM de/encoder
-#, ilbc ? null # iLBC de/encoder
-, libjack2 ? null # Jack audio (only version 2 is supported in this build)
-, ladspaH ? null # LADSPA audio filtering
-, lame ? null # LAME MP3 encoder
-, libass ? null # (Advanced) SubStation Alpha subtitle rendering
-, libaom ? null # AV1 encoder
-, libbluray ? null # BluRay reading
-, libbs2b ? null # bs2b DSP library
-, libcaca ? null # Textual display (ASCII art)
-#, libcdio-paranoia ? null # Audio CD grabbing
-, libdc1394 ? null, libraw1394 ? null # IIDC-1394 grabbing (ieee 1394)
-, libdrm ? null # libdrm support
-, libiconv ? null
-#, libiec61883 ? null, libavc1394 ? null # iec61883 (also uses libraw1394)
-, libmfx ? null # Hardware acceleration vis libmfx
-, libmodplug ? null # ModPlug support
-, libmysofa ? null # HRTF support via SOFAlizer
-#, libnut ? null # NUT (de)muxer, native (de)muser exists
-, libogg ? null # Ogg container used by vorbis & theora
-, libopus ? null # Opus de/encoder
-, librsvg ? null # SVG protocol
-, libssh ? null # SFTP protocol
-, libtheora ? null # Theora encoder
-, libv4l ? null # Video 4 Linux support
-, libva ? null # Vaapi hardware acceleration
-, libvdpau ? null # Vdpau hardware acceleration
-, libvmaf ? null # Netflix's VMAF (Video Multi-Method Assessment Fusion)
-, libvorbis ? null # Vorbis de/encoding, native encoder exists
-, libvpx ? null # VP8 & VP9 de/encoding
-, libwebp ? null # WebP encoder
-, libX11 ? null # Xlib support
-, libxcb ? null # X11 grabbing using XCB
+, alsa-lib # Alsa in/output support
+#, avisynth # Support for reading AviSynth scripts
+, bzip2
+, celt # CELT decoder
+#, crystalhd # Broadcom CrystalHD hardware acceleration
+, dav1d # AV1 decoder (focused on speed and correctness)
+#, decklinkExtlib ? false, blackmagic-design-desktop-video # Blackmagic Design DeckLink I/O support
+, fdkaacExtlib ? false, fdk_aac # Fraunhofer FDK AAC de/encoder
+#, flite # Flite (voice synthesis) support
+, fontconfig # Needed for drawtext filter
+, freetype # Needed for drawtext filter
+, frei0r # frei0r video filtering
+, fribidi # Needed for drawtext filter
+, game-music-emu # Game Music Emulator
+, gnutls
+, gsm # GSM de/encoder
+#, ilbc # iLBC de/encoder
+, libjack2 # Jack audio (only version 2 is supported in this build)
+, ladspaH # LADSPA audio filtering
+, lame # LAME MP3 encoder
+, libass # (Advanced) SubStation Alpha subtitle rendering
+, libaom # AV1 encoder
+, libbluray # BluRay reading
+, libbs2b # bs2b DSP library
+, libcaca # Textual display (ASCII art)
+#, libcdio-paranoia # Audio CD grabbing
+, libdc1394, libraw1394 # IIDC-1394 grabbing (ieee 1394)
+, libdrm # libdrm support
+, libiconv
+#, libiec61883, libavc1394 # iec61883 (also uses libraw1394)
+, libmfx # Hardware acceleration vis libmfx
+, libmodplug # ModPlug support
+, libmysofa # HRTF support via SOFAlizer
+#, libnut # NUT (de)muxer, native (de)muser exists
+, libogg # Ogg container used by vorbis & theora
+, libopus # Opus de/encoder
+, librsvg # SVG protocol
+, libssh # SFTP protocol
+, libtheora # Theora encoder
+, libv4l # Video 4 Linux support
+, libva # Vaapi hardware acceleration
+, libvdpau # Vdpau hardware acceleration
+, libvmaf # Netflix's VMAF (Video Multi-Method Assessment Fusion)
+, libvorbis # Vorbis de/encoding, native encoder exists
+, libvpx # VP8 & VP9 de/encoding
+, libwebp # WebP encoder
+, libX11 # Xlib support
+, libxcb # X11 grabbing using XCB
 , libxcbshmExtlib ? true # X11 grabbing shm communication
 , libxcbxfixesExtlib ? true # X11 grabbing mouse rendering
 , libxcbshapeExtlib ? true # X11 grabbing shape rendering
-, libXv ? null # Xlib support
-, libXext ? null # Xlib support
-, xz ? null # xz-utils
-, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64, nv-codec-headers ? null # NVIDIA NVENC support
-, openal ? null # OpenAL 1.1 capture support
-#, opencl ? null # OpenCL code
-, opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
-#, opencv ? null # Video filtering
-, openglExtlib ? false, libGL ? null, libGLU ? null # OpenGL rendering
-#, openh264 ? null # H.264/AVC encoder
-, openjpeg ? null # JPEG 2000 de/encoder
-, opensslExtlib ? false, openssl ? null
-, libpulseaudio ? null # Pulseaudio input support
-, rav1e ? null # AV1 encoder (focused on speed and safety)
-, svt-av1 ? null # AV1 encoder/decoder (focused on speed and correctness)
-, rtmpdump ? null # RTMP[E] support
-#, libquvi ? null # Quvi input support
-, samba ? null # Samba protocol
-#, schroedinger ? null # Dirac de/encoder
-, SDL2 ? null
-#, shine ? null # Fixed-point MP3 encoder
-, soxr ? null # Resampling via soxr
-, speex ? null # Speex de/encoder
-, srt ? null # Secure Reliable Transport (SRT) protocol
-#, twolame ? null # MP2 encoder
-#, utvideo ? null # Ut Video de/encoder
-, vid-stab ? null # Video stabilization
-#, vo-aacenc ? null # AAC encoder
-, vo-amrwbenc ? null # AMR-WB encoder
-, x264 ? null # H.264/AVC encoder
-, x265 ? null # H.265/HEVC encoder
-, xavs ? null # AVS encoder
-, xvidcore ? null # Xvid encoder, native encoder exists
-, zeromq4 ? null # Message passing
-, zlib ? null
-, vulkan-loader ? null
-, glslang ? null
-#, zvbi ? null # Teletext support
+, libXv # Xlib support
+, libXext # Xlib support
+, xz # xz-utils
+, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64, nv-codec-headers # NVIDIA NVENC support
+, openal # OpenAL 1.1 capture support
+#, opencl # OpenCL code
+, opencore-amr # AMR-NB de/encoder & AMR-WB decoder
+#, opencv # Video filtering
+, openglExtlib ? false, libGL, libGLU # OpenGL rendering
+#, openh264 # H.264/AVC encoder
+, openjpeg # JPEG 2000 de/encoder
+, opensslExtlib ? false, openssl
+, libpulseaudio # Pulseaudio input support
+, rav1e # AV1 encoder (focused on speed and safety)
+, svt-av1 # AV1 encoder/decoder (focused on speed and correctness)
+, rtmpdump # RTMP[E] support
+#, libquvi # Quvi input support
+, samba # Samba protocol
+#, schroedinger # Dirac de/encoder
+, SDL2
+#, shine # Fixed-point MP3 encoder
+, soxr # Resampling via soxr
+, speex # Speex de/encoder
+, srt # Secure Reliable Transport (SRT) protocol
+#, twolame # MP2 encoder
+#, utvideo # Ut Video de/encoder
+, vid-stab # Video stabilization
+#, vo-aacenc # AAC encoder
+, vo-amrwbenc # AMR-WB encoder
+, x264 # H.264/AVC encoder
+, x265 # H.265/HEVC encoder
+, xavs # AVS encoder
+, xvidcore # Xvid encoder, native encoder exists
+, zeromq4 # Message passing
+, zlib
+, vulkan-loader
+, glslang
+#, zvbi # Teletext support
 /*
  *  Developer options
  */

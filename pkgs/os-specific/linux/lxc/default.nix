@@ -2,8 +2,8 @@
 , docbook_xml_dtd_45, python3Packages, pam
 
 # Optional Dependencies
-, libapparmor ? null, gnutls ? null, libselinux ? null, libseccomp ? null
-, libcap ? null, systemd ? null
+, libapparmor, gnutls, libselinux, libseccomp
+, libcap, systemd
 }:
 
 with lib;

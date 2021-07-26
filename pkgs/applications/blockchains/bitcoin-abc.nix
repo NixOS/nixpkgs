@@ -1,5 +1,5 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, cmake, openssl, db53, boost
-, zlib, miniupnpc, qtbase ? null , qttools ? null, util-linux, protobuf, qrencode, libevent
+, zlib, miniupnpc, qtbase, qttools, util-linux, protobuf, qrencode, libevent
 , withGui, python3, jemalloc, zeromq4 }:
 
 with lib;

@@ -108,6 +108,9 @@ let
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           name = "${name}-gcc-wrapper";
           nativeTools = false;
+          gccForLibs = null;
+          zlib = null;
+          libcxx = null;
           nativeLibc = false;
           buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
             inherit (prevStage) stdenv;
@@ -350,6 +353,9 @@ in
         inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
         shell = self.bash + "/bin/bash";
+        gccForLibs = null;
+        zlib = null;
+        libcxx = null;
       };
     };
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++

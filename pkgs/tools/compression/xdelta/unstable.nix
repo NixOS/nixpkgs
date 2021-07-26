@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook
-, lzmaSupport ? true, xz ? null
+, lzmaSupport ? true, xz
 }:
 
 assert lzmaSupport -> xz != null;

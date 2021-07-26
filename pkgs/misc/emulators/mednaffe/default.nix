@@ -4,8 +4,8 @@
 , autoreconfHook
 , pkg-config
 , mednafen
-, gtk2 ? null
-, gtk3 ? null
+, gtk2
+, gtk3
 , wrapGAppsHook
 }:
 

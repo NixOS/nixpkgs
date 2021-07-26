@@ -1,19 +1,19 @@
 { lib, stdenv, fetchFromGitHub, which, pkg-config, makeWrapper
 , ffmpeg, libGLU, libGL, freetype, libxml2, python3
 , libobjc, AppKit, Foundation
-, alsa-lib ? null
-, libdrm ? null
-, libpulseaudio ? null
-, libv4l ? null
-, libX11 ? null
-, libXdmcp ? null
-, libXext ? null
-, libXxf86vm ? null
-, mesa ? null
-, SDL2 ? null
-, udev ? null
-, enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
-, withVulkan ? stdenv.isLinux, vulkan-loader ? null
+, alsa-lib
+, libdrm
+, libpulseaudio
+, libv4l
+, libX11
+, libXdmcp
+, libXext
+, libXxf86vm
+, mesa
+, SDL2
+, udev
+, enableNvidiaCgToolkit ? false, nvidia_cg_toolkit
+, withVulkan ? stdenv.isLinux, vulkan-loader
 , fetchurl
 , wayland
 , libxkbcommon

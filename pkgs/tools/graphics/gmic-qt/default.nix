@@ -16,8 +16,8 @@
 , libtiff
 , libpng
 , curl
-, krita ? null
-, gimp ? null
+, krita
+, gimp
 , qtbase
 , qttools
 }:

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchzip, python3
 , mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, pipewire_0_2
-, libxslt, gst_all_1 ? null
+, libxslt, gst_all_1
 , withPdfReader      ? true
 , withMediaPlayback  ? true
 , backend            ? "webengine"

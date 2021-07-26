@@ -1,6 +1,6 @@
-{ pkgs ? import <nixpkgs> {}
-, nodejs ? pkgs.nodejs
-, yarn ? pkgs.yarn
+{ pkgs
+, nodejs
+, yarn
 }:
 
 let

@@ -1,9 +1,9 @@
 { mkDerivation, lib, fetchFromGitHub, makeWrapper, pkg-config
 , boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false
-, guiSupport ? true, dbus ? null # GUI (disable to run headless)
+, guiSupport ? true, dbus # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
-, trackerSearch ? true, python3 ? null
+, trackerSearch ? true, python3
 }:
 
 assert guiSupport -> (dbus != null);

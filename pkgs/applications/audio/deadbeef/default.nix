@@ -6,32 +6,32 @@
 , pkg-config
 , jansson
 # deadbeef can use either gtk2 or gtk3
-, gtk2Support ? false, gtk2 ? null
-, gtk3Support ? true, gtk3 ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
+, gtk2Support ? false, gtk2
+, gtk3Support ? true, gtk3, gsettings-desktop-schemas, wrapGAppsHook
 # input plugins
-, vorbisSupport ? true, libvorbis ? null
-, mp123Support ? true, libmad ? null
-, flacSupport ? true, flac ? null
-, wavSupport ? true, libsndfile ? null
-, cdaSupport ? true, libcdio ? null, libcddb ? null
-, aacSupport ? true, faad2 ? null
-, opusSupport ? true, opusfile ? null
-, wavpackSupport ? false, wavpack ? null
-, ffmpegSupport ? false, ffmpeg ? null
-, apeSupport ? true, yasm ? null
+, vorbisSupport ? true, libvorbis
+, mp123Support ? true, libmad
+, flacSupport ? true, flac
+, wavSupport ? true, libsndfile
+, cdaSupport ? true, libcdio, libcddb
+, aacSupport ? true, faad2
+, opusSupport ? true, opusfile
+, wavpackSupport ? false, wavpack
+, ffmpegSupport ? false, ffmpeg
+, apeSupport ? true, yasm
 # misc plugins
-, zipSupport ? true, libzip ? null
-, artworkSupport ? true, imlib2 ? null
-, hotkeysSupport ? true, libX11 ? null
-, osdSupport ? true, dbus ? null
+, zipSupport ? true, libzip
+, artworkSupport ? true, imlib2
+, hotkeysSupport ? true, libX11
+, osdSupport ? true, dbus
 # output plugins
-, alsaSupport ? true, alsa-lib ? null
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, alsaSupport ? true, alsa-lib
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
 # effect plugins
-, resamplerSupport ? true, libsamplerate ? null
-, overloadSupport ? true, zlib ? null
+, resamplerSupport ? true, libsamplerate
+, overloadSupport ? true, zlib
 # transports
-, remoteSupport ? true, curl ? null
+, remoteSupport ? true, curl
 }:
 
 assert gtk2Support || gtk3Support;

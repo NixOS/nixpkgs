@@ -10,7 +10,7 @@
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ncurses
 , buildIde ? true
 , glib, gnome, wrapGAppsHook
-, csdp ? null
+, csdp
 , version, coq-version ? null,
 }@args:
 let lib' = lib; in

@@ -9,7 +9,7 @@
 , vala
 , wrapGAppsHook
 , dbus
-, dconf ? null
+, dconf
 , glib
 , gdk-pixbuf
 , gobject-introspection
@@ -23,12 +23,12 @@
 , unicode-emoji
 , python3
 , json-glib
-, libnotify ? null
+, libnotify
 , enablePython2Library ? false
 , enableUI ? true
 , withWayland ? false
-, libxkbcommon ? null
-, wayland ? null
+, libxkbcommon
+, wayland
 , buildPackages
 , runtimeShell
 , nixosTests

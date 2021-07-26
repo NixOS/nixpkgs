@@ -3,7 +3,7 @@
 , fetchurl, unzip
 , boost, pugixml
 , hidapi
-, libusb1 ? null
+, libusb1
 }:
 
 with lib;

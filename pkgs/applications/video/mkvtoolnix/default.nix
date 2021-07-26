@@ -2,9 +2,9 @@
 , ruby, docbook_xsl, file, xdg-utils, gettext, expat, boost, libebml, zlib
 , fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark, pcre2
 , withGUI ? true
-  , qtbase ? null
-  , qtmultimedia ? null
-  , wrapQtAppsHook ? null
+  , qtbase
+  , qtmultimedia
+  , wrapQtAppsHook
 }:
 
 assert withGUI -> qtbase != null && qtmultimedia != null && wrapQtAppsHook != null;

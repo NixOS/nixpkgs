@@ -1,7 +1,7 @@
 { fetchurl, mkDerivation, fetchpatch, stdenv, lib, pkg-config, autoreconfHook, wrapGAppsHook
 , libgpgerror, libassuan, qtbase, wrapQtAppsHook
 , ncurses, gtk2, gcr
-, libcap ? null, libsecret ? null
+, libcap, libsecret
 , enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "emacs" ] ++ lib.optionals stdenv.isLinux [ "gnome3" ]
 }:
 

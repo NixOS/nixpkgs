@@ -3,11 +3,11 @@
 , argp-standalone
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
-, curl ? null, libxml2 ? null, openssl ? null, withNistBeacon ? false
+, curl, libxml2, openssl, withNistBeacon ? false
   # Systems that support RDRAND but not AES-NI require libgcrypt to use RDRAND as an entropy source
-, libgcrypt ? null, withGcrypt ? true
-, jitterentropy ? null, withJitterEntropy ? true
-, libp11 ? null, opensc ? null, withPkcs11 ? true
+, libgcrypt, withGcrypt ? true
+, jitterentropy, withJitterEntropy ? true
+, libp11, opensc, withPkcs11 ? true
 }:
 
 with lib;

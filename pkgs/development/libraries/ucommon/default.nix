@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config
-, openssl ? null, zlib ? null, gnutls ? null
+, openssl, zlib, gnutls
 }:
 
 let

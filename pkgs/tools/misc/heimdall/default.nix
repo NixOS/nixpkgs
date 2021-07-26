@@ -1,5 +1,5 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, cmake, zlib, libusb1
-, enableGUI ? false, qtbase ? null
+, enableGUI ? false, qtbase
 }:
 
 let version = "1.4.2"; in

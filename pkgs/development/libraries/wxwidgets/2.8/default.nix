@@ -2,7 +2,7 @@
 , libX11, cairo
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, libGLU ? null, libGL ? null
+, libGLU, libGL
 , compat24 ? false, compat26 ? true, unicode ? true,
 }:
 

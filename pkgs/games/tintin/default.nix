@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, zlib, pcre
-, tlsSupport ? true, gnutls ? null
+, tlsSupport ? true, gnutls
 # ^ set { tlsSupport = false; } to reduce closure size by ~= 18.6 MB
 }:
 

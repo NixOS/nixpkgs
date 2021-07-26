@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
 , cpuid, ocb-stubblr, sexplib
 , cstruct, zarith, ppx_sexp_conv, ppx_deriving, writeScriptBin
-, cstruct-lwt ? null
+, cstruct-lwt
 }:
 
 with lib;

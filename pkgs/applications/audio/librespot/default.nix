@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, withRodio ? true
-, withALSA ? true, alsa-lib ? null, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null }:
+, withALSA ? true, alsa-lib, withPulseAudio ? false, libpulseaudio
+, withPortAudio ? false, portaudio }:
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";

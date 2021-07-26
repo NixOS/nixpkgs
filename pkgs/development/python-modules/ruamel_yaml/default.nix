@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , ruamel_base
-, ruamel_ordereddict ? null
-, ruamel_yaml_clib ? null
+, ruamel_ordereddict
+, ruamel_yaml_clib
 , isPy3k
 , isPyPy
 }:

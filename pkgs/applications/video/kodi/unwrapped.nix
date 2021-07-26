@@ -29,7 +29,7 @@
 , usbSupport  ? false, libusb-compat-0_1
 , vdpauSupport ? true, libvdpau
 , waylandSupport ? false, wayland, wayland-protocols
-, waylandpp ?  null, libxkbcommon
+, waylandpp, libxkbcommon
 , gbmSupport ? false, mesa, libinput
 , buildPackages
 }:

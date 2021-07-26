@@ -3,7 +3,7 @@
 , libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
 , libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsa-lib
 , miniupnpc, enet, mbedtls, soundtouch, sfml
-, vulkan-loader ? null, libpulseaudio ? null
+, vulkan-loader, libpulseaudio
 
 # - Inputs used for Darwin
 , CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:

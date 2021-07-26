@@ -2,14 +2,14 @@
 , alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
-, openglSupport ? false, libGLU ? null, libGL ? null
-, libmfxSupport ? false, intel-media-sdk ? null
-, libaomSupport ? false, libaom ? null
+, openglSupport ? false, libGLU, libGL
+, libmfxSupport ? false, intel-media-sdk
+, libaomSupport ? false, libaom
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
-, sdlSupport ? !stdenv.isAarch32, SDL ? null, SDL2 ? null
-, vdpauSupport ? !stdenv.isAarch32, libvdpau ? null
+, sdlSupport ? !stdenv.isAarch32, SDL, SDL2
+, vdpauSupport ? !stdenv.isAarch32, libvdpau
 # Developer options
 , debugDeveloper ? false
 , optimizationsDeveloper ? true

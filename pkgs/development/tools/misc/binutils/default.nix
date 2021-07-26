@@ -5,7 +5,7 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , noSysDirs
 , gold ? true
-, bison ? null
+, bison
 , flex
 , texinfo
 , perl

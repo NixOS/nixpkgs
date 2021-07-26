@@ -1,7 +1,7 @@
 { lib, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
-, alsaSupport ? true, alsa-lib ? null
-, jackSupport ? false, libjack2 ? null
-, portaudioSupport ? false, portaudio ? null }:
+, alsaSupport ? true, alsa-lib
+, jackSupport ? false, libjack2
+, portaudioSupport ? false, portaudio }:
 
 assert alsaSupport -> alsa-lib != null;
 assert jackSupport -> libjack2 != null;

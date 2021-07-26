@@ -4,15 +4,15 @@
 , libffi
 , gdbm
 , xz
-, mime-types ? null, mimetypesSupport ? true
+, mime-types, mimetypesSupport ? true
 , ncurses
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
-, bluez ? null, bluezSupport ? false
+, tcl, tk, tix, libX11, xorgproto, x11Support ? false
+, bluez, bluezSupport ? false
 , zlib
-, tzdata ? null
+, tzdata
 , self
 , configd
 , autoreconfHook

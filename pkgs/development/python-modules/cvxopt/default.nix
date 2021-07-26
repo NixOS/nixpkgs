@@ -5,9 +5,9 @@
 , python
 , blas, lapack # build segfaults with 64-bit blas
 , suitesparse
-, glpk ? null
-, gsl ? null
-, fftw ? null
+, glpk
+, gsl
+, fftw
 , withGlpk ? true
 , withGsl ? true
 , withFftw ? true

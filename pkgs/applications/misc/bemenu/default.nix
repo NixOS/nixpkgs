@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, cairo, libxkbcommon
 , pango, fribidi, harfbuzz, pcre, pkg-config
-, ncursesSupport ? true, ncurses ? null
-, waylandSupport ? true, wayland ? null, wayland-protocols ? null
-, x11Support ? true, xorg ? null
+, ncursesSupport ? true, ncurses
+, waylandSupport ? true, wayland, wayland-protocols
+, x11Support ? true, xorg
 }:
 
 assert ncursesSupport -> ncurses != null;

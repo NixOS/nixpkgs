@@ -25,8 +25,8 @@
 { stdenv, lib
 , buildPackages
 , fetchurl
-, linuxHeaders ? null
-, gd ? null, libpng ? null
+, linuxHeaders
+, gd, libpng
 , libidn2
 , bison
 , python3Minimal

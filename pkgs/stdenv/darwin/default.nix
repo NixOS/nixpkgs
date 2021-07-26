@@ -114,6 +114,8 @@ rec {
         let args = {
           inherit lib shell;
           inherit (last) stdenvNoCC;
+          gccForLibs = null;
+          zlib = null;
 
           nativeTools = false;
           nativeLibc = false;

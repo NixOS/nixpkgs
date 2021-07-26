@@ -1,5 +1,5 @@
 { lib, stdenvNoCC, buildPackages
-, subversion, glibcLocales, sshSupport ? true, openssh ? null
+, subversion, glibcLocales, sshSupport ? true, openssh
 }:
 
 { url, rev ? "HEAD", md5 ? "", sha256 ? ""

@@ -1,8 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qt4 ? null
-, withQt5 ? false, qtbase ? null, qttools ? null
-, darwin ? null
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qt4
+, withQt5 ? false, libsForQt5
+, darwin
 , libsecret
 }:
+
+let inherit (libsForQt5) qtbase qttools; in
 
 assert withQt5 -> qtbase != null;
 assert withQt5 -> qttools != null;

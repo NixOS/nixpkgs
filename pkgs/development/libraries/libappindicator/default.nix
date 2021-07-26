@@ -3,10 +3,10 @@
 { stdenv, fetchgit, lib
 , pkg-config, autoreconfHook
 , glib, dbus-glib, gtkVersion ? "3"
-, gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
-, gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
+, gtk2, libindicator-gtk2, libdbusmenu-gtk2
+, gtk3, libindicator-gtk3, libdbusmenu-gtk3
 , gtk-doc, vala, gobject-introspection
-, monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
+, monoSupport ? false, mono, gtk-sharp-2_0
  }:
 
 with lib;

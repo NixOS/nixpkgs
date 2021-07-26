@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, extra-cmake-modules
 , kauth, krunner
-, pass, pass-otp ? null }:
+, pass }:
 
 mkDerivation rec {
   pname = "krunner-pass";
@@ -15,7 +15,7 @@ mkDerivation rec {
 
   buildInputs  = [
     kauth krunner
-    pass pass-otp
+    pass
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

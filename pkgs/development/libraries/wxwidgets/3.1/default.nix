@@ -14,19 +14,19 @@
 , setfile
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported
-, libGLU ? null
-, libGL ? null
+, libGLU
+, libGL
 , compat28 ? false
 , compat30 ? true
 , unicode ? true
 , withGtk2 ? true
 , withWebKit ? false
-, webkitgtk ? null
-, AGL ? null
-, Carbon ? null
-, Cocoa ? null
-, Kernel ? null
-, QTKit ? null
+, webkitgtk
+, AGL
+, Carbon
+, Cocoa
+, Kernel
+, QTKit
 }:
 
 with lib;

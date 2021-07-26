@@ -3,9 +3,9 @@
 , libX11
 , libXt
 
-, libjpeg ? null
-, libpng ? null
-, libtiff ? null
+, libjpeg
+, libpng
+, libtiff
 
 , withJpegSupport ? true
 , withPngSupport ? true

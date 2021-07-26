@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, tls ? true, gnutls ? null }:
+{ stdenv, fetchurl, lib, tls ? true, gnutls }:
 
 assert tls -> gnutls != null;
 

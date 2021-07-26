@@ -1,5 +1,5 @@
 { stdenv, lib, fetchzip, makeWrapper, jre, writeText, nixosTests
-, postgresql_jdbc ? null, mysql_jdbc ? null
+, postgresql_jdbc, mysql_jdbc
 }:
 
 let

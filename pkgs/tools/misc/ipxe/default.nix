@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, perl, cdrkit, xz, openssl, gnu-efi, mtools
-, syslinux ? null
+, syslinux
 , embedScript ? null
 , additionalTargets ? {}
 }:

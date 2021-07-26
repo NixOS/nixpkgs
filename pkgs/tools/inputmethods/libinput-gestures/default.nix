@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper,
   libinput, wmctrl, python3,
-  coreutils, xdotool ? null,
+  coreutils, xdotool,
   extraUtilsPath ? lib.optional (xdotool != null) xdotool
 }:
 stdenv.mkDerivation rec {

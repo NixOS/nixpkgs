@@ -4,9 +4,9 @@
 , llvmPackages
 
 , enableGui ? false
-, wrapQtAppsHook ? null
-, qtbase ? null
-, OpenGL ? null
+, wrapQtAppsHook
+, qtbase
+, OpenGL
 }:
 
 let

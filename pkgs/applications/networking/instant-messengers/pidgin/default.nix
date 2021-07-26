@@ -5,10 +5,10 @@
 , libXScrnSaver, avahi, dbus, dbus-glib, intltool, libidn
 , lib, python3, libICE, libXext, libSM
 , libgnt, ncurses
-, cyrus_sasl ? null
-, openssl ? null
-, gnutls ? null
-, libgcrypt ? null
+, cyrus_sasl
+, openssl
+, gnutls
+, libgcrypt
 , plugins, symlinkJoin
 }:
 

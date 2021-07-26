@@ -1,7 +1,7 @@
 { lib, stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
 , pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
-, contextlib2 ? null, typing ? null, setuptools-scm
-, pytest, mock ? null, pytest-mock
+, contextlib2, typing, setuptools-scm
+, pytest, mock, pytest-mock
 , which, glibcLocales
 }:
 buildPythonPackage rec {

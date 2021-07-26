@@ -5,12 +5,12 @@
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
-, open-watcom-bin ? null
+, open-watcom-bin
 , makeself, perl
-, javaBindings ? true, jdk ? null # Almost doesn't affect closure size
-, pythonBindings ? false, python3 ? null
-, extensionPack ? null, fakeroot ? null
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, javaBindings ? true, jdk # Almost doesn't affect closure size
+, pythonBindings ? false, python3
+, extensionPack ? null, fakeroot
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true

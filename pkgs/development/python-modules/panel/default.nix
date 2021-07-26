@@ -9,10 +9,14 @@
 , testpath
 , tqdm
 , callPackage
+, pkgs
+, nodejs
 }:
 
 let
-  node = callPackage ./node {};
+  node = callPackage ./node {
+    inherit pkgs nodejs;
+  };
 in buildPythonPackage rec {
   pname = "panel";
   version = "0.11.3";

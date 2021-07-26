@@ -5,8 +5,8 @@
 , aften, AudioUnit, CoreAudio, libobjc, Accelerate
 
 # Optional Dependencies
-, dbus ? null, libffado ? null, alsa-lib ? null
-, libopus ? null
+, dbus, libffado, alsa-lib
+, libopus
 
 # Extra options
 , prefix ? ""

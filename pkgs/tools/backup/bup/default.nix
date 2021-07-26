@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper
 , perl, pandoc, python3Packages, git
-, par2cmdline ? null, par2Support ? true
+, par2cmdline, par2Support ? true
 }:
 
 assert par2Support -> par2cmdline != null;

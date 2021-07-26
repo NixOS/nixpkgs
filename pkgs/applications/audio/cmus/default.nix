@@ -1,14 +1,14 @@
 { config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkg-config
 , libiconv, CoreAudio, AudioUnit
 
-, alsaSupport ? stdenv.isLinux, alsa-lib ? null
+, alsaSupport ? stdenv.isLinux, alsa-lib
 # simple fallback for everyone else
-, aoSupport ? !stdenv.isLinux, libao ? null
-, jackSupport ? false, libjack ? null
-, samplerateSupport ? jackSupport, libsamplerate ? null
-, ossSupport ? false, alsa-oss ? null
-, pulseaudioSupport ? config.pulseaudio or false, libpulseaudio ? null
-, mprisSupport ? stdenv.isLinux, systemd ? null
+, aoSupport ? !stdenv.isLinux, libao
+, jackSupport ? false, libjack
+, samplerateSupport ? jackSupport, libsamplerate
+, ossSupport ? false, alsa-oss
+, pulseaudioSupport ? config.pulseaudio or false, libpulseaudio
+, mprisSupport ? stdenv.isLinux, systemd
 
 # TODO: add these
 #, artsSupport
@@ -17,23 +17,23 @@
 #, sunSupport
 #, waveoutSupport
 
-, cddbSupport ? true, libcddb ? null
-, cdioSupport ? true, libcdio ? null, libcdio-paranoia ? null
-, cueSupport ? true, libcue ? null
-, discidSupport ? (!stdenv.isDarwin), libdiscid ? null
-, ffmpegSupport ? true, ffmpeg ? null
-, flacSupport ? true, flac ? null
-, madSupport ? true, libmad ? null
-, mikmodSupport ? true, libmikmod ? null
-, modplugSupport ? true, libmodplug ? null
-, mpcSupport ? true, libmpcdec ? null
-, tremorSupport ? false, tremor ? null
-, vorbisSupport ? true, libvorbis ? null
-, wavpackSupport ? true, wavpack ? null
-, opusSupport ? true, opusfile ? null
+, cddbSupport ? true, libcddb
+, cdioSupport ? true, libcdio, libcdio-paranoia
+, cueSupport ? true, libcue
+, discidSupport ? (!stdenv.isDarwin), libdiscid
+, ffmpegSupport ? true, ffmpeg
+, flacSupport ? true, flac
+, madSupport ? true, libmad
+, mikmodSupport ? true, libmikmod
+, modplugSupport ? true, libmodplug
+, mpcSupport ? true, libmpcdec
+, tremorSupport ? false, tremor
+, vorbisSupport ? true, libvorbis
+, wavpackSupport ? true, wavpack
+, opusSupport ? true, opusfile
 
-, aacSupport ? false, faad2 ? null # already handled by ffmpeg
-, mp4Support ? false, mp4v2 ? null # ffmpeg does support mp4 better
+, aacSupport ? false, faad2 # already handled by ffmpeg
+, mp4Support ? false, mp4v2 # ffmpeg does support mp4 better
 
 # not in nixpkgs
 #, vtxSupport ? true, libayemu ? null

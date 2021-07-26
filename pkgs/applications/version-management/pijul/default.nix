@@ -8,7 +8,7 @@
 , zstd
 , darwin
 , gitImportSupport ? true
-, libgit2 ? null
+, libgit2
 }:
 
 rustPlatform.buildRustPackage rec {

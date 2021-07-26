@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake
-, libjpeg ? null
-, zlib ? null
-, libpng ? null
-, eigen ? null
-, libtiff ? null
+, libjpeg
+, zlib
+, libpng
+, eigen
+, libtiff
 , enableExamples ? false
 , enableDocs ? false }:
 

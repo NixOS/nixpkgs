@@ -2,7 +2,7 @@
   openssl, zlib, sqlite, libxml2, libyaml, libmysqlclient, lmdb, leveldb, postgresql,
   version, git-version,
   gambit-support,
-  gambit ? pkgs.gambit, gambit-params ? pkgs.gambit-support.stable-params, src }:
+  gambit, gambit-params ? pkgs.gambit-support.stable-params, src }:
 
 # We use Gambit, that works 10x better with GCC than Clang. See ../gambit/build.nix
 let stdenv = gccStdenv; in

@@ -1,11 +1,11 @@
 { buildPackages
 , callPackage
 , perl
-, bison ? null
-, flex ? null
-, gmp ? null
-, libmpc ? null
-, mpfr ? null
+, bison
+, flex
+, gmp
+, libmpc
+, mpfr
 , lib
 , stdenv
 

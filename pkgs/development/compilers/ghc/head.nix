@@ -5,10 +5,10 @@
 , autoconf, autoreconfHook, automake, coreutils, fetchgit, perl, python3, m4, sphinx
 , bash
 
-, libiconv ? null, ncurses
+, libiconv, ncurses
 
 , # GHC can be built with system libffi or a bundled one.
-  libffi ? null
+  libffi
 
   # Libdw.c only supports x86_64, i686 and s390x
 , enableDwarf ? stdenv.targetPlatform.isx86 &&

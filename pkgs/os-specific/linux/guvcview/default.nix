@@ -14,14 +14,14 @@
 , libpng
 , sfml
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
-, libpulseaudio ? null
+, libpulseaudio
 , useQt ? false
-, qtbase ? null
-, wrapQtAppsHook ? null
+, qtbase
+, wrapQtAppsHook
 # can be turned off if used as a library
 , useGtk ? true
-, gtk3 ? null
-, wrapGAppsHook ? null
+, gtk3
+, wrapGAppsHook
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;

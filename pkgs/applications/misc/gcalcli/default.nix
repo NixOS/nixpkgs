@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, python3
-, libnotify ? null }:
+, libnotify }:
 
 with python3.pkgs;
 

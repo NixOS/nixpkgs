@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja
 , libevdev, mtdev, udev, libwacom
-, documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
-, eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
-, testsSupport ? false, check ? null, valgrind ? null, python3 ? null
+, documentationSupport ? false, doxygen, graphviz # Documentation
+, eventGUISupport ? false, cairo, glib, gtk3 # GUI event viewer support
+, testsSupport ? false, check, valgrind, python3
 }:
 
 assert documentationSupport -> doxygen != null && graphviz != null && python3 != null;

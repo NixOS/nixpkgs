@@ -14,22 +14,22 @@
   # we opt to always build everything unlike our usual policy.
   enableShared ? true
 , enableLTO ? true
-, texinfo ? null
-, perl ? null # optional, for texi2pod (then pod2man)
+, texinfo
+, perl # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf
 , libelf                      # optional, for link-time optimizations (LTO)
-, isl ? null # optional, for the Graphite optimization framework.
-, zlib ? null
+, isl # optional, for the Graphite optimization framework.
+, zlib
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
-, libcCross ? null
-, threadsCross ? null # for MinGW
+, libcCross
+, threadsCross # for MinGW
 , crossStageStatic ? false
 , # Strip kills static libs of other archs (hence no cross)
   stripped ? stdenv.hostPlatform.system == stdenv.buildPlatform.system
           && stdenv.targetPlatform.system == stdenv.hostPlatform.system
-, gnused ? null
+, gnused
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 }:

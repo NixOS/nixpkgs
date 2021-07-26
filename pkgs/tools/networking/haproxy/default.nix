@@ -3,7 +3,7 @@
 , withPrometheusExporter ? true
 , stdenv, lib, fetchurl, nixosTests
 , openssl, zlib
-, lua5_3 ? null, pcre ? null, systemd ? null
+, lua5_3, pcre, systemd
 }:
 
 assert useLua -> lua5_3 != null;

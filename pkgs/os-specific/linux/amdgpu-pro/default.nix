@@ -2,7 +2,7 @@
 , xorg, patchelf, openssl, libdrm, udev
 , libxcb, libxshmfence, epoxy, perl, zlib
 , ncurses
-, libsOnly ? false, kernel ? null
+, libsOnly ? false, kernel
 }:
 
 assert (!libsOnly) -> kernel != null;

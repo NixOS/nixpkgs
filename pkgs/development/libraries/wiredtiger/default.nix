@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, automake, autoconf, libtool
 
 # Optional Dependencies
-, lz4 ? null, snappy ? null, zlib ? null, bzip2 ? null, db ? null
-, gperftools ? null, leveldb ? null
+, lz4, snappy, zlib, bzip2, db
+, gperftools, leveldb
 }:
 
 with lib;

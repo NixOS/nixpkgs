@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs }:
 ## we default to importing <nixpkgs> here, so that you can use
 ## a simple shell command to insert new sha256's into this file
 ## e.g. with emacs C-u M-x shell-command

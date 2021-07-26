@@ -2,10 +2,10 @@
 , openal, glm, freetype, libGLU, SDL2, epoxy
 , dejavu_fonts, inkscape, optipng, imagemagick
 , withCrashReporter ? !stdenv.isDarwin
-,   qtbase ? null
-,   wrapQtAppsHook ? null
-,   curl ? null
-,   gdb  ? null
+,   qtbase
+,   wrapQtAppsHook
+,   curl
+,   gdb
 }:
 
 with lib;

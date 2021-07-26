@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, libxml2, pkg-config, perl
-, compressionSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
+, compressionSupport ? true, zlib
+, sslSupport ? true, openssl
 , static ? false
 , shared ? true
 }:

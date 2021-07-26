@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python, makeWrapper, autoreconfHook
-, rlwrap ? null, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
+, rlwrap, tk, gnuplot, ecl, ecl-fasl ? false
 }:
 
 let

@@ -2,9 +2,9 @@
 , setfile
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, libGLU ? null, libGL ? null
+, libGLU, libGL
 , compat24 ? false, compat26 ? true, unicode ? true
-, Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
+, Carbon, Cocoa, Kernel, QuickTime, AGL
 }:
 
 assert withMesa -> libGLU != null && libGL != null;

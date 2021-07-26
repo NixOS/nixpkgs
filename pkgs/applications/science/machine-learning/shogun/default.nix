@@ -6,8 +6,8 @@
 # libraries
 , libarchive, libxml2
 # extra support
-, pythonSupport ? true, pythonPackages ? null
-, opencvSupport ? false, opencv ? null
+, pythonSupport ? true, pythonPackages
+, opencvSupport ? false, opencv
 }:
 
 assert pythonSupport -> pythonPackages != null;

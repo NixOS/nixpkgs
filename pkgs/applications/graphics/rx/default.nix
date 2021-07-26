@@ -1,7 +1,7 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub, makeWrapper
 , cmake, pkg-config
-, xorg ? null
-, libGL ? null }:
+, xorg
+, libGL }:
 
 with lib;
 

@@ -1,7 +1,7 @@
 { config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
 , libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
-, util-linuxMinimal ? null
+, util-linuxMinimal
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)

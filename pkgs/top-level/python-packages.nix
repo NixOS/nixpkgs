@@ -2772,6 +2772,8 @@ in {
 
   future = callPackage ../development/python-modules/future { };
 
+  futures = throw "futures is only available for Python 2";
+
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
 
   fuzzyfinder = callPackage ../development/python-modules/fuzzyfinder { };
@@ -2948,6 +2950,8 @@ in {
   google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
 
   googleapis-common-protos = callPackage ../development/python-modules/googleapis-common-protos { };
+
+  google-apputils = throw "google-apputils is only available for Python 2";
 
   google-auth = callPackage ../development/python-modules/google-auth { };
 
@@ -4782,9 +4786,8 @@ in {
   nextcloudmonitor = callPackage ../development/python-modules/nextcloudmonitor { };
 
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
-    inherit (self) python cython setuptools;
-    inherit (pkgs) ncurses;
     enablePython = true;
+    pythonPackages = self;
   })).python;
 
   nibabel = callPackage ../development/python-modules/nibabel { };
@@ -6696,6 +6699,8 @@ in {
     inherit (pkgs) sqlcipher;
   };
 
+  pysqlite = throw "pysqlite is only available for Python 2";
+
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
 
   pysrim = callPackage ../development/python-modules/pysrim { };
@@ -7735,6 +7740,8 @@ in {
   ruamel-base = self.ruamel_base;
   ruamel_base = callPackage ../development/python-modules/ruamel_base { };
 
+  ruamel_ordereddict = throw "ruamel_ordereddict is only available for Python 2";
+
   ruamel-yaml = self.ruamel_yaml;
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
 
@@ -7810,6 +7817,8 @@ in {
   scales = callPackage ../development/python-modules/scales { };
 
   scancode-toolkit = callPackage ../development/python-modules/scancode-toolkit { };
+
+  scandir = throw "scandir is only available for Python 2";
 
   scapy = callPackage ../development/python-modules/scapy { };
 
@@ -8013,6 +8022,8 @@ in {
   simplisafe-python = callPackage ../development/python-modules/simplisafe-python { };
 
   simpy = callPackage ../development/python-modules/simpy { };
+
+  singledispatch = throw "singledispatch is only available for Python 2";
 
   signify = callPackage ../development/python-modules/signify { };
 
@@ -8891,7 +8902,7 @@ in {
 
   typesystem = callPackage ../development/python-modules/typesystem { };
 
-  typing = null;
+  typing = throw "typing is only available for Python 2";
 
   typing-extensions = callPackage ../development/python-modules/typing-extensions { };
 

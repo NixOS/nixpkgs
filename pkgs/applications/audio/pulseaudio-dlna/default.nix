@@ -1,10 +1,10 @@
 { fetchFromGitHub, lib, pythonPackages
-, mp3Support ? true, lame ? null
-, opusSupport ? true, opusTools ? null
-, faacSupport ? false, faac ? null
-, flacSupport ? true, flac ? null
-, soxSupport ? true, sox ? null
-, vorbisSupport ? true, vorbis-tools ? null
+, mp3Support ? true, lame
+, opusSupport ? true, opusTools
+, faacSupport ? false, faac
+, flacSupport ? true, flac
+, soxSupport ? true, sox
+, vorbisSupport ? true, vorbis-tools
 }:
 
 assert mp3Support -> lame != null;

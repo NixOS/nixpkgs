@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, meson, ninja, pkg-config, wayland-scanner
 , wayland, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
-, colord, lcms2, pipewire ? null
-, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
-, libwebp ? null, xwayland ? null, wayland-protocols
+, colord, lcms2, pipewire
+, pango, libunwind, freerdp, vaapi ? null, libva
+, libwebp, xwayland, wayland-protocols
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
