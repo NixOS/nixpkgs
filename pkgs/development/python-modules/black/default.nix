@@ -11,7 +11,7 @@
 , pathspec
 , parameterized
 , regex
-, toml
+, tomli
 , typed-ast
 , typing-extensions
 , uvloop
@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "21.6b0";
+  version = "21.7b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "016f6bhnnnbcrrh3cvmpk77ww0nykv5n1qvgf8b3044dm14264yw";
+    sha256 = "06d27adq6v6p8wspi0wwqz2pnq34p5jhnqvijbin54yyj5j3qdy8";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     mypy-extensions
     pathspec
     regex
-    toml
+    tomli
     typed-ast # required for tests and python2 extra
     uvloop
   ] ++ lib.optional (pythonOlder "3.7") dataclasses
