@@ -25518,6 +25518,8 @@ in
 
   lscolors = callPackage ../applications/misc/lscolors { };
 
+  luddite = with python3Packages; toPythonApplication luddite;
+
   lumail = callPackage ../applications/networking/mailreaders/lumail {
     lua = lua5_1;
   };
