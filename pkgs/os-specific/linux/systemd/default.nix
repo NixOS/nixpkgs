@@ -12,7 +12,6 @@
 , coreutils
 , gperf
 , getent
-, patchelf
 , glibcLocales
 , glib
 , substituteAll
@@ -271,9 +270,7 @@ stdenv.mkDerivation rec {
     gperf
     ninja
     meson
-    coreutils # meson calls date, stat etc.
     glibcLocales
-    patchelf
     getent
     m4
 
