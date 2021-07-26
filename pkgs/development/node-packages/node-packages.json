@@ -4,7 +4,6 @@
 , "@antora/cli"
 , "@antora/site-generator-default"
 , "@bitwarden/cli"
-, "@elm-tooling/elm-language-server"
 , "@hyperspace/cli"
 , "@nestjs/cli"
 , "@prisma/language-server"
@@ -221,6 +220,7 @@
 , "reveal.js"
 , "rimraf"
 , "rollup"
+, "rustywind"
 , { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }
 , "s3http"
 , "sass"
