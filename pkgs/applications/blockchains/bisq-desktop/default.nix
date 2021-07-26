@@ -24,7 +24,7 @@ let
     # whereas Nix only scans for hashes in uncompressed text.
     # ${bisq-tor}
 
-    JAVA_TOOL_OPTIONS="-XX:MaxRAM=4g" bisq-desktop-wrapped "$@"
+    JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication" bisq-desktop-wrapped "$@"
   '';
 
   bisq-tor = writeScript "bisq-tor" ''
