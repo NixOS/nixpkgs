@@ -8262,6 +8262,8 @@ in {
 
   sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
 
+  sphinx-inline-tabs = callPackage ../development/python-modules/sphinx-inline-tabs { };
+
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx-markdown-parser = callPackage ../development/python-modules/sphinx-markdown-parser { };
