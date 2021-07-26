@@ -301,7 +301,6 @@ in
                 "~@privileged"
                 "~@resources"
                 "~@setuid"
-                "~@sync"
                 "~@timer"
               ];
               SystemCallArchitectures = "native";
