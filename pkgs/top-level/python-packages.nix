@@ -4414,6 +4414,8 @@ in {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  mediapipe = callPackage ../development/python-modules/mediapipe { };
+
   meinheld = callPackage ../development/python-modules/meinheld { };
 
   meld3 = callPackage ../development/python-modules/meld3 { };
