@@ -10152,7 +10152,7 @@ with pkgs;
   inherit (callPackages ../servers/varnish/packages.nix { })
     varnish60Packages varnish65Packages;
 
-  varnishPackages = varnish63Packages;
+  varnishPackages = varnish65Packages;
   varnish = varnishPackages.varnish;
 
   hitch = callPackage ../servers/hitch { };
