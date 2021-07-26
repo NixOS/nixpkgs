@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1blxhj70jxb9xfbd4dxqikd262n6dn9dw5qhyml5yvdwxbv0bybc";
   };
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   checkInputs = [ pytestCheckHook ];
 
