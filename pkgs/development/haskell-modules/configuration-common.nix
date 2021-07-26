@@ -1869,8 +1869,6 @@ EOT
   # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
   reactive-banana = doJailbreak super.reactive-banana;
 
-  hackage-db_2_1_0 = doDistribute super.hackage-db_2_1_0;
-
   # Too strict bounds on QuickCheck
   # https://github.com/muesli4/table-layout/issues/16
   table-layout = doJailbreak super.table-layout;
