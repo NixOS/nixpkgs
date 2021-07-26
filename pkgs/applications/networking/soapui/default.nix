@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
+    # Adjust java path to point to derivation paths
     (writeText "soapui-${version}.patch" ''
       --- a/bin/soapui.sh
       +++ b/bin/soapui.sh
