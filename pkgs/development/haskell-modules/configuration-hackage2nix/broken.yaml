@@ -1999,6 +1999,7 @@ broken-packages:
   - hedgehog-checkers
   - hedgehog-generic
   - hedgehog-golden
+  - hedgehog-optics
   - hedgehog-servant
   - hedis-config
   - hedis-namespace
@@ -2210,6 +2211,7 @@ broken-packages:
   - hs2ps
   - hsakamai
   - hsaml2
+  - hs-aws-lambda
   - hsay
   - hsbc
   - hsbencher
@@ -3171,6 +3173,7 @@ broken-packages:
   - naqsha
   - narc
   - nationstates
+  - nat-optics
   - nats-client
   - nat-sized-numbers
   - natural
@@ -3467,6 +3470,7 @@ broken-packages:
   - parsergen
   - parser-helper
   - parsers-megaparsec
+  - parser-unbiased-choice-monad-embedding
   - parsimony
   - parsley
   - parsley-core
@@ -3733,6 +3737,7 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
+  - procex
   - procrastinating-variable
   - procstat
   - prof2pretty
