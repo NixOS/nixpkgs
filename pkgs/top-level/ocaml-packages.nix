@@ -964,6 +964,8 @@ let
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
+    otoml = callPackage ../development/ocaml-modules/otoml { };
+
     otr = callPackage ../development/ocaml-modules/otr { };
 
     owee = callPackage ../development/ocaml-modules/owee { };

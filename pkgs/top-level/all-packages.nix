@@ -1337,6 +1337,8 @@ in
 
   bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
 
+  bic = callPackage ../development/interpreters/bic { };
+
   bit = callPackage ../applications/version-management/git-and-tools/bit { };
 
   bitwarden = callPackage ../tools/security/bitwarden { };
