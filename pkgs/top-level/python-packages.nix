@@ -5977,6 +5977,8 @@ in {
 
   pyfakefs = callPackage ../development/python-modules/pyfakefs { };
 
+  pyfakewebcam = callPackage ../development/python-modules/pyfakewebcam { };
+
   pyfantom = callPackage ../development/python-modules/pyfantom { };
 
   pyfcm = callPackage ../development/python-modules/pyfcm { };
