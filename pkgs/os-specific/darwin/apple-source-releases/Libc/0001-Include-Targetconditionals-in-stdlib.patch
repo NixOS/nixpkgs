@@ -1,0 +1,24 @@
+From 6e573a85b46dcfae323a99aa561c0dcc016a7791 Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Mon, 26 Jul 2021 16:19:44 +0200
+Subject: [PATCH] Include Targetconditionals in stdlib
+
+---
+ include/stdlib.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/stdlib.h b/include/stdlib.h
+index c04d3a7..94a9812 100644
+--- a/include/stdlib.h
++++ b/include/stdlib.h
+@@ -59,6 +59,7 @@
+ #define _STDLIB_H_
+ 
+ #include <Availability.h>
++#include <TargetConditionals.h>
+ 
+ #include <_types.h>
+ #if !defined(_ANSI_SOURCE)
+-- 
+2.17.2 (Apple Git-113)
+
