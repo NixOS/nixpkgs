@@ -1,7 +1,11 @@
 { callPackage, varnish60, varnish65, fetchFromGitHub }: {
   varnish60Packages = {
     varnish = varnish60;
-    digest  = callPackage ./digest.nix   { varnish = varnish60; };
+    digest  = callPackage ./digest.nix {
+      varnish = varnish60;
+      version = "libvmod-digest-1.0.2";
+      sha256 = "0jwkqqalydn0pwfdhirl5zjhbc3hldvhh09hxrahibr72fgmgpbx";
+    };
     dynamic = callPackage ./dynamic.nix  {
       varnish = varnish60;
       version = "0.4";
@@ -10,6 +14,11 @@
   };
   varnish65Packages = {
     varnish = varnish65;
+    digest  = callPackage ./digest.nix {
+      varnish = varnish65;
+      version = "6.6";
+      sha256 = "0n33g8ml4bsyvcvl5lk7yng1ikvmcv8dd6bc1mv2lj4729pp97nn";
+    };
     dynamic = callPackage ./dynamic.nix  {
       varnish = varnish65;
       version = "2.3.1";

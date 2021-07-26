@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkg-config, readline, libedit
+{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkg-config, readline, libedit, coreutils
 , python3, makeWrapper }:
 
 let
@@ -20,6 +20,10 @@ let
       ];
 
       buildFlags = [ "localstatedir=/var/spool" ];
+
+      postPatch = ''
+        substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
+      '';
 
       postInstall = ''
         wrapProgram "$out/sbin/varnishd" --prefix PATH : "${lib.makeBinPath [ stdenv.cc ]}"
