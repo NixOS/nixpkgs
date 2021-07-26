@@ -17708,6 +17708,7 @@ in
   ogre = callPackage ../development/libraries/ogre {};
   ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix {};
   ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix {};
+  ogre1_11 = callPackage ../development/libraries/ogre/1.11.x.nix {};
 
   ogrepaged = callPackage ../development/libraries/ogrepaged { };
   ogre-caelum = callPackage ../development/libraries/ogre-caelum { };
