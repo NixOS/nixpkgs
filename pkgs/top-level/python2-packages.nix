@@ -415,10 +415,10 @@ with self; with super; {
 #
 #  pyblosxom = callPackage ../development/python-modules/pyblosxom { };
 #
-#  pycairo = callPackage ../development/python-modules/pycairo/1.18.nix {
-#    inherit (pkgs) meson;
-#  };
-#
+  pycairo = callPackage ../development/python-modules/pycairo/1.18.nix {
+    inherit (pkgs) meson;
+  };
+
   pycangjie = disabled pycangjie;
 #
 #  pycarddav = callPackage ../development/python-modules/pycarddav { };
