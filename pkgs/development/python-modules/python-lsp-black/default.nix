@@ -23,6 +23,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "pylsp_black" ];  
+
   propagatedBuildInputs = [ black toml python-lsp-server ];
 
   meta = with lib; {
