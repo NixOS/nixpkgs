@@ -98,7 +98,7 @@ with self; with super; {
 #
 #  dulwich = callPackage ../development/python-modules/dulwich/0_19.nix { };
 #
-#  enum = callPackage ../development/python-modules/enum { };
+  enum = callPackage ../development/python-modules/enum { };
 #
 #  eventlib = callPackage ../development/python-modules/eventlib { };
 #
