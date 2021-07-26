@@ -11,7 +11,8 @@ let
     name = perl.name + "-wrapper-for-gnucash";
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ perl ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
-    phases = [ "installPhase" ];
+    dontUnpack = true;
+
     installPhase = ''
       mkdir -p $out/bin
       for script in ${perl}/bin/*; do
@@ -40,10 +41,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper cmake gtest ];
+  nativeBuildInputs = [ pkg-config makeWrapper cmake gtest swig ];
 
   buildInputs = [
-    boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
+    boost icu libxml2 libxslt gettext isocodes gtk3 glibcLocales
     webkitgtk dconf libofx aqbanking gwenhywfar libdbi
     libdbiDrivers guile
     perlWrapper perl
