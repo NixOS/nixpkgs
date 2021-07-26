@@ -112,10 +112,10 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247.6";
 in
-stdenv.mkDerivation {
-  inherit version pname;
+stdenv.mkDerivation rec {
+  inherit pname;
+  version = "247.6";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
