@@ -1409,6 +1409,8 @@ in
 
   codeql = callPackage ../development/tools/analysis/codeql { };
 
+  corearchiver = libsForQt5.callPackage ../tools/archivers/corearchiver { };
+
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
@@ -16155,6 +16157,8 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  libarchive-qt = libsForQt5.callPackage ../development/libraries/libarchive-qt { };
+
   libasr = callPackage ../development/libraries/libasr { };
 
   libass = callPackage ../development/libraries/libass { };
@@ -23110,6 +23114,8 @@ in
 
   aseprite = callPackage ../applications/editors/aseprite { };
   aseprite-unfree = aseprite.override { unfree = true; };
+
+  assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
 
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
