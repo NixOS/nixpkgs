@@ -20,14 +20,14 @@
 }:
 
 mkDerivation rec {
-  pname = "nix-linter-unstable";
-  version = "2021-06-16";
+  pname = "nix-linter";
+  version = "0.2.0.3";
 
   src = fetchFromGitHub {
     owner = "Synthetica9";
     repo = "nix-linter";
-    rev = "74707ed48dcc58dbfa27ae25ee0e044c072cc344";
-    sha256 = "17scghkinpx3pzlw3hw023ybnd8cy7bqfy8b48vwaq8a7bnm2rs3";
+    rev = "38c4a14681cf3a1e6f098d8b723db503910a28d8";
+    sha256 = "16igk4xnm4mg9mw0zg2zk6s44axia3fs6334fasvjy0c7cjwk4c7";
   };
 
   isLibrary = false;

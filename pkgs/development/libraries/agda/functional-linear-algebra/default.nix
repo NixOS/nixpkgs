@@ -18,6 +18,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
+    # Remove if a version compatible with agda 2.6.2 is made
+    broken = true;
     homepage = "https://github.com/ryanorendorff/functional-linear-algebra";
     description = ''
       Formalizing linear algebra in Agda by representing matrices as functions
