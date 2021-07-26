@@ -1,38 +1,71 @@
-{ fetchFromGitHub, lib, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU, libGL, boost,
-  pkg-config, libuuid, openal, ogre, ois, curl, gtk2, mygui, unzip,
-  angelscript, ogrepaged, mysocketw, libxcb
-  }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libuuid
+, openal
+, ogre
+, ogre-caelum
+, ois
+, mygui
+, curl
+, mysocketw
+, angelscript
+, fmt
+, rapidjson
+, xorg
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.4.7.0";
+  version = "2021.04";
   pname = "rigsofrods";
 
   src = fetchFromGitHub {
     owner = "RigsOfRods";
     repo = "rigs-of-rods";
     rev = version;
-    sha256 = "0cb1il7qm45kfhh6h6jwfpxvjlh2dmg8z1yz9kj4d6098myf2lg4";
+    sha256 = "xV3GXVZhoRYVNFqOPCFKDnabhew2UuULQv4p8UKMAsU=";
+    fetchSubmodules = true;
   };
 
-  installPhase = ''
-    sed -e "s@/usr/local/lib/OGRE@${ogre}/lib/OGRE@" -i ../tools/linux/binaries/plugins.cfg
-    mkdir -p $out/share/rigsofrods
-    cp -r bin/* $out/share/rigsofrods
-    cp ../tools/linux/binaries/plugins.cfg $out/share/rigsofrods
-    mkdir -p $out/bin
-    ln -s $out/share/rigsofrods/{RoR,RoRConfig} $out/bin
+  postPatch = ''
+    sed -i '/set(PLUGINS_FOLDER "lib")/d' source/main/CMakeLists.txt
   '';
 
-  nativeBuildInputs = [ cmake pkg-config unzip ];
-  buildInputs = [ wxGTK30 freeimage zziplib libGLU libGL boost
-    libuuid openal ogre ois curl gtk2 mygui angelscript
-    ogrepaged mysocketw libxcb ];
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s $out/share/rigsofrods/RoR $out/bin
+  '';
+
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    ogre
+    ogre-caelum
+    ois
+    mygui
+    fmt
+    openal
+    curl
+    mysocketw
+    angelscript
+    rapidjson
+    xorg.libX11
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_DEV_VERSION=off"
+    "-DUSE_PACKAGE_MANAGER=off"
+    "-DCMAKE_CXX_FLAGS=-Wno-error=format-security"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/share/rigsofrods"
+    "-DOGRE_PLUGIN_DIR=${ogre}/lib/OGRE"
+  ];
 
   meta = with lib; {
     description = "3D simulator game where you can drive, fly and sail various vehicles";
-    homepage = "http://rigsofrods.sourceforge.net/";
+    homepage = "https://www.rigsofrods.org";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin luc65r ];
     platforms = platforms.linux;
     hydraPlatforms = [];
   };
