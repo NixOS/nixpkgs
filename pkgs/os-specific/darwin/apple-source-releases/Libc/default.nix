@@ -3,6 +3,8 @@
 appleDerivation' stdenvNoCC {
   nativeBuildInputs = [ ed unifdef ];
 
+  patches = [ ./0001-Include-Targetconditionals-in-stdlib.patch ];
+
   # TODO: asl.h actually comes from syslog project now
   installPhase = ''
     export SRCROOT=$PWD
