@@ -4,7 +4,7 @@
 # On Hackage every package description shows a category "Distributions" which
 # lists a "NixOS" version.
 # This script uploads a csv to hackage which will update the displayed versions
-# based on the current versions in nixpkgs.  This happens with on simple http
+# based on the current versions in nixpkgs. This happens with a simple http
 # request.
 
 # For authorization you just need to have any valid hackage account. This

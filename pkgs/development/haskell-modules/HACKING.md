@@ -243,7 +243,7 @@ causes all currently open Haskell-related pull-requests to be automatically clos
 
 ## Update Hackage Version Information
 
-After merging into master you can update what hackage displays as the current
+After merging into `master` you can update what hackage displays as the current
 version in NixOS for every individual package.
 To do this you run `maintainers/scripts/haskell/upload-nixos-package-list-to-hackage.sh`.
 See the script for how to provide credentials. Once you have configured that
