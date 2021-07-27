@@ -1,0 +1,26 @@
+From 26a721ca68bb06cb815c49f4ac28bb9de8bb2cba Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Tue, 27 Jul 2021 20:03:40 +0200
+Subject: [PATCH 2/2] Define TARGET_OS_EMBEDDED in stdio if not defined
+
+---
+ include/stdio.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/stdio.h b/include/stdio.h
+index d0cf7a5..487496e 100644
+--- a/include/stdio.h
++++ b/include/stdio.h
+@@ -351,6 +351,9 @@ __END_DECLS
+ /* Additional functionality provided by:
+  * POSIX.2-1992 C Language Binding Option
+  */
++#ifndef TARGET_OS_EMBEDDED
++#  define TARGET_OS_EMBEDDED 0
++#endif
+ #if TARGET_OS_EMBEDDED
+ #define __swift_unavailable_on(osx_msg, ios_msg) __swift_unavailable(ios_msg)
+ #else
+-- 
+2.17.2 (Apple Git-113)
+
