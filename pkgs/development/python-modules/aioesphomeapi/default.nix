@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "5.0.1";
+  version = "5.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2IxXhAysQiqqEd4Mfjgc5vX0+D60rof2nPJDXy9tRVs=";
+    sha256 = "04r97d8bc5amvjvf2sxy2h4jf6z348q6p5z1nsxfnif80kxl0k60";
   };
 
   propagatedBuildInputs = [
