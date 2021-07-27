@@ -5902,6 +5902,8 @@ in
 
   httpx = callPackage ../tools/security/httpx { };
 
+  hurl = callPackage ../tools/networking/hurl { };
+
   hub = callPackage ../applications/version-management/git-and-tools/hub { };
 
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
@@ -30532,6 +30534,8 @@ in
   btor2tools = callPackage ../applications/science/logic/btor2tools {};
 
   boolector = callPackage ../applications/science/logic/boolector {};
+
+  bitwuzla = callPackage ../applications/science/logic/bitwuzla {};
 
   symbiyosys = callPackage ../applications/science/logic/symbiyosys {};
 
