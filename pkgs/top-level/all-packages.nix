@@ -3908,6 +3908,8 @@ in
                                                                         qtbase = qt5.qtbase;
                                                                       };
 
+  coregarage = libsForQt5.callPackage ../applications/misc/coregarage { };
+
   c14 = callPackage ../applications/networking/c14 { };
 
   corehunt = libsForQt5.callPackage ../applications/misc/corehunt { };
