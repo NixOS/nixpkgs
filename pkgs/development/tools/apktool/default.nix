@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r4z0z2c1drjd4ynpf36dklxs3hq1wdnzh63mk2yk4mmk75xg4mk";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
 

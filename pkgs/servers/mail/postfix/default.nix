@@ -23,9 +23,7 @@ let
      ++ lib.optional withLDAP "-lldap");
 
 in stdenv.mkDerivation rec {
-
   pname = "postfix";
-
   version = "3.6.1";
 
   src = fetchurl {
@@ -35,10 +33,10 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper m4 ];
   buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
-                ++ lib.optional withPgSQL postgresql
-                ++ lib.optional withMySQL libmysqlclient
-                ++ lib.optional withSQLite sqlite
-                ++ lib.optional withLDAP openldap;
+    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withMySQL libmysqlclient
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withLDAP openldap;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];
