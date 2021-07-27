@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python ];
 
-  buildInputs =
-    [ boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
-      libwebp proj python sqlite zlib
+  buildInputs = [
+    boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
+    libwebp proj python sqlite zlib
 
-      # optional inputs
-      postgresql
-    ];
+    # optional inputs
+    postgresql
+  ];
 
   propagatedBuildInputs = [ libxml2 ];
 

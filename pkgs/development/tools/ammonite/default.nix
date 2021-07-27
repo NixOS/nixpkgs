@@ -17,7 +17,7 @@ let
         inherit sha256;
       };
 
-      phases = "installPhase";
+      dontUnpack = true;
 
       installPhase = ''
         install -Dm755 $src $out/bin/amm

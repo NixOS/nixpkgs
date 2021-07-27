@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.2.1";
+  version = "3.3.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    sha256 = "0fiqzsgr9c0yicsh1pwhyc6z4qyr2ng42dakyy4a81w9cff38had";
+    sha256 = "sha256-bMnAijFLXZSgTWsalT/J4sJ0Jrc1kFaQHJArwXnQFaQ=";
   };
 
   preBuild = ''
@@ -57,8 +57,13 @@ buildPythonPackage rec {
     mock
   ];
 
+  disabledTests = [
+    # block devices access
+    "test_is_block_device"
+  ];
+
   disabledTestPaths = [
-     # lots of DNS lookups
+    # lots of DNS lookups
     "tests/test_sockets.py"
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin sandboxing limitations
