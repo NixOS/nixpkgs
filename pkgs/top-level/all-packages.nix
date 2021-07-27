@@ -3537,9 +3537,7 @@ in
   birdfont = callPackage ../tools/misc/birdfont { };
   xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { stdenv = gccStdenv; };
 
-  blastem = callPackage ../misc/emulators/blastem {
-    inherit (python27Packages) pillow;
-  };
+  blastem = callPackage ../misc/emulators/blastem { };
 
   blueberry = callPackage ../tools/bluetooth/blueberry { };
 
