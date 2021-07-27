@@ -25150,6 +25150,7 @@ in
     stdenv = gcc6Stdenv;
     boost = boost155.override {
       enablePython = true;
+      python = python2;
       stdenv = gcc6Stdenv;
       buildPackages = buildPackages // {
         stdenv = gcc6Stdenv;
