@@ -308,7 +308,7 @@ rec {
 
   info = msg: builtins.trace "INFO: ${msg}";
 
-  showWarnings = warnings: res: lib.fold (w: x: warn w x) res warnings;
+  showWarnings = warnings: res: lib.foldr (w: x: warn w x) res warnings;
 
   ## Function annotations
 
