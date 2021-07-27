@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mrbayes";
-  version = "3.2.7";
+  version = "3.2.7a";
 
   src = fetchFromGitHub {
     owner = "NBISweden";
     repo = "MrBayes";
     rev = "v${version}";
-    sha256 = "sha256-J0r4CxxQuZ3exvfCMRbLmyEd8ROaXNQG4afwiAs6H+M=";
+    sha256 = "sha256-pkkxZ6YHRn/I1SJpT9A+EK4S5hWGmFdcDBJS0zh5mLA=";
   };
 
   meta = with lib; {
