@@ -9462,6 +9462,8 @@ in {
 
   youtube-search = callPackage ../development/python-modules/youtube-search { };
 
+  youtube-transcript-api = callPackage ../development/python-modules/youtube-transcript-api { };
+
   yowsup = callPackage ../development/python-modules/yowsup { };
 
   yq = callPackage ../development/python-modules/yq {
