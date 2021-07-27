@@ -196,7 +196,7 @@ let
         };
       };
 
-      bbenoist.Nix = buildVscodeMarketplaceExtension {
+      bbenoist.nix = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Nix";
           publisher = "bbenoist";
@@ -285,7 +285,7 @@ let
         };
       };
 
-      CoenraadS.bracket-pair-colorizer = buildVscodeMarketplaceExtension {
+      coenraads.bracket-pair-colorizer = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/CoenraadS.bracket-pair-colorizer/changelog";
           description = "A customizable extension for colorizing matching brackets";
@@ -698,7 +698,7 @@ let
         };
       };
 
-      golang.Go = buildVscodeMarketplaceExtension {
+      golang.go = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Go";
           publisher = "golang";
@@ -1510,7 +1510,7 @@ let
 
   aliases = self: super: {
     # aliases
-    ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
+    ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix

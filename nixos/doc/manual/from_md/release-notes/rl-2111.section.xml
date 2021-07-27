@@ -555,6 +555,32 @@
           6.0.0 to 9.0.0
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The following Visual Studio Code extensions were renamed to
+          keep the naming convention uniform.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>bbenoist.Nix</literal> -&gt;
+              <literal>bbenoist.nix</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>CoenraadS.bracket-pair-colorizer</literal> -&gt;
+              <literal>coenraads.bracket-pair-colorizer</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>golang.Go</literal> -&gt;
+              <literal>golang.go</literal>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
