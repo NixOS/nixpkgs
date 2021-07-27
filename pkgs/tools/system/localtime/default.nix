@@ -1,7 +1,8 @@
 { lib, fetchFromGitHub, buildGoPackage, m4 }:
 
 buildGoPackage rec {
-  name = "localtime-2017-11-07";
+  pname = "localtime";
+  version = "2017-11-07";
 
   src = fetchFromGitHub {
     owner = "Stebalien";

@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "munge-0.5.14";
+  pname = "munge";
+  version = "0.5.14";
 
   src = fetchFromGitHub {
     owner = "dun";
     repo = "munge";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "15h805rwcb9f89dyrkxfclzs41n3ff8x7cc1dbvs8mb0ds682c4j";
   };
 
