@@ -1,4 +1,12 @@
-{ mkDerivation, lib, fetchFromGitHub, qtbase, cmake, qttools, qtsvg }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, qtbase
+, cmake
+, qttools
+, qtsvg
+, nix-update-script
+}:
 
 mkDerivation rec {
   pname = "flameshot";
@@ -9,6 +17,12 @@ mkDerivation rec {
     repo = "flameshot";
     rev = "v${version}";
     sha256 = "1m0mx8qhy9ycsqh5dj6c7mwwpbhqxlds31dqdxxk0krwl750smi2";
+  };
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
   };
 
   nativeBuildInputs = [ cmake qttools qtsvg ];
