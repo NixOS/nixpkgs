@@ -3756,7 +3756,7 @@ in
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd {
-    libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
+    libsigrok = libsigrok_0_3; # not compatible with >= 0.4.0 yet
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
@@ -13454,7 +13454,7 @@ in
 
   libsigrok = callPackage ../development/tools/libsigrok { };
   # old version:
-  libsigrok-0-3-0 = libsigrok.override {
+  libsigrok_0_3 = libsigrok.override {
     version = "0.3.0";
     sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
   };
