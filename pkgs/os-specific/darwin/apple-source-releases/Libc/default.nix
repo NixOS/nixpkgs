@@ -3,7 +3,7 @@
 appleDerivation' stdenvNoCC {
   nativeBuildInputs = [ ed unifdef ];
 
-  patches = [ ./0001-Include-Targetconditionals-in-stdlib.patch ];
+  patches = [ ./0001-Define-TARGET_OS_EMBEDDED-in-stdlib-if-not-defined.patch ];
 
   # TODO: asl.h actually comes from syslog project now
   installPhase = ''
