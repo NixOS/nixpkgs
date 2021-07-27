@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     click
     colorama
     configparser
-    diff_cover
+    diff-cover
     jinja2
     oyaml
     pathspec
