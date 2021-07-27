@@ -7079,7 +7079,18 @@ in {
 
   python_magic = callPackage ../development/python-modules/python-magic { };
 
-  python-mapnik = callPackage ../development/python-modules/python-mapnik { };
+  python-mapnik = let
+    boost = pkgs.boost.override {
+      enablePython = true;
+      inherit python;
+    };
+  in callPackage ../development/python-modules/python-mapnik {
+    inherit (pkgs) pkg-config cairo harfbuzz icu libjpeg libpng libtiff libwebp proj zlib;
+    inherit boost;
+    mapnik = pkgs.mapnik.override {
+      inherit python boost;
+    };
+  };
 
   python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
