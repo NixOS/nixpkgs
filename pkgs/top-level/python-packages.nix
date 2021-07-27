@@ -4260,7 +4260,7 @@ in {
 
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
 
-  lz4 = self.python-lz4; # alias 2018-12-05
+  lz4 = callPackage ../development/python-modules/lz4 { };
 
   lzstring = callPackage ../development/python-modules/lzstring { };
 
@@ -5084,9 +5084,6 @@ in {
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
 
   palettable = callPackage ../development/python-modules/palettable { };
-
-  # Alias. Added 2020-09-07.
-  pam = self.python-pam;
 
   pamela = callPackage ../development/python-modules/pamela { };
 
@@ -7068,8 +7065,6 @@ in {
   python-lsp-server = callPackage ../development/python-modules/python-lsp-server { };
 
   python-ly = callPackage ../development/python-modules/python-ly { };
-
-  python-lz4 = callPackage ../development/python-modules/python-lz4 { };
 
   python-lzf = callPackage ../development/python-modules/python-lzf { };
 
