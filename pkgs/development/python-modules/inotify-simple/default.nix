@@ -12,6 +12,8 @@ buildPythonPackage rec {
 
   # The package has no tests
   doCheck = false;
+  
+  pythonImportsCheck = [ "inotify_simple" ];
 
   meta = with lib; {
     description = "A simple Python wrapper around inotify";
