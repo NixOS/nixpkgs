@@ -85,6 +85,7 @@ with pkgs;
           (lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun))
         {
           overrides = packageOverrides;
+          python = self;
         };
     in rec {
         isPy27 = pythonVersion == "2.7";
