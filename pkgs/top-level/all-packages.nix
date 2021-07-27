@@ -3914,6 +3914,8 @@ in
 
   corehunt = libsForQt5.callPackage ../applications/misc/corehunt { };
 
+  corekeyboard = libsForQt5.callPackage ../applications/misc/corekeyboard { };
+
   certstrap = callPackage ../tools/security/certstrap { };
 
   cfssl = callPackage ../tools/security/cfssl { };
