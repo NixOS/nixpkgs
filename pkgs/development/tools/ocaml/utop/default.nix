@@ -34,7 +34,7 @@ buildDunePackage rec {
 
        buildInputs = [ findlib ] ++ propagatedBuildInputs;
 
-       phases = [ "installPhase" ];
+       dontUnpack = true;
 
        installPhase = ''
          mkdir -p "$out"/${path}

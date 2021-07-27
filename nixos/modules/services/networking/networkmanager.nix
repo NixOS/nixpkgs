@@ -6,7 +6,6 @@ let
   cfg = config.networking.networkmanager;
 
   basePackages = with pkgs; [
-    crda
     modemmanager
     networkmanager
     networkmanager-fortisslvpn
@@ -413,6 +412,8 @@ in {
         '';
       }
     ];
+
+    hardware.wirelessRegulatoryDatabase = true;
 
     environment.etc = with pkgs; {
       "NetworkManager/NetworkManager.conf".source = configFile;
