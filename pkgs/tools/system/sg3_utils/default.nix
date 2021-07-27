@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "sg3_utils-1.45";
+  pname = "sg3_utils";
+  version = "1.45";
 
   src = fetchurl {
-    url = "http://sg.danny.cz/sg/p/${name}.tgz";
+    url = "http://sg.danny.cz/sg/p/sg3_utils-${version}.tgz";
     sha256 = "0qasc3qm4i8swjfaywiwpgz76gdxqvm47qycxgmprbsjmxqwk1qb";
   };
 

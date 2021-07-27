@@ -1,7 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "hologram-2018-03-19";
+  pname = "hologram";
+  version = "2018-03-19";
   rev = "a7bab58642b530edb75b9cf6c1d834c85822ceac";
 
   src = fetchFromGitHub {
