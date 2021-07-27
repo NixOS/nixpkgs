@@ -29850,6 +29850,8 @@ in
     eigen = eigen2;
   };
 
+  avogadrolibs = libsForQt5.callPackage ../development/libraries/science/chemistry/avogadrolibs { };
+
   molequeue = libsForQt5.callPackage ../development/libraries/science/chemistry/molequeue { };
 
   chemtool = callPackage ../applications/science/chemistry/chemtool { };
