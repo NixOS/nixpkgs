@@ -35,6 +35,11 @@ python3Packages.buildPythonApplication rec {
     gnome.adwaita-icon-theme
   ];
 
+  # as of 2021-07, the gobject-introspection setup hook does not
+  # work with `strictDeps` enabled, thus for proper `wrapGAppsHook`
+  # it needs to be disabled explicitly. https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
   checkInputs = with python3Packages; [
     coverage minimock
   ];
