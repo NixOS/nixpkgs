@@ -4801,6 +4801,12 @@
       fingerprint = "7EB1 C02A B62B B464 6D7C  E4AE D1D0 9DE1 69EA 19A0";
     }];
   };
+  jgart = {
+    email = "jgart@dismail.de";
+    github = "jgarte";
+    githubId = 47760695;
+    name = "Jorge Gomez";
+  };
   jgeerds = {
     email = "jascha@geerds.org";
     github = "jgeerds";
