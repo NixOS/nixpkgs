@@ -121,6 +121,7 @@
   ./programs/bash-my-aws.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
+  ./programs/calls.nix
   ./programs/captive-browser.nix
   ./programs/ccache.nix
   ./programs/cdemu.nix
