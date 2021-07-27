@@ -10,6 +10,7 @@
 , nodejs
 , npmHooks
 , nix-update-script
+, nixosTests
 , stdenv
 }:
 
@@ -77,6 +78,9 @@ buildGoModule rec {
   '';
 
   passthru = {
+    tests = {
+      inherit (nixosTests) evcc;
+    };
     updateScript = nix-update-script {
       attrPath = pname;
     };
