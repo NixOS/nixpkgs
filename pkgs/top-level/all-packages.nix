@@ -13459,7 +13459,9 @@ in
     sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
   };
 
-  libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
+  libsigrokdecode = callPackage ../development/tools/libsigrokdecode {
+    python3 = python38;
+  };
 
   # special forks used for dsview
   libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };
