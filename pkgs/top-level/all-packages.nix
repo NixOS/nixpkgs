@@ -29854,6 +29854,8 @@ in
 
   molequeue = libsForQt5.callPackage ../development/libraries/science/chemistry/molequeue { };
 
+  avogadro2 = libsForQt5.callPackage ../applications/science/chemistry/avogadro2 { };
+
   chemtool = callPackage ../applications/science/chemistry/chemtool { };
 
   d-seams = callPackage ../applications/science/chemistry/d-seams {};
