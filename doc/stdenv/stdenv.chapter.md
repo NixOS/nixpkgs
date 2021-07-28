@@ -1080,9 +1080,7 @@ Flags passed to cmake. `cmakeFlags = "-DBUILD_SHARED_LIB=ON -DENABLE_LTO=ON";`
 Flag array passed to cmake. `cmakeFlagsArray = [ "-DBUILD_SHARED_LIB=ON" "-DENABLE_LTO=ON" ];`
 
 ::: note
-::: title
-Caution with whitespace
-:::
+# Caution with whitespace
 
 The bash stringification will destroy boundaries between whitespace with both `cmakeFlags` and `cmakeFlagsArray`. Ensure to use single quotes `'` to preserve whitespace.
 :::
