@@ -7546,6 +7546,8 @@ in
 
   numlockx = callPackage ../tools/X11/numlockx { };
 
+  nttcp = callPackage ../tools/networking/nttcp { };
+
   nuttcp = callPackage ../tools/networking/nuttcp { };
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
