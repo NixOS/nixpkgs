@@ -62,7 +62,7 @@ mapAliases ({
   pytestquickcheck = pytest-quickcheck; # added 2021-07-20
   pytestrunner = pytest-runner; # added 2021-01-04
   python-lz4 = lz4; # added 2018-06-01
-  python-pam = pam; # added 2020-09-07.
+  pam = python-pam; # added 2020-09-07.
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09

@@ -3914,6 +3914,8 @@ in
 
   corehunt = libsForQt5.callPackage ../applications/misc/corehunt { };
 
+  coretoppings = libsForQt5.callPackage ../applications/misc/coretoppings { };
+
   certstrap = callPackage ../tools/security/certstrap { };
 
   cfssl = callPackage ../tools/security/cfssl { };
@@ -11212,7 +11214,15 @@ in
     langCC = false;
     langAda = true;
     profiledCompiler = false;
-    inherit gnatboot;
+    # As per upstream instructions building a cross compiler
+    # should be done with a (native) compiler of the same version.
+    # If we are cross-compiling GNAT, we may as well go the same
+    # route (especially as gnatboot can't cross-compile).
+    gnatboot =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+      then buildPackages.gnatboot
+      else buildPackages.gnat6;
   });
 
   gnat9 = wrapCC (gcc9.cc.override {
@@ -11221,7 +11231,14 @@ in
     langCC = false;
     langAda = true;
     profiledCompiler = false;
-    gnatboot = gnat6;
+    # As per upstream instructions building a cross compiler
+    # should be done with a (native) compiler of the same version.
+    # If we are cross-compiling GNAT, we may as well do the same.
+    gnatboot =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+      then buildPackages.gnat6
+      else buildPackages.gnat9;
   });
 
   gnat10 = wrapCC (gcc10.cc.override {
@@ -11230,7 +11247,14 @@ in
     langCC = false;
     langAda = true;
     profiledCompiler = false;
-    gnatboot = gnat6;
+    # As per upstream instructions building a cross compiler
+    # should be done with a (native) compiler of the same version.
+    # If we are cross-compiling GNAT, we may as well do the same.
+    gnatboot =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+      then buildPackages.gnat6
+      else buildPackages.gnat10;
   });
 
   gnat11 = wrapCC (gcc11.cc.override {
@@ -11239,7 +11263,14 @@ in
     langCC = false;
     langAda = true;
     profiledCompiler = false;
-    gnatboot = gnat6;
+    # As per upstream instructions building a cross compiler
+    # should be done with a (native) compiler of the same version.
+    # If we are cross-compiling GNAT, we may as well do the same.
+    gnatboot =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+      then buildPackages.gnat6
+      else buildPackages.gnat11;
   });
 
   gnatboot = wrapCC (callPackage ../development/compilers/gnatboot { });
@@ -23109,7 +23140,9 @@ in
 
   assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
 
-  astroid = callPackage ../applications/networking/mailreaders/astroid { };
+  astroid = callPackage ../applications/networking/mailreaders/astroid {
+    vim = vim_configurable.override { features = "normal"; gui = "auto"; };
+  };
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
 
@@ -23139,6 +23172,8 @@ in
   cadence = libsForQt5.callPackage ../applications/audio/cadence { };
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
+
+  corefm = libsForQt5.callPackage ../applications/misc/corefm { };
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 

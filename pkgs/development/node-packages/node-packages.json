@@ -199,6 +199,7 @@
 , "purescript-language-server"
 , "purescript-psa"
 , "purty"
+, "pxder"
 , "pyright"
 , "quicktype"
 , "react-native-cli"
