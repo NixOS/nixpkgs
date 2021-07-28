@@ -3910,6 +3910,8 @@ in
 
   coregarage = libsForQt5.callPackage ../applications/misc/coregarage { };
 
+  coreshot = libsForQt5.callPackage ../tools/misc/coreshot { };
+
   c14 = callPackage ../applications/networking/c14 { };
 
   corehunt = libsForQt5.callPackage ../applications/misc/corehunt { };
