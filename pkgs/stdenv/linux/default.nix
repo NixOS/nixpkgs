@@ -421,6 +421,9 @@ in
           bzip2
           xz
           bash
+          burning-oil
+          oil-uninteractive
+          ncurses6
           binutils.bintools
           coreutils
           diffutils
