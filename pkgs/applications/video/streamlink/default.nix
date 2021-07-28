@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "streamlink";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
     rev = version;
-    sha256 = "1323v1pavmbb2vk3djdkxd8j6i3yrcgrkyl2d7xwkb7nwlla1x1v";
+    sha256 = "sha256-lsurDFvVHn1rxR3bgG7BY512ISavpja36/UaKXauf+g=";
   };
 
   checkInputs = with python3.pkgs; [
@@ -35,9 +35,11 @@ python3.pkgs.buildPythonApplication rec {
     ffmpeg
   ];
 
-  disabledTests = [
-    "test_plugin_not_in_removed_list"
-  ];
+  # note that upstream currently uses requests 2.25.1 in Windows builds
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'requests>=2.26.0,<3.0' 'requests>=2.25.1,<3.0'
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/streamlink/streamlink";
