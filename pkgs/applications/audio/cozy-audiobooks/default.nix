@@ -58,6 +58,7 @@ python3Packages.buildPythonApplication rec {
     gst-plugins-good
     gst-plugins-ugly
     gst-plugins-base
+    gst-plugins-bad
   ]);
 
   propagatedBuildInputs = with python3Packages; [
