@@ -8,6 +8,7 @@
 , libseccomp
 , rpcsvc-proto
 , libtirpc
+, nvidia_x11
 , makeWrapper
 , substituteAll
 , go
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
       -e 's#all: shared static tools#all: shared tools#g' \
       -e '/$(INSTALL) -m 644 $(LIB_STATIC) $(DESTDIR)$(libdir)/d' \
       -e '/$(INSTALL) -m 755 $(libdir)\/$(LIBGO_SHARED) $(DESTDIR)$(libdir)/d'
+    sed -i "s#/run/nvidia-docker/bin:/run/nvidia-docker/extras/bin#${nvidia_x11.bin}/origBin#" src/nvc_info.c
   '';
 
   enableParallelBuilding = true;
