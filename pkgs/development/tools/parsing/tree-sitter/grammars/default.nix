@@ -3,6 +3,7 @@
   tree-sitter-bash = (builtins.fromJSON (builtins.readFile ./tree-sitter-bash.json));
   tree-sitter-c = (builtins.fromJSON (builtins.readFile ./tree-sitter-c.json));
   tree-sitter-c-sharp = (builtins.fromJSON (builtins.readFile ./tree-sitter-c-sharp.json));
+  tree-sitter-comment = (builtins.fromJSON (builtins.readFile ./tree-sitter-comment.json));
   tree-sitter-cpp = (builtins.fromJSON (builtins.readFile ./tree-sitter-cpp.json));
   tree-sitter-css = (builtins.fromJSON (builtins.readFile ./tree-sitter-css.json));
   tree-sitter-embedded-template = (builtins.fromJSON (builtins.readFile ./tree-sitter-embedded-template.json));
