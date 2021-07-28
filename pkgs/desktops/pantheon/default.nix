@@ -12,7 +12,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     switchboard-plug-onlineaccounts switchboard-plug-pantheon-shell
     switchboard-plug-power switchboard-plug-printers
     switchboard-plug-security-privacy switchboard-plug-sharing
-    switchboard-plug-sound
+    switchboard-plug-sound switchboard-plug-wacom
   ];
 
   wingpanelIndicators = [
@@ -183,6 +183,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   switchboard-plug-sharing = callPackage ./apps/switchboard-plugs/sharing { };
 
   switchboard-plug-sound = callPackage ./apps/switchboard-plugs/sound { };
+
+  switchboard-plug-wacom = callPackage ./apps/switchboard-plugs/wacom { };
 
   ### ARTWORK
 
