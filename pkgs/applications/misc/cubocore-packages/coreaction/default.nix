@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitLab, fetchpatch, qtsvg, qtbase, libcsys, libcprime, cmake, ninja, }:
+{ mkDerivation, lib, fetchFromGitLab, fetchpatch, qtsvg, qtbase }:
 
 mkDerivation rec {
   pname = "coreaction";
@@ -19,16 +19,9 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
-
   buildInputs = [
     qtsvg
     qtbase
-    libcsys
-    libcprime
   ];
 
   meta = with lib; {

@@ -1,14 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, libcprime, cmake, ninja }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, libarchive, libarchive-qt, cmake, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
-  pname = "coreshot";
+  pname = "corearchiver";
   version = "4.2.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HKgGeuM3CKGXwnFwSw6a0AB0klZKY5YS9C4q2UT6TN8=";
+    sha256 = "sha256-FJGsQp1lbsrvlzKPiTv/FC9RH2+JRwwIvkLDTFW8t5s=";
   };
 
   nativeBuildInputs = [
@@ -18,13 +18,15 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase
-    qtx11extras
+    libarchive-qt
+    libarchive
     libcprime
+    libcsys
   ];
 
   meta = with lib; {
-    description = "A screen capture utility from the C Suite";
-    homepage = "https://gitlab.com/cubocore/coreapps/coreshot";
+    description = "Archiver from the C Suite to create and extract archives";
+    homepage = "https://gitlab.com/cubocore/coreapps/corearchiver";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;

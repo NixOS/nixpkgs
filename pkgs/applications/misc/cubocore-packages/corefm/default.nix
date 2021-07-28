@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, libcprime, libcsys, cmake, ninja }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "corefm";

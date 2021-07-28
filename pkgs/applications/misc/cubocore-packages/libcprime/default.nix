@@ -19,7 +19,9 @@ mkDerivation rec {
     sha256 = "sha256-RywvFATA/+fDP/TR5QRWaJlDgy3EID//iVmrJcj3GXI=";
   };
 
-  patches = [ ./0001-fix-application-dirs.patch ];
+  patches = [
+    ./0001-fix-application-dirs.patch
+  ];
 
   nativeBuildInputs = [
     cmake

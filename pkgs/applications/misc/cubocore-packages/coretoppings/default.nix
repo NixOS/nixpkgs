@@ -1,8 +1,8 @@
-{ mkDerivation, lib, fetchFromGitLab, libcprime, cmake, ninja
-, ffmpeg, qtbase, qtx11extras, qtconnectivity, v4l-utils, grim, wf-recorder
+{ mkDerivation, lib, fetchFromGitLab, ffmpeg, cmake, ninja
+, qtbase, qtx11extras, qtconnectivity, v4l-utils, grim, wf-recorder
 , libdbusmenu, playerctl, xorg, iio-sensor-proxy, inotify-tools
 , bluez, networkmanager, connman, redshift, gawk
-, polkit, libnotify, systemd, xdg-utils }:
+, polkit, libnotify, systemd, xdg-utils, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "coretoppings";
@@ -15,14 +15,14 @@ mkDerivation rec {
     sha256 = "sha256-DpmzGqjW1swLirRLzd5nblAb40LHAmf8nL+VykQNL3E=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
-
   patches = [
     # Fix file cannot create directory: /var/empty/share/polkit-1/actions
     ./0001-fix-install-phase.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
   ];
 
   buildInputs = [
@@ -30,7 +30,6 @@ mkDerivation rec {
     qtx11extras
     qtconnectivity
     libdbusmenu
-    libcprime
     ffmpeg
     v4l-utils
     grim
@@ -50,6 +49,8 @@ mkDerivation rec {
     libnotify
     systemd
     xdg-utils
+    libcprime
+    libcsys
   ];
 
   meta = with lib; {

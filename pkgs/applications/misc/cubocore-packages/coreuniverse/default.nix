@@ -1,14 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, libcprime, qtbase, cmake, ninja }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
-  pname = "coreimage";
+  pname = "coreuniverse";
   version = "4.2.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dxRHzSG5ea1MhpTjgZbFztV9mElEaeOK4NsmieSgf5Q";
+    sha256 = "sha256-YZCMyYMAvd/xQYNUnURIvmQwaM+X+Ql93OS4ZIyAZLY=";
   };
 
   nativeBuildInputs = [
@@ -19,11 +19,12 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     libcprime
+    libcsys
   ];
 
   meta = with lib; {
-    description = "An image viewer from the C Suite";
-    homepage = "https://gitlab.com/cubocore/coreapps/coreimage";
+    description = "Shows information about apps from the C Suite";
+    homepage = "https://gitlab.com/cubocore/coreapps/coreuniverse";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;

@@ -1,23 +1,14 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, cmake
-, ninja
-, qtbase
-, qtserialport
-, qtermwidget
-, libcprime
-}:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, kglobalaccel, xorg, cmake, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
-  pname = "coreterminal";
+  pname = "corestuff";
   version = "4.2.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YXs6VTem3AaK4n1DYwKP/jqNuf09Srn2THHyJJnArlc=";
+    sha256 = "sha256-/mmCIHZXn/Jpjr37neI6owWuU1VO6o7wmRj6ZH8tUbo=";
   };
 
   nativeBuildInputs = [
@@ -27,14 +18,16 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase
-    qtserialport
-    qtermwidget
+    qtx11extras
+    kglobalaccel
+    xorg.libXcomposite
     libcprime
+    libcsys
   ];
 
   meta = with lib; {
-    description = "A terminal emulator from the C Suite";
-    homepage = "https://gitlab.com/cubocore/coreapps/coreterminal";
+    description = "An activity viewer from the C Suite";
+    homepage = "https://gitlab.com/cubocore/coreapps/corestuff";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;

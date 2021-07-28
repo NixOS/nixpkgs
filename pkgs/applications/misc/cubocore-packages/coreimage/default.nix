@@ -1,14 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, libarchive, libarchive-qt, libcprime, cmake, ninja, }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
-  pname = "corearchiver";
+  pname = "coreimage";
   version = "4.2.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FJGsQp1lbsrvlzKPiTv/FC9RH2+JRwwIvkLDTFW8t5s=";
+    sha256 = "sha256-dxRHzSG5ea1MhpTjgZbFztV9mElEaeOK4NsmieSgf5Q";
   };
 
   nativeBuildInputs = [
@@ -19,13 +19,12 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     libcprime
-    libarchive-qt
-    libarchive
+    libcsys
   ];
 
   meta = with lib; {
-    description = "Archiver from the C Suite to create and extract archives";
-    homepage = "https://gitlab.com/cubocore/coreapps/corearchiver";
+    description = "An image viewer from the C Suite";
+    homepage = "https://gitlab.com/cubocore/coreapps/coreimage";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;
