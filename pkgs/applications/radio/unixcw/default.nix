@@ -1,5 +1,5 @@
-{lib, stdenv, fetchurl, libpulseaudio, alsa-lib , pkg-config, qt5}:
-stdenv.mkDerivation rec {
+{lib, mkDerivation, fetchurl, libpulseaudio, alsa-lib , pkg-config, qt5}:
+mkDerivation rec {
   pname = "unixcw";
   version = "3.5.1";
   src = fetchurl {
@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [libpulseaudio alsa-lib pkg-config qt5.qtbase];
   CFLAGS   ="-lasound -lpulse-simple";
-
-  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "sound characters as Morse code on the soundcard or console speaker";
