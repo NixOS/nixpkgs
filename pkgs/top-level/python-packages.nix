@@ -2559,6 +2559,20 @@ in {
 
   flux-led = callPackage ../development/python-modules/flux-led { };
 
+  fmpy = callPackage ../development/python-modules/fmpy {
+    cvode = callPackage ../development/libraries/sundials rec {
+      lapackSupport = false;
+      lapack = { isILP64 = stdenv.hostPlatform.is64bit; };
+      blas = lapack;
+      kluSupport = false;
+      enableCvodes = false;
+      enableArkode = false;
+      enableIda = false;
+      enableIdas = false;
+      enableKinsol = false;
+    };
+  };
+
   fn = callPackage ../development/python-modules/fn { };
 
   fnvhash = callPackage ../development/python-modules/fnvhash { };
