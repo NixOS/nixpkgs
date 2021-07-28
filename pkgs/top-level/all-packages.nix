@@ -870,6 +870,8 @@ in
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
+
   auditwheel = callPackage ../tools/package-management/auditwheel { };
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
