@@ -3,12 +3,13 @@
 , fetchFromGitHub
 , pkg-config
 , cmake
-, glew
-, glfw3
-, leptonica
 , libiconv
-, tesseract3
 , zlib
+, enableOcr ? true
+, makeWrapper
+, tesseract4
+, leptonica
+, ffmpeg
 }:
 
 stdenv.mkDerivation rec {
@@ -24,15 +25,19 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src";
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [ pkg-config cmake makeWrapper ];
 
-  buildInputs = [ 
-    glew
-    glfw3
-    leptonica
-    tesseract3 
-    zlib
-  ] ++ lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ zlib ]
+    ++ lib.optional (!stdenv.isLinux) libiconv
+    ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg ];
+
+
+  cmakeFlags = lib.optionals enableOcr [ "-DWITH_OCR=on" "-DWITH_HARDSUBX=on" ];
+
+  postInstall = lib.optionalString enableOcr ''
+    wrapProgram "$out/bin/ccextractor" \
+      --set TESSDATA_PREFIX "${tesseract4}/share/"
+  '';
 
   meta = with lib; {
     homepage = "https://www.ccextractor.org";
@@ -43,7 +48,13 @@ stdenv.mkDerivation rec {
       It works on Linux, Windows, and OSX.
     '';
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    # undefined reference to `png_do_expand_palette_rgba8_neon'
+    # undefined reference to `png_riffle_palette_neon'
+    # undefined reference to `png_do_expand_palette_rgb8_neon'
+    # undefined reference to `png_init_filter_functions_neon'
+    # during Linking C executable ccextractor
+    broken = stdenv.isAarch64;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ titanous ];
   };
 }
