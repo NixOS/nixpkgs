@@ -23123,7 +23123,9 @@ in
 
   assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
 
-  astroid = callPackage ../applications/networking/mailreaders/astroid { };
+  astroid = callPackage ../applications/networking/mailreaders/astroid {
+    vim = vim_configurable.override { features = "normal"; gui = "auto"; };
+  };
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
 
