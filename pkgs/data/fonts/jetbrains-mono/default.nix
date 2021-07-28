@@ -1,14 +1,14 @@
 { lib, fetchzip }:
 
 let
-  version = "2.225";
+  version = "2.241";
 in
 fetchzip {
   name = "JetBrainsMono-${version}";
 
   url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
 
-  sha256 = "1k8xmjaingz50626hd73hqbp196kg3zndiy0aqb88z5cw9nd0fva";
+  sha256 = "1gwhbmq8zw026i66g96i75zn2zff7cr83ns8aaslrzsrkk247lah";
 
   postFetch = ''
     mkdir -p $out/share/fonts
