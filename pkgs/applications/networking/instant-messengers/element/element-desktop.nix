@@ -12,6 +12,7 @@
 , Security
 , AppKit
 , CoreServices
+, desktopToDarwinBundle
 }:
 
 let
@@ -36,7 +37,7 @@ mkYarnPackage rec {
     sha256 = pinData.desktopYarnHash;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   seshat = callPackage ./seshat { inherit CoreServices; };
   keytar = callPackage ./keytar { inherit Security AppKit; };
