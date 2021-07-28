@@ -28171,6 +28171,8 @@ in
 
   eboard = callPackage ../games/eboard { };
 
+  ecwolf = callPackage ../games/ecwolf { };
+
   eduke32 = callPackage ../games/eduke32 { };
 
   egoboo = callPackage ../games/egoboo { };
