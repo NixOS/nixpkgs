@@ -8,7 +8,7 @@ let
   keyedEncDevs = filter (dev: dev.encrypted.keyFile != null) encDevs;
   keylessEncDevs = filter (dev: dev.encrypted.keyFile == null) encDevs;
   anyEncrypted =
-    fold (j: v: v || j.encrypted.enable) false encDevs;
+    foldr (j: v: v || j.encrypted.enable) false encDevs;
 
   encryptedFSOptions = {
 

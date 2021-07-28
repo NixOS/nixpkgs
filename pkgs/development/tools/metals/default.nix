@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jdk deps ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   extraJavaOpts = "-XX:+UseG1GC -XX:+UseStringDeduplication -Xss4m -Xms100m";
 
