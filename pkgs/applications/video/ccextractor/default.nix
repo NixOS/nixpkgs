@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
-, glew, glfw3, leptonica, libiconv, tesseract3, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, glew
+, glfw3
+, leptonica
+, libiconv
+, tesseract3
+, zlib
+}:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "ccextractor";
   version = "0.91";
@@ -17,9 +26,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  buildInputs = [ glew glfw3 leptonica tesseract3 zlib ] ++ lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ 
+    glew
+    glfw3
+    leptonica
+    tesseract3 
+    zlib
+  ] ++ lib.optional (!stdenv.isLinux) libiconv;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.ccextractor.org";
     description = "Tool that produces subtitles from closed caption data in videos";
     longDescription = ''
