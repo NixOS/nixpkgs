@@ -14,14 +14,14 @@
 }:
 
 let
-  guest-configs = stdenv.mkDerivation {
+  guest-configs = stdenv.mkDerivation rec {
     pname = "guest-configs";
     version = "20210702.00";
 
     src = fetchFromGitHub {
       owner = "GoogleCloudPlatform";
       repo = "guest-configs";
-      rev = "20210702.00";
+      rev = version;
       sha256 = "1965kdrb1ig3z4qwzvyzx1fb4282ak5vgxcvvg5k9c759pzbc5nn";
     };
 
