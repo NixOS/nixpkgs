@@ -25,41 +25,43 @@ let
     folder.enable
   ) cfg.declarative.folders);
 
-  # get the api key by parsing the config.xml
-  getApiKey = pkgs.writers.writeDash "getAPIKey" ''
-    ${pkgs.libxml2}/bin/xmllint \
-      --xpath 'string(configuration/gui/apikey)'\
-      ${cfg.configDir}/config.xml
-  '';
-
   updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
     set -efu
-    # wait for syncthing port to open
-    until ${pkgs.curl}/bin/curl -Ss ${cfg.guiAddress} -o /dev/null; do
-      sleep 1
-    done
 
-    API_KEY=$(${getApiKey})
-    OLD_CFG=$(${pkgs.curl}/bin/curl -Ss \
-      -H "X-API-Key: $API_KEY" \
-      ${cfg.guiAddress}/rest/system/config)
+    # get the api key by parsing the config.xml
+    while
+        ! api_key=$(${pkgs.libxml2}/bin/xmllint \
+            --xpath 'string(configuration/gui/apikey)' \
+            ${cfg.configDir}/config.xml)
+    do sleep 1; done
 
-    # generate the new config by merging with the nixos config options
-    NEW_CFG=$(echo "$OLD_CFG" | ${pkgs.jq}/bin/jq -s '.[] as $in | $in * {
-      "devices": (${builtins.toJSON devices}${optionalString (! cfg.declarative.overrideDevices) " + $in.devices"}),
-      "folders": (${builtins.toJSON folders}${optionalString (! cfg.declarative.overrideFolders) " + $in.folders"})
-    }')
+    curl() {
+        while
+            ${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $api_key" \
+                --retry 100 --retry-delay 1 --retry-connrefused "$@"
+            status=$?
+            [ "$status" -eq 52 ] # retry on empty reply from server
+        do sleep 1; done
+        return "$status"
+    }
 
-    # POST the new config to syncthing
-    echo "$NEW_CFG" | ${pkgs.curl}/bin/curl -Ss \
-      -H "X-API-Key: $API_KEY" \
-      ${cfg.guiAddress}/rest/system/config -d @-
+    # query the old config
+    old_cfg=$(curl ${cfg.guiAddress}/rest/config)
 
-    # restart syncthing after sending the new config
-    ${pkgs.curl}/bin/curl -Ss \
-      -H "X-API-Key: $API_KEY" \
-      -X POST \
-      ${cfg.guiAddress}/rest/system/restart
+    # generate the new config by merging with the NixOS config options
+    new_cfg=$(echo "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
+        "devices": (${builtins.toJSON devices}${optionalString (! cfg.declarative.overrideDevices) " + .devices"}),
+        "folders": (${builtins.toJSON folders}${optionalString (! cfg.declarative.overrideFolders) " + .folders"})
+    } * ${builtins.toJSON cfg.declarative.extraOptions}')
+
+    # send the new config
+    curl -X PUT -d "$new_cfg" ${cfg.guiAddress}/rest/config
+
+    # restart Syncthing if required
+    if curl ${cfg.guiAddress}/rest/config/restart-required |
+       ${pkgs.jq}/bin/jq -e .requiresRestart > /dev/null; then
+        curl -X POST ${cfg.guiAddress}/rest/system/restart
+    fi
   '';
 in {
   ###### interface
@@ -77,7 +79,7 @@ in {
           type = types.nullOr types.str;
           default = null;
           description = ''
-            Path to users cert.pem file, will be copied into the syncthing's
+            Path to users cert.pem file, will be copied into Syncthing's
             <literal>configDir</literal>
           '';
         };
@@ -86,7 +88,7 @@ in {
           type = types.nullOr types.str;
           default = null;
           description = ''
-            Path to users key.pem file, will be copied into the syncthing's
+            Path to users key.pem file, will be copied into Syncthing's
             <literal>configDir</literal>
           '';
         };
@@ -105,7 +107,7 @@ in {
         devices = mkOption {
           default = {};
           description = ''
-            Peers/devices which syncthing should communicate with.
+            Peers/devices which Syncthing should communicate with.
           '';
           example = {
             bigbox = {
@@ -168,7 +170,7 @@ in {
         folders = mkOption {
           default = {};
           description = ''
-            folders which should be shared by syncthing.
+            Folders which should be shared by Syncthing.
           '';
           example = literalExample ''
             {
@@ -227,7 +229,7 @@ in {
               versioning = mkOption {
                 default = null;
                 description = ''
-                  How to keep changed/deleted files with syncthing.
+                  How to keep changed/deleted files with Syncthing.
                   There are 4 different types of versioning with different parameters.
                   See https://docs.syncthing.net/users/versioning.html
                 '';
@@ -335,9 +337,20 @@ in {
                   upstream's docs</link>.
                 '';
               };
-
             };
           }));
+        };
+
+        extraOptions = mkOption {
+          type = types.addCheck (pkgs.formats.json {}).type isAttrs;
+          default = {};
+          description = ''
+            Extra configuration options for Syncthing.
+          '';
+          example = {
+            options.localAnnounceEnabled = false;
+            gui.theme = "black";
+          };
         };
       };
 
@@ -378,7 +391,7 @@ in {
         default = null;
         example = "socks5://address.com:1234";
         description = ''
-          Overwrites all_proxy environment variable for the syncthing process to
+          Overwrites all_proxy environment variable for the Syncthing process to
           the given value. This is normaly used to let relay client connect
           through SOCKS5 proxy server.
         '';
@@ -412,7 +425,7 @@ in {
           Open the default ports in the firewall:
             - TCP 22000 for transfers
             - UDP 21027 for discovery
-          If multiple users are running syncthing on this machine, you will need to manually open a set of ports for each instance and leave this disabled.
+          If multiple users are running Syncthing on this machine, you will need to manually open a set of ports for each instance and leave this disabled.
           Alternatively, if are running only a single instance on this machine using the default ports, enable this.
         '';
       };
@@ -431,7 +444,7 @@ in {
 
   imports = [
     (mkRemovedOptionModule ["services" "syncthing" "useInotify"] ''
-      This option was removed because syncthing now has the inotify functionality included under the name "fswatcher".
+      This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
       It can be enabled on a per-folder basis through the webinterface.
     '')
   ];
@@ -516,8 +529,9 @@ in {
         };
       };
       syncthing-init = mkIf (
-        cfg.declarative.devices != {} || cfg.declarative.folders != {}
+        cfg.declarative.devices != {} || cfg.declarative.folders != {} || cfg.declarative.extraOptions != {}
       ) {
+        description = "Syncthing configuration updater";
         after = [ "syncthing.service" ];
         wantedBy = [ "multi-user.target" ];
 
