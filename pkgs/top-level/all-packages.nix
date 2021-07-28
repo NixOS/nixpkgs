@@ -23187,6 +23187,8 @@ in
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
+  corefm = libsForQt5.callPackage ../applications/misc/corefm { };
+
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
