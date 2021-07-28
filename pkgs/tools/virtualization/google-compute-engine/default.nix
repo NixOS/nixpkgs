@@ -5,7 +5,6 @@
 , bashInteractive
 , systemd
 , util-linux
-, boto
 , boto3
 , setuptools
 , distro
@@ -24,12 +23,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ bash ];
-  propagatedBuildInputs = [
-    setuptools
-    distro
-    # boto isn't compatible with python3.9, but boto3 is
-    (if pythonOlder "3.9" then boto else boto3)
-  ];
+  propagatedBuildInputs = [ boto3 setuptools distro ];
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
