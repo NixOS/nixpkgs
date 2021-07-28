@@ -576,6 +576,8 @@ rec {
           xz.bin
           xz.out
           bash
+          burning-oil
+          oil-uninteractive
           zlib
           libxml2.out
           curl.out
