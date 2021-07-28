@@ -934,6 +934,8 @@ let
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
+    odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
+
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-core = callPackage ../development/ocaml-modules/opam-core {
