@@ -2,7 +2,7 @@
 , python3, makeWrapper }:
 
 let
-  common = { version, sha256, extraNativeBuildInputs ? [] }:
+  common = { version, sha256, extraNativeBuildInputs ? [], extraPatches ? [] }:
     stdenv.mkDerivation rec {
       pname = "varnish";
       inherit version;
@@ -11,6 +11,8 @@ let
         url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
         inherit sha256;
       };
+
+      patches = extraPatches;
 
       passthru.python = python3;
 
@@ -41,15 +43,21 @@ let
 in
 {
   varnish60 = common {
-    version = "6.0.7";
-    sha256 = "0njs6xpc30nc4chjdm4d4g63bigbxhi4dc46f4az3qcz51r8zl2a";
+    version = "6.0.8";
+    sha256 = "1zk83hfxgjq1d0n4zx86q3f05y9f2zc6a1miz1zcvfa052q4bljx";
   };
   varnish62 = common {
     version = "6.2.3";
     sha256 = "02b6pqh5j1d4n362n42q42bfjzjrngd6x49b13q7wzsy6igd1jsy";
+    extraPatches = [
+      ./6.2-6.3-CVE-2021-36740.patch
+    ];
   };
   varnish63 = common {
     version = "6.3.2";
     sha256 = "1f5ahzdh3am6fij5jhiybv3knwl11rhc5r3ig1ybzw55ai7788q8";
+    extraPatches = [
+      ./6.2-6.3-CVE-2021-36740.patch
+    ];
   };
 }
