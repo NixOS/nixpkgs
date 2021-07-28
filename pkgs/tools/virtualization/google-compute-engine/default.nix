@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "google-compute-engine";
   version = "20190124";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
