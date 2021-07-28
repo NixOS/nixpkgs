@@ -29,8 +29,11 @@ python3Packages.buildPythonApplication rec {
     glibcLocales
   ];
 
+  strictDeps = false;
+
   buildInputs = [
     python3
+    gtk3
     gobject-introspection
     gnome.adwaita-icon-theme
   ];
@@ -49,7 +52,6 @@ python3Packages.buildPythonApplication rec {
     eyeD3
     podcastparser
     html5lib
-    gtk3
   ];
 
   makeFlags = [
