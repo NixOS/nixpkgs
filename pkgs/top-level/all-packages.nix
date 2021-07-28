@@ -17284,6 +17284,8 @@ in
 
   ronn = callPackage ../development/tools/ronn { };
 
+  rpclib = callPackage ../development/libraries/rpclib { };
+
   rshell = python3.pkgs.callPackage ../development/tools/rshell { };
 
   rttr = callPackage ../development/libraries/rttr { };
