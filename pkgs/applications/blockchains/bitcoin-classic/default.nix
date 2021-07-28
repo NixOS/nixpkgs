@@ -1,12 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, qtbase ? null, qttools ? null, util-linux, protobuf, qrencode, libevent
-, withGui }:
-
-with lib;
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, openssl
+, db48
+, boost
+, zlib
+, miniupnpc
+, qtbase ? null
+, qttools ? null
+, util-linux
+, protobuf
+, qrencode
+, libevent
+, withGui
+}:
 
 stdenv.mkDerivation rec {
-
-  name = "bitcoin" + (toString (optional (!withGui) "d")) + "-classic-" + version;
+  pname = "bitcoin" + lib.optionalString (!withGui) "d" + "-classic";
   version = "1.3.8uahf";
 
   src = fetchFromGitHub {
@@ -17,22 +29,30 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib
-                  miniupnpc util-linux protobuf libevent ]
-                  ++ optionals withGui [ qtbase qttools qrencode ];
+  buildInputs = [
+    openssl
+    db48
+    boost
+    zlib
+    miniupnpc
+    util-linux
+    protobuf
+    libevent
+  ] ++ lib.optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt5"
-                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-                                          ];
+    ++ lib.optionals withGui [
+    "--with-gui=qt5"
+    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+  ];
 
   enableParallelBuilding = true;
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Peer-to-peer electronic cash system (Classic client)";
-    longDescription= ''
+    longDescription = ''
       Bitcoin is a free open source peer-to-peer electronic cash system that is
       completely decentralized, without the need for a central server or trusted
       parties. Users hold the crypto keys to their own money and transact directly
