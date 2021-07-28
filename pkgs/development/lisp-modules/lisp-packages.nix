@@ -194,7 +194,7 @@ let lispPackages = rec {
       owner = "atlas-engineer";
       repo = "nyxt";
       rev = "${version}";
-      sha256 = "sha256:0kzm05swhyb197cjfd3iglf60b997sx7v95yxzyq483jxqbcxm0r";
+      sha256 = "0kzm05swhyb197cjfd3iglf60b997sx7v95yxzyq483jxqbcxm0r";
     };
 
     packageName = "nyxt";
