@@ -9,11 +9,11 @@ let
   devices = mapAttrsToList (name: device: {
     deviceID = device.id;
     inherit (device) name addresses introducer;
-  }) cfg.declarative.devices;
+  }) cfg.devices;
 
   folders = mapAttrsToList ( _: folder: {
     inherit (folder) path id label type;
-    devices = map (device: { deviceId = cfg.declarative.devices.${device}.id; }) folder.devices;
+    devices = map (device: { deviceId = cfg.devices.${device}.id; }) folder.devices;
     rescanIntervalS = folder.rescanInterval;
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
@@ -23,7 +23,7 @@ let
   }) (filterAttrs (
     _: folder:
     folder.enable
-  ) cfg.declarative.folders);
+  ) cfg.folders);
 
   updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
     set -efu
@@ -50,9 +50,9 @@ let
 
     # generate the new config by merging with the NixOS config options
     new_cfg=$(echo "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
-        "devices": (${builtins.toJSON devices}${optionalString (! cfg.declarative.overrideDevices) " + .devices"}),
-        "folders": (${builtins.toJSON folders}${optionalString (! cfg.declarative.overrideFolders) " + .folders"})
-    } * ${builtins.toJSON cfg.declarative.extraOptions}')
+        "devices": (${builtins.toJSON devices}${optionalString (! cfg.overrideDevices) " + .devices"}),
+        "folders": (${builtins.toJSON folders}${optionalString (! cfg.overrideFolders) " + .folders"})
+    } * ${builtins.toJSON cfg.extraOptions}')
 
     # send the new config
     curl -X PUT -d "$new_cfg" ${cfg.guiAddress}/rest/config
@@ -74,283 +74,281 @@ in {
         available on http://127.0.0.1:8384/.
       '';
 
-      declarative = {
-        cert = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            Path to users cert.pem file, will be copied into Syncthing's
-            <literal>configDir</literal>
-          '';
-        };
+      cert = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to users cert.pem file, will be copied into Syncthing's
+          <literal>configDir</literal>
+        '';
+      };
 
-        key = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            Path to users key.pem file, will be copied into Syncthing's
-            <literal>configDir</literal>
-          '';
-        };
+      key = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to users key.pem file, will be copied into Syncthing's
+          <literal>configDir</literal>
+        '';
+      };
 
-        overrideDevices = mkOption {
-          type = types.bool;
-          default = true;
-          description = ''
-            Whether to delete the devices which are not configured via the
-            <literal>declarative.devices</literal> option.
-            If set to false, devices added via the webinterface will
-            persist but will have to be deleted manually.
-          '';
-        };
+      overrideDevices = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to delete the devices which are not configured via the
+          <literal>devices</literal> option.
+          If set to false, devices added via the webinterface will
+          persist but will have to be deleted manually.
+        '';
+      };
 
-        devices = mkOption {
-          default = {};
-          description = ''
-            Peers/devices which Syncthing should communicate with.
-          '';
-          example = {
-            bigbox = {
-              id = "7CFNTQM-IMTJBHJ-3UWRDIU-ZGQJFR6-VCXZ3NB-XUH3KZO-N52ITXR-LAIYUAU";
-              addresses = [ "tcp://192.168.0.10:51820" ];
-            };
+      devices = mkOption {
+        default = {};
+        description = ''
+          Peers/devices which Syncthing should communicate with.
+        '';
+        example = {
+          bigbox = {
+            id = "7CFNTQM-IMTJBHJ-3UWRDIU-ZGQJFR6-VCXZ3NB-XUH3KZO-N52ITXR-LAIYUAU";
+            addresses = [ "tcp://192.168.0.10:51820" ];
           };
-          type = types.attrsOf (types.submodule ({ name, ... }: {
-            options = {
+        };
+        type = types.attrsOf (types.submodule ({ name, ... }: {
+          options = {
 
-              name = mkOption {
-                type = types.str;
-                default = name;
-                description = ''
-                  Name of the device
-                '';
-              };
-
-              addresses = mkOption {
-                type = types.listOf types.str;
-                default = [];
-                description = ''
-                  The addresses used to connect to the device.
-                  If this is let empty, dynamic configuration is attempted
-                '';
-              };
-
-              id = mkOption {
-                type = types.str;
-                description = ''
-                  The id of the other peer, this is mandatory. It's documented at
-                  https://docs.syncthing.net/dev/device-ids.html
-                '';
-              };
-
-              introducer = mkOption {
-                type = types.bool;
-                default = false;
-                description = ''
-                  If the device should act as an introducer and be allowed
-                  to add folders on this computer.
-                '';
-              };
-
+            name = mkOption {
+              type = types.str;
+              default = name;
+              description = ''
+                Name of the device
+              '';
             };
-          }));
-        };
 
-        overrideFolders = mkOption {
-          type = types.bool;
-          default = true;
-          description = ''
-            Whether to delete the folders which are not configured via the
-            <literal>declarative.folders</literal> option.
-            If set to false, folders added via the webinterface will persist
-            but will have to be deleted manually.
-          '';
-        };
+            addresses = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = ''
+                The addresses used to connect to the device.
+                If this is let empty, dynamic configuration is attempted
+              '';
+            };
 
-        folders = mkOption {
-          default = {};
-          description = ''
-            Folders which should be shared by Syncthing.
-          '';
-          example = literalExample ''
-            {
-              "/home/user/sync" = {
-                id = "syncme";
-                devices = [ "bigbox" ];
-              };
-            }
-          '';
-          type = types.attrsOf (types.submodule ({ name, ... }: {
-            options = {
+            id = mkOption {
+              type = types.str;
+              description = ''
+                The id of the other peer, this is mandatory. It's documented at
+                https://docs.syncthing.net/dev/device-ids.html
+              '';
+            };
 
-              enable = mkOption {
-                type = types.bool;
-                default = true;
-                description = ''
-                  share this folder.
-                  This option is useful when you want to define all folders
-                  in one place, but not every machine should share all folders.
-                '';
-              };
+            introducer = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                If the device should act as an introducer and be allowed
+                to add folders on this computer.
+              '';
+            };
 
-              path = mkOption {
-                type = types.str;
-                default = name;
-                description = ''
-                  The path to the folder which should be shared.
-                '';
-              };
+          };
+        }));
+      };
 
-              id = mkOption {
-                type = types.str;
-                default = name;
-                description = ''
-                  The id of the folder. Must be the same on all devices.
-                '';
-              };
+      overrideFolders = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to delete the folders which are not configured via the
+          <literal>folders</literal> option.
+          If set to false, folders added via the webinterface will persist
+          but will have to be deleted manually.
+        '';
+      };
 
-              label = mkOption {
-                type = types.str;
-                default = name;
-                description = ''
-                  The label of the folder.
-                '';
-              };
+      folders = mkOption {
+        default = {};
+        description = ''
+          Folders which should be shared by Syncthing.
+        '';
+        example = literalExample ''
+          {
+            "/home/user/sync" = {
+              id = "syncme";
+              devices = [ "bigbox" ];
+            };
+          }
+        '';
+        type = types.attrsOf (types.submodule ({ name, ... }: {
+          options = {
 
-              devices = mkOption {
-                type = types.listOf types.str;
-                default = [];
-                description = ''
-                  The devices this folder should be shared with. Must be defined
-                  in the <literal>declarative.devices</literal> attribute.
-                '';
-              };
+            enable = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                share this folder.
+                This option is useful when you want to define all folders
+                in one place, but not every machine should share all folders.
+              '';
+            };
 
-              versioning = mkOption {
-                default = null;
-                description = ''
-                  How to keep changed/deleted files with Syncthing.
-                  There are 4 different types of versioning with different parameters.
-                  See https://docs.syncthing.net/users/versioning.html
-                '';
-                example = [
-                  {
-                    versioning = {
-                      type = "simple";
-                      params.keep = "10";
-                    };
-                  }
-                  {
-                    versioning = {
-                      type = "trashcan";
-                      params.cleanoutDays = "1000";
-                    };
-                  }
-                  {
-                    versioning = {
-                      type = "staggered";
-                      params = {
-                        cleanInterval = "3600";
-                        maxAge = "31536000";
-                        versionsPath = "/syncthing/backup";
-                      };
-                    };
-                  }
-                  {
-                    versioning = {
-                      type = "external";
-                      params.versionsPath = pkgs.writers.writeBash "backup" ''
-                        folderpath="$1"
-                        filepath="$2"
-                        rm -rf "$folderpath/$filepath"
-                      '';
-                    };
-                  }
-                ];
-                type = with types; nullOr (submodule {
-                  options = {
-                    type = mkOption {
-                      type = enum [ "external" "simple" "staggered" "trashcan" ];
-                      description = ''
-                        Type of versioning.
-                        See https://docs.syncthing.net/users/versioning.html
-                      '';
-                    };
-                    params = mkOption {
-                      type = attrsOf (either str path);
-                      description = ''
-                        Parameters for versioning. Structure depends on versioning.type.
-                        See https://docs.syncthing.net/users/versioning.html
-                      '';
+            path = mkOption {
+              type = types.str;
+              default = name;
+              description = ''
+                The path to the folder which should be shared.
+              '';
+            };
+
+            id = mkOption {
+              type = types.str;
+              default = name;
+              description = ''
+                The id of the folder. Must be the same on all devices.
+              '';
+            };
+
+            label = mkOption {
+              type = types.str;
+              default = name;
+              description = ''
+                The label of the folder.
+              '';
+            };
+
+            devices = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = ''
+                The devices this folder should be shared with. Must be defined
+                in the <literal>devices</literal> attribute.
+              '';
+            };
+
+            versioning = mkOption {
+              default = null;
+              description = ''
+                How to keep changed/deleted files with Syncthing.
+                There are 4 different types of versioning with different parameters.
+                See https://docs.syncthing.net/users/versioning.html
+              '';
+              example = [
+                {
+                  versioning = {
+                    type = "simple";
+                    params.keep = "10";
+                  };
+                }
+                {
+                  versioning = {
+                    type = "trashcan";
+                    params.cleanoutDays = "1000";
+                  };
+                }
+                {
+                  versioning = {
+                    type = "staggered";
+                    params = {
+                      cleanInterval = "3600";
+                      maxAge = "31536000";
+                      versionsPath = "/syncthing/backup";
                     };
                   };
-                });
-              };
-
-              rescanInterval = mkOption {
-                type = types.int;
-                default = 3600;
-                description = ''
-                  How often the folders should be rescaned for changes.
-                '';
-              };
-
-              type = mkOption {
-                type = types.enum [ "sendreceive" "sendonly" "receiveonly" ];
-                default = "sendreceive";
-                description = ''
-                  Whether to send only changes from this folder, only receive them
-                  or propagate both.
-                '';
-              };
-
-              watch = mkOption {
-                type = types.bool;
-                default = true;
-                description = ''
-                  Whether the folder should be watched for changes by inotify.
-                '';
-              };
-
-              watchDelay = mkOption {
-                type = types.int;
-                default = 10;
-                description = ''
-                  The delay after an inotify event is triggered.
-                '';
-              };
-
-              ignorePerms = mkOption {
-                type = types.bool;
-                default = true;
-                description = ''
-                  Whether to propagate permission changes.
-                '';
-              };
-
-              ignoreDelete = mkOption {
-                type = types.bool;
-                default = false;
-                description = ''
-                  Whether to delete files in destination. See <link
-                  xlink:href="https://docs.syncthing.net/advanced/folder-ignoredelete.html">
-                  upstream's docs</link>.
-                '';
-              };
+                }
+                {
+                  versioning = {
+                    type = "external";
+                    params.versionsPath = pkgs.writers.writeBash "backup" ''
+                      folderpath="$1"
+                      filepath="$2"
+                      rm -rf "$folderpath/$filepath"
+                    '';
+                  };
+                }
+              ];
+              type = with types; nullOr (submodule {
+                options = {
+                  type = mkOption {
+                    type = enum [ "external" "simple" "staggered" "trashcan" ];
+                    description = ''
+                      Type of versioning.
+                      See https://docs.syncthing.net/users/versioning.html
+                    '';
+                  };
+                  params = mkOption {
+                    type = attrsOf (either str path);
+                    description = ''
+                      Parameters for versioning. Structure depends on versioning.type.
+                      See https://docs.syncthing.net/users/versioning.html
+                    '';
+                  };
+                };
+              });
             };
-          }));
-        };
 
-        extraOptions = mkOption {
-          type = types.addCheck (pkgs.formats.json {}).type isAttrs;
-          default = {};
-          description = ''
-            Extra configuration options for Syncthing.
-          '';
-          example = {
-            options.localAnnounceEnabled = false;
-            gui.theme = "black";
+            rescanInterval = mkOption {
+              type = types.int;
+              default = 3600;
+              description = ''
+                How often the folders should be rescaned for changes.
+              '';
+            };
+
+            type = mkOption {
+              type = types.enum [ "sendreceive" "sendonly" "receiveonly" ];
+              default = "sendreceive";
+              description = ''
+                Whether to send only changes from this folder, only receive them
+                or propagate both.
+              '';
+            };
+
+            watch = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether the folder should be watched for changes by inotify.
+              '';
+            };
+
+            watchDelay = mkOption {
+              type = types.int;
+              default = 10;
+              description = ''
+                The delay after an inotify event is triggered.
+              '';
+            };
+
+            ignorePerms = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether to propagate permission changes.
+              '';
+            };
+
+            ignoreDelete = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Whether to delete files in destination. See <link
+                xlink:href="https://docs.syncthing.net/advanced/folder-ignoredelete.html">
+                upstream's docs</link>.
+              '';
+            };
           };
+        }));
+      };
+
+      extraOptions = mkOption {
+        type = types.addCheck (pkgs.formats.json {}).type isAttrs;
+        default = {};
+        description = ''
+          Extra configuration options for Syncthing.
+        '';
+        example = {
+          options.localAnnounceEnabled = false;
+          gui.theme = "black";
         };
       };
 
@@ -443,11 +441,13 @@ in {
   };
 
   imports = [
-    (mkRemovedOptionModule ["services" "syncthing" "useInotify"] ''
+    (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
       This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
       It can be enabled on a per-folder basis through the webinterface.
     '')
-  ];
+  ] ++ map (o:
+    mkRenamedOptionModule [ "services" "syncthing" "declarative" o ] [ "services" "syncthing" o ]
+  ) [ "cert" "key" "devices" "folders" "overrideDevices" "overrideFolders" "extraOptions"];
 
   ###### implementation
 
@@ -491,14 +491,14 @@ in {
           RestartForceExitStatus="3 4";
           User = cfg.user;
           Group = cfg.group;
-          ExecStartPre = mkIf (cfg.declarative.cert != null || cfg.declarative.key != null)
+          ExecStartPre = mkIf (cfg.cert != null || cfg.key != null)
             "+${pkgs.writers.writeBash "syncthing-copy-keys" ''
               install -dm700 -o ${cfg.user} -g ${cfg.group} ${cfg.configDir}
-              ${optionalString (cfg.declarative.cert != null) ''
-                install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.declarative.cert} ${cfg.configDir}/cert.pem
+              ${optionalString (cfg.cert != null) ''
+                install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.cert} ${cfg.configDir}/cert.pem
               ''}
-              ${optionalString (cfg.declarative.key != null) ''
-                install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.declarative.key} ${cfg.configDir}/key.pem
+              ${optionalString (cfg.key != null) ''
+                install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
               ''}
             ''}"
           ;
@@ -529,7 +529,7 @@ in {
         };
       };
       syncthing-init = mkIf (
-        cfg.declarative.devices != {} || cfg.declarative.folders != {} || cfg.declarative.extraOptions != {}
+        cfg.devices != {} || cfg.folders != {} || cfg.extraOptions != {}
       ) {
         description = "Syncthing configuration updater";
         after = [ "syncthing.service" ];
