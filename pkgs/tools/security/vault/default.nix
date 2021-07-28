@@ -21,15 +21,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  preBuild = ''
-    buildFlagsArray+=(
-      "-tags=vault"
-      "-ldflags=\
-        -s -w \
-        -X github.com/hashicorp/vault/sdk/version.GitCommit=${src.rev} \
-        -X github.com/hashicorp/vault/sdk/version.Version=${version} \
-        -X github.com/hashicorp/vault/sdk/version.VersionPrerelease=")
-  '';
+  buildFlagsArray = [ "-tags=vault" ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/hashicorp/vault/sdk/version.GitCommit=${src.rev}"
+    "-X github.com/hashicorp/vault/sdk/version.Version=${version}"
+    "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
+  ];
 
   postInstall = ''
     echo "complete -C $out/bin/vault vault" > vault.bash
