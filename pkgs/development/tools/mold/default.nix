@@ -3,7 +3,6 @@
 , lib
 , autoPatchelfHook
 , cmake
-, tbb
 , llvmPackages_latest
 , xxHash
 , zlib
@@ -12,16 +11,16 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2LXOPirhjAifKYPgngUJwEdGrKMYsRySr5TL2x2p8J0=";
+    sha256 = "sha256:1z9i8nvdl9h0zydh1gd9244q96n9x1gh5y90m71bghnh7nws0zmd";
   };
 
-  buildInputs = [ tbb zlib openssl ];
+  buildInputs = [ zlib openssl ];
   nativeBuildInputs = [ autoPatchelfHook cmake xxHash ];
 
   dontUseCmakeConfigure = true;
