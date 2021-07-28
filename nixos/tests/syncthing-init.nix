@@ -17,6 +17,7 @@ in {
           path = "/tmp/test";
           devices = [ "testDevice" ];
         };
+        extraOptions.gui.user = "guiUser";
       };
     };
   };
@@ -27,5 +28,6 @@ in {
 
     assert "testFolder" in config
     assert "${testId}" in config
+    assert "guiUser" in config
   '';
 })
