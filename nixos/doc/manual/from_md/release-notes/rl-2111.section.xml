@@ -125,6 +125,15 @@
           <link linkend="opt-services.prometheus.exporters.buildkite-agent.enable">services.prometheus.exporters.buildkite-agent</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.meshcommander.com/meshcentral2/overview">MeshCentral</link>,
+          a remote administration service (<quote>TeamViewer but
+          self-hosted and with more features</quote>) is now available
+          with a package and a module:
+          <link linkend="opt-services.meshcentral.enable">services.meshcentral.enable</link>
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
