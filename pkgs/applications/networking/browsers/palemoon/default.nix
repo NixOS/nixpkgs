@@ -52,14 +52,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.2.1";
+  version = "29.3.0";
 
   src = fetchFromGitHub {
     githubBase = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "0djjl79jrnny16p32db5w7pwwv0a24dc8mg1s1bnavhlvmmk52vq";
+    sha256 = "1q0w1ffmdfk22df4p2ks4n55zmz44ir8fbcdn5a5h4ihy73nf6xp";
     fetchSubmodules = true;
   };
 
