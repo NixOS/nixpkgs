@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libcap, openssl, pam }:
 
 stdenv.mkDerivation rec {
-  name = "vsftpd-3.0.3";
+  pname = "vsftpd";
+  version = "3.0.3";
 
   src = fetchurl {
-    url = "https://security.appspot.com/downloads/${name}.tar.gz";
+    url = "https://security.appspot.com/downloads/vsftpd-${version}.tar.gz";
     sha256 = "1xsyjn68k3fgm2incpb3lz2nikffl9by2safp994i272wvv2nkcx";
   };
 

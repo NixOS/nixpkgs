@@ -1,7 +1,7 @@
 { buildGoModule, hasura-graphql-engine }:
 
 buildGoModule rec {
-  name = "hasura-${version}";
+  pname = "hasura";
   version = hasura-graphql-engine.version;
 
   src = hasura-graphql-engine.src;
