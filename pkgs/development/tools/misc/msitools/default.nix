@@ -59,7 +59,8 @@ stdenv.mkDerivation rec {
     bzip2
   ];
 
-  doCheck = true;
+  # WiX tests fail on darwin
+  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     patchShebangs subprojects/bats-core/{bin,libexec}

@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "prawcore";
-  version = "2.2.0";
+  version = "2.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bde42fad459c4dcfe0f22a18921ef4981ee7cd286ea1de3eb697ba91838c9123";
+    sha256 = "0vgmhjddqxnz5vy70dyqvakak51fg1nk6j3xavkc83d8nzacrwfs";
   };
 
   propagatedBuildInputs = [

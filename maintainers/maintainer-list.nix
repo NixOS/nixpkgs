@@ -4255,6 +4255,12 @@
     githubId = 131599;
     name = "Martin Weinelt";
   };
+  hexagonal-sun = {
+    email = "dev@mattleach.net";
+    github = "hexagonal-sun";
+    githubId = 222664;
+    name = "Matthew Leach";
+  };
   hh = {
     email = "hh@m-labs.hk";
     github = "HarryMakes";
@@ -4932,6 +4938,12 @@
       longkeyid = "dsa1024/0xD1D09DE169EA19A0";
       fingerprint = "7EB1 C02A B62B B464 6D7C  E4AE D1D0 9DE1 69EA 19A0";
     }];
+  };
+  jgart = {
+    email = "jgart@dismail.de";
+    github = "jgarte";
+    githubId = 47760695;
+    name = "Jorge Gomez";
   };
   jgeerds = {
     email = "jascha@geerds.org";

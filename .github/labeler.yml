@@ -70,6 +70,7 @@
 
 "6.topic: nixos":
   - nixos/**/*
+  - pkgs/os-specific/linux/nixos-rebuild/**/*
 
 "6.topic: ocaml":
   - doc/languages-frameworks/ocaml.section.md

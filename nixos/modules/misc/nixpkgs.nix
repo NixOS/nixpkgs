@@ -39,7 +39,7 @@ let
             if c x then true
             else lib.traceSeqN 1 x false;
       in traceXIfNot isConfig;
-    merge = args: fold (def: mergeConfig def.value) {};
+    merge = args: foldr (def: mergeConfig def.value) {};
   };
 
   overlayType = mkOptionType {

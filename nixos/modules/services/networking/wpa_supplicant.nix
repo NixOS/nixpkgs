@@ -241,7 +241,8 @@ in {
     environment.systemPackages = [ package ];
 
     services.dbus.packages = [ package ];
-    services.udev.packages = [ pkgs.crda ];
+
+    hardware.wirelessRegulatoryDatabase = true;
 
     # FIXME: start a separate wpa_supplicant instance per interface.
     systemd.services.wpa_supplicant = let

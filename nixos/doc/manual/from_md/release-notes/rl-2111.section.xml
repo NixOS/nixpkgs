@@ -125,6 +125,21 @@
           <link linkend="opt-services.prometheus.exporters.buildkite-agent.enable">services.prometheus.exporters.buildkite-agent</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus/influxdb_exporter">influxdb-exporter</link>
+          a Prometheus exporter that exports metrics received on an
+          InfluxDB compatible endpoint is now available as
+          <link linkend="opt-services.prometheus.exporters.influxdb.enable">services.prometheus.exporters.influxdb</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/matrix-discord/mx-puppet-discord">mx-puppet-discord</link>,
+          a discord puppeting bridge for matrix. Available as
+          <link linkend="opt-services.mx-puppet-discord.enable">services.mx-puppet-discord</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -566,6 +581,32 @@
           Discourse post</link> in the tt-rss forums for more details.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The following Visual Studio Code extensions were renamed to
+          keep the naming convention uniform.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>bbenoist.Nix</literal> -&gt;
+              <literal>bbenoist.nix</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>CoenraadS.bracket-pair-colorizer</literal> -&gt;
+              <literal>coenraads.bracket-pair-colorizer</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>golang.Go</literal> -&gt;
+              <literal>golang.go</literal>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -711,6 +752,19 @@
           module has a new
           <link xlink:href="options.html#opt-networking.wireless.iwd.settings">networking.wireless.iwd.settings</link>
           option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-services.syncoid.enable">services.syncoid.enable</link>
+          module now properly drops ZFS permissions after usage. Before
+          it delegated permissions to whole pools instead of datasets
+          and didn’t clean up after execution. You can manually look
+          this up for your pools by running
+          <literal>zfs allow your-pool-name</literal> and use
+          <literal>zfs unallow syncoid your-pool-name</literal> to clean
+          this up.
         </para>
       </listitem>
     </itemizedlist>

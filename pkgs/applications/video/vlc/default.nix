@@ -8,6 +8,7 @@
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
+, ncurses
 , onlyLibVLC ? false
 , withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
 , jackSupport ? false
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
     xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
     libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
-    fluidsynth wayland wayland-protocols
+    fluidsynth wayland wayland-protocols ncurses
   ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
     ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
     ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])

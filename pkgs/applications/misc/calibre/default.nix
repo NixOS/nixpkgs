@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchurl
+, fetchFromGitHub
 , poppler_utils
 , pkg-config
 , libpng
@@ -94,7 +95,15 @@ mkDerivation rec {
       python
       regex
       sip
-      zeroconf
+      (zeroconf.overrideAttrs (oldAttrs: rec {
+        version = "0.31.0";
+        src = fetchFromGitHub {
+          owner = "jstasiak";
+          repo = "python-zeroconf";
+          rev = version;
+          sha256 = "158dqay74zvnz6kmpvip4ml0kw59nf2aaajwgaamx0zc8ci1p5pj";
+        };
+      }))
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optional (unrarSupport) unrardll

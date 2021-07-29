@@ -13,21 +13,21 @@
 }:
 
 let
-  version = "1.16.3";
+  version = "1.16.4";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    hash = "sha256-G2XceMwiFu4fWT4L3HJzDB/rD3eSX6ko6RdVw72QLzg=";
+    sha256 = "18kalql846b9ggl3nsz2dpbg51byn8pj0y68fsdcgwwkgvsx7yr2";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    hash = "sha256-YUGozP9B6vmWQ4WxctSbezzu+0yLJXNKQk9TwnQF8F0=";
+    sha256 = "0ssg3q1z80652d4gkv1z7kpsxx82xcw6kpsw266c8q4y2n8x7c76";
   };
 in mkDerivation {
   pname = "makemkv";
