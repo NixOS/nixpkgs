@@ -7,7 +7,7 @@ selfPop (gerbil-support: with gerbil-support; {
   inherit POP;
 
   prePackages-unstable =
-    let pks = [ ./gerbil-libp2p.nix ./smug-gerbil.nix
+    let pks = [ ./gerbil-libp2p.nix ./smug-gerbil.nix ./ftw.nix
                 ./gerbil-utils.nix ./gerbil-crypto.nix ./gerbil-poo.nix
                 ./gerbil-persist.nix ./gerbil-ethereum.nix ];
         call = pkg: callPackage pkg (unpop prePackage-defaults);
