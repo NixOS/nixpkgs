@@ -281,6 +281,8 @@ with self; with super; {
 
   metaphone = callPackage ../development/python-modules/metaphone { };
 
+  mlt = disabled super.mlt;
+
   mock = callPackage ../development/python-modules/mock/2.nix { };
 
   # Needed here because moinmoin is loaded as a Python library.

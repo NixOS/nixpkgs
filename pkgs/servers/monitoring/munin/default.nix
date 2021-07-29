@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
-, python, ruby, jre, nettools, bc
+, python2, ruby, jre, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     perlPackages.ListMoreUtils
     perlPackages.LWP
     perlPackages.DBDPg
-    python
+    python2
     ruby
     jre
     # tests
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     "DESTDIR=$(out)"
     "PERLLIB=$(out)/${perlPackages.perl.libPrefix}"
     "PERL=${perlPackages.perl.outPath}/bin/perl"
-    "PYTHON=${python.outPath}/bin/python"
+    "PYTHON=${python2.outPath}/bin/python"
     "RUBY=${ruby.outPath}/bin/ruby"
     "JAVARUN=${jre.outPath}/bin/java"
     "PLUGINUSER=munin"
