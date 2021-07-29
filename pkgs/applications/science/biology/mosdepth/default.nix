@@ -17,13 +17,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mosdepth";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "brentp";
     repo = "mosdepth";
     rev = "v${version}";
-    sha256 = "1kcrvamrafz1m0s7mlbhaay8jyg97l1w37p6syl36r2m1plmwxjd";
+    sha256 = "sha256-uui4yC7ok+pvbXVKfBVsAarH40fnH4fnP8P4uzOqztQ=";
   };
 
   nativeBuildInputs = [ nim ];

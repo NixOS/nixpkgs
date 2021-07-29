@@ -1,7 +1,7 @@
 { lib, fetchurl, python3Packages, php }:
 
 python3Packages.buildPythonApplication rec {
-  name = "nextcloud-news-updater-${version}";
+  pname = "nextcloud-news-updater";
   version = "10.0.1";
 
   src = fetchurl {

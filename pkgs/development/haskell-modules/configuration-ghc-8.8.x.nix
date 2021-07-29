@@ -136,7 +136,4 @@ self: super: {
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
 
-  # hackage-db 2.1.1 is incompatible with Cabal < 3.4
-  # See https://github.com/NixOS/cabal2nix/issues/501
-  hackage-db = super.hackage-db_2_1_0;
 }

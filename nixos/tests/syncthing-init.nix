@@ -9,16 +9,14 @@ in {
   machine = {
     services.syncthing = {
       enable = true;
-      declarative = {
-        devices.testDevice = {
-          id = testId;
-        };
-        folders.testFolder = {
-          path = "/tmp/test";
-          devices = [ "testDevice" ];
-        };
-        extraOptions.gui.user = "guiUser";
+      devices.testDevice = {
+        id = testId;
       };
+      folders.testFolder = {
+        path = "/tmp/test";
+        devices = [ "testDevice" ];
+      };
+      extraOptions.gui.user = "guiUser";
     };
   };
 

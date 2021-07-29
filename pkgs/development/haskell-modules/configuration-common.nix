@@ -1711,14 +1711,13 @@ self: super: {
     excludes = ["test/buildtest"];
   });
 
-  # workaround for https://github.com/peti/distribution-nixpkgs/issues/9
-  pam = super.pam.override { inherit (pkgs) pam; };
-
   # Too strict version bounds on base:
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
 
-  cabal2nix-unstable = overrideCabal super.cabal2nix-unstable {
+  cabal2nix-unstable = overrideCabal (super.cabal2nix-unstable.override {
+    distribution-nixpkgs = self.distribution-nixpkgs_1_6_0;
+  }) {
     passthru.updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
   };
 
@@ -1868,8 +1867,6 @@ EOT
   # unrestrict bounds for hashable and semigroups
   # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
   reactive-banana = doJailbreak super.reactive-banana;
-
-  hackage-db_2_1_0 = doDistribute super.hackage-db_2_1_0;
 
   # Too strict bounds on QuickCheck
   # https://github.com/muesli4/table-layout/issues/16

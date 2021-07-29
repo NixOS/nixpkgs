@@ -1837,6 +1837,7 @@ dont-distribute-packages:
  - keid-geometry
  - keid-render-basic
  - keid-resource-gltf
+ - keid-sound-openal
  - keid-ui-dearimgui
  - kevin
  - keysafe
@@ -2346,6 +2347,7 @@ dont-distribute-packages:
  - polysemy-log-co
  - polysemy-log-di
  - polysemy-methodology
+ - polysemy-methodology-co-log
  - polysemy-methodology-composite
  - polysemy-mocks
  - polysemy-optics
@@ -2355,6 +2357,7 @@ dont-distribute-packages:
  - polysemy-readline
  - polysemy-req
  - polysemy-resume
+ - polysemy-several
  - polysemy-socket
  - polysemy-test
  - polysemy-time
