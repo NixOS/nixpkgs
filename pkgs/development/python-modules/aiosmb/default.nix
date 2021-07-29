@@ -2,7 +2,7 @@
 , asysocks
 , buildPythonPackage
 , colorama
-, fetchPypi
+, fetchFromGitHub
 , minikerberos
 , prompt-toolkit
 , pycryptodomex
@@ -15,12 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.2.49";
+  version = "0.2.50";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-XCaAaY7a6Gdddm9B0ET+rVzFra5W0GTI/HUMuvpyhzM=";
+  src = fetchFromGitHub {
+    owner = "skelsec";
+    repo = pname;
+    rev = version;
+    sha256 = "016pylxqmzm1hn1mvx6jhxvgckdqpf993sd1bki07pblmm4ikl6q";
   };
 
   propagatedBuildInputs = [
