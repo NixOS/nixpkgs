@@ -8286,6 +8286,8 @@ in {
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
+  sphinxext-opengraph = callPackage ../development/python-modules/sphinxext-opengraph { };
+
   spidev = callPackage ../development/python-modules/spidev { };
 
   splinter = callPackage ../development/python-modules/splinter { };
