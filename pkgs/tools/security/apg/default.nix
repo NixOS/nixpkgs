@@ -1,8 +1,10 @@
 { lib, stdenv, fetchurl, openssl }:
 stdenv.mkDerivation rec {
-  name = "apg-2.3.0b";
+  pname = "apg";
+  version = "2.3.0b";
+
   src = fetchurl {
-    url = "http://www.adel.nursat.kz/apg/download/${name}.tar.gz";
+    url = "http://www.adel.nursat.kz/apg/download/apg-${version}.tar.gz";
     sha256 = "14lbq81xrcsmpk1b9qmqyz7n6ypf08zcxvcvp6f7ybcyf0lj1rfi";
   };
   configurePhase = ''

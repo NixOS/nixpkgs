@@ -1,7 +1,5 @@
 { qtModule, lib, python3, qtbase, qtsvg }:
 
-with lib;
-
 qtModule {
   pname = "qtdeclarative";
   qtInputs = [ qtbase qtsvg ];
