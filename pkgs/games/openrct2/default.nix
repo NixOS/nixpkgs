@@ -5,13 +5,13 @@
 }:
 
 let
-  version = "0.3.4";
+  version = "0.3.4.1";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${version}";
-    sha256 = "051dm7bw3l8qnppk5b7xvavl29xfadqn8aa18q49qdy5mjy6qgk4";
+    sha256 = "0zjqn47pbgd2nrrbdl3lqk1mcdvwvvpjby2g0gfv6ssfw72fji7d";
   };
 
   objects-src = fetchFromGitHub {

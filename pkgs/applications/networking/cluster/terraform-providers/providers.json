@@ -634,9 +634,10 @@
     "owner": "equinix",
     "provider-source-address": "registry.terraform.io/equinix/metal",
     "repo": "terraform-provider-metal",
-    "rev": "v2.1.0",
-    "sha256": "06i3rj6ig8hxbncdpa8b11v8pr3zhi90ppmf77jjin1114ikd172",
-    "version": "2.1.0"
+    "rev": "v3.0.0",
+    "sha256": "08h1h0rpaxpidhslpq1i4bmc6i48rwcg7fsvwgqc202l5m7yk3wd",
+    "vendorSha256": null,
+    "version": "3.0.0"
   },
   "metalcloud": {
     "owner": "terraform-providers",

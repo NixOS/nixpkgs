@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i -e "s|ecwolf.pk3|$out/share/ecwolf/ecwolf.pk3|" src/version.h
+  ''
+  # Disable app bundle creation on Darwin. It fails, and it is not needed to run it from the Nix store
+  + lib.optionalString (stdenv.isDarwin) ''
+    sed -i -e "s|include(\''${CMAKE_CURRENT_SOURCE_DIR}/macosx/install.txt)||" src/CMakeLists.txt
   '';
 
   # Install the required PK3 file in the required data directory
@@ -46,7 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://maniacsvault.net/ecwolf/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
-    # Darwin is untested (supported by upstream)
     platforms = platforms.all;
   };
 }
