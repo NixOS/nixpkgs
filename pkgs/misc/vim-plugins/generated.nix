@@ -2001,6 +2001,18 @@ final: prev:
     meta.homepage = "https://github.com/eddyekofo94/gruvbox-flat.nvim/";
   };
 
+  gruvbox-material = buildVimPluginFrom2Nix {
+    pname = "gruvbox-material";
+    version = "2021-07-29";
+    src = fetchFromGitHub {
+      owner = "sainnhe";
+      repo = "gruvbox-material";
+      rev = "7a1d276a3d938d488d2d592fbb52ecec642268fc";
+      sha256 = "1pvdlci25qr122gzrb661bpl62sfz81vxsbyzwwnf16b18qsxi5r";
+    };
+    meta.homepage = "https://github.com/sainnhe/gruvbox-material/";
+  };
+
   gruvbox-nvim = buildVimPluginFrom2Nix {
     pname = "gruvbox-nvim";
     version = "2021-07-26";
