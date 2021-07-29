@@ -6231,10 +6231,10 @@ let
 
   DevelNYTProf = buildPerlPackage {
     pname = "Devel-NYTProf";
-    version = "6.06";
+    version = "6.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TIMB/Devel-NYTProf-6.06.tar.gz";
-      sha256 = "a14227ca79f1750b92cc7b8b0a5806c92abc4964a21a7fb100bd4907d6c4be55";
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/Devel-NYTProf-6.10.tar.gz";
+      sha256 = "24ac4174f1f01322063fa4e119b247d371d3260ddca6e778c6c1a0e3f905f58e";
     };
     propagatedBuildInputs = [ FileWhich JSONMaybeXS ];
     meta = {
@@ -6242,7 +6242,7 @@ let
       description = "Powerful fast feature-rich Perl source code profiler";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ TestDifferences ];
+    buildInputs = [ CaptureTiny TestDifferences ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/*
