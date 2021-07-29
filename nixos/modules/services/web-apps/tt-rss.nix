@@ -568,9 +568,7 @@ let
 
     systemd.services = {
       phpfpm-tt-rss = mkIf (cfg.pool == "${poolName}") {
-        restartTriggers = [
-          cfg.root
-        ];
+        restartTriggers = [ tt-rss-config tt-rss ];
       };
 
       tt-rss = {
@@ -611,9 +609,9 @@ let
           ''}
           ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
           chmod -R 755 "${cfg.root}"
-          chmod -R 777 "${cfg.root}/${lockDir}"
-          chmod -R 777 "${cfg.root}/${cacheDir}"
-          chmod -R 777 "${cfg.root}/${feedIconsDir}"
+          chmod -R ug+rwX "${cfg.root}/${lockDir}"
+          chmod -R ug+rwX "${cfg.root}/${cacheDir}"
+          chmod -R ug+rwX "${cfg.root}/${feedIconsDir}"
         ''
 
         + (optionalString (cfg.database.type == "pgsql") ''
