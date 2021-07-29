@@ -7832,6 +7832,12 @@
     githubId = 1839979;
     name = "Niklas Thörne";
   };
+  nukaduka = {
+    email = "ksgokte@gmail.com";
+    github = "NukaDuka";
+    githubId = 22592293;
+    name = "Kartik Gokte";
+  };
   nullx76 = {
     email = "nix@xirion.net";
     github = "NULLx76";
