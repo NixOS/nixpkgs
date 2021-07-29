@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-      ./xcode.patch
-    ];
+    ./xcode.patch
+  ];
 
   buildInputs = [ xxd xcode ];
 
