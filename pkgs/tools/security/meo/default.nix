@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "meo";
-  version = "20121113";
+  version = "unstable-2012-11-13";
 
   src = fetchhg {
     url = "http://oss.stamfest.net/hg/meo";
@@ -25,12 +25,12 @@ stdenv.mkDerivation {
     cp meo-gui/meo-gui $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://oss.stamfest.net/wordpress/meo-multiple-eyepairs-only";
     description = "Tools to use cryptography for things like four-eyes principles";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [viric];
-    platforms = with lib.platforms; linux;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.linux;
     broken = true;
   };
 }
