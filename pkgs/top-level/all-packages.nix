@@ -13482,10 +13482,15 @@ with pkgs;
 
   cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
-  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
+  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
 
   cmakeMinimal = libsForQt5.callPackage ../development/tools/build-managers/cmake {
     isBootstrap = true;
+    # There is no SystemConfiguration in bootstrapTools, so this version gets
+    # patched to remove that dependency.
+    SystemConfiguration = null;
   };
 
   cmakeCurses = cmake.override { useNcurses = true; };
