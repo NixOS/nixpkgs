@@ -520,7 +520,7 @@ If you do need to do create this sort of patch file, one way to do so is with gi
 4. Use git to create a diff, and pipe the output to a patch file:
 
     ```ShellSession
-    $ git diff > nixpkgs/pkgs/the/package/0001-changes.patch
+    $ git diff -a > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
 
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`:
