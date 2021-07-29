@@ -1,14 +1,11 @@
 { lib, stdenv, fetchurl }:
 
-let
+stdenv.mkDerivation rec {
   pname = "bftpd";
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   version = "5.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${name}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/${pname}/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-LMcjPdePlKqVD3kdlPxF4LlVp9BLJFkgTg+WWaWPrqY=";
   };
 

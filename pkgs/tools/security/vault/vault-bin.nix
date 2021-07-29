@@ -42,8 +42,8 @@ in stdenv.mkDerivation {
     echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/vault \
-      --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
-  '' + ''
+      --prefix PATH : ${lib.makeBinPath [ gawk glibc ]}
+
     runHook postInstall
   '';
 

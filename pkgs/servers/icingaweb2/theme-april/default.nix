@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "icingaweb2-theme-april";
+  pname = "icingaweb2-theme-april";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "Mikesch-mp";
-    repo = name;
+    repo = pname;
     rev = "v${version}";
     sha256 = "0i1js2k47llzgmc77q9frvcmr02mqlhg0qhswx1486fvm6myxg0g";
   };

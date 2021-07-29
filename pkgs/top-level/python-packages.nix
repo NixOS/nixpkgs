@@ -2326,6 +2326,8 @@ in {
 
   env-canada = callPackage ../development/python-modules/env-canada { };
 
+  environmental-override = callPackage ../development/python-modules/environmental-override {};
+
   envisage = callPackage ../development/python-modules/envisage { };
 
   envs = callPackage ../development/python-modules/envs { };
@@ -8285,6 +8287,8 @@ in {
   sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
+
+  sphinxext-opengraph = callPackage ../development/python-modules/sphinxext-opengraph { };
 
   spidev = callPackage ../development/python-modules/spidev { };
 

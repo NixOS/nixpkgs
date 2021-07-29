@@ -1219,6 +1219,7 @@ broken-packages:
   - EnumMap
   - enummapmap
   - enum-utf8
+  - env-extra
   - env-parser
   - envstatus
   - epanet-haskell
@@ -1607,6 +1608,7 @@ broken-packages:
   - ghc-syb-utils
   - ghc-tags
   - ghc-tags-core
+  - ghc-tcplugin-api
   - ghc-time-alloc-prof
   - ghc-usage
   - gh-labeler
@@ -2307,6 +2309,7 @@ broken-packages:
   - hs-tags
   - hstats
   - hstatsd
+  - hs-term-emulator
   - hstest
   - hstidy
   - hs-twitter
@@ -4531,7 +4534,7 @@ broken-packages:
   - streaming-utils
   - streaming-with
   - streamly-examples
-  - streamly-fsnotify
+  - streamly-process
   - stream-monad
   - streamproc
   - StrictBench
@@ -4652,6 +4655,7 @@ broken-packages:
   - tapioca
   - TaskMonad
   - tasty-auto
+  - tasty-checklist
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage
