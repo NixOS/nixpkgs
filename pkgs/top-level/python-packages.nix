@@ -2326,6 +2326,8 @@ in {
 
   env-canada = callPackage ../development/python-modules/env-canada { };
 
+  environmental-override = callPackage ../development/python-modules/environmental-override {};
+
   envisage = callPackage ../development/python-modules/envisage { };
 
   envs = callPackage ../development/python-modules/envs { };
