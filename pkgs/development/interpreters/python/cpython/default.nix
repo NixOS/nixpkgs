@@ -45,7 +45,9 @@
 # enableLTO is a subset of the enableOptimizations flag that doesn't harm reproducibility.
 # enabling LTO on 32bit arch causes downstream packages to fail when linking
 # enabling LTO on *-darwin causes python3 to fail when linking.
-, enableLTO ? stdenv.is64bit && stdenv.isLinux
+# enabling LTO with musl and dynamic linking fails with a linker error although it should
+# be possible as alpine is doing it: https://github.com/alpinelinux/aports/blob/a8ccb04668c7729e0f0db6c6ff5f25d7519e779b/main/python3/APKBUILD#L82
+, enableLTO ? stdenv.is64bit && stdenv.isLinux && !(stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isStatic)
 , reproducibleBuild ? true
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
