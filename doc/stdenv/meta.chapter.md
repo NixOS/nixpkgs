@@ -187,7 +187,7 @@ all places.
 { stdenv, callPackage }:
 stdenv.mkDerivation (self: {
   # ...
-  passthru.tests.example = callPackage ./example.nix { my-package = self; };
+  passthru.tests.example = callPackage ./example.nix { my-package = self.public; }
 })
 ```
 

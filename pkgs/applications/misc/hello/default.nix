@@ -28,7 +28,7 @@ stdenv.mkDerivation (self: {
         (nixos { environment.noXlibs = true; }).pkgs.hello;
   };
 
-  passthru.tests.run = callPackage ./test.nix { hello = self; };
+  passthru.tests.run = callPackage ./test.nix { hello = self.public; };
 
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";

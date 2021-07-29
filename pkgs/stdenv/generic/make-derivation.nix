@@ -17,52 +17,50 @@ let
       else makeDerivationExtensibleConst mkDerivationSimple fnOrAttrs;
 
   # Based off lib.makeExtensible, with modifications:
-  #  - lib.fix' -> lib.fix ∘ mkDerivationSimple; then inline fix
-  #  - convert `f` to an overlay
-  #  - inline overrideAttrs and make it positional instead of // to reduce allocs
   makeDerivationExtensible = mkDerivationSimple: rattrs:
     let
-      r = mkDerivationSimple
-        (f0:
-          let
-            f = self: super:
-              # Convert f0 to an overlay. Legacy is:
-              #   overrideAttrs (super: {})
-              # We want to introduce self. We follow the convention of overlays:
-              #   overrideAttrs (self: super: {})
-              # Which means the first parameter can be either self or super.
-              # This is surprising, but far better than the confusion that would
-              # arise from flipping an overlay's parameters in some cases.
-              let x = f0 super;
-              in
-                if builtins.isFunction x
-                then
-                  # Can't reuse `x`, because `self` comes first.
-                  # Looks inefficient, but `f0 super` was a cheap thunk.
-                  f0 self super
-                else x;
-          in
-            makeDerivationExtensible mkDerivationSimple
-              (self: let super = rattrs self; in super // f self super))
-        (rattrs r);
-    in r;
+      args = rattrs (args // { inherit public; });
+      public =
+        mkDerivationSimple
+          (f0:
+            let
+              f = self: super:
+                # Convert f0 to an overlay. Legacy is:
+                #   overrideAttrs (super: {})
+                # We want to introduce self. We follow the convention of overlays:
+                #   overrideAttrs (self: super: {})
+                # Which means the first parameter can be either self or super.
+                # This is surprising, but far better than the confusion that would
+                # arise from flipping an overlay's parameters in some cases.
+                let x = f0 super;
+                in
+                  if builtins.isFunction x
+                  then
+                    # Can't reuse `x`, because `self` comes first.
+                    # Looks inefficient, but `f0 super` was a cheap thunk.
+                    f0 self super
+                  else x;
+            in
+              makeDerivationExtensible mkDerivationSimple
+                (self: let super = rattrs self; in super // f self super))
+          args;
+    in public;
 
   # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
   # but pre-evaluated for a slight improvement in performance.
   makeDerivationExtensibleConst = mkDerivationSimple: attrs:
-    mkDerivationSimple (f0:
-      let
-        f = self: super:
-          let x = f0 super;
-          in
-            if builtins.isFunction x
-            then
-              # Can't reuse `x`, because `self` comes first.
-              # Looks inefficient, but `f0 super` was a cheap thunk.
-              f0 self super
-            else x;
-      in
-        makeDerivationExtensible mkDerivationSimple (self: attrs // f self attrs))
+    mkDerivationSimple
+      (f0:
+        let
+          f = self: super:
+            let x = f0 super;
+            in
+              if builtins.isFunction x
+              then
+                f0 self super
+              else x;
+        in
+          makeDerivationExtensible mkDerivationSimple (self: attrs // f self attrs))
       attrs;
 
 in
