@@ -3362,6 +3362,21 @@
           license = lib.licenses.free;
         };
       }) {};
+    shell-command-plus = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "shell-command-plus";
+        ename = "shell-command+";
+        version = "2.2.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/shell-command+-2.2.0.tar";
+          sha256 = "1ms2xk7xfgd3ngwm90hnmlxwpvyb167bislc2wr3ilfrirbbw476";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/shell-command+.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     shelisp = callPackage ({ elpaBuild, fetchurl, lib }:
       elpaBuild {
         pname = "shelisp";
@@ -3374,36 +3389,6 @@
         packageRequires = [];
         meta = {
           homepage = "https://elpa.gnu.org/packages/shelisp.html";
-          license = lib.licenses.free;
-        };
-      }) {};
-    shell-command-plus = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
-      elpaBuild {
-        pname = "shell-command-plus";
-        ename = "shell-command+";
-        version = "2.2.0";
-        src = fetchurl {
-          url = "https://elpa.gnu.org/packages/shell-command+-2.2.0.tar";
-          sha256 = "1ms2xk7xfgd3ngwm90hnmlxwpvyb167bislc2wr3ilfrirbbw476";
-        };
-        packageRequires = [ emacs ];
-        meta = {
-          homepage = "https://elpa.gnu.org/packages/shell-command+.html";
-          license = lib.licenses.free;
-        };
-      }) {};
-    shell-command-plus = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
-      elpaBuild {
-        pname = "shell-command-plus";
-        ename = "shell-command+";
-        version = "2.2.0";
-        src = fetchurl {
-          url = "https://elpa.gnu.org/packages/shell-command+-2.2.0.tar";
-          sha256 = "1ms2xk7xfgd3ngwm90hnmlxwpvyb167bislc2wr3ilfrirbbw476";
-        };
-        packageRequires = [ emacs ];
-        meta = {
-          homepage = "https://elpa.gnu.org/packages/shell-command+.html";
           license = lib.licenses.free;
         };
       }) {};
