@@ -1,0 +1,38 @@
+diff --git a/makefile b/makefile
+index 8d069c4..44bbb0a 100644
+--- a/makefile
++++ b/makefile
+@@ -1,4 +1,5 @@
+-FRAMEWORK_PATH = -F/System/Library/PrivateFrameworks
++XCODE_APP      = /Applications/Xcode.app
++FRAMEWORK_PATH = -F$(XCODE_APP)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks -F$(XCODE_APP)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/PrivateFrameworks -I$(XCODE_APP)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include -L$(XCODE_APP)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib
+ FRAMEWORK      = -framework Carbon -framework Cocoa -framework CoreServices -framework SkyLight -framework ScriptingBridge
+ BUILD_FLAGS    = -std=c99 -Wall -g -O0 -fvisibility=hidden -mmacosx-version-min=10.13
+ BUILD_PATH     = ./bin
+@@ -11,6 +12,7 @@ OSAX_SRC       = ./src/osax/sa_loader.c ./src/osax/sa_payload.c ./src/osax/sa_ma
+ YABAI_SRC      = ./src/manifest.m $(OSAX_SRC)
+ OSAX_PATH      = ./src/osax
+ BINS           = $(BUILD_PATH)/yabai
++CLANG          = $(XCODE_APP)/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang $(FRAMEWORK_PATH)
+ 
+ .PHONY: all clean install sign archive man
+ 
+@@ -20,9 +22,9 @@ install: BUILD_FLAGS=-std=c99 -Wall -DNDEBUG -O2 -fvisibility=hidden -mmacosx-ve
+ install: clean-build $(BINS)
+ 
+ $(OSAX_SRC): $(OSAX_PATH)/loader.m $(OSAX_PATH)/payload.m $(OSAX_PATH)/mach_bootstrap.c
+-	clang $(OSAX_PATH)/loader.m -shared -O2 -mmacosx-version-min=10.13 -o $(OSAX_PATH)/loader -framework Foundation
+-	clang $(OSAX_PATH)/payload.m -shared -fPIC -O2 -mmacosx-version-min=10.13 -o $(OSAX_PATH)/payload -framework Foundation -framework Carbon
+-	clang $(OSAX_PATH)/mach_bootstrap.c -shared -fPIC -O2 -mmacosx-version-min=10.13 -o $(OSAX_PATH)/mach_bootstrap -framework Carbon -lpthread
++	$(CLANG) $(OSAX_PATH)/loader.m -shared -O2 -mmacosx-version-min=10.13 -o $(OSAX_PATH)/loader -framework Foundation
++	$(CLANG) $(OSAX_PATH)/payload.m -shared -fPIC -O2 -mmacosx-version-min=10.13 -o $(OSAX_PATH)/payload -framework Foundation -framework Carbon
++	$(CLANG) $(OSAX_PATH)/mach_bootstrap.c -shared -fPIC -O2 -mmacosx-version-min=10.13 -o $(OSAX_PATH)/mach_bootstrap -framework Carbon -lpthread
+ 	xxd -i -a $(OSAX_PATH)/loader $(OSAX_PATH)/sa_loader.c
+ 	xxd -i -a $(OSAX_PATH)/payload $(OSAX_PATH)/sa_payload.c
+ 	xxd -i -a $(OSAX_PATH)/mach_bootstrap $(OSAX_PATH)/sa_mach_bootstrap.c
+@@ -56,4 +58,4 @@ clean: clean-build
+ 
+ $(BUILD_PATH)/yabai: $(YABAI_SRC)
+ 	mkdir -p $(BUILD_PATH)
+-	clang $^ $(BUILD_FLAGS) $(FRAMEWORK_PATH) $(FRAMEWORK) -o $@
++	$(CLANG) $^ $(BUILD_FLAGS) $(FRAMEWORK_PATH) $(FRAMEWORK) -o $@
