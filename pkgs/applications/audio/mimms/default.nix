@@ -1,6 +1,6 @@
-{ fetchurl, lib, pythonPackages, libmms }:
+{ fetchurl, lib, python2Packages, libmms }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "mimms";
   version = "3.2";
 

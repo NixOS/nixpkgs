@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, makeWrapper
-, python
+, python3
 , fuse
 , pkg-config
 , libpcap
@@ -19,10 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "0dap9dqwwx8adma6arxg015riqc86cmjv2m44hk0kz7s24h79ipq";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs =
-    [ fuse libpcap zlib python ];
+    [ fuse libpcap zlib python3 ];
+
+  strictDeps = true;
 
   buildFlags = lib.optionals stdenv.isDarwin [ "CPPFLAGS=-UHAVE_STRUCT_STAT_ST_BIRTHTIME" ];
 
