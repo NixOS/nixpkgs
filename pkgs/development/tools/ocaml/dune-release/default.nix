@@ -33,7 +33,10 @@ in buildDunePackage rec {
     sed -i '/must_exist (Cmd\.v "curl"/d' lib/github.ml
 
     # ignore weird yes error message
-    sed -i 's/yes |/yes 2>\/dev\/null |/' tests/bin/no_doc/run.t
+    sed -i 's/yes |/yes 2>\/dev\/null |/' \
+      tests/bin/no_doc/run.t \
+      tests/bin/draft/run.t \
+      tests/bin/url-file/run.t
   '';
 
   preCheck = ''
