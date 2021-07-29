@@ -4531,7 +4531,6 @@ broken-packages:
   - streaming-utils
   - streaming-with
   - streamly-examples
-  - streamly-fsnotify
   - stream-monad
   - streamproc
   - StrictBench
