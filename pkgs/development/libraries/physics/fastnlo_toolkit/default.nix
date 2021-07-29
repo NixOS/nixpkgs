@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , autoreconfHook
 , boost
 , gfortran
@@ -15,17 +15,23 @@
 
 stdenv.mkDerivation rec {
   pname = "fastnlo_toolkit";
-  version = "2.3.1pre-2411";
+  rev = "2823";
+  version = "2.5.0pre-${rev}";
 
-  src = fetchurl {
-    urls = [
-      "https://fastnlo.hepforge.org/code/v23/${pname}-${version}.tar.gz"
-      "https://sid.ethz.ch/debian/fastnlo/${pname}-${version}.tar.gz"
-    ];
-    sha256 = "0fm9k732pmi3prbicj2yaq815nmcjll95fagjqzf542ng3swpqnb";
-  };
+  src = fetchFromGitLab {
+    domain = "gitlab.etp.kit.edu";
+    owner = "qcd-public";
+    repo = "fastNLO";
+    inherit rev;
+    hash = "sha256-FEKnEnK90tT4BJJ6MLva9lCl3aYzO1YGdx/8Ol2vM7M=";
+  } + /v2.5/toolkit;
 
-  nativeBuildInputs = lib.optional withPython autoreconfHook;
+  postPatch = ''
+    # remove duplicate macro, to fix for autoconf 2.70
+    sed -e '0,/AC_CONFIG_MACRO_DIR\([m4]\)/{/AC_CONFIG_MACRO_DIR/d}' -i configure.ac
+  '';
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     boost
