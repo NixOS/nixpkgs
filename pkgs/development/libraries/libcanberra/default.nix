@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, pkg-config, libtool
 , gtk ? null
 , libpulseaudio, gst_all_1, libvorbis, libcap
-, CoreServices
+, Carbon, CoreServices
 , withAlsa ? stdenv.isLinux, alsa-lib }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpulseaudio libvorbis gtk
   ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ])
-    ++ lib.optional stdenv.isDarwin CoreServices
+    ++ lib.optionals stdenv.isDarwin [Carbon CoreServices]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional withAlsa alsa-lib;
 
@@ -60,8 +60,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = [ ];
     platforms = platforms.unix;
-    # canberra-gtk-module.c:28:10: fatal error: 'gdk/gdkx.h' file not found
-    # #include <gdk/gdkx.h>
-    broken = stdenv.isDarwin;
   };
 }

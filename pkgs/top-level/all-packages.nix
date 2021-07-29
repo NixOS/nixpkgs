@@ -16283,7 +16283,7 @@ in
   libcacard = callPackage ../development/libraries/libcacard { };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
   };
   libcanberra-gtk2 = pkgs.libcanberra.override {
     gtk = gtk2-x11;
