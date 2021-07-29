@@ -29059,6 +29059,8 @@ with pkgs;
 
   brogue = callPackage ../games/brogue { };
 
+  brutalmaze = callPackage ../games/brutalmaze { };
+
   bsdgames = callPackage ../games/bsdgames { };
 
   btanks = callPackage ../games/btanks { };
