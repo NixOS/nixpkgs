@@ -5,13 +5,12 @@ stdenv.mkDerivation rec {
 
   XCODE_APP = xcode;
 
-  src =
-    fetchFromGitHub {
-      owner = "koekeishiya";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "1gd88s3a05qvvyjhk5wpw1crb7p1gik1gdxn7pv2vq1x7zyvzvph";
-    };
+  src = fetchFromGitHub {
+    owner = "koekeishiya";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1gd88s3a05qvvyjhk5wpw1crb7p1gik1gdxn7pv2vq1x7zyvzvph";
+  };
 
   patches = [
       ./xcode.patch
