@@ -3,7 +3,7 @@
   with pkgs.gerbil-support; {
 
   prePackages-unstable =
-    let pks = [ ./gerbil-libp2p.nix ./smug-gerbil.nix
+    let pks = [ ./gerbil-libp2p.nix ./smug-gerbil.nix ./ftw.nix
                 ./gerbil-utils.nix ./gerbil-crypto.nix ./gerbil-poo.nix
                 ./gerbil-persist.nix ./gerbil-ethereum.nix ];
         call = pkg: callPackage pkg prePackage-defaults;
