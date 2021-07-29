@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , cmake
-, python
+, python3
 , llvm
 , clang-tools-extra_src ? null
 , lld
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   pname = "clang";
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python3 ];
 
   buildInputs = [ llvm ];
 

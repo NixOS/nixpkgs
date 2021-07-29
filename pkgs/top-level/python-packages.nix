@@ -4514,7 +4514,7 @@ in {
   mlxtend = callPackage ../development/python-modules/mlxtend { };
 
   mlt = toPythonModule (pkgs.mlt.override {
-    inherit python;
+    python3 = python;
     enablePython = true;
   });
 
