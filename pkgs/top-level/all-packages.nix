@@ -7495,8 +7495,6 @@ in
     graphicalSupport = true;
   };
 
-  nmap-unfree = callPackage ../tools/security/nmap-unfree { };
-
   nmapsi4 = libsForQt514.callPackage ../tools/security/nmap/qt.nix { };
 
   nnn = callPackage ../applications/misc/nnn { };
@@ -7545,6 +7543,8 @@ in
   numdiff = callPackage ../tools/text/numdiff { };
 
   numlockx = callPackage ../tools/X11/numlockx { };
+
+  nttcp = callPackage ../tools/networking/nttcp { };
 
   nuttcp = callPackage ../tools/networking/nuttcp { };
 
@@ -8344,6 +8344,8 @@ in
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
+  qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
+
   quadrafuzz = callPackage ../applications/audio/quadrafuzz { };
 
   quickfix = callPackage ../development/libraries/quickfix { };
@@ -9014,6 +9016,8 @@ in
   socat = callPackage ../tools/networking/socat { };
 
   socat2pre = lowPrio (callPackage ../tools/networking/socat/2.x.nix { });
+
+  sockperf = callPackage ../tools/networking/sockperf { };
 
   solaar = callPackage ../applications/misc/solaar {};
 
@@ -10043,6 +10047,8 @@ in
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
 
   xsensors = callPackage ../os-specific/linux/xsensors { };
+
+  xspim = callPackage ../development/tools/misc/xspim { };
 
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
@@ -14545,6 +14551,8 @@ in
   xxe-pe = callPackage ../applications/editors/xxe-pe { };
 
   xxdiff-tip = xxdiff;
+
+  xxgdb = callPackage ../development/tools/misc/xxgdb { };
 
   yaml2json = callPackage ../development/tools/yaml2json { };
 

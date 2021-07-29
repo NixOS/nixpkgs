@@ -133,6 +133,13 @@
           <link linkend="opt-services.prometheus.exporters.influxdb.enable">services.prometheus.exporters.influxdb</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/matrix-discord/mx-puppet-discord">mx-puppet-discord</link>,
+          a discord puppeting bridge for matrix. Available as
+          <link linkend="opt-services.mx-puppet-discord.enable">services.mx-puppet-discord</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
