@@ -48,6 +48,7 @@ let
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
         else "unmanaged";
+      firewall-backend = cfg.firewallBackend;
     })
     (mkSection "keyfile" {
       unmanaged-devices =
@@ -240,6 +241,15 @@ in {
         default = "internal";
         description = ''
           Which program (or internal library) should be used for DHCP.
+        '';
+      };
+
+      firewallBackend = mkOption {
+        type = types.enum [ "iptables" "nftables" "none" ];
+        default = "iptables";
+        description = ''
+          Which firewall backend should be used for configuring masquerading with shared mode.
+          If set to none, NetworkManager doesn't manage the configuration at all.
         '';
       };
 

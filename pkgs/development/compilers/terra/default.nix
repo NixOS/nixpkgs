@@ -50,7 +50,6 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional enableCUDA "-DTERRA_ENABLE_CUDA=ON";
 
   doCheck = true;
-  enableParallelBuilding = true;
   hardeningDisable = [ "fortify" ];
   outputs = [ "bin" "dev" "out" "static" ];
 

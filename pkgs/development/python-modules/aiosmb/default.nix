@@ -4,7 +4,7 @@
 , colorama
 , fetchFromGitHub
 , minikerberos
-, prompt_toolkit
+, prompt-toolkit
 , pycryptodomex
 , pythonOlder
 , six
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     asysocks
     colorama
     minikerberos
-    prompt_toolkit
+    prompt-toolkit
     pycryptodomex
     six
     tqdm

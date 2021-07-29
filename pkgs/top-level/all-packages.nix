@@ -20151,9 +20151,11 @@ in
     postgresql_13
     postgresql_14
   ;
-  postgresql = postgresql_11.override { this = postgresql; };
+  postgresql = postgresql_13.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
-  postgresql11Packages = pkgs.postgresqlPackages;
+  postgresql11Packages = recurseIntoAttrs postgresql_11.pkgs;
+  postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
+  postgresql13Packages = pkgs.postgresqlPackages;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
@@ -27043,8 +27045,6 @@ in
 
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
 
-  skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
-
   SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
 
   slmenu = callPackage ../applications/misc/slmenu {};
@@ -29937,6 +29937,8 @@ in
   };
 
   chemtool = callPackage ../applications/science/chemistry/chemtool { };
+
+  cp2k = callPackage ../applications/science/chemistry/cp2k { };
 
   d-seams = callPackage ../applications/science/chemistry/d-seams {};
 

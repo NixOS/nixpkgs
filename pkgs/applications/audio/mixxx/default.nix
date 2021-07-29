@@ -111,8 +111,6 @@ mkDerivation rec {
     wavpack
   ];
 
-  enableParallelBuilding = true;
-
   qtWrapperArgs = [
     "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
   ];

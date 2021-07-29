@@ -53,6 +53,7 @@ mapAliases ({
   lammps-cython = throw "no longer builds and is unmaintained";
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   privacyidea = throw "renamed to pkgs.privacyidea"; # added 2021-06-20
+  prompt_toolkit = prompt-toolkit;
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pytestcov = pytest-cov; # added 2021-01-04

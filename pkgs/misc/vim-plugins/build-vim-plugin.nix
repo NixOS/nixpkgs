@@ -54,7 +54,7 @@ rec {
     }));
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
-    buildPhase = ":";
-    configurePhase =":";
+    dontBuild = true;
+    dontConfigure = true;
   } // attrs);
 }

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, click, prompt_toolkit }:
+{ lib, buildPythonPackage, fetchPypi, click, prompt-toolkit }:
 
 buildPythonPackage rec {
   pname = "click-repl";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "cd12f68d745bf6151210790540b4cb064c7b13e571bc64b6957d98d120dacfd8";
   };
 
-  propagatedBuildInputs = [ click prompt_toolkit ];
+  propagatedBuildInputs = [ click prompt-toolkit ];
 
   meta = with lib; {
     homepage = "https://github.com/click-contrib/click-repl";

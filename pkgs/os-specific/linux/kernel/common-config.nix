@@ -846,6 +846,8 @@ let
       X86_AMD_PLATFORM_DEVICE = yes;
       X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
 
+      LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
+
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

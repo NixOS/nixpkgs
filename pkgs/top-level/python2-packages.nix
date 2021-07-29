@@ -403,7 +403,7 @@ with self; with super; {
 
   progressbar231 = callPackage ../development/python-modules/progressbar231 { };
 
-  prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
+  prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit/1.nix { };
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 

@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , winacl
-, prompt_toolkit
+, prompt-toolkit
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    prompt_toolkit
+    prompt-toolkit
     winacl
   ];
 

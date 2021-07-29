@@ -5604,7 +5604,7 @@ in {
 
   promise = callPackage ../development/python-modules/promise { };
 
-  prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit { };
+  prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit { };
 
   property-manager = callPackage ../development/python-modules/property-manager { };
 
