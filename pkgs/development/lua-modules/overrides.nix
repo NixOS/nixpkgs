@@ -347,4 +347,8 @@ with super;
       sourceRoot=./readline-2.6
     '';
   });
+
+
+  # aliases
+  cjson = super.lua-cjson;
 }
