@@ -9,7 +9,7 @@ diff -Naur algol68g-2.8.4-old/source/plotutils.c algol68g-2.8.4-new/source/plotu
 -/*------------------------------------+
 -| Supported plotter type - pseudo GIF |
 -+------------------------------------*/
-+  } else if (!strcmp (device_type, "gif") || !strcmp (device_type, "gif")) {
++  } else if (!strcmp (device_type, "gif") || !strcmp (device_type, "png")) {
 +/*-------------------------------------------+
 +| Supported plotter type - pseudo GIF or PNG |
 ++-------------------------------------------*/
