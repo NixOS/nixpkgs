@@ -27,10 +27,8 @@ in {
       ];
 
       # NOTE: the preStart process is needed to provide RSA key and server list for the nordvpn daemon
-      # NOTE: and the openvpn copying is due to the openvpn that come with the package is using /sbin/ip which doesn't exist in nixos
       preStart = ''
-        cp -r ${package}/var/lib/nordvpn/* /var/lib/nordvpn/
-        cp ${pkgs.openvpn}/bin/openvpn /var/lib/nordvpn/openvpn
+        ${pkgs.xorg.lndir}/bin/lndir ${cfg.package}/var/lib/nordvpn /var/lib/nordvpn
       '';
 
       serviceConfig = {

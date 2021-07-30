@@ -22,7 +22,10 @@ in stdenv.mkDerivation {
     sed -i 's;ExecStart=.*;;g' unpacked/usr/lib/systemd/system/nordvpnd.service
     cp -r unpacked/* $out/
     mv $out/usr/* $out/
-    cp $out/sbin/* $out/bin/
+    mv $out/sbin/nordvpnd $out/bin/
+    rm -r $out/sbin
+    rm $out/var/lib/nordvpn/openvpn
+    ln -s ${pkgs.openvpn}/bin/openvpn $out/var/lib/nordvpn/openvpn
   '';
 
   meta = with lib; {
