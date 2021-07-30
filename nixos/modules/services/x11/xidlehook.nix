@@ -32,14 +32,16 @@ in
         };
 
         timerPkgs = mkOption {
-          default = with pkgs; [xorg.xrandr gawk i3lock-fancy-rapid];
+          default = with pkgs; [ xorg.xrandr gawk i3lock-fancy-rapid ];
           description = "Packages added to PATH for the timer commands.";
         };
 
         timers = mkOption {
-          default = let brightnessCmd = tgt:
-            "xrandr --output $(xrandr | awk '/ connected/{print $1}') --brightness ${toString tgt} ; " +
-            "echo brightness ${toString tgt}"; in
+          default = let 
+             brightnessCmd = tgt:
+               "xrandr --output $(xrandr | awk '/ connected/{print $1}') --brightness ${toString tgt} ; " +
+               "echo brightness ${toString tgt}";
+          in
           [
             {
               seconds = 5*60-5;
@@ -52,10 +54,10 @@ in
             }
           ];
           description = ''
-            List of commands to run after the screen has been idle for a given \
-            amount of time. N.B. times are cumulative here - in the example \
-            below the first command runs after the screen is idle for 60 \
-            seconds and the second command runs after the screen has been idle \
+            List of commands to run after the screen has been idle for a given
+            amount of time. N.B. times are cumulative here - in the example
+            below the first command runs after the screen is idle for 60
+            seconds and the second command runs after the screen has been idle
             for 70 seconds.
           '';
 
@@ -78,8 +80,8 @@ in
                 canceller = mkOption {
                   type = str;
                   description = ''
-                    The canceller is what is invoked when the user becomes \
-                    active after the timer has gone off, but before the next \
+                    The canceller is what is invoked when the user becomes
+                    active after the timer has gone off, but before the next
                     timer (if any). Pass an empty string to not have one.
                   '';
                   default = "";
