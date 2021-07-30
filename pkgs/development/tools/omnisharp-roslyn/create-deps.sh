@@ -20,6 +20,7 @@ mapfile -t repos < <(
 
 msbuild -t:restore -p:Configuration=Release -p:RestorePackagesPath="$tmpdir" \
         -p:RestoreNoCache=true -p:RestoreForce=true \
+        -p:NuGetPackageVersion=5.9.1-rc.8 \
         src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj >&2
 
 cd "$tmpdir"
