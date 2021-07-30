@@ -4939,6 +4939,12 @@
       fingerprint = "7EB1 C02A B62B B464 6D7C  E4AE D1D0 9DE1 69EA 19A0";
     }];
   };
+  juliosueiras = {
+    email = "juliosueiras@gmail.com";
+    github = "juliosueiras";
+    githubId = 3680302;
+    name = "Julio Tain Sueiras";
+  };
   jgart = {
     email = "jgart@dismail.de";
     github = "jgarte";
