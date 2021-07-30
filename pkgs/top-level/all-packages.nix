@@ -32507,7 +32507,7 @@ in
     stdenv = crossLibcStdenv;
     };
 
-  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
+  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { dotnet-sdk = dotnet-sdk_5; };
 
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 
