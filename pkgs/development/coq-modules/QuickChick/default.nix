@@ -1,9 +1,10 @@
-{ lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io }:
+{ lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io, version ? null }:
 with lib;
 let recent = versions.isGe "8.7" coq.coq-version; in
 mkCoqDerivation {
   pname = "QuickChick";
   owner = "QuickChick";
+  inherit version;
   defaultVersion = with versions; switch [ coq.coq-version ssreflect.version ] [
       { cases = [ "8.13" pred.true  ]; out = "1.5.0"; }
       { cases = [ "8.12" pred.true  ]; out = "1.4.0"; }
