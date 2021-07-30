@@ -144,7 +144,7 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "finalfusion-0.14.0" = "17f4bsdzpcshwh74w5z119xjy2if6l2wgyjy56v621skr2r8y904";
     };
-  }
+  };
 
   # ...
 }
