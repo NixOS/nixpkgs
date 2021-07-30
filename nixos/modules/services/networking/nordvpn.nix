@@ -6,11 +6,7 @@ let
   cfg = config.services.nordvpn;
   package = pkgs.nordvpn;
 in {
-  options = {
-    services.nordvpn = {
-      enable = mkEnableOption "nordvpn";
-    };
-  };
+  options.services.nordvpn.enable = mkEnableOption "nordvpn";
 
   config = mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
