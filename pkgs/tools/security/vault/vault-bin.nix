@@ -40,10 +40,10 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin $out/share/bash-completion/completions
     mv vault $out/bin
     echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
-
+  '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/vault \
       --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
-
+  '' + ''
     runHook postInstall
   '';
 
