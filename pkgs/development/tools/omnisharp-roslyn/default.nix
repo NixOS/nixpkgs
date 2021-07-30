@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
     ln -s ${msbuild}/lib/mono/msbuild/Current/bin $out/src/.msbuild/Current/Bin
 
     makeWrapper ${mono6}/bin/mono $out/bin/omnisharp \
-      --prefix PATH : ${dotnet-sdk}/bin \
+      --suffix PATH : ${dotnet-sdk}/bin \
       --add-flags "$out/src/OmniSharp.exe"
   '';
 
