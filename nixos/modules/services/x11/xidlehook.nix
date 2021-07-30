@@ -55,7 +55,7 @@ in
           ];
           description = ''
             List of commands to run after the screen has been idle for a given
-            amount of time. N.B. times are cumulative here - in the example
+            amount of time. Note that times are cumulative here - in the example
             below the first command runs after the screen is idle for 60
             seconds and the second command runs after the screen has been idle
             for 70 seconds.
