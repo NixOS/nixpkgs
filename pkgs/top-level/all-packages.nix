@@ -3968,6 +3968,10 @@ in
 
   compass = callPackage ../development/tools/compass { };
 
+  cone = callPackage ../development/compilers/cone {
+    llvmPackages = llvmPackages_7;
+  };
+
   conda = callPackage ../tools/package-management/conda { };
 
   console-bridge = callPackage ../development/libraries/console-bridge { };
