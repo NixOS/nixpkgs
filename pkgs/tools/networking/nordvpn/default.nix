@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/
-
     sed -i 's;ExecStart=.*;;g' unpacked/usr/lib/systemd/system/nordvpnd.service
-    
     cp -r unpacked/* $out/
     mv $out/usr/* $out/
     cp $out/sbin/* $out/bin/
