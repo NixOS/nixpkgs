@@ -29498,6 +29498,12 @@ in
 
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
 
+  rott = callPackage ../games/rott { };
+
+  rott-shareware = rott.override {
+    buildShareware = true;
+  };
+
   rrootage = callPackage ../games/rrootage { };
 
   saga = libsForQt5.callPackage ../applications/gis/saga {
