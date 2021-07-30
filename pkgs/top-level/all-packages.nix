@@ -184,6 +184,8 @@ in
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  ASCIIpOrtal = callPackage ../games/ASCIIpOrtal { };
+
   atuin = callPackage ../tools/misc/atuin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -17868,6 +17870,8 @@ in
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
   pdal = callPackage ../development/libraries/pdal { } ;
+
+  PDCurses = callPackage ../development/libraries/PDCurses { };
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
