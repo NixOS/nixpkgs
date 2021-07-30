@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-gh5JO3vO2FpHiZfaHOODPhRSB9HqZe1ir4g7UEkSUHY=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoSha256 = null;
 
   meta = with lib; {
     description = "ELF visualizer, generates HTML files from ELF binaries.";
