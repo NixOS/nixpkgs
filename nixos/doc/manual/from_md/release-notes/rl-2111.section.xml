@@ -758,6 +758,13 @@
       </listitem>
       <listitem>
         <para>
+          The option <literal>services.btrbk.nice</literal> has been
+          renamed to
+          <link xlink:href="options.html#opt-services.btrbk.daemonNiceLevel">services.btrbk.daemonNiceLevel</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option <literal>services.freenet.nice</literal> has been
           renamed to
           <link xlink:href="options.html#opt-services.freenet.daemonNiceLevel">services.freenet.daemonNiceLevel</link>.

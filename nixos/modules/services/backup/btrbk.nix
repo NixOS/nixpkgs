@@ -54,6 +54,10 @@ let
     '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "btrbk" "niceness" ] [ "services" "btrbk" "daemonNiceLevel" ])
+  ];
+
   options = {
     services.btrbk = {
       extraPackages = mkOption {
@@ -62,7 +66,7 @@ in
         default = [ ];
         example = literalExample "[ pkgs.xz ]";
       };
-      niceness = mkOption {
+      daemonNiceLevel = mkOption {
         description = "Niceness for local instances of btrbk. Also applies to remote ones connecting via ssh when positive.";
         type = types.ints.between (-20) 19;
         default = 10;
@@ -193,7 +197,7 @@ in
               Group = "btrbk";
               Type = "oneshot";
               ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/${name}.conf run";
-              Nice = cfg.niceness;
+              Nice = cfg.daemonNiceLevel;
               IOSchedulingClass = cfg.ioSchedulingClass;
               StateDirectory = "btrbk";
             };
