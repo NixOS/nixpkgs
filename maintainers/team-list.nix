@@ -162,6 +162,7 @@ with lib.maintainers; {
       ralith
       mjlbach
       dandellion
+      sumnerevans
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
   };
