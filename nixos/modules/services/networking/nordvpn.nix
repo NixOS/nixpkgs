@@ -4,16 +4,11 @@ with lib;
 
 let
   cfg = config.services.nordvpn;
+  package = pkgs.nordvpn;
 in {
   options = {
     services.nordvpn = {
       enable = mkEnableOption "nordvpn";
-
-      package = mkOption {
-        description = "NordVPN Package";
-        type = types.package;
-        default = pkgs.nordvpn;
-      };
     };
   };
 
@@ -23,7 +18,7 @@ in {
 
     users.groups.nordvpn = {};
 
-    systemd.packages = [ cfg.package ];
+    systemd.packages = [ package ];
 
     systemd.sockets.nordvpnd.wantedBy = [ "sockets.target" ];
 
@@ -38,16 +33,16 @@ in {
       # NOTE: the preStart process is needed to provide RSA key and server list for the nordvpn daemon
       # NOTE: and the openvpn copying is due to the openvpn that come with the package is using /sbin/ip which doesn't exist in nixos
       preStart = ''
-        cp -r ${cfg.package}/var/lib/nordvpn/* /var/lib/nordvpn/
+        cp -r ${package}/var/lib/nordvpn/* /var/lib/nordvpn/
         cp ${pkgs.openvpn}/bin/openvpn /var/lib/nordvpn/openvpn
       '';
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nordvpnd";
+        ExecStart = "${package}/bin/nordvpnd";
         StateDirectory = "nordvpn";
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ package ];
   };
 }

@@ -1,8 +1,10 @@
 { stdenv, lib, fetchurl, libxml2, autoPatchelfHook, dpkg }:
 
-stdenv.mkDerivation rec {
-  name = "nordvpn";
+let
   version = "3.10.0-1";
+in stdenv.mkDerivation {
+  pname = "nordvpn";
+  inherit version;
 
   src = fetchurl {
     url = "https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/nordvpn_${version}_amd64.deb";
