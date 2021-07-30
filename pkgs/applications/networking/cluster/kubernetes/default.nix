@@ -97,10 +97,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 
-  passthru.tests = with nixosTests.kubernetes; {
-    dns-single-node = dns.singlenode;
-    dns-multi-node = dns.multinode;
-    rbac-single-node = rbac.singlenode;
-    rbac-multi-node = rbac.multinode;
-  };
+  passthru.tests = nixosTests.kubernetes;
 }
