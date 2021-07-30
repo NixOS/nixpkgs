@@ -3968,6 +3968,10 @@ in
 
   compass = callPackage ../development/tools/compass { };
 
+  cone = callPackage ../development/compilers/cone {
+    llvmPackages = llvmPackages_7;
+  };
+
   conda = callPackage ../tools/package-management/conda { };
 
   console-bridge = callPackage ../development/libraries/console-bridge { };
@@ -4230,6 +4234,8 @@ in
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
+
+  difftastic = callPackage ../tools/text/difftastic { };
 
   diffutils = callPackage ../tools/text/diffutils { };
 
@@ -8289,6 +8295,8 @@ in
   };
 
   openmpi = callPackage ../development/libraries/openmpi { };
+
+  ouch = callPackage ../tools/compression/ouch { };
 
   mpi = openmpi; # this attribute should used to build MPI applications
 
@@ -29471,6 +29479,12 @@ in
   robotfindskitten = callPackage ../games/robotfindskitten { };
 
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
+
+  rott = callPackage ../games/rott { };
+
+  rott-shareware = rott.override {
+    buildShareware = true;
+  };
 
   rrootage = callPackage ../games/rrootage { };
 
