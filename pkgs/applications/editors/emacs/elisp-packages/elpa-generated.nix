@@ -3362,21 +3362,6 @@
           license = lib.licenses.free;
         };
       }) {};
-    shelisp = callPackage ({ elpaBuild, fetchurl, lib }:
-      elpaBuild {
-        pname = "shelisp";
-        ename = "shelisp";
-        version = "0.9.1";
-        src = fetchurl {
-          url = "https://elpa.gnu.org/packages/shelisp-0.9.1.el";
-          sha256 = "15z8rpx8nhx53q77z5fqcpww255di80lb5mm28mnn2myalrr8b59";
-        };
-        packageRequires = [];
-        meta = {
-          homepage = "https://elpa.gnu.org/packages/shelisp.html";
-          license = lib.licenses.free;
-        };
-      }) {};
     shell-command-plus = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "shell-command-plus";
@@ -3389,6 +3374,21 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/shell-command+.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    shelisp = callPackage ({ elpaBuild, fetchurl, lib }:
+      elpaBuild {
+        pname = "shelisp";
+        ename = "shelisp";
+        version = "0.9.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/shelisp-0.9.1.el";
+          sha256 = "15z8rpx8nhx53q77z5fqcpww255di80lb5mm28mnn2myalrr8b59";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/shelisp.html";
           license = lib.licenses.free;
         };
       }) {};

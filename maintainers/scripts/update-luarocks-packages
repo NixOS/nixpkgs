@@ -89,6 +89,10 @@ function convert_pkg() {
         echo "Skipping comment ${*}" >&2
         return
     fi
+
+    # Normalize package name
+    nix_pkg_name_normalized=$(sed 's/\./-/' <(echo "$nix_pkg_name"))
+
     if [ -z "$lua_pkg_name" ]; then
         echo "Using nix_name as lua_pkg_name for '$nix_pkg_name'" >&2
         lua_pkg_name="$nix_pkg_name"
@@ -111,7 +115,7 @@ function convert_pkg() {
         luarocks_args+=("$pkg_version")
     fi
     echo "Running 'luarocks ${luarocks_args[*]}'" >&2
-    if drv="$nix_pkg_name = $(luarocks "${luarocks_args[@]}")"; then
+    if drv="$nix_pkg_name_normalized = $(luarocks "${luarocks_args[@]}")"; then
         echo "$drv"
     else
         echo "Failed to convert $nix_pkg_name" >&2
