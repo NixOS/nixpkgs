@@ -434,7 +434,7 @@ self: super: {
   });
 
   onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
-    dependencies = with super; [ lush-nvim ];
+    dependencies = with self; [ lush-nvim ];
   });
 
   onehalf = super.onehalf.overrideAttrs (old: {
