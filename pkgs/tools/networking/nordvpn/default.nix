@@ -16,10 +16,13 @@ stdenv.mkDerivation rec {
   unpackPhase = "dpkg -x $src unpacked";
 
   installPhase = ''
-      mkdir -p $out/bin
-      cp -r unpacked/* $out/
-      cp $out/usr/bin/* $out/bin
-      cp $out/usr/sbin/* $out/bin
+    mkdir -p $out/
+
+    sed -i 's;ExecStart=.*;;g' unpacked/usr/lib/systemd/system/nordvpnd.service
+    
+    cp -r unpacked/* $out/
+    mv $out/usr/* $out/
+    cp $out/sbin/* $out/bin/
   '';
 
   meta = with lib; {
