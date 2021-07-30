@@ -307,11 +307,12 @@ in
 
   mps = buildMps rec {
     name = "mps-${version}";
-    version = "2021.1"; /* updated by script */
+    version = "2021.1";
+    versionMajorMinor = "2021.1";
     description = "Create your own domain-specific language";
     license = lib.licenses.asl20;
     src = fetchurl {
-      url = "https://download.jetbrains.com/mps/${version}/MPS-${version}.tar.gz";
+      url = "https://download.jetbrains.com/mps/${versionMajorMinor}/MPS-${version}.tar.gz";
       sha256 = "0fdh8lzsi2zryi0xs961vrf3l8kqk5imlj56dhifywi7xkhs3vwn"; /* updated by script */
     };
     wmClass = "jetbrains-mps";
