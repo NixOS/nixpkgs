@@ -23457,6 +23457,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  cyanrip = callPackage ../applications/audio/cyanrip { };
+
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
   cgit = callPackage ../applications/version-management/git-and-tools/cgit {
