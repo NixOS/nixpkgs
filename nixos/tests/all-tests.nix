@@ -224,6 +224,7 @@ in
   libreswan = handleTest ./libreswan.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
+  litestream = handleTest ./litestream.nix {};
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
   loki = handleTest ./loki.nix {};
