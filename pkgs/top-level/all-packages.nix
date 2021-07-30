@@ -11907,7 +11907,7 @@ in
 
   roslyn = callPackage ../development/compilers/roslyn { };
 
-  msbuild = callPackage ../development/tools/build-managers/msbuild { };
+  msbuild = callPackage ../development/tools/build-managers/msbuild { dotnet-sdk = dotnet-sdk_5; };
 
   mosml = callPackage ../development/compilers/mosml { };
 
