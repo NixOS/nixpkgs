@@ -52,7 +52,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       }
 
       interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-      if [ "${stdenv.hostPlatform.system}" == "x86_64-linux" ]; then
+      if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" && -e bin/fsnotifier64 ]]; then
         target_size=$(get_file_size bin/fsnotifier64)
         patchelf --set-interpreter "$interpreter" bin/fsnotifier64
         munge_size_hack bin/fsnotifier64 $target_size
