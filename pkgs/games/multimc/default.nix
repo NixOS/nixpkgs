@@ -44,6 +44,9 @@ in mkDerivation rec {
     '';
     platforms = platforms.linux;
     license = licenses.asl20;
+    # upstream don't want us to re-distribute this application:
+    # https://github.com/NixOS/nixpkgs/issues/131983
+    hydraPlatforms = [];
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };
 }
