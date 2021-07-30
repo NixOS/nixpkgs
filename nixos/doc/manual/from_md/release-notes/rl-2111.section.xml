@@ -763,6 +763,13 @@
           <link xlink:href="options.html#opt-services.freenet.daemonNiceLevel">services.freenet.daemonNiceLevel</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.icecream.nice</literal> has been
+          renamed to
+          <link xlink:href="options.html#opt-services.icecream.daemonNiceLevel">services.icecream.daemonNiceLevel</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

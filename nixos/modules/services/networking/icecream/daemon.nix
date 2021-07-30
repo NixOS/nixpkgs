@@ -5,6 +5,9 @@ with lib;
 let
   cfg = config.services.icecream.daemon;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "icecream" "daemon" "nice" ] [ "services" "icecream" "daemon" "daemonNiceLevel" ])
+  ];
 
   ###### interface
 
@@ -72,7 +75,7 @@ in {
         '';
       };
 
-      nice = mkOption {
+      daemonNiceLevel = mkOption {
         type = types.int;
         default = 5;
         description = ''
@@ -131,7 +134,7 @@ in {
           "${getBin cfg.package}/bin/iceccd"
           "-b" "$STATE_DIRECTORY"
           "-u" "icecc"
-          (toString cfg.nice)
+          (toString cfg.daemonNiceLevel)
         ]
         ++ optionals (cfg.schedulerHost != null) ["-s" cfg.schedulerHost]
         ++ optionals (cfg.netName != null) [ "-n" cfg.netName ]
