@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, gmp, gcc }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, gmp, gcc }:
 
 with lib; stdenv.mkDerivation rec {
   pname = "mkcl";
@@ -10,6 +10,15 @@ with lib; stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0i2bfkda20lfypis6i4m7srfz6miyf66d8knp693d6sms73m2l26";
   };
+
+  patches = [
+    # "Array sys_siglist[] never was part of the public interface. Replace it with calls to psiginfo()."
+    (fetchpatch {
+      name = "sys_siglist.patch";
+      url = "https://github.com/jcbeaudoin/MKCL/commit/0777dd08254c88676f4f101117b10786b22111d6.patch";
+      sha256 = "1dnr1jzha77nrxs22mclrcqyqvxxn6q1sfn35qjs77fi3jcinjsc";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
