@@ -7749,7 +7749,7 @@ in
     stdenv = clangStdenv;
   };
 
-  nordvpn = callPackages ../tools/networking/nordvpn { };
+  nordvpn = callPackage ../tools/networking/nordvpn { };
 
   oq = callPackage ../development/tools/oq { };
 
