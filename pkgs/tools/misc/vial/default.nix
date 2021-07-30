@@ -26,7 +26,7 @@ appimageTools.wrapType2 {
   meta = with lib; {
     description = "An Open-source cross-platform (Windows, Linux and Mac) GUI and a QMK fork for configuring your keyboard in real time";
     homepage = "https://get.vial.today";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kranzes ];
     platforms = [ "x86_64-linux" ];
   };
