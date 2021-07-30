@@ -7,7 +7,7 @@ let
   cfg = config.services.squid;
 
 
-  squidConfig = pkgs.writeText "squid.conf"
+  squidConfigRaw = pkgs.writeText "squid.conf"
     (if cfg.configText != null then cfg.configText else
     ''
     #
@@ -95,6 +95,10 @@ let
     refresh_pattern .               0       20%     4320
   '');
 
+  squidConfig = pkgs.runCommand "squid-validated.conf" {} ''
+    ${pkgs.squid}/bin/squid -k parse -f "${squidConfigRaw}"
+    ln -s "${squidConfigRaw}" "$out"
+  '';
 in
 
 {
