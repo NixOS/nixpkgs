@@ -773,6 +773,7 @@
   ./services/networking/ntp/chrony.nix
   ./services/networking/ntp/ntpd.nix
   ./services/networking/ntp/openntpd.nix
+  ./services/networking/nordvpn.nix
   ./services/networking/nullidentdmod.nix
   ./services/networking/nylon.nix
   ./services/networking/ocserv.nix
