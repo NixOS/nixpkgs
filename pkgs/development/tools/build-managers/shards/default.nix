@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , crystal_0_34
 , crystal_0_36
+, crystal_1_0
 }:
 let
   generic =
@@ -49,5 +50,11 @@ rec {
     crystal = crystal_0_36;
   };
 
-  shards = shards_0_14;
+  shards_0_15 = generic {
+    version = "0.15.0";
+    sha256 = "sha256-/C6whh5RbTBkFWqpn0GqyVe0opbrklm8xPv5MIG99VU=";
+    crystal = crystal_1_0;
+  };
+
+  shards = shards_0_15;
 }

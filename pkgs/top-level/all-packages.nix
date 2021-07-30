@@ -14723,6 +14723,7 @@ with pkgs;
   inherit (callPackage ../development/tools/build-managers/shards { })
     shards_0_11
     shards_0_14
+    shards_0_15
     shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {};
