@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, gmp, gcc }:
 
-with lib; stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mkcl";
   version = "1.1.11";
 
@@ -27,7 +27,7 @@ with lib; stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
-    "GMP_CFLAGS=-I${gmp.dev}/include"
+    "GMP_CFLAGS=-I${lib.getDev gmp}/include"
     "GMP_LDFLAGS=-L${gmp.out}/lib"
   ];
 
@@ -36,9 +36,9 @@ with lib; stdenv.mkDerivation rec {
     cd contrib/tinycc
     ./configure --cc=cc \
       --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
-      --crtprefix=${getLib stdenv.cc.libc}/lib \
-      --sysincludepaths=${getDev stdenv.cc.libc}/include:{B}/include \
-      --libpaths=${getLib stdenv.cc.libc}/lib
+      --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
+      --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
+      --libpaths=${lib.getLib stdenv.cc.libc}/lib
   )'';
 
   postInstall = ''
@@ -47,7 +47,7 @@ with lib; stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "ANSI Common Lisp Implementation";
     homepage = "https://common-lisp.net/project/mkcl/";
     license = licenses.lgpl2Plus;
