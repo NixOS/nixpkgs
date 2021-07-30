@@ -10,6 +10,7 @@ in {
       enable = mkEnableOption "nordvpn";
 
       package = mkOption {
+        description = "NordVPN Package";
         type = types.package;
         default = pkgs.nordvpn;
       };
