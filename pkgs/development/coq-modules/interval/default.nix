@@ -19,7 +19,6 @@ with lib; mkCoqDerivation rec {
   release."3.3.0".sha256 = "0lz2hgggzn4cvklvm8rpaxvwaryf37i8mzqajqgdxdbd8f12acsz";
   releaseRev = v: "interval-${v}";
 
-  extraBuildInputs = with coq.ocamlPackages; [ ocamlbuild findlib ];
   nativeBuildInputs = [ which autoconf ];
   propagatedBuildInputs = [ bignums coquelicot flocq ]
     ++ lib.optionals (versions.isGe "4.2.0" defaultVersion) [ gnuplot_qt ];
