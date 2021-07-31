@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, makeWrapper, isPy3k
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
 , python, twisted, jinja2, zope_interface, sqlalchemy
 , sqlalchemy_migrate, python-dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq
 , txrequests, pypugjs, boto3, moto, mock, lz4, setuptoolsTrial
@@ -26,11 +26,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "3.2.0";
+    version = "3.3.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-Ji/1anphYaGoP0kaOpArKDKPe9YUFTU1Zd9O4g6V9OA=";
+      sha256 = "sha256-FST+mCIQpzxc/5iQdsSNBlKxY985v+z6Xeh8ZQRu2FE=";
     };
 
     propagatedBuildInputs = [
@@ -78,19 +78,6 @@ let
       # This patch disables the test that tries to read /etc/os-release which
       # is not accessible in sandboxed builds.
       ./skip_test_linux_distro.patch
-      # Fix compatibility with SQLAlchemy 1.4
-      (fetchpatch {
-        url = "https://github.com/buildbot/buildbot/pull/6156.patch";
-        sha256 = "10pg3wcdy85vymn6hprm7rh68zkz818m2vy6v4s2hi2l189wh5my";
-        stripLen = 1;
-        excludes = [
-          ".bbtravis.yml"
-          "buildbot/test/unit/db/test_enginestrategy.py"
-          "buildbot/test/unit/db_migrate/test_versions_045_worker_transition.py"
-          "requirements-ci.txt"
-          "requirements-cidb.txt"
-        ];
-      })
     ];
 
     postPatch = ''
