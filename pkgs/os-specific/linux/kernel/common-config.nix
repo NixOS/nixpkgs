@@ -878,8 +878,6 @@ let
       # Keeping it a built-in ensures it will be used if possible.
       FB_SIMPLE = yes;
 
-    } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux") {
-      ARM_LPAE = yes;
     };
   };
 in
