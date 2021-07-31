@@ -6,6 +6,7 @@
 , gfortran
 , lhapdf
 , ncurses
+, perl
 , python ? null
 , swig
 , yoda
@@ -57,6 +58,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
+  checkInputs = [
+    perl
+    lhapdf.pdf_sets.CT10nlo
+  ];
+  preCheck = ''
+    patchShebangs --build check
+  '';
+  enableParallelChecking = false;
+
   meta = with lib; {
     homepage = "http://fastnlo.hepforge.org";
     description = "Fast pQCD calculations for hadron-induced processes";
@@ -74,5 +85,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
+    broken = stdenv.isAarch64; # failing test "fnlo-tk-stattest.pl"
   };
 }
