@@ -28636,6 +28636,8 @@ in
 
   chia = callPackage ../applications/blockchains/chia { };
 
+  chia-plotter = callPackage ../applications/blockchains/chia-plotter { };
+
   clightning = callPackage ../applications/blockchains/clightning { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
