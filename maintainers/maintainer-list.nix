@@ -11692,6 +11692,12 @@
     githubId = 3705333;
     name = "Dmitry V.";
   };
+  yayayayaka = {
+    email = "nixpkgs@uwu.is";
+    github = "yayayayaka";
+    githubId = 73759599;
+    name = "Lara A.";
+  };
   yegortimoshenko = {
     email = "yegortimoshenko@riseup.net";
     github = "yegortimoshenko";
