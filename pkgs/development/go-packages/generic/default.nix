@@ -43,6 +43,9 @@
 
 , CGO_ENABLED ? go.CGO_ENABLED
 
+# needed for buildFlags warning
+, buildFlags ? ""
+
 , meta ? {}, ... } @ args:
 
 
@@ -257,4 +260,6 @@ let
     } // meta;
   });
 in
+lib.warnIf (buildFlags != "")
+  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`"
   package
