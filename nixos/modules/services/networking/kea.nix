@@ -238,6 +238,10 @@ in
         KEA_PIDFILE_DIR = "/run/kea";
       };
 
+      restartTriggers = [
+        ctrlAgentConfig
+      ];
+
       serviceConfig = {
         ExecStart = "${package}/bin/kea-ctrl-agent -c /etc/kea/ctrl-agent.conf ${lib.escapeShellArgs cfg.dhcp4.extraArgs}";
         KillMode = "process";
@@ -268,6 +272,10 @@ in
       environment = {
         KEA_PIDFILE_DIR = "/run/kea";
       };
+
+      restartTriggers = [
+        dhcp4Config
+      ];
 
       serviceConfig = {
         ExecStart = "${package}/bin/kea-dhcp4 -c /etc/kea/dhcp4-server.conf ${lib.escapeShellArgs cfg.dhcp4.extraArgs}";
@@ -307,6 +315,10 @@ in
         KEA_PIDFILE_DIR = "/run/kea";
       };
 
+      restartTriggers = [
+        dhcp6Config
+      ];
+
       serviceConfig = {
         ExecStart = "${package}/bin/kea-dhcp6 -c /etc/kea/dhcp6-server.conf ${lib.escapeShellArgs cfg.dhcp6.extraArgs}";
         # Kea does not request capabilities by itself
@@ -342,6 +354,10 @@ in
       environment = {
         KEA_PIDFILE_DIR = "/run/kea";
       };
+
+      restartTriggers = [
+        dhcpDdnsConfig
+      ];
 
       serviceConfig = {
         ExecStart = "${package}/bin/kea-dhcp-ddns -c /etc/kea/dhcp-ddns.conf ${lib.escapeShellArgs cfg.dhcp-ddns.extraArgs}";
