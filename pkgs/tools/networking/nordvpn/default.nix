@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libxml2, autoPatchelfHook, dpkg }:
+{ stdenv, lib, fetchurl, openvpn, libxml2, autoPatchelfHook, dpkg }:
 
 let
   version = "3.10.0-1";
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     mv $out/sbin/nordvpnd $out/bin/
     rm -r $out/sbin
     rm $out/var/lib/nordvpn/openvpn
-    ln -s ${pkgs.openvpn}/bin/openvpn $out/var/lib/nordvpn/openvpn
+    ln -s ${openvpn}/bin/openvpn $out/var/lib/nordvpn/openvpn
   '';
 
   meta = with lib; {
