@@ -1212,6 +1212,10 @@ in {
 
   brotli = callPackage ../development/python-modules/brotli { };
 
+  brotlicffi = callPackage ../development/python-modules/brotlicffi {
+    inherit (pkgs) brotli;
+  };
+
   brotlipy = callPackage ../development/python-modules/brotlipy { };
 
   brottsplatskartan = callPackage ../development/python-modules/brottsplatskartan { };
