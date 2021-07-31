@@ -82,12 +82,6 @@ stdenv.mkDerivation rec {
     })
     ./libglvnd-headers.patch
   ] ++ lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/94cdcd289b993ed4d39c17d4b8b90db7c81a9b10.diff";
-      sha256 = "sha256-ywrTEjf3ATqI0Vvs60TeAZ+m58kCibum4DamRWrQfaA=";
-      excludes = [ "Source/WebKit/ChangeLog" ];
-    })
-
     # https://bugs.webkit.org/show_bug.cgi?id=225856
     (fetchpatch {
       url = "https://bug-225856-attachments.webkit.org/attachment.cgi?id=428797";
