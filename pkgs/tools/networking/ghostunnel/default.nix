@@ -35,4 +35,5 @@ buildGoModule rec {
   };
 
   passthru.tests.nixos = nixosTests.ghostunnel;
+  passthru.tests.podman = nixosTests.podman-tls-ghostunnel;
 }
