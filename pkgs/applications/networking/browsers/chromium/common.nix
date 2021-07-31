@@ -11,7 +11,7 @@
 , nspr, systemd, libkrb5
 , util-linux, alsa-lib
 , bison, gperf
-, glib, gtk3, dbus-glib
+, glib, gtk3, gtk4 ? null, dbus-glib
 , glibc
 , libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
@@ -237,6 +237,14 @@ let
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         gpu/config/gpu_info_collector_linux.cc
+
+      sed -i                                -e 's,CHECK(!check || library);,CHECK(!check || library) << library_name;,'            \
+                                            -e 's,"[^"]*libgio-2.0\.so,"${lib.getLib glib}/lib/libgio-2.0.so,'                     \
+                                            -e 's,"[^"]*libgdk_pixbuf-2.0\.so,"${lib.getLib gdk-pixbuf}/lib/libgdk_pixbuf-2.0.so,' \
+                                            -e 's,"[^"]*libgdk-3\.so,"${lib.getLib gtk3}/lib/libgdk-3.so,'                         \
+                                            -e 's,"[^"]*libgtk-3\.so,"${lib.getLib gtk3}/lib/libgtk-3.so,'                         \
+      ${lib.optionalString (gtk4 != null) ''-e 's,"[^"]*libgtk-4\.so,"${lib.getLib gtk4}/lib/libgtk-4.so,' ''}                     \
+                                            ui/gtk/gtk_compat.cc
 
       # Allow to put extensions into the system-path.
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
