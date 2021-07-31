@@ -17,6 +17,10 @@ buildLinux (args // {
     sha256 = "sha256-ZvB5Ejt9MXP4QK5cj9CGQgFJIfDV03IW5xcknCxDui0=";
   };
 
+  structuredExtraConfig = with lib.kernel; {
+    ZEN_INTERACTIVE = yes;
+  };
+
   extraMeta = {
     branch = "5.13";
     maintainers = with lib.maintainers; [ atemu andresilva ];
