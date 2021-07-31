@@ -6,7 +6,8 @@ let
 
   cfg = config.services.mjpg-streamer;
 
-in {
+in
+{
 
   options = {
 
@@ -14,11 +15,12 @@ in {
 
       enable = mkEnableOption "mjpg-streamer webcam streamer";
 
-      inputPlugin = mkOption {
-        type = types.str;
-        default = "input_uvc.so";
+      inputPlugins = mkOption {
+        type = types.nonEmptyListOf types.str;
+        default = [ "input_uvc.so" ];
+        example = ["input_uvc.so -d /dev/video1" "input_uvc.so -d /dev/video2"];
         description = ''
-          Input plugin. See plugins documentation for more information.
+          Input plugins. See plugins documentation for more information.
         '';
       };
 
@@ -67,12 +69,14 @@ in {
         RestartSec = 1;
       };
 
-      script = ''
-        IPLUGIN="${cfg.inputPlugin}"
-        OPLUGIN="${cfg.outputPlugin}"
-        OPLUGIN="''${OPLUGIN//@www@/${pkgs.mjpg-streamer}/share/mjpg-streamer/www}"
-        exec ${pkgs.mjpg-streamer}/bin/mjpg_streamer -i "$IPLUGIN" -o "$OPLUGIN"
-      '';
+      script = let
+        inputPlugins = foldr (input: acc: "-i \"" + input + "\" " + acc) "" cfg.inputPlugins;
+      in
+        ''
+          OPLUGIN='${cfg.outputPlugin}'
+          OPLUGIN="''${OPLUGIN//@www@/${pkgs.mjpg-streamer}/share/mjpg-streamer/www}"
+          exec ${pkgs.mjpg-streamer}/bin/mjpg_streamer ${inputPlugins} -o "$OPLUGIN"
+        '';
     };
 
   };
