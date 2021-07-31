@@ -11,7 +11,7 @@
 , nspr, systemd, libkrb5
 , util-linux, alsa-lib
 , bison, gperf
-, glib, gtk3, gtk4 ? null, dbus-glib
+, glib, gtk3, gdk-pixbuf, gtk4 ? null, dbus-glib
 , glibc
 , libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
