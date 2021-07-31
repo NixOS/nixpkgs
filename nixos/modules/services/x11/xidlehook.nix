@@ -37,7 +37,7 @@ in
         };
 
         timers = mkOption {
-          default = let 
+          default = let
              brightnessCmd = tgt:
                "xrandr --output $(xrandr | awk '/ connected/{print $1}') --brightness ${toString tgt} ; " +
                "echo brightness ${toString tgt}";
