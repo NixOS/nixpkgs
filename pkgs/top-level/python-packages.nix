@@ -3383,6 +3383,8 @@ in {
 
   httpx = callPackage ../development/python-modules/httpx { };
 
+  httpx-socks = callPackage ../development/python-modules/httpx-socks { };
+
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
   huey = callPackage ../development/python-modules/huey { };
