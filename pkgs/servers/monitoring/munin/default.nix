@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   # needs to find a local perl module during build
   PERL_USE_UNSAFE_INC = "1";
 
-  # TODO: tests are failing http://munin-monitoring.org/ticket/1390#comment:1
+  # TODO: tests are failing https://munin-monitoring.org/ticket/1390#comment:1
   # NOTE: important, test command always exits with 0, think of a way to abort the build once tests pass
   doCheck = false;
 
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
       interface. Munin can help analyze resource trends and 'what just happened
       to kill our performance?' problems.
     '';
-    homepage = "http://munin-monitoring.org/";
+    homepage = "https://munin-monitoring.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.bjornfor ];
     platforms = platforms.linux;

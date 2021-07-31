@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hydroxide";
-  version = "0.2.19";
+  version = "0.2.20";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FKZdsFEUlXk0w11v7Y6sKiu4bOjmau2yAifcTpN0J+U=";
+    sha256 = "sha256-VTUpiuSsI795XDSxJJvLQlVNPLiekHyKcCazRBky9nU=";
   };
 
-  vendorSha256 = "sha256-jkiTpDsJN628YKkFZcng9P05hmNUc3UeFsanLf+QtJY=";
+  vendorSha256 = "sha256-AuZnHpJ1Xel/L9dG3ATdXnoTeUxtieah/ea+0svw3oA=";
 
   doCheck = false;
 
