@@ -4,17 +4,16 @@
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "2.0.2";
+  version = "2.0.3";
 
   disabled = pythonOlder "3.7";
 
-  # Tests aren't included in PyPI tarball.
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "python-nbxmpp";
     rev = "nbxmpp-${version}";
-    sha256 = "0z27mxgfk7hvpx0xdrd8g9441rywv74yk7s83zjnc2mc7xvpwhf4";
+    sha256 = "0gzyd25sja7n49f1ihyg6gch1b0r409r0p3qpwn8w8xy7jgn6ysc";
   };
 
   buildInputs = [ precis-i18n ];
