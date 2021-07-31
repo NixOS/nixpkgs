@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromGitLab
-, gobject-introspection, idna, libsoup, precis-i18n, pygobject3, pyopenssl
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitLab
+, gobject-introspection
+, idna
+, libsoup
+, precis-i18n
+, pygobject3
+, pyopenssl
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,8 +25,21 @@ buildPythonPackage rec {
     sha256 = "0gzyd25sja7n49f1ihyg6gch1b0r409r0p3qpwn8w8xy7jgn6ysc";
   };
 
-  buildInputs = [ precis-i18n ];
-  propagatedBuildInputs = [ gobject-introspection idna libsoup pygobject3 pyopenssl ];
+  buildInputs = [
+    precis-i18n
+  ];
+
+  propagatedBuildInputs = [
+    gobject-introspection
+    idna
+    libsoup
+    pygobject3
+    pyopenssl
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "nbxmpp" ];
 
