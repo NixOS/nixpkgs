@@ -568,7 +568,7 @@ let
 
     systemd.services = {
       phpfpm-tt-rss = mkIf (cfg.pool == "${poolName}") {
-        restartTriggers = [ tt-rss-config tt-rss ];
+        restartTriggers = [ tt-rss-config pkgs.tt-rss ];
       };
 
       tt-rss = {
