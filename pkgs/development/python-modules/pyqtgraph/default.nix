@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Scientific Graphics and GUI Library for Python";
-    homepage = "http://www.pyqtgraph.org/";
+    homepage = "https://www.pyqtgraph.org/";
     changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
     license = licenses.mit;
     platforms = platforms.unix;

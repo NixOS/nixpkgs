@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Flash-optimized, in-memory, NoSQL database";
-    homepage = "http://aerospike.com/";
+    homepage = "https://aerospike.com/";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kalbasit ];
