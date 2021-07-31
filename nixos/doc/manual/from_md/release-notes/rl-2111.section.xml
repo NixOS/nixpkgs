@@ -572,6 +572,17 @@
       </listitem>
       <listitem>
         <para>
+          <literal>tt-rss</literal> was upgraded to the commit on
+          2021-06-21, which has breaking changes. If you use
+          <literal>services.tt-rss.extraConfig</literal> you should
+          migrate to the <literal>putenv</literal>-style configuration.
+          See
+          <link xlink:href="https://community.tt-rss.org/t/rip-config-php-hello-classes-config-php/4337">this
+          Discourse post</link> in the tt-rss forums for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The following Visual Studio Code extensions were renamed to
           keep the naming convention uniform.
         </para>
