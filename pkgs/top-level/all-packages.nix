@@ -8952,7 +8952,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  soapui = callPackage ../applications/networking/soapui { };
+  soapui = callPackage ../applications/networking/soapui {
+    jdk = jdk11;
+  };
 
   spglib = callPackage ../development/libraries/spglib { };
 
