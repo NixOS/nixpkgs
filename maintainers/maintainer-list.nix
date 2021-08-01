@@ -6188,6 +6188,12 @@
     githubId = 591860;
     name = "Lionello Lunesu";
   };
+  llelievr = {
+    name = "Lucas Lelievre";
+    email = "llelievr2@gmail.com";
+    github = "loucass003";
+    githubId = 3948904;
+  };
   lluchs = {
     email = "lukas.werling@gmail.com";
     github = "lluchs";
