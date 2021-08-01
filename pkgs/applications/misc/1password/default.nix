@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       stripRoot = false;
     } else fetchurl {
       url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_apple_universal_v${version}.pkg";
-      sha256 = "14j9071ckd7dy7b8687231rbgyxb96iwwdlpxwyngcq57vhl7n7j";
+      sha256 = "1pqdjr6d23j9fpwgahb0s1ni1bpjv9jajs1hapgq5kdrww2w7nhm";
     };
 
   buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
