@@ -69,6 +69,8 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace src/runner.py \
       --replace " {runner}" " ${steam-run-native}/bin/steam-run {runner}" \
       --replace " {dxvk_setup}" " ${steam-run-native}/bin/steam-run {dxvk_setup}"
+      substituteInPlace src/runner_utilities.py \
+        --replace " {runner}" " ${steam-run-native}/bin/steam-run {runner}" \
   '';
 
   preFixup = ''
