@@ -658,6 +658,8 @@ in
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
+  sirula = callPackage ../tools/wayland/sirula { };
+
   srcOnly = callPackage ../build-support/src-only { };
 
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
