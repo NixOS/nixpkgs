@@ -471,32 +471,12 @@ in {
           writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
-            ${optionalString (c.dbpassFile != null) ''
-              function nix_read_pwd() {
-                $file = "${c.dbpassFile}";
+            ${optionalString (cfg.secretFile != null || c.dbpassFile != null) ''
+              function nix_read_file($file, $error) {
                 if (!file_exists($file)) {
-                  throw new \RuntimeException(sprintf(
-                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't seem to "
-                    . "exist! Please make sure that the file exists and has appropriate "
-                    . "permissions for user & group 'nextcloud'!",
-                    $file
-                  ));
+                  throw new \RuntimeException(sprintf($error, $file));
                 }
-
                 return trim(file_get_contents($file));
-              }
-            ''}
-            ${optionalString (cfg.secretFile != null) ''
-              function nix_read_secrets() {
-                $file = "${cfg.secretFile}";
-                if (!file_exists($file)) {
-                  throw new \RuntimeException(sprintf(
-                    "Cannot start Nextcloud, secrets file %s set by NixOS doesn't exist!",
-                    $file
-                  ));
-                }
-
-                return json_decode(file_get_contents($file));
               }
             ''}
             $CONFIG = [
@@ -516,7 +496,15 @@ in {
               ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
               ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
               ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
-              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
+              ${optionalString (c.dbpassFile != null) ''
+                  dbpassword' => nix_read_file(
+                    ${c.dbpassFile},
+                     "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't seem to "
+                    . "exist! Please make sure that the file exists and has appropriate "
+                    . "permissions for user & group 'nextcloud'!"
+                  ),
+                ''
+              }
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
@@ -526,7 +514,12 @@ in {
             $EXTRACONFIG = json_decode(file_get_contents("${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}"), true);
 
             $CONFIG = array_merge($CONFIG, $EXTRACONFIG);
-            ${optionalString (cfg.secretFile != null) "$CONFIG = array_merge($CONFIG, nix_read_secrets());"}
+            ${optionalString (cfg.secretFile != null) ''
+              $CONFIG = array_merge($CONFIG, nix_read_file(
+                ${cfg.secretFile}),
+                "Cannot start Nextcloud, secrets file %s set by NixOS doesn't exist!"
+              );
+            ''}
           '';
           occInstallCmd = let
             dbpass = if c.dbpassFile != null
