@@ -33242,6 +33242,8 @@ with pkgs;
 
   colima = callPackage ../applications/virtualization/colima { };
 
+  lemminx = callPackage ../development/tools/misc/lemminx { };
+
   lima = callPackage ../applications/virtualization/lima { };
 
   logtop = callPackage ../tools/misc/logtop { };
