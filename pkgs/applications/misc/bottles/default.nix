@@ -3,7 +3,7 @@
 , desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy
 , python3Packages, gettext
 , appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3
-, steam-run-native, xdg-utils
+, steam-run-native, xdg-utils, pciutils
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -56,6 +56,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ [
     steam-run-native
     xdg-utils
+    pciutils
   ];
 
   format = "other";
