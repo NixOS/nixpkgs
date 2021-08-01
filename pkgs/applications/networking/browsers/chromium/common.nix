@@ -275,16 +275,6 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
-
-      # TODOs:
-      # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
-      # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
-      chrome_pgo_phase = 0; # TODO
-      # Disable build with TFLite library because it fails without additional changes:
-      # ninja: error: '../../chrome/test/data/simple_test.tflite', needed by 'test_data/simple_test.tflite', missing and no known rule to make it
-      # Note: chrome/test/data/simple_test.tflite is in the Git repository but not in chromium-90.0.4400.8.tar.xz
-      # See also chrome/services/machine_learning/README.md
-      build_with_tflite_lib = false; # TODO
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
