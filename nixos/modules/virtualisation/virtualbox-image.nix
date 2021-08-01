@@ -124,7 +124,7 @@ in {
       inherit pkgs lib config;
       partitionTableType = "legacy";
       diskSize = cfg.baseImageSize;
-      additionalSpace = cfg.baseImageFreeSpace;
+      additionalSpace = "${toString cfg.baseImageFreeSpace}M";
 
       postVM =
         ''
