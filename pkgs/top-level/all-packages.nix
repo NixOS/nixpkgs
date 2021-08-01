@@ -870,6 +870,8 @@ in
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
+
   auditwheel = callPackage ../tools/package-management/auditwheel { };
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
@@ -8567,7 +8569,7 @@ in
 
   rpi-imager = libsForQt5.callPackage ../tools/misc/rpi-imager { };
 
-  rpiboot-unstable = callPackage ../development/misc/rpiboot/unstable.nix { };
+  rpiboot = callPackage ../development/misc/rpiboot { };
 
   rpm = callPackage ../tools/package-management/rpm {
     python = python3;
@@ -27668,7 +27670,7 @@ in
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
-  udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
+  udocker = callPackage ../tools/virtualization/udocker { };
 
   uefitoolPackages = recurseIntoAttrs (callPackage ../tools/system/uefitool/variants.nix {});
   uefitool = uefitoolPackages.new-engine;

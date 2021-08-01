@@ -711,6 +711,7 @@ mapAliases ({
   radare2-cutter = cutter; # added 2021-03-30
   redkite = throw "redkite was archived by upstream"; # added 2021-04-12
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
+  rpiboot-unstable = rpiboot; # added 2021-07-30
   ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_1_0 = throw "ruby_2_1_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_2_9 = throw "ruby_2_2_9 was deprecated on 2018-02-13: use a newer version of ruby";

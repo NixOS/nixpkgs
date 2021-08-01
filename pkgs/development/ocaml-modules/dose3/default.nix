@@ -46,7 +46,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "Dose library (part of Mancoosi tools)";
     downloadPage = "https://gitlab.com/irill/dose3/";
-    homepage = "http://www.mancoosi.org/software/";
+    homepage = "https://www.mancoosi.org/software/";
     license = licenses.lgpl3Plus;
     longDescription = ''
       The dose suite provides libraries for handling package meta-data, and various tools for analyzing package relationships in a large package repository.
