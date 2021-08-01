@@ -3272,7 +3272,6 @@ broken-packages:
   - no-role-annots
   - notcpp
   - not-gloss-examples
-  - notifications-tray-icon
   - NoTrace
   - now-haskell
   - np-extras
