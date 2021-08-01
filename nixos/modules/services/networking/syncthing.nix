@@ -37,13 +37,9 @@ let
     do sleep 1; done
 
     curl() {
-        while
-            ${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $api_key" \
-                --retry 100 --retry-delay 1 --retry-connrefused "$@"
-            status=$?
-            [ "$status" -eq 52 ] # retry on empty reply from server
-        do sleep 1; done
-        return "$status"
+        ${pkgs.curl}/bin/curl -sS -H "X-API-Key: $api_key" \
+            --retry 1000 --retry-delay 1 --retry-all-errors \
+            "$@"
     }
 
     # query the old config
@@ -547,6 +543,7 @@ in {
         cfg.devices != {} || cfg.folders != {} || cfg.extraOptions != {}
       ) {
         description = "Syncthing configuration updater";
+        requisite = [ "syncthing.service" ];
         after = [ "syncthing.service" ];
         wantedBy = [ "multi-user.target" ];
 
