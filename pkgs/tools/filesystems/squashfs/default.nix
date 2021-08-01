@@ -7,6 +7,7 @@
 , lz4
 , lzo
 , zstd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,10 @@ stdenv.mkDerivation rec {
     "LZ4_SUPPORT=1"
     "LZO_SUPPORT=1"
   ];
+
+  passthru.tests = {
+    nixos-iso-boots-and-verifies = nixosTests.boot.biosCdrom;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/plougher/squashfs-tools";
