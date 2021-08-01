@@ -1,8 +1,9 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, callPackage
+{ mkDerivation, lib, fetchFromGitHub, callPackage, fetchpatch
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
-, qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
-, dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk
+, qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
+, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
+, tl-expected, hunspell, glibmm, webkitgtk, jemalloc
+, rnnoise, abseil-cpp, extra-cmake-modules
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
@@ -22,29 +23,27 @@ let
   tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.7.5";
+  version = "2.8.11";
+  # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
-  src = fetchurl {
-    url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "sha256-9GxBw5ii9Musjq7D3KMf/P5BA4h690EgXRbhynHwO98=";
+  src = fetchFromGitHub {
+    owner = "telegramdesktop";
+    repo = "tdesktop";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "020ycgb77vx7rza590i3csrvq1zgm15rvpxqqcp0xkb4yh71i3hb";
   };
 
-  patches = [
-    # fixes issue with ffmpeg>=4.4 crashes, hasn't been upstreamed yet
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/gentoo/1c91884873968997be4b0c954169d04dc839f1db/net-im/telegram-desktop/files/tdesktop-2.7.4-voice-crash.patch";
-      sha256 = "sha256-inLXcP70yJlkkmdeXlc3HRL7Vt+Sf00LLJG33gwBKdY=";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/gentoo/1c91884873968997be4b0c954169d04dc839f1db/net-im/telegram-desktop/files/tdesktop-2.7.4-voice-ffmpeg44.patch";
-      sha256 = "sha256-p57LipNf7BDhVvNKRuicVqx0vU6IBL/Cvr5BAfLF4Hs=";
-    })
-  ];
+  patches = [(fetchpatch {
+    # ref: https://github.com/desktop-app/lib_webview/pull/9
+    url = "https://github.com/desktop-app/lib_webview/commit/75e924934eee8624020befbef1f3cb5b865d3b86.patch";
+    sha256 = "sha256-rN4FVK4KT+xNf9IVdcpbxMqT0+t3SINJPRRQPyMiDP0=";
+    stripLen = 1;
+    extraPrefix = "Telegram/lib_webview/";
+  })];
 
   postPatch = ''
-    substituteInPlace Telegram/lib_spellcheck/spellcheck/platform/linux/linux_enchant.cpp \
-      --replace '"libenchant-2.so.2"' '"${enchant2}/lib/libenchant-2.so.2"'
     substituteInPlace Telegram/CMakeLists.txt \
       --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
 
@@ -63,9 +62,10 @@ in mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook removeReferencesTo ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu enchant2 lz4 xxHash
-    dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
-    tl-expected hunspell glibmm webkitgtk
+    qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
+    ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
+    tl-expected hunspell glibmm webkitgtk jemalloc
+    rnnoise abseil-cpp extra-cmake-modules
     tg_owt
     # Transitive dependencies:
     pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
@@ -112,6 +112,7 @@ in mkDerivation rec {
 
   passthru = {
     inherit tg_owt;
+    updateScript = ./update.py;
   };
 
   meta = {
