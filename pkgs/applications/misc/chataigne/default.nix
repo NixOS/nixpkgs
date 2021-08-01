@@ -27,7 +27,7 @@ appimageTools.wrapType2 {
   meta = with lib; {
     description = "Artist-friendly Modular Machine for Art and Technology";
     homepage = "https://benjamin.kuperberg.fr/chataigne";
-    license = licenses.gpl2;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ llelievr ];
     platforms = [ "x86_64-linux" ];
   };
