@@ -1,8 +1,8 @@
 { lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
 
 let
-  version = "5.13.6";
-  release = "2";
+  version = "5.13.7";
+  release = "1";
   suffix = "xanmod${release}-cacule";
 in
 buildLinux (args // rec {
@@ -13,7 +13,7 @@ buildLinux (args // rec {
     owner = "xanmod";
     repo = "linux";
     rev = modDirVersion;
-    sha256 = "sha256-sSsCgDBDFiQADHE+ZRqrMKVyGDwynirPU3NA2Olgpko=";
+    sha256 = "sha256-6SppDriZWzLu6Qye1e6ciiE+Ro63vDyabxfgWS/PTSo=";
   };
 
   structuredExtraConfig = with lib.kernel; {
