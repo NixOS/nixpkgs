@@ -17293,6 +17293,8 @@ in
 
   libutempter = callPackage ../development/libraries/libutempter { };
 
+  libutp = callPackage ../development/libraries/libutp { };
+
   libuldaq = callPackage ../development/libraries/libuldaq { };
 
   libunwind =
