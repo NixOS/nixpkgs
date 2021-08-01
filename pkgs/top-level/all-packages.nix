@@ -1289,6 +1289,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  chataigne = callPackage ../applications/misc/chataigne { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
