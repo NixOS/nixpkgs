@@ -70,7 +70,7 @@ in
       };
 
       script = let
-        inputPlugins = foldr (input: acc: "-i \"" + input + "\" " + acc) "" cfg.inputPlugins;
+        inputPlugins = foldr (input: acc: ''-i "${input}" ${acc}'') "" cfg.inputPlugins;
       in
         ''
           OPLUGIN='${cfg.outputPlugin}'
