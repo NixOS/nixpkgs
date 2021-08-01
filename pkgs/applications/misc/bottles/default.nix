@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2021.7.14-treviso";
+  version = "2021.7.28-treviso-2";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "0xhfk1ll8vacgrr0kkhynq4bryjhfjs29j824bark5mj9b6lkbix";
+    sha256 = "0kvwcajm9izvkwfg7ir7bks39bpc665idwa8mc8d536ajyjriysn";
   };
 
   postPatch = ''
@@ -52,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     dbus-python
     gst-python
     liblarch
+    patool
   ] ++ [ steam-run-native ];
 
   format = "other";
