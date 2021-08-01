@@ -42,7 +42,6 @@ buildFun:
 with lib;
 
 let
-  jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   python2WithPackages = python2.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
@@ -150,7 +149,6 @@ let
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       mesa # required for libgbm
       pciutils protobuf speechd libXdamage at-spi2-core
-      jre
       pipewire
       libva
       libdrm wayland mesa.drivers libxkbcommon
@@ -165,7 +163,6 @@ let
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
       # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
       ./patches/fix-missing-atspi2-dependency.patch
-      ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
     ] ++ lib.optionals (chromiumVersionAtLeast "93") [
       # We need to revert this patch to build M93 with LLVM 12.
       (githubPatch {
@@ -227,9 +224,10 @@ let
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
 
       patchShebangs .
-      # use our own nodejs
+      # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s "$(command -v node)" third_party/node/linux/node-linux-x64/bin/node
+      ln -s "${jre8}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
