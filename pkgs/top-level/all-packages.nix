@@ -20817,6 +20817,8 @@ in
 
   pcm = callPackage ../os-specific/linux/pcm { };
 
+  i8kutils = callPackage ../os-specific/linux/i8kutils { };
+
   ifmetric = callPackage ../os-specific/linux/ifmetric {};
 
   ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils {
