@@ -3,7 +3,7 @@
 , desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy
 , python3Packages, gettext
 , appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3
-, steam-run-native
+, steam-run-native, xdg-utils
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -53,7 +53,10 @@ python3Packages.buildPythonApplication rec {
     gst-python
     liblarch
     patool
-  ] ++ [ steam-run-native ];
+  ] ++ [
+    steam-run-native
+    xdg-utils
+  ];
 
   format = "other";
   strictDeps = false; # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
