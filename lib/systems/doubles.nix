@@ -35,8 +35,8 @@ let
 
     # NetBSD
     "aarch64-netbsd" "armv6l-netbsd" "armv7a-netbsd" "armv7l-netbsd"
-    "i686-netbsd" "mipsel-netbsd" "powerpc-netbsd" "riscv32-netbsd"
-    "riscv64-netbsd" "x86_64-netbsd"
+    "i686-netbsd" "m68k-netbsd" "mipsel-netbsd" "powerpc-netbsd"
+    "riscv32-netbsd" "riscv64-netbsd" "x86_64-netbsd"
 
     # none
     "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
