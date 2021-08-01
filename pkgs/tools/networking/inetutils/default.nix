@@ -3,10 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "inetutils-1.9.4";
+  pname = "inetutils";
+  version = "1.9.4";
 
   src = fetchurl {
-    url = "mirror://gnu/inetutils/${name}.tar.gz";
+    url = "mirror://gnu/inetutils/inetutils-${version}.tar.gz";
     sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
   };
 
