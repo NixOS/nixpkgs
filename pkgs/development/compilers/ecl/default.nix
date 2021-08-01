@@ -47,20 +47,24 @@ stdenv.mkDerivation {
     (if threadSupport then "--enable-threads" else "--disable-threads")
     "--with-gmp-prefix=${gmp.dev}"
     "--with-libffi-prefix=${libffi.dev}"
-    ]
-    ++
-    (lib.optional (! noUnicode)
-      "--enable-unicode")
-    ;
+  ]
+  ++
+  (lib.optional useBoehmgc
+    "--with-libgc-prefix=${boehmgc.dev}")
+  ++
+  (lib.optional (! noUnicode)
+    "--enable-unicode")
+  ;
 
   hardeningDisable = [ "format" ];
 
-  postInstall = ''
+  postInstall = let
+    ldArgs = lib.strings.concatMapStringsSep " "
+      (l: ''--prefix NIX_LDFLAGS ' ' "-L${l.lib or l.out or l}/lib"'')
+      ([ gmp libffi ] ++ lib.optional useBoehmgc boehmgc);
+  in ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
-    wrapProgram "$out/bin/ecl" \
-      --prefix PATH ':' "${gcc}/bin" \
-      --prefix NIX_LDFLAGS ' ' "-L${gmp.lib or gmp.out or gmp}/lib" \
-      --prefix NIX_LDFLAGS ' ' "-L${libffi.lib or libffi.out or libffi}/lib"
+    wrapProgram "$out/bin/ecl" --prefix PATH ':' "${gcc}/bin" ${ldArgs}
   '';
 
   meta = {

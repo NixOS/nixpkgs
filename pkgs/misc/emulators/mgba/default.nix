@@ -18,26 +18,15 @@
 , wrapQtAppsHook
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "mgba";
-    exec = "mgba-qt";
-    icon = "mgba";
-    comment = "A Game Boy Advance Emulator";
-    desktopName = "mgba";
-    genericName = "Game Boy Advance Emulator";
-    categories = "Game;Emulator;";
-    startupNotify = "false";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mgba";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    hash = "sha256-JVauGyHJVfiXVG4Z+Ydh1lRypy5rk9SKeTbeHFNFYJs=";
+    hash = "sha256-A48PVUCekdRYel/BddPCeIcEDllOvcU7pk4i4P58dpo=";
   };
 
   nativeBuildInputs = [
@@ -59,9 +48,21 @@ in stdenv.mkDerivation rec {
     qttools
   ];
 
-  postInstall = ''
-    cp -r ${desktopItem}/share/applications $out/share
-  '';
+  postInstall = let
+    desktopItem = makeDesktopItem {
+      name = "mgba";
+      exec = "mgba-qt";
+      icon = "mgba";
+      comment = "A Game Boy Advance Emulator";
+      desktopName = "mgba";
+      genericName = "Game Boy Advance Emulator";
+      categories = "Game;Emulator;";
+      startupNotify = "false";
+    };
+  in
+    ''
+      cp -r ${desktopItem}/share/applications $out/share
+    '';
 
   meta = with lib; {
     homepage = "https://mgba.io";
