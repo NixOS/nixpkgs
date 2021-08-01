@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dywedir ];
     license = with licenses; [ mit ];
   };
 }
