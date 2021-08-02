@@ -317,6 +317,8 @@ in
 
   protoc-gen-go-grpc = callPackage ../development/tools/protoc-gen-go-grpc { };
 
+  protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
+
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
