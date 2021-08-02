@@ -27,6 +27,7 @@ in
       browser = mkOption {
         type = types.str;
         default = concatStringsSep " " [
+          ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
           ''${pkgs.chromium}/bin/chromium''
           ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
           ''--proxy-server="socks5://$PROXY"''
@@ -111,6 +112,7 @@ in
     security.wrappers.captive-browser = {
       capabilities = "cap_net_raw+p";
       source = pkgs.writeShellScript "captive-browser" ''
+        export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
         export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
                                   browser = """${cfg.browser}"""
                                   dhcp-dns = """${cfg.dhcp-dns}"""
