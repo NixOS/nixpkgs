@@ -16,11 +16,12 @@ lib.makeScope pkgs.newScope (self: with self; {
   ];
 
   wingpanelIndicators = [
-    wingpanel-applications-menu wingpanel-indicator-bluetooth
-    wingpanel-indicator-datetime wingpanel-indicator-keyboard
-    wingpanel-indicator-network wingpanel-indicator-nightlight
-    wingpanel-indicator-notifications wingpanel-indicator-power
-    wingpanel-indicator-session wingpanel-indicator-sound
+    wingpanel-applications-menu wingpanel-indicator-a11y
+    wingpanel-indicator-bluetooth wingpanel-indicator-datetime
+    wingpanel-indicator-keyboard wingpanel-indicator-network
+    wingpanel-indicator-nightlight wingpanel-indicator-notifications
+    wingpanel-indicator-power wingpanel-indicator-session
+    wingpanel-indicator-sound
   ];
 
   maintainers = lib.teams.pantheon.members;
@@ -121,6 +122,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   #### WINGPANEL INDICATORS
 
   wingpanel-applications-menu = callPackage ./desktop/wingpanel-indicators/applications-menu { };
+
+  wingpanel-indicator-a11y = callPackage ./desktop/wingpanel-indicators/a11y { };
 
   wingpanel-indicator-bluetooth = callPackage ./desktop/wingpanel-indicators/bluetooth { };
 
