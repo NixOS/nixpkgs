@@ -86,6 +86,10 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
 
+      # Polkit file
+      mkdir -p $out/share/polkit-1/actions
+      cp -a com.1password.1Password.policy $out/share/polkit-1/actions/
+
       # Icons
       cp -a resources/icons $out/share
 
