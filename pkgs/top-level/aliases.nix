@@ -70,6 +70,7 @@ mapAliases ({
   aucdtect = throw "aucdtect: Upstream no longer provides download urls."; # added 2020-12-26
   avldrums-lv2 = x42-avldrums; # added 2020-03-29
   avxsynth = throw "avxsynth was removed because it was broken"; # added 2021-05-18
+  azureus = throw "azureus is now known as vuze and the version in nixpkgs was really outdated"; # added 2021-08-02
   badtouch = authoscope; # Project was renamed, added 20210626
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
