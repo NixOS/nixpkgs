@@ -4541,6 +4541,12 @@
     githubId = 592849;
     name = "Ilya Kolpakov";
   };
+  ilyakooo0 = {
+    name = "Ilya Kostyuchenko";
+    email = "ilyakooo0@gmail.com";
+    github = "ilyakooo0";
+    githubId = 6209627;
+  };
   imalison = {
     email = "IvanMalison@gmail.com";
     github = "IvanMalison";
@@ -7476,6 +7482,12 @@
   Nate-Devv = {
     email = "natedevv@gmail.com";
     name = "Nathan Moore";
+  };
+  nathanruiz = {
+    email = "nathanruiz@protonmail.com";
+    github = "nathanruiz";
+    githubId = 18604892;
+    name = "Nathan Ruiz";
   };
   nathan-gs = {
     email = "nathan@nathan.gs";
@@ -11685,6 +11697,12 @@
     github = "Eternity-Yarr";
     githubId = 3705333;
     name = "Dmitry V.";
+  };
+  yayayayaka = {
+    email = "nixpkgs@uwu.is";
+    github = "yayayayaka";
+    githubId = 73759599;
+    name = "Lara A.";
   };
   yegortimoshenko = {
     email = "yegortimoshenko@riseup.net";

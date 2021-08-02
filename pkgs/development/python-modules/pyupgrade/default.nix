@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyupgrade";
-  version = "2.23.0";
+  version = "2.23.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0w1r9s3kr539vwfb7ld7jmr8q4jkr7jsnk51x50wji7jzs627a8i";
+    sha256 = "1jc0gh0y5fz02wab50v6m4x0pfycdkjvf1vw05d8d0yqsv7ld7fw";
   };
 
   checkInputs = [ pytestCheckHook ];

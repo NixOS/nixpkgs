@@ -70,6 +70,7 @@ mapAliases ({
   aucdtect = throw "aucdtect: Upstream no longer provides download urls."; # added 2020-12-26
   avldrums-lv2 = x42-avldrums; # added 2020-03-29
   avxsynth = throw "avxsynth was removed because it was broken"; # added 2021-05-18
+  azureus = throw "azureus is now known as vuze and the version in nixpkgs was really outdated"; # added 2021-08-02
   badtouch = authoscope; # Project was renamed, added 20210626
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
@@ -235,6 +236,7 @@ mapAliases ({
   flashplayer = throw "flashplayer has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
   flashplayer-standalone = throw "flashplayer-standalone has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
   flashplayer-standalone-debugger = throw "flashplayer-standalone-debugger has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
+  flashtool = throw "flashtool was removed from nixpkgs, because the download is down for copyright reasons and the site looks very fishy"; # added 2021-06-31
   flink_1_5 = throw "flink_1_5 was removed, use flink instead"; # added 2021-01-25
   flutter-beta = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions."; # added 2020-01-15
   flutter-dev = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions."; # added 2020-01-15
@@ -526,6 +528,7 @@ mapAliases ({
   nix-review = nixpkgs-review; # added 2019-12-22
   nixFlakes = nixUnstable; # added 2021-05-21
   nmap_graphical = nmap-graphical;  # added 2017-01-19
+  nmap-unfree = nmap; # added 2021-04-06
   nologin = shadow; # added 2018-04-25
   nordic-polar = throw "nordic-polar was removed on 2021-05-27, now integrated in nordic"; # added 2021-05-27
   nxproxy = nx-libs; # added 2019-02-15
@@ -657,6 +660,7 @@ mapAliases ({
   privateer = throw "privateer was removed because it was broken"; # added 2021-05-18
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
+  proglodyte-wasm = throw "proglodyte-wasm has been removed from nixpkgs, because it is unmaintained since 5 years with zero github stars"; # added 2021-06-30
   proj_5 = throw "Proj-5 has been removed from nixpkgs, use proj instead."; # added 2021-04-12
   prometheus-cups-exporter = throw "outdated and broken by design; removed by developer."; # added 2021-03-16
   pygmentex = texlive.bin.pygmentex; # added 2019-12-15
@@ -708,6 +712,7 @@ mapAliases ({
   radare2-cutter = cutter; # added 2021-03-30
   redkite = throw "redkite was archived by upstream"; # added 2021-04-12
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
+  rpiboot-unstable = rpiboot; # added 2021-07-30
   ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_1_0 = throw "ruby_2_1_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_2_9 = throw "ruby_2_2_9 was deprecated on 2018-02-13: use a newer version of ruby";
@@ -763,6 +768,7 @@ mapAliases ({
   sky = throw "sky has been removed from nixpkgs (2020-09-16)";
   skype = skypeforlinux; # added 2017-07-27
   skype_call_recorder = throw "skype_call_recorder has been removed from nixpkgs, because it stopped working when classic Skype was retired."; # added 2020-10-31
+  skype4pidgin = throw "skype4pidgin has been remove from nixpkgs, because it stopped working when classic Skype was retired."; # added 2021-07-14
   skydive = throw "skydive has been removed from nixpkgs (2019-09-10)";
   slack-dark = slack; # added 2020-03-27
   slic3r-prusa3d = prusa-slicer; # added 2019-05-21

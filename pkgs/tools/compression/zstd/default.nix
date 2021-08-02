@@ -3,6 +3,9 @@
 , file
 , legacySupport ? false
 , static ? stdenv.hostPlatform.isStatic
+# these need to be ran on the host, thus disable when cross-compiling
+, buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
+, doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +43,7 @@ stdenv.mkDerivation rec {
     (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
       BUILD_SHARED = !static;
       BUILD_STATIC = static;
-      BUILD_CONTRIB = true;
+      BUILD_CONTRIB = buildContrib;
       PROGRAMS_LINK_SHARED = !static;
       LEGACY_SUPPORT = legacySupport;
       BUILD_TESTS = doCheck;
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [ file ];
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  inherit doCheck;
   checkPhase = ''
     runHook preCheck
     # Patch shebangs for playTests
@@ -64,13 +67,14 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p $bin/bin
-    cp contrib/pzstd/pzstd $bin/bin/pzstd
     substituteInPlace ../programs/zstdgrep \
       --replace ":-grep" ":-${gnugrep}/bin/grep" \
       --replace ":-zstdcat" ":-$bin/bin/zstdcat"
 
     substituteInPlace ../programs/zstdless \
       --replace "zstdcat" "$bin/bin/zstdcat"
+  '' + lib.optionalString buildContrib ''
+    cp contrib/pzstd/pzstd $bin/bin/pzstd
   '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
   '';

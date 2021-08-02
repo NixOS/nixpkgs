@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, flex, bison, pkg-config, which
-, pythonSupport ? false, python, swig, libyaml
+, pythonSupport ? false, python ? null, swig, libyaml
 }:
 
 stdenv.mkDerivation rec {

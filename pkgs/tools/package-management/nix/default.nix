@@ -42,6 +42,8 @@ common =
         [ "out" "dev" ]
         ++ lib.optionals enableDocumentation [ "man" "doc" ];
 
+      hardeningEnable = [ "pie" ];
+
       nativeBuildInputs =
         [ pkg-config ]
         ++ lib.optionals stdenv.isLinux [ util-linuxMinimal ]
@@ -218,10 +220,10 @@ in rec {
 
   nixStable = callPackage common (rec {
     pname = "nix";
-    version = "2.3.14";
+    version = "2.3.15";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-cToMnZU3+UpjeiiXnG3clz9zn8Xk+TbB7UbqmLMrlFk=";
+      sha256 = "sha256-N+MxClX94eUOfUMh0puRgNHp16+cjSEdtqZn5u5OtBA=";
     };
 
     boehmgc = boehmgc_nix;

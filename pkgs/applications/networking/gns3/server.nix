@@ -31,7 +31,7 @@ in python.pkgs.buildPythonPackage {
   propagatedBuildInputs = with python.pkgs; [
     aiohttp-cors yarl aiohttp multidict setuptools
     jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
-    prompt_toolkit py-cpuinfo
+    prompt-toolkit py-cpuinfo
   ];
 
   # Requires network access
