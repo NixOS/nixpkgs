@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "dasel";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "TomWright";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XJSWdXGa1qkkMfETUV8xx9oaMdNVFdO27/GvDvczjG8=";
+    sha256 = "sha256-zuePg8XcDxnXt2bq9YtsBsb5MC9dFLLUeY38q0qh8JU=";
   };
 
   vendorSha256 = "sha256-BdX4DO77mIf/+aBdkNVFUzClsIml1UMcgvikDbbdgcY=";
