@@ -317,6 +317,8 @@ in
 
   protoc-gen-go-grpc = callPackage ../development/tools/protoc-gen-go-grpc { };
 
+  protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
+
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
@@ -1864,11 +1866,6 @@ in
   libusb1-axoloti = callPackage ../applications/audio/axoloti/libusb1.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
-
-  azureus = callPackage ../tools/networking/p2p/azureus {
-    jdk = jdk8;
-    swt = swt_jdk8;
   };
 
   b3sum = callPackage ../tools/security/b3sum {};
@@ -6858,6 +6855,10 @@ in
   libx86emu = callPackage ../development/libraries/libx86emu { };
 
   libzmf = callPackage ../development/libraries/libzmf {};
+
+  libreddit = callPackage ../servers/libreddit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   librespeed-cli = callPackage ../tools/misc/librespeed-cli { };
 
@@ -14415,6 +14416,14 @@ in
 
   swftools = callPackage ../tools/video/swftools {
     stdenv = gccStdenv;
+  };
+
+  taplo-cli = callPackage ../development/tools/taplo-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  taplo-lsp = callPackage ../development/tools/taplo-lsp {
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
@@ -32573,7 +32582,9 @@ in
 
   btcdeb = callPackage ../applications/blockchains/btcdeb { };
 
-  jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
+  jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron {
+    electron = electron_13;
+  };
 
   zenstates = callPackage ../os-specific/linux/zenstates {};
 
