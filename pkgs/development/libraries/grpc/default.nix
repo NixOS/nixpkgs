@@ -4,8 +4,9 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.39.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
+  version = "1.39.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
@@ -13,6 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wa7n7mf20fnvxqw093kr7a4c7vilcmx9yl3hicnyfcd663jgqvd";
     fetchSubmodules = true;
   };
+
   patches = [
     # Fix build on armv6l (https://github.com/grpc/grpc/pull/21341)
     (fetchpatch {
@@ -27,19 +29,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ c-ares.cmake-config openssl protobuf ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
-  cmakeFlags =
-    [ "-DgRPC_ZLIB_PROVIDER=package"
-      "-DgRPC_CARES_PROVIDER=package"
-      "-DgRPC_RE2_PROVIDER=package"
-      "-DgRPC_SSL_PROVIDER=package"
-      "-DgRPC_PROTOBUF_PROVIDER=package"
-      "-DgRPC_ABSL_PROVIDER=package"
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-      "-DCMAKE_CXX_STANDARD=17"
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-    ];
+  cmakeFlags = [
+    "-DgRPC_ZLIB_PROVIDER=package"
+    "-DgRPC_CARES_PROVIDER=package"
+    "-DgRPC_RE2_PROVIDER=package"
+    "-DgRPC_SSL_PROVIDER=package"
+    "-DgRPC_PROTOBUF_PROVIDER=package"
+    "-DgRPC_ABSL_PROVIDER=package"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DCMAKE_CXX_STANDARD=17"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+  ];
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.
@@ -58,7 +60,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
-    maintainers = [ maintainers.lnl7 maintainers.marsam ];
+    maintainers = with maintainers; [ lnl7 marsam ];
     homepage = "https://grpc.io/";
     platforms = platforms.all;
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";

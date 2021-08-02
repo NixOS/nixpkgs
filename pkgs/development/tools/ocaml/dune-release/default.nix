@@ -41,7 +41,7 @@ in buildDunePackage rec {
 
   preCheck = ''
     # it fails when it tries to reference "./make_check_deterministic.exe"
-    rm -fr tests/bin/check
+    rm -r tests/bin/check
   '';
 
   # tool specific env vars have been deprecated, use PATH
