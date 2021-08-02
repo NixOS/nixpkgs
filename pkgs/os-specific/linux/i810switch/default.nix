@@ -3,8 +3,6 @@
 stdenv.mkDerivation {
   name = "i810switch-0.6.5";
 
-  phases = "unpackPhase installPhase";
-
   installPhase = "
     sed -i -e 's+/usr++' Makefile
     sed -i -e 's+^\\(.*putenv(\"PATH=\\).*$+\\1${pciutils}/sbin\");+' i810switch.c
