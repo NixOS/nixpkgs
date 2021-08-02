@@ -23,7 +23,7 @@ python3Packages.buildPythonPackage rec {
   ];
 
   # no tests, just a script
-  doChecks = false;
+  doCheck = false;
 
   meta = with lib; {
     description = "cloudbell webpush notification support for ntfy";
