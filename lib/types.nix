@@ -151,9 +151,12 @@ rec {
       # issue deprecation warnings recursively. Can also be used to reuse
       # nested types
       nestedTypes ? {}
+      # Whether `mkIf` assignments can cause the definiton to be optional in
+      # the parent option. If `processed` is false, this is implicitly false too
+    , conditional ? true
     }:
     { _type = "option-type";
-      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage nestedTypes;
+      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage nestedTypes conditional;
       description = if description == null then name else description;
     };
 
@@ -167,6 +170,10 @@ rec {
       description = "raw value";
       check = value: true;
       merge = mergeOneOption;
+    };
+
+    unconditional = elemType: elemType // {
+      conditional = false;
     };
 
     anything = mkOptionType {
@@ -417,30 +424,7 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
-    # A version of attrsOf that's lazy in its values at the expense of
-    # conditional definitions not working properly. E.g. defining a value with
-    # `foo.attr = mkIf false 10`, then `foo ? attr == true`, whereas with
-    # attrsOf it would correctly be `false`. Accessing `foo.attr` would throw an
-    # error that it's not defined. Use only if conditional definitions don't make sense.
-    lazyAttrsOf = elemType: mkOptionType rec {
-      name = "lazyAttrsOf";
-      description = "lazy attribute set of ${elemType.description}s";
-      check = isAttrs;
-      merge = loc: defs:
-        zipAttrsWith (name: defs:
-          let merged = mergeDefinitions (loc ++ [name]) elemType defs;
-          # mergedValue will trigger an appropriate error when accessed
-          in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
-        )
-        # Push down position info.
-        (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs);
-      emptyValue = { value = {}; };
-      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
-      getSubModules = elemType.getSubModules;
-      substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
-      nestedTypes.elemType = elemType;
-    };
+    lazyAttrsOf = elemType: attrsOf (unconditional elemType);
 
     # TODO: drop this in the future:
     loaOf = elemType: types.attrsOf elemType // {

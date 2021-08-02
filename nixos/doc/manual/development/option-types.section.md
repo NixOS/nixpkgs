@@ -210,6 +210,19 @@ Value types are types that take a value parameter.
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
 
+`types.unconditional` *`t`*
+
+:   The same as *`t`*, but without full support for conditional definitions
+    using `lib.mkIf <cond>`. This has the advantage that when used as the
+    element type in `types.attrsOf` and `types.listOf`, the attribute keys and
+    the list length respectively can be known without evaluating each
+    individual attribute/list value, keeping these structures lazy.
+    For instance, this prevents a case of infinite recursion by allowing elements
+    in an attribute set to reference other elements of the same attribute set
+    via the `config` module argument.
+    If `lib.mkIf <cond>` is used on such a type, the value is assumed to exist,
+    but an error is thrown when evaluated and the condition is false.
+
 ## Composed Types {#sec-option-types-composed}
 
 Composed types are types that take a type as parameter. `listOf

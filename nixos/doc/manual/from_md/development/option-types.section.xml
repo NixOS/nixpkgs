@@ -408,6 +408,31 @@
           </itemizedlist>
         </listitem>
       </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>types.unconditional</literal>
+          <emphasis><literal>t</literal></emphasis>
+        </term>
+        <listitem>
+          <para>
+            The same as <emphasis><literal>t</literal></emphasis>, but
+            without full support for conditional definitions using
+            <literal>lib.mkIf &lt;cond&gt;</literal>. This has the
+            advantage that when used as the element type in
+            <literal>types.attrsOf</literal> and
+            <literal>types.listOf</literal>, the attribute keys and the
+            list length respectively can be known without evaluating
+            each individual attribute/list value, keeping these
+            structures lazy. For instance, this prevents a case of
+            infinite recursion by allowing elements in an attribute set
+            to reference other elements of the same attribute set via
+            the <literal>config</literal> module argument. If
+            <literal>lib.mkIf &lt;cond&gt;</literal> is used on such a
+            type, the value is assumed to exist, but an error is thrown
+            when evaluated and the condition is false.
+          </para>
+        </listitem>
+      </varlistentry>
     </variablelist>
   </section>
   <section xml:id="sec-option-types-composed">
