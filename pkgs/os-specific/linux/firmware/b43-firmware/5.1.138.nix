@@ -13,8 +13,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ b43FirmwareCutter ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/lib/firmware
     b43-fwcutter -w $out/lib/firmware linux/wl_apsta.o
