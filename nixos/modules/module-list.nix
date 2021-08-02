@@ -236,6 +236,7 @@
   ./security/doas.nix
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
+  ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix

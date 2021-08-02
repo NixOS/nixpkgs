@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPackages
-, cmake, zlib, c-ares, pkg-config, re2, openssl, protobuf, grpc
-, abseil-cpp, libnsl
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, buildPackages
+, cmake
+, zlib
+, c-ares
+, pkg-config
+, re2
+, openssl
+, protobuf
+, grpc
+, abseil-cpp
+, libnsl
 }:
 
 stdenv.mkDerivation rec {

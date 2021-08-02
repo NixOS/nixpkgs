@@ -25722,6 +25722,8 @@ in
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
+  meshcentral = callPackage ../tools/admin/meshcentral { };
+
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
   metadata-cleaner = callPackage ../applications/misc/metadata-cleaner { };
@@ -27436,6 +27438,8 @@ in
 
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
 
+  telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
+
   telepathy-gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
 
   telepathy-haze = callPackage ../applications/networking/instant-messengers/telepathy/haze {};
@@ -28629,6 +28633,8 @@ in
 
   chia = callPackage ../applications/blockchains/chia { };
 
+  chia-plotter = callPackage ../applications/blockchains/chia-plotter { };
+
   clightning = callPackage ../applications/blockchains/clightning { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
@@ -28763,6 +28769,9 @@ in
   pivx = libsForQt5.callPackage ../applications/blockchains/pivx { withGui = true; };
   pivxd = callPackage ../applications/blockchains/pivx {
     withGui = false;
+    qtbase = null;
+    qttools = null;
+    wrapQtAppsHook = null;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 

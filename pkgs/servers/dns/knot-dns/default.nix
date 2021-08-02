@@ -3,8 +3,6 @@
 , autoreconfHook, nixosTests
 }:
 
-let inherit (lib) optional optionals; in
-
 stdenv.mkDerivation rec {
   pname = "knot-dns";
   version = "3.1.0";
@@ -29,6 +27,12 @@ stdenv.mkDerivation rec {
     ./runtime-deps.patch
   ];
 
+  # Disable knotd journal tests on platforms that don't use 4k sysconf(_SC_PAGESIZE).
+  # The journal most likely works fine, but some of the tests currently don't.
+  postPatch = lib.optionalString (doCheck && stdenv.isDarwin && stdenv.isAarch64) ''
+    sed '/^\tknot\/test_journal\>/d' -i tests/Makefile.am
+  '';
+
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     gnutls liburcu libidn2 libunistring
@@ -39,12 +43,10 @@ stdenv.mkDerivation rec {
     libmnl # required for knot >= 3.1
     # without sphinx &al. for developer documentation
     # TODO: add dnstap support?
-  ]
-    ++ optionals stdenv.isLinux [
-      libcap_ng systemd
-      libbpf # XDP support
-    ]
-    ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap_ng systemd
+    libbpf # XDP support
+  ] ++ lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
 
