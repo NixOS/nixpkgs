@@ -646,6 +646,8 @@ rec {
         if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
         else let allInvalid = filter (def: ! type.check def.value) defsFinal;
         in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
+      else if type.emptyValue ? value then
+        type.emptyValue.value
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
