@@ -3,8 +3,6 @@
 , autoreconfHook, nixosTests
 }:
 
-let inherit (lib) optional optionals; in
-
 stdenv.mkDerivation rec {
   pname = "knot-dns";
   version = "3.1.0";
@@ -39,12 +37,10 @@ stdenv.mkDerivation rec {
     libmnl # required for knot >= 3.1
     # without sphinx &al. for developer documentation
     # TODO: add dnstap support?
-  ]
-    ++ optionals stdenv.isLinux [
-      libcap_ng systemd
-      libbpf # XDP support
-    ]
-    ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap_ng systemd
+    libbpf # XDP support
+  ] ++ lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
 
