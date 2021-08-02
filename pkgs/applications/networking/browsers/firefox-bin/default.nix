@@ -89,8 +89,6 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (source) url sha256; };
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsa-lib
