@@ -4541,6 +4541,12 @@
     githubId = 592849;
     name = "Ilya Kolpakov";
   };
+  ilyakooo0 = {
+    name = "Ilya Kostyuchenko";
+    email = "ilyakooo0@gmail.com";
+    github = "ilyakooo0";
+    githubId = 6209627;
+  };
   imalison = {
     email = "IvanMalison@gmail.com";
     github = "IvanMalison";
