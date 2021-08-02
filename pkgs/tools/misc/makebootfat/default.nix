@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "makebootfat-1.4";
+  pname = "makebootfat";
+  version = "1.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/advancemame/${name}.tar.gz";
+    url = "mirror://sourceforge/advancemame/makebootfat-${version}.tar.gz";
     sha256 = "0v0g1xax0y6hmw2x10nfhchp9n7vqyvgc33gcxqax8jdq2pxm1q2";
   };
 

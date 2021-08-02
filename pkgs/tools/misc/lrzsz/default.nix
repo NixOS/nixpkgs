@@ -1,10 +1,11 @@
 { lib, stdenv, gettext, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "lrzsz-0.12.20";
+  pname = "lrzsz";
+  version = "0.12.20";
 
   src = fetchurl {
-    url = "https://ohse.de/uwe/releases/${name}.tar.gz";
+    url = "https://ohse.de/uwe/releases/lrzsz-${version}.tar.gz";
     sha256 = "1wcgfa9fsigf1gri74gq0pa7pyajk12m4z69x7ci9c6x9fqkd2y2";
   };
 

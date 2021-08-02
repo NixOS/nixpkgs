@@ -1,9 +1,10 @@
 {lib, stdenv, fetchurl, glib, gettext, readline, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "pal-0.4.3";
+  pname = "pal";
+  version = "0.4.3";
   src = fetchurl {
-    url = "mirror://sourceforge/palcal/${name}.tgz";
+    url = "mirror://sourceforge/palcal/pal-${version}.tgz";
     sha256 = "072mahxvd7lcvrayl32y589w4v3vh7bmlcnhiksjylknpsvhqiyf";
   };
 

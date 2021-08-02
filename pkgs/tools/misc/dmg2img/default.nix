@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, zlib, bzip2, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "dmg2img-1.6.7";
+  pname = "dmg2img";
+  version = "1.6.7";
 
   src = fetchurl {
-    url = "http://vu1tur.eu.org/tools/${name}.tar.gz";
+    url = "http://vu1tur.eu.org/tools/dmg2img-${version}.tar.gz";
     sha256 = "066hqhg7k90xcw5aq86pgr4l7apzvnb4559vj5s010avbk8adbh2";
   };
 

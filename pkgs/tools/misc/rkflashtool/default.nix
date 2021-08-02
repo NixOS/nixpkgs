@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libusb1 }:
 
 stdenv.mkDerivation rec {
-  name = "rkflashtool-5.1";
+  pname = "rkflashtool";
+  version = "5.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rkflashtool/${name}-src.tar.bz2";
+    url = "mirror://sourceforge/rkflashtool/rkflashtool-${version}-src.tar.bz2";
     sha256 = "0dbp1crw7pjav9gffrnskhkf0gxlj4xgp65clqhvfmv32460xb9c";
   };
 
