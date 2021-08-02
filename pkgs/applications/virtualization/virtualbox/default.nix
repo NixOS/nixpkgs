@@ -68,7 +68,6 @@ in stdenv.mkDerivation {
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
-        -e 's@pkg-config Qt5Core Qt5Gui@pkg-config Qt5Core@' \
         ${optionalString (!headless) ''
         -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
         ''} -i configure
@@ -105,6 +104,10 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
+  ] ++ [
+    # Temporary workaround for broken build
+    # https://www.virtualbox.org/pipermail/vbox-dev/2021-July/015670.html
+    ./fix-configure-pkgconfig-qt.patch
   ];
 
   postPatch = ''
