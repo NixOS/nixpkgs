@@ -377,7 +377,7 @@ rec {
             ).optionalValue
           ) def.value
         ) defs)));
-      emptyValue = { value = {}; };
+      emptyValue = { value = []; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
@@ -389,7 +389,7 @@ rec {
       let list = addCheck (types.listOf elemType) (l: l != []);
       in list // {
         description = "non-empty " + list.description;
-        # Note: emptyValue is left as is, because another module may define an element.
+        emptyValue = { };
       };
 
     attrsOf = elemType: mkOptionType rec {
