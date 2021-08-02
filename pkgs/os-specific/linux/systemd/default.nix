@@ -12,7 +12,6 @@
 , coreutils
 , gperf
 , getent
-, patchelf
 , glibcLocales
 , glib
 , substituteAll
@@ -90,7 +89,6 @@
   # name argument
 , pname ? "systemd"
 
-
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_42
@@ -113,10 +111,10 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247.6";
 in
-stdenv.mkDerivation {
-  inherit version pname;
+stdenv.mkDerivation rec {
+  inherit pname;
+  version = "247.6";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -267,55 +265,51 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "man" "dev" ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      gperf
-      ninja
-      meson
-      coreutils # meson calls date, stat etc.
-      glibcLocales
-      patchelf
-      getent
-      m4
+  nativeBuildInputs = [
+    pkg-config
+    gperf
+    ninja
+    meson
+    glibcLocales
+    getent
+    m4
 
-      intltool
-      gettext
+    intltool
+    gettext
 
-      libxslt
-      docbook_xsl
-      docbook_xml_dtd_42
-      docbook_xml_dtd_45
-      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
-    ];
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
+    docbook_xml_dtd_45
+    (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
+  ];
 
-  buildInputs =
-    [
-      acl
-      audit
-      glib
-      kmod
-      libcap
-      libgcrypt
-      libidn2
-      libuuid
-      linuxHeaders
-      pam
-    ]
+  buildInputs = [
+    acl
+    audit
+    glib
+    kmod
+    libcap
+    libgcrypt
+    libidn2
+    libuuid
+    linuxHeaders
+    pam
+  ]
 
-    ++ lib.optional withApparmor libapparmor
-    ++ lib.optional wantCurl (lib.getDev curl)
-    ++ lib.optionals withCompression [ bzip2 lz4 xz ]
-    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional withEfi gnu-efi
-    ++ lib.optional withKexectools kexectools
-    ++ lib.optional withLibseccomp libseccomp
-    ++ lib.optional withNetworkd iptables
-    ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpgerror
-    ++ lib.optional withSelinux libselinux
-    ++ lib.optional withRemote libmicrohttpd
-    ++ lib.optionals withHomed [ p11-kit libfido2 ]
+  ++ lib.optional withApparmor libapparmor
+  ++ lib.optional wantCurl (lib.getDev curl)
+  ++ lib.optionals withCompression [ bzip2 lz4 xz ]
+  ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+  ++ lib.optional withEfi gnu-efi
+  ++ lib.optional withKexectools kexectools
+  ++ lib.optional withLibseccomp libseccomp
+  ++ lib.optional withNetworkd iptables
+  ++ lib.optional withPCRE2 pcre2
+  ++ lib.optional withResolved libgpgerror
+  ++ lib.optional withSelinux libselinux
+  ++ lib.optional withRemote libmicrohttpd
+  ++ lib.optionals withHomed [ p11-kit libfido2 ]
   ;
 
   #dontAddPrefix = true;
@@ -368,14 +362,14 @@ stdenv.mkDerivation {
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
     /*
-    As of now, systemd doesn't allow runtime configuration of these values. So
-    the settings in /etc/login.defs have no effect on it. Many people think this
-    should be supported however, see
-    - https://github.com/systemd/systemd/issues/3855
-    - https://github.com/systemd/systemd/issues/4850
-    - https://github.com/systemd/systemd/issues/9769
-    - https://github.com/systemd/systemd/issues/9843
-    - https://github.com/systemd/systemd/issues/10184
+      As of now, systemd doesn't allow runtime configuration of these values. So
+      the settings in /etc/login.defs have no effect on it. Many people think this
+      should be supported however, see
+      - https://github.com/systemd/systemd/issues/3855
+      - https://github.com/systemd/systemd/issues/4850
+      - https://github.com/systemd/systemd/issues/9769
+      - https://github.com/systemd/systemd/issues/9843
+      - https://github.com/systemd/systemd/issues/10184
     */
     "-Dsystem-uid-max=999"
     "-Dsystem-gid-max=999"
