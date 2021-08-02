@@ -4901,6 +4901,8 @@ in {
 
   nsapi = callPackage ../development/python-modules/nsapi { };
 
+  ntfy-webpush = callPackage ../tools/misc/ntfy-webpush { };
+
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
@@ -5090,6 +5092,8 @@ in {
   pagelabels = callPackage ../development/python-modules/pagelabels { };
 
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
+
+  palace = callPackage ../development/python-modules/palace { };
 
   palettable = callPackage ../development/python-modules/palettable { };
 
