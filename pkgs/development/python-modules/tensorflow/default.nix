@@ -1,5 +1,5 @@
 { stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
-, addOpenGLRunpath
+, addOpenGLRunpath, fetchpatch
 # Python deps
 , buildPythonPackage, pythonOlder, pythonAtLeast, python
 # Python libraries
@@ -114,6 +114,12 @@ let
     };
 
     patches = [
+      # included from 2.6.0 onwards
+      (fetchpatch {
+        name = "fix-numpy-1.20-notimplementederror.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/b258941525f496763d4277045b6513c815720e3a.patch";
+        sha256 = "19f9bzrcfsynk11s2hqvscin5c65zf7r6g3nb10jnimw79vafiry";
+      })
       # Relax too strict Python packages versions dependencies.
       ./relax-dependencies.patch
       # Add missing `io_bazel_rules_docker` dependency.
