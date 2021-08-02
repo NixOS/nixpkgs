@@ -162,6 +162,13 @@ rec {
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
+    raw = mkOptionType rec {
+      name = "raw";
+      description = "raw value";
+      check = value: true;
+      merge = mergeOneOption;
+    };
+
     anything = mkOptionType {
       name = "anything";
       description = "anything";

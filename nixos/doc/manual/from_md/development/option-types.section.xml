@@ -94,6 +94,22 @@
       </varlistentry>
       <varlistentry>
         <term>
+          <literal>types.raw</literal>
+        </term>
+        <listitem>
+          <para>
+            A type that accepts exactly a single arbitrary value. This
+            type is recommended for options whose only value is defined
+            by the same module as the option, because its structure is
+            known ahead-of time and doesn’t need to be typechecked
+            internally. Especially useful for values where type checking
+            would be too expensive, or where type checking is handled in
+            another way.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <literal>types.attrs</literal>
         </term>
         <listitem>

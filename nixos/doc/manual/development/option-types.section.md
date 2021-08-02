@@ -63,6 +63,15 @@ merging is handled.
     ```
     :::
 
+`types.raw`
+
+:   A type that accepts exactly a single arbitrary value. This type is
+    recommended for options whose only value is defined by the same module
+    as the option, because its structure is known ahead-of time and doesn't
+    need to be typechecked internally. Especially useful for values where
+    type checking would be too expensive, or where type checking is handled
+    in another way.
+
 `types.attrs`
 
 :   A free-form attribute set.
