@@ -25740,6 +25740,8 @@ in
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
+  meshcentral = callPackage ../tools/admin/meshcentral { };
+
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
   metadata-cleaner = callPackage ../applications/misc/metadata-cleaner { };
