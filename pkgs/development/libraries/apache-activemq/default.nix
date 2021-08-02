@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     url = "mirror://apache/activemq/${version}/${pname}-${version}-bin.tar.gz";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out
     mv * $out/
