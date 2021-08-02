@@ -13521,6 +13521,7 @@ in
   libsigrok_0_3 = libsigrok.override {
     version = "0.3.0";
     sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
+    doInstallCheck = false;
   };
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode {
