@@ -1,9 +1,11 @@
 {lib, stdenv, fetchurl} :
 
-stdenv.mkDerivation {
-  name = "libbtree-0.0.1alpha2";
+stdenv.mkDerivation rec {
+  pname = "libbtree";
+  version = "0.0.1alpha2";
+
   src = fetchurl {
-    url = "mirror://sourceforge/multitran/libbtree-0.0.1alpha2.tar.bz2";
+    url = "mirror://sourceforge/multitran/libbtree-${version}.tar.bz2";
     sha256 = "34a584e45058950337ff9342693b6739b52c3ce17e66440526c4bd6f9575802c";
   };
   patchPhase = ''
