@@ -50,6 +50,7 @@ in {
         rtl8723bs-firmware
         rtl8761b-firmware
         rtw88-firmware
+        rtw89-firmware
         zd1211fw
         alsa-firmware
         sof-firmware
