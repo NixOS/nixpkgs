@@ -2,13 +2,10 @@
 , fetchurl
 , appimageTools
 , makeWrapper
-, electron_13
+, electron
 , xorg
 }:
 
-let
-  electron = electron_13;
-in
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-electron";
   version = "2.8.9";
