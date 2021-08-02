@@ -406,6 +406,7 @@ stdenv.mkDerivation rec {
     (enableFeature (zlib != null) "zlib")
     (enableFeature (isLinux && vulkan-loader != null) "vulkan")
     (enableFeature (isLinux && vulkan-loader != null && glslang != null) "libglslang")
+    (enableFeature (samba != null && gplLicensing && version3Licensing) "libsmbclient")
     #(enableFeature (zvbi != null && gplLicensing) "libzvbi")
     /*
      * Developer flags
