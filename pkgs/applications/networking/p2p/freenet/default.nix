@@ -61,7 +61,7 @@ in stdenv.mkDerivation {
 
   jars = freenet-jars;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin
