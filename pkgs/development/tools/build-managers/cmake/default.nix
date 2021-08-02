@@ -13,9 +13,9 @@
 
 stdenv.mkDerivation rec {
   pname = "cmake"
-          + lib.optionalString isBootstrap "-boot"
-          + lib.optionalString useNcurses "-cursesUI"
-          + lib.optionalString withQt5 "-qt5UI";
+    + lib.optionalString isBootstrap "-boot"
+    + lib.optionalString useNcurses "-cursesUI"
+    + lib.optionalString withQt5 "-qt5UI";
   version = "3.19.7";
 
   src = fetchurl {
@@ -48,8 +48,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals buildDocs [ texinfo ]
     ++ lib.optionals withQt5 [ wrapQtAppsHook ];
 
-  buildInputs = []
-    ++ lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
+  buildInputs = lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
     ++ lib.optional useOpenSSL openssl
     ++ lib.optional useNcurses ncurses
     ++ lib.optional withQt5 qtbase;
@@ -62,27 +61,24 @@ stdenv.mkDerivation rec {
       --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
       --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
-  ''
-  # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
-  + ''
+    # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
     configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
   '';
 
   configureFlags = [
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
-    ++ lib.optional withQt5 "--qt-gui"
-    ++ lib.optionals buildDocs [
-      "--sphinx-build=${sphinx}/bin/sphinx-build"
-      "--sphinx-man"
-      "--sphinx-info"
-    ]
-    # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
-    ++ lib.optionals stdenv.hostPlatform.is32bit [
-      "CFLAGS=-D_FILE_OFFSET_BITS=64"
-      "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
-    ]
-    ++ [
+  ++ lib.optional withQt5 "--qt-gui"
+  ++ lib.optionals buildDocs [
+    "--sphinx-build=${sphinx}/bin/sphinx-build"
+    "--sphinx-man"
+    "--sphinx-info"
+  ]
+  # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
+    "CFLAGS=-D_FILE_OFFSET_BITS=64"
+    "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
+  ] ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
     # http://www.cmake.org/Wiki/CMake_Cross_Compiling
@@ -117,8 +113,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://cmake.org/";
-    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/"
-      + "release/${lib.versions.majorMinor version}.html";
+    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/release/${lib.versions.majorMinor version}.html";
     description = "Cross-Platform Makefile Generator";
     longDescription = ''
       CMake is an open-source, cross-platform family of tools designed to
