@@ -182,9 +182,7 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
-  qtkeychain = callPackage ../development/libraries/qtkeychain {
-    withQt5 = true;
-  };
+  qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
