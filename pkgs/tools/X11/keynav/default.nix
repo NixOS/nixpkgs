@@ -3,7 +3,8 @@
 
 let release = "20180821"; in
 stdenv.mkDerivation {
-  name = "keynav-0.${release}.0";
+  pname = "keynav";
+  version = "0.${release}.0";
 
   src = fetchFromGitHub {
     owner = "jordansissel";
