@@ -869,6 +869,8 @@ with pkgs;
 
   auditwheel = callPackage ../tools/package-management/auditwheel { };
 
+  autosuspend = callPackage ../tools/misc/autosuspend { };
+
   amidst = callPackage ../tools/games/minecraft/amidst { };
 
   gamemode = callPackage ../tools/games/gamemode {
