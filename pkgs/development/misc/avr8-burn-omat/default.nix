@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  phases = "unpackPhase installPhase";
-
   # move to nix-support to not create that many symlinks..
   # TODO burnomat tries to read /usr/local/etc/avrdude.conf (but you can edit it within the settings dialog)
   installPhase = ''
