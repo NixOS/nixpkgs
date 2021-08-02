@@ -6,6 +6,7 @@ in
   discourse-calendar = callPackage ./discourse-calendar {};
   discourse-canned-replies = callPackage ./discourse-canned-replies {};
   discourse-checklist = callPackage ./discourse-checklist {};
+  discourse-data-explorer = callPackage ./discourse-data-explorer {};
   discourse-github = callPackage ./discourse-github {};
   discourse-math = callPackage ./discourse-math {};
   discourse-solved = callPackage ./discourse-solved {};
