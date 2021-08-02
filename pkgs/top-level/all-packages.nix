@@ -28781,6 +28781,9 @@ in
   pivx = libsForQt5.callPackage ../applications/blockchains/pivx { withGui = true; };
   pivxd = callPackage ../applications/blockchains/pivx {
     withGui = false;
+    qtbase = null;
+    qttools = null;
+    wrapQtAppsHook = null;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
