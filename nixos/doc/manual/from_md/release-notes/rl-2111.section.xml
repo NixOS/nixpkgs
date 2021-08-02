@@ -607,6 +607,14 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.uptimed</literal> now uses
+          <literal>/var/lib/uptimed</literal> as its stateDirectory
+          instead of <literal>/var/spool/uptimed</literal>. Make sure to
+          move all files to the new directory.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
