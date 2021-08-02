@@ -16969,20 +16969,15 @@ let
 
   PerlMagick = buildPerlPackage rec {
     pname = "PerlMagick";
-    version = "7.0.10";
+    version = "7.0.11-1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-${version}.tar.gz";
-      sha256 = "1x05hdb3b6qs36x958b4w46qanvkqm6rpc44rlq4rd2w3gbp4lhx";
+      url = "mirror://cpan/authors/id/J/JC/JCRISTY/Image-Magick-${version}.tar.gz";
+      sha256 = "sha256-c0vuFmVq9bypQABBnZElGIQrpkYKwtD/B+PloBAycuI=";
     };
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
       ''
         sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick.dev}/include/ImageMagick";|' Makefile.PL
-
-        # Enable HDRI support to match the native ImageMagick 7 defaults
-        # See: https://github.com/ImageMagick/ImageMagick/issues/3402#issuecomment-801195538
-        substituteInPlace Makefile.PL \
-          --replace 'MAGICKCORE_HDRI_ENABLE=0' 'MAGICKCORE_HDRI_ENABLE=1'
       '';
   };
 
