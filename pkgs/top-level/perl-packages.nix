@@ -9246,7 +9246,7 @@ let
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
-    checkInputs = [ TestDifferences PerlMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    checkInputs = [ TestDifferences ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
       ${pkgs.xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
         make test
@@ -11099,7 +11099,7 @@ let
       sha256 = "0dr69rgl4si9i9ww1r4dc7apgb7y6f7ih808w4g0924cvz823s0x";
     };
     outputs = [ "out" "tex" ];
-    propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PerlMagick PodParser TextUnidecode XMLLibXSLT ];
+    propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent ImageMagick PodParser TextUnidecode XMLLibXSLT ];
     preCheck = ''
       rm t/931_epub.t # epub test fails
     '';
@@ -16967,8 +16967,9 @@ let
     };
   };
 
-  PerlMagick = buildPerlPackage rec {
-    pname = "PerlMagick";
+  PerlMagick = ImageMagick; # added 2021-08-02
+  ImageMagick = buildPerlPackage rec {
+    pname = "Image-Magick";
     version = "7.0.11-1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JC/JCRISTY/Image-Magick-${version}.tar.gz";
