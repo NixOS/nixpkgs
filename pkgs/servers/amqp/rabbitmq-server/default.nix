@@ -8,12 +8,12 @@
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
 
-  version = "3.8.9";
+  version = "3.9.1";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0b252l9r45h8r5gibdqcn6hhbm8g6rfzhm1k9d39pwhs5x77cjqv";
+    sha256 = "1qba783ja0y5k1npxh9lprpxs0vx2i6aci5j78di91m60pgyf1hc";
   };
 
   nativeBuildInputs = [ unzip ];
