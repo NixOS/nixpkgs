@@ -8,6 +8,7 @@ in
   discourse-data-explorer = callPackage ./discourse-data-explorer {};
   discourse-github = callPackage ./discourse-github {};
   discourse-math = callPackage ./discourse-math {};
+  discourse-migratepassword = callPackage ./discourse-migratepassword {};
   discourse-solved = callPackage ./discourse-solved {};
   discourse-spoiler-alert = callPackage ./discourse-spoiler-alert {};
   discourse-yearly-review = callPackage ./discourse-yearly-review {};
