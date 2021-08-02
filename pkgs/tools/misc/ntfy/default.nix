@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
     psutil
     matrix-client
     dbus-python
+    ntfy-webpush
   ];
 
   checkPhase = ''
