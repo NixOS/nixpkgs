@@ -645,16 +645,22 @@ rec {
 
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
-      if isDefined then
+      if defsFinal != [] then
         if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
         else let allInvalid = filter (def: ! type.check def.value) defsFinal;
         in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
+      # If there are no definitions, but the type is unconditional, we allow
+      # defaulting to its emptyValue if there is one
+      else if ! (type.conditional or true) && type.emptyValue ? value then
+        type.emptyValue.value
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
         throw "The option `${showOption loc}' is used but not defined.";
 
-    isDefined = defsFinal != [];
+    # Note: We use `or true` in case `lib.types` from an older nixpkgs version
+    # that doesn't set `conditional` is used. Avoids some trouble down the road
+    isDefined = type.conditional or true -> defsFinal != [];
 
     optionalValue =
       if isDefined then { value = mergedValue; }
