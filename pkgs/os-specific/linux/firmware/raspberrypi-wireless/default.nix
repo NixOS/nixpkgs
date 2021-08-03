@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/lib/firmware/brcm"
 
     # Wifi firmware
@@ -37,6 +38,7 @@ stdenv.mkDerivation {
 
     # Bluetooth firmware
     cp bluez-firmware/broadcom/*.hcd "$out/lib/firmware/brcm"
+    runHook postInstall
   '';
 
   outputHashMode = "recursive";
