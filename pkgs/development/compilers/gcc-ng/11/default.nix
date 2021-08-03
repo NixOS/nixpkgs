@@ -1,4 +1,5 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake
+{ lowPrio, newScope, pkgs, lib, stdenv
+, fetchurl, wrapCCWith, overrideCC
 , preLibcCrossHeaders
 , buildGccTools # tools, but from the previous stage, for cross
 , targetGccLibraries # libraries, but from the next stage, for cross
@@ -31,7 +32,11 @@ let
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildGccTools; });
+    callPackage = newScope (tools // { inherit src buildGccTools; });
+
+  mkExtraBuildCommands0 = _: "";
+
+  mkExtraBuildCommands = _: "";
 
   in {
 
@@ -71,7 +76,6 @@ let
     gccUseLLVM = wrapCCWith rec {
       cc = tools.gcc-unwrapped;
       libcxx = targetGccLibraries.libcxx;
-      bintools = bintools';
       extraPackages = [
         targetGccLibraries.libcxxabi
         targetGccLibraries.compiler-rt
@@ -93,7 +97,6 @@ let
     gccNoLibstdcxx = wrapCCWith rec {
       cc = tools.gcc-unwrapped;
       libcxx = null;
-      bintools = bintools';
       extraPackages = [
         targetGccLibraries.compiler-rt
       ];
@@ -130,26 +133,24 @@ let
     gccNoCompilerRtWithLibc = wrapCCWith rec {
       cc = tools.gcc-unwrapped;
       libcxx = null;
-      bintools = bintools';
-      extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
     };
 
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildGccTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
+    callPackage = newScope (libraries // buildGccTools // { inherit version src; });
   in {
 
     compiler-rt-libc = callPackage ./compiler-rt {
-      inherit llvm_meta;
+      inherit gcc_libs_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildGccTools.gccNoCompilerRtWithLibc
                else stdenv;
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
-      inherit llvm_meta;
+      inherit gcc_libs_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildGccTools.gccNoCompilerRt
                else stdenv;
@@ -165,21 +166,21 @@ let
     libcxxStdenv = overrideCC stdenv buildGccTools.libcxxGcc;
 
     libcxx = callPackage ./libcxx {
-      inherit llvm_meta;
+      inherit gcc_libs_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildGccTools.gccNoLibstdcxx
                else stdenv;
     };
 
     libcxxabi = callPackage ./libcxxabi {
-      inherit llvm_meta;
+      inherit gcc_libs_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildGccTools.gccNoLibstdcxx
                else stdenv;
     };
 
     libunwind = callPackage ./libunwind {
-      inherit llvm_meta;
+      inherit gcc_libs_meta;
       inherit (buildGccTools) llvm;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildGccTools.gccNoLibstdcxx
@@ -187,7 +188,7 @@ let
     };
 
     openmp = callPackage ./openmp {
-      inherit llvm_meta;
+      inherit gcc_libs_meta;
     };
   });
 
