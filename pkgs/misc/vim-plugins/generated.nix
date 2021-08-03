@@ -3250,6 +3250,18 @@ final: prev:
     meta.homepage = "https://github.com/vhyrro/neorg/";
   };
 
+  neoscroll-nvim = buildVimPluginFrom2Nix {
+    pname = "neoscroll-nvim";
+    version = "2021-07-23";
+    src = fetchFromGitHub {
+      owner = "karb94";
+      repo = "neoscroll.nvim";
+      rev = "bc1dc90b6697931fca5e19fdc4c2fa43d944269f";
+      sha256 = "1ji348kp4w77dhw7byfqrdyv1z7xwn7dx54y1nvclpbbj36ya9wk";
+    };
+    meta.homepage = "https://github.com/karb94/neoscroll.nvim/";
+  };
+
   neosnippet-snippets = buildVimPluginFrom2Nix {
     pname = "neosnippet-snippets";
     version = "2021-05-05";
