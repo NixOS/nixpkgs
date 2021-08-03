@@ -102,19 +102,23 @@
 
   git-undo = callPackage ./git-undo { };
 
-  haskell-unicode-input-method = melpaBuild {
-    pname = "emacs-haskell-unicode-input-method";
+  haskell-unicode-input-method = let
+    rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
+  in melpaBuild {
+    pname = "haskell-unicode-input-method";
     version = "20110905.2307";
+
+    commit = rev;
 
     src = pkgs.fetchFromGitHub {
       owner = "roelvandijk";
       repo = "emacs-haskell-unicode-input-method";
-      rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
+      inherit rev;
       sha256 = "09b7bg2s9aa4s8f2kdqs4xps3jxkq5wsvbi87ih8b6id38blhf78";
     };
 
     recipe = pkgs.writeText "recipe" ''
-      (emacs-haskell-unicode-input-method
+      (haskell-unicode-input-method
        :repo "roelvandijk/emacs-haskell-unicode-input-method"
        :fetcher github)
     '';
