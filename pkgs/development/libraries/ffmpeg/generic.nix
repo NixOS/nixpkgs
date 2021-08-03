@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     # Build flags
       "--enable-shared"
       (ifMinVer "0.6" "--enable-pic")
-      (enableFeature (srt != null) "libsrt")
+      (ifMinVer "4.0" (enableFeature (srt != null) "libsrt"))
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
     ] ++
