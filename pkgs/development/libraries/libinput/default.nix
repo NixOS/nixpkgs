@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja
 , libevdev, mtdev, udev, libwacom
 , documentationSupport ? false, doxygen, graphviz # Documentation
 , eventGUISupport ? false, cairo, glib, gtk3 # GUI event viewer support
@@ -22,14 +22,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.16.4";
+  version = "1.18.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "1c81429kh9av9fanxmnjw5rvsjbzcyi7d0dx0gkyq5yysmpmrppi";
+  src = fetchurl {
+    url = "https://www.freedesktop.org/software/libinput/libinput-${version}.tar.xz";
+    sha256 = "1jx7y48ym89grjz67jmn80h5j8c36qgwb0h5c703nln2zchl18cw";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -72,6 +69,9 @@ stdenv.mkDerivation rec {
       test/symbols-leak-test \
       test/check-leftover-udev-rules.sh \
       test/helper-copy-and-exec-from-tmp.sh
+
+    # Don't create an empty /etc directory.
+    sed -i "/install_subdir('libinput', install_dir : dir_etc)/d" meson.build
   '';
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
