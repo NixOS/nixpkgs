@@ -1,4 +1,5 @@
 { lib
+, cacert
 , fetchFromGitHub
 , fetchpatch
 , python3Packages
@@ -12,7 +13,12 @@ python3Packages.buildPythonApplication rec {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
+ SuperSandro2000-patch-1
     sha256 = "sha256-yS0/Fy2dj8VIbwv2J9sehP0VN0f/YDxu1k9WkaeEz8M=";
+
+    fetchSubmodules = true;
+    sha256 = "sha256-nK/Zk2zgIdrRtw3+VkUXQWfI9j29XFDOR95Dvbn07eA=";
+ master
   };
 
   patches = [
@@ -73,6 +79,12 @@ python3Packages.buildPythonApplication rec {
       --replace "clvm_rs==0.1.8" "clvm_rs>=0.1.8" \
       --replace "clvm==0.9.7" "clvm>=0.9.7" \
       --replace "bitstring==3.1.7" "bitstring>=3.1.9" \
+
+SuperSandro2000-patch-1
+
+
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
+ master
   '';
 
   preCheck = ''

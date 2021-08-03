@@ -100,7 +100,11 @@ let
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
+ SuperSandro2000-patch-1
       maintainers = with maintainers; [ antono jtojnar peterhoeg maxeaubrey ];
+
+      maintainers = with maintainers; [ antono jtojnar peterhoeg maxeaubrey ] ++ teams.pantheon.members;
+ master
     };
   });
 
