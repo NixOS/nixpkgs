@@ -8,7 +8,7 @@ let
       Gtk2Unique FileBaseDir FileWhich FileCopyRecursive XMLSimple NetDBus XMLTwig
       XMLParser HTTPMessage ProcSimple SortNaturally LocaleGettext
       ProcProcessTable URI ImageExifTool Gtk2AppIndicator LWP JSON
-      PerlMagick WWWMechanize HTTPDate HTMLForm HTMLParser HTMLTagset JSONMaybeXS
+      ImageMagick WWWMechanize HTTPDate HTMLForm HTMLParser HTMLTagset JSONMaybeXS
       commonsense HTTPCookies NetOAuth PathClass GooCanvas X11Protocol Cairo
       EncodeLocale TryTiny TypesSerialiser LWPMediaTypes
     ];

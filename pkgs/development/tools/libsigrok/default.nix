@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, pkg-config, libzip, glib, libusb1, libftdi1, check
 , libserialport, librevisa, doxygen, glibmm, python3
-, version ? "0.5.1", sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4"
+, version ? "0.5.1", sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4", doInstallCheck ? true
 }:
 
 stdenv.mkDerivation rec {
-  inherit version;
+  inherit version doInstallCheck;
   pname = "libsigrok";
 
   src = fetchurl {
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     tar --strip-components=1 -xvf "${firmware}" -C "$out/share/sigrok-firmware/"
   '';
 
-  doInstallCheck = true;
   installCheckPhase = ''
     # assert that c++ bindings are included
+    # note that this is only true for modern (>0.5) versions; the 0.3 series does not have these
     [[ -f $out/include/libsigrokcxx/libsigrokcxx.hpp ]] \
       || { echo 'C++ bindings were not generated; check configure output'; false; }
   '';
