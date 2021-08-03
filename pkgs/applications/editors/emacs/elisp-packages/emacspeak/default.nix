@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "emacspeak";
-  version = "51.0";
+  version = "54.0";
 
   src = fetchurl {
     url = "https://github.com/tvraman/emacspeak/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "09a0ywxlqa8jmc0wmvhaf7bdydnkyhy9nqfsdqcpbsgdzj6qpg90";
+    sha256 = "sha256-wsIqiW4UtgdAhqPqgCKgF37+hAtmAelAEnme1W9PKes=";
   };
 
   nativeBuildInputs = [ makeWrapper emacs ];
