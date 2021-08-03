@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.10.3";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SJogepww3IJt+NAkJ0G/lLgZ3rMWDTC+jHIrzzkzJGA=";
+    sha256 = "sha256-NV37K5JUfGPK8TwCi/4XY7MQUvp76vzdxsHUNPlYpYk=";
   };
 
-  vendorSha256 = "sha256-vNsYGlcVIj/cDijCFz8fG5Ht/s7koM62GV8zkOyA/fA=";
+  vendorSha256 = "sha256-4CmAf1s+tK7cKxwetgv0YewLLROsZ5g1Zd30FCep5k8=";
 
   # Don't build and check the integration tests
   excludedPackages = "itest";
