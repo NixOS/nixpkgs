@@ -1,18 +1,18 @@
 { lib
-, buildGoModule
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, pkg-config
-, gpgme
-, lvm2
-, btrfs-progs
-, libapparmor
-, libselinux
-, libseccomp
+ buildGoModule
+ fetchFromGitHub
+ go-md2man
+ installShellFiles
+ pkg-config
+ gpgme
+ lvm2
+ btrfs-progs
+ libapparmor
+ libselinux
+ libseccomp
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "buildah";
   version = "1.22.0";
 
@@ -56,7 +56,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = lib; {
     description = "A tool which facilitates building OCI images";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
