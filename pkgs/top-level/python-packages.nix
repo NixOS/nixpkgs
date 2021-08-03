@@ -7307,6 +7307,8 @@ in {
 
   pyvera = callPackage ../development/python-modules/pyvera { };
 
+  pyverilog = callPackage ../development/python-modules/pyverilog { };
+
   pyvesync = callPackage ../development/python-modules/pyvesync { };
 
   pyvex = callPackage ../development/python-modules/pyvex { };
