@@ -9897,6 +9897,18 @@ final: prev:
     meta.homepage = "https://github.com/folke/which-key.nvim/";
   };
 
+  wilder-nvim = buildVimPluginFrom2Nix {
+    pname = "wilder-nvim";
+    version = "2021-08-02";
+    src = fetchFromGitHub {
+      owner = "gelguy";
+      repo = "wilder.nvim";
+      rev = "a8a2feda01b8d498b49ef133f648297959de2fa8";
+      sha256 = "0sbcgv6zw9i7mv8plv7kr14zpvd24wlbgpx1k0hdfs3wbb8md9ya";
+    };
+    meta.homepage = "https://github.com/gelguy/wilder.nvim/";
+  };
+
   wildfire-vim = buildVimPluginFrom2Nix {
     pname = "wildfire-vim";
     version = "2021-05-10";
