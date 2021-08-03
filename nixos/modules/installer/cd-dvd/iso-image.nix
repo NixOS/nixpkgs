@@ -614,14 +614,11 @@ in
     };
 
   };
-  # store them in lib so we can set the same fileSystems with a
-  # higher prio on installation media
-  # This module is often over-layed onto an existing host config
-  # that defines `fileSystems`. We use mkOverride 60 to override
-  # standard values, but at the same time leave room for mkForce
-  # values targeted at the image build.
+
+  # store them in lib so we can mkImageMediaOverride the
+  # entire file system layout in installation media (only)
   config.lib.isoFileSystems = {
-    "/" = mkOverride 60
+    "/" = mkImageMediaOverride
       {
         fsType = "tmpfs";
         options = [ "mode=0755" ];
@@ -630,7 +627,7 @@ in
     # Note that /dev/root is a symlink to the actual root device
     # specified on the kernel command line, created in the stage 1
     # init script.
-    "/iso" = mkOverride 60
+    "/iso" = mkImageMediaOverride
       { device = "/dev/root";
         neededForBoot = true;
         noCheck = true;
@@ -638,20 +635,20 @@ in
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
-    "/nix/.ro-store" = mkOverride 60
+    "/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
         device = "/iso/nix-store.squashfs";
         options = [ "loop" ];
         neededForBoot = true;
       };
 
-    "/nix/.rw-store" = mkOverride 60
+    "/nix/.rw-store" = mkImageMediaOverride
       { fsType = "tmpfs";
         options = [ "mode=0755" ];
         neededForBoot = true;
       };
 
-    "/nix/store" = mkOverride 60
+    "/nix/store" = mkImageMediaOverride
       { fsType = "overlay";
         device = "overlay";
         options = [
