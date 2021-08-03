@@ -26881,8 +26881,6 @@ in
 
   quirc = callPackage ../tools/graphics/quirc {};
 
-  quilter = callPackage ../applications/editors/quilter { };
-
   quisk = python38Packages.callPackage ../applications/radio/quisk { };
 
   quiterss = libsForQt514.callPackage ../applications/networking/newsreaders/quiterss {};

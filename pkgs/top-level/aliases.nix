@@ -682,6 +682,7 @@ mapAliases ({
   qmk_firmware = throw "qmk_firmware has been removed because it was broken"; # added 2021-04-02
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # added 2020-12-02
   quake3game = ioquake3; # added 2016-01-14
+  quilter = throw "quilter has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-03
   qvim = throw "qvim has been removed."; # added 2020-08-31
   qweechat = throw "qweechat has been removed because it was broken"; # added 2021-03-08
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
