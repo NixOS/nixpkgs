@@ -11334,10 +11334,6 @@
     githubId = 3413119;
     name = "Vonfry";
   };
-  vozz = {
-    email = "oliver.huntuk@gmail.com";
-    name = "Oliver Hunt";
-  };
   vq = {
     email = "vq@erq.se";
     name = "Daniel Nilsson";
