@@ -82,7 +82,7 @@ let
 
     libgfortran = callPackage ./libgfortran { };
 
-    libstdcxx = callPackage ./libstdcxx { };
+    libstdcxx = callPackage ./libstdc++ { };
 
     # TODO add (gnu) libunwind here? can already be built separately aiui
 
