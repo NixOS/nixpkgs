@@ -250,38 +250,4 @@
   rectMark = rect-mark;
   sunriseCommander = sunrise-commander;
 
-  # Legacy aliases, these try to mostly map to melpa stable because it's
-  # closer to the old outdated package infra.
-  #
-  # Ideally this should be dropped some time during/after 20.03
-
-  autoComplete = self.melpaStablePackages.auto-complete;
-  bbdb3 = self.melpaStablePackages.bbdb;
-  colorTheme = self.color-theme;
-  cryptol = self.melpaStablePackages.cryptol-mode;
-  d = self.melpaStablePackages.d-mode;
-  emacsw3m = self.w3m;
-  erlangMode = self.melpaStablePackages.erlang;
-  flymakeCursor = self.melpaStablePackages.flymake-cursor;
-  graphvizDot = self.melpaStablePackages.graphviz-dot-mode;
-  haskellMode = self.melpaStablePackages.haskell-mode;
-  hsc3Mode = self.hsc3-mode;
-  idris = self.melpaStablePackages.idris-mode;
-  jade = self.jade-mode;
-  js2 = self.melpaStablePackages.js2-mode;
-  loremIpsum = self.lorem-ipsum;
-  markdownMode = self.melpaStablePackages.markdown-mode;
-  maudeMode = self.maude-mode;
-  phpMode = self.melpaStablePackages.php-mode;
-  prologMode = self.prolog-mode;
-  proofgeneral = self.melpaStablePackages.proof-general;
-  proofgeneral_HEAD = self.proof-general;
-  rainbowDelimiters = self.melpaStablePackages.rainbow-delimiters;
-  sbtMode = self.melpaStablePackages.sbt-mode;
-  scalaMode1 = self.melpaStablePackages.scala-mode;
-  # scalaMode2 = null;  # No clear mapping as of now
-  structuredHaskellMode = self.melpaStablePackages.shm;
-  tuaregMode = self.melpaStablePackages.tuareg;
-  writeGood = self.melpaStablePackages.writegood-mode;
-  xmlRpc = self.melpaStablePackages.xml-rpc;
 }
