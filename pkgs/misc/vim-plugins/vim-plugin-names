@@ -595,6 +595,7 @@ rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
 sainnhe/edge
+sainnhe/gruvbox-material
 sainnhe/sonokai
 sakhnik/nvim-gdb
 saltstack/salt-vim
