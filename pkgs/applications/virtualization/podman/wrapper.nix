@@ -14,6 +14,7 @@
 , cni-plugins # not added to path
 , iptables
 , iproute2
+, gvproxy
 , qemu
 , xz
 }:
@@ -31,6 +32,7 @@ let
     iptables
     iproute2
   ] ++ lib.optionals stdenv.isDarwin [
+    gvproxy
     qemu
     xz
   ] ++ extraPackages);
