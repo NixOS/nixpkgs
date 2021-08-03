@@ -353,6 +353,7 @@ in
       virtualHosts = mapAttrs (hostName: cfg: {
         serverName = mkDefault hostName;
         root = "${pkg hostName cfg}/share/dokuwiki";
+        extraConfig = lib.optionalString (cfg.webserver.nginx.addSSL || cfg.webserver.nginx.forceSSL || cfg.webserver.nginx.onlySSL || cfg.webserver.nginx.enableACME) "fastcgi_param HTTPS on;";
 
         locations = {
           "~ /(conf/|bin/|inc/|install.php)" = {
@@ -391,6 +392,7 @@ in
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param REDIRECT_STATUS 200;
               fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};
+              ${lib.optionalString (cfg.webserver.nginx.addSSL || cfg.webserver.nginx.forceSSL || cfg.webserver.nginx.onlySSL || cfg.webserver.nginx.enableACME) "fastcgi_param HTTPS on;"}
               '';
           };
 
