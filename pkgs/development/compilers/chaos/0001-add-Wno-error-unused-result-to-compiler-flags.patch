@@ -1,0 +1,47 @@
+From c314f44241d1d5ddf78b3a226374ecd5a652b243 Mon Sep 17 00:00:00 2001
+From: Lucas Ransan <lucas@ransan.tk>
+Date: Tue, 3 Aug 2021 11:23:35 +0200
+Subject: [PATCH] add -Wno-error=unused-result to compiler flags
+
+---
+ compiler/compiler.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/compiler/compiler.c b/compiler/compiler.c
+index b4a0470..d6f9b84 100644
+--- a/compiler/compiler.c
++++ b/compiler/compiler.c
+@@ -366,7 +366,7 @@ void compile(char *module, enum Phase phase_arg, char *bin_file, char *extra_fla
+     if (extra_flags_count > 0)
+         extra_flags_count--;
+ 
+-    unsigned arg_count = 29 + extra_flags_count;
++    unsigned arg_count = 30 + extra_flags_count;
+ #   if !defined(__clang__)
+     arg_count++;
+ #   endif
+@@ -404,17 +404,18 @@ void compile(char *module, enum Phase phase_arg, char *bin_file, char *extra_fla
+     c_compiler_args[25] = "-L/usr/local/opt/readline/lib";
+     c_compiler_args[26] = "-ldl";
+     c_compiler_args[27] = "-I/usr/local/include/chaos/";
++    c_compiler_args[28] = "-Wno-error=unused-result";
+ 
+     for (unsigned i = 0; i < (extra_flags_count); i++) {
+-        c_compiler_args[28 + i] = extra_flags_arr.arr[i];
++        c_compiler_args[29 + i] = extra_flags_arr.arr[i];
+     }
+ 
+ #   if !defined(__clang__)
+-    c_compiler_args[28 + extra_flags_count] = "-fcompare-debug-second",
++    c_compiler_args[29 + extra_flags_count] = "-fcompare-debug-second",
+ #   endif
+ 
+ #   if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
+-    c_compiler_args[29 + extra_flags_count] = "-Wl,-stack_size,0x100000000",
++    c_compiler_args[30 + extra_flags_count] = "-Wl,-stack_size,0x100000000",
+ #   endif
+ 
+     c_compiler_args[arg_count - 1] = NULL;
+-- 
+2.32.0
+
