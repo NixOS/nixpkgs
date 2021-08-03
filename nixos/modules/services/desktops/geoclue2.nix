@@ -266,5 +266,7 @@ in
       } // mapAttrs' appConfigToINICompatible cfg.appConfig);
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  };
 }
