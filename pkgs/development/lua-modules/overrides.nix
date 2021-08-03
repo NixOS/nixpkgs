@@ -344,7 +344,7 @@ with super;
   })).overrideAttrs (old: {
     # Without this, source root is wrongly set to ./readline-2.6/doc
     setSourceRoot = ''
-      sourceRoot=./readline-2.6
+      sourceRoot=./readline-3.0
     '';
   });
 

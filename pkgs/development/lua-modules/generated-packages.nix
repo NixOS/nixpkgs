@@ -10,6 +10,43 @@ You can customize the generated packages in pkgs/development/lua-modules/overrid
 self: super:
 with self;
 {
+alt-getopt = buildLuarocksPackage {
+  pname = "alt-getopt";
+  version = "0.8.0-1";
+
+  src = fetchurl {
+    url    = "https://luarocks.org/alt-getopt-0.8.0-1.src.rock";
+    sha256 = "1mi97dqb97sf47vb6wrk12yf1yxcaz0asr9gbgwyngr5n1adh5i3";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with lib; {
+    homepage = "https://github.com/cheusov/lua-alt-getopt";
+    description = "Process application arguments the same way as getopt_long";
+    maintainers = with maintainers; [ arobyn ];
+    license.fullName = "MIT/X11";
+  };
+};
+
+ansicolors = buildLuarocksPackage {
+  pname = "ansicolors";
+  version = "1.0.2-3";
+
+  src = fetchurl {
+    url    = "https://luarocks.org/ansicolors-1.0.2-3.src.rock";
+    sha256 = "1mhmr090y5394x1j8p44ws17sdwixn5a0r4i052bkfgk3982cqfz";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with lib; {
+    homepage = "https://github.com/kikito/ansicolors.lua";
+    description = "Library for color Manipulation.";
+    license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+  };
+};
+
 argparse = buildLuarocksPackage {
   pname = "argparse";
   version = "0.7.1-1";
@@ -73,20 +110,20 @@ binaryheap = buildLuarocksPackage {
 
 bit32 = buildLuarocksPackage {
   pname = "bit32";
-  version = "5.3.5.1-1";
+  version = "5.3.0-1";
 
   src = fetchurl {
-    url    = "https://luarocks.org/bit32-5.3.5.1-1.src.rock";
-    sha256 = "0b517hkf3r7pdm78sqx9df9440k7wbml4mpckh7jfxxqy8kk89qf";
+    url    = "https://luarocks.org/bit32-5.3.0-1.src.rock";
+    sha256 = "19i7kc2pfg9hc6qjq4kka43q6qk71bkl2rzvrjaks6283q6wfyzy";
   };
-  disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+  disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];
 
   meta = with lib; {
     homepage = "http://www.lua.org/manual/5.2/manual.html#6.7";
     description = "Lua 5.2 bit manipulation library";
     maintainers = with maintainers; [ lblasc ];
-    license.fullName = "MIT";
+    license.fullName = "MIT/X11";
   };
 };
 
@@ -135,13 +172,13 @@ cassowary = buildLuarocksPackage {
 
 compat53 = buildLuarocksPackage {
   pname = "compat53";
-  version = "0.8-1";
+  version = "0.7-1";
 
   src = fetchurl {
-    url    = "https://luarocks.org/compat53-0.8-1.src.rock";
-    sha256 = "14lw4mxh6ksy7fav1hbspp4ir8bjb7mhnkqdxjhj6jggl1dyf4z5";
+    url    = "https://luarocks.org/compat53-0.7-1.src.rock";
+    sha256 = "0kpaxbpgrwjn4jjlb17fn29a09w6lw732d21bi0302kqcaixqpyb";
   };
-  disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
   propagatedBuildInputs = [ lua ];
 
   meta = with lib; {
@@ -238,14 +275,14 @@ cyrussasl = buildLuarocksPackage {
 
 digestif = buildLuarocksPackage {
   pname = "digestif";
-  version = "0.4-1";
+  version = "0.2-1";
 
   src = fetchurl {
-    url    = "https://luarocks.org/digestif-0.4-1.src.rock";
-    sha256 = "1hsdr48akviv0l8ldf1km3xcs3i7kf00ws2d893w23nn8rlanv7y";
+    url    = "mirror://luarocks/digestif-0.2-1.src.rock";
+    sha256 = "03blpj5lxlhmxa4hnj21sz7sc84g96igbc7r97yb2smmlbyq8hxd";
   };
   disabled = (luaOlder "5.3");
-  propagatedBuildInputs = [ lua lpeg ];
+  propagatedBuildInputs = [ lua lpeg dkjson ];
 
   meta = with lib; {
     homepage = "https://github.com/astoff/digestif/";
@@ -291,11 +328,11 @@ fifo = buildLuarocksPackage {
 
 http = buildLuarocksPackage {
   pname = "http";
-  version = "0.4-0";
+  version = "0.3-0";
 
   src = fetchurl {
-    url    = "https://luarocks.org/http-0.4-0.src.rock";
-    sha256 = "0a73rm097jw5rpc7zj5cavc9f79n52kck623kq2kgfczz2gv5qfv";
+    url    = "https://luarocks.org/http-0.3-0.src.rock";
+    sha256 = "0vvl687bh3cvjjwbyp9cphqqccm3slv4g7y3h03scp3vpq9q4ccq";
   };
   disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua compat53 bit32 cqueues luaossl basexx lpeg lpeg_patterns binaryheap fifo ];
@@ -1093,13 +1130,13 @@ luaevent = buildLuarocksPackage {
 
 luaexpat = buildLuarocksPackage {
   pname = "luaexpat";
-  version = "1.3.3-1";
+  version = "1.3.0-1";
 
   src = fetchurl {
-    url    = "https://luarocks.org/luaexpat-1.3.3-1.src.rock";
-    sha256 = "0ahpfnby9qqgj22bajmrqvqq70nx19388lmjm9chljfzszy0hndm";
+    url    = "https://luarocks.org/luaexpat-1.3.0-1.src.rock";
+    sha256 = "15jqz5q12i9zvjyagzwz2lrpzya64mih8v1hxwr0wl2gsjh86y5a";
   };
-  disabled = (luaOlder "5.0");
+  disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];
 
   meta = with lib; {
@@ -1130,11 +1167,11 @@ luaffi = buildLuarocksPackage {
 
 luafilesystem = buildLuarocksPackage {
   pname = "luafilesystem";
-  version = "1.8.0-1";
+  version = "1.7.0-2";
 
   src = fetchurl {
-    url    = "https://luarocks.org/luafilesystem-1.8.0-1.src.rock";
-    sha256 = "1kqr1vwazrysgxamx9x89vn3fparfffx986bq9a452ajayjp0qjp";
+    url    = "https://luarocks.org/luafilesystem-1.7.0-2.src.rock";
+    sha256 = "0xhmd08zklsgpnpjr9rjipah35fbs8jd4v4va36xd8bpwlvx9rk5";
   };
   disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];
@@ -1183,14 +1220,14 @@ luaossl = buildLuarocksPackage {
 
 luaposix = buildLuarocksPackage {
   pname = "luaposix";
-  version = "35.0-1";
+  version = "34.1.1-1";
 
   src = fetchurl {
-    url    = "https://luarocks.org/luaposix-35.0-1.src.rock";
-    sha256 = "1da27fsz6v2asxifr4yv0r8rp80g6bg021piqrabqk9lq23hvjks";
+    url    = "https://luarocks.org/luaposix-34.1.1-1.src.rock";
+    sha256 = "1l9pkn3g0nzlbmmfj12rhfwvkqb06c21ydqxqgmnmd3w9z4ck53w";
   };
-  disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
-  propagatedBuildInputs = [ lua ];
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ bit32 lua ];
 
   meta = with lib; {
     homepage = "http://github.com/luaposix/luaposix/";
@@ -1392,11 +1429,11 @@ luuid = buildLuarocksPackage {
 
 luv = buildLuarocksPackage {
   pname = "luv";
-  version = "1.41.1-0";
+  version = "1.30.0-0";
 
   src = fetchurl {
-    url    = "https://luarocks.org/luv-1.41.1-0.src.rock";
-    sha256 = "0l1v07nhrkzsddbcc4bak382b5flyw6x8g4i394ylbfl25zwcmai";
+    url    = "https://luarocks.org/luv-1.30.0-0.src.rock";
+    sha256 = "1z5sdq9ld4sm5pws9qxpk9cadv9i7ycwad1zwsa57pj67gly11vi";
   };
   disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];
@@ -1556,10 +1593,10 @@ plenary-nvim = buildLuarocksPackage {
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "git://github.com/nvim-lua/plenary.nvim",
-  "rev": "4a30ce31e3132bc268dee6879b20cad28c0fe8fa",
-  "date": "2021-08-02T15:17:10-04:00",
-  "path": "/nix/store/1qfg23iylmj9j2kfs7px1nknm81saw7i-plenary.nvim",
-  "sha256": "0iwrw88vjsnkij1mdm1d7pg1wwksssd6jpngps2qb5cddh43d2c0",
+  "rev": "d897b4d9fdbc51febd71a1f96c96001ae4fa6121",
+  "date": "2021-08-03T08:49:43-04:00",
+  "path": "/nix/store/nwarm7lh0r1rzmx92srq73x3r40whyw1-plenary.nvim",
+  "sha256": "0rgqby4aakqamiw3ykvzhn3vd2grjkzgfxrpzjjp1ipkd2qak8mb",
   "fetchSubmodules": true,
   "deepClone": false,
   "leaveDotGit": false

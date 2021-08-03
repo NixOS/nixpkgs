@@ -1,20 +1,22 @@
 name,server,version,luaversion,maintainers
-bit32,,,lua5_1,lblasc
+alt-getopt,,,,arobyn
+ansicolors,,,,
+bit32,,5.3.0-1,lua5_1,lblasc
 argparse,,,,
 basexx,,,,
 binaryheap,,,,vcunat
 busted,,,,
 cassowary,,,,marsam alerque
-compat53,,,,vcunat
+compat53,,0.7-1,,vcunat
 cosmo,,,,marsam
 coxpcall,,1.17.0-1,,
 cqueues,,,,vcunat
 cyrussasl,,,,
-digestif,,,lua5_3,
+digestif,,0.2-1,lua5_3,
 dkjson,,,,
 fifo,,,,
 gitsigns.nvim,,,lua5_1,
-http,,,,vcunat
+http,,0.3-0,,vcunat
 inspect,,,,
 ldbus,http://luarocks.org/dev,,,
 ldoc,,,,
@@ -58,7 +60,7 @@ luaffi,http://luarocks.org/dev,,,
 luafilesystem,,1.7.0-2,,flosse
 lualogging,,,,
 luaossl,,,lua5_1,
-luaposix,,,,vyp lblasc
+luaposix,,34.1.1-1,,vyp lblasc
 luarepl,,,,
 luasec,,,,flosse
 luasocket,,,,
@@ -69,7 +71,7 @@ luautf8,,,,pstn
 luazip,,,,
 lua-yajl,,,,pstn
 luuid,,,,
-luv,,,,
+luv,,1.30.0-0,,
 lyaml,,,,lblasc
 markdown,,,,
 mediator_lua,,,,

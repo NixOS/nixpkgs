@@ -203,7 +203,6 @@ class Editor:
         name: str,
         root: Path,
         get_plugins: str,
-        # TODO modifier pour accepter un plugin
         generate_nix: Callable[[List[Tuple[str, str, Plugin]], str], None],
         default_in: Optional[Path] = None,
         default_out: Optional[Path] = None,
