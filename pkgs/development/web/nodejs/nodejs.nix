@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
+  buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices darwin.Libsystem ]
     ++ [ zlib libuv openssl http-parser icu ];
 
   nativeBuildInputs = [ which pkg-config python ]
