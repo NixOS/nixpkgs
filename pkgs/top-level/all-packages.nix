@@ -30026,6 +30026,8 @@ in
 
   d-seams = callPackage ../applications/science/chemistry/d-seams {};
 
+  ergoscf = callPackage ../applications/science/chemistry/ergoscf { };
+
   gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
 
   jmol = callPackage ../applications/science/chemistry/jmol {
