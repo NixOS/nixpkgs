@@ -23701,6 +23701,8 @@ in
     inherit (gnome2) libgnomeui;
   };
 
+  dyff = callPackage ../development/tools/dyff {};
+
   dwl = callPackage ../applications/window-managers/dwl { };
 
   dwm = callPackage ../applications/window-managers/dwm {
