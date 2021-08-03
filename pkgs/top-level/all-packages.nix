@@ -6689,6 +6689,8 @@ in
 
   np2kai = callPackage ../misc/emulators/np2kai { };
 
+  openipmi = callPackage ../tools/system/openipmi { };
+
   ox = callPackage ../applications/editors/ox { };
 
   file-rename = callPackage ../tools/filesystems/file-rename { };
