@@ -716,9 +716,11 @@ substituteStream() {
     printf "%s" "${!var}"
 }
 
+# put the content of a file in a variable
+# fail loudly if provided with a binary (containing null bytes)
 consumeEntire() {
     # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -N 0 $1; then
+    if IFS='' read -r -d '' $1 ; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
     fi
