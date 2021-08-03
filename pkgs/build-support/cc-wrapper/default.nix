@@ -234,6 +234,11 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatmake
       wrap ${targetPrefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatbind
       wrap ${targetPrefix}gnatlink ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatlink
+
+      # this symlink points to the unwrapped gnat's output "out". It is used by
+      # our custom gprconfig compiler description to find GNAT's ada runtime. See
+      # ../../development/tools/build-managers/gprbuild/{boot.nix, nixpkgs-gnat.xml}
+      ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
     ''
 
     + optionalString cc.langD or false ''
