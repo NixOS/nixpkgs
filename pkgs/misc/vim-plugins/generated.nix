@@ -7602,6 +7602,18 @@ final: prev:
     meta.homepage = "https://github.com/ledger/vim-ledger/";
   };
 
+  vim-lfe = buildVimPluginFrom2Nix {
+    pname = "vim-lfe";
+    version = "2018-04-30";
+    src = fetchFromGitHub {
+      owner = "lfe-support";
+      repo = "vim-lfe";
+      rev = "290e7085fbd53d0c2b98b5d5a442d697c08b7d76";
+      sha256 = "1wf4lyrnz957ya5zvgkdk1k1jw9yk0bkzz7230m9ry9vl55ss64y";
+    };
+    meta.homepage = "https://github.com/lfe-support/vim-lfe/";
+  };
+
   vim-lightline-coc = buildVimPluginFrom2Nix {
     pname = "vim-lightline-coc";
     version = "2021-03-03";
