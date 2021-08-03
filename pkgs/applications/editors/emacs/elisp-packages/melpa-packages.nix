@@ -517,24 +517,7 @@ let
         });
       };
 
-      # Deprecated legacy aliases for backwards compat
-      aliases = lib.listToAttrs (lib.attrValues (lib.mapAttrs (n: v: { name = v; value = builtins.trace "Melpa attribute '${v}' is a legacy alias that will be removed in 21.05, use '${n}' instead" melpaPackages.${n}; }) (lib.filterAttrs (n: v: lib.hasAttr n melpaPackages) {
-        "auto-complete-clang-async" = "emacsClangCompleteAsync";
-        "vterm" = "emacs-libvterm";
-        "0xc" = "_0xc";
-        "2048-game" = "_2048-game";
-        "4clojure" = "_4clojure";
-        "@" = "at";
-        "term+" = "term-plus";
-        "term+key-intercept" = "term-plus-key-intercept";
-        "term+mux" = "term-plus-mux";
-        "xml+" = "xml-plus";
-      })));
-
-      melpaPackages = lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super;
-
-    in
-    melpaPackages // aliases);
+    in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
 generateMelpa { }
