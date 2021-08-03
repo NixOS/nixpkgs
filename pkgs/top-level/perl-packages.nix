@@ -9008,6 +9008,20 @@ let
     };
   };
 
+  GooCanvas2CairoTypes = buildPerlPackage rec {
+    pname = "GooCanvas2-CairoTypes";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AS/ASOKOLOV/GooCanvas2-CairoTypes-${version}.tar.gz";
+      sha256 = "sha256-uoBnNuvMnePYFBp2Omgr3quxy4cCveKZrf1XSs6HUFI=";
+    };
+    propagatedBuildInputs = [ pkgs.goocanvas2 Gtk3 ];
+    meta = {
+      description = "Bridge between GooCanvas2 and Cairo types";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GoogleProtocolBuffers = buildPerlPackage {
     pname = "Google-ProtocolBuffers";
     version = "0.12";
