@@ -624,6 +624,14 @@
           move all files to the new directory.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Deprecated package aliases in <literal>emacs.pkgs.*</literal>
+          have been removed. These aliases were remnants of the old
+          Emacs package infrastructure. We now use exact upstream names
+          wherever possible.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">

@@ -251,6 +251,8 @@
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix
   ./services/audio/mopidy.nix
+  ./services/audio/networkaudiod.nix
+  ./services/audio/roon-bridge.nix
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
   ./services/audio/snapserver.nix
@@ -933,6 +935,7 @@
   ./services/wayland/cage.nix
   ./services/video/epgstation/default.nix
   ./services/video/mirakurun.nix
+  ./services/video/replay-sorcery.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix

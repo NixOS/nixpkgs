@@ -334,7 +334,10 @@ rec {
      has the same return type and semantics as builtins.functionArgs.
      setFunctionArgs : (a → b) → Map String Bool.
   */
-  functionArgs = f: f.__functionArgs or (builtins.functionArgs f);
+  functionArgs = f:
+    if f ? __functor
+    then f.__functionArgs or (lib.functionArgs (f.__functor f))
+    else builtins.functionArgs f;
 
   /* Check whether something is a function or something
      annotated with function args.
