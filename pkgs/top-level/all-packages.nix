@@ -15617,6 +15617,7 @@ in
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
   goocanvas2 = callPackage ../development/libraries/goocanvas/2.x.nix { };
+  goocanvas3 = callPackage ../development/libraries/goocanvas/3.x.nix { };
   goocanvasmm2 = callPackage ../development/libraries/goocanvasmm { };
 
   gflags = callPackage ../development/libraries/gflags { };
