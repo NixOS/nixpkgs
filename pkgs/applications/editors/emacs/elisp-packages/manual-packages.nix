@@ -134,14 +134,19 @@
     };
   };
 
-  matrix-client = melpaBuild {
+  matrix-client = let
+    rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
+  in melpaBuild
+  {
     pname = "matrix-client";
     version = "0.3.0";
+
+    commit = rev;
 
     src = pkgs.fetchFromGitHub {
       owner = "alphapapa";
       repo = "matrix-client.el";
-      rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
+      inherit rev;
       sha256 = "1scfv1502yg7x4bsl253cpr6plml1j4d437vci2ggs764sh3rcqq";
     };
 
