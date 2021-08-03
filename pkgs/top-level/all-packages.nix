@@ -5749,6 +5749,8 @@ with pkgs;
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
+  gvproxy = callPackage ../tools/networking/gvproxy { };
+
   gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
