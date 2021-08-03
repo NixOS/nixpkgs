@@ -19,11 +19,6 @@ buildPythonApplication rec {
     sha256 = "sha256-5RCeKTAtuFERQSoz4WinGz36tMuKtijnupPR/X02hCU=";
   };
 
-  patches = [
-    # adds an entry point for the service
-    ./homeserver-script.patch
-  ];
-
   buildInputs = [ openssl ];
 
   propagatedBuildInputs = [
@@ -68,6 +63,19 @@ buildPythonApplication rec {
 
   checkPhase = ''
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
+  '';
+
+  postFixup = ''
+    mkdir -p $out/bin
+
+    # Make a little wrapper for running Synapse with its dependencies
+    echo "#!/bin/sh
+      exec python -m synapse.app.homeserver \"\$@\"
+    " > $out/bin/homeserver
+    chmod +x $out/bin/homeserver
+    wrapProgram $out/bin/homeserver \
+      --set PATH ${python3}/bin \
+      --set PYTHONPATH $PYTHONPATH
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };
