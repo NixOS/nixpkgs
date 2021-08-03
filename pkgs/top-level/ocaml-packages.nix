@@ -994,6 +994,10 @@ let
 
     paf = callPackage ../development/ocaml-modules/paf { };
 
+    paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix { };
+
+    paf-le = callPackage ../development/ocaml-modules/paf/le.nix { };
+
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
     path_glob = callPackage ../development/ocaml-modules/path_glob { };
