@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
     homepage = "https://github.com/sphinx-contrib/plantuml/";
+    maintainers = with maintainers; [ ];
     license = with licenses; [ bsd2 ];
   };
-
 }
