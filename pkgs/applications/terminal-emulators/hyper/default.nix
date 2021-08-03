@@ -2,15 +2,16 @@
 , gdk-pixbuf, gnome2, gtk3, cairo, freetype, fontconfig, dbus, libXi, libXcursor
 , libXdamage, libXrandr, libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst
 , libXScrnSaver, libxcb, nss, nspr, alsa-lib, cups, expat, udev, libpulseaudio
-, at-spi2-atk }:
+, at-spi2-atk, at-spi2-core, libxshmfence, libdrm, libxkbcommon, mesa }:
 
 let
   libPath = lib.makeLibraryPath [
     stdenv.cc.cc gtk3 gnome2.GConf atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
     libXrender libX11 libXtst libXScrnSaver nss nspr alsa-lib cups expat udev libpulseaudio
-    at-spi2-atk
+    at-spi2-atk at-spi2-core libxshmfence libdrm libxkbcommon mesa
   ];
+
   name = "hyper";
   desktopItem = makeDesktopItem {
     type = "Application";
@@ -28,8 +29,8 @@ stdenv.mkDerivation rec {
   version = "3.1.1";
 
   src = fetchurl {
-    url = "https://github.com/zeit/hyper/releases/download/${version}/hyper_${version}_amd64.deb";
-    sha256 = "0fv4wv5f8nc739bna83qxmgrvvbyq4w9ch764q2f12wjygrz336p";
+    url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
+    sha256 = "0j999z649k63rnr1lpbansaxnkrhrp73jdrdmslgnwbh7z1wsp9p";
   };
   nativeBuildInputs = [ copyDesktopItems ];
 
