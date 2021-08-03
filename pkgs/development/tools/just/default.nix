@@ -16,6 +16,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
+  postPatch = ''
+    # this hard codes the compiler, which breaks the aarch64 in particular
+    # we rather want to set the compiler ourself
+    rm .cargo/config
+  '';
+
   postInstall = ''
     installManPage man/just.1
 

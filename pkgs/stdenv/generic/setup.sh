@@ -487,7 +487,7 @@ activatePackage() {
     # build platform are included here. That would be `depsBuild*`,
     # and legacy `nativeBuildInputs`, in general. If we aren't cross
     # compiling, however, everything can be put on the PATH. To ease
-    # the transition, we do include everything in thatcase.
+    # the transition, we do include everything in that case.
     #
     # TODO(@Ericson2314): Don't special-case native compilation
     if [[ -z "${strictDeps-}" || "$hostOffset" -le -1 ]]; then

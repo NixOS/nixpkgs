@@ -125,6 +125,30 @@
           <link linkend="opt-services.prometheus.exporters.buildkite-agent.enable">services.prometheus.exporters.buildkite-agent</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus/influxdb_exporter">influxdb-exporter</link>
+          a Prometheus exporter that exports metrics received on an
+          InfluxDB compatible endpoint is now available as
+          <link linkend="opt-services.prometheus.exporters.influxdb.enable">services.prometheus.exporters.influxdb</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/matrix-discord/mx-puppet-discord">mx-puppet-discord</link>,
+          a discord puppeting bridge for matrix. Available as
+          <link linkend="opt-services.mx-puppet-discord.enable">services.mx-puppet-discord</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.meshcommander.com/meshcentral2/overview">MeshCentral</link>,
+          a remote administration service (<quote>TeamViewer but
+          self-hosted and with more features</quote>) is now available
+          with a package and a module:
+          <link linkend="opt-services.meshcentral.enable">services.meshcentral.enable</link>
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -553,6 +577,51 @@
         <para>
           the <literal>mingw-64</literal> package has been upgraded from
           6.0.0 to 9.0.0
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>tt-rss</literal> was upgraded to the commit on
+          2021-06-21, which has breaking changes. If you use
+          <literal>services.tt-rss.extraConfig</literal> you should
+          migrate to the <literal>putenv</literal>-style configuration.
+          See
+          <link xlink:href="https://community.tt-rss.org/t/rip-config-php-hello-classes-config-php/4337">this
+          Discourse post</link> in the tt-rss forums for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The following Visual Studio Code extensions were renamed to
+          keep the naming convention uniform.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>bbenoist.Nix</literal> -&gt;
+              <literal>bbenoist.nix</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>CoenraadS.bracket-pair-colorizer</literal> -&gt;
+              <literal>coenraads.bracket-pair-colorizer</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>golang.Go</literal> -&gt;
+              <literal>golang.go</literal>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.uptimed</literal> now uses
+          <literal>/var/lib/uptimed</literal> as its stateDirectory
+          instead of <literal>/var/spool/uptimed</literal>. Make sure to
+          move all files to the new directory.
         </para>
       </listitem>
     </itemizedlist>

@@ -1,16 +1,16 @@
 { lib, fetchFromGitHub, installShellFiles, rustPlatform, ronn, pkg-config, libsodium }:
 rustPlatform.buildRustPackage rec {
   pname = "bupstash";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "andrewchambers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DzRGhdUxfBW6iazpCHlQ9J8IL10FVxhac8kx6yBSGNk=";
+    sha256 = "sha256-0vDty8JPUOt7mmBzQ9t1lnUyExBYW4hPmzvvhLSZhcs=";
   };
 
-  cargoSha256 = "sha256-IKk4VsO/oH4nC6F1W+JA3Agl7oXXNJ7zpP2PYpPLREU=";
+  cargoSha256 = "sha256-8W6uNLHCiCHB6mYyGnixiaHj1IyTnqjd8NaQG18W/uM=";
 
   nativeBuildInputs = [ ronn pkg-config installShellFiles ];
   buildInputs = [ libsodium ];

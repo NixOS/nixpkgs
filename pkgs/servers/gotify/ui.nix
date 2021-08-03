@@ -3,7 +3,7 @@
 }:
 
 yarn2nix-moretea.mkYarnPackage rec {
-  name = "gotify-ui";
+  pname = "gotify-ui";
 
   packageJSON = ./package.json;
   yarnNix = ./yarndeps.nix;

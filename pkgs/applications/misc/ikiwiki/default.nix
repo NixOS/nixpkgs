@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which, highlight
+{ lib, stdenv, fetchurl, perlPackages, gettext, makeWrapper, ImageMagick, which, highlight
 , gitSupport ? false, git ? null
 , docutilsSupport ? false, python ? null, docutils ? null
 , monotoneSupport ? false, monotone ? null
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   buildInputs = [ which highlight ]
     ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
           TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-          RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
+          RpcXML XMLSimple ImageMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
           NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
     ++ lib.optionals docutilsSupport [python docutils]
     ++ lib.optionals gitSupport [git]

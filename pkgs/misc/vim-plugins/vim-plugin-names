@@ -494,9 +494,9 @@ nvim-telescope/telescope-symbols.nvim
 nvim-telescope/telescope-z.nvim@main
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
-nvim-treesitter/nvim-treesitter
+nvim-treesitter/nvim-treesitter@0.5-compat
 nvim-treesitter/nvim-treesitter-refactor
-nvim-treesitter/nvim-treesitter-textobjects
+nvim-treesitter/nvim-treesitter-textobjects@0.5-compat
 nvim-treesitter/playground
 oberblastmeister/termwrapper.nvim
 ocaml/vim-ocaml
@@ -575,6 +575,7 @@ RishabhRD/popfix
 rktjmp/fwatch.nvim@main
 rktjmp/lush.nvim@main
 rmagatti/auto-session@main
+rmagatti/goto-preview@main
 rodjek/vim-puppet
 romainl/vim-cool
 romainl/vim-qf
@@ -594,6 +595,7 @@ rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
 sainnhe/edge
+sainnhe/gruvbox-material
 sainnhe/sonokai
 sakhnik/nvim-gdb
 saltstack/salt-vim

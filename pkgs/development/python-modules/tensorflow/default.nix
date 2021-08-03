@@ -1,5 +1,5 @@
 { stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
-, addOpenGLRunpath
+, addOpenGLRunpath, fetchpatch
 # Python deps
 , buildPythonPackage, pythonOlder, pythonAtLeast, python
 # Python libraries
@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.4.1";
+  version = "2.4.2";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -110,10 +110,16 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "sha256-J62QfP45g5nxN9Nqa1tAGyc4vD2JKh50ddHLrd6/qsY=";
+      sha256 = "07a2y05hixch1bjag5pzw3p1m7bdj3bq4gdvmsfk2xraz49b1pi8";
     };
 
     patches = [
+      # included from 2.6.0 onwards
+      (fetchpatch {
+        name = "fix-numpy-1.20-notimplementederror.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/b258941525f496763d4277045b6513c815720e3a.patch";
+        sha256 = "19f9bzrcfsynk11s2hqvscin5c65zf7r6g3nb10jnimw79vafiry";
+      })
       # Relax too strict Python packages versions dependencies.
       ./relax-dependencies.patch
       # Add missing `io_bazel_rules_docker` dependency.

@@ -20,8 +20,6 @@ mkDerivation rec {
     "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Qt5 Configuration Tool";
     homepage = "https://www.opendesktop.org/content/show.php?content=168066";

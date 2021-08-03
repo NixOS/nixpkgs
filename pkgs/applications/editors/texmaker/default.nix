@@ -19,8 +19,6 @@ mkDerivation rec {
     "METAINFODIR=${placeholder "out"}/share/metainfo"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "TeX and LaTeX editor";
     longDescription=''

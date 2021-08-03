@@ -315,6 +315,12 @@ rec {
         # Disable OABI to have seccomp_filter (required for systemd)
         # https://github.com/raspberrypi/firmware/issues/651
         OABI_COMPAT n
+
+        # >=5.12 fails with:
+        # drivers/net/ethernet/micrel/ks8851_common.o: in function `ks8851_probe_common':
+        # ks8851_common.c:(.text+0x179c): undefined reference to `__this_module'
+        # See: https://lore.kernel.org/netdev/20210116164828.40545-1-marex@denx.de/T/
+        KS8851_MLL y
       '';
     };
     gcc = {

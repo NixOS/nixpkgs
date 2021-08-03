@@ -1479,6 +1479,36 @@ penlight = buildLuarocksPackage {
     license.fullName = "MIT/X11";
   };
 };
+plenary-nvim = buildLuarocksPackage {
+  pname = "plenary.nvim";
+  version = "scm-1";
+
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/plenary.nvim-scm-1.rockspec";
+    sha256 = "1cp2dzf3010q85h300aa7zphyz75qn67lrwf9v6b0p534nzvmash";
+  }).outPath;
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "git://github.com/nvim-lua/plenary.nvim",
+  "rev": "8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974",
+  "date": "2021-07-12T11:07:18-04:00",
+  "path": "/nix/store/djp9yacizsxs9hiz786fb900fri0m2l8-plenary.nvim",
+  "sha256": "1axvjv6n77afkjqk914dpc020kxd7mig6m5sr916k1n1q35jc4ny",
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua luassert ];
+
+  meta = with lib; {
+    homepage = "http://github.com/nvim-lua/plenary.nvim";
+    description = "lua functions you don't want to write ";
+    license.fullName = "MIT/X11";
+  };
+};
 rapidjson = buildLuarocksPackage {
   pname = "rapidjson";
   version = "0.6.1-1";

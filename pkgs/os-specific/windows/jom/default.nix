@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://qt-project.org/wiki/jom";
+    homepage = "https://qt-project.org/wiki/jom";
     description = "Clone of nmake supporting multiple independent commands in parallel";
     license = lib.licenses.gpl2Plus; # Explicitly, GPLv2 or GPLv3, but not later.
   };

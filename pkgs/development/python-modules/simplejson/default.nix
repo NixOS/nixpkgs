@@ -7,17 +7,20 @@
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.17.2";
-  doCheck = !stdenv.isDarwin;
+  version = "3.17.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2ZC7aKyUUcth43Ce0j6JdjrJ4gb4QfJDlY2M5TLMQ+o=";
+    sha256 = "sha256-Ev1vKyxexPvTT+esf9ngUcHu70Brl27P3qbS5fK2HxU=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  doCheck = !stdenv.isDarwin;
 
   pythonImportsCheck = [ "simplejson" ];
 

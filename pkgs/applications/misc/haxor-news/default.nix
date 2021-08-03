@@ -7,7 +7,7 @@ let
       self = py;
 
       # not compatible with prompt_toolkit >=2.0
-      prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
+      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         name = "${oldAttrs.pname}-${version}";
         version = "1.0.18";
         src = oldAttrs.src.override {
@@ -37,7 +37,7 @@ buildPythonApplication rec {
     colorama
     requests
     pygments
-    prompt_toolkit
+    prompt-toolkit
     six
   ];
 

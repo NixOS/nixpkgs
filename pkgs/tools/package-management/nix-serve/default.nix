@@ -16,7 +16,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nix-serve-0.2-${substring 0 7 rev}";
+  pname = "nix-serve";
+  version = "0.2-${substring 0 7 rev}";
 
   src = fetchFromGitHub {
     owner = "edolstra";

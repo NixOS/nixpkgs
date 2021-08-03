@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hashi-ui";
+  pname = "hashi-ui";
   version = "1.3.8";
 
   src = fetchurl {

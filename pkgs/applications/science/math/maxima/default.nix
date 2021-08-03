@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python, makeWrapper, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python3, makeWrapper, autoreconfHook
 , rlwrap ? null, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
 }:
 
@@ -6,9 +6,11 @@ let
   name    = "maxima";
   version = "5.44.0";
 
+  lisp-compiler = if ecl-fasl then ecl else sbcl;
+
   searchPath =
     lib.makeBinPath
-      (lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
+      (lib.filter (x: x != null) [ lisp-compiler rlwrap tk gnuplot ]);
 in
 stdenv.mkDerivation ({
   inherit version;
@@ -19,11 +21,18 @@ stdenv.mkDerivation ({
     sha256 = "1v6jr5s6hhj6r18gfk6hgxk2qd6z1dxkrjq9ss2z1y6sqi45wgyr";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    lisp-compiler
+    makeWrapper
+    python3
+    texinfo
+  ];
 
-  buildInputs = lib.filter (x: x != null) [
-    sbcl ecl texinfo perl python makeWrapper
-    gnuplot   # required in the test suite
+  strictDeps = true;
+
+  checkInputs = [
+    gnuplot
   ];
 
   postPatch = ''
