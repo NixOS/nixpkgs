@@ -37,15 +37,11 @@ let
     patches =
       [
         # Do not look in /usr etc. for dependencies.
-        (if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
-         else ./no-sys-dirs-5.31.patch)
+        ./no-sys-dirs-5.31.patch
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-      ++ optional crossCompiling ./MakeMaker-cross.patch
-      # Backporting https://github.com/Perl/perl5/pull/17946, can be
-      # removed if there's ever a 5.30.x release with it included.
-      ++ optional (versionOlder version "5.32.1") ./aarch64-darwin.patch;
+      ++ optional crossCompiling ./MakeMaker-cross.patch;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -197,19 +193,19 @@ let
   });
 in {
   # Maint version
-  perl530 = common {
-    perl = pkgs.perl530;
-    buildPerl = buildPackages.perl530;
-    version = "5.30.3";
-    sha256 = "0vs0wwwlw47sswxaflkk4hw0y45cmc7arxx788kwpbminy5lrq1j";
-  };
-
-  # Maint version
   perl532 = common {
     perl = pkgs.perl532;
     buildPerl = buildPackages.perl532;
     version = "5.32.1";
     sha256 = "0b7brakq9xs4vavhg391as50nbhzryc7fy5i65r81bnq3j897dh3";
+  };
+
+  # Maint version
+  perl534 = common {
+    perl = pkgs.perl534;
+    buildPerl = buildPackages.perl534;
+    version = "5.34.0";
+    sha256 = "16mywn5afpv1mczv9dlc1w84rbgjgrr0pyr4c0hhb2wnif0zq7jm";
   };
 
   # the latest Devel version

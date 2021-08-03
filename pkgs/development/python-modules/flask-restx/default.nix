@@ -49,7 +49,7 @@ buildPythonPackage rec {
     "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
   ];
 
-  pythonImportCheck = [ "flask_restx" ];
+  pythonImportsCheck = [ "flask_restx" ];
 
   meta = with lib; {
     homepage = "https://flask-restx.readthedocs.io/en/${version}/";

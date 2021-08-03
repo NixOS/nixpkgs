@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkg-config, python3
 , zlib, bzip2, curl, xz, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
-, gtkClient ? false, gtk3
+, gtkClient ? stdenv.isLinux, gtk3
 , qtClient ? false, qt5
 , server ? true, readline
 , enableSqlite ? true, sqlite
@@ -46,6 +46,7 @@ in stdenv.mkDerivation rec {
       "--enable-client=qt"
       "--with-qt5-includes=${qt5.qtbase.dev}/include"
     ]
+    ++ optionals gtkClient [ "--enable-client=gtk3.22" ]
     ++ optional enableSqlite "--enable-fcdb=sqlite3"
     ++ optional (!gtkClient) "--enable-fcmp=cli"
     ++ optional (!server)    "--disable-server";

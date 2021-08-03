@@ -351,7 +351,7 @@ in
 
   config = mkIf (cfg.networks != { }) {
 
-    environment.etc = fold (a: b: a // b) { }
+    environment.etc = foldr (a: b: a // b) { }
       (flip mapAttrsToList cfg.networks (network: data:
         flip mapAttrs' data.hosts (host: text: nameValuePair
           ("tinc/${network}/hosts/${host}")

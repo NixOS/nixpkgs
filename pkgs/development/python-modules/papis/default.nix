@@ -2,8 +2,8 @@
 , requests, filetype, pyparsing, configparser, arxiv2bib
 , pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
 , click, python-slugify, habanero, isbnlib, typing-extensions
-, prompt_toolkit, pygments, stevedore, tqdm, lxml
-, python-doi, isPy3k, pytestcov
+, prompt-toolkit, pygments, stevedore, tqdm, lxml
+, python-doi, isPy3k, pytest-cov
 #, optional, dependencies
 , whoosh, pytest
 , stdenv
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     requests filetype pyparsing configparser arxiv2bib
     pyyaml chardet beautifulsoup4 colorama bibtexparser
     click python-slugify habanero isbnlib
-    prompt_toolkit pygments typing-extensions
+    prompt-toolkit pygments typing-extensions
     stevedore tqdm lxml
     python-doi
     # optional dependencies
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   checkInputs = ([
-    pytest pytestcov
+    pytest pytest-cov
   ]) ++ [
     xdg-utils
   ];

@@ -11,7 +11,7 @@
 , pytestCheckHook
 , pytest-asyncio
 , pytest-trio
-, pytestcov
+, pytest-cov
 , trustme
 , uvicorn
 }:
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-trio
-    pytestcov
+    pytest-cov
     trustme
     uvicorn
   ];

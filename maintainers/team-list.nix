@@ -114,8 +114,9 @@ with lib.maintainers; {
 
   haskell = {
     members = [
-      maralorn
       cdepillabout
+      expipiplus1
+      maralorn
       sternenseemann
     ];
     scope = "Maintain Haskell packages and infrastructure.";
@@ -161,6 +162,7 @@ with lib.maintainers; {
       ralith
       mjlbach
       dandellion
+      sumnerevans
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
   };

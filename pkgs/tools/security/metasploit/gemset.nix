@@ -114,60 +114,60 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0vsxqayzh04gxxan5i8vvfxh0n238dc9305bc89xs2mx2x1pw167";
+      sha256 = "14l1w0ka4r54rx18c856dpn5dg1fnqlriiscjj89ap6vzg8r5pl4";
       type = "gem";
     };
-    version = "1.478.0";
+    version = "1.482.0";
   };
   aws-sdk-core = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1mcagbyzy7l39lxm9g85frvjwlv3yfd9x8jddd1pfc0xsy9y0rax";
+      sha256 = "1azyn5hj41q1r9wcr0k12xb9j3v1v9ikyxnzjpizhsla44lg3270";
       type = "gem";
     };
-    version = "3.117.0";
+    version = "3.119.0";
   };
   aws-sdk-ec2 = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1n6yl7qbzmjlxp3rzm3a62vinzdg9a8rqspq7xdaa9sxrf4zsamf";
+      sha256 = "1i06ml61fr7qlxfbi98dg4lg40skjj5abfpz60jx7ml5dma13qma";
       type = "gem";
     };
-    version = "1.249.0";
+    version = "1.254.0";
   };
   aws-sdk-iam = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0d30abab908434nmfi5j97vmv63466bmcvhvaknma27qc04s53ph";
+      sha256 = "16am0mpagfzi5n6gsnd4yyiwy8ni312b3kxswq0jvr3wh8ab0r5h";
       type = "gem";
     };
-    version = "1.56.0";
+    version = "1.59.0";
   };
   aws-sdk-kms = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0407yggwsy89fzh387vq3af5azplci5v0a8y97h7r6da4jrv1ksm";
+      sha256 = "0h70lz5pblw0sy82j6kv4q4d8h2rb1p6v650kaq8lh6iyjc6il9a";
       type = "gem";
     };
-    version = "1.44.0";
+    version = "1.46.0";
   };
   aws-sdk-s3 = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0q28bdmpm2c2fw9wh00zhqxnb8p2nzdfi5l6wwa6bl63fm28816h";
+      sha256 = "0799n1j8cxcn79k5zhy8vcpbh4q8vyi1fxqqs20sxh7yhyhrybw9";
       type = "gem";
     };
-    version = "1.96.1";
+    version = "1.98.0";
   };
   aws-sigv4 = {
     groups = ["default"];
@@ -594,12 +594,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "b7cef30d11f0509b7e27334030dae6b8cb34e7f2";
-      sha256 = "0lp1yvlg59kqml29rpgc6ghpj71z6pa8qf8h8x5qvhkd4hakdn6j";
+      rev = "bdf054bcc84e23bba81c387cc9247bf3c4052afb";
+      sha256 = "1hvkbawn611j8pic6fj3mz23kr0gx3f8q5h6fk5cw7lqz67q1zjr";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.0.53";
+    version = "6.0.55";
   };
   metasploit-model = {
     groups = ["default"];
@@ -616,10 +616,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0jxa9q8jzfy91i4khnzmd36p3g2sq7df34csgwbmv6caarzs7732";
+      sha256 = "0jg96v1a7q3ypq33jaflnfvpqm6cz0ihaiilag2y6qvd0ypv297d";
       type = "gem";
     };
-    version = "2.0.47";
+    version = "2.0.48";
   };
   metasploit_data_models = {
     groups = ["default"];
@@ -886,10 +886,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0lmaq05a257m9588a81wql3a5p039f221f0dmq57bm2qjwxydjmj";
+      sha256 = "0bz9y1hxfyv73yb26nvs2kcw08gxi7nxkfc94j82hgx2sifcnv3x";
       type = "gem";
     };
-    version = "5.3.2";
+    version = "5.4.0";
   };
   racc = {
     groups = ["default"];
@@ -1106,20 +1106,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0zrc0pr1pla0amw6hagllj82hyq8pyy6wb38xry2cxg7q70ghfq7";
+      sha256 = "02gpfw43r0pkzp7jj3n0lwn4lgbgkgadrn4p33x7b0xh1dalzgj1";
       type = "gem";
     };
-    version = "0.1.91";
+    version = "0.1.92";
   };
   rex-random_identifier = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0pqd8pfcxqd44ql8dawk59k9s5jnhx7inc8wnpjhkbx0y0sldq8q";
+      sha256 = "1zaqndyy04c4fn021ibh05xim3wr7l2i71713amz6pvhgs2939r3";
       type = "gem";
     };
-    version = "0.1.5";
+    version = "0.1.7";
   };
   rex-registry = {
     groups = ["default"];

@@ -11,9 +11,9 @@ stdenv.mkDerivation {
   propagatedBuildInputs = packages;
 
   preferLocalBuild = true;
-} // {
+
   # For compatability with XFree86.
-  buildClientLibs = true;
+  passthru.buildClientLibs = true;
 
   meta = {
     platforms = lib.platforms.unix;

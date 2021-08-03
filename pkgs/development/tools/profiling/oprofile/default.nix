@@ -8,10 +8,11 @@
 assert withGUI -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "oprofile-1.4.0";
+  pname = "oprofile";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/oprofile/${name}.tar.gz";
+    url = "mirror://sourceforge/oprofile/${pname}-${version}.tar.gz";
     sha256 = "04m46ni0ryk4sqmzd6mahwzp7iwhwqzfbmfi42fki261sycnz83v";
   };
 

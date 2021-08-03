@@ -758,7 +758,7 @@ let
       POSIX_MQUEUE        = yes;
       FRONTSWAP           = yes;
       FUSION              = yes; # Fusion MPT device support
-      IDE                 = no; # deprecated IDE support
+      IDE                 = whenOlder "5.14" no; # deprecated IDE support, removed in 5.14
       IDLE_PAGE_TRACKING  = yes;
       IRDA_ULTRA          = whenOlder "4.17" yes; # Ultra (connectionless) protocol
 
@@ -846,6 +846,8 @@ let
       X86_AMD_PLATFORM_DEVICE = yes;
       X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
 
+      LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
+
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
@@ -878,8 +880,6 @@ let
       # Keeping it a built-in ensures it will be used if possible.
       FB_SIMPLE = yes;
 
-    } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux") {
-      ARM_LPAE = yes;
     };
   };
 in

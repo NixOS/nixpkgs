@@ -127,6 +127,15 @@ let
         '';
       };
 
+      options = mkOption {
+        default = [ "defaults" ];
+        example = [ "nofail" ];
+        type = types.listOf types.nonEmptyStr;
+        description = ''
+          Options used to mount the swap.
+        '';
+      };
+
       deviceName = mkOption {
         type = types.str;
         internal = true;
@@ -215,7 +224,7 @@ in
                   fi
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
-                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${sw.device} ${sw.deviceName}
+                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${optionalString (sw.discardPolicy != null) "--allow-discards"} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';

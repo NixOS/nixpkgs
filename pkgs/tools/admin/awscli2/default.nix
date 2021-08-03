@@ -1,4 +1,4 @@
-{ lib, python3, groff, less, fetchFromGitHub }:
+{ lib, python3, groff, less, fetchFromGitHub, fetchpatch }:
 let
   py = python3.override {
     packageOverrides = self: super: {
@@ -11,7 +11,7 @@ let
           sha256 = "sha256-iAZmqnffqrmFuxlQyOpEQzSCcL/hRAjuXKulOXoy4hY=";
         };
       });
-      prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
+      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.10";
         src = oldAttrs.src.override {
           inherit version;
@@ -32,6 +32,13 @@ with py.pkgs; buildPythonApplication rec {
     rev = version;
     sha256 = "sha256-LU9Tqzdi8ULZ5y3FbfSXdrip4NcxFkXRCTpVGo05LcM=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mgorny/aws-cli/commit/85361123d2fa12eaedf912c046ffe39aebdd2bad.patch";
+      sha256 = "sha256-1Rb+/CY7ze1/DbJ6TfqHF01cfI2vixZ1dT91bmHTg/A=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -55,7 +62,7 @@ with py.pkgs; buildPythonApplication rec {
     docutils
     groff
     less
-    prompt_toolkit
+    prompt-toolkit
     pyyaml
     rsa
     ruamel_yaml

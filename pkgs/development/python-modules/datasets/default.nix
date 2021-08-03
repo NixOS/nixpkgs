@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "1.8.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = version;
-    sha256 = "sha256-is8TS84varARWyfeDTbQH0pcYFTk0PcEyK183emB4GE=";
+    sha256 = "0pm14cp7xaagpf4j96v0ybi5gn3r9p0if3pc197ckwx6sw3lx29p";
   };
 
   propagatedBuildInputs = [
@@ -38,12 +38,6 @@ buildPythonPackage rec {
     tqdm
     xxhash
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"tqdm>=4.27,<4.50.0"' '"tqdm>=4.27"' \
-      --replace "huggingface_hub==0.0.2" "huggingface_hub>=0.0.2"
-  '';
 
   # Tests require pervasive internet access.
   doCheck = false;

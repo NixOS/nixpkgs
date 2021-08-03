@@ -1,16 +1,16 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, Foundation }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dua";
-  version = "2.13.1";
+  version = "2.14.3";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "dua-cli";
     rev = "v${version}";
-    sha256 = "sha256-6xSRsLM1DD1xMjOGzHMDVLibrJlu9lN9OoSV7B/WMT0=";
+    sha256 = "sha256-Tste5DdUwCu1CNRzIcBEvyckrvhEg9C8M3y89luIMbE=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "sha256-udz1EtPchEHxkvvVFnkwSOpFz4XEBGOXRz8qWREyzvc=";
+  cargoSha256 = "sha256-iHRPgQtanW2LcFLPPHmr2n1NeAPi0mDmHNeIv524lrM=";
 
   doCheck = false;
 

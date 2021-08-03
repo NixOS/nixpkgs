@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
-    sha256 = "sha256-ZYncyaX9gqBhDKiC87A2xI7VeU0zGsmm3Sx45lwgnrg=";
+    sha256 = "sha256-yS0/Fy2dj8VIbwv2J9sehP0VN0f/YDxu1k9WkaeEz8M=";
   };
 
   patches = [
@@ -72,6 +72,7 @@ python3Packages.buildPythonApplication rec {
       --replace "click==7.1.2" "click>=7.1.2" \
       --replace "clvm_rs==0.1.8" "clvm_rs>=0.1.8" \
       --replace "clvm==0.9.7" "clvm>=0.9.7" \
+      --replace "bitstring==3.1.7" "bitstring>=3.1.9" \
   '';
 
   preCheck = ''

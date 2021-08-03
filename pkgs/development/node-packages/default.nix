@@ -14,6 +14,17 @@ let
       '';
     };
 
+    autoprefixer = super.autoprefixer.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/autoprefixer" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/autoprefixer.nix { inherit (self) autoprefixer; };
+      };
+    };
+
     aws-azure-login = super.aws-azure-login.override {
       meta.platforms = pkgs.lib.platforms.linux;
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -35,6 +46,17 @@ let
       '';
     };
 
+    fast-cli = super.fast-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/fast \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
+
     hyperspace-cli = super."@hyperspace/cli".override {
       nativeBuildInputs = with pkgs; [
         makeWrapper
@@ -54,10 +76,6 @@ let
     };
 
     coc-imselect = super.coc-imselect.override {
-      meta.broken = since "10";
-    };
-
-    "fast-cli-1.x" = super."fast-cli-1.x".override {
       meta.broken = since "10";
     };
 
@@ -82,14 +100,6 @@ let
       name = "bitwarden-cli-${drv.version}";
       meta.mainProgram = "bw";
     });
-
-    fast-cli = super."fast-cli-1.x".override {
-      preRebuild = ''
-        # Simply ignore the phantomjs --version check. It seems to need a display but it is safe to ignore
-        sed -i -e "s|console.error('Error verifying phantomjs, continuing', err)|console.error('Error verifying phantomjs, continuing', err); return true;|" node_modules/phantomjs-prebuilt/lib/util.js
-      '';
-      buildInputs = [ pkgs.phantomjs2 ];
-    };
 
     flood = super.flood.override {
       buildInputs = [ self.node-pre-gyp ];
@@ -207,12 +217,12 @@ let
           # remove node_ name prefix
           (fetchpatch {
             url = "https://github.com/svanderburg/node2nix/commit/b54d45207427ff46e90f16f2f32771fdc8bff5a4.patch";
-            sha256 = "03cg2xwryvdlvg299dg91qxicrw2r43grja80an9zkb875ps8jxh";
+            sha256 = "sha256-ubUdF0q3l4xxqZ7f9EiQEUQzyqxi9Q6zsRPETHlfzh8=";
           })
           # set meta platform
           (fetchpatch {
             url = "https://github.com/svanderburg/node2nix/commit/58736093161f2d237c17e75a96529b018cd0ac64.patch";
-            sha256 = "1c91qfqa6p4hzyafv5pq6rpgnny2805n007b1443gbqwrz5awz6n";
+            sha256 = "0sif7803c9g6gjmmdniw5qxrq5igiz9nqdmdrcf1hxfi5x43a32h";
           })
         ];
       };
@@ -262,8 +272,14 @@ let
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/postcss" \
-          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules \
+          --prefix NODE_PATH : ${self.autoprefixer}/lib/node_modules
       '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/postcss-cli.nix {
+          inherit (self) postcss-cli;
+        };
+      };
       meta.mainProgram = "postcss";
     };
 

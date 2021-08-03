@@ -6,7 +6,6 @@ let
   cfg = config.networking.networkmanager;
 
   basePackages = with pkgs; [
-    crda
     modemmanager
     networkmanager
     networkmanager-fortisslvpn
@@ -49,6 +48,7 @@ let
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
         else "unmanaged";
+      firewall-backend = cfg.firewallBackend;
     })
     (mkSection "keyfile" {
       unmanaged-devices =
@@ -244,6 +244,15 @@ in {
         '';
       };
 
+      firewallBackend = mkOption {
+        type = types.enum [ "iptables" "nftables" "none" ];
+        default = "iptables";
+        description = ''
+          Which firewall backend should be used for configuring masquerading with shared mode.
+          If set to none, NetworkManager doesn't manage the configuration at all.
+        '';
+      };
+
       logLevel = mkOption {
         type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
         default = "WARN";
@@ -403,6 +412,8 @@ in {
         '';
       }
     ];
+
+    hardware.wirelessRegulatoryDatabase = true;
 
     environment.etc = with pkgs; {
       "NetworkManager/NetworkManager.conf".source = configFile;

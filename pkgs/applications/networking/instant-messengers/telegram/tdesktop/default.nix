@@ -1,11 +1,13 @@
 { mkDerivation, lib, fetchFromGitHub, callPackage
-, pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
+, pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
+, extra-cmake-modules
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk
-, libtgvoip, rnnoise, abseil-cpp, extra-cmake-modules
+, tl-expected, hunspell, glibmm, webkitgtk, jemalloc
+, rnnoise
 # Transitive dependencies:
-, pcre, xorg, util-linux, libselinux, libsepol, epoxy
+, util-linuxMinimal
+, pcre, libpthreadstubs, libXdmcp, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
 , xdg-utils, libsysprof-capture, libpsl, brotli
 }:
@@ -23,7 +25,7 @@ let
   tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.8.4";
+  version = "2.9.0";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -32,28 +34,39 @@ in mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-IN3GQgdNM66/GxKa5EGKB/LIkgBxS8Y4mkPBaSEphmw=";
+    sha256 = "0964as7rkjq1px6z15z6kmkiz4zw69wmm3namwn940bsja123qls";
   };
 
   postPatch = ''
     substituteInPlace Telegram/CMakeLists.txt \
       --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
+
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
+      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
+      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
+      --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook removeReferencesTo ];
+  nativeBuildInputs = [
+    pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook
+    extra-cmake-modules
+  ];
 
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
     ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
-    tl-expected hunspell glibmm webkitgtk
-    libtgvoip rnnoise abseil-cpp extra-cmake-modules
+    tl-expected hunspell glibmm webkitgtk jemalloc
+    rnnoise
     tg_owt
     # Transitive dependencies:
-    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
+    util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
+    pcre libpthreadstubs libXdmcp libselinux libsepol epoxy
     at-spi2-core libXtst libthai libdatrie libsysprof-capture libpsl brotli
   ];
 
@@ -62,25 +75,9 @@ in mkDerivation rec {
     # We're allowed to used the API ID of the Snap package:
     "-DTDESKTOP_API_ID=611335"
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
-    #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
-    "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
+    # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
+    "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
   ];
-
-  # Note: The following packages could be packaged system-wide, but it's
-  # probably best to use the bundled ones from tdesktop (Arch does this too):
-  # rlottie:
-  # - CMake flag: "-DTDESKTOP_USE_PACKAGED_TGVOIP=ON"
-  # - Sources (problem: there are no stable releases!):
-  #   - desktop-app (tdesktop): https://github.com/desktop-app/rlottie
-  #   - upstream: https://github.com/Samsung/rlottie
-  # libtgvoip:
-  # - CMake flag: "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=ON"
-  # - Sources  (problem: the stable releases might be too old!):
-  #   - tdesktop: https://github.com/telegramdesktop/libtgvoip
-  #   - upstream: https://github.com/grishka/libtgvoip
-  # Both of these packages are included in this PR (kotatogram-desktop):
-  # https://github.com/NixOS/nixpkgs/pull/75210
-  # TODO: Package mapbox-variant
 
   postFixup = ''
     # This is necessary to run Telegram in a pure environment.
@@ -105,10 +102,10 @@ in mkDerivation rec {
       Desktop client for the Telegram messenger, based on the Telegram API and
       the MTProto secure protocol.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
-    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v{version}";
-    maintainers = with maintainers; [ primeos abbradar ];
+    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
+    maintainers = with maintainers; [ oxalica primeos ];
   };
 }

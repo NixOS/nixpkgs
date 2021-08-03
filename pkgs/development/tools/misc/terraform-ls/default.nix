@@ -2,36 +2,27 @@
 
 buildGoModule rec {
   pname = "terraform-ls";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-q97N9I1EzpcFlMuHe3X5rfZHt6XTytYO1inpGEvv1IQ=";
+    sha256 = "sha256-G1i5SS1BY+h8qPPjrZ9HCnKX3o2VkwvpeHPNxW6rnuI=";
   };
-  vendorSha256 = "sha256-7XcAt0+slNIjxxf7pUl7XO/PAN2z8WmzTuI0FsjgrBM=";
+  vendorSha256 = "sha256-nRElOa9IQ31Wh01wTFM6pazDYFnmR06vkU4CI8Gx4Vw=";
 
   ldflags = [ "-s" "-w" "-X main.version=v${version}" "-X main.prerelease=" ];
 
-  preCheck = ''
-    # Remove tests that requires networking
-    rm internal/terraform/exec/exec_test.go
-  '' + lib.optionalString stdenv.isAarch64 ''
-    # Not all test failures have tracking issues as HashiCorp do not have
-    # aarch64 testing infra easily available, see issue 549 below.
+  # There's a mixture of tests that use networking and several that fail on aarch64
+  doCheck = false;
 
-    # Remove file that contains `TestLangServer_workspaceExecuteCommand_modules_multiple`
-    # which fails on aarch64: https://github.com/hashicorp/terraform-ls/issues/549
-    rm internal/langserver/handlers/execute_command_modules_test.go
-
-    # `TestModuleManager_ModuleCandidatesByPath` variants fail
-    rm internal/terraform/module/module_manager_test.go
-
-    # internal/terraform/module/module_ops_queue_test.go:17:15: undefined: testLogger
-    # internal/terraform/module/watcher_test.go:39:11: undefined: testLogger
-    # internal/terraform/module/watcher_test.go:79:14: undefined: testLogger
-    rm internal/terraform/module/{watcher_test,module_ops_queue_test}.go
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/terraform-ls --help
+    $out/bin/terraform-ls version | grep "v${version}"
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -11,11 +11,11 @@
 stdenv.mkDerivation rec {
 
   pname = "stretchly";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
-    sha256 = "1q0ihp6cd65lnscbr7xj3yyb06qds77r4s6m1xbk5l9vs2rw923d";
+    sha256 = "sha256-F6p+g0yuDMpNq+cVgA3ZhUwCIiIU1QfYM90lmaNnRWw=";
   };
 
   icon = fetchurl {

@@ -174,6 +174,7 @@ in
   hitch = handleTest ./hitch {};
   hledger-web = handleTest ./hledger-web.nix {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
+  hockeypuck = handleTest ./hockeypuck.nix { };
   home-assistant = handleTest ./home-assistant.nix {};
   hostname = handleTest ./hostname.nix {};
   hound = handleTest ./hound.nix {};
@@ -203,6 +204,7 @@ in
   k3s = handleTest ./k3s.nix {};
   kafka = handleTest ./kafka.nix {};
   kbd-setfont-decompress = handleTest ./kbd-setfont-decompress.nix {};
+  kbd-update-search-paths-patch = handleTest ./kbd-update-search-paths-patch.nix {};
   kea = handleTest ./kea.nix {};
   keepalived = handleTest ./keepalived.nix {};
   keepassxc = handleTest ./keepassxc.nix {};
@@ -221,10 +223,12 @@ in
   latestKernel.hardened = handleTest ./hardened.nix { latestKernel = true; };
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
+  libreddit = handleTest ./libreddit.nix {};
   lidarr = handleTest ./lidarr.nix {};
   libreswan = handleTest ./libreswan.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
+  litestream = handleTest ./litestream.nix {};
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
   loki = handleTest ./loki.nix {};
@@ -257,6 +261,7 @@ in
   morty = handleTest ./morty.nix {};
   mosquitto = handleTest ./mosquitto.nix {};
   mpd = handleTest ./mpd.nix {};
+  mpv = handleTest ./mpv.nix {};
   mumble = handleTest ./mumble.nix {};
   musescore = handleTest ./musescore.nix {};
   munin = handleTest ./munin.nix {};
@@ -299,6 +304,7 @@ in
   nix-serve = handleTest ./nix-ssh-serve.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
+  node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
@@ -423,6 +429,7 @@ in
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
+  tigervnc = handleTest ./tigervnc.nix {};
   timezone = handleTest ./timezone.nix {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
@@ -438,6 +445,7 @@ in
   txredisapi = handleTest ./txredisapi.nix {};
   tuptime = handleTest ./tuptime.nix {};
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
+  tuxguitar = handleTest ./tuxguitar.nix {};
   ucarp = handleTest ./ucarp.nix {};
   ucg = handleTest ./ucg.nix {};
   udisks2 = handleTest ./udisks2.nix {};

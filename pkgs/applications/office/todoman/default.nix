@@ -44,8 +44,8 @@ buildPythonApplication rec {
     freezegun
     hypothesis
     pytest
-    pytestrunner
-    pytestcov
+    pytest-runner
+    pytest-cov
     glibcLocales
   ];
 

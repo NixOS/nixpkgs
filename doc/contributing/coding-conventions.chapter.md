@@ -520,7 +520,7 @@ If you do need to do create this sort of patch file, one way to do so is with gi
 4. Use git to create a diff, and pipe the output to a patch file:
 
     ```ShellSession
-    $ git diff > nixpkgs/pkgs/the/package/0001-changes.patch
+    $ git diff -a > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
 
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`:
@@ -537,7 +537,13 @@ Note that because the checksum is computed after applying these effects, using o
 
 Tests are important to ensure quality and make reviews and automatic updates easy.
 
-Nix package tests are a lightweight alternative to [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests). They can be used to create simple integration tests for packages while the module tests are used to test services or programs with a graphical user interface on a NixOS VM. Unittests that are included in the source code of a package should be executed in the `checkPhase`.
+The following types of tests exists:
+
+* [NixOS **module tests**](https://nixos.org/manual/nixos/stable/#sec-nixos-tests), which spawn one or more NixOS VMs. They exercise both NixOS modules and the packaged programs used within them. For example, a NixOS module test can start a web server VM running the `nginx` module, and a client VM running `curl` or a graphical `firefox`, and test that they can talk to each other and display the correct content.
+* Nix **package tests** are a lightweight alternative to NixOS module tests. They should be used to create simple integration tests for packages, but cannot test NixOS services, and some programs with graphical user interfaces may also be difficult to test with them.
+* The **`checkPhase` of a package**, which should execute the unit tests that are included in the source code of a package.
+
+Here in the nixpkgs manual we describe mostly _package tests_; for _module tests_ head over to the corresponding [section in the NixOS manual](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
 ### Writing package tests {#ssec-package-tests-writing}
 
@@ -568,7 +574,7 @@ let
   inherit (phoronix-test-suite) pname version;
 in
 
-runCommand "${pname}-tests" { meta.timeout = 3; }
+runCommand "${pname}-tests" { meta.timeout = 60; }
   ''
     # automatic initial setup to prevent interactive questions
     ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
@@ -602,3 +608,23 @@ Here are examples of package tests:
 - [Spacy annotation test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/science/math/libtorch/test/default.nix)
 - [Multiple tests for nanopb](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/nanopb/default.nix)
+
+### Linking NixOS module tests to a package {#ssec-nixos-tests-linking}
+
+Like [package tests](#ssec-package-tests-writing) as shown above, [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests) can also be linked to a package, so that the tests can be easily run when changing the related package.
+
+For example, assuming we're packaging `nginx`, we can link its module test via `passthru.tests`:
+
+```nix
+{ stdenv, lib, nixosTests }:
+
+stdenv.mkDerivation {
+  ...
+
+  passthru.tests = {
+    nginx = nixosTests.nginx;
+  };
+
+  ...
+}
+```

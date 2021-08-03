@@ -6,7 +6,7 @@
 , pytest
 , requests-mock
 , mock
-, pytestcov
+, pytest-cov
 , pytest-timeout
 , testtools
 }:
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ defusedxml requests ];
 
-  checkInputs = [ pytest requests-mock mock pytestcov pytest-timeout testtools ];
+  checkInputs = [ pytest requests-mock mock pytest-cov pytest-timeout testtools ];
   checkPhase = ''
     pytest
   '';

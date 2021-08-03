@@ -28,6 +28,7 @@ antoinemadec/coc-fzf
 antoinemadec/FixCursorHold.nvim
 ap/vim-css-color
 arcticicestudio/nord-vim
+arkav/lualine-lsp-progress
 arthurxavierx/vim-unicoder
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
@@ -161,6 +162,7 @@ fruit-in/vim-nong-theme
 fsharp/vim-fsharp
 fszymanski/deoplete-emoji
 garbas/vim-snipmate
+gcmt/taboo.vim
 gcmt/wildfire.vim
 gennaro-tedesco/nvim-peekup
 gentoo/gentoo-syntax
@@ -258,6 +260,7 @@ jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 josa42/coc-lua
 josa42/vim-lightline-coc
+jose-elias-alvarez/null-ls.nvim@main
 joshdick/onedark.vim@main
 jpalardy/vim-slime@main
 jparise/vim-graphql
@@ -491,9 +494,9 @@ nvim-telescope/telescope-symbols.nvim
 nvim-telescope/telescope-z.nvim@main
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
-nvim-treesitter/nvim-treesitter
+nvim-treesitter/nvim-treesitter@0.5-compat
 nvim-treesitter/nvim-treesitter-refactor
-nvim-treesitter/nvim-treesitter-textobjects
+nvim-treesitter/nvim-treesitter-textobjects@0.5-compat
 nvim-treesitter/playground
 oberblastmeister/termwrapper.nvim
 ocaml/vim-ocaml
@@ -504,6 +507,7 @@ Olical/aniseed
 Olical/conjure
 olimorris/onedark.nvim
 onsails/lspkind-nvim
+onsails/vimway-lsp-diag.nvim
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
@@ -535,6 +539,7 @@ preservim/tagbar
 preservim/vim-pencil
 preservim/vim-wordy
 preservim/vimux
+prettier/vim-prettier
 psliwka/vim-smoothie
 ptzz/lf.vim
 puremourning/vimspector
@@ -570,6 +575,7 @@ RishabhRD/popfix
 rktjmp/fwatch.nvim@main
 rktjmp/lush.nvim@main
 rmagatti/auto-session@main
+rmagatti/goto-preview@main
 rodjek/vim-puppet
 romainl/vim-cool
 romainl/vim-qf
@@ -589,11 +595,13 @@ rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
 sainnhe/edge
+sainnhe/gruvbox-material
 sainnhe/sonokai
 sakhnik/nvim-gdb
 saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
+sdiehl/vim-ormolu
 sebastianmarkow/deoplete-rust
 SevereOverfl0w/deoplete-github
 Shatur/neovim-ayu
@@ -625,6 +633,7 @@ sickill/vim-pasta
 SidOfc/mkdx
 simnalamburt/vim-mundo
 simrat39/rust-tools.nvim
+simrat39/symbols-outline.nvim
 sindrets/diffview.nvim@main
 SirVer/ultisnips
 sjl/gundo.vim
@@ -640,6 +649,7 @@ steelsojka/pears.nvim
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 stevearc/aerial.nvim
+stsewd/fzf-checkout.vim
 sunaku/vim-dasht
 sunjon/Shade.nvim
 svermeulen/vim-subversive

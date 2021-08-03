@@ -14,7 +14,7 @@
 , matplotlib-inline
 , pickleshare
 , traitlets
-, prompt_toolkit
+, prompt-toolkit
 , pexpect
 , appnope
 , backcall
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     matplotlib-inline
     pickleshare
     traitlets
-    prompt_toolkit
+    prompt-toolkit
     pygments
     pexpect
     backcall

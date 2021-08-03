@@ -9,8 +9,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config intltool autoreconfHook ];
 
   dontConfigure = true;
-
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase = ''
     echo "Copying libraries from apulse."

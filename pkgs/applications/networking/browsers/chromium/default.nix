@@ -1,8 +1,7 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
 , llvmPackages_11, llvmPackages_12, ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
-, libva ? null
-, pipewire
+, libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
 , lib
 
@@ -165,7 +164,7 @@ in stdenv.mkDerivation {
 
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
-    libPath = lib.makeLibraryPath [ libva pipewire ];
+    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 ];
 
   in with lib; ''
     mkdir -p "$out/bin"

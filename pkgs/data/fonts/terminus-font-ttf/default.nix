@@ -5,7 +5,7 @@ let
 in fetchzip {
   name = "terminus-font-ttf-${version}";
 
-  url = "http://files.ax86.net/terminus-ttf/files/${version}/terminus-ttf-${version}.zip";
+  url = "https://files.ax86.net/terminus-ttf/files/${version}/terminus-ttf-${version}.zip";
 
   postFetch = ''
     unzip -j $downloadedFile
@@ -26,7 +26,7 @@ in fetchzip {
       Monospaced bitmap font designed for long work with computers
       (TTF version, mainly for Java applications)
     '';
-    homepage = "http://files.ax86.net/terminus-ttf";
+    homepage = "https://files.ax86.net/terminus-ttf";
     license = licenses.ofl;
     maintainers = with maintainers; [ okasu ];
   };

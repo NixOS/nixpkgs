@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, stdenv, pytestrunner, pytest, mock }:
+, stdenv, pytest-runner, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "paho-mqtt";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--pylama" ""
   '';
 
-  checkInputs = [ pytestrunner pytest ] ++ lib.optional (!isPy3k) mock;
+  checkInputs = [ pytest-runner pytest ] ++ lib.optional (!isPy3k) mock;
 
   doCheck = !stdenv.isDarwin;
 

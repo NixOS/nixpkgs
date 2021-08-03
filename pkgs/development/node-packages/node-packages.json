@@ -13,6 +13,7 @@
 , "@webassemblyjs/wast-refmt"
 , "alloy"
 , "asar"
+, "autoprefixer"
 , "aws-azure-login"
 , "balanceofsatoshis"
 , "bash-language-server"
@@ -89,7 +90,7 @@
 , "eslint_d"
 , "esy"
 , "expo-cli"
-, {"fast-cli": "1.x"}
+, "fast-cli"
 , "fauna-shell"
 , "firebase-tools"
 , "fixjson"
@@ -164,6 +165,7 @@
 , "mirakurun"
 , "mocha"
 , "multi-file-swagger"
+, "musescore-downloader"
 , "neovim"
 , "netlify-cli"
 , "nijs"
@@ -177,6 +179,7 @@
 , "np"
 , "npm"
 , "npm-check-updates"
+, "npm-merge-driver"
 , {"npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0"}
 , "ocaml-language-server"
 , "parcel-bundler"
@@ -197,6 +200,7 @@
 , "purescript-language-server"
 , "purescript-psa"
 , "purty"
+, "pxder"
 , "pyright"
 , "quicktype"
 , "react-native-cli"
@@ -225,6 +229,7 @@
 , "stf"
 , "stylelint"
 , "svelte-language-server"
+, "svelte-check"
 , "svgo"
 , "swagger"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}

@@ -9,8 +9,11 @@ buildKodiAddon rec {
     sha256 = "0pm86m8kh2p0brps3xzxcmmabvb4izkglzkj8dsn33br3vlc7cm7";
   };
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.idna";
+  passthru = {
+    pythonPath = "lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.idna";
+    };
   };
 
   meta = with lib; {

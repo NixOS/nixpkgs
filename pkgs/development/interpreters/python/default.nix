@@ -85,6 +85,7 @@ with pkgs;
           (lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun))
         {
           overrides = packageOverrides;
+          python = self;
         };
     in rec {
         isPy27 = pythonVersion == "2.7";
@@ -118,14 +119,23 @@ with pkgs;
   };
 
   sources = {
-    "python38" = {
+    python38 = {
       sourceVersion = {
         major = "3";
         minor = "8";
-        patch = "9";
+        patch = "11";
         suffix = "";
       };
-      sha256 = "XjkfPsRdopVEGcqwvq79i+OIlepc4zV3w+wUlAxLlXI=";
+      sha256 = "1chg8b0m1yrz50lizid20zha0dmj40z0iih3jqcrg7pyxca126pv";
+    };
+    python39 = {
+      sourceVersion = {
+        major = "3";
+        minor = "9";
+        patch = "6";
+        suffix = "";
+      };
+      sha256 = "12hhw2685i68pwfx5hdkqngzhbji4ccyjmqb5rzvkigg6fpj0y9r";
     };
   };
 
@@ -149,10 +159,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "6";
-      patch = "13";
+      patch = "14";
       suffix = "";
     };
-    sha256 = "pHpDpTq7QihqLBGWU0P/VnEbnmTo0RvyxnAaT7jOGg8=";
+    sha256 = "1bnm0bx7xf1jpfm0bmzlq19vwm0bvcbl7klx4rvgq05xryhafqr6";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -162,10 +172,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "10";
+      patch = "11";
       suffix = "";
     };
-    sha256 = "+NgudXLIbsnVXIYnquUEAST9IgOvQAw4PIIbmAMG7ms=";
+    sha256 = "0d57b5a47wapzpkkq5rbvvi4caylc35j5910b64rxxn4nmm1kd6x";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -176,18 +186,11 @@ in {
     inherit passthruFun;
   } // sources.python38);
 
-  python39 = callPackage ./cpython {
+  python39 = callPackage ./cpython ({
     self = python39;
-    sourceVersion = {
-      major = "3";
-      minor = "9";
-      patch = "4";
-      suffix = "";
-    };
-    sha256 = "Sw5mRKdvjfhkriSsUApRu/aL0Jj2oXPifTthzcqaoTQ=";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python39);
 
   python310 = callPackage ./cpython {
     self = python310;
@@ -195,9 +198,9 @@ in {
       major = "3";
       minor = "10";
       patch = "0";
-      suffix = "a5";
+      suffix = "b3";
     };
-    sha256 = "BBjlfnA24hnx5rYwOyHnEfZM/Q/dsIlNjxnzev/8XU0=";
+    sha256 = "05fc4mp2ysb372bzkwbn1b1z01bfldnaqig6rxmif58hs3aawrr2";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -223,8 +226,9 @@ in {
     stripBytecode = true;
     includeSiteCustomize = false;
     enableOptimizations = false;
+    enableLTO = false;
     mimetypesSupport = false;
-  } // sources.python38)).overrideAttrs(old: {
+  } // sources.python39)).overrideAttrs(old: {
     pname = "python3-minimal";
     meta = old.meta // {
       maintainers = [];

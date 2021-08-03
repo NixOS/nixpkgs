@@ -2,7 +2,8 @@
 
 buildGoPackage rec {
   rev = "3057a2c07061c8d9ffaf77e5442ffd7512ac0133";
-  name = "heapster-${lib.strings.substring 0 7 rev}";
+  pname = "heapster";
+  version = lib.strings.substring 0 7 rev;
   goPackagePath = "k8s.io/heapster";
   subPackages = [ "./" ];
 

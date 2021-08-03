@@ -236,6 +236,7 @@
   ./security/doas.nix
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
+  ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
@@ -250,6 +251,7 @@
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix
   ./services/audio/mopidy.nix
+  ./services/audio/roon-bridge.nix
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
   ./services/audio/snapserver.nix
@@ -475,6 +477,7 @@
   ./services/misc/calibre-server.nix
   ./services/misc/cfdyndns.nix
   ./services/misc/clipmenu.nix
+  ./services/misc/clipcat.nix
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
@@ -518,6 +521,7 @@
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
+  ./services/misc/libreddit.nix
   ./services/misc/lifecycled.nix
   ./services/misc/mame.nix
   ./services/misc/matrix-appservice-discord.nix
@@ -528,6 +532,7 @@
   ./services/misc/mediatomb.nix
   ./services/misc/metabase.nix
   ./services/misc/mwlib.nix
+  ./services/misc/mx-puppet-discord.nix
   ./services/misc/n8n.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
@@ -632,6 +637,7 @@
   ./services/network-filesystems/glusterfs.nix
   ./services/network-filesystems/kbfs.nix
   ./services/network-filesystems/ipfs.nix
+  ./services/network-filesystems/litestream/default.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
   ./services/network-filesystems/openafs/client.nix
@@ -886,6 +892,7 @@
   ./services/security/fprot.nix
   ./services/security/haka.nix
   ./services/security/haveged.nix
+  ./services/security/hockeypuck.nix
   ./services/security/hologram-server.nix
   ./services/security/hologram-agent.nix
   ./services/security/munge.nix
@@ -927,6 +934,7 @@
   ./services/wayland/cage.nix
   ./services/video/epgstation/default.nix
   ./services/video/mirakurun.nix
+  ./services/video/replay-sorcery.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
@@ -958,6 +966,7 @@
   ./services/web-apps/moodle.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
+  ./services/web-apps/node-red.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix

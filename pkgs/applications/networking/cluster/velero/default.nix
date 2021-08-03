@@ -3,15 +3,15 @@
 buildGoModule rec {
   pname = "velero";
   # When updating, change the commit underneath
-  version = "1.6.0";
-  commit = "5bd70fd8eef316d220317245e46dc6016c348dce";
+  version = "1.6.2";
+  commit = "8c9cdb9603446760452979dc77f93b17054ea1cc";
 
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "vmware-tanzu";
     repo = "velero";
-    sha256 = "sha256-2d4xsffh5DpxGahmzXpgUBRFAt5CsDnHCm8xU1ksqyQ=";
+    sha256 = "sha256-JYa+5lP9uo/6/5wTxNz8xa2usHo6WfXSndbwrMpHhcg=";
   };
 
   buildFlagsArray = ''
@@ -22,11 +22,15 @@ buildGoModule rec {
       -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean
   '';
 
-  vendorSha256 = "sha256-aQjtebIyV69nRwc/zvK/9v0mX3pAPKfOunSL/FpFZJU=";
+  vendorSha256 = "sha256-Rmj2qGY2w1gsnKAuRQ8cQyqfoM556t4/MookkuPmbDM=";
 
-  excludedPackages = [ "issue-template-gen" ];
+  excludedPackages = [ "issue-template-gen" "crd-gen" "release-tools" "velero-restic-restore-helper" ];
 
-  doCheck = false;
+  doCheck = false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/velero version --client-only | grep ${version} > /dev/null
+  '';
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
@@ -43,6 +47,5 @@ buildGoModule rec {
       "https://github.com/vmware-tanzu/velero/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.mbode maintainers.bryanasdev000 ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -70,7 +70,7 @@ assert stdenv.isLinux;
 
 let
   # Combine the `features' attribute sets of all the kernel patches.
-  kernelFeatures = lib.fold (x: y: (x.features or {}) // y) ({
+  kernelFeatures = lib.foldr (x: y: (x.features or {}) // y) ({
     iwlwifi = true;
     efiBootStub = true;
     needsCifsUtils = true;
@@ -179,7 +179,7 @@ let
     };
   }; # end of configfile derivation
 
-  kernel = (callPackage ./manual-config.nix {}) {
+  kernel = (callPackage ./manual-config.nix { inherit buildPackages;  }) {
     inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };

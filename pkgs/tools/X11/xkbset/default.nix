@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, perl, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "xkbset-0.5";
+  pname = "xkbset";
+  version = "0.5";
 
   src = fetchurl {
-    url = "http://faculty.missouri.edu/~stephen/software/xkbset/${name}.tar.gz";
+    url = "http://faculty.missouri.edu/~stephen/software/xkbset/xkbset-${version}.tar.gz";
     sha256 = "01c2579495b39e00d870f50225c441888dc88021e9ee3b693a842dd72554d172";
   };
 

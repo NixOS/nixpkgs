@@ -13,7 +13,6 @@
 let
   pname = "plausible";
   version = "1.3.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "plausible";
@@ -26,12 +25,15 @@ let
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "${pname}-deps";
     inherit src version;
-    sha256 = "18h3hs69nw06msvs3nnymf6p94qd3x1f4d2zawqriy9fr5fz7zx6";
+    sha256 = "1x0if0ifk272vcqjlgf097pxsw13bhwy8vs0b89l0bssx1bzygsi";
 
     # We need ecto 3.6 as this version checks whether the database exists before
     # trying to create it. The creation attempt would always require super-user privileges
     # and since 3.6 this isn't the case anymore.
-    patches = [ ./ecto_sql-fix.patch ];
+    patches = [
+      ./ecto_sql-fix.patch
+      ./plausible-Bump-clickhouse_ecto-dependency-to-be-compatible-with-ecto-3.6.patch
+    ];
   };
 
   yarnDeps = mkYarnModules {

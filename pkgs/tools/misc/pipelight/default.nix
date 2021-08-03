@@ -21,7 +21,10 @@ in stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
-  patches = [ ./pipelight.patch ];
+  patches = [
+    ./pipelight.patch
+    ./wine-6.13-new-args.patch
+  ];
 
   configurePhase = ''
     patchShebangs .

@@ -3,7 +3,7 @@
 , isPy27
 , fetchFromGitHub
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , hyppo
 , matplotlib
 , networkx
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  checkInputs = [ pytestCheckHook pytestcov ];
+  checkInputs = [ pytestCheckHook pytest-cov ];
   pytestFlagsArray = [ "tests" "--ignore=docs" "--ignore=tests/test_sklearn.py" ];
   disabledTests = [ "gridplot_outputs" ];
 

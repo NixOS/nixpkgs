@@ -52,12 +52,6 @@ self: super:
     }
   );
 
-  anyio = super.anyio.overridePythonAttrs (old: {
-    postPatch = ''
-      substituteInPlace setup.py --replace 'setup()' 'setup(version="${old.version}")'
-    '';
-  });
-
   astroid = super.astroid.overridePythonAttrs (
     old: rec {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
@@ -499,7 +493,7 @@ self: super:
     old: {
       inherit (pkgs.python3Packages.jira) patches;
       buildInputs = (old.buildInputs or [ ]) ++ [
-        self.pytestrunner
+        self.pytest-runner
         self.cryptography
         self.pyjwt
       ];
@@ -1268,8 +1262,6 @@ self: super:
       '';
     }
   );
-
-  pytest-runner = super.pytest-runner or super.pytestrunner;
 
   pytest-pylint = super.pytest-pylint.overridePythonAttrs (
     old: {

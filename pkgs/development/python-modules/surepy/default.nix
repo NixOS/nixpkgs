@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "surepy";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "benleb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XoYiZPBc9SybyKocui1HqSA+YPiPpbupJWMCfmQT5RU=";
+    sha256 = "04ywkbgs1lnnlhxakbr96crwc8hl97px8w7yigps2ki69md0xf60";
   };
 
   postPatch = ''
@@ -35,7 +35,9 @@ buildPythonPackage rec {
       --replace 'attrs = "^20.3.0"' 'attrs = "*"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiodns
@@ -53,6 +55,7 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "surepy" ];
 
   meta = with lib; {

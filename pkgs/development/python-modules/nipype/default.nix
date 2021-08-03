@@ -19,14 +19,14 @@
 , pybids
 , pydot
 , pytest
-, pytest_xdist
+, pytest-xdist
 , pytest-forked
 , rdflib
 , scipy
 , simplejson
 , traits
 , xvfbwrapper
-, pytestcov
+, pytest-cov
 , codecov
 , sphinx
 # other dependencies
@@ -93,8 +93,8 @@ buildPythonPackage rec {
     mock
     pytest
     pytest-forked
-    pytest_xdist
-    pytestcov
+    pytest-xdist
+    pytest-cov
     which
   ];
 

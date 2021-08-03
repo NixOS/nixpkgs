@@ -1,7 +1,9 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "undaemonize-2017-07-11";
+  pname = "undaemonize";
+  version = "unstable-2017-07-11";
+
   src = fetchFromGitHub {
     repo = "undaemonize";
     owner = "nickstenning";

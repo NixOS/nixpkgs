@@ -5,7 +5,7 @@
 , pyjwt
 , pylint
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , python-dateutil
 , requests
 , responses
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     codecov
     pylint
     pytestCheckHook
-    pytestcov
+    pytest-cov
     responses
     tox
   ];

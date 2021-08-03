@@ -32,7 +32,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "domoticz";
+  pname = "domoticz";
   inherit version;
 
   src = domoticz-src;

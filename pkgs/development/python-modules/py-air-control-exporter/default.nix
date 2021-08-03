@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchPypi, flask, isPy27, lib, nixosTests
-, prometheus_client, py-air-control, pytestCheckHook, pytestcov, pytestrunner
+, prometheus_client, py-air-control, pytestCheckHook, pytest-cov, pytest-runner
 , setuptools-scm }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  checkInputs = [ pytestCheckHook pytestcov pytestrunner ];
+  checkInputs = [ pytestCheckHook pytest-cov pytest-runner ];
   propagatedBuildInputs = [ flask prometheus_client py-air-control ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) py-air-control; };
