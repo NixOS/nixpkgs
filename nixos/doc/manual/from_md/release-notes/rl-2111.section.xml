@@ -632,6 +632,13 @@
           wherever possible.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>programs.neovim.runtime</literal> switched to a
+          <literal>linkFarm</literal> internally, making it impossible
+          to use wildcards in the <literal>source</literal> argument.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
