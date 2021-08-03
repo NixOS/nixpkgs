@@ -12,26 +12,26 @@
 , libseccomp
 }:
 
-buildGoModule rec {
-  pname = "buildah";
-  version = "1.22.0";
+buildGoModule  {
+  pname  "buildah";
+  version  "1.22.0";
 
-  src = fetchFromGitHub {
-    owner = "containers";
-    repo = "buildah";
-    rev = "v${version}";
-    sha256 = "sha256-F2PUqqzW7e6wmme1rTEJ736Sy/SRR1XVf20j5zDI9/s=";
+  src  fetchFromGitHub {
+    owner  "containers";
+    repo  "buildah";
+    rev  "v${version}";
+    sha256  "sha256-F2PUqqzW7e6wmme1rTEJ736Sy/SRR1XVf20j5zDI9/s=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs  [ "out" "man" ];
 
-  vendorSha256 = null;
+  vendorSha256  null;
 
-  doCheck = false;
+  doCheck  false;
 
-  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
+  nativeBuildInputs  [ go-md2man installShellFiles pkg-config ];
 
-  buildInputs = [
+  buildInputs  [
     btrfs-progs
     gpgme
     libapparmor
@@ -40,7 +40,7 @@ buildGoModule rec {
     lvm2
   ];
 
-  buildPhase = ''
+  buildPhase  ''
     runHook preBuild
     patchShebangs .
     make bin/buildah GIT_COMMIT="unknown"
@@ -48,7 +48,7 @@ buildGoModule rec {
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase  ''
     runHook preInstall
     install -Dm755 bin/buildah $out/bin/buildah
     installShellCompletion --bash contrib/completions/bash/buildah
@@ -56,12 +56,12 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A tool which facilitates building OCI images";
-    homepage = "https://buildah.io/";
-    changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
-    platforms = platforms.linux;
+  meta  lib; {
+    description  "A tool which facilitates building OCI images";
+    homepage  "https://buildah.io/";
+    changelog  "https://github.com/containers/buildah/releases/tag/v${version}";
+    license  licenses.asl20;
+    maintainers  with maintainers; [ Profpatsch ] ++ teams.podman.members;
+    platforms  platforms.linux;
   };
 }
