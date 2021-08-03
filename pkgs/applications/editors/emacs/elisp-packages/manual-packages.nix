@@ -1,25 +1,33 @@
 { lib, pkgs }: self: with self; with lib.licenses; {
 
-  elisp-ffi = melpaBuild rec {
+  elisp-ffi = let
+    rev = "da37c516a0e59bdce63fb2dc006a231dee62a1d9";
+  in melpaBuild {
     pname = "elisp-ffi";
-    version = "1.0.0";
+    version = "20170518.0";
+
+    commit = rev;
 
     src = pkgs.fetchFromGitHub {
       owner = "skeeto";
       repo = "elisp-ffi";
-      rev = version;
-      sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
+      inherit rev;
+      sha256 = "sha256-StOezQEnNTjRmjY02ub5FRh59aL6gWfw+qgboz0wF94=";
     };
+
+    nativeBuildInputs = [ pkgs.pkg-config ];
 
     buildInputs = [ pkgs.libffi ];
 
-    preBuild = "make";
+    preBuild = ''
+      mv ffi.el elisp-ffi.el
+      make
+    '';
 
     recipe = pkgs.writeText "recipe" ''
       (elisp-ffi
       :repo "skeeto/elisp-ffi"
-      :fetcher github
-      :files ("ffi-glue" "ffi.el"))
+      :fetcher github)
     '';
 
     meta = {
@@ -94,19 +102,23 @@
 
   git-undo = callPackage ./git-undo { };
 
-  haskell-unicode-input-method = melpaBuild {
-    pname = "emacs-haskell-unicode-input-method";
+  haskell-unicode-input-method = let
+    rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
+  in melpaBuild {
+    pname = "haskell-unicode-input-method";
     version = "20110905.2307";
+
+    commit = rev;
 
     src = pkgs.fetchFromGitHub {
       owner = "roelvandijk";
       repo = "emacs-haskell-unicode-input-method";
-      rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
+      inherit rev;
       sha256 = "09b7bg2s9aa4s8f2kdqs4xps3jxkq5wsvbi87ih8b6id38blhf78";
     };
 
     recipe = pkgs.writeText "recipe" ''
-      (emacs-haskell-unicode-input-method
+      (haskell-unicode-input-method
        :repo "roelvandijk/emacs-haskell-unicode-input-method"
        :fetcher github)
     '';
@@ -134,14 +146,19 @@
     };
   };
 
-  matrix-client = melpaBuild {
+  matrix-client = let
+    rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
+  in melpaBuild
+  {
     pname = "matrix-client";
     version = "0.3.0";
+
+    commit = rev;
 
     src = pkgs.fetchFromGitHub {
       owner = "alphapapa";
       repo = "matrix-client.el";
-      rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
+      inherit rev;
       sha256 = "1scfv1502yg7x4bsl253cpr6plml1j4d437vci2ggs764sh3rcqq";
     };
 

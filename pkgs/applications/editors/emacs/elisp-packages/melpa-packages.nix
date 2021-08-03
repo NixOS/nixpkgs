@@ -325,14 +325,6 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
           nativeBuildInputs = [ pkgs.pkg-config ];
 
-          patches = [
-            (pkgs.fetchpatch {
-              name = "telega-server-bin-store-prefer.patch";
-              url = "https://github.com/zevlg/telega.el/commit/72550f984ca869309d197203ef7de99182d71729.patch";
-              sha256 = "18xvz53bygksak6h5f8cz79y83p2va15i8qz7n4s3g9gsklmkj2p";
-            })
-          ];
-
           postPatch = ''
             substituteInPlace telega-customize.el \
               --replace 'defcustom telega-server-command "telega-server"' \
