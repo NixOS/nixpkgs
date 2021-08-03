@@ -12316,4 +12316,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  maggicl = {
+    name = "Claudio Maggioni";
+    email = "maggicl+nix@kolabnow.ch";
+    github = "maggicl";
+    githubId = 17784802;
+  };
 }
