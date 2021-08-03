@@ -40,12 +40,11 @@ stdenv.mkDerivation rec {
     libiconv lmdb libintl
     nghttp2 # DoH support in kdig
     libmaxminddb # optional for geoip module (it's tiny)
-    libmnl # required for knot >= 3.1
     # without sphinx &al. for developer documentation
     # TODO: add dnstap support?
   ] ++ lib.optionals stdenv.isLinux [
     libcap_ng systemd
-    libbpf # XDP support
+    libbpf libmnl # XDP support (it's Linux kernel API)
   ] ++ lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
