@@ -58,20 +58,7 @@ stdenv.mkDerivation (overridable // {
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
 
-    mkdir -p _build/$MIX_ENV/lib
-    while read -d ':' lib; do
-      for dir in $lib/*; do
-        # Strip version number for directory name if it exists, so naming of
-        # all libs matches what mix's expectation.
-        dest=$(basename $dir | cut -d '-' -f1)
-        echo "Linking $dir to _build/$MIX_ENV/lib/$dest"
-        # Symlink libs to _build so that mix can find them when compiling.
-        # This is what allows mix to compile the package without searching
-        # for dependencies over the network.
-        ln -s $dir _build/$MIX_ENV/lib/$dest
-      done
-    done <<< "$ERL_LIBS:"
-
+    ${./mix-configure-hook.sh}
     # this is needed for projects that have a specific compile step
     # the dependency needs to be compiled in order for the task
     # to be available
