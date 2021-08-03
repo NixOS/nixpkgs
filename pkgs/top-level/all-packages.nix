@@ -658,6 +658,8 @@ in
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
+  sirula = callPackage ../tools/wayland/sirula { };
+
   srcOnly = callPackage ../build-support/src-only { };
 
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
@@ -3330,6 +3332,8 @@ in
   rav1e = callPackage ../tools/video/rav1e { };
 
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
+
+  replay-sorcery = callPackage ../tools/video/replay-sorcery { };
 
   ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
@@ -32025,7 +32029,7 @@ in
 
   unicode-paracode = callPackage ../tools/misc/unicode { };
 
-  unixcw = callPackage ../applications/radio/unixcw { };
+  unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
 
   vault = callPackage ../tools/security/vault { };
 
