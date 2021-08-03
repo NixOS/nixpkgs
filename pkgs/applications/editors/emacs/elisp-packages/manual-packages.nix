@@ -1,25 +1,33 @@
 { lib, pkgs }: self: with self; with lib.licenses; {
 
-  elisp-ffi = melpaBuild rec {
+  elisp-ffi = let
+    rev = "da37c516a0e59bdce63fb2dc006a231dee62a1d9";
+  in melpaBuild {
     pname = "elisp-ffi";
-    version = "1.0.0";
+    version = "20170518.0";
+
+    commit = rev;
 
     src = pkgs.fetchFromGitHub {
       owner = "skeeto";
       repo = "elisp-ffi";
-      rev = version;
-      sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
+      inherit rev;
+      sha256 = "sha256-StOezQEnNTjRmjY02ub5FRh59aL6gWfw+qgboz0wF94=";
     };
+
+    nativeBuildInputs = [ pkgs.pkg-config ];
 
     buildInputs = [ pkgs.libffi ];
 
-    preBuild = "make";
+    preBuild = ''
+      mv ffi.el elisp-ffi.el
+      make
+    '';
 
     recipe = pkgs.writeText "recipe" ''
       (elisp-ffi
       :repo "skeeto/elisp-ffi"
-      :fetcher github
-      :files ("ffi-glue" "ffi.el"))
+      :fetcher github)
     '';
 
     meta = {
