@@ -18,6 +18,13 @@ in {
           The size of the VirtualBox base image in MiB.
         '';
       };
+      baseImageFreeSpace = mkOption {
+        type = with types; int;
+        default = 30 * 1024;
+        description = ''
+          Free space in the VirtualBox base image in MiB.
+        '';
+      };
       memorySize = mkOption {
         type = types.int;
         default = 1536;
@@ -117,6 +124,7 @@ in {
       inherit pkgs lib config;
       partitionTableType = "legacy";
       diskSize = cfg.baseImageSize;
+      additionalSpace = "${toString cfg.baseImageFreeSpace}M";
 
       postVM =
         ''
