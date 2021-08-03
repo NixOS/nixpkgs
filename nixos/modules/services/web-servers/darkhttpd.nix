@@ -19,7 +19,7 @@ in {
 
     port = mkOption {
       default = 80;
-      type = ints.u16;
+      type = types.port;
       description = ''
         Port to listen on.
         Pass 0 to let the system choose any free port for you.
