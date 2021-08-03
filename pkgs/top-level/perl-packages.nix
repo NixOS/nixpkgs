@@ -9237,16 +9237,16 @@ let
     };
   };
 
-  Gtk3ImageView = buildPerlPackage {
+  Gtk3ImageView = buildPerlPackage rec {
     pname = "Gtk3-ImageView";
-    version = "6";
+    version = "9";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Gtk3-ImageView-6.tar.gz";
-      sha256 = "0krkif9i3hrgjdskw05pcks40fmb43d21lxf4h8aclv0g8z647f0";
+      url = "mirror://cpan/authors/id/A/AS/ASOKOLOV/Gtk3-ImageView-${version}.tar.gz";
+      sha256 = "sha256-0dxe0p1UQglq+xok7g4l2clJ9WqOHxCeAzWD65E0H9w=";
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
-    checkInputs = [ TestDifferences ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    checkInputs = [ TestDifferences TestDeep ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
       ${pkgs.xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
         make test
