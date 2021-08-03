@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "aiowinreg";
-  version = "0.0.6";
+  version = "0.0.7";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h0r9xrz1n8y75f2p21f7phqrlpsymyiipmgzr0lj591irzjmjjy";
+    sha256 = "1p88q2b6slm1sw3234r40s9jd03fqlkcx8y3iwg6ihf0z4ww14d1";
   };
 
   propagatedBuildInputs = [
