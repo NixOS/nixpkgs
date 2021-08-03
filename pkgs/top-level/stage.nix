@@ -169,6 +169,7 @@ let
       # so we don't need to check hostPlatform != buildPlatform.
       crossSystem = stdenv.hostPlatform // {
         useLLVM = true;
+        linker = "lld";
       };
     };
 
