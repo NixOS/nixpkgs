@@ -1972,10 +1972,12 @@ dont-distribute-packages:
  - llvm-tf
  - llvm-tools
  - lmonad-yesod
+ - lnd-client
  - local-search
  - localize
  - locked-poll
  - log
+ - log-elasticsearch
  - log-postgres
  - log-utils
  - logging-effect-extra
@@ -3145,6 +3147,7 @@ dont-distribute-packages:
  - wai-dispatch
  - wai-handler-snap
  - wai-hastache
+ - wai-log
  - wai-middleware-brotli
  - wai-middleware-cache
  - wai-middleware-cache-redis
