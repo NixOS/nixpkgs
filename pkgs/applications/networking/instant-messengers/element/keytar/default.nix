@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, nodejs-14_x, python3, callPackage, fixup_yarn_lock, yarn, pkg-config, libsecret }:
+{ lib, stdenv, fetchFromGitHub, nodejs-14_x, python3, callPackage
+, fixup_yarn_lock, yarn, pkg-config, libsecret, xcbuild, Security, AppKit }:
 
 stdenv.mkDerivation rec {
   pname = "keytar";
@@ -11,8 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0ajvr4kjbyw2shb1y14c0dsghdlnq30f19hk2sbzj6n9y3xa3pmi";
   };
 
-  nativeBuildInputs = [ nodejs-14_x python3 yarn pkg-config];
-  buildInputs = [ libsecret ];
+  nativeBuildInputs = [ nodejs-14_x python3 yarn pkg-config ]
+    ++ lib.optional  stdenv.isDarwin xcbuild;
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
+    ++ lib.optionals stdenv.isDarwin [ Security AppKit ];
 
   npm_config_nodedir = nodejs-14_x;
 
@@ -21,7 +24,8 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     cp ${./yarn.lock} ./yarn.lock
     chmod u+w . ./yarn.lock
-    export HOME=/tmp
+    export HOME=$PWD/tmp
+    mkdir -p $HOME
     yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
     ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
@@ -34,6 +38,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     shopt -s extglob
     rm -rf node_modules
+    rm -rf $HOME
     mkdir -p $out
     cp -r ./!(build) $out
     install -D -t $out/build/Release build/Release/keytar.node
