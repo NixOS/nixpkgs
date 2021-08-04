@@ -325,14 +325,6 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
           nativeBuildInputs = [ pkgs.pkg-config ];
 
-          patches = [
-            (pkgs.fetchpatch {
-              name = "telega-server-bin-store-prefer.patch";
-              url = "https://github.com/zevlg/telega.el/commit/72550f984ca869309d197203ef7de99182d71729.patch";
-              sha256 = "18xvz53bygksak6h5f8cz79y83p2va15i8qz7n4s3g9gsklmkj2p";
-            })
-          ];
-
           postPatch = ''
             substituteInPlace telega-customize.el \
               --replace 'defcustom telega-server-command "telega-server"' \
@@ -517,24 +509,7 @@ let
         });
       };
 
-      # Deprecated legacy aliases for backwards compat
-      aliases = lib.listToAttrs (lib.attrValues (lib.mapAttrs (n: v: { name = v; value = builtins.trace "Melpa attribute '${v}' is a legacy alias that will be removed in 21.05, use '${n}' instead" melpaPackages.${n}; }) (lib.filterAttrs (n: v: lib.hasAttr n melpaPackages) {
-        "auto-complete-clang-async" = "emacsClangCompleteAsync";
-        "vterm" = "emacs-libvterm";
-        "0xc" = "_0xc";
-        "2048-game" = "_2048-game";
-        "4clojure" = "_4clojure";
-        "@" = "at";
-        "term+" = "term-plus";
-        "term+key-intercept" = "term-plus-key-intercept";
-        "term+mux" = "term-plus-mux";
-        "xml+" = "xml-plus";
-      })));
-
-      melpaPackages = lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super;
-
-    in
-    melpaPackages // aliases);
+    in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
 generateMelpa { }
