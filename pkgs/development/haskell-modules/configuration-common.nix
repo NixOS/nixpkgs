@@ -1916,4 +1916,8 @@ EOT
     assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
     doJailbreak super.graphql;
 
+  # Test suite doesn't build with base16-bytestring >= 1.0.0.0
+  # https://github.com/emilypi/Base16/issues/9
+  base16 = dontCheck super.base16;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -286,7 +286,6 @@ broken-packages:
   - barrie
   - barrier
   - barrier-monad
-  - base16
   - base64-conduit
   - base-compat-migrate
   - base-encoding
