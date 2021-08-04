@@ -91,7 +91,6 @@ default-package-overrides:
   - streamly-bytestring < 0.1.3
   - streamly-lmdb < 0.3.0
   - streamly-process
-  - distribution-nixpkgs < 1.6.0        # 2021-07-26: required until cabal2nix 2.17.1 is released
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
