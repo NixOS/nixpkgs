@@ -82,7 +82,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system/hqplayerd.service \
-      --replace /usr/bin/hqplayerd $out/bin/hqplayerd
+      --replace /usr/bin/hqplayerd $out/bin/hqplayerd \
+      --replace "NetworkManager-wait-online.service" ""
   '';
 
   postFixup = ''
