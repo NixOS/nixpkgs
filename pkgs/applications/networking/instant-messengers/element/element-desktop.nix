@@ -2,6 +2,9 @@
 , makeWrapper, makeDesktopItem, mkYarnPackage
 , electron, element-web
 , callPackage
+, Security
+, AppKit
+, CoreServices
 }:
 # Notes for maintainers:
 # * versions of `element-web` and `element-desktop` should be kept in sync.
@@ -25,8 +28,8 @@ in mkYarnPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  seshat = callPackage ./seshat {};
-  keytar = callPackage ./keytar {};
+  seshat = callPackage ./seshat { inherit CoreServices; };
+  keytar = callPackage ./keytar { inherit Security AppKit; };
 
   buildPhase = ''
     runHook preBuild
