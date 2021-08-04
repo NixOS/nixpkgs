@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "1.0.6";
+  version = "1.0.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "0vm19rcy14fdsfddjskxh0nlph10jrj3qh6xqwv73wgcmbdpr91i";
+    sha256 = "1s96zfrw8kdpmyxkiskz1ys8h23dx3b46psmlg1z6d4pkb611ijz";
   };
 
   nativeBuildInputs = [
