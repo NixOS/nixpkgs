@@ -12,18 +12,28 @@
 , openssl
 , withSystemd ? stdenv.isLinux
 , systemd
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.10";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "144vw7b9ja4lci4mplbxs048x9aixd9c3s7rg6wc1k31w099rb12";
+    sha256 = "1i0kkqhjxqahkhsl60s46zlywa87jakv7h4sr3fhi1v53vwpb9mg";
   };
+
+  patches = lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      name = "revert-cmake-shared-to-module.patch"; # See https://github.com/eclipse/mosquitto/issues/2277
+      url = "https://github.com/eclipse/mosquitto/commit/e21eaeca37196439b3e89bb8fd2eb1903ef94845.patch";
+      sha256 = "14syi2c1rks8sl2aw09my276w45yq1iasvzkqcrqwy4drdqrf069";
+      revert = true;
+    })
+  ];
 
   postPatch = ''
     for f in html manpage ; do
