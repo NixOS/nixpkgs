@@ -56,22 +56,6 @@ in
           Open TCP port 8088 in the firewall for the server.
         '';
       };
-
-      user = mkOption {
-        type = types.str;
-        default = "hqplayer";
-        description = ''
-          User account under which hqplayerd runs.
-        '';
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "hqplayer";
-        description = ''
-          Group account under which hqplayerd runs.
-        '';
-      };
     };
   };
 
@@ -100,9 +84,9 @@ in
 
     systemd = {
       tmpfiles.rules = [
-        "d ${configDir}      0755 ${cfg.user} ${cfg.group} - -"
-        "d ${stateDir}       0755 ${cfg.user} ${cfg.group} - -"
-        "d ${stateDir}/home  0755 ${cfg.user} ${cfg.group} - -"
+        "d ${configDir}      0755 hqplayer hqplayer - -"
+        "d ${stateDir}       0755 hqplayer hqplayer - -"
+        "d ${stateDir}/home  0755 hqplayer hqplayer - -"
       ];
 
       services.hqplayerd = {
@@ -130,8 +114,8 @@ in
         serviceConfig = {
           ExecStart = "${pkg}/bin/hqplayerd";
 
-          User = cfg.user;
-          Group = cfg.group;
+          User = "hqplayer";
+          Group = "hqplayer";
 
           Restart = "on-failure";
           RestartSec = 5;
@@ -145,15 +129,15 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "hqplayer") {
+    users.groups = {
       hqplayer.gid = config.ids.gids.hqplayer;
     };
 
-    users.users = mkIf (cfg.user == "hqplayer") {
+    users.users = {
       hqplayer = {
         description = "hqplayer daemon user";
         extraGroups = [ "audio" ];
-        group = cfg.group;
+        group = "hqplayer";
         uid = config.ids.uids.hqplayer;
       };
     };
