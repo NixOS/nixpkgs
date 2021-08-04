@@ -305,7 +305,6 @@ broken-packages:
   - bdo
   - beam
   - beamable
-  - beam-core
   - bech32
   - bed-and-breakfast
   - beeminder-api
