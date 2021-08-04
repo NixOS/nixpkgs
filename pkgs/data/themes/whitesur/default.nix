@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , glib
+, gnome-shell
 , gnome-themes-extra
 , libxml2
 , sassc
@@ -10,17 +11,18 @@
 
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
-  version = "2021-06-23";
+  version = "2021-07-27";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "075fw57mv6zadq4dryn8bg2b3vq8inmisq18s758cv53pprxh9hw";
+    sha256 = "17x4lqlv6whx8vg0c1nm89j7671l033apn4alqyhjb9qx5w2fa43";
   };
 
   nativeBuildInputs = [
     glib
+    gnome-shell
     libxml2
     sassc
     util-linux
@@ -35,6 +37,9 @@ stdenv.mkDerivation rec {
 
     # Do not provide `sudo`, as it is not needed in our use case of the install script
     substituteInPlace lib-core.sh --replace '$(which sudo)' false
+
+    # Provides a dummy home directory
+    substituteInPlace lib-core.sh --replace 'MY_HOME=$(getent passwd "''${MY_USERNAME}" | cut -d: -f6)' 'MY_HOME=/tmp'
   '';
 
   dontBuild = true;

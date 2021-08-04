@@ -4,21 +4,21 @@ let
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "8a30ee4e3570c7db0566028b6b562167aa40f646";
-    sha256 = "sha256-noMVcB1cjiMcRke6/qJIzDaEh4uPIewsedLQRdPbzIQ=";
+    rev = "c63397375632f1a4323918dde78334472f3ffbb9";
+    sha256 = "sha256-6YKk0G3s+35PRsUBkKgu/tNoSSwjJ5bTn8DACF4gYr4=";
   };
 in
 
 buildGoModule rec {
   pname = "teleport";
-  version = "6.2.7";
+  version = "6.2.8";
 
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "0ychs2pqi3awbr0vraz0ksddwk5hihrd1d9raq8mxyw5dz5124ki";
+    sha256 = "sha256-TVjdz97CUXBKCQh9bYrvtcH4StblBMsXiQ9Gix/NIm4=";
   };
 
   vendorSha256 = null;
@@ -27,8 +27,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ zip makeWrapper ];
 
-  # https://github.com/NixOS/nixpkgs/issues/120738
-  patches = [ ./tsh.patch ];
+  patches = [
+    # https://github.com/NixOS/nixpkgs/issues/120738
+    ./tsh.patch
+    # https://github.com/NixOS/nixpkgs/issues/132652
+    ./test.patch
+  ];
 
   postBuild = ''
     pushd .
