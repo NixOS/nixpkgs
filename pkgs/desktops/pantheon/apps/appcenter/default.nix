@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0kwqgilhyrj2nbvw5y34nzch5h9jnrg1a1n333qdsx4ax6yrxh4j";
+    sha256 = "sha256-KBwf9SgPS/MnFjGqNIt4FtGaCq3YXIQMZxJ8ltjbVyI=";
   };
 
   passthru = {
