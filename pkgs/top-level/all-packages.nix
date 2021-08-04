@@ -19861,6 +19861,8 @@ in
 
   neard = callPackage ../servers/neard { };
 
+  networkaudiod = callPackage ../servers/networkaudiod { };
+
   unit = callPackage ../servers/http/unit { };
 
   ncdns = callPackage ../servers/dns/ncdns { };
@@ -26863,8 +26865,6 @@ in
 
   quirc = callPackage ../tools/graphics/quirc {};
 
-  quilter = callPackage ../applications/editors/quilter { };
-
   quisk = python38Packages.callPackage ../applications/radio/quisk { };
 
   quiterss = libsForQt514.callPackage ../applications/networking/newsreaders/quiterss {};
@@ -29507,6 +29507,8 @@ in
   r2mod_cli = callPackage ../games/r2mod_cli { };
 
   racer = callPackage ../games/racer { };
+
+  randtype = callPackage ../games/randtype { };
 
   redeclipse = callPackage ../games/redeclipse { };
 
