@@ -925,6 +925,7 @@ broken-packages:
   - data-nat
   - data-object
   - datapacker
+  - data-pdf-fieldreader
   - data-pprint
   - data-quotientref
   - data-reify-cse
@@ -2485,6 +2486,7 @@ broken-packages:
   - interpolatedstring-qq2
   - interruptible
   - interval
+  - interval-algebra
   - IntFormats
   - int-multimap
   - intricacy
@@ -2522,6 +2524,7 @@ broken-packages:
   - itcli
   - itemfield
   - iteratee
+  - iterative-forward-search
   - iterIO
   - it-has
   - ivory
@@ -2821,6 +2824,7 @@ broken-packages:
   - loch
   - log2json
   - log4hs
+  - log-base
   - logentries
   - logger
   - logging-effect-extra-file
@@ -3673,6 +3677,7 @@ broken-packages:
   - postgres-embedded
   - postgresql-lo-stream
   - postgresql-named
+  - postgresql-resilient
   - postgresql-simple-bind
   - postgresql-simple-named
   - postgresql-simple-sop
