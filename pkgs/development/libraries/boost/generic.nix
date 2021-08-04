@@ -3,6 +3,7 @@
 , fetchpatch
 , which
 , toolset ? /**/ if stdenv.cc.isClang  then "clang"
+            else if stdenv.cc.isGNU    then "gcc"
             else null
 , enableRelease ? true
 , enableDebug ? false
@@ -193,6 +194,7 @@ stdenv.mkDerivation {
     "--libdir=$(out)/lib"
     "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
   ] ++ optional enablePython "--with-python=${python.interpreter}"
+    ++ optional (toolset != null) "--with-toolset=${toolset}"
     ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
