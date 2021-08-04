@@ -162,7 +162,8 @@ def remove_old_entries(gens: List[Tuple[Optional[str], int]]) -> None:
             else:
                 prof = "system"
             gen_number = int(rex_generation.sub(r"\1", path))
-            if not (prof, gen_number) in gens:
+            profile = prof if prof != "system" else None
+            if not (profile, gen_number) in gens:
                 os.unlink(path)
         except ValueError:
             pass
