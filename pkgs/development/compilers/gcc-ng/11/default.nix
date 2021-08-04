@@ -1,5 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv
-, fetchurl, wrapCCWith, overrideCC
+, fetchzip, wrapCCWith, overrideCC
 , preLibcCrossHeaders
 , buildGccTools # tools, but from the previous stage, for cross
 , targetGccLibraries # libraries, but from the next stage, for cross
@@ -12,14 +12,25 @@
 }:
 
 let
-  version = "11.1.0";
+  version = "11.2.0";
 
-  src = fetchurl {
+  # fetchzip to unpack makes debug cycle much better
+  gcc_src = fetchzip {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "1pwxrjhsymv90xzh0x42cxfnmhjinf2lnrrf3hj5jq1rm2w6yjjc";
+    sha256 = "0aj1l0wkdbd5l2h5qybw0i5nwqbhqx89klnp7m5mwr63gmjfxwmi";
   };
 
   gcc_meta = {
+    description = "GNU Compiler Collection";
+    longDescription = ''
+      The GNU Compiler Collection includes compiler front ends for C, C++,
+      Objective-C, Fortran, OpenMP for C/C++/Fortran, and Ada, as well as
+      libraries for these languages (libstdc++, libgomp,...).
+
+      GCC development is a part of the GNU Project, aiming to improve the
+      compiler used in the GNU system including the GNU/Linux variant.
+    '';
+    homepage = "https://gcc.gnu.org/";
     maintainers = with lib.maintainers; [ ericson231 sternenseemann ];
   };
   gcc_libs_meta = gcc_meta // {
@@ -32,7 +43,7 @@ let
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit src buildGccTools; });
+    callPackage = newScope (tools // { inherit version gcc_src buildGccTools; });
 
   mkExtraBuildCommands0 = _: "";
 
@@ -46,45 +57,39 @@ let
 
     gcc = if stdenv.cc.isClang then tools.libcxxGcc else tools.libstdcxxGcc;
 
-    libstdcxxGcc = wrapCCWith rec {
-      cc = tools.gcc-unwrapped;
-      # libstdcxx is taken from gcc in an ad-hoc way in cc-wrapper.
-      libcxx = null;
-      extraPackages = [
-        targetGccLibraries.compiler-rt
-      ];
-      extraBuildCommands = mkExtraBuildCommands cc;
-    };
-
     libcxxGcc = wrapCCWith rec {
       cc = tools.gcc-unwrapped;
-      libcxx = targetGccLibraries.libcxx;
       extraPackages = [
-        targetGccLibraries.libcxxabi
-        targetGccLibraries.compiler-rt
+        targetGccLibraries.libgcc
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    # Below, is the LLVM bootstrapping logic. It handles building a
-    # fully LLVM toolchain from scratch. No GCC toolchain should be
-    # pulled in. As a consequence, it is very quick to build different
-    # targets provided by LLVM and we can also build for what GCC
-    # doesn’t support like LLVM. Probably we should move to some other
-    # file.
-
-    gccUseLLVM = wrapCCWith rec {
+    libstdcxxGcc = wrapCCWith rec {
       cc = tools.gcc-unwrapped;
-      libcxx = targetGccLibraries.libcxx;
+      libcxx = targetGccLibraries.libstdcxx;
       extraPackages = [
-        targetGccLibraries.libcxxabi
-        targetGccLibraries.compiler-rt
+        targetGccLibraries.libgcc
+      ];
+      extraBuildCommands = mkExtraBuildCommands cc;
+    };
+
+	# Below, is the GCC Next Gen bootstrapping logic. It handles building a
+	# fully GCC toolchain from scratch via Nix. No LLVM toolchain should be
+	# pulled in. We should deduplicate this bootstrapping with its LLVM
+	# equivalence one GCC "old gen" is gone.
+
+    gccUseGccNg = wrapCCWith rec {
+      cc = tools.gcc-unwrapped;
+      libcxx = targetGccLibraries.libstdcxx;
+      extraPackages = [
+        targetGccLibraries.libgcc
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetGccLibraries.libunwind
       ];
       extraBuildCommands = ''
-        echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
-        echo "-B${targetGccLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+        echo "-rtlib=libgcc -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
+        echo "-B${targetGccLibraries.libgcc}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
@@ -98,11 +103,11 @@ let
       cc = tools.gcc-unwrapped;
       libcxx = null;
       extraPackages = [
-        targetGccLibraries.compiler-rt
+        targetGccLibraries.libgcc
       ];
       extraBuildCommands = ''
-        echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-        echo "-B${targetGccLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+        echo "-rtlib=libgcc" >> $out/nix-support/cc-cflags
+        echo "-B${targetGccLibraries.libgcc}/lib" >> $out/nix-support/cc-cflags
         echo "-nostdlib++" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
     };
@@ -112,15 +117,15 @@ let
       libcxx = null;
       bintools = bintoolsNoLibc;
       extraPackages = [
-        targetGccLibraries.compiler-rt
+        targetGccLibraries.libgcc
       ];
       extraBuildCommands = ''
-        echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-        echo "-B${targetGccLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+        echo "-rtlib=libgcc" >> $out/nix-support/cc-cflags
+        echo "-B${targetGccLibraries.libgcc}/lib" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
     };
 
-    gccNoCompilerRt = wrapCCWith rec {
+    gccNoLibgcc = wrapCCWith rec {
       cc = tools.gcc-unwrapped;
       libcxx = null;
       bintools = bintoolsNoLibc;
@@ -130,65 +135,22 @@ let
       '' + mkExtraBuildCommands0 cc;
     };
 
-    gccNoCompilerRtWithLibc = wrapCCWith rec {
-      cc = tools.gcc-unwrapped;
-      libcxx = null;
-      extraBuildCommands = mkExtraBuildCommands0 cc;
-    };
-
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildGccTools // { inherit version src; });
+    callPackage = newScope (libraries // buildGccTools // { inherit version gcc_libs_meta gcc_src; });
   in {
 
-    compiler-rt-libc = callPackage ./compiler-rt {
-      inherit gcc_libs_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildGccTools.gccNoCompilerRtWithLibc
-               else stdenv;
+    libgcc = callPackage ./libgcc {
+      stdenv = overrideCC stdenv buildGccTools.gccNoLibgcc;
     };
-
-    compiler-rt-no-libc = callPackage ./compiler-rt {
-      inherit gcc_libs_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildGccTools.gccNoCompilerRt
-               else stdenv;
-    };
-
-    # N.B. condition is safe because without useLLVM both are the same.
-    compiler-rt = if stdenv.hostPlatform.isAndroid
-      then libraries.compiler-rt-libc
-      else libraries.compiler-rt-no-libc;
 
     stdenv = overrideCC stdenv buildGccTools.gcc;
 
-    libcxxStdenv = overrideCC stdenv buildGccTools.libcxxGcc;
+    libstdcxxStdenv = overrideCC stdenv buildGccTools.libstdcxxGcc;
 
-    libcxx = callPackage ./libcxx {
-      inherit gcc_libs_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildGccTools.gccNoLibstdcxx
-               else stdenv;
-    };
-
-    libcxxabi = callPackage ./libcxxabi {
-      inherit gcc_libs_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildGccTools.gccNoLibstdcxx
-               else stdenv;
-    };
-
-    libunwind = callPackage ./libunwind {
-      inherit gcc_libs_meta;
-      inherit (buildGccTools) llvm;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildGccTools.gccNoLibstdcxx
-               else stdenv;
-    };
-
-    openmp = callPackage ./openmp {
-      inherit gcc_libs_meta;
+    libstdcxx = callPackage ./libstdcxx {
+      stdenv = overrideCC stdenv buildGccTools.gccNoLibstdcxx;
     };
   });
 
