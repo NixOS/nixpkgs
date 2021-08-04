@@ -3312,11 +3312,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "xwd";
-    version = "1.0.7";
+    version = "1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xwd-1.0.7.tar.bz2";
-      sha256 = "1537i8q8pgf0sjklakzfvjwrq5b246qjywrx9ll8xfg0p6w1as6d";
+      url = "mirror://xorg/individual/app/xwd-1.0.8.tar.bz2";
+      sha256 = "06q36fh55r62ms0igfxsanrn6gv8lh794q1bw9xzw51p2qs2papv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
