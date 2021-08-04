@@ -89,11 +89,11 @@ in
         "d ${stateDir}/home  0755 hqplayer hqplayer - -"
       ];
 
+      packages = [ pkg ];
+
       services.hqplayerd = {
-        description = "HQPlayer daemon";
         wantedBy = [ "multi-user.target" ];
-        requires = [ "network-online.target" "sound.target" "systemd-udev-settle.service" ];
-        after = [ "network-online.target" "sound.target" "systemd-udev-settle.service" "local-fs.target" "remote-fs.target" "systemd-tmpfiles-setup.service" ];
+        after = [ "systemd-tmpfiles-setup.service" ];
 
         environment.HOME = "${stateDir}/home";
 
@@ -110,22 +110,6 @@ in
         '' + optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
           ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
         '';
-
-        serviceConfig = {
-          ExecStart = "${pkg}/bin/hqplayerd";
-
-          User = "hqplayer";
-          Group = "hqplayer";
-
-          Restart = "on-failure";
-          RestartSec = 5;
-
-          Nice = -10;
-          IOSchedulingClass = "realtime";
-          LimitMEMLOCK = "1G";
-          LimitNICE = -10;
-          LimitRTPRIO = 98;
-        };
       };
     };
 
