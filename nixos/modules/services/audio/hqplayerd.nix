@@ -100,8 +100,9 @@ in
 
     systemd = {
       tmpfiles.rules = [
-        "d ${configDir} 0755 ${cfg.user} ${cfg.group} - -"
-        "d ${stateDir}  0755 ${cfg.user} ${cfg.group} - -"
+        "d ${configDir}      0755 ${cfg.user} ${cfg.group} - -"
+        "d ${stateDir}       0755 ${cfg.user} ${cfg.group} - -"
+        "d ${stateDir}/home  0755 ${cfg.user} ${cfg.group} - -"
       ];
 
       services.hqplayerd = {
@@ -109,6 +110,8 @@ in
         wantedBy = [ "multi-user.target" ];
         requires = [ "network-online.target" "sound.target" "systemd-udev-settle.service" ];
         after = [ "network-online.target" "sound.target" "systemd-udev-settle.service" "local-fs.target" "remote-fs.target" "systemd-tmpfiles-setup.service" ];
+
+        environment.HOME = "${stateDir}/home";
 
         unitConfig.ConditionPathExists = [ configDir stateDir ];
 

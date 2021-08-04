@@ -299,6 +299,7 @@ kana/vim-operator-user
 kana/vim-tabpagecd
 kana/vim-textobj-function
 kana/vim-textobj-user
+karb94/neoscroll.nvim
 kassio/neoterm
 kbenzie/vim-spirv
 kchmck/vim-coffee-script

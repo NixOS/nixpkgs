@@ -9008,6 +9008,20 @@ let
     };
   };
 
+  GooCanvas2CairoTypes = buildPerlPackage rec {
+    pname = "GooCanvas2-CairoTypes";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AS/ASOKOLOV/GooCanvas2-CairoTypes-${version}.tar.gz";
+      sha256 = "sha256-uoBnNuvMnePYFBp2Omgr3quxy4cCveKZrf1XSs6HUFI=";
+    };
+    propagatedBuildInputs = [ pkgs.goocanvas2 Gtk3 ];
+    meta = {
+      description = "Bridge between GooCanvas2 and Cairo types";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GoogleProtocolBuffers = buildPerlPackage {
     pname = "Google-ProtocolBuffers";
     version = "0.12";
@@ -9237,16 +9251,16 @@ let
     };
   };
 
-  Gtk3ImageView = buildPerlPackage {
+  Gtk3ImageView = buildPerlPackage rec {
     pname = "Gtk3-ImageView";
-    version = "6";
+    version = "9";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Gtk3-ImageView-6.tar.gz";
-      sha256 = "0krkif9i3hrgjdskw05pcks40fmb43d21lxf4h8aclv0g8z647f0";
+      url = "mirror://cpan/authors/id/A/AS/ASOKOLOV/Gtk3-ImageView-${version}.tar.gz";
+      sha256 = "sha256-0dxe0p1UQglq+xok7g4l2clJ9WqOHxCeAzWD65E0H9w=";
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
-    checkInputs = [ TestDifferences ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    checkInputs = [ TestDifferences TestDeep ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
       ${pkgs.xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
         make test
@@ -18802,7 +18816,19 @@ let
       sha256 = "096fq62iphmxgcfcayg4i0wf09y1rl1ar6hrcxfqsbrsmkwlzk8a";
     };
     buildInputs = [ FileShareDirInstall JSONMaybeXS TestDifferences TestException XMLWriter YAML ];
-    propagatedBuildInputs = [ CarpClan DBI FileShareDir Moo PackageVariant ParseRecDescent TryTiny ];
+    propagatedBuildInputs = [ CarpClan DBI FileShareDir Moo PackageVariant ParseRecDescent TryTiny GraphViz GD ];
+
+    postPatch = ''
+      patchShebangs script
+    '';
+
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      for file in $out/bin/*; do
+        shortenPerlShebang $file
+      done
+    '';
+
     meta = {
       description = "SQL DDL transformations and more";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
