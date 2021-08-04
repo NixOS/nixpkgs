@@ -3,6 +3,7 @@
 , procps, coreutils, gnused, systemd, glibcLocales
 , AppKit, Carbon, Cocoa
 , nixosTests
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,24 @@ stdenv.mkDerivation rec {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
     sha256 = "0b252l9r45h8r5gibdqcn6hhbm8g6rfzhm1k9d39pwhs5x77cjqv";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-22116.patch";
+      url = "https://github.com/rabbitmq/rabbitmq-server/commit/626d5219115d087a2695c0eb243c7ddb7e154563.patch";
+      sha256 = "0wknixb5szwmxyvna793c2qkwnv7kynimibrswxdd1941vv6ijm3";
+    })
+    (fetchpatch {
+      name = "CVE-2021-32718.patch";
+      url = "https://github.com/rabbitmq/rabbitmq-server/commit/5d15ffc5ebfd9818fae488fc05d1f120ab02703c.patch";
+      sha256 = "11bgknnajd38bkqaiqaqbryjxyxg5qaynv6gbflp5fgy4jj8dv7v";
+    })
+    (fetchpatch {
+      name = "CVE-2021-32719.patch";
+      url = "https://github.com/rabbitmq/rabbitmq-server/commit/f191414dbc2ca738f313bb31e432d57870922892.patch";
+      sha256 = "1p5wb4p9cmxmbvrcwxh8m204nabjqgpmn7sk9djgbi1d0ac65w3h";
+    })
+  ];
 
   nativeBuildInputs = [ unzip ];
   buildInputs =
