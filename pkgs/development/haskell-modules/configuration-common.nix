@@ -1281,8 +1281,10 @@ self: super: {
   # https://github.com/jgm/commonmark-hs/issues/55
   commonmark-extensions = dontCheck super.commonmark-extensions;
 
-  # Testsuite trying to run `which haskeline-examples-Test`
-  haskeline_0_8_1_2 = dontCheck super.haskeline_0_8_1_2;
+  # Fails with encoding problems, likely needs locale data.
+  # Test can be executed by adding which to testToolDepends and
+  # $PWD/dist/build/haskeline-examples-Test to $PATH.
+  haskeline_0_8_2 = dontCheck super.haskeline_0_8_2;
 
   # Tests for list-t, superbuffer, and stm-containers
   # depend on HTF and it is broken, 2020-08-23
@@ -1433,7 +1435,7 @@ self: super: {
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   heist = doJailbreak super.heist;
 
-  hinit = generateOptparseApplicativeCompletion "hi" (super.hinit.override { haskeline = self.haskeline_0_8_1_2; });
+  hinit = generateOptparseApplicativeCompletion "hi" (super.hinit.override { haskeline = self.haskeline_0_8_2; });
 
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/snap/pull/219
   snap = doJailbreak super.snap;
