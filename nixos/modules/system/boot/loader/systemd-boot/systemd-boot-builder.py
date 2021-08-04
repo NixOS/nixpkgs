@@ -242,7 +242,7 @@ def main() -> None:
             if os.readlink(system_dir(*gen)) == args.default_config:
                 write_loader_conf(*gen)
         except OSError as e:
-            print("ignoring profile '{}' in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
+            print("ignoring profile '{}' in the list of boot entries because of the following error:\n{}".format(gen[0] if gen[0] else "system", e), file=sys.stderr)
 
     memtest_entry_file = "@efiSysMountPoint@/loader/entries/memtest86.conf"
     if os.path.exists(memtest_entry_file):
