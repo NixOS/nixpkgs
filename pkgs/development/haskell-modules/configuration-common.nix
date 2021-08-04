@@ -1011,10 +1011,14 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
+  # Requires dlist <0.9 but it works fine with dlist-1.0
+  # https://github.com/haskell-beam/beam/issues/581
+  beam-core = doJailbreak super.beam-core;
+
   # Requires pg_ctl command during tests
   beam-postgres = overrideCabal super.beam-postgres (drv: {
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
-    });
+  });
 
   # Fix for base >= 4.11
   scat = overrideCabal super.scat (drv: {
