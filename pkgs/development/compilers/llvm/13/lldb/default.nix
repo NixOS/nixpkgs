@@ -53,8 +53,7 @@ stdenv.mkDerivation (rec {
     libedit
     libxml2
     libllvm
-  ]
-  ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libobjc
     xpc
     Foundation
