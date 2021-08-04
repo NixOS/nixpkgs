@@ -115,25 +115,17 @@ in
 
         unitConfig.ConditionPathExists = [ configDir stateDir ];
 
-        preStart =
-          let
-            blankCfg = pkgs.writeText "hqplayerd.xml" ''
-              <?xml version="1.0" encoding="utf-8"?>
-              <xml>
-              </xml>
-            '';
-          in
-          ''
-            cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
-            chmod -R u+wX "${stateDir}/web"
+        preStart = ''
+          cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
+          chmod -R u+wX "${stateDir}/web"
 
-            if [ ! -f "${configDir}/hqplayerd.xml" ]; then
-              echo "creating blank config file"
-              install -m 0644 "${blankCfg}" "${configDir}/hqplayerd.xml"
-            fi
-          '' + optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
-            ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
-          '';
+          if [ ! -f "${configDir}/hqplayerd.xml" ]; then
+            echo "creating initial config file"
+            install -m 0644 "${pkg}/etc/hqplayer/hqplayerd.xml" "${configDir}/hqplayerd.xml"
+          fi
+        '' + optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
+          ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
+        '';
 
         serviceConfig = {
           ExecStart = "${pkg}/bin/hqplayerd";
