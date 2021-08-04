@@ -9,7 +9,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0vmxgn9wd3j80hp4gr5iq06jrl4gryz5zgfdd2ah30d12sfcfig0";
   };
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with python3Packages; [
+    pytestCheckHook pytest-xdist responses
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     colorama imagesize lxml requests setuptools
