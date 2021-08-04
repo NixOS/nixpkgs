@@ -549,8 +549,6 @@ rec {
             then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
-        # Docker can't be made to run darwin binaries
-        meta.badPlatforms = lib.platforms.darwin;
       } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"
