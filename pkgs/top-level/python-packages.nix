@@ -8675,6 +8675,8 @@ in {
 
   timelib = callPackage ../development/python-modules/timelib { };
 
+  time-machine = callPackage ../development/python-modules/time-machine { };
+
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
