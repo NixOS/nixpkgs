@@ -8879,6 +8879,8 @@ in {
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
+  types-pytz = callPackage ../development/python-modules/types-pytz { };
+
   types-requests = callPackage ../development/python-modules/types-requests { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
