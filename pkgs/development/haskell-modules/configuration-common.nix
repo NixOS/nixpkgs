@@ -1924,4 +1924,17 @@ EOT
   # https://github.com/emilypi/Base16/issues/9
   base16 = dontCheck super.base16;
 
+  # gtk2hsC2hs fails to build on certain architectures (aarch64, ppc64(le), ...)
+  # with a linker error. As a workaround, we build gtk2hs-buildtools with -O0
+  # as suggested in the GHC thread below. An alternative to this could be to use
+  # -fllvm. I haven't been able to get this to work without linker errors, though.
+  # See also:
+  # * https://gitlab.haskell.org/ghc/ghc/-/issues/17203
+  # * https://github.com/gtk2hs/gtk2hs/issues/305
+  # * https://github.com/gtk2hs/gtk2hs/issues/279
+  gtk2hs-buildtools = appendConfigureFlags super.gtk2hs-buildtools
+    (pkgs.lib.optionals (with pkgs.stdenv.hostPlatform; isAarch64 || isPowerPC) [
+      "--ghc-option=-O0"
+    ]);
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
