@@ -12,29 +12,27 @@ let
     at-spi2-atk at-spi2-core libxshmfence libdrm libxkbcommon mesa
   ];
 
-  name = "hyper";
-  desktopItem = makeDesktopItem {
-    type = "Application";
-    name = name;
-    desktopName = "Hyper";
-    genericName = "Hyper Terminal";
-    exec = name;
-    icon = "hyper";
-    categories = "System;TerminalEmulator;";
-  };
-
 in
 stdenv.mkDerivation rec {
-  pname = name;
+  pname = "hyper";
   version = "3.1.1";
 
   src = fetchurl {
     url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
     sha256 = "0j999z649k63rnr1lpbansaxnkrhrp73jdrdmslgnwbh7z1wsp9p";
   };
-  nativeBuildInputs = [ copyDesktopItems ];
 
-  buildInputs = [ dpkg ];
+  buildInputs = [ copyDesktopItems dpkg ];
+
+  desktopItems = makeDesktopItem {
+    type = "Application";
+    name = pname;
+    desktopName = "Hyper";
+    genericName = "Hyper Terminal";
+    exec = "hyper";
+    icon = "hyper";
+    categories = "System;TerminalEmulator;";
+  };
 
   unpackPhase = ''
     mkdir pkg
@@ -45,13 +43,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     mv opt "$out/"
+
     ln -s "$out/opt/Hyper/hyper" "$out/bin/hyper"
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:$out/opt/Hyper:\$ORIGIN" "$out/opt/Hyper/hyper"
-    mv usr/* "$out/"
-    copyDesktopItems ${desktopItem}/share/applications/* $out/share/applications/
-  '';
 
-  desktopItems = [ desktopItem ];
+    mv usr/* "$out/"
+
+    copyDesktopItems ${desktopItems}/share/applications/* $out/share/applications/
+  '';
 
   dontPatchELF = true;
   meta = with lib; {
