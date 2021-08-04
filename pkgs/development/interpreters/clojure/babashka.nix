@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
           "--no-server"
           "--report-unsupported-elements-at-runtime"
           "--initialize-at-run-time=org.postgresql.sspi.SSPIClient"
+          "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory\$SSLHolder"
           "--native-image-info"
           "--verbose"
           "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileReader"
