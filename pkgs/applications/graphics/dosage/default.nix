@@ -9,14 +9,13 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0vmxgn9wd3j80hp4gr5iq06jrl4gryz5zgfdd2ah30d12sfcfig0";
   };
 
-  checkInputs = with python3Packages; [ pytest pytest-xdist responses ];
-  propagatedBuildInputs = with python3Packages; [ colorama imagesize lxml requests setuptools ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
+
+  propagatedBuildInputs = with python3Packages; [
+    colorama imagesize lxml requests setuptools
+  ];
 
   disabled = python3Packages.pythonOlder "3.3";
-
-  checkPhase = ''
-    py.test tests/
-  '';
 
   meta = {
     description = "A comic strip downloader and archiver";
