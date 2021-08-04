@@ -3057,11 +3057,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgcffiles = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "xorg-cf-files";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/util/xorg-cf-files-1.0.6.tar.bz2";
-      sha256 = "0kckng0zs1viz0nr84rdl6dswgip7ndn4pnh5nfwnviwpsfmmksd";
+      url = "mirror://xorg/individual/util/xorg-cf-files-1.0.7.tar.bz2";
+      sha256 = "0233jyjxjkhlar03vp8l5sm3iq6354izm3crk41h5291pgap39vl";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
