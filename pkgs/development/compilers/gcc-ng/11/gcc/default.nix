@@ -22,6 +22,7 @@
 , zlib ? null
 , name ? "gcc"
 , gnused ? null
+, nonRelease ? false, flex ? null, bison ? null # Convenience for working on GCC
 , buildPackages
 }:
 
@@ -34,23 +35,28 @@ assert stdenv.hostPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 
+# The source tree has less pregenerated code
+assert nonRelease -> flex != null && bison != null;
+
 # profiledCompiler builds inject non-determinism in one of the compilation stages.
 # If turned on, we can't provide reproducible builds anymore
 assert reproducibleBuild -> profiledCompiler == false;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+
+  targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 in
 
 stdenv.mkDerivation ({
-  pname = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-"
-    + name;
+  pname = targetPrefix + name;
   inherit version;
 
   src = gcc_src;
 
   patches = [
     ../../../gcc/no-sys-dirs.patch
+    ./find-prefixed-progs.patch
   ] ++ lib.optional langFortran ../../gcc/gfortran-driving.patch
     ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
       url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.1.0...gcc-11.1.0-arm-20210504.diff";
@@ -63,9 +69,12 @@ stdenv.mkDerivation ({
   # TODO someday avoid target-specific subdirs all over the place and split libs from binaries
   outputs = [ "out" "dev" "man" "info" ];
 
+  strictDeps = true;
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
     ++ lib.optional (perl != null) perl
+    ++ lib.optionals nonRelease [ flex bison ]
     ;
 
   buildInputs = [
@@ -131,6 +140,16 @@ stdenv.mkDerivation ({
   configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags = [
+    # Force target prefix. The behavior if `--target` and `--host` are
+    # specified is inconsistent: Sometimes specifying `--target` always causes
+    # a prefix to be generated, sometimes it's only added if the `--host` and
+    # `--target` differ. This means that sometimes there may be a prefix even
+    # though nixpkgs doesn't expect one and sometimes there may be none even
+    # though nixpkgs expects one (since not all information is serialized into
+    # the config attribute). The easiest way out of these problems is to always
+    # set the program prefix, so gcc will conform to our expectations.
+    "--program-prefix=${targetPrefix}"
+
     "--disable-dependency-tracking"
     "--enable-fast-install"
     "--disable-serial-configure"

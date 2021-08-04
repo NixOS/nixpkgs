@@ -1,0 +1,213 @@
+diff --git a/gcc/gcc.c b/gcc/gcc.c
+index 4d790f9dd4a..a99a6bfcba3 100644
+--- a/gcc/gcc.c
++++ b/gcc/gcc.c
+@@ -361,6 +361,7 @@ static void putenv_from_prefixes (const struct path_prefix *, const char *,
+ 				  bool);
+ static int access_check (const char *, int);
+ static char *find_a_file (const struct path_prefix *, const char *, int, bool);
++static char *find_a_program (const char *);
+ static void add_prefix (struct path_prefix *, const char *, const char *,
+ 			int, int, int);
+ static void add_sysrooted_prefix (struct path_prefix *, const char *,
+@@ -1575,6 +1576,11 @@ static const char *machine_suffix = 0;
+ 
+ static const char *just_machine_suffix = 0;
+ 
++/* Prefix to attach to *basename* of commands being searched.
++   This is just `MACHINE-'.  */
++
++static const char *just_machine_prefix = 0;
++
+ /* Adjusted value of GCC_EXEC_PREFIX envvar.  */
+ 
+ static const char *gcc_exec_prefix;
+@@ -3019,15 +3025,6 @@ file_at_path (char *path, void *data)
+   memcpy (path + len, info->name, info->name_len);
+   len += info->name_len;
+ 
+-  /* Some systems have a suffix for executable files.
+-     So try appending that first.  */
+-  if (info->suffix_len)
+-    {
+-      memcpy (path + len, info->suffix, info->suffix_len + 1);
+-      if (access_check (path, info->mode) == 0)
+-	return path;
+-    }
+-
+   path[len] = '\0';
+   if (access_check (path, info->mode) == 0)
+     return path;
+@@ -3046,6 +3043,75 @@ find_a_file (const struct path_prefix *pprefix, const char *name, int mode,
+ {
+   struct file_at_path_info info;
+ 
++  /* Find the filename in question (special case for absolute paths).  */
++
++  if (IS_ABSOLUTE_PATH (name))
++    {
++      if (access (name, mode) == 0)
++	return xstrdup (name);
++
++      return NULL;
++    }
++
++  info.name = name;
++  info.suffix = (mode & X_OK) != 0 ? HOST_EXECUTABLE_SUFFIX : "";
++  info.name_len = strlen (info.name);
++  info.suffix_len = strlen (info.suffix);
++  info.mode = mode;
++
++  return (char*) for_each_path (pprefix, do_multi,
++				info.name_len + info.suffix_len,
++				file_at_path, &info);
++}
++
++/* Callback for find_a_program.  Appends the file name to the directory
++   path. Like file_at_path but tries machine prefix and exe suffix too. */
++
++static void *
++program_at_path (char *path, void *data)
++{
++  /* try first with machine-prefixed name */
++  struct file_at_path_info *info = (struct file_at_path_info *) data;
++  size_t path_len = strlen (path);
++
++  for (auto prefix : { just_machine_prefix, "" })
++    {
++      auto len = path_len;
++
++      auto prefix_len = strlen(prefix);
++      memcpy (path + len, prefix, prefix_len);
++      len += prefix_len;
++
++      memcpy (path + len, info->name, info->name_len);
++      len += info->name_len;
++
++      /* Some systems have a suffix for executable files.
++	 So try appending that first.  */
++      if (info->suffix_len)
++	{
++	  memcpy (path + len, info->suffix, info->suffix_len + 1);
++	  if (access_check (path, info->mode) == 0)
++	    return path;
++	}
++
++      path[len] = '\0';
++      if (access_check (path, info->mode) == 0)
++	return path;
++    }
++
++  return NULL;
++}
++
++/* Specialization of find_a_file for programs that also takes into account
++   configure-specified default programs. */
++
++static char*
++find_a_program (const char *name)
++{
++  const int mode = X_OK;
++
++  /* Do not search if default matches query. */
++
+ #ifdef DEFAULT_ASSEMBLER
+   if (! strcmp (name, "as") && access (DEFAULT_ASSEMBLER, mode) == 0)
+     return xstrdup (DEFAULT_ASSEMBLER);
+@@ -3056,7 +3122,7 @@ find_a_file (const struct path_prefix *pprefix, const char *name, int mode,
+     return xstrdup (DEFAULT_LINKER);
+ #endif
+ 
+-  /* Determine the filename to execute (special case for absolute paths).  */
++  /* Find the filename in question (special case for absolute paths).  */
+ 
+   if (IS_ABSOLUTE_PATH (name))
+     {
+@@ -3066,15 +3132,18 @@ find_a_file (const struct path_prefix *pprefix, const char *name, int mode,
+       return NULL;
+     }
+ 
++  struct file_at_path_info info;
++
+   info.name = name;
+-  info.suffix = (mode & X_OK) != 0 ? HOST_EXECUTABLE_SUFFIX : "";
++  info.suffix = HOST_EXECUTABLE_SUFFIX;
+   info.name_len = strlen (info.name);
+   info.suffix_len = strlen (info.suffix);
+   info.mode = mode;
+ 
+-  return (char*) for_each_path (pprefix, do_multi,
+-				info.name_len + info.suffix_len,
+-				file_at_path, &info);
++  return (char*) for_each_path (
++    &exec_prefixes, false,
++    info.name_len + info.suffix_len + strlen(just_machine_prefix),
++    program_at_path, &info);
+ }
+ 
+ /* Ranking of prefixes in the sort list. -B prefixes are put before
+@@ -3232,8 +3301,7 @@ execute (void)
+ 
+   if (wrapper_string)
+     {
+-      string = find_a_file (&exec_prefixes,
+-			    argbuf[0], X_OK, false);
++      string = find_a_program (argbuf[0]);
+       if (string)
+ 	argbuf[0] = string;
+       insert_wrapper (wrapper_string);
+@@ -3258,7 +3326,7 @@ execute (void)
+ 
+   if (!wrapper_string)
+     {
+-      string = find_a_file (&exec_prefixes, commands[0].prog, X_OK, false);
++      string = find_a_program(commands[0].prog);
+       if (string)
+ 	commands[0].argv[0] = string;
+     }
+@@ -3273,8 +3341,7 @@ execute (void)
+ 	commands[n_commands].prog = argbuf[i + 1];
+ 	commands[n_commands].argv
+ 	  = &(argbuf.address ())[i + 1];
+-	string = find_a_file (&exec_prefixes, commands[n_commands].prog,
+-			      X_OK, false);
++	string = find_a_program(commands[n_commands].prog);
+ 	if (string)
+ 	  commands[n_commands].argv[0] = string;
+ 	n_commands++;
+@@ -8226,6 +8293,7 @@ driver::set_up_specs () const
+   machine_suffix = concat (spec_host_machine, dir_separator_str, spec_version,
+ 			   accel_dir_suffix, dir_separator_str, NULL);
+   just_machine_suffix = concat (spec_machine, dir_separator_str, NULL);
++  just_machine_prefix = concat (spec_machine, "-", NULL);
+ 
+   specs_file = find_a_file (&startfile_prefixes, "specs", R_OK, true);
+   /* Read the specs file unless it is a default one.  */
+@@ -8466,8 +8534,7 @@ driver::maybe_putenv_COLLECT_LTO_WRAPPER () const
+   if (have_c)
+     lto_wrapper_file = NULL;
+   else
+-    lto_wrapper_file = find_a_file (&exec_prefixes, "lto-wrapper",
+-				    X_OK, false);
++    lto_wrapper_file = find_a_program ("lto-wrapper");
+   if (lto_wrapper_file)
+     {
+       lto_wrapper_file = convert_white_space (lto_wrapper_file);
+@@ -8577,7 +8644,7 @@ driver::maybe_print_and_exit () const
+ #endif
+ 	  print_prog_name = concat (print_prog_name, use_ld, NULL);
+ 	}
+-      char *newname = find_a_file (&exec_prefixes, print_prog_name, X_OK, 0);
++      char *newname = find_a_program (print_prog_name);
+       printf ("%s\n", (newname ? newname : print_prog_name));
+       return (0);
+     }
+@@ -8976,7 +9043,7 @@ driver::maybe_run_linker (const char *argv0) const
+ 	  /* We'll use ld if we can't find collect2.  */
+ 	  if (! strcmp (linker_name_spec, "collect2"))
+ 	    {
+-	      char *s = find_a_file (&exec_prefixes, "collect2", X_OK, false);
++	      char *s = find_a_program ("collect2");
+ 	      if (s == NULL)
+ 		set_static_spec_shared (&linker_name_spec, "ld");
+ 	    }

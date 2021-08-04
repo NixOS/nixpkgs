@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   strictDeps = true;
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ libiberty ];
 
