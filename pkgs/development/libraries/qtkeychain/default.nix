@@ -1,9 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, qtbase, qttools
-, darwin ? null
+, CoreFoundation, Security
 , libsecret
 }:
-
-assert stdenv.isDarwin -> darwin != null;
 
 stdenv.mkDerivation rec {
   pname = "qtkeychain";
@@ -18,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  patches = lib.optional stdenv.isDarwin ./0002-Fix-install-name-Darwin.patch;
+  patches = [ ./0002-Fix-install-name-Darwin.patch ];
 
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
@@ -28,9 +26,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ [ qtbase qttools ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ lib.optionals stdenv.isDarwin [
       CoreFoundation Security
-    ])
+    ]
   ;
 
   meta = {

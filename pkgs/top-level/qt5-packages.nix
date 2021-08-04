@@ -182,7 +182,9 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
-  qtkeychain = callPackage ../development/libraries/qtkeychain { };
+  qtkeychain = callPackage ../development/libraries/qtkeychain {
+    inherit (pkgs.darwin) CoreFoundation Security;
+  };
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
