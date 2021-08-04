@@ -76,8 +76,6 @@ let
 
     src = chromeSrc;
 
-    phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
-
     unpackCmd = let
       widevineCdmPath =
         if (channel == "stable" || channel == "ungoogled-chromium") then
