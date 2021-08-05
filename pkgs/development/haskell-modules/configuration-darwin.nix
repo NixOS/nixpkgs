@@ -187,4 +187,7 @@ self: super: {
     '' + (drv.postPatch or "");
   });
 
+  # Work around SDL_main.h redefining main to SDL_main
+  SDL-ttf = appendPatch super.SDL-ttf ./patches/SDL-ttf-darwin-hsc.patch;
+
 }
