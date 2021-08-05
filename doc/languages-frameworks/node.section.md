@@ -39,7 +39,7 @@ To add a package from NPM to nixpkgs:
  1. Modify `pkgs/development/node-packages/node-packages.json` to add, update
     or remove package entries to have it included in `nodePackages` and
     `nodePackages_latest`.
- 2. Run the script: `(cd pkgs/development/node-packages && ./generate.sh)`.
+ 2. Run the script: `cd pkgs/development/node-packages && ./generate.sh`.
  3. Build your new package to test your changes:
     `cd /path/to/nixpkgs && nix-build -A nodePackages.<new-or-updated-package>`.
     To build against the latest stable Current Node.js version (e.g. 14.x):
