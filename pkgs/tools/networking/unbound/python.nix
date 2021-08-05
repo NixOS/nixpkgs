@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     $out/bin/unbound-anchor -l | tail --lines=+2 - > $out/etc/${pname}/root.key
     # We don't need anything else
     rm -fR $out/bin $out/share $out/include $out/etc/unbound
-    patchelf --replace-needed libunbound.so.2 $out/${python.sitePackages}/libunbound.so.2 $out/${python.sitePackages}/_unbound.so
+    patchelf --replace-needed libunbound.so.8 $out/${python.sitePackages}/libunbound.so.8 $out/${python.sitePackages}/_unbound.so
     '';
 
   meta = with lib; {
@@ -60,6 +60,5 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.unbound.net";
     maintainers = with maintainers; [ leenaars ];
     platforms = lib.platforms.unix;
-    broken = true;
   };
 }
