@@ -14476,6 +14476,8 @@ in
     stdenv = gccStdenv;
   };
 
+  szyszka = callPackage ../tools/misc/szyszka { };
+
   taplo-cli = callPackage ../development/tools/taplo-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
