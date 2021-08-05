@@ -558,10 +558,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.1.0",
-    "sha256": "02ygydgi3fa8z6qd04hgcilbbwns8f21agaqxly2pf9j23fzi37g",
+    "rev": "v2.4.1",
+    "sha256": "0mk0f12yy58gjkki7xpf9bjfw9h9zdgby2b4bddqp5csq11payhd",
     "vendorSha256": null,
-    "version": "2.1.0"
+    "version": "2.4.1"
   },
   "kubernetes-alpha": {
     "owner": "hashicorp",
