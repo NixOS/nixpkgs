@@ -6313,6 +6313,8 @@ with pkgs;
 
   host = bind.host;
 
+  hostess = callPackage ../development/tools/hostess {};
+
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
