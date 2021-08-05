@@ -567,6 +567,8 @@ in {
 
   aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
 
+  assertpy = callPackage ../development/python-modules/assertpy { };
+
   asteval = callPackage ../development/python-modules/asteval { };
 
   astor = callPackage ../development/python-modules/astor { };
