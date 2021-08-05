@@ -3802,6 +3802,18 @@ final: prev:
     meta.homepage = "https://github.com/yamatsum/nvim-nonicons/";
   };
 
+  nvim-notify = buildVimPluginFrom2Nix {
+    pname = "nvim-notify";
+    version = "2021-08-04";
+    src = fetchFromGitHub {
+      owner = "rcarriga";
+      repo = "nvim-notify";
+      rev = "bc18fb4552f051639eade5318f1d538ffe0302f5";
+      sha256 = "1l5fi8c59zqyjgkikbrxas4klfa11j17bl72qxg3kj8isnfalspj";
+    };
+    meta.homepage = "https://github.com/rcarriga/nvim-notify/";
+  };
+
   nvim-peekup = buildVimPluginFrom2Nix {
     pname = "nvim-peekup";
     version = "2021-07-05";
