@@ -75,8 +75,6 @@ stdenv.mkDerivation {
     inherit (source) sha256;
   };
 
-  phases = "unpackPhase installPhase";
-
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsa-lib

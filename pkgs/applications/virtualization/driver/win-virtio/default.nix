@@ -3,7 +3,7 @@ stdenv.mkDerivation rec {
   pname = "win-virtio";
   version = "0.1.196-1";
 
-  phases = [ "buildPhase" "installPhase" ];
+  dontUnpack = true;
 
   src = fetchurl {
     url = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-${version}/virtio-win.iso";
