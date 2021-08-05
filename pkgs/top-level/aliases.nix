@@ -538,6 +538,7 @@ mapAliases ({
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set."; # added 2021-01-24
   ofp = throw "ofp is not compatible with odp-dpdk";
+  olifant = throw "olifant has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   opencl-icd = ocl-icd; # added 2017-01-20
   openconnect_pa = throw "openconnect_pa fork has been discontinued, support for GlobalProtect is now available in openconnect"; # added 2021-05-21
   openexr_ctl = ctl; # added 2018-04-25
