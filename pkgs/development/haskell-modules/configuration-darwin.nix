@@ -206,6 +206,14 @@ self: super: {
     '' + (drv.postPatch or "");
   });
 
+  # Prevent darwin-specific configuration code path being taken which
+  # doesn't work with nixpkgs' SDL libraries
+  SDL-mixer = overrideCabal super.SDL-mixer (drv: {
+    postPatch = ''
+      substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+    '' + (drv.postPatch or "");
+  });
+
   # Work around SDL_main.h redefining main to SDL_main
   SDL-ttf = appendPatch super.SDL-ttf ./patches/SDL-ttf-darwin-hsc.patch;
 
