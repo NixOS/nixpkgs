@@ -6871,6 +6871,8 @@ in {
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
 
+  pytest-mockservers = callPackage ../development/python-modules/pytest-mockservers { };
+
   pytest-mpl = callPackage ../development/python-modules/pytest-mpl { };
 
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
