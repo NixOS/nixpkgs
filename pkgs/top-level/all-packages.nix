@@ -26052,6 +26052,8 @@ in
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+  qtscrcpy = libsForQt5.callPackage ../misc/qtscrcpy { };
+
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
