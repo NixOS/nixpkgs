@@ -23330,8 +23330,6 @@ in
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  aesop = callPackage ../applications/office/aesop { };
-
   AusweisApp2 = libsForQt5.callPackage ../applications/misc/ausweisapp2 { };
 
   avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
