@@ -4,11 +4,11 @@ let
   inherit (pythonPackages) python;
 in stdenv.mkDerivation rec {
   pname = "pyunbound";
-  version = "1.9.3";
+  version = "1.13.1";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/unbound-${version}.tar.gz";
-    sha256 = "1ykdy62sgzv33ggkmzwx2h0ifm7hyyxyfkb4zckv7gz4f28xsm8v";
+    sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
   };
 
   buildInputs = [ openssl expat libevent swig python ];
