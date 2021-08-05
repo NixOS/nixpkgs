@@ -17,6 +17,7 @@
 , "aws-azure-login"
 , "balanceofsatoshis"
 , "bash-language-server"
+, "beancount-langserver"
 , "bower"
 , "bower2nix"
 , "browserify"
