@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "patchelf";
-  version = "0.12";
+  version = "0.13";
 
   src = fetchurl {
     url = "https://github.com/NixOS/${pname}/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "14npmdxppmh0ci140w8i8cy7zg1pnqg81a1mdsnza711ab7k36k9";
+    sha256 = "1v8px6g0zvhfxqa1inmdqfj4gc8dm70x7874hri4s48szjyd8zjc";
   };
 
   setupHook = [ ./setup-hook.sh ];
