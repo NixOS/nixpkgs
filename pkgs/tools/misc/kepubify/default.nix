@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-bLQH7ZY2hE8fBTcW7DNoUQxe4N3m9Mv3JjjKO4cG7DY=";
 
   # remove when built with >= go 1.17
-  buildFlags = [ "-tags" "zip117" ];
+  tags = [ "zip117" ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
