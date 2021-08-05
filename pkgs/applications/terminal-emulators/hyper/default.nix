@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, dpkg, atk, glib, pango
-, gdk-pixbuf, gnome2, gtk3, cairo, freetype, fontconfig, dbus, libXi, libXcursor
-, libXdamage, libXrandr, libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst
-, libXScrnSaver, libxcb, nss, nspr, alsa-lib, cups, expat, udev, libpulseaudio
-, at-spi2-atk, at-spi2-core, libxshmfence, libdrm, libxkbcommon, mesa }:
+{ stdenv, lib, fetchurl, dpkg, atk, glib, pango, gdk-pixbuf, gnome2, gtk3, cairo
+, freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
+, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver, libxcb, nss, nspr
+, alsa-lib, cups, expat, udev, libpulseaudio, at-spi2-atk, at-spi2-core, libxshmfence
+, libdrm, libxkbcommon, mesa }:
 
 let
   libPath = lib.makeLibraryPath [
@@ -15,24 +15,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hyper";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
-    sha256 = "0j999z649k63rnr1lpbansaxnkrhrp73jdrdmslgnwbh7z1wsp9p";
+    sha256 = "1mixy9hlgdbbnwdgidady7q828dkf09lx1pacwxw386jj7kp4y5g";
   };
 
-  buildInputs = [ copyDesktopItems dpkg ];
-
-  desktopItems = makeDesktopItem {
-    type = "Application";
-    name = pname;
-    desktopName = "Hyper";
-    genericName = "Hyper Terminal";
-    exec = "hyper";
-    icon = "hyper";
-    categories = "System;TerminalEmulator;";
-  };
+  nativeBuildInputs = [ dpkg ];
 
   unpackPhase = ''
     mkdir pkg
@@ -49,7 +39,8 @@ stdenv.mkDerivation rec {
 
     mv usr/* "$out/"
 
-    copyDesktopItems ${desktopItems}/share/applications/* $out/share/applications/
+    substituteInPlace $out/share/applications/hyper.desktop \
+      --replace "/opt/Hyper/hyper" "hyper"
   '';
 
   dontPatchELF = true;
