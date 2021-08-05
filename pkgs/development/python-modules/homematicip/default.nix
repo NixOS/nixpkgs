@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "coreGreenberet";
     repo = "homematicip-rest-api";
     rev = version;
-    sha256 = "sha256-AvZfcFvtn90FXJ8iRpNE2qNMYLYrXNSnDPfuh7IK3ck=";
+    sha256 = "008snxx9ijpi1zr1pi1v4a6g74j821hyw0khs9lmi08v2mcabm36";
   };
 
   propagatedBuildInputs = [
