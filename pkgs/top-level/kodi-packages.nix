@@ -120,6 +120,8 @@ let self = rec {
 
   requests = callPackage ../applications/video/kodi-packages/requests { };
 
+  requests-cache = callPackage ../applications/video/kodi-packages/requests-cache { };
+
   routing = callPackage ../applications/video/kodi-packages/routing { };
 
   signals = callPackage ../applications/video/kodi-packages/signals { };
