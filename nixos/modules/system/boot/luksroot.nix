@@ -26,8 +26,9 @@ let
     wait_target() {
         local name="$1"
         local target="$2"
-        local secs="''${3:-10}"
-        local desc="''${4:-$name $target to appear}"
+        local targetDisplayName="''${3:-$target}"
+        local secs="''${4:-10}"
+        local desc="''${5:-$name $targetDisplayName to appear}"
 
         if ! dev_exist $target; then
             echo -n "Waiting $secs seconds for $desc..."
@@ -150,7 +151,7 @@ let
   in ''
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
-    wait_target "device" ${dev.device} || die "${dev.device} is unavailable"
+    wait_target "device" ${dev.device} || die "${if dev.deviceDisplayName != null then dev.deviceDisplayName else dev.device} is unavailable"
 
     ${optionalString (dev.header != null) ''
       wait_target "header" ${dev.header} || die "${dev.header} is unavailable"
@@ -160,7 +161,7 @@ let
         local passphrase
 
         while true; do
-            echo -n "Passphrase for ${dev.device}: "
+            echo -n "Passphrase for ${if dev.deviceDisplayName != null then dev.deviceDisplayName else dev.device}: "
             passphrase=
             while true; do
                 if [ -e /crypt-ramfs/passphrase ]; then
@@ -170,6 +171,7 @@ let
                 else
                     # ask cryptsetup-askpass
                     echo -n "${dev.device}" > /crypt-ramfs/device
+                    echo -n "${if dev.deviceDisplayName != null then dev.deviceDisplayName else dev.device}" > /crypt-ramfs/device-display-name
 
                     # and try reading it from /dev/console with a timeout
                     IFS= read -t 1 -r passphrase
@@ -185,7 +187,7 @@ let
                     fi
                 fi
             done
-            echo -n "Verifying passphrase for ${dev.device}..."
+            echo -n "Verifying passphrase for ${if dev.deviceDisplayName != null then dev.deviceDisplayName else dev.device}..."
             echo -n "$passphrase" | ${csopen} --key-file=-
             if [ $? == 0 ]; then
                 echo " - success"
@@ -363,7 +365,7 @@ let
         gpg --card-status > /dev/null 2> /dev/null
 
         for try in $(seq 3); do
-            echo -n "PIN for GPG Card associated with device ${dev.device}: "
+            echo -n "PIN for GPG Card associated with device ${if dev.deviceDisplayName != null then dev.deviceDisplayName else dev.device}: "
             pin=
             while true; do
                 if [ -e /crypt-ramfs/passphrase ]; then
@@ -385,7 +387,7 @@ let
                     fi
                 fi
             done
-            echo -n "Verifying passphrase for ${dev.device}..."
+            echo -n "Verifying passphrase for ${if dev.deviceDisplayName != null then dev.deviceDisplayName else dev.device}..."
             echo -n "$pin" | gpg -q --batch --passphrase-fd 0 --pinentry-mode loopback -d /gpg-keys/${dev.device}/cryptkey.gpg 2> /dev/null | ${csopen} --key-file=- > /dev/null 2> /dev/null
             if [ $? == 0 ]; then
                 echo " - success"
@@ -423,7 +425,7 @@ let
         ${if dev.fido2.passwordLess then ''
           export passphrase=""
         '' else ''
-          read -rsp "FIDO2 salt for ${dev.device}: " passphrase
+          read -rsp "FIDO2 salt for ${if dev.deviceDisplayName != null then dev.deviceDisplayName else dev.device}: " passphrase
           echo
         ''}
         ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
@@ -458,14 +460,15 @@ let
     ${commonFunctions}
 
     while true; do
-        wait_target "luks" /crypt-ramfs/device 10 "LUKS to request a passphrase" || die "Passphrase is not requested now"
-        device=$(cat /crypt-ramfs/device)
+        wait_target "luks" /crypt-ramfs/device /crypt-ramfs/device-display-name 10 "LUKS to request a passphrase" || die "Passphrase is not requested now"
+        device=$(cat /crypt-ramfs/device-display-name)
 
         echo -n "Passphrase for $device: "
         IFS= read -rs passphrase
         echo
 
         rm /crypt-ramfs/device
+        rm /crypt-ramfs/device-display-name
         echo -n "$passphrase" > /crypt-ramfs/passphrase
     done
   '';
@@ -558,6 +561,13 @@ in
             example = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08";
             type = types.str;
             description = "Path of the underlying encrypted block device.";
+          };
+
+          deviceDisplayName = mkOption {
+            default = null;
+            example = "root";
+            type = types.nullOr types.str;
+            description = "A name for the underlying encrypted block device that will be displayed on-screen to the user during boot.";
           };
 
           header = mkOption {
