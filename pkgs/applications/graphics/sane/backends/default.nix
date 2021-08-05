@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, runtimeShell
 , gettext, pkg-config, python3
 , avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
-, curl, systemd, libxml2, poppler
+, curl, systemd, libxml2, poppler, gawk
 , sane-drivers
 
 # List of { src name backend } attibute sets - see installFirmware below:
@@ -51,6 +51,7 @@ stdenv.mkDerivation {
     systemd
     libxml2
     poppler
+    gawk
   ];
 
   enableParallelBuilding = true;

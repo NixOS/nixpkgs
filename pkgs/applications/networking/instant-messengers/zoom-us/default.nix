@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , makeWrapper
-# Dynamic libraries
+  # Dynamic libraries
 , alsa-lib
 , atk
 , cairo
@@ -18,22 +18,21 @@
 , xorg
 , libxkbcommon
 , zlib
-# Runtime
+  # Runtime
 , coreutils
 , pciutils
 , procps
 , util-linux
-, pulseaudioSupport ? true, libpulseaudio ? null
+, pulseaudioSupport ? true
+, libpulseaudio
 }:
 
-assert pulseaudioSupport -> libpulseaudio != null;
-
 let
-  version = "5.7.28852.0718";
+  version = "5.7.28991.0726";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "NoB9qxsuGsiwsZ3Y+F3WZpszujPBX/nehtFFI+KPV5E=";
+      sha256 = "w1oeMKADG5+7EV1OXyuEbotrwcVywob82KOXKoRUifA=";
     };
   };
 
@@ -65,9 +64,11 @@ let
     xorg.libXtst
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zoom";
   inherit version;
+
   src = srcs.${stdenv.hostPlatform.system};
 
   dontUnpack = true;
@@ -118,11 +119,11 @@ in stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://zoom.us/";
     description = "zoom.us video conferencing application";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with lib.maintainers; [ danbst tadfisher doronbehar ];
+    maintainers = with maintainers; [ danbst tadfisher doronbehar ];
   };
 }

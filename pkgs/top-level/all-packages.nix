@@ -2559,6 +2559,8 @@ in
 
   dgen-sdl = callPackage ../misc/emulators/dgen-sdl { };
 
+  dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
+
   doitlive = callPackage ../tools/misc/doitlive { };
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
@@ -2993,6 +2995,8 @@ in
   languagetool = callPackage ../tools/text/languagetool {  };
 
   lepton = callPackage ../tools/graphics/lepton { };
+
+  lepton-eda = callPackage ../applications/science/electronics/lepton-eda { };
 
   lexicon = callPackage ../tools/admin/lexicon { };
 
@@ -10913,6 +10917,8 @@ in
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
 
+  fnlfmt = callPackage ../development/tools/fnlfmt { };
+
   fpc = callPackage ../development/compilers/fpc { };
 
   g203-led = callPackage ../tools/misc/g203-led { };
@@ -14474,6 +14480,8 @@ in
     stdenv = gccStdenv;
   };
 
+  szyszka = callPackage ../tools/misc/szyszka { };
+
   taplo-cli = callPackage ../development/tools/taplo-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -15848,6 +15856,8 @@ in
     pango = pango.override { cairo = cairo.override { x11Support = true; }; x11Support = true; };
     gdktarget = "x11";
   };
+
+  gtkextra = callPackage ../development/libraries/gtkextra { };
 
   gtk3 = callPackage ../development/libraries/gtk/3.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
@@ -23997,8 +24007,6 @@ in
   inherit (gnome) empathy;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
-
-  envelope = callPackage ../applications/office/envelope { };
 
   eolie = callPackage ../applications/networking/browsers/eolie { };
 
