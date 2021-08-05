@@ -56,7 +56,15 @@ stdenv.mkDerivation (args // {
   ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
   ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
   ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
-  ;
+  ++ optional (stdenv.hostPlatform.isStatic && (lib.versionOlder version "4.08")) "-no-shared-libs"
+  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && lib.versionOlder version "4.08") [
+    "-host ${stdenv.hostPlatform.config}"
+    "-target ${stdenv.targetPlatform.config}"
+  ];
+  dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
+  configurePlatforms = lib.optionals (lib.versionAtLeast version "4.08") [ "host" "target" ];
+  # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
+  hardeningDisable = lib.optional (lib.versionAtLeast version "4.09" && stdenv.hostPlatform.isMusl) "pie";
 
   buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = optional (!lib.versionAtLeast version "4.07") ncurses
@@ -70,6 +78,8 @@ stdenv.mkDerivation (args // {
     # Do what upstream does by default now: https://github.com/ocaml/ocaml/pull/10176
     # This is required for aarch64-darwin, everything else works as is.
     AS="${stdenv.cc}/bin/cc -c" ASPP="${stdenv.cc}/bin/cc -c"
+  '' + optionalString (lib.versionOlder version "4.08" && stdenv.hostPlatform.isStatic) ''
+    configureFlagsArray+=("-cc" "$CC" "-as" "$AS" "-partialld" "$LD -r")
   '';
   postBuild = ''
     mkdir -p $out/include

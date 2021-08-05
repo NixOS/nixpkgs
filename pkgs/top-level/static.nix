@@ -61,20 +61,7 @@ self: super: let
       super
     // {
       lablgtk = null; # Currently xlibs cause infinite recursion
-      ocaml = ((super.ocaml.override { useX11 = false; }).overrideAttrs (o: {
-        configurePlatforms = [ ];
-        dontUpdateAutotoolsGnuConfigScripts = true;
-      })).overrideDerivation (o: {
-        preConfigure = ''
-          configureFlagsArray+=("-cc" "$CC" "-as" "$AS" "-partialld" "$LD -r")
-        '';
-        dontAddStaticConfigureFlags = true;
-        configureFlags = [
-          "--no-shared-libs"
-          "-host ${o.stdenv.hostPlatform.config}"
-          "-target ${o.stdenv.targetPlatform.config}"
-        ];
-      });
+      ocaml = super.ocaml.override { useX11 = false; };
     };
 
 in {
