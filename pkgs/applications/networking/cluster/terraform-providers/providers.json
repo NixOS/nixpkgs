@@ -799,11 +799,13 @@
     "version": "1.5.3"
   },
   "ovh": {
-    "owner": "terraform-providers",
+    "owner": "ovh",
+    "provider-source-address": "registry.terraform.io/ovh/ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v0.8.0",
-    "sha256": "1ww4ng8w5hm50rbxd83xzbkq8qsn04dqwpdjhs587v9d0x2vwrf1",
-    "version": "0.8.0"
+    "rev": "v0.15.0",
+    "sha256": "1cmcfg9vq8cl98d5xambm5hr516b9pblm06y1py9v7msmfh3g09i",
+    "vendorSha256": null,
+    "version": "0.15.0"
   },
   "packet": {
     "owner": "packethost",
