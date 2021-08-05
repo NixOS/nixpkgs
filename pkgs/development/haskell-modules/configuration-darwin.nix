@@ -179,4 +179,12 @@ self: super: {
   # We are lacking pure pgrep at the moment for tests to work
   tmp-postgres = dontCheck super.tmp-postgres;
 
+  # On darwin librt doesn't exist and will fail to link against,
+  # however linking against it is also not necessary there
+  GLHUI = overrideCabal super.GLHUI (drv: {
+    postPatch = ''
+      substituteInPlace GLHUI.cabal --replace " rt" ""
+    '' + (drv.postPatch or "");
+  });
+
 }
