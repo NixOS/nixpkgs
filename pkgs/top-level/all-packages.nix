@@ -2989,6 +2989,8 @@ in
 
   lepton = callPackage ../tools/graphics/lepton { };
 
+  lepton-eda = callPackage ../applications/science/electronics/lepton-eda { };
+
   lexicon = callPackage ../tools/admin/lexicon { };
 
   lief = callPackage ../development/libraries/lief {
