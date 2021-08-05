@@ -9847,6 +9847,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  sentry-native = callPackage ../development/libraries/sentry-native { };
+
   vtun = callPackage ../tools/networking/vtun {
     openssl = openssl_1_0_2;
   };
