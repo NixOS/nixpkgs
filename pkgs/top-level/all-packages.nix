@@ -3100,6 +3100,8 @@ in
 
   moodle-dl = callPackage ../tools/networking/moodle-dl { };
 
+  moonraker = callPackage ../servers/moonraker { };
+
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (pkgs.xorg) libX11 libXtst libXfixes;
   };
@@ -10892,6 +10894,8 @@ in
   flasm = callPackage ../development/compilers/flasm { };
 
   flyctl = callPackage ../development/web/flyctl { };
+
+  fluidd = callPackage ../applications/misc/fluidd { };
 
   flutterPackages =
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
