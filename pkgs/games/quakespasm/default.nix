@@ -1,4 +1,5 @@
-{ lib, stdenv, SDL, fetchurl, gzip, libvorbis, libmad }:
+{ lib, stdenv, SDL, fetchurl, gzip, libvorbis, libmad, copyDesktopItems, makeDesktopItem }:
+
 stdenv.mkDerivation rec {
   pname = "quakespasm";
   majorVersion = "0.93";
@@ -11,6 +12,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${pname}-${version}/Quake";
 
+  nativeBuildInputs = [ copyDesktopItems ];
   buildInputs = [
     gzip SDL libvorbis libmad
   ];
@@ -24,7 +26,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  desktopItems = [
+    (makeDesktopItem {
+      name = "quakespasm";
+      exec = "quake";
+      desktopName = "Quakespasm";
+      categories = "Game;";
+    })
+  ];
+
+  meta = with lib; {
     description = "An engine for iD software's Quake";
     homepage = "http://quakespasm.sourceforge.net/";
     longDescription = ''
