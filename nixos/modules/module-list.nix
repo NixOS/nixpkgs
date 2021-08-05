@@ -1256,6 +1256,7 @@
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/ipxe.nix
   ./system/boot/loader/grub/memtest.nix
+  ./system/boot/loader/external/external.nix
   ./system/boot/loader/init-script/init-script.nix
   ./system/boot/loader/loader.nix
   ./system/boot/loader/raspberrypi/raspberrypi.nix
