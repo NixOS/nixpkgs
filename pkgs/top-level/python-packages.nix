@@ -8172,6 +8172,8 @@ in {
 
   solax = callPackage ../development/python-modules/solax { };
 
+  solc-select = callPackage ../development/python-modules/solc-select { };
+
   solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 
   somajo = callPackage ../development/python-modules/somajo { };

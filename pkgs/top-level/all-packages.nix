@@ -9056,6 +9056,8 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  solc-select = with python3Packages; toPythonApplication solc-select;
+
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
   spacebar = callPackage ../os-specific/darwin/spacebar {
