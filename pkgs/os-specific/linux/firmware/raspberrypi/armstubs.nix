@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
+{ lib, stdenv, fetchFromGitHub }:
 
 let
   inherit (lib) optionals;
