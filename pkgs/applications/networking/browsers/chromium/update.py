@@ -222,14 +222,8 @@ if len(sys.argv) == 2 and sys.argv[1] == '--commit':
             attr_name = channel_name_to_attr_name(channel_name)
             commit_message = f'{attr_name}: {version_old} -> {version_new}'
             if channel_name == 'stable':
-                body = subprocess.check_output([COMMIT_MESSAGE_SCRIPT]).decode('utf-8')
-                prefix = f'chromium: TODO -> {version_new}'
-                if not body.startswith(prefix):
-                    print("Error: Couldn't fetch the the release notes for the following update:")
-                    print(commit_message)
-                    sys.exit(1)
-                body = body.removeprefix(prefix)
-                commit_message += body
+                body = subprocess.check_output([COMMIT_MESSAGE_SCRIPT, version_new]).decode('utf-8')
+                commit_message += '\n\n' + body
             subprocess.run(['git', 'add', JSON_PATH], check=True)
             subprocess.run(['git', 'commit', '--file=-'], input=commit_message.encode(), check=True)
 else:

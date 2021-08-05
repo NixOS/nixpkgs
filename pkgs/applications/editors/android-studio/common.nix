@@ -65,10 +65,14 @@ let
       sha256 = sha256Hash;
     };
 
-    nativeBuildInputs = [ unzip ];
-    buildInputs = [
+    nativeBuildInputs = [
+      unzip
       makeWrapper
     ];
+
+    # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
+    dontPatchShebangs = true;
+
     installPhase = ''
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
@@ -151,9 +155,6 @@ let
       ]}"
     '';
   };
-
-  # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
-  dontPatchShebangs = true;
 
   desktopItem = makeDesktopItem {
     name = drvName;
