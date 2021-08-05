@@ -35,6 +35,16 @@ in stdenv.mkDerivation rec {
       url    = "https://gitlab.freedesktop.org/cairo/cairo/commit/6edf572ebb27b00d3c371ba5ae267e39d27d5b6d.patch";
       sha256 = "112hgrrsmcwxh1r52brhi5lksq4pvrz4xhkzcf2iqp55jl2pb7n1";
     })
+
+    # Fixes CVE-2020-35492; see https://github.com/NixOS/nixpkgs/issues/120364.
+    # CVE information: https://nvd.nist.gov/vuln/detail/CVE-2020-35492
+    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/merge_requests/85
+    (fetchpatch {
+      name = "CVE-2020-35492.patch";
+      includes = [ "src/cairo-image-compositor.c" ];
+      url = "https://github.com/freedesktop/cairo/commit/78266cc8c0f7a595cfe8f3b694bfb9bcc3700b38.patch";
+      sha256 = "048nzfz7rkgqb9xs0dfs56qdw7ckkxr87nbj3p0qziqdq4nb6wki";
+    })
   ] ++ optionals stdenv.hostPlatform.isDarwin [
     # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
     ./skip-configure-stderr-check.patch
