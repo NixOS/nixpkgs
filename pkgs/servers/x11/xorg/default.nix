@@ -1002,11 +1002,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXfont2 = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
     pname = "libXfont2";
-    version = "2.0.4";
+    version = "2.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXfont2-2.0.4.tar.bz2";
-      sha256 = "1rk9pjxcm01lbr1dxhnvk4f2qrn6zp068qjbvvz5w0z5d0rin5bd";
+      url = "mirror://xorg/individual/lib/libXfont2-2.0.5.tar.bz2";
+      sha256 = "0gmm20p3qq23pd2bhc5rsxil60wqvj9xi7l1nh55q8gp3hhnyz5a";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
