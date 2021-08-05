@@ -56,22 +56,6 @@ in
           Open TCP port 8088 in the firewall for the server.
         '';
       };
-
-      user = mkOption {
-        type = types.str;
-        default = "hqplayer";
-        description = ''
-          User account under which hqplayerd runs.
-        '';
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "hqplayer";
-        description = ''
-          Group account under which hqplayerd runs.
-        '';
-      };
     };
   };
 
@@ -100,68 +84,44 @@ in
 
     systemd = {
       tmpfiles.rules = [
-        "d ${configDir}      0755 ${cfg.user} ${cfg.group} - -"
-        "d ${stateDir}       0755 ${cfg.user} ${cfg.group} - -"
-        "d ${stateDir}/home  0755 ${cfg.user} ${cfg.group} - -"
+        "d ${configDir}      0755 hqplayer hqplayer - -"
+        "d ${stateDir}       0755 hqplayer hqplayer - -"
+        "d ${stateDir}/home  0755 hqplayer hqplayer - -"
       ];
 
+      packages = [ pkg ];
+
       services.hqplayerd = {
-        description = "HQPlayer daemon";
         wantedBy = [ "multi-user.target" ];
-        requires = [ "network-online.target" "sound.target" "systemd-udev-settle.service" ];
-        after = [ "network-online.target" "sound.target" "systemd-udev-settle.service" "local-fs.target" "remote-fs.target" "systemd-tmpfiles-setup.service" ];
+        after = [ "systemd-tmpfiles-setup.service" ];
 
         environment.HOME = "${stateDir}/home";
 
         unitConfig.ConditionPathExists = [ configDir stateDir ];
 
-        preStart =
-          let
-            blankCfg = pkgs.writeText "hqplayerd.xml" ''
-              <?xml version="1.0" encoding="utf-8"?>
-              <xml>
-              </xml>
-            '';
-          in
-          ''
-            cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
-            chmod -R u+wX "${stateDir}/web"
+        preStart = ''
+          cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
+          chmod -R u+wX "${stateDir}/web"
 
-            if [ ! -f "${configDir}/hqplayerd.xml" ]; then
-              echo "creating blank config file"
-              install -m 0644 "${blankCfg}" "${configDir}/hqplayerd.xml"
-            fi
-          '' + optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
-            ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
-          '';
-
-        serviceConfig = {
-          ExecStart = "${pkg}/bin/hqplayerd";
-
-          User = cfg.user;
-          Group = cfg.group;
-
-          Restart = "on-failure";
-          RestartSec = 5;
-
-          Nice = -10;
-          IOSchedulingClass = "realtime";
-          LimitMEMLOCK = "1G";
-          LimitNICE = -10;
-          LimitRTPRIO = 98;
-        };
+          if [ ! -f "${configDir}/hqplayerd.xml" ]; then
+            echo "creating initial config file"
+            install -m 0644 "${pkg}/etc/hqplayer/hqplayerd.xml" "${configDir}/hqplayerd.xml"
+          fi
+        '' + optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
+          ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
+        '';
       };
     };
 
-    users.groups = mkIf (cfg.group == "hqplayer") {
+    users.groups = {
       hqplayer.gid = config.ids.gids.hqplayer;
     };
 
-    users.users = mkIf (cfg.user == "hqplayer") {
+    users.users = {
       hqplayer = {
         description = "hqplayer daemon user";
         extraGroups = [ "audio" ];
-        group = cfg.group;
+        group = "hqplayer";
         uid = config.ids.uids.hqplayer;
       };
     };

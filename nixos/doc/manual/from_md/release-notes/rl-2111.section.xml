@@ -799,6 +799,15 @@
           this up.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Zfs: <literal>latestCompatibleLinuxPackages</literal> is now
+          exported on the zfs package. One can use
+          <literal>boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;</literal>
+          to always track the latest compatible kernel with a given
+          version of zfs.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
