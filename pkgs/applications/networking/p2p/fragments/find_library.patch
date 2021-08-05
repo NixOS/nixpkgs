@@ -1,0 +1,26 @@
+--- a/meson.build	2020-09-14 20:27:52.539520481 +0200
++++ b/meson.build	2020-09-14 20:27:59.023657234 +0200
+@@ -21,7 +21,7 @@
+ gio_dep = dependency('gio-2.0')
+ gio_unix_dep = dependency('gio-unix-2.0')
+ gtk_dep = dependency('gtk+-3.0', version : '>=3.20.10')
+-handy_dep = dependency('libhandy-1')
++#handy_dep = dependency('libglade-handy')
+ transmission_lib = meson.get_compiler('c').find_library('transmission')
+ transmission_vapi = meson.get_compiler('vala').find_library('transmission', dirs: vapi_dir)
+ transmission_dep = declare_dependency(
+@@ -32,10 +32,10 @@
+ 				meson.get_compiler('c').find_library('dht'),
+ 				meson.get_compiler('c').find_library('natpmp'),
+ 				meson.get_compiler('c').find_library('event'),
+-				meson.get_compiler('c').find_library('libcurl'),
+-				meson.get_compiler('c').find_library('libcrypto'),
+-				meson.get_compiler('c').find_library('libpthread'),
+-				meson.get_compiler('c').find_library('libz'),
++				meson.get_compiler('c').find_library('curl'),
++				meson.get_compiler('c').find_library('crypto'),
++				meson.get_compiler('c').find_library('pthread'),
++				meson.get_compiler('c').find_library('z'),
+ 				transmission_vapi,
+ 				transmission_lib
+ 			])

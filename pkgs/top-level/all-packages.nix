@@ -24168,6 +24168,8 @@ in
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  fragments = callPackage ../applications/networking/p2p/fragments { };
+
   freebayes = callPackage ../applications/science/biology/freebayes { };
 
   freewheeling = callPackage ../applications/audio/freewheeling { };
