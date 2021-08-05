@@ -17,7 +17,7 @@ buildGoModule rec {
 
   runVend = true;
 
-  buildFlags = [ "-tags" "extended" ];
+  tags = [ "extended" ];
 
   subPackages = [ "." ];
 
