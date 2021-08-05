@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.isLinux) libiconv
     ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg ];
 
-
   cmakeFlags = lib.optionals enableOcr [ "-DWITH_OCR=on" "-DWITH_HARDSUBX=on" ];
 
   postInstall = lib.optionalString enableOcr ''
