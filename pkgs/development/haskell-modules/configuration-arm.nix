@@ -46,6 +46,7 @@ self: super: {
   BNFC = dontCheck super.BNFC;
   C-structs = dontCheck super.C-structs;
   Chart-tests = dontCheck super.Chart-tests;
+  Jikka = dontCheck super.Jikka;
   accelerate = dontCheck super.accelerate;
   ad = dontCheck super.ad;
   autoapply = dontCheck super.autoapply;
