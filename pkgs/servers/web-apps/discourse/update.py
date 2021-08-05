@@ -187,9 +187,13 @@ def update_plugins():
 
     """
     plugins = [
+        {'name': 'discourse-calendar'},
         {'name': 'discourse-canned-replies'},
+        {'name': 'discourse-checklist'},
+        {'name': 'discourse-data-explorer'},
         {'name': 'discourse-github'},
         {'name': 'discourse-math'},
+        {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
         {'name': 'discourse-yearly-review'},
