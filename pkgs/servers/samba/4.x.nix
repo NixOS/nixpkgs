@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, python
 , pkg-config
 , bison
 , flex
@@ -62,6 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    python3Packages.python
     pkg-config
     bison
     flex
@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python
+    python3Packages.python
+    python3Packages.wrapPython
     readline
     popt
     dbus
@@ -128,6 +129,8 @@ stdenv.mkDerivation rec {
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam";
 
+  pythonPath = [ python3Packages.dnspython tdb ];
+
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
   '';
@@ -146,6 +149,9 @@ stdenv.mkDerivation rec {
     patchelf --shrink-rpath "\$BIN";
     EOF
     find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
+
+    # Fix PYTHONPATH for some tools
+    wrapPythonPrograms
   '';
 
   passthru = {
