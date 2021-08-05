@@ -13,7 +13,7 @@ in appimageTools.wrapType2 rec {
     libX11 libXcursor libXdamage libXfixes libXrender libXi
     libXcomposite libXext libXrandr libXtst libSM libICE libxcb
 
-    libselinux pciutils libpulseaudio libxml2 icu clang
+    libselinux pciutils libpulseaudio libxml2 icu clang cacert
   ]);
 
   profile = ''
