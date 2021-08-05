@@ -2292,6 +2292,8 @@ in {
 
   email_validator = callPackage ../development/python-modules/email-validator { };
 
+  embrace = callPackage ../development/python-modules/embrace { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   emv = callPackage ../development/python-modules/emv { };
