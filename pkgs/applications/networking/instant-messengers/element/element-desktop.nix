@@ -5,6 +5,8 @@
 , Security
 , AppKit
 , CoreServices
+
+, useWayland ? false
 }:
 # Notes for maintainers:
 # * versions of `element-web` and `element-desktop` should be kept in sync.
@@ -68,7 +70,7 @@ in mkYarnPackage rec {
 
     # executable wrapper
     makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron"
+      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
   '';
 
   # Do not attempt generating a tarball for element-web again.
