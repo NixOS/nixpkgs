@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, makeWrapper, makeDesktopItem, mkYarnPackage
-, electron, element-web
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, makeDesktopItem
+, mkYarnPackage
+, electron
+, element-web
 , callPackage
 , Security
 , AppKit
@@ -22,7 +27,8 @@ let
     sha256 = "sha256-4d2IOngiRcKd4k0jnilAR3Sojkfru3dlqtoBYi3zeLY=";
   };
   electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
-in mkYarnPackage rec {
+in
+mkYarnPackage rec {
   name = "element-desktop-${version}";
   inherit version src;
 
