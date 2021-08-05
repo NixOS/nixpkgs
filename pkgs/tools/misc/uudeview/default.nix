@@ -1,9 +1,10 @@
 { lib, stdenv, fetchurl, tcl, tk }:
 
 stdenv.mkDerivation rec {
-  name = "uudeview-0.5.20";
+  pname = "uudeview";
+  version = "0.5.20";
   src = fetchurl {
-    url = "http://www.fpx.de/fp/Software/UUDeview/download/${name}.tar.gz";
+    url = "http://www.fpx.de/fp/Software/UUDeview/download/uudeview-${version}.tar.gz";
     sha256 = "0dg4v888fxhmf51vxq1z1gd57fslsidn15jf42pj4817vw6m36p4";
   };
 

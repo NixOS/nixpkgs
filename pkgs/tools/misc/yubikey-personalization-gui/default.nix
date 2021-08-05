@@ -2,10 +2,11 @@
 , libyubikey, yubikey-personalization }:
 
 mkDerivation rec {
-  name = "yubikey-personalization-gui-3.1.25";
+  pname = "yubikey-personalization-gui";
+  version = "3.1.25";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/yubikey-personalization-gui/Releases/${name}.tar.gz";
+    url = "https://developers.yubico.com/yubikey-personalization-gui/Releases/yubikey-personalization-gui-${version}.tar.gz";
     sha256 = "1knyv5yss8lhzaff6jpfqv12fjf1b8b21mfxzx3qi0hw4nl8n2v8";
   };
 

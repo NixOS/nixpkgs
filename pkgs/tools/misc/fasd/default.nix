@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fasd";
-  name = "${pname}-unstable-2016-08-11";
+  version = "unstable-2016-08-11";
 
   src = fetchFromGitHub {
     owner = "clvv";

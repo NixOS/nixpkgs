@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "slsnif-0.4.4";
+stdenv.mkDerivation rec {
+  pname = "slsnif";
+  version = "0.4.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/slsnif/slsnif-0.4.4.tar.gz";
+    url = "mirror://sourceforge/slsnif/slsnif-${version}.tar.gz";
     sha256 = "0gn8c5hj8m3sywpwdgn6w5xl4rzsvg0z7d2w8dxi6p152j5b0pii";
   };
 

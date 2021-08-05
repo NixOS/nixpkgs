@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl } :
 
 stdenv.mkDerivation rec {
-  name = "pv-1.6.6";
+  pname = "pv";
+  version = "1.6.6";
 
   src = fetchurl {
-    url = "https://www.ivarch.com/programs/sources/${name}.tar.bz2";
+    url = "https://www.ivarch.com/programs/sources/pv-${version}.tar.bz2";
     sha256 = "1wbk14xh9rfypiwyy68ssl8dliyji30ly70qki1y2xx3ywszk3k0";
   };
 
