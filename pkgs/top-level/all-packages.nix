@@ -2994,6 +2994,8 @@ in
 
   lepton = callPackage ../tools/graphics/lepton { };
 
+  lepton-eda = callPackage ../applications/science/electronics/lepton-eda { };
+
   lexicon = callPackage ../tools/admin/lexicon { };
 
   lief = callPackage ../development/libraries/lief {
@@ -15848,6 +15850,8 @@ in
     pango = pango.override { cairo = cairo.override { x11Support = true; }; x11Support = true; };
     gdktarget = "x11";
   };
+
+  gtkextra = callPackage ../development/libraries/gtkextra { };
 
   gtk3 = callPackage ../development/libraries/gtk/3.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
