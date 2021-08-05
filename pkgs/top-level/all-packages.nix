@@ -2559,6 +2559,8 @@ in
 
   dgen-sdl = callPackage ../misc/emulators/dgen-sdl { };
 
+  dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
+
   doitlive = callPackage ../tools/misc/doitlive { };
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
