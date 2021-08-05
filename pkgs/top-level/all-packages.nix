@@ -19832,6 +19832,8 @@ in
 
   mailman-web = with python3.pkgs; toPythonApplication mailman-web;
 
+  maker-panel = callPackage ../tools/misc/maker-panel { };
+
   mastodon = callPackage ../servers/mastodon { };
 
   materialize = callPackage ../servers/sql/materialize {
