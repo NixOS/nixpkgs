@@ -78,5 +78,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ dict ];
 
+  dontUnpack = true;
   inherit installPhase;
 })
