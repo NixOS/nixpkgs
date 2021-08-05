@@ -32,7 +32,8 @@ python3Packages.buildPythonApplication rec {
   ] ++
   lib.optional useGeoIP GeoIP;
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
+  doCheck = false;
 
   makeWrapperArgs = ["--prefix PATH : ${wrapperPath}"];
 

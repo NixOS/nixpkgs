@@ -2292,6 +2292,8 @@ in {
 
   email_validator = callPackage ../development/python-modules/email-validator { };
 
+  embrace = callPackage ../development/python-modules/embrace { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   emv = callPackage ../development/python-modules/emv { };
@@ -3384,6 +3386,10 @@ in {
   httptools = callPackage ../development/python-modules/httptools { };
 
   httpx = callPackage ../development/python-modules/httpx { };
+
+  httpx-ntlm = callPackage ../development/python-modules/httpx-ntlm { };
+
+  httpx-socks = callPackage ../development/python-modules/httpx-socks { };
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
@@ -5990,6 +5996,8 @@ in {
 
   pyfakefs = callPackage ../development/python-modules/pyfakefs { };
 
+  pyfakewebcam = callPackage ../development/python-modules/pyfakewebcam { };
+
   pyfantom = callPackage ../development/python-modules/pyfantom { };
 
   pyfcm = callPackage ../development/python-modules/pyfcm { };
@@ -7320,6 +7328,8 @@ in {
   pyvcf = callPackage ../development/python-modules/pyvcf { };
 
   pyvera = callPackage ../development/python-modules/pyvera { };
+
+  pyverilog = callPackage ../development/python-modules/pyverilog { };
 
   pyvesync = callPackage ../development/python-modules/pyvesync { };
 

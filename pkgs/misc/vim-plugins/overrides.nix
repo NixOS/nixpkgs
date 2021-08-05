@@ -501,10 +501,7 @@ self: super: {
 
   telescope-fzf-native-nvim = super.telescope-fzf-native-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim ];
-
-    dontBuild = false;
     buildPhase = "make";
-
     meta.platforms = lib.platforms.all;
   });
 
