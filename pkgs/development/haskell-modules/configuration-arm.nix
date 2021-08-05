@@ -45,6 +45,7 @@ self: super: {
   # TODO: figure out if needed on aarch32 as well
   BNFC = dontCheck super.BNFC;
   C-structs = dontCheck super.C-structs;
+  Chart-tests = dontCheck super.Chart-tests;
   accelerate = dontCheck super.accelerate;
   ad = dontCheck super.ad;
   autoapply = dontCheck super.autoapply;
