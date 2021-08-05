@@ -120,6 +120,8 @@ let self = rec {
 
   requests = callPackage ../applications/video/kodi-packages/requests { };
 
+  routing = callPackage ../applications/video/kodi-packages/routing { };
+
   signals = callPackage ../applications/video/kodi-packages/signals { };
 
   six = callPackage ../applications/video/kodi-packages/six { };
