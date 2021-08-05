@@ -136,11 +136,9 @@ let
 
     nativeBuildInputs = [
       ninja pkg-config
-      python2WithPackages perl nodejs
+      python2WithPackages python3WithPackages perl nodejs
       gnutar which
       llvmPackages.bintools
-    ] ++ lib.optionals (chromiumVersionAtLeast "92") [
-      python3WithPackages
     ];
 
     buildInputs = defaultDependencies ++ [
