@@ -7,18 +7,7 @@ let
 
   runtime' = filter (f: f.enable) (attrValues cfg.runtime);
 
-  # taken from the etc module
-  runtime = pkgs.stdenvNoCC.mkDerivation {
-    name = "runtime";
-
-    builder = ../system/etc/make-etc.sh;
-
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    sources = map (x: x.source) runtime';
-    targets = map (x: x.target) runtime';
-  };
+  runtime = pkgs.linkFarm "neovim-runtime" (map (x: { name = x.target; path = x.source; }) runtime');
 
 in {
   options.programs.neovim = {

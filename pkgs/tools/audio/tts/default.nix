@@ -1,5 +1,5 @@
 { lib
-, python38
+, python3
 , fetchFromGitHub
 , fetchpatch
 }:
@@ -10,26 +10,19 @@
 # $ tts-server --model_name tts_models/en/ljspeech/glow-tts --vocoder_name vocoder_models/universal/libri-tts/fullband-melgan
 #
 # If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
-# Also note that your tts version might not support all available models so check:
-#   https://github.com/coqui-ai/TTS/releases/tag/v0.1.2
 #
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
-let
-  python3 = python38;
-in python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.1.2";
-
-  # https://github.com/coqui-ai/TTS/issues/570
-  disabled = python3.pythonAtLeast "3.9";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "1qgiaqn7iqxyf54qgnpmli69nw9s3gmi9qv874jsgycykc10hjg4";
+    sha256 = "0akhiaaqz53bf5zyps3vgjifmgh5wvcc9r4lrq9hmj3dds03vkjq";
   };
 
   postPatch = ''

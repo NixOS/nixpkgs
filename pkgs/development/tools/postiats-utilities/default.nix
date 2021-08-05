@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 python3Packages.wrapPython ];
 
-  phases = "unpackPhase patchPhase installPhase";
-
   postPatch = ''
     for f in pats-* postiats/*.py; do
       sed -i "$f" -e "1 s,python3,python,"

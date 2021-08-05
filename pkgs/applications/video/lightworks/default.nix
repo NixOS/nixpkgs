@@ -38,7 +38,6 @@ let
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ dpkg ];
 
-    phases = [ "unpackPhase" "installPhase" ];
     unpackPhase = "dpkg-deb -x ${src} ./";
 
     installPhase = ''

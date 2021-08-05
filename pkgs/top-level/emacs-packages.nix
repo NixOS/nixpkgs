@@ -21,12 +21,17 @@
   (package-initialize)
 */
 
-{ pkgs', makeScope, makeOverridable, emacs }:
+{ pkgs'
+, emacs'
+, makeScope
+, makeOverridable
+, dontRecurseIntoAttrs
+}:
 
 let
 
   mkElpaPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/elpa-packages.nix {
-    inherit (pkgs) stdenv texinfo writeText gcc;
+    inherit (pkgs) stdenv texinfo writeText gcc pkgs buildPackages;
     inherit lib;
   };
 
@@ -71,7 +76,12 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
   // manualPackages // { inherit manualPackages; }
   // {
 
-    inherit emacs;
+    # Propagate overriden scope
+    emacs = emacs'.overrideAttrs(old: {
+      passthru = old.passthru // {
+        pkgs = dontRecurseIntoAttrs self;
+      };
+    });
 
     trivialBuild = pkgs.callPackage ../build-support/emacs/trivial.nix {
       inherit (self) emacs;
@@ -84,7 +94,7 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
     emacsWithPackages = emacsWithPackages { inherit pkgs lib; } self;
     withPackages = emacsWithPackages { inherit pkgs lib; } self;
 
-  }// {
+  } // {
 
     # Package specific priority overrides goes here
 

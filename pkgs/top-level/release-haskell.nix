@@ -18,18 +18,22 @@ let
   };
 
   inherit (releaseLib)
-    pkgs
-    packagePlatforms
+    lib
     mapTestOn
-    aggregate
+    packagePlatforms
+    pkgs
     ;
 
-  inherit (pkgs) lib;
-
-  # helper function which traverses a (nested) set
+  # Helper function which traverses a (nested) set
   # of derivations produced by mapTestOn and flattens
   # it to a list of derivations suitable to be passed
   # to `releaseTools.aggregate` as constituents.
+  # Removes all non derivations from the input jobList.
+  #
+  # accumulateDerivations :: [ Either Derivation AttrSet ] -> [ Derivation ]
+  #
+  # > accumulateDerivations [ drv1 "string" { foo = drv2; bar = { baz = drv3; }; } ]
+  # [ drv1 drv2 drv3 ]
   accumulateDerivations = jobList:
     lib.concatMap (
       attrs:
@@ -81,8 +85,45 @@ let
 
   recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate {};
 
-  staticHaskellPackagesPlatforms =
-    packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8104;
+  # Remove multiple elements from a list at once.
+  #
+  # removeMany
+  #   :: [a]  -- list of elements to remove
+  #   -> [a]  -- list of elements from which to remove
+  #   -> [a]
+  #
+  # > removeMany ["aarch64-linux" "x86_64-darwin"] ["aarch64-linux" "x86_64-darwin" "x86_64-linux"]
+  # ["x86_64-linux"]
+  removeMany = itemsToRemove: list: lib.foldr lib.remove list itemsToRemove;
+
+  # Recursively remove platforms from the values in an attribute set.
+  #
+  # removePlatforms
+  #   :: [String]
+  #   -> AttrSet
+  #   -> AttrSet
+  #
+  # > attrSet = {
+  #     foo = ["aarch64-linux" "x86_64-darwin" "x86_64-linux"];
+  #     bar.baz = ["aarch64-linux" "x86_64-linux"];
+  #     bar.quux = ["aarch64-linux" "x86_64-darwin"];
+  #   }
+  # > removePlatforms ["aarch64-linux" "x86_64-darwin"] attrSet
+  # {
+  #   foo = ["x86_64-linux"];
+  #   bar = {
+  #     baz = ["x86_64-linux"];
+  #     quux = [];
+  #   };
+  # }
+  removePlatforms = platformsToRemove: packageSet:
+    lib.mapAttrsRecursive
+      (_: val:
+        if lib.isList val
+          then removeMany platformsToRemove val
+          else val
+      )
+      packageSet;
 
   jobs = recursiveUpdateMany [
     (mapTestOn {
@@ -91,23 +132,8 @@ let
 
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
-      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
-        # remove musl ghc865Binary since it is known to be broken and
-        # causes an evaluation error on darwin.
-        # TODO: remove ghc865Binary altogether and use ghc8102Binary
-        ghc865Binary = {};
-      };
-
-      # test some statically linked packages to catch regressions
-      # and get some cache going for static compilation with GHC
-      # Use integer-simple to avoid GMP linking problems (LGPL)
-      pkgsStatic.haskell.packages.integer-simple.ghc8104 = {
-        inherit (staticHaskellPackagesPlatforms)
-          hello
-          random
-          lens
-          ;
-      };
+      nixosTests.agda = (packagePlatforms pkgs.nixosTests).agda;
+      agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       # top-level packages that depend on haskellPackages
       inherit (pkgsPlatforms)
@@ -215,6 +241,56 @@ let
         ;
 
       elmPackages.elm = pkgsPlatforms.elmPackages.elm;
+
+      # GHCs linked to musl.
+      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
+        # remove musl ghc865Binary since it is known to be broken and
+        # causes an evaluation error on darwin.
+        # TODO: remove ghc865Binary altogether and use ghc8102Binary
+        ghc865Binary = {};
+
+        # remove integer-simple because it appears to be broken with
+        # musl and non-static-linking.
+        integer-simple = {};
+      };
+
+      # Get some cache going for MUSL-enabled GHC.
+      pkgsMusl.haskellPackages =
+        removePlatforms
+          [
+            # pkgsMusl is compiled natively with musl.  It is not
+            # cross-compiled (unlike pkgsStatic).  We can only
+            # natively bootstrap GHC with musl on x86_64-linux because
+            # upstream doesn't provide a musl bindist for aarch64.
+            "aarch64-linux"
+
+            # musl only supports linux, not darwin.
+            "x86_64-darwin"
+          ]
+          {
+            inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
+              hello
+              lens
+              random
+              ;
+          };
+
+      # Test some statically linked packages to catch regressions
+      # and get some cache going for static compilation with GHC.
+      # Use integer-simple to avoid GMP linking problems (LGPL)
+      pkgsStatic.haskell.packages.integer-simple.ghc8104 =
+        removePlatforms
+          [
+            "aarch64-linux" # times out on Hydra
+            "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
+          ]
+          {
+            inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8104)
+              hello
+              lens
+              random
+              ;
+          };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
@@ -291,25 +367,7 @@ let
             (name: jobs.haskellPackages."${name}")
             (maintainedPkgNames pkgs.haskellPackages));
       };
-      staticHaskellPackages = pkgs.releaseTools.aggregate {
-        name = "static-haskell-packages";
-        meta = {
-          description = "Static haskell builds using the pkgsStatic infrastructure";
-          maintainers = [
-            lib.maintainers.sternenseemann
-            lib.maintainers.rnhmjoj
-          ];
-        };
-        constituents = [
-          # TODO: reenable darwin builds if static libiconv works
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.x86_64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello.aarch64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.x86_64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens.aarch64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.x86_64-linux
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random.aarch64-linux
-        ];
-      };
+
       muslGHCs = pkgs.releaseTools.aggregate {
         name = "haskell-pkgsMusl-ghcs";
         meta = {
@@ -323,6 +381,22 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8104
           jobs.pkgsMusl.haskell.compiler.ghc901
+        ];
+      };
+
+      staticHaskellPackages = pkgs.releaseTools.aggregate {
+        name = "static-haskell-packages";
+        meta = {
+          description = "Static haskell builds using the pkgsStatic infrastructure";
+          maintainers = [
+            lib.maintainers.sternenseemann
+            lib.maintainers.rnhmjoj
+          ];
+        };
+        constituents = accumulateDerivations [
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random
         ];
       };
     }

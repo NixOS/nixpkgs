@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "async-dns";
-  version = "1.1.10";
+  version = "2.0.0";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "gera2ld";
     repo = "async_dns";
     rev = "v${version}";
-    sha256 = "1yxmdlf2n66kp2mprsd4bvfsf63l4c4cfkjm2rm063pmlifz2fvj";
+    sha256 = "0vn7hxvpzikd7q61a27fwzal4lwsra2063awyr6fjpy6lh3cjdwf";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   checkPhase = ''
     export HOME=$TMPDIR
     # Test needs network access
-    rm tests/test_resolver.py
+    rm -r tests/resolver
     ${python.interpreter} -m unittest
   '';
 

@@ -1,4 +1,19 @@
-{ config, lib, buildEnv, callPackage, vscode-utils, asciidoctor, nodePackages, jdk, llvmPackages_8, nixpkgs-fmt, jq, shellcheck }:
+{ config
+, lib
+, buildEnv
+, callPackage
+, vscode-utils
+, asciidoctor
+, nodePackages
+, jdk
+, llvmPackages_8
+, nixpkgs-fmt
+, jq
+, shellcheck
+, moreutils
+, racket-minimal
+, clojure-lsp
+}:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -170,12 +185,10 @@ let
           version = "0.0.1";
           sha256 = "sha256-vz2kU36B1xkLci2QwLpl/SBEhfSWltIDJ1r7SorHcr8=";
         };
-        nativeBuildInputs = [ jq ];
+        nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
           cd "$out/$installPrefix"
-          tmp_package_json=$(mktemp)
-          jq '.contributes.configuration.properties."nixpkgs-fmt.path".default = "${nixpkgs-fmt}/bin/nixpkgs-fmt"' package.json > "$tmp_package_json"
-          mv "$tmp_package_json" package.json
+          jq '.contributes.configuration.properties."nixpkgs-fmt.path".default = "${nixpkgs-fmt}/bin/nixpkgs-fmt"' package.json | sponge package.json
         '';
         meta = with lib; {
           license = licenses.mit;
@@ -194,13 +207,30 @@ let
         };
       };
 
-      bbenoist.Nix = buildVscodeMarketplaceExtension {
+      bbenoist.nix = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Nix";
           publisher = "bbenoist";
           version = "1.0.1";
           sha256 = "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b";
         };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      betterthantomorrow.calva = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "calva";
+          publisher = "betterthantomorrow";
+          version = "2.0.205";
+          sha256 = "sha256-umnG1uLB42fUNKjANaKcABjVmqbdOQakd/6TPsEpF9c";
+        };
+        nativeBuildInputs = [ jq moreutils ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration[0].properties."calva.clojureLspPath".default = "${clojure-lsp}/bin/clojure-lsp"' package.json | sponge package.json
+        '';
         meta = with lib; {
           license = licenses.mit;
         };
@@ -266,7 +296,7 @@ let
         };
       };
 
-      CoenraadS.bracket-pair-colorizer = buildVscodeMarketplaceExtension {
+      coenraads.bracket-pair-colorizer = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/CoenraadS.bracket-pair-colorizer/changelog";
           description = "A customizable extension for colorizing matching brackets";
@@ -513,6 +543,27 @@ let
         };
       };
 
+      eugleo.magic-racket = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "magic-racket";
+          publisher = "evzen-wybitul";
+          version = "0.5.7";
+          sha256 = "sha256-34/H0WgM73yzuOGU2w6Ipq7KuEBuN1bykcLGuvzY3mU=";
+        };
+        nativeBuildInputs = [ jq moreutils ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."magic-racket.general.racketPath".default = "${racket-minimal}/bin/racket"' package.json | sponge package.json
+        '';
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/evzen-wybitul.magic-racket/changelog";
+          description = "The best coding experience for Racket in VS Code ";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket";
+          homepage = "https://github.com/Eugleo/magic-racket";
+          license = licenses.agpl3Only;
+        };
+      };
+
       file-icons.file-icons = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/file-icons.file-icons/changelog";
@@ -657,7 +708,7 @@ let
         };
       };
 
-      golang.Go = buildVscodeMarketplaceExtension {
+      golang.go = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Go";
           publisher = "golang";
@@ -1289,12 +1340,10 @@ let
           version = "0.14.4";
           sha256 = "05z314sw9nqym3qlj7dcwm0fz1hb23xppzqn3nr2wcj17hs8zz4m";
         };
-        nativeBuildInputs = [ jq ];
+        nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
           cd "$out/$installPrefix"
-          tmp_package_json=$(mktemp)
-          jq '.contributes.configuration.properties."shellcheck.executablePath".default = "${shellcheck}/bin/shellcheck"' package.json > "$tmp_package_json"
-          mv "$tmp_package_json" package.json
+          jq '.contributes.configuration.properties."shellcheck.executablePath".default = "${shellcheck}/bin/shellcheck"' package.json | sponge package.json
         '';
         meta = {
           license = lib.licenses.mit;
@@ -1469,7 +1518,7 @@ let
 
   aliases = self: super: {
     # aliases
-    ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
+    ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix

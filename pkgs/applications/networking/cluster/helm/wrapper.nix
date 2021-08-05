@@ -10,8 +10,6 @@ let
   let
 
   initialMakeWrapperArgs = [
-      "${helm}/bin/helm" "${placeholder "out"}/bin/helm"
-      "--argv0" "$0" "--set" "HELM_PLUGINS" "${pluginsDir}"
   ];
 
   pluginsDir = symlinkJoin {
@@ -26,7 +24,8 @@ in
     # extra actions upon
     postBuild = ''
       rm $out/bin/helm
-      makeWrapper ${lib.escapeShellArgs initialMakeWrapperArgs}  ${extraMakeWrapperArgs}
+      makeWrapper "${helm}/bin/helm" "$out/bin/helm" "--argv0" "$0" \
+        "--set" "HELM_PLUGINS" "${pluginsDir}" ${extraMakeWrapperArgs}
     '';
     paths = [ helm pluginsDir ];
 

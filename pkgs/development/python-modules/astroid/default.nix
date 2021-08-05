@@ -1,24 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , isPyPy
 , lazy-object-proxy
 , wrapt
 , typed-ast
 , pytestCheckHook
+, setuptools-scm
+, pylint
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.5.1";
+  version = "2.5.6"; # Check whether the version is compatible with pylint
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cfc35498ee64017be059ceffab0a25bedf7548ab76f2bea691c5565896e7128d";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-/nWXzuWkerUDvFT/tJTZuhfju46MAM0cwosVH9BXoY8=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION=version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   # From astroid/__pkginfo__.py
   propagatedBuildInputs = [
@@ -29,6 +39,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
+  passthru.tests = {
+    inherit pylint;
+  };
 
   meta = with lib; {
     description = "An abstract syntax tree for Python with inference support";

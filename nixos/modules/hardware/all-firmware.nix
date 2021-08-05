@@ -35,6 +35,14 @@ in {
       '';
     };
 
+    hardware.wirelessRegulatoryDatabase = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Load the wireless regulatory database at boot.
+      '';
+    };
+
   };
 
 
@@ -50,6 +58,7 @@ in {
         rtl8723bs-firmware
         rtl8761b-firmware
         rtw88-firmware
+        rtw89-firmware
         zd1211fw
         alsa-firmware
         sof-firmware
@@ -58,6 +67,7 @@ in {
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
       ];
+      hardware.wirelessRegulatoryDatabase = true;
     })
     (mkIf cfg.enableAllFirmware {
       assertions = [{
@@ -74,6 +84,9 @@ in {
         b43Firmware_6_30_163_46
         b43FirmwareCutter
       ] ++ optional (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) facetimehd-firmware;
+    })
+    (mkIf cfg.wirelessRegulatoryDatabase {
+      hardware.firmware = [ pkgs.wireless-regdb ];
     })
   ];
 }

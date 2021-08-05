@@ -49,21 +49,17 @@ let
       version = "5.212.0-alpha4";
     };
 
-    # Even if developed in the public, QtWebEngine does not have official
-    # releases or new tags since the Qt company made 5.15.3 proprietary.
-    # Apparently they care more about licensing than the security of their users.
-    # See https://lists.qt-project.org/pipermail/interest/2021-March/036387.html
     qtwebengine =
       let
-        branchName = "5.15.3";
-        rev = "a059e7404a6db799f4da0ad696e65ae9c854b4b0";
+        branchName = "5.15.5";
+        rev = "v${branchName}-lts";
       in
       {
         version = "${branchName}-${lib.substring 0 7 rev}";
 
         src = fetchgit {
           url = "https://github.com/qt/qtwebengine.git";
-          sha256 = "1vdgxfbmx4z4qrm2g61dl64gqn3fv5f83jwpp7h1gyfx5z2qvfmv";
+          sha256 = "12wf30d34sgn82mbz91xybxyn3j1mhvxda452cfkxm232n1f2kjb";
           inherit rev branchName;
           fetchSubmodules = true;
           leaveDotGit = true;
@@ -115,16 +111,16 @@ let
         ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0010-qtbase-assert.patch
         ./qtbase.patch.d/0011-fix-header_module.patch
+        (fetchpatch { # This can be removed when https://codereview.qt-project.org/c/qt/qtbase/+/339323 is included in an release.
+          name = "0014-gcc11-compat.patch";
+          url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=049e14870c13235cd066758f29c42dc96c1ccdf8";
+          sha256 = "1cb2hwi859hds0fa2cbap014qaa7mah9p0rcxcm2cvj2ybl33qfc";
+        })
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtwebengine = [
-      # Fix crashes with non en_US.UTF-8 locales
-      (fetchpatch {
-        url = "https://github.com/qt/qtwebengine/commit/199ea00a9eea13315a652c62778738629185b059.patch";
-        sha256 = "1b5k2g1v8913cvsgvp6ja4mcprjlk5vcwqzi0p1qq7b1wyi4f0g2";
-      })
       # Fix invisible fonts with glibc 2.33: https://github.com/NixOS/nixpkgs/issues/131074
       (fetchpatch {
         url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/d122c011631137b79455850c363676c655cf9e09/f/qtwebengine-everywhere-src-5.15.5-%231904652.patch";

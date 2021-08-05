@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   installFlags = [ "PREFIX=$(out)" ];
 
   passthru.updateScript = nix-update-script { attrPath = pname; };

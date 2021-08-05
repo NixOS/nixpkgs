@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://bochs.sourceforge.io/";
+    homepage = "https://bochs.sourceforge.io/";
     description = "An open-source IA-32 (x86) PC emulator";
     longDescription = ''
       Bochs is an open-source (LGPL), highly portable IA-32 PC emulator, written

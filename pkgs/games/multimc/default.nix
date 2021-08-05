@@ -43,7 +43,10 @@ in mkDerivation rec {
       Allows you to have multiple, separate instances of Minecraft (each with their own mods, texture packs, saves, etc) and helps you manage them and their associated options with a simple interface.
     '';
     platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    license = licenses.asl20;
+    # upstream don't want us to re-distribute this application:
+    # https://github.com/NixOS/nixpkgs/issues/131983
+    hydraPlatforms = [];
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };
 }

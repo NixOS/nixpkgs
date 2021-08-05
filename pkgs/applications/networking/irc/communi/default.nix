@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcommuni qtbase ];
 
-  enableParallelBuilding = true;
-
   dontWrapQtApps = true;
 
   preConfigure = ''

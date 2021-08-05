@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Mic92/TTRSS-Auth-LDAP/commit/7534fa54babc377a070e05e326a46a252b5e3884.patch";
       sha256 = "1p7zas0n627z0g226dp5m5dg1ai2z3vi69n3xivp517iv3lch70l";
     })
+    # https://github.com/hydrian/TTRSS-Auth-LDAP/pull/40
+    (fetchpatch {
+      url = "https://github.com/hydrian/TTRSS-Auth-LDAP/commit/557811efa15bab3b5044c98416f9e37264f11c9a.patch";
+      sha256 = "sha256-KtDY0J1OYNTLwK7834lI+2XL1N1FkOk5zhinGY90/4A=";
+    })
   ];
 
   installPhase = ''

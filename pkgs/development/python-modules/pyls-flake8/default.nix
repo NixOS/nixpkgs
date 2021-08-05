@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "emanspeaks";
     repo = "pyls-flake8";
-    rev = "3df8606ad821100e64743f457c77c20170bde722";
+    rev = "v{version}";
     sha256 = "14wkmwh8mqr826vdzxhvhdwrnx2akzmnbv3ar391qs4imwqfjx3l";
   };
 

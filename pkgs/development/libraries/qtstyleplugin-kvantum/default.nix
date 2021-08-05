@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
-  version = "0.20.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${version}";
-    sha256 = "133m5ifs8ylhdh78m99n0y76q0nix68xsqfwcsrak4yr1n5pj9qp";
+    sha256 = "0rj7zfm2h6812ga1xypism8a48jj669nh10jmhpf2mjriyaar3di";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "SVG-based Qt5 theme engine plus a config tool and extra themes";
     homepage = "https://github.com/tsujan/Kvantum";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     broken = lib.versionOlder qtbase.version "5.14";
     maintainers = [ maintainers.bugworm ];

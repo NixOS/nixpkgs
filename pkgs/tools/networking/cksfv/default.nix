@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "cksfv-1.3.15";
+  pname = "cksfv";
+  version = "1.3.15";
 
   src = fetchurl {
-    url = "http://zakalwe.fi/~shd/foss/cksfv/files/${name}.tar.bz2";
+    url = "http://zakalwe.fi/~shd/foss/cksfv/files/cksfv-${version}.tar.bz2";
     sha256 = "0k06aq94cn5xp4knjw0p7gz06hzh622ql2xvnrlr3q8rcmdvwwx1";
   };
 

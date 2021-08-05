@@ -16,7 +16,7 @@ index a255d83..9699b08 100644
      QStringList ret;
      const auto paths = QCoreApplication::libraryPaths();
 -    for (const QString &path : paths) {
--        static const QStringList searchFolders {
+-        static const QStringList searchFolders{
 -            QStringLiteral("/kf5/org.kde.kwindowsystem.platforms"),
 -            QStringLiteral("/kf5/kwindowsystem"),
 -        };

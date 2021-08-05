@@ -1,11 +1,13 @@
-{ mkDerivation, lib, fetchFromGitHub, callPackage, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
+, extra-cmake-modules
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk, jemalloc
-, rnnoise, extra-cmake-modules
+, rnnoise
 # Transitive dependencies:
-, pcre, xorg, util-linuxMinimal, libselinux, libsepol, epoxy
+, util-linuxMinimal
+, pcre, libpthreadstubs, libXdmcp, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
 , xdg-utils, libsysprof-capture, libpsl, brotli
 }:
@@ -23,7 +25,7 @@ let
   tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.8.11";
+  version = "2.9.0";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -32,16 +34,8 @@ in mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "020ycgb77vx7rza590i3csrvq1zgm15rvpxqqcp0xkb4yh71i3hb";
+    sha256 = "0964as7rkjq1px6z15z6kmkiz4zw69wmm3namwn940bsja123qls";
   };
-
-  patches = [(fetchpatch {
-    # ref: https://github.com/desktop-app/lib_webview/pull/9
-    url = "https://github.com/desktop-app/lib_webview/commit/75e924934eee8624020befbef1f3cb5b865d3b86.patch";
-    sha256 = "sha256-rN4FVK4KT+xNf9IVdcpbxMqT0+t3SINJPRRQPyMiDP0=";
-    stripLen = 1;
-    extraPrefix = "Telegram/lib_webview/";
-  })];
 
   postPatch = ''
     substituteInPlace Telegram/CMakeLists.txt \
@@ -72,7 +66,7 @@ in mkDerivation rec {
     tg_owt
     # Transitive dependencies:
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
-    pcre xorg.libpthreadstubs xorg.libXdmcp libselinux libsepol epoxy
+    pcre libpthreadstubs libXdmcp libselinux libsepol epoxy
     at-spi2-core libXtst libthai libdatrie libsysprof-capture libpsl brotli
   ];
 
@@ -84,20 +78,6 @@ in mkDerivation rec {
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
   ];
-
-  # Note: The following packages could be packaged system-wide, but it's
-  # probably best to use the bundled ones from tdesktop (Arch does this too):
-  # rlottie:
-  # - Sources (problem: there are no stable releases!):
-  #   - desktop-app (tdesktop): https://github.com/desktop-app/rlottie
-  #   - upstream: https://github.com/Samsung/rlottie
-  # libtgvoip:
-  # - Sources  (problem: the stable releases might be too old!):
-  #   - tdesktop: https://github.com/telegramdesktop/libtgvoip
-  #   - upstream: https://github.com/grishka/libtgvoip
-  # Both of these packages are included in this PR (kotatogram-desktop):
-  # https://github.com/NixOS/nixpkgs/pull/75210
-  # TODO: Package mapbox-variant
 
   postFixup = ''
     # This is necessary to run Telegram in a pure environment.
@@ -126,6 +106,6 @@ in mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ primeos abbradar oxalica ];
+    maintainers = with maintainers; [ oxalica primeos ];
   };
 }

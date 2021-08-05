@@ -51,9 +51,6 @@ build_deps="../../../../misc/vscode-extensions/rust-analyzer/build-deps"
 jq '{ name, version, dependencies: (.dependencies + .devDependencies) }' "$node_src/package.json" \
     >"$build_deps/package.json.new"
 
-# FIXME: vsce@1.93.0 breaks the build.
-sed 's/"vsce": ".*"/"vsce": "=1.88.0"/' --in-place "$build_deps/package.json.new"
-
 if cmp --quiet "$build_deps"/package.json{.new,}; then
     echo "package.json not changed, skip updating nodePackages"
     rm "$build_deps"/package.json.new

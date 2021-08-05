@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "juju";
-  version = "2.9.5";
+  version = "2.9.9";
 
   src = fetchFromGitHub {
     owner = "juju";
     repo = "juju";
     rev = "juju-${version}";
-    sha256 = "sha256-oBwusx63a8AWNHqlNtG0S/SiIRM55fbc/CGN2MFJDYA=";
+    sha256 = "sha256-36/fatztop2eB1z9DfnseQXw0Di3Wss72IfgdnKpsNU=";
   };
 
-  vendorSha256 = "sha256-VHUDqDsfY0c6r5sJbMX7JcXTIBXze9cd5qHqZWZAC2g=";
+  vendorSha256 = "sha256-MH9lZNc9KevovZJCN2nClmqJbRSwYoQ4Jb0CXqBBUd0=";
 
   # Disable tests because it attempts to use a mongodb instance
   doCheck = false;

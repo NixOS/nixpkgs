@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/minecraft-server
   '';
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   passthru = {
     tests = { inherit (nixosTests) minecraft-server; };

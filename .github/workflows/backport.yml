@@ -15,13 +15,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Create backport PRs
         # should be kept in sync with `version`
-        uses: zeebe-io/backport-action@2b994724142df0774855690db56bc6308fb99ffa
+        uses: zeebe-io/backport-action@v0.0.5
         with:
           # Config README: https://github.com/zeebe-io/backport-action#backport-action
           github_token: ${{ secrets.GITHUB_TOKEN }}
           github_workspace: ${{ github.workspace }}
           # should be kept in sync with `uses`
-          version: 2b994724142df0774855690db56bc6308fb99ffa
+          version: v0.0.5
           pull_description: |-
             Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
 

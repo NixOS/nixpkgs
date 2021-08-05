@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, pkg-config, pcre, perl }:
 
-stdenv.mkDerivation {
-  name = "maildrop-2.6.0";
+stdenv.mkDerivation rec {
+  pname = "maildrop";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/courier/maildrop/2.6.0/maildrop-2.6.0.tar.bz2";
+    url = "mirror://sourceforge/courier/maildrop/${version}/maildrop-${version}.tar.bz2";
     sha256 = "1a94p2b41iy334cwfwmzi19557dn5j61abh0cp2rfc9dkc8ibhdg";
   };
 

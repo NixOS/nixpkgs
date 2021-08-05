@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "A free 2D physics sandbox game";
     homepage = "http://powdertoy.co.uk/";

@@ -6,7 +6,7 @@
 , gfortran
 , lhapdf
 , ncurses
-, python
+, python ? null
 , swig
 , yoda
 , zlib

@@ -52,12 +52,6 @@ self: super:
     }
   );
 
-  anyio = super.anyio.overridePythonAttrs (old: {
-    postPatch = ''
-      substituteInPlace setup.py --replace 'setup()' 'setup(version="${old.version}")'
-    '';
-  });
-
   astroid = super.astroid.overridePythonAttrs (
     old: rec {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];

@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "blspy";
-  version = "1.0.2";
+  version = "1.0.5";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N1mk83uZrzSty2DyXfKiVp85z/jmztiUSRXKfNBRJV4=";
+    hash = "sha256-uDXzAdGzfyRbsMVllLNd3DK8F/GfovdX293z5Mel6eg=";
   };
 
   patches = [

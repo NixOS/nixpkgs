@@ -2,34 +2,24 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , eigen
 , python
 , catch
 , numpy
 , pytest
-, scipy
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.6.2";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lsacpawl2gb5qlh0cawj9swsyfbwhzhwiv6553a7lsigdbadqpy";
+    sha256 = "sha256-iEXoNTsfsDq79bKV7A4aOCHr11rT/cqnyLghEtGsaks=";
   };
-
-  patches = [
-    # fix pybind11Config.cmake
-    (fetchpatch {
-      url = "https://github.com/pybind/pybind11/commit/d9c4e1047a95f023633a7260af5a633307438941.patch";
-      sha256 = "0kran295kj31xfs6mfha5ip132zd0pnj2dl36qzgyc1rpnha5gz4";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 

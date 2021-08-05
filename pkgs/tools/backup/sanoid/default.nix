@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, zfs
+{ lib, stdenv, fetchFromGitHub, nixosTests, makeWrapper, zfs
 , perlPackages, procps, which, openssh, mbuffer, pv, lzop, gzip, pigz }:
 
 with lib;
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = with perlPackages; [ perl ConfigIniFiles CaptureTiny ];
+
+  passthru.tests = nixosTests.sanoid;
 
   installPhase = ''
     runHook preInstall

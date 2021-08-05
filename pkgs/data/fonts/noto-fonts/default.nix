@@ -110,7 +110,7 @@ in
   };
 
   noto-fonts-emoji = let
-    version = "2020-09-16-unicode13_1";
+    version = "2.028";
     emojiPythonEnv =
       python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenv.mkDerivation {
@@ -121,7 +121,7 @@ in
       owner = "googlefonts";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "0659336dp0l2nkac153jpcb9yvp0p3dx1crcyxjd14i8cqkfi2hh";
+      sha256 = "0dy7px7wfl6bqkfzz82jm4gvbjp338ddsx0mwfl6m7z48l7ng4v6";
     };
 
     nativeBuildInputs = [

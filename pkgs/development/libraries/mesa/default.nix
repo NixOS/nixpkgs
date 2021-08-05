@@ -83,9 +83,9 @@ self = stdenv.mkDerivation {
 
     # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
     substituteInPlace src/util/xmlconfig.c --replace \
-      'DATADIR "/drirc.d"' '"${placeholder "out"}/drirc.d"'
+      'DATADIR "/drirc.d"' '"${placeholder "out"}/share/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
-      "get_option('datadir')" "'${placeholder "out"}'"
+      "get_option('datadir')" "'${placeholder "out"}/share'"
   '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace meson.build --replace \
       "find_program('nm')" \

@@ -76,6 +76,8 @@ buildPythonApplication rec {
     "TestConsumeUserDataHttp"
     # Chef Omnibus
     "TestInstallChefOmnibus"
+    # https://github.com/canonical/cloud-init/pull/893
+    "TestGetPackageMirrorInfo"
   ];
 
   disabledTestPaths = [

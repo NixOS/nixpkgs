@@ -4,6 +4,7 @@
 , autoPatchelfHook
 , wrapGAppsHook
 , gnome2
+, gtk2
 , nss
 , xdg-utils
 , xorg
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gnome2.GConf
-    gnome2.gtk
+    gtk2
     gtk3
     libX11
     libXScrnSaver

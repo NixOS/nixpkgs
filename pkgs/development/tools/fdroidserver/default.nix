@@ -1,7 +1,8 @@
-{ docker
-, fetchFromGitLab
+{ fetchFromGitLab
 , python
-, lib }:
+, lib
+, apksigner
+}:
 
 python.pkgs.buildPythonApplication rec {
   version = "2.0.3";
@@ -46,6 +47,8 @@ python.pkgs.buildPythonApplication rec {
     ruamel_yaml
     yamllint
   ];
+
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ apksigner ]}" ];
 
   # no tests
   doCheck = false;

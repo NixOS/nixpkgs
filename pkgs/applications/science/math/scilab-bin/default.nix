@@ -39,8 +39,6 @@ stdenv.mkDerivation {
     xorg.libXxf86vm
   ];
 
-  phases = [ "unpackPhase" "fixupPhase" "installPhase" ];
-
   fixupPhase = ''
     sed -i 's|\$(/bin/|$(|g' bin/scilab
     sed -i 's|/usr/bin/||g' bin/scilab

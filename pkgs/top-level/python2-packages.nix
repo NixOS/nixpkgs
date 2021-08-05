@@ -281,6 +281,8 @@ with self; with super; {
 
   metaphone = callPackage ../development/python-modules/metaphone { };
 
+  mlt = disabled super.mlt;
+
   mock = callPackage ../development/python-modules/mock/2.nix { };
 
   # Needed here because moinmoin is loaded as a Python library.
@@ -403,7 +405,7 @@ with self; with super; {
 
   progressbar231 = callPackage ../development/python-modules/progressbar231 { };
 
-  prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
+  prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit/1.nix { };
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 

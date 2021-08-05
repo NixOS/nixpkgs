@@ -95,6 +95,8 @@ rec {
 
     mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
 
+    m68k     = { bits = 32; significantByte = bigEndian; family = "m68k"; };
+
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
     powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
@@ -102,6 +104,8 @@ rec {
 
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
+
+    s390     = { bits = 32; significantByte = bigEndian; family = "s390"; };
 
     sparc    = { bits = 32; significantByte = bigEndian;    family = "sparc"; };
     sparc64  = { bits = 64; significantByte = bigEndian;    family = "sparc"; };
@@ -123,9 +127,10 @@ rec {
 
   # GNU build systems assume that older NetBSD architectures are using a.out.
   gnuNetBSDDefaultExecFormat = cpu:
-    if (cpu.family == "x86" && cpu.bits == 32) ||
-       (cpu.family == "arm" && cpu.bits == 32) ||
-       (cpu.family == "sparc" && cpu.bits == 32)
+    if (cpu.family == "arm" && cpu.bits == 32) ||
+       (cpu.family == "sparc" && cpu.bits == 32) ||
+       (cpu.family == "m68k" && cpu.bits == 32) ||
+       (cpu.family == "x86" && cpu.bits == 32)
     then execFormats.aout
     else execFormats.elf;
 

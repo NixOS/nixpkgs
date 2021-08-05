@@ -298,8 +298,12 @@ self: super: {
   himalaya-vim = buildVimPluginFrom2Nix {
     pname = "himalaya-vim";
     inherit (himalaya) src version;
-    configurePhase = "cd vim/";
     dependencies = with self; [ himalaya ];
+    patchPhase = ''
+      rm -rf !"vim/"
+      cp -vaR vim/. .
+      rm -rf vim/
+    '';
     preFixup = ''
       substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
         --replace 'if !executable("himalaya")' 'if v:false'
@@ -431,6 +435,10 @@ self: super: {
             ln -s ${grammars} parser
           '';
       });
+  });
+
+  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
   });
 
   onehalf = super.onehalf.overrideAttrs (old: {
@@ -643,7 +651,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "046c5w47isnz5l23kpk8zkbw312yp5dz9wq9dc2kmpklai71fc1a";
+          cargoSha256 = "sha256-E16fwBb9ZDRrcs+rZVKG0UESDqrVIcybr+kbFIxrS1o=";
         };
       in
       ''

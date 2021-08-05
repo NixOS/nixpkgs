@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , makeWrapper, makeDesktopItem, mkYarnPackage
 , electron, element-web
+, callPackage
+, Security
+, AppKit
+, CoreServices
 }:
 # Notes for maintainers:
 # * versions of `element-web` and `element-desktop` should be kept in sync.
@@ -8,13 +12,14 @@
 
 let
   executableName = "element-desktop";
-  version = "1.7.31";
+  version = "1.7.34";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "14vyqzf69g4n3i7qjm1pgq2kwym6cira0jwvirzdrwxkfsl0dsq6";
+    sha256 = "sha256-4d2IOngiRcKd4k0jnilAR3Sojkfru3dlqtoBYi3zeLY=";
   };
+  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
 in mkYarnPackage rec {
   name = "element-desktop-${version}";
   inherit version src;
@@ -24,6 +29,23 @@ in mkYarnPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  seshat = callPackage ./seshat { inherit CoreServices; };
+  keytar = callPackage ./keytar { inherit Security AppKit; };
+
+  buildPhase = ''
+    runHook preBuild
+    export HOME=$(mktemp -d)
+    pushd deps/element-desktop/
+    npx tsc
+    yarn run i18n
+    node ./scripts/copy-res.js
+    popd
+    rm -rf node_modules/matrix-seshat node_modules/keytar
+    ln -s $keytar node_modules/keytar
+    ln -s $seshat node_modules/matrix-seshat
+    runHook postBuild
+  '';
+
   installPhase = ''
     # resources
     mkdir -p "$out/share/element"
@@ -32,6 +54,7 @@ in mkYarnPackage rec {
     cp -r './deps/element-desktop/res/img' "$out/share/element"
     rm "$out/share/element/electron/node_modules"
     cp -r './node_modules' "$out/share/element/electron"
+    cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
 
     # icons
     for icon in $out/share/element/electron/build/icons/*.png; do
@@ -44,7 +67,7 @@ in mkYarnPackage rec {
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
-    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
+    makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
       --add-flags "$out/share/element/electron"
   '';
 

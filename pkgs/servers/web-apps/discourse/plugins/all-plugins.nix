@@ -3,6 +3,7 @@ let
   callPackage = newScope args;
 in
 {
+  discourse-calendar = callPackage ./discourse-calendar {};
   discourse-canned-replies = callPackage ./discourse-canned-replies {};
   discourse-github = callPackage ./discourse-github {};
   discourse-math = callPackage ./discourse-math {};

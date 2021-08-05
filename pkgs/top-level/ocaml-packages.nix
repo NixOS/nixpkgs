@@ -623,9 +623,7 @@ let
       inherit (pkgs) file;
     };
 
-    lwt = callPackage ../development/ocaml-modules/lwt {
-      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2;
-    };
+    lwt = callPackage ../development/ocaml-modules/lwt { };
 
     lwt-canceler = callPackage ../development/ocaml-modules/lwt-canceler { };
 
@@ -936,6 +934,8 @@ let
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
+    odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
+
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-core = callPackage ../development/ocaml-modules/opam-core {
@@ -965,6 +965,8 @@ let
     optint = callPackage ../development/ocaml-modules/optint { };
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
+
+    otoml = callPackage ../development/ocaml-modules/otoml { };
 
     otr = callPackage ../development/ocaml-modules/otr { };
 

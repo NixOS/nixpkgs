@@ -13,7 +13,6 @@ mkDerivation {
 
   buildInputs = [ qtbase vcg glew ];
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ qmake ];
 
   qmakeFlags = [ "openBrf.pro" ];

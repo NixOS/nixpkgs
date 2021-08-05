@@ -925,6 +925,7 @@ broken-packages:
   - data-nat
   - data-object
   - datapacker
+  - data-pdf-fieldreader
   - data-pprint
   - data-quotientref
   - data-reify-cse
@@ -1219,6 +1220,7 @@ broken-packages:
   - EnumMap
   - enummapmap
   - enum-utf8
+  - env-extra
   - env-parser
   - envstatus
   - epanet-haskell
@@ -1607,6 +1609,7 @@ broken-packages:
   - ghc-syb-utils
   - ghc-tags
   - ghc-tags-core
+  - ghc-tcplugin-api
   - ghc-time-alloc-prof
   - ghc-usage
   - gh-labeler
@@ -1999,6 +2002,7 @@ broken-packages:
   - hedgehog-checkers
   - hedgehog-generic
   - hedgehog-golden
+  - hedgehog-optics
   - hedgehog-servant
   - hedis-config
   - hedis-namespace
@@ -2023,7 +2027,6 @@ broken-packages:
   - heterogeneous-list-literals
   - hetris
   - heukarya
-  - hevm
   - HExcel
   - hexchat
   - hexif
@@ -2211,6 +2214,7 @@ broken-packages:
   - hs2ps
   - hsakamai
   - hsaml2
+  - hs-aws-lambda
   - hsay
   - hsbc
   - hsbencher
@@ -2306,6 +2310,7 @@ broken-packages:
   - hs-tags
   - hstats
   - hstatsd
+  - hs-term-emulator
   - hstest
   - hstidy
   - hs-twitter
@@ -2481,6 +2486,7 @@ broken-packages:
   - interpolatedstring-qq2
   - interruptible
   - interval
+  - interval-algebra
   - IntFormats
   - int-multimap
   - intricacy
@@ -2518,6 +2524,7 @@ broken-packages:
   - itcli
   - itemfield
   - iteratee
+  - iterative-forward-search
   - iterIO
   - it-has
   - ivory
@@ -2817,6 +2824,7 @@ broken-packages:
   - loch
   - log2json
   - log4hs
+  - log-base
   - logentries
   - logger
   - logging-effect-extra-file
@@ -3172,6 +3180,7 @@ broken-packages:
   - naqsha
   - narc
   - nationstates
+  - nat-optics
   - nats-client
   - nat-sized-numbers
   - natural
@@ -3468,6 +3477,7 @@ broken-packages:
   - parsergen
   - parser-helper
   - parsers-megaparsec
+  - parser-unbiased-choice-monad-embedding
   - parsimony
   - parsley
   - parsley-core
@@ -3667,6 +3677,7 @@ broken-packages:
   - postgres-embedded
   - postgresql-lo-stream
   - postgresql-named
+  - postgresql-resilient
   - postgresql-simple-bind
   - postgresql-simple-named
   - postgresql-simple-sop
@@ -3734,6 +3745,7 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
+  - procex
   - procrastinating-variable
   - procstat
   - prof2pretty
@@ -4527,7 +4539,7 @@ broken-packages:
   - streaming-utils
   - streaming-with
   - streamly-examples
-  - streamly-fsnotify
+  - streamly-process
   - stream-monad
   - streamproc
   - StrictBench
@@ -4648,6 +4660,7 @@ broken-packages:
   - tapioca
   - TaskMonad
   - tasty-auto
+  - tasty-checklist
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage
@@ -4805,7 +4818,6 @@ broken-packages:
   - Titim
   - tkhs
   - tkyprof
-  - tmp-postgres
   - todo
   - tofromxml
   - to-haskell

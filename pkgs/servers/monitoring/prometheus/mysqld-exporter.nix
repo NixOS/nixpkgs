@@ -14,6 +14,15 @@ buildGoModule rec {
 
   vendorSha256 = "19785rfzlx8h0h8vmg0ghd40h3p4y6ikhgf8rd2qfj5f6qxfhrgv";
 
+  buildFlagsArray = let t = "github.com/prometheus/common/version"; in ''
+    -ldflags=
+        -s -w -X ${t}.Version=${version}
+        -X ${t}.Revision=${rev}
+        -X ${t}.Branch=unknown
+        -X ${t}.BuildUser=nix@nixpkgs
+        -X ${t}.BuildDate=unknown
+  '';
+
   # skips tests with external dependencies, e.g. on mysqld
   checkFlags = [ "-short" ];
 

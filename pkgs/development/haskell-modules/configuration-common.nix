@@ -64,7 +64,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0nvaaba06dgkl2kfq6ldmj0v6mm2dh7wfky6lsxxy5kskbncyqjr";
+      sha256 = "0jnxh12vkrssz0lj4fpkqw7nxwyc1kisvvpm85cd4zf525m5sgg3";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -178,51 +178,17 @@ self: super: {
   digit = doJailbreak super.digit;
 
   hnix = generateOptparseApplicativeCompletion "hnix"
-    (overrideCabal super.hnix (drv: {
+    (overrideCabal (super.hnix.override {
+      # needs newer version of relude and semialign than stackage has
+      relude = self.relude_1_0_0_1;
+      semialign = self.semialign_1_2;
+    }) (drv: {
       # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
       doCheck = false;
-      # 2021-05-12: Revert a few dependency cleanups which depend on release
-      # that are not in stackage yet:
-      # * Depend on semialign-indexed for Data.Semialign.Indexed
-      #   (remove when semialign >= 1.2 in stackage)
-      # * Readd dependencies to text and unordered-containers.
-      #   (remove when relude >= 1.0.0.0 is in stackage, see
-      #   https://github.com/haskell-nix/hnix/issues/933)
-      libraryHaskellDepends = [
-        self.semialign-indexed
-      ] ++ drv.libraryHaskellDepends;
-      patches = [
-        # depend on semialign-indexed again
-        (pkgs.fetchpatch {
-          url = "https://github.com/haskell-nix/hnix/commit/16fc342a4f2974f855968472252cd9274609f177.patch";
-          sha256 = "0gm4gy3jpn4dqnrhnqlsavfpw9c1j1xa8002v54knnlw6vpk9niy";
-          revert = true;
-        })
-        # depend on text again
-        (pkgs.fetchpatch {
-          url = "https://github.com/haskell-nix/hnix/commit/73057618576e86bb87dfd42f62b855d24bbdf469.patch";
-          sha256 = "03cyk96d5ad362i1pnz9bs8ifr84kpv8phnr628gys4j6a0bqwzc";
-          revert = true;
-        })
-        # depend on unordered-containers again
-        (pkgs.fetchpatch {
-          url = "https://github.com/haskell-nix/hnix/commit/70643481883ed448b51221a030a76026fb5eb731.patch";
-          sha256 = "0pqmijfkysjixg3gb4kmrqdif7s2saz8qi6k337jf15i0npzln8d";
-          revert = true;
-        })
-        # allow relude < 1.0 again
-        (pkgs.fetchpatch {
-          url = "https://github.com/haskell-nix/hnix/commit/f4ea5dcb344369916586498ba33c00d0fc605a79.patch";
-          sha256 = "1ajl7d49d658xhalgf3pc5svmbq73dsysy6z434n75vb1357mx86";
-          revert = true;
-        })
-      ] ++ (drv.patches or []);
-      # make sure patches are not broken by cabal file revisions
-      revision = null;
-      editedCabalFile = null;
     }));
 
   # Fails for non-obvious reasons while attempting to use doctest.
+  focuslist = dontCheck super.focuslist;
   search = dontCheck super.search;
 
   # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
@@ -783,6 +749,9 @@ self: super: {
 
   # Needs pginit to function and pgrep to verify.
   tmp-postgres = overrideCabal super.tmp-postgres (drv: {
+    # Flaky tests: https://github.com/jfischoff/tmp-postgres/issues/274
+    doCheck = false;
+
     preCheck = ''
       export HOME="$TMPDIR"
     '' + (drv.preCheck or "");
@@ -1745,9 +1714,6 @@ self: super: {
     excludes = ["test/buildtest"];
   });
 
-  # workaround for https://github.com/peti/distribution-nixpkgs/issues/9
-  pam = super.pam.override { inherit (pkgs) pam; };
-
   # Too strict version bounds on base:
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
@@ -1903,8 +1869,6 @@ EOT
   # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
   reactive-banana = doJailbreak super.reactive-banana;
 
-  hackage-db_2_1_0 = doDistribute super.hackage-db_2_1_0;
-
   # Too strict bounds on QuickCheck
   # https://github.com/muesli4/table-layout/issues/16
   table-layout = doJailbreak super.table-layout;
@@ -1943,12 +1907,6 @@ EOT
   # Indeterministic tests
   # Fixed on upstream: https://github.com/softwarefactory-project/matrix-client-haskell/commit/4ca4963cfd06379d9bdce49742af854aed6a0d37
   matrix-client = dontCheck super.matrix-client;
-
-  # Flakey tests
-  # upstream https://github.com/circuithub/rel8/issues/86
-  rel8 = dontCheck (super.rel8.override {
-    opaleye = dontCheck super.opaleye_0_7_2_0;
-  });
 
   # Release 1.0.0.0 added version bounds (was unrestricted before),
   # but with too strict lower bounds for our lts-18.

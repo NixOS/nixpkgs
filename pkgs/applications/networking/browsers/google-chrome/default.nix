@@ -18,7 +18,7 @@
 , systemd
 
 # Loaded at runtime.
-, libexif
+, libexif, pciutils
 
 # Additional dependencies according to other distros.
 ## Ubuntu
@@ -62,7 +62,7 @@ let
     alsa-lib libXdamage libXtst libXrandr libxshmfence expat cups
     dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
-    libexif
+    libexif pciutils
     liberation_ttf curl util-linux xdg-utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core

@@ -241,6 +241,14 @@ When you've double-checked these points, go ahead and merge the `haskell-updates
 After merging, **make sure not to delete the `haskell-updates` branch**, since it
 causes all currently open Haskell-related pull-requests to be automatically closed on GitHub.
 
+## Update Hackage Version Information
+
+After merging into `master` you can update what hackage displays as the current
+version in NixOS for every individual package.
+To do this you run `maintainers/scripts/haskell/upload-nixos-package-list-to-hackage.sh`.
+See the script for how to provide credentials. Once you have configured that
+running this takes only a few seconds.
+
 ## Additional Info
 
 Here are some additional tips that didn't fit in above.
@@ -287,3 +295,34 @@ Here are some additional tips that didn't fit in above.
 
 -   The Haskell team members generally hang out in the Matrix room
     [#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org).
+
+-   This is a checklist for things that need to happen when a new
+    member is added to the Nixpkgs Haskell team.
+
+    1.  Add the person to the
+        [@NixOS/haskell](https://github.com/orgs/NixOS/teams/haskell)
+        team.  You may need to ask someone in the NixOS organization
+        to do this, like [@domenkozar](https://github.com/domenkozar).
+        This gives the new member access to the GitHub repos like
+        [cabal2nix](https://github.com/NixOS/cabal2nix).
+
+    1.  Add the person as a maintainer for the following packages
+        on Hackage:
+        - https://hackage.haskell.org/package/cabal2nix
+        - https://hackage.haskell.org/package/distribution-nixpkgs
+        - https://hackage.haskell.org/package/hackage-db
+        - https://hackage.haskell.org/package/jailbreak-cabal
+        - https://hackage.haskell.org/package/language-nix
+
+    1.  Add the person to the `haskell` team in
+        [`maintainers/team-list.nix`](../../../maintainers/team-list.nix).
+        This team is responsible for some important packages in
+        [release-haskell.nix](../../top-level/release-haskell.nix).
+
+    1.  Update the
+        [Nextcloud Calendar](https://cloud.maralorn.de/apps/calendar/p/Mw5WLnzsP7fC4Zky)
+        and work the new member into the `haskell-updates` rotation.
+
+    1.  Optionally, have the new member add themselves to the Haskell
+        section in [`CODEOWNERS`](../../../.github/CODEOWNERS).  This
+        will cause them to get pinged on most Haskell-related PRs.

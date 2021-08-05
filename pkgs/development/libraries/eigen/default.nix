@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eigen";
-  version = "3.3.7";
+  version = "3.3.9";
 
   src = fetchFromGitLab {
     owner = "libeigen";
     repo = pname;
     rev = version;
-    hash = "sha256-oXJ4V5rakL9EPtQF0Geptl0HMR8700FdSrOB09DbbMQ=";
+    sha256 = "sha256-JMIG7CLMndUsECfbKpXE3BtVFuAjn+CZvf8GXZpLkFQ=";
   };
 
   patches = [

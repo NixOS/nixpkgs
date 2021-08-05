@@ -35,8 +35,6 @@ stdenv.mkDerivation {
     done
   '';
 
-  enableParallelBuilding = true;
-
   # Inspired by install/linux-install/nifskope.spec.in.
   installPhase = ''
     runHook preInstall

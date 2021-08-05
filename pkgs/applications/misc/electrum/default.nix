@@ -43,6 +43,20 @@ let
       mv ./all/electrum/tests $out
     '';
   };
+
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      aiorpcx = super.aiorpcx.overridePythonAttrs (oldAttrs: rec {
+        version = "0.18.7";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1rswrspv27x33xa5bnhrkjqzhv0sknv5kd7pl1vidw9d2z4rx2l0";
+        };
+      });
+    };
+  };
+
 in
 
 python3.pkgs.buildPythonApplication {
@@ -66,7 +80,7 @@ python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -87,7 +101,10 @@ python3.pkgs.buildPythonApplication {
     ckcc-protocol
     keepkey
     trezor
-  ] ++ lib.optionals enableQt [ pyqt5 qdarkstyle ];
+  ] ++ lib.optionals enableQt [
+    pyqt5
+    qdarkstyle
+  ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py

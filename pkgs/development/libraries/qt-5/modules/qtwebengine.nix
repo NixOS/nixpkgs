@@ -166,7 +166,7 @@ qtModule {
 
     # X11 libs
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
-    xorg.libXcomposite xorg.libXdamage libdrm
+    xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
 
   ] ++ optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
     # Pipewire

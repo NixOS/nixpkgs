@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, copyDesktopItems, makeDesktopItem, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "logisim";
@@ -11,17 +11,39 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems unzip ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Logisim";
+      exec = "logisim";
+      icon = "logisim";
+      comment = meta.description;
+      categories = "Education;";
+    })
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/logisim --add-flags "-jar $src"
+
+    # Create icons
+    unzip $src "resources/logisim/img/*"
+    for size in 16 20 24 48 64 128
+    do
+      install -D "./resources/logisim/img/logisim-icon-$size.png" "$out/share/icons/hicolor/''${size}x''${size}/apps/logisim.png"
+    done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://ozark.hendrix.edu/~burch/logisim";
+    homepage = "http://www.cburch.com/logisim/";
     description = "Educational tool for designing and simulating digital logic circuits";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ angustrau ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

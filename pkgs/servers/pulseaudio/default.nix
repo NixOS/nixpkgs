@@ -92,7 +92,10 @@ stdenv.mkDerivation rec {
       "--with-bash-completion-dir=${placeholder "out"}/share/bash-completions/completions"
     ]
     ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
-    ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
+    ++ lib.optionals stdenv.isDarwin [
+      "--with-mac-sysroot=/"
+      "--disable-neon-opt"
+    ]
     ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-gsettings";
 

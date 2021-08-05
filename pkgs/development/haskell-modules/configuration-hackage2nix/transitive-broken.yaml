@@ -1444,7 +1444,6 @@ dont-distribute-packages:
  - hasql-cursor-query
  - hasql-postgres
  - hasql-postgres-options
- - hasql-queue
  - hasql-th
  - hastache-aeson
  - haste-app
@@ -1838,6 +1837,7 @@ dont-distribute-packages:
  - keid-geometry
  - keid-render-basic
  - keid-resource-gltf
+ - keid-sound-openal
  - keid-ui-dearimgui
  - kevin
  - keysafe
@@ -1972,10 +1972,12 @@ dont-distribute-packages:
  - llvm-tf
  - llvm-tools
  - lmonad-yesod
+ - lnd-client
  - local-search
  - localize
  - locked-poll
  - log
+ - log-elasticsearch
  - log-postgres
  - log-utils
  - logging-effect-extra
@@ -2341,21 +2343,27 @@ dont-distribute-packages:
  - polysemy-fskvstore
  - polysemy-http
  - polysemy-keyed-state
+ - polysemy-kvstore
  - polysemy-kvstore-jsonfile
  - polysemy-log
  - polysemy-log-co
  - polysemy-log-di
  - polysemy-methodology
+ - polysemy-methodology-co-log
  - polysemy-methodology-composite
  - polysemy-mocks
  - polysemy-optics
  - polysemy-path
  - polysemy-plugin
+ - polysemy-plugin_0_4_0_0
  - polysemy-readline
  - polysemy-req
  - polysemy-resume
+ - polysemy-several
+ - polysemy-socket
  - polysemy-test
  - polysemy-time
+ - polysemy-uncontrolled
  - polysemy-video
  - polysemy-vinyl
  - polysemy-webserver
@@ -2893,7 +2901,6 @@ dont-distribute-packages:
  - swearjure
  - sweet-egison
  - switch
- - sydtest-persistent-postgresql
  - sylvia
  - sym-plot
  - symantic-atom
@@ -3140,6 +3147,7 @@ dont-distribute-packages:
  - wai-dispatch
  - wai-handler-snap
  - wai-hastache
+ - wai-log
  - wai-middleware-brotli
  - wai-middleware-cache
  - wai-middleware-cache-redis

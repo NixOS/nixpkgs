@@ -46,6 +46,7 @@ let
 
   defaults =
     { pname
+    , meta
     , buildInputs ? []
     , everythingFile ? "./Everything.agda"
     , libraryName ? pname
@@ -76,6 +77,7 @@ let
           find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
+        meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
       };
 in
 {

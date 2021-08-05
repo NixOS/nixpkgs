@@ -21,7 +21,7 @@ formats commits for you.
 
 */
 
-{ lib, stdenv, texinfo, writeText, gcc }:
+{ lib, stdenv, texinfo, writeText, gcc, pkgs, buildPackages }:
 
 self: let
 
@@ -57,6 +57,37 @@ self: let
       project = if lib.versionAtLeast self.emacs.version "28"
                 then null
                 else super.project;
+      # Compilation instructions for the Ada executables:
+      # https://www.nongnu.org/ada-mode/ada-mode.html#Ada-executables
+      ada-mode = super.ada-mode.overrideAttrs (old: {
+        # actually unpack source of ada-mode and wisi
+        # which are both needed to compile the tools
+        # we need at runtime
+        phases = "unpackPhase " + old.phases; # not a list, interestingly…
+        srcs = [
+          super.ada-mode.src
+          self.wisi.src
+        ];
+
+        sourceRoot = "ada-mode-${self.ada-mode.version}";
+
+        nativeBuildInputs = [
+          buildPackages.gnat
+          buildPackages.gprbuild
+        ];
+
+        buildInputs = [
+          pkgs.gnatcoll-xref
+        ];
+
+        preInstall = ''
+          ./build.sh
+        '';
+
+        postInstall = ''
+          ./install.sh --prefix=$out
+        '';
+      });
     };
 
     elpaPackages = super // overrides;

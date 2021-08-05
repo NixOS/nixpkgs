@@ -70,10 +70,7 @@ setBSDSourceDir() {
   export _SRC_TOP_=$BSDSRCDIR
   chmod -R u+w $sourceRoot
   for path in $extraPaths; do
-    cd $path
-    find . -type d -exec mkdir -p $sourceRoot/\{} \;
-    find . -type f -exec cp -pr \{} $sourceRoot/\{} \;
-    chmod -R u+w $sourceRoot
+    rsync -Er --chmod u+w $path/ $sourceRoot/
   done
 
   cd $sourceRoot
@@ -104,6 +101,9 @@ moveUsrDir() {
   if [ -d $prefix ]; then
     # Remove lingering /usr references
     if [ -d $prefix/usr ]; then
+      # Didn't try using rsync yet because per
+      # https://unix.stackexchange.com/questions/127712/merging-folders-with-mv,
+      # it's not neessarily better.
       pushd $prefix/usr
       find . -type d -exec mkdir -p $out/\{} \;
       find . \( -type f -o -type l \) -exec mv \{} $out/\{} \;

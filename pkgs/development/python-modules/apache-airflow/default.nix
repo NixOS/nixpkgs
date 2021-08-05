@@ -3,7 +3,6 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
-, writeText
 , alembic
 , argcomplete
 , attrs

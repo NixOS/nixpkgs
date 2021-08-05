@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "adguardhome";
+  pname = "adguardhome";
   version = "0.106.3";
 
   src = fetchurl {

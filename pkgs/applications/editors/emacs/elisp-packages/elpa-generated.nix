@@ -39,10 +39,10 @@
       elpaBuild {
         pname = "ada-mode";
         ename = "ada-mode";
-        version = "7.1.4";
+        version = "7.1.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ada-mode-7.1.4.tar";
-          sha256 = "13zcs7kn7rca82c80qshbdpmmmgkf5phr88hf7p5nwxqhkazy9cd";
+          url = "https://elpa.gnu.org/packages/ada-mode-7.1.5.tar";
+          sha256 = "037v25mqpg1n52hz89b49vf9zw68fmc0m7l6c1f8vnbw3dibyk8d";
         };
         packageRequires = [ emacs uniquify-files wisi ];
         meta = {
@@ -3362,21 +3362,6 @@
           license = lib.licenses.free;
         };
       }) {};
-    shelisp = callPackage ({ elpaBuild, fetchurl, lib }:
-      elpaBuild {
-        pname = "shelisp";
-        ename = "shelisp";
-        version = "0.9.1";
-        src = fetchurl {
-          url = "https://elpa.gnu.org/packages/shelisp-0.9.1.el";
-          sha256 = "15z8rpx8nhx53q77z5fqcpww255di80lb5mm28mnn2myalrr8b59";
-        };
-        packageRequires = [];
-        meta = {
-          homepage = "https://elpa.gnu.org/packages/shelisp.html";
-          license = lib.licenses.free;
-        };
-      }) {};
     shell-command-plus = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "shell-command-plus";
@@ -3389,6 +3374,21 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/shell-command+.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    shelisp = callPackage ({ elpaBuild, fetchurl, lib }:
+      elpaBuild {
+        pname = "shelisp";
+        ename = "shelisp";
+        version = "0.9.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/shelisp-0.9.1.el";
+          sha256 = "15z8rpx8nhx53q77z5fqcpww255di80lb5mm28mnn2myalrr8b59";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/shelisp.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -4224,10 +4224,10 @@
       elpaBuild {
         pname = "wisi";
         ename = "wisi";
-        version = "3.1.3";
+        version = "3.1.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/wisi-3.1.3.tar";
-          sha256 = "0cbjcm35lp164wd06mn3clikga07qxfsfnkvadswsapsd0cn2b4k";
+          url = "https://elpa.gnu.org/packages/wisi-3.1.4.tar";
+          sha256 = "1j35ln5x3dgypq3hn6xcdpg6vp6yjj6avcjakc2r6wx19vxixciw";
         };
         packageRequires = [ emacs seq ];
         meta = {

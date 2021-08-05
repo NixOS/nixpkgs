@@ -16,7 +16,6 @@ mkDerivation rec {
 
   sourceRoot = "source/MiniZincIDE";
 
-  enableParallelBuilding = true;
   dontWrapQtApps = true;
 
   postInstall = ''
