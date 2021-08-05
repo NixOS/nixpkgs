@@ -10917,6 +10917,8 @@ in
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
 
+  fnlfmt = callPackage ../development/tools/fnlfmt { };
+
   fpc = callPackage ../development/compilers/fpc { };
 
   g203-led = callPackage ../tools/misc/g203-led { };
