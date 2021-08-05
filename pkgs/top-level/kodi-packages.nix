@@ -80,6 +80,8 @@ let self = rec {
 
   steam-launcher = callPackage ../applications/video/kodi-packages/steam-launcher { };
 
+  steam-library = callPackage ../applications/video/kodi-packages/steam-library { };
+
   pdfreader = callPackage ../applications/video/kodi-packages/pdfreader { };
 
   pvr-hts = callPackage ../applications/video/kodi-packages/pvr-hts { };
