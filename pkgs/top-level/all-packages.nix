@@ -6697,8 +6697,6 @@ in
     nodejs = pkgs.nodejs;
   });
 
-  now-cli = callPackage ../development/web/now-cli {};
-
   np2kai = callPackage ../misc/emulators/np2kai { };
 
   ox = callPackage ../applications/editors/ox { };
