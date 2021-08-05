@@ -8675,6 +8675,8 @@ in {
 
   tilestache = callPackage ../development/python-modules/tilestache { };
 
+  time-machine = callPackage ../development/python-modules/time-machine { };
+
   timeago = callPackage ../development/python-modules/timeago { };
 
   timelib = callPackage ../development/python-modules/timelib { };
