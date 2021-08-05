@@ -206,6 +206,18 @@ self: super: {
     '' + (drv.postPatch or "");
   });
 
+  SDL-image = overrideCabal super.SDL-image (drv: {
+    # Prevent darwin-specific configuration code path being taken
+    # which doesn't work with nixpkgs' SDL libraries
+    postPatch = ''
+      substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+    '' + (drv.postPatch or "");
+    patches = [
+      # Work around SDL_main.h redefining main to SDL_main
+      ./patches/SDL-image-darwin-hsc.patch
+    ];
+  });
+
   # Prevent darwin-specific configuration code path being taken which
   # doesn't work with nixpkgs' SDL libraries
   SDL-mixer = overrideCabal super.SDL-mixer (drv: {
