@@ -57,6 +57,9 @@ in stdenv.mkDerivation rec {
     $out/bin/unbound-anchor -l | tail --lines=+2 - > $out/etc/${pname}/root.key
     # We don't need anything else
     rm -fR $out/bin $out/share $out/include $out/etc/unbound
+  ''
+  # patchelf is only available on Linux and no patching is needed on darwin
+  + lib.optionalString stdenv.isLinux ''
     patchelf --replace-needed libunbound.so.8 $out/${python.sitePackages}/libunbound.so.8 $out/${python.sitePackages}/_unbound.so
   '';
 
