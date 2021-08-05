@@ -375,6 +375,7 @@ unsupported-platforms:
   hommage-ds:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   honk:                                         [ x86_64-darwin ]
   hpapi:                                        [ x86_64-darwin ]
+  HQu:                                          [ aarch64-linux, armv7l-linux ] # unsupported by vendored C++ library, TODO: explicitly list supported platforms
   HSoM:                                         [ x86_64-darwin ]
   iwlib:                                        [ x86_64-darwin ]
   jsaddle-webkit2gtk:                           [ x86_64-darwin ]
