@@ -62,7 +62,7 @@ in rec {
   gnomeExtensions = lib.recurseIntoAttrs (
     (mapReadableNames (produceExtensionsList "40"))
     // (callPackage ./manuallyPackaged.nix {})
-    // lib.optionalAttrs (config.allowAliases or false) {
+    // lib.optionalAttrs (config.allowAliases or true) {
       unite-shell = gnomeExtensions.unite; # added 2021-01-19
       arc-menu = gnomeExtensions.arcmenu; # added 2021-02-14
 
