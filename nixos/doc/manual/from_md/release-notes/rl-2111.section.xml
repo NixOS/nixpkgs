@@ -881,6 +881,13 @@
           sign OCSP responses and server certificates.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          MariaDB was upgraded from 10.5.x to 10.6.x. Please read the
+          <link xlink:href="https://mariadb.com/kb/en/changes-improvements-in-mariadb-106/">upstream
+          release notes</link> for changes and upgrade instructions.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
