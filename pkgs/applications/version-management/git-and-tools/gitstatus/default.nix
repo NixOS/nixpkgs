@@ -21,18 +21,23 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 usrbin/gitstatusd $out/bin/gitstatusd
-    install -Dm444 gitstatus.plugin.sh $out
-    install -Dm444 gitstatus.plugin.zsh $out
-    install -Dm555 install $out
-    install -Dm444 build.info $out
+    install -Dm444 gitstatus.plugin.sh -t $out/share/gitstatus/
+    install -Dm444 gitstatus.plugin.zsh -t $out/share/gitstatus/
+    install -Dm555 install -t $out/share/gitstatus/
+    install -Dm444 build.info -t $out/share/gitstatus/
+
+    # the fallback path is wrong in the case of home-manager
+    # because the FHS directories don't start at /
+    substituteInPlace install \
+      --replace "_gitstatus_install_main ." "_gitstatus_install_main $out"
   '';
 
   # Don't install the "install" and "build.info" files, which the end user
   # should not need to worry about.
   pathsToLink = [
     "/bin/gitstatusd"
-    "/gitstatus.plugin.sh"
-    "/gitstatus.plugin.zsh"
+    "/share/gitstatus/gitstatus.plugin.sh"
+    "/share/gitstatus/gitstatus.plugin.zsh"
   ];
 
   # The install check sets up an empty Git repository and a minimal zshrc that
@@ -50,7 +55,7 @@ stdenv.mkDerivation rec {
 
     echo '
       GITSTATUS_LOG_LEVEL=DEBUG
-      . $out/gitstatus.plugin.zsh || exit 1
+      . $out/share/gitstatus/gitstatus.plugin.zsh || exit 1
 
       gitstatus_stop NIX_TEST && gitstatus_start NIX_TEST
       gitstatus_query NIX_TEST
