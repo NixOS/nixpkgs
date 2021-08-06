@@ -43,7 +43,7 @@ let
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit version gcc_src buildGccTools; });
+    callPackage = newScope (tools // { inherit version gcc_tools_meta gcc_src buildGccTools; });
 
   mkExtraBuildCommands0 = _: "";
 
@@ -51,10 +51,9 @@ let
 
   in {
 
-    gcc-unwrapped = callPackage ./gcc {
-      inherit gcc_tools_meta;
-    };
+    gcc-unwrapped = callPackage ./gcc { };
 
+    # TODO: support libcxx? is there even an usecase for that?
     gcc = if stdenv.cc.isClang then tools.libcxxGcc else tools.libstdcxxGcc;
 
     libcxxGcc = wrapCCWith rec {
@@ -149,9 +148,15 @@ let
 
     libstdcxxStdenv = overrideCC stdenv buildGccTools.libstdcxxGcc;
 
+    libada = callPackage ./libada { };
+
+    libgfortran = callPackage ./libgfortran { };
+
     libstdcxx = callPackage ./libstdcxx {
       stdenv = overrideCC stdenv buildGccTools.gccNoLibstdcxx;
     };
+
+    # TODO add (gnu) libunwind here? can already be built separately aiui
   });
 
 in { inherit tools libraries; } // libraries // tools
