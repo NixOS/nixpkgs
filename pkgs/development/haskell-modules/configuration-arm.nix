@@ -95,6 +95,9 @@ self: super: {
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;
 
+  # We disable profiling on aarch64, so tests naturally fail
+  ghc-prof = dontCheck super.ghc-prof;
+
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
 
