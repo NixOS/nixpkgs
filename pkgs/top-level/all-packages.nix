@@ -20124,10 +20124,12 @@ with pkgs;
 
   rpcsvc-proto = callPackage ../tools/misc/rpcsvc-proto { };
 
-  libmysqlclient = libmysqlclient_3_1;
+  libmysqlclient = libmysqlclient_3_2;
   libmysqlclient_3_1 = mariadb-connector-c_3_1;
-  mariadb-connector-c = mariadb-connector-c_3_1;
+  libmysqlclient_3_2 = mariadb-connector-c_3_2;
+  mariadb-connector-c = mariadb-connector-c_3_2;
   mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
+  mariadb-connector-c_3_2 = callPackage ../servers/sql/mariadb/connector-c/3_2.nix { };
 
   mariadb-galera = callPackage ../servers/sql/mariadb/galera {
     asio = asio_1_10;

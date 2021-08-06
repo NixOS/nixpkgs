@@ -888,6 +888,17 @@
           release notes</link> for changes and upgrade instructions.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The MariaDB C client library, also known as libmysqlclient or
+          mariadb-connector-c, was upgraded from 3.1.x to 3.2.x. While
+          this should hopefully not have any impact, this upgrade comes
+          with some changes to default behavior, so you might want to
+          review the
+          <link xlink:href="https://mariadb.com/kb/en/changes-and-improvements-in-mariadb-connector-c-32/">upstream
+          release notes</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
