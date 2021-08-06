@@ -16741,6 +16741,8 @@ in
 
   libffi = callPackage ../development/libraries/libffi { };
 
+  libfreeaptx = callPackage ../development/libraries/libfreeaptx { };
+
   libfreefare = callPackage ../development/libraries/libfreefare {
     inherit (darwin) libobjc;
   };
