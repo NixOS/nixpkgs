@@ -9429,6 +9429,8 @@ in {
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
+  xml-marshaller = callPackage ../development/python-modules/xml-marshaller { };
+
   xmodem = callPackage ../development/python-modules/xmodem { };
 
   xnd = callPackage ../development/python-modules/xnd { };
