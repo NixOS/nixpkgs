@@ -18,7 +18,7 @@
 , config
 , glib
 , libxml2
-, ffmpeg_3
+, ffmpeg
 , libxslt
 , libGL
 , freetype
@@ -168,7 +168,7 @@ let result = stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.cc.libc glib libxml2 ffmpeg_3 libxslt libGL xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk-pixbuf atk] ++
+    [stdenv.cc.libc glib libxml2 ffmpeg libxslt libGL xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk-pixbuf atk] ++
     lib.optionals swingSupport [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc];
 
   rpath = lib.strings.makeLibraryPath libraries;
