@@ -77,6 +77,7 @@ in {
 
       serviceConfig = {
         ExecStart = "${package}/bin/nordvpnd";
+        ExecStop = "${package}/bin/nordvpn disconnect";
         StateDirectory = "nordvpn";
       };
     };
