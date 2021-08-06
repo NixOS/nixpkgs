@@ -4,28 +4,18 @@
 
 mkDerivation rec {
   pname = "paraview";
-  version = "5.8.0";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "Kitware";
     repo = "ParaView";
     rev = "v${version}";
-    sha256 = "1mka6wwg9mbkqi3phs29mvxq6qbc44sspbm4awwamqhilh4grhrj";
+    sha256 = "0pzic95br0vr785jnpxqmfxcljw3wk7bhm2xy0jfmwm1dh2b7xac";
     fetchSubmodules = true;
   };
 
-  # Avoid error: format not a string literal and
-  # no format arguments [-Werror=format-security]
-  preConfigure = ''
-    substituteInPlace VTK/Common/Core/vtkLogger.h \
-      --replace 'vtkLogScopeF(verbosity_name, __func__)' 'vtkLogScopeF(verbosity_name, "%s", __func__)'
-
-    substituteInPlace VTK/Common/Core/vtkLogger.h \
-      --replace 'vtkVLogScopeF(level, __func__)' 'vtkVLogScopeF(level, "%s", __func__)'
-  '';
-
   # Find the Qt platform plugin "minimal"
-  patchPhase = ''
+  preConfigure = ''
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
 
