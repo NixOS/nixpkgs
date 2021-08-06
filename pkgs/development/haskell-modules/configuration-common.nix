@@ -1931,4 +1931,10 @@ EOT
       "--ghc-option=-O0"
     ]);
 
+  # https://github.com/ajscholl/basic-cpuid/pull/1
+  basic-cpuid = appendPatch super.basic-cpuid (pkgs.fetchpatch {
+    url = "https://github.com/ajscholl/basic-cpuid/commit/2f2bd7a7b53103fb0cf26883f094db9d7659887c.patch";
+    sha256 = "0l15ccfdys100jf50s9rr4p0d0ikn53bkh7a9qlk9i0y0z5jc6x1";
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
