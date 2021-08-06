@@ -6461,6 +6461,8 @@ in {
 
   pyproj = callPackage ../development/python-modules/pyproj { };
 
+  pyprosegur = callPackage ../development/python-modules/pyprosegur { };
+
   pyptlib = callPackage ../development/python-modules/pyptlib { };
 
   pypubsub = callPackage ../development/python-modules/pypubsub { };
