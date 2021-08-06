@@ -1735,6 +1735,7 @@ broken-packages:
   - gtk2hs-hello
   - gtk2hs-rpn
   - gtk3-mac-integration
+  - gtk-mac-integration
   - gtkglext
   - gtksourceview2
   - gtksourceview3
