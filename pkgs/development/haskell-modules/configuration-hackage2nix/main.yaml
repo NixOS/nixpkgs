@@ -381,6 +381,7 @@ unsupported-platforms:
   HSoM:                                         [ x86_64-darwin ]
   iwlib:                                        [ x86_64-darwin ]
   jsaddle-webkit2gtk:                           [ x86_64-darwin ]
+  kqueue:                                       [ x86_64-linux, aarch64-linux, i686-linux, armv7l-linux ] # BSD / Darwin only API
   LambdaHack:                                   [ x86_64-darwin ]
   large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
   libmodbus:                                    [ x86_64-darwin ]
