@@ -1,4 +1,4 @@
-{ boost, cmake, fetchFromGitHub, ffmpeg, qtbase, qtx11extras,
+{ boost, cmake, fetchFromGitLab, ffmpeg, qtbase, qtx11extras,
   qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper,
   mkDerivation, ninja, mpi, python3, lib, tbb, libGLU, libGL }:
 
@@ -6,9 +6,10 @@ mkDerivation rec {
   pname = "paraview";
   version = "5.9.1";
 
-  src = fetchFromGitHub {
-    owner = "Kitware";
-    repo = "ParaView";
+  src = fetchFromGitLab {
+    domain = "gitlab.kitware.com";
+    owner = "paraview";
+    repo = "paraview";
     rev = "v${version}";
     sha256 = "0pzic95br0vr785jnpxqmfxcljw3wk7bhm2xy0jfmwm1dh2b7xac";
     fetchSubmodules = true;
