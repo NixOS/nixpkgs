@@ -106,6 +106,12 @@ self: super: {
 
   hmatrix = addBuildDepend super.hmatrix darwin.apple_sdk.frameworks.Accelerate;
 
+  blas-hs = overrideCabal super.blas-hs (drv: {
+    libraryFrameworkDepends = [
+      darwin.apple_sdk.frameworks.Accelerate
+    ] ++ (drv.libraryFrameworkDepends or []);
+  });
+
   # Ensure the necessary frameworks are propagatedBuildInputs on darwin
   OpenGLRaw = overrideCabal super.OpenGLRaw (drv: {
     librarySystemDepends = [];
