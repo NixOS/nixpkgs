@@ -216,7 +216,12 @@ nixBuild() {
 }
 
 nixFlakeBuild() {
-    if [ -z "$buildHost" ]; then
+    if [[ -z "$buildHost" && -z "$targetHost" ]] &&
+       ! [ "$action" = switch -o "$action" = boot ]
+    then
+        nix "${flakeFlags[@]}" build "$@"
+        readlink -f ./result
+    elif [ -z "$buildHost" ]; then
         nix "${flakeFlags[@]}" build "$@" --out-link "${tmpDir}/result"
         readlink -f "${tmpDir}/result"
     else
