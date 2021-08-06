@@ -8920,6 +8920,8 @@ in {
 
   ttp = callPackage ../development/python-modules/ttp { };
 
+  tubes = callPackage ../development/python-modules/tubes { };
+
   tunigo = callPackage ../development/python-modules/tunigo { };
 
   tubeup = callPackage ../development/python-modules/tubeup { };
