@@ -18,7 +18,7 @@ buildGoModule rec {
   };
   vendorSha256 = "0zxyd950ksjswja64rfri5v2yaalfg6qmq8215ildgrcavl9974n";
 
-  subPackages = ["cmd" "pkg/..."];
+  subPackages = ["cmd"];
 
   preBuild = ''
     export buildFlagsArray+=("-ldflags=-X main.kubeBuilderVersion=v${version} \
