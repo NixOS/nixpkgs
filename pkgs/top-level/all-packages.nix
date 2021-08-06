@@ -27543,7 +27543,7 @@ in
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
+  tdesktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
     inherit (xorg) libpthreadstubs libXdmcp;
   };
 
