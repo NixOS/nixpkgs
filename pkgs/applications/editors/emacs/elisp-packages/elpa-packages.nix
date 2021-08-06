@@ -66,7 +66,12 @@ self: let
         phases = "unpackPhase " + old.phases; # not a list, interestingly…
         srcs = [
           super.ada-mode.src
-          self.wisi.src
+          # ada-mode needs a specific version of wisi, check NEWS or ada-mode's
+          # package-requires to find the version to use.
+          (pkgs.fetchurl {
+            url = "https://elpa.gnu.org/packages/wisi-3.1.3.tar.lz";
+            sha256 = "18dwcc0crds7aw466vslqicidlzamf8avn59gqi2g7y2x9k5q0as";
+          })
         ];
 
         sourceRoot = "ada-mode-${self.ada-mode.version}";
@@ -74,6 +79,7 @@ self: let
         nativeBuildInputs = [
           buildPackages.gnat
           buildPackages.gprbuild
+          buildPackages.lzip
         ];
 
         buildInputs = [
