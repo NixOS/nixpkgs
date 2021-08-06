@@ -4232,6 +4232,8 @@ in {
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
+  loca = callPackage ../development/python-modules/loca { };
+
   localimport = callPackage ../development/python-modules/localimport { };
 
   localzone = callPackage ../development/python-modules/localzone { };
