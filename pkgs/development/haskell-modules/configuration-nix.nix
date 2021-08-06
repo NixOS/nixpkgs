@@ -788,6 +788,11 @@ self: super: builtins.intersectAttrs super {
     platforms = pkgs.lib.platforms.x86;
   };
 
+  # uses x86 intrinsics
+  geomancy = overrideCabal super.geomancy {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
   hls-brittany-plugin = overrideCabal super.hls-brittany-plugin (drv: {
     testToolDepends = [ pkgs.git ];
     preCheck = ''
