@@ -2043,7 +2043,9 @@ in
 
   boca = callPackage ../development/libraries/boca { };
 
-  bochs = callPackage ../applications/virtualization/bochs { };
+  bochs = callPackage ../applications/virtualization/bochs {
+    wxGTK = wxGTK30;
+  };
 
   bubblewrap = callPackage ../tools/admin/bubblewrap { };
 
