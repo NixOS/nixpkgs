@@ -149,6 +149,13 @@
           <link linkend="opt-services.meshcentral.enable">services.meshcentral.enable</link>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/Arksine/moonraker">moonraker</link>,
+          an API web server for Klipper. Available as
+          <link linkend="opt-services.moonraker.enable">moonraker</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">

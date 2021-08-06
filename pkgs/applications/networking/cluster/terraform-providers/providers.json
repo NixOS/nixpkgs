@@ -7,12 +7,13 @@
     "version": "0.2.3"
   },
   "acme": {
-    "owner": "getstackhead",
-    "provider-source-address": "registry.terraform.io/getstackhead/acme",
+    "owner": "vancluever",
+    "provider-source-address": "registry.terraform.io/vancluever/acme",
     "repo": "terraform-provider-acme",
-    "rev": "v1.5.0-patched",
-    "sha256": "1wdrjpd3l0xadsa3lqhsc9c57g8x2qkwb76q824sk8za1a7lapii",
-    "version": "1.5.0-patched"
+    "rev": "v2.5.2",
+    "sha256": "0yk5yxx8vdfymxggydpzsb2a0iw4n8010wlprz23qg37gb2p26yf",
+    "vendorSha256": "04zrrn67w30ib0n5s4f31x3nl3h3xz2r522ldkbbx20jy5iabrkk",
+    "version": "2.5.2"
   },
   "aiven": {
     "owner": "aiven",
@@ -244,11 +245,13 @@
     "version": "0.8.0"
   },
   "datadog": {
-    "owner": "terraform-providers",
+    "owner": "DataDog",
+    "provider-source-address": "registry.terraform.io/DataDog/datadog",
     "repo": "terraform-provider-datadog",
-    "rev": "v2.7.0",
-    "sha256": "0cq11cjcm2nlszqhsrj425mk8dp0h5ljrrn7jplrbffp8g6wvadd",
-    "version": "2.7.0"
+    "rev": "v3.2.0",
+    "sha256": "1qrk40w81qzcmm52gr3ysrh077417cxyh4xy7igwdjfzl85z22mx",
+    "vendorSha256": "0iphsz6y9gajwmw5rj4yq65azx02ki093agqbqw49rnzdhc6jahr",
+    "version": "3.2.0"
   },
   "digitalocean": {
     "owner": "digitalocean",
@@ -558,19 +561,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.1.0",
-    "sha256": "02ygydgi3fa8z6qd04hgcilbbwns8f21agaqxly2pf9j23fzi37g",
+    "rev": "v2.4.1",
+    "sha256": "0mk0f12yy58gjkki7xpf9bjfw9h9zdgby2b4bddqp5csq11payhd",
     "vendorSha256": null,
-    "version": "2.1.0"
-  },
-  "kubernetes-alpha": {
-    "owner": "hashicorp",
-    "provider-source-address": "registry.terraform.io/hashicorp/kubernetes-alpha",
-    "repo": "terraform-provider-kubernetes-alpha",
-    "rev": "v0.5.0",
-    "sha256": "0yqm3wlya69w9g9kzgvm28mbbwp6wik51syjnbnj8dis5kspx8gd",
-    "vendorSha256": null,
-    "version": "0.5.0"
+    "version": "2.4.1"
   },
   "launchdarkly": {
     "owner": "terraform-providers",
@@ -798,11 +792,13 @@
     "version": "1.5.3"
   },
   "ovh": {
-    "owner": "terraform-providers",
+    "owner": "ovh",
+    "provider-source-address": "registry.terraform.io/ovh/ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v0.8.0",
-    "sha256": "1ww4ng8w5hm50rbxd83xzbkq8qsn04dqwpdjhs587v9d0x2vwrf1",
-    "version": "0.8.0"
+    "rev": "v0.15.0",
+    "sha256": "1cmcfg9vq8cl98d5xambm5hr516b9pblm06y1py9v7msmfh3g09i",
+    "vendorSha256": null,
+    "version": "0.15.0"
   },
   "packet": {
     "owner": "packethost",

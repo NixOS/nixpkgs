@@ -25,9 +25,6 @@ in stdenv.mkDerivation rec {
     sha256 = "I7UkbyH2i218d5RCq4al9Gr1C0MX339jFOeyKrKQ3b0=";
   };
 
-  patches = [ ./bypass-tamper-detection.patch ];
-  patchFlags = [ "--binary" "-p1" ];
-
   nativeBuildInputs = [
     dotnet-sdk dotnetPackages.Nuget makeWrapper
     # FIXME: Without `cacert`, we will suffer from https://github.com/NuGet/Announcements/issues/49
