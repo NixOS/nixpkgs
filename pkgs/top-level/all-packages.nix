@@ -24937,7 +24937,9 @@ in
     wxGTK = wxGTK30;
   };
 
-  haunt = callPackage ../applications/misc/haunt { };
+  haunt = callPackage ../applications/misc/haunt {
+    guile = guile_3_0;
+  };
 
   hugo = callPackage ../applications/misc/hugo { };
 
