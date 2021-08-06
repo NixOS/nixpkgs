@@ -607,7 +607,7 @@
     "openerz" = ps: with ps; [ openerz-api ];
     "openevse" = ps: with ps; [ ]; # missing inputs: openevsewifi
     "openexchangerates" = ps: with ps; [ ];
-    "opengarage" = ps: with ps; [ ]; # missing inputs: open-garage
+    "opengarage" = ps: with ps; [ open-garage ];
     "openhardwaremonitor" = ps: with ps; [ ];
     "openhome" = ps: with ps; [ openhomedevice ];
     "opensensemap" = ps: with ps; [ opensensemap-api ];
