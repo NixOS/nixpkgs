@@ -1044,12 +1044,6 @@ self: super: {
   # Has tasty < 1.2 requirement, but works just fine with 1.2
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
-  # fake a home dir and capture generated man page
-  ats-format = overrideCabal super.ats-format (old : {
-    preConfigure = "export HOME=$PWD";
-    postBuild = "mv .local/share $out";
-  });
-
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
   heap = dontCheck super.heap;
