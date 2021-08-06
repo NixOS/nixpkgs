@@ -244,4 +244,7 @@ self: super: {
   # https://github.com/typeclasses/dsv/issues/1
   dsv = dontCheck super.dsv;
 
+  # https://github.com/acid-state/acid-state/issues/133
+  acid-state = dontCheck super.acid-state;
+
 }
