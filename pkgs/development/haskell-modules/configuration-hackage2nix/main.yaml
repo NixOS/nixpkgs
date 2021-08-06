@@ -358,6 +358,7 @@ unsupported-platforms:
   follow-file:                                  [ x86_64-darwin ]
   freenect:                                     [ x86_64-darwin ]
   FTGL:                                         [ x86_64-darwin ]
+  fuzzytime:                                    [ x86_64-darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
   ghcjs-dom-hello:                              [ x86_64-darwin ]
   gi-dbusmenugtk3:                              [ x86_64-darwin ]
   gi-dbusmenu:                                  [ x86_64-darwin ]
