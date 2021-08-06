@@ -342,7 +342,9 @@ unsupported-platforms:
   barbly:                                       [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   bdcs-api:                                     [ x86_64-darwin ]
   bindings-directfb:                            [ x86_64-darwin ]
+  bindings-parport:                             [ x86_64-darwin ] # parport is a linux kernel component
   bindings-sane:                                [ x86_64-darwin ]
+  btrfs:                                        [ x86_64-darwin ] # depends on linux
   bustle:                                       [ x86_64-darwin ] # uses glibc-specific ptsname_r
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   crackNum:                                     [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
