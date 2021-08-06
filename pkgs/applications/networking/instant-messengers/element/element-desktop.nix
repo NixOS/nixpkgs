@@ -61,6 +61,7 @@ mkYarnPackage rec {
     rm "$out/share/element/electron/node_modules"
     cp -r './node_modules' "$out/share/element/electron"
     cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
+    ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
 
     # icons
     for icon in $out/share/element/electron/build/icons/*.png; do
