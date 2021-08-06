@@ -58,6 +58,12 @@ self: super: {
 
   OpenAL = addExtraLibrary super.OpenAL darwin.apple_sdk.frameworks.OpenAL;
 
+  al = overrideCabal super.al (drv: {
+    libraryFrameworkDepends = [
+      darwin.apple_sdk.frameworks.OpenAL
+    ] ++ (drv.libraryFrameworkDepends or []);
+  });
+
   proteaaudio = addExtraLibrary super.proteaaudio darwin.apple_sdk.frameworks.AudioToolbox;
 
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
