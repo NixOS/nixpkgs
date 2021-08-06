@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, SDL, ... }:
+{ lib, stdenv, fetchurl, cmake, SDL }:
 
 stdenv.mkDerivation rec {
   pname = "ballerburg";
