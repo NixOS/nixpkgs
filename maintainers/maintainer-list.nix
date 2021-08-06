@@ -3401,6 +3401,12 @@
     githubId = 454695;
     name = "Artur Taranchiev";
   };
+  exarkun = {
+    email = "exarkun@twistedmatrix.com";
+    github = "exarkun";
+    githubId = 254565;
+    name = "Jean-Paul Calderone";
+  };
   exfalso = {
     email = "0slemi0@gmail.com";
     github = "exfalso";
