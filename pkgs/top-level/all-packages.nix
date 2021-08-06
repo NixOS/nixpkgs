@@ -28506,6 +28506,8 @@ in
 
   xpdf = libsForQt5.callPackage ../applications/misc/xpdf { };
 
+  xplugd = callPackage ../tools/X11/xplugd { };
+
   xpointerbarrier = callPackage ../tools/X11/xpointerbarrier {};
 
   xkb-switch = callPackage ../tools/X11/xkb-switch { };
