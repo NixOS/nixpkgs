@@ -2,12 +2,13 @@
 
 let
   inherit (pythonPackages) python;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pyunbound";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "http://unbound.net/downloads/unbound-${version}.tar.gz";
+    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
     sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
   };
 
@@ -15,9 +16,10 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ openssl expat libevent python ];
 
-  postPatch = ''substituteInPlace Makefile.in \
-    --replace "\$(DESTDIR)\$(PYTHON_SITE_PKG)" "$out/${python.sitePackages}" \
-    --replace "\$(LIBTOOL) --mode=install cp _unbound.la" "cp _unbound.la"
+  postPatch = ''
+    substituteInPlace Makefile.in \
+      --replace "\$(DESTDIR)\$(PYTHON_SITE_PKG)" "$out/${python.sitePackages}" \
+      --replace "\$(LIBTOOL) --mode=install cp _unbound.la" "cp _unbound.la"
   '';
 
   preConfigure = "export PYTHON_VERSION=${python.pythonVersion}";
@@ -41,7 +43,7 @@ in stdenv.mkDerivation rec {
     cp .libs/_unbound.so .libs/libunbound.so* $out/${python.sitePackages}
     substituteInPlace _unbound.la \
       --replace "-L.libs $PWD/libunbound.la" "-L$out/${python.sitePackages}"
-    '';
+  '';
 
   installFlags = [
     "configfile=\${out}/etc/unbound/unbound.conf"
@@ -56,7 +58,7 @@ in stdenv.mkDerivation rec {
     $out/bin/unbound-anchor -l | head -1 > $out/etc/${pname}/root.anchor
     $out/bin/unbound-anchor -l | tail --lines=+2 - > $out/etc/${pname}/root.key
     # We don't need anything else
-    rm -fR $out/bin $out/share $out/include $out/etc/unbound
+    rm -r $out/bin $out/share $out/include $out/etc/unbound
   ''
   # patchelf is only available on Linux and no patching is needed on darwin
   + lib.optionalString stdenv.isLinux ''
@@ -66,8 +68,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
-    homepage = "http://www.unbound.net";
+    homepage = "https://www.unbound.net";
     maintainers = with maintainers; [ leenaars ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }
