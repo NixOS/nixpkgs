@@ -73,6 +73,10 @@ in buildPythonPackage rec {
     ln -s ${cfg} site.cfg
   '';
 
+  # Workaround flakey compiler feature detection
+  # https://github.com/numpy/numpy/issues/19624
+  hardeningDisable = [ "strictoverflow" ];
+
   enableParallelBuilding = true;
 
   checkInputs = [
