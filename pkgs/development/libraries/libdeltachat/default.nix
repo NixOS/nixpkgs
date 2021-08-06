@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/deltachat/deltachat-core-rust/commit/408467e85d04fbbfd6bed5908d84d9e995943487.patch";
       sha256 = "1j2ywaazglgl6370js34acrg0wrh0b7krqg05dfjf65n527lzn59";
     })
+    ./no-static-lib.patch
   ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
