@@ -101,7 +101,12 @@ python3Packages.buildPythonApplication {
     ./hplip-3.20.11-nixos-cups-ppd-search-path.patch
   ];
 
-  prePatch = ''
+  postPatch = ''
+    # https://github.com/NixOS/nixpkgs/issues/44230
+    substituteInPlace createPPD.sh \
+      --replace ppdc "${cups}/bin/ppdc" \
+      --replace "gzip -c" "gzip -cn"
+
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
       -e s,/etc/hp,$out/etc/hp,g \
@@ -147,6 +152,12 @@ python3Packages.buildPythonApplication {
     # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
     # Could not find how to fix the problem in 'ppdc' so this is a workaround.
     export CUPS_DATADIR="${cups}/share/cups"
+  '';
+
+  postConfigure = ''
+    # don't save timestamp, in order to improve reproducibility
+    substituteInPlace Makefile \
+      --replace "GZIP_ENV = --best" "GZIP_ENV = --best -n"
   '';
 
   enableParallelBuilding = true;
