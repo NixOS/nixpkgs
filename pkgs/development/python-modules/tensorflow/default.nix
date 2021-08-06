@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.4.0";
+  version = "2.4.2";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -110,7 +110,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "0yl06aypfxrcs35828xf04mkidz1x0j89v0q5h4d2xps1cb5rv3f";
+      sha256 = "07a2y05hixch1bjag5pzw3p1m7bdj3bq4gdvmsfk2xraz49b1pi8";
     };
 
     patches = [
