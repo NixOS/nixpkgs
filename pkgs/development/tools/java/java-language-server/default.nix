@@ -1,15 +1,13 @@
 { lib, stdenv, fetchFromGitHub
-, jdk, maven
-# The name of the link which would be placed in the bin directory.
-# Set to null if no link is to be made.
-, linkBinName ? "java-language-server"
+, jdk, maven, runtimeShell
 }:
 
 let
   platform =
     if stdenv.isLinux then "linux"
     else if stdenv.isDarwin then "mac"
-    else "windows";
+    else if stdenv.isWindows then "windows"
+    else throw "unsupported platform";
 in
 stdenv.mkDerivation rec {
   pname = "java-language-server";
@@ -79,20 +77,15 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/java/java-language-server
-    cp -r dist/classpath $out/share/java/java-language-server
-    cp -r dist/*${platform}* $out/share/java/java-language-server
+    cp -r dist/classpath dist/*${platform}* $out/share/java/java-language-server
 
-    ${lib.strings.optionalString (linkBinName != null && platform != "windows")
-    ''
-      mkdir -p $out/bin
-      # a link is not used as lang_server_${platform}.sh makes use of "dirname $0" to access other files
-      cat << _EOF > $out/bin/${linkBinName}
-      #!/usr/bin/env bash
-      $out/share/java/java-language-server/lang_server_${platform}.sh "\$@"
-      _EOF
-      chmod +x $out/bin/${linkBinName}
-    ''
-    }
+    mkdir -p $out/bin
+    # a link is not used as lang_server_${platform}.sh makes use of "dirname $0" to access other files
+    cat << _EOF > $out/bin/java-language-server
+    #!${runtimeShell}
+    $out/share/java/java-language-server/lang_server_${platform}.sh "\$@"
+    _EOF
+    chmod +x $out/bin/java-language-server
 
     runHook postInstall
   '';
@@ -102,6 +95,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ hqurve ];
-    platforms = concatLists (with platforms; [ linux darwin windows ]);
+    platforms = platforms.all;
   };
 }
