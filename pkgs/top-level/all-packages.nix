@@ -5483,6 +5483,8 @@ in
 
   godot-server = callPackage ../development/tools/godot/server.nix { };
 
+  gdtoolkit = python3Packages.callPackage ../development/python-modules/gdtoolkit/default.nix {};
+
   goklp = callPackage ../tools/networking/goklp {};
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
