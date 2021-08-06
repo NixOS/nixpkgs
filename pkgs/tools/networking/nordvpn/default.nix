@@ -13,9 +13,9 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ libxml2 autoPatchelfHook dpkg ];
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" "distPhase" ];
-
-  unpackPhase = "dpkg -x $src unpacked";
+  unpackPhase = ''
+    dpkg -x $src unpacked
+  '';
 
   installPhase = ''
     mkdir -p $out/
