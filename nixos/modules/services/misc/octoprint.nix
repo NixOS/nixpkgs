@@ -17,9 +17,7 @@ let
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
-
-  package = pkgs.octoprint;
+  pluginsEnv = cfg.package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
 
 in
 {
@@ -36,6 +34,14 @@ in
         default = "0.0.0.0";
         description = ''
           Host to bind OctoPrint to.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.octoprint;
+        description = ''
+          OctoPrint package to be used in the module.
         '';
       };
 
