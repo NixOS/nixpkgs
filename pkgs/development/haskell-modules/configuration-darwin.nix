@@ -229,4 +229,19 @@ self: super: {
   # Work around SDL_main.h redefining main to SDL_main
   SDL-ttf = appendPatch super.SDL-ttf ./patches/SDL-ttf-darwin-hsc.patch;
 
+  # Disable a bunch of test suites that fail because of darwin's case insensitive
+  # file system: When a test suite has a test suite file that has the same name
+  # as a module in scope, but in different case (e. g. hedgehog.hs and Hedgehog
+  # in scope), GHC will complain that the file name and module name differ (in
+  # the example hedgehog.hs would be Main).
+  # These failures can easily be fixed by upstream by renaming files, so we
+  # should create issues for them.
+  # https://github.com/typeclasses/aws-cloudfront-signed-cookies/issues/2
+  aws-cloudfront-signed-cookies = dontCheck super.aws-cloudfront-signed-cookies;
+  # https://github.com/typeclasses/assoc-list/issues/2
+  assoc-list = dontCheck super.assoc-list;
+  assoc-listlike = dontCheck super.assoc-listlike;
+  # https://github.com/typeclasses/dsv/issues/1
+  dsv = dontCheck super.dsv;
+
 }
