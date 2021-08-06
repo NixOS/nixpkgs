@@ -247,4 +247,7 @@ self: super: {
   # https://github.com/acid-state/acid-state/issues/133
   acid-state = dontCheck super.acid-state;
 
+  # Otherwise impure gcc is used, which is Apple's weird wrapper
+  c2hsc = addTestToolDepends super.c2hsc [ pkgs.gcc ];
+
 }
