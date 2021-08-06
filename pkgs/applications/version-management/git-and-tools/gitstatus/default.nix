@@ -85,6 +85,6 @@ stdenv.mkDerivation rec {
     description = "10x faster implementation of `git status` command";
     homepage = "https://github.com/romkatv/gitstatus";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mmlb hexa ];
+    maintainers = with maintainers; [ mmlb hexa SuperSandro2000 ];
   };
 }
