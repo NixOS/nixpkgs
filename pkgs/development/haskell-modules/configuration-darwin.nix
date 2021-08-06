@@ -180,6 +180,13 @@ self: super: {
     '' + (drv.postPatch or "");
   });
 
+  # conditional dependency via a cabal flag
+  cas-store = overrideCabal super.cas-store (drv: {
+    libraryHaskellDepends = [
+      self.kqueue
+    ] ++ (drv.libraryHaskellDepends or []);
+  });
+
   # 2021-05-25: Tests fail and I have no way to debug them.
   hls-class-plugin = dontCheck super.hls-class-plugin;
   hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
