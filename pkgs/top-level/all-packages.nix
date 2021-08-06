@@ -23126,7 +23126,11 @@ in
 
   dwl = callPackage ../applications/window-managers/dwl { };
 
-  dwm = callPackage ../applications/window-managers/dwm { };
+  dwm = callPackage ../applications/window-managers/dwm {
+    # dwm is configured entirely through source modification. Allow users to
+    # specify patches through nixpkgs.config.dwm.patches
+    patches = config.dwm.patches or [];
+  };
 
   dwmblocks = callPackage ../applications/misc/dwmblocks { };
 
