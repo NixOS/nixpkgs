@@ -175,19 +175,20 @@
   ./programs/phosh.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
-  ./programs/sedutil.nix
   ./programs/seahorse.nix
-  ./programs/slock.nix
+  ./programs/sedutil.nix
   ./programs/shadow.nix
-  ./programs/spacefm.nix
   ./programs/singularity.nix
+  ./programs/slock.nix
+  ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
-  ./programs/sysdig.nix
-  ./programs/systemtap.nix
+  ./programs/starship.nix
   ./programs/steam.nix
   ./programs/sway.nix
+  ./programs/sysdig.nix
   ./programs/system-config-printer.nix
+  ./programs/systemtap.nix
   ./programs/thefuck.nix
   ./programs/tilp2.nix
   ./programs/tmux.nix
