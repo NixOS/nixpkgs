@@ -15,15 +15,6 @@ in {
   options = {
     services.bee = {
 
-      swarm = mkOption {
-        type = types.nullOr (types.enum [ "mainnet" "testnet" ]);
-        default = "testnet";
-        description = ''
-          Which swarm the bee node(s) should join. The value of this option will affect the default values of the following Bee settings: `chain-id`, `network-id`, `swap-endpoint`.
-          If you want to configure these options by hand, then set `config.services.bee.swarm` to `null`.
-        '';
-      };
-
       package = mkOption {
         type = types.package;
         default = pkgs.bee;
@@ -127,12 +118,15 @@ in {
       beeConfigFiles = forEach serviceEntries head;
 
       deriveDataDir = id:
-        "${cfg.dataDir}/${cfg.swarm or ""}/${toString id}/";
+        if id == null then "${cfg.dataDir}" else "${cfg.dataDir}/${toString id}";
 
       makeSystemdTmpfilesEntry = id:
-        [
-          "d '${deriveDataDir id}' 0750 ${cfg.user} ${cfg.group}"
-        ];
+        let
+          dataDir = deriveDataDir id;
+        in
+          [
+            "d '${dataDir}/'         0750 ${cfg.user} ${cfg.group}"
+          ];
 
       makeSystemdServiceEntry = id:
         let
@@ -142,9 +136,7 @@ in {
           configFile     = format.generate "bee.yaml" settings;
           settings       = cfg.settings // {
             data-dir = dataDir;
-            # TODO assert that these are not set by the user?
-            # TODO ideally, this should call the relevant function in bee-clef.nix... but how?
-            clef-signer-endpoint = "${config.services.bee-clef.dataDir}/${config.services.bee.swarm or ""}/${toString id}/clef.ipc";
+            clef-signer-endpoint = "${config.services.bee-clef.dataDir}/${toString id}/clef.ipc";
             p2p-addr       = ":${toString (cfg.p2pPortBase + id)}";
             api-addr       = ":${toString (cfg.apiPortBase + id)}";
             debug-api-addr = ":${toString (cfg.debugApiPortBase + id)}";
@@ -180,7 +172,7 @@ in {
             };
 
             preStart = with settings; ''
-              umask 0077
+              umask 0600
               if [ ! -f ${password-file} ]; then
                 < /dev/urandom tr -dc _A-Z-a-z-0-9 2> /dev/null | head -c32 > ${password-file}
                 echo "Initialized ${password-file} from /dev/urandom"
@@ -217,7 +209,7 @@ in {
           { assertion = (hasAttr "swap-endpoint" cfg.settings) || (cfg.settings.swap-enable or true == false);
             message = ''
               In a swap-enabled network a working Ethereum blockchain node is required. You must specify one using `services.bee.settings.swap-endpoint`. Disabling swap on the public network using `services.bee.settings.swap-enable = false` is not recommended, it's required for normal operation.
-              You may either run your own <link xlink:href="https://www.xdaichain.com/">xDai</link> node when connecting to the Swarm `mainnet`, or <link xlink:href="https://goerli.net/">Görli</link> node when connecting to the `testnet`, or you may also subscribe to a service that gives you access to these blockchains. Please visit <link xlink:href="https://docs.ethswarm.org/docs/working-with-bee/configuration#swap-endpoint">the official Bee documentation</link> for more information.
+              If you don't want to run your own Ethereum node then you can sign up at <link xlink:href="https://infura.io/"/> and create a "project" there for the Goerli Ethereum blockchain, and then use the URL they provide, something along the lines of `https://mainnet.infura.io/v3/[your-secret-here]`.
             '';
           }
         ];
@@ -226,14 +218,10 @@ in {
           optional (cfg.instanceCount > 1 && any (x: hasAttr x cfg.settings) ["data-dir" "clef-signer-endpoint" "p2p-addr" "api-addr" "debug-api-addr"])
             "You used `services.bee.instanceCount` to start multiple instances, but also specified one of the following bee config attributes that will be thus ignored: `api-addr` `data-dir` `debug-api-addr` `p2p-addr` `clef-signer-endpoint`.";
 
-        services.bee.settings = rec {
+        services.bee.settings = {
           password-file        = lib.mkDefault "/var/lib/bee/password";
           clef-signer-enable   = lib.mkDefault true;
-          mainnet              = lib.mkIf (cfg.swarm == "mainnet") true;
-          network-id           = lib.mkIf (cfg.swarm != null) {
-            testnet = 10;
-            mainnet = 1;
-          }.${cfg.swarm};
+          swap-endpoint        = lib.mkDefault "https://rpc.slock.it/goerli";
         };
 
         systemd.services = listToAttrs (forEach serviceEntries (x: elemAt x 1));
@@ -260,7 +248,6 @@ in {
           [
             "d '${dirOf cfg.settings.password-file}' 0750 ${cfg.user} ${cfg.group}"
             "d '${cfg.dataDir}/'                     0750 ${cfg.user} ${cfg.group}"
-            "d '${cfg.dataDir}/${cfg.swarm or ""}/'  0750 ${cfg.user} ${cfg.group}"
           ];
 
         users.users = optionalAttrs (cfg.user == "bee") {

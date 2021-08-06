@@ -7,7 +7,7 @@ Extracts the clef secret keys and the password from the data directory into the 
     exit 1
 fi
 
-sharedDataDir="@dataDir@/@swarm@/"
+sharedDataDir="@dataDir@"
 dataDir="${sharedDataDir}/$1"
 
 _USER=$(whoami)
@@ -21,7 +21,7 @@ if command -v xclip >/dev/null 2>&1; then
     sudo sh -c "cat ${sharedDataDir}/password | xclip -selection c" && \
       echo "Password loaded into clipboard and ready to be pasted"
 else
-    sudo sh -c "install -o ${_USER} -g ${_GROUP} @dataDir@/password ${_HOME}/bee-clef-password-${_DATE}.txt" && \
+    sudo sh -c "install -o ${_USER} -g ${_GROUP} ${sharedDataDir}/password ${_HOME}/bee-clef-password-${_DATE}.txt" && \
       echo "Pass exported to ${_HOME}/bee-clef-password-${_DATE}.txt"
 fi
 

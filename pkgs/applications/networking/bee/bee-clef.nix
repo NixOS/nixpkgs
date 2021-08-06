@@ -1,5 +1,7 @@
 { version ? "release", stdenv, lib, fetchFromGitHub, go-ethereum }:
 
+# TODO fix go-ethereum's version to the one specified in the upstream bee-clef package?
+
 let
 
   versionSpec = rec {
@@ -11,9 +13,9 @@ let
     };
     release = rec {
       pname = "bee-clef";
-      version = "0.5.0";
+      version = "0.6.0";
       rev = "v${version}";
-      hash = "sha256:1dr3ghj8l28mq9w03nv1lv2df54c6r5vnqnjksgzji0zb64nf0ja";
+      hash = "sha256:0dr3ghj8l28mq9w03nv1lv2df54c6r5vnqnjksgzji0zb64nf0ja";
     };
   }.${version};
 

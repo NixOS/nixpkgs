@@ -9,15 +9,15 @@ let
       rev = "0c04cf56b0f7ce7d76be783d2484a5b824964b54";
       goVersionString = "g" + builtins.substring 0 9 rev;     # this seems to be some kind of standard of git describe --tags HEAD
       hash = "sha256:14j7s1k14k14yczyz08iv0nrfw82lbb0anxc756m1vfa15qa6kx2";
-      vendorSha256 = "sha256:1pvl88br6j26l4smm4kvi122127mna0r45hkg4ykpn902j2vwydd";
+      vendorSha256 = "sha256:09ym5rjlvhjpa2yif2ksjlj540ij2s62y802c5956csgwa5a2gnz";
     };
     release = rec {
       pname = "bee";
-      version = "1.0.0";
+      version = "1.1.0-rc1";
       rev = "v${version}";
-      goCommitTime = 1624280569;   # to produce it: git show -s --format=%ct ${rev}
-      hash = "sha256:14yk5z4lnz7mw875m6y0j43frl3gy8iy43i775z1a3hpycfvqnm9";
-      vendorSha256 = "sha256:1pvl88br6j26l4smm4kvi122127mna0r45hkg4ykpn902j2vwydd";
+      goCommitTime = 1628004442;   # to produce it: git show -s --format=%ct ${rev}
+      hash = "sha256:0csp875z5awx877ljpf86wjvwp40ys3004w8rlk83r8psz99pzz0";
+      vendorSha256 = "sha256:09ym5rjlvhjpa2yif2ksjlj540ij2s62y802c5956csgwa5a2gnz";
     };
   }.${version};
 
@@ -39,12 +39,12 @@ buildGo115Module {
 
   subPackages = [ "cmd/bee" ];
 
-  # no symbol table, no debug info, and pass the commit for the version string
-  buildFlags = "-ldflags -s -ldflags -w -ldflags"
-               + lib.optionalString ( lib.hasAttr "goVersionString" versionSpec)
-                 " -X=github.com/ethersphere/bee.commit=${versionSpec.goVersionString}"
-               + lib.optionalString ( lib.hasAttr "goCommitTime" versionSpec)
-                 " -X=github.com/ethersphere/bee.commitTime=${toString versionSpec.goCommitTime}";
+  # no symbol table, no debug info, and pass the commit info (for the version string and the outdated warning)
+  buildFlags = "-ldflags -s -ldflags -w"
+               + lib.optionalString (lib.hasAttr "goVersionString" versionSpec)
+                 " -ldflags -X=github.com/ethersphere/bee.commitHash=${versionSpec.goVersionString}"
+               + lib.optionalString (lib.hasAttr "goCommitTime" versionSpec)
+                 " -ldflags -X=github.com/ethersphere/bee.commitTime=${toString versionSpec.goCommitTime}";
 
   # Mimic the bee Makefile: without disabling CGO, two (transitive and
   # unused) dependencies would fail to compile.

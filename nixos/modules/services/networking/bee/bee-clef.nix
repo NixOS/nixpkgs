@@ -9,15 +9,15 @@ let
   cfg = config.services.bee-clef;
 
   deriveDataDir = id:
-    "${cfg.dataDir}/${config.services.bee.swarm or ""}/${toString id}/";
+    if id == null then "${cfg.dataDir}" else "${cfg.dataDir}/${toString id}";
 
   makeSystemdTmpfilesEntry = id:
     let
-      dir = deriveDataDir id;
+      dataDir = deriveDataDir id;
     in
       [
-        "d '${dir}'          0750 ${cfg.user} ${cfg.group}"
-        "d '${dir}/keystore' 0700 ${cfg.user} ${cfg.group}"
+        "d '${dataDir}/'         0750 ${cfg.user} ${cfg.group}"
+        "d '${dataDir}/keystore' 0700 ${cfg.user} ${cfg.group}"
       ];
 
   makeSystemdServiceEntry = id:
@@ -191,17 +191,13 @@ in {
             '';
             inherit (pkgs.stdenv) shell;
             inherit (cfg) dataDir;
-            inherit (config.services.bee) swarm;
           };
         in [ bee-clef-cli-tools ];
 
-      systemd.tmpfiles.rules =
-        (concatLists (genList makeSystemdTmpfilesEntry instanceCount))
-        ++
-        [
-          "d '${cfg.dataDir}/' 0750 ${cfg.user} ${cfg.group}"
-          "d '${cfg.dataDir}/${config.services.bee.swarm or ""}/' 0750 ${cfg.user} ${cfg.group}"
-        ];
+      systemd.tmpfiles.rules = (concatLists (genList makeSystemdTmpfilesEntry instanceCount))
+                               ++ [
+                                 "d '${cfg.dataDir}/'         0750 ${cfg.user} ${cfg.group}"
+                               ];
 
       systemd.services = listToAttrs (genList makeSystemdServiceEntry instanceCount);
 
