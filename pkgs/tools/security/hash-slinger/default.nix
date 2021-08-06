@@ -4,13 +4,13 @@ let
   pythonPackages = python2Packages;
 in stdenv.mkDerivation rec {
   pname    = "hash-slinger";
-  version = "2.7";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "letoams";
     repo = pname;
     rev = version;
-    sha256 = "05wn744ydclpnpyah6yfjqlfjlasrrhzj48lqmm5a91nyps5yqyn";
+    sha256 = "sha256-mhMUdZt846QjwRIh2m/4EE+93fUcCKc2FFeoFpzKYvk=";
   };
 
   pythonPath = with pythonPackages; [ dnspython m2crypto ipaddr python-gnupg
