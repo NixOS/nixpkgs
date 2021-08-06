@@ -3982,6 +3982,18 @@ final: prev:
     meta.homepage = "https://github.com/roxma/nvim-yarp/";
   };
 
+  nvim_context_vt = buildVimPluginFrom2Nix {
+    pname = "nvim_context_vt";
+    version = "2021-08-03";
+    src = fetchFromGitHub {
+      owner = "haringsrob";
+      repo = "nvim_context_vt";
+      rev = "7e93fc59c2af9e36d64a230ec77c1ef1ebe47c57";
+      sha256 = "0mgafpcx5mz9hw7pv3a4v74kdikcrf9mv10mqnp5pg71m0f6sjmn";
+    };
+    meta.homepage = "https://github.com/haringsrob/nvim_context_vt/";
+  };
+
   nvimdev-nvim = buildVimPluginFrom2Nix {
     pname = "nvimdev-nvim";
     version = "2019-10-09";
