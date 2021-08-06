@@ -72,7 +72,7 @@ in {
 
       # NOTE: the preStart process is needed to provide RSA key and server list for the nordvpn daemon
       preStart = ''
-        ${pkgs.xorg.lndir}/bin/lndir ${cfg.package}/var/lib/nordvpn /var/lib/nordvpn
+        ${pkgs.xorg.lndir}/bin/lndir ${package}/var/lib/nordvpn /var/lib/nordvpn
       '';
 
       serviceConfig = {
@@ -86,7 +86,7 @@ in {
       after = [ "nordvpnd.service" ];
 
       path = [
-        cfg.package
+        package
       ];
 
       script = ''
