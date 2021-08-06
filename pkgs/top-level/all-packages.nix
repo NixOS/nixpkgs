@@ -13301,6 +13301,8 @@ with pkgs;
 
   guile_2_2 = callPackage ../development/interpreters/guile/2.2.nix { };
 
+  guile_3_0 = callPackage ../development/interpreters/guile/3.0.nix { };
+
   guile = guile_2_2;
 
   guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
