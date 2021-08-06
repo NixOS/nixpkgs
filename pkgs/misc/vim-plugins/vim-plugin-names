@@ -194,6 +194,7 @@ guns/vim-clojure-highlight
 guns/vim-clojure-static
 guns/vim-sexp
 guns/xterm-color-table.vim
+haringsrob/nvim_context_vt
 hashivim/vim-packer
 hashivim/vim-terraform
 hashivim/vim-vagrant
