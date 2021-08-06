@@ -1,4 +1,4 @@
-{ callPackage, lib, stdenv, fetchFromGitHub, git, zsh, ...}:
+{ callPackage, lib, stdenv, fetchFromGitHub, git, zsh }:
 
 stdenv.mkDerivation rec {
   pname = "gitstatus";
@@ -11,12 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MQG4thW73gDqY68bKP2FO8z5uc2R/tED+/X9qas/GOA=";
   };
 
-  buildInputs = [ (callPackage ./romkatv_libgit2.nix {}) ];
-  patchPhase = ''
+  buildInputs = [ (callPackage ./romkatv_libgit2.nix { }) ];
+
+  postPatch = ''
     sed -i '1i GITSTATUS_AUTO_INSTALL=''${GITSTATUS_AUTO_INSTALL-0}' gitstatus.plugin.sh
     sed -i '1i GITSTATUS_AUTO_INSTALL=''${GITSTATUS_AUTO_INSTALL-0}' gitstatus.plugin.zsh
     sed -i "1a GITSTATUS_DAEMON=$out/bin/gitstatusd" install
   '';
+
   installPhase = ''
     install -Dm755 usrbin/gitstatusd $out/bin/gitstatusd
     install -Dm444 gitstatus.plugin.sh $out
@@ -24,6 +26,7 @@ stdenv.mkDerivation rec {
     install -Dm555 install $out
     install -Dm444 build.info $out
   '';
+
   # Don't install the "install" and "build.info" files, which the end user
   # should not need to worry about.
   pathsToLink = [
