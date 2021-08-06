@@ -30,16 +30,16 @@
 , systemd
 , udev
 , xdg-utils
-, libudev
+, udev
 , xorg
 }:
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.1.2-10.BETA";
+  version = "8.1.2-82.BETA";
 
   src = fetchurl {
     url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "0241kxvwyq2j273msqqcf45lc2d2r6njjng5aq554vxsfrw569b7";
+    sha256 = "1rk8zz7c7659r8wdb8a6zj7wwr1mr6nyfhr35g4ysamw87mfprss";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -110,9 +110,6 @@ stdenv.mkDerivation rec {
 
       mv $out/share/1password/1Password-KeyringHelper $out/share/1password/1Password-KeyringHelper-Real
       ln -sf /run/wrappers/bin/_1password-keyring-helper $out/share/1password/1Password-KeyringHelper
-
-      mv $out/share/1password/1Password-BrowserSupport $out/share/1password/1Password-BrowserSupport-Real
-      ln -sf /run/wrappers/bin/_1password-browser-support $out/share/1password/1Password-BrowserSupport
 
       install -D -m0644 com.1password.1Password.policy \
         $out/share/polkit-1/actions/com.1password.1Password.policy
