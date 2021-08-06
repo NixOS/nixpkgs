@@ -20,6 +20,9 @@
 , gtk3
 , libhandy
 , libutp
+, miniupnpc
+, dht
+, libnatpmp
 , hicolor-icon-theme
 , libtransmission
 , libb64
@@ -62,6 +65,9 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libutp
+    miniupnpc
+    dht
+    libnatpmp
     openssl
     zlib
     libtransmission

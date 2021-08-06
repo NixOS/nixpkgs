@@ -15134,6 +15134,8 @@ in
 
   dhex = callPackage ../applications/editors/dhex { };
 
+  dht = callPackage ../development/libraries/dht { };
+
   double-conversion = callPackage ../development/libraries/double-conversion { };
 
   dclib = callPackage ../development/libraries/dclib { };
@@ -17390,6 +17392,8 @@ in
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libutempter = callPackage ../development/libraries/libutempter { };
+
+  libutp = callPackage ../development/libraries/libutp { };
 
   libuldaq = callPackage ../development/libraries/libuldaq { };
 
