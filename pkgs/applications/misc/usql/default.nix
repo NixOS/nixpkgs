@@ -21,8 +21,7 @@ buildGoModule rec {
   buildInputs = [ unixODBC icu ];
 
   # These tags and flags are copied from build-release.sh
-  buildFlags = [ "-tags" ];
-  buildFlagsArray = [
+  tags = [
     "most"
     "sqlite_app_armor"
     "sqlite_fts5"

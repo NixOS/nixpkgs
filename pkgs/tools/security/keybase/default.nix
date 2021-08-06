@@ -29,7 +29,7 @@ buildGoPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox ];
-  buildFlags = [ "-tags production" ];
+  tags = [ "production" ];
 
   meta = with lib; {
     homepage = "https://www.keybase.io/";

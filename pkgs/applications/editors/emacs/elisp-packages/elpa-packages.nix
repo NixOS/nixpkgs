@@ -41,7 +41,10 @@ self: let
   }: let
 
     imported = import generated {
-      inherit (self) callPackage;
+      callPackage = pkgs: args: self.callPackage pkgs (args // {
+        # Use custom elpa url fetcher with fallback/uncompress
+        fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
+      });
     };
 
     super = removeAttrs imported [ "dash" ];
@@ -66,7 +69,12 @@ self: let
         phases = "unpackPhase " + old.phases; # not a list, interestingly…
         srcs = [
           super.ada-mode.src
-          self.wisi.src
+          # ada-mode needs a specific version of wisi, check NEWS or ada-mode's
+          # package-requires to find the version to use.
+          (pkgs.fetchurl {
+            url = "https://elpa.gnu.org/packages/wisi-3.1.3.tar.lz";
+            sha256 = "18dwcc0crds7aw466vslqicidlzamf8avn59gqi2g7y2x9k5q0as";
+          })
         ];
 
         sourceRoot = "ada-mode-${self.ada-mode.version}";
@@ -74,6 +82,7 @@ self: let
         nativeBuildInputs = [
           buildPackages.gnat
           buildPackages.gprbuild
+          buildPackages.lzip
         ];
 
         buildInputs = [
@@ -81,7 +90,7 @@ self: let
         ];
 
         preInstall = ''
-          ./build.sh
+          ./build.sh -j$NIX_BUILD_CORES
         '';
 
         postInstall = ''
