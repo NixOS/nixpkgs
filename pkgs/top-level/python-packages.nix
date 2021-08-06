@@ -3742,6 +3742,8 @@ in {
     inherit (pkgs) jq;
   };
 
+  js2py = callPackage ../development/python-modules/js2py { };
+
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier { };
 
   jsmin = callPackage ../development/python-modules/jsmin { };
