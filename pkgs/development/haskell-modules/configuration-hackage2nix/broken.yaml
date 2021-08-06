@@ -304,6 +304,9 @@ broken-packages:
   - bdo
   - beam
   - beamable
+  - beam-mysql
+  - beam-newtype-field
+  - beam-sqlite
   - bech32
   - bed-and-breakfast
   - beeminder-api
@@ -1445,6 +1448,7 @@ broken-packages:
   - fractals
   - fraction
   - frag
+  - Frames-beam
   - Frames-map-reduce
   - franchise
   - fraxl
@@ -1735,8 +1739,8 @@ broken-packages:
   - gtk2hs-hello
   - gtk2hs-rpn
   - gtk3-mac-integration
-  - gtk-mac-integration
   - gtkglext
+  - gtk-mac-integration
   - gtksourceview2
   - gtksourceview3
   - gtk-toy
@@ -2602,6 +2606,7 @@ broken-packages:
   - kalman
   - Kalman
   - kangaroo
+  - karabiner-config
   - karps
   - katip-kafka
   - katip-raven
@@ -2756,6 +2761,7 @@ broken-packages:
   - life-sync
   - lifted-protolude
   - lifter
+  - lifx-lan
   - ligature
   - lilypond
   - Limit
@@ -3279,6 +3285,7 @@ broken-packages:
   - np-extras
   - np-linear
   - nptools
+  - nri-http
   - nri-kafka
   - nri-postgresql
   - ntp-control
