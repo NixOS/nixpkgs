@@ -87,7 +87,7 @@ self: let
         ];
 
         preInstall = ''
-          ./build.sh
+          ./build.sh -j$NIX_BUILD_CORES
         '';
 
         postInstall = ''
