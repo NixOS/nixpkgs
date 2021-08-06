@@ -10,7 +10,7 @@ To update the list of packages from nongnu (ELPA),
 
 */
 
-{ lib }:
+{ lib, buildPackages }:
 
 self: let
 
@@ -19,7 +19,10 @@ self: let
   }: let
 
     imported = import generated {
-      inherit (self) callPackage;
+      callPackage = pkgs: args: self.callPackage pkgs (args // {
+        # Use custom elpa url fetcher with fallback/uncompress
+        fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
+      });
     };
 
     super = imported;

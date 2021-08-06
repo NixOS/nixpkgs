@@ -41,7 +41,10 @@ self: let
   }: let
 
     imported = import generated {
-      inherit (self) callPackage;
+      callPackage = pkgs: args: self.callPackage pkgs (args // {
+        # Use custom elpa url fetcher with fallback/uncompress
+        fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
+      });
     };
 
     super = removeAttrs imported [ "dash" ];
