@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "f7f80b3a86507d623f5a43c6addb13e8408daa5c";
-    sha256 = "sha256:0832w40a92cl8ydkv0pk7nl1ivhfhbhqbhmpqmdjpi0126jlm2y0";
+    rev = "v{version}";
+    sha256 = "0832w40a92cl8ydkv0pk7nl1ivhfhbhqbhmpqmdjpi0126jlm2y0";
   };
 
   sourceRoot = "source/gdal";
