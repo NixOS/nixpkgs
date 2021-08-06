@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromGitLab
 , meson
 , ninja
 , cmake
@@ -11,7 +11,7 @@
 , libevent
 , openssl
 , zlib
-, pkgconfig
+, pkg-config
 , libgee
 , curl
 , vala
@@ -19,17 +19,21 @@
 , python3
 , gtk3
 , libhandy
+, libutp
 , hicolor-icon-theme
 , libtransmission
 , libb64
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "fragments";
   version = "1.5";
 
-  src = fetchgit {
-    url = "https://gitlab.gnome.org/World/Fragments";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = "Fragments";
     rev = version;
     fetchSubmodules = true;
     sha256 = "0x1kafhlgyi65l4w67c24r8mpvasg3q3c4wlgnjc9sxvp6ki7xbn";
@@ -43,7 +47,7 @@ stdenv.mkDerivation rec {
     libtool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -57,6 +61,7 @@ stdenv.mkDerivation rec {
     libevent
     libgee
     libhandy
+    libutp
     openssl
     zlib
     libtransmission
@@ -75,7 +80,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An easy to use BitTorrent client which follows the GNOME HIG and includes well thought-out features";
     homepage = https://gitlab.gnome.org/World/Fragments;
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ onny ];
   };
