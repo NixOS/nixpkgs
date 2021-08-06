@@ -189,6 +189,8 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  adax = callPackage ../development/python-modules/adax { };
+
   adb-enhanced = callPackage ../development/python-modules/adb-enhanced { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
@@ -4994,6 +4996,8 @@ in {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  open-garage = callPackage ../development/python-modules/open-garage { };
+
   openant = callPackage ../development/python-modules/openant { };
 
   openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
@@ -6460,6 +6464,8 @@ in {
   pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
 
   pyproj = callPackage ../development/python-modules/pyproj { };
+
+  pyprosegur = callPackage ../development/python-modules/pyprosegur { };
 
   pyptlib = callPackage ../development/python-modules/pyptlib { };
 
