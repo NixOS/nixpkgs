@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, installShellFiles
 , makeWrapper
 , git
 , go
@@ -15,7 +14,7 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
     rev = "v${version}";
-    sha256 = "1726j2b5jyvllvnk60g6px3g2jyyphd9pc4vgid45mis9b60sh8a";
+    sha256 = "0bl5ff2cplal6hg75800crhyviamk1ws85sq60h4zg21hzf21y68";
   };
   vendorSha256 = "0zxyd950ksjswja64rfri5v2yaalfg6qmq8215ildgrcavl9974n";
 
