@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}"
-    mv src/tuxedo_keyboard.ko $out/lib/modules/${kernel.modDirVersion}
+
+    for module in clevo_acpi.ko clevo_wmi.ko tuxedo_keyboard.ko tuxedo_io/tuxedo_io.ko; do
+        mv src/$module $out/lib/modules/${kernel.modDirVersion}
+    done
   '';
 
   meta = with lib; {
