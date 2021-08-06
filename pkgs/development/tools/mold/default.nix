@@ -1,9 +1,9 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , lib
 , autoPatchelfHook
 , cmake
-, tbb
 , llvmPackages_latest
 , xxHash
 , zlib
@@ -12,16 +12,24 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2LXOPirhjAifKYPgngUJwEdGrKMYsRySr5TL2x2p8J0=";
+    sha256 = "sha256:1z9i8nvdl9h0zydh1gd9244q96n9x1gh5y90m71bghnh7nws0zmd";
   };
 
-  buildInputs = [ tbb zlib openssl ];
+  patches = [
+    # Intercept all invocations of ld, ld.gold or ld.lld
+    (fetchpatch {
+      url = "https://github.com/rui314/mold/commit/d25c2553ad3cfa39d99043927db1af2c028b5acf.patch";
+      sha256 = "1ic1dyvjcrj6834n6mw9id50l6nymrfn6hws6pjpy8gjk6mqfvnk";
+    })
+  ];
+
+  buildInputs = [ zlib openssl ];
   nativeBuildInputs = [ autoPatchelfHook cmake xxHash ];
 
   dontUseCmakeConfigure = true;

@@ -1,27 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests
+{ stdenv, lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests
 , makeWrapper
 , gawk
 , glibc
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "vault";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "sha256-BO4xzZrX9eVETQWjBDBfP7TlD7sO+gLgbB330A11KAI=";
+    sha256 = "sha256-jyGymAplSe8vaSwbONtpRoAondxNBcRbFZ+YyOtr7qo=";
   };
 
-  goPackagePath = "github.com/hashicorp/vault";
+  vendorSha256 = "11mrdf7pwf8v7bb7wamv2yhixw4x06rd0qym942kk9bwif2balfp";
 
   subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  buildFlagsArray = [ "-tags=vault" "-ldflags=-s -w -X ${goPackagePath}/sdk/version.GitCommit=${src.rev}" ];
+  tags = [ "vault" ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/hashicorp/vault/sdk/version.GitCommit=${src.rev}"
+    "-X github.com/hashicorp/vault/sdk/version.Version=${version}"
+    "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
+  ];
 
   postInstall = ''
     echo "complete -C $out/bin/vault vault" > vault.bash

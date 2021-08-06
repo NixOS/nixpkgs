@@ -149,6 +149,13 @@
           <link linkend="opt-services.meshcentral.enable">services.meshcentral.enable</link>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/Arksine/moonraker">moonraker</link>,
+          an API web server for Klipper. Available as
+          <link linkend="opt-services.moonraker.enable">moonraker</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -797,6 +804,15 @@
           <literal>zfs allow your-pool-name</literal> and use
           <literal>zfs unallow syncoid your-pool-name</literal> to clean
           this up.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Zfs: <literal>latestCompatibleLinuxPackages</literal> is now
+          exported on the zfs package. One can use
+          <literal>boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;</literal>
+          to always track the latest compatible kernel with a given
+          version of zfs.
         </para>
       </listitem>
     </itemizedlist>

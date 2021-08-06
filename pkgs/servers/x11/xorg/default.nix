@@ -1915,17 +1915,17 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xeyes = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xeyes = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxcb, libXext, libXi, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     pname = "xeyes";
-    version = "1.1.2";
+    version = "1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xeyes-1.1.2.tar.bz2";
-      sha256 = "0lq5j7fryx1wn998jq6h3icz1h6pqrsbs3adskjzjyhn5l6yrg2p";
+      url = "mirror://xorg/individual/app/xeyes-1.2.0.tar.bz2";
+      sha256 = "1nxn443pfhddmwl59wplpjkslhlyfk307qx18nrimvvb2hipx8gq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libX11 libXext libXmu xorgproto libXrender libXt ];
+    buildInputs = [ libX11 libxcb libXext libXi libXmu xorgproto libXrender libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -3102,11 +3102,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgserver = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
     pname = "xorg-server";
-    version = "1.20.12";
+    version = "1.20.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/xserver/xorg-server-1.20.12.tar.xz";
-      sha256 = "1b4ckvxaiiiwdxwyfzbbfkr384qqy5qzfsm37z0fr08x8f9w0v9k";
+      url = "mirror://xorg/individual/xserver/xorg-server-1.20.13.tar.xz";
+      sha256 = "003371ad64bz7i2hx7idnh90yw12dbh116ssy40s70balnb4xaj0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -3312,11 +3312,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "xwd";
-    version = "1.0.7";
+    version = "1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xwd-1.0.7.tar.bz2";
-      sha256 = "1537i8q8pgf0sjklakzfvjwrq5b246qjywrx9ll8xfg0p6w1as6d";
+      url = "mirror://xorg/individual/app/xwd-1.0.8.tar.bz2";
+      sha256 = "06q36fh55r62ms0igfxsanrn6gv8lh794q1bw9xzw51p2qs2papv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];

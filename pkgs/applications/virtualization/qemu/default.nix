@@ -31,20 +31,19 @@
 , nixosTestRunner ? false
 }:
 
-with lib;
 let
-  audio = optionalString alsaSupport "alsa,"
-    + optionalString pulseSupport "pa,"
-    + optionalString sdlSupport "sdl,";
+  audio = lib.optionalString alsaSupport "alsa,"
+    + lib.optionalString pulseSupport "pa,"
+    + lib.optionalString sdlSupport "sdl,";
 
 in
 
 stdenv.mkDerivation rec {
-  version = "6.0.0";
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
+  version = "6.0.0";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
@@ -52,32 +51,32 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx pkg-config flex bison meson ninja ]
-    ++ optionals gtkSupport [ wrapGAppsHook ]
-    ++ optionals stdenv.isLinux [ autoPatchelfHook ];
-  buildInputs =
-    [ zlib glib perl pixman
-      vde2 texinfo lzo snappy
-      gnutls nettle curl
-    ]
-    ++ optionals ncursesSupport [ ncurses ]
-    ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
-    ++ optionals seccompSupport [ libseccomp ]
-    ++ optionals numaSupport [ numactl ]
-    ++ optionals pulseSupport [ libpulseaudio ]
-    ++ optionals sdlSupport [ SDL2 SDL2_image ]
-    ++ optionals gtkSupport [ gtk3 gettext vte ]
-    ++ optionals vncSupport [ libjpeg libpng ]
-    ++ optionals smartcardSupport [ libcacard ]
-    ++ optionals spiceSupport [ spice-protocol spice ]
-    ++ optionals usbredirSupport [ usbredir ]
-    ++ optionals stdenv.isLinux [ alsa-lib libaio libcap_ng libcap attr ]
-    ++ optionals xenSupport [ xen ]
-    ++ optionals cephSupport [ ceph ]
-    ++ optionals glusterfsSupport [ glusterfs libuuid ]
-    ++ optionals openGLSupport [ mesa epoxy libdrm ]
-    ++ optionals virglSupport [ virglrenderer ]
-    ++ optionals libiscsiSupport [ libiscsi ]
-    ++ optionals smbdSupport [ samba ];
+    ++ lib.optionals gtkSupport [ wrapGAppsHook ]
+    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+
+  buildInputs = [ zlib glib perl pixman
+    vde2 texinfo lzo snappy
+    gnutls nettle curl
+  ]
+    ++ lib.optionals ncursesSupport [ ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
+    ++ lib.optionals seccompSupport [ libseccomp ]
+    ++ lib.optionals numaSupport [ numactl ]
+    ++ lib.optionals pulseSupport [ libpulseaudio ]
+    ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
+    ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
+    ++ lib.optionals vncSupport [ libjpeg libpng ]
+    ++ lib.optionals smartcardSupport [ libcacard ]
+    ++ lib.optionals spiceSupport [ spice-protocol spice ]
+    ++ lib.optionals usbredirSupport [ usbredir ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib libaio libcap_ng libcap attr ]
+    ++ lib.optionals xenSupport [ xen ]
+    ++ lib.optionals cephSupport [ ceph ]
+    ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
+    ++ lib.optionals openGLSupport [ mesa epoxy libdrm ]
+    ++ lib.optionals virglSupport [ virglrenderer ]
+    ++ lib.optionals libiscsiSupport [ libiscsi ]
+    ++ lib.optionals smbdSupport [ samba ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
@@ -96,8 +95,8 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/9f22893adcb02580aee5968f32baa2cd109b3ec2.patch";
       sha256 = "1vkhm9vl671y4cra60b6704339qk1h5dyyb3dfvmvpsvfyh2pm7n";
     })
-  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ optionals stdenv.hostPlatform.isMusl [
+  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/xattr_size_max.patch";
       sha256 = "1xfdjs1jlvs99hpf670yianb8c3qz2ars8syzyz8f2c2cp5y4bxb";
@@ -149,36 +148,35 @@ stdenv.mkDerivation rec {
       --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace "'VERSION'" "'QEMU_VERSION'"
-  '' + optionalString stdenv.hostPlatform.isMusl ''
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
-  configureFlags =
-    [ "--audio-drv-list=${audio}"
-      "--enable-docs"
-      "--enable-tools"
-      "--enable-guest-agent"
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-    ]
-    ++ optional numaSupport "--enable-numa"
-    ++ optional seccompSupport "--enable-seccomp"
-    ++ optional smartcardSupport "--enable-smartcard"
-    ++ optional spiceSupport "--enable-spice"
-    ++ optional usbredirSupport "--enable-usb-redir"
-    ++ optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
-    ++ optional stdenv.isDarwin "--enable-cocoa"
-    ++ optional stdenv.isDarwin "--enable-hvf"
-    ++ optional stdenv.isLinux "--enable-linux-aio"
-    ++ optional gtkSupport "--enable-gtk"
-    ++ optional xenSupport "--enable-xen"
-    ++ optional cephSupport "--enable-rbd"
-    ++ optional glusterfsSupport "--enable-glusterfs"
-    ++ optional openGLSupport "--enable-opengl"
-    ++ optional virglSupport "--enable-virglrenderer"
-    ++ optional tpmSupport "--enable-tpm"
-    ++ optional libiscsiSupport "--enable-libiscsi"
-    ++ optional smbdSupport "--smbd=${samba}/bin/smbd";
+  configureFlags = [
+    "--audio-drv-list=${audio}"
+    "--enable-docs"
+    "--enable-tools"
+    "--enable-guest-agent"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ] ++ lib.optional numaSupport "--enable-numa"
+    ++ lib.optional seccompSupport "--enable-seccomp"
+    ++ lib.optional smartcardSupport "--enable-smartcard"
+    ++ lib.optional spiceSupport "--enable-spice"
+    ++ lib.optional usbredirSupport "--enable-usb-redir"
+    ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
+    ++ lib.optional stdenv.isDarwin "--enable-cocoa"
+    ++ lib.optional stdenv.isDarwin "--enable-hvf"
+    ++ lib.optional stdenv.isLinux "--enable-linux-aio"
+    ++ lib.optional gtkSupport "--enable-gtk"
+    ++ lib.optional xenSupport "--enable-xen"
+    ++ lib.optional cephSupport "--enable-rbd"
+    ++ lib.optional glusterfsSupport "--enable-glusterfs"
+    ++ lib.optional openGLSupport "--enable-opengl"
+    ++ lib.optional virglSupport "--enable-virglrenderer"
+    ++ lib.optional tpmSupport "--enable-tpm"
+    ++ lib.optional libiscsiSupport "--enable-libiscsi"
+    ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd";
 
   doCheck = false; # tries to access /dev
   dontWrapGApps = true;
@@ -190,7 +188,7 @@ stdenv.mkDerivation rec {
     # copy qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin
     cp $out/bin/qemu-ga $ga/bin/
-  '' + optionalString gtkSupport ''
+  '' + lib.optionalString gtkSupport ''
     # wrap GTK Binaries
     for f in $out/bin/qemu-system-*; do
       wrapGApp $f

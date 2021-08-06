@@ -369,6 +369,7 @@ in
   dockerTools = callPackage ../build-support/docker {
     writePython3 = buildPackages.writers.writePython3;
   };
+  tarsum = callPackage ../build-support/docker/tarsum.nix { };
 
   snapTools = callPackage ../build-support/snap { };
 
@@ -1510,6 +1511,8 @@ in
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
+  echidna = haskell.lib.justStaticExecutables (haskellPackages.callPackage (../tools/security/echidna) { });
+
   sedutil = callPackage ../tools/security/sedutil { };
 
   elvish = callPackage ../shells/elvish { };
@@ -2556,6 +2559,8 @@ in
 
   dgen-sdl = callPackage ../misc/emulators/dgen-sdl { };
 
+  dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
+
   doitlive = callPackage ../tools/misc/doitlive { };
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
@@ -2634,6 +2639,9 @@ in
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
+  };
+  element-desktop-wayland = element-desktop.override {
+    useWayland = true;
   };
 
   element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
@@ -2988,6 +2996,8 @@ in
 
   lepton = callPackage ../tools/graphics/lepton { };
 
+  lepton-eda = callPackage ../applications/science/electronics/lepton-eda { };
+
   lexicon = callPackage ../tools/admin/lexicon { };
 
   lief = callPackage ../development/libraries/lief {
@@ -3099,6 +3109,8 @@ in
   monsoon = callPackage ../tools/security/monsoon {};
 
   moodle-dl = callPackage ../tools/networking/moodle-dl { };
+
+  moonraker = callPackage ../servers/moonraker { };
 
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (pkgs.xorg) libX11 libXtst libXfixes;
@@ -7407,6 +7419,8 @@ in
 
   ngrok-1 = callPackage ../tools/networking/ngrok-1 { };
 
+  nitter = callPackage ../servers/nitter { };
+
   noice = callPackage ../applications/misc/noice { };
 
   noip = callPackage ../tools/networking/noip { };
@@ -8953,6 +8967,8 @@ in
     libpng = libpng12;
   };
 
+  snmpcheck = callPackage ../tools/networking/snmpcheck {};
+
   sniffglue = callPackage ../tools/networking/sniffglue { };
 
   snort = callPackage ../applications/networking/ids/snort { };
@@ -9043,6 +9059,8 @@ in
   solanum = callPackage ../servers/irc/solanum {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  solc-select = with python3Packages; toPythonApplication solc-select;
 
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
@@ -9840,6 +9858,8 @@ in
   sentry-cli = callPackage ../development/tools/sentry-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  sentry-native = callPackage ../development/libraries/sentry-native { };
 
   vtun = callPackage ../tools/networking/vtun {
     openssl = openssl_1_0_2;
@@ -10859,6 +10879,8 @@ in
 
   devpi-server = callPackage ../development/tools/devpi-server {};
 
+  dictu = callPackage ../development/compilers/dictu { };
+
   dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8;};
 
   ecl = callPackage ../development/compilers/ecl { };
@@ -10889,9 +10911,13 @@ in
 
   flyctl = callPackage ../development/web/flyctl { };
 
+  fluidd = callPackage ../applications/misc/fluidd { };
+
   flutterPackages =
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
+
+  fnlfmt = callPackage ../development/tools/fnlfmt { };
 
   fpc = callPackage ../development/compilers/fpc { };
 
@@ -11635,9 +11661,12 @@ in
     inherit (darwin) libiconv libobjc libresolv;
   }) mx jvmci8 graalvm8;
 
-  inherit (callPackages ../development/compilers/graalvm/community-edition.nix {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  }) graalvm8-ce graalvm11-ce;
+  graalvmCEPackages =
+    recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition {
+      inherit (darwin.apple_sdk.frameworks) Foundation;
+    });
+  graalvm8-ce = graalvmCEPackages.graalvm8-ce;
+  graalvm11-ce = graalvmCEPackages.graalvm11-ce;
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee
@@ -12144,7 +12173,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-rr = callPackage ../development/tools/rust/cargo-rr { };
-  cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin { };
+  cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-update = callPackage ../tools/package-management/cargo-update {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -13110,10 +13141,9 @@ in
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
-  apacheKafka = apacheKafka_2_6;
-  apacheKafka_2_4 = callPackage ../servers/apache-kafka { majorVersion = "2.4"; };
-  apacheKafka_2_5 = callPackage ../servers/apache-kafka { majorVersion = "2.5"; };
-  apacheKafka_2_6 = callPackage ../servers/apache-kafka { majorVersion = "2.6"; };
+  apacheKafka = apacheKafka_2_8;
+  apacheKafka_2_7 = callPackage ../servers/apache-kafka { majorVersion = "2.7"; };
+  apacheKafka_2_8 = callPackage ../servers/apache-kafka { majorVersion = "2.8"; };
 
   kt = callPackage ../tools/misc/kt {};
 
@@ -14450,6 +14480,8 @@ in
     stdenv = gccStdenv;
   };
 
+  szyszka = callPackage ../tools/misc/szyszka { };
+
   taplo-cli = callPackage ../development/tools/taplo-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -15660,6 +15692,7 @@ in
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
   goocanvas2 = callPackage ../development/libraries/goocanvas/2.x.nix { };
+  goocanvas3 = callPackage ../development/libraries/goocanvas/3.x.nix { };
   goocanvasmm2 = callPackage ../development/libraries/goocanvasmm { };
 
   gflags = callPackage ../development/libraries/gflags { };
@@ -15823,6 +15856,8 @@ in
     pango = pango.override { cairo = cairo.override { x11Support = true; }; x11Support = true; };
     gdktarget = "x11";
   };
+
+  gtkextra = callPackage ../development/libraries/gtkextra { };
 
   gtk3 = callPackage ../development/libraries/gtk/3.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
@@ -16229,6 +16264,8 @@ in
   lmdb = callPackage ../development/libraries/lmdb { };
 
   lmdbxx = callPackage ../development/libraries/lmdbxx { };
+
+  lemon-graph = callPackage ../development/libraries/lemon-graph { };
 
   levmar = callPackage ../development/libraries/levmar { };
 
@@ -17378,6 +17415,8 @@ in
   libva1 = callPackage ../development/libraries/libva/1.0.0.nix { };
   libva1-minimal = libva1.override { minimal = true; };
 
+  libvarlink = callPackage ../development/libraries/libvarlink { };
+
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
   libmodulemd = callPackage ../development/libraries/libmodulemd { };
@@ -18246,8 +18285,6 @@ in
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
-
-  qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
@@ -19795,6 +19832,8 @@ in
   mailman-rss = callPackage ../development/python-modules/mailman-rss { };
 
   mailman-web = with python3.pkgs; toPythonApplication mailman-web;
+
+  maker-panel = callPackage ../tools/misc/maker-panel { };
 
   mastodon = callPackage ../servers/mastodon { };
 
@@ -22888,6 +22927,8 @@ in
 
   recursive = callPackage ../data/fonts/recursive { };
 
+  rubik = callPackage ../data/fonts/rubik { };
+
   rhodium-libre = callPackage ../data/fonts/rhodium-libre { };
 
   rictydiminished-with-firacode = callPackage ../data/fonts/rictydiminished-with-firacode { };
@@ -23291,8 +23332,6 @@ in
   };
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
-
-  aesop = callPackage ../applications/office/aesop { };
 
   AusweisApp2 = libsForQt5.callPackage ../applications/misc/ausweisapp2 { };
 
@@ -23944,16 +23983,14 @@ in
   };
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
-    inherit (lib) makeScope makeOverridable;
-    inherit emacs;
+    inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
+    emacs' = emacs;
     pkgs' = pkgs;  # default pkgs used for bootstrapping the emacs package set
   };
 
   inherit (gnome) empathy;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
-
-  envelope = callPackage ../applications/office/envelope { };
 
   eolie = callPackage ../applications/networking/browsers/eolie { };
 
@@ -25827,6 +25864,8 @@ in
     ocamlPackages = ocaml-ng.ocamlPackages_4_08;
   };
 
+  mlvwm = callPackage ../applications/window-managers/mlvwm { };
+
   MMA = callPackage ../applications/audio/MMA { };
 
   mmex = callPackage ../applications/office/mmex {
@@ -26129,6 +26168,8 @@ in
   pcmanfm-qt = lxqt.pcmanfm-qt;
 
   pcmanx-gtk2 = callPackage ../applications/misc/pcmanx-gtk2 { };
+
+  pdfmixtool = libsForQt5.callPackage ../applications/office/pdfmixtool { };
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
@@ -27861,8 +27902,6 @@ in
 
   neovim-qt-unwrapped = libsForQt5.callPackage ../applications/editors/neovim/neovim-qt.nix { };
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
-
-  olifant = callPackage ../applications/misc/olifant { };
 
   gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim {
     gtk = pkgs.gtk3;
