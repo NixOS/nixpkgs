@@ -23379,6 +23379,8 @@ in
 
   backintime = backintime-qt;
 
+  ballerburg = callPackage ../games/ballerburg { } ;
+
   balsa = callPackage ../applications/networking/mailreaders/balsa { };
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
