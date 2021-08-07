@@ -23,6 +23,20 @@ rec {
       sha256_64bit = "120ymf59l6nipczszf82lrm2p4ihhqyv2pfwwfg9wy96vqcckc8i";
       settingsSha256 = "08jh7g34p9yxv5fh1cw0r2pjx65ryiv3w2lk1qg0gxn2r7xypkx0";
       persistencedSha256 = "040gx4wqp3hxcfb4aba4sl7b01ixr5slhzw0xldwcqlmhpwqphi5";
+
+      patches = [
+        # Patch to allow building on 5.13+ kernels
+        (fetchurl {
+          url = "https://gist.githubusercontent.com/joanbm/4a9d392e6f2d45c93ef434bda78174e5/raw/60a9d3846e6ba377da8cecaf56dd8eefa35ce03d/nvidia-fix-linux-5.13.patch";
+          sha256 = "bwIZmZlkp02X5SorccTtjNkWpRks61QtvvybNd+0Oqo=";
+
+          # We put the source in kernel/ before patchPhase, so we need to fix the paths.
+          postFetch = ''
+            sed -i 's|--- a/|--- a/kernel/|' $out
+            sed -i 's|--- b/|--- b/kernel/|' $out
+          '';
+        })
+      ];
     }
     else legacy_390;
 
