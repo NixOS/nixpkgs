@@ -33,4 +33,4 @@ except:
     pass
 
 with open("versions.json", "w") as out_file:
-    out_file.write(json.dumps(out, sort_keys=True, indent=2))
+    out_file.write(json.dumps(out, sort_keys=True, indent=2) + "\n")
