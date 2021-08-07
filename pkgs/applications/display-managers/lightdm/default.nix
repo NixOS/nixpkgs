@@ -20,7 +20,7 @@
 , polkit
 , accountsservice
 , gtk-doc
-, gnome3
+, gnome
 , gobject-introspection
 , vala
 , fetchpatch
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     yelp-tools
-    gnome3.yelp-xsl
+    gnome.yelp-xsl
     gobject-introspection
     gtk-doc
     intltool
@@ -142,6 +142,6 @@ stdenv.mkDerivation rec {
     description = "A cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
   };
 }

@@ -1,15 +1,16 @@
 { lib
 , buildPythonPackage
 , aiohttp
-, aiozeroconf
+, audio-metadata
+, bitarray
 , cryptography
 , deepdiff
 , fetchFromGitHub
+, miniaudio
 , netifaces
 , protobuf
 , pytest-aiohttp
 , pytest-asyncio
-, pytest-runner
 , pytest-timeout
 , pytestCheckHook
 , srptools
@@ -18,21 +19,26 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.7.7";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dPnh8XZN7ZVR2rYNnj7GSYXW5I2GNQwD/KRDTgs2AtI=";
+    sha256 = "sha256-/ccmYNOYE+RkJiJbGkQgdYE8/X4xzyRT4dkMa/qSZEc=";
   };
 
-  nativeBuildInputs = [ pytest-runner];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
 
   propagatedBuildInputs = [
     aiohttp
-    aiozeroconf
+    audio-metadata
+    bitarray
     cryptography
+    miniaudio
     netifaces
     protobuf
     srptools

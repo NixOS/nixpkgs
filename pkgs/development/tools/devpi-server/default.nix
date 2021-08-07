@@ -55,6 +55,8 @@ python3Packages.buildPythonApplication rec {
     "TestMirrorIndexThings"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib;{
     homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";

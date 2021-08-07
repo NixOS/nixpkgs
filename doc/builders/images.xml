@@ -5,8 +5,8 @@
  <para>
   This chapter describes tools for creating various types of images.
  </para>
- <xi:include href="images/appimagetools.xml" />
+ <xi:include href="images/appimagetools.section.xml" />
  <xi:include href="images/dockertools.section.xml" />
  <xi:include href="images/ocitools.section.xml" />
- <xi:include href="images/snaptools.xml" />
+ <xi:include href="images/snaptools.section.xml" />
 </chapter>

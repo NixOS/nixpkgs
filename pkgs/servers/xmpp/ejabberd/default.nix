@@ -6,8 +6,6 @@
 , withSqlite ? false, sqlite
 , withPam ? false, pam
 , withZlib ? true, zlib
-, withRiak ? false
-, withElixir ? false, elixir
 , withIconv ? true
 , withTools ? false
 , withRedis ? false
@@ -24,12 +22,12 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "20.12";
+  version = "21.04";
   pname = "ejabberd";
 
   src = fetchurl {
     url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
-    sha256 = "sha256-nZxdYXRyv4UejPLHNT/p6CrvW22Koo7rZSi96KRjqFQ=";
+    sha256 = "09s8mj0dkvp9mxazsqxqqmnl5n2xyi8avx0rzgvqrbl3byanzfzr";
   };
 
   nativeBuildInputs = [ fakegit makeWrapper ];
@@ -38,11 +36,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional withSqlite sqlite
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib
-    ++ lib.optional withElixir elixir
-    ;
-
-  # Apparently needed for Elixir
-  LANG = "en_US.UTF-8";
+  ;
 
   deps = stdenv.mkDerivation {
     pname = "ejabberd-deps";
@@ -52,13 +46,11 @@ in stdenv.mkDerivation rec {
 
     configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
-    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
+    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib ];
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
     makeFlags = [ "deps" ];
-
-    phases = [ "unpackPhase" "configurePhase" "buildPhase" "installPhase" ];
 
     installPhase = ''
       for i in deps/*; do
@@ -76,7 +68,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-0/hBgA+9rsDOBcvbROSpc5Xnw4JkYpuLCl2V+lJnieY=";
+    outputHash = "1mvixgb46ss35abjwz3lw38c69bii1xyj557a92bvrxc1gc6gx31";
   };
 
   configureFlags =
@@ -85,8 +77,6 @@ in stdenv.mkDerivation rec {
       (lib.enableFeature withSqlite "sqlite")
       (lib.enableFeature withPam "pam")
       (lib.enableFeature withZlib "zlib")
-      (lib.enableFeature withRiak "riak")
-      (lib.enableFeature withElixir "elixir")
       (lib.enableFeature withIconv "iconv")
       (lib.enableFeature withTools "tools")
       (lib.enableFeature withRedis "redis")
@@ -97,7 +87,7 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     cp -r $deps deps
     chmod -R +w deps
-    patchShebangs deps
+    patchShebangs .
   '';
 
   postInstall = ''
@@ -108,6 +98,7 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
     wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    rm $out/bin/{mix,iex,elixir}
   '';
 
   meta = with lib; {
@@ -116,6 +107,5 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
     maintainers = with maintainers; [ sander abbradar ];
-    broken = withElixir;
   };
 }

@@ -30,6 +30,7 @@ rec {
         int
         float
         str
+        path
         (attrsOf valueType)
         (listOf valueType)
       ]) // {
@@ -56,7 +57,16 @@ rec {
       };
     };
 
-  ini = { listsAsDuplicateKeys ? false, ... }@args: {
+  ini = {
+    # Represents lists as duplicate keys
+    listsAsDuplicateKeys ? false,
+    # Alternative to listsAsDuplicateKeys, converts list to non-list
+    # listToValue :: [IniAtom] -> IniAtom
+    listToValue ? null,
+    ...
+    }@args:
+    assert !listsAsDuplicateKeys || listToValue == null;
+    {
 
     type = with lib.types; let
 
@@ -74,12 +84,25 @@ rec {
           coercedTo singleIniAtom lib.singleton (listOf singleIniAtom) // {
             description = singleIniAtom.description + " or a list of them for duplicate keys";
           }
+        else if listToValue != null then
+          coercedTo singleIniAtom lib.singleton (nonEmptyListOf singleIniAtom) // {
+            description = singleIniAtom.description + " or a non-empty list of them";
+          }
         else
           singleIniAtom;
 
     in attrsOf (attrsOf iniAtom);
 
-    generate = name: value: pkgs.writeText name (lib.generators.toINI args value);
+    generate = name: value:
+      let
+        transformedValue =
+          if listToValue != null
+          then
+            lib.mapAttrs (section: lib.mapAttrs (key: val:
+              if lib.isList val then listToValue val else val
+            )) value
+          else value;
+      in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
 
   };
 
@@ -90,6 +113,7 @@ rec {
         int
         float
         str
+        path
         (attrsOf valueType)
         (listOf valueType)
       ] // {

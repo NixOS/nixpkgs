@@ -1,15 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, dbus-glib,
-  libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3,
-  desktop-file-utils, dconf, gtk3, polkit, mate, hicolor-icon-theme, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, dbus-glib
+, libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3
+, desktop-file-utils, dconf, gtk3, polkit, mate, hicolor-icon-theme, wrapGAppsHook
+, mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-control-center";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "08bai47fsmbxlw2lhig9n6c8sxr24ixkd1spq3j0635yzcqighb0";
+    sha256 = "18vsqkcl4n3k5aa05fqha61jc3133zw07gd604sm0krslwrwdn39";
   };
 
   nativeBuildInputs = [
@@ -49,10 +50,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "Utilities to configure the MATE desktop";
     homepage = "https://github.com/mate-desktop/mate-control-center";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

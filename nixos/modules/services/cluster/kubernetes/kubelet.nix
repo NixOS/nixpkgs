@@ -134,7 +134,7 @@ in
     containerRuntimeEndpoint = mkOption {
       description = "Endpoint at which to find the container runtime api interface/socket";
       type = str;
-      default = "unix:///var/run/containerd/containerd.sock";
+      default = "unix:///run/containerd/containerd.sock";
     };
 
     enable = mkEnableOption "Kubernetes kubelet.";
@@ -142,7 +142,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes kubelet extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {

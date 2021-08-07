@@ -1,17 +1,17 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
-, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
+, defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
 }@args:
 
 import ./generic.nix (rec {
   pname = "Pillow";
-  version = "8.1.2";
+  version = "8.3.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i7w0fi24za3naz3k3qav6lrhf034nzdy6m9025djlj80476cz5h";
+    sha256 = "2cac53839bfc5cece8fdbe7f084d5e3ee61e1303cccc86511d351adcb9e2c792";
   };
 
   meta = with lib; {

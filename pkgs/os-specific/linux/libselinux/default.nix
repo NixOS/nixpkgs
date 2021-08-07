@@ -35,15 +35,21 @@ stdenv.mkDerivation rec {
     "MAN3DIR=$(man)/share/man/man3"
     "MAN5DIR=$(man)/share/man/man5"
     "MAN8DIR=$(man)/share/man/man8"
-    "PYTHON=${python3.pythonForBuild}/bin/python"
-    "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
     "SBINDIR=$(bin)/sbin"
     "SHLIBDIR=$(out)/lib"
 
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
+  ] ++ optionals enablePython [
+    "PYTHON=${python3.pythonForBuild.interpreter}"
+    "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
   ];
 
-  preInstall = ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace src/procattr.c \
+      --replace "#include <unistd.h>" ""
+  '';
+
+  preInstall = optionalString enablePython ''
     mkdir -p $py/${python3.sitePackages}/selinux
   '';
 

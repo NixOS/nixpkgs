@@ -99,7 +99,7 @@ in stdenv.mkDerivation {
     inherit description platforms;
     license = lib.licenses.isc;
     maintainers = with lib.maintainers;
-      [ pmahoney Profpatsch ] ++ maintainers;
+      [ pmahoney Profpatsch qyliss ] ++ maintainers;
   };
 
 }

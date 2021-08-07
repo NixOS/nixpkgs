@@ -1,15 +1,17 @@
 { lib, stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
 , libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
 , makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
-, libpulseaudio, libopus, libogg, jansson, libsodium }:
+, libpulseaudio, libopus, libogg, jansson, libsodium
+
+, postgresqlSupport ? false, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "sha256-2u9gO9Mu0dM1yixcaqOnZcDfGcp69dc5CH5tkl6vRas=";
+    sha256 = "1hhqv994akymf4s593mc1wpsjy6hccd0zbdim3qmc1y3f32hacja";
   };
 
   enableParallelBuilding = true;
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
     adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
     libmicrohttpd libunistring libxml2 ncurses gettext libsodium
     sqlite zlib libpulseaudio libopus libogg jansson
-  ];
+  ] ++ lib.optional postgresqlSupport postgresql;
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide

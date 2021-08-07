@@ -37,6 +37,7 @@ latest-rt-version() {
     branch="$1" # e.g. 5.4
     curl -sL "$mirror/projects/rt/$branch/sha256sums.asc" |
         sed -ne '/.patch.xz/ { s/.*patch-\(.*\).patch.xz/\1/p}' |
+        grep -v '\-rc' |
         tail -n 1
 }
 

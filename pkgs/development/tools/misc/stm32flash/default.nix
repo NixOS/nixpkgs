@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "stm32flash-0.5";
+  pname = "stm32flash";
+  version = "0.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/stm32flash/${name}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "01p396daqw3zh6nijffbfbwyqza33bi2k4q3m5yjzs02xwi99alp";
   };
 

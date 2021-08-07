@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ kovirobi ];
     platforms   = lib.platforms.linux;
-    inherit version;
-
     longDescription = ''
       A simple command line tool to check for new mail in local mbox and
       maildir and remote POP3 and IMAP mailboxes.

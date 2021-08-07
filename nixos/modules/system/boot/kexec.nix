@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 {
-  config = lib.mkIf (lib.any (lib.meta.platformMatch pkgs.stdenv.hostPlatform) pkgs.kexectools.meta.platforms) {
+  config = lib.mkIf (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.kexectools) {
     environment.systemPackages = [ pkgs.kexectools ];
 
     systemd.services.prepare-kexec =

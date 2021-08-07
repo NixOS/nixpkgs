@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

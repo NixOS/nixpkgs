@@ -21,6 +21,9 @@
 , # Legacy overrides to the intermediate kernel config, as string
   extraConfig ? ""
 
+  # Additional make flags passed to kbuild
+, extraMakeFlags ? []
+
 , # kernel intermediate config overrides, as a set
  structuredExtraConfig ? {}
 
@@ -46,7 +49,6 @@
                        stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 
-, isXen      ? features.xen_dom0 or false
 , isZen      ? false
 , isLibre    ? false
 , isHardened ? false
@@ -68,13 +70,11 @@ assert stdenv.isLinux;
 
 let
   # Combine the `features' attribute sets of all the kernel patches.
-  kernelFeatures = lib.fold (x: y: (x.features or {}) // y) ({
+  kernelFeatures = lib.foldr (x: y: (x.features or {}) // y) ({
     iwlwifi = true;
     efiBootStub = true;
     needsCifsUtils = true;
     netfilterRPFilter = true;
-    grsecurity = false;
-    xen_dom0 = false;
     ia32Emulation = true;
   } // features) kernelPatches;
 
@@ -100,7 +100,7 @@ let
     in lib.concatStringsSep "\n" ([baseConfigStr] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
-    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
+    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch extraMakeFlags;
     pname = "linux-config";
     inherit version;
 
@@ -119,6 +119,9 @@ let
     # e.g. "bzImage"
     kernelTarget = stdenv.hostPlatform.linux-kernel.target;
 
+    makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags) stdenv.hostPlatform.linux-kernel.makeFlags
+      ++ extraMakeFlags;
+
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
       # generate-config.pl from the generic builder can answer them.
@@ -131,18 +134,25 @@ let
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"
+      export HOSTCC=$CC_FOR_BUILD
+      export HOSTCXX=$CXX_FOR_BUILD
+      export HOSTAR=$AR_FOR_BUILD
+      export HOSTLD=$LD_FOR_BUILD
 
       # Get a basic config file for later refinement with $generateConfig.
-      make -C .  O="$buildRoot" $kernelBaseConfig \
+      make $makeFlags \
+          -C . O="$buildRoot" $kernelBaseConfig \
           ARCH=$kernelArch \
-          HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
-          HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}g++
+          HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
+          CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF \
+          $makeFlags
 
       # Create the config file.
       echo "generating kernel configuration..."
       ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
       DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
-           PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
+        PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
+        perl -w $generateConfig
     '';
 
     installPhase = "mv $buildRoot/.config $out";
@@ -150,7 +160,6 @@ let
     enableParallelBuilding = true;
 
     passthru = rec {
-
       module = import ../../../../nixos/modules/system/boot/kernel_config.nix;
       # used also in apache
       # { modules = [ { options = res.options; config = svc.config or svc; } ];
@@ -170,15 +179,16 @@ let
     };
   }; # end of configfile derivation
 
-  kernel = (callPackage ./manual-config.nix {}) {
-    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMeta configfile;
+  kernel = (callPackage ./manual-config.nix { inherit buildPackages;  }) {
+    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
 
   passthru = {
     features = kernelFeatures;
-    inherit commonStructuredConfig isXen isZen isHardened isLibre modDirVersion;
+    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre modDirVersion;
+    isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
     kernelOlder = lib.versionOlder version;
     kernelAtLeast = lib.versionAtLeast version;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);

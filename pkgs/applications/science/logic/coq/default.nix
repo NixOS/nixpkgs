@@ -9,7 +9,7 @@
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ncurses
 , buildIde ? true
-, glib, gnome3, wrapGAppsHook
+, glib, gnome, wrapGAppsHook
 , csdp ? null
 , version, coq-version ? null,
 }@args:
@@ -128,15 +128,16 @@ self = stdenv.mkDerivation {
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
       (if versionAtLeast "8.10"
-       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.adwaita-icon-theme wrapGAppsHook ]
-       else [ ocamlPackages.lablgtk ]);
+       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme wrapGAppsHook ]
+       else [ ocamlPackages.lablgtk ])
+    ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2
+  ;
 
   postPatch = ''
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
-    substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    substituteInPlace configure.ml --replace '"md5 -q"' '"md5sum"'
+    ${if !versionAtLeast "8.7" then "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\"" else ""}
     ${csdpPatch}
   '';
 
@@ -161,6 +162,7 @@ self = stdenv.mkDerivation {
   prefixKey = "-prefix ";
 
   buildFlags = [ "revision" "coq" "coqide" "bin/votour" ];
+  enableParallelBuilding = true;
 
   createFindlibDestdir = true;
 

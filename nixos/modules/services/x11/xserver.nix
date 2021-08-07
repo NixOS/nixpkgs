@@ -81,13 +81,7 @@ let
     monitors = forEach xrandrHeads (h: ''
       Option "monitor-${h.config.output}" "${h.name}"
     '');
-    # First option is indented through the space in the config but any
-    # subsequent options aren't so we need to apply indentation to
-    # them here
-    monitorsIndented = if length monitors > 1
-      then singleton (head monitors) ++ map (m: "  " + m) (tail monitors)
-      else monitors;
-  in concatStrings monitorsIndented;
+  in concatStrings monitors;
 
   # Here we chain every monitor from the left to right, so we have:
   # m4 right of m3 right of m2 right of m1   .----.----.----.----.
@@ -138,10 +132,15 @@ let
 
         echo '${cfg.filesSection}' >> $out
         echo 'EndSection' >> $out
+        echo >> $out
 
         echo "$config" >> $out
       ''; # */
 
+  prefixStringLines = prefix: str:
+    concatMapStringsSep "\n" (line: prefix + line) (splitString "\n" str);
+
+  indent = prefixStringLines "  ";
 in
 
 {
@@ -358,6 +357,13 @@ in
         description = ''
           The contents of the configuration file of the X server
           (<filename>xorg.conf</filename>).
+
+          This option is set by multiple modules, and the configs are
+          concatenated together.
+
+          In Xorg configs the last config entries take precedence,
+          so you may want to use <literal>lib.mkAfter</literal> on this option
+          to override NixOS's defaults.
         '';
       };
 
@@ -651,6 +657,7 @@ in
         pkgs.xterm
         pkgs.xdg-utils
         xorg.xf86inputevdev.out # get evdev.4 man page
+        pkgs.nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
@@ -666,6 +673,7 @@ in
     # The default max inotify watches is 8192.
     # Nowadays most apps require a good number of inotify watches,
     # the value below is used by default on several other distros.
+    boot.kernel.sysctl."fs.inotify.max_user_instances" = mkDefault 524288;
     boot.kernel.sysctl."fs.inotify.max_user_watches" = mkDefault 524288;
 
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
@@ -735,29 +743,29 @@ in
         Section "ServerFlags"
           Option "AllowMouseOpenFail" "on"
           Option "DontZap" "${if cfg.enableCtrlAltBackspace then "off" else "on"}"
-          ${cfg.serverFlagsSection}
+        ${indent cfg.serverFlagsSection}
         EndSection
 
         Section "Module"
-          ${cfg.moduleSection}
+        ${indent cfg.moduleSection}
         EndSection
 
         Section "Monitor"
           Identifier "Monitor[0]"
-          ${cfg.monitorSection}
+        ${indent cfg.monitorSection}
         EndSection
 
         # Additional "InputClass" sections
-        ${flip concatMapStrings cfg.inputClassSections (inputClassSection: ''
-        Section "InputClass"
-          ${inputClassSection}
-        EndSection
+        ${flip (concatMapStringsSep "\n") cfg.inputClassSections (inputClassSection: ''
+          Section "InputClass"
+          ${indent inputClassSection}
+          EndSection
         '')}
 
 
         Section "ServerLayout"
           Identifier "Layout[all]"
-          ${cfg.serverLayoutSection}
+        ${indent cfg.serverLayoutSection}
           # Reference the Screen sections for each driver.  This will
           # cause the X server to try each in turn.
           ${flip concatMapStrings (filter (d: d.display) cfg.drivers) (d: ''
@@ -780,9 +788,9 @@ in
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName or driver.name}"
             ${if cfg.useGlamor then ''Option "AccelMethod" "glamor"'' else ""}
-            ${cfg.deviceSection}
-            ${driver.deviceSection or ""}
-            ${xrandrDeviceSection}
+          ${indent cfg.deviceSection}
+          ${indent (driver.deviceSection or "")}
+          ${indent xrandrDeviceSection}
           EndSection
           ${optionalString driver.display ''
 
@@ -793,18 +801,22 @@ in
                 Monitor "Monitor[0]"
               ''}
 
-              ${cfg.screenSection}
-              ${driver.screenSection or ""}
+            ${indent cfg.screenSection}
+            ${indent (driver.screenSection or "")}
 
               ${optionalString (cfg.defaultDepth != 0) ''
                 DefaultDepth ${toString cfg.defaultDepth}
               ''}
 
               ${optionalString
-                  (driver.name != "virtualbox" &&
+                (
+                  driver.name != "virtualbox"
+                  &&
                   (cfg.resolutions != [] ||
                     cfg.extraDisplaySettings != "" ||
-                    cfg.virtualScreen != null))
+                    cfg.virtualScreen != null
+                  )
+                )
                 (let
                   f = depth:
                     ''
@@ -812,7 +824,7 @@ in
                         Depth ${toString depth}
                         ${optionalString (cfg.resolutions != [])
                           "Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
-                        ${cfg.extraDisplaySettings}
+                      ${indent cfg.extraDisplaySettings}
                         ${optionalString (cfg.virtualScreen != null)
                           "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
                       EndSubSection

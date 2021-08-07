@@ -5,7 +5,7 @@ with haskellLib;
 self: super: {
 
   # This compiler version needs llvm 7.x.
-  llvmPackages = pkgs.llvmPackages_7;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_7;
 
   # Disable GHC 8.8.x core libraries.
   array = null;
@@ -60,8 +60,6 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: {
     Cabal = self.Cabal_3_4_0_0;
     base16-bytestring = self.base16-bytestring_0_1_1_7;
-    random = dontCheck super.random_1_2_0;  # break infinite recursion
-    hashable = doJailbreak super.hashable;  # allow random 1.2.x
   });
 
   # Ignore overly restrictive upper version bounds.
@@ -137,4 +135,5 @@ self: super: {
 
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
+
 }

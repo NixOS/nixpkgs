@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       libICE
       libSM
     ] ++ lib.optional enableSystemd systemd
-    ++ lib.optionals (!stdenv.isDarwin) [ audit libapparmor ];
+    ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
   configureFlags = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ] ++ lib.optional (!x11Support) "--without-x"
-  ++ lib.optionals (!stdenv.isDarwin) [ "--enable-apparmor" "--enable-libaudit" ];
+  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ];
 
   # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
   # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     description = "Simple interprocess messaging system";
     homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;
   };
 }

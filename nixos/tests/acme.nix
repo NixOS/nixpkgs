@@ -245,7 +245,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
           )
           for line in subject_data.lower().split("\n"):
               if "subject" in line:
-                  print(f"First subject in fullchain.pem: ", line)
+                  print(f"First subject in fullchain.pem: {line}")
                   assert cert_name.lower() in line
                   return
 
@@ -330,30 +330,38 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
       with subtest("Can request certificate with HTTPS-01 challenge"):
           webserver.wait_for_unit("acme-finished-a.example.test.target")
-          check_fullchain(webserver, "a.example.test")
-          check_issuer(webserver, "a.example.test", "pebble")
-          check_connection(client, "a.example.test")
 
       with subtest("Certificates and accounts have safe + valid permissions"):
           group = "${nodes.webserver.config.security.acme.certs."a.example.test".group}"
           webserver.succeed(
-              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/a.example.test/* | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+              f"test $(stat -L -c '%a %U %G' /var/lib/acme/a.example.test/*.pem | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
           )
           webserver.succeed(
-              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/.lego/a.example.test/**/* | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+              f"test $(stat -L -c '%a %U %G' /var/lib/acme/.lego/a.example.test/**/a.example.test* | tee /dev/stderr | grep '600 acme {group}' | wc -l) -eq 4"
           )
           webserver.succeed(
-              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/a.example.test | tee /dev/stderr | grep '750 acme {group}' | wc -l) -eq 1"
+              f"test $(stat -L -c '%a %U %G' /var/lib/acme/a.example.test | tee /dev/stderr | grep '750 acme {group}' | wc -l) -eq 1"
           )
           webserver.succeed(
-              f"test $(find /var/lib/acme/accounts -type f -exec stat -L -c \"%a %U %G\" {{}} \\; | tee /dev/stderr | grep -v '600 acme {group}' | wc -l) -eq 0"
+              f"test $(find /var/lib/acme/accounts -type f -exec stat -L -c '%a %U %G' {{}} \\; | tee /dev/stderr | grep -v '600 acme {group}' | wc -l) -eq 0"
           )
 
+      with subtest("Certs are accepted by web server"):
+          webserver.succeed("systemctl start nginx.service")
+          check_fullchain(webserver, "a.example.test")
+          check_issuer(webserver, "a.example.test", "pebble")
+          check_connection(client, "a.example.test")
+
+      # Selfsigned certs tests happen late so we aren't fighting the system init triggering cert renewal
       with subtest("Can generate valid selfsigned certs"):
           webserver.succeed("systemctl clean acme-a.example.test.service --what=state")
           webserver.succeed("systemctl start acme-selfsigned-a.example.test.service")
           check_fullchain(webserver, "a.example.test")
           check_issuer(webserver, "a.example.test", "minica")
+          # Check selfsigned permissions
+          webserver.succeed(
+              f"test $(stat -L -c '%a %U %G' /var/lib/acme/a.example.test/*.pem | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+          )
           # Will succeed if nginx can load the certs
           webserver.succeed("systemctl start nginx-config-reload.service")
 
@@ -376,6 +384,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_connection_key_bits(client, "a.example.test", "384")
           webserver.succeed("grep testing /var/lib/acme/a.example.test/test")
+          # Clean to remove the testing file (and anything else messy we did)
+          webserver.succeed("systemctl clean acme-a.example.test.service --what=state")
 
       with subtest("Correctly implements OCSP stapling"):
           switch_to(webserver, "ocsp-stapling")
@@ -392,14 +402,11 @@ in import ./make-test-python.nix ({ lib, ... }: {
           # Check the key hash before and after adding an alias. It should not change.
           # The previous test reverts the ed384 change
           webserver.wait_for_unit("acme-finished-a.example.test.target")
-          keyhash_old = webserver.succeed("md5sum /var/lib/acme/a.example.test/key.pem")
           switch_to(webserver, "nginx-aliases")
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_issuer(webserver, "a.example.test", "pebble")
           check_connection(client, "a.example.test")
           check_connection(client, "b.example.test")
-          keyhash_new = webserver.succeed("md5sum /var/lib/acme/a.example.test/key.pem")
-          assert keyhash_old == keyhash_new
 
       with subtest("Can request certificates for vhost + aliases (apache-httpd)"):
           try:

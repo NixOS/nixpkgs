@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
-  alsaLib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
+  alsa-lib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
 
 stdenv.mkDerivation rec {
-  name = "lirc-0.10.1";
+  pname = "lirc";
+  version = "0.10.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lirc/${name}.tar.bz2";
+    url = "mirror://sourceforge/lirc/${pname}-${version}.tar.bz2";
     sha256 = "1whlyifvvc7w04ahq07nnk1h18wc8j7c6wnvlb6mszravxh3qxcb";
   };
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config help2man
     (python3.withPackages (p: with p; [ pyyaml setuptools ])) ];
 
-  buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];
+  buildInputs = [ alsa-lib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];
 
   configureFlags = [
     "--sysconfdir=/etc"

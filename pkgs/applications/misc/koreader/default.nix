@@ -2,10 +2,12 @@
 , fetchurl
 , makeWrapper
 , dpkg
-, luajit
-, gtk3-x11
-, SDL2
 , glib
+, gnutar
+, gtk3-x11
+, luajit
+, sdcv
+, SDL2
 , noto-fonts
 , nerdfonts }:
 let font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
@@ -21,7 +23,14 @@ in stdenv.mkDerivation rec {
 
   sourceRoot = ".";
   nativeBuildInputs = [ makeWrapper dpkg ];
-  buildInputs = [ luajit gtk3-x11 SDL2 glib ];
+  buildInputs = [
+    glib
+    gnutar
+    gtk3-x11
+    luajit
+    sdcv
+    SDL2
+  ];
   unpackCmd = "dpkg-deb -x ${src} .";
 
   dontConfigure = true;
@@ -30,7 +39,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -R usr/* $out/
-    cp ${luajit}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${luajit}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
+    ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
     find $out -xtype l -delete
     for i in ${noto-fonts}/share/fonts/truetype/noto/*; do
         ln -s "$i" $out/lib/koreader/fonts/noto/

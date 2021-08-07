@@ -3,32 +3,43 @@
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) perl.meta.platforms, perl
-, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) python.meta.platforms, python
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl, perl
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python, python
 , swig
 , ncurses
 , pam
 , libnotify
 , buildPackages
+, coreutils
+, gnugrep
+, gnused
+, kmod
+, writeShellScript
+, closureInfo
+, runCommand
 }:
 
 let
-  apparmor-series = "2.13";
-  apparmor-patchver = "6";
-  apparmor-version = apparmor-series + "." + apparmor-patchver;
+  apparmor-version = "3.0.1";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
     description = "A mandatory access control system - ${component}";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom thoughtpolice joachifm ];
+    maintainers = with maintainers; [ joachifm julm phreedom thoughtpolice ];
     platforms = platforms.linux;
   };
 
   apparmor-sources = fetchurl {
-    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "13xshy7905d9q9n8d8i0jmdi9m36wr525g4wlsp8k21n7yvvh9j4";
+    url = "https://launchpad.net/apparmor/${lib.versions.majorMinor apparmor-version}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
+    sha256 = "096zbg3v7b51x7f1ly61mzd3iy9alad6sd4lam98j2d6v5ragbcg";
   };
+
+  aa-teardown = writeShellScript "aa-teardown" ''
+    PATH="${lib.makeBinPath [coreutils gnused gnugrep]}:$PATH"
+    . ${apparmor-parser}/lib/apparmor/rc.apparmor.functions
+    remove_profiles
+  '';
 
   prePatchCommon = ''
     chmod a+x ./common/list_capabilities.sh ./common/list_af_names.sh
@@ -45,12 +56,6 @@ let
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
       sha256 = "0yyaqz8jlmn1bm37arggprqz0njb4lhjni2d9c8qfqj0kll0bam0";
     })
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0007-Do-not-build-install-vim-file-with-utils-package.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
-      name = "0007-Do-not-build-install-vim-file-with-utils-package.patch";
-      sha256 = "1m4dx901biqgnr4w4wz8a2z9r9dxyw7wv6m6mqglqwf2lxinqmp4";
-    })
-    # (alpine patches {1,4,5,6,8} are needed for apparmor 2.11, but not 2.12)
     ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
@@ -121,7 +126,11 @@ let
       libapparmor.python
     ];
 
-    prePatch = prePatchCommon + ''
+    prePatch = prePatchCommon +
+      # Do not build vim file
+      lib.optionalString stdenv.hostPlatform.isMusl ''
+        sed -i ./utils/Makefile -e "/\<vim\>/d"
+      '' + ''
       substituteInPlace ./utils/apparmor/easyprof.py --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
       substituteInPlace ./utils/apparmor/aa.py --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
       substituteInPlace ./utils/logprof.conf --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
@@ -132,13 +141,21 @@ let
     installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "VIM_INSTALL_PATH=$(out)/share" "PYPREFIX=" ];
 
     postInstall = ''
-      for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-status aa-unconfined ; do
+      sed -i $out/bin/aa-unconfined -e "/my_env\['PATH'\]/d"
+      for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-unconfined ; do
         wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
       substituteInPlace $out/bin/aa-notify \
         --replace /usr/bin/notify-send ${libnotify}/bin/notify-send \
         --replace /usr/bin/perl "${perl}/bin/perl -I ${libapparmor}/${perl.libPrefix}"
+
+      substituteInPlace $out/bin/aa-remove-unknown \
+       --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
+      wrapProgram $out/bin/aa-remove-unknown \
+       --prefix PATH : ${lib.makeBinPath [gawk]}
+
+      ln -s ${aa-teardown} $out/bin/aa-teardown
     '';
 
     inherit doCheck;
@@ -166,7 +183,7 @@ let
     prePatch = prePatchCommon;
     postPatch = "cd ./binutils";
     makeFlags = [ "LANGS=" "USE_SYSTEM=1" ];
-    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" ];
+    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "SBINDIR=$(out)/bin" ];
 
     inherit doCheck;
 
@@ -187,6 +204,9 @@ let
       substituteInPlace ./parser/Makefile --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
       ## techdoc.pdf still doesn't build ...
       substituteInPlace ./parser/Makefile --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"
+      substituteInPlace parser/rc.apparmor.functions \
+       --replace "/sbin/apparmor_parser" "$out/bin/apparmor_parser"
+      sed -i parser/rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
     '';
     inherit patches;
     postPatch = "cd ./parser";
@@ -236,7 +256,7 @@ let
     name = "apparmor-kernel-patches-${apparmor-version}";
     src = apparmor-sources;
 
-    phases = "unpackPhase installPhase";
+    dontBuild = true;
 
     installPhase = ''
       mkdir "$out"
@@ -248,8 +268,35 @@ let
     meta = apparmor-meta "kernel patches";
   };
 
+  # Generate generic AppArmor rules in a file,
+  # from the closure of given rootPaths.
+  # To be included in an AppArmor profile like so:
+  # include "$(apparmorRulesFromClosure {} [pkgs.hello]}"
+  apparmorRulesFromClosure =
+    { # The store path of the derivation is given in $path
+      additionalRules ? []
+      # TODO: factorize here some other common paths
+      # that may emerge from use cases.
+    , baseRules ? [
+        "r $path"
+        "r $path/etc/**"
+        "r $path/share/**"
+        # Note that not all libraries are prefixed with "lib",
+        # eg. glibc-2.30/lib/ld-2.30.so
+        "mr $path/lib/**.so*"
+        # eg. glibc-2.30/lib/gconv/gconv-modules
+        "r $path/lib/**"
+      ]
+    , name ? ""
+    }: rootPaths: runCommand
+      ( "apparmor-closure-rules"
+      + lib.optionalString (name != "") "-${name}" ) {} ''
+    touch $out
+    while read -r path
+    do printf >>$out "%s,\n" ${lib.concatMapStringsSep " " (x: "\"${x}\"") (baseRules ++ additionalRules)}
+    done <${closureInfo {inherit rootPaths;}}/store-paths
+  '';
 in
-
 {
   inherit
     libapparmor
@@ -258,5 +305,6 @@ in
     apparmor-parser
     apparmor-pam
     apparmor-profiles
-    apparmor-kernel-patches;
+    apparmor-kernel-patches
+    apparmorRulesFromClosure;
 }

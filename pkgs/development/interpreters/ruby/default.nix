@@ -12,7 +12,7 @@ let
   opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl fetchpatch; };
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -55,13 +55,7 @@ let
       #   Or (usually):
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
-      #
-      # Since some Gems require JIT support, there's probably no
-      # escape from this reference. Hence, it was decided to enable this
-      # feature by default, as it's enabled by default by ruby's ./configure
-      # script. If you'd like to have a ruby without reference to cc, setting
-      # jitSupport to false should remove all known references mentioned above.
-      , removeReferencesTo, jitSupport ? true
+      , removeReferencesTo, jitSupport ? false
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
@@ -112,7 +106,17 @@ let
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
           ++ op atLeast27 ./do-not-regenerate-revision.h.patch
-          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch;
+          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch
+          # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
+          # the resulting error was swallowed. Newer rubygems no longer swallows
+          # this error. We upgrade rubygems when rubygemsSupport is enabled, so
+          # we have to fix this bug to prevent the install step from failing.
+          # See https://github.com/ruby/ruby/pull/2930
+          ++ op (!atLeast30 && rubygemsSupport)
+            (fetchpatch {
+              url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
+              sha256 = "0wrii25cxcz2v8bgkrf7ibcanjlxwclzhayin578bf0qydxdm9qy";
+            });
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
@@ -167,8 +171,9 @@ let
         installFlags = lib.optional docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
+          rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
           # Remove unnecessary groff reference from runtime closure, since it's big
-          sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
+          sed -i '/NROFF/d' $rbConfig
           ${
             lib.optionalString (!jitSupport) ''
               # Get rid of the CC runtime dependency
@@ -177,7 +182,8 @@ let
                 $out/lib/libruby*
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
-                $out/${passthru.libPath}/${stdenv.hostPlatform.system}/rbconfig.rb
+                $rbConfig
+              sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
             ''
           }
           # Bundler tries to create this directory
@@ -195,8 +201,6 @@ let
           addEnvHooks "$hostOffset" addGemPath
           addEnvHooks "$hostOffset" addRubyLibPath
           EOF
-
-          rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
         '' + opString docSupport ''
           # Prevent the docs from being included in the closure
           sed -i "s|\$(DESTDIR)$devdoc|\$(datarootdir)/\$(RI_BASE_NAME)|" $rbConfig
@@ -249,26 +253,26 @@ let
 
 in {
   ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "6" "";
+    version = rubyVersion "2" "6" "8" "";
     sha256 = {
-      src = "1492x795qzgp3zhpl580kd1sdp50n5hfsmpbfhdsq2rnxwyi8jrn";
-      git = "1jr9v99a7awssqmw7531afbx4a8i9x5yfqyffha545g7r4s7kj50";
+      src = "0vfam28ifl6h2wxi6p70j0hm3f1pvsp432hf75m5j25wfy2vf1qq";
+      git = "0rc3n6sk8632r0libpv8jwslc7852hgk64rvbdrspc9razjwx21c";
     };
   };
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "2" "";
+    version = rubyVersion "2" "7" "4" "";
     sha256 = {
-      src = "1m63461mxi3fg4y3bspbgmb0ckbbb1ldgf9xi0piwkpfsk80cmvf";
-      git = "0kbgznf1yprfp9645k31ra5f4757b7fichzi0hdg6nxkj90853s0";
+      src = "0nxwkxh7snmjqf787qsp4i33mxd1rbf9yzyfiky5k230i680jhrh";
+      git = "1prsrqwkla4k5japlm54k0j700j4824rg8z8kpswr9r3swrmrf5p";
     };
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "1" "";
+    version = rubyVersion "3" "0" "2" "";
     sha256 = {
-      src = "09vpnxxcxc46qv40xbxr9xkdpbgb0imdy25l2vpsxxlr47djb61n";
-      git = "0vricyhnnczcbsgvz65pdhi9yx1i34zarbjlc5y5mcmj01y9r7ar";
+      src = "1wg6yyzc6arzikcy48igqbxfcdc79bmfpiyfi9m9j1lzmphdx1ah";
+      git = "1kbkxqichi11vli080jgyvjf2xgnlbl9l2f2n1hv4s8b31gjib3r";
     };
   };
 }

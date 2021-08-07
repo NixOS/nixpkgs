@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "12hpn7zcdvp30ldpw2zf115yjqv55n1ldjbids7vx0lvbpr06dm1";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
   buildInputs = [ SDL2 zlib gtk3 libxml2 libXv epoxy minizip pulseaudio portaudio ];
 

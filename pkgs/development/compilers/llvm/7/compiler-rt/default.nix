@@ -1,19 +1,20 @@
-{ lib, stdenv, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, llvm, libcxxabi }:
 
 let
 
   useLLVM = stdenv.hostPlatform.useLLVM or false;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
+  haveLibc = stdenv.cc.libc != null;
   inherit (stdenv.hostPlatform) isMusl;
 
 in
 
 stdenv.mkDerivation {
-  pname = "compiler-rt";
+  pname = "compiler-rt" + lib.optionalString (haveLibc) "-libc";
   inherit version;
   src = fetch "compiler-rt" "1n48p8gjarihkws0i2bay5w9bdwyxyxxbpwyng7ba58jb30dlyq5";
 
-  nativeBuildInputs = [ cmake python3 llvm ];
+  nativeBuildInputs = [ cmake python3 llvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -29,14 +30,15 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-  ] ++ lib.optionals (useLLVM || bareMetal) [
+  ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
+  ] ++ lib.optionals (useLLVM && !haveLibc) [
+    "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
   ] ++ lib.optionals (bareMetal) [
@@ -54,6 +56,7 @@ stdenv.mkDerivation {
     # https://github.com/llvm/llvm-project/commit/947f9692440836dcb8d88b74b69dd379d85974ce
     ../../common/compiler-rt/glibc.patch
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ./gnu-install-dirs.patch
   ] ++ lib.optional (useLLVM) ./crtbegin-and-end.patch
     ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
@@ -82,10 +85,26 @@ stdenv.mkDerivation {
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
     ln -s "$out/lib"/*/* "$out/lib"
   '' + lib.optionalString (useLLVM) ''
-    ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/linux/crtbegin.o
-    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/linux/crtend.o
-    ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/linux/crtbeginS.o
-    ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/linux/crtendS.o
+    ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
+    ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
+    ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '';
 
+  meta = llvm_meta // {
+    homepage = "https://compiler-rt.llvm.org/";
+    description = "Compiler runtime libraries";
+    longDescription = ''
+      The compiler-rt project provides highly tuned implementations of the
+      low-level code generator support routines like "__fixunsdfdi" and other
+      calls generated when a target doesn't have a short sequence of native
+      instructions to implement a core IR operation. It also provides
+      implementations of run-time libraries for dynamic testing tools such as
+      AddressSanitizer, ThreadSanitizer, MemorySanitizer, and DataFlowSanitizer.
+    '';
+    # "All of the code in the compiler-rt project is dual licensed under the MIT
+    # license and the UIUC License (a BSD-like license)":
+    license = with lib.licenses; [ mit ncsa ];
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+  };
 }

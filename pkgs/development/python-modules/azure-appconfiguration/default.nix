@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "azure-appconfiguration";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b83cd2cb63d93225de84e27abbfc059212f8de27766f4c58dd3abb839dff0be4";
+    sha256 = "85c9c25612f160897ae212532ec7c19c94b0f4463f4830d0ee08cb2d296df407";
   };
 
   propagatedBuildInputs = [

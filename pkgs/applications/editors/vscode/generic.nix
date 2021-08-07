@@ -1,25 +1,30 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu
+, systemd, fontconfig, libdbusmenu, buildFHSUserEnvBubblewrap
+, writeShellScriptBin
 
 # Populate passthru.tests
 , tests
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
-, executableName, longName, shortName, pname
+, executableName, longName, shortName, pname, updateScript
+# sourceExecutableName is the name of the binary in the source archive, over
+# which we have no control
+, sourceExecutableName ? executableName
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-in
-  stdenv.mkDerivation {
+  unwrapped = stdenv.mkDerivation {
 
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName tests;
+      inherit executableName tests updateScript;
+      fhs = fhs {};
+      fhsWithPackages = f: fhs { additionalPkgs = f; };
     };
 
     desktopItem = makeDesktopItem {
@@ -72,15 +77,15 @@ in
 
     installPhase = ''
       runHook preInstall
-    '' + (if system == "x86_64-darwin" then ''
+    '' + (if stdenv.isDarwin then ''
       mkdir -p "$out/Applications/${longName}.app" $out/bin
       cp -r ./* "$out/Applications/${longName}.app"
-      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/code" $out/bin/${executableName}
+      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" $out/bin/${executableName}
     '' else ''
       mkdir -p $out/lib/vscode $out/bin
       cp -r ./* $out/lib/vscode
 
-      ln -s $out/lib/vscode/bin/${executableName} $out/bin
+      ln -s $out/lib/vscode/bin/${sourceExecutableName} $out/bin/${executableName}
 
       mkdir -p $out/share/applications
       ln -s $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop
@@ -97,4 +102,63 @@ in
     '';
 
     inherit meta;
-  }
+  };
+
+  # Vscode and variants allow for users to download and use extensions
+  # which often include the usage of pre-built binaries.
+  # This has been an on-going painpoint for many users, as
+  # a full extension update cycle has to be done through nixpkgs
+  # in order to create or update extensions.
+  # See: #83288 #91179 #73810 #41189
+  #
+  # buildFHSUserEnv allows for users to use the existing vscode
+  # extension tooling without significant pain.
+  fhs = { additionalPkgs ? pkgs: [] }: buildFHSUserEnvBubblewrap {
+    # also determines the name of the wrapped command
+    name = executableName;
+
+    # additional libraries which are commonly needed for extensions
+    targetPkgs = pkgs: (with pkgs; [
+      # ld-linux-x86-64-linux.so.2 and others
+      glibc
+
+      # dotnet
+      curl
+      icu
+      libunwind
+      libuuid
+      openssl
+      zlib
+
+      # mono
+      krb5
+    ]) ++ additionalPkgs pkgs;
+
+    # restore desktop item icons
+    extraInstallCommands = ''
+      mkdir -p $out/share/applications
+      for item in ${unwrapped}/share/applications/*.desktop; do
+        ln -s $item $out/share/applications/
+      done
+    '';
+
+    runScript = "${unwrapped}/bin/${executableName}";
+
+    # vscode likes to kill the parent so that the
+    # gui application isn't attached to the terminal session
+    dieWithParent = false;
+
+    passthru = {
+      inherit executableName;
+      inherit (unwrapped) pname version; # for home-manager module
+    };
+
+    meta = meta // {
+      description = ''
+        Wrapped variant of ${pname} which launches in a FHS compatible envrionment.
+        Should allow for easy usage of extensions without nix-specific modifications.
+      '';
+    };
+  };
+in
+  unwrapped

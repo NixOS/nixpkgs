@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook
-, alsaLib, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
+, alsa-lib, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
 , qtbase, qttools, qtxmlpatterns
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
-    alsaLib ladspa-sdk lash libarchive libjack2 liblo libpulseaudio libsndfile lrdf
+    alsa-lib ladspa-sdk lash libarchive libjack2 liblo libpulseaudio libsndfile lrdf
     qtbase qttools qtxmlpatterns
   ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Advanced drum machine";
     homepage = "http://www.hydrogen-music.org";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu orivej ];
   };

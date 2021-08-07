@@ -5,7 +5,7 @@
 , meson
 , ninja
 , scdoc
-, alsaLib
+, alsa-lib
 , fcft
 , json_c
 , libmpdclient
@@ -24,17 +24,17 @@
 
 stdenv.mkDerivation rec {
   pname = "yambar";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/yambar.git";
     rev = version;
-    sha256 = "p47tFsEWsYNe6IVV65xGG211u6Vm2biRf4pmUDylBOQ=";
+    sha256 = "sha256-oUNkaWrYIcsK2u+aeRg6DHmH4M1VZ0leNSM0lV9Yy1Y=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
   buildInputs = [
-    alsaLib
+    alsa-lib
     fcft
     json_c
     libmpdclient

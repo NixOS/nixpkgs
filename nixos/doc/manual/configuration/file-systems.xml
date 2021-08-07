@@ -54,4 +54,5 @@
   </para>
  </note>
  <xi:include href="luks-file-systems.xml" />
+ <xi:include href="../from_md/configuration/sshfs-file-systems.section.xml" />
 </chapter>

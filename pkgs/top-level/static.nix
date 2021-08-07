@@ -25,7 +25,7 @@ self: super: let
   }; in stdenv // {
     mkDerivation = args: stdenv.mkDerivation (args // {
       NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + optionalString stdenv.cc.isGNU " -static-libgcc";
+                      + optionalString (stdenv_.cc.isGNU or false) " -static-libgcc";
       nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
         substitutions = {
           libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
@@ -50,14 +50,10 @@ self: super: let
     # ++ optional (super.stdenv.hostPlatform.libc == "glibc") ((flip overrideInStdenv) [ self.stdenv.glibc.static ])
   ;
 
-  removeUnknownConfigureFlags = f: with self.lib;
-    remove "--disable-shared"
-    (remove "--enable-static" f);
-
   ocamlFixPackage = b:
     b.overrideAttrs (o: {
       configurePlatforms = [ ];
-      configureFlags = removeUnknownConfigureFlags (o.configureFlags or [ ]);
+      dontAddStaticConfigureFlags = true;
       buildInputs = o.buildInputs ++ o.nativeBuildInputs or [ ];
       propagatedNativeBuildInputs = o.propagatedBuildInputs or [ ];
     });
@@ -75,7 +71,8 @@ self: super: let
         preConfigure = ''
           configureFlagsArray+=("-cc" "$CC" "-as" "$AS" "-partialld" "$LD -r")
         '';
-        configureFlags = (removeUnknownConfigureFlags o.configureFlags) ++ [
+        dontAddStaticConfigureFlags = true;
+        configureFlags = [
           "--no-shared-libs"
           "-host ${o.stdenv.hostPlatform.config}"
           "-target ${o.stdenv.targetPlatform.config}"
@@ -83,15 +80,29 @@ self: super: let
       });
     };
 
+  llvmStaticAdapter = llvmPackages:
+    llvmPackages // {
+      stdenv = foldl (flip id) llvmPackages.stdenv staticAdapters;
+      libcxxStdenv = foldl (flip id) llvmPackages.libcxxStdenv staticAdapters;
+    };
+
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
+
   gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
   gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
   gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
   gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;
   gcc9Stdenv = foldl (flip id) super.gcc9Stdenv staticAdapters;
-  clangStdenv = foldl (flip id) super.clangStdenv staticAdapters;
-  libcxxStdenv = foldl (flip id) super.libcxxStdenv staticAdapters;
+
+  llvmPackages_5 = llvmStaticAdapter super.llvmPackages_5;
+  llvmPackages_6 = llvmStaticAdapter super.llvmPackages_6;
+  llvmPackages_7 = llvmStaticAdapter super.llvmPackages_7;
+  llvmPackages_8 = llvmStaticAdapter super.llvmPackages_8;
+  llvmPackages_9 = llvmStaticAdapter super.llvmPackages_9;
+  llvmPackages_10 = llvmStaticAdapter super.llvmPackages_10;
+  llvmPackages_11 = llvmStaticAdapter super.llvmPackages_11;
+  llvmPackages_12 = llvmStaticAdapter super.llvmPackages_12;
 
   boost = super.boost.override {
     # Don’t use new stdenv for boost because it doesn’t like the
@@ -109,11 +120,6 @@ in {
   ocaml-ng = self.lib.mapAttrs (_: set:
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
-
-  openssl = super.openssl_1_1.overrideAttrs (o: {
-    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
-    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
-  });
 
   perl = super.perl.override {
     # Don’t use new stdenv zlib because

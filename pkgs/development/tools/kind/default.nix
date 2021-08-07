@@ -4,16 +4,16 @@ with lib;
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "kubernetes-sigs";
     repo   = "kind";
-    sha256 = "1pp2x4bfqsd15siahyv9xkdyswsipmp9n86iwavrd0xhliqxlsa7";
+    sha256 = "sha256-pjg52ONseKNw06EOBzD6Elge+Cz+C3llPvjJPHkn1cw=";
   };
 
-  vendorSha256 = "0c0j4s8kfzk2b3hy0d2g5bp1zr60l6vnwnpynsg6ksv8spwnpl5m";
+  vendorSha256 = "sha256-HiVdekSZrC/RkMSvcwm1mv6AE4bA5kayUsMdVCbckiE=";
 
   doCheck = false;
 

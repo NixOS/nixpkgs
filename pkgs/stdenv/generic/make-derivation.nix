@@ -89,6 +89,10 @@ in rec {
 
     , patches ? []
 
+    , __contentAddressed ?
+      (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
+      && (config.contentAddressedByDefault or false)
+
     , ... } @ attrs:
 
     let
@@ -104,9 +108,11 @@ in rec {
                                       ++ depsHostHost ++ depsHostHostPropagated
                                       ++ buildInputs ++ propagatedBuildInputs
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
-      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || (stdenv.noCC or false);
+      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-                              # Musl-based platforms will keep "pie", other platforms will not.
+      # Musl-based platforms will keep "pie", other platforms will not.
+      # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
+      # in the nixpkgs manual to inform users about the defaults.
       defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
                                 # Except when:
                                 #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
@@ -196,9 +202,7 @@ in rec {
         // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
           name =
             let
-              staticMarker = lib.optionalString stdenv.hostPlatform.isStatic "-static";
-              name' = attrs.name or
-                "${attrs.pname}${staticMarker}-${attrs.version}";
+              # Indicate the host platform of the derivation if cross compiling.
               # Fixed-output derivations like source tarballs shouldn't get a host
               # suffix. But we have some weird ones with run-time deps that are
               # just used for their side-affects. Those might as well since the
@@ -206,7 +210,16 @@ in rec {
               hostSuffix = lib.optionalString
                 (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
                 "-${stdenv.hostPlatform.config}";
-            in name' + hostSuffix;
+              # Disambiguate statically built packages. This was originally
+              # introduce as a means to prevent nix-env to get confused between
+              # nix and nixStatic. This should be also achieved by moving the
+              # hostSuffix before the version, so we could contemplate removing
+              # it again.
+              staticMarker = lib.optionalString stdenv.hostPlatform.isStatic "-static";
+            in
+              if attrs ? name
+              then attrs.name + hostSuffix
+              else "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}";
         }) // {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
@@ -253,6 +266,12 @@ in rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
+        } // lib.optionalAttrs (__contentAddressed) {
+          inherit __contentAddressed;
+          # Provide default values for outputHashMode and outputHashAlgo because
+          # most people won't care about these anyways
+          outputHashAlgo = attrs.outputHashAlgo or "sha256";
+          outputHashMode = attrs.outputHashMode or "recursive";
         } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]

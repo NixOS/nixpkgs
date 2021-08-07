@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, curl, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "xmlrpc-c-1.51.07";
+  pname = "xmlrpc-c";
+  version = "1.51.07";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xmlrpc-c/${name}.tgz";
+    url = "mirror://sourceforge/xmlrpc-c/${pname}-${version}.tgz";
     sha256 = "sha256-hNIK4z+SdYL4IdYcC5GUrvvx15JFkKE/qdpa4WmK3tk=";
   };
 

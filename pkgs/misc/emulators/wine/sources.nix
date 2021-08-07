@@ -13,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "6.0";
+    version = "6.0.1";
     url = "https://dl.winehq.org/wine/source/6.0/wine-${version}.tar.xz";
-    sha256 = "sha256-tJMGXy+D7kKcYuLsWGmKPPY+94ci4bIHZYIxUuhYLFY=";
+    sha256 = "sha256-Ogmh7Jyh6h1PcpWY14JxeXP09kRYZn+7dX0SLzoB2ko=";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -44,10 +44,17 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "6.5";
+    version = "6.13";
     url = "https://dl.winehq.org/wine/source/6.x/wine-${version}.tar.xz";
-    sha256 = "sha256-BgD9IIwGkl1mNNKfVDu6CmQ2HDTpvXYJwvDiCWEK00c=";
-    inherit (stable) mono gecko32 gecko64;
+    sha256 = "sha256-4DohoBHUXSrp8iIED7dpC5cVY3bnQx+GHyAHPq8k8oo=";
+    inherit (stable) gecko32 gecko64;
+
+    ## see http://wiki.winehq.org/Mono
+    mono = fetchurl rec {
+      version = "6.2.0";
+      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
+      sha256 = "sha256-zY1TUT2DV7KHama6sIllTvmUH0LvaQ+1VcZJP1OB28o=";
+    };
 
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
@@ -58,19 +65,18 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "sha256-u6wDavrFirN1e0fFra4ui3i4PnJF0gcENYoIyNwhIYc=";
+    sha256 = "sha256-3IpO+eQ/+DiQZH6en5Q/p+j441LDvjn4i9Ex7PY8KCk=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
 
-    # Just keep list empty, if current release haven't broken patchsets
     disabledPatchsets = [ ];
   };
 
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
-    version = "20201206";
-    sha256 = "1xs09v1zr98yvwvdsmzgryc2hbk92mwn54yxx8162l461465razc";
+    version = "20210206";
+    sha256 = "sha256-tnwownY9A05nYlkYaoCQZjeGGHuE+kJYzA7MPE2bXnQ=";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;

@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
-  version = "2020f";
+  version = "2021a";
 
   srcs =
     [ (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-        sha256 = "10b8cr55x6ji14n3kqkn3avj1s9b79b8gszh81fxrrisij8k248j";
+        sha256 = "022fn6gkmp7pamlgab04x0dm5hnyn2m2fcnyr3pvm36612xd5rrr";
       })
       (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-        sha256 = "1i998crd9fxdfhv4jd241j1arx0ng7j7cvczpmj4y5j5fwmfmvng";
+        sha256 = "1l02b0jiwp3fl0xd6227i69d26rmx3yrnq0ssq9vvdmm4jhvyipb";
       })
     ];
 
@@ -68,6 +68,10 @@ stdenv.mkDerivation rec {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
     changelog = "https://github.com/eggert/tz/blob/${version}/NEWS";
+    license = with licenses; [
+      bsd3 # tzcode
+      publicDomain # tzdata
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
   };

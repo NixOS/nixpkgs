@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.raskin ] ;
     platforms = lib.platforms.unix;
-    inherit version;
   };
 }

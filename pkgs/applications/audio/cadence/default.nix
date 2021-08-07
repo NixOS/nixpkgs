@@ -98,7 +98,7 @@ mkDerivation rec {
     homepage = "https://github.com/falkTX/Cadence/";
     description = "Collection of tools useful for audio production";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ worldofpeace ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

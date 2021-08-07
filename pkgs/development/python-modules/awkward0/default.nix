@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "039pxzgll2yz8xpr6bw788ymvgvqgna5kgl9m6d9mzi4yhbjsjpx";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [ numpy ];
 

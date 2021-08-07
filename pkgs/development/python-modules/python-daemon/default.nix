@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "python-daemon";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57c84f50a04d7825515e4dbf3a31c70cc44414394a71608dee6cfde469e81766";
+    sha256 = "bda993f1623b1197699716d68d983bb580043cf2b8a66a01274d9b8297b0aeaf";
   };
 
   nativeBuildInputs = [ twine ];

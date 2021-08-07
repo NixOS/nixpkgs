@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-aarch64.patch";
       sha256 = "112svcsilk16ybbsi8ywnxfl2p1v44zh3rfn4ijnl8z08vfqrvvs";
     })
+    ./darwin-aarch64.patch
   ];
 
   nativeBuildInputs = [

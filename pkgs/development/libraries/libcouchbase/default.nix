@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcouchbase";
-  version = "2.10.4";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "couchbase";
     repo = "libcouchbase";
     rev = version;
-    sha256 = "1yfmcx65aqd5l87scha6kmm2s38n85ci3gg0h6qfs16s3jfi6bw7";
+    sha256 = "sha256-8//FEWXXcp/COHj10l4jysaLobzZIl65RCYz/HgL+kc=";
   };
 
   cmakeFlags = [ "-DLCB_NO_MOCK=ON" ];
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   # Running tests in parallel does not work
   enableParallelChecking = false;
-
-  patches = [ ./0001-Fix-timeouts-in-libcouchbase-testsuite.patch ];
 
   doCheck = !stdenv.isDarwin;
 

@@ -4,25 +4,25 @@
 , importlib-metadata
 , isPy3k
 , jedi
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 }:
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.16";
+  version = "3.0.17";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b0f6e381a8251ec8d6aa94fe12f3400bf6edf789f89c8a6099f8a91d4a5d2e1";
+    sha256 = "911d25cca31a8e4f9b2ecd16dcdad793b8859e94fca1275f3485d8cdf20b13de";
   };
 
   propagatedBuildInputs = [
     appdirs
     black # yes, this is in install_requires
     jedi
-    prompt_toolkit
+    prompt-toolkit
     pygments
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 

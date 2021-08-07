@@ -5,8 +5,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pytest-aiohttp
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
 , python-engineio
 , python-socketio
@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "1.2.4";
+  version = "1.2.5";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -24,10 +24,12 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uqvM5F0rpw+xeCXYl4lGMt3r0ugPsUmSvujmTJ9HABk=";
+    sha256 = "1v8xr69y9cajyrdfz8wdksz1hclh5cvgxppf9lpygwfj4q70wh88";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -39,13 +41,14 @@ buildPythonPackage rec {
   checkInputs = [
     aresponses
     asynctest
+    pytest-aiohttp
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
   ];
 
   # Ignore the examples directory as the files are prefixed with test_
-  pytestFlagsArray = [ "--ignore examples/" ];
+  disabledTestPaths = [ "examples/" ];
+
   pythonImportsCheck = [ "aioambient" ];
 
   meta = with lib; {

@@ -12,5 +12,8 @@
   (if (not noninteractive)
       (error "`melpa2nix-build-package' is to be used only with -batch"))
   (pcase command-line-args-left
-    (`(,package ,version)
+    (`(,package ,version ,commit)
+     ;; Monkey-patch package-build so it doesn't shell out to git/hg.
+     (defun package-build--get-commit (&rest _)
+       commit)
      (package-build--package (package-recipe-lookup package) version))))

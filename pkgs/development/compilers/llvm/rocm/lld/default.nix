@@ -1,4 +1,5 @@
 { lib, stdenv
+, buildLlvmTools
 , cmake
 , libxml2
 , llvm
@@ -13,12 +14,17 @@ stdenv.mkDerivation rec {
   pname = "lld";
 
   nativeBuildInputs = [ cmake ];
-
   buildInputs = [ libxml2 llvm ];
 
-  outputs = [ "out" "dev" ];
 
-  cmakeFlags = [ "-DLLVM_MAIN_SRC_DIR=${llvm.src}" ];
+  cmakeFlags = [
+    "-DLLVM_MAIN_SRC_DIR=${llvm.src}"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+    "-DLLVM_CONFIG_PATH=${llvm.dev}/bin/llvm-config-native"
+  ];
+
+  outputs = [ "out" "dev" ];
 
   postInstall = ''
     moveToOutput include "$dev"
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "ROCm fork of the LLVM Linker";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

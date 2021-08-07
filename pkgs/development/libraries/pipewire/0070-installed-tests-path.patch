@@ -1,23 +1,23 @@
 diff --git a/meson.build b/meson.build
-index 97d4d939..b17358e5 100644
+index d4a4cda7..a27569bd 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -353,8 +353,8 @@ libinotify_dep = (build_machine.system() == 'freebsd'
-
+ 
  alsa_dep = dependency('alsa', version : '>=1.1.7', required: get_option('pipewire-alsa'))
-
--installed_tests_metadir = join_paths(pipewire_datadir, 'installed-tests', pipewire_name)
--installed_tests_execdir = join_paths(pipewire_libexecdir, 'installed-tests', pipewire_name)
-+installed_tests_metadir = join_paths(get_option('installed_test_prefix'), 'share', 'installed-tests', pipewire_name)
-+installed_tests_execdir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', pipewire_name)
+ 
+-installed_tests_metadir = pipewire_datadir / 'installed-tests' / pipewire_name
+-installed_tests_execdir = pipewire_libexecdir / 'installed-tests' / pipewire_name
++installed_tests_metadir = get_option('installed_test_prefix') / 'share' / 'installed-tests' / pipewire_name
++installed_tests_execdir = get_option('installed_test_prefix') / 'libexec' / 'installed-tests' / pipewire_name
  installed_tests_enabled = not get_option('installed_tests').disabled()
  installed_tests_template = files('template.test.in')
-
+ 
 diff --git a/meson_options.txt b/meson_options.txt
-index fba0d647..8c6106cd 100644
+index 1b915ac3..85beb86a 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -26,6 +26,9 @@ option('installed_tests',
+@@ -29,6 +29,9 @@ option('installed_tests',
         description: 'Install manual and automated test executables',
         type: 'feature',
         value: 'disabled')

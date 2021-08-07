@@ -45,18 +45,12 @@ let
 
   # These are the providers that don't fall in line with the default model
   special-providers = {
-    acme = automated-providers.acme.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
-      '';
-    });
-
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
     cloudfoundry = callPackage ./cloudfoundry {};
     gandi = callPackage ./gandi {};
     hcloud = callPackage ./hcloud {};
+    kubernetes-alpha = throw "This has been merged as beta into the kubernetes provider. See https://www.hashicorp.com/blog/beta-support-for-crds-in-the-terraform-provider-for-kubernetes for details";
     libvirt = callPackage ./libvirt {};
     linuxbox = callPackage ./linuxbox {};
     lxd = callPackage ./lxd {};

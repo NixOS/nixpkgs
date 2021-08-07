@@ -6,20 +6,19 @@
 , catalogue
 , mock
 , numpy
-, pathlib
 , pytest
-, pytz
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "2.4.0";
+  version = "2.4.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e29730be53015970e4a59050e8e9f9be44d762108a617df56c9dfc981b515ab7";
+    hash = "sha256-sPKuwKMp5ufnQqCmDpmnSWjKKb5x81xcTeIh4ygXaSY=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -30,12 +29,8 @@ buildPythonPackage rec {
     mock
     numpy
     pytest
-    pytz
+    ruamel-yaml
   ];
-
-  # TypeError: cannot serialize '_io.BufferedRandom' object
-  # Possibly because of sandbox restrictions.
-  doCheck = false;
 
   pythonImportsCheck = [ "srsly" ];
 

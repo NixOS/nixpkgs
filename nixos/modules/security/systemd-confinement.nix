@@ -105,7 +105,7 @@ in {
         wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
-          RootDirectory = pkgs.runCommand rootName {} "mkdir \"$out\"";
+          RootDirectory = "/var/empty";
           TemporaryFileSystem = "/";
           PrivateMounts = lib.mkDefault true;
 

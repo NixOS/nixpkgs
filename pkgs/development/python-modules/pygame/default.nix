@@ -1,5 +1,6 @@
 { lib, fetchPypi, buildPythonPackage, python, pkg-config, libX11
 , SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype
+, fontconfig
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,6 @@ buildPythonPackage rec {
     portmidi libX11 freetype
   ];
 
-  # Tests fail because of no audio device and display.
-  doCheck = false;
-
   preConfigure = ''
     sed \
       -e "s/origincdirs = .*/origincdirs = []/" \
@@ -39,9 +37,18 @@ buildPythonPackage rec {
     LOCALBASE=/ ${python.interpreter} buildconfig/config.py
   '';
 
+  checkInputs = [ fontconfig ];
+
+  preCheck = ''
+    # No audio or video device in test environment
+    export SDL_VIDEODRIVER=dummy
+    export SDL_AUDIODRIVER=disk
+    export SDL_DISKAUDIOFILE=/dev/null
+  '';
+
   meta = with lib; {
     description = "Python library for games";
-    homepage = "http://www.pygame.org/";
+    homepage = "https://www.pygame.org/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

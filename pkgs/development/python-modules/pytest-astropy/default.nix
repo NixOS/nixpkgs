@@ -9,7 +9,7 @@
 , pytest-remotedata
 , pytest-openfiles
 , pytest-arraydiff
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   buildInputs = [ pytest ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   # pytest-astropy is a meta package and has no tests
-  checkPhase = ":";
+  doCheck = false;
 
   meta = with lib; {
     description = "Meta-package containing dependencies for testing";

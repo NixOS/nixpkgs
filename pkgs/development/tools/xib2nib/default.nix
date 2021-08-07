@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pugixml, boost, PlistCpp }:
 
 stdenv.mkDerivation {
-  name = "xib2nib-730e177";
+  pname = "xib2nib";
+  version = "unstable-2017-04-12";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";

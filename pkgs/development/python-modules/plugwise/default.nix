@@ -1,31 +1,31 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
 , aiohttp
 , async-timeout
+, buildPythonPackage
 , crcmod
 , defusedxml
-, pyserial
-, pytz
-, python-dateutil
-, semver
+, fetchFromGitHub
 , jsonpickle
+, munch
 , mypy
+, pyserial
 , pytest-aiohttp
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
+, python-dateutil
+, pytz
+, semver
 }:
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.9.3";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "python-plugwise";
     rev = version;
-    sha256 = "sha256-MZ4R55vGUyWmR0Md83eNerzsgtYMch1vfQ3sqbm12bM=";
+    sha256 = "sha256-b00jfPZTVRI7BRpUHI2NjcydkykC/1HjmVzDaIech8c=";
   };
 
   propagatedBuildInputs = [
@@ -33,9 +33,10 @@ buildPythonPackage rec {
     async-timeout
     crcmod
     defusedxml
+    munch
     pyserial
-    pytz
     python-dateutil
+    pytz
     semver
   ];
 
@@ -43,8 +44,6 @@ buildPythonPackage rec {
     jsonpickle
     mypy
     pytest-aiohttp
-    pytest-asyncio
-    pytest-cov
     pytest-asyncio
     pytestCheckHook
   ];

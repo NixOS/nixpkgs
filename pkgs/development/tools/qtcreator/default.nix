@@ -45,8 +45,6 @@ mkDerivation rec {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
-
   buildFlags = optional withDocumentation "docs";
 
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
@@ -64,7 +62,7 @@ mkDerivation rec {
 
     # Fix paths to libclang library.
     substituteInPlace src/shared/clang/clang_installation.pri \
-      --replace 'LIBCLANG_LIBS = -L$${LLVM_LIBDIR}' 'LIBCLANG_LIBS = -L${llvmPackages_8.libclang}/lib' \
+      --replace 'LIBCLANG_LIBS = -L$${LLVM_LIBDIR}' 'LIBCLANG_LIBS = -L${llvmPackages_8.libclang.lib}/lib' \
       --replace 'LIBCLANG_LIBS += $${CLANG_LIB}' 'LIBCLANG_LIBS += -lclang' \
       --replace 'LIBTOOLING_LIBS = -L$${LLVM_LIBDIR}' 'LIBTOOLING_LIBS = -L${clang_qt_vendor}/lib' \
       --replace 'LLVM_CXXFLAGS ~= s,-gsplit-dwarf,' '${lib.concatStringsSep "\n" ["LLVM_CXXFLAGS ~= s,-gsplit-dwarf," "    LLVM_CXXFLAGS += -fno-rtti"]}'

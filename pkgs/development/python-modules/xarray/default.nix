@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.16.2";
+  version = "0.18.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OOhDnWyRvNW3wPyjSdr44GQ6xohQyYcmLVNSbp19AeQ=";
+    sha256 = "5d2e72a228286fcf60f66e16876bd27629a1a70bf64822c565f16515c4d10284";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

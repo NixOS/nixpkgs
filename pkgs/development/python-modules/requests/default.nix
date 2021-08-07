@@ -20,6 +20,13 @@ buildPythonPackage rec {
     sha256 = "sha256-J5c91KkEpPE7JjoZyGbBO5KjntHJZGVfAl8/jT11uAQ=";
   };
 
+  patches = [ ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch ];
+
+  postPatch = ''
+    # Use latest idna
+    substituteInPlace setup.py --replace ",<3" ""
+  '';
+
   propagatedBuildInputs = [
     certifi
     chardet

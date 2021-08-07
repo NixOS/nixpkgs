@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.4";
-  name = "${varnish.name}-dynamic-${version}";
+  pname = "${varnish.name}-dynamic";
 
   src = fetchFromGitHub {
     owner = "nigoroll";

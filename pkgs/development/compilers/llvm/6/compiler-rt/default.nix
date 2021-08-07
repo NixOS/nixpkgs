@@ -1,4 +1,4 @@
-{ lib, stdenv, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, llvm, libcxxabi }:
 
 let
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetch "compiler-rt" "1fcr3jn24yr8lh36nc0c4ikli4744i2q9m1ik67p1jymwwaixkgl";
 
-  nativeBuildInputs = [ cmake python3 llvm ];
+  nativeBuildInputs = [ cmake python3 llvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -54,6 +54,7 @@ stdenv.mkDerivation {
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     # https://github.com/llvm/llvm-project/commit/947f9692440836dcb8d88b74b69dd379d85974ce
     ../../common/compiler-rt/glibc.patch
+    ./gnu-install-dirs.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
@@ -87,4 +88,20 @@ stdenv.mkDerivation {
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/linux/crtendS.o
   '';
 
+  meta = llvm_meta // {
+    homepage = "https://compiler-rt.llvm.org/";
+    description = "Compiler runtime libraries";
+    longDescription = ''
+      The compiler-rt project provides highly tuned implementations of the
+      low-level code generator support routines like "__fixunsdfdi" and other
+      calls generated when a target doesn't have a short sequence of native
+      instructions to implement a core IR operation. It also provides
+      implementations of run-time libraries for dynamic testing tools such as
+      AddressSanitizer, ThreadSanitizer, MemorySanitizer, and DataFlowSanitizer.
+    '';
+    # "All of the code in the compiler-rt project is dual licensed under the MIT
+    # license and the UIUC License (a BSD-like license)":
+    license = with lib.licenses; [ mit ncsa ];
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+  };
 }

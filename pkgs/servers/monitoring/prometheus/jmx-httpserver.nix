@@ -1,23 +1,20 @@
 { lib, stdenv, fetchurl, jre, makeWrapper }:
 
-let
-  version = "0.10";
-  jarName = "jmx_prometheus_httpserver-${version}-jar-with-dependencies.jar";
-  mavenUrl = "mirror://maven/io/prometheus/jmx/jmx_prometheus_httpserver/${version}/${jarName}";
-in stdenv.mkDerivation {
-  inherit version jarName;
+stdenv.mkDerivation rec {
+  pname = "jmx-prometheus-httpserver";
+  version = "0.15.0";
 
-  name = "jmx-prometheus-httpserver-${version}";
+  jarName = "jmx_prometheus_httpserver-${version}-jar-with-dependencies.jar";
 
   src = fetchurl {
-    url = mavenUrl;
-    sha256 = "1pvqphrirq48xhmx0aa6vkxz6qy1cx2q6jxsh7rin432iap7j62f";
+    url = "mirror://maven/io/prometheus/jmx/jmx_prometheus_httpserver/${version}/${jarName}";
+    sha256 = "0fr3svn8kjp7bq1wzbkvv5awylwn8b01bngj04zvk7fpzqpgs7mz";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/libexec

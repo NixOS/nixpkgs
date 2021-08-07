@@ -30,6 +30,13 @@ existing packages here and modify it as necessary.
 }:
 
 let
+  minQtVersion = "5.15";
+  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
+  maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
+  license = with lib.licenses; [
+    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+  ];
+
   srcs = import ./srcs.nix {
     inherit fetchurl;
     mirror = "mirror://kde";
@@ -81,14 +88,15 @@ let
             defaultSetupHook = if hasBin && hasDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
 
-            meta = {
-              license = with lib.licenses; [
-                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
-              ];
-              platforms = lib.platforms.linux;
-              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
-              homepage = "http://www.kde.org";
-            } // (args.meta or {});
+            meta =
+              let meta = args.meta or {}; in
+              meta // {
+                homepage = meta.homepage or "http://www.kde.org";
+                license = meta.license or license;
+                maintainers = (meta.maintainers or []) ++ maintainers;
+                platforms = meta.platforms or lib.platforms.linux;
+                broken = meta.broken or broken;
+              };
           in
           mkDerivation (args // {
             name = "${name}-${version}";
@@ -115,12 +123,14 @@ let
       kscreen = callPackage ./kscreen.nix {};
       kscreenlocker = callPackage ./kscreenlocker.nix {};
       ksshaskpass = callPackage ./ksshaskpass.nix {};
-      ksysguard = callPackage ./ksysguard.nix {};
+      ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
+      ksystemstats = callPackage ./ksystemstats.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
       kwayland-server = callPackage ./kwayland-server {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
+      layer-shell-qt = callPackage ./layer-shell-qt.nix {};
       libkscreen = callPackage ./libkscreen {};
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
@@ -131,6 +141,7 @@ let
       plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-sdk = callPackage ./plasma-sdk.nix {};
       plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
       plasma-thunderbolt = callPackage ./plasma-thunderbolt.nix { };
       plasma-vault = callPackage ./plasma-vault {};
@@ -149,6 +160,7 @@ let
         kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
         kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
+        krunner-symbols = callPackage ./3rdparty/addons/krunner-symbols.nix { };
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
 

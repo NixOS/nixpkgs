@@ -1,11 +1,8 @@
 { lib, stdenv, fetchurl, perl }:
 
-let
-  version = "2.1.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "uthash";
-  inherit version;
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/troydhanson/uthash/archive/v${version}.tar.gz";

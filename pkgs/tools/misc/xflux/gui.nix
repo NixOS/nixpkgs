@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildPythonApplication, python3Packages, wrapGAppsHook
 , xflux, librsvg, gtk3, gobject-introspection, pango, gdk-pixbuf, atk
-, pexpect, pyGtkGlade, pygobject3, pyxdg, libappindicator-gtk3
+, pexpect, pygobject3, pyxdg, libappindicator-gtk3
 }:
 buildPythonApplication rec {
   pname = "xflux-gui";

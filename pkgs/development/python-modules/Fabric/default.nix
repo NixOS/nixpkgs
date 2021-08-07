@@ -9,12 +9,18 @@
 
 buildPythonPackage rec {
   pname = "fabric";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19nzdibjfndzcwvby20p59igqwyzw7skrb45v2mxqsjma5yjv114";
+    sha256 = "47f184b070272796fd2f9f0436799e18f2ccba4ee8ee587796fca192acd46cd2";
   };
+
+  # only relevant to python < 3.4
+  postPatch = ''
+    substituteInPlace setup.py \
+        --replace ', "pathlib2"' ' '
+  '';
 
   propagatedBuildInputs = [ invoke paramiko cryptography ];
   checkInputs = [ pytest mock pytest-relaxed ];

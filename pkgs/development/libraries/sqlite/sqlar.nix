@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fuse, zlib }:
+{ lib, stdenv, fetchurl, fuse, zlib
+, withFuse ? true }:
 
 stdenv.mkDerivation {
   pname = "sqlar";
@@ -9,12 +10,21 @@ stdenv.mkDerivation {
     sha256 = "09pikkbp93gqypn3da9zi0dzc47jyypkwc9vnmfzhmw7kpyv8nm9";
   };
 
-  buildInputs = [ fuse zlib ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
+  '';
 
-  buildFlags = [ "sqlar" "sqlarfs" "CFLAGS=-Wno-error" ];
+  buildInputs = [ zlib ]
+    ++ lib.optional withFuse fuse;
+
+  buildFlags = [ "CFLAGS=-Wno-error" "sqlar" ]
+    ++ lib.optional withFuse "sqlarfs";
 
   installPhase = ''
-    install -D -t $out/bin sqlar sqlarfs
+    install -D -t $out/bin sqlar
+  '' + lib.optionalString withFuse ''
+    install -D -t $out/bin sqlarfs
   '';
 
   meta = with lib; {

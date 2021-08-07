@@ -14,6 +14,7 @@ args @ {
 , unshareNet ? false
 , unshareUts ? true
 , unshareCgroup ? true
+, dieWithParent ? true
 , ...
 }:
 
@@ -22,7 +23,7 @@ let
   buildFHSEnv = callPackage ./env.nix { };
 
   env = buildFHSEnv (removeAttrs args [
-    "runScript" "extraInstallCommands" "meta" "passthru"
+    "runScript" "extraInstallCommands" "meta" "passthru" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
   ]);
 
@@ -30,6 +31,13 @@ let
     files = [
       # NixOS Compatibility
       "static"
+      "nix" # mainly for nixUnstable users, but also for access to nix/netrc
+      # Shells
+      "bashrc"
+      "zshenv"
+      "zshrc"
+      "zinputrc"
+      "zprofile"
       # Users, Groups, NSS
       "passwd"
       "group"
@@ -54,6 +62,7 @@ let
       # Fonts
       "fonts"
       # ALSA
+      "alsa"
       "asound.conf"
       # SSL
       "ssl/certs"
@@ -136,7 +145,7 @@ let
       ${lib.optionalString unshareNet "--unshare-net"}
       ${lib.optionalString unshareUts "--unshare-uts"}
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
-      --die-with-parent
+      ${lib.optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel

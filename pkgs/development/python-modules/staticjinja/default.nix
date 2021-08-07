@@ -2,28 +2,27 @@
 , fetchFromGitHub
 , buildPythonPackage
 , poetry
-, isPy27
 , docopt
 , easywatch
 , jinja2
 , pytestCheckHook
 , pytest-check
 , markdown
+, testVersion
+, staticjinja
 }:
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "1.0.4";
+  version = "3.0.1";
   format = "pyproject";
-
-  disabled = isPy27; # 0.4.0 drops python2 support
 
   # No tests in pypi
   src = fetchFromGitHub {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "1saz6f71s693gz9c2k3bq2di2mrkj65mgmfdg86jk0z0zzjk90y1";
+    sha256 = "sha256-W4q0vG8Kl2gCmA8UnUbdiGRtghhdnWxIJXFIIa6BogA=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +45,10 @@ buildPythonPackage rec {
   preCheck = ''
     export PATH="$PATH:$out/bin";
   '';
+
+  passthru.tests.version = testVersion {
+    package = staticjinja;
+  };
 
   meta = with lib; {
     description = "A library and cli tool that makes it easy to build static sites using Jinja2";

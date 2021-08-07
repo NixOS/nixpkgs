@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost169, flatbuffers, fmt, rapidjson, spdlog, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, flatbuffers, fmt, rapidjson, spdlog, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "vowpal-wabbit";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boost169
+    boost
     flatbuffers
     fmt
     rapidjson

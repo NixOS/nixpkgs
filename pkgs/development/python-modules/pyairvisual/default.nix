@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "5.0.7";
+  version = "5.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-r/AJl36dv6+C92tc3kpX4/VzG69qdh4ERCyQxDOHdVU=";
+    sha256 = "1jfbwnipklpgxjgsgsx4j53anbqyrbgvj0wb84fvsm32jq9m8avf";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -43,8 +43,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples as they are prefixed with test_
-  pytestFlagsArray = [ "--ignore examples/" ];
+  disabledTestPaths = [ "examples/" ];
+
   pythonImportsCheck = [ "pyairvisual" ];
 
   meta = with lib; {

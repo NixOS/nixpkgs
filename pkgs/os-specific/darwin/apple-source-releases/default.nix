@@ -1,9 +1,6 @@
 { lib, stdenv, fetchurl, fetchzip, pkgs }:
 
 let
-  macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage'; };
-  developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage'; };
-
   # This attrset can in theory be computed automatically, but for that to work nicely we need
   # import-from-derivation to work properly. Currently it's rather ugly when we try to bootstrap
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
@@ -157,7 +154,7 @@ let
     version = versions.${sdkName}.${pname};
   in fetchApple' pname version sha256;
 
-  appleDerivation' = pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
+  appleDerivation'' = stdenv: pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
     inherit pname version;
 
     src = if attrs ? srcs then null else (fetchApple' pname version sha256);
@@ -190,17 +187,6 @@ let
     }) // (attrs.meta or {});
   });
 
-  applePackage' = namePath: version: sdkName: sha256: let
-    pname = builtins.head (lib.splitString "/" namePath);
-    appleDerivation = appleDerivation' pname version sdkName sha256;
-    callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation; });
-  in callPackage (./. + "/${namePath}");
-
-  applePackage = namePath: sdkName: sha256: let
-    pname = builtins.head (lib.splitString "/" namePath);
-    version = versions.${sdkName}.${pname};
-  in applePackage' namePath version sdkName sha256;
-
   IOKitSpecs = {
     IOAudioFamily                        = fetchApple "osx-10.10.5" "0ggq7za3iq8g02j16rj67prqhrw828jsw3ah3bxq8a1cvr55aqnq";
     IOFireWireFamily                     = fetchApple "osx-10.10.5" "059qa1m668kwvchl90cqcx35b31zaqdg61zi11y1imn5s389y2g1";
@@ -225,11 +211,36 @@ let
 
   IOKitSrcs = lib.mapAttrs (name: value: if lib.isFunction value then value name else value) IOKitSpecs;
 
+in
+
+# darwin package set
+self:
+
+let
+  macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage'; };
+  developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage'; };
+
+  applePackage' = namePath: version: sdkName: sha256:
+    let
+      pname = builtins.head (lib.splitString "/" namePath);
+      appleDerivation' = stdenv: appleDerivation'' stdenv pname version sdkName sha256;
+      appleDerivation = appleDerivation' stdenv;
+      callPackage = self.newScope { inherit appleDerivation' appleDerivation; };
+    in callPackage (./. + "/${namePath}");
+
+  applePackage = namePath: sdkName: sha256: let
+    pname = builtins.head (lib.splitString "/" namePath);
+    version = versions.${sdkName}.${pname};
+  in applePackage' namePath version sdkName sha256;
+
   # Only used for bootstrapping. It’s convenient because it was the last version to come with a real makefile.
   adv_cmds-boot = applePackage "adv_cmds/boot.nix" "osx-10.5.8" "102ssayxbg9wb35mdmhswbnw0bg7js3pfd8fcbic83c5q3bqa6c6" {};
 
-  # TODO: shorten this list, we should cut down to a minimum set of bootstrap or necessary packages here.
-  stubPackages = {
+in
+
+developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
+    # TODO: shorten this list, we should cut down to a minimum set of bootstrap or necessary packages here.
+
     inherit (adv_cmds-boot) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "1pbpjcd7is69hn8y29i98ci0byik826if8gnp824ha92h90w0fq3" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
@@ -262,17 +273,16 @@ let
     libplatform     = applePackage "libplatform"       "osx-10.12.6"     "0rh1f5ybvwz8s0nwfar8s0fh7jbgwqcy903cv2x8m15iq1x599yn" {};
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "1j6541rcgjpas1fc77ip5krjgw4bvz6jq7bq7h9q7axb0jv2ns6c" {};
     libresolv       = applePackage "libresolv"         "osx-10.12.6"     "077j6ljfh7amqpk2146rr7dsz5vasvr3als830mgv5jzl7l6vz88" {};
-    Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "1082ircc1ggaq3wha218vmfa75jqdaqidsy1bmrc4ckfkbr3bwx2" {
-      libutil = pkgs.darwin.libutil.override { headersOnly = true; };
-      hfs = pkgs.darwin.hfs.override { headersOnly = true; };
-    };
+    Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "1082ircc1ggaq3wha218vmfa75jqdaqidsy1bmrc4ckfkbr3bwx2" {};
     libutil         = applePackage "libutil"           "osx-10.12.6"     "0lqdxaj82h8yjbjm856jjz9k2d96k0viimi881akfng08xk1246y" {};
     libunwind       = applePackage "libunwind"         "osx-10.12.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.12.6"     "02ms1p8zlgmprzn65jzr7yaqxykh3zxjcrw0c06aayim6h0dsqfy" {};
     objc4           = applePackage "objc4"             "osx-10.12.6"     "1cj1vhbcs9pkmag2ms8wslagicnq9bxi2qjkszmp3ys7z7ccrbwz" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "1kcc2nc4x1kf8sz0a23i6nfpvxg381kipi0qdisrp8x9z2gbkxb8" {};
     removefile      = applePackage "removefile"        "osx-10.12.6"     "0jzjxbmxgjzhssqd50z7kq9dlwrv5fsdshh57c0f8mdwcs19bsyx" {};
-    xnu             = applePackage "xnu"               "osx-10.12.6"     "1sjb0i7qzz840v2h4z3s4jyjisad4r5yyi6sg8pakv3wd81i5fg5" {};
+    xnu             = applePackage "xnu"               "osx-10.12.6"     "1sjb0i7qzz840v2h4z3s4jyjisad4r5yyi6sg8pakv3wd81i5fg5" {
+      python3 = pkgs.buildPackages.buildPackages.python3; # TODO(@Ericson2314) this shouldn't be needed.
+    };
     hfs             = applePackage "hfs"               "osx-10.12.6"     "1mj3xvqpq1mgd80b6kl1s04knqnap7hccr0gz8rjphalq14rbl5g" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "1zwfwcl9irxl1dlnf2b4v30vdybp0p0r6n6g1pd14zbdci1jcg2k" {};
     adv_cmds        = applePackage "adv_cmds"          "osx-10.11.6"    "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q" {};
@@ -287,10 +297,11 @@ let
     top             = applePackage "top"               "osx-10.11.6"     "0i9120rfwapgwdvjbfg0ya143i29s1m8zbddsxh39pdc59xnsg5l" {};
     PowerManagement = applePackage "PowerManagement"   "osx-10.11.6"     "1llimhvp0gjffd47322lnjq7cqwinx0c5z7ikli04ad5srpa68mh" {};
 
+    libutilHeaders  = pkgs.darwin.libutil.override { headersOnly = true; };
+    hfsHeaders      = pkgs.darwin.hfs.override { headersOnly = true; };
+    libresolvHeaders= pkgs.darwin.libresolv.override { headersOnly = true; };
+
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.
     Security        = applePackage "Security/boot.nix" "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
-  };
-
-  packages = developerToolsPackages_11_3_1 // macosPackages_11_0_1 // stubPackages;
-in packages
+}

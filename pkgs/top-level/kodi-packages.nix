@@ -126,4 +126,6 @@ let self = rec {
 
   urllib3 = callPackage ../applications/video/kodi-packages/urllib3 { };
 
+  websocket = callPackage ../applications/video/kodi-packages/websocket { };
+
 }; in self

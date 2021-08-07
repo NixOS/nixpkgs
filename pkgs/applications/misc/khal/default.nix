@@ -2,44 +2,36 @@
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "khal";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11qhrga44knlnp88py9p547d4nr5kn041d2nszwa3dqw7mf22ks9";
+    sha256 = "sha256-L92PwU/ll+Wn1unGPHho2WC07QIbVjxoSnHwcJDtpDI=";
   };
-
-  patches = [
-    ./skip-broken-test.patch
-  ];
 
   propagatedBuildInputs = [
     atomicwrites
     click
     click-log
     configobj
-    dateutil
+    python-dateutil
     icalendar
     lxml
     pkgs.vdirsyncer
     pytz
     pyxdg
-    requests_toolbelt
+    requests-toolbelt
     tzlocal
     urwid
     pkginfo
     freezegun
   ];
-  nativeBuildInputs = [ setuptools_scm sphinx sphinxcontrib_newsfeed ];
-  checkInputs = [ pytest glibcLocales ];
+  nativeBuildInputs = [ setuptools-scm sphinx sphinxcontrib_newsfeed ];
+  checkInputs = [
+    glibcLocales
+    pytestCheckHook
+  ];
   LC_ALL = "en_US.UTF-8";
-
-  postPatch = ''
-    sed -i \
-      -e "s/Invalid value for \"ics\"/Invalid value for \\\'ics\\\'/" \
-      -e "s/Invalid value for \"\[ICS\]\"/Invalid value for \\\'\[ICS\]\\\'/" \
-      tests/cli_test.py
-  '';
 
   postInstall = ''
     # zsh completion
@@ -56,11 +48,13 @@ with python3.pkgs; buildPythonApplication rec {
 
   doCheck = !stdenv.isAarch64;
 
-  checkPhase = ''
-    py.test -k "not test_vertical_month_abbr_fr and not test_vertical_month_unicode_weekdeays_gr \
-      and not test_event_different_timezones and not test_default_calendar and not test_birthdays \
-      and not test_birthdays_no_year"
-  '';
+  disabledTests = [
+    # This test is failing due to https://github.com/pimutils/khal/issues/1065
+    "test_print_ics_command"
+
+    # Mocking breaks in this testcase
+    "test_import_from_stdin"
+  ];
 
   meta = with lib; {
     homepage = "http://lostpackets.de/khal/";

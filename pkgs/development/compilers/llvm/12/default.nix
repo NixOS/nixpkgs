@@ -1,13 +1,24 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake
+, gccForLibs, preLibcCrossHeaders
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
-, buildPackages
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+# This is the default binutils, but with *this* version of LLD rather
+# than the default LLVM verion's, if LLD is the choice. We use these for
+# the `useLLVM` bootstrapping below.
+, bootBintoolsNoLibc ?
+    if stdenv.targetPlatform.linker == "lld"
+    then null
+    else pkgs.bintoolsNoLibc
+, bootBintools ?
+    if stdenv.targetPlatform.linker == "lld"
+    then null
+    else pkgs.bintools
 , darwin
 }:
 
 let
-  release_version = "12.0.0";
+  release_version = "12.0.1";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
@@ -18,7 +29,7 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "0p3dzr0qa7mar83y66xa5m5apynf6ia0lsdsq6axwnm64ysy0hdd";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1r9a4fdz9ci58b5z2inwvm4z4cdp6scrivnaw05dggkxz7yrwrb5";
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
@@ -27,34 +38,50 @@ let
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
-    mkExtraBuildCommands = cc: ''
+    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });
+    mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
-      ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
-      ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
+      ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
+    mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
+      ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+      ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
+    '';
+
+  bintoolsNoLibc' =
+    if bootBintoolsNoLibc == null
+    then tools.bintoolsNoLibc
+    else bootBintoolsNoLibc;
+  bintools' =
+    if bootBintools == null
+    then tools.bintools
+    else bootBintools;
 
   in {
 
-    llvm = callPackage ./llvm {
+    libllvm = callPackage ./llvm {
       inherit llvm_meta;
     };
 
-    clang-unwrapped = callPackage ./clang {
-      inherit (tools) lld;
+    # `llvm` historically had the binaries.  When choosing an output explicitly,
+    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm.out // { outputUnspecified = true; };
+
+    libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
+    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
+
     # disabled until recommonmark supports sphinx 3
-    #Llvm-manpages = lowPrio (tools.llvm.override {
+    #Llvm-manpages = lowPrio (tools.libllvm.override {
     #  enableManpages = true;
     #  python3 = pkgs.python3;  # don't use python-boot
     #});
 
-    clang-manpages = lowPrio (tools.clang-unwrapped.override {
+    clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;
       python3 = pkgs.python3;  # don't use python-boot
     });
@@ -64,8 +91,6 @@ let
     #   enableManpages = true;
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
-
-    libclang = tools.clang-unwrapped.lib;
 
     clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 
@@ -91,7 +116,7 @@ let
 
     lld = callPackage ./lld {
       inherit llvm_meta;
-      libunwind = libraries.libunwind;
+      inherit (libraries) libunwind;
     };
 
     lldb = callPackage ./lldb {
@@ -108,14 +133,21 @@ let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools = callPackage ./bintools.nix {};
+    bintools-unwrapped = callPackage ./bintools {};
 
-    lldClang = wrapCCWith rec {
+    bintoolsNoLibc = wrapBintoolsWith {
+      bintools = tools.bintools-unwrapped;
+      libc = preLibcCrossHeaders;
+    };
+
+    bintools = wrapBintoolsWith {
+      bintools = tools.bintools-unwrapped;
+    };
+
+    clangUseLLVM = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
-      bintools = wrapBintoolsWith {
-        inherit (tools) bintools;
-      };
+      bintools = bintools';
       extraPackages = [
         targetLlvmLibraries.libcxxabi
         targetLlvmLibraries.compiler-rt
@@ -127,17 +159,17 @@ let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+      '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
+        echo "-lunwind" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
         echo "-fno-exceptions" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
     };
 
-    lldClangNoLibcxx = wrapCCWith rec {
+    clangNoLibcxx = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
-      bintools = wrapBintoolsWith {
-        inherit (tools) bintools;
-      };
+      bintools = bintools';
       extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];
@@ -148,13 +180,10 @@ let
       '' + mkExtraBuildCommands cc;
     };
 
-    lldClangNoLibc = wrapCCWith rec {
+    clangNoLibc = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
-      bintools = wrapBintoolsWith {
-        inherit (tools) bintools;
-        libc = null;
-      };
+      bintools = bintoolsNoLibc';
       extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];
@@ -164,17 +193,22 @@ let
       '' + mkExtraBuildCommands cc;
     };
 
-    lldClangNoCompilerRt = wrapCCWith {
+    clangNoCompilerRt = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
-      bintools = wrapBintoolsWith {
-        inherit (tools) bintools;
-        libc = null;
-      };
+      bintools = bintoolsNoLibc';
       extraPackages = [ ];
       extraBuildCommands = ''
         echo "-nostartfiles" >> $out/nix-support/cc-cflags
-      '';
+      '' + mkExtraBuildCommands0 cc;
+    };
+
+    clangNoCompilerRtWithLibc = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      libcxx = null;
+      bintools = bintools';
+      extraPackages = [ ];
+      extraBuildCommands = mkExtraBuildCommands0 cc;
     };
 
   });
@@ -183,33 +217,54 @@ let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
   in {
 
-    compiler-rt = callPackage ./compiler-rt ({ inherit llvm_meta; } //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoCompilerRt;
-      }));
+    compiler-rt-libc = callPackage ./compiler-rt {
+      inherit llvm_meta;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
+               else stdenv;
+    };
+
+    compiler-rt-no-libc = callPackage ./compiler-rt {
+      inherit llvm_meta;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
+               else stdenv;
+    };
+
+    # N.B. condition is safe because without useLLVM both are the same.
+    compiler-rt = if stdenv.hostPlatform.isAndroid
+      then libraries.compiler-rt-libc
+      else libraries.compiler-rt-no-libc;
 
     stdenv = overrideCC stdenv buildLlvmTools.clang;
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libc++ ({ inherit llvm_meta; } //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-      }));
+    libcxx = callPackage ./libcxx {
+      inherit llvm_meta;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
+               else stdenv;
+    };
 
-    libcxxabi = callPackage ./libc++abi ({ inherit llvm_meta; } //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-        libunwind = libraries.libunwind;
-      }));
+    libcxxabi = callPackage ./libcxxabi {
+      inherit llvm_meta;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
+               else stdenv;
+    };
 
-    openmp = callPackage ./openmp.nix { inherit llvm_meta; };
+    libunwind = callPackage ./libunwind {
+      inherit llvm_meta;
+      inherit (buildLlvmTools) llvm;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
+               else stdenv;
+    };
 
-    libunwind = callPackage ./libunwind ({ inherit llvm_meta; } //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-      }));
-
+    openmp = callPackage ./openmp {
+      inherit llvm_meta;
+    };
   });
 
 in { inherit tools libraries; } // libraries // tools

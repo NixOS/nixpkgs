@@ -13,7 +13,7 @@
 , nlohmann_json
 , soapysdr-with-plugins
 , portaudio
-, alsaLib
+, alsa-lib
 , muparserx
 , python3
 }:
@@ -39,7 +39,7 @@ mkDerivation rec {
 
   buildInputs = [
     pcre poco qtbase qtsvg libsForQt5.qwt nlohmann_json
-    soapysdr-with-plugins portaudio alsaLib muparserx python3
+    soapysdr-with-plugins portaudio alsa-lib muparserx python3
   ];
 
   postInstall = ''

@@ -11,7 +11,7 @@
 , pango
 , gdk-pixbuf
 , gobject-introspection
-, xvfb_run
+, xvfb-run
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication rec {
   checkInputs = with python3Packages; [
     nose
     mock
-    xvfb_run
+    xvfb-run
   ];
 
   preBuild = ''

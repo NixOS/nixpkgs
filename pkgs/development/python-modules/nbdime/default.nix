@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
 , hypothesis
-, setuptools_scm
+, setuptools-scm
 , six
 , attrs
 , py
 , setuptools
-, pytestcov
+, pytest-cov
 , pytest-timeout
 , pytest-tornado
 , mock
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     hypothesis
-    pytestcov
+    pytest-cov
     pytest-timeout
     pytest-tornado
     jsonschema
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     "test_merge"
   ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrs

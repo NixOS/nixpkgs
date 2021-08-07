@@ -2,6 +2,7 @@
 , lib
 , fetchzip
 , fetchurl
+, fetchpatch
 , runCommandNoCC
 , fcft
 , freetype
@@ -15,7 +16,9 @@
 , scdoc
 , tllist
 , wayland-protocols
+, wayland-scanner
 , pkg-config
+, utf8proc
 , allowPgo ? true
 , python3  # for PGO
 # for clang stdenv check
@@ -25,7 +28,7 @@
 }:
 
 let
-  version = "1.7.2";
+  version = "1.8.2";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -39,7 +42,7 @@ let
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "019bdiqfi3wx2lwrv3nhq83knc1r3lmqd5zgisa33wwshm2kyv7p";
+      sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
     };
 
     dontUnpack = true;
@@ -76,7 +79,7 @@ let
   }."${compilerName}";
 
   # ar with lto support
-  ar = {
+  ar = stdenv.cc.bintools.targetPrefix + {
     "clang" = "llvm-ar";
     "gcc" = "gcc-ar";
     "unknown" = "ar";
@@ -93,26 +96,43 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
-    sha256 = "0iabj9c0dj1r0m89i5gk2jdmwj4wfsai8na54x2w4fq406q6g9nh";
+    sha256 = "1k0alz991cslls4926c5gq02pdq0vfw9jfpprh2a1vb59xgikv7h";
   };
 
+  patches = [
+    # Fixes PGO builds with clang
+    (fetchpatch {
+      url = "https://codeberg.org/dnkl/foot/commit/2acd4b34c57659d86dca76c58e4363de9b0a1f17.patch";
+      sha256 = "13xi9ppaqx2p88cxbh6801ry9ral70ylh40agn6ij7pklybs4d7s";
+      includes = [ "pgo/pgo.c" ];
+    })
+  ];
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
+    wayland-scanner
     meson
     ninja
     ncurses
     scdoc
-    tllist
-    wayland-protocols
     pkg-config
-  ] ++ lib.optional stdenv.cc.isClang stdenv.cc.cc.llvm;
+  ] ++ lib.optionals (compilerName == "clang") [
+    stdenv.cc.cc.libllvm.out
+  ];
 
   buildInputs = [
+    tllist
+    wayland-protocols
     fontconfig
     freetype
     pixman
     wayland
     libxkbcommon
     fcft
+    utf8proc
   ];
 
   # recommended build flags for performance optimized foot builds
@@ -127,7 +147,11 @@ stdenv.mkDerivation rec {
     export AR="${ar}"
   '';
 
-  mesonFlags = [ "--buildtype=release" "-Db_lto=true" ];
+  mesonFlags = [
+    "--buildtype=release"
+    "-Db_lto=true"
+    "-Dterminfo-install-location=${placeholder "terminfo"}/share/terminfo"
+  ];
 
   # build and run binary generating PGO profiles,
   # then reconfigure to build the normal foot binary utilizing PGO
@@ -142,6 +166,15 @@ stdenv.mkDerivation rec {
     meson configure -Db_pgo=use
   '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
+  '';
+
+  outputs = [ "out" "terminfo" ];
+
+  # make sure nix-env and buildEnv also include the
+  # terminfo output when the package is installed
+  postInstall = ''
+    mkdir -p "$out/nix-support"
+    echo "$terminfo" >> "$out/nix-support/propagated-user-env-packages"
   '';
 
   passthru.tests = {

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, pytest, pytestcov }:
+{ lib, buildPythonPackage, fetchPypi, pyyaml, pytest, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "python-hosts";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     substituteInPlace python_hosts/utils.py --replace "import win_inet_pton" ""
   '';
 
-  checkInputs = [ pyyaml pytest pytestcov ];
+  checkInputs = [ pyyaml pytest pytest-cov ];
 
   # Removing 1 test file (it requires internet connection) and keeping the other two
   checkPhase = ''

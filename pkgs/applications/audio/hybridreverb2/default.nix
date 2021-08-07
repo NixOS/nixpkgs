@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchzip, cmake, pkg-config, lv2, alsaLib, libjack2,
+{ lib, stdenv, fetchFromGitHub, fetchzip, cmake, pkg-config, lv2, alsa-lib, libjack2,
   freetype, libX11, gtk3, pcre, libpthreadstubs, libXdmcp, libxkbcommon,
   epoxy, at-spi2-core, dbus, curl, fftwFloat }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ lv2 alsaLib libjack2 freetype libX11 gtk3 pcre
+  buildInputs = [ lv2 alsa-lib libjack2 freetype libX11 gtk3 pcre
     libpthreadstubs libXdmcp libxkbcommon epoxy at-spi2-core dbus curl fftwFloat ];
 
   cmakeFlags = [

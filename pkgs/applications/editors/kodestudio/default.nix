@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , # Patchelf dependencies:
-  alsaLib, atomEnv, boehmgc, flac, libogg, libvorbis, libXScrnSaver, libGLU, libGL
+  alsa-lib, atomEnv, boehmgc, flac, libogg, libvorbis, libXScrnSaver, libGLU, libGL
 , openssl, xorg, zlib
 }:
 
@@ -57,7 +57,7 @@ in
           $out/kodestudio
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ".:${stdenv.cc.libc}/lib:${xorg.libXinerama}/lib:${xorg.libX11}/lib:${alsaLib}/lib:${libGL}/lib:${libGLU}/lib:${openssl.out}/lib" \
+          --set-rpath ".:${stdenv.cc.libc}/lib:${xorg.libXinerama}/lib:${xorg.libX11}/lib:${alsa-lib}/lib:${libGL}/lib:${libGLU}/lib:${openssl.out}/lib" \
           $out/resources/app/extensions/krom/Krom/linux/Krom
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

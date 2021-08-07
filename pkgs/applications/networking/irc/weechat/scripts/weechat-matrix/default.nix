@@ -21,7 +21,7 @@ let
     python_magic
   ]);
 
-  version = "0.2.0";
+  version = "0.3.0";
 in buildPythonPackage {
   pname = "weechat-matrix";
   inherit version;
@@ -30,7 +30,7 @@ in buildPythonPackage {
     owner = "poljar";
     repo = "weechat-matrix";
     rev = version;
-    hash = "sha256-qsTdF9mGHac4rPs53mgoOElcujicRNXbJ7GsoptWSGc=";
+    hash = "sha256-o4kgneszVLENG167nWnk2FxM+PsMzi+PSyMUMIktZcc=";
   };
 
   propagatedBuildInputs = [
@@ -73,6 +73,7 @@ in buildPythonPackage {
   postFixup = ''
     addToSearchPath program_PYTHONPATH $out/${python.sitePackages}
     patchPythonScript $out/share/matrix.py
+    substituteInPlace $out/${python.sitePackages}/matrix/server.py --replace \"matrix_sso_helper\" \"$out/bin/matrix_sso_helper\"
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, itstool, libxml2, mate, dconf, gtk3, vte, pcre2, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, glib, itstool, libxml2, mate, dconf, gtk3, vte, pcre2, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-terminal";
@@ -30,10 +30,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "The MATE Terminal Emulator";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

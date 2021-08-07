@@ -1,6 +1,6 @@
-{ lib, pythonPackages, fetchFromGitHub, pkg-config, glib, alsaLib, libjack2  }:
+{ lib, python2Packages, fetchFromGitHub, pkg-config, glib, alsa-lib, libjack2  }:
 
-pythonPackages.buildPythonApplication {
+python2Packages.buildPythonApplication {
   version = "2015-11-17";
   pname = "mididings";
 
@@ -12,8 +12,8 @@ pythonPackages.buildPythonApplication {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib alsaLib libjack2 pythonPackages.boost ];
-  propagatedBuildInputs = with pythonPackages; [ decorator ]
+  buildInputs = [ glib alsa-lib libjack2 python2Packages.boost ];
+  propagatedBuildInputs = with python2Packages; [ decorator ]
     # for livedings
     ++ [ tkinter pyliblo ]
     # for mididings.extra
@@ -25,14 +25,14 @@ pythonPackages.buildPythonApplication {
 
   preBuild = with lib.versions; ''
     substituteInPlace setup.py \
-      --replace boost_python "boost_python${major pythonPackages.python.version}${minor pythonPackages.python.version}"
+      --replace boost_python "boost_python${major python2Packages.python.version}${minor python2Packages.python.version}"
   '';
 
   meta = with lib; {
     description = "A MIDI router and processor based on Python, supporting ALSA and JACK MIDI";
     homepage = "http://das.nasophon.de/mididings";
     license = licenses.gpl2;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

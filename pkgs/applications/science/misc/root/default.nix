@@ -1,23 +1,73 @@
-{ stdenv, lib, fetchurl, makeWrapper, cmake, ftgl, gl2ps, glew, gsl, llvm_5
-, libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, lz4, xz, pcre
-, pkg-config, python, xxHash, zlib, zstd
-, libAfterImage, giflib, libjpeg, libtiff, libpng
-, Cocoa, OpenGL, noSplash ? false }:
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, cmake
+, git
+, ftgl
+, gl2ps
+, glew
+, gsl
+, libX11
+, libXpm
+, libXft
+, libXext
+, libGLU
+, libGL
+, libxml2
+, lz4
+, xz
+, pcre
+, nlohmann_json
+, pkg-config
+, python
+, xxHash
+, zlib
+, zstd
+, libAfterImage
+, giflib
+, libjpeg
+, libtiff
+, libpng
+, Cocoa
+, CoreSymbolication
+, OpenGL
+, noSplash ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.22.08";
+  version = "6.24.02";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "0vrgi83hrw4n9zgx873fn4ba3vk54slrwk1cl4cc4plgxzv1y1kg";
+    sha256 = "sha256-BQfhCV4nnMxyQPZR0llmAkMlF5+oWhJZtpS1ZyOtfBw=";
   };
 
-  nativeBuildInputs = [ makeWrapper cmake pkg-config ];
-  buildInputs = [ ftgl gl2ps glew pcre zlib zstd llvm_5 libxml2 lz4 xz gsl xxHash libAfterImage giflib libjpeg libtiff libpng python.pkgs.numpy ]
-    ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-    ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
-    ;
+  nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
+  buildInputs = [
+    ftgl
+    gl2ps
+    glew
+    pcre
+    zlib
+    zstd
+    libxml2
+    lz4
+    xz
+    gsl
+    xxHash
+    libAfterImage
+    giflib
+    libjpeg
+    libtiff
+    libpng
+    nlohmann_json
+    python.pkgs.numpy
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
+  ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
+  ;
 
   patches = [
     ./sw_vers.patch
@@ -28,18 +78,31 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace 'set(lcgpackages ' '#set(lcgpackages '
 
+    # Don't require textutil on macOS
+    : > cmake/modules/RootCPack.cmake
+
+    # Hardcode path to fix use with cmake
+    sed -i cmake/scripts/ROOTConfig.cmake.in \
+      -e 'iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
+
     patchShebangs build/unix/
   '' + lib.optionalString noSplash ''
     substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Eliminate impure reference to /System/Library/PrivateFrameworks
+    substituteInPlace core/CMakeLists.txt \
+      --replace "-F/System/Library/PrivateFrameworks" ""
   '';
 
   cmakeFlags = [
     "-Drpath=ON"
+    "-DCMAKE_CXX_STANDARD=17"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-Dbuiltin_nlohmannjson=OFF"
+    "-Dbuiltin_openui5=OFF"
     "-Dalien=OFF"
     "-Dbonjour=OFF"
-    "-Dbuiltin_llvm=OFF"
     "-Dcastor=OFF"
     "-Dchirp=OFF"
     "-Dclad=OFF"
@@ -53,6 +116,7 @@ stdenv.mkDerivation rec {
     "-Dgfal=OFF"
     "-Dgviz=OFF"
     "-Dhdfs=OFF"
+    "-Dhttp=ON"
     "-Dkrb5=OFF"
     "-Dldap=OFF"
     "-Dmonalisa=OFF"
@@ -64,9 +128,11 @@ stdenv.mkDerivation rec {
     "-Dpythia6=OFF"
     "-Dpythia8=OFF"
     "-Drfio=OFF"
+    "-Droot7=OFF"
     "-Dsqlite=OFF"
     "-Dssl=OFF"
     "-Dvdt=OFF"
+    "-Dwebgui=OFF"
     "-Dxml=ON"
     "-Dxrootd=OFF"
   ]

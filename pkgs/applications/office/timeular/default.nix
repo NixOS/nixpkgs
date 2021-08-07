@@ -2,21 +2,29 @@
 , fetchurl
 , appimageTools
 , libsecret
+, gtk3
+, gsettings-desktop-schemas
 }:
 
 let
-  version = "3.4.1";
+  version = "3.9.1";
   pname = "timeular";
   name = "${pname}-${version}";
+
   src = fetchurl {
     url = "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
-    sha256 = "1s5jjdl1nzq9yd582lqs904yl10mp0s25897zmifmcbw1vz38bar";
+    sha256 = "103hy443p697jdkz6li8s1n6kg1r55jmiw2vbjz12kskf7njg4y4";
   };
+
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
 in appimageTools.wrapType2 rec {
   inherit name src;
+
+  profile = ''
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+  '';
 
   extraPkgs = pkgs: with pkgs; [
     libsecret

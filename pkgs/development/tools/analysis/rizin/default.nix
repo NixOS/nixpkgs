@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    sha256 = "sha256-CGHeo247syha+rVtiAQz0XkEYK9p4DHTnLK2FhBOvE8=";
+    sha256 = "sha256-lxVsPI+qLenZ0pelvxtHlQ6fhWdQeqoEEHrUGZ5Rdmg=";
   };
 
   mesonFlags = [
@@ -77,6 +77,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
     platforms = with lib.platforms; linux;
-    inherit version;
   };
 }

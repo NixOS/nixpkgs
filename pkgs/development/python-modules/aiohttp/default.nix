@@ -15,7 +15,6 @@
 , freezegun
 , gunicorn
 , pytest-mock
-, pytest-xdist
 , pytestCheckHook
 , re-assert
 , trustme
@@ -52,14 +51,9 @@ buildPythonPackage rec {
     freezegun
     gunicorn
     pytest-mock
-    pytest-xdist
     pytestCheckHook
     re-assert
     trustme
-  ];
-
-  pytestFlagsArray = [
-    "-n auto"
   ];
 
   disabledTests = [

@@ -28,6 +28,8 @@ let
     else
       "${lib.getLib glibc}/lib/ld-linux*";
 
+  downloadsUrl = "https://downloads.haskell.org/ghc";
+
 in
 
 stdenv.mkDerivation rec {
@@ -39,22 +41,22 @@ stdenv.mkDerivation rec {
   src = fetchurl ({
     i686-linux = {
       # Don't use the Fedora27 build (as below) because there isn't one!
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
       sha256 = "1p2h29qghql19ajk755xa0yxkn85slbds8m9n5196ris743vkp8w";
     };
     x86_64-linux = {
       # This is the Fedora build because it links against ncurses6 where the
       # deb9 one links against ncurses5, see here
       # https://github.com/NixOS/nixpkgs/issues/85924 for a discussion
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
       sha256 = "18dlqm5d028fqh6ghzn7pgjspr5smw030jjzl3kq6q1kmwzbay6g";
     };
     aarch64-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
       sha256 = "11n7l2a36i5vxzzp85la2555q4m34l747g0pnmd81cp46y85hlhq";
     };
     x86_64-darwin = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "0s9188vhhgf23q3rjarwhbr524z6h2qga5xaaa2pma03sfqvvhfz";
     };
   }.${stdenv.hostPlatform.system}
@@ -119,8 +121,9 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ ];
   configureFlags = [
-    "--with-gmp-libraries=${lib.getLib gmp}/lib"
     "--with-gmp-includes=${lib.getDev gmp}/include"
+    # Note `--with-gmp-libraries` does nothing for GHC bindists:
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
@@ -150,6 +153,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # In nixpkgs, musl based builds currently enable `pie` hardening by default
+  # (see `defaultHardeningFlags` in `make-derivation.nix`).
+  # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+  # See:
+  # * https://github.com/NixOS/nixpkgs/issues/129247
+  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+
   doInstallCheck = true;
   installCheckPhase = ''
     unset ${libEnvVar}
@@ -169,8 +181,16 @@ stdenv.mkDerivation rec {
   passthru = {
     targetPrefix = "";
     enableShared = true;
+
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc-${version}";
   };
 
-  meta.license = lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+  meta = rec {
+    license = lib.licenses.bsd3;
+    platforms = ["x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+    hydraPlatforms = builtins.filter (p: p != "aarch64-linux") platforms;
+    # build segfaults, use ghc8102Binary which has proper musl support instead
+    broken = stdenv.hostPlatform.isMusl;
+  };
 }

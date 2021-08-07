@@ -1,15 +1,15 @@
 { lib, buildPythonPackage, fetchPypi, installShellFiles
 , Babel, requests, requests_oauthlib, six, click, markdown, pyyaml, cryptography
-, pytestrunner, coverage, flake8, mock, pytestCheckHook, pytestcov, tox, gntp, sleekxmpp
+, pytest-runner, coverage, flake8, mock, pytestCheckHook, pytest-cov, tox, gntp, sleekxmpp
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FW5gt35yoXVr2+hiGBDJ/5jFFfIpn2Z9sDN8acoO4FI=";
+    sha256 = "sha256-yKzpyJHUIkVYVwrL6oCPMd+QSVML2czWmQHCemXWAMQ=";
   };
 
   nativeBuildInputs = [ Babel installShellFiles ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestrunner coverage flake8 mock pytestCheckHook pytestcov tox gntp sleekxmpp
+    pytest-runner coverage flake8 mock pytestCheckHook pytest-cov tox gntp sleekxmpp
   ];
 
   disabledTests = [ "test_apprise_cli_nux_env"  ];

@@ -7,7 +7,6 @@
 , elementary-gtk-theme
 , elementary-icon-theme
 , fetchFromGitHub
-, fetchpatch
 , flatpak
 , gettext
 , glib
@@ -15,6 +14,7 @@
 , gtk3
 , json-glib
 , libgee
+, libhandy
 , libsoup
 , libxml2
 , meson
@@ -25,19 +25,18 @@
 , python3
 , vala
 , polkit
-, libhandy_0
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.5.1";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8r0DlmG8xlCQ1uFHZQjXG2ls4VBrsRzrVY8Ey3/OYAU=";
+    sha256 = "0kwqgilhyrj2nbvw5y34nzch5h9jnrg1a1n333qdsx4ax6yrxh4j";
   };
 
   passthru = {
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libgee
-    libhandy_0 # doesn't support libhandy-1 yet
+    libhandy
     libsoup
     libxml2
     packagekit

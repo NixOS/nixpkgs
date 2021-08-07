@@ -43,6 +43,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://raw.githubusercontent.com/SConsProject/scons/rel_${version}/src/CHANGES.txt";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.primeos ];
+    maintainers = [ ];
   };
 }

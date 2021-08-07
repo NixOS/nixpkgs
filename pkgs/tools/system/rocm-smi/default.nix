@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "System management interface for AMD GPUs supported by ROCm";
     homepage = "https://github.com/RadeonOpenCompute/ROC-smi";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

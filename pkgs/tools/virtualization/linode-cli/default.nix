@@ -1,33 +1,34 @@
 { lib
-, buildPythonApplication
 , fetchFromGitHub
 , fetchurl
-, terminaltables
+, buildPythonApplication
 , colorclass
-, requests
-, pyyaml
-, setuptools
 , installShellFiles
+, pyyaml
+, requests
+, setuptools
+, terminaltables
 }:
 
 let
-
+  # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
+  specVersion = "4.99.0";
   spec = fetchurl {
-    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v4.89.0/openapi.yaml";
-    sha256 = "sha256-R7Dmq8ifGEjh47ftuoGrbymYBsPCj/ULz0j1OqJDcwY=";
+    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
+    sha256 = "10z63a2clbiskdnmnyf4m8v2hgc4bdm703y7s2dpw0q09msx9aca";
   };
 
 in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "5.0.1";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zelopRaHaDCnbYA/y7dNMBh70g0+wuc6t9LH/VLaUIk=";
+    sha256 = "sha256-AjO4h0PaE/QFwbwUVNoe98XOPZ24ct0mbLkua5/YsEA=";
   };
 
   # remove need for git history
@@ -37,11 +38,11 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    terminaltables
     colorclass
-    requests
     pyyaml
+    requests
     setuptools
+    terminaltables
   ];
 
   postConfigure = ''
@@ -60,10 +61,9 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/linode/linode-cli";
     description = "The Linode Command Line Interface";
+    homepage = "https://github.com/linode/linode-cli";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ryantm superherointj ];
   };
-
 }

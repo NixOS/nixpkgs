@@ -2,17 +2,22 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools-scm
 , gmt
 , numpy
 , netcdf4
 , pandas
 , packaging
 , xarray
+, pytest-mpl
+, ipython
+, ghostscript
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.2.0";
+  version = "0.4.0";
 
   disabled = pythonOlder "3.6";
 
@@ -20,7 +25,7 @@ buildPythonPackage rec {
     owner = "GenericMappingTools";
     repo = "pygmt";
     rev = "v${version}";
-    sha256 = "1yx1n6mxfmwg69ls5560nm6d3jxyghv27981iplz7m7990bbp468";
+    sha256 = "sha256-oRRbSoDlHjkOVhVjuOoDScBILbIQpYVxAOclNlnzVMw=";
   };
 
   postPatch = ''
@@ -28,12 +33,14 @@ buildPythonPackage rec {
       --replace "env.get(\"GMT_LIBRARY_PATH\", \"\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ numpy netcdf4 pandas packaging xarray ];
 
-  doCheck = false; # requires network access
-
-  postBuild = "export HOME=$TMP";
-
+  doCheck = false; # the *entire* test suite requires network access
+  checkInputs = [ pytestCheckHook pytest-mpl ghostscript ipython ];
+  postBuild = ''
+    export HOME=$TMP
+  '';
   pythonImportsCheck = [ "pygmt" ];
 
   meta = with lib; {

@@ -1,17 +1,17 @@
 { lib, fetchFromGitHub, appstream-glib, desktop-file-utils, glib
-, gobject-introspection, gst_all_1, gtk3, libhandy, librsvg, meson, ninja
+, gobject-introspection, gst_all_1, gtk4, libadwaita, librsvg, meson, ninja
 , pkg-config, python3, wrapGAppsHook }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kooha";
-  version = "1.1.1";
+  version = "1.2.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Kooha";
     rev = "v${version}";
-    sha256 = "05515xccs6y3wy28a6lkyn2jgi0fli53548l8qs73li8mdbxzd4c";
+    sha256 = "1qwbzdn0n1nxcfci1bhhkfchdhw5yz74fdvsa84cznyyx2jils8w";
   };
 
   buildInputs = [
@@ -19,8 +19,8 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     librsvg
   ];
 
@@ -46,6 +46,10 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
+  '';
+
+  installCheckPhase = ''
+    $out/bin/kooha --help
   '';
 
   meta = with lib; {

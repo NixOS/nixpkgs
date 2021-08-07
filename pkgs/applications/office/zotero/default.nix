@@ -26,7 +26,7 @@
 , libXrender
 , libXt
 , libnotify
-, gnome3
+, gnome
 , libGLU, libGL
 , nspr
 , nss
@@ -36,15 +36,15 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "5.0.96";
+  version = "5.0.96.2";
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "sha256-W8Iu8UoTqC3aK7lB4bq1L7cNmjaEvjEK+ODcZ9kk3f8=";
+    sha256 = "sha256-ZT+qxNLjdG29DhyV0JXtgDHDi2gYPyKrZwgJOro5III=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome3.adwaita-icon-theme dconf ];
+  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
 
   dontConfigure = true;
   dontBuild = true;

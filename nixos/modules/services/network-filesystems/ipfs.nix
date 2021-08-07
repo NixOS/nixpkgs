@@ -216,14 +216,11 @@ in {
 
     systemd.packages = [ cfg.package ];
 
-    systemd.services.ipfs-init = {
-      description = "IPFS Initializer";
-
+    systemd.services.ipfs = {
+      path = [ "/run/wrappers" cfg.package ];
       environment.IPFS_PATH = cfg.dataDir;
 
-      path = [ cfg.package ];
-
-      script = ''
+      preStart = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
           ipfs init ${optionalString cfg.emptyRepo "-e"} \
             ${optionalString (! cfg.localDiscovery) "--profile=server"}
@@ -233,29 +230,10 @@ in {
             else "ipfs config profile apply server"
           }
         fi
-      '';
-
-      wantedBy = [ "default.target" ];
-
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = cfg.user;
-        Group = cfg.group;
-      };
-    };
-
-    systemd.services.ipfs = {
-      path = [ "/run/wrappers" cfg.package ];
-      environment.IPFS_PATH = cfg.dataDir;
-
-      wants = [ "ipfs-init.service" ];
-      after = [ "ipfs-init.service" ];
-
-      preStart = optionalString cfg.autoMount ''
-        ipfs --local config Mounts.FuseAllowOther --json true
-        ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
-        ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
+      '' + optionalString cfg.autoMount ''
+        ipfs --offline config Mounts.FuseAllowOther --json true
+        ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
+        ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
       '' + concatStringsSep "\n" (collect
             isString
             (mapAttrsRecursive
@@ -265,7 +243,7 @@ in {
                 read value <<EOF
                 ${builtins.toJSON value}
                 EOF
-                ipfs --local config --json "${concatStringsSep "." path}" "$value"
+                ipfs --offline config --json "${concatStringsSep "." path}" "$value"
               '')
               ({ Addresses.API = cfg.apiAddress;
                  Addresses.Gateway = cfg.gatewayAddress;
@@ -296,7 +274,7 @@ in {
 
     systemd.sockets.ipfs-api = {
       wantedBy = [ "sockets.target" ];
-      # We also include "%t/ipfs.sock" because tere is no way to put the "%t"
+      # We also include "%t/ipfs.sock" because there is no way to put the "%t"
       # in the multiaddr.
       socketConfig.ListenStream = let
           fromCfg = multiaddrToListenStream cfg.apiAddress;

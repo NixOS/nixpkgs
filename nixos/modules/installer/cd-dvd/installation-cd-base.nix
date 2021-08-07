@@ -30,5 +30,16 @@ with lib;
   # Add Memtest86+ to the CD.
   boot.loader.grub.memtest86.enable = true;
 
+  boot.postBootCommands = ''
+    for o in $(</proc/cmdline); do
+      case "$o" in
+        live.nixos.passwd=*)
+          set -- $(IFS==; echo $o)
+          echo "nixos:$2" | ${pkgs.shadow}/bin/chpasswd
+          ;;
+      esac
+    done
+  '';
+
   system.stateVersion = mkDefault "18.03";
 }

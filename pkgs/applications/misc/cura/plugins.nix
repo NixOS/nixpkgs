@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages, libspnav }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages, libspnav, jq }:
 
 let
 
@@ -34,18 +34,28 @@ let
 
     rawmouse = stdenv.mkDerivation rec {
       pname = "RawMouse";
-      version = "1.0.13";
+      version = "1.1.0";
 
       src = fetchFromGitHub {
         owner = "smartavionics";
         repo = pname;
         rev = version;
-        sha256 = "1cj40pgsfcwliz47mkiqjbslkwcm34qb1pajc2mcljgflcnickly";
+        sha256 = "0hvi7qwd4xfnqnhbj9dgfjmvv9df7s42asf3fdfxv43n6nx74scw";
       };
 
+      nativeBuildInputs = [ jq ];
+
+      propagatedBuildInputs = with python3Packages; [
+        hidapi
+      ];
+
       buildPhase = ''
-        substituteInPlace RawMouse/config.json --replace \
-          /usr/local/lib/libspnav.so ${libspnav}/lib/libspnav.so
+        jq 'del(.devices) | .libspnav="${libspnav}/lib/libspnav.so"' \
+          <RawMouse/config.json >RawMouse/config.json.new
+        mv RawMouse/config.json.new RawMouse/config.json
+
+        # remove prebuilt binaries
+        rm -r RawMouse/hidapi
       '';
 
       installPhase = ''

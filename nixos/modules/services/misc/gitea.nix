@@ -82,7 +82,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = (if !usePostgresql then 3306 else pg.port);
           description = "Database host port.";
         };
@@ -477,63 +477,58 @@ in
       in ''
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
-          cp -f ${configFile} ${runConfig}
+          function gitea_setup {
+            cp -f ${configFile} ${runConfig}
 
-          if [ ! -e ${secretKey} ]; then
-              ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
-          fi
+            if [ ! -e ${secretKey} ]; then
+                ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
+            fi
 
-          # Migrate LFS_JWT_SECRET filename
-          if [[ -e ${oldLfsJwtSecret} && ! -e ${lfsJwtSecret} ]]; then
-              mv ${oldLfsJwtSecret} ${lfsJwtSecret}
-          fi
+            # Migrate LFS_JWT_SECRET filename
+            if [[ -e ${oldLfsJwtSecret} && ! -e ${lfsJwtSecret} ]]; then
+                mv ${oldLfsJwtSecret} ${lfsJwtSecret}
+            fi
 
-          if [ ! -e ${oauth2JwtSecret} ]; then
-              ${gitea}/bin/gitea generate secret JWT_SECRET > ${oauth2JwtSecret}
-          fi
+            if [ ! -e ${oauth2JwtSecret} ]; then
+                ${gitea}/bin/gitea generate secret JWT_SECRET > ${oauth2JwtSecret}
+            fi
 
-          if [ ! -e ${lfsJwtSecret} ]; then
-              ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
-          fi
+            if [ ! -e ${lfsJwtSecret} ]; then
+                ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
+            fi
 
-          if [ ! -e ${internalToken} ]; then
-              ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
-          fi
+            if [ ! -e ${internalToken} ]; then
+                ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
+            fi
 
-          SECRETKEY="$(head -n1 ${secretKey})"
-          DBPASS="$(head -n1 ${cfg.database.passwordFile})"
-          OAUTH2JWTSECRET="$(head -n1 ${oauth2JwtSecret})"
-          LFSJWTSECRET="$(head -n1 ${lfsJwtSecret})"
-          INTERNALTOKEN="$(head -n1 ${internalToken})"
-          ${if (cfg.mailerPasswordFile == null) then ''
-            MAILERPASSWORD="#mailerpass#"
-          '' else ''
-            MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
-          ''}
-          sed -e "s,#secretkey#,$SECRETKEY,g" \
-              -e "s,#dbpass#,$DBPASS,g" \
-              -e "s,#oauth2jwtsecret#,$OAUTH2JWTSECRET,g" \
-              -e "s,#lfsjwtsecret#,$LFSJWTSECRET,g" \
-              -e "s,#internaltoken#,$INTERNALTOKEN,g" \
-              -e "s,#mailerpass#,$MAILERPASSWORD,g" \
-              -i ${runConfig}
-          chmod 640 ${runConfig} ${secretKey} ${oauth2JwtSecret} ${lfsJwtSecret} ${internalToken}
+            SECRETKEY="$(head -n1 ${secretKey})"
+            DBPASS="$(head -n1 ${cfg.database.passwordFile})"
+            OAUTH2JWTSECRET="$(head -n1 ${oauth2JwtSecret})"
+            LFSJWTSECRET="$(head -n1 ${lfsJwtSecret})"
+            INTERNALTOKEN="$(head -n1 ${internalToken})"
+            ${if (cfg.mailerPasswordFile == null) then ''
+              MAILERPASSWORD="#mailerpass#"
+            '' else ''
+              MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+            ''}
+            sed -e "s,#secretkey#,$SECRETKEY,g" \
+                -e "s,#dbpass#,$DBPASS,g" \
+                -e "s,#oauth2jwtsecret#,$OAUTH2JWTSECRET,g" \
+                -e "s,#lfsjwtsecret#,$LFSJWTSECRET,g" \
+                -e "s,#internaltoken#,$INTERNALTOKEN,g" \
+                -e "s,#mailerpass#,$MAILERPASSWORD,g" \
+                -i ${runConfig}
+          }
+          (umask 027; gitea_setup)
         ''}
 
         # update all hooks' binary paths
-        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
-        if [ "$HOOKS" ]
-        then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
-        fi
+        ${gitea}/bin/gitea admin regenerate hooks
 
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
+          ${gitea}/bin/gitea admin regenerate keys
         fi
       '';
 

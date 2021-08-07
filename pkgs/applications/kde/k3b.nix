@@ -4,7 +4,7 @@
 , flac, lame, libmad, libmpcdec, libvorbis
 , libsamplerate, libsndfile, taglib
 , cdparanoia, cdrdao, cdrtools, dvdplusrwtools, libburn, libdvdcss, libdvdread, vcdimager
-, ffmpeg_3, libmusicbrainz3, normalize, sox, transcode, kinit
+, ffmpeg, libmusicbrainz3, normalize, sox, transcode, kinit
 }:
 
 mkDerivation {
@@ -25,7 +25,7 @@ mkDerivation {
     # cd/dvd
     cdparanoia libdvdcss libdvdread
     # others
-    ffmpeg_3 libmusicbrainz3 shared-mime-info
+    ffmpeg libmusicbrainz3 shared-mime-info
   ];
   propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
   postFixup =

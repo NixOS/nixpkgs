@@ -4,13 +4,13 @@
 , fetchFromGitHub
 , substituteAll
 , xmlsec
-, cryptography, defusedxml, pyopenssl, dateutil, pytz, requests, six
+, cryptography, defusedxml, pyopenssl, python-dateutil, pytz, requests, six
 , mock, pyasn1, pymongo, pytest, responses, xmlschema, importlib-resources
 }:
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "6.5.1";
+  version = "6.5.2";
 
   disabled = !isPy3k;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gh74csjk6af23agyigk4id79s4li1xnkmbpp73aqyvlly2kd0b7";
+    sha256 = "1p0i88v2ng9fzs0fzjam1dc1idnihqc1wgagvnavqjrih721qcpi";
   };
 
   patches = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cryptography
-    dateutil
+    python-dateutil
     defusedxml
     importlib-resources
     pyopenssl

@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Queries a selection from the user and prints to stdout";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
-    maintainers = with maintainers; [ primeos mbakke ];
+    maintainers = with maintainers; [ ];
   };
 }

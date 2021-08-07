@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "faadelays";
-  version = "0.0.6";
+  version = "0.0.7";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02z8p0n9d6n4l6v1m969009gxwmy5v14z108r4f3swd6yrk0h2xd";
+    sha256 = "sha256-osZqfSYlKPYZMelBR6YB331iRB4DTjCUlmX7pcrIiGk=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

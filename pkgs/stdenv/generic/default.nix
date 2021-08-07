@@ -84,6 +84,11 @@ let
       allowedRequisites = allowedRequisites
         ++ defaultNativeBuildInputs ++ defaultBuildInputs;
     }
+    // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+      __contentAddressed = true;
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+    }
     // {
       inherit name;
 
@@ -106,6 +111,8 @@ let
       '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
+      '' + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
+        export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
       ''
       # TODO this should be uncommented, but it causes stupid mass rebuilds. I
       # think the best solution would just be to fixup linux RPATHs so we don't
@@ -151,13 +158,6 @@ let
       inherit (import ./make-derivation.nix {
         inherit lib config stdenv;
       }) mkDerivation;
-
-      # Slated for removal in 21.11
-      lib = if config.allowAliases or true then builtins.trace
-        ( "Warning: `stdenv.lib` is deprecated and will be removed in the next release."
-         + " Please use `lib` instead."
-         + " For more information see https://github.com/NixOS/nixpkgs/issues/108938")
-        lib else throw "`stdenv.lib` is a deprecated alias for `lib`";
 
       inherit fetchurlBoot;
 

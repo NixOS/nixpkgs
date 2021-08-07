@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, zlib, flex, bison, readline }:
+{ lib, stdenv, fetchFromGitHub, zlib, flex, bison, readline, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "foma";
@@ -13,8 +13,13 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/foma";
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison ]
+    ++ lib.optional stdenv.isDarwin darwin.cctools;
   buildInputs = [ zlib readline ];
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   patchPhase = ''
     substituteInPlace Makefile \

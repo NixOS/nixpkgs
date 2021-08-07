@@ -1,18 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm }:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "py";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342";
+    sha256 = "21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3";
   };
 
   # Circular dependency on pytest
   doCheck = false;
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   pythonImportsCheck = [
     "py"

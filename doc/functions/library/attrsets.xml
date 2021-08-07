@@ -166,7 +166,7 @@ lib.attrsets.setAttrByPath [ "a" "b" ] 3
   <xi:include href="./locations.xml" xpointer="lib.attrsets.getAttrFromPath" />
 
   <para>
-   Like <xref linkend="function-library-lib.attrsets.attrByPath" /> except without a default, and it will throw if the value doesn't exist.
+   Like [](#function-library-lib.attrsets.attrByPath) except without a default, and it will throw if the value doesn't exist.
   </para>
 
   <variablelist>
@@ -855,7 +855,7 @@ lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair ("foo_" + name) 
   <title><function>lib.attrsets.mapAttrsToList</function></title>
 
   <subtitle><literal>mapAttrsToList :: (String -> Any -> Any) ->
-   AttrSet -> Any</literal>
+   AttrSet -> [Any]</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsToList" />
@@ -1480,7 +1480,7 @@ lib.attrsets.zipAttrsWith
   <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrs" />
 
   <para>
-   Merge sets of attributes and combine each attribute value in to a list. Similar to <xref linkend="function-library-lib.attrsets.zipAttrsWith" /> where the merge function returns a list of all values.
+   Merge sets of attributes and combine each attribute value in to a list. Similar to [](#function-library-lib.attrsets.zipAttrsWith) where the merge function returns a list of all values.
   </para>
 
   <variablelist>

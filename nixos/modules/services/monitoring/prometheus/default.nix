@@ -112,7 +112,7 @@ let
           http://tools.ietf.org/html/rfc4366#section-3.1
         '';
       };
-      name = mkOpt types.string ''
+      name = mkOpt types.str ''
         Name of the remote read config, which if specified must be unique among remote read configs.
         The name will be used in metrics and logging in place of a generated value to help users distinguish between
         remote read configs.
@@ -174,7 +174,7 @@ let
       write_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
         List of remote write relabel configurations.
       '';
-      name = mkOpt types.string ''
+      name = mkOpt types.str ''
         Name of the remote write config, which if specified must be unique among remote write configs.
         The name will be used in metrics and logging in place of a generated value to help users distinguish between
         remote write configs.
@@ -323,15 +323,13 @@ let
               HTTP username
             '';
           };
-          password = mkOption {
-            type = types.str;
-            description = ''
-              HTTP password
-            '';
-          };
+          password = mkOpt types.str "HTTP password";
+          password_file = mkOpt types.str "HTTP password file";
         };
       }) ''
-        Optional http login credentials for metrics scraping.
+        Sets the `Authorization` header on every scrape request with the
+        configured username and password.
+        password and password_file are mutually exclusive.
       '';
 
       bearer_token = mkOpt types.str ''
@@ -384,6 +382,10 @@ let
 
       relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
         List of relabel configurations.
+      '';
+
+      metric_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
+        List of metric relabel configurations.
       '';
 
       sample_limit = mkDefOpt types.int "0" ''
@@ -941,6 +943,7 @@ in {
         RuntimeDirectoryMode = "0700";
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
+        StateDirectoryMode = "0700";
       };
     };
   };

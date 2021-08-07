@@ -1,5 +1,5 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
-, fix, menhir, merlin-extend, ppx_tools_versioned, utop, cppo
+{ lib, callPackage, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
+, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
 }:
 
 stdenv.mkDerivation rec {
@@ -13,11 +13,28 @@ stdenv.mkDerivation rec {
     sha256 = "0m6ldrci1a4j0qv1cbwh770zni3al8qxsphl353rv19f6rblplhs";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    menhir
+  ];
 
-  propagatedBuildInputs = [ menhir merlin-extend ppx_tools_versioned ];
+  buildInputs = [
+    cppo
+    dune_2
+    findlib
+    fix
+    menhir
+    menhirSdk
+    ocaml
+    ppxlib
+    utop
+  ];
 
-  buildInputs = [ ocaml findlib dune_2 cppo fix utop menhir ];
+  propagatedBuildInputs = [
+    menhirLib
+    merlin-extend
+    ppx_derivers
+  ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
@@ -29,11 +46,16 @@ stdenv.mkDerivation rec {
       --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
   '';
 
+  passthru.tests = {
+    hello = callPackage ./tests/hello { };
+  };
+
   meta = with lib; {
     homepage = "https://reasonml.github.io/";
+    downloadPage = "https://github.com/reasonml/reason";
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.volth ];
+    maintainers = with maintainers; [ superherointj ];
   };
 }

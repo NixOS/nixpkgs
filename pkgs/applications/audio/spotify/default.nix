@@ -1,6 +1,6 @@
-{ fetchurl, lib, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
+{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeWrapper, wrapGAppsHook, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curl, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
 }:
 
@@ -20,7 +20,7 @@ let
   rev = "46";
 
   deps = [
-    alsaLib
+    alsa-lib
     atk
     at-spi2-atk
     at-spi2-core
@@ -29,7 +29,7 @@ let
     curl
     dbus
     expat
-    ffmpeg_3
+    ffmpeg
     fontconfig
     freetype
     gdk-pixbuf
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
     sha512 = "dabb55d2ba41f977b6d3f03bfcf147d11785136dd1277efc62011c8371ef25cc04531266bd16608639b9b6a500c1a18a45f44ba7a43e17ab5ac139e36eff7149";
   };
 
-  nativeBuildInputs = [ makeWrapper squashfsTools ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook squashfsTools ];
 
   dontStrip = true;
   dontPatchELF = true;
@@ -109,6 +109,9 @@ stdenv.mkDerivation {
     runHook postUnpack
   '';
 
+  # Prevent double wrapping
+  dontWrapGApps = true;
+
   installPhase =
     ''
       runHook preInstall
@@ -127,8 +130,8 @@ stdenv.mkDerivation {
       ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
-      ln -s ${ffmpeg_3.out}/lib/libavcodec.so* $libdir
-      ln -s ${ffmpeg_3.out}/lib/libavformat.so* $libdir
+      ln -s ${ffmpeg.out}/lib/libavcodec.so* $libdir
+      ln -s ${ffmpeg.out}/lib/libavformat.so* $libdir
 
       rpath="$out/share/spotify:$libdir"
 
@@ -138,8 +141,9 @@ stdenv.mkDerivation {
 
       librarypath="${lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
+        ''${gappsWrapperArgs[@]} \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome3.zenity}/bin"
+        --prefix PATH : "${gnome.zenity}/bin"
 
       # fix Icon line in the desktop file (#48062)
       sed -i "s:^Icon=.*:Icon=spotify-client:" "$out/share/spotify/spotify.desktop"

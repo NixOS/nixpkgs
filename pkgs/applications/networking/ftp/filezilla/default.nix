@@ -11,17 +11,18 @@
 , pugixml
 , sqlite
 , tinyxml
+, wrapGAppsHook
 , wxGTK30-gtk3
 , xdg-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.53.0";
+  version = "3.55.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "sha256-MJXnYN9PVADttNqj3hshLElHk2Dy9FzE67clMMh85CA=";
+    sha256 = "sha256-rnDrQYDRNr4pu61vzdGI5JfiBfxBbqPkE9znzYyrnII=";
   };
 
   # https://www.linuxquestions.org/questions/slackware-14/trouble-building-filezilla-3-47-2-1-current-4175671182/#post6099769
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
 
   buildInputs = [
     dbus

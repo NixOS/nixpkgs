@@ -1,5 +1,5 @@
 { stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
-, openssl, gmp, zlib, fetchFromGitHub, rustPlatform }:
+, openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 let
   libPath = lib.makeLibraryPath [ gmp ];
@@ -7,21 +7,22 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "0.11.0";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
-    owner = "kha";
+    owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "1sl69ygdwhf80sx6m76x5gp1kwsw0rr1lv814cgzm8hvyr6g0jqa";
+    sha256 = "sha256-Ns8vSS/PDlfopigW4Nz3fdR9PCMG8gDoL36+/s0Qkeo=";
   };
 
-  cargoSha256 = "1f881maf8jizd5ip7pc1ncbiq7lpggp0byma13pvqk7gisnqyr4r";
+  cargoSha256 = "sha256-NDtldiVo4SyE88f6ntKn1WJDFdvwN5Ps4DxQH15iNZE=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   OPENSSL_NO_VENDOR = 1;
-  buildInputs = [ curl zlib openssl ];
+  buildInputs = [ curl zlib openssl ]
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
@@ -61,7 +62,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
-    homepage = "https://github.com/Kha/elan";
+    homepage = "https://github.com/leanprover/elan";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
   };

@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "Implementation of the reverse search algorithm for vertex enumeration/convex hull problems";
     license = lib.licenses.gpl2 ;
     maintainers = [lib.maintainers.raskin];

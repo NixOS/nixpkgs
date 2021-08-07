@@ -1,12 +1,8 @@
 { lib, stdenv, fetchurl, makeWrapper, pkg-config, nasm, makeDesktopItem
-, alsaLib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
+, alsa-lib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
 , SDL2, SDL2_mixer }:
 
 let
-  version = "20200907";
-  rev = "9257";
-  revExtra = "93f62bbad";
-
   desktopItem = makeDesktopItem {
     name = "eduke32";
     exec = "@out@/bin/${wrapper}";
@@ -18,16 +14,18 @@ let
 
   wrapper = "eduke32-wrapper";
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "eduke32";
-  inherit version;
+  version = "20210722";
+  rev = "9484";
+  revExtra = "f3fea8c15";
 
   src = fetchurl {
-    url = "http://dukeworld.duke4.net/eduke32/synthesis/latest/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
-    sha256 = "972630059be61ef9564a241b84ef2ee4f69fc85c19ee36ce46052ff2f1ce3bf9";
+    url = "http://dukeworld.duke4.net/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
+    sha256 = "0fdl2i465cl5x7129772ksx97lvim98m9009q5cfmf6scagj9pvz";
   };
 
-  buildInputs = [ alsaLib flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
+  buildInputs = [ alsa-lib flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
 
   nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;

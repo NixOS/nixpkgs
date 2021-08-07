@@ -1,35 +1,82 @@
-diff --git a/src/pass/test.rs b/src/pass/test.rs
-index c980a2f..2e6c8cc 100644
 --- a/src/pass/test.rs
-+++ b/src/pass/test.rs
-@@ -56,6 +56,7 @@ fn populate_password_list_small_repo() {
++++ a/src/pass/test.rs
+@@ -83,6 +83,7 @@
      base_path.pop();
      base_path.pop();
      base_path.pop();
 +    base_path.pop();
      base_path.push("testres");
  
-     let mut password_dir: PathBuf = base_path.clone();
-@@ -84,6 +85,7 @@ fn populate_password_list_repo_with_deleted_files() {
+     let home: PathBuf = base_path.clone();
+@@ -114,6 +115,7 @@
      base_path.pop();
      base_path.pop();
      base_path.pop();
 +    base_path.pop();
      base_path.push("testres");
  
-     let mut password_dir: PathBuf = base_path.clone();
-@@ -112,6 +114,7 @@ fn populate_password_list_directory_without_git() {
+     let home: PathBuf = base_path.clone();
+@@ -144,6 +146,7 @@
      base_path.pop();
      base_path.pop();
      base_path.pop();
 +    base_path.pop();
      base_path.push("testres");
  
-     let mut password_dir: PathBuf = base_path.clone();
-@@ -149,4 +152,4 @@ fn parse_signing_keys_empty() {
-     let result = PasswordStore::parse_signing_keys(&None).unwrap();
+     let home: PathBuf = base_path.clone();
+@@ -185,6 +188,7 @@
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
  
-     assert_eq!(result.len(), 0);
--}
-\ No newline at end of file
-+}
+     let home: PathBuf = base_path.clone();
+@@ -220,6 +224,7 @@
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
+ 
+     let home: PathBuf = base_path.clone();
+@@ -267,6 +272,7 @@
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
+ 
+     let home: PathBuf = base_path.clone();
+@@ -298,6 +304,7 @@
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
+ 
+     let home: PathBuf = base_path.clone();
+@@ -337,6 +344,7 @@
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
+ 
+     let home: PathBuf = base_path.clone();
+@@ -828,6 +836,7 @@
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
+ 
+     let home: PathBuf = base_path.clone();
+@@ -860,6 +869,7 @@
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.pop();
+     base_path.push("testres");
+ 

@@ -1,13 +1,13 @@
 { fetchNuGet }: [
   (fetchNuGet {
     name = "AtkSharp";
-    version = "3.22.25.74";
-    sha256 = "04zjpjrddw5clac0mjpk0q00rbmv45bh1bsqa4s3pc5pb7fm9cd9";
+    version = "3.24.24.34";
+    sha256 = "1jn1vgi9xm0jp7769k6sbdi8d273kigjrsh93i6s4c03hqxv7cqs";
   })
   (fetchNuGet {
     name = "CairoSharp";
-    version = "3.22.25.74";
-    sha256 = "0sx7vmwcrfbkg3g887v051iklcdmdhh43ndp96nk4bccjimmmwl6";
+    version = "3.24.24.34";
+    sha256 = "0pydn1k0cam1gclg9sc1sbnmbyzh28qlc5qanyxcylwghink3kgz";
   })
   (fetchNuGet {
     name = "Eto.Forms";
@@ -15,34 +15,39 @@
     sha256 = "1d71wglk4ixfqfbm6sxmj753x5iwbar8i9zzjy3bh64fy1dn8lz7";
   })
   (fetchNuGet {
+    name = "Eto.Forms";
+    version = "2.5.11";
+    sha256 = "0h86jc19wy3ssj7pb34w1h02v92mg29gdipszwjs3y15piy66z3s";
+  })
+  (fetchNuGet {
     name = "Eto.Platform.Gtk";
-    version = "2.5.10";
-    sha256 = "1pkqvlfx7bzracnw19bl50i9jg4ym376vihmy9qq7m5z5nfdqn4g";
+    version = "2.5.11";
+    sha256 = "1s9njz7l9zghrbzli7lbiav5ss3glqf17npj07f3jldd933nb95j";
   })
   (fetchNuGet {
     name = "GdkSharp";
-    version = "3.22.25.74";
-    sha256 = "07sdfvqk2jmyjj7fyd0mikhnzsk52zd3g2dhip8kz3006cczqm81";
+    version = "3.24.24.34";
+    sha256 = "0r0x0yib7chwsyrbpvicrfwldwqx5lyqq4p86zaxpmzd6zdaj0x5";
   })
   (fetchNuGet {
     name = "GioSharp";
-    version = "3.22.25.74";
-    sha256 = "01l4216bm5jxbxypkkq4d2527c6zd68kbywr3h1lr1darc9nf1d1";
+    version = "3.24.24.34";
+    sha256 = "02hxvgjd4w9jpzbkk7qf9q9bkvyp5hfzwxfqp10vg5lpl9yl3xpx";
   })
   (fetchNuGet {
     name = "GLibSharp";
-    version = "3.22.25.74";
-    sha256 = "0k2p79z4wcswi528v0ykc37rsqfqi6xd6pl0j4csdj9zf19svgx2";
+    version = "3.24.24.34";
+    sha256 = "0kvp033fgdwc8p2abfp5z9pzq66cvwbnjfvr4v4bkpy5s5h181kq";
   })
   (fetchNuGet {
     name = "GtkSharp";
-    version = "3.22.25.74";
-    sha256 = "0vazfvkjyzppcynqa1h70s1jmp4vq2j30v5x2scg8n2c5dxaj0k3";
+    version = "3.24.24.34";
+    sha256 = "0028hzmmqyfx87qqmaf9cgb5psn7gkbmqvixcid67x1d6mzxjicb";
   })
   (fetchNuGet {
     name = "HidSharpCore";
-    version = "1.2.1";
-    sha256 = "0vcw38skr9g691gxbzv3cf6y9rk11vh5pvcyjshdgii2z1z8a4g2";
+    version = "1.2.1.1";
+    sha256 = "1zkndglmz0s8rblfhnqcvv90rkq2i7lf4bc380g7z8h1avf2ikll";
   })
   (fetchNuGet {
     name = "MessagePack.Annotations";
@@ -121,13 +126,13 @@
   })
   (fetchNuGet {
     name = "Octokit";
-    version = "0.48.0";
-    sha256 = "17ria1shx04rb6knbaswpqndmwam6v3r3lsfsd486q584798ccn8";
+    version = "0.50.0";
+    sha256 = "1ignj5i6a1c19qqrw00wlr9fdjmwrxkxz7gdxj0x653w84gbv7qq";
   })
   (fetchNuGet {
     name = "PangoSharp";
-    version = "3.22.25.74";
-    sha256 = "172i1hjpz4rgqlilir8a57kgmciw9x0shz4zwbhhlr59mndvqbih";
+    version = "3.24.24.34";
+    sha256 = "1r0h14cklglfpv1lhv93cxmzi2w7d5s03gzpq3j5dmrz43flg9zw";
   })
   (fetchNuGet {
     name = "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl";

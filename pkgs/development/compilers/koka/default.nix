@@ -1,15 +1,15 @@
-{ stdenv, buildPackages, cmake, gnumake, makeWrapper, mkDerivation, fetchFromGitHub
+{ stdenv, pkgsHostTarget, cmake, makeWrapper, mkDerivation, fetchFromGitHub
 , alex, array, base, bytestring, cond, containers, directory, extra
 , filepath, haskeline, hpack, hspec, hspec-core, json, lib, mtl
 , parsec, process, regex-compat, text, time }:
 
 let
-  version = "2.1.1";
+  version = "2.1.9";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-cq+dljfTKJh5NgwQfxQQP9jRcg2PQxxBVEgQ59ll36o=";
+    sha256 = "0xny4x1a2lzwgmng60bni7rxfjx5ns70qbfp703qwms54clvj5wy";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
@@ -18,11 +18,12 @@ let
     src = "${src}/kklib";
     nativeBuildInputs = [ cmake ];
   };
+  inherit (pkgsHostTarget.targetPackages.stdenv) cc;
   runtimeDeps = [
-    buildPackages.stdenv.cc
-    buildPackages.stdenv.cc.bintools.bintools
-    gnumake
-    cmake
+    cc
+    cc.bintools.bintools
+    pkgsHostTarget.gnumake
+    pkgsHostTarget.cmake
   ];
 in
 mkDerivation rec {
@@ -42,7 +43,7 @@ mkDerivation rec {
     cp -a contrib $out/share/koka/v${version}
     cp -a kklib $out/share/koka/v${version}
     wrapProgram "$out/bin/koka" \
-      --set CC "${lib.getBin buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc" \
+      --set CC "${lib.getBin cc}/bin/${cc.targetPrefix}cc" \
       --prefix PATH : "${lib.makeSearchPath "bin" runtimeDeps}"
   '';
   doCheck = false;

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://git.xfce.org/archive/${pname}/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "11k7m41jxkaqmpp5njkixw60q517xnw923mz34dnm1llx9ilvfk8";
+    sha256 = "sha256-aLpNY+qUhmobGb8OkbjtJxQMDO9xSlvurVjNLgOpZ4Y=";
   };
 
   nativeBuildInputs = [

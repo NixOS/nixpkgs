@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitLab, rustPlatform, cmake, pkg-config, openssl
-, darwin, installShellFiles
+, installShellFiles
+, CoreFoundation, CoreServices, Security, AppKit, libiconv
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
 , xclip ? null, xsel ? null
@@ -16,20 +17,20 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.68";
+  version = "0.2.72";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "0ga1v4s8ks2v632mim8ljya0gi2j8bbwj98yfm3g00p0z1i526qk";
+    sha256 = "sha256-YEmEaf0ob2ulmQghwDYi0RtGuTdRHCoLdPnuVjxvlxE=";
   };
 
-  cargoSha256 = "1n9pf29xid6jcas5yx94k4cpmqgx0kpqq7gwf83jisjywxzygh6w";
+  cargoSha256 = "sha256-mcWQzfMc2cJjp0EFcfG7SAM70ItwEC/N13UDiRiI3ys=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
   buildInputs =
-    if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
+    if stdenv.isDarwin then [ libiconv CoreFoundation CoreServices Security AppKit ]
     else [ openssl ];
 
   preBuild = lib.optionalString (x11Support && usesX11) (
@@ -54,7 +55,7 @@ buildRustPackage rec {
       web browser.
     '';
     homepage = "https://gitlab.com/timvisee/ffsend";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ lilyball equirosa ];
     platforms = platforms.unix;
   };

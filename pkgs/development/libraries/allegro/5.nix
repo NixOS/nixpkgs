@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, texinfo, libXext, xorgproto, libX11
-, libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
+, libXpm, libXt, libXcursor, alsa-lib, cmake, zlib, libpng, libvorbis
 , libXxf86dga, libXxf86misc
 , libXxf86vm, openal, libGLU, libGL, libjpeg, flac
 , libXi, libXfixes, freetype, libopus, libtheora
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     texinfo libXext xorgproto libX11 libXpm libXt libXcursor
-    alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
+    alsa-lib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
     libXxf86vm openal libGLU libGL
     libjpeg flac
     libXi libXfixes

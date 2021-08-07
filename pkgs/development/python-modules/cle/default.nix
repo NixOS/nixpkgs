@@ -15,7 +15,7 @@
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.0.6281";
+  version = "9.0.9355";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0f2zc02dljmgp6ny6ja6917j08kqhwckncan860dq4xv93g61rmg";
+    sha256 = "0jqbqp82arrxyiisj96n9laxhwjlrd0vj4a9wa8lgxafi6zv4lc6";
   };
 
   propagatedBuildInputs = [
@@ -64,6 +64,8 @@ buildPythonPackage rec {
     "test_ppc_rel24_relocation"
     "test_ppc_addr16_ha_relocation"
     "test_ppc_addr16_lo_relocation"
+    # Binary not found, seems to be missing in the current binaries release
+    "test_plt_full_relro"
   ];
 
   pythonImportsCheck = [ "cle" ];

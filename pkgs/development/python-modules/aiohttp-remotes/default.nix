@@ -1,5 +1,5 @@
 { lib, fetchpatch, buildPythonPackage, fetchPypi
-, aiohttp, pytest, pytestcov, pytest-aiohttp
+, aiohttp, pytest, pytest-cov, pytest-aiohttp
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [ pytest pytestcov pytest-aiohttp ];
+  checkInputs = [ pytest pytest-cov pytest-aiohttp ];
   checkPhase = ''
     python -m pytest
   '';

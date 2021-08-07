@@ -37,7 +37,7 @@ in {
         }
       '';
       description = ''
-        Configuration for CoreRAD, see <link xlink:href="https://github.com/mdlayher/corerad/blob/master/internal/config/default.toml"/>
+        Configuration for CoreRAD, see <link xlink:href="https://github.com/mdlayher/corerad/blob/main/internal/config/reference.toml"/>
         for supported values. Ignored if configFile is set.
       '';
     };

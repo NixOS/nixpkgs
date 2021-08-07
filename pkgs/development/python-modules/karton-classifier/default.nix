@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "karton-classifier";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05pxv0smrzgmljykc6yx0rx8b85ck7fa09xjkjw0dd7lb6bb19a6";
+    sha256 = "0s09mzsw546klnvm59wzj9vdwd2hyzgxvapi20k86q3prs9ncds6";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "chardet==3.0.4" "chardet" \
-      --replace "karton-core==4.0.4" "karton-core" \
       --replace "python-magic==0.4.18" "python-magic"
   '';
 

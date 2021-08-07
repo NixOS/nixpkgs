@@ -13,14 +13,14 @@
 , advancedProcessing ? false
 , opencv3 ? null
 , scikitimage ? null
-, scikitlearn ? null
+, scikit-learn ? null
 , scipy ? null
 , matplotlib ? null
 , youtube-dl ? null
 }:
 
 assert advancedProcessing -> (
-  opencv3 != null && scikitimage != null && scikitlearn != null
+  opencv3 != null && scikitimage != null && scikit-learn != null
   && scipy != null && matplotlib != null && youtube-dl != null);
 
 buildPythonPackage rec {
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy decorator imageio imageio-ffmpeg tqdm requests proglog
   ] ++ (lib.optionals advancedProcessing [
-    opencv3 scikitimage scikitlearn scipy matplotlib youtube-dl
+    opencv3 scikitimage scikit-learn scipy matplotlib youtube-dl
   ]);
 
   meta = with lib; {

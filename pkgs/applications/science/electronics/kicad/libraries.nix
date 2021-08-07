@@ -2,13 +2,12 @@
 , cmake
 , gettext
 , libSrc
-, libVersion
 }:
 let
   mkLib = name:
     stdenv.mkDerivation {
       pname = "kicad-${name}";
-      version = libVersion;
+      version = builtins.substring 0 10 (libSrc name).rev;
 
       src = libSrc name;
 

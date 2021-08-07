@@ -5,7 +5,7 @@
 , cffi
 , six
 , pytest
-, pytestrunner
+, pytest-runner
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0px8k4fjbkjb717bg2v7rjhm4iclrxzq7sh0hfqs55f4ddqi0m8v";
   };
 
-  buildInputs = [ pkgs.ssdeep pytestrunner ];
+  buildInputs = [ pkgs.ssdeep pytest-runner ];
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ cffi six ];
 

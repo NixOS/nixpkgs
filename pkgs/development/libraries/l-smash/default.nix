@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
+  configureFlags = [
+    "--cc=cc"
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+  ];
+
   meta = with lib; {
     homepage = "http://l-smash.github.io/l-smash/";
     description = "MP4 container utilities";

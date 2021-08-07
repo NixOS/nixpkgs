@@ -1,7 +1,7 @@
 { lib, stdenv, buildPythonPackage, fetchPypi
-, setuptools_scm
+, setuptools-scm
 , cheroot, contextlib2, portend, routes, six, zc_lockfile
-, backports_unittest-mock, objgraph, pathpy, pytest, pytestcov, backports_functools_lru_cache, requests_toolbelt
+, backports_unittest-mock, objgraph, pathpy, pytest, pytest-cov, backports_functools_lru_cache, requests-toolbelt
 }:
 
 buildPythonPackage rec {
@@ -18,10 +18,10 @@ buildPythonPackage rec {
     cheroot contextlib2 portend routes six zc_lockfile
   ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [
-    backports_unittest-mock objgraph pathpy pytest pytestcov backports_functools_lru_cache requests_toolbelt
+    backports_unittest-mock objgraph pathpy pytest pytest-cov backports_functools_lru_cache requests-toolbelt
   ];
 
   checkPhase = ''

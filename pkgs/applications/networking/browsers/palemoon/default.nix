@@ -1,29 +1,65 @@
-{ stdenv, lib, fetchFromGitHub, writeScript, desktop-file-utils
-, pkg-config, autoconf213, alsaLib, bzip2, cairo
-, dbus, dbus-glib, ffmpeg, file, fontconfig, freetype
-, gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
-, libnotify, libstartup_notification, wrapGAppsHook
-, libGLU, libGL, perl, python2, libpulseaudio
-, unzip, xorg, wget, which, yasm, zip, zlib
-
-, withGTK3 ? true, gtk3
+{ stdenv
+, lib
+, fetchFromGitHub
+, writeScript
+, alsa-lib
+, autoconf213
+, cairo
+, desktop-file-utils
+, dbus
+, dbus-glib
+, ffmpeg
+, fontconfig
+, freetype
+, gnome2
+, gnum4
+, gtk2
+, libevent
+, libGL
+, libGLU
+, libnotify
+, libpulseaudio
+, libstartup_notification
+, perl
+, pkg-config
+, python2
+, unzip
+, which
+, wrapGAppsHook
+, xorg
+, yasm
+, zip
+, zlib
+, withGTK3 ? true
+, gtk3
 }:
 
+# Only specific GCC versions are supported with branding
+# https://developer.palemoon.org/build/linux/
+assert stdenv.cc.isGNU;
+assert with lib.strings; (
+  versionAtLeast stdenv.cc.version "4.9"
+  && !hasPrefix "6" stdenv.cc.version
+  && versionOlder stdenv.cc.version "11"
+);
+
 let
-
-  libPath = lib.makeLibraryPath [ ffmpeg libpulseaudio ];
+  libPath = lib.makeLibraryPath [
+    ffmpeg
+    libpulseaudio
+  ];
   gtkVersion = if withGTK3 then "3" else "2";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.1.1";
+  version = "29.3.0";
 
   src = fetchFromGitHub {
     githubBase = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "1ppdmj816zwccb0l0mgpq14ckdwg785wmqz41wran0nl63fg6i1x";
+    sha256 = "1q0w1ffmdfk22df4p2ks4n55zmz44ir8fbcdn5a5h4ihy73nf6xp";
     fetchSubmodules = true;
   };
 
@@ -43,24 +79,55 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    desktop-file-utils file gnum4 perl pkg-config python2 wget which wrapGAppsHook unzip
+    autoconf213
+    desktop-file-utils
+    gnum4
+    perl
+    pkg-config
+    python2
+    unzip
+    which
+    wrapGAppsHook
+    yasm
+    zip
   ];
 
   buildInputs = [
-    alsaLib bzip2 cairo dbus dbus-glib ffmpeg fontconfig freetype
-    gnome2.GConf gtk2 hunspell libevent libjpeg libnotify
-    libstartup_notification libGLU libGL
-    libpulseaudio yasm zip zlib
+    alsa-lib
+    cairo
+    dbus
+    dbus-glib
+    ffmpeg
+    fontconfig
+    freetype
+    gnome2.GConf
+    gtk2
+    libevent
+    libGL
+    libGLU
+    libnotify
+    libpulseaudio
+    libstartup_notification
+    zlib
   ]
   ++ (with xorg; [
-    libX11 libXext libXft libXi libXrender libXScrnSaver
-    libXt pixman xorgproto
+    libX11
+    libXext
+    libXft
+    libXi
+    libXrender
+    libXScrnSaver
+    libXt
+    pixman
+    xorgproto
   ])
   ++ lib.optional withGTK3 gtk3;
 
   enableParallelBuilding = true;
 
   configurePhase = ''
+    runHook preConfigure
+
     export MOZCONFIG=$PWD/mozconfig
     export MOZ_NOSPAM=1
 
@@ -81,6 +148,7 @@ in stdenv.mkDerivation rec {
     ac_add_options --enable-jemalloc
     ac_add_options --enable-strip
     ac_add_options --enable-devtools
+    ac_add_options --enable-av1
 
     ac_add_options --disable-eme
     ac_add_options --disable-webrtc
@@ -96,12 +164,7 @@ in stdenv.mkDerivation rec {
     ac_add_options --enable-official-branding
     export MOZILLA_OFFICIAL=1
 
-    # For versions after 28.12.0
-    ac_add_options --enable-phoenix-extensions
-
     ac_add_options --x-libraries=${lib.makeLibraryPath [ xorg.libX11 ]}
-
-    export MOZ_PKG_SPECIAL=gtk$_GTK_VERSION
 
     #
     # NixOS-specific adjustments
@@ -112,24 +175,42 @@ in stdenv.mkDerivation rec {
     mk_add_options MOZ_MAKE_FLAGS="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
     mk_add_options AUTOCONF=${autoconf213}/bin/autoconf
     '
+
+    runHook postConfigure
   '';
 
-  buildPhase = "./mach build";
+  buildPhase = ''
+    runHook preBuild
+
+    ./mach build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     ./mach install
 
     # Fix missing icon due to wrong WMClass
+    # https://forum.palemoon.org/viewtopic.php?f=3&t=26746&p=214221#p214221
     substituteInPlace ./palemoon/branding/official/palemoon.desktop \
       --replace 'StartupWMClass="pale moon"' 'StartupWMClass=Pale moon'
     desktop-file-install --dir=$out/share/applications \
       ./palemoon/branding/official/palemoon.desktop
 
+    # Install official branding icons
     for iconname in default{16,22,24,32,48,256} mozicon128; do
       n=''${iconname//[^0-9]/}
       size=$n"x"$n
       install -Dm644 ./palemoon/branding/official/$iconname.png $out/share/icons/hicolor/$size/apps/palemoon.png
     done
+
+    # Remove unneeded SDK data from installation
+    # https://forum.palemoon.org/viewtopic.php?f=37&t=26796&p=214676#p214729
+    rm -rf $out/{include,share/idl,lib/palemoon-devel-${version}}
+
+    runHook postInstall
   '';
 
   dontWrapGApps = true;
@@ -154,9 +235,10 @@ in stdenv.mkDerivation rec {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    homepage    = "https://www.palemoon.org/";
-    license     = licenses.mpl20;
+    homepage = "https://www.palemoon.org/";
+    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
+    license = licenses.mpl20;
     maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

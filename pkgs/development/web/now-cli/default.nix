@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     gunzip -c $curSrc > now-linux
   '';
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase = ''
     mkdir $out

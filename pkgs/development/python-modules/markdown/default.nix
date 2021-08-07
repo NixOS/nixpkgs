@@ -1,36 +1,37 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, setuptools
-, nose
-, pyyaml
 , pythonOlder
+, fetchPypi
 , importlib-metadata
-, isPy3k
+, pyyaml
+, python
 }:
 
 buildPythonPackage rec {
   pname = "Markdown";
-  version = "3.3.3";
+  version = "3.3.4";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d9f2b5ca24bc4c7a390d22323ca4bad200368612b5aaa7796babf971d2b2f18";
+    sha256 = "31b5b491868dcc87d6c24b7e3d19a0d730d59d3e46f4eea6430a321bed387a49";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ] ++ lib.optionals (pythonOlder "3.8") [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  disabled = !isPy3k;
+  checkInputs = [ pyyaml ];
 
-  checkInputs = [ nose pyyaml ];
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover
+  '';
 
-  meta = {
+  meta = with lib; {
     description = "A Python implementation of John Gruber's Markdown with Extension support";
     homepage = "https://github.com/Python-Markdown/markdown";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

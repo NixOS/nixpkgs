@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "gpxsee";
-  version = "8.9";
+  version = "9.2";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "sha256-nl9iu8ezgMZ1wy2swDXYRDLlkSz1II+C65UUWNvGBxg=";
+    sha256 = "sha256-pU02Eaq6tB7X6EPOo8YAyryJRbSV3KebQv8VELxXaBw=";
   };
 
   patches = (substituteAll {
@@ -39,6 +39,6 @@ mkDerivation rec {
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ womfoo sikmir ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
   };
 }

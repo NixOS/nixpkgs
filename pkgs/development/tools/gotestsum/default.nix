@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gotestsum";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "gotestyourself";
     repo = "gotestsum";
     rev = "v${version}";
-    sha256 = "sha256-xUDhJLTO3JZ7rlUUzcypUev60qmRK9zOlO2VYeXqT4o=";
+    sha256 = "sha256-nZaVi39dOytJTM69xpl+d9XoUt+yHdndPgY2ggfNeMQ=";
   };
 
-  vendorSha256 = "sha256-sHi8iW+ZV/coeAwDUYnSH039UNtUO9HK0Bhz9Gmtv8k=";
+  vendorSha256 = "sha256-wP5y8Ec6eSe+rdMEQQdX0fFTQ0HWuiyBRHxGlraZd+o=";
 
   doCheck = false;
 

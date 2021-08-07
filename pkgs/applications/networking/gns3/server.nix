@@ -24,13 +24,14 @@ in python.pkgs.buildPythonPackage {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2"
+      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2" \
+      --replace "py-cpuinfo==7.0.0" "py-cpuinfo>=8.0.0"
   '';
 
   propagatedBuildInputs = with python.pkgs; [
     aiohttp-cors yarl aiohttp multidict setuptools
     jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
-    prompt_toolkit py-cpuinfo
+    prompt-toolkit py-cpuinfo
   ];
 
   # Requires network access

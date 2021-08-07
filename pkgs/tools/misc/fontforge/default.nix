@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, lib
+{ stdenv, fetchpatch, fetchFromGitHub, lib
 , cmake, perl, uthash, pkg-config, gettext
-, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
+, python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq, libuninameslist
 , withSpiro ? false, libspiro
 , withGTK ? false, gtk3
@@ -23,6 +23,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Rl/5lbXaPgIndANaD0IakaDus6T53FjiBb45FIuGrvc=";
   };
 
+  patches = [
+    # Allow installing contrib files (e.g. extras and tools).
+    # Taken from https://salsa.debian.org/fonts-team/fontforge/-/blob/master/debian/patches/0001-add-extra-cmake-install-rules.patch
+    (fetchpatch {
+      url = "https://salsa.debian.org/fonts-team/fontforge/raw/76bffe6ccf8ab20a0c81476a80a87ad245e2fd1c/debian/patches/0001-add-extra-cmake-install-rules.patch";
+      sha256 = "u3D9od2xLECNEHhZ+8dkuv9818tPkdP6y/Tvd9CADJg=";
+    })
+  ];
+
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
   postPatch = ''
     find . -type f -name '*.c' -exec sed -r -i 's#\btime\(&(.+)\)#if (getenv("SOURCE_DATE_EPOCH")) \1=atol(getenv("SOURCE_DATE_EPOCH")); else &#g' {} \;
@@ -38,7 +47,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
     readline uthash woff2 zeromq libuninameslist
-    python freetype zlib glib libungif libpng libjpeg libtiff libxml2
+    python freetype zlib glib giflib libpng libjpeg libtiff libxml2
   ]
     ++ lib.optionals withSpiro [libspiro]
     ++ lib.optionals withGUI [ gtk3 cairo pango ]

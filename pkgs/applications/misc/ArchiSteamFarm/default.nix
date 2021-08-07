@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     platforms = dotnetCorePackages.aspnetcore_3_1.meta.platforms;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
     hydraPlatforms = [];
   };
 }

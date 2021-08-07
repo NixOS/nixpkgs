@@ -25,9 +25,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       {
         virtualisation.vlans = [ 10 20 ];
 
-        boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = 1;
-        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
-
         networking = {
           useDHCP = false;
           firewall.enable = false;
@@ -73,9 +70,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       remote_router = { pkgs, lib, ... }:
       {
         virtualisation.vlans = [ 20 30 ];
-
-        boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = 1;
-        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
 
         networking = {
           useDHCP = false;

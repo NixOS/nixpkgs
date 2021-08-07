@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gnome3, gmime3, webkitgtk, ronn
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gnome, gmime3, webkitgtk, ronn
 , libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf, vim_configurable
 , gtkmm3, libpeas, gsettings-desktop-schemas, gobject-introspection, python3
 
 # vim to be used, should support the GUI mode.
-, vim ? vim_configurable.override { features = "normal"; gui = "auto"; }
+, vim
 
 # additional python3 packages to be available within plugins
 , extraPythonPackages ? []
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtkmm3 gmime3 webkitgtk libsass libpeas
     python3
-    notmuch boost gsettings-desktop-schemas gnome3.adwaita-icon-theme
+    notmuch boost gsettings-desktop-schemas gnome.adwaita-icon-theme
     glib-networking protobuf
     vim
   ];

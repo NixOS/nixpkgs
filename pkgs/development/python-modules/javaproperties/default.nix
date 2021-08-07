@@ -1,23 +1,24 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , six
 , pytest
-, dateutil
+, python-dateutil
 }:
 
 buildPythonPackage rec {
-  version = "0.7.0";
+  version = "0.8.0";
   pname = "javaproperties";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14dlzwr4gxlbgjy012i4pqs2rn2rmp21w8n1k1wwjkf26mcvrq5s";
+    sha256 = "0n6dz6rnpq8wdwqyxqwv0q7vrl26vfmvvysdjvy557fck1q2l0kf";
   };
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ dateutil pytest ];
+  checkInputs = [ python-dateutil pytest ];
   checkPhase = ''
     rm tox.ini
     pytest -k 'not dumps and not time' --ignore=test/test_propclass.py

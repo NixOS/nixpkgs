@@ -175,7 +175,8 @@ in stdenv.mkDerivation rec {
 
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + lib.optionalString wrapPythonDrv ''
-    wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin"
+    wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin" \
+      --set NIX_PYTHONPATH "${python3}/${python3.sitePackages}"
   '' + lib.optionalString (guiSupport == "gtk3") ''
 
     rewrap () {

@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     "--with-auth-pam"
     "--without-auth-bsdauth"
     "--with-path-socket=/run"
+    "--with-path-pidfile=/run"
     "--with-user-smtpd=smtpd"
     "--with-user-queue=smtpq"
     "--with-group-queue=smtpq"
@@ -61,5 +62,6 @@ stdenv.mkDerivation rec {
   };
   passthru.tests = {
     basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
+    rspamd-integration = nixosTests.opensmtpd-rspamd;
   };
 }

@@ -3,7 +3,7 @@
 , isPy27
 , fetchFromGitHub
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , dill
 , numpy
 , pytorch
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy pytorch threadpoolctl tqdm ];
-  checkInputs = [ dill pytestcov pytestCheckHook ];
+  checkInputs = [ dill pytest-cov pytestCheckHook ];
 
   disabledTests = [ "test_affine" ];  # deprecated division operator '/'
 

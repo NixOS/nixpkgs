@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "omnilogic";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "djtimca";
     repo = "omnilogic-api";
-    rev = "v${version}";
-    sha256 = "19pmbykq0mckk23aj33xbhg3gjx557xy9a481mp6pkmihf2lsc8z";
+    rev = version;
+    sha256 = "081awb0fl40b5ighc9yxfq1xkgxz7l5dvz5544hx965q2r20wvsg";
   };
 
   propagatedBuildInputs = [

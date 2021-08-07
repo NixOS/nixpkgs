@@ -2,17 +2,17 @@
 
 buildPythonPackage rec {
   pname = "incremental";
-  version = "17.5.0";
+  version = "21.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b751696aaf36eebfab537e458929e194460051ccad279c72b755a167eebd4b3";
+    sha256 = "02f5de5aff48f6b9f665d99d48bfc7ec03b6e3943210de7cfc88856d755d6f57";
   };
 
   meta = with lib; {
     homepage = "https://github.com/twisted/treq";
     description = "Incremental is a small library that versions your Python projects";
     license = licenses.mit;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

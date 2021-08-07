@@ -1,13 +1,14 @@
 { lib, stdenv
+, buildPackages
 , fetchurl
-, python
+, wafHook
 , pkg-config
 , bison
 , flex
 , perl
 , libxslt
+, heimdal
 , docbook_xsl
-, rpcgen
 , fixDarwinDylibNames
 , docbook_xml_dtd_45
 , readline
@@ -17,7 +18,6 @@
 , libarchive
 , zlib
 , liburing
-, fam
 , gnutls
 , libunwind
 , systemd
@@ -26,6 +26,7 @@
 , tdb
 , cmocka
 , rpcsvc-proto
+, python3Packages
 , nixosTests
 
 , enableLDAP ? false, openldap
@@ -44,11 +45,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.13.7";
+  version = "4.14.4";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "1ajvr5hzl9kmrf77hb9c71zvnm8j0xgy40nqfjz4f407cw470zaf";
+    sha256 = "1fc9ix91hb1f35j69sk7rsi9pky2p0vsmw47s973bx801cm0kbw9";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -58,28 +59,31 @@ stdenv.mkDerivation rec {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
-    # Backport, should be removed for version 4.14
-    ./0001-lib-util-Standardize-use-of-st_-acm-time-ns.patch
+    ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
   ];
 
   nativeBuildInputs = [
+    python3Packages.python
+    wafHook
     pkg-config
     bison
     flex
     perl
     perl.pkgs.ParseYapp
     libxslt
+    buildPackages.stdenv.cc
+    heimdal
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
   ] ++ optionals stdenv.isDarwin [
-    rpcgen
     fixDarwinDylibNames
   ];
 
   buildInputs = [
-    python
+    python3Packages.python
+    python3Packages.wrapPython
     readline
     popt
     dbus
@@ -87,21 +91,22 @@ stdenv.mkDerivation rec {
     libbsd
     libarchive
     zlib
-    fam
     libunwind
     gnutls
     libtasn1
     tdb
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
-    ++ optional enableLDAP openldap
+    ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
-    ++ optionals enableDomainController [ gpgme lmdb ]
+    ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enablePam pam;
+
+  wafPath = "buildtools/bin/waf";
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -113,7 +118,11 @@ stdenv.mkDerivation rec {
     patchShebangs ./buildtools/bin
   '';
 
-  configureFlags = [
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+  '';
+
+  wafConfigureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
     "--enable-fhs"
@@ -127,7 +136,17 @@ stdenv.mkDerivation rec {
     "--without-ads"
   ] ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
-    ++ optional (!enablePam) "--without-pam";
+    ++ optional (!enablePam) "--without-pam"
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--bundled-libraries=!asn1_compile,!compile_et"
+  ];
+
+  # python-config from build Python gives incorrect values when cross-compiling.
+  # If python-config is not found, the build falls back to using the sysconfig
+  # module, which works correctly in all cases.
+  PYTHON_CONFIG = "/invalid";
+
+  pythonPath = [ python3Packages.dnspython tdb ];
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
@@ -147,6 +166,13 @@ stdenv.mkDerivation rec {
     patchelf --shrink-rpath "\$BIN";
     EOF
     find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
+
+    # Samba does its own shebang patching, but uses build Python
+    find "$out/bin" -type f -executable -exec \
+      sed -i '1 s^#!${python3Packages.python.pythonForBuild}/bin/python.*^#!${python3Packages.python.interpreter}^' {} \;
+
+    # Fix PYTHONPATH for some tools
+    wrapPythonPrograms
   '';
 
   passthru = {

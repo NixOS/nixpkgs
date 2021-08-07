@@ -23,14 +23,13 @@ let
   };
 
 in stdenv.mkDerivation rec {
-
   pname = "ghidra";
-  version = "9.2.2";
-  versiondate = "20201229";
+  version = "10.0";
+  versiondate = "20210621";
 
   src = fetchzip {
-    url = "https://www.ghidra-sre.org/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    sha256 = "1xahkwiqdcwxssah16hhgrmyam49cb341xp5ysycj1h0kkm8p53s";
+    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
+    sha256 = "0m1ksng2fkmcg7m22lqil10qn95s06gxnxdz7ih9qpbx67pmmq9x";
   };
 
   nativeBuildInputs = [
@@ -72,7 +71,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://ghidra-sre.org/";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ ck3d govanify ];
+    maintainers = with maintainers; [ ck3d govanify mic92 ];
   };
 
 }

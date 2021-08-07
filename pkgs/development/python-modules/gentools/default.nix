@@ -1,5 +1,5 @@
 { buildPythonPackage, lib, fetchFromGitHub, pytest
-, typing, funcsigs, pythonOlder
+, typing ? null, funcsigs ? null, pythonOlder
 }:
 
 buildPythonPackage rec {

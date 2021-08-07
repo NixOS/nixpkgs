@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file
+, fixup_yarn_lock, replace, file, cacert
 }:
 
 let
@@ -32,7 +32,7 @@ let
         openssl = x.openssl // {
           buildInputs = [ openssl ];
         };
-        ruby-magic-static = x.ruby-magic-static // {
+        ruby-magic = x.ruby-magic // {
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
         };
@@ -51,7 +51,7 @@ let
     pname = "gitlab-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
     # Since version 12.6.0, the rake tasks need the location of git,
     # so we have to apply the location patches here too.
@@ -131,6 +131,7 @@ stdenv.mkDerivation {
     ${lib.optionalString (!gitlabEnterprise) ''
       # Remove all proprietary components
       rm -rf ee
+      sed -i 's/-ee//' ./VERSION
     ''}
 
     # For reasons I don't understand "bundle exec" ignores the
@@ -181,6 +182,7 @@ stdenv.mkDerivation {
     GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
     GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
     GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
+    gitlabEnv.FOSS_ONLY = lib.boolToString (!gitlabEnterprise);
     tests = {
       nixos-test-passes = nixosTests.gitlab;
     };
@@ -189,7 +191,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz ];
+    maintainers = with maintainers; [ fpletz globin krav talyz yuka ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

@@ -90,6 +90,7 @@ let
       "systemd-fsck@.service"
       "systemd-fsck-root.service"
       "systemd-remount-fs.service"
+      "systemd-pstore.service"
       "local-fs.target"
       "local-fs-pre.target"
       "remote-fs.target"
@@ -754,7 +755,7 @@ in
       default = [];
       example = [ "d /tmp 1777 root root 10d" ];
       description = ''
-        Rules for creating and cleaning up temporary files
+        Rules for creation, deletion and cleaning of volatile and temporary files
         automatically. See
         <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
         for the exact format.
@@ -924,9 +925,8 @@ in
     system.nssModules = [ systemd.out ];
     system.nssDatabases = {
       hosts = (mkMerge [
-        [ "mymachines" ]
-        (mkOrder 1600 [ "myhostname" ] # 1600 to ensure it's always the last
-      )
+        (mkOrder 400 ["mymachines"]) # 400 to ensure it comes before resolve (which is mkBefore'd)
+        (mkOrder 999 ["myhostname"]) # after files (which is 998), but before regular nss modules
       ]);
       passwd = (mkMerge [
         (mkAfter [ "systemd" ])
@@ -1044,7 +1044,7 @@ in
           done
         '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
           rm -f $out/${removePrefix "tmpfiles.d/" name}
-        '') config.system.build.etc.targets;
+        '') config.system.build.etc.passthru.targets;
       }) + "/*";
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
@@ -1053,6 +1053,7 @@ in
 
     services.dbus.enable = true;
 
+    users.users.systemd-coredump.uid = config.ids.uids.systemd-coredump;
     users.users.systemd-network.uid = config.ids.uids.systemd-network;
     users.groups.systemd-network.gid = config.ids.gids.systemd-network;
     users.users.systemd-resolve.uid = config.ids.uids.systemd-resolve;
@@ -1183,6 +1184,7 @@ in
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-importd.environment = proxy_env;
+    systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";

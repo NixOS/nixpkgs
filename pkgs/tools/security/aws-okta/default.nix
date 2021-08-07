@@ -21,7 +21,6 @@ buildGoPackage rec {
   buildInputs = [ libusb1  libiconv ];
 
   meta = with lib; {
-    inherit version;
     description = "aws-vault like tool for Okta authentication";
     license = licenses.mit;
     maintainers = with maintainers; [imalsogreg Chili-Man];

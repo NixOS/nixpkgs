@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ b43FirmwareCutter ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   sourceRoot = ".";
 
   installPhase = ''

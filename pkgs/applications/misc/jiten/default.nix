@@ -1,26 +1,35 @@
 { lib
 , fetchFromGitHub
-, python3Packages
+, python3
+, bash
 , makeWrapper
+, kanjidraw
 , pcre
 , sqlite
 , nodejs
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "jiten";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "obfusk";
     repo = "jiten";
     rev = "v${version}";
-    sha256 = "1lg1n7f4383jdlkbma0q65yl6l159wgh886admcq7l7ap26zpqd2";
+    sha256 = "13bdx136sirbhxdhvpq5kf0r6q1xvm5zyzp454z51gy0v6rn0qrp";
+  };
+
+  nonFreeData = fetchFromGitHub {
+    owner = "obfusk";
+    repo = "jiten-nonfree-data";
+    rev = "v${version}";
+    sha256 = "16sz8i0sw7ggy6kijcx4qyl2zr6xj789x4iav0yyllx12dfgp5b1";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ pcre sqlite ];
-  propagatedBuildInputs = with python3Packages; [ click flask ];
+  propagatedBuildInputs = with python3.pkgs; [ click flask kanjidraw ];
   checkInputs = [ nodejs ];
 
   preBuild = ''
@@ -29,11 +38,16 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postPatch = ''
-    substituteInPlace Makefile                  --replace /bin/bash "$(command -v bash)"
-    substituteInPlace jiten/res/jmdict/Makefile --replace /bin/bash "$(command -v bash)"
+    rmdir nonfree-data
+    ln -s ${nonFreeData} nonfree-data
+    substituteInPlace Makefile --replace /bin/bash ${bash}/bin/bash
+    substituteInPlace jiten/res/jmdict/Makefile \
+      --replace /bin/bash ${bash}/bin/bash
   '';
 
-  checkPhase = "make test";
+  checkPhase = ''
+    make test
+  '';
 
   postInstall = ''
     # requires pywebview
@@ -59,7 +73,8 @@ python3Packages.buildPythonApplication rec {
       • readings (romaji optional), meanings (english), jmdict entries, radicals & more
       • search using SKIP codes
       • search by radical
-      • browse by frequency/level/jlpt
+      • handwritten kanji recognition
+      • browse by frequency/level/jlpt/SKIP
 
       Example sentences (from Tatoeba)
       • with english, dutch, german, french and/or spanish translation
@@ -83,9 +98,8 @@ python3Packages.buildPythonApplication rec {
     license = with licenses; [
       agpl3Plus               # code
       cc-by-sa-30             # jmdict/kanjidic
-      unfreeRedistributable   # pitch data from wadoku is non-commercial :(
+      unfreeRedistributable   # pitch data & audio are non-commercial
     ];
     maintainers = [ maintainers.obfusk ];
-    platforms = platforms.unix;
   };
 }

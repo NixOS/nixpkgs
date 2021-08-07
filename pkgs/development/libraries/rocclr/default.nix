@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Radeon Open Compute common language runtime";
     homepage = "https://github.com/ROCm-Developer-Tools/ROCclr";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     # rocclr seems to have some AArch64 ifdefs, but does not seem
     # to be supported yet by the build infrastructure. Recheck in
     # the future.

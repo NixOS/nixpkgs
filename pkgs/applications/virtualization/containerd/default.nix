@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 , btrfs-progs
 , go-md2man
 , installShellFiles
@@ -8,19 +8,20 @@
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "containerd";
-  version = "1.4.4";
+  version = "1.5.5";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "0qjbfj1dw6pykxhh8zahcxlgpyjzgnrngk5vjaf34akwyan8nrxb";
+    sha256 = "sha256-6mDTTXHpXBcKOcT+VrGgt6HJzvTeKgJ0ItJ+IjCTJxk=";
   };
 
-  goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "out" "man" ];
+  vendorSha256 = null;
 
   nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
@@ -28,20 +29,22 @@ buildGoPackage rec {
 
   buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
 
-  BUILDTAGS = [ ]
-    ++ lib.optional (btrfs-progs == null) "no_btrfs";
+  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
+    runHook preBuild
     patchShebangs .
     make binaries man $buildFlags
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 bin/* -t $out/bin
     installManPage man/*.[1-9]
     installShellCompletion --bash contrib/autocomplete/ctr
     installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) docker; };

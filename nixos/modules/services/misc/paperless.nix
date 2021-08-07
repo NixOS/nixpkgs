@@ -67,7 +67,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 28981;
       description = "Server port to listen on.";
     };

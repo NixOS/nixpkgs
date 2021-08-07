@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, config, wrapGAppsHook
-, alsaLib
+, alsa-lib
 , atk
 , cairo
 , curl
@@ -28,11 +28,12 @@
 , libXt
 , libcanberra
 , libnotify
-, gnome3
+, gnome
 , libGLU, libGL
 , nspr
 , nss
 , pango
+, pipewire
 , pciutils
 , libheimdal
 , libpulseaudio
@@ -79,20 +80,18 @@ let
 
   source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
-  name = "firefox-${channel}-bin-unwrapped-${version}";
+  pname = "firefox-${channel}-bin-unwrapped";
 
 in
 
 stdenv.mkDerivation {
-  inherit name;
+  inherit pname version;
 
   src = fetchurl { inherit (source) url sha256; };
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib
+      alsa-lib
       atk
       cairo
       curl
@@ -126,6 +125,7 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
+      pipewire
       pciutils
       libheimdal
       libpulseaudio
@@ -137,7 +137,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 gnome.adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -187,7 +187,7 @@ stdenv.mkDerivation {
   # update with:
   # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
-    inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
+    inherit pname version channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
         then "http://archive.mozilla.org/pub/devedition/releases/"
@@ -201,6 +201,7 @@ stdenv.mkDerivation {
       url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
     platforms = builtins.attrNames mozillaPlatforms;
+    timeout = 86400; # 24 hours (increased from the Hydra default of 10h, c.f. #129115)
     maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

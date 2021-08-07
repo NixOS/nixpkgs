@@ -1,0 +1,46 @@
+diff -ur unpacked/tensorflow-2.4.0/tensorflow-2.4.0.dist-info/METADATA unpacked.new/tensorflow-2.4.0/tensorflow-2.4.0.dist-info/METADATA
+--- unpacked/tensorflow-2.4.0/tensorflow-2.4.0.dist-info/METADATA	2021-05-06 23:51:40.298995191 -0700
++++ unpacked.new/tensorflow-2.4.0/tensorflow-2.4.0.dist-info/METADATA	2021-05-07 00:03:49.856882153 -0700
+@@ -27,24 +27,24 @@
+ Classifier: Topic :: Software Development :: Libraries
+ Classifier: Topic :: Software Development :: Libraries :: Python Modules
+ Description-Content-Type: text/markdown
+-Requires-Dist: absl-py (~=0.10)
+-Requires-Dist: astunparse (~=1.6.3)
+-Requires-Dist: flatbuffers (~=1.12.0)
+-Requires-Dist: google-pasta (~=0.2)
+-Requires-Dist: h5py (~=2.10.0)
+-Requires-Dist: keras-preprocessing (~=1.1.2)
+-Requires-Dist: numpy (~=1.19.2)
+-Requires-Dist: opt-einsum (~=3.3.0)
+-Requires-Dist: protobuf (>=3.9.2)
+-Requires-Dist: six (~=1.15.0)
+-Requires-Dist: termcolor (~=1.1.0)
+-Requires-Dist: typing-extensions (~=3.7.4)
+-Requires-Dist: wheel (~=0.35)
+-Requires-Dist: wrapt (~=1.12.1)
+-Requires-Dist: gast (==0.3.3)
+-Requires-Dist: tensorboard (~=2.4)
+-Requires-Dist: tensorflow-estimator (<2.5.0,>=2.4.0rc0)
+-Requires-Dist: grpcio (~=1.32.0)
++Requires-Dist: absl-py
++Requires-Dist: astunparse
++Requires-Dist: flatbuffers
++Requires-Dist: google-pasta
++Requires-Dist: h5py
++Requires-Dist: keras-preprocessing
++Requires-Dist: numpy
++Requires-Dist: opt-einsum
++Requires-Dist: protobuf
++Requires-Dist: six
++Requires-Dist: termcolor
++Requires-Dist: typing-extensions
++Requires-Dist: wheel
++Requires-Dist: wrapt
++Requires-Dist: gast
++Requires-Dist: tensorboard
++Requires-Dist: tensorflow-estimator
++Requires-Dist: grpcio
+ 
+ [![Python](https://img.shields.io/pypi/pyversions/tensorflow.svg?style=plastic)](https://badge.fury.io/py/tensorflow)
+ [![PyPI](https://badge.fury.io/py/tensorflow.svg)](https://badge.fury.io/py/tensorflow)

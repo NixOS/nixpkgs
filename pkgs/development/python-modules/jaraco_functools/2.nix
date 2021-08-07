@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools_scm
+, setuptools-scm
 , more-itertools, backports_functools_lru_cache }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
 
   meta = with lib; {
     description = "Additional functools in the spirit of stdlib's functools";

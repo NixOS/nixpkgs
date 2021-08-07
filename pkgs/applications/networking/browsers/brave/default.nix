@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl
 , dpkg
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -13,7 +13,7 @@
 , gdk-pixbuf
 , glib
 , gnome2
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , gtk3
 , libpulseaudio
@@ -46,7 +46,7 @@
 let
 
 rpath = lib.makeLibraryPath [
-  alsaLib
+  alsa-lib
   at-spi2-atk
   at-spi2-core
   atk
@@ -90,11 +90,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.23.71";
+  version = "1.27.111";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "17ajn1vx5xwlp2yvjf1hr8vw3b7hiribv5gaipyb37zrhkff241h";
+    sha256 = "nQkna1r8wSjTPEWp9RxOz45FVmz97NHzTlb4Hh5lXcs=";
   };
 
   dontConfigure = true;
@@ -104,11 +104,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
-  buildInputs = [ glib gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
+  buildInputs = [ glib gsettings-desktop-schemas gnome.adwaita-icon-theme ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
   installPhase = ''
+      runHook preInstall
+
       mkdir -p $out $out/bin
 
       cp -R usr/share $out
@@ -122,9 +124,11 @@ stdenv.mkDerivation rec {
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
+      for exe in $out/opt/brave.com/brave/{brave,crashpad_handler}; do
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${rpath}" $out/opt/brave.com/brave/brave
+          --set-rpath "${rpath}" $exe
+      done
 
       # Fix paths
       substituteInPlace $out/share/applications/brave-browser.desktop \
@@ -148,6 +152,8 @@ stdenv.mkDerivation rec {
       # Replace xdg-settings and xdg-mime
       ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
       ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+
+      runHook postInstall
   '';
 
   installCheckPhase = ''

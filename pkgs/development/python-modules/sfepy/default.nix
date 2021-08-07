@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   name = "sfepy";
-  version = "2020.4";
+  version = "2021.2";
   disabled = pythonOlder "3.8";
 
   src = fetchurl {
     url="https://github.com/sfepy/sfepy/archive/release_${version}.tar.gz";
-    sha256 = "1wb0ik6kjg3mksxin0abr88bhsly67fpg36qjdzabhj0xn7j1yaz";
+    sha256 = "1vnynxzbspj900wjyy6020l71jdv2l1wkyax7nhi6w5wvav4kfwz";
   };
 
   propagatedBuildInputs = [

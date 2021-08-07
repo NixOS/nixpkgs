@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation rec {
 
-  name = "tracefilegen-2017-05-13";
+  pname = "tracefilegen";
+  version = "unstable-2017-05-13";
 
   src = fetchFromGitHub {
     owner = "GarCoSim";
@@ -17,8 +18,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 TraceFileGen $out/bin/TraceFileGen
-    mkdir -p $out/share/doc/${name}/
-    cp -ar $src/Documentation/html $out/share/doc/${name}/.
+    mkdir -p $out/share/doc/${pname}-${version}/
+    cp -ar $src/Documentation/html $out/share/doc/${pname}-${version}/.
   '';
 
   meta = with lib; {

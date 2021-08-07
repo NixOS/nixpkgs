@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, nix, cmake, pkg-config, boost }:
-let version = "6.0.0"; in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "nix-plugins";
-  inherit version;
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "shlevy";

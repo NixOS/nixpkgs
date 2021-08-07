@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libsoup, tzdata }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libsoup, tzdata, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "libmateweather";
@@ -22,10 +22,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "Library to access weather information from online services for MATE";
     homepage = "https://github.com/mate-desktop/libmateweather";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

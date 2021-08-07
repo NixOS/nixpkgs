@@ -1,7 +1,7 @@
 { lib, fetchgit, SDL, stdenv, libogg, libvorbis, libmad, xdelta }:
 
 stdenv.mkDerivation rec {
-  name = "uhexen2";
+  pname = "uhexen2";
   version = "1.5.9";
 
   src = fetchgit {

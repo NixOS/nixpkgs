@@ -9,14 +9,10 @@
   "OMNINXT"    # 3.4.0-rc4: has not specified a valid STM group, must be one of F1, F3, F405, F411 or F7x5. Have you prepared a valid target.mk?
 ]}:
 
-let
-
-  version = "3.4.0-rc4";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
 
   pname = "betaflight";
-  inherit version;
+  version = "3.4.0-rc4";
 
   src = fetchFromGitHub {
     owner = "betaflight";

@@ -1,24 +1,45 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gettext, texinfo, ncurses, readline }:
+{ lib
+, autoreconfHook
+, fetchFromGitHub
+, gettext
+, ncurses
+, readline
+, stdenv
+, texinfo
+}:
 
-stdenv.mkDerivation {
-  name = "pinfo-0.6.10";
+stdenv.mkDerivation rec {
+  pname = "pinfo";
+  version = "0.6.13";
 
-  src = fetchurl {
-    # homepage needed you to login to download the tarball
-    url = "https://src.fedoraproject.org/repo/pkgs/pinfo/pinfo-0.6.10.tar.bz2"
-      + "/fe3d3da50371b1773dfe29bf870dbc5b/pinfo-0.6.10.tar.bz2";
-    sha256 = "0p8wyrpz9npjcbx6c973jspm4c3xz4zxx939nngbq49xqah8088j";
+  src = fetchFromGitHub {
+    owner = "baszoetekouw";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "173d2p22irwiabvr4z6qvr6zpr6ysfkhmadjlyhyiwd7z62larvy";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ gettext texinfo ncurses readline ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
-  configureFlags = [ "--with-curses=${ncurses.dev}" "--with-readline=${readline.dev}" ];
+  buildInputs = [
+    gettext
+    texinfo
+    ncurses
+    readline
+  ];
+
+  configureFlags = [
+    "--with-curses=${ncurses.dev}"
+    "--with-readline=${readline.dev}"
+  ];
 
   meta = with lib; {
     description = "A viewer for info files";
+    homepage = "https://github.com/baszoetekouw/pinfo";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ fab ];
   };
 }
-

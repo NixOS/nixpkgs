@@ -7,7 +7,7 @@
 , alembic
 , async_generator
 , certipy
-, dateutil
+, python-dateutil
 , entrypoints
 , jinja2
 , jupyter-telemetry
@@ -115,7 +115,7 @@ buildPythonPackage rec {
     alembic
     async_generator
     certipy
-    dateutil
+    python-dateutil
     entrypoints
     jinja2
     jupyter-telemetry

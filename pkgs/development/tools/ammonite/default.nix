@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts, git
-, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
+{ lib, stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts
+, git, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
 
 with lib;
 
@@ -9,7 +9,7 @@ let
   common = { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "2.3.8";
+      version = "2.4.0";
 
       src = fetchurl {
         url =
@@ -17,7 +17,7 @@ let
         inherit sha256;
       };
 
-      phases = "installPhase";
+      dontUnpack = true;
 
       installPhase = ''
         install -Dm755 $src $out/bin/amm
@@ -66,7 +66,7 @@ let
           with a lot of ergonomic improvements and configurability
           that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
         '';
-        homepage = "http://www.lihaoyi.com/Ammonite/";
+        homepage = "https://www.lihaoyi.com/Ammonite/";
         license = licenses.mit;
         platforms = platforms.all;
         maintainers = [ maintainers.nequissimus ];
@@ -75,10 +75,10 @@ let
 in {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "1kzk0437h2wd9jhwkvjkiaj6mscz4bh85iv266x9zz4zssb355hs";
+    sha256 = "K8JII6SAmnBjMWQ9a3NqSLLuP1OLcbwobj3G+OCiLdA=";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "0js84m6yqjd7d77md38z6nk3qzlm1ms8brzczaw05zq2c90pdbz7";
+    sha256 = "2F35qhWI6hNb+Eh9ZTDznqo116yN7MZIGVchaAIM36A=";
   };
 }

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "0.18.0";
+  version = "0.18.9";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8g8DrFvhecdPsfiw+uKnfJOrLQeuFUziK2Jl3xKmrf4=";
+    sha256 = "1dw1dqhd790wsa6v7bpcv921zf1y544ry7drwcfdcmprsm7hs42j";
   };
 
   propagatedBuildInputs = [
@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/XKNX/xknx";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }

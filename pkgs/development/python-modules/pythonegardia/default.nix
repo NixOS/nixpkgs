@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pythonegardia";
-  version = "1.0.40";
+  version = "1.0.51";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rv6m5zaflf3nanpl1xmfmfcpg8kzcnmniq1hhgrybsspkc7mvry";
+    sha256 = "b99217e34c59bfae059db400acef99d3d32237d13da6fdce9e0d4decc9a07e61";
   };
 
   propagatedBuildInputs = [

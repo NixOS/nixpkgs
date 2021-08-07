@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchgit, yasm, perl, cmake, pkg-config, python3 }:
+{ lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.0.0";
+  version = "3.1.2";
 
-  src = fetchgit {
-    url = "https://aomedia.googlesource.com/aom";
-    rev	= "v${version}";
-    sha256 = "178rq1d7i9q4lg40bipkyhdrk18j9wi5k5avpa5bls0zm7g5ifsx";
+  src = fetchzip {
+    url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
+    sha256 = "1c7yrhb56qj5c3lz54n1f9cbrvdr32g2yrrdiiy72sib8ycq9hz2";
+    stripRoot = false;
   };
 
   patches = [ ./outputs.patch ];

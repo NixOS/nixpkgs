@@ -4,19 +4,19 @@
 , withCC ? true, opencc
 , withEpwing ? true, libeb
 , withExtraTiff ? true, libtiff
-, withFFmpeg ? true, libao, ffmpeg_3
+, withFFmpeg ? true, libao, ffmpeg
 , withMultimedia ? true
 , withZim ? true, zstd }:
 
 mkDerivation rec {
   pname = "goldendict";
-  version = "2020-12-09";
+  version = "2021-03-09";
 
   src = fetchFromGitHub {
     owner = "goldendict";
     repo = pname;
-    rev = "261e45a5d79f9df2fbc050292410bed0f4ef3132";
-    sha256 = "01pny06d4cmwf998hpqd7xx7mccbbasb8js1bv3rkdi1ljg01f7n";
+    rev = "b2e673961d28ca5eb920a909091252d3321f09d6";
+    sha256 = "sha256-+AAamnICq0/B54ggFpgF/Uupm1a4YiEYgHXrhIK4M0E=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ mkDerivation rec {
     ++ lib.optional withCC opencc
     ++ lib.optional withEpwing libeb
     ++ lib.optional withExtraTiff libtiff
-    ++ lib.optionals withFFmpeg [ libao ffmpeg_3 ]
+    ++ lib.optionals withFFmpeg [ libao ffmpeg ]
     ++ lib.optional withZim zstd;
 
   qmakeFlags = with lib; [

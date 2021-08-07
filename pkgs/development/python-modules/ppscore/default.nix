@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , isPy27
 , pandas
-, scikitlearn
+, scikit-learn
 , pytestCheckHook
 }:
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pandas
-    scikitlearn
+    scikit-learn
   ];
 
   meta = with lib; {

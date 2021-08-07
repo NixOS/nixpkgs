@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "meshio";
-  version = "4.3.10";
+  version = "4.4.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1i34bk8bbc0dnizrlgj0yxnbzyvndkmnl6ryymxgcl9rv1abkfki";
+    sha256 = "0kv832s2vyff30zz8yqypw5jifwdanvh5x56d2bzkvy94h4jlddy";
   };
 
   propagatedBuildInputs = [

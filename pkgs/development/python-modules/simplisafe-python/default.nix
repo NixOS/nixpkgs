@@ -1,56 +1,52 @@
 { lib
 , aiohttp
-, aresponses
+, aioresponses
 , asynctest
+, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
-, python-engineio
-, python-socketio
 , pythonOlder
 , pytz
 , voluptuous
-, websockets
 }:
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "9.6.9";
+  version = "11.0.2";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "1q5w5pvrgj94bzd5wig79l4hipkfrcdah54rvwyi7b8q46gw77sg";
+    sha256 = "sha256-sIv7zoLp+1CfeyhVYWMp93TkNk+h14WawOJOQMhwAp8=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
-    python-engineio
-    python-socketio
+    backoff
     pytz
     voluptuous
-    websockets
   ];
 
   checkInputs = [
-    aresponses
+    aioresponses
     asynctest
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
   ];
 
   disabledTestPaths = [ "examples/" ];
 
   pythonImportsCheck = [ "simplipy" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python library the SimpliSafe API";

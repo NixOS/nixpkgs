@@ -4,25 +4,25 @@ let
 in {
   mainline = libsForQt5.callPackage ./base.nix rec {
     pname = "yuzu-mainline";
-    version = "576";
+    version = "679";
     branchName = branch;
     src = fetchFromGitHub {
       owner = "yuzu-emu";
       repo = "yuzu-mainline";
       rev = "mainline-0-${version}";
-      sha256 = "121pn3kmghpcf4pzs0mc8z3viyp32rzm7rssva7cdd5016z2648k";
+      sha256 = "1wkxkgfff5nn30mn2pqcrlsr7fja6bgaallsx1ainlcbamfyspcz";
       fetchSubmodules = true;
     };
   };
   early-access = libsForQt5.callPackage ./base.nix rec {
     pname = "yuzu-ea";
-    version = "1536";
+    version = "1874";
     branchName = branch;
     src = fetchFromGitHub {
       owner = "pineappleEA";
       repo = "pineapple-src";
       rev = "EA-${version}";
-      sha256 = "0smrx05xxr4b96i8bw6n6pynkl9r21ydfvpjdzxkr9amin20r54y";
+      sha256 = "0ryrz7dl1sg30vvd7wrf05pjj8swah86055fn7qm6mr2bfslww0h";
     };
   };
 }.${branch}

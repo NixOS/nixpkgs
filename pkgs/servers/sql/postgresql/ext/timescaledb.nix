@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5 }:
 
 # # To enable on NixOS:
 # config.services.postgresql = {
@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "2.2.0";
+  version = "2.3.1";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ postgresql openssl ];
+  buildInputs = [ postgresql openssl libkrb5 ];
 
   src = fetchFromGitHub {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "0gl2jjk9k0s5h7s4yq1qb60lvcqvhp88rh1fhlpyx1vm1hifhhik";
+    sha256 = "0azcg8fh0bbc4a6b0mghdg4b9v62bb3haaq6cycj40fk4mf1dldx";
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" ]

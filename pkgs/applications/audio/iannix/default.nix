@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, alsaLib, pkg-config, qtbase, qtscript, qmake
+{ mkDerivation, lib, fetchFromGitHub, alsa-lib, pkg-config, qtbase, qtscript, qmake
 }:
 
 mkDerivation rec {
@@ -13,13 +13,11 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config qmake ];
-  buildInputs = [ alsaLib qtbase qtscript ];
+  buildInputs = [ alsa-lib qtbase qtscript ];
 
   qmakeFlags = [ "PREFIX=/" ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Graphical open-source sequencer";

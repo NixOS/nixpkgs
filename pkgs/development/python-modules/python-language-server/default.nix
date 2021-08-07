@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
-, backports_functools_lru_cache, configparser, futures, future, jedi, pluggy, python-jsonrpc-server, flake8
-, pytestCheckHook, mock, pytestcov, coverage, setuptools, ujson, flaky
+{ lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast, pythonOlder, isPy27
+, backports_functools_lru_cache ? null, configparser ? null, futures ? null, future, jedi, pluggy, python-jsonrpc-server, flake8
+, pytestCheckHook, mock, pytest-cov, coverage, setuptools, ujson, flaky
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
   # The following packages are optional and
@@ -22,6 +22,8 @@ in
 buildPythonPackage rec {
   pname = "python-language-server";
   version = "0.36.2";
+  # https://github.com/palantir/python-language-server/issues/896#issuecomment-752790868
+  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "palantir";
@@ -29,6 +31,13 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "07x6jr4z20jxn03bxblwc8vk0ywha492cgwfhj7q97nb5cm7kx0q";
   };
+
+  postPatch = ''
+    # Reading the changelog I don't expect an API break in pycodestyle and pyflakes
+    substituteInPlace setup.py \
+      --replace "pycodestyle>=2.6.0,<2.7.0" "pycodestyle>=2.6.0,<2.8.0" \
+      --replace "pyflakes>=2.2.0,<2.3.0" "pyflakes>=2.2.0,<2.4.0"
+  '';
 
   propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server ujson ]
     ++ lib.optional (withProvider "autopep8") autopep8
@@ -46,7 +55,7 @@ buildPythonPackage rec {
   doCheck = providers == ["*"];
 
   checkInputs = [
-    pytestCheckHook mock pytestcov coverage flaky
+    pytestCheckHook mock pytest-cov coverage flaky
     # Do not propagate flake8 or it will enable pyflakes implicitly
     flake8
     # rope is technically a dependency, but we don't add it by default since we
@@ -75,6 +84,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/palantir/python-language-server";
     description = "An implementation of the Language Server Protocol for Python";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ ];
   };
 }

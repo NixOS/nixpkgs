@@ -7,7 +7,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 deps_file="$(realpath "./deps.nix")"
 
-new_version="$(curl -s "https://api.github.com/repos/InfinityGhost/OpenTabletDriver/releases" | jq -r '.[0].tag_name' | sed 's|[^0-9.]||g')"
+new_version="$(curl -s "https://api.github.com/repos/OpenTabletDriver/OpenTabletDriver/releases" | jq -r '.[0].tag_name' | sed 's|[^0-9.]||g')"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 if [[ "$new_version" == "$old_version" ]]; then
   echo "Up to date"
@@ -15,8 +15,8 @@ if [[ "$new_version" == "$old_version" ]]; then
 fi
 
 # Updating the hash of deb package manually since there seems to be no way to do it automatically
-oldDebPkgUrl="https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${old_version}/OpenTabletDriver.deb";
-newDebPkgUrl="https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${new_version}/OpenTabletDriver.deb";
+oldDebPkgUrl="https://github.com/OpenTabletDriver/OpenTabletDriver/releases/download/v${old_version}/OpenTabletDriver.deb";
+newDebPkgUrl="https://github.com/OpenTabletDriver/OpenTabletDriver/releases/download/v${new_version}/OpenTabletDriver.deb";
 oldDebSha256=$(nix-prefetch-url "$oldDebPkgUrl")
 newDebSha256=$(nix-prefetch-url "$newDebPkgUrl")
 echo "oldDebSha256: $oldDebSha256 newDebSha256: $newDebSha256"

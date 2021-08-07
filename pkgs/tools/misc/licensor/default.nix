@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0x0lkfrj7jka0p6nx6i9syz0bnzya5z9np9cw09zm1c9njv9mm32";
   };
 
-  cargoSha256 = "1yix40351yasg7mjmz7qwvwh1dq292dv47gy2a3bwkzhcn6whyjf";
+  cargoSha256 = "1h66d1brx441bg7vzbqdish4avgmc6h7rrkw2qf1siwmplwqqhw0";
 
   meta = with lib; {
     description = "Write licenses to stdout";

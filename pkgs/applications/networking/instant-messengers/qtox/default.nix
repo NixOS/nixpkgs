@@ -1,9 +1,30 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, perl
-, libtoxcore, libpthreadstubs, libXdmcp, libXScrnSaver
-, qtbase, qtsvg, qttools, qttranslations
-, ffmpeg_3, filter-audio, libexif, libsodium, libopus
-, libvpx, openal, pcre, qrencode, sqlcipher
-, AVFoundation }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, perl
+, libtoxcore
+, libpthreadstubs
+, libXdmcp
+, libXScrnSaver
+, qtbase
+, qtsvg
+, qttools
+, qttranslations
+, ffmpeg
+, filter-audio
+, libexif
+, libsodium
+, libopus
+, libvpx
+, openal
+, pcre
+, qrencode
+, sqlcipher
+, AVFoundation
+}:
 
 mkDerivation rec {
   pname = "qtox";
@@ -18,11 +39,23 @@ mkDerivation rec {
 
   buildInputs = [
     libtoxcore
-    libpthreadstubs libXdmcp libXScrnSaver
-    qtbase qtsvg qttranslations
-    ffmpeg_3 filter-audio libexif libopus libsodium
-    libvpx openal pcre qrencode sqlcipher
-  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation] ;
+    libpthreadstubs
+    libXdmcp
+    libXScrnSaver
+    qtbase
+    qtsvg
+    qttranslations
+    ffmpeg
+    filter-audio
+    libexif
+    libopus
+    libsodium
+    libvpx
+    openal
+    pcre
+    qrencode
+    sqlcipher
+  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation ];
 
   nativeBuildInputs = [ cmake pkg-config qttools ]
     ++ lib.optionals stdenv.isDarwin [ perl ];

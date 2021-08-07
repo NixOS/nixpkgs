@@ -48,7 +48,9 @@ in lib.init bootStages ++ [
       # Prior overrides are surely not valid as packages built with this run on
       # a different platform, and so are disabled.
       overrides = _: _: {};
-      extraBuildInputs = [ ]; # Old ones run on wrong platform
+      extraBuildInputs = [ ] # Old ones run on wrong platform
+         ++ lib.optionals hostPlatform.isDarwin [ buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation ]
+         ;
       allowedRequisites = null;
 
       hasCC = !targetPlatform.isGhcjs;
@@ -66,7 +68,7 @@ in lib.init bootStages ++ [
            else if crossSystem.isDarwin
              then buildPackages.llvmPackages.clang
            else if crossSystem.useLLVM or false
-             then buildPackages.llvmPackages.lldClang
+             then buildPackages.llvmPackages.clangUseLLVM
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.8.121";
+  version = "1.8.130";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-uita3HPcerxH/bnSIL3ZNUp68QXtKJLYi0pcnV7OBkQ=";
+    sha256 = "sha256-5T4l0KYB0utFTdEOtYT9trQ/JehQbXxk/IhI6YavErs=";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
@@ -25,12 +25,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake curl ];
 
   buildInputs = [
-    curl openssl s2n-tls zlib
-    aws-c-cal aws-c-common aws-c-event-stream aws-c-io aws-checksums
+    curl openssl zlib
   ] ++ lib.optionals (stdenv.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
          [ CoreAudio AudioToolbox ];
+
+  # propagation is needed for Security.framework to be available when linking
+  propagatedBuildInputs = [
+    aws-c-cal
+    aws-c-event-stream
+    aws-c-io
+    aws-c-common
+    aws-checksums
+    s2n-tls
+  ];
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
@@ -62,6 +71,9 @@ stdenv.mkDerivation rec {
   patches = [
     ./cmake-dirs.patch
   ];
+
+  # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";

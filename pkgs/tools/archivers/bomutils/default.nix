@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1i7nhbq1fcbrjwfg64znz8p4l7662f7qz2l6xcvwd5z93dnmgmdr";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/hogliux/bomutils";

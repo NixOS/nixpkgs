@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, ffmpeg_3, cmake, libpng, pkg-config, libjpeg
+{ fetchFromGitHub, lib, stdenv, ffmpeg, cmake, libpng, pkg-config, libjpeg
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ffmpeg_3 libpng libjpeg ];
+  buildInputs = [ ffmpeg libpng libjpeg ];
   cmakeFlags = [ "-DENABLE_THUMBNAILER=ON" ];
 
   meta = with lib;  {

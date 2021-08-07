@@ -7,25 +7,24 @@ let
     x86_64-linux = "linux-x64";
     x86_64-darwin = "darwin";
     aarch64-linux = "linux-arm64";
+    aarch64-darwin = "darwin-arm64";
     armv7l-linux = "linux-armhf";
   }.${system};
 
-  archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
+  archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "08151qdhf4chg9gfbs0dl0v0k5vla2gz5dfy439jzdg1d022d5rw";
-    x86_64-darwin = "1vlxxkv3wvds3xl3ir93l5q5yq2d7mcragsicfayj9x9r49ilqn3";
-    aarch64-linux = "0rxw1wsi555z41ak817sxqyyan0rm7hma640zsh8dz0yvhzdv1h8";
-    armv7l-linux = "1ijvd7r2fxxlw4zv3zx5h70b3d0b4gcq3aljsi02v1lr2zm8f8gb";
+    x86_64-linux = "049spg4c1arkw97mg0h046kiirmcrjj97sy4ldiblwldjn510acw";
+    x86_64-darwin = "0g6b1891ag4a6p7rlkfka5v4nbmpr4ckkmibhw8l3wa9zdzs77x6";
+    aarch64-linux = "1qvk6cn5v9bz4vl5ifpdgrba94v6a54xx8s3fxdkj3lqvq27kpd1";
+    aarch64-darwin = "1whgjkxy70ifx1vaddxr8f1xcg651fhca4x7rzidzbyyf3baghy0";
+    armv7l-linux = "1k45s81s4ispc0vz7i17a7gss05d82vpymxgangg6f1yxwz944r4";
   }.${system};
 in
   callPackage ./generic.nix rec {
-    # The update script doesn't correctly change the hash for darwin, so please:
-    # nixpkgs-update: no auto update
-
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.55.2";
+    version = "1.58.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -40,11 +39,14 @@ in
 
     sourceRoot = "";
 
+    updateScript = ./update-vscodium.sh;
+
     meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS
       '';
+      mainProgram = "code";
       longDescription = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS. It includes support for debugging, embedded Git
@@ -55,7 +57,7 @@ in
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
+      maintainers = with maintainers; [ eadwu synthetica maxeaubrey ];
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

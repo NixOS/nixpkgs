@@ -12,11 +12,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "element-web";
-  version = "1.7.25";
+  version = "1.7.34";
 
   src = fetchurl {
     url = "https://github.com/vector-im/element-web/releases/download/v${version}/element-v${version}.tar.gz";
-    sha256 = "sha256-T4lsGVSUHkw4R7tSeTKPifbhwaTf/YF2vVAakFSrt9k=";
+    sha256 = "sha256-0M2LuVSHIGRwzq00wgzlzTVWh3WItNN+JDNf+u+9V30=";
   };
 
   installPhase = ''
@@ -32,6 +32,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "A glossy Matrix collaboration client for the web";
     homepage = "https://element.io/";
+    changelog = "https://github.com/vector-im/element-web/blob/v${version}/CHANGELOG.md";
     maintainers = lib.teams.matrix.members;
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;

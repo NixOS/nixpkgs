@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "tld";
-  version = "0.12.5";
+  version = "0.12.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d1lbbg2qdw5jjxks0dqlf69bki5885mhj8ysvgylmrni56hjqqv";
+    sha256 = "69fed19d26bb3f715366fb4af66fdeace896c55c052b00e8aaba3a7b63f3e7f0";
   };
 
   checkInputs = [
@@ -26,6 +26,12 @@ buildPythonPackage rec {
     tox
   ];
 
+  # these tests require network access, but disabledTestPaths doesn't work.
+  # the file needs to be `import`ed by another python test file, so it
+  # can't simply be removed.
+  preCheck = ''
+    echo > src/tld/tests/test_commands.py
+  '';
   pythonImportsCheck = [ "tld" ];
 
   meta = with lib; {

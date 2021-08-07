@@ -1,12 +1,14 @@
-{ fetchurl, lib, which, ocamlPackages }:
+{ fetchFromGitHub, lib, which, ocamlPackages }:
 
 let
   pname = "alt-ergo";
-  version = "2.3.3";
+  version = "2.4.0";
 
-  src = fetchurl {
-    url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-${version}/alt-ergo-${version}.tar.gz";
-    sha256 = "124k2a4ikk4wdpmvgjpgl97x9skvr9qznk8m68dzsynzpv6yksaj";
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = pname;
+    rev = version;
+    sha256 = "1jm1yrvsg8iyfp9bb728zdx2i7yb6z7minjrfs27k5ncjqkjm65g";
   };
 
   useDune2 = true;
@@ -19,6 +21,7 @@ let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
   inherit version src useDune2 nativeBuildInputs;
   configureFlags = pname;
+  buildInputs = with ocamlPackages; [ dune-configurator ];
   propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
 }; in
 
@@ -36,7 +39,9 @@ ocamlPackages.buildDunePackage {
 
   configureFlags = pname;
 
-  buildInputs = [ alt-ergo-parsers ocamlPackages.menhir ];
+  buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [
+    cmdliner menhir ])
+  ;
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

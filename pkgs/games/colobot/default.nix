@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, SDL2, SDL2_image, SDL2_ttf, libpng
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, SDL2, SDL2_image, SDL2_ttf, libpng
 , glew, gettext, libsndfile, libvorbis, libogg, physfs, openal
 , xmlstarlet, doxygen, python3, callPackage }:
 
@@ -17,6 +17,15 @@ stdenv.mkDerivation rec {
     rev = "colobot-gold-${version}";
     sha256 = "0viq5s4zqs33an7rdmc3anf74ml7mwwcwf60alhvp9hj5jr547s2";
   };
+
+  patches = [
+    # Fix issue with newer compilers, like used in nixpkgs
+    # https://github.com/colobot/colobot/pull/1291
+    (fetchpatch {
+      url = "https://github.com/colobot/colobot/commit/fc2bd68876ac6302dbc8e91e8ffa33592db14b21.patch";
+      sha256 = "sha256-PKe8jeyHpTT86tprSafQhNqTYBrSonz+r2fL1lVJdfo=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake xmlstarlet doxygen python3 ];
   buildInputs = [ boost SDL2 SDL2_image SDL2_ttf libpng glew gettext libsndfile libvorbis libogg physfs openal ];

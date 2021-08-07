@@ -2,6 +2,7 @@
 , substituteAll
 , pkg-config
 , fetchurl
+, fetchpatch
 , python3Packages
 , gettext
 , itstool
@@ -14,7 +15,7 @@
 , libsndfile
 , withLibao ? true, libao
 , withPulse ? false, libpulseaudio
-, withAlsa ? false, alsaLib
+, withAlsa ? false, alsa-lib
 , withOss ? false
 , withFlite ? true, flite
 # , withFestival ? false, festival-freebsoft-utils
@@ -51,6 +52,13 @@ in stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       utillinux = util-linux;
     })
+
+    # Fix build with Glib 2.68
+    # https://github.com/brailcom/speechd/pull/462
+    (fetchpatch {
+      url = "https://github.com/brailcom/speechd/commit/a2faab416e42cbdf3d73f98578a89eb7a235e25a.patch";
+      sha256 = "8Q7tUdKKBBtgXZZnj59OcJOkrCNeBR9gkBjhKlpW0hQ=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -69,7 +77,7 @@ in stdenv.mkDerivation rec {
     libsndfile
     libao
     libpulseaudio
-    alsaLib
+    alsa-lib
     python
   ] ++ optionals withEspeak [
     espeak

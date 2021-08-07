@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, alsaLib, bluez, glib, sbc, dbus
+, alsa-lib, bluez, glib, sbc, dbus
 
 # optional, but useful utils
 , readline, libbsd, ncurses
@@ -13,19 +13,19 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "bluez-alsa";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
     rev = "v${version}";
-    sha256 = "1jlsgxyqfhncfhx1sy3ry0dp6p95kd4agh7g2b7g51h0c4cv74h8";
+    sha256 = "sha256-bohc/0hUr1mcV2JbFy71TjY8MXOU3oBBPCcupgkWsWY=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
-    alsaLib bluez glib sbc dbus
+    alsa-lib bluez glib sbc dbus
     readline libbsd ncurses
   ]
   ++ optional aacSupport fdk_aac;

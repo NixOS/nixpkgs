@@ -4,6 +4,7 @@
 , lua52Packages
 , pkg-config
 , makeWrapper
+, openlibm
 } :
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
-  buildInputs = [ SDL2 lua52Packages.lua ];
+  buildInputs = [ SDL2 lua52Packages.lua openlibm ];
 
   postPatch = ''
     # use system Lua 5.2
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     # extracted and adapted from build.sh
     CC=$NIX_CC/bin/cc
     CFLAGS="-Wall -O3 -g -std=gnu11 -Isrc -DLUA_USE_POPEN $(pkg-config --cflags lua sdl2)"
-    LDFLAGS="$(pkg-config --libs lua sdl2)"
+    LDFLAGS="$(pkg-config --libs lua sdl2 openlibm)"
     for f in $(find src -name "*.c"); do
       $CC -c $CFLAGS $f -o "''${f//\//_}.o"
     done

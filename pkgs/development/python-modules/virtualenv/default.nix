@@ -16,22 +16,22 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
-, setuptools_scm
+, setuptools-scm
 , six
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.2.2";
+  version = "20.4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7a8ec323ee02fb2312f098b6b4c9de99559b462775bc8fe3627a73706603c1b";
+    sha256 = "14fdf849f80dbb29a4eb6caa9875d476ee2a5cf76a5f5415fa2f1606010ab467";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

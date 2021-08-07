@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fswatch";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = version;
-    sha256 = "11479ac436g8bwk0lfnmdms0cirv9k11pdvfrrg9jwkki1j1abkk";
+    sha256 = "sha256-EKbo5gkrWuijLJgYsNBDtxy0ioXu/yHxnPPeOpk620g=";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];

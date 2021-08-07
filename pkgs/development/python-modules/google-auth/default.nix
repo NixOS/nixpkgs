@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
@@ -9,6 +10,7 @@
 , mock
 , oauth2client
 , pyasn1-modules
+, pyu2f
 , pytest-localserver
 , responses
 , rsa
@@ -18,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.28.0";
+  version = "1.31.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-m9Q20ZqwRwAaE0ByDStinrlt1QMljFJJIewq8+6IqA4=";
+    sha256 = "154f7889c5d679a6f626f36adb12afbd4dbb0a9a04ec575d989d6ba79c4fd65e";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +33,7 @@ buildPythonPackage rec {
     rsa
     six
     pyopenssl
+    pyu2f
   ];
 
   checkInputs = [
@@ -46,6 +49,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_request_with_timeout_success"
+    "test_request_with_timeout_failure"
+    "test_request_headers"
+    "test_request_error"
+    "test_request_basic"
   ];
 
   meta = with lib; {

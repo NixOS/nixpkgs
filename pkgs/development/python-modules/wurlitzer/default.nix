@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "wurlitzer";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hvmbc41kdwrjns8z1s4a59a4azdvzb8q3vs7nn1li4qm4l0g3yh";
+    sha256 = "0144228960a992ef46e339e8aa560600bd34cd64e018bfebad88c0dd61bd8ba5";
   };
 
   propagatedBuildInputs = lib.optionals isPy27 [ selectors2 ];

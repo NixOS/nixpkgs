@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, bash, btrfs-progs, openssh, perl, perlPackages
-, util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
+, util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "btrbk";
@@ -35,12 +35,13 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
 
+  passthru.tests.btrbk = nixosTests.btrbk;
+
   meta = with lib; {
     description = "A backup tool for btrfs subvolumes";
     homepage = "https://digint.ch/btrbk";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ asymmetric ];
-    inherit version;
   };
 }

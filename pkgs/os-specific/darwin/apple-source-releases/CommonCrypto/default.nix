@@ -1,6 +1,6 @@
-{ lib, appleDerivation }:
+{ lib, appleDerivation', stdenvNoCC }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   installPhase = ''
     mkdir -p $out/include/CommonCrypto
     cp include/* $out/include/CommonCrypto

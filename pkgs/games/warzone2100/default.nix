@@ -3,7 +3,7 @@
 , fetchurl
 , cmake
 , ninja
-, zip
+, p7zip
 , pkg-config
 , asciidoctor
 , gettext
@@ -39,11 +39,11 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.0.1";
+  version  = "4.1.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "1f8a4kflslsjl8jrryhwg034h1yc9y3y1zmllgww3fqkz3aj4xik";
+    sha256 = "sha256-CnMt3FytpTDAtibU3V24i6EvWRc9UkAuvC9ingphCM8=";
   };
 
   buildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     pkg-config
     cmake
     ninja
-    zip
+    p7zip
     asciidoctor
     gettext
     shaderc
@@ -84,10 +84,15 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DWZ_DISTRIBUTOR=NixOS"
     # The cmake builder automatically sets CMAKE_INSTALL_BINDIR to an absolute
-    # path, but this results in an error.
-    # By resetting it, we let the CMakeLists set it to an accepted value
-    # based on prefix.
-    "-DCMAKE_INSTALL_BINDIR="
+    # path, but this results in an error:
+    #
+    # > An absolute CMAKE_INSTALL_BINDIR path cannot be used if the following
+    # > are not also absolute paths: WZ_DATADIR
+    #
+    # WZ_DATADIR is based on CMAKE_INSTALL_DATAROOTDIR, so we set that.
+    #
+    # Alternatively, we could have set CMAKE_INSTALL_BINDIR to "bin".
+    "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
   ];
 
   postInstall = lib.optionalString withVideos ''

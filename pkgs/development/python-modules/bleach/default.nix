@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, pytestrunner
+, pytest-runner
 , six
 , html5lib
 , setuptools
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-mLMXBznl6D3Z3BljPwdHJ62EjL7bYCZwjIrC07aXpDM=";
   };
 
-  checkInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytest pytest-runner ];
   propagatedBuildInputs = [ packaging six html5lib setuptools ];
 
   # Disable network tests

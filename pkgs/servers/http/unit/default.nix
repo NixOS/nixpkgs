@@ -2,10 +2,10 @@
 , pcre2
 , withPython2 ? false, python2
 , withPython3 ? true, python3, ncurses
-, withPHP73 ? false, php73
-, withPHP74 ? true, php74
-, withPerl530 ? false, perl530
-, withPerl532 ? true, perl532
+, withPHP74 ? false, php74
+, withPHP80 ? true, php80
+, withPerl532 ? false, perl532
+, withPerl534 ? true, perl534
 , withPerldevel ? false, perldevel
 , withRuby_2_6 ? true, ruby_2_6
 , withRuby_2_7 ? false, ruby_2_7
@@ -26,18 +26,18 @@ let
     fpmSupport = false;
   };
 
-  php73-unit = php73.override phpConfig;
   php74-unit = php74.override phpConfig;
+  php80-unit = php80.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.22.0";
+  version = "1.24.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-M5Q8sxI1nZi8+ixO1PHuQpQ81EwyLAsnBI5PTtm+bKA=";
+    sha256 = "0214dvwz31hxjxnqk3fkqhn2xznaqdrb96m5s2k8ll8rldmk1gd6";
   };
 
   nativeBuildInputs = [ which ];
@@ -45,10 +45,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pcre2.dev ]
     ++ optional withPython2 python2
     ++ optionals withPython3 [ python3 ncurses ]
-    ++ optional withPHP73 php73-unit
     ++ optional withPHP74 php74-unit
-    ++ optional withPerl530 perl530
+    ++ optional withPHP80 php80-unit
     ++ optional withPerl532 perl532
+    ++ optional withPerl534 perl534
     ++ optional withPerldevel perldevel
     ++ optional withRuby_2_6 ruby_2_6
     ++ optional withRuby_2_7 ruby_2_7
@@ -64,16 +64,16 @@ in stdenv.mkDerivation rec {
     ++ optional withDebug   "--debug";
 
   # Optionally add the PHP derivations used so they can be addressed in the configs
-  usedPhp73 = optionals withPHP73 php73-unit;
   usedPhp74 = optionals withPHP74 php74-unit;
+  usedPhp80 = optionals withPHP80 php80-unit;
 
   postConfigure = ''
     ${optionalString withPython2    "./configure python --module=python2  --config=python2-config  --lib-path=${python2}/lib"}
     ${optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
-    ${optionalString withPHP73      "./configure php    --module=php73    --config=${php73-unit.unwrapped.dev}/bin/php-config --lib-path=${php73-unit}/lib"}
     ${optionalString withPHP74      "./configure php    --module=php74    --config=${php74-unit.unwrapped.dev}/bin/php-config --lib-path=${php74-unit}/lib"}
-    ${optionalString withPerl530    "./configure perl   --module=perl530  --perl=${perl530}/bin/perl"}
+    ${optionalString withPHP80      "./configure php    --module=php80    --config=${php80-unit.unwrapped.dev}/bin/php-config --lib-path=${php80-unit}/lib"}
     ${optionalString withPerl532    "./configure perl   --module=perl532  --perl=${perl532}/bin/perl"}
+    ${optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
     ${optionalString withRuby_2_6   "./configure ruby   --module=ruby26   --ruby=${ruby_2_6}/bin/ruby"}
     ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib, stdenv, llvm_meta
+, pkgsBuildBuild
 , fetch
 , fetchpatch
 , cmake
@@ -10,9 +11,11 @@
 , version
 , release_version
 , zlib
+, buildLlvmTools
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !enableManpages
+, enablePolly ? false
 }:
 
 let
@@ -29,15 +32,18 @@ stdenv.mkDerivation ({
   inherit version;
 
   src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
+  polly_src = fetch "polly" "1f4i1qsw7ywx25v262p8syz339zcbvfkx295xz26hmqrn944xa6x";
 
   unpackPhase = ''
     unpackFile $src
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
+  '' + optionalString enablePolly ''
+    unpackFile $polly_src
+    mv polly-* $sourceRoot/tools/polly
   '';
 
-  outputs = [ "out" "python" ]
-    ++ optional enableSharedLibraries "lib";
+  outputs = [ "out" "lib" "dev" "python" ];
 
   nativeBuildInputs = [ cmake python3 ]
     ++ optional enableManpages python3.pkgs.sphinx;
@@ -59,11 +65,13 @@ stdenv.mkDerivation ({
     #  sha256 = "0injj1hqgrbcbihhwp2nbal88jfykad30r54f2cdcx7gws2fcy8i";
     #  stripLen = 1;
     #})
-  ];
+    ./gnu-install-dirs.patch
+  ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
+
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
-      --replace 'set(_install_rpath "@loader_path/../lib" ''${extra_libdir})' ""
+      --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}" ''${extra_libdir})' ""
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
   + optionalString (enableSharedLibraries) ''
@@ -90,6 +98,7 @@ stdenv.mkDerivation ({
   '';
 
   cmakeFlags = with stdenv; [
+    "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=ON"
@@ -100,20 +109,36 @@ stdenv.mkDerivation ({
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ]
-  ++ optional enableSharedLibraries
+  ++ lib.optional enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ++ optionals enableManpages [
+  ++ lib.optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ]
-  ++ optional (!isDarwin)
+  ++ lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ optionals (isDarwin) [
+  ++ lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DCMAKE_CROSSCOMPILING=True"
+    "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+    (
+      let
+        nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;
+        nativeBintools = nativeCC.bintools.bintools;
+        nativeToolchainFlags = [
+          "-DCMAKE_C_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}cc"
+          "-DCMAKE_CXX_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}c++"
+          "-DCMAKE_AR=${nativeBintools}/bin/${nativeBintools.targetPrefix}ar"
+          "-DCMAKE_STRIP=${nativeBintools}/bin/${nativeBintools.targetPrefix}strip"
+          "-DCMAKE_RANLIB=${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib"
+        ];
+      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${lib.concatStringsSep ";" nativeToolchainFlags}"
+    )
   ];
 
   postBuild = ''
@@ -127,21 +152,20 @@ stdenv.mkDerivation ({
   postInstall = ''
     mkdir -p $python/share
     mv $out/share/opt-viewer $python/share/opt-viewer
-  ''
-  + optionalString enableSharedLibraries ''
-    moveToOutput "lib/libLLVM-*" "$lib"
-    moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
-    moveToOutput "lib/libLTO${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
-    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
+    moveToOutput "bin/llvm-config*" "$dev"
+    substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
+      --replace "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
+      --replace "$out/bin/llvm-config" "$dev/bin/llvm-config"
+    substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
+      --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
   ''
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib" \
-      --replace "\''${_IMPORT_PREFIX}/lib/libLTO.dylib" "$lib/lib/libLTO.dylib"
     ${lib.concatMapStringsSep "\n" (v: ''
       ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
     '') versionSuffixes}
+  ''
+  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 
   doCheck = stdenv.isLinux && (!stdenv.isi686);
@@ -149,12 +173,23 @@ stdenv.mkDerivation ({
   checkTarget = "check-all";
 
   requiredSystemFeatures = [ "big-parallel" ];
-  meta = {
-    description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = "https://llvm.org/";
-    license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = lib.platforms.all;
+  meta = llvm_meta // {
+    homepage = "https://llvm.org/";
+    description = "A collection of modular and reusable compiler and toolchain technologies";
+    longDescription = ''
+      The LLVM Project is a collection of modular and reusable compiler and
+      toolchain technologies. Despite its name, LLVM has little to do with
+      traditional virtual machines. The name "LLVM" itself is not an acronym; it
+      is the full name of the project.
+      LLVM began as a research project at the University of Illinois, with the
+      goal of providing a modern, SSA-based compilation strategy capable of
+      supporting both static and dynamic compilation of arbitrary programming
+      languages. Since then, LLVM has grown to be an umbrella project consisting
+      of a number of subprojects, many of which are being used in production by
+      a wide variety of commercial and open source projects as well as being
+      widely used in academic research. Code in the LLVM project is licensed
+      under the "Apache 2.0 License with LLVM exceptions".
+    '';
   };
 } // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
@@ -173,5 +208,7 @@ stdenv.mkDerivation ({
 
   doCheck = false;
 
-  meta.description = "man pages for LLVM ${version}";
+  meta = llvm_meta // {
+    description = "man pages for LLVM ${version}";
+  };
 })

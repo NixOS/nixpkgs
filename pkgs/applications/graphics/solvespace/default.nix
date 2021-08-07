@@ -3,12 +3,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "solvespace";
-  version = "v3.0.rc2";
+  version = "v3.0";
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1z0873gwcr0hybrpqy4hwislir6k2zb4s62lbsivq5nbkizy7gjm";
+    sha256 = "04aympdsjp37vp0p13mb8nwkc080hp9cdrjpyy5m1mhwkm8jm9k9";
     fetchSubmodules = true;
   };
 

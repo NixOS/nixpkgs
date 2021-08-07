@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, autoreconfHook, popt, libiconv }:
 
-stdenv.mkDerivation (rec {
-  name = "libnatspec-0.3.0";
+stdenv.mkDerivation rec {
+  pname = "libnatspec";
+  version = "0.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/natspec/${name}.tar.bz2";
+    url = "mirror://sourceforge/natspec/${pname}-${version}.tar.bz2";
     sha256 = "0wffxjlc8svilwmrcg3crddpfrpv35mzzjgchf8ygqsvwbrbb3b7";
   };
 
@@ -20,4 +21,4 @@ stdenv.mkDerivation (rec {
   };
 } // lib.optionalAttrs (!stdenv.isLinux) {
   propagatedBuildInputs = [ libiconv ];
-})
+}

@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, alsaLib
+, alsa-lib
 , boost
 , chromaprint
 , fftw
@@ -19,33 +19,34 @@
 , protobuf
 , sqlite
 , taglib
-, libpulseaudio ? null
-, libselinux ? null
-, libsepol ? null
-, p11-kit ? null
-, util-linux ? null
+, libpulseaudio
+, libselinux
+, libsepol
+, p11-kit
+, util-linux
 , qtbase
 , qtx11extras
 , qttools
 , withGstreamer ? true
-, gst_all_1 ? null
+, glib-networking
+, gst_all_1
 , withVlc ? true
-, libvlc ? null
+, libvlc
 }:
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "sha256:0d9asg21j9ai23sb35cimws8bd8fsnpha777rgscraa7i09q0rx2";
+    sha256 = "sha256-OOdHsii6O4okVHDhrqCNJ7WVB0VKPs8q0AhEY+IvflE=";
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     boost
     chromaprint
     fftw
@@ -61,33 +62,33 @@ mkDerivation rec {
     taglib
     qtbase
     qtx11extras
-  ]
-  ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     libpulseaudio
     libselinux
     libsepol
     p11-kit
-  ]
-  ++ lib.optionals withGstreamer (with gst_all_1; [
+  ] ++ lib.optionals withGstreamer (with gst_all_1; [
+    glib-networking
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
-  ])
-  ++ lib.optional withVlc libvlc;
+  ]) ++ lib.optional withVlc libvlc;
 
   nativeBuildInputs = [
-    cmake ninja pkg-config qttools
+    cmake
+    ninja
+    pkg-config
+    qttools
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
   ];
 
-  cmakeFlags = [
-    "-DUSE_SYSTEM_TAGLIB=ON"
-  ];
-
-  postInstall = ''
-    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  postInstall = lib.optionalString withGstreamer ''
+    qtWrapperArgs+=(
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules"
+    )
   '';
 
   meta = with lib; {

@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/intel/linux-sgx-driver/commit/276c5c6a064d22358542f5e0aa96b1c0ace5d695.patch";
       sha256 = "sha256-PmchqYENIbnJ51G/tkdap/g20LUrJEoQ4rDtqy6hj24=";
     })
+    # Fixes detection with kernel >= 5.11
+    (fetchpatch {
+      url = "https://github.com/intel/linux-sgx-driver/commit/ed2c256929962db1a8805db53bed09bb8f2f4de3.patch";
+      sha256 = "sha256-MRbgS4U8FTCP1J1n+rhsvbXxKDytfl6B7YlT9Izq05U=";
+    })
   ];
 
   hardeningDisable = [ "pic" ];
@@ -46,8 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/linux-sgx-driver";
     license = with licenses; [ bsd3 /* OR */ gpl2Only ];
     maintainers = with maintainers; [ oxalica ];
-    platforms = platforms.linux;
-    # The driver is already in kernel >= 5.11.0.
-    broken = kernelAtLeast "5.11.0";
+    platforms = [ "x86_64-linux" ];
   };
 }

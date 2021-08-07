@@ -187,6 +187,7 @@ in
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
+      systemd-coredump = 151;
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;
@@ -229,7 +230,7 @@ in
       grafana = 196;
       skydns = 197;
       # ripple-rest = 198; # unused, removed 2017-08-12
-      nix-serve = 199;
+      # nix-serve = 199; # unused, removed 2020-12-12
       tvheadend = 200;
       uwsgi = 201;
       gitit = 202;
@@ -252,7 +253,7 @@ in
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
-      gale = 223;
+      # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22
@@ -300,7 +301,7 @@ in
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
-      geoip = 272;
+      #geoip = 272; # new module uses DynamicUser
       fcron = 273;
       sonarr = 274;
       radarr = 275;
@@ -315,7 +316,7 @@ in
       restya-board = 284;
       mighttpd2 = 285;
       hass = 286;
-      monero = 287;
+      #monero = 287; # dynamically allocated as of 2021-05-08
       ceph = 288;
       duplicati = 289;
       monetdb = 290;
@@ -347,6 +348,8 @@ in
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
       # shadow = 318; # unused
+      hqplayer = 319;
+      moonraker = 320;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -562,7 +565,7 @@ in
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
-      gale = 223;
+      # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22
@@ -617,7 +620,7 @@ in
       restya-board = 284;
       mighttpd2 = 285;
       hass = 286;
-      monero = 287;
+      # monero = 287; # dynamically allocated as of 2021-05-08
       ceph = 288;
       duplicati = 289;
       monetdb = 290;
@@ -649,6 +652,8 @@ in
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
       shadow = 318;
+      hqplayer = 319;
+      moonraker = 320;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

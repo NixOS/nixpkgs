@@ -1,5 +1,5 @@
-{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
+{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsa-lib
+, libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "7.5.5";
+  version = "7.7.1";
 
   src = fetchzip {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-    sha256 = "0l40ap0ck2ywjarmn7lmpw4qbsdkx717d9kmx67p4qlmbwpimqhg";
+    sha256 = "sha256-nFXj40PfHctymBcZoiJNzkvAsFnABD300/aUqNpUn2c=";
   };
 
   dontBuild = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     nss
     nspr
     cups
-    alsaLib
+    alsa-lib
     expat
     gdk-pixbuf
     dbus
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   installPhase = ''
     runHook preInstall

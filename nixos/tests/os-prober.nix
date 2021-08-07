@@ -69,6 +69,9 @@ in {
       imports = [ ../modules/profiles/installation-device.nix
                   ../modules/profiles/base.nix ];
       virtualisation.memorySize = 1300;
+      # To add the secondary disk:
+      virtualisation.qemu.options = [ "-drive index=2,file=${debianImage}/disk-image.qcow2,read-only,if=virtio" ];
+
       # The test cannot access the network, so any packages
       # nixos-rebuild needs must be included in the VM.
       system.extraDependencies = with pkgs;
@@ -95,11 +98,6 @@ in {
   });
 
   testScript = ''
-    # hack to add the secondary disk
-    os.environ[
-        "QEMU_OPTS"
-    ] = "-drive index=2,file=${debianImage}/disk-image.qcow2,read-only,if=virtio"
-
     machine.start()
     machine.succeed("udevadm settle")
     machine.wait_for_unit("multi-user.target")

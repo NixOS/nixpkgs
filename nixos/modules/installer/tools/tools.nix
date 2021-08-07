@@ -40,9 +40,9 @@ let
   };
 
   nixos-option =
-    if lib.versionAtLeast (lib.getVersion pkgs.nix) "2.4pre"
+    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
     then null
-    else pkgs.callPackage ./nixos-option { };
+    else pkgs.nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -163,7 +163,7 @@ in
         # List packages installed in system profile. To search, run:
         # \$ nix search wget
         # environment.systemPackages = with pkgs; [
-        #   nano vim # don't forget to add an editor to edit configuration.nix!
+        #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
         #   wget
         #   firefox
         # ];

@@ -9,7 +9,7 @@
 , zlib
 , debugVersion ? false
 , enableManpages ? false
-, enableSharedLibraries ? true
+, enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 
 , version
 , src
@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
     description = "ROCm fork of the LLVM compiler infrastructure";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

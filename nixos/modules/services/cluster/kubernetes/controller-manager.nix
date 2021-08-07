@@ -38,7 +38,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes controller manager extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {

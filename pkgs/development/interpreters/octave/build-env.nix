@@ -40,11 +40,15 @@ in buildEnv {
          cd $out
       fi
 
-      # Remove symlinks to the input tarballs, they aren't needed.
-      rm $out/*.tar.gz
+      # Remove symlinks to the input tarballs, they aren't needed, use -f so it
+      # will not fail if no .tar.gz symlinks are there - for example if
+      # sommething which is not a tarball used as a package
+      rm -f $out/*.tar.gz
 
       createOctavePackagesPath $out ${octave}
 
+      # Create the file even if the loop afterwards has no packages to run over
+      touch $out/.octave_packages
       for path in ${lib.concatStringsSep " " packages}; do
           if [ -e $path/*.tar.gz ]; then
              $out/bin/octave-cli --eval "pkg local_list $out/.octave_packages; \

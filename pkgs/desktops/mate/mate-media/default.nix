@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, libtool, libxml2, libcanberra-gtk3, gtk3, mate, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, libtool, libxml2, libcanberra-gtk3, gtk3, mate, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-media";
@@ -27,10 +27,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "Media tools for MATE";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo maintainers.chpatrick ];
   };

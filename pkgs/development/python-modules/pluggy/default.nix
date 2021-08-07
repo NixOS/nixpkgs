@@ -1,7 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , importlib-metadata
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # To prevent infinite recursion with pytest
   doCheck = false;
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ importlib-metadata ];
 

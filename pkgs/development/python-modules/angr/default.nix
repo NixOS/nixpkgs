@@ -13,12 +13,12 @@
 , GitPython
 , itanium_demangler
 , mulpyplexer
+, nampa
 , networkx
 , progressbar2
 , protobuf
 , psutil
 , pycparser
-, pkgs
 , pythonOlder
 , pyvex
 , sqlalchemy
@@ -43,14 +43,14 @@ in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.6281";
+  version = "9.0.9355";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "10i4qdk8f342gzxiwy0pjdc35lc4q5ab7l5q420ca61cgdvxkk4r";
+    sha256 = "0myk3xlvdw4szypivv6a90jw8cqdf1njjqxgqz5lqbx7fajqhrmy";
   };
 
   propagatedBuildInputs = [
@@ -66,6 +66,7 @@ buildPythonPackage rec {
     GitPython
     itanium_demangler
     mulpyplexer
+    nampa
     networkx
     progressbar2
     protobuf
@@ -82,7 +83,15 @@ buildPythonPackage rec {
   # Tests have additional requirements, e.g., pypcode and angr binaries
   # cle is executing the tests with the angr binaries
   doCheck = false;
-  pythonImportsCheck = [ "angr" ];
+
+  # See http://angr.io/api-doc/
+  pythonImportsCheck = [
+    "angr"
+    "claripy"
+    "cle"
+    "pyvex"
+    "archinfo"
+  ];
 
   meta = with lib; {
     description = "Powerful and user-friendly binary analysis platform";

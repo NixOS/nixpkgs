@@ -13,14 +13,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ aws-c-cal aws-c-common s2n-tls] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ aws-c-cal aws-c-common s2n-tls ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_MODULE_PATH=${aws-c-common}/lib/cmake"
   ];
-
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error";
 
   meta = with lib; {
     description = "AWS SDK for C module for IO and TLS";

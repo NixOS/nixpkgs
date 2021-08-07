@@ -1,10 +1,10 @@
-{ lib, pkgs, makeWrapper, haskellPackages, haskell, pandoc, imagemagick }:
+{ lib, pkgs, makeWrapper, haskellPackages, haskell, pandoc, imagemagick, CoreServices }:
 
 with lib;
 with haskell.lib;
 
 let
-  ldgallery-viewer = pkgs.callPackage ./viewer { };
+  ldgallery-viewer = pkgs.callPackage ./viewer { inherit CoreServices; };
   inherit (haskellPackages) ldgallery-compiler;
 
 in

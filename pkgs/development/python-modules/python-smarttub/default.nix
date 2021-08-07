@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.23";
+  version = "0.0.25";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mdz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0maqbmk50xjhv9f0zm62ayzyf99kic3c0g5714cqkw3pfp8k75cx";
+    sha256 = "13yf75vmn15g2hrbiv78mws96qbk40p5pz7vc6ljyp41y2lc9wpm";
   };
 
   propagatedBuildInputs = [
@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mdz/python-smarttub";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    broken = pyjwt.version != "1.7.1";
   };
 }

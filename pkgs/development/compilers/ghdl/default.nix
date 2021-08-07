@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--enable-synth" ] ++ lib.optional (backend == "llvm")
-    "--with-llvm-config=${llvm}/bin/llvm-config";
+    "--with-llvm-config=${llvm.dev}/bin/llvm-config";
 
   hardeningDisable = [ "format" ];
 

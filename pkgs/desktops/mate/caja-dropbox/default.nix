@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, substituteAll
 , pkg-config, gobject-introspection, gdk-pixbuf
-, gtk3, mate, python3, dropbox }:
+, gtk3, mate, python3, dropbox, mateUpdateScript }:
 
 let
   dropboxd = "${dropbox}/bin/dropbox";
@@ -43,10 +43,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "Dropbox extension for Caja file manager";
     homepage = "https://github.com/mate-desktop/caja-dropbox";
-    license = with licenses; [ gpl3 cc-by-nd-30 ];
+    license = with licenses; [ gpl3Plus cc-by-nd-30 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

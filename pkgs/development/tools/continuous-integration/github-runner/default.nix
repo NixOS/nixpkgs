@@ -20,7 +20,7 @@
 }:
 let
   pname = "github-actions-runner";
-  version = "2.277.1";
+  version = "2.279.0";
 
   deps = (import ./deps.nix { inherit fetchurl; });
   nugetPackages = map
@@ -41,6 +41,10 @@ let
     # Online tests
     (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
     [
+      "CompositeActionWithActionfile_CompositeContainerNested"
+      "CompositeActionWithActionfile_CompositePrestepNested"
+      "CompositeActionWithActionfile_MaxLimit"
+      "CompositeActionWithActionfile_Node"
       "DownloadActionFromGraph"
       "DownloadActionFromGraph_Legacy"
       "NotPullOrBuildImagesMultipleTimes"
@@ -80,8 +84,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
-    rev = "183a3dd9a0d4d51feddc5fe9fa6c3b5f8b08343d"; # v${version}
-    sha256 = "sha256-fQH4QwdR8E76ckUjMCaKOsDjNoVBIWAw2YcFRrVucX8=";
+    rev = "6b75179ec79e2041b3b5b4e9206b73db2d206aac"; # v${version}
+    sha256 = "sha256-d7LAHL8Ff7R++d1HuLxWjtiBZRogySe7xHY/xJAcFms=";
   };
 
   nativeBuildInputs = [
@@ -122,6 +126,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/dir.proj \
       --replace 'dotnet test Test/Test.csproj' \
                 "dotnet test Test/Test.csproj --filter '${testFilterXml}'"
+
+    # We don't use a Git checkout
+    substituteInPlace src/dir.proj \
+      --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
+                'echo Patched out.'
 
     # Fix FHS path
     substituteInPlace src/Test/L0/Util/IOUtilL0.cs \

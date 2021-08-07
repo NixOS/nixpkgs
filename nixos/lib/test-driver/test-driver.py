@@ -1,8 +1,9 @@
 #! /somewhere/python3
 from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue, Empty
-from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
+from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable
 from xml.sax.saxutils import XMLGenerator
+from colorama import Style
 import queue
 import io
 import _thread
@@ -20,6 +21,7 @@ import shutil
 import socket
 import subprocess
 import sys
+import telnetlib
 import tempfile
 import time
 import traceback
@@ -127,18 +129,18 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     return (vlan_nr, vde_socket, vde_process, fd)
 
 
-def retry(fn: Callable) -> None:
+def retry(fn: Callable, timeout: int = 900) -> None:
     """Call the given function repeatedly, with 1 second intervals,
     until it returns True or a timeout is reached.
     """
 
-    for _ in range(900):
+    for _ in range(timeout):
         if fn(False):
             return
         time.sleep(1)
 
     if not fn(True):
-        raise Exception("action timed out")
+        raise Exception(f"action timed out after {timeout} seconds")
 
 
 class Logger:
@@ -150,6 +152,8 @@ class Logger:
 
         self.xml.startDocument()
         self.xml.startElement("logfile", attrs={})
+
+        self._print_serial_logs = True
 
     def close(self) -> None:
         self.xml.endElement("logfile")
@@ -174,15 +178,21 @@ class Logger:
         self.drain_log_queue()
         self.log_line(message, attributes)
 
-    def enqueue(self, message: Dict[str, str]) -> None:
-        self.queue.put(message)
+    def log_serial(self, message: str, machine: str) -> None:
+        self.enqueue({"msg": message, "machine": machine, "type": "serial"})
+        if self._print_serial_logs:
+            eprint(Style.DIM + "{} # {}".format(machine, message) + Style.RESET_ALL)
+
+    def enqueue(self, item: Dict[str, str]) -> None:
+        self.queue.put(item)
 
     def drain_log_queue(self) -> None:
         try:
             while True:
                 item = self.queue.get_nowait()
-                attributes = {"machine": item["machine"], "type": "serial"}
-                self.log_line(self.sanitise(item["msg"]), attributes)
+                msg = self.sanitise(item["msg"])
+                del item["msg"]
+                self.log_line(msg, item)
         except Empty:
             pass
 
@@ -203,6 +213,37 @@ class Logger:
         self.log("({:.2f} seconds)".format(toc - tic))
 
         self.xml.endElement("nest")
+
+
+def _perform_ocr_on_screenshot(
+    screenshot_path: str, model_ids: Iterable[int]
+) -> List[str]:
+    if shutil.which("tesseract") is None:
+        raise Exception("OCR requested but enableOCR is false")
+
+    magick_args = (
+        "-filter Catrom -density 72 -resample 300 "
+        + "-contrast -normalize -despeckle -type grayscale "
+        + "-sharpen 1 -posterize 3 -negate -gamma 100 "
+        + "-blur 1x65535"
+    )
+
+    tess_args = f"-c debug_file=/dev/null --psm 11"
+
+    cmd = f"convert {magick_args} {screenshot_path} tiff:{screenshot_path}.tiff"
+    ret = subprocess.run(cmd, shell=True, capture_output=True)
+    if ret.returncode != 0:
+        raise Exception(f"TIFF conversion failed with exit code {ret.returncode}")
+
+    model_results = []
+    for model_id in model_ids:
+        cmd = f"tesseract {screenshot_path}.tiff - {tess_args} --oem {model_id}"
+        ret = subprocess.run(cmd, shell=True, capture_output=True)
+        if ret.returncode != 0:
+            raise Exception(f"OCR failed with exit code {ret.returncode}")
+        model_results.append(ret.stdout.decode("utf-8"))
+
+    return model_results
 
 
 class Machine:
@@ -251,7 +292,12 @@ class Machine:
             net_frontend += "," + args["netFrontendArgs"]
 
         start_command = (
-            "qemu-kvm -m 384 " + net_backend + " " + net_frontend + " $QEMU_OPTS "
+            args.get("qemuBinary", "qemu-kvm")
+            + " -m 384 "
+            + net_backend
+            + " "
+            + net_frontend
+            + " $QEMU_OPTS "
         )
 
         if "hda" in args:
@@ -276,8 +322,9 @@ class Machine:
             start_command += "-cdrom " + args["cdrom"] + " "
 
         if "usb" in args:
+            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
             start_command += (
-                "-device piix3-usb-uhci -drive "
+                "-device usb-ehci -drive "
                 + "id=usbdisk,file="
                 + args["usb"]
                 + ",if=none,readonly "
@@ -295,6 +342,9 @@ class Machine:
 
     def log(self, msg: str) -> None:
         self.logger.log(msg, {"machine": self.name})
+
+    def log_serial(self, msg: str) -> None:
+        self.logger.log_serial(msg, self.name)
 
     def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
         my_attrs = {"machine": self.name}
@@ -396,7 +446,7 @@ class Machine:
     def execute(self, command: str) -> Tuple[int, str]:
         self.connect()
 
-        out_command = "( {} ); echo '|!=EOF' $?\n".format(command)
+        out_command = "( set -euo pipefail; {} ); echo '|!=EOF' $?\n".format(command)
         self.shell.send(out_command.encode())
 
         output = ""
@@ -410,6 +460,17 @@ class Machine:
                 status_code = int(match[2])
                 return (status_code, output)
             output += chunk
+
+    def shell_interact(self) -> None:
+        """Allows you to interact with the guest shell
+
+        Should only be used during test development, not in the production test."""
+        self.connect()
+        self.log("Terminal is ready (there is no prompt):")
+        subprocess.run(
+            ["socat", "READLINE", f"FD:{self.shell.fileno()}"],
+            pass_fds=[self.shell.fileno()],
+        )
 
     def succeed(self, *commands: str) -> str:
         """Execute each command and check that it succeeds."""
@@ -438,7 +499,7 @@ class Machine:
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
         """Wait until a command returns success and return its output.
         Throws an exception on timeout.
         """
@@ -450,7 +511,7 @@ class Machine:
             return status == 0
 
         with self.nested("waiting for success: {}".format(command)):
-            retry(check_success)
+            retry(check_success, timeout)
             return output
 
     def wait_until_fails(self, command: str) -> str:
@@ -637,43 +698,29 @@ class Machine:
         """Debugging: Dump the contents of the TTY<n>"""
         self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
 
+    def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            screenshot_path = os.path.join(tmpdir, "ppm")
+            self.send_monitor_command(f"screendump {screenshot_path}")
+            return _perform_ocr_on_screenshot(screenshot_path, model_ids)
+
+    def get_screen_text_variants(self) -> List[str]:
+        return self._get_screen_text_variants([0, 1, 2])
+
     def get_screen_text(self) -> str:
-        if shutil.which("tesseract") is None:
-            raise Exception("get_screen_text used but enableOCR is false")
-
-        magick_args = (
-            "-filter Catrom -density 72 -resample 300 "
-            + "-contrast -normalize -despeckle -type grayscale "
-            + "-sharpen 1 -posterize 3 -negate -gamma 100 "
-            + "-blur 1x65535"
-        )
-
-        tess_args = "-c debug_file=/dev/null --psm 11 --oem 2"
-
-        with self.nested("performing optical character recognition"):
-            with tempfile.NamedTemporaryFile() as tmpin:
-                self.send_monitor_command("screendump {}".format(tmpin.name))
-
-                cmd = "convert {} {} tiff:- | tesseract - - {}".format(
-                    magick_args, tmpin.name, tess_args
-                )
-                ret = subprocess.run(cmd, shell=True, capture_output=True)
-                if ret.returncode != 0:
-                    raise Exception(
-                        "OCR failed with exit code {}".format(ret.returncode)
-                    )
-
-                return ret.stdout.decode("utf-8")
+        return self._get_screen_text_variants([2])[0]
 
     def wait_for_text(self, regex: str) -> None:
         def screen_matches(last: bool) -> bool:
-            text = self.get_screen_text()
-            matches = re.search(regex, text) is not None
+            variants = self.get_screen_text_variants()
+            for text in variants:
+                if re.search(regex, text) is not None:
+                    return True
 
-            if last and not matches:
-                self.log("Last OCR attempt failed. Text was: {}".format(text))
+            if last:
+                self.log("Last OCR attempt failed. Text was: {}".format(variants))
 
-            return matches
+            return False
 
         with self.nested("waiting for {} to appear on screen".format(regex)):
             retry(screen_matches)
@@ -718,6 +765,7 @@ class Machine:
         shell_path = os.path.join(self.state_dir, "shell")
         self.shell_socket = create_socket(shell_path)
 
+        display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
         qemu_options = (
             " ".join(
                 [
@@ -727,7 +775,7 @@ class Machine:
                     "-device virtio-serial",
                     "-device virtconsole,chardev=shell",
                     "-device virtio-rng-pci",
-                    "-serial stdio" if "DISPLAY" in os.environ else "-nographic",
+                    "-serial stdio" if display_available else "-nographic",
                 ]
             )
             + " "
@@ -766,8 +814,7 @@ class Machine:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()
                 self.last_lines.put(line)
-                eprint("{} # {}".format(self.name, line))
-                self.logger.enqueue({"msg": line, "machine": self.name})
+                self.log_serial(line)
 
         _thread.start_new_thread(process_serial_output, ())
 
@@ -866,7 +913,6 @@ class Machine:
 def create_machine(args: Dict[str, Any]) -> Machine:
     global log
     args["log"] = log
-    args["redirectSerial"] = os.environ.get("USE_SERIAL", "0") == "1"
     return Machine(args)
 
 
@@ -909,6 +955,16 @@ def run_tests() -> None:
             machine.execute("sync")
 
 
+def serial_stdout_on() -> None:
+    global log
+    log._print_serial_logs = True
+
+
+def serial_stdout_off() -> None:
+    global log
+    log._print_serial_logs = False
+
+
 @contextmanager
 def subtest(name: str) -> Iterator[None]:
     with log.nested(name):
@@ -923,7 +979,7 @@ def subtest(name: str) -> Iterator[None]:
 
 
 if __name__ == "__main__":
-    arg_parser = argparse.ArgumentParser()
+    arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
         "-K",
         "--keep-vm-state",

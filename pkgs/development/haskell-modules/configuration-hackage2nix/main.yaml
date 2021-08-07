@@ -1,0 +1,525 @@
+# pkgs/development/haskell-modules/configuration-hackage2nix.yaml
+
+compiler: ghc-8.10.4
+
+core-packages:
+  - array-0.5.4.0
+  - base-4.14.1.0
+  - binary-0.8.8.0
+  - bytestring-0.10.12.0
+  - Cabal-3.2.1.0
+  - containers-0.6.2.1
+  - deepseq-1.4.4.0
+  - directory-1.3.6.0
+  - exceptions-0.10.4
+  - filepath-1.4.2.1
+  - ghc-8.10.4
+  - ghc-boot-8.10.4
+  - ghc-boot-th-8.10.4
+  - ghc-compact-0.1.0.0
+  - ghc-heap-8.10.4
+  - ghc-prim-0.6.1
+  - ghci-8.10.4
+  - haskeline-0.8.0.1
+  - hpc-0.6.1.0
+  - integer-gmp-1.0.3.0
+  - libiserv-8.10.4
+  - mtl-2.2.2
+  - parsec-3.1.14.0
+  - pretty-1.1.3.6
+  - process-1.6.9.0
+  - rts-1.0
+  - stm-2.5.0.0
+  - template-haskell-2.16.0.0
+  - terminfo-0.4.1.4
+  - text-1.2.4.1
+  - time-1.9.3
+  - transformers-0.5.6.2
+  - unix-2.7.2.2
+  - xhtml-3000.2.2.1
+
+  # Hack: The following package is a core package of GHCJS. If we don't declare
+  # it, then hackage2nix will generate a Hackage database where all dependants
+  # of this library are marked as "broken".
+  - ghcjs-base-0
+
+# This is a list of packages with versions from the latest Stackage LTS release.
+#
+# The packages and versions in this list cause the `hackage2nix` tool to
+# generate the package at the given version.
+#
+# For instance, with a line like the following:
+#
+# - aeson ==1.4.6.0
+#
+# `hackage2nix` will generate the `aeson` package at version 1.4.6.0 in the
+# ./hackage-packages.nix file.
+#
+# Since the packages in the LTS package set are sometimes older than the latest
+# on Hackage, `hackage2nix` is smart enough to also generate the latest version
+# of a given package.
+#
+# In the above example with aeson, if there was version 1.5.0.0 of aeson
+# available on Hackage, `hackage2nix` would generate two packages, `aeson`
+# at version 1.4.6.0 and `aeson_1_5_0_0` at version 1.5.0.0.
+#
+# WARNING: This list is generated semiautomatically based on the most recent
+# LTS package set. If you want to add entries to it, you must do so before the
+# comment saying "# LTS Haskell x.y". Any changes after that comment will be
+# lost the next time `update-stackage.sh` runs.
+default-package-overrides:
+  # This was only intended for ghc-7.0.4, and has very old deps, one hidden behind a flag
+  - MissingH ==1.4.2.0
+  # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
+  # not yet available in Nixpkgs
+  - gi-gdkx11 < 4
+  # 2021-05-11: not all diagrams libraries have adjusted to
+  # monoid-extras 0.6 yet, keep them pinned to lower versions
+  # until we can do a full migration, see
+  # https://github.com/diagrams/diagrams-core/issues/115
+  # We can keep this pin at most until base 4.15
+  # Since the monoid-extras adjustment was combined with
+  # a major release in some cases, we need to wait for
+  # diagrams 1.5 to be released.
+  - monoid-extras < 0.6
+  - dual-tree < 0.2.3.0
+  - diagrams-core < 1.5.0
+  - diagrams-lib < 1.4.4
+  # streamly-* packages which are not in stackage and to be constrained
+  # as long as we have streamly < 0.8.0
+  - streamly-archive < 0.1.0
+  - streamly-bytestring < 0.1.3
+  - streamly-lmdb < 0.3.0
+  - streamly-process
+
+extra-packages:
+  - base16-bytestring < 1               # required for cabal-install etc.
+  - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
+  - Cabal == 2.4.*                      # required for cabal-install etc.
+  - Cabal == 3.2.*                      # required for cabal-install etc.
+  - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
+  - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
+  - dhall == 1.29.0                     # required for ats-pkg
+  - dhall == 1.38.1                     # required for spago
+  - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
+  - ghc-tcplugins-extra ==0.3.2         # required for polysemy-plugin 0.2.5.0
+  - haddock == 2.23.*                   # required on GHC < 8.10.x
+  - haddock-api == 2.23.*               # required on GHC < 8.10.x
+  - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
+  - happy == 1.19.9                     # for purescript
+  - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
+  - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
+  - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
+  - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
+  - optparse-applicative < 0.16         # needed for niv-0.2.19
+  - refinery == 0.3.*                   # required by hls-tactics-plugin-1.0.0.0
+  - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
+  - sbv == 7.13                         # required for pkgs.petrinizer
+  - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
+  - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
+
+package-maintainers:
+  abbradar:
+    - Agda
+  Anton-Latukha:
+    - hnix
+    - hnix-store-core
+    - hnix-store-remote
+  berberman:
+    - nvfetcher
+    - arch-web
+    - uusi
+  bdesham:
+    - pinboard-notes-backup
+  cdepillabout:
+    - password
+    - password-instances
+    - pretty-simple
+    - spago
+    - termonad
+  domenkozar:
+    - cachix
+    - cachix-api
+  expipiplus1:
+    - VulkanMemoryAllocator
+    - autoapply
+    - exact-real
+    - language-c
+    - orbits
+    - update-nix-fetchgit
+    - vector-sized
+    - vulkan
+    - vulkan-utils
+  erictapen:
+    - hakyll
+    - hakyll-contrib-hyphenation
+    - webify
+  Gabriel439:
+    - annah
+    - bench
+    - break
+    - dhall-bash
+    - dhall-docs
+    - dhall-json
+    - dhall-lsp-server
+    - dhall-nix
+    - dhall-nixpkgs
+    - dhall-openapi
+    - dhall-text
+    - dhall-yaml
+    - dhall
+    - dirstream
+    - errors
+    - foldl
+    - index-core
+    - lens-tutorial
+    - list-transformer
+    - managed
+    - mmorph
+    - morte
+    - mvc-updates
+    - mvc
+    - nix-derivation
+    - nix-diff
+    - optional-args
+    - optparse-generic
+    - pipes-bytestring
+    - pipes-concurrency
+    - pipes-csv
+    - pipes-extras
+    - pipes-group
+    - pipes-http
+    - pipes-parse
+    - pipes-safe
+    - pipes
+    - server-generic
+    - total
+    - turtle
+    - typed-spreadsheet
+  gridaphobe:
+    - located-base
+  jb55:
+    # - bson-lens
+    - cased
+    - elm-export-persistent
+    # - pipes-mongodb
+    - streaming-wai
+  kiwi:
+    - config-schema
+    - config-value
+    - glirc
+    - irc-core
+    - matterhorn
+    - mattermost-api
+    - mattermost-api-qc
+    - Unique
+  maralorn:
+    - arbtt
+    - cabal-fmt
+    - generic-optics
+    - ghcup
+    - ghcide
+    - haskell-language-server
+    - hedgehog
+    - hlint
+    - hmatrix
+    - iCalendar
+    - matrix-client
+    - neuron
+    - optics
+    - reflex-dom
+    - releaser
+    - req
+    - shake-bench
+    - shh
+    - snap
+    - stm-containers
+    - streamly
+    - taskwarrior
+  pacien:
+    - ldgallery-compiler
+  peti:
+    - cabal-install
+    - cabal2nix
+    - cabal2spec
+    - distribution-nixpkgs
+    - funcmp
+    - git-annex
+    - hackage-db
+    - hledger
+    - hledger-interest
+    - hledger-ui
+    - hledger-web
+    - hopenssl
+    - hsdns
+    - hsemail
+    - hsyslog
+    - jailbreak-cabal
+    - language-nix
+    - logging-facade-syslog
+    - nix-paths
+    - pandoc
+    - structured-haskell-mode
+    - titlecase
+    - xmonad
+    - xmonad-contrib
+  poscat:
+    - hinit
+  psibi:
+    - path-pieces
+    - persistent
+    - persistent-sqlite
+    - persistent-template
+    - shakespeare
+  roberth:
+    - arion-compose
+    - hercules-ci-agent
+    - hercules-ci-api
+    - hercules-ci-api-agent
+    - hercules-ci-api-core
+    - hercules-ci-cli
+    - hercules-ci-cnix-expr
+    - hercules-ci-cnix-store
+  rvl:
+    - taffybar
+    - arbtt
+    - lentil
+  sorki:
+    - cayenne-lpp
+    - data-stm32
+    - gcodehs
+    - nix-derivation
+    - nix-narinfo
+    - ttn
+    - ttn-client
+    - update-nix-fetchgit
+    - zre
+  sternenseemann:
+    # also maintain upstream package
+    - spacecookie
+    - gopher-proxy
+    # other packages I can help out for
+    - systemd
+    - fast-logger
+    - flat
+    - Euterpea2
+    - utc
+    - socket
+    - gitit
+    - yarn-lock
+    - yarn2nix
+    - large-hashable
+    - haskell-ci
+    - diagrams
+    - rel8
+    # owothia
+    - irc-client
+    - chatter
+    - envy
+  terlar:
+    - nix-diff
+  turion:
+    - rhine
+    - rhine-gloss
+    - essence-of-live-coding
+    - essence-of-live-coding-gloss
+    - essence-of-live-coding-pulse
+    - essence-of-live-coding-quickcheck
+    - Agda
+    - dunai
+    - finite-typelits
+    - pulse-simple
+    - simple-affine-space
+  utdemir:
+    - nix-tree
+
+unsupported-platforms:
+  Allure:                                       [ x86_64-darwin ]
+  alsa-mixer:                                   [ x86_64-darwin ]
+  alsa-pcm:                                     [ x86_64-darwin ]
+  alsa-seq:                                     [ x86_64-darwin ]
+  AWin32Console:                                [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  barbly:                                       [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
+  bdcs-api:                                     [ x86_64-darwin ]
+  bindings-directfb:                            [ x86_64-darwin ]
+  bindings-sane:                                [ x86_64-darwin ]
+  bustle:                                       [ x86_64-darwin ] # uses glibc-specific ptsname_r
+  charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
+  crackNum:                                     [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
+  cut-the-crap:                                 [ x86_64-darwin ]
+  d3d11binding:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  DirectSound:                                  [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  dx9base:                                      [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  dx9d3d:                                       [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  dx9d3dx:                                      [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Euterpea:                                     [ x86_64-darwin ]
+  follow-file:                                  [ x86_64-darwin ]
+  freenect:                                     [ x86_64-darwin ]
+  FTGL:                                         [ x86_64-darwin ]
+  ghcjs-dom-hello:                              [ x86_64-darwin ]
+  gi-dbusmenugtk3:                              [ x86_64-darwin ]
+  gi-dbusmenu:                                  [ x86_64-darwin ]
+  gi-ggit:                                      [ x86_64-darwin ]
+  gi-ibus:                                      [ x86_64-darwin ]
+  gi-ostree:                                    [ x86_64-darwin ]
+  gi-vte:                                       [ x86_64-darwin ]
+  gi-wnck:                                      [ x86_64-darwin ]
+  gnome-keyring:                                [ x86_64-darwin ]
+  gtk-mac-integration:                          [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
+  gtk-sni-tray:                                 [ x86_64-darwin ]
+  haskell-snake:                                [ x86_64-darwin ]
+  hcwiid:                                       [ x86_64-darwin ]
+  HFuse:                                        [ x86_64-darwin ]
+  hidapi:                                       [ x86_64-darwin ]
+  hinotify-bytestring:                          [ x86_64-darwin ]
+  hommage-ds:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  honk:                                         [ x86_64-darwin ]
+  hpapi:                                        [ x86_64-darwin ]
+  HSoM:                                         [ x86_64-darwin ]
+  iwlib:                                        [ x86_64-darwin ]
+  jsaddle-webkit2gtk:                           [ x86_64-darwin ]
+  LambdaHack:                                   [ x86_64-darwin ]
+  large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
+  libmodbus:                                    [ x86_64-darwin ]
+  libsystemd-journal:                           [ x86_64-darwin ]
+  libtelnet:                                    [ x86_64-darwin ]
+  libzfs:                                       [ x86_64-darwin ]
+  linearEqSolver:                               [ aarch64-linux ]
+  linux-evdev:                                  [ x86_64-darwin ]
+  linux-file-extents:                           [ x86_64-darwin ]
+  linux-inotify:                                [ x86_64-darwin ]
+  linux-mount:                                  [ x86_64-darwin ]
+  linux-namespaces:                             [ x86_64-darwin ]
+  lio-fs:                                       [ x86_64-darwin ]
+  logging-facade-journald:                      [ x86_64-darwin ]
+  midi-alsa:                                    [ x86_64-darwin ]
+  mpi-hs:                                       [ aarch64-linux, x86_64-darwin ]
+  mpi-hs-binary:                                [ aarch64-linux, x86_64-darwin ]
+  mpi-hs-cereal:                                [ aarch64-linux, x86_64-darwin ]
+  mpi-hs-store:                                 [ aarch64-linux, x86_64-darwin ]
+  mplayer-spot:                                 [ aarch64-linux ]
+  mptcp-pm:                                     [ x86_64-darwin ]
+  netlink:                                      [ x86_64-darwin ]
+  oculus:                                       [ x86_64-darwin ]
+  pam:                                          [ x86_64-darwin ]
+  parport:                                      [ x86_64-darwin ]
+  password:                                     [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
+  password-instances:                           [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
+  persist-state:                                [ aarch64-linux, armv7l-linux ] # https://github.com/minad/persist-state/blob/6fd68c0b8b93dec78218f6d5a1f4fa06ced4e896/src/Data/PersistState.hs#L122-L128
+  piyo:                                         [ x86_64-darwin ]
+  PortMidi-simple:                              [ x86_64-darwin ]
+  PortMidi:                                     [ x86_64-darwin ]
+  posix-api:                                    [ x86_64-darwin ]
+  Raincat:                                      [ x86_64-darwin ]
+  reactive-balsa:                               [ x86_64-darwin ] # depends on alsa-core
+  reactivity:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  reflex-dom-fragment-shader-canvas:            [ x86_64-darwin, aarch64-linux ]
+  reflex-dom:                                   [ x86_64-darwin, aarch64-linux ]
+  reflex-localize-dom:                          [ x86_64-darwin, aarch64-linux ]
+  rtlsdr:                                       [ x86_64-darwin ]
+  rubberband:                                   [ x86_64-darwin ]
+  sbv:                                          [ aarch64-linux ]
+  scat:                                         [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
+  scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
+  sdl2-mixer:                                   [ x86_64-darwin ]
+  sdl2-ttf:                                     [ x86_64-darwin ]
+  synthesizer-alsa:                             [ x86_64-darwin ]
+  taffybar:                                     [ x86_64-darwin ]
+  termonad:                                     [ x86_64-darwin ]
+  tokyotyrant-haskell:                          [ x86_64-darwin ]
+  udev:                                         [ x86_64-darwin ]
+  Unixutils-shadow:                             [ x86_64-darwin ]
+  verifiable-expressions:                       [ aarch64-linux ]
+  vrpn:                                         [ x86_64-darwin ]
+  vulkan:                                       [ i686-linux, armv7l-linux, x86_64-darwin ]
+  VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux, x86_64-darwin ]
+  vulkan-utils:                                 [ x86_64-darwin ]
+  webkit2gtk3-javascriptcore:                   [ x86_64-darwin ]
+  Win32-console:                                [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32-dhcp-server:                            [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32-errors:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32-extras:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32:                                        [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32-junction-point:                         [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32-notify:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32-security:                               [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32-services:                               [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32-services-wrapper:                       [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  xattr:                                        [ x86_64-darwin ]
+  xgboost-haskell:                              [ aarch64-linux, armv7l-linux ]
+  XInput:                                       [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  xmobar:                                       [ x86_64-darwin ]
+  xmonad-extras:                                [ x86_64-darwin ]
+  xmonad-volume:                                [ x86_64-darwin ]
+
+dont-distribute-packages:
+  # Depends on shine, which is a ghcjs project.
+  - shine-varying
+
+  # these packages depend on software with an unfree license
+  - accelerate-bignum
+  - accelerate-blas
+  - accelerate-cublas
+  - accelerate-cuda
+  - accelerate-cufft
+  - accelerate-examples
+  - accelerate-fft
+  - accelerate-fourier-benchmark
+  - accelerate-io-array
+  - accelerate-io-bmp
+  - accelerate-io-bytestring
+  - accelerate-io-cereal
+  - accelerate-io-JuicyPixels
+  - accelerate-io-repa
+  - accelerate-io-vector
+  - accelerate-kullback-liebler
+  - accelerate-llvm-ptx
+  - bindings-yices
+  - boolector
+  - ccelerate-cuda
+  - containers-accelerate
+  - cplex-hs
+  - cublas
+  - cuda # 2020-08-18 because of dependency nvidia-x11
+  - cufft
+  - cusolver
+  - cusparse
+  - gloss-raster-accelerate
+  - hashable-accelerate
+  - libnvvm
+  - matlab
+  - nvvm
+  - Obsidian
+  - odpic-raw
+  - patch-image
+  # license for input data unclear, dependency not on Hackage
+  # see https://github.com/NixOS/nixpkgs/pull/88604
+  - tensorflow-mnist
+  - yices-easy
+  - yices-painless
+
+  # These packages don‘t build because they use deprecated webkit versions.
+  - diagrams-hsqml
+  - dialog
+  - ghcjs-dom-webkit
+  - gi-webkit
+  - hs-mesos
+  - hsqml
+  - hsqml-datamodel
+  - hsqml-demo-manic
+  - hsqml-demo-notes
+  - hsqml-demo-samples
+  - hstorchat
+  - jsaddle-webkitgtk
+  - jsc
+  - lambdacat
+  - manatee-all
+  - manatee-browser
+  - manatee-reader
+  - markup-preview
+  - spike
+  - web-browser-in-haskell
+  - webkit
+  - webkitgtk3
+  - webkitgtk3-javascriptcore
+  - websnap

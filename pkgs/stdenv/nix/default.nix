@@ -24,6 +24,7 @@ bootStages ++ [
       initialPath = (import ../common-path.nix) { pkgs = prevStage; };
 
       cc = import ../../build-support/cc-wrapper {
+        inherit lib;
         nativeTools = false;
         nativePrefix = lib.optionalString hostPlatform.isSunOS "/usr";
         nativeLibc = true;

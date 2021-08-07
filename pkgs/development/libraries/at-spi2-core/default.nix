@@ -14,23 +14,25 @@
 , libX11
 , libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
 , libXi
+, libXext
 
-, gnome3 # To pass updateScript
+, gnome # To pass updateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.38.0";
+  version = "2.40.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "hONsP+ZoYhM/X+Ipdyt2qiUm4Q3lAUo3ePL6Rs5VDaU=";
+    sha256 = "RNwXr5Q7D9GWxhweA7bBZpYDhcrpbMtelb3v/7aEn5g=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ meson ninja pkg-config gobject-introspection makeWrapper ];
-  buildInputs = [ libX11 libXtst libXi ];
+  # libXext is a transitive dependency of libXi
+  buildInputs = [ libX11 libXtst libXi libXext ];
   # In atspi-2.pc dbus-1 glib-2.0
   propagatedBuildInputs = [ dbus glib ];
 
@@ -43,8 +45,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon" ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -61,6 +61,15 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
+    # Fix quadratic slowdown in `strip` performance.
+    # See #129467 and https://sourceware.org/bugzilla/show_bug.cgi?id=28058
+    # Remove when we're on binutils > 2.36.1.
+    # The patch is downloaded from
+    #     https://sourceware.org/git/?p=binutils-gdb.git;a=blobdiff_plain;f=bfd/elf.c;h=af62aadc3d446cd5b1f0201b207c90c22e7809b1;hp=36733e080dd9d9be28b576b246aaf5bd8c8569c7;hb=84fd26d8209e99fc3a432dd0b09b6c053de1ce65;hpb=abe2a28aaa7a2bfd0f3061c72a98eb898976b721
+    # which is the 2.36 backport (using `TRUE` instead of `true` of binutils master commit:
+    #     https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=956ea65cd707707c0f725930214cbc781367a831
+    ./bfd-elf-Dont-read-non-existing-secondary-relocs.patch
+
     ./CVE-2020-35448.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
     ++ # This patch was suggested by Nick Clifton to fix
@@ -70,7 +79,7 @@ stdenv.mkDerivation {
        # indeed GHC will refuse to compile with a binutils suffering from it. See
        # this comment for more information:
        # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
-       lib.optional stdenv.targetPlatform.isAarch32 ./R_ARM_COPY.patch;
+       lib.optional (stdenv.targetPlatform.isAarch32 && stdenv.hostPlatform.system != stdenv.targetPlatform.system) ./R_ARM_COPY.patch;
 
   outputs = [ "out" "info" "man" ];
 
@@ -107,8 +116,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" "pie" ];
 
-  # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-  configurePlatforms = [ "build" "host" ] ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags =
     (if enableShared then [ "--enable-shared" "--disable-static" ]
@@ -126,7 +134,19 @@ stdenv.mkDerivation {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     "--enable-new-dtags"
-  ] ++ lib.optionals gold [ "--enable-gold" "--enable-plugins" ];
+
+    # force target prefix. Some versions of binutils will make it empty
+    # if `--host` and `--target` are too close, even if Nixpkgs thinks
+    # the platforms are different (e.g. because not all the info makes
+    # the `config`). Other versions of binutils will always prefix if
+    # `--target` is passed, even if `--host` and `--target` are the same.
+    # The easiest thing for us to do is not leave it to chance, and force
+    # the program prefix to be what we want it to be.
+    "--program-prefix=${targetPrefix}"
+  ] ++ lib.optionals gold [
+    "--enable-gold"
+    "--enable-plugins"
+  ];
 
   doCheck = false; # fails
 
@@ -143,6 +163,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit targetPrefix;
+    isGNU = true;
   };
 
   meta = with lib; {

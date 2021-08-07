@@ -9,6 +9,7 @@
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
+, enableGlusterfs ? false, glusterfs
 }:
 
 with lib;
@@ -72,6 +73,8 @@ in stdenv.mkDerivation rec {
     openiscsi
   ] ++ optionals enableCeph [
     ceph
+  ] ++ optionals enableGlusterfs [
+    glusterfs
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -119,6 +122,7 @@ in stdenv.mkDerivation rec {
     "-Dsecdriver_apparmor=enabled"
     "-Dnumad=enabled"
     "-Dstorage_disk=enabled"
+    (opt "glusterfs" enableGlusterfs)
     (opt "storage_rbd" enableCeph)
   ] ++ optionals stdenv.isDarwin [
     "-Dinit_script=none"

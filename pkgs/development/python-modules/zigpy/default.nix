@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.33.0";
+  version = "0.35.2";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     rev = version;
-    sha256 = "sha256-oEf4GnvbQ6LY4NaNFWRmnNz1TK2tMpIVUxskhU38g4w=";
+    sha256 = "sha256-p0q0wGp3NaBO7gBTsPAt7FEAHW0MDPJCKqLklY21zBQ=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +38,21 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # RuntimeError: coroutine 'test_remigrate_forcibly_downgraded_v4' was never awaited
+    "test_remigrate_forcibly_downgraded_v4"
+    # RuntimeError: Event loop is closed
+    "test_startup"
+  ];
+
+  pythonImportsCheck = [
+    "zigpy.application"
+    "zigpy.config"
+    "zigpy.exceptions"
+    "zigpy.types"
+    "zigpy.zcl"
   ];
 
   meta = with lib; {

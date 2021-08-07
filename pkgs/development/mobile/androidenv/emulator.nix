@@ -26,7 +26,7 @@ deployAndroidPackage {
     pkgs.freetype
     pkgs.nss
     pkgs.nspr
-    pkgs.alsaLib
+    pkgs.alsa-lib
   ];
   patchInstructions = lib.optionalString (os == "linux") ''
     addAutoPatchelfSearchPath $packageBaseDir/lib

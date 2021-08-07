@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The nice editor";
-    homepage = "http://ne.di.unimi.it/";
+    homepage = "https://ne.di.unimi.it/";
     longDescription = ''
       ne is a free (GPL'd) text editor based on the POSIX standard that runs
       (we hope) on almost any UN*X machine.  ne is easy to use for the beginner,

@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.3.1";
+  version = "0.5.1";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "0ar2ry07axgrmdb6nsc0786v1a1nwlyvapgxncaaympvn38qk8qf";
+    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
+    sha256 = "1mx89rrkxyn7s8nfif0564gjrpc299wzl0wfq9qx8blc6a1438a9";
   };
 
   src = fetchurl {
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "1fapkyq7fcgydy8sls6jzxagfkhgxhwp1rdvjqxdmqk4d82jwrh2";
+    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
+    sha256 = "0rp6lam3psnk12j69z8qp1ixyp7zvvjahn18mvkmc38naml0p514";
   };
 
   dontUnpack = true;
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
           "--no-server"
           "--report-unsupported-elements-at-runtime"
           "--initialize-at-run-time=org.postgresql.sspi.SSPIClient"
+          "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory\$SSLHolder"
           "--native-image-info"
           "--verbose"
           "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileReader"
@@ -110,9 +111,15 @@ stdenv.mkDerivation rec {
     - Batteries included (tools.cli, cheshire, ...)
     - Library support via popular tools like the clojure CLI
     '';
-    homepage = "https://github.com/borkdude/babashka";
+    homepage = "https://github.com/babashka/babashka";
     license = licenses.epl10;
     platforms = graalvm11-ce.meta.platforms;
-    maintainers = with maintainers; [ bandresen bhougland DerGuteMoritz jlesquembre ];
+    maintainers = with maintainers; [
+      bandresen
+      bhougland
+      DerGuteMoritz
+      jlesquembre
+      thiagokokada
+    ];
   };
 }

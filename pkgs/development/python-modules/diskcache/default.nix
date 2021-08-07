@@ -3,8 +3,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, pytestcov
-, pytest_xdist
+, pytest-cov
+, pytest-xdist
 , pytest-django
 , mock
 }:
@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
-    pytest_xdist
+    pytest-cov
+    pytest-xdist
     pytest-django
     mock
   ];

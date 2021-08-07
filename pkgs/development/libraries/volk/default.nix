@@ -1,9 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
-, cppunit
 , python3
 , enableModTool ? true
 , removeReferencesTo
@@ -11,25 +9,18 @@
 
 stdenv.mkDerivation rec {
   pname = "volk";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "fuHJ+p5VN4ThdbQFbzB08VCuy/Zo7m/I1Gs5EQGPeNY=";
+    sha256 = "XvX6emv30bSB29EFm6aC+j8NGOxWqHCNv0Hxtdrq/jc=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Fixes a failing test: https://github.com/gnuradio/volk/pull/434
-    (fetchpatch {
-      url = "https://github.com/gnuradio/volk/pull/434/commits/bce8531b6f1a3c5abe946ed6674b283d54258281.patch";
-      sha256 = "OLW9uF6iL47z63kjvYqwsWtkINav8Xhs+Htqg6Kr4uI=";
-    })
-  ];
   cmakeFlags = lib.optionals (!enableModTool) [ "-DENABLE_MODTOOL=OFF" ];
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)
   '';
 

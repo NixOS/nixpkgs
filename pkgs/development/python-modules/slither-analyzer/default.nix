@@ -14,25 +14,31 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.7.0";
-
+  version = "0.8.0";
   disabled = pythonOlder "3.6";
-
-  # No Python tests
-  doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10r479xidgxvas4wb0z6injp59jrn7rfq8d7bxlcalc2dy4mawr0";
+    sha256 = "0b8a2e2145daefd9443ffa43639608203532e78a858af99c4c52c2b128ca681f";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ crytic-compile prettytable setuptools ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  propagatedBuildInputs = [
+    crytic-compile
+    prettytable
+    setuptools
+  ];
 
   postFixup = lib.optionalString withSolc ''
     wrapProgram $out/bin/slither \
       --prefix PATH : "${lib.makeBinPath [ solc ]}"
   '';
+
+  # No Python tests
+  doCheck = false;
 
   meta = with lib; {
     description = "Static Analyzer for Solidity";
@@ -43,6 +49,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/trailofbits/slither";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ arturcygan ];
+    maintainers = with maintainers; [ arturcygan fab ];
   };
 }

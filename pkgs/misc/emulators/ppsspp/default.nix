@@ -1,11 +1,12 @@
-{ SDL2
-, cmake
+{ mkDerivation
 , fetchFromGitHub
-, ffmpeg_3
+, fetchpatch
+, SDL2
+, cmake
+, ffmpeg
 , glew
 , lib
 , libzip
-, mkDerivation
 , pkg-config
 , python3
 , qtbase
@@ -23,8 +24,17 @@ mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "19948jzqpclf8zfzp3k7s580xfjgqcyfwlcp7x7xj8h8lyypzymx";
+    sha256 = "sha256-vfp/vacIItlPP5dR7jzDT7oOUNFnjvvdR46yi79EJKU=";
   };
+
+  patches = [
+     # fix compability with ffmpeg 4.4, remove on next release after 1.11
+    (fetchpatch {
+      name = "fix_ffmpeg_4.4.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/hrydgard/ppsspp/pull/14176.patch";
+      sha256 = "sha256-ecDoOydaLfL6+eFpahcO1TnRl866mZZVHlr6Qrib1mo=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace git-version.cmake --replace unknown ${src.rev}
@@ -35,7 +45,7 @@ mkDerivation rec {
 
   buildInputs = [
     SDL2
-    ffmpeg_3
+    ffmpeg
     glew
     libzip
     qtbase
@@ -45,23 +55,25 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DHEADLESS=OFF"
     "-DOpenGL_GL_PREFERENCE=GLVND"
     "-DUSE_SYSTEM_FFMPEG=ON"
     "-DUSE_SYSTEM_LIBZIP=ON"
     "-DUSE_SYSTEM_SNAPPY=ON"
     "-DUSING_QT_UI=ON"
-    "-DHEADLESS=OFF"
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/ppsspp
     install -Dm555 PPSSPPQt $out/bin/ppsspp
     mv assets $out/share/ppsspp
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A HLE Playstation Portable emulator, written in C++";
     homepage = "https://www.ppsspp.org/";
+    description = "A HLE Playstation Portable emulator, written in C++";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre8, which, gawk }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, which, gawk }:
 
 with lib;
 
@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre8 which gawk ];
-
 
   installPhase = ''
     mkdir -p "$out/share/neo4j"
@@ -24,8 +22,8 @@ stdenv.mkDerivation rec {
     do
         makeWrapper "$out/share/neo4j/bin/$NEO4J_SCRIPT" \
             "$out/bin/$NEO4J_SCRIPT" \
-            --prefix PATH : "${lib.makeBinPath [ jre8 which gawk ]}" \
-            --set JAVA_HOME "$jre8"
+            --prefix PATH : "${lib.makeBinPath [ jre which gawk ]}" \
+            --set JAVA_HOME "${jre}"
     done
   '';
 

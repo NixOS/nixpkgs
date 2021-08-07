@@ -9,7 +9,7 @@ buildPythonApplication rec {
   # application, it would mess up the Python environment. Thus, don't add it
   # here, instead add it to PATH when running unit tests
   checkInputs = [ pytest pytest-flake8 git ];
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ ipython nbformat ];
 
   src = fetchPypi {
@@ -29,7 +29,6 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    inherit version;
     description = "Strip output from Jupyter and IPython notebooks";
     homepage = "https://github.com/kynan/nbstripout";
     license = lib.licenses.mit;

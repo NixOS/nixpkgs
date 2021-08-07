@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="libmwaw";
-    version="0.3.17";
+    version="0.3.20";
     name="${baseName}-${version}";
-    hash="074ipcq9w7jbd5x316dzclddgia2ydw098ph9d7p3d713pmkf5cf";
-    url="mirror://sourceforge/libmwaw/libmwaw/libmwaw-0.3.17/libmwaw-0.3.17.tar.xz";
-    sha256="074ipcq9w7jbd5x316dzclddgia2ydw098ph9d7p3d713pmkf5cf";
+    hash="sha256-FMOLBiFPJ3zNFFDiLm4yZIlVAY12lYlrxWAWV0jIzSE=";
+    url="mirror://sourceforge/libmwaw/libmwaw/libmwaw-0.3.20/libmwaw-0.3.20.tar.xz";
+    sha256="sha256-FMOLBiFPJ3zNFFDiLm4yZIlVAY12lYlrxWAWV0jIzSE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -21,6 +21,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  enableParallelBuilding = true;
   meta = {
     inherit (s) version;
     description = "Import library for some old mac text documents";

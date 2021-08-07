@@ -1,8 +1,8 @@
 diff --git a/config/environments/production.rb b/config/environments/production.rb
-index d9b3ee354b0..1eb0507488b 100644
+index e1a7db8d860..5823f170410 100644
 --- a/config/environments/production.rb
 +++ b/config/environments/production.rb
-@@ -69,10 +69,10 @@
+@@ -71,10 +71,10 @@
  
    config.action_mailer.delivery_method = :sendmail
    # Defaults to:
@@ -18,10 +18,10 @@ index d9b3ee354b0..1eb0507488b 100644
    config.action_mailer.raise_delivery_errors = true
  
 diff --git a/config/gitlab.yml.example b/config/gitlab.yml.example
-index 92e7501d49d..4ee5a1127df 100644
+index da1a15302da..c846db93e5c 100644
 --- a/config/gitlab.yml.example
 +++ b/config/gitlab.yml.example
-@@ -1168,7 +1168,7 @@ production: &base
+@@ -1191,7 +1191,7 @@ production: &base
    # CAUTION!
    # Use the default values unless you really know what you are doing
    git:
@@ -31,19 +31,19 @@ index 92e7501d49d..4ee5a1127df 100644
    ## Webpack settings
    # If enabled, this will tell rails to serve frontend assets from the webpack-dev-server running
 diff --git a/config/initializers/1_settings.rb b/config/initializers/1_settings.rb
-index bbed08f5044..2906e5c44af 100644
+index 99335321f28..9d9d1c48af4 100644
 --- a/config/initializers/1_settings.rb
 +++ b/config/initializers/1_settings.rb
-@@ -183,7 +183,7 @@
+@@ -185,7 +185,7 @@
  Settings.gitlab['user_home'] ||= begin
    Etc.getpwnam(Settings.gitlab['user']).dir
-                                  rescue ArgumentError # no user configured
--                                   '/home/' + Settings.gitlab['user']
-+                                   '/homeless-shelter'
+ rescue ArgumentError # no user configured
+-  '/home/' + Settings.gitlab['user']
++  '/homeless-shelter'
  end
  Settings.gitlab['time_zone'] ||= nil
  Settings.gitlab['signup_enabled'] ||= true if Settings.gitlab['signup_enabled'].nil?
-@@ -751,7 +751,7 @@
+@@ -794,7 +794,7 @@
  # Git
  #
  Settings['git'] ||= Settingslogic.new({})
@@ -97,7 +97,7 @@ index 9fc354a8fe8..2352ca9b58c 100644
  json_formatter = Gitlab::PumaLogging::JSONFormatter.new
  log_formatter do |str|
 diff --git a/lib/api/api.rb b/lib/api/api.rb
-index ada0da28749..8a3f5824008 100644
+index a287ffbfcd8..1a5ca59183a 100644
 --- a/lib/api/api.rb
 +++ b/lib/api/api.rb
 @@ -4,7 +4,7 @@ module API

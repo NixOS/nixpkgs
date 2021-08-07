@@ -1,9 +1,10 @@
 { lib, stdenv, fetchurl, gtk2, pkg-config, libintl }:
 
-stdenv.mkDerivation {
-  name = "gtkperf-0.40.0";
+stdenv.mkDerivation rec {
+  pname = "gtkperf";
+  version = "0.40.0";
   src = fetchurl {
-    url = "mirror://sourceforge//gtkperf/gtkperf_0.40.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}_${lib.versions.majorMinor version}.tar.gz";
     sha256 = "0yxj3ap3yfi76vqg6xjvgc16nfi9arm9kp87s35ywf10fd73814p";
   };
 

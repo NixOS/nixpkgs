@@ -78,10 +78,11 @@ mpack,,,,,
 moonscript,,,,,arobyn
 nvim-client,,,,,
 penlight,,,,,
+plenary.nvim,,,,lua5_1,
 rapidjson,,,,,
 readline,,,,,
 say,,,,,
-std__debug,std._debug,,,,
+std-_debug,std._debug,,,,
 std_normalize,std.normalize,,,,
 stdlib,,,,,vyp
 vstruct,,,,,

@@ -5,7 +5,7 @@
 , mock
 , pycrypto
 , requests
-, pytestrunner
+, pytest-runner
 , pytest
 , requests-mock
 , typing
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "d7450453eaf5904eb4fb4f74cf9f37dc83721a719bce34f5abb336b1a1ab974d";
   };
 
-  checkInputs = [ mock pytest pytestrunner requests-mock ];
+  checkInputs = [ mock pytest pytest-runner requests-mock ];
   propagatedBuildInputs = [ pycrypto requests ] ++ lib.optionals isPy27 [ typing ];
 
   preConfigure = "cp libcloud/test/secrets.py-dist libcloud/test/secrets.py";

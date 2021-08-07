@@ -6,7 +6,6 @@ let
       curl
       filter
       iconv
-      json
       mbstring
       openssl
       simplexml

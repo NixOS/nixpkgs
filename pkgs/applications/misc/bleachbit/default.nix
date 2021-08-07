@@ -7,6 +7,7 @@
 , glib
 , gtk3
 , libnotify
+, scandir ? null
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "packer";
-  version = "1.7.2";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-Ey1gkld7WosJgoqnNp4Lz2x3PTI+w5p+A8Cwv4+uUZw=";
+    sha256 = "sha256-VNOq9uhtzf1hdEn+bkAOYy4gZxP5ek0WaaS/71uJzrA=";
   };
 
-  vendorSha256 = null;
+  vendorSha256 = "sha256-WYA/wZJg93+X4IAX9hOMRHVRQRyA4N4aDaScDgkGUIE=";
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-s -w" ];
+  ldflags = [ "-s" "-w" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

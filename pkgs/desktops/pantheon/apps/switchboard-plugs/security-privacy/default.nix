@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -27,6 +28,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-Sws6FqUL7QAROInDrcqYAp6j1TCC4aGV0/hi5Kmm5wQ=";
   };
+
+  patches = [
+    # Fix build with latest Vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-security-privacy/commit/c8e422e630bbee0badcf4df26364c9e83e06bad0.patch";
+      sha256 = "5Gm+muZiCraJC5JaGVVo0HDJ7KxjOpclHRW1RKsk3bc=";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {

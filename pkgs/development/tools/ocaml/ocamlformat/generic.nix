@@ -22,11 +22,14 @@ let src =
       "0.16.0" = "1vwjvvwha0ljc014v8jp8snki5zsqxlwd7x0dl0rg2i9kcmwc4mr";
       "0.17.0" = "0f1lxp697yq61z8gqxjjaqd2ns8fd1vjfggn55x0gh9dx098p138";
       "0.18.0" = "0571kzmb1h03qj74090n3mg8wfbh29qqrkdjkai6rnl5chll86lq";
+      "0.19.0" = "0ihgwl7d489g938m1jvgx8azdgq9f5np5mzqwwya797hx2m4dz32";
     }."${version}";
   };
   ocamlPackages =
-  if lib.versionAtLeast version "0.14.3"
+  if lib.versionAtLeast version "0.17.0"
   then ocaml-ng.ocamlPackages
+  else if lib.versionAtLeast version "0.14.3"
+  then ocaml-ng.ocamlPackages_4_10
   else ocaml-ng.ocamlPackages_4_07
 ; in
 
@@ -44,7 +47,24 @@ buildDunePackage {
   useDune2 = true;
 
   buildInputs =
-    if lib.versionAtLeast version "0.18.0"
+    if lib.versionAtLeast version "0.19.0"
+    then [
+      base
+      cmdliner
+      fpath
+      re
+      stdio
+      uuseg
+      uutf
+      fix
+      menhir
+      menhirLib
+      menhirSdk
+      ocp-indent
+      dune-build-info
+      odoc-parser
+    ]
+    else if lib.versionAtLeast version "0.18.0"
     then [
       base
       cmdliner
@@ -56,6 +76,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
       dune-build-info
       ocaml-version
       # Changed since 0.16.0:
@@ -73,11 +95,13 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
       dune-build-info
       ocaml-version
       # Changed since 0.16.0:
       (ppxlib.override { version = "0.22.0"; })
-      ocaml-migrate-parsetree-2-1
+      ocaml-migrate-parsetree-2
     ]
     else if lib.versionAtLeast version "0.15.1"
     then [
@@ -91,6 +115,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
       (ppxlib.override { version = "0.18.0"; })
       dune-build-info # lib.versionAtLeast version "0.16.0"
       ocaml-version # lib.versionAtLeast version "0.16.0"
@@ -108,6 +134,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
     ] else [
       base
       cmdliner

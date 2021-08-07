@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "5.5.0";
+  version = "6.1.0";
 
   outputs = [ "out" "dev" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ytbjuo9RnYyJ9+LqtWE117dGlNErLl+nmTM22xGGDo8=";
+    sha256 = "02hn4abnsn6fm2m33pjmlnkj8dljsm292z62vn8ccvy7l8f9my6l";
   };
 
   passthru = {

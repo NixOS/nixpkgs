@@ -10,6 +10,8 @@ let
   };
 in
 ourNodePackages."${packageName}".override {
+  pname = "matrix-appservice-irc";
+
   nativeBuildInputs = [ makeWrapper nodePackages.node-gyp-build ];
 
   postInstall = ''

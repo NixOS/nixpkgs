@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   kdbusaddons, kcrash, kbookmarks, kiconthemes, kio, kpimtextedit,
-  kmailtransport, pimcommon, libksieve
+  kmailtransport, libksieve, pimcommon, qtkeychain, libsecret
 }:
 
 mkDerivation {
@@ -14,6 +14,6 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kdbusaddons kcrash kbookmarks kiconthemes kio kpimtextedit kmailtransport
-    pimcommon libksieve
+    libksieve pimcommon qtkeychain libsecret
   ];
 }

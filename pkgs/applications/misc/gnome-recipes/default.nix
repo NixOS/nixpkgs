@@ -3,7 +3,7 @@
 , meson
 , ninja
 , pkg-config
-, gnome3
+, gnome
 , desktop-file-utils
 , gettext
 , itstool
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

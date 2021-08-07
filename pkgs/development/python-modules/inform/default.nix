@@ -3,22 +3,22 @@
 , six
 , hypothesis
 , pytest
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.23";
+  version = "1.24";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
     rev = "v${version}";
-    sha256 = "02zlprvidkz51aypss4knhv7dbr0sbpz3caqjzf9am2n1jx2viyy";
+    sha256 = "114cyff00j9r7qm2ld4w1a4kklr5gx570vk67p56gpr2553dkmly";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ arrow six ];
 
   checkInputs = [ pytest hypothesis ];

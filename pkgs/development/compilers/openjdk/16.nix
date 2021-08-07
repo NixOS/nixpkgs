@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, bash, pkg-config, autoconf, cpio
-, file, which, unzip, zip, perl, cups, freetype, alsaLib, libjpeg, giflib
+, file, which, unzip, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib
 , libpng, zlib, lcms2, libX11, libICE, libXrender, libXext, libXt, libXtst
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk16-bootstrap
 , setJavaClassPath
@@ -28,7 +28,7 @@ let
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which zip perl zlib cups freetype alsaLib libjpeg giflib
+      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk16-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
@@ -147,13 +147,7 @@ let
 
     disallowedReferences = [ openjdk16-bootstrap ];
 
-    meta = with lib; {
-      homepage = "https://openjdk.java.net/";
-      license = licenses.gpl2;
-      description = "The open-source Java Development Kit";
-      maintainers = with maintainers; [ edwtjo ];
-      platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ];
-    };
+    meta = import ./meta.nix lib;
 
     passthru = {
       architecture = "";

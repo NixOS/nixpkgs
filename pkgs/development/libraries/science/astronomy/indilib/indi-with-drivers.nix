@@ -1,7 +1,7 @@
-{ buildEnv, indilib ? indilib, extraDrivers ? null , pkgName ? "indi-with-drivers" }:
+{ buildEnv, indilib ? indilib, pname ? "indi-with-drivers", version ? null, extraDrivers ? null }:
 
 buildEnv {
-  name = pkgName;
+  name = "${pname}-${version}";
   paths = [
     indilib
   ]

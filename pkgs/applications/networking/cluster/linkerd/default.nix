@@ -1,26 +1,71 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
-buildGoModule {
-  pname = "linkerd-unstable";
-  version = "2020-05-01";
+let generic = { channel, version, sha256, vendorSha256 }:
+  buildGoModule rec {
+    pname = "linkerd-${channel}";
+    inherit version vendorSha256;
 
-  src = fetchFromGitHub {
-    owner = "linkerd";
-    repo = "linkerd2";
-    rev = "9e9f3bb1e2aeab8cf20f98f5cad159bbb6f24883";
-    sha256 = "1pvj31wz1klwhcqga1m8kixdqsxwmppp9ix6r3wpp4dwfig45fm0";
+    src = fetchFromGitHub {
+      owner = "linkerd";
+      repo = "linkerd2";
+      rev = "${channel}-${version}";
+      inherit sha256;
+    };
+
+    subPackages = [ "cli" ];
+    runVend = true;
+
+    preBuild = ''
+      env GOFLAGS="" go generate ./pkg/charts/static
+      env GOFLAGS="" go generate ./jaeger/static
+      env GOFLAGS="" go generate ./multicluster/static
+      env GOFLAGS="" go generate ./viz/static
+    '';
+
+    tags = [
+      "prod"
+    ];
+
+    ldflags = [
+      "-s" "-w"
+      "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
+    ];
+
+    nativeBuildInputs = [ installShellFiles ];
+
+    postInstall = ''
+      mv $out/bin/cli $out/bin/linkerd
+      installShellCompletion --cmd linkerd \
+        --bash <($out/bin/linkerd completion bash) \
+        --zsh <($out/bin/linkerd completion zsh) \
+        --fish <($out/bin/linkerd completion fish)
+    '';
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      $out/bin/linkerd version --client | grep ${src.rev} > /dev/null
+    '';
+
+    meta = with lib; {
+      description = "A simple Kubernetes service mesh that improves security, observability and reliability";
+      downloadPage = "https://github.com/linkerd/linkerd2/";
+      homepage = "https://linkerd.io/";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ Gonzih bryanasdev000 superherointj ];
+    };
   };
-
-  vendorSha256 = "0vls58ld50jca5yn73kvg3lx4z83cc7skky54a90pkbj737y58pz";
-
-  doCheck = false;
-
-  subPackages = [ "cli/cmd" ];
-
-  meta = with lib; {
-    description = "A service mesh for Kubernetes and beyond";
-    homepage = "https://linkerd.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih ];
-  };
-}
+in
+  {
+    stable = generic {
+      channel = "stable";
+      version = "2.10.2";
+      sha256 = "sha256-dOD0S4FJ2lXE+1VZooi8tKvC8ndGEHAxmAvSqoWI/m0=";
+      vendorSha256 = "sha256-Qb0FZOvKL9GgncfUl538PynkYbm3V8Q6lUpApUoIp5s=";
+    };
+    edge = generic {
+      channel = "edge";
+      version = "21.7.4";
+      sha256 = "sha256-yorxP4SQVV6MWlx8+8l0f7qOaF7aJ1XiPfnMqKC8m/o=";
+      vendorSha256 = "sha256-2ZDsBiIV9ng8P0cDURbqDqMTxFKUFcBxHsPGWp5WjPo=";
+    };
+  }

@@ -6,14 +6,14 @@
 , requests_oauthlib
 , isodate
 , certifi
-, enum34
+, enum34 ? null
 , typing
 , aiohttp
 , aiodns
 , pytest
 , httpretty
 , mock
-, futures
+, futures ? null
 , trio
 }:
 

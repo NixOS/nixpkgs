@@ -1,5 +1,5 @@
 { lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, gawk
+, libelf, cpio, elfutils, zstd, gawk, python3Minimal
 , writeTextFile
 }:
 
@@ -19,6 +19,8 @@ in {
   stdenv,
   # The kernel version
   version,
+  # Additional kernel make flags
+  extraMakeFlags ? [],
   # The version of the kernel module directory
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
@@ -37,7 +39,6 @@ in {
   extraMeta ? {},
 
   # for module compatibility
-  isXen      ? features.xen_dom0 or false,
   isZen      ? false,
   isLibre    ? false,
   isHardened ? false,
@@ -94,7 +95,8 @@ let
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
-        inherit isXen isZen isHardened isLibre;
+        inherit isZen isHardened isLibre;
+        isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
         kernelOlder = lib.versionOlder version;
         kernelAtLeast = lib.versionAtLeast version;
       };
@@ -119,9 +121,9 @@ let
         # This way kernels can be bit-by-bit reproducible depending on settings
         # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
         # See also https://kernelnewbies.org/BuildId
-        sed -i Makefile -e 's|--build-id|--build-id=none|'
+        sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
-        patchShebangs scripts/ld-version.sh
+        patchShebangs scripts
       '';
 
       postPatch = ''
@@ -173,7 +175,9 @@ let
         "KBUILD_BUILD_VERSION=1-NixOS"
         kernelConf.target
         "vmlinux"  # for "perf" and things like that
-      ] ++ optional isModular "modules";
+      ]
+      ++ optional isModular "modules"
+      ++ extraMakeFlags;
 
       installFlags = [
         "INSTALLKERNEL=${installkernel}"
@@ -285,7 +289,7 @@ let
             " (with patches: "
             + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
             + ")");
-        license = lib.licenses.gpl2;
+        license = lib.licenses.gpl2Only;
         homepage = "https://www.kernel.org/";
         repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
         maintainers = [
@@ -307,7 +311,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd ]
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd python3Minimal ]
       ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
       ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
@@ -325,7 +329,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
     "ARCH=${stdenv.hostPlatform.linuxArch}"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  ] ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
 })

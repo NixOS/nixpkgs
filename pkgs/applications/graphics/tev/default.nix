@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, wrapGAppsHook
-, libX11, libzip, glfw, libpng, xorg, gnome3
+, libX11, libzip, glfw, libpng, xorg, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/tev \
       "''${gappsWrapperArgs[@]}" \
-      --prefix PATH ":" "${gnome3.zenity}/bin"
+      --prefix PATH ":" "${gnome.zenity}/bin"
   '';
 
   meta = with lib; {

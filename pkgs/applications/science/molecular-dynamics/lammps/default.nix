@@ -12,14 +12,14 @@ let packages = [
 in
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
-  version = "stable_22Aug2018";
+  version = "stable_29Oct2020";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = version;
-    sha256 = "1dlifm9wm1jcw2zwal3fnzzl41ng08c7v48w6hx2mz84zljg1nsj";
+    sha256 = "1rmi9r5wj2z49wg43xyhqn9sm37n95cyli3g7vrqk3ww35mmh21q";
   };
 
   passthru = {
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
       funding from the DOE. It is an open-source code, distributed freely
       under the terms of the GNU Public License (GPL).
       '';
-    homepage = "http://lammps.sandia.gov";
-    license = licenses.gpl2;
+    homepage = "https://lammps.sandia.gov";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.costrouc ];
   };

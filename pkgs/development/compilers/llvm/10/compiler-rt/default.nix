@@ -1,19 +1,20 @@
-{ lib, stdenv, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, llvm, libcxxabi }:
 
 let
 
   useLLVM = stdenv.hostPlatform.useLLVM or false;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
+  haveLibc = stdenv.cc.libc != null;
   inherit (stdenv.hostPlatform) isMusl;
 
 in
 
-stdenv.mkDerivation rec {
-  pname = "compiler-rt";
+stdenv.mkDerivation {
+  pname = "compiler-rt" + lib.optionalString (haveLibc) "-libc";
   inherit version;
-  src = fetch pname "1yjqjri753w0fzmxcyz687nvd97sbc9rsqrxzpq720na47hwh3fr";
+  src = fetch "compiler-rt" "1yjqjri753w0fzmxcyz687nvd97sbc9rsqrxzpq720na47hwh3fr";
 
-  nativeBuildInputs = [ cmake python3 llvm ];
+  nativeBuildInputs = [ cmake python3 llvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -29,14 +30,15 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-  ] ++ lib.optionals (useLLVM || bareMetal) [
+  ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
+  ] ++ lib.optionals (useLLVM && !haveLibc) [
+    "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
   ] ++ lib.optionals (bareMetal) [
@@ -54,9 +56,9 @@ stdenv.mkDerivation rec {
   patches = [
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./find-darwin-sdk-version.patch # don't test for macOS being >= 10.15
+    ./gnu-install-dirs.patch
   ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
-
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -88,4 +90,20 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '';
 
+  meta = llvm_meta // {
+    homepage = "https://compiler-rt.llvm.org/";
+    description = "Compiler runtime libraries";
+    longDescription = ''
+      The compiler-rt project provides highly tuned implementations of the
+      low-level code generator support routines like "__fixunsdfdi" and other
+      calls generated when a target doesn't have a short sequence of native
+      instructions to implement a core IR operation. It also provides
+      implementations of run-time libraries for dynamic testing tools such as
+      AddressSanitizer, ThreadSanitizer, MemorySanitizer, and DataFlowSanitizer.
+    '';
+    # "All of the code in the compiler-rt project is dual licensed under the MIT
+    # license and the UIUC License (a BSD-like license)":
+    license = with lib.licenses; [ mit ncsa ];
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+  };
 }

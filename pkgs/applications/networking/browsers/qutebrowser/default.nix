@@ -1,6 +1,6 @@
-{ lib, fetchurl, fetchzip, fetchpatch, python3
+{ stdenv, lib, fetchurl, fetchzip, python3
 , mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
-, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
+, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, pipewire_0_2
 , libxslt, gst_all_1 ? null
 , withPdfReader      ? true
 , withMediaPlayback  ? true
@@ -31,12 +31,12 @@ let
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "2.2.0";
+  version = "2.3.1";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256:0anxhrkxqb35mxr7jr820xcfw0v514s92wffsiqap2a2sqaj0pgs";
+    sha256 = "05n64mw9lzzxpxr7lhakbkm9ir3x8p0rwk6vbbg01aqg5iaanyj0";
   };
 
   # Needs tox
@@ -69,11 +69,6 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
 
   patches = [
     ./fix-restart.patch
-    (fetchpatch {
-      name = "add-qtwebengine-version-override.patch";
-      url = "https://github.com/qutebrowser/qutebrowser/commit/febb921040b6670d9b1694a6ce55ae39384d1306.patch";
-      sha256 = "15p11kk8via7c7m14jiqgzc63qwxxzayr2bkl93jd10l2gx7pk9v";
-    })
   ];
 
   dontWrapGApps = true;
@@ -117,12 +112,16 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     done
   '';
 
-  preFixup = ''
+  preFixup = let
+    libPath = lib.makeLibraryPath [ pipewire_0_2 ];
+  in
+    ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
       --add-flags '--backend ${backend}'
       --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
+      ${lib.optionalString (!stdenv.isDarwin && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
     )
   '';
 

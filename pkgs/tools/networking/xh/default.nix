@@ -1,27 +1,35 @@
 { stdenv, lib, openssl, pkg-config, rustPlatform, fetchFromGitHub, Security
-, libiconv }:
+, libiconv, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.9.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "cOlya3ngIoaoqzh0fIbNAjwO7S7wZCQk7WVqgZona8A=";
+    sha256 = "sha256-icJBQdFWdiHCYrZ7U90g6CdXdAkv3Y/WJu0IfZAdGv0=";
   };
 
-  cargoSha256 = "5B2fY+S9z6o+CHCIK93+Yj8dpaiQi4PSMQw1mfXg1NA=";
+  cargoSha256 = "sha256-htv5OQnat4Qi6A6lmVonuz+8/DWz8fOGYPbnCnlizBo=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = if stdenv.isDarwin then [ Security libiconv ] else [ openssl ];
 
   # Get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;
 
-  checkFlagsArray = [ "--skip=basic_options" ];
+  postInstall = ''
+    installShellCompletion --cmd xh \
+      --bash completions/xh.bash \
+      --fish completions/xh.fish \
+      --zsh completions/_xh
+
+    # https://github.com/ducaale/xh#xh-and-xhs
+    ln -s $out/bin/xh $out/bin/xhs
+  '';
 
   # Nix build happens in sandbox without internet connectivity
   # disable tests as some of them require internet due to nature of application
@@ -29,10 +37,11 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
   postInstallCheck = ''
     $out/bin/xh --help > /dev/null
+    $out/bin/xhs --help > /dev/null
   '';
 
   meta = with lib; {
-    description = "Yet another HTTPie clone in Rust";
+    description = "Friendly and fast tool for sending HTTP requests";
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

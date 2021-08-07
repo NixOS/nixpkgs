@@ -2,7 +2,7 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , setuptools
 , requests
 , lxml
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     snscrape --help
   '';
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ setuptools requests lxml beautifulsoup4 ];
 
   meta = with lib; {

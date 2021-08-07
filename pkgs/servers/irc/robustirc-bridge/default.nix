@@ -24,6 +24,5 @@ buildGoModule rec {
     homepage = "https://robustirc.net/";
     license = licenses.bsd3;
     maintainers = [ maintainers.hax404 ];
-    platforms = platforms.all;
   };
 }

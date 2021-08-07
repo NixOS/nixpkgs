@@ -1,4 +1,4 @@
-{ config, pkgs, lib, gnome3 }:
+{ config, pkgs, lib, gnome }:
 
 
 lib.makeScope pkgs.newScope (self: with self; {
@@ -23,9 +23,9 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-session wingpanel-indicator-sound
   ];
 
-  maintainers = with pkgs.lib.maintainers; [ worldofpeace ];
+  maintainers = lib.teams.pantheon.members;
 
-  mutter = pkgs.gnome3.mutter334;
+  mutter = pkgs.gnome.mutter334;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
@@ -48,6 +48,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-files = callPackage ./apps/elementary-files { };
 
   elementary-feedback = callPackage ./apps/elementary-feedback { };
+
+  elementary-mail = callPackage ./apps/elementary-mail { };
 
   elementary-music = callPackage ./apps/elementary-music { };
 
@@ -72,17 +74,17 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
   elementary-session-settings = callPackage ./desktop/elementary-session-settings {
-    inherit (gnome3) gnome-session gnome-keyring;
+    inherit (gnome) gnome-session gnome-keyring;
   };
 
   elementary-shortcut-overlay = callPackage ./desktop/elementary-shortcut-overlay { };
 
   extra-elementary-contracts = callPackage ./desktop/extra-elementary-contracts {
-    inherit (gnome3) file-roller gnome-bluetooth;
+    inherit (gnome) file-roller gnome-bluetooth;
   };
 
   gala = callPackage ./desktop/gala {
-    inherit (gnome3) gnome-desktop;
+    inherit (gnome) gnome-desktop;
   };
 
   wingpanel = callPackage ./desktop/wingpanel { };
@@ -109,7 +111,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # explained here -> https://github.com/elementary/greeter/issues/92#issuecomment-376215614
   # Take note of "I am holding off on "fixing" this bug for as long as possible."
   elementary-settings-daemon = callPackage ./services/elementary-settings-daemon {
-    inherit (gnome3) gnome-desktop;
+    inherit (gnome) gnome-desktop;
   };
 
   pantheon-agent-geoclue2 = callPackage ./services/pantheon-agent-geoclue2 { };
@@ -169,7 +171,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   switchboard-plug-onlineaccounts = callPackage ./apps/switchboard-plugs/onlineaccounts { };
 
   switchboard-plug-pantheon-shell = callPackage ./apps/switchboard-plugs/pantheon-shell {
-    inherit (gnome3) gnome-desktop;
+    inherit (gnome) gnome-desktop;
   };
 
   switchboard-plug-power = callPackage ./apps/switchboard-plugs/power { };

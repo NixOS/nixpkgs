@@ -126,6 +126,14 @@ in
       type = types.bool;
     };
 
+    environment.localBinInPath = mkOption {
+      description = ''
+        Add ~/.local/bin/ to $PATH
+      '';
+      default = false;
+      type = types.bool;
+    };
+
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
       defaultText = "\${config.system.build.binsh}/bin/sh";
@@ -197,6 +205,10 @@ in
         ${optionalString cfg.homeBinInPath ''
           # ~/bin if it exists overrides other bin directories.
           export PATH="$HOME/bin:$PATH"
+        ''}
+
+        ${optionalString cfg.localBinInPath ''
+          export PATH="$HOME/.local/bin:$PATH"
         ''}
       '';
 

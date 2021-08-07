@@ -8,7 +8,7 @@
 , gcr
 , gettext
 , glib
-, gnome3
+, gnome
 , gpgme
 , gtk3
 , gtksourceview3
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none"; # it is quite odd
     };

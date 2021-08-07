@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools_scm
+, setuptools-scm
 , sphinx
 , hypothesis
 , py
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "4fa46f7ff96dc244abfc437383d987404ae861df797e2fd5b190e233c302be09";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ sphinx ];
 
   checkInputs = [

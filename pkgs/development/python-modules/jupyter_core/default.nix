@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , ipython
 , traitlets
 , glibcLocales
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "jupyter_core";
   version = "4.7.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

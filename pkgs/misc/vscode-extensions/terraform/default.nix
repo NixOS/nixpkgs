@@ -3,19 +3,19 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "terraform";
     publisher = "hashicorp";
-    version = "2.10.0";
+    version = "2.14.0";
   };
 
   vsix = fetchurl {
     name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
     url = "https://github.com/hashicorp/vscode-terraform/releases/download/v${mktplcRef.version}/${mktplcRef.name}-${mktplcRef.version}.vsix";
-    sha256 = "1xhypy4vvrzxj3qwkzpfx8b48hddf72mxmh0hgz7iry6bch6sh5f";
+    sha256 = "1q43a28l6xfp3yw6wlr1kcidik0dbp8b7lg9vc83rhw4rjgvjsfm";
   };
 
   patches = [ ./fix-terraform-ls.patch ];
 
   postPatch = ''
-    substituteInPlace out/extension.js --replace TERRAFORM-LS-PATH ${terraform-ls}/bin/terraform-ls
+    substituteInPlace out/serverPath.js --replace TERRAFORM-LS-PATH ${terraform-ls}/bin/terraform-ls
   '';
 
   meta = with lib; {

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "bit";
-  version = "1.0.6";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "chriswalz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-juQAFVqs0d4EtoX24EyrlKd2qRRseP+jKfM0ymkD39E=";
+    sha256 = "sha256-18R0JGbG5QBDghF4SyhXaKe9UY5UzF7Ap0Y061Z1SZ8=";
   };
 
   vendorSha256 = "sha256-3Y/B14xX5jaoL44rq9+Nn4niGViLPPXBa8WcJgTvYTA=";

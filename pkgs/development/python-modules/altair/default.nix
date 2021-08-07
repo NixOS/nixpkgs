@@ -12,7 +12,7 @@
 , six
 , sphinx
 , toolz
-, typing
+, typing ? null
 , vega_datasets
 }:
 

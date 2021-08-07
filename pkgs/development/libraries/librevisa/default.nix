@@ -3,10 +3,11 @@
 # TODO: add VXI development files, for VXI-11 (TCPIP) support
 
 stdenv.mkDerivation rec {
-  name = "librevisa-0.0.20130412";
+  pname = "librevisa";
+  version = "0.0.20130412";
 
   src = fetchurl {
-    url = "http://www.librevisa.org/download/${name}.tar.gz";
+    url = "http://www.librevisa.org/download/${pname}-${version}.tar.gz";
     sha256 = "0bjzq23s3xzw0l9qx4l8achrx5id8xdd6r52lvdl4a28dxzbcfhq";
   };
 

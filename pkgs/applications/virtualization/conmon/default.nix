@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.0.27";
+  version = "2.0.29";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LMvhSoKd652XVPzuId8Ortf0f08FUP1zCn06PgtRwkA=";
+    sha256 = "sha256-Idt+bN9Lf6GEjdGC/sM9Ln1ohXhUy78CrmJxSDA2Y0o=";
   };
 
   nativeBuildInputs = [ pkg-config ];

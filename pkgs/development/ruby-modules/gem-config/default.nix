@@ -17,7 +17,7 @@
 # This seperates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python, stdenv, which
+{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, libmysqlclient, git, perl, pcre, gecode_3, curl
@@ -25,7 +25,7 @@
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libselinux, libsepol, shared-mime-info, libthai, libdatrie
+, bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools
 }@args:
 
@@ -187,6 +187,11 @@ in
     buildInputs = [ openssl ];
   };
 
+  exif = attrs: {
+    buildFlags = [ "--with-exif-dir=${libexif}" ];
+    buildInputs = [ libexif ];
+  };
+
   ffi = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libffi ];
@@ -323,7 +328,7 @@ in
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
-    buildInputs = [ which v8 python ];
+    buildInputs = [ which v8 python2 ];
     buildFlags = [ "--with-system-v8=true" ];
     dontBuild = false;
     postPatch = ''
@@ -528,6 +533,14 @@ in
       "--with-libvirt-include=${libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"
     ];
+    dontBuild = false;
+    postPatch = ''
+      # https://gitlab.com/libvirt/libvirt-ruby/-/commit/43543991832c9623c00395092bcfb9e178243ba4
+      substituteInPlace ext/libvirt/common.c \
+        --replace 'st.h' 'ruby/st.h'
+      substituteInPlace ext/libvirt/domain.c \
+        --replace 'st.h' 'ruby/st.h'
+    '';
   };
 
   ruby-lxc = attrs: {
@@ -547,13 +560,9 @@ in
       cd "$(cat $out/nix-support/gem-meta/install-path)"
 
       substituteInPlace lib/vips.rb \
-        --replace "glib-2.0" "${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
-
-      substituteInPlace lib/vips.rb \
-        --replace "gobject-2.0" "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
-
-      substituteInPlace lib/vips.rb \
-        --replace "vips_libname = 'vips'" "vips_libname = '${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        --replace 'library_name("vips", 42)' '"${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace 'library_name("glib-2.0", 0)' '"${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace 'library_name("gobject-2.0", 0)' '"${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"'
     '';
   };
 

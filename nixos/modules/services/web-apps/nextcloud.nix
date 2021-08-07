@@ -10,7 +10,7 @@ let
     extensions = { enabled, all }:
       (with all;
         enabled
-        ++ optional (!cfg.disableImagemagick) imagick
+        ++ optional cfg.enableImagemagick imagick
         # Optionally enabled depending on caching settings
         ++ optional cfg.caching.apcu apcu
         ++ optional cfg.caching.redis redis
@@ -63,6 +63,9 @@ in {
       Further details about this can be found in the `Nextcloud`-section of the NixOS-manual
       (which can be openend e.g. by running `nixos-help`).
     '')
+    (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
+      Use services.nextcloud.nginx.enableImagemagick instead.
+    '')
   ];
 
   options.services.nextcloud = {
@@ -89,7 +92,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud19" "nextcloud20" "nextcloud21" ];
+      relatedPackages = [ "nextcloud20" "nextcloud21" "nextcloud22" ];
     };
 
     maxUploadSize = mkOption {
@@ -303,16 +306,14 @@ in {
       };
     };
 
-    disableImagemagick = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to not load the ImageMagick module into PHP.
+    enableImagemagick = mkEnableOption ''
+        Whether to load the ImageMagick module into PHP.
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
         See https://github.com/nextcloud/server/issues/13099
-      '';
+    '' // {
+      default = true;
     };
 
     caching = {
@@ -384,7 +385,7 @@ in {
       ];
 
       warnings = let
-        latest = 21;
+        latest = 22;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -402,9 +403,9 @@ in {
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "19") (upgradeWarning 18 "20.09"))
         ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"))
-        ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"));
+        ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
+        ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -414,13 +415,13 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "20.09" then nextcloud18
           # 21.03 will not be an official release - it was instead 21.05.
           # This versionOlder statement remains set to 21.03 for backwards compatibility.
           # See https://github.com/NixOS/nixpkgs/pull/108899 and
           # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
           else if versionOlder stateVersion "21.03" then nextcloud19
-          else nextcloud21
+          else if versionOlder stateVersion "21.11" then nextcloud21
+          else nextcloud22
         );
     }
 
@@ -615,9 +616,7 @@ in {
 
       services.nginx.enable = mkDefault true;
 
-      services.nginx.virtualHosts.${cfg.hostName} = let
-        major = toInt (versions.major cfg.package.version);
-      in {
+      services.nginx.virtualHosts.${cfg.hostName} = {
         root = cfg.package;
         locations = {
           "= /robots.txt" = {
@@ -700,7 +699,6 @@ in {
         };
         extraConfig = ''
           index index.php index.html /index.php$request_uri;
-          expires 1m;
           add_header X-Content-Type-Options nosniff;
           add_header X-XSS-Protection "1; mode=block";
           add_header X-Robots-Tag none;

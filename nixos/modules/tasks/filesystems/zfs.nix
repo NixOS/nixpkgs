@@ -103,6 +103,7 @@ in
         readOnly = true;
         type = types.package;
         default = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
+        defaultText = "if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs";
         description = "Configured ZFS userland tools package.";
       };
 

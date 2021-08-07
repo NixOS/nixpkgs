@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "django-logentry-admin";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "yprez";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ji04qklzhjb7fx6644vzikjb2196rxyi8hrwf2knsz41ndvq1l9";
+    sha256 = "1bndxgvisw8kk52zfdifvly6dl4833wqilxf77pg473172yaf5gq";
   };
 
   checkInputs = [ pytest pytest-django ];

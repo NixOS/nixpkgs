@@ -28,10 +28,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 ];
+  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.llvm.dev ];
   buildInputs = with llvmPackages; [
-    # we need to link against libclang, so we need the unwrapped
-    llvm llvmPackages.clang-unwrapped
+    llvm llvmPackages.libclang
   ];
 
   postPatch = ''
@@ -66,6 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"

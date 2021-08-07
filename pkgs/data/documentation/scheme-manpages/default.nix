@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scheme-manpages-unstable";
-  version = "2021-01-17";
+  version = "2021-03-11";
 
   src = fetchFromGitHub {
     owner = "schemedoc";
     repo = "manpages";
-    rev = "817798ccca81424e797fda0e218d53a95f50ded7";
-    sha256 = "1amc0dmliz2a37pivlkx88jbc08ypfiwv3z477znx8khhc538glk";
+    rev = "d0163a4e29d29b2f0beb762be4095775134f5ef9";
+    sha256 = "0a8f7rq458c7985chwn1qb9yxcwyr0hl39r9vlvm5j687hy3igs2";
   };
 
   dontBuild = true;

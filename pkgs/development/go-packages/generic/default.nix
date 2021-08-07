@@ -7,6 +7,12 @@
 , preFixup ? ""
 , shellHook ? ""
 
+# Go linker flags, passed to go via -ldflags
+, ldflags ? []
+
+# Go tags, passed to go via -tag
+, tags ? []
+
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
@@ -148,7 +154,7 @@ let
         echo "$d" | grep -q "\(/_\|examples\|Godeps\)" && return 0
         [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v -p $NIX_BUILD_CORES $d 2>&1)"; then
+        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${tags:+-tags=${lib.concatStringsSep "," tags}} ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -207,7 +213,7 @@ let
       runHook preCheck
 
       for pkg in $(getGoDirs test); do
-        buildGoDir test "$pkg"
+        buildGoDir test $checkFlags "$pkg"
       done
 
       runHook postCheck

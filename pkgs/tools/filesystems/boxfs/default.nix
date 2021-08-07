@@ -37,7 +37,10 @@ in stdenv.mkDerivation {
   buildInputs = [ curl fuse libxml2 ];
   nativeBuildInputs = [ pkg-config ];
 
-  buildFlags = [ "static" ];
+  buildFlags = [
+    "static"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ] ++ lib.optional stdenv.isDarwin "CFLAGS=-D_BSD_SOURCE";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -55,6 +58,6 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://github.com/drotiro/boxfs2";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

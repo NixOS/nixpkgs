@@ -39,9 +39,9 @@ stdenv.mkDerivation {
 }
 ```
 
-This attribute ensures that the `bin` subdirectories of these packages appear in the `PATH` environment variable during the build, that their `include` subdirectories are searched by the C compiler, and so on. (See <xref linkend="ssec-setup-hooks" /> for details.)
+This attribute ensures that the `bin` subdirectories of these packages appear in the `PATH` environment variable during the build, that their `include` subdirectories are searched by the C compiler, and so on. (See [](#ssec-setup-hooks) for details.)
 
-Often it is necessary to override or modify some aspect of the build. To make this easier, the standard environment breaks the package build into a number of *phases*, all of which can be overridden or modified individually: unpacking the sources, applying patches, configuring, building, and installing. (There are some others; see <xref linkend="sec-stdenv-phases" />.) For instance, a package that doesn’t supply a makefile but instead has to be compiled "manually" could be handled like this:
+Often it is necessary to override or modify some aspect of the build. To make this easier, the standard environment breaks the package build into a number of *phases*, all of which can be overridden or modified individually: unpacking the sources, applying patches, configuring, building, and installing. (There are some others; see [](#sec-stdenv-phases).) For instance, a package that doesn’t supply a makefile but instead has to be compiled "manually" could be handled like this:
 
 ```nix
 stdenv.mkDerivation {
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
 (Note the use of `''`-style string literals, which are very convenient for large multi-line script fragments because they don’t need escaping of `"` and `\`, and because indentation is intelligently removed.)
 
-There are many other attributes to customise the build. These are listed in <xref linkend="ssec-stdenv-attributes" />.
+There are many other attributes to customise the build. These are listed in [](#ssec-stdenv-attributes).
 
 While the standard environment provides a generic builder, you can still supply your own build script:
 
@@ -116,9 +116,9 @@ On Linux, `stdenv` also includes the `patchelf` utility.
 
 ## Specifying dependencies {#ssec-stdenv-dependencies}
 
-As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to, between them, include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See <xref linkend="ssec-setup-hooks" /> for details.
+As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to, between them, include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See [](#ssec-setup-hooks) for details.
 
-Dependencies can be broken down along three axes: their host and target platforms relative to the new derivation’s, and whether they are propagated. The platform distinctions are motivated by cross compilation; see <xref linkend="chap-cross" /> for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether or not the dependency is needed at run-time or build-time, a concept that makes perfect sense outside of cross compilation. By default, the run-time/build-time distinction is just a hint for mental clarity, but with `strictDeps` set it is mostly enforced even in the native case.
+Dependencies can be broken down along three axes: their host and target platforms relative to the new derivation’s, and whether they are propagated. The platform distinctions are motivated by cross compilation; see [](#chap-cross) for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether or not the dependency is needed at run-time or build-time, a concept that makes perfect sense outside of cross compilation. By default, the run-time/build-time distinction is just a hint for mental clarity, but with `strictDeps` set it is mostly enforced even in the native case.
 
 The extension of `PATH` with dependencies, alluded to above, proceeds according to the relative platforms alone. The process is carried out only for dependencies whose host platform matches the new derivation’s build platform i.e. dependencies which run on the platform where the new derivation will be built. [^footnote-stdenv-native-dependencies-in-path] For each dependency \<dep\> of those dependencies, `dep/bin`, if present, is added to the `PATH` environment variable.
 
@@ -175,7 +175,8 @@ Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In
 
 Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the dependending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforagable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
 
-### Variables specifying dependencies
+### Variables specifying dependencies {#variables-specifying-dependencies}
+
 #### `depsBuildBuild` {#var-stdenv-depsBuildBuild}
 
 A list of dependencies whose host and target platforms are the new derivation’s build platform. This means a `-1` host and `-1` target offset from the new derivation’s platforms. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc`, the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
@@ -236,13 +237,13 @@ The propagated equivalent of `depsTargetTarget`. This is prefixed for the same r
 
 ## Attributes {#ssec-stdenv-attributes}
 
-### Variables affecting `stdenv` initialisation
+### Variables affecting `stdenv` initialisation {#variables-affecting-stdenv-initialisation}
 
 #### `NIX_DEBUG` {#var-stdenv-NIX_DEBUG}
 
 A natural number indicating how much information to log. If set to 1 or higher, `stdenv` will print moderate debugging information during the build. In particular, the `gcc` and `ld` wrapper scripts will print out the complete command line passed to the wrapped tools. If set to 6 or higher, the `stdenv` setup script will be run with `set -x` tracing. If set to 7 or higher, the `gcc` and `ld` wrapper scripts will also be run with `set -x` tracing.
 
-### Attributes affecting build properties
+### Attributes affecting build properties {#attributes-affecting-build-properties}
 
 #### `enableParallelBuilding` {#var-stdenv-enableParallelBuilding}
 
@@ -250,7 +251,7 @@ If set to `true`, `stdenv` will pass specific flags to `make` and other build to
 
 Unless set to `false`, some build systems with good support for parallel building including `cmake`, `meson`, and `qmake` will set it to `true`.
 
-### Special variables
+### Special variables {#special-variables}
 
 #### `passthru` {#var-stdenv-passthru}
 
@@ -298,7 +299,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
 
 The script will be run with `UPDATE_NIX_ATTR_PATH` environment variable set to the attribute path it is supposed to update.
 
-::: note
+::: {.note}
 The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running `git commit` or any other commands that cannot handle that.
 :::
 
@@ -314,7 +315,7 @@ Each phase can be overridden in its entirety either by setting the environment v
 
 There are a number of variables that control what phases are executed and in what order:
 
-#### Variables affecting phase control
+#### Variables affecting phase control {#variables-affecting-phase-control}
 
 ##### `phases` {#var-stdenv-phases}
 
@@ -354,21 +355,22 @@ Additional phases executed after any of the default phases.
 
 The unpack phase is responsible for unpacking the source code of the package. The default implementation of `unpackPhase` unpacks the source files listed in the `src` environment variable to the current directory. It supports the following files by default:
 
-#### Tar files
+#### Tar files {#tar-files}
 
 These can optionally be compressed using `gzip` (`.tar.gz`, `.tgz` or `.tar.Z`), `bzip2` (`.tar.bz2`, `.tbz2` or `.tbz`) or `xz` (`.tar.xz`, `.tar.lzma` or `.txz`).
 
-#### Zip files
+#### Zip files {#zip-files}
 
 Zip files are unpacked using `unzip`. However, `unzip` is not in the standard environment, so you should add it to `nativeBuildInputs` yourself.
 
-#### Directories in the Nix store
+#### Directories in the Nix store {#directories-in-the-nix-store}
 
 These are simply copied to the current directory. The hash part of the file name is stripped, e.g. `/nix/store/1wydxgby13cz...-my-sources` would be copied to `my-sources`.
 
 Additional file types can be supported by setting the `unpackCmd` variable (see below).
 
-#### Variables controlling the unpack phase
+#### Variables controlling the unpack phase {#variables-controlling-the-unpack-phase}
+
 ##### `srcs` / `src` {#var-stdenv-src}
 
 The list of source files or directories to be unpacked or copied. One of these must be set.
@@ -405,7 +407,7 @@ The unpack phase evaluates the string `$unpackCmd` for any unrecognised file. Th
 
 The patch phase applies the list of patches defined in the `patches` variable.
 
-#### Variables controlling the patch phase
+#### Variables controlling the patch phase {#variables-controlling-the-patch-phase}
 
 ##### `dontPatch` {#var-stdenv-dontPatch}
 
@@ -431,7 +433,7 @@ Hook executed at the end of the patch phase.
 
 The configure phase prepares the source tree for building. The default `configurePhase` runs `./configure` (typically an Autoconf-generated script) if it exists.
 
-#### Variables controlling the configure phase
+#### Variables controlling the configure phase {#variables-controlling-the-configure-phase}
 
 ##### `configureScript` {#var-stdenv-configureScript}
 
@@ -461,6 +463,12 @@ The prefix under which the package must be installed, passed via the `--prefix` 
 
 The key to use when specifying the prefix. By default, this is set to `--prefix=` as that is used by the majority of packages.
 
+##### `dontAddStaticConfigureFlags`
+
+By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
+
+If this is undesirable, set this variable to true.
+
 ##### `dontAddDisableDepTrack` {#var-stdenv-dontAddDisableDepTrack}
 
 By default, the flag `--disable-dependency-tracking` is added to the configure flags to speed up Automake-based builds. If this is undesirable, set this variable to true.
@@ -473,7 +481,7 @@ By default, the configure phase applies some special hackery to all files called
 
 By default, when the configure script has `--enable-static`, the option `--disable-static` is added to the configure flags.
 
-If this is undesirable, set this variable to true.
+If this is undesirable, set this variable to true.  It is automatically set to true when building statically, for example through `pkgsStatic`.
 
 ##### `configurePlatforms` {#var-stdenv-configurePlatforms}
 
@@ -491,7 +499,7 @@ Hook executed at the end of the configure phase.
 
 The build phase is responsible for actually building the package (e.g. compiling it). The default `buildPhase` simply calls `make` if a file named `Makefile`, `makefile` or `GNUmakefile` exists in the current directory (or the `makefile` is explicitly set); otherwise it does nothing.
 
-#### Variables controlling the build phase
+#### Variables controlling the build phase {#variables-controlling-the-build-phase}
 
 ##### `dontBuild` {#var-stdenv-dontBuild}
 
@@ -509,7 +517,7 @@ A list of strings passed as additional flags to `make`. These flags are also use
 makeFlags = [ "PREFIX=$(out)" ];
 ```
 
-::: note
+::: {.note}
 The flags are quoted in bash, but environment variables can be specified by using the make syntax.
 :::
 
@@ -545,7 +553,7 @@ Before and after running `make`, the hooks `preBuild` and `postBuild` are called
 
 The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make check`, but only if the `doCheck` variable is enabled.
 
-#### Variables controlling the check phase
+#### Variables controlling the check phase {#variables-controlling-the-check-phase}
 
 ##### `doCheck` {#var-stdenv-doCheck}
 
@@ -557,7 +565,7 @@ doCheck = true;
 
 in the derivation to enable checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doCheck` is set, as the newly-built program won’t run on the platform used to build it.
 
-##### `makeFlags` / `makeFlagsArray` / `makefile`
+##### `makeFlags` / `makeFlagsArray` / `makefile` {#makeflags-makeflagsarray-makefile}
 
 See the [build phase](#var-stdenv-makeFlags) for details.
 
@@ -585,13 +593,13 @@ Hook executed at the end of the check phase.
 
 The install phase is responsible for installing the package in the Nix store under `out`. The default `installPhase` creates the directory `$out` and calls `make install`.
 
-#### Variables controlling the install phase
+#### Variables controlling the install phase {#variables-controlling-the-install-phase}
 
 ##### `dontInstall` {#var-stdenv-dontInstall}
 
 Set to true to skip the install phase.
 
-##### `makeFlags` / `makeFlagsArray` / `makefile`
+##### `makeFlags` / `makeFlagsArray` / `makefile` {#makeflags-makeflagsarray-makefile-1}
 
 See the [build phase](#var-stdenv-makeFlags) for details.
 
@@ -624,7 +632,7 @@ The fixup phase performs some (Nix-specific) post-processing actions on the file
 - On Linux, it applies the `patchelf` command to ELF executables and libraries to remove unused directories from the `RPATH` in order to prevent unnecessary runtime dependencies.
 - It rewrites the interpreter paths of shell scripts to paths found in `PATH`. E.g., `/usr/bin/perl` will be rewritten to `/nix/store/some-perl/bin/perl` found in `PATH`.
 
-#### Variables controlling the fixup phase
+#### Variables controlling the fixup phase {#variables-controlling-the-fixup-phase}
 
 ##### `dontFixup` {#var-stdenv-dontFixup}
 
@@ -706,7 +714,7 @@ to `~/.gdbinit`. GDB will then be able to find debug information installed via `
 
 The installCheck phase checks whether the package was installed correctly by running its test suite against the installed directories. The default `installCheck` calls `make installcheck`.
 
-#### Variables controlling the installCheck phase
+#### Variables controlling the installCheck phase {#variables-controlling-the-installcheck-phase}
 
 ##### `doInstallCheck` {#var-stdenv-doInstallCheck}
 
@@ -742,7 +750,7 @@ Hook executed at the end of the installCheck phase.
 
 The distribution phase is intended to produce a source distribution of the package. The default `distPhase` first calls `make dist`, then it copies the resulting source tarballs to `$out/tarballs/`. This phase is only executed if the attribute `doDist` is set.
 
-#### Variables controlling the distribution phase
+#### Variables controlling the distribution phase {#variables-controlling-the-distribution-phase}
 
 ##### `distTarget` {#var-stdenv-distTarget}
 
@@ -879,7 +887,7 @@ The most typical use of the setup hook is actually to add other hooks which are 
 
 Packages adding a hook should not hard code a specific hook, but rather choose a variable *relative* to how they are included. Returning to the C compiler wrapper example, if the wrapper itself is an `n` dependency, then it only wants to accumulate flags from `n + 1` dependencies, as only those ones match the compiler’s target platform. The `hostOffset` variable is defined with the current dependency’s host offset `targetOffset` with its target offset, before its setup hook is sourced. Additionally, since most environment hooks don’t care about the target platform, that means the setup hook can append to the right bash array by doing something like
 
-```{.bash}
+```bash
 addEnvHooks "$hostOffset" myBashFunction
 ```
 
@@ -887,47 +895,47 @@ The *existence* of setups hooks has long been documented and packages inside Nix
 
 First, let’s cover some setup hooks that are part of Nixpkgs default stdenv. This means that they are run for every package built using `stdenv.mkDerivation`. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
 
-### `move-docs.sh`
+### `move-docs.sh` {#move-docs.sh}
 
 This setup hook moves any installed documentation to the `/share` subdirectory directory. This includes the man, doc and info directories. This is needed for legacy programs that do not know how to use the `share` subdirectory.
 
-### `compress-man-pages.sh`
+### `compress-man-pages.sh` {#compress-man-pages.sh}
 
 This setup hook compresses any man pages that have been installed. The compression is done using the gzip program. This helps to reduce the installed size of packages.
 
-### `strip.sh`
+### `strip.sh` {#strip.sh}
 
 This runs the strip command on installed binaries and libraries. This removes unnecessary information like debug symbols when they are not needed. This also helps to reduce the installed size of packages.
 
-### `patch-shebangs.sh`
+### `patch-shebangs.sh` {#patch-shebangs.sh}
 
 This setup hook patches installed scripts to use the full path to the shebang interpreter. A shebang interpreter is the first commented line of a script telling the operating system which program will run the script (e.g `#!/bin/bash`). In Nix, we want an exact path to that interpreter to be used. This often replaces `/bin/sh` with a path in the Nix store.
 
-### `audit-tmpdir.sh`
+### `audit-tmpdir.sh` {#audit-tmpdir.sh}
 
 This verifies that no references are left from the install binaries to the directory used to build those binaries. This ensures that the binaries do not need things outside the Nix store. This is currently supported in Linux only.
 
-### `multiple-outputs.sh`
+### `multiple-outputs.sh` {#multiple-outputs.sh}
 
-This setup hook adds configure flags that tell packages to install files into any one of the proper outputs listed in `outputs`. This behavior can be turned off by setting `setOutputFlags` to false in the derivation environment. See <xref linkend="chap-multiple-output" /> for more information.
+This setup hook adds configure flags that tell packages to install files into any one of the proper outputs listed in `outputs`. This behavior can be turned off by setting `setOutputFlags` to false in the derivation environment. See [](#chap-multiple-output) for more information.
 
-### `move-sbin.sh`
+### `move-sbin.sh` {#move-sbin.sh}
 
 This setup hook moves any binaries installed in the `sbin/` subdirectory into `bin/`. In addition, a link is provided from `sbin/` to `bin/` for compatibility.
 
-### `move-lib64.sh`
+### `move-lib64.sh` {#move-lib64.sh}
 
 This setup hook moves any libraries installed in the `lib64/` subdirectory into `lib/`. In addition, a link is provided from `lib64/` to `lib/` for compatibility.
 
-### `move-systemd-user-units.sh`
+### `move-systemd-user-units.sh` {#move-systemd-user-units.sh}
 
 This setup hook moves any systemd user units installed in the `lib/` subdirectory into `share/`. In addition, a link is provided from `share/` to `lib/` for compatibility. This is needed for systemd to find user services when installed into the user profile.
 
-### `set-source-date-epoch-to-latest.sh`
+### `set-source-date-epoch-to-latest.sh` {#set-source-date-epoch-to-latest.sh}
 
 This sets `SOURCE_DATE_EPOCH` to the modification time of the most recent file.
 
-### Bintools Wrapper
+### Bintools Wrapper {#bintools-wrapper}
 
 The Bintools Wrapper wraps the binary utilities for a bunch of miscellaneous purposes. These are GNU Binutils when targetting Linux, and a mix of cctools and GNU binutils for Darwin. \[The “Bintools” name is supposed to be a compromise between “Binutils” and “cctools” not denoting any specific implementation.\] Specifically, the underlying bintools package, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the Bintools Wrapper. Packages typically depend on CC Wrapper, which in turn (at run time) depends on the Bintools Wrapper.
 
@@ -937,7 +945,7 @@ A final task of the setup hook is defining a number of standard environment vari
 
 A problem with this final task is that the Bintools Wrapper is honest and defines `LD` as `ld`. Most packages, however, firstly use the C compiler for linking, secondly use `LD` anyways, defining it as the C compiler, and thirdly, only so define `LD` when it is undefined as a fallback. This triple-threat means Bintools Wrapper will break those packages, as LD is already defined as the actual linker which the package won’t override yet doesn’t want to use. The workaround is to define, just for the problematic package, `LD` as the C compiler. A good way to do this would be `preConfigure = "LD=$CC"`.
 
-### CC Wrapper
+### CC Wrapper {#cc-wrapper}
 
 The CC Wrapper wraps a C toolchain for a bunch of miscellaneous purposes. Specifically, a C compiler (GCC or Clang), wrapped binary tools, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the CC Wrapper. Packages typically depend on the CC Wrapper, which in turn (at run-time) depends on the Bintools Wrapper.
 
@@ -971,11 +979,11 @@ The `autoreconfHook` derivation adds `autoreconfPhase`, which runs autoreconf, l
 
 Adds every file named `catalog.xml` found under the `xml/dtd` and `xml/xsl` subdirectories of each build input to the `XML_CATALOG_FILES` environment variable.
 
-### teTeX / TeX Live
+### teTeX / TeX Live {#tetex-tex-live}
 
 Adds the `share/texmf-nix` subdirectory of each build input to the `TEXINPUTS` environment variable.
 
-### Qt 4
+### Qt 4 {#qt-4}
 
 Sets the `QTDIR` environment variable to Qt’s path.
 
@@ -983,13 +991,13 @@ Sets the `QTDIR` environment variable to Qt’s path.
 
 Exports `GDK_PIXBUF_MODULE_FILE` environment variable to the builder. Add librsvg package to `buildInputs` to get svg support. See also the [setup hook description in GNOME platform docs](#ssec-gnome-hooks-gdk-pixbuf).
 
-### GHC
+### GHC {#ghc}
 
 Creates a temporary package database and registers every Haskell build input in it (TODO: how?).
 
-### GNOME platform
+### GNOME platform {#gnome-platform}
 
-Hooks related to GNOME platform and related libraries like GLib, GTK and GStreamer are described in <xref linkend="sec-language-gnome" />.
+Hooks related to GNOME platform and related libraries like GLib, GTK and GStreamer are described in [](#sec-language-gnome).
 
 ### autoPatchelfHook {#setup-hook-autopatchelfhook}
 
@@ -1003,7 +1011,7 @@ By default `autoPatchelf` will fail as soon as any ELF file requires a dependenc
 
 The `autoPatchelf` command also recognizes a `--no-recurse` command line flag, which prevents it from recursing into subdirectories.
 
-### breakpointHook
+### breakpointHook {#breakpointhook}
 
 This hook will make a build pause instead of stopping when a failure happens. It prevents nix from cleaning up the build environment immediately and allows the user to attach to a build environment using the `cntr` command. Upon build error it will print instructions on how to use `cntr`, which can be used to enter the environment for debugging. Installing cntr and running the command will provide shell access to the build sandbox of failed build. At `/var/lib/cntr` the sandboxed filesystem is mounted. All commands and files of the system are still accessible within the shell. To execute commands from the sandbox use the cntr exec subcommand. `cntr` is only supported on Linux-based platforms. To use it first add `cntr` to your `environment.systemPackages` on NixOS or alternatively to the root user on non-NixOS systems. Then in the package that is supposed to be inspected, add `breakpointHook` to `nativeBuildInputs`.
 
@@ -1013,15 +1021,15 @@ nativeBuildInputs = [ breakpointHook ];
 
 When a build failure happens there will be an instruction printed that shows how to attach with `cntr` to the build sandbox.
 
-::: note
-::: title
+::: {.note}
+::: {.title}
 Caution with remote builds
 :::
 
 This won’t work with remote builds as the build environment is on a different machine and can’t be accessed by `cntr`. Remote builds can be turned off by setting `--option builders ''` for `nix-build` or `--builders ''` for `nix build`.
 :::
 
-### installShellFiles
+### installShellFiles {#installshellfiles}
 
 This hook helps with installing manpages and shell completion files. It exposes 2 shell functions `installManPage` and `installShellCompletion` that can be used from your `postInstall` hook.
 
@@ -1047,61 +1055,61 @@ postInstall = ''
 '';
 ```
 
-### libiconv, libintl
+### libiconv, libintl {#libiconv-libintl}
 
 A few libraries automatically add to `NIX_LDFLAGS` their library, making their symbols automatically available to the linker. This includes libiconv and libintl (gettext). This is done to provide compatibility between GNU Linux, where libiconv and libintl are bundled in, and other systems where that might not be the case. Sometimes, this behavior is not desired. To disable this behavior, set `dontAddExtraLibs`.
 
-### validatePkgConfig
+### validatePkgConfig {#validatepkgconfig}
 
 The `validatePkgConfig` hook validates all pkg-config (`.pc`) files in a package. This helps catching some common errors in pkg-config files, such as undefined variables.
 
-### cmake
+### cmake {#cmake}
 
 Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake. In addition, dependencies are added automatically to CMAKE_PREFIX_PATH so that packages are correctly detected by CMake. Some additional flags are passed in to give similar behavior to configure-based packages. You can disable this hook’s behavior by setting configurePhase to a custom value, or by setting dontUseCmakeConfigure. cmakeFlags controls flags passed only to CMake. By default, parallel building is enabled as CMake supports parallel building almost everywhere. When Ninja is also in use, CMake will detect that and use the ninja generator.
 
-### xcbuildHook
+### xcbuildHook {#xcbuildhook}
 
 Overrides the build and install phases to run the "xcbuild" command. This hook is needed when a project only comes with build files for the XCode build system. You can disable this behavior by setting buildPhase and configurePhase to a custom value. xcbuildFlags controls flags passed only to xcbuild.
 
-### Meson
+### Meson {#meson}
 
 Overrides the configure phase to run meson to generate Ninja files. To run these files, you should accompany Meson with ninja. By default, `enableParallelBuilding` is enabled as Meson supports parallel building almost everywhere.
 
-#### Variables controlling Meson
+#### Variables controlling Meson {#variables-controlling-meson}
 
-##### `mesonFlags`
+##### `mesonFlags` {#mesonflags}
 
 Controls the flags passed to meson.
 
-##### `mesonBuildType`
+##### `mesonBuildType` {#mesonbuildtype}
 
 Which [`--buildtype`](https://mesonbuild.com/Builtin-options.html#core-options) to pass to Meson. We default to `plain`.
 
-##### `mesonAutoFeatures`
+##### `mesonAutoFeatures` {#mesonautofeatures}
 
 What value to set [`-Dauto_features=`](https://mesonbuild.com/Builtin-options.html#core-options) to. We default to `enabled`.
 
-##### `mesonWrapMode`
+##### `mesonWrapMode` {#mesonwrapmode}
 
 What value to set [`-Dwrap_mode=`](https://mesonbuild.com/Builtin-options.html#core-options) to. We default to `nodownload` as we disallow network access.
 
-##### `dontUseMesonConfigure`
+##### `dontUseMesonConfigure` {#dontusemesonconfigure}
 
 Disables using Meson’s `configurePhase`.
 
-### ninja
+### ninja {#ninja}
 
 Overrides the build, install, and check phase to run ninja instead of make. You can disable this behavior with the `dontUseNinjaBuild`, `dontUseNinjaInstall`, and `dontUseNinjaCheck`, respectively. Parallel building is enabled by default in Ninja.
 
-### unzip
+### unzip {#unzip}
 
 This setup hook will allow you to unzip .zip files specified in `$src`. There are many similar packages like `unrar`, `undmg`, etc.
 
-### wafHook
+### wafHook {#wafhook}
 
 Overrides the configure, build, and install phases. This will run the “waf” script used by many projects. If `wafPath` (default `./waf`) doesn’t exist, it will copy the version of waf available in Nixpkgs. `wafFlags` can be used to pass flags to the waf script.
 
-### scons
+### scons {#scons}
 
 Overrides the build, install, and check phases. This uses the scons build system as a replacement for make. scons does not provide a configure phase, so everything is managed at build and install time.
 
@@ -1117,9 +1125,13 @@ There are flags available to harden packages at compile or link-time. These can 
 
 Both parameters take a list of flags as strings. The special `"all"` flag can be passed to `hardeningDisable` to turn off all hardening. These flags can also be used as environment variables for testing or development purposes.
 
+For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/title/Security).
+
+### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
+
 The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to package is incompatible.
 
-### `format`
+#### `format` {#format}
 
 Adds the `-Wformat -Wformat-security -Werror=format-security` compiler options. At present, this warns about calls to `printf` and `scanf` functions where the format string is not a string literal and there are no format arguments, as in `printf(foo);`. This may be a security hole if the format string came from untrusted input and contains `%n`.
 
@@ -1132,7 +1144,7 @@ This needs to be turned off or fixed for errors similar to:
 cc1plus: some warnings being treated as errors
 ```
 
-### `stackprotector`
+#### `stackprotector` {#stackprotector}
 
 Adds the `-fstack-protector-strong --param ssp-buffer-size=4` compiler options. This adds safety checks against stack overwrites rendering many potential code injection attacks into aborting situations. In the best case this turns code injection vulnerabilities into denial of service or into non-issues (depending on the application).
 
@@ -1143,7 +1155,7 @@ bin/blib.a(bios_console.o): In function `bios_handle_cup':
 /tmp/nix-build-ipxe-20141124-5cbdc41.drv-0/ipxe-5cbdc41/src/arch/i386/firmware/pcbios/bios_console.c:86: undefined reference to `__stack_chk_fail'
 ```
 
-### `fortify`
+#### `fortify` {#fortify}
 
 Adds the `-O2 -D_FORTIFY_SOURCE=2` compiler options. During code generation the compiler knows a great deal of information about buffer sizes (where possible), and attempts to replace insecure unlimited length buffer function calls with length-limited ones. This is especially useful for old, crufty code. Additionally, format strings in writable memory that contain `%n` are blocked. If an application depends on such a format string, it will need to be worked around.
 
@@ -1164,7 +1176,7 @@ installwatch.c:3751:5: error: conflicting types for '__open_2'
 fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
 ```
 
-### `pic`
+#### `pic` {#pic}
 
 Adds the `-fPIC` compiler options. This options adds support for position independent code in shared libraries and thus making ASLR possible.
 
@@ -1177,19 +1189,19 @@ ccbLfRgg.s: Assembler messages:
 ccbLfRgg.s:33: Error: missing or invalid displacement expression `private_key_len@GOTOFF'
 ```
 
-### `strictoverflow`
+#### `strictoverflow` {#strictoverflow}
 
 Signed integer overflow is undefined behaviour according to the C standard. If it happens, it is an error in the program as it should check for overflow before it can happen, not afterwards. GCC provides built-in functions to perform arithmetic with overflow checking, which are correct and faster than any custom implementation. As a workaround, the option `-fno-strict-overflow` makes gcc behave as if signed integer overflows were defined.
 
 This flag should not trigger any build or runtime errors.
 
-### `relro`
+#### `relro` {#relro}
 
 Adds the `-z relro` linker option. During program load, several ELF memory sections need to be written to by the linker, but can be turned read-only before turning over control to the program. This prevents some GOT (and .dtors) overwrite attacks, but at least the part of the GOT used by the dynamic linker (.got.plt) is still vulnerable.
 
 This flag can break dynamic shared object loading. For instance, the module systems of Xorg and OpenCV are incompatible with this flag. In almost all cases the `bindnow` flag must also be disabled and incompatible programs typically fail with similar errors at runtime.
 
-### `bindnow`
+#### `bindnow` {#bindnow}
 
 Adds the `-z bindnow` linker option. During program load, all dynamic symbols are resolved, allowing for the complete GOT to be marked read-only (due to `relro`). This prevents GOT overwrite attacks. For very large applications, this can incur some performance loss during initial load while symbols are resolved, but this shouldn’t be an issue for daemons.
 
@@ -1199,13 +1211,18 @@ This flag can break dynamic shared object loading. For instance, the module syst
 intel_drv.so: undefined symbol: vgaHWFreeHWRec
 ```
 
+### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
+
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
 
-### `pie`
+#### `pie` {#pie}
+
+This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for `musl` based package builds.
 
 Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Executables are needed to take advantage of Address Space Layout Randomization, supported by modern kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this with the `pic` flag, so they gain ASLR automatically, but binary .text regions need to be build with `pie` to gain ASLR. When this happens, ROP attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
 
-For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/index.php/DeveloperWiki:Security).
+Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
+If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
 [^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
 [^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.

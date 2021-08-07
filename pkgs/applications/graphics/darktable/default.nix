@@ -2,17 +2,17 @@
 , cairo, cmake, ninja, curl, perl, llvm, desktop-file-utils, exiv2, glib
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkg-config, sqlite, libxslt
-, openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
-, ocl-icd, pcre, gtk-mac-integration, isocodes, llvmPackages
+, openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome
+, ocl-icd, pcre, gtk-mac-integration, isocodes, llvmPackages, gmic, libavif, icu
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.4.1";
+  version = "3.6.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "sha256-f8P4UdqbzXxQU+zQnyGqPrYQO+mKbFj1IBC28iF0lB4=";
+    sha256 = "sha256:0f8aqwkgw4gs97b5i4ygiqk5zilwq7ax7zwdd31r72zk98cd1g46";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libexif
     libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
     libsoup graphicsmagick json-glib openjpeg lua pugixml
-    libwebp libsecret gnome3.adwaita-icon-theme osm-gps-map pcre isocodes
+    libwebp libsecret gnome.adwaita-icon-theme osm-gps-map pcre isocodes gmic libavif icu
   ] ++ lib.optionals stdenv.isLinux [
     colord colord-gtk libX11 ocl-icd
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration

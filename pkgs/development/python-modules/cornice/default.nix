@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "cornice";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c81cd9429759c0de475f580bbff92d5646cfc5f43e8aa24492037e2e90677ee6";
+    sha256 = "50f86a5e9fb73d664d20e8dd0bdc3ce419145eb17813591a5a40e8a9d567b9c5";
   };
 
   propagatedBuildInputs = [ pyramid simplejson six venusian ];

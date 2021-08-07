@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  # The conftest hangs on Hydra runners, because they are not logged in.
+  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+
   meta = with lib; {
     description = "Jump and run game, reimplementation of Tower Toppler/Nebulus";
     homepage = "http://toppler.sourceforge.net/";

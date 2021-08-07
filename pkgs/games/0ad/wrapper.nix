@@ -6,7 +6,7 @@ buildEnv {
   name = "zeroad-${zeroad-unwrapped.version}";
   inherit (zeroad-unwrapped) meta;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   paths = [ zeroad-unwrapped zeroad-data ];
 

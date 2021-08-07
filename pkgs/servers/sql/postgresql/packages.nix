@@ -6,12 +6,7 @@ self: super: {
 
     periods = super.callPackage ./ext/periods.nix { };
 
-    postgis = super.callPackage ./ext/postgis.nix {
-        gdal = self.gdal.override {
-            postgresql = self.postgresql;
-            poppler = self.poppler_0_61;
-        };
-    };
+    postgis = super.callPackage ./ext/postgis.nix { };
 
     pg_auto_failover = super.callPackage ./ext/pg_auto_failover.nix { };
 
@@ -19,11 +14,15 @@ self: super: {
 
     pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
 
+    pg_rational = super.callPackage ./ext/pg_rational.nix { };
+
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
 
     pg_similarity = super.callPackage ./ext/pg_similarity.nix { };
 
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
+
+    pgvector = super.callPackage ./ext/pgvector.nix { };
 
     plpgsql_check = super.callPackage ./ext/plpgsql_check.nix { };
 

@@ -36,11 +36,11 @@
 
 "6.topic: GNOME":
   - doc/languages-frameworks/gnome.section.md
-  - nixos/modules/services/desktops/gnome3/**/*
-  - nixos/modules/services/x11/desktop-managers/gnome3.nix
-  - nixos/tests/gnome3-xorg.nix
-  - nixos/tests/gnome3.nix
-  - pkgs/desktops/gnome-3/**/*
+  - nixos/modules/services/desktops/gnome/**/*
+  - nixos/modules/services/x11/desktop-managers/gnome.nix
+  - nixos/tests/gnome-xorg.nix
+  - nixos/tests/gnome.nix
+  - pkgs/desktops/gnome/**/*
 
 "6.topic: golang":
   - doc/languages-frameworks/go.section.md
@@ -50,10 +50,13 @@
 
 "6.topic: haskell":
   - doc/languages-frameworks/haskell.section.md
+  - maintainers/scripts/haskell/**/*
   - pkgs/development/compilers/ghc/**/*
   - pkgs/development/haskell-modules/**/*
   - pkgs/development/tools/haskell/**/*
+  - pkgs/test/haskell/**/*
   - pkgs/top-level/haskell-packages.nix
+  - pkgs/top-level/release-haskell.nix
 
 "6.topic: kernel":
   - pkgs/build-support/kernel/**/*
@@ -67,6 +70,7 @@
 
 "6.topic: nixos":
   - nixos/**/*
+  - pkgs/os-specific/linux/nixos-rebuild/**/*
 
 "6.topic: ocaml":
   - doc/languages-frameworks/ocaml.section.md
