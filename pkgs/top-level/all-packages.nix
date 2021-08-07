@@ -25519,6 +25519,8 @@ in
 
   kubernetes-helmPlugins = dontRecurseIntoAttrs (callPackage ../applications/networking/cluster/helm/plugins { });
 
+  chart-testing = callPackage ../applications/networking/cluster/helm/chart-testing { };
+
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 
   kupfer = callPackage ../applications/misc/kupfer {
