@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
           "-J-Dclojure.spec.skip-macros=true"
           "-J-Dclojure.compiler.direct-linking=true"
           "-H:IncludeResources=BABASHKA_VERSION"
+          "-H:IncludeResources=META-INF/babashka/.*"
           "-H:IncludeResources=SCI_VERSION"
           "-H:ReflectionConfigurationFiles=${reflectionJson}"
           "--initialize-at-build-time"
