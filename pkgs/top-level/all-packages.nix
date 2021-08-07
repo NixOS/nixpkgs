@@ -21615,6 +21615,8 @@ with pkgs;
 
   freeradius = callPackage ../servers/freeradius { };
 
+  freshrss = callPackage ../servers/freshrss { };
+
   freeswitch = callPackage ../servers/sip/freeswitch {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
