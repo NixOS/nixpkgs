@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, nixosTests }:
 
 let
   pname = "FreshRSS";
@@ -13,6 +13,8 @@ stdenv.mkDerivation {
     rev = version;
     sha256 = "189rwfpp5chv11p12bkyr64wpxap03gkhim90vm961qnixbypbdw";
   };
+
+  passthru.tests = nixosTests.freshrss;
 
   # There's nothing to build.
   dontBuild = true;
