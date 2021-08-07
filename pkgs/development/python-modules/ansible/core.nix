@@ -42,9 +42,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
-
-    substituteInPlace requirements.txt \
-      --replace "resolvelib >= 0.5.3, < 0.6.0" "resolvelib"
   '';
 
   nativeBuildInputs = [
