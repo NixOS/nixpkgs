@@ -19,12 +19,6 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  #installPhase = ''
-  #  mkdir -p $out/lib $out/include/dht
-  #  cp dht.a dht.so $out/lib/
-  #  cp *.h $out/include/dht/
-  #'';
-
   meta = with lib; {
     description = " BitTorrent DHT library ";
     homepage = "https://github.com/transmission/dht";
