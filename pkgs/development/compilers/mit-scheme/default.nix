@@ -1,12 +1,13 @@
 { fetchurl, lib, stdenv, makeWrapper, gnum4, texinfo, texLive, automake,
+  autoconf, libtool, ghostscript, ncurses,
   enableX11 ? false, xlibsWrapper ? null }:
 
 let
-  version = "10.1.10";
-  bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
+  version = "11.2";
+  bootstrapFromC = ! ((stdenv.isLinux && stdenv.isAarch64) || stdenv.isx86_64);
 
-  arch = if      stdenv.isi686   then "-i386"
-         else                         "-x86-64";
+  arch = if stdenv.isLinux && stdenv.isAarch64 then "-aarch64"
+         else                                       "-x86-64";
 in
 stdenv.mkDerivation {
   name = if enableX11 then "mit-scheme-x11-${version}" else "mit-scheme-${version}";
@@ -16,16 +17,18 @@ stdenv.mkDerivation {
   # leads to more efficient code than when building the tarball that contains
   # generated C code instead of those binaries.
   src =
-    if stdenv.isi686
+    if stdenv.isLinux && stdenv.isAarch64
     then fetchurl {
-      url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-i386.tar.gz";
-      sha256 = "117lf06vcdbaa5432hwqnskpywc6x8ai0gj99h480a4wzkp3vhy6";
+      url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-aarch64le.tar.gz";
+      sha256 = "11maixldk20wqb5js5p4imq221zz9nf27649v9pqkdf8fv7rnrs9";
   } else fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
-      sha256 = "1rljv6iddrbssm91c0nn08myj92af36hkix88cc6qwq38xsxs52g";
+      sha256 = "17822hs9y07vcviv2af17p3va7qh79dird49nj50bwi9rz64ia3w";
     };
 
   buildInputs = if enableX11 then [xlibsWrapper] else [];
+
+  propagatedBuildInputs = [ ncurses ];
 
   configurePhase =
     '' (cd src && ./configure)
@@ -40,9 +43,6 @@ stdenv.mkDerivation {
 
        cd ../doc
 
-       # Provide a `texinfo.tex'.
-       export TEXINPUTS="$(echo ${automake}/share/automake-*)"
-       echo "\$TEXINPUTS is \`$TEXINPUTS'"
        make
 
        cd ..
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
          $out/lib/mit-scheme${arch}
     '';
 
-  nativeBuildInputs = [ makeWrapper gnum4 texinfo texLive automake ];
+  nativeBuildInputs = [ makeWrapper gnum4 texinfo texLive automake ghostscript autoconf libtool];
 
   # XXX: The `check' target doesn't exist.
   doCheck = false;
