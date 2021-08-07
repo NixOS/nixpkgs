@@ -5147,7 +5147,9 @@ in
 
   gexiv2 = callPackage ../development/libraries/gexiv2 { };
 
-  gftp = callPackage ../tools/networking/gftp { };
+  gftp = callPackage ../applications/networking/gftp {
+    gtk = gtk2;
+  };
 
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
 
