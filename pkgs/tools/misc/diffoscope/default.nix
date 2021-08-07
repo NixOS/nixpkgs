@@ -9,11 +9,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "179";
+  version = "180";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-SIFLWlmENuhgwG0YbIDTWG6uCHEfuoc0IMVz4cp5NX4=";
+    sha256 = "sha256-P6u+5MwnJ4xQ955qdX1I/ujRCcgyCXjXDXvvpUbhqt8=";
   };
 
   outputs = [ "out" "man" ];
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
-  # Still missing these tools: docx2txt dumppdf dumpxsb enjarify lipo ocamlobjinfo oggDump otool procyon
+  # Still missing these tools: docx2txt dumpimage dumppdf dumpxsb enjarify lipo ocamlobjinfo oggDump otool procyon
   pythonPath = [
       binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
