@@ -8077,6 +8077,10 @@ in
 
   pixiewps = callPackage ../tools/networking/pixiewps {};
 
+  pinyin-tool = callPackage ../tools/text/pinyin-tool {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
@@ -25496,6 +25500,8 @@ in
   kubernetes-helm-wrapped = wrapHelm kubernetes-helm {};
 
   kubernetes-helmPlugins = dontRecurseIntoAttrs (callPackage ../applications/networking/cluster/helm/plugins { });
+
+  chart-testing = callPackage ../applications/networking/cluster/helm/chart-testing { };
 
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 

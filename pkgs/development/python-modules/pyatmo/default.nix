@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "5.2.0";
+  version = "5.2.3";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
     rev = "v${version}";
-    sha256 = "sha256-P9c9tm2RcF/4r0OYBoAQxQbMBaFAsaHg/stg9rrYHNM=";
+    sha256 = "1w9rhh85z9m3c4rbz6zxlrxglsm5sk5d6796dsj1p1l3b3ad476z";
   };
 
   postPatch = ''

@@ -45,6 +45,8 @@ self: super: {
   # TODO: figure out if needed on aarch32 as well
   BNFC = dontCheck super.BNFC;
   C-structs = dontCheck super.C-structs;
+  Chart-tests = dontCheck super.Chart-tests;
+  Jikka = dontCheck super.Jikka;
   accelerate = dontCheck super.accelerate;
   ad = dontCheck super.ad;
   autoapply = dontCheck super.autoapply;
@@ -92,6 +94,9 @@ self: super: {
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;
+
+  # We disable profiling on aarch64, so tests naturally fail
+  ghc-prof = dontCheck super.ghc-prof;
 
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES

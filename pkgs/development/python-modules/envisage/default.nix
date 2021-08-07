@@ -1,7 +1,7 @@
 { lib, fetchPypi, isPy27
 , buildPythonPackage
 , traits, apptools, pytestCheckHook
-, ipykernel, ipython
+, ipykernel, ipython, setuptools
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0zrxlq4v3091727vf10ngc8418sp26raxa8q83i4h0sydfkh2dic";
   };
 
-  propagatedBuildInputs = [ traits apptools ];
+  propagatedBuildInputs = [ traits apptools setuptools ];
 
   preCheck = ''
     export HOME=$PWD/HOME

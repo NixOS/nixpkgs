@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "akira";
-  version = "0.0.14";
+  version = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "akiraux";
     repo = "Akira";
     rev = "v${version}";
-    sha256 = "1zbb2bsc6v2rwrbigbkgrzfjmlj96s3ri73zbdcyqg4p08v1w4l6";
+    sha256 = "sha256-2GhpxajymLVAl2P6vZ0+nuZK3ZRRktFswWkj7TP8eHI=";
   };
 
   nativeBuildInputs = [
