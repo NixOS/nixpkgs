@@ -8077,6 +8077,10 @@ in
 
   pixiewps = callPackage ../tools/networking/pixiewps {};
 
+  pinyin-tool = callPackage ../tools/text/pinyin-tool {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
