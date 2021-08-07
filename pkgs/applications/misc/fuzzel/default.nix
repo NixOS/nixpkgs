@@ -1,4 +1,21 @@
-{ stdenv, lib, fetchFromGitea, pkg-config, meson, ninja, wayland, pixman, cairo, librsvg, wayland-protocols, wlroots, libxkbcommon, scdoc, git, tllist, fcft}:
+{ stdenv
+, lib
+, fetchFromGitea
+, pkg-config
+, meson
+, ninja
+, wayland
+, pixman
+, cairo
+, librsvg
+, wayland-protocols
+, wlroots
+, libxkbcommon
+, scdoc
+, git
+, tllist
+, fcft
+}:
 
 stdenv.mkDerivation rec {
   pname = "fuzzel";
@@ -12,8 +29,25 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JW5sAlTprSRIdFbmSaUreGtNccERgQMGEW+WCSscYQk=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja scdoc git ];
-  buildInputs = [ wayland pixman cairo librsvg wayland-protocols  wlroots libxkbcommon tllist fcft ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    scdoc
+    git
+  ];
+
+  buildInputs = [
+    wayland
+    pixman
+    cairo
+    librsvg
+    wayland-protocols
+    wlroots
+    libxkbcommon
+    tllist
+    fcft
+  ];
 
   meta = with lib; {
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
