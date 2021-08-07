@@ -25636,6 +25636,8 @@ in
 
   liblinphone = callPackage ../development/libraries/liblinphone { };
 
+  librewolf = callPackage ../applications/networking/browsers/librewolf { };
+
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = libsForQt5.callPackage ../applications/networking/instant-messengers/linphone { };
