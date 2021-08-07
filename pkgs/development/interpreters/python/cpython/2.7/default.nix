@@ -26,8 +26,8 @@
 , sourceVersion
 , sha256
 , passthruFun
-, static ? false
-, stripBytecode ? true
+, static ? stdenv.hostPlatform.isStatic
+, stripBytecode ? reproducibleBuild
 , rebuildBytecode ? true
 , reproducibleBuild ? false
 , enableOptimizations ? false
@@ -187,8 +187,9 @@ let
 
   configureFlags = optionals enableOptimizations [
     "--enable-optimizations"
-  ] ++ [
+  ] ++ optionals (!static) [
     "--enable-shared"
+  ] ++ [
     "--with-threads"
     "--enable-unicode=ucs${toString ucsEncoding}"
   ] ++ optionals (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) [
