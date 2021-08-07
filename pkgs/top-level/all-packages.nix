@@ -17705,6 +17705,8 @@ in
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
 
+  mpdecimal = callPackage ../development/libraries/mpdecimal { };
+
   mps = callPackage ../development/libraries/mps { };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
