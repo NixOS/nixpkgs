@@ -30,30 +30,39 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ ncurses ];
 
-  configurePhase =
-    '' (cd src && ./configure)
-       (cd doc && ./configure)
-    '';
+  configurePhase = ''
+    runHook preConfigure
+    (cd src && ./configure)
+    (cd doc && ./configure)
+    runHook postConfigure
+  '';
 
-  buildPhase =
-    '' cd src
-       ${if bootstrapFromC
-         then "./etc/make-liarc.sh --prefix=$out"
-         else "make compile-microcode"}
+  buildPhase = ''
+    runHook preBuild
+    cd src
 
-       cd ../doc
+   ${if bootstrapFromC
+      then "./etc/make-liarc.sh --prefix=$out"
+      else "make compile-microcode"}
 
-       make
+    cd ../doc
 
-       cd ..
-    '';
+    make
 
-  installPhase =
-    '' make prefix=$out install -C src
-       make prefix=$out install -C doc
-    '';
+    cd ..
 
-  fixupPhase =
+    runHook postBuild
+  '';
+
+
+  installPhase = ''
+    runHook preInstall
+    make prefix=$out install -C src
+    make prefix=$out install -C doc
+    runHook postInstall
+  '';
+
+  postFixup =
     '' wrapProgram $out/bin/mit-scheme${arch} --set MITSCHEME_LIBRARY_PATH \
          $out/lib/mit-scheme${arch}
     '';
