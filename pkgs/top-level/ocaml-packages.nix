@@ -1018,6 +1018,8 @@ let
       inherit (pkgs) postgresql;
     };
 
+    pp = callPackage ../development/ocaml-modules/pp { };
+
     ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
 
     ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix {
