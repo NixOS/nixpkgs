@@ -1851,6 +1851,14 @@ Superuser created successfully.
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          <literal>security.pam.services.&lt;name&gt;.makeHomeDir</literal>
+          now uses <literal>umask=0077</literal> instead of
+          <literal>umask=0022</literal> when creating the home
+          directory.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
