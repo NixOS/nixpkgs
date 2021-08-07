@@ -163,7 +163,7 @@ rec {
         echo "Compiling a custom test"
         set -x
         emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 test/example.c -DZ_SOLO \
-        libz.so.${old.version} -I . -o example.js
+        -L. libz.so.${old.version} -I . -o example.js
 
         echo "Using node to execute the test"
         ${pkgs.nodejs}/bin/node ./example.js 
