@@ -21,9 +21,8 @@ buildGoModule rec {
 
   excludedPackages = "\\(copasetic\\)";
 
-  preBuild = ''
-    buildFlagsArray+=(${lib.optionalString pivKeySupport "-tags=pivkey"})
-  '';
+  tags = lib.optionals pivKeySupport [ "pivkey" ];
+
   ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/cmd/cosign/cli.gitVersion=v${version}" ];
 
   meta = with lib; {
