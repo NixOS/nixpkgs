@@ -5,20 +5,22 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   };
 
   machine = { config, pkgs, ... }: {
-    environment.systemPackages = [ pkgs.isso ];
+    services.isso = {
+      enable = true;
+      settings = {
+        general = {
+          dbpath = "/var/lib/isso/comments.db";
+          host = "http://localhost";
+        };
+      };
+    };
   };
 
   testScript = let
-    issoConfig = pkgs.writeText "minimal-isso.conf" ''
-      [general]
-      dbpath = /tmp/isso-comments.db
-      host = http://localhost
-    '';
-
     port = 8080;
   in
   ''
-    machine.succeed("isso -c ${issoConfig} &")
+    machine.wait_for_unit("isso.service")
 
     machine.wait_for_open_port("${toString port}")
 
