@@ -405,6 +405,7 @@ unsupported-platforms:
   mplayer-spot:                                 [ aarch64-linux ]
   mptcp-pm:                                     [ x86_64-darwin ]
   netlink:                                      [ x86_64-darwin ]
+  notifications-tray-icon:                      [ x86_64-darwin ] # depends on gi-dbusmenu
   oculus:                                       [ x86_64-darwin ]
   pam:                                          [ x86_64-darwin ]
   parport:                                      [ x86_64-darwin ]
