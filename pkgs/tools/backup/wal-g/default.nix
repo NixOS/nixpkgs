@@ -17,10 +17,9 @@ buildGoModule rec {
 
   subPackages = [ "main/pg" ];
 
-  buildFlagsArray = [
-    "-tags=brotli libsodium"
-    "-ldflags=-s -w -X github.com/wal-g/wal-g/cmd/pg.WalgVersion=${version} -X github.com/wal-g/wal-g/cmd/pg.GitRevision=${src.rev}"
-  ];
+  tags = [ "brotli" "libsodium" ];
+
+  ldflags = [ "-s" "-w" "-X github.com/wal-g/wal-g/cmd/pg.WalgVersion=${version}" "-X github.com/wal-g/wal-g/cmd/pg.GitRevision=${src.rev}" ];
 
   postInstall = ''
     mv $out/bin/pg $out/bin/wal-g
