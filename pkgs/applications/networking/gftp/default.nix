@@ -1,25 +1,56 @@
-{ lib, stdenv, fetchurl, gtk2, readline, ncurses, gettext, openssl, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, gettext
+, gtk
+, intltool
+, libtool
+, ncurses
+, openssl
+, pkg-config
+, readline
+}:
 
 stdenv.mkDerivation rec {
   pname = "gftp";
-  version = "2.0.19";
+  version = "2.7.0b";
 
-  src = fetchurl {
-    url = "https://www.gftp.org/gftp-${version}.tar.bz2";
-    sha256 = "1z8b26n23k0sjbxgrix646b06cnpndpq7cbcj0ilsvvdx5ms81jk";
+  src = fetchFromGitHub {
+    owner = "masneyb";
+    repo = pname;
+    rev = version;
+    hash = "sha256-cIB3SneYKavgdI8eTtM1qsOrBJJ0c7/3CEvNPishNog=";
   };
 
-  postPatch = ''
-    sed -i -e '/<stropts.h>/d' lib/pty.c
+  nativeBuildInputs = [
+    autoconf
+    automake
+    gettext
+    intltool
+    libtool
+    pkg-config
+  ];
+  buildInputs = [
+    gtk
+    ncurses
+    openssl
+    readline
+  ];
+
+  hardeningDisable = [ "format" ];
+
+  preConfigure = ''
+    ./autogen.sh
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 readline ncurses gettext openssl ];
-
-  meta = {
-    description = "GTK-based FTP client";
-    homepage = "http://www.gftp.org";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+  meta = with lib; {
+    homepage = "https://github.com/masneyb/gftp";
+    description = "GTK-based multithreaded FTP client for *nix-based machines";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 }
+# TODO: report the hardeningDisable to upstream
