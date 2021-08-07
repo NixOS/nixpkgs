@@ -8732,6 +8732,8 @@ in
 
   scmpuff = callPackage ../applications/version-management/git-and-tools/scmpuff { };
 
+  scorecard = callPackage ../tools/security/scorecard { };
+
   scream = callPackage ../applications/audio/scream { };
 
   scimark = callPackage ../misc/scimark { };
@@ -16745,6 +16747,8 @@ in
 
   libffi = callPackage ../development/libraries/libffi { };
 
+  libfreeaptx = callPackage ../development/libraries/libfreeaptx { };
+
   libfreefare = callPackage ../development/libraries/libfreefare {
     inherit (darwin) libobjc;
   };
@@ -23379,6 +23383,8 @@ in
 
   backintime = backintime-qt;
 
+  ballerburg = callPackage ../games/ballerburg { } ;
+
   balsa = callPackage ../applications/networking/mailreaders/balsa { };
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
@@ -24056,6 +24062,8 @@ in
   exercism = callPackage ../applications/misc/exercism { };
 
   expenses = callPackage ../applications/misc/expenses { };
+
+  fnott = callPackage ../applications/misc/fnott { };
 
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 

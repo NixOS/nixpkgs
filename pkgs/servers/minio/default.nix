@@ -30,11 +30,13 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  preBuild = let t = "github.com/minio/minio/cmd"; in
-    ''
-      export CGO_ENABLED=0
-      buildFlagsArray+=("-tags" "kqueue" "-ldflags" "-s -w -X ${t}.Version=${versionToTimestamp version} -X ${t}.ReleaseTag=RELEASE.${version} -X ${t}.CommitID=${src.rev}")
-    '';
+  CGO_ENABLED = 0;
+
+  tags = [ "kqueue" ];
+
+  ldflags = let t = "github.com/minio/minio/cmd"; in [
+    "-s" "-w" "-X ${t}.Version=${versionToTimestamp version}" "-X ${t}.ReleaseTag=RELEASE.${version}" "-X ${t}.CommitID=${src.rev}"
+  ];
 
   passthru.tests.minio = nixosTests.minio;
 
