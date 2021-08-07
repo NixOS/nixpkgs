@@ -949,4 +949,15 @@ self: super: builtins.intersectAttrs super {
       })
     )
   );
+
+  # Use nix packaged libBF
+  libBF = overrideCabal super.libBF (drv: {
+    librarySystemDepends = [
+      pkgs.libbf
+    ] ++ (drv.librarySystemDepends or []);
+    configureFlags = [
+      "-fsystem-libbf"
+    ] ++ (drv.configureFlags or []);
+  });
+
 }
