@@ -23,13 +23,14 @@ stdenv.mkDerivation rec {
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bochs/bochs/${version}/bochs-${version}.tar.gz";
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-oBCrG/3HKsWgjS4kEs1HHA/r1mrx2TSbwNeWh53lsXo=";
   };
 
   nativeBuildInputs = [
     docbook_xml_dtd_45
     docbook_xsl
+    libtool
     pkg-config
   ];
   buildInputs = [
@@ -37,7 +38,6 @@ stdenv.mkDerivation rec {
     curl
     gtk2
     libGL
-    libtool
     libGLU
     libX11
     libXpm
@@ -131,4 +131,4 @@ stdenv.mkDerivation rec {
   };
 }
 # TODO: a better way to organize the options
-# TODO: docbook (install docbook-tools from RedHat mirrors can help)
+# TODO: docbook (docbook-tools from RedHat mirrors should help)

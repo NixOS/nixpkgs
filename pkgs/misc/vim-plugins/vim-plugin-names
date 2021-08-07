@@ -260,6 +260,7 @@ jnurmine/zenburn
 jonbri/vim-colorstepper
 jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
+joosepalviste/nvim-ts-context-commentstring@main
 josa42/coc-lua
 josa42/vim-lightline-coc
 jose-elias-alvarez/null-ls.nvim@main

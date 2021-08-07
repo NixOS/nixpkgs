@@ -4,11 +4,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "catt";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fef58bf7a8ebaba98399d1077cc4615f53d0196aab2a989df369a66f7111963b";
+    sha256 = "sha256-BOETKTkcbLOu5SubiejswU7D47qWS13QZ7rU9x3jf5Y=";
   };
 
   propagatedBuildInputs = [
@@ -18,6 +18,14 @@ buildPythonApplication rec {
     requests
     youtube-dl
   ];
+
+  # remove click when 0.12.3 is released
+  # upstream doesn't use zeroconf directly but pins it for pychromecast
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "zeroconf==0.31.0" "" \
+      --replace "Click>=7.1.2,<8" "click"
+  '';
 
   doCheck = false; # attempts to access various URLs
   pythonImportsCheck = [ "catt" ];
@@ -29,4 +37,3 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ dtzWill ];
   };
 }
-
