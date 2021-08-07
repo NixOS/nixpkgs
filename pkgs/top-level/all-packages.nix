@@ -24057,6 +24057,8 @@ in
 
   expenses = callPackage ../applications/misc/expenses { };
 
+  fnott = callPackage ../applications/misc/fnott { };
+
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 
   go-motion = callPackage ../development/tools/go-motion { };
