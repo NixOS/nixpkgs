@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
 let
-  version = "2.0.10";
+  version = "2.0.12";
 in fetchzip {
   name = "weather-icons-${version}";
 
-  url = "https://github.com/erikflowers/weather-icons/archive/${version}.zip";
+  url = "https://github.com/erikflowers/weather-icons/archive/refs/tags/${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
