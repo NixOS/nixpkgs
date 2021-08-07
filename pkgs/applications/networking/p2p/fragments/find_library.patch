@@ -1,6 +1,6 @@
 --- a/meson.build	2020-09-14 20:27:52.539520481 +0200
 +++ b/meson.build	2020-09-14 20:27:59.023657234 +0200
-@@ -32,10 +32,10 @@
+@@ -32,11 +32,11 @@
  				meson.get_compiler('c').find_library('dht'),
  				meson.get_compiler('c').find_library('natpmp'),
  				meson.get_compiler('c').find_library('event'),
