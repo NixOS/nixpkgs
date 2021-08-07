@@ -1,4 +1,6 @@
-{ lib, python3, mautrix-telegram, fetchFromGitHub }:
+{ lib, python3, mautrix-telegram, fetchFromGitHub
+, withE2BE ? true
+}:
 
 let
   python = python3.override {
@@ -36,7 +38,7 @@ in python.pkgs.buildPythonPackage rec {
     sed -i -e '/alembic>/d' requirements.txt
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python.pkgs; ([
     Mako
     aiohttp
     mautrix
@@ -49,7 +51,12 @@ in python.pkgs.buildPythonPackage rec {
     pillow
     lxml
     setuptools
-  ] ++ dbDrivers;
+  ] ++ lib.optionals withE2BE [
+    asyncpg
+    python-olm
+    pycryptodome
+    unpaddedbase64
+  ]) ++ dbDrivers;
 
   # `alembic` (a database migration tool) is only needed for the initial setup,
   # and not needed during the actual runtime. However `alembic` requires `mautrix-telegram`
