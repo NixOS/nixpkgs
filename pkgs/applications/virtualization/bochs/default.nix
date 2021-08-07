@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bochs/bochs/${version}/bochs-${version}.tar.gz";
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-oBCrG/3HKsWgjS4kEs1HHA/r1mrx2TSbwNeWh53lsXo=";
   };
 
