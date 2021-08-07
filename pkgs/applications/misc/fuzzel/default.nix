@@ -1,11 +1,14 @@
-{ stdenv, lib, fetchzip, pkg-config, meson, ninja, wayland, pixman, cairo, librsvg, wayland-protocols, wlroots, libxkbcommon, scdoc, git, tllist, fcft}:
+{ stdenv, lib, fetchFromGitea, pkg-config, meson, ninja, wayland, pixman, cairo, librsvg, wayland-protocols, wlroots, libxkbcommon, scdoc, git, tllist, fcft}:
 
 stdenv.mkDerivation rec {
   pname = "fuzzel";
   version = "1.6.1";
 
-  src = fetchzip {
-    url = "https://codeberg.org/dnkl/fuzzel/archive/${version}.tar.gz";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = "fuzzel";
+    rev = version;
     sha256 = "sha256-JW5sAlTprSRIdFbmSaUreGtNccERgQMGEW+WCSscYQk=";
   };
 
