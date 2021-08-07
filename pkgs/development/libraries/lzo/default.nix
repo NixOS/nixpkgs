@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wm04519pd3g8hqpjqhfr72q8qmbiwqaxcs3cndny9h86aa95y60";
   };
 
-  configureFlags = [ "--enable-shared" ];
+  configureFlags = lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared" ;
 
   enableParallelBuilding = true;
 
