@@ -47,6 +47,7 @@ buildPythonPackage rec {
   disabledTests = [
     # simplipy/api.py:253: InvalidCredentialsError
     "test_request_error_failed_retry"
+    "test_update_error"
   ];
 
   disabledTestPaths = [ "examples/" ];
