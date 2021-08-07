@@ -4230,6 +4230,7 @@
     name = "Hans-Christian Esperer";
   };
   hdhog = {
+    name = "Serg Larchenko";
     email = "hdhog@hdhog.ru";
     github = "hdhog";
     githubId = 386666;
