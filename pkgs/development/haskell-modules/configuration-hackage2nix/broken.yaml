@@ -3285,7 +3285,6 @@ broken-packages:
   - np-extras
   - np-linear
   - nptools
-  - nri-http
   - nri-kafka
   - nri-postgresql
   - ntp-control
