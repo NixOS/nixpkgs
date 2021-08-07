@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2021.06.0";
+  version = "2021.07.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "intake";
     repo = "filesystem_spec";
     rev = version;
-    sha256 = "sha256-2yTjaAuORlZMACKnXkZ6QLMV2o71sPMM2O/bDPaPHD0=";
+    hash = "sha256-I0oR7qxMCB2egyOx69hY0++H7fzCdK3ZyyzCvP3yXAs=";
   };
 
   propagatedBuildInputs = [
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fsspec" ];
 
   meta = with lib; {
-    description = "A specification that Python filesystems should adhere to";
     homepage = "https://github.com/intake/filesystem_spec";
+    description = "A specification that Python filesystems should adhere to";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };
