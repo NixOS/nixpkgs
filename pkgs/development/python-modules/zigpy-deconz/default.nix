@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-d/yAk8owMu+J1BzlwR5mzF9HkXiE6Kc81AznvsAboy8=";
+    sha256 = "sha256-NpLhVQfezXbJQMvqqZjr9sc8tCjJgGu5Xk3C5/IDeUQ=";
   };
 
   propagatedBuildInputs = [ pyserial pyserial-asyncio zigpy ];

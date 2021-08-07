@@ -342,7 +342,9 @@ unsupported-platforms:
   barbly:                                       [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   bdcs-api:                                     [ x86_64-darwin ]
   bindings-directfb:                            [ x86_64-darwin ]
+  bindings-parport:                             [ x86_64-darwin ] # parport is a linux kernel component
   bindings-sane:                                [ x86_64-darwin ]
+  btrfs:                                        [ x86_64-darwin ] # depends on linux
   bustle:                                       [ x86_64-darwin ] # uses glibc-specific ptsname_r
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   crackNum:                                     [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
@@ -356,6 +358,7 @@ unsupported-platforms:
   follow-file:                                  [ x86_64-darwin ]
   freenect:                                     [ x86_64-darwin ]
   FTGL:                                         [ x86_64-darwin ]
+  fuzzytime:                                    [ x86_64-darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
   ghcjs-dom-hello:                              [ x86_64-darwin ]
   gi-dbusmenugtk3:                              [ x86_64-darwin ]
   gi-dbusmenu:                                  [ x86_64-darwin ]
@@ -375,9 +378,11 @@ unsupported-platforms:
   hommage-ds:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   honk:                                         [ x86_64-darwin ]
   hpapi:                                        [ x86_64-darwin ]
+  HQu:                                          [ aarch64-linux, armv7l-linux ] # unsupported by vendored C++ library, TODO: explicitly list supported platforms
   HSoM:                                         [ x86_64-darwin ]
   iwlib:                                        [ x86_64-darwin ]
   jsaddle-webkit2gtk:                           [ x86_64-darwin ]
+  kqueue:                                       [ x86_64-linux, aarch64-linux, i686-linux, armv7l-linux ] # BSD / Darwin only API
   LambdaHack:                                   [ x86_64-darwin ]
   large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
   libmodbus:                                    [ x86_64-darwin ]
@@ -400,6 +405,7 @@ unsupported-platforms:
   mplayer-spot:                                 [ aarch64-linux ]
   mptcp-pm:                                     [ x86_64-darwin ]
   netlink:                                      [ x86_64-darwin ]
+  notifications-tray-icon:                      [ x86_64-darwin ] # depends on gi-dbusmenu
   oculus:                                       [ x86_64-darwin ]
   pam:                                          [ x86_64-darwin ]
   parport:                                      [ x86_64-darwin ]

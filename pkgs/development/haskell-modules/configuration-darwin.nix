@@ -58,6 +58,12 @@ self: super: {
 
   OpenAL = addExtraLibrary super.OpenAL darwin.apple_sdk.frameworks.OpenAL;
 
+  al = overrideCabal super.al (drv: {
+    libraryFrameworkDepends = [
+      darwin.apple_sdk.frameworks.OpenAL
+    ] ++ (drv.libraryFrameworkDepends or []);
+  });
+
   proteaaudio = addExtraLibrary super.proteaaudio darwin.apple_sdk.frameworks.AudioToolbox;
 
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
@@ -99,6 +105,12 @@ self: super: {
   yesod-bin = addBuildDepend super.yesod-bin darwin.apple_sdk.frameworks.Cocoa;
 
   hmatrix = addBuildDepend super.hmatrix darwin.apple_sdk.frameworks.Accelerate;
+
+  blas-hs = overrideCabal super.blas-hs (drv: {
+    libraryFrameworkDepends = [
+      darwin.apple_sdk.frameworks.Accelerate
+    ] ++ (drv.libraryFrameworkDepends or []);
+  });
 
   # Ensure the necessary frameworks are propagatedBuildInputs on darwin
   OpenGLRaw = overrideCabal super.OpenGLRaw (drv: {
@@ -168,6 +180,13 @@ self: super: {
     '' + (drv.postPatch or "");
   });
 
+  # conditional dependency via a cabal flag
+  cas-store = overrideCabal super.cas-store (drv: {
+    libraryHaskellDepends = [
+      self.kqueue
+    ] ++ (drv.libraryHaskellDepends or []);
+  });
+
   # 2021-05-25: Tests fail and I have no way to debug them.
   hls-class-plugin = dontCheck super.hls-class-plugin;
   hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
@@ -178,5 +197,57 @@ self: super: {
 
   # We are lacking pure pgrep at the moment for tests to work
   tmp-postgres = dontCheck super.tmp-postgres;
+
+  # On darwin librt doesn't exist and will fail to link against,
+  # however linking against it is also not necessary there
+  GLHUI = overrideCabal super.GLHUI (drv: {
+    postPatch = ''
+      substituteInPlace GLHUI.cabal --replace " rt" ""
+    '' + (drv.postPatch or "");
+  });
+
+  SDL-image = overrideCabal super.SDL-image (drv: {
+    # Prevent darwin-specific configuration code path being taken
+    # which doesn't work with nixpkgs' SDL libraries
+    postPatch = ''
+      substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+    '' + (drv.postPatch or "");
+    patches = [
+      # Work around SDL_main.h redefining main to SDL_main
+      ./patches/SDL-image-darwin-hsc.patch
+    ];
+  });
+
+  # Prevent darwin-specific configuration code path being taken which
+  # doesn't work with nixpkgs' SDL libraries
+  SDL-mixer = overrideCabal super.SDL-mixer (drv: {
+    postPatch = ''
+      substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+    '' + (drv.postPatch or "");
+  });
+
+  # Work around SDL_main.h redefining main to SDL_main
+  SDL-ttf = appendPatch super.SDL-ttf ./patches/SDL-ttf-darwin-hsc.patch;
+
+  # Disable a bunch of test suites that fail because of darwin's case insensitive
+  # file system: When a test suite has a test suite file that has the same name
+  # as a module in scope, but in different case (e. g. hedgehog.hs and Hedgehog
+  # in scope), GHC will complain that the file name and module name differ (in
+  # the example hedgehog.hs would be Main).
+  # These failures can easily be fixed by upstream by renaming files, so we
+  # should create issues for them.
+  # https://github.com/typeclasses/aws-cloudfront-signed-cookies/issues/2
+  aws-cloudfront-signed-cookies = dontCheck super.aws-cloudfront-signed-cookies;
+  # https://github.com/typeclasses/assoc-list/issues/2
+  assoc-list = dontCheck super.assoc-list;
+  assoc-listlike = dontCheck super.assoc-listlike;
+  # https://github.com/typeclasses/dsv/issues/1
+  dsv = dontCheck super.dsv;
+
+  # https://github.com/acid-state/acid-state/issues/133
+  acid-state = dontCheck super.acid-state;
+
+  # Otherwise impure gcc is used, which is Apple's weird wrapper
+  c2hsc = addTestToolDepends super.c2hsc [ pkgs.gcc ];
 
 }

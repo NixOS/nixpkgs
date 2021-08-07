@@ -788,6 +788,11 @@ self: super: builtins.intersectAttrs super {
     platforms = pkgs.lib.platforms.x86;
   };
 
+  # uses x86 intrinsics
+  geomancy = overrideCabal super.geomancy {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
   hls-brittany-plugin = overrideCabal super.hls-brittany-plugin (drv: {
     testToolDepends = [ pkgs.git ];
     preCheck = ''
@@ -919,4 +924,29 @@ self: super: builtins.intersectAttrs super {
   # Flag added in Agda 2.6.2
   Agda = appendConfigureFlag super.Agda "-foptimise-heavily";
 
+  # ats-format uses cli-setup in Setup.hs which is quite happy to write
+  # to arbitrary files in $HOME. This doesn't either not achieve anything
+  # or even fail, so we prevent it and install everything necessary ourselves.
+  # See also: https://hackage.haskell.org/package/cli-setup-0.2.1.4/docs/src/Distribution.CommandLine.html#setManpathGeneric
+  ats-format = generateOptparseApplicativeCompletion "atsfmt" (
+    justStaticExecutables (
+      overrideCabal super.ats-format (drv: {
+        # use vanilla Setup.hs
+        preCompileBuildDriver = ''
+          cat > Setup.hs << EOF
+          module Main where
+          import Distribution.Simple
+          main = defaultMain
+          EOF
+        '' + (drv.preCompileBuildDriver or "");
+        # install man page
+        buildTools = [
+          pkgs.buildPackages.installShellFiles
+        ] ++ (drv.buildTools or []);
+        postInstall = ''
+          installManPage man/atsfmt.1
+        '' + (drv.postInstall or "");
+      })
+    )
+  );
 }
