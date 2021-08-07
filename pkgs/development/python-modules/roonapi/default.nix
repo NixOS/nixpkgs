@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , ifaddr
 , poetry-core
 , pythonOlder
