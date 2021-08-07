@@ -44,7 +44,7 @@ mkDerivation rec {
       running radio simulators.
     '';
     homepage = "https://www.open-tx.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ elitak lopsided98 ];
   };
