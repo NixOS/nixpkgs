@@ -113,7 +113,6 @@ dont-distribute-packages:
  - Forestry
  - FormalGrammars
  - Foster
- - Frames-beam
  - Frames-dsv
  - Frank
  - GLFW-OGL
@@ -394,6 +393,7 @@ dont-distribute-packages:
  - adict
  - adp-multi-monadiccp
  - aern2-real
+ - aern2-real_0_2_8_0
  - aeson-native
  - afv
  - agda-server
@@ -515,7 +515,6 @@ dont-distribute-packages:
  - bamboo-theme-mini-html5
  - bamse
  - bamstats
- - base16-lens
  - base32-bytestring
  - base64-bytes
  - baserock-schema
@@ -527,11 +526,6 @@ dont-distribute-packages:
  - bdcs
  - bdcs-api
  - beam-automigrate
- - beam-migrate
- - beam-mysql
- - beam-newtype-field
- - beam-postgres
- - beam-sqlite
  - beam-th
  - beautifHOL
  - bech32-th
@@ -1588,6 +1582,7 @@ dont-distribute-packages:
  - hs-ffmpeg
  - hs-gen-iface
  - hs-pkpass
+ - hs-sdl-term-emulator
  - hs-swisstable-hashtables-class
  - hs2dot
  - hsautogui
@@ -2718,7 +2713,6 @@ dont-distribute-packages:
  - servant-streaming-docs
  - servant-streaming-server
  - servant-swagger-tags
- - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
