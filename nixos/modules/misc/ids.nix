@@ -348,6 +348,8 @@ in
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
       # shadow = 318; # unused
+      hqplayer = 319;
+      moonraker = 320;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -650,6 +652,8 @@ in
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
       shadow = 318;
+      hqplayer = 319;
+      moonraker = 320;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

@@ -21,8 +21,8 @@ let
   release_version = "13.0.0";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = "98033fdc50e61273b1d5c77ba5f0f75afe3965c1"; # When using a Git commit
-  rev-version = "unstable-2021-07-12"; # When using a Git commit
+  rev = "f98ed74f6910f8b09e77497aeb30c860c433610d"; # When using a Git commit
+  rev-version = "unstable-2021-07-16"; # When using a Git commit
   version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
   targetConfig = stdenv.targetPlatform.config;
 
@@ -30,7 +30,7 @@ let
     owner = "llvm";
     repo = "llvm-project";
     rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "0m28wpkyymzgqflp8xwyab0vryn3jln565qk15qm839n0d0mq3hh";
+    sha256 = "1dp0n3rpg60xr321mvn2gi268pfcs6ii4nnwgsi2lix0di4h3ccb";
   };
 
   llvm_meta = {
@@ -77,18 +77,17 @@ let
 
     clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
 
-    # disabled until recommonmark supports sphinx 3
-    #Llvm-manpages = lowPrio (tools.libllvm.override {
-    #  enableManpages = true;
-    #  python3 = pkgs.python3;  # don't use python-boot
-    #});
+    llvm-manpages = lowPrio (tools.libllvm.override {
+      enableManpages = true;
+      python3 = pkgs.python3;  # don't use python-boot
+    });
 
     clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;
       python3 = pkgs.python3;  # don't use python-boot
     });
 
-    # disabled until recommonmark supports sphinx 3
+    # TODO: lldb/docs/index.rst:155:toctree contains reference to nonexisting document 'design/structureddataplugins'
     # lldb-manpages = lowPrio (tools.lldb.override {
     #   enableManpages = true;
     #   python3 = pkgs.python3;  # don't use python-boot

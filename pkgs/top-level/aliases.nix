@@ -38,6 +38,7 @@ mapAliases ({
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
   adobeReader = adobe-reader; # added 2013-11-04
   adobe_flex_sdk = apache-flex-sdk; # added 2018-06-01
+  aesop = throw "aesop has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream."; # added 2020-11-30
@@ -52,15 +53,6 @@ mapAliases ({
   ammonite-repl = ammonite; # added 2017-05-02
   amsn = throw "amsn has been removed due to being unmaintained."; # added 2020-12-09
   antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
-  apacheKafka_0_9 = throw "kafka 0.9 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_0_10 = throw "kafka 0.10 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_0_11 = throw "kafka 0.11 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_1_0 = throw "kafka 1.0 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_1_1 = throw "kafka 1.1 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_2_0 = throw "kafka 2.0 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_2_1 = throw "kafka 2.1 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_2_2 = throw "kafka 2.2 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_2_3 = throw "kafka 2.3 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
   arduino_core = arduino-core;  # added 2015-02-04
   arora = throw "arora has been removed."; # added 2020-09-09
   asciidocFull = asciidoc-full;  # added 2014-06-22
@@ -215,6 +207,7 @@ mapAliases ({
   emacsPackages = emacs.pkgs; # added 2020-12-18
   emby = throw "The Emby derivation has been removed, see jellyfin instead for a free software fork."; # added 2019-05-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
+  envelope = throw "envelope has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # added 2021-04-12
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
@@ -538,6 +531,7 @@ mapAliases ({
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set."; # added 2021-01-24
   ofp = throw "ofp is not compatible with odp-dpdk";
+  olifant = throw "olifant has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   opencl-icd = ocl-icd; # added 2017-01-20
   openconnect_pa = throw "openconnect_pa fork has been discontinued, support for GlobalProtect is now available in openconnect"; # added 2021-05-21
   openexr_ctl = ctl; # added 2018-04-25
@@ -682,9 +676,11 @@ mapAliases ({
   qmk_firmware = throw "qmk_firmware has been removed because it was broken"; # added 2021-04-02
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # added 2020-12-02
   quake3game = ioquake3; # added 2016-01-14
+  quilter = throw "quilter has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-03
   qvim = throw "qvim has been removed."; # added 2020-08-31
   qweechat = throw "qweechat has been removed because it was broken"; # added 2021-03-08
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
+  qtkeychain = throw "the qtkeychain attribute (qt4 version) has been removes, use the qt5 version: libsForQt5.qtkeychain"; # added 2021-08-04
   qtcurve = libsForQt5.qtcurve;  # added 2020-11-07
   qtpfsgui = throw "qtpfsgui is now luminanceHDR"; # added 2019-06-26
   quaternion-git = throw "quaternion-git has been removed in favor of the stable version 'quaternion'"; # added 2020-04-09
@@ -1118,7 +1114,7 @@ mapAliases ({
     kgamma5
     kinfocenter
     kmenuedit
-    kscreen kscreenlocker ksshaskpass ksysguard
+    kscreen kscreenlocker ksshaskpass
     kwallet-pam kwayland-integration kwin kwrited
     milou
     oxygen

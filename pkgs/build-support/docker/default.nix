@@ -5,7 +5,6 @@
   callPackage,
   closureInfo,
   coreutils,
-  docker,
   e2fsprogs,
   fakeroot,
   findutils,
@@ -17,6 +16,7 @@
   moreutils,
   nix,
   pigz,
+  pkgs,
   rsync,
   runCommand,
   runtimeShell,
@@ -123,24 +123,7 @@ rec {
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions etc.
-  tarsum = runCommand "tarsum" {
-    nativeBuildInputs = [ go ];
-  } ''
-    mkdir tarsum
-    cd tarsum
-
-    cp ${./tarsum.go} tarsum.go
-    export GOPATH=$(pwd)
-    export GOCACHE="$TMPDIR/go-cache"
-    export GO111MODULE=off
-    mkdir -p src/github.com/docker/docker/pkg
-    ln -sT ${docker.moby-src}/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
-    go build
-
-    mkdir -p $out/bin
-
-    cp tarsum $out/bin/
-  '';
+  tarsum = pkgs.tarsum;
 
   # buildEnv creates symlinks to dirs, which is hard to edit inside the overlay VM
   mergeDrvs = {
@@ -549,8 +532,6 @@ rec {
             then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
-        # Docker can't be made to run darwin binaries
-        meta.badPlatforms = lib.platforms.darwin;
       } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"

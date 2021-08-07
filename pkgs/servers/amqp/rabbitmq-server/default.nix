@@ -1,13 +1,32 @@
-{ lib, stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
-, docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat
-, procps, coreutils, gnused, systemd, glibcLocales
-, AppKit, Carbon, Cocoa
+{ lib
+, stdenv
+, fetchurl
+, erlang
+, elixir
+, python
+, libxml2
+, libxslt
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, zip
+, unzip
+, rsync
+, getconf
+, socat
+, procps
+, coreutils
+, gnused
+, systemd
+, glibcLocales
+, AppKit
+, Carbon
+, Cocoa
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
-
   version = "3.9.1";
 
   # when updating, consider bumping elixir version in all-packages.nix
@@ -17,8 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync ];
-  buildInputs =
-    [ erlang elixir python libxml2 libxslt glibcLocales ]
+  buildInputs = [ erlang elixir python libxml2 libxslt glibcLocales ]
     ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];
@@ -33,9 +51,12 @@ stdenv.mkDerivation rec {
   runtimePath = lib.makeBinPath ([
     erlang
     getconf # for getting memory limits
-    socat procps
-    gnused coreutils # used by helper scripts
+    socat
+    procps
+    gnused
+    coreutils # used by helper scripts
   ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early
     sed -i $out/sbin/rabbitmq-env -e '2s|^|PATH=${runtimePath}\''${PATH:+:}\$PATH/\n|'
@@ -53,15 +74,15 @@ stdenv.mkDerivation rec {
     rm $out/INSTALL
   '';
 
-  meta = {
-    homepage = "https://www.rabbitmq.com/";
-    description = "An implementation of the AMQP messaging protocol";
-    license = lib.licenses.mpl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ Profpatsch ];
-  };
-
   passthru.tests = {
     vm-test = nixosTests.rabbitmq;
+  };
+
+  meta = with lib; {
+    homepage = "https://www.rabbitmq.com/";
+    description = "An implementation of the AMQP messaging protocol";
+    license = licenses.mpl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ Profpatsch ];
   };
 }

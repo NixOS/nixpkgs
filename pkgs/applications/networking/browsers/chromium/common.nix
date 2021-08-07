@@ -136,11 +136,9 @@ let
 
     nativeBuildInputs = [
       ninja pkg-config
-      python2WithPackages perl nodejs
+      python2WithPackages python3WithPackages perl nodejs
       gnutar which
       llvmPackages.bintools
-    ] ++ lib.optionals (chromiumVersionAtLeast "92") [
-      python3WithPackages
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -267,7 +265,6 @@ let
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
       symbol_level = 0;
-      fieldtrial_testing_like_official_build = true;
 
       # Google API key, see: https://www.chromium.org/developers/how-tos/api-keys
       # Note: The API key is for NixOS/nixpkgs use ONLY.
@@ -288,6 +285,10 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
+    } // optionalAttrs (!chromiumVersionAtLeast "94") {
+      fieldtrial_testing_like_official_build = true;
+    } // optionalAttrs (chromiumVersionAtLeast "94") {
+      disable_fieldtrial_testing_config = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;

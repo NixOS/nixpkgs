@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lainsce/notejot";
     description = "Stupidly-simple sticky notes applet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
     platforms = platforms.linux;
   };
 

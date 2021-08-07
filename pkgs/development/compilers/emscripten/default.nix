@@ -92,8 +92,12 @@ stdenv.mkDerivation rec {
       # wasm2c doesn't work with PIC
       $out/bin/emcc -s WASM2C -s STANDALONE_WASM $LTO test.c
 
-      for RELOCATABLE in "" "-s RELOCATABLE"; do
-        $out/bin/emcc $RELOCATABLE $LTO test.c
+      for BIND in "" "--bind"; do
+        for MT in "" "-s USE_PTHREADS"; do
+          for RELOCATABLE in "" "-s RELOCATABLE"; do
+            $out/bin/emcc $RELOCATABLE $BIND $MT $LTO test.c
+          done
+        done
       done
     done
     popd

@@ -164,6 +164,7 @@ fszymanski/deoplete-emoji
 garbas/vim-snipmate
 gcmt/taboo.vim
 gcmt/wildfire.vim
+gelguy/wilder.nvim
 gennaro-tedesco/nvim-peekup
 gentoo/gentoo-syntax
 GEverding/vim-hocon
@@ -298,6 +299,7 @@ kana/vim-operator-user
 kana/vim-tabpagecd
 kana/vim-textobj-function
 kana/vim-textobj-user
+karb94/neoscroll.nvim
 kassio/neoterm
 kbenzie/vim-spirv
 kchmck/vim-coffee-script
@@ -340,6 +342,7 @@ ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
 lewis6991/gitsigns.nvim@main
+lfe-support/vim-lfe
 lfilho/cosco.vim
 lifepillar/vim-gruvbox8
 lifepillar/vim-mucomplete
@@ -494,9 +497,9 @@ nvim-telescope/telescope-symbols.nvim
 nvim-telescope/telescope-z.nvim@main
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
-nvim-treesitter/nvim-treesitter@0.5-compat
 nvim-treesitter/nvim-treesitter-refactor
 nvim-treesitter/nvim-treesitter-textobjects@0.5-compat
+nvim-treesitter/nvim-treesitter@0.5-compat
 nvim-treesitter/playground
 oberblastmeister/termwrapper.nvim
 ocaml/vim-ocaml
@@ -562,6 +565,7 @@ ray-x/lsp_signature.nvim
 rbgrouleff/bclose.vim
 rbong/vim-flog
 rcarriga/nvim-dap-ui
+rcarriga/nvim-notify
 rcarriga/vim-ultest
 rhysd/committia.vim
 rhysd/conflict-marker.vim

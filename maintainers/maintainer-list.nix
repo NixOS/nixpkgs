@@ -1412,6 +1412,12 @@
     githubId = 10221570;
     name = "Bo Bakker";
   };
+  bobby285271 = {
+    name = "Bobby Rong";
+    email = "rjl931189261@126.com";
+    github = "bobby285271";
+    githubId = 20080233;
+  };
   bobvanderlinden = {
     email = "bobvanderlinden@gmail.com";
     github = "bobvanderlinden";
@@ -1904,6 +1910,12 @@
     github = "chrisjefferson";
     githubId = 811527;
     name = "Christopher Jefferson";
+  };
+  chrispickard = {
+    email = "chrispickard9@gmail.com";
+    github = "chrispickard";
+    githubId = 1438690;
+    name = "Chris Pickard";
   };
   chrisrosset = {
     email = "chris@rosset.org.uk";
@@ -3993,6 +4005,16 @@
     keys = [{
       longkeyid = "rsa4096/0xDE62E1E2A6145556";
       fingerprint = "5214 2D39 A7CE F8FA 872B  CA7F DE62 E1E2 A614 5556";
+    }];
+  };
+  gpanders = {
+    name = "Gregory Anders";
+    email = "greg@gpanders.com";
+    github = "gpanders";
+    githubId = 8965202;
+    keys = [{
+      longkeyid = "rsa2048/0x56E93C2FB6B08BDB";
+      fingerprint = "B9D5 0EDF E95E ECD0 C135  00A9 56E9 3C2F B6B0 8BDB";
     }];
   };
   gpyh = {
@@ -7843,6 +7865,12 @@
     github = "nthorne";
     githubId = 1839979;
     name = "Niklas Thörne";
+  };
+  nukaduka = {
+    email = "ksgokte@gmail.com";
+    github = "NukaDuka";
+    githubId = 22592293;
+    name = "Kartik Gokte";
   };
   nullx76 = {
     email = "nix@xirion.net";

@@ -1,6 +1,12 @@
-{ lib, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , makeWrapper, makeDesktopItem, mkYarnPackage
 , electron, element-web
+, callPackage
+, Security
+, AppKit
+, CoreServices
+
+, useWayland ? false
 }:
 # Notes for maintainers:
 # * versions of `element-web` and `element-desktop` should be kept in sync.
@@ -15,6 +21,7 @@ let
     rev = "v${version}";
     sha256 = "sha256-4d2IOngiRcKd4k0jnilAR3Sojkfru3dlqtoBYi3zeLY=";
   };
+  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
 in mkYarnPackage rec {
   name = "element-desktop-${version}";
   inherit version src;
@@ -24,6 +31,9 @@ in mkYarnPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  seshat = callPackage ./seshat { inherit CoreServices; };
+  keytar = callPackage ./keytar { inherit Security AppKit; };
+
   buildPhase = ''
     runHook preBuild
     export HOME=$(mktemp -d)
@@ -32,6 +42,9 @@ in mkYarnPackage rec {
     yarn run i18n
     node ./scripts/copy-res.js
     popd
+    rm -rf node_modules/matrix-seshat node_modules/keytar
+    ln -s $keytar node_modules/keytar
+    ln -s $seshat node_modules/matrix-seshat
     runHook postBuild
   '';
 
@@ -56,8 +69,8 @@ in mkYarnPackage rec {
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
-    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron"
+    makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
+      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
   '';
 
   # Do not attempt generating a tarball for element-web again.
