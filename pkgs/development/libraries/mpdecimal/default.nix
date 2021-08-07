@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, windows
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,15 @@ stdenv.mkDerivation rec {
     # as flags end up getting passed which ld doesn't understand
     "LD=$(CC)"
   ];
+
+  # need pthreads on windows
+  buildInputs = lib.optional (stdenv.hostPlatform.libc == "msvcrt")
+    (if stdenv.hostPlatform.is64bit
+     then windows.mingw_w64_pthreads
+     else windows.pthreads);
+
+  # Link against libssp for __memcpy_chk on windows
+  NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.libc == "msvcrt") "-lssp";
 
   outputs = [ "out" "dev" "doc" ];
 
