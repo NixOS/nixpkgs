@@ -21,12 +21,9 @@ buildGoModule rec {
 
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
-  preBuild = ''
-    export buildFlagsArray=(
-      -tags="xversion"
-      -ldflags="-X tailscale.com/version.Long=${version} -X tailscale.com/version.Short=${version}"
-    )
-  '';
+  tags = [ "xversion" ];
+
+  ldflags = [ "-X tailscale.com/version.Long=${version}" "-X tailscale.com/version.Short=${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/tailscaled --prefix PATH : ${
