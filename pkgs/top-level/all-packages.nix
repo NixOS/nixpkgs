@@ -13566,7 +13566,9 @@ in
 
   nix-build-uncached = callPackage ../development/tools/misc/nix-build-uncached { };
 
-  nexus = callPackage ../development/tools/repository-managers/nexus { };
+  nexus = callPackage ../development/tools/repository-managers/nexus {
+    jre_headless = jre8_headless;
+  };
 
   nwjs = callPackage ../development/tools/nwjs {
     gconf = pkgs.gnome2.GConf;
@@ -28569,6 +28571,8 @@ in
 
   pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
 
+  powermanga = callPackage ../games/powermanga { };
+
   prboom = callPackage ../games/prboom { };
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
@@ -28788,6 +28792,8 @@ in
   };
 
   tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
+
+  tecnoballz = callPackage ../games/tecnoballz { };
 
   teetertorture = callPackage ../games/teetertorture { };
 
