@@ -8732,6 +8732,8 @@ in
 
   scmpuff = callPackage ../applications/version-management/git-and-tools/scmpuff { };
 
+  scorecard = callPackage ../tools/security/scorecard { };
+
   scream = callPackage ../applications/audio/scream { };
 
   scimark = callPackage ../misc/scimark { };
