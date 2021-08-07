@@ -2,7 +2,7 @@
 , zlib, xz, libintl, python, gettext, ncurses, findXMLCatalogs
 , pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
-, enableShared ? stdenv.hostPlatform.libc != "msvcrt"
+, enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 }:
 
