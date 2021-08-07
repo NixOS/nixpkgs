@@ -14476,6 +14476,10 @@ in
 
   c2ffi = callPackage ../development/tools/misc/c2ffi { };
 
+  c3c = callPackage ../development/compilers/c3c {
+    llvmPackages = llvmPackages_11;
+  };
+
   swfmill = callPackage ../tools/video/swfmill { };
 
   swftools = callPackage ../tools/video/swftools {
@@ -28483,6 +28487,8 @@ in
   apvlv = callPackage ../applications/misc/apvlv { };
 
   xpdf = libsForQt5.callPackage ../applications/misc/xpdf { };
+
+  xplugd = callPackage ../tools/X11/xplugd { };
 
   xpointerbarrier = callPackage ../tools/X11/xpointerbarrier {};
 
