@@ -102,11 +102,11 @@ in buildGoModule {
       go generate
       popd
     done
-    export buildFlagsArray=(
-      -tags="assets"
-      -ldflags="-X main.commit=${shorthash} -X main.version=${version}"
-    )
   '';
+
+  tags = [ "assets" ];
+
+  ldflags = [ "-X main.commit=${shorthash}" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "An open-source distributed time series database";
