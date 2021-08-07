@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "bindir=$(out)/bin" ];
 
   meta = with lib; {
-    homepage = "http://rephial.org/";
+    homepage = "https://angband.github.io/angband";
     description = "A single-player roguelike dungeon exploration game";
     maintainers = [ maintainers.chattered ];
     license = licenses.gpl2;
