@@ -3244,6 +3244,8 @@ in
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
 
+  reg = callPackage ../tools/virtualization/reg { };
+
   river = callPackage ../applications/window-managers/river { };
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
