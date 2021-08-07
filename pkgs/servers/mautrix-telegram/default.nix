@@ -1,4 +1,6 @@
-{ lib, python3, mautrix-telegram, fetchFromGitHub }:
+{ lib, python3, mautrix-telegram, fetchFromGitHub
+, withE2BE ? true
+}:
 
 with python3.pkgs;
 
@@ -39,6 +41,11 @@ in buildPythonPackage rec {
     pillow
     lxml
     setuptools
+  ] ++ lib.optionals withE2BE [
+    asyncpg
+    python-olm
+    pycryptodome
+    unpaddedbase64
   ] ++ dbDrivers;
 
   # `alembic` (a database migration tool) is only needed for the initial setup,
