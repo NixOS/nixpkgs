@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "silicon";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "silicon";
     rev = "v${version}";
-    sha256 = "sha256-ci0gq4rOQHBmFPvhXZseIlwnqAWd06/qg/i/luhV79s=";
+    sha256 = "sha256-k+p8AEEL1BBJTmPc58QoIk7EOzu8QKdG00RQ58EN3bg=";
   };
 
-  cargoSha256 = "sha256-sUPOf9er+BOMqDJ8C6+Xjjqj6NQUV2JTzGA4yUWtDWM=";
+  cargoSha256 = "sha256-vpegobS7lpRkt/oZePW9WggYeg0JXDte8fQP/bf7oAI=";
 
   buildInputs = [ llvmPackages.libclang expat freetype fira-code ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
