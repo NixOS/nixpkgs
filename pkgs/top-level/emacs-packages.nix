@@ -35,7 +35,8 @@ let
     inherit lib;
   };
 
-  mkNongnuPackages = { lib }: import ../applications/editors/emacs/elisp-packages/nongnu-packages.nix {
+  mkNongnuPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/nongnu-packages.nix {
+    inherit (pkgs) buildPackages;
     inherit lib;
   };
 
@@ -62,7 +63,7 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
   pkgs ? pkgs'
   , lib ? pkgs.lib
   , elpaPackages ? mkElpaPackages { inherit pkgs lib; } self
-  , nongnuPackages ? mkNongnuPackages { inherit lib; } self
+  , nongnuPackages ? mkNongnuPackages { inherit pkgs lib; } self
   , melpaStablePackages ? melpaGeneric { inherit pkgs lib; } "stable" self
   , melpaPackages ? melpaGeneric { inherit pkgs lib; } "unstable" self
   , orgPackages ? mkOrgPackages { inherit lib; } self
