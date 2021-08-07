@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lepton-eda";
-  version = "1.9.13-20201211";
+  version = "1.9.16-20210731";
 
   src = fetchurl {
     url = "https://github.com/lepton-eda/lepton-eda/releases/download/${version}/lepton-eda-${builtins.head (lib.splitString "-" version)}.tar.gz";
-    sha256 = "sha256-9Be3FBWnZU2M5aNQwi3N8M81e0S7n46mwWQh1mrK4Z8=";
+    sha256 = "sha256-xdJ11M4RXNF6ePZD6Y+/DUdO21AFLbydZcq9nWg0+Yk=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper texinfo autoreconfHook ];

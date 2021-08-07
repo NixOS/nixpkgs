@@ -8568,6 +8568,12 @@
     github = "polygon";
     githubId = 51489;
   };
+  polykernel = {
+    email = "81340136+polykernel@users.noreply.github.com";
+    github = "polykernel";
+    githubId = 81340136;
+    name = "polykernel";
+  };
   polyrod = {
     email = "dc1mdp@gmail.com";
     github = "polyrod";

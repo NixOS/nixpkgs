@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ]
-              ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
+    ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   patches = [
     # Fix the mime type detection of xz file. Is merged in master.
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://darwinsys.com/file";
     description = "A program that shows the type of files";
+    maintainers = with maintainers; [ ];
     license = licenses.bsd2;
     platforms = platforms.all;
   };
