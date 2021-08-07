@@ -14847,6 +14847,8 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  libbf = callPackage ../development/libraries/libbf { };
+
   libopcodes = callPackage ../development/libraries/libopcodes {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
