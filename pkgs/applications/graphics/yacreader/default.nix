@@ -18,8 +18,6 @@ mkDerivation rec {
   buildInputs = [ poppler libunarr libGLU qtmultimedia qtscript ];
   propagatedBuildInputs = [ qtquickcontrols qtgraphicaleffects qtdeclarative ];
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "A comic reader for cross-platform reading and managing your digital comic collection";
     homepage = "http://www.yacreader.com";

@@ -6,6 +6,7 @@
 , nvidiaGpuSupport
 , patchelf
 , nvidia_x11
+, nixosTests
 }:
 
 buildGoPackage rec {
@@ -29,16 +30,7 @@ buildGoPackage rec {
   # ui:
   #  Nomad release commits include the compiled version of the UI, but the file
   #  is only included if we build with the ui tag.
-  preBuild =
-    let
-      tags = [ "ui" ] ++ lib.optional (!nvidiaGpuSupport) "nonvidia";
-      tagsString = lib.concatStringsSep " " tags;
-    in
-    ''
-      export buildFlagsArray=(
-        -tags="${tagsString}"
-      )
-    '';
+  tags = [ "ui" ] ++ lib.optional (!nvidiaGpuSupport) "nonvidia";
 
   # The dependency on NVML isn't explicit. We have to make it so otherwise the
   # binary will not know where to look for the relevant symbols.
@@ -47,6 +39,8 @@ buildGoPackage rec {
       patchelf --add-needed "${nvidia_x11}/lib/libnvidia-ml.so" "$bin"
     done
   '';
+
+  passthru.tests.nomad = nixosTests.nomad;
 
   meta = with lib; {
     homepage = "https://www.nomadproject.io/";

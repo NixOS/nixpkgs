@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=$(out)"
-    "CGIT_SCRIPT_PATH=$out/cgit/"
+    "CGIT_SCRIPT_PATH=$(out)/cgit/"
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
   ];

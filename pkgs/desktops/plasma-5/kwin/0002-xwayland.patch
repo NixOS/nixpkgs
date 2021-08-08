@@ -4,13 +4,13 @@ Date: Mon, 27 Jan 2020 05:31:23 -0600
 Subject: [PATCH 2/3] xwayland
 
 ---
- xwl/xwayland.cpp | 2 +-
+ src/xwl/xwayland.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/xwl/xwayland.cpp b/xwl/xwayland.cpp
+diff --git a/src/xwl/xwayland.cpp b/src/xwl/xwayland.cpp
 index 57efdde..a211a58 100644
---- a/xwl/xwayland.cpp
-+++ b/xwl/xwayland.cpp
+--- a/src/xwl/xwayland.cpp
++++ b/src/xwl/xwayland.cpp
 @@ -124,7 +124,7 @@ void Xwayland::start()
  
      m_xwaylandProcess = new Process(this);

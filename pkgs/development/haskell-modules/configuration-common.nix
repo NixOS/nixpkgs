@@ -64,7 +64,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0jnxh12vkrssz0lj4fpkqw7nxwyc1kisvvpm85cd4zf525m5sgg3";
+      sha256 = "0kcsb5kqyx256fp1bj3y0x6k3286j4cykrx0yr4k3vvb3maakf7k";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -749,6 +749,9 @@ self: super: {
 
   # Needs pginit to function and pgrep to verify.
   tmp-postgres = overrideCabal super.tmp-postgres (drv: {
+    # Flaky tests: https://github.com/jfischoff/tmp-postgres/issues/274
+    doCheck = false;
+
     preCheck = ''
       export HOME="$TMPDIR"
     '' + (drv.preCheck or "");
@@ -1008,10 +1011,14 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
+  # Requires dlist <0.9 but it works fine with dlist-1.0
+  # https://github.com/haskell-beam/beam/issues/581
+  beam-core = doJailbreak super.beam-core;
+
   # Requires pg_ctl command during tests
   beam-postgres = overrideCabal super.beam-postgres (drv: {
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
-    });
+  });
 
   # Fix for base >= 4.11
   scat = overrideCabal super.scat (drv: {
@@ -1036,12 +1043,6 @@ self: super: {
 
   # Has tasty < 1.2 requirement, but works just fine with 1.2
   temporary-resourcet = doJailbreak super.temporary-resourcet;
-
-  # fake a home dir and capture generated man page
-  ats-format = overrideCabal super.ats-format (old : {
-    preConfigure = "export HOME=$PWD";
-    postBuild = "mv .local/share $out";
-  });
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1278,8 +1279,10 @@ self: super: {
   # https://github.com/jgm/commonmark-hs/issues/55
   commonmark-extensions = dontCheck super.commonmark-extensions;
 
-  # Testsuite trying to run `which haskeline-examples-Test`
-  haskeline_0_8_1_2 = dontCheck super.haskeline_0_8_1_2;
+  # Fails with encoding problems, likely needs locale data.
+  # Test can be executed by adding which to testToolDepends and
+  # $PWD/dist/build/haskeline-examples-Test to $PATH.
+  haskeline_0_8_2 = dontCheck super.haskeline_0_8_2;
 
   # Tests for list-t, superbuffer, and stm-containers
   # depend on HTF and it is broken, 2020-08-23
@@ -1430,7 +1433,7 @@ self: super: {
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   heist = doJailbreak super.heist;
 
-  hinit = generateOptparseApplicativeCompletion "hi" (super.hinit.override { haskeline = self.haskeline_0_8_1_2; });
+  hinit = generateOptparseApplicativeCompletion "hi" (super.hinit.override { haskeline = self.haskeline_0_8_2; });
 
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/snap/pull/219
   snap = doJailbreak super.snap;
@@ -1711,9 +1714,6 @@ self: super: {
     excludes = ["test/buildtest"];
   });
 
-  # workaround for https://github.com/peti/distribution-nixpkgs/issues/9
-  pam = super.pam.override { inherit (pkgs) pam; };
-
   # Too strict version bounds on base:
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
@@ -1869,8 +1869,6 @@ EOT
   # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
   reactive-banana = doJailbreak super.reactive-banana;
 
-  hackage-db_2_1_0 = doDistribute super.hackage-db_2_1_0;
-
   # Too strict bounds on QuickCheck
   # https://github.com/muesli4/table-layout/issues/16
   table-layout = doJailbreak super.table-layout;
@@ -1915,5 +1913,28 @@ EOT
   graphql = assert pkgs.lib.versionOlder self.parser-combinators.version "1.3.0";
     assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
     doJailbreak super.graphql;
+
+  # Test suite doesn't build with base16-bytestring >= 1.0.0.0
+  # https://github.com/emilypi/Base16/issues/9
+  base16 = dontCheck super.base16;
+
+  # gtk2hsC2hs fails to build on certain architectures (aarch64, ppc64(le), ...)
+  # with a linker error. As a workaround, we build gtk2hs-buildtools with -O0
+  # as suggested in the GHC thread below. An alternative to this could be to use
+  # -fllvm. I haven't been able to get this to work without linker errors, though.
+  # See also:
+  # * https://gitlab.haskell.org/ghc/ghc/-/issues/17203
+  # * https://github.com/gtk2hs/gtk2hs/issues/305
+  # * https://github.com/gtk2hs/gtk2hs/issues/279
+  gtk2hs-buildtools = appendConfigureFlags super.gtk2hs-buildtools
+    (pkgs.lib.optionals (with pkgs.stdenv.hostPlatform; isAarch64 || isPowerPC) [
+      "--ghc-option=-O0"
+    ]);
+
+  # https://github.com/ajscholl/basic-cpuid/pull/1
+  basic-cpuid = appendPatch super.basic-cpuid (pkgs.fetchpatch {
+    url = "https://github.com/ajscholl/basic-cpuid/commit/2f2bd7a7b53103fb0cf26883f094db9d7659887c.patch";
+    sha256 = "0l15ccfdys100jf50s9rr4p0d0ikn53bkh7a9qlk9i0y0z5jc6x1";
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

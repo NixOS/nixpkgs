@@ -610,7 +610,7 @@ let
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      libllvm = pkgs.llvmPackages_8.libllvm;
+      libllvm = pkgs.llvmPackages_10.libllvm;
     };
 
     logs = callPackage ../development/ocaml-modules/logs { };
@@ -933,6 +933,8 @@ let
     odate = callPackage ../development/ocaml-modules/odate { };
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
+
+    odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
 
     omd = callPackage ../development/ocaml-modules/omd { };
 

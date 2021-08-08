@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake removeReferencesTo ];
 
+  # These checks fail on aarch64-darwin
+  cmakeFlags = [ "-DENABLE_UBSAN=OFF" ];
+
   # It used to reference it, in the past, but thanks to the postFixup hook, now
   # it doesn't.
   disallowedReferences = [ stdenv.cc.cc ];

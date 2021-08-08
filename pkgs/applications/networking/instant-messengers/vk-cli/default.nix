@@ -2,7 +2,6 @@
 , lib
 , fetchurl
 , curl
-, zulip
 , p7zip
 , glibc
 , ncurses
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf $out/bin/vk-cli \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lib.makeLibraryPath [ curl zulip glibc ]}"
+      --set-rpath "${lib.makeLibraryPath [ curl glibc ]}"
   '';
 
   meta = with lib; {

@@ -2,7 +2,7 @@
 , replace, fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify
+, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , gnome/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
@@ -49,6 +49,8 @@ let
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
       pipewireSupport = browser.pipewireSupport or false;
+      # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
+      smartcardSupport = cfg.smartcardSupport or false;
 
       nativeMessagingHosts =
         ([ ]
@@ -70,6 +72,7 @@ let
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsa-lib zlib ])
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
             ++ lib.optional alsaSupport alsa-lib
+            ++ lib.optional smartcardSupport opensc
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
@@ -119,6 +122,10 @@ let
               Install = lib.foldr (e: ret:
                 ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
                 ) [] extensions;
+            };
+          } // lib.optionalAttrs smartcardSupport {
+            SecurityDevices = {
+              "OpenSC PKCS#11 Module" = "onepin-opensc-pkcs11.so";
             };
           }
         // extraPolicies;

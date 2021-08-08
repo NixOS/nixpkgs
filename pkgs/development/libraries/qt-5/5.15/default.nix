@@ -111,6 +111,11 @@ let
         ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0010-qtbase-assert.patch
         ./qtbase.patch.d/0011-fix-header_module.patch
+        (fetchpatch { # This can be removed when https://codereview.qt-project.org/c/qt/qtbase/+/339323 is included in an release.
+          name = "0014-gcc11-compat.patch";
+          url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=049e14870c13235cd066758f29c42dc96c1ccdf8";
+          sha256 = "1cb2hwi859hds0fa2cbap014qaa7mah9p0rcxcm2cvj2ybl33qfc";
+        })
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];

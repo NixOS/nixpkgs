@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2021.01.02";
+  version = "2021.07.06";
 
   # git describe --tags
   realVersion = with lib; with builtins;
@@ -15,16 +15,16 @@ stdenv.mkDerivation rec {
     (fetchFromGitHub {
        owner  = "YosysHQ";
        repo   = "prjtrellis";
-       rev    = "60c05b3f4e71fd78d4fba5c31f9974694245199e";
-       sha256 = "1k37mxwxv9fpm6xnrxlqqap7zqh2dvgqncphj3asi2rz0kh07ppf";
+       rev    = "dff1cbcb1bd30de7e96f8a059f2e19be1bb2e44d";
+       sha256 = "1gbrka9gqn124shx448aivbgywyp30zyjwfazr7v49lhrl7d46lb";
        name   = "trellis";
      })
 
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "prjtrellis-db";
-      rev    = "2cf058e7a3ba36134d21e34823e9b2ecaaceac2c";
-      sha256 = "1hjaw5jkwiaiznm2z0smy88m2cdz63cd51z4nibajfih7ikvkj6g";
+      rev    = "0ee729d20eaf9f1e0f1d657bc6452e3ffe6a0d63";
+      sha256 = "0069c98bb4wilxz21snwc39yy0rm7ffma179djyz57d99p0vcfkq";
       name   = "trellis-database";
     })
   ];

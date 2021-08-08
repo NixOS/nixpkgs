@@ -12,10 +12,10 @@
 # ~/.cabal/config file.
 
 # e.g. username: maralorn
-#      password-command: pass hackage.haskell.org (this can be any command, but not an arbitrary shell expression.)
+#      password-command: pass hackage.haskell.org (this can be any command, but not an arbitrary shell expression. Like cabal we only read the first output line and ignore the rest.)
 # Those fields are specified under `upload` on the `cabal` man page.
 
 package_list="$(nix-build -A haskell.package-list)/nixos-hackage-packages.csv"
 username=$(grep "^username:" ~/.cabal/config | sed "s/^username: //")
 password_command=$(grep "^password-command:" ~/.cabal/config | sed "s/^password-command: //")
-curl -u "$username:$($password_command)" --digest -H "Content-type: text/csv" -T "$package_list" http://hackage.haskell.org/distro/NixOS/packages.csv
+curl -u "$username:$($password_command | head -n1)" --digest -H "Content-type: text/csv" -T "$package_list" http://hackage.haskell.org/distro/NixOS/packages.csv

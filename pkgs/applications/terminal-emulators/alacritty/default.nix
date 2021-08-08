@@ -53,16 +53,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9pQqnsLMkzhKTs7WGhf6lac/LGot6EmJQxgFBTrHA4E=";
+    sha256 = "sha256-kgZEbOGmO+uRKaWR+oQBiGkBzDSuCznUyWNUoMICHhk=";
   };
 
-  cargoSha256 = "sha256-NtDeXS2g+5RzKHJdDrbzL5oReS42SzuEubkfZ4gbkFc=";
+  cargoSha256 = "sha256-JqnYMDkagWNGliUxi5eqJN92ULsvT7Fwmah8um1xaRw=";
 
   nativeBuildInputs = [
     cmake
@@ -99,6 +99,7 @@ rustPlatform.buildRustPackage rec {
       ln -s $out/bin $out/Applications/Alacritty.app/Contents/MacOS
     '' else ''
       install -D extra/linux/Alacritty.desktop -t $out/share/applications/
+      install -D extra/linux/io.alacritty.Alacritty.appdata.xml -t $out/share/appdata/
       install -D extra/logo/compat/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
 
       # patchelf generates an ELF that binutils' "strip" doesn't like:

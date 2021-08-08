@@ -1,6 +1,6 @@
 { lib, stdenv, fetchzip
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
-, libwebp, libxml2, proj, python, sqlite, zlib
+, libwebp, libxml2, proj, python3, python ? python3, sqlite, zlib
 
 # supply a postgresql package to enable the PostGIS input plugin
 , postgresql ? null
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # a distinct dev output makes python-mapnik fail
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python3 ];
 
   buildInputs = [
     boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff

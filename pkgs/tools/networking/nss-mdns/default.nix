@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "nss-mdns-0.10";
+  pname = "nss-mdns";
+  version = "0.10";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/nss-mdns/${name}.tar.gz";
+    url = "http://0pointer.de/lennart/projects/nss-mdns/nss-mdns-${version}.tar.gz";
     sha256 = "0vgs6j0qsl0mwzh5a0m0bykr7x6bx79vnbyn0r3q289rghp3qs0y";
   };
 

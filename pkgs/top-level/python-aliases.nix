@@ -53,6 +53,7 @@ mapAliases ({
   lammps-cython = throw "no longer builds and is unmaintained";
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   privacyidea = throw "renamed to pkgs.privacyidea"; # added 2021-06-20
+  prompt_toolkit = prompt-toolkit;
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pytestcov = pytest-cov; # added 2021-01-04
@@ -72,6 +73,7 @@ mapAliases ({
   setuptools_scm = setuptools-scm; # added 2021-06-03
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
+  sphinxcontrib_plantuml = sphinxcontrib-plantuml;
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
   tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
   websocket_client = websocket-client;

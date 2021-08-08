@@ -16,7 +16,7 @@ stdenv.mkDerivation  {
   name = "gplpv-0.11.0.373";
   version = "0.11.0.373";
 
-  phases = [ "buildPhase" "installPhase" ];
+  dontUnpack = true;
 
   buildPhase = ''
     mkdir -p x86

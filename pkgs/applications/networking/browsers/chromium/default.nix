@@ -1,5 +1,5 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_11, llvmPackages_12, ed, gnugrep, coreutils, xdg-utils
+, llvmPackages_12, llvmPackages_13, ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
@@ -19,7 +19,7 @@
 }:
 
 let
-  llvmPackages = llvmPackages_11;
+  llvmPackages = llvmPackages_12;
   stdenv = llvmPackages.stdenv;
 
   callPackage = newScope chromium;
@@ -38,9 +38,9 @@ let
           inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
-    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "90") {
-      llvmPackages = llvmPackages_12;
-      stdenv = llvmPackages_12.stdenv;
+    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "94") rec {
+      llvmPackages = llvmPackages_13;
+      stdenv = llvmPackages.stdenv;
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine ungoogled; };
@@ -75,8 +75,6 @@ let
     name = "chrome-widevine-cdm";
 
     src = chromeSrc;
-
-    phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
 
     unpackCmd = let
       widevineCdmPath =

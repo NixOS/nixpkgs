@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook
+{ lib, stdenv, fetchurl, autoreconfHook, fetchpatch
 , libarchive, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsa-lib
 , pkg-config, dbus, fribidi, freefont_ttf, libebml, libmatroska
@@ -8,7 +8,7 @@
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
-, ncurses
+, ncurses, srt
 , onlyLibVLC ? false
 , withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
 , jackSupport ? false
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
     xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
     libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
-    fluidsynth wayland wayland-protocols ncurses
+    fluidsynth wayland wayland-protocols ncurses srt
   ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
     ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
     ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
@@ -60,6 +60,13 @@ stdenv.mkDerivation rec {
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
   BUILDCC = "${stdenv.cc}/bin/gcc";
+
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4250fe8f28c220d883db454cec2b2c76a07473eb/trunk/vlc-3.0.11.1-srt_1.4.2.patch";
+      sha256 = "53poWjZfwq/6l316sqiCp0AtcGweyXBntcLDFPSokHQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \
@@ -80,6 +87,7 @@ stdenv.mkDerivation rec {
   # "--enable-foo" flags here
   configureFlags = [
     "--with-kde-solid=$out/share/apps/solid/actions"
+    "--enable-srt" # Explicit enable srt to ensure the patch is applied.
   ] ++ optional onlyLibVLC "--disable-vlc"
     ++ optional skins2Support "--enable-skins2"
     ++ optionals chromecastSupport [

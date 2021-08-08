@@ -4,7 +4,8 @@
 let
   binPath = lib.makeBinPath [ which file ];
 in stdenv.mkDerivation {
-  name = "mumble-overlay-${mumble.version}";
+  pname = "mumble-overlay";
+  version = mumble.version;
 
   inherit (mumble) src;
 

@@ -2,31 +2,28 @@
 
 buildGoModule rec {
   pname = "tailscale";
-  version = "1.12.1";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    sha256 = "sha256-lGUV3GsRz09HHooaBYSvM+D53R0FPkvPyZml66hxMww=";
+    sha256 = "sha256-jjxO35PaxEI9n0qsawTPt3mHNC0PjWfmEA4NkIAwyTY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   CGO_ENABLED = 0;
 
-  vendorSha256 = "sha256-NIf5nyUXZY5UGFcdjeeFZdGKVcD2pve+PytziCD2NFk=";
+  vendorSha256 = "sha256-2MPenTV0fgvXbf8WkoPd9uApPSDLPyHtCq9o3CHB/D0=";
 
   doCheck = false;
 
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
-  preBuild = ''
-    export buildFlagsArray=(
-      -tags="xversion"
-      -ldflags="-X tailscale.com/version.Long=${version} -X tailscale.com/version.Short=${version}"
-    )
-  '';
+  tags = [ "xversion" ];
+
+  ldflags = [ "-X tailscale.com/version.Long=${version}" "-X tailscale.com/version.Short=${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/tailscaled --prefix PATH : ${

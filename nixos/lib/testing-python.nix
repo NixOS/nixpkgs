@@ -83,7 +83,10 @@ rec {
         ''
           mkdir -p $out
 
-          LOGFILE=/dev/null tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
+          # effectively mute the XMLLogger
+          export LOGFILE=/dev/null
+
+          ${driver}/bin/nixos-test-driver
         '';
 
       passthru = driver.passthru // {
@@ -130,9 +133,12 @@ rec {
 
       nodeHostNames = map (c: c.config.system.name) (lib.attrValues nodes);
 
+      # TODO: This is an implementation error and needs fixing
+      # the testing famework cannot legitimately restrict hostnames further
+      # beyond RFC1035
       invalidNodeNames = lib.filter
         (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null)
-        (builtins.attrNames nodes);
+        nodeHostNames;
 
       testScript' =
         # Call the test script with the computed nodes.
@@ -146,7 +152,9 @@ rec {
         Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
         All machines are referenced as python variables in the testing framework which will break the
         script when special characters are used.
-        Please stick to alphanumeric chars and underscores as separation.
+
+        This is an IMPLEMENTATION ERROR and needs to be fixed. Meanwhile,
+        please stick to alphanumeric chars and underscores as separation.
       ''
     else lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
       {
@@ -161,7 +169,10 @@ rec {
       ''
         mkdir -p $out/bin
 
+        vmStartScripts=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
         echo -n "$testScript" > $out/test-script
+        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
+
         ${lib.optionalString (!skipLint) ''
           PYFLAKES_BUILTINS="$(
             echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
@@ -169,17 +180,12 @@ rec {
           )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
 
-        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
-        vms=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
+        # set defaults through environment
+        # see: ./test-driver/test-driver.py argparse implementation
         wrapProgram $out/bin/nixos-test-driver \
-          --add-flags "''${vms[*]}" \
-          --run "export testScript=\"\$(${coreutils}/bin/cat $out/test-script)\"" \
-          --set VLANS '${toString vlans}'
-        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
-        wrapProgram $out/bin/nixos-run-vms \
-          --add-flags "''${vms[*]}" \
-          --set tests 'start_all(); join_all();' \
-          --set VLANS '${toString vlans}'
+          --set startScripts "''${vmStartScripts[*]}" \
+          --set testScript "$out/test-script" \
+          --set vlans '${toString vlans}'
       '');
 
   # Make a full-blown test

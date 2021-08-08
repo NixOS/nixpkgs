@@ -1,7 +1,7 @@
-{ mkDerivation, lib, fetchFromGitHub, callPackage, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , extra-cmake-modules
-, qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
+, qtbase, qtimageformats, gtk3, kwayland, libdbusmenu, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk, jemalloc
 , rnnoise
@@ -11,8 +11,6 @@
 , at-spi2-core, libXtst, libthai, libdatrie
 , xdg-utils, libsysprof-capture, libpsl, brotli
 }:
-
-with lib;
 
 # Main reference:
 # - This package was originally based on the Arch package but all patches are now upstreamed:
@@ -25,7 +23,7 @@ let
   tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.8.11";
+  version = "2.9.0";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -34,16 +32,8 @@ in mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "020ycgb77vx7rza590i3csrvq1zgm15rvpxqqcp0xkb4yh71i3hb";
+    sha256 = "0964as7rkjq1px6z15z6kmkiz4zw69wmm3namwn940bsja123qls";
   };
-
-  patches = [(fetchpatch {
-    # ref: https://github.com/desktop-app/lib_webview/pull/9
-    url = "https://github.com/desktop-app/lib_webview/commit/75e924934eee8624020befbef1f3cb5b865d3b86.patch";
-    sha256 = "sha256-rN4FVK4KT+xNf9IVdcpbxMqT0+t3SINJPRRQPyMiDP0=";
-    stripLen = 1;
-    extraPrefix = "Telegram/lib_webview/";
-  })];
 
   postPatch = ''
     substituteInPlace Telegram/CMakeLists.txt \
@@ -67,7 +57,7 @@ in mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
+    qtbase qtimageformats gtk3 kwayland libdbusmenu lz4 xxHash
     ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
     tl-expected hunspell glibmm webkitgtk jemalloc
     rnnoise
@@ -93,7 +83,7 @@ in mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${xdg-utils}/bin \
+      --prefix PATH : ${lib.makeBinPath [ xdg-utils]} \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
@@ -104,7 +94,7 @@ in mkDerivation rec {
     updateScript = ./update.py;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Telegram Desktop messaging app";
     longDescription = ''
       Desktop client for the Telegram messenger, based on the Telegram API and

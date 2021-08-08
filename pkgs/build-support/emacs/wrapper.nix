@@ -27,7 +27,7 @@ let customEmacsPackages =
         # use the unstable MELPA version of magit
         magit = self.melpaPackages.magit;
       });
-in customEmacsPackages.emacs.pkgs.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
+in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
 ```
 
 */

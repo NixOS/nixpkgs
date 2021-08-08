@@ -1,17 +1,15 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
-, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2
+, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
 , autoreconfHook, nixosTests
 }:
 
-let inherit (lib) optional optionals; in
-
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.0.8";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "df723949c19ebecf9a7118894c3127e292eb09dc7274b5ce9b527409f42edfb0";
+    sha256 = "54323712e3cbc3d4c70a15777818fd2ff0de30cebb6c22e2946372b15b2653ed";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -29,6 +27,12 @@ stdenv.mkDerivation rec {
     ./runtime-deps.patch
   ];
 
+  # Disable knotd journal tests on platforms that don't use 4k sysconf(_SC_PAGESIZE).
+  # The journal most likely works fine, but some of the tests currently don't.
+  postPatch = lib.optionalString (doCheck && stdenv.isDarwin && stdenv.isAarch64) ''
+    sed '/^\tknot\/test_journal\>/d' -i tests/Makefile.am
+  '';
+
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     gnutls liburcu libidn2 libunistring
@@ -38,12 +42,10 @@ stdenv.mkDerivation rec {
     libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
     # TODO: add dnstap support?
-  ]
-    ++ optionals stdenv.isLinux [
-      libcap_ng systemd
-      libbpf # XDP support
-    ]
-    ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap_ng systemd
+    libbpf libmnl # XDP support (it's Linux kernel API)
+  ] ++ lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
 

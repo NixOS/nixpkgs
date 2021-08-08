@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, speexdsp, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.5";
+  version = "1.2.6";
   pname = "libebur128";
 
   src = fetchFromGitHub {
     owner = "jiixyj";
     repo = "libebur128";
     rev = "v${version}";
-    sha256 = "sha256-B6MOSbLfPvadXtXHSvxZCIpAH1Bnj6sItYRp+xH5HDA=";
+    sha256 = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

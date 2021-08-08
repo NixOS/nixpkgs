@@ -29,6 +29,19 @@ python3Packages.buildPythonApplication rec {
     find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
+
+    substituteInPlace scripts/xon.sh \
+      --replace 'python' "${python3Packages.python}/bin/python"
+
+  '';
+
+  makeWrapperArgs = [
+    "--prefix PYTHONPATH : ${placeholder "out"}/lib/${python3Packages.python.libPrefix}/site-packages"
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/xon.sh \
+      $makeWrapperArgs
   '';
 
   disabledTests = [
@@ -57,7 +70,7 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = [ glibcLocales git ] ++ (with python3Packages; [ pytestCheckHook pytest-subprocess ]);
 
-  propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit pygments ];
+  propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];
 
   meta = with lib; {
     description = "A Python-ish, BASHwards-compatible shell";

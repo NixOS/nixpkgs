@@ -20,25 +20,17 @@
 
 stdenv.mkDerivation rec {
   pname = "bochs";
-  version = "2.6.11";
+  version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bochs/bochs/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0ql8q6y1k356li1g9gbvl21448mlxphxxi6kjb2b3pxvzd0pp2b3";
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-oBCrG/3HKsWgjS4kEs1HHA/r1mrx2TSbwNeWh53lsXo=";
   };
-
-  patches = [
-    # A flip between two lines of code, in order to compile with GLIBC 2.26
-    ./bochs-2.6.11-glibc-2.26.patch
-    # Fix compilation for MSYS2 GCC 10; remove it when the next version arrives
-    ./bochs_fix_narrowing_conv_warning.patch
-    # SMP-enabled configs; remove it when the next version arrives
-    ./fix-build-smp.patch
-  ];
 
   nativeBuildInputs = [
     docbook_xml_dtd_45
     docbook_xsl
+    libtool
     pkg-config
   ];
   buildInputs = [
@@ -46,7 +38,6 @@ stdenv.mkDerivation rec {
     curl
     gtk2
     libGL
-    libtool
     libGLU
     libX11
     libXpm
@@ -62,7 +53,6 @@ stdenv.mkDerivation rec {
 
     "--with-rfb=no"
     "--with-vncsrv=no"
-    "--with-svga=no" # it doesn't compile on NixOS
 
     # These will always be "yes" on NixOS
     "--enable-ltdl-install=yes"
@@ -92,7 +82,6 @@ stdenv.mkDerivation rec {
     "--enable-cpu-level=6" # from 3 to 6
     "--enable-debugger" #conflicts with gdb-stub option
     "--enable-debugger-gui"
-    "--enable-disasm"
     "--enable-e1000"
     "--enable-es1370"
     "--enable-evex"
@@ -105,7 +94,7 @@ stdenv.mkDerivation rec {
     "--enable-largefile"
     "--enable-ne2000"
     "--enable-pci"
-    "--enable-plugins=no" # Plugins are a bit buggy in Bochs
+    "--enable-plugins=yes"
     "--enable-pnic"
     "--enable-repeat-speedups"
     "--enable-sb16"
@@ -126,15 +115,10 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (ncurses != null) [ "--with-term" ]
   ++ lib.optionals (gtk2 != null && wxGTK != null) [ "--with-wx" ];
 
-  NIX_CFLAGS_COMPILE="-I${gtk2.dev}/include/gtk-2.0/ -I${libtool}/include/";
-  NIX_LDFLAGS="-L${libtool.lib}/lib";
-
-  hardeningDisable = [ "format" ];
-
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://bochs.sourceforge.io/";
+    homepage = "https://bochs.sourceforge.io/";
     description = "An open-source IA-32 (x86) PC emulator";
     longDescription = ''
       Bochs is an open-source (LGPL), highly portable IA-32 PC emulator, written
@@ -146,5 +130,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-# TODO: plugins
 # TODO: a better way to organize the options
+# TODO: docbook (docbook-tools from RedHat mirrors should help)

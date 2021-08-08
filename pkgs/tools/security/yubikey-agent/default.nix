@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, makeWrapper, pcsclite, pinentry_mac, pkg-config, darwin }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, makeWrapper, pcsclite, pkg-config, darwin }:
 
 buildGoModule rec {
   pname = "yubikey-agent";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1b4522s7xkh6q74m0lprbnzg2hspg1pr9rzn94qmd06sry82d3fd";
+    sha256 = "14s61jgcmpqh70jz0krrai8xg0xqhwmillxkij50vbsagpxjssk6";
   };
 
   buildInputs =
@@ -27,11 +27,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  # On macOS, there isn't a choice of pinentry program, so let's
-  # ensure the nixpkgs-provided one is available
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    wrapProgram $out/bin/yubikey-agent --suffix PATH : $(dirname ${pinentry_mac}/${pinentry_mac.binaryPath})
-  '' + lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p $out/lib/systemd/user
     substitute contrib/systemd/user/yubikey-agent.service $out/lib/systemd/user/yubikey-agent.service \
       --replace 'ExecStart=yubikey-agent' "ExecStart=$out/bin/yubikey-agent"

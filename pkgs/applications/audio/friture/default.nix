@@ -38,7 +38,7 @@ in py.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A real-time audio analyzer";
-    homepage = "http://friture.org/";
+    homepage = "https://friture.org/";
     license = licenses.gpl3;
     platforms = platforms.linux; # fails on Darwin
     maintainers = [ maintainers.laikq ];

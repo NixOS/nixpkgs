@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-DFFA6t+ZgpGieq5kT80PW5ZSByIp54ia2UvcBYY2+Lg=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
-    ++ lib.optional stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";

@@ -30,8 +30,7 @@ in
 
       apiSocket = mkOption {
         type = types.nullOr types.path;
-        default = null;
-        example = "/run/klipper/api";
+        default = "/run/klipper/api";
         description = "Path of the API socket to create.";
       };
 

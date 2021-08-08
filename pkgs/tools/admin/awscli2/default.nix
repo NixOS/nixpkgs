@@ -11,7 +11,7 @@ let
           sha256 = "sha256-iAZmqnffqrmFuxlQyOpEQzSCcL/hRAjuXKulOXoy4hY=";
         };
       });
-      prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
+      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.10";
         src = oldAttrs.src.override {
           inherit version;
@@ -62,7 +62,7 @@ with py.pkgs; buildPythonApplication rec {
     docutils
     groff
     less
-    prompt_toolkit
+    prompt-toolkit
     pyyaml
     rsa
     ruamel_yaml

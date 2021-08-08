@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   # Requires having the physical onlykey (a usb security key)
   doCheck = false;
   propagatedBuildInputs =
-    with python3Packages; [ hidapi aenum six prompt_toolkit pynacl ecdsa cython ];
+    with python3Packages; [ hidapi aenum six prompt-toolkit pynacl ecdsa cython ];
 
   meta = with lib; {
     description = "OnlyKey client and command-line tool";

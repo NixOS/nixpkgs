@@ -148,7 +148,7 @@ in
         wantedBy = [ "multi-user.target" ];
         wants    = [ "time-sync.target" ];
         before   = [ "time-sync.target" ];
-        after    = [ "network.target" ];
+        after    = [ "network.target" "nss-lookup.target" ];
         conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
 
         path = [ chronyPkg ];

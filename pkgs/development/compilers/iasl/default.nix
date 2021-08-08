@@ -1,24 +1,27 @@
-{lib, stdenv, fetchurl, fetchpatch, bison, flex}:
+{lib, stdenv, fetchurl, bison, flex}:
 
 stdenv.mkDerivation rec {
   pname = "iasl";
-  version = "20200110";
+  version = "20210730";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "1cb6aa6acrixmdzvj9vv4qs9lmlsbkd27pjlz14i1kq1x3xn0gwx";
+    sha256 = "1pmm977nyl3bs71ipzcl4dh30qm8x9wm2p2ml0m62rl62kai832a";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";
 
   buildFlags = [ "iasl" ];
 
-  buildInputs = [ bison flex ];
+  nativeBuildInputs = [ bison flex ];
 
   installPhase =
     ''
-      install -d $out/bin
-      install generate/unix/bin*/iasl $out/bin
+      runHook preInstall
+
+      install -Dm755 generate/unix/bin*/iasl -t $out/bin
+
+      runHook postInstall
     '';
 
   meta = {

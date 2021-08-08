@@ -286,7 +286,6 @@ broken-packages:
   - barrie
   - barrier
   - barrier-monad
-  - base16
   - base64-conduit
   - base-compat-migrate
   - base-encoding
@@ -305,7 +304,9 @@ broken-packages:
   - bdo
   - beam
   - beamable
-  - beam-core
+  - beam-mysql
+  - beam-newtype-field
+  - beam-sqlite
   - bech32
   - bed-and-breakfast
   - beeminder-api
@@ -925,6 +926,7 @@ broken-packages:
   - data-nat
   - data-object
   - datapacker
+  - data-pdf-fieldreader
   - data-pprint
   - data-quotientref
   - data-reify-cse
@@ -1219,6 +1221,7 @@ broken-packages:
   - EnumMap
   - enummapmap
   - enum-utf8
+  - env-extra
   - env-parser
   - envstatus
   - epanet-haskell
@@ -1445,6 +1448,7 @@ broken-packages:
   - fractals
   - fraction
   - frag
+  - Frames-beam
   - Frames-map-reduce
   - franchise
   - fraxl
@@ -1607,6 +1611,7 @@ broken-packages:
   - ghc-syb-utils
   - ghc-tags
   - ghc-tags-core
+  - ghc-tcplugin-api
   - ghc-time-alloc-prof
   - ghc-usage
   - gh-labeler
@@ -1735,6 +1740,7 @@ broken-packages:
   - gtk2hs-rpn
   - gtk3-mac-integration
   - gtkglext
+  - gtk-mac-integration
   - gtksourceview2
   - gtksourceview3
   - gtk-toy
@@ -2307,6 +2313,7 @@ broken-packages:
   - hs-tags
   - hstats
   - hstatsd
+  - hs-term-emulator
   - hstest
   - hstidy
   - hs-twitter
@@ -2482,6 +2489,7 @@ broken-packages:
   - interpolatedstring-qq2
   - interruptible
   - interval
+  - interval-algebra
   - IntFormats
   - int-multimap
   - intricacy
@@ -2519,6 +2527,7 @@ broken-packages:
   - itcli
   - itemfield
   - iteratee
+  - iterative-forward-search
   - iterIO
   - it-has
   - ivory
@@ -2597,6 +2606,7 @@ broken-packages:
   - kalman
   - Kalman
   - kangaroo
+  - karabiner-config
   - karps
   - katip-kafka
   - katip-raven
@@ -2624,7 +2634,6 @@ broken-packages:
   - koellner-phonetic
   - kontra-config
   - kparams
-  - kqueue
   - kraken
   - krapsh
   - Kriens
@@ -2752,6 +2761,7 @@ broken-packages:
   - life-sync
   - lifted-protolude
   - lifter
+  - lifx-lan
   - ligature
   - lilypond
   - Limit
@@ -2818,6 +2828,7 @@ broken-packages:
   - loch
   - log2json
   - log4hs
+  - log-base
   - logentries
   - logger
   - logging-effect-extra-file
@@ -3269,7 +3280,6 @@ broken-packages:
   - no-role-annots
   - notcpp
   - not-gloss-examples
-  - notifications-tray-icon
   - NoTrace
   - now-haskell
   - np-extras
@@ -3670,6 +3680,7 @@ broken-packages:
   - postgres-embedded
   - postgresql-lo-stream
   - postgresql-named
+  - postgresql-resilient
   - postgresql-simple-bind
   - postgresql-simple-named
   - postgresql-simple-sop
@@ -4531,7 +4542,7 @@ broken-packages:
   - streaming-utils
   - streaming-with
   - streamly-examples
-  - streamly-fsnotify
+  - streamly-process
   - stream-monad
   - streamproc
   - StrictBench
@@ -4652,6 +4663,7 @@ broken-packages:
   - tapioca
   - TaskMonad
   - tasty-auto
+  - tasty-checklist
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage

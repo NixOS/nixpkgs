@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sakura";
-  version = "3.8.2";
+  version = "3.8.3";
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/trunk/${version}/+download/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-nd/okZrg4RZzyiKHmuMkVl0Jh7FOlI4dK63/U4/htbk=";
+    sha256 = "sha256-UEDc3TjoqjLNZtWGlIZB3VTVQC+31AP0ASQH0fu+U+Q=";
   };
 
   nativeBuildInputs = [

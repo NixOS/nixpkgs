@@ -4,7 +4,10 @@ with lib;
 
 let
 
-  pkg = pkgs.sane-backends;
+  pkg = pkgs.sane-backends.override {
+    scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
+    scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
+  };
 
   sanedConf = pkgs.writeTextFile {
     name = "saned.conf";
@@ -95,6 +98,28 @@ in
       example = "192.168.0.16";
       description = ''
         Network hosts that should be probed for remote scanners.
+      '';
+    };
+
+    hardware.sane.drivers.scanSnap.enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable drivers for the Fujitsu ScanSnap scanners.
+
+        The driver files are unfree and extracted from the Windows driver image.
+      '';
+    };
+
+    hardware.sane.drivers.scanSnap.package = mkOption {
+      type = types.package;
+      default = pkgs.sane-drivers.epjitsu;
+      description = ''
+        Epjitsu driver package to use. Useful if you want to extract the driver files yourself.
+
+        The process is described in the <literal>/etc/sane.d/epjitsu.conf</literal> file in
+        the <literal>sane-backends</literal> package.
       '';
     };
 
