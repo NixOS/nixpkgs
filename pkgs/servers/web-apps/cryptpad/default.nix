@@ -2,6 +2,7 @@
 , pkgs
 , lib
 , buildBowerComponents
+, fetchbower
 , fetchurl
 , nodejs
 }:
@@ -12,14 +13,21 @@ let
     inherit (stdenv.hostPlatform) system;
   };
 
-  bowerPackages = buildBowerComponents {
+  bowerPackages = (buildBowerComponents {
     name = "${cryptpad.name}-bower-packages";
-    # this list had to be tweaked by hand:
-    # * add the second jquery ~2.1.0 entry
-    # * add the second bootstrap ~3.1.1 entry
     generated = ./bower-packages.nix;
     src = cryptpad.src;
-  };
+  }).overrideAttrs (old: {
+    bowerPackages = old.bowerPackages.override (old_: {
+      # add missing dependencies:
+      # * add the second jquery ~2.1.0 entry
+      # * add the second bootstrap ~3.1.1 entry
+      paths = old_.paths ++ [
+        (fetchbower "jquery" "2.1.0" "~2.1.0" "02kwvz93vzpv10qnp7s0dz3al0jh77awwrizb6wadsvgifxssnlr")
+        (fetchbower "bootstrap" "3.1.1" "~3.1.1" "06bhjwa8p7mzbpr3jkgydd804z1nwrkdql66h7jkfml99psv9811")
+      ];
+    });
+  });
 
   # find an element in an attribute set
   findValue = pred: default: set:
