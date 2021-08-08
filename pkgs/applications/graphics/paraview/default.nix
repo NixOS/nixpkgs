@@ -108,7 +108,7 @@ in mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.paraview.org/";
     description = "3D Data analysis and visualization application";
-    license = licenses.free;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ guibert ];
     platforms = platforms.linux;
   };
