@@ -14,16 +14,19 @@
 , withPython ? false
 }:
 
+let
+  tag = "2823";
+in
+
 stdenv.mkDerivation rec {
   pname = "fastnlo_toolkit";
-  rev = "2823";
-  version = "2.5.0pre-${rev}";
+  version = "2.5.0pre-${tag}";
 
   src = fetchFromGitLab {
     domain = "gitlab.etp.kit.edu";
     owner = "qcd-public";
     repo = "fastNLO";
-    inherit rev;
+    rev = tag;
     hash = "sha256-FEKnEnK90tT4BJJ6MLva9lCl3aYzO1YGdx/8Ol2vM7M=";
   } + /v2.5/toolkit;
 
