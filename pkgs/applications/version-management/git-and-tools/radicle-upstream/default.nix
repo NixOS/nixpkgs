@@ -58,7 +58,7 @@ appimageTools.wrapType2 {
     description = "A decentralized app for code collaboration";
     homepage = "https://radicle.xyz/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xwvvvvwx ];
+    maintainers = with maintainers; [ d-xo ];
     platforms = [ "x86_64-linux" ];
   };
 }
