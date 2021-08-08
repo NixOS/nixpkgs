@@ -35,8 +35,18 @@ in
 
     token = mkOption {
       type = types.str;
-      description = "The k3s token to use when connecting to the server. This option only makes sense for an agent.";
+      description = ''
+        The k3s token to use when connecting to the server. This option only makes sense for an agent.
+        WARNING: This option will expose store your token unencrypted world-readable in the nix store.
+        If this is undesired use the tokenFile option instead.
+      '';
       default = "";
+    };
+
+    tokenFile = mkOption {
+      type = types.nullOr types.path;
+      description = "File path containing k3s token to use when connecting to the server. This option only makes sense for an agent.";
+      default = null;
     };
 
     docker = mkOption {
@@ -68,8 +78,8 @@ in
         message = "serverAddr should be set if role is 'agent'";
       }
       {
-        assertion = cfg.role == "agent" -> cfg.token != "";
-        message = "token should be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> cfg.token != "" || cfg.tokenFile != null;
+        message = "token or tokenFile should be set if role is 'agent'";
       }
     ];
 
@@ -80,6 +90,8 @@ in
     # TODO: disable this once k3s supports cgroupsv2, either by docker
     # supporting it, or their bundled containerd
     systemd.enableUnifiedCgroupHierarchy = false;
+
+    environment.systemPackages = [ config.services.k3s.package ];
 
     systemd.services.k3s = {
       description = "k3s service";
@@ -102,7 +114,12 @@ in
             "${cfg.package}/bin/k3s ${cfg.role}"
           ] ++ (optional cfg.docker "--docker")
           ++ (optional cfg.disableAgent "--disable-agent")
-          ++ (optional (cfg.role == "agent") "--server ${cfg.serverAddr} --token ${cfg.token}")
+          ++ (optional (cfg.role == "agent") "--server ${cfg.serverAddr} ${
+            if cfg.tokenFile != null then
+              "--token-file ${cfg.tokenFile}"
+            else
+              "--token ${cfg.token}"
+          }")
           ++ [ cfg.extraFlags ]
         );
       };
