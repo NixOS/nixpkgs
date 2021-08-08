@@ -185,6 +185,7 @@ in
     users.users = optionalAttrs (cfg.user == "influxdb") {
       influxdb = {
         uid = config.ids.uids.influxdb;
+        group = "influxdb";
         description = "Influxdb daemon user";
       };
     };

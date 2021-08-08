@@ -74,7 +74,7 @@ in {
       users."${cfg.user}" = {
         description = "Pleroma user";
         home = cfg.stateDir;
-        extraGroups = [ cfg.group ];
+        group = cfg.group;
         isSystemUser = true;
       };
       groups."${cfg.group}" = {};

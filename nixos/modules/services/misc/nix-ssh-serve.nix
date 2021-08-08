@@ -38,9 +38,11 @@ in {
 
     users.users.nix-ssh = {
       description = "Nix SSH store user";
-      uid = config.ids.uids.nix-ssh;
+      isSystemUser = true;
+      group = "nix-ssh";
       useDefaultShell = true;
     };
+    users.groups.nix-ssh = {};
 
     services.openssh.enable = true;
 
