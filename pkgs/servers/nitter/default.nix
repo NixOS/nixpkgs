@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, nixosTests
 , fetchFromGitHub
 , nim
 , libsass
@@ -119,6 +120,10 @@ in stdenv.mkDerivation rec {
     cp -r public $out/share/nitter/public
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) nitter;
+  };
 
   meta = with lib; {
     description = "Alternative Twitter front-end";
