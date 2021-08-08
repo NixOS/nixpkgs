@@ -2,17 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "unstable-2021-07-14";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = pname;
-    # unstable because the latest release fails to build
-    rev = "312ffcb04c06c5f157b9fd2b944b858703238592";
-    sha256 = "0i5zqs1gwxhvsynb540c3azfi4357igr4i5p0bi3h7ras2asas8w";
+    rev = "v${version}";
+    sha256 = "1mvin6pfqhsfhaifivbdi6qcn0dsa98w83m1n51q807gh4l1k2yj";
   };
 
-  cargoSha256 = "0g5z0s837cfwzral2zz0avp0xywyaa3l1adxg520qrnga7z0kbh8";
+  cargoSha256 = "02bk399c7x15a5rkaz7ik65yihkfbjn1q46gx7l8hycqq7xb0xmg";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles];
   buildInputs = [ openssl oniguruma ]
@@ -30,6 +29,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A fast static site generator with everything built-in";
     homepage = "https://www.getzola.org/";
+    changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
     # set because of unstable-* version
