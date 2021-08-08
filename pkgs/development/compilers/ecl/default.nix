@@ -45,20 +45,20 @@ stdenv.mkDerivation {
 
   configureFlags = [
     (if threadSupport then "--enable-threads" else "--disable-threads")
-    "--with-gmp-prefix=${lib.getDev gmp}"
-    "--with-libffi-prefix=${lib.getDev libffi}"
-  ] ++ lib.optional useBoehmgc "--with-libgc-prefix=${lib.getDev boehmgc}"
-  ++ lib.optional (!noUnicode) "--enable-unicode";
+    "--with-gmp-incdir=${lib.getDev gmp}/include"
+    "--with-gmp-libdir=${lib.getLib gmp}/lib"
+    "--with-libffi-incdir=${lib.getDev libffi}/include"
+    "--with-libffi-libdir=${lib.getLib libffi}/lib"
+  ] ++ lib.optionals useBoehmgc [
+    "--with-libgc-incdir=${lib.getDev boehmgc}/include"
+    "--with-libgc-libdir=${lib.getLib boehmgc}/lib"
+  ] ++ lib.optional (!noUnicode) "--enable-unicode";
 
   hardeningDisable = [ "format" ];
 
-  postInstall = let
-    ldArgs = lib.strings.concatMapStringsSep " "
-      (l: ''--prefix NIX_LDFLAGS ' ' "-L${l.lib or l.out or l}/lib"'')
-      ([ gmp libffi ] ++ lib.optional useBoehmgc boehmgc);
-  in ''
+  postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
-    wrapProgram "$out/bin/ecl" --prefix PATH ':' "${gcc}/bin" ${ldArgs}
+    wrapProgram "$out/bin/ecl" --prefix PATH ':' "${gcc}/bin"
   '';
 
   meta = with lib; {
