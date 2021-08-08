@@ -1,25 +1,21 @@
-{ stdenv, rust, rustPlatform, buildPackages }:
+{ stdenv, rust, rustPlatform, buildPackages, runCommandLocal }:
 
 { shortTarget, originalCargoToml, target, RUSTFLAGS }:
 
 let
-  cargoSrc = stdenv.mkDerivation {
-    name = "cargo-src";
-    preferLocalBuild = true;
-    phases = [ "installPhase" ];
-    installPhase = ''
-      RUSTC_SRC=${rustPlatform.rustcSrc.override { minimalContent = false; }} ORIG_CARGO=${originalCargoToml} \
-        ${buildPackages.python3.withPackages (ps: with ps; [ toml ])}/bin/python3 ${./cargo.py}
-      mkdir -p $out
-      cp Cargo.toml $out/Cargo.toml
-      cp ${./Cargo.lock} $out/Cargo.lock
-    '';
-  };
-in rustPlatform.buildRustPackage {
+  cargoSrc = runCommandLocal "cargo-src" { } ''
+    RUSTC_SRC=${rustPlatform.rustcSrc.override { minimalContent = false; }} ORIG_CARGO=${originalCargoToml} \
+      ${buildPackages.python3.withPackages (ps: with ps; [ toml ])}/bin/python3 ${./cargo.py}
+    mkdir -p $out
+    cp Cargo.toml $out/Cargo.toml
+    cp ${./Cargo.lock} $out/Cargo.lock
+  '';
+in
+rustPlatform.buildRustPackage {
   inherit target RUSTFLAGS;
 
   name = "custom-sysroot";
-  src =  cargoSrc;
+  src = cargoSrc;
 
   RUSTC_BOOTSTRAP = 1;
   __internal_dontAddSysroot = true;
