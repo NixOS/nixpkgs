@@ -63,3 +63,16 @@ index 734167e51bc5..f95761b5df58 100644
  install(TARGETS lldbIntelFeatures
 -  LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX})
 +  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+diff --git a/cmake/modules/LLDBStandalone.cmake b/cmake/modules/LLDBStandalone.cmake
+index 752113b..010f187 100644
+--- a/cmake/modules/LLDBStandalone.cmake
++++ b/cmake/modules/LLDBStandalone.cmake
+@@ -62,7 +62,7 @@ endif()
+
+ # They are used as destination of target generators.
+ set(LLVM_RUNTIME_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/bin)
+-set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lib${LLVM_LIBDIR_SUFFIX})
++set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+ if(WIN32 OR CYGWIN)
+   # DLL platform -- put DLLs into bin.
+   set(LLVM_SHLIB_OUTPUT_INTDIR ${LLVM_RUNTIME_OUTPUT_INTDIR})
