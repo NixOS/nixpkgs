@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "DavidGriffith";
     repo = "inform6unix";
     rev = version;
-    sha256 = "1mfgr9vzm7nwxnh13hfpvpyc9dbzi9a4sfi1b4wypqc2rb5q7n6r";
+    sha256 = "sha256-VjlTu7IIY12qLlqfuV0DyzC3z6rFdR8iXo966TrOpGs=";
   };
 
   buildInputs = [ perl ];
