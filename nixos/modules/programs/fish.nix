@@ -196,32 +196,21 @@ in
         etc."fish/config.fish".text = ''
         # /etc/fish/config.fish: DO NOT EDIT -- this file has been generated automatically.
 
-        # if we haven't sourced the general config, do it
-        if not set -q __fish_nixos_general_config_sourced
-          ${sourceEnv "shellInit"}
+        # Only execute this file once per shell.
+        set -q __fish_nixos_config_sourced; and exit
+        set -g __fish_nixos_config_sourced 1
 
-          ${cfg.shellInit}
+        ${sourceEnv "shellInit"}
 
-          # and leave a note so we don't source this config section again from
-          # this very shell (children will source the general config anew)
-          set -g __fish_nixos_general_config_sourced 1
-        end
+        ${cfg.shellInit}
 
-        # if we haven't sourced the login config, do it
-        status --is-login; and not set -q __fish_nixos_login_config_sourced
-        and begin
+        status --is-login; and begin
           ${sourceEnv "loginShellInit"}
 
           ${cfg.loginShellInit}
-
-          # and leave a note so we don't source this config section again from
-          # this very shell (children will source the general config anew)
-          set -g __fish_nixos_login_config_sourced 1
         end
 
-        # if we haven't sourced the interactive config, do it
-        status --is-interactive; and not set -q __fish_nixos_interactive_config_sourced
-        and begin
+        status --is-interactive; and begin
           ${fishAbbrs}
           ${fishAliases}
 
@@ -229,11 +218,6 @@ in
 
           ${cfg.promptInit}
           ${cfg.interactiveShellInit}
-
-          # and leave a note so we don't source this config section again from
-          # this very shell (children will source the general config anew,
-          # allowing configuration changes in, e.g, aliases, to propagate)
-          set -g __fish_nixos_interactive_config_sourced 1
         end
       '';
       }
