@@ -6,7 +6,7 @@ let
   commonMeta = with lib; {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Only gpl2Plus ];
     maintainers = with maintainers; [ petabyteboy felixsinger yuka ];
     platforms = platforms.linux;
   };
@@ -81,7 +81,13 @@ let
     amdfwtool = generic {
       pname = "amdfwtool";
       meta.description = "Create AMD firmware combination";
-      installPhase = "install -Dm755 amdfwtool $out/bin/amdfwtool";
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm755 amdfwtool $out/bin/amdfwtool
+
+        runHook postInstall
+      '';
     };
     acpidump-all = generic {
       pname = "acpidump-all";
@@ -89,7 +95,13 @@ let
       meta.description = "Walk through all ACPI tables with their addresses";
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
-      installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm755 acpidump-all $out/bin/acpidump-all
+
+        runHook postInstall
+      '';
       postFixup = let
         binPath = [ coreutils acpica-tools gnugrep gnused file ];
       in "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
