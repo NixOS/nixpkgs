@@ -4414,7 +4414,7 @@ in {
   maya = callPackage ../development/python-modules/maya { };
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
-    inherit buildPythonPackage isPy27 fetchPypi;
+    inherit buildPythonPackage pythonOlder fetchPypi;
     inherit (self) pyface pygments numpy vtk traitsui envisage apptools pyqt5;
   };
 
