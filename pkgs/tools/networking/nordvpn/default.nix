@@ -1,10 +1,8 @@
 { stdenv, lib, fetchurl, openvpn, libxml2, autoPatchelfHook, dpkg }:
 
-let
-  version = "3.10.0-1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "nordvpn";
-  inherit version;
+  version = "3.10.0-1";
 
   src = fetchurl {
     url = "https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/nordvpn_${version}_amd64.deb";
