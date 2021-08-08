@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
-, pkg-config
-
+, runCommandLocal
 , bison
 , flex
 , llvmPackages_8
@@ -46,18 +46,14 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # Handholding the braindead build script
-  # We put this in a derivation because the cmake requires an absolute path
-  prebuilds = stdenv.mkDerivation {
-    name = "igc-cclang-prebuilds";
-    phases = [ "installPhase" ];
-    installPhase = ''
-      mkdir $out
-      ln -s ${clang}/bin/clang $out/
-      ln -s clang $out/clang-${versions.major (getVersion clang)}
-      ln -s ${opencl-clang}/lib/* $out/
-      ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c.h $out/
-    '';
-  };
+  # cmake requires an absolute path
+  prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
+    mkdir $out
+    ln -s ${clang}/bin/clang $out/
+    ln -s clang $out/clang-${versions.major (getVersion clang)}
+    ln -s ${opencl-clang}/lib/* $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c.h $out/
+  '';
 
   cmakeFlags = [
     "-DCCLANG_BUILD_PREBUILDS=ON"
@@ -66,10 +62,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage    = "https://github.com/intel/intel-graphics-compiler";
+    homepage = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
-    license     = licenses.mit;
-    platforms   = platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
     maintainers = with maintainers; [ gloaming ];
   };
 }
