@@ -51,6 +51,9 @@ build_deps="../../../../misc/vscode-extensions/rust-analyzer/build-deps"
 jq '{ name, version, dependencies: (.dependencies + .devDependencies) }' "$node_src/package.json" \
     >"$build_deps/package.json.new"
 
+# FIXME: rollup@2.55.0 breaks the build: https://github.com/rollup/rollup/issues/4195
+sed 's/"rollup": ".*"/"rollup": "=2.51.1"/' --in-place "$build_deps/package.json.new"
+
 if cmp --quiet "$build_deps"/package.json{.new,}; then
     echo "package.json not changed, skip updating nodePackages"
     rm "$build_deps"/package.json.new

@@ -86,6 +86,7 @@ in
 
         StateDirectory = "containerd";
         RuntimeDirectory = "containerd";
+        RuntimeDirectoryPreserve = "yes";
       };
       unitConfig = {
         StartLimitBurst = "16";
