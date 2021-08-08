@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl, jre, makeWrapper }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   version = "6.8.9";
   pname = "frostwire";
