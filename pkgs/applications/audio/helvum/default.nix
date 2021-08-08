@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "helvum";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "ryuukyu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZnpdGXK8N8c/s4qC2NXcn0Pdqrqr47iOWvVwXD9pn1A=";
+    sha256 = "sha256-AlHCK4pWaoNjR0eflxHBsuVaaily/RvCbgJv/ByQZK4=";
   };
 
-  cargoSha256 = "sha256-2v2L20rUWftXdhhuE3wiRrDIuSg6VFxfpWYMRaMUyTU=";
+  cargoSha256 = "sha256-mAhh12rGvQjs2xtm+OrtVv0fgG6qni/QM/oRYoFR7U8=";
 
   nativeBuildInputs = [ clang copyDesktopItems pkg-config ];
   buildInputs = [ glib gtk4 pipewire ];
