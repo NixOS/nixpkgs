@@ -37,7 +37,7 @@ mkYarnPackage rec {
     unlink $out/libexec/vieb/deps/vieb/node_modules
     ln -s $out/libexec/vieb/node_modules $out/libexec/vieb/deps/vieb/node_modules
 
-    find $out/libexec/vieb/node_modules/7zip-bin -name 7za -exec ln -s -f ${p7zip}/bin/7z {} ';'
+    find $out/libexec/vieb/node_modules/7zip-bin -name 7za -exec ln -s -f ${p7zip}/bin/7za {} ';'
 
     install -Dm0644 {${desktopItem},$out}/share/applications/vieb.desktop
 
