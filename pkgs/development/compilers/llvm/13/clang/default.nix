@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, src, cmake, libxml2, libllvm, version, python3
+{ lib, stdenv, llvm_meta, src, substituteAll, cmake, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -37,6 +37,10 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
+      (substituteAll {
+        src = ../../clang-11-12-LLVMgold-path.patch;
+        libllvmLibdir = "${libllvm.lib}/lib";
+      })
     ];
 
     postPatch = ''
@@ -52,12 +56,7 @@ let
 
     outputs = [ "out" "lib" "dev" "python" ];
 
-    # Clang expects to find LLVMgold in its own prefix
     postInstall = ''
-      if [ -e ${libllvm.lib}/lib/LLVMgold.so ]; then
-        ln -sv ${libllvm.lib}/lib/LLVMgold.so $lib/lib
-      fi
-
       ln -sv $out/bin/clang $out/bin/cpp
 
       # Move libclang to 'lib' output
