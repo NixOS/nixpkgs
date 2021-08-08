@@ -1,4 +1,4 @@
-# nix name, luarocks name, server, version,luaversion,maintainers
+# nix name,luarocks name,server,version,luaversion,maintainers
 alt-getopt,,,,,arobyn
 ansicolors,,,,,
 argparse,,,,,
@@ -16,6 +16,7 @@ cyrussasl,,,,,
 digestif,,,,lua5_3,
 dkjson,,,,,
 fifo,,,,,
+gitsigns.nvim,,,,lua5_1,
 http,,,,,vcunat
 inspect,,,,,
 ldbus,,http://luarocks.org/dev,,,
