@@ -26242,6 +26242,8 @@ in
 
   yambar = callPackage ../applications/misc/yambar { };
 
+  yambar-wayland = callPackage ../applications/misc/yambar { waylandSupport = true; };
+
   polyphone = libsForQt514.callPackage ../applications/audio/polyphone { };
 
   portfolio = callPackage ../applications/office/portfolio {
