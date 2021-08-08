@@ -1,19 +1,20 @@
 { stdenv, lib, fetchurl, unzip }:
 
 let
-  version = "3.5.15";
+  # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
+  version = "3.5.37";
   src =
     if stdenv.hostPlatform.system == "x86_64-darwin" then
       fetchurl
         {
           url = "https://update.tabnine.com/bundles/${version}/x86_64-apple-darwin/TabNine.zip";
-          sha256 = "sha256-JrDAF/3yPGJXwonWIvaKf0dw4GQf3U2wbf5iF4QUXco=";
+          sha256 = "sha256-Vxmhl4/bhRDeByGgkdSF8yEY5wI23WzT2iH1OFkEpck=";
         }
     else if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl
         {
           url = "https://update.tabnine.com/bundles/${version}/x86_64-unknown-linux-musl/TabNine.zip";
-          sha256 = "sha256-fgVVJ+J4w+Z3Kmryixp844xlLFiRs5PSAcD/wrcXF1w=";
+          sha256 = "sha256-pttjlx7WWE3nog9L1APp8HN+a4ShhlBj5irHOaPgqHw=";
         }
     else throw "Not supported on ${stdenv.hostPlatform.system}";
 in
