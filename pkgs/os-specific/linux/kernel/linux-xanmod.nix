@@ -48,7 +48,7 @@ buildLinux (args // rec {
 
   extraMeta = {
     branch = "5.13-cacule";
-    maintainers = with lib.maintainers; [ fortuneteller2k ];
+    maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
     description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
     broken = stdenv.isAarch64;
   };
