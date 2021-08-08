@@ -10,11 +10,11 @@
 
 mkDerivation rec {
   pname = "krita";
-  version = "4.4.5";
+  version = "4.4.7";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-S/1ygIcNEGCgDREj2Db8Gltb+KAoZ2Z58CaM1ef7dWg=";
+    sha256 = "sha256-I6fFxPRCcRU5dyFXZPvGvTb9MuGikrvTaGCXpp4LRRk=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip_4 makeWrapper ];
