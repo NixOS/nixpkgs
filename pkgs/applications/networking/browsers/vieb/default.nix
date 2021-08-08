@@ -34,6 +34,9 @@ mkYarnPackage rec {
   };
 
   postInstall = ''
+    unlink $out/libexec/vieb/deps/vieb/node_modules
+    ln -s $out/libexec/vieb/node_modules $out/libexec/vieb/deps/vieb/node_modules
+
     install -Dm0644 {${desktopItem},$out}/share/applications/vieb.desktop
 
     pushd $out/libexec/vieb/node_modules/vieb/app/img/icons
