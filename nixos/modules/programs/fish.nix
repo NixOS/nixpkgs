@@ -43,6 +43,14 @@ in
 
 {
 
+  imports = [
+    (mkRemovedOptionModule [ "programs" "fish" "promptInit" ] ''
+      Prompt is now configured through the
+        programs.fish.interactiveShellInit
+      option. Please change to use that instead.
+    '')
+  ];
+
   options = {
 
     programs.fish = {
@@ -133,14 +141,6 @@ in
         type = types.lines;
       };
 
-      promptInit = mkOption {
-        default = "";
-        description = ''
-          Shell script code used to initialise fish prompt.
-        '';
-        type = types.lines;
-      };
-
     };
 
   };
@@ -227,7 +227,6 @@ in
 
           ${sourceEnv "interactiveShellInit"}
 
-          ${cfg.promptInit}
           ${cfg.interactiveShellInit}
 
           # and leave a note so we don't source this config section again from
